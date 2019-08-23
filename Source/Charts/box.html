@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Box Chart</title>
+
+    <script src="../../Assets/vendors/vega5.min.js"></script>
+    <script src="../../Assets/vendors/vega-embed.js"></script>
+  </head>
+
+  <body>
+    <div id="vis"></div>
+    <script type="text/javascript">
+      var config = {
+        // default view background color
+        // covers the entire view component
+        background: "#fff",
+        axis: {
+          labelFont: "serif",
+          labelFontSize: 16,
+          tickWidth: 3,
+          tickColor: "red"
+        }
+      };
+
+      var spec = {
+    $schema: "https://vega.github.io/schema/vega/v5.json",
+    width: 800,
+    height: 400,
+    padding: 5,
+
+    config: {
+        axisBand: {
+            bandPosition: 1,
+            tickExtra: true,
+            tickOffset: 0
+        }
+    },
+
+    signals: [
+        {
+            name: "fields",
+            value: ["a", "b", "c", "d"]
+        },
+        { name: "plotWidth", value: 60 },
+        { name: "height", update: "(plotWidth + 10) * length(fields)" }
+    ],
+
+    data: [
+        {
+            name: "iris",
+            url:
+                "https://gist.githubusercontent.com/chilarai/4872fc6469a812ed44cbc30c28758376/raw/e4662e57b8ec55768127fd9d75cef7eed1a9448f/boxgraph.json",
+            transform: [
+                {
+                    type: "fold",
+                    fields: { signal: "fields" },
+                    as: ["organ", "value"]
+                }
+            ]
+        }
+    ],
+
+    scales: [
+        {
+            name: "layout",
+            type: "band",
+            range: "height",
+            domain: { data: "iris", field: "organ" }
+        },
+        {
+            name: "xscale",
+            type: "linear",
+            range: "width",
+            round: true,
+            domain: { data: "iris", field: "value" },
+            zero: true,
+            nice: true
+        }
+    ],
+
+    axes: [
+        {
+            orient: "bottom",
+            scale: "xscale",
+            zindex: 1,
+            domainColor: "#dfdfdf",
+            ticks: false,
+            labelColor: "#797979"
+        },
+        {
+            orient: "left",
+            scale: "layout",
+            tickCount: 5,
+            zindex: 1,
+            domainColor: "#dfdfdf",
+            ticks: false,
+            labelColor: "#797979"
+        }
+    ],
+
+    marks: [
+        {
+            type: "group",
+            from: {
+                facet: {
+                    data: "iris",
+                    name: "organs",
+                    groupby: "organ"
+                }
+            },
+
+            encode: {
+                enter: {
+                    yc: { scale: "layout", field: "organ", band: 0.5 },
+                    height: { signal: "plotWidth" },
+                    width: { signal: "width" }
+                }
+            },
+
+            data: [
+                {
+                    name: "summary",
+                    source: "organs",
+                    transform: [
+                        {
+                            type: "aggregate",
+                            fields: [
+                                "value",
+                                "value",
+                                "value",
+                                "value",
+                                "value"
+                            ],
+                            ops: ["min", "q1", "median", "q3", "max"],
+                            as: ["min", "q1", "median", "q3", "max"]
+                        }
+                    ]
+                }
+            ],
+
+            marks: [
+                {
+                    type: "rect",
+                    from: { data: "summary" },
+                    encode: {
+                        enter: {
+                            fill: { value: "black" },
+                            height: { value: 1 }
+                        },
+                        update: {
+                            yc: { signal: "plotWidth / 2", offset: -0.5 },
+                            x: { scale: "xscale", field: "min" },
+                            x2: { scale: "xscale", field: "max" }
+                        }
+                    }
+                },
+                {
+                    type: "rect",
+                    from: { data: "summary" },
+                    encode: {
+                        enter: {
+                            fill: { value: "steelblue" },
+                            cornerRadius: { value: 4 }
+                        },
+                        update: {
+                            yc: { signal: "plotWidth / 2" },
+                            height: { signal: "plotWidth / 2" },
+                            x: { scale: "xscale", field: "q1" },
+                            x2: { scale: "xscale", field: "q3" }
+                        }
+                    }
+                },
+                {
+                    type: "rect",
+                    from: { data: "summary" },
+                    encode: {
+                        enter: {
+                            fill: { value: "aliceblue" },
+                            width: { value: 2 }
+                        },
+                        update: {
+                            yc: { signal: "plotWidth / 2" },
+                            height: { signal: "plotWidth / 2" },
+                            x: { scale: "xscale", field: "median" }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+};
+
+      vegaEmbed("#vis", spec, {
+        config: config,
+        tooltip: { theme: "dark" }
+      })
+        .then(function(result) {
+          console.log(result);
+        })
+        .catch(console.error);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Area Chart</title>
+
+                <script src="../../Assets/vendors/vega5.min.js"></script>
+                <script src="../../Assets/vendors/vega-embed.js"></script>
+	</head>
+
+	<body>
+		<div id="vis"></div>
+		<script type="text/javascript">
+			var config = {
+				// default view background color
+				// covers the entire view component
+                                background: "#fff",
+				axis: {
+					labelFont: "serif",
+					labelFontSize: 16,
+					tickWidth: 3,
+					tickColor: "red"
+				}
+			};
+
+			var spec = {
+				$schema: "https://vega.github.io/schema/vega/v5.json",
+				width: 800,
+				height: 400,
+				padding: 5,
+
+				data: [
+					{
+						name: "table",
+						values: [
+							{ x: 0, y: 28, c: 0 },
+							{ x: 0, y: 55, c: 1 },
+							{ x: 1, y: 43, c: 0 },
+							{ x: 1, y: 91, c: 1 },
+							{ x: 2, y: 81, c: 0 },
+							{ x: 2, y: 53, c: 1 },
+							{ x: 3, y: 19, c: 0 },
+							{ x: 3, y: 87, c: 1 },
+							{ x: 4, y: 52, c: 0 },
+							{ x: 4, y: 48, c: 1 },
+							{ x: 5, y: 24, c: 0 },
+							{ x: 5, y: 49, c: 1 },
+							{ x: 6, y: 87, c: 0 },
+							{ x: 6, y: 66, c: 1 },
+							{ x: 7, y: 17, c: 0 },
+							{ x: 7, y: 27, c: 1 },
+							{ x: 8, y: 68, c: 0 },
+							{ x: 8, y: 16, c: 1 },
+							{ x: 9, y: 49, c: 0 },
+							{ x: 9, y: 15, c: 1 }
+						],
+						transform: [
+							{
+								type: "stack",
+								groupby: ["x"],
+								sort: { field: "c" },
+								field: "y"
+							}
+						]
+					}
+				],
+
+				scales: [
+					{
+						name: "x",
+						type: "point",
+						range: "width",
+						domain: { data: "table", field: "x" }
+					},
+					{
+						name: "y",
+						type: "linear",
+						range: "height",
+						nice: true,
+						zero: true,
+						domain: { data: "table", field: "y1" }
+					},
+					{
+						name: "color",
+						type: "ordinal",
+						range: "category",
+						domain: { data: "table", field: "c" }
+					}
+				],
+
+				axes: [
+					{
+						orient: "bottom",
+						scale: "x",
+						zindex: 1,
+						grid: true,
+						domainColor: "#dfdfdf",
+						ticks: false,
+						labelColor: "#797979"
+					},
+					{
+						orient: "left",
+						scale: "y",
+						zindex: 1,
+						grid: true,
+						domainColor: "#dfdfdf",
+						ticks: false,
+						labelColor: "#797979"
+					}
+				],
+
+				marks: [
+					{
+						type: "group",
+						from: {
+							facet: {
+								name: "series",
+								data: "table",
+								groupby: "c"
+							}
+						},
+						marks: [
+							{
+								type: "area",
+								from: { data: "series" },
+								encode: {
+									enter: {
+										interpolate: { value: "monotone" },
+										x: { scale: "x", field: "x" },
+										y: { scale: "y", field: "y0" },
+										y2: { scale: "y", field: "y1" },
+										fill: { scale: "color", field: "c" }
+									},
+									update: {
+										fillOpacity: { value: 1 }
+									},
+									hover: {
+										fillOpacity: { value: 0.5 }
+									}
+								}
+							}
+						]
+					}
+				]
+			};
+
+			vegaEmbed("#vis", spec, {
+				config: config,
+				tooltip: { theme: "dark" }
+			})
+				.then(function(result) {
+					console.log(result);
+				})
+				.catch(console.error);
+		</script>
+	</body>
+</html>

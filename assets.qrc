@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Assets/vendors/markdown.css</file>
+        <file>Assets/vendors/MARKDOWN-LICENSE.txt</file>
+        <file>Assets/vendors/marked.js</file>
+        <file>Assets/vendors/MARKED-LICENSE.txt</file>
+        <file>Assets/vendors/qt_attribution.json</file>
+        <file>Assets/vendors/vega5.min.js</file>
+        <file>Assets/vendors/vega-embed.js</file>
+        <file>Assets/css/custom.css</file>
+        <file>Assets/js/custom.js</file>
+    </qresource>
+</RCC>

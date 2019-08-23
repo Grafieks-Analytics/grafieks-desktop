@@ -2,14 +2,6 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Styles 1.4
-/****************************************************************************
-**
-** Copyright (C) 2019 Grafieks.
-** Contact: https://grafieks.com/
-**
-** Master Template File
-**
-****************************************************************************/
 
 import "./Source/Data"
 import "./Source/Dashboard"
@@ -22,11 +14,7 @@ ApplicationWindow {
     visible: true
     width: 1600
     height: 800
-    minimumWidth: 1300
-    minimumHeight: 700
-
-    title: Constants.applicationName
-
+    title: qsTr("Grafieks")
 
     menuBar : MenuBar{
         id:menubar
@@ -91,7 +79,7 @@ ApplicationWindow {
             Action{
                 text: qsTr("Open Help")
                 onTriggered: {
-                    stacklayout_home.currentIndex = 1
+                    stacklayout_home.currentIndex = 0
                 }
 
             }
@@ -182,11 +170,16 @@ ApplicationWindow {
         }
 
         // 6
+        DashboardList{
+            id: dashboard_list_main
+        }
+
+        // 7
         NewReport{
             id: new_report_main
         }
 
-        // 7
+        // 8
         NewDashboard{
             id: new_dashboard_main
         }

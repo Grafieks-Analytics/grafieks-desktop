@@ -1,36 +1,26 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
-import QtQuick.Controls.Styles 1.4
-/****************************************************************************
-**
-** Copyright (C) 2019 Grafieks.
-** Contact: https://grafieks.com/
-**
-** Master Template File
-**
-****************************************************************************/
 
-import "./Source/Data"
-import "./Source/Dashboard"
-import "./Source/Others"
-
-import "Constants.js" as Constants
+import "../Data"
+import "../Dashboard"
 
 ApplicationWindow {
     id: mainwindow
     visible: true
     width: 1600
     height: 800
-    minimumWidth: 1300
-    minimumHeight: 700
+    title: qsTr("Grafieks")
 
-    title: Constants.applicationName
+    header: Rectangle{
+        width: parent.width
+        height: 30
+        border.color: "lightGray"
+    }
 
 
     menuBar : MenuBar{
         id:menubar
-
 
         // Menu File
 
@@ -91,7 +81,7 @@ ApplicationWindow {
             Action{
                 text: qsTr("Open Help")
                 onTriggered: {
-                    stacklayout_home.currentIndex = 1
+                    stacklayout_home.currentIndex = 0
                 }
 
             }
@@ -127,20 +117,10 @@ ApplicationWindow {
             Action{
                 text: qsTr("&Test")
                 onTriggered: {
-                    stacklayout_home.currentIndex = 2
+                    stacklayout_home.currentIndex = 3
                 }
             }
         }
-
-        background: Rectangle {
-            color: Constants.themeColor
-        }
-    }
-
-    header: Rectangle {
-        implicitWidth: parent.vertical ? 1 : 24
-        implicitHeight: parent.vertical ? 24 : 1
-        color: Constants.darkThemeColor
     }
 
 
@@ -182,11 +162,16 @@ ApplicationWindow {
         }
 
         // 6
+        DashboardList{
+            id: dashboard_list_main
+        }
+
+        // 7
         NewReport{
             id: new_report_main
         }
 
-        // 7
+        // 8
         NewDashboard{
             id: new_dashboard_main
         }

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Scatter Chart</title>
+
+    <script src="../../Assets/vendors/vega5.min.js"></script>
+    <script src="../../Assets/vendors/vega-embed.js"></script>
+  </head>
+
+  <body>
+    <div id="vis"></div>
+    <script type="text/javascript">
+      var config = {
+        // default view background color
+        // covers the entire view component
+        background: "#fff",
+        axis: {
+          labelFont: "serif",
+          labelFontSize: 16,
+          tickWidth: 3,
+          tickColor: "red"
+        }
+      };
+
+      var spec = {
+    $schema: "https://vega.github.io/schema/vega/v5.json",
+    width: 800,
+    height: 400,
+    padding: 5,
+    autosize: "pad",
+
+    data: [
+        {
+            name: "source",
+            url:
+                "https://raw.githubusercontent.com/vega/vega/master/docs/data/cars.json",
+            transform: [
+                {
+                    type: "filter",
+                    expr:
+                        "datum['Horsepower'] != null && datum['Miles_per_Gallon'] != null && datum['Acceleration'] != null"
+                }
+            ]
+        },
+        {
+            name: "summary",
+            source: "source",
+            transform: [
+                {
+                    type: "extent",
+                    field: "Horsepower",
+                    signal: "hp_extent"
+                },
+                {
+                    type: "bin",
+                    field: "Horsepower",
+                    maxbins: 10,
+                    extent: { signal: "hp_extent" },
+                    as: ["hp0", "hp1"]
+                },
+                {
+                    type: "extent",
+                    field: "Miles_per_Gallon",
+                    signal: "mpg_extent"
+                },
+                {
+                    type: "bin",
+                    field: "Miles_per_Gallon",
+                    maxbins: 10,
+                    extent: { signal: "mpg_extent" },
+                    as: ["mpg0", "mpg1"]
+                },
+                {
+                    type: "aggregate",
+                    groupby: ["hp0", "hp1", "mpg0", "mpg1"]
+                }
+            ]
+        }
+    ],
+
+    scales: [
+        {
+            name: "x",
+            type: "linear",
+            round: true,
+            nice: true,
+            zero: true,
+            domain: { data: "source", field: "Horsepower" },
+            range: "width"
+        },
+        {
+            name: "y",
+            type: "linear",
+            round: true,
+            nice: true,
+            zero: true,
+            domain: { data: "source", field: "Miles_per_Gallon" },
+            range: "height"
+        },
+        {
+            name: "size",
+            type: "linear",
+            zero: true,
+            domain: { data: "summary", field: "count" },
+            range: [0, 360]
+        }
+    ],
+
+    axes: [
+        {
+            scale: "x",
+            grid: true,
+            domain: false,
+            orient: "bottom",
+            tickCount: 5,
+            title: "X-Axis",
+            domainColor: "#dfdfdf",
+            ticks: false,
+            labelColor: "#797979"
+        },
+        {
+            scale: "y",
+            grid: true,
+            domain: false,
+            orient: "left",
+            titlePadding: 5,
+            title: "Y-Axis",
+            domainColor: "#dfdfdf",
+            ticks: false,
+            labelColor: "#797979"
+        }
+    ],
+
+    legends: [
+        {
+            size: "size",
+            title: "Count",
+            format: "s",
+            symbolFillColor: "#4682b4",
+            symbolStrokeColor: "transparent",
+            symbolType: "circle"
+        }
+    ],
+
+    marks: [
+        {
+            name: "marks",
+            type: "symbol",
+            from: { data: "summary" },
+            encode: {
+                update: {
+                    x: { scale: "x", signal: "(datum.hp0 + datum.hp1) / 2" },
+                    y: { scale: "y", signal: "(datum.mpg0 + datum.mpg1) / 2" },
+                    size: { scale: "size", field: "count" },
+                    shape: { value: "circle" },
+                    fill: { value: "#4682b4" }
+                }
+            }
+        }
+    ]
+};
+
+      vegaEmbed("#vis", spec, {
+        config: config,
+        tooltip: { theme: "dark" }
+      })
+        .then(function(result) {
+          console.log(result);
+        })
+        .catch(console.error);
+    </script>
+  </body>
+</html>
