@@ -46,7 +46,6 @@ Page {
             spacing:10
 
             Image{
-                //                x: 40
                 source:"../../Images/icons/Excel.png"
                 height:60
                 fillMode: Image.Stretch
