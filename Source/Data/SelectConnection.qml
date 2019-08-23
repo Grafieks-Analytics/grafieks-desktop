@@ -23,7 +23,7 @@ Page {
         id: mainLabel
 
         text: qsTr("Connect To")
-        font.pointSize: 28
+        font.pointSize: 20
         color:"gray"
         anchors.top:parent.top
         anchors.topMargin: 100
@@ -63,7 +63,7 @@ Page {
             }
             Text{
                 text:"Microsoft Excel"
-                font.pointSize: 24
+                font.pointSize: 14
                 color:"gray"
                 anchors.horizontalCenter: parent.horizontalCenter
 
@@ -98,7 +98,7 @@ Page {
             }
             Text{
                 text:"ODBC"
-                font.pointSize: 24
+                font.pointSize: 14
                 color:"gray"
                 anchors.horizontalCenter: parent.horizontalCenter
 
@@ -133,7 +133,7 @@ Page {
             }
             Text{
                 text:"JDBC"
-                font.pointSize: 24
+                font.pointSize: 14
                 color:"gray"
                 anchors.horizontalCenter: parent.horizontalCenter
 
@@ -153,7 +153,7 @@ Page {
             spacing:10
 
             Image{
-                source:"../../Images/icons/Server.png"
+                source:"../../Images/icons/server.png"
                 height:60
                 width:height
                 verticalAlignment: Image.AlignVCenter
@@ -169,7 +169,7 @@ Page {
             }
             Text{
                 text:"Server"
-                font.pointSize: 24
+                font.pointSize: 14
                 color:"gray"
                 anchors.horizontalCenter: parent.horizontalCenter
 

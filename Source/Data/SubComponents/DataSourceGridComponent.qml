@@ -12,8 +12,8 @@ Item {
     Rectangle{
         id:data_source_main
         border.color: Constants.darkThemeColor
-        width: 340
-        height: 240
+        width: 370
+        height: 250
         radius: 10
 
         Rectangle{
@@ -23,7 +23,7 @@ Item {
             anchors.top: data_source_main.top
             anchors.leftMargin: 1
             anchors.topMargin: 1
-            width: 338
+            width: 368
             height: 40
             color: "#f2f1f1"
             radius: 10
@@ -114,12 +114,12 @@ Item {
 
             Text{
                 text: "Description"
+                font.bold: true
             }
             Text{
                 width:data_source_main.width - 10
                 text: "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs."
                 wrapMode: Text.WordWrap
-                font.pointSize: 11
             }
         }
 
@@ -139,7 +139,7 @@ Item {
                 }
                 Text{
                     text: "Hirak Kocharee"
-                    font.pointSize: 11
+                    font.bold: true
                 }
 
             }
@@ -153,7 +153,7 @@ Item {
                 }
                 Text{
                     text: "Live"
-                    font.pointSize: 11
+                    font.bold:true
                 }
 
             }

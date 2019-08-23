@@ -38,11 +38,11 @@ Rectangle{
                 id: row_left1
                 anchors.left:rect_col_1.left
                 anchors.leftMargin: 5
+                anchors.verticalCenter: rect_col_1.verticalCenter
+                width: parent.width
 
                 Image{
                     id: db_menu_icon
-                    x: 0
-                    y: 120
                     source:"../../Images/icons/Db.png"
                     width:25
                     height: 25
@@ -51,9 +51,9 @@ Rectangle{
                 Text{
                     id: db_menu_text
                     x: 0
-                    y: -30
+                    y: 60
                     text: "Data Designer"
-                    transform: Rotation { origin.x: 110; origin.y: 100; angle: 270}
+                    transform: Rotation { origin.x: 0; origin.y: 0; angle: 270}
                     color:"Gray"
 
                 }
@@ -105,11 +105,11 @@ Rectangle{
                 id: row_left2
                 anchors.left:rect_col_2.left
                 anchors.leftMargin: 5
+                anchors.verticalCenter: rect_col_2.verticalCenter
+                width: rect_col_2.width
 
                 Image{
                     id: chart_menu_icon
-                    x: 0
-                    y: 120
                     source:"../../Images/icons/Charts.png"
                     width:25
                     height: 25
@@ -119,9 +119,9 @@ Rectangle{
                 Text{
                     id: chart_menu_text
                     x: 0
-                    y: 0
+                    y: 70
                     text: "Dashboard Designer"
-                    transform: Rotation { origin.x: 110; origin.y: 100; angle: 270}
+                    transform: Rotation { origin.x: 0; origin.y: 0; angle: 270}
                     color:"Gray"
 
                 }
