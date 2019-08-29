@@ -143,10 +143,22 @@ Popup {
         spacing: 10
 
         Button{
-            text:"Sign In"
+
+            id: btn_signin
+            height: back_rec_1.height
+            width: back_rec_1.width
+
             background: Rectangle{
+                id: back_rec_1
                 radius: 10
-                color: Constants.themeColor
+                color: Constants.greenThemeColor
+                width: 100
+                height: 30
+
+                Text{
+                    text:"Sign In"
+                    anchors.centerIn: parent
+                }
             }
             onClicked: {
                 popup.visible = false
@@ -155,10 +167,22 @@ Popup {
         }
 
         Button{
-            text:"Cancel"
+
+            id: btn_cancel
+            height: back_rec_2.height
+            width: back_rec_2.width
+
             background: Rectangle{
+                id: back_rec_2
                 radius: 10
-                color: Constants.themeColor
+                color: Constants.redThemeColor
+                width: 100
+                height: 30
+
+                Text{
+                     text:"Cancel"
+                     anchors.centerIn: parent
+                }
             }
             onClicked: {
                 popup.visible = false

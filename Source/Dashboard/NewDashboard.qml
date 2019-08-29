@@ -284,7 +284,7 @@ Page {
         contentItem: Rectangle {
             implicitWidth: parent.vertical ? 1 : 24
             implicitHeight: parent.vertical ? 24 : 1
-            color: Constants.themeColor
+            color: Constants.darkThemeColor
         }
 
 

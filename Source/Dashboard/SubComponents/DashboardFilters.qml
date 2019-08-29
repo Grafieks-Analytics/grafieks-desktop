@@ -6,12 +6,13 @@ import "../../../Constants.js" as Constants
 
 Item {
 
+    id: dashboard_filter
     width:200
-
+    height: parent.height
 
 
     Rectangle {
-        id: rectangle
+        id: rectangle1
         x: 8
         y: 8
         width: 185
@@ -68,7 +69,7 @@ Item {
     }
 
     Rectangle {
-        id: rectangle1
+        id: rectangle2
         x: 8
         y: 161
         width: 185
@@ -104,7 +105,7 @@ Item {
     }
 
     Rectangle {
-        id: rectangle2
+        id: rectangle3
         x: 8
         y: 247
         width: 185
@@ -135,6 +136,7 @@ Item {
             id: rangeSlider
             x: 15
             y: 37
+
             slider_height: 10
             slider_width: 150
             knob_size: 16
@@ -145,7 +147,7 @@ Item {
     }
 
     Rectangle {
-        id: rectangle3
+        id: rectangle4
         x: 8
         y: 323
         width: 185
@@ -199,6 +201,53 @@ Item {
             text: qsTr("Order Creation Date")
             font.pixelSize: 12
         }
+    }
+
+    TabBar{
+
+        id: apply_btn
+        anchors.horizontalCenter: rectangle4.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 60
+        width: 190
+        height:23
+
+        TabButton{
+            id: filter_cancel_btn
+            text: "Cancel"
+
+            background: Rectangle {
+                id: filter_cancel_btn_background
+                color:  filter_cancel_btn.pressed? Constants.darkThemeColor: Constants.redThemeColor
+
+            }
+            contentItem: Text{
+                id: filter_cancel_btn_text
+                text: filter_cancel_btn.text
+                color:  "black"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+        }
+
+        TabButton{
+            id: filter_apply_btn
+            text: "Apply"
+
+            background: Rectangle {
+                id: filter_apply_btn_background
+                color:  filter_apply_btn.pressed? Constants.darkThemeColor: Constants.greenThemeColor
+
+            }
+            contentItem: Text{
+                id: filter_apply_btn_text
+                text: filter_apply_btn.text
+                color:  "black"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+        }
+
     }
 
 }

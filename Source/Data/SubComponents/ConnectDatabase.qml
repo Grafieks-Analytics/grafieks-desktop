@@ -263,18 +263,40 @@ Popup {
         spacing: 10
 
         Button{
-            text:"Test Connection"
+            id: btn_test_con
+            height: back_rec_1.height
+            width: back_rec_1.width
+
             background: Rectangle{
+                id: back_rec_1
                 radius: 10
-                color: Constants.themeColor
+                color: Constants.greenThemeColor
+                width: 130
+                height: 30
+
+                Text{
+                    text:"Test Connection"
+                    anchors.centerIn: parent
+                }
             }
         }
 
         Button{
-            text:"Connect"
+            id: btn_connect
+            height: back_rec_2.height
+            width: back_rec_2.width
+
             background: Rectangle{
+                id: back_rec_2
                 radius: 10
-                color: Constants.themeColor
+                color: Constants.greenThemeColor
+                width: 100
+                height: 30
+
+                Text{
+                    text:"Connect"
+                    anchors.centerIn: parent
+                }
             }
 
             onClicked: {
@@ -284,10 +306,21 @@ Popup {
         }
 
         Button{
-            text:"Cancel"
+            id: btn_cancel
+            height: back_rec_3.height
+            width: back_rec_3.width
+
             background: Rectangle{
+                id: back_rec_3
                 radius: 10
-                color: Constants.themeColor
+                color: Constants.redThemeColor
+                width: 100
+                height: 30
+
+                Text{
+                    text:"Cancel"
+                    anchors.centerIn: parent
+                }
             }
             onClicked: {
                 popup.visible = false
