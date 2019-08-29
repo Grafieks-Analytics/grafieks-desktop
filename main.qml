@@ -36,6 +36,7 @@ ApplicationWindow {
 
         Menu{
             id: menu_file
+            x:2
             title: qsTr("File")
 
             Action{

@@ -41,8 +41,23 @@ Rectangle{
             }
             MouseArea{
                 anchors.fill:parent
+                hoverEnabled: true
                 onClicked: {
                     rectangle_left.loadchart("../Charts/bar.html")
+                }
+
+                onPressed: {
+                    bar_chart.color = "white"
+                }
+                onReleased:  {
+                    bar_chart.color = Constants.themeColor
+                }
+
+                onEntered: {
+                    bar_chart.color = Constants.hoverThemeColor
+                }
+                onExited: {
+                    bar_chart.color = Constants.themeColor
                 }
             }
         }
@@ -59,8 +74,22 @@ Rectangle{
             }
             MouseArea{
                 anchors.fill:parent
+                hoverEnabled: true
                 onClicked: {
                     rectangle_left.loadchart("../Charts/line.html")
+                }
+                onPressed: {
+                    line_chart.color = "white"
+                }
+                onReleased:  {
+                    line_chart.color = Constants.themeColor
+                }
+
+                onEntered: {
+                    line_chart.color = Constants.hoverThemeColor
+                }
+                onExited: {
+                    line_chart.color = Constants.themeColor
                 }
             }
         }
@@ -77,8 +106,23 @@ Rectangle{
             }
             MouseArea{
                 anchors.fill:parent
+                hoverEnabled: true
                 onClicked: {
                     rectangle_left.loadchart("../Charts/area.html")
+                }
+
+                onPressed: {
+                    area_chart.color = "white"
+                }
+                onReleased:  {
+                    area_chart.color = Constants.themeColor
+                }
+
+                onEntered: {
+                    area_chart.color = Constants.hoverThemeColor
+                }
+                onExited: {
+                    area_chart.color = Constants.themeColor
                 }
             }
         }
@@ -95,8 +139,23 @@ Rectangle{
             }
             MouseArea{
                 anchors.fill:parent
+                hoverEnabled: true
                 onClicked: {
 //                    rectangle_left.loadchart("../Charts/line.html")
+                }
+
+                onPressed: {
+                    donout_chart.color = "white"
+                }
+                onReleased:  {
+                    donout_chart.color = Constants.themeColor
+                }
+
+                onEntered: {
+                    donout_chart.color = Constants.hoverThemeColor
+                }
+                onExited: {
+                    donout_chart.color = Constants.themeColor
                 }
             }
         }
@@ -113,14 +172,29 @@ Rectangle{
             }
             MouseArea{
                 anchors.fill:parent
+                hoverEnabled: true
                 onClicked: {
                     rectangle_left.loadchart("../Charts/pie.html")
+                }
+
+                onPressed: {
+                    pie_chart.color = "white"
+                }
+                onReleased:  {
+                    pie_chart.color = Constants.themeColor
+                }
+
+                onEntered: {
+                    pie_chart.color = Constants.hoverThemeColor
+                }
+                onExited: {
+                    pie_chart.color = Constants.themeColor
                 }
             }
         }
 
         Rectangle{
-            id: funner_chart
+            id: funnel_chart
             width: parent.width
             height: 30
             color: Constants.themeColor
@@ -131,8 +205,23 @@ Rectangle{
             }
             MouseArea{
                 anchors.fill:parent
+                hoverEnabled: true
                 onClicked: {
 //                    rectangle_left.loadchart("../Charts/line.html")
+                }
+
+                onPressed: {
+                    funnel_chart.color = "white"
+                }
+                onReleased:  {
+                    funnel_chart.color = Constants.themeColor
+                }
+
+                onEntered: {
+                    funnel_chart.color = Constants.hoverThemeColor
+                }
+                onExited: {
+                    funnel_chart.color = Constants.themeColor
                 }
             }
         }
@@ -149,8 +238,23 @@ Rectangle{
             }
             MouseArea{
                 anchors.fill:parent
+                hoverEnabled: true
                 onClicked: {
 //                    rectangle_left.loadchart("../Charts/line.html")
+                }
+
+                onPressed: {
+                    gauge_chart.color = "white"
+                }
+                onReleased:  {
+                    gauge_chart.color = Constants.themeColor
+                }
+
+                onEntered: {
+                    gauge_chart.color = Constants.hoverThemeColor
+                }
+                onExited: {
+                    gauge_chart.color = Constants.themeColor
                 }
             }
         }
@@ -167,8 +271,23 @@ Rectangle{
             }
             MouseArea{
                 anchors.fill:parent
+                hoverEnabled: true
                 onClicked: {
                     rectangle_left.loadchart("../Charts/radar.html")
+                }
+
+                onPressed: {
+                    radar_chart.color = "white"
+                }
+                onReleased:  {
+                    radar_chart.color = Constants.themeColor
+                }
+
+                onEntered: {
+                    radar_chart.color = Constants.hoverThemeColor
+                }
+                onExited: {
+                    radar_chart.color = Constants.themeColor
                 }
             }
         }
@@ -186,8 +305,23 @@ Rectangle{
             }
             MouseArea{
                 anchors.fill:parent
+                hoverEnabled: true
                 onClicked: {
 //                    rectangle_left.loadchart("../Charts/line.html")
+                }
+
+                onPressed: {
+                    candlestick_chart.color = "white"
+                }
+                onReleased:  {
+                    candlestick_chart.color = Constants.themeColor
+                }
+
+                onEntered: {
+                    candlestick_chart.color = Constants.hoverThemeColor
+                }
+                onExited: {
+                    candlestick_chart.color = Constants.themeColor
                 }
             }
         }
@@ -204,8 +338,23 @@ Rectangle{
             }
             MouseArea{
                 anchors.fill:parent
+                hoverEnabled: true
                 onClicked: {
 //                    rectangle_left.loadchart("../Charts/line.html")
+                }
+
+                onPressed: {
+                    sankey_chart.color = "white"
+                }
+                onReleased:  {
+                    sankey_chart.color = Constants.themeColor
+                }
+
+                onEntered: {
+                    sankey_chart.color = Constants.hoverThemeColor
+                }
+                onExited: {
+                    sankey_chart.color = Constants.themeColor
                 }
             }
         }
@@ -222,8 +371,23 @@ Rectangle{
             }
             MouseArea{
                 anchors.fill:parent
+                hoverEnabled: true
                 onClicked: {
 //                    rectangle_left.loadchart("../Charts/line.html")
+                }
+
+                onPressed: {
+                    heatmap_chart.color = "white"
+                }
+                onReleased:  {
+                    heatmap_chart.color = Constants.themeColor
+                }
+
+                onEntered: {
+                    heatmap_chart.color = Constants.hoverThemeColor
+                }
+                onExited: {
+                    heatmap_chart.color = Constants.themeColor
                 }
             }
         }
@@ -240,8 +404,23 @@ Rectangle{
             }
             MouseArea{
                 anchors.fill:parent
+                hoverEnabled: true
                 onClicked: {
 //                    rectangle_left.loadchart("../Charts/line.html")
+                }
+
+                onPressed: {
+                    map_chart.color = "white"
+                }
+                onReleased:  {
+                    map_chart.color = Constants.themeColor
+                }
+
+                onEntered: {
+                    map_chart.color = Constants.hoverThemeColor
+                }
+                onExited: {
+                    map_chart.color = Constants.themeColor
                 }
             }
         }
@@ -260,8 +439,23 @@ Rectangle{
             }
             MouseArea{
                 anchors.fill:parent
+                hoverEnabled: true
                 onClicked: {
                     rectangle_left.loadchart("../Charts/scatter.html")
+                }
+
+                onPressed: {
+                    scatter_chart.color = "white"
+                }
+                onReleased:  {
+                    scatter_chart.color = Constants.themeColor
+                }
+
+                onEntered: {
+                    scatter_chart.color = Constants.hoverThemeColor
+                }
+                onExited: {
+                    scatter_chart.color = Constants.themeColor
                 }
             }
         }
@@ -278,8 +472,23 @@ Rectangle{
             }
             MouseArea{
                 anchors.fill:parent
+                hoverEnabled: true
                 onClicked: {
                     rectangle_left.loadchart("../Charts/tree.html")
+                }
+
+                onPressed: {
+                    tree_chart.color = "white"
+                }
+                onReleased:  {
+                    tree_chart.color = Constants.themeColor
+                }
+
+                onEntered: {
+                    tree_chart.color = Constants.hoverThemeColor
+                }
+                onExited: {
+                    tree_chart.color = Constants.themeColor
                 }
             }
         }
@@ -296,8 +505,23 @@ Rectangle{
             }
             MouseArea{
                 anchors.fill:parent
+                hoverEnabled: true
                 onClicked: {
                     rectangle_left.loadchart("../Charts/tree-map.html")
+                }
+
+                onPressed: {
+                    treemap_chart.color = "white"
+                }
+                onReleased:  {
+                    treemap_chart.color = Constants.themeColor
+                }
+
+                onEntered: {
+                    treemap_chart.color = Constants.hoverThemeColor
+                }
+                onExited: {
+                    treemap_chart.color = Constants.themeColor
                 }
             }
         }
@@ -314,8 +538,23 @@ Rectangle{
             }
             MouseArea{
                 anchors.fill:parent
+                hoverEnabled: true
                 onClicked: {
 //                    rectangle_left.loadchart("../Charts/line.html")
+                }
+
+                onPressed: {
+                    chord_chart.color = "white"
+                }
+                onReleased:  {
+                    chord_chart.color = Constants.themeColor
+                }
+
+                onEntered: {
+                    chord_chart.color = Constants.hoverThemeColor
+                }
+                onExited: {
+                    chord_chart.color = Constants.themeColor
                 }
             }
         }
@@ -332,8 +571,23 @@ Rectangle{
             }
             MouseArea{
                 anchors.fill:parent
+                hoverEnabled: true
                 onClicked: {
                     rectangle_left.loadchart("../Charts/sunburst.html")
+                }
+
+                onPressed: {
+                    sunburst_chart.color = "white"
+                }
+                onReleased:  {
+                    sunburst_chart.color = Constants.themeColor
+                }
+
+                onEntered: {
+                    sunburst_chart.color = Constants.hoverThemeColor
+                }
+                onExited: {
+                    sunburst_chart.color = Constants.themeColor
                 }
             }
         }
@@ -350,8 +604,23 @@ Rectangle{
             }
             MouseArea{
                 anchors.fill:parent
+                hoverEnabled: true
                 onClicked: {
 //                    rectangle_left.loadchart("../Charts/line.html")
+                }
+
+                onPressed: {
+                    nightigalerose_chart.color = "white"
+                }
+                onReleased:  {
+                    nightigalerose_chart.color = Constants.themeColor
+                }
+
+                onEntered: {
+                    nightigalerose_chart.color = Constants.hoverThemeColor
+                }
+                onExited: {
+                    nightigalerose_chart.color = Constants.themeColor
                 }
             }
         }
@@ -368,8 +637,23 @@ Rectangle{
             }
             MouseArea{
                 anchors.fill:parent
+                hoverEnabled: true
                 onClicked: {
 //                    rectangle_left.loadchart("../Charts/line.html")
+                }
+
+                onPressed: {
+                    forcedirected_chart.color = "white"
+                }
+                onReleased:  {
+                    forcedirected_chart.color = Constants.themeColor
+                }
+
+                onEntered: {
+                    forcedirected_chart.color = Constants.hoverThemeColor
+                }
+                onExited: {
+                    forcedirected_chart.color = Constants.themeColor
                 }
             }
         }

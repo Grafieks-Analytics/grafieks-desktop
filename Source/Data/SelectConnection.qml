@@ -10,9 +10,7 @@ import "../../Constants.js" as Constants
 Page {
 
     id: selectconn_page
-    width: parent.width
-
-    property int menu_width: 60
+    width: parent.width - left_menubar.width
 
 
     LeftMenuBar{
@@ -27,7 +25,7 @@ Page {
         color:"gray"
         anchors.top:parent.top
         anchors.topMargin: 100
-        x: parent.width/2
+        x: selectconn_page.width/2 - 70
     }
 
     Row{

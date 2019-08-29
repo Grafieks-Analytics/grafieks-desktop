@@ -33,6 +33,16 @@ Item{
         id: nestedModel
 
         ListElement {
+            categoryName: "Axis"
+            collapsed: false
+            subItems: [
+                ListElement { itemName: "X Axis" },
+                ListElement { itemName: "Y Axis" },
+                ListElement { itemName: "Edit Axis" }
+            ]
+        }
+
+        ListElement {
             categoryName: "Properties"
             collapsed: false
 
@@ -43,16 +53,6 @@ Item{
                 ListElement { itemName: "Size" },
                 ListElement { itemName: "Marker Shape" },
                 ListElement { itemName: "Label" }
-            ]
-        }
-
-        ListElement {
-            categoryName: "Axis"
-            collapsed: false
-            subItems: [
-                ListElement { itemName: "X Axis" },
-                ListElement { itemName: "Y Axis" },
-                ListElement { itemName: "Edit Axis" }
             ]
         }
 

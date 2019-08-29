@@ -2,6 +2,7 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 
+import "../../MainSubComponents"
 import "../../../Constants.js" as Constants
 
 Item {
@@ -25,12 +26,23 @@ Item {
             anchors.topMargin: 1
             width: 368
             height: 40
-            color: "#f2f1f1"
+            color: Constants.themeColor
             radius: 10
 
-            Text{
+            Rectangle{
+                id: inner_rectangle
+                width: parent.width
+                anchors.bottom: parent.bottom
+                height:10
+                color: Constants.themeColor
+            }
+
+            CheckBoxTpl{
+
                 id: data_source_name
-                text: "Data Source Name"
+                checkbox_text: "Data Source Name"
+                checkbox_checked: false
+                parent_dimension: 16
                 anchors.centerIn: parent
             }
 

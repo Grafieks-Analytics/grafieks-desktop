@@ -557,8 +557,8 @@ Page {
                             Image {
                                 id: drop_icon
                                 source: "../../Images/icons/Down_20.png"
-                                width: 20
-                                height: 20
+                                width: 10
+                                height: 10
                                 anchors.right: parent.right
                                 anchors.rightMargin: 15
                                 anchors.verticalCenter: parent.verticalCenter

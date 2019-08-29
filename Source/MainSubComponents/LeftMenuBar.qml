@@ -62,6 +62,7 @@ Rectangle{
 
             MouseArea{
                 anchors.fill: parent
+                hoverEnabled: true
                 onClicked: {
                     stacklayout_home.currentIndex = 3
                 }
@@ -69,6 +70,12 @@ Rectangle{
                     rect_col_1.color = "white"
                 }
                 onReleased:  {
+                    rect_col_1.color = Constants.themeColor
+                }
+                onEntered: {
+                    rect_col_1.color = Constants.hoverThemeColor
+                }
+                onExited: {
                     rect_col_1.color = Constants.themeColor
                 }
 
@@ -129,6 +136,7 @@ Rectangle{
 
             MouseArea{
                 anchors.fill: parent
+                hoverEnabled: true
                 onClicked: {
                     stacklayout_home.currentIndex = 7
                 }
@@ -136,6 +144,12 @@ Rectangle{
                     rect_col_2.color = "white"
                 }
                 onReleased:  {
+                    rect_col_2.color = Constants.themeColor
+                }
+                onEntered: {
+                    rect_col_2.color = Constants.hoverThemeColor
+                }
+                onExited: {
                     rect_col_2.color = Constants.themeColor
                 }
             }
