@@ -10,6 +10,7 @@
 
 import QtQuick 2.11
 import QtQuick.Controls 2.4
+import QtQuick.Dialogs 1.2
 
 import "../../../Constants.js" as Constants
 
@@ -26,6 +27,23 @@ Popup {
     padding: 0
 
     property int label_col : 150
+
+
+    Connections{
+        target: MysqlConnect
+        onConnectStatus: {
+
+            if(status.match(/Success/gi)){
+                popup.visible = false
+                stacklayout_home.currentIndex = 4
+            }
+            else{
+                popup.visible = true
+                msg_dialog.open()
+                msg_dialog.text = status
+            }
+        }
+    }
 
     // Popup Header starts
 
@@ -75,7 +93,7 @@ Popup {
         }
 
         TextField{
-            id: field1
+            id: hostname
             maximumLength: 45
             anchors.verticalCenter: parent.verticalCenter
 
@@ -115,7 +133,7 @@ Popup {
         }
 
         TextField{
-            id: field2
+            id: database
             maximumLength: 45
             anchors.verticalCenter: parent.verticalCenter
 
@@ -130,7 +148,7 @@ Popup {
 
     // Row2: Enter database name ends
 
-    // Row3: Enter database name starts
+    // Row3: Enter port number starts
 
     Row{
 
@@ -155,7 +173,7 @@ Popup {
         }
 
         TextField{
-            id: field3
+            id: port
             maximumLength: 45
             anchors.verticalCenter: parent.verticalCenter
 
@@ -168,7 +186,7 @@ Popup {
 
     }
 
-    // Row3: Enter database name ends
+    // Row3: Enter port number ends
 
     // Row 4: Enter user name starts
 
@@ -195,7 +213,7 @@ Popup {
         }
 
         TextField{
-            id: field4
+            id: username
             maximumLength: 45
             anchors.verticalCenter: parent.verticalCenter
 
@@ -235,7 +253,7 @@ Popup {
         }
 
         TextField{
-            id: field5
+            id: password
             maximumLength: 45
             echoMode: "Password"
             anchors.verticalCenter: parent.verticalCenter
@@ -275,7 +293,7 @@ Popup {
                 height: 30
 
                 Text{
-                    text:"Test Connection"
+                    text: "Test Connection"
                     anchors.centerIn: parent
                 }
             }
@@ -294,14 +312,18 @@ Popup {
                 height: 30
 
                 Text{
-                    text:"Connect"
+                    text: "Connect"
                     anchors.centerIn: parent
                 }
             }
 
             onClicked: {
-                popup.visible = false
-                stacklayout_home.currentIndex = 4
+
+                let host = hostname.text
+                let user = username.text
+                let pass = password.text
+                let data = database.text
+                MysqlConnect.startConnection(host, user, pass, data)
             }
         }
 
@@ -318,14 +340,24 @@ Popup {
                 height: 30
 
                 Text{
-                    text:"Cancel"
+                    text: "Cancel"
                     anchors.centerIn: parent
                 }
             }
             onClicked: {
                 popup.visible = false
+
             }
         }
     }
     // Row 6: Action Button ends
+
+
+    MessageDialog{
+        id: msg_dialog
+        title: "Mysql Connection"
+        text: ""
+        icon: StandardIcon.Critical
+    }
+
 }
