@@ -40,3 +40,6 @@ HEADERS += \
     Code/Headers/mysqlconnect.h \
     Code/qttest.h \
     Code/Headers/qttest.h
+
+DISTFILES += \
+    README.md
