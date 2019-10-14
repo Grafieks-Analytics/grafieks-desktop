@@ -17,10 +17,10 @@ signals:
     void connectStatus(QString status);
 
 public slots:
-    void startConnection(QString host, QString username, QString password, QString db);
+    void startConnection(QString host, QString username, QString password, QString database);
 
 private:
-    QSqlDatabase db;
+    QSqlDatabase db_mysql;
 };
 
 #endif // MYSQLCONNECT_H
