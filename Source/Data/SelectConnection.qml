@@ -13,6 +13,17 @@ Page {
     width: parent.width - left_menubar.width
 
 
+    // Signals
+    signal update_host_query_modeller(string new_host);
+    signal update_data_sources_list();
+
+    // Slots
+
+    function tmp_update_host(new_host){
+        update_host_query_modeller(new_host)
+    }
+
+
     LeftMenuBar{
         id: left_menubar
     }
@@ -21,7 +32,7 @@ Page {
         id: mainLabel
 
         text: qsTr("Connect To")
-        font.pointSize: 20
+        font.pointSize: 28
         color:"gray"
         anchors.top:parent.top
         anchors.topMargin: 100
@@ -44,23 +55,30 @@ Page {
             spacing:10
 
             Image{
+                id: excel_icon
                 source:"../../Images/icons/Excel.png"
                 height:60
                 fillMode: Image.Stretch
                 width:height
                 anchors.horizontalCenter: parent.horizontalCenter
 
+
+
                 MouseArea{
+                    id: btn1
                     anchors.fill: parent
+                    hoverEnabled: true
 
                     onClicked: {
                         fileDialog1.open()
                     }
+
                 }
             }
             Text{
+                id: excel_text
                 text:"Microsoft Excel"
-                font.pointSize: 14
+                font.pointSize: 24
                 color:"gray"
                 anchors.horizontalCenter: parent.horizontalCenter
 
@@ -90,12 +108,13 @@ Page {
 
                     onClicked: {
                         connectDatabase.visible = true
+                        update_data_sources_list();
                     }
                 }
             }
             Text{
                 text:"ODBC"
-                font.pointSize: 14
+                font.pointSize: 24
                 color:"gray"
                 anchors.horizontalCenter: parent.horizontalCenter
 
@@ -104,6 +123,7 @@ Page {
 
                     onClicked: {
                         connectDatabase.visible = true
+                        update_data_sources_list();
                     }
                 }
             }
@@ -125,12 +145,13 @@ Page {
 
                     onClicked: {
                         connectDatabase.visible = true
+                        update_data_sources_list();
                     }
                 }
             }
             Text{
                 text:"JDBC"
-                font.pointSize: 14
+                font.pointSize: 24
                 color:"gray"
                 anchors.horizontalCenter: parent.horizontalCenter
 
@@ -139,6 +160,7 @@ Page {
 
                     onClicked: {
                         connectDatabase.visible = true
+                        update_data_sources_list();
                     }
                 }
             }
@@ -150,7 +172,7 @@ Page {
             spacing:10
 
             Image{
-                source:"../../Images/icons/server.png"
+                source:"../../Images/icons/Server.png"
                 height:60
                 width:height
                 verticalAlignment: Image.AlignVCenter
@@ -166,7 +188,7 @@ Page {
             }
             Text{
                 text:"Server"
-                font.pointSize: 14
+                font.pointSize: 24
                 color:"gray"
                 anchors.horizontalCenter: parent.horizontalCenter
 
@@ -224,11 +246,15 @@ Page {
 
     ConnectGrafieks2{
         id: connectGrafieks2
+
     }
 
     ConnectDatabase{
         id: connectDatabase
+
     }
+
+
 
 
 

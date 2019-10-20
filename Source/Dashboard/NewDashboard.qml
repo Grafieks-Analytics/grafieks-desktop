@@ -278,7 +278,9 @@ Page {
     ToolSeparator{
         id: tool_sep_chartFilters
         anchors.left: column_newdashboard.left
+        anchors.top: parent.top
         anchors.leftMargin: -8
+        anchors.topMargin: -3
         height:parent.height
 
         contentItem: Rectangle {

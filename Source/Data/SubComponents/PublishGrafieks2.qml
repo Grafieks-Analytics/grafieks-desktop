@@ -4,19 +4,22 @@
 ** Contact: https://grafieks.com/
 **
 ** Popup code to connect to Grafieks server
-** Prompts Server URL
+** Prompts Username and Password
 **
 ****************************************************************************/
 
 import QtQuick 2.11
 import QtQuick.Controls 2.4
+import QtQuick.Dialogs 1.2
 
 import "../../../Constants.js" as Constants
 
+
+
 Popup {
-    id: popup
+    id: popup2
     width: 600
-    height: 180
+    height: 230
     modal: true
     visible: false
     x: parent.width / 2 - 200
@@ -25,7 +28,28 @@ Popup {
 
     property int label_col : 150
 
-    // Header starts
+    Connections{
+        target: User
+        onLoginStatus:{
+
+            if(showPublish === true){
+
+                if(loginStatusVar === true){
+                    popup2.visible = false
+                    datasourceDescription.visible = true
+                    action_signin.text = qsTr("Sign Out")
+
+                }
+                else{
+                    popup2.visible = true
+                    msg_dialog_publish_grafieks.open()
+                    msg_dialog_publish_grafieks.text = "Invalid Username or Password"
+                }
+            }
+        }
+    }
+
+    // Popup Header starts
 
     Rectangle{
         id: header_popup
@@ -46,9 +70,9 @@ Popup {
         }
     }
 
-    // Header ends
+    // Popup Header ends
 
-    // Signin to server starts
+    // Row1: Enter username starts
 
     Row{
 
@@ -65,7 +89,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Server URL"
+                text: "Username"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
@@ -73,8 +97,7 @@ Popup {
         }
 
         TextField{
-            id: server_address
-            placeholderText: "http://"
+            id: username_field
             maximumLength: 45
             anchors.verticalCenter: parent.verticalCenter
             width: 370
@@ -88,9 +111,9 @@ Popup {
 
     }
 
-    // Signin to server ends
+    // Row1: Enter username ends
 
-    // Row 2: Action Button starts
+    // Row2: Enter password starts
 
     Row{
 
@@ -98,11 +121,54 @@ Popup {
         anchors.top: row1.bottom
         anchors.topMargin: 5
         anchors.left: parent.left
+        anchors.leftMargin: 1
+
+        Rectangle{
+
+            id: label2
+            width:label_col
+            height: 40
+
+            Text{
+                text: "Password"
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+
+        TextField{
+            id: password_field
+            maximumLength: 45
+            echoMode: "Password"
+            anchors.verticalCenter: parent.verticalCenter
+            width: 370
+
+            background: Rectangle {
+                border.color: Constants.darkThemeColor
+                radius: 10
+                width: 370
+            }
+        }
+
+    }
+
+    // Row2: Enter password ends
+
+    // Row 3: Action Button starts
+
+    Row{
+
+        id: row3
+        anchors.top: row2.bottom
+        anchors.topMargin: 5
+        anchors.left: parent.left
         anchors.leftMargin: label_col
         spacing: 10
 
         Button{
-            id: btn_con
+
+            id: btn_signin
             height: back_rec_1.height
             width: back_rec_1.width
 
@@ -114,15 +180,16 @@ Popup {
                 height: 30
 
                 Text{
-                    text: "Connect"
+                    text:"Sign In"
                     anchors.centerIn: parent
                 }
             }
             onClicked: {
 
-                User.setServerHost(server_address.text)
-                popup.visible = false
-                connectGrafieks2.visible = true
+                User.setLoginUsername(username_field.text);
+                User.setLoginPassword(password_field.text);
+
+                User.checkLogin(true)
             }
         }
 
@@ -139,16 +206,21 @@ Popup {
                 height: 30
 
                 Text{
-                    text: "Cancel"
+                    text:"Cancel"
                     anchors.centerIn: parent
                 }
             }
-
             onClicked: {
-                popup.visible = false
+                popup2.visible = false
             }
         }
     }
-    // Row 2: Action Button ends
+    // Row 3: Action Button ends
 
+    MessageDialog{
+        id: msg_dialog_publish_grafieks
+        title: "Hostname"
+        text: ""
+        icon: StandardIcon.Critical
+    }
 }

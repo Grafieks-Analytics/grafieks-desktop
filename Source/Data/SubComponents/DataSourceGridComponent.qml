@@ -10,37 +10,41 @@ Item {
     width: data_source_main.width
     height:data_source_main.height
 
+    property alias datasource_name : data_source_name.checkbox_text
+    property alias description : description_id.text
+    property alias owner_name : owner_name_id.text
+    property alias mode : mode_id.text
+
     Rectangle{
         id:data_source_main
         border.color: Constants.darkThemeColor
-        width: 370
-        height: 250
+        width: 340
+        height: 240
         radius: 10
 
         Rectangle{
             id:data_source_head
-//            border.color: Constants.darkThemeColor
             anchors.left: data_source_main.left
             anchors.top: data_source_main.top
             anchors.leftMargin: 1
             anchors.topMargin: 1
-            width: 368
+            width: 338
             height: 40
             color: Constants.themeColor
             radius: 10
 
-            Rectangle{
+            Rectangle {
                 id: inner_rectangle
                 width: parent.width
                 anchors.bottom: parent.bottom
-                height:10
+                height: 10
                 color: Constants.themeColor
             }
 
             CheckBoxTpl{
 
                 id: data_source_name
-                checkbox_text: "Data Source Name"
+                checkbox_text: ""
                 checkbox_checked: false
                 parent_dimension: 16
                 anchors.centerIn: parent
@@ -87,6 +91,8 @@ Item {
                     }
                 }
             }
+
+
         }
 
 
@@ -126,12 +132,13 @@ Item {
 
             Text{
                 text: "Description"
-                font.bold: true
             }
             Text{
+                id: description_id
                 width:data_source_main.width - 10
                 text: "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs."
                 wrapMode: Text.WordWrap
+                font.pointSize: 11
             }
         }
 
@@ -150,8 +157,9 @@ Item {
                     text: "Published by"
                 }
                 Text{
+                    id: owner_name_id
                     text: "Hirak Kocharee"
-                    font.bold: true
+                    font.pointSize: 11
                 }
 
             }
@@ -164,8 +172,9 @@ Item {
 
                 }
                 Text{
+                    id: mode_id
                     text: "Live"
-                    font.bold:true
+                    font.pointSize: 11
                 }
 
             }

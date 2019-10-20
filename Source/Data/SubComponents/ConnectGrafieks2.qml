@@ -10,6 +10,7 @@
 
 import QtQuick 2.11
 import QtQuick.Controls 2.4
+import QtQuick.Dialogs 1.2
 
 import "../../../Constants.js" as Constants
 
@@ -26,6 +27,27 @@ Popup {
     padding: 0
 
     property int label_col : 150
+
+    Connections{
+        target: User
+        onLoginStatus:{
+
+            if(showPublish === false){
+
+                if(loginStatusVar === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 4
+                    action_signin.text = qsTr("Sign Out")
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog_connect_grafieks.open()
+                    msg_dialog_connect_grafieks.text = "Invalid Username or Password"
+                }
+            }
+        }
+    }
+
 
     // Popup Header starts
 
@@ -75,9 +97,10 @@ Popup {
         }
 
         TextField{
-            id: field1
+            id: username_field
             maximumLength: 45
             anchors.verticalCenter: parent.verticalCenter
+            width: 370
 
             background: Rectangle {
                 border.color: Constants.darkThemeColor
@@ -115,10 +138,11 @@ Popup {
         }
 
         TextField{
-            id: field2
+            id: password_field
             maximumLength: 45
             echoMode: "Password"
             anchors.verticalCenter: parent.verticalCenter
+            width: 370
 
             background: Rectangle {
                 border.color: Constants.darkThemeColor
@@ -161,13 +185,16 @@ Popup {
                 }
             }
             onClicked: {
-                popup.visible = false
-                stacklayout_home.currentIndex = 4
+
+                User.setLoginUsername(username_field.text);
+                User.setLoginPassword(password_field.text);
+
+                User.checkLogin(false)
+
             }
         }
 
         Button{
-
             id: btn_cancel
             height: back_rec_2.height
             width: back_rec_2.width
@@ -180,8 +207,8 @@ Popup {
                 height: 30
 
                 Text{
-                     text:"Cancel"
-                     anchors.centerIn: parent
+                    text:"Cancel"
+                    anchors.centerIn: parent
                 }
             }
             onClicked: {
@@ -190,4 +217,11 @@ Popup {
         }
     }
     // Row 3: Action Button ends
+
+    MessageDialog{
+        id: msg_dialog_connect_grafieks
+        title: "Hostname"
+        text: ""
+        icon: StandardIcon.Critical
+    }
 }

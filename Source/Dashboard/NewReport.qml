@@ -149,7 +149,9 @@ Page {
     ToolSeparator{
         id: tool_sep_chartFilters
         anchors.left: chartFilters1.right
+        anchors.top: parent.top
         anchors.leftMargin: 0
+        anchors.topMargin: -3
         height:parent.height
         padding: 0
 
@@ -168,15 +170,17 @@ Page {
     // Center Panel
 
 
+
+
     WebEngineView {
         id:primary_chart
-
-        url: "../Charts/horizontal-bar.html"
         height:parent.height
+        width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width
+        url: "../Charts/horizontal-bar.html"
         anchors.left: tool_sep_chartFilters.right
         anchors.top: seperator_title_bar.bottom
-        width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width
     }
+
 
 
 
@@ -214,14 +218,6 @@ Page {
                     id: data_btn
                     text:"Data"
 
-                    onClicked: {
-                        if(infodata_table.visible === true){
-                            infodata_table.visible = false
-                        }
-                        else{
-                            infodata_table.visible = true
-                        }
-                    }
 
                     background: Rectangle {
                         id: data_btn_background
@@ -244,6 +240,7 @@ Page {
                     onClicked: {
                         stacklayout_home.currentIndex = 7
                     }
+
 
                     background: Rectangle {
                         id: add_btn_background

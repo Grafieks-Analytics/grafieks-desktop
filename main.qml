@@ -14,6 +14,7 @@ import QtQuick.Controls.Styles 1.4
 import "./Source/Data"
 import "./Source/Dashboard"
 import "./Source/Others"
+import "./Source/Data/SubComponents"
 
 import "Constants.js" as Constants
 
@@ -27,16 +28,22 @@ ApplicationWindow {
 
     title: Constants.applicationName
 
+    Component.onCompleted: {
+        var loginSession = User.checkSession();
+        if(loginSession){
+            action_signin.text  = qsTr("Sign Out")
+        }
+    }
+
 
     menuBar : MenuBar{
         id:menubar
-
 
         // Menu File
 
         Menu{
             id: menu_file
-            x:2
+            x: 2
             title: qsTr("File")
 
             Action{
@@ -68,6 +75,23 @@ ApplicationWindow {
         Menu{
             id: menu_data
             title: qsTr("Data")
+
+            Action{
+                id: action_new_ds
+                text: qsTr("Add New Datasource")
+            }
+            Action{
+                id: action_refresh_ds
+                text: qsTr("Refresh Datasource")
+            }
+            Action{
+                id: action_export_ds_csv
+                text: qsTr("Export Datasource to CSV")
+            }
+            Action{
+                id: action_export_ds_excel
+                text: qsTr("Export Datasource to Excel")
+            }
         }
 
         // Menu Server
@@ -79,6 +103,16 @@ ApplicationWindow {
             Action{
                 id: action_signin
                 text: qsTr("Sign In")
+            }
+            Action{
+                id: action_publish_datasource
+                text: qsTr("Publish Datasource")
+
+                onTriggered: {
+                    Datasources.setSourceType("live")
+
+                    publishGrafieks1.visible = true
+                }
             }
 
         }
@@ -92,7 +126,7 @@ ApplicationWindow {
             Action{
                 text: qsTr("Open Help")
                 onTriggered: {
-                    stacklayout_home.currentIndex = 1
+                    stacklayout_home.currentIndex = 2
                 }
 
             }
@@ -128,7 +162,7 @@ ApplicationWindow {
             Action{
                 text: qsTr("&Test")
                 onTriggered: {
-                    stacklayout_home.currentIndex = 2
+                    stacklayout_home.currentIndex = 1
                 }
             }
         }
@@ -193,4 +227,17 @@ ApplicationWindow {
         }
 
     }
+
+    PublishGrafieks1{
+        id: publishGrafieks1
+    }
+
+    PublishGrafieks2{
+        id: publishGrafieks2
+    }
+
+    DataSourceDescription{
+        id: datasourceDescription
+    }
 }
+

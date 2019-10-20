@@ -3,20 +3,23 @@
 ** Copyright (C) 2019 Grafieks.
 ** Contact: https://grafieks.com/
 **
-** Popup code to connect to Grafieks server
-** Prompts Server URL
+** Popup code to publish datasource to Grafieks server
+** Prompts Description and Image upload for Datasource
 **
 ****************************************************************************/
 
 import QtQuick 2.11
 import QtQuick.Controls 2.4
+import QtQuick.Dialogs 1.2
 
 import "../../../Constants.js" as Constants
+
+
 
 Popup {
     id: popup
     width: 600
-    height: 180
+    height: 230
     modal: true
     visible: false
     x: parent.width / 2 - 200
@@ -24,8 +27,16 @@ Popup {
     padding: 0
 
     property int label_col : 150
+    property string host_final : ""
+    property string database_final : ""
+    property string port_final : ""
+    property string username_final : ""
+    property string password_final : ""
+    property string mode_final : ""
+    property string datasource_name_final : ""
 
-    // Header starts
+
+    // Popup Header starts
 
     Rectangle{
         id: header_popup
@@ -46,9 +57,9 @@ Popup {
         }
     }
 
-    // Header ends
+    // Popup Header ends
 
-    // Signin to server starts
+    // Row1: Enter Description starts
 
     Row{
 
@@ -65,7 +76,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Server URL"
+                text: "Description"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
@@ -73,12 +84,10 @@ Popup {
         }
 
         TextField{
-            id: server_address
-            placeholderText: "http://"
-            maximumLength: 45
+            id: description_field
             anchors.verticalCenter: parent.verticalCenter
+            maximumLength: 45
             width: 370
-
             background: Rectangle {
                 border.color: Constants.darkThemeColor
                 radius: 10
@@ -88,9 +97,9 @@ Popup {
 
     }
 
-    // Signin to server ends
+    // Row1: Enter Description ends
 
-    // Row 2: Action Button starts
+    // Row2: Enter FileDialog starts
 
     Row{
 
@@ -98,11 +107,34 @@ Popup {
         anchors.top: row1.bottom
         anchors.topMargin: 5
         anchors.left: parent.left
+        anchors.leftMargin: 1
+
+        Button{
+            text: "Choose a file"
+            anchors.verticalCenter: parent.verticalCenter
+            onClicked: {
+                fileDialog1.open();
+            }
+        }
+
+    }
+
+    // Row2: Enter FileDialog ends
+
+    // Row 3: Action Button starts
+
+    Row{
+
+        id: row3
+        anchors.top: row2.bottom
+        anchors.topMargin: 5
+        anchors.left: parent.left
         anchors.leftMargin: label_col
         spacing: 10
 
         Button{
-            id: btn_con
+
+            id: btn_signin
             height: back_rec_1.height
             width: back_rec_1.width
 
@@ -114,15 +146,19 @@ Popup {
                 height: 30
 
                 Text{
-                    text: "Connect"
+                    text:"Publish"
                     anchors.centerIn: parent
                 }
             }
             onClicked: {
+                Datasources.setDsDescription(description_field.text);
+                Datasources.setDsImage("");
+                Datasources.setDsOwner(User.firstName + " "+ User.lastName);
 
-                User.setServerHost(server_address.text)
+                Datasources.saveDataSources(1, Datasources.sourceType, Datasources.dsName, Datasources.dsDescription, Datasources.dsImage, Datasources.dsOwner)
+
                 popup.visible = false
-                connectGrafieks2.visible = true
+                stacklayout_home.currentIndex = 6
             }
         }
 
@@ -139,16 +175,27 @@ Popup {
                 height: 30
 
                 Text{
-                    text: "Cancel"
+                    text:"Cancel"
                     anchors.centerIn: parent
                 }
             }
-
             onClicked: {
                 popup.visible = false
             }
         }
     }
-    // Row 2: Action Button ends
+    // Row 3: Action Button ends
 
+
+    FileDialog{
+        id: fileDialog1
+        title: "Select a file"
+
+        onAccepted: {
+            messageDialog1.open()
+        }
+        onRejected: {
+            console.log("file rejected")
+        }
+    }
 }

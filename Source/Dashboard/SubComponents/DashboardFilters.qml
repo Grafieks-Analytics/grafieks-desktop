@@ -8,7 +8,8 @@ Item {
 
     id: dashboard_filter
     width:200
-    height: parent.height
+    height:parent.height
+
 
 
     Rectangle {
@@ -57,14 +58,7 @@ Item {
             font.pixelSize: 12
         }
 
-        Image {
-            id: image
-            x: 150
-            y: 8
-            width: 30
-            height: 30
-            source: "qrc:/qtquickplugin/images/template_image.png"
-        }
+
 
     }
 
@@ -136,7 +130,6 @@ Item {
             id: rangeSlider
             x: 15
             y: 37
-
             slider_height: 10
             slider_width: 150
             knob_size: 16
@@ -203,6 +196,7 @@ Item {
         }
     }
 
+
     TabBar{
 
         id: apply_btn
@@ -249,5 +243,8 @@ Item {
         }
 
     }
+
+
+
 
 }

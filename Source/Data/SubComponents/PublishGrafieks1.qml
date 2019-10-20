@@ -122,7 +122,7 @@ Popup {
 
                 User.setServerHost(server_address.text)
                 popup.visible = false
-                connectGrafieks2.visible = true
+                publishGrafieks2.visible = true
             }
         }
 
@@ -150,5 +150,4 @@ Popup {
         }
     }
     // Row 2: Action Button ends
-
 }

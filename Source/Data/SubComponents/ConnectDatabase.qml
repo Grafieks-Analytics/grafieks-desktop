@@ -29,22 +29,6 @@ Popup {
     property int label_col : 150
 
 
-    Connections{
-        target: MysqlConnect
-        onConnectStatus: {
-
-            if(status.match(/Success/gi)){
-                popup.visible = false
-                stacklayout_home.currentIndex = 4
-            }
-            else{
-                popup.visible = true
-                msg_dialog.open()
-                msg_dialog.text = status
-            }
-        }
-    }
-
     // Popup Header starts
 
     Rectangle{
@@ -96,6 +80,7 @@ Popup {
             id: hostname
             maximumLength: 45
             anchors.verticalCenter: parent.verticalCenter
+            width: 370
 
             background: Rectangle {
                 border.color: Constants.darkThemeColor
@@ -136,6 +121,7 @@ Popup {
             id: database
             maximumLength: 45
             anchors.verticalCenter: parent.verticalCenter
+            width: 370
 
             background: Rectangle {
                 border.color: Constants.darkThemeColor
@@ -176,6 +162,7 @@ Popup {
             id: port
             maximumLength: 45
             anchors.verticalCenter: parent.verticalCenter
+            width: 370
 
             background: Rectangle {
                 border.color: Constants.darkThemeColor
@@ -216,6 +203,7 @@ Popup {
             id: username
             maximumLength: 45
             anchors.verticalCenter: parent.verticalCenter
+            width: 370
 
             background: Rectangle {
                 border.color: Constants.darkThemeColor
@@ -257,6 +245,7 @@ Popup {
             maximumLength: 45
             echoMode: "Password"
             anchors.verticalCenter: parent.verticalCenter
+            width: 370
 
             background: Rectangle {
                 border.color: Constants.darkThemeColor
@@ -319,11 +308,25 @@ Popup {
 
             onClicked: {
 
-                let host = hostname.text
-                let user = username.text
-                let pass = password.text
-                let data = database.text
-                MysqlConnect.startConnection(host, user, pass, data)
+                MysqlConnect.setMysqlHost(hostname.text)
+                MysqlConnect.setMysqlDatabase(database.text)
+                MysqlConnect.setMysqlPort(port.text)
+                MysqlConnect.setMysqlUsername(username.text)
+                MysqlConnect.setMysqlPassword(password.text)
+
+                var connect_response = MysqlConnect.startConnection()
+
+                if(connect_response.match(/Success/gi)){
+
+                    // And move forward
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = connect_response
+                }
             }
         }
 

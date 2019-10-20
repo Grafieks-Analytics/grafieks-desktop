@@ -13,9 +13,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        Code/localstoragesqlite.cpp \
+        Code/datasources.cpp \
         Code/mysqlconnect.cpp \
         Code/qttest.cpp \
+        Code/user.cpp \
         main.cpp
 
 RESOURCES += qml.qrc \
@@ -36,11 +37,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    Code/Headers/localstoragesqlite.h \
-    odbctest.h \
-    Code/mysqlconnect.h \
+    Code/Headers/datasources.h \
+    Code/Headers/user.h \
     Code/Headers/mysqlconnect.h \
-    Code/qttest.h \
     Code/Headers/qttest.h
 
 DISTFILES += \

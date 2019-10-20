@@ -45,7 +45,7 @@ Page {
                 id: primary_video_desc
                 text:"Getting started with Grafieks"
                 color:"gray"
-                font.pointSize: 14
+                font.pointSize: 18
             }
         }
 
@@ -88,7 +88,7 @@ Page {
                     id: secondary_video_desc1
                     text:"Connect to Database"
                     color:"gray"
-                    font.pointSize: 11
+                    font.pointSize: 15
                 }
             }
 
@@ -122,7 +122,7 @@ Page {
                     id: secondary_video_desc2
                     text:"Build a report"
                     color:"gray"
-                    font.pointSize: 11
+                    font.pointSize: 15
                 }
             }
 
@@ -157,7 +157,7 @@ Page {
                     id: secondary_video_desc3
                     text:"Publish your report"
                     color:"gray"
-                    font.pointSize: 11
+                    font.pointSize: 15
                 }
             }
 
@@ -194,7 +194,7 @@ Page {
                 text:"Sample"
                 color:"gray"
                 font{
-                    pointSize: 14
+                    pointSize: 20
                 }
             }
 
@@ -225,7 +225,7 @@ Page {
                 text:"Tutorial"
                 color:"gray"
                 font{
-                    pointSize: 14
+                    pointSize: 20
                 }
             }
 
@@ -256,7 +256,7 @@ Page {
                 text:"Community"
                 color:"gray"
                 font{
-                    pointSize: 14
+                    pointSize: 20
                 }
             }
 
@@ -286,7 +286,7 @@ Page {
                 text:"Blog"
                 color:"gray"
                 font{
-                    pointSize: 14
+                    pointSize: 20
                 }
             }
 

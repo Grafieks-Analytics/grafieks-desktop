@@ -18,9 +18,9 @@ Page {
     ListView {
         id: listView
         anchors.fill: parent
-
         contentWidth: parent.width
         flickableDirection: Flickable.HorizontalAndVerticalFlick
+
 
         header: Row {
             spacing: 1

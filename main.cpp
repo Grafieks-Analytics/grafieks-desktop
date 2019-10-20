@@ -10,9 +10,10 @@
 #include <QSqlError>
 #include <QSqlQuery>
 
-#include "Code/Headers/mysqlconnect.h"
 #include "Code/Headers/qttest.h"
-#include "Code/Headers/localstoragesqlite.h"
+#include "Code/Headers/mysqlconnect.h"
+#include "Code/Headers/user.h"
+#include "Code/Headers/datasources.h"
 
 
 void createsqlite();
@@ -23,19 +24,22 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
-    MysqlConnect mysqlconnect;
+    createsqlite();
+
     QtTest qttest;
-    LocalStorageSqlite localstoragesqlite;
+    MysqlConnect mysqlconnect;
+    Datasources dsparams;
+    User user;
 
     QtWebEngine::initialize();
     QQmlApplicationEngine engine;
     QQuickStyle::setStyle("Default");
 
-    engine.rootContext()->setContextProperty("MysqlConnect", &mysqlconnect);
     engine.rootContext()->setContextProperty("QtTest", &qttest);
-     engine.rootContext()->setContextProperty("LocalStorageSqlite", &localstoragesqlite);
+    engine.rootContext()->setContextProperty("MysqlConnect", &mysqlconnect);
+    engine.rootContext()->setContextProperty("Datasources", &dsparams);
+    engine.rootContext()->setContextProperty("User", &user);
 
-    createsqlite();
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
@@ -64,32 +68,61 @@ void createsqlite(){
         QSqlQuery query;
 
         // Datasources table
-
         if(!query.exec("CREATE TABLE datasources ("
-                       "id	INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,"
-                       "db_type	TEXT NOT NULL,"
-                       "connection_string	TEXT,"
-                       "mode	TEXT NOT NULL,"
-                       "datasource_name	TEXT NOT NULL,"
-                       "description	TEXT,"
-                       "image_link	TEXT,"
-                       "owner_name	TEXT NOT NULL)"
+                       "id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,"
+                       "my_datasource_id INTEGER NOT NULL,"
+                       "source_type TEXT NOT NULL,"
+                       "datasource_name TEXT NOT NULL,"
+                       "description TEXT,"
+                       "image_link TEXT,"
+                       "owner_name TEXT NOT NULL)"
                        ))
         {
-            qDebug() << "datasources table could not be created";
+            qDebug() << "Datasources table already exists";
         }
 
-        // User table
-
-        if(!query.exec("CREATE TABLE user ("
+        // Connections table
+        if(!query.exec("CREATE TABLE connections ("
                        "id	INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,"
-                       "user_id	INTEGER,"
-                       "name	TEXT,"
-                       "email	TEXT)"
+                       "database_type	TEXT NOT NULL,"
+                       "connection_string	TEXT NOT NULL)"
+                   ))
+        {
+            qDebug() << "Connections table already exists" << query.lastError();
+        }
 
+        // Temporary Connections table
+        if(!query.exec("CREATE TABLE temp_connections ("
+                       "id	INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,"
+                       "database_type	TEXT NOT NULL,"
+                       "connection_string	TEXT NOT NULL)"
+                   ))
+        {
+            qDebug() << "Connections table already exists" << query.lastError();
+        }
+
+        // Datasource Connection Mappings table
+        if(!query.exec("CREATE TABLE datasource_connections ("
+                       "id	INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,"
+                       "datasource_id	INTEGER NOT NULL,"
+                       "connection_id	INTEGER NOT NULL)"
+                   ))
+        {
+            qDebug() << "Datasource Connections table already exists";
+        }
+
+
+        // User table
+        if(!query.exec("CREATE TABLE user ("
+                       "id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,"
+                       "profile_id INTEGER NOT NULL,"
+                       "session_hash TEXT NOT NULL,"
+                       "firstname TEXT NOT NULL,"
+                       "lastname TEXT,"
+                       "photo_link TEXT)"
                        ))
         {
-            qDebug() << "user table could not be created";
+            qDebug() << "User table already exists";
         }
     }
 }

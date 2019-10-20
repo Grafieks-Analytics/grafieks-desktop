@@ -19,7 +19,7 @@ Popup {
     id: popup_main
     width: 600
     height: 390
-    x: parent.width / 2 - 300
+    x: parent.width / 2 - 380
     y: 100
     modal: true
     visible: false
@@ -230,7 +230,7 @@ Popup {
         x: 10
         y: 10
         width: 580
-        height: 370
+        height:370
 
 
         MenuItem {

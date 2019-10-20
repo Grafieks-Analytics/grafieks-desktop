@@ -13,6 +13,7 @@ Page {
     id: datasourcelist_page
     property int menu_width: 60
 
+
     LeftMenuBar{
         id: left_menubar
     }
@@ -192,7 +193,7 @@ Page {
         id: toolsep11
         width: parent.width - menu_width
         anchors.top: toolsep2.bottom
-//        anchors.horizontalCenter: toolsep2.horizontalCenter
+        //        anchors.horizontalCenter: toolsep2.horizontalCenter
 
 
         StackLayout{
@@ -200,9 +201,15 @@ Page {
             anchors.horizontalCenter : parent.horizontalCenter
             currentIndex: tabbar_ds.currentIndex
 
+            DataSourcesGrid{
+                id: data_source_grid
 
-            DataSourcesGrid{}
-            DataSourcesList{}
+            }
+
+
+            DataSourcesList{
+                id: data_source_list
+            }
 
         }
 

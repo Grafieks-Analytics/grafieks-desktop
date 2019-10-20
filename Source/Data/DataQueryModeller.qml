@@ -21,6 +21,7 @@ Page {
     id: query_modeller_page
     property int menu_width: 60
 
+
     // Left menubar starts
 
     LeftMenuBar{
@@ -162,7 +163,6 @@ Page {
 
                 onClicked: {
                     datafilters.visible = true
-                    console.log("gel")
                 }
             }
 
@@ -348,12 +348,10 @@ Page {
                     onClicked: {
                         if(infodata_table.visible === true){
                             infodata_table.visible = false
-                            linebar.visible = false
                             preview_btn_background.color =  Constants.themeColor
                         }
                         else{
                             infodata_table.visible = true
-                            linebar.visible = true
                             preview_btn_background.color =  Constants.darkThemeColor
                         }
                     }
@@ -384,6 +382,10 @@ Page {
 
 
                     onClicked: {
+
+                        Datasources.setDsName(ds_name.text)
+                        Datasources.setSourceType("live")
+
                         stacklayout_home.currentIndex = 6
                     }
 
@@ -419,7 +421,8 @@ Page {
                 height:50
                 width: rectangle_querymodeller_right_col.width
 
-                Text{
+                TextEdit{
+                    id: ds_name
                     text: "Data Source Name"
                     anchors.verticalCenter: rectangle_querymodeller_right_col1.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col1.left
@@ -441,10 +444,12 @@ Page {
                 color:Constants.themeColor
 
                 Text{
-                    text: "Connected To"
+                    id: connected_to
+                    text: "Connected To: " + MysqlConnect.mysqlDatabase
                     anchors.verticalCenter: rectangle_querymodeller_right_col2.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col2.left
                     anchors.leftMargin: 10
+
                 }
             }
 
@@ -620,14 +625,46 @@ Page {
 
             // Right item 4 ends
 
+            Button {
+                id: button
+                text: qsTr("Publish")
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 40
+
+                onClicked: {
+                    Datasources.setDsName(ds_name.text)
+                    Datasources.setSourceType("live")
+
+                    publishGrafieks1.visible = true
+
+                }
+            }
+
 
         }
+
+
 
     }
     // Righthand Panel ends
 
     DataFilters{
         id: datafilters
+    }
+
+
+
+    PublishGrafieks1{
+        id: publishGrafieks1
+
+    }
+
+    PublishGrafieks2{
+        id: publishGrafieks2
+    }
+
+    DataSourceDescription{
+        id: datasourceDescription
     }
 
 }

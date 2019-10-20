@@ -17,36 +17,27 @@ import "../../MainSubComponents"
 
 Page {
 
+    id: datasources_grid
+
     Grid{
         id: ds_grid
         columns:3
         spacing: 30
 
 
-
-        DataSourceGridComponent{
-            id: a1
+        Repeater {
+            model: Datasources.fetchDatasources(); // just define the number you want, can be a variable too
+            delegate: DataSourceGridComponent{
+                id: a1
+                datasource_name: modelData.datasource_name
+                description: modelData.description
+                owner_name: modelData.owner_name
+                mode: modelData.source_type
+            }
         }
 
-        DataSourceGridComponent{
-            id: a2
-        }
-        DataSourceGridComponent{
-            id: a3
-        }
-        DataSourceGridComponent{
-            id: a4
-        }
-        DataSourceGridComponent{
-            id: a5
-        }
-        DataSourceGridComponent{
-            id: a6
-        }
 
 
     }
-
-
 }
 
