@@ -13,5 +13,5 @@ nmake
 Run the following to show the shortcut directory name
 `dir /x`
 
-## To overcome Slow QT install issue
+## To overcome Slow QT download issue
 Download the binary from [https://github.com/JKSH/QtSdkRepoChooser/releases](https://github.com/JKSH/QtSdkRepoChooser/releases) and select the fastest mirror. Use the mirror in the Maintenance tool or Qt Online installer settings `user defined repository`
