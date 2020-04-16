@@ -22,7 +22,7 @@ Below, the details of individual files (main layout files only and excluding sub
 
 1. **Root —> Source —> Charts**
 
-This folder contains html files with [D3js](<[https://d3js.org/](https://d3js.org/)>) charts (code only). The data will be programatically fetched to the code here in the desktop later on.
+This folder contains html files with [D3js](https://d3js.org/) charts (code only). The data will be programatically fetched to the code here in the desktop later on.
 
 2. **Root —> Source —> Dashboard**
 
@@ -76,7 +76,7 @@ This layout appears only if a user selects existing datasource from the above st
 
 -   StackLayout ID: 5
 
-Data Query Modelling page is where a user will create relationships between various entities. This layout will show contain a ER Diagram to depict the relationships and contain tools to model or publish them
+Data Query Modelling page is where a user will create relationships between various entities. This layout will show a ER Diagram to depict the relationships and contain tools to model or publish them
 
 5. **Root —> Source —> Dashboard —> NewReport.qml**
 
