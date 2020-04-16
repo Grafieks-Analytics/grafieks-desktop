@@ -186,10 +186,16 @@ Popup {
             }
             onClicked: {
 
-                User.setLoginUsername(username_field.text);
-                User.setLoginPassword(password_field.text);
+                // User.setLoginUsername(username_field.text);
+                // User.setLoginPassword(password_field.text);
 
-                User.checkLogin(false)
+                // User.checkLogin(false)
+
+                // Pass on without checking C++ code
+                
+                popup.visible = false
+                stacklayout_home.currentIndex = 4
+                action_signin.text = qsTr("Sign Out")
 
             }
         }
