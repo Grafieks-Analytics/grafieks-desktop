@@ -308,25 +308,30 @@ Popup {
 
             onClicked: {
 
-                MysqlConnect.setMysqlHost(hostname.text)
-                MysqlConnect.setMysqlDatabase(database.text)
-                MysqlConnect.setMysqlPort(port.text)
-                MysqlConnect.setMysqlUsername(username.text)
-                MysqlConnect.setMysqlPassword(password.text)
+                // Move forward without any checks
+                // Only for UI checks
+                popup.visible = false
+                stacklayout_home.currentIndex = 5
 
-                var connect_response = MysqlConnect.startConnection()
+                // MysqlConnect.setMysqlHost(hostname.text)
+                // MysqlConnect.setMysqlDatabase(database.text)
+                // MysqlConnect.setMysqlPort(port.text)
+                // MysqlConnect.setMysqlUsername(username.text)
+                // MysqlConnect.setMysqlPassword(password.text)
 
-                if(connect_response.match(/Success/gi)){
+                // var connect_response = MysqlConnect.startConnection()
 
-                    // And move forward
-                    popup.visible = false
-                    stacklayout_home.currentIndex = 5
-                }
-                else{
-                    popup.visible = true
-                    msg_dialog.open()
-                    msg_dialog.text = connect_response
-                }
+                // if(connect_response.match(/Success/gi)){
+
+                //     // And move forward
+                //     popup.visible = false
+                //     stacklayout_home.currentIndex = 5
+                // }
+                // else{
+                //     popup.visible = true
+                //     msg_dialog.open()
+                //     msg_dialog.text = connect_response
+                // }
             }
         }
 
