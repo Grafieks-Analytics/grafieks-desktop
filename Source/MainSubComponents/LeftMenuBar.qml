@@ -17,7 +17,7 @@ import "../../Constants.js" as Constants
 Rectangle{
     id: rectangle_left
     height: parent.height
-    width: 60
+    width: 49
 
     Column{
 
@@ -34,15 +34,15 @@ Rectangle{
             color: Constants.themeColor
 
 
-            Row{
+            Column{
                 id: row_left1
                 anchors.left:rect_col_1.left
                 anchors.leftMargin: 5
 
                 Image{
                     id: db_menu_icon
-                    x: 0
-                    y: 120
+                    x: 5
+                    y: rect_col_1.height/2 - 60
                     source:"../../Images/icons/Db.png"
                     width:25
                     height: 25
@@ -50,8 +50,9 @@ Rectangle{
 
                 Text{
                     id: db_menu_text
-                    x: 0
-                    y: -30
+                    anchors.bottom: db_menu_icon.bottom
+                    anchors.bottomMargin: 100
+                    horizontalAlignment: db_menu_icon.horizontalCenter
                     text: "Data Designer"
                     transform: Rotation { origin.x: 110; origin.y: 100; angle: 270}
                     color:"Gray"
@@ -107,7 +108,7 @@ Rectangle{
             width: rectangle_left.width - 1
             color: Constants.themeColor
 
-            Row{
+            Column{
 
                 id: row_left2
                 anchors.left:rect_col_2.left
@@ -115,18 +116,21 @@ Rectangle{
 
                 Image{
                     id: chart_menu_icon
-                    x: 0
-                    y: 120
+                    x: 5
+                    y: rect_col_2.height/2 - 90
                     source:"../../Images/icons/Charts.png"
                     width:25
                     height: 25
+                    anchors.bottomMargin: -150
                 }
 
 
                 Text{
                     id: chart_menu_text
-                    x: 0
-                    y: 0
+//                    x: 0
+//                    y: chart_menu_icon.y - 145
+                    anchors.top: chart_menu_icon.bottom
+                    anchors.topMargin: -80
                     text: "Dashboard Designer"
                     transform: Rotation { origin.x: 110; origin.y: 100; angle: 270}
                     color:"Gray"

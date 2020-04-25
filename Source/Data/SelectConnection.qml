@@ -30,12 +30,13 @@ Page {
 
     Text{
         id: mainLabel
-
-        text: qsTr("Connect To")
+        scale : 0.7
+        text: qsTr("Data Connectors")
         font.pointSize: 28
         color:"gray"
         anchors.top:parent.top
         anchors.topMargin: 100
+        anchors.horizontalCenter: parent.horizontalCenter
         x: selectconn_page.width/2 - 70
     }
 
@@ -53,6 +54,7 @@ Page {
         Column{
             id:excel_col
             spacing:10
+            scale : 0.5
 
             Image{
                 id: excel_icon
@@ -96,6 +98,7 @@ Page {
         Column{
             id:odbc_col
             spacing:10
+            scale: 0.5
 
             Image{
                 source:"../../Images/icons/Db.png"
@@ -133,7 +136,7 @@ Page {
         Column{
             id:jdbc_col
             spacing:10
-
+            scale : 0.5
             Image{
                 source:"../../Images/icons/Db.png"
                 height:60
@@ -170,7 +173,75 @@ Page {
         Column{
             id:server_col
             spacing:10
+            scale : 0.5
+            Image{
+                source:"../../Images/icons/Server.png"
+                height:60
+                width:height
+                verticalAlignment: Image.AlignVCenter
+                anchors.horizontalCenter: parent.horizontalCenter
 
+                MouseArea{
+                    anchors.fill: parent
+
+                    onClicked: {
+                        connectGrafieks1.visible = true
+                    }
+                }
+            }
+            Text{
+                text:"Server"
+                font.pointSize: 24
+                color:"gray"
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                MouseArea{
+                    anchors.fill: parent
+
+                    onClicked: {
+                        connectGrafieks1.visible = true
+                    }
+                }
+            }
+        }
+        Column{
+            id:server_col1
+            spacing:10
+            scale : 0.5
+            Image{
+                source:"../../Images/icons/Server.png"
+                height:60
+                width:height
+                verticalAlignment: Image.AlignVCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                MouseArea{
+                    anchors.fill: parent
+
+                    onClicked: {
+                        connectGrafieks1.visible = true
+                    }
+                }
+            }
+            Text{
+                text:"Server"
+                font.pointSize: 24
+                color:"gray"
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                MouseArea{
+                    anchors.fill: parent
+
+                    onClicked: {
+                        connectGrafieks1.visible = true
+                    }
+                }
+            }
+        }
+        Column{
+            id:server_col2
+            spacing:10
+            scale : 0.5
             Image{
                 source:"../../Images/icons/Server.png"
                 height:60
