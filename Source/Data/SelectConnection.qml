@@ -30,7 +30,7 @@ Page {
 
     Text{
         id: mainLabel
-        scale : 0.7
+        scale : 0.8
         text: qsTr("Data Connectors")
         font.pointSize: 28
         color:"gray"
@@ -40,6 +40,47 @@ Page {
         x: selectconn_page.width/2 - 70
     }
 
+    Rectangle{
+        id:search_rect
+        border.color: "#BCE0FD"
+        width: 400
+        height: 35
+        radius: 5
+        x: selectconn_page.width/2 - 195
+        anchors.verticalCenter: selectconn_page.verticalCenter
+        anchors.top : mainLabel.bottom
+        anchors.topMargin: 20
+
+
+        TextEdit {
+            id: search_text
+            text: "Search"
+            cursorVisible: true
+            width:250
+            height: 50
+            anchors.left: search_rect.left
+            anchors.leftMargin: 30
+            anchors.top: search_rect.top
+            anchors.bottom:search_rect.bottom
+            verticalAlignment:TextEdit.AlignVCenter
+            font.italic: true
+            font.weight: font.Thin
+            font.pointSize: 12
+            opacity: 0.6
+        }
+
+        Image{
+            id:search_btn
+            source: "../../Images/icons/Search.png"
+            //anchors.left: search_text.right
+            anchors.right: search_rect.right
+            anchors.rightMargin: 10
+            height:30
+            width: height
+            anchors.verticalCenter: search_rect.verticalCenter
+
+        }
+    }
     Row{
         id: options_row
 
@@ -47,14 +88,14 @@ Page {
         spacing: 150
         anchors.horizontalCenter:mainLabel.horizontalCenter
         anchors.top: mainLabel.bottom
-        anchors.topMargin: 60
+        anchors.topMargin: 90
         Layout.fillWidth: true
 
 
         Column{
             id:excel_col
             spacing:10
-            scale : 0.5
+            scale : 0.7
 
             Image{
                 id: excel_icon
@@ -98,7 +139,7 @@ Page {
         Column{
             id:odbc_col
             spacing:10
-            scale: 0.5
+            scale: 0.7
 
             Image{
                 source:"../../Images/icons/Db.png"
@@ -136,7 +177,7 @@ Page {
         Column{
             id:jdbc_col
             spacing:10
-            scale : 0.5
+            scale : 0.7
             Image{
                 source:"../../Images/icons/Db.png"
                 height:60
@@ -173,7 +214,7 @@ Page {
         Column{
             id:server_col
             spacing:10
-            scale : 0.5
+            scale : 0.7
             Image{
                 source:"../../Images/icons/Server.png"
                 height:60
@@ -207,7 +248,7 @@ Page {
         Column{
             id:server_col1
             spacing:10
-            scale : 0.5
+            scale : 0.7
             Image{
                 source:"../../Images/icons/Server.png"
                 height:60
@@ -241,7 +282,7 @@ Page {
         Column{
             id:server_col2
             spacing:10
-            scale : 0.5
+            scale : 0.7
             Image{
                 source:"../../Images/icons/Server.png"
                 height:60
