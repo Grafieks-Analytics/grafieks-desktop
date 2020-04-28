@@ -103,7 +103,7 @@ Popup {
             width: 370
 
             background: Rectangle {
-                border.color: Constants.darkThemeColor
+                border.color: Constants.borderBlueColor
                 radius: 10
                 width: 370
             }
@@ -145,7 +145,7 @@ Popup {
             width: 370
 
             background: Rectangle {
-                border.color: Constants.darkThemeColor
+                border.color: Constants.borderBlueColor
                 radius: 10
                 width: 370
             }
@@ -162,8 +162,8 @@ Popup {
         id: row3
         anchors.top: row2.bottom
         anchors.topMargin: 5
-        anchors.left: parent.left
-        anchors.leftMargin: label_col
+        anchors.right: parent.right
+        anchors.rightMargin: label_col - 70
         spacing: 10
 
         Button{
@@ -175,7 +175,7 @@ Popup {
             background: Rectangle{
                 id: back_rec_1
                 radius: 10
-                color: Constants.greenThemeColor
+                color: Constants.lightThemeColor
                 width: 100
                 height: 30
 
@@ -208,7 +208,7 @@ Popup {
             background: Rectangle{
                 id: back_rec_2
                 radius: 10
-                color: Constants.redThemeColor
+                color: Constants.lightThemeColor
                 width: 100
                 height: 30
 
