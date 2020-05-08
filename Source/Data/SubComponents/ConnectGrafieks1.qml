@@ -101,7 +101,7 @@ Popup {
             height: 40
             background: Rectangle {
                 border.color: Constants.borderBlueColor
-                radius: 5
+                radius: 10
                 width: 370
             }
         }
@@ -128,8 +128,13 @@ Popup {
 
             background: Rectangle{
                 id: back_rec_1
+<<<<<<< HEAD
                 //radius: 10
                 color: btn_con.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
+=======
+                radius: 10
+                color: Constants.lightThemeColor
+>>>>>>> 6e2f3f3893a52154e67867ee5563691f8c887fa6
                 width: 100
                 height: 40
                 Rectangle{
@@ -161,8 +166,13 @@ Popup {
 
             background: Rectangle{
                 id: back_rec_2
+<<<<<<< HEAD
                 //radius: 10
                 color: btn_cancel.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
+=======
+                radius: 10
+                color: Constants.lightThemeColor
+>>>>>>> 6e2f3f3893a52154e67867ee5563691f8c887fa6
                 width: 100
                 height: 40
                 Rectangle{

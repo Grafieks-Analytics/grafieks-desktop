@@ -122,7 +122,7 @@ Popup {
 
             background: Rectangle {
                 border.color: Constants.borderBlueColor
-                radius: 5
+                radius: 10
                 width: 370
             }
         }
@@ -166,7 +166,11 @@ Popup {
 
             background: Rectangle {
                 border.color: Constants.borderBlueColor
+<<<<<<< HEAD
                 radius: 5
+=======
+                radius: 10
+>>>>>>> 6e2f3f3893a52154e67867ee5563691f8c887fa6
                 width: 370
             }
         }
@@ -181,7 +185,11 @@ Popup {
 
         id: row3
         anchors.top: row2.bottom
+<<<<<<< HEAD
         anchors.topMargin: 30
+=======
+        anchors.topMargin: 5
+>>>>>>> 6e2f3f3893a52154e67867ee5563691f8c887fa6
         anchors.right: parent.right
         anchors.rightMargin: label_col - 70
         spacing: 10
@@ -194,7 +202,12 @@ Popup {
 
             background: Rectangle{
                 id: back_rec_1
+<<<<<<< HEAD
                 color: btn_signin.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
+=======
+                radius: 10
+                color: Constants.lightThemeColor
+>>>>>>> 6e2f3f3893a52154e67867ee5563691f8c887fa6
                 width: 100
                 height: 40
                 Rectangle{
@@ -234,7 +247,12 @@ Popup {
 
             background: Rectangle{
                 id: back_rec_2
+<<<<<<< HEAD
                 color: btn_cancel.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
+=======
+                radius: 10
+                color: Constants.lightThemeColor
+>>>>>>> 6e2f3f3893a52154e67867ee5563691f8c887fa6
                 width: 100
                 height: 40
                 Rectangle{

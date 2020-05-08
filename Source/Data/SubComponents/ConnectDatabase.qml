@@ -19,7 +19,7 @@ import "../../../Constants.js" as Constants
 Popup {
     id: popup
     width: 600
-    height: 360
+    height: 400
     modal: true
     visible: false
     x: parent.width / 2 - 200
@@ -69,7 +69,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Server"
+                text: "Driver"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
@@ -83,7 +83,7 @@ Popup {
             width: 370
 
             background: Rectangle {
-                border.color: Constants.darkThemeColor
+                border.color: Constants.borderBlueColor
                 radius: 10
                 width: 370
             }
@@ -93,12 +93,166 @@ Popup {
 
     // Row1: Enter server address ends
 
+
+    // Action button starts
+
+    Row{
+
+        id: row_btn
+        anchors.top: row1.bottom
+        anchors.topMargin: 5
+        anchors.right: parent.right
+        anchors.rightMargin: label_col - 70
+        spacing: 10
+
+        Button{
+            id: btn_test_con
+            height: back_rec_1.height
+            width: back_rec_1.width
+
+            background: Rectangle{
+                id: back_rec_1
+                radius: 10
+                color: Constants.lightThemeColor
+                width: 130
+                height: 30
+
+                Text{
+                    text: "Test Connection"
+                    anchors.centerIn: parent
+                }
+            }
+        }
+
+        Button{
+            id: btn_connect
+            height: back_rec_2.height
+            width: back_rec_2.width
+
+            background: Rectangle{
+                id: back_rec_2
+                radius: 10
+                color: Constants.lightThemeColor
+                width: 100
+                height: 30
+
+                Text{
+                    text: "Connect"
+                    anchors.centerIn: parent
+                }
+            }
+
+            onClicked: {
+
+                // Move forward without any checks
+                // Only for UI checks
+                popup.visible = false
+                stacklayout_home.currentIndex = 5
+
+                // MysqlConnect.setMysqlHost(hostname.text)
+                // MysqlConnect.setMysqlDatabase(database.text)
+                // MysqlConnect.setMysqlPort(port.text)
+                // MysqlConnect.setMysqlUsername(username.text)
+                // MysqlConnect.setMysqlPassword(password.text)
+
+                // var connect_response = MysqlConnect.startConnection()
+
+                // if(connect_response.match(/Success/gi)){
+
+                //     // And move forward
+                //     popup.visible = false
+                //     stacklayout_home.currentIndex = 5
+                // }
+                // else{
+                //     popup.visible = true
+                //     msg_dialog.open()
+                //     msg_dialog.text = connect_response
+                // }
+            }
+        }
+
+
+    }
+
+    // Action button ends
+
     // Row2: Enter database name starts
 
     Row{
 
         id: row2
-        anchors.top: row1.bottom
+        anchors.top: row_btn.bottom
+        anchors.topMargin: 5
+        anchors.left: parent.left
+        anchors.leftMargin: 1
+
+        Rectangle{
+
+            id: label3
+            width:label_col
+            height: 40
+
+            Text{
+                text: "Server"
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+
+        TextField{
+            id: server
+            maximumLength: 45
+            anchors.verticalCenter: parent.verticalCenter
+
+            width: 200
+
+            background: Rectangle {
+                border.color: Constants.borderBlueColor
+                radius: 10
+                width: 200
+            }
+        }
+        Rectangle{
+
+            id: label_port
+            width: 40
+            height: 40
+
+
+
+            Text{
+                text: "Port"
+                anchors.left: server.right
+                leftPadding: 10
+                anchors.rightMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+        TextField{
+            id: port
+            maximumLength: 45
+            anchors.verticalCenter: parent.verticalCenter
+            width: 130
+
+            background: Rectangle {
+                border.color: Constants.borderBlueColor
+                radius: 10
+                width: 130
+            }
+        }
+
+    }
+
+    // Row2: Enter database name ends
+
+    // Row3: Enter port number starts
+
+
+    Row{
+
+        id: row3
+        anchors.top: row2.bottom
         anchors.topMargin: 5
         anchors.left: parent.left
         anchors.leftMargin: 1
@@ -124,7 +278,7 @@ Popup {
             width: 370
 
             background: Rectangle {
-                border.color: Constants.darkThemeColor
+                border.color: Constants.borderBlueColor
                 radius: 10
                 width: 370
             }
@@ -132,46 +286,6 @@ Popup {
 
     }
 
-    // Row2: Enter database name ends
-
-    // Row3: Enter port number starts
-
-    Row{
-
-        id: row3
-        anchors.top: row2.bottom
-        anchors.topMargin: 5
-        anchors.left: parent.left
-        anchors.leftMargin: 1
-
-        Rectangle{
-
-            id: label3
-            width:label_col
-            height: 40
-
-            Text{
-                text: "Port"
-                anchors.right: parent.right
-                anchors.rightMargin: 10
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-
-        TextField{
-            id: port
-            maximumLength: 45
-            anchors.verticalCenter: parent.verticalCenter
-            width: 370
-
-            background: Rectangle {
-                border.color: Constants.darkThemeColor
-                radius: 10
-                width: 370
-            }
-        }
-
-    }
 
     // Row3: Enter port number ends
 
@@ -206,7 +320,7 @@ Popup {
             width: 370
 
             background: Rectangle {
-                border.color: Constants.darkThemeColor
+                border.color: Constants.borderBlueColor
                 radius: 10
                 width: 370
             }
@@ -248,7 +362,7 @@ Popup {
             width: 370
 
             background: Rectangle {
-                border.color: Constants.darkThemeColor
+                border.color: Constants.borderBlueColor
                 radius: 10
                 width: 370
             }
@@ -265,75 +379,13 @@ Popup {
         id: row6
         anchors.top: row5.bottom
         anchors.topMargin: 5
-        anchors.left: parent.left
-        anchors.leftMargin: label_col
+        anchors.right: parent.right
+        anchors.rightMargin: label_col - 70
         spacing: 10
 
-        Button{
-            id: btn_test_con
-            height: back_rec_1.height
-            width: back_rec_1.width
 
-            background: Rectangle{
-                id: back_rec_1
-                radius: 10
-                color: Constants.greenThemeColor
-                width: 130
-                height: 30
 
-                Text{
-                    text: "Test Connection"
-                    anchors.centerIn: parent
-                }
-            }
-        }
 
-        Button{
-            id: btn_connect
-            height: back_rec_2.height
-            width: back_rec_2.width
-
-            background: Rectangle{
-                id: back_rec_2
-                radius: 10
-                color: Constants.greenThemeColor
-                width: 100
-                height: 30
-
-                Text{
-                    text: "Connect"
-                    anchors.centerIn: parent
-                }
-            }
-
-            onClicked: {
-
-                // Move forward without any checks
-                // Only for UI checks
-                popup.visible = false
-                stacklayout_home.currentIndex = 5
-
-                // MysqlConnect.setMysqlHost(hostname.text)
-                // MysqlConnect.setMysqlDatabase(database.text)
-                // MysqlConnect.setMysqlPort(port.text)
-                // MysqlConnect.setMysqlUsername(username.text)
-                // MysqlConnect.setMysqlPassword(password.text)
-
-                // var connect_response = MysqlConnect.startConnection()
-
-                // if(connect_response.match(/Success/gi)){
-
-                //     // And move forward
-                //     popup.visible = false
-                //     stacklayout_home.currentIndex = 5
-                // }
-                // else{
-                //     popup.visible = true
-                //     msg_dialog.open()
-                //     msg_dialog.text = connect_response
-                // }
-            }
-        }
 
         Button{
             id: btn_cancel
@@ -343,12 +395,12 @@ Popup {
             background: Rectangle{
                 id: back_rec_3
                 radius: 10
-                color: Constants.redThemeColor
+                color: "#F5F5F5"
                 width: 100
                 height: 30
 
                 Text{
-                    text: "Cancel"
+                    text: "Sign In"
                     anchors.centerIn: parent
                 }
             }
