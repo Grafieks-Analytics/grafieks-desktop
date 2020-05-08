@@ -166,15 +166,7 @@ Popup {
 
             background: Rectangle {
                 border.color: Constants.borderBlueColor
-<<<<<<< HEAD
                 radius: 5
-=======
-<<<<<<< HEAD
-                radius: 5
-=======
-                radius: 10
->>>>>>> 6e2f3f3893a52154e67867ee5563691f8c887fa6
->>>>>>> a96ec3a6c24f7811e8b79d4849e4602d1c5a3394
                 width: 370
             }
         }
@@ -189,15 +181,9 @@ Popup {
 
         id: row3
         anchors.top: row2.bottom
-<<<<<<< HEAD
         anchors.topMargin: 30
-=======
-<<<<<<< HEAD
-        anchors.topMargin: 30
-=======
-        anchors.topMargin: 5
->>>>>>> 6e2f3f3893a52154e67867ee5563691f8c887fa6
->>>>>>> a96ec3a6c24f7811e8b79d4849e4602d1c5a3394
+
+
         anchors.right: parent.right
         anchors.rightMargin: label_col - 70
         spacing: 10
@@ -210,27 +196,13 @@ Popup {
 
             background: Rectangle{
                 id: back_rec_1
-<<<<<<< HEAD
                 //radius: 10
                 color: btn_signin.hovered ? Constants.buttonBorderColor : "#E6E7EA"
                 width: 100
                 height: 40
-=======
-<<<<<<< HEAD
-                color: btn_signin.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
-=======
                 radius: 10
-                color: Constants.lightThemeColor
->>>>>>> 6e2f3f3893a52154e67867ee5563691f8c887fa6
-                width: 100
-                height: 40
-                Rectangle{
-                    anchors.fill: parent
-                    anchors.margins: 1
-                    color: btn_signin.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
 
-                }
->>>>>>> a96ec3a6c24f7811e8b79d4849e4602d1c5a3394
+
 
                 Text{
                     text:"Sign In"
@@ -262,27 +234,10 @@ Popup {
 
             background: Rectangle{
                 id: back_rec_2
-<<<<<<< HEAD
                 //radius: 10
                 color: btn_cancel.hovered ? Constants.buttonBorderColor : "#E6E7EA"
                 width: 100
                 height: 40
-=======
-<<<<<<< HEAD
-                color: btn_cancel.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
-=======
-                radius: 10
-                color: Constants.lightThemeColor
->>>>>>> 6e2f3f3893a52154e67867ee5563691f8c887fa6
-                width: 100
-                height: 40
-                Rectangle{
-                    anchors.fill: parent
-                    anchors.margins: 1
-                    color: btn_cancel.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
-
-                }
->>>>>>> a96ec3a6c24f7811e8b79d4849e4602d1c5a3394
 
                 Text{
                     text:"Cancel"

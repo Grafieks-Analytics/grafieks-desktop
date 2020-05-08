@@ -128,29 +128,12 @@ Popup {
 
             background: Rectangle{
                 id: back_rec_1
-<<<<<<< HEAD
                 //radius: 10
                 color: btn_con.hovered ? Constants.buttonBorderColor : "#E6E7EA"
                 width: 100
                 height: 40
-=======
-<<<<<<< HEAD
-                //radius: 10
-                color: btn_con.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
-=======
-                radius: 10
-                color: Constants.lightThemeColor
->>>>>>> 6e2f3f3893a52154e67867ee5563691f8c887fa6
-                width: 100
-                height: 40
-                Rectangle{
-                    anchors.fill: parent
-                    anchors.margins: 1
-                    //radius: 10
-                    color: btn_con.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
->>>>>>> a96ec3a6c24f7811e8b79d4849e4602d1c5a3394
 
-                }
+
                 Text{
                     text: "Connect"
                     anchors.centerIn: parent
@@ -173,29 +156,12 @@ Popup {
 
             background: Rectangle{
                 id: back_rec_2
-<<<<<<< HEAD
                 //radius: 10
                 color: btn_cancel.hovered ? Constants.buttonBorderColor : "#E6E7EA"
                 width: 100
                 height: 40
-=======
-<<<<<<< HEAD
                 //radius: 10
-                color: btn_cancel.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
-=======
-                radius: 10
-                color: Constants.lightThemeColor
->>>>>>> 6e2f3f3893a52154e67867ee5563691f8c887fa6
-                width: 100
-                height: 40
-                Rectangle{
-                    anchors.fill: parent
-                    anchors.margins: 1
-                    //radius: 10
-                    color: btn_cancel.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
 
-                }
->>>>>>> a96ec3a6c24f7811e8b79d4849e4602d1c5a3394
 
                 Text{
                     text: "Cancel"
