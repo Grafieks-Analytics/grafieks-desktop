@@ -1,4 +1,4 @@
-#include "Headers/datasources.h"
+#include "datasources.h"
 
 Datasources::Datasources(QObject *parent) : QObject(parent)
 {
