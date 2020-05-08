@@ -19,13 +19,12 @@ import "../../../Constants.js" as Constants
 Popup {
     id: popup
     width: 600
-    height: 400
+    height: 500
     modal: true
     visible: false
-    x: parent.width / 2 - 200
-    y: 100
+    x: parent.width/2 - 300
+    y: parent.height/2 - 300
     padding: 0
-
     property int label_col : 150
 
 
@@ -43,11 +42,29 @@ Popup {
         anchors.leftMargin: 1
 
         Text{
+            id : text1
             text: "Signin to Database"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
+            font.pixelSize: 15
             anchors.leftMargin: 10
         }
+        Image {
+            id: close_icn
+            source: "../../../Images/icons/outline_close_black_18dp2x.png"
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right:  parent.right
+            height: 25
+            width: 25
+            anchors.rightMargin: 5
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    popup.visible = false
+                }
+            }
+        }
+
     }
 
     // Popup Header ends
@@ -58,9 +75,11 @@ Popup {
 
         id: row1
         anchors.top: header_popup.bottom
-        anchors.topMargin: 30
+        //anchors.horizontalCenter: parent.horizontalCenter
+        anchors.topMargin: 45
         anchors.left: parent.left
         anchors.leftMargin: 1
+        anchors.rightMargin: 40
 
         Rectangle{
 
@@ -71,21 +90,107 @@ Popup {
             Text{
                 text: "Driver"
                 anchors.right: parent.right
+//                anchors.rightMargin: 60
                 anchors.rightMargin: 10
+                font.pixelSize: 15
+
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
 
-        TextField{
-            id: hostname
-            maximumLength: 45
-            anchors.verticalCenter: parent.verticalCenter
-            width: 370
+        //        TextField{
+        //            id: hostname
+        //            maximumLength: 45
+        //            anchors.verticalCenter: parent.verticalCenter
+        //            width: 370
+
+        //            background: Rectangle {
+        //                border.color: Constants.borderBlueColor
+        //                radius: 10
+        //                width: 370
+        //            }
+        //        }
+
+        ComboBox {
+            id: control
+            //editable: true
+            model: ["First", "Second", "Third","fourth"]
+
+
+            delegate: ItemDelegate {
+                width: control.width
+                contentItem: Text {
+                    text: modelData
+                    color: "black"
+                    font: control.font
+                    elide: Text.ElideRight
+                    verticalAlignment: Text.AlignVCenter
+                }
+                highlighted: control.highlightedIndex === index
+            }
+
+            indicator: Canvas {
+                id: canvas
+                x: control.width - width - control.rightPadding
+                y: control.topPadding + (control.availableHeight - height) / 2
+                width: 12
+                height: 8
+                contextType: "2d"
+
+                Connections {
+                    target: control
+                    onPressedChanged: canvas.requestPaint()
+                }
+
+                onPaint: {
+                    context.reset();
+                    context.moveTo(0, 0);
+                    context.lineTo(width, 0);
+                    context.lineTo(width / 2, height);
+                    context.closePath();
+                    context.fillStyle = control.pressed ? "#black" : "#gray";
+                    context.fill();
+                }
+            }
+
+            contentItem: Text {
+                leftPadding: 10
+                rightPadding: control.indicator.width + control.spacing
+
+                text: control.displayText
+                font: control.font
+                color: control.pressed ? "black" : "black"
+                verticalAlignment: Text.AlignVCenter
+                elide: Text.ElideRight
+            }
 
             background: Rectangle {
+                implicitWidth: 400
+                implicitHeight: 40
                 border.color: Constants.borderBlueColor
-                radius: 10
-                width: 370
+                border.width: control.visualFocus ? 2 : 1
+                radius: 5
+            }
+
+            popup: Popup {
+                y: control.height - 1
+                width: control.width
+                implicitHeight: contentItem.implicitHeight
+                padding: 1
+
+                contentItem: ListView {
+                    clip: true
+                    implicitHeight: contentHeight
+                    model: control.popup.visible ? control.delegateModel : null
+                    currentIndex: control.highlightedIndex
+
+                    ScrollIndicator.vertical: ScrollIndicator { }
+                }
+
+                background: Rectangle {
+                    border.color: Constants.borderBlueColor
+                    radius: 10
+                }
             }
         }
 
@@ -100,9 +205,10 @@ Popup {
 
         id: row_btn
         anchors.top: row1.bottom
-        anchors.topMargin: 5
+        anchors.topMargin: 15
         anchors.right: parent.right
-        anchors.rightMargin: label_col - 70
+        anchors.rightMargin: label_col - 100
+//        anchors.rightMargin: label_col + 55
         spacing: 10
 
         Button{
@@ -112,14 +218,16 @@ Popup {
 
             background: Rectangle{
                 id: back_rec_1
-                radius: 10
-                color: Constants.lightThemeColor
+                //radius: 10
+                color: btn_test_con.hovered? Constants.buttonBorderColor : "#E6E7EA"
                 width: 130
-                height: 30
+                height: 40
 
                 Text{
                     text: "Test Connection"
                     anchors.centerIn: parent
+                    font.pixelSize: 15
+                    color: btn_test_con.hovered ? "white" : "black"
                 }
             }
         }
@@ -131,14 +239,16 @@ Popup {
 
             background: Rectangle{
                 id: back_rec_2
-                radius: 10
-                color: Constants.lightThemeColor
+                //radius: 10
+                color: btn_connect.hovered ? Constants.buttonBorderColor : "#E6E7EA"
                 width: 100
-                height: 30
+                height: 40
 
                 Text{
                     text: "Connect"
                     anchors.centerIn: parent
+                    font.pixelSize: 15
+                    color: btn_connect.hovered ? "white" : "black"
                 }
             }
 
@@ -182,7 +292,7 @@ Popup {
 
         id: row2
         anchors.top: row_btn.bottom
-        anchors.topMargin: 5
+        anchors.topMargin: 15
         anchors.left: parent.left
         anchors.leftMargin: 1
 
@@ -191,11 +301,11 @@ Popup {
             id: label3
             width:label_col
             height: 40
-
             Text{
                 text: "Server"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
+                font.pixelSize: 15
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -204,12 +314,12 @@ Popup {
             id: server
             maximumLength: 45
             anchors.verticalCenter: parent.verticalCenter
-
+            height: 40
             width: 200
 
             background: Rectangle {
                 border.color: Constants.borderBlueColor
-                radius: 10
+                radius: 5
                 width: 200
             }
         }
@@ -220,12 +330,13 @@ Popup {
             height: 40
 
 
-
             Text{
                 text: "Port"
-                anchors.left: server.right
                 leftPadding: 10
-                anchors.rightMargin: 10
+                anchors.left: server.right
+                //anchors.leftMargin: 20
+                anchors.rightMargin: 20
+                font.pixelSize: 15
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -233,12 +344,13 @@ Popup {
             id: port
             maximumLength: 45
             anchors.verticalCenter: parent.verticalCenter
-            width: 130
-
+            //width: 130
+            height: 40
             background: Rectangle {
                 border.color: Constants.borderBlueColor
-                radius: 10
-                width: 130
+                radius: 5
+                width: 160
+
             }
         }
 
@@ -253,7 +365,7 @@ Popup {
 
         id: row3
         anchors.top: row2.bottom
-        anchors.topMargin: 5
+        anchors.topMargin: 15
         anchors.left: parent.left
         anchors.leftMargin: 1
 
@@ -267,6 +379,7 @@ Popup {
                 text: "Database"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
+                font.pixelSize: 15
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -276,11 +389,13 @@ Popup {
             maximumLength: 45
             anchors.verticalCenter: parent.verticalCenter
             width: 370
+            height: 40
 
             background: Rectangle {
                 border.color: Constants.borderBlueColor
-                radius: 10
-                width: 370
+                radius: 5
+                width: 400
+
             }
         }
 
@@ -295,7 +410,7 @@ Popup {
 
         id: row4
         anchors.top: row3.bottom
-        anchors.topMargin: 5
+        anchors.topMargin: 15
         anchors.left: parent.left
         anchors.leftMargin: 1
 
@@ -309,6 +424,7 @@ Popup {
                 text: "Username"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
+                font.pixelSize: 15
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -318,11 +434,13 @@ Popup {
             maximumLength: 45
             anchors.verticalCenter: parent.verticalCenter
             width: 370
+            height: 40
 
             background: Rectangle {
                 border.color: Constants.borderBlueColor
-                radius: 10
-                width: 370
+                radius: 5
+                width: 400
+
             }
         }
 
@@ -336,7 +454,7 @@ Popup {
 
         id: row5
         anchors.top: row4.bottom
-        anchors.topMargin: 5
+        anchors.topMargin: 15
         anchors.left: parent.left
         anchors.leftMargin: 1
 
@@ -350,6 +468,7 @@ Popup {
                 text: "Password"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
+                font.pixelSize: 15
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -360,11 +479,13 @@ Popup {
             echoMode: "Password"
             anchors.verticalCenter: parent.verticalCenter
             width: 370
+            height: 40
 
             background: Rectangle {
                 border.color: Constants.borderBlueColor
-                radius: 10
-                width: 370
+                radius: 5
+                width: 400
+
             }
         }
 
@@ -378,14 +499,11 @@ Popup {
 
         id: row6
         anchors.top: row5.bottom
-        anchors.topMargin: 5
+        anchors.topMargin: 15
         anchors.right: parent.right
-        anchors.rightMargin: label_col - 70
+        anchors.rightMargin: label_col - 100
+//        anchors.rightMargin: label_col*2 + 47
         spacing: 10
-
-
-
-
 
         Button{
             id: btn_cancel
@@ -394,14 +512,16 @@ Popup {
 
             background: Rectangle{
                 id: back_rec_3
-                radius: 10
-                color: "#F5F5F5"
+                //radius: 10
+                color: btn_cancel.hovered ? Constants.buttonBorderColor : "#E6E7EA"
                 width: 100
-                height: 30
+                height: 40
 
                 Text{
                     text: "Sign In"
                     anchors.centerIn: parent
+                    font.pixelSize: 15
+                    color: btn_cancel.hovered ? "white" : "black"
                 }
             }
             onClicked: {

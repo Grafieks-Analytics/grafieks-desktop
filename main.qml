@@ -21,9 +21,9 @@ import "Constants.js" as Constants
 ApplicationWindow {
     id: mainwindow
     visible: true
-    width: 1600
-    height: 800
-    minimumWidth: 1300
+    width: 1800
+    height: 1000
+    minimumWidth: 1500
     minimumHeight: 700
 
     title: Constants.applicationName
@@ -69,8 +69,10 @@ ApplicationWindow {
 //                x: 40
                 topPadding: 0
                 bottomPadding: 0
+                leftPadding: 35
+                rightPadding: 5
                 background: Rectangle{
-                    color: "#D7D9DF"
+                    color: "#E3E5EA"
                 }
             }
 
@@ -139,11 +141,14 @@ ApplicationWindow {
             }
             MenuSeparator{
 //                width: 150
-//                x: 40
+//                x : 0
+                leftPadding: 35
                 topPadding: 0
                 bottomPadding: 0
+                rightPadding: 5
                 background: Rectangle{
-                    color: "#D7D9DF"
+                    color: "#E3E5EA"
+
                 }
             }
             Action{
@@ -194,6 +199,7 @@ ApplicationWindow {
                          horizontalAlignment: Text.AlignLeft
                          verticalAlignment: Text.AlignVCenter
                          elide: Text.ElideRight
+
                      }
 
             }
@@ -329,9 +335,11 @@ ApplicationWindow {
 //                width: 150
 //                x: 40
                 topPadding: 0
+                leftPadding: 35
                 bottomPadding: 0
+                rightPadding: 5
                 background: Rectangle{
-                    color: "#D7D9DF"
+                    color: "#E3E5EA"
                 }
             }
             Action{
@@ -346,9 +354,11 @@ ApplicationWindow {
 //                width: 150
 //                x: 40
                 topPadding: 0
+                leftPadding: 35
                 bottomPadding: 0
+                rightPadding: 5
                 background: Rectangle{
-                    color: "#D7D9DF"
+                    color: "#E3E5EA"
                 }
             }
             Action{
@@ -364,8 +374,10 @@ ApplicationWindow {
 //                x: 40
                 topPadding: 0
                 bottomPadding: 0
+                leftPadding: 35
+                rightPadding: 5
                 background: Rectangle{
-                    color: "#D7D9DF"
+                    color: "#E3E5EA"
                 }
             }
             Action{
@@ -378,9 +390,10 @@ ApplicationWindow {
 //                x: 40
                 topPadding: 0
                 bottomPadding: 0
-
+                leftPadding: 35
+                rightPadding: 5
                 background: Rectangle{
-                    color: "#D7D9DF"
+                    color: "#E3E5EA"
                 }
             }
 
@@ -431,6 +444,18 @@ ApplicationWindow {
 
             }
         }
+        Menu{
+            id: menu_signIn
+            title: qsTr("Sign In")
+            height: 0
+            onOpened: {
+            connectGrafieks1.visible = true
+            }
+
+
+        }
+
+
         delegate: MenuBarItem{
             id: menuBarItem
             contentItem: Text{
@@ -553,6 +578,13 @@ ApplicationWindow {
 
     DataSourceDescription{
         id: datasourceDescription
+    }
+    ConnectGrafieks1{
+        id: connectGrafieks1
+    }
+    ConnectGrafieks2{
+        id: connectGrafieks2
+
     }
 }
 

@@ -19,11 +19,11 @@ import "../../../Constants.js" as Constants
 Popup {
     id: popup
     width: 600
-    height: 230
+    height: 400
     modal: true
     visible: false
-    x: parent.width / 2 - 200
-    y: 100
+    x: parent.width / 2 - 300
+    y: parent.width / 2 - 700
     padding: 0
 
     property int label_col : 150
@@ -66,7 +66,23 @@ Popup {
             text: "Signin to Grafieks server"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
+            font.pixelSize: 15
             anchors.leftMargin: 10
+        }
+        Image {
+            id: close_icn
+            source: "../../../Images/icons/outline_close_black_18dp2x.png"
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+            height: 25
+            width: 25
+            anchors.rightMargin: 5
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    popup.visible = false
+                }
+            }
         }
     }
 
@@ -78,7 +94,7 @@ Popup {
 
         id: row1
         anchors.top: header_popup.bottom
-        anchors.topMargin: 30
+        anchors.topMargin: 70
         anchors.left: parent.left
         anchors.leftMargin: 1
 
@@ -92,6 +108,7 @@ Popup {
                 text: "Username"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
+                font.pixelSize: 15
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -101,10 +118,11 @@ Popup {
             maximumLength: 45
             anchors.verticalCenter: parent.verticalCenter
             width: 370
+            height: 40
 
             background: Rectangle {
                 border.color: Constants.borderBlueColor
-                radius: 10
+                radius: 5
                 width: 370
             }
         }
@@ -119,7 +137,7 @@ Popup {
 
         id: row2
         anchors.top: row1.bottom
-        anchors.topMargin: 5
+        anchors.topMargin: 30
         anchors.left: parent.left
         anchors.leftMargin: 1
 
@@ -133,6 +151,7 @@ Popup {
                 text: "Password"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
+                font.pixelSize: 15
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -143,10 +162,11 @@ Popup {
             echoMode: "Password"
             anchors.verticalCenter: parent.verticalCenter
             width: 370
+            height: 40
 
             background: Rectangle {
                 border.color: Constants.borderBlueColor
-                radius: 10
+                radius: 5
                 width: 370
             }
         }
@@ -161,7 +181,7 @@ Popup {
 
         id: row3
         anchors.top: row2.bottom
-        anchors.topMargin: 5
+        anchors.topMargin: 30
         anchors.right: parent.right
         anchors.rightMargin: label_col - 70
         spacing: 10
@@ -174,13 +194,15 @@ Popup {
 
             background: Rectangle{
                 id: back_rec_1
-                radius: 10
-                color: Constants.lightThemeColor
+                //radius: 10
+                color: btn_signin.hovered ? Constants.buttonBorderColor : "#E6E7EA"
                 width: 100
-                height: 30
+                height: 40
 
                 Text{
                     text:"Sign In"
+                    font.pixelSize: 15
+                    color: btn_signin.hovered ? "white" : "black"
                     anchors.centerIn: parent
                 }
             }
@@ -207,16 +229,19 @@ Popup {
 
             background: Rectangle{
                 id: back_rec_2
-                radius: 10
-                color: Constants.lightThemeColor
+                //radius: 10
+                color: btn_cancel.hovered ? Constants.buttonBorderColor : "#E6E7EA"
                 width: 100
-                height: 30
+                height: 40
 
                 Text{
                     text:"Cancel"
+                    font.pixelSize: 15
+                    color: btn_cancel.hovered ? "white" : "black"
                     anchors.centerIn: parent
                 }
             }
+
             onClicked: {
                 popup.visible = false
             }
