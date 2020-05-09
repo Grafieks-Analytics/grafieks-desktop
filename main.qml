@@ -2,9 +2,10 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Styles 1.4
+import Qt.labs.settings 1.1
 /****************************************************************************
 **
-** Copyright (C) 2019 Grafieks.
+** Copyright (C) 2019 - 2020 Grafieks.
 ** Contact: https://grafieks.com/
 **
 ** Master Template File
@@ -15,23 +16,31 @@ import "./Source/Data"
 import "./Source/Dashboard"
 import "./Source/Others"
 import "./Source/Data/SubComponents"
+import "./Source/MainSubComponents"
 
 import "Constants.js" as Constants
+
 
 ApplicationWindow {
     id: mainwindow
     visible: true
     width: 1800
-    height: 1000
-    minimumWidth: 1500
+    height: 900
+    minimumWidth: 1300
     minimumHeight: 700
 
     title: Constants.applicationName
 
     Component.onCompleted: {
-        var loginSession = User.checkSession();
-        if(loginSession){
+        if(settings.value("user/profileId") > 0){
+            var firstname = settings.value("user/firstname")
+            var lastname = settings.value("user/lastname")
+            var capitalizeFirstName = firstname.charAt(0).toUpperCase() + firstname.slice(1)
+            var capitalizeLastName = lastname.charAt(0).toUpperCase() + lastname.slice(1)
+            var name = capitalizeFirstName + " "+ capitalizeLastName
+
             action_signin.text  = qsTr("Sign Out")
+            menu_signIn.title = qsTr(name)
         }
     }
 
@@ -65,14 +74,14 @@ ApplicationWindow {
             }
 
             MenuSeparator{
-//                width: 150
-//                x: 40
+                //                width: 150
+                //                x: 40
                 topPadding: 0
                 bottomPadding: 0
                 leftPadding: 35
                 rightPadding: 5
                 background: Rectangle{
-                    color: "#E3E5EA"
+                    color: "#D7D9DF"
                 }
             }
 
@@ -86,35 +95,35 @@ ApplicationWindow {
 
 
             delegate: MenuItem{
-             id: menuItem
-             background: Rectangle {
+                id: menuItem
+                background: Rectangle {
 
-                 Rectangle{
-                     anchors.fill: parent
-                     anchors.margins: 3
-                     color: menuItem.highlighted ? "#A5BAFA" : "transparent"
-                 Rectangle{
-                    anchors.fill: parent
-                    anchors.margins: 2
-                    color: menuItem.highlighted? "#C5D2FC" : "transparent"
-                 }
-                 }
-                     implicitWidth: 200
-                     implicitHeight: 25
-                     opacity: enabled ? 1 : 0.3
-                     color:  "#E3E5EA"
+                    Rectangle{
+                        anchors.fill: parent
+                        anchors.margins: 3
+                        color: menuItem.highlighted ? "#A5BAFA" : "transparent"
+                        Rectangle{
+                            anchors.fill: parent
+                            anchors.margins: 2
+                            color: menuItem.highlighted? "#C5D2FC" : "transparent"
+                        }
+                    }
+                    implicitWidth: 200
+                    implicitHeight: 25
+                    opacity: enabled ? 1 : 0.3
+                    color:  "#E3E5EA"
 
-                 }
-             contentItem: Text {
-                         leftPadding: 30
-                         text: menuItem.text
-                         font: menuItem.font
-                         opacity: enabled ? 1.0 : 0.3
-                         //color: menuItem.highlighted ? "#ffffff" : "#000"
-                         horizontalAlignment: Text.AlignLeft
-                         verticalAlignment: Text.AlignVCenter
-                         elide: Text.ElideRight
-                     }
+                }
+                contentItem: Text {
+                    leftPadding: 30
+                    text: menuItem.text
+                    font: menuItem.font
+                    opacity: enabled ? 1.0 : 0.3
+                    //color: menuItem.highlighted ? "#ffffff" : "#000"
+                    horizontalAlignment: Text.AlignLeft
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight
+                }
 
             }
 
@@ -140,15 +149,14 @@ ApplicationWindow {
                 text: qsTr("Redo")
             }
             MenuSeparator{
-//                width: 150
-//                x : 0
-                leftPadding: 35
+                //                width: 150
+                //                x: 40
                 topPadding: 0
                 bottomPadding: 0
+                leftPadding: 35
                 rightPadding: 5
                 background: Rectangle{
-                    color: "#E3E5EA"
-
+                    color: "#D7D9DF"
                 }
             }
             Action{
@@ -171,36 +179,35 @@ ApplicationWindow {
 
 
             delegate: MenuItem{
-             id: menuItem5
-             background: Rectangle {
+                id: menuItem5
+                background: Rectangle {
 
-                 Rectangle{
-                     anchors.fill: parent
-                     anchors.margins: 3
-                     color: menuItem5.highlighted ? "#A5BAFA" : "transparent"
-                 Rectangle{
-                    anchors.fill: parent
-                    anchors.margins: 2
-                    color: menuItem5.highlighted? "#C5D2FC" : "transparent"
-                 }
-                 }
-                     implicitWidth: 200
-                     implicitHeight: 25
-                     opacity: enabled ? 1 : 0.3
-                     color:  "#E3E5EA"
+                    Rectangle{
+                        anchors.fill: parent
+                        anchors.margins: 3
+                        color: menuItem5.highlighted ? "#A5BAFA" : "transparent"
+                        Rectangle{
+                            anchors.fill: parent
+                            anchors.margins: 2
+                            color: menuItem5.highlighted? "#C5D2FC" : "transparent"
+                        }
+                    }
+                    implicitWidth: 200
+                    implicitHeight: 25
+                    opacity: enabled ? 1 : 0.3
+                    color:  "#E3E5EA"
 
-                 }
-             contentItem: Text {
-                         leftPadding: 30
-                         text: menuItem5.text
-                         font: menuItem5.font
-                         opacity: enabled ? 1.0 : 0.3
-                         //color: menuItem.highlighted ? "#ffffff" : "#000"
-                         horizontalAlignment: Text.AlignLeft
-                         verticalAlignment: Text.AlignVCenter
-                         elide: Text.ElideRight
-
-                     }
+                }
+                contentItem: Text {
+                    leftPadding: 30
+                    text: menuItem5.text
+                    font: menuItem5.font
+                    opacity: enabled ? 1.0 : 0.3
+                    //color: menuItem.highlighted ? "#ffffff" : "#000"
+                    horizontalAlignment: Text.AlignLeft
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight
+                }
 
             }
 
@@ -231,34 +238,34 @@ ApplicationWindow {
             }
 
             delegate: MenuItem{
-             id: menuItem2
-             background: Rectangle {
-                 Rectangle{
-                     anchors.fill: parent
-                     anchors.margins: 3
-                     color: menuItem2.highlighted ? "#A5BAFA" : "transparent"
-                 Rectangle{
-                    anchors.fill: parent
-                    anchors.margins: 2
-                    color: menuItem2.highlighted? "#C5D2FC" : "transparent"
-                 }
-                 }
-                     implicitWidth: 200
-                     implicitHeight: 25
-                     opacity: enabled ? 1 : 0.3
-                     color: "#E3E5EA"
+                id: menuItem2
+                background: Rectangle {
+                    Rectangle{
+                        anchors.fill: parent
+                        anchors.margins: 3
+                        color: menuItem2.highlighted ? "#A5BAFA" : "transparent"
+                        Rectangle{
+                            anchors.fill: parent
+                            anchors.margins: 2
+                            color: menuItem2.highlighted? "#C5D2FC" : "transparent"
+                        }
+                    }
+                    implicitWidth: 200
+                    implicitHeight: 25
+                    opacity: enabled ? 1 : 0.3
+                    color: "#E3E5EA"
 
-                 }
-             contentItem: Text {
-                         leftPadding: 30
-                         text: menuItem2.text
-                         font: menuItem2.font
-                         opacity: enabled ? 1.0 : 0.3
-                         //color: menuItem2.highlighted ? "#ffffff" : "#000"
-                         horizontalAlignment: Text.AlignLeft
-                         verticalAlignment: Text.AlignVCenter
-                         elide: Text.ElideRight
-                     }
+                }
+                contentItem: Text {
+                    leftPadding: 30
+                    text: menuItem2.text
+                    font: menuItem2.font
+                    opacity: enabled ? 1.0 : 0.3
+                    //color: menuItem2.highlighted ? "#ffffff" : "#000"
+                    horizontalAlignment: Text.AlignLeft
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight
+                }
 
             }
         }
@@ -272,6 +279,18 @@ ApplicationWindow {
             Action{
                 id: action_signin
                 text: qsTr("Sign In")
+
+                onTriggered: {
+                    if(typeof settings.value("user/sessionToken") !== "undefined"){
+
+                        // Call logout
+                        logout.visible = true
+                    } else{
+
+                        // Call login
+                        connectGrafieks1.visible = true
+                    }
+                }
             }
             Action{
                 id: action_publish_datasource
@@ -284,38 +303,40 @@ ApplicationWindow {
                 }
             }
             delegate: MenuItem{
-             id: menuItem3
-             background: Rectangle {
-                 Rectangle{
-                     anchors.fill: parent
-                     anchors.margins: 3
-                     color: menuItem3.highlighted ? "#A5BAFA" : "transparent"
-                 Rectangle{
-                    anchors.fill: parent
-                    anchors.margins: 2
-                    color: menuItem3.highlighted? "#C5D2FC" : "transparent"
-                 }
-                 }
-                     implicitWidth: 200
-                     implicitHeight: 25
-                     opacity: enabled ? 1 : 0.3
-                     color:  "#E3E5EA"
+                id: menuItem3
+                background: Rectangle {
+                    Rectangle{
+                        anchors.fill: parent
+                        anchors.margins: 3
+                        color: menuItem3.highlighted ? "#A5BAFA" : "transparent"
+                        Rectangle{
+                            anchors.fill: parent
+                            anchors.margins: 2
+                            color: menuItem3.highlighted? "#C5D2FC" : "transparent"
+                        }
+                    }
+                    implicitWidth: 200
+                    implicitHeight: 25
+                    opacity: enabled ? 1 : 0.3
+                    color:  "#E3E5EA"
 
 
-                 }
-             contentItem: Text {
-                         leftPadding: 30
-                         text: menuItem3.text
-                         font: menuItem3.font
-                         opacity: enabled ? 1.0 : 0.3
-                        // color: menuItem3.highlighted ? "#ffffff" : "#000"
-                         horizontalAlignment: Text.AlignLeft
-                         verticalAlignment: Text.AlignVCenter
-                         elide: Text.ElideRight
-                     }
+                }
+                contentItem: Text {
+                    leftPadding: 30
+                    text: menuItem3.text
+                    font: menuItem3.font
+                    opacity: enabled ? 1.0 : 0.3
+                    // color: menuItem3.highlighted ? "#ffffff" : "#000"
+                    horizontalAlignment: Text.AlignLeft
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight
+                }
 
             }
+
         }
+
 
 
         // Menu Help
@@ -332,14 +353,14 @@ ApplicationWindow {
 
             }
             MenuSeparator{
-//                width: 150
-//                x: 40
+                //                width: 150
+                //                x: 40
                 topPadding: 0
-                leftPadding: 35
                 bottomPadding: 0
+                leftPadding: 35
                 rightPadding: 5
                 background: Rectangle{
-                    color: "#E3E5EA"
+                    color: "#D7D9DF"
                 }
             }
             Action{
@@ -351,14 +372,14 @@ ApplicationWindow {
 
             }
             MenuSeparator{
-//                width: 150
-//                x: 40
+                //                width: 150
+                //                x: 40
                 topPadding: 0
-                leftPadding: 35
                 bottomPadding: 0
+                leftPadding: 35
                 rightPadding: 5
                 background: Rectangle{
-                    color: "#E3E5EA"
+                    color: "#D7D9DF"
                 }
             }
             Action{
@@ -370,14 +391,14 @@ ApplicationWindow {
 
             }
             MenuSeparator{
-//                width: 150
-//                x: 40
+                //                width: 150
+                //                x: 40
                 topPadding: 0
                 bottomPadding: 0
                 leftPadding: 35
                 rightPadding: 5
                 background: Rectangle{
-                    color: "#E3E5EA"
+                    color: "#D7D9DF"
                 }
             }
             Action{
@@ -385,15 +406,16 @@ ApplicationWindow {
 
             }
             MenuSeparator{
-//                width: 160
-//                id:msep
-//                x: 40
+                //                width: 160
+                //                id:msep
+                //                x: 40
                 topPadding: 0
                 bottomPadding: 0
                 leftPadding: 35
                 rightPadding: 5
+
                 background: Rectangle{
-                    color: "#E3E5EA"
+                    color: "#D7D9DF"
                 }
             }
 
@@ -409,53 +431,62 @@ ApplicationWindow {
 
 
             delegate: MenuItem{
-             id: menuItem4
-             background: Rectangle {
-                 Rectangle{
-                     anchors.fill: parent
-                     anchors.margins: 3
-                     color: menuItem4.highlighted ? "#A5BAFA" : "transparent"
-                 Rectangle{
-                    anchors.fill: parent
-                    anchors.margins: 2
-                    color: menuItem4.highlighted? "#C5D2FC" : "transparent"
-                 }
-                 }
-                     implicitWidth: 200
-                     implicitHeight: 25
-                     opacity: enabled ? 1 : 0.3
-                     color:  "#E3E5EA"
+                id: menuItem4
+                background: Rectangle {
+                    Rectangle{
+                        anchors.fill: parent
+                        anchors.margins: 3
+                        color: menuItem4.highlighted ? "#A5BAFA" : "transparent"
+                        Rectangle{
+                            anchors.fill: parent
+                            anchors.margins: 2
+                            color: menuItem4.highlighted? "#C5D2FC" : "transparent"
+                        }
+                    }
+                    implicitWidth: 200
+                    implicitHeight: 25
+                    opacity: enabled ? 1 : 0.3
+                    color:  "#E3E5EA"
 
 
-                     //border.color: "#CAC9C9"
+                    //border.color: "#CAC9C9"
 
-                 }
+                }
 
-             contentItem: Text {
-                         leftPadding: 30
-                         text: menuItem4.text
-                         font: menuItem4.font
-                         opacity: enabled ? 1.0 : 0.3
-                         //color: menuItem4.highlighted ? "#ffffff" : "#000"
-                         horizontalAlignment: Text.AlignLeft
-                         verticalAlignment: Text.AlignVCenter
-                         elide: Text.ElideRight
-                     }
+                contentItem: Text {
+                    leftPadding: 30
+                    text: menuItem4.text
+                    font: menuItem4.font
+                    opacity: enabled ? 1.0 : 0.3
+                    //color: menuItem4.highlighted ? "#ffffff" : "#000"
+                    horizontalAlignment: Text.AlignLeft
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight
+                }
 
             }
         }
+
         Menu{
             id: menu_signIn
             title: qsTr("Sign In")
             height: 0
             onOpened: {
-            connectGrafieks1.visible = true
+
+                if(typeof settings.value("user/sessionToken") !== "undefined"){
+
+                    // Call logout
+                    logout.visible = true
+                } else{
+
+                    // Call login
+                    connectGrafieks1.visible = true
+                }
             }
 
 
+
         }
-
-
         delegate: MenuBarItem{
             id: menuBarItem
             contentItem: Text{
@@ -471,37 +502,39 @@ ApplicationWindow {
                 implicitWidth: 30
                 implicitHeight: 30
                 opacity: enabled ? 1 : 0.3
+
                 color: "transparent"
                 Rectangle {
                     id: inner_rect
-                anchors.fill: parent
-                anchors.margins: 2
-                Rectangle{
-                   anchors.fill: parent
-                   id: inner_rect2
-                   anchors.margins: 2
+                    anchors.fill: parent
+                    anchors.margins: 2
+                    Rectangle{
+                        anchors.fill: parent
+                        id: inner_rect2
+                        anchors.margins: 2
 
-                   color: {
-                       if(menuBarItem.autoExclusive)
-                       "#E1E3E7"
-                       else if(menuBarItem.highlighted)
-                        "#C5D2FC"
-                       else
-                       "transparent"
-                   }
-//
+                        color: {
+                            if(menuBarItem.autoExclusive)
+                                "#E1E3E7"
+                            else if(menuBarItem.highlighted)
+                                "#C5D2FC"
+                            else
+                                "transparent"
+                        }
+                        //
+
+                    }
+
+
+                    color:{
+                        menuBarItem.highlighted ?  "#A5BAFA" : "transparent"
+                    }
 
                 }
 
 
-                        color:{
-                            menuBarItem.highlighted ?  "#A5BAFA" : "transparent"
-                 }
 
-                }
-
-
-        }
+            }
         }
 
         background: Rectangle {
@@ -524,7 +557,7 @@ ApplicationWindow {
         id: stacklayout_home
         width: mainwindow.width
         height: mainwindow.height
-        currentIndex: 2
+        currentIndex: 4
 
         // 0
         Test{
@@ -568,23 +601,23 @@ ApplicationWindow {
 
     }
 
-    PublishGrafieks1{
-        id: publishGrafieks1
-    }
-
-    PublishGrafieks2{
-        id: publishGrafieks2
-    }
 
     DataSourceDescription{
         id: datasourceDescription
     }
-    ConnectGrafieks1{
+    LoginServer{
         id: connectGrafieks1
     }
-    ConnectGrafieks2{
+    LoginCredentials{
         id: connectGrafieks2
+    }
+    Logout{
+        id: logout
 
+    }
+
+    Settings{
+        id: settings
     }
 }
 

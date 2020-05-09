@@ -1275,11 +1275,11 @@ Page {
         }
     }
 
-    ConnectGrafieks1{
+    LoginServer{
         id: connectGrafieks1
     }
 
-    ConnectGrafieks2{
+    LoginCredentials{
         id: connectGrafieks2
 
     }

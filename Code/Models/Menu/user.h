@@ -11,6 +11,7 @@
 #include <QDebug>
 
 #include "../../Api/login.h"
+#include "../../Api/logout.h"
 #include "../General/constants.h"
 
 class User : public QObject
@@ -24,11 +25,12 @@ public:
     Q_INVOKABLE void setPassword(const QString &value);
     Q_INVOKABLE void setUsername(const QString &value);
     Q_INVOKABLE void checkLogin();
-    Q_INVOKABLE bool checkSession();
+    Q_INVOKABLE void logout();
 
 
 signals:
-    void loginStatus(QVariantMap status, bool showPublish);
+    void loginStatus(QVariantMap status);
+    void logoutStatus(QVariantMap status);
 
 private:
 

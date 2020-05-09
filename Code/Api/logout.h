@@ -24,6 +24,7 @@ private slots:
 
 
 signals:
+    void logoutStatus(bool status);
 
 private :
     QNetworkAccessManager * m_networkAccessManager;

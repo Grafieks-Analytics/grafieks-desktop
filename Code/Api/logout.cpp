@@ -12,6 +12,7 @@ Logout::Logout(QObject *parent) : QObject(parent),
     QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
     int profileId = settings.value("user/profileId").toInt();
 
+
     QNetworkRequest m_networkRequest;
     m_networkRequest.setUrl(baseUrl+"/logout");
 
@@ -33,6 +34,7 @@ Logout::Logout(QObject *parent) : QObject(parent),
 
 
 
+
 void Logout::reading()
 {
 
@@ -41,9 +43,14 @@ void Logout::reading()
 
 void Logout::readComplete()
 {
+    bool finalStatus = false;
 
     if(m_networkReply->error()){
         qDebug() << __FILE__ << __LINE__ << m_networkReply->errorString();
+
+        // Set the output
+        outputStatus.insert("code", m_networkReply->error());
+        outputStatus.insert("msg", m_networkReply->errorString());
 
     } else{
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_tempStorage);
@@ -59,8 +66,15 @@ void Logout::readComplete()
 
             QSettings settings;
             settings.remove("user");
+            finalStatus = false;
         }
 
+        emit logoutStatus(finalStatus);
         m_tempStorage->clear();
     }
+}
+
+QVariantMap Logout::getOutputStatus() const
+{
+    return outputStatus;
 }
