@@ -22,10 +22,6 @@ SOURCES += \
         Code/Models/Datasources/datasources.cpp \
         Code/Models/General/qttest2.cpp \
         Code/Models/Menu/user.cpp \
-        Code/datasources.cpp \
-        Code/mysqlconnect.cpp \
-        Code/qttest.cpp \
-        Code/user.cpp \
         main.cpp
 
 RESOURCES += qml.qrc \
@@ -52,10 +48,6 @@ HEADERS += \
     Code/Api/searchdatasources.h \
     Code/Datasources/mysqlcon.h \
     Code/Datasources/sqlitecon.h \
-    Code/Headers/datasources.h \
-    Code/Headers/user.h \
-    Code/Headers/mysqlconnect.h \
-    Code/Headers/qttest.h \
     Code/Models/Datasources/datasources.h \
     Code/Models/General/constants.h \
     Code/Models/General/qttest2.h \

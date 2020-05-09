@@ -200,9 +200,6 @@ Popup {
                 color: btn_signin.hovered ? Constants.buttonBorderColor : "#E6E7EA"
                 width: 100
                 height: 40
-                radius: 10
-
-
 
                 Text{
                     text:"Sign In"

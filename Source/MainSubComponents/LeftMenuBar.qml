@@ -13,7 +13,6 @@ import QtQuick.Controls 2.4
 
 import "../../Constants.js" as Constants
 
-
 Rectangle{
     id: rectangle_left
     height: parent.height
@@ -32,7 +31,6 @@ Rectangle{
             height: rectangle_left.height/2
             width: rectangle_left.width - 1
             color: Constants.themeColor
-
 
             Column{
                 id: row_left1
@@ -65,20 +63,23 @@ Rectangle{
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: {
+                    rect_col_1.color = Constants.leftDarkColor
+                    rect_col_2.color = Constants.themeColor
                     stacklayout_home.currentIndex = 3
                 }
                 onPressed: {
-                    rect_col_1.color = "white"
+                    rect_col_1.color = Constants.leftDarkColor
                 }
-                onReleased:  {
-                    rect_col_1.color = Constants.themeColor
-                }
+                //                onReleased:  {
+                //                    rect_col_1.color = Constants.themeColor
+                //                }
                 onEntered: {
-                    rect_col_1.color = Constants.hoverThemeColor
+                    rect_col_1.color = Constants.leftDarkColor
+                    rect_col_2.color = Constants.themeColor
                 }
-                onExited: {
-                    rect_col_1.color = Constants.themeColor
-                }
+                //                onExited: {
+                //                    rect_col_1.color = Constants.themeColor
+                //                }
 
             }
 
@@ -142,20 +143,23 @@ Rectangle{
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: {
+                    rect_col_2.color = Constants.leftDarkColor
+                    rect_col_1.color = Constants.themeColor
                     stacklayout_home.currentIndex = 7
                 }
                 onPressed: {
-                    rect_col_2.color = "white"
+                    rect_col_2.color = Constants.leftDarkColor
                 }
-                onReleased:  {
-                    rect_col_2.color = Constants.themeColor
-                }
+                //                onReleased:  {
+                //                    rect_col_2.color = Constants.themeColor
+                //                }
                 onEntered: {
-                    rect_col_2.color = Constants.hoverThemeColor
+                    rect_col_2.color = Constants.leftDarkColor
+                    rect_col_1.color = Constants.themeColor
                 }
-                onExited: {
-                    rect_col_2.color = Constants.themeColor
-                }
+                //                onExited: {
+                //                    rect_col_2.color = Constants.themeColor
+                //                }
             }
         }
 

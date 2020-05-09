@@ -25,7 +25,7 @@ Popup {
     x: parent.width/2 - 300
     y: parent.height/2 - 300
     padding: 0
-    property int label_col : 150
+    property int label_col : 135
 
 
     // Popup Header starts
@@ -90,7 +90,7 @@ Popup {
             Text{
                 text: "Driver"
                 anchors.right: parent.right
-//                anchors.rightMargin: 60
+                //                anchors.rightMargin: 60
                 anchors.rightMargin: 10
                 font.pixelSize: 15
 
@@ -207,8 +207,8 @@ Popup {
         anchors.top: row1.bottom
         anchors.topMargin: 15
         anchors.right: parent.right
-        anchors.rightMargin: label_col - 100
-//        anchors.rightMargin: label_col + 55
+        anchors.rightMargin: label_col - 70
+        //        anchors.rightMargin: label_col + 55
         spacing: 10
 
         Button{
@@ -501,8 +501,8 @@ Popup {
         anchors.top: row5.bottom
         anchors.topMargin: 15
         anchors.right: parent.right
-        anchors.rightMargin: label_col - 100
-//        anchors.rightMargin: label_col*2 + 47
+        anchors.rightMargin: label_col - 70
+        //        anchors.rightMargin: label_col*2 + 47
         spacing: 10
 
         Button{
