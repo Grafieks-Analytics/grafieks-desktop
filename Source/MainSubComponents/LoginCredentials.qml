@@ -206,15 +206,15 @@ Popup {
                 color: btn_signin.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
                 width: 100
                 height: 40
-<<<<<<< HEAD:Source/Data/SubComponents/ConnectGrafieks2.qml
-=======
+//<<<<<<< HEAD:Source/Data/SubComponents/ConnectGrafieks2.qml
+//=======
                 Rectangle{
                     anchors.fill: parent
                     anchors.margins: 1
                     color: btn_signin.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
 
                 }
->>>>>>> 196ae9f3d66e922070633cb1fd7fd58d5f92988b:Source/MainSubComponents/LoginCredentials.qml
+//>>>>>>> 196ae9f3d66e922070633cb1fd7fd58d5f92988b:Source/MainSubComponents/LoginCredentials.qml
 
                 Text{
                     text:"Sign In"
