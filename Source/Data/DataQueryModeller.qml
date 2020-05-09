@@ -653,16 +653,6 @@ Page {
     }
 
 
-
-    PublishGrafieks1{
-        id: publishGrafieks1
-
-    }
-
-    PublishGrafieks2{
-        id: publishGrafieks2
-    }
-
     DataSourceDescription{
         id: datasourceDescription
     }

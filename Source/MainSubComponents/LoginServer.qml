@@ -4,52 +4,28 @@
 ** Contact: https://grafieks.com/
 **
 ** Popup code to connect to Grafieks server
-** Prompts Username and Password
+** Prompts Server URL
 **
 ****************************************************************************/
 
 import QtQuick 2.11
 import QtQuick.Controls 2.4
-import QtQuick.Dialogs 1.2
 
-import "../../../Constants.js" as Constants
-
-
+import "../../Constants.js" as Constants
 
 Popup {
     id: popup
     width: 600
-    height: 400
+    height: 200
     modal: true
     visible: false
     x: parent.width / 2 - 300
-    y: parent.width / 2 - 700
+    y: parent.width /2 - 600
     padding: 0
 
     property int label_col : 150
 
-    Connections{
-        target: User
-        onLoginStatus:{
-
-            if(showPublish === false){
-
-                if(status.code === 200){
-                    popup.visible = false
-                    stacklayout_home.currentIndex = 4
-                    action_signin.text = qsTr("Sign Out")
-                }
-                else{
-                    popup.visible = true
-                    msg_dialog_connect_grafieks.open()
-                    msg_dialog_connect_grafieks.text = "Invalid Username or Password"
-                }
-            }
-        }
-    }
-
-
-    // Popup Header starts
+    // Header starts
 
     Rectangle{
         id: header_popup
@@ -63,11 +39,12 @@ Popup {
         anchors.leftMargin: 1
 
         Text{
+            id: text2
             text: "Signin to Grafieks server"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
-            font.pixelSize: 15
             anchors.leftMargin: 10
+            font.pixelSize: 15
         }
         Image {
             id: close_icn
@@ -86,15 +63,16 @@ Popup {
         }
     }
 
-    // Popup Header ends
+    // Header ends
 
-    // Row1: Enter username starts
+    // Signin to server starts
 
     Row{
 
         id: row1
         anchors.top: header_popup.bottom
-        anchors.topMargin: 70
+        anchors.topMargin: 30
+
         anchors.left: parent.left
         anchors.leftMargin: 1
 
@@ -105,7 +83,7 @@ Popup {
             height: 40
 
             Text{
-                text: "Username"
+                text: "Server URL"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
                 font.pixelSize: 15
@@ -114,129 +92,65 @@ Popup {
         }
 
         TextField{
-            id: username_field
+            id: server_address
+            placeholderText: "http://"
             maximumLength: 45
+            font.pixelSize: 15
             anchors.verticalCenter: parent.verticalCenter
             width: 370
             height: 40
-
             background: Rectangle {
                 border.color: Constants.borderBlueColor
-                radius: 10
+                radius: 5
                 width: 370
             }
         }
 
     }
 
-    // Row1: Enter username ends
+    // Signin to server ends
 
-    // Row2: Enter password starts
+    // Row 2: Action Button starts
 
     Row{
 
         id: row2
         anchors.top: row1.bottom
-        anchors.topMargin: 30
-        anchors.left: parent.left
-        anchors.leftMargin: 1
-
-        Rectangle{
-
-            id: label2
-            width:label_col
-            height: 40
-
-            Text{
-                text: "Password"
-                anchors.right: parent.right
-                anchors.rightMargin: 10
-                font.pixelSize: 15
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-
-        TextField{
-            id: password_field
-            maximumLength: 45
-            echoMode: "Password"
-            anchors.verticalCenter: parent.verticalCenter
-            width: 370
-            height: 40
-
-            background: Rectangle {
-                border.color: Constants.borderBlueColor
-<<<<<<< HEAD
-                radius: 5
-=======
-                radius: 10
->>>>>>> 6e2f3f3893a52154e67867ee5563691f8c887fa6
-                width: 370
-            }
-        }
-
-    }
-
-    // Row2: Enter password ends
-
-    // Row 3: Action Button starts
-
-    Row{
-
-        id: row3
-        anchors.top: row2.bottom
-<<<<<<< HEAD
-        anchors.topMargin: 30
-=======
-        anchors.topMargin: 5
->>>>>>> 6e2f3f3893a52154e67867ee5563691f8c887fa6
+        anchors.topMargin: 15
         anchors.right: parent.right
         anchors.rightMargin: label_col - 70
         spacing: 10
 
         Button{
-
-            id: btn_signin
+            id: btn_con
             height: back_rec_1.height
             width: back_rec_1.width
 
             background: Rectangle{
                 id: back_rec_1
-<<<<<<< HEAD
-                color: btn_signin.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
-=======
-                radius: 10
-                color: Constants.lightThemeColor
->>>>>>> 6e2f3f3893a52154e67867ee5563691f8c887fa6
+                //radius: 10
+                color: btn_con.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
                 width: 100
                 height: 40
                 Rectangle{
                     anchors.fill: parent
                     anchors.margins: 1
-                    color: btn_signin.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
+                    //radius: 10
+                    color: btn_con.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
 
                 }
-
                 Text{
-                    text:"Sign In"
-                    font.pixelSize: 15
-                    color: btn_signin.hovered ? "white" : "black"
+                    text: "Connect"
                     anchors.centerIn: parent
+                    color: btn_con.hovered ? "white" : "black"
+                    font.pixelSize: 15
                 }
             }
             onClicked: {
 
-                 User.setUsername(username_field.text);
-                 User.setPassword(password_field.text);
-
-                 User.checkLogin()
-
-                // Pass on without checking C++ code
-
-//                popup.visible = false
-//                stacklayout_home.currentIndex = 4
-//                action_signin.text = qsTr("Sign Out")
-
+                User.setHost(server_address.text)
+                popup.visible = false
+                connectGrafieks2.visible = true
             }
         }
 
@@ -247,26 +161,23 @@ Popup {
 
             background: Rectangle{
                 id: back_rec_2
-<<<<<<< HEAD
+                //radius: 10
                 color: btn_cancel.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
-=======
-                radius: 10
-                color: Constants.lightThemeColor
->>>>>>> 6e2f3f3893a52154e67867ee5563691f8c887fa6
                 width: 100
                 height: 40
                 Rectangle{
                     anchors.fill: parent
                     anchors.margins: 1
+                    //radius: 10
                     color: btn_cancel.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
 
                 }
 
                 Text{
-                    text:"Cancel"
-                    font.pixelSize: 15
-                    color: btn_cancel.hovered ? "white" : "black"
+                    text: "Cancel"
                     anchors.centerIn: parent
+                    color: btn_cancel.hovered ? "white" : "black"
+                    font.pixelSize: 15
                 }
             }
 
@@ -275,12 +186,6 @@ Popup {
             }
         }
     }
-    // Row 3: Action Button ends
+    // Row 2: Action Button ends
 
-    MessageDialog{
-        id: msg_dialog_connect_grafieks
-        title: "Hostname"
-        text: ""
-        icon: StandardIcon.Critical
-    }
 }

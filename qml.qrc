@@ -24,8 +24,6 @@
         <file>Source/MainSubComponents/LeftMenuBar.qml</file>
         <file>Source/MainSubComponents/LeftMenuBarReports.qml</file>
         <file>Source/MainSubComponents/SearchBar.qml</file>
-        <file>Source/Data/SubComponents/ConnectGrafieks1.qml</file>
-        <file>Source/Data/SubComponents/ConnectGrafieks2.qml</file>
         <file>Source/Data/SubComponents/ConnectDatabase.qml</file>
         <file>Source/Data/SubComponents/DataSourcesGrid.qml</file>
         <file>Source/Data/SubComponents/DataSourcesList.qml</file>
@@ -43,10 +41,10 @@
         <file>Source/Data/SubComponents/DataModeller.qml</file>
         <file>Source/MainSubComponents/HorizontalLineTpl.qml</file>
         <file>Source/Dashboard/SubComponents/ReportCustomizations.qml</file>
-        <file>Source/.DS_Store</file>
         <file>Source/Data/SubComponents/.DS_Store</file>
         <file>Source/Data/SubComponents/DataSourceDescription.qml</file>
-        <file>Source/Data/SubComponents/PublishGrafieks1.qml</file>
-        <file>Source/Data/SubComponents/PublishGrafieks2.qml</file>
+        <file>Source/MainSubComponents/LoginServer.qml</file>
+        <file>Source/MainSubComponents/Logout.qml</file>
+        <file>Source/MainSubComponents/LoginCredentials.qml</file>
     </qresource>
 </RCC>

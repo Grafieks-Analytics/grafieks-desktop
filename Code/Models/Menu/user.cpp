@@ -30,29 +30,50 @@ void User::checkLogin()
 
     timer.setSingleShot(true);
 
-    connect( login, &Login::loginStatus, &loop, &QEventLoop::quit );
-    connect( &timer, &QTimer::timeout, &loop, &QEventLoop::quit );
+    connect( login, &Login::loginStatus, &loop, &QEventLoop::quit, Qt::UniqueConnection );
+    connect( &timer, &QTimer::timeout, &loop, &QEventLoop::quit, Qt::UniqueConnection );
 
     timer.start(Constants::ApiWaitTime);
     loop.exec();
 
     if(timer.isActive()){
         outputStatus = login->getOutputStatus();
-        emit loginStatus(outputStatus, true);
 
     } else{
         outputStatus.insert("code", Constants::GeneralErrorCode);
         outputStatus.insert("msg", Constants::GeneralTimeOut);
-        emit loginStatus(outputStatus, false);
     }
 
+    emit loginStatus(outputStatus);
 
 
 }
 
-bool User::checkSession()
+void User::logout()
 {
-    return false;
+    Logout *logout = new Logout(this);
+
+    QVariantMap outputStatus;
+    QTimer timer;
+    QEventLoop loop;
+
+    timer.setSingleShot(true);
+
+    connect( logout, &Logout::logoutStatus, &loop, &QEventLoop::quit, Qt::UniqueConnection );
+    connect( &timer, &QTimer::timeout, &loop, &QEventLoop::quit, Qt::UniqueConnection );
+
+    timer.start(Constants::ApiWaitTime);
+    loop.exec();
+
+    if(timer.isActive()){
+        outputStatus = logout->getOutputStatus();
+
+    } else{
+        outputStatus.insert("code", Constants::GeneralErrorCode);
+        outputStatus.insert("msg", Constants::GeneralTimeOut);
+    }
+
+    emit logoutStatus(outputStatus);
 }
 
 

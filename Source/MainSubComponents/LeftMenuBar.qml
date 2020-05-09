@@ -127,8 +127,8 @@ Rectangle{
 
                 Text{
                     id: chart_menu_text
-//                    x: 0
-//                    y: chart_menu_icon.y - 145
+                    //                    x: 0
+                    //                    y: chart_menu_icon.y - 145
                     anchors.top: chart_menu_icon.bottom
                     anchors.topMargin: -80
                     text: "Dashboard Designer"

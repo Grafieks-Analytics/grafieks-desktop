@@ -2,13 +2,11 @@
     <qresource prefix="/">
         <file>Images/icons/.DS_Store</file>
         <file>Images/icons/Charts.png</file>
-        <file>Images/icons/Db.png</file>
         <file>Images/icons/Down.png</file>
         <file>Images/icons/Down_20.png</file>
         <file>Images/icons/Edit.png</file>
         <file>Images/icons/Edit_20.png</file>
         <file>Images/icons/Enlarge.png</file>
-        <file>Images/icons/Excel.png</file>
         <file>Images/icons/Grid.png</file>
         <file>Images/icons/List.png</file>
         <file>Images/icons/Plus.png</file>
@@ -64,5 +62,28 @@
         <file>Images/icons/charts/TreeMap_30.png</file>
         <file>Images/logos/logo.png</file>
         <file>Images/logos/logo_full_small.png</file>
+        <file>Images/icons/outline_close_black_18dp1x.png</file>
+        <file>Images/icons/outline_close_black_18dp2x.png</file>
+        <file>Images/icons/GRS.png</file>
+        <file>Images/icons/json-file.png</file>
+        <file>Images/icons/text.png</file>
+        <file>Images/icons/dropbox-2.png</file>
+        <file>Images/icons/github-1.png</file>
+        <file>Images/icons/aws-redshift-logo.png</file>
+        <file>Images/icons/hadoop.png</file>
+        <file>Images/icons/box.png</file>
+        <file>Images/icons/google-analytics-4.png</file>
+        <file>Images/icons/microsoft-access-1.png</file>
+        <file>Images/icons/microsoft-excel-2013.png</file>
+        <file>Images/icons/16_google-sheets_1b1915a4b0.png</file>
+        <file>Images/icons/mysql-6.png</file>
+        <file>Images/icons/oracle-icon.png</file>
+        <file>Images/icons/json-icon.png</file>
+        <file>Images/icons/20_snowflake-icon_a4ed1ae266.png</file>
+        <file>Images/icons/74_sqlite-icon_a6ac860586.png</file>
+        <file>Images/icons/microsoft-sql-server.png</file>
+        <file>Images/icons/16_csv.png</file>
+        <file>Images/icons/Db.png</file>
+        <file>Images/icons/Db - 60.png</file>
     </qresource>
 </RCC>

@@ -1,10 +1,7 @@
 #include "login.h"
 
 
-Login::Login(QObject *parent) : QObject(parent),
-    m_networkAccessManager(new QNetworkAccessManager(this)),
-    m_networkReply(nullptr),
-    m_tempStorage(new QByteArray)
+Login::Login(QObject *parent) : QObject(parent)
 
 {
 
@@ -36,8 +33,8 @@ Login::Login(const QString &host, const QString &username, const QString &passwo
     QSettings settings;
     settings.setValue("general/baseUrl", host);
 
-    connect(m_networkReply, &QIODevice::readyRead, this, &Login::reading);
-    connect(m_networkReply, &QNetworkReply::finished, this, &Login::readComplete);
+    connect(m_networkReply, &QIODevice::readyRead, this, &Login::reading, Qt::UniqueConnection);
+    connect(m_networkReply, &QNetworkReply::finished, this, &Login::readComplete, Qt::UniqueConnection);
 }
 
 void Login::reading()
@@ -47,13 +44,14 @@ void Login::reading()
 
 void Login::readComplete()
 {
+    bool finalStatus = false;
+
     if(m_networkReply->error()){
         qDebug() << __FILE__ << __LINE__ << m_networkReply->errorString();
 
         // Set the output
         outputStatus.insert("code", m_networkReply->error());
         outputStatus.insert("msg", m_networkReply->errorString());
-        emit loginStatus(false);
 
     } else{
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_tempStorage);
@@ -63,8 +61,6 @@ void Login::readComplete()
         // Set the output
         outputStatus.insert("code", statusObj["code"].toInt());
         outputStatus.insert("msg", statusObj["msg"].toString());
-
-        qDebug() << __FILE__ << __LINE__ << statusObj;
 
         // If successful, set the variables in settings
         if(statusObj["code"].toInt() == 200){
@@ -79,13 +75,12 @@ void Login::readComplete()
             settings.setValue("user/photoLink", dataObj["photoLink"].toString());
             settings.setValue("user/sessionToken", dataObj["sessionToken"].toString());
 
-            emit loginStatus(true);
+            finalStatus = true;
 
 
-        } else{
-            emit loginStatus(false);
         }
 
+        emit loginStatus(finalStatus);
         m_tempStorage->clear();
 
     }
