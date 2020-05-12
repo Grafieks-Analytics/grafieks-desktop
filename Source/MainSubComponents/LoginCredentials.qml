@@ -208,6 +208,7 @@ Popup {
                 color: btn_signin.hovered ? Constants.buttonBorderColor : Constants.lightThemeColor
                 width: 100
                 height: 40
+
                 Rectangle{
                     anchors.fill: parent
                     anchors.margins: 1

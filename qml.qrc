@@ -20,7 +20,6 @@
         <file>Source/Dashboard/SubComponents/ReportCustomizations.qml</file>
         <file>Source/Data/DataQueryModeller.qml</file>
         <file>Source/Data/DataSources.qml</file>
-        <file>Source/Data/SelectConnection_copy.qml</file>
         <file>Source/Data/SelectConnection.qml</file>
         <file>Source/Data/SubComponents/ConnectDatabase.qml</file>
         <file>Source/Data/SubComponents/DataFilters.qml</file>
