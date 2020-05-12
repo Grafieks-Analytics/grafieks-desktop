@@ -144,7 +144,6 @@ Rectangle{
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: {
-                    <<<<<<< HEAD
                     dashboardDesignerRect.color = Constants.leftDarkColor
                     dataDesignerRect.color = Constants.themeColor
                     stacklayout_home.currentIndex = 7
@@ -159,25 +158,6 @@ Rectangle{
                     dashboardDesignerRect.color = Constants.leftDarkColor
                 }
 
-                =======
-                rect_col_2.color = Constants.leftDarkColor
-                rect_col_1.color = Constants.themeColor
-                stacklayout_home.currentIndex = 7
-            }
-                onPressed: {
-                    rect_col_2.color = Constants.leftDarkColor
-                }
-                //                onReleased:  {
-                //                    rect_col_2.color = Constants.themeColor
-                //                }
-                onEntered: {
-                    rect_col_2.color = Constants.leftDarkColor
-                    rect_col_1.color = Constants.themeColor
-                }
-                //                onExited: {
-                //                    rect_col_2.color = Constants.themeColor
-                //                }
-                >>>>>>> 37464cf3486cec9f9c4e5ea2061d59c9ae8d40dd
             }
         }
 
