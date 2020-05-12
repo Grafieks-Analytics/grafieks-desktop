@@ -80,13 +80,7 @@ Rectangle{
                     dashboardDesignerRect.color = Constants.themeColor
 
                 }
-                //                onExited: {
-                //                    rect_col_1.color = Constants.themeColor
-                //                }
-
-
             }
-
 
         }
 

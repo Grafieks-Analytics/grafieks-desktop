@@ -518,7 +518,7 @@ Popup {
                 height: 40
 
                 Text{
-                    text: "Sign In"
+                    text: Constants.signInText
                     anchors.centerIn: parent
                     font.pixelSize: 15
                     color: btn_cancel.hovered ? "white" : "black"

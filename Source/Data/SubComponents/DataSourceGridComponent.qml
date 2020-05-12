@@ -149,7 +149,7 @@ Item {
                 width:data_source_main.width - 10
                 text: "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs."
                 wrapMode: Text.WordWrap
-                font.pointSize: 11
+                font.pointSize: Constants.fontReading
             }
         }
 
@@ -170,7 +170,7 @@ Item {
                 Text{
                     id: owner_name_id
                     text: "Hirak Kocharee"
-                    font.pointSize: 11
+                    font.pointSize: Constants.fontReading
                 }
 
             }
@@ -185,7 +185,7 @@ Item {
                 Text{
                     id: mode_id
                     text: "Live"
-                    font.pointSize: 11
+                    font.pointSize: Constants.fontReading
                 }
 
             }

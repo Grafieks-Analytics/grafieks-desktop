@@ -45,7 +45,7 @@ Popup {
                 var capitalizeLastName = lastname.charAt(0).toUpperCase() + lastname.slice(1)
                 var name = capitalizeFirstName + " "+ capitalizeLastName
 
-                action_signin.text  = qsTr("Sign Out")
+                action_signin.text  = Constants.signOutText
                 menu_signIn.title = qsTr(name)
             }
             else{
@@ -217,7 +217,7 @@ Popup {
                 }
 
                 Text{
-                    text:"Sign In"
+                    text:Constants.signInText
                     font.pixelSize: 15
                     color: btn_signin.hovered ? "white" : "black"
                     anchors.centerIn: parent

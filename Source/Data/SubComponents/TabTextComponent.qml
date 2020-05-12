@@ -9,6 +9,7 @@
 ****************************************************************************/
 
 import QtQuick 2.11
+import com.grafieks.singleton.constants 1.0
 
 Item {
 
@@ -17,7 +18,7 @@ Item {
 
     Text {
         id : textcomponent
-        font.pixelSize: 15
+        font.pointSize: Constants.fontCategoryHeaderSmall
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         color: "black"

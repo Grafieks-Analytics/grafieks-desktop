@@ -38,10 +38,11 @@ QtObject {
     // Standard Font Sizes
 
     property font fontDefault : Qt.font({family : "verdana"})
-    property int fontHeader : 40
-    property int fontSubHeader : 30
-    property int fontCategoryHeader : 20
-    property int fontReading: 15
+    property int fontHeader : 28
+    property int fontSubHeader : 20
+    property int fontCategoryHeader : 18
+    property int fontCategoryHeaderSmall : 15
+    property int fontReading: 11
 
 
 }

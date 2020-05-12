@@ -36,8 +36,8 @@ Popup {
 
             if(status.code === 200){
                 popupLogout.visible = false
-                action_signin.text = qsTr("Sign In")
-                menu_signIn.title = qsTr("Sign In")
+                action_signin.text = Constants.signInText
+                menu_signIn.title = Constants.signInText
             }
             else{
                 error_connection_text.text = status.msg
@@ -122,7 +122,7 @@ Popup {
                 }
 
                 Text{
-                    text:"Sign Out"
+                    text: Constants.signOutText
                     font.pixelSize: 15
                     color: btn_signin.hovered ? "white" : "black"
                     anchors.centerIn: parent

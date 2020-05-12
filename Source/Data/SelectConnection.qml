@@ -46,7 +46,7 @@ Page {
         id: mainLabel
         scale : 0.8
         text: qsTr("Data Connectors")
-        font.pointSize: 28
+        font.pointSize: Constants.fontHeader
         color:"gray"
         anchors.top:parent.top
         anchors.topMargin: 100
@@ -79,7 +79,7 @@ Page {
             verticalAlignment:TextEdit.AlignVCenter
             font.italic: true
             font.weight: font.Thin
-            font.pointSize: 12
+            font.pointSize: Constants.fontReading
             opacity: 0.6
         }
 
@@ -111,12 +111,10 @@ Page {
             width: 50
             height: parent.height
 
-            // @disable-check M16
             contentItem: TabTextComponent{
                 name: qsTr("All")
             }
 
-            // @disable-check M16
             background: TabBackgroundComponent{
                 colorOuter : tab_all.activeFocus ? Constants.buttonBorderColor : "transparent"
             }
@@ -128,12 +126,10 @@ Page {
             width: 50
             height: parent.height
 
-            // @disable-check M16
             contentItem: TabTextComponent{
                 name: qsTr("File")
             }
 
-            // @disable-check M16
             background: TabBackgroundComponent{
                 colorOuter : tab_file.activeFocus ? Constants.buttonBorderColor : "transparent"
             }
@@ -144,12 +140,10 @@ Page {
             width: 200
             height: parent.height
 
-            // @disable-check M16
             contentItem: TabTextComponent{
                 name: qsTr("Grafieks Reporting Server")
             }
 
-            // @disable-check M16
             background: TabBackgroundComponent{
                 colorOuter : tab_grs.activeFocus ? Constants.buttonBorderColor : "transparent"
             }
@@ -160,12 +154,12 @@ Page {
             width: 150
             height: parent.height
 
-            // @disable-check M16
+
             contentItem: TabTextComponent{
                 name: qsTr("Relational Database")
             }
 
-            // @disable-check M16
+
             background: TabBackgroundComponent{
                 colorOuter : tab_rd.activeFocus ? Constants.buttonBorderColor : "transparent"
             }
@@ -176,12 +170,12 @@ Page {
             width: 150
             height: parent.height
 
-            // @disable-check M16
+
             contentItem: TabTextComponent{
                 name: qsTr("NoSQL Database")
             }
 
-            // @disable-check M16
+
             background: TabBackgroundComponent{
                 colorOuter : tab_nd.activeFocus ? Constants.buttonBorderColor : "transparent"
             }
@@ -192,12 +186,12 @@ Page {
             width: 150
             height: parent.height
 
-            // @disable-check M16
+
             contentItem: TabTextComponent{
                 name: qsTr("Cloud Storage")
             }
 
-            // @disable-check M16
+
             background: TabBackgroundComponent{
                 colorOuter : tab_cs.activeFocus ? Constants.buttonBorderColor : "transparent"
             }
@@ -207,11 +201,11 @@ Page {
             width: 150
             height: parent.height
 
-            // @disable-check M16
+
             contentItem: TabTextComponent{
                 name: qsTr("Online Services")
             }
-            // @disable-check M16
+
             background: TabBackgroundComponent{
                 colorOuter : tab_os.activeFocus ? Constants.buttonBorderColor : "transparent"
             }
@@ -347,7 +341,7 @@ Page {
 
             Text{
                 text:name
-                font.pointSize: 20
+                font.pointSize: Constants.fontSubHeader
                 color:"gray"
                 anchors.top: imageId.bottom
                 anchors.topMargin: 10

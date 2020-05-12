@@ -41,7 +41,7 @@ ApplicationWindow {
             var capitalizeLastName = lastname.charAt(0).toUpperCase() + lastname.slice(1)
             var name = capitalizeFirstName + " "+ capitalizeLastName
 
-            action_signin.text  = qsTr("Sign Out")
+            action_signin.text  = Constants.signOutText
             menu_signIn.title = qsTr(name)
 
         }
@@ -167,7 +167,7 @@ ApplicationWindow {
 
             Action{
                 id: action_signin
-                text: qsTr("Sign In")
+                text: Constants.signInText
 
                 onTriggered: {
                     if(typeof settings.value("user/sessionToken") !== "undefined"){
@@ -255,7 +255,7 @@ ApplicationWindow {
 
         Menu{
             id: menu_signIn
-            title: qsTr("Sign In")
+            title: Constants.signInText
             height: 0
             onOpened: {
 
