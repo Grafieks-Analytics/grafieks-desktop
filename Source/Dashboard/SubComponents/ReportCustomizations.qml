@@ -1,10 +1,10 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 Grafieks.
+** Copyright (C) 2019 - 2020 Grafieks v1.0.
 ** Contact: https://grafieks.com/
 **
-** Report Customization
-** Various options to customize reports
+** Dashboard/Subcomponents
+** Report Customizations
 **
 ****************************************************************************/
 
@@ -12,7 +12,7 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 
-import "../../../Constants.js" as Constants
+import com.grafieks.singleton.constants 1.0
 
 Item{
     width: 150

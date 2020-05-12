@@ -4,26 +4,27 @@
 ** Contact: https://grafieks.com/
 **
 ** MainSubComponents
-** Horizontal Line Tpl
+** Menu Separator Component
 **
 ****************************************************************************/
 
 import QtQuick 2.11
+import QtQuick.Controls 2.4
 
 import com.grafieks.singleton.constants 1.0
 
 Item{
+    id : menuSeparatorComponent
+    height: 1
+    width: implicitWidth
 
-    id: horizontal_line
-    width: control.implicitWidth
-    height: control.implicitHeight
-
-    property alias line_color: control.color
-    property alias line_width: control.width
-
-    Rectangle {
-        id: control
-        implicitWidth: parent.vertical ? 1 : 24
-        implicitHeight: parent.vertical ? 24 : 1
+    MenuSeparator{
+        topPadding: 0
+        bottomPadding: 0
+        leftPadding: 35
+        rightPadding: 5
+        background: Rectangle{
+            color: "#D7D9DF"
+        }
     }
 }

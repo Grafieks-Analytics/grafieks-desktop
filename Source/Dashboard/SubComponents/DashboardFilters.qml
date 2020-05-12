@@ -1,8 +1,19 @@
+/****************************************************************************
+**
+** Copyright (C) 2019 - 2020 Grafieks v1.0.
+** Contact: https://grafieks.com/
+**
+** Dashboard/Subcomponents
+** Dashboard Filters
+**
+****************************************************************************/
+
 import QtQuick 2.11
 import QtQuick.Controls 2.4
 
+import com.grafieks.singleton.constants 1.0
+
 import "../../MainSubComponents"
-import "../../../Constants.js" as Constants
 
 Item {
 
@@ -18,7 +29,7 @@ Item {
         y: 8
         width: 185
         height: 147
-        color: "#ffffff"
+        color: "white"
         border.color: Constants.themeColor
 
 
@@ -68,7 +79,7 @@ Item {
         y: 161
         width: 185
         height: 80
-        color: "#ffffff"
+        color: "white"
         border.color: Constants.themeColor
 
         ToolSeparator {
@@ -104,7 +115,7 @@ Item {
         y: 247
         width: 185
         height: 70
-        color: "#ffffff"
+        color: "white"
         border.color: Constants.themeColor
 
         ToolSeparator {
@@ -145,7 +156,7 @@ Item {
         y: 323
         width: 185
         height: 150
-        color: "#ffffff"
+        color: "white"
         border.color: Constants.themeColor
 
 

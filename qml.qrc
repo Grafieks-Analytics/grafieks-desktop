@@ -1,50 +1,57 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
-        <file>Source/Charts/tree.html</file>
-        <file>Source/Charts/tree-map.html</file>
-        <file>Source/Charts/sunburst.html</file>
-        <file>Source/Charts/scatter.html</file>
-        <file>Source/Charts/radar.html</file>
-        <file>Source/Charts/pie.html</file>
-        <file>Source/Charts/line.html</file>
-        <file>Source/Charts/horizontal-bar.html</file>
-        <file>Source/Charts/box.html</file>
-        <file>Source/Charts/bar.html</file>
         <file>Source/Charts/area.html</file>
-        <file>Source/Others/Test2.qml</file>
-        <file>Source/Others/Test.qml</file>
-        <file>Source/Others/Home.qml</file>
-        <file>Source/Data/DataQueryModeller.qml</file>
-        <file>Source/Data/SelectConnection.qml</file>
-        <file>Source/Data/DataSources.qml</file>
+        <file>Source/Charts/bar.html</file>
+        <file>Source/Charts/box.html</file>
+        <file>Source/Charts/horizontal-bar.html</file>
+        <file>Source/Charts/line.html</file>
+        <file>Source/Charts/pie.html</file>
+        <file>Source/Charts/radar.html</file>
+        <file>Source/Charts/scatter.html</file>
+        <file>Source/Charts/sunburst.html</file>
+        <file>Source/Charts/tree-map.html</file>
+        <file>Source/Charts/tree.html</file>
         <file>Source/Dashboard/NewDashboard.qml</file>
         <file>Source/Dashboard/NewReport.qml</file>
-        <file>Constants.js</file>
-        <file>Source/MainSubComponents/LeftMenuBar.qml</file>
-        <file>Source/MainSubComponents/LeftMenuBarReports.qml</file>
-        <file>Source/MainSubComponents/SearchBar.qml</file>
+        <file>Source/Dashboard/SubComponents/DashboardCustomize.qml</file>
+        <file>Source/Dashboard/SubComponents/DashboardFilters.qml</file>
+        <file>Source/Dashboard/SubComponents/DashboardSubFilters.qml</file>
+        <file>Source/Dashboard/SubComponents/DashboardSummary.qml</file>
+        <file>Source/Dashboard/SubComponents/ReportCustomizations.qml</file>
+        <file>Source/Data/DataQueryModeller.qml</file>
+        <file>Source/Data/DataSources.qml</file>
+        <file>Source/Data/SelectConnection_copy.qml</file>
+        <file>Source/Data/SelectConnection.qml</file>
         <file>Source/Data/SubComponents/ConnectDatabase.qml</file>
+        <file>Source/Data/SubComponents/DataFilters.qml</file>
+        <file>Source/Data/SubComponents/DataModeller.qml</file>
+        <file>Source/Data/SubComponents/DataSourceDescription.qml</file>
+        <file>Source/Data/SubComponents/DataSourceGridComponent.qml</file>
         <file>Source/Data/SubComponents/DataSourcesGrid.qml</file>
         <file>Source/Data/SubComponents/DataSourcesList.qml</file>
-        <file>Source/MainSubComponents/RadioButtonTpl.qml</file>
-        <file>Source/MainSubComponents/CheckBoxTpl.qml</file>
-        <file>Source/MainSubComponents/RangeSliderTpl.qml</file>
-        <file>Source/MainSubComponents/SliderTpl.qml</file>
-        <file>Source/Dashboard/SubComponents/DashboardFilters.qml</file>
-        <file>Source/Dashboard/SubComponents/DashboardCustomize.qml</file>
-        <file>Source/Dashboard/SubComponents/DashboardSummary.qml</file>
-        <file>Source/Dashboard/SubComponents/DashboardSubFilters.qml</file>
-        <file>Source/Data/SubComponents/DataSourceGridComponent.qml</file>
-        <file>Source/Data/SubComponents/DataFilters.qml</file>
+        <file>Source/Data/SubComponents/MainMenuDelegate.qml</file>
+        <file>Source/Data/SubComponents/MenuSeparatorComponent.qml</file>
         <file>Source/Data/SubComponents/QueryModeller.qml</file>
-        <file>Source/Data/SubComponents/DataModeller.qml</file>
+        <file>Source/Data/SubComponents/TabBackgroundComponent.qml</file>
+        <file>Source/Data/SubComponents/TabTextComponent.qml</file>
+        <file>Source/MainSubComponents/CheckBoxTpl.qml</file>
         <file>Source/MainSubComponents/HorizontalLineTpl.qml</file>
-        <file>Source/Dashboard/SubComponents/ReportCustomizations.qml</file>
-        <file>Source/Data/SubComponents/.DS_Store</file>
-        <file>Source/Data/SubComponents/DataSourceDescription.qml</file>
+        <file>Source/MainSubComponents/LeftMenuBar.qml</file>
+        <file>Source/MainSubComponents/LeftMenuBarReports.qml</file>
+        <file>Source/MainSubComponents/LoginCredentials.qml</file>
         <file>Source/MainSubComponents/LoginServer.qml</file>
         <file>Source/MainSubComponents/Logout.qml</file>
-        <file>Source/MainSubComponents/LoginCredentials.qml</file>
+        <file>Source/MainSubComponents/MainMenuDelegate.qml</file>
+        <file>Source/MainSubComponents/MenuItemDelegate.qml</file>
+        <file>Source/MainSubComponents/MenuSeparatorComponent.qml</file>
+        <file>Source/MainSubComponents/RadioButtonTpl.qml</file>
+        <file>Source/MainSubComponents/RangeSliderTpl.qml</file>
+        <file>Source/MainSubComponents/SearchBar.qml</file>
+        <file>Source/MainSubComponents/SliderTpl.qml</file>
+        <file>Source/Others/Test.qml</file>
+        <file>Source/Others/Test2.qml</file>
+        <file>Source/Others/Home.qml</file>
+        <file>main.qml</file>
+        <file>Constants.qml</file>
     </qresource>
 </RCC>

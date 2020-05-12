@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QTextStream>
+#include <QtQml>
 
 #include "Code/Models/General/qttest2.h"
 #include "Code/Datasources/mysqlcon.h"
@@ -28,6 +29,8 @@ int main(int argc, char *argv[])
     MysqlCon mysqlconnect;
     Datasources dsparams;
     User user;
+
+    qmlRegisterSingletonType( QUrl("qrc:/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants" );
 
 
     QtWebEngine::initialize();

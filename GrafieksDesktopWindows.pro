@@ -24,9 +24,10 @@ SOURCES += \
         Code/Models/Menu/user.cpp \
         main.cpp
 
-RESOURCES += qml.qrc \
+RESOURCES += \
     assets.qrc \
-    images.qrc
+    images.qrc \
+    qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

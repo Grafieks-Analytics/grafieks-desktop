@@ -1,9 +1,10 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 Grafieks.
+** Copyright (C) 2019 - 2020 Grafieks v1.0.
 ** Contact: https://grafieks.com/
 **
-** Data Query and Modeller Screen
+** Data
+** Data Query Modeller
 **
 ****************************************************************************/
 
@@ -11,10 +12,11 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 
+import com.grafieks.singleton.constants 1.0
+
 
 import "../MainSubComponents"
 import "./SubComponents"
-import "../../Constants.js" as Constants
 
 Page {
 
@@ -501,9 +503,6 @@ Page {
                     anchors.horizontalCenter: row_querymodeller_right_col.horizontalCenter
                     anchors.topMargin: 5
                 }
-
-
-
             }
 
             // Right item 3 ends
@@ -620,7 +619,6 @@ Page {
                     }
 
                 }
-
             }
 
             // Right item 4 ends
@@ -635,23 +633,17 @@ Page {
                     Datasources.setDsName(ds_name.text)
                     Datasources.setSourceType("live")
 
-                    publishGrafieks1.visible = true
+                    datasourceDescription.visible = true
 
                 }
             }
-
-
         }
-
-
-
     }
-    // Righthand Panel ends
 
+    // Righthand Panel ends
     DataFilters{
         id: datafilters
     }
-
 
     DataSourceDescription{
         id: datasourceDescription

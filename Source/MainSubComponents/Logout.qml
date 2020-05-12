@@ -3,6 +3,8 @@
 ** Copyright (C) 2019 Grafieks.
 ** Contact: https://grafieks.com/
 **
+** MainSubComponents
+** Logout
 ** Popup code to Logout from Grafieks server
 **
 ****************************************************************************/
@@ -12,12 +14,12 @@ import QtQuick.Controls 2.4
 import QtQuick.Dialogs 1.2
 import Qt.labs.settings 1.0
 
-import "../../Constants.js" as Constants
+import com.grafieks.singleton.constants 1.0
 
 
 
 Popup {
-    id: logout_popup
+    id: popupLogout
     width: 600
     height: 400
     modal: true
@@ -33,7 +35,7 @@ Popup {
         onLogoutStatus:{
 
             if(status.code === 200){
-                logout_popup.visible = false
+                popupLogout.visible = false
                 action_signin.text = qsTr("Sign In")
                 menu_signIn.title = qsTr("Sign In")
             }
@@ -51,7 +53,7 @@ Popup {
     // Popup Header starts
 
     Rectangle{
-        id: header_popup
+        id: headerPopup
         color: Constants.themeColor
         border.color: "transparent"
         height: 40
@@ -80,7 +82,7 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    logout_popup.visible = false
+                    popupLogout.visible = false
                 }
             }
         }
@@ -95,7 +97,7 @@ Popup {
     Row{
 
         id: row1
-        anchors.top: header_popup.bottom
+        anchors.top: headerPopup.bottom
         anchors.topMargin: 30
         anchors.right: parent.right
         anchors.rightMargin: label_col - 70
@@ -158,7 +160,7 @@ Popup {
             }
 
             onClicked: {
-                logout_popup.visible = false
+                popupLogout.visible = false
             }
         }
 

@@ -4,7 +4,7 @@
 ** Contact: https://grafieks.com/
 **
 ** Data/SubComponents
-** Data Modeller
+** Tab Text Component
 **
 ****************************************************************************/
 
@@ -12,9 +12,14 @@ import QtQuick 2.11
 
 Item {
 
-    Text{
-        padding:10
-        text: "Data Designer will show up when programmed"
-    }
+    id : tabTextComponent
+    property alias name : textcomponent.text
 
+    Text {
+        id : textcomponent
+        font.pixelSize: 15
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        color: "black"
+    }
 }

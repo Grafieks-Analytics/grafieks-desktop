@@ -7,8 +7,4 @@ Column{
     spacing: 10
     width: implicitWidth
 
-    Component.onCompleted: {
-        Datasources.fetchDatasources()
-    }
-
 }

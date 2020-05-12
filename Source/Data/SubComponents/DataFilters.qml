@@ -1,9 +1,10 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 Grafieks.
+** Copyright (C) 2019 - 2020 Grafieks v1.0.
 ** Contact: https://grafieks.com/
 **
-** Data Filters screen
+** Data/SubComponents
+** Data Filters
 **
 ****************************************************************************/
 
@@ -11,12 +12,14 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 
+import com.grafieks.singleton.constants 1.0
+
 import "../../MainSubComponents"
-import "../../../Constants.js" as Constants
+
 
 
 Popup {
-    id: popup_main
+    id: popupMain
     width: 600
     height: 390
     x: parent.width / 2 - 380
@@ -30,7 +33,7 @@ Popup {
     // Header starts
 
     Rectangle{
-        id: header_popup
+        id: headerPopup
         color: Constants.themeColor
         border.color: "transparent"
         height: 40
@@ -53,7 +56,7 @@ Popup {
 
     TabBar{
         id: tabbar1
-        anchors.top: header_popup.bottom
+        anchors.top: headerPopup.bottom
         anchors.left: parent.left
         anchors.topMargin: 1
         anchors.leftMargin: 1
@@ -68,7 +71,7 @@ Popup {
         TabButton{
             id: character_btn
             text: "Character"
-            width:popup_main.width/4 - 1
+            width:popupMain.width/4 - 1
 
             background: Rectangle {
                 id: character_btn_background
@@ -99,7 +102,7 @@ Popup {
         TabButton{
             id: date_btn
             text: "Date"
-            width:popup_main.width/4 - 1
+            width:popupMain.width/4 - 1
 
             background: Rectangle {
                 id: date_btn_background
@@ -130,7 +133,7 @@ Popup {
         TabButton{
             id: numbers_btn
             text: "Numbers"
-            width:popup_main.width/4 - 1
+            width:popupMain.width/4 - 1
 
             background: Rectangle {
                 id: numbers_btn_background
@@ -161,7 +164,7 @@ Popup {
         TabButton{
             id: users_btn
             text: "User"
-            width:popup_main.width/4 - 2
+            width:popupMain.width/4 - 2
 
 
             background: Rectangle {
@@ -266,7 +269,7 @@ Popup {
 
     Rectangle{
         id: rect1
-        width: popup_main.width - 40
+        width: popupMain.width - 40
         height:230
         border.color: "black"
         anchors.top:add_btn_1.bottom
@@ -291,7 +294,7 @@ Popup {
             id: cancel_btn1
             text: "Cancel"
             onClicked: {
-                popup_main.visible = false
+                popupMain.visible = false
             }
 
             background: Rectangle {
@@ -330,7 +333,7 @@ Popup {
                 verticalAlignment: Text.AlignVCenter
             }
             onClicked: {
-                popup_main.visible = false
+                popupMain.visible = false
             }
         }
     }

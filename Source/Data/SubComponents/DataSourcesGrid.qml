@@ -1,9 +1,10 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 Grafieks.
+** Copyright (C) 2019 - 2020 Grafieks v1.0.
 ** Contact: https://grafieks.com/
 **
-** Data Sources Grid Component
+** Data/SubComponents
+** Data Sources Grid
 **
 ****************************************************************************/
 
@@ -11,6 +12,8 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 1.4 as OldControls
+
+import com.grafieks.singleton.constants 1.0
 
 import "../../MainSubComponents"
 

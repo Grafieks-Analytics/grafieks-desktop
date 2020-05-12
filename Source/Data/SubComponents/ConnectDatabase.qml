@@ -1,10 +1,10 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 Grafieks.
+** Copyright (C) 2019 - 2020 Grafieks v1.0.
 ** Contact: https://grafieks.com/
 **
-** Popup code to connect to database server
-** Prompts all the details
+** Data/SubComponents
+** Connect Database
 **
 ****************************************************************************/
 
@@ -12,7 +12,7 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Dialogs 1.2
 
-import "../../../Constants.js" as Constants
+import com.grafieks.singleton.constants 1.0
 
 
 
@@ -25,7 +25,7 @@ Popup {
     x: parent.width/2 - 300
     y: parent.height/2 - 300
     padding: 0
-    property int label_col : 150
+    property int label_col : 135
 
 
     // Popup Header starts
@@ -90,7 +90,7 @@ Popup {
             Text{
                 text: "Driver"
                 anchors.right: parent.right
-//                anchors.rightMargin: 60
+                //                anchors.rightMargin: 60
                 anchors.rightMargin: 10
                 font.pixelSize: 15
 
@@ -207,8 +207,8 @@ Popup {
         anchors.top: row1.bottom
         anchors.topMargin: 15
         anchors.right: parent.right
-        anchors.rightMargin: label_col - 100
-//        anchors.rightMargin: label_col + 55
+        anchors.rightMargin: label_col - 70
+        //        anchors.rightMargin: label_col + 55
         spacing: 10
 
         Button{
@@ -501,8 +501,8 @@ Popup {
         anchors.top: row5.bottom
         anchors.topMargin: 15
         anchors.right: parent.right
-        anchors.rightMargin: label_col - 100
-//        anchors.rightMargin: label_col*2 + 47
+        anchors.rightMargin: label_col - 70
+        //        anchors.rightMargin: label_col*2 + 47
         spacing: 10
 
         Button{

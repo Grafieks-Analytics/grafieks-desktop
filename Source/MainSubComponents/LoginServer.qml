@@ -3,6 +3,8 @@
 ** Copyright (C) 2019 Grafieks.
 ** Contact: https://grafieks.com/
 **
+** MainSubComponents
+** Login Server
 ** Popup code to connect to Grafieks server
 ** Prompts Server URL
 **
@@ -11,10 +13,10 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.4
 
-import "../../Constants.js" as Constants
+import com.grafieks.singleton.constants 1.0
 
 Popup {
-    id: popup
+    id: popupLoginServer
     width: 600
     height: 200
     modal: true
@@ -28,7 +30,7 @@ Popup {
     // Header starts
 
     Rectangle{
-        id: header_popup
+        id: headerPopup
         color: Constants.themeColor
         border.color: "transparent"
         height: 40
@@ -57,7 +59,7 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    popup.visible = false
+                    popupLoginServer.visible = false
                 }
             }
         }
@@ -70,7 +72,7 @@ Popup {
     Row{
 
         id: row1
-        anchors.top: header_popup.bottom
+        anchors.top: headerPopup.bottom
         anchors.topMargin: 30
 
         anchors.left: parent.left
@@ -149,7 +151,7 @@ Popup {
             onClicked: {
 
                 User.setHost(server_address.text)
-                popup.visible = false
+                popupLoginServer.visible = false
                 connectGrafieks2.visible = true
             }
         }
@@ -182,7 +184,7 @@ Popup {
             }
 
             onClicked: {
-                popup.visible = false
+                popupLoginServer.visible = false
             }
         }
     }

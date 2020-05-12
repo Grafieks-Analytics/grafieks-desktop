@@ -1,48 +1,54 @@
+/****************************************************************************
+**
+** Copyright (C) 2019 - 2020 Grafieks v1.0.
+** Contact: https://grafieks.com/
+**
+** Other
+** Home Layout
+**
+****************************************************************************/
+
 import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtWebEngine 1.7
 
+import com.grafieks.singleton.constants 1.0
+
 import "../MainSubComponents"
-import "../../Constants.js" as Constants
 
 Page {
 
     id: homepage
-
     property int menu_width: 60
-
-
 
     LeftMenuBar{
 
-        id: left_menubar
+        id: leftMenuBar
     }
 
     GroupBox{
 
-        id: groupbox_primaryvideo_row
-
+        id: groupBoxPrimaryVideo
         anchors.top:parent.top
         anchors.left:parent.left
         anchors.topMargin: 100
         anchors.leftMargin: 250
 
-
         Column{
-            id: primaryvideo_row
+            id: primaryVideoSection
             spacing: 10
 
             WebEngineView {
-                id:primary_video
+                id:primaryVideo
 
-                url: "https://www.youtube.com/embed/hDJdkcdG1iA"
+                url: "http://www.youtube.com/embed/hDJdkcdG1iA"
                 width:500
                 height:250
             }
 
             Text{
-                id: primary_video_desc
+                id: primaryVideoDesc
                 text:"Getting started with Grafieks"
                 color:"gray"
                 font.pointSize: 18
@@ -57,9 +63,9 @@ Page {
     }
 
     Row{
-        id: secondary_videos
+        id: secondaryVideoSection
 
-        anchors.top:groupbox_primaryvideo_row.bottom
+        anchors.top:groupBoxPrimaryVideo.bottom
         anchors.left:parent.left
         anchors.topMargin: 20
         anchors.leftMargin: 250
@@ -67,25 +73,25 @@ Page {
 
         GroupBox{
 
-            id: groupbox_secondaryvideo_col1
+            id: groupboxSecondaryVideoCol1
 
             Column{
 
-                id: secondary_col1
+                id: secondaryCol1
 
                 anchors.top:parent.top
                 spacing: 10
 
                 WebEngineView {
-                    id:secondary_video1
+                    id:secondaryVideo1
 
-                    url: "https://www.youtube.com/embed/i-pGuzNkpDg"
+                    url: "http://www.youtube.com/embed/i-pGuzNkpDg"
                     width:200
                     height:130
                 }
 
                 Text{
-                    id: secondary_video_desc1
+                    id: secondaryVideoDesc1
                     text:"Connect to Database"
                     color:"gray"
                     font.pointSize: 15
@@ -102,24 +108,24 @@ Page {
 
         GroupBox{
 
-            id: groupbox_secondaryvideo_col2
+            id: groupboxSecondaryVideoCol2
             Column{
 
-                id: secondary_col2
+                id: secondaryCol2
 
                 anchors.top:parent.top
                 spacing: 10
 
                 WebEngineView {
-                    id:secondary_video2
+                    id:secondaryVideo2
 
-                    url: "https://www.youtube.com/embed/9ldOuVuas1c"
+                    url: "http://www.youtube.com/embed/9ldOuVuas1c"
                     width:200
                     height:130
                 }
 
                 Text{
-                    id: secondary_video_desc2
+                    id: secondaryVideoDesc2
                     text:"Build a report"
                     color:"gray"
                     font.pointSize: 15
@@ -136,25 +142,25 @@ Page {
 
         GroupBox{
 
-            id: groupbox_secondaryvideo_col3
+            id: groupboxSecondaryVideoCol3
 
             Column{
 
-                id: secondary_col3
+                id: secondaryCol3
 
                 anchors.top:parent.top
                 spacing: 10
 
                 WebEngineView {
-                    id:secondary_video3
+                    id:secondaryVideo3
 
-                    url: "https://www.youtube.com/embed/N8F7eOqgH8Q"
+                    url: "http://www.youtube.com/embed/N8F7eOqgH8Q"
                     width:200
                     height:130
                 }
 
                 Text{
-                    id: secondary_video_desc3
+                    id: secondaryVideoDesc3
                     text:"Publish your report"
                     color:"gray"
                     font.pointSize: 15
@@ -172,7 +178,7 @@ Page {
 
 
     Column{
-        id: rowlayout_home_right
+        id: rowLayoutHomeRight
 
         height:parent.height
         width: 200
@@ -184,11 +190,11 @@ Page {
 
 
         Column{
-            id: col_rt_1
+            id: rightColumn
 
 
             Text{
-                id:right_head1
+                id:rightHead1
 
 
                 text:"Sample"
@@ -201,26 +207,26 @@ Page {
             ToolSeparator {
                 id:toolsep1
                 orientation: Qt.Horizontal
-                width:rowlayout_home_right.width - 10
+                width:rowLayoutHomeRight.width - 10
 
             }
 
 
             Text{
-                id:right_text1
+                id:rightText1
 
 
                 text: "Want to begin developing dashboard with sample data or view dashboard"
                 color:"gray"
                 wrapMode: Text.Wrap
-                width: rowlayout_home_right.width
+                width: rowLayoutHomeRight.width
             }
         }
 
 
         Column{
             Text{
-                id:right_head2
+                id:rightHead2
 
                 text:"Tutorial"
                 color:"gray"
@@ -232,26 +238,26 @@ Page {
             ToolSeparator {
                 id:toolsep2
                 orientation: Qt.Horizontal
-                width:rowlayout_home_right.width  - 10
+                width:rowLayoutHomeRight.width  - 10
 
             }
 
 
             Text{
-                id:right_text2
+                id:rightText2
 
 
                 text: "Ready to learn how to use Grafieks?"
                 color:"gray"
                 wrapMode: Text.Wrap
-                width: rowlayout_home_right.width
+                width: rowLayoutHomeRight.width
             }
         }
 
 
         Column{
             Text{
-                id:right_head3
+                id:rightHead3
 
                 text:"Community"
                 color:"gray"
@@ -263,25 +269,25 @@ Page {
             ToolSeparator {
                 id:toolsep3
                 orientation: Qt.Horizontal
-                width:rowlayout_home_right.width  - 10
+                width:rowLayoutHomeRight.width  - 10
 
             }
 
 
             Text{
-                id:right_text3
+                id:rightText3
 
 
                 text: "Join the community and interact with others"
                 color:"gray"
                 wrapMode: Text.Wrap
-                width: rowlayout_home_right.width
+                width: rowLayoutHomeRight.width
             }
         }
 
         Column{
             Text{
-                id:right_head4
+                id:rightHead4
 
                 text:"Blog"
                 color:"gray"
@@ -293,19 +299,19 @@ Page {
             ToolSeparator {
                 id:toolsep4
                 orientation: Qt.Horizontal
-                width:rowlayout_home_right.width  - 10
+                width:rowLayoutHomeRight.width  - 10
 
             }
 
 
             Text{
-                id:right_text4
+                id:rightText4
 
 
                 text: "Want to stay updated with news, resources and others"
                 color:"gray"
                 wrapMode: Text.Wrap
-                width: rowlayout_home_right.width
+                width: rowLayoutHomeRight.width
             }
         }
     }

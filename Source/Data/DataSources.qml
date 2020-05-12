@@ -1,11 +1,22 @@
+/****************************************************************************
+**
+** Copyright (C) 2019 - 2020 Grafieks v1.0.
+** Contact: https://grafieks.com/
+**
+** Data
+** Data Sources
+**
+****************************************************************************/
+
 import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 1.4 as OldControls
 
+import com.grafieks.singleton.constants 1.0
+
 import "../MainSubComponents"
 import "./SubComponents"
-import "../../Constants.js" as Constants
 
 
 Page {
@@ -18,12 +29,12 @@ Page {
         id: left_menubar
     }
 
+
     Rectangle{
         id: submenu
         height: 20
         width: parent.width - menu_width
         x: menu_width
-
 
 
         Button{
@@ -188,12 +199,12 @@ Page {
         }
     }
 
+
     Rectangle{
 
         id: toolsep11
         width: parent.width - menu_width
         anchors.top: toolsep2.bottom
-        //        anchors.horizontalCenter: toolsep2.horizontalCenter
 
 
         StackLayout{
@@ -205,7 +216,6 @@ Page {
                 id: data_source_grid
 
             }
-
 
             DataSourcesList{
                 id: data_source_list

@@ -1,24 +1,26 @@
-import QtQuick 2.11
-import QtQuick.Controls 2.4
-import QtQuick.Layouts 1.3
-import QtQuick.Controls.Styles 1.4
-import Qt.labs.settings 1.1
 /****************************************************************************
 **
-** Copyright (C) 2019 - 2020 Grafieks.
+** Copyright (C) 2019 - 2020 Grafieks v1.0.
 ** Contact: https://grafieks.com/
 **
 ** Master Template File
 **
 ****************************************************************************/
 
+import QtQuick 2.11
+import QtQuick.Controls 2.4
+import QtQuick.Layouts 1.3
+import QtQuick.Controls.Styles 1.4
+import Qt.labs.settings 1.1
+
+import com.grafieks.singleton.constants 1.0
+
+
 import "./Source/Data"
 import "./Source/Dashboard"
 import "./Source/Others"
 import "./Source/Data/SubComponents"
 import "./Source/MainSubComponents"
-
-import "Constants.js" as Constants
 
 
 ApplicationWindow {
@@ -41,6 +43,7 @@ ApplicationWindow {
 
             action_signin.text  = qsTr("Sign Out")
             menu_signIn.title = qsTr(name)
+
         }
     }
 
@@ -53,7 +56,6 @@ ApplicationWindow {
         Menu{
             id: menu_file
             x: 0
-            //height: implicitHeight
             width: 200
             title: qsTr("File")
 
@@ -73,17 +75,7 @@ ApplicationWindow {
                 text: qsTr("SampleData")
             }
 
-            MenuSeparator{
-                //                width: 150
-                //                x: 40
-                topPadding: 0
-                bottomPadding: 0
-                leftPadding: 35
-                rightPadding: 5
-                background: Rectangle{
-                    color: "#D7D9DF"
-                }
-            }
+            MenuSeparatorComponent{}
 
             Action{
                 id: action_quit
@@ -93,39 +85,7 @@ ApplicationWindow {
                 }
             }
 
-
-            delegate: MenuItem{
-                id: menuItem
-                background: Rectangle {
-
-                    Rectangle{
-                        anchors.fill: parent
-                        anchors.margins: 3
-                        color: menuItem.highlighted ? "#A5BAFA" : "transparent"
-                        Rectangle{
-                            anchors.fill: parent
-                            anchors.margins: 2
-                            color: menuItem.highlighted? "#C5D2FC" : "transparent"
-                        }
-                    }
-                    implicitWidth: 200
-                    implicitHeight: 25
-                    opacity: enabled ? 1 : 0.3
-                    color:  "#E3E5EA"
-
-                }
-                contentItem: Text {
-                    leftPadding: 30
-                    text: menuItem.text
-                    font: menuItem.font
-                    opacity: enabled ? 1.0 : 0.3
-                    //color: menuItem.highlighted ? "#ffffff" : "#000"
-                    horizontalAlignment: Text.AlignLeft
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-
-            }
+            delegate: MenuItemDelegate{}
 
         }
 
@@ -148,17 +108,7 @@ ApplicationWindow {
                 id: action_redo
                 text: qsTr("Redo")
             }
-            MenuSeparator{
-                //                width: 150
-                //                x: 40
-                topPadding: 0
-                bottomPadding: 0
-                leftPadding: 35
-                rightPadding: 5
-                background: Rectangle{
-                    color: "#D7D9DF"
-                }
-            }
+            MenuSeparatorComponent{}
             Action{
                 id: action_cut
                 text: qsTr("Cut")
@@ -178,38 +128,7 @@ ApplicationWindow {
             }
 
 
-            delegate: MenuItem{
-                id: menuItem5
-                background: Rectangle {
-
-                    Rectangle{
-                        anchors.fill: parent
-                        anchors.margins: 3
-                        color: menuItem5.highlighted ? "#A5BAFA" : "transparent"
-                        Rectangle{
-                            anchors.fill: parent
-                            anchors.margins: 2
-                            color: menuItem5.highlighted? "#C5D2FC" : "transparent"
-                        }
-                    }
-                    implicitWidth: 200
-                    implicitHeight: 25
-                    opacity: enabled ? 1 : 0.3
-                    color:  "#E3E5EA"
-
-                }
-                contentItem: Text {
-                    leftPadding: 30
-                    text: menuItem5.text
-                    font: menuItem5.font
-                    opacity: enabled ? 1.0 : 0.3
-                    //color: menuItem.highlighted ? "#ffffff" : "#000"
-                    horizontalAlignment: Text.AlignLeft
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-
-            }
+            delegate: MenuItemDelegate{}
 
         }
 
@@ -237,37 +156,7 @@ ApplicationWindow {
                 text: qsTr("Export Datasource to Excel")
             }
 
-            delegate: MenuItem{
-                id: menuItem2
-                background: Rectangle {
-                    Rectangle{
-                        anchors.fill: parent
-                        anchors.margins: 3
-                        color: menuItem2.highlighted ? "#A5BAFA" : "transparent"
-                        Rectangle{
-                            anchors.fill: parent
-                            anchors.margins: 2
-                            color: menuItem2.highlighted? "#C5D2FC" : "transparent"
-                        }
-                    }
-                    implicitWidth: 200
-                    implicitHeight: 25
-                    opacity: enabled ? 1 : 0.3
-                    color: "#E3E5EA"
-
-                }
-                contentItem: Text {
-                    leftPadding: 30
-                    text: menuItem2.text
-                    font: menuItem2.font
-                    opacity: enabled ? 1.0 : 0.3
-                    //color: menuItem2.highlighted ? "#ffffff" : "#000"
-                    horizontalAlignment: Text.AlignLeft
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-
-            }
+            delegate: MenuItemDelegate{}
         }
 
         // Menu Server
@@ -302,38 +191,7 @@ ApplicationWindow {
                     publishGrafieks1.visible = true
                 }
             }
-            delegate: MenuItem{
-                id: menuItem3
-                background: Rectangle {
-                    Rectangle{
-                        anchors.fill: parent
-                        anchors.margins: 3
-                        color: menuItem3.highlighted ? "#A5BAFA" : "transparent"
-                        Rectangle{
-                            anchors.fill: parent
-                            anchors.margins: 2
-                            color: menuItem3.highlighted? "#C5D2FC" : "transparent"
-                        }
-                    }
-                    implicitWidth: 200
-                    implicitHeight: 25
-                    opacity: enabled ? 1 : 0.3
-                    color:  "#E3E5EA"
-
-
-                }
-                contentItem: Text {
-                    leftPadding: 30
-                    text: menuItem3.text
-                    font: menuItem3.font
-                    opacity: enabled ? 1.0 : 0.3
-                    // color: menuItem3.highlighted ? "#ffffff" : "#000"
-                    horizontalAlignment: Text.AlignLeft
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-
-            }
+            delegate: MenuItemDelegate{}
 
         }
 
@@ -352,17 +210,7 @@ ApplicationWindow {
                 }
 
             }
-            MenuSeparator{
-                //                width: 150
-                //                x: 40
-                topPadding: 0
-                bottomPadding: 0
-                leftPadding: 35
-                rightPadding: 5
-                background: Rectangle{
-                    color: "#D7D9DF"
-                }
-            }
+            MenuSeparatorComponent{}
             Action{
                 text: qsTr("Manage License")
             }
@@ -371,17 +219,8 @@ ApplicationWindow {
                 text: qsTr("Check for updates")
 
             }
-            MenuSeparator{
-                //                width: 150
-                //                x: 40
-                topPadding: 0
-                bottomPadding: 0
-                leftPadding: 35
-                rightPadding: 5
-                background: Rectangle{
-                    color: "#D7D9DF"
-                }
-            }
+            MenuSeparatorComponent{}
+
             Action{
                 text: qsTr("Report Issue")
 
@@ -390,81 +229,28 @@ ApplicationWindow {
                 text: qsTr("Locate Log Files")
 
             }
-            MenuSeparator{
-                //                width: 150
-                //                x: 40
-                topPadding: 0
-                bottomPadding: 0
-                leftPadding: 35
-                rightPadding: 5
-                background: Rectangle{
-                    color: "#D7D9DF"
-                }
-            }
+            MenuSeparatorComponent{}
             Action{
                 text: qsTr("Function List")
 
             }
-            MenuSeparator{
-                //                width: 160
-                //                id:msep
-                //                x: 40
-                topPadding: 0
-                bottomPadding: 0
-                leftPadding: 35
-                rightPadding: 5
-
-                background: Rectangle{
-                    color: "#D7D9DF"
-                }
-            }
+            MenuSeparatorComponent{}
 
 
             Action{
                 text: qsTr("Grafieks Community")
-
             }
             Action{
                 text: qsTr("About Grafieks")
-
+            }
+            Action{
+                text: qsTr("Test")
+                onTriggered: {
+                    stacklayout_home.currentIndex = 1
+                }
             }
 
-
-            delegate: MenuItem{
-                id: menuItem4
-                background: Rectangle {
-                    Rectangle{
-                        anchors.fill: parent
-                        anchors.margins: 3
-                        color: menuItem4.highlighted ? "#A5BAFA" : "transparent"
-                        Rectangle{
-                            anchors.fill: parent
-                            anchors.margins: 2
-                            color: menuItem4.highlighted? "#C5D2FC" : "transparent"
-                        }
-                    }
-                    implicitWidth: 200
-                    implicitHeight: 25
-                    opacity: enabled ? 1 : 0.3
-                    color:  "#E3E5EA"
-
-
-                    //border.color: "#CAC9C9"
-
-                }
-
-                contentItem: Text {
-                    leftPadding: 30
-                    text: menuItem4.text
-                    font: menuItem4.font
-                    opacity: enabled ? 1.0 : 0.3
-                    //color: menuItem4.highlighted ? "#ffffff" : "#000"
-                    horizontalAlignment: Text.AlignLeft
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-
-            }
+            delegate: MenuItemDelegate{}
         }
 
         Menu{
@@ -477,70 +263,18 @@ ApplicationWindow {
 
                     // Call logout
                     logout.visible = true
+
                 } else{
 
                     // Call login
                     connectGrafieks1.visible = true
                 }
             }
-
-
-
         }
-        delegate: MenuBarItem{
-            id: menuBarItem
-            contentItem: Text{
-                text : menuBarItem.text
-                font : menuBarItem.font
-                opacity: enabled ? 1.0 : 0.3
-                horizontalAlignment: Text.AlignLeft
-                verticalAlignment: Text.AlignVCenter
-                //elide: Text.ElideRight
-            }
-            background:
-                Rectangle{
-                implicitWidth: 30
-                implicitHeight: 30
-                opacity: enabled ? 1 : 0.3
-
-                color: "transparent"
-                Rectangle {
-                    id: inner_rect
-                    anchors.fill: parent
-                    anchors.margins: 2
-                    Rectangle{
-                        anchors.fill: parent
-                        id: inner_rect2
-                        anchors.margins: 2
-
-                        color: {
-                            if(menuBarItem.autoExclusive)
-                                "#E1E3E7"
-                            else if(menuBarItem.highlighted)
-                                "#C5D2FC"
-                            else
-                                "transparent"
-                        }
-                        //
-
-                    }
-
-
-                    color:{
-                        menuBarItem.highlighted ?  "#A5BAFA" : "transparent"
-                    }
-
-                }
-
-
-
-            }
-        }
+        delegate: MainMenuDelegate{}
 
         background: Rectangle {
-
             color: Constants.themeColor
-
         }
 
     }
@@ -557,7 +291,7 @@ ApplicationWindow {
         id: stacklayout_home
         width: mainwindow.width
         height: mainwindow.height
-        currentIndex: 4
+        currentIndex: 2
 
         // 0
         Test{
@@ -602,6 +336,7 @@ ApplicationWindow {
     }
 
 
+    // Global Modals
     DataSourceDescription{
         id: datasourceDescription
     }
@@ -613,11 +348,14 @@ ApplicationWindow {
     }
     Logout{
         id: logout
-
     }
 
+    // Settings
+    // Fetch and Set Settings
     Settings{
         id: settings
     }
+
+
 }
 

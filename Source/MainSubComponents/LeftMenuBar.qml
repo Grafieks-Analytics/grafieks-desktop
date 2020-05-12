@@ -1,9 +1,10 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 Grafieks.
+** Copyright (C) 2019 - 2020 Grafieks v1.0.
 ** Contact: https://grafieks.com/
 **
-** Master Left Menubar
+** MainSubComponents
+** Left Menu Bar
 **
 ****************************************************************************/
 
@@ -11,49 +12,47 @@ import QtQuick 2.11
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.4
 
-import "../../Constants.js" as Constants
-
+import com.grafieks.singleton.constants 1.0
 
 Rectangle{
-    id: rectangle_left
+    id: leftMenuBar
     height: parent.height
     width: 49
 
     Column{
 
-        id: leftmenu_col
+        id: leftMenuContent
 
 
         // 1st Menu Item starts
 
         Rectangle{
 
-            id: rect_col_1
-            height: rectangle_left.height/2
-            width: rectangle_left.width - 1
+            id: dataDesignerRect
+            height: leftMenuBar.height/2
+            width: leftMenuBar.width - 1
             color: Constants.themeColor
 
-
             Column{
-                id: row_left1
-                anchors.left:rect_col_1.left
+                id: menu1
+                anchors.left:dataDesignerRect.left
                 anchors.leftMargin: 5
 
                 Image{
-                    id: db_menu_icon
+                    id: dbMenuIcon
                     x: 5
-                    y: rect_col_1.height/2 - 60
+                    y: dataDesignerRect.height/2 - 60
                     source:"../../Images/icons/Db.png"
                     width:25
                     height: 25
                 }
 
                 Text{
-                    id: db_menu_text
-                    anchors.bottom: db_menu_icon.bottom
+                    id: dbMenuText
+                    anchors.bottom: dbMenuIcon.bottom
                     anchors.bottomMargin: 100
-                    horizontalAlignment: db_menu_icon.horizontalCenter
-                    text: "Data Designer"
+                    horizontalAlignment: dbMenuIcon.horizontalCenter
+                    text: Constants.dataDesignerText
                     transform: Rotation { origin.x: 110; origin.y: 100; angle: 270}
                     color:"Gray"
 
@@ -65,20 +64,21 @@ Rectangle{
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: {
+                    dataDesignerRect.color = Constants.leftDarkColor
+                    dashboardDesignerRect.color = Constants.themeColor
                     stacklayout_home.currentIndex = 3
                 }
                 onPressed: {
-                    rect_col_1.color = "white"
+
+                    dataDesignerRect.color = Constants.leftDarkColor
                 }
-                onReleased:  {
-                    rect_col_1.color = Constants.themeColor
-                }
+
                 onEntered: {
-                    rect_col_1.color = Constants.hoverThemeColor
+
+                    dataDesignerRect.color = Constants.leftDarkColor
+                    dashboardDesignerRect.color = Constants.themeColor
                 }
-                onExited: {
-                    rect_col_1.color = Constants.themeColor
-                }
+
 
             }
 
@@ -91,7 +91,7 @@ Rectangle{
 
         Rectangle {
             id: seperator1
-            width: rectangle_left.width - 1
+            width: leftMenuBar.width - 1
             implicitWidth: parent.vertical ? 1 : 24
             implicitHeight: parent.vertical ? 24 : 1
             color: Constants.darkThemeColor
@@ -103,21 +103,21 @@ Rectangle{
 
         Rectangle{
 
-            id: rect_col_2
-            height: rectangle_left.height/2
-            width: rectangle_left.width - 1
+            id: dashboardDesignerRect
+            height: leftMenuBar.height/2
+            width: leftMenuBar.width - 1
             color: Constants.themeColor
 
             Column{
 
-                id: row_left2
-                anchors.left:rect_col_2.left
+                id: menu2
+                anchors.left:dashboardDesignerRect.left
                 anchors.leftMargin: 5
 
                 Image{
-                    id: chart_menu_icon
+                    id: chartMenuIcon
                     x: 5
-                    y: rect_col_2.height/2 - 90
+                    y: dashboardDesignerRect.height/2 - 90
                     source:"../../Images/icons/Charts.png"
                     width:25
                     height: 25
@@ -126,12 +126,9 @@ Rectangle{
 
 
                 Text{
-                    id: chart_menu_text
-                    //                    x: 0
-                    //                    y: chart_menu_icon.y - 145
-                    anchors.top: chart_menu_icon.bottom
+                    anchors.top: chartMenuIcon.bottom
                     anchors.topMargin: -80
-                    text: "Dashboard Designer"
+                    text: Constants.dashboardDesignerText
                     transform: Rotation { origin.x: 110; origin.y: 100; angle: 270}
                     color:"Gray"
 
@@ -142,20 +139,20 @@ Rectangle{
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: {
+                    dashboardDesignerRect.color = Constants.leftDarkColor
+                    dataDesignerRect.color = Constants.themeColor
                     stacklayout_home.currentIndex = 7
                 }
                 onPressed: {
-                    rect_col_2.color = "white"
+
+                    dashboardDesignerRect.color = Constants.leftDarkColor
                 }
-                onReleased:  {
-                    rect_col_2.color = Constants.themeColor
-                }
+
                 onEntered: {
-                    rect_col_2.color = Constants.hoverThemeColor
+                    dataDesignerRect.color = Constants.themeColor
+                     dashboardDesignerRect.color = Constants.leftDarkColor
                 }
-                onExited: {
-                    rect_col_2.color = Constants.themeColor
-                }
+
             }
         }
 
@@ -163,8 +160,8 @@ Rectangle{
     }
 
     ToolSeparator{
-        height: rectangle_left.height
-        anchors.left: leftmenu_col.right
+        height: leftMenuBar.height
+        anchors.left: leftMenuContent.right
         anchors.top: parent.top
         padding: 0
         anchors.topMargin: -5

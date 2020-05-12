@@ -1,9 +1,10 @@
 /****************************************************************************
 **
-** Copyright (C) 2019 Grafieks.
+** Copyright (C) 2019 - 2020 Grafieks v1.0.
 ** Contact: https://grafieks.com/
 **
-** Dashboard & Customizations
+** Dashboard
+** New Dashboard
 **
 ****************************************************************************/
 
@@ -12,9 +13,10 @@ import QtQuick 2.11
 import QtQuick.Controls 2.4
 import QtWebEngine 1.7
 
+import com.grafieks.singleton.constants 1.0
+
 import "../MainSubComponents"
 import "./SubComponents"
-import "../../Constants.js" as Constants
 
 Page {
 
@@ -337,11 +339,6 @@ Page {
             }
 
             // Widget Drawer ends
-
-
-
-
-
         }
 
     }
