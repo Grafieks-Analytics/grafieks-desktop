@@ -18,9 +18,11 @@ Item {
 
     Text {
         id : textcomponent
-        font.pointSize: Constants.fontCategoryHeaderSmall
+        font.pointSize: Constants.fontReading
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         color: "black"
+        anchors.centerIn: parent
+
     }
 }

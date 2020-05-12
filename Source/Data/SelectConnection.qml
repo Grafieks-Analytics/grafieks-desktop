@@ -102,7 +102,7 @@ Page {
         anchors.verticalCenter: selectconn_page.verticalCenter
         height: 40
         anchors.topMargin: 40
-        x : selectconn_page.width/2 - 450
+        x : selectconn_page.width/2 - 440
 
 
 
@@ -110,9 +110,9 @@ Page {
             id: tab_all
             width: 50
             height: parent.height
-
             contentItem: TabTextComponent{
                 name: qsTr("All")
+
             }
 
             background: TabBackgroundComponent{
@@ -137,8 +137,9 @@ Page {
 
         TabButton{
             id: tab_grs
-            width: 200
+            width: 220
             height: parent.height
+
 
             contentItem: TabTextComponent{
                 name: qsTr("Grafieks Reporting Server")
@@ -146,12 +147,13 @@ Page {
 
             background: TabBackgroundComponent{
                 colorOuter : tab_grs.activeFocus ? Constants.buttonBorderColor : "transparent"
+
             }
         }
 
         TabButton{
             id:tab_rd
-            width: 150
+            width: 170
             height: parent.height
 
 
@@ -313,7 +315,7 @@ Page {
         width: selectconn_page.width
         height: parent.height
         model: listConnectors
-        cellWidth: 230
+        cellWidth: grid1.width / 6
         cellHeight: 130
 
 
