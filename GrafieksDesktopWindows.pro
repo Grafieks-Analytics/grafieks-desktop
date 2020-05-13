@@ -17,14 +17,14 @@ SOURCES += \
         Code/Api/login.cpp \
         Code/Api/logout.cpp \
         Code/Api/searchdatasources.cpp \
-        Code/Datasources/mysqlcon.cpp \
-        Code/Datasources/sqlitecon.cpp \
-        Code/Models/Datasources/connector.cpp \
-        Code/Models/Datasources/connectorfilter.cpp \
-        Code/Models/Datasources/connectormodel.cpp \
-        Code/Models/Datasources/datasources.cpp \
-        Code/Models/General/qttest2.cpp \
-        Code/Models/Menu/user.cpp \
+        Code/Connectors/mysqlcon.cpp \
+        Code/Connectors/sqlitecon.cpp \
+        Code/Logic/Datasources/connector.cpp \
+        Code/Logic/Datasources/connectorfilter.cpp \
+        Code/Logic/Datasources/connectormodel.cpp \
+        Code/Logic/Datasources/datasources.cpp \
+        Code/Logic/General/qttest2.cpp \
+        Code/Logic/Menu/user.cpp \
         main.cpp
 
 RESOURCES += \
@@ -50,15 +50,15 @@ HEADERS += \
     Code/Api/login.h \
     Code/Api/logout.h \
     Code/Api/searchdatasources.h \
-    Code/Datasources/mysqlcon.h \
-    Code/Datasources/sqlitecon.h \
-    Code/Models/Datasources/connector.h \
-    Code/Models/Datasources/connectorfilter.h \
-    Code/Models/Datasources/connectormodel.h \
-    Code/Models/Datasources/datasources.h \
-    Code/Models/General/constants.h \
-    Code/Models/General/qttest2.h \
-    Code/Models/Menu/user.h
+    Code/Connectors/mysqlcon.h \
+    Code/Connectors/sqlitecon.h \
+    Code/Logic/Datasources/connector.h \
+    Code/Logic/Datasources/connectorfilter.h \
+    Code/Logic/Datasources/connectormodel.h \
+    Code/Logic/Datasources/datasources.h \
+    Code/Logic/General/constants.h \
+    Code/Logic/General/qttest2.h \
+    Code/Logic/Menu/user.h \
 
 DISTFILES += \
     README.md

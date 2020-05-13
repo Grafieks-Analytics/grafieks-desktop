@@ -9,11 +9,11 @@
 #include <QTextStream>
 #include <QtQml>
 
-#include "Code/Models/General/qttest2.h"
-#include "Code/Datasources/mysqlcon.h"
-#include "Code/Models/Menu/user.h"
-#include "Code/Models/Datasources/datasources.h"
-#include "Code/Models/Datasources/connectorfilter.h"
+#include "Code/Connectors/mysqlcon.h"
+#include "Code/Logic/General/qttest2.h"
+#include "Code/Logic/Menu/user.h"
+#include "Code/Logic/Datasources/datasources.h"
+#include "Code/Logic/Datasources/connectorfilter.h"
 
 
 int main(int argc, char *argv[])
