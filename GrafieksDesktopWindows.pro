@@ -19,6 +19,9 @@ SOURCES += \
         Code/Api/searchdatasources.cpp \
         Code/Datasources/mysqlcon.cpp \
         Code/Datasources/sqlitecon.cpp \
+        Code/Models/Datasources/connector.cpp \
+        Code/Models/Datasources/connectorfilter.cpp \
+        Code/Models/Datasources/connectormodel.cpp \
         Code/Models/Datasources/datasources.cpp \
         Code/Models/General/qttest2.cpp \
         Code/Models/Menu/user.cpp \
@@ -49,6 +52,9 @@ HEADERS += \
     Code/Api/searchdatasources.h \
     Code/Datasources/mysqlcon.h \
     Code/Datasources/sqlitecon.h \
+    Code/Models/Datasources/connector.h \
+    Code/Models/Datasources/connectorfilter.h \
+    Code/Models/Datasources/connectormodel.h \
     Code/Models/Datasources/datasources.h \
     Code/Models/General/constants.h \
     Code/Models/General/qttest2.h \

@@ -51,7 +51,7 @@ Page {
                 id: primaryVideoDesc
                 text:"Getting started with Grafieks"
                 color:"gray"
-                font.pointSize: Constants.fontSubHeaderSmall
+                font.pointSize: Constants.fontCategoryHeader
             }
         }
 
@@ -200,7 +200,7 @@ Page {
                 text:"Sample"
                 color:"gray"
                 font{
-                    pointSize: 20
+                    pointSize: Constants.fontCategoryHeaderSmall
                 }
             }
 
@@ -220,6 +220,7 @@ Page {
                 color:"gray"
                 wrapMode: Text.Wrap
                 width: rowLayoutHomeRight.width
+                font.pointSize: Constants.fontReading
             }
         }
 
@@ -231,7 +232,7 @@ Page {
                 text:"Tutorial"
                 color:"gray"
                 font{
-                    pointSize: 20
+                    pointSize: Constants.fontCategoryHeaderSmall
                 }
             }
 
@@ -251,6 +252,7 @@ Page {
                 color:"gray"
                 wrapMode: Text.Wrap
                 width: rowLayoutHomeRight.width
+                font.pointSize: Constants.fontReading
             }
         }
 
@@ -262,7 +264,7 @@ Page {
                 text:"Community"
                 color:"gray"
                 font{
-                    pointSize: 20
+                    pointSize: Constants.fontCategoryHeaderSmall
                 }
             }
 
@@ -282,6 +284,7 @@ Page {
                 color:"gray"
                 wrapMode: Text.Wrap
                 width: rowLayoutHomeRight.width
+                font.pointSize: Constants.fontReading
             }
         }
 
@@ -292,7 +295,7 @@ Page {
                 text:"Blog"
                 color:"gray"
                 font{
-                    pointSize: 20
+                    pointSize: Constants.fontCategoryHeaderSmall
                 }
             }
 
@@ -312,6 +315,7 @@ Page {
                 color:"gray"
                 wrapMode: Text.Wrap
                 width: rowLayoutHomeRight.width
+                font.pointSize: Constants.fontReading
             }
         }
     }

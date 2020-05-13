@@ -13,6 +13,7 @@
 #include "Code/Datasources/mysqlcon.h"
 #include "Code/Models/Menu/user.h"
 #include "Code/Models/Datasources/datasources.h"
+#include "Code/Models/Datasources/connectorfilter.h"
 
 
 int main(int argc, char *argv[])
@@ -29,6 +30,7 @@ int main(int argc, char *argv[])
     MysqlCon mysqlconnect;
     Datasources dsparams;
     User user;
+    ConnectorFilter connectorFilter;
 
     qmlRegisterSingletonType( QUrl("qrc:/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants" );
 
@@ -41,6 +43,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("MysqlConnect", &mysqlconnect);
     engine.rootContext()->setContextProperty("Datasources", &dsparams);
     engine.rootContext()->setContextProperty("User", &user);
+    engine.rootContext()->setContextProperty("ConnectorFilter", &connectorFilter);
 
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
