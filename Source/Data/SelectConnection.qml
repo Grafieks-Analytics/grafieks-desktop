@@ -24,6 +24,7 @@ Page {
     id: selectconn_page
     width: parent.width - left_menubar.width
 
+    // For search, filter, sort
     property var categoriesList : ["all", "file", "grs", "rdbms", "nosql", "cloud", "online"]
     property var selectedCategory : categoriesList[0]
 
@@ -36,6 +37,7 @@ Page {
     }
 
 
+
     // Signals
     signal update_host_query_modeller(string new_host);
     signal update_data_sources_list();
@@ -44,6 +46,28 @@ Page {
 
     function tmp_update_host(new_host){
         update_host_query_modeller(new_host)
+    }
+
+    // General Functions
+
+    // Set modal popup
+    function selectAuthorization(param){
+
+        switch(param){
+
+        case "GRS":
+            connectGrafieks1.visible = true
+            break;
+
+        case "Mysql":
+            mysqlModal.visible = true
+            break;
+
+        default:
+            break;
+
+
+        }
     }
 
 
@@ -92,6 +116,7 @@ Page {
             font.weight: font.Thin
             font.pointSize: Constants.fontReading
             opacity: 0.6
+
         }
 
         Image{
@@ -296,6 +321,9 @@ Page {
                         //                        modalId.visible = true
                         //                        update_data_sources_list();
 
+                        // Select the mmodal popup
+                        selectAuthorization(name)
+
                     }
                 }
             }
@@ -314,6 +342,9 @@ Page {
                     onClicked: {
                         //                        modalId.visible = true
                         //                        update_data_sources_list();
+
+                        // Select the mmodal popup
+                        selectAuthorization(name)
                     }
                 }
             }
@@ -364,7 +395,7 @@ Page {
     }
 
     ConnectDatabase{
-        id: connectDatabase
+        id: mysqlModal
 
     }
 
