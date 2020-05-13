@@ -53,20 +53,19 @@ Page {
     // Set modal popup
     function selectAuthorization(param){
 
-        switch(param){
 
-        case "GRS":
+        switch(param.toLowerCase()){
+
+        case "grs":
             connectGrafieks1.visible = true
             break;
 
-        case "Mysql":
+        case "mysql":
             mysqlModal.visible = true
             break;
 
         default:
             break;
-
-
         }
     }
 
