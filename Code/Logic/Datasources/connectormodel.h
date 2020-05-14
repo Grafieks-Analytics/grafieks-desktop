@@ -24,8 +24,6 @@ public:
 
     void addConnector( Connector *connector);
     Q_INVOKABLE void addConnector(const QString & name, const QString & imageLink, const QString & category);
-    Q_INVOKABLE void removeConnector(int index);
-    Q_INVOKABLE QList<Connector*> searchConnector(QString param);
 
     enum ConnectorRoles{
         NameRole = Qt::UserRole + 1,

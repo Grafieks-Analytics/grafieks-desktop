@@ -12,7 +12,6 @@
 #include "Code/Connectors/mysqlcon.h"
 #include "Code/Logic/General/qttest2.h"
 #include "Code/Logic/Menu/user.h"
-#include "Code/Logic/Datasources/datasources.h"
 #include "Code/Logic/Datasources/connectorfilter.h"
 
 
@@ -28,12 +27,10 @@ int main(int argc, char *argv[])
 
     QtTest2 qttest2;
     MysqlCon mysqlconnect;
-    Datasources dsparams;
     User user;
     ConnectorFilter connectorFilter;
 
     qmlRegisterSingletonType( QUrl("qrc:/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants" );
-
 
     QtWebEngine::initialize();
     QQmlApplicationEngine engine;
@@ -41,7 +38,6 @@ int main(int argc, char *argv[])
 
     engine.rootContext()->setContextProperty("QtTest2", &qttest2);
     engine.rootContext()->setContextProperty("MysqlConnect", &mysqlconnect);
-    engine.rootContext()->setContextProperty("Datasources", &dsparams);
     engine.rootContext()->setContextProperty("User", &user);
     engine.rootContext()->setContextProperty("ConnectorFilter", &connectorFilter);
 

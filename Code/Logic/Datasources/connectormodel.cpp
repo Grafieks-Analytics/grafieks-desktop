@@ -121,25 +121,4 @@ void ConnectorModel::addConnector(const QString &name, const QString &imageLink,
     addConnector(connector);
 }
 
-void ConnectorModel::removeConnector(int index)
-{
-    beginRemoveRows(QModelIndex(), index, index);
-    mConnector.removeAt(index);
-    endRemoveRows();
-}
-
-QList<Connector*> ConnectorModel::searchConnector(QString param)
-{
-    QList<Connector*> tmpVar;
-
-    for(int i=0; i < mConnector.size();i++)
-    {
-        if(mConnector.at(i)->name().contains(param) || mConnector.at(i)->category().contains(param))
-        {
-            tmpVar.append(mConnector.at(i));
-        }
-    }
-
-    return tmpVar;
-}
 
