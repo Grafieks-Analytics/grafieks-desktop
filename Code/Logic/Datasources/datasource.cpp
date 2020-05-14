@@ -1,8 +1,8 @@
 #include "datasource.h"
 
-Datasource::Datasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & description, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, QObject *parent) :
+Datasource::Datasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, QObject *parent) :
 
-    QObject(parent),m_id(id), m_connectedWorkbooksCount(connectedWorkbooksCount), m_profileId(profileId), m_connectionType(connectionType), m_datasourceName(datasourceName), m_description(description), m_sourceType(sourceType), m_imageLink(imageLink), m_downloadLink(downloadLink), m_createdDate(createdDate), m_firstName(firstName), m_lastName(lastName)
+    QObject(parent),m_id(id), m_connectedWorkbooksCount(connectedWorkbooksCount), m_profileId(profileId), m_connectionType(connectionType), m_datasourceName(datasourceName), m_descriptions(descriptions), m_sourceType(sourceType), m_imageLink(imageLink), m_downloadLink(downloadLink), m_createdDate(createdDate), m_firstName(firstName), m_lastName(lastName)
 {
 
 }
@@ -18,9 +18,9 @@ QString Datasource::datasourceName() const
     return m_datasourceName;
 }
 
-QString Datasource::description() const
+QString Datasource::descriptions() const
 {
-    return m_description;
+    return m_descriptions;
 }
 
 QString Datasource::imageLink() const
@@ -86,13 +86,13 @@ void Datasource::setDatasourceName(QString datasourceName)
     emit datasourceNameChanged(m_datasourceName);
 }
 
-void Datasource::setDescription(QString description)
+void Datasource::setDescriptions(QString descriptions)
 {
-    if (m_description == description)
+    if (m_descriptions == descriptions)
         return;
 
-    m_description = description;
-    emit descriptionChanged(m_description);
+    m_descriptions = descriptions;
+    emit descriptionsChanged(m_descriptions);
 }
 
 void Datasource::setImageLink(QString imageLink)

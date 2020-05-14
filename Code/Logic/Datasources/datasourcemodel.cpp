@@ -13,18 +13,45 @@ int DatasourceModel::rowCount(const QModelIndex &parent) const
 
 QVariant DatasourceModel::data(const QModelIndex &index, int role) const
 {
+
+    qDebug() << role << "Called " << DescriptionsRole << "Descriptions";
+
     if( index.row() < 0 || index.row() >= m_datasource->dataItems().count()){
         return QVariant();
     }
     Datasource * datasource = m_datasource->dataItems().at(index.row());
     if( role == ConnectionTypeRole)
         return datasource->connectionType();
-    if( role == DatasourceNameRole)
+    if( role == DatasourceNameRole){
+        qDebug() << datasource->datasourceName() << "Called setting2";
         return datasource->datasourceName();
-    if( role == DescriptionRole)
-        return datasource->description();
+    }
+
+    if( role == DescriptionsRole){
+        qDebug() << datasource->descriptions() << "Called setting";
+        return datasource->descriptions();
+    }
+
     if( role == ImageLinkRole)
         return datasource->imageLink();
+
+    if( role == DatasourceIdRole)
+        return datasource->id();
+    if( role == ConnectedWorkbooksCountRole)
+        return datasource->connectedWorkbooksCount();
+    if( role == DSProfileIDRole)
+        return datasource->profileId();
+    if( role == SourceTypeRole)
+        return datasource->sourceType();
+
+    if( role == DatasourceLinkRole)
+        return datasource->downloadLink();
+    if( role == CreatedDateRole)
+        return datasource->createdDate();
+    if( role == FirstnameRole)
+        return datasource->firstName();
+    if( role == LastnameRole)
+        return datasource->lastName();
     return QVariant();
 }
 
@@ -34,7 +61,7 @@ bool DatasourceModel::setData(const QModelIndex &index, const QVariant &value, i
     bool somethingChanged = false;
 
     switch (role) {
-        case  ConnectionTypeRole :
+    case  ConnectionTypeRole :
         if ( datasource->connectionType() != value.toString()){
             datasource->setConnectionType(value.toString());
             somethingChanged = true;
@@ -48,9 +75,9 @@ bool DatasourceModel::setData(const QModelIndex &index, const QVariant &value, i
         }
         break;
 
-    case DescriptionRole:
-        if ( datasource->description() != value.toString()){
-            datasource->setDescription(value.toString());
+    case DescriptionsRole:
+        if ( datasource->descriptions() != value.toString()){
+            datasource->setDescriptions(value.toString());
             somethingChanged = true;
         }
         break;
@@ -61,11 +88,64 @@ bool DatasourceModel::setData(const QModelIndex &index, const QVariant &value, i
             somethingChanged = true;
         }
         break;
+    case  DatasourceIdRole :
+        if ( datasource->id() != value.toInt()){
+            datasource->setId(value.toInt());
+            somethingChanged = true;
+        }
+        break;
+
+    case ConnectedWorkbooksCountRole:
+        if ( datasource->connectedWorkbooksCount() != value.toInt()){
+            datasource->setConnectedWorkbooksCount(value.toInt());
+            somethingChanged = true;
+        }
+        break;
+
+    case DSProfileIDRole:
+        if ( datasource->profileId() != value.toString()){
+            datasource->setProfileId(value.toInt());
+            somethingChanged = true;
+        }
+        break;
+
+    case SourceTypeRole:
+        if ( datasource->sourceType() != value.toString()){
+            datasource->setSourceType(value.toString());
+            somethingChanged = true;
+        }
+        break;
+    case  DatasourceLinkRole :
+        if ( datasource->downloadLink() != value.toString()){
+            datasource->setDownloadLink(value.toString());
+            somethingChanged = true;
+        }
+        break;
+
+    case CreatedDateRole:
+        if ( datasource->createdDate() != value.toString()){
+            datasource->setCreatedDate(value.toString());
+            somethingChanged = true;
+        }
+        break;
+
+    case FirstnameRole:
+        if ( datasource->firstName() != value.toString()){
+            datasource->setFirstName(value.toString());
+            somethingChanged = true;
+        }
+        break;
+
+    case LastnameRole:
+        if ( datasource->lastName() != value.toString()){
+            datasource->setLastName(value.toString());
+            somethingChanged = true;
+        }
+        break;
 
     }
 
     if ( somethingChanged){
-        qDebug() << "Called by initiation";
         emit dataChanged(index,index,QVector<int> () << role);
         return true;
     }
@@ -84,11 +164,11 @@ QHash<int, QByteArray> DatasourceModel::roleNames() const
     QHash<int, QByteArray> roles;
 
     roles[DatasourceIdRole] = "id";
-    roles[ConnectionTypeRole] = "connectedWorkbooksCount";
+    roles[ConnectedWorkbooksCountRole] = "connectedWorkbooksCount";
     roles[DSProfileIDRole] = "profileId";
     roles[ConnectionTypeRole] = "connectionType";
     roles[DatasourceNameRole] = "datasourceName";
-    roles[DescriptionRole] = "description";
+    roles[DescriptionsRole] = "descriptions";
     roles[SourceTypeRole] = "sourceType";
     roles[ImageLinkRole] = "imageLink";
     roles[DatasourceLinkRole] = "datasourceLink";

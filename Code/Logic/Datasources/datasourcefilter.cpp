@@ -3,9 +3,9 @@
 DatasourceFilter::DatasourceFilter(QObject *parent) :
     QSortFilterProxyModel(parent)
 {
-//    setSortOrder(false);
+    setSortOrder(false);
     setSourceModel(&m_datasourceModel);
-    setFilterRole(m_datasourceModel.DescriptionRole);
+    setFilterRole(m_datasourceModel.DescriptionsRole);
     setSortRole(m_datasourceModel.DatasourceNameRole);
 }
 

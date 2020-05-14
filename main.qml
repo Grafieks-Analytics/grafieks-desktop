@@ -24,6 +24,7 @@ import "./Source/MainSubComponents"
 
 
 ApplicationWindow {
+
     id: mainwindow
     visible: true
     width: 1800

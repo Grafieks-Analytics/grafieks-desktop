@@ -32,8 +32,8 @@ int main(int argc, char *argv[])
     User user;
     ConnectorFilter connectorFilter;
     DatasourceModel datasourceModel;
-    DatasourceDS * ds = new DatasourceDS();
-    datasourceModel.setDatasourceds(ds);
+    DatasourceDS * datasource = new DatasourceDS();
+    datasourceModel.setDatasourceds(datasource);
 
     qmlRegisterSingletonType( QUrl("qrc:/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants" );
 
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("User", &user);
     engine.rootContext()->setContextProperty("ConnectorFilter", &connectorFilter);
     engine.rootContext()->setContextProperty("DatasourceModel", &datasourceModel);
-     engine.rootContext()->setContextProperty("DatasourceDS",ds);
+     engine.rootContext()->setContextProperty("DatasourceDS",datasource);
 
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

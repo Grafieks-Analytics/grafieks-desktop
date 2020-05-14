@@ -30,7 +30,6 @@ void DatasourceDS::fetchDatsources(int page, bool fulllist, bool listview)
     obj.insert("fulllist", fulllist);
     obj.insert("listview", listview);
 
-    qDebug() << "object was: "<< obj;
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -50,10 +49,10 @@ void DatasourceDS::addDatasource(Datasource *datasource)
 }
 
 
-void DatasourceDS::addDatasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & description, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName)
+void DatasourceDS::addDatasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName)
 
 {
-    Datasource *datasource = new Datasource(id, connectedWorkbooksCount, profileId, connectionType, datasourceName, description, sourceType, imageLink, downloadLink, createdDate, firstName, lastName, this);
+    Datasource *datasource = new Datasource(id, connectedWorkbooksCount, profileId, connectionType, datasourceName, descriptions, sourceType, imageLink, downloadLink, createdDate, firstName, lastName, this);
 
     addDatasource(datasource);
 }
@@ -74,7 +73,7 @@ QList<Datasource *> DatasourceDS::dataItems()
 
 void DatasourceDS::dataReadyRead()
 {
-     m_dataBuffer->append(m_networkReply->readAll());
+    m_dataBuffer->append(m_networkReply->readAll());
 }
 
 void DatasourceDS::dataReadFinished()
@@ -89,29 +88,33 @@ void DatasourceDS::dataReadFinished()
         QJsonObject statusObj = resultObj["status"].toObject();
 
 
-        qDebug() << resultObj << statusObj << "no error";
 
         // If successful, set the variables in settings
         if(statusObj["code"].toInt() == 200){
 
-            QJsonObject dataObj = resultObj["data"].toObject();
+            QJsonArray dataArray = resultObj["data"].toArray();
 
-            int DatasourceID = dataObj["DatasourceID"].toInt();
-            int ConnectedWorkbooksCount = dataObj["ConnectedWorkbooksCount"].toInt();
-            int DSProfileID = dataObj["DSProfileID"].toInt();
-            QString ConnectionType = dataObj["ConnectionType"].toString();
-            QString DatasourceName = dataObj["DatasourceName"].toString();
-            QString Description = dataObj["Description"].toString();
-            QString SourceType = dataObj["SourceType"].toString();
-            QString ImageLink = dataObj["ImageLink"].toString();
-            QString DatasourceLink = dataObj["DatasourceLink"].toString();
-            QString CreatedDate = dataObj["CreatedDate"].toString();
-            QString Firstname = dataObj["Firstname"].toString();
-            QString Lastname = dataObj["Lastname"].toString();
+            for(int i = 0; i<= dataArray.size(); i++){
 
-            qDebug() << resultObj["data"].toObject();
+                QJsonObject dataObj = dataArray.at(i).toObject();
 
-            addDatasource(DatasourceID, ConnectedWorkbooksCount, DSProfileID, ConnectionType,DatasourceName,  Description, SourceType, ImageLink, DatasourceLink, CreatedDate, Firstname, Lastname);
+                int DatasourceID = dataObj["DatasourceID"].toInt();
+                int ConnectedWorkbooksCount = dataObj["ConnectedWorkbooksCount"].toInt();
+                int DSProfileID = dataObj["DSProfileID"].toInt();
+                QString ConnectionType = dataObj["ConnectionType"].toString();
+                QString DatasourceName = dataObj["DatasourceName"].toString();
+                QString Descriptions = dataObj["Description"].toString();
+                QString SourceType = dataObj["SourceType"].toString();
+                QString ImageLink = dataObj["ImageLink"].toString();
+                QString DatasourceLink = dataObj["DatasourceLink"].toString();
+                QString CreatedDate = dataObj["CreatedDate"].toString();
+                QString Firstname = dataObj["Firstname"].toString();
+                QString Lastname = dataObj["Lastname"].toString();
+
+
+                this->addDatasource(DatasourceID, ConnectedWorkbooksCount, DSProfileID, ConnectionType,DatasourceName,  Descriptions, SourceType, ImageLink, DatasourceLink, CreatedDate, Firstname, Lastname);
+            }
+
         }
 
         //Clear the buffer

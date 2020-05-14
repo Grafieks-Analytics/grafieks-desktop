@@ -31,7 +31,7 @@ public:
         DSProfileIDRole,
         ConnectionTypeRole,
         DatasourceNameRole,
-        DescriptionRole,
+        DescriptionsRole,
         SourceTypeRole,
         ImageLinkRole,
         DatasourceLinkRole,

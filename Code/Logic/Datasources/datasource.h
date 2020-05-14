@@ -12,7 +12,7 @@ class Datasource : public QObject
     int m_profileId;
     QString m_connectionType;
     QString m_datasourceName;
-    QString m_description;
+    QString m_descriptions;
     QString m_sourceType;
     QString m_imageLink;
     QString m_downloadLink;
@@ -22,14 +22,14 @@ class Datasource : public QObject
 
 
 public:
-    explicit Datasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & description, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, QObject *parent = nullptr);
+    explicit Datasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, QObject *parent = nullptr);
 
     Q_PROPERTY(int id READ id WRITE setId NOTIFY idChanged)
     Q_PROPERTY(int connectedWorkbooksCount READ connectedWorkbooksCount WRITE setConnectedWorkbooksCount NOTIFY connectedWorkbooksCountChanged)
     Q_PROPERTY(int profileId READ profileId WRITE setProfileId NOTIFY profileIdChanged)
     Q_PROPERTY(QString connectionType READ connectionType WRITE setConnectionType NOTIFY connectionTypeChanged)
     Q_PROPERTY(QString datasourceName READ datasourceName WRITE setDatasourceName NOTIFY datasourceNameChanged)
-    Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
+    Q_PROPERTY(QString descriptions READ descriptions WRITE setDescriptions NOTIFY descriptionsChanged)
     Q_PROPERTY(QString sourceType READ sourceType WRITE setSourceType NOTIFY sourceTypeChanged)
     Q_PROPERTY(QString imageLink READ imageLink WRITE setImageLink NOTIFY imageLinkChanged)
     Q_PROPERTY(QString downloadLink READ downloadLink WRITE setDownloadLink NOTIFY downloadLinkChanged)
@@ -39,7 +39,7 @@ public:
 
     QString connectionType() const;
     QString datasourceName() const;
-    QString description() const;
+    QString descriptions() const;
     QString imageLink() const;
     int id() const;
     int connectedWorkbooksCount() const;
@@ -53,7 +53,7 @@ public:
 public slots:
     void setConnectionType(QString connectionType);
     void setDatasourceName(QString datasourceName);
-    void setDescription(QString description);
+    void setDescriptions(QString descriptions);
     void setImageLink(QString imageLink);
     void setId(int id);
     void setConnectedWorkbooksCount(int connectedWorkbooksCount);
@@ -67,7 +67,7 @@ public slots:
 signals:
     void connectionTypeChanged(QString connectionType);
     void datasourceNameChanged(QString datasourceName);
-    void descriptionChanged(QString description);
+    void descriptionsChanged(QString descriptions);
     void imageLinkChanged(QString imageLink);
     void idChanged(int id);
     void connectedWorkbooksCountChanged(int connectedWorkbooksCount);

@@ -21,21 +21,28 @@ import "../../MainSubComponents"
 Page {
 
     id: datasources_grid
-
-    Component.onCompleted: {
-        DatasourceDS.fetchDatsources(0, true, true)
-        console.log(JSON.stringify(DatasourceModel)) 
-    }
-
+    width: parent.width
+    height: parent.height
 
     GridView {
-        model: DatasourceModel; // just define the number you want, can be a variable too
+        width: datasources_grid.width
+        height: datasources_grid.height
+        cellWidth: width/3
+        cellHeight: 300
+        model: DatasourceModel;
+
         delegate: DataSourceGridComponent{
             id: a1
             datasource_name: datasourceName
-            description: description
+            description: descriptions
             owner_name: firstname + " "+lastname
-            mode: sourceType
+            mode: connectionType
+
+            Component.onCompleted: {
+
+
+                console.log(qsTr(descriptions))
+            }
         }
     }
 

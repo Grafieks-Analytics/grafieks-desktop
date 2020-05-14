@@ -112,7 +112,6 @@ Page {
             anchors.bottom:search_rect.bottom
             verticalAlignment:TextEdit.AlignVCenter
             font.italic: true
-            font.weight: font.Thin
             font.pointSize: Constants.fontReading
             opacity: 0.6
 
