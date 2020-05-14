@@ -38,11 +38,6 @@ Page {
             owner_name: firstname + " "+lastname
             mode: connectionType
 
-            Component.onCompleted: {
-
-
-                console.log(qsTr(descriptions))
-            }
         }
     }
 

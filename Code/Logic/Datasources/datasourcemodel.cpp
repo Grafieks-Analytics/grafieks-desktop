@@ -14,7 +14,6 @@ int DatasourceModel::rowCount(const QModelIndex &parent) const
 QVariant DatasourceModel::data(const QModelIndex &index, int role) const
 {
 
-    qDebug() << role << "Called " << DescriptionsRole << "Descriptions";
 
     if( index.row() < 0 || index.row() >= m_datasource->dataItems().count()){
         return QVariant();
@@ -22,16 +21,10 @@ QVariant DatasourceModel::data(const QModelIndex &index, int role) const
     Datasource * datasource = m_datasource->dataItems().at(index.row());
     if( role == ConnectionTypeRole)
         return datasource->connectionType();
-    if( role == DatasourceNameRole){
-        qDebug() << datasource->datasourceName() << "Called setting2";
+    if( role == DatasourceNameRole)
         return datasource->datasourceName();
-    }
-
-    if( role == DescriptionsRole){
-        qDebug() << datasource->descriptions() << "Called setting";
+    if( role == DescriptionsRole)
         return datasource->descriptions();
-    }
-
     if( role == ImageLinkRole)
         return datasource->imageLink();
 
