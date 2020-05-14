@@ -9,7 +9,7 @@
 class DatasourceModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(DatasourceDs * datasourceds READ datasourceds WRITE setDatasourceds)
+    Q_PROPERTY(DatasourceDS * datasourceds READ datasourceds WRITE setDatasourceds)
 
 
 
@@ -23,7 +23,7 @@ public:
     QHash<int, QByteArray> roleNames() const; //Allows to expose our custom roles( names,favoritecolor,age) to a qml ListView
 
     DatasourceDS *datasourceds() const;
-    void setDatasource(DatasourceDS * datasourceds);
+    void setDatasourceds(DatasourceDS * datasourceds);
 
     enum DatasourceRoles{
         DatasourceIdRole = Qt::UserRole + 1,

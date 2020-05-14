@@ -65,6 +65,7 @@ bool DatasourceModel::setData(const QModelIndex &index, const QVariant &value, i
     }
 
     if ( somethingChanged){
+        qDebug() << "Called by initiation";
         emit dataChanged(index,index,QVector<int> () << role);
         return true;
     }
@@ -81,6 +82,7 @@ Qt::ItemFlags DatasourceModel::flags(const QModelIndex &index) const
 QHash<int, QByteArray> DatasourceModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
+
     roles[DatasourceIdRole] = "id";
     roles[ConnectionTypeRole] = "connectedWorkbooksCount";
     roles[DSProfileIDRole] = "profileId";
@@ -93,6 +95,7 @@ QHash<int, QByteArray> DatasourceModel::roleNames() const
     roles[CreatedDateRole] = "createdDate";
     roles[FirstnameRole] = "firstname";
     roles[LastnameRole] = "lastname";
+
     return roles;
 }
 
@@ -102,7 +105,7 @@ DatasourceDS *DatasourceModel::datasourceds() const
     return m_datasource;
 }
 
-void DatasourceModel::setDatasource(DatasourceDS *datasource)
+void DatasourceModel::setDatasourceds(DatasourceDS *datasource)
 {
     beginResetModel();
 

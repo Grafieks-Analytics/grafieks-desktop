@@ -22,12 +22,15 @@ void DatasourceDS::fetchDatsources(int page, bool fulllist, bool listview)
 
     m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
                                "application/x-www-form-urlencoded");
+    m_NetworkRequest.setRawHeader("Authorization", sessionToken);
 
     QJsonObject obj;
     obj.insert("profileId", profileId);
     obj.insert("page", page);
     obj.insert("fulllist", fulllist);
     obj.insert("listview", listview);
+
+    qDebug() << "object was: "<< obj;
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -86,6 +89,8 @@ void DatasourceDS::dataReadFinished()
         QJsonObject statusObj = resultObj["status"].toObject();
 
 
+        qDebug() << resultObj << statusObj << "no error";
+
         // If successful, set the variables in settings
         if(statusObj["code"].toInt() == 200){
 
@@ -103,6 +108,8 @@ void DatasourceDS::dataReadFinished()
             QString CreatedDate = dataObj["CreatedDate"].toString();
             QString Firstname = dataObj["Firstname"].toString();
             QString Lastname = dataObj["Lastname"].toString();
+
+            qDebug() << resultObj["data"].toObject();
 
             addDatasource(DatasourceID, ConnectedWorkbooksCount, DSProfileID, ConnectionType,DatasourceName,  Description, SourceType, ImageLink, DatasourceLink, CreatedDate, Firstname, Lastname);
         }

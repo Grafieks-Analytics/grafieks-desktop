@@ -1,14 +1,17 @@
 #include "datasourcefilter.h"
 
-DatasourceFilter::DatasourceFilter(QObject *parent) : QSortFilterProxyModel(parent)
+DatasourceFilter::DatasourceFilter(QObject *parent) :
+    QSortFilterProxyModel(parent)
 {
-    setSortOrder(false);
+//    setSortOrder(false);
     setSourceModel(&m_datasourceModel);
     setFilterRole(m_datasourceModel.DescriptionRole);
     setSortRole(m_datasourceModel.DatasourceNameRole);
 }
 
-void DatasourceFilter::setSearchString(QString string)
+
+
+void DatasourceFilter::setFilterString(QString string)
 {
     this->setFilterCaseSensitivity(Qt::CaseInsensitive);
     this->setFilterFixedString(string);

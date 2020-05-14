@@ -28,6 +28,46 @@ QString Datasource::imageLink() const
     return m_imageLink;
 }
 
+int Datasource::id() const
+{
+    return m_id;
+}
+
+int Datasource::connectedWorkbooksCount() const
+{
+    return m_connectedWorkbooksCount;
+}
+
+int Datasource::profileId() const
+{
+    return m_profileId;
+}
+
+QString Datasource::sourceType() const
+{
+    return m_sourceType;
+}
+
+QString Datasource::downloadLink() const
+{
+    return m_downloadLink;
+}
+
+QString Datasource::createdDate() const
+{
+    return m_createdDate;
+}
+
+QString Datasource::firstName() const
+{
+    return m_firstName;
+}
+
+QString Datasource::lastName() const
+{
+    return m_lastName;
+}
+
 void Datasource::setConnectionType(QString connectionType)
 {
     if (m_connectionType == connectionType)
@@ -62,5 +102,77 @@ void Datasource::setImageLink(QString imageLink)
 
     m_imageLink = imageLink;
     emit imageLinkChanged(m_imageLink);
+}
+
+void Datasource::setId(int id)
+{
+    if (m_id == id)
+        return;
+
+    m_id = id;
+    emit idChanged(m_id);
+}
+
+void Datasource::setConnectedWorkbooksCount(int connectedWorkbooksCount)
+{
+    if (m_connectedWorkbooksCount == connectedWorkbooksCount)
+        return;
+
+    m_connectedWorkbooksCount = connectedWorkbooksCount;
+    emit connectedWorkbooksCountChanged(m_connectedWorkbooksCount);
+}
+
+void Datasource::setProfileId(int profileId)
+{
+    if (m_profileId == profileId)
+        return;
+
+    m_profileId = profileId;
+    emit profileIdChanged(m_profileId);
+}
+
+void Datasource::setSourceType(QString sourceType)
+{
+    if (m_sourceType == sourceType)
+        return;
+
+    m_sourceType = sourceType;
+    emit sourceTypeChanged(m_sourceType);
+}
+
+void Datasource::setDownloadLink(QString downloadLink)
+{
+    if (m_downloadLink == downloadLink)
+        return;
+
+    m_downloadLink = downloadLink;
+    emit downloadLinkChanged(m_downloadLink);
+}
+
+void Datasource::setCreatedDate(QString createdDate)
+{
+    if (m_createdDate == createdDate)
+        return;
+
+    m_createdDate = createdDate;
+    emit createdDateChanged(m_createdDate);
+}
+
+void Datasource::setFirstName(QString firstName)
+{
+    if (m_firstName == firstName)
+        return;
+
+    m_firstName = firstName;
+    emit firstNameChanged(m_firstName);
+}
+
+void Datasource::setLastName(QString lastName)
+{
+    if (m_lastName == lastName)
+        return;
+
+    m_lastName = lastName;
+    emit lastNameChanged(m_lastName);
 }
 

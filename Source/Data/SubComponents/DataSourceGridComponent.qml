@@ -26,6 +26,10 @@ Item {
     property alias owner_name : owner_name_id.text
     property alias mode : mode_id.text
 
+    Component.onCompleted: {
+        console.log(datasource_name, "test", "test")
+    }
+
     Rectangle{
         id:data_source_main
         border.color: Constants.darkThemeColor

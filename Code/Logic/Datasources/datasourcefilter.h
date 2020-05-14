@@ -11,7 +11,7 @@ class DatasourceFilter : public QSortFilterProxyModel
     Q_OBJECT
 public:
     explicit DatasourceFilter(QObject *parent = nullptr);
-    Q_INVOKABLE void setSearchString(QString string);
+
     Q_INVOKABLE void setFilterString(QString string);
     Q_INVOKABLE void setSortOrder(bool checked);
 

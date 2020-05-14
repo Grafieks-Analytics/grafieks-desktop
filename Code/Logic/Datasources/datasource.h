@@ -7,26 +7,19 @@ class Datasource : public QObject
 {
     Q_OBJECT
 
+    int m_id;
+    int m_connectedWorkbooksCount;
+    int m_profileId;
     QString m_connectionType;
     QString m_datasourceName;
     QString m_description;
+    QString m_sourceType;
     QString m_imageLink;
+    QString m_downloadLink;
+    QString m_createdDate;
+    QString m_firstName;
+    QString m_lastName;
 
-    int m_id;
-
-    int m_connectedWorkbooksCount;
-
-int m_profileId;
-
-QString m_sourceType;
-
-QString m_downloadLink;
-
-QString m_createdDate;
-
-QString m_firstName;
-
-QString m_lastName;
 
 public:
     explicit Datasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & description, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName, QObject *parent = nullptr);
