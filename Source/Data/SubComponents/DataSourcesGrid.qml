@@ -60,9 +60,6 @@ Page {
                 radius: 10
 
 
-
-
-
                 Text{
                     id: title
                     text:  datasourceName
@@ -106,7 +103,13 @@ Page {
 
                         MenuItem {
                             text: "Edit Connection"
-                            onTriggered: {}
+                            onTriggered: {
+                                if(typeof settings.value("user/sessionToken") != "undefined"){
+                                    connectGrafieks1.visible = true
+                                } else{
+
+                                }
+                            }
                         }
                         MenuItem {
                             text: "Remove"
@@ -136,7 +139,6 @@ Page {
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-//                        updateDSName(datasourceName)
                     }
                 }
 

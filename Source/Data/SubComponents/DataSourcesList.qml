@@ -224,6 +224,15 @@ Page {
                             text: "Edit"
                             height: 23
                             width: implicitWidth
+
+                            onClicked: {
+
+                                if(typeof settings.value("user/sessionToken") != "undefined"){
+                                    connectGrafieks1.visible = true
+                                } else{
+
+                                }
+                            }
                         }
 
                         Button{
