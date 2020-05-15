@@ -26,6 +26,8 @@ Item {
     property alias owner_name : owner_name_id.text
     property alias mode : mode_id.text
 
+
+
     Rectangle{
         id:data_source_main
         border.color: Constants.darkThemeColor
@@ -147,7 +149,7 @@ Item {
             Text{
                 id: description_id
                 width:data_source_main.width - 10
-                text: "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs."
+                text: ""
                 wrapMode: Text.WordWrap
                 font.pointSize: Constants.fontReading
             }
@@ -169,7 +171,7 @@ Item {
                 }
                 Text{
                     id: owner_name_id
-                    text: "Hirak Kocharee"
+                    text: ""
                     font.pointSize: Constants.fontReading
                 }
 

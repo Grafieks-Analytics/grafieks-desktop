@@ -8,7 +8,7 @@
 #include <QSqlQuery>
 #include <QDebug>
 
-#include "../Models/General/constants.h"
+#include "../Logic/General/constants.h"
 
 class Sqlitecon : public QObject
 {

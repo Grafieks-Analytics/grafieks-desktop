@@ -41,8 +41,8 @@ QtObject {
     property int fontHeader : 28
     property int fontSubHeader : 20
     property int fontCategoryHeader : 18
-    property int fontCategoryHeaderSmall : 15
-    property int fontReading: 11
+    property int fontCategoryHeaderSmall : 16
+    property int fontReading: 12
 
 
 }

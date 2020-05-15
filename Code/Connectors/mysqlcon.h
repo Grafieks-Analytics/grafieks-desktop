@@ -9,7 +9,7 @@
 #include <QObject>
 
 
-#include "../Models/General/constants.h"
+#include "../Logic/General/constants.h"
 
 class MysqlCon : public QObject
 {

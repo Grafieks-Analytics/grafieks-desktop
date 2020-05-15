@@ -24,6 +24,10 @@ Page {
     id: datasourcelist_page
     property int menu_width: 60
 
+    Component.onCompleted: {
+        DatasourceDS.fetchDatsources(0, true, true)
+    }
+
 
     LeftMenuBar{
         id: left_menubar
@@ -204,13 +208,16 @@ Page {
 
         id: toolsep11
         width: parent.width - menu_width
+        height: parent.height
         anchors.top: toolsep2.bottom
+        anchors.left: left_menubar.right
 
 
         StackLayout{
             id: stacklayout_ds
-            anchors.horizontalCenter : parent.horizontalCenter
             currentIndex: tabbar_ds.currentIndex
+            width: toolsep11.width
+            height: toolsep11.height
 
             DataSourcesGrid{
                 id: data_source_grid
