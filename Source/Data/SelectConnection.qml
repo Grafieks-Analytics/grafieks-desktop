@@ -57,7 +57,12 @@ Page {
         switch(param.toLowerCase()){
 
         case "grs":
-            connectGrafieks1.visible = true
+            if (typeof settings.value("user/sessionToken") == "undefined"){
+                connectGrafieks1.visible = true
+            } else{
+                stacklayout_home.currentIndex = 4
+            }
+
             break;
 
         case "mysql":

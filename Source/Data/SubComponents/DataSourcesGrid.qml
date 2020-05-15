@@ -29,7 +29,7 @@ Page {
         height: datasources_grid.height
         cellWidth: width/3
         cellHeight: 300
-        model: DatasourceModel;
+        model: DatasourceModel
 
         delegate: DataSourceGridComponent{
             id: a1

@@ -94,7 +94,7 @@ void DatasourceDS::dataReadFinished()
 
             QJsonArray dataArray = resultObj["data"].toArray();
 
-            for(int i = 0; i<= dataArray.size(); i++){
+            for(int i = 0; i< dataArray.size(); i++){
 
                 QJsonObject dataObj = dataArray.at(i).toObject();
 
