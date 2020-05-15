@@ -25,7 +25,6 @@
         <file>Source/Data/SubComponents/DataFilters.qml</file>
         <file>Source/Data/SubComponents/DataModeller.qml</file>
         <file>Source/Data/SubComponents/DataSourceDescription.qml</file>
-        <file>Source/Data/SubComponents/DataSourceGridComponent.qml</file>
         <file>Source/Data/SubComponents/DataSourcesGrid.qml</file>
         <file>Source/Data/SubComponents/DataSourcesList.qml</file>
         <file>Source/Data/SubComponents/MainMenuDelegate.qml</file>

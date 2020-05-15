@@ -26,7 +26,18 @@ Page {
 
     Component.onCompleted: {
         DatasourceDS.fetchDatsources(0, true, true)
+
+        // Connect signal and slot
+        data_source_grid.updateDSName.connect(datasourcelist_page.updateDSNameTitle)
+        data_source_list.updateDSName.connect(datasourcelist_page.updateDSNameTitle)
+
     }
+
+    // Slots
+    function updateDSNameTitle(signalDSName){
+        ds_name_header.text = signalDSName
+    }
+
 
 
     LeftMenuBar{
@@ -161,16 +172,20 @@ Page {
                 spacing: 20
 
                 Text{
+                    id: ds_server_label_header
                     text: "Server Address"
                 }
                 Text{
-                    text: "http://google.com"
+                    id: ds_server_header
+                    text: settings.value("general/baseUrl")
                 }
                 Text{
+                    id: ds_name_label_header
                     text: "Data Source Name"
                 }
                 Text{
-                    text: "Lorem Ipsum"
+                    id: ds_name_header
+                    text: "Not Selected"
                 }
             }
 
@@ -183,7 +198,7 @@ Page {
                 id:search_rect
                 anchors.right:parent.right
                 anchors.verticalCenter: grid1.verticalCenter
-                anchors.rightMargin: 350
+                anchors.rightMargin: 50
                 border.color: Constants.darkThemeColor
                 width: 300
                 height: 40

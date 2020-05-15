@@ -16,8 +16,11 @@ import com.grafieks.singleton.constants 1.0
 
 Page {
 
+    id: data_source_list_page
     property var headersModel : ["Data Source Name", "Published By", "Live/Extract", "Published On", "Last Refreshed", "Edit"]
     property int headerSize : headersModel.length
+
+    signal updateDSName(string signalDSName);
 
     ListView {
         id: listView
@@ -51,73 +54,165 @@ Page {
         }
 
 
+        highlight: Rectangle{
+            color:"lightgray"
+            width: parent
+            opacity: 0.3
+            z:10
+
+        }
+
         delegate: Column {
 
             id: delegate
+
 
             Row {
                 spacing: 1
                 height: 25
 
-
                 Column{
                     id: dsName_col
                     width: listView.width / headerSize
-                    leftPadding: 10
-                    anchors.verticalCenter: parent.verticalCenter
+                    height: parent.height
 
-                    Text {
-                        text: qsTr(datasourceName)
+                    Rectangle{
+                        width: parent.width
+                        height: parent.height
+
+                        Text {
+                            text: qsTr(datasourceName)
+                            leftPadding: 10
+                            anchors.verticalCenter: parent.verticalCenter
+
+                        }
+
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                listView.currentIndex = index
+                                updateDSName(datasourceName)
+                            }
+                        }
                     }
+
                 }
 
                 Column{
                     id: dsOwner_col
                     width: listView.width / headerSize
-                    leftPadding: 10
-                    anchors.verticalCenter: parent.verticalCenter
+                    height: parent.height
 
-                    Text {
-                        text: qsTr(firstname + " " + lastname)
+                    Rectangle{
+                        width: parent.width
+                        height: parent.height
+
+                        Text {
+                            text: qsTr(firstname + " " + lastname)
+                            leftPadding: 10
+                            anchors.verticalCenter: parent.verticalCenter
+
+                        }
+
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                listView.currentIndex = index
+                                updateDSName(datasourceName)
+                            }
+                        }
                     }
+
                 }
 
                 Column{
                     id: dsConType_col
                     width: listView.width / headerSize
-                    leftPadding: 10
-                    anchors.verticalCenter: parent.verticalCenter
+                    height: parent.height
 
-                    Text {
-                        text: qsTr(connectionType)
+                    Rectangle{
+                        width: parent.width
+                        height: parent.height
+
+                        Text {
+                            text: qsTr(connectionType)
+                            leftPadding: 10
+                            anchors.verticalCenter: parent.verticalCenter
+
+                        }
+
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                listView.currentIndex = index
+                                updateDSName(datasourceName)
+                            }
+                        }
                     }
+
+
                 }
 
                 Column{
                     id: dsCreatedDate_col
                     width: listView.width / headerSize
-                    leftPadding: 10
-                    anchors.verticalCenter: parent.verticalCenter
+                    height: parent.height
 
-                    Text {
-                        text: qsTr(createdDate)
+                    Rectangle{
+                        width: parent.width
+                        height: parent.height
+
+                        Text {
+                            text: qsTr(createdDate)
+                            leftPadding: 10
+                            anchors.verticalCenter: parent.verticalCenter
+
+                        }
+
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                listView.currentIndex = index
+                                updateDSName(datasourceName)
+                            }
+                        }
                     }
+
                 }
 
                 Column{
                     id: dsLastRefreshed_col
                     width: listView.width / headerSize
-                    leftPadding: 10
-                    anchors.verticalCenter: parent.verticalCenter
+                    height: parent.height
 
-                    Text {
-                        text: qsTr(connectionType)
+                    Rectangle{
+                        width: parent.width
+                        height: parent.height
+
+                        Text {
+                            text: qsTr(connectionType)
+                            leftPadding: 10
+                            anchors.verticalCenter: parent.verticalCenter
+
+                        }
+
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                listView.currentIndex = index
+                                updateDSName(datasourceName)
+                            }
+                        }
                     }
+
+
                 }
 
                 Column{
                     id: dsEditRemove_col
                     width: listView.width / headerSize
+                    height: parent.height
+
                     leftPadding: 10
                     anchors.verticalCenter: parent.verticalCenter
 
