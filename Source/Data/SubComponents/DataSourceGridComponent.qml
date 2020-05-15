@@ -26,6 +26,7 @@ Item {
     property alias owner_name : owner_name_id.text
     property alias mode : mode_id.text
 
+    function deleteDS(){}
 
 
     Rectangle{
@@ -100,7 +101,11 @@ Item {
                     }
                     MenuItem {
                         text: "Remove"
-                        onTriggered: {}
+                        onTriggered: {
+
+                            // Delete Datasource
+                            deleteDS();
+                        }
                     }
                 }
             }

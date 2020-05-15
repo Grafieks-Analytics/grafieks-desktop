@@ -19,6 +19,7 @@ public:
     explicit DatasourceDS(QObject *parent = nullptr);
 
     Q_INVOKABLE void fetchDatsources(int page, bool fulllist, bool listview, QString keyword = "");
+    Q_INVOKABLE void deleteDatasource(int datasourceId, int listIndex);
 
     void addDatasource(Datasource * datasource);
 
@@ -36,9 +37,12 @@ signals:
     void postReset();
 
 private slots:
+    void resetDatasource();
+
     void dataReadyRead();
     void dataReadFinished();
-    void resetDatasource();
+    void dataDeleteFinished();
+
 
 public slots:
 

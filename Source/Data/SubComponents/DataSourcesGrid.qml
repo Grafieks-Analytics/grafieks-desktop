@@ -38,6 +38,10 @@ Page {
             owner_name: firstname + " "+lastname
             mode: connectionType
 
+            function deleteDS() {
+                DatasourceDS.deleteDatasource(id, index)
+            }
+
         }
     }
 

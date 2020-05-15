@@ -136,6 +136,11 @@ Page {
                             text: "Remove"
                             height: 23
                             width: implicitWidth
+
+                            onClicked: {
+                                // Remove datasource
+                                DatasourceDS.deleteDatasource(id, index)
+                            }
                         }
                     }
                 }
