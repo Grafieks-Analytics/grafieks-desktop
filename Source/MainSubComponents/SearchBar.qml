@@ -15,6 +15,8 @@ import com.grafieks.singleton.constants 1.0
 
 Item {
 
+    property alias searchtext: search_text.text
+
     Rectangle{
         id:search_rect
         border.color: Constants.darkThemeColor

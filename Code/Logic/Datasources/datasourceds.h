@@ -18,7 +18,8 @@ class DatasourceDS : public QObject
 public:
     explicit DatasourceDS(QObject *parent = nullptr);
 
-    Q_INVOKABLE void fetchDatsources( int page, bool fulllist, bool listview);
+    Q_INVOKABLE void fetchDatsources(int page, bool fulllist, bool listview, QString keyword = "");
+
     void addDatasource(Datasource * datasource);
 
     Q_INVOKABLE void addDatasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName);
@@ -31,12 +32,16 @@ signals:
     void postItemAdded();
     void preItemRemoved(int index);
     void postItemRemoved();
+    void preReset();
+    void postReset();
 
 private slots:
     void dataReadyRead();
     void dataReadFinished();
+    void resetDatasource();
 
 public slots:
+
 private :
     QNetworkAccessManager * m_networkAccessManager;
     QNetworkReply * m_networkReply;

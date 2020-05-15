@@ -39,6 +39,7 @@ Page {
         height: 20
         width: parent.width - menu_width
         x: menu_width
+        z: 5
 
 
         Button{
@@ -68,6 +69,7 @@ Page {
             anchors.top: submenu.top
             anchors.topMargin: -3
             currentIndex: stacklayout_ds.currentIndex
+            z: 5
 
             Component.onCompleted: {
                 grid_btn_background.color = Constants.darkThemeColor
@@ -123,6 +125,7 @@ Page {
         width: parent.width - menu_width
         anchors.top: submenu.bottom
         anchors.horizontalCenter: submenu.horizontalCenter
+        z: 5
 
         padding: vertical ? 10 : 2
         topPadding: vertical ? 2 : 10
@@ -143,6 +146,7 @@ Page {
         anchors.top: toolsep1.bottom
         anchors.horizontalCenter: toolsep1.horizontalCenter
         x: menu_width
+        z: 5
 
         Row{
 
@@ -173,12 +177,47 @@ Page {
 
 
 
-            SearchBar{
-                id: search_bar_datasources
+            // Search box
+
+            Rectangle{
+                id:search_rect
                 anchors.right:parent.right
                 anchors.verticalCenter: grid1.verticalCenter
                 anchors.rightMargin: 350
+                border.color: Constants.darkThemeColor
+                width: 300
+                height: 40
+                radius: 10
 
+                TextEdit {
+                    id: search_text
+                    text: "Search"
+                    cursorVisible: true
+                    width:250
+                    height: 40
+                    anchors.left: search_rect.left
+                    anchors.leftMargin: 10
+                    verticalAlignment:TextEdit.AlignVCenter
+                }
+
+                Image{
+                    id:search_btn
+                    source: "../../Images/icons/Search.png"
+                    anchors.left: search_text.right
+                    height:30
+                    width: height
+                    anchors.verticalCenter: search_rect.verticalCenter
+
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+
+                            // Fetch search results
+                            DatasourceDS.fetchDatsources(0, true, true, search_text.text)
+                        }
+                    }
+
+                }
             }
 
 
@@ -191,6 +230,7 @@ Page {
         width: parent.width - menu_width
         anchors.top: info_rectangle.bottom
         anchors.horizontalCenter: info_rectangle.horizontalCenter
+        z: 5
 
         padding: vertical ? 10 : 2
         topPadding: vertical ? 2 : 10

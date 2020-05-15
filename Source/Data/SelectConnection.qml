@@ -57,6 +57,8 @@ Page {
         switch(param.toLowerCase()){
 
         case "grs":
+
+            // If already logged in, dont prompt
             if (typeof settings.value("user/sessionToken") == "undefined"){
                 connectGrafieks1.visible = true
             } else{
@@ -103,6 +105,7 @@ Page {
         anchors.verticalCenter: selectconn_page.verticalCenter
         anchors.top : mainLabel.bottom
         anchors.topMargin: 20
+        z: 5
 
 
         TextEdit {
@@ -150,6 +153,7 @@ Page {
         height: 40
         anchors.topMargin: 40
         x : selectconn_page.width/2 - 440
+        z: 6
 
 
 
