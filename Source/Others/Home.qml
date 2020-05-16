@@ -27,13 +27,36 @@ Page {
         id: leftMenuBar
     }
 
+    Column{
+        topPadding: 20
+        leftPadding: 160
+
+        Text{
+            text:"Welcome to Grafieks Desktop"
+            color:"#707070"
+            font.pointSize: Constants.fontHeader
+        }
+    }
+    Column{
+        topPadding: 80
+        leftPadding: 160
+
+        Text{
+
+            text:"Grafieks Desktop is a graphical user interface for data connectors, data modeller,
+SQL query builder, report builder and dashboard designer."
+            color:"#707070"
+            font.pointSize: Constants.fontReading
+        }
+    }
     GroupBox{
 
         id: groupBoxPrimaryVideo
         anchors.top:parent.top
         anchors.left:parent.left
-        anchors.topMargin: 100
-        anchors.leftMargin: 250
+        anchors.topMargin: 160
+        anchors.leftMargin: 150
+
 
         Column{
             id: primaryVideoSection
@@ -49,7 +72,7 @@ Page {
 
             Text{
                 id: primaryVideoDesc
-                text:"Getting started with Grafieks"
+                text:"Getting started"
                 color:"gray"
                 font.pointSize: Constants.fontCategoryHeader
             }
@@ -68,7 +91,7 @@ Page {
         anchors.top:groupBoxPrimaryVideo.bottom
         anchors.left:parent.left
         anchors.topMargin: 20
-        anchors.leftMargin: 250
+        anchors.leftMargin: 150
         spacing: 10
 
         GroupBox{
@@ -86,8 +109,8 @@ Page {
                     id:secondaryVideo1
 
                     url: "http://www.youtube.com/embed/i-pGuzNkpDg"
-                    width:200
-                    height:130
+                    width:300
+                    height:200
                 }
 
                 Text{
@@ -120,8 +143,8 @@ Page {
                     id:secondaryVideo2
 
                     url: "http://www.youtube.com/embed/9ldOuVuas1c"
-                    width:200
-                    height:130
+                    width:300
+                    height:200
                 }
 
                 Text{
@@ -155,8 +178,8 @@ Page {
                     id:secondaryVideo3
 
                     url: "http://www.youtube.com/embed/N8F7eOqgH8Q"
-                    width:200
-                    height:130
+                    width:300
+                    height:200
                 }
 
                 Text{
@@ -181,12 +204,12 @@ Page {
         id: rowLayoutHomeRight
 
         height:parent.height
-        width: 200
+        width: 360
         anchors.right:parent.right
         anchors.top: parent.top
         anchors.topMargin: 100
         anchors.rightMargin: 10
-        spacing: 50
+        spacing: 80
 
 
         Column{
@@ -216,7 +239,7 @@ Page {
                 id:rightText1
 
 
-                text: "Want to begin developing dashboard with sample data or view dashboard"
+                text: "Want to begin developing dashboard with sample data or view dashboard?"
                 color:"gray"
                 wrapMode: Text.Wrap
                 width: rowLayoutHomeRight.width
@@ -226,6 +249,7 @@ Page {
 
 
         Column{
+
             Text{
                 id:rightHead2
 
@@ -246,7 +270,6 @@ Page {
 
             Text{
                 id:rightText2
-
 
                 text: "Ready to learn how to use Grafieks?"
                 color:"gray"
@@ -279,8 +302,7 @@ Page {
             Text{
                 id:rightText3
 
-
-                text: "Join the community and interact with others"
+                text: "Join the community and interact with other users"
                 color:"gray"
                 wrapMode: Text.Wrap
                 width: rowLayoutHomeRight.width
