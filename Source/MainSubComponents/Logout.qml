@@ -38,6 +38,7 @@ Popup {
                 popupLogout.visible = false
                 action_signin.text = Constants.signInText
                 menu_signIn.title = Constants.signInText
+                stacklayout_home.currentIndex = 2
             }
             else{
                 error_connection_text.text = status.msg
