@@ -51,5 +51,6 @@
         <file>Source/Others/Home.qml</file>
         <file>main.qml</file>
         <file>Constants.qml</file>
+        <file>Source/Others/Test3.qml</file>
     </qresource>
 </RCC>
