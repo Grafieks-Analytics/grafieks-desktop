@@ -12,6 +12,9 @@ Logout::Logout(QObject *parent) : QObject(parent),
     QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
     int profileId = settings.value("user/profileId").toInt();
 
+    // Remove user settings from data
+    settings.remove("user");
+
 
     QNetworkRequest m_networkRequest;
     m_networkRequest.setUrl(baseUrl+"/logout");
@@ -64,8 +67,8 @@ void Logout::readComplete()
         // If successful, remove the user variables in settings
         if(statusObj["code"].toInt() == 200){
 
-            QSettings settings;
-            settings.remove("user");
+//            QSettings settings;
+//            settings.remove("user");
             finalStatus = false;
         }
 
