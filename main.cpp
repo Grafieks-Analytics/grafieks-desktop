@@ -35,6 +35,8 @@ int main(int argc, char *argv[])
     DatasourceDS * datasource = new DatasourceDS();
     datasourceModel.setDatasourceds(datasource);
 
+    qttest2.fetchPosts();
+
     qmlRegisterSingletonType( QUrl("qrc:/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants" );
 
     QtWebEngine::initialize();
@@ -46,7 +48,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("User", &user);
     engine.rootContext()->setContextProperty("ConnectorFilter", &connectorFilter);
     engine.rootContext()->setContextProperty("DatasourceModel", &datasourceModel);
-     engine.rootContext()->setContextProperty("DatasourceDS",datasource);
+    engine.rootContext()->setContextProperty("DatasourceDS",datasource);
 
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
