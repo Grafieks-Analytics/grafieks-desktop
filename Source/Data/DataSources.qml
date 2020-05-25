@@ -67,7 +67,7 @@ Page {
 
             background: Rectangle{
                 id: next_btn_background
-                color: next_btn.pressed? Constants.darkThemeColor: Constants.themeColor
+                color: next_btn.hovered? Constants.darkThemeColor: Constants.themeColor
             }
 
 

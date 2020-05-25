@@ -309,7 +309,6 @@ Page {
         cellHeight: 130
 
 
-
         delegate : Column{
             scale: 1
             width: 230
