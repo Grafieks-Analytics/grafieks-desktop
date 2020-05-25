@@ -52,7 +52,7 @@ Popup {
 
     // Header ends
 
-    // Top header buttons starts
+    //    Top header buttons starts
 
     TabBar{
         id: tabbar1

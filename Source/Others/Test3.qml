@@ -5,7 +5,9 @@ Item
 {
     ListModel {
         id: elementModel
-        ListElement { content: "1"}
+        ListElement { elementColor: "red"; elementWidth: 50; elementHeight: 50}
+        ListElement { elementColor: "green"; elementWidth: 20; elementHeight: 50}
+        ListElement { elementColor: "blue"; elementWidth: 50; elementHeight: 20}
     }
 
     Column {
@@ -13,7 +15,7 @@ Item
         spacing: 2
         Repeater {
             model: elementModel
-            Text { text: content;}
+            Rectangle { color: elementColor; width: elementWidth; height: elementHeight }
         }
     }
 
@@ -23,7 +25,7 @@ Item
         onClicked:
         {
             //How to remove perticular element from above column ?
-            elementModel.remove(1)
+            elementModel.remove(index)
         }
     }
 
@@ -33,7 +35,7 @@ Item
         onClicked:
         {
             // Code to add controls dynamically to column.
-            elementModel.insert(1, { "content": Math.random(3).toString()})
+            elementModel.insert(index, { "elementColor": "red", "elementWidth": 50, "elementHeight": 50})
         }
 
     }

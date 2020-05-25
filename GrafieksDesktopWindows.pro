@@ -13,10 +13,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        Code/Api/listdatasources.cpp \
         Code/Api/login.cpp \
         Code/Api/logout.cpp \
-        Code/Api/searchdatasources.cpp \
         Code/Connectors/mysqlcon.cpp \
         Code/Connectors/sqlitecon.cpp \
         Code/Logic/Datasources/connector.cpp \
@@ -49,10 +47,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    Code/Api/listdatasources.h \
     Code/Api/login.h \
     Code/Api/logout.h \
-    Code/Api/searchdatasources.h \
     Code/Connectors/mysqlcon.h \
     Code/Connectors/sqlitecon.h \
     Code/Logic/Datasources/connector.h \

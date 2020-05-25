@@ -25,7 +25,6 @@
         <file>Source/Data/SubComponents/DataFilters.qml</file>
         <file>Source/Data/SubComponents/DataModeller.qml</file>
         <file>Source/Data/SubComponents/DataSourceDescription.qml</file>
-        <file>Source/Data/SubComponents/DataSourceGridComponent.qml</file>
         <file>Source/Data/SubComponents/DataSourcesGrid.qml</file>
         <file>Source/Data/SubComponents/DataSourcesList.qml</file>
         <file>Source/Data/SubComponents/MainMenuDelegate.qml</file>
@@ -52,5 +51,7 @@
         <file>Source/Others/Home.qml</file>
         <file>main.qml</file>
         <file>Constants.qml</file>
+        <file>Source/Others/Test3.qml</file>
+        <file>Source/Data/SubComponents/InMemory.qml</file>
     </qresource>
 </RCC>

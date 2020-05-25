@@ -23,6 +23,14 @@ Page {
     id: query_modeller_page
     property int menu_width: 60
 
+    property bool data_modeller_selected: true
+
+    property int statusIndex: 1
+
+    onStatusIndexChanged: {
+
+    }
+
 
     // Left menubar starts
 
@@ -38,8 +46,7 @@ Page {
         id: submenu
         height: 22
         width: parent.width - menu_width - column_querymodeller.width
-        x: menu_width
-
+        x: menu_width - 11
 
         TabBar{
 
@@ -53,16 +60,29 @@ Page {
                 width:100
 
                 onClicked: {
-                    data_query_modeller_stackview.pop()
-                    data_query_modeller_stackview.push("./SubComponents/DataModeller.qml")
 
-                    datamodeller_querymodeller_background.color = Constants.darkThemeColor
-                    query_querymodeller_background.color = Constants.themeColor
+
+                    if(!data_modeller_selected){
+                        data_modeller_selected = !data_modeller_selected
+                        datamodeller_querymodeller_background.color = Constants.darkThemeColor;
+                        query_querymodeller_background.color = query_querymodeller_background.hovered ? Constants.darkThemeColor : Constants.themeColor
+
+                        data_query_modeller_stackview.pop()
+                        data_query_modeller_stackview.push("./SubComponents/DataModeller.qml")
+                        console.log('Haha')
+                    }
+
+                }
+
+                onHoveredChanged: {
+                    if(!data_modeller_selected){
+                        datamodeller_querymodeller_background.color = datamodeller_querymodeller.hovered ? Constants.darkThemeColor : Constants.themeColor
+                    }
                 }
 
                 background: Rectangle {
                     id: datamodeller_querymodeller_background
-                    color:  Constants.themeColor
+                    color: datamodeller_querymodeller.hovered ? Constants.darkThemeColor : Constants.themeColor
 
                 }
                 contentItem: Text{
@@ -89,18 +109,31 @@ Page {
                 width:100
 
                 onClicked: {
-                    data_query_modeller_stackview.pop()
-                    data_query_modeller_stackview.push("./SubComponents/QueryModeller.qml")
 
-                    datamodeller_querymodeller_background.color = Constants.themeColor
-                    query_querymodeller_background.color = Constants.darkThemeColor
+                    if(data_modeller_selected){
+                        data_modeller_selected = !data_modeller_selected
+
+                        query_querymodeller_background.color = Constants.darkThemeColor
+                        datamodeller_querymodeller_background.color = datamodeller_querymodeller.hovered ? Constants.darkThemeColor : Constants.themeColor
+
+                        data_query_modeller_stackview.pop()
+                        data_query_modeller_stackview.push("./SubComponents/QueryModeller.qml")
+                    }
+
+                }
+
+                onHoveredChanged: {
+                    if(data_modeller_selected){
+                        query_querymodeller_background.color = query_querymodeller.hovered ? Constants.darkThemeColor : Constants.themeColor
+                    }
                 }
 
                 background: Rectangle {
                     id: query_querymodeller_background
-                    color:  Constants.themeColor
+                    color:  query_querymodeller.hovered ? Constants.darkThemeColor : Constants.themeColor
 
                 }
+
                 contentItem: Text{
                     id: query_querymodeller_text
                     text: query_querymodeller.text
@@ -121,15 +154,38 @@ Page {
 
             // Refresh button starts
 
-            Image{
+            Button{
                 id:refresh_querymodeller
-                source: "../../Images/icons/Refresh_30.png"
-                anchors.top: toptool_querymodeller.top
-                anchors.topMargin: 5
-                height: 20
-                width: 20
+                height: 30
+                width: 30
+
+
+                Image{
+
+                    source: "../../Images/icons/Refresh_30.png"
+                    anchors.topMargin: 5
+                    anchors.left: refresh_querymodeller.left
+                    anchors.top: refresh_querymodeller.top
+                    anchors.leftMargin: 5
+                    height: 20
+                    width: 20
+
+
+                }
+
+
+                background: Rectangle{
+                    color: refresh_querymodeller.hovered ? Constants.darkThemeColor : "white"
+                }
+
+                onClicked: {
+                    inMemory.visible = true
+                }
+
 
             }
+
+
             // Refresh button ends
 
             // Filter button starts
@@ -138,16 +194,18 @@ Page {
                 id: filter_btn
                 width: 100
                 height: 30
+                anchors.leftMargin: 10
 
                 Image{
                     id: filter_querymodeller
                     source: "../../Images/icons/Plus_32.png"
-                    anchors.top: filter_btn.top
                     anchors.topMargin: 5
-                    anchors.left: filter_btn.left
                     anchors.leftMargin: 10
+                    anchors.left: filter_btn.left
+                    anchors.top: filter_btn.top
                     height: 20
                     width: 20
+
                 }
 
                 Text{
@@ -160,7 +218,7 @@ Page {
                 }
 
                 background: Rectangle{
-                    color: Constants.themeColor
+                    color: filter_btn.hovered ? Constants.darkThemeColor : "white"
                 }
 
                 onClicked: {
@@ -227,6 +285,38 @@ Page {
         rightPadding: 10
         leftPadding: 10
 
+        pushEnter: Transition {
+                  PropertyAnimation {
+                      property: "opacity"
+                      from: 0
+                      to:1
+                      duration: 1
+                  }
+              }
+              pushExit: Transition {
+                  PropertyAnimation {
+                      property: "opacity"
+                      from: 1
+                      to:0
+                      duration: 1
+                  }
+              }
+              popEnter: Transition {
+                  PropertyAnimation {
+                      property: "opacity"
+                      from: 0
+                      to:1
+                      duration: 1
+                  }
+              }
+              popExit: Transition {
+                  PropertyAnimation {
+                      property: "opacity"
+                      from: 1
+                      to:0
+                      duration: 1
+                  }
+              }
 
         initialItem: DataModeller{}
 
@@ -243,18 +333,19 @@ Page {
         anchors.top: data_query_modeller_stackview.bottom
         anchors.left: left_menubar.right
         width: parent.width
+        visible: false
 
         HorizontalLineTpl{
             id: linebar1
             line_color: Constants.themeColor
-            line_width: infodata_table.width
+            line_width: parent.width
             anchors.top: infodata_table.top
         }
 
         Rectangle{
             id: toolbar_querymodeller
 
-            width: 70
+            width: 100
             anchors.top: linebar1.bottom
             anchors.left: parent.left
             anchors.topMargin: 8
@@ -263,7 +354,7 @@ Page {
 
 
             Text{
-                text: "Preview"
+                text: "Test Query"
             }
         }
 
@@ -275,25 +366,77 @@ Page {
             padding: 0
         }
 
-        Text{
-            text: "Display limited to top 100"
+        Rectangle{
+            id: data_preview_btn
+            width: 100
+            anchors.top: linebar1.bottom
             anchors.left: seperator1.right
+            anchors.topMargin: 8
             anchors.leftMargin: 20
-            anchors.verticalCenter: seperator1.verticalCenter
+            height: 22
+
+            Text{
+                text: "Data Preview"
+                anchors.verticalCenter: seperator1.verticalCenter
+            }
+        }
+
+        ToolSeparator{
+            id: seperator2
+            height:30
+            anchors.left:data_preview_btn.right
+            anchors.top: linebar1.top
+            padding: 0
+        }
+
+        Rectangle{
+            id: display_limited_btn
+            width: 160
+            anchors.top: linebar1.bottom
+            anchors.left: seperator2.right
+            anchors.topMargin: 8
+            anchors.leftMargin: 20
+            height: 22
+
+            Text{
+                text: "Display limited to top 100"
+                anchors.verticalCenter: seperator2.verticalCenter
+            }
+        }
+
+        ToolSeparator{
+            id: seperator3
+            height:30
+            anchors.left:display_limited_btn.right
+            anchors.top: linebar1.top
+            padding: 0
         }
 
         HorizontalLineTpl{
             id: linebar2
             line_color: Constants.themeColor
             line_width: parent.width
-            anchors.top: toolbar_querymodeller.bottom
+            anchors.topMargin: 28
+            anchors.top: parent.bottom
         }
 
-        DataSourcesList{
-            id: dummy_datasources
-            anchors.top: toolbar_querymodeller.bottom
-
+        Row{
+            id:as
+            anchors.topMargin: 30
+            topPadding: 30
+            leftPadding: 10
+            Text {
+                id: s
+                anchors.top: linebar2.bottom
+                text: qsTr("text")
+            }
         }
+
+//        DataSourcesList{
+//            id: dummy_datasources
+//            anchors.top: toolbar_querymodeller.bottom
+
+//        }
 
 
     }
@@ -359,7 +502,7 @@ Page {
                     }
                     background: Rectangle {
                         id: preview_btn_background
-                        color: Constants.themeColor
+                        color: preview_btn.hovered ?  Constants.darkThemeColor : Constants.themeColor
                     }
 
                     contentItem: Text{
@@ -368,9 +511,6 @@ Page {
                         color:"black"
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                    }
-                    Component.onCompleted: {
-                        preview_btn_background.color =  Constants.darkThemeColor
                     }
                 }
 
@@ -392,7 +532,7 @@ Page {
                     }
 
                     background: Rectangle {
-                        color: tab_btn_nxt.pressed? Constants.darkThemeColor: Constants.themeColor
+                        color: tab_btn_nxt.hovered? Constants.darkThemeColor: Constants.themeColor
                     }
 
                     contentItem: Text{
@@ -625,14 +765,14 @@ Page {
 
             Button {
                 id: button
-                text: qsTr("Publish")
+                text: qsTr("Publish Data Source")
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 40
+                width: parent.width
 
                 onClicked: {
                     Datasources.setDsName(ds_name.text)
                     Datasources.setSourceType("live")
-
                     datasourceDescription.visible = true
 
                 }
@@ -647,6 +787,10 @@ Page {
 
     DataSourceDescription{
         id: datasourceDescription
+    }
+
+    InMemory{
+        id: inMemory
     }
 
 }

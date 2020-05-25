@@ -8,7 +8,7 @@ DatasourceDS::DatasourceDS(QObject *parent) : QObject(parent),
 
 }
 
-void DatasourceDS::fetchDatsources(int page, bool fulllist, bool listview)
+void DatasourceDS::fetchDatsources(int page, bool fulllist, bool listview, QString keyword)
 {
 
     // Fetch value from settings
@@ -17,8 +17,13 @@ void DatasourceDS::fetchDatsources(int page, bool fulllist, bool listview)
     QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
     int profileId = settings.value("user/profileId").toInt();
 
+
     QNetworkRequest m_NetworkRequest;
-    m_NetworkRequest.setUrl(baseUrl+"/listdatasources");
+    if(keyword == ""){
+        m_NetworkRequest.setUrl(baseUrl+"/listdatasources");
+    } else{
+        m_NetworkRequest.setUrl(baseUrl+"/searchdatasource");
+    }
 
     m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
                                "application/x-www-form-urlencoded");
@@ -30,6 +35,8 @@ void DatasourceDS::fetchDatsources(int page, bool fulllist, bool listview)
     obj.insert("fulllist", fulllist);
     obj.insert("listview", listview);
 
+    if(keyword != "")
+        obj.insert("keyword", keyword);
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -40,6 +47,42 @@ void DatasourceDS::fetchDatsources(int page, bool fulllist, bool listview)
     connect(m_networkReply,&QIODevice::readyRead,this,&DatasourceDS::dataReadyRead);
     connect(m_networkReply,&QNetworkReply::finished,this,&DatasourceDS::dataReadFinished);
 }
+
+
+void DatasourceDS::deleteDatasource(int datasourceId, int listIndex)
+{
+    // Fetch value from settings
+    QSettings settings;
+    QString baseUrl = settings.value("general/baseUrl").toString();
+    QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
+    int profileId = settings.value("user/profileId").toInt();
+
+
+    QNetworkRequest m_NetworkRequest;
+    m_NetworkRequest.setUrl(baseUrl+"/deletedatasource");
+
+
+    m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
+                               "application/x-www-form-urlencoded");
+    m_NetworkRequest.setRawHeader("Authorization", sessionToken);
+
+    QJsonObject obj;
+    obj.insert("profileId", profileId);
+    obj.insert("datasourceId", datasourceId);
+
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
+
+    this->removeDatasource(listIndex);
+
+
+    connect(m_networkReply,&QIODevice::readyRead,this,&DatasourceDS::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&DatasourceDS::dataDeleteFinished);
+}
+
 
 void DatasourceDS::addDatasource(Datasource *datasource)
 {
@@ -55,6 +98,7 @@ void DatasourceDS::addDatasource(const int & id, const int & connectedWorkbooksC
     Datasource *datasource = new Datasource(id, connectedWorkbooksCount, profileId, connectionType, datasourceName, descriptions, sourceType, imageLink, downloadLink, createdDate, firstName, lastName, this);
 
     addDatasource(datasource);
+
 }
 
 void DatasourceDS::removeDatasource(int index)
@@ -62,6 +106,13 @@ void DatasourceDS::removeDatasource(int index)
     emit preItemRemoved(index);
     m_datasource.removeAt(index);
     emit postItemRemoved();
+}
+
+void DatasourceDS::resetDatasource()
+{
+    emit preReset();
+    m_datasource.clear();
+    emit postReset();
 }
 
 
@@ -83,10 +134,11 @@ void DatasourceDS::dataReadFinished()
         qDebug() << "There was some error : " << m_networkReply->errorString();
     }else{
 
+        this->resetDatasource();
+
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
         QJsonObject statusObj = resultObj["status"].toObject();
-
 
 
         // If successful, set the variables in settings
@@ -111,13 +163,42 @@ void DatasourceDS::dataReadFinished()
                 QString Firstname = dataObj["Firstname"].toString();
                 QString Lastname = dataObj["Lastname"].toString();
 
-
                 this->addDatasource(DatasourceID, ConnectedWorkbooksCount, DSProfileID, ConnectionType,DatasourceName,  Descriptions, SourceType, ImageLink, DatasourceLink, CreatedDate, Firstname, Lastname);
             }
+
 
         }
 
         //Clear the buffer
         m_dataBuffer->clear();
+
+
     }
 }
+
+
+void DatasourceDS::dataDeleteFinished()
+{
+    //Parse the JSON
+    if( m_networkReply->error()){
+        qDebug() << "There was some error : " << m_networkReply->errorString();
+    }else{
+
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
+        QJsonObject resultObj = resultJson.object();
+        QJsonObject statusObj = resultObj["status"].toObject();
+
+
+        // If successful, set the variables in settings
+        if(statusObj["code"].toInt() != 200){
+            qWarning() << "Failed to delete. " << statusObj["code"].toString();
+        }
+
+        //Clear the buffer
+        m_dataBuffer->clear();
+
+
+    }
+}
+
+

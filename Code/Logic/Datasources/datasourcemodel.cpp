@@ -204,6 +204,16 @@ void DatasourceModel::setDatasourceds(DatasourceDS *datasource)
         endRemoveRows();
     });
 
+    connect(m_datasource,&DatasourceDS::preReset,this,[=](){
+        beginResetModel();
+    });
+
+    connect(m_datasource,&DatasourceDS::postReset,this,[=](){
+        endResetModel();
+    });
+
+
+
 
     endResetModel();
 }
