@@ -22,6 +22,7 @@ Item{
     property variant lineObjects :[]
 
 
+    // For line numbers
     ListModel {
         id: elementModel
         ListElement { content: "1"}
@@ -90,11 +91,8 @@ Item{
                 for(i = totalLineCount; i > lineCount; i--){
                     var counter = i-1
                     elementModel.remove(counter)
+                    totalLineCount--
                 }
-
-                totalLineCount--
-
-
             }
         }
 
