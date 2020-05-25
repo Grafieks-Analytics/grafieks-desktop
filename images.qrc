@@ -85,5 +85,8 @@
         <file>Images/icons/16_csv.png</file>
         <file>Images/icons/Db.png</file>
         <file>Images/icons/Db - 60.png</file>
+        <file>Images/icons/zoom out.png</file>
+        <file>Images/icons/align.png</file>
+        <file>Images/icons/align-2.png</file>
     </qresource>
 </RCC>
