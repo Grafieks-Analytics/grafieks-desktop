@@ -14,6 +14,8 @@
 class MysqlCon : public QObject
 {
     Q_OBJECT
+    QVariantMap outputStatus;
+    const QString DRIVER = "QMYSQL";
 
 public:
     explicit MysqlCon(QObject *parent = nullptr);
@@ -21,14 +23,11 @@ public:
 
     void MysqlSelect(QString &sqlQuery);
     void MysqlListDbs();
-    void MysqlListTables(QString db);
+    void MysqlListTables(QString &db);
 
 signals:
 
-private:
 
-    QVariantMap outputStatus;
-    const QString DRIVER = "QMYSQL";
 
 };
 

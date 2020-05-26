@@ -54,6 +54,8 @@ void MysqlCon::MysqlSelect(QString &sqlQuery)
         qDebug()<<" error1: "<<query.lastError().text();
     }
 
+    dbMysql.close();
+
 
 }
 
@@ -72,9 +74,11 @@ void MysqlCon::MysqlListDbs()
     } else{
         qDebug()<<" error1: "<<query.lastError().text();
     }
+
+    dbMysql.close();
 }
 
-void MysqlCon::MysqlListTables(QString db)
+void MysqlCon::MysqlListTables(QString &db)
 {
 
     QSqlDatabase dbMysql = QSqlDatabase::database();
@@ -90,4 +94,6 @@ void MysqlCon::MysqlListTables(QString db)
     } else{
         qDebug()<<" error1: "<<query.lastError().text();
     }
+
+    dbMysql.close();
 }

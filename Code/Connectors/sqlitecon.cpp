@@ -53,7 +53,7 @@ void Sqlitecon::SqliteSelect(QString &sqlQuery)
         qDebug()<<" error1: "<<query.lastError().text();
     }
 
-
+    dbSqlite.close();
 
 }
 
@@ -73,5 +73,7 @@ void Sqlitecon::SqliteTables()
     } else{
         qDebug()<<" error88: "<<query.lastError().text();
     }
+
+    dbSqlite.close();
 }
 

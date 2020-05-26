@@ -14,6 +14,8 @@ class Sqlitecon : public QObject
 {
     Q_OBJECT
 
+    QVariantMap outputStatus;
+
 public:
     explicit Sqlitecon(QObject *parent = nullptr);
     QVariantMap SqliteInstance(const QString & filepath, const QString & username, const QString & password);
@@ -23,9 +25,8 @@ public:
 
 signals:
 
-private:
 
-    QVariantMap outputStatus;
+
 
 };
 
