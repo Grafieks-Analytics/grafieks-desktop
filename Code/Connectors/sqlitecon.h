@@ -18,6 +18,9 @@ public:
     explicit Sqlitecon(QObject *parent = nullptr);
     QVariantMap SqliteInstance(const QString & filepath, const QString & username, const QString & password);
 
+    void SqliteSelect(QString &sqlQuery);
+    void SqliteTables();
+
 signals:
 
 private:

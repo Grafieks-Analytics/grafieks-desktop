@@ -16,33 +16,61 @@
 #include "Code/Logic/Datasources/datasourcemodel.h"
 #include "Code/Logic/Datasources/datasourceds.h"
 
+#include "Code/Connectors/mysqlcon.h"
+#include "Code/Connectors/sqlitecon.h"
+
 
 int main(int argc, char *argv[])
 {
+
+    // Application basic initialization
+    QtWebEngine::initialize();
+    QQuickStyle::setStyle("Default");
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
+    QQmlApplicationEngine engine;
 
+    // Settings
     QCoreApplication::setOrganizationName("Grafieks Limited");
     QCoreApplication::setOrganizationDomain("grafieks.com");
     QCoreApplication::setApplicationName("Grafieks");
 
+    // Initialize Objects
     QtTest2 qttest2;
     MysqlCon mysqlconnect;
     User user;
     ConnectorFilter connectorFilter;
     DatasourceModel datasourceModel;
-    DatasourceDS * datasource = new DatasourceDS();
+    DatasourceDS * datasource = new DatasourceDS(&app);
+//    MysqlCon a;
+    Sqlitecon b;
+
+
+    // Call default functions
     datasourceModel.setDatasourceds(datasource);
 
-    qttest2.fetchPosts();
+//    a.MysqlInstance("localhost", "grafieks_my", 3306, "root", "123@312QQl");
+//    QString s= "SELECT * FROM users LIMIT 0,10";
+//    QString dbName = "grafieks_my";
+//    a.MysqlSelect(s);
+//    a.MysqlListDbs();
+//    a.MysqlListTables(dbName);
 
+//    QString s2= "SELECT * FROM customers LIMIT 0,10";
+    b.SqliteInstance("/Users/chilaraimushahary/Downloads/chinook.db", "", "");
+//    b.SqliteSelect(s2);
+    b.SqliteTables();
+
+
+//    qttest2.fetchPosts();
+
+    // Define singletons
     qmlRegisterSingletonType( QUrl("qrc:/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants" );
 
-    QtWebEngine::initialize();
-    QQmlApplicationEngine engine;
-    QQuickStyle::setStyle("Default");
 
+
+    // Set contexts for QML
     engine.rootContext()->setContextProperty("QtTest2", &qttest2);
     engine.rootContext()->setContextProperty("MysqlConnect", &mysqlconnect);
     engine.rootContext()->setContextProperty("User", &user);
@@ -52,8 +80,6 @@ int main(int argc, char *argv[])
 
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-
-
     if (engine.rootObjects().isEmpty())
         return -1;
 

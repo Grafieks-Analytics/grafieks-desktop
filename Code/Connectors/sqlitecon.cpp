@@ -2,7 +2,6 @@
 
 Sqlitecon::Sqlitecon(QObject *parent) : QObject(parent)
 {
-
 }
 
 QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &username, const QString &password)
@@ -37,5 +36,42 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &us
 
     return outputStatus;
 
+}
+
+void Sqlitecon::SqliteSelect(QString &sqlQuery)
+{
+    QSqlDatabase dbSqlite = QSqlDatabase::database();
+    QSqlQuery query = dbSqlite.exec(sqlQuery);
+
+    if(query.exec())
+    {
+        while(query.next())
+        {
+            qDebug()<<query.value(3).toString();
+        }
+    } else{
+        qDebug()<<" error1: "<<query.lastError().text();
+    }
+
+
+
+}
+
+
+
+void Sqlitecon::SqliteTables()
+{
+    QSqlDatabase dbSqlite = QSqlDatabase::database();
+    QSqlQuery query = dbSqlite.exec("SELECT name FROM sqlite_master WHERE type='table'");
+
+    if(query.exec())
+    {
+        while(query.next())
+        {
+            qDebug()<<query.value(0).toString();
+        }
+    } else{
+        qDebug()<<" error88: "<<query.lastError().text();
+    }
 }
 
