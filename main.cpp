@@ -16,8 +16,6 @@
 #include "Code/Logic/Datasources/datasourcemodel.h"
 #include "Code/Logic/Datasources/datasourceds.h"
 
-#include "Code/Connectors/mysqlcon.h"
-#include "Code/Connectors/sqlitecon.h"
 
 
 int main(int argc, char *argv[])
@@ -43,26 +41,10 @@ int main(int argc, char *argv[])
     ConnectorFilter connectorFilter;
     DatasourceModel datasourceModel;
     DatasourceDS * datasource = new DatasourceDS(&app);
-//    MysqlCon a;
-    Sqlitecon b;
 
 
     // Call default functions
     datasourceModel.setDatasourceds(datasource);
-
-//    a.MysqlInstance("localhost", "grafieks_my", 3306, "root", "123@312QQl");
-//    QString s= "SELECT * FROM users LIMIT 0,10";
-//    QString dbName = "grafieks_my";
-//    a.MysqlSelect(s);
-//    a.MysqlListDbs();
-//    a.MysqlListTables(dbName);
-
-    QString s2= "SELECT * FROM customers LIMIT 0,10";
-    b.SqliteInstance("/Users/chilaraimushahary/Downloads/chinook.db", "", "");
-    b.SqliteSelect(s2);
-    b.SqliteTables();
-
-
 //    qttest2.fetchPosts();
 
     // Define singletons

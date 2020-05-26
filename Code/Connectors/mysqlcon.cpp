@@ -37,31 +37,36 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
     return outputStatus;
 }
 
-void MysqlCon::MysqlSelect(QString &sqlQuery)
+QVector<QStringList> MysqlCon::MysqlSelect(QString &sqlQuery)
 {
 
     QSqlDatabase dbMysql = QSqlDatabase::database();
     QSqlQuery query = dbMysql.exec(sqlQuery);
+    QSqlRecord rec = query.record();
+
+    int totalCols = rec.count();
 
     if(query.exec())
     {
         while(query.next())
         {
-
-            qDebug()<<query.value(3).toString();
+            for(int i=0; i< totalCols; i++){
+                outputResult << query.value(i).toString();
+            }
+            outputData.append(outputResult);
+            outputResult.clear();
         }
-    } else{
-        qDebug()<<" error1: "<<query.lastError().text();
-    }
 
+    }
     dbMysql.close();
+
+    return outputData;
 
 
 }
 
-void MysqlCon::MysqlListDbs()
+QStringList MysqlCon::MysqlListDbs()
 {
-
     QSqlDatabase dbMysql = QSqlDatabase::database();
     QSqlQuery query = dbMysql.exec("SHOW DATABASES");
 
@@ -70,15 +75,15 @@ void MysqlCon::MysqlListDbs()
         while(query.next())
         {
             qDebug()<<query.value(0).toString();
+            tableList.append(query.value(0).toString());
         }
-    } else{
-        qDebug()<<" error1: "<<query.lastError().text();
     }
 
     dbMysql.close();
+    return tableList;
 }
 
-void MysqlCon::MysqlListTables(QString &db)
+QStringList MysqlCon::MysqlListTables(QString &db)
 {
 
     QSqlDatabase dbMysql = QSqlDatabase::database();
@@ -90,10 +95,10 @@ void MysqlCon::MysqlListTables(QString &db)
         while(query.next())
         {
             qDebug()<<query.value(0).toString();
+            tableList.append(query.value(0).toString());
         }
-    } else{
-        qDebug()<<" error1: "<<query.lastError().text();
     }
 
     dbMysql.close();
+    return tableList;
 }

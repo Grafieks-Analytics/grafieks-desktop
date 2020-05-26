@@ -4,11 +4,12 @@
 #include <QObject>
 #include <QSqlDatabase>
 #include <QSqlDriver>
+#include <QSqlQueryModel>
+#include <QSqlRecord>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QDebug>
-#include <QSqlQueryModel>
-#include <QSqlRecord>
+
 
 #include "../Logic/General/constants.h"
 
