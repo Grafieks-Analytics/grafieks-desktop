@@ -38,28 +38,35 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &us
 
 }
 
-void Sqlitecon::SqliteSelect(QString &sqlQuery)
+QVector<QStringList> Sqlitecon::SqliteSelect(QString &sqlQuery)
 {
     QSqlDatabase dbSqlite = QSqlDatabase::database();
     QSqlQuery query = dbSqlite.exec(sqlQuery);
+    QSqlRecord rec = query.record();
+
+    int totalCols = rec.count();
+
 
     if(query.exec())
     {
         while(query.next())
         {
-            qDebug()<<query.value(3).toString();
+            for(int i=0; i< totalCols; i++){
+                outputResult << query.value(i).toString();
+            }
+            outputData.append(outputResult);
+            outputResult.clear();
         }
-    } else{
-        qDebug()<<" error1: "<<query.lastError().text();
-    }
 
+    }
     dbSqlite.close();
 
+    return outputData;
 }
 
 
 
-void Sqlitecon::SqliteTables()
+QStringList Sqlitecon::SqliteTables()
 {
     QSqlDatabase dbSqlite = QSqlDatabase::database();
     QSqlQuery query = dbSqlite.exec("SELECT name FROM sqlite_master WHERE type='table'");
@@ -68,12 +75,15 @@ void Sqlitecon::SqliteTables()
     {
         while(query.next())
         {
-            qDebug()<<query.value(0).toString();
+            tableList.append(query.value(0).toString());
         }
-    } else{
-        qDebug()<<" error88: "<<query.lastError().text();
+
+        outputStatus.insert("data", tableList);
+
     }
 
     dbSqlite.close();
+
+    return tableList;
 }
 

@@ -57,9 +57,9 @@ int main(int argc, char *argv[])
 //    a.MysqlListDbs();
 //    a.MysqlListTables(dbName);
 
-//    QString s2= "SELECT * FROM customers LIMIT 0,10";
+    QString s2= "SELECT * FROM customers LIMIT 0,10";
     b.SqliteInstance("/Users/chilaraimushahary/Downloads/chinook.db", "", "");
-//    b.SqliteSelect(s2);
+    b.SqliteSelect(s2);
     b.SqliteTables();
 
 
