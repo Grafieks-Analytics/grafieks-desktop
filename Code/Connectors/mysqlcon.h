@@ -12,6 +12,7 @@
 
 
 #include "../constants.h"
+#include "../statics.h"
 
 class MysqlCon : public QObject
 {

@@ -7,6 +7,7 @@
 
 #include "dblist.h"
 #include "../../Connectors/mysqlcon.h"
+#include "../../statics.h"
 
 class DBListModel : public QAbstractListModel
 {
@@ -23,11 +24,11 @@ public:
     QHash<int, QByteArray> roleNames() const;
 
     void addDbList( DBList *dbList);
-    Q_INVOKABLE void addDbList(const int & id, const QString & name);
+    Q_INVOKABLE void addDbList(const QString & name);
 
     enum ConnectorRoles{
-        DBIdRole = Qt::UserRole + 1,
-        DBNameRole
+        DBNameRole = Qt::UserRole + 1
+
     };
 
 signals:

@@ -13,10 +13,10 @@
 #include "Code/Logic/General/qttest2.h"
 #include "Code/Logic/Menu/user.h"
 #include "Code/Logic/Connectors/connectorfilter.h"
+#include "Code/Logic/Connectors/connectorsloginmodel.h"
 #include "Code/Logic/Datasources/datasourcemodel.h"
 #include "Code/Logic/Datasources/datasourceds.h"
-
-#include "Code/Connectors/mysqlcon.h"
+#include "Code/Logic/DataModeller/dblistmodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -39,20 +39,19 @@ int main(int argc, char *argv[])
     MysqlCon mysqlconnect;
     User user;
     ConnectorFilter connectorFilter;
+    ConnectorsLoginModel connectorsLoginModel;
     DatasourceModel datasourceModel;
     DatasourceDS * datasource = new DatasourceDS(&app);
-    static MysqlCon myCon;
+    DBListModel dbListModel;
 
 
     // Call default functions
     datasourceModel.setDatasourceds(datasource);
 //    qttest2.fetchPosts();
 
-    myCon.MysqlInstance("localhost", "grafieks_my", 3306, "root", "123@312QQl");
 
     // Define singletons
     qmlRegisterSingletonType( QUrl("qrc:/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants" );
-
 
 
     // Set contexts for QML
@@ -60,8 +59,10 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("MysqlConnect", &mysqlconnect);
     engine.rootContext()->setContextProperty("User", &user);
     engine.rootContext()->setContextProperty("ConnectorFilter", &connectorFilter);
+    engine.rootContext()->setContextProperty("ConnectorsLoginModel", &connectorsLoginModel);
     engine.rootContext()->setContextProperty("DatasourceModel", &datasourceModel);
     engine.rootContext()->setContextProperty("DatasourceDS",datasource);
+    engine.rootContext()->setContextProperty("DBListModel",&dbListModel);
 
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

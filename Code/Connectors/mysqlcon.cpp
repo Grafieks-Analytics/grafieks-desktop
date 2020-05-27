@@ -27,11 +27,11 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
             // For automatic connection for other instances
             // If correct credentials inserted once
 
-//            this->staticMyHost = host;
-//            this->staticMyDb = db;
-//            this->staticMyPort = port;
-//            this->staticMyUsername = username;
-//            this->staticMyPassword = password;
+            Statics::myHost = host;
+            Statics::myDb = db;
+            Statics::myPort = port;
+            Statics::myUsername = username;
+            Statics::myPassword = password;
 
         } else{
 

@@ -21,7 +21,7 @@
         <file>Source/Data/DataQueryModeller.qml</file>
         <file>Source/Data/DataSources.qml</file>
         <file>Source/Data/SelectConnection.qml</file>
-        <file>Source/Data/SubComponents/ConnectDatabase.qml</file>
+        <file>Source/Data/SubComponents/MysqlConnection.qml</file>
         <file>Source/Data/SubComponents/DataFilters.qml</file>
         <file>Source/Data/SubComponents/DataModeller.qml</file>
         <file>Source/Data/SubComponents/DataSourceDescription.qml</file>
@@ -53,5 +53,6 @@
         <file>Constants.qml</file>
         <file>Source/Others/Test3.qml</file>
         <file>Source/Data/SubComponents/InMemory.qml</file>
+        <file>Source/Data/SubComponents/SqliteConnection.qml</file>
     </qresource>
 </RCC>

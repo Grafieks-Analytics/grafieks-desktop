@@ -14,7 +14,7 @@ class DBList : public QObject
 
 public:
     explicit DBList(QObject *parent = nullptr);
-    DBList(const int &id, const QString &name, QObject * parent = nullptr);
+    DBList(const QString &name, QObject * parent = nullptr);
 
     QString dbName() const;
     int dbId() const;

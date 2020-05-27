@@ -4,7 +4,7 @@
 ** Contact: https://grafieks.com/
 **
 ** Data/SubComponents
-** Connect Database
+** Mysql Connection
 **
 ****************************************************************************/
 
@@ -26,6 +26,25 @@ Popup {
     y: parent.height/2 - 300
     padding: 0
     property int label_col : 135
+
+
+    Connections{
+        target: ConnectorsLoginModel
+
+        onMysqlLoginStatus:{
+
+             if(status.status === true){
+
+                 popup.visible = false
+                 stacklayout_home.currentIndex = 5
+             }
+             else{
+                 popup.visible = true
+                 msg_dialog.open()
+                 msg_dialog.text = status.msg
+             }
+        }
+    }
 
 
     // Popup Header starts
@@ -90,7 +109,6 @@ Popup {
             Text{
                 text: "Driver"
                 anchors.right: parent.right
-                //                anchors.rightMargin: 60
                 anchors.rightMargin: 10
                 font.pixelSize: 15
 
@@ -98,22 +116,9 @@ Popup {
             }
         }
 
-        //        TextField{
-        //            id: hostname
-        //            maximumLength: 45
-        //            anchors.verticalCenter: parent.verticalCenter
-        //            width: 370
-
-        //            background: Rectangle {
-        //                border.color: Constants.borderBlueColor
-        //                radius: 10
-        //                width: 370
-        //            }
-        //        }
 
         ComboBox {
             id: control
-            //editable: true
             model: ["First", "Second", "Third","fourth"]
 
 
@@ -258,26 +263,6 @@ Popup {
                 // Only for UI checks
                 popup.visible = false
                 stacklayout_home.currentIndex = 5
-
-                // MysqlConnect.setMysqlHost(hostname.text)
-                // MysqlConnect.setMysqlDatabase(database.text)
-                // MysqlConnect.setMysqlPort(port.text)
-                // MysqlConnect.setMysqlUsername(username.text)
-                // MysqlConnect.setMysqlPassword(password.text)
-
-                // var connect_response = MysqlConnect.startConnection()
-
-                // if(connect_response.match(/Success/gi)){
-
-                //     // And move forward
-                //     popup.visible = false
-                //     stacklayout_home.currentIndex = 5
-                // }
-                // else{
-                //     popup.visible = true
-                //     msg_dialog.open()
-                //     msg_dialog.text = connect_response
-                // }
             }
         }
 
@@ -525,7 +510,10 @@ Popup {
                 }
             }
             onClicked: {
-                popup.visible = false
+
+                // Call mysql connector model
+//                ConnectorsLoginModel.mysqlLogin(server.text, database.text, port.text, username.text, password.text)
+                ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_my", 3306, "root", "123@312QQl")
 
             }
         }

@@ -2,7 +2,15 @@
 
 DBListModel::DBListModel(QObject *parent) : QAbstractListModel(parent)
 {
-//    addDbList(new DBList("Amazon Redshift","../../Images/icons/aws-redshift-logo.png","rdbms"));
+    MysqlCon mysqlcon;
+    mysqlcon.MysqlInstance(Statics::myHost, Statics::myDb, Statics::myPort, Statics::myUsername, Statics::myPassword);
+
+    QStringList dbList =  mysqlcon.MysqlListDbs();
+
+    foreach(QString tmpDbList, dbList){
+        addDbList(new DBList(tmpDbList));
+    }
+
 }
 
 int DBListModel::rowCount(const QModelIndex &parent) const
@@ -17,8 +25,6 @@ QVariant DBListModel::data(const QModelIndex &index, int role) const
         return QVariant();
     //The index is valid
     DBList * dblist = mDbList[index.row()];
-    if( role == DBIdRole)
-        return dblist->dbId();
     if( role == DBNameRole)
         return dblist->dbName();
 
@@ -32,15 +38,6 @@ bool DBListModel::setData(const QModelIndex &index, const QVariant &value, int r
     bool somethingChanged = false;
 
     switch (role) {
-    case DBIdRole:
-    {
-        if( dbList->dbId()!= value.toString()){
-            qDebug() << "Changing names for " << dbList->dbId();
-            dbList->setDbId(value.toInt());
-            somethingChanged = true;
-        }
-    }
-        break;
     case DBNameRole:
     {
         if( dbList->dbName()!= value.toString()){
@@ -50,7 +47,6 @@ bool DBListModel::setData(const QModelIndex &index, const QVariant &value, int r
         }
     }
         break;
-
 
     }
 
@@ -72,7 +68,6 @@ QHash<int, QByteArray> DBListModel::roleNames() const
 {
 
     QHash<int, QByteArray> roles;
-    roles[DBIdRole] = "id";
     roles[DBNameRole] = "dbName";
     return roles;
 }
@@ -86,9 +81,9 @@ void DBListModel::addDbList(DBList *dbList)
     endInsertRows();
 }
 
-void DBListModel::addDbList(const int &id, const QString &name)
+void DBListModel::addDbList(const QString &name)
 {
 
-    DBList *dbList=new DBList(id,name);
+    DBList *dbList=new DBList(name);
     addDbList(dbList);
 }

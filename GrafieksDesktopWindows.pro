@@ -20,6 +20,7 @@ SOURCES += \
         Code/Logic/Connectors/connector.cpp \
         Code/Logic/Connectors/connectorfilter.cpp \
         Code/Logic/Connectors/connectormodel.cpp \
+        Code/Logic/Connectors/connectorsloginmodel.cpp \
         Code/Logic/DataModeller/dblist.cpp \
         Code/Logic/DataModeller/dblistmodel.cpp \
         Code/Logic/Datasources/datasource.cpp \
@@ -56,6 +57,7 @@ HEADERS += \
     Code/Logic/Connectors/connector.h \
     Code/Logic/Connectors/connectorfilter.h \
     Code/Logic/Connectors/connectormodel.h \
+    Code/Logic/Connectors/connectorsloginmodel.h \
     Code/Logic/DataModeller/dblist.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/Datasources/datasource.h \

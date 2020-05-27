@@ -71,6 +71,10 @@ Page {
             mysqlModal.visible = true
             break;
 
+        case "sqlite":
+            sqliteModal.visible = true
+            break;
+
         default:
             break;
         }
@@ -400,8 +404,13 @@ Page {
 
     }
 
-    ConnectDatabase{
+    MysqlConnection{
         id: mysqlModal
+
+    }
+
+    SqliteConnection{
+        id: sqliteModal
 
     }
 

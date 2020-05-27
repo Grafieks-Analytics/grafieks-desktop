@@ -5,7 +5,7 @@ DBList::DBList(QObject *parent) : QObject(parent)
 
 }
 
-DBList::DBList(const int &id, const QString &name, QObject *parent):QObject(parent),m_dbId(id),m_dbName(name)
+DBList::DBList(const QString &name, QObject *parent):QObject(parent),m_dbName(name)
 {
 
 }
