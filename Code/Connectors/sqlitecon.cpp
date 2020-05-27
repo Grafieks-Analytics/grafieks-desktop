@@ -7,11 +7,9 @@ Sqlitecon::Sqlitecon(QObject *parent) : QObject(parent)
 QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &username, const QString &password)
 {
 
-    const QString DRIVER("QSQLITE");
-
     if(QSqlDatabase::isDriverAvailable(DRIVER)){
 
-        QSqlDatabase dbSqlite = QSqlDatabase::addDatabase("QSQLITE");
+        QSqlDatabase dbSqlite = QSqlDatabase::addDatabase(DRIVER);
         dbSqlite.setDatabaseName(filename);
 
         if(username != "" && password != ""){
@@ -38,7 +36,7 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &us
 
 }
 
-QVector<QStringList> Sqlitecon::SqliteSelect(QString &sqlQuery)
+QVector<QStringList *> Sqlitecon::SqliteSelect(QString &sqlQuery)
 {
     QSqlDatabase dbSqlite = QSqlDatabase::database();
     QSqlQuery query = dbSqlite.exec(sqlQuery);
@@ -54,7 +52,7 @@ QVector<QStringList> Sqlitecon::SqliteSelect(QString &sqlQuery)
             for(int i=0; i< totalCols; i++){
                 outputResult << query.value(i).toString();
             }
-            outputData.append(outputResult);
+            outputData.append(&outputResult);
             outputResult.clear();
         }
 

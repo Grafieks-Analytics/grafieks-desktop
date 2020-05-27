@@ -23,6 +23,16 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
             outputStatus.insert("status", false);
             outputStatus.insert("msg", dbMysql.lastError().text());
 
+            // Save static values to access it later on other objects
+            // For automatic connection for other instances
+            // If correct credentials inserted once
+
+//            this->staticMyHost = host;
+//            this->staticMyDb = db;
+//            this->staticMyPort = port;
+//            this->staticMyUsername = username;
+//            this->staticMyPassword = password;
+
         } else{
 
             outputStatus.insert("status", true);
@@ -37,7 +47,13 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
     return outputStatus;
 }
 
-QVector<QStringList> MysqlCon::MysqlSelect(QString &sqlQuery)
+MysqlCon::~MysqlCon()
+{
+    QSqlDatabase dbMysql = QSqlDatabase::database();
+    dbMysql.close();
+}
+
+QVector<QStringList *> MysqlCon::MysqlSelect(QString &sqlQuery)
 {
 
     QSqlDatabase dbMysql = QSqlDatabase::database();
@@ -53,12 +69,12 @@ QVector<QStringList> MysqlCon::MysqlSelect(QString &sqlQuery)
             for(int i=0; i< totalCols; i++){
                 outputResult << query.value(i).toString();
             }
-            outputData.append(outputResult);
+            outputData.append(&outputResult);
             outputResult.clear();
         }
 
     }
-    dbMysql.close();
+
 
     return outputData;
 
@@ -79,7 +95,6 @@ QStringList MysqlCon::MysqlListDbs()
         }
     }
 
-    dbMysql.close();
     return tableList;
 }
 
@@ -99,6 +114,5 @@ QStringList MysqlCon::MysqlListTables(QString &db)
         }
     }
 
-    dbMysql.close();
     return tableList;
 }

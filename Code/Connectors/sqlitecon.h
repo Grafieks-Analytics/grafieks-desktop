@@ -11,22 +11,23 @@
 #include <QDebug>
 
 
-#include "../Logic/General/constants.h"
+#include "../constants.h"
 
 class Sqlitecon : public QObject
 {
     Q_OBJECT
 
     QVariantMap outputStatus;
-    QVector<QStringList> outputData;
+    QVector<QStringList *> outputData;
     QStringList outputResult;
     QStringList tableList;
+    const QString DRIVER = "QSQLITE";
 
 public:
     explicit Sqlitecon(QObject *parent = nullptr);
     QVariantMap SqliteInstance(const QString & filepath, const QString & username, const QString & password);
 
-    QVector<QStringList> SqliteSelect(QString &sqlQuery);
+    QVector<QStringList *> SqliteSelect(QString &sqlQuery);
     QStringList SqliteTables();
 
 signals:

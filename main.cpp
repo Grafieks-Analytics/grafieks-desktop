@@ -12,11 +12,11 @@
 #include "Code/Connectors/mysqlcon.h"
 #include "Code/Logic/General/qttest2.h"
 #include "Code/Logic/Menu/user.h"
-#include "Code/Logic/Datasources/connectorfilter.h"
+#include "Code/Logic/Connectors/connectorfilter.h"
 #include "Code/Logic/Datasources/datasourcemodel.h"
 #include "Code/Logic/Datasources/datasourceds.h"
 
-
+#include "Code/Connectors/mysqlcon.h"
 
 int main(int argc, char *argv[])
 {
@@ -41,11 +41,14 @@ int main(int argc, char *argv[])
     ConnectorFilter connectorFilter;
     DatasourceModel datasourceModel;
     DatasourceDS * datasource = new DatasourceDS(&app);
+    static MysqlCon myCon;
 
 
     // Call default functions
     datasourceModel.setDatasourceds(datasource);
 //    qttest2.fetchPosts();
+
+    myCon.MysqlInstance("localhost", "grafieks_my", 3306, "root", "123@312QQl");
 
     // Define singletons
     qmlRegisterSingletonType( QUrl("qrc:/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants" );

@@ -12,7 +12,7 @@
 
 #include "../../Api/login.h"
 #include "../../Api/logout.h"
-#include "../General/constants.h"
+#include "../../constants.h"
 
 class User : public QObject
 {

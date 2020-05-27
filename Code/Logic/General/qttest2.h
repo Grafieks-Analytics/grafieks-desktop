@@ -17,6 +17,8 @@
 #include <QNetworkRequest>
 #include <QQmlApplicationEngine>
 
+#include "../../Connectors/mysqlcon.h"
+
 class QtTest2 : public QObject
 {
     Q_OBJECT

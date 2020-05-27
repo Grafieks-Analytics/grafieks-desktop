@@ -11,7 +11,7 @@ class ConnectorModel : public QAbstractListModel
 {
     Q_OBJECT
 
-
+    QList<Connector*> mConnector;
 
 public:
     explicit ConnectorModel(QObject *parent = nullptr);
@@ -32,8 +32,7 @@ public:
     };
 
 signals:
-private :
-    QList<Connector*> mConnector;
+
 
 };
 
