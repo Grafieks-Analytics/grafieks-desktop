@@ -27,13 +27,12 @@ public:
     explicit Sqlitecon(QObject *parent = nullptr);
     QVariantMap SqliteInstance(const QString & filepath, const QString & username, const QString & password);
 
+    ~Sqlitecon();
+
     QVector<QStringList *> SqliteSelect(QString &sqlQuery);
     QStringList SqliteTables();
 
 signals:
-
-
-
 
 };
 

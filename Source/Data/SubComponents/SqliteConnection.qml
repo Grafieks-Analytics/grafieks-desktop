@@ -31,18 +31,18 @@ Popup {
     Connections{
         target: ConnectorsLoginModel
 
-        onMysqlLoginStatus:{
+        onSqliteLoginStatus:{
 
-             if(status.status === true){
+            if(status.status === true){
 
-                 popup.visible = false
-                 stacklayout_home.currentIndex = 5
-             }
-             else{
-                 popup.visible = true
-                 msg_dialog.open()
-                 msg_dialog.text = status.msg
-             }
+                popup.visible = false
+                stacklayout_home.currentIndex = 5
+            }
+            else{
+                popup.visible = true
+                msg_dialog.open()
+                msg_dialog.text = status.msg
+            }
         }
     }
 
@@ -62,7 +62,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Signin to Database"
+            text: "Signin to Sqlite"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: 15
@@ -271,88 +271,18 @@ Popup {
 
     // Action button ends
 
-    // Row2: Enter database name starts
-
-    Row{
-
-        id: row2
-        anchors.top: row_btn.bottom
-        anchors.topMargin: 15
-        anchors.left: parent.left
-        anchors.leftMargin: 1
-
-        Rectangle{
-
-            id: label3
-            width:label_col
-            height: 40
-            Text{
-                text: "Server"
-                anchors.right: parent.right
-                anchors.rightMargin: 10
-                font.pixelSize: 15
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-
-        TextField{
-            id: server
-            maximumLength: 45
-            anchors.verticalCenter: parent.verticalCenter
-            height: 40
-            width: 200
-
-            background: Rectangle {
-                border.color: Constants.borderBlueColor
-                radius: 5
-                width: 200
-            }
-        }
-        Rectangle{
-
-            id: label_port
-            width: 40
-            height: 40
-
-
-            Text{
-                text: "Port"
-                leftPadding: 10
-                anchors.left: server.right
-                //anchors.leftMargin: 20
-                anchors.rightMargin: 20
-                font.pixelSize: 15
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-        TextField{
-            id: port
-            maximumLength: 45
-            anchors.verticalCenter: parent.verticalCenter
-            //width: 130
-            height: 40
-            background: Rectangle {
-                border.color: Constants.borderBlueColor
-                radius: 5
-                width: 160
-
-            }
-        }
-
-    }
-
-    // Row2: Enter database name ends
-
     // Row3: Enter port number starts
 
 
     Row{
 
         id: row3
-        anchors.top: row2.bottom
+        anchors.top: row_btn.bottom
         anchors.topMargin: 15
         anchors.left: parent.left
         anchors.leftMargin: 1
+
+
 
         Rectangle{
 
@@ -369,19 +299,18 @@ Popup {
             }
         }
 
-        TextField{
-            id: database
-            maximumLength: 45
-            anchors.verticalCenter: parent.verticalCenter
-            width: 370
-            height: 40
+        Button{
+            id : file_btn
+            text: "Select Sqlite file"
 
-            background: Rectangle {
-                border.color: Constants.borderBlueColor
-                radius: 5
-                width: 400
-
+            onClicked: {
+                promptSqlite.open();
             }
+        }
+
+        Text{
+            id: sqliteFileName
+            text:""
         }
 
     }
@@ -511,9 +440,8 @@ Popup {
             }
             onClicked: {
 
-                // Call mysql connector model
-//                ConnectorsLoginModel.mysqlLogin(server.text, database.text, port.text, username.text, password.text)
-                ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_my", 3306, "root", "123@312QQl")
+                // Call sqlite connector model
+                ConnectorsLoginModel.sqliteLogin(sqliteFileName.text, username.text, password.text)
 
             }
         }
@@ -523,9 +451,24 @@ Popup {
 
     MessageDialog{
         id: msg_dialog
-        title: "Mysql Connection"
+        title: "Sqlite Connection"
         text: ""
         icon: StandardIcon.Critical
     }
+
+    // Select SQLITE file
+    FileDialog{
+        id: promptSqlite
+
+        title: "Select a file"
+
+        onAccepted: {
+            console.log(fileUrl)
+        }
+        onRejected: {
+            console.log("file rejected")
+        }
+    }
+
 
 }

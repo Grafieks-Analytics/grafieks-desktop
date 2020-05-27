@@ -11,7 +11,14 @@ void ConnectorsLoginModel::mysqlLogin(QString host, QString db, int port, QStrin
     MysqlCon mysqlcon;
     QVariantMap response = mysqlcon.MysqlInstance(host, db, port, username, password);
 
-//    qDebug() << response << this;
-
     emit mysqlLoginStatus(response);
+}
+
+void ConnectorsLoginModel::sqliteLogin(QString filename, QString username, QString password)
+{
+
+    Sqlitecon sqlitecon;
+    QVariantMap response = sqlitecon.SqliteInstance(filename, username, password);
+
+    emit sqliteLoginStatus(response);
 }

@@ -62,7 +62,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Signin to Database"
+            text: "Signin to Mysql"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: 15

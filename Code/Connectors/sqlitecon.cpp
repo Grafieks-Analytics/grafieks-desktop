@@ -36,6 +36,12 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &us
 
 }
 
+Sqlitecon::~Sqlitecon()
+{
+    QSqlDatabase dbSqlite = QSqlDatabase::database();
+    dbSqlite.close();
+}
+
 QVector<QStringList *> Sqlitecon::SqliteSelect(QString &sqlQuery)
 {
     QSqlDatabase dbSqlite = QSqlDatabase::database();
