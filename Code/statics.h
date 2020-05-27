@@ -1,23 +1,19 @@
-#ifndef STATICS_H
-#define STATICS_H
-
+#ifndef CREDENTIALS_H
+#define CREDENTIALS_H
 
 #include <QString>
 
-namespace Statics {
+class Statics
+{
+public:
 
-// Mysql
-static QString myHost = "localhost";
-static QString myDb;
-static int myPort = 3306;
-static QString myUsername;
-static QString myPassword;
-
-// Sqlite
-static QString sqliteFile;
-static QString sqliteUsername;
-static QString sqlitePassword;
-}
+    static QString myHost;
+    static QString myDb;
+    static int myPort;
+    static QString myUsername;
+    static QString myPassword;
 
 
-#endif // STATICS_H
+};
+
+#endif // CREDENTIALS_H

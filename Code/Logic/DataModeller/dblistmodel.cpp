@@ -2,14 +2,6 @@
 
 DBListModel::DBListModel(QObject *parent) : QAbstractListModel(parent)
 {
-    MysqlCon mysqlcon;
-    mysqlcon.MysqlInstance(Statics::myHost, Statics::myDb, Statics::myPort, Statics::myUsername, Statics::myPassword);
-
-    QStringList dbList =  mysqlcon.MysqlListDbs();
-
-    foreach(QString tmpDbList, dbList){
-        addDbList(new DBList(tmpDbList));
-    }
 
 }
 
@@ -25,8 +17,11 @@ QVariant DBListModel::data(const QModelIndex &index, int role) const
         return QVariant();
     //The index is valid
     DBList * dblist = mDbList[index.row()];
-    if( role == DBNameRole)
+    if( role == DBNameRole){
+
         return dblist->dbName();
+    }
+
 
     return QVariant();
 }
@@ -41,7 +36,6 @@ bool DBListModel::setData(const QModelIndex &index, const QVariant &value, int r
     case DBNameRole:
     {
         if( dbList->dbName()!= value.toString()){
-            qDebug() << "Changing color for " << dbList->dbName();
             dbList->setDbName(value.toString());
             somethingChanged = true;
         }
@@ -86,4 +80,17 @@ void DBListModel::addDbList(const QString &name)
 
     DBList *dbList=new DBList(name);
     addDbList(dbList);
+}
+
+void DBListModel::requestDbList()
+{
+    MysqlCon mysqlcon;
+
+    mysqlcon.MysqlInstance(Statics::myHost, Statics::myDb, Statics::myPort, Statics::myUsername, Statics::myPassword);
+    QStringList dbList =  mysqlcon.MysqlListDbs();
+
+    foreach(QString tmpDbList, dbList){
+        qDebug() << "caller" << tmpDbList;
+        addDbList(new DBList(tmpDbList));
+    }
 }

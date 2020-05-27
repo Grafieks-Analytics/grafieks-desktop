@@ -14,6 +14,7 @@
 #include "../constants.h"
 #include "../statics.h"
 
+
 class MysqlCon : public QObject
 {
     Q_OBJECT
@@ -23,6 +24,8 @@ class MysqlCon : public QObject
     QStringList tableList;
     QStringList dbList;
     const QString DRIVER = "QMYSQL";
+
+
 
 public:
     explicit MysqlCon(QObject *parent = nullptr);

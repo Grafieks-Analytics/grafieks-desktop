@@ -25,6 +25,7 @@ public:
 
     void addDbList( DBList *dbList);
     Q_INVOKABLE void addDbList(const QString & name);
+    Q_INVOKABLE void requestDbList();
 
     enum ConnectorRoles{
         DBNameRole = Qt::UserRole + 1

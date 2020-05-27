@@ -18,6 +18,16 @@
 #include "Code/Logic/Datasources/datasourceds.h"
 #include "Code/Logic/DataModeller/dblistmodel.h"
 
+#include "Code/statics.h"
+
+
+QString Statics::myHost;
+QString Statics::myDb;
+int Statics::myPort;
+QString Statics::myUsername;
+QString Statics::myPassword;
+
+
 int main(int argc, char *argv[])
 {
 

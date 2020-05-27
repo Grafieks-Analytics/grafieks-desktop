@@ -3,7 +3,6 @@
 MysqlCon::MysqlCon(QObject *parent) : QObject(parent)
 {
 
-
 }
 
 QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, const int &port, const QString &username, const QString &password)
@@ -23,6 +22,8 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
             outputStatus.insert("status", false);
             outputStatus.insert("msg", dbMysql.lastError().text());
 
+        } else{
+
             // Save static values to access it later on other objects
             // For automatic connection for other instances
             // If correct credentials inserted once
@@ -32,8 +33,6 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
             Statics::myPort = port;
             Statics::myUsername = username;
             Statics::myPassword = password;
-
-        } else{
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Constants::GeneralSuccessMsg);
@@ -85,6 +84,7 @@ QStringList MysqlCon::MysqlListDbs()
 {
     QSqlDatabase dbMysql = QSqlDatabase::database();
     QSqlQuery query = dbMysql.exec("SHOW DATABASES");
+
 
     if(query.exec())
     {

@@ -1,40 +1,117 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.4
 
-Item
-{
-    ListModel {
-        id: elementModel
-        ListElement { content: "1"}
-    }
+Item{
+        id: root
+        width: 1406; height: 536
 
-    Column {
-        id:col
-        spacing: 2
-        Repeater {
-            model: elementModel
-            Text { text: content;}
-        }
-    }
-
-    Button
-    {
-        id: deleteButton; x: 200; y: 200; height: 50; width: 50; text: "Delete"
-        onClicked:
-        {
-            //How to remove perticular element from above column ?
-            elementModel.remove(1)
-        }
-    }
-
-    Button
-    {
-        id: addButton; x: 400; y: 200; height: 50; width: 50; text: "Add"
-        onClicked:
-        {
-            // Code to add controls dynamically to column.
-            elementModel.insert(1, { "content": Math.random(3).toString()})
+        ListModel {
+            id: animalsModel
+            ListElement { name: "Puss in Boots"; type: "Cats"; aVisible: false}
+            ListElement { name: "Bengal"; type: "Cats"; aVisible: false }
+            ListElement { name: "Pug"; type: "Dogs"; aVisible: false }
+            ListElement { name: "German Shepherd"; type: "Dogs"; aVisible: false }
+            ListElement { name: "Parrot"; type: "Birds"; aVisible: false }
         }
 
+        Component {
+            id: sectionHeader
+
+            Rectangle {
+                id: sectionHeaderRect
+                width: 181
+                color:"green"
+                height: 50
+
+                property bool isExpanded: false
+                property string currentExpandedSection: ListView.view.expandedSection
+
+                onCurrentExpandedSectionChanged: {
+                    if(currentExpandedSection === section)
+                        isExpanded = true;
+                    else
+                        isExpanded = false;
+                }
+
+                onIsExpandedChanged: {
+                    if(isExpanded){
+                        color = "blue";
+                        ListView.view.expandedSection = section;
+                    }
+                    else
+                        color = "green";
+                    for(var i=0; i<animalsModel.count; i++){
+                        var animal = animalsModel.get(i);
+                        if(section === animal.type)
+                            animal.aVisible = sectionHeaderRect.isExpanded;
+                    }
+                }
+
+                Text {
+                    id: sectionHeaderText
+                    text: section
+                    anchors.centerIn: parent
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        sectionHeaderRect.isExpanded = !sectionHeaderRect.isExpanded;
+                    }
+                }
+            }
+        }
+
+
+        ListView {
+            id: listing
+            width: 181
+            height: parent.height
+            model: animalsModel
+
+            property string expandedSection: ""
+
+            delegate: listdelegate
+
+            section.property: "type"
+            section.criteria: ViewSection.FullString
+            section.delegate: sectionHeader
+
+        }
+
+        Component {
+            id: listdelegate
+
+            Rectangle {
+                id: menuItem
+                width: 181
+                //height: 55
+                color: ListView.isCurrentItem ? "lightblue" : "white"
+                visible: aVisible
+
+                onVisibleChanged: {
+                    if(visible)
+                        height = 55;
+                    else
+                        height = 0;
+                }
+
+                Behavior on height {
+                    NumberAnimation { duration: 10 }
+                }
+
+                Text {
+                    id: text
+                    text: name
+                    anchors.centerIn: parent
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        listing.currentIndex = index;
+                    }
+                }
+            }
+        }
     }
-}

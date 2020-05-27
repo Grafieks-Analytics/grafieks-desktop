@@ -459,8 +459,8 @@ Popup {
     // Select SQLITE file
     FileDialog{
         id: promptSqlite
-
         title: "Select a file"
+        nameFilters: ["Sqlite files (*.sqlite *.db)"];
 
         onAccepted: {
             console.log(fileUrl)
