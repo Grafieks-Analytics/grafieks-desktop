@@ -37,7 +37,7 @@ Popup {
              if(status.status === true){
 
                  // Call functions
-                 DBListModel.requestDbList()
+                 TableListModel.requestTableList()
 
                  popup.visible = false
                  stacklayout_home.currentIndex = 5

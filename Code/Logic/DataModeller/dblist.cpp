@@ -15,11 +15,6 @@ QString DBList::dbName() const
     return m_dbName;
 }
 
-int DBList::dbId() const
-{
-    return m_dbId;
-}
-
 void DBList::setDbName(QString dbName)
 {
     if (m_dbName == dbName)
@@ -29,11 +24,3 @@ void DBList::setDbName(QString dbName)
     emit dbNameChanged(m_dbName);
 }
 
-void DBList::setDbId(int dbId)
-{
-    if (m_dbId == dbId)
-        return;
-
-    m_dbId = dbId;
-    emit dbIdChanged(m_dbId);
-}

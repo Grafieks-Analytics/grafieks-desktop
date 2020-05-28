@@ -1,20 +1,21 @@
-#ifndef DBLISTDS_H
-#define DBLISTDS_H
+#ifndef TABLELISTMODEL_H
+#define TABLELISTMODEL_H
 
 #include <QAbstractListModel>
 #include <QObject>
 
-#include "dblist.h"
+#include "tablelist.h"
 #include "../../Connectors/mysqlcon.h"
 #include "../../statics.h"
 
-class DBListModel : public QAbstractListModel
+class TableListModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    QList<DBList*> mDbList;
+    QList<TableList*> mTableList;
+
 public:
-    explicit DBListModel(QObject *parent = nullptr);
+    explicit TableListModel(QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
@@ -22,12 +23,11 @@ public:
     Qt::ItemFlags flags(const QModelIndex& index) const;
     QHash<int, QByteArray> roleNames() const;
 
-    void addDbList( DBList *dbList);
-    Q_INVOKABLE void addDbList(const QString & name);
-    Q_INVOKABLE void requestDbList();
+    void addTableList( TableList *tableList);
+    Q_INVOKABLE void requestTableList();
 
     enum ConnectorRoles{
-        DBNameRole = Qt::UserRole + 1
+        TableNameRole = Qt::UserRole + 1
 
     };
 
@@ -35,4 +35,4 @@ signals:
 
 };
 
-#endif // DBLISTDS_H
+#endif // TABLELISTMODEL_H

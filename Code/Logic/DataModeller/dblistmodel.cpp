@@ -15,7 +15,7 @@ QVariant DBListModel::data(const QModelIndex &index, int role) const
 {
     if (index.row() < 0 || index.row() >= mDbList.count())
         return QVariant();
-    //The index is valid
+
     DBList * dblist = mDbList[index.row()];
     if( role == DBNameRole){
 

@@ -16,7 +16,7 @@
 #include "Code/Logic/Connectors/connectorsloginmodel.h"
 #include "Code/Logic/Datasources/datasourcemodel.h"
 #include "Code/Logic/Datasources/datasourceds.h"
-#include "Code/Logic/DataModeller/dblistmodel.h"
+#include "Code/Logic/DataModeller/tablelistmodel.h"
 
 #include "Code/statics.h"
 
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     ConnectorsLoginModel connectorsLoginModel;
     DatasourceModel datasourceModel;
     DatasourceDS * datasource = new DatasourceDS(&app);
-    DBListModel dbListModel;
+    TableListModel tableListModel;
 
 
     // Call default functions
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("ConnectorsLoginModel", &connectorsLoginModel);
     engine.rootContext()->setContextProperty("DatasourceModel", &datasourceModel);
     engine.rootContext()->setContextProperty("DatasourceDS",datasource);
-    engine.rootContext()->setContextProperty("DBListModel",&dbListModel);
+    engine.rootContext()->setContextProperty("TableListModel",&tableListModel);
 
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

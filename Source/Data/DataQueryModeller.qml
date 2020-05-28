@@ -24,16 +24,13 @@ Page {
     property int menu_width: 60
     property bool data_modeller_selected: true
     property int statusIndex: 1
+    property bool collapsed: false
 
     onStatusIndexChanged: {
 
     }
 
-    Component.onCompleted: {
-        console.log(DBListModel, "corona", DatasourceModel)
 
-
-    }
 
 
     // Left menubar starts
@@ -684,14 +681,17 @@ Page {
                             anchors.fill: parent
 
                             onClicked: {
-//                                nestedModel.setProperty(index, "collapsed", !collapsed)
 
-//                                if(collapsed === true){
-//                                    drop_icon.source = "../../../Images/icons/Down_20.png"
-//                                }
-//                                else{
-//                                    drop_icon.source = "../../../Images/icons/Up_20.png"
-//                                }
+                                if(collapsed === true){
+                                    drop_icon.source = "../../../Images/icons/Down_20.png"
+                                    collapsed = false
+                                    tableslist.visible = false
+                                }
+                                else{
+                                    drop_icon.source = "../../../Images/icons/Up_20.png"
+                                    collapsed = true
+                                    tableslist.visible = true
+                                }
                             }
                         }
                     }
@@ -699,63 +699,73 @@ Page {
 
 
 
-                ListView {
-                    anchors.fill: parent
-                    model:DBListModel
-                    delegate: Rectangle {
-                        height: 40
-                        width: 200
+                Column{
+                    spacing: 1
+                    anchors.top:  categoryItem.bottom
+                    id : tableslist
+                    visible: false
+                    Repeater {
 
-                        Text {
-                            anchors.verticalCenter: parent.verticalCenter
-                            x: 30
-                            font.pixelSize: 12
-                            text: dbName
+                        model:TableListModel
+                        anchors.top: categoryItem.bottom
+                        delegate: Rectangle {
+                            id: wrapper
+                            width: 2000
+                            height: 30
+
+                            Text {
+                                id: contactInfo
+                                text: tableName
+                                x: 30
+                                font.pixelSize: 12
+                            }
                         }
                     }
                 }
 
 
-//                Component {
-//                    id: categoryDelegate
-//                    Column {
-//                        width: 200
+
+
+                //                Component {
+                //                    id: categoryDelegate
+                //                    Column {
+                //                        width: 200
 
 
 
-//                        Loader {
-//                            id: subItemLoader
+                //                        Loader {
+                //                            id: subItemLoader
 
-//                            visible: !collapsed
-//                            property variant subItemModel : subItems
-//                            sourceComponent: collapsed ? null : subItemColumnDelegate
-//                            onStatusChanged: if (status == Loader.Ready) item.model = subItemModel
-//                        }
-//                    }
+                //                            visible: !collapsed
+                //                            property variant subItemModel : subItems
+                //                            sourceComponent: collapsed ? null : subItemColumnDelegate
+                //                            onStatusChanged: if (status == Loader.Ready) item.model = subItemModel
+                //                        }
+                //                    }
 
-//                }
+                //                }
 
-//                Component {
-//                    id: subItemColumnDelegate
-//                    Column {
-//                        property alias model : subItemRepeater.model
-//                        width: 200
-//                        Repeater {
-//                            id: subItemRepeater
-//                            delegate: Rectangle {
-//                                height: 40
-//                                width: 200
+                //                Component {
+                //                    id: subItemColumnDelegate
+                //                    Column {
+                //                        property alias model : subItemRepeater.model
+                //                        width: 200
+                //                        Repeater {
+                //                            id: subItemRepeater
+                //                            delegate: Rectangle {
+                //                                height: 40
+                //                                width: 200
 
-//                                Text {
-//                                    anchors.verticalCenter: parent.verticalCenter
-//                                    x: 30
-//                                    font.pixelSize: 12
-//                                    text: itemName
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
+                //                                Text {
+                //                                    anchors.verticalCenter: parent.verticalCenter
+                //                                    x: 30
+                //                                    font.pixelSize: 12
+                //                                    text: itemName
+                //                                }
+                //                            }
+                //                        }
+                //                    }
+                //                }
             }
 
             // Right item 4 ends
