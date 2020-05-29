@@ -26,9 +26,6 @@ Page {
     property int statusIndex: 1
     property bool collapsed: false
 
-    onStatusIndexChanged: {
-
-    }
 
 
 
@@ -632,6 +629,13 @@ Page {
                         width:30
                         anchors.top: row_querymodeller_right_col.top
                         anchors.topMargin: 5
+
+                        MouseArea{
+                            anchors.fill: parent
+
+                            onClicked: {
+                            }
+                        }
                     }
                 }
 
@@ -710,62 +714,20 @@ Page {
                         anchors.top: categoryItem.bottom
                         delegate: Rectangle {
                             id: wrapper
-                            width: 2000
-                            height: 30
+                            width: 200
+                            height: 20
 
                             Text {
                                 id: contactInfo
                                 text: tableName
-                                x: 30
+                                x: 20
                                 font.pixelSize: 12
+                                anchors.verticalCenter: parent.verticalCenter
                             }
                         }
                     }
                 }
 
-
-
-
-                //                Component {
-                //                    id: categoryDelegate
-                //                    Column {
-                //                        width: 200
-
-
-
-                //                        Loader {
-                //                            id: subItemLoader
-
-                //                            visible: !collapsed
-                //                            property variant subItemModel : subItems
-                //                            sourceComponent: collapsed ? null : subItemColumnDelegate
-                //                            onStatusChanged: if (status == Loader.Ready) item.model = subItemModel
-                //                        }
-                //                    }
-
-                //                }
-
-                //                Component {
-                //                    id: subItemColumnDelegate
-                //                    Column {
-                //                        property alias model : subItemRepeater.model
-                //                        width: 200
-                //                        Repeater {
-                //                            id: subItemRepeater
-                //                            delegate: Rectangle {
-                //                                height: 40
-                //                                width: 200
-
-                //                                Text {
-                //                                    anchors.verticalCenter: parent.verticalCenter
-                //                                    x: 30
-                //                                    font.pixelSize: 12
-                //                                    text: itemName
-                //                                }
-                //                            }
-                //                        }
-                //                    }
-                //                }
             }
 
             // Right item 4 ends

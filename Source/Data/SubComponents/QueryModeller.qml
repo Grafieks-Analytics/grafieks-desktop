@@ -96,4 +96,13 @@ Item{
 
     }
 
+    Button{
+        text: "Test Query"
+        anchors.top: textedit_querymodeller.bottom
+
+        onClicked: {
+            console.log(textedit_querymodeller.text)
+        }
+    }
+
 }

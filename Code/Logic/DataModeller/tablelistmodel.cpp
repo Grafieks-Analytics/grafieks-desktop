@@ -1,92 +1,55 @@
 #include "tablelistmodel.h"
 
-TableListModel::TableListModel(QObject *parent) : QAbstractListModel(parent)
+TableListModel::TableListModel(QObject *parent): QSqlQueryModel(parent)
 {
-
-
+    this->setQuery("SHOW TABLES");
 }
 
-int TableListModel::rowCount(const QModelIndex &parent) const
+void TableListModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
+    QSqlQueryModel::setQuery(query, db);
+    generateRoleNames();
+}
 
-    Q_UNUSED(parent)
-    return mTableList.size();
+void TableListModel::setQuery(const QSqlQuery &query)
+{
+    QSqlQueryModel::setQuery(query);
+    generateRoleNames();
 }
 
 QVariant TableListModel::data(const QModelIndex &index, int role) const
 {
-    if (index.row() < 0 || index.row() >= mTableList.count())
-        return QVariant();
+    QVariant value;
 
-    TableList * tablelist = mTableList[index.row()];
-
-    if( role == TableNameRole){
-
-        return tablelist->tableName();
+    if(role < Qt::UserRole) {
+        value = QSqlQueryModel::data(index, role);
+    }
+    else {
+        int columnIdx = role - Qt::UserRole - 1;
+        QModelIndex modelIndex = this->index(index.row(), columnIdx);
+        value = QSqlQueryModel::data(modelIndex, Qt::DisplayRole);
     }
 
 
-    return QVariant();
-}
-
-bool TableListModel::setData(const QModelIndex &index, const QVariant &value, int role)
-{
-    TableList * tableList = mTableList[index.row()];
-    bool somethingChanged = false;
-
-    switch (role) {
-    case TableNameRole:
-    {
-        if( tableList->tableName()!= value.toString()){
-            tableList->setTableName(value.toString());
-            somethingChanged = true;
-        }
-    }
-        break;
-
-    }
-
-    if( somethingChanged){
-        emit dataChanged(index,index,QVector<int>() << role);
-        return true;
-    }
-    return false;
-}
-
-Qt::ItemFlags TableListModel::flags(const QModelIndex &index) const
-{
-
-    if (!index.isValid())
-        return Qt::NoItemFlags;
-    return Qt::ItemIsEditable;
+    return value;
 }
 
 QHash<int, QByteArray> TableListModel::roleNames() const
 {
-    QHash<int, QByteArray> roles;
-    roles[TableNameRole] = "tableName";
-    return roles;
-
+    return m_roleNames;
 }
 
-void TableListModel::addTableList(TableList *tableList)
+void TableListModel::callQuery(QString queryString)
 {
-    const int index = mTableList.size();
-    beginInsertRows(QModelIndex(),index,index);
-    mTableList.append(tableList);
-    endInsertRows();
+    this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'");
 }
 
-void TableListModel::requestTableList()
+
+void TableListModel::generateRoleNames()
 {
 
-    MysqlCon mysqlcon;
-
-    mysqlcon.MysqlInstance(Statics::myHost, Statics::myDb, Statics::myPort, Statics::myUsername, Statics::myPassword);
-    QStringList tableList =  mysqlcon.MysqlListTables(Statics::myDb);
-
-    foreach(QString tmpTableList, tableList){
-        qDebug() << "caller" << tmpTableList;
-        addTableList(new TableList(tmpTableList));
+    m_roleNames.clear();
+    for( int i = 0; i < record().count(); i ++) {
+        m_roleNames.insert(Qt::UserRole + i + 1, record().fieldName(i).toUtf8());
     }
 }

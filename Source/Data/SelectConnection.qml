@@ -328,10 +328,7 @@ Page {
                     anchors.fill: parent
 
                     onClicked: {
-                        //                        modalId.visible = true
-                        //                        update_data_sources_list();
 
-                        // Select the mmodal popup
                         selectAuthorization(name)
 
                     }
@@ -350,10 +347,7 @@ Page {
                     anchors.fill: parent
 
                     onClicked: {
-                        //                        modalId.visible = true
-                        //                        update_data_sources_list();
 
-                        // Select the mmodal popup
                         selectAuthorization(name)
                     }
                 }

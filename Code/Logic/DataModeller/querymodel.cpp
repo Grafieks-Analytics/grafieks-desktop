@@ -1,25 +1,24 @@
-#include "dblistmodel.h"
+#include "querymodel.h"
 
 
-DBListModel::DBListModel(QObject *parent):
-    QSqlQueryModel(parent)
+QueryModel::QueryModel(QObject *parent): QSqlQueryModel(parent)
 {
-    this->setQuery("SHOW DATABASES");
+
 }
 
-void DBListModel::setQuery(const QString &query, const QSqlDatabase &db)
+void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
     QSqlQueryModel::setQuery(query, db);
     generateRoleNames();
 }
 
-void DBListModel::setQuery(const QSqlQuery &query)
+void QueryModel::setQuery(const QSqlQuery &query)
 {
     QSqlQueryModel::setQuery(query);
     generateRoleNames();
 }
 
-QVariant DBListModel::data(const QModelIndex &index, int role) const
+QVariant QueryModel::data(const QModelIndex &index, int role) const
 {
     QVariant value;
 
@@ -36,17 +35,17 @@ QVariant DBListModel::data(const QModelIndex &index, int role) const
     return value;
 }
 
-QHash<int, QByteArray> DBListModel::roleNames() const
+QHash<int, QByteArray> QueryModel::roleNames() const
 {
     return m_roleNames;
 }
 
-void DBListModel::callQuery(QString queryString)
+void QueryModel::callQuery(QString queryString)
 {
-    this->setQuery("SHOW DATABASES LIKE '%"+queryString+"%'");
+    this->setQuery(queryString);
 }
 
-void DBListModel::generateRoleNames()
+void QueryModel::generateRoleNames()
 {
     m_roleNames.clear();
     for( int i = 0; i < record().count(); i ++) {

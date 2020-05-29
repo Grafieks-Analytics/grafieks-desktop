@@ -1,5 +1,5 @@
-#ifndef TABLELISTMODEL_H
-#define TABLELISTMODEL_H
+#ifndef QUERYMODELLER_H
+#define QUERYMODELLER_H
 
 #include <QSqlQueryModel>
 #include <QSqlRecord>
@@ -8,14 +8,13 @@
 #include <QObject>
 
 #include "../../Connectors/allconnectors.h"
-#include "../../statics.h"
 
-class TableListModel : public QSqlQueryModel
+class QueryModel : public QSqlQueryModel
 {
     Q_OBJECT
 
 public:
-    explicit TableListModel(QObject *parent = 0);
+    explicit QueryModel(QObject *parent = 0);
 
     void setQuery(const QString &query, const QSqlDatabase &db = QSqlDatabase());
     void setQuery(const QSqlQuery &query);
@@ -30,4 +29,4 @@ private:
 
 };
 
-#endif // TABLELISTMODEL_H
+#endif // QUERYMODELLER_H
