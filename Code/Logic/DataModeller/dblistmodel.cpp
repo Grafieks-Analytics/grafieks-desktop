@@ -4,7 +4,7 @@
 DBListModel::DBListModel(QObject *parent):
     QSqlQueryModel(parent)
 {
-    this->setQuery("SHOW DATABASES");
+
 }
 
 void DBListModel::setQuery(const QString &query, const QSqlDatabase &db)
@@ -32,7 +32,6 @@ QVariant DBListModel::data(const QModelIndex &index, int role) const
         value = QSqlQueryModel::data(modelIndex, Qt::DisplayRole);
     }
 
-
     return value;
 }
 
@@ -43,13 +42,40 @@ QHash<int, QByteArray> DBListModel::roleNames() const
 
 void DBListModel::callQuery(QString queryString)
 {
-    this->setQuery("SHOW DATABASES LIKE '%"+queryString+"%'");
+
+    QSqlDatabase dbMysql = QSqlDatabase::addDatabase("QMYSQL");
+    dbMysql.setHostName("localhost");
+    dbMysql.setPort(3306);
+    dbMysql.setDatabaseName("grafieks_my");
+    dbMysql.setUserName("root");
+    dbMysql.setPassword("123@312QQl");
+
+    dbMysql.open();
+
+    if(queryString != ""){
+        this->setQuery("SHOW DATABASES LIKE '%"+queryString+"%'", dbMysql);
+    } else{
+        this->setQuery("SHOW DATABASES", dbMysql);
+    }
+
+}
+
+void DBListModel::callQuery2(QString queryString)
+{
+//    QSqlDatabase dbMysql = QSqlDatabase::database();
+
+    qDebug() << queryString << "blank";
+
+    if(queryString != ""){
+        this->setQuery("SHOW DATABASES LIKE '%"+queryString+"%'");
+    } else{
+        this->setQuery("SHOW DATABASES");
+    }
 }
 
 void DBListModel::generateRoleNames()
 {
     m_roleNames.clear();
-    for( int i = 0; i < record().count(); i ++) {
-        m_roleNames.insert(Qt::UserRole + i + 1, record().fieldName(i).toUtf8());
-    }
+    QString roleName = "dbName";
+    m_roleNames.insert(Qt::UserRole + 1, roleName.toUtf8());
 }

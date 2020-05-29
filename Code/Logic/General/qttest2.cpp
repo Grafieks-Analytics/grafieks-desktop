@@ -40,7 +40,6 @@ void QtTest2::readComplete()
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_tempStorage);
         QJsonObject resultObj = resultJson.object();
 
-        qDebug() << resultJson << "corona";
 
         m_tempStorage->clear();
 

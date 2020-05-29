@@ -26,9 +26,17 @@ Page {
     property int statusIndex: 1
     property bool collapsed: false
 
+    Connections{
+        target: ConnectorsLoginModel
 
-
-
+        onMysqlLoginStatus:{
+            if(status.status === true){
+                // Call functions
+                TableListModel.callQuery()
+                tableslist.model = TableListModel
+            }
+        }
+    }
 
     // Left menubar starts
 
@@ -584,7 +592,7 @@ Page {
 
                 Text{
                     id: connected_to
-                    text: "Connected To: " + MysqlConnect.mysqlDatabase
+                    text: "Connected To: " + ConnectorsLoginModel.currentDbName
                     anchors.verticalCenter: rectangle_querymodeller_right_col2.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col2.left
                     anchors.leftMargin: 10
@@ -609,6 +617,7 @@ Page {
                     id: row_querymodeller_right_col
 
                     TextField{
+                        id:searchTextBox
                         text: "Search"
                         width:rectangle_querymodeller_right_col3.width - search_icon.width
                         height:30
@@ -634,6 +643,7 @@ Page {
                             anchors.fill: parent
 
                             onClicked: {
+                                TableListModel.callQuery(searchTextBox.text)
                             }
                         }
                     }
@@ -673,7 +683,7 @@ Page {
 
                     Image {
                         id: drop_icon
-                        source: "../../Images/icons/Down_20.png"
+                        source: "../../Images/icons/Up_20.png"
                         width: 10
                         height: 10
                         anchors.right: parent.right
@@ -687,45 +697,27 @@ Page {
                             onClicked: {
 
                                 if(collapsed === true){
-                                    drop_icon.source = "../../../Images/icons/Down_20.png"
+                                    drop_icon.source = "../../../Images/icons/Up_20.png"
                                     collapsed = false
-                                    tableslist.visible = false
+                                    tableslist.visible = true
                                 }
                                 else{
-                                    drop_icon.source = "../../../Images/icons/Up_20.png"
+                                    drop_icon.source = "../../../Images/icons/Down_20.png"
                                     collapsed = true
-                                    tableslist.visible = true
+                                    tableslist.visible = false
                                 }
                             }
                         }
                     }
                 }
 
-
-
-                Column{
-                    spacing: 1
-                    anchors.top:  categoryItem.bottom
-                    id : tableslist
-                    visible: false
-                    Repeater {
-
-                        model:TableListModel
-                        anchors.top: categoryItem.bottom
-                        delegate: Rectangle {
-                            id: wrapper
-                            width: 200
-                            height: 20
-
-                            Text {
-                                id: contactInfo
-                                text: tableName
-                                x: 20
-                                font.pixelSize: 12
-                                anchors.verticalCenter: parent.verticalCenter
-                            }
-                        }
-                    }
+                ListView {
+                    id: tableslist
+                    spacing: 2
+                    anchors.top: categoryItem.bottom
+                    height : contentHeight
+                    delegate: tablelistDelegate
+                    visible: true
                 }
 
             }
@@ -733,7 +725,7 @@ Page {
             // Right item 4 ends
 
             Button {
-                id: button
+                id: publish_button
                 text: qsTr("Publish Data Source")
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 40
@@ -760,6 +752,25 @@ Page {
 
     InMemory{
         id: inMemory
+    }
+
+
+    Component{
+        id:tablelistDelegate
+
+        Rectangle {
+            id: wrapper
+            width: 200
+            height: 30
+
+            Text {
+                id: contactInfo
+                text: tableName
+                x: 20
+                font.pixelSize: 12
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
     }
 
 }

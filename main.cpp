@@ -18,6 +18,7 @@
 #include "Code/Logic/Datasources/datasourceds.h"
 #include "Code/Logic/DataModeller/tablelistmodel.h"
 #include "Code/Logic/DataModeller/querymodel.h"
+#include "Code/Logic/DataModeller/dblistmodel.h"
 
 #include "Code/statics.h"
 
@@ -55,6 +56,7 @@ int main(int argc, char *argv[])
     DatasourceDS * datasource = new DatasourceDS(&app);
     TableListModel tableListModel;
     QueryModel queryModel;
+    DBListModel dblistModel;
 
 
     // Call default functions
@@ -76,6 +78,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("DatasourceDS",datasource);
     engine.rootContext()->setContextProperty("TableListModel",&tableListModel);
     engine.rootContext()->setContextProperty("QueryModel",&queryModel);
+    engine.rootContext()->setContextProperty("DBListModel",&dblistModel);
 
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

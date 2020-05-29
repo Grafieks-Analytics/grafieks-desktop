@@ -33,11 +33,7 @@ Popup {
 
         onMysqlLoginStatus:{
 
-
              if(status.status === true){
-
-                 // Call functions
-                 TableListModel.requestTableList()
 
                  popup.visible = false
                  stacklayout_home.currentIndex = 5

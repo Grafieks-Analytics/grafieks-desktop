@@ -101,7 +101,7 @@ Item{
         anchors.top: textedit_querymodeller.bottom
 
         onClicked: {
-            console.log(textedit_querymodeller.text)
+            QueryModel.callQuery()
         }
     }
 

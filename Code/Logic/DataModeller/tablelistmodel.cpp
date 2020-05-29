@@ -2,7 +2,7 @@
 
 TableListModel::TableListModel(QObject *parent): QSqlQueryModel(parent)
 {
-    this->setQuery("SHOW TABLES");
+
 }
 
 void TableListModel::setQuery(const QString &query, const QSqlDatabase &db)
@@ -29,8 +29,6 @@ QVariant TableListModel::data(const QModelIndex &index, int role) const
         QModelIndex modelIndex = this->index(index.row(), columnIdx);
         value = QSqlQueryModel::data(modelIndex, Qt::DisplayRole);
     }
-
-
     return value;
 }
 
@@ -41,7 +39,15 @@ QHash<int, QByteArray> TableListModel::roleNames() const
 
 void TableListModel::callQuery(QString queryString)
 {
-    this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'");
+
+    QSqlDatabase dbMysql = QSqlDatabase::database();
+    if (queryString != ""){
+        this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'");
+    } else{
+        qDebug() << "QueryString "<< "Else";
+        this->setQuery("SHOW TABLES");
+    }
+
 }
 
 
@@ -49,7 +55,7 @@ void TableListModel::generateRoleNames()
 {
 
     m_roleNames.clear();
-    for( int i = 0; i < record().count(); i ++) {
-        m_roleNames.insert(Qt::UserRole + i + 1, record().fieldName(i).toUtf8());
-    }
+    QString roleName = "tableName";
+    m_roleNames.insert(Qt::UserRole + 1, roleName.toUtf8());
+
 }

@@ -30,8 +30,6 @@ QVariant QueryModel::data(const QModelIndex &index, int role) const
         QModelIndex modelIndex = this->index(index.row(), columnIdx);
         value = QSqlQueryModel::data(modelIndex, Qt::DisplayRole);
     }
-
-
     return value;
 }
 
@@ -42,7 +40,8 @@ QHash<int, QByteArray> QueryModel::roleNames() const
 
 void QueryModel::callQuery(QString queryString)
 {
-    this->setQuery(queryString);
+    QSqlDatabase dbMysql = QSqlDatabase::database();
+    this->setQuery(queryString, dbMysql);
 }
 
 void QueryModel::generateRoleNames()
