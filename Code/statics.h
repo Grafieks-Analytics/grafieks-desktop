@@ -7,13 +7,17 @@ class Statics
 {
 public:
 
+    // Mysql
     static QString myHost;
     static QString myDb;
     static int myPort;
     static QString myUsername;
     static QString myPassword;
 
-
+    // Sqlite
+    static QString sqliteFile;
+    static QString sqliteUsername;
+    static QString sqlitePassword;
 };
 
 #endif // CREDENTIALS_H
