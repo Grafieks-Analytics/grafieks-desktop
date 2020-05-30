@@ -34,12 +34,13 @@ int main(int argc, char *argv[])
 {
 
     // Application basic initialization
-    QtWebEngine::initialize();
-    QQuickStyle::setStyle("Default");
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
+
+    QtWebEngine::initialize();
+    QQuickStyle::setStyle("Default");
 
     // Settings
     QCoreApplication::setOrganizationName("Grafieks Limited");

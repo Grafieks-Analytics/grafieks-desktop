@@ -54,5 +54,6 @@
         <file>Source/Others/Test3.qml</file>
         <file>Source/Data/SubComponents/InMemory.qml</file>
         <file>Source/Data/SubComponents/SqliteConnection.qml</file>
+        <file>Source/Data/SubComponents/DropboxConnection.qml</file>
     </qresource>
 </RCC>
