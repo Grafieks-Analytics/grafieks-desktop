@@ -22,15 +22,21 @@ Page {
 
     id: query_modeller_page
     property int menu_width: 60
-
     property bool data_modeller_selected: true
-
     property int statusIndex: 1
+    property bool collapsed: false
 
-    onStatusIndexChanged: {
+    Connections{
+        target: ConnectorsLoginModel
 
+        onMysqlLoginStatus:{
+            if(status.status === true){
+                // Call functions
+                TableListModel.callQuery()
+                tableslist.model = TableListModel
+            }
+        }
     }
-
 
     // Left menubar starts
 
@@ -69,7 +75,6 @@ Page {
 
                         data_query_modeller_stackview.pop()
                         data_query_modeller_stackview.push("./SubComponents/DataModeller.qml")
-                        console.log('Haha')
                     }
 
                 }
@@ -286,37 +291,37 @@ Page {
         leftPadding: 10
 
         pushEnter: Transition {
-                  PropertyAnimation {
-                      property: "opacity"
-                      from: 0
-                      to:1
-                      duration: 1
-                  }
-              }
-              pushExit: Transition {
-                  PropertyAnimation {
-                      property: "opacity"
-                      from: 1
-                      to:0
-                      duration: 1
-                  }
-              }
-              popEnter: Transition {
-                  PropertyAnimation {
-                      property: "opacity"
-                      from: 0
-                      to:1
-                      duration: 1
-                  }
-              }
-              popExit: Transition {
-                  PropertyAnimation {
-                      property: "opacity"
-                      from: 1
-                      to:0
-                      duration: 1
-                  }
-              }
+            PropertyAnimation {
+                property: "opacity"
+                from: 0
+                to:1
+                duration: 1
+            }
+        }
+        pushExit: Transition {
+            PropertyAnimation {
+                property: "opacity"
+                from: 1
+                to:0
+                duration: 1
+            }
+        }
+        popEnter: Transition {
+            PropertyAnimation {
+                property: "opacity"
+                from: 0
+                to:1
+                duration: 1
+            }
+        }
+        popExit: Transition {
+            PropertyAnimation {
+                property: "opacity"
+                from: 1
+                to:0
+                duration: 1
+            }
+        }
 
         initialItem: DataModeller{}
 
@@ -432,11 +437,11 @@ Page {
             }
         }
 
-//        DataSourcesList{
-//            id: dummy_datasources
-//            anchors.top: toolbar_querymodeller.bottom
+        //        DataSourcesList{
+        //            id: dummy_datasources
+        //            anchors.top: toolbar_querymodeller.bottom
 
-//        }
+        //        }
 
 
     }
@@ -587,7 +592,7 @@ Page {
 
                 Text{
                     id: connected_to
-                    text: "Connected To: " + MysqlConnect.mysqlDatabase
+                    text: "Connected To: " + ConnectorsLoginModel.currentDbName
                     anchors.verticalCenter: rectangle_querymodeller_right_col2.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col2.left
                     anchors.leftMargin: 10
@@ -612,6 +617,7 @@ Page {
                     id: row_querymodeller_right_col
 
                     TextField{
+                        id:searchTextBox
                         text: "Search"
                         width:rectangle_querymodeller_right_col3.width - search_icon.width
                         height:30
@@ -632,6 +638,14 @@ Page {
                         width:30
                         anchors.top: row_querymodeller_right_col.top
                         anchors.topMargin: 5
+
+                        MouseArea{
+                            anchors.fill: parent
+
+                            onClicked: {
+                                TableListModel.callQuery(searchTextBox.text)
+                            }
+                        }
                     }
                 }
 
@@ -655,116 +669,63 @@ Page {
                 anchors.top: rectangle_querymodeller_right_col3.bottom
                 anchors.topMargin: 2
 
+                Rectangle {
+                    id: categoryItem
+                    height: 50
+                    width: 200
+
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        x: 15
+                        font.pixelSize: 12
+                        text: "Database Name 1"
+                    }
+
+                    Image {
+                        id: drop_icon
+                        source: "../../Images/icons/Up_20.png"
+                        width: 10
+                        height: 10
+                        anchors.right: parent.right
+                        anchors.rightMargin: 15
+                        anchors.verticalCenter: parent.verticalCenter
+                        visible: true
+
+                        MouseArea {
+                            anchors.fill: parent
+
+                            onClicked: {
+
+                                if(collapsed === true){
+                                    drop_icon.source = "../../../Images/icons/Up_20.png"
+                                    collapsed = false
+                                    tableslist.visible = true
+                                }
+                                else{
+                                    drop_icon.source = "../../../Images/icons/Down_20.png"
+                                    collapsed = true
+                                    tableslist.visible = false
+                                }
+                            }
+                        }
+                    }
+                }
+
                 ListView {
-                    anchors.fill: parent
-                    model: nestedModel
-                    delegate: categoryDelegate
+                    id: tableslist
+                    spacing: 2
+                    anchors.top: categoryItem.bottom
+                    height : contentHeight
+                    delegate: tablelistDelegate
+                    visible: true
                 }
 
-
-                ListModel {
-                    id: nestedModel
-
-
-                    ListElement {
-                        categoryName: "Database 1"
-                        collapsed: true
-
-                        subItems: [
-                            ListElement { itemName: "Table 1" },
-                            ListElement { itemName: "Table 2" },
-                            ListElement { itemName: "Table 3" },
-                            ListElement { itemName: "Table 4" }
-                        ]
-                    }
-
-
-                }
-
-                Component {
-                    id: categoryDelegate
-                    Column {
-                        width: 200
-
-                        Rectangle {
-                            id: categoryItem
-                            height: 50
-                            width: 200
-
-                            Text {
-                                anchors.verticalCenter: parent.verticalCenter
-                                x: 15
-                                font.pixelSize: 12
-                                text: categoryName
-                            }
-
-                            Image {
-                                id: drop_icon
-                                source: "../../Images/icons/Down_20.png"
-                                width: 10
-                                height: 10
-                                anchors.right: parent.right
-                                anchors.rightMargin: 15
-                                anchors.verticalCenter: parent.verticalCenter
-                                visible: true
-
-                                MouseArea {
-                                    anchors.fill: parent
-
-                                    onClicked: {
-                                        nestedModel.setProperty(index, "collapsed", !collapsed)
-
-                                        if(collapsed === true){
-                                            drop_icon.source = "../../../Images/icons/Down_20.png"
-                                        }
-                                        else{
-                                            drop_icon.source = "../../../Images/icons/Up_20.png"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        Loader {
-                            id: subItemLoader
-
-                            visible: !collapsed
-                            property variant subItemModel : subItems
-                            sourceComponent: collapsed ? null : subItemColumnDelegate
-                            onStatusChanged: if (status == Loader.Ready) item.model = subItemModel
-                        }
-                    }
-
-                }
-
-                Component {
-                    id: subItemColumnDelegate
-                    Column {
-                        property alias model : subItemRepeater.model
-                        width: 200
-                        Repeater {
-                            id: subItemRepeater
-                            delegate: Rectangle {
-                                height: 40
-                                width: 200
-
-                                Text {
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    x: 30
-                                    font.pixelSize: 12
-                                    text: itemName
-                                }
-                            }
-                        }
-                    }
-
-                }
             }
 
             // Right item 4 ends
 
             Button {
-                id: button
+                id: publish_button
                 text: qsTr("Publish Data Source")
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 40
@@ -791,6 +752,25 @@ Page {
 
     InMemory{
         id: inMemory
+    }
+
+
+    Component{
+        id:tablelistDelegate
+
+        Rectangle {
+            id: wrapper
+            width: 200
+            height: 30
+
+            Text {
+                id: contactInfo
+                text: tableName
+                x: 20
+                font.pixelSize: 12
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
     }
 
 }

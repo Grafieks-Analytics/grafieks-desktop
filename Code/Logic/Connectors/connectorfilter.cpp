@@ -10,6 +10,7 @@ ConnectorFilter::ConnectorFilter(QObject *parent) : QSortFilterProxyModel(parent
 
 void ConnectorFilter::setSearchString(QString string)
 {
+    qDebug() << "Filter called";
     setFilterRole(m_connectorModel.NameRole);
     this->setFilterCaseSensitivity(Qt::CaseInsensitive);
     this->setFilterFixedString(string);

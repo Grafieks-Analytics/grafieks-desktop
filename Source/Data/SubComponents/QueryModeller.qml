@@ -19,7 +19,6 @@ Item{
     height:parent.height
     width: parent.width
     property int totalLineCount: 1
-    property variant lineObjects :[]
 
 
     // For line numbers
@@ -87,8 +86,7 @@ Item{
 
             // Remove line numbers on deleting query from the line
             else if(totalLineCount > lineCount){
-                var i;
-                for(i = totalLineCount; i > lineCount; i--){
+                for(var i = totalLineCount; i > lineCount; i--){
                     var counter = i-1
                     elementModel.remove(counter)
                     totalLineCount--
@@ -98,12 +96,13 @@ Item{
 
     }
 
+    Button{
+        text: "Test Query"
+        anchors.top: textedit_querymodeller.bottom
 
-
-    Component {
-        id: newLineComponent;
-
-        Text {
+        onClicked: {
+            QueryModel.callQuery()
         }
     }
+
 }

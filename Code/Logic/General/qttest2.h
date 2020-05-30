@@ -5,17 +5,11 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
-#include <QJsonDocument>
+#include <QByteArray>
+#include <QJsonArray>
 #include <QJsonObject>
-#include <QSettings>
-#include <QDebug>
+#include <QJsonDocument>
 
-
-#include <QObject>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QQmlApplicationEngine>
 
 class QtTest2 : public QObject
 {
@@ -23,32 +17,22 @@ class QtTest2 : public QObject
 public:
     explicit QtTest2(QObject *parent = nullptr);
 
-    Q_INVOKABLE void fetchPosts();
-
-//    Q_INVOKABLE void removeLast();
-
-
-//    QStringList jokes() const;
-
-    bool initialize();
-
 private slots:
-
-    void dataReadyRead();
-    void dataReadFinished();
+    void reading();
+    void readComplete();
 
 signals:
+    void loginStatus(bool status);
 
 private:
+    QNetworkAccessManager * m_networkAccessManager;
+    QNetworkReply * m_networkReply;
+    QByteArray * m_tempStorage;
+    QVariantMap outputStatus;
 
-    void resetModel();
 
-    QNetworkAccessManager *mNetManager;
-    QNetworkReply *mNetReply;
-    QByteArray * mDataBuffer;
-    QString mBuffer;
-    QStringList mJokes;
-    QQmlApplicationEngine mEngine;
+
+
 
 };
 

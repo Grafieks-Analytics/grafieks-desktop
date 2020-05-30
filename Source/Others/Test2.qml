@@ -1,40 +1,49 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.4
 
-Item
-{
-    ListModel {
-        id: elementModel
-        ListElement { content: "1"}
+Item{
+    id: x1
+
+    Component.onCompleted: {
+
+        DBListModel.callQuery()
+        list_view1.model = DBListModel
     }
 
-    Column {
-        id:col
-        spacing: 2
-        Repeater {
-            model: elementModel
-            Text { text: content;}
-        }
+    ListView {
+        id: list_view1
+        x: 10
+        y: 100
+        width: parent.width
+        height: 160
+        delegate: x
     }
 
-    Button
-    {
-        id: deleteButton; x: 200; y: 200; height: 50; width: 50; text: "Delete"
-        onClicked:
-        {
-            //How to remove perticular element from above column ?
-            elementModel.remove(1)
-        }
-    }
+//    ListView {
+//        id: tableslist
+//        anchors.top: categoryItem.bottom
 
-    Button
-    {
-        id: addButton; x: 400; y: 200; height: 50; width: 50; text: "Add"
-        onClicked:
-        {
-            // Code to add controls dynamically to column.
-            elementModel.insert(1, { "content": Math.random(3).toString()})
-        }
+//        delegate: x
+//    }
 
+    Component{
+        id: x
+
+        Item {
+            id: delegate
+            width: parent.width;
+            height: 30
+            clip: true
+            anchors.margins: 4
+            Row {
+                anchors.margins: 4
+                anchors.fill: parent
+                spacing: 4;
+                Text {
+                    text: dbName
+                    width: delegate.width/3
+                }
+            }
+        }
     }
 }

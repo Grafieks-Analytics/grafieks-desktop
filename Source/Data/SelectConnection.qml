@@ -71,6 +71,10 @@ Page {
             mysqlModal.visible = true
             break;
 
+        case "sqlite":
+            sqliteModal.visible = true
+            break;
+
         default:
             break;
         }
@@ -324,10 +328,7 @@ Page {
                     anchors.fill: parent
 
                     onClicked: {
-                        //                        modalId.visible = true
-                        //                        update_data_sources_list();
 
-                        // Select the mmodal popup
                         selectAuthorization(name)
 
                     }
@@ -346,10 +347,7 @@ Page {
                     anchors.fill: parent
 
                     onClicked: {
-                        //                        modalId.visible = true
-                        //                        update_data_sources_list();
 
-                        // Select the mmodal popup
                         selectAuthorization(name)
                     }
                 }
@@ -400,8 +398,13 @@ Page {
 
     }
 
-    ConnectDatabase{
+    MysqlConnection{
         id: mysqlModal
+
+    }
+
+    SqliteConnection{
+        id: sqliteModal
 
     }
 

@@ -4,25 +4,29 @@
 #include <QObject>
 #include <QSqlDatabase>
 #include <QSqlDriver>
+#include <QSqlQueryModel>
+#include <QSqlRecord>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QDebug>
 
-#include "../Logic/General/constants.h"
+
+#include "../constants.h"
 
 class Sqlitecon : public QObject
 {
     Q_OBJECT
 
+    QVariantMap outputStatus;
+    const QString DRIVER = "QSQLITE";
+
 public:
     explicit Sqlitecon(QObject *parent = nullptr);
     QVariantMap SqliteInstance(const QString & filepath, const QString & username, const QString & password);
 
+    ~Sqlitecon();
+
 signals:
-
-private:
-
-    QVariantMap outputStatus;
 
 };
 

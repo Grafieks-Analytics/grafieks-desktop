@@ -2,17 +2,14 @@
 
 Sqlitecon::Sqlitecon(QObject *parent) : QObject(parent)
 {
-
 }
 
 QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &username, const QString &password)
 {
 
-    const QString DRIVER("QSQLITE");
-
     if(QSqlDatabase::isDriverAvailable(DRIVER)){
 
-        QSqlDatabase dbSqlite = QSqlDatabase::addDatabase("QSQLITE");
+        QSqlDatabase dbSqlite = QSqlDatabase::addDatabase(DRIVER);
         dbSqlite.setDatabaseName(filename);
 
         if(username != "" && password != ""){
@@ -39,3 +36,8 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &us
 
 }
 
+Sqlitecon::~Sqlitecon()
+{
+    QSqlDatabase dbSqlite = QSqlDatabase::database();
+    dbSqlite.close();
+}

@@ -17,9 +17,13 @@ SOURCES += \
         Code/Api/logout.cpp \
         Code/Connectors/mysqlcon.cpp \
         Code/Connectors/sqlitecon.cpp \
-        Code/Logic/Datasources/connector.cpp \
-        Code/Logic/Datasources/connectorfilter.cpp \
-        Code/Logic/Datasources/connectormodel.cpp \
+        Code/Logic/Connectors/connector.cpp \
+        Code/Logic/Connectors/connectorfilter.cpp \
+        Code/Logic/Connectors/connectormodel.cpp \
+        Code/Logic/Connectors/connectorsloginmodel.cpp \
+        Code/Logic/DataModeller/dblistmodel.cpp \
+        Code/Logic/DataModeller/querymodel.cpp \
+        Code/Logic/DataModeller/tablelistmodel.cpp \
         Code/Logic/Datasources/datasource.cpp \
         Code/Logic/Datasources/datasourceds.cpp \
         Code/Logic/Datasources/datasourcefilter.cpp \
@@ -49,18 +53,24 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     Code/Api/login.h \
     Code/Api/logout.h \
+    Code/Connectors/allconnectors.h \
     Code/Connectors/mysqlcon.h \
     Code/Connectors/sqlitecon.h \
-    Code/Logic/Datasources/connector.h \
-    Code/Logic/Datasources/connectorfilter.h \
-    Code/Logic/Datasources/connectormodel.h \
+    Code/Logic/Connectors/connector.h \
+    Code/Logic/Connectors/connectorfilter.h \
+    Code/Logic/Connectors/connectormodel.h \
+    Code/Logic/Connectors/connectorsloginmodel.h \
+    Code/Logic/DataModeller/dblistmodel.h \
+    Code/Logic/DataModeller/querymodel.h \
+    Code/Logic/DataModeller/tablelistmodel.h \
     Code/Logic/Datasources/datasource.h \
     Code/Logic/Datasources/datasourceds.h \
     Code/Logic/Datasources/datasourcefilter.h \
     Code/Logic/Datasources/datasourcemodel.h \
-    Code/Logic/General/constants.h \
     Code/Logic/General/qttest2.h \
-    Code/Logic/Menu/user.h \
+    Code/Logic/Menu/user.h \ \
+    Code/constants.h \
+    Code/statics.h
 
 DISTFILES += \
     README.md
