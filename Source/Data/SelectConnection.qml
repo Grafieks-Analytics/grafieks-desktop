@@ -75,6 +75,10 @@ Page {
             sqliteModal.visible = true
             break;
 
+        case "dropbox":
+            dropboxModal.visible = true
+            break;
+
         default:
             break;
         }
@@ -313,6 +317,7 @@ Page {
         cellHeight: 130
 
 
+
         delegate : Column{
             scale: 1
             width: 230
@@ -406,6 +411,10 @@ Page {
     SqliteConnection{
         id: sqliteModal
 
+    }
+
+    DropboxConnection{
+        id: dropboxModal
     }
 
 }
