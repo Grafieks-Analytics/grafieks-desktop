@@ -36,6 +36,14 @@ Page {
                 tableslist.model = TableListModel
             }
         }
+        onSqliteLoginStatus:{
+            if(status.status === true){
+                // Call functions
+                TableListModel.callQuery()
+                tableslist.model = TableListModel
+                console.log("HEre i am",TableListModel)
+            }
+        }
     }
 
     // Left menubar starts

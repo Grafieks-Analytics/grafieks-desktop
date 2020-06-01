@@ -40,14 +40,32 @@ QHash<int, QByteArray> TableListModel::roleNames() const
 void TableListModel::callQuery(QString queryString)
 {
 
-    QSqlDatabase dbMysql = QSqlDatabase::database();
-    if (queryString != ""){
-        this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'");
-    } else{
-        qDebug() << "QueryString "<< "Else";
-        this->setQuery("SHOW TABLES");
-    }
+    //    QSqlDatabase dbMysql = QSqlDatabase::database();
 
+    switch(Statics::currentDbIntType){
+
+
+    case Constants::mysqlIntType:
+
+        if (queryString != ""){
+            this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'");
+        } else{
+            this->setQuery("SHOW TABLES");
+        }
+
+        break;
+
+
+    case Constants::sqliteIntType:
+
+        if (queryString != ""){
+            this->setQuery("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '%"+queryString+"%'  AND name != 'sqlite_%'");
+        } else{
+            this->setQuery("SELECT name FROM sqlite_master WHERE type='table' AND name != 'sqlite_%'");
+        }
+
+        break;
+    }
 }
 
 
@@ -56,6 +74,7 @@ void TableListModel::generateRoleNames()
 
     m_roleNames.clear();
     QString roleName = "tableName";
+    qDebug() << "Table name" << roleName;
     m_roleNames.insert(Qt::UserRole + 1, roleName.toUtf8());
 
 }

@@ -22,12 +22,19 @@
 
 #include "Code/statics.h"
 
+QString Statics::currentDbName;
+int Statics::currentDbIntType;
+QString Statics::currentDbStrType;
 
 QString Statics::myHost;
 QString Statics::myDb;
 int Statics::myPort;
 QString Statics::myUsername;
 QString Statics::myPassword;
+
+QString Statics::sqliteFile;
+QString Statics::sqliteUsername;
+QString Statics::sqlitePassword;
 
 
 int main(int argc, char *argv[])
