@@ -14,7 +14,7 @@ import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
 
-
+import "../SubComponents"
 
 Popup {
     id: popup
@@ -129,6 +129,10 @@ Popup {
                     color: btn_test_con.hovered ? "white" : "black"
                 }
 
+                onClicked: {
+                    fileListPopup.visible = true;
+                    popup.visible = false;
+                }
             }
 
             Text {
@@ -139,13 +143,13 @@ Popup {
 
                 x : dropboxConnectionModal.width + popup.width/7 + 40
 
-
                 text: qsTr("Click the allow button above to open the Dropbox authorization page on a separate window.");
 
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
 
                 font.pixelSize: Constants.fontReading
+
             }
 
             Text {
@@ -167,4 +171,8 @@ Popup {
 
 
 
+
+
+
 }
+

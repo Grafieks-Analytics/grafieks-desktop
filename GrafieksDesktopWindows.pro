@@ -35,8 +35,11 @@ SOURCES += \
 RESOURCES += \
     assets.qrc \
     assets.qrc \
+    assets.qrc \
     images.qrc \
     images.qrc \
+    images.qrc \
+    qml.qrc \
     qml.qrc \
     qml.qrc
 
@@ -91,6 +94,8 @@ DISTFILES += \
     Constants.qml \
     Documentation/.DS_Store \
     Documentation/Configuration Windows QT.pdf \
+    Documentation/Configuration Windows QT.pdf \
+    Documentation/Configuration Windows QT.pptx \
     Documentation/Configuration Windows QT.pptx \
     Documentation/Layouts.md \
     Images/.DS_Store \
@@ -100,6 +105,7 @@ DISTFILES += \
     Images/icons/20_snowflake-icon_a4ed1ae266.png \
     Images/icons/74_sqlite-icon_a6ac860586.png \
     Images/icons/Charts.png \
+    Images/icons/Db - 60.png \
     Images/icons/Db - 60.png \
     Images/icons/Db.png \
     Images/icons/Down.png \
@@ -181,6 +187,7 @@ DISTFILES += \
     Images/icons/sample_graph.png \
     Images/icons/text.png \
     Images/icons/zoom out.png \
+    Images/icons/zoom out.png \
     Images/logos/.DS_Store \
     Images/logos/logo.ico \
     Images/logos/logo.png \
@@ -218,6 +225,7 @@ DISTFILES += \
     Source/Data/SubComponents/DataSourcesGrid.qml \
     Source/Data/SubComponents/DataSourcesList.qml \
     Source/Data/SubComponents/DropboxConnection.qml \
+    Source/Data/SubComponents/DropboxConnectionFiles.qml \
     Source/Data/SubComponents/InMemory.qml \
     Source/Data/SubComponents/MainMenuDelegate.qml \
     Source/Data/SubComponents/MenuSeparatorComponent.qml \
