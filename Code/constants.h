@@ -14,6 +14,14 @@ const QString GeneralFailureMsg = "Failure";
 const QString GeneralNoDriver = "No driver available";
 const QString GeneralTimeOut = "Request Time Out";
 
+// Datasource type int
+const int mysqlIntType = 0;
+const int sqliteIntType = 1;
+
+// Datasource type Strings
+const QString mysqlStrType = "mysql";
+const QString sqliteStrType = "sqlite";
+
 
 // Layout level constants
 

@@ -7,6 +7,10 @@ class Statics
 {
 public:
 
+    static QString currentDbName;
+    static int currentDbIntType;
+    static QString currentDbStrType;
+
     // Mysql
     static QString myHost;
     static QString myDb;
@@ -18,6 +22,8 @@ public:
     static QString sqliteFile;
     static QString sqliteUsername;
     static QString sqlitePassword;
+
+    // Dropbox
 };
 
 #endif // CREDENTIALS_H

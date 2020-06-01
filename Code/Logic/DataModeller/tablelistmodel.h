@@ -7,9 +7,11 @@
 #include <QSqlDatabase>
 #include <QObject>
 #include <QSqlDatabase>
+#include <QDebug>
 
 #include "../../Connectors/allconnectors.h"
 #include "../../statics.h"
+#include "../../constants.h"
 
 class TableListModel : public QSqlQueryModel
 {

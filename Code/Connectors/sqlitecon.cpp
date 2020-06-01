@@ -9,7 +9,7 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &us
 
     if(QSqlDatabase::isDriverAvailable(DRIVER)){
 
-        QSqlDatabase dbSqlite = QSqlDatabase::addDatabase(DRIVER);
+        QSqlDatabase dbSqlite = QSqlDatabase::addDatabase(DRIVER, Constants::sqliteStrType);
         dbSqlite.setDatabaseName(filename);
 
         if(username != "" && password != ""){
@@ -22,6 +22,14 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &us
             outputStatus.insert("msg", dbSqlite.lastError().text());
 
         } else{
+
+            // Save static values to access it later on other objects
+            // For automatic connection for other instances
+            // If correct credentials inserted once
+
+            Statics::sqliteFile = filename;
+            Statics::sqliteUsername = username;
+            Statics::sqlitePassword = password;
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Constants::GeneralSuccessMsg);
