@@ -417,4 +417,8 @@ Page {
         id: dropboxModal
     }
 
+    DropboxConnectionFiles{
+        id: fileListPopup
+    }
+
 }

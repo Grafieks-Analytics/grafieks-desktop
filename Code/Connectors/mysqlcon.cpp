@@ -10,7 +10,7 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
 
     if(QSqlDatabase::isDriverAvailable(DRIVER)){
 
-        QSqlDatabase dbMysql = QSqlDatabase::addDatabase(DRIVER);
+        QSqlDatabase dbMysql = QSqlDatabase::addDatabase(DRIVER, Constants::mysqlStrType);
         dbMysql.setHostName(host);
         dbMysql.setPort(port);
         dbMysql.setDatabaseName(db);

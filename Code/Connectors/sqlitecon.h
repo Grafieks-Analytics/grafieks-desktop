@@ -10,7 +10,7 @@
 #include <QSqlQuery>
 #include <QDebug>
 
-
+#include "../statics.h"
 #include "../constants.h"
 
 class Sqlitecon : public QObject
