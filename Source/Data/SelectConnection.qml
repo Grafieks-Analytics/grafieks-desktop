@@ -107,7 +107,7 @@ Page {
         id:search_rect
         border.color: Constants.borderBlueColor
         width: 400
-        height: 35
+        height: 50
         radius: 5
         x: selectconn_page.width/2 - 195
         anchors.verticalCenter: selectconn_page.verticalCenter
@@ -116,17 +116,18 @@ Page {
         z: 5
 
 
-        TextEdit {
+        TextField {
             id: search_text
-            text: "Search"
-            cursorVisible: true
-            width:250
+            width: 400
             height: 50
+            placeholderText: "Search"
+            cursorVisible: true
             anchors.left: search_rect.left
-            anchors.leftMargin: 30
+            leftPadding: 15
+            rightPadding: 15
             anchors.top: search_rect.top
             anchors.bottom:search_rect.bottom
-            verticalAlignment:TextEdit.AlignVCenter
+            verticalAlignment:TextField.AlignVCenter
             font.italic: true
             font.pointSize: Constants.fontReading
             opacity: 0.6
