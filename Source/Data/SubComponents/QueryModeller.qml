@@ -96,13 +96,13 @@ Item{
 
     }
 
-    Button{
-        text: "Test Query"
-        anchors.top: textedit_querymodeller.bottom
+//    Button{
+//        text: "Test Query"
+//        anchors.top: textedit_querymodeller.bottom
 
-        onClicked: {
-            QueryModel.callQuery()
-        }
-    }
+//        onClicked: {
+//            QueryModel.callQuery()
+//        }
+//    }
 
 }

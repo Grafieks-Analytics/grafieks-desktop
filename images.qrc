@@ -88,5 +88,8 @@
         <file>Images/icons/zoom out.png</file>
         <file>Images/icons/align.png</file>
         <file>Images/icons/align-2.png</file>
+        <file>Images/icons/play.png</file>
+        <file>Images/icons/drive.png</file>
+        <file>Images/icons/folder.png</file>
     </qresource>
 </RCC>

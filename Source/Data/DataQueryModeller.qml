@@ -26,6 +26,31 @@ Page {
     property int statusIndex: 1
     property bool collapsed: false
 
+    ListModel{
+        id : testQueryModel
+        ListElement{
+            status: "tick"
+            queryNumber:"1"
+            action:"SELECT * from  accounts LIMIT 0, 1000"
+            message:"1 row(s) returned"
+            duration:"01.000 sec"
+        }
+        ListElement{
+            status: "cross"
+            queryNumber:"2"
+            action:"SELECT * from  accountssad LIMIT 0, 1000"
+            message:"Error Code: 1146. Table 'grafieks_my.accountsasd' doesn't exist"
+            duration:""
+        }
+        ListElement{
+            status: "tick"
+            queryNumber:"3"
+            action:"SELECT * from  accountsasda LIMIT 0, 1000"
+            message:"2 row(s) returned"
+            duration:"01.000 sec"
+        }
+    }
+
     Connections{
         target: ConnectorsLoginModel
 
@@ -346,7 +371,7 @@ Page {
         anchors.top: data_query_modeller_stackview.bottom
         anchors.left: left_menubar.right
         width: parent.width
-        visible: false
+        visible: true
 
         HorizontalLineTpl{
             id: linebar1
@@ -361,14 +386,43 @@ Page {
             width: 100
             anchors.top: linebar1.bottom
             anchors.left: parent.left
-            anchors.topMargin: 8
-            anchors.leftMargin: 10
             height: 22
 
+            Button{
+                id: testQueryBtn
+                height: 27
+                width: 100
+                leftPadding: 10
+                topPadding: 8
 
-            Text{
-                text: "Test Query"
+                Text{
+                    text: "Test Query"
+                    anchors.centerIn: parent
+                }
+
+                background: Rectangle{
+                    id: testQueryBtnBackground
+                    color: testQueryBtn.hovered ? Constants.themeColor : Constants.whiteColor
+                }
+
+                onClicked: {
+
+
+                    testQueryBtnBackground.color = Constants.themeColor
+                    displayLimitBtnBackground.color = displayLimitBtn.hovered ? Constants.themeColor : Constants.whiteColor
+                    dataPreviewBtnBackground.color = dataPreviewBtn.hovered ? Constants.themeColor : Constants.whiteColor
+
+
+                    testQueryResult.visible = true
+                    dataPreviewResult.visible = false
+                    displayResult.visible = false
+
+                    QueryModel.callQuery()
+
+                }
             }
+
+
         }
 
         ToolSeparator{
@@ -380,18 +434,46 @@ Page {
         }
 
         Rectangle{
+
             id: data_preview_btn
             width: 100
             anchors.top: linebar1.bottom
             anchors.left: seperator1.right
-            anchors.topMargin: 8
-            anchors.leftMargin: 20
             height: 22
 
-            Text{
-                text: "Data Preview"
-                anchors.verticalCenter: seperator1.verticalCenter
+            Button{
+                id: dataPreviewBtn
+                height: 27
+                width: 100
+                leftPadding: 10
+                topPadding: 8
+
+                Text{
+                    text: "Data Preview"
+                    anchors.centerIn: parent
+                }
+
+                background: Rectangle{
+                    id: dataPreviewBtnBackground
+                    color: dataPreviewBtn.hovered ? Constants.themeColor : Constants.whiteColor
+                }
+
+                onClicked: {
+
+                    testQueryBtnBackground.color = testQueryBtn.hovered ? Constants.themeColor : Constants.whiteColor
+                    dataPreviewBtnBackground.color = Constants.themeColor
+                    displayLimitBtnBackground.color = displayLimitBtn.hovered ? Constants.themeColor : Constants.whiteColor
+
+                    testQueryResult.visible = false
+                    dataPreviewResult.visible = true
+                    displayResult.visible = false
+
+                }
+
+
             }
+
+
         }
 
         ToolSeparator{
@@ -403,18 +485,44 @@ Page {
         }
 
         Rectangle{
+
             id: display_limited_btn
             width: 160
             anchors.top: linebar1.bottom
             anchors.left: seperator2.right
-            anchors.topMargin: 8
-            anchors.leftMargin: 20
             height: 22
 
-            Text{
-                text: "Display limited to top 100"
-                anchors.verticalCenter: seperator2.verticalCenter
+            Button{
+                id: displayLimitBtn
+                height: 27
+                width: 160
+                leftPadding: 10
+                topPadding: 8
+
+                Text{
+                    text: "Display limited to top 100"
+                    anchors.centerIn: parent
+                }
+
+                background: Rectangle{
+                    id: displayLimitBtnBackground
+                    color: displayLimitBtn.hovered ? Constants.themeColor : Constants.whiteColor
+                }
+
+                onClicked: {
+
+                    testQueryBtnBackground.color = testQueryBtn.hovered ? Constants.themeColor : Constants.whiteColor
+                    dataPreviewBtnBackground.color = dataPreviewBtn.hovered ? Constants.themeColor : Constants.whiteColor
+                    displayLimitBtnBackground.color = Constants.themeColor
+
+                    testQueryResult.visible = false
+                    dataPreviewResult.visible = false
+                    displayResult.visible = true
+
+                }
+
             }
+
         }
 
         ToolSeparator{
@@ -425,6 +533,38 @@ Page {
             padding: 0
         }
 
+        Rectangle{
+
+            id: play_btn_rect
+            width: 160
+            anchors.top: linebar1.bottom
+            anchors.left: seperator3.right
+            height: 22
+
+            Button{
+                id: playBtn
+                height: 27
+                width: 27
+                leftPadding: 10
+                topPadding: 8
+
+                Image {
+                    id: playBtnImage
+                    height: 24
+                    width: 24
+                    source: "../../Images/icons/play.png"
+                    anchors.centerIn: parent
+                }
+
+                background: Rectangle{
+                    color: playBtn.hovered ? "#009B8F" : "#0dd1c2"
+                    opacity: 0.42
+                }
+
+            }
+
+        }
+
         HorizontalLineTpl{
             id: linebar2
             line_color: Constants.themeColor
@@ -433,31 +573,126 @@ Page {
             anchors.top: parent.bottom
         }
 
+        // Result starts
+
+        Rectangle{
+            id:testQueryResult
+            visible: false
+            height: testQueryList.height
+            width: parent.width
+            anchors.top: linebar2.bottom
+
+            ListView{
+                id: testQueryList
+                model:testQueryModel
+
+                header: Row{
+                    width: parent.width
+
+                    Column{
+                        width: 40
+                        Rectangle {
+                            height: 30
+                            width: 40
+                            Text{
+                                text: ""
+                            }
+                        }
+                    }
+
+                    Column{
+                        width: 40
+                        Rectangle {
+                            height: 30
+                            width: 40
+                            Text{
+                                text: "#"
+                                anchors.centerIn: parent
+                            }
+                        }
+                    }
+
+                    Column{
+                        width: 200
+                        Rectangle {
+                            height: 30
+                            width: 200
+                            Text{
+                                text: "Action"
+                                anchors.centerIn: parent
+                            }
+                        }
+                    }
+
+
+                    Column{
+                        width: 400
+                        Rectangle {
+                            height: 30
+                            width: 400
+                            Text{
+                                text: "Message"
+                                anchors.centerIn: parent
+                            }
+                        }
+                    }
+
+
+                    Column{
+                        width: 120
+                        Rectangle {
+                            height: 30
+                            width: 120
+                            Text{
+                                text: "Duration"
+                                anchors.centerIn: parent
+                            }
+                        }
+                    }
+                }
+
+
+            }
+
+
+
+        }
+
+
         Row{
-            id:as
+            id:dataPreviewResult
             anchors.topMargin: 30
             topPadding: 30
             leftPadding: 10
+            visible: false
             Text {
-                id: s
+                id: dataPreviewResultText
                 anchors.top: linebar2.bottom
-                text: qsTr("text")
+                text: qsTr("Data preview result")
             }
         }
 
-        //        DataSourcesList{
-        //            id: dummy_datasources
-        //            anchors.top: toolbar_querymodeller.bottom
 
-        //        }
+        Row{
+            id:displayResult
+            anchors.topMargin: 30
+            topPadding: 30
+            leftPadding: 10
+            visible: false
+            Text {
+                id: displayResultText
+                anchors.top: linebar2.bottom
+                text: qsTr("Table Result")
+            }
+        }
 
+        // Result starts
 
     }
     // Data table and other info at bottom
     // Ends
 
     // Center Panel ends
-
 
     // Righthand Panel starts
 
@@ -497,44 +732,12 @@ Page {
                     color: Constants.darkThemeColor
                 }
 
-
-                // Preview data button starts
-
-                TabButton{
-                    id: preview_btn
-                    text:"Preview Data"
-                    onClicked: {
-                        if(infodata_table.visible === true){
-                            infodata_table.visible = false
-                            preview_btn_background.color =  Constants.themeColor
-                        }
-                        else{
-                            infodata_table.visible = true
-                            preview_btn_background.color =  Constants.darkThemeColor
-                        }
-                    }
-                    background: Rectangle {
-                        id: preview_btn_background
-                        color: preview_btn.hovered ?  Constants.darkThemeColor : Constants.themeColor
-                    }
-
-                    contentItem: Text{
-                        id:preview_btn_text
-                        text: preview_btn.text
-                        color:"black"
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
-
-                // Preview data button ends
-
                 // Next button starts
 
                 TabButton{
-                    id: tab_btn_nxt
-                    text:"Next"
-
+                    id: tabCreateDashboard
+                    text:"Create Dashboard"
+                    width:rectangle_querymodeller_right_col.width
 
                     onClicked: {
 
@@ -545,12 +748,12 @@ Page {
                     }
 
                     background: Rectangle {
-                        color: tab_btn_nxt.hovered? Constants.darkThemeColor: Constants.themeColor
+                        color: tabCreateDashboard.hovered? Constants.darkThemeColor: Constants.themeColor
                     }
 
                     contentItem: Text{
-                        id:tab_btn_nxt_text
-                        text: tab_btn_nxt.text
+                        id:tabCreateDashboard_text
+                        text: tabCreateDashboard.text
                         color:"black"
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
@@ -626,7 +829,7 @@ Page {
 
                     TextField{
                         id:searchTextBox
-                        text: "Search"
+                        placeholderText: "Search"
                         width:rectangle_querymodeller_right_col3.width - search_icon.width
                         height:30
                         cursorVisible: true
@@ -642,10 +845,11 @@ Page {
                     Image{
                         id:search_icon
                         source:"../../Images/icons/Search.png"
-                        height:30
-                        width:30
+                        height:25
+                        width:25
+                        anchors.rightMargin: 10
                         anchors.top: row_querymodeller_right_col.top
-                        anchors.topMargin: 5
+                        anchors.topMargin: 7.5
 
                         MouseArea{
                             anchors.fill: parent

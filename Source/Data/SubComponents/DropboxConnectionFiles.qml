@@ -167,7 +167,7 @@ Popup {
                     x : filePopup.width * 0.6 - 100
                     background: Rectangle {
                         id: searchBtnBackground
-                        color: searchBtn.hovered ?  Constants.darkThemeColor : Constants.themeColor
+                        color: searchBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
                     }
 
                     Text{
@@ -180,25 +180,25 @@ Popup {
                 }
 
 
-//                Button{
-//                    id: search_btn
-//                    height: 40
-//                    width: 100
-//                    x : filePopup.width * 0.6 - 100
-//                    background: Rectangle{
-//                        id: search_btn_background
-//                        color: search_btn.hovered ? Constants.darkThemeColor : Constants.ThemeColor
+                //                Button{
+                //                    id: search_btn
+                //                    height: 40
+                //                    width: 100
+                //                    x : filePopup.width * 0.6 - 100
+                //                    background: Rectangle{
+                //                        id: search_btn_background
+                //                        color: search_btn.hovered ? Constants.darkThemeColor : Constants.ThemeColor
 
-//                        Text{
-//                            text: "Search"
-//                            anchors.centerIn: parent
-//                            font.pixelSize: Constants.fontReading
-//                        }
+                //                        Text{
+                //                            text: "Search"
+                //                            anchors.centerIn: parent
+                //                            font.pixelSize: Constants.fontReading
+                //                        }
 
-//                    }
+                //                    }
 
 
-//                }
+                //                }
 
 
             }
@@ -218,10 +218,11 @@ Popup {
 
             Row{
                 width: filePopup.width * 0.6
+
                 Rectangle{
                     height: filePopup.height * 0.75 - 100
                     width: filePopup.width * 0.6
-                    border.color: Constants.darkThemeColor
+                    border.color: Constants.themeColor
 
                     ListView{
                         id: fileList
@@ -258,6 +259,7 @@ Popup {
 
                                     Text{
                                         text: qsTr("Kind")
+                                        leftPadding: 20
                                         anchors.verticalCenter: parent.verticalCenter
                                     }
                                 }
@@ -267,10 +269,11 @@ Popup {
                                 Rectangle {
                                     color: Constants.themeColor
                                     height: 30
-                                    width: fileList.width / 2
+                                    width: parent.width
 
                                     Text{
                                         text: qsTr("Last Modified")
+                                        leftPadding: 20
                                         anchors.verticalCenter: parent.verticalCenter
 
                                     }
@@ -280,38 +283,82 @@ Popup {
                         }
 
                         delegate: Row{
-
-                            height: 20
+                            height:30
                             width: filePopup.width * 0.6
 
                             Column{
                                 width: parent.width / 2
-                                Text {
-                                    text: qsTr(fileName)
-                                    leftPadding: 20
+                                height: parent.height
+
+                                Row{
+                                    height: parent.height
+                                    width: parent.width
+                                    anchors.left: parent
+                                    anchors.leftMargin: 2
+
+                                    Text {
+                                        text: qsTr(fileName)
+                                        padding: 5
+                                        leftPadding: 20
+                                    }
+
+                                    MouseArea{
+
+                                        anchors.fill:parent
+                                        onClicked: {
+
+                                            fileSelected.visible = true
+                                            fileNotSelectedMsg.visible = false
+
+                                        }
+                                    }
                                 }
+
                             }
 
 
                             Column{
                                 width: parent.width / 4
+                                height: 30
 
-                                Text {
-                                    text: qsTr(kind)
-                                    horizontalAlignment: Text.AlignHCenter
+                                Row{
+                                    height: parent.height
+                                    width: parent.width
+                                    anchors.left: parent
+
+                                    Text {
+                                        text: qsTr(kind)
+                                        padding: 5
+                                        leftPadding: 20
+                                    }
                                 }
+
                             }
 
                             Column{
                                 width: parent.width / 4
-                                Text {
-                                    text: qsTr(lastModified)
+                                height: 30
 
+                                Row{
+                                    height: parent.height
+                                    width: parent.width
+                                    anchors.left: parent
+
+                                    Text {
+                                        text: qsTr(lastModified)
+                                        padding: 5
+                                        leftPadding: 20
+                                    }
                                 }
                             }
 
+
+                            HorizontalLineTpl{
+                                width: parent.width
+                                anchors.top: parent.bottom
+                                line_color: Constants.themeColor
+                            }
                         }
-
 
                     }
                 }
@@ -322,18 +369,27 @@ Popup {
                 width: filePopup.width * 0.4  - 40
 
                 Rectangle{
+                    id: fileNotSelected
                     height: filePopup.height * 0.75 - 100
                     width: filePopup.width * 0.4 - 40
-                    border.color: Constants.darkThemeColor
+                    border.color: Constants.themeColor
 
-                    Text {
+                    Rectangle{
                         id: detailsHeading
-                        x: parent.width/2 - detailsHeading.width/2
-                        text: qsTr("Details")
-                        anchors.topMargin: 20
-                        font.pointSize: Constants.fontReading
-                    }
+                        height: 30
+                        width: parent.width
+                        border.color: Constants.themeColor
 
+                        Text {
+
+                            text: qsTr("Details")
+                            anchors.topMargin: 20
+                            font.pointSize: Constants.fontReading
+                            anchors.top: fileDetails.bottom
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                    }
 
                     HorizontalLineTpl{
                         width: parent.width
@@ -344,17 +400,75 @@ Popup {
                     Image {
                         id: dropBoxImage
                         source: "../../../Images/icons/dropbox-2.png"
-                        anchors.top: detailsHeading.bottom
-                        x: parent.width/2 - dropBoxImage.width/2
                         anchors.topMargin: 50
+                        anchors.top: detailsHeading.bottom
+                        anchors.horizontalCenter: parent.horizontalCenter
                     }
 
                     Text {
-                        id: msg
+                        id: fileNotSelectedMsg
+                        anchors.topMargin: 20
+                        anchors.top: dropBoxImage.bottom
+                        text: qsTr("Select a file from the list that you want to connect to")
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    Rectangle{
+                        id: fileSelected
+                        visible: false
+                        width: parent.width
                         anchors.top: dropBoxImage.bottom
                         anchors.topMargin: 20
-                        text: qsTr("Select a file from the list that you want to connect to")
-                        x:parent.width/2 - msg.width/2
+
+                        Column{
+                            id: fileHeadingColumn
+                            width: parent.width/2 - 5
+
+                            Text {
+                                anchors.right: parent.right
+                                padding: 5
+                                text: qsTr("Name")
+                            }
+                            Text {
+                                anchors.right: parent.right
+                                padding: 5
+                                text: qsTr("Kind")
+                            }
+                            Text {
+                                anchors.right: parent.right
+                                padding: 5
+                                text: qsTr("Last Modified")
+                            }
+                            Text {
+                                anchors.right: parent.right
+                                padding: 5
+                                text: qsTr("Size")
+                            }
+                        }
+
+                        Column{
+                            id:fileDetailsColumn
+                            anchors.left: fileHeadingColumn.right
+                            width: parent.width/2 + 5
+
+                            Text {
+                                text: qsTr("Test.xlsx")
+                                padding: 5
+                            }
+                            Text {
+                                text: qsTr("Document")
+                                padding: 5
+                            }
+                            Text {
+                                text: qsTr("24/05/2020 14:30")
+                                padding: 5
+                            }
+                            Text {
+                                text: qsTr("50 MB")
+                                padding: 5
+                            }
+
+                        }
                     }
 
                 }
@@ -373,6 +487,7 @@ Popup {
             anchors.topMargin: 20
 
             Row{
+                id: breadcrumb
                 width: filePopup.width * 0.6
                 Rectangle{
                     height: 40
@@ -382,8 +497,8 @@ Popup {
 
                     Text {
                         id: path
-                        anchors.topMargin: 10
-                        anchors.verticalCenter: parent
+                        anchors.verticalCenter: parent.verticalCenter
+                        leftPadding: 10
                         text: qsTr("abhishek/abhi/file.txt")
                     }
                 }
@@ -392,7 +507,8 @@ Popup {
 
             Row{
                 width: filePopup.width * 0.4
-                anchors.leftMargin: 40
+                anchors.left:breadcrumb.right
+                anchors.leftMargin: filePopup.width * 0.4  - 270
 
                 Button{
                     id: cancelBtn
@@ -401,7 +517,7 @@ Popup {
 
                     background: Rectangle {
                         id: cancelBtnBackground
-                        color: cancelBtn.hovered ?  Constants.darkThemeColor : Constants.themeColor
+                        color: cancelBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
                     }
 
                     Text{
@@ -421,10 +537,11 @@ Popup {
                     id: nextBtn
                     height: 40
                     width: 100
-                    x : 200
+                    anchors.left: cancelBtn.right
+                    anchors.leftMargin: 30
                     background: Rectangle {
                         id: nextBtnBackground
-                        color: nextBtn.hovered ?  Constants.darkThemeColor : Constants.themeColor
+                        color: nextBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
                     }
 
                     Text{
