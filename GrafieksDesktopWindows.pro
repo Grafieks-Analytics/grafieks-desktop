@@ -21,6 +21,9 @@ SOURCES += \
         Code/Logic/Connectors/connectorfilter.cpp \
         Code/Logic/Connectors/connectormodel.cpp \
         Code/Logic/Connectors/connectorsloginmodel.cpp \
+        Code/Logic/Connectors/dropbox.cpp \
+        Code/Logic/Connectors/dropboxds.cpp \
+        Code/Logic/Connectors/dropboxmodel.cpp \
         Code/Logic/DataModeller/dblistmodel.cpp \
         Code/Logic/DataModeller/querymodel.cpp \
         Code/Logic/DataModeller/tablelistmodel.cpp \
@@ -66,6 +69,9 @@ HEADERS += \
     Code/Logic/Connectors/connectorfilter.h \
     Code/Logic/Connectors/connectormodel.h \
     Code/Logic/Connectors/connectorsloginmodel.h \
+    Code/Logic/Connectors/dropbox.h \
+    Code/Logic/Connectors/dropboxds.h \
+    Code/Logic/Connectors/dropboxmodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/querymodel.h \
     Code/Logic/DataModeller/tablelistmodel.h \

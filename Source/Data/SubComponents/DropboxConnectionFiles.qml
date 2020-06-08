@@ -226,7 +226,7 @@ Popup {
 
                     ListView{
                         id: fileList
-                        model:allFileData
+                        model:DropboxModel
 
                         height: 200
                         width: filePopup.width * 0.6
@@ -297,10 +297,11 @@ Popup {
                                     anchors.leftMargin: 2
 
                                     Text {
-                                        text: qsTr(fileName)
+                                        text: qsTr(name)
                                         padding: 5
                                         leftPadding: 20
                                     }
+
 
                                     MouseArea{
 
@@ -309,6 +310,10 @@ Popup {
 
                                             fileSelected.visible = true
                                             fileNotSelectedMsg.visible = false
+                                            if(tag == "folder")
+                                             DropboxDS.fetchDatasources(pathLower)
+
+                                            path.text = pathLower
 
                                         }
                                     }
@@ -327,7 +332,7 @@ Popup {
                                     anchors.left: parent
 
                                     Text {
-                                        text: qsTr(kind)
+                                        text: qsTr(extension)
                                         padding: 5
                                         leftPadding: 20
                                     }
@@ -345,7 +350,7 @@ Popup {
                                     anchors.left: parent
 
                                     Text {
-                                        text: qsTr(lastModified)
+                                        text: qsTr(clientModified)
                                         padding: 5
                                         leftPadding: 20
                                     }
@@ -499,7 +504,7 @@ Popup {
                         id: path
                         anchors.verticalCenter: parent.verticalCenter
                         leftPadding: 10
-                        text: qsTr("abhishek/abhi/file.txt")
+                        text: qsTr("Dropbox")
                     }
                 }
             }
