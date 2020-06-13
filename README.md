@@ -23,3 +23,7 @@ windeployqt --qmldir <path-to-app-qml-files> <path-to-app-binary>
 ## To overcome Slow QT download issue
 
 Download the binary from [https://github.com/JKSH/QtSdkRepoChooser/releases](https://github.com/JKSH/QtSdkRepoChooser/releases) and select the fastest mirror. Use the mirror in the Maintenance tool or Qt Online installer settings `user defined repository`
+
+# Dependencies
+
+-   Openssl - For calling HTTPS requests. On Linux/Mac, directly install from package repo manager. For Windows use the [link](https://slproweb.com/products/Win32OpenSSL.html)

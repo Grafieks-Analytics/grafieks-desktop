@@ -132,6 +132,7 @@ Popup {
                 onClicked: {
                     fileListPopup.visible = true;
                     popup.visible = false;
+                    DropboxDS.fetchDatasources("")
                 }
             }
 
