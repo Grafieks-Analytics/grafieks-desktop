@@ -26,4 +26,4 @@ Download the binary from [https://github.com/JKSH/QtSdkRepoChooser/releases](htt
 
 # Dependencies
 
--   Openssl - For calling HTTPS requestes
+-   Openssl - For calling HTTPS requests. On Linux/Mac, directly install from package repo manager. For Windows use the [link](https://slproweb.com/products/Win32OpenSSL.html)
