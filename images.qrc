@@ -91,5 +91,7 @@
         <file>Images/icons/play.png</file>
         <file>Images/icons/drive.png</file>
         <file>Images/icons/folder.png</file>
+        <file>Images/icons/file-icon.png</file>
+        <file>Images/icons/folder-invoices.png</file>
     </qresource>
 </RCC>

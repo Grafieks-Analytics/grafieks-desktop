@@ -43,6 +43,25 @@ void DropboxDS::fetchDatasources(QString path)
 
 }
 
+QString DropboxDS::goingBack(QString path,QString name)
+{
+    int len = name.length();
+//    QStringRef sub(&path);
+//    sub.chop(len);
+    QString p = path;
+//    QStringList pa = path.split('');
+//    qDebug() <<"Listr is :" << pa;
+    p.chop(len);
+    if(p=="Dropbox" || p.length() == 1 || name == "Folder name")
+        p="";
+
+    qDebug()<<"This is p: "<<p;
+    fetchDatasources(p);
+
+    return p;
+
+}
+
 void DropboxDS::addDataSource(Dropbox *dropbox)
 {
     emit preItemAdded();
