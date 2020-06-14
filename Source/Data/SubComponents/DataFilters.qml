@@ -8,7 +8,7 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
+import QtQuick 2.12
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 
@@ -16,25 +16,25 @@ import com.grafieks.singleton.constants 1.0
 
 import "../../MainSubComponents"
 
-
-
 Popup {
     id: popupMain
     width: 600
-    height: 390
+    height: 500
     x: parent.width / 2 - 380
     y: 100
     modal: true
     visible: false
     padding: 0
 
+    background: Rectangle{
+        color: Constants.themeColor
+    }
 
-
-    // Header starts
+    // Popup Header starts
 
     Rectangle{
         id: headerPopup
-        color: Constants.themeColor
+        color: Constants.whiteColor
         border.color: "transparent"
         height: 40
         width: parent.width - 2
@@ -43,14 +43,34 @@ Popup {
         anchors.topMargin: 1
         anchors.leftMargin: 1
 
+
         Text{
-            text: "Add Data Filter"
+            id : text1
+            text: "Data Source Filter"
             anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.left : parent.left
+            font.pixelSize: 15
+            anchors.leftMargin: 10
         }
+        Image {
+            id: close_icn
+            source: "../../../Images/icons/outline_close_black_18dp2x.png"
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right:  parent.right
+            height: 25
+            width: 25
+            anchors.rightMargin: 5
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    popupMain.visible = false
+                }
+            }
+        }
+
     }
 
-    // Header ends
+    // Popup Header ends
 
     //    Top header buttons starts
 
@@ -62,7 +82,7 @@ Popup {
         anchors.leftMargin: 1
 
         Component.onCompleted: {
-            character_btn_background.color =  Constants.darkThemeColor
+            character_btn_background.color =  Constants.themeColor
         }
 
 
@@ -70,13 +90,13 @@ Popup {
 
         TabButton{
             id: character_btn
-            text: "Character"
+            text: "Categorial"
             width:popupMain.width/4 - 1
 
             background: Rectangle {
                 id: character_btn_background
                 border.color: Constants.darkThemeColor
-                color: character_btn.pressed? Constants.darkThemeColor: Constants.themeColor
+                color: character_btn.pressed? Constants.themeColor: Constants.whiteColor
             }
 
             contentItem: Text{
@@ -88,10 +108,10 @@ Popup {
             }
 
             onClicked: {
-                character_btn_background.color =  Constants.darkThemeColor
-                date_btn_background.color =  Constants.themeColor
-                numbers_btn_background.color = Constants.themeColor
-                users_btn_background.color = Constants.themeColor
+                character_btn_background.color =  Constants.themeColor
+                date_btn_background.color =  Constants.whiteColor
+                numbers_btn_background.color = Constants.whiteColor
+                users_btn_background.color = Constants.whiteColor
             }
         }
 
@@ -107,7 +127,7 @@ Popup {
             background: Rectangle {
                 id: date_btn_background
                 border.color: Constants.darkThemeColor
-                color: date_btn.pressed? Constants.darkThemeColor: Constants.themeColor
+                color: date_btn.pressed? Constants.themeColor: Constants.whiteColor
             }
 
             contentItem: Text{
@@ -119,10 +139,10 @@ Popup {
             }
 
             onClicked: {
-                character_btn_background.color =  Constants.themeColor
-                date_btn_background.color =  Constants.darkThemeColor
-                numbers_btn_background.color = Constants.themeColor
-                users_btn_background.color = Constants.themeColor
+                character_btn_background.color =  Constants.whiteColor
+                date_btn_background.color =  Constants.themeColor
+                numbers_btn_background.color = Constants.whiteColor
+                users_btn_background.color = Constants.whiteColor
             }
         }
 
@@ -132,13 +152,13 @@ Popup {
 
         TabButton{
             id: numbers_btn
-            text: "Numbers"
+            text: "Numerical"
             width:popupMain.width/4 - 1
 
             background: Rectangle {
                 id: numbers_btn_background
                 border.color: Constants.darkThemeColor
-                color: character_btn.pressed? Constants.darkThemeColor: Constants.themeColor
+                color: character_btn.pressed? Constants.themeColor: Constants.whiteColor
             }
 
             contentItem: Text{
@@ -150,10 +170,10 @@ Popup {
             }
 
             onClicked: {
-                character_btn_background.color =  Constants.themeColor
-                date_btn_background.color =  Constants.themeColor
-                numbers_btn_background.color = Constants.darkThemeColor
-                users_btn_background.color = Constants.themeColor
+                character_btn_background.color =  Constants.whiteColor
+                date_btn_background.color =  Constants.whiteColor
+                numbers_btn_background.color = Constants.themeColor
+                users_btn_background.color = Constants.whiteColor
             }
         }
 
@@ -163,14 +183,14 @@ Popup {
 
         TabButton{
             id: users_btn
-            text: "User"
+            text: "Group"
             width:popupMain.width/4 - 2
 
 
             background: Rectangle {
                 id: users_btn_background
                 border.color: Constants.darkThemeColor
-                color: users_btn.pressed? Constants.darkThemeColor: Constants.themeColor
+                color: users_btn.pressed? Constants.themeColor: Constants.whiteColor
 
             }
 
@@ -183,10 +203,10 @@ Popup {
             }
 
             onClicked: {
-                character_btn_background.color =  Constants.themeColor
-                date_btn_background.color =  Constants.themeColor
-                numbers_btn_background.color = Constants.themeColor
-                users_btn_background.color = Constants.darkThemeColor
+                character_btn_background.color =  Constants.whiteColor
+                date_btn_background.color =  Constants.whiteColor
+                numbers_btn_background.color = Constants.whiteColor
+                users_btn_background.color = Constants.themeColor
             }
         }
 
@@ -211,7 +231,7 @@ Popup {
 
         background: Rectangle {
             id: add_btn_1_background
-            color: users_btn.pressed? Constants.darkThemeColor: Constants.themeColor
+            color: add_btn_1.pressed? Constants.darkThemeColor: Constants.themeColor
 
         }
 
@@ -230,15 +250,17 @@ Popup {
 
     Menu {
         id: optionsMenu1
-        x: 10
-        y: 10
-        width: 580
-        height:370
-
+        x: parent.width/2 - optionsMenu1.width/2
+        y: parent.height/2 - optionsMenu1.height/2
+        width: 150
 
         MenuItem {
             text: "Customer ID"
             onTriggered: {}
+            onClicked: {
+                console.log("Clicked")
+                dataFilterInnerPopup.visible = true
+            }
         }
         MenuItem {
             text: "Customer Name"
@@ -260,6 +282,10 @@ Popup {
         MenuItem {
             text: "PO Line Number"
             onTriggered: {}
+            onClicked: {
+                console.log("Clicked")
+                dataFilterInnerPopup.visible = true
+            }
         }
     }
 
@@ -270,12 +296,19 @@ Popup {
     Rectangle{
         id: rect1
         width: popupMain.width - 40
-        height:230
-        border.color: "black"
+        height: parent.height - headerPopup.height - tabbar1.height - 100;
+        border.color: Constants.grayColor
         anchors.top:add_btn_1.bottom
         anchors.left: parent.left
         anchors.topMargin: 10
         anchors.leftMargin: 20
+
+
+        DataFiltersPopup{
+            id:dataFilterInnerPopup
+        }
+
+
     }
 
     // Center Panel Ends
@@ -285,10 +318,9 @@ Popup {
     Row{
         anchors.top:rect1.bottom
         anchors.right: parent.right
-        anchors.topMargin: 5
+        anchors.topMargin: 10
         anchors.rightMargin: 20
         spacing: 5
-
 
         Button{
             id: cancel_btn1
@@ -299,7 +331,7 @@ Popup {
 
             background: Rectangle {
                 id: cancel_btn1_background
-                color: cancel_btn1.pressed? Constants.darkThemeColor: Constants.themeColor
+                color: cancel_btn1.pressed? Constants.themeColor: Constants.darkThemeColor
 
             }
 
@@ -321,7 +353,7 @@ Popup {
 
             background: Rectangle {
                 id: apply_btn1_background
-                color: apply_btn1.pressed? Constants.darkThemeColor: Constants.themeColor
+                color: apply_btn1.pressed? Constants.themeColor: Constants.darkThemeColor
 
             }
 
@@ -339,5 +371,7 @@ Popup {
     }
 
     // Action button ends
+
+
 }
 

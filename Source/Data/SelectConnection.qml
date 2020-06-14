@@ -316,6 +316,8 @@ Page {
         model: ConnectorFilter
         cellWidth: grid1.width / 6
         cellHeight: 130
+//        clip:true
+//        boundsBehavior : Flickable.StopAtBounds
 
 
 

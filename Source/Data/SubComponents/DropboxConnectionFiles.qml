@@ -395,12 +395,6 @@ Popup {
                                 }
                             }
 
-
-                            HorizontalLineTpl{
-                                width: parent.width
-                                anchors.top: parent.bottom
-                                line_color: Constants.themeColor
-                            }
                         }
 
                     }
@@ -424,7 +418,6 @@ Popup {
                         border.color: Constants.themeColor
 
                         Text {
-
                             text: qsTr("Details")
                             anchors.topMargin: 20
                             font.pointSize: Constants.fontReading

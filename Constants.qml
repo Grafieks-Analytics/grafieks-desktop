@@ -34,6 +34,7 @@ QtObject {
     property color buttonBorderColor : "#009B8F"
     property color buttonHoverColor : "#009B8F"
     property color whiteColor : "#FFFFFF"
+    property color grayColor : "#707070"
 
 
     // Standard Font Sizes
