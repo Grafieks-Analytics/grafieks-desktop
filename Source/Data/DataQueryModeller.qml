@@ -53,6 +53,90 @@ Page {
             message:"2 row(s) returned"
             duration:"01.000 sec"
         }
+        ListElement{
+            status: "tick"
+            queryNumber:"1"
+            action:"SELECT * from  accounts LIMIT 0, 1000"
+            message:"1 row(s) returned"
+            duration:"01.000 sec"
+        }
+        ListElement{
+            status: "cross"
+            queryNumber:"2"
+            action:"SELECT * from  accountssad LIMIT 0, 1000"
+            message:"Error Code: 1146. Table 'grafieks_my.accountsasd' doesn't exist"
+            duration:""
+        }
+        ListElement{
+            status: "tick"
+            queryNumber:"3"
+            action:"SELECT * from  accountsasda LIMIT 0, 1000"
+            message:"2 row(s) returned"
+            duration:"01.000 sec"
+        }
+        ListElement{
+            status: "tick"
+            queryNumber:"1"
+            action:"SELECT * from  accounts LIMIT 0, 1000"
+            message:"1 row(s) returned"
+            duration:"01.000 sec"
+        }
+        ListElement{
+            status: "cross"
+            queryNumber:"2"
+            action:"SELECT * from  accountssad LIMIT 0, 1000"
+            message:"Error Code: 1146. Table 'grafieks_my.accountsasd' doesn't exist"
+            duration:""
+        }
+        ListElement{
+            status: "tick"
+            queryNumber:"3"
+            action:"SELECT * from  accountsasda LIMIT 0, 1000"
+            message:"2 row(s) returned"
+            duration:"01.000 sec"
+        }
+        ListElement{
+            status: "tick"
+            queryNumber:"1"
+            action:"SELECT * from  accounts LIMIT 0, 1000"
+            message:"1 row(s) returned"
+            duration:"01.000 sec"
+        }
+        ListElement{
+            status: "cross"
+            queryNumber:"2"
+            action:"SELECT * from  accountssad LIMIT 0, 1000"
+            message:"Error Code: 1146. Table 'grafieks_my.accountsasd' doesn't exist"
+            duration:""
+        }
+        ListElement{
+            status: "tick"
+            queryNumber:"3"
+            action:"SELECT * from  accountsasda LIMIT 0, 1000"
+            message:"2 row(s) returned"
+            duration:"01.000 sec"
+        }
+        ListElement{
+            status: "tick"
+            queryNumber:"1"
+            action:"SELECT * from  accounts LIMIT 0, 1000"
+            message:"1 row(s) returned"
+            duration:"01.000 sec"
+        }
+        ListElement{
+            status: "cross"
+            queryNumber:"2"
+            action:"SELECT * from  accountssad LIMIT 0, 1000"
+            message:"Error Code: 1146. Table 'grafieks_my.accountsasd' doesn't exist"
+            duration:""
+        }
+        ListElement{
+            status: "tick"
+            queryNumber:"3"
+            action:"SELECT * from  accountsasda LIMIT 0, 1000"
+            message:"2 row(s) returned"
+            duration:"01.000 sec"
+        }
     }
 
     ListModel{
@@ -690,13 +774,17 @@ Page {
             width: parent.width
             TableView {
                 id: testQueryResult
-                anchors.top: infodataTableHeader.bottom
+//                anchors.top: infodataTableHeader.bottom
                 model: testQueryModel
-                width: parent.width
+                width: parent.width- 300
                 visible: true
                 columnSpacing: 1
                 rowSpacing: 1
                 height:parent.height
+                boundsBehavior : Flickable.StopAtBounds
+                clip:true
+                ScrollBar.horizontal: ScrollBar{}
+                ScrollBar.vertical: ScrollBar{}
 
                 delegate: Row{
                     id: resultQueryRow
@@ -800,10 +888,13 @@ Page {
 
                 }
 
+                ScrollIndicator.horizontal: ScrollIndicator { }
+                ScrollIndicator.vertical: ScrollIndicator { }
+
             }
             TableView {
                 id:dataPreviewResult
-                anchors.top: infodataTableHeader.bottom
+//                anchors.top: infodataTableHeader.bottom
                 model: dataPreviewModel
                 width: parent.width
                 height:parent.height
@@ -926,7 +1017,7 @@ Page {
             }
             TableView {
                 id:displayResult
-                anchors.top: infodataTableHeader.bottom
+//                anchors.top: infodataTableHeader.bottom
                 model: dataPreviewModel
                 width: parent.width
                 height:300

@@ -1,48 +1,43 @@
 #include "qttest2.h"
 
-QtTest2::QtTest2(QObject *parent) : QObject(parent),
-    m_networkAccessManager(new QNetworkAccessManager(this)),
-    m_networkReply(nullptr),
-    m_tempStorage(new QByteArray)
+
+QtTest2::QtTest2(QObject *parent):QAbstractTableModel(parent)
 {
-    const QUrl API_ENDPOINT("https://content.dropboxapi.com/2/files/download");
-    QNetworkRequest request(API_ENDPOINT);
-
-    request.setRawHeader("Authorization", "Bearer Nhs8WPsY-hYAAAAAAAAHvLP53pgtkGD_ZI3ZYNXF5LacVrX88iJnqV807cFLvw-E");
-    request.setRawHeader("Dropbox-API-Arg","{\"path\": \"id:g8RmlbAknUAAAAAAAAACsw\"}");
-
-    QString a="";
-
-    m_networkReply = m_networkAccessManager->post(request, a.toUtf8());
-
-
-    connect(m_networkReply, &QIODevice::readyRead, this, &QtTest2::reading, Qt::UniqueConnection);
-    connect(m_networkReply, &QNetworkReply::finished, this, &QtTest2::readComplete, Qt::UniqueConnection);
 
 }
 
-
-void QtTest2::reading()
+QVariant QtTest2::headerData(int section, Qt::Orientation orientation, int role) const
 {
-
-    m_tempStorage->append(m_networkReply->readAll());
+    if(role == Qt::DisplayRole){
+            if(orientation == Qt::Horizontal)
+                return  QString("hor-%1").arg(section);
+            else
+                return QString("ver-%1").arg(section);
+        }
+        return QVariant();
 }
 
-void QtTest2::readComplete()
+int QtTest2::rowCount(const QModelIndex &parent) const
 {
-
-
-    if(m_networkReply->error()){
-        qDebug() << __FILE__ << __LINE__ << m_networkReply->errorString() << m_networkReply->error();
-
-
-    } else{
-        QJsonDocument resultJson = QJsonDocument::fromJson(* m_tempStorage);
-        QJsonObject resultObj = resultJson.object();
-
-
-        m_tempStorage->clear();
-
-    }
+    if (parent.isValid())
+            return 0;
+        return 20;
 }
 
+int QtTest2::columnCount(const QModelIndex &parent) const
+{
+    if (parent.isValid())
+            return 0;
+        return 20;
+}
+
+QVariant QtTest2::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid())
+            return QVariant();
+        if(role == Qt::DisplayRole
+                && index.row() >= 0 && index.row() < rowCount()
+                && index.column() >= 0 && index.column() < columnCount())
+            return QString("data %1-%2").arg(index.row()).arg(index.column());
+        return QVariant();
+}
