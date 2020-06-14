@@ -20,9 +20,11 @@ This path is assuming that the Qt is location in ~/Qt, else change the path. Onc
 
 #### Qmake
 
-Set the path for Qmake in the ~/.zshrc file
+Set the path for Qmake in the ~/.zshrc file.
 
 ```
-export PATH=/Users/mac/Qt/5.15.0/clang_64/bin:$PATH
+export PATH=$HOME/Qt/x.x.x/clang_64/bin:$PATH
 export PATH=$PATH
 ```
+
+Set the path accroding to your Qt install directory.
