@@ -27,6 +27,8 @@ Popup {
     y: parent.height * 0.125
     padding: 0
     property int label_col : 135
+    property var pathFolder: "Dropbox"
+    property var folderName: "Folder name"
 
 
     ListModel{
@@ -100,6 +102,7 @@ Popup {
                 anchors.fill: parent
                 onClicked: {
                     fileListPopup.visible = false
+                    path.text="Dropbox";
                 }
             }
         }
@@ -234,6 +237,15 @@ Popup {
                         header: Row{
 
                             width: filePopup.width * 0.6
+                            Column{
+                                width: 20
+                                Rectangle{
+                                    color: Constants.themeColor
+                                    height:30
+                                    width:fileList.width / 2
+
+                                }
+                            }
 
 
                             Column{
@@ -287,6 +299,20 @@ Popup {
                             width: filePopup.width * 0.6
 
                             Column{
+                                width: 20
+                                height: parent.height
+                                Row{
+
+                                    Image{
+                                        id: fileMenuIcon
+                                        source: tag=="folder"?"../../../Images/icons/folder-invoices.png" :"../../../Images/icons/file-icon.png"
+                                        width:25
+                                        height: 25
+                                    }
+                                }
+                            }
+
+                            Column{
                                 width: parent.width / 2
                                 height: parent.height
 
@@ -310,11 +336,23 @@ Popup {
 
                                             fileSelected.visible = true
                                             fileNotSelectedMsg.visible = false
+                                            detailName.text = name;
+                                            if(tag == "folder"){
+                                                pathFolder = pathLower;
+                                                folderName = name;
+                                            }
+
+                                            if(tag == "file")
+                                            {
+                                                path.text = pathLower
+                                               detailName.text = name;
+                                            }
+                                        }
+                                        onDoubleClicked: {
                                             if(tag == "folder")
-                                             DropboxDS.fetchDatasources(pathLower)
+                                            DropboxDS.fetchDatasources(pathLower)
 
                                             path.text = pathLower
-
                                         }
                                     }
                                 }
@@ -357,12 +395,6 @@ Popup {
                                 }
                             }
 
-
-                            HorizontalLineTpl{
-                                width: parent.width
-                                anchors.top: parent.bottom
-                                line_color: Constants.themeColor
-                            }
                         }
 
                     }
@@ -386,7 +418,6 @@ Popup {
                         border.color: Constants.themeColor
 
                         Text {
-
                             text: qsTr("Details")
                             anchors.topMargin: 20
                             font.pointSize: Constants.fontReading
@@ -449,6 +480,7 @@ Popup {
                                 padding: 5
                                 text: qsTr("Size")
                             }
+
                         }
 
                         Column{
@@ -457,6 +489,7 @@ Popup {
                             width: parent.width/2 + 5
 
                             Text {
+                                id: detailName
                                 text: qsTr("Test.xlsx")
                                 padding: 5
                             }
@@ -472,6 +505,7 @@ Popup {
                                 text: qsTr("50 MB")
                                 padding: 5
                             }
+
 
                         }
                     }
@@ -514,6 +548,29 @@ Popup {
                 width: filePopup.width * 0.4
                 anchors.left:breadcrumb.right
                 anchors.leftMargin: filePopup.width * 0.4  - 270
+                Button{
+                    id: homeBtn
+                    height: 40
+                    width: 100
+                    anchors.right: cancelBtn.left
+                    anchors.rightMargin: 30
+                    background: Rectangle {
+                        id: homeBtnBackground
+                        color: homeBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
+                    }
+
+                    Text{
+                        text: "Home"
+                        anchors.centerIn: parent
+                        font.pixelSize: Constants.fontReading
+                    }
+                    onClicked: {
+                        DropboxDS.fetchDatasources("")
+                        path.text = "Dropbox"
+                    }
+
+
+                }
 
                 Button{
                     id: cancelBtn
@@ -526,13 +583,14 @@ Popup {
                     }
 
                     Text{
-                        text: "Cancel"
+                        text: "Back"
                         anchors.centerIn: parent
                         font.pixelSize: Constants.fontReading
                     }
 
                     onClicked: {
-                        fileListPopup.visible = false
+//                        fileListPopup.visible = false
+                          path.text = DropboxDS.goingBack(pathFolder,folderName)
                     }
 
 

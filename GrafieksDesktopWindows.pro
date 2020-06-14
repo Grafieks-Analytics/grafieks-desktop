@@ -39,9 +39,15 @@ RESOURCES += \
     assets.qrc \
     assets.qrc \
     assets.qrc \
+    assets.qrc \
+    assets.qrc \
     images.qrc \
     images.qrc \
     images.qrc \
+    images.qrc \
+    images.qrc \
+    qml.qrc \
+    qml.qrc \
     qml.qrc \
     qml.qrc \
     qml.qrc
@@ -101,6 +107,10 @@ DISTFILES += \
     Documentation/.DS_Store \
     Documentation/Configuration Windows QT.pdf \
     Documentation/Configuration Windows QT.pdf \
+    Documentation/Configuration Windows QT.pdf \
+    Documentation/Configuration Windows QT.pdf \
+    Documentation/Configuration Windows QT.pptx \
+    Documentation/Configuration Windows QT.pptx \
     Documentation/Configuration Windows QT.pptx \
     Documentation/Configuration Windows QT.pptx \
     Documentation/Layouts.md \
@@ -111,6 +121,8 @@ DISTFILES += \
     Images/icons/20_snowflake-icon_a4ed1ae266.png \
     Images/icons/74_sqlite-icon_a6ac860586.png \
     Images/icons/Charts.png \
+    Images/icons/Db - 60.png \
+    Images/icons/Db - 60.png \
     Images/icons/Db - 60.png \
     Images/icons/Db - 60.png \
     Images/icons/Db.png \
@@ -177,7 +189,11 @@ DISTFILES += \
     Images/icons/charts/force_directed.png \
     Images/icons/charts/nightingale_rose.png \
     Images/icons/charts/susburst.png \
+    Images/icons/cross.png \
+    Images/icons/cross_32.png \
+    Images/icons/drive.png \
     Images/icons/dropbox-2.png \
+    Images/icons/folder.png \
     Images/icons/github-1.png \
     Images/icons/google-analytics-4.png \
     Images/icons/hadoop.png \
@@ -190,8 +206,14 @@ DISTFILES += \
     Images/icons/oracle-icon.png \
     Images/icons/outline_close_black_18dp1x.png \
     Images/icons/outline_close_black_18dp2x.png \
+    Images/icons/outline_play_arrow_black_48dp.png \
+    Images/icons/play.png \
     Images/icons/sample_graph.png \
     Images/icons/text.png \
+    Images/icons/tick.png \
+    Images/icons/tick_32.png \
+    Images/icons/zoom out.png \
+    Images/icons/zoom out.png \
     Images/icons/zoom out.png \
     Images/icons/zoom out.png \
     Images/logos/.DS_Store \
@@ -225,7 +247,9 @@ DISTFILES += \
     Source/Data/DataSources.qml \
     Source/Data/SelectConnection.qml \
     Source/Data/SubComponents/.DS_Store \
+    Source/Data/SubComponents/DataFilterTestPopup.qml \
     Source/Data/SubComponents/DataFilters.qml \
+    Source/Data/SubComponents/DataFiltersPopup.qml \
     Source/Data/SubComponents/DataModeller.qml \
     Source/Data/SubComponents/DataSourceDescription.qml \
     Source/Data/SubComponents/DataSourcesGrid.qml \
@@ -240,6 +264,7 @@ DISTFILES += \
     Source/Data/SubComponents/SqliteConnection.qml \
     Source/Data/SubComponents/TabBackgroundComponent.qml \
     Source/Data/SubComponents/TabTextComponent.qml \
+    Source/Data/SubComponents/TestQueryResultsTable.qml \
     Source/MainSubComponents/.DS_Store \
     Source/MainSubComponents/CheckBoxTpl.qml \
     Source/MainSubComponents/HorizontalLineTpl.qml \

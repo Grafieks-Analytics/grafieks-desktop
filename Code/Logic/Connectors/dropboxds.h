@@ -19,6 +19,7 @@ public:
     explicit DropboxDS(QObject *parent = nullptr);
 
     Q_INVOKABLE void fetchDatasources(QString path);
+    Q_INVOKABLE QString goingBack(QString path,QString name);
 
     void addDataSource(Dropbox * dropbox);
 

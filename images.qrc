@@ -91,5 +91,9 @@
         <file>Images/icons/play.png</file>
         <file>Images/icons/drive.png</file>
         <file>Images/icons/folder.png</file>
+        <file>Images/icons/cross.png</file>
+        <file>Images/icons/cross_32.png</file>
+        <file>Images/icons/tick.png</file>
+        <file>Images/icons/tick_32.png</file>
     </qresource>
 </RCC>
