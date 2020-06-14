@@ -17,3 +17,12 @@ PATH="$(xcode-select -p)/usr/bin:${PATH}" ~/Qt/Qt\ Creator.app/Contents/MacOS/Qt
 ```
 
 This path is assuming that the Qt is location in ~/Qt, else change the path. Once the kit is set, you can open the creator normally
+
+#### Qmake
+
+Set the path for Qmake in the ~/.zshrc file
+
+```
+export PATH=/Users/mac/Qt/5.15.0/clang_64/bin:$PATH
+export PATH=$PATH
+```
