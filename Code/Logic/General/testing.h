@@ -16,15 +16,24 @@
 #include <QUrl>
 #include <QOAuthHttpServerReplyHandler>
 #include <QDesktopServices>
+#include <QEventLoop>
+#include <QUrlQuery>
 
 class Testing : public QObject
 {
     Q_OBJECT
-    public:
-        explicit Testing(QObject *parent = nullptr);
+public:
+    explicit Testing(QObject *parent = nullptr);
+    Q_INVOKABLE void click();
 
-    private:
-        QOAuth2AuthorizationCodeFlow * google;
+
+private:
+    QOAuth2AuthorizationCodeFlow * google;
+
+private slots:
+
+    void readme();
+
 
 };
 
