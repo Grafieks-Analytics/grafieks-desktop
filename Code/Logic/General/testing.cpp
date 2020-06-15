@@ -9,9 +9,9 @@ Testing::Testing(QObject *parent) : QObject(parent)
     connect(this->google, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, &QDesktopServices::openUrl);
 
     this->google->setAuthorizationUrl(QUrl("https://accounts.google.com/o/oauth2/auth"));
-    this->google->setClientIdentifier("452291785459-1ldhc2q2ahqfl7sv0mh1veuov740bj5f.apps.googleusercontent.com");
+    this->google->setClientIdentifier("CLIENT ID");
     this->google->setAccessTokenUrl(QUrl("https://oauth2.googleapis.com/token"));
-    this->google->setClientIdentifierSharedKey("I09LKhYI21Svp-QWPe2nsJvb");
+    this->google->setClientIdentifierSharedKey("SOME KEY");
 
     auto replyHandler = new QOAuthHttpServerReplyHandler(5476, this);
     this->google->setReplyHandler(replyHandler);
