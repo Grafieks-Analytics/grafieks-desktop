@@ -6,18 +6,11 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
-#include <QByteArray>
-#include <QJsonArray>
-#include <QJsonObject>
-#include <QJsonDocument>
 
-#include <QFile>
-#include <QDir>
 #include <QUrl>
+#include <QUrlQuery>
 #include <QOAuthHttpServerReplyHandler>
 #include <QDesktopServices>
-#include <QEventLoop>
-#include <QUrlQuery>
 
 class Testing : public QObject
 {
@@ -30,9 +23,6 @@ public:
 private:
     QOAuth2AuthorizationCodeFlow * google;
 
-private slots:
-
-    void readme();
 
 
 };

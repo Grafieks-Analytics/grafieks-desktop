@@ -3,23 +3,35 @@
 Testing::Testing(QObject *parent) : QObject(parent)
 {
     this->google = new QOAuth2AuthorizationCodeFlow(this);
+
+    // Set Scope or Permissions required from Google
+    // List can be obtained from https://developers.google.com/identity/protocols/oauth2/scopes
+
     this->google->setScope("email https://www.googleapis.com/auth/drive.readonly");
+
 
     connect(this->google, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, [=](QUrl url) {
         QUrlQuery query(url);
 
-        // Forces the user to enter their credentials to authorize the correct
-        query.addQueryItem("prompt", "consent");
+        query.addQueryItem("prompt", "consent"); // Param required to get data everytime
+        query.addQueryItem("access_type", "offline"); // Needed for Refresh Token (as AccessToken expires shortly)
         url.setQuery(query);
         QDesktopServices::openUrl(url);
     });
+
+    // Here the parameters from Google JSON are filled up
+    // Attached screenshot of JSON file and Google Console
 
     this->google->setAuthorizationUrl(QUrl("https://accounts.google.com/o/oauth2/auth"));
     this->google->setClientIdentifier("CLIENT_ID");
     this->google->setAccessTokenUrl(QUrl("https://oauth2.googleapis.com/token"));
     this->google->setClientIdentifierSharedKey("SECRET_KEY");
 
-    // In my case, I have hardcoded 8080 to test
+
+    // In my case, I have hardcoded 5476
+    // This is set in Redirect URI in Google Developers Console of the app
+    // Same can be seen in the downloaded JSON file
+
     auto replyHandler = new QOAuthHttpServerReplyHandler(5476, this);
     this->google->setReplyHandler(replyHandler);
 
@@ -35,15 +47,13 @@ Testing::Testing(QObject *parent) : QObject(parent)
     });
 }
 
+
+// Call this function to prompt authentication
+// and receive data from Google
+
 void Testing::click()
 {
     this->google->grant();
-}
-
-
-void Testing::readme()
-{
-
 }
 
 
