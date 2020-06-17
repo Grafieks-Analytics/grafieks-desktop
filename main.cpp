@@ -71,10 +71,9 @@ int main(int argc, char *argv[])
     QueryModel queryModel;
     DBListModel dblistModel;
 
-
+    // Datasource Connector Initializations
     DropboxModel dropboxModel;
     DropboxDS * dropbox = new DropboxDS(&app);
-
 
 
     // Call default functions
