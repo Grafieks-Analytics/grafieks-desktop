@@ -6,25 +6,24 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
-#include <QByteArray>
-#include <QJsonArray>
-#include <QJsonObject>
-#include <QJsonDocument>
 
-#include <QFile>
-#include <QDir>
 #include <QUrl>
+#include <QUrlQuery>
 #include <QOAuthHttpServerReplyHandler>
 #include <QDesktopServices>
 
 class Testing : public QObject
 {
     Q_OBJECT
-    public:
-        explicit Testing(QObject *parent = nullptr);
+public:
+    explicit Testing(QObject *parent = nullptr);
+    Q_INVOKABLE void click();
 
-    private:
-        QOAuth2AuthorizationCodeFlow * google;
+
+private:
+    QOAuth2AuthorizationCodeFlow * google;
+
+
 
 };
 

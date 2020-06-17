@@ -77,7 +77,7 @@ void Login::readComplete()
 
             finalStatus = true;
 
-
+            qDebug() << "logged in";
         }
 
         emit loginStatus(finalStatus);

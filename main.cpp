@@ -71,10 +71,9 @@ int main(int argc, char *argv[])
     QueryModel queryModel;
     DBListModel dblistModel;
 
-
+    // Datasource Connector Initializations
     DropboxModel dropboxModel;
     DropboxDS * dropbox = new DropboxDS(&app);
-
 
 
     // Call default functions
@@ -89,6 +88,7 @@ int main(int argc, char *argv[])
 
     // Set contexts for QML
     engine.rootContext()->setContextProperty("QtTest2", &qttest2);
+    engine.rootContext()->setContextProperty("Testing", &testing);
     engine.rootContext()->setContextProperty("MysqlConnect", &mysqlconnect);
     engine.rootContext()->setContextProperty("User", &user);
     engine.rootContext()->setContextProperty("ConnectorFilter", &connectorFilter);
