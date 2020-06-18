@@ -21,7 +21,7 @@
 #include "Code/Logic/DataModeller/dblistmodel.h"
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
-#include "Code/Logic/General/testing.h"
+//#include "Code/Logic/General/testing.h"
 
 
 #include "Code/statics.h"
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 
     // Initialize Objects
     QtTest2 qttest2;
-    Testing testing;
+//    Testing testing;
     MysqlCon mysqlconnect;
     User user;
     ConnectorFilter connectorFilter;
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 
     // Set contexts for QML
     engine.rootContext()->setContextProperty("QtTest2", &qttest2);
-    engine.rootContext()->setContextProperty("Testing", &testing);
+//    engine.rootContext()->setContextProperty("Testing", &testing);
     engine.rootContext()->setContextProperty("MysqlConnect", &mysqlconnect);
     engine.rootContext()->setContextProperty("User", &user);
     engine.rootContext()->setContextProperty("ConnectorFilter", &connectorFilter);

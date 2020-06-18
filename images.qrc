@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>Images/icons/.DS_Store</file>
         <file>Images/icons/Charts.png</file>
         <file>Images/icons/Down.png</file>
         <file>Images/icons/Down_20.png</file>

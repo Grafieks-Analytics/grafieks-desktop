@@ -18,7 +18,7 @@ Item {
 
     Text {
         id : textcomponent
-        font.pointSize: Constants.fontReading
+        font.pointSize: 10
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         color: "black"
