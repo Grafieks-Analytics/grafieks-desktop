@@ -21,6 +21,9 @@
 #include "Code/Logic/DataModeller/dblistmodel.h"
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
+#include "Code/Logic/Connectors/driveds.h"
+#include "Code/Logic/Connectors/drivemodel.h"
+
 //#include "Code/Logic/General/testing.h"
 
 
@@ -76,11 +79,17 @@ int main(int argc, char *argv[])
     DropboxDS * dropbox = new DropboxDS(&app);
 
 
+    DriveModel driveModel;
+    DriveDS * drive = new DriveDS(&app);
+
+
     // Call default functions
     datasourceModel.setDatasourceds(datasource);
 //    qttest2.fetchPosts();
 
     dropboxModel.setDropboxds(dropbox);
+
+    driveModel.setDriveds(drive);
 
     // Define singletons
     qmlRegisterSingletonType( QUrl("qrc:/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants" );
@@ -100,6 +109,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("DBListModel",&dblistModel);
     engine.rootContext()->setContextProperty("DropboxModel",&dropboxModel);
     engine.rootContext()->setContextProperty("DropboxDS",dropbox);
+    engine.rootContext()->setContextProperty("DriveModel",&driveModel);
+    engine.rootContext()->setContextProperty("DriveDS",drive);
 
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
