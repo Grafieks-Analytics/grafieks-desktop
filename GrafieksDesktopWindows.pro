@@ -36,6 +36,7 @@ SOURCES += \
         Code/Logic/Datasources/datasourcemodel.cpp \
         Code/Logic/General/qttest2.cpp \
 #        Code/Logic/General/testing.cpp \
+    Code/Logic/General/testing.cpp \
         Code/Logic/Menu/user.cpp \
         main.cpp
 
@@ -97,6 +98,7 @@ HEADERS += \
     Code/Logic/Datasources/datasourcemodel.h \
     Code/Logic/General/qttest2.h \
 #    Code/Logic/General/testing.h \
+    Code/Logic/General/testing.h \
     Code/Logic/Menu/user.h \ \
     Code/constants.h \
     Code/statics.h
