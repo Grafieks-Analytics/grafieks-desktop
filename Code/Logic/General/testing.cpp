@@ -15,9 +15,8 @@ Testing::Testing(QObject *parent) : QObject(parent)
         QByteArray postData;
 
         query.addQueryItem("force_reapprove", "true"); // Param required to get data everytime
-        query.addQueryItem("disable_signup", "false"); // Needed for Refresh Token (as AccessToken expires shortly)
+        query.addQueryItem("token_access_type", "offline"); // Needed for Refresh Token (as AccessToken expires shortly)
         query.addQueryItem("response_type", "code");
-        query.addQueryItem("redirect_uri", "http://localhost:80/jq/");
 
 
         postData = query.toString(QUrl::FullyEncoded).toUtf8();
@@ -30,16 +29,16 @@ Testing::Testing(QObject *parent) : QObject(parent)
     // Attached screenshot of JSON file and Google Console
 
     this->google->setAuthorizationUrl(QUrl("https://www.dropbox.com/oauth2/authorize"));
-    this->google->setClientIdentifier("63tucv4hmxxr4rf");
+    this->google->setClientIdentifier("APP_ID");
     this->google->setAccessTokenUrl(QUrl("https://api.dropboxapi.com/oauth2/token"));
-    this->google->setClientIdentifierSharedKey("u29h3ibejo1vqav");
+    this->google->setClientIdentifierSharedKey("APP_SECRET");
 
 
     // In my case, I have hardcoded 5476
     // This is set in Redirect URI in Google Developers Console of the app
     // Same can be seen in the downloaded JSON file
 
-    auto replyHandler = new QOAuthHttpServerReplyHandler(80, this);
+    auto replyHandler = new QOAuthHttpServerReplyHandler(5476, this);
     this->google->setReplyHandler(replyHandler);
 
 

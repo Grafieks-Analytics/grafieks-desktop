@@ -90,7 +90,7 @@ Popup {
 
         TabButton{
             id: character_btn
-            text: "Categorial"
+            text: "Categorical"
             width:popupMain.width/4 - 1
 
             background: Rectangle {
@@ -304,9 +304,6 @@ Popup {
         anchors.leftMargin: 20
 
 
-        DataFiltersPopup{
-            id:dataFilterInnerPopup
-        }
 
 
     }
@@ -373,5 +370,8 @@ Popup {
     // Action button ends
 
 
+    DataFiltersPopup{
+        id:dataFilterInnerPopup
+    }
 }
 

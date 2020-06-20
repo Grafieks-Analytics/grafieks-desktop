@@ -79,6 +79,14 @@ Page {
             dropboxModal.visible = true
             break;
 
+        case "google sheets":
+            driveModal.visible = true;
+            break;
+
+//        case "drive":
+//            driveModal.visible = true
+//            break;
+
         default:
             break;
         }
@@ -423,5 +431,13 @@ Page {
     DropboxConnectionFiles{
         id: fileListPopup
     }
+
+    DriveConnection{
+        id: driveModal
+    }
+
+   DriveConnectionFiles{
+        id: driveListPopup
+   }
 
 }

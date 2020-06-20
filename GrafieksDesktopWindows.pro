@@ -21,6 +21,9 @@ SOURCES += \
         Code/Logic/Connectors/connectorfilter.cpp \
         Code/Logic/Connectors/connectormodel.cpp \
         Code/Logic/Connectors/connectorsloginmodel.cpp \
+    Code/Logic/Connectors/drive.cpp \
+    Code/Logic/Connectors/driveds.cpp \
+    Code/Logic/Connectors/drivemodel.cpp \
         Code/Logic/Connectors/dropbox.cpp \
         Code/Logic/Connectors/dropboxds.cpp \
         Code/Logic/Connectors/dropboxmodel.cpp \
@@ -32,7 +35,8 @@ SOURCES += \
         Code/Logic/Datasources/datasourcefilter.cpp \
         Code/Logic/Datasources/datasourcemodel.cpp \
         Code/Logic/General/qttest2.cpp \
-        Code/Logic/General/testing.cpp \
+#        Code/Logic/General/testing.cpp \
+    Code/Logic/General/testing.cpp \
         Code/Logic/Menu/user.cpp \
         main.cpp
 
@@ -42,11 +46,14 @@ RESOURCES += \
     assets.qrc \
     assets.qrc \
     assets.qrc \
+    assets.qrc \
     images.qrc \
     images.qrc \
     images.qrc \
     images.qrc \
     images.qrc \
+    images.qrc \
+    qml.qrc \
     qml.qrc \
     qml.qrc \
     qml.qrc \
@@ -76,6 +83,9 @@ HEADERS += \
     Code/Logic/Connectors/connectorfilter.h \
     Code/Logic/Connectors/connectormodel.h \
     Code/Logic/Connectors/connectorsloginmodel.h \
+    Code/Logic/Connectors/drive.h \
+    Code/Logic/Connectors/driveds.h \
+    Code/Logic/Connectors/drivemodel.h \
     Code/Logic/Connectors/dropbox.h \
     Code/Logic/Connectors/dropboxds.h \
     Code/Logic/Connectors/dropboxmodel.h \
@@ -87,6 +97,7 @@ HEADERS += \
     Code/Logic/Datasources/datasourcefilter.h \
     Code/Logic/Datasources/datasourcemodel.h \
     Code/Logic/General/qttest2.h \
+#    Code/Logic/General/testing.h \
     Code/Logic/General/testing.h \
     Code/Logic/Menu/user.h \ \
     Code/constants.h \
@@ -111,10 +122,13 @@ DISTFILES += \
     Documentation/Configuration Windows QT.pdf \
     Documentation/Configuration Windows QT.pdf \
     Documentation/Configuration Windows QT.pdf \
+    Documentation/Configuration Windows QT.pdf \
     Documentation/Configuration Windows QT.pptx \
     Documentation/Configuration Windows QT.pptx \
     Documentation/Configuration Windows QT.pptx \
     Documentation/Configuration Windows QT.pptx \
+    Documentation/Configuration Windows QT.pptx \
+    Documentation/ConfigurationMac.md \
     Documentation/Layouts.md \
     Images/.DS_Store \
     Images/icons/.DS_Store \
@@ -123,6 +137,7 @@ DISTFILES += \
     Images/icons/20_snowflake-icon_a4ed1ae266.png \
     Images/icons/74_sqlite-icon_a6ac860586.png \
     Images/icons/Charts.png \
+    Images/icons/Db - 60.png \
     Images/icons/Db - 60.png \
     Images/icons/Db - 60.png \
     Images/icons/Db - 60.png \
@@ -195,6 +210,8 @@ DISTFILES += \
     Images/icons/cross_32.png \
     Images/icons/drive.png \
     Images/icons/dropbox-2.png \
+    Images/icons/file-icon.png \
+    Images/icons/folder-invoices.png \
     Images/icons/folder.png \
     Images/icons/github-1.png \
     Images/icons/google-analytics-4.png \
@@ -214,6 +231,7 @@ DISTFILES += \
     Images/icons/text.png \
     Images/icons/tick.png \
     Images/icons/tick_32.png \
+    Images/icons/zoom out.png \
     Images/icons/zoom out.png \
     Images/icons/zoom out.png \
     Images/icons/zoom out.png \
@@ -256,6 +274,8 @@ DISTFILES += \
     Source/Data/SubComponents/DataSourceDescription.qml \
     Source/Data/SubComponents/DataSourcesGrid.qml \
     Source/Data/SubComponents/DataSourcesList.qml \
+    Source/Data/SubComponents/DriveConnection.qml \
+    Source/Data/SubComponents/DriveConnectionFiles.qml \
     Source/Data/SubComponents/DropboxConnection.qml \
     Source/Data/SubComponents/DropboxConnectionFiles.qml \
     Source/Data/SubComponents/InMemory.qml \

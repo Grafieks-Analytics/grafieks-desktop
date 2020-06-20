@@ -1,19 +1,18 @@
-#ifndef DROPBOXMODEL_H
-#define DROPBOXMODEL_H
+#ifndef DRIVEMODEL_H
+#define DRIVEMODEL_H
 
 #include <QAbstractListModel>
 #include <QObject>
 
-#include "dropboxds.h"
+#include "driveds.h"
 
-class DropboxModel : public QAbstractListModel
+class DriveModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(DropboxDS * dropboxds READ dropboxds WRITE setDropboxds)
+    Q_PROPERTY(DriveDS * driveds READ driveds WRITE setDriveds);
 
 public:
-    explicit DropboxModel(QObject *parent = nullptr);
-
+    explicit DriveModel(QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
@@ -21,27 +20,23 @@ public:
     Qt::ItemFlags flags(const QModelIndex& index) const;
     QHash<int, QByteArray> roleNames() const;
 
-    DropboxDS *dropboxds() const;
-    void setDropboxds(DropboxDS * dropbox);
+    DriveDS * driveds() const;
+    void setDriveds(DriveDS * driveds);
 
-    enum DroboxRoles{
+    enum DriveRoles{
         IdRole = Qt::UserRole +1,
-        TagRole,
         NameRole,
-        PathLowerRole,
-        ClientModifiedRole,
+        KindRole,
+        ModifiedTimeRole,
         ExtensionRole
-
     };
-
 
 signals:
 
 private:
-
-    DropboxDS * m_dropbox;
+    DriveDS * m_drive;
     bool signalsConnected {false};
 
 };
 
-#endif // DROPBOXMODEL_H
+#endif // DRIVEMODEL_H
