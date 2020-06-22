@@ -1,4 +1,4 @@
-QT += quick webengine quickcontrols2 sql
+QT += quick webengine quickcontrols2 sql networkauth
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -21,6 +21,9 @@ SOURCES += \
         Code/Logic/Connectors/connectorfilter.cpp \
         Code/Logic/Connectors/connectormodel.cpp \
         Code/Logic/Connectors/connectorsloginmodel.cpp \
+    Code/Logic/Connectors/drive.cpp \
+    Code/Logic/Connectors/driveds.cpp \
+    Code/Logic/Connectors/drivemodel.cpp \
         Code/Logic/Connectors/dropbox.cpp \
         Code/Logic/Connectors/dropboxds.cpp \
         Code/Logic/Connectors/dropboxmodel.cpp \
@@ -89,6 +92,9 @@ HEADERS += \
     Code/Logic/Connectors/connectorfilter.h \
     Code/Logic/Connectors/connectormodel.h \
     Code/Logic/Connectors/connectorsloginmodel.h \
+    Code/Logic/Connectors/drive.h \
+    Code/Logic/Connectors/driveds.h \
+    Code/Logic/Connectors/drivemodel.h \
     Code/Logic/Connectors/dropbox.h \
     Code/Logic/Connectors/dropboxds.h \
     Code/Logic/Connectors/dropboxmodel.h \
@@ -296,6 +302,8 @@ DISTFILES += \
     Source/Data/SubComponents/DataSourceDescription.qml \
     Source/Data/SubComponents/DataSourcesGrid.qml \
     Source/Data/SubComponents/DataSourcesList.qml \
+    Source/Data/SubComponents/DriveConnection.qml \
+    Source/Data/SubComponents/DriveConnectionFiles.qml \
     Source/Data/SubComponents/DropboxConnection.qml \
     Source/Data/SubComponents/DropboxConnectionFiles.qml \
     Source/Data/SubComponents/InMemory.qml \

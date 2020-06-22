@@ -66,5 +66,7 @@
         <file>Source/Data/MiniSubComponents/AllDateFilters.qml</file>
         <file>Source/Data/MiniSubComponents/AllGroupFilters.qml</file>
         <file>Source/Data/MiniSubComponents/AllNumericalFilters.qml</file>
+        <file>Source/Data/SubComponents/DriveConnection.qml</file>
+        <file>Source/Data/SubComponents/DriveConnectionFiles.qml</file>
     </qresource>
 </RCC>

@@ -4,8 +4,8 @@ import QtQuick.Window 2.11
 
 Item {
     visible: true
-//    width: 640
-//    height: 480
+    width: 640
+    height: 480
 
 //    Button{
 //        text: "click"
