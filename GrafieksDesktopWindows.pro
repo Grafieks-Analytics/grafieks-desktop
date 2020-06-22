@@ -33,6 +33,7 @@ SOURCES += \
         Code/Logic/Datasources/datasourcemodel.cpp \
         Code/Logic/General/qttest2.cpp \
 #        Code/Logic/General/testing.cpp \
+    Code/Logic/General/testing.cpp \
         Code/Logic/Menu/user.cpp \
         main.cpp
 
@@ -43,12 +44,21 @@ RESOURCES += \
     assets.qrc \
     assets.qrc \
     assets.qrc \
+    assets.qrc \
+    assets.qrc \
+    assets.qrc \
     images.qrc \
     images.qrc \
     images.qrc \
     images.qrc \
     images.qrc \
     images.qrc \
+    images.qrc \
+    images.qrc \
+    images.qrc \
+    qml.qrc \
+    qml.qrc \
+    qml.qrc \
     qml.qrc \
     qml.qrc \
     qml.qrc \
@@ -91,6 +101,7 @@ HEADERS += \
     Code/Logic/Datasources/datasourcemodel.h \
     Code/Logic/General/qttest2.h \
 #    Code/Logic/General/testing.h \
+    Code/Logic/General/testing.h \
     Code/Logic/Menu/user.h \ \
     Code/constants.h \
     Code/statics.h
@@ -115,6 +126,12 @@ DISTFILES += \
     Documentation/Configuration Windows QT.pdf \
     Documentation/Configuration Windows QT.pdf \
     Documentation/Configuration Windows QT.pdf \
+    Documentation/Configuration Windows QT.pdf \
+    Documentation/Configuration Windows QT.pdf \
+    Documentation/Configuration Windows QT.pdf \
+    Documentation/Configuration Windows QT.pptx \
+    Documentation/Configuration Windows QT.pptx \
+    Documentation/Configuration Windows QT.pptx \
     Documentation/Configuration Windows QT.pptx \
     Documentation/Configuration Windows QT.pptx \
     Documentation/Configuration Windows QT.pptx \
@@ -129,6 +146,9 @@ DISTFILES += \
     Images/icons/20_snowflake-icon_a4ed1ae266.png \
     Images/icons/74_sqlite-icon_a6ac860586.png \
     Images/icons/Charts.png \
+    Images/icons/Db - 60.png \
+    Images/icons/Db - 60.png \
+    Images/icons/Db - 60.png \
     Images/icons/Db - 60.png \
     Images/icons/Db - 60.png \
     Images/icons/Db - 60.png \
@@ -228,6 +248,9 @@ DISTFILES += \
     Images/icons/zoom out.png \
     Images/icons/zoom out.png \
     Images/icons/zoom out.png \
+    Images/icons/zoom out.png \
+    Images/icons/zoom out.png \
+    Images/icons/zoom out.png \
     Images/logos/.DS_Store \
     Images/logos/logo.ico \
     Images/logos/logo.png \
@@ -257,6 +280,13 @@ DISTFILES += \
     Source/Data/.DS_Store \
     Source/Data/DataQueryModeller.qml \
     Source/Data/DataSources.qml \
+    Source/Data/MiniSubComponents/AllDateFilters.qml \
+    Source/Data/MiniSubComponents/AllFilters.qml \
+    Source/Data/MiniSubComponents/AllGroupFilters.qml \
+    Source/Data/MiniSubComponents/AllNumericalFilters.qml \
+    Source/Data/MiniSubComponents/FilterListContent.qml \
+    Source/Data/MiniSubComponents/FilterTopContent.qml \
+    Source/Data/MiniSubComponents/FilterWildcardContent.qml \
     Source/Data/SelectConnection.qml \
     Source/Data/SubComponents/.DS_Store \
     Source/Data/SubComponents/DataFilterTestPopup.qml \
@@ -290,7 +320,9 @@ DISTFILES += \
     Source/MainSubComponents/MenuSeparatorComponent.qml \
     Source/MainSubComponents/RadioButtonTpl.qml \
     Source/MainSubComponents/RangeSliderTpl.qml \
+    Source/MainSubComponents/ReadOnlyTextBox.qml \
     Source/MainSubComponents/SearchBar.qml \
+    Source/MainSubComponents/SelectDropdown.qml \
     Source/MainSubComponents/SliderTpl.qml \
     Source/Others/.DS_Store \
     Source/Others/Home.qml \

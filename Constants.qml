@@ -35,16 +35,17 @@ QtObject {
     property color buttonHoverColor : "#009B8F"
     property color whiteColor : "#FFFFFF"
     property color grayColor : "#707070"
+    property color blackColor : "#707070"
 
 
     // Standard Font Sizes
 
     property font fontDefault : Qt.font({family : "verdana"})
-    property int fontHeader : 28
-    property int fontSubHeader : 20
-    property int fontCategoryHeader : 18
-    property int fontCategoryHeaderSmall : 16
-    property int fontReading: 12
+    property int fontHeader : 20
+    property int fontSubHeader : 18
+    property int fontCategoryHeader : 16
+    property int fontCategoryHeaderSmall : 12
+    property int fontReading: 10
 
 
 }
