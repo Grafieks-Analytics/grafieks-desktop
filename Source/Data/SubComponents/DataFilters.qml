@@ -15,12 +15,13 @@ import QtQuick.Layouts 1.3
 import com.grafieks.singleton.constants 1.0
 
 import "../../MainSubComponents"
+import "../MiniSubComponents"
 
 Popup {
     id: popupMain
-    width: 600
+    width: parent.width * 0.5
     height: 500
-    x: parent.width / 2 - 380
+    x:  parent.width * 0.25
     y: 100
     modal: true
     visible: false
@@ -42,7 +43,6 @@ Popup {
         anchors.left: parent.left
         anchors.topMargin: 1
         anchors.leftMargin: 1
-
 
         Text{
             id : text1
@@ -112,6 +112,14 @@ Popup {
                 date_btn_background.color =  Constants.whiteColor
                 numbers_btn_background.color = Constants.whiteColor
                 users_btn_background.color = Constants.whiteColor
+
+                allCategoricalFilterContent.visible = true
+                allDateFilterContent.visible = false
+                allNumericalFilterContent.visible = false
+                allGroupFilterContent.visible = false
+
+                addMenuList.model = categoricalMenuList
+
             }
         }
 
@@ -143,6 +151,14 @@ Popup {
                 date_btn_background.color =  Constants.themeColor
                 numbers_btn_background.color = Constants.whiteColor
                 users_btn_background.color = Constants.whiteColor
+
+
+                allCategoricalFilterContent.visible = false
+                allDateFilterContent.visible = true
+                allNumericalFilterContent.visible = false
+                allGroupFilterContent.visible = false
+
+                addMenuList.model = dateMenuList;
             }
         }
 
@@ -174,6 +190,15 @@ Popup {
                 date_btn_background.color =  Constants.whiteColor
                 numbers_btn_background.color = Constants.themeColor
                 users_btn_background.color = Constants.whiteColor
+
+
+                allCategoricalFilterContent.visible = false
+                allDateFilterContent.visible = false
+                allNumericalFilterContent.visible = true
+                allGroupFilterContent.visible = false
+
+                addMenuList.model = numericalMenuList
+
             }
         }
 
@@ -207,6 +232,13 @@ Popup {
                 date_btn_background.color =  Constants.whiteColor
                 numbers_btn_background.color = Constants.whiteColor
                 users_btn_background.color = Constants.themeColor
+
+                allCategoricalFilterContent.visible = false
+                allDateFilterContent.visible = false
+                allNumericalFilterContent.visible = false
+                allGroupFilterContent.visible = true
+
+                addMenuList.model = groupModelList
             }
         }
 
@@ -248,43 +280,85 @@ Popup {
 
     // Menu options on clicking 'Add button' starts
 
+    ListModel{
+        id: categoricalMenuList
+        ListElement{
+            textValue:"Customer Id"
+        }
+        ListElement{
+            textValue:"Customer Id 2"
+        }
+        ListElement{
+            textValue:"Customer Id 3"
+        }
+        ListElement{
+            textValue:"Customer Id 4"
+        }
+    }
+
+    ListModel{
+        id: dateMenuList
+        ListElement{
+            textValue:"DOB"
+        }
+        ListElement{
+            textValue:"PO Date"
+        }
+        ListElement{
+            textValue:"GR DATE"
+        }
+        ListElement{
+            textValue:"Customer Id 4"
+        }
+    }
+
+    ListModel{
+        id: numericalMenuList
+        ListElement{
+            textValue:"DOB"
+        }
+        ListElement{
+            textValue:"PO Date"
+        }
+        ListElement{
+            textValue:"GR DATE"
+        }
+        ListElement{
+            textValue:"Customer Id 4"
+        }
+    }
+
+    ListModel{
+        id:groupModelList
+        ListElement{
+            textValue:"group1"
+        }
+        ListElement{
+            textValue:"group2"
+        }
+    }
+
     Menu {
         id: optionsMenu1
-        x: parent.width/2 - optionsMenu1.width/2
-        y: parent.height/2 - optionsMenu1.height/2
+
+        x: 20
+        y: headerPopup.height + tabbar1.height + add_btn_1.height + 22
         width: 150
 
-        MenuItem {
-            text: "Customer ID"
-            onTriggered: {}
-            onClicked: {
-                console.log("Clicked")
-                dataFilterInnerPopup.visible = true
-            }
-        }
-        MenuItem {
-            text: "Customer Name"
-            onTriggered: {
-            }
-        }
-        MenuItem {
-            text: "Sales Order No"
-            onTriggered: {}
-        }
-        MenuItem {
-            text: "Sales Order Line No"
-            onTriggered: {}
-        }
-        MenuItem {
-            text: "PO Number"
-            onTriggered: {}
-        }
-        MenuItem {
-            text: "PO Line Number"
-            onTriggered: {}
-            onClicked: {
-                console.log("Clicked")
-                dataFilterInnerPopup.visible = true
+        ListView{
+            id: addMenuList
+            anchors.top: parent.top
+            model: categoricalMenuList
+            height: this.model.count * 40
+            width: 150
+            delegate:
+
+            MenuItem {
+                text: textValue
+                onTriggered: {}
+                onClicked: {
+                    dataFilterInnerPopup.visible = true
+                }
             }
         }
     }
@@ -304,6 +378,27 @@ Popup {
         anchors.leftMargin: 20
 
 
+        AllFilters{
+            id: allCategoricalFilterContent
+        }
+
+
+        AllDateFilters{
+            id: allDateFilterContent
+            visible: false
+        }
+
+
+        AllNumericalFilters{
+            id: allNumericalFilterContent
+            visible: false
+        }
+
+
+        AllGroupFilters{
+            id: allGroupFilterContent
+            visible: false
+        }
 
 
     }

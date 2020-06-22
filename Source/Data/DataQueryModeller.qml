@@ -368,7 +368,6 @@ Page {
                     anchors.left: filter_querymodeller.right
                     anchors.topMargin: 7
                     anchors.leftMargin: 5
-
                 }
 
                 background: Rectangle{
@@ -651,7 +650,6 @@ Page {
                 anchors.top: linebar1.top
                 padding: 0
             }
-
             Rectangle{
 
                 id: play_btn_rect
@@ -710,8 +708,8 @@ Page {
 
                     Image {
                         id: collapseBtnImage
-                        height: 24
-                        width: 24
+                        height: 12
+                        width: 12
                         source: "../../Images/icons/Down.png"
                         anchors.centerIn: parent
                     }
@@ -744,7 +742,6 @@ Page {
                             queryResultsTable.visible = true
                             queryResultsTable.height = 270
 
-
                             infodata_table.height = Qt.binding(function(){
                                 return infodataTableHeader.height + queryResultsTable.height
                             })
@@ -769,15 +766,17 @@ Page {
 
         Row{
             id:queryResultsTable
-            height: 270
+            height: 208
             anchors.top: infodataTableHeader.bottom
-            width: parent.width
+            anchors.topMargin: 2
+            anchors.rightMargin: column_querymodeller.width + 50
+            width: parent.width - column_querymodeller.width - 50
             TableView {
                 id: testQueryResult
-//                anchors.top: infodataTableHeader.bottom
                 model: testQueryModel
-                width: parent.width- 300
-                visible: true
+                rowHeightProvider: function (column) { return 30; }
+                width: parent.width
+                visible: false
                 columnSpacing: 1
                 rowSpacing: 1
                 height:parent.height
@@ -785,6 +784,7 @@ Page {
                 clip:true
                 ScrollBar.horizontal: ScrollBar{}
                 ScrollBar.vertical: ScrollBar{}
+                topMargin: columnsHeader.implicitHeight
 
                 delegate: Row{
                     id: resultQueryRow
@@ -854,7 +854,7 @@ Page {
                     }
 
                     Column{
-                        width: parent.width * 0.3
+                        width: parent.width * 0.4
                         height: 30
 
                         Row{
@@ -888,132 +888,304 @@ Page {
 
                 }
 
-                ScrollIndicator.horizontal: ScrollIndicator { }
-                ScrollIndicator.vertical: ScrollIndicator { }
-
-            }
-            TableView {
-                id:dataPreviewResult
-//                anchors.top: infodataTableHeader.bottom
-                model: dataPreviewModel
-                width: parent.width
-                height:parent.height
-                visible: false
-
-                delegate: Row{
-                    height:30
+                Rectangle { // mask the headers
+                    z: 3
+                    color: "#222222"
+                    y: testQueryResult.contentY
+                    x: testQueryResult.contentX
+                    width: testQueryResult.leftMargin
+                    height: testQueryResult.topMargin
+                }
+                Row {
+                    id: columnsHeader
+                    y: testQueryResult.contentY
+                    z: 3
                     width: parent.width
 
-                    Column{
-                        width: 200
-                        height: parent.height
-                        topPadding: 5
-
-                        Row{
-                            height: parent.height
-                            width: parent.width
-                            anchors.top: parent
-                            anchors.topMargin: 3
-                            anchors.left: parent.left
-                            leftPadding: 20
-
-                            Text {
-                                id: modelT1
-                                text: qsTr(customerId)
-                            }
-                        }
-
-                    }
-
-                    Column{
-                        width: 200
-                        height: parent.height
-
-                        Row{
-                            height: parent.height
-                            width: parent.width
-                            anchors.left: parent
-                            anchors.leftMargin: 2
-
-                            Text {
-                                text: qsTr(customerName)
-                                padding: 5
-                                leftPadding: 20
-                            }
-                        }
-
-                    }
-
-
-                    Column{
-                        width: 200
+                    Label {
+                        id: statusColumn
+                        width: 50
                         height: 30
-
-                        Row{
-                            height: parent.height
-                            width: parent.width
-                            anchors.left: parent
-
-                            Text {
-                                text: qsTr(dob)
-                                padding: 5
-                                leftPadding: 20
-                            }
+                        text: ""
+                        color: 'black'
+                        padding: 10
+                        leftPadding: 20
+                        verticalAlignment: Text.AlignVCenter
+                        background: Rectangle{
+                            color: 'white'
+                        }
+                    }
+                    Label {
+                        id: numberCoulmn
+                        width: 50
+                        height: 30
+                        text: "#"
+                        color: 'black'
+                        padding: 10
+                        leftPadding: 20
+                        verticalAlignment: Text.AlignVCenter
+                        background: Rectangle{
+                            color: 'white'
                         }
 
                     }
-
-                    Column{
-                        width: 200
+                    Label {
+                        id: actionCoulmn
+                        width: parent.width * 0.4
                         height: 30
-
-                        Row{
-                            height: parent.height
-                            width: parent.width
-                            anchors.left: parent
-
-                            Text {
-                                text: qsTr(orderNo)
-                                padding: 5
-                                leftPadding: 20
-                            }
+                        text: "Action"
+                        color: 'black'
+                        padding: 10
+                        leftPadding: 20
+                        verticalAlignment: Text.AlignVCenter
+                        background: Rectangle{
+                            color: 'white'
                         }
+
                     }
+                    Label {
 
-                    Column{
-                        width: 200
+                        id: messageColumn
+                        width: parent.width * 0.4
                         height: 30
-
-                        Row{
-                            height: parent.height
-                            width: parent.width
-
-                            Text {
-                                text: qsTr(orderLine)
-                                padding: 5
-                                leftPadding: 20
-                            }
+                        text: "Message"
+                        color: 'black'
+                        padding: 10
+                        leftPadding: 20
+                        verticalAlignment: Text.AlignVCenter
+                        background: Rectangle{
+                            color: 'white'
                         }
+
                     }
-
-                    Column{
-                        width: 200
+                    Label {
+                        id: durationColumn
+                        width: parent.width  - ( statusColumn.width + numberCoulmn.width + actionCoulmn.width + messageColumn.width)
                         height: 30
-
-                        Row{
-                            height: parent.height
-                            width: parent.width
-
-                            Text {
-                                text: qsTr(productNo)
-                                padding: 5
-                                leftPadding: 20
-                            }
+                        text: "Duration"
+                        color: 'black'
+                        padding: 10
+                        leftPadding: 20
+                        verticalAlignment: Text.AlignVCenter
+                        background: Rectangle{
+                            color: 'white'
                         }
+
                     }
 
                 }
 
+                ScrollIndicator.horizontal: ScrollIndicator { }
+                ScrollIndicator.vertical: ScrollIndicator { }
+
+            }
+//            TableView {
+//                id:dataPreviewResult
+//                model: dataPreviewModel
+//                rowHeightProvider: function (column) { return 30; }
+//                width: parent.width - column_querymodeller.width - 50
+//                visible: false
+//                columnSpacing: 1
+//                rowSpacing: 1
+//                height:parent.height
+//                boundsBehavior : Flickable.StopAtBounds
+//                clip:true
+//                ScrollBar.horizontal: ScrollBar{}
+//                ScrollBar.vertical: ScrollBar{}
+//                topMargin: dataPreviewColumnsHeader.implicitHeight
+
+//                Row {
+//                    id: dataPreviewColumnsHeader
+//                    y: dataPreviewResult.contentY
+//                    z: 2
+//                    Repeater {
+//                        model: dataPreviewResult.columns > 0 ? dataPreviewResult.columns : 1
+//                        Label {
+//                            width: dataPreviewResult.columnWidthProvider(modelData)
+//                            height: 30
+//                            text: "s"
+//                            color: 'black'
+//                            font.pixelSize: 15
+//                            padding: 10
+//                            verticalAlignment: Text.AlignVCenter
+
+//                            background: Rectangle { color: "beige" }
+//                        }
+//                    }
+//                }
+
+//                delegate: Row{
+//                    height:30
+//                    width: parent.width
+
+//                    Column{
+//                        width: 200
+//                        height: parent.height
+//                        topPadding: 5
+
+//                        Row{
+//                            height: parent.height
+//                            width: parent.width
+//                            anchors.top: parent
+//                            anchors.topMargin: 3
+//                            anchors.left: parent.left
+//                            leftPadding: 20
+
+//                            Text {
+//                                id: modelT1
+//                                text: qsTr(customerId)
+//                            }
+//                        }
+
+//                    }
+
+//                    Column{
+//                        width: 200
+//                        height: parent.height
+
+//                        Row{
+//                            height: parent.height
+//                            width: parent.width
+//                            anchors.left: parent
+//                            anchors.leftMargin: 2
+
+//                            Text {
+//                                text: qsTr(customerName)
+//                                padding: 5
+//                                leftPadding: 20
+//                            }
+//                        }
+
+//                    }
+
+
+//                    Column{
+//                        width: 200
+//                        height: 30
+
+//                        Row{
+//                            height: parent.height
+//                            width: parent.width
+//                            anchors.left: parent
+
+//                            Text {
+//                                text: qsTr(dob)
+//                                padding: 5
+//                                leftPadding: 20
+//                            }
+//                        }
+
+//                    }
+
+//                    Column{
+//                        width: 200
+//                        height: 30
+
+//                        Row{
+//                            height: parent.height
+//                            width: parent.width
+//                            anchors.left: parent
+
+//                            Text {
+//                                text: qsTr(orderNo)
+//                                padding: 5
+//                                leftPadding: 20
+//                            }
+//                        }
+//                    }
+
+//                    Column{
+//                        width: 200
+//                        height: 30
+
+//                        Row{
+//                            height: parent.height
+//                            width: parent.width
+
+//                            Text {
+//                                text: qsTr(orderLine)
+//                                padding: 5
+//                                leftPadding: 20
+//                            }
+//                        }
+//                    }
+
+//                    Column{
+//                        width: 200
+//                        height: 30
+
+//                        Row{
+//                            height: parent.height
+//                            width: parent.width
+
+//                            Text {
+//                                text: qsTr(productNo)
+//                                padding: 5
+//                                leftPadding: 20
+//                            }
+//                        }
+//                    }
+
+//                }
+
+//            }
+            TableView {
+                id: dataPreviewResult
+
+                columnWidthProvider: function (column) { return 100; }
+                rowHeightProvider: function (column) { return 30; }
+                anchors.fill: parent
+                topMargin: columnsHeader1.implicitHeight
+                width: parent.width
+                model: QtTest2
+                ScrollBar.horizontal: ScrollBar{}
+                ScrollBar.vertical: ScrollBar{}
+                clip: true
+                boundsBehavior : Flickable.StopAtBounds
+
+                delegate: Rectangle {
+                    Text {
+                        text: 'text'
+                        anchors.fill: parent
+                        anchors.margins: 10
+                        color: 'black'
+                        font.pixelSize: 15
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                }
+                Rectangle { // mask the headers
+                    z: 3
+                    color: "#222222"
+                    y: dataPreviewResult.contentY
+                    x: dataPreviewResult.contentX
+                    width: dataPreviewResult.leftMargin
+                    height: dataPreviewResult.topMargin
+                }
+
+                Row {
+                    id: columnsHeader1
+                    y: dataPreviewResult.contentY
+                    z: 2
+                    Repeater {
+                        model: dataPreviewResult.columns > 0 ? dataPreviewResult.columns : 1
+                        Label {
+                            width: dataPreviewResult.columnWidthProvider(modelData)
+                            height: 35
+                            text: QtTest2.headerData(modelData, Qt.Horizontal)
+//                            text: "s"
+                            color: 'black'
+                            font.pixelSize: 15
+                            padding: 10
+                            verticalAlignment: Text.AlignVCenter
+
+                            background: Rectangle { color: "white" }
+                        }
+                    }
+                }
+
+
+                ScrollIndicator.horizontal: ScrollIndicator { }
+                ScrollIndicator.vertical: ScrollIndicator { }
             }
             TableView {
                 id:displayResult

@@ -57,6 +57,15 @@
         <file>Source/Data/SubComponents/DropboxConnection.qml</file>
         <file>Source/Data/SubComponents/DropboxConnectionFiles.qml</file>
         <file>Source/Data/SubComponents/DataFiltersPopup.qml</file>
+        <file>Source/Data/MiniSubComponents/FilterListContent.qml</file>
+        <file>Source/Data/MiniSubComponents/FilterWildcardContent.qml</file>
+        <file>Source/Data/MiniSubComponents/FilterTopContent.qml</file>
+        <file>Source/MainSubComponents/SelectDropdown.qml</file>
+        <file>Source/MainSubComponents/ReadOnlyTextBox.qml</file>
+        <file>Source/Data/MiniSubComponents/AllFilters.qml</file>
+        <file>Source/Data/MiniSubComponents/AllDateFilters.qml</file>
+        <file>Source/Data/MiniSubComponents/AllGroupFilters.qml</file>
+        <file>Source/Data/MiniSubComponents/AllNumericalFilters.qml</file>
         <file>Source/Data/SubComponents/DriveConnection.qml</file>
         <file>Source/Data/SubComponents/DriveConnectionFiles.qml</file>
     </qresource>
