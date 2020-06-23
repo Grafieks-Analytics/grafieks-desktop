@@ -292,7 +292,11 @@ ApplicationWindow {
         id: stacklayout_home
         width: mainwindow.width
         height: mainwindow.height
+<<<<<<< HEAD
         currentIndex: 2
+=======
+        currentIndex: 5
+>>>>>>> 568d243b36b4d885c461603373e8898b978f6f4b
 
         // 0
         Test{

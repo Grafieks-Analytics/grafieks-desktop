@@ -8,7 +8,7 @@ ConnectorModel::ConnectorModel(QObject *parent) : QAbstractListModel(parent)
     addConnector(new Connector("Box","../../Images/icons/box.png","cloud"));
     addConnector(new Connector("Dropbox","../../Images/icons/dropbox-2.png","cloud"));
     addConnector(new Connector("Github","../../Images/icons/github-1.png","online"));
-    addConnector(new Connector("Google Analytics","../../Images/icons/google-analytics-4.png","online"));
+    addConnector(new Connector("Google Drive","../../Images/icons/drive.png","online"));
     addConnector(new Connector("Google Sheets","../../Images/icons/16_google-sheets_1b1915a4b0.png","online"));
     addConnector(new Connector("GRS","../../Images/icons/GRS.png","grs"));
     addConnector(new Connector("JSON","../../Images/icons/json-icon.png","file"));
