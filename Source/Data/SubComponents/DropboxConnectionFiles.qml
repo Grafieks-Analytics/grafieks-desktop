@@ -350,7 +350,7 @@ Popup {
                                         }
                                         onDoubleClicked: {
                                             if(tag == "folder")
-                                            DropboxDS.fetchDatasources(pathLower)
+                                            DropboxDS.folderNav(pathFolder)
 
                                             path.text = pathLower
                                         }
@@ -565,7 +565,7 @@ Popup {
                         font.pixelSize: Constants.fontReading
                     }
                     onClicked: {
-                        DropboxDS.fetchDatasources("")
+                        DropboxDS.folderNav("")
                         path.text = "Dropbox"
                     }
 

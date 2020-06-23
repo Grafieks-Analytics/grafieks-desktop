@@ -3,12 +3,16 @@
 
 #include <QObject>
 #include <QNetworkAccessManager>
+#include <QOAuth2AuthorizationCodeFlow>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QSettings>
+#include <QUrl>
+#include <QUrlQuery>
+
 
 #include "dropbox.h"
 
@@ -18,8 +22,9 @@ class DropboxDS : public QObject
 public:
     explicit DropboxDS(QObject *parent = nullptr);
 
-    Q_INVOKABLE void fetchDatasources(QString path);
+    Q_INVOKABLE void fetchDatasources();
     Q_INVOKABLE QString goingBack(QString path,QString name);
+    Q_INVOKABLE void folderNav(QString path);
 
     void addDataSource(Dropbox * dropbox);
 
@@ -49,6 +54,8 @@ private:
     QNetworkReply * m_networkReply;
     QByteArray * m_dataBuffer;
     QList<Dropbox*> m_dropbox;
+    QOAuth2AuthorizationCodeFlow * dropbox;
+    QString token;
 };
 
 #endif // DROPBOXDS_H
