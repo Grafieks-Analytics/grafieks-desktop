@@ -68,5 +68,7 @@
         <file>Source/Data/MiniSubComponents/AllNumericalFilters.qml</file>
         <file>Source/Data/SubComponents/DriveConnection.qml</file>
         <file>Source/Data/SubComponents/DriveConnectionFiles.qml</file>
+        <file>Source/Data/SubComponents/BoxConnection.qml</file>
+        <file>Source/Data/SubComponents/BoxConnectionFiles.qml</file>
     </qresource>
 </RCC>

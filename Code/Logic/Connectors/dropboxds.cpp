@@ -10,8 +10,6 @@
 #include <QOAuthHttpServerReplyHandler>
 #include <QtDebug>
 
-
-
 DropboxDS::DropboxDS(QObject *parent) : QObject(parent),
     m_networkAccessManager(new QNetworkAccessManager(this)),
     m_networkReply(nullptr),
@@ -183,9 +181,6 @@ void DropboxDS::dataReadFinished()
 
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
-        QJsonObject statusObj = resultObj["status"].toObject();
-
-
 
         QJsonArray dataArray = resultObj["entries"].toArray();
 

@@ -1,0 +1,60 @@
+#ifndef BOXDS_H
+#define BOXDS_H
+
+#include <QObject>
+#include <QNetworkAccessManager>
+#include <QOAuth2AuthorizationCodeFlow>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QSettings>
+#include <QUrl>
+#include <QUrlQuery>
+
+#include "box.h"
+
+class BoxDS : public QObject
+{
+    Q_OBJECT
+public:
+    explicit BoxDS(QObject *parent = nullptr);
+
+    Q_INVOKABLE void fetchDatasources();
+//    Q_INVOKABLE QString goingBack(QString path,QString name);
+    Q_INVOKABLE void folderNav(QString path);
+
+    void addDataSource(Box *box);
+
+    Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & type,const QString & modifiedAt,const QString & extension);
+
+    QList<Box *> dataItems();
+
+signals:
+    void preItemAdded();
+    void postItemAdded();
+    void preItemRemoved(int index);
+    void postItemRemoved();
+    void preReset();
+    void postReset();
+
+private slots:
+    void resetDatasource();
+    void dataReadyRead();
+    void dataReadFinished();
+
+public slots:
+
+private:
+    QNetworkAccessManager * m_networkAccessManager;
+    QNetworkReply * m_networkReply;
+    QByteArray * m_dataBuffer;
+    QList<Box*> m_box;
+    QOAuth2AuthorizationCodeFlow * box;
+    QString token;
+
+
+};
+
+#endif // BOXDS_H
