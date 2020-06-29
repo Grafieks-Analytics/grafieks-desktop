@@ -18,7 +18,7 @@ import com.grafieks.singleton.constants 1.0
 import "../../MainSubComponents"
 
 Popup {
-    id: filePopup
+    id: sheetListPopup
     width: parent.width * 0.75
     height: parent.height * 0.75
     modal: true
@@ -27,7 +27,7 @@ Popup {
     y: parent.height * 0.125
     padding: 0
     property int label_col : 135
-    property var pathFolder: "Dropbox"
+    property var pathFolder: "Sheet"
     property var folderName: "Folder name"
 
 
@@ -57,11 +57,11 @@ Popup {
 
             if(status.status === true){
 
-                popup.visible = false
+                sheetPopup.visible = false
                 stacklayout_home.currentIndex = 5
             }
             else{
-                popup.visible = true
+                sheetPopup.visible = true
                 msg_dialog.open()
                 msg_dialog.text = status.msg
             }
@@ -84,7 +84,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Connect to Dropbox"
+            text: "Connect to Sheet"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontReading
@@ -101,8 +101,8 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    fileListPopup.visible = false
-                    path.text="Dropbox";
+                    sheetListPopup.visible = false
+                    path.text="Sheet";
                 }
             }
         }
@@ -135,7 +135,7 @@ Popup {
 
 //                Text {
 //                    id: signOutBtn
-//                    x:filePopup.width - filePopup.parent.width * 0.125 - 30
+//                    x:sheetListPopup.width - sheetListPopup.parent.width * 0.125 - 30
 //                    text: qsTr("Sign Out")
 //                    color: "blue"
 //                }
@@ -155,19 +155,19 @@ Popup {
                 id: server_files
                 placeholderText: "file name"
                 font.pixelSize: Constants.fontReading
-                width: filePopup.width * 0.6
+                width: sheetListPopup.width * 0.6
                 height: 40
                 background: Rectangle {
                     border.color: Constants.borderBlueColor
                     radius: 5
-                    width: filePopup.width * 0.6
+                    width: sheetListPopup.width * 0.6
                 }
 
                 Button{
                     id: searchBtn
                     height: 40
                     width: 100
-                    x : filePopup.width * 0.6 - 100
+                    x : sheetListPopup.width * 0.6 - 100
                     background: Rectangle {
                         id: searchBtnBackground
                         color: searchBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
@@ -187,7 +187,7 @@ Popup {
                 //                    id: search_btn
                 //                    height: 40
                 //                    width: 100
-                //                    x : filePopup.width * 0.6 - 100
+                //                    x : sheetListPopup.width * 0.6 - 100
                 //                    background: Rectangle{
                 //                        id: search_btn_background
                 //                        color: search_btn.hovered ? Constants.darkThemeColor : Constants.ThemeColor
@@ -220,23 +220,23 @@ Popup {
             anchors.topMargin: 20
 
             Row{
-                width: filePopup.width * 0.6
+                width: sheetListPopup.width * 0.6
 
                 Rectangle{
-                    height: filePopup.height * 0.75 - 100
-                    width: filePopup.width * 0.6
+                    height: sheetListPopup.height * 0.75 - 100
+                    width: sheetListPopup.width * 0.6
                     border.color: Constants.themeColor
 
                     ListView{
                         id: fileList
-                        model:DropboxModel
+                        model:SheetModel
 
                         height: 200
-                        width: filePopup.width * 0.6
+                        width: sheetListPopup.width * 0.6
 
                         header: Row{
 
-                            width: filePopup.width * 0.6
+                            width: sheetListPopup.width * 0.6
                             Column{
                                 width: 20
                                 Rectangle{
@@ -296,7 +296,7 @@ Popup {
 
                         delegate: Row{
                             height:30
-                            width: filePopup.width * 0.6
+                            width: sheetListPopup.width * 0.6
 
                             Column{
                                 width: 20
@@ -305,7 +305,7 @@ Popup {
 
                                     Image{
                                         id: fileMenuIcon
-                                        source: tag=="folder"?"../../../Images/icons/folder-invoices.png" :"../../../Images/icons/file-icon.png"
+                                        source: kind=="drive#folder"?"../../../Images/icons/folder-invoices.png" :"../../../Images/icons/file-icon.png"
                                         width:25
                                         height: 25
                                     }
@@ -342,7 +342,7 @@ Popup {
                                                 folderName = name;
                                             }
 
-                                            if(tag == "file")
+                                            if(kind == "drive#file")
                                             {
                                                 path.text = pathLower
                                                detailName.text = name;
@@ -350,7 +350,7 @@ Popup {
                                         }
                                         onDoubleClicked: {
                                             if(tag == "folder")
-                                            DropboxDS.folderNav(pathFolder)
+                                            DropboxDS.fetchDatasources(pathLower)
 
                                             path.text = pathLower
                                         }
@@ -388,7 +388,7 @@ Popup {
                                     anchors.left: parent
 
                                     Text {
-                                        text: qsTr(clientModified)
+                                        text: qsTr(modifiedTime)
                                         padding: 5
                                         leftPadding: 20
                                     }
@@ -403,12 +403,12 @@ Popup {
             }
             Row{
                 id:fileDetails
-                width: filePopup.width * 0.4  - 40
+                width: sheetListPopup.width * 0.4  - 40
 
                 Rectangle{
                     id: fileNotSelected
-                    height: filePopup.height * 0.75 - 100
-                    width: filePopup.width * 0.4 - 40
+                    height: sheetListPopup.height * 0.75 - 100
+                    width: sheetListPopup.width * 0.4 - 40
                     border.color: Constants.themeColor
 
                     Rectangle{
@@ -435,7 +435,7 @@ Popup {
 
                     Image {
                         id: dropBoxImage
-                        source: "../../../Images/icons/dropbox-2.png"
+                        source: "../../../Images/icons/16_google-sheets_1b1915a4b0.png"
                         anchors.topMargin: 50
                         anchors.top: detailsHeading.bottom
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -527,10 +527,10 @@ Popup {
 
             Row{
                 id: breadcrumb
-                width: filePopup.width * 0.6
+                width: sheetListPopup.width * 0.6
                 Rectangle{
                     height: 40
-                    width: filePopup.width * 0.6
+                    width: sheetListPopup.width * 0.6
                     border.color: Constants.borderBlueColor
                     anchors.verticalCenter: parent
 
@@ -538,39 +538,17 @@ Popup {
                         id: path
                         anchors.verticalCenter: parent.verticalCenter
                         leftPadding: 10
-                        text: qsTr("Dropbox")
+                        text: qsTr("Sheet")
                     }
                 }
             }
 
 
             Row{
-                width: filePopup.width * 0.4
+                width: sheetListPopup.width * 0.4
                 anchors.left:breadcrumb.right
-                anchors.leftMargin: filePopup.width * 0.4  - 270
-                Button{
-                    id: homeBtn
-                    height: 40
-                    width: 100
-                    anchors.right: cancelBtn.left
-                    anchors.rightMargin: 30
-                    background: Rectangle {
-                        id: homeBtnBackground
-                        color: homeBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
-                    }
+                anchors.leftMargin: sheetListPopup.width * 0.4  - 270
 
-                    Text{
-                        text: "Home"
-                        anchors.centerIn: parent
-                        font.pixelSize: Constants.fontReading
-                    }
-                    onClicked: {
-                        DropboxDS.folderNav("")
-                        path.text = "Dropbox"
-                    }
-
-
-                }
 
                 Button{
                     id: cancelBtn
@@ -583,14 +561,14 @@ Popup {
                     }
 
                     Text{
-                        text: "Back"
+                        text: "Cancel"
                         anchors.centerIn: parent
                         font.pixelSize: Constants.fontReading
                     }
 
                     onClicked: {
-//                        fileListPopup.visible = false
-                          path.text = DropboxDS.goingBack(pathFolder,folderName)
+                        sheetListPopup.visible = false
+//                          path.text = DropboxDS.goingBack(pathFolder,folderName)
                     }
 
 

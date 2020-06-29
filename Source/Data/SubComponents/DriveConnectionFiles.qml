@@ -27,7 +27,7 @@ Popup {
     y: parent.height * 0.125
     padding: 0
     property int label_col : 135
-    property var pathFolder: "Dropbox"
+    property var pathFolder: "Drive"
     property var folderName: "Folder name"
 
 
@@ -84,7 +84,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Connect to Dropbox"
+            text: "Connect to Drive"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontReading
@@ -130,16 +130,16 @@ Popup {
                 text: qsTr("Connected by: test@test.com")
             }
 
-            Column{
-                x: parent.width * 0.75
+//            Column{
+//                x: parent.width * 0.75
 
-                Text {
-                    id: signOutBtn
-                    x:driveListPopup.width - driveListPopup.parent.width * 0.125 - 30
-                    text: qsTr("Sign Out")
-                    color: "blue"
-                }
-            }
+//                Text {
+//                    id: signOutBtn
+//                    x:driveListPopup.width - driveListPopup.parent.width * 0.125 - 30
+//                    text: qsTr("Sign Out")
+//                    color: "blue"
+//                }
+//            }
         }
 
         // Row  User Details Ends
@@ -419,9 +419,9 @@ Popup {
 
                         Text {
                             text: qsTr("Details")
-                            anchors.topMargin: 20
+                            anchors.topMargin: 5
                             font.pointSize: Constants.fontReading
-                            anchors.top: fileDetails.bottom
+                            anchors.top: detailsHeading.top
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
@@ -435,7 +435,7 @@ Popup {
 
                     Image {
                         id: dropBoxImage
-                        source: "../../../Images/icons/16_google-sheets_1b1915a4b0.png"
+                        source: "../../../Images/icons/drive.png"
                         anchors.topMargin: 50
                         anchors.top: detailsHeading.bottom
                         anchors.horizontalCenter: parent.horizontalCenter

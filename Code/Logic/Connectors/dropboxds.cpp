@@ -50,7 +50,7 @@ DropboxDS::DropboxDS(QObject *parent) : QObject(parent),
     // This is set in Redirect URI in dropbox Developers Console of the app
     // Same can be seen in the downloaded JSON file
 
-    auto replyHandler = new QOAuthHttpServerReplyHandler(3000, this);
+    auto replyHandler = new QOAuthHttpServerReplyHandler(8080, this);
     this->dropbox->setReplyHandler(replyHandler);
 //    connect(this->dropbox,&QOAuth2AuthorizationCodeFlow::granted,this,&DropboxDS::folderNav);
 

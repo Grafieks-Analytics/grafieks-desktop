@@ -30,6 +30,9 @@ SOURCES += \
         Code/Logic/Connectors/dropbox.cpp \
         Code/Logic/Connectors/dropboxds.cpp \
         Code/Logic/Connectors/dropboxmodel.cpp \
+    Code/Logic/Connectors/sheet.cpp \
+    Code/Logic/Connectors/sheetds.cpp \
+    Code/Logic/Connectors/sheetmodel.cpp \
         Code/Logic/DataModeller/dblistmodel.cpp \
         Code/Logic/DataModeller/querymodel.cpp \
         Code/Logic/DataModeller/tablelistmodel.cpp \
@@ -104,6 +107,9 @@ HEADERS += \
     Code/Logic/Connectors/dropbox.h \
     Code/Logic/Connectors/dropboxds.h \
     Code/Logic/Connectors/dropboxmodel.h \
+    Code/Logic/Connectors/sheet.h \
+    Code/Logic/Connectors/sheetds.h \
+    Code/Logic/Connectors/sheetmodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/querymodel.h \
     Code/Logic/DataModeller/tablelistmodel.h \
@@ -319,6 +325,8 @@ DISTFILES += \
     Source/Data/SubComponents/MenuSeparatorComponent.qml \
     Source/Data/SubComponents/MysqlConnection.qml \
     Source/Data/SubComponents/QueryModeller.qml \
+    Source/Data/SubComponents/SheetConnection.qml \
+    Source/Data/SubComponents/SheetConnectionFiles.qml \
     Source/Data/SubComponents/SqliteConnection.qml \
     Source/Data/SubComponents/TabBackgroundComponent.qml \
     Source/Data/SubComponents/TabTextComponent.qml \
