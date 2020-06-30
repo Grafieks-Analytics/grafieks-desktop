@@ -139,6 +139,23 @@ void DropboxDS::folderNav(QString path)
     connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::dataReadFinished);
 }
 
+void DropboxDS::searchQuer(QString path)
+{
+    QJsonObject obj;
+    obj.insert("query",path);
+    obj.insert("include_highlights",false);
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+    QNetworkRequest m_networkRequest;
+    m_networkRequest.setUrl(QUrl("https://api.dropboxapi.com/2/files/search_v2"));
+    m_networkRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
+    m_networkRequest.setRawHeader("Authorization", "Bearer " + token.toUtf8());
+    m_networkReply = m_networkAccessManager->post(m_networkRequest,strJson.toUtf8());
+    connect(m_networkReply,&QIODevice::readyRead,this,&DropboxDS::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::dataSearchedFinished);
+
+}
+
 void DropboxDS::addDataSource(Dropbox *dropbox)
 {
     emit preItemAdded();
@@ -208,6 +225,43 @@ void DropboxDS::dataReadFinished()
             this->addDataSource(DropboxID,DropboxTag,DropboxName,DropboxPathLower,DropboxClientModi,DropboxExtension);
         }
 
+        m_dataBuffer->clear();
+    }
+}
+
+void DropboxDS::dataSearchedFinished()
+{
+    if(m_networkReply->error()){
+        qDebug()<< "There was some error :" << m_networkReply->errorString();
+    }else{
+        this->resetDatasource();
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
+        QJsonObject resultObj = resultJson.object();
+        QJsonArray dataArray = resultObj["matches"].toArray();
+        for(int i=0;i<dataArray.size();i++){
+            QJsonObject dataObj = dataArray.at(i).toObject();
+            QJsonObject dataObj2 = dataObj["metadata"].toObject();
+            QJsonObject dataObj3 = dataObj2["metadata"].toObject();
+            QString DropboxID = dataObj3["id"].toString();
+            QString DropboxTag = dataObj3[".tag"].toString();
+            QString DropboxName = dataObj3["name"].toString();
+            QStringList extensionList;
+            QString DropboxExtension;
+            QString DropboxPathLower = dataObj3["path_lower"].toString();
+            QString DropboxClientModi;
+            if(DropboxTag  == "file"){
+                DropboxClientModi = dataObj3["client_modified"].toString();
+                extensionList = DropboxName.split('.');
+                DropboxExtension = "." + extensionList.last();
+            }
+            else{
+                DropboxClientModi = "--";
+                DropboxExtension = "--";
+
+            }
+            this->addDataSource(DropboxID,DropboxTag,DropboxName,DropboxPathLower,DropboxClientModi,DropboxExtension);
+
+        }
         m_dataBuffer->clear();
     }
 }

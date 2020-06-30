@@ -178,6 +178,9 @@ Popup {
                         anchors.centerIn: parent
                         font.pixelSize: Constants.fontReading
                     }
+                    onClicked: {
+                        DropboxDS.searchQuer(server_files.text);
+                    }
 
 
                 }

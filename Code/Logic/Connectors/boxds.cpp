@@ -92,6 +92,25 @@ void BoxDS::folderNav(QString path)
 
 }
 
+void BoxDS::searchQuer(QString path)
+{
+    QNetworkRequest m_networkRequest;
+    QUrl api("https://api.box.com/2.0/search");
+    QUrlQuery quer(api);
+    quer.addQueryItem("query",path);
+    quer.addQueryItem("fields","id,name,type,modified_at,description,size");
+    api.setQuery(quer);
+    m_networkRequest.setUrl(api);
+
+    m_networkRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
+    m_networkRequest.setRawHeader("Authorization", "Bearer " + this->box->token().toUtf8());
+    token = this->box->token();
+
+    m_networkReply = m_networkAccessManager->get(m_networkRequest);
+    connect(m_networkReply,&QIODevice::readyRead,this,&BoxDS::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::dataReadFinished);
+}
+
 void BoxDS::addDataSource(Box *box)
 {
     emit preItemAdded();

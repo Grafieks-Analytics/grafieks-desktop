@@ -24,6 +24,7 @@ public:
     Q_INVOKABLE void fetchDatasources();
 //    Q_INVOKABLE QString goingBack(QString path,QString name);
     Q_INVOKABLE void folderNav(QString path);
+    Q_INVOKABLE void searchQuer(QString path);
 
     void addDataSource(Box *box);
 

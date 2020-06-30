@@ -25,6 +25,7 @@ public:
     Q_INVOKABLE void fetchDatasources();
     Q_INVOKABLE QString goingBack(QString path,QString name);
     Q_INVOKABLE void folderNav(QString path);
+    Q_INVOKABLE void searchQuer(QString path);
 
     void addDataSource(Dropbox * dropbox);
 
@@ -45,6 +46,7 @@ private slots:
     void resetDatasource();
     void dataReadyRead();
     void dataReadFinished();
+    void dataSearchedFinished();
 //    void datadeleteFinished();
 
 public slots:
