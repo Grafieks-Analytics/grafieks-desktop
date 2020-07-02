@@ -52,6 +52,24 @@ void SheetDS::fetchDatasources()
     this->google->grant();
 }
 
+void SheetDS::searchQuer(QString path)
+{
+    if(path == "")
+        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType+contains+%27application%2Fvnd.google-apps.spreadsheet%27"));
+    else
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name+contains+%27" + path +"%27+and+mimeType+contains+%27application%2Fvnd.google-apps.spreadsheet%27"));
+
+    connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
+}
+
+void SheetDS::homeBut()
+{
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'"));
+
+    connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
+}
+
+
 void SheetDS::addDataSource(Sheet *Sheet)
 {
     emit preItemAdded();

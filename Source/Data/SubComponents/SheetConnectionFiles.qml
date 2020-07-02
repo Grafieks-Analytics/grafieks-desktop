@@ -178,6 +178,9 @@ Popup {
                         anchors.centerIn: parent
                         font.pixelSize: Constants.fontReading
                     }
+                    onClicked: {
+                        SheetDS.searchQuer(server_files.text);
+                    }
 
 
                 }
@@ -549,6 +552,30 @@ Popup {
                 anchors.left:breadcrumb.right
                 anchors.leftMargin: sheetListPopup.width * 0.4  - 270
 
+                Button{
+                    id: homeBtn
+                    height: 40
+                    width: 100
+                    anchors.right: cancelBtn.left
+                    anchors.rightMargin: 30
+
+                    background: Rectangle {
+                        id: homeBtnBackground
+                        color: homeBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
+                    }
+
+                    Text{
+                        text: "Home"
+                        anchors.centerIn: parent
+                        font.pixelSize: Constants.fontReading
+                    }
+
+                    onClicked: {
+                        SheetDS.homeBut();
+                    }
+
+
+                }
 
                 Button{
                     id: cancelBtn
