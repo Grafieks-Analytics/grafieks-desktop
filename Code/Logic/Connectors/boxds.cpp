@@ -10,6 +10,8 @@
 #include <QOAuthHttpServerReplyHandler>
 #include <QtDebug>
 
+// box api documentation - https://developer.box.com/reference/
+
 BoxDS::BoxDS(QObject *parent) : QObject(parent),
     m_networkAccessManager(new QNetworkAccessManager(this)),
     m_networkReply(nullptr),

@@ -572,6 +572,7 @@ Popup {
 
                     onClicked: {
                         SheetDS.homeBut();
+                        //refer sheetds.cpp for function info
                     }
 
 
@@ -595,7 +596,6 @@ Popup {
 
                     onClicked: {
                         sheetListPopup.visible = false
-//                          path.text = DropboxDS.goingBack(pathFolder,folderName)
                     }
 
 

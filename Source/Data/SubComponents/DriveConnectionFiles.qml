@@ -573,6 +573,7 @@ Popup {
 
                     onClicked: {
                         DriveDS.homeBut()
+                        //refer driveds.cpp for function info
                     }
 
 
@@ -596,7 +597,6 @@ Popup {
 
                     onClicked: {
                         driveListPopup.visible = false
-//                          path.text = DropboxDS.goingBack(pathFolder,folderName)
                     }
 
 

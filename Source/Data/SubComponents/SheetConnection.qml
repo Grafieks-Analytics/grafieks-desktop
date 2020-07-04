@@ -133,6 +133,7 @@ Popup {
                     sheetListPopup.visible = true;
                     sheetPopup.visible = false;
                     SheetDS.fetchDatasources();
+                    //sheetds.cpp for more info
                 }
             }
 

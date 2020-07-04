@@ -569,6 +569,7 @@ Popup {
                     }
                     onClicked: {
                         DropboxDS.folderNav("")
+                        //refer function folderNav of dropboxds.cpp
                         path.text = "Dropbox"
                     }
 
@@ -592,8 +593,8 @@ Popup {
                     }
 
                     onClicked: {
-//                        fileListPopup.visible = false
                           path.text = DropboxDS.goingBack(pathFolder,folderName)
+                        //refer dropboxds.cpp for function goingback
                     }
 
 

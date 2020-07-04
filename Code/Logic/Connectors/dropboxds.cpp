@@ -10,6 +10,8 @@
 #include <QOAuthHttpServerReplyHandler>
 #include <QtDebug>
 
+//dropbox api documentation - https://www.dropbox.com/developers/documentation/http/documentation
+
 DropboxDS::DropboxDS(QObject *parent) : QObject(parent),
     m_networkAccessManager(new QNetworkAccessManager(this)),
     m_networkReply(nullptr),

@@ -1,5 +1,7 @@
 #include "sheetds.h"
 
+//sheets api documentation - https://developers.google.com/drive/api/v3/reference/files
+
 SheetDS::SheetDS(QObject *parent) : QObject(parent),
     m_networkAccessManager(new QNetworkAccessManager(this)),
     m_networkReply(nullptr),

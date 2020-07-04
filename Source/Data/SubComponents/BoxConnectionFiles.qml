@@ -569,6 +569,7 @@ Popup {
                     }
                     onClicked: {
                         BoxDS.folderNav("0")
+                        // refer boxds.cpp for function info
                         path.text = "Box"
                     }
 

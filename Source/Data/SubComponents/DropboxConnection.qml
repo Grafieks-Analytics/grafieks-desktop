@@ -133,6 +133,7 @@ Popup {
                     fileListPopup.visible = true;
                     popup.visible = false;
                     DropboxDS.fetchDatasources()
+                    //dropboxds.cpp for more info
                 }
             }
 
