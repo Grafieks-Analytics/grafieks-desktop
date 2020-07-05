@@ -17,6 +17,9 @@ SOURCES += \
         Code/Api/logout.cpp \
         Code/Connectors/mysqlcon.cpp \
         Code/Connectors/sqlitecon.cpp \
+    Code/Logic/Connectors/box.cpp \
+    Code/Logic/Connectors/boxds.cpp \
+    Code/Logic/Connectors/boxmodel.cpp \
         Code/Logic/Connectors/connector.cpp \
         Code/Logic/Connectors/connectorfilter.cpp \
         Code/Logic/Connectors/connectormodel.cpp \
@@ -88,6 +91,9 @@ HEADERS += \
     Code/Connectors/allconnectors.h \
     Code/Connectors/mysqlcon.h \
     Code/Connectors/sqlitecon.h \
+    Code/Logic/Connectors/box.h \
+    Code/Logic/Connectors/boxds.h \
+    Code/Logic/Connectors/boxmodel.h \
     Code/Logic/Connectors/connector.h \
     Code/Logic/Connectors/connectorfilter.h \
     Code/Logic/Connectors/connectormodel.h \
@@ -295,6 +301,8 @@ DISTFILES += \
     Source/Data/MiniSubComponents/FilterWildcardContent.qml \
     Source/Data/SelectConnection.qml \
     Source/Data/SubComponents/.DS_Store \
+    Source/Data/SubComponents/BoxConnection.qml \
+    Source/Data/SubComponents/BoxConnectionFiles.qml \
     Source/Data/SubComponents/DataFilterTestPopup.qml \
     Source/Data/SubComponents/DataFilters.qml \
     Source/Data/SubComponents/DataFiltersPopup.qml \

@@ -83,9 +83,9 @@ Page {
             driveModal.visible = true;
             break;
 
-//        case "drive":
-//            driveModal.visible = true
-//            break;
+        case "box":
+            boxModal.visible = true;
+            break;
 
         default:
             break;
@@ -438,6 +438,13 @@ Page {
 
    DriveConnectionFiles{
         id: driveListPopup
+   }
+
+   BoxConnection{
+        id: boxModal
+   }
+   BoxConnectionFiles{
+        id: boxListPopup
    }
 
 }

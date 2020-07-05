@@ -1,65 +1,142 @@
 #include "dropboxds.h"
 #include <QJsonArray>
+#include <QOAuth2AuthorizationCodeFlow>
+#include <QFile>
 #include <QJsonDocument>
+#include <QDesktopServices>
 #include <QJsonObject>
 #include <QNetworkRequest>
 #include <QQmlContext>
+#include <QOAuthHttpServerReplyHandler>
 #include <QtDebug>
-
 
 DropboxDS::DropboxDS(QObject *parent) : QObject(parent),
     m_networkAccessManager(new QNetworkAccessManager(this)),
     m_networkReply(nullptr),
     m_dataBuffer(new QByteArray)
 {
+    this->dropbox = new QOAuth2AuthorizationCodeFlow(this);
+
+    // Set Scope or Permissions required from dropbox
+    // List can be obtained from https://developers.dropbox.com/identity/protocols/oauth2/scopes
+
+    this->dropbox->setScope("");
+
+    connect(this->dropbox, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, [=](QUrl url) {
+        QUrlQuery query(url);
+        QByteArray postData;
+
+        query.addQueryItem("force_reapprove", "true"); // Param required to get data everytime
+        query.addQueryItem("token_access_type", "offline"); // Needed for Refresh Token (as AccessToken expires shortly)
+        query.addQueryItem("response_type", "code");
+
+
+        postData = query.toString(QUrl::FullyEncoded).toUtf8();
+
+        url.setQuery(query);
+        QDesktopServices::openUrl(url);
+    });
+    // Here the parameters from dropbox JSON are filled up
+    // Attached screenshot of JSON file and dropbox Console
+
+    this->dropbox->setAuthorizationUrl(QUrl("https://www.dropbox.com/oauth2/authorize"));
+    this->dropbox->setClientIdentifier("v1eumlddpbcttjt");
+    this->dropbox->setAccessTokenUrl(QUrl("https://api.dropboxapi.com/oauth2/token"));
+    this->dropbox->setClientIdentifierSharedKey("y91t2hwv0fdcbki");
+
+
+
+    // In my case, I have hardcoded 5476
+    // This is set in Redirect URI in dropbox Developers Console of the app
+    // Same can be seen in the downloaded JSON file
+
+    auto replyHandler = new QOAuthHttpServerReplyHandler(3000, this);
+    this->dropbox->setReplyHandler(replyHandler);
+//    connect(this->dropbox,&QOAuth2AuthorizationCodeFlow::granted,this,&DropboxDS::folderNav);
+
+    connect(this->dropbox, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
+        qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
+        const QUrl API_ENDPOINT("https://api.dropboxapi.com/2/files/list_folder");
+        QJsonObject obj;
+        obj.insert("limit", 100);
+        obj.insert("path","");
+        //    request.setRawHeader("Dropbox-API-Arg","{\"path\": \"id:XbzRXviwTQAAAAAAAAAAIQ\"}");
+        obj.insert("recursive",false);
+        obj.insert("include_media_info",false);
+        obj.insert("include_deleted",false);
+        obj.insert("include_has_explicit_shared_members",false);
+        obj.insert("include_mounted_folders",true);
+        obj.insert("include_non_downloadable_files",true);
+
+        QJsonDocument doc(obj);
+        QString strJson(doc.toJson(QJsonDocument::Compact));
+
+        QNetworkRequest m_networkRequest;
+        m_networkRequest.setUrl(QUrl("https://api.dropboxapi.com/2/files/list_folder"));
+
+        m_networkRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
+        m_networkRequest.setRawHeader("Authorization", "Bearer " + this->dropbox->token().toUtf8());
+        token = this->dropbox->token();
+
+        m_networkReply = m_networkAccessManager->post(m_networkRequest, strJson.toUtf8());
+        connect(m_networkReply,&QIODevice::readyRead,this,&DropboxDS::dataReadyRead);
+        connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::dataReadFinished);
+
+    });
 
 }
 
-void DropboxDS::fetchDatasources(QString path)
+void DropboxDS::fetchDatasources()
 {
-    const QUrl API_ENDPOINT("https://api.dropboxapi.com/2/files/list_folder");
-    QNetworkRequest request(API_ENDPOINT);
-
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    request.setRawHeader("Authorization", "Bearer u9UObpKvFnAAAAAAAAAAVUtFxxez0zkpmVysh6lbupRUR8XbW7TKomNdz0JAn9WE");
-
-    QJsonObject json_body;
-    json_body.insert("path",path);
-    //    request.setRawHeader("Dropbox-API-Arg","{\"path\": \"id:XbzRXviwTQAAAAAAAAAAIQ\"}");
-    json_body.insert("recursive",false);
-    json_body.insert("include_media_info",false);
-    json_body.insert("include_deleted",false);
-    json_body.insert("include_has_explicit_shared_members",false);
-    json_body.insert("include_mounted_folders",true);
-    json_body.insert("include_non_downloadable_files",true);
-    //    QString a="";
-
-    m_networkReply = m_networkAccessManager->post(request,QJsonDocument(json_body).toJson());
-    //        mNetReply = mNetManager->post(request, a.toUtf8());
-
-
-    connect(m_networkReply,&QIODevice::readyRead,this,&DropboxDS::dataReadyRead);
-    connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::dataReadFinished);
+    this->dropbox->grant();
 
 }
 
 QString DropboxDS::goingBack(QString path,QString name)
 {
     int len = name.length();
-//    QStringRef sub(&path);
-//    sub.chop(len);
+    //    QStringRef sub(&path);
+    //    sub.chop(len);
     QString p = path;
-//    QStringList pa = path.split('');
-//    qDebug() <<"Listr is :" << pa;
+    //    QStringList pa = path.split('');
+    //    qDebug() <<"Listr is :" << pa;
     p.chop(len);
     if(p=="Dropbox" || p.length() == 1 || name == "Folder name")
         p="";
 
     qDebug()<<"This is p: "<<p;
-    fetchDatasources(p);
+    folderNav(p);
 
     return p;
 
+}
+
+void DropboxDS::folderNav(QString path)
+{
+    const QUrl API_ENDPOINT("https://api.dropboxapi.com/2/files/list_folder");
+    QJsonObject obj;
+    obj.insert("limit", 100);
+    obj.insert("path",path);
+    //    request.setRawHeader("Dropbox-API-Arg","{\"path\": \"id:XbzRXviwTQAAAAAAAAAAIQ\"}");
+    obj.insert("recursive",false);
+    obj.insert("include_media_info",false);
+    obj.insert("include_deleted",false);
+    obj.insert("include_has_explicit_shared_members",false);
+    obj.insert("include_mounted_folders",true);
+    obj.insert("include_non_downloadable_files",true);
+
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    QNetworkRequest m_networkRequest;
+    m_networkRequest.setUrl(QUrl("https://api.dropboxapi.com/2/files/list_folder"));
+
+    m_networkRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
+    m_networkRequest.setRawHeader("Authorization", "Bearer " + token.toUtf8());
+
+    m_networkReply = m_networkAccessManager->post(m_networkRequest, strJson.toUtf8());
+    connect(m_networkReply,&QIODevice::readyRead,this,&DropboxDS::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::dataReadFinished);
 }
 
 void DropboxDS::addDataSource(Dropbox *dropbox)
@@ -104,35 +181,32 @@ void DropboxDS::dataReadFinished()
 
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
-        QJsonObject statusObj = resultObj["status"].toObject();
 
+        QJsonArray dataArray = resultObj["entries"].toArray();
 
+        for(int i=0;i<dataArray.size();i++){
 
-            QJsonArray dataArray = resultObj["entries"].toArray();
+            QJsonObject dataObj = dataArray.at(i).toObject();
 
-            for(int i=0;i<dataArray.size();i++){
-
-                QJsonObject dataObj = dataArray.at(i).toObject();
-
-                QString DropboxID = dataObj["id"].toString();
-                QString DropboxTag = dataObj[".tag"].toString();
-                QString DropboxName = dataObj["name"].toString();
-                QStringList extensionList;
-                QString DropboxExtension;
-                QString DropboxPathLower = dataObj["path_lower"].toString();
-                QString DropboxClientModi;
-                if(DropboxTag  == "file"){
-                    DropboxClientModi = dataObj["client_modified"].toString();
-                    extensionList = DropboxName.split('.');
-                    DropboxExtension = "." + extensionList.last();
-                }
-                else{
-                    DropboxClientModi = "--";
-                    DropboxExtension = "--";
-
-                }
-                this->addDataSource(DropboxID,DropboxTag,DropboxName,DropboxPathLower,DropboxClientModi,DropboxExtension);
+            QString DropboxID = dataObj["id"].toString();
+            QString DropboxTag = dataObj[".tag"].toString();
+            QString DropboxName = dataObj["name"].toString();
+            QStringList extensionList;
+            QString DropboxExtension;
+            QString DropboxPathLower = dataObj["path_lower"].toString();
+            QString DropboxClientModi;
+            if(DropboxTag  == "file"){
+                DropboxClientModi = dataObj["client_modified"].toString();
+                extensionList = DropboxName.split('.');
+                DropboxExtension = "." + extensionList.last();
             }
+            else{
+                DropboxClientModi = "--";
+                DropboxExtension = "--";
+
+            }
+            this->addDataSource(DropboxID,DropboxTag,DropboxName,DropboxPathLower,DropboxClientModi,DropboxExtension);
+        }
 
         m_dataBuffer->clear();
     }

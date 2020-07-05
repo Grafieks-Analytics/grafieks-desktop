@@ -1,5 +1,5 @@
-#ifndef DROPBOXDS_H
-#define DROPBOXDS_H
+#ifndef BOXDS_H
+#define BOXDS_H
 
 #include <QObject>
 #include <QNetworkAccessManager>
@@ -13,25 +13,23 @@
 #include <QUrl>
 #include <QUrlQuery>
 
+#include "box.h"
 
-#include "dropbox.h"
-
-class DropboxDS : public QObject
+class BoxDS : public QObject
 {
     Q_OBJECT
 public:
-    explicit DropboxDS(QObject *parent = nullptr);
+    explicit BoxDS(QObject *parent = nullptr);
 
     Q_INVOKABLE void fetchDatasources();
-    Q_INVOKABLE QString goingBack(QString path,QString name);
+//    Q_INVOKABLE QString goingBack(QString path,QString name);
     Q_INVOKABLE void folderNav(QString path);
 
-    void addDataSource(Dropbox * dropbox);
+    void addDataSource(Box *box);
 
-    Q_INVOKABLE void addDataSource(const QString & id,const QString & tag,const QString & name,const QString & pathLower,const QString & clientModified,const QString & extension);
+    Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & type,const QString & modifiedAt,const QString & extension);
 
-//    Q_INVOKABLE void removeDatasource(int index);
-    QList<Dropbox *> dataItems();
+    QList<Box *> dataItems();
 
 signals:
     void preItemAdded();
@@ -45,7 +43,6 @@ private slots:
     void resetDatasource();
     void dataReadyRead();
     void dataReadFinished();
-//    void datadeleteFinished();
 
 public slots:
 
@@ -53,9 +50,11 @@ private:
     QNetworkAccessManager * m_networkAccessManager;
     QNetworkReply * m_networkReply;
     QByteArray * m_dataBuffer;
-    QList<Dropbox*> m_dropbox;
-    QOAuth2AuthorizationCodeFlow * dropbox;
+    QList<Box*> m_box;
+    QOAuth2AuthorizationCodeFlow * box;
     QString token;
+
+
 };
 
-#endif // DROPBOXDS_H
+#endif // BOXDS_H
