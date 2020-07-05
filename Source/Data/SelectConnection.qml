@@ -79,12 +79,16 @@ Page {
             dropboxModal.visible = true
             break;
 
-        case "google sheets":
+        case "google drive":
             driveModal.visible = true;
             break;
 
         case "box":
             boxModal.visible = true;
+            break;
+
+        case "google sheets":
+            sheetModal.visible = true;
             break;
 
         default:
@@ -445,6 +449,13 @@ Page {
    }
    BoxConnectionFiles{
         id: boxListPopup
+   }
+
+   SheetConnection{
+        id: sheetModal
+   }
+   SheetConnectionFiles{
+        id: sheetListPopup
    }
 
 }

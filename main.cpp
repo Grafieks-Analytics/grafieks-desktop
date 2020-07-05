@@ -25,6 +25,8 @@
 #include "Code/Logic/Connectors/drivemodel.h"
 #include "Code/Logic/Connectors/boxds.h"
 #include "Code/Logic/Connectors/boxmodel.h"
+#include "Code/Logic/Connectors/sheetds.h"
+#include "Code/Logic/Connectors/sheetmodel.h"
 
 //#include "Code/Logic/General/testing.h"
 
@@ -88,6 +90,9 @@ int main(int argc, char *argv[])
     BoxModel boxModel;
     BoxDS * box = new BoxDS(&app);
 
+    SheetModel sheetModel;
+    SheetDS * sheet = new SheetDS(&app);
+
 
     // Call default functions
     datasourceModel.setDatasourceds(datasource);
@@ -98,6 +103,8 @@ int main(int argc, char *argv[])
     driveModel.setDriveds(drive);
 
     boxModel.setBoxds(box);
+
+    sheetModel.setSheetds(sheet);
     // Define singletons
     qmlRegisterSingletonType( QUrl("qrc:/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants" );
 
@@ -120,6 +127,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("DriveDS",drive);
     engine.rootContext()->setContextProperty("BoxModel",&boxModel);
     engine.rootContext()->setContextProperty("BoxDS",box);
+    engine.rootContext()->setContextProperty("SheetModel",&sheetModel);
+    engine.rootContext()->setContextProperty("SheetDS",sheet);
 
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

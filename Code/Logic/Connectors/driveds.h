@@ -23,6 +23,8 @@ public:
     explicit DriveDS(QObject *parent = nullptr);
 
     Q_INVOKABLE void fetchDatasources();
+    Q_INVOKABLE void searchQuer(QString path);
+    Q_INVOKABLE void homeBut();
 
     void addDataSource(Drive * drive);
     Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & kind,const QString & modifiedTime,const QString & extension);

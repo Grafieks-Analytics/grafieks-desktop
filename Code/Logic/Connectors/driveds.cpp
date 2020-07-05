@@ -6,6 +6,7 @@
 #include <QQmlContext>
 #include <QtDebug>
 
+//drive api documentation - https://developers.google.com/drive/api/v3/reference/files
 
 DriveDS::DriveDS(QObject *parent) : QObject(parent),
     m_networkAccessManager(new QNetworkAccessManager(this)),
@@ -54,9 +55,25 @@ DriveDS::DriveDS(QObject *parent) : QObject(parent),
     });
 }
 
+
+
 void DriveDS::fetchDatasources()
 {
     this->google->grant();
+}
+
+void DriveDS::searchQuer(QString path)
+{
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name  +contains+%27" + path+ "%27"));
+
+    connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
+}
+
+void DriveDS::homeBut()
+{
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)"));
+
+    connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
 }
 
 void DriveDS::addDataSource(Drive *drive)

@@ -1,36 +1,35 @@
-#ifndef BOXDS_H
-#define BOXDS_H
+#ifndef SHEETDS_H
+#define SHEETDS_H
 
 #include <QObject>
-#include <QNetworkAccessManager>
 #include <QOAuth2AuthorizationCodeFlow>
+#include <QUrl>
+#include <QUrlQuery>
+#include <QOAuthHttpServerReplyHandler>
+#include <QDesktopServices>
+#include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QSettings>
-#include <QUrl>
-#include <QUrlQuery>
+#include "sheet.h"
 
-#include "box.h"
-
-class BoxDS : public QObject
+class SheetDS : public QObject
 {
     Q_OBJECT
 public:
-    explicit BoxDS(QObject *parent = nullptr);
+    explicit SheetDS(QObject *parent = nullptr);
 
     Q_INVOKABLE void fetchDatasources();
-//    Q_INVOKABLE QString goingBack(QString path,QString name);
-    Q_INVOKABLE void folderNav(QString path);
     Q_INVOKABLE void searchQuer(QString path);
+    Q_INVOKABLE void homeBut();
 
-    void addDataSource(Box *box);
+    void addDataSource(Sheet * Sheet);
+    Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & kind,const QString & modifiedTime,const QString & extension);
 
-    Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & type,const QString & modifiedAt,const QString & extension);
-
-    QList<Box *> dataItems();
+    QList<Sheet *> dataItems();
 
 signals:
     void preItemAdded();
@@ -42,20 +41,17 @@ signals:
 
 private slots:
     void resetDatasource();
-    void dataReadyRead();
+//    void dataReadyRead();
     void dataReadFinished();
-
-public slots:
 
 private:
     QNetworkAccessManager * m_networkAccessManager;
+    QOAuth2AuthorizationCodeFlow * google;
     QNetworkReply * m_networkReply;
     QByteArray * m_dataBuffer;
-    QList<Box*> m_box;
-    QOAuth2AuthorizationCodeFlow * box;
-    QString token;
+    QList<Sheet*> m_Sheet;
 
 
 };
 
-#endif // BOXDS_H
+#endif // SHEETDS_H
