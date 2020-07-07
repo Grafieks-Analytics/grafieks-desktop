@@ -28,7 +28,7 @@
 #include "Code/Logic/Connectors/sheetds.h"
 #include "Code/Logic/Connectors/sheetmodel.h"
 
-//#include "Code/Logic/General/testing.h"
+#include "Code/Logic/General/testing.h"
 
 
 #include "Code/statics.h"
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 
     // Initialize Objects
     QtTest2 qttest2;
-//    Testing testing;
+    Testing testing;
     MysqlCon mysqlconnect;
     User user;
     ConnectorFilter connectorFilter;
@@ -108,10 +108,16 @@ int main(int argc, char *argv[])
     // Define singletons
     qmlRegisterSingletonType( QUrl("qrc:/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants" );
 
+    QtTest2 *model1 = new QtTest2(0);
+    model1->setQuery("SELECT * FROM users WHERE column='value'");
+    QtTest2 *model2 = new QtTest2(0);
+    model2->setQuery("SELECT * FROM profiles WHERE anothercolumn='value'");
+
+
 
     // Set contexts for QML
     engine.rootContext()->setContextProperty("QtTest2", &qttest2);
-//    engine.rootContext()->setContextProperty("Testing", &testing);
+    engine.rootContext()->setContextProperty("Testing", &testing);
     engine.rootContext()->setContextProperty("MysqlConnect", &mysqlconnect);
     engine.rootContext()->setContextProperty("User", &user);
     engine.rootContext()->setContextProperty("ConnectorFilter", &connectorFilter);
@@ -129,6 +135,9 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("BoxDS",box);
     engine.rootContext()->setContextProperty("SheetModel",&sheetModel);
     engine.rootContext()->setContextProperty("SheetDS",sheet);
+
+    engine.rootContext()->setContextProperty("myFirstModel", model1);
+    engine.rootContext()->setContextProperty("mySecondModel", model2);
 
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

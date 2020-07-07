@@ -1,43 +1,48 @@
 #include "qttest2.h"
 
 
-QtTest2::QtTest2(QObject *parent):QAbstractTableModel(parent)
+QtTest2::QtTest2(QObject *parent) :
+    QSqlQueryModel(parent)
 {
-
 }
 
-QVariant QtTest2::headerData(int section, Qt::Orientation orientation, int role) const
+
+void QtTest2::setQuery(const QString &query, const QSqlDatabase &db)
 {
-    if(role == Qt::DisplayRole){
-            if(orientation == Qt::Horizontal)
-                return  QString("hor-%1").arg(section);
-            else
-                return QString("ver-%1").arg(section);
-        }
-        return QVariant();
+    QSqlQueryModel::setQuery(query, db);
+    generateRoleNames();
 }
 
-int QtTest2::rowCount(const QModelIndex &parent) const
+void QtTest2::setQuery(const QSqlQuery & query)
 {
-    if (parent.isValid())
-            return 0;
-        return 20;
+    QSqlQueryModel::setQuery(query);
+    generateRoleNames();
 }
 
-int QtTest2::columnCount(const QModelIndex &parent) const
+void QtTest2::generateRoleNames()
 {
-    if (parent.isValid())
-            return 0;
-        return 20;
+    m_roleNames.clear();
+    for( int i = 0; i < record().count(); i ++) {
+        m_roleNames.insert(Qt::UserRole + i + 1, record().fieldName(i).toUtf8());
+    }
 }
 
 QVariant QtTest2::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
-            return QVariant();
-        if(role == Qt::DisplayRole
-                && index.row() >= 0 && index.row() < rowCount()
-                && index.column() >= 0 && index.column() < columnCount())
-            return QString("data %1-%2").arg(index.row()).arg(index.column());
-        return QVariant();
+    QVariant value;
+
+    if(role < Qt::UserRole) {
+        value = QSqlQueryModel::data(index, role);
+    }
+    else {
+        int columnIdx = role - Qt::UserRole - 1;
+        QModelIndex modelIndex = this->index(index.row(), columnIdx);
+        value = QSqlQueryModel::data(modelIndex, Qt::DisplayRole);
+    }
+    return value;
+}
+
+void QtTest2::callSql()
+{
+
 }

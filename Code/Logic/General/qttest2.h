@@ -2,31 +2,29 @@
 #define QTTEST2_H
 
 #include <QObject>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QByteArray>
-#include <QJsonArray>
-#include <QJsonObject>
-#include <QJsonDocument>
-
-#include <QAbstractTableModel>
+#include <QSqlQueryModel>
+#include <QSqlRecord>
+#include <QSqlField>
 
 
-class QtTest2 : public QAbstractTableModel
+
+class QtTest2 : public QSqlQueryModel
 {
     Q_OBJECT
 
-    public:
-        explicit QtTest2(QObject *parent = nullptr);
-        Q_INVOKABLE QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-        int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-        int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-        QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+public:
+    explicit QtTest2(QObject *parent = nullptr);
 
+    void setQuery(const QString &query, const QSqlDatabase &db = QSqlDatabase());
+    void setQuery(const QSqlQuery &query);
+    QVariant data(const QModelIndex &index, int role) const;
+    QHash<int, QByteArray> roleNames() const {	return m_roleNames;	}
 
+    Q_INVOKABLE void callSql();
 
-
+private :
+    void generateRoleNames();
+    QHash<int, QByteArray> m_roleNames;
 
 };
 

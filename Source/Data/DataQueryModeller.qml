@@ -35,108 +35,11 @@ Page {
         ListElement{
             status: "tick"
             queryNumber:"1"
-            action:"SELECT * from  accounts LIMIT 0, 1000"
-            message:"1 row(s) returned"
-            duration:"01.000 sec"
-        }
-        ListElement{
-            status: "cross"
-            queryNumber:"2"
-            action:"SELECT * from  accountssad LIMIT 0, 1000"
-            message:"Error Code: 1146. Table 'grafieks_my.accountsasd' doesn't exist"
+            action:""
+            message:""
             duration:""
         }
-        ListElement{
-            status: "tick"
-            queryNumber:"3"
-            action:"SELECT * from  accountsasda LIMIT 0, 1000"
-            message:"2 row(s) returned"
-            duration:"01.000 sec"
-        }
-        ListElement{
-            status: "tick"
-            queryNumber:"1"
-            action:"SELECT * from  accounts LIMIT 0, 1000"
-            message:"1 row(s) returned"
-            duration:"01.000 sec"
-        }
-        ListElement{
-            status: "cross"
-            queryNumber:"2"
-            action:"SELECT * from  accountssad LIMIT 0, 1000"
-            message:"Error Code: 1146. Table 'grafieks_my.accountsasd' doesn't exist"
-            duration:""
-        }
-        ListElement{
-            status: "tick"
-            queryNumber:"3"
-            action:"SELECT * from  accountsasda LIMIT 0, 1000"
-            message:"2 row(s) returned"
-            duration:"01.000 sec"
-        }
-        ListElement{
-            status: "tick"
-            queryNumber:"1"
-            action:"SELECT * from  accounts LIMIT 0, 1000"
-            message:"1 row(s) returned"
-            duration:"01.000 sec"
-        }
-        ListElement{
-            status: "cross"
-            queryNumber:"2"
-            action:"SELECT * from  accountssad LIMIT 0, 1000"
-            message:"Error Code: 1146. Table 'grafieks_my.accountsasd' doesn't exist"
-            duration:""
-        }
-        ListElement{
-            status: "tick"
-            queryNumber:"3"
-            action:"SELECT * from  accountsasda LIMIT 0, 1000"
-            message:"2 row(s) returned"
-            duration:"01.000 sec"
-        }
-        ListElement{
-            status: "tick"
-            queryNumber:"1"
-            action:"SELECT * from  accounts LIMIT 0, 1000"
-            message:"1 row(s) returned"
-            duration:"01.000 sec"
-        }
-        ListElement{
-            status: "cross"
-            queryNumber:"2"
-            action:"SELECT * from  accountssad LIMIT 0, 1000"
-            message:"Error Code: 1146. Table 'grafieks_my.accountsasd' doesn't exist"
-            duration:""
-        }
-        ListElement{
-            status: "tick"
-            queryNumber:"3"
-            action:"SELECT * from  accountsasda LIMIT 0, 1000"
-            message:"2 row(s) returned"
-            duration:"01.000 sec"
-        }
-        ListElement{
-            status: "tick"
-            queryNumber:"1"
-            action:"SELECT * from  accounts LIMIT 0, 1000"
-            message:"1 row(s) returned"
-            duration:"01.000 sec"
-        }
-        ListElement{
-            status: "cross"
-            queryNumber:"2"
-            action:"SELECT * from  accountssad LIMIT 0, 1000"
-            message:"Error Code: 1146. Table 'grafieks_my.accountsasd' doesn't exist"
-            duration:""
-        }
-        ListElement{
-            status: "tick"
-            queryNumber:"3"
-            action:"SELECT * from  accountsasda LIMIT 0, 1000"
-            message:"2 row(s) returned"
-            duration:"01.000 sec"
-        }
+
     }
 
     ListModel{
@@ -149,22 +52,7 @@ Page {
             orderLine:"Sales Order Line"
             productNo:"productNo"
         }
-        ListElement{
-            customerId: "1"
-            customerName: "Abhishek"
-            dob:"2020-08-30"
-            orderNo:"Sales Order Number"
-            orderLine:"Sales Order Line"
-            productNo:"productNo"
-        }
-        ListElement{
-            customerId: "1"
-            customerName: "Abhishek"
-            dob:"2020-08-30"
-            orderNo:"Sales Order Number"
-            orderLine:"Sales Order Line"
-            productNo:"productNo"
-        }
+
     }
 
     Connections{
