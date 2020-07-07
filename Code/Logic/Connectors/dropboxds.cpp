@@ -62,7 +62,6 @@ DropboxDS::DropboxDS(QObject *parent) : QObject(parent),
         QJsonObject obj;
         obj.insert("limit", 100);
         obj.insert("path","");
-        //    request.setRawHeader("Dropbox-API-Arg","{\"path\": \"id:XbzRXviwTQAAAAAAAAAAIQ\"}");
         obj.insert("recursive",false);
         obj.insert("include_media_info",false);
         obj.insert("include_deleted",false);
@@ -72,6 +71,9 @@ DropboxDS::DropboxDS(QObject *parent) : QObject(parent),
 
         QJsonDocument doc(obj);
         QString strJson(doc.toJson(QJsonDocument::Compact));
+
+        //api link - https://www.dropbox.com/developers/documentation/http/documentation#files-list_folder
+
 
         QNetworkRequest m_networkRequest;
         m_networkRequest.setUrl(QUrl("https://api.dropboxapi.com/2/files/list_folder"));
@@ -119,7 +121,6 @@ void DropboxDS::folderNav(QString path)
     QJsonObject obj;
     obj.insert("limit", 100);
     obj.insert("path",path);
-    //    request.setRawHeader("Dropbox-API-Arg","{\"path\": \"id:XbzRXviwTQAAAAAAAAAAIQ\"}");
     obj.insert("recursive",false);
     obj.insert("include_media_info",false);
     obj.insert("include_deleted",false);
@@ -149,6 +150,9 @@ void DropboxDS::searchQuer(QString path)
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
     QNetworkRequest m_networkRequest;
+
+    // api link - https://www.dropbox.com/developers/documentation/http/documentation#files-search
+
     m_networkRequest.setUrl(QUrl("https://api.dropboxapi.com/2/files/search_v2"));
     m_networkRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
     m_networkRequest.setRawHeader("Authorization", "Bearer " + token.toUtf8());

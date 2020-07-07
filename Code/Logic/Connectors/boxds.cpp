@@ -45,6 +45,8 @@ BoxDS::BoxDS(QObject *parent) : QObject(parent),
     connect(this->box, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
         qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
 
+        // api link - https://developer.box.com/reference/get-folders-id-items/
+
         QNetworkRequest m_networkRequest;
         QUrl api("https://api.box.com/2.0/folders/0/items");
         QUrlQuery quer(api);
@@ -97,6 +99,10 @@ void BoxDS::folderNav(QString path)
 void BoxDS::searchQuer(QString path)
 {
     QNetworkRequest m_networkRequest;
+
+    // api link - https://developer.box.com/reference/get-search/
+
+
     QUrl api("https://api.box.com/2.0/search");
     QUrlQuery quer(api);
     quer.addQueryItem("query",path);
