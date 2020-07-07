@@ -126,8 +126,6 @@ HEADERS += \
 
 DISTFILES += \
     .gitignore \
-    Assets/.DS_Store \
-    Assets/css/.DS_Store \
     Assets/css/custom.css \
     Assets/js/custom.js \
     Assets/vendors/MARKDOWN-LICENSE.txt \
@@ -138,7 +136,6 @@ DISTFILES += \
     Assets/vendors/vega-embed.js \
     Assets/vendors/vega5.min.js \
     Constants.qml \
-    Documentation/.DS_Store \
     Documentation/Configuration Windows QT.pdf \
     Documentation/Configuration Windows QT.pdf \
     Documentation/Configuration Windows QT.pdf \
@@ -157,8 +154,6 @@ DISTFILES += \
     Documentation/Configuration Windows QT.pptx \
     Documentation/ConfigurationMac.md \
     Documentation/Layouts.md \
-    Images/.DS_Store \
-    Images/icons/.DS_Store \
     Images/icons/16_csv.png \
     Images/icons/16_google-sheets_1b1915a4b0.png \
     Images/icons/20_snowflake-icon_a4ed1ae266.png \
@@ -193,7 +188,6 @@ DISTFILES += \
     Images/icons/align.png \
     Images/icons/aws-redshift-logo.png \
     Images/icons/box.png \
-    Images/icons/charts/.DS_Store \
     Images/icons/charts/Area.png \
     Images/icons/charts/Area_30.png \
     Images/icons/charts/Bar.png \
@@ -269,12 +263,10 @@ DISTFILES += \
     Images/icons/zoom out.png \
     Images/icons/zoom out.png \
     Images/icons/zoom out.png \
-    Images/logos/.DS_Store \
     Images/logos/logo.ico \
     Images/logos/logo.png \
     Images/logos/logo_full_small.png \
     README.md \
-    Source/.DS_Store \
     Source/Charts/area.html \
     Source/Charts/bar.html \
     Source/Charts/box.html \
@@ -286,16 +278,13 @@ DISTFILES += \
     Source/Charts/sunburst.html \
     Source/Charts/tree-map.html \
     Source/Charts/tree.html \
-    Source/Dashboard/.DS_Store \
     Source/Dashboard/NewDashboard.qml \
     Source/Dashboard/NewReport.qml \
-    Source/Dashboard/SubComponents/.DS_Store \
     Source/Dashboard/SubComponents/DashboardCustomize.qml \
     Source/Dashboard/SubComponents/DashboardFilters.qml \
     Source/Dashboard/SubComponents/DashboardSubFilters.qml \
     Source/Dashboard/SubComponents/DashboardSummary.qml \
     Source/Dashboard/SubComponents/ReportCustomizations.qml \
-    Source/Data/.DS_Store \
     Source/Data/DataQueryModeller.qml \
     Source/Data/DataSources.qml \
     Source/Data/MiniSubComponents/AllDateFilters.qml \
@@ -306,7 +295,6 @@ DISTFILES += \
     Source/Data/MiniSubComponents/FilterTopContent.qml \
     Source/Data/MiniSubComponents/FilterWildcardContent.qml \
     Source/Data/SelectConnection.qml \
-    Source/Data/SubComponents/.DS_Store \
     Source/Data/SubComponents/BoxConnection.qml \
     Source/Data/SubComponents/BoxConnectionFiles.qml \
     Source/Data/SubComponents/DataFilterTestPopup.qml \
@@ -331,7 +319,6 @@ DISTFILES += \
     Source/Data/SubComponents/TabBackgroundComponent.qml \
     Source/Data/SubComponents/TabTextComponent.qml \
     Source/Data/SubComponents/TestQueryResultsTable.qml \
-    Source/MainSubComponents/.DS_Store \
     Source/MainSubComponents/CheckBoxTpl.qml \
     Source/MainSubComponents/HorizontalLineTpl.qml \
     Source/MainSubComponents/LeftMenuBar.qml \
@@ -348,9 +335,7 @@ DISTFILES += \
     Source/MainSubComponents/SearchBar.qml \
     Source/MainSubComponents/SelectDropdown.qml \
     Source/MainSubComponents/SliderTpl.qml \
-    Source/Others/.DS_Store \
     Source/Others/Home.qml \
-    Source/Others/SubComponents/.DS_Store \
     Source/Others/Test.qml \
     Source/Others/Test2.qml \
     Source/Others/Test3.qml \
