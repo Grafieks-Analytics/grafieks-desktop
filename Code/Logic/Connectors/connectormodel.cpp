@@ -56,7 +56,6 @@ bool ConnectorModel::setData(const QModelIndex &index, const QVariant &value, in
     case NameRole:
     {
         if( connector->name()!= value.toString()){
-            qDebug() << "Changing names for " << connector->name();
             connector->setName(value.toString());
             somethingChanged = true;
         }
@@ -65,7 +64,6 @@ bool ConnectorModel::setData(const QModelIndex &index, const QVariant &value, in
     case ImageLinkRole:
     {
         if( connector->imageLink()!= value.toString()){
-            qDebug() << "Changing color for " << connector->imageLink();
             connector->setImageLink(value.toString());
             somethingChanged = true;
         }
@@ -74,7 +72,6 @@ bool ConnectorModel::setData(const QModelIndex &index, const QVariant &value, in
     case CategoryRole:
     {
         if( connector->category()!= value.toInt()){
-            qDebug() << "Changing age for " << connector->category();
             connector->setCategory(value.toString());
             somethingChanged = true;
         }

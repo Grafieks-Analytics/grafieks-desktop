@@ -67,6 +67,8 @@ int main(int argc, char *argv[])
 
     // Initialize Objects
     QtTest2 qttest2;
+//    QtTest2 *qttest2 = new QtTest2();
+
     Testing testing;
     MysqlCon mysqlconnect;
     User user;
@@ -82,14 +84,15 @@ int main(int argc, char *argv[])
     DropboxModel dropboxModel;
     DropboxDS * dropbox = new DropboxDS(&app);
 
-
+    // Google Drive modal
     DriveModel driveModel;
     DriveDS * drive = new DriveDS(&app);
 
-
+    // Box modal
     BoxModel boxModel;
     BoxDS * box = new BoxDS(&app);
 
+    // Google sheet modal
     SheetModel sheetModel;
     SheetDS * sheet = new SheetDS(&app);
 
@@ -99,21 +102,14 @@ int main(int argc, char *argv[])
 //    qttest2.fetchPosts();
 
     dropboxModel.setDropboxds(dropbox);
-
     driveModel.setDriveds(drive);
-
     boxModel.setBoxds(box);
-
     sheetModel.setSheetds(sheet);
+    qttest2.callSql();
+
+
     // Define singletons
     qmlRegisterSingletonType( QUrl("qrc:/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants" );
-
-    QtTest2 *model1 = new QtTest2(0);
-    model1->setQuery("SELECT * FROM users WHERE column='value'");
-    QtTest2 *model2 = new QtTest2(0);
-    model2->setQuery("SELECT * FROM profiles WHERE anothercolumn='value'");
-
-
 
     // Set contexts for QML
     engine.rootContext()->setContextProperty("QtTest2", &qttest2);
@@ -136,8 +132,6 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("SheetModel",&sheetModel);
     engine.rootContext()->setContextProperty("SheetDS",sheet);
 
-    engine.rootContext()->setContextProperty("myFirstModel", model1);
-    engine.rootContext()->setContextProperty("mySecondModel", model2);
 
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

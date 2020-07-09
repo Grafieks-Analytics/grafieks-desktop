@@ -6,6 +6,8 @@
 #include <QSqlRecord>
 #include <QSqlField>
 
+#include "../../Connectors/mysqlcon.h"
+
 
 
 class QtTest2 : public QSqlQueryModel
