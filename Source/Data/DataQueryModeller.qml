@@ -474,6 +474,8 @@ Page {
                         dataPreviewResult.visible = true
                         displayResult.visible = false
 
+                        QtTest2.callSql()
+
                     }
 
 
@@ -567,7 +569,8 @@ Page {
 
                     onClicked:{
                         testQueryBtn.visible = true
-                        QueryModel.callQuery()
+//                        QueryModel.callQuery()
+                        QtTest2.callSql()
                     }
 
                 }

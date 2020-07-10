@@ -53,14 +53,14 @@ void QtTest2::callSql()
 //    Statics::currentDbIntType = Constants::mysqlIntType;
 //    Statics::currentDbStrType = Constants::mysqlStrType;
 
-    QSqlDatabase dbMysql = QSqlDatabase::addDatabase("QMYSQL");
-    dbMysql.setHostName("localhost");
-    dbMysql.setPort(3306);
-    dbMysql.setDatabaseName("grafieks_my");
-    dbMysql.setUserName("root");
-    dbMysql.setPassword("123@312QQl");
+//    QSqlDatabase dbMysql = QSqlDatabase::addDatabase("QMYSQL");
+//    dbMysql.setHostName("localhost");
+//    dbMysql.setPort(3306);
+//    dbMysql.setDatabaseName("grafieks_my");
+//    dbMysql.setUserName("root");
+//    dbMysql.setPassword("123@312QQl");
 
-    dbMysql.open();
+//    dbMysql.open();
 
 
     this->setQuery("SELECT * FROM users");

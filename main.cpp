@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     driveModel.setDriveds(drive);
     boxModel.setBoxds(box);
     sheetModel.setSheetds(sheet);
-    qttest2.callSql();
+//    qttest2.callSql();
 
 
     // Define singletons
