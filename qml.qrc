@@ -85,5 +85,9 @@
         <file>Source/MainSubComponents/CustomTextBox.qml</file>
         <file>Source/MainSubComponents/CustomTextArea.qml</file>
         <file>Source/MainSubComponents/FileUploadBtn.qml</file>
+        <file>Source/Data/SubComponents/BoxConnection.qml</file>
+        <file>Source/Data/SubComponents/BoxConnectionFiles.qml</file>
+        <file>Source/Data/SubComponents/SheetConnection.qml</file>
+        <file>Source/Data/SubComponents/SheetConnectionFiles.qml</file>
     </qresource>
 </RCC>

@@ -45,18 +45,28 @@ void TableListModel::callQuery(QString queryString)
     switch(Statics::currentDbIntType){
 
 
-    case Constants::mysqlIntType:
+    case Constants::mysqlIntType:{
+
+        QSqlDatabase dbMysql = QSqlDatabase::addDatabase("QMYSQL");
+        dbMysql.setHostName("localhost");
+        dbMysql.setPort(3306);
+        dbMysql.setDatabaseName("grafieks_my");
+        dbMysql.setUserName("root");
+        dbMysql.setPassword("123@312QQl");
+
+        dbMysql.open();
 
         if (queryString != ""){
-            this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'");
+
+            this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'",dbMysql);
         } else{
-            this->setQuery("SHOW TABLES");
+            this->setQuery("SHOW TABLES",dbMysql);
         }
 
         break;
+    }
 
-
-    case Constants::sqliteIntType:
+    case Constants::sqliteIntType:{
 
         if (queryString != ""){
             this->setQuery("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '%"+queryString+"%'  AND name != 'sqlite_%'");
@@ -66,6 +76,7 @@ void TableListModel::callQuery(QString queryString)
 
         break;
     }
+    }
 }
 
 
@@ -74,7 +85,6 @@ void TableListModel::generateRoleNames()
 
     m_roleNames.clear();
     QString roleName = "tableName";
-    qDebug() << "Table name" << roleName;
     m_roleNames.insert(Qt::UserRole + 1, roleName.toUtf8());
 
 }

@@ -17,7 +17,7 @@ import com.grafieks.singleton.constants 1.0
 import "../SubComponents"
 
 Popup {
-    id: popup
+    id: boxPopup
     width: 800
     height: 500
     modal: true
@@ -35,11 +35,11 @@ Popup {
 
             if(status.status === true){
 
-                popup.visible = false
+                boxPopup.visible = false
                 stacklayout_home.currentIndex = 5
             }
             else{
-                popup.visible = true
+                boxPopup.visible = true
                 msg_dialog.open()
                 msg_dialog.text = status.msg
             }
@@ -79,7 +79,7 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    popup.visible = false
+                    boxPopup.visible = false
                 }
             }
         }
@@ -106,7 +106,7 @@ Popup {
                 anchors.rightMargin: 10
                 x : dropboxConnectionModal.width + 50
 
-                text: qsTr("Allow Grafieks desktop to access to your Dropbox account...")
+                text: qsTr("Allow Grafieks desktop to access to your Box account...")
 
                 horizontalAlignment: Text.AlignHCenter
                 font.pointSize: Constants.fontCategoryHeaderSmall
@@ -118,7 +118,7 @@ Popup {
                 anchors.topMargin: 60
                 width: 100
                 height:50
-                x : dropboxConnectionModal.width + popup.width/2 - allowBtn.width / 2
+                x : dropboxConnectionModal.width + boxPopup.width/2 - allowBtn.width / 2
 
                 topPadding: 50
 
@@ -130,10 +130,10 @@ Popup {
                 }
 
                 onClicked: {
-                    fileListPopup.visible = true;
-                    popup.visible = false;
-                    DropboxDS.fetchDatasources()
-                    //dropboxds.cpp for more info
+                    boxListPopup.visible = true;
+                    boxPopup.visible = false;
+                    BoxDS.fetchDatasources()
+                    // boxds.cpp for more info
                 }
             }
 
@@ -143,9 +143,9 @@ Popup {
 
                 anchors.topMargin: 80
 
-                x : dropboxConnectionModal.width + popup.width/7 + 40
+                x : dropboxConnectionModal.width + boxPopup.width/7 + 40
 
-                text: qsTr("Click the allow button above to open the Dropbox authorization page on a separate window.");
+                text: qsTr("Click the allow button above to open the Box authorization page on a separate window.");
 
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
@@ -157,7 +157,7 @@ Popup {
             Text {
                 id: infoMsg2
                 anchors.top: infoMsg.bottom
-                x : dropboxConnectionModal.width + popup.width/4 + 40
+                x : dropboxConnectionModal.width + boxPopup.width/4 + 40
 
                 text: qsTr("Once you authorize this connection you will be returned to this page.")
 

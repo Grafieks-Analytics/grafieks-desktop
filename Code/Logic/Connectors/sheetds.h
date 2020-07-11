@@ -1,5 +1,5 @@
-#ifndef DRIVEDS_H
-#define DRIVEDS_H
+#ifndef SHEETDS_H
+#define SHEETDS_H
 
 #include <QObject>
 #include <QOAuth2AuthorizationCodeFlow>
@@ -14,22 +14,22 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QSettings>
-#include "drive.h"
+#include "sheet.h"
 
-class DriveDS : public QObject
+class SheetDS : public QObject
 {
     Q_OBJECT
 public:
-    explicit DriveDS(QObject *parent = nullptr);
+    explicit SheetDS(QObject *parent = nullptr);
 
     Q_INVOKABLE void fetchDatasources();
     Q_INVOKABLE void searchQuer(QString path);
     Q_INVOKABLE void homeBut();
 
-    void addDataSource(Drive * drive);
+    void addDataSource(Sheet * Sheet);
     Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & kind,const QString & modifiedTime,const QString & extension);
 
-    QList<Drive *> dataItems();
+    QList<Sheet *> dataItems();
 
 signals:
     void preItemAdded();
@@ -49,8 +49,9 @@ private:
     QOAuth2AuthorizationCodeFlow * google;
     QNetworkReply * m_networkReply;
     QByteArray * m_dataBuffer;
-    QList<Drive*> m_drive;
+    QList<Sheet*> m_Sheet;
+
 
 };
 
-#endif // DRIVEDS_H
+#endif // SHEETDS_H

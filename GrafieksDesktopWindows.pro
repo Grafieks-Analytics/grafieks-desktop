@@ -17,6 +17,9 @@ SOURCES += \
         Code/Api/logout.cpp \
         Code/Connectors/mysqlcon.cpp \
         Code/Connectors/sqlitecon.cpp \
+    Code/Logic/Connectors/box.cpp \
+    Code/Logic/Connectors/boxds.cpp \
+    Code/Logic/Connectors/boxmodel.cpp \
         Code/Logic/Connectors/connector.cpp \
         Code/Logic/Connectors/connectorfilter.cpp \
         Code/Logic/Connectors/connectormodel.cpp \
@@ -27,6 +30,9 @@ SOURCES += \
         Code/Logic/Connectors/dropbox.cpp \
         Code/Logic/Connectors/dropboxds.cpp \
         Code/Logic/Connectors/dropboxmodel.cpp \
+    Code/Logic/Connectors/sheet.cpp \
+    Code/Logic/Connectors/sheetds.cpp \
+    Code/Logic/Connectors/sheetmodel.cpp \
         Code/Logic/DataModeller/dblistmodel.cpp \
         Code/Logic/DataModeller/querymodel.cpp \
         Code/Logic/DataModeller/tablelistmodel.cpp \
@@ -88,6 +94,9 @@ HEADERS += \
     Code/Connectors/allconnectors.h \
     Code/Connectors/mysqlcon.h \
     Code/Connectors/sqlitecon.h \
+    Code/Logic/Connectors/box.h \
+    Code/Logic/Connectors/boxds.h \
+    Code/Logic/Connectors/boxmodel.h \
     Code/Logic/Connectors/connector.h \
     Code/Logic/Connectors/connectorfilter.h \
     Code/Logic/Connectors/connectormodel.h \
@@ -98,6 +107,9 @@ HEADERS += \
     Code/Logic/Connectors/dropbox.h \
     Code/Logic/Connectors/dropboxds.h \
     Code/Logic/Connectors/dropboxmodel.h \
+    Code/Logic/Connectors/sheet.h \
+    Code/Logic/Connectors/sheetds.h \
+    Code/Logic/Connectors/sheetmodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/querymodel.h \
     Code/Logic/DataModeller/tablelistmodel.h \
@@ -114,8 +126,6 @@ HEADERS += \
 
 DISTFILES += \
     .gitignore \
-    Assets/.DS_Store \
-    Assets/css/.DS_Store \
     Assets/css/custom.css \
     Assets/js/custom.js \
     Assets/vendors/MARKDOWN-LICENSE.txt \
@@ -126,7 +136,6 @@ DISTFILES += \
     Assets/vendors/vega-embed.js \
     Assets/vendors/vega5.min.js \
     Constants.qml \
-    Documentation/.DS_Store \
     Documentation/Configuration Windows QT.pdf \
     Documentation/Configuration Windows QT.pdf \
     Documentation/Configuration Windows QT.pdf \
@@ -145,8 +154,6 @@ DISTFILES += \
     Documentation/Configuration Windows QT.pptx \
     Documentation/ConfigurationMac.md \
     Documentation/Layouts.md \
-    Images/.DS_Store \
-    Images/icons/.DS_Store \
     Images/icons/16_csv.png \
     Images/icons/16_google-sheets_1b1915a4b0.png \
     Images/icons/20_snowflake-icon_a4ed1ae266.png \
@@ -181,7 +188,6 @@ DISTFILES += \
     Images/icons/align.png \
     Images/icons/aws-redshift-logo.png \
     Images/icons/box.png \
-    Images/icons/charts/.DS_Store \
     Images/icons/charts/Area.png \
     Images/icons/charts/Area_30.png \
     Images/icons/charts/Bar.png \
@@ -257,12 +263,10 @@ DISTFILES += \
     Images/icons/zoom out.png \
     Images/icons/zoom out.png \
     Images/icons/zoom out.png \
-    Images/logos/.DS_Store \
     Images/logos/logo.ico \
     Images/logos/logo.png \
     Images/logos/logo_full_small.png \
     README.md \
-    Source/.DS_Store \
     Source/Charts/area.html \
     Source/Charts/bar.html \
     Source/Charts/box.html \
@@ -274,16 +278,13 @@ DISTFILES += \
     Source/Charts/sunburst.html \
     Source/Charts/tree-map.html \
     Source/Charts/tree.html \
-    Source/Dashboard/.DS_Store \
     Source/Dashboard/NewDashboard.qml \
     Source/Dashboard/NewReport.qml \
-    Source/Dashboard/SubComponents/.DS_Store \
     Source/Dashboard/SubComponents/DashboardCustomize.qml \
     Source/Dashboard/SubComponents/DashboardFilters.qml \
     Source/Dashboard/SubComponents/DashboardSubFilters.qml \
     Source/Dashboard/SubComponents/DashboardSummary.qml \
     Source/Dashboard/SubComponents/ReportCustomizations.qml \
-    Source/Data/.DS_Store \
     Source/Data/DataQueryModeller.qml \
     Source/Data/DataSources.qml \
     Source/Data/MiniSubComponents/AllDateFilters.qml \
@@ -305,6 +306,8 @@ DISTFILES += \
     Source/Data/SelectConnection.qml \
     Source/Data/SubComponents/.DS_Store \
     Source/Data/SubComponents/CategoricalFilterPopup.qml \
+    Source/Data/SubComponents/BoxConnection.qml \
+    Source/Data/SubComponents/BoxConnectionFiles.qml \
     Source/Data/SubComponents/DataFilterTestPopup.qml \
     Source/Data/SubComponents/DataFilters.qml \
     Source/Data/SubComponents/DataFiltersPopup.qml \
@@ -324,11 +327,12 @@ DISTFILES += \
     Source/Data/SubComponents/MysqlConnection.qml \
     Source/Data/SubComponents/NumericalFilter.qml \
     Source/Data/SubComponents/QueryModeller.qml \
+    Source/Data/SubComponents/SheetConnection.qml \
+    Source/Data/SubComponents/SheetConnectionFiles.qml \
     Source/Data/SubComponents/SqliteConnection.qml \
     Source/Data/SubComponents/TabBackgroundComponent.qml \
     Source/Data/SubComponents/TabTextComponent.qml \
     Source/Data/SubComponents/TestQueryResultsTable.qml \
-    Source/MainSubComponents/.DS_Store \
     Source/MainSubComponents/CheckBoxTpl.qml \
     Source/MainSubComponents/CustomButton.qml \
     Source/MainSubComponents/CustomTextArea.qml \
@@ -349,9 +353,7 @@ DISTFILES += \
     Source/MainSubComponents/SearchBar.qml \
     Source/MainSubComponents/SelectDropdown.qml \
     Source/MainSubComponents/SliderTpl.qml \
-    Source/Others/.DS_Store \
     Source/Others/Home.qml \
-    Source/Others/SubComponents/.DS_Store \
     Source/Others/Test.qml \
     Source/Others/Test2.qml \
     Source/Others/Test3.qml \
