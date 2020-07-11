@@ -68,5 +68,22 @@
         <file>Source/Data/MiniSubComponents/AllNumericalFilters.qml</file>
         <file>Source/Data/SubComponents/DriveConnection.qml</file>
         <file>Source/Data/SubComponents/DriveConnectionFiles.qml</file>
+        <file>Source/Data/SubComponents/DateFilter.qml</file>
+        <file>Source/Data/SubComponents/CategoricalFilterPopup.qml</file>
+        <file>Source/Data/SubComponents/NumericalFilter.qml</file>
+        <file>Source/Data/SubComponents/GroupFilter.qml</file>
+        <file>Source/Data/MiniSubComponents/NumericalFilterInnerPopup.qml</file>
+        <file>Source/Data/MiniSubComponents/GroupFilterInnerPopup.qml</file>
+        <file>Source/Data/MiniSubComponents/DateFilterListContent.qml</file>
+        <file>Source/Data/MiniSubComponents/DateFilterCalenderContent.qml</file>
+        <file>Source/Data/MiniSubComponents/DateTimeFrameContent.qml</file>
+        <file>Source/Data/MiniSubComponents/DateTimeFrameYearContent.qml</file>
+        <file>Source/Data/MiniSubComponents/DateTimeFrameDayContent.qml</file>
+        <file>Source/Data/MiniSubComponents/DateTimeFrameMonthContent.qml</file>
+        <file>Source/Data/MiniSubComponents/DateTimeFrameQuarterContent.qml</file>
+        <file>Source/MainSubComponents/CustomButton.qml</file>
+        <file>Source/MainSubComponents/CustomTextBox.qml</file>
+        <file>Source/MainSubComponents/CustomTextArea.qml</file>
+        <file>Source/MainSubComponents/FileUploadBtn.qml</file>
     </qresource>
 </RCC>

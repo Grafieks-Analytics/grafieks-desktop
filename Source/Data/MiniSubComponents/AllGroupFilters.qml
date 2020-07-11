@@ -9,6 +9,7 @@ Row{
     y:10
     anchors.left: parent.left
     anchors.leftMargin: 20
+    property int rowSpacing: 8
 
     ListModel{
         id: groupModel
@@ -94,9 +95,10 @@ Row{
                     id: listFiltersListView
                     model: filterObject
                     width: parent.width
-                    height: this.model.count * 30
-                    anchors.top: listFilters.bottom
+                    height: filterObject.count * 30
                     anchors.topMargin: 10
+
+                    spacing: rowSpacing
 
                     delegate:
 
@@ -105,7 +107,6 @@ Row{
                         height: 30
                         width: parent.width
 
-                        anchors.top:listFilters.top
                         anchors.topMargin: 30
 
                         Column{

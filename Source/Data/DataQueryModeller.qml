@@ -199,7 +199,7 @@ Page {
 
     Rectangle{
         id: submenu
-        height: 22
+        height: 24
         width: parent.width - menu_width - column_querymodeller.width
         x: menu_width - 11
 
@@ -215,7 +215,6 @@ Page {
                 width:100
 
                 onClicked: {
-
 
                     if(!data_modeller_selected){
                         data_modeller_selected = !data_modeller_selected
@@ -363,11 +362,37 @@ Page {
                 }
 
                 Text{
-                    text: "Filter [0]"
+                    id: filterText
+                    text: "Filter"
                     anchors.top: filter_btn.top
                     anchors.left: filter_querymodeller.right
                     anchors.topMargin: 7
                     anchors.leftMargin: 5
+                }
+
+                Text {
+                    id: filterLeftSquareBracket
+                    anchors.left: filterText.right
+                    anchors.top: filter_btn.top
+                    anchors.topMargin: 7
+                    anchors.leftMargin: 2
+                    text: qsTr("[")
+                    color: Constants.grafieksGreen
+                }
+                Text {
+                    id: filterNumber
+                    anchors.left: filterLeftSquareBracket.right
+                    anchors.top: filter_btn.top
+                    anchors.topMargin: 7
+                    text: qsTr("0")
+                }
+                Text {
+                    id: filterRightSquareBracket
+                    anchors.left: filterNumber.right
+                    anchors.top: filter_btn.top
+                    anchors.topMargin: 7
+                    text: qsTr("]")
+                    color: Constants.grafieksGreen
                 }
 
                 background: Rectangle{
@@ -411,15 +436,15 @@ Page {
     ToolSeparator{
         id: toolsep1
         orientation: Qt.Horizontal
-        width: parent.width - menu_width
+        width: parent.width - menu_width - 100
         anchors.top: submenu.bottom
+        leftPadding: left_menubar.width
         anchors.horizontalCenter: submenu.horizontalCenter
-
 
         contentItem: Rectangle {
             implicitWidth: parent.vertical ? 1 : 24
             implicitHeight: parent.vertical ? 24 : 1
-            color: Constants.themeColor
+            color: Constants.darkThemeColor
         }
 
     }
@@ -497,7 +522,7 @@ Page {
 
             HorizontalLineTpl{
                 id: linebar1
-                line_color: Constants.themeColor
+                line_color: Constants.darkThemeColor
                 line_width: parent.width
                 anchors.top: infodata_table.top
             }
@@ -688,7 +713,7 @@ Page {
 
             HorizontalLineTpl{
                 id: linebar2
-                line_color: Constants.themeColor
+                line_color:Constants.darkThemeColor
                 line_width: parent.width
                 anchors.top: parent.bottom
             }
@@ -696,14 +721,14 @@ Page {
             Rectangle{
                 id:collapseBtnRow
                 anchors.top: linebar1.bottom
-                height: 27
+                height: 26
 
                 x: parent.width - 278
 
                 Button{
                     id: collapseBtn
-                    height: 27
-                    width: 27
+                    height: parent.height
+                    width: parent.height
                     topPadding: 8
 
                     Image {
@@ -979,156 +1004,7 @@ Page {
                 ScrollIndicator.vertical: ScrollIndicator { }
 
             }
-//            TableView {
-//                id:dataPreviewResult
-//                model: dataPreviewModel
-//                rowHeightProvider: function (column) { return 30; }
-//                width: parent.width - column_querymodeller.width - 50
-//                visible: false
-//                columnSpacing: 1
-//                rowSpacing: 1
-//                height:parent.height
-//                boundsBehavior : Flickable.StopAtBounds
-//                clip:true
-//                ScrollBar.horizontal: ScrollBar{}
-//                ScrollBar.vertical: ScrollBar{}
-//                topMargin: dataPreviewColumnsHeader.implicitHeight
 
-//                Row {
-//                    id: dataPreviewColumnsHeader
-//                    y: dataPreviewResult.contentY
-//                    z: 2
-//                    Repeater {
-//                        model: dataPreviewResult.columns > 0 ? dataPreviewResult.columns : 1
-//                        Label {
-//                            width: dataPreviewResult.columnWidthProvider(modelData)
-//                            height: 30
-//                            text: "s"
-//                            color: 'black'
-//                            font.pixelSize: 15
-//                            padding: 10
-//                            verticalAlignment: Text.AlignVCenter
-
-//                            background: Rectangle { color: "beige" }
-//                        }
-//                    }
-//                }
-
-//                delegate: Row{
-//                    height:30
-//                    width: parent.width
-
-//                    Column{
-//                        width: 200
-//                        height: parent.height
-//                        topPadding: 5
-
-//                        Row{
-//                            height: parent.height
-//                            width: parent.width
-//                            anchors.top: parent
-//                            anchors.topMargin: 3
-//                            anchors.left: parent.left
-//                            leftPadding: 20
-
-//                            Text {
-//                                id: modelT1
-//                                text: qsTr(customerId)
-//                            }
-//                        }
-
-//                    }
-
-//                    Column{
-//                        width: 200
-//                        height: parent.height
-
-//                        Row{
-//                            height: parent.height
-//                            width: parent.width
-//                            anchors.left: parent
-//                            anchors.leftMargin: 2
-
-//                            Text {
-//                                text: qsTr(customerName)
-//                                padding: 5
-//                                leftPadding: 20
-//                            }
-//                        }
-
-//                    }
-
-
-//                    Column{
-//                        width: 200
-//                        height: 30
-
-//                        Row{
-//                            height: parent.height
-//                            width: parent.width
-//                            anchors.left: parent
-
-//                            Text {
-//                                text: qsTr(dob)
-//                                padding: 5
-//                                leftPadding: 20
-//                            }
-//                        }
-
-//                    }
-
-//                    Column{
-//                        width: 200
-//                        height: 30
-
-//                        Row{
-//                            height: parent.height
-//                            width: parent.width
-//                            anchors.left: parent
-
-//                            Text {
-//                                text: qsTr(orderNo)
-//                                padding: 5
-//                                leftPadding: 20
-//                            }
-//                        }
-//                    }
-
-//                    Column{
-//                        width: 200
-//                        height: 30
-
-//                        Row{
-//                            height: parent.height
-//                            width: parent.width
-
-//                            Text {
-//                                text: qsTr(orderLine)
-//                                padding: 5
-//                                leftPadding: 20
-//                            }
-//                        }
-//                    }
-
-//                    Column{
-//                        width: 200
-//                        height: 30
-
-//                        Row{
-//                            height: parent.height
-//                            width: parent.width
-
-//                            Text {
-//                                text: qsTr(productNo)
-//                                padding: 5
-//                                leftPadding: 20
-//                            }
-//                        }
-//                    }
-
-//                }
-
-//            }
             TableView {
                 id: dataPreviewResult
 
@@ -1172,7 +1048,7 @@ Page {
                             width: dataPreviewResult.columnWidthProvider(modelData)
                             height: 35
                             text: QtTest2.headerData(modelData, Qt.Horizontal)
-//                            text: "s"
+                            //                            text: "s"
                             color: 'black'
                             font.pixelSize: 15
                             padding: 10
@@ -1189,7 +1065,7 @@ Page {
             }
             TableView {
                 id:displayResult
-//                anchors.top: infodataTableHeader.bottom
+                //                anchors.top: infodataTableHeader.bottom
                 model: dataPreviewModel
                 width: parent.width
                 height:300
@@ -1586,16 +1462,17 @@ Page {
 
             // Right item 4 ends
 
-            Button {
+            CustomButton {
                 id: publish_button
-                text: qsTr("Publish Data Source")
+                textValue: qsTr("Publish Data Source")
                 anchors.bottom: parent.bottom
-                anchors.bottomMargin: 40
+                anchors.bottomMargin: 30
                 width: parent.width
+                height: 40
 
                 onClicked: {
-                    Datasources.setDsName(ds_name.text)
-                    Datasources.setSourceType("live")
+                    //                    Datasources.setDsName(ds_name.text)
+                    //                    Datasources.setSourceType("live")
                     datasourceDescription.visible = true
 
                 }

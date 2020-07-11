@@ -35,7 +35,8 @@ QtObject {
     property color buttonHoverColor : "#009B8F"
     property color whiteColor : "#FFFFFF"
     property color grayColor : "#707070"
-    property color blackColor : "#707070"
+    property color blackColor : "#000000"
+    property color grafieksGreen: "#009B8F"
 
 
     // Standard Font Sizes
@@ -47,5 +48,11 @@ QtObject {
     property int fontCategoryHeaderSmall : 12
     property int fontReading: 10
 
+    // Tab Bar Open Constants
+
+    property string categoricalTab: "categorical"
+    property string dateTab: "date"
+    property string numericalTab: "numerical"
+    property string groupTab: "group"
 
 }

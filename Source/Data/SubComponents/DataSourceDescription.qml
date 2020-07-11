@@ -16,17 +16,19 @@ import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
 
-
+import "../../MainSubComponents"
 
 Popup {
     id: popup
     width: 600
-    height: 230
+    height: 520
     modal: true
     visible: false
     x: parent.width / 2 - 200
     y: 100
     padding: 0
+
+    closePolicy: Popup.NoAutoClose
 
     property int label_col : 150
     property string host_final : ""
@@ -52,49 +54,102 @@ Popup {
         anchors.leftMargin: 1
 
         Text{
-            text: "Signin to Grafieks server"
+            text: "Publish Data Source"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             anchors.leftMargin: 10
+        }
+        Image {
+            id: close_icn
+            source: "../../../Images/icons/outline_close_black_18dp2x.png"
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right:  parent.right
+            height: 25
+            width: 25
+            anchors.rightMargin: 5
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    popup.visible = false
+                }
+            }
         }
     }
 
     // Popup Header ends
 
-    // Row1: Enter Description starts
+    // Row : Enter Data Source name
 
     Row{
 
-        id: row1
+        id: datasourceName
         anchors.top: header_popup.bottom
         anchors.topMargin: 30
         anchors.left: parent.left
-        anchors.leftMargin: 1
+        anchors.leftMargin: 30
 
         Rectangle{
 
             id: label1
             width:label_col
             height: 40
+            anchors.leftMargin: 30
 
             Text{
-                text: "Description"
-                anchors.right: parent.right
+                text: "Data Source Name"
+                anchors.left: parent.left
                 anchors.rightMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
 
-        TextField{
-            id: description_field
+        CustomTextBox{
+            id: datasource_name_field
             anchors.verticalCenter: parent.verticalCenter
-            maximumLength: 45
-            width: 370
-            background: Rectangle {
-                border.color: Constants.darkThemeColor
-                radius: 10
-                width: 370
+            maxLength: 150
+            boxWidth: 370
+            boxHeight: 40
+        }
+
+    }
+
+
+    // Row1: Enter Description starts
+
+    Row{
+
+        id: row1
+        anchors.top: datasourceName.bottom
+        anchors.topMargin: 30
+        anchors.left: parent.left
+        anchors.leftMargin: 30
+
+        Rectangle{
+
+            id: label2
+            width:label_col
+            height: 40
+
+            Text{
+                text: "Description"
+                anchors.left: parent.left
+                anchors.rightMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
             }
+        }
+
+        CustomTextArea{
+            id: description_field
+            boxWidth: 370
+            boxHeight: 200
+
+            ScrollBar.horizontal: ScrollBar{}
+            ScrollBar.vertical: ScrollBar{}
+
+            ScrollIndicator.horizontal: ScrollIndicator { }
+            ScrollIndicator.vertical: ScrollIndicator { }
+
+
         }
 
     }
@@ -107,19 +162,40 @@ Popup {
 
         id: row2
         anchors.top: row1.bottom
-        anchors.topMargin: 5
+        anchors.topMargin: 30
         anchors.left: parent.left
-        anchors.leftMargin: 1
+        anchors.leftMargin: 30
 
-        Button{
-            text: "Choose a file"
-            anchors.verticalCenter: parent.verticalCenter
-            onClicked: {
-                fileDialog1.open();
+        Rectangle{
+
+            id: label3
+            width:label_col
+            height: 40
+
+            Text{
+                text: "Upload Image"
+                anchors.left: parent.left
+                anchors.rightMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+
+        FileUploadBtn{
+            id: file
+            btnHeight: 40
+            btnWidth: 370
+            textValue: "Click to upload"
+
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    fileDialog1.open();
+                }
             }
         }
 
     }
+
 
     // Row2: Enter FileDialog ends
 
@@ -129,29 +205,15 @@ Popup {
 
         id: row3
         anchors.top: row2.bottom
-        anchors.topMargin: 5
-        anchors.left: parent.left
-        anchors.leftMargin: label_col
+        anchors.topMargin: 20
+        anchors.right: parent.right
+        anchors.rightMargin: 50
         spacing: 10
 
-        Button{
+        CustomButton{
 
             id: btn_signin
-            height: back_rec_1.height
-            width: back_rec_1.width
-
-            background: Rectangle{
-                id: back_rec_1
-                radius: 10
-                color: Constants.greenThemeColor
-                width: 100
-                height: 30
-
-                Text{
-                    text:"Publish"
-                    anchors.centerIn: parent
-                }
-            }
+            textValue: "Publish"
             onClicked: {
                 Datasources.setDsDescription(description_field.text);
                 Datasources.setDsImage("");
@@ -164,23 +226,9 @@ Popup {
             }
         }
 
-        Button{
+        CustomButton{
             id: btn_cancel
-            height: back_rec_2.height
-            width: back_rec_2.width
-
-            background: Rectangle{
-                id: back_rec_2
-                radius: 10
-                color: Constants.redThemeColor
-                width: 100
-                height: 30
-
-                Text{
-                    text:"Cancel"
-                    anchors.centerIn: parent
-                }
-            }
+            textValue: "Cancel"
             onClicked: {
                 popup.visible = false
             }
@@ -188,6 +236,18 @@ Popup {
     }
     // Row 3: Action Button ends
 
+    Row{
+        id: note
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 20
+        anchors.left: parent.left
+        anchors.leftMargin: 30
+
+        Text {
+            text: qsTr("For Data Source access permission, contact Project Admin ")
+        }
+
+    }
 
     FileDialog{
         id: fileDialog1

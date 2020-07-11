@@ -9,6 +9,7 @@ Row{
     y:10
     anchors.left: parent.left
     anchors.leftMargin: 20
+    property int rowSpacing: 8
 
     Column{
         id: listFiltersColumn
@@ -45,6 +46,7 @@ Row{
             height: listModel.count * 30
             anchors.top: listFilters.bottom
             anchors.topMargin: 10
+            spacing: rowSpacing
 
             delegate:
 
@@ -166,6 +168,7 @@ Row{
             height: calendarModel.count * 30
             anchors.top: calendarHeading.bottom
             anchors.topMargin: 10
+            spacing: rowSpacing
 
             delegate:
 
@@ -311,6 +314,7 @@ Row{
             height: timeFrameModel.count * 30
             anchors.top: timeFrameHeading.bottom
             anchors.topMargin: 10
+            spacing: rowSpacing
 
             delegate:
 
