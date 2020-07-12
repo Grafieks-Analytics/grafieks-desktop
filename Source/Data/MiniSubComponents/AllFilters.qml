@@ -412,6 +412,29 @@ Row{
         ScrollBar.horizontal: ScrollBar{}
         ScrollBar.vertical: ScrollBar{}
 
+        ScrollBar {
+            id: vbar
+            hoverEnabled: true
+            active: hovered || pressed
+            orientation: Qt.Vertical
+            size: parent.height / 2
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+        }
+
+        ScrollBar {
+            id: hbar
+            hoverEnabled: true
+            active: hovered || pressed
+            orientation: Qt.Horizontal
+            size: parent.width / 2
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+        }
+
+
         ScrollIndicator.horizontal: ScrollIndicator { }
         ScrollIndicator.vertical: ScrollIndicator { }
 

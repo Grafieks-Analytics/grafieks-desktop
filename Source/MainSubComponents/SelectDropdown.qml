@@ -18,14 +18,15 @@ Item {
         id: selectBox
         height: 30
         width: parent.width
-        anchors.left: wildcardOptionRow.left
-        border.color: Constants.darkThemeColor
         anchors.leftMargin: 40
 
-        Row{
+        Rectangle{
             height: parent.height
             width: parent.width
             anchors.leftMargin: 20
+            border.color: Constants.borderBlueColor
+            border.width: 2
+
 
             Text {
                 id: selectBoxValue

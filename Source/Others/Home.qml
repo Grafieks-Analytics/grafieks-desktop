@@ -204,7 +204,7 @@ SQL query builder, report builder and dashboard designer."
         id: rowLayoutHomeRight
 
         height:parent.height
-        width: 360
+        width: parent.width - (secondaryVideoSection.width + 300)
         anchors.right:parent.right
         anchors.top: parent.top
         anchors.topMargin: 100
