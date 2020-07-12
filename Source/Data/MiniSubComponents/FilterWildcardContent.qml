@@ -27,15 +27,21 @@ Rectangle{
     x:20
     y:10
     anchors.top:  fullExtactRadioBtn.bottom
+
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
     visible: false
 
-    Row{
+    Rectangle{
         id: wildcardHead
+        anchors.top: parent.top
+        anchors.topMargin: 5
 
         height: 40
-        width: parent.width
+        width: parent.width - 10
+
+        anchors.horizontalCenter: parent.horizontalCenter
+
 
         Column{
 
@@ -47,8 +53,8 @@ Rectangle{
 
             anchors.verticalCenter: parent.verticalAlignment
 
-            Text {
-                text: qsTr("Add Wildcard")
+            CustomButton {
+                textValue: qsTr("Add Wildcard")
             }
 
         }
@@ -56,10 +62,11 @@ Rectangle{
         Column{
             id: singleSelectRadioColumn
 
-            anchors.right: wildcardHead.right
+            anchors.right: parent.right
             rightPadding: 30
 
             CheckBox {
+
                 checked: true
                 text: qsTr("Exclude")
                 indicator.width: 15
@@ -70,146 +77,81 @@ Rectangle{
         }
     }
 
-    Row{
-        id: wildcardOptionRow
+    property int numModels: 2
+
+    ListView{
+        model: numModels
         anchors.top: wildcardHead.bottom
-        anchors.topMargin: 8
-        width: parent.width / 3
-        height: 30
+        anchors.topMargin: 20
+        anchors.left: parent.left
 
-        Rectangle{
-            id: selectBox
-            height: 30
+        anchors.leftMargin: 30
+        width: parent.width
+        height: numModels * 40
+        spacing: 5
+
+        delegate: Row{
             width: parent.width
-            anchors.left: wildcardOptionRow.left
-            border.color: Constants.borderBlueColor
-            anchors.leftMargin: 20
+            height: 40
 
-            Row{
-                height: parent.height
-                width: parent.width
-                leftPadding: 20
+            Column{
 
-                Text {
-                    id: selectBoxValue
-                    text: qsTr("Select Wildcard")
-                    color: Constants.grayColor
-                    anchors.centerIn: parent
-                    width: parent.width - 10
-                }
+                width: parent.width/2
 
-                Image{
-                    id: showBtn
-                    source:"../../../Images/icons/Down_20.png"
+                ListModel{
+                    id: selectDropdown
 
-                    anchors.top: parent.top
-                    anchors.right: parent.right
-                    anchors.rightMargin: 10
-                    anchors.topMargin: 5
-                }
-
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-                        selectListViewOptions.open()
+                    ListElement{
+                        menuItem:"Containing"
+                    }
+                    ListElement{
+                        menuItem:"Ends With"
+                    }
+                    ListElement{
+                        menuItem:"Equal To"
+                    }
+                    ListElement{
+                        menuItem:"Doesn't Start with"
+                    }
+                    ListElement{
+                        menuItem:"Doesn't End with"
+                    }
+                    ListElement{
+                        menuItem:"Not Equal to"
                     }
                 }
 
+                SelectDropdown{
+                    id: wildcardDropdown
+                    width: parent.width*2/3
+                    textValue:"Containing"
+                    list: selectDropdown
+                }
+
+
             }
 
-        }
+            Column{
+                width: parent.width/2
 
-        Menu {
-            id: selectListViewOptions
-            x: 20
-            y: selectBox.height
-            width: 150
-
-            MenuItem {
-                text: "Containing"
-                height: 30
-                onTriggered: {}
-                onClicked: {
-                    selectBoxValue.text = this.text
+                anchors{
+                    top: parent.top
                 }
-            }
-            MenuItem {
-                text: "Ends with"
-                height: 30
-                onTriggered: {
-                }
-                onClicked: {
-                    selectBoxValue.text = this.text
-                }
-            }
-            MenuItem {
-                text: "Equals to"
-                height: 30
-                onTriggered: {}
-                onClicked: {
-                    selectBoxValue.text = this.text
-                }
-            }
-            MenuItem {
-                text: "Doesn't Start With"
-                height: 30
-                onTriggered: {}
-                onClicked: {
-                    selectBoxValue.text = this.text
-                }
-            }
-            MenuItem {
-                text: "Doesn't End With"
-                height: 30
-                onTriggered: {}
-                onClicked: {
-                    selectBoxValue.text = this.text
-                }
-            }
-            MenuItem {
-                text: "Not Equal to"
-                height: 30
-                onTriggered: {}
-                onClicked: {
-                    selectBoxValue.text = this.text
-                }
-            }
-        }
 
-    }
-
-    Row{
-        id: wildcardOption2Row
-        anchors.top: wildcardHead.bottom
-        anchors.right: wildcardHead.right
-        anchors.topMargin: 8
-
-        width: parent.width / 3
-        height: 30
-        anchors.rightMargin: 20
-
-        Rectangle{
-            id: wildcardTextBox
-            height: 30
-            width: parent.width
-            anchors.left: wildcardOptionRow.left
-            anchors.rightMargin: 20
-
-            Row{
-                height: parent.height
-                width: parent.width
-                rightPadding: 20
-
-                TextField {
+                CustomTextBox{
                     placeholderText: "Enter Text"
-                    anchors.centerIn: parent
-                    width: parent.width - 10
-                    height: 30
+                    boxWidth: parent.width * 2 / 3
+
+                    anchors{
+                        right: parent.right
+                        rightMargin: 50
+                    }
+
+                    boxHeight: 30
                 }
             }
 
         }
 
     }
-
 }

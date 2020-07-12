@@ -127,7 +127,7 @@ Rectangle{
                 placeholderText: "Search"
                 leftPadding: 20
                 height: 40
-                anchors.top: searchTextBox.top
+                anchors.top: parent.top
                 width: parent.width - 20
                 x: 10
 
@@ -229,19 +229,19 @@ Rectangle{
                 id: dateFormatList
 
                 ListElement{
-                    textValue:"DD/MM/YYYY 4"
+                    menuItem:"DD/MM/YYYY 4"
                 }
 
                 ListElement{
-                    textValue:"DD/MM/YYYY 4"
+                    menuItem:"DD/MM/YYYY 4"
                 }
 
                 ListElement{
-                    textValue:"DD/MM/YYYY 2"
+                    menuItem:"DD/MM/YYYY 2"
                 }
 
                 ListElement{
-                    textValue:"DD/MM/YYYY 3"
+                    menuItem:"DD/MM/YYYY 3"
                 }
             }
 

@@ -10,7 +10,7 @@ TextField{
     property alias boxWidth: textField.width
     property alias boxHeight: textField.height
 
-    anchors.verticalCenter: parent.verticalCenter
+//    anchors.verticalCenter: parent.verticalCenter
 
     background: Rectangle {
         border.color: Constants.borderBlueColor

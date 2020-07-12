@@ -77,7 +77,8 @@ Rectangle{
             id: topTextBox
             height: 30
             width: parent.width
-            anchors.left: topOptionRow.left
+
+
             anchors.rightMargin: 20
 
             Row{
@@ -85,11 +86,11 @@ Rectangle{
                 width: parent.width
                 rightPadding: 20
 
-                TextField {
+                CustomTextBox {
                     placeholderText: "Enter Text"
                     anchors.centerIn: parent
-                    width: parent.width - 10
-                    height: 30
+                    boxWidth: parent.width
+                    boxHeight:  30
                 }
             }
 
@@ -97,7 +98,7 @@ Rectangle{
 
     }
 
-//    By Select Box Start
+    //    By Select Box Start
 
     Row{
         id: topByTextField

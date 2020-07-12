@@ -199,6 +199,8 @@ Popup {
 
     FilterWildcardContent{
         id: wildcardContent
+
+
     }
 
     FilterTopContent{

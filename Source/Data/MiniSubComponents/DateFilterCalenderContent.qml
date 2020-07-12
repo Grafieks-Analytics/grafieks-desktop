@@ -40,7 +40,6 @@ Rectangle{
         width: parent.width
 
         Column{
-            anchors.top: wildcardHead.top
 
             padding: 12
             leftPadding: 20

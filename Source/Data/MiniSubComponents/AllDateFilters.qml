@@ -196,7 +196,7 @@ Row{
                     width: parent.width / 3 - 50
 
                     Text {
-                        text: filterKey
+                        text: dateFrom
                         anchors.left: parent.left
                         leftPadding: 20
                         anchors.verticalCenter: parent.verticalCenter
@@ -234,7 +234,7 @@ Row{
 
                     ReadOnlyTextBox{
                         boxWidth: parent.width
-                        text: columnValue
+                        text: dateTo
                     }
                 }
 
