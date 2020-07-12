@@ -67,13 +67,11 @@ int main(int argc, char *argv[])
 
     // Initialize Objects
     QtTest2 qttest2;
-<<<<<<< HEAD
-//    Testing testing;
-=======
-//    QtTest2 *qttest2 = new QtTest2();
 
-    Testing testing;
->>>>>>> 6d55d084798dae31b1c335395f887c72fe775152
+//    Testing testing;
+//    QtTest2 *qttest2 = new QtTest2();
+//    Testing testing;
+
     MysqlCon mysqlconnect;
     User user;
     ConnectorFilter connectorFilter;

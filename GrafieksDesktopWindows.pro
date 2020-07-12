@@ -312,6 +312,7 @@ DISTFILES += \
     Source/Data/SubComponents/DataFilters.qml \
     Source/Data/SubComponents/DataFiltersPopup.qml \
     Source/Data/SubComponents/DataModeller.qml \
+    Source/Data/SubComponents/DataPreviewTable.qml \
     Source/Data/SubComponents/DataSourceDescription.qml \
     Source/Data/SubComponents/DataSourcesGrid.qml \
     Source/Data/SubComponents/DataSourcesList.qml \
@@ -322,6 +323,7 @@ DISTFILES += \
     Source/Data/SubComponents/DropboxConnectionFiles.qml \
     Source/Data/SubComponents/GroupFilter.qml \
     Source/Data/SubComponents/InMemory.qml \
+    Source/Data/SubComponents/InfoTable.qml \
     Source/Data/SubComponents/MainMenuDelegate.qml \
     Source/Data/SubComponents/MenuSeparatorComponent.qml \
     Source/Data/SubComponents/MysqlConnection.qml \

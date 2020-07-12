@@ -89,5 +89,7 @@
         <file>Source/Data/SubComponents/BoxConnectionFiles.qml</file>
         <file>Source/Data/SubComponents/SheetConnection.qml</file>
         <file>Source/Data/SubComponents/SheetConnectionFiles.qml</file>
+        <file>Source/Data/SubComponents/DataPreviewTable.qml</file>
+        <file>Source/Data/SubComponents/InfoTable.qml</file>
     </qresource>
 </RCC>
