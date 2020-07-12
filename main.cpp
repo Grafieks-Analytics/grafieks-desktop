@@ -19,6 +19,7 @@
 #include "Code/Logic/DataModeller/tablelistmodel.h"
 #include "Code/Logic/DataModeller/querymodel.h"
 #include "Code/Logic/DataModeller/dblistmodel.h"
+#include "Code/Logic/DataModeller/querystatsmodel.h"
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
 #include "Code/Logic/Connectors/driveds.h"
@@ -78,6 +79,7 @@ int main(int argc, char *argv[])
     DatasourceDS * datasource = new DatasourceDS(&app);
     TableListModel tableListModel;
     QueryModel queryModel;
+    QueryStatsModel queryStatsModel;
     DBListModel dblistModel;
 
     // Datasource Connector Initializations
@@ -99,13 +101,11 @@ int main(int argc, char *argv[])
 
     // Call default functions
     datasourceModel.setDatasourceds(datasource);
-//    qttest2.fetchPosts();
 
     dropboxModel.setDropboxds(dropbox);
     driveModel.setDriveds(drive);
     boxModel.setBoxds(box);
     sheetModel.setSheetds(sheet);
-//    qttest2.callSql();
 
 
     // Define singletons
@@ -123,6 +123,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("TableListModel",&tableListModel);
     engine.rootContext()->setContextProperty("QueryModel",&queryModel);
     engine.rootContext()->setContextProperty("DBListModel",&dblistModel);
+    engine.rootContext()->setContextProperty("QueryStatsModel",&queryStatsModel);
     engine.rootContext()->setContextProperty("DropboxModel",&dropboxModel);
     engine.rootContext()->setContextProperty("DropboxDS",dropbox);
     engine.rootContext()->setContextProperty("DriveModel",&driveModel);

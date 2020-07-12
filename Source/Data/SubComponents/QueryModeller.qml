@@ -96,13 +96,4 @@ Item{
 
     }
 
-    Button{
-        text: "Test Query"
-        anchors.top: textedit_querymodeller.bottom
-
-        onClicked: {
-            QtTest2.callSql()
-        }
-    }
-
 }

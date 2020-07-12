@@ -1,6 +1,5 @@
 #include "qttest2.h"
 
-
 QtTest2::QtTest2(QObject *parent) :
     QSqlQueryModel(parent)
 {
@@ -42,26 +41,11 @@ QVariant QtTest2::data(const QModelIndex &index, int role) const
     return value;
 }
 
-void QtTest2::callSql()
+QHash<int, QByteArray> QtTest2::roleNames() const {
+    return {{Qt::DisplayRole, "display"}};
+}
+
+void QtTest2::callSql(QString queryString)
 {
-//    MysqlCon mysqlcon;
-//    QVariantMap response = mysqlcon.MysqlInstance("localhost", "grafieks_my", 3306, "root", "123@312QQl");
-
-//    qDebug() << response << "Testing CPP";
-
-//    Statics::currentDbName = "grafieks_my";
-//    Statics::currentDbIntType = Constants::mysqlIntType;
-//    Statics::currentDbStrType = Constants::mysqlStrType;
-
-//    QSqlDatabase dbMysql = QSqlDatabase::addDatabase("QMYSQL");
-//    dbMysql.setHostName("localhost");
-//    dbMysql.setPort(3306);
-//    dbMysql.setDatabaseName("grafieks_my");
-//    dbMysql.setUserName("root");
-//    dbMysql.setPassword("123@312QQl");
-
-//    dbMysql.open();
-
-
-    this->setQuery("SELECT * FROM users");
+    this->setQuery(queryString);
 }

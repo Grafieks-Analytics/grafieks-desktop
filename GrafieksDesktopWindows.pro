@@ -35,6 +35,7 @@ SOURCES += \
     Code/Logic/Connectors/sheetmodel.cpp \
         Code/Logic/DataModeller/dblistmodel.cpp \
         Code/Logic/DataModeller/querymodel.cpp \
+    Code/Logic/DataModeller/querystatsmodel.cpp \
         Code/Logic/DataModeller/tablelistmodel.cpp \
         Code/Logic/Datasources/datasource.cpp \
         Code/Logic/Datasources/datasourceds.cpp \
@@ -112,6 +113,7 @@ HEADERS += \
     Code/Logic/Connectors/sheetmodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/querymodel.h \
+    Code/Logic/DataModeller/querystatsmodel.h \
     Code/Logic/DataModeller/tablelistmodel.h \
     Code/Logic/Datasources/datasource.h \
     Code/Logic/Datasources/datasourceds.h \

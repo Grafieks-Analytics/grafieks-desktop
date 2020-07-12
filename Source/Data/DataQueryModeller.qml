@@ -26,9 +26,15 @@ Page {
     property int statusIndex: 1
     property bool collapsed: false
     property bool open: true
-
     property int dataPreviewNo: 6
     height: parent.height
+
+    // Temporary
+    property int tmpCounter : 0
+    property int i : 0
+    property string tmpQuery : ""
+    // Temporary
+
 
     ListModel{
         id : testQueryModel
@@ -70,10 +76,11 @@ Page {
                 // Call functions
                 TableListModel.callQuery()
                 tableslist.model = TableListModel
-                console.log("HEre i am",TableListModel)
             }
         }
     }
+
+
 
     // Left menubar starts
 
@@ -474,7 +481,7 @@ Page {
                         dataPreviewResult.visible = true
                         displayResult.visible = false
 
-                        QtTest2.callSql()
+                        QtTest2.callSql("SELECT * FROM users")
 
                     }
 
@@ -569,8 +576,24 @@ Page {
 
                     onClicked:{
                         testQueryBtn.visible = true
-//                        QueryModel.callQuery()
-                        QtTest2.callSql()
+                        QueryModel.callQuery("SELECT * FROM dashboards")
+//                        QtTest2.callSql(tmpQuery)
+                        QtTest2.callSql("SELECT * FROM users")
+
+                        var queryString = "";
+                        var duration = Math.random().toFixed(2)
+
+                        if(tmpCounter == 0){
+                            tmpQuery = "SELECT * FROM users"
+                        } else{
+                            tmpQuery = "SELECT * FROM profiles"
+                        }
+
+                        tmpCounter++
+                        var counter = tmpCounter.toString()
+
+                        testQueryModel.append({"status": "tick", "queryNumber":counter, "action" : tmpQuery, "message": "Success", "duration":duration})
+
                     }
 
                 }
@@ -870,156 +893,7 @@ Page {
                 ScrollIndicator.vertical: ScrollIndicator { }
 
             }
-//            TableView {
-//                id:dataPreviewResult
-//                model: dataPreviewModel
-//                rowHeightProvider: function (column) { return 30; }
-//                width: parent.width - column_querymodeller.width - 50
-//                visible: false
-//                columnSpacing: 1
-//                rowSpacing: 1
-//                height:parent.height
-//                boundsBehavior : Flickable.StopAtBounds
-//                clip:true
-//                ScrollBar.horizontal: ScrollBar{}
-//                ScrollBar.vertical: ScrollBar{}
-//                topMargin: dataPreviewColumnsHeader.implicitHeight
 
-//                Row {
-//                    id: dataPreviewColumnsHeader
-//                    y: dataPreviewResult.contentY
-//                    z: 2
-//                    Repeater {
-//                        model: dataPreviewResult.columns > 0 ? dataPreviewResult.columns : 1
-//                        Label {
-//                            width: dataPreviewResult.columnWidthProvider(modelData)
-//                            height: 30
-//                            text: "s"
-//                            color: 'black'
-//                            font.pixelSize: 15
-//                            padding: 10
-//                            verticalAlignment: Text.AlignVCenter
-
-//                            background: Rectangle { color: "beige" }
-//                        }
-//                    }
-//                }
-
-//                delegate: Row{
-//                    height:30
-//                    width: parent.width
-
-//                    Column{
-//                        width: 200
-//                        height: parent.height
-//                        topPadding: 5
-
-//                        Row{
-//                            height: parent.height
-//                            width: parent.width
-//                            anchors.top: parent
-//                            anchors.topMargin: 3
-//                            anchors.left: parent.left
-//                            leftPadding: 20
-
-//                            Text {
-//                                id: modelT1
-//                                text: qsTr(customerId)
-//                            }
-//                        }
-
-//                    }
-
-//                    Column{
-//                        width: 200
-//                        height: parent.height
-
-//                        Row{
-//                            height: parent.height
-//                            width: parent.width
-//                            anchors.left: parent
-//                            anchors.leftMargin: 2
-
-//                            Text {
-//                                text: qsTr(customerName)
-//                                padding: 5
-//                                leftPadding: 20
-//                            }
-//                        }
-
-//                    }
-
-
-//                    Column{
-//                        width: 200
-//                        height: 30
-
-//                        Row{
-//                            height: parent.height
-//                            width: parent.width
-//                            anchors.left: parent
-
-//                            Text {
-//                                text: qsTr(dob)
-//                                padding: 5
-//                                leftPadding: 20
-//                            }
-//                        }
-
-//                    }
-
-//                    Column{
-//                        width: 200
-//                        height: 30
-
-//                        Row{
-//                            height: parent.height
-//                            width: parent.width
-//                            anchors.left: parent
-
-//                            Text {
-//                                text: qsTr(orderNo)
-//                                padding: 5
-//                                leftPadding: 20
-//                            }
-//                        }
-//                    }
-
-//                    Column{
-//                        width: 200
-//                        height: 30
-
-//                        Row{
-//                            height: parent.height
-//                            width: parent.width
-
-//                            Text {
-//                                text: qsTr(orderLine)
-//                                padding: 5
-//                                leftPadding: 20
-//                            }
-//                        }
-//                    }
-
-//                    Column{
-//                        width: 200
-//                        height: 30
-
-//                        Row{
-//                            height: parent.height
-//                            width: parent.width
-
-//                            Text {
-//                                text: qsTr(productNo)
-//                                padding: 5
-//                                leftPadding: 20
-//                            }
-//                        }
-//                    }
-
-//                }
-
-//            }
             TableView {
                 id: dataPreviewResult
 
@@ -1034,9 +908,9 @@ Page {
                 clip: true
                 boundsBehavior : Flickable.StopAtBounds
 
-                delegate: Rectangle {
+                delegate:Rectangle {
                     Text {
-                        text: 'text'
+                        text: display
                         anchors.fill: parent
                         anchors.margins: 10
                         color: 'black'
@@ -1044,14 +918,10 @@ Page {
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
-                Rectangle { // mask the headers
-                    z: 3
-                    color: "#222222"
-                    y: dataPreviewResult.contentY
-                    x: dataPreviewResult.contentX
-                    width: dataPreviewResult.leftMargin
-                    height: dataPreviewResult.topMargin
-                }
+
+
+
+
 
                 Row {
                     id: columnsHeader1
@@ -1063,7 +933,6 @@ Page {
                             width: dataPreviewResult.columnWidthProvider(modelData)
                             height: 35
                             text: QtTest2.headerData(modelData, Qt.Horizontal)
-//                            text: "s"
                             color: 'black'
                             font.pixelSize: 15
                             padding: 10
@@ -1078,9 +947,12 @@ Page {
                 ScrollIndicator.horizontal: ScrollIndicator { }
                 ScrollIndicator.vertical: ScrollIndicator { }
             }
+
+
+
             TableView {
                 id:displayResult
-//                anchors.top: infodataTableHeader.bottom
+                //                anchors.top: infodataTableHeader.bottom
                 model: dataPreviewModel
                 width: parent.width
                 height:300
@@ -1344,7 +1216,8 @@ Page {
 
                 Text{
                     id: connected_to
-                    text: "Connected To: " + ConnectorsLoginModel.currentDbName
+                    //                    text: "Connected To: " + ConnectorsLoginModel.currentDbName
+                    text: "Connected To: grafieks_my"
                     anchors.verticalCenter: rectangle_querymodeller_right_col2.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col2.left
                     anchors.leftMargin: 10

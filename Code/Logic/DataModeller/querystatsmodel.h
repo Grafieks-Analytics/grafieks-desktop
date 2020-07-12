@@ -1,33 +1,35 @@
-#ifndef QTTEST2_H
-#define QTTEST2_H
+#ifndef QUERYSTATSMODEL_H
+#define QUERYSTATSMODEL_H
 
 #include <QObject>
 #include <QSqlQueryModel>
 #include <QSqlRecord>
 #include <QSqlField>
+#include <QSqlDatabase>
+#include <QObject>
 
 #include "../../Connectors/mysqlcon.h"
+#include "../../statics.h"
 
-
-
-class QtTest2 : public QSqlQueryModel
+class QueryStatsModel : public QSqlQueryModel
 {
     Q_OBJECT
-
 public:
-    explicit QtTest2(QObject *parent = nullptr);
-
+    explicit QueryStatsModel(QObject *parent = nullptr);
     void setQuery(const QString &query, const QSqlDatabase &db = QSqlDatabase());
     void setQuery(const QSqlQuery &query);
     QVariant data(const QModelIndex &index, int role) const;
     QHash<int, QByteArray> roleNames() const;
 
-    Q_INVOKABLE void callSql(QString queryString);
+    Q_INVOKABLE void callQuery();
 
-private :
+private:
     void generateRoleNames();
     QHash<int, QByteArray> m_roleNames;
+    QSqlDatabase dbMysql;
+
+signals:
 
 };
 
-#endif // QTTEST2_H
+#endif // QUERYSTATSMODEL_H
