@@ -217,27 +217,14 @@ Popup {
         width: parent.width
 
 
-        Button{
+        CustomButton{
             id: resetBtn
-            text: "Reset"
+            textValue: "Reset"
 
             anchors.left: parent.left
             anchors.leftMargin: 20
 
 
-            background: Rectangle {
-                id: resetBtnBackground
-                color: resetBtn.hovered? Constants.buttonHoverColor    : Constants.darkThemeColor
-
-            }
-
-            contentItem: Text{
-                id:resetBtnText
-                text: resetBtn.text
-                color:"black"
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
             onClicked: {
                 dataFilterPopup.visible = false
             }
@@ -245,58 +232,30 @@ Popup {
 
 
 
-        Button{
+        CustomButton{
             id: apply_btn1
-            text: "Apply"
+            textValue: "Apply"
 
             anchors.right: parent.right
             anchors.rightMargin: 20
 
 
-            background: Rectangle {
-                id: apply_btn1_background
-                color: apply_btn1.hovered? Constants.buttonHoverColor    : Constants.darkThemeColor
-
-            }
-
-            contentItem: Text{
-                id:apply_btn1_text
-                text: apply_btn1.text
-                color:"black"
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
             onClicked: {
                 dataFilterPopup.visible = false
             }
         }
 
 
-        Button{
+        CustomButton{
             id: cancel_btn1
 
             anchors.right: apply_btn1.left
             anchors.rightMargin: 20
 
-            text: "Cancel"
+            textValue: "Cancel"
             onClicked: {
                 dataFilterPopup.visible = false
             }
-
-            background: Rectangle {
-                id: cancel_btn1_background
-                color: cancel_btn1.hovered? Constants.buttonHoverColor    : Constants.darkThemeColor
-
-            }
-
-            contentItem: Text{
-                id:cancel_btn1_text
-                text: cancel_btn1.text
-                color:"black"
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-
 
         }
 

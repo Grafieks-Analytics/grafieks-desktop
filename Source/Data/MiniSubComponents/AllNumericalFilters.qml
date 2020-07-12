@@ -12,6 +12,8 @@ Row{
     anchors.top: parent.top
     anchors.topMargin: 40
 
+    property int rowSpacing: 8
+
     Column{
         id: listFiltersColumn
 
@@ -35,6 +37,7 @@ Row{
             width: parent.width
             height: listModel.count * 30
             anchors.topMargin: 30
+            spacing: rowSpacing
 
             delegate:
 
@@ -149,6 +152,7 @@ Row{
             width: parent.width
             height: multipleValueModel.count * 30
             anchors.topMargin: 10
+            spacing: rowSpacing
 
             delegate:
 

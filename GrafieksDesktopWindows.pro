@@ -293,10 +293,21 @@ DISTFILES += \
     Source/Data/MiniSubComponents/AllFilters.qml \
     Source/Data/MiniSubComponents/AllGroupFilters.qml \
     Source/Data/MiniSubComponents/AllNumericalFilters.qml \
+    Source/Data/MiniSubComponents/DateFilterCalenderContent.qml \
+    Source/Data/MiniSubComponents/DateFilterListContent.qml \
+    Source/Data/MiniSubComponents/DateTimeFrameContent.qml \
+    Source/Data/MiniSubComponents/DateTimeFrameDayContent.qml \
+    Source/Data/MiniSubComponents/DateTimeFrameMonthContent.qml \
+    Source/Data/MiniSubComponents/DateTimeFrameQuarterContent.qml \
+    Source/Data/MiniSubComponents/DateTimeFrameYearContent.qml \
     Source/Data/MiniSubComponents/FilterListContent.qml \
     Source/Data/MiniSubComponents/FilterTopContent.qml \
     Source/Data/MiniSubComponents/FilterWildcardContent.qml \
+    Source/Data/MiniSubComponents/GroupFilterInnerPopup.qml \
+    Source/Data/MiniSubComponents/NumericalFilterInnerPopup.qml \
     Source/Data/SelectConnection.qml \
+    Source/Data/SubComponents/.DS_Store \
+    Source/Data/SubComponents/CategoricalFilterPopup.qml \
     Source/Data/SubComponents/BoxConnection.qml \
     Source/Data/SubComponents/BoxConnectionFiles.qml \
     Source/Data/SubComponents/DataFilterTestPopup.qml \
@@ -306,14 +317,17 @@ DISTFILES += \
     Source/Data/SubComponents/DataSourceDescription.qml \
     Source/Data/SubComponents/DataSourcesGrid.qml \
     Source/Data/SubComponents/DataSourcesList.qml \
+    Source/Data/SubComponents/DateFilter.qml \
     Source/Data/SubComponents/DriveConnection.qml \
     Source/Data/SubComponents/DriveConnectionFiles.qml \
     Source/Data/SubComponents/DropboxConnection.qml \
     Source/Data/SubComponents/DropboxConnectionFiles.qml \
+    Source/Data/SubComponents/GroupFilter.qml \
     Source/Data/SubComponents/InMemory.qml \
     Source/Data/SubComponents/MainMenuDelegate.qml \
     Source/Data/SubComponents/MenuSeparatorComponent.qml \
     Source/Data/SubComponents/MysqlConnection.qml \
+    Source/Data/SubComponents/NumericalFilter.qml \
     Source/Data/SubComponents/QueryModeller.qml \
     Source/Data/SubComponents/SheetConnection.qml \
     Source/Data/SubComponents/SheetConnectionFiles.qml \
@@ -322,6 +336,10 @@ DISTFILES += \
     Source/Data/SubComponents/TabTextComponent.qml \
     Source/Data/SubComponents/TestQueryResultsTable.qml \
     Source/MainSubComponents/CheckBoxTpl.qml \
+    Source/MainSubComponents/CustomButton.qml \
+    Source/MainSubComponents/CustomTextArea.qml \
+    Source/MainSubComponents/CustomTextBox.qml \
+    Source/MainSubComponents/FileUploadBtn.qml \
     Source/MainSubComponents/HorizontalLineTpl.qml \
     Source/MainSubComponents/LeftMenuBar.qml \
     Source/MainSubComponents/LeftMenuBarReports.qml \

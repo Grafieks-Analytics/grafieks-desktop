@@ -97,5 +97,6 @@
         <file>Images/icons/file-icon.png</file>
         <file>Images/icons/folder-invoices.png</file>
         <file>Images/icons/remove.png</file>
+        <file>Images/icons/clipart268070@2x.png</file>
     </qresource>
 </RCC>

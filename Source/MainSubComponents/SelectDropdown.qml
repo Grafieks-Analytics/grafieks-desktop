@@ -11,7 +11,7 @@ Item {
 
     id: selectDropdown
     width: parent.width
-    height: (list.count + 1) * 30
+    height: list.count * 30
     anchors.left: parent.left
 
     Rectangle{
@@ -58,14 +58,16 @@ Item {
     Menu {
         id: selectListViewOptions
         y: selectBox.height
+        z:1
         width: parent.width
         height: list.count * 30
 
         ListView{
             id:listView
 
-            height: parent.height
+            height: list.count * 30
             width: parent.width
+            z:2
 
             model:list
 

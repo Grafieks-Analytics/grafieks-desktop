@@ -17,7 +17,11 @@ import com.grafieks.singleton.constants 1.0
 import "../../MainSubComponents"
 import "../MiniSubComponents"
 
+
 Popup {
+
+    property string tabBarOpen: Constants.categoricalTab
+
     id: popupMain
     width: parent.width * 0.5
     height: 500
@@ -26,7 +30,7 @@ Popup {
     modal: true
     visible: false
     padding: 0
-
+    closePolicy: Popup.NoAutoClose
     background: Rectangle{
         color: Constants.themeColor
     }
@@ -120,6 +124,8 @@ Popup {
 
                 addMenuList.model = categoricalMenuList
 
+                tabBarOpen = Constants.categoricalTab
+
             }
         }
 
@@ -159,6 +165,9 @@ Popup {
                 allGroupFilterContent.visible = false
 
                 addMenuList.model = dateMenuList;
+
+
+                tabBarOpen = Constants.dateTab
             }
         }
 
@@ -198,6 +207,9 @@ Popup {
                 allGroupFilterContent.visible = false
 
                 addMenuList.model = numericalMenuList
+
+
+                tabBarOpen = Constants.numericalTab
 
             }
         }
@@ -239,6 +251,8 @@ Popup {
                 allGroupFilterContent.visible = true
 
                 addMenuList.model = groupModelList
+
+                tabBarOpen = Constants.groupTab
             }
         }
 
@@ -249,30 +263,15 @@ Popup {
 
     // Add button starts
 
-    Button{
+    CustomButton{
         id: add_btn_1
         anchors.top: tabbar1.bottom
         anchors.left: parent.left
         anchors.topMargin: 10
         anchors.leftMargin: 20
-
-        text:"Add"
+        textValue:"Add"
         onClicked: {
             optionsMenu1.open()
-        }
-
-        background: Rectangle {
-            id: add_btn_1_background
-            color: add_btn_1.pressed? Constants.darkThemeColor: Constants.themeColor
-
-        }
-
-        contentItem: Text{
-            id:add_btn_1_text
-            text: add_btn_1.text
-            color:"black"
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
         }
     }
 
@@ -336,6 +335,21 @@ Popup {
         ListElement{
             textValue:"group2"
         }
+        ListElement{
+            textValue:"group2"
+        }
+        ListElement{
+            textValue:"group2"
+        }
+        ListElement{
+            textValue:"group2"
+        }
+        ListElement{
+            textValue:"group2"
+        }
+        ListElement{
+            textValue:"group2"
+        }
     }
 
     Menu {
@@ -353,11 +367,35 @@ Popup {
             width: 150
             delegate:
 
-            MenuItem {
+                MenuItem {
                 text: textValue
                 onTriggered: {}
                 onClicked: {
-                    dataFilterInnerPopup.visible = true
+                    if(tabBarOpen === Constants.categoricalTab){
+                        categoricalInnerPopup.visible = true
+                        dateFilterPopup.visible = false
+                        numericalFilterPopup.visible = false
+                        groupFilterPopup.visible = false
+                    }
+                    else if(tabBarOpen === Constants.dateTab){
+                        console.log('ok')
+                        categoricalInnerPopup.visible = false
+                        dateFilterPopup.visible = true
+                        numericalFilterPopup.visible = false
+                        groupFilterPopup.visible = false
+                    }
+                    else if(tabBarOpen === Constants.numericalTab){
+                        categoricalInnerPopup.visible = false
+                        dateFilterPopup.visible = false
+                        numericalFilterPopup.visible = true
+                        groupFilterPopup.visible = false
+                    }
+                    else if(tabBarOpen === Constants.groupTab){
+                        categoricalInnerPopup.visible = false
+                        dateFilterPopup.visible = false
+                        numericalFilterPopup.visible = false
+                        groupFilterPopup.visible = true
+                    }
                 }
             }
         }
@@ -371,7 +409,7 @@ Popup {
         id: rect1
         width: popupMain.width - 40
         height: parent.height - headerPopup.height - tabbar1.height - 100;
-        border.color: Constants.grayColor
+        border.color: Constants.darkThemeColor
         anchors.top:add_btn_1.bottom
         anchors.left: parent.left
         anchors.topMargin: 10
@@ -414,48 +452,18 @@ Popup {
         anchors.rightMargin: 20
         spacing: 5
 
-        Button{
+        CustomButton{
             id: cancel_btn1
-            text: "Cancel"
+            textValue: "Cancel"
             onClicked: {
                 popupMain.visible = false
             }
-
-            background: Rectangle {
-                id: cancel_btn1_background
-                color: cancel_btn1.pressed? Constants.themeColor: Constants.darkThemeColor
-
-            }
-
-            contentItem: Text{
-                id:cancel_btn1_text
-                text: cancel_btn1.text
-                color:"black"
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-
-
         }
 
 
-        Button{
+        CustomButton{
             id: apply_btn1
-            text: "Apply"
-
-            background: Rectangle {
-                id: apply_btn1_background
-                color: apply_btn1.pressed? Constants.themeColor: Constants.darkThemeColor
-
-            }
-
-            contentItem: Text{
-                id:apply_btn1_text
-                text: apply_btn1.text
-                color:"black"
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            textValue: "Apply"
             onClicked: {
                 popupMain.visible = false
             }
@@ -464,9 +472,20 @@ Popup {
 
     // Action button ends
 
+    CategoricalFilterPopup{
+        id:categoricalInnerPopup
+    }
 
-    DataFiltersPopup{
-        id:dataFilterInnerPopup
+    DateFilter{
+        id: dateFilterPopup
+    }
+
+    NumericalFilter{
+        id: numericalFilterPopup
+    }
+
+    GroupFilter{
+        id: groupFilterPopup
     }
 }
 
