@@ -1,14 +1,35 @@
 #include "user.h"
 
 User::User(QObject *parent) : QObject(parent),
-    m_networkAccessManager(new QNetworkAccessManager(this)),
-    m_networkReply(nullptr),
-    m_tempStorage(new QByteArray)
+  m_networkAccessManager(new QNetworkAccessManager(this)),
+  m_networkReply(nullptr),
+  m_tempStorage(new QByteArray)
 {
 
 }
 
+void User::setHost(const QString &value)
+{
+    host = value;
+}
+
+void User::setPassword(const QString &value)
+{
+    password = value;
+}
+
+void User::setUsername(const QString &value)
+{
+    username = value;
+}
+
+void User::reading()
+{
+    m_tempStorage->append(m_networkReply->readAll());
+}
+
 void User::login()
+
 {
     QNetworkRequest m_NetworkRequest;
     m_NetworkRequest.setUrl(this->host);
@@ -35,7 +56,6 @@ void User::login()
 
 void User::logout()
 {
-
     // Fetch value from settings
     QSettings settings;
     QString baseUrl = settings.value("general/baseUrl").toString();
@@ -65,29 +85,11 @@ void User::logout()
     connect(m_networkReply, &QNetworkReply::finished, this, &User::logoutReadComplete);
 }
 
-void User::setHost(const QString &value)
-{
-    host = value;
-}
 
-void User::setPassword(const QString &value)
-{
-    password = value;
-}
 
-void User::setUsername(const QString &value)
-{
-    username = value;
-}
-
-void User::reading()
-{
-    m_tempStorage->append(m_networkReply->readAll());
-}
 
 void User::loginReadComplete()
 {
-
 
     if(m_networkReply->error()){
         qDebug() << __FILE__ << __LINE__ << m_networkReply->errorString();
@@ -119,6 +121,7 @@ void User::loginReadComplete()
             settings.setValue("user/sessionToken", dataObj["sessionToken"].toString());
 
 
+            qDebug() << "logged in";
         }
 
         emit loginStatus(outputStatus);
@@ -129,7 +132,6 @@ void User::loginReadComplete()
 
 void User::logoutReadComplete()
 {
-
 
     if(m_networkReply->error()){
         qDebug() << __FILE__ << __LINE__ << m_networkReply->errorString();
@@ -150,12 +152,11 @@ void User::logoutReadComplete()
         // If successful, remove the user variables in settings
         if(statusObj["code"].toInt() == 200){
 
-            //            QSettings settings;
-            //            settings.remove("user");
+//            QSettings settings;
+//            settings.remove("user");
         }
 
         emit logoutStatus(outputStatus);
         m_tempStorage->clear();
     }
-
 }

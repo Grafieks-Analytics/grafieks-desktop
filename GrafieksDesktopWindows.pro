@@ -13,29 +13,27 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        Code/Api/login.cpp \
-        Code/Api/logout.cpp \
         Code/Connectors/mysqlcon.cpp \
         Code/Connectors/sqlitecon.cpp \
-    Code/Logic/Connectors/box.cpp \
-    Code/Logic/Connectors/boxds.cpp \
-    Code/Logic/Connectors/boxmodel.cpp \
+        Code/Logic/Connectors/box.cpp \
+        Code/Logic/Connectors/boxds.cpp \
+        Code/Logic/Connectors/boxmodel.cpp \
         Code/Logic/Connectors/connector.cpp \
         Code/Logic/Connectors/connectorfilter.cpp \
         Code/Logic/Connectors/connectormodel.cpp \
         Code/Logic/Connectors/connectorsloginmodel.cpp \
-    Code/Logic/Connectors/drive.cpp \
-    Code/Logic/Connectors/driveds.cpp \
-    Code/Logic/Connectors/drivemodel.cpp \
+        Code/Logic/Connectors/drive.cpp \
+        Code/Logic/Connectors/driveds.cpp \
+        Code/Logic/Connectors/drivemodel.cpp \
         Code/Logic/Connectors/dropbox.cpp \
         Code/Logic/Connectors/dropboxds.cpp \
         Code/Logic/Connectors/dropboxmodel.cpp \
-    Code/Logic/Connectors/sheet.cpp \
-    Code/Logic/Connectors/sheetds.cpp \
-    Code/Logic/Connectors/sheetmodel.cpp \
+        Code/Logic/Connectors/sheet.cpp \
+        Code/Logic/Connectors/sheetds.cpp \
+        Code/Logic/Connectors/sheetmodel.cpp \
         Code/Logic/DataModeller/dblistmodel.cpp \
         Code/Logic/DataModeller/querymodel.cpp \
-    Code/Logic/DataModeller/querystatsmodel.cpp \
+        Code/Logic/DataModeller/querystatsmodel.cpp \
         Code/Logic/DataModeller/tablelistmodel.cpp \
         Code/Logic/Datasources/datasource.cpp \
         Code/Logic/Datasources/datasourceds.cpp \
@@ -43,7 +41,7 @@ SOURCES += \
         Code/Logic/Datasources/datasourcemodel.cpp \
         Code/Logic/General/qttest2.cpp \
 #        Code/Logic/General/testing.cpp \
-    Code/Logic/General/testing.cpp \
+        Code/Logic/General/testing.cpp \
         Code/Logic/Menu/user.cpp \
         main.cpp
 
@@ -90,8 +88,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    Code/Api/login.h \
-    Code/Api/logout.h \
     Code/Connectors/allconnectors.h \
     Code/Connectors/mysqlcon.h \
     Code/Connectors/sqlitecon.h \
@@ -122,7 +118,8 @@ HEADERS += \
     Code/Logic/General/qttest2.h \
 #    Code/Logic/General/testing.h \
     Code/Logic/General/testing.h \
-    Code/Logic/Menu/user.h \ \
+    Code/Logic/Menu/user.h \
+    \ \
     Code/constants.h \
     Code/statics.h
 

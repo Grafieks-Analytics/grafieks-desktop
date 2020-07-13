@@ -1,44 +1,47 @@
-#ifndef USER_H
-#define USER_H
+#ifndef User_H
+#define User_H
 
 #include <QObject>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QJsonDocument>
-#include <QJsonArray>
 #include <QJsonObject>
 #include <QSettings>
-#include <QTimer>
-#include <QEventLoop>
 #include <QDebug>
-
-#include "../../Api/login.h"
-#include "../../Api/logout.h"
-#include "../../constants.h"
 
 class User : public QObject
 {
     Q_OBJECT
-
 public:
     explicit User(QObject *parent = nullptr);
+    Q_INVOKABLE void login();
+    Q_INVOKABLE void logout();
 
     Q_INVOKABLE void setHost(const QString &value);
     Q_INVOKABLE void setPassword(const QString &value);
     Q_INVOKABLE void setUsername(const QString &value);
-    Q_INVOKABLE void checkLogin();
-    Q_INVOKABLE void logout();
 
+
+private slots:
+    void reading();
+    void loginReadComplete();
+    void logoutReadComplete();
 
 signals:
     void loginStatus(QVariantMap status);
     void logoutStatus(QVariantMap status);
 
 private:
+    QNetworkAccessManager * m_networkAccessManager;
+    QNetworkReply * m_networkReply;
+    QByteArray * m_tempStorage;
+    QVariantMap outputStatus;
 
     QString username;
     QString password;
     QString host;
 
-
 };
 
-#endif // USER_H
+#endif // User_H

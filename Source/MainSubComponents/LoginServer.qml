@@ -150,6 +150,7 @@ Popup {
             }
             onClicked: {
 
+//                User.setHost(server_address.text)
                 User.setHost(server_address.text)
                 popupLoginServer.visible = false
                 connectGrafieks2.visible = true

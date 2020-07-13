@@ -229,7 +229,7 @@ Popup {
                 User.setUsername(username_field.text);
                 User.setPassword(password_field.text);
 
-                User.checkLogin()
+                User.login()
 
             }
         }

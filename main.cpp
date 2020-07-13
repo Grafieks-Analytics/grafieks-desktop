@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 //    Testing testing;
 
     MysqlCon mysqlconnect;
-    User user;
+    User User;
     ConnectorFilter connectorFilter;
     ConnectorsLoginModel connectorsLoginModel;
     DatasourceModel datasourceModel;
@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("QtTest2", &qttest2);
 //    engine.rootContext()->setContextProperty("Testing", &testing);
     engine.rootContext()->setContextProperty("MysqlConnect", &mysqlconnect);
-    engine.rootContext()->setContextProperty("User", &user);
+    engine.rootContext()->setContextProperty("User", &User);
     engine.rootContext()->setContextProperty("ConnectorFilter", &connectorFilter);
     engine.rootContext()->setContextProperty("ConnectorsLoginModel", &connectorsLoginModel);
     engine.rootContext()->setContextProperty("DatasourceModel", &datasourceModel);
