@@ -110,7 +110,7 @@ Row{
 
                         Image{
                             id: editBtn
-                            source: '../../../Images/icons/Edit_20.png'
+                            source: '../../../../Images/icons/Edit_20.png'
                             anchors.top: parent.parent.top
                             anchors.left: parent.left
                             anchors.leftMargin: 20
@@ -120,7 +120,7 @@ Row{
 
                         Image{
                             id: removeBtn
-                            source: '../../../Images/icons/remove.png'
+                            source: '../../../../Images/icons/remove.png'
                             anchors.left: editBtn.right
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.leftMargin: 10
@@ -255,7 +255,7 @@ Row{
 
                         Image{
                             id: editBtncalendar
-                            source: '../../../Images/icons/Edit_20.png'
+                            source: '../../../../Images/icons/Edit_20.png'
                             anchors.top: parent.parent.top
                             anchors.left: parent.left
                             anchors.leftMargin: 20
@@ -264,7 +264,7 @@ Row{
                         }
 
                         Image{
-                            source: '../../../Images/icons/remove.png'
+                            source: '../../../../Images/icons/remove.png'
                             anchors.left: editBtncalendar.right
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.leftMargin: 10
@@ -378,7 +378,7 @@ Row{
 
                         Image{
                             id: editBtnTimeFrame
-                            source: '../../../Images/icons/Edit_20.png'
+                            source: '../../../../Images/icons/Edit_20.png'
                             anchors.top: parent.parent.top
                             anchors.left: parent.left
                             anchors.leftMargin: 20
@@ -387,7 +387,7 @@ Row{
                         }
 
                         Image{
-                            source: '../../../Images/icons/remove.png'
+                            source: '../../../../Images/icons/remove.png'
                             anchors.left: editBtnTimeFrame.right
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.leftMargin: 10

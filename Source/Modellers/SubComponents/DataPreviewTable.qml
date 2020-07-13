@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 
+// Data Preview - Table View From Query Results
 
 TableView {
     id: dataPreviewResult
@@ -36,6 +37,8 @@ TableView {
         height: dataPreviewResult.topMargin
     }
 
+    // Table Header Starts
+
     Row {
         id: columnsHeader1
         y: dataPreviewResult.contentY
@@ -56,6 +59,7 @@ TableView {
         }
     }
 
+    // Table Header Ends
 
     ScrollIndicator.horizontal: ScrollIndicator { }
     ScrollIndicator.vertical: ScrollIndicator { }
