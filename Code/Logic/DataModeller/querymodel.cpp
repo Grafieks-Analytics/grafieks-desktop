@@ -35,7 +35,7 @@ QVariant QueryModel::data(const QModelIndex &index, int role) const
 
 QHash<int, QByteArray> QueryModel::roleNames() const
 {
-    return m_roleNames;
+    return {{Qt::DisplayRole, "display"}};
 }
 
 void QueryModel::callQuery(QString queryString)
