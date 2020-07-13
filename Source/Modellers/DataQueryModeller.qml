@@ -35,7 +35,7 @@ Page {
         id : testQueryModel
         ListElement{
             status: "tick"
-            queryNumber:"1"
+            queryNumber:"2"
             action:""
             message:""
             duration:""

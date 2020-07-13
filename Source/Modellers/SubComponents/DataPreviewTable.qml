@@ -11,7 +11,7 @@ TableView {
     anchors.fill: parent
     topMargin: columnsHeader1.implicitHeight
     width: parent.width
-    model: QtTest2
+    model: QueryModel
     ScrollBar.horizontal: ScrollBar{}
     ScrollBar.vertical: ScrollBar{}
     clip: true
@@ -19,7 +19,7 @@ TableView {
 
     delegate: Rectangle {
         Text {
-            text: 'text'
+            text: display
             anchors.fill: parent
             anchors.margins: 10
             color: 'black'
@@ -45,8 +45,7 @@ TableView {
             Label {
                 width: dataPreviewResult.columnWidthProvider(modelData)
                 height: 35
-                text: QtTest2.headerData(modelData, Qt.Horizontal)
-                //                            text: "s"
+                text: QueryModel.headerData(modelData, Qt.Horizontal)
                 color: 'black'
                 font.pixelSize: 15
                 padding: 10

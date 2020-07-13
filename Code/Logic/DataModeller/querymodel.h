@@ -21,7 +21,7 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     QHash<int, QByteArray> roleNames() const;
 
-    Q_INVOKABLE void callQuery(QString queryString);
+    Q_INVOKABLE void callSql(QString queryString);
 
 private:
     void generateRoleNames();

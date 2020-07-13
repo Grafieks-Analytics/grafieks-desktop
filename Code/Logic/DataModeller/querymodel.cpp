@@ -38,7 +38,7 @@ QHash<int, QByteArray> QueryModel::roleNames() const
     return {{Qt::DisplayRole, "display"}};
 }
 
-void QueryModel::callQuery(QString queryString)
+void QueryModel::callSql(QString queryString)
 {
     QSqlDatabase dbMysql = QSqlDatabase::database();
     this->setQuery(queryString, dbMysql);

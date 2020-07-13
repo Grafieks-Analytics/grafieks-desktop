@@ -60,7 +60,6 @@
         <file>Source/Modellers/SubComponents/DataFilterTestPopup.qml</file>
         <file>Source/Modellers/SubComponents/DataModeller.qml</file>
         <file>Source/Modellers/SubComponents/DataPreviewTable.qml</file>
-        <file>Source/Modellers/SubComponents/DataSourceDescription.qml</file>
         <file>Source/Modellers/SubComponents/DateFilter.qml</file>
         <file>Source/Modellers/SubComponents/GroupFilter.qml</file>
         <file>Source/Modellers/SubComponents/InfoTable.qml</file>
@@ -94,5 +93,7 @@
         <file>Source/Dashboards/NewDashboard.qml</file>
         <file>Source/Reports/NewReport.qml</file>
         <file>Source/Reports/SubComponents/ReportCustomizations.qml</file>
+        <file>Source/Modellers/SubComponents/TestQuery.qml</file>
+        <file>Source/Modellers/SubComponents/DataSourceDescription.qml</file>
     </qresource>
 </RCC>

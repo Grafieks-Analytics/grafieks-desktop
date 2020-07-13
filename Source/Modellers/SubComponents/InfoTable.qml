@@ -32,6 +32,8 @@ Item{
             anchors.top: infodata_table.top
         }
 
+         // "Test Query" Button Starts
+
         Rectangle{
 
             id: toolbar_querymodeller
@@ -74,6 +76,8 @@ Item{
 
         }
 
+         // "Test Query" Button Ends
+
         ToolSeparator{
             id: seperator1
             height:30
@@ -81,6 +85,8 @@ Item{
             anchors.top: linebar1.top
             padding: 0
         }
+
+        // "Data Preview" Button Starts
 
         Rectangle{
 
@@ -117,7 +123,7 @@ Item{
                     dataPreviewResult.visible = true
                     displayResult.visible = false
 
-                    QtTest2.callSql()
+                    QueryModel.callSql()
 
                 }
 
@@ -127,6 +133,8 @@ Item{
 
         }
 
+        // "Data Preview" Button Ends
+
         ToolSeparator{
             id: seperator2
             height:30
@@ -134,6 +142,9 @@ Item{
             anchors.top: linebar1.top
             padding: 0
         }
+
+
+        // "Display Limit" Button Starts
 
         Rectangle{
 
@@ -176,6 +187,8 @@ Item{
 
         }
 
+         // "Display Limit" Button Ends
+
         ToolSeparator{
             id: seperator3
             height:30
@@ -183,6 +196,8 @@ Item{
             anchors.top: linebar1.top
             padding: 0
         }
+
+        // "Play" Button Starts
 
         Rectangle{
 
@@ -213,13 +228,14 @@ Item{
 
                 onClicked:{
                     testQueryBtn.visible = true
-//                        QueryModel.callQuery()
-                    QtTest2.callSql()
+                    QueryModel.callSql()
                 }
 
             }
 
         }
+
+        // "Play" Button Ends
 
         HorizontalLineTpl{
             id: linebar2
@@ -227,6 +243,8 @@ Item{
             line_width: parent.width
             anchors.top: parent.bottom
         }
+
+        // "Hide-Show-Panel" Button Starts
 
         Rectangle{
             id:collapseBtnRow
@@ -294,6 +312,8 @@ Item{
 
         }
 
+        // "Hide-Show-Panel" Button Ends
+
 
     }
 
@@ -308,213 +328,8 @@ Item{
         anchors.rightMargin: column_querymodeller.width + 50
         width: parent.width - column_querymodeller.width - 50
 
-        TableView {
-            id: testQueryResult
-            model: testQueryModel
-            rowHeightProvider: function (column) { return 30; }
-            width: parent.width
-            visible: false
-            columnSpacing: 1
-            rowSpacing: 1
-            height:parent.height
-            boundsBehavior : Flickable.StopAtBounds
-            clip:true
-            ScrollBar.horizontal: ScrollBar{}
-            ScrollBar.vertical: ScrollBar{}
-            topMargin: columnsHeader.implicitHeight
-
-            delegate: Row{
-                id: resultQueryRow
-                height:30
-                width: parent.width
-
-                Column{
-                    width: 50
-                    height: parent.height
-                    topPadding: 5
-
-                    Row{
-                        height: parent.height
-                        width: parent.width
-                        anchors.top: parent
-                        anchors.topMargin: 3
-                        anchors.left: parent.left
-                        leftPadding: 20
-
-                        Image {
-                            id: statusImg
-                            height: 18
-                            width: 18
-                            source: "../../../Images/icons/tick.png"
-                        }
-
-                    }
-
-                }
-
-                Column{
-                    width: 50
-                    height: parent.height
-
-                    Row{
-                        height: parent.height
-                        width: parent.width
-                        anchors.left: parent
-                        anchors.leftMargin: 2
-
-                        Text {
-                            text: qsTr(queryNumber)
-                            padding: 5
-                            leftPadding: 20
-                        }
-                    }
-
-                }
-
-
-                Column{
-                    width: parent.width * 0.4
-                    height: 30
-
-                    Row{
-                        height: parent.height
-                        width: parent.width
-                        anchors.left: parent
-
-                        Text {
-                            text: qsTr(action)
-                            padding: 5
-                            leftPadding: 20
-                        }
-                    }
-
-                }
-
-                Column{
-                    width: parent.width * 0.4
-                    height: 30
-
-                    Row{
-                        height: parent.height
-                        width: parent.width
-                        anchors.left: parent
-
-                        Text {
-                            text: qsTr(message)
-                            padding: 5
-                            leftPadding: 20
-                        }
-                    }
-                }
-
-                Column{
-                    width: parent.width * 0.1
-                    height: 30
-
-                    Row{
-                        height: parent.height
-                        width: parent.width
-
-                        Text {
-                            text: qsTr(duration)
-                            padding: 5
-                            leftPadding: 20
-                        }
-                    }
-                }
-
-            }
-
-            Rectangle { // mask the headers
-                z: 3
-                color: "#222222"
-                y: testQueryResult.contentY
-                x: testQueryResult.contentX
-                width: testQueryResult.leftMargin
-                height: testQueryResult.topMargin
-            }
-            Row {
-                id: columnsHeader
-                y: testQueryResult.contentY
-                z: 3
-                width: parent.width
-
-                Label {
-                    id: statusColumn
-                    width: 50
-                    height: 30
-                    text: ""
-                    color: 'black'
-                    padding: 10
-                    leftPadding: 20
-                    verticalAlignment: Text.AlignVCenter
-                    background: Rectangle{
-                        color: 'white'
-                    }
-                }
-                Label {
-                    id: numberCoulmn
-                    width: 50
-                    height: 30
-                    text: "#"
-                    color: 'black'
-                    padding: 10
-                    leftPadding: 20
-                    verticalAlignment: Text.AlignVCenter
-                    background: Rectangle{
-                        color: 'white'
-                    }
-
-                }
-                Label {
-                    id: actionCoulmn
-                    width: parent.width * 0.4
-                    height: 30
-                    text: "Action"
-                    color: 'black'
-                    padding: 10
-                    leftPadding: 20
-                    verticalAlignment: Text.AlignVCenter
-                    background: Rectangle{
-                        color: 'white'
-                    }
-
-                }
-                Label {
-
-                    id: messageColumn
-                    width: parent.width * 0.4
-                    height: 30
-                    text: "Message"
-                    color: 'black'
-                    padding: 10
-                    leftPadding: 20
-                    verticalAlignment: Text.AlignVCenter
-                    background: Rectangle{
-                        color: 'white'
-                    }
-
-                }
-                Label {
-                    id: durationColumn
-                    width: parent.width  - ( statusColumn.width + numberCoulmn.width + actionCoulmn.width + messageColumn.width)
-                    height: 30
-                    text: "Duration"
-                    color: 'black'
-                    padding: 10
-                    leftPadding: 20
-                    verticalAlignment: Text.AlignVCenter
-                    background: Rectangle{
-                        color: 'white'
-                    }
-
-                }
-
-            }
-
-            ScrollIndicator.horizontal: ScrollIndicator { }
-            ScrollIndicator.vertical: ScrollIndicator { }
-
+        TestQuery{
+            id: testQueryPreview
         }
 
         DataPreviewTable{

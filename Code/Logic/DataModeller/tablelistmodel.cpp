@@ -37,6 +37,7 @@ QHash<int, QByteArray> TableListModel::roleNames() const
     return m_roleNames;
 }
 
+
 void TableListModel::callQuery(QString queryString)
 {
 
