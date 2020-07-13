@@ -2,7 +2,7 @@ import QtQuick 2.11
 
 import com.grafieks.singleton.constants 1.0
 
-import "../../MainSubComponents"
+import "../../../MainSubComponents"
 
 Row{
     width: parent.width

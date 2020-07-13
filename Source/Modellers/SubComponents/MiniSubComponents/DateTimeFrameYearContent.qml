@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
 
-import "../../MainSubComponents"
+import "../../../MainSubComponents"
 
 Column{
     width: parent.width
@@ -24,7 +24,7 @@ Column{
         RadioButtonTpl{
             id:thisRadio
 
-            radio_text: qsTr("This Day")
+            radio_text: qsTr("This Year")
             radio_checked: false
             parent_dimension: 16
 
@@ -60,7 +60,7 @@ Column{
 
         RadioButtonTpl{
             id:lastRadio
-            radio_text: qsTr("Last Day")
+            radio_text: qsTr("Last Year")
             radio_checked: false
             parent_dimension: 16
 
@@ -95,7 +95,7 @@ Column{
 
         RadioButtonTpl{
             id:nextRadio
-            radio_text: qsTr("Next Day")
+            radio_text: qsTr("Next Year")
             radio_checked: false
             parent_dimension: 16
 
@@ -158,7 +158,7 @@ Column{
             width: 80
             id:lastXRadioTextField
             anchors.left: lastXRadio.right
-            placeholderText: "Day"
+            placeholderText: "Year"
         }
 
     }
@@ -204,7 +204,7 @@ Column{
             width: 80
             anchors.left: nextXRadio.right
 
-            placeholderText: "Day"
+            placeholderText: "Year"
         }
 
     }

@@ -16,10 +16,14 @@ import Qt.labs.settings 1.1
 import com.grafieks.singleton.constants 1.0
 
 
-import "./Source/Data"
-import "./Source/Dashboard"
+import "./Source/Modellers"
+import "./Source/Modellers/SubComponents"
+import "./Source/Modellers/SubComponents/MiniSubComponents"
+import "./Source/Dashboards"
+import "./Source/Connectors"
+import "./Source/Datasources"
+import "./Source/Reports"
 import "./Source/Others"
-import "./Source/Data/SubComponents"
 import "./Source/MainSubComponents"
 
 
@@ -292,7 +296,7 @@ ApplicationWindow {
         id: stacklayout_home
         width: mainwindow.width
         height: mainwindow.height
-        currentIndex: 5
+        currentIndex: 2
 
         // 0
         Test{

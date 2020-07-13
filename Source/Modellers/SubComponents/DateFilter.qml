@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.3
 import com.grafieks.singleton.constants 1.0
 
 import "../../MainSubComponents"
-import "../MiniSubComponents"
+import "../SubComponents/MiniSubComponents"
 
 Popup {
     id: dataFilterPopup
@@ -17,6 +17,7 @@ Popup {
     visible: false
     padding: 0
     closePolicy: Popup.NoAutoClose
+
 
     background: Rectangle{
         color: Constants.themeColor
@@ -116,19 +117,19 @@ Popup {
                     anchors.fill:parent
                     onClicked: {
                         listRadio.radio_checked = true
-                        wildcardRadio.radio_checked = false
+                        dateRadio.radio_checked = false
                         topRadio.radio_checked = false
 
                         listContent.visible = true
-                        wildcardContent.visible = false
-                        topContent.visible = false
+                        calendarContent.visible = false
+                        dateTimeFrameContent.visible = false
                     }
                 }
             }
 
         }
         Column{
-            id: wildcardRadioColumn
+            id: dateRadioColumn
             topPadding: 10
             bottomPadding: 10
             leftPadding: 50
@@ -137,8 +138,8 @@ Popup {
             anchors.centerIn: parent
 
             RadioButtonTpl{
-                id: wildcardRadio
-                radio_text: qsTr("Wildcard")
+                id: dateRadio
+                radio_text: qsTr("Calendar")
                 radio_checked: false
                 parent_dimension: 16
 
@@ -146,13 +147,13 @@ Popup {
                     anchors.fill:parent
                     onClicked: {
                         listRadio.radio_checked = false
-                        wildcardRadio.radio_checked = true
+                        dateRadio.radio_checked = true
                         topRadio.radio_checked = false
 
 
                         listContent.visible = false
-                        wildcardContent.visible = true
-                        topContent.visible = false
+                        calendarContent.visible = true
+                        dateTimeFrameContent.visible = false
                     }
                 }
 
@@ -167,7 +168,7 @@ Popup {
 
             RadioButtonTpl{
                 id: topRadio
-                radio_text: qsTr("Top")
+                radio_text: qsTr("Time Frame")
                 radio_checked: false
                 parent_dimension: 16
 
@@ -176,13 +177,13 @@ Popup {
                     anchors.fill:parent
                     onClicked: {
                         listRadio.radio_checked = false
-                        wildcardRadio.radio_checked = false
+                        dateRadio.radio_checked = false
                         topRadio.radio_checked = true
 
 
                         listContent.visible = false
-                        wildcardContent.visible = false
-                        topContent.visible = true
+                        calendarContent.visible = false
+                        dateTimeFrameContent.visible = true
                     }
                 }
             }
@@ -193,16 +194,16 @@ Popup {
 
     //    Top Menu Contents
 
-    FilterListContent{
+    DateFilterListContent{
         id: listContent
     }
 
-    FilterWildcardContent{
-        id: wildcardContent
+    DateFilterCalenderContent{
+        id: calendarContent
     }
 
-    FilterTopContent{
-        id: topContent
+    DateTimeFrameContent{
+        id: dateTimeFrameContent
     }
 
     // Footer starts
@@ -238,7 +239,6 @@ Popup {
 
             anchors.right: parent.right
             anchors.rightMargin: 20
-
 
             onClicked: {
                 dataFilterPopup.visible = false

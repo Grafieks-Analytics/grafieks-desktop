@@ -11,27 +11,6 @@
         <file>Source/Charts/sunburst.html</file>
         <file>Source/Charts/tree-map.html</file>
         <file>Source/Charts/tree.html</file>
-        <file>Source/Dashboard/NewDashboard.qml</file>
-        <file>Source/Dashboard/NewReport.qml</file>
-        <file>Source/Dashboard/SubComponents/DashboardCustomize.qml</file>
-        <file>Source/Dashboard/SubComponents/DashboardFilters.qml</file>
-        <file>Source/Dashboard/SubComponents/DashboardSubFilters.qml</file>
-        <file>Source/Dashboard/SubComponents/DashboardSummary.qml</file>
-        <file>Source/Dashboard/SubComponents/ReportCustomizations.qml</file>
-        <file>Source/Data/DataQueryModeller.qml</file>
-        <file>Source/Data/DataSources.qml</file>
-        <file>Source/Data/SelectConnection.qml</file>
-        <file>Source/Data/SubComponents/MysqlConnection.qml</file>
-        <file>Source/Data/SubComponents/DataFilters.qml</file>
-        <file>Source/Data/SubComponents/DataModeller.qml</file>
-        <file>Source/Data/SubComponents/DataSourceDescription.qml</file>
-        <file>Source/Data/SubComponents/DataSourcesGrid.qml</file>
-        <file>Source/Data/SubComponents/DataSourcesList.qml</file>
-        <file>Source/Data/SubComponents/MainMenuDelegate.qml</file>
-        <file>Source/Data/SubComponents/MenuSeparatorComponent.qml</file>
-        <file>Source/Data/SubComponents/QueryModeller.qml</file>
-        <file>Source/Data/SubComponents/TabBackgroundComponent.qml</file>
-        <file>Source/Data/SubComponents/TabTextComponent.qml</file>
         <file>Source/MainSubComponents/CheckBoxTpl.qml</file>
         <file>Source/MainSubComponents/HorizontalLineTpl.qml</file>
         <file>Source/MainSubComponents/LeftMenuBar.qml</file>
@@ -52,44 +31,68 @@
         <file>main.qml</file>
         <file>Constants.qml</file>
         <file>Source/Others/Test3.qml</file>
-        <file>Source/Data/SubComponents/InMemory.qml</file>
-        <file>Source/Data/SubComponents/SqliteConnection.qml</file>
-        <file>Source/Data/SubComponents/DropboxConnection.qml</file>
-        <file>Source/Data/SubComponents/DropboxConnectionFiles.qml</file>
-        <file>Source/Data/SubComponents/DataFiltersPopup.qml</file>
-        <file>Source/Data/MiniSubComponents/FilterListContent.qml</file>
-        <file>Source/Data/MiniSubComponents/FilterWildcardContent.qml</file>
-        <file>Source/Data/MiniSubComponents/FilterTopContent.qml</file>
         <file>Source/MainSubComponents/SelectDropdown.qml</file>
         <file>Source/MainSubComponents/ReadOnlyTextBox.qml</file>
-        <file>Source/Data/MiniSubComponents/AllFilters.qml</file>
-        <file>Source/Data/MiniSubComponents/AllDateFilters.qml</file>
-        <file>Source/Data/MiniSubComponents/AllGroupFilters.qml</file>
-        <file>Source/Data/MiniSubComponents/AllNumericalFilters.qml</file>
-        <file>Source/Data/SubComponents/DriveConnection.qml</file>
-        <file>Source/Data/SubComponents/DriveConnectionFiles.qml</file>
-        <file>Source/Data/SubComponents/DateFilter.qml</file>
-        <file>Source/Data/SubComponents/CategoricalFilterPopup.qml</file>
-        <file>Source/Data/SubComponents/NumericalFilter.qml</file>
-        <file>Source/Data/SubComponents/GroupFilter.qml</file>
-        <file>Source/Data/MiniSubComponents/NumericalFilterInnerPopup.qml</file>
-        <file>Source/Data/MiniSubComponents/GroupFilterInnerPopup.qml</file>
-        <file>Source/Data/MiniSubComponents/DateFilterListContent.qml</file>
-        <file>Source/Data/MiniSubComponents/DateFilterCalenderContent.qml</file>
-        <file>Source/Data/MiniSubComponents/DateTimeFrameContent.qml</file>
-        <file>Source/Data/MiniSubComponents/DateTimeFrameYearContent.qml</file>
-        <file>Source/Data/MiniSubComponents/DateTimeFrameDayContent.qml</file>
-        <file>Source/Data/MiniSubComponents/DateTimeFrameMonthContent.qml</file>
-        <file>Source/Data/MiniSubComponents/DateTimeFrameQuarterContent.qml</file>
         <file>Source/MainSubComponents/CustomButton.qml</file>
         <file>Source/MainSubComponents/CustomTextBox.qml</file>
         <file>Source/MainSubComponents/CustomTextArea.qml</file>
         <file>Source/MainSubComponents/FileUploadBtn.qml</file>
-        <file>Source/Data/SubComponents/BoxConnection.qml</file>
-        <file>Source/Data/SubComponents/BoxConnectionFiles.qml</file>
-        <file>Source/Data/SubComponents/SheetConnection.qml</file>
-        <file>Source/Data/SubComponents/SheetConnectionFiles.qml</file>
-        <file>Source/Data/SubComponents/DataPreviewTable.qml</file>
-        <file>Source/Data/SubComponents/InfoTable.qml</file>
+        <file>Source/Connectors/SelectConnection.qml</file>
+        <file>Source/Connectors/SubComponents/BoxConnection.qml</file>
+        <file>Source/Connectors/SubComponents/BoxConnectionFiles.qml</file>
+        <file>Source/Connectors/SubComponents/DriveConnection.qml</file>
+        <file>Source/Connectors/SubComponents/DriveConnectionFiles.qml</file>
+        <file>Source/Connectors/SubComponents/DropboxConnection.qml</file>
+        <file>Source/Connectors/SubComponents/DropboxConnectionFiles.qml</file>
+        <file>Source/Connectors/SubComponents/MysqlConnection.qml</file>
+        <file>Source/Connectors/SubComponents/SheetConnection.qml</file>
+        <file>Source/Connectors/SubComponents/SheetConnectionFiles.qml</file>
+        <file>Source/Connectors/SubComponents/SqliteConnection.qml</file>
+        <file>Source/Connectors/SubComponents/TabBackgroundComponent.qml</file>
+        <file>Source/Connectors/SubComponents/TabTextComponent.qml</file>
+        <file>Source/Datasources/DataSources.qml</file>
+        <file>Source/Datasources/SubComponents/DataSourcesGrid.qml</file>
+        <file>Source/Datasources/SubComponents/DataSourcesList.qml</file>
+        <file>Source/Modellers/DataQueryModeller.qml</file>
+        <file>Source/Modellers/SubComponents/CategoricalFilterPopup.qml</file>
+        <file>Source/Modellers/SubComponents/DataFilters.qml</file>
+        <file>Source/Modellers/SubComponents/DataFiltersPopup.qml</file>
+        <file>Source/Modellers/SubComponents/DataFilterTestPopup.qml</file>
+        <file>Source/Modellers/SubComponents/DataModeller.qml</file>
+        <file>Source/Modellers/SubComponents/DataPreviewTable.qml</file>
+        <file>Source/Modellers/SubComponents/DataSourceDescription.qml</file>
+        <file>Source/Modellers/SubComponents/DateFilter.qml</file>
+        <file>Source/Modellers/SubComponents/GroupFilter.qml</file>
+        <file>Source/Modellers/SubComponents/InfoTable.qml</file>
+        <file>Source/Modellers/SubComponents/InMemory.qml</file>
+        <file>Source/Modellers/SubComponents/MainMenuDelegate.qml</file>
+        <file>Source/Modellers/SubComponents/MenuSeparatorComponent.qml</file>
+        <file>Source/Modellers/SubComponents/NumericalFilter.qml</file>
+        <file>Source/Modellers/SubComponents/QueryModeller.qml</file>
+        <file>Source/Modellers/SubComponents/TestQueryResultsTable.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/AllCategoricalFilters.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/AllDateFilters.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/AllFilters.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/AllGroupFilters.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/AllNumericalFilters.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/DateFilterCalenderContent.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/DateFilterListContent.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/DateTimeFrameContent.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/DateTimeFrameDayContent.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/DateTimeFrameMonthContent.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/DateTimeFrameQuarterContent.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/DateTimeFrameYearContent.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/FilterListContent.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/FilterTopContent.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/FilterWildcardContent.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/GroupFilterInnerPopup.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/NumericalFilterInnerPopup.qml</file>
+        <file>Source/Dashboards/SubComponents/DashboardCustomize.qml</file>
+        <file>Source/Dashboards/SubComponents/DashboardFilters.qml</file>
+        <file>Source/Dashboards/SubComponents/DashboardSubFilters.qml</file>
+        <file>Source/Dashboards/SubComponents/DashboardSummary.qml</file>
+        <file>Source/Dashboards/NewDashboard.qml</file>
+        <file>Source/Reports/NewReport.qml</file>
+        <file>Source/Reports/SubComponents/ReportCustomizations.qml</file>
     </qresource>
 </RCC>

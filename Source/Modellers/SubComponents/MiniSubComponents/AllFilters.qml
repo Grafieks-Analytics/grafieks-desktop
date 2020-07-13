@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
 
-import "../../MainSubComponents"
+import "../../../MainSubComponents"
 
 Row{
     width: parent.width

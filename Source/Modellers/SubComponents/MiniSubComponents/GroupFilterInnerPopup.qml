@@ -14,7 +14,7 @@ import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
 
-import "../../MainSubComponents"
+import "../../../MainSubComponents"
 
 
 Rectangle{

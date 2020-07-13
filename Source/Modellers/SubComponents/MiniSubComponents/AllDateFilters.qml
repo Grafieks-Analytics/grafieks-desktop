@@ -2,16 +2,13 @@ import QtQuick 2.11
 
 import com.grafieks.singleton.constants 1.0
 
-import "../../MainSubComponents"
+import "../../../MainSubComponents"
 
 Row{
     width: parent.width
     y:10
     anchors.left: parent.left
     anchors.leftMargin: 20
-    anchors.top: parent.top
-    anchors.topMargin: 40
-
     property int rowSpacing: 8
 
     Column{
@@ -19,33 +16,46 @@ Row{
 
         anchors.left: parent.left
         width: parent.width
-        height:filtersListView.height
+        height:listFiltersListView.height + listFilters.height
+
+        Text {
+            id: listFilters
+            text: qsTr("List")
+            font.pointSize: Constants.fontReading
+        }
+
 
         ListModel{
             id: listModel
             ListElement{
-                columnName:"Revenue"
-                filterKey:"Equal or Greater Than"
-                columnValue:"1300"
+                columnName:"Order Date"
+                filterKey:"Equals"
+                columnValue:"6 Jan 2018, 21 Apr 2018"
             }
-
+            ListElement{
+                columnName:"PO Request Date"
+                filterKey:"Exlcudes"
+                columnValue:"6 Jan 2018, 21 Apr 2018"
+            }
         }
 
         ListView{
-            id: filtersListView
+            id: listFiltersListView
             model: listModel
             width: parent.width
             height: listModel.count * 30
-            anchors.topMargin: 30
+            anchors.top: listFilters.bottom
+            anchors.topMargin: 10
             spacing: rowSpacing
 
             delegate:
 
-                Row{
-                id:filtersContent
+            Row{
+                id:listFiltersContent
                 height: 30
                 width: parent.width
 
+                anchors.top:listFilters.top
                 anchors.topMargin: 30
 
                 Column{
@@ -126,42 +136,48 @@ Row{
     }
 
     Column{
-        id: multipleValueFiltersColumn
+        id: calendarFiltersColumn
 
         width: parent.width
-        height:multipleValueFiltersListView.height + multipleValueHeading.height
+        height:calendarFiltersListView.height + calendarHeading.height
 
         anchors.left: parent.left
         anchors.top: listFiltersColumn.bottom
         anchors.topMargin: 20
 
+        Text {
+            id: calendarHeading
+            text: qsTr("Calendar")
+            font.pointSize: Constants.fontReading
+        }
+
         ListModel{
-            id: multipleValueModel
+            id: calendarModel
             ListElement{
                 columnName:"Requested Ship Date"
-                filterKey:"Between"
-                fromValue:"100"
-                toValue:"500"
+                dateFrom:"ab"
+                dateTo:"ab"
             }
         }
 
 
         ListView{
-            id: multipleValueFiltersListView
-            model: multipleValueModel
+            id: calendarFiltersListView
+            model: calendarModel
             width: parent.width
-            height: multipleValueModel.count * 30
+            height: calendarModel.count * 30
+            anchors.top: calendarHeading.bottom
             anchors.topMargin: 10
             spacing: rowSpacing
 
             delegate:
 
-                Row{
-                id:multipleValueFiltersContent
+            Row{
+                id:calendarFiltersContent
                 height: 30
                 width: parent.width
 
-                anchors.top:multipleValueFiltersColumn.top
+                anchors.top:calendarFiltersColumn.top
                 anchors.topMargin: 30
 
                 Column{
@@ -180,7 +196,7 @@ Row{
                     width: parent.width / 3 - 50
 
                     Text {
-                        text: filterKey
+                        text: dateFrom
                         anchors.left: parent.left
                         leftPadding: 20
                         anchors.verticalCenter: parent.verticalCenter
@@ -218,6 +234,129 @@ Row{
 
                     ReadOnlyTextBox{
                         boxWidth: parent.width
+                        text: dateTo
+                    }
+                }
+
+                Column{
+
+                    width: 100
+                    anchors.right: parent.right
+
+
+                    Row{
+
+                        width: parent.width
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        anchors.topMargin: 15
+                        anchors.leftMargin: 10
+
+
+                        Image{
+                            id: editBtncalendar
+                            source: '../../../Images/icons/Edit_20.png'
+                            anchors.top: parent.parent.top
+                            anchors.left: parent.left
+                            anchors.leftMargin: 20
+
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Image{
+                            source: '../../../Images/icons/remove.png'
+                            anchors.left: editBtncalendar.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.leftMargin: 10
+                        }
+
+                    }
+
+                }
+            }
+
+
+        }
+
+
+    }
+
+    Column{
+        id: timeFrameFiltersColumn
+
+        width: parent.width
+        height:timeFrameFiltersListView.height + timeFrameHeading.height
+
+        anchors.left: parent.left
+        anchors.top: calendarFiltersColumn.bottom
+        anchors.topMargin: 20
+
+        Text {
+            id: timeFrameHeading
+            text: qsTr("Time Frame")
+            font.pointSize: Constants.fontReading
+        }
+
+        ListModel{
+            id: timeFrameModel
+            ListElement{
+                columnName:"GR Date"
+                filterKey:"Last"
+                columnValue:"3 Months"
+            }
+        }
+
+
+        ListView{
+            id: timeFrameFiltersListView
+            model: timeFrameModel
+            width: parent.width
+            height: timeFrameModel.count * 30
+            anchors.top: timeFrameHeading.bottom
+            anchors.topMargin: 10
+            spacing: rowSpacing
+
+            delegate:
+
+            Row{
+                id:timeFrameFiltersContent
+                height: 30
+                width: parent.width
+
+                anchors.top:timeFrameFiltersColumn.top
+                anchors.topMargin: 30
+
+                Column{
+                    height: 30
+                    width: parent.width / 3 - 25
+
+                    ReadOnlyTextBox{
+                        boxWidth: parent.width
+                        text: columnName
+                    }
+                }
+
+
+                Column{
+                    height: 30
+                    width: parent.width / 3 - 50
+
+                    Text {
+                        text: filterKey
+                        anchors.left: parent.left
+                        leftPadding: 20
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                }
+
+
+                Column{
+                    height: 30
+                    width: parent.width / 3 - 25
+
+                    ReadOnlyTextBox{
+                        boxWidth: parent.width
                         text: columnValue
                     }
                 }
@@ -238,7 +377,7 @@ Row{
 
 
                         Image{
-                            id: editBtnmultipleValue
+                            id: editBtnTimeFrame
                             source: '../../../Images/icons/Edit_20.png'
                             anchors.top: parent.parent.top
                             anchors.left: parent.left
@@ -249,7 +388,7 @@ Row{
 
                         Image{
                             source: '../../../Images/icons/remove.png'
-                            anchors.left: editBtnmultipleValue.right
+                            anchors.left: editBtnTimeFrame.right
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.leftMargin: 10
                         }
