@@ -94,6 +94,6 @@
         <file>Source/Reports/NewReport.qml</file>
         <file>Source/Reports/SubComponents/ReportCustomizations.qml</file>
         <file>Source/Modellers/SubComponents/TestQuery.qml</file>
-        <file>Source/Modellers/SubComponents/DataSourceDescription.qml</file>
+        <file>Source/Modellers/SubComponents/PublishDatasource.qml</file>
     </qresource>
 </RCC>

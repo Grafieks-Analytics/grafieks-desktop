@@ -693,7 +693,7 @@ Page {
                 onClicked: {
                     //                    Datasources.setDsName(ds_name.text)
                     //                    Datasources.setSourceType("live")
-                    datasourceDescription.visible = true
+                    publishDatasource.visible = true
 
                 }
             }
@@ -708,8 +708,8 @@ Page {
         id: datafilters
     }
 
-    DataSourceDescription{
-        id: datasourceDescription
+    PublishDatasource{
+        id: publishDatasource
     }
 
     InMemory{

@@ -344,7 +344,7 @@ ApplicationWindow {
 
 
     // Global Modals
-    DataSourceDescription{
+    PublishDatasource{
         id: datasourceDescription
     }
     LoginServer{
