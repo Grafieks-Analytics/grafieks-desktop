@@ -372,26 +372,26 @@ Popup {
                 onTriggered: {}
                 onClicked: {
                     if(tabBarOpen === Constants.categoricalTab){
-                        categoricalInnerPopup.visible = true
+                        categoricalFilterPopup.visible = true
                         dateFilterPopup.visible = false
                         numericalFilterPopup.visible = false
                         groupFilterPopup.visible = false
                     }
                     else if(tabBarOpen === Constants.dateTab){
                         console.log('ok')
-                        categoricalInnerPopup.visible = false
+                        categoricalFilterPopup.visible = false
                         dateFilterPopup.visible = true
                         numericalFilterPopup.visible = false
                         groupFilterPopup.visible = false
                     }
                     else if(tabBarOpen === Constants.numericalTab){
-                        categoricalInnerPopup.visible = false
+                        categoricalFilterPopup.visible = false
                         dateFilterPopup.visible = false
                         numericalFilterPopup.visible = true
                         groupFilterPopup.visible = false
                     }
                     else if(tabBarOpen === Constants.groupTab){
-                        categoricalInnerPopup.visible = false
+                        categoricalFilterPopup.visible = false
                         dateFilterPopup.visible = false
                         numericalFilterPopup.visible = false
                         groupFilterPopup.visible = true
@@ -472,8 +472,8 @@ Popup {
 
     // Action button ends
 
-    CategoricalFilterPopup{
-        id:categoricalInnerPopup
+    CategoricalFilter{
+        id:categoricalFilterPopup
     }
 
     DateFilter{

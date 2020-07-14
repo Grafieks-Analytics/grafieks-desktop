@@ -68,7 +68,7 @@ Item{
 
                     testQueryResult.visible = true
                     dataPreviewResult.visible = false
-                    displayResult.visible = false
+
 
                 }
             }
@@ -121,7 +121,7 @@ Item{
 
                     testQueryResult.visible = false
                     dataPreviewResult.visible = true
-                    displayResult.visible = false
+
 
                     QueryModel.callSql()
 
@@ -176,10 +176,6 @@ Item{
                     testQueryBtnBackground.color = testQueryBtn.hovered ? Constants.themeColor : Constants.whiteColor
                     dataPreviewBtnBackground.color = dataPreviewBtn.hovered ? Constants.themeColor : Constants.whiteColor
                     displayLimitBtnBackground.color = Constants.themeColor
-
-                    testQueryResult.visible = false
-                    dataPreviewResult.visible = false
-                    displayResult.visible = true
 
                 }
 
@@ -328,18 +324,21 @@ Item{
         anchors.rightMargin: column_querymodeller.width + 50
         width: parent.width - column_querymodeller.width - 50
 
-        TestQuery{
-            id: testQueryPreview
+        // "Test Query Results" - Status of query section -> Execution Time starts
+
+        TestQueryResultsTable{
+            id: testQueryResult
         }
+
+        // "Test Query Results" Ends
+
+        // "Data Priview" Table Starts
 
         DataPreviewTable{
             id: dataPreviewResult
         }
 
-
-        Row{
-            id:displayResult
-        }
+        // "Data Priview" Table Ends
 
     }
 
@@ -366,6 +365,6 @@ Item{
         anchors.bottom: parent.bottom
     }
 
-    // Result starts
+    // Result Ends
 
 }

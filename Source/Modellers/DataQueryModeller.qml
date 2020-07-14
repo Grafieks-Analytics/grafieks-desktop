@@ -439,9 +439,6 @@ Page {
 
 
 
-
-    // Righthand Panel starts
-
     ToolSeparator{
         id: toolsep2
         height:parent.height
@@ -450,6 +447,11 @@ Page {
         anchors.rightMargin: 194
         anchors.topMargin: -5
     }
+
+
+
+    // Righthand Panel starts
+
 
     Column{
         id: column_querymodeller

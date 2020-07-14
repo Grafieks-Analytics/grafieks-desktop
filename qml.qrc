@@ -53,21 +53,16 @@
         <file>Source/Datasources/SubComponents/DataSourcesGrid.qml</file>
         <file>Source/Datasources/SubComponents/DataSourcesList.qml</file>
         <file>Source/Modellers/DataQueryModeller.qml</file>
-        <file>Source/Modellers/SubComponents/CategoricalFilterPopup.qml</file>
         <file>Source/Modellers/SubComponents/DataFilters.qml</file>
         <file>Source/Modellers/SubComponents/DataFiltersPopup.qml</file>
-        <file>Source/Modellers/SubComponents/DataFilterTestPopup.qml</file>
         <file>Source/Modellers/SubComponents/DataModeller.qml</file>
         <file>Source/Modellers/SubComponents/DataPreviewTable.qml</file>
         <file>Source/Modellers/SubComponents/DateFilter.qml</file>
         <file>Source/Modellers/SubComponents/GroupFilter.qml</file>
         <file>Source/Modellers/SubComponents/InfoTable.qml</file>
         <file>Source/Modellers/SubComponents/InMemory.qml</file>
-        <file>Source/Modellers/SubComponents/MainMenuDelegate.qml</file>
-        <file>Source/Modellers/SubComponents/MenuSeparatorComponent.qml</file>
         <file>Source/Modellers/SubComponents/NumericalFilter.qml</file>
         <file>Source/Modellers/SubComponents/QueryModeller.qml</file>
-        <file>Source/Modellers/SubComponents/TestQueryResultsTable.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/AllCategoricalFilters.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/AllDateFilters.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/AllFilters.qml</file>
@@ -92,8 +87,8 @@
         <file>Source/Dashboards/NewDashboard.qml</file>
         <file>Source/Reports/NewReport.qml</file>
         <file>Source/Reports/SubComponents/ReportCustomizations.qml</file>
-        <file>Source/Modellers/SubComponents/TestQuery.qml</file>
         <file>Source/Modellers/SubComponents/PublishDatasource.qml</file>
-        <file>Source/Others/Test3.qml</file>
+        <file>Source/Modellers/SubComponents/CategoricalFilter.qml</file>
+        <file>Source/Modellers/SubComponents/TestQueryResultsTable.qml</file>
     </qresource>
 </RCC>
