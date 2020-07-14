@@ -122,9 +122,6 @@ Item{
                     testQueryResult.visible = false
                     dataPreviewResult.visible = true
 
-
-                    QueryModel.callSql()
-
                 }
 
 

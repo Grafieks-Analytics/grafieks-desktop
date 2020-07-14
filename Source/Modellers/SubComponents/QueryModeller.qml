@@ -20,7 +20,6 @@ Item{
     width: parent.width
     property int totalLineCount: 1
 
-
     // For line numbers
     ListModel {
         id: elementModel
@@ -92,6 +91,12 @@ Item{
                     totalLineCount--
                 }
             }
+        }
+
+        onTextChanged: {
+
+            // Set the Tmp SQL Query in C++
+            QueryModel.setTmpSql(textedit_querymodeller.text.replace(/\n|\r/g, ""))
         }
 
     }
