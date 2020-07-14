@@ -12,6 +12,7 @@
 class QueryModel : public QSqlQueryModel
 {
     Q_OBJECT
+
     // For Partial query in DataQueryModeller.qml (TextEdit)
     Q_PROPERTY(QString tmpSql READ tmpSql WRITE setTmpSql NOTIFY tmpSqlChanged)
 

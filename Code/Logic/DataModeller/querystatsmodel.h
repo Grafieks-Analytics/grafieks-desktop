@@ -21,7 +21,9 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     QHash<int, QByteArray> roleNames() const;
 
-    Q_INVOKABLE void callQuery();
+    Q_INVOKABLE void setProfiling(bool status);
+    Q_INVOKABLE void resetProfiling();
+    Q_INVOKABLE void showStats();
 
 private:
     void generateRoleNames();

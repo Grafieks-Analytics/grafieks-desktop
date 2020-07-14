@@ -3,15 +3,6 @@
 QueryStatsModel::QueryStatsModel(QObject *parent) : QSqlQueryModel(parent)
 {
 
-//    QSqlDatabase dbMysql = QSqlDatabase::addDatabase("QMYSQL");
-//    dbMysql.setHostName("localhost");
-//    dbMysql.setPort(3306);
-//    dbMysql.setDatabaseName("grafieks_my");
-//    dbMysql.setUserName("root");
-//    dbMysql.setPassword("123@312QQl");
-
-//    dbMysql.open();
-//    this->setQuery("SET profiling = 1", dbMysql);
 }
 
 void QueryStatsModel::setQuery(const QString &query, const QSqlDatabase &db)
@@ -44,26 +35,31 @@ QVariant QueryStatsModel::data(const QModelIndex &index, int role) const
 
 QHash<int, QByteArray> QueryStatsModel::roleNames() const
 {
-    return m_roleNames;
+    return {{Qt::DisplayRole, "display"}};
 }
 
-void QueryStatsModel::callQuery()
+void QueryStatsModel::setProfiling(bool status)
 {
-    QSqlDatabase dbMysql = QSqlDatabase::addDatabase("QMYSQL");
-    dbMysql.setHostName("localhost");
-    dbMysql.setPort(3306);
-    dbMysql.setDatabaseName("grafieks_my");
-    dbMysql.setUserName("root");
-    dbMysql.setPassword("123@312QQl");
+    if(status == true){
+        this->setQuery("SET profiling = 1");
+    } else{
+        this->setQuery("SET profiling = 0");
+    }
 
-    dbMysql.open();
+    //    this->setQuery("SHOW PROFILES");
+}
 
-    this->setQuery("SET profiling = 1", dbMysql);
-    this->setQuery("SELECT * FROM users", dbMysql);
-    this->setQuery("SHOW PROFILES", dbMysql);
+void QueryStatsModel::resetProfiling()
+{
+    this->setQuery("SET profiling = 0");
+    this->setQuery("SET profiling_history_size = 0");
+    this->setQuery("SET profiling_history_size = 100");
+    this->setQuery("SET profiling = 1");
+}
 
-    qDebug() << "In here";
-
+void QueryStatsModel::showStats()
+{
+    this->setQuery("SHOW profiles");
 }
 
 void QueryStatsModel::generateRoleNames()
