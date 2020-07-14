@@ -30,7 +30,6 @@
         <file>Source/Others/Home.qml</file>
         <file>main.qml</file>
         <file>Constants.qml</file>
-        <file>Source/Others/Test3.qml</file>
         <file>Source/MainSubComponents/SelectDropdown.qml</file>
         <file>Source/MainSubComponents/ReadOnlyTextBox.qml</file>
         <file>Source/MainSubComponents/CustomButton.qml</file>
@@ -95,5 +94,6 @@
         <file>Source/Reports/SubComponents/ReportCustomizations.qml</file>
         <file>Source/Modellers/SubComponents/TestQuery.qml</file>
         <file>Source/Modellers/SubComponents/PublishDatasource.qml</file>
+        <file>Source/Others/Test3.qml</file>
     </qresource>
 </RCC>

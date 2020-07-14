@@ -357,5 +357,4 @@ DISTFILES += \
     Source/Others/Home.qml \
     Source/Others/Test.qml \
     Source/Others/Test2.qml \
-    Source/Others/Test3.qml \
     main.qml
