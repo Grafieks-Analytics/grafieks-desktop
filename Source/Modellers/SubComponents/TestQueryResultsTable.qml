@@ -4,7 +4,8 @@ import QtQuick.Controls 2.4
 
 TableView {
     id: testQueryResult
-    model: testQueryModel
+    model: QueryStatsModel
+    columnWidthProvider: function (column) { return 100; }
     rowHeightProvider: function (column) { return 30; }
     width: parent.width
     visible: false
@@ -17,121 +18,24 @@ TableView {
     ScrollBar.vertical: ScrollBar{}
     topMargin: columnsHeader.implicitHeight
 
-    delegate:
-
-    // Table Content Starts
-
-    Row{
-        id: resultQueryRow
-        height:30
-        width: parent.width
-
-        Column{
-            width: 50
-            height: parent.height
-            topPadding: 5
-
-            Row{
-                height: parent.height
-                width: parent.width
-                anchors.top: parent
-                anchors.topMargin: 3
-                anchors.left: parent.left
-                leftPadding: 20
-
-                Image {
-                    id: statusImg
-                    height: 18
-                    width: 18
-                    source: "../../../Images/icons/tick.png"
-                }
-
-            }
+    delegate: Rectangle {
+        Text {
+            text: display
+            anchors.fill: parent
+            anchors.margins: 10
+            color: 'black'
+            font.pixelSize: 12
+            verticalAlignment: Text.AlignVCenter
 
         }
-
-        Column{
-            width: 50
-            height: parent.height
-
-            Row{
-                height: parent.height
-                width: parent.width
-                anchors.left: parent
-                anchors.leftMargin: 2
-
-                Text {
-                    text: qsTr(queryNumber)
-                    padding: 5
-                    leftPadding: 20
-                }
-            }
-
-        }
-
-
-        Column{
-            width: parent.width * 0.4
-            height: 30
-
-            Row{
-                height: parent.height
-                width: parent.width
-                anchors.left: parent
-
-                Text {
-                    text: qsTr(action)
-                    padding: 5
-                    leftPadding: 20
-                }
-            }
-
-        }
-
-        Column{
-            width: parent.width * 0.4
-            height: 30
-
-            Row{
-                height: parent.height
-                width: parent.width
-                anchors.left: parent
-
-                Text {
-                    text: qsTr(message)
-                    padding: 5
-                    leftPadding: 20
-                }
-            }
-        }
-
-        Column{
-            width: parent.width * 0.1
-            height: 30
-
-            Row{
-                height: parent.height
-                width: parent.width
-
-                Text {
-                    text: qsTr(duration)
-                    padding: 5
-                    leftPadding: 20
-                }
-            }
-        }
-
     }
-
-    // Table Content Ends
-
     Rectangle { // mask the headers
         z: 3
         color: "#222222"
-        y: testQueryResult.contentY
-        x: testQueryResult.contentX
-        width: testQueryResult.leftMargin
-        height: testQueryResult.topMargin
+        y: dataPreviewResult.contentY
+        x: dataPreviewResult.contentX
+        width: dataPreviewResult.leftMargin
+        height: dataPreviewResult.topMargin
     }
 
     // Table Header Starts
@@ -142,22 +46,10 @@ TableView {
         z: 3
         width: parent.width
 
-        Label {
-            id: statusColumn
-            width: 50
-            height: 30
-            text: ""
-            color: 'black'
-            padding: 10
-            leftPadding: 20
-            verticalAlignment: Text.AlignVCenter
-            background: Rectangle{
-                color: 'white'
-            }
-        }
+
         Label {
             id: numberCoulmn
-            width: 50
+            width: parent.width/5 // 20% of width
             height: 30
             text: "#"
             color: 'black'
@@ -171,9 +63,9 @@ TableView {
         }
         Label {
             id: actionCoulmn
-            width: parent.width * 0.4
+            width: parent.width/2.5 // 40% of width
             height: 30
-            text: "Action"
+            text: "Duration"
             color: 'black'
             padding: 10
             leftPadding: 20
@@ -186,9 +78,9 @@ TableView {
         Label {
 
             id: messageColumn
-            width: parent.width * 0.4
+            width: parent.width /2.5 // 40% of width
             height: 30
-            text: "Message"
+            text: "Query"
             color: 'black'
             padding: 10
             leftPadding: 20
@@ -198,22 +90,23 @@ TableView {
             }
 
         }
-        Label {
-            id: durationColumn
-            width: parent.width  - ( statusColumn.width + numberCoulmn.width + actionCoulmn.width + messageColumn.width)
-            height: 30
-            text: "Duration"
-            color: 'black'
-            padding: 10
-            leftPadding: 20
-            verticalAlignment: Text.AlignVCenter
-            background: Rectangle{
-                color: 'white'
-            }
+        //            Label {
+        //                id: durationColumn
+        //                width: parent.width  - ( statusColumn.width + numberCoulmn.width + actionCoulmn.width + messageColumn.width)
+        //                height: 30
+        //                text: "Duration"
+        //                color: 'black'
+        //                padding: 10
+        //                leftPadding: 20
+        //                verticalAlignment: Text.AlignVCenter
+        //                background: Rectangle{
+        //                    color: 'white'
+        //                }
 
-        }
+        //            }
 
     }
+    // Table Header Ends
 
     // Table Header Ends
 

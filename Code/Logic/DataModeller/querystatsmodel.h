@@ -14,6 +14,8 @@
 class QueryStatsModel : public QSqlQueryModel
 {
     Q_OBJECT
+    Q_PROPERTY(bool profileStatus READ profileStatus WRITE setProfileStatus NOTIFY profileStatusChanged)
+
 public:
     explicit QueryStatsModel(QObject *parent = nullptr);
     void setQuery(const QString &query, const QSqlDatabase &db = QSqlDatabase());
@@ -24,14 +26,23 @@ public:
     Q_INVOKABLE void setProfiling(bool status);
     Q_INVOKABLE void resetProfiling();
     Q_INVOKABLE void showStats();
+//    Q_INVOKABLE void callQuery();
+
+    bool profileStatus() const;
+
+public slots:
+
+    void setProfileStatus(bool profileStatus);
 
 private:
     void generateRoleNames();
     QHash<int, QByteArray> m_roleNames;
     QSqlDatabase dbMysql;
+    bool m_profileStatus;
 
 signals:
 
+void profileStatusChanged(bool profileStatus);
 };
 
 #endif // QUERYSTATSMODEL_H

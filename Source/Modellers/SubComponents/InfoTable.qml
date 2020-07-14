@@ -17,6 +17,8 @@ Item{
     visible: true
     height: infodataTableHeader.height + queryResultsTable.height
 
+    property bool profilingStatus: false
+
     Row{
         id: infodataTableHeader
         height: 27
@@ -221,7 +223,17 @@ Item{
 
                 onClicked:{
                     testQueryBtn.visible = true
+
+                    // Set profiling on when clicking the play button
+                    // Reset profiling and turn off when clicked on Publish button
+
+                    if(QueryStatsModel.profileStatus === false){
+                        QueryStatsModel.setProfiling(true)
+                        QueryStatsModel.setProfileStatus(true)
+                    }
+
                     QueryModel.callSql()
+                    QueryStatsModel.showStats()
                 }
 
             }

@@ -6,12 +6,20 @@ Page {
 
     id : somepageid
 
-    Component.onCompleted: {
-        QueryStatsModel.callQuery()
+    Button {
+        id: x
+        text: "bat"
+
+        onClicked: {
+            QueryStatsModel.setProfiling(true)
+            QueryModel.setTmpSql("SELECT * FROM dashboards");
+            QueryModel.callSql()
+            QueryStatsModel.showStats()
+        }
     }
 
     ListModel{
-        id: x
+        id: y
         ListElement{
             name: "a"
             surname: "b"
@@ -19,6 +27,8 @@ Page {
     }
 
     TableView{
+        id: a
+        anchors.top: x.bottom
         model: QueryStatsModel
         height: 500
         width: 400
@@ -26,27 +36,6 @@ Page {
             Text {
             text: display
 
-        }
-
-
-        Row {
-            id: columnsHeader1
-            y: dataPreviewResult.contentY
-            z: 2
-            Repeater {
-                model: dataPreviewResult.columns > 0 ? dataPreviewResult.columns : 1
-                Label {
-                    width: dataPreviewResult.columnWidthProvider(modelData)
-                    height: 35
-                    text: QueryStatsModel.headerData(modelData, Qt.Horizontal)
-                    color: 'black'
-                    font.pixelSize: 15
-                    padding: 10
-                    verticalAlignment: Text.AlignVCenter
-
-                    background: Rectangle { color: "white" }
-                }
-            }
         }
     }
 

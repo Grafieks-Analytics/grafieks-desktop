@@ -1,6 +1,7 @@
 #include "querystatsmodel.h"
 
-QueryStatsModel::QueryStatsModel(QObject *parent) : QSqlQueryModel(parent)
+QueryStatsModel::QueryStatsModel(QObject *parent) : QSqlQueryModel(parent),
+    m_profileStatus(false)
 {
 
 }
@@ -36,21 +37,24 @@ QVariant QueryStatsModel::data(const QModelIndex &index, int role) const
 QHash<int, QByteArray> QueryStatsModel::roleNames() const
 {
     return {{Qt::DisplayRole, "display"}};
+//        return m_roleNames;
 }
 
 void QueryStatsModel::setProfiling(bool status)
 {
+
+    QSqlDatabase dbMysql = QSqlDatabase::database();
     if(status == true){
         this->setQuery("SET profiling = 1");
+
     } else{
         this->setQuery("SET profiling = 0");
     }
-
-    //    this->setQuery("SHOW PROFILES");
 }
 
 void QueryStatsModel::resetProfiling()
 {
+    QSqlDatabase dbMysql = QSqlDatabase::database();
     this->setQuery("SET profiling = 0");
     this->setQuery("SET profiling_history_size = 0");
     this->setQuery("SET profiling_history_size = 100");
@@ -59,8 +63,31 @@ void QueryStatsModel::resetProfiling()
 
 void QueryStatsModel::showStats()
 {
+    QSqlDatabase dbMysql = QSqlDatabase::database();
     this->setQuery("SHOW profiles");
 }
+
+//void QueryStatsModel::callQuery()
+//{
+//    QSqlDatabase dbMysql = QSqlDatabase::database();
+//    this->setQuery("SELECT * FROM users");
+//    this->setQuery("SELECT * FROM profiles");
+//}
+
+bool QueryStatsModel::profileStatus() const
+{
+    return m_profileStatus;
+}
+
+void QueryStatsModel::setProfileStatus(bool profileStatus)
+{
+    if (m_profileStatus == profileStatus)
+        return;
+
+    m_profileStatus = profileStatus;
+    emit profileStatusChanged(m_profileStatus);
+}
+
 
 void QueryStatsModel::generateRoleNames()
 {

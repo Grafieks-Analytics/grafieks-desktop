@@ -30,35 +30,6 @@ Page {
     height: parent.height
 
 
-    // List Models - Can be deleted
-
-    ListModel{
-        id : testQueryModel
-        ListElement{
-            status: "tick"
-            queryNumber:"2"
-            action:""
-            message:""
-            duration:""
-        }
-
-    }
-
-    ListModel{
-        id : dataPreviewModel
-        ListElement{
-            customerId: "1"
-            customerName: "Abhishek"
-            dob:"2020-08-30"
-            orderNo:"Sales Order Number"
-            orderLine:"Sales Order Line"
-            productNo:"productNo"
-        }
-
-    }
-
-    // List Models ends
-
     Connections{
         target: ConnectorsLoginModel
 
@@ -697,6 +668,9 @@ Page {
                     //                    Datasources.setDsName(ds_name.text)
                     //                    Datasources.setSourceType("live")
                     publishDatasource.visible = true
+
+                    QueryStatsModel.setProfiling(false)
+                    QueryStatsModel.setProfileStatus(false)
 
                 }
             }
