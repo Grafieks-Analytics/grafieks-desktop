@@ -11,6 +11,8 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
+import QtQuick.Dialogs 1.3
+//import Qt.labs.platform 1.1
 
 import com.grafieks.singleton.constants 1.0
 
@@ -89,8 +91,11 @@ Page {
                         datamodeller_querymodeller_background.color = Constants.darkThemeColor;
                         query_querymodeller_background.color = query_querymodeller_background.hovered ? Constants.darkThemeColor : Constants.themeColor
 
-                        data_query_modeller_stackview.pop()
-                        data_query_modeller_stackview.push("./SubComponents/DataModeller.qml")
+                        // Prompt dialog to warn user of data deletion
+                        // If accepted, the clear data
+                        // and push to another stackview screen
+                        // MessageDialog defined at the bottom
+                        dataRemovalWarningDataModel.open()
                     }
 
                 }
@@ -139,8 +144,11 @@ Page {
                         query_querymodeller_background.color = Constants.darkThemeColor
                         datamodeller_querymodeller_background.color = datamodeller_querymodeller.hovered ? Constants.darkThemeColor : Constants.themeColor
 
-                        data_query_modeller_stackview.pop()
-                        data_query_modeller_stackview.push("./SubComponents/QueryModeller.qml")
+                        // Prompt dialog to warn user of data deletion
+                        // If accepted, the clear data
+                        // and push to another stackview screen
+                        // MessageDialog defined at the bottom
+                        dataRemovalWarningQueryModel.open()
                     }
 
                 }
@@ -713,5 +721,31 @@ Page {
             }
         }
     }
+
+    MessageDialog{
+        id: dataRemovalWarningDataModel
+        title: "Warning"
+        text: "Your diagram will be lost. Are you sure you want to proceed?"
+        icon: StandardIcon.Critical
+
+        onAccepted: {
+            data_query_modeller_stackview.pop()
+            data_query_modeller_stackview.push("./SubComponents/QueryModeller.qml")
+        }
+    }
+
+    MessageDialog{
+        id: dataRemovalWarningQueryModel
+        title: "Warning"
+        text: "Your query will be lost. Are you sure you want to proceed?"
+        icon: StandardIcon.Critical
+
+        onAccepted: {
+            data_query_modeller_stackview.pop()
+            data_query_modeller_stackview.push("./SubComponents/DataModeller.qml")
+        }
+
+    }
+
 
 }
