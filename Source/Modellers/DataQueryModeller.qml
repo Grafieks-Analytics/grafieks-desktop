@@ -673,8 +673,7 @@ Page {
                 height: 40
 
                 onClicked: {
-                    //                    Datasources.setDsName(ds_name.text)
-                    //                    Datasources.setSourceType("live")
+
                     publishDatasource.visible = true
 
                     QueryStatsModel.setProfiling(false)
@@ -741,6 +740,8 @@ Page {
         icon: StandardIcon.Critical
 
         onAccepted: {
+            QueryModel.setTmpSql("")
+
             data_query_modeller_stackview.pop()
             data_query_modeller_stackview.push("./SubComponents/DataModeller.qml")
         }
