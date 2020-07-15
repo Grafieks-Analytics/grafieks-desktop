@@ -3,9 +3,9 @@ import QtQuick.Controls 2.4
 
 
 TableView {
-    id: testQueryResult
+    id: dataPreviewResult
     model: QueryStatsModel
-    columnWidthProvider: function (column) { return 100; }
+    columnWidthProvider: function (column) { return 200; }
     rowHeightProvider: function (column) { return 30; }
     width: parent.width
     visible: false
@@ -18,17 +18,38 @@ TableView {
     ScrollBar.vertical: ScrollBar{}
     topMargin: columnsHeader.implicitHeight
 
-    delegate: Rectangle {
-        Text {
-            text: display
-            anchors.fill: parent
-            anchors.margins: 10
-            color: 'black'
-            font.pixelSize: 12
-            verticalAlignment: Text.AlignVCenter
+    delegate:
+
+        Row{
+
+
+        Loader{
+            active: model.column === 0
+            sourceComponent:
+                Rectangle{
+                id: rect
+                width: 30
+                height: 30
+
+                Image{
+                    source: "../../../Images/icons/tick.png"
+                    height: 18
+                    width: 18
+                }
+            }
 
         }
+
+
+
+        Text {
+            text: modelData
+        }
     }
+
+
+
+
     Rectangle { // mask the headers
         z: 3
         color: "#222222"
@@ -44,17 +65,27 @@ TableView {
         id: columnsHeader
         y: testQueryResult.contentY
         z: 3
-        width: parent.width
-
+        width: testQueryResult.width
 
         Label {
-            id: numberCoulmn
-            width: parent.width/5 // 20% of width
+            id: imageStatus
+            width: 30
             height: 30
             text: "#"
             color: 'black'
-            padding: 10
-            leftPadding: 20
+            verticalAlignment: Text.AlignVCenter
+            background: Rectangle{
+                color: 'white'
+            }
+
+        }
+
+        Label {
+            id: numberCoulmn
+            width: 200
+            height: 30
+            text: "#"
+            color: 'black'
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
                 color: 'white'
@@ -63,12 +94,10 @@ TableView {
         }
         Label {
             id: actionCoulmn
-            width: parent.width/2.5 // 40% of width
+            width: 200
             height: 30
             text: "Duration"
             color: 'black'
-            padding: 10
-            leftPadding: 20
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
                 color: 'white'
@@ -78,36 +107,19 @@ TableView {
         Label {
 
             id: messageColumn
-            width: parent.width /2.5 // 40% of width
+            width: 200
             height: 30
             text: "Query"
             color: 'black'
-            padding: 10
-            leftPadding: 20
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
                 color: 'white'
             }
 
         }
-        //            Label {
-        //                id: durationColumn
-        //                width: parent.width  - ( statusColumn.width + numberCoulmn.width + actionCoulmn.width + messageColumn.width)
-        //                height: 30
-        //                text: "Duration"
-        //                color: 'black'
-        //                padding: 10
-        //                leftPadding: 20
-        //                verticalAlignment: Text.AlignVCenter
-        //                background: Rectangle{
-        //                    color: 'white'
-        //                }
 
-        //            }
 
     }
-    // Table Header Ends
-
     // Table Header Ends
 
     ScrollIndicator.horizontal: ScrollIndicator { }

@@ -37,7 +37,6 @@ QVariant QueryStatsModel::data(const QModelIndex &index, int role) const
 QHash<int, QByteArray> QueryStatsModel::roleNames() const
 {
     return {{Qt::DisplayRole, "display"}};
-//        return m_roleNames;
 }
 
 void QueryStatsModel::setProfiling(bool status)
@@ -67,12 +66,6 @@ void QueryStatsModel::showStats()
     this->setQuery("SHOW profiles");
 }
 
-//void QueryStatsModel::callQuery()
-//{
-//    QSqlDatabase dbMysql = QSqlDatabase::database();
-//    this->setQuery("SELECT * FROM users");
-//    this->setQuery("SELECT * FROM profiles");
-//}
 
 bool QueryStatsModel::profileStatus() const
 {
