@@ -42,28 +42,28 @@ QHash<int, QByteArray> QueryStatsModel::roleNames() const
 void QueryStatsModel::setProfiling(bool status)
 {
 
-    QSqlDatabase dbMysql = QSqlDatabase::database();
+    QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
     if(status == true){
-        this->setQuery("SET profiling = 1");
+        this->setQuery("SET profiling = 1", dbMysql);
 
     } else{
-        this->setQuery("SET profiling = 0");
+        this->setQuery("SET profiling = 0", dbMysql);
     }
 }
 
 void QueryStatsModel::resetProfiling()
 {
-    QSqlDatabase dbMysql = QSqlDatabase::database();
-    this->setQuery("SET profiling = 0");
-    this->setQuery("SET profiling_history_size = 0");
-    this->setQuery("SET profiling_history_size = 100");
-    this->setQuery("SET profiling = 1");
+    QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
+    this->setQuery("SET profiling = 0", dbMysql);
+    this->setQuery("SET profiling_history_size = 0", dbMysql);
+    this->setQuery("SET profiling_history_size = 100", dbMysql);
+    this->setQuery("SET profiling = 1", dbMysql);
 }
 
 void QueryStatsModel::showStats()
 {
-    QSqlDatabase dbMysql = QSqlDatabase::database();
-    this->setQuery("SHOW profiles");
+    QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
+    this->setQuery("SHOW profiles", dbMysql);
 }
 
 

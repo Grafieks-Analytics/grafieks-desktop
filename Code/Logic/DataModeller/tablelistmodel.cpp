@@ -41,27 +41,20 @@ QHash<int, QByteArray> TableListModel::roleNames() const
 void TableListModel::callQuery(QString queryString)
 {
 
-    //    QSqlDatabase dbMysql = QSqlDatabase::database();
+//        QSqlDatabase dbMysql = QSqlDatabase::database();
 
     switch(Statics::currentDbIntType){
 
 
     case Constants::mysqlIntType:{
 
-        QSqlDatabase dbMysql = QSqlDatabase::addDatabase("QMYSQL");
-        dbMysql.setHostName("localhost");
-        dbMysql.setPort(3306);
-        dbMysql.setDatabaseName("grafieks_my");
-        dbMysql.setUserName("root");
-        dbMysql.setPassword("123@312QQl");
-
-        dbMysql.open();
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
 
         if (queryString != ""){
 
-            this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'",dbMysql);
+            this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'", dbMysql);
         } else{
-            this->setQuery("SHOW TABLES",dbMysql);
+            this->setQuery("SHOW TABLES", dbMysql);
         }
 
         break;

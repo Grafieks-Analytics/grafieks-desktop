@@ -43,14 +43,7 @@ QHash<int, QByteArray> DBListModel::roleNames() const
 void DBListModel::callQuery(QString queryString)
 {
 
-    QSqlDatabase dbMysql = QSqlDatabase::addDatabase("QMYSQL");
-    dbMysql.setHostName("localhost");
-    dbMysql.setPort(3306);
-    dbMysql.setDatabaseName("grafieks_my");
-    dbMysql.setUserName("root");
-    dbMysql.setPassword("123@312QQl");
-
-    dbMysql.open();
+    QSqlDatabase dbMysql = QSqlDatabase::addDatabase(Constants::mysqlStrType);
 
     if(queryString != ""){
         this->setQuery("SHOW DATABASES LIKE '%"+queryString+"%'", dbMysql);
@@ -60,18 +53,6 @@ void DBListModel::callQuery(QString queryString)
 
 }
 
-void DBListModel::callQuery2(QString queryString)
-{
-//    QSqlDatabase dbMysql = QSqlDatabase::database();
-
-    qDebug() << queryString << "blank";
-
-    if(queryString != ""){
-        this->setQuery("SHOW DATABASES LIKE '%"+queryString+"%'");
-    } else{
-        this->setQuery("SHOW DATABASES");
-    }
-}
 
 void DBListModel::generateRoleNames()
 {

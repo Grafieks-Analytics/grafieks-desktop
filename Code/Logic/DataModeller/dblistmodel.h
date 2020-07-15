@@ -23,7 +23,6 @@ public:
     QHash<int, QByteArray> roleNames() const;
 
     Q_INVOKABLE void callQuery(QString queryString = "");
-    Q_INVOKABLE void callQuery2(QString queryString = "");
 
 private:
     void generateRoleNames();

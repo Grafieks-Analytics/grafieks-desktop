@@ -8,6 +8,7 @@
 #include <QObject>
 
 #include "../../Connectors/allconnectors.h"
+#include "../../constants.h"
 
 class QueryModel : public QSqlQueryModel
 {

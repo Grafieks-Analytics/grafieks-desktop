@@ -724,26 +724,26 @@ Page {
     MessageDialog{
         id: dataRemovalWarningDataModel
         title: "Warning"
-        text: "Your diagram will be lost. Are you sure you want to proceed?"
+        text: "Your query will be lost. Are you sure you want to proceed?"
         icon: StandardIcon.Critical
 
         onAccepted: {
             data_query_modeller_stackview.pop()
-            data_query_modeller_stackview.push("./SubComponents/QueryModeller.qml")
+            data_query_modeller_stackview.push("./SubComponents/DataModeller.qml")
         }
     }
 
     MessageDialog{
         id: dataRemovalWarningQueryModel
         title: "Warning"
-        text: "Your query will be lost. Are you sure you want to proceed?"
+        text: "Your diagram will be lost. Are you sure you want to proceed?"
         icon: StandardIcon.Critical
 
         onAccepted: {
             QueryModel.setTmpSql("")
 
             data_query_modeller_stackview.pop()
-            data_query_modeller_stackview.push("./SubComponents/DataModeller.qml")
+            data_query_modeller_stackview.push("./SubComponents/QueryModeller.qml")
         }
 
     }
