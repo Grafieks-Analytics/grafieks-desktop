@@ -10,7 +10,6 @@
 #include <QtQml>
 
 #include "Code/Connectors/mysqlcon.h"
-#include "Code/Logic/General/qttest2.h"
 #include "Code/Logic/Menu/user.h"
 #include "Code/Logic/Connectors/connectorfilter.h"
 #include "Code/Logic/Connectors/connectorsloginmodel.h"
@@ -28,8 +27,9 @@
 #include "Code/Logic/Connectors/boxmodel.h"
 #include "Code/Logic/Connectors/sheetds.h"
 #include "Code/Logic/Connectors/sheetmodel.h"
+#include "Code/Logic/General/tableschemamodel.h"
 
-#include "Code/Logic/General/testing.h"
+#include "Code/Logic/General/qttest2.h"
 
 
 #include "Code/statics.h"
@@ -69,9 +69,6 @@ int main(int argc, char *argv[])
     // Initialize Objects
     QtTest2 qttest2;
 
-//    Testing testing;
-//    QtTest2 *qttest2 = new QtTest2();
-//    Testing testing;
 
     MysqlCon mysqlconnect;
     User User;
@@ -83,6 +80,7 @@ int main(int argc, char *argv[])
     QueryModel queryModel;
     QueryStatsModel queryStatsModel;
     DBListModel dblistModel;
+    TableSchemaModel tableSchemaModel;
 
     // Datasource Connector Initializations
     DropboxModel dropboxModel;
@@ -115,7 +113,6 @@ int main(int argc, char *argv[])
 
     // Set contexts for QML
     engine.rootContext()->setContextProperty("QtTest2", &qttest2);
-//    engine.rootContext()->setContextProperty("Testing", &testing);
     engine.rootContext()->setContextProperty("MysqlConnect", &mysqlconnect);
     engine.rootContext()->setContextProperty("User", &User);
     engine.rootContext()->setContextProperty("ConnectorFilter", &connectorFilter);
@@ -134,6 +131,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("BoxDS",box);
     engine.rootContext()->setContextProperty("SheetModel",&sheetModel);
     engine.rootContext()->setContextProperty("SheetDS",sheet);
+    engine.rootContext()->setContextProperty("TableSchemaModel", &tableSchemaModel);
 
 
 

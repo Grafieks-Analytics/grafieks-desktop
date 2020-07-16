@@ -32,6 +32,7 @@ SOURCES += \
         Code/Logic/Connectors/sheetds.cpp \
         Code/Logic/Connectors/sheetmodel.cpp \
         Code/Logic/DataModeller/dblistmodel.cpp \
+    Code/Logic/DataModeller/filterresultmodel.cpp \
         Code/Logic/DataModeller/querymodel.cpp \
         Code/Logic/DataModeller/querystatsmodel.cpp \
         Code/Logic/DataModeller/tablelistmodel.cpp \
@@ -41,6 +42,7 @@ SOURCES += \
         Code/Logic/Datasources/datasourcemodel.cpp \
         Code/Logic/General/qttest2.cpp \
 #        Code/Logic/General/testing.cpp \
+    Code/Logic/General/tableschemamodel.cpp \
         Code/Logic/General/testing.cpp \
         Code/Logic/Menu/user.cpp \
         main.cpp
@@ -108,6 +110,7 @@ HEADERS += \
     Code/Logic/Connectors/sheetds.h \
     Code/Logic/Connectors/sheetmodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
+    Code/Logic/DataModeller/filterresultmodel.h \
     Code/Logic/DataModeller/querymodel.h \
     Code/Logic/DataModeller/querystatsmodel.h \
     Code/Logic/DataModeller/tablelistmodel.h \
@@ -117,6 +120,7 @@ HEADERS += \
     Code/Logic/Datasources/datasourcemodel.h \
     Code/Logic/General/qttest2.h \
 #    Code/Logic/General/testing.h \
+    Code/Logic/General/tableschemamodel.h \
     Code/Logic/General/testing.h \
     Code/Logic/Menu/user.h \
     \ \
