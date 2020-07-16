@@ -5,13 +5,25 @@ TableSchemaModel::TableSchemaModel(QObject *parent) : QObject(parent)
 
 }
 
-QString TableSchemaModel::showSchema(QString dbType)
+QString TableSchemaModel::showSchema(QString tableName)
 {
-    Q_UNUSED(dbType);
-
     QString bingo = "bingo";
+    QString queryString;
 
-    qDebug() << bingo;
+    switch(Statics::currentDbIntType){
+
+    case Constants::mysqlIntType:{
+
+        queryString = "DESCRIBE " + tableName;
+
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
+
+        break;
+    }
+
+    }
+
+
     return bingo;
 
 }

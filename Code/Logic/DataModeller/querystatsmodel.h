@@ -1,7 +1,6 @@
 #ifndef QUERYSTATSMODEL_H
 #define QUERYSTATSMODEL_H
 
-#include <QObject>
 #include <QSqlQueryModel>
 #include <QSqlRecord>
 #include <QSqlField>

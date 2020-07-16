@@ -37,9 +37,30 @@ QHash<int, QByteArray> FilterResultModel::roleNames() const
     return m_roleNames;
 }
 
-void FilterResultModel::callQuery(QString queryString)
+void FilterResultModel::callQuery(QString fieldName, QString tableName, QString searchString)
 {
-    switch(Statics::currentDbIntType){}
+    QString queryString;
+
+    switch(Statics::currentDbIntType){
+
+    case Constants::mysqlIntType:{
+
+        if (searchString != ""){
+            queryString = "SELECT DISTINCT " + fieldName + " FROM "+ tableName + " WHERE " + fieldName + " LIKE '%"+searchString+"%'";
+        } else{
+            queryString = "SELECT DISTINCT " + fieldName + " FROM "+ tableName;
+        }
+
+        qDebug() << queryString << "QueryString";
+
+
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
+        this->setQuery(queryString, dbMysql);
+
+        break;
+    }
+
+    }
 }
 
 void FilterResultModel::generateRoleNames()

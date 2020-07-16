@@ -41,8 +41,6 @@ QHash<int, QByteArray> TableListModel::roleNames() const
 void TableListModel::callQuery(QString queryString)
 {
 
-//        QSqlDatabase dbMysql = QSqlDatabase::database();
-
     switch(Statics::currentDbIntType){
 
 
@@ -70,6 +68,7 @@ void TableListModel::callQuery(QString queryString)
 
         break;
     }
+
     }
 }
 

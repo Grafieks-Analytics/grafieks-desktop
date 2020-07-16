@@ -6,7 +6,6 @@
 #include <QSqlField>
 #include <QSqlDatabase>
 #include <QObject>
-#include <QSqlDatabase>
 #include <QDebug>
 
 #include "../../Connectors/allconnectors.h"

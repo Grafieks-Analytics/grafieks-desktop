@@ -40,8 +40,17 @@ QHash<int, QByteArray> QueryModel::roleNames() const
 
 void QueryModel::callSql()
 {
-    QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
-    this->setQuery(this->tmpSql(), dbMysql);
+
+    switch(Statics::currentDbIntType){
+
+    case Constants::mysqlIntType:{
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
+        this->setQuery(this->tmpSql(), dbMysql);
+
+        break;
+    }
+
+    }
 }
 
 QString QueryModel::tmpSql() const

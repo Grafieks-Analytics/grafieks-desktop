@@ -43,15 +43,23 @@ QHash<int, QByteArray> DBListModel::roleNames() const
 void DBListModel::callQuery(QString queryString)
 {
 
-    QSqlDatabase dbMysql = QSqlDatabase::addDatabase(Constants::mysqlStrType);
+    switch(Statics::currentDbIntType){
 
-    if(queryString != ""){
-        this->setQuery("SHOW DATABASES LIKE '%"+queryString+"%'", dbMysql);
-    } else{
-        this->setQuery("SHOW DATABASES", dbMysql);
+    case Constants::mysqlIntType:{
+        QSqlDatabase dbMysql = QSqlDatabase::addDatabase(Constants::mysqlStrType);
+
+        if(queryString != ""){
+            this->setQuery("SHOW DATABASES LIKE '%"+queryString+"%'", dbMysql);
+        } else{
+            this->setQuery("SHOW DATABASES", dbMysql);
+        }
+
+        break;
     }
 
+    }
 }
+
 
 
 void DBListModel::generateRoleNames()
