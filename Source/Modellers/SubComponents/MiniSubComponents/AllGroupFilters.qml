@@ -21,17 +21,17 @@ Row{
                     columnName:"Country"
                     filterKey:"Equals 2"
                     columnValue:"USA, Canada 2"
-                  },
+                },
                 ListElement{
                     columnName:"Country"
                     filterKey:"Equals 3"
                     columnValue:"USA, Canada 2"
-                  },
+                },
                 ListElement{
                     columnName:"Country"
                     filterKey:"Equals 5"
                     columnValue:"USA, Inid 2"
-                  }
+                }
             ]
         }
         ListElement{
@@ -41,12 +41,12 @@ Row{
                     columnName:"Country 2"
                     filterKey:"Equals 2"
                     columnValue:"USA, Canada 2"
-                  },
+                },
                 ListElement{
                     columnName:"Country"
                     filterKey:"Equals 3"
                     columnValue:"USA, Canada 2"
-                  }
+                }
             ]
         }
     }
@@ -61,7 +61,7 @@ Row{
 
         delegate:
 
-        Rectangle{
+            Rectangle{
 
             height: filterObject.count * (40 + rowSpacing)
             width: allGroupFilter.width
@@ -91,7 +91,7 @@ Row{
 
                     delegate:
 
-                        Row{
+                        Rectangle{
                         id:listFiltersContent
                         height: 30
                         width: parent.width
@@ -99,6 +99,7 @@ Row{
                         anchors.topMargin: 30
 
                         Column{
+                            id: columnId
                             height: 30
                             width: parent.width / 3 - 25
 
@@ -110,22 +111,28 @@ Row{
 
 
                         Column{
+                            id: filterKeyId
                             height: 30
                             width: parent.width / 3 - 50
 
+                            anchors.left: columnId.right
+
                             Text {
                                 text: filterKey
-                                anchors.left: parent.left
                                 leftPadding: 20
-                                anchors.verticalCenter: parent.verticalCenter
+                                topPadding: 7
+
                             }
 
                         }
 
 
                         Column{
+                            id: valueContent
                             height: 30
                             width: parent.width / 3 - 25
+
+                            anchors.left: filterKeyId.right
 
                             ReadOnlyTextBox{
                                 boxWidth: parent.width
@@ -134,36 +141,40 @@ Row{
                         }
 
                         Column{
-
+                            id:btnsColumn
                             width: 100
-                            anchors.right: parent.right
 
+                            anchors.left: valueContent.right
 
-                            Row{
+                            Rectangle{
 
-                                width: parent.width
-                                anchors.top: parent.top
-                                anchors.right: parent.right
-                                anchors.topMargin: 15
-                                anchors.leftMargin: 10
-
+                                width: parent.width -2
+                                anchors.left: parent.left
+                                anchors.leftMargin: 2
+                                height: 20
 
                                 Image{
                                     id: editBtn
-                                    source: '../../../Images/icons/Edit_20.png'
-                                    anchors.top: parent.parent.top
+                                    source: '../../../../Images/icons/Edit_20.png'
+
+                                    anchors.top: parent.top
+                                    anchors.topMargin: 5
                                     anchors.left: parent.left
                                     anchors.leftMargin: 20
 
-                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.verticalCenter: Image.verticalCenter
                                 }
 
                                 Image{
                                     id: removeBtn
-                                    source: '../../../Images/icons/remove.png'
+                                    source: '../../../../Images/icons/remove.png'
+
+                                    anchors.top: parent.top
                                     anchors.left: editBtn.right
-                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.topMargin: 8
                                     anchors.leftMargin: 10
+                                    anchors.verticalCenter: Image.verticalCenter
+
                                 }
 
                             }
