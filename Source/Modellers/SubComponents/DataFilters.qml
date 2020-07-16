@@ -416,7 +416,7 @@ Popup {
         anchors.leftMargin: 20
 
 
-        AllFilters{
+        AllCategoricalFilters{
             id: allCategoricalFilterContent
         }
 
