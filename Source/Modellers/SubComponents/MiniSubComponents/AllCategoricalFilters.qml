@@ -322,7 +322,7 @@ Row{
 
                 delegate:
 
-                    Row{
+                    Rectangle{
                     id:topFiltersContent
                     height: 30
                     width: parent.width

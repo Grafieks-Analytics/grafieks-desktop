@@ -5,7 +5,8 @@ import com.grafieks.singleton.constants 1.0
 import "../../../MainSubComponents"
 
 Row{
-    width: parent.width
+    id:allGroupFilter
+    width: parent.width - 22
     y:10
     anchors.left: parent.left
     anchors.leftMargin: 20
@@ -53,16 +54,17 @@ Row{
     ListView{
         model:groupModel
         anchors.top: parent.top
-        width: parent.width
+        width: allGroupFilter.width
         height: 500
         anchors.topMargin: 10
-
+        spacing: rowSpacing
 
         delegate:
 
-        Row{
-            height: parent.height
-            width: parent.width
+        Rectangle{
+
+            height: filterObject.count * (40 + rowSpacing)
+            width: allGroupFilter.width
 
             Column{
                 id: listFiltersColumn
@@ -70,25 +72,12 @@ Row{
                 width: parent.width
                 height:listFiltersListView.height + listFilters.height
 
+                spacing: rowSpacing
+
                 Text {
                     id: listFilters
                     text: qsTr(groupName)
                     font.pointSize: Constants.fontReading
-                }
-
-
-                ListModel{
-                    id: listModel
-                    ListElement{
-                        columnName:"Customer Name"
-                        filterKey:"Equals"
-                        columnValue:"Hirak Kocharee, Chilarai"
-                    }
-                    ListElement{
-                        columnName:"PO Number"
-                        filterKey:"Exlcudes"
-                        columnValue:"ABC123, BCD987, GHF5"
-                    }
                 }
 
                 ListView{
