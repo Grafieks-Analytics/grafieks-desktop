@@ -46,7 +46,7 @@ void DBListModel::callQuery(QString queryString)
     switch(Statics::currentDbIntType){
 
     case Constants::mysqlIntType:{
-        QSqlDatabase dbMysql = QSqlDatabase::addDatabase(Constants::mysqlStrType);
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
 
         if(queryString != ""){
             this->setQuery("SHOW DATABASES LIKE '%"+queryString+"%'", dbMysql);

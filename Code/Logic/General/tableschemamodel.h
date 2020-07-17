@@ -4,6 +4,10 @@
 #include <QSqlRecord>
 #include <QSqlField>
 #include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 #include <QObject>
 #include <QDebug>
 
@@ -16,7 +20,7 @@ class TableSchemaModel : public QObject
     Q_OBJECT
 public:
     explicit TableSchemaModel(QObject *parent = nullptr);
-    Q_INVOKABLE QString showSchema(QString tableName = "");
+    Q_INVOKABLE QString showSchema(QString query = "");
 
 signals:
 

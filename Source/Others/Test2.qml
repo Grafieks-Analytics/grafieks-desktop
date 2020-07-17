@@ -6,7 +6,18 @@ Page {
 
     id : somepageid
 
-    Text{
-        text: TableSchemaModel.showSchema();
+    Connections{
+        target: ConnectorsLoginModel
+
+        onMysqlLoginStatus:{
+            if(status.status === true){
+                // Call functions
+                TableSchemaModel.showSchema("SELECT users.id, profiles.email FROM users INNER JOIN profiles ON profiles.user_id = users.id");
+            }
+        }
     }
+
+//    Text{
+//        text: TableSchemaModel.showSchema();
+//    }
 }
