@@ -5,12 +5,13 @@ TableSchemaModel::TableSchemaModel(QObject *parent) : QObject(parent)
 
 }
 
-QString TableSchemaModel::showSchema(QString query)
+QList<QStringList> TableSchemaModel::showSchema(QString query)
 {
     QString bingo = "bingo";
 
-    QString explainQuery, describeQuery;
-    QStringList tableList;
+    QString explainQueryString, describeQueryString;
+    QStringList tableList, outputDataList;
+
 
     switch(Statics::currentDbIntType){
 
@@ -18,42 +19,58 @@ QString TableSchemaModel::showSchema(QString query)
 
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
 
-        explainQuery = "EXPLAIN FORMAT = JSON "+ query;
-        QSqlQuery query(explainQuery, dbMysql);
+        // Determine the list of table names
+        // from the last query
 
-        query.first();
+        explainQueryString = "EXPLAIN FORMAT = JSON "+ query;
 
-        QJsonDocument json = QJsonDocument::fromJson(query.value(0).toString().toUtf8());
-        QJsonObject obj = json.object(); // since your string is an JSON object
+        QSqlQuery explainQuery(explainQueryString, dbMysql);
 
-        QJsonObject statusObj = obj["query_block"].toObject();
+        explainQuery.first();
+
+        QJsonDocument jsonQuery = QJsonDocument::fromJson(explainQuery.value(0).toString().toUtf8());
+        QJsonObject objQuery = jsonQuery.object();
+
+        QJsonObject statusObj = objQuery["query_block"].toObject();
         QJsonArray tablesListArray = statusObj["nested_loop"].toArray();
 
+        if(tablesListArray.size() > 0){
+            for(int i = 0; i< tablesListArray.size(); i++){
+                QJsonObject table = tablesListArray.at(i).toObject();
+                QJsonObject tableData = table["table"].toObject();
+                tableList << tableData["table_name"].toString();
+            }
+        } else{
+            QJsonObject tableData = statusObj["table"].toObject();
+            tableList << tableData["table_name"].toString();
+        }
 
-        for(int i = 0; i< tablesListArray.size(); i++){
-             QJsonObject table = tablesListArray.at(i).toObject();
-             QJsonObject tableData = table["table"].toObject();
-             qDebug() << tableData["table_name"].toString() << bingo;
+        // Determine the Table structure
+
+        for(QString tableName: tableList){
+            describeQueryString = "DESCRIBE " + tableName;
+
+            QSqlQuery describeQuery(describeQueryString, dbMysql);
+
+            while(describeQuery.next()){
+
+                QString fieldName = describeQuery.value(0).toString();
+                QString fieldType = describeQuery.value(1).toString();
+                outputDataList << tableName << fieldName << fieldType;
+
+                outputData.append(outputDataList);
+            }
         }
 
 
 
 
-
-        //        for(QString tableName: tableList){
-        //            describeQuery = "DESCRIBE " + tableName;
-        //            qDebug() <<describeQuery << bingo;
-        //        }
-
-
-
-
-        break;
+        break; // Mysql Type break
     }
 
     }
 
 
-    return bingo;
+    return outputData;
 
 }

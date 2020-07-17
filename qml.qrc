@@ -65,7 +65,6 @@
         <file>Source/Modellers/SubComponents/QueryModeller.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/AllCategoricalFilters.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/AllDateFilters.qml</file>
-        <file>Source/Modellers/SubComponents/MiniSubComponents/AllFilters.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/AllGroupFilters.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/AllNumericalFilters.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/DateFilterCalenderContent.qml</file>

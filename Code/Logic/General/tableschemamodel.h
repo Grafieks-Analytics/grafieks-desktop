@@ -20,12 +20,12 @@ class TableSchemaModel : public QObject
     Q_OBJECT
 public:
     explicit TableSchemaModel(QObject *parent = nullptr);
-    Q_INVOKABLE QString showSchema(QString query = "");
+    Q_INVOKABLE QList<QStringList> showSchema(QString query = "");
 
 signals:
 
 private:
-
+    QList<QStringList> outputData;
 
 };
 

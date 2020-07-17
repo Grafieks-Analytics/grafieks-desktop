@@ -34,7 +34,7 @@ Item{
             anchors.top: infodata_table.top
         }
 
-         // "Test Query" Button Starts
+        // "Test Query" Button Starts
 
         Rectangle{
 
@@ -78,7 +78,7 @@ Item{
 
         }
 
-         // "Test Query" Button Ends
+        // "Test Query" Button Ends
 
         ToolSeparator{
             id: seperator1
@@ -174,15 +174,64 @@ Item{
 
                     testQueryBtnBackground.color = testQueryBtn.hovered ? Constants.themeColor : Constants.whiteColor
                     dataPreviewBtnBackground.color = dataPreviewBtn.hovered ? Constants.themeColor : Constants.whiteColor
-                    displayLimitBtnBackground.color = Constants.themeColor
 
+                    selectLimitOptions.open()
                 }
 
             }
 
+
+            // "Limit menu" List Model starts
+
+            ListModel{
+                id:selectLimitList
+                ListElement{
+                    menuItem: "Display Top 100 - 1"
+                }
+                ListElement{
+                    menuItem: "Display Top 100 - 2"
+                }
+            }
+
+            // "Limit menu" List Model Ends
+
+            // "Menu Dropdown" Starts
+
+            Menu {
+                id:selectLimitOptions
+                y: 27
+                z:1
+                width: parent.width
+                height: list.count * 30
+
+                ListView{
+                    id:listView
+
+                    height: selectLimitList.count * 30
+                    width: parent.width
+                    z:2
+
+                    model:selectLimitList
+
+                    delegate: MenuItem{
+                        text: menuItem
+                        height: 30
+                        width: parent.width
+                        onTriggered: {}
+                        onClicked: {
+                            selectLimitOptions.close()
+                        }
+                    }
+                }
+
+            }
+
+            // "Menu Dropdown" Ends
+
+
         }
 
-         // "Display Limit" Button Ends
+        // "Display Limit" Button Ends
 
         ToolSeparator{
             id: seperator3
@@ -346,6 +395,7 @@ Item{
         DataPreviewTable{
             id: dataPreviewResult
         }
+
 
         // "Data Priview" Table Ends
 

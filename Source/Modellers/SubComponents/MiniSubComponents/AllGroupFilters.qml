@@ -5,7 +5,8 @@ import com.grafieks.singleton.constants 1.0
 import "../../../MainSubComponents"
 
 Row{
-    width: parent.width
+    id:allGroupFilter
+    width: parent.width - 22
     y:10
     anchors.left: parent.left
     anchors.leftMargin: 20
@@ -20,17 +21,17 @@ Row{
                     columnName:"Country"
                     filterKey:"Equals 2"
                     columnValue:"USA, Canada 2"
-                  },
+                },
                 ListElement{
                     columnName:"Country"
                     filterKey:"Equals 3"
                     columnValue:"USA, Canada 2"
-                  },
+                },
                 ListElement{
                     columnName:"Country"
                     filterKey:"Equals 5"
                     columnValue:"USA, Inid 2"
-                  }
+                }
             ]
         }
         ListElement{
@@ -40,12 +41,12 @@ Row{
                     columnName:"Country 2"
                     filterKey:"Equals 2"
                     columnValue:"USA, Canada 2"
-                  },
+                },
                 ListElement{
                     columnName:"Country"
                     filterKey:"Equals 3"
                     columnValue:"USA, Canada 2"
-                  }
+                }
             ]
         }
     }
@@ -53,16 +54,17 @@ Row{
     ListView{
         model:groupModel
         anchors.top: parent.top
-        width: parent.width
+        width: allGroupFilter.width
         height: 500
         anchors.topMargin: 10
-
+        spacing: rowSpacing
 
         delegate:
 
-        Row{
-            height: parent.height
-            width: parent.width
+            Rectangle{
+
+            height: filterObject.count * (40 + rowSpacing)
+            width: allGroupFilter.width
 
             Column{
                 id: listFiltersColumn
@@ -70,25 +72,12 @@ Row{
                 width: parent.width
                 height:listFiltersListView.height + listFilters.height
 
+                spacing: rowSpacing
+
                 Text {
                     id: listFilters
                     text: qsTr(groupName)
                     font.pointSize: Constants.fontReading
-                }
-
-
-                ListModel{
-                    id: listModel
-                    ListElement{
-                        columnName:"Customer Name"
-                        filterKey:"Equals"
-                        columnValue:"Hirak Kocharee, Chilarai"
-                    }
-                    ListElement{
-                        columnName:"PO Number"
-                        filterKey:"Exlcudes"
-                        columnValue:"ABC123, BCD987, GHF5"
-                    }
                 }
 
                 ListView{
@@ -102,7 +91,7 @@ Row{
 
                     delegate:
 
-                        Row{
+                        Rectangle{
                         id:listFiltersContent
                         height: 30
                         width: parent.width
@@ -110,6 +99,7 @@ Row{
                         anchors.topMargin: 30
 
                         Column{
+                            id: columnId
                             height: 30
                             width: parent.width / 3 - 25
 
@@ -121,22 +111,28 @@ Row{
 
 
                         Column{
+                            id: filterKeyId
                             height: 30
                             width: parent.width / 3 - 50
 
+                            anchors.left: columnId.right
+
                             Text {
                                 text: filterKey
-                                anchors.left: parent.left
                                 leftPadding: 20
-                                anchors.verticalCenter: parent.verticalCenter
+                                topPadding: 7
+
                             }
 
                         }
 
 
                         Column{
+                            id: valueContent
                             height: 30
                             width: parent.width / 3 - 25
+
+                            anchors.left: filterKeyId.right
 
                             ReadOnlyTextBox{
                                 boxWidth: parent.width
@@ -145,36 +141,40 @@ Row{
                         }
 
                         Column{
-
+                            id:btnsColumn
                             width: 100
-                            anchors.right: parent.right
 
+                            anchors.left: valueContent.right
 
-                            Row{
+                            Rectangle{
 
-                                width: parent.width
-                                anchors.top: parent.top
-                                anchors.right: parent.right
-                                anchors.topMargin: 15
-                                anchors.leftMargin: 10
-
+                                width: parent.width -2
+                                anchors.left: parent.left
+                                anchors.leftMargin: 2
+                                height: 20
 
                                 Image{
                                     id: editBtn
-                                    source: '../../../Images/icons/Edit_20.png'
-                                    anchors.top: parent.parent.top
+                                    source: '../../../../Images/icons/Edit_20.png'
+
+                                    anchors.top: parent.top
+                                    anchors.topMargin: 5
                                     anchors.left: parent.left
                                     anchors.leftMargin: 20
 
-                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.verticalCenter: Image.verticalCenter
                                 }
 
                                 Image{
                                     id: removeBtn
-                                    source: '../../../Images/icons/remove.png'
+                                    source: '../../../../Images/icons/remove.png'
+
+                                    anchors.top: parent.top
                                     anchors.left: editBtn.right
-                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.topMargin: 8
                                     anchors.leftMargin: 10
+                                    anchors.verticalCenter: Image.verticalCenter
+
                                 }
 
                             }
