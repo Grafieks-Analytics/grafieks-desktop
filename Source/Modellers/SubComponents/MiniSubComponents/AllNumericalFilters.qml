@@ -4,7 +4,7 @@ import com.grafieks.singleton.constants 1.0
 
 import "../../../MainSubComponents"
 
-Row{
+Rectangle{
     width: parent.width
     y:10
     anchors.left: parent.left
@@ -14,22 +14,51 @@ Row{
 
     property int rowSpacing: 8
 
+    ListModel{
+        id: listModel
+        ListElement{
+            columnName:"Revenue"
+            filterKey:"Equal or Greater Than"
+            columnValue:"1300"
+        }
+        ListElement{
+            columnName:"Revenue"
+            filterKey:"Equal or Greater Than"
+            columnValue:"1300"
+        }
+
+    }
+
+    ListModel{
+        id: multipleValueModel
+        ListElement{
+            columnName:"Requested Ship Date"
+            filterKey:"Between"
+            fromValue:"100"
+            toValue:"500"
+        }
+
+        ListElement{
+            columnName:"Requested Ship Date"
+            filterKey:"Between"
+            fromValue:"100"
+            toValue:"500"
+        }
+
+    }
+
+    // Two Columns here
+    // 1. for all the single values
+    // 2. for all the 2 values -> "between case"
+
+    // Single Value List Starts
+
     Column{
         id: listFiltersColumn
 
         anchors.left: parent.left
         width: parent.width
         height:filtersListView.height
-
-        ListModel{
-            id: listModel
-            ListElement{
-                columnName:"Revenue"
-                filterKey:"Equal or Greater Than"
-                columnValue:"1300"
-            }
-
-        }
 
         ListView{
             id: filtersListView
@@ -67,7 +96,6 @@ Row{
                         text: filterKey
                         anchors.left: parent.left
                         leftPadding: 20
-                        anchors.verticalCenter: parent.verticalCenter
                     }
 
                 }
@@ -89,31 +117,34 @@ Row{
                     anchors.right: parent.right
 
 
-                    Row{
+                    Rectangle{
 
                         width: parent.width
                         anchors.top: parent.top
                         anchors.right: parent.right
-                        anchors.topMargin: 15
                         anchors.leftMargin: 10
-
 
                         Image{
                             id: editBtn
-                            source: '../../../Images/icons/Edit_20.png'
-                            anchors.top: parent.parent.top
+                            source: '../../../../Images/icons/Edit_20.png'
+
+                            anchors.top: parent.top
+                            anchors.topMargin: 5
                             anchors.left: parent.left
                             anchors.leftMargin: 20
 
-                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.verticalCenter: Image.verticalCenter
                         }
 
                         Image{
-                            id: removeBtn
-                            source: '../../../Images/icons/remove.png'
+                            source: '../../../../Images/icons/remove.png'
+
+                            anchors.top: parent.top
                             anchors.left: editBtn.right
-                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.topMargin: 8
                             anchors.leftMargin: 10
+                            anchors.verticalCenter: Image.verticalCenter
+
                         }
 
                     }
@@ -125,25 +156,19 @@ Row{
         }
     }
 
+    // Single Value List Ends
+
+    // Between Case Value List Starts
+
     Column{
         id: multipleValueFiltersColumn
 
         width: parent.width
-        height:multipleValueFiltersListView.height + multipleValueHeading.height
+        height:multipleValueFiltersListView.height
 
         anchors.left: parent.left
         anchors.top: listFiltersColumn.bottom
         anchors.topMargin: 20
-
-        ListModel{
-            id: multipleValueModel
-            ListElement{
-                columnName:"Requested Ship Date"
-                filterKey:"Between"
-                fromValue:"100"
-                toValue:"500"
-            }
-        }
 
 
         ListView{
@@ -160,8 +185,6 @@ Row{
                 id:multipleValueFiltersContent
                 height: 30
                 width: parent.width
-
-                anchors.top:multipleValueFiltersColumn.top
                 anchors.topMargin: 30
 
                 Column{
@@ -183,7 +206,7 @@ Row{
                         text: filterKey
                         anchors.left: parent.left
                         leftPadding: 20
-                        anchors.verticalCenter: parent.verticalCenter
+
                     }
 
                 }
@@ -195,7 +218,7 @@ Row{
 
                     ReadOnlyTextBox{
                         boxWidth: parent.width
-                        text: columnValue
+                        text: fromValue
                     }
                 }
 
@@ -208,7 +231,6 @@ Row{
                         id: name
                         text: qsTr("To")
                         anchors.left: parent.left
-                        anchors.centerIn: parent
                     }
                 }
 
@@ -218,7 +240,7 @@ Row{
 
                     ReadOnlyTextBox{
                         boxWidth: parent.width
-                        text: columnValue
+                        text: toValue
                     }
                 }
 
@@ -228,33 +250,39 @@ Row{
                     anchors.right: parent.right
 
 
-                    Row{
+
+                    Rectangle{
 
                         width: parent.width
                         anchors.top: parent.top
                         anchors.right: parent.right
-                        anchors.topMargin: 15
                         anchors.leftMargin: 10
 
-
                         Image{
-                            id: editBtnmultipleValue
-                            source: '../../../Images/icons/Edit_20.png'
-                            anchors.top: parent.parent.top
+                            id: editBtn2
+                            source: '../../../../Images/icons/Edit_20.png'
+
+                            anchors.top: parent.top
+                            anchors.topMargin: 5
                             anchors.left: parent.left
                             anchors.leftMargin: 20
 
-                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.verticalCenter: Image.verticalCenter
                         }
 
                         Image{
-                            source: '../../../Images/icons/remove.png'
-                            anchors.left: editBtnmultipleValue.right
-                            anchors.verticalCenter: parent.verticalCenter
+                            source: '../../../../Images/icons/remove.png'
+
+                            anchors.top: parent.top
+                            anchors.left: editBtn2.right
+                            anchors.topMargin: 8
                             anchors.leftMargin: 10
+                            anchors.verticalCenter: Image.verticalCenter
+
                         }
 
                     }
+
 
                 }
             }
@@ -262,6 +290,8 @@ Row{
 
         }
 
+
+        // Between Case Value List Ends
 
     }
 

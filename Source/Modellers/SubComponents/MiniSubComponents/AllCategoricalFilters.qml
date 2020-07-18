@@ -58,10 +58,17 @@ Rectangle{
         }
     }
 
+    // Three Columns here
+    // 1. for List - list view
+    // 2. for Wildcard - list view
+    // 3. for Top - list view
+
     Flickable{
         width: parent.width
         anchors.left: parent.left
         height: 100
+
+        // List - list view Starts
 
         Column{
             id: listFiltersColumn
@@ -85,14 +92,13 @@ Rectangle{
                 model: listModel
                 width: parent.width
                 height: listModel.count * (30 + rowSpacing)
-//                anchors.top: listFilters.bottom
                 anchors.topMargin: 10
                 spacing: rowSpacing
                 interactive: false
 
                 delegate:
 
-                Row{
+                    Row{
                     id:listFiltersContent
                     height: 30
                     width: parent.width
@@ -179,6 +185,13 @@ Rectangle{
 
             }
         }
+
+
+        // List - list view Ends
+
+
+        // Wildcard - list view Starts
+
 
         Column{
             id: wildcardFiltersColumn
@@ -302,6 +315,9 @@ Rectangle{
 
         }
 
+        // Wildcard - list view Ends
+
+        // Top - list view Starts
 
         Column{
             id: topFiltersColumn
@@ -419,6 +435,8 @@ Rectangle{
 
 
         }
+
+        // Top - list view Ends
 
 
         ScrollBar.horizontal: ScrollBar{}
