@@ -4,12 +4,48 @@ import com.grafieks.singleton.constants 1.0
 
 import "../../../MainSubComponents"
 
-Row{
+Rectangle{
     width: parent.width
     y:10
     anchors.left: parent.left
     anchors.leftMargin: 20
     property int rowSpacing: 8
+
+    ListModel{
+        id: timeFrameModel
+        ListElement{
+            columnName:"GR Date"
+            filterKey:"Last"
+            columnValue:"3 Months"
+        }
+    }
+
+
+    ListModel{
+        id: listModel
+        ListElement{
+            columnName:"Order Date"
+            filterKey:"Equals"
+            columnValue:"6 Jan 2018, 21 Apr 2018"
+        }
+        ListElement{
+            columnName:"PO Request Date"
+            filterKey:"Exlcudes"
+            columnValue:"6 Jan 2018, 21 Apr 2018"
+        }
+    }
+
+    ListModel{
+        id: calendarModel
+        ListElement{
+            columnName:"Requested Ship Date"
+            filterKey:"Between"
+            dateFrom:"ab"
+            dateTo:"ab"
+        }
+    }
+
+    // All List Filter Starts
 
     Column{
         id: listFiltersColumn
@@ -24,27 +60,12 @@ Row{
             font.pointSize: Constants.fontReading
         }
 
-
-        ListModel{
-            id: listModel
-            ListElement{
-                columnName:"Order Date"
-                filterKey:"Equals"
-                columnValue:"6 Jan 2018, 21 Apr 2018"
-            }
-            ListElement{
-                columnName:"PO Request Date"
-                filterKey:"Exlcudes"
-                columnValue:"6 Jan 2018, 21 Apr 2018"
-            }
-        }
-
         ListView{
             id: listFiltersListView
             model: listModel
             width: parent.width
             height: listModel.count * 30
-            anchors.top: listFilters.bottom
+
             anchors.topMargin: 10
             spacing: rowSpacing
 
@@ -54,8 +75,6 @@ Row{
                 id:listFiltersContent
                 height: 30
                 width: parent.width
-
-                anchors.top:listFilters.top
                 anchors.topMargin: 30
 
                 Column{
@@ -77,7 +96,7 @@ Row{
                         text: filterKey
                         anchors.left: parent.left
                         leftPadding: 20
-                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.verticalCenter: Text.verticalCenter
                     }
 
                 }
@@ -99,31 +118,35 @@ Row{
                     anchors.right: parent.right
 
 
-                    Row{
+                    Rectangle{
 
                         width: parent.width
                         anchors.top: parent.top
                         anchors.right: parent.right
-                        anchors.topMargin: 15
                         anchors.leftMargin: 10
-
 
                         Image{
                             id: editBtn
                             source: '../../../../Images/icons/Edit_20.png'
-                            anchors.top: parent.parent.top
+
+                            anchors.top: parent.top
+                            anchors.topMargin: 5
                             anchors.left: parent.left
                             anchors.leftMargin: 20
 
-                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.verticalCenter: Image.verticalCenter
                         }
 
                         Image{
                             id: removeBtn
                             source: '../../../../Images/icons/remove.png'
+
+                            anchors.top: parent.top
                             anchors.left: editBtn.right
-                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.topMargin: 8
                             anchors.leftMargin: 10
+                            anchors.verticalCenter: Image.verticalCenter
+
                         }
 
                     }
@@ -134,6 +157,11 @@ Row{
 
         }
     }
+
+
+    // All Calendar Filter Ends
+
+    // All Calendar Filter Starts
 
     Column{
         id: calendarFiltersColumn
@@ -151,14 +179,6 @@ Row{
             font.pointSize: Constants.fontReading
         }
 
-        ListModel{
-            id: calendarModel
-            ListElement{
-                columnName:"Requested Ship Date"
-                dateFrom:"ab"
-                dateTo:"ab"
-            }
-        }
 
 
         ListView{
@@ -166,7 +186,7 @@ Row{
             model: calendarModel
             width: parent.width
             height: calendarModel.count * 30
-            anchors.top: calendarHeading.bottom
+
             anchors.topMargin: 10
             spacing: rowSpacing
 
@@ -176,8 +196,6 @@ Row{
                 id:calendarFiltersContent
                 height: 30
                 width: parent.width
-
-                anchors.top:calendarFiltersColumn.top
                 anchors.topMargin: 30
 
                 Column{
@@ -196,10 +214,10 @@ Row{
                     width: parent.width / 3 - 50
 
                     Text {
-                        text: dateFrom
-                        anchors.left: parent.left
+                        text: filterKey
+//                        anchors.left: parent.left
                         leftPadding: 20
-                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.verticalCenter: Text.verticalCenter
                     }
 
                 }
@@ -211,7 +229,7 @@ Row{
 
                     ReadOnlyTextBox{
                         boxWidth: parent.width
-                        text: columnValue
+                        text: dateFrom
                     }
                 }
 
@@ -223,8 +241,7 @@ Row{
                     Text {
                         id: name
                         text: qsTr("To")
-                        anchors.left: parent.left
-                        anchors.centerIn: parent
+                        anchors.topMargin: 5
                     }
                 }
 
@@ -244,30 +261,35 @@ Row{
                     anchors.right: parent.right
 
 
-                    Row{
+                    Rectangle{
 
                         width: parent.width
                         anchors.top: parent.top
                         anchors.right: parent.right
-                        anchors.topMargin: 15
                         anchors.leftMargin: 10
 
-
                         Image{
-                            id: editBtncalendar
+                            id: editBtn1
                             source: '../../../../Images/icons/Edit_20.png'
-                            anchors.top: parent.parent.top
+
+                            anchors.top: parent.top
+                            anchors.topMargin: 5
                             anchors.left: parent.left
                             anchors.leftMargin: 20
 
-                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.verticalCenter: Image.verticalCenter
                         }
 
                         Image{
+                            id: removeBtn1
                             source: '../../../../Images/icons/remove.png'
-                            anchors.left: editBtncalendar.right
-                            anchors.verticalCenter: parent.verticalCenter
+
+                            anchors.top: parent.top
+                            anchors.left: editBtn1.right
+                            anchors.topMargin: 8
                             anchors.leftMargin: 10
+                            anchors.verticalCenter: Image.verticalCenter
+
                         }
 
                     }
@@ -281,13 +303,16 @@ Row{
 
     }
 
+    // All Calendar Filter End
+
+    // All Time Frame Filter Starts
+
     Column{
         id: timeFrameFiltersColumn
 
         width: parent.width
         height:timeFrameFiltersListView.height + timeFrameHeading.height
 
-        anchors.left: parent.left
         anchors.top: calendarFiltersColumn.bottom
         anchors.topMargin: 20
 
@@ -297,23 +322,14 @@ Row{
             font.pointSize: Constants.fontReading
         }
 
-        ListModel{
-            id: timeFrameModel
-            ListElement{
-                columnName:"GR Date"
-                filterKey:"Last"
-                columnValue:"3 Months"
-            }
-        }
-
 
         ListView{
             id: timeFrameFiltersListView
             model: timeFrameModel
             width: parent.width
             height: timeFrameModel.count * 30
-            anchors.top: timeFrameHeading.bottom
-            anchors.topMargin: 10
+
+            anchors.topMargin: 20
             spacing: rowSpacing
 
             delegate:
@@ -323,7 +339,6 @@ Row{
                 height: 30
                 width: parent.width
 
-                anchors.top:timeFrameFiltersColumn.top
                 anchors.topMargin: 30
 
                 Column{
@@ -345,7 +360,7 @@ Row{
                         text: filterKey
                         anchors.left: parent.left
                         leftPadding: 20
-                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.verticalCenter: Text.verticalCenter
                     }
 
                 }
@@ -367,30 +382,35 @@ Row{
                     anchors.right: parent.right
 
 
-                    Row{
+                    Rectangle{
 
                         width: parent.width
                         anchors.top: parent.top
                         anchors.right: parent.right
-                        anchors.topMargin: 15
                         anchors.leftMargin: 10
 
-
                         Image{
-                            id: editBtnTimeFrame
+                            id: editBtn2
                             source: '../../../../Images/icons/Edit_20.png'
-                            anchors.top: parent.parent.top
+
+                            anchors.top: parent.top
+                            anchors.topMargin: 5
                             anchors.left: parent.left
                             anchors.leftMargin: 20
 
-                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.verticalCenter: Image.verticalCenter
                         }
 
                         Image{
+                            id: removeBtn2
                             source: '../../../../Images/icons/remove.png'
-                            anchors.left: editBtnTimeFrame.right
-                            anchors.verticalCenter: parent.verticalCenter
+
+                            anchors.top: parent.top
+                            anchors.left: editBtn2.right
+                            anchors.topMargin: 8
                             anchors.leftMargin: 10
+                            anchors.verticalCenter: Image.verticalCenter
+
                         }
 
                     }
@@ -403,5 +423,7 @@ Row{
 
 
     }
+
+    // All Time Frame Filter Ends
 
 }

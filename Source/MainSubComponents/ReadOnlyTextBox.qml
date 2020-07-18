@@ -11,7 +11,7 @@ Rectangle {
     id: box
     height: 30
     border.color: Constants.borderBlueColor
-    border.width: 2
+    border.width: Constants.borderWidth
 
     Text {
         id: textValue

@@ -22,6 +22,31 @@ Rectangle{
 
     property string selectOption: "Select Wildcard"
 
+
+    ListModel{
+        id: selectDropdown
+
+        ListElement{
+            menuItem:"Containing"
+        }
+        ListElement{
+            menuItem:"Ends With"
+        }
+        ListElement{
+            menuItem:"Equal To"
+        }
+        ListElement{
+            menuItem:"Doesn't Start with"
+        }
+        ListElement{
+            menuItem:"Doesn't End with"
+        }
+        ListElement{
+            menuItem:"Not Equal to"
+        }
+    }
+
+
     height: parent.height - 80 - 40
     width: parent.width - 40
     x:20
@@ -97,29 +122,6 @@ Rectangle{
             Column{
 
                 width: parent.width/2
-
-                ListModel{
-                    id: selectDropdown
-
-                    ListElement{
-                        menuItem:"Containing"
-                    }
-                    ListElement{
-                        menuItem:"Ends With"
-                    }
-                    ListElement{
-                        menuItem:"Equal To"
-                    }
-                    ListElement{
-                        menuItem:"Doesn't Start with"
-                    }
-                    ListElement{
-                        menuItem:"Doesn't End with"
-                    }
-                    ListElement{
-                        menuItem:"Not Equal to"
-                    }
-                }
 
                 SelectDropdown{
                     id: wildcardDropdown

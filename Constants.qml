@@ -55,4 +55,6 @@ QtObject {
     property string numericalTab: "numerical"
     property string groupTab: "group"
 
+    property double borderWidth: 1.3
+
 }

@@ -16,6 +16,6 @@ TextField{
         border.color: Constants.borderBlueColor
         radius: 6
         width: parent.width
-        border.width: 2
+        border.width: Constants.borderWidth
     }
 }

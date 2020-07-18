@@ -26,6 +26,19 @@ Popup {
     visible: false
     padding: 0
 
+    ListModel{
+        id:incrementalExtactDropDown
+        ListElement{
+            menuItem:"abc"
+        }
+        ListElement{
+            menuItem:"abc 2"
+        }
+        ListElement{
+            menuItem:"abc 3"
+        }
+    }
+
     background: Rectangle{
         color: Constants.whiteColor
     }
@@ -78,6 +91,7 @@ Popup {
         width: parent.width
         color: Constants.whiteColor
 
+        // Full Extract Radio Button Starts
 
         Row{
             id: fullExtactRadioBtn
@@ -90,8 +104,13 @@ Popup {
                 parent_dimension: 16
             }
         }
+
+        // Full Extract Radio Button Ends
+
+        // Incremental Extract Radio Button Starts
+
         Row{
-            id: incrementatlExtactRadioBtn
+            id: incrementalExtactRadioBtn
             anchors.top: fullExtactRadioBtn.bottom
             height:40
             padding: 30
@@ -103,82 +122,102 @@ Popup {
             }
         }
 
+        // Incremental Extract Radio Button Ends
+
+        // Select Dropdown Content Starts
 
         Column{
             id: selectColumn
-            anchors.top: incrementatlExtactRadioBtn.bottom
-            anchors.topMargin: 30
+            anchors.top: incrementalExtactRadioBtn.bottom
+            anchors.topMargin: 10
             height: 40
             padding: 30
+            width: parent.width
+
+            spacing: 10
+
+            // Text for Incremental Extract Dropdown Content Starts
 
             Text {
-                id: incrementatlExtactSelectbtnText
-                anchors.top: selectColumn.top
+                id: incrementalExtactSelectbtnText
                 text: qsTr("Select the column for incremental extract")
-                anchors.margins: 10
+                anchors.bottomMargin: 20
                 leftPadding: 30
             }
 
-            Row{
-                id: incrementatlExtactSelectbtn
-                anchors.top: incrementatlExtactSelectbtnText.bottom
+            // Text for Incremental Extract Dropdown Content Ends
+
+            // Incremental Extract Dropdown  Ends
+
+            Rectangle{
+                id: incrementalExtactSelectbtn
                 height: 40
-                leftPadding: 30
-                anchors.margins: 10
-                Rectangle{
-                    height: 40
-                    width: 520
-                    border.color: Constants.borderBlueColor
-                    radius: 4
+                anchors.topMargin: 20
+                width: parent.width - 120
+
+                SelectDropdown{
+                    textValue:"abc"
+                    list: incrementalExtactDropDown
+                    height: incrementalExtactDropDown.count * 30
+                    anchors.topMargin: 20
+                    anchors.left: parent.left
+                    anchors.leftMargin: 30
                 }
+
             }
+
+            // Incremental Extract Dropdown Ends
+
+
+            // Text for Schedule Data Extract Content Ends
+
 
             Text {
-                id: dataExtractSelectBtnText
-                text: qsTr("Select Schedule for data extract")
-                anchors.top: incrementatlExtactSelectbtn.bottom
-                anchors.margins: 6
+                text: qsTr("Select schedule for data extraction")
+                anchors.bottomMargin: 20
                 leftPadding: 30
             }
+            // Text for Schedule Data Extract Content Ends
 
-            Row{
-                id:dataExtractSelectBtn
-                anchors.top: dataExtractSelectBtnText.bottom
-                height: 40
-                leftPadding: 30
-                anchors.topMargin: 10
+            // Text for Schedule Data Extract Dropdown Starts
 
-                Rectangle{
-                    height: 40
-                    width: 520
-                    border.color: Constants.borderBlueColor
-                    radius: 4
+            Rectangle{
+                height: 60
+                anchors.topMargin: 20
+                width: parent.width - 120
+
+                SelectDropdown{
+                    id: scheduleForExtractDropdown
+                    textValue:"abc"
+                    list: incrementalExtactDropDown
+                    height: incrementalExtactDropDown.count * 30
+                    anchors.topMargin: 20
+                    anchors.left: parent.left
+                    anchors.leftMargin: 30
                 }
+
+                Text {
+                    id: noteText
+                    leftPadding: 30
+                    anchors.top: scheduleForExtractDropdown.top
+                    anchors.topMargin: 35
+                    text: qsTr("Above field will show all data extract schedule that is set up in GRS")
+                }
+
             }
 
-            Text {
-                id: noteText
-                anchors.top: dataExtractSelectBtn.bottom
-                leftPadding: 30
-                anchors.topMargin: 4
-                text: qsTr("Above field will show all data extract schedule that is set up in GRS")
-            }
+            // Text for Schedule Data Extract Dropdown ends
 
-            Button{
+            // Add button Starts
+
+            CustomButton{
                  id: addBtn
-                 anchors.top: noteText.bottom
-                 x: popupMain.width - 150
-                 anchors.rightMargin: 100
-                 anchors.topMargin: 20
-
-                 Text {
-                     id: name
-                     text: qsTr("Add")
-                     anchors.top: parent
-                     anchors.centerIn: parent
-                 }
+                 anchors.right: parent.right
+                 anchors.rightMargin: 60
+                 textValue: "Add"
             }
 
+            // Add button Ends
 
         }
 

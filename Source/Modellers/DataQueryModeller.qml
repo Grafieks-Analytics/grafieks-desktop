@@ -133,7 +133,7 @@ Page {
 
             TabButton{
                 id: query_querymodeller
-                text: "Query"
+                text: "Query Modeller"
                 width:100
 
                 onClicked: {
@@ -212,7 +212,7 @@ Page {
                 }
 
                 onClicked: {
-                    inMemory.visible = true
+
                 }
 
 
@@ -298,6 +298,14 @@ Page {
                 radio_text: qsTr("Live")
                 radio_checked: true
                 parent_dimension: 16
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        radio_live.radio_checked = true
+                        radio_memory.radio_checked = false
+                    }
+                }
             }
 
             // Live radio button ends
@@ -311,6 +319,16 @@ Page {
                 radio_text: qsTr("In Memory")
                 radio_checked: false
                 parent_dimension: 16
+
+                MouseArea{
+
+                    anchors.fill: parent
+                    onClicked: {
+                        inMemory.visible = true
+                        radio_live.radio_checked = false
+                        radio_memory.radio_checked = true
+                    }
+                }
             }
 
             // In memory radio button ends
