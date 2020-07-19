@@ -65,13 +65,6 @@ void PublishDatasourceModel::readComplete()
         outputStatus.insert("code", statusObj["code"].toInt());
         outputStatus.insert("msg", statusObj["msg"].toString());
 
-        // If successful, remove the user variables in settings
-        if(statusObj["code"].toInt() == 200){
-
-            //            QSettings settings;
-            //            settings.remove("user");
-        }
-
         emit publishDSStatus(outputStatus);
         m_tempStorage->clear();
     }
