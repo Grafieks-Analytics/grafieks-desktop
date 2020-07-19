@@ -143,13 +143,6 @@ Popup {
             boxWidth: 370
             boxHeight: 200
 
-            ScrollBar.horizontal: ScrollBar{}
-            ScrollBar.vertical: ScrollBar{}
-
-            ScrollIndicator.horizontal: ScrollIndicator { }
-            ScrollIndicator.vertical: ScrollIndicator { }
-
-
         }
 
     }

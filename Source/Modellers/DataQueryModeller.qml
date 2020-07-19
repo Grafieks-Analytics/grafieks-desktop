@@ -425,16 +425,10 @@ Page {
         anchors.left: left_menubar.right
         width: parent.width
         visible: true
-        height: infodataTableHeader.height + queryResultsTable.height
-
 
     }
 
     // Info table Ends
-
-
-
-
 
 
     ToolSeparator{

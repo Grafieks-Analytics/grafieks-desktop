@@ -89,11 +89,13 @@ Popup {
 
     //    Menu Starts
 
-    Row{
+    Rectangle{
         id: fullExtactRadioBtn
         height: 40
         width: parent.width
         anchors.top: headerPopup.bottom
+
+        color:"transparent"
 
         Column{
 
@@ -193,29 +195,29 @@ Popup {
 
     //    Top Menu Contents
 
-    FilterListContent{
+    CategoricalFilterListContent{
         id: listContent
     }
 
-    FilterWildcardContent{
+    CategoricalFilterWildcardContent{
         id: wildcardContent
     }
 
-    FilterTopContent{
+    CategoricalFilterTopContent{
         id: topContent
     }
 
     // Footer starts
 
-    Row{
+    Rectangle{
         id: footerContent
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 5
         anchors.rightMargin: 20
-        spacing: 5
+
         height: 30
         width: parent.width
-
+        color:"transparent"
 
         CustomButton{
             id: resetBtn

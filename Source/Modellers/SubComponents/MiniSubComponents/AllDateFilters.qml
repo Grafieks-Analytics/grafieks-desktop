@@ -54,6 +54,8 @@ Rectangle{
         width: parent.width
         height:listFiltersListView.height + listFilters.height
 
+        spacing: rowSpacing
+
         Text {
             id: listFilters
             text: qsTr("List")
@@ -172,6 +174,7 @@ Rectangle{
         anchors.left: parent.left
         anchors.top: listFiltersColumn.bottom
         anchors.topMargin: 20
+        spacing: rowSpacing
 
         Text {
             id: calendarHeading
@@ -315,6 +318,8 @@ Rectangle{
 
         anchors.top: calendarFiltersColumn.bottom
         anchors.topMargin: 20
+
+        spacing: rowSpacing
 
         Text {
             id: timeFrameHeading
