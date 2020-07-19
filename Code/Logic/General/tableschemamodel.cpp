@@ -7,8 +7,6 @@ TableSchemaModel::TableSchemaModel(QObject *parent) : QObject(parent)
 
 QList<QStringList> TableSchemaModel::showSchema(QString query)
 {
-    QString bingo = "bingo";
-
     QString explainQueryString, describeQueryString;
     QStringList tableList, outputDataList;
 
@@ -61,7 +59,6 @@ QList<QStringList> TableSchemaModel::showSchema(QString query)
                 outputData.append(outputDataList);
             }
         }
-
 
 
 

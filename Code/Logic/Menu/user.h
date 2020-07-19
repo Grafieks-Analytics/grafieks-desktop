@@ -1,14 +1,15 @@
 #ifndef User_H
 #define User_H
 
-#include <QObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QSettings>
+#include <QObject>
 #include <QDebug>
+
 
 class User : public QObject
 {
