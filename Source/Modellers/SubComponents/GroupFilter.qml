@@ -94,14 +94,16 @@ Popup {
 
     // Footer starts
 
-    Row{
+
+    Rectangle{
         id: footerContent
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 5
         anchors.rightMargin: 20
-        spacing: 5
         height: 30
         width: parent.width
+
+        color:"transparent"
 
 
         CustomButton{

@@ -22,19 +22,45 @@ Rectangle{
 
     property string selectOption: "Select numerical"
 
+    ListModel{
+        id: listModel
+        ListElement{
+            menuItem:"Equal"
+        }
+        ListElement{
+            menuItem:"Not Equal To"
+        }
+        ListElement{
+            menuItem:"Smaller Than"
+        }
+        ListElement{
+            menuItem:"Greater Than"
+        }
+        ListElement{
+            menuItem:"Equal or Smaller Than"
+        }
+        ListElement{
+            menuItem:"Equal or Greater Than"
+        }
+        ListElement{
+            menuItem:"Between"
+        }
+    }
+
     height: parent.height - 80 - 40
     width: parent.width - 40
     x:20
     y:60
-    anchors.top:  fullExtactRadioBtn.bottom
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
 
-    Row{
+    Rectangle{
         id: numericalHeading
 
         height: 40
         width: parent.width
+
+        color: "transparent"
 
         Column{
 
@@ -75,12 +101,12 @@ Rectangle{
         }
     }
 
-    Row{
+    Rectangle{
         id: conditionRow
 
         height: 30
-
         width: parent.width
+        color: "transparent"
 
         anchors.top: numericalHeading.bottom
         anchors.topMargin: 5
@@ -95,45 +121,19 @@ Rectangle{
 
     }
 
-    Column{
+    Rectangle{
         anchors.top: conditionRow.bottom
         width: parent.width
         height: 30
+        color: "transparent"
 
-
-        Row{
+        Rectangle{
             id: numericalOptionRow
-//            anchors.top: numericalHeading.bottom
-//            anchors.topMargin: 8
-            anchors.top: parent.top
             anchors.left: parent.left
             width: parent.width / 3
             height: 30
+            color: "transparent"
 
-            ListModel{
-                id: listModel
-                ListElement{
-                    menuItem:"Equal"
-                }
-                ListElement{
-                    menuItem:"Not Equal To"
-                }
-                ListElement{
-                    menuItem:"Smaller Than"
-                }
-                ListElement{
-                    menuItem:"Greater Than"
-                }
-                ListElement{
-                    menuItem:"Equal or Smaller Than"
-                }
-                ListElement{
-                    menuItem:"Equal or Greater Than"
-                }
-                ListElement{
-                    menuItem:"Between"
-                }
-            }
 
             SelectDropdown{
                 id: selectOption
@@ -147,16 +147,17 @@ Rectangle{
 
         }
 
-        Row{
+        Rectangle{
             id: numericalTextRow
-//            anchors.top: numericalHeading.bottom
-//            anchors.right: numericalHeading.right
             anchors.top: parent.top
             anchors.right: parent.right
 
             width: parent.width / 3
             height: 30
             anchors.rightMargin: 20
+
+
+            color: "transparent"
 
             Rectangle{
                 id: numericalTextBox
@@ -165,10 +166,10 @@ Rectangle{
                 anchors.left: parent.left
                 anchors.rightMargin: 20
 
-                Row{
+                Rectangle{
                     height: parent.height
                     width: parent.width
-                    rightPadding: 20
+                    color: "transparent"
 
                     TextField {
                         placeholderText: "Enter Text"
@@ -188,12 +189,11 @@ Rectangle{
                 anchors.rightMargin: 20
                 visible: false
 
-                Row{
+                Rectangle{
                     height: parent.height
                     width: parent.width/2
                     anchors.left: parent.left
-
-                    rightPadding: 20
+                    color: "transparent"
 
                     TextField {
                         placeholderText: "Enter Text"
@@ -204,12 +204,12 @@ Rectangle{
                 }
 
 
-                Row{
+                Rectangle{
                     height: parent.height
                     width: parent.width/2
                     anchors.right: parent.right
 
-                    rightPadding: 20
+                    color: "transparent"
 
                     TextField {
                         placeholderText: "Enter Text"

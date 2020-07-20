@@ -26,6 +26,25 @@ Rectangle{
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
 
+    ListModel{
+        id: dateFormatList
+
+        ListElement{
+            menuItem:"DD/MM/YYYY 4"
+        }
+
+        ListElement{
+            menuItem:"DD/MM/YYYY 4"
+        }
+
+        ListElement{
+            menuItem:"DD/MM/YYYY 2"
+        }
+
+        ListElement{
+            menuItem:"DD/MM/YYYY 3"
+        }
+    }
 
     ListModel{
         id: dateCheckListModel
@@ -48,15 +67,17 @@ Rectangle{
         }
     }
 
-    Row{
+    Rectangle{
         id: selectTypeRadioBtn
         height: 40
-        width: parent.width
+        width: parent.width - 4
+        anchors.left: parent.left
+        anchors.leftMargin: 2
 
         Column{
 
             id: multiSelectRadioColumn
-            anchors.top: selectTypeRadioBtn.top
+//            anchors.top: selectTypeRadioBtn.top
 
             padding: 10
             leftPadding: 30
@@ -108,18 +129,20 @@ Rectangle{
         }
     }
 
-    Row{
+    Rectangle{
         id: searchTextBox
         anchors.top: selectTypeRadioBtn.bottom
         anchors.topMargin: 8
-        width: parent.width
+        width: parent.width - 4
         height: 40
+        anchors.left: parent.left
+        anchors.leftMargin: 2
 
         Rectangle{
 
             height: 30
             radius: 4
-            width: parent.width - 8
+            width: parent.width - 10
             anchors.left: searchTextBox.left
             anchors.leftMargin: 4
 
@@ -144,7 +167,7 @@ Rectangle{
     Rectangle{
         id: listInnerContent
         height: listContent.height - ( selectTypeRadioBtn.height  + searchTextBox.height + includeExcludeRow.height + footerContent.height)
-        width: parent.width - 30
+        width: parent.width - 35
         anchors.top: searchTextBox.bottom
         anchors.left: searchTextBox.left
         anchors.leftMargin: 15
@@ -212,9 +235,6 @@ Rectangle{
         }
 
 
-        ScrollIndicator.horizontal: ScrollIndicator { }
-        ScrollIndicator.vertical: ScrollIndicator { }
-
         }
 
         Column{
@@ -223,27 +243,6 @@ Rectangle{
 
             anchors.top: parent.top
             anchors.right: parent.right
-
-
-            ListModel{
-                id: dateFormatList
-
-                ListElement{
-                    menuItem:"DD/MM/YYYY 4"
-                }
-
-                ListElement{
-                    menuItem:"DD/MM/YYYY 4"
-                }
-
-                ListElement{
-                    menuItem:"DD/MM/YYYY 2"
-                }
-
-                ListElement{
-                    menuItem:"DD/MM/YYYY 3"
-                }
-            }
 
             SelectDropdown{
                 id: dateFormatDropDown
@@ -258,12 +257,12 @@ Rectangle{
 
     }
 
-    Row{
+    Rectangle{
         id: includeExcludeRow
         anchors.top:  listInnerContent.bottom
         anchors.left: parent.left
         height: 30
-        width: parent.width
+        width: parent.width - 25
         anchors.leftMargin: 10
 
         Column{

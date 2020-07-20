@@ -26,10 +26,11 @@ Rectangle{
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
 
-    Row{
+    Rectangle{
         id: selectTypeRadioBtn
         height: 40
         width: parent.width
+        color: "transparent"
 
         Column{
 
@@ -86,12 +87,13 @@ Rectangle{
         }
     }
 
-    Row{
+    Rectangle{
         id: searchTextBox
         anchors.top: selectTypeRadioBtn.bottom
         anchors.topMargin: 8
         width: parent.width
         height: 40
+        color: "transparent"
 
         Rectangle{
 
@@ -105,7 +107,6 @@ Rectangle{
                 placeholderText: "Search"
                 leftPadding: 20
                 height: 40
-                anchors.top: searchTextBox.top
                 width: parent.width - 20
                 x: 10
 
@@ -184,19 +185,17 @@ Rectangle{
             }
         }
 
-
-        ScrollIndicator.horizontal: ScrollIndicator { }
-        ScrollIndicator.vertical: ScrollIndicator { }
-
     }
 
-    Row{
+    Rectangle{
         id: includeExcludeRow
         anchors.top:  listInnerContent.bottom
         anchors.left: parent.left
         height: 30
         width: parent.width
         anchors.leftMargin: 10
+
+        color: "transparent"
 
         Column{
             anchors.left: includeExcludeRow.left

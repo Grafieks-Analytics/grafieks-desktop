@@ -28,7 +28,6 @@ Rectangle{
     width: parent.width - 40
     x:20
     y:10
-    anchors.top:  fullExtactRadioBtn.bottom
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
     visible: false
@@ -44,7 +43,7 @@ Rectangle{
             padding: 12
             leftPadding: 20
 
-            anchors.verticalCenter: parent.verticalAlignment
+
 
             Text {
                 text: qsTr("Date Range")
@@ -53,30 +52,32 @@ Rectangle{
         }
     }
 
-    Row{
+    Rectangle{
         id: dateOptionRow
         anchors.top: dateRangeText.bottom
         anchors.topMargin: 8
-        width: parent.width
         height: 30
+        anchors.left: parent.left
+        anchors.leftMargin: 10
+        width: parent.width - 20
 
         Column{
             id: fromDate
             anchors.top: parent.top
             width: parent.width/2
             anchors.left: parent.left
-            anchors.leftMargin: 20
+            anchors.leftMargin: 10
 
-            anchors.verticalCenter: parent.verticalAlignment
+            spacing: 10
 
             Text {
                 id: fromDateText
                 text: qsTr("From")
             }
 
-            Row{
+            Rectangle{
                 width: parent.width
-                anchors.top: fromDateText.bottom
+
                 anchors.left: parent.left
                 anchors.topMargin: 10
                 height: 30
@@ -84,18 +85,17 @@ Rectangle{
                 TextField {
                     id:fromDateInput
                     placeholderText: "dd/mm/yyyy"
-                    anchors.verticalCenter: parent.verticalCenter
+
                     height: parent.height
                 }
 
                 Image{
                     id: fromDatePicker
-                    source: '../../../Images/icons/clipart268070@2x.png'
-                    anchors.top: parent.top
+                    source: '../../../../Images/icons/clipart268070@2x.png'
                     anchors.left: fromDateInput.right
                     anchors.leftMargin: 20
-                    anchors.verticalCenter: parent.verticalCenter
-                    height: parent.height - 10
+
+                    height: parent.height - 3
                     width: parent.height - 10
 
                     MouseArea{
@@ -122,41 +122,38 @@ Rectangle{
         }
 
         Column{
-            anchors.top: parent.top
+
             width: parent.width/2
             anchors.left: fromDate.right
             anchors.leftMargin: 20
 
-            anchors.verticalCenter: parent.verticalAlignment
+            spacing: 10
 
             Text {
                 id: toDateText
                 text: qsTr("To")
             }
 
-            Row{
-                width: parent.width
-                anchors.top: toDateText.bottom
+            Rectangle{
+                width: parent.width - 50
                 anchors.left: parent.left
-                anchors.topMargin: 10
                 height: 30
 
                 TextField {
                     id: toDateInput
                     placeholderText: "dd/mm/yyyy"
-                    anchors.verticalCenter: parent.verticalCenter
+
                     height: parent.height
                 }
 
 
                 Image{
                     id: toDatePicker
-                    source: '../../../Images/icons/clipart268070@2x.png'
-                    anchors.top: parent.top
+                    source: '../../../../Images/icons/clipart268070@2x.png'
                     anchors.left: toDateInput.right
                     anchors.leftMargin: 20
-                    anchors.verticalCenter: parent.verticalCenter
-                    height: parent.height - 10
+
+                    height: parent.height - 3
                     width: parent.height - 10
 
                     MouseArea{
@@ -182,8 +179,6 @@ Rectangle{
             }
 
         }
-
-
 
     }
 

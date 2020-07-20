@@ -31,7 +31,7 @@ Rectangle{
 
     visible: false
 
-    Row{
+    Rectangle{
 
         id: submenuTab
         height: 30

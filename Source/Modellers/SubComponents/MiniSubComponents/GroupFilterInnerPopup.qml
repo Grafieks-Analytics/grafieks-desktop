@@ -26,11 +26,36 @@ Rectangle{
     width: parent.width - 40
     x:20
     y:60
-    anchors.top:  fullExtactRadioBtn.bottom
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
 
-    Row{
+
+    ListModel{
+        id: listModel
+        ListElement{
+            menuItem:"Equal"
+        }
+        ListElement{
+            menuItem:"Not Equal To"
+        }
+        ListElement{
+            menuItem:"Smaller Than"
+        }
+        ListElement{
+            menuItem:"Greater Than"
+        }
+        ListElement{
+            menuItem:"Equal or Smaller Than"
+        }
+        ListElement{
+            menuItem:"Equal or Greater Than"
+        }
+        ListElement{
+            menuItem:"Between"
+        }
+    }
+
+    Rectangle{
         id: conditionRow
 
         height: 30
@@ -43,6 +68,8 @@ Rectangle{
         anchors.left: parent.left
         anchors.leftMargin: 20
 
+        color: "transparent"
+
         CustomButton {
             id: name
             textValue: qsTr("Add Character")
@@ -52,44 +79,23 @@ Rectangle{
 
     }
 
-    Column{
+    Rectangle{
         anchors.top: conditionRow.bottom
         anchors.topMargin: 10
         width: parent.width
         height: 30
 
+        color: "transparent"
 
-        Row{
+
+        Rectangle{
             id: groupOptionRow
             anchors.top: parent.top
             anchors.left: parent.left
             width: parent.width / 3
             height: 30
 
-            ListModel{
-                id: listModel
-                ListElement{
-                    menuItem:"Equal"
-                }
-                ListElement{
-                    menuItem:"Not Equal To"
-                }
-                ListElement{
-                    menuItem:"Smaller Than"
-                }
-                ListElement{
-                    menuItem:"Greater Than"
-                }
-                ListElement{
-                    menuItem:"Equal or Smaller Than"
-                }
-                ListElement{
-                    menuItem:"Equal or Greater Than"
-                }
-                ListElement{
-                    menuItem:"Between"
-                }
-            }
+            color:"transparent"
 
             SelectDropdown{
                 id: selectOption
@@ -103,10 +109,11 @@ Rectangle{
 
         }
 
-        Row{
+        Rectangle{
             id: groupSelectRow
             anchors.top: parent.top
             anchors.right: parent.right
+            color:"transparent"
 
             width: parent.width / 3
             height: 30

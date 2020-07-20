@@ -14,7 +14,7 @@ Column{
     anchors.topMargin: 30
 
 
-    Row{
+    Rectangle{
         id:thisTimeFrameRow
         height: 30
         width: parent.width
@@ -47,7 +47,7 @@ Column{
 
     }
 
-    Row{
+    Rectangle{
         id:lastTimeFrameRow
         height: 30
         width: parent.width
@@ -82,7 +82,7 @@ Column{
 
     }
 
-    Row{
+    Rectangle{
         id:nextTimeFrameRow
         height: 30
         width: parent.width
@@ -118,7 +118,7 @@ Column{
     }
 
 
-    Row{
+    Rectangle{
         id:lastXTimeFrameRow
         height: 30
         width: parent.width
@@ -163,7 +163,7 @@ Column{
 
     }
 
-    Row{
+    Rectangle{
         id:nextXTimeFrameRow
         height: 30
         width: parent.width
