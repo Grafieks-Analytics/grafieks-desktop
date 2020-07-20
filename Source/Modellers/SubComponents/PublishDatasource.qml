@@ -96,6 +96,7 @@ Popup {
             anchors.leftMargin: 30
 
             Text{
+                id : dsNameLabel
                 text: "Data Source Name"
                 anchors.left: parent.left
                 anchors.rightMargin: 10
@@ -184,7 +185,7 @@ Popup {
             id: file
             btnHeight: 40
             btnWidth: 370
-            textValue: "Click to upload"
+            textValue: "Click to upload image (*.jpg *.jpeg *.png  only)"
 
             MouseArea{
                 anchors.fill: parent
@@ -215,11 +216,17 @@ Popup {
             id: btn_signin
             textValue: "Publish"
             onClicked: {
-                Datasources.setDsDescription(description_field.text);
-                Datasources.setDsImage("");
-                Datasources.setDsOwner(User.firstName + " "+ User.lastName);
 
-                Datasources.saveDataSources(1, Datasources.sourceType, Datasources.dsName, Datasources.dsDescription, Datasources.dsImage, Datasources.dsOwner)
+
+                // Call Cpp function to process &
+                // Upload data to API
+
+                var dsName = datasource_name_field.text
+                var description = description_field.text
+                var uploadImage = fileDialog1.fileUrl
+                var sourceType = DSParamsModel.dsType
+
+                PublishDatasourceModel.publishDatasource(dsName, description, uploadImage, sourceType)
 
                 popup.visible = false
                 stacklayout_home.currentIndex = 6
@@ -251,10 +258,12 @@ Popup {
 
     FileDialog{
         id: fileDialog1
-        title: "Select a file"
+        title: "Select a file (*.jpg *.jpeg *.png  only)"
+        selectMultiple: false
+        nameFilters: [ "Image files (*.jpg *.jpeg *.png )"]
 
         onAccepted: {
-            messageDialog1.open()
+            console.log("You chose: " + fileDialog1.fileUrls)
         }
         onRejected: {
             console.log("file rejected")

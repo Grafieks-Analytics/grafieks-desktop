@@ -304,6 +304,9 @@ Page {
                     onClicked: {
                         radio_live.radio_checked = true
                         radio_memory.radio_checked = false
+
+                        // Also set the C++ class
+                        DSParamsModel.setDsType("live")
                     }
                 }
             }
@@ -327,6 +330,10 @@ Page {
                         inMemory.visible = true
                         radio_live.radio_checked = false
                         radio_memory.radio_checked = true
+
+                        // Also set the C++ class
+                        // extract == in memory
+                        DSParamsModel.setDsType("extract")
                     }
                 }
             }
@@ -530,6 +537,11 @@ Page {
                     anchors.verticalCenter: rectangle_querymodeller_right_col1.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col1.left
                     anchors.leftMargin: 10
+
+                    // Set the text
+                    onTextChanged: {
+                        DSParamsModel.setDsName(ds_name.text)
+                    }
                 }
             }
 

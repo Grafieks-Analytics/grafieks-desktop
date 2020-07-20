@@ -10,15 +10,21 @@
 #include <QtQml>
 
 #include "Code/Connectors/mysqlcon.h"
+
 #include "Code/Logic/Menu/user.h"
 #include "Code/Logic/Connectors/connectorfilter.h"
 #include "Code/Logic/Connectors/connectorsloginmodel.h"
+
 #include "Code/Logic/Datasources/datasourcemodel.h"
 #include "Code/Logic/Datasources/datasourceds.h"
+
 #include "Code/Logic/DataModeller/tablelistmodel.h"
 #include "Code/Logic/DataModeller/querymodel.h"
 #include "Code/Logic/DataModeller/dblistmodel.h"
 #include "Code/Logic/DataModeller/querystatsmodel.h"
+#include "Code/Logic/DataModeller/dsparamsmodel.h"
+#include "Code/Logic/DataModeller/publishdatasourcemodel.h"
+
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
 #include "Code/Logic/Connectors/driveds.h"
@@ -27,8 +33,8 @@
 #include "Code/Logic/Connectors/boxmodel.h"
 #include "Code/Logic/Connectors/sheetds.h"
 #include "Code/Logic/Connectors/sheetmodel.h"
-#include "Code/Logic/General/tableschemamodel.h"
 
+#include "Code/Logic/General/tableschemamodel.h"
 #include "Code/Logic/General/qttest2.h"
 
 
@@ -81,6 +87,8 @@ int main(int argc, char *argv[])
     QueryStatsModel queryStatsModel;
     DBListModel dblistModel;
     TableSchemaModel tableSchemaModel;
+    DSParamsModel dsParamsModel;
+    PublishDatasourceModel publishDatasourceModel;
 
     // Datasource Connector Initializations
     DropboxModel dropboxModel;
@@ -132,6 +140,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("SheetModel",&sheetModel);
     engine.rootContext()->setContextProperty("SheetDS",sheet);
     engine.rootContext()->setContextProperty("TableSchemaModel", &tableSchemaModel);
+    engine.rootContext()->setContextProperty("DSParamsModel",&dsParamsModel);
+    engine.rootContext()->setContextProperty("PublishDatasourceModel", &publishDatasourceModel);
 
 
 

@@ -8,7 +8,7 @@ PublishDatasourceModel::PublishDatasourceModel(QObject *parent) : QObject(parent
 
 }
 
-void PublishDatasourceModel::publishDatasource(QString dsName, QString description, QString &fileDataString, QString fileName, QString sourceType)
+void PublishDatasourceModel::publishDatasource(QString dsName, QString description, QString uploadImage, QString sourceType)
 {
 
     // Fetch value from settings
@@ -17,19 +17,41 @@ void PublishDatasourceModel::publishDatasource(QString dsName, QString descripti
     QByteArray sessionToken = settings.value("user/sessionToken").toByteArray();
     int profileId = settings.value("user/profileId").toInt();
 
+
+    // Extract the exact file path
+    QString finalImage = uploadImage.right(7);
+    QStringRef subString(&uploadImage, 7, uploadImage.length() - 7);
+
+
+    // Open file for reading
+    QFile file(subString.toString());
+
+    file.open(QIODevice::ReadOnly);
+
+    // Extract the filename
+    QFileInfo fileInfo(file.fileName());
+    QString filename(fileInfo.fileName());
+
+    // Convert filedata to base64
+    QByteArray imageData = file.readAll();
+    QString base64Image = QString(imageData.toBase64());
+
     QNetworkRequest m_NetworkRequest;
     m_NetworkRequest.setUrl(baseUrl+"/newdatasource");
 
     m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
                                "application/x-www-form-urlencoded");
+     m_NetworkRequest.setRawHeader("Authorization", sessionToken);
+
 
     QJsonObject obj;
     obj.insert("profileID", profileId);
     obj.insert("DatasourceName", dsName);
     obj.insert("Description", description);
-    obj.insert("Image", fileDataString);
-    obj.insert("Filename", fileName);
+    obj.insert("Image", base64Image);
+    obj.insert("Filename", filename);
     obj.insert("SourceType", sourceType);
+
 
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -64,6 +86,8 @@ void PublishDatasourceModel::readComplete()
         // Set the output
         outputStatus.insert("code", statusObj["code"].toInt());
         outputStatus.insert("msg", statusObj["msg"].toString());
+
+        qDebug() << "uploaded" << outputStatus;
 
         emit publishDSStatus(outputStatus);
         m_tempStorage->clear();

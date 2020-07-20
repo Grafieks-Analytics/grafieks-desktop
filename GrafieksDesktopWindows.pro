@@ -32,6 +32,7 @@ SOURCES += \
     Code/Logic/Connectors/sheetds.cpp \
     Code/Logic/Connectors/sheetmodel.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
+    Code/Logic/DataModeller/dsparamsmodel.cpp \
     Code/Logic/DataModeller/filterresultmodel.cpp \
     Code/Logic/DataModeller/publishdatasourcemodel.cpp \
     Code/Logic/DataModeller/querymodel.cpp \
@@ -111,6 +112,7 @@ HEADERS += \
     Code/Logic/Connectors/sheetds.h \
     Code/Logic/Connectors/sheetmodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
+    Code/Logic/DataModeller/dsparamsmodel.h \
     Code/Logic/DataModeller/filterresultmodel.h \
     Code/Logic/DataModeller/publishdatasourcemodel.h \
     Code/Logic/DataModeller/querymodel.h \

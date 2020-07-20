@@ -9,6 +9,7 @@ TextField{
     property alias maxLength: textField.maximumLength
     property alias boxWidth: textField.width
     property alias boxHeight: textField.height
+    text: (DSParamsModel.dsName !== "" || DSParamsModel.dsName !== null) ? DSParamsModel.dsName : ""
 
 //    anchors.verticalCenter: parent.verticalCenter
 

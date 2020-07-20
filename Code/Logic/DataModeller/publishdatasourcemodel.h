@@ -7,6 +7,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QSettings>
+#include <QFile>
+#include <QFileInfo>
 #include <QObject>
 #include <QDebug>
 
@@ -16,7 +18,7 @@ class PublishDatasourceModel : public QObject
     Q_OBJECT
 public:
     explicit PublishDatasourceModel(QObject *parent = nullptr);
-    Q_INVOKABLE void publishDatasource(QString dsName, QString description, QString &fileDataString, QString fileName, QString sourceType);
+    Q_INVOKABLE void publishDatasource(QString dsName, QString description, QString uploadImage, QString sourceType);
 
 private slots:
     void reading();
