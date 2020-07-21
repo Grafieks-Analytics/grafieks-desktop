@@ -34,9 +34,14 @@ SOURCES += \
     Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
     Code/Logic/DataModeller/filterresultmodel.cpp \
+    Code/Logic/DataModeller/listextractschedulersmodel.cpp \
     Code/Logic/DataModeller/publishdatasourcemodel.cpp \
     Code/Logic/DataModeller/querymodel.cpp \
     Code/Logic/DataModeller/querystatsmodel.cpp \
+    Code/Logic/DataModeller/schedulerslist.cpp \
+    Code/Logic/DataModeller/schedulerslistds.cpp \
+    Code/Logic/DataModeller/schedulerslistmodel.cpp \
+    Code/Logic/DataModeller/tablecolumnmodel.cpp \
     Code/Logic/DataModeller/tablelistmodel.cpp \
     Code/Logic/Datasources/datasource.cpp \
     Code/Logic/Datasources/datasourceds.cpp \
@@ -114,9 +119,14 @@ HEADERS += \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
     Code/Logic/DataModeller/filterresultmodel.h \
+    Code/Logic/DataModeller/listextractschedulersmodel.h \
     Code/Logic/DataModeller/publishdatasourcemodel.h \
     Code/Logic/DataModeller/querymodel.h \
     Code/Logic/DataModeller/querystatsmodel.h \
+    Code/Logic/DataModeller/schedulerslist.h \
+    Code/Logic/DataModeller/schedulerslistds.h \
+    Code/Logic/DataModeller/schedulerslistmodel.h \
+    Code/Logic/DataModeller/tablecolumnmodel.h \
     Code/Logic/DataModeller/tablelistmodel.h \
     Code/Logic/Datasources/datasource.h \
     Code/Logic/Datasources/datasourceds.h \

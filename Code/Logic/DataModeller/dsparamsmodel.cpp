@@ -15,6 +15,21 @@ QString DSParamsModel::dsType() const
     return m_dsType;
 }
 
+bool DSParamsModel::isFullExtract() const
+{
+    return m_isFullExtract;
+}
+
+QString DSParamsModel::extractColName() const
+{
+    return m_extractColName;
+}
+
+int DSParamsModel::schedulerId() const
+{
+    return m_schedulerId;
+}
+
 void DSParamsModel::setDsName(QString dsName)
 {
     if (m_dsName == dsName)
@@ -31,4 +46,31 @@ void DSParamsModel::setDsType(QString dsType)
 
     m_dsType = dsType;
     emit dsTypeChanged(m_dsType);
+}
+
+void DSParamsModel::setIsFullExtract(bool isFullExtract)
+{
+    if (m_isFullExtract == isFullExtract)
+        return;
+
+    m_isFullExtract = isFullExtract;
+    emit isFullExtractChanged(m_isFullExtract);
+}
+
+void DSParamsModel::setExtractColName(QString extractColName)
+{
+    if (m_extractColName == extractColName)
+        return;
+
+    m_extractColName = extractColName;
+    emit extractColNameChanged(m_extractColName);
+}
+
+void DSParamsModel::setSchedulerId(int schedulerId)
+{
+    if (m_schedulerId == schedulerId)
+        return;
+
+    m_schedulerId = schedulerId;
+    emit schedulerIdChanged(m_schedulerId);
 }

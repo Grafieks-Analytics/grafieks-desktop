@@ -73,6 +73,7 @@ Popup {
             height: 25
             width: 25
             anchors.rightMargin: 5
+
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
@@ -102,6 +103,16 @@ Popup {
                 radio_text: qsTr("Full Extract")
                 radio_checked: false
                 parent_dimension: 16
+
+                MouseArea{
+
+                    anchors.fill: parent
+                    onClicked: {
+
+                        // Save the value in C++
+                        DSParamsModel.setIsFullExtract(true)
+                    }
+                }
             }
         }
 
@@ -119,6 +130,16 @@ Popup {
                 radio_text: qsTr("Incremental Extract")
                 radio_checked: false
                 parent_dimension: 16
+
+                MouseArea{
+
+                    anchors.fill: parent
+                    onClicked: {
+
+                        // Save the value in C++
+                        DSParamsModel.setIsFullExtract(false)
+                    }
+                }
             }
         }
 

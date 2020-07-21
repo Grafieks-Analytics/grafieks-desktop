@@ -24,6 +24,7 @@
 #include "Code/Logic/DataModeller/querystatsmodel.h"
 #include "Code/Logic/DataModeller/dsparamsmodel.h"
 #include "Code/Logic/DataModeller/publishdatasourcemodel.h"
+#include "Code/Logic/DataModeller/listextractschedulersmodel.h"
 
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
@@ -89,6 +90,7 @@ int main(int argc, char *argv[])
     TableSchemaModel tableSchemaModel;
     DSParamsModel dsParamsModel;
     PublishDatasourceModel publishDatasourceModel;
+    ListExtractSchedulersModel listExtractSchedulersModel;
 
     // Datasource Connector Initializations
     DropboxModel dropboxModel;
@@ -142,6 +144,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("TableSchemaModel", &tableSchemaModel);
     engine.rootContext()->setContextProperty("DSParamsModel",&dsParamsModel);
     engine.rootContext()->setContextProperty("PublishDatasourceModel", &publishDatasourceModel);
+    engine.rootContext()->setContextProperty("ListExtractSchedulersModel", &listExtractSchedulersModel);
 
 
 
