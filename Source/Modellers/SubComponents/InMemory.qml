@@ -176,14 +176,37 @@ Popup {
                 anchors.topMargin: 20
                 width: parent.width - 120
 
-                SelectDropdown{
-                    textValue:"abc"
-                    list: incrementalExtactDropDown
-                    height: incrementalExtactDropDown.count * 30
-                    anchors.topMargin: 20
-                    anchors.left: parent.left
-                    anchors.leftMargin: 30
+                ComboBox{
+
+                    currentIndex: 2
+                    model: SchedulersListModel
+                    width: 200
+                    onCurrentIndexChanged: {
+                        //                            console.debug(cbItems.get(currentIndex).text + ", " + cbItems.get(currentIndex).color)
+                    }
                 }
+                Text {
+                    id: textRefresh
+                    text: qsTr("Refresh List")
+                    anchors.bottomMargin: 20
+                    leftPadding: 30
+
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+//                            SchedulersListDS.fetchSchedulersList()
+                        }
+                    }
+                }
+
+                //                SelectDropdown{
+                //                    textValue:"abc"
+                //                    list: incrementalExtactDropDown
+                //                    height: incrementalExtactDropDown.count * 30
+                //                    anchors.topMargin: 20
+                //                    anchors.left: parent.left
+                //                    anchors.leftMargin: 30
+                //                }
 
             }
 
@@ -232,10 +255,10 @@ Popup {
             // Add button Starts
 
             CustomButton{
-                 id: addBtn
-                 anchors.right: parent.right
-                 anchors.rightMargin: 60
-                 textValue: "Add"
+                id: addBtn
+                anchors.right: parent.right
+                anchors.rightMargin: 60
+                textValue: "Add"
             }
 
             // Add button Ends

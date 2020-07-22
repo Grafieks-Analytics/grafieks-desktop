@@ -20,7 +20,7 @@ public:
 
     Q_INVOKABLE void fetchSchedulersList();
 
-    void addScheduler(SchedulersList * datasource);
+    void addScheduler(SchedulersList * schedulersList);
     Q_INVOKABLE void addScheduler(const int & schedulerId,  const QString & schedulerName);
 
     QList<SchedulersList *> dataItems();
@@ -38,7 +38,7 @@ private :
     QNetworkAccessManager * m_networkAccessManager;
     QNetworkReply * m_networkReply;
     QByteArray * m_dataBuffer;
-    QList<SchedulersList*> m_datasource;
+    QList<SchedulersList*> m_schedulersList;
 
 };
 

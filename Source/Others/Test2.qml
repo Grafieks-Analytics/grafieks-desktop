@@ -6,18 +6,18 @@ Page {
 
     id : somepageid
 
-    Connections{
-        target: ConnectorsLoginModel
+    Component.onCompleted: {
+        SchedulersListDS.fetchSchedulersList()
+    }
 
-        onMysqlLoginStatus:{
-            if(status.status === true){
-                // Call functions
-                TableSchemaModel.showSchema("SELECT users.id, profiles.email FROM users INNER JOIN profiles ON profiles.user_id = users.id");
+    ListView{
+        id:x
+        model : SchedulersListModel
+        delegate: Row{
+
+            Text{
+                text: modelData
             }
         }
     }
-
-//    Text{
-//        text: TableSchemaModel.showSchema();
-//    }
 }

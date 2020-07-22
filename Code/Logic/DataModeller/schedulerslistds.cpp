@@ -20,8 +20,6 @@ void SchedulersListDS::fetchSchedulersList()
 
     QNetworkRequest m_NetworkRequest;
     m_NetworkRequest.setUrl(baseUrl+"/desk_listschedules");
-
-
     m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
                                "application/x-www-form-urlencoded");
     m_NetworkRequest.setRawHeader("Authorization", sessionToken);
@@ -39,26 +37,30 @@ void SchedulersListDS::fetchSchedulersList()
 
     connect(m_networkReply,&QIODevice::readyRead,this,&SchedulersListDS::dataReadyRead);
     connect(m_networkReply,&QNetworkReply::finished,this,&SchedulersListDS::dataReadFinished);
-
 }
 
-void SchedulersListDS::addScheduler(SchedulersList *datasource)
+
+void SchedulersListDS::addScheduler(SchedulersList *schedulersList)
 {
     emit preItemAdded();
-    m_datasource.append(datasource);
+    m_schedulersList.append(schedulersList);
     emit postItemAdded();
 }
 
-void SchedulersListDS::addScheduler(const int &schedulerId, const QString &schedulerName)
-{
-    SchedulersList *scheduler = new SchedulersList(schedulerId, schedulerName, this);
 
-    addScheduler(scheduler);
+void SchedulersListDS::addScheduler(const int & schedulerId,  const QString & schedulerName)
+
+{
+    SchedulersList *schedulersList = new SchedulersList(schedulerId, schedulerName, this);
+
+    addScheduler(schedulersList);
+
 }
+
 
 QList<SchedulersList *> SchedulersListDS::dataItems()
 {
-    return m_datasource;
+    return m_schedulersList;
 }
 
 void SchedulersListDS::dataReadyRead()
@@ -72,6 +74,7 @@ void SchedulersListDS::dataReadFinished()
     if( m_networkReply->error()){
         qDebug() << "There was some error : " << m_networkReply->errorString();
     }else{
+
 
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
@@ -87,10 +90,11 @@ void SchedulersListDS::dataReadFinished()
 
                 QJsonObject dataObj = dataArray.at(i).toObject();
 
-                int SchedulerID = dataObj["ScheduleID"].toInt();
-                QString SchedulerName = dataObj["Name"].toString();
+                int ScheduleID = dataObj["ScheduleID"].toInt();
+                QString Name = dataObj["Name"].toString();
 
-                this->addScheduler(SchedulerID, SchedulerName);
+
+                this->addScheduler(ScheduleID, Name);
             }
 
 
