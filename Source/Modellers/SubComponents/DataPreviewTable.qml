@@ -18,6 +18,7 @@ TableView {
     clip: true
     boundsBehavior : Flickable.StopAtBounds
 
+
     delegate: Rectangle {
         Text {
             text: display
@@ -46,6 +47,7 @@ TableView {
         Repeater {
             model: dataPreviewResult.columns > 0 ? dataPreviewResult.columns : 1
             Label {
+                id : label
                 width: dataPreviewResult.columnWidthProvider(modelData)
                 height: 35
                 text: QueryModel.headerData(modelData, Qt.Horizontal)
@@ -56,6 +58,7 @@ TableView {
 
                 background: Rectangle { color: "white" }
             }
+
         }
     }
 

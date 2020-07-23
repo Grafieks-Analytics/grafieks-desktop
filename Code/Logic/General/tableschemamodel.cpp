@@ -5,7 +5,7 @@ TableSchemaModel::TableSchemaModel(QObject *parent) : QObject(parent)
 
 }
 
-QList<QStringList> TableSchemaModel::showSchema(QString query)
+void TableSchemaModel::showSchema(QString query)
 {
     QString explainQueryString, describeQueryString;
     QStringList tableList, outputDataList;
@@ -36,6 +36,15 @@ QList<QStringList> TableSchemaModel::showSchema(QString query)
             for(int i = 0; i< tablesListArray.size(); i++){
                 QJsonObject table = tablesListArray.at(i).toObject();
                 QJsonObject tableData = table["table"].toObject();
+
+                // Affected column names in teh query
+                QJsonArray affectedColumns = tableData["used_columns"].toArray();
+
+                for(int j = 0; j < affectedColumns.size(); j++){
+                    queriedColumnNames << tableData["table_name"].toString() + "." +affectedColumns.at(j).toString();
+                }
+
+                // Affected table names in the query
                 tableList << tableData["table_name"].toString();
             }
         } else{
@@ -56,7 +65,9 @@ QList<QStringList> TableSchemaModel::showSchema(QString query)
                 QString fieldType = describeQuery.value(1).toString();
                 outputDataList << tableName << fieldName << fieldType;
 
-                outputData.append(outputDataList);
+                allColumnNames.append(outputDataList);
+
+                outputDataList.clear();
             }
         }
 
@@ -67,7 +78,11 @@ QList<QStringList> TableSchemaModel::showSchema(QString query)
 
     }
 
+    // Emit the signals here
+    // For the slots to received the data
+    // in QML (UI)
 
-    return outputData;
+    emit tableSchemaObtained(allColumnNames, queriedColumnNames);
+
 
 }

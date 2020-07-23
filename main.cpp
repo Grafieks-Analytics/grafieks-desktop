@@ -124,6 +124,7 @@ int main(int argc, char *argv[])
     schedulerModel.setScheduler(scheduler);
 
 
+
     // Define singletons
     qmlRegisterSingletonType( QUrl("qrc:/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants" );
 

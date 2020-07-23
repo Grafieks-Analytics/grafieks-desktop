@@ -19,6 +19,8 @@ Item{
 
     property bool profilingStatus: false
 
+
+
     Row{
         id: infodataTableHeader
         height: 27
@@ -283,6 +285,7 @@ Item{
 
                     QueryModel.callSql()
                     QueryStatsModel.showStats()
+                    TableSchemaModel.showSchema(QueryModel.tmpSql)
                 }
 
             }

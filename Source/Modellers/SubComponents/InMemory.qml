@@ -26,20 +26,23 @@ Popup {
     visible: false
     padding: 0
 
+
+    background: Rectangle{
+        color: Constants.whiteColor
+    }
+
+
     Component.onCompleted: {
         SchedulerDS.fetchSchedulers()
     }
 
-    ListModel{
-        id:incrementalExtactDropDown
+    Connections{
+        target: TableSchemaModel
 
-        ListElement { text: "Banana"; color: "Yellow" }
-        ListElement { text: "Apple"; color: "Green" }
-        ListElement { text: "Coconut"; color: "Brown" }
-    }
-
-    background: Rectangle{
-        color: Constants.whiteColor
+        onTableSchemaObtained:{
+//            console.log(outputData, columnNames)
+            columnsDropdown.model = queriedColumnNames
+        }
     }
 
     // Popup Header starts
@@ -221,15 +224,24 @@ Popup {
                 anchors.topMargin: 20
                 width: parent.width - 120
 
-                SelectDropdown{
-                    id: scheduleForExtractDropdown
-                    textValue:"abc"
-                    list: incrementalExtactDropDown
-                    height: incrementalExtactDropDown.count * 30
-                    anchors.topMargin: 20
-                    anchors.left: parent.left
-                    anchors.leftMargin: 30
+                ComboBox{
+                    id: columnsDropdown
+                    currentIndex: 2
+                    onCurrentIndexChanged: {
+                        console.debug(currentIndex, currentText)
+                    }
+
                 }
+
+//                SelectDropdown{
+//                    id: scheduleForExtractDropdown
+//                    textValue:"abc"
+//                    list: incrementalExtactDropDown
+//                    height: incrementalExtactDropDown.count * 30
+//                    anchors.topMargin: 20
+//                    anchors.left: parent.left
+//                    anchors.leftMargin: 30
+//                }
 
                 Text {
                     id: noteText
