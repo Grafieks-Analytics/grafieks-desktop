@@ -18,7 +18,7 @@ class PublishDatasourceModel : public QObject
     Q_OBJECT
 public:
     explicit PublishDatasourceModel(QObject *parent = nullptr);
-    Q_INVOKABLE void publishDatasource(QString dsName, QString description, QString uploadImage, QString sourceType);
+    Q_INVOKABLE void publishDatasource(QString dsName, QString description, QString uploadImage, QString sourceType,  int schedulerId, bool isFullExtract, QString extractColumnName);
 
 private slots:
     void reading();

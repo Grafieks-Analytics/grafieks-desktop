@@ -8,7 +8,7 @@ PublishDatasourceModel::PublishDatasourceModel(QObject *parent) : QObject(parent
 
 }
 
-void PublishDatasourceModel::publishDatasource(QString dsName, QString description, QString uploadImage, QString sourceType)
+void PublishDatasourceModel::publishDatasource(QString dsName, QString description, QString uploadImage, QString sourceType,  int schedulerId,  bool isFullExtract, QString extractColumnName)
 {
 
     // Fetch value from settings
@@ -37,20 +37,24 @@ void PublishDatasourceModel::publishDatasource(QString dsName, QString descripti
     QString base64Image = QString(imageData.toBase64());
 
     QNetworkRequest m_NetworkRequest;
-    m_NetworkRequest.setUrl(baseUrl+"/newdatasource");
+    m_NetworkRequest.setUrl(baseUrl+"/desk_newdatasource");
 
     m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
                                "application/x-www-form-urlencoded");
-     m_NetworkRequest.setRawHeader("Authorization", sessionToken);
+    m_NetworkRequest.setRawHeader("Authorization", sessionToken);
 
 
     QJsonObject obj;
-    obj.insert("profileID", profileId);
+    obj.insert("ProfileID", profileId);
+    obj.insert("SchedulerID", schedulerId);
     obj.insert("DatasourceName", dsName);
     obj.insert("Description", description);
     obj.insert("Image", base64Image);
     obj.insert("Filename", filename);
     obj.insert("SourceType", sourceType);
+    obj.insert("ColumnName", extractColumnName);
+    obj.insert("IsFullExtract", isFullExtract);
+    qDebug() <<obj <<  profileId << schedulerId << dsName << description << sourceType << extractColumnName << isFullExtract  << "Parle";
 
 
     QJsonDocument doc(obj);

@@ -40,7 +40,7 @@ Popup {
         target: TableSchemaModel
 
         onTableSchemaObtained:{
-//            console.log(outputData, columnNames)
+            //            console.log(outputData, columnNames)
             columnsDropdown.model = queriedColumnNames
         }
     }
@@ -187,7 +187,8 @@ Popup {
                     currentIndex: 2
                     model: SchedulerModel
                     onCurrentIndexChanged: {
-                        console.debug(currentText, currentValue, currentIndex )
+                        console.log(currentValue, currentText, currentIndex)
+                        DSParamsModel.setSchedulerId(currentValue)
                     }
 
                 }
@@ -228,26 +229,27 @@ Popup {
                     id: columnsDropdown
                     currentIndex: 2
                     onCurrentIndexChanged: {
-                        console.debug(currentIndex, currentText)
+                        console.log(currentText, currentIndex)
+                        DSParamsModel.setExtractColName(currentText)
                     }
 
                 }
 
-//                SelectDropdown{
-//                    id: scheduleForExtractDropdown
-//                    textValue:"abc"
-//                    list: incrementalExtactDropDown
-//                    height: incrementalExtactDropDown.count * 30
-//                    anchors.topMargin: 20
-//                    anchors.left: parent.left
-//                    anchors.leftMargin: 30
-//                }
+                //                SelectDropdown{
+                //                    id: scheduleForExtractDropdown
+                //                    textValue:"abc"
+                //                    list: incrementalExtactDropDown
+                //                    height: incrementalExtactDropDown.count * 30
+                //                    anchors.topMargin: 20
+                //                    anchors.left: parent.left
+                //                    anchors.leftMargin: 30
+                //                }
 
                 Text {
                     id: noteText
                     leftPadding: 30
-                    anchors.top: scheduleForExtractDropdown.top
-                    anchors.topMargin: 35
+                    anchors.top: columnsDropdown.bottom
+                    anchors.topMargin: 10
                     text: qsTr("Above field will show all data extract schedule that is set up in GRS")
                 }
 
