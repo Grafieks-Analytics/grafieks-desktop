@@ -54,7 +54,6 @@ void PublishDatasourceModel::publishDatasource(QString dsName, QString descripti
     obj.insert("SourceType", sourceType);
     obj.insert("ColumnName", extractColumnName);
     obj.insert("IsFullExtract", isFullExtract);
-    qDebug() <<obj <<  profileId << schedulerId << dsName << description << sourceType << extractColumnName << isFullExtract  << "Parle";
 
 
     QJsonDocument doc(obj);
@@ -91,7 +90,6 @@ void PublishDatasourceModel::readComplete()
         outputStatus.insert("code", statusObj["code"].toInt());
         outputStatus.insert("msg", statusObj["msg"].toString());
 
-        qDebug() << "uploaded" << outputStatus;
 
         emit publishDSStatus(outputStatus);
         m_tempStorage->clear();
