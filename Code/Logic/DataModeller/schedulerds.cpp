@@ -1,6 +1,6 @@
-#include "schedulerslistds.h"
+#include "schedulerds.h"
 
-SchedulersListDS::SchedulersListDS(QObject *parent) : QObject(parent),
+SchedulerDS::SchedulerDS(QObject *parent) : QObject(parent),
     m_networkAccessManager(new QNetworkAccessManager(this)),
     m_networkReply(nullptr),
     m_dataBuffer(new QByteArray)
@@ -8,7 +8,7 @@ SchedulersListDS::SchedulersListDS(QObject *parent) : QObject(parent),
 
 }
 
-void SchedulersListDS::fetchSchedulersList()
+void SchedulerDS::fetchSchedulers()
 {
 
     // Fetch value from settings
@@ -20,6 +20,7 @@ void SchedulersListDS::fetchSchedulersList()
 
     QNetworkRequest m_NetworkRequest;
     m_NetworkRequest.setUrl(baseUrl+"/desk_listschedules");
+
     m_NetworkRequest.setHeader(QNetworkRequest::ContentTypeHeader,
                                "application/x-www-form-urlencoded");
     m_NetworkRequest.setRawHeader("Authorization", sessionToken);
@@ -29,46 +30,47 @@ void SchedulersListDS::fetchSchedulersList()
     obj.insert("type", "data_extract");
 
 
+
+
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
 
     m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
 
 
-    connect(m_networkReply,&QIODevice::readyRead,this,&SchedulersListDS::dataReadyRead);
-    connect(m_networkReply,&QNetworkReply::finished,this,&SchedulersListDS::dataReadFinished);
+    connect(m_networkReply,&QIODevice::readyRead,this,&SchedulerDS::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&SchedulerDS::dataReadFinished);
 }
 
-
-void SchedulersListDS::addScheduler(SchedulersList *schedulersList)
+void SchedulerDS::addScheduler(Scheduler *schedule)
 {
     emit preItemAdded();
-    m_schedulersList.append(schedulersList);
+    m_scheduler.append(schedule);
     emit postItemAdded();
 }
 
 
-void SchedulersListDS::addScheduler(const int & schedulerId,  const QString & schedulerName)
+void SchedulerDS::addScheduler(const int & schedulerId, const QString & schedulerName)
 
 {
-    SchedulersList *schedulersList = new SchedulersList(schedulerId, schedulerName, this);
+    Scheduler *scheduler = new Scheduler(schedulerId, schedulerName, this);
 
-    addScheduler(schedulersList);
+    addScheduler(scheduler);
 
 }
 
 
-QList<SchedulersList *> SchedulersListDS::dataItems()
+QList<Scheduler *> SchedulerDS::dataItems()
 {
-    return m_schedulersList;
+    return m_scheduler;
 }
 
-void SchedulersListDS::dataReadyRead()
+void SchedulerDS::dataReadyRead()
 {
     m_dataBuffer->append(m_networkReply->readAll());
 }
 
-void SchedulersListDS::dataReadFinished()
+void SchedulerDS::dataReadFinished()
 {
     //Parse the JSON
     if( m_networkReply->error()){
@@ -91,10 +93,8 @@ void SchedulersListDS::dataReadFinished()
                 QJsonObject dataObj = dataArray.at(i).toObject();
 
                 int ScheduleID = dataObj["ScheduleID"].toInt();
-                QString Name = dataObj["Name"].toString();
-
-
-                this->addScheduler(ScheduleID, Name);
+                QString SchedulerName = dataObj["Name"].toString();
+                this->addScheduler(ScheduleID, SchedulerName);
             }
 
 
@@ -106,3 +106,4 @@ void SchedulersListDS::dataReadFinished()
 
     }
 }
+

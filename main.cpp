@@ -24,8 +24,8 @@
 #include "Code/Logic/DataModeller/querystatsmodel.h"
 #include "Code/Logic/DataModeller/dsparamsmodel.h"
 #include "Code/Logic/DataModeller/publishdatasourcemodel.h"
-#include "Code/Logic/DataModeller/schedulerslistds.h"
-#include "Code/Logic/DataModeller/schedulerslistmodel.h"
+#include "Code/Logic/DataModeller/schedulerds.h"
+#include "Code/Logic/DataModeller/schedulermodel.h"
 
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
@@ -38,6 +38,7 @@
 
 #include "Code/Logic/General/tableschemamodel.h"
 #include "Code/Logic/General/qttest2.h"
+
 
 
 #include "Code/statics.h"
@@ -92,8 +93,9 @@ int main(int argc, char *argv[])
     DSParamsModel dsParamsModel;
     PublishDatasourceModel publishDatasourceModel;
 
-    SchedulersListModel schedulersListModel;
-    SchedulersListDS * schedulersList = new SchedulersListDS(&app);
+    SchedulerModel schedulerModel;
+    SchedulerDS * scheduler = new SchedulerDS(&app);
+
 
     // Datasource Connector Initializations
     DropboxModel dropboxModel;
@@ -119,6 +121,7 @@ int main(int argc, char *argv[])
     driveModel.setDriveds(drive);
     boxModel.setBoxds(box);
     sheetModel.setSheetds(sheet);
+    schedulerModel.setScheduler(scheduler);
 
 
     // Define singletons
@@ -147,8 +150,9 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("TableSchemaModel", &tableSchemaModel);
     engine.rootContext()->setContextProperty("DSParamsModel",&dsParamsModel);
     engine.rootContext()->setContextProperty("PublishDatasourceModel", &publishDatasourceModel);
-    engine.rootContext()->setContextProperty("SchedulersListModel",&schedulersListModel);
-    engine.rootContext()->setContextProperty("SchedulersListDS", schedulersList);
+
+    engine.rootContext()->setContextProperty("SchedulerModel",&schedulerModel);
+    engine.rootContext()->setContextProperty("SchedulerDS",scheduler);
 
 
 

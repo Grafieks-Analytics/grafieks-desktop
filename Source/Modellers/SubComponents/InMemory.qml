@@ -8,8 +8,8 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
-import QtQuick.Controls 2.4
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
@@ -26,17 +26,16 @@ Popup {
     visible: false
     padding: 0
 
+    Component.onCompleted: {
+        SchedulerDS.fetchSchedulers()
+    }
+
     ListModel{
         id:incrementalExtactDropDown
-        ListElement{
-            menuItem:"abc"
-        }
-        ListElement{
-            menuItem:"abc 2"
-        }
-        ListElement{
-            menuItem:"abc 3"
-        }
+
+        ListElement { text: "Banana"; color: "Yellow" }
+        ListElement { text: "Apple"; color: "Green" }
+        ListElement { text: "Coconut"; color: "Brown" }
     }
 
     background: Rectangle{
@@ -176,28 +175,20 @@ Popup {
                 anchors.topMargin: 20
                 width: parent.width - 120
 
+
+
                 ComboBox{
-
+                    id: schedulerDropdown
+                    textRole: "Name"
+                    valueRole: "ScheduleID"
                     currentIndex: 2
-                    model: SchedulersListModel
-                    width: 200
+                    model: SchedulerModel
                     onCurrentIndexChanged: {
-                        //                            console.debug(cbItems.get(currentIndex).text + ", " + cbItems.get(currentIndex).color)
+                        console.debug(currentText, currentValue, currentIndex )
                     }
-                }
-                Text {
-                    id: textRefresh
-                    text: qsTr("Refresh List")
-                    anchors.bottomMargin: 20
-                    leftPadding: 30
 
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: {
-//                            SchedulersListDS.fetchSchedulersList()
-                        }
-                    }
                 }
+
 
                 //                SelectDropdown{
                 //                    textValue:"abc"

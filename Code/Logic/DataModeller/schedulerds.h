@@ -1,5 +1,5 @@
-#ifndef SCHEDULERSLISTDS_H
-#define SCHEDULERSLISTDS_H
+#ifndef SCHEDULERDS_H
+#define SCHEDULERDS_H
 
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
@@ -10,27 +10,31 @@
 #include <QSettings>
 #include <QObject>
 
-#include "schedulerslist.h"
+#include "scheduler.h"
 
-class SchedulersListDS : public QObject
+class SchedulerDS : public QObject
 {
     Q_OBJECT
 public:
-    explicit SchedulersListDS(QObject *parent = nullptr);
+    explicit SchedulerDS(QObject *parent = nullptr);
 
-    Q_INVOKABLE void fetchSchedulersList();
+    Q_INVOKABLE void fetchSchedulers();
 
-    void addScheduler(SchedulersList * schedulersList);
-    Q_INVOKABLE void addScheduler(const int & schedulerId,  const QString & schedulerName);
+    void addScheduler(Scheduler * datasource);
 
-    QList<SchedulersList *> dataItems();
+    Q_INVOKABLE void addScheduler(const int & schedulerId, const QString & schedulerName);
+
+    QList<Scheduler *> dataItems();
+
 signals:
     void preItemAdded();
     void postItemAdded();
 
 private slots:
+
     void dataReadyRead();
     void dataReadFinished();
+
 
 public slots:
 
@@ -38,8 +42,8 @@ private :
     QNetworkAccessManager * m_networkAccessManager;
     QNetworkReply * m_networkReply;
     QByteArray * m_dataBuffer;
-    QList<SchedulersList*> m_schedulersList;
+    QList<Scheduler*> m_scheduler;
 
 };
 
-#endif // SCHEDULERSLISTDS_H
+#endif // SCHEDULERDS_H

@@ -6,18 +6,4 @@ Page {
 
     id : somepageid
 
-    Component.onCompleted: {
-        SchedulersListDS.fetchSchedulersList()
-    }
-
-    ListView{
-        id:x
-        model : SchedulersListModel
-        delegate: Row{
-
-            Text{
-                text: modelData
-            }
-        }
-    }
 }
