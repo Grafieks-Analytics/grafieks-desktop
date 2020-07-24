@@ -111,6 +111,8 @@ Popup {
                     anchors.fill: parent
                     onClicked: {
 
+                        console.log("clicked full extract")
+
                         // Save the value in C++
                         DSParamsModel.setIsFullExtract(true)
                     }
@@ -137,6 +139,8 @@ Popup {
 
                     anchors.fill: parent
                     onClicked: {
+
+                        console.log("clicked incremental extract")
 
                         // Save the value in C++
                         DSParamsModel.setIsFullExtract(false)
@@ -184,7 +188,7 @@ Popup {
                     id: schedulerDropdown
                     textRole: "Name"
                     valueRole: "ScheduleID"
-                    currentIndex: 2
+                    currentIndex: 0
                     model: SchedulerModel
                     onCurrentIndexChanged: {
                         console.log(currentValue, currentText, currentIndex)
@@ -227,7 +231,7 @@ Popup {
 
                 ComboBox{
                     id: columnsDropdown
-                    currentIndex: 2
+                    currentIndex: 0
                     onCurrentIndexChanged: {
                         console.log(currentText, currentIndex)
                         DSParamsModel.setExtractColName(currentText)
@@ -264,6 +268,10 @@ Popup {
                 anchors.right: parent.right
                 anchors.rightMargin: 60
                 textValue: "Add"
+
+                onClicked: {
+                    popupMain.visible = false
+                }
             }
 
             // Add button Ends

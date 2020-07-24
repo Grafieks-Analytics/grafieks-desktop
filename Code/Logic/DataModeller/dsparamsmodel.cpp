@@ -30,6 +30,11 @@ int DSParamsModel::schedulerId() const
     return m_schedulerId;
 }
 
+int DSParamsModel::displayRowsCount() const
+{
+    return m_displayRowsCount;
+}
+
 void DSParamsModel::setDsName(QString dsName)
 {
     if (m_dsName == dsName)
@@ -73,4 +78,13 @@ void DSParamsModel::setSchedulerId(int schedulerId)
 
     m_schedulerId = schedulerId;
     emit schedulerIdChanged(m_schedulerId);
+}
+
+void DSParamsModel::setDisplayRowsCount(int displayRowsCount)
+{
+    if (m_displayRowsCount == displayRowsCount)
+        return;
+
+    m_displayRowsCount = displayRowsCount;
+    emit displayRowsCountChanged(m_displayRowsCount);
 }

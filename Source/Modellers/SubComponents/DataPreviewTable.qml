@@ -8,7 +8,7 @@ TableView {
     id: dataPreviewResult
 
     columnWidthProvider: function (column) { return 100; }
-    rowHeightProvider: function (column) { return 30; }
+    rowHeightProvider: function (column) { if(column < DSParamsModel.displayRowsCount) {return 30;} else {return 0;} }
     anchors.fill: parent
     topMargin: columnsHeader1.implicitHeight
     width: parent.width
@@ -17,6 +17,7 @@ TableView {
     ScrollBar.vertical: ScrollBar{}
     clip: true
     boundsBehavior : Flickable.StopAtBounds
+
 
 
     delegate: Rectangle {

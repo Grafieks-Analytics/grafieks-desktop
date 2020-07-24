@@ -11,12 +11,14 @@ class DSParamsModel : public QObject
     Q_PROPERTY(bool isFullExtract READ isFullExtract WRITE setIsFullExtract NOTIFY isFullExtractChanged)
     Q_PROPERTY(QString extractColName READ extractColName WRITE setExtractColName NOTIFY extractColNameChanged)
     Q_PROPERTY(int schedulerId READ schedulerId WRITE setSchedulerId NOTIFY schedulerIdChanged)
+    Q_PROPERTY(int displayRowsCount READ displayRowsCount WRITE setDisplayRowsCount NOTIFY displayRowsCountChanged)
 
     QString m_dsName;
     QString m_dsType; 
     bool m_isFullExtract;
     QString m_extractColName;
     int m_schedulerId;
+    int m_displayRowsCount;
 
 public:
     explicit DSParamsModel(QObject *parent = nullptr);
@@ -26,6 +28,7 @@ public:
     bool isFullExtract() const;
     QString extractColName() const;
     int schedulerId() const;
+    int displayRowsCount() const;
 
 public slots:
     void setDsName(QString dsName);
@@ -33,6 +36,7 @@ public slots:
     void setIsFullExtract(bool isFullExtract);
     void setExtractColName(QString extractColName);
     void setSchedulerId(int schedulerId);
+    void setDisplayRowsCount(int displayRowsCount);
 
 signals:
 
@@ -41,6 +45,7 @@ signals:
     void isFullExtractChanged(bool isFullExtract);
     void extractColNameChanged(QString extractColName);
     void schedulerIdChanged(int schedulerId);
+    void displayRowsCountChanged(int displayRowsCount);
 };
 
 #endif // DSPARAMSMODEL_H

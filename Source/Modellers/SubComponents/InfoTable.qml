@@ -19,6 +19,12 @@ Item{
 
     property bool profilingStatus: false
 
+    Component.onCompleted: {
+        // Set default value of displayLimit
+        // of query results to 100
+        DSParamsModel.setDisplayRowsCount(100)
+    }
+
 
 
     Row{
@@ -163,6 +169,7 @@ Item{
                 topPadding: 8
 
                 Text{
+                    id : displayLimit
                     text: "Display limited to top 100"
                     anchors.centerIn: parent
                 }
@@ -188,10 +195,12 @@ Item{
             ListModel{
                 id:selectLimitList
                 ListElement{
-                    menuItem: "Display Top 100 - 1"
+                    value : 100
+                    menuItem: "Display Top 100"
                 }
                 ListElement{
-                    menuItem: "Display Top 100 - 2"
+                    value : 200
+                    menuItem: "Display Top 200"
                 }
             }
 
@@ -221,6 +230,11 @@ Item{
                         width: parent.width
                         onTriggered: {}
                         onClicked: {
+
+                            // Change display limit of query results here
+
+                            displayLimit.text = "Display limited to top "+ value
+                            DSParamsModel.setDisplayRowsCount(value)
                             selectLimitOptions.close()
                         }
                     }
