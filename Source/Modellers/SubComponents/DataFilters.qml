@@ -21,6 +21,11 @@ import "../SubComponents/MiniSubComponents"
 Popup {
 
     property string tabBarOpen: Constants.categoricalTab
+    property var categoricalModel: []
+    property var numericalModel: []
+    property var dateModel: []
+    property var otherModel: []
+
 
     id: popupMain
     width: parent.width * 0.5
@@ -31,9 +36,36 @@ Popup {
     visible: false
     padding: 0
     closePolicy: Popup.NoAutoClose
+
+    Connections{
+        target: TableSchemaModel
+
+        onTableSchemaObtained:{
+
+
+            allCategorical.forEach(function (element) {
+                categoricalModel.push(element[0] +"."+ element[1]);
+            });
+
+            allNumerical.forEach(function (element) {
+                numericalModel.push(element[0] +"."+ element[1]);
+            });
+
+            allDates.forEach(function (element) {
+                dateModel.push(element[0] +"."+ element[1]);
+            });
+
+            addMenuList.model =  categoricalModel
+            addMenuList.height = categoricalModel.length * 40
+
+        }
+    }
+
+
     background: Rectangle{
         color: Constants.themeColor
     }
+
 
     // Popup Header starts
 
@@ -122,7 +154,8 @@ Popup {
                 allNumericalFilterContent.visible = false
                 allGroupFilterContent.visible = false
 
-                addMenuList.model = categoricalMenuList
+                addMenuList.model = categoricalModel
+                addMenuList.height = categoricalModel.length * 40
 
                 tabBarOpen = Constants.categoricalTab
 
@@ -164,7 +197,8 @@ Popup {
                 allNumericalFilterContent.visible = false
                 allGroupFilterContent.visible = false
 
-                addMenuList.model = dateMenuList;
+                addMenuList.model = dateModel
+                addMenuList.height = dateModel.length * 40
 
 
                 tabBarOpen = Constants.dateTab
@@ -206,7 +240,8 @@ Popup {
                 allNumericalFilterContent.visible = true
                 allGroupFilterContent.visible = false
 
-                addMenuList.model = numericalMenuList
+                addMenuList.model = numericalModel
+                addMenuList.height = numericalModel.length * 40
 
 
                 tabBarOpen = Constants.numericalTab
@@ -279,53 +314,7 @@ Popup {
 
     // Menu options on clicking 'Add button' starts
 
-    ListModel{
-        id: categoricalMenuList
-        ListElement{
-            textValue:"Customer Id"
-        }
-        ListElement{
-            textValue:"Customer Id 2"
-        }
-        ListElement{
-            textValue:"Customer Id 3"
-        }
-        ListElement{
-            textValue:"Customer Id 4"
-        }
-    }
 
-    ListModel{
-        id: dateMenuList
-        ListElement{
-            textValue:"DOB"
-        }
-        ListElement{
-            textValue:"PO Date"
-        }
-        ListElement{
-            textValue:"GR DATE"
-        }
-        ListElement{
-            textValue:"Customer Id 4"
-        }
-    }
-
-    ListModel{
-        id: numericalMenuList
-        ListElement{
-            textValue:"DOB"
-        }
-        ListElement{
-            textValue:"PO Date"
-        }
-        ListElement{
-            textValue:"GR DATE"
-        }
-        ListElement{
-            textValue:"Customer Id 4"
-        }
-    }
 
     ListModel{
         id:groupModelList
@@ -362,13 +351,11 @@ Popup {
         ListView{
             id: addMenuList
             anchors.top: parent.top
-            model: categoricalMenuList
-            height: this.model.count * 40
             width: 150
             delegate:
 
                 MenuItem {
-                text: textValue
+                text: modelData
                 onTriggered: {}
                 onClicked: {
                     if(tabBarOpen === Constants.categoricalTab){

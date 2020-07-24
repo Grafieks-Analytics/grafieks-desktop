@@ -258,11 +258,11 @@ Popup {
         selectMultiple: false
         nameFilters: [ "Image files (*.jpg *.jpeg *.png )"]
 
-        onAccepted: {
-            console.log("You chose: " + fileDialog1.fileUrls)
-        }
-        onRejected: {
-            console.log("file rejected")
-        }
+//        onAccepted: {
+//            console.log("You chose: " + fileDialog1.fileUrls)
+//        }
+//        onRejected: {
+//            console.log("file rejected")
+//        }
     }
 }

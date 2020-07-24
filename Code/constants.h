@@ -22,6 +22,11 @@ const int sqliteIntType = 1;
 const QString mysqlStrType = "mysql";
 const QString sqliteStrType = "sqlite";
 
+// Filter type Strings
+const QString categoricalType = "categorical";
+const QString numericalType = "numerical";
+const QString dateType = "date";
+const QString otherType = "other";
 
 // Layout level constants
 

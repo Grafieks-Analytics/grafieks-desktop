@@ -63,10 +63,28 @@ void TableSchemaModel::showSchema(QString query)
 
                 QString fieldName = describeQuery.value(0).toString();
                 QString fieldType = describeQuery.value(1).toString();
-                outputDataList << tableName << fieldName << fieldType;
 
-                allColumnNames.append(outputDataList);
+                // Remove characters after `(` and then trim whitespaces
+                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
 
+                // Get filter data type for QML
+                QString filterDataType = this->dataType(fieldTypeTrimmed);
+
+                outputDataList << tableName << fieldName << fieldType << filterDataType;
+
+                // Output data according to Filter type
+
+                if(filterDataType == Constants::categoricalType){
+                    allCategorical.append(outputDataList);
+                } else if(filterDataType == Constants::numericalType){
+                    allNumerical.append(outputDataList);
+                } else if(filterDataType == Constants::dateType){
+                    allDates.append(outputDataList);
+                } else{
+                    allOthers.append(outputDataList);
+                }
+
+                // Clear Stringlist for future
                 outputDataList.clear();
             }
         }
@@ -82,7 +100,33 @@ void TableSchemaModel::showSchema(QString query)
     // For the slots to received the data
     // in QML (UI)
 
-    emit tableSchemaObtained(allColumnNames, queriedColumnNames);
+    emit tableSchemaObtained(allCategorical, allNumerical, allDates, allOthers, queriedColumnNames);
 
+
+}
+
+QString TableSchemaModel::dataType(QString parameter)
+{
+
+    QString output;
+    QStringList categorical, numerical, dateformat;
+
+    categorical << "varchar" << "char" << "text" << "tinytext" << "mediumtext" << "longtext" << "boolean" ;
+    numerical << "int" << "tinyint" << "smallint" << "mediumint" << "bigint" << "decimal" << "float" << "double" << "real";
+    dateformat << "date" << "datetime" << "timestamp" << "time" << "year";
+
+    // Match the incoming parameter and determine filter type
+
+    if(categorical.contains(parameter, Qt::CaseInsensitive)){
+        output =  Constants::categoricalType;
+    } else if(numerical.contains(parameter, Qt::CaseInsensitive)){
+        output =  Constants::numericalType;
+    } else if(dateformat.contains(parameter, Qt::CaseInsensitive)){
+        output =  Constants::dateType;
+    } else{
+        output =  Constants::otherType;
+    }
+
+    return output;
 
 }

@@ -20,14 +20,20 @@ class TableSchemaModel : public QObject
     Q_OBJECT
 public:
     explicit TableSchemaModel(QObject *parent = nullptr);
+
     Q_INVOKABLE void showSchema(QString query = "");
 
 signals:
-    void tableSchemaObtained(QList <QStringList> allColumnNames, QStringList queriedColumnNames);
+    void tableSchemaObtained(QList <QStringList> allCategorical, QList <QStringList> allNumerical, QList <QStringList> allDates, QList <QStringList> allOthers,QStringList queriedColumnNames);
 
 private:
+
+    QString dataType(QString parameter);
     
-    QList<QStringList> allColumnNames;
+    QList<QStringList> allCategorical;
+    QList<QStringList> allNumerical;
+    QList<QStringList> allDates;
+    QList<QStringList> allOthers;
     QStringList queriedColumnNames;
 
 };
