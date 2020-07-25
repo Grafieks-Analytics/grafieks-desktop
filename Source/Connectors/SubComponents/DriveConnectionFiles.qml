@@ -18,7 +18,7 @@ import com.grafieks.singleton.constants 1.0
 import "../../MainSubComponents"
 
 Popup {
-    id: driveListPopup
+    id: drivefilePopup
     width: parent.width * 0.75
     height: parent.height * 0.75
     modal: true
@@ -27,7 +27,7 @@ Popup {
     y: parent.height * 0.125
     padding: 0
     property int label_col : 135
-    property var pathFolder: "Drive"
+    property var pathFolder: "drive"
     property var folderName: "Folder name"
 
 
@@ -57,11 +57,11 @@ Popup {
 
             if(status.status === true){
 
-                popupDrive.visible = false
+                popup.visible = false
                 stacklayout_home.currentIndex = 5
             }
             else{
-                popupDrive.visible = true
+                popup.visible = true
                 msg_dialog.open()
                 msg_dialog.text = status.msg
             }
@@ -84,10 +84,9 @@ Popup {
 
         Text{
             id : text1
-            text: "Connect to Drive"
+            text: "Connect to drive"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
-            font.pixelSize: Constants.fontReading
             anchors.leftMargin: 20
         }
         Image {
@@ -101,8 +100,8 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    driveListPopup.visible = false
-                    path.text="Drive";
+                    drivefilePopup.visible = false
+                    path.text="drive";
                 }
             }
         }
@@ -115,7 +114,7 @@ Popup {
 
 
     Column{
-        id: dropboxModalContent
+        id: dropdriveModalContent
         anchors.top: header_filePopup.bottom
         anchors.margins: 20
         anchors.left: parent.left
@@ -130,16 +129,16 @@ Popup {
                 text: qsTr("Connected by: test@test.com")
             }
 
-//            Column{
-//                x: parent.width * 0.75
+            //            Column{
+            //                x: parent.width * 0.75
 
-//                Text {
-//                    id: signOutBtn
-//                    x:driveListPopup.width - driveListPopup.parent.width * 0.125 - 30
-//                    text: qsTr("Sign Out")
-//                    color: "blue"
-//                }
-//            }
+            //                Text {
+            //                    id: signOutBtn
+            //                    x:drivefilePopup.width - drivefilePopup.parent.width * 0.125 - 30
+            //                    text: qsTr("Sign Out")
+            //                    color: "blue"
+            //                }
+            //            }
         }
 
         // Row  User Details Ends
@@ -154,59 +153,28 @@ Popup {
             TextField{
                 id: server_files
                 placeholderText: "file name"
-                font.pixelSize: Constants.fontReading
-                width: driveListPopup.width * 0.6
+
+                width: drivefilePopup.width * 0.6
                 height: 40
                 background: Rectangle {
                     border.color: Constants.borderBlueColor
                     radius: 5
-                    width: driveListPopup.width * 0.6
+                    width: drivefilePopup.width * 0.6
                 }
 
-                Button{
+                CustomButton{
+
                     id: searchBtn
                     height: 40
                     width: 100
-                    x : driveListPopup.width * 0.6 - 100
-                    background: Rectangle {
-                        id: searchBtnBackground
-                        color: searchBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
-                    }
+                    textValue: "Search"
+                    x : drivefilePopup.width * 0.6 - 100
 
-                    Text{
-                        text: "Search"
-                        anchors.centerIn: parent
-                        font.pixelSize: Constants.fontReading
-                    }
                     onClicked: {
-
-                            DriveDS.searchQuer(server_files.text);
+                        DriveDS.searchQuer(server_files.text);
                     }
-
 
                 }
-
-
-                //                Button{
-                //                    id: search_btn
-                //                    height: 40
-                //                    width: 100
-                //                    x : driveListPopup.width * 0.6 - 100
-                //                    background: Rectangle{
-                //                        id: search_btn_background
-                //                        color: search_btn.hovered ? Constants.darkThemeColor : Constants.ThemeColor
-
-                //                        Text{
-                //                            text: "Search"
-                //                            anchors.centerIn: parent
-                //                            font.pixelSize: Constants.fontReading
-                //                        }
-
-                //                    }
-
-
-                //                }
-
 
             }
 
@@ -218,17 +186,17 @@ Popup {
         // Row  File List Table Starts
 
         Row{
-            id: dropboxFilesList
+            id: dropdriveFilesList
             anchors.top : searchFileRow.bottom
 
             anchors.topMargin: 20
 
             Row{
-                width: driveListPopup.width * 0.6
+                width: drivefilePopup.width * 0.6
 
                 Rectangle{
-                    height: driveListPopup.height * 0.75 - 100
-                    width: driveListPopup.width * 0.6
+                    height: drivefilePopup.height * 0.75 - 100
+                    width: drivefilePopup.width * 0.6
                     border.color: Constants.themeColor
 
                     ListView{
@@ -236,11 +204,11 @@ Popup {
                         model:DriveModel
 
                         height: 200
-                        width: driveListPopup.width * 0.6
+                        width: drivefilePopup.width * 0.6
 
                         header: Row{
 
-                            width: driveListPopup.width * 0.6
+                            width: drivefilePopup.width * 0.6
                             Column{
                                 width: 20
                                 Rectangle{
@@ -300,7 +268,7 @@ Popup {
 
                         delegate: Row{
                             height:30
-                            width: driveListPopup.width * 0.6
+                            width: drivefilePopup.width * 0.6
 
                             Column{
                                 width: 20
@@ -309,7 +277,7 @@ Popup {
 
                                     Image{
                                         id: fileMenuIcon
-                                        source: kind=="drive#folder"?"../../../Images/icons/folder-invoices.png" :"../../../Images/icons/file-icon.png"
+                                        source: type=="folder"?"../../../Images/icons/folder-invoices.png" :"../../../Images/icons/file-icon.png"
                                         width:25
                                         height: 25
                                     }
@@ -341,22 +309,22 @@ Popup {
                                             fileSelected.visible = true
                                             fileNotSelectedMsg.visible = false
                                             detailName.text = name;
-                                            if(tag == "folder"){
-                                                pathFolder = pathLower;
+                                            if(type == "folder"){
+                                                pathFolder = id;
                                                 folderName = name;
                                             }
 
-                                            if(kind == "drive#file")
+                                            if(type == "file")
                                             {
-                                                path.text = pathLower
-                                               detailName.text = name;
+                                                path.text = name
+                                                detailName.text = name;
                                             }
                                         }
                                         onDoubleClicked: {
-                                            if(tag == "folder")
-                                            DropboxDS.fetchDatasources(pathLower)
+                                            if(type == "folder")
+                                                DriveDS.folderNav(pathFolder)
 
-                                            path.text = pathLower
+                                            path.text = name
                                         }
                                     }
                                 }
@@ -392,7 +360,7 @@ Popup {
                                     anchors.left: parent
 
                                     Text {
-                                        text: qsTr(modifiedTime)
+                                        text: qsTr(modifiedAt)
                                         padding: 5
                                         leftPadding: 20
                                     }
@@ -407,12 +375,12 @@ Popup {
             }
             Row{
                 id:fileDetails
-                width: driveListPopup.width * 0.4  - 40
+                width: drivefilePopup.width * 0.4  - 40
 
                 Rectangle{
                     id: fileNotSelected
-                    height: driveListPopup.height * 0.75 - 100
-                    width: driveListPopup.width * 0.4 - 40
+                    height: drivefilePopup.height * 0.75 - 100
+                    width: drivefilePopup.width * 0.4 - 40
                     border.color: Constants.themeColor
 
                     Rectangle{
@@ -438,7 +406,7 @@ Popup {
                     }
 
                     Image {
-                        id: dropBoxImage
+                        id: driveImage
                         source: "../../../Images/icons/drive.png"
                         anchors.topMargin: 50
                         anchors.top: detailsHeading.bottom
@@ -448,7 +416,7 @@ Popup {
                     Text {
                         id: fileNotSelectedMsg
                         anchors.topMargin: 20
-                        anchors.top: dropBoxImage.bottom
+                        anchors.top: driveImage.bottom
                         text: qsTr("Select a file from the list that you want to connect to")
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
@@ -457,7 +425,7 @@ Popup {
                         id: fileSelected
                         visible: false
                         width: parent.width
-                        anchors.top: dropBoxImage.bottom
+                        anchors.top: driveImage.bottom
                         anchors.topMargin: 20
 
                         Column{
@@ -525,16 +493,16 @@ Popup {
 
 
         Row{
-            anchors.top: dropboxFilesList.bottom
+            anchors.top: dropdriveFilesList.bottom
 
             anchors.topMargin: 20
 
             Row{
                 id: breadcrumb
-                width: driveListPopup.width * 0.6
+                width: drivefilePopup.width * 0.6
                 Rectangle{
                     height: 40
-                    width: driveListPopup.width * 0.6
+                    width: drivefilePopup.width * 0.6
                     border.color: Constants.borderBlueColor
                     anchors.verticalCenter: parent
 
@@ -542,83 +510,56 @@ Popup {
                         id: path
                         anchors.verticalCenter: parent.verticalCenter
                         leftPadding: 10
-                        text: qsTr("Drive")
+                        text: qsTr("drive")
                     }
                 }
             }
 
 
-            Row{
-                width: driveListPopup.width * 0.4
+            Rectangle{
+                width: drivefilePopup.width * 0.4
                 anchors.left:breadcrumb.right
-                anchors.leftMargin: driveListPopup.width * 0.4  - 270
+                anchors.leftMargin: drivefilePopup.width * 0.4  - 270
 
-                Button{
+                CustomButton{
+
                     id: homeBtn
                     height: 40
                     width: 100
-                    anchors.right : cancelBtn.left
+                    textValue: "Home"
+                    anchors.right: cancelBtn.left
                     anchors.rightMargin: 30
 
-                    background: Rectangle {
-                        id: homeBtnBackground
-                        color: homeBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
-                    }
-
-                    Text{
-                        text: "Home"
-                        anchors.centerIn: parent
-                        font.pixelSize: Constants.fontReading
-                    }
-
                     onClicked: {
-                        DriveDS.homeBut()
-                        //refer driveds.cpp for function info
+                        DriveDS.folderNav("0")
+                        // refer DriveDS.cpp for function info
+                        path.text = "drive"
                     }
-
 
                 }
 
-                Button{
+                CustomButton{
+
                     id: cancelBtn
                     height: 40
                     width: 100
-
-                    background: Rectangle {
-                        id: cancelBtnBackground
-                        color: cancelBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
-                    }
-
-                    Text{
-                        text: "Cancel"
-                        anchors.centerIn: parent
-                        font.pixelSize: Constants.fontReading
-                    }
+                    textValue: "Back"
+                    anchors.leftMargin: 30
 
                     onClicked: {
-                        driveListPopup.visible = false
+                        drivefilePopup.visible = false
                     }
-
 
                 }
 
-                Button{
+                CustomButton{
+
                     id: nextBtn
                     height: 40
                     width: 100
+                    textValue: "Next"
                     anchors.left: cancelBtn.right
                     anchors.leftMargin: 30
-                    background: Rectangle {
-                        id: nextBtnBackground
-                        color: nextBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
-                    }
-
-                    Text{
-                        text: "Next"
-                        anchors.centerIn: parent
-                        font.pixelSize: Constants.fontReading
-                    }
-
 
                 }
 

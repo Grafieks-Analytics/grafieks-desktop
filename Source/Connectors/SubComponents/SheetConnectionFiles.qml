@@ -18,7 +18,7 @@ import com.grafieks.singleton.constants 1.0
 import "../../MainSubComponents"
 
 Popup {
-    id: sheetListPopup
+    id: sheetfilePopup
     width: parent.width * 0.75
     height: parent.height * 0.75
     modal: true
@@ -27,7 +27,7 @@ Popup {
     y: parent.height * 0.125
     padding: 0
     property int label_col : 135
-    property var pathFolder: "Sheet"
+    property var pathFolder: "sheet"
     property var folderName: "Folder name"
 
 
@@ -57,11 +57,11 @@ Popup {
 
             if(status.status === true){
 
-                sheetPopup.visible = false
+                popup.visible = false
                 stacklayout_home.currentIndex = 5
             }
             else{
-                sheetPopup.visible = true
+                popup.visible = true
                 msg_dialog.open()
                 msg_dialog.text = status.msg
             }
@@ -84,10 +84,9 @@ Popup {
 
         Text{
             id : text1
-            text: "Connect to Sheet"
+            text: "Connect to sheet"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
-            font.pixelSize: Constants.fontReading
             anchors.leftMargin: 20
         }
         Image {
@@ -101,8 +100,8 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    sheetListPopup.visible = false
-                    path.text="Sheet";
+                    sheetfilePopup.visible = false
+                    path.text="sheet";
                 }
             }
         }
@@ -115,7 +114,7 @@ Popup {
 
 
     Column{
-        id: dropboxModalContent
+        id: dropsheetModalContent
         anchors.top: header_filePopup.bottom
         anchors.margins: 20
         anchors.left: parent.left
@@ -130,16 +129,16 @@ Popup {
                 text: qsTr("Connected by: test@test.com")
             }
 
-//            Column{
-//                x: parent.width * 0.75
+            //            Column{
+            //                x: parent.width * 0.75
 
-//                Text {
-//                    id: signOutBtn
-//                    x:sheetListPopup.width - sheetListPopup.parent.width * 0.125 - 30
-//                    text: qsTr("Sign Out")
-//                    color: "blue"
-//                }
-//            }
+            //                Text {
+            //                    id: signOutBtn
+            //                    x:sheetfilePopup.width - sheetfilePopup.parent.width * 0.125 - 30
+            //                    text: qsTr("Sign Out")
+            //                    color: "blue"
+            //                }
+            //            }
         }
 
         // Row  User Details Ends
@@ -154,58 +153,28 @@ Popup {
             TextField{
                 id: server_files
                 placeholderText: "file name"
-                font.pixelSize: Constants.fontReading
-                width: sheetListPopup.width * 0.6
+
+                width: sheetfilePopup.width * 0.6
                 height: 40
                 background: Rectangle {
                     border.color: Constants.borderBlueColor
                     radius: 5
-                    width: sheetListPopup.width * 0.6
+                    width: sheetfilePopup.width * 0.6
                 }
 
-                Button{
+                CustomButton{
+
                     id: searchBtn
                     height: 40
                     width: 100
-                    x : sheetListPopup.width * 0.6 - 100
-                    background: Rectangle {
-                        id: searchBtnBackground
-                        color: searchBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
-                    }
+                    textValue: "Search"
+                    x : sheetfilePopup.width * 0.6 - 100
 
-                    Text{
-                        text: "Search"
-                        anchors.centerIn: parent
-                        font.pixelSize: Constants.fontReading
-                    }
                     onClicked: {
                         SheetDS.searchQuer(server_files.text);
                     }
 
-
                 }
-
-
-                //                Button{
-                //                    id: search_btn
-                //                    height: 40
-                //                    width: 100
-                //                    x : sheetListPopup.width * 0.6 - 100
-                //                    background: Rectangle{
-                //                        id: search_btn_background
-                //                        color: search_btn.hovered ? Constants.darkThemeColor : Constants.ThemeColor
-
-                //                        Text{
-                //                            text: "Search"
-                //                            anchors.centerIn: parent
-                //                            font.pixelSize: Constants.fontReading
-                //                        }
-
-                //                    }
-
-
-                //                }
-
 
             }
 
@@ -217,17 +186,17 @@ Popup {
         // Row  File List Table Starts
 
         Row{
-            id: dropboxFilesList
+            id: dropsheetFilesList
             anchors.top : searchFileRow.bottom
 
             anchors.topMargin: 20
 
             Row{
-                width: sheetListPopup.width * 0.6
+                width: sheetfilePopup.width * 0.6
 
                 Rectangle{
-                    height: sheetListPopup.height * 0.75 - 100
-                    width: sheetListPopup.width * 0.6
+                    height: sheetfilePopup.height * 0.75 - 100
+                    width: sheetfilePopup.width * 0.6
                     border.color: Constants.themeColor
 
                     ListView{
@@ -235,11 +204,11 @@ Popup {
                         model:SheetModel
 
                         height: 200
-                        width: sheetListPopup.width * 0.6
+                        width: sheetfilePopup.width * 0.6
 
                         header: Row{
 
-                            width: sheetListPopup.width * 0.6
+                            width: sheetfilePopup.width * 0.6
                             Column{
                                 width: 20
                                 Rectangle{
@@ -299,7 +268,7 @@ Popup {
 
                         delegate: Row{
                             height:30
-                            width: sheetListPopup.width * 0.6
+                            width: sheetfilePopup.width * 0.6
 
                             Column{
                                 width: 20
@@ -308,7 +277,7 @@ Popup {
 
                                     Image{
                                         id: fileMenuIcon
-                                        source: kind=="drive#folder"?"../../../Images/icons/folder-invoices.png" :"../../../Images/icons/file-icon.png"
+                                        source: type=="folder"?"../../../Images/icons/folder-invoices.png" :"../../../Images/icons/file-icon.png"
                                         width:25
                                         height: 25
                                     }
@@ -340,22 +309,22 @@ Popup {
                                             fileSelected.visible = true
                                             fileNotSelectedMsg.visible = false
                                             detailName.text = name;
-                                            if(tag == "folder"){
-                                                pathFolder = pathLower;
+                                            if(type == "folder"){
+                                                pathFolder = id;
                                                 folderName = name;
                                             }
 
-                                            if(kind == "drive#file")
+                                            if(type == "file")
                                             {
-                                                path.text = pathLower
-                                               detailName.text = name;
+                                                path.text = name
+                                                detailName.text = name;
                                             }
                                         }
                                         onDoubleClicked: {
-                                            if(tag == "folder")
-                                            DropboxDS.fetchDatasources(pathLower)
+                                            if(type == "folder")
+                                                SheetDS.folderNav(pathFolder)
 
-                                            path.text = pathLower
+                                            path.text = name
                                         }
                                     }
                                 }
@@ -391,7 +360,7 @@ Popup {
                                     anchors.left: parent
 
                                     Text {
-                                        text: qsTr(modifiedTime)
+                                        text: qsTr(modifiedAt)
                                         padding: 5
                                         leftPadding: 20
                                     }
@@ -406,12 +375,12 @@ Popup {
             }
             Row{
                 id:fileDetails
-                width: sheetListPopup.width * 0.4  - 40
+                width: sheetfilePopup.width * 0.4  - 40
 
                 Rectangle{
                     id: fileNotSelected
-                    height: sheetListPopup.height * 0.75 - 100
-                    width: sheetListPopup.width * 0.4 - 40
+                    height: sheetfilePopup.height * 0.75 - 100
+                    width: sheetfilePopup.width * 0.4 - 40
                     border.color: Constants.themeColor
 
                     Rectangle{
@@ -437,7 +406,7 @@ Popup {
                     }
 
                     Image {
-                        id: dropBoxImage
+                        id: sheetImage
                         source: "../../../Images/icons/16_google-sheets_1b1915a4b0.png"
                         anchors.topMargin: 50
                         anchors.top: detailsHeading.bottom
@@ -447,7 +416,7 @@ Popup {
                     Text {
                         id: fileNotSelectedMsg
                         anchors.topMargin: 20
-                        anchors.top: dropBoxImage.bottom
+                        anchors.top: sheetImage.bottom
                         text: qsTr("Select a file from the list that you want to connect to")
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
@@ -456,7 +425,7 @@ Popup {
                         id: fileSelected
                         visible: false
                         width: parent.width
-                        anchors.top: dropBoxImage.bottom
+                        anchors.top: sheetImage.bottom
                         anchors.topMargin: 20
 
                         Column{
@@ -524,16 +493,16 @@ Popup {
 
 
         Row{
-            anchors.top: dropboxFilesList.bottom
+            anchors.top: dropsheetFilesList.bottom
 
             anchors.topMargin: 20
 
             Row{
                 id: breadcrumb
-                width: sheetListPopup.width * 0.6
+                width: sheetfilePopup.width * 0.6
                 Rectangle{
                     height: 40
-                    width: sheetListPopup.width * 0.6
+                    width: sheetfilePopup.width * 0.6
                     border.color: Constants.borderBlueColor
                     anchors.verticalCenter: parent
 
@@ -541,83 +510,56 @@ Popup {
                         id: path
                         anchors.verticalCenter: parent.verticalCenter
                         leftPadding: 10
-                        text: qsTr("Sheet")
+                        text: qsTr("sheet")
                     }
                 }
             }
 
 
-            Row{
-                width: sheetListPopup.width * 0.4
+            Rectangle{
+                width: sheetfilePopup.width * 0.4
                 anchors.left:breadcrumb.right
-                anchors.leftMargin: sheetListPopup.width * 0.4  - 270
+                anchors.leftMargin: sheetfilePopup.width * 0.4  - 270
 
-                Button{
+                CustomButton{
+
                     id: homeBtn
                     height: 40
                     width: 100
+                    textValue: "Home"
                     anchors.right: cancelBtn.left
                     anchors.rightMargin: 30
 
-                    background: Rectangle {
-                        id: homeBtnBackground
-                        color: homeBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
-                    }
-
-                    Text{
-                        text: "Home"
-                        anchors.centerIn: parent
-                        font.pixelSize: Constants.fontReading
-                    }
-
                     onClicked: {
-                        SheetDS.homeBut();
-                        //refer sheetds.cpp for function info
+                        SheetDS.folderNav("0")
+                        // refer SheetDS.cpp for function info
+                        path.text = "sheet"
                     }
-
 
                 }
 
-                Button{
+                CustomButton{
+
                     id: cancelBtn
                     height: 40
                     width: 100
-
-                    background: Rectangle {
-                        id: cancelBtnBackground
-                        color: cancelBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
-                    }
-
-                    Text{
-                        text: "Cancel"
-                        anchors.centerIn: parent
-                        font.pixelSize: Constants.fontReading
-                    }
+                    textValue: "Back"
+                    anchors.leftMargin: 30
 
                     onClicked: {
-                        sheetListPopup.visible = false
+                        sheetfilePopup.visible = false
                     }
-
 
                 }
 
-                Button{
+                CustomButton{
+
                     id: nextBtn
                     height: 40
                     width: 100
+                    textValue: "Next"
                     anchors.left: cancelBtn.right
                     anchors.leftMargin: 30
-                    background: Rectangle {
-                        id: nextBtnBackground
-                        color: nextBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
-                    }
-
-                    Text{
-                        text: "Next"
-                        anchors.centerIn: parent
-                        font.pixelSize: Constants.fontReading
-                    }
-
 
                 }
 

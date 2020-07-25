@@ -130,16 +130,16 @@ Popup {
                 text: qsTr("Connected by: test@test.com")
             }
 
-//            Column{
-//                x: parent.width * 0.75
+            //            Column{
+            //                x: parent.width * 0.75
 
-//                Text {
-//                    id: signOutBtn
-//                    x:filePopup.width - filePopup.parent.width * 0.125 - 30
-//                    text: qsTr("Sign Out")
-//                    color: "blue"
-//                }
-//            }
+            //                Text {
+            //                    id: signOutBtn
+            //                    x:filePopup.width - filePopup.parent.width * 0.125 - 30
+            //                    text: qsTr("Sign Out")
+            //                    color: "blue"
+            //                }
+            //            }
         }
 
 
@@ -156,7 +156,6 @@ Popup {
             TextField{
                 id: server_files
                 placeholderText: "file name"
-                font.pixelSize: Constants.fontReading
                 width: filePopup.width * 0.6
                 height: 40
                 background: Rectangle {
@@ -179,49 +178,6 @@ Popup {
                     }
 
                 }
-
-//                Button{
-//                    id: searchBtn
-//                    height: 40
-//                    width: 100
-//                    x : filePopup.width * 0.6 - 100
-//                    background: Rectangle {
-//                        id: searchBtnBackground
-//                        color: searchBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
-//                    }
-
-//                    Text{
-//                        text: "Search"
-//                        anchors.centerIn: parent
-//                        font.pixelSize: Constants.fontReading
-//                    }
-//                    onClicked: {
-//                        DropboxDS.searchQuer(server_files.text);
-//                    }
-
-
-//                }
-
-
-                //                Button{
-                //                    id: search_btn
-                //                    height: 40
-                //                    width: 100
-                //                    x : filePopup.width * 0.6 - 100
-                //                    background: Rectangle{
-                //                        id: search_btn_background
-                //                        color: search_btn.hovered ? Constants.darkThemeColor : Constants.ThemeColor
-
-                //                        Text{
-                //                            text: "Search"
-                //                            anchors.centerIn: parent
-                //                            font.pixelSize: Constants.fontReading
-                //                        }
-
-                //                    }
-
-
-                //                }
 
 
             }
@@ -365,12 +321,12 @@ Popup {
                                             if(tag == "file")
                                             {
                                                 path.text = pathLower
-                                               detailName.text = name;
+                                                detailName.text = name;
                                             }
                                         }
                                         onDoubleClicked: {
                                             if(tag == "folder")
-                                            DropboxDS.folderNav(pathFolder)
+                                                DropboxDS.folderNav(pathFolder)
 
                                             path.text = pathLower
                                         }
@@ -595,7 +551,7 @@ Popup {
                     anchors.leftMargin: 30
 
                     onClicked: {
-                          path.text = DropboxDS.goingBack(pathFolder,folderName)
+                        path.text = DropboxDS.goingBack(pathFolder,folderName)
                         //refer dropboxds.cpp for function goingback
                     }
 

@@ -15,9 +15,10 @@ import QtQuick.Dialogs 1.2
 import com.grafieks.singleton.constants 1.0
 
 import "../SubComponents"
+import "../../MainSubComponents"
 
 Popup {
-    id: popupDrive
+    id: drivePopup
     width: 800
     height: 500
     modal: true
@@ -35,11 +36,11 @@ Popup {
 
             if(status.status === true){
 
-                popupDrive.visible = false
+                popup.visible = false
                 stacklayout_home.currentIndex = 5
             }
             else{
-                popupDrive.visible = true
+                popup.visible = true
                 msg_dialog.open()
                 msg_dialog.text = status.msg
             }
@@ -62,7 +63,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Connect to Drive"
+            text: "Connect to drive"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: 15
@@ -79,7 +80,7 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    popupDrive.visible = false
+                    popup.visible = false
                 }
             }
         }
@@ -91,51 +92,52 @@ Popup {
     // Row : To allow user to login to drive
 
     Row{
-        id: dropboxConnectionModal
+        id: driveConnectionModal
         anchors.top: header_popup.bottom
         anchors.topMargin: 70
+        width: parent.width
 
-        Column{
+        Rectangle{
 
-            id:dropboxConnectionAllow
+            id:driveConnectionAllow
             width: parent.width
 
             Text {
                 id: allowMsg
-                anchors.top: dropboxConnectionModal.bottom
+                anchors.top: parent.top
                 anchors.rightMargin: 10
-                x : dropboxConnectionModal.width + 50
 
-                text: qsTr("Allow Grafieks desktop to access to your Drive account...")
-
-                horizontalAlignment: Text.AlignHCenter
+                text: qsTr("Allow Grafieks desktop to access to your drive account...")
+                anchors.horizontalCenter: parent.horizontalCenter
                 font.pointSize: Constants.fontCategoryHeaderSmall
             }
 
-            Button{
-                id:allowBtn
+
+
+
+
+            CustomButton{
+
+                id: allowBtn
+                textValue: "Allow"
                 anchors.top: allowMsg.bottom
                 anchors.topMargin: 60
                 width: 100
                 height:50
-                x : dropboxConnectionModal.width + popupDrive.width/2 - allowBtn.width / 2
+                fontPointSize: Constants.fontCategoryHeaderSmall
 
-                topPadding: 50
+                anchors.horizontalCenter: parent.horizontalCenter
 
-                Text{
-                    text: "Allow"
-                    anchors.centerIn: parent
-                    font.pixelSize: Constants.fontCategoryHeaderSmall
-                    color: btn_test_con.hovered ? "white" : "black"
-                }
 
                 onClicked: {
                     driveListPopup.visible = true;
-                    popupDrive.visible = false;
+                    drivePopup.visible = false;
                     DriveDS.fetchDatasources();
                     //driveds.cpp for more info
                 }
+
             }
+
 
             Text {
                 id: infoMsg
@@ -143,28 +145,18 @@ Popup {
 
                 anchors.topMargin: 80
 
-                x : dropboxConnectionModal.width + popupDrive.width/7 + 40
-
-                text: qsTr("Click the allow button above to open the Drive authorization page on a separate window.");
-
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-
-                font.pixelSize: Constants.fontReading
-
+                text: qsTr("Click the allow button above to open the drive authorization page on a separate window.");
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: Constants.fontCategoryHeaderSmall
             }
 
             Text {
                 id: infoMsg2
                 anchors.top: infoMsg.bottom
-                x : dropboxConnectionModal.width + popupDrive.width/4 + 40
 
                 text: qsTr("Once you authorize this connection you will be returned to this page.")
-
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-
-                font.pixelSize: Constants.fontReading
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: Constants.fontCategoryHeaderSmall
             }
 
         }

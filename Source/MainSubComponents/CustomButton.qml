@@ -8,6 +8,7 @@ Button{
     id: customButton
 
     property alias textValue: contentItem.text
+    property alias fontPointSize: contentItem.font.pointSize
 
     background: Rectangle{
         id: btnBackground

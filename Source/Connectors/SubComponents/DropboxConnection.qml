@@ -15,6 +15,7 @@ import QtQuick.Dialogs 1.2
 import com.grafieks.singleton.constants 1.0
 
 import "../SubComponents"
+import "../../MainSubComponents"
 
 Popup {
     id: popup
@@ -111,21 +112,18 @@ Popup {
                 font.pointSize: Constants.fontCategoryHeaderSmall
             }
 
-            Button{
-                id:allowBtn
+            CustomButton{
+
+                id: allowBtn
+                textValue: "Allow"
                 anchors.top: allowMsg.bottom
                 anchors.topMargin: 60
                 width: 100
                 height:50
+                fontPointSize: Constants.fontCategoryHeaderSmall
+
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                topPadding: 50
-
-                Text{
-                    text: "Allow"
-                    anchors.centerIn: parent
-                    font.pointSize: Constants.fontCategoryHeaderSmall
-                }
 
                 onClicked: {
                     fileListPopup.visible = true;
@@ -133,6 +131,7 @@ Popup {
                     DropboxDS.fetchDatasources()
                     //dropboxds.cpp for more info
                 }
+
             }
 
             Text {

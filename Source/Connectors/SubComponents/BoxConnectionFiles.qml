@@ -87,7 +87,6 @@ Popup {
             text: "Connect to Box"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
-            font.pixelSize: Constants.fontReading
             anchors.leftMargin: 20
         }
         Image {
@@ -130,16 +129,16 @@ Popup {
                 text: qsTr("Connected by: test@test.com")
             }
 
-//            Column{
-//                x: parent.width * 0.75
+            //            Column{
+            //                x: parent.width * 0.75
 
-//                Text {
-//                    id: signOutBtn
-//                    x:boxfilePopup.width - boxfilePopup.parent.width * 0.125 - 30
-//                    text: qsTr("Sign Out")
-//                    color: "blue"
-//                }
-//            }
+            //                Text {
+            //                    id: signOutBtn
+            //                    x:boxfilePopup.width - boxfilePopup.parent.width * 0.125 - 30
+            //                    text: qsTr("Sign Out")
+            //                    color: "blue"
+            //                }
+            //            }
         }
 
         // Row  User Details Ends
@@ -154,7 +153,7 @@ Popup {
             TextField{
                 id: server_files
                 placeholderText: "file name"
-                font.pixelSize: Constants.fontReading
+
                 width: boxfilePopup.width * 0.6
                 height: 40
                 background: Rectangle {
@@ -163,49 +162,19 @@ Popup {
                     width: boxfilePopup.width * 0.6
                 }
 
-                Button{
+                CustomButton{
+
                     id: searchBtn
                     height: 40
                     width: 100
+                    textValue: "Search"
                     x : boxfilePopup.width * 0.6 - 100
-                    background: Rectangle {
-                        id: searchBtnBackground
-                        color: searchBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
-                    }
 
-                    Text{
-                        text: "Search"
-                        anchors.centerIn: parent
-                        font.pixelSize: Constants.fontReading
-                    }
                     onClicked: {
                         BoxDS.searchQuer(server_files.text);
                     }
 
-
                 }
-
-
-                //                Button{
-                //                    id: search_btn
-                //                    height: 40
-                //                    width: 100
-                //                    x : filePopup.width * 0.6 - 100
-                //                    background: Rectangle{
-                //                        id: search_btn_background
-                //                        color: search_btn.hovered ? Constants.darkThemeColor : Constants.ThemeColor
-
-                //                        Text{
-                //                            text: "Search"
-                //                            anchors.centerIn: parent
-                //                            font.pixelSize: Constants.fontReading
-                //                        }
-
-                //                    }
-
-
-                //                }
-
 
             }
 
@@ -547,76 +516,50 @@ Popup {
             }
 
 
-            Row{
+            Rectangle{
                 width: boxfilePopup.width * 0.4
                 anchors.left:breadcrumb.right
                 anchors.leftMargin: boxfilePopup.width * 0.4  - 270
-                Button{
+
+                CustomButton{
+
                     id: homeBtn
                     height: 40
                     width: 100
+                    textValue: "Home"
                     anchors.right: cancelBtn.left
                     anchors.rightMargin: 30
-                    background: Rectangle {
-                        id: homeBtnBackground
-                        color: homeBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
-                    }
 
-                    Text{
-                        text: "Home"
-                        anchors.centerIn: parent
-                        font.pixelSize: Constants.fontReading
-                    }
                     onClicked: {
                         BoxDS.folderNav("0")
                         // refer boxds.cpp for function info
                         path.text = "Box"
                     }
 
-
                 }
 
-                Button{
+                CustomButton{
+
                     id: cancelBtn
                     height: 40
                     width: 100
-
-                    background: Rectangle {
-                        id: cancelBtnBackground
-                        color: cancelBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
-                    }
-
-                    Text{
-                        text: "Cancel"
-                        anchors.centerIn: parent
-                        font.pixelSize: Constants.fontReading
-                    }
+                    textValue: "Back"
+                    anchors.leftMargin: 30
 
                     onClicked: {
                         boxfilePopup.visible = false
-//                          path.text = DropboxDS.goingBack(pathFolder,folderName)
                     }
-
 
                 }
 
-                Button{
+                CustomButton{
+
                     id: nextBtn
                     height: 40
                     width: 100
+                    textValue: "Next"
                     anchors.left: cancelBtn.right
                     anchors.leftMargin: 30
-                    background: Rectangle {
-                        id: nextBtnBackground
-                        color: nextBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
-                    }
-
-                    Text{
-                        text: "Next"
-                        anchors.centerIn: parent
-                        font.pixelSize: Constants.fontReading
-                    }
-
 
                 }
 
