@@ -122,7 +122,7 @@ Popup {
 
         // Row  User Details Starts
 
-        Row{
+        Rectangle{
             id: userDetails
 
             Text {
@@ -141,6 +141,8 @@ Popup {
 //                }
 //            }
         }
+
+
 
         // Row  User Details Ends
 
@@ -163,27 +165,42 @@ Popup {
                     width: filePopup.width * 0.6
                 }
 
-                Button{
+
+                CustomButton{
+
                     id: searchBtn
                     height: 40
                     width: 100
+                    textValue: "Search"
                     x : filePopup.width * 0.6 - 100
-                    background: Rectangle {
-                        id: searchBtnBackground
-                        color: searchBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
-                    }
 
-                    Text{
-                        text: "Search"
-                        anchors.centerIn: parent
-                        font.pixelSize: Constants.fontReading
-                    }
                     onClicked: {
                         DropboxDS.searchQuer(server_files.text);
                     }
 
-
                 }
+
+//                Button{
+//                    id: searchBtn
+//                    height: 40
+//                    width: 100
+//                    x : filePopup.width * 0.6 - 100
+//                    background: Rectangle {
+//                        id: searchBtnBackground
+//                        color: searchBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
+//                    }
+
+//                    Text{
+//                        text: "Search"
+//                        anchors.centerIn: parent
+//                        font.pixelSize: Constants.fontReading
+//                    }
+//                    onClicked: {
+//                        DropboxDS.searchQuer(server_files.text);
+//                    }
+
+
+//                }
 
 
                 //                Button{
@@ -547,76 +564,51 @@ Popup {
             }
 
 
-            Row{
+            Rectangle{
                 width: filePopup.width * 0.4
                 anchors.left:breadcrumb.right
                 anchors.leftMargin: filePopup.width * 0.4  - 270
-                Button{
+
+                CustomButton{
+
                     id: homeBtn
                     height: 40
                     width: 100
+                    textValue: "Home"
                     anchors.right: cancelBtn.left
                     anchors.rightMargin: 30
-                    background: Rectangle {
-                        id: homeBtnBackground
-                        color: homeBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
-                    }
 
-                    Text{
-                        text: "Home"
-                        anchors.centerIn: parent
-                        font.pixelSize: Constants.fontReading
-                    }
                     onClicked: {
                         DropboxDS.folderNav("")
                         //refer function folderNav of dropboxds.cpp
                         path.text = "Dropbox"
                     }
 
-
                 }
 
-                Button{
+                CustomButton{
+
                     id: cancelBtn
                     height: 40
                     width: 100
-
-                    background: Rectangle {
-                        id: cancelBtnBackground
-                        color: cancelBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
-                    }
-
-                    Text{
-                        text: "Back"
-                        anchors.centerIn: parent
-                        font.pixelSize: Constants.fontReading
-                    }
+                    textValue: "Back"
+                    anchors.leftMargin: 30
 
                     onClicked: {
                           path.text = DropboxDS.goingBack(pathFolder,folderName)
                         //refer dropboxds.cpp for function goingback
                     }
 
-
                 }
 
-                Button{
+                CustomButton{
+
                     id: nextBtn
                     height: 40
                     width: 100
+                    textValue: "Next"
                     anchors.left: cancelBtn.right
                     anchors.leftMargin: 30
-                    background: Rectangle {
-                        id: nextBtnBackground
-                        color: nextBtn.hovered ?  Constants.buttonHoverColor : Constants.darkThemeColor
-                    }
-
-                    Text{
-                        text: "Next"
-                        anchors.centerIn: parent
-                        font.pixelSize: Constants.fontReading
-                    }
-
 
                 }
 

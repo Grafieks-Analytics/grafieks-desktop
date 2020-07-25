@@ -94,21 +94,20 @@ Popup {
         id: dropboxConnectionModal
         anchors.top: header_popup.bottom
         anchors.topMargin: 70
+        width: parent.width
 
-        Column{
+        Rectangle{
 
             id:dropboxConnectionAllow
             width: parent.width
 
             Text {
                 id: allowMsg
-                anchors.top: dropboxConnectionModal.bottom
+                anchors.top: parent.top
                 anchors.rightMargin: 10
-                x : dropboxConnectionModal.width + 50
 
                 text: qsTr("Allow Grafieks desktop to access to your Dropbox account...")
-
-                horizontalAlignment: Text.AlignHCenter
+                anchors.horizontalCenter: parent.horizontalCenter
                 font.pointSize: Constants.fontCategoryHeaderSmall
             }
 
@@ -118,15 +117,14 @@ Popup {
                 anchors.topMargin: 60
                 width: 100
                 height:50
-                x : dropboxConnectionModal.width + popup.width/2 - allowBtn.width / 2
+                anchors.horizontalCenter: parent.horizontalCenter
 
                 topPadding: 50
 
                 Text{
                     text: "Allow"
                     anchors.centerIn: parent
-                    font.pixelSize: Constants.fontCategoryHeaderSmall
-                    color: btn_test_con.hovered ? "white" : "black"
+                    font.pointSize: Constants.fontCategoryHeaderSmall
                 }
 
                 onClicked: {
@@ -143,28 +141,18 @@ Popup {
 
                 anchors.topMargin: 80
 
-                x : dropboxConnectionModal.width + popup.width/7 + 40
-
                 text: qsTr("Click the allow button above to open the Dropbox authorization page on a separate window.");
-
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-
-                font.pixelSize: Constants.fontReading
-
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: Constants.fontCategoryHeaderSmall
             }
 
             Text {
                 id: infoMsg2
                 anchors.top: infoMsg.bottom
-                x : dropboxConnectionModal.width + popup.width/4 + 40
 
                 text: qsTr("Once you authorize this connection you will be returned to this page.")
-
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-
-                font.pixelSize: Constants.fontReading
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: Constants.fontCategoryHeaderSmall
             }
 
         }
