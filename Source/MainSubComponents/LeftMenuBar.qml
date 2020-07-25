@@ -20,10 +20,15 @@ Rectangle{
     height: parent.height
     width: 49
 
+    // selectedMenu indicates
+    // 0 : Data Designer is selected
+    // 1 : Dashboard Designer is selected
+
+    property int selectedMenu: 0
+
     Column{
 
         id: leftMenuContent
-
 
         // 1st Menu Item starts
 
@@ -34,7 +39,7 @@ Rectangle{
             width: leftMenuBar.width - 1
             color: Constants.themeColor
 
-            Column{
+            Rectangle{
                 id: menu1
                 anchors.left:dataDesignerRect.left
                 anchors.leftMargin: 5
@@ -52,7 +57,6 @@ Rectangle{
                     id: dbMenuText
                     anchors.bottom: dbMenuIcon.bottom
                     anchors.bottomMargin: 100
-                    horizontalAlignment: dbMenuIcon.horizontalCenter
                     text: Constants.dataDesignerText
                     transform: Rotation { origin.x: 110; origin.y: 100; angle: 270}
                     color:"Gray"
@@ -107,7 +111,7 @@ Rectangle{
             width: leftMenuBar.width - 1
             color: Constants.themeColor
 
-            Column{
+            Rectangle{
 
                 id: menu2
                 anchors.left:dashboardDesignerRect.left
