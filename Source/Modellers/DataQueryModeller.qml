@@ -68,7 +68,7 @@ Page {
 
     Rectangle{
         id: submenu
-        height: 24
+        height: 22.5
         width: parent.width - menu_width - column_querymodeller.width
         x: menu_width - 11
 
@@ -190,14 +190,13 @@ Page {
 
             Button{
                 id:refresh_querymodeller
-                height: 30
+                height: 28
                 width: 30
-
 
                 Image{
 
                     source: "../../Images/icons/Refresh_30.png"
-                    anchors.topMargin: 5
+                    anchors.topMargin: 4
                     anchors.left: refresh_querymodeller.left
                     anchors.top: refresh_querymodeller.top
                     anchors.leftMargin: 5
@@ -228,13 +227,13 @@ Page {
             Button{
                 id: filter_btn
                 width: 100
-                height: 30
+                height: 28
                 anchors.leftMargin: 10
 
                 Image{
                     id: filter_querymodeller
                     source: "../../Images/icons/Plus_32.png"
-                    anchors.topMargin: 5
+                    anchors.topMargin: 4
                     anchors.leftMargin: 10
                     anchors.left: filter_btn.left
                     anchors.top: filter_btn.top
@@ -248,7 +247,7 @@ Page {
                     text: "Filter"
                     anchors.top: filter_btn.top
                     anchors.left: filter_querymodeller.right
-                    anchors.topMargin: 7
+                    anchors.topMargin: 6
                     anchors.leftMargin: 5
                 }
 
@@ -256,7 +255,7 @@ Page {
                     id: filterLeftSquareBracket
                     anchors.left: filterText.right
                     anchors.top: filter_btn.top
-                    anchors.topMargin: 7
+                    anchors.topMargin: 6
                     anchors.leftMargin: 2
                     text: qsTr("[")
                     color: Constants.grafieksGreen
@@ -265,14 +264,14 @@ Page {
                     id: filterNumber
                     anchors.left: filterLeftSquareBracket.right
                     anchors.top: filter_btn.top
-                    anchors.topMargin: 7
+                    anchors.topMargin: 6
                     text: qsTr("0")
                 }
                 Text {
                     id: filterRightSquareBracket
                     anchors.left: filterNumber.right
                     anchors.top: filter_btn.top
-                    anchors.topMargin: 7
+                    anchors.topMargin: 6
                     text: qsTr("]")
                     color: Constants.grafieksGreen
                 }
