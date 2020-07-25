@@ -35,7 +35,6 @@ Item {
 
                 source: "../../../Images/icons/align.png"
                 anchors.centerIn: align_btn
-                anchors.top: new_dashboard_btn.top
                 anchors.topMargin: 3
                 anchors.leftMargin: 2
                 horizontalAlignment: Image.AlignHCenter
@@ -65,7 +64,6 @@ Item {
                 height: 25
                 width: 25
                 anchors.centerIn: plus_icon_btn
-                anchors.top: new_dashboard_btn.top
                 anchors.topMargin: 3
                 horizontalAlignment: Image.AlignHCenter
                 verticalAlignment: Image.AlignVCenter
@@ -82,7 +80,6 @@ Item {
 
         Button{
             id:minus_icon_btn
-            anchors.left: tabbutton_newdashboard.right
             width: 30
             height: 30
             Image{
@@ -92,7 +89,6 @@ Item {
                 width: 20
                 anchors.topMargin: 3
                 anchors.leftMargin:3
-
                 anchors.centerIn: minus_icon_btn
                 anchors.top: minus_icon_btn.top
                 horizontalAlignment: Image.AlignHCenter

@@ -27,11 +27,9 @@ Item{
 
 
 
-    Row{
+    Rectangle{
         id: infodataTableHeader
         height: 27
-        anchors.top: data_query_modeller_stackview.bottom
-        anchors.left: left_menubar.right
         width: parent.width
         visible: true
 
@@ -39,7 +37,7 @@ Item{
             id: linebar1
             line_color: Constants.darkThemeColor
             line_width: parent.width
-            anchors.top: infodata_table.top
+            anchors.top: infodataTableHeader.top
         }
 
         // "Test Query" Button Starts
@@ -213,7 +211,7 @@ Item{
                 y: 27
                 z:1
                 width: parent.width
-                height: list.count * 30
+                height: selectLimitList.count * 30
 
                 ListView{
                     id:listView
@@ -390,7 +388,7 @@ Item{
 
     // Result starts
 
-    Row{
+    Rectangle{
 
         id:queryResultsTable
         height: 208
