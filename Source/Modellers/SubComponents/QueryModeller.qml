@@ -29,8 +29,8 @@ Item{
     ToolSeparator{
         id: tool_sep1
         anchors.top:parent.top
-        anchors.topMargin: -7
-        height:parent.height  + 7
+        anchors.topMargin: - 6
+        height:parent.height  + 6
         padding: 15
         width: 30
         contentItem: Rectangle {
