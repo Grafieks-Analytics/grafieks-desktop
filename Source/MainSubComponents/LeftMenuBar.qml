@@ -37,7 +37,7 @@ Rectangle{
             id: dataDesignerRect
             height: leftMenuBar.height/2
             width: leftMenuBar.width - 1
-            color: Constants.themeColor
+            color: Constants.leftDarkColor
 
             Rectangle{
                 id: menu1
@@ -66,23 +66,25 @@ Rectangle{
 
 
             MouseArea{
-                anchors.fill: parent
+                anchors.fill: dataDesignerRect
                 hoverEnabled: true
                 onClicked: {
+                    selectedMenu = 0
+                    stacklayout_home.currentIndex = 3
+                    console.log('data designer is clicked')
                     dataDesignerRect.color = Constants.leftDarkColor
                     dashboardDesignerRect.color = Constants.themeColor
-                    stacklayout_home.currentIndex = 3
-                }
-                onPressed: {
 
-                    dataDesignerRect.color = Constants.leftDarkColor
                 }
 
                 onEntered: {
-
                     dataDesignerRect.color = Constants.leftDarkColor
-                    dashboardDesignerRect.color = Constants.themeColor
+                }
 
+                onExited: {
+                    if(selectedMenu != 0){
+                        dataDesignerRect.color = Constants.themeColor
+                    }
                 }
             }
 
@@ -139,21 +141,29 @@ Rectangle{
             }
 
             MouseArea{
-                anchors.fill: parent
+                anchors.fill: dashboardDesignerRect
                 hoverEnabled: true
                 onClicked: {
-                    dashboardDesignerRect.color = Constants.leftDarkColor
-                    dataDesignerRect.color = Constants.themeColor
-                    stacklayout_home.currentIndex = 7
-                }
-                onPressed: {
 
+                    selectedMenu = 1
+                    stacklayout_home.currentIndex = 7
+                    console.log('dashboard designer is clicked')
+
+                    dataDesignerRect.color = Constants.themeColor
                     dashboardDesignerRect.color = Constants.leftDarkColor
+
                 }
 
                 onEntered: {
-                    dataDesignerRect.color = Constants.themeColor
                     dashboardDesignerRect.color = Constants.leftDarkColor
+                }
+
+                onExited: {
+
+                    if(selectedMenu != 1){
+                        dashboardDesignerRect.color = Constants.themeColor
+                    }
+
                 }
 
             }

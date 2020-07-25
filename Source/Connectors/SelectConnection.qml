@@ -115,6 +115,7 @@ Page {
         x: selectconn_page.width/2 - 70
     }
 
+
     Rectangle{
         id:search_rect
         border.color: Constants.borderBlueColor
@@ -122,11 +123,10 @@ Page {
         height: 50
         radius: 5
         x: selectconn_page.width/2 - 195
-        anchors.verticalCenter: selectconn_page.verticalCenter
+
         anchors.top : mainLabel.bottom
         anchors.topMargin: 20
         z: 5
-
 
         TextField {
             id: search_text
@@ -170,7 +170,6 @@ Page {
     TabBar{
         id: tabbar
         anchors.top: search_rect.bottom
-        anchors.verticalCenter: selectconn_page.verticalCenter
         height: 40
         anchors.topMargin: 40
         x : selectconn_page.width/2 - 440
@@ -333,7 +332,7 @@ Page {
 
 
 
-        delegate : Column{
+        delegate : Rectangle{
             scale: 1
             width: 230
 
