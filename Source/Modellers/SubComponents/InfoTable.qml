@@ -15,17 +15,18 @@ Item{
     anchors.left: left_menubar.right
     width: parent.width
     visible: true
-    height: infodataTableHeader.height + queryResultsTable.height
+    height:  infodataTableHeader.height + queryResultsTable.height
 
     property bool profilingStatus: false
+
+    property bool infoTableResizingFixed: true
+
 
     Component.onCompleted: {
         // Set default value of displayLimit
         // of query results to 100
         DSParamsModel.setDisplayRowsCount(100)
     }
-
-
 
     Rectangle{
         id: infodataTableHeader
@@ -38,6 +39,52 @@ Item{
             line_color: Constants.darkThemeColor
             line_width: parent.width
             anchors.top: infodataTableHeader.top
+            height: 2
+
+            MouseArea{
+                anchors.fill: parent
+                cursorShape: Qt.SizeVerCursor
+                width: parent.width
+
+                onPositionChanged: {
+
+                    if(infoTableResizingFixed){
+
+                        if(mouse.y > 0){
+                            queryResultsTable.height -= mouse.y
+                            data_query_modeller_stackview.height += mouse.y
+                            if(data_query_modeller_stackview.height > 200){
+                                infoTableResizingFixed = false
+                            }
+                        }
+                    }
+
+                    if(data_query_modeller_stackview.height > 200){
+
+                        queryResultsTable.height -= mouse.y
+                        if(data_query_modeller_stackview.height + mouse.y < 200){
+
+                            data_query_modeller_stackview.height = 200
+
+                        }else{
+
+                            data_query_modeller_stackview.height += mouse.y
+                        }
+
+                    }else{
+                        infoTableResizingFixed = true;
+                    }
+
+                    console.log(mouse.x)
+                    console.log(mouse.y)
+                    console.log(data_query_modeller_stackview.height)
+                    console.log(linebar1.width)
+                    console.log(infodataTableHeader.width)
+
+                }
+
+            }
+
         }
 
         // "Test Query" Button Starts
@@ -318,7 +365,7 @@ Item{
         Rectangle{
             id:collapseBtnRow
             anchors.top: linebar1.bottom
-            height: 26
+            height: 24
 
             x: parent.width - 278
 
@@ -326,7 +373,7 @@ Item{
                 id: collapseBtn
                 height: parent.height
                 width: parent.height
-                topPadding: 8
+                topPadding: 6
 
                 Image {
                     id: collapseBtnImage

@@ -8,7 +8,7 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.12
+import QtQuick 2.15
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.3
@@ -22,7 +22,7 @@ import "./SubComponents"
 
 Page {
 
-    id: query_modeller_page
+    id: queryModellerPage
     property int menu_width: 60
     property bool data_modeller_selected: true
     property int statusIndex: 1
@@ -52,6 +52,7 @@ Page {
     }
 
 
+    /***********************************************************************************************************************/
 
     // Left menubar starts
 
@@ -61,8 +62,11 @@ Page {
 
     // Left menubar ends
 
+    /***********************************************************************************************************************/
 
 
+
+    /***********************************************************************************************************************/
 
     // Top toolbar starts - Sub menu -> Data modeller and Query Modeller Tabs + Filter Btns
 
@@ -342,6 +346,8 @@ Page {
 
     }
 
+    /***********************************************************************************************************************/
+
 
     ToolSeparator{
         id: toolsep1
@@ -372,8 +378,8 @@ Page {
 
         anchors.top: toolsep1.bottom
         anchors.left:left_menubar.right
-        height:query_modeller_page.height - 300
-        width: query_modeller_page.width - menu_width - column_querymodeller.width
+        height:queryModellerPage.height - 300
+        width: queryModellerPage.width - menu_width - column_querymodeller.width
         rightPadding: 10
         leftPadding: 10
 

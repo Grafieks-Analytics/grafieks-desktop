@@ -67,7 +67,7 @@ Item{
 
         Keys.onReturnPressed: {
 
-            if(lineCount < 25){
+            if(lineCount < 30){
                 event.accepted = true
                 textedit_querymodeller.text += "\n"
                 textedit_querymodeller.cursorPosition = textedit_querymodeller.text.length

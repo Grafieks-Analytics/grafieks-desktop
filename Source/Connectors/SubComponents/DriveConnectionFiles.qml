@@ -8,7 +8,7 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.11
+import QtQuick 2.15
 import QtQuick.Controls 2.4
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.3
@@ -53,7 +53,7 @@ Popup {
     Connections{
         target: ConnectorsLoginModel
 
-        onSqliteLoginStatus:{
+        function onSqliteLoginStatus(){
 
             if(status.status === true){
 
@@ -288,11 +288,12 @@ Popup {
                                 width: parent.width / 2
                                 height: parent.height
 
-                                Row{
+                                Rectangle{
                                     height: parent.height
                                     width: parent.width
                                     anchors.left: parent
                                     anchors.leftMargin: 2
+                                    color: "transparent"
 
                                     Text {
                                         text: qsTr(name)
