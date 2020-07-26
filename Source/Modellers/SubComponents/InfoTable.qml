@@ -11,7 +11,7 @@ import "../SubComponents"
 Item{
 
     id: infodata_table
-    anchors.top: data_query_modeller_stackview.bottom
+    anchors.top: dataQueryModellerStackview.bottom
     anchors.left: left_menubar.right
     width: parent.width
     visible: true
@@ -28,6 +28,44 @@ Item{
         DSParamsModel.setDisplayRowsCount(100)
     }
 
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTIONS START
+
+    function onDragInfoTablePanel(mouse){
+        if(infoTableResizingFixed){
+
+            if(mouse.y > 0){
+                queryResultsTable.height -= mouse.y
+                dataQueryModellerStackview.height += mouse.y
+                if(dataQueryModellerStackview.height > 200){
+                    infoTableResizingFixed = false
+                }
+            }
+        }
+
+        if(dataQueryModellerStackview.height > 200){
+
+            queryResultsTable.height -= mouse.y
+            if(dataQueryModellerStackview.height + mouse.y < 200){
+
+                dataQueryModellerStackview.height = 200
+
+            }else{
+
+                dataQueryModellerStackview.height += mouse.y
+            }
+
+        }else{
+            infoTableResizingFixed = true;
+        }
+    }
+
+
+    //JAVASCRIPT FUNCTIONS ENDS
+    /***********************************************************************************************************************/
+
+
+
     Rectangle{
         id: infodataTableHeader
         height: 27
@@ -42,44 +80,14 @@ Item{
             height: 2
 
             MouseArea{
+                id: infoPanelDragMouseArea
                 anchors.fill: parent
                 cursorShape: Qt.SizeVerCursor
                 width: parent.width
 
                 onPositionChanged: {
 
-                    if(infoTableResizingFixed){
-
-                        if(mouse.y > 0){
-                            queryResultsTable.height -= mouse.y
-                            data_query_modeller_stackview.height += mouse.y
-                            if(data_query_modeller_stackview.height > 200){
-                                infoTableResizingFixed = false
-                            }
-                        }
-                    }
-
-                    if(data_query_modeller_stackview.height > 200){
-
-                        queryResultsTable.height -= mouse.y
-                        if(data_query_modeller_stackview.height + mouse.y < 200){
-
-                            data_query_modeller_stackview.height = 200
-
-                        }else{
-
-                            data_query_modeller_stackview.height += mouse.y
-                        }
-
-                    }else{
-                        infoTableResizingFixed = true;
-                    }
-
-                    console.log(mouse.x)
-                    console.log(mouse.y)
-                    console.log(data_query_modeller_stackview.height)
-                    console.log(linebar1.width)
-                    console.log(infodataTableHeader.width)
+                  onDragInfoTablePanel(mouse)
 
                 }
 
@@ -398,7 +406,7 @@ Item{
                         infodata_table.height = Qt.binding(function(){
                             return infodataTableHeader.height + queryResultsTable.height
                         })
-                        data_query_modeller_stackview.height = Qt.binding(function(){
+                        dataQueryModellerStackview.height = Qt.binding(function(){
 
                             return query_modeller_page.height - infodata_table.height - 66
                         })
@@ -414,7 +422,7 @@ Item{
                         infodata_table.height = Qt.binding(function(){
                             return infodataTableHeader.height + queryResultsTable.height
                         })
-                        data_query_modeller_stackview.height = Qt.binding(function(){
+                        dataQueryModellerStackview.height = Qt.binding(function(){
 
                             return query_modeller_page.height - infodata_table.height
                         })

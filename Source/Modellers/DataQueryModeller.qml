@@ -23,13 +23,15 @@ import "./SubComponents"
 Page {
 
     id: queryModellerPage
+    height: parent.height
+
+
     property int menu_width: 60
-    property bool data_modeller_selected: true
+    property bool dataModellerSelected: true
     property int statusIndex: 1
     property bool collapsed: false
     property bool open: true
     property int dataPreviewNo: 6
-    height: parent.height
 
 
     Connections{
@@ -52,7 +54,181 @@ Page {
     }
 
 
+
+
     /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTIONS STARTS
+
+    function onDataModellerClicked(){
+        if(!dataModellerSelected){
+            dataModellerSelected = !dataModellerSelected
+            datamodeller_querymodeller_background.color = Constants.darkThemeColor;
+            queryModellerTab_background.color = queryModellerTab_background.hovered ? Constants.darkThemeColor : Constants.themeColor
+
+            // Prompt dialog to warn user of data deletion
+            // If accepted, the clear data
+            // and push to another stackview screen
+            // MessageDialog defined at the bottom
+            dataRemovalWarningDataModel.open()
+        }
+    }
+
+    function onDataModellerHovered(){
+        if(!dataModellerSelected){
+            datamodeller_querymodeller_background.color = datamodeller_querymodeller.hovered ? Constants.darkThemeColor : Constants.themeColor
+        }
+    }
+
+    function onQueryModellerClicked(){
+
+        if(dataModellerSelected){
+            dataModellerSelected = !dataModellerSelected
+
+            queryModellerTab_background.color = Constants.darkThemeColor
+            datamodeller_querymodeller_background.color = datamodeller_querymodeller.hovered ? Constants.darkThemeColor : Constants.themeColor
+
+            // Prompt dialog to warn user of data deletion
+            // If accepted, the clear data
+            // and push to another stackview screen
+            // MessageDialog defined at the bottom
+            dataRemovalWarningQueryModel.open()
+        }
+
+    }
+
+    function onInMemorySelected(){
+        inMemory.visible = true
+        radio_live.radio_checked = false
+        radio_memory.radio_checked = true
+
+        // Also set the C++ class
+        // extract == in memory
+        DSParamsModel.setDsType("extract")
+    }
+
+    function openDataFilters(){
+        datafilters.visible = true
+    }
+
+    function onLiveSelected(){
+        radio_live.radio_checked = true
+        radio_memory.radio_checked = false
+
+        // Also set the C++ class
+        DSParamsModel.setDsType("live")
+    }
+
+    function onCreateDashboardClicked(){
+
+        Datasources.setDsName(ds_name.text)
+        Datasources.setSourceType("live")
+
+        stacklayout_home.currentIndex = 6
+    }
+
+
+    function onPublishDataSourceClicked(){
+        publishDatasource.visible = true
+
+        QueryStatsModel.setProfiling(false)
+        QueryStatsModel.setProfileStatus(false)
+    }
+
+    function searchTable(text){
+        TableListModel.callQuery(text)
+    }
+
+    function collapseTables(){
+
+        if(collapsed === true){
+            drop_icon.source = "../../../Images/icons/Up_20.png"
+            collapsed = false
+            tableslist.visible = true
+        }
+        else{
+            drop_icon.source = "../../../Images/icons/Down_20.png"
+            collapsed = true
+            tableslist.visible = false
+        }
+    }
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+    DataFilters{
+        id: datafilters
+    }
+
+    PublishDatasource{
+        id: publishDatasource
+    }
+
+    InMemory{
+        id: inMemory
+    }
+
+
+    Component{
+        id:tablelistDelegate
+
+        Rectangle {
+            id: wrapper
+            width: 200
+            height: 30
+
+            Text {
+                id: contactInfo
+                text: tableName
+                x: 20
+                font.pixelSize: 12
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+    }
+
+    MessageDialog{
+        id: dataRemovalWarningDataModel
+        title: "Warning"
+        text: "Your query will be lost. Are you sure you want to proceed?"
+        icon: StandardIcon.Critical
+
+        onAccepted: {
+            dataQueryModellerStackview.pop()
+            dataQueryModellerStackview.push("./SubComponents/DataModeller.qml")
+        }
+    }
+
+    MessageDialog{
+        id: dataRemovalWarningQueryModel
+        title: "Warning"
+        text: "Your diagram will be lost. Are you sure you want to proceed?"
+        icon: StandardIcon.Critical
+
+        onAccepted: {
+            QueryModel.setTmpSql("")
+
+            dataQueryModellerStackview.pop()
+            dataQueryModellerStackview.push("./SubComponents/QueryModeller.qml")
+        }
+
+    }
+
+
+    // SubComponents ends
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
 
     // Left menubar starts
 
@@ -89,36 +265,22 @@ Page {
                 width:100
 
                 onClicked: {
-
-                    if(!data_modeller_selected){
-                        data_modeller_selected = !data_modeller_selected
-                        datamodeller_querymodeller_background.color = Constants.darkThemeColor;
-                        query_querymodeller_background.color = query_querymodeller_background.hovered ? Constants.darkThemeColor : Constants.themeColor
-
-                        // Prompt dialog to warn user of data deletion
-                        // If accepted, the clear data
-                        // and push to another stackview screen
-                        // MessageDialog defined at the bottom
-                        dataRemovalWarningDataModel.open()
-                    }
-
+                    onDataModellerClicked()
                 }
 
                 onHoveredChanged: {
-                    if(!data_modeller_selected){
-                        datamodeller_querymodeller_background.color = datamodeller_querymodeller.hovered ? Constants.darkThemeColor : Constants.themeColor
-                    }
+                    onDataModellerHovered()
                 }
 
                 background: Rectangle {
                     id: datamodeller_querymodeller_background
                     color: datamodeller_querymodeller.hovered ? Constants.darkThemeColor : Constants.themeColor
-
                 }
+
                 contentItem: Text{
                     id: datamodeller_querymodeller_text
                     text: datamodeller_querymodeller.text
-                    color:  "black"
+                    color:  Constants.blackColor
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
@@ -136,42 +298,31 @@ Page {
             // Query Modeller Button starts
 
             TabButton{
-                id: query_querymodeller
+                id: queryModellerTab
                 text: "Query Modeller"
                 width:100
 
                 onClicked: {
 
-                    if(data_modeller_selected){
-                        data_modeller_selected = !data_modeller_selected
-
-                        query_querymodeller_background.color = Constants.darkThemeColor
-                        datamodeller_querymodeller_background.color = datamodeller_querymodeller.hovered ? Constants.darkThemeColor : Constants.themeColor
-
-                        // Prompt dialog to warn user of data deletion
-                        // If accepted, the clear data
-                        // and push to another stackview screen
-                        // MessageDialog defined at the bottom
-                        dataRemovalWarningQueryModel.open()
-                    }
+                    onQueryModellerClicked()
 
                 }
 
                 onHoveredChanged: {
-                    if(data_modeller_selected){
-                        query_querymodeller_background.color = query_querymodeller.hovered ? Constants.darkThemeColor : Constants.themeColor
+                    if(dataModellerSelected){
+                        queryModellerTab_background.color = queryModellerTab.hovered ? Constants.darkThemeColor : Constants.themeColor
                     }
                 }
 
                 background: Rectangle {
-                    id: query_querymodeller_background
-                    color:  query_querymodeller.hovered ? Constants.darkThemeColor : Constants.themeColor
+                    id: queryModellerTab_background
+                    color:  queryModellerTab.hovered ? Constants.darkThemeColor : Constants.themeColor
 
                 }
 
                 contentItem: Text{
-                    id: query_querymodeller_text
-                    text: query_querymodeller.text
+                    id: queryModellerTab_text
+                    text: queryModellerTab.text
                     color:  "black"
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -212,10 +363,6 @@ Page {
 
                 background: Rectangle{
                     color: refresh_querymodeller.hovered ? Constants.darkThemeColor : "white"
-                }
-
-                onClicked: {
-
                 }
 
 
@@ -285,7 +432,9 @@ Page {
                 }
 
                 onClicked: {
-                    datafilters.visible = true
+
+                    openDataFilters()
+
                 }
             }
 
@@ -305,11 +454,7 @@ Page {
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        radio_live.radio_checked = true
-                        radio_memory.radio_checked = false
-
-                        // Also set the C++ class
-                        DSParamsModel.setDsType("live")
+                        onLiveSelected()
                     }
                 }
             }
@@ -330,13 +475,7 @@ Page {
 
                     anchors.fill: parent
                     onClicked: {
-                        inMemory.visible = true
-                        radio_live.radio_checked = false
-                        radio_memory.radio_checked = true
-
-                        // Also set the C++ class
-                        // extract == in memory
-                        DSParamsModel.setDsType("extract")
+                        onInMemorySelected()
                     }
                 }
             }
@@ -371,10 +510,11 @@ Page {
 
 
 
+    /***********************************************************************************************************************/
     // Center Panel starts
 
     StackView{
-        id: data_query_modeller_stackview
+        id: dataQueryModellerStackview
 
         anchors.top: toolsep1.bottom
         anchors.left:left_menubar.right
@@ -421,10 +561,7 @@ Page {
 
 
     // Center Panel Ends
-
-
-
-
+    /***********************************************************************************************************************/
 
 
 
@@ -433,7 +570,7 @@ Page {
     InfoTable{
 
         id: infodata_table
-        anchors.top: data_query_modeller_stackview.bottom
+        anchors.top: dataQueryModellerStackview.bottom
         anchors.left: left_menubar.right
         width: parent.width
         visible: true
@@ -491,11 +628,7 @@ Page {
                     width:rectangle_querymodeller_right_col.width
 
                     onClicked: {
-
-                        Datasources.setDsName(ds_name.text)
-                        Datasources.setSourceType("live")
-
-                        stacklayout_home.currentIndex = 6
+                        onCreateDashboardClicked()
                     }
 
                     background: Rectangle {
@@ -612,7 +745,9 @@ Page {
                             anchors.fill: parent
 
                             onClicked: {
-                                TableListModel.callQuery(searchTextBox.text)
+
+                                searchTable(searchTextBox.text)
+
                             }
                         }
                     }
@@ -665,16 +800,7 @@ Page {
 
                             onClicked: {
 
-                                if(collapsed === true){
-                                    drop_icon.source = "../../../Images/icons/Up_20.png"
-                                    collapsed = false
-                                    tableslist.visible = true
-                                }
-                                else{
-                                    drop_icon.source = "../../../Images/icons/Down_20.png"
-                                    collapsed = true
-                                    tableslist.visible = false
-                                }
+                                collapseTables()
                             }
                         }
                     }
@@ -702,12 +828,7 @@ Page {
                 height: 40
 
                 onClicked: {
-
-                    publishDatasource.visible = true
-
-                    QueryStatsModel.setProfiling(false)
-                    QueryStatsModel.setProfileStatus(false)
-
+                    onPublishDataSourceClicked()
                 }
             }
         }
@@ -715,67 +836,8 @@ Page {
 
     // Righthand Panel ends
 
-
-
-    DataFilters{
-        id: datafilters
-    }
-
-    PublishDatasource{
-        id: publishDatasource
-    }
-
-    InMemory{
-        id: inMemory
-    }
-
-
-
-
-    Component{
-        id:tablelistDelegate
-
-        Rectangle {
-            id: wrapper
-            width: 200
-            height: 30
-
-            Text {
-                id: contactInfo
-                text: tableName
-                x: 20
-                font.pixelSize: 12
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-    }
-
-    MessageDialog{
-        id: dataRemovalWarningDataModel
-        title: "Warning"
-        text: "Your query will be lost. Are you sure you want to proceed?"
-        icon: StandardIcon.Critical
-
-        onAccepted: {
-            data_query_modeller_stackview.pop()
-            data_query_modeller_stackview.push("./SubComponents/DataModeller.qml")
-        }
-    }
-
-    MessageDialog{
-        id: dataRemovalWarningQueryModel
-        title: "Warning"
-        text: "Your diagram will be lost. Are you sure you want to proceed?"
-        icon: StandardIcon.Critical
-
-        onAccepted: {
-            QueryModel.setTmpSql("")
-
-            data_query_modeller_stackview.pop()
-            data_query_modeller_stackview.push("./SubComponents/QueryModeller.qml")
-        }
-
-    }
+    //Page Design Ends
+    /***********************************************************************************************************************/
 
 
 }

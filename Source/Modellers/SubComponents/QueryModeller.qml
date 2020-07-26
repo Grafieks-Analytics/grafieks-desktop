@@ -27,16 +27,18 @@ Item{
     }
 
     ToolSeparator{
-        id: tool_sep1
+        id: toolSeperator1
         anchors.top:parent.top
         anchors.topMargin: - 6
         height:parent.height  + 6
+        anchors.left: left_menubar.right
+        anchors.leftMargin: 30
         padding: 15
         width: 30
         contentItem: Rectangle {
-            implicitWidth: parent.vertical ? 1 : 24
-            implicitHeight: parent.vertical ? 24 : 1
-            color: Constants.themeColor
+            implicitWidth: parent.vertical ? 3 : 24
+            implicitHeight: parent.vertical ? 24 : 3
+            color: Constants.darkThemeColor
         }
 
         background: Rectangle{
@@ -44,7 +46,7 @@ Item{
         }
 
         Column{
-            id: query_numbers_column
+            id: queryNumbersColumn
             topPadding: 17
             leftPadding: 12
 
@@ -58,10 +60,10 @@ Item{
     }
 
     TextEdit{
-        id: textedit_querymodeller
-        anchors.left: tool_sep1.right
+        id: textEditQueryModeller
+        anchors.left: toolSeperator1.right
         height:parent.height
-        width: parent.width - tool_sep1.width
+        width: parent.width - toolSeperator1.width
         wrapMode: TextEdit.WordWrap
         padding: 10
 
@@ -69,8 +71,8 @@ Item{
 
             if(lineCount < 30){
                 event.accepted = true
-                textedit_querymodeller.text += "\n"
-                textedit_querymodeller.cursorPosition = textedit_querymodeller.text.length
+                textEditQueryModeller.text += "\n"
+                textEditQueryModeller.cursorPosition = textEditQueryModeller.text.length
                 totalLineCount++
 
             }
@@ -96,7 +98,7 @@ Item{
         onTextChanged: {
 
             // Set the Tmp SQL Query in C++
-            QueryModel.setTmpSql(textedit_querymodeller.text.replace(/\n|\r/g, ""))
+            QueryModel.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, ""))
         }
 
     }

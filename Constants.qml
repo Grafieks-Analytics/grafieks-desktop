@@ -37,6 +37,7 @@ QtObject {
     property color grayColor : "#707070"
     property color blackColor : "#000000"
     property color grafieksGreen: "#009B8F"
+    property color grafieksGreenColor: "#009B8F"
 
 
     // Standard Font Sizes
