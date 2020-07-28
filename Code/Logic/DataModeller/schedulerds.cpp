@@ -37,7 +37,6 @@ void SchedulerDS::fetchSchedulers()
 
     m_networkReply = m_networkAccessManager->post(m_NetworkRequest, strJson.toUtf8());
 
-
     connect(m_networkReply,&QIODevice::readyRead,this,&SchedulerDS::dataReadyRead);
     connect(m_networkReply,&QNetworkReply::finished,this,&SchedulerDS::dataReadFinished);
 }
@@ -74,6 +73,7 @@ void SchedulerDS::dataReadFinished()
 {
     //Parse the JSON
     if( m_networkReply->error()){
+
         qDebug() << "There was some error : " << m_networkReply->errorString();
     }else{
 
@@ -96,7 +96,6 @@ void SchedulerDS::dataReadFinished()
                 QString SchedulerName = dataObj["Name"].toString();
                 this->addScheduler(ScheduleID, SchedulerName);
             }
-
 
         }
 

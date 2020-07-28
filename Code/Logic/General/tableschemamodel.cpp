@@ -15,7 +15,7 @@ void TableSchemaModel::showSchema(QString query)
 
     case Constants::mysqlIntType:{
 
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
 
         // Determine the list of table names
         // from the last query
@@ -41,16 +41,28 @@ void TableSchemaModel::showSchema(QString query)
                 QJsonArray affectedColumns = tableData["used_columns"].toArray();
 
                 for(int j = 0; j < affectedColumns.size(); j++){
-                    queriedColumnNames << tableData["table_name"].toString() + "." +affectedColumns.at(j).toString();
+                    queriedColumnNames << affectedColumns.at(j).toString();
                 }
 
                 // Affected table names in the query
                 tableList << tableData["table_name"].toString();
+
             }
         } else{
             QJsonObject tableData = statusObj["table"].toObject();
+
+            // Affected column names in teh query
+            QJsonArray affectedColumns = tableData["used_columns"].toArray();
+
+            for(int j = 0; j < affectedColumns.size(); j++){
+                queriedColumnNames << affectedColumns.at(j).toString();
+            }
+
             tableList << tableData["table_name"].toString();
+
         }
+
+
 
         // Determine the Table structure
 
@@ -84,6 +96,9 @@ void TableSchemaModel::showSchema(QString query)
                     allOthers.append(outputDataList);
                 }
 
+                // Append all data type to allCategorical as well
+                allCategorical.append(outputDataList);
+
                 // Clear Stringlist for future
                 outputDataList.clear();
             }
@@ -100,7 +115,15 @@ void TableSchemaModel::showSchema(QString query)
     // For the slots to received the data
     // in QML (UI)
 
+
     emit tableSchemaObtained(allCategorical, allNumerical, allDates, allOthers, queriedColumnNames);
+
+    // Clear all stringlist for new values
+    queriedColumnNames.clear();
+    allCategorical.clear();
+    allNumerical.clear();
+    allDates.clear();
+    allOthers.clear();
 
 
 }
@@ -110,6 +133,7 @@ QString TableSchemaModel::dataType(QString parameter)
 
     QString output;
     QStringList categorical, numerical, dateformat;
+
 
     categorical << "varchar" << "char" << "text" << "tinytext" << "mediumtext" << "longtext" << "boolean" ;
     numerical << "int" << "tinyint" << "smallint" << "mediumint" << "bigint" << "decimal" << "float" << "double" << "real";

@@ -40,7 +40,6 @@ Popup {
         target: TableSchemaModel
 
         onTableSchemaObtained:{
-            //            console.log(outputData, columnNames)
             columnsDropdown.model = queriedColumnNames
         }
     }
@@ -185,14 +184,11 @@ Popup {
 
 
                 ComboBox{
-                    id: schedulerDropdown
-                    textRole: "Name"
-                    valueRole: "ScheduleID"
+                    id: columnsDropdown
                     currentIndex: 0
-                    model: SchedulerModel
                     onCurrentIndexChanged: {
-                        console.log(currentValue, currentText, currentIndex)
-                        DSParamsModel.setSchedulerId(currentValue)
+                        console.log(currentText, currentIndex)
+                        DSParamsModel.setExtractColName(currentText)
                     }
 
                 }
@@ -229,12 +225,17 @@ Popup {
                 anchors.topMargin: 20
                 width: parent.width - 120
 
+
+
                 ComboBox{
-                    id: columnsDropdown
+                    id: schedulerDropdown
+                    textRole: "Name"
+                    valueRole: "ScheduleID"
                     currentIndex: 0
+                    model: SchedulerModel
                     onCurrentIndexChanged: {
-                        console.log(currentText, currentIndex)
-                        DSParamsModel.setExtractColName(currentText)
+                        console.log(currentValue, currentText, currentIndex)
+                        DSParamsModel.setSchedulerId(currentValue)
                     }
 
                 }
@@ -252,7 +253,7 @@ Popup {
                 Text {
                     id: noteText
                     leftPadding: 30
-                    anchors.top: columnsDropdown.bottom
+                    anchors.top: schedulerDropdown.bottom
                     anchors.topMargin: 10
                     text: qsTr("Above field will show all data extract schedule that is set up in GRS")
                 }
