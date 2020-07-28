@@ -8,17 +8,17 @@ During the build process, if you encounter errors, delete the files `config.cach
 
 ## Windows 10 installation
 
-> **Step 1**
+### <u>Step 1</u>
 
 Download and Install [Mysql Server](https://dev.mysql.com/downloads/installer/) (select **mysql-installer-web-community-8.0.21.0.msi** and select Mysql Server v5.7 during installation). Follow the rest of the instructions on the installer screen.
 
 _NOTE:_ If you already have WAMP/XAMPP, you don't need to follow the above step
 
-> **Step 2**
+### <u>Step 2</u>
 
 Download and install [Mysql C Connector 6.1.11](https://downloads.mysql.com/archives/c-c/). Dont download the latest 8.x version as it doesn't contain the required development headers
 
-> **Step 3**
+### <u>Step 3</u>
 
 Open the command prompt and enter the following commands.
 
@@ -39,7 +39,7 @@ nmake-install
 nmake-clean
 ```
 
-> **Step 4**
+### <u>Step 4</u>
 
 Copy `libmysql.dll` from `C:/Program Files/MySQL/MySQL Connector C 6.1/lib/`
 
