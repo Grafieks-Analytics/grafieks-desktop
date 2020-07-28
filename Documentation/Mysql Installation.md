@@ -1,6 +1,6 @@
 # Mysql installation
 
-This document is tested with **Mysql 5.7**. Although for higher versions, the steps will be almost similar.
+This document is guides you to compile driver for **Mysql 5.7**. Although for higher versions, the steps should be almost similar.
 
 **Note: Sql Driver Compilation error**
 
@@ -22,11 +22,6 @@ Download and install [Mysql C Connector 6.1.11](https://downloads.mysql.com/arch
 
 Open the command prompt and enter the following commands.
 
-_Note_ :
-
--   Actual path may vary. Check with your system's path
--   Steps can also be refered from https://doc.qt.io/qt-5/sql-driver.html
-
 ```sh
 cd QT_INSTALL_DIR/5.15.0/Src/qtbase/src/plugins/sqldrivers
 
@@ -39,8 +34,13 @@ nmake-install
 nmake-clean
 ```
 
+_Note_ :
+
+-   Actual path may vary. Check with your system's path
+-   Steps can also be refered from https://doc.qt.io/qt-5/sql-driver.html
+
 ### Step 4
 
-Copy `libmysql.dll` to `QT_INSTALL_DIR/msvc2019/bin` from `C:/Program Files/MySQL/MySQL Connector C 6.1/lib/`
+Copy `libmysql.dll` to `QT_INSTALL_DIR/5.15.0/msvc2019/bin` from `C:/Program Files/MySQL/MySQL Connector C 6.1/lib/`
 
 ## Mac installation
