@@ -13,7 +13,7 @@ Click the **Modify** button and select the **Individual Components** tab on the 
 5. Windows Universal CRT SDK
 
 A few components can be automatically selected. But that is ok
-![Visual Studio 2019 Community Components](https://imgur.com/PtbVqPD)
+![Visual Studio 2019 Community Components](https://i.imgur.com/0uSuF3n.png)
 
 #### QT Installation 5.15
 
@@ -37,5 +37,5 @@ The following components will be enough for Grafieks
 4. Openssl 1.1.1d Toolkit
 
 The above steps should be enough for Windows installation
-![QT 5.15.0 components](https://imgur.com/a/wl2EHe6)
-![Developer and Designer tools](https://imgur.com/a/nLxX0n6)
+![QT 5.15.0 components](https://i.imgur.com/xnLGvpN.png)
+![Developer and Designer tools](https://i.imgur.com/DlIuFfc.png)
