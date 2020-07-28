@@ -44,7 +44,7 @@ void QueryModel::callSql()
     switch(Statics::currentDbIntType){
 
     case Constants::mysqlIntType:{
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
         this->setQuery(this->tmpSql(), dbMysql);
 
         break;

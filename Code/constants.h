@@ -20,7 +20,9 @@ const int sqliteIntType = 1;
 
 // Datasource type Strings
 const QString mysqlStrType = "mysql";
+const QString mysqlStrQueryType = "mysql_query";
 const QString sqliteStrType = "sqlite";
+const QString sqliteStrQueryType = "sqlite_query";
 
 // Filter type Strings
 const QString categoricalType = "categorical";

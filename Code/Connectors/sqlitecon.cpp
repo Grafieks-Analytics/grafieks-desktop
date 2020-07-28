@@ -33,6 +33,21 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &us
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Constants::GeneralSuccessMsg);
+
+
+            // Open another Sqlite Connection
+            // For Query/Data modeller
+            // Else all the query statistics are listed in "Test Query" tab in Data-Query-Modeller
+
+            QSqlDatabase dbSqlite2 = QSqlDatabase::addDatabase(DRIVER, Constants::sqliteStrQueryType);
+            dbSqlite2.setDatabaseName(filename);
+
+            if(username != "" && password != ""){
+                dbSqlite2.setUserName(username);
+                dbSqlite2.setPassword(password);
+            }
+
+            dbSqlite2.open();
         }
 
     } else{
@@ -46,6 +61,8 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &us
 
 Sqlitecon::~Sqlitecon()
 {
-    QSqlDatabase dbSqlite = QSqlDatabase::database();
+    QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
+    QSqlDatabase dbSqlite2 = QSqlDatabase::database(Constants::sqliteStrQueryType);
     dbSqlite.close();
+    dbSqlite2.close();
 }

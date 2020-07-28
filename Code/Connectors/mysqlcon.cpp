@@ -36,6 +36,19 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Constants::GeneralSuccessMsg);
+
+            // Open another Mysql Connection
+            // For Query/Data modeller
+            // Else all the query statistics are listed in "Test Query" tab in Data-Query-Modeller
+
+            QSqlDatabase dbMysql2 = QSqlDatabase::addDatabase(DRIVER, Constants::mysqlStrQueryType);
+            dbMysql2.setHostName(host);
+            dbMysql2.setPort(port);
+            dbMysql2.setDatabaseName(db);
+            dbMysql2.setUserName(username);
+            dbMysql2.setPassword(password);
+
+            dbMysql2.open();
         }
 
     } else{
@@ -48,6 +61,8 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
 
 MysqlCon::~MysqlCon()
 {
-    QSqlDatabase dbMysql = QSqlDatabase::database();
+    QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
+    QSqlDatabase dbMysql2 = QSqlDatabase::database( Constants::mysqlStrQueryType);
     dbMysql.close();
+    dbMysql2.close();
 }
