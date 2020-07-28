@@ -41,6 +41,6 @@ nmake-clean
 
 ### Step 4
 
-Copy `libmysql.dll` from `C:/Program Files/MySQL/MySQL Connector C 6.1/lib/`
+Copy `libmysql.dll` to `QT_INSTALL_DIR/msvc2019/bin` from `C:/Program Files/MySQL/MySQL Connector C 6.1/lib/`
 
 ## Mac installation
