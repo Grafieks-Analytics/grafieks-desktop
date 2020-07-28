@@ -1,6 +1,8 @@
 import QtQuick 2.12
+import QtQuick.Controls 2.15
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
+import QtQuick.Dialogs 1.3
 
 import com.grafieks.singleton.constants 1.0
 
@@ -87,7 +89,7 @@ Item{
 
                 onPositionChanged: {
 
-                  onDragInfoTablePanel(mouse)
+                    onDragInfoTablePanel(mouse)
 
                 }
 
@@ -341,18 +343,27 @@ Item{
 
                 onClicked:{
                     testQueryBtn.visible = true
+                    var isSqlSelect = QueryModel.tmpSql.toUpperCase().startsWith("SELECT") || QueryModel.tmpSql.toUpperCase().startsWith("WITH");
 
                     // Set profiling on when clicking the play button
                     // Reset profiling and turn off when clicked on Publish button
+
 
                     if(QueryStatsModel.profileStatus === false){
                         QueryStatsModel.setProfiling(true)
                         QueryStatsModel.setProfileStatus(true)
                     }
 
-                    QueryModel.callSql()
-                    QueryStatsModel.showStats()
-                    TableSchemaModel.showSchema(QueryModel.tmpSql)
+                    // If query is SELECT query
+                    // Only SELECT query allowed
+
+                    if(isSqlSelect){
+                        QueryModel.callSql()
+                        QueryStatsModel.showStats()
+                        TableSchemaModel.showSchema(QueryModel.tmpSql)
+                    } else{
+                        sqlQueryNotAllowedDialog.visible = true
+                    }
                 }
 
             }
@@ -496,4 +507,28 @@ Item{
 
     // Result Ends
 
+
+
+    //    Dialog {
+    //        id: sqlQueryNotAllowedDialog
+    //        title: "SQL query not allowed"
+    //        standardButtons: Dialog.Ok | Dialog.Cancel
+
+    //        onAccepted: console.log("Ok clicked")
+    //        onRejected: console.log("Cancel clicked")
+    //    }
+
+    MessageDialog{
+        id: sqlQueryNotAllowedDialog
+        title: "Warning"
+        text: "Sql query not allowed. Only SELECT query allowed"
+        icon: StandardIcon.Critical
+
+        onAccepted: {
+            sqlQueryNotAllowedDialog.close()
+        }
+    }
+
 }
+
+

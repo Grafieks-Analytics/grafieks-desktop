@@ -7,6 +7,7 @@ TableSchemaModel::TableSchemaModel(QObject *parent) : QObject(parent)
 
 void TableSchemaModel::showSchema(QString query)
 {
+
     QString explainQueryString, describeQueryString;
     QStringList tableList, outputDataList;
 
