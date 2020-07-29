@@ -104,6 +104,7 @@ Rectangle{
             anchors.leftMargin: 4
 
             TextField{
+                id: searchText
                 placeholderText: "Search"
                 leftPadding: 20
                 height: 40
@@ -113,6 +114,11 @@ Rectangle{
                 background: Rectangle{
                     border.color: Constants.borderBlueColor
                     radius: 4
+                }
+
+                onTextChanged: {
+                    console.log("text changing")
+                    ColumnListModel.likeColumnQuery(DSParamsModel.colName, DSParamsModel.tableName, searchText.text)
                 }
             }
         }
@@ -137,7 +143,7 @@ Rectangle{
         ListView{
 
             id: multiSelectCheckList
-            model: checkListModel
+            model: ColumnListModel
             height: parent.height
             width: parent.width
 
@@ -149,7 +155,7 @@ Rectangle{
                 Column{
                     CheckBox {
                         checked: true
-                        text: qsTr(textValue)
+                        text: modelData
                         indicator.width: 15
                         indicator.height: 15
 
@@ -163,7 +169,7 @@ Rectangle{
         ListView{
 
             id: singleSelectCheckList
-            model: checkListModel
+            model: ColumnListModel
             height: parent.height
             width: parent.width
             visible: false
@@ -176,7 +182,7 @@ Rectangle{
                 Column{
                     RadioButtonTpl {
                         radio_checked: true
-                        radio_text: qsTr(textValue)
+                        radio_text: modelData
                         parent_dimension: 16
 
                     }

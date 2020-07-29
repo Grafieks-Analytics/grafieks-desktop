@@ -35,6 +35,16 @@ int DSParamsModel::displayRowsCount() const
     return m_displayRowsCount;
 }
 
+QString DSParamsModel::colName() const
+{
+    return m_colName;
+}
+
+QString DSParamsModel::tableName() const
+{
+    return m_tableName;
+}
+
 void DSParamsModel::setDsName(QString dsName)
 {
     if (m_dsName == dsName)
@@ -87,4 +97,22 @@ void DSParamsModel::setDisplayRowsCount(int displayRowsCount)
 
     m_displayRowsCount = displayRowsCount;
     emit displayRowsCountChanged(m_displayRowsCount);
+}
+
+void DSParamsModel::setColName(QString colName)
+{
+    if (m_colName == colName)
+        return;
+
+    m_colName = colName;
+    emit colNameChanged(m_colName);
+}
+
+void DSParamsModel::setTableName(QString tableName)
+{
+    if (m_tableName == tableName)
+        return;
+
+    m_tableName = tableName;
+    emit tableNameChanged(m_tableName);
 }

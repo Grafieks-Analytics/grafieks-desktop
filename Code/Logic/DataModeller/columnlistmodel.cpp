@@ -34,7 +34,7 @@ QVariant ColumnListModel::data(const QModelIndex &index, int role) const
 
 QHash<int, QByteArray> ColumnListModel::roleNames() const
 {
-    return m_roleNames;
+    return {{Qt::DisplayRole, "display"}};
 }
 
 void ColumnListModel::columnQuery(QString columnName, QString tableName, int pageNo)
@@ -63,6 +63,8 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
 
 
         queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+
+        qDebug() << queryString << "queryString";
 
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
         this->setQuery(queryString, dbMysql);

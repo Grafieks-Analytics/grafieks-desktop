@@ -377,8 +377,9 @@ Popup {
                 text: colName
                 onTriggered: {
 
-                    console.log(tableName, colName, "XOXO")
                     ColumnListModel.columnQuery(colName, tableName)
+                    DSParamsModel.setColName(colName)
+                    DSParamsModel.setTableName(tableName)
 
                 }
                 onClicked: {
