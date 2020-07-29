@@ -62,9 +62,7 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
     case Constants::mysqlIntType:{
 
 
-        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + lowerLimit + ", "+ upperLimit;
-
-        qDebug() << queryString << "QueryString";
+        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
 
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
         this->setQuery(queryString, dbMysql);

@@ -21,11 +21,6 @@ import "../SubComponents/MiniSubComponents"
 Popup {
 
     property string tabBarOpen: Constants.categoricalTab
-    property var categoricalModel: []
-    property var numericalModel: []
-    property var dateModel: []
-    property var otherModel: []
-
 
     id: popupMain
     width: parent.width * 0.5
@@ -37,33 +32,73 @@ Popup {
     padding: 0
     closePolicy: Popup.NoAutoClose
 
+
+    // ListModels
+    // Dynamically populated by
+    // Connections: TableSchemaModel
+
+    ListModel{
+        id: categoricalModel
+    }
+
+    ListModel{
+        id: numericalModel
+    }
+
+    ListModel{
+        id: datesModel
+    }
+
+    // For Groups tab
+
+    ListModel{
+        id:groupModelList
+        ListElement{
+            textValue:"group1"
+        }
+        ListElement{
+            textValue:"group2"
+        }
+        ListElement{
+            textValue:"group2"
+        }
+        ListElement{
+            textValue:"group2"
+        }
+        ListElement{
+            textValue:"group2"
+        }
+        ListElement{
+            textValue:"group2"
+        }
+        ListElement{
+            textValue:"group2"
+        }
+    }
+
+    // This function is used to create models
+    // for FILTERS category type
+    // Populates Listmodal
+
     Connections{
         target: TableSchemaModel
 
-        // This function is used to create models
-        // for FILTERS category type
-
         onTableSchemaObtained:{
 
-            categoricalModel = []
-            numericalModel = []
-            dateModel = []
-
-
             allCategorical.forEach(function (element) {
-                categoricalModel.push(element[1]);
+                categoricalModel.append({"tableName" : element[0], "colName" : element[1]});
             });
 
             allNumerical.forEach(function (element) {
-                numericalModel.push(element[1]);
+                numericalModel.append({"tableName" : element[0], "colName" : element[1]});
             });
 
             allDates.forEach(function (element) {
-                dateModel.push(element[1]);
+                datesModel.append({"tableName" : element[0], "colName" : element[1]});
             });
 
             addMenuList.model =  categoricalModel
-            addMenuList.height = categoricalModel.length * 40
+            addMenuList.height = categoricalModel.count * 40
 
         }
     }
@@ -162,7 +197,7 @@ Popup {
                 allGroupFilterContent.visible = false
 
                 addMenuList.model = categoricalModel
-                addMenuList.height = categoricalModel.length * 40
+                addMenuList.height = categoricalModel.count * 40
 
                 tabBarOpen = Constants.categoricalTab
 
@@ -204,8 +239,8 @@ Popup {
                 allNumericalFilterContent.visible = false
                 allGroupFilterContent.visible = false
 
-                addMenuList.model = dateModel
-                addMenuList.height = dateModel.length * 40
+                addMenuList.model = datesModel
+                addMenuList.height = datesModel.count * 40
 
 
                 tabBarOpen = Constants.dateTab
@@ -248,7 +283,7 @@ Popup {
                 allGroupFilterContent.visible = false
 
                 addMenuList.model = numericalModel
-                addMenuList.height = numericalModel.length * 40
+                addMenuList.height = numericalModel.count * 40
 
 
                 tabBarOpen = Constants.numericalTab
@@ -323,30 +358,7 @@ Popup {
 
 
 
-    ListModel{
-        id:groupModelList
-        ListElement{
-            textValue:"group1"
-        }
-        ListElement{
-            textValue:"group2"
-        }
-        ListElement{
-            textValue:"group2"
-        }
-        ListElement{
-            textValue:"group2"
-        }
-        ListElement{
-            textValue:"group2"
-        }
-        ListElement{
-            textValue:"group2"
-        }
-        ListElement{
-            textValue:"group2"
-        }
-    }
+
 
     Menu {
         id: optionsMenu1
@@ -362,8 +374,13 @@ Popup {
             delegate:
 
                 MenuItem {
-                text: modelData
-                onTriggered: {}
+                text: colName
+                onTriggered: {
+
+                    console.log(tableName, colName, "XOXO")
+                    ColumnListModel.columnQuery(colName, tableName)
+
+                }
                 onClicked: {
                     if(tabBarOpen === Constants.categoricalTab){
                         categoricalFilterPopup.visible = true
@@ -372,7 +389,6 @@ Popup {
                         groupFilterPopup.visible = false
                     }
                     else if(tabBarOpen === Constants.dateTab){
-                        console.log('ok')
                         categoricalFilterPopup.visible = false
                         dateFilterPopup.visible = true
                         numericalFilterPopup.visible = false
