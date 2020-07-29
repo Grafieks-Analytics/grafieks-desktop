@@ -343,7 +343,7 @@ Item{
 
                 onClicked:{
                     testQueryBtn.visible = true
-                    var isSqlSelect = QueryModel.tmpSql.toUpperCase().startsWith("SELECT") || QueryModel.tmpSql.toUpperCase().startsWith("WITH");
+                    var isSqlSelect = QueryModel.tmpSql.toUpperCase().startsWith("SELECT");
 
                     // Set profiling on when clicking the play button
                     // Reset profiling and turn off when clicked on Publish button
@@ -508,20 +508,13 @@ Item{
     // Result Ends
 
 
-
-    //    Dialog {
-    //        id: sqlQueryNotAllowedDialog
-    //        title: "SQL query not allowed"
-    //        standardButtons: Dialog.Ok | Dialog.Cancel
-
-    //        onAccepted: console.log("Ok clicked")
-    //        onRejected: console.log("Cancel clicked")
-    //    }
+    // IF the sql query is not "SELECT query"
+    // Show this popup
 
     MessageDialog{
         id: sqlQueryNotAllowedDialog
         title: "Warning"
-        text: "Sql query not allowed. Only SELECT query allowed"
+        text: "Only SELECT (without Common Table Expressions) query allowed"
         icon: StandardIcon.Critical
 
         onAccepted: {

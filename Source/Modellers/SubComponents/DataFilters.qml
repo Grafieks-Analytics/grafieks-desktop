@@ -42,17 +42,21 @@ Popup {
 
         onTableSchemaObtained:{
 
+            categoricalModel = []
+            numericalModel = []
+            dateModel = []
+
 
             allCategorical.forEach(function (element) {
-                categoricalModel.push(element[0] +"."+ element[1]);
+                categoricalModel.push(element[1]);
             });
 
             allNumerical.forEach(function (element) {
-                numericalModel.push(element[0] +"."+ element[1]);
+                numericalModel.push(element[1]);
             });
 
             allDates.forEach(function (element) {
-                dateModel.push(element[0] +"."+ element[1]);
+                dateModel.push(element[1]);
             });
 
             addMenuList.model =  categoricalModel

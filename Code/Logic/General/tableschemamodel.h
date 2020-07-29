@@ -24,12 +24,13 @@ public:
     Q_INVOKABLE void showSchema(QString query = "");
 
 signals:
-    void tableSchemaObtained(QList <QStringList> allCategorical, QList <QStringList> allNumerical, QList <QStringList> allDates, QList <QStringList> allOthers,QStringList queriedColumnNames);
+    void tableSchemaObtained(QList <QStringList> allList, QList <QStringList> allCategorical, QList <QStringList> allNumerical, QList <QStringList> allDates, QList <QStringList> allOthers,QStringList queriedColumnNames);
 
 private:
 
     QString dataType(QString parameter);
     
+    QList<QStringList> allList;
     QList<QStringList> allCategorical;
     QList<QStringList> allNumerical;
     QList<QStringList> allDates;

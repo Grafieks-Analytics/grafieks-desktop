@@ -97,8 +97,8 @@ void TableSchemaModel::showSchema(QString query)
                     allOthers.append(outputDataList);
                 }
 
-                // Append all data type to allCategorical as well
-                allCategorical.append(outputDataList);
+                // Append all data type to allList as well
+                allList.append(outputDataList);
 
                 // Clear Stringlist for future
                 outputDataList.clear();
@@ -117,7 +117,7 @@ void TableSchemaModel::showSchema(QString query)
     // in QML (UI)
 
 
-    emit tableSchemaObtained(allCategorical, allNumerical, allDates, allOthers, queriedColumnNames);
+    emit tableSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers, queriedColumnNames);
 
     // Clear all stringlist for new values
     queriedColumnNames.clear();
@@ -125,6 +125,7 @@ void TableSchemaModel::showSchema(QString query)
     allNumerical.clear();
     allDates.clear();
     allOthers.clear();
+    allList.clear();
 
 
 }

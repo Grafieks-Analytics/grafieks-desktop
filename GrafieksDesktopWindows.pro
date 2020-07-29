@@ -135,6 +135,7 @@ HEADERS += \
     Code/Logic/General/tableschemamodel.h \
     Code/Logic/General/testing.h \
     Code/Logic/Menu/user.h \
+    Code/messages.h \
     \ \
     Code/constants.h \
     Code/statics.h

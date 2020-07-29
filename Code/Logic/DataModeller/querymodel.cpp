@@ -60,7 +60,7 @@ QString QueryModel::tmpSql() const
 
 void QueryModel::setTmpSql(QString tmpSql)
 {
-     bool isSqlSelect = tmpSql.toUpper().startsWith("SELECT") || tmpSql.toUpper().startsWith("WITH");
+     bool isSqlSelect = tmpSql.toUpper().startsWith("SELECT");
 
 
     if (m_tmpSql == tmpSql && !isSqlSelect)
