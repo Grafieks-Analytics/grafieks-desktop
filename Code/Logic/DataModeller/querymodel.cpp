@@ -60,11 +60,13 @@ QString QueryModel::tmpSql() const
 
 void QueryModel::setTmpSql(QString tmpSql)
 {
-     bool isSqlSelect = tmpSql.toUpper().startsWith("SELECT");
+    // Only select queries to be accepted
+
+    bool isSqlSelect = tmpSql.toUpper().startsWith("SELECT");
 
 
     if (m_tmpSql == tmpSql && !isSqlSelect)
-        return;    
+        return;
 
     m_tmpSql = tmpSql;
     emit tmpSqlChanged(m_tmpSql);

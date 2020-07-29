@@ -40,6 +40,9 @@ Popup {
     Connections{
         target: TableSchemaModel
 
+        // This function is used to create models
+        // for FILTERS category type
+
         onTableSchemaObtained:{
 
             categoricalModel = []

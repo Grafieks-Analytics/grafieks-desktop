@@ -26,6 +26,7 @@
 #include "Code/Logic/DataModeller/publishdatasourcemodel.h"
 #include "Code/Logic/DataModeller/schedulerds.h"
 #include "Code/Logic/DataModeller/schedulermodel.h"
+#include "Code/Logic/DataModeller/columnlistmodel.h"
 
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
@@ -92,10 +93,7 @@ int main(int argc, char *argv[])
     TableSchemaModel tableSchemaModel;
     DSParamsModel dsParamsModel;
     PublishDatasourceModel publishDatasourceModel;
-
-    SchedulerModel schedulerModel;
-    SchedulerDS * scheduler = new SchedulerDS(&app);
-
+    ColumnListModel columnListModel;
 
     // Datasource Connector Initializations
     DropboxModel dropboxModel;
@@ -112,6 +110,10 @@ int main(int argc, char *argv[])
     // Google sheet modal
     SheetModel sheetModel;
     SheetDS * sheet = new SheetDS(&app);
+
+    // Scheduler model
+    SchedulerModel schedulerModel;
+    SchedulerDS * scheduler = new SchedulerDS(&app);
 
 
     // Call default functions
@@ -151,7 +153,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("TableSchemaModel", &tableSchemaModel);
     engine.rootContext()->setContextProperty("DSParamsModel",&dsParamsModel);
     engine.rootContext()->setContextProperty("PublishDatasourceModel", &publishDatasourceModel);
-
+    engine.rootContext()->setContextProperty("ColumnListModel", &columnListModel);
     engine.rootContext()->setContextProperty("SchedulerModel",&schedulerModel);
     engine.rootContext()->setContextProperty("SchedulerDS",scheduler);
 

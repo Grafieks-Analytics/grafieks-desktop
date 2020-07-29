@@ -18,12 +18,22 @@ void TableSchemaModel::showSchema(QString query)
 
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
 
+        // Reset Mysql Profiling so that it doesn't log the query stats
+        // Then in the end of this case, Set it back again in the end
+        // We donot want to show "EXPLAIN" & "DESCRIBE" output
+        // in Test Query Tab
+
+        QSqlQuery profilingUnsetQuery("SET profiling = 0", dbMysql);
+        QSqlQuery profilingSetQuery("SET profiling = 1", dbMysql);
+
+        profilingUnsetQuery.exec();
+
         // Determine the list of table names
         // from the last query
 
         explainQueryString = "EXPLAIN FORMAT = JSON "+ query;
-
         QSqlQuery explainQuery(explainQueryString, dbMysql);
+
 
         explainQuery.first();
 
@@ -105,6 +115,9 @@ void TableSchemaModel::showSchema(QString query)
             }
         }
 
+        // Set mysql profiling back again
+        profilingSetQuery.exec();
+
 
 
         break; // Mysql Type break
@@ -116,10 +129,10 @@ void TableSchemaModel::showSchema(QString query)
     // For the slots to received the data
     // in QML (UI)
 
-
     emit tableSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers, queriedColumnNames);
 
     // Clear all stringlist for new values
+
     queriedColumnNames.clear();
     allCategorical.clear();
     allNumerical.clear();
