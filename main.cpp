@@ -27,6 +27,7 @@
 #include "Code/Logic/DataModeller/schedulerds.h"
 #include "Code/Logic/DataModeller/schedulermodel.h"
 #include "Code/Logic/DataModeller/columnlistmodel.h"
+#include "Code/Logic/DataModeller/filterlistmodel.h"
 
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
@@ -94,6 +95,7 @@ int main(int argc, char *argv[])
     DSParamsModel dsParamsModel;
     PublishDatasourceModel publishDatasourceModel;
     ColumnListModel columnListModel;
+    FilterListModel filterListModel;
 
     // Datasource Connector Initializations
     DropboxModel dropboxModel;
@@ -156,6 +158,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("ColumnListModel", &columnListModel);
     engine.rootContext()->setContextProperty("SchedulerModel",&schedulerModel);
     engine.rootContext()->setContextProperty("SchedulerDS",scheduler);
+    engine.rootContext()->setContextProperty("FilterListModel",&filterListModel);
 
 
 

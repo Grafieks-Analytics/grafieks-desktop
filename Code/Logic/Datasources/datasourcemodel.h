@@ -20,7 +20,7 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     Qt::ItemFlags flags(const QModelIndex& index) const;
-    QHash<int, QByteArray> roleNames() const; //Allows to expose our custom roles( names,favoritecolor,age) to a qml ListView
+    QHash<int, QByteArray> roleNames() const;
 
     DatasourceDS *datasourceds() const;
     void setDatasourceds(DatasourceDS * datasourceds);

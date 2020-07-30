@@ -26,6 +26,8 @@ Rectangle{
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
 
+    property int counter : 0
+
     Rectangle{
         id: selectTypeRadioBtn
         height: 40
@@ -140,6 +142,9 @@ Rectangle{
 
 
 
+        // Checkbox ListView
+        // List Filters starts
+
         ListView{
 
             id: multiSelectCheckList
@@ -147,24 +152,73 @@ Rectangle{
             height: parent.height
             width: parent.width
 
-            delegate: Row{
+            delegate: Column{
 
                 height: 20
                 width: parent.width
 
-                Column{
-                    CheckBox {
+
+                Loader{
+
+                    id: loaderAll
+                    height: 15
+                    active: model.row === 0
+                    sourceComponent:
+
+                        CheckBox {
                         checked: true
-                        text: modelData
+                        text: "All"
                         indicator.width: 15
                         indicator.height: 15
 
+                        onCheckStateChanged: {
+                            console.log("All", checked)
+                            modelCheckBoxes.checked = false
+                            modelCheckBoxes.checked = false
+                        }
                     }
                 }
+
+                CheckBox {
+
+                    id: modelCheckBoxes
+                    anchors.top: loaderAll.bottom
+                    checked: true
+                    text: modelData
+                    indicator.width: 15
+                    indicator.height: 15
+
+                    Component.objectName: {
+                        counter++
+                        console.log(counter)
+                    }
+
+                    onCheckStateChanged: {
+                        console.log(modelData, checked)
+                    }
+
+                }
+
+
+
+
+
 
             }
         }
 
+        // Checkbox ListView
+        // List Filters ends
+
+        // Mutually exclusive radio buttons
+
+        ButtonGroup {
+            id: btngrp
+        }
+
+
+        // Radio button ListView
+        // List Filters starts
 
         ListView{
 
@@ -180,16 +234,34 @@ Rectangle{
                 width: parent.width
 
                 Column{
-                    RadioButtonTpl {
-                        radio_checked: true
-                        radio_text: modelData
-                        parent_dimension: 16
 
+                    //                    RadioButtonTpl {
+                    //                        radio_checked: false
+                    //                        radio_text: modelData
+                    //                        parent_dimension: 16
+
+                    //                        onRadio_checkedChanged: {
+                    //                            console.log(modelData, radio_checked)
+                    //                        }
+
+                    //                    }
+
+
+                    RadioButton {
+                        text: modelData
+                        ButtonGroup.group: btngrp
+
+                        onCheckedChanged: {
+                            console.log(modelData, checked)
+                        }
                     }
                 }
 
             }
         }
+
+        // Radio button ListView
+        // List Filters ends
 
     }
 
@@ -227,5 +299,7 @@ Rectangle{
         }
 
     }
+
+
 
 }
