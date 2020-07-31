@@ -1,8 +1,8 @@
 #include "filterlist.h"
 
-FilterList::FilterList(const int &filterId, const QString &category, const QString &tableName, const QString &columnName, const QString &relation, const QVariant &value, QObject *parent):
+FilterList::FilterList(const int &filterId, const QString &category, const QString &subcategory, const QString &tableName, const QString &columnName, const QString &relation, const QVariant &value, QObject *parent):
 
-    QObject(parent), m_filterId(filterId), m_category(category), m_tableName(tableName), m_columnName(columnName), m_relation(relation), m_value(value)
+    QObject(parent), m_filterId(filterId), m_category(category), m_subCategory(subcategory), m_tableName(tableName), m_columnName(columnName), m_relation(relation), m_value(value)
 {
 
 }
@@ -31,6 +31,11 @@ QVariant FilterList::value() const
 QString FilterList::category() const
 {
     return m_category;
+}
+
+QString FilterList::subCategory() const
+{
+    return m_subCategory;
 }
 
 int FilterList::filterId() const
@@ -81,6 +86,15 @@ void FilterList::setCategory(QString category)
 
     m_category = category;
     emit categoryChanged(m_category);
+}
+
+void FilterList::setSubCategory(QString subCategory)
+{
+    if (m_subCategory == subCategory)
+        return;
+
+    m_subCategory = subCategory;
+    emit subCategoryChanged(m_subCategory);
 }
 
 void FilterList::setFilterId(int filterId)

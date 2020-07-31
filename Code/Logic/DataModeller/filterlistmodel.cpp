@@ -24,6 +24,8 @@ QVariant FilterListModel::data(const QModelIndex &index, int role) const
         return filterList->filterId();
     if( role == FilterListCategoryRole)
         return filterList->category();
+    if( role == FilterListSubCategoryRole)
+        return filterList->subCategory();
     if( role == FilterListTableNameRole)
         return filterList->tableName();
     if( role == FilterListColumnNameRole)
@@ -47,16 +49,27 @@ bool FilterListModel::setData(const QModelIndex &index, const QVariant &value, i
             filterList->setFilterId(value.toInt());
             somethingChanged = true;
         }
-    }
         break;
+    }
+
     case FilterListCategoryRole:
     {
         if( filterList->category()!= value.toString()){
             filterList->setCategory(value.toString());
             somethingChanged = true;
         }
-    }
         break;
+    }
+
+    case FilterListSubCategoryRole:
+    {
+        if( filterList->subCategory()!= value.toString()){
+            filterList->setSubCategory(value.toString());
+            somethingChanged = true;
+        }
+        break;
+    }
+
     case FilterListTableNameRole:
     {
         if( filterList->tableName()!= value.toString()){
@@ -72,16 +85,18 @@ bool FilterListModel::setData(const QModelIndex &index, const QVariant &value, i
             filterList->setColumnName(value.toString());
             somethingChanged = true;
         }
-    }
         break;
+    }
+
     case FilterListRelationRole:
     {
         if( filterList->relation()!= value.toString()){
             filterList->setRelation(value.toString());
             somethingChanged = true;
         }
-    }
         break;
+    }
+
     case FilterListValueRole:
     {
 
@@ -121,6 +136,7 @@ QHash<int, QByteArray> FilterListModel::roleNames() const
     QHash<int, QByteArray> roles;
     roles[FilterListIdRole] = "filterId";
     roles[FilterListCategoryRole] = "category";
+    roles[FilterListSubCategoryRole] = "subcategory";
     roles[FilterListTableNameRole] = "tableName";
     roles[FilterListColumnNameRole] = "columnName";
     roles[FilterListRelationRole] = "relation";
@@ -129,10 +145,10 @@ QHash<int, QByteArray> FilterListModel::roleNames() const
     return roles;
 }
 
-void FilterListModel::newFilter(QString tableName, QString colName, QString relation, QVariant requiredVal, QString category)
+void FilterListModel::newFilter(QString category, QString subcategory, QString tableName, QString colName, QString relation, QVariant val )
 {
 
-    FilterList *filterList = new FilterList(counter, category, tableName, colName, relation, requiredVal, this);
+    FilterList *filterList = new FilterList(counter, category, subcategory, tableName, colName, relation, val, this);
     addFilterList(filterList);
 
     counter++;
@@ -146,11 +162,13 @@ void FilterListModel::deleteFilter(int FilterID)
     endRemoveRows();
 }
 
-void FilterListModel::updateFilter(int FilterId, QString tableName, QString colName, QString relation, QVariant value, QString category)
+void FilterListModel::updateFilter(int FilterId, QString category, QString subcategory, QString tableName, QString colName, QString relation, QVariant value)
 {
 
     if(category != "")
         mFilter[FilterId]->setCategory(category);
+    if(subcategory != "")
+        mFilter[FilterId]->setSubCategory(subcategory);
     if(tableName != "")
         mFilter[FilterId]->setTableName(tableName);
     if(colName != "")

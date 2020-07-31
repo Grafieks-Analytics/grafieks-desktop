@@ -27,9 +27,9 @@ public:
     Qt::ItemFlags flags(const QModelIndex& index) const;
     QHash<int, QByteArray> roleNames() const;
 
-    Q_INVOKABLE void newFilter(QString tableName = "", QString colName = "", QString relation = "", QVariant requiredVal = "", QString category = "" );
+    Q_INVOKABLE void newFilter(QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QVariant val = "");
     Q_INVOKABLE void deleteFilter(int FilterID);
-    Q_INVOKABLE void updateFilter(int FilterId, QString tableName = "", QString colName = "", QString relation = "", QVariant value = "", QString category = "" );
+    Q_INVOKABLE void updateFilter(int FilterId, QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QVariant value = "");
 
     void addFilterList(FilterList * filter);
 
@@ -37,6 +37,7 @@ public:
     enum Roles{
         FilterListIdRole = Qt::UserRole +1,
         FilterListCategoryRole,
+        FilterListSubCategoryRole,
         FilterListTableNameRole,
         FilterListColumnNameRole,
         FilterListRelationRole,
