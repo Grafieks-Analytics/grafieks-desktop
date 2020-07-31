@@ -2,6 +2,7 @@
 #define DSPARAMSMODEL_H
 
 #include <QVariant>
+#include <QDebug>
 #include <QObject>
 
 class DSParamsModel : public QObject
@@ -23,6 +24,7 @@ class DSParamsModel : public QObject
     Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
     Q_PROPERTY(bool exclude READ exclude WRITE setExclude NOTIFY excludeChanged)
     Q_PROPERTY(bool includeNull READ includeNull WRITE setIncludeNull NOTIFY includeNullChanged)
+    Q_PROPERTY(bool selectAll READ selectAll WRITE setSelectAll NOTIFY selectAllChanged)
 
     QString m_dsName;
     QString m_dsType;
@@ -40,9 +42,12 @@ class DSParamsModel : public QObject
     QVariant m_value;
     bool m_exclude;
     bool m_includeNull;
+    bool m_selectAll;
 
 public:
     explicit DSParamsModel(QObject *parent = nullptr);
+
+    Q_INVOKABLE void resetFilter();
 
     QString dsName() const;
     QString dsType() const;
@@ -60,6 +65,7 @@ public:
     QVariant value() const;
     bool exclude() const;
     bool includeNull() const;
+    bool selectAll() const;
 
 public slots:
     void setDsName(QString dsName);
@@ -78,6 +84,7 @@ public slots:
     void setValue(QVariant value);
     void setExclude(bool exclude);
     void setIncludeNull(bool includeNull);
+    void setSelectAll(bool selectAll);
 
 signals:
 
@@ -97,6 +104,7 @@ signals:
     void valueChanged(QVariant value);
     void excludeChanged(bool exclude);
     void includeNullChanged(bool includeNull);
+    void selectAllChanged(bool selectAll);
 };
 
 #endif // DSPARAMSMODEL_H

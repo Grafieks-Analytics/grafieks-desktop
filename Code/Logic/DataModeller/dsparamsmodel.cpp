@@ -1,9 +1,18 @@
 #include "dsparamsmodel.h"
 
 DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent),
-    m_category("list"), m_subCategory("multiple"), m_exclude(false), m_includeNull(true)
+    m_category("list"), m_subCategory("multiple"), m_exclude(false), m_includeNull(true), m_selectAll(true)
 {
 
+}
+
+void DSParamsModel::resetFilter()
+{
+    this->setCategory("list");
+    this->setSubCategory("multiple");
+    this->setExclude(false);
+    this->setIncludeNull(true);
+    this->setSelectAll(true);
 }
 
 QString DSParamsModel::dsName() const
@@ -54,6 +63,11 @@ bool DSParamsModel::exclude() const
 bool DSParamsModel::includeNull() const
 {
     return m_includeNull;
+}
+
+bool DSParamsModel::selectAll() const
+{
+    return m_selectAll;
 }
 
 QString DSParamsModel::category() const
@@ -164,6 +178,15 @@ void DSParamsModel::setIncludeNull(bool includeNull)
 
     m_includeNull = includeNull;
     emit includeNullChanged(m_includeNull);
+}
+
+void DSParamsModel::setSelectAll(bool selectAll)
+{
+    if (m_selectAll == selectAll)
+        return;
+
+    m_selectAll = selectAll;
+    emit selectAllChanged(m_selectAll);
 }
 
 void DSParamsModel::setCategory(QString category)

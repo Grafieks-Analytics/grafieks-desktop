@@ -24,6 +24,7 @@ Popup {
     }
 
 
+
     // Popup Header starts
 
     Rectangle{
@@ -220,6 +221,7 @@ Popup {
 
             onClicked: {
                 dataFilterPopup.visible = false
+                DSParamsModel.resetFilter();
             }
         }
 

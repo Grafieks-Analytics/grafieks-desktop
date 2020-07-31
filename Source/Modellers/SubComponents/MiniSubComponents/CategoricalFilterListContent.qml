@@ -223,7 +223,7 @@ Rectangle{
             delegate: Row{
 
                 height: 20
-                width: parent.width
+                width: singleSelectCheckList.width
 
                 Column{
 
