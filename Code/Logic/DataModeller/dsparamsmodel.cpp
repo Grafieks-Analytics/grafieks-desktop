@@ -1,6 +1,7 @@
 #include "dsparamsmodel.h"
 
-DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent)
+DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent),
+    m_category("list"), m_subCategory("multiple"), m_exclude(false), m_includeNull(true)
 {
 
 }
@@ -43,6 +44,36 @@ QString DSParamsModel::colName() const
 QString DSParamsModel::tableName() const
 {
     return m_tableName;
+}
+
+bool DSParamsModel::exclude() const
+{
+    return m_exclude;
+}
+
+bool DSParamsModel::includeNull() const
+{
+    return m_includeNull;
+}
+
+QString DSParamsModel::category() const
+{
+    return m_category;
+}
+
+QString DSParamsModel::subCategory() const
+{
+    return m_subCategory;
+}
+
+QString DSParamsModel::relation() const
+{
+    return m_relation;
+}
+
+QVariant DSParamsModel::value() const
+{
+    return m_value;
 }
 
 void DSParamsModel::setDsName(QString dsName)
@@ -115,4 +146,58 @@ void DSParamsModel::setTableName(QString tableName)
 
     m_tableName = tableName;
     emit tableNameChanged(m_tableName);
+}
+
+void DSParamsModel::setExclude(bool exclude)
+{
+    if (m_exclude == exclude)
+        return;
+
+    m_exclude = exclude;
+    emit excludeChanged(m_exclude);
+}
+
+void DSParamsModel::setIncludeNull(bool includeNull)
+{
+    if (m_includeNull == includeNull)
+        return;
+
+    m_includeNull = includeNull;
+    emit includeNullChanged(m_includeNull);
+}
+
+void DSParamsModel::setCategory(QString category)
+{
+    if (m_category == category)
+        return;
+
+    m_category = category;
+    emit categoryChanged(m_category);
+}
+
+void DSParamsModel::setSubCategory(QString subCategory)
+{
+    if (m_subCategory == subCategory)
+        return;
+
+    m_subCategory = subCategory;
+    emit subCategoryChanged(m_subCategory);
+}
+
+void DSParamsModel::setRelation(QString relation)
+{
+    if (m_relation == relation)
+        return;
+
+    m_relation = relation;
+    emit relationChanged(m_relation);
+}
+
+void DSParamsModel::setValue(QVariant value)
+{
+    if (m_value == value)
+        return;
+
+    m_value = value;
+    emit valueChanged(m_value);
 }

@@ -92,10 +92,14 @@ Rectangle{
 
             CheckBox {
 
-                checked: true
+                checked: DSParamsModel.exclude
                 text: qsTr("Exclude")
                 indicator.width: 15
                 indicator.height: 15
+
+                onCheckStateChanged: {
+                    DSParamsModel.setExclude(checked)
+                }
             }
 
 

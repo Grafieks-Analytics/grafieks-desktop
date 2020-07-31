@@ -1,6 +1,7 @@
 #ifndef DSPARAMSMODEL_H
 #define DSPARAMSMODEL_H
 
+#include <QVariant>
 #include <QObject>
 
 class DSParamsModel : public QObject
@@ -14,19 +15,31 @@ class DSParamsModel : public QObject
     Q_PROPERTY(int displayRowsCount READ displayRowsCount WRITE setDisplayRowsCount NOTIFY displayRowsCountChanged)
 
     // For Filters
+    Q_PROPERTY(QString category READ category WRITE setCategory NOTIFY categoryChanged)
+    Q_PROPERTY(QString subCategory READ subCategory WRITE setSubCategory NOTIFY subCategoryChanged)
     Q_PROPERTY(QString tableName READ tableName WRITE setTableName NOTIFY tableNameChanged)
     Q_PROPERTY(QString colName READ colName WRITE setColName NOTIFY colNameChanged)
+    Q_PROPERTY(QString relation READ relation WRITE setRelation NOTIFY relationChanged)
+    Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
+    Q_PROPERTY(bool exclude READ exclude WRITE setExclude NOTIFY excludeChanged)
+    Q_PROPERTY(bool includeNull READ includeNull WRITE setIncludeNull NOTIFY includeNullChanged)
 
     QString m_dsName;
-    QString m_dsType; 
+    QString m_dsType;
     bool m_isFullExtract;
     QString m_extractColName;
     int m_schedulerId;
     int m_displayRowsCount;
 
     // For Filters
+    QString m_category;
+    QString m_subCategory;
     QString m_colName;
     QString m_tableName;
+    QString m_relation;
+    QVariant m_value;
+    bool m_exclude;
+    bool m_includeNull;
 
 public:
     explicit DSParamsModel(QObject *parent = nullptr);
@@ -39,8 +52,14 @@ public:
     int displayRowsCount() const;
 
     // For Filters
+    QString category() const;
+    QString subCategory() const;
     QString colName() const;
     QString tableName() const;
+    QString relation() const;
+    QVariant value() const;
+    bool exclude() const;
+    bool includeNull() const;
 
 public slots:
     void setDsName(QString dsName);
@@ -51,8 +70,14 @@ public slots:
     void setDisplayRowsCount(int displayRowsCount);
 
     // For Filters
+    void setCategory(QString category);
+    void setSubCategory(QString subCategory);
     void setColName(QString colName);
     void setTableName(QString tableName);
+    void setRelation(QString relation);
+    void setValue(QVariant value);
+    void setExclude(bool exclude);
+    void setIncludeNull(bool includeNull);
 
 signals:
 
@@ -64,8 +89,14 @@ signals:
     void displayRowsCountChanged(int displayRowsCount);
 
     // For Filters
+    void categoryChanged(QString category);
+    void subCategoryChanged(QString subCategory);
     void colNameChanged(QString colName);
     void tableNameChanged(QString tableName);
+    void relationChanged(QString relation);
+    void valueChanged(QVariant value);
+    void excludeChanged(bool exclude);
+    void includeNullChanged(bool includeNull);
 };
 
 #endif // DSPARAMSMODEL_H

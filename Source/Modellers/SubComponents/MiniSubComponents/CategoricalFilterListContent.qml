@@ -55,6 +55,10 @@ Rectangle{
                         multiSelectRadio.radio_checked = true
                         multiSelectCheckList.visible = true
                         singleSelectCheckList.visible = false
+
+                        // Set the sub category for filter
+                        DSParamsModel.setSubCategory(Constants.categorySubMulti)
+                        console.log(Constants.categorySubMulti)
                     }
                 }
             }
@@ -82,6 +86,10 @@ Rectangle{
                         multiSelectRadio.radio_checked = false
                         multiSelectCheckList.visible = false
                         singleSelectCheckList.visible = true
+
+                        // Set the sub category for filter
+                        DSParamsModel.setSubCategory(Constants.categorySubSingle)
+                        console.log(Constants.categorySubSingle)
                     }
                 }
 
@@ -263,10 +271,14 @@ Rectangle{
             anchors.left: includeExcludeRow.left
 
             CheckBox {
-                checked: true
+                checked: DSParamsModel.includeNull
                 text: qsTr("Include Null")
                 indicator.width: 15
                 indicator.height: 15
+
+                onCheckStateChanged: {
+                    DSParamsModel.setIncludeNull(checked)
+                }
 
             }
         }
@@ -275,10 +287,16 @@ Rectangle{
             anchors.right: includeExcludeRow.right
             anchors.rightMargin: 30
             CheckBox {
-                checked: true
+                checked: DSParamsModel.exclude
                 text: qsTr("Exclude")
                 indicator.width: 15
                 indicator.height: 15
+
+                onCheckStateChanged: {
+                    DSParamsModel.setExclude(checked)
+                }
+
+
             }
         }
 

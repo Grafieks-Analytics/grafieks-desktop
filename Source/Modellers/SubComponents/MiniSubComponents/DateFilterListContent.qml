@@ -269,10 +269,14 @@ Rectangle{
             anchors.left: includeExcludeRow.left
 
             CheckBox {
-                checked: true
+                checked: DSParamsModel.includeNull
                 text: qsTr("Include Null")
                 indicator.width: 15
                 indicator.height: 15
+
+                onCheckStateChanged: {
+                    DSParamsModel.setIncludeNull(checked)
+                }
 
             }
         }
@@ -281,10 +285,14 @@ Rectangle{
             anchors.right: includeExcludeRow.right
             anchors.rightMargin: 30
             CheckBox {
-                checked: true
+                checked: DSParamsModel.exclude
                 text: qsTr("Exclude")
                 indicator.width: 15
                 indicator.height: 15
+
+                onCheckStateChanged: {
+                    DSParamsModel.setExclude(checked)
+                }
             }
         }
 

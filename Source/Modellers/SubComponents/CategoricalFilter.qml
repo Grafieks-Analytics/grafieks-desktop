@@ -23,26 +23,6 @@ Popup {
         border.color: Constants.darkThemeColor
     }
 
-    ListModel{
-        id: checkListModel
-
-        ListElement{
-            textValue:"All"
-        }
-
-        ListElement{
-            textValue:"All 1"
-        }
-
-        ListElement{
-            textValue:"All 2"
-        }
-
-        ListElement{
-            textValue:"All 3"
-        }
-    }
-
 
     // Popup Header starts
 
@@ -124,6 +104,10 @@ Popup {
                         listContent.visible = true
                         wildcardContent.visible = false
                         topContent.visible = false
+
+                        // Set the main category of the filter
+                        DSParamsModel.setCategory(Constants.categoryMainListType)
+
                     }
                 }
             }
@@ -155,6 +139,10 @@ Popup {
                         listContent.visible = false
                         wildcardContent.visible = true
                         topContent.visible = false
+
+                        // Set the main category of the filter
+                        DSParamsModel.setCategory(Constants.categoryMainWildCardType)
+
                     }
                 }
 
@@ -185,6 +173,9 @@ Popup {
                         listContent.visible = false
                         wildcardContent.visible = false
                         topContent.visible = true
+
+                        // Set the main category of the filter
+                        DSParamsModel.setCategory(Constants.categoryMainTopType)
                     }
                 }
             }

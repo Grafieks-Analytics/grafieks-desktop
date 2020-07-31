@@ -190,8 +190,12 @@ Rectangle{
         anchors.leftMargin: 20
 
         CheckBox {
-            checked: true
+            checked: DSParamsModel.includeNull
             text: qsTr("Include Null")
+
+            onCheckedStateChanged: {
+                DSParamsModel.setIncludeNull(checked)
+            }
 
         }
     }
@@ -204,8 +208,12 @@ Rectangle{
         anchors.rightMargin: 20
 
         CheckBox {
-            checked: true
+            checked: DSParamsModel.exclude
             text: qsTr("Exclude")
+
+            onCheckedChanged: {
+                DSParamsModel.setExclude(checked)
+            }
 
         }
     }

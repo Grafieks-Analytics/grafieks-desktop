@@ -49,6 +49,7 @@ QtObject {
     property int fontCategoryHeaderSmall : 12
     property int fontReading: 10
 
+    // Filters
     // Tab Bar Open Constants
 
     property string categoricalTab: "categorical"
@@ -57,5 +58,15 @@ QtObject {
     property string groupTab: "group"
 
     property double borderWidth: 1.3
+
+    // Main Category
+    property string categoryMainListType: "list"
+    property string categoryMainWildCardType: "wildcard"
+    property string categoryMainTopType: "top"
+
+    // Sub Categories
+    property string categorySubMulti: "multiple"
+    property string categorySubSingle: "single"
+
 
 }

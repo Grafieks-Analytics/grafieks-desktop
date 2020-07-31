@@ -73,10 +73,14 @@ Rectangle{
             anchors.verticalCenter: parent.verticalAlignment
 
             CheckBox {
-                checked: true
+                checked: DSParamsModel.includeNull
                 text: qsTr("Include Null")
                 indicator.width: 15
                 indicator.height: 15
+
+                onCheckStateChanged: {
+                    DSParamsModel.setIncludeNull(checked)
+                }
             }
 
 
@@ -91,10 +95,14 @@ Rectangle{
             anchors.verticalCenter: parent.verticalAlignment
 
             CheckBox {
-                checked: true
+                checked: DSParamsModel.exclude
                 text: qsTr("Exclude")
                 indicator.width: 15
                 indicator.height: 15
+
+                onCheckStateChanged: {
+                    DSParamsModel.setExclude(checked)
+                }
             }
 
 
