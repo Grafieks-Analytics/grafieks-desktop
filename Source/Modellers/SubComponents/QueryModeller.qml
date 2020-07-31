@@ -101,6 +101,10 @@ Item{
             QueryModel.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, ""))
         }
 
+        Component.onCompleted: {
+            textEditQueryModeller.text = "SELECT * FROM users"
+        }
+
     }
 
 }

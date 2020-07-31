@@ -145,67 +145,51 @@ Rectangle{
         // Checkbox ListView
         // List Filters starts
 
-        ListView{
-
-            id: multiSelectCheckList
-            model: ColumnListModel
+        Item {
+            id : somepageid
             height: parent.height
             width: parent.width
 
-            delegate: Column{
+            ButtonGroup {
+                id: childGroup
+                exclusive: false
+                checkState: mainCheckBox.checkState
+            }
 
-                height: 20
+            CheckBox {
+                id: mainCheckBox
+                checked: true
+                text: "All"
+                indicator.width: 15
+                indicator.height: 15
+                checkState: childGroup.checkState
+            }
+
+            ListView {
+                id: multiSelectCheckList
+                model: ColumnListModel
+                height: parent.height
                 width: parent.width
+                anchors {
+                    top: mainCheckBox.top
+                    topMargin: 20
+                }
 
-
-                Loader{
-
-                    id: loaderAll
-                    height: 15
-                    active: model.row === 0
-                    sourceComponent:
-
-                        CheckBox {
+                delegate: Column{
+                    height:20
+                    CheckBox {
+                        id: modelCheckBoxes
                         checked: true
-                        text: "All"
+                        text: modelData
                         indicator.width: 15
                         indicator.height: 15
-
-                        onCheckStateChanged: {
-                            console.log("All", checked)
-                            modelCheckBoxes.checked = false
-                            modelCheckBoxes.checked = false
-                        }
+                        ButtonGroup.group: childGroup
                     }
                 }
-
-                CheckBox {
-
-                    id: modelCheckBoxes
-                    anchors.top: loaderAll.bottom
-                    checked: true
-                    text: modelData
-                    indicator.width: 15
-                    indicator.height: 15
-
-                    Component.objectName: {
-                        counter++
-                        console.log(counter)
-                    }
-
-                    onCheckStateChanged: {
-                        console.log(modelData, checked)
-                    }
-
-                }
-
-
-
-
-
-
             }
         }
+
+
 
         // Checkbox ListView
         // List Filters ends
