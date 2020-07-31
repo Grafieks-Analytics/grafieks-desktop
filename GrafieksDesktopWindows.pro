@@ -49,6 +49,7 @@ SOURCES += \
     Code/Logic/Datasources/datasourcemodel.cpp \
     Code/Logic/General/qttest2.cpp \
 #        Code/Logic/General/testing.cpp \
+    Code/Logic/General/querysplitter.cpp \
     Code/Logic/General/tableschemamodel.cpp \
     Code/Logic/General/testing.cpp \
     Code/Logic/Menu/user.cpp \
@@ -56,31 +57,7 @@ SOURCES += \
 
 RESOURCES += \
     assets.qrc \
-    assets.qrc \
-    assets.qrc \
-    assets.qrc \
-    assets.qrc \
-    assets.qrc \
-    assets.qrc \
-    assets.qrc \
-    assets.qrc \
     images.qrc \
-    images.qrc \
-    images.qrc \
-    images.qrc \
-    images.qrc \
-    images.qrc \
-    images.qrc \
-    images.qrc \
-    images.qrc \
-    qml.qrc \
-    qml.qrc \
-    qml.qrc \
-    qml.qrc \
-    qml.qrc \
-    qml.qrc \
-    qml.qrc \
-    qml.qrc \
     qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
@@ -134,11 +111,11 @@ HEADERS += \
     Code/Logic/Datasources/datasourcemodel.h \
     Code/Logic/General/qttest2.h \
 #    Code/Logic/General/testing.h \
+    Code/Logic/General/querysplitter.h \
     Code/Logic/General/tableschemamodel.h \
     Code/Logic/General/testing.h \
     Code/Logic/Menu/user.h \
     Code/messages.h \
-    \ \
     Code/constants.h \
     Code/statics.h
 
@@ -154,22 +131,6 @@ DISTFILES += \
     Assets/vendors/vega-embed.js \
     Assets/vendors/vega5.min.js \
     Constants.qml \
-    Documentation/Configuration Windows QT.pdf \
-    Documentation/Configuration Windows QT.pdf \
-    Documentation/Configuration Windows QT.pdf \
-    Documentation/Configuration Windows QT.pdf \
-    Documentation/Configuration Windows QT.pdf \
-    Documentation/Configuration Windows QT.pdf \
-    Documentation/Configuration Windows QT.pdf \
-    Documentation/Configuration Windows QT.pdf \
-    Documentation/Configuration Windows QT.pptx \
-    Documentation/Configuration Windows QT.pptx \
-    Documentation/Configuration Windows QT.pptx \
-    Documentation/Configuration Windows QT.pptx \
-    Documentation/Configuration Windows QT.pptx \
-    Documentation/Configuration Windows QT.pptx \
-    Documentation/Configuration Windows QT.pptx \
-    Documentation/Configuration Windows QT.pptx \
     Documentation/ConfigurationMac.md \
     Documentation/Layouts.md \
     Images/icons/16_csv.png \
@@ -177,13 +138,6 @@ DISTFILES += \
     Images/icons/20_snowflake-icon_a4ed1ae266.png \
     Images/icons/74_sqlite-icon_a6ac860586.png \
     Images/icons/Charts.png \
-    Images/icons/Db - 60.png \
-    Images/icons/Db - 60.png \
-    Images/icons/Db - 60.png \
-    Images/icons/Db - 60.png \
-    Images/icons/Db - 60.png \
-    Images/icons/Db - 60.png \
-    Images/icons/Db - 60.png \
     Images/icons/Db - 60.png \
     Images/icons/Db.png \
     Images/icons/Down.png \
@@ -274,13 +228,6 @@ DISTFILES += \
     Images/icons/tick.png \
     Images/icons/tick_32.png \
     Images/icons/zoom out.png \
-    Images/icons/zoom out.png \
-    Images/icons/zoom out.png \
-    Images/icons/zoom out.png \
-    Images/icons/zoom out.png \
-    Images/icons/zoom out.png \
-    Images/icons/zoom out.png \
-    Images/icons/zoom out.png \
     Images/logos/logo.ico \
     Images/logos/logo.png \
     Images/logos/logo_full_small.png \
@@ -322,7 +269,6 @@ DISTFILES += \
     Source/Data/MiniSubComponents/GroupFilterInnerPopup.qml \
     Source/Data/MiniSubComponents/NumericalFilterInnerPopup.qml \
     Source/Data/SelectConnection.qml \
-    Source/Data/SubComponents/.DS_Store \
     Source/Data/SubComponents/CategoricalFilterPopup.qml \
     Source/Data/SubComponents/BoxConnection.qml \
     Source/Data/SubComponents/BoxConnectionFiles.qml \
