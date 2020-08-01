@@ -31,6 +31,11 @@ Popup {
     property var folderName: "Folder name"
 
 
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
     ListModel{
         id : allFileData
         ListElement{
@@ -50,6 +55,24 @@ Popup {
         }
     }
 
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
     Connections{
         target: ConnectorsLoginModel
 
@@ -67,6 +90,94 @@ Popup {
             }
         }
     }
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
+    function hidePopup(){
+        boxfilePopup.visible = false
+    }
+
+    function updatePath(text){
+        path.text="Box";
+    }
+
+
+    function onHomeClicked(){
+        BoxDS.folderNav("0")
+        // refer boxds.cpp for function info
+        updatePath("Box")
+    }
+
+    function searchFiles(){
+        BoxDS.searchQuer(server_files.text)
+    }
+
+
+    function showSelectedFileDetails(){
+        fileSelected.visible = true
+    }
+
+    function hideFileNotSelectedMessage(){
+        fileNotSelectedMsg.visible = false
+    }
+
+    function onFileClicked(name,type){
+
+        showSelectedFileDetails();
+        hideFileNotSelectedMessage();
+
+        detailName.text = name;
+
+        if(type === "folder"){
+            pathFolder = id;
+            folderName = name;
+        }
+
+        if(type === "file")
+        {
+            path.text = name
+            detailName.text = name;
+        }
+
+    }
+
+    function onFolderDoubleClicked(name,type){
+        if(type === "folder")
+            BoxDS.folderNav(pathFolder)
+
+        path.text = name
+    }
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
 
 
     // Popup Header starts
@@ -100,8 +211,9 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    boxfilePopup.visible = false
-                    path.text="Box";
+                    hidePopup()
+                    updatePath("Box")
+
                 }
             }
         }
@@ -114,7 +226,7 @@ Popup {
 
 
     Column{
-        id: dropboxModalContent
+        id: boxModalContent
         anchors.top: header_filePopup.bottom
         anchors.margins: 20
         anchors.left: parent.left
@@ -171,7 +283,7 @@ Popup {
                     x : boxfilePopup.width * 0.6 - 100
 
                     onClicked: {
-                        BoxDS.searchQuer(server_files.text);
+                        searchFiles();
                     }
 
                 }
@@ -306,25 +418,11 @@ Popup {
                                         anchors.fill:parent
                                         onClicked: {
 
-                                            fileSelected.visible = true
-                                            fileNotSelectedMsg.visible = false
-                                            detailName.text = name;
-                                            if(type == "folder"){
-                                                pathFolder = id;
-                                                folderName = name;
-                                            }
+                                            onFileClicked(name,type);
 
-                                            if(type == "file")
-                                            {
-                                                path.text = name
-                                                detailName.text = name;
-                                            }
                                         }
                                         onDoubleClicked: {
-                                            if(type == "folder")
-                                                BoxDS.folderNav(pathFolder)
-
-                                            path.text = name
+                                            onFolderDoubleClicked(name,type)
                                         }
                                     }
                                 }
@@ -531,9 +629,7 @@ Popup {
                     anchors.rightMargin: 30
 
                     onClicked: {
-                        BoxDS.folderNav("0")
-                        // refer boxds.cpp for function info
-                        path.text = "Box"
+                        onHomeClicked();
                     }
 
                 }
@@ -547,7 +643,7 @@ Popup {
                     anchors.leftMargin: 30
 
                     onClicked: {
-                        boxfilePopup.visible = false
+                        hidePopup()
                     }
 
                 }
@@ -567,9 +663,12 @@ Popup {
         }
     }
 
-    // Modal Content ends
+    // Modal Content Starts
 
 
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
 
 
 }
