@@ -105,14 +105,14 @@ Popup {
     }
 
     function updatePath(text){
-        path.text="Box";
+        path.text="Drive";
     }
 
 
     function onHomeClicked(){
         DriveDS.folderNav("0")
         // refer boxds.cpp for function info
-        updatePath("Box")
+        updatePath("Drive")
     }
 
     function searchFiles(){
@@ -398,11 +398,11 @@ Popup {
                                         anchors.fill:parent
                                         onClicked: {
 
-                                            onFileClicked(name,type);
+                                            onFileClicked(name,tag);
 
                                         }
                                         onDoubleClicked: {
-                                            onFolderDoubleClicked(name,type)
+                                            onFolderDoubleClicked(name,tag)
                                         }
                                     }
                                 }
