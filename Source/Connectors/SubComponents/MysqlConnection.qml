@@ -14,12 +14,12 @@ import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
 
-
+import "../../MainSubComponents"
 
 Popup {
     id: popup
     width: 600
-    height: 500
+    height: 400
     modal: true
     visible: false
     x: parent.width/2 - 300
@@ -27,6 +27,9 @@ Popup {
     padding: 0
     property int label_col : 135
 
+
+    /***********************************************************************************************************************/
+    // Connection  Starts
 
     Connections{
         target: ConnectorsLoginModel
@@ -46,11 +49,52 @@ Popup {
         }
     }
 
+    // Connection  Ends
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+    function hidePopup(){
+        popup.visible = false
+    }
+
+    function connectToMySQL(){
+//        ConnectorsLoginModel.mysqlLogin(server.text, database.text, port.text, username.text, password.text)
+//        ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_my", 3306, "root", "123@312QQl")
+        ConnectorsLoginModel.mysqlLogin("localhost", "information_schema", 3306, "root", "")
+
+    }
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+    MessageDialog{
+        id: msg_dialog
+        title: "Mysql Connection"
+        text: ""
+        icon: StandardIcon.Critical
+    }
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
 
     // Popup Header starts
 
     Rectangle{
-        id: header_popup
+        id: headerPopup
         color: Constants.themeColor
         border.color: "transparent"
         height: 40
@@ -62,7 +106,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Signin to Mysql"
+            text: "Sign In to Mysql"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: 15
@@ -79,7 +123,7 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    popup.visible = false
+                    hidePopup()
                 }
             }
         }
@@ -93,9 +137,9 @@ Popup {
     Row{
 
         id: row1
-        anchors.top: header_popup.bottom
+        anchors.top: headerPopup.bottom
         //anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 45
+        anchors.topMargin: 20
         anchors.left: parent.left
         anchors.leftMargin: 1
         anchors.rightMargin: 40
@@ -203,80 +247,12 @@ Popup {
 
     // Row1: Enter server address ends
 
-
-    // Action button starts
-
-    Row{
-
-        id: row_btn
-        anchors.top: row1.bottom
-        anchors.topMargin: 15
-        anchors.right: parent.right
-        anchors.rightMargin: label_col - 70
-        //        anchors.rightMargin: label_col + 55
-        spacing: 10
-
-        Button{
-            id: btn_test_con
-            height: back_rec_1.height
-            width: back_rec_1.width
-
-            background: Rectangle{
-                id: back_rec_1
-                //radius: 10
-                color: btn_test_con.hovered? Constants.buttonBorderColor : "#E6E7EA"
-                width: 130
-                height: 40
-
-                Text{
-                    text: "Test Connection"
-                    anchors.centerIn: parent
-                    font.pixelSize: 15
-                    color: btn_test_con.hovered ? "white" : "black"
-                }
-            }
-        }
-
-        Button{
-            id: btn_connect
-            height: back_rec_2.height
-            width: back_rec_2.width
-
-            background: Rectangle{
-                id: back_rec_2
-                //radius: 10
-                color: btn_connect.hovered ? Constants.buttonBorderColor : "#E6E7EA"
-                width: 100
-                height: 40
-
-                Text{
-                    text: "Connect"
-                    anchors.centerIn: parent
-                    font.pixelSize: 15
-                    color: btn_connect.hovered ? "white" : "black"
-                }
-            }
-
-            onClicked: {
-
-                // Move forward without any checks
-                // Only for UI checks
-                popup.visible = false
-                stacklayout_home.currentIndex = 5
-            }
-        }
-
-
-    }
-
-    // Action button ends
-
     // Row2: Enter database name starts
 
     Row{
 
         id: row2
-        anchors.top: row_btn.bottom
+        anchors.top: row1.bottom
         anchors.topMargin: 15
         anchors.left: parent.left
         anchors.leftMargin: 1
@@ -310,16 +286,14 @@ Popup {
         }
         Rectangle{
 
-            id: label_port
+            id: labelPort
             width: 40
             height: 40
-
 
             Text{
                 text: "Port"
                 leftPadding: 10
                 anchors.left: server.right
-                //anchors.leftMargin: 20
                 anchors.rightMargin: 20
                 font.pixelSize: 15
                 anchors.verticalCenter: parent.verticalCenter
@@ -409,7 +383,7 @@ Popup {
                 text: "Username"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
-                font.pixelSize: 15
+                font.pixelSize: Constants.fontCategoryHeader
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -453,7 +427,7 @@ Popup {
                 text: "Password"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
-                font.pixelSize: 15
+                font.pixelSize: Constants.fontCategoryHeader
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -490,43 +464,24 @@ Popup {
         //        anchors.rightMargin: label_col*2 + 47
         spacing: 10
 
-        Button{
-            id: btn_cancel
-            height: back_rec_3.height
-            width: back_rec_3.width
+        CustomButton{
 
-            background: Rectangle{
-                id: back_rec_3
-                //radius: 10
-                color: btn_cancel.hovered ? Constants.buttonBorderColor : "#E6E7EA"
-                width: 100
-                height: 40
-
-                Text{
-                    text: Constants.signInText
-                    anchors.centerIn: parent
-                    font.pixelSize: 15
-                    color: btn_cancel.hovered ? "white" : "black"
-                }
-            }
+            id: btn_signin
+            textValue: Constants.signInText
+            fontPixelSize: Constants.fontCategoryHeader
             onClicked: {
-
-                // Call mysql connector model
-//                ConnectorsLoginModel.mysqlLogin(server.text, database.text, port.text, username.text, password.text)
-                ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_my", 3306, "root", "123@312QQl")
-//                ConnectorsLoginModel.mysqlLogin("localhost", "information_schema", 3306, "root", "")
-
+                connectToMySQL()
             }
         }
+
     }
     // Row 6: Action Button ends
 
 
-    MessageDialog{
-        id: msg_dialog
-        title: "Mysql Connection"
-        text: ""
-        icon: StandardIcon.Critical
-    }
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
+
+
 
 }
