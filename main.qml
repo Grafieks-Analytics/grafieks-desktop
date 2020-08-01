@@ -38,6 +38,39 @@ ApplicationWindow {
 
     title: Constants.applicationName
 
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
     Component.onCompleted: {
         if(settings.value("user/profileId") > 0){
             var firstname = settings.value("user/firstname")
@@ -51,6 +84,48 @@ ApplicationWindow {
 
         }
     }
+
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+    // Global Modals
+    PublishDatasource{
+        id: datasourceDescription
+    }
+    LoginServer{
+        id: connectGrafieks1
+    }
+    LoginCredentials{
+        id: connectGrafieks2
+    }
+    Logout{
+        id: logout
+    }
+
+    // Settings
+    // Fetch and Set Settings
+    Settings{
+        id: settings
+    }
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
 
 
     menuBar : MenuBar{
@@ -296,7 +371,7 @@ ApplicationWindow {
         id: stacklayout_home
         width: mainwindow.width
         height: mainwindow.height
-        currentIndex:3
+        currentIndex:5
 
         // 0
         Test{
@@ -343,25 +418,9 @@ ApplicationWindow {
     }
 
 
-    // Global Modals
-    PublishDatasource{
-        id: datasourceDescription
-    }
-    LoginServer{
-        id: connectGrafieks1
-    }
-    LoginCredentials{
-        id: connectGrafieks2
-    }
-    Logout{
-        id: logout
-    }
 
-    // Settings
-    // Fetch and Set Settings
-    Settings{
-        id: settings
-    }
+    // Page Design Ends
+    /***********************************************************************************************************************/
 
 
 }
