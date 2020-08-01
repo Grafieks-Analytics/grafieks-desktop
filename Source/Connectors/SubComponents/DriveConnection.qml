@@ -26,9 +26,8 @@ Popup {
     x: parent.width/2 - 300
     y: parent.height/2 - 300
     padding: 0
+    closePolicy: Popup.NoAutoClose
     property int label_col : 135
-
-
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS

@@ -30,6 +30,7 @@ Popup {
     property var pathFolder: "Drive"
     property var folderName: "Folder name"
 
+    closePolicy: Popup.NoAutoClose
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS

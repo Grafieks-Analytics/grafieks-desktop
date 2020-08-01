@@ -18,7 +18,7 @@ import com.grafieks.singleton.constants 1.0
 import "../../MainSubComponents"
 
 Popup {
-    id: sheetfilePopup
+    id: popup
     width: parent.width * 0.75
     height: parent.height * 0.75
     modal: true
@@ -29,7 +29,12 @@ Popup {
     property int label_col : 135
     property var pathFolder: "sheet"
     property var folderName: "Folder name"
+    closePolicy: Popup.NoAutoClose
 
+
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
 
     ListModel{
         id : allFileData
@@ -50,6 +55,24 @@ Popup {
         }
     }
 
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
     Connections{
         target: ConnectorsLoginModel
 
@@ -67,6 +90,84 @@ Popup {
             }
         }
     }
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
+    function closePopup(){
+        popup.visible = false
+    }
+
+    function updatePath(text){
+        path.text=text;
+    }
+
+    function searchFiles(){
+        SheetDS.searchQuer(server_files.text);
+    }
+
+    function onFileSelected(name,id,type){
+
+        fileSelected.visible = true
+        fileNotSelectedMsg.visible = false
+
+        detailName.text = name;
+
+        if(type === "folder"){
+            pathFolder = id;
+            folderName = name;
+        }
+
+        if(type === "file")
+        {
+            updatePath(name)
+            detailName.text = name;
+        }
+    }
+
+    function onFolderClicked(name,type,pathFolder){
+        if(type === "folder")
+            SheetDS.folderNav(pathFolder)
+        updatePath(name)
+    }
+
+
+    function onHomeClicked(){
+        SheetDS.folderNav("0")
+        // refer SheetDS.cpp for function info
+        updatePath("Sheet")
+    }
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
 
 
     // Popup Header starts
@@ -100,8 +201,8 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    sheetfilePopup.visible = false
-                    path.text="sheet";
+                    closePopup();
+                    updatePath("Sheet")
                 }
             }
         }
@@ -134,7 +235,7 @@ Popup {
 
             //                Text {
             //                    id: signOutBtn
-            //                    x:sheetfilePopup.width - sheetfilePopup.parent.width * 0.125 - 30
+            //                    x:popup.width - popup.parent.width * 0.125 - 30
             //                    text: qsTr("Sign Out")
             //                    color: "blue"
             //                }
@@ -154,12 +255,12 @@ Popup {
                 id: server_files
                 placeholderText: "file name"
 
-                width: sheetfilePopup.width * 0.6
+                width: popup.width * 0.6
                 height: 40
                 background: Rectangle {
                     border.color: Constants.borderBlueColor
                     radius: 5
-                    width: sheetfilePopup.width * 0.6
+                    width: popup.width * 0.6
                 }
 
                 CustomButton{
@@ -168,10 +269,11 @@ Popup {
                     height: 40
                     width: 100
                     textValue: "Search"
-                    x : sheetfilePopup.width * 0.6 - 100
+                    x : popup.width * 0.6 - 100
 
                     onClicked: {
-                        SheetDS.searchQuer(server_files.text);
+
+                        searchFiles();
                     }
 
                 }
@@ -192,11 +294,11 @@ Popup {
             anchors.topMargin: 20
 
             Row{
-                width: sheetfilePopup.width * 0.6
+                width: popup.width * 0.6
 
                 Rectangle{
-                    height: sheetfilePopup.height * 0.75 - 100
-                    width: sheetfilePopup.width * 0.6
+                    height: popup.height * 0.75 - 100
+                    width: popup.width * 0.6
                     border.color: Constants.themeColor
 
                     ListView{
@@ -204,11 +306,11 @@ Popup {
                         model:SheetModel
 
                         height: 200
-                        width: sheetfilePopup.width * 0.6
+                        width: popup.width * 0.6
 
                         header: Row{
 
-                            width: sheetfilePopup.width * 0.6
+                            width: popup.width * 0.6
                             Column{
                                 width: 20
                                 Rectangle{
@@ -268,7 +370,7 @@ Popup {
 
                         delegate: Row{
                             height:30
-                            width: sheetfilePopup.width * 0.6
+                            width: popup.width * 0.6
 
                             Column{
                                 width: 20
@@ -305,26 +407,11 @@ Popup {
 
                                         anchors.fill:parent
                                         onClicked: {
-
-                                            fileSelected.visible = true
-                                            fileNotSelectedMsg.visible = false
-                                            detailName.text = name;
-                                            if(type == "folder"){
-                                                pathFolder = id;
-                                                folderName = name;
-                                            }
-
-                                            if(type == "file")
-                                            {
-                                                path.text = name
-                                                detailName.text = name;
-                                            }
+                                            onFileSelected(name,id,type)
                                         }
-                                        onDoubleClicked: {
-                                            if(type == "folder")
-                                                SheetDS.folderNav(pathFolder)
 
-                                            path.text = name
+                                        onDoubleClicked: {
+                                            onFolderClicked()
                                         }
                                     }
                                 }
@@ -375,12 +462,12 @@ Popup {
             }
             Row{
                 id:fileDetails
-                width: sheetfilePopup.width * 0.4  - 40
+                width: popup.width * 0.4  - 40
 
                 Rectangle{
                     id: fileNotSelected
-                    height: sheetfilePopup.height * 0.75 - 100
-                    width: sheetfilePopup.width * 0.4 - 40
+                    height: popup.height * 0.75 - 100
+                    width: popup.width * 0.4 - 40
                     border.color: Constants.themeColor
 
                     Rectangle{
@@ -392,7 +479,7 @@ Popup {
                         Text {
                             text: qsTr("Details")
                             anchors.topMargin: 5
-                            font.pointSize: Constants.fontReading
+                            font.pixelSize: Constants.fontCategoryHeader
                             anchors.top: detailsHeading.top
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
@@ -499,10 +586,10 @@ Popup {
 
             Row{
                 id: breadcrumb
-                width: sheetfilePopup.width * 0.6
+                width: popup.width * 0.6
                 Rectangle{
                     height: 40
-                    width: sheetfilePopup.width * 0.6
+                    width: popup.width * 0.6
                     border.color: Constants.borderBlueColor
                     anchors.verticalCenter: parent
 
@@ -517,9 +604,9 @@ Popup {
 
 
             Rectangle{
-                width: sheetfilePopup.width * 0.4
+                width: popup.width * 0.4
                 anchors.left:breadcrumb.right
-                anchors.leftMargin: sheetfilePopup.width * 0.4  - 270
+                anchors.leftMargin: popup.width * 0.4  - 270
 
                 CustomButton{
 
@@ -531,9 +618,7 @@ Popup {
                     anchors.rightMargin: 30
 
                     onClicked: {
-                        SheetDS.folderNav("0")
-                        // refer SheetDS.cpp for function info
-                        path.text = "sheet"
+                        onHomeClicked()
                     }
 
                 }
@@ -547,7 +632,7 @@ Popup {
                     anchors.leftMargin: 30
 
                     onClicked: {
-                        sheetfilePopup.visible = false
+                        closePopup()
                     }
 
                 }
@@ -569,6 +654,11 @@ Popup {
 
     // Modal Content ends
 
+
+
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
 
 
 

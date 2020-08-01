@@ -74,9 +74,9 @@ Popup {
     // JAVASCRIPT FUNCTION STARTS
 
     function onAllowBtnClicked(){
-        popup.visible = false;
         boxListPopup.visible = true;
         BoxDS.fetchDatasources()
+        closePopup()
     }
 
     function closePopup(){

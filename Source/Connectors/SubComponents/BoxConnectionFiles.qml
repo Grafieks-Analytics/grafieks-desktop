@@ -26,6 +26,8 @@ Popup {
     x: parent.width * 0.125
     y: parent.height * 0.125
     padding: 0
+    closePolicy: Popup.NoAutoClose
+
     property int label_col : 135
     property var pathFolder: "Box"
     property var folderName: "Folder name"
