@@ -31,11 +31,6 @@ QVariant ColumnListModel::data(const QModelIndex &index, int role) const
     }
 
 
-    QString stringVar = "QString";
-    if(stringVar.compare(value.typeName())){
-        qDebug() << "SQL!!" << value.toString() << value.type() << value.typeName() << "String";
-    }
-
     return value;
 }
 
@@ -79,6 +74,8 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
 
     }
 }
+
+
 
 void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QString searchString)
 {

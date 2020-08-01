@@ -32,6 +32,7 @@ public:
     Q_INVOKABLE void updateFilter(int FilterId, QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QVariant value = "");
 
     void addFilterList(FilterList * filter);
+    void columnList(QVariantList &columns);
 
 
     enum Roles{

@@ -187,3 +187,8 @@ void FilterListModel::addFilterList(FilterList *filter)
     endInsertRows();
 }
 
+void FilterListModel::columnList(QVariantList &columns)
+{
+
+}
+

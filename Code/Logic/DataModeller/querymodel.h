@@ -27,6 +27,7 @@ public:
 
     Q_INVOKABLE void callSql();
     QString tmpSql() const;
+    void callSqlWithFilter();
 
 public slots:
     void setTmpSql(QString tmpSql);

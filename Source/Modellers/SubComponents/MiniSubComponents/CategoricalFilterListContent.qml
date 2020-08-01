@@ -28,12 +28,6 @@ Rectangle{
 
     property int counter : 0
 
-    Component.onCompleted: {
-        console.log(ColumnListModel)
-
-
-
-    }
 
     Rectangle{
         id: selectTypeRadioBtn
@@ -65,7 +59,6 @@ Rectangle{
 
                         // Set the sub category for filter
                         DSParamsModel.setSubCategory(Constants.categorySubMulti)
-                        console.log(Constants.categorySubMulti)
                     }
                 }
             }
@@ -96,7 +89,6 @@ Rectangle{
 
                         // Set the sub category for filter
                         DSParamsModel.setSubCategory(Constants.categorySubSingle)
-                        console.log(Constants.categorySubSingle)
                     }
                 }
 
@@ -134,7 +126,6 @@ Rectangle{
                 }
 
                 onTextChanged: {
-                    console.log("text changing")
                     ColumnListModel.likeColumnQuery(DSParamsModel.colName, DSParamsModel.tableName, searchText.text)
                 }
             }
