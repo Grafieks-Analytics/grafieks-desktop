@@ -1,4 +1,4 @@
-import QtQuick 2.11
+import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
