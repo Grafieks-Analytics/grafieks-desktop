@@ -28,6 +28,22 @@ Page {
     property var categoriesList : ["all", "file", "grs", "rdbms", "nosql", "cloud", "online"]
     property var selectedCategory : categoriesList[0]
 
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+    signal update_host_query_modeller(string new_host);
+    signal update_data_sources_list();
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // Status Changed Functions Starts
+
     onSelectedCategoryChanged: {
         if(selectedCategory !== categoriesList[0]){
             ConnectorFilter.setFilterString(selectedCategory);
@@ -36,13 +52,13 @@ Page {
         }
     }
 
+    // Status Changed Function ENDS
+    /***********************************************************************************************************************/
 
 
-    // Signals
-    signal update_host_query_modeller(string new_host);
-    signal update_data_sources_list();
 
-    // Slots
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTIONS STARTS
 
     function tmp_update_host(new_host){
         update_host_query_modeller(new_host)
@@ -96,11 +112,121 @@ Page {
         }
     }
 
+    //Search Data Connector
+    function  searchDataConnector(text){
+        ConnectorFilter.setSearchString(text)
+    }
+
+
+    // JAVASCRIPT FUNCTIONS ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+    LoginServer{
+        id: connectGrafieks1
+    }
+
+    LoginCredentials{
+        id: connectGrafieks2
+    }
+
+    MysqlConnection{
+        id: mysqlModal
+    }
+
+    SqliteConnection{
+        id: sqliteModal
+    }
+
+    DropboxConnection{
+        id: dropboxModal
+    }
+
+    DropboxConnectionFiles{
+        id: fileListPopup
+    }
+
+    DriveConnection{
+        id: driveModal
+    }
+
+    DriveConnectionFiles{
+        id: driveListPopup
+    }
+
+    BoxConnection{
+        id: boxModal
+    }
+
+    BoxConnectionFiles{
+        id: boxListPopup
+    }
+
+    SheetConnection{
+        id: sheetModal
+    }
+
+    SheetConnectionFiles{
+        id: sheetListPopup
+    }
+
+
+    // Connect to Microsoft Excel
+    FileDialog{
+        id: fileDialog1
+
+        title: "Select a file"
+
+        onAccepted: {
+            console.log("file chosen")
+            messageDialog1.open()
+        }
+        onRejected: {
+            console.log("file rejected")
+        }
+    }
+
+    MessageDialog{
+        id: messageDialog1
+
+        modality: Qt.ApplicationModal
+        title: "Processing file"
+        text: "Please wait. We are processing your input file. Hit Ok to continue"
+        standardButtons: StandardButton.Ok | StandardButton.Close
+
+        onAccepted: {
+
+        }
+        onRejected: {
+
+        }
+    }
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
+
+
+    // Left menubar starts
 
     LeftMenuBar{
         id: left_menubar
     }
 
+    // Left menubar ends
 
 
     Text{
@@ -116,8 +242,9 @@ Page {
     }
 
 
+    // Search Bar
     Rectangle{
-        id:search_rect
+        id:searchRectangle
         border.color: Constants.borderBlueColor
         width: 400
         height: 50
@@ -134,33 +261,39 @@ Page {
             height: 50
             placeholderText: "Search"
             cursorVisible: true
-            anchors.left: search_rect.left
+            anchors.left: searchRectangle.left
             leftPadding: 15
-            rightPadding: 15
-            anchors.top: search_rect.top
-            anchors.bottom:search_rect.bottom
+            rightPadding: 45
+            anchors.top: searchRectangle.top
+            anchors.bottom:searchRectangle.bottom
             verticalAlignment:TextField.AlignVCenter
             font.italic: true
             font.pointSize: Constants.fontReading
             opacity: 0.6
+
+            onAccepted: {
+                searchDataConnector(search_text.text);
+            }
+
 
         }
 
         Image{
             id:search_btn
             source: "../../Images/icons/Search.png"
-            anchors.right: search_rect.right
+            anchors.right: searchRectangle.right
             anchors.rightMargin: 10
             height:30
             width: height
-            anchors.verticalCenter: search_rect.verticalCenter
+            anchors.verticalCenter: searchRectangle.verticalCenter
 
             MouseArea{
                 anchors.fill: parent
 
                 onClicked: {
-                    ConnectorFilter.setSearchString(search_text.text)
+                    onSearchDataConnector(search_text.text);
                 }
+
             }
 
         }
@@ -169,13 +302,12 @@ Page {
 
     TabBar{
         id: tabbar
-        anchors.top: search_rect.bottom
+        anchors.top: searchRectangle.bottom
         height: 40
         anchors.topMargin: 40
+        width: parent.width
         x : selectconn_page.width/2 - 440
         z: 6
-
-
 
         TabButton{
             id: tab_all
@@ -315,7 +447,7 @@ Page {
 
     }
 
-
+    // Display Connectors
     GridView{
         id: grid1
 
@@ -327,10 +459,9 @@ Page {
         model: ConnectorFilter
         cellWidth: grid1.width / 6
         cellHeight: 130
-//        clip:true
-//        boundsBehavior : Flickable.StopAtBounds
 
-
+        //        clip:true
+        //        boundsBehavior : Flickable.StopAtBounds
 
         delegate : Rectangle{
             scale: 1
@@ -376,85 +507,7 @@ Page {
 
 
 
-
-    // Connect to Microsoft Excel
-    FileDialog{
-        id: fileDialog1
-
-        title: "Select a file"
-
-        onAccepted: {
-            console.log("file chosen")
-            messageDialog1.open()
-        }
-        onRejected: {
-            console.log("file rejected")
-        }
-    }
-
-    MessageDialog{
-        id: messageDialog1
-
-        modality: Qt.ApplicationModal
-        title: "Processing file"
-        text: "Please wait. We are processing your input file. Hit Ok to continue"
-        standardButtons: StandardButton.Ok | StandardButton.Close
-
-        onAccepted: {
-
-        }
-        onRejected: {
-
-        }
-    }
-
-    LoginServer{
-        id: connectGrafieks1
-    }
-
-    LoginCredentials{
-        id: connectGrafieks2
-
-    }
-
-    MysqlConnection{
-        id: mysqlModal
-
-    }
-
-    SqliteConnection{
-        id: sqliteModal
-
-    }
-
-    DropboxConnection{
-        id: dropboxModal
-    }
-
-    DropboxConnectionFiles{
-        id: fileListPopup
-    }
-
-    DriveConnection{
-        id: driveModal
-    }
-
-   DriveConnectionFiles{
-        id: driveListPopup
-   }
-
-   BoxConnection{
-        id: boxModal
-   }
-   BoxConnectionFiles{
-        id: boxListPopup
-   }
-
-   SheetConnection{
-        id: sheetModal
-   }
-   SheetConnectionFiles{
-        id: sheetListPopup
-   }
+    // Page Design Ends
+    /***********************************************************************************************************************/
 
 }
