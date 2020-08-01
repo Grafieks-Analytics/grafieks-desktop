@@ -237,6 +237,15 @@ Popup {
 
             onClicked: {
                 dataFilterPopup.visible = false
+
+                var category = DSParamsModel.category
+                var subCategory = DSParamsModel.subCategory
+                var tableName = DSParamsModel.tableName
+                var columnName = DSParamsModel.colName
+                var relation = DSParamsModel.relation
+                var value = DSParamsModel.value
+
+                FilterListModel.newFilter(category, subCategory, tableName, columnName, relation, value)
             }
         }
 

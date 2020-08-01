@@ -29,6 +29,13 @@ QVariant ColumnListModel::data(const QModelIndex &index, int role) const
         QModelIndex modelIndex = this->index(index.row(), columnIdx);
         value = QSqlQueryModel::data(modelIndex, Qt::DisplayRole);
     }
+
+
+    QString stringVar = "QString";
+    if(stringVar.compare(value.typeName())){
+        qDebug() << "SQL!!" << value.toString() << value.type() << value.typeName() << "String";
+    }
+
     return value;
 }
 

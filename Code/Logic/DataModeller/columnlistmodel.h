@@ -28,6 +28,8 @@ public:
 private:
     void generateRoleNames();
     QHash<int, QByteArray> m_roleNames;
+    QVariantList s;
+
 
 };
 

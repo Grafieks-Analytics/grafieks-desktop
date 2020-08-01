@@ -28,6 +28,13 @@ Rectangle{
 
     property int counter : 0
 
+    Component.onCompleted: {
+        console.log(ColumnListModel)
+
+
+
+    }
+
     Rectangle{
         id: selectTypeRadioBtn
         height: 40
@@ -166,7 +173,7 @@ Rectangle{
 
             CheckBox {
                 id: mainCheckBox
-                checked: true
+                checked: DSParamsModel.selectAll
                 text: "All"
                 indicator.width: 15
                 indicator.height: 15
@@ -192,6 +199,11 @@ Rectangle{
                         indicator.width: 15
                         indicator.height: 15
                         ButtonGroup.group: childGroup
+
+                        Component.onCompleted: {
+//                            console.log(modelData)
+
+                        }
                     }
                 }
             }
