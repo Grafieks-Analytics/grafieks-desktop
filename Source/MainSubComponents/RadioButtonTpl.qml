@@ -13,9 +13,10 @@ import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
 
-Item {
 
-    id: radio_item
+RadioButton {
+    id: control
+
     height: control.implicitHeight
     width: control.implicitWidth
 
@@ -23,35 +24,32 @@ Item {
     property alias radio_checked: control.checked
     property alias parent_dimension: parent_border.implicitWidth
 
-    RadioButton {
-        id: control
 
-        indicator: Rectangle {
-            id: parent_border
-            implicitHeight: parent_dimension
-            radius: parent_dimension/2
-            x: control.leftPadding
-            y: parent.height / 2 - height / 2
-            border.color: control.down ? Constants.darkThemeColor : "black"
+    indicator: Rectangle {
+        id: parent_border
+        implicitHeight: parent_dimension
+        radius: parent_dimension/2
+        x: control.leftPadding
+        y: parent.height / 2 - height / 2
+        border.color: control.down ? Constants.darkThemeColor : "black"
 
-            Rectangle {
-                id: child_border
-                width: parent_dimension/2
-                height: width
-                radius: width/2
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                color: control.down ? Constants.darkThemeColor : "black"
-                visible: control.checked
-            }
-        }
-
-        contentItem: Text {
-            text: control.text
-            opacity: enabled ? 1.0 : 0.3
-            verticalAlignment: Text.AlignVCenter
-            leftPadding: control.indicator.width + control.spacing
+        Rectangle {
+            id: child_border
+            width: parent_dimension/2
+            height: width
+            radius: width/2
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: control.down ? Constants.darkThemeColor : "black"
+            visible: control.checked
         }
     }
 
+    contentItem: Text {
+        text: control.text
+        opacity: enabled ? 1.0 : 0.3
+        verticalAlignment: Text.AlignVCenter
+        leftPadding: control.indicator.width + control.spacing
+    }
 }
+
