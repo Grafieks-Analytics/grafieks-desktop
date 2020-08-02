@@ -70,7 +70,7 @@ Rectangle{
         // Except when "Select All" checked.
         // Then Relation will be LIKE
 
-        DSParamsModel.setRelation("IN")
+        DSParamsModel.setRelation(Constants.likeRelation)
     }
 
 
@@ -97,8 +97,9 @@ Rectangle{
     }
 
 
-    function onSingleSelectRadioSelected(modelData,checked){
-        console.log(modelData, checked)
+    function onSingleSelectRadioSelected(modelData){
+        DSParamsModel.setValue(modelData.toString())
+        DSParamsModel.setRelation(Constants.equalRelation)
     }
 
 
@@ -108,10 +109,9 @@ Rectangle{
 
     function onAllCheckBoxCheckedChanged(checked){
         // If Select All option is true
-
         if(checked === true){
 
-            DSParamsModel.setRelation("IN")
+            DSParamsModel.setRelation(Constants.likeRelation)
             DSParamsModel.setValue("%")
             checkedValues = []
 
@@ -119,6 +119,23 @@ Rectangle{
     }
 
     function onMultiSelectCheckboxSelected(modelData,checked){
+
+//        if(mainCheckBox.checked === true){
+
+//            if(checked === false){
+
+//                // Set SELECT ALL to false
+//                DSParamsModel.setSelectAll(false)
+//                mainCheckBox.checked = false
+
+
+//                // Start pushing the individual checked intem in the array
+//                // Save the array and Set relation type to IN
+//                checkedValues.push(modelData)
+//                DSParamsModel.setValue(checkedValues.toString())
+//                DSParamsModel.setRelation("IN")
+//            }
+//        }
 
         if(mainCheckBox.checked === true){
 
@@ -128,13 +145,26 @@ Rectangle{
                 DSParamsModel.setSelectAll(false)
                 mainCheckBox.checked = false
 
-
-                // Start pushing the individual checked intem in the array
-                // Save the array and Set relation type to IN
-                checkedValues.push(modelData)
-                DSParamsModel.setValue(checkedValues.toString())
-                DSParamsModel.setRelation("IN")
             }
+        } else{
+            if(checked === true){
+
+                // Start pushing the individual checked item in the array
+                checkedValues.push(modelData)
+                console.log(checkedValues)
+
+            } else{
+                 // Remove item if unchecked
+                const index = checkedValues.indexOf(modelData);
+                if (index > -1) {
+                  checkedValues.splice(index, 1);
+                }
+            }
+
+            // Save the array and Set relation type to IN
+
+            DSParamsModel.setValue(checkedValues.toString())
+            DSParamsModel.setRelation(Constants.inRelation)
         }
 
     }
@@ -385,7 +415,7 @@ Rectangle{
                         width: 16
                         parent_dimension: 16
                         onCheckedChanged: {
-                            onSingleSelectRadioSelected(modelData,checked)
+                            onSingleSelectRadioSelected(modelData)
                         }
                     }
                 }

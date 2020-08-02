@@ -22,6 +22,8 @@ QVariant FilterListModel::data(const QModelIndex &index, int role) const
     FilterList * filterList = mFilter[index.row()];
     if( role == FilterListIdRole)
         return filterList->filterId();
+    if( role == FilterListSectionRole)
+        return filterList->section();
     if( role == FilterListCategoryRole)
         return filterList->category();
     if( role == FilterListSubCategoryRole)
@@ -34,6 +36,10 @@ QVariant FilterListModel::data(const QModelIndex &index, int role) const
         return filterList->relation();
     if( role == FilterListValueRole)
         return filterList->value();
+    if( role == FilterListIncludeNullRole)
+        return filterList->includeNull();
+    if( role == FilterListExcludeRole)
+        return filterList->exclude();
     return QVariant();
 }
 
@@ -47,6 +53,16 @@ bool FilterListModel::setData(const QModelIndex &index, const QVariant &value, i
     {
         if( filterList->filterId()!= value.toInt()){
             filterList->setFilterId(value.toInt());
+            somethingChanged = true;
+        }
+        break;
+    }
+
+
+    case FilterListSectionRole:
+    {
+        if( filterList->section()!= value.toString()){
+            filterList->setSection(value.toString());
             somethingChanged = true;
         }
         break;
@@ -114,6 +130,25 @@ bool FilterListModel::setData(const QModelIndex &index, const QVariant &value, i
         break;
     }
 
+    case FilterListIncludeNullRole:
+    {
+        if( filterList->includeNull()!= value.toBool()){
+            filterList->setIncludeNull(value.toBool());
+            somethingChanged = true;
+        }
+        break;
+    }
+
+    case FilterListExcludeRole:
+    {
+        if( filterList->exclude()!= value.toBool()){
+            filterList->setExclude(value.toBool());
+            somethingChanged = true;
+        }
+        break;
+    }
+
+
     }
 
     if( somethingChanged){
@@ -135,12 +170,15 @@ QHash<int, QByteArray> FilterListModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
     roles[FilterListIdRole] = "filterId";
+    roles[FilterListSectionRole] = "section";
     roles[FilterListCategoryRole] = "category";
-    roles[FilterListSubCategoryRole] = "subcategory";
+    roles[FilterListSubCategoryRole] = "subCategory";
     roles[FilterListTableNameRole] = "tableName";
     roles[FilterListColumnNameRole] = "columnName";
     roles[FilterListRelationRole] = "relation";
     roles[FilterListValueRole] = "value";
+    roles[FilterListIncludeNullRole] = "includeNull";
+    roles[FilterListExcludeRole] = "exclude";
 
     return roles;
 }
@@ -162,9 +200,11 @@ void FilterListModel::deleteFilter(int FilterID)
     endRemoveRows();
 }
 
-void FilterListModel::updateFilter(int FilterId, QString category, QString subcategory, QString tableName, QString colName, QString relation, QVariant value)
+void FilterListModel::updateFilter(int FilterId, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QVariant value, bool includeNull, bool exclude)
 {
 
+    if(section != "")
+        mFilter[FilterId]->setSection(section);
     if(category != "")
         mFilter[FilterId]->setCategory(category);
     if(subcategory != "")
@@ -177,6 +217,9 @@ void FilterListModel::updateFilter(int FilterId, QString category, QString subca
         mFilter[FilterId]->setRelation(relation);
     if(value != "")
         mFilter[FilterId]->setValue(value);
+
+    mFilter[FilterId]->setIncludeNull(includeNull);
+    mFilter[FilterId]->setExclude(exclude);
 }
 
 void FilterListModel::addFilterList(FilterList *filter)
@@ -190,5 +233,6 @@ void FilterListModel::addFilterList(FilterList *filter)
 void FilterListModel::columnList(QVariantList &columns)
 {
 
+    Q_UNUSED(columns);
 }
 

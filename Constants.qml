@@ -52,6 +52,11 @@ QtObject {
     //font.pointSize: Constants.fontReading = font.pixelSize: Constants.fontCategoryHeader
     //font.pointSize: Constants.fontCategoryHeader = font.pixelSize: Constants.fontHeader
 
+    // SQL Relations
+    property string likeRelation: "LIKE"
+    property string inRelation: "IN"
+    property string equalRelation: "EQUAL"
+
 
     // Filters
     // Tab Bar Open Constants- Section

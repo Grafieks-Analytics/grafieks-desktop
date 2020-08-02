@@ -29,7 +29,7 @@ public:
 
     Q_INVOKABLE void newFilter(QString section = "",QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QVariant val = "", bool includeNull = true, bool exclude = false);
     Q_INVOKABLE void deleteFilter(int FilterID);
-    Q_INVOKABLE void updateFilter(int FilterId, QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QVariant value = "");
+    Q_INVOKABLE void updateFilter(int FilterId, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QVariant value = "", bool includeNull = true, bool exclude = false);
 
     void addFilterList(FilterList * filter);
     void columnList(QVariantList &columns);
