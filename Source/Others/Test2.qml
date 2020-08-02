@@ -12,7 +12,7 @@ Page {
         model: FilterListModel
         delegate: Row{
             Text{
-                text: section + "-"+category+"-"+tableName+"-"+columnName+"-"+relation+"-"+value+"-"+includeNull+"-"+exclude
+                text: section + "-"+category+"-"+subCategory+"-"+tableName+"-"+columnName+"-"+relation+"-"+value+"-"+includeNull+"-"+exclude
                 // section + "" + subCategory
             }
         }

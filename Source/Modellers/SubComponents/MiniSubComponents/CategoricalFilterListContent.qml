@@ -35,7 +35,7 @@ Rectangle{
         // Except when "Select All" checked.
         // Then Relation will be LIKE
 
-        DSParamsModel.setRelation("LIKE")
+        DSParamsModel.setRelation(Constants.likeRelation)
     }
 
 
@@ -185,7 +185,7 @@ Rectangle{
                     // If Select All option is true
                     if(checked === true){
 
-                        DSParamsModel.setRelation("LIKE")
+                        DSParamsModel.setRelation(Constants.likeRelation)
                         DSParamsModel.setValue("%")
                         checkedValues = []
 
@@ -242,7 +242,7 @@ Rectangle{
                                 // Save the array and Set relation type to IN
 
                                 DSParamsModel.setValue(checkedValues.toString())
-                                DSParamsModel.setRelation("IN")
+                                DSParamsModel.setRelation(Constants.inRelation)
                             }
 
 
@@ -299,7 +299,8 @@ Rectangle{
                         ButtonGroup.group: btngrp
 
                         onCheckedChanged: {
-                            console.log(modelData, checked)
+                            DSParamsModel.setValue(modelData.toString())
+                            DSParamsModel.setRelation(Constants.equalRelation)
                         }
                     }
                 }
