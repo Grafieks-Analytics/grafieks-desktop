@@ -18,32 +18,7 @@ Rectangle{
 
     ListModel{
         id: listModel
-        ListElement{
-            columnName:"Customer Name"
-            filterKey:"Equals"
-            columnValue:"Hirak Kocharee, Chilarai"
-        }
-        ListElement{
-            columnName:"PO Number"
-            filterKey:"Exlcudes"
-            columnValue:"ABC123, BCD987, GHF5"
-        }
 
-        ListElement{
-            columnName:"PO Number"
-            filterKey:"Exlcudes"
-            columnValue:"ABC123, BCD987, GHF5"
-        }
-        ListElement{
-            columnName:"PO Number"
-            filterKey:"Exlcudes"
-            columnValue:"ABC123, BCD987, GHF5"
-        }
-        ListElement{
-            columnName:"PO Number"
-            filterKey:"Exlcudes"
-            columnValue:"ABC123, BCD987, GHF5"
-        }
     }
     ListModel{
         id: wildcardModel
@@ -80,7 +55,6 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // Connections Starts
-
 
 
     // Connections Ends
@@ -171,7 +145,7 @@ Rectangle{
 
             ListView{
                 id: listFiltersListView
-                model: listModel
+                model: FilterListModel
                 width: parent.width
                 height: listModel.count * (30 + rowSpacing)
                 anchors.topMargin: 10
@@ -203,7 +177,7 @@ Rectangle{
                         width: parent.width / 3 - 50
 
                         Text {
-                            text: filterKey
+                            text: exclude === true ? "NOT " +relation : relation
                             anchors.left: parent.left
                             leftPadding: 20
 
@@ -218,7 +192,7 @@ Rectangle{
 
                         ReadOnlyTextBox{
                             boxWidth: parent.width
-                            text: columnValue
+                            text: value
                         }
                     }
 

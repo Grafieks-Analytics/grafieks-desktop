@@ -20,6 +20,7 @@ QVariant FilterListModel::data(const QModelIndex &index, int role) const
         return QVariant();
     //The index is valid
     FilterList * filterList = mFilter[index.row()];
+
     if( role == FilterListIdRole)
         return filterList->filterId();
     if( role == FilterListSectionRole)
