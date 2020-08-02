@@ -14,6 +14,77 @@ Column{
     anchors.topMargin: 30
 
 
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+    function toggleRadios(thisRadioChecked,lastRadioChecked,nextRadioChecked,nextXRadioChecked,lastXRadioChecked,nextXRadioTextFieldFocus,lastXRadioTextFieldFocus){
+
+        thisRadio.radio_checked = thisRadioChecked
+        lastRadio.radio_checked = lastRadioChecked
+        nextRadio.radio_checked = nextRadioChecked
+        nextXRadio.radio_checked = nextXRadioChecked
+        lastXRadio.radio_checked = lastXRadioChecked
+
+
+        nextXRadioTextField.focus = nextXRadioTextFieldFocus
+        lastXRadioTextField.focus = lastXRadioTextFieldFocus
+
+    }
+
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
+
+
     Rectangle{
         id:thisTimeFrameRow
         height: 30
@@ -140,15 +211,7 @@ Column{
                 anchors.fill:parent
 
                 onClicked: {
-                    thisRadio.radio_checked = false
-                    lastRadio.radio_checked = false
-                    nextRadio.radio_checked = false
-                    nextXRadio.radio_checked = false
-                    lastXRadio.radio_checked = true
-
-
-                    nextXRadioTextField.focus = false
-                    lastXRadioTextField.focus = true
+                   toggleRadios(false,false,false,false,true,true,false)
                 }
             }
         }
@@ -185,15 +248,7 @@ Column{
                 anchors.fill:parent
 
                 onClicked: {
-                    thisRadio.radio_checked = false
-                    lastRadio.radio_checked = false
-                    nextRadio.radio_checked = false
-                    nextXRadio.radio_checked = true
-                    lastXRadio.radio_checked = false
-
-
-                    nextXRadioTextField.focus = true
-                    lastXRadioTextField.focus = false
+                    toggleRadios(false,false,false,true,false,true,false)
                 }
             }
         }
@@ -208,4 +263,8 @@ Column{
         }
 
     }
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
+
 }
