@@ -31,6 +31,139 @@ Rectangle{
 
     visible: false
 
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
+    function onMonthTabClicked(){
+        yearTabContent.visible = false
+        quarterTabContent.visible = false
+        monthTabContent.visible = true
+        dayTabContent.visible = false
+
+        monthTabBackground.color = Constants.themeColor
+        quarterTabBackground.color = Qt.binding(function(){
+            return quarterTab.hovered ? Constants.themeColor : Constants.whiteColor
+        })
+        yearTabBackground.color = Qt.binding(function(){
+            return yearTab.hovered ? Constants.themeColor : Constants.whiteColor
+        })
+        dayTabBackground.color = Qt.binding(function(){
+            return dayTab.hovered ? Constants.themeColor : Constants.whiteColor
+        })
+    }
+
+
+    function onDayTabClicked(){
+        yearTabContent.visible = false
+        quarterTabContent.visible = false
+        monthTabContent.visible = false
+        dayTabContent.visible = true
+
+        dayTabBackground.color = Constants.themeColor
+        quarterTabBackground.color = Qt.binding(function(){
+            return quarterTab.hovered ? Constants.themeColor : Constants.whiteColor
+        })
+        monthTabBackground.color = Qt.binding(function(){
+            return monthTab.hovered ? Constants.themeColor : Constants.whiteColor
+        })
+        yearTabBackground.color = Qt.binding(function(){
+            return yearTab.hovered ? Constants.themeColor : Constants.whiteColor
+        })
+    }
+
+    function onQuarterTabClicked(){
+
+        yearTabContent.visible = false
+        quarterTabContent.visible = true
+        monthTabContent.visible = false
+        dayTabContent.visible = false
+
+        quarterTabBackground.color = Constants.themeColor
+        yearTabBackground.color = Qt.binding(function(){
+            return yearTab.hovered ? Constants.themeColor : Constants.whiteColor
+        })
+        monthTabBackground.color = Qt.binding(function(){
+            return monthTab.hovered ? Constants.themeColor : Constants.whiteColor
+        })
+        dayTabBackground.color = Qt.binding(function(){
+            return dayTab.hovered ? Constants.themeColor : Constants.whiteColor
+        })
+    }
+
+    function onYearTabClicked(){
+        yearTabContent.visible = true
+        quarterTabContent.visible = false
+        monthTabContent.visible = false
+        dayTabContent.visible = false
+
+        yearTabBackground.color = Constants.themeColor
+        quarterTabBackground.color = Qt.binding(function(){
+            return quarterTab.hovered ? Constants.themeColor : Constants.whiteColor
+        })
+        monthTabBackground.color = Qt.binding(function(){
+            return monthTab.hovered ? Constants.themeColor : Constants.whiteColor
+        })
+        dayTabBackground.color = Qt.binding(function(){
+            return dayTab.hovered ? Constants.themeColor : Constants.whiteColor
+        })
+    }
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
+
+
+
     Rectangle{
 
         id: submenuTab
@@ -57,23 +190,7 @@ Rectangle{
             }
 
             onClicked: {
-                yearTabContent.visible = true
-                quarterTabContent.visible = false
-                monthTabContent.visible = false
-                dayTabContent.visible = false
-
-                yearTabBackground.color = Constants.themeColor
-                quarterTabBackground.color = Qt.binding(function(){
-                    return quarterTab.hovered ? Constants.themeColor : Constants.whiteColor
-                })
-                monthTabBackground.color = Qt.binding(function(){
-                    return monthTab.hovered ? Constants.themeColor : Constants.whiteColor
-                })
-                dayTabBackground.color = Qt.binding(function(){
-                    return dayTab.hovered ? Constants.themeColor : Constants.whiteColor
-                })
-
-
+                onYearTabClicked()
             }
         }
 
@@ -95,22 +212,8 @@ Rectangle{
             }
 
             onClicked: {
-                yearTabContent.visible = false
-                quarterTabContent.visible = true
-                monthTabContent.visible = false
-                dayTabContent.visible = false
 
-                quarterTabBackground.color = Constants.themeColor
-                yearTabBackground.color = Qt.binding(function(){
-                    return yearTab.hovered ? Constants.themeColor : Constants.whiteColor
-                })
-                monthTabBackground.color = Qt.binding(function(){
-                    return monthTab.hovered ? Constants.themeColor : Constants.whiteColor
-                })
-                dayTabBackground.color = Qt.binding(function(){
-                    return dayTab.hovered ? Constants.themeColor : Constants.whiteColor
-                })
-
+                onQuarterTabClicked()
             }
         }
 
@@ -134,22 +237,7 @@ Rectangle{
 
 
             onClicked: {
-                yearTabContent.visible = false
-                quarterTabContent.visible = false
-                monthTabContent.visible = true
-                dayTabContent.visible = false
-
-                monthTabBackground.color = Constants.themeColor
-                quarterTabBackground.color = Qt.binding(function(){
-                    return quarterTab.hovered ? Constants.themeColor : Constants.whiteColor
-                })
-                yearTabBackground.color = Qt.binding(function(){
-                    return yearTab.hovered ? Constants.themeColor : Constants.whiteColor
-                })
-                dayTabBackground.color = Qt.binding(function(){
-                    return dayTab.hovered ? Constants.themeColor : Constants.whiteColor
-                })
-
+                onMonthTabClicked()
             }
         }
 
@@ -175,25 +263,8 @@ Rectangle{
 
 
             onClicked: {
-                yearTabContent.visible = false
-                quarterTabContent.visible = false
-                monthTabContent.visible = false
-                dayTabContent.visible = true
-
-                dayTabBackground.color = Constants.themeColor
-                quarterTabBackground.color = Qt.binding(function(){
-                    return quarterTab.hovered ? Constants.themeColor : Constants.whiteColor
-                })
-                monthTabBackground.color = Qt.binding(function(){
-                    return monthTab.hovered ? Constants.themeColor : Constants.whiteColor
-                })
-                yearTabBackground.color = Qt.binding(function(){
-                    return yearTab.hovered ? Constants.themeColor : Constants.whiteColor
-                })
-
+                onDayTabClicked()
             }
-
-
         }
 
     }
@@ -225,6 +296,9 @@ Rectangle{
     }
 
 
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
 
 
 }
