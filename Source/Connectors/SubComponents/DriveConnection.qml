@@ -18,7 +18,7 @@ import "../SubComponents"
 import "../../MainSubComponents"
 
 Popup {
-    id: drivePopup
+    id: popup
     width: 800
     height: 500
     modal: true
@@ -26,7 +26,28 @@ Popup {
     x: parent.width/2 - 300
     y: parent.height/2 - 300
     padding: 0
+    closePolicy: Popup.NoAutoClose
     property int label_col : 135
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
 
 
     Connections{
@@ -47,6 +68,48 @@ Popup {
         }
     }
 
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
+    function onAllowBtnClicked(){
+        popup.visible = false;
+        driveListPopup.visible = true;
+        DriveDS.fetchDatasources();
+        //driveds.cpp for more info
+
+    }
+
+    function closePopup(){
+        popup.visible = false
+    }
+
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
 
     // Popup Header starts
 
@@ -80,7 +143,7 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    popup.visible = false
+                    closePopup()
                 }
             }
         }
@@ -109,7 +172,7 @@ Popup {
 
                 text: qsTr("Allow Grafieks desktop to access to your drive account...")
                 anchors.horizontalCenter: parent.horizontalCenter
-                font.pointSize: Constants.fontCategoryHeaderSmall
+                font.pixelSize: Constants.fontHeader
             }
 
 
@@ -124,16 +187,12 @@ Popup {
                 anchors.topMargin: 60
                 width: 100
                 height:50
-                fontPointSize: Constants.fontCategoryHeaderSmall
-
+                fontPixelSize: Constants.fontHeader
                 anchors.horizontalCenter: parent.horizontalCenter
 
 
                 onClicked: {
-                    driveListPopup.visible = true;
-                    drivePopup.visible = false;
-                    DriveDS.fetchDatasources();
-                    //driveds.cpp for more info
+                    onAllowBtnClicked()
                 }
 
             }
@@ -164,8 +223,8 @@ Popup {
     }
 
 
-
-
+    // Page Design Ends
+    /***********************************************************************************************************************/
 
 
 }

@@ -18,7 +18,7 @@ import com.grafieks.singleton.constants 1.0
 import "../../MainSubComponents"
 
 Popup {
-    id: drivefilePopup
+    id: popup
     width: parent.width * 0.75
     height: parent.height * 0.75
     modal: true
@@ -27,8 +27,13 @@ Popup {
     y: parent.height * 0.125
     padding: 0
     property int label_col : 135
-    property var pathFolder: "drive"
+    property var pathFolder: "Drive"
     property var folderName: "Folder name"
+
+    closePolicy: Popup.NoAutoClose
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
 
 
     ListModel{
@@ -50,10 +55,28 @@ Popup {
         }
     }
 
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
     Connections{
         target: ConnectorsLoginModel
 
-        function onSqliteLoginStatus(){
+        onSqliteLoginStatus:{
 
             if(status.status === true){
 
@@ -67,6 +90,75 @@ Popup {
             }
         }
     }
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
+    function hidePopup(){
+        boxfilePopup.visible = false
+    }
+
+    function updatePath(text){
+        path.text="Drive";
+    }
+
+
+    function onHomeClicked(){
+        DriveDS.folderNav("0")
+        // refer boxds.cpp for function info
+        updatePath("Drive")
+    }
+
+    function searchFiles(){
+        DriveDS.searchQuer(server_files.text)
+    }
+
+
+    function showSelectedFileDetails(){
+        fileSelected.visible = true
+    }
+
+    function hideFileNotSelectedMessage(){
+        fileNotSelectedMsg.visible = false
+    }
+
+    function onFileClicked(name,type){
+
+        showSelectedFileDetails();
+        hideFileNotSelectedMessage();
+
+        detailName.text = name;
+
+        if(type === "folder"){
+            pathFolder = id;
+            folderName = name;
+        }
+
+        if(type === "file")
+        {
+            path.text = name
+            detailName.text = name;
+        }
+
+    }
+
+    function onFolderDoubleClicked(name,type){
+        if(type === "folder")
+            DriveDS.folderNav(pathFolder)
+
+        path.text = name
+    }
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
 
 
     // Popup Header starts
@@ -100,8 +192,8 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    drivefilePopup.visible = false
-                    path.text="drive";
+                    hidePopup()
+                    updatePath("Drive")
                 }
             }
         }
@@ -134,7 +226,7 @@ Popup {
 
             //                Text {
             //                    id: signOutBtn
-            //                    x:drivefilePopup.width - drivefilePopup.parent.width * 0.125 - 30
+            //                    x:popup.width - popup.parent.width * 0.125 - 30
             //                    text: qsTr("Sign Out")
             //                    color: "blue"
             //                }
@@ -154,12 +246,12 @@ Popup {
                 id: server_files
                 placeholderText: "file name"
 
-                width: drivefilePopup.width * 0.6
+                width: popup.width * 0.6
                 height: 40
                 background: Rectangle {
                     border.color: Constants.borderBlueColor
                     radius: 5
-                    width: drivefilePopup.width * 0.6
+                    width: popup.width * 0.6
                 }
 
                 CustomButton{
@@ -168,10 +260,10 @@ Popup {
                     height: 40
                     width: 100
                     textValue: "Search"
-                    x : drivefilePopup.width * 0.6 - 100
+                    x : popup.width * 0.6 - 100
 
                     onClicked: {
-                        DriveDS.searchQuer(server_files.text);
+                            searchFiles();
                     }
 
                 }
@@ -192,11 +284,11 @@ Popup {
             anchors.topMargin: 20
 
             Row{
-                width: drivefilePopup.width * 0.6
+                width: popup.width * 0.6
 
                 Rectangle{
-                    height: drivefilePopup.height * 0.75 - 100
-                    width: drivefilePopup.width * 0.6
+                    height: popup.height * 0.75 - 100
+                    width: popup.width * 0.6
                     border.color: Constants.themeColor
 
                     ListView{
@@ -204,11 +296,11 @@ Popup {
                         model:DriveModel
 
                         height: 200
-                        width: drivefilePopup.width * 0.6
+                        width: popup.width * 0.6
 
                         header: Row{
 
-                            width: drivefilePopup.width * 0.6
+                            width: popup.width * 0.6
                             Column{
                                 width: 20
                                 Rectangle{
@@ -268,7 +360,7 @@ Popup {
 
                         delegate: Row{
                             height:30
-                            width: drivefilePopup.width * 0.6
+                            width: popup.width * 0.6
 
                             Column{
                                 width: 20
@@ -307,25 +399,11 @@ Popup {
                                         anchors.fill:parent
                                         onClicked: {
 
-                                            fileSelected.visible = true
-                                            fileNotSelectedMsg.visible = false
-                                            detailName.text = name;
-                                            if(type == "folder"){
-                                                pathFolder = id;
-                                                folderName = name;
-                                            }
+                                            onFileClicked(name,tag);
 
-                                            if(type == "file")
-                                            {
-                                                path.text = name
-                                                detailName.text = name;
-                                            }
                                         }
                                         onDoubleClicked: {
-                                            if(type == "folder")
-                                                DriveDS.folderNav(pathFolder)
-
-                                            path.text = name
+                                            onFolderDoubleClicked(name,tag)
                                         }
                                     }
                                 }
@@ -376,12 +454,12 @@ Popup {
             }
             Row{
                 id:fileDetails
-                width: drivefilePopup.width * 0.4  - 40
+                width: popup.width * 0.4  - 40
 
                 Rectangle{
                     id: fileNotSelected
-                    height: drivefilePopup.height * 0.75 - 100
-                    width: drivefilePopup.width * 0.4 - 40
+                    height: popup.height * 0.75 - 100
+                    width: popup.width * 0.4 - 40
                     border.color: Constants.themeColor
 
                     Rectangle{
@@ -393,7 +471,7 @@ Popup {
                         Text {
                             text: qsTr("Details")
                             anchors.topMargin: 5
-                            font.pointSize: Constants.fontReading
+                            font.pixelSize: Constants.fontCategoryHeader
                             anchors.top: detailsHeading.top
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
@@ -500,10 +578,10 @@ Popup {
 
             Row{
                 id: breadcrumb
-                width: drivefilePopup.width * 0.6
+                width: popup.width * 0.6
                 Rectangle{
                     height: 40
-                    width: drivefilePopup.width * 0.6
+                    width: popup.width * 0.6
                     border.color: Constants.borderBlueColor
                     anchors.verticalCenter: parent
 
@@ -511,16 +589,16 @@ Popup {
                         id: path
                         anchors.verticalCenter: parent.verticalCenter
                         leftPadding: 10
-                        text: qsTr("drive")
+                        text: qsTr("Drive")
                     }
                 }
             }
 
 
             Rectangle{
-                width: drivefilePopup.width * 0.4
+                width: popup.width * 0.4
                 anchors.left:breadcrumb.right
-                anchors.leftMargin: drivefilePopup.width * 0.4  - 270
+                anchors.leftMargin: popup.width * 0.4  - 270
 
                 CustomButton{
 
@@ -532,9 +610,7 @@ Popup {
                     anchors.rightMargin: 30
 
                     onClicked: {
-                        DriveDS.folderNav("0")
-                        // refer DriveDS.cpp for function info
-                        path.text = "drive"
+                        onHomeClicked();
                     }
 
                 }
@@ -548,7 +624,7 @@ Popup {
                     anchors.leftMargin: 30
 
                     onClicked: {
-                        drivefilePopup.visible = false
+                        hidePopup()
                     }
 
                 }

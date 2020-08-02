@@ -49,6 +49,10 @@ QtObject {
     property int fontCategoryHeaderSmall : 12
     property int fontReading: 10
 
+    //font.pointSize: Constants.fontReading = font.pixelSize: Constants.fontCategoryHeader
+    //font.pointSize: Constants.fontCategoryHeader = font.pixelSize: Constants.fontHeader
+
+
     // Filters
     // Tab Bar Open Constants
 

@@ -18,7 +18,7 @@ import com.grafieks.singleton.constants 1.0
 import "../../MainSubComponents"
 
 Popup {
-    id: filePopup
+    id: popup
     width: parent.width * 0.75
     height: parent.height * 0.75
     modal: true
@@ -26,9 +26,15 @@ Popup {
     x: parent.width * 0.125
     y: parent.height * 0.125
     padding: 0
+    closePolicy: Popup.NoAutoClose
     property int label_col : 135
     property var pathFolder: "Dropbox"
     property var folderName: "Folder name"
+
+
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
 
 
     ListModel{
@@ -50,6 +56,25 @@ Popup {
         }
     }
 
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
     Connections{
         target: ConnectorsLoginModel
 
@@ -69,10 +94,94 @@ Popup {
     }
 
 
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
+    function closePopup(){
+        popup.visible = false
+    }
+
+    function updatePath(text){
+        path.text=text;
+    }
+
+    function onFileClicked(name,tag,pathLower){
+
+        fileSelected.visible = true
+        fileNotSelectedMsg.visible = false
+
+        detailName.text = name;
+        if(tag === "folder"){
+            pathFolder = pathLower;
+            folderName = name;
+        }
+
+        if(tag === "file")
+        {
+            updatePath(pathLower)
+            detailName.text = name;
+        }
+
+    }
+
+    function onFolderClicked(name,tag,pathFolder,pathLower){
+        if(tag === "folder")
+            DropboxDS.folderNav(pathFolder)
+
+        updatePath(pathLower)
+    }
+
+    function onHomeClicked(){
+        DropboxDS.folderNav("")
+        //refer function folderNav of dropboxds.cpp
+        updatePath("Dropbox")
+    }
+
+
+    function searchFiles(){
+        DropboxDS.searchQuer(server_files.text)
+    }
+
+
+    function onBackPressed(){
+        updatePath(DropboxDS.goingBack(pathFolder,folderName));
+    }
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
+
     // Popup Header starts
 
     Rectangle{
-        id: header_filePopup
+        id: header_popup
         color: Constants.themeColor
         border.color: "transparent"
         height: 40
@@ -101,8 +210,8 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    fileListPopup.visible = false
-                    path.text="Dropbox";
+                    closePopup();
+                    updatePath("Dropbox")
                 }
             }
         }
@@ -116,7 +225,7 @@ Popup {
 
     Column{
         id: dropboxModalContent
-        anchors.top: header_filePopup.bottom
+        anchors.top: header_popup.bottom
         anchors.margins: 20
         anchors.left: parent.left
 
@@ -135,7 +244,7 @@ Popup {
 
             //                Text {
             //                    id: signOutBtn
-            //                    x:filePopup.width - filePopup.parent.width * 0.125 - 30
+            //                    x:popup.width - popup.parent.width * 0.125 - 30
             //                    text: qsTr("Sign Out")
             //                    color: "blue"
             //                }
@@ -156,12 +265,12 @@ Popup {
             TextField{
                 id: server_files
                 placeholderText: "file name"
-                width: filePopup.width * 0.6
+                width: popup.width * 0.6
                 height: 40
                 background: Rectangle {
                     border.color: Constants.borderBlueColor
                     radius: 5
-                    width: filePopup.width * 0.6
+                    width: popup.width * 0.6
                 }
 
 
@@ -171,10 +280,10 @@ Popup {
                     height: 40
                     width: 100
                     textValue: "Search"
-                    x : filePopup.width * 0.6 - 100
+                    x : popup.width * 0.6 - 100
 
                     onClicked: {
-                        DropboxDS.searchQuer(server_files.text);
+                        searchFiles()
                     }
 
                 }
@@ -196,11 +305,11 @@ Popup {
             anchors.topMargin: 20
 
             Row{
-                width: filePopup.width * 0.6
+                width: popup.width * 0.6
 
                 Rectangle{
-                    height: filePopup.height * 0.75 - 100
-                    width: filePopup.width * 0.6
+                    height: popup.height * 0.75 - 100
+                    width: popup.width * 0.6
                     border.color: Constants.themeColor
 
                     ListView{
@@ -208,11 +317,11 @@ Popup {
                         model:DropboxModel
 
                         height: 200
-                        width: filePopup.width * 0.6
+                        width: popup.width * 0.6
 
                         header: Row{
 
-                            width: filePopup.width * 0.6
+                            width: popup.width * 0.6
                             Column{
                                 width: 20
                                 Rectangle{
@@ -272,7 +381,7 @@ Popup {
 
                         delegate: Row{
                             height:30
-                            width: filePopup.width * 0.6
+                            width: popup.width * 0.6
 
                             Column{
                                 width: 20
@@ -309,26 +418,10 @@ Popup {
 
                                         anchors.fill:parent
                                         onClicked: {
-
-                                            fileSelected.visible = true
-                                            fileNotSelectedMsg.visible = false
-                                            detailName.text = name;
-                                            if(tag == "folder"){
-                                                pathFolder = pathLower;
-                                                folderName = name;
-                                            }
-
-                                            if(tag == "file")
-                                            {
-                                                path.text = pathLower
-                                                detailName.text = name;
-                                            }
+                                            onFileClicked(name,tag,pathLower)
                                         }
                                         onDoubleClicked: {
-                                            if(tag == "folder")
-                                                DropboxDS.folderNav(pathFolder)
-
-                                            path.text = pathLower
+                                            onFolderClicked(name,tag,pathFolder,pathLower);
                                         }
                                     }
                                 }
@@ -379,12 +472,12 @@ Popup {
             }
             Row{
                 id:fileDetails
-                width: filePopup.width * 0.4  - 40
+                width: popup.width * 0.4  - 40
 
                 Rectangle{
                     id: fileNotSelected
-                    height: filePopup.height * 0.75 - 100
-                    width: filePopup.width * 0.4 - 40
+                    height: popup.height * 0.75 - 100
+                    width: popup.width * 0.4 - 40
                     border.color: Constants.themeColor
 
                     Rectangle{
@@ -396,7 +489,7 @@ Popup {
                         Text {
                             text: qsTr("Details")
                             anchors.topMargin: 5
-                            font.pointSize: Constants.fontReading
+                            font.pixelSize: Constants.fontCategoryHeader
                             anchors.top: detailsHeading.top
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
@@ -503,10 +596,10 @@ Popup {
 
             Row{
                 id: breadcrumb
-                width: filePopup.width * 0.6
+                width: popup.width * 0.6
                 Rectangle{
                     height: 40
-                    width: filePopup.width * 0.6
+                    width: popup.width * 0.6
                     border.color: Constants.borderBlueColor
                     anchors.verticalCenter: parent
 
@@ -521,9 +614,9 @@ Popup {
 
 
             Rectangle{
-                width: filePopup.width * 0.4
+                width: popup.width * 0.4
                 anchors.left:breadcrumb.right
-                anchors.leftMargin: filePopup.width * 0.4  - 270
+                anchors.leftMargin: popup.width * 0.4  - 270
 
                 CustomButton{
 
@@ -535,9 +628,7 @@ Popup {
                     anchors.rightMargin: 30
 
                     onClicked: {
-                        DropboxDS.folderNav("")
-                        //refer function folderNav of dropboxds.cpp
-                        path.text = "Dropbox"
+                        onHomeClicked()
                     }
 
                 }
@@ -551,8 +642,7 @@ Popup {
                     anchors.leftMargin: 30
 
                     onClicked: {
-                        path.text = DropboxDS.goingBack(pathFolder,folderName)
-                        //refer dropboxds.cpp for function goingback
+                        onBackPressed()
                     }
 
                 }
@@ -573,6 +663,12 @@ Popup {
     }
 
     // Modal Content ends
+
+
+
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
 
 
 

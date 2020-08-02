@@ -29,6 +29,29 @@ Popup {
     property int label_col : 135
 
 
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
     Connections{
         target: ConnectorsLoginModel
 
@@ -46,6 +69,49 @@ Popup {
             }
         }
     }
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
+    function onAllowBtnClicked(){
+        fileListPopup.visible = true;
+        popup.visible = false;
+        DropboxDS.fetchDatasources()
+        //dropboxds.cpp for more info
+    }
+
+    function closePopup(){
+        popup.visible = false
+    }
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
 
 
     // Popup Header starts
@@ -80,7 +146,7 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    popup.visible = false
+                    closePopup()
                 }
             }
         }
@@ -109,7 +175,7 @@ Popup {
 
                 text: qsTr("Allow Grafieks desktop to access to your Dropbox account...")
                 anchors.horizontalCenter: parent.horizontalCenter
-                font.pointSize: Constants.fontCategoryHeaderSmall
+                font.pixelSize: Constants.fontHeader
             }
 
             CustomButton{
@@ -120,16 +186,13 @@ Popup {
                 anchors.topMargin: 60
                 width: 100
                 height:50
-                fontPointSize: Constants.fontCategoryHeaderSmall
+                fontPixelSize: Constants.fontHeader
 
                 anchors.horizontalCenter: parent.horizontalCenter
 
 
                 onClicked: {
-                    fileListPopup.visible = true;
-                    popup.visible = false;
-                    DropboxDS.fetchDatasources()
-                    //dropboxds.cpp for more info
+                    onAllowBtnClicked()
                 }
 
             }
@@ -157,6 +220,10 @@ Popup {
         }
 
     }
+
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
 
 
 
