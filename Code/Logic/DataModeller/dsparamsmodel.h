@@ -35,6 +35,7 @@ class DSParamsModel : public QObject
     int m_displayRowsCount;
 
     // For Filters
+    QString m_section;
     QString m_category;
     QString m_subCategory;
     QString m_colName;
@@ -45,7 +46,7 @@ class DSParamsModel : public QObject
     bool m_includeNull;
     bool m_selectAll;
 
-    QString m_section;
+
 
 public:
     explicit DSParamsModel(QObject *parent = nullptr);

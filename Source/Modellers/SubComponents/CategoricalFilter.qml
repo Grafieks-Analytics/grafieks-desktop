@@ -245,6 +245,8 @@ Popup {
                 var columnName = DSParamsModel.colName
                 var relation = DSParamsModel.relation
                 var value = DSParamsModel.value
+                var includeNull = DSParamsModel.includeNull
+                var exclude = DSParamsModel.exclude
 
                 // Set conditions before saving the filter
 
@@ -268,19 +270,9 @@ Popup {
                 }
                 }
 
-                // If EXCLUDE cheked
-                if(DSParamsModel.exclude === true){
-                    relation += "NOT "+relation
-                }
-
-                // If INCLUDE NULL unchecked
-                if(DSParamsModel.includeNull === false){
-                    relation += "NOT "+relation
-                }
-
 
                 // Save the filter
-                FilterListModel.newFilter(category, subCategory, tableName, columnName, relation, value)
+                FilterListModel.newFilter(section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
             }
         }
 

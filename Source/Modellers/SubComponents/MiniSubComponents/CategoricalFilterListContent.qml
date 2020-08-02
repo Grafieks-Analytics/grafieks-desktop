@@ -35,7 +35,7 @@ Rectangle{
         // Except when "Select All" checked.
         // Then Relation will be LIKE
 
-        DSParamsModel.setRelation("IN")
+        DSParamsModel.setRelation("LIKE")
     }
 
 
@@ -183,10 +183,9 @@ Rectangle{
                 onCheckedChanged: {
 
                     // If Select All option is true
-
                     if(checked === true){
 
-                        DSParamsModel.setRelation("IN")
+                        DSParamsModel.setRelation("LIKE")
                         DSParamsModel.setValue("%")
                         checkedValues = []
 
@@ -224,14 +223,29 @@ Rectangle{
                                     DSParamsModel.setSelectAll(false)
                                     mainCheckBox.checked = false
 
-
-                                    // Start pushing the individual checked intem in the array
-                                    // Save the array and Set relation type to IN
-                                    checkedValues.push(modelData)
-                                    DSParamsModel.setValue(checkedValues.toString())
-                                    DSParamsModel.setRelation("IN")
                                 }
+                            } else{
+                                if(checked === true){
+
+                                    // Start pushing the individual checked item in the array
+                                    checkedValues.push(modelData)
+                                    console.log(checkedValues)
+
+                                } else{
+                                     // Remove item if unchecked
+                                    const index = checkedValues.indexOf(modelData);
+                                    if (index > -1) {
+                                      checkedValues.splice(index, 1);
+                                    }
+                                }
+
+                                // Save the array and Set relation type to IN
+
+                                DSParamsModel.setValue(checkedValues.toString())
+                                DSParamsModel.setRelation("IN")
                             }
+
+
                         }
                     }
                 }

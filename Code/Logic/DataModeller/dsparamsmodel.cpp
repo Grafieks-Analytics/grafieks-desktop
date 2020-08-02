@@ -1,13 +1,14 @@
 #include "dsparamsmodel.h"
 
 DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent),
-    m_category("list"), m_subCategory("multiple"), m_exclude(false), m_includeNull(true), m_selectAll(true)
+    m_section("categorical"), m_category("list"), m_subCategory("multiple"), m_exclude(false), m_includeNull(true), m_selectAll(true)
 {
 
 }
 
 void DSParamsModel::resetFilter()
 {
+    this->setSection("categorical");
     this->setCategory("list");
     this->setSubCategory("multiple");
     this->setExclude(false);
