@@ -128,6 +128,9 @@ ApplicationWindow {
 
 
 
+    /***********************************************************************************************************************/
+    // Menu Bar Starts
+
     menuBar : MenuBar{
         id:menubar
 
@@ -359,6 +362,9 @@ ApplicationWindow {
 
     }
 
+    // Menu Bar Ends
+    /***********************************************************************************************************************/
+
     header: Rectangle {
         implicitWidth: parent.vertical ? 1 : 24
         implicitHeight: parent.vertical ? 24 : 1
@@ -367,11 +373,14 @@ ApplicationWindow {
 
 
 
+    /***********************************************************************************************************************/
+    // Stack Layout Starts
+
     StackLayout{
         id: stacklayout_home
         width: mainwindow.width
         height: mainwindow.height
-        currentIndex:5
+        currentIndex:3
 
         // 0
         Test{
@@ -417,6 +426,8 @@ ApplicationWindow {
 
     }
 
+    // Stack Layout Ends
+    /***********************************************************************************************************************/
 
 
     // Page Design Ends

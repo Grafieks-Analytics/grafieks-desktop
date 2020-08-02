@@ -28,6 +28,41 @@ Rectangle{
 
     property var checkedValues : []
 
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
     Component.onCompleted: {
 
         // For list category type
@@ -37,6 +72,104 @@ Rectangle{
 
         DSParamsModel.setRelation("IN")
     }
+
+
+    function onMultiSelectSelected(){
+        singleSelectRadio.radio_checked = false
+        multiSelectRadio.radio_checked = true
+        multiSelectCheckList.visible = true
+        singleSelectCheckList.visible = false
+
+        // Set the sub category for filter
+        DSParamsModel.setSubCategory(Constants.categorySubMulti)
+    }
+
+
+    function onSingleSelectSelected(){
+
+        singleSelectRadio.radio_checked = true
+        multiSelectRadio.radio_checked = false
+        multiSelectCheckList.visible = false
+        singleSelectCheckList.visible = true
+
+        // Set the sub category for filter
+        DSParamsModel.setSubCategory(Constants.categorySubSingle)
+    }
+
+
+    function onSingleSelectRadioSelected(modelData,checked){
+        console.log(modelData, checked)
+    }
+
+
+    function onTextChangedSearch(){
+        ColumnListModel.likeColumnQuery(DSParamsModel.colName, DSParamsModel.tableName, searchText.text)
+    }
+
+    function onAllCheckBoxCheckedChanged(checked){
+        // If Select All option is true
+
+        if(checked === true){
+
+            DSParamsModel.setRelation("IN")
+            DSParamsModel.setValue("%")
+            checkedValues = []
+
+        }
+    }
+
+    function onMultiSelectCheckboxSelected(modelData,checked){
+
+        if(mainCheckBox.checked === true){
+
+            if(checked === false){
+
+                // Set SELECT ALL to false
+                DSParamsModel.setSelectAll(false)
+                mainCheckBox.checked = false
+
+
+                // Start pushing the individual checked intem in the array
+                // Save the array and Set relation type to IN
+                checkedValues.push(modelData)
+                DSParamsModel.setValue(checkedValues.toString())
+                DSParamsModel.setRelation("IN")
+            }
+        }
+
+    }
+
+    function onIncludeCheckedClicked(checked){
+        DSParamsModel.setIncludeNull(checked)
+    }
+
+
+    function onExcludeCheckedClicked(checked){
+        DSParamsModel.setExclude(checked)
+    }
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
+
 
 
     Rectangle{
@@ -62,13 +195,8 @@ Rectangle{
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        singleSelectRadio.radio_checked = false
-                        multiSelectRadio.radio_checked = true
-                        multiSelectCheckList.visible = true
-                        singleSelectCheckList.visible = false
 
-                        // Set the sub category for filter
-                        DSParamsModel.setSubCategory(Constants.categorySubMulti)
+                        onMultiSelectSelected()
                     }
                 }
             }
@@ -92,13 +220,7 @@ Rectangle{
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        singleSelectRadio.radio_checked = true
-                        multiSelectRadio.radio_checked = false
-                        multiSelectCheckList.visible = false
-                        singleSelectCheckList.visible = true
-
-                        // Set the sub category for filter
-                        DSParamsModel.setSubCategory(Constants.categorySubSingle)
+                        onSingleSelectSelected()
                     }
                 }
 
@@ -136,7 +258,7 @@ Rectangle{
                 }
 
                 onTextChanged: {
-                    ColumnListModel.likeColumnQuery(DSParamsModel.colName, DSParamsModel.tableName, searchText.text)
+                    onTextChangedSearch()
                 }
             }
         }
@@ -181,16 +303,7 @@ Rectangle{
                 checkState: childGroup.checkState
 
                 onCheckedChanged: {
-
-                    // If Select All option is true
-
-                    if(checked === true){
-
-                        DSParamsModel.setRelation("IN")
-                        DSParamsModel.setValue("%")
-                        checkedValues = []
-
-                    }
+                    onAllCheckBoxCheckedChanged(checked)
                 }
             }
 
@@ -215,23 +328,7 @@ Rectangle{
                         ButtonGroup.group: childGroup
 
                         onCheckedChanged: {
-
-                            if(mainCheckBox.checked === true){
-
-                                if(checked === false){
-
-                                    // Set SELECT ALL to false
-                                    DSParamsModel.setSelectAll(false)
-                                    mainCheckBox.checked = false
-
-
-                                    // Start pushing the individual checked intem in the array
-                                    // Save the array and Set relation type to IN
-                                    checkedValues.push(modelData)
-                                    DSParamsModel.setValue(checkedValues.toString())
-                                    DSParamsModel.setRelation("IN")
-                                }
-                            }
+                            onMultiSelectCheckboxSelected(modelData,checked)
                         }
                     }
                 }
@@ -247,8 +344,9 @@ Rectangle{
 
         ButtonGroup {
             id: btngrp
-        }
+            buttons: singleSelectCheckList.RadioButtonTpl
 
+        }
 
         // Radio button ListView
         // List Filters starts
@@ -268,24 +366,26 @@ Rectangle{
 
                 Column{
 
-                    //                    RadioButtonTpl {
-                    //                        radio_checked: false
-                    //                        radio_text: modelData
-                    //                        parent_dimension: 16
+//                        RadioButtonTpl {
+//                            radio_text: modelData
+//                            parent_dimension: 16
+//                            ButtonGroup.group: btngrp
 
-                    //                        onRadio_checkedChanged: {
-                    //                            console.log(modelData, radio_checked)
-                    //                        }
+//                            onRadio_checkedChanged: {
+//                                console.log(modelData, radio_checked)
+//                            }
 
-                    //                    }
+//                        }
 
 
-                    RadioButton {
+                    RadioButtonTpl {
                         text: modelData
                         ButtonGroup.group: btngrp
-
+                        height: 16
+                        width: 16
+                        parent_dimension: 16
                         onCheckedChanged: {
-                            console.log(modelData, checked)
+                            onSingleSelectRadioSelected(modelData,checked)
                         }
                     }
                 }
@@ -318,7 +418,7 @@ Rectangle{
                 indicator.height: 15
 
                 onCheckStateChanged: {
-                    DSParamsModel.setIncludeNull(checked)
+                    onIncludeCheckedClicked(checked)
                 }
 
             }
@@ -334,7 +434,7 @@ Rectangle{
                 indicator.height: 15
 
                 onCheckStateChanged: {
-                    DSParamsModel.setExclude(checked)
+                    onExcludeCheckedClicked(checked)
                 }
 
 
@@ -343,6 +443,10 @@ Rectangle{
 
     }
 
+
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
 
 
 }
