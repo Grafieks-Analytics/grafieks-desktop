@@ -32,6 +32,110 @@ Rectangle{
     border.color: Constants.darkThemeColor
     visible: false
 
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
+
+    function showFromDateCalendar(){
+        fromDateCalendar.visible = true
+    }
+    function showToDateCalendar(){
+        toDateCalendar.visible = true
+    }
+
+    function closeFromDateCalendar(){
+        fromDateCalendar.visible = false
+    }
+    function closeToDateCalendar(){
+        toDateCalendar.visible = false
+    }
+
+    function setFromDate(date){
+        fromDateInput.text = date
+    }
+
+    function setToDate(date){
+        toDateInput.text = date
+    }
+
+    function onSelectFromDate(){
+        closeFromDateCalendar()
+        let date = fromDateCalendar.selectedDate.toLocaleDateString(locale,"dd/MM/yyyy")
+        setFromDate(date)
+    }
+
+
+    function onSelectToDate(){
+        closeToDateCalendar()
+        let date = toDateCalendar.selectedDate.toLocaleDateString(locale,"dd/MM/yyyy")
+        setToDate(date)
+    }
+
+    function onIncludeCheckedClicked(checked){
+        DSParamsModel.setIncludeNull(checked)
+    }
+
+
+    function onExcludeCheckedClicked(checked){
+        DSParamsModel.setExclude(checked)
+    }
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
+
+
+
     Row{
         id: dateRangeText
 
@@ -101,7 +205,7 @@ Rectangle{
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
-                            fromDateCalendar.visible = true
+                            showFromDateCalendar()
                         }
                     }
                 }
@@ -110,9 +214,7 @@ Rectangle{
                     id: fromDateCalendar
                     visible: false
                     onClicked: {
-                        fromDateCalendar.visible = false
-                        let date = fromDateCalendar.selectedDate.toLocaleDateString(locale,"dd/MM/yyyy")
-                        fromDateInput.text = date
+                        onSelectFromDate();
                     }
 
                 }
@@ -159,7 +261,7 @@ Rectangle{
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
-                            toDateCalendar.visible = true
+                            closeToDateCalendar();
                         }
                     }
                 }
@@ -168,9 +270,7 @@ Rectangle{
                     id: toDateCalendar
                     visible: false
                     onClicked: {
-                        toDateCalendar.visible = false
-                        let date = toDateCalendar.selectedDate.toLocaleDateString(locale,"dd/MM/yyyy")
-                        toDateInput.text = date
+                        onSelectToDate();
                     }
 
                 }
@@ -194,7 +294,7 @@ Rectangle{
             text: qsTr("Include Null")
 
             onCheckedStateChanged: {
-                DSParamsModel.setIncludeNull(checked)
+                onIncludeCheckedClicked(checked)
             }
 
         }
@@ -212,10 +312,15 @@ Rectangle{
             text: qsTr("Exclude")
 
             onCheckedChanged: {
-                DSParamsModel.setExclude(checked)
+                onExcludeCheckedClicked(checked);
             }
 
         }
     }
+
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
+
 
 }

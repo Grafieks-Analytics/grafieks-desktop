@@ -26,6 +26,12 @@ Rectangle{
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
 
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+
     ListModel{
         id: dateFormatList
 
@@ -67,6 +73,85 @@ Rectangle{
         }
     }
 
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
+    function onMultiSelectSelected(){
+        singleSelectRadio.checked = false
+        multiSelectRadio.checked = true
+        multiSelectCheckList.visible = true
+        singleSelectCheckList.visible = false
+
+    }
+
+
+    function onSingleSelectSelected(){
+
+        singleSelectRadio.checked = true
+        multiSelectRadio.checked = false
+        multiSelectCheckList.visible = false
+        singleSelectCheckList.visible = true
+   }
+
+
+    function onIncludeCheckedClicked(checked){
+        DSParamsModel.setIncludeNull(checked)
+    }
+
+
+    function onExcludeCheckedClicked(checked){
+        DSParamsModel.setExclude(checked)
+    }
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
+
     Rectangle{
         id: selectTypeRadioBtn
         height: 40
@@ -91,10 +176,7 @@ Rectangle{
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        singleSelectRadio.radio_checked = false
-                        multiSelectRadio.radio_checked = true
-                        multiSelectCheckList.visible = true
-                        singleSelectCheckList.visible = false
+                        onMultiSelectSelected()
                     }
                 }
             }
@@ -118,10 +200,7 @@ Rectangle{
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        singleSelectRadio.radio_checked = true
-                        multiSelectRadio.radio_checked = false
-                        multiSelectCheckList.visible = false
-                        singleSelectCheckList.visible = true
+                        onSingleSelectSelected()
                     }
                 }
 
@@ -224,7 +303,7 @@ Rectangle{
 
                 Column{
                     RadioButtonTpl {
-                        radio_checked: true
+                        checked: true
                         radio_text: qsTr(textValue)
                         parent_dimension: 16
 
@@ -275,7 +354,7 @@ Rectangle{
                 indicator.height: 15
 
                 onCheckStateChanged: {
-                    DSParamsModel.setIncludeNull(checked)
+                    onIncludeCheckedClicked(checked)
                 }
 
             }
@@ -291,11 +370,17 @@ Rectangle{
                 indicator.height: 15
 
                 onCheckStateChanged: {
-                    DSParamsModel.setExclude(checked)
+                    onExcludeCheckedClicked(checked)
                 }
             }
         }
 
     }
+
+
+
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
 
 }
