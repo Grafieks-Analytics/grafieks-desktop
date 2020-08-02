@@ -26,7 +26,17 @@ Rectangle{
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
 
-    property int counter : 0
+    property var checkedValues : []
+
+    Component.onCompleted: {
+
+        // For list category type
+        // The db WHERE relation can only be IN / NOT IN ARRAY type
+        // Except when "Select All" checked.
+        // Then Relation will be LIKE
+
+        DSParamsModel.setRelation("IN")
+    }
 
 
     Rectangle{
@@ -169,6 +179,19 @@ Rectangle{
                 indicator.width: 15
                 indicator.height: 15
                 checkState: childGroup.checkState
+
+                onCheckedChanged: {
+
+                    // If Select All option is true
+
+                    if(checked === true){
+
+                        DSParamsModel.setRelation("IN")
+                        DSParamsModel.setValue("%")
+                        checkedValues = []
+
+                    }
+                }
             }
 
             ListView {
@@ -191,9 +214,24 @@ Rectangle{
                         indicator.height: 15
                         ButtonGroup.group: childGroup
 
-                        Component.onCompleted: {
-//                            console.log(modelData)
+                        onCheckedChanged: {
 
+                            if(mainCheckBox.checked === true){
+
+                                if(checked === false){
+
+                                    // Set SELECT ALL to false
+                                    DSParamsModel.setSelectAll(false)
+                                    mainCheckBox.checked = false
+
+
+                                    // Start pushing the individual checked intem in the array
+                                    // Save the array and Set relation type to IN
+                                    checkedValues.push(modelData)
+                                    DSParamsModel.setValue(checkedValues.toString())
+                                    DSParamsModel.setRelation("IN")
+                                }
+                            }
                         }
                     }
                 }

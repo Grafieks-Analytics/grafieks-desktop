@@ -54,7 +54,7 @@ QtObject {
 
 
     // Filters
-    // Tab Bar Open Constants
+    // Tab Bar Open Constants- Section
 
     property string categoricalTab: "categorical"
     property string dateTab: "date"

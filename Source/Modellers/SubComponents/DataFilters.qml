@@ -201,6 +201,9 @@ Popup {
 
                 tabBarOpen = Constants.categoricalTab
 
+                // Set the section in C++
+                DSParamsModel.setSection(Constants.categoricalTab)
+
             }
         }
 
@@ -244,6 +247,9 @@ Popup {
 
 
                 tabBarOpen = Constants.dateTab
+
+                // Set the section in C++
+                DSParamsModel.setSection(Constants.dateTab)
             }
         }
 
@@ -288,6 +294,9 @@ Popup {
 
                 tabBarOpen = Constants.numericalTab
 
+                // Set the section in C++
+                DSParamsModel.setSection(Constants.numericalTab)
+
             }
         }
 
@@ -330,6 +339,9 @@ Popup {
                 addMenuList.model = groupModelList
 
                 tabBarOpen = Constants.groupTab
+
+                // Set the section in C++
+                DSParamsModel.setSection(Constants.groupTab)
             }
         }
 

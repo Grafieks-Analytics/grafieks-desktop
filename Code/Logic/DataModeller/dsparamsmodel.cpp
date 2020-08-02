@@ -45,6 +45,11 @@ int DSParamsModel::displayRowsCount() const
     return m_displayRowsCount;
 }
 
+QString DSParamsModel::section() const
+{
+    return m_section;
+}
+
 QString DSParamsModel::colName() const
 {
     return m_colName;
@@ -142,6 +147,15 @@ void DSParamsModel::setDisplayRowsCount(int displayRowsCount)
 
     m_displayRowsCount = displayRowsCount;
     emit displayRowsCountChanged(m_displayRowsCount);
+}
+
+void DSParamsModel::setSection(QString section)
+{
+    if (m_section == section)
+        return;
+
+    m_section = section;
+    emit sectionChanged(m_section);
 }
 
 void DSParamsModel::setColName(QString colName)

@@ -1,8 +1,8 @@
 #include "filterlist.h"
 
-FilterList::FilterList(const int &filterId, const QString &category, const QString &subcategory, const QString &tableName, const QString &columnName, const QString &relation, const QVariant &value, QObject *parent):
+FilterList::FilterList(const int &filterId, const QString &section, const QString &category, const QString &subcategory, const QString &tableName, const QString &columnName, const QString &relation, const QVariant &value, const bool &includeNull, const bool &exclude, QObject *parent):
 
-    QObject(parent), m_filterId(filterId), m_category(category), m_subCategory(subcategory), m_tableName(tableName), m_columnName(columnName), m_relation(relation), m_value(value)
+    QObject(parent), m_filterId(filterId), m_section(section), m_category(category), m_subCategory(subcategory), m_tableName(tableName), m_columnName(columnName), m_relation(relation), m_value(value), m_includeNull(includeNull), m_exclude(exclude)
 {
 
 }
@@ -28,6 +28,16 @@ QVariant FilterList::value() const
     return m_value;
 }
 
+bool FilterList::includeNull() const
+{
+    return m_includeNull;
+}
+
+bool FilterList::exclude() const
+{
+    return m_exclude;
+}
+
 QString FilterList::category() const
 {
     return m_category;
@@ -41,6 +51,11 @@ QString FilterList::subCategory() const
 int FilterList::filterId() const
 {
     return m_filterId;
+}
+
+QString FilterList::section() const
+{
+    return m_section;
 }
 
 void FilterList::setTableName(QString tableName)
@@ -79,6 +94,24 @@ void FilterList::setValue(QVariant value)
     emit valueChanged(m_value);
 }
 
+void FilterList::setIncludeNull(bool includeNull)
+{
+    if (m_includeNull == includeNull)
+        return;
+
+    m_includeNull = includeNull;
+    emit includeNullChanged(m_includeNull);
+}
+
+void FilterList::setExclude(bool exclude)
+{
+    if (m_exclude == exclude)
+        return;
+
+    m_exclude = exclude;
+    emit excludeChanged(m_exclude);
+}
+
 void FilterList::setCategory(QString category)
 {
     if (m_category == category)
@@ -104,4 +137,13 @@ void FilterList::setFilterId(int filterId)
 
     m_filterId = filterId;
     emit filterIdChanged(m_filterId);
+}
+
+void FilterList::setSection(QString section)
+{
+    if (m_section == section)
+        return;
+
+    m_section = section;
+    emit sectionChanged(m_section);
 }
