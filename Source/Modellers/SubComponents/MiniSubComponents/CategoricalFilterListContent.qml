@@ -26,7 +26,18 @@ Rectangle{
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
 
-    property int counter : 0
+    property var checkedValues : []
+
+    Component.onCompleted: {
+
+        // For list category type
+        // The db WHERE relation can only be IN / NOT IN ARRAY type
+        // Except when "Select All" checked.
+        // Then Relation will be LIKE
+
+        DSParamsModel.setRelation("IN")
+    }
+
 
     Rectangle{
         id: selectTypeRadioBtn
@@ -58,7 +69,6 @@ Rectangle{
 
                         // Set the sub category for filter
                         DSParamsModel.setSubCategory(Constants.categorySubMulti)
-                        console.log(Constants.categorySubMulti)
                     }
                 }
             }
@@ -89,7 +99,6 @@ Rectangle{
 
                         // Set the sub category for filter
                         DSParamsModel.setSubCategory(Constants.categorySubSingle)
-                        console.log(Constants.categorySubSingle)
                     }
                 }
 
@@ -127,7 +136,6 @@ Rectangle{
                 }
 
                 onTextChanged: {
-                    console.log("text changing")
                     ColumnListModel.likeColumnQuery(DSParamsModel.colName, DSParamsModel.tableName, searchText.text)
                 }
             }
@@ -166,11 +174,24 @@ Rectangle{
 
             CheckBox {
                 id: mainCheckBox
-                checked: true
+                checked: DSParamsModel.selectAll
                 text: "All"
                 indicator.width: 15
                 indicator.height: 15
                 checkState: childGroup.checkState
+
+                onCheckedChanged: {
+
+                    // If Select All option is true
+
+                    if(checked === true){
+
+                        DSParamsModel.setRelation("IN")
+                        DSParamsModel.setValue("%")
+                        checkedValues = []
+
+                    }
+                }
             }
 
             ListView {
@@ -192,6 +213,26 @@ Rectangle{
                         indicator.width: 15
                         indicator.height: 15
                         ButtonGroup.group: childGroup
+
+                        onCheckedChanged: {
+
+                            if(mainCheckBox.checked === true){
+
+                                if(checked === false){
+
+                                    // Set SELECT ALL to false
+                                    DSParamsModel.setSelectAll(false)
+                                    mainCheckBox.checked = false
+
+
+                                    // Start pushing the individual checked intem in the array
+                                    // Save the array and Set relation type to IN
+                                    checkedValues.push(modelData)
+                                    DSParamsModel.setValue(checkedValues.toString())
+                                    DSParamsModel.setRelation("IN")
+                                }
+                            }
+                        }
                     }
                 }
             }

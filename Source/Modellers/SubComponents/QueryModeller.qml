@@ -26,6 +26,10 @@ Item{
         ListElement { content: "1"}
     }
 
+    Component.onCompleted: {
+        textEditQueryModeller.text = "SELECT * FROM users"
+    }
+
     ToolSeparator{
         id: toolSeperator1
         anchors.top:parent.top
@@ -101,9 +105,7 @@ Item{
             QueryModel.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, ""))
         }
 
-        Component.onCompleted: {
-            textEditQueryModeller.text = "SELECT * FROM users"
-        }
+
 
     }
 

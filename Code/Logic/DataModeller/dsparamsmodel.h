@@ -16,6 +16,7 @@ class DSParamsModel : public QObject
     Q_PROPERTY(int displayRowsCount READ displayRowsCount WRITE setDisplayRowsCount NOTIFY displayRowsCountChanged)
 
     // For Filters
+    Q_PROPERTY(QString section READ section WRITE setSection NOTIFY sectionChanged)
     Q_PROPERTY(QString category READ category WRITE setCategory NOTIFY categoryChanged)
     Q_PROPERTY(QString subCategory READ subCategory WRITE setSubCategory NOTIFY subCategoryChanged)
     Q_PROPERTY(QString tableName READ tableName WRITE setTableName NOTIFY tableNameChanged)
@@ -44,6 +45,8 @@ class DSParamsModel : public QObject
     bool m_includeNull;
     bool m_selectAll;
 
+    QString m_section;
+
 public:
     explicit DSParamsModel(QObject *parent = nullptr);
 
@@ -57,6 +60,7 @@ public:
     int displayRowsCount() const;
 
     // For Filters
+    QString section() const;
     QString category() const;
     QString subCategory() const;
     QString colName() const;
@@ -67,6 +71,8 @@ public:
     bool includeNull() const;
     bool selectAll() const;
 
+
+
 public slots:
     void setDsName(QString dsName);
     void setDsType(QString dsType);
@@ -76,6 +82,7 @@ public slots:
     void setDisplayRowsCount(int displayRowsCount);
 
     // For Filters
+    void setSection(QString section);
     void setCategory(QString category);
     void setSubCategory(QString subCategory);
     void setColName(QString colName);
@@ -85,6 +92,8 @@ public slots:
     void setExclude(bool exclude);
     void setIncludeNull(bool includeNull);
     void setSelectAll(bool selectAll);
+
+
 
 signals:
 
@@ -96,6 +105,7 @@ signals:
     void displayRowsCountChanged(int displayRowsCount);
 
     // For Filters
+    void sectionChanged(QString section);
     void categoryChanged(QString category);
     void subCategoryChanged(QString subCategory);
     void colNameChanged(QString colName);
@@ -105,6 +115,7 @@ signals:
     void excludeChanged(bool exclude);
     void includeNullChanged(bool includeNull);
     void selectAllChanged(bool selectAll);
+
 };
 
 #endif // DSPARAMSMODEL_H

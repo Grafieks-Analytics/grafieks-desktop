@@ -29,6 +29,8 @@ QVariant ColumnListModel::data(const QModelIndex &index, int role) const
         QModelIndex modelIndex = this->index(index.row(), columnIdx);
         value = QSqlQueryModel::data(modelIndex, Qt::DisplayRole);
     }
+
+
     return value;
 }
 
@@ -72,6 +74,8 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
 
     }
 }
+
+
 
 void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QString searchString)
 {

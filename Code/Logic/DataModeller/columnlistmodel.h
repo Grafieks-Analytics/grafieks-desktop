@@ -25,10 +25,12 @@ public:
     Q_INVOKABLE void likeColumnQuery(QString columnName, QString tableName, QString searchString = "");
     Q_INVOKABLE void columnQuery(QString columnName, QString tableName, int pageNo = 0);
 
+public slots:
+
+
 private:
     void generateRoleNames();
     QHash<int, QByteArray> m_roleNames;
-
 };
 
 #endif // COLUMNLISTMODEL_H

@@ -145,10 +145,10 @@ QHash<int, QByteArray> FilterListModel::roleNames() const
     return roles;
 }
 
-void FilterListModel::newFilter(QString category, QString subcategory, QString tableName, QString colName, QString relation, QVariant val )
+void FilterListModel::newFilter(QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QVariant val, bool includeNull, bool exclude )
 {
 
-    FilterList *filterList = new FilterList(counter, category, subcategory, tableName, colName, relation, val, this);
+    FilterList *filterList = new FilterList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this);
     addFilterList(filterList);
 
     counter++;
@@ -185,5 +185,10 @@ void FilterListModel::addFilterList(FilterList *filter)
     beginInsertRows(QModelIndex(),index,index);
     mFilter.append(filter);
     endInsertRows();
+}
+
+void FilterListModel::columnList(QVariantList &columns)
+{
+
 }
 

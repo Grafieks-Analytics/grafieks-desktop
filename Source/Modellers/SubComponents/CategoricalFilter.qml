@@ -237,6 +237,50 @@ Popup {
 
             onClicked: {
                 dataFilterPopup.visible = false
+
+                var section = DSParamsModel.section
+                var category = DSParamsModel.category
+                var subCategory = DSParamsModel.subCategory
+                var tableName = DSParamsModel.tableName
+                var columnName = DSParamsModel.colName
+                var relation = DSParamsModel.relation
+                var value = DSParamsModel.value
+
+                // Set conditions before saving the filter
+
+                switch(section){
+
+                case Constants.categoricalTab:{
+
+                    break
+                }
+                case Constants.dateTab:{
+
+                    break
+                }
+                case Constants.numericalTab:{
+
+                    break
+                }
+                case Constants.groupTab:{
+
+                    break
+                }
+                }
+
+                // If EXCLUDE cheked
+                if(DSParamsModel.exclude === true){
+                    relation += "NOT "+relation
+                }
+
+                // If INCLUDE NULL unchecked
+                if(DSParamsModel.includeNull === false){
+                    relation += "NOT "+relation
+                }
+
+
+                // Save the filter
+                FilterListModel.newFilter(category, subCategory, tableName, columnName, relation, value)
             }
         }
 
