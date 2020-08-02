@@ -93,6 +93,29 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    function onRemoveListElement(){
+        console.log('Remove List Element')
+    }
+
+    function onEditListElement(){
+
+    }
+
+
+    function onRemoveWildcardElement(){
+
+    }
+    function onEditWildcardElement(){
+
+    }
+
+
+    function onRemoveTopElement(){
+
+    }
+    function onEditTopElement(){
+
+    }
 
 
     // JAVASCRIPT FUNCTION ENDS
@@ -222,6 +245,13 @@ Rectangle{
                                 anchors.leftMargin: 20
 
                                 anchors.verticalCenter: Image.verticalCenter
+
+                                MouseArea{
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        onEditListElement()
+                                    }
+                                }
                             }
 
                             Image{
@@ -233,6 +263,13 @@ Rectangle{
                                 anchors.topMargin: 8
                                 anchors.leftMargin: 10
                                 anchors.verticalCenter: Image.verticalCenter
+
+                                MouseArea{
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        onRemoveListElement()
+                                    }
+                                }
 
                             }
 
@@ -350,6 +387,13 @@ Rectangle{
                                 anchors.leftMargin: 20
 
                                 anchors.verticalCenter: Image.verticalCenter
+
+                                MouseArea{
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        onEditWildcardElement()
+                                    }
+                                }
                             }
 
                             Image{
@@ -360,6 +404,13 @@ Rectangle{
                                 anchors.topMargin: 8
                                 anchors.leftMargin: 10
                                 anchors.verticalCenter: Image.verticalCenter
+
+                                MouseArea{
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        onRemoveWildcardElement()
+                                    }
+                                }
 
                             }
 
@@ -472,6 +523,13 @@ Rectangle{
                                 anchors.leftMargin: 20
 
                                 anchors.verticalCenter: Image.verticalCenter
+
+                                MouseArea{
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        onEditTopElement()
+                                    }
+                                }
                             }
 
                             Image{
@@ -482,6 +540,13 @@ Rectangle{
                                 anchors.topMargin: 8
                                 anchors.leftMargin: 10
                                 anchors.verticalCenter: Image.verticalCenter
+
+                                MouseArea{
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        onRemoveTopElement()
+                                    }
+                                }
 
                             }
 

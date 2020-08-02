@@ -75,8 +75,8 @@ Rectangle{
 
 
     function onMultiSelectSelected(){
-        singleSelectRadio.radio_checked = false
-        multiSelectRadio.radio_checked = true
+        singleSelectRadio.checked = false
+        multiSelectRadio.checked = true
         multiSelectCheckList.visible = true
         singleSelectCheckList.visible = false
 
@@ -87,8 +87,8 @@ Rectangle{
 
     function onSingleSelectSelected(){
 
-        singleSelectRadio.radio_checked = true
-        multiSelectRadio.radio_checked = false
+        singleSelectRadio.checked = true
+        multiSelectRadio.checked = false
         multiSelectCheckList.visible = false
         singleSelectCheckList.visible = true
 
@@ -119,23 +119,6 @@ Rectangle{
     }
 
     function onMultiSelectCheckboxSelected(modelData,checked){
-
-//        if(mainCheckBox.checked === true){
-
-//            if(checked === false){
-
-//                // Set SELECT ALL to false
-//                DSParamsModel.setSelectAll(false)
-//                mainCheckBox.checked = false
-
-
-//                // Start pushing the individual checked intem in the array
-//                // Save the array and Set relation type to IN
-//                checkedValues.push(modelData)
-//                DSParamsModel.setValue(checkedValues.toString())
-//                DSParamsModel.setRelation("IN")
-//            }
-//        }
 
         if(mainCheckBox.checked === true){
 
@@ -200,6 +183,9 @@ Rectangle{
     // Page Design Starts
 
 
+    ButtonGroup{
+        id: selectTypeRadioBtnGrp
+    }
 
 
     Rectangle{
@@ -218,8 +204,9 @@ Rectangle{
 
             RadioButtonTpl{
                 id: multiSelectRadio
-                radio_text: qsTr("Multi Select")
-                radio_checked: true
+                text: qsTr("Multi Select")
+                ButtonGroup.group: selectTypeRadioBtnGrp
+                checked: true
                 parent_dimension: 16
 
                 MouseArea{
@@ -242,10 +229,9 @@ Rectangle{
 
             RadioButtonTpl{
                 id: singleSelectRadio
-                radio_text: qsTr("Single Select")
-                radio_checked: false
+                text: qsTr("Single Select")
+                ButtonGroup.group: selectTypeRadioBtnGrp
                 parent_dimension: 16
-
 
                 MouseArea{
                     anchors.fill: parent
@@ -374,8 +360,7 @@ Rectangle{
 
         ButtonGroup {
             id: btngrp
-            buttons: singleSelectCheckList.RadioButtonTpl
-
+//            buttons: singleSelectCheckList.RadioButtonTpl
         }
 
         // Radio button ListView
@@ -388,6 +373,7 @@ Rectangle{
             height: parent.height
             width: parent.width
             visible: false
+            spacing: 2
 
             delegate: Row{
 
@@ -411,9 +397,9 @@ Rectangle{
                     RadioButtonTpl {
                         text: modelData
                         ButtonGroup.group: btngrp
-                        height: 16
-                        width: 16
-                        parent_dimension: 16
+                        height: Constants.defaultRadioDimension
+                        width: Constants.defaultRadioDimension
+                        parent_dimension: Constants.defaultRadioDimension
                         onCheckedChanged: {
                             onSingleSelectRadioSelected(modelData)
                         }

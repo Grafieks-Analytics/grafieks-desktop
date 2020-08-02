@@ -52,6 +52,9 @@ QtObject {
     //font.pointSize: Constants.fontReading = font.pixelSize: Constants.fontCategoryHeader
     //font.pointSize: Constants.fontCategoryHeader = font.pixelSize: Constants.fontHeader
 
+    // Radio Size
+    property int defaultRadioDimension: 16
+
     // SQL Relations
     property string likeRelation: "LIKE"
     property string inRelation: "IN"
