@@ -4,6 +4,7 @@
 #include <QAbstractListModel>
 #include <QVariant>
 #include <QObject>
+#include <QDebug>
 
 #include <typeinfo>
 
