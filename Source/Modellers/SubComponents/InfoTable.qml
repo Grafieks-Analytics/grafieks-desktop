@@ -1,6 +1,5 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.3
 
@@ -20,18 +19,45 @@ Item{
     height:  infodataTableHeader.height + queryResultsTable.height
 
     property bool profilingStatus: false
-
     property bool infoTableResizingFixed: true
 
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTIONS START
 
     Component.onCompleted: {
         // Set default value of displayLimit
         // of query results to 100
         DSParamsModel.setDisplayRowsCount(100)
     }
-
-    /***********************************************************************************************************************/
-    // JAVASCRIPT FUNCTIONS START
 
     function onDragInfoTablePanel(mouse){
         if(infoTableResizingFixed){
@@ -63,8 +89,135 @@ Item{
     }
 
 
+    function onTestQueryClicked(){
+        testQueryBtnBackground.color = Constants.themeColor
+        displayLimitBtnBackground.color = displayLimitBtn.hovered ? Constants.themeColor : Constants.whiteColor
+        dataPreviewBtnBackground.color = dataPreviewBtn.hovered ? Constants.themeColor : Constants.whiteColor
+
+        testQueryResult.visible = true
+        dataPreviewResult.visible = false
+    }
+
+
+    function onDataPreviewClicked(){
+        testQueryBtnBackground.color = testQueryBtn.hovered ? Constants.themeColor : Constants.whiteColor
+        dataPreviewBtnBackground.color = Constants.themeColor
+        displayLimitBtnBackground.color = displayLimitBtn.hovered ? Constants.themeColor : Constants.whiteColor
+
+        testQueryResult.visible = false
+        dataPreviewResult.visible = true
+    }
+
+
+    function openDisplayLimitMenu(){
+
+        testQueryBtnBackground.color = testQueryBtn.hovered ? Constants.themeColor : Constants.whiteColor
+        dataPreviewBtnBackground.color = dataPreviewBtn.hovered ? Constants.themeColor : Constants.whiteColor
+
+        selectLimitOptions.open()
+    }
+
+
+    function onDisplayLimitSelected(value){
+        // Change display limit of query results here
+        displayLimit.text = "Display limited to top "+ value
+        DSParamsModel.setDisplayRowsCount(value)
+        selectLimitOptions.close()
+    }
+
+    function onRunQueryClicked(){
+
+        testQueryBtn.visible = true
+        var isSqlSelect = QueryModel.tmpSql.toUpperCase().startsWith("SELECT");
+
+        // Set profiling on when clicking the play button
+        // Reset profiling and turn off when clicked on Publish button
+
+
+        if(QueryStatsModel.profileStatus === false){
+            QueryStatsModel.setProfiling(true)
+            QueryStatsModel.setProfileStatus(true)
+        }
+
+        // If query is SELECT query
+        // Only SELECT query allowed
+
+        if(isSqlSelect){
+            QueryModel.callSql()
+            QueryStatsModel.showStats()
+            TableSchemaModel.showSchema(QueryModel.tmpSql)
+        } else{
+            sqlQueryNotAllowedDialog.visible = true
+        }
+    }
+
+    function onCollapseInfoTable(){
+        if(open){
+
+            collapseBtnImage.source = "../../../Images/icons/Up.png"
+
+            queryResultsTable.height = 0
+            queryResultsTable.visible = false
+
+            infodata_table.height = Qt.binding(function(){
+                return infodataTableHeader.height + queryResultsTable.height
+            })
+            dataQueryModellerStackview.height = Qt.binding(function(){
+
+                return queryModellerPage.height - infodata_table.height - 66
+            })
+
+            open = false
+        }else{
+
+            collapseBtnImage.source = "../../../Images/icons/Down.png"
+
+            queryResultsTable.visible = true
+            queryResultsTable.height = 270
+
+            infodata_table.height = Qt.binding(function(){
+                return infodataTableHeader.height + queryResultsTable.height
+            })
+            dataQueryModellerStackview.height = Qt.binding(function(){
+
+                return query_modeller_page.height - infodata_table.height
+            })
+            open = true
+        }
+    }
+
     //JAVASCRIPT FUNCTIONS ENDS
     /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // IF the sql query is not "SELECT query"
+    // Show this popup
+
+    MessageDialog{
+        id: sqlQueryNotAllowedDialog
+        title: "Warning"
+        text: "Only SELECT (without Common Table Expressions) query allowed"
+        icon: StandardIcon.Critical
+
+        onAccepted: {
+            sqlQueryNotAllowedDialog.close()
+        }
+    }
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
 
 
 
@@ -127,13 +280,7 @@ Item{
 
                 onClicked: {
 
-                    testQueryBtnBackground.color = Constants.themeColor
-                    displayLimitBtnBackground.color = displayLimitBtn.hovered ? Constants.themeColor : Constants.whiteColor
-                    dataPreviewBtnBackground.color = dataPreviewBtn.hovered ? Constants.themeColor : Constants.whiteColor
-
-                    testQueryResult.visible = true
-                    dataPreviewResult.visible = false
-
+                   onTestQueryClicked()
 
                 }
             }
@@ -180,12 +327,7 @@ Item{
 
                 onClicked: {
 
-                    testQueryBtnBackground.color = testQueryBtn.hovered ? Constants.themeColor : Constants.whiteColor
-                    dataPreviewBtnBackground.color = Constants.themeColor
-                    displayLimitBtnBackground.color = displayLimitBtn.hovered ? Constants.themeColor : Constants.whiteColor
-
-                    testQueryResult.visible = false
-                    dataPreviewResult.visible = true
+                    onDataPreviewClicked()
 
                 }
 
@@ -236,10 +378,8 @@ Item{
 
                 onClicked: {
 
-                    testQueryBtnBackground.color = testQueryBtn.hovered ? Constants.themeColor : Constants.whiteColor
-                    dataPreviewBtnBackground.color = dataPreviewBtn.hovered ? Constants.themeColor : Constants.whiteColor
+                    openDisplayLimitMenu()
 
-                    selectLimitOptions.open()
                 }
 
             }
@@ -285,12 +425,7 @@ Item{
                         width: parent.width
                         onTriggered: {}
                         onClicked: {
-
-                            // Change display limit of query results here
-
-                            displayLimit.text = "Display limited to top "+ value
-                            DSParamsModel.setDisplayRowsCount(value)
-                            selectLimitOptions.close()
+                            onDisplayLimitSelected(value)
                         }
                     }
                 }
@@ -342,28 +477,7 @@ Item{
                 }
 
                 onClicked:{
-                    testQueryBtn.visible = true
-                    var isSqlSelect = QueryModel.tmpSql.toUpperCase().startsWith("SELECT");
-
-                    // Set profiling on when clicking the play button
-                    // Reset profiling and turn off when clicked on Publish button
-
-
-                    if(QueryStatsModel.profileStatus === false){
-                        QueryStatsModel.setProfiling(true)
-                        QueryStatsModel.setProfileStatus(true)
-                    }
-
-                    // If query is SELECT query
-                    // Only SELECT query allowed
-
-                    if(isSqlSelect){
-                        QueryModel.callSql()
-                        QueryStatsModel.showStats()
-                        TableSchemaModel.showSchema(QueryModel.tmpSql)
-                    } else{
-                        sqlQueryNotAllowedDialog.visible = true
-                    }
+                    onRunQueryClicked()
                 }
 
             }
@@ -407,38 +521,7 @@ Item{
                 }
 
                 onClicked:{
-                    if(open){
-
-                        collapseBtnImage.source = "../../../Images/icons/Up.png"
-
-                        queryResultsTable.height = 0
-                        queryResultsTable.visible = false
-
-                        infodata_table.height = Qt.binding(function(){
-                            return infodataTableHeader.height + queryResultsTable.height
-                        })
-                        dataQueryModellerStackview.height = Qt.binding(function(){
-
-                            return query_modeller_page.height - infodata_table.height - 66
-                        })
-
-                        open = false
-                    }else{
-
-                        collapseBtnImage.source = "../../../Images/icons/Down.png"
-
-                        queryResultsTable.visible = true
-                        queryResultsTable.height = 270
-
-                        infodata_table.height = Qt.binding(function(){
-                            return infodataTableHeader.height + queryResultsTable.height
-                        })
-                        dataQueryModellerStackview.height = Qt.binding(function(){
-
-                            return query_modeller_page.height - infodata_table.height
-                        })
-                        open = true
-                    }
+                    onCollapseInfoTable()
                 }
 
 
@@ -508,19 +591,11 @@ Item{
     // Result Ends
 
 
-    // IF the sql query is not "SELECT query"
-    // Show this popup
 
-    MessageDialog{
-        id: sqlQueryNotAllowedDialog
-        title: "Warning"
-        text: "Only SELECT (without Common Table Expressions) query allowed"
-        icon: StandardIcon.Critical
+    // Page Design Ends
+    /***********************************************************************************************************************/
 
-        onAccepted: {
-            sqlQueryNotAllowedDialog.close()
-        }
-    }
+
 
 }
 
