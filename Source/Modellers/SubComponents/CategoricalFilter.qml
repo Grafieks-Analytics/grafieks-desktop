@@ -8,7 +8,7 @@ import "../../MainSubComponents"
 import "../SubComponents/MiniSubComponents"
 
 Popup {
-    id: dataFilterPopup
+    id: categoricalFilterPopup
     width: parent.width
     height: parent.height
     x: 0
@@ -22,6 +22,154 @@ Popup {
         color: Constants.themeColor
         border.color: Constants.darkThemeColor
     }
+
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
+
+    function closeCategoricalFilterPopup(){
+        categoricalFilterPopup.visible = false
+    }
+
+    function onApplyClicked(){
+        categoricalFilterPopup.visible = false
+
+        var section = DSParamsModel.section
+        var category = DSParamsModel.category
+        var subCategory = DSParamsModel.subCategory
+        var tableName = DSParamsModel.tableName
+        var columnName = DSParamsModel.colName
+        var relation = DSParamsModel.relation
+        var value = DSParamsModel.value
+        var includeNull = DSParamsModel.includeNull
+        var exclude = DSParamsModel.exclude
+
+        // Set conditions before saving the filter
+
+        switch(section){
+
+        case Constants.categoricalTab:{
+
+            break
+        }
+        case Constants.dateTab:{
+
+            break
+        }
+        case Constants.numericalTab:{
+
+            break
+        }
+        case Constants.groupTab:{
+
+            break
+        }
+        }
+
+
+        // Save the filter
+        FilterListModel.newFilter(section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+    }
+
+    function onListClicked(){
+
+        listRadio.radio_checked = true
+        wildcardRadio.radio_checked = false
+        topRadio.radio_checked = false
+
+        listContent.visible = true
+        wildcardContent.visible = false
+        topContent.visible = false
+
+        // Set the main category of the filter
+        DSParamsModel.setCategory(Constants.categoryMainListType)
+    }
+
+
+    function onWildcardClicked(){
+        listRadio.radio_checked = false
+        wildcardRadio.radio_checked = true
+        topRadio.radio_checked = false
+
+
+        listContent.visible = false
+        wildcardContent.visible = true
+        topContent.visible = false
+
+        // Set the main category of the filter
+        DSParamsModel.setCategory(Constants.categoryMainWildCardType)
+    }
+
+
+    function onTopClicked(){
+
+        listRadio.radio_checked = false
+        wildcardRadio.radio_checked = false
+        topRadio.radio_checked = true
+
+
+        listContent.visible = false
+        wildcardContent.visible = false
+        topContent.visible = true
+
+        // Set the main category of the filter
+        DSParamsModel.setCategory(Constants.categoryMainTopType)
+    }
+
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
 
 
 
@@ -58,7 +206,7 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    dataFilterPopup.visible = false
+                    closeCategoricalFilterPopup()
                 }
             }
         }
@@ -91,24 +239,14 @@ Popup {
 
             RadioButtonTpl{
                 id: listRadio
-                radio_text: qsTr("List")
-                radio_checked: true
+                text: qsTr("List")
+                checked: true
                 parent_dimension: 16
 
                 MouseArea{
                     anchors.fill:parent
                     onClicked: {
-                        listRadio.radio_checked = true
-                        wildcardRadio.radio_checked = false
-                        topRadio.radio_checked = false
-
-                        listContent.visible = true
-                        wildcardContent.visible = false
-                        topContent.visible = false
-
-                        // Set the main category of the filter
-                        DSParamsModel.setCategory(Constants.categoryMainListType)
-
+                        onListClicked()
                     }
                 }
             }
@@ -125,25 +263,14 @@ Popup {
 
             RadioButtonTpl{
                 id: wildcardRadio
-                radio_text: qsTr("Wildcard")
-                radio_checked: false
+                text: qsTr("Wildcard")
+                checked: false
                 parent_dimension: 16
 
                 MouseArea{
                     anchors.fill:parent
                     onClicked: {
-                        listRadio.radio_checked = false
-                        wildcardRadio.radio_checked = true
-                        topRadio.radio_checked = false
-
-
-                        listContent.visible = false
-                        wildcardContent.visible = true
-                        topContent.visible = false
-
-                        // Set the main category of the filter
-                        DSParamsModel.setCategory(Constants.categoryMainWildCardType)
-
+                        onWildcardClicked()
                     }
                 }
 
@@ -158,25 +285,14 @@ Popup {
 
             RadioButtonTpl{
                 id: topRadio
-                radio_text: qsTr("Top")
-                radio_checked: false
+                text: qsTr("Top")
+                checked: false
                 parent_dimension: 16
-
 
                 MouseArea{
                     anchors.fill:parent
                     onClicked: {
-                        listRadio.radio_checked = false
-                        wildcardRadio.radio_checked = false
-                        topRadio.radio_checked = true
-
-
-                        listContent.visible = false
-                        wildcardContent.visible = false
-                        topContent.visible = true
-
-                        // Set the main category of the filter
-                        DSParamsModel.setCategory(Constants.categoryMainTopType)
+                        onTopClicked()
                     }
                 }
             }
@@ -220,7 +336,7 @@ Popup {
 
 
             onClicked: {
-                dataFilterPopup.visible = false
+                categoricalFilterPopup.visible = false
                 DSParamsModel.resetFilter();
             }
         }
@@ -236,43 +352,7 @@ Popup {
 
 
             onClicked: {
-                dataFilterPopup.visible = false
-
-                var section = DSParamsModel.section
-                var category = DSParamsModel.category
-                var subCategory = DSParamsModel.subCategory
-                var tableName = DSParamsModel.tableName
-                var columnName = DSParamsModel.colName
-                var relation = DSParamsModel.relation
-                var value = DSParamsModel.value
-                var includeNull = DSParamsModel.includeNull
-                var exclude = DSParamsModel.exclude
-
-                // Set conditions before saving the filter
-
-                switch(section){
-
-                case Constants.categoricalTab:{
-
-                    break
-                }
-                case Constants.dateTab:{
-
-                    break
-                }
-                case Constants.numericalTab:{
-
-                    break
-                }
-                case Constants.groupTab:{
-
-                    break
-                }
-                }
-
-
-                // Save the filter
-                FilterListModel.newFilter(section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+                onApplyClicked()
             }
         }
 
@@ -285,7 +365,8 @@ Popup {
 
             textValue: "Cancel"
             onClicked: {
-                dataFilterPopup.visible = false
+                closeCategoricalFilterPopup()
+
             }
 
         }
@@ -294,4 +375,9 @@ Popup {
     }
 
     // Footer ends
+
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
+
 }

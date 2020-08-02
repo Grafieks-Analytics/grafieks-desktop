@@ -54,7 +54,6 @@
         <file>Source/Datasources/SubComponents/DataSourcesList.qml</file>
         <file>Source/Modellers/DataQueryModeller.qml</file>
         <file>Source/Modellers/SubComponents/DataFilters.qml</file>
-        <file>Source/Modellers/SubComponents/DataFiltersPopup.qml</file>
         <file>Source/Modellers/SubComponents/DataModeller.qml</file>
         <file>Source/Modellers/SubComponents/DataPreviewTable.qml</file>
         <file>Source/Modellers/SubComponents/DateFilter.qml</file>
