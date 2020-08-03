@@ -15,11 +15,6 @@ Rectangle{
     /***********************************************************************************************************************/
     // LIST MODELS STARTS
 
-
-    ListModel{
-        id: listModel
-
-    }
     ListModel{
         id: wildcardModel
         ListElement{
@@ -73,11 +68,11 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    function onRemoveElement(filterId){
-        console.log('Remove Element', filterId)
+    function onRemoveElement(filterIndex){
+        FilterListModel.deleteFilter(filterIndex)
     }
 
-    function onEditElement(filterId){
+    function onEditElement(filterIndex){
         console.log('Edit element', filterId)
 
     }
@@ -142,9 +137,7 @@ Rectangle{
                 spacing: rowSpacing
                 interactive: false
 
-                Component.onCompleted: {
-                    console.log(model.length)
-                }
+
 
                 delegate:
 
@@ -237,9 +230,7 @@ Rectangle{
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onRemoveElement(filterId)
-                                        FilterListModel.deleteFilter(filterId)
-                                        console.log(index)
+                                        onRemoveElement(model.index)
                                     }
                                 }
 
