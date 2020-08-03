@@ -32,15 +32,6 @@ Popup {
     padding: 0
     closePolicy: Popup.NoAutoClose
 
-    background: Rectangle{
-        color: Constants.themeColor
-    }
-
-
-    /***********************************************************************************************************************/
-    // LIST MODEL STARTS
-
-
 
     // ListModels
     // Dynamically populated by
@@ -85,25 +76,6 @@ Popup {
         }
     }
 
-
-    // LIST MODEL ENDS
-    /***********************************************************************************************************************/
-
-
-    /***********************************************************************************************************************/
-    // SIGNALS STARTS
-
-
-
-    // SIGNALS ENDS
-    /***********************************************************************************************************************/
-
-
-
-    /***********************************************************************************************************************/
-    // Connections Starts
-
-
     // This function is used to create models
     // for FILTERS category type
     // Populates Listmodal
@@ -132,195 +104,9 @@ Popup {
     }
 
 
-
-    // Connections Ends
-    /***********************************************************************************************************************/
-
-
-
-
-
-    /***********************************************************************************************************************/
-    // JAVASCRIPT FUNCTION STARTS
-
-
-    function onAddMenuItemTriggered(colName,tableName){
-        ColumnListModel.columnQuery(colName, tableName)
-        DSParamsModel.setColName(colName)
-        DSParamsModel.setTableName(tableName)
+    background: Rectangle{
+        color: Constants.themeColor
     }
-
-    function onAddMenuItemClicked(){
-
-        if(tabBarOpen === Constants.categoricalTab){
-            categoricalFilterPopup.visible = true
-            dateFilterPopup.visible = false
-            numericalFilterPopup.visible = false
-            groupFilterPopup.visible = false
-        }
-        else if(tabBarOpen === Constants.dateTab){
-            categoricalFilterPopup.visible = false
-            dateFilterPopup.visible = true
-            numericalFilterPopup.visible = false
-            groupFilterPopup.visible = false
-        }
-        else if(tabBarOpen === Constants.numericalTab){
-            categoricalFilterPopup.visible = false
-            dateFilterPopup.visible = false
-            numericalFilterPopup.visible = true
-            groupFilterPopup.visible = false
-        }
-        else if(tabBarOpen === Constants.groupTab){
-            categoricalFilterPopup.visible = false
-            dateFilterPopup.visible = false
-            numericalFilterPopup.visible = false
-            groupFilterPopup.visible = true
-        }
-    }
-
-    function onTabToggle(characterFilterTab,dateFilterTab,numericalFilterTab,groupFilterTab){
-
-        categoricalTabBackground.color =  Constants.whiteColor
-        dateTabBackground.color =  Constants.whiteColor
-        numericalTabBackground.color = Constants.whiteColor
-        groupTabBackground.color = Constants.whiteColor
-
-        allCategoricalFilterContent.visible = false
-        allDateFilterContent.visible = false
-        allNumericalFilterContent.visible = false
-        allGroupFilterContent.visible = false
-
-        if(characterFilterTab){
-            categoricalTabBackground.color =  Constants.whiteColor
-            allCategoricalFilterContent.visible = true
-
-        }
-
-        if(dateFilterTab){
-            dateTabBackground.color =  Constants.themeColor
-            allDateFilterContent.visible = true
-        }
-
-        if(numericalFilterTab){
-            numericalTabBackground.color = Constants.whiteColor
-            allNumericalFilterContent.visible = true
-
-        }
-        if(groupFilterTab){
-            groupTabBackground.color = Constants.whiteColor
-            allGroupFilterContent.visible=true
-            tabBarOpen = Constants.groupTab
-        }
-
-    }
-
-
-
-    function onCategoricalTabClicked(){
-
-        onTabToggle(true,false,false,false);
-
-        addMenuList.model = categoricalModel
-        addMenuList.height = categoricalModel.count * 40
-
-        tabBarOpen = Constants.categoricalTab
-
-        // Set the section in C++
-        DSParamsModel.setSection(Constants.categoricalTab)
-
-    }
-
-
-    function onDateTabClicked(){
-
-        onTabToggle(false,true,false,false);
-
-        addMenuList.model = datesModel
-        addMenuList.height = datesModel.count * 40
-
-
-        tabBarOpen = Constants.dateTab
-
-        // Set the section in C++
-        DSParamsModel.setSection(Constants.dateTab)
-    }
-
-
-    function onNumericalTabClicked(){
-
-        onTabToggle(false,false,true,false);
-        addMenuList.model = numericalModel
-        addMenuList.height = numericalModel.count * 40
-
-
-        tabBarOpen = Constants.numericalTab
-
-        // Set the section in C++
-        DSParamsModel.setSection(Constants.numericalTab)
-
-    }
-
-
-
-    function onGroupTabClicked(){
-
-        onTabToggle(false,false,false,true);
-        addMenuList.model = groupModelList
-
-        // Set the section in C++
-        DSParamsModel.setSection(Constants.groupTab)
-    }
-
-
-    function onApplyClicked(){
-        popupMain.visible = false
-    }
-    function onCancelClicked(){
-        popupMain.visible = false
-    }
-
-
-
-    // JAVASCRIPT FUNCTION ENDS
-    /***********************************************************************************************************************/
-
-
-
-
-    /***********************************************************************************************************************/
-    // SubComponents Starts
-
-
-
-    CategoricalFilter{
-        id:categoricalFilterPopup
-    }
-
-    DateFilter{
-        id: dateFilterPopup
-    }
-
-    NumericalFilter{
-        id: numericalFilterPopup
-    }
-
-    GroupFilter{
-        id: groupFilterPopup
-    }
-
-
-    // SubComponents Ends
-    /***********************************************************************************************************************/
-
-
-
-
-
-    /***********************************************************************************************************************/
-    // Page Design Starts
-
-
-
 
 
     // Popup Header starts
@@ -374,7 +160,7 @@ Popup {
         anchors.leftMargin: 1
 
         Component.onCompleted: {
-            categoricalTabBackground.color =  Constants.themeColor
+            character_btn_background.color =  Constants.themeColor
         }
 
 
@@ -386,7 +172,7 @@ Popup {
             width:popupMain.width/4 - 1
 
             background: Rectangle {
-                id: categoricalTabBackground
+                id: character_btn_background
                 border.color: Constants.darkThemeColor
                 color: character_btn.pressed? Constants.themeColor: Constants.whiteColor
             }
@@ -400,8 +186,23 @@ Popup {
             }
 
             onClicked: {
+                character_btn_background.color =  Constants.themeColor
+                date_btn_background.color =  Constants.whiteColor
+                numbers_btn_background.color = Constants.whiteColor
+                users_btn_background.color = Constants.whiteColor
 
-                onCategoricalTabClicked()
+                allCategoricalFilterContent.visible = true
+                allDateFilterContent.visible = false
+                allNumericalFilterContent.visible = false
+                allGroupFilterContent.visible = false
+
+                addMenuList.model = categoricalModel
+                addMenuList.height = categoricalModel.count * 40
+
+                tabBarOpen = Constants.categoricalTab
+
+                // Set the section in C++
+                DSParamsModel.setSection(Constants.categoricalTab)
 
             }
         }
@@ -416,7 +217,7 @@ Popup {
             width:popupMain.width/4 - 1
 
             background: Rectangle {
-                id: dateTabBackground
+                id: date_btn_background
                 border.color: Constants.darkThemeColor
                 color: date_btn.pressed? Constants.themeColor: Constants.whiteColor
             }
@@ -430,8 +231,25 @@ Popup {
             }
 
             onClicked: {
+                character_btn_background.color =  Constants.whiteColor
+                date_btn_background.color =  Constants.themeColor
+                numbers_btn_background.color = Constants.whiteColor
+                users_btn_background.color = Constants.whiteColor
 
-                onDateTabClicked()
+
+                allCategoricalFilterContent.visible = false
+                allDateFilterContent.visible = true
+                allNumericalFilterContent.visible = false
+                allGroupFilterContent.visible = false
+
+                addMenuList.model = datesModel
+                addMenuList.height = datesModel.count * 40
+
+
+                tabBarOpen = Constants.dateTab
+
+                // Set the section in C++
+                DSParamsModel.setSection(Constants.dateTab)
             }
         }
 
@@ -445,7 +263,7 @@ Popup {
             width:popupMain.width/4 - 1
 
             background: Rectangle {
-                id: numericalTabBackground
+                id: numbers_btn_background
                 border.color: Constants.darkThemeColor
                 color: character_btn.pressed? Constants.themeColor: Constants.whiteColor
             }
@@ -459,9 +277,25 @@ Popup {
             }
 
             onClicked: {
+                character_btn_background.color =  Constants.whiteColor
+                date_btn_background.color =  Constants.whiteColor
+                numbers_btn_background.color = Constants.themeColor
+                users_btn_background.color = Constants.whiteColor
 
 
-                onNumericalTabClicked()
+                allCategoricalFilterContent.visible = false
+                allDateFilterContent.visible = false
+                allNumericalFilterContent.visible = true
+                allGroupFilterContent.visible = false
+
+                addMenuList.model = numericalModel
+                addMenuList.height = numericalModel.count * 40
+
+
+                tabBarOpen = Constants.numericalTab
+
+                // Set the section in C++
+                DSParamsModel.setSection(Constants.numericalTab)
 
             }
         }
@@ -477,7 +311,7 @@ Popup {
 
 
             background: Rectangle {
-                id: groupTabBackground
+                id: users_btn_background
                 border.color: Constants.darkThemeColor
                 color: users_btn.pressed? Constants.themeColor: Constants.whiteColor
 
@@ -492,8 +326,22 @@ Popup {
             }
 
             onClicked: {
-                onGroupTabClicked()
+                character_btn_background.color =  Constants.whiteColor
+                date_btn_background.color =  Constants.whiteColor
+                numbers_btn_background.color = Constants.whiteColor
+                users_btn_background.color = Constants.themeColor
 
+                allCategoricalFilterContent.visible = false
+                allDateFilterContent.visible = false
+                allNumericalFilterContent.visible = false
+                allGroupFilterContent.visible = true
+
+                addMenuList.model = groupModelList
+
+                tabBarOpen = Constants.groupTab
+
+                // Set the section in C++
+                DSParamsModel.setSection(Constants.groupTab)
             }
         }
 
@@ -541,13 +389,36 @@ Popup {
                 text: colName
                 onTriggered: {
 
-                    onAddMenuItemTriggered(colName.tableName);
+                    ColumnListModel.columnQuery(colName, tableName)
+                    DSParamsModel.setColName(colName)
+                    DSParamsModel.setTableName(tableName)
 
                 }
                 onClicked: {
-
-                    onAddMenuItemClicked()
-
+                    if(tabBarOpen === Constants.categoricalTab){
+                        categoricalFilterPopup.visible = true
+                        dateFilterPopup.visible = false
+                        numericalFilterPopup.visible = false
+                        groupFilterPopup.visible = false
+                    }
+                    else if(tabBarOpen === Constants.dateTab){
+                        categoricalFilterPopup.visible = false
+                        dateFilterPopup.visible = true
+                        numericalFilterPopup.visible = false
+                        groupFilterPopup.visible = false
+                    }
+                    else if(tabBarOpen === Constants.numericalTab){
+                        categoricalFilterPopup.visible = false
+                        dateFilterPopup.visible = false
+                        numericalFilterPopup.visible = true
+                        groupFilterPopup.visible = false
+                    }
+                    else if(tabBarOpen === Constants.groupTab){
+                        categoricalFilterPopup.visible = false
+                        dateFilterPopup.visible = false
+                        numericalFilterPopup.visible = false
+                        groupFilterPopup.visible = true
+                    }
                 }
             }
         }
@@ -607,9 +478,7 @@ Popup {
             id: cancel_btn1
             textValue: "Cancel"
             onClicked: {
-
-                onCancelClicked()
-
+                popupMain.visible = false
             }
         }
 
@@ -618,16 +487,27 @@ Popup {
             id: apply_btn1
             textValue: "Apply"
             onClicked: {
-                onApplyClicked()
+                popupMain.visible = false
             }
         }
     }
 
     // Action button ends
 
+    CategoricalFilter{
+        id:categoricalFilterPopup
+    }
 
-    // Page Design Ends
-    /***********************************************************************************************************************/
+    DateFilter{
+        id: dateFilterPopup
+    }
 
+    NumericalFilter{
+        id: numericalFilterPopup
+    }
+
+    GroupFilter{
+        id: groupFilterPopup
+    }
 }
 
