@@ -72,8 +72,8 @@ Rectangle{
         FilterListModel.deleteFilter(filterIndex)
     }
 
-    function onEditElement(filterIndex){
-        console.log('Edit element', filterId)
+    function onEditElement(filterIndex, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude){
+        console.log('Edit element', filterIndex, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
 
     }
 
@@ -206,12 +206,11 @@ Rectangle{
                                 anchors.leftMargin: 20
 
                                 anchors.verticalCenter: Image.verticalCenter
-                                objectName: filterId
 
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onEditElement(filterId)
+                                        onEditElement(model.index, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
                                     }
                                 }
                             }
@@ -225,7 +224,6 @@ Rectangle{
                                 anchors.topMargin: 8
                                 anchors.leftMargin: 10
                                 anchors.verticalCenter: Image.verticalCenter
-                                objectName: filterId
 
                                 MouseArea{
                                     anchors.fill: parent
@@ -350,12 +348,11 @@ Rectangle{
                                 anchors.leftMargin: 20
 
                                 anchors.verticalCenter: Image.verticalCenter
-                                objectName: filterId
 
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onEditElement(filterId)
+                                        onEditElement(model.index)
                                     }
                                 }
                             }
@@ -368,12 +365,11 @@ Rectangle{
                                 anchors.topMargin: 8
                                 anchors.leftMargin: 10
                                 anchors.verticalCenter: Image.verticalCenter
-                                objectName: filterId
 
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onRemoveElement(filterId)
+                                        onRemoveElement(model.index)
                                     }
                                 }
 
@@ -486,14 +482,13 @@ Rectangle{
                                 anchors.topMargin: 5
                                 anchors.left: parent.left
                                 anchors.leftMargin: 20
-                                objectName: filterId
 
                                 anchors.verticalCenter: Image.verticalCenter
 
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onEditElement(filterId)
+                                        onEditElement(model.index)
                                     }
                                 }
                             }
@@ -506,12 +501,11 @@ Rectangle{
                                 anchors.topMargin: 8
                                 anchors.leftMargin: 10
                                 anchors.verticalCenter: Image.verticalCenter
-                                objectName: filterId
 
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onRemoveElement(filterId)
+                                        onRemoveElement(model.index)
                                     }
                                 }
 

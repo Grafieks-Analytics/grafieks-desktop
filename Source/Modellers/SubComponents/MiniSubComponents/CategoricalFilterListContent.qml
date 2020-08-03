@@ -134,7 +134,6 @@ Rectangle{
 
                 // Start pushing the individual checked item in the array
                 checkedValues.push(modelData)
-                console.log(checkedValues)
 
             } else{
                  // Remove item if unchecked
@@ -360,7 +359,6 @@ Rectangle{
 
         ButtonGroup {
             id: btngrp
-//            buttons: singleSelectCheckList.RadioButtonTpl
         }
 
         // Radio button ListView

@@ -187,7 +187,6 @@ QHash<int, QByteArray> FilterListModel::roleNames() const
 void FilterListModel::newFilter(QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QVariant val, bool includeNull, bool exclude )
 {
 
-    qDebug() << counter<< section<< category<< subcategory<< tableName<< colName<< relation<< val<< includeNull<< exclude;
     FilterList *filterList = new FilterList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this);
     addFilterList(filterList);
 
@@ -225,6 +224,7 @@ void FilterListModel::updateFilter(int FilterId, QString section, QString catego
     mFilter[FilterId]->setIncludeNull(includeNull);
     mFilter[FilterId]->setExclude(exclude);
 }
+
 
 void FilterListModel::addFilterList(FilterList *filter)
 {
