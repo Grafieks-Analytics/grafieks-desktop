@@ -2,7 +2,7 @@
 
 
 
-FilterListModel::FilterListModel(QObject *parent) : QAbstractListModel(parent), counter(0)
+FilterListModel::FilterListModel(QObject *parent) : QAbstractListModel(parent), counter(0), rowCountSize(0)
 {
 
 }
@@ -187,6 +187,7 @@ QHash<int, QByteArray> FilterListModel::roleNames() const
 void FilterListModel::newFilter(QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QVariant val, bool includeNull, bool exclude )
 {
 
+    qDebug() << counter<< section<< category<< subcategory<< tableName<< colName<< relation<< val<< includeNull<< exclude;
     FilterList *filterList = new FilterList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this);
     addFilterList(filterList);
 
@@ -199,6 +200,8 @@ void FilterListModel::deleteFilter(int FilterID)
     beginRemoveRows(QModelIndex(), FilterID, FilterID);
     mFilter.removeAt(FilterID);
     endRemoveRows();
+
+    emit rowCountChanged();
 }
 
 void FilterListModel::updateFilter(int FilterId, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QVariant value, bool includeNull, bool exclude)
@@ -229,6 +232,8 @@ void FilterListModel::addFilterList(FilterList *filter)
     beginInsertRows(QModelIndex(),index,index);
     mFilter.append(filter);
     endInsertRows();
+
+    emit rowCountChanged();
 }
 
 void FilterListModel::columnList(QVariantList &columns)

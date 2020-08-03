@@ -56,7 +56,13 @@ Rectangle{
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: FilterListModel
 
+        function onRowCountChanged(){
+            listFiltersListView.height = FilterListModel.rowCount() * 30
+        }
+    }
     // Connections Ends
     /***********************************************************************************************************************/
 
@@ -67,27 +73,12 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    function onRemoveListElement(){
-        console.log('Remove List Element')
+    function onRemoveElement(filterId){
+        console.log('Remove Element', filterId)
     }
 
-    function onEditListElement(){
-
-    }
-
-
-    function onRemoveWildcardElement(){
-
-    }
-    function onEditWildcardElement(){
-
-    }
-
-
-    function onRemoveTopElement(){
-
-    }
-    function onEditTopElement(){
+    function onEditElement(filterId){
+        console.log('Edit element', filterId)
 
     }
 
@@ -147,10 +138,13 @@ Rectangle{
                 id: listFiltersListView
                 model: FilterListModel
                 width: parent.width
-                height: listModel.count * (30 + rowSpacing)
                 anchors.topMargin: 10
                 spacing: rowSpacing
                 interactive: false
+
+                Component.onCompleted: {
+                    console.log(model.length)
+                }
 
                 delegate:
 
@@ -219,11 +213,12 @@ Rectangle{
                                 anchors.leftMargin: 20
 
                                 anchors.verticalCenter: Image.verticalCenter
+                                objectName: filterId
 
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onEditListElement()
+                                        onEditElement(filterId)
                                     }
                                 }
                             }
@@ -237,11 +232,14 @@ Rectangle{
                                 anchors.topMargin: 8
                                 anchors.leftMargin: 10
                                 anchors.verticalCenter: Image.verticalCenter
+                                objectName: filterId
 
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onRemoveListElement()
+                                        onRemoveElement(filterId)
+                                        FilterListModel.deleteFilter(filterId)
+                                        console.log(index)
                                     }
                                 }
 
@@ -361,11 +359,12 @@ Rectangle{
                                 anchors.leftMargin: 20
 
                                 anchors.verticalCenter: Image.verticalCenter
+                                objectName: filterId
 
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onEditWildcardElement()
+                                        onEditElement(filterId)
                                     }
                                 }
                             }
@@ -378,11 +377,12 @@ Rectangle{
                                 anchors.topMargin: 8
                                 anchors.leftMargin: 10
                                 anchors.verticalCenter: Image.verticalCenter
+                                objectName: filterId
 
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onRemoveWildcardElement()
+                                        onRemoveElement(filterId)
                                     }
                                 }
 
@@ -495,13 +495,14 @@ Rectangle{
                                 anchors.topMargin: 5
                                 anchors.left: parent.left
                                 anchors.leftMargin: 20
+                                objectName: filterId
 
                                 anchors.verticalCenter: Image.verticalCenter
 
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onEditTopElement()
+                                        onEditElement(filterId)
                                     }
                                 }
                             }
@@ -514,11 +515,12 @@ Rectangle{
                                 anchors.topMargin: 8
                                 anchors.leftMargin: 10
                                 anchors.verticalCenter: Image.verticalCenter
+                                objectName: filterId
 
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onRemoveTopElement()
+                                        onRemoveElement(filterId)
                                     }
                                 }
 

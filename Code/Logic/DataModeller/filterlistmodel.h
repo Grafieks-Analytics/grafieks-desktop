@@ -22,7 +22,7 @@ class FilterListModel : public QAbstractListModel
 public:
     explicit FilterListModel(QObject *parent = nullptr);
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     Qt::ItemFlags flags(const QModelIndex& index) const;
@@ -49,7 +49,10 @@ public:
         FilterListExcludeRole
     };
 
+    int rowCountSize;
+
 signals:
+    void rowCountChanged();
 
 };
 
