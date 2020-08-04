@@ -115,7 +115,6 @@ Rectangle{
 
                 DSParamsModel.setValue("%")
             } else{
-                console.log(checkedValues.toString()," FFF1")
                 DSParamsModel.setValue(checkedValues.toString())
             }
 
@@ -152,7 +151,6 @@ Rectangle{
 
             // Save the array and Set relation type to IN
 
-            console.log(checkedValues.toString()," FFF2")
             DSParamsModel.setValue(checkedValues.toString())
             DSParamsModel.setRelation(Constants.inRelation)
         }

@@ -76,7 +76,6 @@ Rectangle{
 
     // Called when edit filter from categorical list clicked
     function onEditElement(filterIndex, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude){
-        console.log('Edit element', filterIndex, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
         ColumnListModel.columnEditQuery(columnName, tableName, value)
 
         DSParamsModel.setMode(Constants.modeEdit)
@@ -85,7 +84,7 @@ Rectangle{
         DSParamsModel.setCategory(category)
         DSParamsModel.setSubCategory(subCategory)
         DSParamsModel.setTableName(tableName)
-        DSParamsModel.colName(columnName)
+        DSParamsModel.setColName(columnName)
         DSParamsModel.setRelation(relation)
         DSParamsModel.setIncludeNull(includeNull)
         DSParamsModel.setExclude(exclude)

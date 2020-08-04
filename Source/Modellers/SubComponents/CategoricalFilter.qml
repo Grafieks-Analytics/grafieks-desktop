@@ -61,6 +61,9 @@ Popup {
 
     function closeCategoricalFilterPopup(){
         categoricalFilterPopup.visible = false
+
+        // Reset all DSParams
+        DSParamsModel.resetFilter();
     }
 
     function onApplyClicked(){
@@ -77,35 +80,18 @@ Popup {
         var includeNull = DSParamsModel.includeNull
         var exclude = DSParamsModel.exclude
 
-        // Set conditions before saving the filter
-
-        switch(section){
-
-        case Constants.categoricalTab:{
-
-            break
-        }
-        case Constants.dateTab:{
-
-            break
-        }
-        case Constants.numericalTab:{
-
-            break
-        }
-        case Constants.groupTab:{
-
-            break
-        }
-        }
 
 
         // Save the filter
         if(DSParamsModel.mode === Constants.modeCreate){
             FilterListModel.newFilter(section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+
         } else{
             FilterListModel.updateFilter(filterIndex, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
         }
+
+        // Reset all DSParams
+        DSParamsModel.resetFilter();
 
 
     }
