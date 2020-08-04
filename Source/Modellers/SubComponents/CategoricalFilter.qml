@@ -96,6 +96,11 @@ Popup {
 
     }
 
+    function onResetClicked(){
+        categoricalFilterPopup.visible = false
+        DSParamsModel.resetFilter();
+    }
+
     function onListClicked(){
 
         listRadio.radio_checked = true
@@ -329,8 +334,7 @@ Popup {
 
 
             onClicked: {
-                categoricalFilterPopup.visible = false
-                DSParamsModel.resetFilter();
+                onResetClicked()
             }
         }
 

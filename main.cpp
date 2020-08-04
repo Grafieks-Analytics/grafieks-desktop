@@ -39,6 +39,7 @@
 #include "Code/Logic/Connectors/sheetmodel.h"
 
 #include "Code/Logic/General/tableschemamodel.h"
+#include "Code/Logic/General/querysplitter.h"
 #include "Code/Logic/General/qttest2.h"
 
 
@@ -96,6 +97,7 @@ int main(int argc, char *argv[])
     PublishDatasourceModel publishDatasourceModel;
     ColumnListModel columnListModel;
     FilterListModel filterListModel;
+    QuerySplitter querySplitter;
 
     // Datasource Connector Initializations
     DropboxModel dropboxModel;
@@ -160,6 +162,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("SchedulerModel",&schedulerModel);
     engine.rootContext()->setContextProperty("SchedulerDS",scheduler);
     engine.rootContext()->setContextProperty("FilterListModel",&filterListModel);
+    engine.rootContext()->setContextProperty("QuerySplitter",&querySplitter);
 
 
 
