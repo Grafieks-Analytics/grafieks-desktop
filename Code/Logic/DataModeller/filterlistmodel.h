@@ -29,8 +29,8 @@ public:
     QHash<int, QByteArray> roleNames() const;
 
     Q_INVOKABLE void newFilter(QString section = "",QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QVariant val = "", bool includeNull = true, bool exclude = false);
-    Q_INVOKABLE void deleteFilter(int FilterID);
-    Q_INVOKABLE void updateFilter(int FilterId, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QVariant value = "", bool includeNull = true, bool exclude = false);
+    Q_INVOKABLE void deleteFilter(int FilterIndex);
+    Q_INVOKABLE void updateFilter(int FilterIndex, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QVariant value = "", bool includeNull = true, bool exclude = false);
 
     void addFilterList(FilterList * filter);
     void columnList(QVariantList &columns);

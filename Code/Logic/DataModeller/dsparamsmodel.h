@@ -26,6 +26,8 @@ class DSParamsModel : public QObject
     Q_PROPERTY(bool exclude READ exclude WRITE setExclude NOTIFY excludeChanged)
     Q_PROPERTY(bool includeNull READ includeNull WRITE setIncludeNull NOTIFY includeNullChanged)
     Q_PROPERTY(bool selectAll READ selectAll WRITE setSelectAll NOTIFY selectAllChanged)
+    Q_PROPERTY(int filterIndex READ filterIndex WRITE setFilterIndex NOTIFY filterIndexChanged)
+    Q_PROPERTY(QString mode READ mode WRITE setMode NOTIFY modeChanged)
 
     QString m_dsName;
     QString m_dsType;
@@ -45,7 +47,8 @@ class DSParamsModel : public QObject
     bool m_exclude;
     bool m_includeNull;
     bool m_selectAll;
-
+    int m_filterIndex;
+    QString m_mode;
 
 
 public:
@@ -71,6 +74,14 @@ public:
     bool exclude() const;
     bool includeNull() const;
     bool selectAll() const;
+    int filterIndex() const;
+    QString mode() const;
+
+    QString defaultSection = "categorical";
+    QString defaultCategory = "list";
+    QString defaultSubCategory = "multiple";
+    QString defaultMode = "create";
+
 
 
 
@@ -92,7 +103,10 @@ public slots:
     void setValue(QVariant value);
     void setExclude(bool exclude);
     void setIncludeNull(bool includeNull);
+    void setFilterIndex(int filterIndex);
     void setSelectAll(bool selectAll);
+    void setMode(QString mode);
+
 
 
 
@@ -116,6 +130,8 @@ signals:
     void excludeChanged(bool exclude);
     void includeNullChanged(bool includeNull);
     void selectAllChanged(bool selectAll);
+    void filterIndexChanged(int filterIndex);
+    void modeChanged(QString mode);
 
 };
 

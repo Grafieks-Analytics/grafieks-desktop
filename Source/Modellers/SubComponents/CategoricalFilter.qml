@@ -66,6 +66,7 @@ Popup {
     function onApplyClicked(){
         categoricalFilterPopup.visible = false
 
+        var filterIndex = DSParamsModel.filterIndex
         var section = DSParamsModel.section
         var category = DSParamsModel.category
         var subCategory = DSParamsModel.subCategory
@@ -100,7 +101,13 @@ Popup {
 
 
         // Save the filter
-        FilterListModel.newFilter(section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+        if(DSParamsModel.mode === Constants.modeCreate){
+            FilterListModel.newFilter(section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+        } else{
+            FilterListModel.updateFilter(filterIndex, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+        }
+
+
     }
 
     function onListClicked(){

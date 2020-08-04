@@ -77,13 +77,14 @@ Popup {
     }
 
     // This function is used to create models
-    // for FILTERS category type
-    // Populates Listmodal
+    // for FILTERS section type
+    // Populates Listmodel
 
     Connections{
         target: TableSchemaModel
 
-        onTableSchemaObtained:{
+        // Set the model of the `Add Button` in each tab
+        function onTableSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers, queriedColumnNames){
 
             allCategorical.forEach(function (element) {
                 categoricalModel.append({"tableName" : element[0], "colName" : element[1]});
@@ -100,6 +101,42 @@ Popup {
             addMenuList.model =  categoricalModel
             addMenuList.height = categoricalModel.count * 40
 
+        }
+    }
+
+    // This section is called when
+    // EDIT filter is clicked from various lists
+    // On receiving the signal from C++, it will popup the relevant screen
+
+    Connections{
+        target: ColumnListModel
+
+        function onEditCalled(){
+
+            if(DSParamsModel.section === Constants.categoricalTab){
+                categoricalFilterPopup.visible = true
+                dateFilterPopup.visible = false
+                numericalFilterPopup.visible = false
+                groupFilterPopup.visible = false
+            }
+            else if(DSParamsModel.section === Constants.dateTab){
+                categoricalFilterPopup.visible = false
+                dateFilterPopup.visible = true
+                numericalFilterPopup.visible = false
+                groupFilterPopup.visible = false
+            }
+            else if(DSParamsModel.section === Constants.numericalTab){
+                categoricalFilterPopup.visible = false
+                dateFilterPopup.visible = false
+                numericalFilterPopup.visible = true
+                groupFilterPopup.visible = false
+            }
+            else if(DSParamsModel.section === Constants.groupTab){
+                categoricalFilterPopup.visible = false
+                dateFilterPopup.visible = false
+                numericalFilterPopup.visible = false
+                groupFilterPopup.visible = true
+            }
         }
     }
 

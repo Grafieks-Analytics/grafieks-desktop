@@ -194,35 +194,41 @@ void FilterListModel::newFilter(QString section, QString category, QString subca
 
 }
 
-void FilterListModel::deleteFilter(int FilterID)
+void FilterListModel::deleteFilter(int FilterIndex)
 {
-    beginRemoveRows(QModelIndex(), FilterID, FilterID);
-    mFilter.removeAt(FilterID);
+    beginRemoveRows(QModelIndex(), FilterIndex, FilterIndex);
+    mFilter.removeAt(FilterIndex);
     endRemoveRows();
 
     emit rowCountChanged();
 }
 
-void FilterListModel::updateFilter(int FilterId, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QVariant value, bool includeNull, bool exclude)
+void FilterListModel::updateFilter(int FilterIndex, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QVariant value, bool includeNull, bool exclude)
 {
 
+    beginResetModel();
     if(section != "")
-        mFilter[FilterId]->setSection(section);
+        mFilter[FilterIndex]->setSection(section);
     if(category != "")
-        mFilter[FilterId]->setCategory(category);
+        mFilter[FilterIndex]->setCategory(category);
     if(subcategory != "")
-        mFilter[FilterId]->setSubCategory(subcategory);
+        mFilter[FilterIndex]->setSubCategory(subcategory);
     if(tableName != "")
-        mFilter[FilterId]->setTableName(tableName);
+        mFilter[FilterIndex]->setTableName(tableName);
     if(colName != "")
-        mFilter[FilterId]->setColumnName(colName);
+        mFilter[FilterIndex]->setColumnName(colName);
     if(relation != "")
-        mFilter[FilterId]->setRelation(relation);
+        mFilter[FilterIndex]->setRelation(relation);
     if(value != "")
-        mFilter[FilterId]->setValue(value);
+        mFilter[FilterIndex]->setValue(value);
 
-    mFilter[FilterId]->setIncludeNull(includeNull);
-    mFilter[FilterId]->setExclude(exclude);
+    mFilter[FilterIndex]->setIncludeNull(includeNull);
+    mFilter[FilterIndex]->setExclude(exclude);
+
+    endResetModel();
+
+
+//    qDebug() << FilterIndex << section <<  category <<  subcategory <<  tableName << colName << relation <<  value << includeNull << exclude;
 }
 
 

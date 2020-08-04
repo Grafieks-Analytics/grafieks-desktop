@@ -111,8 +111,15 @@ Rectangle{
         // If Select All option is true
         if(checked === true){
 
+            if(DSParamsModel.mode === Constants.modeCreate){
+
+                DSParamsModel.setValue("%")
+            } else{
+                console.log(checkedValues.toString()," FFF1")
+                DSParamsModel.setValue(checkedValues.toString())
+            }
+
             DSParamsModel.setRelation(Constants.likeRelation)
-            DSParamsModel.setValue("%")
             checkedValues = []
 
         }
@@ -136,15 +143,16 @@ Rectangle{
                 checkedValues.push(modelData)
 
             } else{
-                 // Remove item if unchecked
+                // Remove item if unchecked
                 const index = checkedValues.indexOf(modelData);
                 if (index > -1) {
-                  checkedValues.splice(index, 1);
+                    checkedValues.splice(index, 1);
                 }
             }
 
             // Save the array and Set relation type to IN
 
+            console.log(checkedValues.toString()," FFF2")
             DSParamsModel.setValue(checkedValues.toString())
             DSParamsModel.setRelation(Constants.inRelation)
         }
@@ -380,16 +388,16 @@ Rectangle{
 
                 Column{
 
-//                        RadioButtonTpl {
-//                            radio_text: modelData
-//                            parent_dimension: 16
-//                            ButtonGroup.group: btngrp
+                    //                        RadioButtonTpl {
+                    //                            radio_text: modelData
+                    //                            parent_dimension: 16
+                    //                            ButtonGroup.group: btngrp
 
-//                            onRadio_checkedChanged: {
-//                                console.log(modelData, radio_checked)
-//                            }
+                    //                            onRadio_checkedChanged: {
+                    //                                console.log(modelData, radio_checked)
+                    //                            }
 
-//                        }
+                    //                        }
 
 
                     RadioButtonTpl {

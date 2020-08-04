@@ -61,7 +61,7 @@ QtObject {
     property string equalRelation: "EQUAL"
 
 
-    // Filters
+    // FILTERS starts
     // Tab Bar Open Constants- Section
 
     property string categoricalTab: "categorical"
@@ -79,6 +79,12 @@ QtObject {
     // Sub Categories
     property string categorySubMulti: "multiple"
     property string categorySubSingle: "single"
+
+    // Mode
+    property string modeCreate: "create"
+    property string modeEdit: "edit"
+
+    // FILTERS ends
 
 
 }

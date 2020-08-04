@@ -76,6 +76,41 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
 }
 
 
+void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QString fieldNames)
+{
+
+    QString queryString;
+    QString finalSearchFields;
+    QStringList pieces;
+
+    switch(Statics::currentDbIntType){
+
+    case Constants::mysqlIntType:{
+
+        pieces = fieldNames.split(",");
+
+        if(pieces.length() > 1){
+            finalSearchFields = pieces.join("','");
+        }else{
+            finalSearchFields = fieldNames;
+        }
+
+        finalSearchFields = "'" + finalSearchFields + "'";
+
+        queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
+        this->setQuery(queryString, dbMysql);
+
+
+        break;
+    }
+    }
+
+    emit editCalled();
+}
+
+
 
 void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QString searchString)
 {

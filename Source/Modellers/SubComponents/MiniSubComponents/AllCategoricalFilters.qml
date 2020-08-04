@@ -54,6 +54,7 @@ Rectangle{
     Connections{
         target: FilterListModel
 
+        // Listview height
         function onRowCountChanged(){
             listFiltersListView.height = FilterListModel.rowCount() * 30
         }
@@ -68,12 +69,26 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    // Called when remove filter from categorical list clicked
     function onRemoveElement(filterIndex){
         FilterListModel.deleteFilter(filterIndex)
     }
 
+    // Called when edit filter from categorical list clicked
     function onEditElement(filterIndex, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude){
         console.log('Edit element', filterIndex, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+        ColumnListModel.columnEditQuery(columnName, tableName, value)
+
+        DSParamsModel.setMode(Constants.modeEdit)
+        DSParamsModel.setFilterIndex(filterIndex)
+        DSParamsModel.setSection(section)
+        DSParamsModel.setCategory(category)
+        DSParamsModel.setSubCategory(subCategory)
+        DSParamsModel.setTableName(tableName)
+        DSParamsModel.colName(columnName)
+        DSParamsModel.setRelation(relation)
+        DSParamsModel.setIncludeNull(includeNull)
+        DSParamsModel.setExclude(exclude)
 
     }
 

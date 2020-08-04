@@ -1,16 +1,23 @@
 #include "dsparamsmodel.h"
 
-DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent),
-    m_section("categorical"), m_category("list"), m_subCategory("multiple"), m_exclude(false), m_includeNull(true), m_selectAll(true)
+DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent)
 {
 
+    m_section = defaultSection;
+    m_category = defaultCategory;
+    m_subCategory = defaultSubCategory;
+    m_mode = defaultMode;
+    m_exclude = false;
+    m_includeNull = true;
+    m_selectAll = true;
 }
 
 void DSParamsModel::resetFilter()
 {
-    this->setSection("categorical");
-    this->setCategory("list");
-    this->setSubCategory("multiple");
+    this->setSection(defaultSection);
+    this->setCategory(defaultCategory);
+    this->setSubCategory(defaultSubCategory);
+    this->setMode(defaultMode);
     this->setExclude(false);
     this->setIncludeNull(true);
     this->setSelectAll(true);
@@ -74,6 +81,16 @@ bool DSParamsModel::includeNull() const
 bool DSParamsModel::selectAll() const
 {
     return m_selectAll;
+}
+
+int DSParamsModel::filterIndex() const
+{
+    return m_filterIndex;
+}
+
+QString DSParamsModel::mode() const
+{
+    return m_mode;
 }
 
 QString DSParamsModel::category() const
@@ -195,6 +212,15 @@ void DSParamsModel::setIncludeNull(bool includeNull)
     emit includeNullChanged(m_includeNull);
 }
 
+void DSParamsModel::setFilterIndex(int filterIndex)
+{
+    if (m_filterIndex == filterIndex)
+        return;
+
+    m_filterIndex = filterIndex;
+    emit filterIndexChanged(m_filterIndex);
+}
+
 void DSParamsModel::setSelectAll(bool selectAll)
 {
     if (m_selectAll == selectAll)
@@ -202,6 +228,15 @@ void DSParamsModel::setSelectAll(bool selectAll)
 
     m_selectAll = selectAll;
     emit selectAllChanged(m_selectAll);
+}
+
+void DSParamsModel::setMode(QString mode)
+{
+    if (m_mode == mode)
+        return;
+
+    m_mode = mode;
+    emit modeChanged(m_mode);
 }
 
 void DSParamsModel::setCategory(QString category)
