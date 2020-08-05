@@ -27,7 +27,7 @@ Item{
     }
 
     Component.onCompleted: {
-        textEditQueryModeller.text = "SELECT * FROM users"
+        textEditQueryModeller.text = "SELECT * FROM users WHERE id > 0"
     }
 
     ToolSeparator{

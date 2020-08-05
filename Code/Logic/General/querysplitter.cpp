@@ -32,8 +32,6 @@ QStringList QuerySplitter::getSelectParams()
     QRegularExpressionMatch selectIterator = selectListRegex.match(m_query);
     selectList << selectIterator.captured(1).trimmed().replace("DISTINCT", "", Qt::CaseInsensitive).split(",");
 
-    qDebug() << "SELECT" << selectList;
-
     return selectList;
 }
 
@@ -44,12 +42,10 @@ QString QuerySplitter::getWhereCondition()
     QString whereString;
 
     // Where params
-    QRegularExpression whereListRegex(R"(\sWHERE\s+(.*?)(?:\s+(?:GROUP\s+BY|HAVING|ORDER\s+BY|ASC|DESC|LIMIT)\b|\s*$))", QRegularExpression::CaseInsensitiveOption);
+    QRegularExpression whereListRegex(R"(\sWHERE\s+(.*?)(?:\s+(?:GROUP|ORDER|LIMIT)\b|\s*$))", QRegularExpression::CaseInsensitiveOption);
 
     QRegularExpressionMatch whereIterator = whereListRegex.match(m_query);
     whereString = whereIterator.captured(1).trimmed();
-
-    qDebug() << "WHERE" << whereString;
 
     return whereString;
 
@@ -61,11 +57,9 @@ QString QuerySplitter::getMainTable()
     QString tableMainString;
 
     // Table params
-    QRegularExpression tableMainRegex(R"(\sFROM\s+(.*?)\s+(LEFT|RIGHT|INNER|JOIN|WHERE|GROUP\sBY|HAVING|ORDER\sBY|ASC|DESC|LIMIT)\s)", QRegularExpression::CaseInsensitiveOption);
+    QRegularExpression tableMainRegex(R"(\sFROM\s+(.*?)\s+(LEFT|RIGHT|FULL|INNER|JOIN|WHERE|GROUP|ORDER|LIMIT)\s)", QRegularExpression::CaseInsensitiveOption);
     QRegularExpressionMatch tableMainIterator = tableMainRegex.match(m_query);
     tableMainString = tableMainIterator.captured(1).trimmed();
-
-    qDebug() << "MAIN TABLE" << tableMainString;
 
     return tableMainString;
 
@@ -83,8 +77,6 @@ QStringList QuerySplitter::getJoinTables()
         QRegularExpressionMatch match = joinTableIterator.next();
         joinTableList << match.captured(1).trimmed();
     }
-
-    qDebug() << "JOIN" << joinTableList;
 
     return joinTableList;
 }

@@ -525,6 +525,9 @@ Popup {
             textValue: "Apply"
             onClicked: {
                 popupMain.visible = false
+                var tmpSql = QueryModel.tmpSql
+
+                FilterListModel.callQueryModel(tmpSql)
 
 
             }

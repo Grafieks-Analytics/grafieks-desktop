@@ -78,7 +78,9 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("grafieks.com");
     QCoreApplication::setApplicationName("Grafieks");
 
-    // Initialize Objects
+    /***********************************************************************************************************************/
+    // OBJECT INITIALIZATION STARTS
+
     QtTest2 qttest2;
 
 
@@ -86,8 +88,6 @@ int main(int argc, char *argv[])
     User User;
     ConnectorFilter connectorFilter;
     ConnectorsLoginModel connectorsLoginModel;
-    DatasourceModel datasourceModel;
-    DatasourceDS * datasource = new DatasourceDS(&app);
     TableListModel tableListModel;
     QueryModel queryModel;
     QueryStatsModel queryStatsModel;
@@ -102,6 +102,10 @@ int main(int argc, char *argv[])
 
 
     // Datasource Connector Initializations
+    DatasourceModel datasourceModel;
+    DatasourceDS * datasource = new DatasourceDS(&app);
+
+    // Dropbox modal
     DropboxModel dropboxModel;
     DropboxDS * dropbox = new DropboxDS(&app);
 
@@ -122,24 +126,32 @@ int main(int argc, char *argv[])
     SchedulerDS * scheduler = new SchedulerDS(&app);
 
 
-    // Signals and Slots
+    // OBJECT INITIALIZATION ENDS
+    /***********************************************************************************************************************/
+    /***********************************************************************************************************************/
+    // SIGNAL & SLOTS STARTS
+
+
     QObject::connect(&filterListModel, &FilterListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
 
 
+    // SIGNAL & SLOTS ENDS
+    /***********************************************************************************************************************/
+    /***********************************************************************************************************************/
+    // DEFAULT FUNCTION STARTS
 
-    // Call default functions
     datasourceModel.setDatasourceds(datasource);
-
     dropboxModel.setDropboxds(dropbox);
     driveModel.setDriveds(drive);
     boxModel.setBoxds(box);
     sheetModel.setSheetds(sheet);
     schedulerModel.setScheduler(scheduler);
-    filterListModel.callQueryModel();
 
 
-
-
+    // DEFAULT FUNCTION ENDS
+    /***********************************************************************************************************************/
+    /***********************************************************************************************************************/
+    // CONTEXT PROPERTY STARTS
 
 
     // Define singletons
@@ -175,6 +187,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("QuerySplitter",&querySplitter);
 
 
+    // CONTEXT PROPERTY  ENDS
+    /***********************************************************************************************************************/
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())

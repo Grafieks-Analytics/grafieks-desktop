@@ -2,6 +2,11 @@
 
 
 
+QString FilterListModel::setRelation(QString relation, bool exclude, bool isNull)
+{
+
+}
+
 FilterListModel::FilterListModel(QObject *parent) : QAbstractListModel(parent), counter(0), rowCountSize(0)
 {
 
@@ -230,10 +235,32 @@ void FilterListModel::updateFilter(int FilterIndex, QString section, QString cat
 
 }
 
-void FilterListModel::callQueryModel()
+void FilterListModel::callQueryModel(QString tmpSql)
 {
-    mQuerySplitter.setQuery("select * from users where id=1");
-    QString tmpWhereConditions = mQuerySplitter.getWhereCondition();
+    FilterList *filter;
+    QString tmpWhereConditions;
+    QString newQuery;
+    QString tmpRelation;
+    QStringList conditionList;
+
+    mQuerySplitter.setQuery(tmpSql);
+    tmpWhereConditions = mQuerySplitter.getWhereCondition();
+
+    foreach(filter, mFilter){
+        qDebug() << filter->filterId() << filter->section() << filter->category() << filter->subCategory() << filter->tableName() << filter->columnName() << filter->relation() << filter->value() << filter->includeNull() << filter->exclude();
+
+        if(filter->relation().contains(",", Qt::CaseInsensitive)){
+
+             conditionList = filter->relation().split(",");
+        } else{
+            tmpWhereConditions += " AND ";
+        }
+
+
+        qDebug() << conditionList;
+
+
+    }
 
     emit sendFilterQuery(tmpWhereConditions);
 }
