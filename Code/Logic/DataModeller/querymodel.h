@@ -10,6 +10,7 @@
 #include "../../Connectors/allconnectors.h"
 #include "../../constants.h"
 
+
 class QueryModel : public QSqlQueryModel
 {
     Q_OBJECT
@@ -20,6 +21,8 @@ class QueryModel : public QSqlQueryModel
 public:
     explicit QueryModel(QObject *parent = 0);
 
+    // QSqlQueryModel method override
+
     void setQuery(const QString &query, const QSqlDatabase &db = QSqlDatabase());
     void setQuery(const QSqlQuery &query);
     QVariant data(const QModelIndex &index, int role) const;
@@ -27,13 +30,14 @@ public:
 
     Q_INVOKABLE void callSql();
     QString tmpSql() const;
-    void callSqlWithFilter();
 
 public slots:
     void setTmpSql(QString tmpSql);
+    void receiveFilterQuery(QString & filteredQuery);
 
 signals:
     void tmpSqlChanged(QString tmpSql);
+
 
 private:
     void generateRoleNames();

@@ -8,15 +8,17 @@
 
 #include <typeinfo>
 
-
 #include "filterlist.h"
+#include "../General/querysplitter.h"
 
 class FilterListModel : public QAbstractListModel
 {
     Q_OBJECT
 
     int counter;
+    QuerySplitter mQuerySplitter;
     QList <FilterList *> mFilter;
+
 
 
 public:
@@ -31,6 +33,7 @@ public:
     Q_INVOKABLE void newFilter(QString section = "",QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QVariant val = "", bool includeNull = true, bool exclude = false);
     Q_INVOKABLE void deleteFilter(int FilterIndex);
     Q_INVOKABLE void updateFilter(int FilterIndex, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QVariant value = "", bool includeNull = true, bool exclude = false);
+    void callQueryModel();
 
     void addFilterList(FilterList * filter);
     void columnList(QVariantList &columns);
@@ -53,6 +56,7 @@ public:
 
 signals:
     void rowCountChanged();
+    void sendFilterQuery(QString & filteredQuery);
 
 };
 

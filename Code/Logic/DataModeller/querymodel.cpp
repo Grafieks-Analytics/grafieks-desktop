@@ -72,6 +72,10 @@ void QueryModel::setTmpSql(QString tmpSql)
     emit tmpSqlChanged(m_tmpSql);
 }
 
+void QueryModel::receiveFilterQuery(QString &filteredQuery)
+{
+}
+
 void QueryModel::generateRoleNames()
 {
     m_roleNames.clear();

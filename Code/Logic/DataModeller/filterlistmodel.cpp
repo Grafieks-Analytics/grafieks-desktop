@@ -228,7 +228,14 @@ void FilterListModel::updateFilter(int FilterIndex, QString section, QString cat
     endResetModel();
 
 
-//    qDebug() << FilterIndex << section <<  category <<  subcategory <<  tableName << colName << relation <<  value << includeNull << exclude;
+}
+
+void FilterListModel::callQueryModel()
+{
+    mQuerySplitter.setQuery("select * from users where id=1");
+    QString tmpWhereConditions = mQuerySplitter.getWhereCondition();
+
+    emit sendFilterQuery(tmpWhereConditions);
 }
 
 

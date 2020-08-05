@@ -525,6 +525,8 @@ Popup {
             textValue: "Apply"
             onClicked: {
                 popupMain.visible = false
+
+
             }
         }
     }

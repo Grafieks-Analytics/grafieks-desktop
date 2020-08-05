@@ -99,6 +99,8 @@ int main(int argc, char *argv[])
     FilterListModel filterListModel;
     QuerySplitter querySplitter;
 
+
+
     // Datasource Connector Initializations
     DropboxModel dropboxModel;
     DropboxDS * dropbox = new DropboxDS(&app);
@@ -120,6 +122,10 @@ int main(int argc, char *argv[])
     SchedulerDS * scheduler = new SchedulerDS(&app);
 
 
+    // Signals and Slots
+    QObject::connect(&filterListModel, &FilterListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
+
+
 
     // Call default functions
     datasourceModel.setDatasourceds(datasource);
@@ -129,6 +135,10 @@ int main(int argc, char *argv[])
     boxModel.setBoxds(box);
     sheetModel.setSheetds(sheet);
     schedulerModel.setScheduler(scheduler);
+    filterListModel.callQueryModel();
+
+
+
 
 
 

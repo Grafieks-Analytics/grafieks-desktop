@@ -14,16 +14,18 @@ class QuerySplitter : public QObject
 public:
     explicit QuerySplitter(QObject *parent = nullptr);
 
+    QStringList getSelectParams();
+    QString getWhereCondition();
+    QString getMainTable();
+    QStringList getJoinTables();
+
     QString query() const;
 
 public slots:
     void setQuery(QString query);
 
 private:
-    QStringList getSelectParams(QString & query);
-    QString getWhereCondition(QString & query);
-    QString getMainTable(QString & query);
-    QStringList getJoinTables(QString & query);
+
 
     QString m_query;
 
