@@ -18,9 +18,7 @@ class FilterListModel : public QAbstractListModel
     int counter;
     QuerySplitter mQuerySplitter;
     QList <FilterList *> mFilter;
-
-    QString setRelation(QString relation, bool exclude, bool isNull);
-
+    QStringList sqlComparisonOperators;
 
 
 public:
@@ -32,9 +30,9 @@ public:
     Qt::ItemFlags flags(const QModelIndex& index) const;
     QHash<int, QByteArray> roleNames() const;
 
-    Q_INVOKABLE void newFilter(QString section = "",QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QVariant val = "", bool includeNull = true, bool exclude = false);
+    Q_INVOKABLE void newFilter(QString section = "",QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString val = "", bool includeNull = true, bool exclude = false);
     Q_INVOKABLE void deleteFilter(int FilterIndex);
-    Q_INVOKABLE void updateFilter(int FilterIndex, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QVariant value = "", bool includeNull = true, bool exclude = false);
+    Q_INVOKABLE void updateFilter(int FilterIndex, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString value = "", bool includeNull = true, bool exclude = false);
     Q_INVOKABLE void callQueryModel(QString tmpSql);
 
     void addFilterList(FilterList * filter);
@@ -55,6 +53,11 @@ public:
     };
 
     int rowCountSize;
+
+private:
+
+    QString setRelation(QString tableName, QString columnName, QString relation, QString conditions, bool exclude, bool isNull);
+
 
 signals:
     void rowCountChanged();

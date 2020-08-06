@@ -1,6 +1,6 @@
 #include "filterlist.h"
 
-FilterList::FilterList(const int &filterId, const QString &section, const QString &category, const QString &subcategory, const QString &tableName, const QString &columnName, const QString &relation, const QVariant &value, const bool &includeNull, const bool &exclude, QObject *parent):
+FilterList::FilterList(const int &filterId, const QString &section, const QString &category, const QString &subcategory, const QString &tableName, const QString &columnName, const QString &relation, const QString &value, const bool &includeNull, const bool &exclude, QObject *parent):
 
     QObject(parent), m_filterId(filterId), m_section(section), m_category(category), m_subCategory(subcategory), m_tableName(tableName), m_columnName(columnName), m_relation(relation), m_value(value), m_includeNull(includeNull), m_exclude(exclude)
 {
@@ -23,7 +23,7 @@ QString FilterList::relation() const
     return m_relation;
 }
 
-QVariant FilterList::value() const
+QString FilterList::value() const
 {
     return m_value;
 }
@@ -85,7 +85,7 @@ void FilterList::setRelation(QString relation)
     emit relationChanged(m_relation);
 }
 
-void FilterList::setValue(QVariant value)
+void FilterList::setValue(QString value)
 {
     if (m_value == value)
         return;
