@@ -40,17 +40,7 @@ QHash<int, QByteArray> QueryModel::roleNames() const
 
 void QueryModel::callSql()
 {
-
-    switch(Statics::currentDbIntType){
-
-    case Constants::mysqlIntType:{
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
-        this->setQuery(this->tmpSql(), dbMysql);
-
-        break;
-    }
-
-    }
+    this->executeQuery(m_tmpSql);
 }
 
 QString QueryModel::tmpSql() const
@@ -74,6 +64,7 @@ void QueryModel::setTmpSql(QString tmpSql)
 
 void QueryModel::receiveFilterQuery(QString &filteredQuery)
 {
+    this->executeQuery(filteredQuery);
 }
 
 void QueryModel::generateRoleNames()
@@ -81,5 +72,20 @@ void QueryModel::generateRoleNames()
     m_roleNames.clear();
     for( int i = 0; i < record().count(); i ++) {
         m_roleNames.insert(Qt::UserRole + i + 1, record().fieldName(i).toUtf8());
+    }
+}
+
+void QueryModel::executeQuery(QString &query)
+{
+
+    switch(Statics::currentDbIntType){
+
+    case Constants::mysqlIntType:{
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
+        this->setQuery(query, dbMysql);
+
+        break;
+    }
+
     }
 }
