@@ -19,6 +19,8 @@ import "../../../MainSubComponents"
 
 Rectangle{
     property bool listOpened: false
+    property var numModels: []
+    property int counter: 0
 
     property string selectOption: "Select Wildcard"
 
@@ -33,21 +35,27 @@ Rectangle{
 
         ListElement{
             menuItem:"Containing"
+            compareValue: "containing"
         }
         ListElement{
             menuItem:"Ends With"
+            compareValue: "endswith"
         }
         ListElement{
             menuItem:"Equal To"
+            compareValue: "equalto"
         }
         ListElement{
             menuItem:"Doesn't Start with"
+            compareValue: "doesntstartwith"
         }
         ListElement{
             menuItem:"Doesn't End with"
+            compareValue: "doesntendwith"
         }
         ListElement{
             menuItem:"Not Equal to"
+            compareValue: "notequalto"
         }
     }
 
@@ -82,8 +90,27 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted: {
+        wildcardDropdown.currentText = "Containing"
+        wildcardDropdown.currentValue = "containing"
+
+        listviewWildCard.model = numModels
+    }
+
     function onExcludeCheckedClicked(checked){
         DSParamsModel.setExclude(checked)
+    }
+
+    function onAddWidcard(){
+        if(counter < selectDropdown.count){
+            counter++;
+            console.log(counter, numModels)
+            numModels.push(counter)
+            console.log(numModels)
+            listviewWildCard.model = numModels
+        }
+
+
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -140,6 +167,10 @@ Rectangle{
 
             CustomButton {
                 textValue: qsTr("Add Wildcard")
+
+                onClicked: {
+                    onAddWidcard();
+                }
             }
 
         }
@@ -166,17 +197,17 @@ Rectangle{
         }
     }
 
-    property int numModels: 2
+
 
     ListView{
-        model: numModels
+        id: listviewWildCard
         anchors.top: wildcardHead.bottom
         anchors.topMargin: 20
         anchors.left: parent.left
 
         anchors.leftMargin: 30
         width: parent.width
-        height: numModels * 40
+        height: listviewWildCard.count * 40
         spacing: 5
 
         delegate: Row{
@@ -187,14 +218,23 @@ Rectangle{
 
                 width: parent.width/2
 
-                SelectDropdown{
+                //                SelectDropdown{
+                //                    id: wildcardDropdown
+                //                    width: parent.width*2/3
+                //                    textValue:"Containing"
+                //                    list: selectDropdown
+                //                }
+
+                ComboBox{
                     id: wildcardDropdown
-                    width: parent.width*2/3
-                    textValue:"Containing"
-                    list: selectDropdown
+                    currentIndex: 0
+                    model: selectDropdown
+                    textRole: "menuItem"
+                    valueRole: "compareValue"
+                    onCurrentIndexChanged: {
+                        console.log(valueText.text, wildcardDropdown.currentValue, wildcardDropdown.currentText)
+                    }
                 }
-
-
             }
 
             Column{
@@ -205,15 +245,21 @@ Rectangle{
                 }
 
                 CustomTextBox{
+                    id: valueText
                     placeholderText: "Enter Text"
                     boxWidth: parent.width * 2 / 3
+                    boxHeight: 30
 
                     anchors{
                         right: parent.right
                         rightMargin: 50
                     }
 
-                    boxHeight: 30
+                    onTextChanged: {
+                        console.log(valueText.text, wildcardDropdown.currentValue, wildcardDropdown.currentText)
+                    }
+
+
                 }
             }
 

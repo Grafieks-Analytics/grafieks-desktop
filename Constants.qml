@@ -58,7 +58,7 @@ QtObject {
     // SQL Relations
     property string likeRelation: "LIKE"
     property string inRelation: "IN"
-    property string equalRelation: "EQUAL"
+    property string equalRelation: "="
 
 
     // FILTERS starts

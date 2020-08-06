@@ -13,6 +13,8 @@ FilterListModel::FilterListModel(QObject *parent) : QAbstractListModel(parent), 
     sqlComparisonOperators.append(">=");
     sqlComparisonOperators.append("!>");
     sqlComparisonOperators.append("!<");
+    sqlComparisonOperators.append("~");  // Case sensitive posix comparators
+    sqlComparisonOperators.append("~*"); // Case insensitive posix comparators
 }
 
 int FilterListModel::rowCount(const QModelIndex &parent) const
