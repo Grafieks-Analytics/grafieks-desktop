@@ -5,16 +5,43 @@ import QtQuick.Layouts 1.3
 Page {
 
     id : somepageid
+    property int modelList: 0
+    property int counter: 0
 
+    ListModel {
+        id: listModel
+    }
 
     ListView{
-        id: x
-        model: FilterListModel
+        model: listModel
+        anchors.top:  testButton.bottom
+        height: parent.height
+
         delegate: Row{
-            Text{
-                text: section + "-"+category+"-"+subCategory+"-"+tableName+"-"+columnName+"-"+relation+"-"+value+"-"+includeNull+"-"+exclude
-                // section + "" + subCategory
+            ComboBox{
+                textRole: "elem"
+                model:  ListModel{
+                    ListElement{
+                        elem: "A"
+                    }
+                    ListElement{
+                        elem: "B"
+                    }
+                    ListElement{
+                        elem: "C"
+                    }
+                }
+                onCurrentIndexChanged: listModel.setProperty(index ,"value", currentIndex)
             }
+        }
+    }
+
+
+    Button{
+        id: testButton
+        text: "Click to add Combobox"
+        onClicked: {
+            listModel.append({"value":0})
         }
     }
 }
