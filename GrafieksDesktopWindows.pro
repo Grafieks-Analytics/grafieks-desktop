@@ -68,6 +68,8 @@ QML_IMPORT_PATH =
 QML_DESIGNER_IMPORT_PATH =
 
 RC_ICONS = Images/logos/logo.ico
+ICON = Images/logos/GrafieksDesktopMac.icns
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
