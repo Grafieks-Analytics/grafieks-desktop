@@ -30,6 +30,11 @@ const QString numericalType = "numerical";
 const QString dateType = "date";
 const QString otherType = "other";
 
+// Main Category
+const QString categoryMainListType = "categorical.list";
+const QString categoryMainWildCardType = "categorical.wildcard";
+const QString categoryMainTopType = "categorical.top";
+
 // Layout level constants
 
 // Menu User

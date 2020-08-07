@@ -19,17 +19,24 @@ import "../../../MainSubComponents"
 
 Rectangle{
     property bool listOpened: false
-    property var numModels: []
     property int counter: 0
 
     property string selectOption: "Select Wildcard"
+    property var acceptedValues:["containing", "endswith", "equalto", "doesntstartwith", "doesntendwith", "notequalto"]
 
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
+    // List model for Listview
+    // Will be dynamically populated
+    // on button click
+    ListModel {
+        id: listviewWildCardModel
+    }
 
 
+    // Listmodel for combobox
     ListModel{
         id: selectDropdown
 
@@ -95,21 +102,85 @@ Rectangle{
         wildcardDropdown.currentValue = "containing"
 
         listviewWildCard.model = numModels
+
     }
 
     function onExcludeCheckedClicked(checked){
         DSParamsModel.setExclude(checked)
     }
 
-    function onAddWidcard(){
+    function onAddWildcard(){
         if(counter < selectDropdown.count){
             counter++;
-            console.log(counter, numModels)
-            numModels.push(counter)
-            console.log(numModels)
-            listviewWildCard.model = numModels
+
+            // Append a new ListElement on the ListView model
+            listviewWildCardModel.append({"value":0})
+        }
+    }
+
+    function onWildCardInput(textValue, selectCurrentValue, selectCurrentText, selectCurrentIndex, listIndex){
+
+        let newFilter = ""
+        let newRelation = ""
+        let existingValues = DSParamsModel.value.split(",")
+        let existingRelations = DSParamsModel.relation.split(",")
+
+        // Set maximum length of the array
+        existingValues.length = existingValues.length > selectDropdown.count ? selectDropdown.count : existingValues.length;
+        existingRelations.length = existingRelations.length > selectDropdown.count ? selectDropdown.count : existingRelations.length;
+
+        switch(selectCurrentValue){
+
+        case acceptedValues[0]:
+
+            newFilter = "%"+ textValue +"%"
+            newRelation = Constants.likeRelation
+
+            break
+
+        case acceptedValues[1]:
+
+            newFilter = "%"+ textValue
+            newRelation = Constants.likeRelation
+
+            break
+
+        case acceptedValues[2]:
+
+            newFilter = textValue
+            newRelation = Constants.equalRelation
+
+            break
+
+        case acceptedValues[3]:
+
+            newFilter = "%" + textValue
+            newRelation = Constants.notLikeRelation
+
+            break
+
+        case acceptedValues[4]:
+
+            newFilter =  textValue + "%"
+            newRelation = Constants.notLikeRelation
+
+            break
+
+        case acceptedValues[5]:
+
+            newFilter =  textValue
+            newRelation = Constants.notEqualRelation
+
+            break
+
+
         }
 
+        existingValues[listIndex] = newFilter
+        existingRelations[listIndex] = newRelation
+
+        DSParamsModel.setRelation(existingRelations.toString())
+        DSParamsModel.setValue(existingValues.toString())
 
     }
 
@@ -169,7 +240,7 @@ Rectangle{
                 textValue: qsTr("Add Wildcard")
 
                 onClicked: {
-                    onAddWidcard();
+                    onAddWildcard();
                 }
             }
 
@@ -201,6 +272,7 @@ Rectangle{
 
     ListView{
         id: listviewWildCard
+        model: listviewWildCardModel
         anchors.top: wildcardHead.bottom
         anchors.topMargin: 20
         anchors.left: parent.left
@@ -232,7 +304,8 @@ Rectangle{
                     textRole: "menuItem"
                     valueRole: "compareValue"
                     onCurrentIndexChanged: {
-                        console.log(valueText.text, wildcardDropdown.currentValue, wildcardDropdown.currentText)
+                        selectDropdown.setProperty(index ,"value", currentIndex)
+                        onWildCardInput(valueText.text, wildcardDropdown.currentValue, wildcardDropdown.currentText, wildcardDropdown.currentIndex, index)
                     }
                 }
             }
@@ -256,9 +329,8 @@ Rectangle{
                     }
 
                     onTextChanged: {
-                        console.log(valueText.text, wildcardDropdown.currentValue, wildcardDropdown.currentText)
+                        onWildCardInput(valueText.text, wildcardDropdown.currentValue, wildcardDropdown.currentText, wildcardDropdown.currentIndex, index)
                     }
-
 
                 }
             }

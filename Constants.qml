@@ -57,8 +57,10 @@ QtObject {
 
     // SQL Relations
     property string likeRelation: "LIKE"
+    property string notLikeRelation: "NOT LIKE"
     property string inRelation: "IN"
     property string equalRelation: "="
+    property string notEqualRelation: "!="
 
 
     // FILTERS starts
@@ -72,9 +74,9 @@ QtObject {
     property double borderWidth: 1.3
 
     // Main Category
-    property string categoryMainListType: "list"
-    property string categoryMainWildCardType: "wildcard"
-    property string categoryMainTopType: "top"
+    property string categoryMainListType: "categorical.list"
+    property string categoryMainWildCardType: "categorical.wildcard"
+    property string categoryMainTopType: "categorical.top"
 
     // Sub Categories
     property string categorySubMulti: "multiple"

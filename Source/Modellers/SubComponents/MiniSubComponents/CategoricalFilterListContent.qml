@@ -63,16 +63,6 @@ Rectangle{
     // JAVASCRIPT FUNCTION STARTS
 
 
-    Component.onCompleted: {
-
-        // For list category type
-        // The db WHERE relation can only be IN / NOT IN ARRAY type
-        // Except when "Select All" checked.
-        // Then Relation will be LIKE
-
-        DSParamsModel.setRelation(Constants.likeRelation)
-    }
-
 
     function onMultiSelectSelected(){
         singleSelectRadio.checked = false

@@ -288,9 +288,9 @@ Rectangle{
 
             ListView{
                 id: wildcardFiltersListView
-                model: wildcardModel
+                model: FilterListModel
                 width: parent.width
-                height: wildcardModel.count * 30
+                height: FilterListModel.count * 30
                 anchors.topMargin: 10
                 interactive: false
                 spacing: rowSpacing
@@ -335,7 +335,7 @@ Rectangle{
 
                         ReadOnlyTextBox{
                             boxWidth: parent.width
-                            text: columnValue
+                            text: value
                         }
                     }
 

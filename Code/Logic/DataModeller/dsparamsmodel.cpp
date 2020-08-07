@@ -18,6 +18,8 @@ void DSParamsModel::resetFilter()
     this->setCategory(defaultCategory);
     this->setSubCategory(defaultSubCategory);
     this->setMode(defaultMode);
+    this->setValue("");
+    this->setRelation("");
     this->setExclude(false);
     this->setIncludeNull(true);
     this->setSelectAll(true);

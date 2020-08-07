@@ -5,43 +5,46 @@ import QtQuick.Layouts 1.3
 Page {
 
     id : somepageid
-    property int modelList: 0
-    property int counter: 0
 
-    ListModel {
-        id: listModel
-    }
+    Column{
+        Button{
+            id: btn1
+            text: "btn a"
+            onClicked: {
+                filterList.searchByCategory("category a")
+            }
+        }
 
-    ListView{
-        model: listModel
-        anchors.top:  testButton.bottom
-        height: parent.height
-
-        delegate: Row{
-            ComboBox{
-                textRole: "elem"
-                model:  ListModel{
-                    ListElement{
-                        elem: "A"
-                    }
-                    ListElement{
-                        elem: "B"
-                    }
-                    ListElement{
-                        elem: "C"
-                    }
-                }
-                onCurrentIndexChanged: listModel.setProperty(index ,"value", currentIndex)
+        Button{
+            id: btn2
+            text: "btn b"
+            onClicked: {
+                filterList.searchByCategory("category b")
             }
         }
     }
 
-
-    Button{
-        id: testButton
-        text: "Click to add Combobox"
-        onClicked: {
-            listModel.append({"value":0})
+    ListView{
+        id: lv1
+        model: filterList
+        height: 100
+        delegate: Row{
+            Text{
+                text: name
+            }
         }
     }
+
+    ListView{
+        id: lv2
+        anchors.top: lv1.bottom
+        model: filterList
+        height: 100
+        delegate: Row{
+            Text{
+                text: name
+            }
+        }
+    }
+
 }
