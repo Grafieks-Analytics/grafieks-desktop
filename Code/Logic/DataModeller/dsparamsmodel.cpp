@@ -3,26 +3,26 @@
 DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent)
 {
 
-    m_section = defaultSection;
-    m_category = defaultCategory;
-    m_subCategory = defaultSubCategory;
-    m_mode = defaultMode;
-    m_exclude = false;
-    m_includeNull = true;
-    m_selectAll = true;
+    m_section = Constants::defaultTabSection;
+    m_category = Constants::defaultCategory;
+    m_subCategory = Constants::defaultSubCategory;
+    m_mode = Constants::defaultMode;
+    m_exclude = Constants::defaultExclude;
+    m_includeNull = Constants::defaultIncludeNull;
+    m_selectAll = Constants::defaultSelectAll;
 }
 
 void DSParamsModel::resetFilter()
 {
-    this->setSection(defaultSection);
-    this->setCategory(defaultCategory);
-    this->setSubCategory(defaultSubCategory);
-    this->setMode(defaultMode);
-    this->setValue("");
-    this->setRelation("");
-    this->setExclude(false);
-    this->setIncludeNull(true);
-    this->setSelectAll(true);
+    this->setSection(Constants::defaultTabSection);
+    this->setCategory(Constants::defaultCategory);
+    this->setSubCategory(Constants::defaultSubCategory);
+    this->setMode(Constants::defaultMode);
+    this->setValue(Constants::defaultValue);
+    this->setRelation(Constants::defaultRelation);
+    this->setExclude(Constants::defaultExclude);
+    this->setIncludeNull(Constants::defaultIncludeNull);
+    this->setSelectAll( Constants::defaultSelectAll);
 }
 
 QString DSParamsModel::dsName() const

@@ -1,8 +1,15 @@
 #include "filterlistmodel.h"
 
 
-FilterListModel::FilterListModel(QObject *parent) : QAbstractListModel(parent), counter(0), rowCountSize(0)
+FilterListModel::FilterListModel(QObject *parent) : QAbstractListModel(parent), counter(0)
 {
+
+
+//    explicit FilterList(const int & filterId, const QString & section, const QString & category, const QString & subcategory, const QString & tableName, const QString & columnName, const QString & relation, const QString & value, const bool & includeNull, const bool & exclude, QObject *parent = nullptr);
+
+//    qDebug() << "CALLED model constructor";
+//    addFilterList(new FilterList(0,"categorical", "categoricalList", "multiple", "users", "username", "IN", "%", true, false, this));
+//    addFilterList(new FilterList(1,"categorical", "categoricalList", "multiple", "email", "username", "IN", "%", true, false, this));
 
     sqlComparisonOperators.append("=");
     sqlComparisonOperators.append("!=");
@@ -15,6 +22,12 @@ FilterListModel::FilterListModel(QObject *parent) : QAbstractListModel(parent), 
     sqlComparisonOperators.append("!<");
     sqlComparisonOperators.append("~");  // Case sensitive posix comparators
     sqlComparisonOperators.append("~*"); // Case insensitive posix comparators
+}
+
+void FilterListModel::callNewFilter()
+{
+//    qDebug() << "CALLED new filter";
+//    addFilterList(new FilterList(1,"categorical", "categoricalList", "multiple", "reset_hash", "username", "IN", "%", true, false, this));
 }
 
 int FilterListModel::rowCount(const QModelIndex &parent) const
@@ -187,11 +200,14 @@ QHash<int, QByteArray> FilterListModel::roleNames() const
     return roles;
 }
 
+
+
 void FilterListModel::newFilter(QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString val, bool includeNull, bool exclude )
 {
 
-    FilterList *filterList = new FilterList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this);
-    addFilterList(filterList);
+//    FilterList *filterList = new FilterList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this);
+//    qDebug << counter << section<< category<< subcategory < tableName, colName, relation, val, includeNull, exclude, this;
+    addFilterList(new FilterList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this));
 
     counter++;
 

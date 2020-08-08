@@ -10,11 +10,12 @@
 class FilterListCategoryListFilter : public QSortFilterProxyModel
 {
     Q_OBJECT
-    FilterListModel m_filterListModel;
-
 public:
     explicit FilterListCategoryListFilter(QObject *parent = nullptr);
+     Q_INVOKABLE void setSearchString(QString string);
 
+private:
+    FilterListModel m_filterListModel;
 };
 
 #endif // FILTERLISTCATEGORYLISTFILTER_H

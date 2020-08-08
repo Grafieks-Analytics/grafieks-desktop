@@ -80,7 +80,7 @@ Popup {
         var includeNull = DSParamsModel.includeNull
         var exclude = DSParamsModel.exclude
 
-
+        console.log(section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
 
         // Save the filter
         if(DSParamsModel.mode === Constants.modeCreate){
@@ -92,6 +92,7 @@ Popup {
 
         // Reset all DSParams
         DSParamsModel.resetFilter();
+        FilterListCategoryListFilter.setSearchString(category)
 
 
     }

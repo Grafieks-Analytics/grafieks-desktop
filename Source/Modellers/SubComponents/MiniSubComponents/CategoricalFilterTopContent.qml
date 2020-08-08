@@ -21,6 +21,7 @@ Rectangle{
     property bool listOpened: false
 
     property string selectOption: "Select top"
+    property string calculatedFieldType : "number"
 
     id: topHead
 
@@ -50,15 +51,103 @@ Rectangle{
     }
 
     ListModel{
-        id: bySelectModel
+        id: fieldsModel
         ListElement{
-            menuItem:"Order unit"
+            fieldName:"Order unit"
+            fieldType: "number"
         }
         ListElement{
-            menuItem:"Profit"
+            fieldName:"Profit"
+            fieldType: "string"
         }
         ListElement{
-            menuItem:"Sales value"
+            fieldName:"Sales value"
+            fieldType: "number"
+        }
+    }
+
+    ListModel{
+        id: calculations
+
+        ListElement{
+            calculationName:"Count"
+            calculationType: "string"
+            calculationCompareValue : "count"
+        }
+        ListElement{
+            calculationName:"Count (Distinct)"
+            calculationType: "string"
+            calculationCompareValue : "countdistinct"
+        }
+        ListElement{
+            calculationName:"Minimum"
+            calculationType: "string"
+            calculationCompareValue : "minimum"
+        }
+        ListElement{
+            calculationName:"Maximum"
+            calculationType: "string"
+            calculationCompareValue : "maximum"
+        }
+        ListElement{
+            calculationName:"Sum"
+            calculationType: "number"
+            calculationCompareValue : "sum"
+        }
+        ListElement{
+            calculationName:"Average"
+            calculationType: "number"
+            calculationCompareValue : "average"
+        }
+        ListElement{
+            calculationName:"Median"
+            calculationType: "number"
+            calculationCompareValue : "median"
+        }
+        ListElement{
+            calculationName:"Count"
+            calculationType: "number"
+            calculationCompareValue : "count"
+        }
+        ListElement{
+            calculationName:"Count (Distinct)"
+            calculationType: "number"
+            calculationCompareValue : "countdistinct"
+        }
+        ListElement{
+            calculationName:"Minimum"
+            calculationType: "number"
+            calculationCompareValue : "minimum"
+        }
+        ListElement{
+            calculationName:"Maximum"
+            calculationType: "number"
+            calculationCompareValue : "maximum"
+        }
+        ListElement{
+            calculationName:"Percentile"
+            calculationType: "number"
+            calculationCompareValue : "percentile"
+        }
+        ListElement{
+            calculationName:"Std. Dev"
+            calculationType: "number"
+            calculationCompareValue : "stddev"
+        }
+        ListElement{
+            calculationName:"Std. Dev (Pop.)"
+            calculationType: "number"
+            calculationCompareValue : "stddevpop"
+        }
+        ListElement{
+            calculationName:"Variance"
+            calculationType: "number"
+            calculationCompareValue : "variance"
+        }
+        ListElement{
+            calculationName:"Variance (Pop.)"
+            calculationType: "number"
+            calculationCompareValue : "variancepop"
         }
     }
 
@@ -126,10 +215,21 @@ Rectangle{
 
         color:"transparent"
 
-        SelectDropdown{
-            id: selectOption
-            textValue:"Top"
-            list: listModel
+        //        SelectDropdown{
+        //            id: selectOption
+        //            textValue:"Top"
+        //            list: listModel
+        //        }
+
+        ComboBox{
+            id: topType
+            model: listModel
+            textRole: "menuItem"
+            onCurrentIndexChanged: {
+                //                selectDropdown.setProperty(index ,"value", currentIndex)
+                console.log("TOP-BOTTOM", topType.currentValue, topType.currentIndex, topType.currentText )
+                //                DSParamsModel.setSubCategory()
+            }
         }
 
     }
@@ -161,8 +261,7 @@ Rectangle{
                 rightPadding: 20
 
                 CustomTextBox {
-                    placeholderText: "Enter Text"
-//                    anchors.centerIn: parent
+                    placeholderText: "Enter Value"
                     boxWidth: parent.width
                     boxHeight:  30
                 }
@@ -176,8 +275,8 @@ Rectangle{
 
     Rectangle{
         id: topByTextField
-        anchors.top: topOptionRow.top
-        anchors.right: parent.right
+        anchors.top: topOptionRow.bottom
+        anchors.left: topOptionRow.left
         anchors.topMargin: 50
 
         width: parent.width / 3
@@ -204,11 +303,31 @@ Rectangle{
                     y:8
                 }
 
-                SelectDropdown{
-                    id: bySelectDropdown
-                    textValue:""
-                    list: bySelectModel
+                //                SelectDropdown{
+                //                    id: bySelectDropdown
+                //                    textValue:""
+                //                    list: bySelectModel
+                //                }
+
+                ComboBox{
+                    id: fields
+                    model: fieldsModel
+                    textRole: "fieldName"
+                    valueRole: "fieldType"
+                    onCurrentIndexChanged: {
+                        console.log("FIELDS", fields.currentValue, fields.currentIndex, fields.currentText)
+
+                        if(fields.currentValue === "number"){
+                            calculatedFieldType = "number"
+                        } else{
+                            calculatedFieldType = "string"
+                        }
+
+                        console.log(calculatedFieldType)
+                    }
                 }
+
+
 
             }
 
@@ -218,6 +337,30 @@ Rectangle{
 
 
     //    By Select Box Ends
+
+
+    //    By Calculated Field Starts
+    ComboBox{
+        id: calculatedFields
+        anchors.left: topOption2Row.left
+        anchors.verticalCenter: topByTextField.verticalCenter
+        model: calculations
+        textRole: "calculationName"
+        valueRole: "calculationCompareValue"
+        onCurrentIndexChanged: {
+            console.log("CALCULATIONS", currentValue, currentIndex, currentText, topType.currentText)
+
+        }
+        delegate: ItemDelegate {
+            width: calculatedFields.width
+            text: calculationName
+            font.weight: calculatedFields.currentIndex === index ? Font.DemiBold : Font.Normal
+            highlighted: ListView.isCurrentItem
+            height: calculatedFieldType === calculationType ? calculatedFields.height : 0
+        }
+    }
+
+    //    By Calculated Field Ends
 
 
     // Page Design Ends

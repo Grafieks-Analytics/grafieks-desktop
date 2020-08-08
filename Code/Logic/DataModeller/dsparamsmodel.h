@@ -5,6 +5,8 @@
 #include <QDebug>
 #include <QObject>
 
+#include "../../constants.h"
+
 class DSParamsModel : public QObject
 {
     Q_OBJECT
@@ -76,11 +78,6 @@ public:
     bool selectAll() const;
     int filterIndex() const;
     QString mode() const;
-
-    QString defaultSection = "categorical";
-    QString defaultCategory = "list";
-    QString defaultSubCategory = "multiple";
-    QString defaultMode = "create";
 
 
 

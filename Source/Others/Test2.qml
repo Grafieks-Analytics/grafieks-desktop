@@ -6,45 +6,32 @@ Page {
 
     id : somepageid
 
-    Column{
-        Button{
-            id: btn1
-            text: "btn a"
-            onClicked: {
-                filterList.searchByCategory("category a")
-            }
-        }
+    visible: true
+        width: 640
+        height: 200
+        title: qsTr("Let's disable some items in ComboBox")
 
-        Button{
-            id: btn2
-            text: "btn b"
-            onClicked: {
-                filterList.searchByCategory("category b")
-            }
-        }
-    }
+        ComboBox {
+            id: control
+            currentIndex: 0
+            anchors.centerIn: parent
 
-    ListView{
-        id: lv1
-        model: filterList
-        height: 100
-        delegate: Row{
-            Text{
-                text: name
-            }
-        }
-    }
+            model: [
+                { text: "Enabled item.", enabled: true },
+                { text: "Supposed to be disabled. Can't click on it.", enabled: false},
+                { text: "Last, but enabled item.", enabled: true}
+            ]
+            width: 500
+            textRole: "text"
 
-    ListView{
-        id: lv2
-        anchors.top: lv1.bottom
-        model: filterList
-        height: 100
-        delegate: Row{
-            Text{
-                text: name
+            delegate: ItemDelegate {
+                width: control.width
+                text: modelData.text
+                font.weight: control.currentIndex === index ? Font.DemiBold : Font.Normal
+                highlighted: ListView.isCurrentItem
+                enabled: modelData.enabled
+                visible: modelData.enabled
             }
         }
-    }
 
 }

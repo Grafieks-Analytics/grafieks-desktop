@@ -117,6 +117,10 @@ Page {
         ConnectorFilter.setSearchString(text)
     }
 
+    function onSearchDataConnector(text){
+        ConnectorFilter.setSearchString(text)
+    }
+
 
     // JAVASCRIPT FUNCTIONS ENDS
     /***********************************************************************************************************************/
