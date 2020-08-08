@@ -14,6 +14,90 @@ Column{
     anchors.topMargin: 30
 
 
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+    function onLastXChecked(){
+        nextXRadioTextField.focus = false
+        lastXRadioTextField.focus = true
+    }
+    function onNextXChecked(){
+        nextXRadioTextField.focus = true
+        lastXRadioTextField.focus = false
+    }
+
+    function onThisChecked(){
+        nextXRadioTextField.focus = false
+        lastXRadioTextField.focus = false
+    }
+
+    function onLastChecked(){
+        nextXRadioTextField.focus = false
+        lastXRadioTextField.focus = false
+    }
+
+    function onNextChecked(){
+        nextXRadioTextField.focus = false
+        lastXRadioTextField.focus = false
+    }
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+    ButtonGroup{
+        id: timeFrameRadio
+    }
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
+
+
     Rectangle{
         id:thisTimeFrameRow
         height: 30
@@ -27,21 +111,9 @@ Column{
             radio_text: qsTr("This Year")
             radio_checked: false
             parent_dimension: 16
-
-            MouseArea{
-                anchors.fill:parent
-
-                onClicked: {
-                    thisRadio.radio_checked = true
-                    lastRadio.radio_checked = false
-                    nextRadio.radio_checked = false
-                    nextXRadio.radio_checked = false
-                    lastXRadio.radio_checked = false
-
-                    nextXRadioTextField.focus = false
-                    lastXRadioTextField.focus = false
-
-                }
+            ButtonGroup.group: timeFrameRadio
+            onCheckedChanged: {
+                onThisChecked()
             }
         }
 
@@ -61,22 +133,11 @@ Column{
         RadioButtonTpl{
             id:lastRadio
             radio_text: qsTr("Last Year")
-            radio_checked: false
+            checked: false
             parent_dimension: 16
-
-            MouseArea{
-                anchors.fill:parent
-
-                onClicked: {
-                    thisRadio.radio_checked = false
-                    lastRadio.radio_checked = true
-                    nextRadio.radio_checked = false
-                    nextXRadio.radio_checked = false
-                    lastXRadio.radio_checked = false
-
-                    nextXRadioTextField.focus = false
-                    lastXRadioTextField.focus = false
-                }
+            ButtonGroup.group: timeFrameRadio
+            onCheckedChanged: {
+                onLastChecked()
             }
         }
 
@@ -98,20 +159,9 @@ Column{
             radio_text: qsTr("Next Year")
             radio_checked: false
             parent_dimension: 16
-
-            MouseArea{
-                anchors.fill:parent
-
-                onClicked: {
-                    thisRadio.radio_checked = false
-                    lastRadio.radio_checked = false
-                    nextRadio.radio_checked = true
-                    nextXRadio.radio_checked = false
-                    lastXRadio.radio_checked = false
-
-                    nextXRadioTextField.focus = false
-                    lastXRadioTextField.focus = false
-                }
+            ButtonGroup.group: timeFrameRadio
+            onCheckedChanged: {
+                onNextChecked()
             }
         }
 
@@ -132,25 +182,14 @@ Column{
         RadioButtonTpl{
             id:lastXRadio
             radio_text: qsTr("Last")
-            radio_checked: false
+            checked: false
             parent_dimension: 16
             width: 200
-
-            MouseArea{
-                anchors.fill:parent
-
-                onClicked: {
-                    thisRadio.radio_checked = false
-                    lastRadio.radio_checked = false
-                    nextRadio.radio_checked = false
-                    nextXRadio.radio_checked = false
-                    lastXRadio.radio_checked = true
-
-
-                    nextXRadioTextField.focus = false
-                    lastXRadioTextField.focus = true
-                }
+            ButtonGroup.group: timeFrameRadio
+            onCheckedChanged: {
+                onLastXChecked()
             }
+
         }
 
         TextField{
@@ -180,21 +219,9 @@ Column{
             radio_checked: false
             parent_dimension: 16
             width: 200
-
-            MouseArea{
-                anchors.fill:parent
-
-                onClicked: {
-                    thisRadio.radio_checked = false
-                    lastRadio.radio_checked = false
-                    nextRadio.radio_checked = false
-                    nextXRadio.radio_checked = true
-                    lastXRadio.radio_checked = false
-
-
-                    nextXRadioTextField.focus = true
-                    lastXRadioTextField.focus = false
-                }
+            ButtonGroup.group: timeFrameRadio
+            onCheckedChanged: {
+                onNextXChecked()
             }
         }
 
@@ -208,4 +235,10 @@ Column{
         }
 
     }
+
+
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
+
 }

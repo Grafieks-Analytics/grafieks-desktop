@@ -261,7 +261,7 @@ Rectangle{
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
-                            closeToDateCalendar();
+                            showToDateCalendar();
                         }
                     }
                 }

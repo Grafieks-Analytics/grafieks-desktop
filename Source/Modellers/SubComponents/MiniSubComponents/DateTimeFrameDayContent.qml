@@ -47,20 +47,29 @@ Column{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    function toggleRadios(thisRadioChecked,lastRadioChecked,nextRadioChecked,nextXRadioChecked,lastXRadioChecked,nextXRadioTextFieldFocus,lastXRadioTextFieldFocus){
-
-        thisRadio.radio_checked = thisRadioChecked
-        lastRadio.radio_checked = lastRadioChecked
-        nextRadio.radio_checked = nextRadioChecked
-        nextXRadio.radio_checked = nextXRadioChecked
-        lastXRadio.radio_checked = lastXRadioChecked
-
-
-        nextXRadioTextField.focus = nextXRadioTextFieldFocus
-        lastXRadioTextField.focus = lastXRadioTextFieldFocus
-
+    function onLastXChecked(){
+        nextXRadioTextField.focus = false
+        lastXRadioTextField.focus = true
+    }
+    function onNextXChecked(){
+        nextXRadioTextField.focus = true
+        lastXRadioTextField.focus = false
     }
 
+    function onThisChecked(){
+        nextXRadioTextField.focus = false
+        lastXRadioTextField.focus = false
+    }
+
+    function onLastChecked(){
+        nextXRadioTextField.focus = false
+        lastXRadioTextField.focus = false
+    }
+
+    function onNextChecked(){
+        nextXRadioTextField.focus = false
+        lastXRadioTextField.focus = false
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -71,6 +80,9 @@ Column{
     /***********************************************************************************************************************/
     // SubComponents Starts
 
+    ButtonGroup{
+        id: timeFrameRadio
+    }
 
 
     // SubComponents Ends
@@ -82,7 +94,6 @@ Column{
 
     /***********************************************************************************************************************/
     // Page Design Starts
-
 
 
     Rectangle{
@@ -98,14 +109,9 @@ Column{
             text: qsTr("This Day")
             checked: false
             parent_dimension: 16
-
-            MouseArea{
-                anchors.fill:parent
-
-                onClicked: {
-                    toggleRadios(true,false,false,false,false,false,false)
-
-                }
+            ButtonGroup.group: timeFrameRadio
+            onCheckedChanged: {
+                onThisChecked()
             }
         }
 
@@ -127,13 +133,9 @@ Column{
             radio_text: qsTr("Last Day")
             radio_checked: false
             parent_dimension: 16
-
-            MouseArea{
-                anchors.fill:parent
-
-                onClicked: {
-                    toggleRadios(false,true,false,false,false,false,false)
-                }
+            ButtonGroup.group: timeFrameRadio
+            onCheckedChanged: {
+                onLastChecked()
             }
         }
 
@@ -155,13 +157,9 @@ Column{
             radio_text: qsTr("Next Day")
             radio_checked: false
             parent_dimension: 16
-
-            MouseArea{
-                anchors.fill:parent
-
-                onClicked: {
-                    toggleRadios(false,false,true,false,false,false,false)
-                }
+            ButtonGroup.group: timeFrameRadio
+            onCheckedChanged: {
+                onNextChecked()
             }
         }
 
@@ -185,13 +183,9 @@ Column{
             radio_checked: false
             parent_dimension: 16
             width: 200
-
-            MouseArea{
-                anchors.fill:parent
-
-                onClicked: {
-                    toggleRadios(false,false,false,false,true,true,false)
-                }
+            ButtonGroup.group: timeFrameRadio
+            onCheckedChanged: {
+                onLastXChecked()
             }
         }
 
@@ -222,15 +216,9 @@ Column{
             radio_checked: false
             parent_dimension: 16
             width: 200
-
-            MouseArea{
-                anchors.fill:parent
-
-                onClicked: {
-
-                    toggleRadios(false,false,false,true,false,true,false)
-
-                }
+            ButtonGroup.group: timeFrameRadio
+            onCheckedChanged: {
+                onNextXChecked()
             }
         }
 
