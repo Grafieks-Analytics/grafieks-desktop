@@ -104,10 +104,6 @@ Popup {
 
     function onListClicked(){
 
-        listRadio.radio_checked = true
-        wildcardRadio.radio_checked = false
-        topRadio.radio_checked = false
-
         listContent.visible = true
         wildcardContent.visible = false
         topContent.visible = false
@@ -126,10 +122,6 @@ Popup {
 
 
     function onWildcardClicked(){
-        listRadio.radio_checked = false
-        wildcardRadio.radio_checked = true
-        topRadio.radio_checked = false
-
 
         listContent.visible = false
         wildcardContent.visible = true
@@ -142,11 +134,6 @@ Popup {
 
 
     function onTopClicked(){
-
-        listRadio.radio_checked = false
-        wildcardRadio.radio_checked = false
-        topRadio.radio_checked = true
-
 
         listContent.visible = false
         wildcardContent.visible = false
@@ -167,6 +154,10 @@ Popup {
     /***********************************************************************************************************************/
     // SubComponents Starts
 
+
+    ButtonGroup{
+        id: filterType
+    }
 
 
     // SubComponents Ends
@@ -224,7 +215,6 @@ Popup {
 
     // Popup Header ends
 
-
     //    Menu Starts
 
     Rectangle{
@@ -249,14 +239,11 @@ Popup {
             RadioButtonTpl{
                 id: listRadio
                 text: qsTr("List")
+                ButtonGroup.group: filterType
                 checked: true
                 parent_dimension: 16
-
-                MouseArea{
-                    anchors.fill:parent
-                    onClicked: {
-                        onListClicked()
-                    }
+                onCheckedChanged: {
+                    onListClicked()
                 }
             }
 
@@ -275,12 +262,9 @@ Popup {
                 text: qsTr("Wildcard")
                 checked: false
                 parent_dimension: 16
-
-                MouseArea{
-                    anchors.fill:parent
-                    onClicked: {
-                        onWildcardClicked()
-                    }
+                ButtonGroup.group: filterType
+                onCheckedChanged: {
+                    onWildcardClicked()
                 }
 
             }
@@ -297,12 +281,9 @@ Popup {
                 text: qsTr("Top")
                 checked: false
                 parent_dimension: 16
-
-                MouseArea{
-                    anchors.fill:parent
-                    onClicked: {
-                        onTopClicked()
-                    }
+                ButtonGroup.group: filterType
+                onCheckedChanged: {
+                    onTopClicked()
                 }
             }
         }

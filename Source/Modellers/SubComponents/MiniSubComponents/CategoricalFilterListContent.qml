@@ -65,8 +65,6 @@ Rectangle{
 
 
     function onMultiSelectSelected(){
-        singleSelectRadio.checked = false
-        multiSelectRadio.checked = true
         multiSelectCheckList.visible = true
         singleSelectCheckList.visible = false
 
@@ -77,8 +75,6 @@ Rectangle{
 
     function onSingleSelectSelected(){
 
-        singleSelectRadio.checked = true
-        multiSelectRadio.checked = false
         multiSelectCheckList.visible = false
         singleSelectCheckList.visible = true
 
@@ -203,13 +199,8 @@ Rectangle{
                 ButtonGroup.group: selectTypeRadioBtnGrp
                 checked: true
                 parent_dimension: 16
-
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-
-                        onMultiSelectSelected()
-                    }
+                onCheckedChanged:{
+                    onMultiSelectSelected()
                 }
             }
 
@@ -227,14 +218,9 @@ Rectangle{
                 text: qsTr("Single Select")
                 ButtonGroup.group: selectTypeRadioBtnGrp
                 parent_dimension: 16
-
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-                        onSingleSelectSelected()
-                    }
+                onCheckedChanged: {
+                    onSingleSelectSelected()
                 }
-
             }
         }
     }
