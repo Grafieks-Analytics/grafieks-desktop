@@ -24,7 +24,82 @@ Page {
     width: parent.width
     height: parent.height
 
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
     signal updateDSName(string signalDSName);
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
+    function onRemoveClicked(id,index){
+        // Delete Datasource
+        DatasourceDS.deleteDatasource(id, index)
+    }
+    function onEditClicked(){
+        if(typeof settings.value("user/sessionToken") != "undefined"){
+            connectGrafieks1.visible = true
+        } else{
+
+        }
+    }
+
+    function openMenu(){
+        optionsMenu.open()
+    }
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
+
+
 
     GridView {
         width: datasources_grid.width
@@ -94,7 +169,9 @@ Page {
                         height:width
 
                     }
-                    onClicked: optionsMenu.open()
+                    onClicked: {
+                        openMenu()
+                    }
 
                     Menu {
                         id: optionsMenu
@@ -104,20 +181,17 @@ Page {
                         MenuItem {
                             text: "Edit Connection"
                             onTriggered: {
-                                if(typeof settings.value("user/sessionToken") != "undefined"){
-                                    connectGrafieks1.visible = true
-                                } else{
-
-                                }
+                                onEditClicked()
                             }
                         }
                         MenuItem {
                             text: "Remove"
                             onTriggered: {
 
-                                // Delete Datasource
-                                DatasourceDS.deleteDatasource(id, index)
+                                onRemoveClicked(id,index)
+
                             }
+
                         }
                     }
                 }
@@ -139,6 +213,7 @@ Page {
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
+
                     }
                 }
 
@@ -163,7 +238,7 @@ Page {
                     width:data_source_main.width - 10
                     text: descriptions
                     wrapMode: Text.WordWrap
-                    font.pointSize: Constants.fontReading
+                    font.pixelSize: Constants.fontCategoryHeader
                 }
             }
 
@@ -184,13 +259,12 @@ Page {
                     Text{
                         id: owner_name_id
                         text: firstname + " "+ lastname
-                        font.pointSize: Constants.fontReading
+                        font.pixelSize: Constants.fontCategoryHeader
                     }
 
                 }
 
                 Column{
-
 
                     Text{
                         text: "Live / In Memory"
@@ -199,7 +273,7 @@ Page {
                     Text{
                         id: mode_id
                         text: connectionType
-                        font.pointSize: Constants.fontReading
+                        font.pixelSize: Constants.fontCategoryHeader
                     }
 
                 }
@@ -209,6 +283,9 @@ Page {
     }
 
 
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
 
 
 }
