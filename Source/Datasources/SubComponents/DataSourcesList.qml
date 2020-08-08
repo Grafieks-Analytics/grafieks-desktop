@@ -20,7 +20,106 @@ Page {
     property var headersModel : ["Data Source Name", "Published By", "Live/Extract", "Published On", "Last Refreshed", "Edit"]
     property int headerSize : headersModel.length
 
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
     signal updateDSName(string signalDSName);
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+    function onDataSourceNameClicked(){
+        listView.currentIndex = index
+        updateDSName(datasourceName)
+    }
+
+    function onDataSourceOwnerClicked(){
+        listView.currentIndex = index
+        updateDSName(datasourceName)
+    }
+
+    function onConnectionClicked(datasourceName){
+        listView.currentIndex = index;
+        updateDSName(datasourceName)
+    }
+
+    function onDateCreatedClicked(datasourceName){
+        listView.currentIndex = index;
+        updateDSName(datasourceName)
+    }
+
+    function onLastRefreshedClicked(){
+        listView.currentIndex = index;
+        updateDSName(datasourceName)
+
+    }
+
+
+    function onRemoveClicked(id,index){
+        // Remove datasource
+        DatasourceDS.deleteDatasource(id, index)
+    }
+
+    function onEditClicked(){
+
+        if(typeof settings.value("user/sessionToken") != "undefined"){
+            connectGrafieks1.visible = true
+        } else{
+
+        }
+    }
+
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
 
     ListView {
         id: listView
@@ -90,8 +189,9 @@ Page {
                         MouseArea{
                             anchors.fill: parent
                             onClicked: {
-                                listView.currentIndex = index
-                                updateDSName(datasourceName)
+
+                                onDataSourceNameClicked(datasourceName)
+
                             }
                         }
                     }
@@ -117,8 +217,7 @@ Page {
                         MouseArea{
                             anchors.fill: parent
                             onClicked: {
-                                listView.currentIndex = index
-                                updateDSName(datasourceName)
+                                onDataSourceOwnerClicked(datasourceName)
                             }
                         }
                     }
@@ -144,8 +243,9 @@ Page {
                         MouseArea{
                             anchors.fill: parent
                             onClicked: {
-                                listView.currentIndex = index
-                                updateDSName(datasourceName)
+
+                                onConnectionClicked(datasourceName)
+
                             }
                         }
                     }
@@ -172,8 +272,7 @@ Page {
                         MouseArea{
                             anchors.fill: parent
                             onClicked: {
-                                listView.currentIndex = index
-                                updateDSName(datasourceName)
+                                onDateCreatedClicked(datasourceName)
                             }
                         }
                     }
@@ -199,8 +298,7 @@ Page {
                         MouseArea{
                             anchors.fill: parent
                             onClicked: {
-                                listView.currentIndex = index
-                                updateDSName(datasourceName)
+                                onLastRefreshedClicked()
                             }
                         }
                     }
@@ -226,12 +324,7 @@ Page {
                             width: implicitWidth
 
                             onClicked: {
-
-                                if(typeof settings.value("user/sessionToken") != "undefined"){
-                                    connectGrafieks1.visible = true
-                                } else{
-
-                                }
+                                onEditClicked()
                             }
                         }
 
@@ -242,8 +335,7 @@ Page {
                             width: implicitWidth
 
                             onClicked: {
-                                // Remove datasource
-                                DatasourceDS.deleteDatasource(id, index)
+                                onRemoveClicked(id,index)
                             }
                         }
                     }
@@ -262,6 +354,9 @@ Page {
     }
 
 
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
 
 
 }
