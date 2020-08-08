@@ -35,7 +35,9 @@ SOURCES += \
     Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
     Code/Logic/DataModeller/filterlist.cpp \
-    Code/Logic/DataModeller/filterlistfilter.cpp \
+    Code/Logic/DataModeller/filterlistcategorylistfilter.cpp \
+    Code/Logic/DataModeller/filterlistcategorytopfilter.cpp \
+    Code/Logic/DataModeller/filterlistcategorywildcardfilter.cpp \
     Code/Logic/DataModeller/filterlistmodel.cpp \
     Code/Logic/DataModeller/publishdatasourcemodel.cpp \
     Code/Logic/DataModeller/querymodel.cpp \
@@ -68,6 +70,8 @@ QML_IMPORT_PATH =
 QML_DESIGNER_IMPORT_PATH =
 
 RC_ICONS = Images/logos/logo.ico
+ICON = Images/logos/GrafieksDesktopMac.icns
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -98,7 +102,9 @@ HEADERS += \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
     Code/Logic/DataModeller/filterlist.h \
-    Code/Logic/DataModeller/filterlistfilter.h \
+    Code/Logic/DataModeller/filterlistcategorylistfilter.h \
+    Code/Logic/DataModeller/filterlistcategorytopfilter.h \
+    Code/Logic/DataModeller/filterlistcategorywildcardfilter.h \
     Code/Logic/DataModeller/filterlistmodel.h \
     Code/Logic/DataModeller/publishdatasourcemodel.h \
     Code/Logic/DataModeller/querymodel.h \
@@ -122,129 +128,6 @@ HEADERS += \
     Code/statics.h
 
 DISTFILES += \
-    .gitignore \
-    Assets/css/custom.css \
-    Assets/js/custom.js \
-    Assets/vendors/MARKDOWN-LICENSE.txt \
-    Assets/vendors/MARKED-LICENSE.txt \
-    Assets/vendors/markdown.css \
-    Assets/vendors/marked.js \
-    Assets/vendors/qt_attribution.json \
-    Assets/vendors/vega-embed.js \
-    Assets/vendors/vega5.min.js \
-    Constants.qml \
-    Documentation/ConfigurationMac.md \
-    Documentation/Layouts.md \
-    Images/icons/16_csv.png \
-    Images/icons/16_google-sheets_1b1915a4b0.png \
-    Images/icons/20_snowflake-icon_a4ed1ae266.png \
-    Images/icons/74_sqlite-icon_a6ac860586.png \
-    Images/icons/Charts.png \
-    Images/icons/Db - 60.png \
-    Images/icons/Db.png \
-    Images/icons/Down.png \
-    Images/icons/Down_20.png \
-    Images/icons/Edit.png \
-    Images/icons/Edit_20.png \
-    Images/icons/Enlarge.png \
-    Images/icons/GRS.png \
-    Images/icons/Grid.png \
-    Images/icons/List.png \
-    Images/icons/Plus.png \
-    Images/icons/Plus_32.png \
-    Images/icons/Refresh.png \
-    Images/icons/Refresh_30.png \
-    Images/icons/Search.png \
-    Images/icons/Server.png \
-    Images/icons/Up.png \
-    Images/icons/Up_20.png \
-    Images/icons/align-2.png \
-    Images/icons/align.png \
-    Images/icons/aws-redshift-logo.png \
-    Images/icons/box.png \
-    Images/icons/charts/Area.png \
-    Images/icons/charts/Area_30.png \
-    Images/icons/charts/Bar.png \
-    Images/icons/charts/Bar_30.png \
-    Images/icons/charts/CandleStick.png \
-    Images/icons/charts/CandleStick_30.png \
-    Images/icons/charts/Chord.png \
-    Images/icons/charts/Chord_30.png \
-    Images/icons/charts/Doughnut_30.png \
-    Images/icons/charts/ForceDirected_30.png \
-    Images/icons/charts/Funnel.png \
-    Images/icons/charts/Funnel_30.png \
-    Images/icons/charts/Gauge.png \
-    Images/icons/charts/Gauge_30.png \
-    Images/icons/charts/HeatMap.png \
-    Images/icons/charts/HeatMap_30.png \
-    Images/icons/charts/Line.png \
-    Images/icons/charts/Line_30.png \
-    Images/icons/charts/Map.png \
-    Images/icons/charts/Map2.png \
-    Images/icons/charts/Map2_30.png \
-    Images/icons/charts/Map_30.png \
-    Images/icons/charts/NightingaleRose_30.png \
-    Images/icons/charts/Pie.png \
-    Images/icons/charts/Pie_30.png \
-    Images/icons/charts/Radar.png \
-    Images/icons/charts/Radar_30.png \
-    Images/icons/charts/Sankey.png \
-    Images/icons/charts/Sankey_30.png \
-    Images/icons/charts/ScatterPlot.png \
-    Images/icons/charts/ScatterPlot_30.png \
-    Images/icons/charts/Sunburst_30.png \
-    Images/icons/charts/Table.png \
-    Images/icons/charts/Table_30.png \
-    Images/icons/charts/Tree.png \
-    Images/icons/charts/TreeMap.png \
-    Images/icons/charts/TreeMap_30.png \
-    Images/icons/charts/Tree_30.png \
-    Images/icons/charts/doughnut.png \
-    Images/icons/charts/force_directed.png \
-    Images/icons/charts/nightingale_rose.png \
-    Images/icons/charts/susburst.png \
-    Images/icons/cross.png \
-    Images/icons/cross_32.png \
-    Images/icons/drive.png \
-    Images/icons/dropbox-2.png \
-    Images/icons/file-icon.png \
-    Images/icons/folder-invoices.png \
-    Images/icons/folder.png \
-    Images/icons/github-1.png \
-    Images/icons/google-analytics-4.png \
-    Images/icons/hadoop.png \
-    Images/icons/json-file.png \
-    Images/icons/json-icon.png \
-    Images/icons/microsoft-access-1.png \
-    Images/icons/microsoft-excel-2013.png \
-    Images/icons/microsoft-sql-server.png \
-    Images/icons/mysql-6.png \
-    Images/icons/oracle-icon.png \
-    Images/icons/outline_close_black_18dp1x.png \
-    Images/icons/outline_close_black_18dp2x.png \
-    Images/icons/outline_play_arrow_black_48dp.png \
-    Images/icons/play.png \
-    Images/icons/sample_graph.png \
-    Images/icons/text.png \
-    Images/icons/tick.png \
-    Images/icons/tick_32.png \
-    Images/icons/zoom out.png \
-    Images/logos/logo.ico \
-    Images/logos/logo.png \
-    Images/logos/logo_full_small.png \
-    README.md \
-    Source/Charts/area.html \
-    Source/Charts/bar.html \
-    Source/Charts/box.html \
-    Source/Charts/horizontal-bar.html \
-    Source/Charts/line.html \
-    Source/Charts/pie.html \
-    Source/Charts/radar.html \
-    Source/Charts/scatter.html \
-    Source/Charts/sunburst.html \
-    Source/Charts/tree-map.html \
-    Source/Charts/tree.html \
     Source/Dashboard/NewDashboard.qml \
     Source/Dashboard/NewReport.qml \
     Source/Dashboard/SubComponents/DashboardCustomize.qml \
@@ -300,28 +183,4 @@ DISTFILES += \
     Source/Data/SubComponents/SqliteConnection.qml \
     Source/Data/SubComponents/TabBackgroundComponent.qml \
     Source/Data/SubComponents/TabTextComponent.qml \
-    Source/Data/SubComponents/TestQueryResultsTable.qml \
-    Source/MainSubComponents/CheckBoxTpl.qml \
-    Source/MainSubComponents/CustomButton.qml \
-    Source/MainSubComponents/CustomTextArea.qml \
-    Source/MainSubComponents/CustomTextBox.qml \
-    Source/MainSubComponents/FileUploadBtn.qml \
-    Source/MainSubComponents/HorizontalLineTpl.qml \
-    Source/MainSubComponents/LeftMenuBar.qml \
-    Source/MainSubComponents/LeftMenuBarReports.qml \
-    Source/MainSubComponents/LoginCredentials.qml \
-    Source/MainSubComponents/LoginServer.qml \
-    Source/MainSubComponents/Logout.qml \
-    Source/MainSubComponents/MainMenuDelegate.qml \
-    Source/MainSubComponents/MenuItemDelegate.qml \
-    Source/MainSubComponents/MenuSeparatorComponent.qml \
-    Source/MainSubComponents/RadioButtonTpl.qml \
-    Source/MainSubComponents/RangeSliderTpl.qml \
-    Source/MainSubComponents/ReadOnlyTextBox.qml \
-    Source/MainSubComponents/SearchBar.qml \
-    Source/MainSubComponents/SelectDropdown.qml \
-    Source/MainSubComponents/SliderTpl.qml \
-    Source/Others/Home.qml \
-    Source/Others/Test.qml \
-    Source/Others/Test2.qml \
-    main.qml
+    Source/Data/SubComponents/TestQueryResultsTable.qml

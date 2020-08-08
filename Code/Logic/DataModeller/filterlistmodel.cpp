@@ -1,15 +1,33 @@
 #include "filterlistmodel.h"
 
 
-
-QString FilterListModel::setRelation(QString relation, bool exclude, bool isNull)
+FilterListModel::FilterListModel(QObject *parent) : QAbstractListModel(parent), counter(0)
 {
-    return true;
+
+
+//    explicit FilterList(const int & filterId, const QString & section, const QString & category, const QString & subcategory, const QString & tableName, const QString & columnName, const QString & relation, const QString & value, const bool & includeNull, const bool & exclude, QObject *parent = nullptr);
+
+//    qDebug() << "CALLED model constructor";
+//    addFilterList(new FilterList(0,"categorical", "categoricalList", "multiple", "users", "username", "IN", "%", true, false, this));
+//    addFilterList(new FilterList(1,"categorical", "categoricalList", "multiple", "email", "username", "IN", "%", true, false, this));
+
+    sqlComparisonOperators.append("=");
+    sqlComparisonOperators.append("!=");
+    sqlComparisonOperators.append("<>");
+    sqlComparisonOperators.append("<");
+    sqlComparisonOperators.append(">");
+    sqlComparisonOperators.append("<=");
+    sqlComparisonOperators.append(">=");
+    sqlComparisonOperators.append("!>");
+    sqlComparisonOperators.append("!<");
+    sqlComparisonOperators.append("~");  // Case sensitive posix comparators
+    sqlComparisonOperators.append("~*"); // Case insensitive posix comparators
 }
 
-FilterListModel::FilterListModel(QObject *parent) : QAbstractListModel(parent), counter(0), rowCountSize(0)
+void FilterListModel::callNewFilter()
 {
-
+//    qDebug() << "CALLED new filter";
+//    addFilterList(new FilterList(1,"categorical", "categoricalList", "multiple", "reset_hash", "username", "IN", "%", true, false, this));
 }
 
 int FilterListModel::rowCount(const QModelIndex &parent) const
@@ -122,15 +140,8 @@ bool FilterListModel::setData(const QModelIndex &index, const QVariant &value, i
     case FilterListValueRole:
     {
 
-        if( filterList->value()!= value.toString() || filterList->value()!= value.toInt() ){
-
-            QString varType = typeid(filterList->value()).name();
-            if(varType == "int"){
-                filterList->setValue(value.toInt());
-            } else{
-                filterList->setValue(value.toString());
-            }
-
+        if( filterList->value()!= value.toString() ){
+            filterList->setValue(value.toString());
             somethingChanged = true;
         }
         break;
@@ -189,11 +200,14 @@ QHash<int, QByteArray> FilterListModel::roleNames() const
     return roles;
 }
 
-void FilterListModel::newFilter(QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QVariant val, bool includeNull, bool exclude )
+
+
+void FilterListModel::newFilter(QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString val, bool includeNull, bool exclude )
 {
 
-    FilterList *filterList = new FilterList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this);
-    addFilterList(filterList);
+//    FilterList *filterList = new FilterList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this);
+//    qDebug << counter << section<< category<< subcategory < tableName, colName, relation, val, includeNull, exclude, this;
+    addFilterList(new FilterList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this));
 
     counter++;
 
@@ -208,7 +222,7 @@ void FilterListModel::deleteFilter(int FilterIndex)
     emit rowCountChanged();
 }
 
-void FilterListModel::updateFilter(int FilterIndex, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QVariant value, bool includeNull, bool exclude)
+void FilterListModel::updateFilter(int FilterIndex, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString value, bool includeNull, bool exclude)
 {
 
     beginResetModel();
@@ -238,31 +252,30 @@ void FilterListModel::updateFilter(int FilterIndex, QString section, QString cat
 void FilterListModel::callQueryModel(QString tmpSql)
 {
     FilterList *filter;
-    QString tmpWhereConditions;
+    QString newWhereConditions;
     QString newQuery;
-    QString tmpRelation;
-    QStringList conditionList;
+    QString existingWhereString;
+
 
     mQuerySplitter.setQuery(tmpSql);
-    tmpWhereConditions = mQuerySplitter.getWhereCondition();
+    newWhereConditions = mQuerySplitter.getWhereCondition();
 
     foreach(filter, mFilter){
-        qDebug() << filter->filterId() << filter->section() << filter->category() << filter->subCategory() << filter->tableName() << filter->columnName() << filter->relation() << filter->value() << filter->includeNull() << filter->exclude();
 
-        if(filter->relation().contains(",", Qt::CaseInsensitive)){
-
-             conditionList = filter->relation().split(",");
-        } else{
-            tmpWhereConditions += " AND ";
-        }
-
-
-        qDebug() << conditionList;
-
+        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), filter->value(), filter->exclude(), filter->includeNull());
 
     }
 
-    emit sendFilterQuery(tmpWhereConditions);
+    // Replace the WHERE condition with the new one
+
+    QRegularExpression whereListRegex(R"(\sWHERE\s+(.*?)(?:\s+(?:GROUP|ORDER|LIMIT)\b|\s*$))", QRegularExpression::CaseInsensitiveOption);
+
+    QRegularExpressionMatch whereIterator = whereListRegex.match(tmpSql);
+    existingWhereString = whereIterator.captured(1).trimmed();
+    newQuery = tmpSql.replace(existingWhereString, newWhereConditions);
+
+
+    emit sendFilterQuery(newQuery);
 }
 
 
@@ -280,5 +293,66 @@ void FilterListModel::columnList(QVariantList &columns)
 {
 
     Q_UNUSED(columns);
+}
+
+QString FilterListModel::setRelation(QString tableName, QString columnName, QString relation, QString conditions, bool exclude, bool isNull)
+{
+
+    QStringList conditionList;
+    QStringList relationList;
+    QString tmpCondition;
+    QString tmpRelation;
+    QString tmpWhereConditions;
+
+    QString notSign;
+    QString excludeCase;
+    QString newCondition;
+    QString newIncludeNull;
+    QString individualCondition;
+    QString concetantedCondition;
+
+    int counter = 0;
+
+    // If there are several relations involved
+
+    if(relation.contains(",", Qt::CaseInsensitive)){
+        relationList = relation.split(",");
+        conditionList = conditions.split(",");
+
+        foreach(tmpRelation, relationList){
+
+            notSign = sqlComparisonOperators.contains(tmpRelation)? " !" : " NOT ";
+            excludeCase = exclude ? tmpRelation.prepend(notSign) : tmpRelation;
+            newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[counter] + "')" : conditionList[counter] ;
+            newIncludeNull = isNull == false ? "AND " + tableName + "." + columnName + " IS NOT NULL" : "";
+
+            tmpWhereConditions = QString("%1.%2 %3 %4 %5")
+                            .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+
+            counter++;
+        }
+
+        counter = 0;
+
+    } else{
+
+        conditionList = conditions.split(",");
+
+        foreach(individualCondition, conditionList){
+
+            concetantedCondition.append("'" + individualCondition + "',");
+        }
+       concetantedCondition.chop(1);
+
+        notSign = sqlComparisonOperators.contains(relation)? " !" : " NOT ";
+        excludeCase = exclude ? relation.prepend(notSign) : relation;
+        newCondition = relation.contains("in", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
+        newIncludeNull = isNull == false ? " AND " + tableName + "." + columnName + " IS NOT NULL" : "";
+
+        tmpWhereConditions = QString("%1.%2 %3 %4 %5")
+                        .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+    }
+
+    return tmpWhereConditions;
 }
 

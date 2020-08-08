@@ -43,6 +43,8 @@ private:
     void generateRoleNames();
     QHash<int, QByteArray> m_roleNames;
     QString m_tmpSql;
+
+    void executeQuery(QString & query);
 };
 
 #endif // QUERYMODELLER_H

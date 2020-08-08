@@ -34,6 +34,7 @@ Rectangle{
     }
 
 
+
     // LIST MODELS ENDS
     /***********************************************************************************************************************/
 
@@ -147,6 +148,7 @@ Rectangle{
                 id: listFiltersListView
                 model: FilterListModel
                 width: parent.width
+                height: 50
                 anchors.topMargin: 10
                 spacing: rowSpacing
                 interactive: false
@@ -288,9 +290,9 @@ Rectangle{
 
             ListView{
                 id: wildcardFiltersListView
-                model: wildcardModel
+                model: FilterListCategoryWildcardFilter
                 width: parent.width
-                height: wildcardModel.count * 30
+                height: FilterListCategoryWildcardFilter.count * 30
                 anchors.topMargin: 10
                 interactive: false
                 spacing: rowSpacing
@@ -335,7 +337,7 @@ Rectangle{
 
                         ReadOnlyTextBox{
                             boxWidth: parent.width
-                            text: columnValue
+                            text: value
                         }
                     }
 
@@ -424,9 +426,9 @@ Rectangle{
 
             ListView{
                 id: topFiltersListView
-                model: wildcardModel
+                model: FilterListCategoryTopFilter
                 width: parent.width
-                height: topModel.count * 30
+                height: FilterListCategoryTopFilter.count * 30
                 anchors.topMargin: 10
                 spacing: rowSpacing
                 interactive: false

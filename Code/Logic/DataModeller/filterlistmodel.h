@@ -18,23 +18,23 @@ class FilterListModel : public QAbstractListModel
     int counter;
     QuerySplitter mQuerySplitter;
     QList <FilterList *> mFilter;
-
-    QString setRelation(QString relation, bool exclude, bool isNull);
-
+    QStringList sqlComparisonOperators;
 
 
 public:
     explicit FilterListModel(QObject *parent = nullptr);
 
-    Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     Qt::ItemFlags flags(const QModelIndex& index) const;
     QHash<int, QByteArray> roleNames() const;
 
-    Q_INVOKABLE void newFilter(QString section = "",QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QVariant val = "", bool includeNull = true, bool exclude = false);
+    void callNewFilter();
+
+    Q_INVOKABLE void newFilter(QString section = "",QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString val = "", bool includeNull = true, bool exclude = false);
     Q_INVOKABLE void deleteFilter(int FilterIndex);
-    Q_INVOKABLE void updateFilter(int FilterIndex, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QVariant value = "", bool includeNull = true, bool exclude = false);
+    Q_INVOKABLE void updateFilter(int FilterIndex, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString value = "", bool includeNull = true, bool exclude = false);
     Q_INVOKABLE void callQueryModel(QString tmpSql);
 
     void addFilterList(FilterList * filter);
@@ -54,7 +54,10 @@ public:
         FilterListExcludeRole
     };
 
-    int rowCountSize;
+private:
+
+    QString setRelation(QString tableName, QString columnName, QString relation, QString conditions, bool exclude, bool isNull);
+
 
 signals:
     void rowCountChanged();

@@ -208,6 +208,7 @@ Popup {
             maxLength: 150
             boxWidth: 370
             boxHeight: 40
+            text: (DSParamsModel.dsName !== "" || DSParamsModel.dsName !== null) ? DSParamsModel.dsName : ""
         }
 
     }

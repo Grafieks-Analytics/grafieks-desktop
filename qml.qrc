@@ -11,31 +11,6 @@
         <file>Source/Charts/sunburst.html</file>
         <file>Source/Charts/tree-map.html</file>
         <file>Source/Charts/tree.html</file>
-        <file>Source/MainSubComponents/CheckBoxTpl.qml</file>
-        <file>Source/MainSubComponents/HorizontalLineTpl.qml</file>
-        <file>Source/MainSubComponents/LeftMenuBar.qml</file>
-        <file>Source/MainSubComponents/LeftMenuBarReports.qml</file>
-        <file>Source/MainSubComponents/LoginCredentials.qml</file>
-        <file>Source/MainSubComponents/LoginServer.qml</file>
-        <file>Source/MainSubComponents/Logout.qml</file>
-        <file>Source/MainSubComponents/MainMenuDelegate.qml</file>
-        <file>Source/MainSubComponents/MenuItemDelegate.qml</file>
-        <file>Source/MainSubComponents/MenuSeparatorComponent.qml</file>
-        <file>Source/MainSubComponents/RadioButtonTpl.qml</file>
-        <file>Source/MainSubComponents/RangeSliderTpl.qml</file>
-        <file>Source/MainSubComponents/SearchBar.qml</file>
-        <file>Source/MainSubComponents/SliderTpl.qml</file>
-        <file>Source/Others/Test.qml</file>
-        <file>Source/Others/Test2.qml</file>
-        <file>Source/Others/Home.qml</file>
-        <file>main.qml</file>
-        <file>Constants.qml</file>
-        <file>Source/MainSubComponents/SelectDropdown.qml</file>
-        <file>Source/MainSubComponents/ReadOnlyTextBox.qml</file>
-        <file>Source/MainSubComponents/CustomButton.qml</file>
-        <file>Source/MainSubComponents/CustomTextBox.qml</file>
-        <file>Source/MainSubComponents/CustomTextArea.qml</file>
-        <file>Source/MainSubComponents/FileUploadBtn.qml</file>
         <file>Source/Connectors/SelectConnection.qml</file>
         <file>Source/Connectors/SubComponents/BoxConnection.qml</file>
         <file>Source/Connectors/SubComponents/BoxConnectionFiles.qml</file>
@@ -88,5 +63,30 @@
         <file>Source/Modellers/SubComponents/MiniSubComponents/CategoricalFilterListContent.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/CategoricalFilterTopContent.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/CategoricalFilterWildcardContent.qml</file>
+        <file>Constants.qml</file>
+        <file>main.qml</file>
+        <file>Source/MainSubComponents/CheckBoxTpl.qml</file>
+        <file>Source/MainSubComponents/CustomButton.qml</file>
+        <file>Source/MainSubComponents/CustomTextArea.qml</file>
+        <file>Source/MainSubComponents/CustomTextBox.qml</file>
+        <file>Source/MainSubComponents/FileUploadBtn.qml</file>
+        <file>Source/MainSubComponents/HorizontalLineTpl.qml</file>
+        <file>Source/MainSubComponents/LeftMenuBar.qml</file>
+        <file>Source/MainSubComponents/LeftMenuBarReports.qml</file>
+        <file>Source/MainSubComponents/LoginCredentials.qml</file>
+        <file>Source/MainSubComponents/LoginServer.qml</file>
+        <file>Source/MainSubComponents/Logout.qml</file>
+        <file>Source/MainSubComponents/MainMenuDelegate.qml</file>
+        <file>Source/MainSubComponents/MenuItemDelegate.qml</file>
+        <file>Source/MainSubComponents/MenuSeparatorComponent.qml</file>
+        <file>Source/MainSubComponents/RadioButtonTpl.qml</file>
+        <file>Source/MainSubComponents/RangeSliderTpl.qml</file>
+        <file>Source/MainSubComponents/ReadOnlyTextBox.qml</file>
+        <file>Source/MainSubComponents/SearchBar.qml</file>
+        <file>Source/MainSubComponents/SelectDropdown.qml</file>
+        <file>Source/MainSubComponents/SliderTpl.qml</file>
+        <file>Source/Others/Home.qml</file>
+        <file>Source/Others/Test.qml</file>
+        <file>Source/Others/Test2.qml</file>
     </qresource>
 </RCC>

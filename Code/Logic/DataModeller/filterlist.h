@@ -15,7 +15,7 @@ class FilterList : public QObject
     Q_PROPERTY(QString tableName READ tableName WRITE setTableName NOTIFY tableNameChanged)
     Q_PROPERTY(QString columnName READ columnName WRITE setColumnName NOTIFY columnNameChanged)
     Q_PROPERTY(QString relation READ relation WRITE setRelation NOTIFY relationChanged)
-    Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
+    Q_PROPERTY(QString value READ value WRITE setValue NOTIFY valueChanged)
     Q_PROPERTY(bool includeNull READ includeNull WRITE setIncludeNull NOTIFY includeNullChanged)
     Q_PROPERTY(bool exclude READ exclude WRITE setExclude NOTIFY excludeChanged)
 
@@ -27,12 +27,12 @@ class FilterList : public QObject
     QString m_tableName;
     QString m_columnName;
     QString m_relation;
-    QVariant m_value;
+    QString m_value;
     bool m_includeNull;
     bool m_exclude;
 
 public:
-    explicit FilterList(const int & filterId, const QString & section, const QString & category, const QString & subcategory, const QString & tableName, const QString & columnName, const QString & relation, const QVariant & value, const bool & includeNull, const bool & exclude, QObject *parent = nullptr);
+    explicit FilterList(const int & filterId, const QString & section, const QString & category, const QString & subcategory, const QString & tableName, const QString & columnName, const QString & relation, const QString & value, const bool & includeNull, const bool & exclude, QObject *parent = nullptr);
 
     int filterId() const;
     QString section() const;
@@ -41,7 +41,7 @@ public:
     QString tableName() const;
     QString columnName() const;
     QString relation() const;
-    QVariant value() const;
+    QString value() const;
     bool includeNull() const;
     bool exclude() const;
 
@@ -53,7 +53,7 @@ public slots:
     void setTableName(QString tableName);
     void setColumnName(QString columnName);
     void setRelation(QString relation);
-    void setValue(QVariant value);
+    void setValue(QString value);
     void setIncludeNull(bool includeNull);
     void setExclude(bool exclude);
 
@@ -66,7 +66,7 @@ signals:
     void tableNameChanged(QString tableName);
     void columnNameChanged(QString columnName);
     void relationChanged(QString relation);
-    void valueChanged(QVariant value);
+    void valueChanged(QString value);
     void includeNullChanged(bool includeNull);
     void excludeChanged(bool exclude);
 };

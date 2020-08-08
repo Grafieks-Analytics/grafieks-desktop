@@ -5,6 +5,8 @@
 #include <QDebug>
 #include <QObject>
 
+#include "../../constants.h"
+
 class DSParamsModel : public QObject
 {
     Q_OBJECT
@@ -27,7 +29,7 @@ class DSParamsModel : public QObject
     Q_PROPERTY(bool includeNull READ includeNull WRITE setIncludeNull NOTIFY includeNullChanged)
     Q_PROPERTY(bool selectAll READ selectAll WRITE setSelectAll NOTIFY selectAllChanged)
     Q_PROPERTY(int filterIndex READ filterIndex WRITE setFilterIndex NOTIFY filterIndexChanged)
-    Q_PROPERTY(QString mode READ mode WRITE setMode NOTIFY modeChanged)
+    Q_PROPERTY(QString mode READ mode WRITE setMode NOTIFY modeChanged) // Create/Edit mode
 
     QString m_dsName;
     QString m_dsType;
@@ -76,11 +78,6 @@ public:
     bool selectAll() const;
     int filterIndex() const;
     QString mode() const;
-
-    QString defaultSection = "categorical";
-    QString defaultCategory = "list";
-    QString defaultSubCategory = "multiple";
-    QString defaultMode = "create";
 
 
 

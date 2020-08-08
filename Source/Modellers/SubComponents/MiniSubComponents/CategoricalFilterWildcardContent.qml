@@ -19,35 +19,50 @@ import "../../../MainSubComponents"
 
 Rectangle{
     property bool listOpened: false
+    property int counter: 0
 
     property string selectOption: "Select Wildcard"
+    property var acceptedValues:["containing", "endswith", "equalto", "doesntstartwith", "doesntendwith", "notequalto"]
 
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
+    // List model for Listview
+    // Will be dynamically populated
+    // on button click
+    ListModel {
+        id: listviewWildCardModel
+    }
 
 
+    // Listmodel for combobox
     ListModel{
         id: selectDropdown
 
         ListElement{
             menuItem:"Containing"
+            compareValue: "containing"
         }
         ListElement{
             menuItem:"Ends With"
+            compareValue: "endswith"
         }
         ListElement{
             menuItem:"Equal To"
+            compareValue: "equalto"
         }
         ListElement{
             menuItem:"Doesn't Start with"
+            compareValue: "doesntstartwith"
         }
         ListElement{
             menuItem:"Doesn't End with"
+            compareValue: "doesntendwith"
         }
         ListElement{
             menuItem:"Not Equal to"
+            compareValue: "notequalto"
         }
     }
 
@@ -82,8 +97,91 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted: {
+        wildcardDropdown.currentText = "Containing"
+        wildcardDropdown.currentValue = "containing"
+
+        listviewWildCard.model = numModels
+
+    }
+
     function onExcludeCheckedClicked(checked){
         DSParamsModel.setExclude(checked)
+    }
+
+    function onAddWildcard(){
+        if(counter < selectDropdown.count){
+            counter++;
+
+            // Append a new ListElement on the ListView model
+            listviewWildCardModel.append({"value":0})
+        }
+    }
+
+    function onWildCardInput(textValue, selectCurrentValue, selectCurrentText, selectCurrentIndex, listIndex){
+
+        let newFilter = ""
+        let newRelation = ""
+        let existingValues = DSParamsModel.value.split(",")
+        let existingRelations = DSParamsModel.relation.split(",")
+
+        // Set maximum length of the array
+        existingValues.length = existingValues.length > selectDropdown.count ? selectDropdown.count : existingValues.length;
+        existingRelations.length = existingRelations.length > selectDropdown.count ? selectDropdown.count : existingRelations.length;
+
+        switch(selectCurrentValue){
+
+        case acceptedValues[0]:
+
+            newFilter = "%"+ textValue +"%"
+            newRelation = Constants.likeRelation
+
+            break
+
+        case acceptedValues[1]:
+
+            newFilter = "%"+ textValue
+            newRelation = Constants.likeRelation
+
+            break
+
+        case acceptedValues[2]:
+
+            newFilter = textValue
+            newRelation = Constants.equalRelation
+
+            break
+
+        case acceptedValues[3]:
+
+            newFilter = "%" + textValue
+            newRelation = Constants.notLikeRelation
+
+            break
+
+        case acceptedValues[4]:
+
+            newFilter =  textValue + "%"
+            newRelation = Constants.notLikeRelation
+
+            break
+
+        case acceptedValues[5]:
+
+            newFilter =  textValue
+            newRelation = Constants.notEqualRelation
+
+            break
+
+
+        }
+
+        existingValues[listIndex] = newFilter
+        existingRelations[listIndex] = newRelation
+
+        DSParamsModel.setRelation(existingRelations.toString())
+        DSParamsModel.setValue(existingValues.toString())
+
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -140,6 +238,10 @@ Rectangle{
 
             CustomButton {
                 textValue: qsTr("Add Wildcard")
+
+                onClicked: {
+                    onAddWildcard();
+                }
             }
 
         }
@@ -166,17 +268,18 @@ Rectangle{
         }
     }
 
-    property int numModels: 2
+
 
     ListView{
-        model: numModels
+        id: listviewWildCard
+        model: listviewWildCardModel
         anchors.top: wildcardHead.bottom
         anchors.topMargin: 20
         anchors.left: parent.left
 
         anchors.leftMargin: 30
         width: parent.width
-        height: numModels * 40
+        height: listviewWildCard.count * 40
         spacing: 5
 
         delegate: Row{
@@ -187,14 +290,24 @@ Rectangle{
 
                 width: parent.width/2
 
-                SelectDropdown{
+                //                SelectDropdown{
+                //                    id: wildcardDropdown
+                //                    width: parent.width*2/3
+                //                    textValue:"Containing"
+                //                    list: selectDropdown
+                //                }
+
+                ComboBox{
                     id: wildcardDropdown
-                    width: parent.width*2/3
-                    textValue:"Containing"
-                    list: selectDropdown
+                    currentIndex: 0
+                    model: selectDropdown
+                    textRole: "menuItem"
+                    valueRole: "compareValue"
+                    onCurrentIndexChanged: {
+                        selectDropdown.setProperty(index ,"value", currentIndex)
+                        onWildCardInput(valueText.text, wildcardDropdown.currentValue, wildcardDropdown.currentText, wildcardDropdown.currentIndex, index)
+                    }
                 }
-
-
             }
 
             Column{
@@ -205,15 +318,20 @@ Rectangle{
                 }
 
                 CustomTextBox{
+                    id: valueText
                     placeholderText: "Enter Text"
                     boxWidth: parent.width * 2 / 3
+                    boxHeight: 30
 
                     anchors{
                         right: parent.right
                         rightMargin: 50
                     }
 
-                    boxHeight: 30
+                    onTextChanged: {
+                        onWildCardInput(valueText.text, wildcardDropdown.currentValue, wildcardDropdown.currentText, wildcardDropdown.currentIndex, index)
+                    }
+
                 }
             }
 
