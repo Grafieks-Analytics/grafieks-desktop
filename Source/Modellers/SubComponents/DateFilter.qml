@@ -91,6 +91,24 @@ Popup {
     }
 
 
+    function onListClicked(){
+        listContent.visible = true
+        calendarContent.visible = false
+        dateTimeFrameContent.visible = false
+    }
+    function onCalendarClicked(){
+        listContent.visible = false
+        calendarContent.visible = true
+        dateTimeFrameContent.visible = false
+    }
+
+    function onTimeFrameClicked(){
+        listContent.visible = false
+        calendarContent.visible = false
+        dateTimeFrameContent.visible = true
+    }
+
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -116,6 +134,10 @@ Popup {
     DateTimeFrameContent{
         id: dateTimeFrameContent
         anchors.top:  fullExtactRadioBtn.bottom
+    }
+
+    ButtonGroup{
+        id: dateFilterType
     }
 
 
@@ -207,18 +229,9 @@ Popup {
                 radio_text: qsTr("List")
                 radio_checked: true
                 parent_dimension: 16
-
-                MouseArea{
-                    anchors.fill:parent
-                    onClicked: {
-                        listRadio.radio_checked = true
-                        dateRadio.radio_checked = false
-                        topRadio.radio_checked = false
-
-                        listContent.visible = true
-                        calendarContent.visible = false
-                        dateTimeFrameContent.visible = false
-                    }
+                ButtonGroup.group: dateFilterType
+                onCheckedChanged: {
+                    onListClicked()
                 }
             }
 
@@ -237,19 +250,9 @@ Popup {
                 radio_text: qsTr("Calendar")
                 radio_checked: false
                 parent_dimension: 16
-
-                MouseArea{
-                    anchors.fill:parent
-                    onClicked: {
-                        listRadio.radio_checked = false
-                        dateRadio.radio_checked = true
-                        topRadio.radio_checked = false
-
-
-                        listContent.visible = false
-                        calendarContent.visible = true
-                        dateTimeFrameContent.visible = false
-                    }
+                ButtonGroup.group: dateFilterType
+                onCheckedChanged: {
+                    onCalendarClicked()
                 }
 
             }
@@ -266,21 +269,11 @@ Popup {
                 radio_text: qsTr("Time Frame")
                 radio_checked: false
                 parent_dimension: 16
-
-
-                MouseArea{
-                    anchors.fill:parent
-                    onClicked: {
-                        listRadio.radio_checked = false
-                        dateRadio.radio_checked = false
-                        topRadio.radio_checked = true
-
-
-                        listContent.visible = false
-                        calendarContent.visible = false
-                        dateTimeFrameContent.visible = true
-                    }
+                ButtonGroup.group: dateFilterType
+                onCheckedChanged: {
+                    onTimeFrameClicked()
                 }
+
             }
         }
     }

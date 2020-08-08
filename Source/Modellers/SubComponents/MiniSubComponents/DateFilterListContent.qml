@@ -36,11 +36,7 @@ Rectangle{
         id: dateFormatList
 
         ListElement{
-            menuItem:"DD/MM/YYYY 4"
-        }
-
-        ListElement{
-            menuItem:"DD/MM/YYYY 4"
+            menuItem:"DD/MM/YYYY 1"
         }
 
         ListElement{
@@ -49,6 +45,10 @@ Rectangle{
 
         ListElement{
             menuItem:"DD/MM/YYYY 3"
+        }
+
+        ListElement{
+            menuItem:"DD/MM/YYYY 4"
         }
     }
 
@@ -104,8 +104,6 @@ Rectangle{
 
 
     function onMultiSelectSelected(){
-        singleSelectRadio.checked = false
-        multiSelectRadio.checked = true
         multiSelectCheckList.visible = true
         singleSelectCheckList.visible = false
 
@@ -114,8 +112,6 @@ Rectangle{
 
     function onSingleSelectSelected(){
 
-        singleSelectRadio.checked = true
-        multiSelectRadio.checked = false
         multiSelectCheckList.visible = false
         singleSelectCheckList.visible = true
    }
@@ -139,7 +135,13 @@ Rectangle{
     /***********************************************************************************************************************/
     // SubComponents Starts
 
+    ButtonGroup{
+        id: selectTypeRadioGroup
+    }
 
+    ButtonGroup{
+        id:singleSelectRadioGroup
+    }
 
     // SubComponents Ends
     /***********************************************************************************************************************/
@@ -172,12 +174,9 @@ Rectangle{
                 radio_text: qsTr("Multi Select")
                 radio_checked: true
                 parent_dimension: 16
-
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-                        onMultiSelectSelected()
-                    }
+                ButtonGroup.group: selectTypeRadioGroup
+                onCheckedChanged: {
+                    onMultiSelectSelected()
                 }
             }
 
@@ -195,15 +194,10 @@ Rectangle{
                 radio_text: qsTr("Single Select")
                 radio_checked: false
                 parent_dimension: 16
-
-
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-                        onSingleSelectSelected()
-                    }
+                ButtonGroup.group: selectTypeRadioGroup
+                onCheckedChanged: {
+                    onSingleSelectSelected()
                 }
-
             }
         }
     }
@@ -303,10 +297,10 @@ Rectangle{
 
                 Column{
                     RadioButtonTpl {
-                        checked: true
+
                         radio_text: qsTr(textValue)
                         parent_dimension: 16
-
+                        ButtonGroup.group: singleSelectRadioGroup
                     }
                 }
 
@@ -321,16 +315,20 @@ Rectangle{
             height: parent.height
 
             anchors.top: parent.top
+            anchors.topMargin: 10
             anchors.right: parent.right
+            spacing: 5
 
-            SelectDropdown{
-                id: dateFormatDropDown
-                textValue:"DD/MM/YYYY"
-                list: dateFormatList
-                height: dateFormatList.count * 30
-                anchors.left: parent.left
+            ComboBox{
+                currentIndex: 0
+                model: dateFormatList
+                textRole: "menuItem"
+                valueRole: "compareValue"
+                anchors{
+                    right: parent.right
+                    rightMargin: 10
+                }
             }
-
 
         }
 
