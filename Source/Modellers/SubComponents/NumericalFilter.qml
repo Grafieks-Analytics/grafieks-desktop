@@ -8,7 +8,7 @@ import "../../MainSubComponents"
 import "../SubComponents/MiniSubComponents"
 
 Popup {
-    id: dataFilterPopup
+    id: numericalFilterPopup
     width: parent.width
     height: parent.height
     x: 0
@@ -21,6 +21,11 @@ Popup {
         color: Constants.themeColor
         border.color: Constants.darkThemeColor
     }
+
+
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
 
     ListModel{
         id: checkListModel
@@ -43,6 +48,75 @@ Popup {
     }
 
 
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+    function closePopup(){
+        numericalFilterPopup.visible = false
+    }
+
+    function onCancelClicked(){
+        closePopup()
+    }
+
+    function onApplyClicked(){
+        closePopup()
+    }
+
+    function onResetClicked(){
+        closePopup()
+    }
+
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
+
+
+
     // Popup Header starts
 
     Rectangle{
@@ -62,7 +136,7 @@ Popup {
             text: "Numerical Data Filter"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
-            font.pixelSize: 15
+            font.pixelSize: Constants.fontCategoryHeader
             anchors.leftMargin: 10
         }
         Image {
@@ -76,7 +150,9 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    dataFilterPopup.visible = false
+
+                    closePopup()
+
                 }
             }
         }
@@ -112,7 +188,8 @@ Popup {
             anchors.leftMargin: 20
 
             onClicked: {
-                dataFilterPopup.visible = false
+
+                onResetClicked()
             }
         }
 
@@ -127,7 +204,9 @@ Popup {
 
 
             onClicked: {
-                dataFilterPopup.visible = false
+
+                onApplyClicked()
+
             }
         }
 
@@ -140,7 +219,8 @@ Popup {
 
             textValue: "Cancel"
             onClicked: {
-                dataFilterPopup.visible = false
+
+                onCancelClicked()
             }
 
 
@@ -150,4 +230,9 @@ Popup {
     }
 
     // Footer ends
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
+
+
 }

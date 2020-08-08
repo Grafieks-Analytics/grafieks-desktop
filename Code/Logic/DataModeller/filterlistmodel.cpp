@@ -4,7 +4,7 @@
 
 QString FilterListModel::setRelation(QString relation, bool exclude, bool isNull)
 {
-
+    return true;
 }
 
 FilterListModel::FilterListModel(QObject *parent) : QAbstractListModel(parent), counter(0), rowCountSize(0)

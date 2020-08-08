@@ -64,8 +64,8 @@ Popup {
 
     function connectToMySQL(){
 //        ConnectorsLoginModel.mysqlLogin(server.text, database.text, port.text, username.text, password.text)
-        ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_my", 3306, "root", "123@312QQl")
-//        ConnectorsLoginModel.mysqlLogin("localhost", "information_schema", 3306, "root", "")
+//        ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_my", 3306, "root", "123@312QQl")
+        ConnectorsLoginModel.mysqlLogin("localhost", "information_schema", 3306, "root", "")
 
     }
 
@@ -117,7 +117,7 @@ Popup {
             text: "Sign In to Mysql"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
-            font.pixelSize: 15
+            font.pixelSize: Constants.fontCategoryHeader
             anchors.leftMargin: 10
         }
         Image {
@@ -162,7 +162,7 @@ Popup {
                 text: "Driver"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
-                font.pixelSize: 15
+                font.pixelSize: Constants.fontCategoryHeader
 
                 anchors.verticalCenter: parent.verticalCenter
             }
@@ -274,7 +274,7 @@ Popup {
                 text: "Server"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
-                font.pixelSize: 15
+                font.pixelSize: Constants.fontCategoryHeader
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -303,7 +303,7 @@ Popup {
                 leftPadding: 10
                 anchors.left: server.right
                 anchors.rightMargin: 20
-                font.pixelSize: 15
+                font.pixelSize: Constants.fontCategoryHeader
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -346,7 +346,7 @@ Popup {
                 text: "Database"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
-                font.pixelSize: 15
+                font.pixelSize: Constants.fontCategoryHeader
                 anchors.verticalCenter: parent.verticalCenter
             }
         }

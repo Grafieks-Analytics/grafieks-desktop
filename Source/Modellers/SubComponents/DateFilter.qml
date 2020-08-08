@@ -8,7 +8,7 @@ import "../../MainSubComponents"
 import "../SubComponents/MiniSubComponents"
 
 Popup {
-    id: dataFilterPopup
+    id: dateFilterPopup
     width: parent.width
     height: parent.height
     x: 0
@@ -17,6 +17,12 @@ Popup {
     visible: false
     padding: 0
     closePolicy: Popup.NoAutoClose
+
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
 
     ListModel{
         id: checkListModel
@@ -37,6 +43,93 @@ Popup {
             textValue:"All 3"
         }
     }
+
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+    function closeDateFilterPopup(){
+     dateFilterPopup.visible = false
+    }
+
+    function applyDateFilter(){
+        // Wrtie code to apply date filter
+
+        closeDateFilterPopup()
+    }
+
+    function resetDateFilter(){
+        // Reset date filter here
+        closeDateFilterPopup()
+    }
+
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+    //    Top Menu Contents
+
+    DateFilterListContent{
+        id: listContent
+        anchors.top:  fullExtactRadioBtn.bottom
+    }
+
+    DateFilterCalenderContent{
+        id: calendarContent
+        anchors.top:  fullExtactRadioBtn.bottom
+    }
+
+    DateTimeFrameContent{
+        id: dateTimeFrameContent
+        anchors.top:  fullExtactRadioBtn.bottom
+    }
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
+
 
     background: Rectangle{
         color: Constants.themeColor
@@ -63,9 +156,10 @@ Popup {
             text: "Data Source Filter heading"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
-            font.pixelSize: 15
+            font.pixelSize: Constants.fontCategoryHeader
             anchors.leftMargin: 10
         }
+
         Image {
             id: close_icn
             source: "../../../Images/icons/outline_close_black_18dp2x.png"
@@ -77,7 +171,7 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    dataFilterPopup.visible = false
+                    closeDateFilterPopup()
                 }
             }
         }
@@ -193,21 +287,6 @@ Popup {
 
     //   Menu Ends
 
-    //    Top Menu Contents
-
-    DateFilterListContent{
-        id: listContent
-    }
-
-    DateFilterCalenderContent{
-        anchors.top:  fullExtactRadioBtn.bottom
-        id: calendarContent
-    }
-
-    DateTimeFrameContent{
-        id: dateTimeFrameContent
-    }
-
     // Footer starts
 
     Rectangle{
@@ -229,7 +308,7 @@ Popup {
 
 
             onClicked: {
-                dataFilterPopup.visible = false
+                resetDateFilter()
             }
         }
 
@@ -243,7 +322,7 @@ Popup {
             anchors.rightMargin: 20
 
             onClicked: {
-                dataFilterPopup.visible = false
+                applyDateFilter()
             }
         }
 
@@ -256,7 +335,7 @@ Popup {
 
             textValue: "Cancel"
             onClicked: {
-                dataFilterPopup.visible = false
+                closeDateFilterPopup()
             }
 
         }
@@ -265,4 +344,9 @@ Popup {
     }
 
     // Footer ends
+
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
+
 }

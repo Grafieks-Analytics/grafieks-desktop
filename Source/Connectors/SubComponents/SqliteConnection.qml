@@ -65,7 +65,7 @@ Popup {
             text: "Signin to Sqlite"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
-            font.pixelSize: 15
+            font.pixelSize: Constants.fontCategoryHeader
             anchors.leftMargin: 10
         }
         Image {
@@ -110,7 +110,7 @@ Popup {
                 text: "Driver"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
-                font.pixelSize: 15
+                font.pixelSize: Constants.fontCategoryHeader
 
                 anchors.verticalCenter: parent.verticalCenter
             }
@@ -231,7 +231,7 @@ Popup {
                 Text{
                     text: "Test Connection"
                     anchors.centerIn: parent
-                    font.pixelSize: 15
+                    font.pixelSize: Constants.fontCategoryHeader
                     color: btn_test_con.hovered ? "white" : "black"
                 }
             }
@@ -252,7 +252,7 @@ Popup {
                 Text{
                     text: "Connect"
                     anchors.centerIn: parent
-                    font.pixelSize: 15
+                    font.pixelSize: Constants.fontCategoryHeader
                     color: btn_connect.hovered ? "white" : "black"
                 }
             }
@@ -294,7 +294,7 @@ Popup {
                 text: "Database"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
-                font.pixelSize: 15
+                font.pixelSize: Constants.fontCategoryHeader
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -338,7 +338,7 @@ Popup {
                 text: "Username"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
-                font.pixelSize: 15
+                font.pixelSize: Constants.fontCategoryHeader
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -382,7 +382,7 @@ Popup {
                 text: "Password"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
-                font.pixelSize: 15
+                font.pixelSize: Constants.fontCategoryHeader
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -434,7 +434,7 @@ Popup {
                 Text{
                     text: Constants.signInText
                     anchors.centerIn: parent
-                    font.pixelSize: 15
+                    font.pixelSize: Constants.fontCategoryHeader
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
