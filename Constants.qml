@@ -72,6 +72,7 @@ QtObject {
     property string groupTab: "group"
 
     property double borderWidth: 1.3
+    property int radiusNumber: 4
 
     // Main Category
     property string categoryMainListType: "categorical.list"

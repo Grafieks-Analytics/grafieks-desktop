@@ -88,5 +88,6 @@
         <file>Source/Others/Home.qml</file>
         <file>Source/Others/Test.qml</file>
         <file>Source/Others/Test2.qml</file>
+        <file>Source/MainSubComponents/CustomComboBox.qml</file>
     </qresource>
 </RCC>

@@ -422,9 +422,6 @@ ApplicationWindow {
             id: new_dashboard_main
         }
 
-
-
-
     }
 
     // Stack Layout Ends

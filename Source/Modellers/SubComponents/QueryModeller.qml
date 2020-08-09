@@ -19,6 +19,7 @@ Item{
     height:parent.height
     width: parent.width
     property int totalLineCount: 1
+    property int lineCount: 30
 
 
     /***********************************************************************************************************************/
@@ -61,7 +62,49 @@ Item{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted: {
+        textEditQueryModeller.text = "SELECT * FROM users WHERE id > 0"
+    }
 
+    function onTextEditorChanged(){
+        console.log(textEditQueryModeller.text)
+        // Set the Tmp SQL Query in C++
+        QueryModel.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, ""))
+
+    }
+
+
+    function onEditorLineCountChanged(){
+
+        // Append line numbers on query modeller
+        if(totalLineCount <= lineCount){
+            var content = totalLineCount +1
+            elementModel.insert(totalLineCount, { "content": content.toString()})
+        }
+
+        // Remove line numbers on deleting query from the line
+        else if(totalLineCount > lineCount){
+            for(var i = totalLineCount; i > lineCount; i--){
+                var counter = i-1
+                elementModel.remove(counter)
+                totalLineCount--
+            }
+        }
+
+    }
+
+    function onEnterKeyPressed(event){
+
+        console.log('enter pressed')
+
+        if(totalLineCount < lineCount){
+            event.accepted = true
+            textEditQueryModeller.text += "\n"
+            textEditQueryModeller.cursorPosition = textEditQueryModeller.text.length
+            totalLineCount++
+
+        }
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -83,11 +126,6 @@ Item{
 
     /***********************************************************************************************************************/
     // Page Design Starts
-
-
-    Component.onCompleted: {
-        textEditQueryModeller.text = "SELECT * FROM users WHERE id > 0"
-    }
 
     ToolSeparator{
         id: toolSeperator1
@@ -132,40 +170,16 @@ Item{
 
         Keys.onReturnPressed: {
 
-            if(lineCount < 30){
-                event.accepted = true
-                textEditQueryModeller.text += "\n"
-                textEditQueryModeller.cursorPosition = textEditQueryModeller.text.length
-                totalLineCount++
-
-            }
+            onEnterKeyPressed(event)
         }
 
         onLineCountChanged: {
-
-            // Append line numbers on query modeller
-            if(totalLineCount <= lineCount){
-                var content = totalLineCount +1
-                elementModel.insert(totalLineCount, { "content": content.toString()})
-            }
-
-            // Remove line numbers on deleting query from the line
-            else if(totalLineCount > lineCount){
-                for(var i = totalLineCount; i > lineCount; i--){
-                    var counter = i-1
-                    elementModel.remove(counter)
-                    totalLineCount--
-                }
-            }
+            onEditorLineCountChanged()
         }
 
         onTextChanged: {
-            // Set the Tmp SQL Query in C++
-            QueryModel.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, ""))
-
+            onTextEditorChanged()
         }
-
-
 
     }
 

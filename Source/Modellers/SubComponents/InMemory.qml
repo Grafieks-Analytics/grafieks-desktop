@@ -271,7 +271,7 @@ Popup {
 
 
 
-                ComboBox{
+                CustomComboBox{
                     id: columnsDropdown
                     currentIndex: 0
                     onCurrentIndexChanged: {
@@ -317,7 +317,7 @@ Popup {
 
 
 
-                ComboBox{
+                CustomComboBox{
                     id: schedulerDropdown
                     textRole: "Name"
                     valueRole: "ScheduleID"

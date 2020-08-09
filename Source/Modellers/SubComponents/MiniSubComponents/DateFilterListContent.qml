@@ -319,7 +319,7 @@ Rectangle{
             anchors.right: parent.right
             spacing: 5
 
-            ComboBox{
+            CustomComboBox{
                 currentIndex: 0
                 model: dateFormatList
                 textRole: "menuItem"

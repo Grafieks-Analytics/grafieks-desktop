@@ -297,7 +297,7 @@ Rectangle{
                 //                    list: selectDropdown
                 //                }
 
-                ComboBox{
+                CustomComboBox{
                     id: wildcardDropdown
                     currentIndex: 0
                     model: selectDropdown
