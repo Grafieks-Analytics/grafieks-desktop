@@ -79,7 +79,6 @@
         <file>Source/MainSubComponents/MainMenuDelegate.qml</file>
         <file>Source/MainSubComponents/MenuItemDelegate.qml</file>
         <file>Source/MainSubComponents/MenuSeparatorComponent.qml</file>
-        <file>Source/MainSubComponents/RadioButtonTpl.qml</file>
         <file>Source/MainSubComponents/RangeSliderTpl.qml</file>
         <file>Source/MainSubComponents/ReadOnlyTextBox.qml</file>
         <file>Source/MainSubComponents/SearchBar.qml</file>
@@ -89,5 +88,9 @@
         <file>Source/Others/Test.qml</file>
         <file>Source/Others/Test2.qml</file>
         <file>Source/MainSubComponents/CustomComboBox.qml</file>
+        <file>Source/MainSubComponents/CustomScrollBar.qml</file>
+        <file>Source/MainSubComponents/CustomScrollVerticalIndicator.qml</file>
+        <file>Source/MainSubComponents/CustomScrollHorizontalIndicator.qml</file>
+        <file>Source/MainSubComponents/CustomRadioButton.qml</file>
     </qresource>
 </RCC>

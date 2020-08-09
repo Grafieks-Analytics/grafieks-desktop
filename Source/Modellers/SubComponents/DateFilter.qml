@@ -224,7 +224,7 @@ Popup {
             topPadding: 8
             anchors.verticalCenter: parent.verticalCenter
 
-            RadioButtonTpl{
+            CustomRadioButton{
                 id: listRadio
                 radio_text: qsTr("List")
                 radio_checked: true
@@ -245,7 +245,7 @@ Popup {
             anchors.top: fullExtactRadioBtn.top
             anchors.centerIn: parent
 
-            RadioButtonTpl{
+            CustomRadioButton{
                 id: dateRadio
                 radio_text: qsTr("Calendar")
                 radio_checked: false
@@ -264,7 +264,7 @@ Popup {
             topPadding: 8
             rightPadding: 30
 
-            RadioButtonTpl{
+            CustomRadioButton{
                 id: topRadio
                 radio_text: qsTr("Time Frame")
                 radio_checked: false

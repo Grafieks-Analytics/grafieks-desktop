@@ -169,7 +169,7 @@ Rectangle{
             padding: 10
             leftPadding: 30
 
-            RadioButtonTpl{
+            CustomRadioButton{
                 id: multiSelectRadio
                 radio_text: qsTr("Multi Select")
                 radio_checked: true
@@ -189,7 +189,7 @@ Rectangle{
             anchors.right: selectTypeRadioBtn.right
             rightPadding: 30
 
-            RadioButtonTpl{
+            CustomRadioButton{
                 id: singleSelectRadio
                 radio_text: qsTr("Single Select")
                 radio_checked: false
@@ -296,7 +296,7 @@ Rectangle{
                 width: parent.width
 
                 Column{
-                    RadioButtonTpl {
+                    CustomRadioButton {
 
                         radio_text: qsTr(textValue)
                         parent_dimension: 16

@@ -193,7 +193,7 @@ Rectangle{
             padding: 10
             leftPadding: 30
 
-            RadioButtonTpl{
+            CustomRadioButton{
                 id: multiSelectRadio
                 text: qsTr("Multi Select")
                 ButtonGroup.group: selectTypeRadioBtnGrp
@@ -213,7 +213,7 @@ Rectangle{
             anchors.right: selectTypeRadioBtn.right
             rightPadding: 30
 
-            RadioButtonTpl{
+            CustomRadioButton{
                 id: singleSelectRadio
                 text: qsTr("Single Select")
                 ButtonGroup.group: selectTypeRadioBtnGrp
@@ -362,7 +362,7 @@ Rectangle{
 
                 Column{
 
-                    //                        RadioButtonTpl {
+                    //                        CustomRadioButton {
                     //                            radio_text: modelData
                     //                            parent_dimension: 16
                     //                            ButtonGroup.group: btngrp
@@ -374,7 +374,7 @@ Rectangle{
                     //                        }
 
 
-                    RadioButtonTpl {
+                    CustomRadioButton {
                         text: modelData
                         ButtonGroup.group: btngrp
                         height: Constants.defaultRadioDimension

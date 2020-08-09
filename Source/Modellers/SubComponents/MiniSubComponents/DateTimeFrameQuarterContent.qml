@@ -105,7 +105,7 @@ Column{
         anchors.left: parent.left
 
 
-        RadioButtonTpl{
+        CustomRadioButton{
             id:thisRadio
 
             radio_text: qsTr("This Quarter")
@@ -130,7 +130,7 @@ Column{
         anchors.leftMargin: parent.width * 0.2
         anchors.rightMargin: parent.width * 0.2
 
-        RadioButtonTpl{
+        CustomRadioButton{
             id:lastRadio
             radio_text: qsTr("Last Quarter")
             checked: false
@@ -154,7 +154,7 @@ Column{
         anchors.leftMargin: parent.width * 0.2
         anchors.rightMargin: parent.width * 0.2
 
-        RadioButtonTpl{
+        CustomRadioButton{
             id:nextRadio
             radio_text: qsTr("Next Quarter")
             checked: false
@@ -179,7 +179,7 @@ Column{
         anchors.topMargin: 10
         anchors.rightMargin: parent.width * 0.2
 
-        RadioButtonTpl{
+        CustomRadioButton{
             id:lastXRadio
             radio_text: qsTr("Last")
             checked: false
@@ -212,7 +212,7 @@ Column{
         anchors.rightMargin: parent.width * 0.2
         anchors.topMargin: 10
 
-        RadioButtonTpl{
+        CustomRadioButton{
             id:nextXRadio
             radio_text: qsTr("Next")
             checked: false

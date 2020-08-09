@@ -4,6 +4,8 @@ import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
 
+import "../../MainSubComponents"
+
 // Data Preview - Table View From Query Results
 
 TableView {
@@ -123,10 +125,14 @@ TableView {
         }
     }
 
+    Layout.fillWidth: true
+    Layout.fillHeight: true
+
+
     // Table Header Ends
 
-    ScrollIndicator.horizontal: ScrollIndicator { }
-    ScrollIndicator.vertical: ScrollIndicator { }
+    ScrollIndicator.horizontal: CustomScrollHorizontalIndicator  {}
+    ScrollIndicator.vertical: CustomScrollVerticalIndicator {}
 
 
     // Page Design Ends

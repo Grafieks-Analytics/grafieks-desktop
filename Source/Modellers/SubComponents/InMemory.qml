@@ -193,7 +193,7 @@ Popup {
             id: fullExtactRadioBtn
             height: 40
             padding: 30
-            RadioButtonTpl{
+            CustomRadioButton{
                 id: radio_memory
                 radio_text: qsTr("Full Extract")
                 radio_checked: false
@@ -218,7 +218,7 @@ Popup {
             anchors.top: fullExtactRadioBtn.bottom
             height:40
             padding: 30
-            RadioButtonTpl{
+            CustomRadioButton{
                 id: radio_memory2
                 radio_text: qsTr("Incremental Extract")
                 radio_checked: false

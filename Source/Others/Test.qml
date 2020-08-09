@@ -8,27 +8,38 @@ import "../MainSubComponents"
 
 Page{
 
-    ButtonGroup{
-        id: buttons
-    }
 
-    Column{
-        spacing: 10
+    Rectangle{
+        height: 300
+        width: 500
+        border.color: "red"
+        Column{
+            spacing: 10
+            height: parent.height
+            width: parent.width
+            ListView{
 
-        RadioButtonTpl{
-            ButtonGroup.group: buttons
-            radio_text: qsTr("This Year")
-            radio_checked: false
-            parent_dimension: 16
+                flickableDirection: Flickable.VerticalFlick
+                boundsBehavior: Flickable.StopAtBounds
+
+                model: 50
+                height: parent.height
+                width: parent.width
+                spacing: 3
+                delegate:Text{
+                        text: qsTr("1")
+                }
+
+
+                clip: true
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                ScrollBar.horizontal: CustomScrollBar {}
+                ScrollBar.vertical: CustomScrollBar {}
+
+            }
         }
 
-        RadioButtonTpl{
-            ButtonGroup.group: buttons
-            radio_text: qsTr("This Year 2")
-            radio_checked: false
-            parent_dimension: 16
-        }
     }
-
 
 }

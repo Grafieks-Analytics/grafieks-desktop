@@ -457,7 +457,7 @@ Page {
             // Live radio button starts
 
 
-            RadioButtonTpl{
+            CustomRadioButton{
                 id: radio_live
                 radio_text: qsTr("Live")
                 radio_checked: true
@@ -474,7 +474,7 @@ Page {
 
             // In memory radio button starts
 
-            RadioButtonTpl{
+            CustomRadioButton{
                 id: radio_memory
                 radio_text: qsTr("In Memory")
                 radio_checked: false

@@ -236,7 +236,7 @@ Popup {
             topPadding: 8
             anchors.verticalCenter: parent.verticalCenter
 
-            RadioButtonTpl{
+            CustomRadioButton{
                 id: listRadio
                 text: qsTr("List")
                 ButtonGroup.group: filterType
@@ -257,7 +257,7 @@ Popup {
             anchors.top: fullExtactRadioBtn.top
             anchors.centerIn: parent
 
-            RadioButtonTpl{
+            CustomRadioButton{
                 id: wildcardRadio
                 text: qsTr("Wildcard")
                 checked: false
@@ -276,7 +276,7 @@ Popup {
             topPadding: 8
             rightPadding: 30
 
-            RadioButtonTpl{
+            CustomRadioButton{
                 id: topRadio
                 text: qsTr("Top")
                 checked: false
