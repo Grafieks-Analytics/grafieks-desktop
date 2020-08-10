@@ -34,6 +34,7 @@ SOURCES += \
     Code/Logic/DataModeller/columnlistmodel.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
+    Code/Logic/DataModeller/filterfunctionsmodel.cpp \
     Code/Logic/DataModeller/filterlist.cpp \
     Code/Logic/DataModeller/filterlistcategorylistfilter.cpp \
     Code/Logic/DataModeller/filterlistcategorytopfilter.cpp \
@@ -51,10 +52,8 @@ SOURCES += \
     Code/Logic/Datasources/datasourcefilter.cpp \
     Code/Logic/Datasources/datasourcemodel.cpp \
     Code/Logic/General/qttest2.cpp \
-#        Code/Logic/General/testing.cpp \
     Code/Logic/General/querysplitter.cpp \
     Code/Logic/General/tableschemamodel.cpp \
-    Code/Logic/General/testing.cpp \
     Code/Logic/Menu/user.cpp \
     main.cpp
 
@@ -101,6 +100,7 @@ HEADERS += \
     Code/Logic/DataModeller/columnlistmodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
+    Code/Logic/DataModeller/filterfunctionsmodel.h \
     Code/Logic/DataModeller/filterlist.h \
     Code/Logic/DataModeller/filterlistcategorylistfilter.h \
     Code/Logic/DataModeller/filterlistcategorytopfilter.h \
@@ -118,10 +118,8 @@ HEADERS += \
     Code/Logic/Datasources/datasourcefilter.h \
     Code/Logic/Datasources/datasourcemodel.h \
     Code/Logic/General/qttest2.h \
-#    Code/Logic/General/testing.h \
     Code/Logic/General/querysplitter.h \
     Code/Logic/General/tableschemamodel.h \
-    Code/Logic/General/testing.h \
     Code/Logic/Menu/user.h \
     Code/messages.h \
     Code/constants.h \
