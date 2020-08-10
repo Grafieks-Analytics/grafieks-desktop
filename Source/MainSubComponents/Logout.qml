@@ -68,7 +68,7 @@ Popup {
             text: "Logout"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
-            font.pixelSize: 15
+            font.pixelSize: Constants.fontCategoryHeader
             anchors.leftMargin: 10
         }
         Image {
@@ -124,7 +124,7 @@ Popup {
 
                 Text{
                     text: Constants.signOutText
-                    font.pixelSize: 15
+                    font.pixelSize: Constants.fontCategoryHeader
                     color: btn_signin.hovered ? "white" : "black"
                     anchors.centerIn: parent
                 }
@@ -154,7 +154,7 @@ Popup {
 
                 Text{
                     text:"Cancel"
-                    font.pixelSize: 15
+                    font.pixelSize: Constants.fontCategoryHeader
                     color: btn_cancel.hovered ? "white" : "black"
                     anchors.centerIn: parent
                 }

@@ -161,7 +161,7 @@ Item {
 
 
 
-        RadioButtonTpl{
+        CustomRadioButton{
             id: radioButton
             x: 14
             y: 32
@@ -170,7 +170,7 @@ Item {
             parent_dimension: 16
         }
 
-        RadioButtonTpl{
+        CustomRadioButton{
             id: radioButton1
             x: 14
             y: 65
@@ -179,7 +179,7 @@ Item {
             parent_dimension: 16
         }
 
-        RadioButtonTpl{
+        CustomRadioButton{
             id: radioButton2
             x: 14
             y: 102

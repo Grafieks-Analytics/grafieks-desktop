@@ -76,7 +76,7 @@ Popup {
             text: "Signin to Grafieks server"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
-            font.pixelSize: 15
+            font.pixelSize: Constants.fontCategoryHeader
             anchors.leftMargin: 10
         }
         Image {
@@ -119,7 +119,7 @@ Popup {
                 text: "Username"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
-                font.pixelSize: 15
+                font.pixelSize: Constants.fontCategoryHeader
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -162,7 +162,7 @@ Popup {
                 text: "Password"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
-                font.pixelSize: 15
+                font.pixelSize: Constants.fontCategoryHeader
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -218,7 +218,7 @@ Popup {
 
                 Text{
                     text:Constants.signInText
-                    font.pixelSize: 15
+                    font.pixelSize: Constants.fontCategoryHeader
                     color: btn_signin.hovered ? "white" : "black"
                     anchors.centerIn: parent
                 }
@@ -253,7 +253,7 @@ Popup {
 
                 Text{
                     text:"Cancel"
-                    font.pixelSize: 15
+                    font.pixelSize: Constants.fontCategoryHeader
                     color: btn_cancel.hovered ? "white" : "black"
                     anchors.centerIn: parent
                 }

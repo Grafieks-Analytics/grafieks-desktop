@@ -2,6 +2,10 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
+import com.grafieks.singleton.constants 1.0
+
+import "../../MainSubComponents"
+
 // Data Preview - Table View From Query Results
 
 TableView {
@@ -20,13 +24,71 @@ TableView {
 
 
 
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
+
     delegate: Rectangle {
         Text {
             text: display
             anchors.fill: parent
             anchors.margins: 10
             color: 'black'
-            font.pixelSize: 15
+            font.pixelSize: Constants.fontCategoryHeader
             verticalAlignment: Text.AlignVCenter
         }
     }
@@ -53,7 +115,7 @@ TableView {
                 height: 35
                 text: QueryModel.headerData(modelData, Qt.Horizontal)
                 color: 'black'
-                font.pixelSize: 15
+                font.pixelSize: Constants.fontCategoryHeader
                 padding: 10
                 verticalAlignment: Text.AlignVCenter
 
@@ -63,8 +125,17 @@ TableView {
         }
     }
 
+    Layout.fillWidth: true
+    Layout.fillHeight: true
+
+
     // Table Header Ends
 
-    ScrollIndicator.horizontal: ScrollIndicator { }
-    ScrollIndicator.vertical: ScrollIndicator { }
+    ScrollIndicator.horizontal: CustomScrollHorizontalIndicator  {}
+    ScrollIndicator.vertical: CustomScrollVerticalIndicator {}
+
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
+
 }

@@ -297,11 +297,12 @@ Rectangle{
                 //                    list: selectDropdown
                 //                }
 
-                ComboBox{
+                CustomComboBox{
                     id: wildcardDropdown
                     currentIndex: 0
                     model: selectDropdown
                     textRole: "menuItem"
+                    width: parent.width*2/3
                     valueRole: "compareValue"
                     onCurrentIndexChanged: {
                         selectDropdown.setProperty(index ,"value", currentIndex)

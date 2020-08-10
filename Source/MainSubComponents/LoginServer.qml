@@ -46,7 +46,7 @@ Popup {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             anchors.leftMargin: 10
-            font.pixelSize: 15
+            font.pixelSize: Constants.fontCategoryHeader
         }
         Image {
             id: close_icn
@@ -88,7 +88,7 @@ Popup {
                 text: "Server URL"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
-                font.pixelSize: 15
+                font.pixelSize: Constants.fontCategoryHeader
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
@@ -97,7 +97,7 @@ Popup {
             id: server_address
             placeholderText: "http://"
             maximumLength: 45
-            font.pixelSize: 15
+            font.pixelSize: Constants.fontCategoryHeader
             anchors.verticalCenter: parent.verticalCenter
             width: 370
             height: 40
@@ -145,7 +145,7 @@ Popup {
                     text: "Connect"
                     anchors.centerIn: parent
                     color: btn_con.hovered ? "white" : "black"
-                    font.pixelSize: 15
+                    font.pixelSize: Constants.fontCategoryHeader
                 }
             }
             onClicked: {
@@ -180,7 +180,7 @@ Popup {
                     text: "Cancel"
                     anchors.centerIn: parent
                     color: btn_cancel.hovered ? "white" : "black"
-                    font.pixelSize: 15
+                    font.pixelSize: Constants.fontCategoryHeader
                 }
             }
 

@@ -33,6 +33,29 @@ Popup {
     }
 
 
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
     Component.onCompleted: {
         SchedulerDS.fetchSchedulers()
     }
@@ -44,6 +67,76 @@ Popup {
             columnsDropdown.model = queriedColumnNames
         }
     }
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
+    function closePopup(){
+        popupMain.visible = false
+    }
+
+    function onAddClicked(){
+        closePopup()
+    }
+
+    function onIncrementalExtractClicked(){
+        console.log("clicked incremental extract")
+
+        // Save the value in C++
+        DSParamsModel.setIsFullExtract(false)
+    }
+
+    function onFullExtractClicked(){
+        console.log("clicked full extract")
+
+        // Save the value in C++
+        DSParamsModel.setIsFullExtract(true)
+    }
+
+    function onSchedulerIndexChanged(currentValue, currentText, currentIndex){
+        DSParamsModel.setSchedulerId(currentValue)
+    }
+
+    function onIncrementalIndexChanged(currentText, currentIndex){
+        DSParamsModel.setExtractColName(currentText)
+    }
+
+
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
+
+
 
     // Popup Header starts
 
@@ -64,7 +157,7 @@ Popup {
             text: "Data Extract"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
-            font.pixelSize: 15
+            font.pixelSize: Constants.fontCategoryHeader
             anchors.leftMargin: 10
         }
         Image {
@@ -79,7 +172,7 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    popupMain.visible = false
+                    closePopup()
                 }
             }
         }
@@ -100,7 +193,7 @@ Popup {
             id: fullExtactRadioBtn
             height: 40
             padding: 30
-            RadioButtonTpl{
+            CustomRadioButton{
                 id: radio_memory
                 radio_text: qsTr("Full Extract")
                 radio_checked: false
@@ -110,11 +203,7 @@ Popup {
 
                     anchors.fill: parent
                     onClicked: {
-
-                        console.log("clicked full extract")
-
-                        // Save the value in C++
-                        DSParamsModel.setIsFullExtract(true)
+                        onFullExtractClicked()
                     }
                 }
             }
@@ -129,7 +218,7 @@ Popup {
             anchors.top: fullExtactRadioBtn.bottom
             height:40
             padding: 30
-            RadioButtonTpl{
+            CustomRadioButton{
                 id: radio_memory2
                 radio_text: qsTr("Incremental Extract")
                 radio_checked: false
@@ -140,10 +229,8 @@ Popup {
                     anchors.fill: parent
                     onClicked: {
 
-                        console.log("clicked incremental extract")
+                        onIncrementalExtractClicked()
 
-                        // Save the value in C++
-                        DSParamsModel.setIsFullExtract(false)
                     }
                 }
             }
@@ -184,12 +271,14 @@ Popup {
 
 
 
-                ComboBox{
+                CustomComboBox{
                     id: columnsDropdown
                     currentIndex: 0
                     onCurrentIndexChanged: {
+
                         console.log(currentText, currentIndex)
-                        DSParamsModel.setExtractColName(currentText)
+                        onIncrementalExtractClicked(currentText, currentIndex)
+
                     }
 
                 }
@@ -228,7 +317,7 @@ Popup {
 
 
 
-                ComboBox{
+                CustomComboBox{
                     id: schedulerDropdown
                     textRole: "Name"
                     valueRole: "ScheduleID"
@@ -236,7 +325,9 @@ Popup {
                     model: SchedulerModel
                     onCurrentIndexChanged: {
                         console.log(currentValue, currentText, currentIndex)
-                        DSParamsModel.setSchedulerId(currentValue)
+
+                        onSchedulerIndexChanged(currentValue, currentText, currentIndex)
+
                     }
 
                 }
@@ -272,7 +363,7 @@ Popup {
                 textValue: "Add"
 
                 onClicked: {
-                    popupMain.visible = false
+                    onAddClicked()
                 }
             }
 
@@ -281,5 +372,8 @@ Popup {
         }
 
     }
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
 
 }

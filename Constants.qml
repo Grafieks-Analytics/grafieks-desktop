@@ -38,6 +38,8 @@ QtObject {
     property color blackColor : "#000000"
     property color grafieksGreen: "#009B8F"
     property color grafieksGreenColor: "#009B8F"
+    property color scrollBarColor: "#CCCCCC"
+
 
 
     // Standard Font Sizes
@@ -54,6 +56,7 @@ QtObject {
 
     // Radio Size
     property int defaultRadioDimension: 16
+    property int defaultRadius: 4
 
     // SQL Relations
     property string likeRelation: "LIKE"
@@ -72,6 +75,7 @@ QtObject {
     property string groupTab: "group"
 
     property double borderWidth: 1.3
+    property int radiusNumber: 4
 
     // Main Category
     property string categoryMainListType: "categorical.list"

@@ -25,7 +25,6 @@ Rectangle{
     width: parent.width - 40
     x:20
     y:30
-    anchors.top:  fullExtactRadioBtn.bottom
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
 

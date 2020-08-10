@@ -22,6 +22,18 @@ Rectangle{
 
     property string selectOption: "Select numerical"
 
+    height: parent.height - 80 - 40
+    width: parent.width - 40
+    x:20
+    y:60
+    color: Constants.whiteColor
+    border.color: Constants.darkThemeColor
+
+
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
     ListModel{
         id: listModel
         ListElement{
@@ -47,12 +59,70 @@ Rectangle{
         }
     }
 
-    height: parent.height - 80 - 40
-    width: parent.width - 40
-    x:20
-    y:60
-    color: Constants.whiteColor
-    border.color: Constants.darkThemeColor
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
+    function onExludeCheckStateChanged(checked){
+        DSParamsModel.setExclude(checked)
+    }
+
+
+    function onIncludeCheckStateChanged(checked){
+        DSParamsModel.setIncludeNull(checked)
+    }
+
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
+
 
     Rectangle{
         id: numericalHeading
@@ -79,7 +149,7 @@ Rectangle{
                 indicator.height: 15
 
                 onCheckStateChanged: {
-                    DSParamsModel.setIncludeNull(checked)
+                    onIncludeCheckStateChanged(checked)
                 }
             }
 
@@ -101,7 +171,8 @@ Rectangle{
                 indicator.height: 15
 
                 onCheckStateChanged: {
-                    DSParamsModel.setExclude(checked)
+
+                    onExludeCheckStateChanged(checked)
                 }
             }
 
@@ -234,5 +305,11 @@ Rectangle{
         }
 
     }
+
+
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
+
 }
 

@@ -221,7 +221,7 @@ Rectangle{
         //            list: listModel
         //        }
 
-        ComboBox{
+        CustomComboBox{
             id: topType
             model: listModel
             textRole: "menuItem"
@@ -290,17 +290,20 @@ Rectangle{
             width: parent.width
             anchors.right: parent.right
             anchors.rightMargin: 20
+            color: "transparent"
 
             Rectangle{
                 height: parent.height
                 width: parent.width
                 color: "transparent"
+                anchors.left: parent.left
+                anchors.leftMargin: 20
 
                 Text {
                     id: topByText
                     text: qsTr("By")
-                    x: -30
-                    y:8
+                    y:6
+
                 }
 
                 //                SelectDropdown{
@@ -309,11 +312,13 @@ Rectangle{
                 //                    list: bySelectModel
                 //                }
 
-                ComboBox{
+                CustomComboBox{
                     id: fields
                     model: fieldsModel
                     textRole: "fieldName"
                     valueRole: "fieldType"
+                    anchors.left: topByText.right
+                    anchors.leftMargin: 10
                     onCurrentIndexChanged: {
                         console.log("FIELDS", fields.currentValue, fields.currentIndex, fields.currentText)
 
@@ -340,7 +345,7 @@ Rectangle{
 
 
     //    By Calculated Field Starts
-    ComboBox{
+    CustomComboBox{
         id: calculatedFields
         anchors.left: topOption2Row.left
         anchors.verticalCenter: topByTextField.verticalCenter

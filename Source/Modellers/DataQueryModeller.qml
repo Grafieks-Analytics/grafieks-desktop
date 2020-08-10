@@ -103,10 +103,15 @@ Page {
 
     }
 
-    function onInMemorySelected(){
+    function showInMemoryPopup(){
         inMemory.visible = true
-        radio_live.radio_checked = false
-        radio_memory.radio_checked = true
+    }
+
+    function onRefreshBtnClicked(){
+        showInMemoryPopup()
+    }
+
+    function onInMemorySelected(){
 
         // Also set the C++ class
         // extract == in memory
@@ -118,8 +123,6 @@ Page {
     }
 
     function onLiveSelected(){
-        radio_live.radio_checked = true
-        radio_memory.radio_checked = false
 
         // Also set the C++ class
         DSParamsModel.setDsType("live")
@@ -228,6 +231,9 @@ Page {
 
     }
 
+    ButtonGroup{
+        id: memoryType
+    }
 
     // SubComponents ends
     /***********************************************************************************************************************/
@@ -367,6 +373,10 @@ Page {
                     color: refresh_querymodeller.hovered ? Constants.darkThemeColor : "white"
                 }
 
+                onClicked: {
+                    onRefreshBtnClicked()
+                }
+
 
             }
 
@@ -447,17 +457,14 @@ Page {
             // Live radio button starts
 
 
-            RadioButtonTpl{
+            CustomRadioButton{
                 id: radio_live
                 radio_text: qsTr("Live")
                 radio_checked: true
                 parent_dimension: 16
-
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-                        onLiveSelected()
-                    }
+                ButtonGroup.group: memoryType
+                onCheckedChanged: {
+                    onLiveSelected()
                 }
             }
 
@@ -467,18 +474,15 @@ Page {
 
             // In memory radio button starts
 
-            RadioButtonTpl{
+            CustomRadioButton{
                 id: radio_memory
                 radio_text: qsTr("In Memory")
                 radio_checked: false
                 parent_dimension: 16
 
-                MouseArea{
-
-                    anchors.fill: parent
-                    onClicked: {
-                        onInMemorySelected()
-                    }
+                ButtonGroup.group: memoryType
+                onCheckedChanged: {
+                    onInMemorySelected()
                 }
             }
 

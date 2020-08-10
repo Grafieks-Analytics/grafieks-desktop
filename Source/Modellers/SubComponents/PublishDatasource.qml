@@ -40,6 +40,103 @@ Popup {
     property string datasource_name_final : ""
 
 
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+    function closePopup(){
+        popup.visible = false
+    }
+    function openFileDialog(){
+        fileDialog1.open();
+    }
+
+    function onPublishDataSourceClicked(){
+
+        // Call Cpp function to process &
+        // Upload data to API
+
+        var dsName = datasource_name_field.text
+        var description = description_field.text
+        var uploadImage = fileDialog1.fileUrl
+        var sourceType = DSParamsModel.dsType
+        var schedulerId = DSParamsModel.schedulerId
+        var isFullExtract = DSParamsModel.isFullExtract
+        var extractColumnName = DSParamsModel.extractColName
+
+        PublishDatasourceModel.publishDatasource(dsName, description, uploadImage, sourceType, schedulerId, isFullExtract, extractColumnName)
+
+        closePopup()
+        stacklayout_home.currentIndex = 6
+    }
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+    FileDialog{
+        id: fileDialog1
+        title: "Select a file (*.jpg *.jpeg *.png  only)"
+        selectMultiple: false
+        nameFilters: [ "Image files (*.jpg *.jpeg *.png )"]
+
+//        onAccepted: {
+//            console.log("You chose: " + fileDialog1.fileUrls)
+//        }
+//        onRejected: {
+//            console.log("file rejected")
+//        }
+    }
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
+
+
     // Popup Header starts
 
     Rectangle{
@@ -70,7 +167,8 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    popup.visible = false
+
+                    closePopup()
                 }
             }
         }
@@ -184,7 +282,7 @@ Popup {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    fileDialog1.open();
+                    openFileDialog()
                 }
             }
         }
@@ -210,23 +308,7 @@ Popup {
             id: btn_signin
             textValue: "Publish"
             onClicked: {
-
-
-                // Call Cpp function to process &
-                // Upload data to API
-
-                var dsName = datasource_name_field.text
-                var description = description_field.text
-                var uploadImage = fileDialog1.fileUrl
-                var sourceType = DSParamsModel.dsType
-                var schedulerId = DSParamsModel.schedulerId
-                var isFullExtract = DSParamsModel.isFullExtract
-                var extractColumnName = DSParamsModel.extractColName
-
-                PublishDatasourceModel.publishDatasource(dsName, description, uploadImage, sourceType, schedulerId, isFullExtract, extractColumnName)
-
-                popup.visible = false
-                stacklayout_home.currentIndex = 6
+                onPublishDataSourceClicked()
             }
         }
 
@@ -234,7 +316,7 @@ Popup {
             id: btn_cancel
             textValue: "Cancel"
             onClicked: {
-                popup.visible = false
+                closePopup()
             }
         }
     }
@@ -253,17 +335,8 @@ Popup {
 
     }
 
-    FileDialog{
-        id: fileDialog1
-        title: "Select a file (*.jpg *.jpeg *.png  only)"
-        selectMultiple: false
-        nameFilters: [ "Image files (*.jpg *.jpeg *.png )"]
 
-//        onAccepted: {
-//            console.log("You chose: " + fileDialog1.fileUrls)
-//        }
-//        onRejected: {
-//            console.log("file rejected")
-//        }
-    }
+    // Page Design Ends
+    /***********************************************************************************************************************/
+
 }
