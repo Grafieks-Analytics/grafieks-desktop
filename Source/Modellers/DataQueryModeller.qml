@@ -33,6 +33,10 @@ Page {
     property bool open: true
     property int dataPreviewNo: 6
 
+
+    property Page page: queryModellerPage
+    property LeftMenuBar leftMenuBar : left_menubar
+
     /***********************************************************************************************************************/
     // Connection Starts
 
@@ -190,9 +194,10 @@ Page {
         id:tablelistDelegate
 
         Rectangle {
-            id: wrapper
+            id: dragRect
             width: 200
             height: 30
+            property bool caught: false
 
             Text {
                 id: contactInfo
@@ -201,6 +206,54 @@ Page {
                 font.pixelSize: 12
                 anchors.verticalCenter: parent.verticalCenter
             }
+            MouseArea {
+                id: mouseArea
+                anchors.fill: parent
+                drag.target: dragRect
+                drag.minimumX: -(  page.width - parent.width - leftMenuBar.width)
+//                drag.minimumY: - 199
+                drag.maximumX: 0
+//                drag.maximumY: parent.height
+
+
+                drag.onActiveChanged: {
+                    if (mouseArea.drag.active) {
+                        tableslist.dragItemIndex = index;
+                        tableslist.tableName = tableName
+                    }
+                    dragRect.Drag.drop();
+                }
+//                onReleased: {
+//                    if(!dragRect.caught) {
+//                        backAnimX.from = dragRect.x;
+//                        backAnimX.to = beginDrag.x;
+//                        backAnimY.from = dragRect.y;
+//                        backAnimY.to = beginDrag.y;
+//                        backAnim.start()
+//                        console.log()
+//                    }
+//                }
+            }
+
+            states: [
+                State {
+                    when: dragRect.Drag.active
+                    ParentChange {
+                        target: dragRect
+                        parent: tableslist
+                    }
+
+                    AnchorChanges {
+                        target: dragRect
+                        anchors.horizontalCenter: undefined
+                        anchors.verticalCenter: undefined
+                    }
+                }
+            ]
+
+            Drag.active: mouseArea.drag.active
+            Drag.hotSpot.x: dragRect.width / 2
+            Drag.hotSpot.y: dragRect.height / 2
         }
     }
 
@@ -698,8 +751,8 @@ Page {
 
                 Text{
                     id: connected_to
-                    //                    text: "Connected To: " + ConnectorsLoginModel.currentDbName
-                    text: "Connected To: grafieks_my"
+                    text: "Connected To: " + ConnectorsLoginModel.currentDbName
+                    // text: "Connected To: grafieks_my"
                     anchors.verticalCenter: rectangle_querymodeller_right_col2.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col2.left
                     anchors.leftMargin: 10
@@ -819,6 +872,9 @@ Page {
                     height : contentHeight
                     delegate: tablelistDelegate
                     visible: true
+
+                    property int dragItemIndex: -1
+                    property string tableName : ""
                 }
 
             }

@@ -18,6 +18,10 @@ import com.grafieks.singleton.constants 1.0
 
 Item {
 
+    id: dataModellerItem
+    property real droppedX : 0
+    property real droppedY : 0
+
 
 
     /***********************************************************************************************************************/
@@ -187,6 +191,44 @@ Item {
             }
         }
 
+    }
+
+    Rectangle{
+        id:highlightRect
+        height: parent.height
+        width: parent.width
+
+        MouseArea{
+            anchors.fill: parent
+            hoverEnabled: true
+            onEntered: {
+                droppedX = mouseX
+                droppedY = mouseY
+            }
+        }
+
+        DropArea {
+            id: dropArea
+            anchors.fill: parent
+            onEntered: {
+                highlightRect.color = "ivory"
+            }
+            onExited: {
+                highlightRect.color = "white"
+            }
+
+
+
+            onDropped: {
+                // listView.model.remove(listView.dragItemIndex);
+                // listView.dragItemIndex = -1;
+                console.log("dropeed")
+                highlightRect.color = "white"
+                Qt.createQmlObject('import QtQuick 2.15; Rectangle {color: "red"; width: 60; height: 30; x:Math.random()*parent.width; y:Math.random()*parent.height; Text{text: tableslist.tableName}}',
+                                   highlightRect,
+                                   "dynamicSnippet1");
+            }
+        }
     }
 
 
