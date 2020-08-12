@@ -54,7 +54,7 @@ Any of the native or cross compiler tools build configurations can be used on th
 
 1. Open Command Prompt
 2. `cd C:/Program Files (x)/Microsoft Visual Studio /2019/Community/VC/Auxiliary/Build`
-3. `./vcvarsall.bat`
+3. Try`./vcvarsall.bat`. If it doesn't work, `./vcvars64.bat` or `./vcvars32.bat` depending on your system architeture
 4. Restart Command Prompt
 
 ![vcvarsall path](https://i.imgur.com/bzkLVKn.png)
