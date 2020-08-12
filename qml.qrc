@@ -92,5 +92,6 @@
         <file>Source/MainSubComponents/CustomScrollVerticalIndicator.qml</file>
         <file>Source/MainSubComponents/CustomScrollHorizontalIndicator.qml</file>
         <file>Source/MainSubComponents/CustomRadioButton.qml</file>
+        <file>Source/Modellers/SubComponents/DroppedRectangle.qml</file>
     </qresource>
 </RCC>

@@ -224,9 +224,11 @@ Item {
                 // listView.dragItemIndex = -1;
                 console.log("dropeed")
                 highlightRect.color = "white"
-                Qt.createQmlObject('import QtQuick 2.15; Rectangle {color: "red"; width: 60; height: 30; x:Math.random()*parent.width; y:Math.random()*parent.height; Text{text: tableslist.tableName}}',
-                                   highlightRect,
-                                   "dynamicSnippet1");
+//                Qt.createQmlObject('import QtQuick 2.15; Rectangle {color: "red"; width: 60; height: 30; x:Math.random()*parent.width; y:Math.random()*parent.height; Text{text: tableslist.tableName}}',
+//                                   highlightRect,
+//                                   "dynamicSnippet1");
+
+
             }
         }
     }

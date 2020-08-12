@@ -66,8 +66,14 @@ SQL query builder, report builder and dashboard designer."
                 id:primaryVideo
 
                 url: "http://www.youtube.com/embed/hDJdkcdG1iA"
+//                url: "https://doc.qt.io/qt-5/qml-qtwebengine-webengineview.html#inspectedView-prop"
                 width:500
                 height:250
+
+                onLoadingChanged: {
+                    console.log(loadRequest, "XXX")
+
+                }
             }
 
             Text{
