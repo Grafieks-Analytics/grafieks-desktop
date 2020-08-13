@@ -57,6 +57,10 @@ Item {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted: {
+       var dynamicRectangle = Qt.createComponent("DroppedRectangle.qml");
+    }
+
 
     function onZoomOutClicked(){
         console.log('Zoom Out')
@@ -198,14 +202,7 @@ Item {
         height: parent.height
         width: parent.width
 
-        MouseArea{
-            anchors.fill: parent
-            hoverEnabled: true
-            onEntered: {
-                droppedX = mouseX
-                droppedY = mouseY
-            }
-        }
+
 
         DropArea {
             id: dropArea
@@ -217,16 +214,15 @@ Item {
                 highlightRect.color = "white"
             }
 
-
-
             onDropped: {
                 // listView.model.remove(listView.dragItemIndex);
                 // listView.dragItemIndex = -1;
-                console.log("dropeed")
+
                 highlightRect.color = "white"
-//                Qt.createQmlObject('import QtQuick 2.15; Rectangle {color: "red"; width: 60; height: 30; x:Math.random()*parent.width; y:Math.random()*parent.height; Text{text: tableslist.tableName}}',
-//                                   highlightRect,
-//                                   "dynamicSnippet1");
+
+                var  dynamicRectangle = Qt.createComponent("DroppedRectangle.qml");
+
+                dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName})
 
 
             }
