@@ -56,12 +56,17 @@ Item{
 
         }
 
-        MouseArea{
+        MouseArea {
+            id: mouseArea
             anchors.fill: parent
+            drag.target: newItem
+
             onDoubleClicked: {
                 droppedRectangle.height = droppedRectangle.height === 30 ? 60 : 30
             }
         }
+
+
     }
 
 }

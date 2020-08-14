@@ -223,16 +223,6 @@ Page {
                     }
                     dragRect.Drag.drop();
                 }
-//                onReleased: {
-//                    if(!dragRect.caught) {
-//                        backAnimX.from = dragRect.x;
-//                        backAnimX.to = beginDrag.x;
-//                        backAnimY.from = dragRect.y;
-//                        backAnimY.to = beginDrag.y;
-//                        backAnim.start()
-//                        console.log()
-//                    }
-//                }
             }
 
             states: [
