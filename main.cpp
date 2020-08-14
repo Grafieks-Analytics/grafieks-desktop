@@ -28,9 +28,7 @@
 #include "Code/Logic/DataModeller/schedulermodel.h"
 #include "Code/Logic/DataModeller/columnlistmodel.h"
 #include "Code/Logic/DataModeller/filterlistmodel.h"
-#include "Code/Logic/DataModeller/filterlistcategorylistfilter.h"
-//#include "Code/Logic/DataModeller/filterlistcategorywildcardfilter.h"
-//#include "Code/Logic/DataModeller/filterlistcategorytopfilter.h"
+#include "Code/Logic/DataModeller/filterlistcategoricalfilter.h"
 
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
@@ -100,9 +98,7 @@ int main(int argc, char *argv[])
     PublishDatasourceModel publishDatasourceModel;
     ColumnListModel columnListModel;
     FilterListModel filterListModel;
-    FilterListCategoryListFilter filterListCategoryListFilter;
-//    FilterListCategoryTopFilter filterListCategoryTopFilter;
-//    FilterListCategoryWildcardFilter filterListCategoryWildcardFilter;
+    FilterListCategoricalFilter filterListCategoricalFilter;
 
     QuerySplitter querySplitter;
 
@@ -156,7 +152,7 @@ int main(int argc, char *argv[])
     schedulerModel.setScheduler(scheduler);
 
     filterListModel.callNewFilter();
-    filterListCategoryListFilter.setSearchString("test");
+    filterListCategoricalFilter.setSearchString("test");
 
 
     // DEFAULT FUNCTION ENDS
@@ -195,9 +191,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("SchedulerModel",&schedulerModel);
     engine.rootContext()->setContextProperty("SchedulerDS",scheduler);
     engine.rootContext()->setContextProperty("FilterListModel",&filterListModel);
-    engine.rootContext()->setContextProperty("FilterListCategoryListFilter",&filterListCategoryListFilter);
-//    engine.rootContext()->setContextProperty("FilterListCategoryWildcardFilter",&filterListCategoryWildcardFilter);
-//    engine.rootContext()->setContextProperty("FilterListCategoryTopFilter",&filterListCategoryTopFilter);
+    engine.rootContext()->setContextProperty("FilterListCategoricalFilter",&filterListCategoricalFilter);
     engine.rootContext()->setContextProperty("QuerySplitter",&querySplitter);
 
 

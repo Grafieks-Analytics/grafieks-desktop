@@ -1,13 +1,13 @@
-#include "filterlistcategorylistfilter.h"
+#include "filterlistcategoricalfilter.h"
 
-FilterListCategoryListFilter::FilterListCategoryListFilter(QObject *parent) : QSortFilterProxyModel(parent)
+FilterListCategoricalFilter::FilterListCategoricalFilter(QObject *parent) : QSortFilterProxyModel(parent)
 {
     //    qDebug() << "CALLED filter constructor";
     this->setSourceModel(&m_filterListModel);
     this->setFilterRole(m_filterListModel.FilterListCategoryRole);
 }
 
-void FilterListCategoryListFilter::setSearchString(QString string)
+void FilterListCategoricalFilter::setSearchString(QString string)
 {
     this->setSourceModel(&m_filterListModel);
     this->setFilterRole(m_filterListModel.FilterListCategoryRole);
