@@ -83,6 +83,7 @@ TableView {
 
 
     delegate: Rectangle {
+        border.color: Constants.darkThemeColor
         Text {
             text: display
             anchors.fill: parent
@@ -107,21 +108,29 @@ TableView {
         id: columnsHeader1
         y: dataPreviewResult.contentY
         z: 2
+        width: dataPreviewResult.width
+
         Repeater {
             model: dataPreviewResult.columns > 0 ? dataPreviewResult.columns : 1
-            Label {
-                id : label
+            Rectangle{
                 width: dataPreviewResult.columnWidthProvider(modelData)
                 height: 35
-                text: QueryModel.headerData(modelData, Qt.Horizontal)
-                color: 'black'
-                font.pixelSize: Constants.fontCategoryHeader
-                padding: 10
-                verticalAlignment: Text.AlignVCenter
+//                border.color: "red"
+//                border.width: 3
 
-                background: Rectangle { color: "white" }
+                Label {
+                    id : label
+                    width: dataPreviewResult.columnWidthProvider(modelData)
+                    height: 35
+                    text: QueryModel.headerData(modelData, Qt.Horizontal)
+                    color: 'black'
+                    font.pixelSize: Constants.fontCategoryHeader
+                    padding: 10
+                    verticalAlignment: Text.AlignVCenter
+                    background: Rectangle { color: "white" }
+                }
+
             }
-
         }
     }
 
