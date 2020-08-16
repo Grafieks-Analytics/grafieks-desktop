@@ -89,6 +89,7 @@ TableView {
             anchors.fill: parent
             anchors.margins: 10
             verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
         }
     }
     Rectangle { // mask the headers
@@ -97,7 +98,8 @@ TableView {
         x: dataPreviewResult.contentX
         width: dataPreviewResult.leftMargin
         height: dataPreviewResult.topMargin
-        border.color: Constants.darkThemeColor
+        border.color: Constants.themeColor
+        border.width: 0.2
     }
 
     // Table Header Starts
@@ -112,19 +114,17 @@ TableView {
             model: dataPreviewResult.columns > 0 ? dataPreviewResult.columns : 1
             Rectangle{
                 width: dataPreviewResult.columnWidthProvider(modelData)
-                height: 35
-//                border.color: "red"
-//                border.width: 3
-
-                Label {
-                    id : label
-                    width: dataPreviewResult.columnWidthProvider(modelData)
-                    height: 35
+                height: 30
+                border.color: Constants.darkThemeColor
+                border.width: 1
+                Text {
+                    id: name
                     text: QueryModel.headerData(modelData, Qt.Horizontal)
+                    width: parent.width
+                    height: parent.height
+                    anchors.centerIn: parent
                     padding: 10
                     verticalAlignment: Text.AlignVCenter
-                    color: Constants.blackColor
-                    background: Rectangle { color: "white" }
                 }
 
             }

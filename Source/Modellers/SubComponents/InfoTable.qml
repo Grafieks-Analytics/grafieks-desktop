@@ -293,8 +293,7 @@ Item{
             height:30
             anchors.left:toolbar_querymodeller.right
             anchors.top: infodataTableHeader.top
-            anchors.topMargin: 1
-            padding: 0
+            anchors.topMargin: -1
         }
 
         // "Data Preview" Button Starts
@@ -342,8 +341,8 @@ Item{
             id: seperator2
             height:30
             anchors.left:data_preview_btn.right
-            anchors.top: linebar1.top
-            padding: 0
+            anchors.top: infodataTableHeader.top
+            anchors.topMargin: -1
         }
 
 
@@ -362,8 +361,8 @@ Item{
             Button{
                 id: displayLimitBtn
                 height: 27
-                width: 160
-                leftPadding: 10
+                width: parent.width
+//                leftPadding: 10
 
                 Text{
                     id : displayLimit
@@ -443,8 +442,8 @@ Item{
             id: seperator3
             height:30
             anchors.left:display_limited_btn.right
-            anchors.top: linebar1.top
-            padding: 0
+            anchors.top: infodataTableHeader.top
+            anchors.topMargin: -1
         }
 
         // "Play" Button Starts
@@ -453,10 +452,11 @@ Item{
 
             id: play_btn_rect
             width: 160
+            height: 22
             anchors.top: infodataTableHeader.top
             anchors.topMargin: 1
             anchors.left: seperator3.right
-            height: 22
+            anchors.leftMargin: -6
 
             Button{
                 id: playBtn
@@ -542,7 +542,7 @@ Item{
         id:queryResultsTable
         height: queryModellerPage.height - submenu.height - dataQueryModellerStackview.height  - infodataTableHeader.height - 46
         anchors.top: infodataTableHeader.bottom
-        anchors.topMargin: 2
+        anchors.topMargin: 1
         anchors.rightMargin: column_querymodeller.width + 50
         width: parent.width - column_querymodeller.width - 50
 

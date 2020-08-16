@@ -73,9 +73,9 @@ Page {
     function onDataModellerClicked(){
         if(!dataModellerSelected){
             dataModellerSelected = !dataModellerSelected
-            datamodeller_querymodeller_background.color = Constants.darkThemeColor;
-            queryModellerTab_background.color = queryModellerTab_background.hovered ? Constants.darkThemeColor : Constants.themeColor
-
+            datamodeller_querymodeller_background.color = Constants.leftDarkColor;
+            queryModellerTab_background.color = queryModellerTab_background.hovered ? Constants.leftDarkColor : Constants.themeColor
+            datamodeller_querymodeller_text.color = Constants.blackColor
             // Prompt dialog to warn user of data deletion
             // If accepted, the clear data
             // and push to another stackview screen
@@ -86,7 +86,17 @@ Page {
 
     function onDataModellerHovered(){
         if(!dataModellerSelected){
-            datamodeller_querymodeller_background.color = datamodeller_querymodeller.hovered ? Constants.darkThemeColor : Constants.themeColor
+            datamodeller_querymodeller_background.color = datamodeller_querymodeller.hovered ? Constants.grafieksGreenColor : Constants.themeColor
+            datamodeller_querymodeller_text.color = datamodeller_querymodeller.hovered ? Constants.whiteColor : Constants.blackColor
+
+        }
+    }
+
+    function onQueryModellerHovered(){
+        if(dataModellerSelected){
+            queryModellerTab_background.color = queryModellerTab.hovered ? Constants.grafieksGreenColor : Constants.themeColor
+            queryModellerTab_text.color = queryModellerTab.hovered ? Constants.whiteColor : Constants.blackColor
+            datamodeller_querymodeller_text.color = Constants.blackColor
         }
     }
 
@@ -95,8 +105,9 @@ Page {
         if(dataModellerSelected){
             dataModellerSelected = !dataModellerSelected
 
-            queryModellerTab_background.color = Constants.darkThemeColor
-            datamodeller_querymodeller_background.color = datamodeller_querymodeller.hovered ? Constants.darkThemeColor : Constants.themeColor
+            queryModellerTab_background.color = Constants.leftDarkColor
+            datamodeller_querymodeller_background.color = datamodeller_querymodeller.hovered ? Constants.leftDarkColor : Constants.themeColor
+            queryModellerTab_text.color = Constants.blackColor
 
             // Prompt dialog to warn user of data deletion
             // If accepted, the clear data
@@ -336,19 +347,22 @@ Page {
 
                 background: Rectangle {
                     id: datamodeller_querymodeller_background
-                    color: datamodeller_querymodeller.hovered ? Constants.darkThemeColor : Constants.themeColor
+                    color: {
+                        datamodeller_querymodeller.hovered ? Constants.grafieksGreenColor : Constants.themeColor
+                    }
                 }
 
                 contentItem: Text{
                     id: datamodeller_querymodeller_text
                     text: datamodeller_querymodeller.text
-                    color:  Constants.blackColor
+                    color:  datamodeller_querymodeller.hovered ? Constants.whiteColor : Constants.blackColor
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
 
                 Component.onCompleted: {
-                    datamodeller_querymodeller_background.color = Constants.darkThemeColor
+                    datamodeller_querymodeller_background.color = Constants.leftDarkColor
+                    datamodeller_querymodeller_text.color = Constants.blackColor
                 }
 
             }
@@ -371,21 +385,19 @@ Page {
                 }
 
                 onHoveredChanged: {
-                    if(dataModellerSelected){
-                        queryModellerTab_background.color = queryModellerTab.hovered ? Constants.darkThemeColor : Constants.themeColor
-                    }
+                    onQueryModellerHovered()
                 }
 
                 background: Rectangle {
                     id: queryModellerTab_background
-                    color:  queryModellerTab.hovered ? Constants.darkThemeColor : Constants.themeColor
+                    color:  queryModellerTab.hovered ? Constants.grafieksGreenColor : Constants.themeColor
 
                 }
 
                 contentItem: Text{
                     id: queryModellerTab_text
                     text: queryModellerTab.text
-                    color:  "black"
+                    color:  queryModellerTab.hovered ? Constants.whiteColor : Constants.blackColor
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
@@ -927,20 +939,6 @@ Page {
 
             }
 
-//            // Right item 4 ends
-
-//            CustomButton {
-//                id: publish_button
-//                textValue: qsTr("Publish Data Source")
-//                anchors.bottom: parent.bottom
-//                anchors.bottomMargin: 30
-//                width: parent.width
-//                height: 40
-
-//                onClicked: {
-//                    onPublishDataSourceClicked()
-//                }
-//            }
         }
     }
 
