@@ -100,9 +100,12 @@ $(document).ready(function(){initNavTree('class_box_d_s.html',''); initResizable
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_box_d_s-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">BoxDS Class Reference</div>  </div>
+<div class="title">BoxDS Class Reference<div class="ingroups"><a class="el" href="group___logic.html">Logic</a> &raquo; <a class="el" href="group___connector_screen.html">ConnectorScreen</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Fetches data records from <a class="el" href="class_box.html" title="Roles required for Box API/Model.">Box</a> API.  
+ <a href="class_box_d_s.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="boxds_8h_source.html">boxds.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -130,27 +133,37 @@ Signals</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aca367a3bbdb2ab843856dc4cba9b75f6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_box_d_s.html#aca367a3bbdb2ab843856dc4cba9b75f6">BoxDS</a> (QObject *parent=nullptr)</td></tr>
+<tr class="memdesc:aca367a3bbdb2ab843856dc4cba9b75f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function to initialize connection with <a class="el" href="class_box.html" title="Roles required for Box API/Model.">Box</a> API.  <a href="class_box_d_s.html#aca367a3bbdb2ab843856dc4cba9b75f6">More...</a><br /></td></tr>
 <tr class="separator:aca367a3bbdb2ab843856dc4cba9b75f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66ea5146c8d4cbb19a1ba27e36e2ad88"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_box_d_s.html#a66ea5146c8d4cbb19a1ba27e36e2ad88">fetchDatasources</a> ()</td></tr>
+<tr class="memdesc:a66ea5146c8d4cbb19a1ba27e36e2ad88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls to authorize the user using Qt's OAuth class.  <a href="class_box_d_s.html#a66ea5146c8d4cbb19a1ba27e36e2ad88">More...</a><br /></td></tr>
 <tr class="separator:a66ea5146c8d4cbb19a1ba27e36e2ad88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad785ba8b10cd4689feb0a0a51bf2be98"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_box_d_s.html#ad785ba8b10cd4689feb0a0a51bf2be98">folderNav</a> (QString path)</td></tr>
+<tr class="memdesc:ad785ba8b10cd4689feb0a0a51bf2be98"><td class="mdescLeft">&#160;</td><td class="mdescRight">List contents of a folder.  <a href="class_box_d_s.html#ad785ba8b10cd4689feb0a0a51bf2be98">More...</a><br /></td></tr>
 <tr class="separator:ad785ba8b10cd4689feb0a0a51bf2be98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f34d1a2e5d497de3b808594e17affe7"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_box_d_s.html#a4f34d1a2e5d497de3b808594e17affe7">searchQuer</a> (QString path)</td></tr>
+<tr class="memdesc:a4f34d1a2e5d497de3b808594e17affe7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Search the <a class="el" href="class_box.html" title="Roles required for Box API/Model.">Box</a> API.  <a href="class_box_d_s.html#a4f34d1a2e5d497de3b808594e17affe7">More...</a><br /></td></tr>
 <tr class="separator:a4f34d1a2e5d497de3b808594e17affe7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8cb0d4ff7713544a785b0d69dfe4177"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_box_d_s.html#ad8cb0d4ff7713544a785b0d69dfe4177">addDataSource</a> (<a class="el" href="class_box.html">Box</a> *<a class="el" href="class_box_d_s.html#a1a0e7afea6056e67d6371dd6acc63f66">box</a>)</td></tr>
+<tr class="memdesc:ad8cb0d4ff7713544a785b0d69dfe4177"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notify model after adding new record in QList&lt;Box *&gt;  <a href="class_box_d_s.html#ad8cb0d4ff7713544a785b0d69dfe4177">More...</a><br /></td></tr>
 <tr class="separator:ad8cb0d4ff7713544a785b0d69dfe4177"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5d22978f1586a26b1ee899a4739aa6f"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_box_d_s.html#ae5d22978f1586a26b1ee899a4739aa6f">addDataSource</a> (const QString &amp;id, const QString &amp;name, const QString &amp;type, const QString &amp;modifiedAt, const QString &amp;extension)</td></tr>
+<tr class="memdesc:ae5d22978f1586a26b1ee899a4739aa6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add new data to QList&lt;Box *&gt;  <a href="class_box_d_s.html#ae5d22978f1586a26b1ee899a4739aa6f">More...</a><br /></td></tr>
 <tr class="separator:ae5d22978f1586a26b1ee899a4739aa6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9348c88a9881f4390537cabf3bb06895"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="class_box.html">Box</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_box_d_s.html#a9348c88a9881f4390537cabf3bb06895">dataItems</a> ()</td></tr>
+<tr class="memdesc:a9348c88a9881f4390537cabf3bb06895"><td class="mdescLeft">&#160;</td><td class="mdescRight">List the values in QList&lt;Box *&gt;  <a href="class_box_d_s.html#a9348c88a9881f4390537cabf3bb06895">More...</a><br /></td></tr>
 <tr class="separator:a9348c88a9881f4390537cabf3bb06895"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-slots"></a>
 Private Slots</h2></td></tr>
 <tr class="memitem:a532ca193a3b6b8546d27ecb810c781ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_box_d_s.html#a532ca193a3b6b8546d27ecb810c781ae">resetDatasource</a> ()</td></tr>
+<tr class="memdesc:a532ca193a3b6b8546d27ecb810c781ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear all the values in QList&lt;Box*&gt; &amp; notify model.  <a href="class_box_d_s.html#a532ca193a3b6b8546d27ecb810c781ae">More...</a><br /></td></tr>
 <tr class="separator:a532ca193a3b6b8546d27ecb810c781ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95b6d3034cd15c37d87e98e0a63923d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_box_d_s.html#a95b6d3034cd15c37d87e98e0a63923d5">dataReadyRead</a> ()</td></tr>
+<tr class="memdesc:a95b6d3034cd15c37d87e98e0a63923d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads incoming data from the API &amp; store to buffer.  <a href="class_box_d_s.html#a95b6d3034cd15c37d87e98e0a63923d5">More...</a><br /></td></tr>
 <tr class="separator:a95b6d3034cd15c37d87e98e0a63923d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3044869034dd4c834546dc1694464a1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_box_d_s.html#ac3044869034dd4c834546dc1694464a1">dataReadFinished</a> ()</td></tr>
+<tr class="memdesc:ac3044869034dd4c834546dc1694464a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes the data buffer.  <a href="class_box_d_s.html#ac3044869034dd4c834546dc1694464a1">More...</a><br /></td></tr>
 <tr class="separator:ac3044869034dd4c834546dc1694464a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
@@ -168,7 +181,10 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a88625a90ed2e8fc0b615edcdb4dfff62"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_box_d_s.html#a88625a90ed2e8fc0b615edcdb4dfff62">token</a></td></tr>
 <tr class="separator:a88625a90ed2e8fc0b615edcdb4dfff62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Fetches data records from <a class="el" href="class_box.html" title="Roles required for Box API/Model.">Box</a> API. </p>
+<p>This class lists all the methods which interact with the <a class="el" href="class_box.html" title="Roles required for Box API/Model.">Box</a> API documented in <a href="https://developer.box.com/reference/">https://developer.box.com/reference/</a> </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aca367a3bbdb2ab843856dc4cba9b75f6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aca367a3bbdb2ab843856dc4cba9b75f6">&#9670;&nbsp;</a></span>BoxDS()</h2>
 
@@ -193,6 +209,14 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Constructor function to initialize connection with <a class="el" href="class_box.html" title="Roles required for Box API/Model.">Box</a> API. </p>
+<p>Initiates OAuth connection. Once OAuth token is obtained, it calls relevant methods to fetch the data from the API </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -211,6 +235,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Notify model after adding new record in QList&lt;Box *&gt; </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">box</td><td>(<a class="el" href="class_box.html" title="Roles required for Box API/Model.">Box</a> *) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -258,6 +290,18 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Add new data to QList&lt;Box *&gt; </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>(File id) </td></tr>
+    <tr><td class="paramname">name</td><td>(File name) </td></tr>
+    <tr><td class="paramname">type</td><td>(File type) </td></tr>
+    <tr><td class="paramname">modifiedAt</td><td>(Modified date) </td></tr>
+    <tr><td class="paramname">extension</td><td>(File extension) </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a9348c88a9881f4390537cabf3bb06895"></a>
@@ -274,6 +318,9 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>List the values in QList&lt;Box *&gt; </p>
+<dl class="section return"><dt>Returns</dt><dd>QList&lt;Box *&gt; </dd></dl>
 
 </div>
 </div>
@@ -300,6 +347,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Processes the data buffer. </p>
+<p>Process the data buffer and append new values to QList&lt;Box*&gt; </p>
+
 </div>
 </div>
 <a id="a95b6d3034cd15c37d87e98e0a63923d5"></a>
@@ -325,6 +375,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Reads incoming data from the API &amp; store to buffer. </p>
+
 </div>
 </div>
 <a id="a66ea5146c8d4cbb19a1ba27e36e2ad88"></a>
@@ -341,6 +393,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Calls to authorize the user using Qt's OAuth class. </p>
 
 </div>
 </div>
@@ -359,6 +413,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>List contents of a folder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>(Folder path) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -536,6 +598,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Clear all the values in QList&lt;Box*&gt; &amp; notify model. </p>
+
 </div>
 </div>
 <a id="a4f34d1a2e5d497de3b808594e17affe7"></a>
@@ -553,6 +617,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Search the <a class="el" href="class_box.html" title="Roles required for Box API/Model.">Box</a> API. </p>
+<p>Documentation reference <a href="https://developer.box.com/reference/get-search/">https://developer.box.com/reference/get-search/</a> </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>(File name) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

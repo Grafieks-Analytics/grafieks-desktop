@@ -2,7 +2,6 @@
 
 /*!
  * \fn Sqlitecon::Sqlitecon
- * \ingroup Connectors
  * \brief Constructor function for Sqlite connection
  * \param parent
  */
@@ -13,8 +12,9 @@ Sqlitecon::Sqlitecon(QObject *parent) : QObject(parent)
 
 /*!
  * \fn Sqlitecon::SqliteInstance
- * \ingroup Connectors
- * \brief Instantiates and Sqlite connection to a given database
+ * \brief Instantiates an Sqlite connection
+ * \details The function instantiates 2 Sqlite connections for General connections and one specially for DataQuery Modeller - query profiling.
+ * Query profiling needs a separate connection because once enabled, it profiles all the queries which we don't want
  * \param QString &filename
  * \param QString &username
  * \param QString &password
@@ -78,8 +78,8 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &us
 
 /*!
  * \fn Sqlitecon::~Sqlitecon
- * \ingroup Connectors
  * \brief Destructor function for Sqlite connection
+ * \details The function closes the two Sqlite open connections
  */
 Sqlitecon::~Sqlitecon()
 {

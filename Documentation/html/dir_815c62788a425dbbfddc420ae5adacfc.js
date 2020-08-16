@@ -9,7 +9,5 @@ var dir_815c62788a425dbbfddc420ae5adacfc =
       [ "QuerySplitter", "class_query_splitter.html", "class_query_splitter" ]
     ] ],
     [ "tableschemamodel.cpp", "tableschemamodel_8cpp.html", null ],
-    [ "tableschemamodel.h", "tableschemamodel_8h.html", [
-      [ "TableSchemaModel", "class_table_schema_model.html", "class_table_schema_model" ]
-    ] ]
+    [ "tableschemamodel.h", "tableschemamodel_8h.html", null ]
 ];

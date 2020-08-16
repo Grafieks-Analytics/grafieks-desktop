@@ -1,13 +1,9 @@
 var dir_3babadc2f55bb09d631ca3b2db978bcd =
 [
     [ "box.cpp", "box_8cpp.html", null ],
-    [ "box.h", "box_8h.html", [
-      [ "Box", "class_box.html", "class_box" ]
-    ] ],
+    [ "box.h", "box_8h.html", null ],
     [ "boxds.cpp", "boxds_8cpp.html", null ],
-    [ "boxds.h", "boxds_8h.html", [
-      [ "BoxDS", "class_box_d_s.html", "class_box_d_s" ]
-    ] ],
+    [ "boxds.h", "boxds_8h.html", null ],
     [ "boxmodel.cpp", "boxmodel_8cpp.html", null ],
     [ "boxmodel.h", "boxmodel_8h.html", [
       [ "BoxModel", "class_box_model.html", "class_box_model" ]
