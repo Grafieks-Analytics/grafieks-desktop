@@ -12,11 +12,11 @@ import "../SubComponents"
 Item{
 
     id: infodata_table
-    anchors.top: dataQueryModellerStackview.bottom
+    anchors.bottom: dataQueryModellerStackview.bottom
     anchors.left: left_menubar.right
     width: parent.width
     visible: true
-    height:  infodataTableHeader.height + queryResultsTable.height
+    height: queryModellerPage.height - submenu.height - dataQueryModellerStackview.height
 
     property bool profilingStatus: false
     property bool infoTableResizingFixed: true
@@ -57,13 +57,13 @@ Item{
         // Set default value of displayLimit
         // of query results to 100
         DSParamsModel.setDisplayRowsCount(100)
+        console.log(queryModellerPage.height - submenu.height - dataQueryModellerStackview.height  - infodataTableHeader.height)
     }
 
     function onDragInfoTablePanel(mouse){
-        if(infoTableResizingFixed){
 
+        if(infoTableResizingFixed){
             if(mouse.y > 0){
-                queryResultsTable.height -= mouse.y
                 dataQueryModellerStackview.height += mouse.y
                 if(dataQueryModellerStackview.height > 200){
                     infoTableResizingFixed = false
@@ -73,19 +73,19 @@ Item{
 
         if(dataQueryModellerStackview.height > 200){
 
-            queryResultsTable.height -= mouse.y
             if(dataQueryModellerStackview.height + mouse.y < 200){
-
                 dataQueryModellerStackview.height = 200
-
             }else{
-
                 dataQueryModellerStackview.height += mouse.y
             }
 
         }else{
             infoTableResizingFixed = true;
         }
+
+        infodata_table.height = Qt.binding(function(){
+            return queryModellerPage.height - submenu.height - dataQueryModellerStackview.height
+        })
     }
 
 
@@ -155,33 +155,30 @@ Item{
         if(open){
 
             collapseBtnImage.source = "../../../Images/icons/Up.png"
-
-            queryResultsTable.height = 0
             queryResultsTable.visible = false
 
-            infodata_table.height = Qt.binding(function(){
-                return infodataTableHeader.height + queryResultsTable.height
-            })
             dataQueryModellerStackview.height = Qt.binding(function(){
+                return queryModellerPage.height - 95
+            })
 
-                return queryModellerPage.height - infodata_table.height - 66
+            infodata_table.height = Qt.binding(function(){
+                return  queryModellerPage.height - submenu.height - dataQueryModellerStackview.height
             })
 
             open = false
         }else{
 
             collapseBtnImage.source = "../../../Images/icons/Down.png"
-
             queryResultsTable.visible = true
-            queryResultsTable.height = 270
+
+            dataQueryModellerStackview.height = Qt.binding(function(){
+                return queryModellerPage.height - 300
+            })
 
             infodata_table.height = Qt.binding(function(){
-                return infodataTableHeader.height + queryResultsTable.height
+                return queryModellerPage.height - submenu.height - dataQueryModellerStackview.height
             })
-            dataQueryModellerStackview.height = Qt.binding(function(){
 
-                return query_modeller_page.height - infodata_table.height
-            })
             open = true
         }
     }
@@ -231,8 +228,9 @@ Item{
             id: linebar1
             line_color: Constants.darkThemeColor
             line_width: parent.width
-            anchors.top: infodataTableHeader.top
-            height: 2
+            anchors.top: parent.top
+            width: parent.width
+            height: 4
 
             MouseArea{
                 id: infoPanelDragMouseArea
@@ -257,7 +255,8 @@ Item{
             id: toolbar_querymodeller
 
             width: 100
-            anchors.top: linebar1.bottom
+            anchors.top: infodataTableHeader.top
+            anchors.topMargin: 1
             anchors.left: parent.left
             height: 22
 
@@ -266,7 +265,6 @@ Item{
                 height: 27
                 width: 100
                 leftPadding: 10
-                topPadding: 8
 
                 Text{
                     text: "Test Query"
@@ -294,7 +292,8 @@ Item{
             id: seperator1
             height:30
             anchors.left:toolbar_querymodeller.right
-            anchors.top: linebar1.top
+            anchors.top: infodataTableHeader.top
+            anchors.topMargin: 1
             padding: 0
         }
 
@@ -304,7 +303,8 @@ Item{
 
             id: data_preview_btn
             width: 100
-            anchors.top: linebar1.bottom
+            anchors.top: infodataTableHeader.top
+            anchors.topMargin: 1
             anchors.left: seperator1.right
             height: 22
 
@@ -313,7 +313,6 @@ Item{
                 height: 27
                 width: 100
                 leftPadding: 10
-                topPadding: 8
 
                 Text{
                     text: "Data Preview"
@@ -354,7 +353,9 @@ Item{
 
             id: display_limited_btn
             width: 160
-            anchors.top: linebar1.bottom
+
+            anchors.top: infodataTableHeader.top
+            anchors.topMargin: 1
             anchors.left: seperator2.right
             height: 22
 
@@ -363,7 +364,6 @@ Item{
                 height: 27
                 width: 160
                 leftPadding: 10
-                topPadding: 8
 
                 Text{
                     id : displayLimit
@@ -453,7 +453,8 @@ Item{
 
             id: play_btn_rect
             width: 160
-            anchors.top: linebar1.bottom
+            anchors.top: infodataTableHeader.top
+            anchors.topMargin: 1
             anchors.left: seperator3.right
             height: 22
 
@@ -461,7 +462,6 @@ Item{
                 id: playBtn
                 height: 27
                 width: 27
-                topPadding: 8
 
                 Image {
                     id: playBtnImage
@@ -497,8 +497,9 @@ Item{
 
         Rectangle{
             id:collapseBtnRow
-            anchors.top: linebar1.bottom
-            height: 24
+            anchors.top: infodataTableHeader.top
+            anchors.topMargin: 1
+            height: 26
 
             x: parent.width - 278
 
@@ -506,7 +507,6 @@ Item{
                 id: collapseBtn
                 height: parent.height
                 width: parent.height
-                topPadding: 6
 
                 Image {
                     id: collapseBtnImage
@@ -540,7 +540,7 @@ Item{
     Rectangle{
 
         id:queryResultsTable
-        height: 208
+        height: queryModellerPage.height - submenu.height - dataQueryModellerStackview.height  - infodataTableHeader.height - 46
         anchors.top: infodataTableHeader.bottom
         anchors.topMargin: 2
         anchors.rightMargin: column_querymodeller.width + 50
