@@ -98,5 +98,6 @@
         <file>Images/icons/folder-invoices.png</file>
         <file>Images/icons/remove.png</file>
         <file>Images/icons/clipart268070@2x.png</file>
+        <file>Images/logos/GrafieksDesktopMac.icns</file>
     </qresource>
 </RCC>

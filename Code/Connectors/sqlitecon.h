@@ -13,6 +13,11 @@
 #include "../statics.h"
 #include "../constants.h"
 
+/*!
+ * \brief  Handles the connection with Sqlitecon across the application
+ * \ingroup Connectors
+ */
+
 class Sqlitecon : public QObject
 {
     Q_OBJECT

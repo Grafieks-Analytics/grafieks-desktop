@@ -5,6 +5,13 @@ TableSchemaModel::TableSchemaModel(QObject *parent) : QObject(parent)
 
 }
 
+/*!
+ * \fn void showSchema();
+ * \brief Accepts an SQL query parameter and emits a signal with list of information of individual column
+ *
+ * \note emit tableSchemaObtained(QList <QStringList> allList, QList <QStringList> allCategorical, QList <QStringList> allNumerical, QList <QStringList> allDates, QList <QStringList> allOthers,QStringList queriedColumnNames);
+ *
+ */
 void TableSchemaModel::showSchema(QString query)
 {
 
@@ -142,6 +149,7 @@ void TableSchemaModel::showSchema(QString query)
 
 
 }
+
 
 QString TableSchemaModel::dataType(QString parameter)
 {

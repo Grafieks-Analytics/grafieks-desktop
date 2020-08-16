@@ -1,8 +1,25 @@
 #include "sqlitecon.h"
 
+/*!
+ * \fn Sqlitecon::Sqlitecon
+ * \ingroup Connectors
+ * \brief Constructor function for Sqlite connection
+ * \param parent
+ */
 Sqlitecon::Sqlitecon(QObject *parent) : QObject(parent)
 {
 }
+
+
+/*!
+ * \fn Sqlitecon::SqliteInstance
+ * \ingroup Connectors
+ * \brief Instantiates and Sqlite connection to a given database
+ * \param QString &filename
+ * \param QString &username
+ * \param QString &password
+ * \return QVariantMap {bool status, QString msg}
+ */
 
 QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &username, const QString &password)
 {
@@ -59,6 +76,11 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &us
 
 }
 
+/*!
+ * \fn Sqlitecon::~Sqlitecon
+ * \ingroup Connectors
+ * \brief Destructor function for Sqlite connection
+ */
 Sqlitecon::~Sqlitecon()
 {
     QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);

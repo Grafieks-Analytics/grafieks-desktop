@@ -15,6 +15,11 @@
 #include "../../statics.h"
 #include "../../constants.h"
 
+/*!
+ * \class TableSchemaModel
+ * \brief Generates schema of a given table
+ * \ingroup General
+ */
 class TableSchemaModel : public QObject
 {
     Q_OBJECT
