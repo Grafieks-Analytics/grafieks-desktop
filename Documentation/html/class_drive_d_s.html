@@ -100,9 +100,12 @@ $(document).ready(function(){initNavTree('class_drive_d_s.html',''); initResizab
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_drive_d_s-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">DriveDS Class Reference</div>  </div>
+<div class="title">DriveDS Class Reference<div class="ingroups"><a class="el" href="group___logic.html">Logic</a> &raquo; <a class="el" href="group___connector_screen.html">ConnectorScreen</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Fetches data records from Google <a class="el" href="class_drive.html" title="Roles required for Google Drive API/Model.">Drive</a> API.  
+ <a href="class_drive_d_s.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="driveds_8h_source.html">driveds.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -130,25 +133,37 @@ Signals</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aa80bc15bdbd10514ad3841dbfa071797"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_d_s.html#aa80bc15bdbd10514ad3841dbfa071797">DriveDS</a> (QObject *parent=nullptr)</td></tr>
+<tr class="memdesc:aa80bc15bdbd10514ad3841dbfa071797"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function to initialize connection with Google <a class="el" href="class_drive.html" title="Roles required for Google Drive API/Model.">Drive</a> API.  <a href="class_drive_d_s.html#aa80bc15bdbd10514ad3841dbfa071797">More...</a><br /></td></tr>
 <tr class="separator:aa80bc15bdbd10514ad3841dbfa071797"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a501dc475e089ac3f5bc3ea1d6a2046"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_d_s.html#a3a501dc475e089ac3f5bc3ea1d6a2046">fetchDatasources</a> ()</td></tr>
+<tr class="memdesc:a3a501dc475e089ac3f5bc3ea1d6a2046"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls to authorize the user using Qt's OAuth class.  <a href="class_drive_d_s.html#a3a501dc475e089ac3f5bc3ea1d6a2046">More...</a><br /></td></tr>
 <tr class="separator:a3a501dc475e089ac3f5bc3ea1d6a2046"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf061d06e556ede80ce676cec1bafb93"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_d_s.html#adf061d06e556ede80ce676cec1bafb93">searchQuer</a> (QString path)</td></tr>
+<tr class="memdesc:adf061d06e556ede80ce676cec1bafb93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Search the <a class="el" href="class_box.html" title="Roles required for Box API/Model.">Box</a> API.  <a href="class_drive_d_s.html#adf061d06e556ede80ce676cec1bafb93">More...</a><br /></td></tr>
 <tr class="separator:adf061d06e556ede80ce676cec1bafb93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6250dc8bef9b8cbc64f9135faa289cd5"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_d_s.html#a6250dc8bef9b8cbc64f9135faa289cd5">homeBut</a> ()</td></tr>
+<tr class="memdesc:a6250dc8bef9b8cbc64f9135faa289cd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get back the home directory.  <a href="class_drive_d_s.html#a6250dc8bef9b8cbc64f9135faa289cd5">More...</a><br /></td></tr>
 <tr class="separator:a6250dc8bef9b8cbc64f9135faa289cd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5cb503e2f3c74fdb80a97219c504a6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_d_s.html#ab5cb503e2f3c74fdb80a97219c504a6b">addDataSource</a> (<a class="el" href="class_drive.html">Drive</a> *drive)</td></tr>
+<tr class="memdesc:ab5cb503e2f3c74fdb80a97219c504a6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notify model after adding new record in QList&lt;Drive *&gt;  <a href="class_drive_d_s.html#ab5cb503e2f3c74fdb80a97219c504a6b">More...</a><br /></td></tr>
 <tr class="separator:ab5cb503e2f3c74fdb80a97219c504a6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44eb15db25bc27d5d96e3a1e7cab99ae"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_d_s.html#a44eb15db25bc27d5d96e3a1e7cab99ae">addDataSource</a> (const QString &amp;id, const QString &amp;name, const QString &amp;kind, const QString &amp;modifiedTime, const QString &amp;extension)</td></tr>
+<tr class="memdesc:a44eb15db25bc27d5d96e3a1e7cab99ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add new data to QList&lt;Drive *&gt;  <a href="class_drive_d_s.html#a44eb15db25bc27d5d96e3a1e7cab99ae">More...</a><br /></td></tr>
 <tr class="separator:a44eb15db25bc27d5d96e3a1e7cab99ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c546770b25081725a856222fb931892"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="class_drive.html">Drive</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_d_s.html#a1c546770b25081725a856222fb931892">dataItems</a> ()</td></tr>
+<tr class="memdesc:a1c546770b25081725a856222fb931892"><td class="mdescLeft">&#160;</td><td class="mdescRight">List the values in QList&lt;Drive *&gt;  <a href="class_drive_d_s.html#a1c546770b25081725a856222fb931892">More...</a><br /></td></tr>
 <tr class="separator:a1c546770b25081725a856222fb931892"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-slots"></a>
 Private Slots</h2></td></tr>
 <tr class="memitem:abf95a7ae7d81177494af6a7af26d24f4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_d_s.html#abf95a7ae7d81177494af6a7af26d24f4">resetDatasource</a> ()</td></tr>
+<tr class="memdesc:abf95a7ae7d81177494af6a7af26d24f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear all the values in QList&lt;Drive*&gt; &amp; notify model.  <a href="class_drive_d_s.html#abf95a7ae7d81177494af6a7af26d24f4">More...</a><br /></td></tr>
 <tr class="separator:abf95a7ae7d81177494af6a7af26d24f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa75517f8750495d22485bb93d66c8570"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_d_s.html#aa75517f8750495d22485bb93d66c8570">dataReadyRead</a> ()</td></tr>
+<tr class="memdesc:aa75517f8750495d22485bb93d66c8570"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads incoming data from the API &amp; store to buffer.  <a href="class_drive_d_s.html#aa75517f8750495d22485bb93d66c8570">More...</a><br /></td></tr>
+<tr class="separator:aa75517f8750495d22485bb93d66c8570"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80e93226b543308ea11c53b6a875b99c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_d_s.html#a80e93226b543308ea11c53b6a875b99c">dataReadFinished</a> ()</td></tr>
+<tr class="memdesc:a80e93226b543308ea11c53b6a875b99c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes the data buffer.  <a href="class_drive_d_s.html#a80e93226b543308ea11c53b6a875b99c">More...</a><br /></td></tr>
 <tr class="separator:a80e93226b543308ea11c53b6a875b99c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
@@ -164,7 +179,10 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a3d1f1154c271038282c23c5d8a888a8c"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="class_drive.html">Drive</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_d_s.html#a3d1f1154c271038282c23c5d8a888a8c">m_drive</a></td></tr>
 <tr class="separator:a3d1f1154c271038282c23c5d8a888a8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Fetches data records from Google <a class="el" href="class_drive.html" title="Roles required for Google Drive API/Model.">Drive</a> API. </p>
+<p>This class lists all the methods which interact with the <a class="el" href="class_box.html" title="Roles required for Box API/Model.">Box</a> API documented in <a href="https://developers.google.com/drive/api/v3/reference/files">https://developers.google.com/drive/api/v3/reference/files</a> </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aa80bc15bdbd10514ad3841dbfa071797"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa80bc15bdbd10514ad3841dbfa071797">&#9670;&nbsp;</a></span>DriveDS()</h2>
 
@@ -188,6 +206,14 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Constructor function to initialize connection with Google <a class="el" href="class_drive.html" title="Roles required for Google Drive API/Model.">Drive</a> API. </p>
+<p>Initiates OAuth connection. Once OAuth token is obtained, it calls relevant methods to fetch the data from the API </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -236,6 +262,18 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Add new data to QList&lt;Drive *&gt; </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>(File id) </td></tr>
+    <tr><td class="paramname">name</td><td>(File name) </td></tr>
+    <tr><td class="paramname">kind</td><td>(File kind) </td></tr>
+    <tr><td class="paramname">modifiedTime</td><td>(Modified date) </td></tr>
+    <tr><td class="paramname">extension</td><td>(File extension) </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="ab5cb503e2f3c74fdb80a97219c504a6b"></a>
@@ -254,6 +292,14 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Notify model after adding new record in QList&lt;Drive *&gt; </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">drive</td><td>(<a class="el" href="class_drive.html" title="Roles required for Google Drive API/Model.">Drive</a> *) </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a1c546770b25081725a856222fb931892"></a>
@@ -270,6 +316,9 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>List the values in QList&lt;Drive *&gt; </p>
+<dl class="section return"><dt>Returns</dt><dd>QList&lt;Drive *&gt; </dd></dl>
 
 </div>
 </div>
@@ -296,6 +345,36 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Processes the data buffer. </p>
+<p>Process the data buffer and append new values to QList&lt;Drive*&gt; </p>
+
+</div>
+</div>
+<a id="aa75517f8750495d22485bb93d66c8570"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa75517f8750495d22485bb93d66c8570">&#9670;&nbsp;</a></span>dataReadyRead</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DriveDS::dataReadyRead </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reads incoming data from the API &amp; store to buffer. </p>
+
 </div>
 </div>
 <a id="a3a501dc475e089ac3f5bc3ea1d6a2046"></a>
@@ -313,6 +392,8 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Calls to authorize the user using Qt's OAuth class. </p>
+
 </div>
 </div>
 <a id="a6250dc8bef9b8cbc64f9135faa289cd5"></a>
@@ -329,6 +410,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Get back the home directory. </p>
 
 </div>
 </div>
@@ -506,6 +589,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Clear all the values in QList&lt;Drive*&gt; &amp; notify model. </p>
+
 </div>
 </div>
 <a id="adf061d06e556ede80ce676cec1bafb93"></a>
@@ -523,6 +608,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Search the <a class="el" href="class_box.html" title="Roles required for Box API/Model.">Box</a> API. </p>
+<p>Documentation reference <a href="https://developer.box.com/reference/get-search/">https://developer.box.com/reference/get-search/</a> </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>(File name) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

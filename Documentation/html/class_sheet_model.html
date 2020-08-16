@@ -100,9 +100,12 @@ $(document).ready(function(){initNavTree('class_sheet_model.html',''); initResiz
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_sheet_model-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">SheetModel Class Reference</div>  </div>
+<div class="title">SheetModel Class Reference<div class="ingroups"><a class="el" href="group___logic.html">Logic</a> &raquo; <a class="el" href="group___connector_screen.html">ConnectorScreen</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Sets the Google <a class="el" href="class_sheet.html" title="Roles required for Google Sheets API/Model.">Sheet</a> API data to view in QtQuick.  
+ <a href="class_sheet_model.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sheetmodel_8h_source.html">sheetmodel.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -128,20 +131,28 @@ Public Types</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae810579fb8379d5cf6b0bfe8c3e7367c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sheet_model.html#ae810579fb8379d5cf6b0bfe8c3e7367c">SheetModel</a> (QObject *parent=nullptr)</td></tr>
+<tr class="memdesc:ae810579fb8379d5cf6b0bfe8c3e7367c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function for <a class="el" href="class_sheet_model.html" title="Sets the Google Sheet API data to view in QtQuick.">SheetModel</a>.  <a href="class_sheet_model.html#ae810579fb8379d5cf6b0bfe8c3e7367c">More...</a><br /></td></tr>
 <tr class="separator:ae810579fb8379d5cf6b0bfe8c3e7367c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6340877e3c5aa61b6bed1e717ba601d8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sheet_model.html#a6340877e3c5aa61b6bed1e717ba601d8">rowCount</a> (const QModelIndex &amp;parent=QModelIndex()) const</td></tr>
+<tr class="memdesc:a6340877e3c5aa61b6bed1e717ba601d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QAbstractListModel::rowCount.  <a href="class_sheet_model.html#a6340877e3c5aa61b6bed1e717ba601d8">More...</a><br /></td></tr>
 <tr class="separator:a6340877e3c5aa61b6bed1e717ba601d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3174af6fd542a33ec56fd5ffdaf3eb03"><td class="memItemLeft" align="right" valign="top">QVariant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sheet_model.html#a3174af6fd542a33ec56fd5ffdaf3eb03">data</a> (const QModelIndex &amp;index, int role) const</td></tr>
+<tr class="memdesc:a3174af6fd542a33ec56fd5ffdaf3eb03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QAbstractListModel::data.  <a href="class_sheet_model.html#a3174af6fd542a33ec56fd5ffdaf3eb03">More...</a><br /></td></tr>
 <tr class="separator:a3174af6fd542a33ec56fd5ffdaf3eb03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a810653f030a4db5aae9ddedae47dd9ba"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sheet_model.html#a810653f030a4db5aae9ddedae47dd9ba">setData</a> (const QModelIndex &amp;index, const QVariant &amp;value, int role)</td></tr>
+<tr class="memdesc:a810653f030a4db5aae9ddedae47dd9ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QAbstractListModel::setData.  <a href="class_sheet_model.html#a810653f030a4db5aae9ddedae47dd9ba">More...</a><br /></td></tr>
 <tr class="separator:a810653f030a4db5aae9ddedae47dd9ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4b43018b56d6576be273c75e2a6694c"><td class="memItemLeft" align="right" valign="top">Qt::ItemFlags&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sheet_model.html#aa4b43018b56d6576be273c75e2a6694c">flags</a> (const QModelIndex &amp;index) const</td></tr>
+<tr class="memdesc:aa4b43018b56d6576be273c75e2a6694c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QAbstractListModel::flags.  <a href="class_sheet_model.html#aa4b43018b56d6576be273c75e2a6694c">More...</a><br /></td></tr>
 <tr class="separator:aa4b43018b56d6576be273c75e2a6694c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a202f03ef4d9d4f4ed2d90ab795c6c258"><td class="memItemLeft" align="right" valign="top">QHash&lt; int, QByteArray &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sheet_model.html#a202f03ef4d9d4f4ed2d90ab795c6c258">roleNames</a> () const</td></tr>
+<tr class="memdesc:a202f03ef4d9d4f4ed2d90ab795c6c258"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QAbstractListModel::roleNames.  <a href="class_sheet_model.html#a202f03ef4d9d4f4ed2d90ab795c6c258">More...</a><br /></td></tr>
 <tr class="separator:a202f03ef4d9d4f4ed2d90ab795c6c258"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad874462bf2fb5efeab58de41455348db"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_sheet_d_s.html">SheetDS</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sheet_model.html#ad874462bf2fb5efeab58de41455348db">sheetds</a> () const</td></tr>
+<tr class="memdesc:ad874462bf2fb5efeab58de41455348db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter function for the object.  <a href="class_sheet_model.html#ad874462bf2fb5efeab58de41455348db">More...</a><br /></td></tr>
 <tr class="separator:ad874462bf2fb5efeab58de41455348db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a84add94abb5f668acd585106aa6702f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sheet_model.html#a84add94abb5f668acd585106aa6702f5">setSheetds</a> (<a class="el" href="class_sheet_d_s.html">SheetDS</a> *<a class="el" href="class_sheet_model.html#a7875d7d0833c8e00712a9261fc608a48">sheetds</a>)</td></tr>
+<tr class="memdesc:a84add94abb5f668acd585106aa6702f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter function for the object.  <a href="class_sheet_model.html#a84add94abb5f668acd585106aa6702f5">More...</a><br /></td></tr>
 <tr class="separator:a84add94abb5f668acd585106aa6702f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
@@ -156,7 +167,10 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:af92b5057843eca311566b564172c38be"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sheet_model.html#af92b5057843eca311566b564172c38be">signalsConnected</a> {false}</td></tr>
 <tr class="separator:af92b5057843eca311566b564172c38be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Sets the Google <a class="el" href="class_sheet.html" title="Roles required for Google Sheets API/Model.">Sheet</a> API data to view in QtQuick. </p>
+<p>This class lists all the methods which interact with the view in QtQuick </p>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="aebb153a326fa4636413394e04ef55266"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aebb153a326fa4636413394e04ef55266">&#9670;&nbsp;</a></span>SheetRoles</h2>
 
@@ -203,6 +217,14 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Constructor function for <a class="el" href="class_sheet_model.html" title="Sets the Google Sheet API data to view in QtQuick.">SheetModel</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -232,6 +254,16 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Override QAbstractListModel::data. </p>
+<p>Override method to return the data of the object for a given index </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>(object index) </td></tr>
+    <tr><td class="paramname">role</td><td>(object role) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QVariant </dd></dl>
+
 </div>
 </div>
 <a id="aa4b43018b56d6576be273c75e2a6694c"></a>
@@ -250,6 +282,15 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Override QAbstractListModel::flags. </p>
+<p>Override method to tell the model that at given index of the object, data is editable </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>(Object index) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Qt::ItemFlags </dd></dl>
+
 </div>
 </div>
 <a id="a202f03ef4d9d4f4ed2d90ab795c6c258"></a>
@@ -266,6 +307,9 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Override QAbstractListModel::roleNames. </p>
+<p>Override method to tell the view the exact role names with which the value can be accessed from the object </p><dl class="section return"><dt>Returns</dt><dd>QHash&lt;int, QByteArray&gt; </dd></dl>
 
 </div>
 </div>
@@ -284,6 +328,15 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Override QAbstractListModel::rowCount. </p>
+<p>Override method to return the number of results in new model </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
 
 </div>
 </div>
@@ -319,6 +372,17 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Override QAbstractListModel::setData. </p>
+<p>Override method to set new data in the object at given index </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>(Object index) </td></tr>
+    <tr><td class="paramname">value</td><td>(New value for the object at index) </td></tr>
+    <tr><td class="paramname">role</td><td>(role name) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
 </div>
 </div>
 <a id="a84add94abb5f668acd585106aa6702f5"></a>
@@ -337,6 +401,8 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Setter function for the object. </p>
+
 </div>
 </div>
 <a id="ad874462bf2fb5efeab58de41455348db"></a>
@@ -353,6 +419,9 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Getter function for the object. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_sheet_d_s.html">SheetDS</a> *SheetModel </dd></dl>
 
 </div>
 </div>

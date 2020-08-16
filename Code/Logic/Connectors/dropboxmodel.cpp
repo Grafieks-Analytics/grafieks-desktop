@@ -1,16 +1,33 @@
 #include "dropboxmodel.h"
 
+/*!
+ * \brief Constructor function for DropboxModel
+ * \param parent
+ */
 DropboxModel::DropboxModel(QObject *parent) : QAbstractListModel(parent)
 {
 
 }
 
+/*!
+ * \brief Override QAbstractListModel::rowCount
+ * \details Override method to return the number of results in new model
+ * \param parent
+ * \return int
+ */
 int DropboxModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_dropbox->dataItems().count();
 }
 
+/*!
+ * \brief Override QAbstractListModel::data
+ * \details Override method to return the data of the object for a given index
+ * \param index (object index)
+ * \param role (object role)
+ * \return QVariant
+ */
 QVariant DropboxModel::data(const QModelIndex &index, int role) const
 {
     if(index.row() < 0 || index.row() >= m_dropbox->dataItems().count()){
@@ -33,6 +50,14 @@ QVariant DropboxModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+/*!
+ * \brief Override QAbstractListModel::setData
+ * \details Override method to set new data in the object at given index
+ * \param index (Object index)
+ * \param value (New value for the object at index)
+ * \param role (role name)
+ * \return bool
+ */
 bool DropboxModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     Dropbox * dropbox = m_dropbox->dataItems().at(index.row());
@@ -83,6 +108,12 @@ bool DropboxModel::setData(const QModelIndex &index, const QVariant &value, int 
     return false;
 }
 
+/*!
+ * \brief Override QAbstractListModel::flags
+ * \details Override method to tell the model that at given index of the object, data is editable
+ * \param index (Object index)
+ * \return Qt::ItemFlags
+ */
 Qt::ItemFlags DropboxModel::flags(const QModelIndex &index) const
 {
     if(!index.isValid())
@@ -90,6 +121,11 @@ Qt::ItemFlags DropboxModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEditable;
 }
 
+/*!
+ * \brief Override QAbstractListModel::roleNames
+ * \details Override method to tell the view the exact role names with which the value can be accessed from the object
+ * \return QHash<int, QByteArray>
+ */
 QHash<int, QByteArray> DropboxModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
@@ -104,11 +140,18 @@ QHash<int, QByteArray> DropboxModel::roleNames() const
     return roles;
 }
 
+/*!
+ * \brief Getter function for the object
+ * \return DropboxDS *DropboxModel
+ */
 DropboxDS *DropboxModel::dropboxds() const
 {
     return m_dropbox;
 }
 
+/*!
+ * \brief Setter function for the object
+ */
 void DropboxModel::setDropboxds(DropboxDS *dropbox)
 {
     beginResetModel();

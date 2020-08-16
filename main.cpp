@@ -66,13 +66,13 @@ QString Statics::sqlitePassword;
  * <a href="https://www.qt.io/">Qt SDK 5.15 (C++ & QML)</a>
  *
  * \subsection navigation Document Navigation
- * \details Before starting to read the code documentation, it is recommended to install all the requirements and run the application.
+ * \details Before starting to read the code documentation, it is recommended to install all the dependencies and run the application.
  * Begin by reading the basic setup documents below:
  * <ul>
  * <li><a href="md__documentation__configuration__mac.html">Mac installation</a> or <a href="md__documentation__configuration__windows_10.html">Windows 10 installation</a></li>
  * <li><a href="md__documentation__mysql__installation.html">MySql installation</a></li>
  * <li><a href="md__r_e_a_d_m_e.html">General instructions</a></li>
- * <li><a href="md__documentation__layouts.html">Grafikes Layout Structure</a></li>
+ * <li><a href="md__documentation__layouts.html">Grafieks Layout Structure</a></li>
  * </ul>
  *
  * Code is categorized into various modules depending on the individual display screens in the application file. Access it by visiting the

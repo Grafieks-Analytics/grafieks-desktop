@@ -5,6 +5,11 @@
 
 #include "sheetds.h"
 
+/*!
+ * \brief Sets the Google Sheet API data to view in QtQuick
+ * \details This class lists all the methods which interact with the view in QtQuick
+ * \ingroup ConnectorScreen
+ */
 class SheetModel : public QAbstractListModel
 {
     Q_OBJECT

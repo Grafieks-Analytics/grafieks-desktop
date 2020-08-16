@@ -6,6 +6,12 @@
 
 #include "driveds.h"
 
+/*!
+ * \brief Sets the Google Drive API data to view in QtQuick
+ * \details This class lists all the methods which interact with the view in QtQuick
+ * \ingroup ConnectorScreen
+ */
+
 class DriveModel : public QAbstractListModel
 {
     Q_OBJECT

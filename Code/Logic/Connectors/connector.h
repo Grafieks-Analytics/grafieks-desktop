@@ -3,6 +3,13 @@
 
 #include <QObject>
 
+/*!
+ * \brief Roles required for Connector Screen grid items
+ * \details This document won't explain the individual Roles in detail. Basically, the class describes the Getter/Setter functions for the Roles
+ * to be used in other classes.
+ * \ingroup ConnectorScreen
+ */
+
 class Connector : public QObject
 {
     Q_OBJECT

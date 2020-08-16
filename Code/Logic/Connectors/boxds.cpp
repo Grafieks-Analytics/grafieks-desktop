@@ -1,14 +1,4 @@
 #include "boxds.h"
-#include <QJsonArray>
-#include <QOAuth2AuthorizationCodeFlow>
-#include <QFile>
-#include <QJsonDocument>
-#include <QDesktopServices>
-#include <QJsonObject>
-#include <QNetworkRequest>
-#include <QQmlContext>
-#include <QOAuthHttpServerReplyHandler>
-#include <QtDebug>
 
 /*!
  * \brief Constructor function to initialize connection with Box API

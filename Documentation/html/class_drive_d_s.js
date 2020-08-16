@@ -5,6 +5,7 @@ var class_drive_d_s =
     [ "addDataSource", "class_drive_d_s.html#ab5cb503e2f3c74fdb80a97219c504a6b", null ],
     [ "dataItems", "class_drive_d_s.html#a1c546770b25081725a856222fb931892", null ],
     [ "dataReadFinished", "class_drive_d_s.html#a80e93226b543308ea11c53b6a875b99c", null ],
+    [ "dataReadyRead", "class_drive_d_s.html#aa75517f8750495d22485bb93d66c8570", null ],
     [ "fetchDatasources", "class_drive_d_s.html#a3a501dc475e089ac3f5bc3ea1d6a2046", null ],
     [ "homeBut", "class_drive_d_s.html#a6250dc8bef9b8cbc64f9135faa289cd5", null ],
     [ "postItemAdded", "class_drive_d_s.html#a06f2c045a2e6ebcb9266e790ee607b67", null ],

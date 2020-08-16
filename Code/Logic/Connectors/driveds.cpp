@@ -1,13 +1,12 @@
 #include "driveds.h"
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QNetworkRequest>
-#include <QQmlContext>
-#include <QtDebug>
 
-//drive api documentation - https://developers.google.com/drive/api/v3/reference/files
 
+/*!
+ * \brief Constructor function to initialize connection with Google Drive API
+ * \details Initiates OAuth connection. Once OAuth token is obtained, it calls relevant methods to fetch the data from
+ * the API
+ * \param parent
+ */
 DriveDS::DriveDS(QObject *parent) : QObject(parent),
     m_networkAccessManager(new QNetworkAccessManager(this)),
     m_networkReply(nullptr),
@@ -56,12 +55,19 @@ DriveDS::DriveDS(QObject *parent) : QObject(parent),
 }
 
 
-
+/*!
+ * \brief Calls to authorize the user using Qt's OAuth class
+ */
 void DriveDS::fetchDatasources()
 {
     this->google->grant();
 }
 
+/*!
+ * \brief Search the Box API
+ * \details Documentation reference https://developer.box.com/reference/get-search/
+ * \param path (File name)
+ */
 void DriveDS::searchQuer(QString path)
 {
     m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name  +contains+%27" + path+ "%27"));
@@ -69,6 +75,9 @@ void DriveDS::searchQuer(QString path)
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
 }
 
+/*!
+ * \brief Get back the home directory
+ */
 void DriveDS::homeBut()
 {
     m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)"));
@@ -76,6 +85,10 @@ void DriveDS::homeBut()
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
 }
 
+/*!
+ * \brief Notify model after adding new record in QList<Drive *>
+ * \param drive (Drive *)
+ */
 void DriveDS::addDataSource(Drive *drive)
 {
     emit preItemAdded();
@@ -83,17 +96,32 @@ void DriveDS::addDataSource(Drive *drive)
     emit postItemAdded();
 }
 
+/*!
+ * \brief Add new data to QList<Drive *>
+ * \param id (File id)
+ * \param name (File name)
+ * \param kind (File kind)
+ * \param modifiedTime (Modified date)
+ * \param extension (File extension)
+ */
 void DriveDS::addDataSource(const QString &id, const QString &name, const QString &kind, const QString &modifiedTime, const QString &extension)
 {
     Drive *drive = new Drive(id,name,kind,modifiedTime,extension);
     addDataSource(drive);
 }
 
+/*!
+ * \brief List the values in QList<Drive *>
+ * \return QList<Drive *>
+ */
 QList<Drive *> DriveDS::dataItems()
 {
     return m_drive;
 }
 
+/*!
+ * \brief Clear all the values in QList<Drive*> & notify model
+ */
 void DriveDS::resetDatasource()
 {
     emit preReset();
@@ -101,6 +129,19 @@ void DriveDS::resetDatasource()
     emit postReset();
 }
 
+/*!
+ * \brief Reads incoming data from the API & store to buffer
+ */
+void DriveDS::dataReadyRead()
+{
+    m_dataBuffer->append(m_networkReply->readAll());
+}
+
+
+/*!
+ * \brief Processes the data buffer
+ * \details Process the data buffer and append new values to QList<Drive*>
+ */
 void DriveDS::dataReadFinished()
 {
     m_dataBuffer->append(m_networkReply->readAll());

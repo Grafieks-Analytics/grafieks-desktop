@@ -98,9 +98,12 @@ $(document).ready(function(){initNavTree('class_connector_filter.html',''); init
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_connector_filter-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">ConnectorFilter Class Reference</div>  </div>
+<div class="title">ConnectorFilter Class Reference<div class="ingroups"><a class="el" href="group___logic.html">Logic</a> &raquo; <a class="el" href="group___connector_screen.html">ConnectorScreen</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Proxy <a class="el" href="class_connector.html" title="Roles required for Connector Screen grid items.">Connector</a> screen model.  
+ <a href="class_connector_filter.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="connectorfilter_8h_source.html">connectorfilter.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -113,12 +116,16 @@ Inheritance diagram for ConnectorFilter:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a89ccb1ef1c965e2d236b5ab40041d18b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connector_filter.html#a89ccb1ef1c965e2d236b5ab40041d18b">ConnectorFilter</a> (QObject *parent=nullptr)</td></tr>
+<tr class="memdesc:a89ccb1ef1c965e2d236b5ab40041d18b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function for <a class="el" href="class_connector_filter.html" title="Proxy Connector screen model.">ConnectorFilter</a>.  <a href="class_connector_filter.html#a89ccb1ef1c965e2d236b5ab40041d18b">More...</a><br /></td></tr>
 <tr class="separator:a89ccb1ef1c965e2d236b5ab40041d18b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abbf39e95bf2f20bf45a365df4f4120d1"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connector_filter.html#abbf39e95bf2f20bf45a365df4f4120d1">setSearchString</a> (QString string)</td></tr>
+<tr class="memdesc:abbf39e95bf2f20bf45a365df4f4120d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the search string and update model.  <a href="class_connector_filter.html#abbf39e95bf2f20bf45a365df4f4120d1">More...</a><br /></td></tr>
 <tr class="separator:abbf39e95bf2f20bf45a365df4f4120d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa60c29f8c6cef0997e4b602d0df664bc"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connector_filter.html#aa60c29f8c6cef0997e4b602d0df664bc">setFilterString</a> (QString string)</td></tr>
+<tr class="memdesc:aa60c29f8c6cef0997e4b602d0df664bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the filter string and update model.  <a href="class_connector_filter.html#aa60c29f8c6cef0997e4b602d0df664bc">More...</a><br /></td></tr>
 <tr class="separator:aa60c29f8c6cef0997e4b602d0df664bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8232babe228146a7dc94b89cae76459b"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connector_filter.html#a8232babe228146a7dc94b89cae76459b">setSortOrder</a> (bool checked)</td></tr>
+<tr class="memdesc:a8232babe228146a7dc94b89cae76459b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set sort order.  <a href="class_connector_filter.html#a8232babe228146a7dc94b89cae76459b">More...</a><br /></td></tr>
 <tr class="separator:a8232babe228146a7dc94b89cae76459b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
@@ -126,7 +133,10 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:ad9b68c89be5dab46b6dc555886642710"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_connector_model.html">ConnectorModel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connector_filter.html#ad9b68c89be5dab46b6dc555886642710">m_connectorModel</a></td></tr>
 <tr class="separator:ad9b68c89be5dab46b6dc555886642710"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Proxy <a class="el" href="class_connector.html" title="Roles required for Connector Screen grid items.">Connector</a> screen model. </p>
+<p>This class is a proxy model for <a class="el" href="class_connector_model.html" title="Sets the Connector screen data to view in QtQuick.">ConnectorModel</a> to facilitate search/sort in view </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a89ccb1ef1c965e2d236b5ab40041d18b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a89ccb1ef1c965e2d236b5ab40041d18b">&#9670;&nbsp;</a></span>ConnectorFilter()</h2>
 
@@ -151,6 +161,14 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Constructor function for <a class="el" href="class_connector_filter.html" title="Proxy Connector screen model.">ConnectorFilter</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -170,6 +188,14 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Set the filter string and update model. </p>
+<p>Filter string for filter by datasource type </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string</td><td>(filter string for datasource type) </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="abbf39e95bf2f20bf45a365df4f4120d1"></a>
@@ -188,6 +214,14 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Set the search string and update model. </p>
+<p>Search string for searching by datasource name </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string</td><td>(search string for datasource name) </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a8232babe228146a7dc94b89cae76459b"></a>
@@ -205,6 +239,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Set sort order. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">checked</td><td>(sort asc/desc after applying filter) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

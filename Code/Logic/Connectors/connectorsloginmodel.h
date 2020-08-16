@@ -8,6 +8,11 @@
 #include "../../statics.h"
 #include "../../constants.h"
 
+/*!
+ * \brief Initiates connection to a datasource from the view
+ * \details Accepts login credentials from the view and calls the Connectors class
+ * \ingroup ConnectorScreen
+ */
 class ConnectorsLoginModel : public QObject
 {
     Q_OBJECT

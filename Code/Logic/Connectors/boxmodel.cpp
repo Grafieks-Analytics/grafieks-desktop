@@ -1,16 +1,33 @@
 #include "boxmodel.h"
 
+/*!
+ * \brief Constructor function for BoxModel
+ * \param parent
+ */
 BoxModel::BoxModel(QObject *parent) : QAbstractListModel(parent)
 {
 
 }
 
+/*!
+ * \brief Override QAbstractListModel::rowCount
+ * \details Override method to return the number of results in new model
+ * \param parent
+ * \return int
+ */
 int BoxModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_box->dataItems().count();
 }
 
+/*!
+ * \brief Override QAbstractListModel::data
+ * \details Override method to return the data of the object for a given index
+ * \param index (object index)
+ * \param role (object role)
+ * \return QVariant
+ */
 QVariant BoxModel::data(const QModelIndex &index, int role) const
 {
     if(index.row() < 0 || index.row() >= m_box->dataItems().count()){
@@ -31,6 +48,14 @@ QVariant BoxModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+/*!
+ * \brief Override QAbstractListModel::setData
+ * \details Override method to set new data in the object at given index
+ * \param index (Object index)
+ * \param value (New value for the object at index)
+ * \param role (role name)
+ * \return bool
+ */
 bool BoxModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     Box * box = m_box->dataItems().at(index.row());
@@ -75,6 +100,13 @@ bool BoxModel::setData(const QModelIndex &index, const QVariant &value, int role
     return false;
 }
 
+/*!
+ * \brief Override QAbstractListModel::flags
+ * \details Override method to tell the model that at given index of the object, data is editable
+ * \param index (Object index)
+ * \return Qt::ItemFlags
+ */
+
 Qt::ItemFlags BoxModel::flags(const QModelIndex &index) const
 {
     if(!index.isValid())
@@ -82,6 +114,11 @@ Qt::ItemFlags BoxModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEditable;
 }
 
+/*!
+ * \brief Override QAbstractListModel::roleNames
+ * \details Override method to tell the view the exact role names with which the value can be accessed from the object
+ * \return QHash<int, QByteArray>
+ */
 QHash<int, QByteArray> BoxModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
@@ -95,11 +132,18 @@ QHash<int, QByteArray> BoxModel::roleNames() const
     return roles;
 }
 
+/*!
+ * \brief Getter function for the object
+ * \return BoxDS *BoxModel
+ */
 BoxDS *BoxModel::boxds() const
 {
     return m_box;
 }
 
+/*!
+ * \brief Setter function for the object
+ */
 void BoxModel::setBoxds(BoxDS *box)
 {
     beginResetModel();

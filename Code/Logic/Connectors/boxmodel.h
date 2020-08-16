@@ -6,6 +6,12 @@
 
 #include "boxds.h"
 
+/*!
+ * \brief Sets the BoxDS API data to view in QtQuick
+ * \details This class lists all the methods which interact with the view in QtQuick
+ * \ingroup ConnectorScreen
+ */
+
 class BoxModel : public QAbstractListModel
 {
     Q_OBJECT

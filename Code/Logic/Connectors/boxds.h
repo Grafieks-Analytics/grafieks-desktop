@@ -12,6 +12,10 @@
 #include <QSettings>
 #include <QUrl>
 #include <QUrlQuery>
+#include <QFile>
+#include <QDesktopServices>
+#include <QOAuthHttpServerReplyHandler>
+#include <QtDebug>
 
 #include "box.h"
 

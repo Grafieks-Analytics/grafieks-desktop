@@ -6,6 +6,12 @@
 
 #include "connectormodel.h"
 
+/*!
+ * \brief Proxy Connector screen model
+ * \details This class is a proxy model for ConnectorModel to facilitate search/sort in view
+ * \ingroup ConnectorScreen
+ */
+
 class ConnectorFilter : public QSortFilterProxyModel
 {
     Q_OBJECT

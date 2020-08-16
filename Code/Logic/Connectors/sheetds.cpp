@@ -2,6 +2,12 @@
 
 //sheets api documentation - https://developers.google.com/drive/api/v3/reference/files
 
+/*!
+ * \brief Constructor function to initialize connection with Google Sheets API
+ * \details Initiates OAuth connection. Once OAuth token is obtained, it calls relevant methods to fetch the data from
+ * the API
+ * \param parent
+ */
 SheetDS::SheetDS(QObject *parent) : QObject(parent),
     m_networkAccessManager(new QNetworkAccessManager(this)),
     m_networkReply(nullptr),
@@ -49,11 +55,18 @@ SheetDS::SheetDS(QObject *parent) : QObject(parent),
     });
 }
 
+/*!
+ * \brief Calls to authorize the user using Qt's OAuth class
+ */
 void SheetDS::fetchDatasources()
 {
     this->google->grant();
 }
 
+/*!
+ * \brief Search the Box API
+ * \param path (File name)
+ */
 void SheetDS::searchQuer(QString path)
 {
     if(path == "")
@@ -64,6 +77,9 @@ void SheetDS::searchQuer(QString path)
     connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
 }
 
+/*!
+ * \brief Get back the home directory
+ */
 void SheetDS::homeBut()
 {
     m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'"));
@@ -72,6 +88,10 @@ void SheetDS::homeBut()
 }
 
 
+/*!
+ * \brief Notify model after adding new record in QList<Sheet *>
+ * \param Sheet (Sheet *)
+ */
 void SheetDS::addDataSource(Sheet *Sheet)
 {
     emit preItemAdded();
@@ -79,17 +99,32 @@ void SheetDS::addDataSource(Sheet *Sheet)
     emit postItemAdded();
 }
 
+/*!
+ * \brief Add new data to QList<Sheet *>
+ * \param id (File id)
+ * \param name (File name)
+ * \param kind (File type)
+ * \param modifiedTime (Modified date)
+ * \param extension ( File extension)
+ */
 void SheetDS::addDataSource(const QString &id, const QString &name, const QString &kind, const QString &modifiedTime, const QString &extension)
 {
     Sheet *sheet = new Sheet(id,name,kind,modifiedTime,extension);
     addDataSource(sheet);
 }
 
+/*!
+ * \brief List the values in QList<Sheet *>
+ * \return QList<Sheet *>
+ */
 QList<Sheet *> SheetDS::dataItems()
 {
     return m_Sheet;
 }
 
+/*!
+ * \brief Clear all the values in QList<Sheet*> & notify model
+ */
 void SheetDS::resetDatasource()
 {
     emit preReset();
@@ -97,6 +132,10 @@ void SheetDS::resetDatasource()
     emit postReset();
 }
 
+/*!
+ * \brief Processes the data buffer
+ * \details Process the data buffer and append new values to QList<Sheet*>
+ */
 void SheetDS::dataReadFinished()
 {
     m_dataBuffer->append(m_networkReply->readAll());

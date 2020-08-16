@@ -100,9 +100,12 @@ $(document).ready(function(){initNavTree('class_drive_model.html',''); initResiz
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_drive_model-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">DriveModel Class Reference</div>  </div>
+<div class="title">DriveModel Class Reference<div class="ingroups"><a class="el" href="group___logic.html">Logic</a> &raquo; <a class="el" href="group___connector_screen.html">ConnectorScreen</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Sets the Google <a class="el" href="class_drive.html" title="Roles required for Google Drive API/Model.">Drive</a> API data to view in QtQuick.  
+ <a href="class_drive_model.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="drivemodel_8h_source.html">drivemodel.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -128,20 +131,28 @@ Public Types</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a8edcbef9bbb7fb87130646ba5f96c1d2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_model.html#a8edcbef9bbb7fb87130646ba5f96c1d2">DriveModel</a> (QObject *parent=nullptr)</td></tr>
+<tr class="memdesc:a8edcbef9bbb7fb87130646ba5f96c1d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function for <a class="el" href="class_drive_model.html" title="Sets the Google Drive API data to view in QtQuick.">DriveModel</a>.  <a href="class_drive_model.html#a8edcbef9bbb7fb87130646ba5f96c1d2">More...</a><br /></td></tr>
 <tr class="separator:a8edcbef9bbb7fb87130646ba5f96c1d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9af7fda5ce4a1ca85a560f65232e2c8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_model.html#ae9af7fda5ce4a1ca85a560f65232e2c8">rowCount</a> (const QModelIndex &amp;parent=QModelIndex()) const</td></tr>
+<tr class="memdesc:ae9af7fda5ce4a1ca85a560f65232e2c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QAbstractListModel::rowCount.  <a href="class_drive_model.html#ae9af7fda5ce4a1ca85a560f65232e2c8">More...</a><br /></td></tr>
 <tr class="separator:ae9af7fda5ce4a1ca85a560f65232e2c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49402c15f8f0e4cbfd3ce8ac0c270702"><td class="memItemLeft" align="right" valign="top">QVariant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_model.html#a49402c15f8f0e4cbfd3ce8ac0c270702">data</a> (const QModelIndex &amp;index, int role) const</td></tr>
+<tr class="memdesc:a49402c15f8f0e4cbfd3ce8ac0c270702"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QAbstractListModel::data.  <a href="class_drive_model.html#a49402c15f8f0e4cbfd3ce8ac0c270702">More...</a><br /></td></tr>
 <tr class="separator:a49402c15f8f0e4cbfd3ce8ac0c270702"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad53912bdca2dd6fde6c3f4ed075f1f70"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_model.html#ad53912bdca2dd6fde6c3f4ed075f1f70">setData</a> (const QModelIndex &amp;index, const QVariant &amp;value, int role)</td></tr>
+<tr class="memdesc:ad53912bdca2dd6fde6c3f4ed075f1f70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QAbstractListModel::setData.  <a href="class_drive_model.html#ad53912bdca2dd6fde6c3f4ed075f1f70">More...</a><br /></td></tr>
 <tr class="separator:ad53912bdca2dd6fde6c3f4ed075f1f70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75e4507cefe8c3eef926d0a9ed61abbb"><td class="memItemLeft" align="right" valign="top">Qt::ItemFlags&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_model.html#a75e4507cefe8c3eef926d0a9ed61abbb">flags</a> (const QModelIndex &amp;index) const</td></tr>
+<tr class="memdesc:a75e4507cefe8c3eef926d0a9ed61abbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QAbstractListModel::flags.  <a href="class_drive_model.html#a75e4507cefe8c3eef926d0a9ed61abbb">More...</a><br /></td></tr>
 <tr class="separator:a75e4507cefe8c3eef926d0a9ed61abbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac85c31bc7d6196bcb2d3243423102045"><td class="memItemLeft" align="right" valign="top">QHash&lt; int, QByteArray &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_model.html#ac85c31bc7d6196bcb2d3243423102045">roleNames</a> () const</td></tr>
+<tr class="memdesc:ac85c31bc7d6196bcb2d3243423102045"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QAbstractListModel::roleNames.  <a href="class_drive_model.html#ac85c31bc7d6196bcb2d3243423102045">More...</a><br /></td></tr>
 <tr class="separator:ac85c31bc7d6196bcb2d3243423102045"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad321b8f39f2f81399cbd9a58d7494558"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_drive_d_s.html">DriveDS</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_model.html#ad321b8f39f2f81399cbd9a58d7494558">driveds</a> () const</td></tr>
+<tr class="memdesc:ad321b8f39f2f81399cbd9a58d7494558"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter function for the object.  <a href="class_drive_model.html#ad321b8f39f2f81399cbd9a58d7494558">More...</a><br /></td></tr>
 <tr class="separator:ad321b8f39f2f81399cbd9a58d7494558"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaeab420c637ce435649eb2a83a1b5254"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_model.html#aaeab420c637ce435649eb2a83a1b5254">setDriveds</a> (<a class="el" href="class_drive_d_s.html">DriveDS</a> *<a class="el" href="class_drive_model.html#adabd6f645df386dc0967b93da849e203">driveds</a>)</td></tr>
+<tr class="memdesc:aaeab420c637ce435649eb2a83a1b5254"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter function for the object.  <a href="class_drive_model.html#aaeab420c637ce435649eb2a83a1b5254">More...</a><br /></td></tr>
 <tr class="separator:aaeab420c637ce435649eb2a83a1b5254"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
@@ -156,7 +167,10 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a9968f656d19300cc1f7a1d84425a9311"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_drive_model.html#a9968f656d19300cc1f7a1d84425a9311">signalsConnected</a> {false}</td></tr>
 <tr class="separator:a9968f656d19300cc1f7a1d84425a9311"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Sets the Google <a class="el" href="class_drive.html" title="Roles required for Google Drive API/Model.">Drive</a> API data to view in QtQuick. </p>
+<p>This class lists all the methods which interact with the view in QtQuick </p>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a01efe0765a275a16633aabc4c61250f2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a01efe0765a275a16633aabc4c61250f2">&#9670;&nbsp;</a></span>DriveRoles</h2>
 
@@ -203,6 +217,14 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Constructor function for <a class="el" href="class_drive_model.html" title="Sets the Google Drive API data to view in QtQuick.">DriveModel</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -232,6 +254,16 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Override QAbstractListModel::data. </p>
+<p>Override method to return the data of the object for a given index </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>(object index) </td></tr>
+    <tr><td class="paramname">role</td><td>(object role) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QVariant </dd></dl>
+
 </div>
 </div>
 <a id="ad321b8f39f2f81399cbd9a58d7494558"></a>
@@ -248,6 +280,9 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Getter function for the object. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_drive_d_s.html" title="Fetches data records from Google Drive API.">DriveDS</a> *DriveModel </dd></dl>
 
 </div>
 </div>
@@ -267,6 +302,15 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Override QAbstractListModel::flags. </p>
+<p>Override method to tell the model that at given index of the object, data is editable </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>(Object index) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Qt::ItemFlags </dd></dl>
+
 </div>
 </div>
 <a id="ac85c31bc7d6196bcb2d3243423102045"></a>
@@ -283,6 +327,9 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Override QAbstractListModel::roleNames. </p>
+<p>Override method to tell the view the exact role names with which the value can be accessed from the object </p><dl class="section return"><dt>Returns</dt><dd>QHash&lt;int, QByteArray&gt; </dd></dl>
 
 </div>
 </div>
@@ -301,6 +348,15 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Override QAbstractListModel::rowCount. </p>
+<p>Override method to return the number of results in new model </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
 
 </div>
 </div>
@@ -336,6 +392,17 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Override QAbstractListModel::setData. </p>
+<p>Override method to set new data in the object at given index </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>(Object index) </td></tr>
+    <tr><td class="paramname">value</td><td>(New value for the object at index) </td></tr>
+    <tr><td class="paramname">role</td><td>(role name) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
 </div>
 </div>
 <a id="aaeab420c637ce435649eb2a83a1b5254"></a>
@@ -353,6 +420,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Setter function for the object. </p>
 
 </div>
 </div>
