@@ -14,6 +14,10 @@
 #include "../constants.h"
 #include "../statics.h"
 
+/*!
+ * \brief Handles the connection with MysqlCon across the application
+ * \ingroup Connectors
+ */
 
 class MysqlCon : public QObject
 {

@@ -1,9 +1,28 @@
 #include "mysqlcon.h"
 
+/*!
+ * \fn MysqlCon::MysqlCon
+ * \ingroup Connectors
+ * \brief Constructor function for Mysql connection
+ * \param parent
+ */
+
 MysqlCon::MysqlCon(QObject *parent) : QObject(parent)
 {
 
 }
+
+/*!
+ * \fn MysqlCon::MysqlInstance
+ * \ingroup Connectors
+ * \brief Instantiates and Mysql connection to a given database
+ * \param QString &host
+ * \param QString &db
+ * \param int &port
+ * \param QString &username
+ * \param QString &password
+ * \return QVariantMap {bool status, QString msg}
+ */
 
 QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, const int &port, const QString &username, const QString &password)
 {
@@ -58,6 +77,12 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
 
     return outputStatus;
 }
+
+/*!
+ * \fn MysqlCon::~MysqlCon
+ * \ingroup Connectors
+ * \brief Destructor function for Mysql connection
+ */
 
 MysqlCon::~MysqlCon()
 {

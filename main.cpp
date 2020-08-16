@@ -44,6 +44,15 @@
 #include "Code/Logic/General/qttest2.h"
 
 
+/*! \mainpage Code Documentation
+ *
+ * \subsection tools Development tools
+ * <b>Qt SDK 5.15 (C++ & QML)</b>
+ *
+ * \subsection navigation Document Navigation
+ *
+ * \subsection structure Code Structure
+ */
 
 #include "Code/statics.h"
 

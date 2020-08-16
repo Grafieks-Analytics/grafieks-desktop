@@ -4,4 +4,9 @@
 #include "mysqlcon.h"
 #include "sqlitecon.h"
 
+/**
+ *  \defgroup Connectors
+ *  Database connections
+ */
+
 #endif // ALLCONNECTORS_H
