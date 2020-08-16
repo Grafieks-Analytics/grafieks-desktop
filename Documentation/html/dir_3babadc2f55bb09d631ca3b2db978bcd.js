@@ -29,9 +29,7 @@ var dir_3babadc2f55bb09d631ca3b2db978bcd =
     [ "sheet.cpp", "sheet_8cpp.html", null ],
     [ "sheet.h", "sheet_8h.html", null ],
     [ "sheetds.cpp", "sheetds_8cpp.html", null ],
-    [ "sheetds.h", "sheetds_8h.html", [
-      [ "SheetDS", "class_sheet_d_s.html", "class_sheet_d_s" ]
-    ] ],
+    [ "sheetds.h", "sheetds_8h.html", null ],
     [ "sheetmodel.cpp", "sheetmodel_8cpp.html", null ],
     [ "sheetmodel.h", "sheetmodel_8h.html", null ]
 ];
