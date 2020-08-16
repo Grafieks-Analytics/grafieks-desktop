@@ -166,6 +166,17 @@ Page {
         }
     }
 
+
+    function setDataSourceName(){
+        DSParamsModel.setDsName(ds_name.text)
+    }
+
+    function focusDataSourceNameField(){
+        ds_name.readOnly= false
+        ds_name.focus = true;
+        console.log('Focussed')
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -657,6 +668,7 @@ Page {
             color:Constants.themeColor
             width:column_querymodeller.width
             height:column_querymodeller.height
+            border.color: Constants.darkThemeColor
 
             // Tab button starts
 
@@ -668,28 +680,55 @@ Page {
                 background: Rectangle {
                     color: Constants.darkThemeColor
                 }
-
                 // Next button starts
 
                 TabButton{
-                    id: tabCreateDashboard
-                    text:"Create Dashboard"
-                    width:rectangle_querymodeller_right_col.width
+                    id: tabPublishDashboard
+                    width:rectangle_querymodeller_right_col.width / 2
+                    height: parent.height
+
+                    Image {
+                        id: publishIcon
+                        source: "../../Images/icons/publish_20.png"
+                        height: 20
+                        width: 20
+                        anchors.centerIn: parent
+                    }
 
                     onClicked: {
-                        onCreateDashboardClicked()
+                        onPublishDataSourceClicked()
                     }
 
                     background: Rectangle {
-                        color: tabCreateDashboard.hovered? Constants.darkThemeColor: Constants.themeColor
+                        color: tabPublishDashboard.hovered? Constants.darkThemeColor: Constants.themeColor
+                    }
+
+
+                }
+
+
+                TabButton{
+                    id: tabCreateDashboard
+                    width:rectangle_querymodeller_right_col.width / 2
+                    height: parent.height
+
+                    Image {
+                        id: dashboardIcon
+                        source: "../../Images/icons/create_dashboard_20.png"
+                        height: 20
+                        width: 20
+                        anchors.centerIn: parent
                     }
 
                     contentItem: Text{
                         id:tabCreateDashboard_text
-                        text: tabCreateDashboard.text
-                        color:"black"
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
+                    }
+                    background: Rectangle {
+                        color: tabCreateDashboard.hovered? Constants.darkThemeColor: Constants.themeColor
+                    }
+
+                    onClicked: {
+                        onCreateDashboardClicked()
                     }
 
                 }
@@ -718,10 +757,29 @@ Page {
                     anchors.verticalCenter: rectangle_querymodeller_right_col1.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col1.left
                     anchors.leftMargin: 10
+                    readOnly: true
 
                     // Set the text
                     onTextChanged: {
-                        DSParamsModel.setDsName(ds_name.text)
+                        setDataSourceName()
+                    }
+
+                }
+
+                Image {
+                    id: dataSourceNameEditIcon
+                    source: "../../Images/icons/edit-32.png"
+                    height: 20
+                    width: 20
+                    anchors.right: parent.right
+                    anchors.rightMargin: 20
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            focusDataSourceNameField()
+                        }
                     }
                 }
             }
@@ -869,20 +927,20 @@ Page {
 
             }
 
-            // Right item 4 ends
+//            // Right item 4 ends
 
-            CustomButton {
-                id: publish_button
-                textValue: qsTr("Publish Data Source")
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 30
-                width: parent.width
-                height: 40
+//            CustomButton {
+//                id: publish_button
+//                textValue: qsTr("Publish Data Source")
+//                anchors.bottom: parent.bottom
+//                anchors.bottomMargin: 30
+//                width: parent.width
+//                height: 40
 
-                onClicked: {
-                    onPublishDataSourceClicked()
-                }
-            }
+//                onClicked: {
+//                    onPublishDataSourceClicked()
+//                }
+//            }
         }
     }
 

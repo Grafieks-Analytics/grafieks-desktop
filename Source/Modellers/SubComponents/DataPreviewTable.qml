@@ -88,18 +88,16 @@ TableView {
             text: display
             anchors.fill: parent
             anchors.margins: 10
-            color: 'black'
-            font.pixelSize: Constants.fontCategoryHeader
             verticalAlignment: Text.AlignVCenter
         }
     }
     Rectangle { // mask the headers
         z: 3
-        color: "#222222"
         y: dataPreviewResult.contentY
         x: dataPreviewResult.contentX
         width: dataPreviewResult.leftMargin
         height: dataPreviewResult.topMargin
+        border.color: Constants.darkThemeColor
     }
 
     // Table Header Starts
@@ -123,10 +121,9 @@ TableView {
                     width: dataPreviewResult.columnWidthProvider(modelData)
                     height: 35
                     text: QueryModel.headerData(modelData, Qt.Horizontal)
-                    color: 'black'
-                    font.pixelSize: Constants.fontCategoryHeader
                     padding: 10
                     verticalAlignment: Text.AlignVCenter
+                    color: Constants.blackColor
                     background: Rectangle { color: "white" }
                 }
 
