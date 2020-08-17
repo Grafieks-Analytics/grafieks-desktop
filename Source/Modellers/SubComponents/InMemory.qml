@@ -122,6 +122,9 @@ Popup {
     /***********************************************************************************************************************/
     // SubComponents Starts
 
+    ButtonGroup{
+        id: extractRadio
+    }
 
 
     // SubComponents Ends
@@ -198,13 +201,10 @@ Popup {
                 radio_text: qsTr("Full Extract")
                 radio_checked: false
                 parent_dimension: 16
-
-                MouseArea{
-
-                    anchors.fill: parent
-                    onClicked: {
-                        onFullExtractClicked()
-                    }
+                font.pixelSize: Constants.fontCategoryHeader
+                ButtonGroup.group: extractRadio
+                onCheckedChanged: {
+                    onFullExtractClicked()
                 }
             }
         }
@@ -221,17 +221,12 @@ Popup {
             CustomRadioButton{
                 id: radio_memory2
                 radio_text: qsTr("Incremental Extract")
+                font.pixelSize: Constants.fontCategoryHeader
                 radio_checked: false
                 parent_dimension: 16
-
-                MouseArea{
-
-                    anchors.fill: parent
-                    onClicked: {
-
-                        onIncrementalExtractClicked()
-
-                    }
+                ButtonGroup.group: extractRadio
+                onCheckedChanged: {
+                    onIncrementalExtractClicked()
                 }
             }
         }
@@ -255,6 +250,7 @@ Popup {
             Text {
                 id: incrementalExtactSelectbtnText
                 text: qsTr("Select the column for incremental extract")
+                font.pixelSize: Constants.fontCategoryHeader
                 anchors.bottomMargin: 20
                 leftPadding: 30
             }
@@ -269,11 +265,17 @@ Popup {
                 anchors.topMargin: 20
                 width: parent.width - 120
 
-
+                anchors.left: parent.left
+                anchors.leftMargin: 30
 
                 CustomComboBox{
                     id: columnsDropdown
                     currentIndex: 0
+                    anchors.left: parent.left
+                    anchors.leftMargin: 30
+                    width: parent.width
+                    font.pixelSize: Constants.fontCategoryHeader
+
                     onCurrentIndexChanged: {
 
                         console.log(currentText, currentIndex)
@@ -303,6 +305,7 @@ Popup {
 
             Text {
                 text: qsTr("Select schedule for data extraction")
+                font.pixelSize: Constants.fontCategoryHeader
                 anchors.bottomMargin: 20
                 leftPadding: 30
             }
@@ -314,7 +317,9 @@ Popup {
                 height: 60
                 anchors.topMargin: 20
                 width: parent.width - 120
+                anchors.left: parent.left
 
+                anchors.leftMargin: 30
 
 
                 CustomComboBox{
@@ -322,6 +327,10 @@ Popup {
                     textRole: "Name"
                     valueRole: "ScheduleID"
                     currentIndex: 0
+                    anchors.left: parent.left
+                    anchors.leftMargin: 30
+                    width: parent.width
+
                     model: SchedulerModel
                     onCurrentIndexChanged: {
                         console.log(currentValue, currentText, currentIndex)
@@ -348,6 +357,7 @@ Popup {
                     anchors.top: schedulerDropdown.bottom
                     anchors.topMargin: 10
                     text: qsTr("Above field will show all data extract schedule that is set up in GRS")
+                    font.pixelSize: Constants.fontCategoryHeaderSmall
                 }
 
             }
