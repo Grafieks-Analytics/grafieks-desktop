@@ -101,9 +101,12 @@ $(document).ready(function(){initNavTree('class_query_splitter.html',''); initRe
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_query_splitter-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">QuerySplitter Class Reference</div>  </div>
+<div class="title">QuerySplitter Class Reference<div class="ingroups"><a class="el" href="group___logic.html">Logic</a> &raquo; <a class="el" href="group___general.html">General</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>This class splits an Sql query into components.  
+ <a href="class_query_splitter.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="querysplitter_8h_source.html">querysplitter.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -116,6 +119,7 @@ Inheritance diagram for QuerySplitter:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
 Public Slots</h2></td></tr>
 <tr class="memitem:ac991562cc3eeabc0851815a4e7fff91c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_query_splitter.html#ac991562cc3eeabc0851815a4e7fff91c">setQuery</a> (QString <a class="el" href="class_query_splitter.html#a4a0966dd4043c2a0d3368e89de7a62ef">query</a>)</td></tr>
+<tr class="memdesc:ac991562cc3eeabc0851815a4e7fff91c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sql query Setter method.  <a href="class_query_splitter.html#ac991562cc3eeabc0851815a4e7fff91c">More...</a><br /></td></tr>
 <tr class="separator:ac991562cc3eeabc0851815a4e7fff91c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="signals"></a>
@@ -126,16 +130,22 @@ Signals</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a5f6159a7bda1d0ddbd202b76da68abc6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_query_splitter.html#a5f6159a7bda1d0ddbd202b76da68abc6">QuerySplitter</a> (QObject *parent=nullptr)</td></tr>
+<tr class="memdesc:a5f6159a7bda1d0ddbd202b76da68abc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function.  <a href="class_query_splitter.html#a5f6159a7bda1d0ddbd202b76da68abc6">More...</a><br /></td></tr>
 <tr class="separator:a5f6159a7bda1d0ddbd202b76da68abc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:accff0441069bef1d9db1cca999ecb063"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_query_splitter.html#accff0441069bef1d9db1cca999ecb063">getSelectParams</a> ()</td></tr>
+<tr class="memdesc:accff0441069bef1d9db1cca999ecb063"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns column names selected in a query.  <a href="class_query_splitter.html#accff0441069bef1d9db1cca999ecb063">More...</a><br /></td></tr>
 <tr class="separator:accff0441069bef1d9db1cca999ecb063"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a329b7181aafb69311a62302dc8982cad"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_query_splitter.html#a329b7181aafb69311a62302dc8982cad">getWhereCondition</a> ()</td></tr>
+<tr class="memdesc:a329b7181aafb69311a62302dc8982cad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns Sql query Where conditions.  <a href="class_query_splitter.html#a329b7181aafb69311a62302dc8982cad">More...</a><br /></td></tr>
 <tr class="separator:a329b7181aafb69311a62302dc8982cad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4c23f477f0a34a4dce43dc6337f6be1"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_query_splitter.html#ad4c23f477f0a34a4dce43dc6337f6be1">getMainTable</a> ()</td></tr>
+<tr class="memdesc:ad4c23f477f0a34a4dce43dc6337f6be1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the main table queried.  <a href="class_query_splitter.html#ad4c23f477f0a34a4dce43dc6337f6be1">More...</a><br /></td></tr>
 <tr class="separator:ad4c23f477f0a34a4dce43dc6337f6be1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77317fa1ffbbaa06d1d02f5331c9fcac"><td class="memItemLeft" align="right" valign="top">QStringList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_query_splitter.html#a77317fa1ffbbaa06d1d02f5331c9fcac">getJoinTables</a> ()</td></tr>
+<tr class="memdesc:a77317fa1ffbbaa06d1d02f5331c9fcac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the names of joined tables in the sql query.  <a href="class_query_splitter.html#a77317fa1ffbbaa06d1d02f5331c9fcac">More...</a><br /></td></tr>
 <tr class="separator:a77317fa1ffbbaa06d1d02f5331c9fcac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada882dcdb3c39a759c1b61bb3467b60a"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_query_splitter.html#ada882dcdb3c39a759c1b61bb3467b60a">query</a> () const</td></tr>
+<tr class="memdesc:ada882dcdb3c39a759c1b61bb3467b60a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Query getter function.  <a href="class_query_splitter.html#ada882dcdb3c39a759c1b61bb3467b60a">More...</a><br /></td></tr>
 <tr class="separator:ada882dcdb3c39a759c1b61bb3467b60a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
@@ -148,7 +158,9 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a62c85435b4197b06d450835fa3b0fff1"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_query_splitter.html#a62c85435b4197b06d450835fa3b0fff1">m_query</a></td></tr>
 <tr class="separator:a62c85435b4197b06d450835fa3b0fff1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class splits an Sql query into components. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a5f6159a7bda1d0ddbd202b76da68abc6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5f6159a7bda1d0ddbd202b76da68abc6">&#9670;&nbsp;</a></span>QuerySplitter()</h2>
 
@@ -173,6 +185,14 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Constructor function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -191,6 +211,9 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Get the names of joined tables in the sql query. </p>
+<dl class="section return"><dt>Returns</dt><dd>QStringList (joined table names) </dd></dl>
+
 </div>
 </div>
 <a id="ad4c23f477f0a34a4dce43dc6337f6be1"></a>
@@ -207,6 +230,9 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Get the name of the main table queried. </p>
+<dl class="section return"><dt>Returns</dt><dd>QString (table name) </dd></dl>
 
 </div>
 </div>
@@ -225,6 +251,9 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Returns column names selected in a query. </p>
+<dl class="section return"><dt>Returns</dt><dd>QStringList (query column names) </dd></dl>
+
 </div>
 </div>
 <a id="a329b7181aafb69311a62302dc8982cad"></a>
@@ -242,6 +271,9 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Returns Sql query Where conditions. </p>
+<dl class="section return"><dt>Returns</dt><dd>QString (Where conditions in sql query) </dd></dl>
+
 </div>
 </div>
 <a id="ada882dcdb3c39a759c1b61bb3467b60a"></a>
@@ -258,6 +290,9 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Query getter function. </p>
+<dl class="section return"><dt>Returns</dt><dd>QString </dd></dl>
 
 </div>
 </div>
@@ -310,6 +345,14 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Sql query Setter method. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td>(sql query) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

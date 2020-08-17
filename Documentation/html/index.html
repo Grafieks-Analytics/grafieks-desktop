@@ -99,11 +99,32 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="contents">
 <div class="textblock"><h2><a class="anchor" id="tools"></a>
 Development tools</h2>
-<p><b>Qt SDK 5.15 (C++ &amp; QML)</b></p>
+<p><a href="https://www.qt.io/">Qt SDK 5.15 (C++ &amp; QML)</a></p>
 <h2><a class="anchor" id="navigation"></a>
 Document Navigation</h2>
-<h2><a class="anchor" id="structure"></a>
-Code Structure</h2>
+<p>Before starting to read the code documentation, it is recommended to install all the dependencies and run the application. Begin by reading the basic setup documents below: </p><ul>
+<li>
+<a href="md__documentation__configuration__mac.html">Mac installation</a> or <a href="md__documentation__configuration__windows_10.html">Windows 10 installation</a> </li>
+<li>
+<a href="md__documentation__mysql__installation.html">MySql installation</a> </li>
+<li>
+<a href="md__r_e_a_d_m_e.html">General instructions</a> </li>
+<li>
+<a href="md__documentation__layouts.html">Grafieks Layout Structure</a> </li>
+</ul>
+<p>Code is categorized into various modules depending on the individual display screens in the application file. Access it by visiting the <a href="file:///Users/mac/grafieks-desktop-windows/Documentation/html/modules.html"><b>Modules Link</b></a>. Rest of the files can be also accessed using <a href="annotated.html"><b>Classes</b></a> or <a href="files.html"><b>Files</b></a> menu options</p>
+<h2><a class="anchor" id="convention"></a>
+File Naming Conventions</h2>
+<ul>
+<li>
+<b><code>*model.h</code>, <code>*model.cpp</code></b> files are the models for views in QtQuick </li>
+<li>
+<b><code>*filter.h</code>, <code>*filter.cpp</code></b> files are the proxy models for views in QtQuick. Basically, they help in search and sort. </li>
+<li>
+<b><code>*ds.h</code>, <code>*ds.cpp</code></b> files don't interact with views. They talk to internet based APIs </li>
+<li>
+<b><code>*.h</code>, <code>*.cpp</code></b> general class files </li>
+</ul>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->

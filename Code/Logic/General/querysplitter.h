@@ -5,6 +5,10 @@
 #include <QObject>
 #include <QDebug>
 
+/*!
+ * \brief This class splits an Sql query into components
+ * \ingroup General
+ */
 class QuerySplitter : public QObject
 {
     Q_OBJECT

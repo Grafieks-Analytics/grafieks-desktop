@@ -15,7 +15,7 @@
 #include "../statics.h"
 
 /*!
- * \brief Handles the connection with MysqlCon across the application
+ * \brief Handles the connection with MySql database across the application
  * \ingroup Connectors
  */
 

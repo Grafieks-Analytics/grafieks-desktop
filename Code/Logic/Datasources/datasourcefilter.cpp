@@ -1,5 +1,9 @@
 #include "datasourcefilter.h"
 
+/*!
+ * \brief Default Constructor function
+ * \param parent
+ */
 DatasourceFilter::DatasourceFilter(QObject *parent) :
     QSortFilterProxyModel(parent)
 {
@@ -10,14 +14,20 @@ DatasourceFilter::DatasourceFilter(QObject *parent) :
 }
 
 
-
+/*!
+ * \brief Set filter string for Datasource filter
+ * \param string (search string)
+ */
 void DatasourceFilter::setFilterString(QString string)
 {
     this->setFilterCaseSensitivity(Qt::CaseInsensitive);
     this->setFilterFixedString(string);
 }
 
-
+/*!
+ * \brief Set sort order for Datasource
+ * \param checked (sort Asc/Desc)
+ */
 void DatasourceFilter::setSortOrder(bool checked)
 {
     if(checked)

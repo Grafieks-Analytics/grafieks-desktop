@@ -7,6 +7,12 @@
 
 #include "connector.h"
 
+/*!
+ * \brief Sets the Connector screen data to view in QtQuick
+ * \details This class lists all the methods which interact with the view in QtQuick
+ * \ingroup ConnectorScreen
+ */
+
 class ConnectorModel : public QAbstractListModel
 {
     Q_OBJECT

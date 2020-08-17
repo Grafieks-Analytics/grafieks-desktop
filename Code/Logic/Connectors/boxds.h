@@ -12,8 +12,19 @@
 #include <QSettings>
 #include <QUrl>
 #include <QUrlQuery>
+#include <QFile>
+#include <QDesktopServices>
+#include <QOAuthHttpServerReplyHandler>
+#include <QtDebug>
 
 #include "box.h"
+
+/*!
+ * \brief Fetches data records from Box API
+ * \details This class lists all the methods which interact with the Box API documented in
+ * <a href="https://developer.box.com/reference/">https://developer.box.com/reference/</a>
+ * \ingroup ConnectorScreen
+ */
 
 class BoxDS : public QObject
 {
@@ -22,7 +33,6 @@ public:
     explicit BoxDS(QObject *parent = nullptr);
 
     Q_INVOKABLE void fetchDatasources();
-//    Q_INVOKABLE QString goingBack(QString path,QString name);
     Q_INVOKABLE void folderNav(QString path);
     Q_INVOKABLE void searchQuer(QString path);
 

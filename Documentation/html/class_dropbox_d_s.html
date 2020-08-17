@@ -100,9 +100,12 @@ $(document).ready(function(){initNavTree('class_dropbox_d_s.html',''); initResiz
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_dropbox_d_s-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">DropboxDS Class Reference</div>  </div>
+<div class="title">DropboxDS Class Reference<div class="ingroups"><a class="el" href="group___logic.html">Logic</a> &raquo; <a class="el" href="group___connector_screen.html">ConnectorScreen</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Fetches data records from <a class="el" href="class_dropbox.html" title="Roles required for Dropbox API/Model.">Dropbox</a> API.  
+ <a href="class_dropbox_d_s.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="dropboxds_8h_source.html">dropboxds.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -130,31 +133,43 @@ Signals</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a361062b1aaa348c09c237a2cd888a1ef"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dropbox_d_s.html#a361062b1aaa348c09c237a2cd888a1ef">DropboxDS</a> (QObject *parent=nullptr)</td></tr>
+<tr class="memdesc:a361062b1aaa348c09c237a2cd888a1ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function to initialize connection with <a class="el" href="class_dropbox.html" title="Roles required for Dropbox API/Model.">Dropbox</a> API.  <a href="class_dropbox_d_s.html#a361062b1aaa348c09c237a2cd888a1ef">More...</a><br /></td></tr>
 <tr class="separator:a361062b1aaa348c09c237a2cd888a1ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6da000d6f0a9cf6548fa9ac7f720809a"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dropbox_d_s.html#a6da000d6f0a9cf6548fa9ac7f720809a">fetchDatasources</a> ()</td></tr>
+<tr class="memdesc:a6da000d6f0a9cf6548fa9ac7f720809a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls to authorize the user using Qt's OAuth class.  <a href="class_dropbox_d_s.html#a6da000d6f0a9cf6548fa9ac7f720809a">More...</a><br /></td></tr>
 <tr class="separator:a6da000d6f0a9cf6548fa9ac7f720809a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b64dca1885a6277250dbd1bd65916a8"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dropbox_d_s.html#a6b64dca1885a6277250dbd1bd65916a8">goingBack</a> (QString path, QString name)</td></tr>
+<tr class="memdesc:a6b64dca1885a6277250dbd1bd65916a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Back navigation path.  <a href="class_dropbox_d_s.html#a6b64dca1885a6277250dbd1bd65916a8">More...</a><br /></td></tr>
 <tr class="separator:a6b64dca1885a6277250dbd1bd65916a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f6d3362bbdc9c37a9c4cca293a639ce"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dropbox_d_s.html#a2f6d3362bbdc9c37a9c4cca293a639ce">folderNav</a> (QString path)</td></tr>
+<tr class="memdesc:a2f6d3362bbdc9c37a9c4cca293a639ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">List contents of a folder.  <a href="class_dropbox_d_s.html#a2f6d3362bbdc9c37a9c4cca293a639ce">More...</a><br /></td></tr>
 <tr class="separator:a2f6d3362bbdc9c37a9c4cca293a639ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3689e7d8a4fd5404b6ca801df2170762"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dropbox_d_s.html#a3689e7d8a4fd5404b6ca801df2170762">searchQuer</a> (QString path)</td></tr>
+<tr class="memdesc:a3689e7d8a4fd5404b6ca801df2170762"><td class="mdescLeft">&#160;</td><td class="mdescRight">Search the <a class="el" href="class_box.html" title="Roles required for Box API/Model.">Box</a> API.  <a href="class_dropbox_d_s.html#a3689e7d8a4fd5404b6ca801df2170762">More...</a><br /></td></tr>
 <tr class="separator:a3689e7d8a4fd5404b6ca801df2170762"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8ae8182ff78102fff2e562831005a57"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dropbox_d_s.html#ad8ae8182ff78102fff2e562831005a57">addDataSource</a> (<a class="el" href="class_dropbox.html">Dropbox</a> *<a class="el" href="class_dropbox_d_s.html#a2a8a3a40d388af83137d5b60b19a1718">dropbox</a>)</td></tr>
+<tr class="memdesc:ad8ae8182ff78102fff2e562831005a57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notify model after adding new record in QList&lt;Dropbox *&gt;  <a href="class_dropbox_d_s.html#ad8ae8182ff78102fff2e562831005a57">More...</a><br /></td></tr>
 <tr class="separator:ad8ae8182ff78102fff2e562831005a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11351a1808cd6ec918d6116011a6f2f4"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dropbox_d_s.html#a11351a1808cd6ec918d6116011a6f2f4">addDataSource</a> (const QString &amp;id, const QString &amp;tag, const QString &amp;name, const QString &amp;pathLower, const QString &amp;clientModified, const QString &amp;extension)</td></tr>
+<tr class="memdesc:a11351a1808cd6ec918d6116011a6f2f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add new data to QList&lt;Dropbox *&gt;  <a href="class_dropbox_d_s.html#a11351a1808cd6ec918d6116011a6f2f4">More...</a><br /></td></tr>
 <tr class="separator:a11351a1808cd6ec918d6116011a6f2f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4639d4b4d273e43374575d2b75cc42f"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="class_dropbox.html">Dropbox</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dropbox_d_s.html#ad4639d4b4d273e43374575d2b75cc42f">dataItems</a> ()</td></tr>
+<tr class="memdesc:ad4639d4b4d273e43374575d2b75cc42f"><td class="mdescLeft">&#160;</td><td class="mdescRight">List the values in QList&lt;Dropbox *&gt;  <a href="class_dropbox_d_s.html#ad4639d4b4d273e43374575d2b75cc42f">More...</a><br /></td></tr>
 <tr class="separator:ad4639d4b4d273e43374575d2b75cc42f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-slots"></a>
 Private Slots</h2></td></tr>
 <tr class="memitem:a5d3707213c9f7a8b79a7704973d01fa1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dropbox_d_s.html#a5d3707213c9f7a8b79a7704973d01fa1">resetDatasource</a> ()</td></tr>
+<tr class="memdesc:a5d3707213c9f7a8b79a7704973d01fa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear all the values in QList&lt;Dropbox*&gt; &amp; notify model.  <a href="class_dropbox_d_s.html#a5d3707213c9f7a8b79a7704973d01fa1">More...</a><br /></td></tr>
 <tr class="separator:a5d3707213c9f7a8b79a7704973d01fa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a2b1eeedd9e9b8c80e28be77d31a9a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dropbox_d_s.html#a0a2b1eeedd9e9b8c80e28be77d31a9a4">dataReadyRead</a> ()</td></tr>
+<tr class="memdesc:a0a2b1eeedd9e9b8c80e28be77d31a9a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads incoming data from the API &amp; store to buffer.  <a href="class_dropbox_d_s.html#a0a2b1eeedd9e9b8c80e28be77d31a9a4">More...</a><br /></td></tr>
 <tr class="separator:a0a2b1eeedd9e9b8c80e28be77d31a9a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff493b00534f53224a27d9ec5e25e3ad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dropbox_d_s.html#aff493b00534f53224a27d9ec5e25e3ad">dataReadFinished</a> ()</td></tr>
+<tr class="memdesc:aff493b00534f53224a27d9ec5e25e3ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Processes the data buffer.  <a href="class_dropbox_d_s.html#aff493b00534f53224a27d9ec5e25e3ad">More...</a><br /></td></tr>
 <tr class="separator:aff493b00534f53224a27d9ec5e25e3ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd53d28fc9a14f53b99b8032f41e462d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dropbox_d_s.html#afd53d28fc9a14f53b99b8032f41e462d">dataSearchedFinished</a> ()</td></tr>
+<tr class="memdesc:afd53d28fc9a14f53b99b8032f41e462d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process data search in <a class="el" href="class_dropbox.html" title="Roles required for Dropbox API/Model.">Dropbox</a>.  <a href="class_dropbox_d_s.html#afd53d28fc9a14f53b99b8032f41e462d">More...</a><br /></td></tr>
 <tr class="separator:afd53d28fc9a14f53b99b8032f41e462d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
@@ -172,7 +187,10 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a968ea1191d74331fca97d10f1580bd4c"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dropbox_d_s.html#a968ea1191d74331fca97d10f1580bd4c">token</a></td></tr>
 <tr class="separator:a968ea1191d74331fca97d10f1580bd4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Fetches data records from <a class="el" href="class_dropbox.html" title="Roles required for Dropbox API/Model.">Dropbox</a> API. </p>
+<p>This class lists all the methods which interact with the <a class="el" href="class_box.html" title="Roles required for Box API/Model.">Box</a> API documented in <a href="https://www.dropbox.com/developers/documentation/http/documentation">https://www.dropbox.com/developers/documentation/http/documentation</a> </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a361062b1aaa348c09c237a2cd888a1ef"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a361062b1aaa348c09c237a2cd888a1ef">&#9670;&nbsp;</a></span>DropboxDS()</h2>
 
@@ -196,6 +214,14 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Constructor function to initialize connection with <a class="el" href="class_dropbox.html" title="Roles required for Dropbox API/Model.">Dropbox</a> API. </p>
+<p>Initiates OAuth connection. Once OAuth token is obtained, it calls relevant methods to fetch the data from the API </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -250,6 +276,19 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Add new data to QList&lt;Dropbox *&gt; </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>(File id) </td></tr>
+    <tr><td class="paramname">tag</td><td>(File tag) </td></tr>
+    <tr><td class="paramname">name</td><td>(File name) </td></tr>
+    <tr><td class="paramname">pathLower</td><td>(path in lower case) </td></tr>
+    <tr><td class="paramname">clientModified</td><td>(Modified date) </td></tr>
+    <tr><td class="paramname">extension</td><td>(File extension) </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="ad8ae8182ff78102fff2e562831005a57"></a>
@@ -268,6 +307,14 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Notify model after adding new record in QList&lt;Dropbox *&gt; </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">box</td><td>(<a class="el" href="class_dropbox.html" title="Roles required for Dropbox API/Model.">Dropbox</a> *) </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="ad4639d4b4d273e43374575d2b75cc42f"></a>
@@ -284,6 +331,9 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>List the values in QList&lt;Dropbox *&gt; </p>
+<dl class="section return"><dt>Returns</dt><dd>QList&lt;Dropbox *&gt; </dd></dl>
 
 </div>
 </div>
@@ -310,6 +360,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Processes the data buffer. </p>
+<p>Process the data buffer and append new values to QList&lt;Dropbox*&gt; </p>
+
 </div>
 </div>
 <a id="a0a2b1eeedd9e9b8c80e28be77d31a9a4"></a>
@@ -334,6 +387,8 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Reads incoming data from the API &amp; store to buffer. </p>
 
 </div>
 </div>
@@ -360,6 +415,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Process data search in <a class="el" href="class_dropbox.html" title="Roles required for Dropbox API/Model.">Dropbox</a>. </p>
+
 </div>
 </div>
 <a id="a6da000d6f0a9cf6548fa9ac7f720809a"></a>
@@ -376,6 +433,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Calls to authorize the user using Qt's OAuth class. </p>
 
 </div>
 </div>
@@ -394,6 +453,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>List contents of a folder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>(Folder path) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -422,6 +489,16 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Back navigation path. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>(string identifier parameter: <a class="el" href="class_dropbox.html" title="Roles required for Dropbox API/Model.">Dropbox</a>) </td></tr>
+    <tr><td class="paramname">name</td><td>(folder name) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString </dd></dl>
 
 </div>
 </div>
@@ -599,6 +676,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Clear all the values in QList&lt;Dropbox*&gt; &amp; notify model. </p>
+
 </div>
 </div>
 <a id="a3689e7d8a4fd5404b6ca801df2170762"></a>
@@ -616,6 +695,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Search the <a class="el" href="class_box.html" title="Roles required for Box API/Model.">Box</a> API. </p>
+<p>Documentation reference <a href="https://www.dropbox.com/developers/documentation/http/documentation#files-search">https://www.dropbox.com/developers/documentation/http/documentation#files-search</a> </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>(File name) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

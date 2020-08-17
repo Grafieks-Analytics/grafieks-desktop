@@ -14,7 +14,7 @@
 #include "../constants.h"
 
 /*!
- * \brief  Handles the connection with Sqlitecon across the application
+ * \brief Handles the connection with Sqlite database across the application
  * \ingroup Connectors
  */
 

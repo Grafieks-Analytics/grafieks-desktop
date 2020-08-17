@@ -1,15 +1,27 @@
 #include "querysplitter.h"
 
+/*!
+ * \brief Constructor function
+ * \param parent
+ */
 QuerySplitter::QuerySplitter(QObject *parent) : QObject(parent)
 {
 
 }
 
+/*!
+ * \brief Query getter function
+ * \return QString
+ */
 QString QuerySplitter::query() const
 {
     return m_query;
 }
 
+/*!
+ * \brief Sql query Setter method
+ * \param query (sql query)
+ */
 void QuerySplitter::setQuery(QString query)
 {
     if (m_query == query)
@@ -22,6 +34,10 @@ void QuerySplitter::setQuery(QString query)
     emit queryChanged(m_query);
 }
 
+/*!
+ * \brief Returns column names selected in a query
+ * \return QStringList (query column names)
+ */
 QStringList QuerySplitter::getSelectParams()
 {
 
@@ -34,7 +50,10 @@ QStringList QuerySplitter::getSelectParams()
 
     return selectList;
 }
-
+/*!
+ * \brief Returns Sql query Where conditions
+ * \return QString (Where conditions in sql query)
+ */
 QString QuerySplitter::getWhereCondition()
 {
 
@@ -51,6 +70,10 @@ QString QuerySplitter::getWhereCondition()
 
 }
 
+/*!
+ * \brief Get the name of the main table queried
+ * \return QString (table name)
+ */
 QString QuerySplitter::getMainTable()
 {
 
@@ -65,6 +88,10 @@ QString QuerySplitter::getMainTable()
 
 }
 
+/*!
+ * \brief Get the names of joined tables in the sql query
+ * \return QStringList (joined table names)
+ */
 QStringList QuerySplitter::getJoinTables()
 {
 

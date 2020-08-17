@@ -31,7 +31,7 @@ var NAVTREE =
       [ "Visual Studio 2019 Dependencies", "md__documentation__configuration__windows_10.html#autotoc_md4", [
         [ "Development tools", "index.html#tools", null ],
         [ "Document Navigation", "index.html#navigation", null ],
-        [ "Code Structure", "index.html#structure", [
+        [ "File Naming Conventions", "index.html#convention", [
           [ "Xcode dependencies", "md__documentation__configuration__mac.html#autotoc_md1", null ],
           [ "Qmake", "md__documentation__configuration__mac.html#autotoc_md2", null ],
           [ "QT Installation 5.15", "md__documentation__configuration__windows_10.html#autotoc_md5", null ]
@@ -99,9 +99,9 @@ var NAVTREEINDEX =
 [
 "_messages_8h.html",
 "class_datasource.html#a3290e46565e4c58744992938c51e1b12",
-"class_filter_functions_model.html#a38f48d29aa1a6f5cf49a5c67a81e35da",
-"class_sheet_d_s.html#ae31aa134048dff1a32b571d480b7e8e6",
-"md__documentation__configuration__mac.html"
+"class_filter_functions_model.html#a201f200bcf38c19385f79b9fa34c20ba",
+"class_sheet_d_s.html#ab8bfc99ff0ec652fd3b7b116ee648423",
+"main_8cpp.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -2,7 +2,6 @@
 
 /*!
  * \fn MysqlCon::MysqlCon
- * \ingroup Connectors
  * \brief Constructor function for Mysql connection
  * \param parent
  */
@@ -14,8 +13,9 @@ MysqlCon::MysqlCon(QObject *parent) : QObject(parent)
 
 /*!
  * \fn MysqlCon::MysqlInstance
- * \ingroup Connectors
- * \brief Instantiates and Mysql connection to a given database
+ * \brief Instantiates a Mysql connection to a given database
+ * \details The function instantiates 2 MySql connections for General connections and one specially for DataQuery Modeller - query profiling.
+ * Query profiling needs a separate connection because once enabled, it profiles all the queries which we don't want
  * \param QString &host
  * \param QString &db
  * \param int &port
@@ -80,8 +80,8 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
 
 /*!
  * \fn MysqlCon::~MysqlCon
- * \ingroup Connectors
  * \brief Destructor function for Mysql connection
+ * \details The function closes the two MySql open connections
  */
 
 MysqlCon::~MysqlCon()

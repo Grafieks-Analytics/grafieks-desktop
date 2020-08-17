@@ -1,17 +1,12 @@
 #include "dropboxds.h"
-#include <QJsonArray>
-#include <QOAuth2AuthorizationCodeFlow>
-#include <QFile>
-#include <QJsonDocument>
-#include <QDesktopServices>
-#include <QJsonObject>
-#include <QNetworkRequest>
-#include <QQmlContext>
-#include <QOAuthHttpServerReplyHandler>
-#include <QtDebug>
 
-//dropbox api documentation - https://www.dropbox.com/developers/documentation/http/documentation
 
+/*!
+ * \brief Constructor function to initialize connection with Dropbox API
+ * \details Initiates OAuth connection. Once OAuth token is obtained, it calls relevant methods to fetch the data from
+ * the API
+ * \param parent
+ */
 DropboxDS::DropboxDS(QObject *parent) : QObject(parent),
     m_networkAccessManager(new QNetworkAccessManager(this)),
     m_networkReply(nullptr),
@@ -90,31 +85,41 @@ DropboxDS::DropboxDS(QObject *parent) : QObject(parent),
 
 }
 
+/*!
+ * \brief Calls to authorize the user using Qt's OAuth class
+ */
 void DropboxDS::fetchDatasources()
 {
     this->dropbox->grant();
 
 }
 
+/*!
+ * \brief Back navigation path
+ * \param path (string identifier parameter: Dropbox)
+ * \param name (folder name)
+ * \return QString
+ */
 QString DropboxDS::goingBack(QString path,QString name)
 {
     int len = name.length();
-    //    QStringRef sub(&path);
-    //    sub.chop(len);
     QString p = path;
-    //    QStringList pa = path.split('');
-    //    qDebug() <<"Listr is :" << pa;
     p.chop(len);
+
     if(p=="Dropbox" || p.length() == 1 || name == "Folder name")
         p="";
 
-    qDebug()<<"This is p: "<<p;
     folderNav(p);
 
     return p;
 
 }
 
+
+/*!
+ * \brief List contents of a folder
+ * \param path (Folder path)
+ */
 void DropboxDS::folderNav(QString path)
 {
     const QUrl API_ENDPOINT("https://api.dropboxapi.com/2/files/list_folder");
@@ -142,6 +147,11 @@ void DropboxDS::folderNav(QString path)
     connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::dataReadFinished);
 }
 
+/*!
+ * \brief Search the Box API
+ * \details Documentation reference https://www.dropbox.com/developers/documentation/http/documentation#files-search
+ * \param path (File name)
+ */
 void DropboxDS::searchQuer(QString path)
 {
     QJsonObject obj;
@@ -150,8 +160,6 @@ void DropboxDS::searchQuer(QString path)
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
     QNetworkRequest m_networkRequest;
-
-    // api link - https://www.dropbox.com/developers/documentation/http/documentation#files-search
 
     m_networkRequest.setUrl(QUrl("https://api.dropboxapi.com/2/files/search_v2"));
     m_networkRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
@@ -162,6 +170,10 @@ void DropboxDS::searchQuer(QString path)
 
 }
 
+/*!
+ * \brief Notify model after adding new record in QList<Dropbox *>
+ * \param box (Dropbox *)
+ */
 void DropboxDS::addDataSource(Dropbox *dropbox)
 {
     emit preItemAdded();
@@ -169,6 +181,15 @@ void DropboxDS::addDataSource(Dropbox *dropbox)
     emit postItemAdded();
 }
 
+/*!
+ * \brief Add new data to QList<Dropbox *>
+ * \param id (File id)
+ * \param tag (File tag)
+ * \param name (File name)
+ * \param pathLower (path in lower case)
+ * \param clientModified (Modified date)
+ * \param extension (File extension)
+ */
 void DropboxDS::addDataSource(const QString & id, const QString & tag, const QString & name, const QString & pathLower, const QString & clientModified,const QString & extension)
 {
     Dropbox *dropbox = new Dropbox(id,tag,name,pathLower,clientModified,extension);
@@ -176,11 +197,18 @@ void DropboxDS::addDataSource(const QString & id, const QString & tag, const QSt
     addDataSource(dropbox);
 }
 
+/*!
+ * \brief List the values in QList<Dropbox *>
+ * \return QList<Dropbox *>
+ */
 QList<Dropbox *> DropboxDS::dataItems()
 {
     return m_dropbox;
 }
 
+/*!
+ * \brief Clear all the values in QList<Dropbox*> & notify model
+ */
 void DropboxDS::resetDatasource()
 {
     emit preReset();
@@ -188,10 +216,18 @@ void DropboxDS::resetDatasource()
     emit postReset();
 }
 
+/*!
+ * \brief Reads incoming data from the API & store to buffer
+ */
 void DropboxDS::dataReadyRead()
 {
     m_dataBuffer->append(m_networkReply->readAll());
 }
+
+/*!
+ * \brief Processes the data buffer
+ * \details Process the data buffer and append new values to QList<Dropbox*>
+ */
 
 void DropboxDS::dataReadFinished()
 {
@@ -235,6 +271,9 @@ void DropboxDS::dataReadFinished()
     }
 }
 
+/*!
+ * \brief Process data search in Dropbox
+ */
 void DropboxDS::dataSearchedFinished()
 {
     if(m_networkReply->error()){

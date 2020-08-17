@@ -2,8 +2,8 @@ var class_filter_functions_model =
 [
     [ "FilterFunctionsModel", "class_filter_functions_model.html#a797bbf81662d5642d4a5878c5e74a831", null ],
     [ "mAverage", "class_filter_functions_model.html#aad4c26a220f507701af953538e3b754c", null ],
-    [ "mCount", "class_filter_functions_model.html#a9b3afebdff4363ddcb5349628aa4c3f7", null ],
-    [ "mCountdistinct", "class_filter_functions_model.html#a65e273a4029286c120154ece4a67e53d", null ],
+    [ "mCount", "class_filter_functions_model.html#a5ac63dc438f2fb4b7c5b8995568c37bc", null ],
+    [ "mCountdistinct", "class_filter_functions_model.html#a201f200bcf38c19385f79b9fa34c20ba", null ],
     [ "mMaximum", "class_filter_functions_model.html#aa019719cab4d7865c3394a81e9cd46f7", null ],
     [ "mMedian", "class_filter_functions_model.html#a38f48d29aa1a6f5cf49a5c67a81e35da", null ],
     [ "mMinimum", "class_filter_functions_model.html#a31034a47532e666e2454540aae5b57f9", null ],

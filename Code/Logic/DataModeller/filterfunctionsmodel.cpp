@@ -16,12 +16,24 @@ FilterFunctionsModel::FilterFunctionsModel(QObject *parent) : QObject(parent)
 
 //}
 
+/*!
+ * \brief Calculates the average of the numbers
+ * \param numbers (QVariantlist of numbers)
+ * \return float
+ */
+
 float FilterFunctionsModel::mAverage(QVariantList numbers)
 {
 
     Q_UNUSED(numbers);
     return 0.0;
 }
+
+/*!
+ * \brief Calculates the median of numbers
+ * \param numbers (QVariantlist of numbers)
+ * \return float
+ */
 
 float FilterFunctionsModel::mMedian(QVariantList numbers)
 {
@@ -30,19 +42,37 @@ float FilterFunctionsModel::mMedian(QVariantList numbers)
 
 }
 
-float FilterFunctionsModel::mCount(QVariantList numbers)
+/*!
+ * \brief Returns the count of numbers in the list
+ * \param numbers (QVariantlist of numbers)
+ * \return int
+ */
+
+int FilterFunctionsModel::mCount(QVariantList numbers)
 {
 
     Q_UNUSED(numbers);
-    return 0.0;
+    return 0;
 }
 
-float FilterFunctionsModel::mCountdistinct(QVariantList numbers)
+/*!
+ * \brief Returns the distinct count of numbers in the list
+ * \param numbers (QVariantlist of numbers)
+ * \return int
+ */
+
+int FilterFunctionsModel::mCountdistinct(QVariantList numbers)
 {
 
     Q_UNUSED(numbers);
-    return 0.0;
+    return 0;
 }
+
+/*!
+ * \brief Returns the minimum number in the list
+ * \param numbers (QVariantlist of numbers)
+ * \return float
+ */
 
 float FilterFunctionsModel::mMinimum(QVariantList numbers)
 {
@@ -51,6 +81,11 @@ float FilterFunctionsModel::mMinimum(QVariantList numbers)
     return 0.0;
 }
 
+/*!
+ * \brief Returns the maximum number in the list
+ * \param numbers (QVariantlist of numbers)
+ * \return float
+ */
 float FilterFunctionsModel::mMaximum(QVariantList numbers)
 {
 
@@ -58,6 +93,11 @@ float FilterFunctionsModel::mMaximum(QVariantList numbers)
     return 0.0;
 }
 
+/*!
+ * \brief Returns the percentile of numbers in the list
+ * \param numbers (QVariantlist of numbers)
+ * \return float
+ */
 float FilterFunctionsModel::mPercentile(QVariantList numbers)
 {
 
@@ -65,12 +105,18 @@ float FilterFunctionsModel::mPercentile(QVariantList numbers)
     return 0.0;
 }
 
+/*!
+ * \brief Returns the standard deviation of numbers in the list
+ * \param numbers (QVariantlist of numbers)
+ * \return float
+ */
 float FilterFunctionsModel::mStddev(QVariantList numbers)
 {
 
     Q_UNUSED(numbers);
     return 0.0;
 }
+
 
 float FilterFunctionsModel::mStddevpop(QVariantList numbers)
 {

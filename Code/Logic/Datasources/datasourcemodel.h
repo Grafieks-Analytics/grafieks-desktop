@@ -6,6 +6,11 @@
 
 #include "datasourceds.h"
 
+/*!
+ * \brief Sets the Datasource API data to view in QtQuick
+ * \details This class lists all the methods which interact with the view in QtQuick
+ * \ingroup Datasources
+ */
 class DatasourceModel : public QAbstractListModel
 {
     Q_OBJECT

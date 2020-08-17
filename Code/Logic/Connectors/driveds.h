@@ -14,7 +14,16 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QSettings>
+#include <QtDebug>
+
 #include "drive.h"
+
+/*!
+ * \brief Fetches data records from Google Drive API
+ * \details This class lists all the methods which interact with the Box API documented in
+ * <a href="https://developers.google.com/drive/api/v3/reference/files">https://developers.google.com/drive/api/v3/reference/files</a>
+ * \ingroup ConnectorScreen
+ */
 
 class DriveDS : public QObject
 {
@@ -41,7 +50,7 @@ signals:
 
 private slots:
     void resetDatasource();
-//    void dataReadyRead();
+    void dataReadyRead();
     void dataReadFinished();
 
 private:

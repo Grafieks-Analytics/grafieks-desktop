@@ -43,17 +43,6 @@
 #include "Code/Logic/General/querysplitter.h"
 #include "Code/Logic/General/qttest2.h"
 
-
-/*! \mainpage Code Documentation
- *
- * \subsection tools Development tools
- * <b>Qt SDK 5.15 (C++ & QML)</b>
- *
- * \subsection navigation Document Navigation
- *
- * \subsection structure Code Structure
- */
-
 #include "Code/statics.h"
 
 QString Statics::currentDbName;
@@ -69,6 +58,69 @@ QString Statics::myPassword;
 QString Statics::sqliteFile;
 QString Statics::sqliteUsername;
 QString Statics::sqlitePassword;
+
+
+/*! \mainpage Code Documentation
+ *
+ * \subsection tools Development tools
+ * <a href="https://www.qt.io/">Qt SDK 5.15 (C++ & QML)</a>
+ *
+ * \subsection navigation Document Navigation
+ * \details Before starting to read the code documentation, it is recommended to install all the dependencies and run the application.
+ * Begin by reading the basic setup documents below:
+ * <ul>
+ * <li><a href="md__documentation__configuration__mac.html">Mac installation</a> or <a href="md__documentation__configuration__windows_10.html">Windows 10 installation</a></li>
+ * <li><a href="md__documentation__mysql__installation.html">MySql installation</a></li>
+ * <li><a href="md__r_e_a_d_m_e.html">General instructions</a></li>
+ * <li><a href="md__documentation__layouts.html">Grafieks Layout Structure</a></li>
+ * </ul>
+ *
+ * Code is categorized into various modules depending on the individual display screens in the application file. Access it by visiting the
+ * <a href="file:///Users/mac/grafieks-desktop-windows/Documentation/html/modules.html"><b>Modules Link</b></a>. Rest of the files can be also accessed using <a href="annotated.html"><b>Classes</b></a>
+ * or <a href="files.html"><b>Files</b></a> menu options
+ *
+ * \subsection convention File Naming Conventions
+ * \details
+ * <ul>
+ * <li><b>`*model.h`, `*model.cpp`</b> files are the models for views in QtQuick</li>
+ * <li><b>`*filter.h`, `*filter.cpp`</b> files are the proxy models for views in QtQuick. Basically, they help in search and sort.</li>
+ * <li><b>`*ds.h`, `*ds.cpp`</b> files don't interact with views. They talk to internet based APIs</li>
+ * <li><b>`*.h`, `*.cpp`</b> general class files</li>
+ * </ul>
+ */
+
+
+/*!
+ *  \defgroup Connectors
+ *  \brief Database connections
+ *
+ *  \defgroup Logic
+ *  \brief Rest of all the classes for the application
+ *
+ * \defgroup ConnectorScreen
+ * \ingroup Logic
+ * \brief Classes related to Connectors screen
+ *
+ * \defgroup DataModeller
+ * \ingroup Logic
+ * \brief Classes related to Modelling Screen. Both Query and Data modeller
+ *
+ * \defgroup Datasources
+ * \ingroup Logic
+ * \brief Classes related to Datasources
+ *
+ * \defgroup General
+ * \ingroup Logic
+ * \brief All other General classes
+ *
+ * \defgroup Reports
+ * \ingroup Logic
+ * \brief Classes related to Reports
+ *
+ * \defgroup Dashboards
+ * \ingroup Logic
+ * \brief Classes related to Dashboard designing
+ */
 
 
 int main(int argc, char *argv[])

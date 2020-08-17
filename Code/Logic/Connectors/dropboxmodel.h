@@ -6,6 +6,12 @@
 
 #include "dropboxds.h"
 
+/*!
+ * \brief Sets the Dropbox API data to view in QtQuick
+ * \details This class lists all the methods which interact with the view in QtQuick
+ * \ingroup ConnectorScreen
+ */
+
 class DropboxModel : public QAbstractListModel
 {
     Q_OBJECT

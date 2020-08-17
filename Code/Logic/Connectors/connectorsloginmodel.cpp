@@ -1,9 +1,21 @@
 #include "connectorsloginmodel.h"
 
+/*!
+ * \brief Constructor function
+ * \param parent
+ */
 ConnectorsLoginModel::ConnectorsLoginModel(QObject *parent) : QObject(parent)
 {
 }
 
+/*!
+ * \brief Initiate connection with a MySql database
+ * \param host (database server host)
+ * \param db (database name)
+ * \param port
+ * \param username
+ * \param password
+ */
 void ConnectorsLoginModel::mysqlLogin(QString host, QString db, int port, QString username, QString password)
 {
 
@@ -17,6 +29,13 @@ void ConnectorsLoginModel::mysqlLogin(QString host, QString db, int port, QStrin
     emit mysqlLoginStatus(response);
 }
 
+
+/*!
+ * \brief Initiate connection with an Sqlite database
+ * \param filename (database file)
+ * \param username
+ * \param password
+ */
 void ConnectorsLoginModel::sqliteLogin(QString filename, QString username, QString password)
 {
 

@@ -98,9 +98,12 @@ $(document).ready(function(){initNavTree('class_datasource_filter.html',''); ini
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_datasource_filter-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">DatasourceFilter Class Reference</div>  </div>
+<div class="title">DatasourceFilter Class Reference<div class="ingroups"><a class="el" href="group___logic.html">Logic</a> &raquo; <a class="el" href="group___datasources.html">Datasources</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Proxy Datasources Model.  
+ <a href="class_datasource_filter.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="datasourcefilter_8h_source.html">datasourcefilter.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -113,10 +116,13 @@ Inheritance diagram for DatasourceFilter:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac0a049d0b348d3b65ce6c33428757035"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_datasource_filter.html#ac0a049d0b348d3b65ce6c33428757035">DatasourceFilter</a> (QObject *parent=nullptr)</td></tr>
+<tr class="memdesc:ac0a049d0b348d3b65ce6c33428757035"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default Constructor function.  <a href="class_datasource_filter.html#ac0a049d0b348d3b65ce6c33428757035">More...</a><br /></td></tr>
 <tr class="separator:ac0a049d0b348d3b65ce6c33428757035"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89c30579cd11843b9bd4e4acf6f2c4ad"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_datasource_filter.html#a89c30579cd11843b9bd4e4acf6f2c4ad">setFilterString</a> (QString string)</td></tr>
+<tr class="memdesc:a89c30579cd11843b9bd4e4acf6f2c4ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set filter string for <a class="el" href="class_datasource.html" title="Roles required for Datasource.">Datasource</a> filter.  <a href="class_datasource_filter.html#a89c30579cd11843b9bd4e4acf6f2c4ad">More...</a><br /></td></tr>
 <tr class="separator:a89c30579cd11843b9bd4e4acf6f2c4ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40bc3ddeed5c369fbf302756c62c06d0"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_datasource_filter.html#a40bc3ddeed5c369fbf302756c62c06d0">setSortOrder</a> (bool checked)</td></tr>
+<tr class="memdesc:a40bc3ddeed5c369fbf302756c62c06d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set sort order for <a class="el" href="class_datasource.html" title="Roles required for Datasource.">Datasource</a>.  <a href="class_datasource_filter.html#a40bc3ddeed5c369fbf302756c62c06d0">More...</a><br /></td></tr>
 <tr class="separator:a40bc3ddeed5c369fbf302756c62c06d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
@@ -124,7 +130,10 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a7a55c070186c8621fe8a26d0026a6afb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_datasource_model.html">DatasourceModel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_datasource_filter.html#a7a55c070186c8621fe8a26d0026a6afb">m_datasourceModel</a></td></tr>
 <tr class="separator:a7a55c070186c8621fe8a26d0026a6afb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Proxy Datasources Model. </p>
+<p>This class is a proxy model for Datasources to facilitate search/sort in view </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac0a049d0b348d3b65ce6c33428757035"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac0a049d0b348d3b65ce6c33428757035">&#9670;&nbsp;</a></span>DatasourceFilter()</h2>
 
@@ -149,6 +158,14 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Default Constructor function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -168,6 +185,14 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Set filter string for <a class="el" href="class_datasource.html" title="Roles required for Datasource.">Datasource</a> filter. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">string</td><td>(search string) </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a40bc3ddeed5c369fbf302756c62c06d0"></a>
@@ -185,6 +210,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Set sort order for <a class="el" href="class_datasource.html" title="Roles required for Datasource.">Datasource</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">checked</td><td>(sort Asc/Desc) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

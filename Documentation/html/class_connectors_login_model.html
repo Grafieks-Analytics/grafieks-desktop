@@ -98,9 +98,12 @@ $(document).ready(function(){initNavTree('class_connectors_login_model.html','')
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="class_connectors_login_model-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">ConnectorsLoginModel Class Reference</div>  </div>
+<div class="title">ConnectorsLoginModel Class Reference<div class="ingroups"><a class="el" href="group___logic.html">Logic</a> &raquo; <a class="el" href="group___connector_screen.html">ConnectorScreen</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Initiates connection to a datasource from the view.  
+ <a href="class_connectors_login_model.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="connectorsloginmodel_8h_source.html">connectorsloginmodel.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -120,13 +123,19 @@ Signals</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a348edd25e2985560bc3beed37021d213"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connectors_login_model.html#a348edd25e2985560bc3beed37021d213">ConnectorsLoginModel</a> (QObject *parent=nullptr)</td></tr>
+<tr class="memdesc:a348edd25e2985560bc3beed37021d213"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function.  <a href="class_connectors_login_model.html#a348edd25e2985560bc3beed37021d213">More...</a><br /></td></tr>
 <tr class="separator:a348edd25e2985560bc3beed37021d213"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91f75644e991e391093aeaaf28a5da80"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connectors_login_model.html#a91f75644e991e391093aeaaf28a5da80">mysqlLogin</a> (QString host, QString db, int port, QString username, QString password)</td></tr>
+<tr class="memdesc:a91f75644e991e391093aeaaf28a5da80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initiate connection with a MySql database.  <a href="class_connectors_login_model.html#a91f75644e991e391093aeaaf28a5da80">More...</a><br /></td></tr>
 <tr class="separator:a91f75644e991e391093aeaaf28a5da80"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a675cbf40702144b77fbe205e2d4e3d5e"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connectors_login_model.html#a675cbf40702144b77fbe205e2d4e3d5e">sqliteLogin</a> (QString filename, QString username=&quot;&quot;, QString password=&quot;&quot;)</td></tr>
+<tr class="memdesc:a675cbf40702144b77fbe205e2d4e3d5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initiate connection with an Sqlite database.  <a href="class_connectors_login_model.html#a675cbf40702144b77fbe205e2d4e3d5e">More...</a><br /></td></tr>
 <tr class="separator:a675cbf40702144b77fbe205e2d4e3d5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Initiates connection to a datasource from the view. </p>
+<p>Accepts login credentials from the view and calls the Connectors class </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a348edd25e2985560bc3beed37021d213"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a348edd25e2985560bc3beed37021d213">&#9670;&nbsp;</a></span>ConnectorsLoginModel()</h2>
 
@@ -150,6 +159,14 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Constructor function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -197,6 +214,18 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Initiate connection with a MySql database. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">host</td><td>(database server host) </td></tr>
+    <tr><td class="paramname">db</td><td>(database name) </td></tr>
+    <tr><td class="paramname">port</td><td></td></tr>
+    <tr><td class="paramname">username</td><td></td></tr>
+    <tr><td class="paramname">password</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -257,6 +286,16 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Initiate connection with an Sqlite database. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>(database file) </td></tr>
+    <tr><td class="paramname">username</td><td></td></tr>
+    <tr><td class="paramname">password</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

@@ -3,6 +3,12 @@
 
 #include <QObject>
 
+/*!
+ * \brief Roles required for Google Sheets API/Model
+ * \details This document won't explain the individual Roles in detail. Basically, the class describes the Getter/Setter functions for the Roles
+ * to be used in other classes.
+ * \ingroup ConnectorScreen
+ */
 class Sheet : public QObject
 {
     Q_OBJECT

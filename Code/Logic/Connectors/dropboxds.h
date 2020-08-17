@@ -12,9 +12,21 @@
 #include <QSettings>
 #include <QUrl>
 #include <QUrlQuery>
+#include <QFile>
+#include <QDesktopServices>
+#include <QOAuthHttpServerReplyHandler>
+#include <QtDebug>
 
 
 #include "dropbox.h"
+
+
+/*!
+ * \brief Fetches data records from Dropbox API
+ * \details This class lists all the methods which interact with the Box API documented in
+ * <a href="https://www.dropbox.com/developers/documentation/http/documentation">https://www.dropbox.com/developers/documentation/http/documentation</a>
+ * \ingroup ConnectorScreen
+ */
 
 class DropboxDS : public QObject
 {

@@ -1,16 +1,11 @@
 #include "boxds.h"
-#include <QJsonArray>
-#include <QOAuth2AuthorizationCodeFlow>
-#include <QFile>
-#include <QJsonDocument>
-#include <QDesktopServices>
-#include <QJsonObject>
-#include <QNetworkRequest>
-#include <QQmlContext>
-#include <QOAuthHttpServerReplyHandler>
-#include <QtDebug>
 
-// box api documentation - https://developer.box.com/reference/
+/*!
+ * \brief Constructor function to initialize connection with Box API
+ * \details Initiates OAuth connection. Once OAuth token is obtained, it calls relevant methods to fetch the data from
+ * the API
+ * \param parent
+ */
 
 BoxDS::BoxDS(QObject *parent) : QObject(parent),
     m_networkAccessManager(new QNetworkAccessManager(this)),
@@ -66,15 +61,19 @@ BoxDS::BoxDS(QObject *parent) : QObject(parent),
     });
 }
 
+/*!
+ * \brief Calls to authorize the user using Qt's OAuth class
+ */
+
 void BoxDS::fetchDatasources()
 {
     this->box->grant();
 }
 
-//QString BoxDS::goingBack(QString path, QString name)
-//{
-
-//}
+/*!
+ * \brief List contents of a folder
+ * \param path (Folder path)
+ */
 
 void BoxDS::folderNav(QString path)
 {
@@ -95,6 +94,12 @@ void BoxDS::folderNav(QString path)
     connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::dataReadFinished);
 
 }
+
+/*!
+ * \brief Search the Box API
+ * \details Documentation reference https://developer.box.com/reference/get-search/
+ * \param path (File name)
+ */
 
 void BoxDS::searchQuer(QString path)
 {
@@ -119,12 +124,26 @@ void BoxDS::searchQuer(QString path)
     connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::dataReadFinished);
 }
 
+/*!
+ * \brief Notify model after adding new record in QList<Box *>
+ * \param box (Box *)
+ */
+
 void BoxDS::addDataSource(Box *box)
 {
     emit preItemAdded();
     m_box.append(box);
     emit postItemAdded();
 }
+
+/*!
+ * \brief Add new data to QList<Box *>
+ * \param id (File id)
+ * \param name (File name)
+ * \param type (File type)
+ * \param modifiedAt (Modified date)
+ * \param extension (File extension)
+ */
 
 void BoxDS::addDataSource(const QString &id, const QString &name, const QString &type, const QString &modifiedAt, const QString &extension)
 {
@@ -133,10 +152,19 @@ void BoxDS::addDataSource(const QString &id, const QString &name, const QString 
     addDataSource(box);
 }
 
+/*!
+ * \brief List the values in QList<Box *>
+ * \return QList<Box *>
+ */
+
 QList<Box *> BoxDS::dataItems()
 {
     return m_box;
 }
+
+/*!
+ * \brief Clear all the values in QList<Box*> & notify model
+ */
 
 void BoxDS::resetDatasource()
 {
@@ -145,10 +173,19 @@ void BoxDS::resetDatasource()
     emit postReset();
 }
 
+/*!
+ * \brief Reads incoming data from the API & store to buffer
+ */
+
 void BoxDS::dataReadyRead()
 {
     m_dataBuffer->append(m_networkReply->readAll());
 }
+
+/*!
+ * \brief Processes the data buffer
+ * \details Process the data buffer and append new values to QList<Box*>
+ */
 
 void BoxDS::dataReadFinished()
 {

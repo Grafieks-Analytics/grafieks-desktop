@@ -102,7 +102,7 @@ $(document).ready(function(){initNavTree('class_mysql_con.html',''); initResizab
 </div><!--header-->
 <div class="contents">
 
-<p>Handles the connection with <a class="el" href="class_mysql_con.html" title="Handles the connection with MysqlCon across the application.">MysqlCon</a> across the application.  
+<p>Handles the connection with MySql database across the application.  
  <a href="class_mysql_con.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="mysqlcon_8h_source.html">mysqlcon.h</a>&gt;</code></p>
@@ -115,15 +115,15 @@ Inheritance diagram for MysqlCon:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ga12678e7a6983650f05fedccb3c4c3c65"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___connectors.html#ga12678e7a6983650f05fedccb3c4c3c65">MysqlCon</a> (QObject *parent=nullptr)</td></tr>
-<tr class="memdesc:ga12678e7a6983650f05fedccb3c4c3c65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function for Mysql connection.  <a href="group___connectors.html#ga12678e7a6983650f05fedccb3c4c3c65">More...</a><br /></td></tr>
-<tr class="separator:ga12678e7a6983650f05fedccb3c4c3c65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaf714d2a56c0f2ef4befdd57a34e88464"><td class="memItemLeft" align="right" valign="top">QVariantMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___connectors.html#gaf714d2a56c0f2ef4befdd57a34e88464">MysqlInstance</a> (const QString &amp;host, const QString &amp;db, const int &amp;port, const QString &amp;username, const QString &amp;password)</td></tr>
-<tr class="memdesc:gaf714d2a56c0f2ef4befdd57a34e88464"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instantiates and Mysql connection to a given database.  <a href="group___connectors.html#gaf714d2a56c0f2ef4befdd57a34e88464">More...</a><br /></td></tr>
-<tr class="separator:gaf714d2a56c0f2ef4befdd57a34e88464"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga8ee0859ea740cc9347161a5a22059c61"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___connectors.html#ga8ee0859ea740cc9347161a5a22059c61">~MysqlCon</a> ()</td></tr>
-<tr class="memdesc:ga8ee0859ea740cc9347161a5a22059c61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor function for Mysql connection.  <a href="group___connectors.html#ga8ee0859ea740cc9347161a5a22059c61">More...</a><br /></td></tr>
-<tr class="separator:ga8ee0859ea740cc9347161a5a22059c61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12678e7a6983650f05fedccb3c4c3c65"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mysql_con.html#a12678e7a6983650f05fedccb3c4c3c65">MysqlCon</a> (QObject *parent=nullptr)</td></tr>
+<tr class="memdesc:a12678e7a6983650f05fedccb3c4c3c65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function for Mysql connection.  <a href="class_mysql_con.html#a12678e7a6983650f05fedccb3c4c3c65">More...</a><br /></td></tr>
+<tr class="separator:a12678e7a6983650f05fedccb3c4c3c65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af714d2a56c0f2ef4befdd57a34e88464"><td class="memItemLeft" align="right" valign="top">QVariantMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mysql_con.html#af714d2a56c0f2ef4befdd57a34e88464">MysqlInstance</a> (const QString &amp;host, const QString &amp;db, const int &amp;port, const QString &amp;username, const QString &amp;password)</td></tr>
+<tr class="memdesc:af714d2a56c0f2ef4befdd57a34e88464"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instantiates a Mysql connection to a given database.  <a href="class_mysql_con.html#af714d2a56c0f2ef4befdd57a34e88464">More...</a><br /></td></tr>
+<tr class="separator:af714d2a56c0f2ef4befdd57a34e88464"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ee0859ea740cc9347161a5a22059c61"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_mysql_con.html#a8ee0859ea740cc9347161a5a22059c61">~MysqlCon</a> ()</td></tr>
+<tr class="memdesc:a8ee0859ea740cc9347161a5a22059c61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor function for Mysql connection.  <a href="class_mysql_con.html#a8ee0859ea740cc9347161a5a22059c61">More...</a><br /></td></tr>
+<tr class="separator:a8ee0859ea740cc9347161a5a22059c61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -133,8 +133,123 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a9de567c4fe7b56f515aaba2d9c2f63b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Handles the connection with <a class="el" href="class_mysql_con.html" title="Handles the connection with MysqlCon across the application.">MysqlCon</a> across the application. </p>
-</div><h2 class="groupheader">Member Data Documentation</h2>
+<div class="textblock"><p>Handles the connection with MySql database across the application. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a12678e7a6983650f05fedccb3c4c3c65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12678e7a6983650f05fedccb3c4c3c65">&#9670;&nbsp;</a></span>MysqlCon()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">MysqlCon::MysqlCon </td>
+          <td>(</td>
+          <td class="paramtype">QObject *&#160;</td>
+          <td class="paramname"><em>parent</em> = <code>nullptr</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor function for Mysql connection. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8ee0859ea740cc9347161a5a22059c61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ee0859ea740cc9347161a5a22059c61">&#9670;&nbsp;</a></span>~MysqlCon()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">MysqlCon::~MysqlCon </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor function for Mysql connection. </p>
+<p>The function closes the two MySql open connections </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="af714d2a56c0f2ef4befdd57a34e88464"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af714d2a56c0f2ef4befdd57a34e88464">&#9670;&nbsp;</a></span>MysqlInstance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVariantMap MysqlCon::MysqlInstance </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>host</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>db</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>port</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>username</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>password</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Instantiates a Mysql connection to a given database. </p>
+<p>The function instantiates 2 MySql connections for General connections and one specially for DataQuery Modeller - query profiling. Query profiling needs a separate connection because once enabled, it profiles all the queries which we don't want </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">QString</td><td>&amp;host </td></tr>
+    <tr><td class="paramname">QString</td><td>&amp;db </td></tr>
+    <tr><td class="paramname">int</td><td>&amp;port </td></tr>
+    <tr><td class="paramname">QString</td><td>&amp;username </td></tr>
+    <tr><td class="paramname">QString</td><td>&amp;password </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QVariantMap {bool status, QString msg} </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
 <a id="a9de567c4fe7b56f515aaba2d9c2f63b1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9de567c4fe7b56f515aaba2d9c2f63b1">&#9670;&nbsp;</a></span>DRIVER</h2>
 

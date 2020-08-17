@@ -100,7 +100,7 @@ $(document).ready(function(){initNavTree('class_table_schema_model.html',''); in
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_table_schema_model-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">TableSchemaModel Class Reference</div>  </div>
+<div class="title">TableSchemaModel Class Reference<div class="ingroups"><a class="el" href="group___logic.html">Logic</a> &raquo; <a class="el" href="group___general.html">General</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -125,11 +125,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a93bc1a10de258d80d9da99bdfc4b0055"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_table_schema_model.html#a93bc1a10de258d80d9da99bdfc4b0055">TableSchemaModel</a> (QObject *parent=nullptr)</td></tr>
 <tr class="separator:a93bc1a10de258d80d9da99bdfc4b0055"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3bc478ce162425979e0e51498f7cb2aa"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_table_schema_model.html#a3bc478ce162425979e0e51498f7cb2aa">showSchema</a> (QString query=&quot;&quot;)</td></tr>
+<tr class="memdesc:a3bc478ce162425979e0e51498f7cb2aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accepts an SQL query parameter and emits a signal with list of information of individual column.  <a href="class_table_schema_model.html#a3bc478ce162425979e0e51498f7cb2aa">More...</a><br /></td></tr>
 <tr class="separator:a3bc478ce162425979e0e51498f7cb2aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:ac416c8626ef5149112ddae593021fa16"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_table_schema_model.html#ac416c8626ef5149112ddae593021fa16">dataType</a> (QString parameter)</td></tr>
+<tr class="memdesc:ac416c8626ef5149112ddae593021fa16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns custom datatype of the queried column name.  <a href="class_table_schema_model.html#ac416c8626ef5149112ddae593021fa16">More...</a><br /></td></tr>
 <tr class="separator:ac416c8626ef5149112ddae593021fa16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
@@ -201,6 +203,15 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Returns custom datatype of the queried column name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parameter</td><td>(table column type) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QString </dd></dl>
+
 </div>
 </div>
 <a id="a3bc478ce162425979e0e51498f7cb2aa"></a>
@@ -219,6 +230,9 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Accepts an SQL query parameter and emits a signal with list of information of individual column. </p>
+<p>Each signal object contains a list of <b>tableName, fieldName, fieldType, filterDataType</b> </p><div class="fragment"><div class="line">emit <a class="code" href="class_table_schema_model.html#a5cb2f76a4702237d97596ea8eb64b547">tableSchemaObtained</a>(QList &lt;QStringList&gt; <a class="code" href="class_table_schema_model.html#a35b44ded6d37d7f10d604d3eb450ada7">allList</a>, QList &lt;QStringList&gt; <a class="code" href="class_table_schema_model.html#a270df78807c656ff81e313b9eaf51783">allCategorical</a>, QList &lt;QStringList&gt; <a class="code" href="class_table_schema_model.html#afc418b8bbb9526e6bf1bf38a20510c3c">allNumerical</a>, QList &lt;QStringList&gt; <a class="code" href="class_table_schema_model.html#a8c46a282ce2e91d0a01a5f6e0106d340">allDates</a>, QList &lt;QStringList&gt; <a class="code" href="class_table_schema_model.html#a61331c77d9060105db1b8c2812ffc177">allOthers</a>,QStringList <a class="code" href="class_table_schema_model.html#aa50c3ebf571e2fcd982865303bdc0358">queriedColumnNames</a>);</div>
+</div><!-- fragment --> 
 </div>
 </div>
 <a id="a5cb2f76a4702237d97596ea8eb64b547"></a>
@@ -420,6 +434,13 @@ Private Attributes</h2></td></tr>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="aclass_table_schema_model_html_aa50c3ebf571e2fcd982865303bdc0358"><div class="ttname"><a href="class_table_schema_model.html#aa50c3ebf571e2fcd982865303bdc0358">TableSchemaModel::queriedColumnNames</a></div><div class="ttdeci">QStringList queriedColumnNames</div><div class="ttdef"><b>Definition:</b> tableschemamodel.h:43</div></div>
+<div class="ttc" id="aclass_table_schema_model_html_afc418b8bbb9526e6bf1bf38a20510c3c"><div class="ttname"><a href="class_table_schema_model.html#afc418b8bbb9526e6bf1bf38a20510c3c">TableSchemaModel::allNumerical</a></div><div class="ttdeci">QList&lt; QStringList &gt; allNumerical</div><div class="ttdef"><b>Definition:</b> tableschemamodel.h:40</div></div>
+<div class="ttc" id="aclass_table_schema_model_html_a35b44ded6d37d7f10d604d3eb450ada7"><div class="ttname"><a href="class_table_schema_model.html#a35b44ded6d37d7f10d604d3eb450ada7">TableSchemaModel::allList</a></div><div class="ttdeci">QList&lt; QStringList &gt; allList</div><div class="ttdef"><b>Definition:</b> tableschemamodel.h:38</div></div>
+<div class="ttc" id="aclass_table_schema_model_html_a5cb2f76a4702237d97596ea8eb64b547"><div class="ttname"><a href="class_table_schema_model.html#a5cb2f76a4702237d97596ea8eb64b547">TableSchemaModel::tableSchemaObtained</a></div><div class="ttdeci">void tableSchemaObtained(QList&lt; QStringList &gt; allList, QList&lt; QStringList &gt; allCategorical, QList&lt; QStringList &gt; allNumerical, QList&lt; QStringList &gt; allDates, QList&lt; QStringList &gt; allOthers, QStringList queriedColumnNames)</div></div>
+<div class="ttc" id="aclass_table_schema_model_html_a8c46a282ce2e91d0a01a5f6e0106d340"><div class="ttname"><a href="class_table_schema_model.html#a8c46a282ce2e91d0a01a5f6e0106d340">TableSchemaModel::allDates</a></div><div class="ttdeci">QList&lt; QStringList &gt; allDates</div><div class="ttdef"><b>Definition:</b> tableschemamodel.h:41</div></div>
+<div class="ttc" id="aclass_table_schema_model_html_a61331c77d9060105db1b8c2812ffc177"><div class="ttname"><a href="class_table_schema_model.html#a61331c77d9060105db1b8c2812ffc177">TableSchemaModel::allOthers</a></div><div class="ttdeci">QList&lt; QStringList &gt; allOthers</div><div class="ttdef"><b>Definition:</b> tableschemamodel.h:42</div></div>
+<div class="ttc" id="aclass_table_schema_model_html_a270df78807c656ff81e313b9eaf51783"><div class="ttname"><a href="class_table_schema_model.html#a270df78807c656ff81e313b9eaf51783">TableSchemaModel::allCategorical</a></div><div class="ttdeci">QList&lt; QStringList &gt; allCategorical</div><div class="ttdef"><b>Definition:</b> tableschemamodel.h:39</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
