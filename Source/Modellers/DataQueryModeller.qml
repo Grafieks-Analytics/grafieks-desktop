@@ -73,9 +73,9 @@ Page {
     function onDataModellerClicked(){
         if(!dataModellerSelected){
             dataModellerSelected = !dataModellerSelected
-            datamodeller_querymodeller_background.color = Constants.darkThemeColor;
-            queryModellerTab_background.color = queryModellerTab_background.hovered ? Constants.darkThemeColor : Constants.themeColor
-
+            datamodeller_querymodeller_background.color = Constants.leftDarkColor;
+            queryModellerTab_background.color = queryModellerTab_background.hovered ? Constants.leftDarkColor : Constants.themeColor
+            datamodeller_querymodeller_text.color = Constants.blackColor
             // Prompt dialog to warn user of data deletion
             // If accepted, the clear data
             // and push to another stackview screen
@@ -86,7 +86,17 @@ Page {
 
     function onDataModellerHovered(){
         if(!dataModellerSelected){
-            datamodeller_querymodeller_background.color = datamodeller_querymodeller.hovered ? Constants.darkThemeColor : Constants.themeColor
+            datamodeller_querymodeller_background.color = datamodeller_querymodeller.hovered ? Constants.grafieksGreenColor : Constants.themeColor
+            datamodeller_querymodeller_text.color = datamodeller_querymodeller.hovered ? Constants.whiteColor : Constants.blackColor
+
+        }
+    }
+
+    function onQueryModellerHovered(){
+        if(dataModellerSelected){
+            queryModellerTab_background.color = queryModellerTab.hovered ? Constants.grafieksGreenColor : Constants.themeColor
+            queryModellerTab_text.color = queryModellerTab.hovered ? Constants.whiteColor : Constants.blackColor
+            datamodeller_querymodeller_text.color = Constants.blackColor
         }
     }
 
@@ -95,8 +105,9 @@ Page {
         if(dataModellerSelected){
             dataModellerSelected = !dataModellerSelected
 
-            queryModellerTab_background.color = Constants.darkThemeColor
-            datamodeller_querymodeller_background.color = datamodeller_querymodeller.hovered ? Constants.darkThemeColor : Constants.themeColor
+            queryModellerTab_background.color = Constants.leftDarkColor
+            datamodeller_querymodeller_background.color = datamodeller_querymodeller.hovered ? Constants.leftDarkColor : Constants.themeColor
+            queryModellerTab_text.color = Constants.blackColor
 
             // Prompt dialog to warn user of data deletion
             // If accepted, the clear data
@@ -164,6 +175,17 @@ Page {
             collapsed = true
             tableslist.visible = false
         }
+    }
+
+
+    function setDataSourceName(){
+        DSParamsModel.setDsName(ds_name.text)
+    }
+
+    function focusDataSourceNameField(){
+        ds_name.readOnly= false
+        ds_name.focus = true;
+        console.log('Focussed')
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -325,19 +347,22 @@ Page {
 
                 background: Rectangle {
                     id: datamodeller_querymodeller_background
-                    color: datamodeller_querymodeller.hovered ? Constants.darkThemeColor : Constants.themeColor
+                    color: {
+                        datamodeller_querymodeller.hovered ? Constants.grafieksGreenColor : Constants.themeColor
+                    }
                 }
 
                 contentItem: Text{
                     id: datamodeller_querymodeller_text
                     text: datamodeller_querymodeller.text
-                    color:  Constants.blackColor
+                    color:  datamodeller_querymodeller.hovered ? Constants.whiteColor : Constants.blackColor
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
 
                 Component.onCompleted: {
-                    datamodeller_querymodeller_background.color = Constants.darkThemeColor
+                    datamodeller_querymodeller_background.color = Constants.leftDarkColor
+                    datamodeller_querymodeller_text.color = Constants.blackColor
                 }
 
             }
@@ -360,21 +385,19 @@ Page {
                 }
 
                 onHoveredChanged: {
-                    if(dataModellerSelected){
-                        queryModellerTab_background.color = queryModellerTab.hovered ? Constants.darkThemeColor : Constants.themeColor
-                    }
+                    onQueryModellerHovered()
                 }
 
                 background: Rectangle {
                     id: queryModellerTab_background
-                    color:  queryModellerTab.hovered ? Constants.darkThemeColor : Constants.themeColor
+                    color:  queryModellerTab.hovered ? Constants.grafieksGreenColor : Constants.themeColor
 
                 }
 
                 contentItem: Text{
                     id: queryModellerTab_text
                     text: queryModellerTab.text
-                    color:  "black"
+                    color:  queryModellerTab.hovered ? Constants.whiteColor : Constants.blackColor
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
@@ -657,6 +680,7 @@ Page {
             color:Constants.themeColor
             width:column_querymodeller.width
             height:column_querymodeller.height
+            border.color: Constants.darkThemeColor
 
             // Tab button starts
 
@@ -668,28 +692,55 @@ Page {
                 background: Rectangle {
                     color: Constants.darkThemeColor
                 }
-
                 // Next button starts
 
                 TabButton{
-                    id: tabCreateDashboard
-                    text:"Create Dashboard"
-                    width:rectangle_querymodeller_right_col.width
+                    id: tabPublishDashboard
+                    width:rectangle_querymodeller_right_col.width / 2
+                    height: parent.height
+
+                    Image {
+                        id: publishIcon
+                        source: "../../Images/icons/publish_20.png"
+                        height: 20
+                        width: 20
+                        anchors.centerIn: parent
+                    }
 
                     onClicked: {
-                        onCreateDashboardClicked()
+                        onPublishDataSourceClicked()
                     }
 
                     background: Rectangle {
-                        color: tabCreateDashboard.hovered? Constants.darkThemeColor: Constants.themeColor
+                        color: tabPublishDashboard.hovered? Constants.darkThemeColor: Constants.themeColor
+                    }
+
+
+                }
+
+
+                TabButton{
+                    id: tabCreateDashboard
+                    width:rectangle_querymodeller_right_col.width / 2
+                    height: parent.height
+
+                    Image {
+                        id: dashboardIcon
+                        source: "../../Images/icons/create_dashboard_20.png"
+                        height: 20
+                        width: 20
+                        anchors.centerIn: parent
                     }
 
                     contentItem: Text{
                         id:tabCreateDashboard_text
-                        text: tabCreateDashboard.text
-                        color:"black"
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
+                    }
+                    background: Rectangle {
+                        color: tabCreateDashboard.hovered? Constants.darkThemeColor: Constants.themeColor
+                    }
+
+                    onClicked: {
+                        onCreateDashboardClicked()
                     }
 
                 }
@@ -718,10 +769,29 @@ Page {
                     anchors.verticalCenter: rectangle_querymodeller_right_col1.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col1.left
                     anchors.leftMargin: 10
+                    readOnly: true
 
                     // Set the text
                     onTextChanged: {
-                        DSParamsModel.setDsName(ds_name.text)
+                        setDataSourceName()
+                    }
+
+                }
+
+                Image {
+                    id: dataSourceNameEditIcon
+                    source: "../../Images/icons/edit-32.png"
+                    height: 20
+                    width: 20
+                    anchors.right: parent.right
+                    anchors.rightMargin: 20
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            focusDataSourceNameField()
+                        }
                     }
                 }
             }
@@ -869,20 +939,6 @@ Page {
 
             }
 
-            // Right item 4 ends
-
-            CustomButton {
-                id: publish_button
-                textValue: qsTr("Publish Data Source")
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 30
-                width: parent.width
-                height: 40
-
-                onClicked: {
-                    onPublishDataSourceClicked()
-                }
-            }
         }
     }
 

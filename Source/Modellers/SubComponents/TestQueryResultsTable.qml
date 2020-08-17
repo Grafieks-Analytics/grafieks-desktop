@@ -3,6 +3,8 @@ import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
 
+import "../../MainSubComponents"
+
 TableView {
     id: dataPreviewResult
     model: QueryStatsModel
@@ -183,9 +185,8 @@ TableView {
     }
     // Table Header Ends
 
-    ScrollIndicator.horizontal: ScrollIndicator { }
-    ScrollIndicator.vertical: ScrollIndicator { }
-
+    ScrollIndicator.horizontal: CustomScrollHorizontalIndicator  {}
+    ScrollIndicator.vertical: CustomScrollVerticalIndicator {}
 
 
     // Page Design Ends

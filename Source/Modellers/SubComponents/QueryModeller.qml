@@ -96,6 +96,7 @@ Item{
     function onEnterKeyPressed(event){
 
         console.log('enter pressed')
+        console.log(textEditQueryModeller.lineCount)
 
         if(totalLineCount < lineCount){
             event.accepted = true
