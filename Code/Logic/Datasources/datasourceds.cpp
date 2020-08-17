@@ -1,5 +1,10 @@
 #include "datasourceds.h"
 
+/*!
+ * \brief Constructor function
+ * \initializes QNAM, QByteArray, networkReply variables
+ * \param parent
+ */
 DatasourceDS::DatasourceDS(QObject *parent) : QObject(parent),
     m_networkAccessManager(new QNetworkAccessManager(this)),
     m_networkReply(nullptr),
@@ -8,6 +13,13 @@ DatasourceDS::DatasourceDS(QObject *parent) : QObject(parent),
 
 }
 
+/*!
+ * \brief Fetch datasource from the Grafieks server API
+ * \param page (pagination page number)
+ * \param fulllist (whether datasource fullList or the ones owned by the current user)
+ * \param listview (listview or gridview)
+ * \param keyword (search by keyword)
+ */
 void DatasourceDS::fetchDatsources(int page, bool fulllist, bool listview, QString keyword)
 {
 
@@ -48,7 +60,11 @@ void DatasourceDS::fetchDatsources(int page, bool fulllist, bool listview, QStri
     connect(m_networkReply,&QNetworkReply::finished,this,&DatasourceDS::dataReadFinished);
 }
 
-
+/*!
+ * \brief Delete a Datasource entry from the Grafieks API
+ * \param datasourceId (datasource id)
+ * \param listIndex (id of the entry in view list)
+ */
 void DatasourceDS::deleteDatasource(int datasourceId, int listIndex)
 {
     // Fetch value from settings
@@ -84,6 +100,11 @@ void DatasourceDS::deleteDatasource(int datasourceId, int listIndex)
 }
 
 
+/*!
+ * \brief Notify view of a new datasource object
+ * \param datasource
+ */
+
 void DatasourceDS::addDatasource(Datasource *datasource)
 {
     emit preItemAdded();
@@ -91,7 +112,21 @@ void DatasourceDS::addDatasource(Datasource *datasource)
     emit postItemAdded();
 }
 
-
+/*!
+ * \brief Add datasource object to the model
+ * \param id (datasource id)
+ * \param connectedWorkbooksCount (total workbooks in datasource)
+ * \param profileId (owner)
+ * \param connectionType (live/extract)
+ * \param datasourceName
+ * \param descriptions
+ * \param sourceType (live/extract)
+ * \param imageLink (datasource image)
+ * \param downloadLink (download link of the datasource)
+ * \param createdDate (datasource creation date)
+ * \param firstName (owner firstname)
+ * \param lastName (owner lastname)
+ */
 void DatasourceDS::addDatasource(const int & id, const int & connectedWorkbooksCount, const int & profileId, const QString & connectionType, const QString & datasourceName, const QString & descriptions, const QString & sourceType, const QString & imageLink, const QString & downloadLink, const QString & createdDate, const QString & firstName, const QString & lastName)
 
 {
@@ -101,6 +136,10 @@ void DatasourceDS::addDatasource(const int & id, const int & connectedWorkbooksC
 
 }
 
+/*!
+ * \brief Remove a datasource at index and notify view
+ * \param index (datasource id/index)
+ */
 void DatasourceDS::removeDatasource(int index)
 {
     emit preItemRemoved(index);
@@ -108,6 +147,9 @@ void DatasourceDS::removeDatasource(int index)
     emit postItemRemoved();
 }
 
+/*!
+ * \brief Clear Datasource model & notify view
+ */
 void DatasourceDS::resetDatasource()
 {
     emit preReset();
@@ -116,17 +158,28 @@ void DatasourceDS::resetDatasource()
 }
 
 
-
+/*!
+ * \brief Returns the data in the model
+ * \return QList<Datasource *>
+ */
 QList<Datasource *> DatasourceDS::dataItems()
 {
     return m_datasource;
 }
 
+/*!
+ * \brief Called when DatasourceDS::fetchDatsources is fired
+ * \details populates the data buffer read from the API
+ */
 void DatasourceDS::dataReadyRead()
 {
     m_dataBuffer->append(m_networkReply->readAll());
 }
 
+/*!
+ * \brief Called when DatasourceDS::fetchDatsources is fired
+ * \details  Once called the method reads the data buffer and adds data to the model
+ */
 void DatasourceDS::dataReadFinished()
 {
     //Parse the JSON
@@ -176,7 +229,9 @@ void DatasourceDS::dataReadFinished()
     }
 }
 
-
+/*!
+ * \brief Call delete Datasource in Grafieks API
+ */
 void DatasourceDS::dataDeleteFinished()
 {
     //Parse the JSON

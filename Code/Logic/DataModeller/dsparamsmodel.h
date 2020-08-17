@@ -7,6 +7,13 @@
 
 #include "../../constants.h"
 
+/*!
+ * \brief Sets all the temporary variables for DataModeller
+ * \details This class saves all the temporary variables for the class DataModeller. Mainly, it contains Getter/Setter methods for the variables
+ * This include variables for filters as well.
+ * Details of the Class won't be explained here
+ * \ingroup DataModeller
+ */
 class DSParamsModel : public QObject
 {
     Q_OBJECT

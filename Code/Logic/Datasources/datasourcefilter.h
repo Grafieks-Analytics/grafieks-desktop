@@ -4,6 +4,11 @@
 #include <QSortFilterProxyModel>
 #include <QObject>
 
+/*!
+ * \brief Proxy Datasources Model
+ * \details This class is a proxy model for Datasources to facilitate search/sort in view
+ * \ingroup Datasources
+ */
 #include "datasourcemodel.h"
 
 class DatasourceFilter : public QSortFilterProxyModel

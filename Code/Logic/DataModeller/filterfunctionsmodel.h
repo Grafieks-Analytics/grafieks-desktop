@@ -4,6 +4,11 @@
 #include <QVariant>
 #include <QObject>
 
+/*!
+ * \brief Explains all the calculated functions for the Filters
+ * \note Rest of the code needs to be commented as well
+ * \ingroup DataModeller
+ */
 class FilterFunctionsModel : public QObject
 {
     Q_OBJECT
@@ -16,8 +21,8 @@ public:
 //    Q_INVOKABLE bool mSum(QVariantList numbers, float * output);
     Q_INVOKABLE float mAverage(QVariantList numbers);
     Q_INVOKABLE float mMedian(QVariantList numbers);
-    Q_INVOKABLE float mCount(QVariantList numbers);
-    Q_INVOKABLE float mCountdistinct(QVariantList numbers);
+    Q_INVOKABLE int mCount(QVariantList numbers);
+    Q_INVOKABLE int mCountdistinct(QVariantList numbers);
     Q_INVOKABLE float mMinimum(QVariantList numbers);
     Q_INVOKABLE float mMaximum(QVariantList numbers);
     Q_INVOKABLE float mPercentile(QVariantList numbers);

@@ -103,34 +103,34 @@ $(document).ready(function(){initNavTree('datasourcefilter_8h_source.html',''); 
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;QSortFilterProxyModel&gt;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;QObject&gt;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="datasourcemodel_8h.html">datasourcemodel.h</a>&quot;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="class_datasource_filter.html">    9</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_datasource_filter.html">DatasourceFilter</a> : <span class="keyword">public</span> QSortFilterProxyModel</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;{</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    Q_OBJECT</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="class_datasource_filter.html#ac0a049d0b348d3b65ce6c33428757035">DatasourceFilter</a>(QObject *parent = <span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    Q_INVOKABLE <span class="keywordtype">void</span> <a class="code" href="class_datasource_filter.html#a89c30579cd11843b9bd4e4acf6f2c4ad">setFilterString</a>(QString <span class="keywordtype">string</span>);</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    Q_INVOKABLE <span class="keywordtype">void</span> <a class="code" href="class_datasource_filter.html#a40bc3ddeed5c369fbf302756c62c06d0">setSortOrder</a>(<span class="keywordtype">bool</span> checked);</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;signals:</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="datasourcemodel_8h.html">datasourcemodel.h</a>&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="class_datasource_filter.html">   14</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_datasource_filter.html">DatasourceFilter</a> : <span class="keyword">public</span> QSortFilterProxyModel</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;{</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    Q_OBJECT</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="class_datasource_filter.html#ac0a049d0b348d3b65ce6c33428757035">DatasourceFilter</a>(QObject *parent = <span class="keyword">nullptr</span>);</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;private :</div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="class_datasource_filter.html#a7a55c070186c8621fe8a26d0026a6afb">   21</a></span>&#160;    <a class="code" href="class_datasource_model.html">DatasourceModel</a> <a class="code" href="class_datasource_filter.html#a7a55c070186c8621fe8a26d0026a6afb">m_datasourceModel</a>;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    Q_INVOKABLE <span class="keywordtype">void</span> <a class="code" href="class_datasource_filter.html#a89c30579cd11843b9bd4e4acf6f2c4ad">setFilterString</a>(QString <span class="keywordtype">string</span>);</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    Q_INVOKABLE <span class="keywordtype">void</span> <a class="code" href="class_datasource_filter.html#a40bc3ddeed5c369fbf302756c62c06d0">setSortOrder</a>(<span class="keywordtype">bool</span> checked);</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;};</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;signals:</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#endif // DATASOURCEFILTER_H</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;private :</div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="class_datasource_filter.html#a7a55c070186c8621fe8a26d0026a6afb">   26</a></span>&#160;    <a class="code" href="class_datasource_model.html">DatasourceModel</a> <a class="code" href="class_datasource_filter.html#a7a55c070186c8621fe8a26d0026a6afb">m_datasourceModel</a>;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;};</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#endif // DATASOURCEFILTER_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aclass_datasource_filter_html_a7a55c070186c8621fe8a26d0026a6afb"><div class="ttname"><a href="class_datasource_filter.html#a7a55c070186c8621fe8a26d0026a6afb">DatasourceFilter::m_datasourceModel</a></div><div class="ttdeci">DatasourceModel m_datasourceModel</div><div class="ttdef"><b>Definition:</b> datasourcefilter.h:21</div></div>
-<div class="ttc" id="aclass_datasource_filter_html_ac0a049d0b348d3b65ce6c33428757035"><div class="ttname"><a href="class_datasource_filter.html#ac0a049d0b348d3b65ce6c33428757035">DatasourceFilter::DatasourceFilter</a></div><div class="ttdeci">DatasourceFilter(QObject *parent=nullptr)</div><div class="ttdef"><b>Definition:</b> datasourcefilter.cpp:3</div></div>
-<div class="ttc" id="aclass_datasource_filter_html_a89c30579cd11843b9bd4e4acf6f2c4ad"><div class="ttname"><a href="class_datasource_filter.html#a89c30579cd11843b9bd4e4acf6f2c4ad">DatasourceFilter::setFilterString</a></div><div class="ttdeci">Q_INVOKABLE void setFilterString(QString string)</div><div class="ttdef"><b>Definition:</b> datasourcefilter.cpp:14</div></div>
-<div class="ttc" id="aclass_datasource_filter_html"><div class="ttname"><a href="class_datasource_filter.html">DatasourceFilter</a></div><div class="ttdef"><b>Definition:</b> datasourcefilter.h:10</div></div>
+<div class="ttc" id="aclass_datasource_filter_html_a7a55c070186c8621fe8a26d0026a6afb"><div class="ttname"><a href="class_datasource_filter.html#a7a55c070186c8621fe8a26d0026a6afb">DatasourceFilter::m_datasourceModel</a></div><div class="ttdeci">DatasourceModel m_datasourceModel</div><div class="ttdef"><b>Definition:</b> datasourcefilter.h:26</div></div>
+<div class="ttc" id="aclass_datasource_filter_html_ac0a049d0b348d3b65ce6c33428757035"><div class="ttname"><a href="class_datasource_filter.html#ac0a049d0b348d3b65ce6c33428757035">DatasourceFilter::DatasourceFilter</a></div><div class="ttdeci">DatasourceFilter(QObject *parent=nullptr)</div><div class="ttdoc">Default Constructor function.</div><div class="ttdef"><b>Definition:</b> datasourcefilter.cpp:7</div></div>
+<div class="ttc" id="aclass_datasource_filter_html_a89c30579cd11843b9bd4e4acf6f2c4ad"><div class="ttname"><a href="class_datasource_filter.html#a89c30579cd11843b9bd4e4acf6f2c4ad">DatasourceFilter::setFilterString</a></div><div class="ttdeci">Q_INVOKABLE void setFilterString(QString string)</div><div class="ttdoc">Set filter string for Datasource filter.</div><div class="ttdef"><b>Definition:</b> datasourcefilter.cpp:21</div></div>
+<div class="ttc" id="aclass_datasource_filter_html"><div class="ttname"><a href="class_datasource_filter.html">DatasourceFilter</a></div><div class="ttdoc">Proxy Datasources Model.</div><div class="ttdef"><b>Definition:</b> datasourcefilter.h:15</div></div>
 <div class="ttc" id="adatasourcemodel_8h_html"><div class="ttname"><a href="datasourcemodel_8h.html">datasourcemodel.h</a></div></div>
-<div class="ttc" id="aclass_datasource_model_html"><div class="ttname"><a href="class_datasource_model.html">DatasourceModel</a></div><div class="ttdef"><b>Definition:</b> datasourcemodel.h:10</div></div>
-<div class="ttc" id="aclass_datasource_filter_html_a40bc3ddeed5c369fbf302756c62c06d0"><div class="ttname"><a href="class_datasource_filter.html#a40bc3ddeed5c369fbf302756c62c06d0">DatasourceFilter::setSortOrder</a></div><div class="ttdeci">Q_INVOKABLE void setSortOrder(bool checked)</div><div class="ttdef"><b>Definition:</b> datasourcefilter.cpp:21</div></div>
+<div class="ttc" id="aclass_datasource_model_html"><div class="ttname"><a href="class_datasource_model.html">DatasourceModel</a></div><div class="ttdoc">Sets the Datasource API data to view in QtQuick.</div><div class="ttdef"><b>Definition:</b> datasourcemodel.h:15</div></div>
+<div class="ttc" id="aclass_datasource_filter_html_a40bc3ddeed5c369fbf302756c62c06d0"><div class="ttname"><a href="class_datasource_filter.html#a40bc3ddeed5c369fbf302756c62c06d0">DatasourceFilter::setSortOrder</a></div><div class="ttdeci">Q_INVOKABLE void setSortOrder(bool checked)</div><div class="ttdoc">Set sort order for Datasource.</div><div class="ttdef"><b>Definition:</b> datasourcefilter.cpp:31</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

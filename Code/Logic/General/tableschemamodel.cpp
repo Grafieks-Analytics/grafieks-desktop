@@ -6,10 +6,11 @@ TableSchemaModel::TableSchemaModel(QObject *parent) : QObject(parent)
 }
 
 /*!
- * \fn void showSchema();
  * \brief Accepts an SQL query parameter and emits a signal with list of information of individual column
- *
- * \note emit tableSchemaObtained(QList <QStringList> allList, QList <QStringList> allCategorical, QList <QStringList> allNumerical, QList <QStringList> allDates, QList <QStringList> allOthers,QStringList queriedColumnNames);
+ * \details Each signal object contains a list of  <b>tableName, fieldName,  fieldType, filterDataType</b>
+ * \code
+ * emit tableSchemaObtained(QList <QStringList> allList, QList <QStringList> allCategorical, QList <QStringList> allNumerical, QList <QStringList> allDates, QList <QStringList> allOthers,QStringList queriedColumnNames);
+ * \endcode
  *
  */
 void TableSchemaModel::showSchema(QString query)
@@ -150,7 +151,11 @@ void TableSchemaModel::showSchema(QString query)
 
 }
 
-
+/*!
+ * \brief Returns custom datatype of the queried column name
+ * \param parameter (table column type)
+ * \return QString
+ */
 QString TableSchemaModel::dataType(QString parameter)
 {
 

@@ -2,8 +2,8 @@ var searchData=
 [
   ['main_820',['main',['../main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97',1,'main.cpp']]],
   ['maverage_821',['mAverage',['../class_filter_functions_model.html#aad4c26a220f507701af953538e3b754c',1,'FilterFunctionsModel']]],
-  ['mcount_822',['mCount',['../class_filter_functions_model.html#a9b3afebdff4363ddcb5349628aa4c3f7',1,'FilterFunctionsModel']]],
-  ['mcountdistinct_823',['mCountdistinct',['../class_filter_functions_model.html#a65e273a4029286c120154ece4a67e53d',1,'FilterFunctionsModel']]],
+  ['mcount_822',['mCount',['../class_filter_functions_model.html#a5ac63dc438f2fb4b7c5b8995568c37bc',1,'FilterFunctionsModel']]],
+  ['mcountdistinct_823',['mCountdistinct',['../class_filter_functions_model.html#a201f200bcf38c19385f79b9fa34c20ba',1,'FilterFunctionsModel']]],
   ['mmaximum_824',['mMaximum',['../class_filter_functions_model.html#aa019719cab4d7865c3394a81e9cd46f7',1,'FilterFunctionsModel']]],
   ['mmedian_825',['mMedian',['../class_filter_functions_model.html#a38f48d29aa1a6f5cf49a5c67a81e35da',1,'FilterFunctionsModel']]],
   ['mminimum_826',['mMinimum',['../class_filter_functions_model.html#a31034a47532e666e2454540aae5b57f9',1,'FilterFunctionsModel']]],

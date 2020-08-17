@@ -10,6 +10,11 @@
 #include "../../Connectors/mysqlcon.h"
 #include "../../statics.h"
 
+/*!
+ * \brief Displays database list
+ * \details Select distinct values from a given table and column name. Allows to select as well as search the table
+ * \ingroup DataModeller
+ */
 class DBListModel : public QSqlQueryModel
 {
     Q_OBJECT

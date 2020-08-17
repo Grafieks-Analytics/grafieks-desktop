@@ -12,6 +12,12 @@
 
 #include "datasource.h"
 
+/*!
+ * \brief Fetches data records from Datasources API
+ * \details Fetches data records for Datasources from Grafieks server API
+ * \ingroup Datasources
+ */
+
 class DatasourceDS : public QObject
 {
     Q_OBJECT

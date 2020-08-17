@@ -142,7 +142,7 @@ BoxDS *BoxModel::boxds() const
 }
 
 /*!
- * \brief Setter function for the object
+ * \brief Setter function for the object & notify view
  */
 void BoxModel::setBoxds(BoxDS *box)
 {

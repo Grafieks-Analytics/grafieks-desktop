@@ -99,9 +99,12 @@ $(document).ready(function(){initNavTree('class_d_b_list_model.html',''); initRe
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_d_b_list_model-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">DBListModel Class Reference</div>  </div>
+<div class="title">DBListModel Class Reference<div class="ingroups"><a class="el" href="group___logic.html">Logic</a> &raquo; <a class="el" href="group___data_modeller.html">DataModeller</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Displays database list.  
+ <a href="class_d_b_list_model.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="dblistmodel_8h_source.html">dblistmodel.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -114,21 +117,28 @@ Inheritance diagram for DBListModel:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae4ec5b6c1a2e311beb1bb2e26274fd71"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_d_b_list_model.html#ae4ec5b6c1a2e311beb1bb2e26274fd71">DBListModel</a> (QObject *parent=0)</td></tr>
+<tr class="memdesc:ae4ec5b6c1a2e311beb1bb2e26274fd71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function for <a class="el" href="class_column_list_model.html" title="Selects distinct values for a given column in sql.">ColumnListModel</a>.  <a href="class_d_b_list_model.html#ae4ec5b6c1a2e311beb1bb2e26274fd71">More...</a><br /></td></tr>
 <tr class="separator:ae4ec5b6c1a2e311beb1bb2e26274fd71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7c066b6312765f5ebb757b88bdd35fa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_d_b_list_model.html#ac7c066b6312765f5ebb757b88bdd35fa">setQuery</a> (const QString &amp;query, const QSqlDatabase &amp;db=QSqlDatabase())</td></tr>
+<tr class="memdesc:ac7c066b6312765f5ebb757b88bdd35fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QSqlQueryModel::setQuery (Overloaded)  <a href="class_d_b_list_model.html#ac7c066b6312765f5ebb757b88bdd35fa">More...</a><br /></td></tr>
 <tr class="separator:ac7c066b6312765f5ebb757b88bdd35fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e923ddea29e593d7ecbf8403594b2d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_d_b_list_model.html#a6e923ddea29e593d7ecbf8403594b2d8">setQuery</a> (const QSqlQuery &amp;query)</td></tr>
+<tr class="memdesc:a6e923ddea29e593d7ecbf8403594b2d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QSqlQueryModel::setQuery.  <a href="class_d_b_list_model.html#a6e923ddea29e593d7ecbf8403594b2d8">More...</a><br /></td></tr>
 <tr class="separator:a6e923ddea29e593d7ecbf8403594b2d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2669caf480ec75c8e4cec2c1113d932"><td class="memItemLeft" align="right" valign="top">QVariant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_d_b_list_model.html#aa2669caf480ec75c8e4cec2c1113d932">data</a> (const QModelIndex &amp;index, int role) const</td></tr>
+<tr class="memdesc:aa2669caf480ec75c8e4cec2c1113d932"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QSqlQueryModel::data.  <a href="class_d_b_list_model.html#aa2669caf480ec75c8e4cec2c1113d932">More...</a><br /></td></tr>
 <tr class="separator:aa2669caf480ec75c8e4cec2c1113d932"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f10388a66e98640fee3b0fb2fe183a1"><td class="memItemLeft" align="right" valign="top">QHash&lt; int, QByteArray &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_d_b_list_model.html#a5f10388a66e98640fee3b0fb2fe183a1">roleNames</a> () const</td></tr>
+<tr class="memdesc:a5f10388a66e98640fee3b0fb2fe183a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QSqlQueryModel::roleNames.  <a href="class_d_b_list_model.html#a5f10388a66e98640fee3b0fb2fe183a1">More...</a><br /></td></tr>
 <tr class="separator:a5f10388a66e98640fee3b0fb2fe183a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79b117a2c15f5f980829bfa3936bc0b4"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_d_b_list_model.html#a79b117a2c15f5f980829bfa3936bc0b4">callQuery</a> (QString queryString=&quot;&quot;)</td></tr>
+<tr class="memdesc:a79b117a2c15f5f980829bfa3936bc0b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a new select query for a given database name.  <a href="class_d_b_list_model.html#a79b117a2c15f5f980829bfa3936bc0b4">More...</a><br /></td></tr>
 <tr class="separator:a79b117a2c15f5f980829bfa3936bc0b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a3e667f6f5375a8eb18628681f5d128d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_d_b_list_model.html#a3e667f6f5375a8eb18628681f5d128d6">generateRoleNames</a> ()</td></tr>
+<tr class="memdesc:a3e667f6f5375a8eb18628681f5d128d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QSqlQueryModel::generateRoleNames.  <a href="class_d_b_list_model.html#a3e667f6f5375a8eb18628681f5d128d6">More...</a><br /></td></tr>
 <tr class="separator:a3e667f6f5375a8eb18628681f5d128d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
@@ -136,7 +146,10 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:aeaeaa5188d61c893e041d080e8f223c8"><td class="memItemLeft" align="right" valign="top">QHash&lt; int, QByteArray &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_d_b_list_model.html#aeaeaa5188d61c893e041d080e8f223c8">m_roleNames</a></td></tr>
 <tr class="separator:aeaeaa5188d61c893e041d080e8f223c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Displays database list. </p>
+<p>Select distinct values from a given table and column name. Allows to select as well as search the table </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ae4ec5b6c1a2e311beb1bb2e26274fd71"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae4ec5b6c1a2e311beb1bb2e26274fd71">&#9670;&nbsp;</a></span>DBListModel()</h2>
 
@@ -161,6 +174,14 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Constructor function for <a class="el" href="class_column_list_model.html" title="Selects distinct values for a given column in sql.">ColumnListModel</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -179,6 +200,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Set a new select query for a given database name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">queryString</td><td>(database name for like query) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -208,6 +237,16 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Override QSqlQueryModel::data. </p>
+<p>Override method to return the data of the object for a given index </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>(object index) </td></tr>
+    <tr><td class="paramname">role</td><td>(object role) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QVariant </dd></dl>
+
 </div>
 </div>
 <a id="a3e667f6f5375a8eb18628681f5d128d6"></a>
@@ -233,6 +272,9 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Override QSqlQueryModel::generateRoleNames. </p>
+<p>Override method to generate a new rolename </p>
+
 </div>
 </div>
 <a id="a5f10388a66e98640fee3b0fb2fe183a1"></a>
@@ -249,6 +291,9 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Override QSqlQueryModel::roleNames. </p>
+<p>Override method to tell the view the exact role names with which the value can be accessed from the object </p><dl class="section return"><dt>Returns</dt><dd>QHash&lt;int, QByteArray&gt; </dd></dl>
 
 </div>
 </div>
@@ -267,6 +312,14 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Override QSqlQueryModel::setQuery. </p>
+<p>Executes the query query for the given database connection db. If no database (or an invalid database) is specified, the default connection is used. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td>(sql query) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -295,6 +348,15 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Override QSqlQueryModel::setQuery (Overloaded) </p>
+<p>Executes the query query for the given database connection db. If no database (or an invalid database) is specified, the default connection is used. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">query</td><td>(sql query) </td></tr>
+    <tr><td class="paramname">db</td><td>(database) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

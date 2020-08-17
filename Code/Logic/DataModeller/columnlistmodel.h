@@ -12,6 +12,11 @@
 #include "../../statics.h"
 #include "../../constants.h"
 
+/*!
+ * \brief Selects distinct values for a given column in sql
+ * \details Select distinct values from a given table and column name. Allows to select as well as search the table
+ * \ingroup DataModeller
+ */
 class ColumnListModel : public QSqlQueryModel
 {
     Q_OBJECT

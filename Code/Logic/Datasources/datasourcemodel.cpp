@@ -1,16 +1,33 @@
 #include "datasourcemodel.h"
 
+/*!
+ * \brief Constructor function for DatasourceModel
+ * \param parent
+ */
 DatasourceModel::DatasourceModel(QObject *parent) : QAbstractListModel(parent)
 {
 
 }
 
+/*!
+ * \brief Override QAbstractListModel::rowCount
+ * \details Override method to return the number of results in new model
+ * \param parent
+ * \return int
+ */
 int DatasourceModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_datasource->dataItems().count();
 }
 
+/*!
+ * \brief Override QAbstractListModel::data
+ * \details Override method to return the data of the object for a given index
+ * \param index (object index)
+ * \param role (object role)
+ * \return QVariant
+ */
 QVariant DatasourceModel::data(const QModelIndex &index, int role) const
 {
 
@@ -48,6 +65,14 @@ QVariant DatasourceModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+/*!
+ * \brief Override QAbstractListModel::setData
+ * \details Override method to set new data in the object at given index
+ * \param index (Object index)
+ * \param value (New value for the object at index)
+ * \param role (role name)
+ * \return bool
+ */
 bool DatasourceModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     Datasource * datasource = m_datasource->dataItems().at(index.row());
@@ -145,6 +170,13 @@ bool DatasourceModel::setData(const QModelIndex &index, const QVariant &value, i
     return false;
 }
 
+
+/*!
+ * \brief Override QAbstractListModel::flags
+ * \details Override method to tell the model that at given index of the object, data is editable
+ * \param index (Object index)
+ * \return Qt::ItemFlags
+ */
 Qt::ItemFlags DatasourceModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
@@ -152,6 +184,11 @@ Qt::ItemFlags DatasourceModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEditable;
 }
 
+/*!
+ * \brief Override QAbstractListModel::roleNames
+ * \details Override method to tell the view the exact role names with which the value can be accessed from the object
+ * \return QHash<int, QByteArray>
+ */
 QHash<int, QByteArray> DatasourceModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
@@ -172,12 +209,18 @@ QHash<int, QByteArray> DatasourceModel::roleNames() const
     return roles;
 }
 
-
+/*!
+ * \brief Getter function for the object
+ * \return DatasourceDS *DatasourceModel
+ */
 DatasourceDS *DatasourceModel::datasourceds() const
 {
     return m_datasource;
 }
 
+/*!
+ * \brief Setter function for the object & notify view
+ */
 void DatasourceModel::setDatasourceds(DatasourceDS *datasource)
 {
     beginResetModel();

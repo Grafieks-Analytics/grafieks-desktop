@@ -1,25 +1,15 @@
 var dir_7e821b2344ff4693924716c2ce89242e =
 [
     [ "columnlistmodel.cpp", "columnlistmodel_8cpp.html", null ],
-    [ "columnlistmodel.h", "columnlistmodel_8h.html", [
-      [ "ColumnListModel", "class_column_list_model.html", "class_column_list_model" ]
-    ] ],
+    [ "columnlistmodel.h", "columnlistmodel_8h.html", null ],
     [ "dblistmodel.cpp", "dblistmodel_8cpp.html", null ],
-    [ "dblistmodel.h", "dblistmodel_8h.html", [
-      [ "DBListModel", "class_d_b_list_model.html", "class_d_b_list_model" ]
-    ] ],
+    [ "dblistmodel.h", "dblistmodel_8h.html", null ],
     [ "dsparamsmodel.cpp", "dsparamsmodel_8cpp.html", null ],
-    [ "dsparamsmodel.h", "dsparamsmodel_8h.html", [
-      [ "DSParamsModel", "class_d_s_params_model.html", "class_d_s_params_model" ]
-    ] ],
+    [ "dsparamsmodel.h", "dsparamsmodel_8h.html", null ],
     [ "filterfunctionsmodel.cpp", "filterfunctionsmodel_8cpp.html", null ],
-    [ "filterfunctionsmodel.h", "filterfunctionsmodel_8h.html", [
-      [ "FilterFunctionsModel", "class_filter_functions_model.html", "class_filter_functions_model" ]
-    ] ],
+    [ "filterfunctionsmodel.h", "filterfunctionsmodel_8h.html", null ],
     [ "filterlist.cpp", "filterlist_8cpp.html", null ],
-    [ "filterlist.h", "filterlist_8h.html", [
-      [ "FilterList", "class_filter_list.html", "class_filter_list" ]
-    ] ],
+    [ "filterlist.h", "filterlist_8h.html", null ],
     [ "filterlistcategoricalfilter.cpp", "filterlistcategoricalfilter_8cpp.html", null ],
     [ "filterlistcategoricalfilter.h", "filterlistcategoricalfilter_8h.html", [
       [ "FilterListCategoricalFilter", "class_filter_list_categorical_filter.html", "class_filter_list_categorical_filter" ]

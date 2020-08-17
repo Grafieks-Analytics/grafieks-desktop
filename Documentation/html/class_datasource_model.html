@@ -100,9 +100,12 @@ $(document).ready(function(){initNavTree('class_datasource_model.html',''); init
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_datasource_model-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">DatasourceModel Class Reference</div>  </div>
+<div class="title">DatasourceModel Class Reference<div class="ingroups"><a class="el" href="group___logic.html">Logic</a> &raquo; <a class="el" href="group___datasources.html">Datasources</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Sets the <a class="el" href="class_datasource.html" title="Roles required for Datasource.">Datasource</a> API data to view in QtQuick.  
+ <a href="class_datasource_model.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="datasourcemodel_8h_source.html">datasourcemodel.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -136,20 +139,28 @@ Public Types</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a5aeabc248348e1b400896f2a7f9f5e37"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_datasource_model.html#a5aeabc248348e1b400896f2a7f9f5e37">DatasourceModel</a> (QObject *parent=nullptr)</td></tr>
+<tr class="memdesc:a5aeabc248348e1b400896f2a7f9f5e37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor function for <a class="el" href="class_datasource_model.html" title="Sets the Datasource API data to view in QtQuick.">DatasourceModel</a>.  <a href="class_datasource_model.html#a5aeabc248348e1b400896f2a7f9f5e37">More...</a><br /></td></tr>
 <tr class="separator:a5aeabc248348e1b400896f2a7f9f5e37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94b7df974cfa3dc281105a49d45ce1ba"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_datasource_model.html#a94b7df974cfa3dc281105a49d45ce1ba">rowCount</a> (const QModelIndex &amp;parent=QModelIndex()) const</td></tr>
+<tr class="memdesc:a94b7df974cfa3dc281105a49d45ce1ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QAbstractListModel::rowCount.  <a href="class_datasource_model.html#a94b7df974cfa3dc281105a49d45ce1ba">More...</a><br /></td></tr>
 <tr class="separator:a94b7df974cfa3dc281105a49d45ce1ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a019b7fbc259ff56d98f09f95f9c79f86"><td class="memItemLeft" align="right" valign="top">QVariant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_datasource_model.html#a019b7fbc259ff56d98f09f95f9c79f86">data</a> (const QModelIndex &amp;index, int role) const</td></tr>
+<tr class="memdesc:a019b7fbc259ff56d98f09f95f9c79f86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QAbstractListModel::data.  <a href="class_datasource_model.html#a019b7fbc259ff56d98f09f95f9c79f86">More...</a><br /></td></tr>
 <tr class="separator:a019b7fbc259ff56d98f09f95f9c79f86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c1518f50b78239180ad3769c58a68d6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_datasource_model.html#a5c1518f50b78239180ad3769c58a68d6">setData</a> (const QModelIndex &amp;index, const QVariant &amp;value, int role)</td></tr>
+<tr class="memdesc:a5c1518f50b78239180ad3769c58a68d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QAbstractListModel::setData.  <a href="class_datasource_model.html#a5c1518f50b78239180ad3769c58a68d6">More...</a><br /></td></tr>
 <tr class="separator:a5c1518f50b78239180ad3769c58a68d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9cc3d78479c5346990be3866edf2d1e"><td class="memItemLeft" align="right" valign="top">Qt::ItemFlags&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_datasource_model.html#ae9cc3d78479c5346990be3866edf2d1e">flags</a> (const QModelIndex &amp;index) const</td></tr>
+<tr class="memdesc:ae9cc3d78479c5346990be3866edf2d1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QAbstractListModel::flags.  <a href="class_datasource_model.html#ae9cc3d78479c5346990be3866edf2d1e">More...</a><br /></td></tr>
 <tr class="separator:ae9cc3d78479c5346990be3866edf2d1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af129a22e9c83c4df9e5374fd0f00a8c8"><td class="memItemLeft" align="right" valign="top">QHash&lt; int, QByteArray &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_datasource_model.html#af129a22e9c83c4df9e5374fd0f00a8c8">roleNames</a> () const</td></tr>
+<tr class="memdesc:af129a22e9c83c4df9e5374fd0f00a8c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override QAbstractListModel::roleNames.  <a href="class_datasource_model.html#af129a22e9c83c4df9e5374fd0f00a8c8">More...</a><br /></td></tr>
 <tr class="separator:af129a22e9c83c4df9e5374fd0f00a8c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7962a23caf047b60df47348df1f3205"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_datasource_d_s.html">DatasourceDS</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_datasource_model.html#ad7962a23caf047b60df47348df1f3205">datasourceds</a> () const</td></tr>
+<tr class="memdesc:ad7962a23caf047b60df47348df1f3205"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter function for the object.  <a href="class_datasource_model.html#ad7962a23caf047b60df47348df1f3205">More...</a><br /></td></tr>
 <tr class="separator:ad7962a23caf047b60df47348df1f3205"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7eb96265c954ae57527a9b86f11500b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_datasource_model.html#a7eb96265c954ae57527a9b86f11500b0">setDatasourceds</a> (<a class="el" href="class_datasource_d_s.html">DatasourceDS</a> *<a class="el" href="class_datasource_model.html#af4a5844f8eabcbb3764f5a89f3b225c1">datasourceds</a>)</td></tr>
+<tr class="memdesc:a7eb96265c954ae57527a9b86f11500b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter function for the object &amp; notify view.  <a href="class_datasource_model.html#a7eb96265c954ae57527a9b86f11500b0">More...</a><br /></td></tr>
 <tr class="separator:a7eb96265c954ae57527a9b86f11500b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
@@ -164,7 +175,10 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a560eef18c19942f3c069beb4a29631b8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_datasource_model.html#a560eef18c19942f3c069beb4a29631b8">signalsConnected</a> {false}</td></tr>
 <tr class="separator:a560eef18c19942f3c069beb4a29631b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Sets the <a class="el" href="class_datasource.html" title="Roles required for Datasource.">Datasource</a> API data to view in QtQuick. </p>
+<p>This class lists all the methods which interact with the view in QtQuick </p>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a7ab48d1c1d11defb2abad1216bacf855"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7ab48d1c1d11defb2abad1216bacf855">&#9670;&nbsp;</a></span>DatasourceRoles</h2>
 
@@ -218,6 +232,14 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Constructor function for <a class="el" href="class_datasource_model.html" title="Sets the Datasource API data to view in QtQuick.">DatasourceModel</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -247,6 +269,16 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Override QAbstractListModel::data. </p>
+<p>Override method to return the data of the object for a given index </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>(object index) </td></tr>
+    <tr><td class="paramname">role</td><td>(object role) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>QVariant </dd></dl>
+
 </div>
 </div>
 <a id="ad7962a23caf047b60df47348df1f3205"></a>
@@ -263,6 +295,9 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Getter function for the object. </p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_datasource_d_s.html" title="Fetches data records from Datasources API.">DatasourceDS</a> *DatasourceModel </dd></dl>
 
 </div>
 </div>
@@ -282,6 +317,15 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Override QAbstractListModel::flags. </p>
+<p>Override method to tell the model that at given index of the object, data is editable </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>(Object index) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Qt::ItemFlags </dd></dl>
+
 </div>
 </div>
 <a id="af129a22e9c83c4df9e5374fd0f00a8c8"></a>
@@ -298,6 +342,9 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Override QAbstractListModel::roleNames. </p>
+<p>Override method to tell the view the exact role names with which the value can be accessed from the object </p><dl class="section return"><dt>Returns</dt><dd>QHash&lt;int, QByteArray&gt; </dd></dl>
 
 </div>
 </div>
@@ -316,6 +363,15 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Override QAbstractListModel::rowCount. </p>
+<p>Override method to return the number of results in new model </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
 
 </div>
 </div>
@@ -351,6 +407,17 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Override QAbstractListModel::setData. </p>
+<p>Override method to set new data in the object at given index </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>(Object index) </td></tr>
+    <tr><td class="paramname">value</td><td>(New value for the object at index) </td></tr>
+    <tr><td class="paramname">role</td><td>(role name) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool </dd></dl>
+
 </div>
 </div>
 <a id="a7eb96265c954ae57527a9b86f11500b0"></a>
@@ -368,6 +435,8 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Setter function for the object &amp; notify view. </p>
 
 </div>
 </div>
