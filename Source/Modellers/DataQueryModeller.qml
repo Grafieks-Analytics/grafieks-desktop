@@ -233,9 +233,7 @@ Page {
                 anchors.fill: parent
                 drag.target: dragRect
                 drag.minimumX: -(  page.width - parent.width - leftMenuBar.width)
-//                drag.minimumY: - 199
                 drag.maximumX: 0
-//                drag.maximumY: parent.height
 
 
                 drag.onActiveChanged: {

@@ -61,9 +61,7 @@ Page {
             anchors.topMargin: 0
             height: 30
 
-            onClicked: {
-                stacklayout_home.currentIndex = 5
-            }
+            onClicked: stacklayout_home.currentIndex = 5
 
             background: Rectangle{
                 id: next_btn_background

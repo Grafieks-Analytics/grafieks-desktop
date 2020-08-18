@@ -21,6 +21,9 @@ Item {
     id: dataModellerItem
     property real droppedX : 0
     property real droppedY : 0
+    property var frontRectangleCoordinates : []
+    property var rearRectangleCoordinates : []
+    property var existingTables : []
 
 
 
@@ -58,7 +61,7 @@ Item {
     // JAVASCRIPT FUNCTION STARTS
 
     Component.onCompleted: {
-       var dynamicRectangle = Qt.createComponent("DroppedRectangle.qml");
+        var dynamicRectangle = Qt.createComponent("DroppedRectangle.qml");
     }
 
     function onDropAreaExited(){
@@ -67,10 +70,16 @@ Item {
 
     function onDropAreaEntered(){
 
-         highlightRect.color = "ivory"
+        highlightRect.color = "ivory"
+
+        // Show light shaded line between the current rectangle
+        // and the nearest rectangle
+        if(existingTables.length > 1){
+
+        }
     }
 
-    function onDropAreaDropped(){
+    function onDropAreaDropped(drag){
 
         // listView.model.remove(listView.dragItemIndex);
         // listView.dragItemIndex = -1;
@@ -78,8 +87,56 @@ Item {
         highlightRect.color = "white"
 
         var  dynamicRectangle = Qt.createComponent("DroppedRectangle.qml");
-
         dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName})
+
+        // Created rectangle front & back coordinates
+        var rectLeftX = drag.x
+        var rectRightX = rectLeftX + tableslist.tableName.length * 10 + 30
+        var rectLeftY = drag.y + 15
+        var rectRightY = rectLeftY
+        var tmpArray = []
+
+        // Push the coordinates in the array
+        frontRectangleCoordinates.push({x: rectLeftX, y: rectLeftY})
+        rearRectangleCoordinates.push({x: rectRightX, y: rectRightY})
+        existingTables.push(tableslist.tableName)
+
+        // Current reference Coordinate
+        var currentPoint = {x: rectLeftX, y: rectLeftY};
+
+        // Temporary clone the rear rectangle coordinates to a variable
+        var tmpRearRectangleCoordinates = rearRectangleCoordinates.slice();
+        tmpRearRectangleCoordinates.pop();
+
+
+        // Find the distance b/w all rear of a rectangle
+        // and the current point
+        if(tmpRearRectangleCoordinates.length > 0){
+
+            tmpRearRectangleCoordinates.forEach(function(item, index){
+
+                // calculate the distance b/w coordinates
+                var newDistance = distance(currentPoint,item)
+                tmpArray.push({"index": newDistance, "coordinates" : item})
+            })
+        }
+
+        // Sort all the coordinates based on distance
+        // and find the nearest distance
+        const sortByDistance = tmpArray.sort((a,b) => a.index - b.index).map((arr, index, array) => arr.coordinates)
+        var nearestIndex = tmpRearRectangleCoordinates.indexOf(sortByDistance[0])
+
+        if(nearestIndex > -1){
+            console.log(existingTables[nearestIndex])
+        }
+
+    }
+
+
+
+    // Calculate distance between 2 points
+    function distance(currentPoint, referencePoint) {
+        return Math.pow((referencePoint.x - currentPoint.x), 2) + Math.pow((referencePoint.y - currentPoint.y), 2);
     }
 
 
@@ -218,7 +275,7 @@ Item {
             anchors.fill: parent
             onEntered: onDropAreaEntered()
             onExited: onDropAreaExited()
-            onDropped: onDropAreaDropped()
+            onDropped: onDropAreaDropped(drag)
         }
     }
 

@@ -163,9 +163,7 @@ ApplicationWindow {
             Action{
                 id: action_quit
                 text: qsTr("Exit")
-                onTriggered: {
-                    Qt.quit()
-                }
+                onTriggered: Qt.quit()
             }
 
             delegate: MenuItemDelegate{}

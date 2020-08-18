@@ -43,10 +43,6 @@ Page {
                 text: "Dashboard 1"
                 width:100
 
-                onClicked: {
-
-                }
-
                 background: Rectangle {
                     id: datamodeller_newdashboard_background
                     color:  datamodeller_newdashboard.pressed? Constants.darkThemeColor: Constants.themeColor
@@ -83,9 +79,6 @@ Page {
             }
 
 
-            onClicked: {
-
-            }
 
             background: Rectangle {
                 id: new_dashboard_btn_background
@@ -135,9 +128,6 @@ Page {
 
                 }
 
-                onClicked: {
-
-                }
 
                 background: Rectangle {
                     id: report_btn_background

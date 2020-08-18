@@ -21,6 +21,10 @@ Item{
         droppedRectangle.width = nameID.text.length * 10 + 30
     }
 
+    function onRectangleToggle(){
+        droppedRectangle.height = droppedRectangle.height === 30 ? 60 : 30
+    }
+
 
 
     Rectangle {
@@ -49,9 +53,7 @@ Item{
 
             MouseArea{
                 anchors.fill: parent
-                onClicked: {
-                    newItem.destroy()
-                }
+                onClicked: newItem.destroy()
             }
 
         }
@@ -61,9 +63,7 @@ Item{
             anchors.fill: parent
             drag.target: newItem
 
-            onDoubleClicked: {
-                droppedRectangle.height = droppedRectangle.height === 30 ? 60 : 30
-            }
+            onDoubleClicked: onRectangleToggle()
         }
 
 
