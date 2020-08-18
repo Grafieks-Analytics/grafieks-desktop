@@ -8,38 +8,43 @@ import "../MainSubComponents"
 
 Page{
 
+    id: root
 
+
+    function buttonClicked(a,b){
+        console.debug("not here", a,b);
+    }
+
+    // On Dropped
+    function onDropAreaDropped(drag){
+        console.log(JSON.stringify(drag))
+    }
+
+    // On Entered
+    function onDropAreaEntered(drag){
+        console.log(JSON.stringify(drag))
+    }
+
+    // This is the Drop area code
     Rectangle{
-        height: 300
-        width: 500
-        border.color: "red"
-        Column{
-            spacing: 10
-            height: parent.height
-            width: parent.width
-            ListView{
+        id: dropRectangle
+        color: "beige"
+        width: parent.width
+        height: parent.height
 
-                flickableDirection: Flickable.VerticalFlick
-                boundsBehavior: Flickable.StopAtBounds
-
-                model: 50
-                height: parent.height
-                width: parent.width
-                spacing: 3
-                delegate:Text{
-                        text: qsTr("1")
-                }
-
-
-                clip: true
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                ScrollBar.horizontal: CustomScrollBar {}
-                ScrollBar.vertical: CustomScrollBar {}
-
-            }
+        DropArea {
+            id: dropArea
+            anchors.fill: parent
+            onEntered: onDropAreaEntered(drag)
+            onDropped: onDropAreaDropped(drag)
         }
 
+        // This creates the new rectangle component
+        Component.onCompleted: {
+            var dynamicRectangle2 = Qt.createComponent("Test2.qml");
+            var newRect =  dynamicRectangle2.createObject(root, {x:100, y: 100})
+            newRect.clicked.connect(buttonClicked)
+        }
     }
 
 }

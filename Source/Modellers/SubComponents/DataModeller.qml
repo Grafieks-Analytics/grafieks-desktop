@@ -80,6 +80,7 @@ Item {
     }
 
     function onDropAreaDropped(drag){
+        console.log("called again", drag.x)
 
         // listView.model.remove(listView.dragItemIndex);
         // listView.dragItemIndex = -1;

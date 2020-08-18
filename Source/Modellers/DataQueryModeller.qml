@@ -335,13 +335,8 @@ Page {
                 text: "Data Modeller"
                 width:100
 
-                onClicked: {
-                    onDataModellerClicked()
-                }
-
-                onHoveredChanged: {
-                    onDataModellerHovered()
-                }
+                onClicked: onDataModellerClicked()
+                onHoveredChanged: onDataModellerHovered()
 
                 background: Rectangle {
                     id: datamodeller_querymodeller_background
@@ -376,15 +371,8 @@ Page {
                 text: "Query Modeller"
                 width:100
 
-                onClicked: {
-
-                    onQueryModellerClicked()
-
-                }
-
-                onHoveredChanged: {
-                    onQueryModellerHovered()
-                }
+                onClicked: onQueryModellerClicked()
+                onHoveredChanged: onQueryModellerHovered()
 
                 background: Rectangle {
                     id: queryModellerTab_background
@@ -437,10 +425,7 @@ Page {
                     color: refresh_querymodeller.hovered ? Constants.darkThemeColor : "white"
                 }
 
-                onClicked: {
-                    onRefreshBtnClicked()
-                }
-
+                onClicked: onRefreshBtnClicked()
 
             }
 
@@ -507,11 +492,7 @@ Page {
                     color: filter_btn.hovered ? Constants.darkThemeColor : "white"
                 }
 
-                onClicked: {
-
-                    openDataFilters()
-
-                }
+                onClicked: openDataFilters()
             }
 
             // Filter button ends
@@ -527,9 +508,7 @@ Page {
                 radio_checked: true
                 parent_dimension: 16
                 ButtonGroup.group: memoryType
-                onCheckedChanged: {
-                    onLiveSelected()
-                }
+                onCheckedChanged: onLiveSelected()
             }
 
             // Live radio button ends
@@ -545,9 +524,7 @@ Page {
                 parent_dimension: 16
 
                 ButtonGroup.group: memoryType
-                onCheckedChanged: {
-                    onInMemorySelected()
-                }
+                onCheckedChanged: onInMemorySelected()
             }
 
             // In memory radio button ends
@@ -705,9 +682,7 @@ Page {
                         anchors.centerIn: parent
                     }
 
-                    onClicked: {
-                        onPublishDataSourceClicked()
-                    }
+                    onClicked: onPublishDataSourceClicked()
 
                     background: Rectangle {
                         color: tabPublishDashboard.hovered? Constants.darkThemeColor: Constants.themeColor
@@ -737,9 +712,7 @@ Page {
                         color: tabCreateDashboard.hovered? Constants.darkThemeColor: Constants.themeColor
                     }
 
-                    onClicked: {
-                        onCreateDashboardClicked()
-                    }
+                    onClicked: onCreateDashboardClicked()
 
                 }
 
@@ -770,9 +743,7 @@ Page {
                     readOnly: true
 
                     // Set the text
-                    onTextChanged: {
-                        setDataSourceName()
-                    }
+                    onTextChanged: setDataSourceName()
 
                 }
 
@@ -787,9 +758,7 @@ Page {
 
                     MouseArea{
                         anchors.fill: parent
-                        onClicked: {
-                            focusDataSourceNameField()
-                        }
+                        onClicked: ocusDataSourceNameField()
                     }
                 }
             }
@@ -861,11 +830,7 @@ Page {
                         MouseArea{
                             anchors.fill: parent
 
-                            onClicked: {
-
-                                searchTable(searchTextBox.text)
-
-                            }
+                            onClicked: searchTable(searchTextBox.text)
                         }
                     }
                 }
@@ -915,10 +880,7 @@ Page {
                         MouseArea {
                             anchors.fill: parent
 
-                            onClicked: {
-
-                                collapseTables()
-                            }
+                            onClicked: collapseTables()
                         }
                     }
                 }

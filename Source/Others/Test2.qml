@@ -3,52 +3,25 @@ import QtQuick.Controls 2.15
 //import QtWebEngine 1.10
 import QtQuick.Shapes 1.15
 
+Rectangle{
+    id:dragRect
+
+    height: 40
+    width: 60
+    color: "blue"
 
 
-Page {
-    id : somepageid
+    signal clicked(double x, double y);
 
-    Rectangle {
-        color: "lightGray"
+    MouseArea{
+        id: mArea
+        anchors.fill: parent
+        drag.target: dragRect
 
-        Shape {
-            id: circ1
-            anchors.fill: parent
-            containsMode: Shape.BoundingRectContains
-            z:3
-
-            ShapePath {
-                strokeColor: "black"
-                strokeWidth: 10
-                fillColor: "transparent"
-                capStyle: ShapePath.RoundCap
-
-                property int joinStyleIndex: 2
-
-                property variant styles: [
-                    ShapePath.BevelJoin,
-                    ShapePath.MiterJoin,
-                    ShapePath.RoundJoin
-                ]
-
-                joinStyle: styles[joinStyleIndex]
-
-                startX: 30
-                startY: 30
-                PathLine { x: 100; y: 100 }
-                PathLine { x: 30; y: 100 }
-
-
-            }
-
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    console.log("hello")
-                }
-            }
+        onReleased: {
+            console.log("Child", dragRect.x, dragRect.y)
+            dragRect.clicked(dragRect.x, dragRect.y)
         }
-
 
     }
 }
