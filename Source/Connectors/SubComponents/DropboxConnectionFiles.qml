@@ -111,6 +111,7 @@ Popup {
     }
 
     function updatePath(text){
+        closePopup();
         path.text=text;
     }
 
@@ -209,10 +210,7 @@ Popup {
             anchors.rightMargin: 5
             MouseArea{
                 anchors.fill: parent
-                onClicked: {
-                    closePopup();
-                    updatePath("Dropbox")
-                }
+                onClicked: updatePath("Dropbox")
             }
         }
 
@@ -281,10 +279,7 @@ Popup {
                     width: 100
                     textValue: "Search"
                     x : popup.width * 0.6 - 100
-
-                    onClicked: {
-                        searchFiles()
-                    }
+                    onClicked: searchFiles()
 
                 }
 
@@ -417,12 +412,8 @@ Popup {
                                     MouseArea{
 
                                         anchors.fill:parent
-                                        onClicked: {
-                                            onFileClicked(name,tag,pathLower)
-                                        }
-                                        onDoubleClicked: {
-                                            onFolderClicked(name,tag,pathFolder,pathLower);
-                                        }
+                                        onClicked: onFileClicked(name,tag,pathLower)
+                                        onDoubleClicked: onFolderClicked(name,tag,pathFolder,pathLower);
                                     }
                                 }
 
@@ -627,9 +618,7 @@ Popup {
                     anchors.right: cancelBtn.left
                     anchors.rightMargin: 30
 
-                    onClicked: {
-                        onHomeClicked()
-                    }
+                    onClicked: onHomeClicked()
 
                 }
 
@@ -641,9 +630,7 @@ Popup {
                     textValue: "Back"
                     anchors.leftMargin: 30
 
-                    onClicked: {
-                        onBackPressed()
-                    }
+                    onClicked: onBackPressed()
 
                 }
 

@@ -65,11 +65,7 @@ var NAVTREE =
     ] ],
     [ "Modules", "modules.html", "modules" ],
     [ "Namespaces", "namespaces.html", [
-      [ "Namespace List", "namespaces.html", "namespaces_dup" ],
-      [ "Namespace Members", "namespacemembers.html", [
-        [ "All", "namespacemembers.html", null ],
-        [ "Variables", "namespacemembers_vars.html", null ]
-      ] ]
+      [ "Namespace List", "namespaces.html", "namespaces_dup" ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -78,7 +74,7 @@ var NAVTREE =
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", "functions_func" ],
-        [ "Variables", "functions_vars.html", null ],
+        [ "Variables", "functions_vars.html", "functions_vars" ],
         [ "Enumerations", "functions_enum.html", null ],
         [ "Enumerator", "functions_eval.html", null ],
         [ "Properties", "functions_prop.html", null ]
@@ -97,11 +93,13 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_messages_8h.html",
-"class_datasource.html#a3290e46565e4c58744992938c51e1b12",
-"class_filter_functions_model.html#a201f200bcf38c19385f79b9fa34c20ba",
-"class_sheet_d_s.html#ab8bfc99ff0ec652fd3b7b116ee648423",
-"main_8cpp.html"
+"_all_categorical_filters_8qml.html",
+"class_connector_model.html#a6d0f93bae2d36b11f8933dbac8aa1018",
+"class_datasource.html#a08987dc9c9e049f15040e557fae114ba",
+"class_date_time_frame_quarter_content.html#a5607cf97a0e081006bbf6512d6dc675b",
+"class_filter_list.html#ae398edefff44235c12a14c6d0d7ba28f",
+"class_scheduler.html#a75d1639aa91fae8f47f08e3dfa5d8854",
+"dir_7e821b2344ff4693924716c2ce89242e.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

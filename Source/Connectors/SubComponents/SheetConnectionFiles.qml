@@ -271,10 +271,7 @@ Popup {
                     textValue: "Search"
                     x : popup.width * 0.6 - 100
 
-                    onClicked: {
-
-                        searchFiles();
-                    }
+                    onClicked: searchFiles();
 
                 }
 
@@ -406,13 +403,8 @@ Popup {
                                     MouseArea{
 
                                         anchors.fill:parent
-                                        onClicked: {
-                                            onFileSelected(name,id,type)
-                                        }
-
-                                        onDoubleClicked: {
-                                            onFolderClicked()
-                                        }
+                                        onClicked: onFileSelected(name,id,type)
+                                        onDoubleClicked: onFolderClicked()
                                     }
                                 }
 
@@ -617,9 +609,7 @@ Popup {
                     anchors.right: cancelBtn.left
                     anchors.rightMargin: 30
 
-                    onClicked: {
-                        onHomeClicked()
-                    }
+                    onClicked: onHomeClicked()
 
                 }
 
@@ -631,9 +621,7 @@ Popup {
                     textValue: "Back"
                     anchors.leftMargin: 30
 
-                    onClicked: {
-                        closePopup()
-                    }
+                    onClicked: closePopup()
 
                 }
 

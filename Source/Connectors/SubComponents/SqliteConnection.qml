@@ -302,10 +302,7 @@ Popup {
         Button{
             id : file_btn
             text: "Select Sqlite file"
-
-            onClicked: {
-                promptSqlite.open();
-            }
+            onClicked: promptSqlite.open();
         }
 
         Text{
@@ -416,7 +413,6 @@ Popup {
         anchors.topMargin: 15
         anchors.right: parent.right
         anchors.rightMargin: label_col - 70
-        //        anchors.rightMargin: label_col*2 + 47
         spacing: 10
 
         Button{
@@ -438,12 +434,8 @@ Popup {
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
-            onClicked: {
+            onClicked: ConnectorsLoginModel.sqliteLogin(sqliteFileName.text, username.text, password.text)
 
-                // Call sqlite connector model
-                ConnectorsLoginModel.sqliteLogin(sqliteFileName.text, username.text, password.text)
-
-            }
         }
     }
     // Row 6: Action Button ends

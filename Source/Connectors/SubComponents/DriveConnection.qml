@@ -142,9 +142,7 @@ Popup {
             anchors.rightMargin: 5
             MouseArea{
                 anchors.fill: parent
-                onClicked: {
-                    closePopup()
-                }
+                onClicked: closePopup()
             }
         }
 
@@ -191,9 +189,7 @@ Popup {
                 anchors.horizontalCenter: parent.horizontalCenter
 
 
-                onClicked: {
-                    onAllowBtnClicked()
-                }
+                onClicked: onAllowBtnClicked()
 
             }
 

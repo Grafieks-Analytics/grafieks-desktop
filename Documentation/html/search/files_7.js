@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['publishdatasourcemodel_2ecpp_669',['publishdatasourcemodel.cpp',['../publishdatasourcemodel_8cpp.html',1,'']]],
-  ['publishdatasourcemodel_2eh_670',['publishdatasourcemodel.h',['../publishdatasourcemodel_8h.html',1,'']]]
+  ['infotable_2eqml_1174',['InfoTable.qml',['../_info_table_8qml.html',1,'']]],
+  ['inmemory_2eqml_1175',['InMemory.qml',['../_in_memory_8qml.html',1,'']]]
 ];

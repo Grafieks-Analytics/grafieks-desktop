@@ -1,0 +1,26 @@
+var classmain =
+[
+    [ "connectGrafieks1", "classmain.html#a8c9ec3e63b798985de75e1e1ae682977", null ],
+    [ "connectGrafieks2", "classmain.html#ae039bf7447218674a35a0055783a10be", null ],
+    [ "data_query_modeller_main", "classmain.html#aa1407e35057c9ae318c41fcd182c05d6", null ],
+    [ "datasourceDescription", "classmain.html#a5399683ea6e27905e33b7a147a581f0f", null ],
+    [ "datasources_grid_main", "classmain.html#a92c276ac7fb1b8c210159af15e254688", null ],
+    [ "header", "classmain.html#a45df911737b596dbce5b417f8370826e", null ],
+    [ "height", "classmain.html#ab20503a8b521cd3955b6d889ddbf8416", null ],
+    [ "home_main", "classmain.html#a6259a4d4820240126fe7b11010f29a16", null ],
+    [ "logout", "classmain.html#a44a42cca43d4fd16c3ed995c1d6e2c6f", null ],
+    [ "menuBar", "classmain.html#a974c77ef14f300e530f3799a9008455e", null ],
+    [ "minimumHeight", "classmain.html#aca9e62ed1ab333e24dfdcfd4e4601c05", null ],
+    [ "minimumWidth", "classmain.html#ad5d9ce0c0e26712f071803ba81af8d7e", null ],
+    [ "new_dashboard_main", "classmain.html#ac81029e31a2c3309a78535c15dab6f87", null ],
+    [ "new_report_main", "classmain.html#a3b5bb933971c71343eb02be24587d263", null ],
+    [ "onCompleted", "classmain.html#a0ad50d64297d8b1f28457c51e53b7c45", null ],
+    [ "select_connecton_main", "classmain.html#a56f42ed9509d356f479e0a38c6d86a63", null ],
+    [ "settings", "classmain.html#ac517d4ce8b7ae370167325b0ab666586", null ],
+    [ "stacklayout_home", "classmain.html#a1a972a4935e99ec12d8e3294622e71e8", null ],
+    [ "test2_main", "classmain.html#a7ee6fbf81fa76466efc12a539aca8334", null ],
+    [ "test_main", "classmain.html#a342c17034bbf3d0c14fc303715a5d391", null ],
+    [ "title", "classmain.html#aa2b5da233ebccde49335b243fd869d3b", null ],
+    [ "visible", "classmain.html#af890a0dc244f9b460bf0569f59b6245d", null ],
+    [ "width", "classmain.html#a521975d48ecbcc1851b78efd18381e94", null ]
+];

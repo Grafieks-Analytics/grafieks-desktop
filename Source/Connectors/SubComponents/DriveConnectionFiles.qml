@@ -106,6 +106,7 @@ Popup {
     }
 
     function updatePath(text){
+        hidePopup()
         path.text="Drive";
     }
 
@@ -191,10 +192,7 @@ Popup {
             anchors.rightMargin: 5
             MouseArea{
                 anchors.fill: parent
-                onClicked: {
-                    hidePopup()
-                    updatePath("Drive")
-                }
+                onClicked: updatePath("Drive")
             }
         }
 
@@ -262,9 +260,7 @@ Popup {
                     textValue: "Search"
                     x : popup.width * 0.6 - 100
 
-                    onClicked: {
-                            searchFiles();
-                    }
+                    onClicked: searchFiles();
 
                 }
 
@@ -397,14 +393,8 @@ Popup {
                                     MouseArea{
 
                                         anchors.fill:parent
-                                        onClicked: {
-
-                                            onFileClicked(name,tag);
-
-                                        }
-                                        onDoubleClicked: {
-                                            onFolderDoubleClicked(name,tag)
-                                        }
+                                        onClicked:onFileClicked(name,tag);
+                                        onDoubleClicked: onFolderDoubleClicked(name,tag)
                                     }
                                 }
 
@@ -609,9 +599,7 @@ Popup {
                     anchors.right: cancelBtn.left
                     anchors.rightMargin: 30
 
-                    onClicked: {
-                        onHomeClicked();
-                    }
+                    onClicked: onHomeClicked();
 
                 }
 
@@ -622,10 +610,7 @@ Popup {
                     width: 100
                     textValue: "Back"
                     anchors.leftMargin: 30
-
-                    onClicked: {
-                        hidePopup()
-                    }
+                    onClicked: hidePopup()
 
                 }
 

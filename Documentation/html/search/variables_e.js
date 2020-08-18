@@ -1,11 +1,6 @@
 var searchData=
 [
-  ['signalsconnected_1101',['signalsConnected',['../class_box_model.html#ab732f1bac4cef70360649623b1201380',1,'BoxModel::signalsConnected()'],['../class_drive_model.html#a9968f656d19300cc1f7a1d84425a9311',1,'DriveModel::signalsConnected()'],['../class_dropbox_model.html#aa79c749f4647527df9101d9197ccd983',1,'DropboxModel::signalsConnected()'],['../class_sheet_model.html#af92b5057843eca311566b564172c38be',1,'SheetModel::signalsConnected()'],['../class_scheduler_model.html#aa587985fe53d4f916fbec1ba66eb18e7',1,'SchedulerModel::signalsConnected()'],['../class_datasource_model.html#a560eef18c19942f3c069beb4a29631b8',1,'DatasourceModel::signalsConnected()']]],
-  ['sqlcomparisonoperators_1102',['sqlComparisonOperators',['../class_filter_list_model.html#a4245d8c44e7d00c2bd1249721250f934',1,'FilterListModel']]],
-  ['sqlitefile_1103',['sqliteFile',['../class_statics.html#ab7cc8791cd96b3422cba8cce5905bf09',1,'Statics']]],
-  ['sqliteinttype_1104',['sqliteIntType',['../namespace_constants.html#a95aeacab8bb5aca23b8cbba9c2dd5ac5',1,'Constants']]],
-  ['sqlitepassword_1105',['sqlitePassword',['../class_statics.html#aec543a6ad13c50e80f681071c7194757',1,'Statics']]],
-  ['sqlitestrquerytype_1106',['sqliteStrQueryType',['../namespace_constants.html#af996564609e92c5e28da22120a45d06e',1,'Constants']]],
-  ['sqlitestrtype_1107',['sqliteStrType',['../namespace_constants.html#a22927b29193b01a078e1936c2a7b7ef4',1,'Constants']]],
-  ['sqliteusername_1108',['sqliteUsername',['../class_statics.html#a405559528eae9fd3762203cfb47bf316',1,'Statics']]]
+  ['padding_1796',['padding',['../class_categorical_filter.html#a967a6d7672d4db6677251891fa3fddbc',1,'CategoricalFilter::padding()'],['../class_date_filter.html#a511bc5a8cdff5e7bd1150fd91290e6b7',1,'DateFilter::padding()'],['../class_group_filter.html#a9a3f3048c0e8d06e67e0a714f344b0d9',1,'GroupFilter::padding()'],['../class_in_memory.html#aed832c93f67c1014adb6e7d88c594c75',1,'InMemory::padding()'],['../class_numerical_filter.html#a0fd8d91712250d4b6275f9282d10eab8',1,'NumericalFilter::padding()']]],
+  ['password_1797',['password',['../class_user.html#ac887622f22a898c097d156ad964be846',1,'User']]],
+  ['pie_5fchart_1798',['pie_chart',['../class_left_menu_bar_reports.html#ab6f598e96b13ceaec18aedfdbfef8908',1,'LeftMenuBarReports']]]
 ];

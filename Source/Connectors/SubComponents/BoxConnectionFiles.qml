@@ -110,6 +110,7 @@ Popup {
     }
 
     function updatePath(text){
+        closePopup()
         path.text=text;
     }
 
@@ -212,11 +213,8 @@ Popup {
             anchors.rightMargin: 5
             MouseArea{
                 anchors.fill: parent
-                onClicked: {
-                    closePopup()
-                    updatePath("Box")
+                onClicked: updatePath("Box")
 
-                }
             }
         }
 
@@ -284,9 +282,7 @@ Popup {
                     textValue: "Search"
                     x : popup.width * 0.6 - 100
 
-                    onClicked: {
-                        searchFiles();
-                    }
+                    onClicked: searchFiles();
 
                 }
 
@@ -418,14 +414,8 @@ Popup {
                                     MouseArea{
 
                                         anchors.fill:parent
-                                        onClicked: {
-
-                                            onFileClicked(name,type);
-
-                                        }
-                                        onDoubleClicked: {
-                                            onFolderDoubleClicked(name,type)
-                                        }
+                                        onClicked: onFileClicked(name,type);
+                                        onDoubleClicked: onFolderDoubleClicked(name,type)
                                     }
                                 }
 
@@ -630,9 +620,7 @@ Popup {
                     anchors.right: cancelBtn.left
                     anchors.rightMargin: 30
 
-                    onClicked: {
-                        onHomeClicked();
-                    }
+                    onClicked: onHomeClicked();
 
                 }
 
@@ -643,10 +631,7 @@ Popup {
                     width: 100
                     textValue: "Back"
                     anchors.leftMargin: 30
-
-                    onClicked: {
-                        closePopup()
-                    }
+                    onClicked: closePopup()
 
                 }
 

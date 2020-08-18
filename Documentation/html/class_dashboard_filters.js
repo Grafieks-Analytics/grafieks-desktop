@@ -1,0 +1,27 @@
+var class_dashboard_filters =
+[
+    [ "apply_btn", "class_dashboard_filters.html#afa6b8532c92f7d48cab122d356cf0a8f", null ],
+    [ "checkBox1", "class_dashboard_filters.html#a22c74a3c315b97f86e3cb94d8fb6e01e", null ],
+    [ "checkBox2", "class_dashboard_filters.html#a992637e5926ca59fd77cf9b44fb09c80", null ],
+    [ "checkBox3", "class_dashboard_filters.html#ace540effde90f1812adf42a5589b7f15", null ],
+    [ "filter_apply_btn", "class_dashboard_filters.html#a4ec93f00cbf9cad2296745b6c074cda8", null ],
+    [ "filter_cancel_btn", "class_dashboard_filters.html#ad1d8707571aab876e95d0bd535ebffd5", null ],
+    [ "height", "class_dashboard_filters.html#a5641062bc6c308641b285e916906a762", null ],
+    [ "radioButton", "class_dashboard_filters.html#a5c76594ff62adc7c89eea88f0357af87", null ],
+    [ "radioButton1", "class_dashboard_filters.html#ae7fc079833f8b9aed82cc68a9ff37c2e", null ],
+    [ "radioButton2", "class_dashboard_filters.html#adcb2f8e9d2127d74fcefdfa53ace5f3a", null ],
+    [ "rangeSlider", "class_dashboard_filters.html#ab691a725e731f891861057cd40d94fe9", null ],
+    [ "rectangle1", "class_dashboard_filters.html#a6509af64e4d1ffed6a53ea6a50c4d393", null ],
+    [ "rectangle2", "class_dashboard_filters.html#a5883b0a3adb15270f02a82e904b42d66", null ],
+    [ "rectangle3", "class_dashboard_filters.html#a59ac5a16e419eae150c09e858a5f3823", null ],
+    [ "rectangle4", "class_dashboard_filters.html#a7be5767b1a8915c313f145ec8779e6d9", null ],
+    [ "text1", "class_dashboard_filters.html#a9294c9cdd63d7ddd8ebcadff5f590b5e", null ],
+    [ "text2", "class_dashboard_filters.html#a38849cc7e6162f96223de0c4b6021f05", null ],
+    [ "text3", "class_dashboard_filters.html#a308b0d09cb0a105a0b5aa8a8e9e8dcab", null ],
+    [ "text4", "class_dashboard_filters.html#a3c2a3b1e7a586dfa2f390ced8898ec19", null ],
+    [ "toolSeparator", "class_dashboard_filters.html#a2cdd18f011f0deec8fd0a41b0ede04ce", null ],
+    [ "toolSeparator1", "class_dashboard_filters.html#a506dabd343f82ca7162b4dcf9befd94e", null ],
+    [ "toolSeparator2", "class_dashboard_filters.html#ab8332e626db28861b8044dd7919956b2", null ],
+    [ "toolSeparator3", "class_dashboard_filters.html#a3cfaba85b17018c2fc9ccb2d85ca5d31", null ],
+    [ "width", "class_dashboard_filters.html#af57175bd40aebcb94eb7d97809ae1bee", null ]
+];

@@ -61,6 +61,27 @@ Item {
        var dynamicRectangle = Qt.createComponent("DroppedRectangle.qml");
     }
 
+    function onDropAreaExited(){
+        highlightRect.color = "white"
+    }
+
+    function onDropAreaEntered(){
+
+         highlightRect.color = "ivory"
+    }
+
+    function onDropAreaDropped(){
+
+        // listView.model.remove(listView.dragItemIndex);
+        // listView.dragItemIndex = -1;
+
+        highlightRect.color = "white"
+
+        var  dynamicRectangle = Qt.createComponent("DroppedRectangle.qml");
+
+        dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName})
+    }
+
 
     function onZoomOutClicked(){
         console.log('Zoom Out')
@@ -123,12 +144,7 @@ Item {
 
             }
 
-            onClicked: {
-
-                onAlignBtnClicked()
-
-            }
-
+            onClicked: onAlignBtnClicked()
             background: Rectangle {
                 id: align_btn_background
                 color:  align_btn.hovered? Constants.darkThemeColor: Constants.themeColor
@@ -158,11 +174,7 @@ Item {
                 color:  plus_icon_btn.hovered? Constants.darkThemeColor: Constants.themeColor
 
             }
-            onClicked: {
-
-                onZoomInClicked()
-
-            }
+            onClicked: onZoomInClicked()
         }
 
         Button{
@@ -189,10 +201,7 @@ Item {
 
             }
 
-            onClicked: {
-
-                onZoomOutClicked()
-            }
+            onClicked: onZoomOutClicked()
         }
 
     }
@@ -207,25 +216,9 @@ Item {
         DropArea {
             id: dropArea
             anchors.fill: parent
-            onEntered: {
-                highlightRect.color = "ivory"
-            }
-            onExited: {
-                highlightRect.color = "white"
-            }
-
-            onDropped: {
-                // listView.model.remove(listView.dragItemIndex);
-                // listView.dragItemIndex = -1;
-
-                highlightRect.color = "white"
-
-                var  dynamicRectangle = Qt.createComponent("DroppedRectangle.qml");
-
-                dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName})
-
-
-            }
+            onEntered: onDropAreaEntered()
+            onExited: onDropAreaExited()
+            onDropped: onDropAreaDropped()
         }
     }
 

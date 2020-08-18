@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['box_562',['Box',['../class_box.html',1,'']]],
-  ['boxds_563',['BoxDS',['../class_box_d_s.html',1,'']]],
-  ['boxmodel_564',['BoxModel',['../class_box_model.html',1,'']]]
+  ['allcategoricalfilters_942',['AllCategoricalFilters',['../class_all_categorical_filters.html',1,'']]],
+  ['alldatefilters_943',['AllDateFilters',['../class_all_date_filters.html',1,'']]],
+  ['allgroupfilters_944',['AllGroupFilters',['../class_all_group_filters.html',1,'']]],
+  ['allnumericalfilters_945',['AllNumericalFilters',['../class_all_numerical_filters.html',1,'']]]
 ];

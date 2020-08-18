@@ -275,9 +275,7 @@ Page {
             font.pointSize: Constants.fontReading
             opacity: 0.6
 
-            onAccepted: {
-                searchDataConnector(search_text.text);
-            }
+            onAccepted: searchDataConnector(search_text.text);
 
 
         }
@@ -294,9 +292,7 @@ Page {
             MouseArea{
                 anchors.fill: parent
 
-                onClicked: {
-                    onSearchDataConnector(search_text.text);
-                }
+                onClicked: onSearchDataConnector(search_text.text);
 
             }
 
@@ -327,9 +323,7 @@ Page {
                 colorOuter : tab_all.activeFocus ? Constants.buttonBorderColor : "transparent"
             }
 
-            onClicked: {
-                selectedCategory = categoriesList[0]
-            }
+            onClicked: selectedCategory = categoriesList[0]
 
         }
 
@@ -346,9 +340,7 @@ Page {
                 colorOuter : tab_file.activeFocus ? Constants.buttonBorderColor : "transparent"
             }
 
-            onClicked: {
-                selectedCategory = categoriesList[1]
-            }
+            onClicked: selectedCategory = categoriesList[1]
         }
 
         TabButton{
@@ -366,9 +358,7 @@ Page {
 
             }
 
-            onClicked: {
-                selectedCategory = categoriesList[2]
-            }
+            onClicked: selectedCategory = categoriesList[2]
         }
 
         TabButton{
@@ -386,9 +376,7 @@ Page {
                 colorOuter : tab_rd.activeFocus ? Constants.buttonBorderColor : "transparent"
             }
 
-            onClicked: {
-                selectedCategory = categoriesList[3]
-            }
+            onClicked: selectedCategory = categoriesList[3]
         }
 
         TabButton{
@@ -406,9 +394,7 @@ Page {
                 colorOuter : tab_nd.activeFocus ? Constants.buttonBorderColor : "transparent"
             }
 
-            onClicked: {
-                selectedCategory = categoriesList[4]
-            }
+            onClicked: selectedCategory = categoriesList[4]
         }
 
         TabButton{
@@ -426,9 +412,7 @@ Page {
                 colorOuter : tab_cs.activeFocus ? Constants.buttonBorderColor : "transparent"
             }
 
-            onClicked: {
-                selectedCategory = categoriesList[5]
-            }
+            onClicked: selectedCategory = categoriesList[5]
         }
         TabButton{
             id:tab_os
@@ -444,9 +428,7 @@ Page {
                 colorOuter : tab_os.activeFocus ? Constants.buttonBorderColor : "transparent"
             }
 
-            onClicked: {
-                selectedCategory = categoriesList[6]
-            }
+            onClicked: selectedCategory = categoriesList[6]
         }
 
     }
@@ -481,11 +463,8 @@ Page {
                 MouseArea{
                     anchors.fill: parent
 
-                    onClicked: {
+                    onClicked: selectAuthorization(name)
 
-                        selectAuthorization(name)
-
-                    }
                 }
             }
 
@@ -500,10 +479,7 @@ Page {
                 MouseArea{
                     anchors.fill: parent
 
-                    onClicked: {
-
-                        selectAuthorization(name)
-                    }
+                    onClicked: selectAuthorization(name)
                 }
             }
         }

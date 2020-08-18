@@ -136,9 +136,7 @@ Popup {
             anchors.rightMargin: 5
             MouseArea{
                 anchors.fill: parent
-                onClicked: {
-                    closePopup()
-                }
+                onClicked: closePopup()
             }
         }
 
@@ -181,10 +179,7 @@ Popup {
                 fontPixelSize: Constants.fontHeader
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                onClicked: {
-                    onAllowBtnClicked()
-                    // boxds.cpp for more info
-                }
+                onClicked: onAllowBtnClicked()
 
             }
 
