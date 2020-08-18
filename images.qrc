@@ -99,5 +99,10 @@
         <file>Images/icons/remove.png</file>
         <file>Images/icons/clipart268070@2x.png</file>
         <file>Images/logos/GrafieksDesktopMac.icns</file>
+        <file>Images/icons/create_dashboard_20.png</file>
+        <file>Images/icons/create_dashboard_32.png</file>
+        <file>Images/icons/edit-32.png</file>
+        <file>Images/icons/publish_20.png</file>
+        <file>Images/icons/publish_32.png</file>
     </qresource>
 </RCC>
