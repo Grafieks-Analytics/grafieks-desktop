@@ -10,6 +10,7 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Shapes 1.15
 
 
 
@@ -24,6 +25,8 @@ Item {
     property var frontRectangleCoordinates : []
     property var rearRectangleCoordinates : []
     property var existingTables : []
+
+    property var dynamicConnectorLine : Qt.createComponent("ConnectingLine.qml")
 
 
 
@@ -69,16 +72,31 @@ Item {
         console.log("Dropped" , x, y)
     }
 
-    // New component onn Entered
+    // New component on Entered
     function onDropAreaEnteredNewComponent(x,y){
         console.log("Dragging" , x, y)
+    }
+
+    function onDropAreaPositionChanged(drag){
+        console.log("Pos changed", drag.x, drag.y)
+
+        // Show light shaded line between the current rectangle
+        // and the nearest rectangle
+        if(existingTables.length > 1){
+
+            // Add the line component on stage
+            var dynamicConnectorLine = Qt.createComponent("ConnectingLine.qml")
+            console.log(JSON.stringify(drag))
+
+        }
     }
 
     function onDropAreaExited(){
         highlightRect.color = "white"
     }
 
-    function onDropAreaEntered(){
+    function onDropAreaEntered(drag){
+        console.log("Entered", drag.x, drag.y)
 
         highlightRect.color = "ivory"
 
@@ -86,11 +104,14 @@ Item {
         // and the nearest rectangle
         if(existingTables.length > 1){
 
+            // Add the line component on stage
+            var dynamicConnectorLine = Qt.createComponent("ConnectingLine.qml")
+            console.log(JSON.stringify(drag))
+
         }
     }
 
     function onDropAreaDropped(drag){
-        console.log("called again", drag.x)
 
         // listView.model.remove(listView.dragItemIndex);
         // listView.dragItemIndex = -1;
@@ -98,6 +119,8 @@ Item {
         highlightRect.color = "white"
 
         var  dynamicRectangle = Qt.createComponent("DroppedRectangle.qml");
+
+
         // Assign new variable to the created object
         // Use this variable to connect the signals and slots
         var newRect =  dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName})
@@ -110,7 +133,7 @@ Item {
         var rectRightX = rectLeftX + tableslist.tableName.length * 10 + 30
         var rectLeftY = drag.y + 15
         var rectRightY = rectLeftY
-        var tmpArray = []
+
 
         // Push the coordinates in the array
         frontRectangleCoordinates.push({x: rectLeftX, y: rectLeftY})
@@ -122,6 +145,29 @@ Item {
 
         // Temporary clone the rear rectangle coordinates to a variable
         var tmpRearRectangleCoordinates = rearRectangleCoordinates.slice();
+
+
+        // Get the nearest rectangle
+        // And process the rest
+        if(existingTables.length > 1){
+            var nearestTable = nearestRectangle(tmpRearRectangleCoordinates, currentPoint)
+            console.log(nearestTable.tableName, nearestTable.tableId)
+        }
+    }
+
+
+
+    // Calculate distance between 2 points
+    function distance(currentPoint, referencePoint) {
+        return Math.pow((referencePoint.x - currentPoint.x), 2) + Math.pow((referencePoint.y - currentPoint.y), 2);
+    }
+
+
+    // Get the nearest rectangle when another rectangle is brought on stage
+    function nearestRectangle(tmpRearRectangleCoordinates, currentPoint){
+
+        var tmpArray = []
+
         tmpRearRectangleCoordinates.pop();
 
 
@@ -142,17 +188,8 @@ Item {
         const sortByDistance = tmpArray.sort((a,b) => a.index - b.index).map((arr, index, array) => arr.coordinates)
         var nearestIndex = tmpRearRectangleCoordinates.indexOf(sortByDistance[0])
 
-        if(nearestIndex > -1){
-            console.log(existingTables[nearestIndex])
-        }
-
-    }
-
-
-
-    // Calculate distance between 2 points
-    function distance(currentPoint, referencePoint) {
-        return Math.pow((referencePoint.x - currentPoint.x), 2) + Math.pow((referencePoint.y - currentPoint.y), 2);
+        // return table name & id
+        return {"tableName" :existingTables[nearestIndex], tableId : nearestIndex}
     }
 
 
@@ -289,8 +326,9 @@ Item {
         DropArea {
             id: dropArea
             anchors.fill: parent
-            onEntered: onDropAreaEntered()
+            onEntered: onDropAreaEntered(drag)
             onExited: onDropAreaExited()
+            onPositionChanged: onDropAreaPositionChanged(drag)
             onDropped: onDropAreaDropped(drag)
         }
     }
