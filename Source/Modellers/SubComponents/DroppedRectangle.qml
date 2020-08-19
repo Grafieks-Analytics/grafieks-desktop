@@ -16,6 +16,10 @@ Item{
     property string name: nameID.text
 
 
+    signal dragged(double x, double y);
+    signal dropped(double x, double y);
+
+
     Component.onCompleted: {
         nameID.text = name
         droppedRectangle.width = nameID.text.length * 10 + 30
@@ -64,6 +68,8 @@ Item{
             drag.target: newItem
 
             onDoubleClicked: onRectangleToggle()
+            onReleased: newItem.dropped(newItem.x, newItem.y)
+            onPositionChanged: newItem.dragged(newItem.x, newItem.y)
         }
 
 

@@ -64,6 +64,16 @@ Item {
         var dynamicRectangle = Qt.createComponent("DroppedRectangle.qml");
     }
 
+    // New component on Dropped
+    function onDropAreaDroppedNewComponent(x,y){
+        console.log("Dropped" , x, y)
+    }
+
+    // New component onn Entered
+    function onDropAreaEnteredNewComponent(x,y){
+        console.log("Dragging" , x, y)
+    }
+
     function onDropAreaExited(){
         highlightRect.color = "white"
     }
@@ -88,7 +98,12 @@ Item {
         highlightRect.color = "white"
 
         var  dynamicRectangle = Qt.createComponent("DroppedRectangle.qml");
-        dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName})
+        // Assign new variable to the created object
+        // Use this variable to connect the signals and slots
+        var newRect =  dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName})
+
+        newRect.dragged.connect(onDropAreaEnteredNewComponent)
+        newRect.dropped.connect(onDropAreaDroppedNewComponent)
 
         // Created rectangle front & back coordinates
         var rectLeftX = drag.x
