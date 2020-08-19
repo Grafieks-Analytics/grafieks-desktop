@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+import QtQuick.Shapes 1.15
 
 import com.grafieks.singleton.constants 1.0
 
@@ -8,6 +9,39 @@ import "../MainSubComponents"
 
 Page{
 
-    id: root
+    id: pageid
+
+    Shape {
+        width: 200
+        height: 150
+        anchors.centerIn: parent
+        ShapePath {
+            strokeWidth: 4
+            strokeColor: "red"
+            fillGradient: LinearGradient {
+                x1: 20; y1: 20
+                x2: 180; y2: 130
+                GradientStop { position: 0; color: "blue" }
+                GradientStop { position: 0.2; color: "green" }
+                GradientStop { position: 0.4; color: "red" }
+                GradientStop { position: 0.6; color: "yellow" }
+                GradientStop { position: 1; color: "cyan" }
+            }
+            strokeStyle: ShapePath.DashLine
+            dashPattern: [ 1, 4 ]
+            startX: 20; startY: 20
+            PathLine { x: 180; y: 130 }
+            PathLine { x: 20; y: 130 }
+            PathLine { x: 20; y: 20 }
+        }
+
+        MouseArea{
+            anchors.fill: parent
+
+            onClicked: {
+                console.log("clicked")
+            }
+        }
+    }
 
 }
