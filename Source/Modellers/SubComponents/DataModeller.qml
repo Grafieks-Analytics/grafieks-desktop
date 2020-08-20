@@ -20,6 +20,7 @@ import com.grafieks.singleton.constants 1.0
 Item {
 
     id: dataModellerItem
+    property int counter : 0
     property real droppedX : 0
     property real droppedY : 0
     property var frontRectangleCoordinates : []
@@ -30,8 +31,13 @@ Item {
     property var dynamicConnectorLine : Qt.createComponent("ConnectingLine.qml")
     property var dynamicJoinBox : Qt.createComponent("JoinBox.qml")
 
-    property var newConnectingLine
-    property var newJoinBox
+    property var newConnectingLine : new Map()
+    property var newJoinBox: new Map()
+    property var rectangles: new Map()
+    property var frontRectLineMaps:new Map()
+    property var rearRectLineMaps:new Map()
+
+    property var tempRearRectLineMaps : []
 
 
 
@@ -76,7 +82,7 @@ Item {
     }
 
     // New component on Entered
-    function onDropAreaEnteredNewComponent(x,y){
+    function onDropAreaDraggedNewComponent(x,y){
         console.log("Dragging" , x, y)
     }
 
@@ -93,20 +99,23 @@ Item {
 
             // Get the coordinates for the nearest rectangle
             var nearestRectangleCoordinates = rearRectangleCoordinates[nearestTable.tableId]
-            newConnectingLine.incomingRectangleFrontX = drag.x
-            newConnectingLine.incomingRectangleFrontY = drag.y
-            newConnectingLine.refRectangleRearX = nearestRectangleCoordinates.x
-            newConnectingLine.refRectangleRearY = nearestRectangleCoordinates.y
+            newConnectingLine[counter].incomingRectangleFrontX = drag.x
+            newConnectingLine[counter].incomingRectangleFrontY = drag.y
+            newConnectingLine[counter].refRectangleRearX = nearestRectangleCoordinates.x
+            newConnectingLine[counter].refRectangleRearY = nearestRectangleCoordinates.y
         }
     }
 
     function onDropAreaExited(){
         highlightRect.color = "white"
+
+        newConnectingLine[counter].destroy()
     }
 
     function onDropAreaEntered(drag){
 
         highlightRect.color = "ivory"
+        counter++
 
         // Show light shaded line between the current rectangle
         // and the nearest rectangle
@@ -120,7 +129,7 @@ Item {
             var nearestRectangleCoordinates = rearRectangleCoordinates[nearestTable.tableId]
 
             // Add the line component on stage
-            newConnectingLine =  dynamicConnectorLine.createObject(parent, {incomingRectangleFrontX:drag.x, incomingRectangleFrontY: drag.y, refRectangleRearX : nearestRectangleCoordinates.x, refRectangleRearY: nearestRectangleCoordinates.y, lineColor: "grey"})
+            newConnectingLine[counter] = dynamicConnectorLine.createObject(parent, {incomingRectangleFrontX:drag.x, incomingRectangleFrontY: drag.y, refRectangleRearX : nearestRectangleCoordinates.x, refRectangleRearY: nearestRectangleCoordinates.y, lineColor: "grey"})
 
         }
     }
@@ -134,10 +143,10 @@ Item {
 
         // Assign new variable to the created object
         // Use this variable to connect the signals and slots
-        var newRect =  dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName})
+        rectangles[counter] =  dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName})
 
-        newRect.dragged.connect(onDropAreaEnteredNewComponent)
-        newRect.dropped.connect(onDropAreaDroppedNewComponent)
+        rectangles[counter].dragged.connect(onDropAreaDraggedNewComponent)
+        rectangles[counter].dropped.connect(onDropAreaDroppedNewComponent)
 
         // Created rectangle front & back coordinates
         var rectLeftX = drag.x
@@ -156,10 +165,26 @@ Item {
             var nearestTable = nearestRectangle(rearRectangleCoordinates.slice(), currentPoint)
 
             //Change the line color to black
-            newConnectingLine.lineColor = "black"
+            newConnectingLine[counter].lineColor = "black"
 
             // Get the coordinates for the nearest rectangle
             var nearestRectangleCoordinates = rearRectangleCoordinates[nearestTable.tableId]
+
+            // Update the front and rear line arrays
+            frontRectLineMaps[counter] = nearestTable.tableId
+
+            if(typeof rearRectLineMaps[nearestTable.tableId] !== "undefined"){
+                tempRearRectLineMaps = rearRectLineMaps[nearestTable.tableId]
+            }
+
+            tempRearRectLineMaps.push(counter)
+            rearRectLineMaps[nearestTable.tableId] = tempRearRectLineMaps
+
+            console.log("test", frontRectLineMaps, counter, nearestTable.tableId)
+
+            // Reset temp array
+            tempRearRectLineMaps = []
+
 
             // Draw a JoinBox
             var midLengthX = Math.abs(nearestRectangleCoordinates.x - currentPoint.x) / 2;
@@ -168,13 +193,16 @@ Item {
             var rectX = nearestRectangleCoordinates.x <= currentPoint.x ? nearestRectangleCoordinates.x + midLengthX : currentPoint.x + midLengthX
             var rectY = nearestRectangleCoordinates.y <= currentPoint.y ? nearestRectangleCoordinates.y + midLengthY : currentPoint.y + midLengthY
 
-            newJoinBox = dynamicJoinBox.createObject(parent, {x: rectX, y: rectY})
+            newJoinBox[counter] = dynamicJoinBox.createObject(parent, {x: rectX, y: rectY})
+
         }
 
         // Push the coordinates in the array
-        frontRectangleCoordinates.push({x: rectLeftX, y: rectLeftY})
-        rearRectangleCoordinates.push({x: rectRightX, y: rectRightY})
-        existingTables.push(tableslist.tableName)
+        frontRectangleCoordinates[counter] = {x: rectLeftX, y: rectLeftY}
+        rearRectangleCoordinates[counter] = {x: rectRightX, y: rectRightY}
+        existingTables[counter] = tableslist.tableName
+
+
     }
 
 
