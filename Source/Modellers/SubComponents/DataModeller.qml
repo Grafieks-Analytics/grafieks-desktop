@@ -26,7 +26,12 @@ Item {
     property var rearRectangleCoordinates : []
     property var existingTables : []
 
+    property var dynamicRectangle : Qt.createComponent("DroppedRectangle.qml");
     property var dynamicConnectorLine : Qt.createComponent("ConnectingLine.qml")
+    property var dynamicJoinBox : Qt.createComponent("JoinBox.qml")
+
+    property var newConnectingLine
+    property var newJoinBox
 
 
 
@@ -63,9 +68,7 @@ Item {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    Component.onCompleted: {
-        var dynamicRectangle = Qt.createComponent("DroppedRectangle.qml");
-    }
+
 
     // New component on Dropped
     function onDropAreaDroppedNewComponent(x,y){
@@ -78,16 +81,22 @@ Item {
     }
 
     function onDropAreaPositionChanged(drag){
-        console.log("Pos changed", drag.x, drag.y)
 
         // Show light shaded line between the current rectangle
         // and the nearest rectangle
-        if(existingTables.length > 1){
+        if(existingTables.length > 0){
 
-            // Add the line component on stage
-            var dynamicConnectorLine = Qt.createComponent("ConnectingLine.qml")
-            console.log(JSON.stringify(drag))
+            // Current reference Coordinate
+            var currentPoint = {x: drag.x, y: drag.y};
 
+            var nearestTable = nearestRectangle(rearRectangleCoordinates.slice(), currentPoint)
+
+            // Get the coordinates for the nearest rectangle
+            var nearestRectangleCoordinates = rearRectangleCoordinates[nearestTable.tableId]
+            newConnectingLine.incomingRectangleFrontX = drag.x
+            newConnectingLine.incomingRectangleFrontY = drag.y
+            newConnectingLine.refRectangleRearX = nearestRectangleCoordinates.x
+            newConnectingLine.refRectangleRearY = nearestRectangleCoordinates.y
         }
     }
 
@@ -96,17 +105,22 @@ Item {
     }
 
     function onDropAreaEntered(drag){
-        console.log("Entered", drag.x, drag.y)
 
         highlightRect.color = "ivory"
 
         // Show light shaded line between the current rectangle
         // and the nearest rectangle
-        if(existingTables.length > 1){
+        if(existingTables.length > 0){
+
+            // Current reference Coordinate
+            var currentPoint = {x: drag.x, y: drag.y};
+            var nearestTable = nearestRectangle(rearRectangleCoordinates.slice(), currentPoint)
+
+            // Get the coordinates for the nearest rectangle
+            var nearestRectangleCoordinates = rearRectangleCoordinates[nearestTable.tableId]
 
             // Add the line component on stage
-            var dynamicConnectorLine = Qt.createComponent("ConnectingLine.qml")
-            console.log(JSON.stringify(drag))
+            newConnectingLine =  dynamicConnectorLine.createObject(parent, {incomingRectangleFrontX:drag.x, incomingRectangleFrontY: drag.y, refRectangleRearX : nearestRectangleCoordinates.x, refRectangleRearY: nearestRectangleCoordinates.y, lineColor: "grey"})
 
         }
     }
@@ -117,9 +131,6 @@ Item {
         // listView.dragItemIndex = -1;
 
         highlightRect.color = "white"
-
-        var  dynamicRectangle = Qt.createComponent("DroppedRectangle.qml");
-
 
         // Assign new variable to the created object
         // Use this variable to connect the signals and slots
@@ -135,24 +146,35 @@ Item {
         var rectRightY = rectLeftY
 
 
-        // Push the coordinates in the array
-        frontRectangleCoordinates.push({x: rectLeftX, y: rectLeftY})
-        rearRectangleCoordinates.push({x: rectRightX, y: rectRightY})
-        existingTables.push(tableslist.tableName)
-
         // Current reference Coordinate
         var currentPoint = {x: rectLeftX, y: rectLeftY};
-
-        // Temporary clone the rear rectangle coordinates to a variable
-        var tmpRearRectangleCoordinates = rearRectangleCoordinates.slice();
 
 
         // Get the nearest rectangle
         // And process the rest
-        if(existingTables.length > 1){
-            var nearestTable = nearestRectangle(tmpRearRectangleCoordinates, currentPoint)
-            console.log(nearestTable.tableName, nearestTable.tableId)
+        if(existingTables.length > 0){
+            var nearestTable = nearestRectangle(rearRectangleCoordinates.slice(), currentPoint)
+
+            //Change the line color to black
+            newConnectingLine.lineColor = "black"
+
+            // Get the coordinates for the nearest rectangle
+            var nearestRectangleCoordinates = rearRectangleCoordinates[nearestTable.tableId]
+
+            // Draw a JoinBox
+            var midLengthX = Math.abs(nearestRectangleCoordinates.x - currentPoint.x) / 2;
+            var midLengthY = Math.abs(nearestRectangleCoordinates.y - currentPoint.y) / 2;
+
+            var rectX = nearestRectangleCoordinates.x <= currentPoint.x ? nearestRectangleCoordinates.x + midLengthX : currentPoint.x + midLengthX
+            var rectY = nearestRectangleCoordinates.y <= currentPoint.y ? nearestRectangleCoordinates.y + midLengthY : currentPoint.y + midLengthY
+
+            newJoinBox = dynamicJoinBox.createObject(parent, {x: rectX, y: rectY})
         }
+
+        // Push the coordinates in the array
+        frontRectangleCoordinates.push({x: rectLeftX, y: rectLeftY})
+        rearRectangleCoordinates.push({x: rectRightX, y: rectRightY})
+        existingTables.push(tableslist.tableName)
     }
 
 
@@ -167,8 +189,6 @@ Item {
     function nearestRectangle(tmpRearRectangleCoordinates, currentPoint){
 
         var tmpArray = []
-
-        tmpRearRectangleCoordinates.pop();
 
 
         // Find the distance b/w all rear of a rectangle

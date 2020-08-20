@@ -94,5 +94,6 @@
         <file>Source/MainSubComponents/CustomRadioButton.qml</file>
         <file>Source/Modellers/SubComponents/DroppedRectangle.qml</file>
         <file>Source/Modellers/SubComponents/ConnectingLine.qml</file>
+        <file>Source/Modellers/SubComponents/JoinBox.qml</file>
     </qresource>
 </RCC>

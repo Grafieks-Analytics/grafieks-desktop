@@ -8,58 +8,43 @@ import com.grafieks.singleton.constants 1.0
 
 Item{
     id: lineItem
-    property string lineColor: shapePath.strokeColor
+    property string lineColor
     property var incomingRectangleFrontX
     property var incomingRectangleFrontY
-    property var refRectangleFrontX
-    property var refRectangleFrontY
+    property var refRectangleRearX
+    property var refRectangleRearY
 
     Shape {
         containsMode: Shape.FillContains
 
         ShapePath {
             id:shapePath
-            strokeColor: "black"
-            strokeWidth: 1
+            strokeColor: lineColor
+            strokeWidth: 5
             fillColor: "transparent"
             capStyle: ShapePath.RoundCap
             joinStyle: ShapePath.RoundJoin
 
-            startX: firstRectCoordinateBack.x
-            startY: firstRectCoordinateBack.y
+            startX: refRectangleRearX
+            startY: refRectangleRearY
 
             PathLine {
                 id: secondRectCoord;
-                x: secondRectCoordinateFront.x ;
-                y: secondRectCoordinateFront.y;
+                x: incomingRectangleFrontX
+                y: incomingRectangleFrontY
                 onXChanged: {
-                    invisibleCircle.x = shapePath.startX <= secondRectCoord.x ? shapePath.startX + Math.abs(shapePath.startX - secondRectCoord.x) / 2 : secondRectCoord.x + Math.abs(shapePath.startX - secondRectCoord.x) / 2
-                    invisibleCircle.y = shapePath.startY <= secondRectCoord.y ? shapePath.startY + Math.abs(shapePath.startY - secondRectCoord.y) / 2 : secondRectCoord.y + Math.abs(shapePath.startY - secondRectCoord.y) / 2
+                    //                    invisibleCircle.x = shapePath.startX <= secondRectCoord.x ? shapePath.startX + Math.abs(shapePath.startX - secondRectCoord.x) / 2 : secondRectCoord.x + Math.abs(shapePath.startX - secondRectCoord.x) / 2
+                    //                    invisibleCircle.y = shapePath.startY <= secondRectCoord.y ? shapePath.startY + Math.abs(shapePath.startY - secondRectCoord.y) / 2 : secondRectCoord.y + Math.abs(shapePath.startY - secondRectCoord.y) / 2
 
-    //                    console.log(shapePath.startX, shapePath.startY, secondRectCoord.x, secondRectCoord.y, invisibleCircle.x, invisibleCircle.y)
+                    //                    console.log(shapePath.startX, shapePath.startY, secondRectCoord.x, secondRectCoord.y, invisibleCircle.x, invisibleCircle.y)
                 }
             }
 
             onStartXChanged: {
-                invisibleCircle.x = shapePath.startX <= secondRectCoord.x ? shapePath.startX + Math.abs(shapePath.startX - secondRectCoord.x) / 2 : secondRectCoord.x + Math.abs(shapePath.startX - secondRectCoord.x) / 2
-                invisibleCircle.y = shapePath.startY <= secondRectCoord.y ? shapePath.startY + Math.abs(shapePath.startY - secondRectCoord.y) / 2 : secondRectCoord.y + Math.abs(shapePath.startY - secondRectCoord.y) / 2
+                //                invisibleCircle.x = shapePath.startX <= secondRectCoord.x ? shapePath.startX + Math.abs(shapePath.startX - secondRectCoord.x) / 2 : secondRectCoord.x + Math.abs(shapePath.startX - secondRectCoord.x) / 2
+                //                invisibleCircle.y = shapePath.startY <= secondRectCoord.y ? shapePath.startY + Math.abs(shapePath.startY - secondRectCoord.y) / 2 : secondRectCoord.y + Math.abs(shapePath.startY - secondRectCoord.y) / 2
 
-    //                console.log(shapePath.startX, shapePath.startY, secondRectCoord.x, secondRectCoord.y)
-            }
-        }
-    }
-
-    Rectangle{
-        id: invisibleCircle
-        width:20
-        height:20
-        color: "red"
-        radius: 10
-
-        MouseArea{
-            anchors.fill: parent
-            onClicked: {
-                console.log("join")
+                //                console.log(shapePath.startX, shapePath.startY, secondRectCoord.x, secondRectCoord.y)
             }
         }
     }
