@@ -23,9 +23,9 @@ Item {
     property int counter : 0
     property real droppedX : 0
     property real droppedY : 0
-    property var frontRectangleCoordinates : []
-    property var rearRectangleCoordinates : []
-    property var existingTables : []
+    property var frontRectangleCoordinates : new Map()
+    property var rearRectangleCoordinates : new Map()
+    property var existingTables : new Map()
 
     property var dynamicRectangle : Qt.createComponent("DroppedRectangle.qml");
     property var dynamicConnectorLine : Qt.createComponent("ConnectingLine.qml")
@@ -38,6 +38,10 @@ Item {
     property var rearRectLineMaps:new Map()
 
     property var tempRearRectLineMaps : []
+
+    property int refObject: 0
+    property int refObjectWidth: 0
+    property int refObjectHeight: 0
 
 
 
@@ -75,6 +79,12 @@ Item {
     // JAVASCRIPT FUNCTION STARTS
 
 
+    // Set the current selected rectangle
+    function setRefObject(newRefObject, newRefObejectWidth, newRefObejectHeight){
+        refObject = newRefObject
+        refObjectWidth = newRefObejectWidth
+        refObjectHeight = newRefObejectHeight
+    }
 
     // New component on Dropped
     function onDropAreaDroppedNewComponent(x,y){
@@ -83,33 +93,91 @@ Item {
 
     // New component on Entered
     function onDropAreaDraggedNewComponent(x,y){
-        console.log("Dragging" , x, y)
+//        console.log("Dragging" , x, y, refObject)
+
+        let rectLeftX = x
+        let rectRightX = rectLeftX + refObjectWidth
+        let rectLeftY = y
+        let rectRightY = rectLeftY
+
+        let frontVal = {x: rectLeftX, y: rectLeftY}
+        let rearVal = {x: rectRightX, y: rectRightY}
+
+        frontRectangleCoordinates.set(refObject, frontVal)
+        rearRectangleCoordinates.set(refObject, rearVal)
+
+
+
+        // Adjust the lines connected to the object front
+        if(newConnectingLine.has(refObject)){
+            newConnectingLine.get(refObject).incomingRectangleFrontX = x
+            newConnectingLine.get(refObject).incomingRectangleFrontY = y + (refObjectHeight/2)
+
+            let frontVal = frontRectLineMaps.get(refObject)
+
+            let tmpRearRectCoordinatesX = rearRectangleCoordinates.get(frontVal).x
+            let tmpRearRectCoordinatesY = rearRectangleCoordinates.get(frontVal).y
+
+            let diffX = Math.abs(rectLeftX - tmpRearRectCoordinatesX) /2
+            let diffY = Math.abs(rectLeftY - tmpRearRectCoordinatesY) /2
+
+            newJoinBox.get(refObject).x = rectLeftX <= tmpRearRectCoordinatesX ? ( rectLeftX +diffX ) : ( tmpRearRectCoordinatesX + diffX )
+            newJoinBox.get(refObject).y = rectLeftY <= tmpRearRectCoordinatesY ? ( rectLeftY +diffY ) : ( tmpRearRectCoordinatesY + diffY )
+        }
+
+
+        // Adjust the lines connected to object rear
+        // Also adjust the join objects
+        if(rearRectLineMaps.has(refObject)){
+
+
+
+            rearRectLineMaps.get(refObject).forEach(function(value, index){
+
+                // Adjust the rear
+                newConnectingLine.get(value).refRectangleRearX = x + refObjectWidth
+                newConnectingLine.get(value).refRectangleRearY = y + (refObjectHeight/2)
+
+                let tmpFrontRectCoordinatesX = frontRectangleCoordinates.get(value).x
+                let tmpFrontRectCoordinatesY = frontRectangleCoordinates.get(value).y
+
+                let diffX = Math.abs(rectRightX - tmpFrontRectCoordinatesX) /2
+                let diffY = Math.abs(rectRightY - tmpFrontRectCoordinatesY) /2
+
+                newJoinBox.get(value).x = rectRightX <= tmpFrontRectCoordinatesX ? ( rectRightX +diffX ) : ( tmpFrontRectCoordinatesX + diffX )
+                newJoinBox.get(value).y = rectRightY <= tmpFrontRectCoordinatesY ? ( rectRightY +diffY ) : ( tmpFrontRectCoordinatesY + diffY )
+            })
+        }
+
+
+
+
     }
 
     function onDropAreaPositionChanged(drag){
 
         // Show light shaded line between the current rectangle
         // and the nearest rectangle
-        if(existingTables.length > 0){
+        if(existingTables.size > 0){
 
             // Current reference Coordinate
             var currentPoint = {x: drag.x, y: drag.y};
 
-            var nearestTable = nearestRectangle(rearRectangleCoordinates.slice(), currentPoint)
+            var nearestTable = nearestRectangle(rearRectangleCoordinates, currentPoint)
 
             // Get the coordinates for the nearest rectangle
-            var nearestRectangleCoordinates = rearRectangleCoordinates[nearestTable.tableId]
-            newConnectingLine[counter].incomingRectangleFrontX = drag.x
-            newConnectingLine[counter].incomingRectangleFrontY = drag.y
-            newConnectingLine[counter].refRectangleRearX = nearestRectangleCoordinates.x
-            newConnectingLine[counter].refRectangleRearY = nearestRectangleCoordinates.y
+            var nearestRectangleCoordinates = rearRectangleCoordinates.get(nearestTable.tableId)
+            newConnectingLine.get(counter).incomingRectangleFrontX = drag.x
+            newConnectingLine.get(counter).incomingRectangleFrontY = drag.y
+            newConnectingLine.get(counter).refRectangleRearX = nearestRectangleCoordinates.x
+            newConnectingLine.get(counter).refRectangleRearY = nearestRectangleCoordinates.y
         }
     }
 
     function onDropAreaExited(){
         highlightRect.color = "white"
 
-        newConnectingLine[counter].destroy()
+        newConnectingLine.get(counter).destroy()
     }
 
     function onDropAreaEntered(drag){
@@ -119,17 +187,17 @@ Item {
 
         // Show light shaded line between the current rectangle
         // and the nearest rectangle
-        if(existingTables.length > 0){
+        if(existingTables.size > 0){
 
             // Current reference Coordinate
             var currentPoint = {x: drag.x, y: drag.y};
-            var nearestTable = nearestRectangle(rearRectangleCoordinates.slice(), currentPoint)
+            var nearestTable = nearestRectangle(rearRectangleCoordinates, currentPoint)
 
             // Get the coordinates for the nearest rectangle
-            var nearestRectangleCoordinates = rearRectangleCoordinates[nearestTable.tableId]
+            var nearestRectangleCoordinates = rearRectangleCoordinates.get(nearestTable.tableId)
 
             // Add the line component on stage
-            newConnectingLine[counter] = dynamicConnectorLine.createObject(parent, {incomingRectangleFrontX:drag.x, incomingRectangleFrontY: drag.y, refRectangleRearX : nearestRectangleCoordinates.x, refRectangleRearY: nearestRectangleCoordinates.y, lineColor: "grey"})
+            newConnectingLine.set(counter, dynamicConnectorLine.createObject(parent, {incomingRectangleFrontX:drag.x, incomingRectangleFrontY: drag.y, refRectangleRearX : nearestRectangleCoordinates.x, refRectangleRearY: nearestRectangleCoordinates.y, lineColor: "grey", objectName : counter}))
 
         }
     }
@@ -143,10 +211,11 @@ Item {
 
         // Assign new variable to the created object
         // Use this variable to connect the signals and slots
-        rectangles[counter] =  dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName})
+        rectangles.set(counter, dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName, objectName : counter}))
 
-        rectangles[counter].dragged.connect(onDropAreaDraggedNewComponent)
-        rectangles[counter].dropped.connect(onDropAreaDroppedNewComponent)
+        rectangles.get(counter).dragged.connect(onDropAreaDraggedNewComponent)
+        rectangles.get(counter).dropped.connect(onDropAreaDroppedNewComponent)
+        rectangles.get(counter).refObjectCount.connect(setRefObject)
 
         // Created rectangle front & back coordinates
         var rectLeftX = drag.x
@@ -161,28 +230,29 @@ Item {
 
         // Get the nearest rectangle
         // And process the rest
-        if(existingTables.length > 0){
-            var nearestTable = nearestRectangle(rearRectangleCoordinates.slice(), currentPoint)
+        if(existingTables.size > 0){
+            var nearestTable = nearestRectangle(rearRectangleCoordinates, currentPoint)
 
             //Change the line color to black
-            newConnectingLine[counter].lineColor = "black"
+            newConnectingLine.get(counter).lineColor = "black"
 
             // Get the coordinates for the nearest rectangle
-            var nearestRectangleCoordinates = rearRectangleCoordinates[nearestTable.tableId]
+            var nearestRectangleCoordinates = rearRectangleCoordinates.get(nearestTable.tableId)
 
             // Update the front and rear line arrays
-            frontRectLineMaps[counter] = nearestTable.tableId
+            // Front will just have a single Connection
+            // While back can have multiple connections
+            frontRectLineMaps.set(counter, nearestTable.tableId)
 
-            if(typeof rearRectLineMaps[nearestTable.tableId] !== "undefined"){
-                tempRearRectLineMaps = rearRectLineMaps[nearestTable.tableId]
+            if(typeof rearRectLineMaps.get(nearestTable.tableId) !== "undefined"){
+                tempRearRectLineMaps = rearRectLineMaps.get(nearestTable.tableId)
             }
 
             tempRearRectLineMaps.push(counter)
-            rearRectLineMaps[nearestTable.tableId] = tempRearRectLineMaps
 
-            console.log("test", frontRectLineMaps, counter, nearestTable.tableId)
+            rearRectLineMaps.set(nearestTable.tableId, tempRearRectLineMaps)
 
-            // Reset temp array
+            // Reset temp array of the rear connections
             tempRearRectLineMaps = []
 
 
@@ -193,14 +263,14 @@ Item {
             var rectX = nearestRectangleCoordinates.x <= currentPoint.x ? nearestRectangleCoordinates.x + midLengthX : currentPoint.x + midLengthX
             var rectY = nearestRectangleCoordinates.y <= currentPoint.y ? nearestRectangleCoordinates.y + midLengthY : currentPoint.y + midLengthY
 
-            newJoinBox[counter] = dynamicJoinBox.createObject(parent, {x: rectX, y: rectY})
+            newJoinBox.set(counter, dynamicJoinBox.createObject(parent, {x: rectX, y: rectY, objectName : counter}))
 
         }
 
         // Push the coordinates in the array
-        frontRectangleCoordinates[counter] = {x: rectLeftX, y: rectLeftY}
-        rearRectangleCoordinates[counter] = {x: rectRightX, y: rectRightY}
-        existingTables[counter] = tableslist.tableName
+        frontRectangleCoordinates.set(counter, {x: rectLeftX, y: rectLeftY})
+        rearRectangleCoordinates.set(counter, {x: rectRightX, y: rectRightY})
+        existingTables.set(counter, tableslist.tableName)
 
 
     }
@@ -221,20 +291,30 @@ Item {
 
         // Find the distance b/w all rear of a rectangle
         // and the current point
-        if(tmpRearRectangleCoordinates.length > 0){
+        if(tmpRearRectangleCoordinates.size > 0){
 
-            tmpRearRectangleCoordinates.forEach(function(item, index){
+            //            tmpRearRectangleCoordinates.forEach(function(item, index){
 
-                // calculate the distance b/w coordinates
-                var newDistance = distance(currentPoint,item)
-                tmpArray.push({"index": newDistance, "coordinates" : item})
-            })
+            //                // calculate the distance b/w coordinates
+            //                var newDistance = distance(currentPoint,item)
+            //                tmpArray.push({"index": newDistance, "coordinates" : item})
+            //            })
+
+
+            const mapIterator = tmpRearRectangleCoordinates[Symbol.iterator]();
+
+            for (const item of mapIterator) {
+
+                //                 calculate the distance b/w coordinates
+                var newDistance = distance(currentPoint,item[1])
+                tmpArray.push({"index": item[0], "coordinates" : item[1], "distance" : newDistance})
+            }
         }
 
         // Sort all the coordinates based on distance
         // and find the nearest distance
-        const sortByDistance = tmpArray.sort((a,b) => a.index - b.index).map((arr, index, array) => arr.coordinates)
-        var nearestIndex = tmpRearRectangleCoordinates.indexOf(sortByDistance[0])
+        const sortByDistance = tmpArray.sort((a,b) => a.distance - b.distance).map((arr, distance, array) => arr.index)
+        var nearestIndex = sortByDistance[0]
 
         // return table name & id
         return {"tableName" :existingTables[nearestIndex], tableId : nearestIndex}

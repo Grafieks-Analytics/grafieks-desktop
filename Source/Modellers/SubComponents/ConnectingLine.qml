@@ -13,6 +13,9 @@ Item{
     property var incomingRectangleFrontY
     property var refRectangleRearX
     property var refRectangleRearY
+    property var objectName
+
+    objectName: objectName
 
     Shape {
         containsMode: Shape.FillContains
@@ -32,19 +35,6 @@ Item{
                 id: secondRectCoord;
                 x: incomingRectangleFrontX
                 y: incomingRectangleFrontY
-                onXChanged: {
-                    //                    invisibleCircle.x = shapePath.startX <= secondRectCoord.x ? shapePath.startX + Math.abs(shapePath.startX - secondRectCoord.x) / 2 : secondRectCoord.x + Math.abs(shapePath.startX - secondRectCoord.x) / 2
-                    //                    invisibleCircle.y = shapePath.startY <= secondRectCoord.y ? shapePath.startY + Math.abs(shapePath.startY - secondRectCoord.y) / 2 : secondRectCoord.y + Math.abs(shapePath.startY - secondRectCoord.y) / 2
-
-                    //                    console.log(shapePath.startX, shapePath.startY, secondRectCoord.x, secondRectCoord.y, invisibleCircle.x, invisibleCircle.y)
-                }
-            }
-
-            onStartXChanged: {
-                //                invisibleCircle.x = shapePath.startX <= secondRectCoord.x ? shapePath.startX + Math.abs(shapePath.startX - secondRectCoord.x) / 2 : secondRectCoord.x + Math.abs(shapePath.startX - secondRectCoord.x) / 2
-                //                invisibleCircle.y = shapePath.startY <= secondRectCoord.y ? shapePath.startY + Math.abs(shapePath.startY - secondRectCoord.y) / 2 : secondRectCoord.y + Math.abs(shapePath.startY - secondRectCoord.y) / 2
-
-                //                console.log(shapePath.startX, shapePath.startY, secondRectCoord.x, secondRectCoord.y)
             }
         }
     }

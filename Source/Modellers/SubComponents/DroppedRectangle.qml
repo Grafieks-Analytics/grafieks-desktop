@@ -14,10 +14,13 @@ Item{
     width: droppedRectangle.width
     height: droppedRectangle.height
     property string name: nameID.text
+    property var objectName
 
+    objectName: objectName
 
     signal dragged(double x, double y);
     signal dropped(double x, double y);
+    signal refObjectCount(int counter, int objectWidth, int objectHeight)
 
 
     Component.onCompleted: {
@@ -70,6 +73,7 @@ Item{
             onDoubleClicked: onRectangleToggle()
             onReleased: newItem.dropped(newItem.x, newItem.y)
             onPositionChanged: newItem.dragged(newItem.x, newItem.y)
+            onPressed: newItem.refObjectCount(parseInt(newItem.objectName), newItem.width, newItem.height)
         }
 
 
