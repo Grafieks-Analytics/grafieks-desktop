@@ -250,7 +250,6 @@ Popup {
             Text {
                 id: incrementalExtactSelectbtnText
                 text: qsTr("Select the column for incremental extract")
-                font.pixelSize: Constants.fontCategoryHeader
                 anchors.bottomMargin: 20
                 leftPadding: 30
             }
@@ -274,8 +273,6 @@ Popup {
                     anchors.left: parent.left
                     anchors.leftMargin: 30
                     width: parent.width
-                    font.pixelSize: Constants.fontCategoryHeader
-
                     onCurrentIndexChanged: {
 
                         console.log(currentText, currentIndex)
@@ -305,7 +302,6 @@ Popup {
 
             Text {
                 text: qsTr("Select schedule for data extraction")
-                font.pixelSize: Constants.fontCategoryHeader
                 anchors.bottomMargin: 20
                 leftPadding: 30
             }

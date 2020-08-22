@@ -29,8 +29,9 @@ QtObject {
     property color greenThemeColor : "#A1D99B"
     property color redThemeColor : "#FB8072"
     property color borderBlueColor : "#BCE0FD"
-    property color lightThemeColor : "#F5F5F5"
+//    property color lightThemeColor : "#F5F5F5"
     property color leftDarkColor: "#E2E2E4"
+    property color lightThemeColor: "#E2E2E4"
     property color buttonBorderColor : "#009B8F"
     property color buttonHoverColor : "#009B8F"
     property color whiteColor : "#FFFFFF"
@@ -39,6 +40,8 @@ QtObject {
     property color grafieksGreen: "#009B8F"
     property color grafieksGreenColor: "#009B8F"
     property color scrollBarColor: "#CCCCCC"
+
+    property color lightGrayTextColor: "#454545"
 
 
 

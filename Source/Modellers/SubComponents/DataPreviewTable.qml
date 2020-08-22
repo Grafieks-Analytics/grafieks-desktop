@@ -23,8 +23,6 @@ TableView {
     boundsBehavior : Flickable.StopAtBounds
 
 
-
-
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
@@ -84,12 +82,14 @@ TableView {
 
     delegate: Rectangle {
         border.color: Constants.darkThemeColor
+        border.width: 0.5
         Text {
             text: display
             anchors.fill: parent
             anchors.margins: 10
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
+            color: Constants.lightGrayTextColor
         }
     }
     Rectangle { // mask the headers
@@ -116,6 +116,7 @@ TableView {
                 width: dataPreviewResult.columnWidthProvider(modelData)
                 height: 30
                 border.color: Constants.darkThemeColor
+                color: Constants.lightThemeColor
                 border.width: 1
                 Text {
                     id: name
@@ -124,6 +125,7 @@ TableView {
                     height: parent.height
                     anchors.centerIn: parent
                     padding: 10
+                    font.bold: true
                     verticalAlignment: Text.AlignVCenter
                 }
 
