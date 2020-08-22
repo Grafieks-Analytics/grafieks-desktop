@@ -20,7 +20,7 @@ Item{
 
     signal dragged(double x, double y);
     signal dropped(double x, double y);
-    signal refObjectCount(int counter, int objectWidth, int objectHeight)
+    signal refObjectCount(int counter, int objectWidth)
 
 
     Component.onCompleted: {
