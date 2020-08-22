@@ -108,5 +108,7 @@
         <file>Images/icons/left_join_32.png</file>
         <file>Images/icons/outer_join_32.png</file>
         <file>Images/icons/right_join_32.png</file>
+        <file>Images/icons/database_32x36.png</file>
+        <file>Images/icons/table_32.png</file>
     </qresource>
 </RCC>

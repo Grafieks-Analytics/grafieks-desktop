@@ -21,7 +21,7 @@ Item {
         id: joinBoxRectangle
         width:35
         height:35
-        color: Constants.themeColor
+        color: "transparent"
 
         Image{
             id: iconId
@@ -40,24 +40,28 @@ Item {
                     text: "Inner Join"
                     display: AbstractButton.TextBesideIcon
                     icon.source: "../../../Images/icons/inner_join_32.png"
+                    icon.color: "transparent"
                     onTriggered: setJoinOption(Constants.innerJoin, icon.source)
                 }
                 MenuItem {
                     text: "Left Join"
                     display: AbstractButton.TextBesideIcon
                     icon.source: "../../../Images/icons/left_join_32.png"
+                    icon.color: "transparent"
                     onTriggered: setJoinOption(Constants.leftJoin, icon.source)
                 }
                 MenuItem {
                     text: "Right Join"
                     display: AbstractButton.TextBesideIcon
                     icon.source: "../../../Images/icons/right_join_32.png"
+                    icon.color: "transparent"
                     onTriggered: setJoinOption(Constants.rightJoin, icon.source)
                 }
                 MenuItem {
                     text: "Full Join"
                     display: AbstractButton.TextBesideIcon
                     icon.source: "../../../Images/icons/outer_join_32.png"
+                    icon.color: "transparent"
                     onTriggered: setJoinOption(Constants.fullJoin, icon.source)
                 }
             }

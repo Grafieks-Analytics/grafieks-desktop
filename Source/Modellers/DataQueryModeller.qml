@@ -221,12 +221,23 @@ Page {
             height: 30
             property bool caught: false
 
+            Image {
+                id: tableImg
+                height: 22
+                width: 22
+                source: "../../Images/icons/table_32.png"
+                anchors.left: parent.left
+                anchors.leftMargin: 15
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
             Text {
                 id: contactInfo
                 text: tableName
-                x: 20
-                font.pixelSize: 12
+                anchors.left: tableImg.right
+                anchors.leftMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: Constants.fontCategoryHeaderSmall
             }
             MouseArea {
                 id: mouseArea
@@ -332,7 +343,7 @@ Page {
 
             TabButton{
                 id: datamodeller_querymodeller
-                text: "Data Modeller"
+                text: "Data Modeler"
                 width:100
 
                 onClicked: onDataModellerClicked()
@@ -368,7 +379,7 @@ Page {
 
             TabButton{
                 id: queryModellerTab
-                text: "Query Modeller"
+                text: "Query Modeler"
                 width:100
 
                 onClicked: onQueryModellerClicked()
@@ -758,7 +769,7 @@ Page {
 
                     MouseArea{
                         anchors.fill: parent
-                        onClicked: ocusDataSourceNameField()
+                        onClicked: focusDataSourceNameField()
                     }
                 }
             }
@@ -860,12 +871,24 @@ Page {
                     height: 50
                     width: 200
 
-                    Text {
+                    Image {
+                        id: database
+                        height: 28
+                        width: 22
+                        source: "../../Images/icons/database_32x36.png"
+                        anchors.left: parent.left
+                        anchors.leftMargin: 15
                         anchors.verticalCenter: parent.verticalCenter
-                        x: 15
-                        font.pixelSize: 12
+                    }
+
+                    Text {
+                        anchors.left: database.right
+                        anchors.leftMargin: 10
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pixelSize: Constants.fontCategoryHeaderSmall
                         text: "Database Name 1"
                     }
+
 
                     Image {
                         id: drop_icon
