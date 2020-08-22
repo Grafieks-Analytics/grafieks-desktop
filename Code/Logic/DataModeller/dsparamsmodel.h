@@ -23,6 +23,7 @@ class DSParamsModel : public QObject
     Q_PROPERTY(QString extractColName READ extractColName WRITE setExtractColName NOTIFY extractColNameChanged)
     Q_PROPERTY(int schedulerId READ schedulerId WRITE setSchedulerId NOTIFY schedulerIdChanged)
     Q_PROPERTY(int displayRowsCount READ displayRowsCount WRITE setDisplayRowsCount NOTIFY displayRowsCountChanged)
+    Q_PROPERTY(QString joinType READ joinType WRITE setJoinType NOTIFY joinTypeChanged)
 
     // For Filters
     Q_PROPERTY(QString section READ section WRITE setSection NOTIFY sectionChanged)
@@ -44,6 +45,7 @@ class DSParamsModel : public QObject
     QString m_extractColName;
     int m_schedulerId;
     int m_displayRowsCount;
+    QString m_joinType;
 
     // For Filters
     QString m_section;
@@ -60,6 +62,8 @@ class DSParamsModel : public QObject
     QString m_mode;
 
 
+
+
 public:
     explicit DSParamsModel(QObject *parent = nullptr);
 
@@ -71,6 +75,7 @@ public:
     QString extractColName() const;
     int schedulerId() const;
     int displayRowsCount() const;
+    QString joinType() const;
 
     // For Filters
     QString section() const;
@@ -89,6 +94,8 @@ public:
 
 
 
+
+
 public slots:
     void setDsName(QString dsName);
     void setDsType(QString dsType);
@@ -96,6 +103,7 @@ public slots:
     void setExtractColName(QString extractColName);
     void setSchedulerId(int schedulerId);
     void setDisplayRowsCount(int displayRowsCount);
+    void setJoinType(QString joinType);
 
     // For Filters
     void setSection(QString section);
@@ -122,6 +130,7 @@ signals:
     void extractColNameChanged(QString extractColName);
     void schedulerIdChanged(int schedulerId);
     void displayRowsCountChanged(int displayRowsCount);
+    void joinTypeChanged(QString joinType);
 
     // For Filters
     void sectionChanged(QString section);

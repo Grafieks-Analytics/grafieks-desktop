@@ -1,4 +1,8 @@
 import QtQuick 2.15
+import QtQuick.Controls 2.15
+
+import com.grafieks.singleton.constants 1.0
+
 
 Item {
 
@@ -7,17 +11,55 @@ Item {
 
     objectName: objectName
 
+    // Set the join type
+    function setJoinOption(joinType, icon){
+        DSParamsModel.setJoinType(joinType)
+        iconId.source = icon
+    }
+
     Rectangle{
         id: joinBoxRectangle
-        width:20
-        height:20
-        color: "red"
-        radius: 10
+        width:35
+        height:35
+        color: Constants.themeColor
+
+        Image{
+            id: iconId
+            source: "../../../Images/icons/inner_join_32.png"
+        }
 
         MouseArea{
             anchors.fill: parent
             onClicked: {
-                console.log("join")
+                contextMenu.popup()
+            }
+
+            Menu {
+                id: contextMenu
+                MenuItem {
+                    text: "Inner Join"
+                    display: AbstractButton.TextBesideIcon
+                    icon.source: "../../../Images/icons/inner_join_32.png"
+                    onTriggered: setJoinOption(Constants.innerJoin, icon.source)
+                }
+                MenuItem {
+                    text: "Left Join"
+                    display: AbstractButton.TextBesideIcon
+                    icon.source: "../../../Images/icons/left_join_32.png"
+                    onTriggered: setJoinOption(Constants.leftJoin, icon.source)
+                }
+                MenuItem {
+                    text: "Right Join"
+                    display: AbstractButton.TextBesideIcon
+                    icon.source: "../../../Images/icons/right_join_32.png"
+                    onTriggered: setJoinOption(Constants.rightJoin, icon.source)
+                }
+                MenuItem {
+                    text: "Full Join"
+                    display: AbstractButton.TextBesideIcon
+                    icon.source: "../../../Images/icons/outer_join_32.png"
+                    onTriggered: setJoinOption(Constants.fullJoin, icon.source)
+                }
             }
         }
     }

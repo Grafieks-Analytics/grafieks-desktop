@@ -20,6 +20,7 @@ import com.grafieks.singleton.constants 1.0
 Item {
 
     id: dataModellerItem
+    property int rectangleHeight : 30
     property int counter : 0
     property real droppedX : 0
     property real droppedY : 0
@@ -41,7 +42,6 @@ Item {
 
     property int refObject: 0
     property int refObjectWidth: 0
-    property int refObjectHeight: 0
 
 
 
@@ -80,10 +80,9 @@ Item {
 
 
     // Set the current selected rectangle
-    function setRefObject(newRefObject, newRefObejectWidth, newRefObejectHeight){
+    function setRefObject(newRefObject, newRefObejectWidth){
         refObject = newRefObject
         refObjectWidth = newRefObejectWidth
-        refObjectHeight = newRefObejectHeight
     }
 
     // New component on Dropped
@@ -111,7 +110,7 @@ Item {
         // Adjust the lines connected to the object front
         if(newConnectingLine.has(refObject)){
             newConnectingLine.get(refObject).incomingRectangleFrontX = x
-            newConnectingLine.get(refObject).incomingRectangleFrontY = y + (refObjectHeight/2)
+            newConnectingLine.get(refObject).incomingRectangleFrontY = y + (rectangleHeight/2)
 
             let frontVal = frontRectLineMaps.get(refObject)
 
@@ -136,7 +135,7 @@ Item {
 
                 // Adjust the rear
                 newConnectingLine.get(value).refRectangleRearX = x + refObjectWidth
-                newConnectingLine.get(value).refRectangleRearY = y + (refObjectHeight/2)
+                newConnectingLine.get(value).refRectangleRearY = y + (rectangleHeight/2)
 
                 let tmpFrontRectCoordinatesX = frontRectangleCoordinates.get(value).x
                 let tmpFrontRectCoordinatesY = frontRectangleCoordinates.get(value).y
@@ -168,9 +167,9 @@ Item {
             // Get the coordinates for the nearest rectangle
             var nearestRectangleCoordinates = rearRectangleCoordinates.get(nearestTable.tableId)
             newConnectingLine.get(counter).incomingRectangleFrontX = drag.x
-            newConnectingLine.get(counter).incomingRectangleFrontY = drag.y
+            newConnectingLine.get(counter).incomingRectangleFrontY = drag.y + (rectangleHeight / 2)
             newConnectingLine.get(counter).refRectangleRearX = nearestRectangleCoordinates.x
-            newConnectingLine.get(counter).refRectangleRearY = nearestRectangleCoordinates.y
+            newConnectingLine.get(counter).refRectangleRearY = nearestRectangleCoordinates.y + (rectangleHeight / 2)
         }
     }
 
@@ -220,7 +219,7 @@ Item {
         // Created rectangle front & back coordinates
         var rectLeftX = drag.x
         var rectRightX = rectLeftX + tableslist.tableName.length * 10 + 30
-        var rectLeftY = drag.y + 15
+        var rectLeftY = drag.y
         var rectRightY = rectLeftY
 
 
