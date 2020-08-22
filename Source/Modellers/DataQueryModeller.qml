@@ -676,7 +676,7 @@ Page {
                 width:rectangle_querymodeller_right_col.width
 
                 background: Rectangle {
-                    color: Constants.darkThemeColor
+                    color: "transparent"
                 }
                 // Next button starts
 
@@ -695,10 +695,10 @@ Page {
 
                     onClicked: onPublishDataSourceClicked()
 
-                    background: Rectangle {
-                        color: tabPublishDashboard.hovered? Constants.darkThemeColor: Constants.themeColor
+                    background: Rectangle{
+                        color: Constants.grafieksLightGreenColor
+                        opacity: tabPublishDashboard.hovered ? 0.42 : 1
                     }
-
 
                 }
 
@@ -720,7 +720,8 @@ Page {
                         id:tabCreateDashboard_text
                     }
                     background: Rectangle {
-                        color: tabCreateDashboard.hovered? Constants.darkThemeColor: Constants.themeColor
+                        color: Constants.grafieksLightGreenColor
+                        opacity: tabCreateDashboard.hovered ? 0.42 : 1
                     }
 
                     onClicked: onCreateDashboardClicked()

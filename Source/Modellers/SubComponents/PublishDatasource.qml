@@ -24,7 +24,7 @@ Popup {
     height: 520
     modal: true
     visible: false
-    x: parent.width / 2 - 200
+    x: (parent.width - popup.width) / 2
     y: 100
     padding: 0
 

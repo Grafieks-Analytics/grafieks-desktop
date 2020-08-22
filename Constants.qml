@@ -39,6 +39,7 @@ QtObject {
     property color blackColor : "#000000"
     property color grafieksGreen: "#009B8F"
     property color grafieksGreenColor: "#009B8F"
+    property color grafieksLightGreenColor: "#0dd1c2"
     property color scrollBarColor: "#CCCCCC"
 
     property color lightGrayTextColor: "#454545"
