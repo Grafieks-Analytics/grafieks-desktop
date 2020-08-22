@@ -104,5 +104,9 @@
         <file>Images/icons/edit-32.png</file>
         <file>Images/icons/publish_20.png</file>
         <file>Images/icons/publish_32.png</file>
+        <file>Images/icons/inner_join_32.png</file>
+        <file>Images/icons/left_join_32.png</file>
+        <file>Images/icons/outer_join_32.png</file>
+        <file>Images/icons/right_join_32.png</file>
     </qresource>
 </RCC>

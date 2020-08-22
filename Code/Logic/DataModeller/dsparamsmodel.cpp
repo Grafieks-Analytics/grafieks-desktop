@@ -55,6 +55,11 @@ int DSParamsModel::displayRowsCount() const
     return m_displayRowsCount;
 }
 
+QString DSParamsModel::joinType() const
+{
+    return m_joinType;
+}
+
 QString DSParamsModel::section() const
 {
     return m_section;
@@ -167,6 +172,15 @@ void DSParamsModel::setDisplayRowsCount(int displayRowsCount)
 
     m_displayRowsCount = displayRowsCount;
     emit displayRowsCountChanged(m_displayRowsCount);
+}
+
+void DSParamsModel::setJoinType(QString joinType)
+{
+    if (m_joinType == joinType)
+        return;
+
+    m_joinType = joinType;
+    emit joinTypeChanged(m_joinType);
 }
 
 void DSParamsModel::setSection(QString section)

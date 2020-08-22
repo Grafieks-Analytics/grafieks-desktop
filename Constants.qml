@@ -65,6 +65,11 @@ QtObject {
     property string equalRelation: "="
     property string notEqualRelation: "!="
 
+    property string innerJoin: "INNER JOIN"
+    property string fullJoin: "FULL JOIN"
+    property string leftJoin: "LEFT JOIN"
+    property string rightJoin: "RIGHT JOIN"
+
 
     // FILTERS starts
     // Tab Bar Open Constants- Section
