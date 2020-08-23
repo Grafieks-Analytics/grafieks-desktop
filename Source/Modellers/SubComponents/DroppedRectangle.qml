@@ -14,6 +14,7 @@ Item{
     width: droppedRectangle.width
     height: droppedRectangle.height
     property string name: nameID.text
+    property bool alreadyJoined: true
     property var objectName
 
     objectName: objectName
@@ -22,6 +23,8 @@ Item{
     signal dropped(double x, double y);
     signal destroyComponents(int counter)
     signal refObjectCount(int counter, int objectWidth)
+
+
 
 
     Component.onCompleted: {
@@ -39,6 +42,20 @@ Item{
     }
 
 
+    function onDropAreaRectangleEntered(){
+        console.log("detected")
+    }
+
+    function onReleasedRectangle(parent){
+
+        // Released rectangle
+//        parent.Drag.drop();
+
+        // Call signal
+        parent.dropped(newItem.x, newItem.y)
+    }
+
+
     Rectangle {
 
         id: droppedRectangle
@@ -48,11 +65,12 @@ Item{
         height: 30
 
 
+        Drag.active: alreadyJoined ? false: mouseArea.drag.active
+
         Text{
             id: nameID
             text: text
             anchors.centerIn: parent
-
         }
 
         Image{
@@ -67,7 +85,6 @@ Item{
                 anchors.fill: parent
                 onClicked: destroyRectangle(parseInt(newItem.objectName))
             }
-
         }
 
         MouseArea {
@@ -76,13 +93,19 @@ Item{
             drag.target: newItem
 
             onDoubleClicked: onRectangleToggle()
-            onReleased: newItem.dropped(newItem.x, newItem.y)
+            onReleased: onReleasedRectangle(newItem)
             onPositionChanged: newItem.dragged(newItem.x, newItem.y)
             onPressed: newItem.refObjectCount(parseInt(newItem.objectName), newItem.width, newItem.height)
         }
 
 
-    }
 
+    }
+    DropArea{
+        id: dropAreaRectangle
+        anchors.fill: parent
+        onEntered: console.log("entered on rect") //onDropAreaRectangleEntered()
+        onDropped: console.log("dropped on rect") //onDropAreaRectangleEntered()
+    }
 }
 
