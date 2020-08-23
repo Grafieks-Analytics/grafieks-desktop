@@ -79,13 +79,16 @@ Item {
     // JAVASCRIPT FUNCTION STARTS
 
 
+    // SLOT
     // Set the current selected rectangle
     function setRefObject(newRefObject, newRefObejectWidth){
         refObject = newRefObject
         refObjectWidth = newRefObejectWidth
     }
 
+    // SLOT
     // Destroy Lines and JoinBox
+    // When destroying main rectangle
     function destroyComponents(refObject){
 
         newConnectingLine.get(refObject).destroy();
@@ -225,7 +228,7 @@ Item {
         rectangles.set(counter, dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName, objectName : counter}))
 
         rectangles.get(counter).dragged.connect(onDropAreaDraggedNewComponent)
-        rectangles.get(counter).dropped.connect(onDropAreaDroppedNewComponent)
+//        rectangles.get(counter).dropped.connect(onDropAreaDroppedNewComponent)
         rectangles.get(counter).destroyComponents.connect(destroyComponents)
         rectangles.get(counter).refObjectCount.connect(setRefObject)
 
