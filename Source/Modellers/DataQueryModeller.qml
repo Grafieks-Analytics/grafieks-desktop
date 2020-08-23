@@ -19,6 +19,7 @@ import com.grafieks.singleton.constants 1.0
 
 import "../MainSubComponents"
 import "./SubComponents"
+import "./SubComponents/MiniSubComponents"
 
 Page {
 
@@ -308,6 +309,8 @@ Page {
     ButtonGroup{
         id: memoryType
     }
+
+
 
     // SubComponents ends
     /***********************************************************************************************************************/
@@ -647,6 +650,21 @@ Page {
         anchors.topMargin: -5
     }
 
+
+//    Rectangle{
+//        id: joinPopup
+//        color: "red"
+//        anchors.right:parent.right
+//        anchors.bottom: parent.bottom
+//        height:parent.height
+//        width: 400
+//        z:10
+//        visible: false
+//    }
+
+    JoinPopup{
+        id: joinPopup
+    }
 
 
     // Righthand Panel starts

@@ -95,5 +95,7 @@
         <file>Source/Modellers/SubComponents/DroppedRectangle.qml</file>
         <file>Source/Modellers/SubComponents/ConnectingLine.qml</file>
         <file>Source/Modellers/SubComponents/JoinBox.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/JoinPopup.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/JoinDisplayTable.qml</file>
     </qresource>
 </RCC>

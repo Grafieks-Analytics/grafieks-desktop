@@ -110,5 +110,13 @@
         <file>Images/icons/right_join_32.png</file>
         <file>Images/icons/database_32x36.png</file>
         <file>Images/icons/table_32.png</file>
+        <file>Images/icons/Full Outer.png</file>
+        <file>Images/icons/Inner.png</file>
+        <file>Images/icons/Inner@4x.png</file>
+        <file>Images/icons/Join@4x.png</file>
+        <file>Images/icons/Left.png</file>
+        <file>Images/icons/Left@4x.png</file>
+        <file>Images/icons/Right.png</file>
+        <file>Images/icons/Right@4x.png</file>
     </qresource>
 </RCC>
