@@ -20,7 +20,7 @@ import com.grafieks.singleton.constants 1.0
 Item {
 
     id: dataModellerItem
-    property int rectangleHeight : 30
+    property int bufferHeight : 15 // distance between rectangle top to connectingLine point
     property int counter : 0
     property real droppedX : 0
     property real droppedY : 0
@@ -32,13 +32,13 @@ Item {
     property var dynamicConnectorLine : Qt.createComponent("ConnectingLine.qml")
     property var dynamicJoinBox : Qt.createComponent("JoinBox.qml")
 
-    property var newConnectingLine : new Map()
-    property var newJoinBox: new Map()
-    property var rectangles: new Map()
-    property var frontRectLineMaps:new Map()
-    property var rearRectLineMaps:new Map()
+    property var newConnectingLine : new Map() // connectingLine object
+    property var newJoinBox: new Map() // joinBox object btween 2 rectangles
+    property var rectangles: new Map() // rectangle object
+    property var frontRectLineMaps:new Map() // id of objects connected to rectangle front
+    property var rearRectLineMaps:new Map() // id of objects connected to rectangle back
 
-    property var tempRearRectLineMaps : []
+    property var tempRearRectLineMaps : [] // tmp id of objects connected to back of rectangle. used while processing
 
     property int refObject: 0
     property int refObjectWidth: 0
@@ -85,6 +85,18 @@ Item {
         refObjectWidth = newRefObejectWidth
     }
 
+    // Destroy Lines and JoinBox
+    function destroyComponents(refObject){
+
+        newConnectingLine.get(refObject).destroy();
+        newJoinBox.get(refObject).destroy();
+
+        rearRectLineMaps.get(refObject).forEach(function(value){
+            newConnectingLine.get(value).destroy();
+            newJoinBox.get(value).destroy();
+        })
+    }
+
     // New component on Dropped
     function onDropAreaDroppedNewComponent(x,y){
         console.log("Dropped" , x, y)
@@ -92,7 +104,7 @@ Item {
 
     // New component on Entered
     function onDropAreaDraggedNewComponent(x,y){
-//        console.log("Dragging" , x, y, refObject)
+        //        console.log("Dragging" , x, y, refObject)
 
         let rectLeftX = x
         let rectRightX = rectLeftX + refObjectWidth
@@ -110,7 +122,7 @@ Item {
         // Adjust the lines connected to the object front
         if(newConnectingLine.has(refObject)){
             newConnectingLine.get(refObject).incomingRectangleFrontX = x
-            newConnectingLine.get(refObject).incomingRectangleFrontY = y + (rectangleHeight/2)
+            newConnectingLine.get(refObject).incomingRectangleFrontY = y + bufferHeight
 
             let frontVal = frontRectLineMaps.get(refObject)
 
@@ -135,7 +147,7 @@ Item {
 
                 // Adjust the rear
                 newConnectingLine.get(value).refRectangleRearX = x + refObjectWidth
-                newConnectingLine.get(value).refRectangleRearY = y + (rectangleHeight/2)
+                newConnectingLine.get(value).refRectangleRearY = y + bufferHeight
 
                 let tmpFrontRectCoordinatesX = frontRectangleCoordinates.get(value).x
                 let tmpFrontRectCoordinatesY = frontRectangleCoordinates.get(value).y
@@ -167,9 +179,9 @@ Item {
             // Get the coordinates for the nearest rectangle
             var nearestRectangleCoordinates = rearRectangleCoordinates.get(nearestTable.tableId)
             newConnectingLine.get(counter).incomingRectangleFrontX = drag.x
-            newConnectingLine.get(counter).incomingRectangleFrontY = drag.y + (rectangleHeight / 2)
+            newConnectingLine.get(counter).incomingRectangleFrontY = drag.y + bufferHeight
             newConnectingLine.get(counter).refRectangleRearX = nearestRectangleCoordinates.x
-            newConnectingLine.get(counter).refRectangleRearY = nearestRectangleCoordinates.y + (rectangleHeight / 2)
+            newConnectingLine.get(counter).refRectangleRearY = nearestRectangleCoordinates.y + bufferHeight
         }
     }
 
@@ -214,6 +226,7 @@ Item {
 
         rectangles.get(counter).dragged.connect(onDropAreaDraggedNewComponent)
         rectangles.get(counter).dropped.connect(onDropAreaDroppedNewComponent)
+        rectangles.get(counter).destroyComponents.connect(destroyComponents)
         rectangles.get(counter).refObjectCount.connect(setRefObject)
 
         // Created rectangle front & back coordinates

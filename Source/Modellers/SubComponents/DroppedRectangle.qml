@@ -20,6 +20,7 @@ Item{
 
     signal dragged(double x, double y);
     signal dropped(double x, double y);
+    signal destroyComponents(int counter)
     signal refObjectCount(int counter, int objectWidth)
 
 
@@ -32,6 +33,10 @@ Item{
         droppedRectangle.height = droppedRectangle.height === 30 ? 60 : 30
     }
 
+    function destroyRectangle(counter){
+        newItem.destroy()
+        destroyComponents(counter)
+    }
 
 
     Rectangle {
@@ -60,7 +65,7 @@ Item{
 
             MouseArea{
                 anchors.fill: parent
-                onClicked: newItem.destroy()
+                onClicked: destroyRectangle(parseInt(newItem.objectName))
             }
 
         }
