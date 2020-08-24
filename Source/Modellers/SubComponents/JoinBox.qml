@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
 
+import "./MiniSubComponents"
 
 Item {
 
@@ -31,7 +32,8 @@ Item {
         MouseArea{
             anchors.fill: parent
             onClicked: {
-                contextMenu.popup()
+                joinPopup.visible = true
+//                contextMenu.popup()
             }
 
             Menu {
