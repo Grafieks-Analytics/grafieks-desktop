@@ -144,8 +144,6 @@ Item {
         // Also adjust the join objects
         if(rearRectLineMaps.has(refObject)){
 
-
-
             rearRectLineMaps.get(refObject).forEach(function(value, index){
 
                 // Adjust the rear
@@ -162,9 +160,6 @@ Item {
                 newJoinBox.get(value).y = rectRightY <= tmpFrontRectCoordinatesY ? ( rectRightY +diffY ) : ( tmpFrontRectCoordinatesY + diffY )
             })
         }
-
-
-
 
     }
 
@@ -196,7 +191,7 @@ Item {
 
     function onDropAreaEntered(drag){
 
-        highlightRect.color = "ivory"
+        highlightRect.color = Constants.dropAreaHighlightColor
         counter++
 
         // Show light shaded line between the current rectangle
@@ -308,19 +303,11 @@ Item {
         // and the current point
         if(tmpRearRectangleCoordinates.size > 0){
 
-            //            tmpRearRectangleCoordinates.forEach(function(item, index){
-
-            //                // calculate the distance b/w coordinates
-            //                var newDistance = distance(currentPoint,item)
-            //                tmpArray.push({"index": newDistance, "coordinates" : item})
-            //            })
-
-
             const mapIterator = tmpRearRectangleCoordinates[Symbol.iterator]();
 
             for (const item of mapIterator) {
 
-                //                 calculate the distance b/w coordinates
+                // calculate the distance b/w coordinates
                 var newDistance = distance(currentPoint,item[1])
                 tmpArray.push({"index": item[0], "coordinates" : item[1], "distance" : newDistance})
             }
