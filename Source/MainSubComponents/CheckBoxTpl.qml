@@ -13,18 +13,19 @@ import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
 
-Item {
+//Item {
 
-    id: check_item
-    height: control.implicitHeight
-    width: control.implicitWidth
+//    id: check_item
+//    height: control.implicitHeight
+//    width: control.implicitWidth
 
-    property alias checkbox_text: control.text
-    property alias checkbox_checked: control.checked
-    property alias parent_dimension: parent_border.implicitWidth
+
 
     CheckBox {
         id: control
+        property alias checkbox_text: control.text
+        property alias checkbox_checked: control.checked
+        property alias parent_dimension: parent_border.implicitWidth
 
         indicator: Rectangle {
             id: parent_border
@@ -53,4 +54,4 @@ Item {
         }
     }
 
-}
+//}

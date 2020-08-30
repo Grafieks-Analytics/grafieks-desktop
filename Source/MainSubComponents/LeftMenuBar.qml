@@ -32,12 +32,24 @@ Rectangle{
 
         // 1st Menu Item starts
 
-        Rectangle{
+        Button{
 
             id: dataDesignerRect
             height: leftMenuBar.height/2
             width: leftMenuBar.width - 1
-            color: Constants.leftDarkColor
+
+            background: Rectangle{
+                id: dataDesignerBtnBackground
+                color: Constants.leftDarkColor
+            }
+
+            onClicked: {
+
+                dataDesignerBtnBackground.color = Qt.binding(function() { return  Constants.leftDarkColor })
+                dashboardMenuBtnBackground.color = Qt.binding(function() { return dashboardDesignerRect.hovered ? Constants.leftDarkColor : Constants.themeColor })
+
+                stacklayout_home.currentIndex = 3
+            }
 
             Rectangle{
                 id: menu1
@@ -65,28 +77,6 @@ Rectangle{
             }
 
 
-            MouseArea{
-                anchors.fill: dataDesignerRect
-                hoverEnabled: true
-                onClicked: {
-                    selectedMenu = 0
-                    stacklayout_home.currentIndex = 3
-                    console.log('data designer is clicked')
-                    dataDesignerRect.color = Constants.leftDarkColor
-                    dashboardDesignerRect.color = Constants.themeColor
-
-                }
-
-                onEntered: {
-                    dataDesignerRect.color = Constants.leftDarkColor
-                }
-
-                onExited: {
-                    if(selectedMenu != 0){
-                        dataDesignerRect.color = Constants.themeColor
-                    }
-                }
-            }
 
         }
 
@@ -106,12 +96,23 @@ Rectangle{
 
         // 2nd Menu Item starts
 
-        Rectangle{
+        Button{
 
             id: dashboardDesignerRect
             height: leftMenuBar.height/2
             width: leftMenuBar.width - 1
-            color: Constants.themeColor
+
+            background: Rectangle{
+                id: dashboardMenuBtnBackground
+                color: dashboardDesignerRect.hovered ? Constants.leftDarkColor : Constants.themeColor
+            }
+
+            onClicked: {
+                dashboardMenuBtnBackground.color = Qt.binding(function() { return  Constants.leftDarkColor })
+                dataDesignerBtnBackground.color = Qt.binding(function() { return dataDesignerRect.hovered ? Constants.leftDarkColor : Constants.themeColor })
+
+                stacklayout_home.currentIndex = 7
+            }
 
             Rectangle{
 
@@ -140,33 +141,6 @@ Rectangle{
                 }
             }
 
-            MouseArea{
-                anchors.fill: dashboardDesignerRect
-                hoverEnabled: true
-                onClicked: {
-
-                    selectedMenu = 1
-                    stacklayout_home.currentIndex = 7
-                    console.log('dashboard designer is clicked')
-
-                    dataDesignerRect.color = Constants.themeColor
-                    dashboardDesignerRect.color = Constants.leftDarkColor
-
-                }
-
-                onEntered: {
-                    dashboardDesignerRect.color = Constants.leftDarkColor
-                }
-
-                onExited: {
-
-                    if(selectedMenu != 1){
-                        dashboardDesignerRect.color = Constants.themeColor
-                    }
-
-                }
-
-            }
         }
 
         // 2nd Menu Item ends

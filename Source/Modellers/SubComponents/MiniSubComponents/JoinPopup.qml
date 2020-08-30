@@ -146,124 +146,102 @@ Rectangle{
         Column{
             width: parent.width/4
             height: parent.height
-            spacing: 10
+            anchors.top: parent.top
+            anchors.topMargin: 5
 
-
-            CustomRadioButton{
-                anchors.horizontalCenter: parent
+            CustomRadioDelegate{
                 checked: true
-                parent_dimension: 16
+                width: 90
+                height: 90
+
                 ButtonGroup.group:joinBtnGroup
                 onCheckedChanged: {
                     onJoinChanged()
                 }
-
-                width: 80
-                height: 80
-
                 contentItem: Image {
                     source: "../../../../Images/icons/Inner.png"
-                    width: 60
-                    height: 60
+                    width: parent.width
+                    height: parent.width
                     anchors.left: parent.left
                     anchors.leftMargin: 22
                     verticalAlignment: Image.AlignVCenter
                 }
-
             }
 
         }
         Column{
             width: parent.width/4
             height: parent.height
-            spacing: 10
+            anchors.top: parent.top
+            anchors.topMargin: 5
 
+            CustomRadioDelegate{
+                width: 90
+                height: 90
 
-            CustomRadioButton{
-                anchors.horizontalCenter: parent
-                checked: false
-                parent_dimension: 16
                 ButtonGroup.group:joinBtnGroup
                 onCheckedChanged: {
                     onJoinChanged()
                 }
-
-                width: 80
-                height: 80
-
-                contentItem:
-                    Image {
+                contentItem: Image {
                     source: "../../../../Images/icons/Left.png"
-                    width: 60
-                    height: 60
+                    width: parent.width
+                    height: parent.width
                     anchors.left: parent.left
-                    anchors.leftMargin: 20
+                    anchors.leftMargin: 22
                     verticalAlignment: Image.AlignVCenter
                 }
-
             }
 
         }
         Column{
             width: parent.width/4
             height: parent.height
-            spacing: 10
+            anchors.top: parent.top
+            anchors.topMargin: 5
 
+            CustomRadioDelegate{
 
-            CustomRadioButton{
-                anchors.horizontalCenter: parent
-                checked: false
-                parent_dimension: 16
+                width: 90
+                height: 90
+
                 ButtonGroup.group:joinBtnGroup
                 onCheckedChanged: {
                     onJoinChanged()
                 }
-
-                width: 80
-                height: 80
-
-                contentItem:
-                    Image {
+                contentItem: Image {
                     source: "../../../../Images/icons/Right.png"
-                    width: 60
-                    height: 60
+                    width: parent.width
+                    height: parent.width
                     anchors.left: parent.left
-                    anchors.leftMargin: 20
+                    anchors.leftMargin: 22
                     verticalAlignment: Image.AlignVCenter
                 }
-
             }
 
         }
-
         Column{
             width: parent.width/4
             height: parent.height
-            spacing: 10
+            anchors.top: parent.top
+            anchors.topMargin: 5
 
+            CustomRadioDelegate{
+                width: 90
+                height: 90
 
-            CustomRadioButton{
-                anchors.horizontalCenter: parent
-                checked: false
-                parent_dimension: 16
                 ButtonGroup.group:joinBtnGroup
                 onCheckedChanged: {
                     onJoinChanged()
                 }
-
-                width: 80
-                height: 80
-
-                contentItem:
-                    Image {
+                contentItem: Image {
                     source: "../../../../Images/icons/Full Outer.png"
-                    width: 60
-                    height: 60
+                    width: parent.width
+                    height: parent.width
                     anchors.left: parent.left
-                    anchors.leftMargin: 20
+                    anchors.leftMargin: 22
                     verticalAlignment: Image.AlignVCenter
                 }
-
             }
 
         }

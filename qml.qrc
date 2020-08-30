@@ -97,5 +97,6 @@
         <file>Source/Modellers/SubComponents/JoinBox.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/JoinPopup.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/JoinDisplayTable.qml</file>
+        <file>Source/MainSubComponents/CustomRadioDelegate.qml</file>
     </qresource>
 </RCC>

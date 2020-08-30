@@ -12,12 +12,20 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
+import QtQuick.Dialogs 1.0
+
 import com.grafieks.singleton.constants 1.0
 
 Item{
     width: 150
     x: 60
     height: parent.height
+
+
+
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
 
 
     // Item 1 Starts
@@ -48,7 +56,10 @@ Item{
 
             subItems: [
 
-                ListElement { itemName: "Color" },
+                ListElement {
+                    itemName: "Color"
+                    onClick: "console.log('Heyy')"
+                },
                 ListElement { itemName: "Tool Tip" },
                 ListElement { itemName: "Size" },
                 ListElement { itemName: "Marker Shape" },
@@ -97,6 +108,124 @@ Item{
 
 
     }
+
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+    function onSubItemClicked(itemName){
+
+        switch(itemName){
+            case "Color":
+                console.log('Open Color Dialog')
+                colorDialog.open()
+                break;
+            case "Tool Tip":
+                console.log('Opening Tool Tip')
+                break;
+        }
+    }
+
+
+
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    ColorDialog {
+        id: colorDialog
+        title: "Please choose a color"
+        onAccepted: {
+            console.log("You chose: " + colorDialog.color)
+        }
+        onRejected: {
+            console.log("Canceled")
+        }
+    }
+
+
+    Component {
+        id: subItemColumnDelegate
+        Column {
+            property alias model : subItemRepeater.model
+            width: 150
+            Repeater {
+                id: subItemRepeater
+                delegate: Rectangle {
+                    height: 20
+                    width: 150
+
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        x: 30
+                        font.pixelSize: 12
+                        text: itemName
+                    }
+
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            onSubItemClicked(itemName);
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
+
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
+
 
     Component {
         id: categoryDelegate
@@ -151,34 +280,11 @@ Item{
                 property variant subItemModel : subItems
                 sourceComponent: collapsed ? null : subItemColumnDelegate
                 onStatusChanged: if (status == Loader.Ready) item.model = subItemModel
+
             }
         }
 
     }
-
-    Component {
-        id: subItemColumnDelegate
-        Column {
-            property alias model : subItemRepeater.model
-            width: 150
-            Repeater {
-                id: subItemRepeater
-                delegate: Rectangle {
-                    height: 20
-                    width: 150
-
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        x: 30
-                        font.pixelSize: 12
-                        text: itemName
-                    }
-                }
-            }
-        }
-
-    }
-
 
 
 
