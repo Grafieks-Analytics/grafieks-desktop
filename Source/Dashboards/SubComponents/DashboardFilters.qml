@@ -21,7 +21,8 @@ Item {
     width:200
     height:parent.height
 
-
+    anchors.left: parent.left
+    anchors.leftMargin: 3
 
     Rectangle {
         id: rectangle1

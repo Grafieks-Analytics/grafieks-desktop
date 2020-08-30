@@ -118,5 +118,6 @@
         <file>Images/icons/Left@4x.png</file>
         <file>Images/icons/Right.png</file>
         <file>Images/icons/Right@4x.png</file>
+        <file>Images/icons/table.png</file>
     </qresource>
 </RCC>
