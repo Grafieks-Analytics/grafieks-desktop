@@ -161,6 +161,17 @@ Rectangle{
     /***********************************************************************************************************************/
     // SubComponents Starts
 
+    // Mutually exclusive radio buttons
+
+    ButtonGroup {
+        id: btngrp
+    }
+
+
+    ButtonGroup{
+        id: selectTypeRadioBtnGrp
+    }
+
 
 
     // SubComponents Ends
@@ -173,10 +184,6 @@ Rectangle{
     /***********************************************************************************************************************/
     // Page Design Starts
 
-
-    ButtonGroup{
-        id: selectTypeRadioBtnGrp
-    }
 
 
     Rectangle{
@@ -291,12 +298,11 @@ Rectangle{
                 checkState: mainCheckBox.checkState
             }
 
-            CheckBox {
+            CheckBoxTpl {
                 id: mainCheckBox
                 checked: DSParamsModel.selectAll
                 text: "All"
-                indicator.width: 15
-                indicator.height: 15
+                parent_dimension: Constants.defaultCheckBoxDimension
                 checkState: childGroup.checkState
 
                 onCheckedChanged: {
@@ -316,12 +322,11 @@ Rectangle{
 
                 delegate: Column{
                     height:20
-                    CheckBox {
+                    CheckBoxTpl {
                         id: modelCheckBoxes
                         checked: true
                         text: modelData
-                        indicator.width: 15
-                        indicator.height: 15
+                        parent_dimension: Constants.defaultCheckBoxDimension
                         ButtonGroup.group: childGroup
 
                         onCheckedChanged: {
@@ -337,11 +342,7 @@ Rectangle{
         // Checkbox ListView
         // List Filters ends
 
-        // Mutually exclusive radio buttons
 
-        ButtonGroup {
-            id: btngrp
-        }
 
         // Radio button ListView
         // List Filters starts
@@ -407,11 +408,10 @@ Rectangle{
         Column{
             anchors.left: includeExcludeRow.left
 
-            CheckBox {
+            CheckBoxTpl {
                 checked: DSParamsModel.includeNull
                 text: qsTr("Include Null")
-                indicator.width: 15
-                indicator.height: 15
+                parent_dimension: Constants.defaultCheckBoxDimension
 
                 onCheckStateChanged: {
                     onIncludeCheckedClicked(checked)
@@ -423,11 +423,10 @@ Rectangle{
         Column{
             anchors.right: includeExcludeRow.right
             anchors.rightMargin: 30
-            CheckBox {
+            CheckBoxTpl {
                 checked: DSParamsModel.exclude
                 text: qsTr("Exclude")
-                indicator.width: 15
-                indicator.height: 15
+                parent_dimension: Constants.defaultCheckBoxDimension
 
                 onCheckStateChanged: {
                     onExcludeCheckedClicked(checked)

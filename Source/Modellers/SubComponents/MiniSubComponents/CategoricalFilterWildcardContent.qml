@@ -252,12 +252,11 @@ Rectangle{
             anchors.right: parent.right
             rightPadding: 30
 
-            CheckBox {
+            CheckBoxTpl {
 
                 checked: DSParamsModel.exclude
                 text: qsTr("Exclude")
-                indicator.width: 15
-                indicator.height: 15
+                parent_dimension: Constants.defaultCheckBoxDimension
 
                 onCheckStateChanged: {
                     onExcludeCheckedClicked(checked)

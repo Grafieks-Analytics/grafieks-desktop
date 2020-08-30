@@ -75,8 +75,10 @@ Item{
 
 
     function onEditorLineCountChanged(){
-
+        var lineCount = textEditQueryModeller.lineCount
+        console.log(lineCount);
         // Append line numbers on query modeller
+
         if(totalLineCount <= lineCount){
             var content = totalLineCount +1
             elementModel.insert(totalLineCount, { "content": content.toString()})
@@ -128,15 +130,34 @@ Item{
     /***********************************************************************************************************************/
     // Page Design Starts
 
+
+    Column{
+        id: queryNumbersColumn
+
+        anchors.top:parent.top
+        topPadding: 10
+        leftPadding: 10
+        height:parent.height  + 6
+
+        Repeater {
+            model: elementModel
+            Text {
+                text: content
+                anchors.horizontalCenter: Text.AlignHCenter
+            }
+        }
+
+    }
+
     ToolSeparator{
         id: toolSeperator1
         anchors.top:parent.top
         anchors.topMargin: - 6
         height:parent.height  + 6
-        anchors.left: left_menubar.right
-        anchors.leftMargin: 30
+        anchors.left: queryNumbersColumn.right
+        anchors.leftMargin: 10
         padding: 15
-        width: 30
+        width: 1
         contentItem: Rectangle {
             implicitWidth: parent.vertical ? 3 : 24
             implicitHeight: parent.vertical ? 24 : 3
@@ -144,19 +165,7 @@ Item{
         }
 
         background: Rectangle{
-            color: Constants.themeColor
-        }
-
-        Column{
-            id: queryNumbersColumn
-            topPadding: 17
-            leftPadding: 12
-
-            Repeater {
-                model: elementModel
-                Text { text: content;}
-            }
-
+            color: Constants.darkThemeColor
         }
 
     }
@@ -168,6 +177,8 @@ Item{
         width: parent.width - toolSeperator1.width
         wrapMode: TextEdit.WordWrap
         padding: 10
+        selectByMouse: true
+        selectByKeyboard: true
 
         Keys.onReturnPressed: {
 

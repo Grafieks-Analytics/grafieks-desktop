@@ -14,7 +14,6 @@ Rectangle{
     height: parent.height
     border.color: Constants.lightThemeColor
 
-
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
@@ -114,6 +113,7 @@ Rectangle{
             color: Constants.lightThemeColor
 
             border.color: Constants.darkThemeColor
+
             height: 30
             width: parent.width
             anchors.left: parent.left

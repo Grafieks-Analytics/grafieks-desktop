@@ -63,6 +63,9 @@ QtObject {
     property int defaultRadioDimension: 16
     property int defaultRadius: 4
 
+    // Checbox Size
+    property int defaultCheckBoxDimension: 16
+
     // SQL Relations
     property string likeRelation: "LIKE"
     property string notLikeRelation: "NOT LIKE"

@@ -472,8 +472,8 @@ Item{
                 }
 
                 background: Rectangle{
-                    color: playBtn.hovered ? "#009B8F" : "#0dd1c2"
-                    opacity: 0.42
+                    color: Constants.grafieksLightGreenColor
+                    opacity: playBtn.hovered ? 0.42 : 1
                 }
 
                 onClicked:{
