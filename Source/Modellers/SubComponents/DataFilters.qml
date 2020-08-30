@@ -53,6 +53,22 @@ Popup {
         id: datesModel
     }
 
+
+    // Listmodel for combobox
+    ListModel{
+        id: addComboDropdown
+
+        ListElement{
+            menuItem:"Add"
+        }
+        ListElement{
+            menuItem:"User Name"
+        }
+        ListElement{
+            menuItem:"First Name"
+        }
+    }
+
     // For Groups tab
 
     ListModel{
@@ -539,55 +555,70 @@ Popup {
 
     // Add button starts
 
-    CustomButton{
+//    CustomButton{
+//        id: add_btn_1
+//        anchors.top: tabbar1.bottom
+//        anchors.left: parent.left
+//        anchors.topMargin: 10
+//        anchors.leftMargin: 20
+//        textValue:"Add"
+//        onClicked: {
+//            optionsMenu1.open()
+//        }
+//    }
+
+
+    // Menu options on clicking 'Add button' starts
+
+//    Menu {
+//        id: optionsMenu1
+
+//        x: 20
+//        y: headerPopup.height + tabbar1.height + add_btn_1.height + 22
+//        width: 150
+
+//        ListView{
+//            id: addMenuList
+//            anchors.top: parent.top
+//            width: 150
+//            delegate:
+
+//                MenuItem {
+//                text: colName
+//                onTriggered: {
+
+//                    onAddMenuItemTriggered(colName, tableName);
+
+//                }
+//                onClicked: {
+
+//                    onAddMenuItemClicked()
+//                }
+//            }
+//        }
+//    }
+
+    // Menu options on clicking 'Add button' ends
+
+    CustomComboBox{
         id: add_btn_1
         anchors.top: tabbar1.bottom
         anchors.left: parent.left
         anchors.topMargin: 10
         anchors.leftMargin: 20
-        textValue:"Add"
-        onClicked: {
-            optionsMenu1.open()
+
+        currentIndex: 0
+        model: addComboDropdown
+        textRole: "menuItem"
+
+        onCurrentIndexChanged: {
+
+//            onAddMenuItemTriggered(colName, tableName);
+
         }
     }
 
     // Add button ends
-
-    // Menu options on clicking 'Add button' starts
-
-
-
-
-
-    Menu {
-        id: optionsMenu1
-
-        x: 20
-        y: headerPopup.height + tabbar1.height + add_btn_1.height + 22
-        width: 150
-
-        ListView{
-            id: addMenuList
-            anchors.top: parent.top
-            width: 150
-            delegate:
-
-                MenuItem {
-                text: colName
-                onTriggered: {
-
-                    onAddMenuItemTriggered(colName, tableName);
-
-                }
-                onClicked: {
-
-                    onAddMenuItemClicked()
-                }
-            }
-        }
-    }
-
-    // Menu options on clicking 'Add button' ends
 
     // Center Panel Starts
 

@@ -289,13 +289,6 @@ Rectangle{
 
                 width: parent.width/2
 
-                //                SelectDropdown{
-                //                    id: wildcardDropdown
-                //                    width: parent.width*2/3
-                //                    textValue:"Containing"
-                //                    list: selectDropdown
-                //                }
-
                 CustomComboBox{
                     id: wildcardDropdown
                     currentIndex: 0

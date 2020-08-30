@@ -263,7 +263,7 @@ Rectangle{
         width: parent.width
 
         anchors.left: parent.left
-        anchors.leftMargin: 4
+        anchors.leftMargin: 12
 
         CustomButton{
 
