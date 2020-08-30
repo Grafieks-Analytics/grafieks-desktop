@@ -66,6 +66,10 @@ Rectangle{
         joinPopup.visible = false
     }
 
+    function onDragJoinPopup(mouse){
+        console.log('Write here to drag the panel')
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -295,6 +299,24 @@ Rectangle{
 
                 JoinDisplayTable{
                     id: table1
+
+                    Rectangle{
+                        width: 1
+                        height: parent.height
+                        anchors.left: parent.left
+                        color: Constants.darkThemeColor
+
+                        MouseArea{
+                            anchors.fill: parent
+                            cursorShape: Qt.SizeHorCursor
+                            width: parent.width
+
+                            onPositionChanged: {
+                                onDragJoinPopup(mouse)
+                            }
+
+                        }
+                    }
                 }
 
 

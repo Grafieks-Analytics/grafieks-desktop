@@ -12,7 +12,7 @@ Rectangle{
 
     width: parent.width
     height: parent.height
-    border.color: Constants.lightThemeColor
+
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS

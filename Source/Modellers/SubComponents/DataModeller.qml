@@ -377,6 +377,7 @@ Item {
         id: button_options_group
         x:20
         y:10
+        z: 10
 
         Button{
             id: align_btn
