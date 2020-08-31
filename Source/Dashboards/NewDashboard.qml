@@ -23,15 +23,90 @@ Page {
     id: new_dashboard_page
     property int menu_width: 60
 
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
+
+    function openDashboardFilters(){
+
+        if(column_filter_newdashboard.visible === true){
+            column_filter_newdashboard.visible = false
+
+            // hide other panels
+            column_newdashboard.visible = false
+        }
+        else{
+            column_filter_newdashboard.visible = true
+
+            // hide other panels
+            column_newdashboard.visible = false
+        }
+
+    }
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
+
     LeftMenuBar{
         id: left_menubar
     }
 
     Rectangle{
         id: submenu
-        height: 23
-        width: parent.width - menu_width
-        x: menu_width
+        height: 22.5
+        width: parent.width - menu_width + 11
+        x: menu_width - 11
 
 
         TabBar{
@@ -105,7 +180,7 @@ Page {
             Button{
                 id: report_btn
                 width: 100
-                height: 30
+                height: 28
 
                 Image{
                     id: report_btn_icon
@@ -123,73 +198,85 @@ Page {
                     text: "Report"
                     anchors.top: report_btn.top
                     anchors.left: report_btn_icon.right
-                    anchors.topMargin: 8
+                    anchors.verticalCenter: Text.AlignVCenter
+                    anchors.topMargin: 6
                     anchors.leftMargin: 5
-
                 }
 
 
                 background: Rectangle {
                     id: report_btn_background
-                    color: report_btn.pressed? Constants.darkThemeColor: Constants.themeColor
-
+                    color: report_btn.hovered? Constants.darkThemeColor: Constants.whiteColor
                 }
 
             }
 
+
+            // Filter button starts
+
             Button{
                 id: filter_btn
                 width: 100
-                height: 30
+                height: 28
+                anchors.leftMargin: 10
 
                 Image{
-                    id: filter_newdashboard
+                    id: filter_querymodeller
                     source: "../../Images/icons/Plus_32.png"
-                    anchors.top: filter_btn.top
-                    anchors.left: filter_btn.left
+                    anchors.topMargin: 4
                     anchors.leftMargin: 10
-                    anchors.topMargin: 2
-                    height:25
-                    width: 25
+                    anchors.left: filter_btn.left
+                    anchors.top: filter_btn.top
+                    height: 20
+                    width: 20
+
                 }
 
                 Text{
-                    text: "Filter [0]"
+                    id: filterText
+                    text: "Filter"
                     anchors.top: filter_btn.top
-                    anchors.left: filter_newdashboard.right
-                    anchors.topMargin: 8
+                    anchors.left: filter_querymodeller.right
+                    anchors.topMargin: 6
                     anchors.leftMargin: 5
-
                 }
 
-                onClicked: {
-
-                    if(column_filter_newdashboard.visible === true){
-                        column_filter_newdashboard.visible = false
-
-                        // hide other panels
-                        column_newdashboard.visible = false
-                    }
-                    else{
-                        column_filter_newdashboard.visible = true
-
-                        // hide other panels
-                        column_newdashboard.visible = false
-                    }
-
+                Text {
+                    id: filterLeftSquareBracket
+                    anchors.left: filterText.right
+                    anchors.top: filter_btn.top
+                    anchors.topMargin: 6
+                    anchors.leftMargin: 2
+                    text: qsTr("[")
+                    color: Constants.grafieksGreen
+                }
+                Text {
+                    id: filterNumber
+                    anchors.left: filterLeftSquareBracket.right
+                    anchors.top: filter_btn.top
+                    anchors.topMargin: 6
+                    text: qsTr("0")
+                }
+                Text {
+                    id: filterRightSquareBracket
+                    anchors.left: filterNumber.right
+                    anchors.top: filter_btn.top
+                    anchors.topMargin: 6
+                    text: qsTr("]")
+                    color: Constants.grafieksGreen
                 }
 
-                background: Rectangle {
-                    id: filter_btn_background
-                    color: filter_btn.pressed? Constants.darkThemeColor: Constants.themeColor
-
+                background: Rectangle{
+                    color: filter_btn.hovered ? Constants.darkThemeColor : "white"
                 }
+
+                onClicked: openDashboardFilters()
             }
 
 
             Button{
                 id: customize_btn
-                height: 30
+                height: 28
                 width: 100
 
                 Text{
@@ -267,23 +354,6 @@ Page {
 
     // Right Dashboard Customize Starts
 
-    ToolSeparator{
-        id: tool_sep_chartFilters
-        anchors.left: column_newdashboard.left
-        anchors.top: parent.top
-        anchors.leftMargin: -8
-        anchors.topMargin: -3
-        height:parent.height
-
-        contentItem: Rectangle {
-            implicitWidth: parent.vertical ? 1 : 24
-            implicitHeight: parent.vertical ? 24 : 1
-            color: Constants.darkThemeColor
-        }
-
-
-    }
-
     Column{
         id: column_newdashboard
 
@@ -291,18 +361,32 @@ Page {
         width: 200
         anchors.right:parent.right
         anchors.top: submenu.bottom
-        anchors.topMargin: 10
+        anchors.topMargin: 4
         spacing: 50
+
+        visible: false
+
+
+        ToolSeparator{
+
+            anchors.left: column_newdashboard.left
+            anchors.top: parent.top
+            anchors.leftMargin: -8
+            height:parent.height
+
+            contentItem: Rectangle {
+                implicitWidth: parent.vertical ? 1 : 24
+                implicitHeight: parent.vertical ? 24 : 1
+                color: Constants.darkThemeColor
+            }
+        }
+
 
         Rectangle{
             id: rectangle_newdashboard_right_col
             color:Constants.themeColor
             width:column_newdashboard.width
             height:column_newdashboard.height
-
-
-
-
 
             Rectangle{
                 id: rectangle_newdashboard_right_col1
@@ -317,8 +401,6 @@ Page {
                     anchors.leftMargin: 10
                 }
             }
-
-
 
             // Widget Drawer starts
 
@@ -345,13 +427,32 @@ Page {
         width: 200
         anchors.right:parent.right
         anchors.top: submenu.bottom
-        anchors.topMargin: 10
+        anchors.topMargin: 4
         spacing: 50
         visible: false
+
+        ToolSeparator{
+            anchors.top: parent.top
+            anchors.left: column_newdashboard.left
+//            anchors.leftMargin: 20
+
+            height:parent.height
+
+            contentItem: Rectangle {
+                implicitWidth: parent.vertical ? 1 : 24
+                implicitHeight: parent.vertical ? 24 : 1
+                color: Constants.darkThemeColor
+            }
+        }
+
 
         DashboardFilters{}
     }
 
     // Right Filter Ends
+
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
 
 }

@@ -578,6 +578,7 @@ Page {
         id: dataQueryModellerStackview
 
         anchors.top: toolsep1.bottom
+//        anchors.topMargin: 2
         anchors.left:left_menubar.right
         height:queryModellerPage.height - 300
         width: queryModellerPage.width - menu_width - column_querymodeller.width
@@ -649,18 +650,6 @@ Page {
         anchors.rightMargin: 194
         anchors.topMargin: -5
     }
-
-
-//    Rectangle{
-//        id: joinPopup
-//        color: "red"
-//        anchors.right:parent.right
-//        anchors.bottom: parent.bottom
-//        height:parent.height
-//        width: 400
-//        z:10
-//        visible: false
-//    }
 
     JoinPopup{
         id: joinPopup
@@ -771,6 +760,8 @@ Page {
                     anchors.left: rectangle_querymodeller_right_col1.left
                     anchors.leftMargin: 10
                     readOnly: true
+                    selectByKeyboard: true
+                    selectByMouse: true
 
                     // Set the text
                     onTextChanged: setDataSourceName()
