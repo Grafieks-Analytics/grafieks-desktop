@@ -16,8 +16,11 @@ import com.grafieks.singleton.constants 1.0
 
 Item{
 
+    id: listViewElem
     width:200
     height: parent.height
+
+    property string itemName : ""
 
 
     // Item 1 Starts
@@ -166,7 +169,7 @@ Item{
                         drag.onActiveChanged: {
 
                             if (mouseArea.drag.active) {
-                                subItemRepeater.itemName = itemName
+                                listViewElem.itemName = itemName
                             }
                             dragRect.Drag.drop();
                         }

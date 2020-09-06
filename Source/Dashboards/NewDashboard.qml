@@ -411,7 +411,7 @@ Page {
             // Widget Drawer starts
 
             DashboardCustomize{
-                id: dashboard_customize_newdashboard
+                id: listViewElem
                 anchors.top: rectangle_newdashboard_right_col1.bottom
                 anchors.left: parent.left
             }

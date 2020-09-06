@@ -11,7 +11,7 @@ Page{
         height: 400
 
         Test3{
-//            id: listView
+            id: listView
         }
 
         Test{}
