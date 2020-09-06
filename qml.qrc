@@ -100,5 +100,6 @@
         <file>Source/MainSubComponents/CustomRadioDelegate.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/DroppedText.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/DroppedImage.qml</file>
+        <file>Source/Others/Test3.qml</file>
     </qresource>
 </RCC>

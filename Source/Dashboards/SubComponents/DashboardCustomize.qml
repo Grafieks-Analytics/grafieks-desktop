@@ -142,6 +142,8 @@ Item{
             width: 200
             Repeater {
                 id: subItemRepeater
+                property string itemName : ""
+
                 delegate: Rectangle {
                     id: dragRect
                     height: 20
@@ -164,11 +166,6 @@ Item{
                         drag.onActiveChanged: {
 
                             if (mouseArea.drag.active) {
-
-                                console.log(itemName)
-                                console.log(index)
-
-                                subItemRepeater.dragItemIndex = index;
                                 subItemRepeater.itemName = itemName
                             }
                             dragRect.Drag.drop();

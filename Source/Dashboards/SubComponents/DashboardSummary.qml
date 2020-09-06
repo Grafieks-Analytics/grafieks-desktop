@@ -69,16 +69,16 @@ Rectangle {
         dashboardArea.color = Constants.dropHighlightColor
 
         var currentPoint = {x: drag.x, y: drag.y};
-        console.log(currentPoint)
-        console.log(dropArea.keys)
+        console.log("Entered", currentPoint.x, itemName)
+//        console.log(dropArea.keys)
 
 
 
     }
     function onDropAreaDropped(drag,itemName){
         var currentPoint = {x: drag.x, y: drag.y};
-        console.log(currentPoint.x)
-        console.log(currentPoint.y)
+//        console.log(currentPoint.x)
+//        console.log(currentPoint.y)
 
 //        console.log(subItemRepeater);
 
@@ -90,10 +90,10 @@ Rectangle {
 
     }
     function onDropAreaPositionChanged(drag){
-        console.log(drag);
+//        console.log(drag);
     }
     function onDropAreaExited(){
-        console.log('Exit');
+//        console.log('Exit');
     }
 
 
