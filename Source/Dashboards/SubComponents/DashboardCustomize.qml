@@ -15,6 +15,7 @@ import QtQuick.Layouts 1.3
 import com.grafieks.singleton.constants 1.0
 
 Item{
+
     width:200
     height: parent.height
 
@@ -142,9 +143,9 @@ Item{
             Repeater {
                 id: subItemRepeater
                 delegate: Rectangle {
+                    id: dragRect
                     height: 20
                     width: 200
-
 
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
@@ -152,16 +153,54 @@ Item{
                         font.pixelSize: 12
                         text: itemName
                     }
+
+                    MouseArea {
+                        id: mouseArea
+                        anchors.fill: parent
+                        drag.target: dragRect
+                        drag.minimumX: -( new_dashboard_page.width - parent.width - leftMenuBar.width)
+                        drag.maximumX: 0
+
+                        drag.onActiveChanged: {
+
+                            if (mouseArea.drag.active) {
+
+                                console.log(itemName)
+                                console.log(index)
+
+                                subItemRepeater.dragItemIndex = index;
+                                subItemRepeater.itemName = itemName
+                            }
+                            dragRect.Drag.drop();
+                        }
+                    }
+
+                    states: [
+                        State {
+                            when: dragRect.Drag.active
+                            ParentChange {
+                                target: dragRect
+                                parent: subItemRepeater
+                            }
+
+                            AnchorChanges {
+                                target: dragRect
+                                anchors.horizontalCenter: undefined
+                                anchors.verticalCenter: undefined
+                            }
+                        }
+                    ]
+
+                    Drag.active: mouseArea.drag.active
+                    Drag.hotSpot.x: - dragRect.width / 2
+                    Drag.hotSpot.y: - dragRect.height / 2
+                    Drag.keys: ['1','2']
+
                 }
             }
         }
 
     }
-
-
-
-
-
 
 }
 

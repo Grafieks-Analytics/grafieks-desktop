@@ -98,5 +98,7 @@
         <file>Source/Modellers/SubComponents/MiniSubComponents/JoinPopup.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/JoinDisplayTable.qml</file>
         <file>Source/MainSubComponents/CustomRadioDelegate.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/DroppedText.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/DroppedImage.qml</file>
     </qresource>
 </RCC>

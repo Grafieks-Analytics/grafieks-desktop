@@ -97,7 +97,7 @@ Popup {
         PublishDatasourceModel.publishDatasource(dsName, description, uploadImage, sourceType, schedulerId, isFullExtract, extractColumnName)
 
         closePopup()
-        stacklayout_home.currentIndex = 6
+        stacklayout_home.currentIndex = 7
     }
 
     // JAVASCRIPT FUNCTION ENDS

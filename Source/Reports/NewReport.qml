@@ -240,7 +240,7 @@ Page {
                     text:"Add"
 
                     onClicked: {
-                        stacklayout_home.currentIndex = 7
+                        stacklayout_home.currentIndex = 6
                     }
 
 

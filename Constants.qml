@@ -42,6 +42,8 @@ QtObject {
     property color grafieksLightGreenColor: "#0dd1c2"
     property color scrollBarColor: "#CCCCCC"
 
+    property color dropHighlightColor: "ivory"
+
     property color lightGrayTextColor: "#454545"
     property color dropAreaHighlightColor: "ivory"
 

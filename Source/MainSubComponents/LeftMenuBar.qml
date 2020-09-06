@@ -111,7 +111,7 @@ Rectangle{
                 dashboardMenuBtnBackground.color = Qt.binding(function() { return  Constants.leftDarkColor })
                 dataDesignerBtnBackground.color = Qt.binding(function() { return dataDesignerRect.hovered ? Constants.leftDarkColor : Constants.themeColor })
 
-                stacklayout_home.currentIndex = 7
+                stacklayout_home.currentIndex = 6
             }
 
             Rectangle{
