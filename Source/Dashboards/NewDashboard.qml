@@ -76,6 +76,21 @@ Page {
 
     }
 
+    function onCustomizeBtnClicked(){
+        if(column_newdashboard.visible === true){
+            column_newdashboard.visible = false
+
+            // hide other panels
+            column_filter_newdashboard.visible = false
+        }
+        else{
+            column_newdashboard.visible = true
+
+            // hide other panels
+            column_filter_newdashboard.visible = false
+        }
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -152,8 +167,6 @@ Page {
                 anchors.left: new_dashboard_btn.left
                 anchors.leftMargin: 13
             }
-
-
 
             background: Rectangle {
                 id: new_dashboard_btn_background
@@ -235,7 +248,7 @@ Page {
                 Text{
                     id: filterText
                     text: "Filter"
-                    anchors.top: filter_btn.top
+                    anchors.top: parent.top
                     anchors.left: filter_querymodeller.right
                     anchors.topMargin: 6
                     anchors.leftMargin: 5
@@ -280,32 +293,22 @@ Page {
                 width: 100
 
                 Text{
+                    id: customizeText
                     text: "Customize"
-                    anchors.top: customize_btn.top
-                    anchors.topMargin: 8
-                    anchors.left: customize_btn.left
-                    anchors.leftMargin: 20
+                    anchors.top: parent.top
+                    anchors.topMargin: 6
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
                 }
 
                 onClicked: {
-                    if(column_newdashboard.visible === true){
-                        column_newdashboard.visible = false
-
-                        // hide other panels
-                        column_filter_newdashboard.visible = false
-                    }
-                    else{
-                        column_newdashboard.visible = true
-
-                        // hide other panels
-                        column_filter_newdashboard.visible = false
-                    }
+                    onCustomizeBtnClicked()
                 }
-                background: Rectangle {
-                    id: customize_btn_background
-                    color: customize_btn.pressed? Constants.darkThemeColor: Constants.themeColor
 
+                background: Rectangle{
+                    color: customize_btn.hovered ? Constants.darkThemeColor : "white"
                 }
+
             }
 
 
@@ -314,20 +317,21 @@ Page {
 
     }
 
+
     ToolSeparator{
         id: toolsep1
         orientation: Qt.Horizontal
-        width: parent.width - menu_width
+        width: parent.width - left_menubar.width
         anchors.top: submenu.bottom
-        anchors.topMargin: 0
+        anchors.left: left_menubar.right
         anchors.horizontalCenter: submenu.horizontalCenter
-        padding: 0
 
         contentItem: Rectangle {
             implicitWidth: parent.vertical ? 1 : 24
             implicitHeight: parent.vertical ? 24 : 1
-            color: Constants.themeColor
+            color: Constants.darkThemeColor
         }
+
     }
 
     // Center Panel Starts
@@ -387,6 +391,8 @@ Page {
             color:Constants.themeColor
             width:column_newdashboard.width
             height:column_newdashboard.height
+            anchors.top: parent.top
+            anchors.topMargin: 10
 
             Rectangle{
                 id: rectangle_newdashboard_right_col1

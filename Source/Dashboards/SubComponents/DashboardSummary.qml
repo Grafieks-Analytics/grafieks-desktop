@@ -10,12 +10,115 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
 
-Item {
 
-    width: 250
+Rectangle {
+
+    id: dashboardArea
+
+    height: parent.height
+    width: parent.width
+
+    property var rectangles: new Map() // rectangle object
+    property var dynamicText : Qt.createComponent("./MiniSubComponents/DroppedText.qml");
+    property var dynamicImageBox : Qt.createComponent("./MiniSubComponents/DroppedImage.qml");
+
+    property int textCounter: 1
+
+    property string item: 'test'
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+    function onDropAreaEntered(drag,itemName){
+
+
+        dashboardArea.color = Constants.dropHighlightColor
+
+        var currentPoint = {x: drag.x, y: drag.y};
+        console.log(currentPoint)
+        console.log(dropArea.keys)
+
+
+
+    }
+    function onDropAreaDropped(drag,itemName){
+        var currentPoint = {x: drag.x, y: drag.y};
+        console.log(currentPoint.x)
+        console.log(currentPoint.y)
+
+//        console.log(subItemRepeater);
+
+        dashboardArea.color = "transparent"
+
+        rectangles.set(textCounter, dynamicImageBox.createObject(parent, {x:drag.x, y: drag.y, name: 'Select an Image', objectName : textCounter}))
+        textCounter++;
+
+
+    }
+    function onDropAreaPositionChanged(drag){
+        console.log(drag);
+    }
+    function onDropAreaExited(){
+        console.log('Exit');
+    }
+
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
+
 
     Rectangle {
         id: rectangle
@@ -68,6 +171,7 @@ Item {
             y: 10
             source: "../../../Images/icons/charts/Map2_30.png"
         }
+
 
         Text {
             id: text3
@@ -125,5 +229,23 @@ Item {
             font.pixelSize: 12
         }
     }
+
+    DropArea {
+        id: dropArea
+
+        property alias dropProxy: dropArea
+
+        anchors.fill: parent
+        onEntered: onDropAreaEntered(drag, dropArea.itemName)
+        onExited: onDropAreaExited()
+        onPositionChanged: onDropAreaPositionChanged(drag)
+        onDropped: onDropAreaDropped(drag,dropArea.itemName)
+        keys: [dragItemIndex,itemName]
+    }
+
+
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
 
 }
