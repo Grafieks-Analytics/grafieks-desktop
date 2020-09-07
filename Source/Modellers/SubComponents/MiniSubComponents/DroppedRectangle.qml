@@ -75,7 +75,7 @@ Item{
 
         Image{
             id: removeIcon
-            source : "../../../Images/icons/remove.png"
+            source : "../../../../Images/icons/remove.png"
             anchors.right: droppedRectangle.right
             anchors.rightMargin: 10
             anchors.verticalCenter: droppedRectangle.verticalCenter

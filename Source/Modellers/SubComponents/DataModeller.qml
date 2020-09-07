@@ -12,6 +12,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Shapes 1.15
 
+
 import com.grafieks.singleton.constants 1.0
 
 
@@ -26,9 +27,9 @@ Item {
     property var rearRectangleCoordinates : new Map()
     property var existingTables : new Map()
 
-    property var dynamicRectangle : Qt.createComponent("DroppedRectangle.qml");
-    property var dynamicConnectorLine : Qt.createComponent("ConnectingLine.qml")
-    property var dynamicJoinBox : Qt.createComponent("JoinBox.qml")
+    property var dynamicRectangle : Qt.createComponent("./MiniSubComponents/DroppedRectangle.qml");
+    property var dynamicConnectorLine : Qt.createComponent("./MiniSubComponents/ConnectingLine.qml")
+    property var dynamicJoinBox : Qt.createComponent("./MiniSubComponents/JoinBox.qml")
 
     property var newConnectingLine : new Map() // connectingLine object
     property var newJoinBox: new Map() // joinBox object btween 2 rectangles

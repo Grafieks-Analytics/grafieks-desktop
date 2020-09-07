@@ -92,14 +92,14 @@
         <file>Source/MainSubComponents/CustomScrollVerticalIndicator.qml</file>
         <file>Source/MainSubComponents/CustomScrollHorizontalIndicator.qml</file>
         <file>Source/MainSubComponents/CustomRadioButton.qml</file>
-        <file>Source/Modellers/SubComponents/DroppedRectangle.qml</file>
-        <file>Source/Modellers/SubComponents/ConnectingLine.qml</file>
-        <file>Source/Modellers/SubComponents/JoinBox.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/JoinPopup.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/JoinDisplayTable.qml</file>
         <file>Source/MainSubComponents/CustomRadioDelegate.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/DroppedText.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/DroppedImage.qml</file>
         <file>Source/Others/Test3.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/JoinBox.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/ConnectingLine.qml</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/DroppedRectangle.qml</file>
     </qresource>
 </RCC>
