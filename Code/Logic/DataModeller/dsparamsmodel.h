@@ -24,6 +24,7 @@ class DSParamsModel : public QObject
     Q_PROPERTY(int schedulerId READ schedulerId WRITE setSchedulerId NOTIFY schedulerIdChanged)
     Q_PROPERTY(int displayRowsCount READ displayRowsCount WRITE setDisplayRowsCount NOTIFY displayRowsCountChanged)
     Q_PROPERTY(QString joinType READ joinType WRITE setJoinType NOTIFY joinTypeChanged)
+    Q_PROPERTY(QString joinIcon READ joinIcon WRITE setJoinIcon NOTIFY joinIconChanged)
 
     // For Filters
     Q_PROPERTY(QString section READ section WRITE setSection NOTIFY sectionChanged)
@@ -46,6 +47,7 @@ class DSParamsModel : public QObject
     int m_schedulerId;
     int m_displayRowsCount;
     QString m_joinType;
+    QString m_joinIcon;
 
     // For Filters
     QString m_section;
@@ -76,6 +78,7 @@ public:
     int schedulerId() const;
     int displayRowsCount() const;
     QString joinType() const;
+    QString joinIcon() const;
 
     // For Filters
     QString section() const;
@@ -95,7 +98,6 @@ public:
 
 
 
-
 public slots:
     void setDsName(QString dsName);
     void setDsType(QString dsType);
@@ -104,6 +106,7 @@ public slots:
     void setSchedulerId(int schedulerId);
     void setDisplayRowsCount(int displayRowsCount);
     void setJoinType(QString joinType);
+    void setJoinIcon(QString joinIcon);
 
     // For Filters
     void setSection(QString section);
@@ -122,6 +125,8 @@ public slots:
 
 
 
+
+
 signals:
 
     void dsNameChanged(QString dsName);
@@ -131,6 +136,7 @@ signals:
     void schedulerIdChanged(int schedulerId);
     void displayRowsCountChanged(int displayRowsCount);
     void joinTypeChanged(QString joinType);
+    void joinIconChanged(QString joinIcon);
 
     // For Filters
     void sectionChanged(QString section);
@@ -145,6 +151,7 @@ signals:
     void selectAllChanged(bool selectAll);
     void filterIndexChanged(int filterIndex);
     void modeChanged(QString mode);
+
 
 };
 

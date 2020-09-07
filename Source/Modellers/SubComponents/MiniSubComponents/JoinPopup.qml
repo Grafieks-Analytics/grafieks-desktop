@@ -49,13 +49,39 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted: {
+        DSParamsModel.setJoinType(Constants.innerJoin)
+    }
+
 
     function closePopup(){
         joinPopup.visible = false
     }
 
-    function onJoinChanged(){
-        console.log('Join Calls')
+    function onJoinChanged(joinType){
+
+        let iconSource = ""
+        switch (joinType){
+
+        case Constants.innerJoin:
+            iconSource = "/Images/icons/inner_join_32.png"
+            break;
+
+        case Constants.leftJoin:
+            iconSource = "/Images/icons/left_join_32.png"
+            break;
+
+        case Constants.rightJoin:
+            iconSource = "/Images/icons/right_join_32.png"
+            break;
+
+        case Constants.fullJoin:
+            iconSource = "/Images/icons/outer_join_32.png"
+            break;
+        }
+
+        DSParamsModel.setJoinIcon(iconSource)
+        DSParamsModel.setJoinType(joinType)
     }
 
     function addKeyToList(){
@@ -159,11 +185,11 @@ Rectangle{
                 height: 90
 
                 ButtonGroup.group:joinBtnGroup
-                onCheckedChanged: {
-                    onJoinChanged()
-                }
+                onClicked: onJoinChanged(Constants.innerJoin)
+
                 contentItem: Image {
-                    source: "../../../../Images/icons/Inner.png"
+                    id: innerIcon
+                    source: "/Images/icons/Inner.png"
                     width: parent.width
                     height: parent.width
                     anchors.left: parent.left
@@ -184,11 +210,12 @@ Rectangle{
                 height: 90
 
                 ButtonGroup.group:joinBtnGroup
-                onCheckedChanged: {
-                    onJoinChanged()
-                }
+                onClicked: onJoinChanged(Constants.leftJoin)
+
+
                 contentItem: Image {
-                    source: "../../../../Images/icons/Left.png"
+                    id: leftIcon
+                    source: "/Images/icons/Left.png"
                     width: parent.width
                     height: parent.width
                     anchors.left: parent.left
@@ -210,11 +237,11 @@ Rectangle{
                 height: 90
 
                 ButtonGroup.group:joinBtnGroup
-                onCheckedChanged: {
-                    onJoinChanged()
-                }
+                onClicked: onJoinChanged(Constants.rightJoin)
+
                 contentItem: Image {
-                    source: "../../../../Images/icons/Right.png"
+                    id: rightIcon
+                    source: "/Images/icons/Right.png"
                     width: parent.width
                     height: parent.width
                     anchors.left: parent.left
@@ -235,11 +262,11 @@ Rectangle{
                 height: 90
 
                 ButtonGroup.group:joinBtnGroup
-                onCheckedChanged: {
-                    onJoinChanged()
-                }
+                onClicked: onJoinChanged(Constants.fullJoin)
+
                 contentItem: Image {
-                    source: "../../../../Images/icons/Full Outer.png"
+                    id: outerIcon
+                    source: "/Images/icons/Full Outer.png"
                     width: parent.width
                     height: parent.width
                     anchors.left: parent.left
@@ -269,9 +296,8 @@ Rectangle{
 
             id: addKey
             textValue: "Add key"
-            onClicked: {
-                addKeyToList()
-            }
+            onClicked: addKeyToList()
+
         }
 
     }
@@ -311,10 +337,7 @@ Rectangle{
                             cursorShape: Qt.SizeHorCursor
                             width: parent.width
 
-                            onPositionChanged: {
-                                onDragJoinPopup(mouse)
-                            }
-
+                            onPositionChanged: onDragJoinPopup(mouse)
                         }
                     }
                 }
@@ -397,9 +420,8 @@ Rectangle{
             anchors.right: parent.right
 
             textValue: "Done"
-            onClicked: {
-                onDoneClicked()
-            }
+            onClicked: onDoneClicked()
+
         }
     }
 
