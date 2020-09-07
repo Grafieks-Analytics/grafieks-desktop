@@ -61,6 +61,10 @@ QtObject {
     //font.pointSize: Constants.fontReading = font.pixelSize: Constants.fontCategoryHeader
     //font.pointSize: Constants.fontCategoryHeader = font.pixelSize: Constants.fontHeader
 
+    // Menu option
+    property int dataDesignerMenu : 0
+    property int dashboardDesignerMenu : 1
+
     // Radio Size
     property int defaultRadioDimension: 16
     property int defaultRadius: 4
