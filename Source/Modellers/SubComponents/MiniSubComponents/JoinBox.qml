@@ -10,11 +10,59 @@ Item {
 
     objectName: objectName
 
-    signal joinChanged(int joinId);
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
 
     Component.onCompleted: {
-        DSParamsModel.setJoinIcon("../../../../Images/icons/inner_join_32.png")
+        DSParamsModel.setJoinIcon("/Images/icons/inner_join_32.png")
     }
+
+    function onIconClicked(){
+
+        joinPopup.visible = true
+
+        // Set joinId. Required to get value from Map() in the parent component
+        DSParamsModel.setJoinId(parseInt(objectName))
+    }
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
 
 
     Rectangle{
@@ -26,15 +74,12 @@ Item {
         Image{
             id: iconId
             source: DSParamsModel.joinIcon
-
-            onSourceChanged: joinChanged(parseInt(objectName))
         }
 
         MouseArea{
             anchors.fill: parent
-            onClicked: {
-                joinPopup.visible = true
-            }
+            onClicked: onIconClicked()
+
         }
     }
 

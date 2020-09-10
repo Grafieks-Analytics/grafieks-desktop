@@ -23,6 +23,7 @@ Item {
     property int counter : 0
     property real droppedX : 0
     property real droppedY : 0
+    property var joinMaps : new Map() // Save join relationships between entities
     property var frontRectangleCoordinates : new Map()
     property var rearRectangleCoordinates : new Map()
     property var existingTables : new Map()

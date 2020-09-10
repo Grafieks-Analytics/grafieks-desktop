@@ -65,6 +65,11 @@ QString DSParamsModel::joinIcon() const
     return m_joinIcon;
 }
 
+int DSParamsModel::joinId() const
+{
+    return m_joinId;
+}
+
 QString DSParamsModel::section() const
 {
     return m_section;
@@ -195,6 +200,15 @@ void DSParamsModel::setJoinIcon(QString joinIcon)
 
     m_joinIcon = joinIcon;
     emit joinIconChanged(m_joinIcon);
+}
+
+void DSParamsModel::setJoinId(int joinId)
+{
+    if (m_joinId == joinId)
+        return;
+
+    m_joinId = joinId;
+    emit joinIdChanged(m_joinId);
 }
 
 void DSParamsModel::setSection(QString section)

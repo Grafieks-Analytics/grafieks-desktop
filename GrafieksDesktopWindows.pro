@@ -44,6 +44,7 @@ SOURCES += \
     Code/Logic/DataModeller/scheduler.cpp \
     Code/Logic/DataModeller/schedulerds.cpp \
     Code/Logic/DataModeller/schedulermodel.cpp \
+    Code/Logic/DataModeller/tablecolumnslistmodel.cpp \
     Code/Logic/DataModeller/tablelistmodel.cpp \
     Code/Logic/Datasources/datasource.cpp \
     Code/Logic/Datasources/datasourceds.cpp \
@@ -52,6 +53,7 @@ SOURCES += \
     Code/Logic/General/generalparamsmodel.cpp \
     Code/Logic/General/qttest2.cpp \
     Code/Logic/General/querysplitter.cpp \
+    Code/Logic/General/tablecolumnsmodel.cpp \
     Code/Logic/General/tableschemamodel.cpp \
     Code/Logic/Menu/user.cpp \
     main.cpp
@@ -109,6 +111,7 @@ HEADERS += \
     Code/Logic/DataModeller/scheduler.h \
     Code/Logic/DataModeller/schedulerds.h \
     Code/Logic/DataModeller/schedulermodel.h \
+    Code/Logic/DataModeller/tablecolumnslistmodel.h \
     Code/Logic/DataModeller/tablelistmodel.h \
     Code/Logic/Datasources/datasource.h \
     Code/Logic/Datasources/datasourceds.h \
@@ -117,6 +120,7 @@ HEADERS += \
     Code/Logic/General/generalparamsmodel.h \
     Code/Logic/General/qttest2.h \
     Code/Logic/General/querysplitter.h \
+    Code/Logic/General/tablecolumnsmodel.h \
     Code/Logic/General/tableschemamodel.h \
     Code/Logic/Menu/user.h \
     Code/messages.h \

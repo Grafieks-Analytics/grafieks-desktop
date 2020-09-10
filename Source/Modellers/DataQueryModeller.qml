@@ -799,7 +799,7 @@ Page {
 
                 Text{
                     id: connected_to
-                    text: "Connected To: " + ConnectorsLoginModel.currentDbName
+                    text: "Connected To: "
                     // text: "Connected To: grafieks_my"
                     anchors.verticalCenter: rectangle_querymodeller_right_col2.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col2.left
@@ -896,7 +896,7 @@ Page {
                         anchors.leftMargin: 10
                         anchors.verticalCenter: parent.verticalCenter
                         font.pixelSize: Constants.fontCategoryHeaderSmall
-                        text: "Database Name 1"
+                        text: ConnectorsLoginModel.currentDbName
                     }
 
 

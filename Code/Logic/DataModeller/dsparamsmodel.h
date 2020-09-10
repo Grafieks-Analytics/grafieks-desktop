@@ -23,8 +23,11 @@ class DSParamsModel : public QObject
     Q_PROPERTY(QString extractColName READ extractColName WRITE setExtractColName NOTIFY extractColNameChanged)
     Q_PROPERTY(int schedulerId READ schedulerId WRITE setSchedulerId NOTIFY schedulerIdChanged)
     Q_PROPERTY(int displayRowsCount READ displayRowsCount WRITE setDisplayRowsCount NOTIFY displayRowsCountChanged)
+
+    // For Data Modeller
     Q_PROPERTY(QString joinType READ joinType WRITE setJoinType NOTIFY joinTypeChanged)
     Q_PROPERTY(QString joinIcon READ joinIcon WRITE setJoinIcon NOTIFY joinIconChanged)
+    Q_PROPERTY(int joinId READ joinId WRITE setJoinId NOTIFY joinIdChanged)
 
     // For Filters
     Q_PROPERTY(QString section READ section WRITE setSection NOTIFY sectionChanged)
@@ -46,8 +49,11 @@ class DSParamsModel : public QObject
     QString m_extractColName;
     int m_schedulerId;
     int m_displayRowsCount;
+
+    // For Data Modeller
     QString m_joinType;
     QString m_joinIcon;
+    int m_joinId;
 
     // For Filters
     QString m_section;
@@ -65,7 +71,6 @@ class DSParamsModel : public QObject
 
 
 
-
 public:
     explicit DSParamsModel(QObject *parent = nullptr);
 
@@ -77,8 +82,11 @@ public:
     QString extractColName() const;
     int schedulerId() const;
     int displayRowsCount() const;
+
+    // For Data Modeller
     QString joinType() const;
     QString joinIcon() const;
+    int joinId() const;
 
     // For Filters
     QString section() const;
@@ -96,8 +104,6 @@ public:
 
 
 
-
-
 public slots:
     void setDsName(QString dsName);
     void setDsType(QString dsType);
@@ -105,8 +111,11 @@ public slots:
     void setExtractColName(QString extractColName);
     void setSchedulerId(int schedulerId);
     void setDisplayRowsCount(int displayRowsCount);
+
+    // For Data Modeller
     void setJoinType(QString joinType);
     void setJoinIcon(QString joinIcon);
+    void setJoinId(int joinId);
 
     // For Filters
     void setSection(QString section);
@@ -123,10 +132,6 @@ public slots:
     void setMode(QString mode);
 
 
-
-
-
-
 signals:
 
     void dsNameChanged(QString dsName);
@@ -135,8 +140,11 @@ signals:
     void extractColNameChanged(QString extractColName);
     void schedulerIdChanged(int schedulerId);
     void displayRowsCountChanged(int displayRowsCount);
+
+    // For Data Modeller
     void joinTypeChanged(QString joinType);
     void joinIconChanged(QString joinIcon);
+    void joinIdChanged(int joinId);
 
     // For Filters
     void sectionChanged(QString section);
@@ -151,7 +159,6 @@ signals:
     void selectAllChanged(bool selectAll);
     void filterIndexChanged(int filterIndex);
     void modeChanged(QString mode);
-
 
 };
 
