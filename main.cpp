@@ -9,6 +9,9 @@
 #include <QTextStream>
 #include <QtQml>
 
+#include "documenthandler.h"
+#include <QtQml/QQmlApplicationEngine>
+
 #include "Code/Connectors/mysqlcon.h"
 
 #include "Code/Logic/Menu/user.h"
@@ -224,6 +227,7 @@ int main(int argc, char *argv[])
 
     // Define singletons
     qmlRegisterSingletonType( QUrl("qrc:/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants" );
+    qmlRegisterType<DocumentHandler>("io.qt.examples.texteditor", 1, 0, "DocumentHandler");
 
     // Set contexts for QML
     engine.rootContext()->setContextProperty("QtTest2", &qttest2);

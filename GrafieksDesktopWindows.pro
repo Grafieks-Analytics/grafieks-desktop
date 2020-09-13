@@ -56,6 +56,7 @@ SOURCES += \
     Code/Logic/General/tablecolumnsmodel.cpp \
     Code/Logic/General/tableschemamodel.cpp \
     Code/Logic/Menu/user.cpp \
+    documenthandler.cpp \
     main.cpp
 
 RESOURCES += \
@@ -125,7 +126,8 @@ HEADERS += \
     Code/Logic/Menu/user.h \
     Code/messages.h \
     Code/constants.h \
-    Code/statics.h
+    Code/statics.h \
+    documenthandler.h
 
 DISTFILES += \
     Source/Dashboard/NewDashboard.qml \

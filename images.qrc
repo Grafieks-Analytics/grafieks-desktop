@@ -119,5 +119,6 @@
         <file>Images/icons/Right.png</file>
         <file>Images/icons/Right@4x.png</file>
         <file>Images/icons/table.png</file>
+        <file>Images/icons/edit_black.png</file>
     </qresource>
 </RCC>

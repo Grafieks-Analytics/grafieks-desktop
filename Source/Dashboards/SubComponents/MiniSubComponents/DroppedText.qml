@@ -26,11 +26,12 @@ Item{
 
     Component.onCompleted: {
         nameID.text = name
-        droppedRectangle.width = nameID.text.length * 10 + 30
+        droppedRectangle.width = nameID.text.length * 10 + 100
     }
 
     function onRectangleToggle(){
-        droppedRectangle.height = droppedRectangle.height === 30 ? 60 : 30
+        textEditor.visible = true
+//        droppedRectangle.height = droppedRectangle.height === 30 ? 60 : 30
     }
 
     function destroyRectangle(counter){
@@ -46,9 +47,6 @@ Item{
     }
 
     function onReleasedRectangle(parent){
-
-        // Released rectangle
-//        parent.Drag.drop();
 
         // Call signal
         parent.dropped(newItem.x, newItem.y)
@@ -96,8 +94,12 @@ Item{
         }
 
 
-
     }
+
+    WidgetTextEditor{
+        id: textEditor
+    }
+
     DropArea{
 
         id: dropAreaRectangle

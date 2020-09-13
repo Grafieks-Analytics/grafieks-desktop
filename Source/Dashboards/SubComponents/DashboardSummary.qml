@@ -26,7 +26,9 @@ Rectangle {
     property var dynamicText : Qt.createComponent("./MiniSubComponents/DroppedText.qml");
     property var dynamicImageBox : Qt.createComponent("./MiniSubComponents/DroppedImage.qml");
 
-    property int textCounter: 1
+
+
+    property int counter: 1
 
     property string item: 'test'
 
@@ -63,7 +65,7 @@ Rectangle {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    function onDropAreaEntered(drag,itemName){
+    function onDropAreaEntered(drag){
 
 
         dashboardArea.color = Constants.dropHighlightColor
@@ -75,7 +77,7 @@ Rectangle {
 
 
     }
-    function onDropAreaDropped(drag,itemName){
+    function onDropAreaDropped(drag){
         var currentPoint = {x: drag.x, y: drag.y};
 //        console.log(currentPoint.x)
 //        console.log(currentPoint.y)
@@ -84,9 +86,15 @@ Rectangle {
 
         dashboardArea.color = "transparent"
 
-        rectangles.set(textCounter, dynamicImageBox.createObject(parent, {x:drag.x, y: drag.y, name: 'Select an Image', objectName : textCounter}))
-        textCounter++;
+        if(listViewElem.itemName.toLowerCase() == "image"){
+            rectangles.set(counter, dynamicImageBox.createObject(parent, {x:drag.x, y: drag.y, name: 'Select an Image', objectName : counter}))
+        }
 
+        if(listViewElem.itemName.toLowerCase() == "text"){
+            rectangles.set(counter, dynamicText.createObject(parent, {x:drag.x, y: drag.y, name: 'Text', objectName : counter}))
+        }
+
+        counter++;
 
     }
     function onDropAreaPositionChanged(drag){
@@ -232,15 +240,12 @@ Rectangle {
 
     DropArea {
         id: dropArea
-
-        property alias dropProxy: dropArea
-
         anchors.fill: parent
-        onEntered: onDropAreaEntered(drag, dropArea.itemName)
+        onEntered: onDropAreaEntered(drag)
         onExited: onDropAreaExited()
         onPositionChanged: onDropAreaPositionChanged(drag)
-        onDropped: onDropAreaDropped(drag,dropArea.itemName)
-        keys: [dragItemIndex,itemName]
+        onDropped: onDropAreaDropped(drag)
+
     }
 
 
