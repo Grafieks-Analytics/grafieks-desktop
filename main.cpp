@@ -9,7 +9,6 @@
 #include <QTextStream>
 #include <QtQml>
 
-#include "documenthandler.h"
 #include <QtQml/QQmlApplicationEngine>
 
 #include "Code/Connectors/mysqlcon.h"
@@ -43,7 +42,9 @@
 #include "Code/Logic/Connectors/sheetmodel.h"
 
 #include "Code/Logic/General/tableschemamodel.h"
+#include "Code/Logic/General/tablecolumnsmodel.h"
 #include "Code/Logic/General/querysplitter.h"
+#include "Code/Logic/General/documenthandler.h"
 #include "Code/Logic/General/qttest2.h"
 
 #include "Code/statics.h"
@@ -158,6 +159,7 @@ int main(int argc, char *argv[])
     QueryStatsModel queryStatsModel;
     DBListModel dblistModel;
     TableSchemaModel tableSchemaModel;
+    TableColumnsModel tableColumnsModel;
     DSParamsModel dsParamsModel;
     PublishDatasourceModel publishDatasourceModel;
     ColumnListModel columnListModel;
@@ -250,6 +252,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("SheetModel",&sheetModel);
     engine.rootContext()->setContextProperty("SheetDS",sheet);
     engine.rootContext()->setContextProperty("TableSchemaModel", &tableSchemaModel);
+    engine.rootContext()->setContextProperty("TableColumnsModel", &tableColumnsModel);
     engine.rootContext()->setContextProperty("DSParamsModel",&dsParamsModel);
     engine.rootContext()->setContextProperty("PublishDatasourceModel", &publishDatasourceModel);
     engine.rootContext()->setContextProperty("ColumnListModel", &columnListModel);

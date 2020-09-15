@@ -55,8 +55,8 @@ SOURCES += \
     Code/Logic/General/querysplitter.cpp \
     Code/Logic/General/tablecolumnsmodel.cpp \
     Code/Logic/General/tableschemamodel.cpp \
+    Code/Logic/General/documenthandler.cpp \
     Code/Logic/Menu/user.cpp \
-    documenthandler.cpp \
     main.cpp
 
 RESOURCES += \
@@ -123,11 +123,11 @@ HEADERS += \
     Code/Logic/General/querysplitter.h \
     Code/Logic/General/tablecolumnsmodel.h \
     Code/Logic/General/tableschemamodel.h \
+    Code/Logic/General/documenthandler.h \
     Code/Logic/Menu/user.h \
     Code/messages.h \
     Code/constants.h \
     Code/statics.h \
-    documenthandler.h
 
 DISTFILES += \
     Source/Dashboard/NewDashboard.qml \

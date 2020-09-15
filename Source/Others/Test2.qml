@@ -1,20 +1,30 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Shapes 1.15
 
-Page{
+Item{
     id:dragRect
 
+    function clicky() {
+        console.log("calling Q3",TableColumnsModel.getColumnsForTable("profiles"))
+    }
+
+    function columnListObtained(hello){
+        console.log("DATS", hello)
+    }
+
+    Button{
+        text:"Hello"
+    }
+
     Rectangle {
-        id: root
+        id: groot
         width: 400
         height: 400
 
-        Test3{
-            id: listView
+        MouseArea{
+            anchors.fill:parent
+            onClicked: clicky()
         }
-
-        Test{}
     }
 
 }

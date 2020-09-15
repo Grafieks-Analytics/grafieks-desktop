@@ -15,6 +15,8 @@ Rectangle {
     anchors.right: parent.right
     color: "#aaff0011"
 
+
+
     DropArea {
         id: dropArea
         anchors.fill: parent
