@@ -240,6 +240,15 @@ Page {
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: Constants.fontCategoryHeaderSmall
             }
+
+            ListView{
+                id: columnListView
+                model: [12,32]
+                delegate: Text{
+                    text: modelData
+                }
+            }
+
             MouseArea {
                 id: mouseArea
                 anchors.fill: parent
@@ -254,6 +263,11 @@ Page {
                         tableslist.tableName = tableName
                     }
                     dragRect.Drag.drop();
+                }
+
+                onDoubleClicked: {
+                    console.log("double clicked", tableName)
+                    TableColumnsModel.getColumnsForTable(tableName)
                 }
             }
 
@@ -276,7 +290,10 @@ Page {
             Drag.active: mouseArea.drag.active
             Drag.hotSpot.x: dragRect.width / 2
             Drag.hotSpot.y: dragRect.height / 2
+
         }
+
+
     }
 
     MessageDialog{
@@ -578,7 +595,7 @@ Page {
         id: dataQueryModellerStackview
 
         anchors.top: toolsep1.bottom
-//        anchors.topMargin: 2
+        //        anchors.topMargin: 2
         anchors.left:left_menubar.right
         height:queryModellerPage.height - 300
         width: queryModellerPage.width - menu_width - column_querymodeller.width

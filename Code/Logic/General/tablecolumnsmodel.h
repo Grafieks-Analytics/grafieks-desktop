@@ -30,11 +30,11 @@ public:
     Q_INVOKABLE void getColumnsForTable(QString tableName = "");
 
 signals:
-    void columnListObtained(QList<QStringList> allColumns);
+    void columnListObtained(QStringList allColumns);
 
 
 private:
-    QList<QStringList> allColumns;
+    QStringList allColumns;
 };
 
 #endif // TABLECOLUMNSMODEL_H

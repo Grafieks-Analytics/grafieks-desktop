@@ -15,8 +15,8 @@ TableColumnsModel::TableColumnsModel(QObject *parent) : QObject(parent)
 void TableColumnsModel::getColumnsForTable(QString tableName)
 {
 
-    QString describeQueryString;
-    QStringList outputDataList;
+
+    QString describeQueryString, fieldName;
 
     switch(Statics::currentDbIntType){
 
@@ -30,19 +30,15 @@ void TableColumnsModel::getColumnsForTable(QString tableName)
 
         while(describeQuery.next()){
 
-            QString fieldName = describeQuery.value(0).toString();
-
-            outputDataList << fieldName;
+            fieldName = describeQuery.value(0).toString();
 
             // Append all data type to allList as well
-            allColumns.append(outputDataList);
-
-            // Clear Stringlist for future
-            outputDataList.clear();
+            allColumns.append(fieldName);
         }
         break;
     }
     }
 
     emit columnListObtained(allColumns);
+    allColumns.clear();
 }

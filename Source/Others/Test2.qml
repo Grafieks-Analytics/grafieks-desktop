@@ -1,30 +1,64 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-Item{
-    id:dragRect
 
-    function clicky() {
-        console.log("calling Q3",TableColumnsModel.getColumnsForTable("profiles"))
-    }
+Page{
+    width: parent.width
+    height: parent.height
 
-    function columnListObtained(hello){
-        console.log("DATS", hello)
-    }
+    ListView {
+        id: canvas
+        clip: true
+        width: parent.width
+        height:parent.height
 
-    Button{
-        text:"Hello"
-    }
+        model: [1,2,3,4,5,6,7]
 
-    Rectangle {
-        id: groot
-        width: 400
-        height: 400
+        delegate: Component {
+            id: c
 
-        MouseArea{
-            anchors.fill:parent
-            onClicked: clicky()
+            Rectangle{
+                id: ret1
+                width: 100
+                height:20
+
+                Text{
+                    id: a
+                    text: modelData
+                    anchors.top: parent.top
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+                Rectangle{
+                    id: x
+                    width: 100
+                    height: 100
+                    color: "red"
+                    visible: false
+                    anchors.top: a.bottom
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+                    onDoubleClicked: {
+                        console.log(modelData)
+
+                        if(x.visible === true){
+                            x.visible = false
+                            ret1.height -= x.height
+                        } else{
+                            x.visible = true
+                            ret1.height += x.height
+                        }
+
+
+                    }
+                }
+
+
+            }
+
         }
     }
-
 }
+
+

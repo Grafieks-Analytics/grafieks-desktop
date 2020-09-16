@@ -13,6 +13,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Styles 1.4
 import Qt.labs.settings 1.1
 
+
 import com.grafieks.singleton.constants 1.0
 
 
@@ -130,6 +131,9 @@ ApplicationWindow {
 
     /***********************************************************************************************************************/
     // Menu Bar Starts
+
+
+
 
     menuBar : MenuBar{
         id:menubar
