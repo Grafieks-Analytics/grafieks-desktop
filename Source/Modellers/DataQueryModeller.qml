@@ -34,6 +34,8 @@ Page {
     property bool open: true
     property int dataPreviewNo: 6
 
+    property var hideColumnsArray : [] // Hide these cols in join popup and rectangles col list
+
 
     property Page page: queryModellerPage
     property LeftMenuBar leftMenuBar : left_menubar
@@ -75,7 +77,24 @@ Page {
 
 
     function columnSelectionSlot(state, colName, tableName){
-        console.log(state, colName, tableName)
+
+        var key = tableName + "." + colName
+
+        // If key already exists, remove
+        // Else insert into hideColumnsArray
+        if(state === true){
+
+            let index = hideColumnsArray.indexOf(key);
+            hideColumnsArray.splice(index, 1)
+
+        } else{
+
+            // check if the key exists
+            if(!hideColumnsArray.includes(key)){
+                hideColumnsArray.push(key)
+            }
+        }
+        console.log(hideColumnsArray)
     }
 
     function onDataModellerClicked(){

@@ -8,10 +8,10 @@ Item {
     height:columnListView.height
     z: 2
 
-    property alias objectName: tableColumnsComponent.objectName
-    property var tableColumnsMapTmp : new Map()
-    property var tableColumnsMapFinal : new Map()
+    property alias objectName: tableColumnsComponent.objectName // Table name sent here
+    property var tableColumnsMap : new Map()
     property var itemMap: new Map()
+    property bool halt : true
 
 
     signal onColumnStateChanged(bool state, string colName, string tableName)
@@ -27,6 +27,7 @@ Item {
 
         function onColumnListObtained(allColumns, tableName){
             onReceivingSignal(allColumns, tableName);
+            halt = true
         }
     }
 
@@ -43,7 +44,7 @@ Item {
                 newListModel.append({colName: colName, colType: colType, tableName: tableName})
             })
 
-            tableColumnsMapTmp.set(tableName, itemMap)
+            tableColumnsMap.set(tableName, itemMap)
             columnListView.model = newListModel
             columnListView.height = newListModel.count * 40
         }
@@ -65,8 +66,7 @@ Item {
                 checkbox_checked: true
                 parent_dimension: 16
 
-                onCheckStateChanged: onColumnStateChanged(checked, colName, tableName)
-
+                onClicked: onColumnStateChanged(checked, colName, tableName)
             }
         }
     }
