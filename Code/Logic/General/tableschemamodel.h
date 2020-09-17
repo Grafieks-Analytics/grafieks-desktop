@@ -14,6 +14,7 @@
 #include "../../Connectors/allconnectors.h"
 #include "../../statics.h"
 #include "../../constants.h"
+#include "datatype.h"
 
 /*!
  * \class TableSchemaModel
@@ -23,6 +24,8 @@
 class TableSchemaModel : public QObject
 {
     Q_OBJECT
+    DataType dataType;
+
 public:
     explicit TableSchemaModel(QObject *parent = nullptr);
 
@@ -32,8 +35,6 @@ signals:
     void tableSchemaObtained(QList <QStringList> allList, QList <QStringList> allCategorical, QList <QStringList> allNumerical, QList <QStringList> allDates, QList <QStringList> allOthers,QStringList queriedColumnNames);
 
 private:
-
-    QString dataType(QString parameter);
     
     QList<QStringList> allList;
     QList<QStringList> allCategorical;

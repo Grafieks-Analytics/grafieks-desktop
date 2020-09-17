@@ -5,6 +5,10 @@
 
 #include <QtGui/QTextCharFormat>
 #include <QtCore/QTextCodec>
+#include <QtGui/QTextDocument>
+#include <QtGui/QTextCursor>
+#include <QtGui/QFontDatabase>
+#include <QtCore/QFileInfo>
 
 #include <qqmlfile.h>
 

@@ -99,7 +99,7 @@ void TableSchemaModel::showSchema(QString query)
                 QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
 
                 // Get filter data type for QML
-                QString filterDataType = this->dataType(fieldTypeTrimmed);
+                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
                 outputDataList << tableName << fieldName << fieldType << filterDataType;
 
@@ -148,37 +148,5 @@ void TableSchemaModel::showSchema(QString query)
     allOthers.clear();
     allList.clear();
 
-
-}
-
-/*!
- * \brief Returns custom datatype of the queried column name
- * \param parameter (table column type)
- * \return QString
- */
-QString TableSchemaModel::dataType(QString parameter)
-{
-
-    QString output;
-    QStringList categorical, numerical, dateformat;
-
-
-    categorical << "varchar" << "char" << "text" << "tinytext" << "mediumtext" << "longtext" << "boolean" ;
-    numerical << "int" << "tinyint" << "smallint" << "mediumint" << "bigint" << "decimal" << "float" << "double" << "real";
-    dateformat << "date" << "datetime" << "timestamp" << "time" << "year";
-
-    // Match the incoming parameter and determine filter type
-
-    if(categorical.contains(parameter, Qt::CaseInsensitive)){
-        output =  Constants::categoricalType;
-    } else if(numerical.contains(parameter, Qt::CaseInsensitive)){
-        output =  Constants::numericalType;
-    } else if(dateformat.contains(parameter, Qt::CaseInsensitive)){
-        output =  Constants::dateType;
-    } else{
-        output =  Constants::otherType;
-    }
-
-    return output;
 
 }

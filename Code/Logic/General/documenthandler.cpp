@@ -1,9 +1,6 @@
 #include "documenthandler.h"
 
-#include <QtGui/QTextDocument>
-#include <QtGui/QTextCursor>
-#include <QtGui/QFontDatabase>
-#include <QtCore/QFileInfo>
+
 
 DocumentHandler::DocumentHandler()
     : m_target(0)
