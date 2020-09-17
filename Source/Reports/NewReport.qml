@@ -308,7 +308,7 @@ Page {
 
                     Image{
                         id:search_icon
-                        source:"../../Images/icons/Search.png"
+                        source:"/Images/icons/Search.png"
                         height:30
                         width:30
                         anchors.top: row_querymodeller_right_col.top
@@ -382,7 +382,7 @@ Page {
 
                             Image {
                                 id: drop_icon
-                                source: "../../Images/icons/Down_20.png"
+                                source: "/Images/icons/Down_20.png"
                                 width: 10
                                 height: 10
                                 anchors.right: parent.right
@@ -397,10 +397,10 @@ Page {
                                         nestedModel.setProperty(index, "collapsed", !collapsed)
 
                                         if(collapsed === true){
-                                            drop_icon.source = "../../../Images/icons/Down_20.png"
+                                            drop_icon.source = "/Images/icons/Down_20.png"
                                         }
                                         else{
-                                            drop_icon.source = "../../../Images/icons/Up_20.png"
+                                            drop_icon.source = "/Images/icons/Up_20.png"
                                         }
                                     }
                                 }

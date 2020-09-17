@@ -3,18 +3,15 @@ import QtQuick.Controls 2.15
 
 import "../MainSubComponents"
 
-
 Page{
     width: parent.width
     height: parent.height
-
 
     ListView {
         id: canvas
         clip: true
         width: parent.width
         height:parent.height
-
         model: [1,2,3,4,5,6,7]
 
         delegate: Component {
@@ -41,7 +38,6 @@ Page{
                     model: [1,2,3]
                     z: 20
 
-
                     delegate:Rectangle{
                         id: innerListView1
                         height: 40
@@ -59,7 +55,6 @@ Page{
                     }
                 }
 
-
                 MouseArea{
                     anchors.fill: parent
                     onDoubleClicked: {
@@ -72,16 +67,11 @@ Page{
                             innerListView.visible = true
                             ret1.height += innerListView.height
                         }
-
-
                     }
                 }
             }
-
         }
     }
-
-
 }
 
 

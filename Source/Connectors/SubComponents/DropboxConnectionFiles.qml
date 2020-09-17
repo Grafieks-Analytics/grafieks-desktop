@@ -202,7 +202,7 @@ Popup {
         }
         Image {
             id: close_icn
-            source: "../../../Images/icons/outline_close_black_18dp2x.png"
+            source: "/Images/icons/outline_close_black_18dp2x.png"
             anchors.verticalCenter: parent.verticalCenter
             anchors.right:  parent.right
             height: 25
@@ -385,7 +385,7 @@ Popup {
 
                                     Image{
                                         id: fileMenuIcon
-                                        source: tag=="folder"?"../../../Images/icons/folder-invoices.png" :"../../../Images/icons/file-icon.png"
+                                        source: tag=="folder"?"/Images/icons/folder-invoices.png" :"/Images/icons/file-icon.png"
                                         width:25
                                         height: 25
                                     }
@@ -495,7 +495,7 @@ Popup {
 
                     Image {
                         id: dropBoxImage
-                        source: "../../../Images/icons/dropbox-2.png"
+                        source: "/Images/icons/dropbox-2.png"
                         anchors.topMargin: 50
                         anchors.top: detailsHeading.bottom
                         anchors.horizontalCenter: parent.horizontalCenter

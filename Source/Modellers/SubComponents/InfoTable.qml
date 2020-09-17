@@ -154,7 +154,7 @@ Item{
     function onCollapseInfoTable(){
         if(open){
 
-            collapseBtnImage.source = "../../../Images/icons/Up.png"
+            collapseBtnImage.source = "/Images/icons/Up.png"
             queryResultsTable.visible = false
 
             dataQueryModellerStackview.height = Qt.binding(function(){
@@ -168,7 +168,7 @@ Item{
             open = false
         }else{
 
-            collapseBtnImage.source = "../../../Images/icons/Down.png"
+            collapseBtnImage.source = "/Images/icons/Down.png"
             queryResultsTable.visible = true
 
             dataQueryModellerStackview.height = Qt.binding(function(){
@@ -467,7 +467,7 @@ Item{
                     id: playBtnImage
                     height: 24
                     width: 24
-                    source: "../../../Images/icons/play.png"
+                    source: "/Images/icons/play.png"
                     anchors.centerIn: parent
                 }
 
@@ -512,7 +512,7 @@ Item{
                     id: collapseBtnImage
                     height: 12
                     width: 12
-                    source: "../../../Images/icons/Down.png"
+                    source: "/Images/icons/Down.png"
                     anchors.centerIn: parent
                 }
 

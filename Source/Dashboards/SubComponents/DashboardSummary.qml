@@ -141,7 +141,7 @@ Rectangle {
             id: image
             x: 8
             y: 10
-            source: "../../../Images/icons/charts/Map2_30.png"
+            source: "/Images/icons/charts/Map2_30.png"
         }
 
         Text {
@@ -177,7 +177,7 @@ Rectangle {
             id: image1
             x: 8
             y: 10
-            source: "../../../Images/icons/charts/Map2_30.png"
+            source: "/Images/icons/charts/Map2_30.png"
         }
 
 
@@ -214,7 +214,7 @@ Rectangle {
             id: image2
             x: 8
             y: 10
-            source: "../../../Images/icons/charts/Map2_30.png"
+            source: "/Images/icons/charts/Map2_30.png"
         }
 
         Text {

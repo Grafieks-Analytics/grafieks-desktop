@@ -189,7 +189,7 @@ Rectangle{
 
                             Image{
                                 id: editBtn
-                                source: '../../../../Images/icons/Edit_20.png'
+                                source: '/Images/icons/Edit_20.png'
 
                                 anchors.top: parent.top
                                 anchors.topMargin: 5
@@ -208,7 +208,7 @@ Rectangle{
 
                             Image{
                                 id: removeBtn
-                                source: '../../../../Images/icons/remove.png'
+                                source: '/Images/icons/remove.png'
 
                                 anchors.top: parent.top
                                 anchors.left: editBtn.right

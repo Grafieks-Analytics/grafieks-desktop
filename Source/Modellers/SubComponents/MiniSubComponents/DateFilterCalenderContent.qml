@@ -195,7 +195,7 @@ Rectangle{
 
                 Image{
                     id: fromDatePicker
-                    source: '../../../../Images/icons/clipart268070@2x.png'
+                    source: '/Images/icons/clipart268070@2x.png'
                     anchors.left: fromDateInput.right
                     anchors.leftMargin: 20
 
@@ -251,7 +251,7 @@ Rectangle{
 
                 Image{
                     id: toDatePicker
-                    source: '../../../../Images/icons/clipart268070@2x.png'
+                    source: '/Images/icons/clipart268070@2x.png'
                     anchors.left: toDateInput.right
                     anchors.leftMargin: 20
 

@@ -60,7 +60,7 @@ Rectangle{
                     id: dbMenuIcon
                     x: 5
                     y: dataDesignerRect.height/2 - 60
-                    source:"../../Images/icons/Db.png"
+                    source:"/Images/icons/Db.png"
                     width:25
                     height: 25
                 }
@@ -124,7 +124,7 @@ Rectangle{
                     id: chartMenuIcon
                     x: 5
                     y: dashboardDesignerRect.height/2 - 90
-                    source:"../../Images/icons/Charts.png"
+                    source:"/Images/icons/Charts.png"
                     width:25
                     height: 25
                     anchors.bottomMargin: -150

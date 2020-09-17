@@ -1,0 +1,73 @@
+import QtQuick 2.15
+
+import "../../../MainSubComponents"
+
+Item {
+
+    id: tableColumnsComponent
+    height:columnListView.height
+    z: 2
+
+    property alias objectName: tableColumnsComponent.objectName
+    property var tableColumnsMapTmp : new Map()
+    property var tableColumnsMapFinal : new Map()
+    property var itemMap: new Map()
+
+
+    signal onColumnStateChanged(bool state, string colName, string tableName)
+
+
+    ListModel{
+        id: newListModel
+    }
+
+
+    Connections{
+        target: TableColumnsModel
+
+        function onColumnListObtained(allColumns, tableName){
+            onReceivingSignal(allColumns, tableName);
+        }
+    }
+
+
+    function onReceivingSignal(allColumns, tableName){
+
+        if(tableColumnsComponent.objectName === tableName && itemMap.size <= 0){
+            allColumns.forEach(function(item){
+
+                let colName = item[0]
+                let colType = item[1]
+
+                itemMap.set(colName, colType)
+                newListModel.append({colName: colName, colType: colType, tableName: tableName})
+            })
+
+            tableColumnsMapTmp.set(tableName, itemMap)
+            columnListView.model = newListModel
+            columnListView.height = newListModel.count * 40
+        }
+    }
+
+
+
+    ListView{
+        id: columnListView
+
+        delegate: Rectangle{
+            id: innerListView
+            height: 40
+            width: 100
+
+            CheckBoxTpl{
+                id: checkBox1
+                checkbox_text: colName
+                checkbox_checked: true
+                parent_dimension: 16
+
+                onCheckStateChanged: onColumnStateChanged(checked, colName, tableName)
+
+            }
+        }
+    }
+}

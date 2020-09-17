@@ -248,7 +248,7 @@ Item{
 
                 Image {
                     id: drop_icon
-                    source: "../../../Images/icons/Up_20.png"
+                    source: "/Images/icons/Up_20.png"
                     width: 10
                     height: 10
                     anchors.right: parent.right
@@ -263,10 +263,10 @@ Item{
                             nestedModel.setProperty(index, "collapsed", !collapsed)
 
                             if(collapsed === true){
-                                drop_icon.source = "../../../Images/icons/Down_20.png"
+                                drop_icon.source = "/Images/icons/Down_20.png"
                             }
                             else{
-                                drop_icon.source = "../../../Images/icons/Up_20.png"
+                                drop_icon.source = "/Images/icons/Up_20.png"
                             }
                         }
                     }

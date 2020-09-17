@@ -105,7 +105,7 @@ TableView {
                 border.width: 0.5
 
                 Image{
-                    source: "../../../Images/icons/tick.png"
+                    source: "/Images/icons/tick.png"
                     height: 18
                     width: 18
                 }

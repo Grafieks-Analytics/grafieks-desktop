@@ -164,7 +164,7 @@ Page {
 
 
                     Image {
-                        source: "../../../Images/icons/Edit_20.png"
+                        source: "/Images/icons/Edit_20.png"
                         width:20
                         height:width
 
@@ -203,7 +203,7 @@ Page {
 
             Image{
                 id: image_datasource
-                source: "../../../Images/icons/sample_graph.png"
+                source: "/Images/icons/sample_graph.png"
                 anchors.top: data_source_head.bottom
                 anchors.topMargin:10
                 anchors.horizontalCenter: data_source_main.horizontalCenter

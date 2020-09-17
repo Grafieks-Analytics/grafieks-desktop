@@ -128,7 +128,7 @@ Popup {
         }
         Image {
             id: close_icn
-            source: "../../../Images/icons/outline_close_black_18dp2x.png"
+            source: "/Images/icons/outline_close_black_18dp2x.png"
             anchors.verticalCenter: parent.verticalCenter
             anchors.right:  parent.right
             height: 25

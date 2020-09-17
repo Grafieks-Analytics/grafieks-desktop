@@ -16,7 +16,8 @@ void TableColumnsModel::getColumnsForTable(QString tableName)
 {
 
 
-    QString describeQueryString, fieldName;
+    QString describeQueryString, fieldName, fieldType;
+    QStringList outputDataList;
 
     switch(Statics::currentDbIntType){
 
@@ -24,21 +25,33 @@ void TableColumnsModel::getColumnsForTable(QString tableName)
 
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
 
-        describeQueryString = "DESCRIBE " + tableName;
+        describeQueryString = "DESCRIBE `" + tableName + "`";
 
         QSqlQuery describeQuery(describeQueryString, dbMysql);
 
         while(describeQuery.next()){
 
             fieldName = describeQuery.value(0).toString();
+            fieldType = describeQuery.value(1).toString();
+
+            // Remove characters after `(` and then trim whitespaces
+            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+
+            // Get filter data type for QML
+            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+
+
+            outputDataList << fieldName << filterDataType;
 
             // Append all data type to allList as well
-            allColumns.append(fieldName);
+            allColumns.append(outputDataList);
+
+            outputDataList.clear();
         }
         break;
     }
     }
 
-    emit columnListObtained(allColumns);
+    emit columnListObtained(allColumns, tableName);
     allColumns.clear();
 }

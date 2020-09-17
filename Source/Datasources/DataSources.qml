@@ -87,7 +87,7 @@ Page {
 
             TabButton{
                 id: grid_btn
-                icon.source: "../../Images/icons/Grid.png"
+                icon.source: "/Images/icons/Grid.png"
                 icon.color: "black"
                 height: 30
 
@@ -106,7 +106,7 @@ Page {
 
             TabButton{
                 id: list_btn
-                icon.source: "../../Images/icons/List.png"
+                icon.source: "/Images/icons/List.png"
                 icon.color: "black"
                 height: 30
 
@@ -215,7 +215,7 @@ Page {
 
                 Image{
                     id:search_btn
-                    source: "../../Images/icons/Search.png"
+                    source: "/Images/icons/Search.png"
                     anchors.left: search_text.right
                     height:30
                     width: height

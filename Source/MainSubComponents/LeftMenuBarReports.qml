@@ -36,7 +36,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/Bar_30.png"
+                source:"/Images/icons/charts/Bar_30.png"
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -69,7 +69,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/Line_30.png"
+                source:"/Images/icons/charts/Line_30.png"
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -101,7 +101,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/Area_30.png"
+                source:"/Images/icons/charts/Area_30.png"
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -134,7 +134,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/Doughnut_30.png"
+                source:"/Images/icons/charts/Doughnut_30.png"
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -167,7 +167,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/Pie_30.png"
+                source:"/Images/icons/charts/Pie_30.png"
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -200,7 +200,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/Funnel_30.png"
+                source:"/Images/icons/charts/Funnel_30.png"
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -233,7 +233,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/Gauge_30.png"
+                source:"/Images/icons/charts/Gauge_30.png"
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -266,7 +266,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/Radar_30.png"
+                source:"/Images/icons/charts/Radar_30.png"
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -300,7 +300,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/CandleStick_30.png"
+                source:"/Images/icons/charts/CandleStick_30.png"
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -333,7 +333,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/Sankey_30.png"
+                source:"/Images/icons/charts/Sankey_30.png"
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -366,7 +366,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/HeatMap_30.png"
+                source:"/Images/icons/charts/HeatMap_30.png"
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -399,7 +399,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/Map_30.png"
+                source:"/Images/icons/charts/Map_30.png"
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -434,7 +434,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/ScatterPlot_30.png"
+                source:"/Images/icons/charts/ScatterPlot_30.png"
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -467,7 +467,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/Tree_30.png"
+                source:"/Images/icons/charts/Tree_30.png"
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -500,7 +500,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/TreeMap_30.png"
+                source:"/Images/icons/charts/TreeMap_30.png"
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -533,7 +533,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/Chord_30.png"
+                source:"/Images/icons/charts/Chord_30.png"
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -566,7 +566,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/Sunburst_30.png"
+                source:"/Images/icons/charts/Sunburst_30.png"
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -599,7 +599,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/NightingaleRose_30.png"
+                source:"/Images/icons/charts/NightingaleRose_30.png"
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -632,7 +632,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/ForceDirected_30.png"
+                source:"/Images/icons/charts/ForceDirected_30.png"
                 anchors.centerIn: parent
             }
             MouseArea{
@@ -665,7 +665,7 @@ Rectangle{
             color: Constants.themeColor
 
             Image{
-                source:"../../Images/icons/charts/Table_30.png"
+                source:"/Images/icons/charts/Table_30.png"
                 anchors.centerIn: parent
             }
         }

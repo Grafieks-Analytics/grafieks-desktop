@@ -14,6 +14,7 @@
 #include "../../Connectors/allconnectors.h"
 #include "../../statics.h"
 #include "../../constants.h"
+#include "datatype.h"
 
 
 /*!
@@ -24,17 +25,19 @@
 class TableColumnsModel : public QObject
 {
     Q_OBJECT
+    DataType dataType;
+
 public:
     explicit TableColumnsModel(QObject *parent = nullptr);
 
     Q_INVOKABLE void getColumnsForTable(QString tableName = "");
 
 signals:
-    void columnListObtained(QStringList allColumns);
+    void columnListObtained(QList<QStringList> allColumns, QString tableName);
 
 
 private:
-    QStringList allColumns;
+    QList<QStringList> allColumns;
 };
 
 #endif // TABLECOLUMNSMODEL_H

@@ -37,7 +37,7 @@ Item {
 
         Image{
             id:search_btn
-            source: "../../Images/icons/Search.png"
+            source: "/Images/icons/Search.png"
             anchors.left: search_text.right
             height:30
             width: height

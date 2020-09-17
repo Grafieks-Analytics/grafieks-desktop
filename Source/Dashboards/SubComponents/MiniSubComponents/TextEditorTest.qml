@@ -353,7 +353,7 @@ Rectangle{
                 Image{
                     width: 18
                     height: 18
-                    source: "../../../../Images/icons/edit_black.png"
+                    source: "/Images/icons/edit_black.png"
                     anchors.centerIn: parent
                 }
             }

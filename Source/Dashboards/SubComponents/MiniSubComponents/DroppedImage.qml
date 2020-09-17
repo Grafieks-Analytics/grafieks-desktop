@@ -82,7 +82,7 @@ Item{
 
         Image{
             id: removeIcon
-            source : "../../../../Images/icons/remove.png"
+            source : "/Images/icons/remove.png"
             height: 10
             width: 10
             anchors.right: droppedRectangle.right

@@ -159,7 +159,7 @@ Page {
 
             Image{
                 id: new_dashboard_icon
-                source: "../../Images/icons/Plus_32.png"
+                source: "/Images/icons/Plus_32.png"
                 height: 25
                 width: 25
                 anchors.top: new_dashboard_btn.top
@@ -197,7 +197,7 @@ Page {
 
                 Image{
                     id: report_btn_icon
-                    source: "../../Images/icons/Plus_32.png"
+                    source: "/Images/icons/Plus_32.png"
                     anchors.top: report_btn.top
                     anchors.left: report_btn.left
                     anchors.leftMargin: 10
@@ -235,7 +235,7 @@ Page {
 
                 Image{
                     id: filter_querymodeller
-                    source: "../../Images/icons/Plus_32.png"
+                    source: "/Images/icons/Plus_32.png"
                     anchors.topMargin: 4
                     anchors.leftMargin: 10
                     anchors.left: filter_btn.left

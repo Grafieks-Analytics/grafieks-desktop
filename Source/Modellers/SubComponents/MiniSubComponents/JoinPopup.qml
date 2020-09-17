@@ -149,7 +149,7 @@ Rectangle{
         }
         Image {
             id: closeBtn
-            source: "../../../../Images/icons/outline_close_black_18dp2x.png"
+            source: "/Images/icons/outline_close_black_18dp2x.png"
             anchors.verticalCenter: parent.verticalCenter
             anchors.right:  parent.right
             height: 18
@@ -378,7 +378,7 @@ Rectangle{
 
                             anchors.verticalCenter: parent.verticalCenter
 
-                            source: "../../../../Images/icons/remove.png"
+                            source: "/Images/icons/remove.png"
                             height: 12
                             width: 12
                         }

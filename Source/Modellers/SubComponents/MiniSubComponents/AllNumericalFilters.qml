@@ -188,7 +188,7 @@ Rectangle{
 
                         Image{
                             id: editBtn
-                            source: '../../../../Images/icons/Edit_20.png'
+                            source: '/Images/icons/Edit_20.png'
 
                             anchors.top: parent.top
                             anchors.topMargin: 5
@@ -199,7 +199,7 @@ Rectangle{
                         }
 
                         Image{
-                            source: '../../../../Images/icons/remove.png'
+                            source: '/Images/icons/remove.png'
 
                             anchors.top: parent.top
                             anchors.left: editBtn.right
@@ -322,7 +322,7 @@ Rectangle{
 
                         Image{
                             id: editBtn2
-                            source: '../../../../Images/icons/Edit_20.png'
+                            source: '/Images/icons/Edit_20.png'
 
                             anchors.top: parent.top
                             anchors.topMargin: 5
@@ -333,7 +333,7 @@ Rectangle{
                         }
 
                         Image{
-                            source: '../../../../Images/icons/remove.png'
+                            source: '/Images/icons/remove.png'
 
                             anchors.top: parent.top
                             anchors.left: editBtn2.right

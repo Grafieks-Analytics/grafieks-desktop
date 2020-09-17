@@ -37,7 +37,7 @@ Item {
 
             Image{
                 id: showBtn
-                source:"../../../Images/icons/Down_20.png"
+                source:"/Images/icons/Down_20.png"
 
                 anchors.top: parent.top
                 anchors.right: parent.right

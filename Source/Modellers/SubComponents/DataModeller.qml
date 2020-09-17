@@ -376,7 +376,7 @@ Item {
                 height: 22
                 width: 22
 
-                source: "../../../Images/icons/align.png"
+                source: "/Images/icons/align.png"
                 anchors.centerIn: align_btn
                 anchors.topMargin: 3
                 anchors.leftMargin: 2
@@ -400,7 +400,7 @@ Item {
             height: 30
             Image{
                 id: plus_icon
-                source: "../../../Images/icons/Plus_32.png"
+                source: "/Images/icons/Plus_32.png"
                 height: 25
                 width: 25
                 anchors.centerIn: plus_icon_btn
@@ -424,7 +424,7 @@ Item {
             height: 30
             Image{
                 id: minus_icon
-                source: "../../../Images/icons/zoom out.png"
+                source: "/Images/icons/zoom out.png"
                 height: 20
                 width: 20
                 anchors.topMargin: 3

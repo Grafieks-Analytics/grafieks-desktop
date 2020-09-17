@@ -45,14 +45,14 @@ Page {
     Connections{
         target: ConnectorsLoginModel
 
-        onMysqlLoginStatus:{
+        function onMysqlLoginStatus(status){
             if(status.status === true){
                 // Call functions
                 TableListModel.callQuery()
                 tableslist.model = TableListModel
             }
         }
-        onSqliteLoginStatus:{
+        function onSqliteLoginStatus(status){
             if(status.status === true){
                 // Call functions
                 TableListModel.callQuery()
@@ -60,6 +60,8 @@ Page {
             }
         }
     }
+
+
 
 
     // Connection  Ends
@@ -70,6 +72,11 @@ Page {
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTIONS STARTS
+
+
+    function columnSelectionSlot(state, colName, tableName){
+        console.log(state, colName, tableName)
+    }
 
     function onDataModellerClicked(){
         if(!dataModellerSelected){
@@ -167,12 +174,12 @@ Page {
     function collapseTables(){
 
         if(collapsed === true){
-            drop_icon.source = "../../../Images/icons/Up_20.png"
+            drop_icon.source = "/Images/icons/Up_20.png"
             collapsed = false
             tableslist.visible = true
         }
         else{
-            drop_icon.source = "../../../Images/icons/Down_20.png"
+            drop_icon.source = "/Images/icons/Down_20.png"
             collapsed = true
             tableslist.visible = false
         }
@@ -226,10 +233,9 @@ Page {
                 id: tableImg
                 height: 22
                 width: 22
-                source: "../../Images/icons/table_32.png"
+                source: "/Images/icons/table_32.png"
                 anchors.left: parent.left
                 anchors.leftMargin: 15
-                anchors.verticalCenter: parent.verticalCenter
             }
 
             Text {
@@ -237,15 +243,18 @@ Page {
                 text: tableName
                 anchors.left: tableImg.right
                 anchors.leftMargin: 10
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenter: tableImg.verticalCenter
                 font.pixelSize: Constants.fontCategoryHeaderSmall
             }
 
-            ListView{
-                id: columnListView
-                model: [12,32]
-                delegate: Text{
-                    text: modelData
+            TableColumns{
+                id: tablecolumnListView
+                anchors.top: tableImg.bottom
+                visible: false
+                objectName: tableName
+
+                Component.onCompleted: {
+                    onColumnStateChanged.connect(queryModellerPage.columnSelectionSlot)
                 }
             }
 
@@ -266,8 +275,15 @@ Page {
                 }
 
                 onDoubleClicked: {
-                    console.log("double clicked", tableName)
                     TableColumnsModel.getColumnsForTable(tableName)
+
+                    if(tablecolumnListView.visible === true){
+                        tablecolumnListView.visible = false
+                        dragRect.height -= tablecolumnListView.height
+                    } else{
+                        tablecolumnListView.visible = true
+                        dragRect.height += tablecolumnListView.height
+                    }
                 }
             }
 
@@ -441,7 +457,7 @@ Page {
 
                 Image{
 
-                    source: "../../Images/icons/Refresh_30.png"
+                    source: "/Images/icons/Refresh_30.png"
                     anchors.topMargin: 4
                     anchors.left: refresh_querymodeller.left
                     anchors.top: refresh_querymodeller.top
@@ -475,7 +491,7 @@ Page {
 
                 Image{
                     id: filter_querymodeller
-                    source: "../../Images/icons/Plus_32.png"
+                    source: "/Images/icons/Plus_32.png"
                     anchors.topMargin: 4
                     anchors.leftMargin: 10
                     anchors.left: filter_btn.left
@@ -711,7 +727,7 @@ Page {
 
                     Image {
                         id: publishIcon
-                        source: "../../Images/icons/publish_20.png"
+                        source: "/Images/icons/publish_20.png"
                         height: 20
                         width: 20
                         anchors.centerIn: parent
@@ -734,7 +750,7 @@ Page {
 
                     Image {
                         id: dashboardIcon
-                        source: "../../Images/icons/create_dashboard_20.png"
+                        source: "/Images/icons/create_dashboard_20.png"
                         height: 20
                         width: 20
                         anchors.centerIn: parent
@@ -787,7 +803,7 @@ Page {
 
                 Image {
                     id: dataSourceNameEditIcon
-                    source: "../../Images/icons/edit-32.png"
+                    source: "/Images/icons/edit-32.png"
                     height: 20
                     width: 20
                     anchors.right: parent.right
@@ -817,7 +833,6 @@ Page {
                 Text{
                     id: connected_to
                     text: "Connected To: "
-                    // text: "Connected To: grafieks_my"
                     anchors.verticalCenter: rectangle_querymodeller_right_col2.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col2.left
                     anchors.leftMargin: 10
@@ -858,7 +873,7 @@ Page {
 
                     Image{
                         id:search_icon
-                        source:"../../Images/icons/Search.png"
+                        source:"/Images/icons/Search.png"
                         height:25
                         width:25
                         anchors.rightMargin: 10
@@ -902,7 +917,7 @@ Page {
                         id: database
                         height: 28
                         width: 22
-                        source: "../../Images/icons/database_32x36.png"
+                        source: "/Images/icons/database_32x36.png"
                         anchors.left: parent.left
                         anchors.leftMargin: 15
                         anchors.verticalCenter: parent.verticalCenter
@@ -919,7 +934,7 @@ Page {
 
                     Image {
                         id: drop_icon
-                        source: "../../Images/icons/Up_20.png"
+                        source: "/Images/icons/Up_20.png"
                         width: 10
                         height: 10
                         anchors.right: parent.right

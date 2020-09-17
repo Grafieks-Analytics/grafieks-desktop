@@ -282,7 +282,7 @@ Page {
 
         Image{
             id:search_btn
-            source: "../../Images/icons/Search.png"
+            source: "/Images/icons/Search.png"
             anchors.right: searchRectangle.right
             anchors.rightMargin: 10
             height:30
