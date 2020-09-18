@@ -42,6 +42,26 @@ QStringList DSParamsModel::fetchHideColumns(QString searchKeyword)
     return this->hideColumns.filter(searchKeyword);
 }
 
+void DSParamsModel::addToJoinBoxTableMap(int refObjId, QString firstTable, QString secondTable)
+{
+    QStringList joinedTables;
+    joinedTables << firstTable << secondTable;
+
+    joinBoxTableMap.insert(refObjId, joinedTables);
+}
+
+void DSParamsModel::removeJoinBoxTableMap(int refObjId)
+{
+    joinBoxTableMap.remove(refObjId);
+}
+
+QVariantList DSParamsModel::fetchJoinBoxTableMap(int refObjId)
+{
+    QVariantList returnObj;
+    returnObj << refObjId << joinBoxTableMap.value(refObjId).at(0) << joinBoxTableMap.value(refObjId).at(1);
+    return returnObj;
+}
+
 QString DSParamsModel::dsName() const
 {
     return m_dsName;

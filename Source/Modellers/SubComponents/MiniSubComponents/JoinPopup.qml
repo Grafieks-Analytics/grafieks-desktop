@@ -15,6 +15,8 @@ Rectangle{
     border.color: Constants.darkThemeColor
     visible: false
 
+    onVisibleChanged: fetchJoinTableInfo(visible)
+
 
 
     /***********************************************************************************************************************/
@@ -53,6 +55,16 @@ Rectangle{
         DSParamsModel.setJoinType(Constants.innerJoin)
     }
 
+
+    function fetchJoinTableInfo(visible){
+
+        if(visible === true){
+
+            let joinTableInfo = DSParamsModel.fetchJoinBoxTableMap(DSParamsModel.joinId)
+            table1.tableName = joinTableInfo[1];
+            table2.tableName = joinTableInfo[2]
+        }
+    }
 
     function closePopup(){
         joinPopup.visible = false
@@ -199,6 +211,7 @@ Rectangle{
             }
 
         }
+
         Column{
             width: parent.width/4
             height: parent.height
@@ -299,7 +312,6 @@ Rectangle{
             onClicked: addKeyToList()
 
         }
-
     }
 
 
@@ -325,21 +337,6 @@ Rectangle{
 
                 JoinDisplayTable{
                     id: table1
-
-                    Rectangle{
-                        width: 1
-                        height: parent.height
-                        anchors.left: parent.left
-                        color: Constants.darkThemeColor
-
-                        MouseArea{
-                            anchors.fill: parent
-                            cursorShape: Qt.SizeHorCursor
-                            width: parent.width
-
-                            onPositionChanged: onDragJoinPopup(mouse)
-                        }
-                    }
                 }
 
 

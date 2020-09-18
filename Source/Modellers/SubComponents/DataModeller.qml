@@ -275,6 +275,9 @@ Item {
 
             newJoinBox.set(counter, dynamicJoinBox.createObject(parent, {x: rectX, y: rectY, objectName : counter}))
 
+            // Save the Join Box Table map for join manipulation later
+            DSParamsModel.addToJoinBoxTableMap(counter, nearestTable.tableName, tableslist.tableName)
+
         }
 
         // Push the coordinates in the array
@@ -319,7 +322,7 @@ Item {
         var nearestIndex = sortByDistance[0]
 
         // return table name & id
-        return {"tableName" :existingTables[nearestIndex], tableId : nearestIndex}
+        return {"tableName" :existingTables.get(nearestIndex), tableId : nearestIndex}
     }
 
 

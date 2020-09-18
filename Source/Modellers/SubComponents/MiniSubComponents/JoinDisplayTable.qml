@@ -1,6 +1,4 @@
-import QtQuick 2.0
-
-
+import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import "../../SubComponents"
@@ -10,8 +8,15 @@ import com.grafieks.singleton.constants 1.0
 
 Rectangle{
 
+    id: newItem
     width: parent.width
     height: parent.height
+
+    readonly property string moduleName : "JoinDisplayTable"
+    property var allColumnsProperty : []
+    property alias tableName: title.text
+
+    onTableNameChanged: loadTableColumns(tableName)
 
 
     /***********************************************************************************************************************/
@@ -19,19 +24,7 @@ Rectangle{
 
 
     ListModel{
-        id:tableList
-        ListElement{
-            columnName: "colm1"
-        }
-        ListElement{
-            columnName: "colm2"
-        }
-        ListElement{
-            columnName: "colm3"
-        }
-        ListElement{
-            columnName: "colm4"
-        }
+        id:displayColList
     }
 
 
@@ -43,7 +36,17 @@ Rectangle{
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
+    Connections{
+        target: TableColumnsModel
 
+        function onColumnListObtained(allColumns, tableName, moduleName){
+
+            allColumnsProperty = allColumns
+
+            if(moduleName === newItem.moduleName)
+                displayColumns(allColumns, tableName)
+        }
+    }
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -66,6 +69,29 @@ Rectangle{
     // JAVASCRIPT FUNCTION STARTS
 
 
+    function loadTableColumns(tableName){
+
+        TableColumnsModel.getColumnsForTable(tableName, newItem.moduleName)
+    }
+
+
+    function displayColumns(allColumns, tableName){
+
+        const searchKey = tableName + "."
+        let toHideCols = DSParamsModel.fetchHideColumns(searchKey)
+
+        displayColList.clear()
+
+        allColumns.forEach(function(item){
+
+            var regex = new RegExp("[.]" + item[0] + "$");
+
+            if(!toHideCols.find(value => regex.test(value))){
+                displayColList.append({colName: item[0], colType: item[1]})
+            }
+        })
+        console.log(displayColList)
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -125,7 +151,6 @@ Rectangle{
 
                 Text{
                     id : title
-                    text: "Table Name"
                     anchors.left : parent.left
                     anchors.leftMargin: 10
                     anchors.verticalCenter: parent.verticalCenter
@@ -154,11 +179,8 @@ Rectangle{
                         parent_dimension: 16
                         ButtonGroup.group: tableLeftRightJoinGrp
                     }
-
                 }
-
             }
-
         }
 
 
@@ -168,20 +190,17 @@ Rectangle{
             height: parent.height - header.height
             width: parent.width
             anchors.left: parent.left
-
             spacing: 2
-
-            model: 4
+            model: 1
 
             delegate:   CustomComboBox{
                 id: columnDropDown
                 height: 30
                 width: parent.width
-                model: tableList
+                model: displayColList
+                textRole: "colName"
                 currentIndex: 0
             }
-
-
         }
 
 

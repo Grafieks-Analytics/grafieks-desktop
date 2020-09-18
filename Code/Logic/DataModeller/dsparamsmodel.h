@@ -20,6 +20,8 @@ class DSParamsModel : public QObject
 
     // Standalone variables
     QStringList hideColumns;
+    QMap<int, QStringList> joinBoxTableMap;
+
 
 
     // Q_PROPERTY variables
@@ -84,6 +86,10 @@ public:
     Q_INVOKABLE void addToHideColumns(QString colName);
     Q_INVOKABLE void removeFromHideColumns(QString colName);
     Q_INVOKABLE QStringList fetchHideColumns(QString searchKeyword = "");
+
+    Q_INVOKABLE void addToJoinBoxTableMap(int refObjId, QString firstTable, QString secondTable);
+    Q_INVOKABLE void removeJoinBoxTableMap(int refObjId = 0);
+    Q_INVOKABLE QVariantList fetchJoinBoxTableMap(int refObjId = 0);
 
     QString dsName() const;
     QString dsType() const;

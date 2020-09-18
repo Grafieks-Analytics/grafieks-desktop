@@ -46,10 +46,10 @@ Item {
 
     function onIconClicked(){
 
-        joinPopup.visible = true
-
         // Set joinId. Required to get value from Map() in the parent component
         DSParamsModel.setJoinId(parseInt(objectName))
+
+        joinPopup.visible = true
     }
 
     // JAVASCRIPT FUNCTION ENDS
