@@ -16,6 +16,9 @@ Item{
     property string name: nameID.text
     property bool alreadyJoined: true
     property var objectName
+    readonly property string moduleName : "DroppedRectangle"
+
+    property var allColumnsProperty : []
 
     objectName: objectName
 
@@ -25,6 +28,32 @@ Item{
     signal refObjectCount(int counter, int objectWidth)
 
 
+    ListModel{
+        id: displayColList
+    }
+
+    Connections{
+        target: TableColumnsModel
+
+        function onColumnListObtained(allColumns, tableName, moduleName){
+
+            allColumnsProperty = allColumns
+
+            if(moduleName === newItem.moduleName)
+                displayColumns(allColumns, tableName)
+        }
+    }
+
+    Connections{
+        target : DSParamsModel
+
+        // Re render column list model when
+        // a column is checked/unchecked in the right panel
+        function onHideColumnsChanged(){
+            displayColumns(allColumnsProperty, newItem.name)
+        }
+    }
+
 
 
     Component.onCompleted: {
@@ -32,10 +61,28 @@ Item{
         droppedRectangle.width = nameID.text.length * 10 + 30
     }
 
-    function onRectangleToggle(){
-        droppedRectangle.height = droppedRectangle.height === 30 ? 60 : 30
+    function displayColumns(allColumns, tableName){
 
-        TableColumnsModel.getColumnsForTable()
+        const searchKey = tableName + "."
+        let toHideCols = DSParamsModel.fetchHideColumns(searchKey)
+
+        displayColList.clear()
+
+        allColumns.forEach(function(item){
+
+            var regex = new RegExp("[.]" + item[0] + "$");
+
+            if(!toHideCols.find(value => regex.test(value))){
+                displayColList.append({colName: item[0], colType: item[1]})
+            }
+        })
+    }
+
+    function onRectangleToggle(){
+
+        columnListDroppedRect.visible = columnListDroppedRect.visible === true ? false : true
+
+        TableColumnsModel.getColumnsForTable(newItem.name, newItem.moduleName)
     }
 
     function destroyRectangle(counter){
@@ -50,11 +97,22 @@ Item{
 
     function onReleasedRectangle(parent){
 
-        // Released rectangle
-//        parent.Drag.drop();
-
         // Call signal
         parent.dropped(newItem.x, newItem.y)
+    }
+
+
+    Component{
+        id: listviewComponent
+
+        Row{
+            id: innerRow
+            height: 20
+
+            Text{
+                text: colName
+            }
+        }
     }
 
 
@@ -103,6 +161,17 @@ Item{
 
 
     }
+
+    ListView{
+        id: columnListDroppedRect
+        visible: false
+        anchors.top : droppedRectangle.bottom
+        height: model.count * 30
+        model: displayColList
+        delegate: listviewComponent
+
+    }
+
     DropArea{
         id: dropAreaRectangle
         anchors.fill: parent

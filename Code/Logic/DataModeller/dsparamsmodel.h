@@ -147,6 +147,8 @@ public slots:
 
 signals:
 
+    void hideColumnsChanged(QStringList hideColumns);
+
     void dsNameChanged(QString dsName);
     void dsTypeChanged(QString dsType);
     void isFullExtractChanged(bool isFullExtract);

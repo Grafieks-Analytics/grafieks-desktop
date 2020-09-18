@@ -30,10 +30,10 @@ class TableColumnsModel : public QObject
 public:
     explicit TableColumnsModel(QObject *parent = nullptr);
 
-    Q_INVOKABLE void getColumnsForTable(QString tableName = "");
+    Q_INVOKABLE void getColumnsForTable(QString tableName = "", QString moduleName = "");
 
 signals:
-    void columnListObtained(QList<QStringList> allColumns, QString tableName);
+    void columnListObtained(QList<QStringList> allColumns, QString tableName, QString moduleName);
 
 
 private:

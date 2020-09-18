@@ -21,8 +21,9 @@ Item {
     Connections{
         target: TableColumnsModel
 
-        function onColumnListObtained(allColumns, tableName){
-            onReceivingSignal(allColumns, tableName);
+        function onColumnListObtained(allColumns, tableName, moduleName){
+            if(moduleName === "TableColumns")
+                onReceivingSignal(allColumns, tableName);
         }
     }
 

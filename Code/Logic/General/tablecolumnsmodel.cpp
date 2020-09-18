@@ -12,7 +12,7 @@ TableColumnsModel::TableColumnsModel(QObject *parent) : QObject(parent)
  * \endcode
  *
  */
-void TableColumnsModel::getColumnsForTable(QString tableName)
+void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName)
 {
 
 
@@ -52,6 +52,6 @@ void TableColumnsModel::getColumnsForTable(QString tableName)
     }
     }
 
-    emit columnListObtained(allColumns, tableName);
+    emit columnListObtained(allColumns, tableName, moduleName);
     allColumns.clear();
 }

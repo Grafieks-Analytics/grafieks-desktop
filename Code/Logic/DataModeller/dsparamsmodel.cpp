@@ -28,11 +28,13 @@ void DSParamsModel::resetFilter()
 void DSParamsModel::addToHideColumns(QString colName)
 {
     this->hideColumns.append(colName);
+    emit hideColumnsChanged(this->hideColumns);
 }
 
 void DSParamsModel::removeFromHideColumns(QString colName)
 {
     this->hideColumns.removeOne(colName);
+    emit hideColumnsChanged(this->hideColumns);
 }
 
 QStringList DSParamsModel::fetchHideColumns(QString searchKeyword)

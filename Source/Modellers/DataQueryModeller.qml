@@ -266,7 +266,7 @@ Page {
                 }
 
                 onDoubleClicked: {
-                    TableColumnsModel.getColumnsForTable(tableName)
+                    TableColumnsModel.getColumnsForTable(tableName, "TableColumns")
 
                     if(tablecolumnListView.visible === true){
                         tablecolumnListView.visible = false

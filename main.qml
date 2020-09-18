@@ -382,7 +382,7 @@ ApplicationWindow {
         id: stacklayout_home
         width: mainwindow.width
         height: mainwindow.height
-        currentIndex:6
+        currentIndex:3
 
         // 0
         Test{
@@ -414,15 +414,17 @@ ApplicationWindow {
             id: data_query_modeller_main
         }
 
-        // 7
+        // 6
         NewDashboard{
             id: new_dashboard_main
         }
 
-        // 6
+        // 7
         NewReport{
             id: new_report_main
         }
+
+
 
     }
 
