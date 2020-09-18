@@ -48,6 +48,16 @@ Rectangle{
         }
     }
 
+    Connections{
+        target: DSParamsModel
+
+        // Re render column list model when
+        // a column is checked/unchecked in the right panel
+        function onHideColumnsChanged(){
+            displayColumns(allColumnsProperty, newItem.tableName)
+        }
+    }
+
     // SIGNALS ENDS
     /***********************************************************************************************************************/
 
