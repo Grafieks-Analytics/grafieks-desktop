@@ -35,9 +35,9 @@ void DSParamsModel::removeFromHideColumns(QString colName)
     this->hideColumns.removeOne(colName);
 }
 
-QStringList DSParamsModel::fetchHideColumns()
+QStringList DSParamsModel::fetchHideColumns(QString searchKeyword)
 {
-    return this->hideColumns;
+    return this->hideColumns.filter(searchKeyword);
 }
 
 QString DSParamsModel::dsName() const

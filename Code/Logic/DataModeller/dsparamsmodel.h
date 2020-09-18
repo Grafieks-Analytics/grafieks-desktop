@@ -83,7 +83,7 @@ public:
     Q_INVOKABLE void resetFilter();
     Q_INVOKABLE void addToHideColumns(QString colName);
     Q_INVOKABLE void removeFromHideColumns(QString colName);
-    Q_INVOKABLE QStringList fetchHideColumns();
+    Q_INVOKABLE QStringList fetchHideColumns(QString searchKeyword = "");
 
     QString dsName() const;
     QString dsType() const;
