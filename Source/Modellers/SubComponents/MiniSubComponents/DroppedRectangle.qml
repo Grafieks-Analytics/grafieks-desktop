@@ -34,6 +34,8 @@ Item{
 
     function onRectangleToggle(){
         droppedRectangle.height = droppedRectangle.height === 30 ? 60 : 30
+
+        TableColumnsModel.getColumnsForTable()
     }
 
     function destroyRectangle(counter){

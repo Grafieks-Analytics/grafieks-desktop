@@ -25,6 +25,21 @@ void DSParamsModel::resetFilter()
     this->setSelectAll( Constants::defaultSelectAll);
 }
 
+void DSParamsModel::addToHideColumns(QString colName)
+{
+    this->hideColumns.append(colName);
+}
+
+void DSParamsModel::removeFromHideColumns(QString colName)
+{
+    this->hideColumns.removeOne(colName);
+}
+
+QStringList DSParamsModel::fetchHideColumns()
+{
+    return this->hideColumns;
+}
+
 QString DSParamsModel::dsName() const
 {
     return m_dsName;
@@ -69,6 +84,7 @@ int DSParamsModel::joinId() const
 {
     return m_joinId;
 }
+
 
 QString DSParamsModel::section() const
 {
@@ -210,6 +226,7 @@ void DSParamsModel::setJoinId(int joinId)
     m_joinId = joinId;
     emit joinIdChanged(m_joinId);
 }
+
 
 void DSParamsModel::setSection(QString section)
 {

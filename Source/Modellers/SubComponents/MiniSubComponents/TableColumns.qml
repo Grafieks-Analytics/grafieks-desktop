@@ -8,13 +8,9 @@ Item {
     height:columnListView.height
     z: 2
 
-    property alias objectName: tableColumnsComponent.objectName // Table name sent here
+    property alias objectName: tableColumnsComponent.objectName // Table name sent here from the caller
     property var tableColumnsMap : new Map()
     property var itemMap: new Map()
-    property bool halt : true
-
-
-    signal onColumnStateChanged(bool state, string colName, string tableName)
 
 
     ListModel{
@@ -27,7 +23,6 @@ Item {
 
         function onColumnListObtained(allColumns, tableName){
             onReceivingSignal(allColumns, tableName);
-            halt = true
         }
     }
 
@@ -50,6 +45,22 @@ Item {
         }
     }
 
+    function hideColumnSelection(state, colName, tableName){
+
+        var key = tableName + "." + colName
+
+        // If key already exists, remove
+        // Else insert into DSParamsModel.hideColumns
+        if(state === true){
+
+            DSParamsModel.removeFromHideColumns(key)
+        } else{
+
+            // check if the key exists
+            DSParamsModel.addToHideColumns(key)
+        }
+    }
+
 
 
     ListView{
@@ -66,7 +77,7 @@ Item {
                 checkbox_checked: true
                 parent_dimension: 16
 
-                onClicked: onColumnStateChanged(checked, colName, tableName)
+                onClicked: hideColumnSelection(checked, colName, tableName)
             }
         }
     }

@@ -17,6 +17,13 @@
 class DSParamsModel : public QObject
 {
     Q_OBJECT
+
+    // Standalone variables
+    QStringList hideColumns;
+
+
+    // Q_PROPERTY variables
+
     Q_PROPERTY(QString dsName READ dsName WRITE setDsName NOTIFY dsNameChanged)
     Q_PROPERTY(QString dsType READ dsType WRITE setDsType NOTIFY dsTypeChanged)
     Q_PROPERTY(bool isFullExtract READ isFullExtract WRITE setIsFullExtract NOTIFY isFullExtractChanged)
@@ -70,11 +77,13 @@ class DSParamsModel : public QObject
     QString m_mode;
 
 
-
 public:
     explicit DSParamsModel(QObject *parent = nullptr);
 
     Q_INVOKABLE void resetFilter();
+    Q_INVOKABLE void addToHideColumns(QString colName);
+    Q_INVOKABLE void removeFromHideColumns(QString colName);
+    Q_INVOKABLE QStringList fetchHideColumns();
 
     QString dsName() const;
     QString dsType() const;
@@ -101,6 +110,8 @@ public:
     bool selectAll() const;
     int filterIndex() const;
     QString mode() const;
+
+
 
 
 
@@ -132,6 +143,8 @@ public slots:
     void setMode(QString mode);
 
 
+
+
 signals:
 
     void dsNameChanged(QString dsName);
@@ -159,6 +172,7 @@ signals:
     void selectAllChanged(bool selectAll);
     void filterIndexChanged(int filterIndex);
     void modeChanged(QString mode);
+
 
 };
 
