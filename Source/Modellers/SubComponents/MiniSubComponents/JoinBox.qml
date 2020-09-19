@@ -8,7 +8,7 @@ Item {
     id: joinBoxItem
     property var objectName
 
-    objectName: objectName
+    objectName: objectName // refObjectId from parent
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -20,6 +20,8 @@ Item {
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
+    signal destroyJoin(int refObjectId, string depth)
+
     // SIGNALS ENDS
     /***********************************************************************************************************************/
 
@@ -29,6 +31,17 @@ Item {
     // Connections Starts
 
 
+    Connections{
+        target: DSParamsModel
+
+        function onJoinIconMapChanged(joinIconData){
+
+            let refObjId = joinIconData[0]
+            let newIcon = joinIconData[1]
+
+            changeJoinIcon(refObjId, newIcon);
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -41,15 +54,28 @@ Item {
     // JAVASCRIPT FUNCTION STARTS
 
     Component.onCompleted: {
-        DSParamsModel.setJoinIcon("/Images/icons/inner_join_32.png")
+        DSParamsModel.addToJoinIconMap(parseInt(joinBoxItem.objectName), "/Images/icons/inner_join_32.png")
+        DSParamsModel.addToJoinTypeMap(parseInt(joinBoxItem.objectName), Constants.innerJoin)
     }
 
-    function onIconClicked(){
+    function onJoinIconClicked(){
 
         // Set joinId. Required to get value from Map() in the parent component
-        DSParamsModel.setJoinId(parseInt(objectName))
+        DSParamsModel.setJoinId(parseInt(joinBoxItem.objectName))
 
         joinPopup.visible = true
+    }
+
+    function onDeleteIconClicked(){
+
+        destroyJoin(parseInt(joinBoxItem.objectName), "single")
+    }
+
+
+    function changeJoinIcon(refObjId, newIcon){
+
+        if(refObjId === parseInt(objectName))
+            joinIconId.source = newIcon
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -72,13 +98,33 @@ Item {
         color: "transparent"
 
         Image{
-            id: iconId
-            source: DSParamsModel.joinIcon
+            id: joinIconId
+            source: "/Images/icons/inner_join_32.png"
         }
 
         MouseArea{
             anchors.fill: parent
-            onClicked: onIconClicked()
+            onClicked: onJoinIconClicked()
+
+        }
+    }
+
+    Rectangle{
+        id: deleteJoinRectangle
+        anchors.verticalCenter: joinBoxRectangle.verticalCenter
+        anchors.left: joinBoxRectangle.right
+        width:35
+        height:35
+        color: "transparent"
+
+        Image{
+            id: deleteIconId
+            source: "/Images/icons/remove.png"
+        }
+
+        MouseArea{
+            anchors.fill: parent
+            onClicked: onDeleteIconClicked()
 
         }
     }

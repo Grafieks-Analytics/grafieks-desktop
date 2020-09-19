@@ -21,6 +21,8 @@ class DSParamsModel : public QObject
     // Standalone variables
     QStringList hideColumns;
     QMap<int, QStringList> joinBoxTableMap;
+    QMap<int, QString> joinTypeMap;
+    QMap<int, QString> joinIconMap;
 
 
 
@@ -91,6 +93,16 @@ public:
     Q_INVOKABLE void removeJoinBoxTableMap(int refObjId = 0);
     Q_INVOKABLE QVariantList fetchJoinBoxTableMap(int refObjId = 0);
 
+    Q_INVOKABLE void addToJoinTypeMap(int refObjId, QString joinType = "");
+    Q_INVOKABLE void updateJoinTypeMap(int refObjId, QString joinType = "");
+    Q_INVOKABLE void removeJoinTypeMap(int refObjId = 0);
+    Q_INVOKABLE QString fetchJoinTypeMap(int refObjId = 0);
+
+    Q_INVOKABLE void addToJoinIconMap(int refObjId, QString iconLink = "");
+    Q_INVOKABLE void updateJoinIconMap(int refObjId, QString iconLink = "");
+    Q_INVOKABLE void removeJoinIconMap(int refObjId = 0);
+    Q_INVOKABLE QString fetchJoinIconMap(int refObjId = 0);
+
     QString dsName() const;
     QString dsType() const;
     bool isFullExtract() const;
@@ -154,6 +166,8 @@ public slots:
 signals:
 
     void hideColumnsChanged(QStringList hideColumns);
+    void joinTypeMapChanged(QVariantList joinTypeData);
+    void joinIconMapChanged(QVariantList joinIconData);
 
     void dsNameChanged(QString dsName);
     void dsTypeChanged(QString dsType);

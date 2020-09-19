@@ -62,6 +62,65 @@ QVariantList DSParamsModel::fetchJoinBoxTableMap(int refObjId)
     return returnObj;
 }
 
+void DSParamsModel::addToJoinTypeMap(int refObjId, QString joinType)
+{
+    QVariantList outData;
+    outData << refObjId << joinType;
+
+    this->joinTypeMap.insert(refObjId, joinType);
+    emit joinTypeMapChanged(outData);
+}
+
+void DSParamsModel::updateJoinTypeMap(int refObjId, QString joinType)
+{
+    QVariantList outData;
+    outData << refObjId << joinType;
+
+    this->joinTypeMap[refObjId] = joinType;
+    emit joinTypeMapChanged(outData);
+}
+
+void DSParamsModel::removeJoinTypeMap(int refObjId)
+{
+    this->joinTypeMap.remove(refObjId);
+}
+
+QString DSParamsModel::fetchJoinTypeMap(int refObjId)
+{
+    return this->joinTypeMap.value(refObjId);
+}
+
+void DSParamsModel::addToJoinIconMap(int refObjId, QString iconLink)
+{
+    QVariantList outData;
+    outData << refObjId << iconLink;
+
+    this->joinIconMap.insert(refObjId, iconLink);
+    emit joinIconMapChanged(outData);
+
+    qDebug() << "DS PARAMS INS" << iconLink << refObjId;
+}
+
+void DSParamsModel::updateJoinIconMap(int refObjId, QString iconLink)
+{
+    QVariantList outData;
+    outData << refObjId << iconLink;
+
+    this->joinIconMap[refObjId] = iconLink;
+    emit joinIconMapChanged(outData);
+}
+
+void DSParamsModel::removeJoinIconMap(int refObjId)
+{
+    this->joinIconMap.remove(refObjId);
+}
+
+QString DSParamsModel::fetchJoinIconMap(int refObjId)
+{
+    qDebug() << "DS PARAMS" << this->joinIconMap.value(refObjId) << refObjId << this->joinIconMap;
+    return this->joinIconMap.value(refObjId);
+}
+
 QString DSParamsModel::dsName() const
 {
     return m_dsName;

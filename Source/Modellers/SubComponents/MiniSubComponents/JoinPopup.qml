@@ -51,9 +51,9 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    Component.onCompleted: {
-        DSParamsModel.setJoinType(Constants.innerJoin)
-    }
+//    Component.onCompleted: {
+//        DSParamsModel.setJoinType(Constants.innerJoin)
+//    }
 
 
     function fetchJoinTableInfo(visible){
@@ -92,8 +92,9 @@ Rectangle{
             break;
         }
 
-        DSParamsModel.setJoinIcon(iconSource)
-        DSParamsModel.setJoinType(joinType)
+        DSParamsModel.updateJoinIconMap(DSParamsModel.joinId, iconSource)
+        DSParamsModel.updateJoinTypeMap(DSParamsModel.joinId, joinType)
+
     }
 
     function addKeyToList(){

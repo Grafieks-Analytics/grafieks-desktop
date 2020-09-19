@@ -89,15 +89,19 @@ Item {
     // SLOT
     // Destroy Lines and JoinBox
     // When destroying main rectangle
-    function destroyComponents(refObject){
+    function destroyComponents(refObject, depth){
 
         newConnectingLine.get(refObject).destroy();
         newJoinBox.get(refObject).destroy();
 
-        rearRectLineMaps.get(refObject).forEach(function(value){
-            newConnectingLine.get(value).destroy();
-            newJoinBox.get(value).destroy();
-        })
+        if(depth === "all"){
+            rearRectLineMaps.get(refObject).forEach(function(value){
+                newConnectingLine.get(value).destroy();
+                newJoinBox.get(value).destroy();
+            })
+        }
+
+
     }
 
     // New component on Dropped
@@ -227,6 +231,7 @@ Item {
         rectangles.get(counter).destroyComponents.connect(destroyComponents)
         rectangles.get(counter).refObjectCount.connect(setRefObject)
 
+
         // Created rectangle front & back coordinates
         var rectLeftX = drag.x
         var rectRightX = rectLeftX + tableslist.tableName.length * 10 + 30
@@ -274,6 +279,9 @@ Item {
             var rectY = nearestRectangleCoordinates.y <= currentPoint.y ? nearestRectangleCoordinates.y + midLengthY : currentPoint.y + midLengthY
 
             newJoinBox.set(counter, dynamicJoinBox.createObject(parent, {x: rectX, y: rectY, objectName : counter}))
+
+            // Connect join box destroy signal and slot
+            newJoinBox.get(counter).destroyJoin.connect(destroyComponents)
 
             // Save the Join Box Table map for join manipulation later
             DSParamsModel.addToJoinBoxTableMap(counter, nearestTable.tableName, tableslist.tableName)

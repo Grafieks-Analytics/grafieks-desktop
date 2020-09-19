@@ -25,7 +25,7 @@ Item{
 
     signal dragged(double x, double y);
     signal dropped(double x, double y);
-    signal destroyComponents(int counter)
+    signal destroyComponents(int counter, string depth)
     signal refObjectCount(int counter, int objectWidth)
 
 
@@ -91,7 +91,7 @@ Item{
 
     function destroyRectangle(counter){
         newItem.destroy()
-        destroyComponents(counter)
+        destroyComponents(counter, "all")
     }
 
 
