@@ -19,6 +19,7 @@ Item{
     readonly property string moduleName : "DroppedRectangle"
 
     property var allColumnsProperty : []
+    property string tableNameProperty : ""
 
     objectName: objectName
 
@@ -38,8 +39,9 @@ Item{
         function onColumnListObtained(allColumns, tableName, moduleName){
 
             allColumnsProperty = allColumns
+            tableNameProperty  = tableName
 
-            if(moduleName === newItem.moduleName)
+            if(moduleName === newItem.moduleName && tableName === newItem.name)
                 displayColumns(allColumns, tableName)
         }
     }
@@ -50,7 +52,9 @@ Item{
         // Re render column list model when
         // a column is checked/unchecked in the right panel
         function onHideColumnsChanged(){
-            displayColumns(allColumnsProperty, newItem.name)
+
+            if(tableNameProperty === newItem.name)
+                displayColumns(allColumnsProperty, newItem.name)
         }
     }
 

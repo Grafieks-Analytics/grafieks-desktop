@@ -14,6 +14,7 @@ Rectangle{
 
     readonly property string moduleName : "JoinDisplayTable"
     property var allColumnsProperty : []
+    property string tableNameProperty : ""
     property alias tableName: title.text
 
     onTableNameChanged: loadTableColumns(tableName)
@@ -42,8 +43,9 @@ Rectangle{
         function onColumnListObtained(allColumns, tableName, moduleName){
 
             allColumnsProperty = allColumns
+            tableNameProperty = tableName
 
-            if(moduleName === newItem.moduleName)
+            if(moduleName === newItem.moduleName && tableName === newItem.tableName)
                 displayColumns(allColumns, tableName)
         }
     }
@@ -54,7 +56,9 @@ Rectangle{
         // Re render column list model when
         // a column is checked/unchecked in the right panel
         function onHideColumnsChanged(){
-            displayColumns(allColumnsProperty, newItem.tableName)
+
+            if(tableNameProperty === newItem.tableName)
+                displayColumns(allColumnsProperty, newItem.tableName)
         }
     }
 
@@ -82,6 +86,7 @@ Rectangle{
     function loadTableColumns(tableName){
 
         TableColumnsModel.getColumnsForTable(tableName, newItem.moduleName)
+        console.log(moduleName, "CALLED")
     }
 
 
@@ -157,7 +162,7 @@ Rectangle{
             Row{
                 id: tableHeader
                 height: parent.height
-                anchors.top: parent.top
+//                anchors.top: parent.top
 
                 Text{
                     id : title
