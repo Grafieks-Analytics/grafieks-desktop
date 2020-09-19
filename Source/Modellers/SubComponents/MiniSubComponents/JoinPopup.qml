@@ -15,6 +15,8 @@ Rectangle{
     border.color: Constants.darkThemeColor
     visible: false
 
+    property int counter : 1
+
     onVisibleChanged: fetchJoinTableInfo(visible)
 
 
@@ -39,6 +41,13 @@ Rectangle{
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: DSParamsModel
+
+        function onJoinIdChanged(joinId){
+            fetchJoinTableInfo(true)
+        }
+    }
 
 
     // Connections Ends
@@ -50,10 +59,6 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
-
-//    Component.onCompleted: {
-//        DSParamsModel.setJoinType(Constants.innerJoin)
-//    }
 
 
     function fetchJoinTableInfo(visible){
@@ -98,7 +103,13 @@ Rectangle{
     }
 
     function addKeyToList(){
-        console.log('Add Key')
+
+        counter++
+
+        relationListView.model = counter
+        table1.modelCounter = counter
+        table2.modelCounter = counter
+
     }
 
     function onDoneClicked(){
@@ -349,13 +360,14 @@ Rectangle{
 
                 ListView{
 
+                    id: relationListView
                     height: parent.height
                     width: parent.width
                     anchors.top: parent.top
                     anchors.topMargin: 40
                     anchors.left: parent.left
 
-                    model: 4
+                    model: 1
 
                     delegate:  Row{
 

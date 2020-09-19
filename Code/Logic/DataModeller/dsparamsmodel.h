@@ -23,6 +23,7 @@ class DSParamsModel : public QObject
     QMap<int, QStringList> joinBoxTableMap;
     QMap<int, QString> joinTypeMap;
     QMap<int, QString> joinIconMap;
+    QMap<int, QMap<int, QStringList>> joinMapList;
 
 
 
@@ -36,8 +37,6 @@ class DSParamsModel : public QObject
     Q_PROPERTY(int displayRowsCount READ displayRowsCount WRITE setDisplayRowsCount NOTIFY displayRowsCountChanged)
 
     // For Data Modeller
-    Q_PROPERTY(QString joinType READ joinType WRITE setJoinType NOTIFY joinTypeChanged)
-    Q_PROPERTY(QString joinIcon READ joinIcon WRITE setJoinIcon NOTIFY joinIconChanged)
     Q_PROPERTY(int joinId READ joinId WRITE setJoinId NOTIFY joinIdChanged)
 
     // For Filters
@@ -62,8 +61,6 @@ class DSParamsModel : public QObject
     int m_displayRowsCount;
 
     // For Data Modeller
-    QString m_joinType;
-    QString m_joinIcon;
     int m_joinId;
 
     // For Filters
@@ -103,6 +100,11 @@ public:
     Q_INVOKABLE void removeJoinIconMap(int refObjId = 0);
     Q_INVOKABLE QString fetchJoinIconMap(int refObjId = 0);
 
+    Q_INVOKABLE void addToJoinMapList(int refObjId, int internalCounter, QString leftParam = "", QString rightParam = "");
+    Q_INVOKABLE void updateJoinMapList(int refObjId, int internalCounter, QString leftParam = "", QString rightParam = "");
+    Q_INVOKABLE void removeJoinMapList(int refObjId = 0, int internalCounter = 0);
+    Q_INVOKABLE QString fetchJoinMapList(int refObjId = 0);
+
     QString dsName() const;
     QString dsType() const;
     bool isFullExtract() const;
@@ -111,8 +113,6 @@ public:
     int displayRowsCount() const;
 
     // For Data Modeller
-    QString joinType() const;
-    QString joinIcon() const;
     int joinId() const;
 
     // For Filters
@@ -142,8 +142,6 @@ public slots:
     void setDisplayRowsCount(int displayRowsCount);
 
     // For Data Modeller
-    void setJoinType(QString joinType);
-    void setJoinIcon(QString joinIcon);
     void setJoinId(int joinId);
 
     // For Filters
@@ -177,8 +175,6 @@ signals:
     void displayRowsCountChanged(int displayRowsCount);
 
     // For Data Modeller
-    void joinTypeChanged(QString joinType);
-    void joinIconChanged(QString joinIcon);
     void joinIdChanged(int joinId);
 
     // For Filters

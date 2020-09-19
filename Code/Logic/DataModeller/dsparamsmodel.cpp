@@ -121,6 +121,35 @@ QString DSParamsModel::fetchJoinIconMap(int refObjId)
     return this->joinIconMap.value(refObjId);
 }
 
+void DSParamsModel::addToJoinMapList(int refObjId, int internalCounter, QString leftParam, QString rightParam)
+{
+    Q_UNUSED(refObjId);
+    Q_UNUSED(internalCounter);
+    Q_UNUSED(leftParam);
+    Q_UNUSED(rightParam);
+}
+
+void DSParamsModel::updateJoinMapList(int refObjId, int internalCounter, QString leftParam, QString rightParam)
+{
+
+    Q_UNUSED(refObjId);
+    Q_UNUSED(internalCounter);
+    Q_UNUSED(leftParam);
+    Q_UNUSED(rightParam);
+}
+
+void DSParamsModel::removeJoinMapList(int refObjId, int internalCounter)
+{
+
+    Q_UNUSED(refObjId);
+    Q_UNUSED(internalCounter);
+}
+
+QString DSParamsModel::fetchJoinMapList(int refObjId)
+{
+    Q_UNUSED(refObjId);
+}
+
 QString DSParamsModel::dsName() const
 {
     return m_dsName;
@@ -151,15 +180,6 @@ int DSParamsModel::displayRowsCount() const
     return m_displayRowsCount;
 }
 
-QString DSParamsModel::joinType() const
-{
-    return m_joinType;
-}
-
-QString DSParamsModel::joinIcon() const
-{
-    return m_joinIcon;
-}
 
 int DSParamsModel::joinId() const
 {
@@ -281,23 +301,7 @@ void DSParamsModel::setDisplayRowsCount(int displayRowsCount)
     emit displayRowsCountChanged(m_displayRowsCount);
 }
 
-void DSParamsModel::setJoinType(QString joinType)
-{
-    if (m_joinType == joinType)
-        return;
 
-    m_joinType = joinType;
-    emit joinTypeChanged(m_joinType);
-}
-
-void DSParamsModel::setJoinIcon(QString joinIcon)
-{
-    if (m_joinIcon == joinIcon)
-        return;
-
-    m_joinIcon = joinIcon;
-    emit joinIconChanged(m_joinIcon);
-}
 
 void DSParamsModel::setJoinId(int joinId)
 {

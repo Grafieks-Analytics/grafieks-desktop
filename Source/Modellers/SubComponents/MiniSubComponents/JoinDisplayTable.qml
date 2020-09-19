@@ -13,6 +13,7 @@ Rectangle{
     height: parent.height
 
     readonly property string moduleName : "JoinDisplayTable"
+    property alias modelCounter: tableListView.model
     property var allColumnsProperty : []
     property string tableNameProperty : ""
     property alias tableName: title.text
@@ -201,6 +202,7 @@ Rectangle{
 
         ListView{
 
+            id: tableListView
             anchors.top: header.bottom
             height: parent.height - header.height
             width: parent.width
