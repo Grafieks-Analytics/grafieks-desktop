@@ -103,7 +103,7 @@ public:
     Q_INVOKABLE void addToJoinMapList(int refObjId, int internalCounter, QString leftParam = "", QString rightParam = "");
     Q_INVOKABLE void updateJoinMapList(int refObjId, int internalCounter, QString leftParam = "", QString rightParam = "");
     Q_INVOKABLE void removeJoinMapList(int refObjId = 0, int internalCounter = 0);
-    Q_INVOKABLE QString fetchJoinMapList(int refObjId = 0);
+    Q_INVOKABLE QMap<int, QStringList> fetchJoinMapList(int refObjId = 0);
 
     QString dsName() const;
     QString dsType() const;

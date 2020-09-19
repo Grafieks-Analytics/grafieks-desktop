@@ -145,9 +145,13 @@ void DSParamsModel::removeJoinMapList(int refObjId, int internalCounter)
     Q_UNUSED(internalCounter);
 }
 
-QString DSParamsModel::fetchJoinMapList(int refObjId)
+QMap<int, QStringList> DSParamsModel::fetchJoinMapList(int refObjId)
 {
     Q_UNUSED(refObjId);
+
+    QMap<int, QStringList> out;
+
+    return out;
 }
 
 QString DSParamsModel::dsName() const
