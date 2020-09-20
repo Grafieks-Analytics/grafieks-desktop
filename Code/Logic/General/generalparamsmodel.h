@@ -7,8 +7,6 @@ class GeneralParamsModel : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int menuType READ menuType WRITE setMenuType NOTIFY menuTypeChanged)
-
-
     int m_menuType;
 
 public:

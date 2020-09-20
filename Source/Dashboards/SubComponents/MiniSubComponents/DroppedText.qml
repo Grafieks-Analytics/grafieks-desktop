@@ -11,8 +11,8 @@ Item{
 
     id: newItem
     visible: true
-    width: droppedRectangle.width
-    height: droppedRectangle.height
+//    width: parent.width
+//    height: parent.height
     property string name: nameID.text
     property bool alreadyJoined: true
     property var objectName
@@ -25,7 +25,7 @@ Item{
     signal refObjectCount(int counter, int objectWidth)
 
     Component.onCompleted: {
-        nameID.text = name
+//        nameID.text = name
         droppedRectangle.width = nameID.text.length * 10 + 100
     }
 
@@ -59,28 +59,8 @@ Item{
         id: droppedRectangle
         color: "white"
         border.width: 1
-        border.color: "grey"
-        height: 30
-
-        Text{
-            id: nameID
-            text: text
-            anchors.centerIn: parent
-        }
-
-        Image{
-            id: removeIcon
-            source : "/Images/icons/remove.png"
-            anchors.right: droppedRectangle.right
-            anchors.rightMargin: 10
-            anchors.verticalCenter: droppedRectangle.verticalCenter
-            z: 5
-
-            MouseArea{
-                anchors.fill: parent
-                onClicked: destroyRectangle(parseInt(newItem.objectName))
-            }
-        }
+        height: parent.height
+        width: parent.width
 
         MouseArea {
             id: mouseArea

@@ -106,5 +106,6 @@
         <file>Source/Dashboards/SubComponents/MiniSubComponents/ToolBarSeparator.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/example.html</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/TableColumns.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/MainContainer.qml</file>
     </qresource>
 </RCC>

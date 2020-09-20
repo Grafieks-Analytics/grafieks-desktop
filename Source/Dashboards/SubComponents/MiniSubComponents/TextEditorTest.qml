@@ -166,9 +166,6 @@ Rectangle{
 
     Action {
         id: alignLeftAction
-        text: "&Left"
-        iconSource: "images/textleft.png"
-        iconName: "format-justify-left"
         shortcut: "ctrl+l"
         onTriggered: document.alignment = Qt.AlignLeft
         checkable: true
@@ -176,27 +173,18 @@ Rectangle{
     }
     Action {
         id: alignCenterAction
-        text: "C&enter"
-        iconSource: "images/textcenter.png"
-        iconName: "format-justify-center"
         onTriggered: document.alignment = Qt.AlignHCenter
         checkable: true
         checked: document.alignment == Qt.AlignHCenter
     }
     Action {
         id: alignRightAction
-        text: "&Right"
-        iconSource: "images/textright.png"
-        iconName: "format-justify-right"
         onTriggered: document.alignment = Qt.AlignRight
         checkable: true
         checked: document.alignment == Qt.AlignRight
     }
     Action {
         id: alignJustifyAction
-        text: "&Justify"
-        iconSource: "images/textjustify.png"
-        iconName: "format-justify-fill"
         onTriggered: document.alignment = Qt.AlignJustify
         checkable: true
         checked: document.alignment == Qt.AlignJustify
@@ -344,19 +332,87 @@ Rectangle{
                 action: underlineAction
             }
 
+            Rectangle{
+                id: colorBox
+                width: 30
+                height: parent.height - 16
+                anchors.verticalCenter: parent.verticalCenter
+                color: colorDialog.color;
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: colorDialog.open()
+                }
+            }
+
+
+
             Button{
                 width: 30
                 height: parent.height - 16
                 anchors.verticalCenter: parent.verticalCenter
-                onClicked: colorDialog.open()
-
                 Image{
                     width: 18
                     height: 18
-                    source: "/Images/icons/edit_black.png"
+                    source: "/Images/icons/align-left.png"
+                    anchors.centerIn: parent
+                }
+                action: alignLeftAction
+            }
+
+
+            Button{
+                width: 30
+                height: parent.height - 16
+                anchors.verticalCenter: parent.verticalCenter
+                Image{
+                    width: 18
+                    height: 18
+                    source: "/Images/icons/align-center.png"
+                    anchors.centerIn: parent
+                }
+                action: alignCenterAction
+            }
+
+            Button{
+                width: 30
+                height: parent.height - 16
+                anchors.verticalCenter: parent.verticalCenter
+                Image{
+                    width: 18
+                    height: 18
+                    source: "/Images/icons/align-right.png"
+                    anchors.centerIn: parent
+                }
+                action: alignRightAction
+            }
+
+            Button{
+                width: 30
+                height: parent.height - 16
+                anchors.verticalCenter: parent.verticalCenter
+                Image{
+                    width: 18
+                    height: 18
+                    source: "/Images/icons/align-justify.png"
+                    anchors.centerIn: parent
+                }
+                action: alignJustifyAction
+            }
+
+
+            Button{
+                width: 30
+                height: parent.height - 16
+                anchors.verticalCenter: parent.verticalCenter
+                Image{
+                    width: 18
+                    height: 18
+                    source: "/Images/icons/attach-link.png"
                     anchors.centerIn: parent
                 }
             }
+
 
 
         }
@@ -410,6 +466,9 @@ Rectangle{
             onError: {
                 errorDialog.text = message
                 errorDialog.visible = true
+            }
+            onTextColorChanged: {
+                colorBox.color = colorDialog.color
             }
         }
 

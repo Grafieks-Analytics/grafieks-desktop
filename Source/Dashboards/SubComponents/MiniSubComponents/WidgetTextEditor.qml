@@ -95,8 +95,6 @@ Popup {
     // Page Design Starts
 
 
-
-
     Rectangle{
         id: headerPopup
         color: Constants.whiteColor
@@ -134,16 +132,16 @@ Popup {
 
 
     Rectangle{
-
+        id: textEditorDocument
         anchors.top: headerPopup.bottom
         anchors.topMargin: 10
         height: editorPopup.height - (headerPopup.height + 30)
 
-        width: parent.width - 40
+        width: parent.width - 20
 
         anchors.left: parent.left
-        anchors.leftMargin: 20
-        anchors.rightMargin: 20
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
 
         color: "transparent"
 
@@ -159,6 +157,15 @@ Popup {
             }
 
         }
+
+    }
+
+    Rectangle{
+        id: footer
+        anchors.top: textEditorDocument.bottom
+        anchors.topMargin: 10
+
+        anchors.right: parent.right
 
     }
 

@@ -23,8 +23,13 @@ Rectangle {
     width: parent.width
 
     property var rectangles: new Map() // rectangle object
+
+    property var dynamicContainer : Qt.createComponent("./MiniSubComponents/MainContainer.qml");
+
     property var dynamicText : Qt.createComponent("./MiniSubComponents/DroppedText.qml");
     property var dynamicImageBox : Qt.createComponent("./MiniSubComponents/DroppedImage.qml");
+
+    property var acceptedProperties: ['text','image','report']
 
 
 
@@ -42,7 +47,6 @@ Rectangle {
 
     /***********************************************************************************************************************/
     // SIGNALS STARTS
-
 
 
     // SIGNALS ENDS
@@ -72,29 +76,24 @@ Rectangle {
 
         var currentPoint = {x: drag.x, y: drag.y};
         console.log("Entered", currentPoint.x, listViewElem.itemName)
-//        console.log(dropArea.keys)
-
-
 
     }
     function onDropAreaDropped(drag){
         var currentPoint = {x: drag.x, y: drag.y};
-//        console.log(currentPoint.x)
-//        console.log(currentPoint.y)
-
-//        console.log(subItemRepeater);
 
         dashboardArea.color = "transparent"
 
-        if(listViewElem.itemName.toLowerCase() == "image"){
-            rectangles.set(counter, dynamicImageBox.createObject(parent, {x:drag.x, y: drag.y, name: 'Select an Image', objectName : counter}))
+        console.log(listViewElem.itemName.toLowerCase(),'Dropped Item');
+        DashboardContainer.setLastContainerType(listViewElem.itemName.toLowerCase());
+        DashboardContainer.setPositionX(drag.x);
+        DashboardContainer.setPositionY(drag.y);
+
+        if(acceptedProperties.includes(listViewElem.itemName.toLocaleLowerCase())){
+            rectangles.set(counter,dynamicContainer.createObject(parent,{x:drag.x, y: drag.y, name: 'Text', objectName : counter}))
+            counter++;
         }
 
-        if(listViewElem.itemName.toLowerCase() == "text"){
-            rectangles.set(counter, dynamicText.createObject(parent, {x:drag.x, y: drag.y, name: 'Text', objectName : counter}))
-        }
 
-        counter++;
 
     }
     function onDropAreaPositionChanged(drag){
