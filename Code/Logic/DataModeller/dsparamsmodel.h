@@ -24,6 +24,7 @@ class DSParamsModel : public QObject
     QMap<int, QString> joinTypeMap;
     QMap<int, QString> joinIconMap;
     QMap<int, QMap<int, QStringList>> joinMapList;
+    QMap<int, QString> primaryJoinTable;
 
 
 
@@ -103,6 +104,10 @@ public:
     Q_INVOKABLE void addToJoinMapList(int refObjId, int internalCounter, QString leftParam = "", QString rightParam = "");
     Q_INVOKABLE void removeJoinMapList(int refObjId = 0, int internalCounter = 0);
     Q_INVOKABLE QMap<int, QStringList> fetchJoinMapList(int refObjId = 0);
+
+    Q_INVOKABLE void addToPrimaryJoinTable(int refObjId, QString tableName);
+    Q_INVOKABLE void removePrimaryJoinTable(int refObjId = 0);
+    Q_INVOKABLE QString fetchPrimaryJoinTable(int refObjId = 0);
 
     QString dsName() const;
     QString dsType() const;

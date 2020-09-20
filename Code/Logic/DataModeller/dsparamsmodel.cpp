@@ -164,6 +164,21 @@ QMap<int, QStringList> DSParamsModel::fetchJoinMapList(int refObjId)
     return this->joinMapList[refObjId];
 }
 
+void DSParamsModel::addToPrimaryJoinTable(int refObjId, QString tableName)
+{
+    this->primaryJoinTable[refObjId] = tableName;
+}
+
+void DSParamsModel::removePrimaryJoinTable(int refObjId)
+{
+    this->primaryJoinTable.remove(refObjId);
+}
+
+QString DSParamsModel::fetchPrimaryJoinTable(int refObjId)
+{
+    return this->primaryJoinTable.value(refObjId);
+}
+
 QString DSParamsModel::dsName() const
 {
     return m_dsName;
