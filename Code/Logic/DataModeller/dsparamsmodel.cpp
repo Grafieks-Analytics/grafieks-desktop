@@ -98,7 +98,6 @@ void DSParamsModel::addToJoinIconMap(int refObjId, QString iconLink)
     this->joinIconMap.insert(refObjId, iconLink);
     emit joinIconMapChanged(outData);
 
-    qDebug() << "DS PARAMS INS" << iconLink << refObjId;
 }
 
 void DSParamsModel::updateJoinIconMap(int refObjId, QString iconLink)
@@ -117,41 +116,67 @@ void DSParamsModel::removeJoinIconMap(int refObjId)
 
 QString DSParamsModel::fetchJoinIconMap(int refObjId)
 {
-    qDebug() << "DS PARAMS" << this->joinIconMap.value(refObjId) << refObjId << this->joinIconMap;
     return this->joinIconMap.value(refObjId);
 }
 
 void DSParamsModel::addToJoinMapList(int refObjId, int internalCounter, QString leftParam, QString rightParam)
 {
-    Q_UNUSED(refObjId);
-    Q_UNUSED(internalCounter);
-    Q_UNUSED(leftParam);
-    Q_UNUSED(rightParam);
+    QMap<int, QStringList> joinParamMap;
+    QStringList params;
+
+    params << leftParam << rightParam;
+
+
+    if(!joinMapList[refObjId].isEmpty())
+        joinParamMap = joinMapList[refObjId];
+
+
+    joinParamMap[internalCounter] = params;
+    this->joinMapList[refObjId] = joinParamMap;
+
+    qDebug() << this->joinMapList << "DSPARAMS addToJoinMapList";
 }
 
-void DSParamsModel::updateJoinMapList(int refObjId, int internalCounter, QString leftParam, QString rightParam)
-{
-
-    Q_UNUSED(refObjId);
-    Q_UNUSED(internalCounter);
-    Q_UNUSED(leftParam);
-    Q_UNUSED(rightParam);
-}
 
 void DSParamsModel::removeJoinMapList(int refObjId, int internalCounter)
 {
 
-    Q_UNUSED(refObjId);
-    Q_UNUSED(internalCounter);
+    if(refObjId > 0 || internalCounter > 0){
+
+        if(internalCounter > 0){
+            QMap<int, QStringList> joinParamMap;
+
+            joinParamMap = this->joinMapList.value(refObjId);
+            joinParamMap.remove(internalCounter);
+
+            this->joinMapList[refObjId] = joinParamMap;
+
+        } else{
+            this->joinMapList.remove(refObjId);
+        }
+    }
+
 }
 
 QMap<int, QStringList> DSParamsModel::fetchJoinMapList(int refObjId)
 {
-    Q_UNUSED(refObjId);
 
-    QMap<int, QStringList> out;
+    return this->joinMapList[refObjId];
+}
 
-    return out;
+void DSParamsModel::addToPrimaryJoinTable(int refObjId, QString tableName)
+{
+    this->primaryJoinTable[refObjId] = tableName;
+}
+
+void DSParamsModel::removePrimaryJoinTable(int refObjId)
+{
+    this->primaryJoinTable.remove(refObjId);
+}
+
+QString DSParamsModel::fetchPrimaryJoinTable(int refObjId)
+{
+    return this->primaryJoinTable.value(refObjId);
 }
 
 QString DSParamsModel::dsName() const

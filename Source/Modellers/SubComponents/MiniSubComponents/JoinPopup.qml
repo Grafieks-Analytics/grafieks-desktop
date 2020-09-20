@@ -65,9 +65,36 @@ Rectangle{
 
         if(visible === true){
 
+            // Set join info in both the tables
             let joinTableInfo = DSParamsModel.fetchJoinBoxTableMap(DSParamsModel.joinId)
-            table1.tableName = joinTableInfo[1];
+            table1.tableName = joinTableInfo[1]
             table2.tableName = joinTableInfo[2]
+
+            // Set tablenames in primary join table radio boxes
+            leftJoinRadio.radio_text = table1.tableName
+            rightJoinRadio.radio_text = table2.tableName
+
+            // Set default primary join table
+
+            if(DSParamsModel.fetchPrimaryJoinTable(DSParamsModel.joinId) === ""){
+
+                DSParamsModel.addToPrimaryJoinTable(DSParamsModel.joinId, table1.tableName)
+                leftJoinRadio.checked = true
+
+            } else{
+
+                if(DSParamsModel.fetchPrimaryJoinTable(DSParamsModel.joinId) === table1.tableName){
+                    leftJoinRadio.checked = true
+                } else{
+                    rightJoinRadio.checked = true
+                }
+            }
+
+
+            // Reset the counter, if it appears for the first time
+            // Or fetch existing counter value & joins from DSParamsModel
+            counter = 0
+            addKeyToList()
         }
     }
 
@@ -110,6 +137,8 @@ Rectangle{
         table1.modelCounter = counter
         table2.modelCounter = counter
 
+        DSParamsModel.addToJoinMapList(DSParamsModel.joinId, counter, "test1", "test2")
+
     }
 
     function onDoneClicked(){
@@ -118,6 +147,10 @@ Rectangle{
 
     function onDragJoinPopup(mouse){
         console.log('Write here to drag the panel')
+    }
+
+    function changePrimaryJoinTable(tableName){
+        DSParamsModel.addToPrimaryJoinTable(DSParamsModel.joinId, tableName)
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -305,17 +338,56 @@ Rectangle{
 
     // Select Option Ends
 
-    // Add Key Starts
+    // Primary Table Starts
 
-    Row{
-        id: addKeyRow
-        height: 30
-
+    Column{
+        id: primaryTableRow
         anchors.top: selectJoin.bottom
         width: parent.width
 
         anchors.left: parent.left
         anchors.leftMargin: 12
+
+        Text{
+            text: "Select Primary Table"
+        }
+
+        Row{
+            // For Table 1
+            // Text set by function
+            // Default Checked set from the function
+            CustomRadioButton{
+
+                id: leftJoinRadio
+                parent_dimension: 16
+                ButtonGroup.group: tableLeftRightJoinGrp
+                onClicked: changePrimaryJoinTable(leftJoinRadio.radio_text)
+
+            }
+
+            // For Table 2
+            // Text set by function
+            // Default Checked set from the function
+            CustomRadioButton{
+                id: rightJoinRadio
+                parent_dimension: 16
+                ButtonGroup.group: tableLeftRightJoinGrp
+                onClicked: changePrimaryJoinTable(rightJoinRadio.radio_text)
+            }
+        }
+
+
+    }
+
+    // Primary Table Ends
+
+    // Add Key Starts
+
+    Row{
+        id: addKeyRow
+        height: 30
+        anchors.top: primaryTableRow.bottom
+        anchors.left: primaryTableRow.left
 
         CustomButton{
 
@@ -324,17 +396,21 @@ Rectangle{
             onClicked: addKeyToList()
 
         }
+
+
     }
 
 
     // Add key Ends
+
+
 
     Column{
         id: tables
         anchors.top: addKeyRow.bottom
 
         width: parent.width
-        height: parent.height - selectJoin.height - headerPopup.height - addKeyRow.height - doneBtn.height
+        height: parent.height - selectJoin.height - headerPopup.height - addKeyRow.height - doneBtn.height - primaryTableRow.height
 
         Row{
 
