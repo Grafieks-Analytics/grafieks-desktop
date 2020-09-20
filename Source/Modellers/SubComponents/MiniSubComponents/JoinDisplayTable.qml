@@ -87,7 +87,6 @@ Rectangle{
     function loadTableColumns(tableName){
 
         TableColumnsModel.getColumnsForTable(tableName, newItem.moduleName)
-        console.log(moduleName, "CALLED")
     }
 
 
@@ -106,7 +105,6 @@ Rectangle{
                 displayColList.append({colName: item[0], colType: item[1]})
             }
         })
-        console.log(displayColList)
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -170,31 +168,6 @@ Rectangle{
                     anchors.left : parent.left
                     anchors.leftMargin: 10
                     anchors.verticalCenter: parent.verticalCenter
-                }
-
-
-                Rectangle{
-                    height: parent.height
-                    anchors.left: title.right
-
-                    CustomRadioButton{
-
-                        id: leftJoinRadio
-                        radio_text: "L"
-                        checked: true
-                        parent_dimension: 16
-                        ButtonGroup.group: tableLeftRightJoinGrp
-
-                    }
-
-                    CustomRadioButton{
-                        id: rightJoinRadio
-                        anchors.left: leftJoinRadio.right
-                        checked: false
-                        radio_text: "R"
-                        parent_dimension: 16
-                        ButtonGroup.group: tableLeftRightJoinGrp
-                    }
                 }
             }
         }

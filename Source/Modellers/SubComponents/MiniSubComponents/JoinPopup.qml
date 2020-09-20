@@ -65,9 +65,18 @@ Rectangle{
 
         if(visible === true){
 
+            // Set join info in both the tables
             let joinTableInfo = DSParamsModel.fetchJoinBoxTableMap(DSParamsModel.joinId)
-            table1.tableName = joinTableInfo[1];
+            table1.tableName = joinTableInfo[1]
             table2.tableName = joinTableInfo[2]
+
+            leftJoinRadio.radio_text = joinTableInfo[1]
+            rightJoinRadio.radio_text = joinTableInfo[2]
+
+            // Reset the counter, if it appears for the first time
+            // Or fetch existing counter value & joins from DSParamsModel
+            counter = 0
+            addKeyToList()
         }
     }
 
@@ -109,6 +118,8 @@ Rectangle{
         relationListView.model = counter
         table1.modelCounter = counter
         table2.modelCounter = counter
+
+        DSParamsModel.addToJoinMapList(DSParamsModel.joinId, counter, "test1", "test2")
 
     }
 
@@ -305,17 +316,54 @@ Rectangle{
 
     // Select Option Ends
 
-    // Add Key Starts
+    // Primary Table Starts
 
-    Row{
-        id: addKeyRow
-        height: 30
-
+    Column{
+        id: primaryTableRow
         anchors.top: selectJoin.bottom
         width: parent.width
 
         anchors.left: parent.left
         anchors.leftMargin: 12
+
+        Text{
+            text: "Select Primary Table"
+        }
+
+        Row{
+            // For Table 1
+            // Text set by function
+            CustomRadioButton{
+
+                id: leftJoinRadio
+                checked: true
+                parent_dimension: 16
+                ButtonGroup.group: tableLeftRightJoinGrp
+
+            }
+
+            // For Table 2
+            // Text set by function
+            CustomRadioButton{
+                id: rightJoinRadio
+                checked: false
+                parent_dimension: 16
+                ButtonGroup.group: tableLeftRightJoinGrp
+            }
+        }
+
+
+    }
+
+    // Primary Table Ends
+
+    // Add Key Starts
+
+    Row{
+        id: addKeyRow
+        height: 30
+        anchors.top: primaryTableRow.bottom
+        anchors.left: primaryTableRow.left
 
         CustomButton{
 
@@ -324,17 +372,21 @@ Rectangle{
             onClicked: addKeyToList()
 
         }
+
+
     }
 
 
     // Add key Ends
+
+
 
     Column{
         id: tables
         anchors.top: addKeyRow.bottom
 
         width: parent.width
-        height: parent.height - selectJoin.height - headerPopup.height - addKeyRow.height - doneBtn.height
+        height: parent.height - selectJoin.height - headerPopup.height - addKeyRow.height - doneBtn.height - primaryTableRow.height
 
         Row{
 
