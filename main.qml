@@ -382,7 +382,7 @@ ApplicationWindow {
         id: stacklayout_home
         width: mainwindow.width
         height: mainwindow.height
-        currentIndex:3
+        currentIndex:6
 
         // 0
         Test{

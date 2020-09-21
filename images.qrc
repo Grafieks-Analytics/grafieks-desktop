@@ -120,5 +120,10 @@
         <file>Images/icons/Right@4x.png</file>
         <file>Images/icons/table.png</file>
         <file>Images/icons/edit_black.png</file>
+        <file>Images/icons/align-center.png</file>
+        <file>Images/icons/align-justify.png</file>
+        <file>Images/icons/align-left.png</file>
+        <file>Images/icons/align-right.png</file>
+        <file>Images/icons/attach-link.png</file>
     </qresource>
 </RCC>
