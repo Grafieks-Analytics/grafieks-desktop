@@ -149,26 +149,18 @@ Rectangle{
 
         Rectangle{
             id: header
-
             color: Constants.lightThemeColor
-
             border.color: Constants.darkThemeColor
-
             height: 30
             width: parent.width
             anchors.left: parent.left
 
-            Row{
-                id: tableHeader
-                height: parent.height
-//                anchors.top: parent.top
 
-                Text{
-                    id : title
-                    anchors.left : parent.left
-                    anchors.leftMargin: 10
-                    anchors.verticalCenter: parent.verticalCenter
-                }
+            Text{
+                id : title
+                anchors.left : parent.left
+                anchors.leftMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
 
@@ -189,6 +181,7 @@ Rectangle{
                 width: parent.width
                 model: displayColList
                 textRole: "colName"
+                valueRole: "colId"
                 currentIndex: 0
             }
         }

@@ -155,13 +155,29 @@ void DSParamsModel::removeJoinMapList(int refObjId, int internalCounter)
             this->joinMapList.remove(refObjId);
         }
     }
-
 }
 
-QMap<int, QStringList> DSParamsModel::fetchJoinMapList(int refObjId)
+QVariantMap DSParamsModel::fetchJoinMapList(int refObjId)
 {
+    QStringList params;
+    QVariantMap output;
 
-    return this->joinMapList[refObjId];
+    QString leftParam, rightParam;
+
+    for(auto key : this->joinMapList.value(refObjId).keys()){
+
+
+        leftParam = this->joinMapList.value(refObjId).value(key).value(0);
+        rightParam = this->joinMapList.value(refObjId).value(key).value(1);
+
+        params << leftParam << rightParam;
+
+        output.insert(QString::number(key), params);
+        params.clear();
+
+    }
+
+    return output;
 }
 
 void DSParamsModel::addToPrimaryJoinTable(int refObjId, QString tableName)

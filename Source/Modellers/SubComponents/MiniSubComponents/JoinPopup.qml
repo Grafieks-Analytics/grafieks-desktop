@@ -7,6 +7,7 @@ import "../../../MainSubComponents"
 import com.grafieks.singleton.constants 1.0
 
 Rectangle{
+    id: joinPopupItem
     anchors.right:parent.right
     anchors.bottom: parent.bottom
     height:parent.height + 1
@@ -16,6 +17,7 @@ Rectangle{
     visible: false
 
     property int counter : 1
+    property int refObjId : 0
 
     onVisibleChanged: fetchJoinTableInfo(visible)
 
@@ -23,6 +25,14 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
+
+    ListModel{
+        id: leftTableModel
+    }
+
+    ListModel{
+        id: rightTableModel
+    }
 
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
@@ -45,8 +55,11 @@ Rectangle{
         target: DSParamsModel
 
         function onJoinIdChanged(joinId){
+
+            refObjId = joinId
             fetchJoinTableInfo(true)
         }
+
     }
 
 
@@ -66,7 +79,7 @@ Rectangle{
         if(visible === true){
 
             // Set join info in both the tables
-            let joinTableInfo = DSParamsModel.fetchJoinBoxTableMap(DSParamsModel.joinId)
+            let joinTableInfo = DSParamsModel.fetchJoinBoxTableMap(refObjId)
             table1.tableName = joinTableInfo[1]
             table2.tableName = joinTableInfo[2]
 
@@ -75,15 +88,14 @@ Rectangle{
             rightJoinRadio.radio_text = table2.tableName
 
             // Set default primary join table
+            if(DSParamsModel.fetchPrimaryJoinTable(refObjId) === ""){
 
-            if(DSParamsModel.fetchPrimaryJoinTable(DSParamsModel.joinId) === ""){
-
-                DSParamsModel.addToPrimaryJoinTable(DSParamsModel.joinId, table1.tableName)
+                DSParamsModel.addToPrimaryJoinTable(refObjId, table1.tableName)
                 leftJoinRadio.checked = true
 
             } else{
 
-                if(DSParamsModel.fetchPrimaryJoinTable(DSParamsModel.joinId) === table1.tableName){
+                if(DSParamsModel.fetchPrimaryJoinTable(refObjId) === table1.tableName){
                     leftJoinRadio.checked = true
                 } else{
                     rightJoinRadio.checked = true
@@ -93,8 +105,24 @@ Rectangle{
 
             // Reset the counter, if it appears for the first time
             // Or fetch existing counter value & joins from DSParamsModel
-            counter = 0
-            addKeyToList()
+            var tableModel = DSParamsModel.fetchJoinMapList(refObjId)
+
+            if(Object.keys(tableModel).length > 0){
+                for (var i=1; i<=Object.keys(tableModel).length; i++){
+
+                    leftTableModel.append({"colName": tableModel[i][0], "colId": Object.keys(tableModel)[i]})
+                    rightTableModel.append({"colName": tableModel[i][1], "colId": Object.keys(tableModel)[i]})
+                }
+                joinPopupItem.counter = Object.keys(tableModel).length
+                console.log(Object.keys(tableModel).length)
+
+            } else{
+                joinPopupItem.counter = 0
+            }
+
+            relationListView.model = joinPopupItem.counter
+            table1.modelCounter = joinPopupItem.counter
+            table2.modelCounter = joinPopupItem.counter
         }
     }
 
@@ -131,13 +159,13 @@ Rectangle{
 
     function addKeyToList(){
 
-        counter++
+        joinPopupItem.counter++
 
-        relationListView.model = counter
-        table1.modelCounter = counter
-        table2.modelCounter = counter
+        relationListView.model = joinPopupItem.counter
+        table1.modelCounter = joinPopupItem.counter
+        table2.modelCounter = joinPopupItem.counter
 
-        DSParamsModel.addToJoinMapList(DSParamsModel.joinId, counter, "test1", "test2")
+        DSParamsModel.addToJoinMapList(DSParamsModel.joinId, joinPopupItem.counter, "test1", "test2")
 
     }
 
