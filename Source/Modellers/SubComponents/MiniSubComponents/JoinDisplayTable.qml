@@ -13,12 +13,18 @@ Rectangle{
     height: parent.height
 
     readonly property string moduleName : "JoinDisplayTable"
-    property alias modelCounter: tableListView.model
+    property int modelCounter: 0
     property var allColumnsProperty : []
     property string tableNameProperty : ""
     property alias tableName: title.text
+    property var selectedKeys : ""
+    property var existingModel : []
 
     onTableNameChanged: loadTableColumns(tableName)
+    onModelCounterChanged: appendToModel(modelCounter)
+    onExistingModelChanged: console.log(newItem.existingModel, "EXISTING MODEL")
+
+
 
 
     /***********************************************************************************************************************/
@@ -29,6 +35,10 @@ Rectangle{
         id:displayColList
     }
 
+    ListModel{
+        id: tableListModel
+    }
+
 
 
     // LIST MODEL ENDS
@@ -37,6 +47,16 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // SIGNALS STARTS
+
+    signal selectedColumn(string columnName, string tableName, int counter)
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
 
     Connections{
         target: TableColumnsModel
@@ -63,16 +83,6 @@ Rectangle{
         }
     }
 
-    // SIGNALS ENDS
-    /***********************************************************************************************************************/
-
-
-
-    /***********************************************************************************************************************/
-    // Connections Starts
-
-
-
     // Connections Ends
     /***********************************************************************************************************************/
 
@@ -83,6 +93,24 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+
+    function slotClearModel(haveExistingValues){
+
+        tableListModel.clear()
+
+        if(haveExistingValues === false){
+            tableListModel.append({counter: 1})
+        } else{
+
+            newItem.existingModel.forEach(function(item, index){
+                tableListModel.append({counter: parseInt(item)})
+            })
+        }
+    }
+
+    function appendToModel(counter){
+        tableListModel.append({counter: counter})
+    }
 
     function loadTableColumns(tableName){
 
@@ -97,14 +125,19 @@ Rectangle{
 
         displayColList.clear()
 
-        allColumns.forEach(function(item){
+        allColumns.forEach(function(item, index){
 
             var regex = new RegExp("[.]" + item[0] + "$");
 
             if(!toHideCols.find(value => regex.test(value))){
-                displayColList.append({colName: item[0], colType: item[1]})
+                displayColList.append({colName: item[0]})
             }
         })
+    }
+
+
+    function changeColumn(columnName, counter){
+        selectedColumn(columnName, tableName, counter)
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -132,9 +165,6 @@ Rectangle{
     // Page Design Starts
 
 
-
-    // Page Design Ends
-    /***********************************************************************************************************************/
 
     Rectangle{
         id: content
@@ -173,20 +203,27 @@ Rectangle{
             width: parent.width
             anchors.left: parent.left
             spacing: 2
-            model: 1
+            model: tableListModel
 
             delegate:   CustomComboBox{
                 id: columnDropDown
+                objectName: counter
                 height: 30
                 width: parent.width
                 model: displayColList
                 textRole: "colName"
-                valueRole: "colId"
                 currentIndex: 0
+
+                onCurrentTextChanged: changeColumn(columnDropDown.currentText, columnDropDown.objectName)
+
             }
         }
 
 
     }
+
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
 
 }

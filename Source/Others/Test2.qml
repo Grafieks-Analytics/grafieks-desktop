@@ -7,22 +7,36 @@ Page{
     width: parent.width
     height: parent.height
 
-    Connections{
-        target: QtTest2
 
-        function onAChanged(a){
-            console.log("SECOND", "TEST2")
-            console.log("SIGNAL FIRED", a)
+    ListModel{
+        id: newListmodel
+    }
+
+
+    Row{
+        id: row1
+        Button{
+            id: add
+            text: "Add more"
+            onClicked: newListmodel.append({name: "hello"})
+        }
+        Button{
+            id: clear
+            text: "Clear all"
+            onClicked: newListmodel.clear()
         }
     }
 
+    ListView{
+        id: listView
+        anchors.top: row1.bottom
+        width: parent.width
+        model: newListmodel
+        height: newListmodel.count * 40
+        delegate:Text {
+            id: newText
+            text: name
+        }
 
-    Component.onCompleted: {
-        console.log("FIRST", "TEST2")
-        QtTest2.setA("Abhishek")
-    }
-
-    Text{
-        text: QtTest2.a
     }
 }

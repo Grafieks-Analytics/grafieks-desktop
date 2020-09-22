@@ -124,8 +124,8 @@ void DSParamsModel::addToJoinMapList(int refObjId, int internalCounter, QString 
     QMap<int, QStringList> joinParamMap;
     QStringList params;
 
-    params << leftParam << rightParam;
 
+    params << leftParam << rightParam;
 
     if(!joinMapList[refObjId].isEmpty())
         joinParamMap = joinMapList[refObjId];

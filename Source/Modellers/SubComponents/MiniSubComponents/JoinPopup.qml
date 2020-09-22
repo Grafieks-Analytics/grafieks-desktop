@@ -18,6 +18,8 @@ Rectangle{
 
     property int counter : 1
     property int refObjId : 0
+    property var leftParam : new Map()
+    property var rightParam : new Map()
 
     onVisibleChanged: fetchJoinTableInfo(visible)
 
@@ -41,7 +43,7 @@ Rectangle{
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
-
+    signal clearModel(bool haveExistingValues)
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -72,6 +74,29 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
+
+    Component.onCompleted: {
+        table1.selectedColumn.connect(joinPopupItem.slotColumnChanged)
+        table2.selectedColumn.connect(joinPopupItem.slotColumnChanged)
+
+        joinPopupItem.clearModel.connect(table1.slotClearModel)
+        joinPopupItem.clearModel.connect(table2.slotClearModel)
+    }
+
+
+    function slotColumnChanged(columnName, tableName, counter){
+
+        if(columnName !== "" && tableName !== "" && counter !== ""){
+            if(tableName === DSParamsModel.fetchPrimaryJoinTable(refObjId)){
+                leftParam.set(counter, columnName)
+            } else{
+                rightParam.set(counter, columnName)
+            }
+
+            DSParamsModel.addToJoinMapList(DSParamsModel.joinId, counter, leftParam.get(counter), rightParam.get(counter))
+        }
+    }
+
 
 
     function fetchJoinTableInfo(visible){
@@ -105,24 +130,39 @@ Rectangle{
 
             // Reset the counter, if it appears for the first time
             // Or fetch existing counter value & joins from DSParamsModel
+
+
             var tableModel = DSParamsModel.fetchJoinMapList(refObjId)
 
             if(Object.keys(tableModel).length > 0){
                 for (var i=1; i<=Object.keys(tableModel).length; i++){
 
-                    leftTableModel.append({"colName": tableModel[i][0], "colId": Object.keys(tableModel)[i]})
-                    rightTableModel.append({"colName": tableModel[i][1], "colId": Object.keys(tableModel)[i]})
+//                    leftTableModel = tableModel[i][0]
+//                    rightTableModel = tableModel[i][1]
+
+                    console.log(tableModel[i][0], tableModel[i][1])
                 }
-                joinPopupItem.counter = Object.keys(tableModel).length
-                console.log(Object.keys(tableModel).length)
+//                joinPopupItem.counter = Object.keys(tableModel)
+
+                console.log(Object.keys(tableModel))
+                table1.existingModel = Object.keys(tableModel)
+                table2.existingModel = Object.keys(tableModel)
+                joinPopupItem.clearModel(true)
 
             } else{
-                joinPopupItem.counter = 0
+
+                joinPopupItem.clearModel(false)
+                joinPopupItem.counter = 1
+
             }
 
+            // Restore the total keys from the existing value
             relationListView.model = joinPopupItem.counter
-            table1.modelCounter = joinPopupItem.counter
-            table2.modelCounter = joinPopupItem.counter
+
+
+
+            table1.selectedKeys = leftTableModel
+            table2.selectedKeys = rightTableModel
         }
     }
 
@@ -164,8 +204,6 @@ Rectangle{
         relationListView.model = joinPopupItem.counter
         table1.modelCounter = joinPopupItem.counter
         table2.modelCounter = joinPopupItem.counter
-
-        DSParamsModel.addToJoinMapList(DSParamsModel.joinId, joinPopupItem.counter, "test1", "test2")
 
     }
 
@@ -245,7 +283,6 @@ Rectangle{
                 onClicked: closePopup()
             }
         }
-
     }
 
     // header ends
@@ -282,8 +319,8 @@ Rectangle{
                     verticalAlignment: Image.AlignVCenter
                 }
             }
-
         }
+
 
         Column{
             width: parent.width/4
@@ -471,8 +508,6 @@ Rectangle{
                     anchors.topMargin: 40
                     anchors.left: parent.left
 
-                    model: 1
-
                     delegate:  Row{
 
                         height: 30
@@ -521,8 +556,7 @@ Rectangle{
 
     Row{
         id:doneBtn
-        height: 80
-        width: parent.width
+
 
         anchors.top: tables.bottom
         anchors.topMargin: 15
@@ -530,6 +564,8 @@ Rectangle{
         anchors.rightMargin: 10
 
         CustomButton{
+            height: 80
+            width: parent.width
 
             anchors.right: parent.right
 
