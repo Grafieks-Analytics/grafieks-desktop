@@ -112,11 +112,15 @@ Rectangle{
                     }
                 }
 
-                console.log(newCurrIndex, "CURR INDEX", newItem.selectedKeys.get(item) )
                 tableListModel.append({counter: parseInt(item), currIndex: newCurrIndex})
             })
         }
     }
+
+    function slotDeleteModel(counter){
+        tableListModel.remove(counter)
+    }
+
 
     function appendToModel(counter){
         tableListModel.append({counter: counter, currIndex: 0})

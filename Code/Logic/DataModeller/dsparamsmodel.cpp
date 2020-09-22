@@ -148,6 +148,7 @@ void DSParamsModel::removeJoinMapList(int refObjId, int internalCounter)
             joinParamMap.remove(internalCounter);
 
             this->joinMapList[refObjId] = joinParamMap;
+            qDebug() << this->joinMapList[refObjId] << "XEX" << internalCounter;
 
         } else{
             this->joinMapList.remove(refObjId);
@@ -170,10 +171,12 @@ QVariantMap DSParamsModel::fetchJoinMapList(int refObjId)
 
         params << leftParam << rightParam;
 
-        output.insert(QString::number(key), params);
+
+        output[QString::number(key)] = params;
         params.clear();
 
     }
+    qDebug() << output << "OUT";
 
     return output;
 }

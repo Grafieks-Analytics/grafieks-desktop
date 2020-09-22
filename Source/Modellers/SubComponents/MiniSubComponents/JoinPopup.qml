@@ -16,7 +16,7 @@ Rectangle{
     border.color: Constants.darkThemeColor
     visible: false
 
-    property int counter : 1
+    property int counter : 0
     property int refObjId : 0
     property var leftParam : new Map()
     property var rightParam : new Map()
@@ -30,14 +30,6 @@ Rectangle{
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
-    ListModel{
-        id: leftTableModel
-    }
-
-    ListModel{
-        id: rightTableModel
-    }
-
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
 
@@ -46,6 +38,7 @@ Rectangle{
     // SIGNALS STARTS
 
     signal clearModel(bool haveExistingValues)
+    signal deleteModel(int counter)
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -81,8 +74,12 @@ Rectangle{
         table1.selectedColumn.connect(joinPopupItem.slotColumnChanged)
         table2.selectedColumn.connect(joinPopupItem.slotColumnChanged)
 
+        joinPopupItem.deleteModel.connect(table1.slotDeleteModel)
+        joinPopupItem.deleteModel.connect(table2.slotDeleteModel)
+
         joinPopupItem.clearModel.connect(table1.slotClearModel)
         joinPopupItem.clearModel.connect(table2.slotClearModel)
+
     }
 
 
@@ -136,15 +133,17 @@ Rectangle{
 
             var tableModel = DSParamsModel.fetchJoinMapList(refObjId)
 
+            console.log(Object.keys(tableModel), "XAO")
+
             if(Object.keys(tableModel).length > 0){
                 for (var i=1; i<=Object.keys(tableModel).length; i++){
 
                     let key = Object.keys(tableModel)[i-1]
+                    console.log(key, "KEY")
 
                     leftDefaultIndex.set(key, tableModel[i][0])
                     rightDefaultIndex.set(key, tableModel[i][1])
                 }
-//                joinPopupItem.counter = Object.keys(tableModel)
 
                 table1.existingModel = Object.keys(tableModel)
                 table2.existingModel = Object.keys(tableModel)
@@ -152,18 +151,36 @@ Rectangle{
                 table1.selectedKeys = leftDefaultIndex
                 table2.selectedKeys = rightDefaultIndex
 
+
                 joinPopupItem.clearModel(true)
+
+                // Restore the total keys from the existing value
+                relationListView.model = []
+                relationListView.model = Object.keys(tableModel)
 
             } else{
 
                 joinPopupItem.clearModel(false)
                 joinPopupItem.counter = 1
+
+                // Restore the total keys from the existing value
+                relationListView.model = []
+                relationListView.model.push(joinPopupItem.counter)
             }
-
-            // Restore the total keys from the existing value
-            relationListView.model = joinPopupItem.counter
-
         }
+    }
+
+    function removeJoinItem(removeItem){
+
+        let itemId = relationListView.model.indexOf(removeItem.toString())
+        let tmpModel = relationListView.model
+        tmpModel.splice(itemId, 1)
+
+        relationListView.model = tmpModel
+        joinPopupItem.deleteModel(itemId)
+        console.log(refObjId, itemId, "CHECK==")
+        DSParamsModel.removeJoinMapList(refObjId, itemId)
+
     }
 
     function closePopup(){
@@ -201,7 +218,7 @@ Rectangle{
 
         joinPopupItem.counter++
 
-        relationListView.model = joinPopupItem.counter
+        relationListView.model.push(joinPopupItem.counter)
         table1.modelCounter = joinPopupItem.counter
         table2.modelCounter = joinPopupItem.counter
 
@@ -516,7 +533,7 @@ Rectangle{
 
                         Text {
                             id: equal
-                            text: qsTr("=")
+                            text: qsTr("=" + modelData)
                             anchors.verticalCenter: parent.verticalCenter
                             font.pixelSize: Constants.fontCategoryHeader
                         }
@@ -530,6 +547,11 @@ Rectangle{
                             source: "/Images/icons/remove.png"
                             height: 12
                             width: 12
+
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: removeJoinItem(modelData)
+                            }
                         }
 
                     }
