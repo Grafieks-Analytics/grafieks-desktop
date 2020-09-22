@@ -20,6 +20,8 @@ Rectangle{
     property int refObjId : 0
     property var leftParam : new Map()
     property var rightParam : new Map()
+    property var leftDefaultIndex : new Map()
+    property var rightDefaultIndex : new Map()
 
     onVisibleChanged: fetchJoinTableInfo(visible)
 
@@ -137,32 +139,30 @@ Rectangle{
             if(Object.keys(tableModel).length > 0){
                 for (var i=1; i<=Object.keys(tableModel).length; i++){
 
-//                    leftTableModel = tableModel[i][0]
-//                    rightTableModel = tableModel[i][1]
+                    let key = Object.keys(tableModel)[i-1]
 
-                    console.log(tableModel[i][0], tableModel[i][1])
+                    leftDefaultIndex.set(key, tableModel[i][0])
+                    rightDefaultIndex.set(key, tableModel[i][1])
                 }
 //                joinPopupItem.counter = Object.keys(tableModel)
 
-                console.log(Object.keys(tableModel))
                 table1.existingModel = Object.keys(tableModel)
                 table2.existingModel = Object.keys(tableModel)
+
+                table1.selectedKeys = leftDefaultIndex
+                table2.selectedKeys = rightDefaultIndex
+
                 joinPopupItem.clearModel(true)
 
             } else{
 
                 joinPopupItem.clearModel(false)
                 joinPopupItem.counter = 1
-
             }
 
             // Restore the total keys from the existing value
             relationListView.model = joinPopupItem.counter
 
-
-
-            table1.selectedKeys = leftTableModel
-            table2.selectedKeys = rightTableModel
         }
     }
 

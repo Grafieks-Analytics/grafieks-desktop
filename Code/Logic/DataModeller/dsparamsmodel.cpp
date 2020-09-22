@@ -133,8 +133,6 @@ void DSParamsModel::addToJoinMapList(int refObjId, int internalCounter, QString 
 
     joinParamMap[internalCounter] = params;
     this->joinMapList[refObjId] = joinParamMap;
-
-    qDebug() << this->joinMapList << "DSPARAMS addToJoinMapList";
 }
 
 

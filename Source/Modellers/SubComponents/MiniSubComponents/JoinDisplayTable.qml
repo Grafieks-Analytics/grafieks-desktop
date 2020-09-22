@@ -17,13 +17,11 @@ Rectangle{
     property var allColumnsProperty : []
     property string tableNameProperty : ""
     property alias tableName: title.text
-    property var selectedKeys : ""
+    property var selectedKeys : new Map()
     property var existingModel : []
 
     onTableNameChanged: loadTableColumns(tableName)
     onModelCounterChanged: appendToModel(modelCounter)
-    onExistingModelChanged: console.log(newItem.existingModel, "EXISTING MODEL")
-
 
 
 
@@ -94,22 +92,34 @@ Rectangle{
     // JAVASCRIPT FUNCTION STARTS
 
 
+
+
     function slotClearModel(haveExistingValues){
 
         tableListModel.clear()
 
         if(haveExistingValues === false){
-            tableListModel.append({counter: 1})
+            tableListModel.append({counter: 1, currIndex: 0})
         } else{
 
             newItem.existingModel.forEach(function(item, index){
-                tableListModel.append({counter: parseInt(item)})
+
+                let newCurrIndex = 0
+                for(var i = 0; i < displayColList.count; i++){
+
+                    if (displayColList.get(i).colName === newItem.selectedKeys.get(item)){
+                        newCurrIndex = displayColList.get(i).index
+                    }
+                }
+
+                console.log(newCurrIndex, "CURR INDEX", newItem.selectedKeys.get(item) )
+                tableListModel.append({counter: parseInt(item), currIndex: newCurrIndex})
             })
         }
     }
 
     function appendToModel(counter){
-        tableListModel.append({counter: counter})
+        tableListModel.append({counter: counter, currIndex: 0})
     }
 
     function loadTableColumns(tableName){
@@ -130,7 +140,7 @@ Rectangle{
             var regex = new RegExp("[.]" + item[0] + "$");
 
             if(!toHideCols.find(value => regex.test(value))){
-                displayColList.append({colName: item[0]})
+                displayColList.append({colName: item[0], index: index})
             }
         })
     }
@@ -212,7 +222,7 @@ Rectangle{
                 width: parent.width
                 model: displayColList
                 textRole: "colName"
-                currentIndex: 0
+                currentIndex: currIndex
 
                 onCurrentTextChanged: changeColumn(columnDropDown.currentText, columnDropDown.objectName)
 
