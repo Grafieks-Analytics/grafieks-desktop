@@ -27,6 +27,7 @@ Item {
     property var frontRectangleCoordinates : new Map()
     property var rearRectangleCoordinates : new Map()
     property var existingTables : new Map()
+    property int zindex: 0
 
     property var dynamicRectangle : Qt.createComponent("./MiniSubComponents/DroppedRectangle.qml");
     property var dynamicConnectorLine : Qt.createComponent("./MiniSubComponents/ConnectingLine.qml")
@@ -42,6 +43,7 @@ Item {
 
     property int refObject: 0
     property int refObjectWidth: 0
+
 
 
 
@@ -65,7 +67,6 @@ Item {
 
     /***********************************************************************************************************************/
     // Connections Starts
-
 
 
     // Connections Ends
@@ -94,14 +95,25 @@ Item {
         newConnectingLine.get(refObject).destroy();
         newJoinBox.get(refObject).destroy();
 
+//        let frontItemOfConcernedRect = frontRectLineMaps.get(refObject)
+//        let rearItemsOfFrontRect = rearRectLineMaps.get(frontItemOfConcernedRect);
+
+//        let itemToRemoveFromRearRect = rearItemsOfFrontRect.indexOf(refObject)
+//        rearItemsOfFrontRect.splice(itemToRemoveFromRearRect, 1)
+
+//        frontRectLineMaps.delete(refObject);
+//        frontRectLineMaps.set(frontItemOfConcernedRect, rearItemsOfFrontRect);
+
+//        console.log(frontRectLineMaps.get(refObject), rearRectLineMaps.get(refObject))
+//        console.log(frontRectLineMaps.get(frontItemOfConcernedRect), rearRectLineMaps.get(frontItemOfConcernedRect))
+
+
         if(depth === "all"){
             rearRectLineMaps.get(refObject).forEach(function(value){
                 newConnectingLine.get(value).destroy();
                 newJoinBox.get(value).destroy();
             })
         }
-
-
     }
 
     // New component on Dropped
@@ -111,19 +123,27 @@ Item {
 
     // New component on Entered
     function onDropAreaDraggedNewComponent(x,y){
-        //        console.log("Dragging" , x, y, refObject)
 
         let rectLeftX = x
         let rectRightX = rectLeftX + refObjectWidth
         let rectLeftY = y
         let rectRightY = rectLeftY
 
-        let frontVal = {x: rectLeftX, y: rectLeftY}
-        let rearVal = {x: rectRightX, y: rectRightY}
+        var frontVal = {x: rectLeftX, y: rectLeftY}
+        var rearVal = {x: rectRightX, y: rectRightY}
 
         frontRectangleCoordinates.set(refObject, frontVal)
         rearRectangleCoordinates.set(refObject, rearVal)
 
+
+        // If the rectangle is not connected to any parent rectangle
+        // and if its not the first dragged rectangle
+        console.log(refObject, frontRectLineMaps.get(refObject), "DATA", rearRectLineMaps.get(refObject))
+        if(refObject !== "undefined"){
+
+            var nearestTable = nearestRectangle(rearRectangleCoordinates, frontVal)
+            console.log(nearestTable, "NEAREST TABLE")
+        }
 
 
         // Adjust the lines connected to the object front
@@ -227,7 +247,6 @@ Item {
         rectangles.set(counter, dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName, objectName : counter}))
 
         rectangles.get(counter).dragged.connect(onDropAreaDraggedNewComponent)
-//        rectangles.get(counter).dropped.connect(onDropAreaDroppedNewComponent)
         rectangles.get(counter).destroyComponents.connect(destroyComponents)
         rectangles.get(counter).refObjectCount.connect(setRefObject)
 
@@ -292,8 +311,6 @@ Item {
         frontRectangleCoordinates.set(counter, {x: rectLeftX, y: rectLeftY})
         rearRectangleCoordinates.set(counter, {x: rectRightX, y: rectRightY})
         existingTables.set(counter, tableslist.tableName)
-
-
     }
 
 

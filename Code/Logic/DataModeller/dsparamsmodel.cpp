@@ -164,16 +164,13 @@ QVariantMap DSParamsModel::fetchJoinMapList(int refObjId)
 
     for(auto key : this->joinMapList.value(refObjId).keys()){
 
-
         leftParam = this->joinMapList.value(refObjId).value(key).value(0);
         rightParam = this->joinMapList.value(refObjId).value(key).value(1);
 
         params << leftParam << rightParam;
 
-
         output[QString::number(key)] = params;
         params.clear();
-
     }
 
     return output;

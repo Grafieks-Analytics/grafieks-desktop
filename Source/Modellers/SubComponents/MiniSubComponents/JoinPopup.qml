@@ -181,8 +181,6 @@ Rectangle{
 
     function addKeyToList(){
 
-
-
         let lastItem = tmpModelArray[tmpModelArray.length - 1]
 
         joinPopupItem.counter = lastItem + 1
@@ -195,10 +193,8 @@ Rectangle{
 
     function removeJoinItem(removeItem){
 
-
         let itemId = tmpModelArray.indexOf(removeItem)
         tmpModelArray.splice(itemId, 1)
-
 
         relationListView.model = tmpModelArray
         joinPopupItem.deleteModel(itemId)
@@ -580,20 +576,15 @@ Rectangle{
                 height: parent.height
                 width: parent.width/2 - 20
 
-
                 JoinDisplayTable{
                     id: table2
                 }
-
             }
-
         }
-
     }
 
     Row{
         id:doneBtn
-
 
         anchors.top: tables.bottom
         anchors.topMargin: 15

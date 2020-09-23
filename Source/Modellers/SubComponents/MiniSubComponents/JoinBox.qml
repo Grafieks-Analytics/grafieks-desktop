@@ -107,6 +107,11 @@ Item {
             onClicked: onJoinIconClicked()
 
         }
+
+        DropArea{
+            onDropped: console.log("drop detected")
+
+        }
     }
 
     Rectangle{

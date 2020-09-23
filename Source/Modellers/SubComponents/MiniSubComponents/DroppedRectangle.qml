@@ -14,7 +14,6 @@ Item{
     width: droppedRectangle.width
     height: droppedRectangle.height
     property string name: nameID.text
-    property bool alreadyJoined: true
     property var objectName
     readonly property string moduleName : "DroppedRectangle"
 
@@ -85,7 +84,6 @@ Item{
     function onRectangleToggle(){
 
         columnListDroppedRect.visible = columnListDroppedRect.visible === true ? false : true
-
         TableColumnsModel.getColumnsForTable(newItem.name, newItem.moduleName)
     }
 
@@ -94,10 +92,6 @@ Item{
         destroyComponents(counter, "all")
     }
 
-
-    function onDropAreaRectangleEntered(){
-        console.log("detected")
-    }
 
     function onReleasedRectangle(parent){
 
@@ -127,9 +121,6 @@ Item{
         border.width: 1
         border.color: "grey"
         height: 30
-
-
-        Drag.active: alreadyJoined ? false: mouseArea.drag.active
 
         Text{
             id: nameID
@@ -161,9 +152,6 @@ Item{
             onPositionChanged: newItem.dragged(newItem.x, newItem.y)
             onPressed: newItem.refObjectCount(parseInt(newItem.objectName), newItem.width, newItem.height)
         }
-
-
-
     }
 
     ListView{
@@ -173,14 +161,6 @@ Item{
         height: model.count * 30
         model: displayColList
         delegate: listviewComponent
-
-    }
-
-    DropArea{
-        id: dropAreaRectangle
-        anchors.fill: parent
-        onEntered: console.log("entered on rect") //onDropAreaRectangleEntered()
-        onDropped: console.log("dropped on rect") //onDropAreaRectangleEntered()
     }
 }
 
