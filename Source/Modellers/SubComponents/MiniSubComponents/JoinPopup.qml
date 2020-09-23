@@ -22,6 +22,8 @@ Rectangle{
     property var rightParam : new Map()
     property var leftDefaultIndex : new Map()
     property var rightDefaultIndex : new Map()
+    property var tmpModel : []
+    property var tmpModelArray: []
 
     onVisibleChanged: fetchJoinTableInfo(visible)
 
@@ -29,6 +31,10 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
+
+    ListModel{
+        id: removeListModel
+    }
 
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
@@ -133,17 +139,19 @@ Rectangle{
 
             var tableModel = DSParamsModel.fetchJoinMapList(refObjId)
 
-            console.log(Object.keys(tableModel), "XAO")
+
 
             if(Object.keys(tableModel).length > 0){
-                for (var i=1; i<=Object.keys(tableModel).length; i++){
 
-                    let key = Object.keys(tableModel)[i-1]
-                    console.log(key, "KEY")
 
-                    leftDefaultIndex.set(key, tableModel[i][0])
-                    rightDefaultIndex.set(key, tableModel[i][1])
+                for (var i=0; i<Object.keys(tableModel).length; i++){
+
+                    let key = Object.keys(tableModel)[i]
+
+                    leftDefaultIndex.set(key, tableModel[key][0])
+                    rightDefaultIndex.set(key, tableModel[key][1])
                 }
+
 
                 table1.existingModel = Object.keys(tableModel)
                 table2.existingModel = Object.keys(tableModel)
@@ -151,35 +159,50 @@ Rectangle{
                 table1.selectedKeys = leftDefaultIndex
                 table2.selectedKeys = rightDefaultIndex
 
-
                 joinPopupItem.clearModel(true)
 
                 // Restore the total keys from the existing value
                 relationListView.model = []
                 relationListView.model = Object.keys(tableModel)
+                tmpModelArray = Object.keys(tableModel)
 
             } else{
 
                 joinPopupItem.clearModel(false)
-                joinPopupItem.counter = 1
+                joinPopupItem.counter = 0
 
                 // Restore the total keys from the existing value
-                relationListView.model = []
-                relationListView.model.push(joinPopupItem.counter)
+                tmpModelArray = [joinPopupItem.counter]
+                relationListView.model = tmpModelArray
+
             }
         }
     }
 
+    function addKeyToList(){
+
+
+
+        let lastItem = tmpModelArray[tmpModelArray.length - 1]
+
+        joinPopupItem.counter = lastItem + 1
+
+        relationListView.model = tmpModelArray.push(joinPopupItem.counter)
+        table1.modelCounter = joinPopupItem.counter
+        table2.modelCounter = joinPopupItem.counter
+
+    }
+
     function removeJoinItem(removeItem){
 
-        let itemId = relationListView.model.indexOf(removeItem.toString())
-        let tmpModel = relationListView.model
-        tmpModel.splice(itemId, 1)
 
-        relationListView.model = tmpModel
+        let itemId = tmpModelArray.indexOf(removeItem)
+        tmpModelArray.splice(itemId, 1)
+
+
+        relationListView.model = tmpModelArray
         joinPopupItem.deleteModel(itemId)
-        console.log(refObjId, itemId, "CHECK==")
-        DSParamsModel.removeJoinMapList(refObjId, itemId)
+        DSParamsModel.removeJoinMapList(refObjId, removeItem, false)
 
     }
 
@@ -214,15 +237,6 @@ Rectangle{
 
     }
 
-    function addKeyToList(){
-
-        joinPopupItem.counter++
-
-        relationListView.model.push(joinPopupItem.counter)
-        table1.modelCounter = joinPopupItem.counter
-        table2.modelCounter = joinPopupItem.counter
-
-    }
 
     function onDoneClicked(){
         joinPopup.visible = false
@@ -524,6 +538,7 @@ Rectangle{
                     anchors.top: parent.top
                     anchors.topMargin: 40
                     anchors.left: parent.left
+                    model:removeListModel
 
                     delegate:  Row{
 
@@ -533,7 +548,7 @@ Rectangle{
 
                         Text {
                             id: equal
-                            text: qsTr("=" + modelData)
+                            text: qsTr("=")
                             anchors.verticalCenter: parent.verticalCenter
                             font.pixelSize: Constants.fontCategoryHeader
                         }

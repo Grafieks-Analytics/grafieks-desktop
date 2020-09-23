@@ -99,7 +99,7 @@ Rectangle{
         tableListModel.clear()
 
         if(haveExistingValues === false){
-            tableListModel.append({counter: 1, currIndex: 0})
+            tableListModel.append({counter: 0, currIndex: 0})
         } else{
 
             newItem.existingModel.forEach(function(item, index){
