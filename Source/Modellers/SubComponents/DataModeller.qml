@@ -137,7 +137,7 @@ Item {
     // Make a new join to orphan rectangle
     function createNewJoin(refObject, refObjectName){
 
-        if(tmpOrphanTableId === refObject){
+        if(tmpOrphanTableId === refObject && tmpNearestTable.tableId > 0){
 
             // Get front coordinates of the orphan rectangle
             // Get the rear coordinates of the nearest rectangle
@@ -168,16 +168,18 @@ Item {
 
             // Rear Rectangle Line Maps
             let tmpArray = []
-            if(typeof rearRectLineMaps.get(tmpNearestTable.tableId) !== "undefined"){
+            if(typeof rearRectLineMaps.get(tmpNearestTable.tableId) !== "undefined" && rearRectLineMaps.get(tmpNearestTable.tableId).length > 0){
                 tmpArray = rearRectLineMaps.get(tmpNearestTable.tableId)
-            } else{
-                tmpArray.push(tmpOrphanTableId)
             }
+            tmpArray.push(tmpOrphanTableId)
+
 
             rearRectLineMaps.set(tmpNearestTable.tableId, tmpArray)
+            console.log("REARAR", tmpArray, rearRectLineMaps.get(tmpNearestTable.tableId), tmpOrphanTableId)
 
             // Reset glow color of nearest rectangle
             dataModellerItem.changeGlowColor("white", tmpNearestTable.tableId)
+            dataModellerItem.changeGlowColor("white", tmpOrphanTableId)
 
             // Add to DSParamsModel
             DSParamsModel.addToJoinBoxTableMap(tmpOrphanTableId, refObjectName, tmpNearestTable.tableName)
@@ -259,8 +261,13 @@ Item {
 
 
                         dataModellerItem.changeGlowColor(Constants.grafieksLightGreenColor, tmpNearestTable.tableId)
+                        dataModellerItem.changeGlowColor(Constants.grafieksLightGreenColor, refObject)
+
                     } else{
                         dataModellerItem.changeGlowColor("white", tmpNearestTable.tableId)
+                        dataModellerItem.changeGlowColor("white", refObject)
+
+                        // Reset tmpNearestTable
                         tmpNearestTable.tableId = 0
                         tmpNearestTable.tableName =  ""
                     }
