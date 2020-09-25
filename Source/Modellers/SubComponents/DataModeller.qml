@@ -23,13 +23,11 @@ Item {
     property int counter : 0
     property real droppedX : 0
     property real droppedY : 0
-    property var joinMaps : new Map() // Save join relationships between entities
     property var frontRectangleCoordinates : new Map()
     property var rearRectangleCoordinates : new Map()
     property var existingTables : new Map()
     property var tmpNearestTable: {"tableId" : 0, "tableName" : ""} // 0 // for highlighting nearest rect when an orphan rectangle is moved
     property int tmpOrphanTableId:  0 // dragged orphan table id
-    //    property string tmpOrphanTableName:  "" // dragged orphan tableName
 
     property var dynamicRectangle : Qt.createComponent("./MiniSubComponents/DroppedRectangle.qml");
     property var dynamicConnectorLine : Qt.createComponent("./MiniSubComponents/ConnectingLine.qml")
@@ -107,6 +105,10 @@ Item {
 
                 // Delete from DSParamsModel
                 DSParamsModel.removeJoinBoxTableMap(value)
+                DSParamsModel.removeJoinIconMap(value)
+                DSParamsModel.removeJoinTypeMap(value)
+                DSParamsModel.removePrimaryJoinTable(value)
+                DSParamsModel.removeJoinMapList(value)
             })
 
         }
@@ -129,6 +131,10 @@ Item {
         rearRectLineMaps.set(frontItemOfConcernedRect, rearItemsOfFrontRect);
 
         DSParamsModel.removeJoinBoxTableMap(refObject)
+        DSParamsModel.removeJoinIconMap(refObject)
+        DSParamsModel.removeJoinTypeMap(refObject)
+        DSParamsModel.removePrimaryJoinTable(refObject)
+        DSParamsModel.removeJoinMapList(refObject)
 
     }
 
@@ -175,7 +181,6 @@ Item {
 
 
             rearRectLineMaps.set(tmpNearestTable.tableId, tmpArray)
-            console.log("REARAR", tmpArray, rearRectLineMaps.get(tmpNearestTable.tableId), tmpOrphanTableId)
 
             // Reset glow color of nearest rectangle
             dataModellerItem.changeGlowColor("white", tmpNearestTable.tableId)
