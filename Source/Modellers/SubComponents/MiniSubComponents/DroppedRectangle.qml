@@ -14,18 +14,17 @@ Item{
     width: droppedRectangle.width
     height: droppedRectangle.height
     property string name: nameID.text
-    property var objectName
     readonly property string moduleName : "DroppedRectangle"
 
     property var allColumnsProperty : []
     property string tableNameProperty : ""
 
-    objectName: objectName
 
     signal dragged(double x, double y);
     signal dropped(double x, double y);
     signal destroyComponents(int counter, string depth)
     signal refObjectCount(int counter, int objectWidth)
+    signal createNewJoin(int refObjectId, string tableName)
 
 
     ListModel{
@@ -64,6 +63,14 @@ Item{
         droppedRectangle.width = nameID.text.length * 10 + 30
     }
 
+
+    function slotDisplayColor(glowColor, tableId){
+
+//        console.log(glowColor, tableId, parseInt(newItem.objectName) )
+        if(tableId === parseInt(newItem.objectName))
+            droppedRectangle.color = glowColor
+    }
+
     function displayColumns(allColumns, tableName){
 
         const searchKey = tableName + "."
@@ -97,6 +104,8 @@ Item{
 
         // Call signal
         parent.dropped(newItem.x, newItem.y)
+        parent.createNewJoin(parseInt(parent.objectName), newItem.name)
+
     }
 
 
@@ -117,10 +126,10 @@ Item{
     Rectangle {
 
         id: droppedRectangle
-        color: "white"
         border.width: 1
         border.color: "grey"
         height: 30
+
 
         Text{
             id: nameID

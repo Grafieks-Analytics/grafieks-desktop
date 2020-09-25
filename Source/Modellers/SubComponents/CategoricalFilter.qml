@@ -205,9 +205,7 @@ Popup {
             anchors.rightMargin: 5
             MouseArea{
                 anchors.fill: parent
-                onClicked: {
-                    closeCategoricalFilterPopup()
-                }
+                onClicked: closeCategoricalFilterPopup()
             }
         }
 
@@ -242,9 +240,7 @@ Popup {
                 ButtonGroup.group: filterType
                 checked: true
                 parent_dimension: 16
-                onCheckedChanged: {
-                    onListClicked()
-                }
+                onCheckedChanged: onListClicked()
             }
 
         }

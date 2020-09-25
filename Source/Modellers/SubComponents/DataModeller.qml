@@ -27,7 +27,9 @@ Item {
     property var frontRectangleCoordinates : new Map()
     property var rearRectangleCoordinates : new Map()
     property var existingTables : new Map()
-    property int zindex: 0
+    property var tmpNearestTable: {"tableId" : 0, "tableName" : ""} // 0 // for highlighting nearest rect when an orphan rectangle is moved
+    property int tmpOrphanTableId:  0 // dragged orphan table id
+//    property string tmpOrphanTableName:  "" // dragged orphan tableName
 
     property var dynamicRectangle : Qt.createComponent("./MiniSubComponents/DroppedRectangle.qml");
     property var dynamicConnectorLine : Qt.createComponent("./MiniSubComponents/ConnectingLine.qml")
@@ -58,7 +60,7 @@ Item {
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
-
+    signal changeGlowColor(string color, int tableId)
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -92,37 +94,106 @@ Item {
     // When destroying main rectangle
     function destroyComponents(refObject, depth){
 
-        newConnectingLine.get(refObject).destroy();
-        newJoinBox.get(refObject).destroy();
-
-//        let frontItemOfConcernedRect = frontRectLineMaps.get(refObject)
-//        let rearItemsOfFrontRect = rearRectLineMaps.get(frontItemOfConcernedRect);
-
-//        let itemToRemoveFromRearRect = rearItemsOfFrontRect.indexOf(refObject)
-//        rearItemsOfFrontRect.splice(itemToRemoveFromRearRect, 1)
-
-//        frontRectLineMaps.delete(refObject);
-//        frontRectLineMaps.set(frontItemOfConcernedRect, rearItemsOfFrontRect);
-
-//        console.log(frontRectLineMaps.get(refObject), rearRectLineMaps.get(refObject))
-//        console.log(frontRectLineMaps.get(frontItemOfConcernedRect), rearRectLineMaps.get(frontItemOfConcernedRect))
-
-
+        // IF the main object is deleted
         if(depth === "all"){
+
             rearRectLineMaps.get(refObject).forEach(function(value){
                 newConnectingLine.get(value).destroy();
                 newJoinBox.get(value).destroy();
+
+                // Delete values from the map
+                newConnectingLine.delete(value)
+                newJoinBox.delete(value)
+
+                // Delete from DSParamsModel
+                DSParamsModel.removeJoinBoxTableMap(value)
             })
+
+        }
+
+        // Destroy dynamically created components
+        newConnectingLine.get(refObject).destroy();
+        newJoinBox.get(refObject).destroy();
+
+        // Delete values from the map
+        newConnectingLine.delete(refObject)
+        newJoinBox.delete(refObject)
+
+        let frontItemOfConcernedRect = frontRectLineMaps.get(refObject)
+        let rearItemsOfFrontRect = rearRectLineMaps.get(frontItemOfConcernedRect);
+
+        let itemToRemoveFromRearRect = rearItemsOfFrontRect.indexOf(refObject)
+        rearItemsOfFrontRect.splice(itemToRemoveFromRearRect, 1)
+
+        frontRectLineMaps.delete(refObject);
+        rearRectLineMaps.set(frontItemOfConcernedRect, rearItemsOfFrontRect);
+
+        DSParamsModel.removeJoinBoxTableMap(refObject)
+
+    }
+
+
+    // SLOT
+    // Make a new join to orphan rectangle
+    function createNewJoin(refObject, refObjectName){
+
+        if(tmpOrphanTableId === refObject){
+
+            // Get front coordinates of the orphan rectangle
+            // Get the rear coordinates of the nearest rectangle
+
+            let orphanX = frontRectangleCoordinates.get(tmpOrphanTableId).x
+            let orphanY = frontRectangleCoordinates.get(tmpOrphanTableId).y
+            let nearestX = rearRectangleCoordinates.get(tmpNearestTable.tableId).x
+            let nearestY = rearRectangleCoordinates.get(tmpNearestTable.tableId).y
+
+            // Get the center of the line for JoinBox
+            let diffX = Math.abs(orphanX - nearestX) /2
+            let diffY = Math.abs(orphanY - nearestY) /2
+
+            let rectX = orphanX <= nearestX ? ( orphanX +diffX ) : ( nearestX + diffX )
+            let rectY = orphanY <= nearestY ? ( orphanY +diffY ) : ( nearestY + diffY )
+
+            // Add the line component on stage
+            newConnectingLine.set(tmpOrphanTableId, dynamicConnectorLine.createObject(parent, {incomingRectangleFrontX:orphanX, incomingRectangleFrontY: orphanY, refRectangleRearX : nearestX, refRectangleRearY: nearestY, lineColor: "black", objectName : tmpOrphanTableId}))
+
+            // Add joinBox
+            newJoinBox.set(tmpOrphanTableId, dynamicJoinBox.createObject(parent, {x: rectX, y: rectY, objectName : tmpOrphanTableId}))
+
+            // Connect join box destroy signal and slot
+            newJoinBox.get(tmpOrphanTableId).destroyJoin.connect(destroyComponents)
+
+            // Front Rectangle Line Maps
+            frontRectLineMaps.set(tmpOrphanTableId, tmpNearestTable.tableId)
+
+            // Rear Rectangle Line Maps
+            let tmpArray = []
+            if(typeof rearRectLineMaps.get(tmpNearestTable.tableId) !== "undefined"){
+                tmpArray = rearRectLineMaps.get(tmpNearestTable.tableId)
+            } else{
+                tmpArray.push(tmpOrphanTableId)
+            }
+
+            rearRectLineMaps.set(tmpNearestTable.tableId, tmpArray)
+
+            // Reset glow color of nearest rectangle
+            dataModellerItem.changeGlowColor("white", tmpNearestTable.tableId)
+
+            // Add to DSParamsModel
+            DSParamsModel.addToJoinBoxTableMap(tmpOrphanTableId, refObjectName, tmpNearestTable.tableName)
+
+            // Reset orphane and nearest tables
+            tmpOrphanTableId = 0
+
+            tmpNearestTable.tableId =  0
+            tmpNearestTable.tableName =  ""
         }
     }
 
-    // New component on Dropped
-    function onDropAreaDroppedNewComponent(x,y){
-        console.log("Dropped" , x, y)
-    }
 
     // New component on Entered
     function onDropAreaDraggedNewComponent(x,y){
+
 
         let rectLeftX = x
         let rectRightX = rectLeftX + refObjectWidth
@@ -136,13 +207,61 @@ Item {
         rearRectangleCoordinates.set(refObject, rearVal)
 
 
-        // If the rectangle is not connected to any parent rectangle
-        // and if its not the first dragged rectangle
-        console.log(refObject, frontRectLineMaps.get(refObject), "DATA", rearRectLineMaps.get(refObject))
-        if(refObject !== "undefined"){
+        // This block is for orphan rectangles and when they are brought near other rectangle
+        // to create new joins
+
+        // if its not the first dragged rectangle
+        // and if the moved rectangle doesnot have any connections to other objects
+        if(typeof refObject !== "undefined" && frontRectLineMaps.has(refObject) === false){
 
             var nearestTable = nearestRectangle(rearRectangleCoordinates, frontVal)
-            console.log(nearestTable, "NEAREST TABLE")
+
+            if(nearestTable.tableId !== refObject){
+
+                // Check if the nearest rectangle is not already connected to the current one
+                let ifRearRelationExists = false
+                let ifFrontRelationExists = false
+
+                rearRectLineMaps.get(refObject).every(function(item){
+
+                    if(item === nearestTable.tableId){
+                        ifRearRelationExists = true;
+                        return false
+                    }
+                    return true
+                })
+
+                // check for front relations
+                if(ifRearRelationExists === false){
+                    if(frontRectLineMaps.get(refObject) === nearestTable.tableId){
+                        ifFrontRelationExists = true
+                    }
+                }
+
+                // Check if any relation exists
+                if(ifRearRelationExists === false && ifFrontRelationExists === false){
+
+                    if(nearestTable.distance <= 100){
+
+                        if(tmpNearestTable.tableId !== nearestTable.tableId){
+                            dataModellerItem.changeGlowColor("white", tmpNearestTable.tableId)
+                        }
+
+                        // Set the temporary nearest table
+                        tmpNearestTable.tableId = nearestTable.tableId
+                        tmpNearestTable.tableName = nearestTable.tableName
+
+                        tmpOrphanTableId = refObject
+
+
+                        dataModellerItem.changeGlowColor(Constants.grafieksLightGreenColor, tmpNearestTable.tableId)
+                    } else{
+                        dataModellerItem.changeGlowColor("white", tmpNearestTable.tableId)
+                        tmpNearestTable.tableId = 0
+                        tmpNearestTable.tableName =  ""
+                    }
+                }
+            }
         }
 
 
@@ -161,12 +280,14 @@ Item {
 
             newJoinBox.get(refObject).x = rectLeftX <= tmpRearRectCoordinatesX ? ( rectLeftX +diffX ) : ( tmpRearRectCoordinatesX + diffX )
             newJoinBox.get(refObject).y = rectLeftY <= tmpRearRectCoordinatesY ? ( rectLeftY +diffY ) : ( tmpRearRectCoordinatesY + diffY )
+
         }
 
 
         // Adjust the lines connected to object rear
         // Also adjust the join objects
         if(rearRectLineMaps.has(refObject)){
+
 
             rearRectLineMaps.get(refObject).forEach(function(value, index){
 
@@ -244,11 +365,13 @@ Item {
 
         // Assign new variable to the created object
         // Use this variable to connect the signals and slots
-        rectangles.set(counter, dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName, objectName : counter}))
+        rectangles.set(counter, dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName, objectName : counter, glowColor: "white"}))
 
         rectangles.get(counter).dragged.connect(onDropAreaDraggedNewComponent)
         rectangles.get(counter).destroyComponents.connect(destroyComponents)
         rectangles.get(counter).refObjectCount.connect(setRefObject)
+        rectangles.get(counter).createNewJoin.connect(createNewJoin)
+        dataModellerItem.changeGlowColor.connect(rectangles.get(counter).slotDisplayColor)
 
 
         // Created rectangle front & back coordinates
@@ -317,7 +440,7 @@ Item {
 
     // Calculate distance between 2 points
     function distance(currentPoint, referencePoint) {
-        return Math.pow((referencePoint.x - currentPoint.x), 2) + Math.pow((referencePoint.y - currentPoint.y), 2);
+        return Math.sqrt(Math.pow((referencePoint.x - currentPoint.x), 2) + Math.pow((referencePoint.y - currentPoint.y), 2));
     }
 
 
@@ -343,11 +466,12 @@ Item {
 
         // Sort all the coordinates based on distance
         // and find the nearest distance
-        const sortByDistance = tmpArray.sort((a,b) => a.distance - b.distance).map((arr, distance, array) => arr.index)
-        var nearestIndex = sortByDistance[0]
+        const sortByDistance = tmpArray.sort((a,b) => a.distance - b.distance).map((arr, distance, array) => arr)
+        var nearestIndex = sortByDistance[0].index
+        var nearestDistance = sortByDistance[0].distance
 
         // return table name & id
-        return {"tableName" :existingTables.get(nearestIndex), tableId : nearestIndex}
+        return {"tableName" :existingTables.get(nearestIndex), tableId : nearestIndex, distance : nearestDistance}
     }
 
 

@@ -10,6 +10,8 @@ Item {
 
     objectName: objectName // refObjectId from parent
 
+    onObjectNameChanged: console.log(objectName, "ONAME")
+
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
