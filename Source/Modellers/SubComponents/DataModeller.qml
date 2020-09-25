@@ -29,7 +29,7 @@ Item {
     property var existingTables : new Map()
     property var tmpNearestTable: {"tableId" : 0, "tableName" : ""} // 0 // for highlighting nearest rect when an orphan rectangle is moved
     property int tmpOrphanTableId:  0 // dragged orphan table id
-//    property string tmpOrphanTableName:  "" // dragged orphan tableName
+    //    property string tmpOrphanTableName:  "" // dragged orphan tableName
 
     property var dynamicRectangle : Qt.createComponent("./MiniSubComponents/DroppedRectangle.qml");
     property var dynamicConnectorLine : Qt.createComponent("./MiniSubComponents/ConnectingLine.qml")
@@ -222,14 +222,18 @@ Item {
                 let ifRearRelationExists = false
                 let ifFrontRelationExists = false
 
-                rearRectLineMaps.get(refObject).every(function(item){
+                if(typeof rearRectLineMaps.get(refObject) !== "undefined"){
+                    rearRectLineMaps.get(refObject).every(function(item){
 
-                    if(item === nearestTable.tableId){
-                        ifRearRelationExists = true;
-                        return false
-                    }
-                    return true
-                })
+                        if(item === nearestTable.tableId){
+                            ifRearRelationExists = true;
+                            return false
+                        }
+                        return true
+                    })
+
+                }
+
 
                 // check for front relations
                 if(ifRearRelationExists === false){

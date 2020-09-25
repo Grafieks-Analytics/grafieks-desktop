@@ -66,7 +66,6 @@ Item{
 
     function slotDisplayColor(glowColor, tableId){
 
-//        console.log(glowColor, tableId, parseInt(newItem.objectName) )
         if(tableId === parseInt(newItem.objectName))
             droppedRectangle.color = glowColor
     }
