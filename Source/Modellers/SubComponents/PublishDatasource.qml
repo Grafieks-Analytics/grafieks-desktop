@@ -52,7 +52,24 @@ Popup {
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
+    Connections{
+        target : PublishDatasourceModel
 
+        function onPublishDSStatus(outputstatus){
+
+            if(outputstatus.code === 200){
+
+                closePopup()
+                stacklayout_home.currentIndex = 7
+
+            } else{
+
+                errorMsg.text = outputstatus.msg
+            }
+
+        }
+
+    }
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -76,6 +93,7 @@ Popup {
 
     function closePopup(){
         popup.visible = false
+        errorMsg.text = ""
     }
     function openFileDialog(){
         fileDialog1.open();
@@ -94,11 +112,10 @@ Popup {
         var isFullExtract = DSParamsModel.isFullExtract
         var extractColumnName = DSParamsModel.extractColName
 
-        PublishDatasourceModel.publishDatasource(dsName, description, uploadImage, sourceType, schedulerId, isFullExtract, extractColumnName)
 
-        closePopup()
-        stacklayout_home.currentIndex = 7
+        PublishDatasourceModel.publishDatasource(dsName, description, uploadImage, sourceType, schedulerId, isFullExtract, extractColumnName)
     }
+
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -115,14 +132,13 @@ Popup {
         selectMultiple: false
         nameFilters: [ "Image files (*.jpg *.jpeg *.png )"]
 
-//        onAccepted: {
-//            console.log("You chose: " + fileDialog1.fileUrls)
-//        }
-//        onRejected: {
-//            console.log("file rejected")
-//        }
+        //        onAccepted: {
+        //            console.log("You chose: " + fileDialog1.fileUrls)
+        //        }
+        //        onRejected: {
+        //            console.log("file rejected")
+        //        }
     }
-
 
 
     // SubComponents Ends
@@ -166,10 +182,7 @@ Popup {
             anchors.rightMargin: 5
             MouseArea{
                 anchors.fill: parent
-                onClicked: {
-
-                    closePopup()
-                }
+                onClicked: closePopup()
             }
         }
     }
@@ -281,9 +294,7 @@ Popup {
 
             MouseArea{
                 anchors.fill: parent
-                onClicked: {
-                    openFileDialog()
-                }
+                onClicked: openFileDialog()
             }
         }
 
@@ -307,22 +318,18 @@ Popup {
 
             id: btn_signin
             textValue: "Publish"
-            onClicked: {
-                onPublishDataSourceClicked()
-            }
+            onClicked: onPublishDataSourceClicked()
         }
 
         CustomButton{
             id: btn_cancel
             textValue: "Cancel"
-            onClicked: {
-                closePopup()
-            }
+            onClicked: closePopup()
         }
     }
     // Row 3: Action Button ends
 
-    Row{
+    Column{
         id: note
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 20
@@ -331,6 +338,11 @@ Popup {
 
         Text {
             text: qsTr("For Data Source access permission, contact Project Admin ")
+        }
+
+        Text {
+            id: errorMsg
+            color: "red"
         }
 
     }

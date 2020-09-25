@@ -90,8 +90,8 @@ void PublishDatasourceModel::readComplete()
         outputStatus.insert("code", statusObj["code"].toInt());
         outputStatus.insert("msg", statusObj["msg"].toString());
 
-
-        emit publishDSStatus(outputStatus);
         m_tempStorage->clear();
     }
+
+    emit publishDSStatus(outputStatus);
 }

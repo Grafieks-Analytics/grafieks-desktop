@@ -919,7 +919,7 @@ Page {
                         anchors.leftMargin: 10
                         anchors.verticalCenter: parent.verticalCenter
                         font.pixelSize: Constants.fontCategoryHeaderSmall
-                        text: ConnectorsLoginModel.currentDbName
+                        text: ConnectorsLoginModel.connectedDB
                     }
 
 

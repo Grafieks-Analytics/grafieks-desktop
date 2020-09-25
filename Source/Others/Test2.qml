@@ -8,10 +8,20 @@ Page{
     width: parent.width
     height: parent.height
 
-    property var xa : {"tableID" : 1, "sa": "b"}
 
-    Component.onCompleted: {
-        xa.tableID = 3
+    ListView{
+
+        id: list1
+        model: SchedulerModel
+        height: 1000
+
+        delegate: Rectangle{
+            height: 20
+            width: parent.width
+            Text {
+                id: name
+                text: Name
+            }
+        }
     }
-
 }

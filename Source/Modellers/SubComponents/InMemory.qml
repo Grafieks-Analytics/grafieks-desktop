@@ -63,7 +63,7 @@ Popup {
     Connections{
         target: TableSchemaModel
 
-        onTableSchemaObtained:{
+        function onTableSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers, queriedColumnNames){
             columnsDropdown.model = queriedColumnNames
         }
     }
@@ -90,14 +90,12 @@ Popup {
     }
 
     function onIncrementalExtractClicked(){
-        console.log("clicked incremental extract")
 
         // Save the value in C++
         DSParamsModel.setIsFullExtract(false)
     }
 
     function onFullExtractClicked(){
-        console.log("clicked full extract")
 
         // Save the value in C++
         DSParamsModel.setIsFullExtract(true)
@@ -174,9 +172,7 @@ Popup {
 
             MouseArea{
                 anchors.fill: parent
-                onClicked: {
-                    closePopup()
-                }
+                onClicked: closePopup()
             }
         }
 
@@ -203,9 +199,7 @@ Popup {
                 parent_dimension: 16
                 font.pixelSize: Constants.fontCategoryHeader
                 ButtonGroup.group: extractRadio
-                onCheckedChanged: {
-                    onFullExtractClicked()
-                }
+                onCheckedChanged: onFullExtractClicked()
             }
         }
 
@@ -225,9 +219,7 @@ Popup {
                 radio_checked: false
                 parent_dimension: 16
                 ButtonGroup.group: extractRadio
-                onCheckedChanged: {
-                    onIncrementalExtractClicked()
-                }
+                onCheckedChanged: onIncrementalExtractClicked()
             }
         }
 
@@ -273,24 +265,9 @@ Popup {
                     anchors.left: parent.left
                     anchors.leftMargin: 30
                     width: parent.width
-                    onCurrentIndexChanged: {
-
-                        console.log(currentText, currentIndex)
-                        onIncrementalExtractClicked(currentText, currentIndex)
-
-                    }
+                    onCurrentIndexChanged: onIncrementalExtractClicked(currentText, currentIndex)
 
                 }
-
-
-                //                SelectDropdown{
-                //                    textValue:"abc"
-                //                    list: incrementalExtactDropDown
-                //                    height: incrementalExtactDropDown.count * 30
-                //                    anchors.topMargin: 20
-                //                    anchors.left: parent.left
-                //                    anchors.leftMargin: 30
-                //                }
 
             }
 
@@ -328,24 +305,9 @@ Popup {
                     width: parent.width
 
                     model: SchedulerModel
-                    onCurrentIndexChanged: {
-                        console.log(currentValue, currentText, currentIndex)
-
-                        onSchedulerIndexChanged(currentValue, currentText, currentIndex)
-
-                    }
+                    onCurrentIndexChanged: onSchedulerIndexChanged(currentValue, currentText, currentIndex)
 
                 }
-
-                //                SelectDropdown{
-                //                    id: scheduleForExtractDropdown
-                //                    textValue:"abc"
-                //                    list: incrementalExtactDropDown
-                //                    height: incrementalExtactDropDown.count * 30
-                //                    anchors.topMargin: 20
-                //                    anchors.left: parent.left
-                //                    anchors.leftMargin: 30
-                //                }
 
                 Text {
                     id: noteText
@@ -368,9 +330,7 @@ Popup {
                 anchors.rightMargin: 60
                 textValue: "Add"
 
-                onClicked: {
-                    onAddClicked()
-                }
+                onClicked: onAddClicked()
             }
 
             // Add button Ends
