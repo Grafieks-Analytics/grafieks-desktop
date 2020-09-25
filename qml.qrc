@@ -22,8 +22,6 @@
         <file>Source/Connectors/SubComponents/SheetConnection.qml</file>
         <file>Source/Connectors/SubComponents/SheetConnectionFiles.qml</file>
         <file>Source/Connectors/SubComponents/SqliteConnection.qml</file>
-        <file>Source/Connectors/SubComponents/TabBackgroundComponent.qml</file>
-        <file>Source/Connectors/SubComponents/TabTextComponent.qml</file>
         <file>Source/Datasources/DataSources.qml</file>
         <file>Source/Datasources/SubComponents/DataSourcesGrid.qml</file>
         <file>Source/Datasources/SubComponents/DataSourcesList.qml</file>
@@ -107,5 +105,7 @@
         <file>Source/Dashboards/SubComponents/MiniSubComponents/example.html</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/TableColumns.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/MainContainer.qml</file>
+        <file>Source/Connectors/SubComponents/MiniSubComponents/TabBackgroundComponent.qml</file>
+        <file>Source/Connectors/SubComponents/MiniSubComponents/TabTextComponent.qml</file>
     </qresource>
 </RCC>

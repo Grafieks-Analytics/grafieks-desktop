@@ -12,7 +12,6 @@ Page{
 
     Component.onCompleted: {
         xa.tableID = 3
-        console.log(xa.tableID, "test2")
     }
 
 }

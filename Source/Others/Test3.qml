@@ -32,7 +32,6 @@ Item{
         DropArea{
             id: dropArea1
             anchors.fill: parent
-            onDropped: console.log("Dropped on rect", x1.objectName)
         }
     }
 }

@@ -89,7 +89,7 @@ Item {
 
     // SLOT
     // Destroy Lines and JoinBox
-    // When destroying main rectangle
+    // or destroying main rectangle
     function destroyComponents(refObject, depth){
 
         // IF the main object is deleted
