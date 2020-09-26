@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-class DashboardContainer: public QObject
+class DashboardContainerModel: public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString lastContainerType READ lastContainerType WRITE setLastContainerType NOTIFY lastContainerTypeChanged)
@@ -17,7 +17,7 @@ class DashboardContainer: public QObject
     int m_positionX;
 
 public:
-    explicit DashboardContainer(QObject *parent = nullptr);
+    explicit DashboardContainerModel(QObject *parent = nullptr);
 
     QString lastContainerType() const;
     int positionY() const;

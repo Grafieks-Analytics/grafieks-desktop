@@ -11,7 +11,6 @@ import com.grafieks.singleton.constants 1.0
 
 Item{
 
-    id: newItem
     visible: true
     anchors{
         top: mainContainer.top
@@ -23,7 +22,6 @@ Item{
 
     Rectangle {
 
-        id: droppedRectangle
         color: "white"
         border.width: 1
         border.color: "grey"
@@ -38,9 +36,7 @@ Item{
             bottom: parent.bottom
         }
 
-
         Text{
-            id: nameID
             text: 'Choose Image'
             anchors.centerIn: parent
         }

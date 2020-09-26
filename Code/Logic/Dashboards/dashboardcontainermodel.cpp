@@ -1,26 +1,26 @@
-#include "dashboardcontainer.h"
+#include "dashboardcontainermodel.h"
 
-DashboardContainer::DashboardContainer(QObject *parent) : QObject(parent)
+DashboardContainerModel::DashboardContainerModel(QObject *parent) : QObject(parent)
 {
 
 }
 
-QString DashboardContainer::lastContainerType() const
+QString DashboardContainerModel::lastContainerType() const
 {
     return m_lastContainerType;
 }
 
-int DashboardContainer::positionY() const
+int DashboardContainerModel::positionY() const
 {
     return m_positionY;
 }
 
-int DashboardContainer::positionX() const
+int DashboardContainerModel::positionX() const
 {
     return m_positionX;
 }
 
-void DashboardContainer::setLastContainerType(QString lastContainerType)
+void DashboardContainerModel::setLastContainerType(QString lastContainerType)
 {
     if (m_lastContainerType == lastContainerType)
         return;
@@ -29,7 +29,7 @@ void DashboardContainer::setLastContainerType(QString lastContainerType)
     emit lastContainerTypeChanged(m_lastContainerType);
 }
 
-void DashboardContainer::setPositionY(int positionY)
+void DashboardContainerModel::setPositionY(int positionY)
 {
     if (m_positionY == positionY)
         return;
@@ -38,7 +38,7 @@ void DashboardContainer::setPositionY(int positionY)
     emit positionYChanged(m_positionY);
 }
 
-void DashboardContainer::setPositionX(int positionX)
+void DashboardContainerModel::setPositionX(int positionX)
 {
     if (m_positionX == positionX)
         return;

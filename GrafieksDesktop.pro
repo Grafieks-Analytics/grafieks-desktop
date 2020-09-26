@@ -31,8 +31,8 @@ SOURCES += \
     Code/Logic/Connectors/sheet.cpp \
     Code/Logic/Connectors/sheetds.cpp \
     Code/Logic/Connectors/sheetmodel.cpp \
-    Code/Logic/Dashboards/dashboardcontainer.cpp \
-    Code/Logic/Dashboards/documenthandler.cpp \
+    Code/Logic/Dashboards/dashboardcontainermodel.cpp \
+    Code/Logic/Dashboards/documenthandlermodel.cpp \
     Code/Logic/DataModeller/columnlistmodel.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
@@ -101,8 +101,8 @@ HEADERS += \
     Code/Logic/Connectors/sheet.h \
     Code/Logic/Connectors/sheetds.h \
     Code/Logic/Connectors/sheetmodel.h \
-    Code/Logic/Dashboards/dashboardcontainer.h \
-    Code/Logic/Dashboards/documenthandler.h \
+    Code/Logic/Dashboards/dashboardcontainermodel.h \
+    Code/Logic/Dashboards/documenthandlermodel.h \
     Code/Logic/DataModeller/columnlistmodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \

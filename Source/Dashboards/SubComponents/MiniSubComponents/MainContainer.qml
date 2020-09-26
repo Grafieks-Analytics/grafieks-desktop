@@ -77,15 +77,15 @@ Rectangle {
 
     Component.onCompleted: {
 
-        if(DashboardContainer.lastContainerType == "text"){
+        if(DashboardContainerModel.lastContainerType == "text"){
             rectangles.set(counter,dynamicText.createObject(parent,{name: 'Text', objectName : counter}))
         }
 
-        if(DashboardContainer.lastContainerType == "image"){
+        if(DashboardContainerModel.lastContainerType == "image"){
             rectangles.set(counter, dynamicImageBox.createObject(parent, { name: 'Choose Image', objectName : counter}))
         }
 
-        objectType = DashboardContainer.lastContainerType;
+        objectType = DashboardContainerModel.lastContainerType;
         counter++;
 
     }

@@ -41,8 +41,8 @@
 #include "Code/Logic/Connectors/sheetds.h"
 #include "Code/Logic/Connectors/sheetmodel.h"
 
-#include "Code/Logic/Dashboards/documenthandler.h"
-#include "Code/Logic/Dashboards/dashboardcontainer.h"
+#include "Code/Logic/Dashboards/documenthandlermodel.h"
+#include "Code/Logic/Dashboards/dashboardcontainermodel.h"
 
 #include "Code/Logic/General/tableschemamodel.h"
 #include "Code/Logic/General/tablecolumnsmodel.h"
@@ -169,7 +169,7 @@ int main(int argc, char *argv[])
     FilterListCategoricalFilter filterListCategoricalFilter;
 
     QuerySplitter querySplitter;
-    DashboardContainer dashboardContainer;
+    DashboardContainerModel dashboardContainerModel;
 
 
 
@@ -235,7 +235,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<DocumentHandler>("io.qt.examples.texteditor", 1, 0, "DocumentHandler");
 
     // Set contexts for QML
-    engine.rootContext()->setContextProperty("DashboardContainer", &dashboardContainer);
+    engine.rootContext()->setContextProperty("DashboardContainerModel", &dashboardContainerModel);
     engine.rootContext()->setContextProperty("QtTest2", &qttest2);
     engine.rootContext()->setContextProperty("MysqlConnect", &mysqlconnect);
     engine.rootContext()->setContextProperty("User", &User);

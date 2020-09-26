@@ -84,9 +84,9 @@ Rectangle {
         dashboardArea.color = "transparent"
 
         console.log(listViewElem.itemName.toLowerCase(),'Dropped Item');
-        DashboardContainer.setLastContainerType(listViewElem.itemName.toLowerCase());
-        DashboardContainer.setPositionX(drag.x);
-        DashboardContainer.setPositionY(drag.y);
+        DashboardContainerModel.setLastContainerType(listViewElem.itemName.toLowerCase());
+        DashboardContainerModel.setPositionX(drag.x);
+        DashboardContainerModel.setPositionY(drag.y);
 
         if(acceptedProperties.includes(listViewElem.itemName.toLocaleLowerCase())){
             rectangles.set(counter,dynamicContainer.createObject(parent,{x:drag.x, y: drag.y, name: 'Text', objectName : counter}))
