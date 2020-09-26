@@ -31,6 +31,8 @@ SOURCES += \
     Code/Logic/Connectors/sheet.cpp \
     Code/Logic/Connectors/sheetds.cpp \
     Code/Logic/Connectors/sheetmodel.cpp \
+    Code/Logic/Dashboards/dashboardcontainer.cpp \
+    Code/Logic/Dashboards/documenthandler.cpp \
     Code/Logic/DataModeller/columnlistmodel.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
@@ -50,14 +52,12 @@ SOURCES += \
     Code/Logic/Datasources/datasourceds.cpp \
     Code/Logic/Datasources/datasourcefilter.cpp \
     Code/Logic/Datasources/datasourcemodel.cpp \
-    Code/Logic/General/dashboardcontainer.cpp \
     Code/Logic/General/datatype.cpp \
     Code/Logic/General/generalparamsmodel.cpp \
     Code/Logic/General/qttest2.cpp \
     Code/Logic/General/querysplitter.cpp \
     Code/Logic/General/tablecolumnsmodel.cpp \
     Code/Logic/General/tableschemamodel.cpp \
-    Code/Logic/General/documenthandler.cpp \
     Code/Logic/Menu/user.cpp \
     main.cpp
 
@@ -101,6 +101,8 @@ HEADERS += \
     Code/Logic/Connectors/sheet.h \
     Code/Logic/Connectors/sheetds.h \
     Code/Logic/Connectors/sheetmodel.h \
+    Code/Logic/Dashboards/dashboardcontainer.h \
+    Code/Logic/Dashboards/documenthandler.h \
     Code/Logic/DataModeller/columnlistmodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
@@ -120,14 +122,12 @@ HEADERS += \
     Code/Logic/Datasources/datasourceds.h \
     Code/Logic/Datasources/datasourcefilter.h \
     Code/Logic/Datasources/datasourcemodel.h \
-    Code/Logic/General/dashboardcontainer.h \
     Code/Logic/General/datatype.h \
     Code/Logic/General/generalparamsmodel.h \
     Code/Logic/General/qttest2.h \
     Code/Logic/General/querysplitter.h \
     Code/Logic/General/tablecolumnsmodel.h \
     Code/Logic/General/tableschemamodel.h \
-    Code/Logic/General/documenthandler.h \
     Code/Logic/Menu/user.h \
     Code/messages.h \
     Code/constants.h \
