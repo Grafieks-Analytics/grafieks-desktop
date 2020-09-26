@@ -18,41 +18,42 @@ class DSParamsModel : public QObject
 {
     Q_OBJECT
 
-    // Standalone variables
-    QStringList hideColumns;
-    QMap<int, QStringList> joinBoxTableMap;
-    QMap<int, QString> joinTypeMap;
-    QMap<int, QString> joinIconMap;
-    QMap<int, QMap<int, QStringList>> joinMapList;
-    QMap<int, QString> primaryJoinTable;
+    // Standalone variables for Data Modeler
+    QStringList hideColumns; // List of columns not available for join conditions in any given table
+    QMap<int, QStringList> joinBoxTableMap; // holds the name of tables against a join id. Called when clicking a join box to show related tables
+    QMap<int, QString> joinTypeMap; // left join, inner join, right join, full outer join
+    QMap<int, QString> joinIconMap; // icon for various type of joins for joinTypeMap
+    QMap<int, QMap<int, QStringList>> joinMapList; // relation between columns for given two tables
+    QMap<int, QString> primaryJoinTable; // Set the primary table in a join. ie, parameter will be on left side of relation in a join
 
 
 
     // Q_PROPERTY variables
 
-    Q_PROPERTY(QString dsName READ dsName WRITE setDsName NOTIFY dsNameChanged)
-    Q_PROPERTY(QString dsType READ dsType WRITE setDsType NOTIFY dsTypeChanged)
-    Q_PROPERTY(bool isFullExtract READ isFullExtract WRITE setIsFullExtract NOTIFY isFullExtractChanged)
-    Q_PROPERTY(QString extractColName READ extractColName WRITE setExtractColName NOTIFY extractColNameChanged)
-    Q_PROPERTY(int schedulerId READ schedulerId WRITE setSchedulerId NOTIFY schedulerIdChanged)
-    Q_PROPERTY(int displayRowsCount READ displayRowsCount WRITE setDisplayRowsCount NOTIFY displayRowsCountChanged)
+    // Publish datasource
+    Q_PROPERTY(QString dsName READ dsName WRITE setDsName NOTIFY dsNameChanged) // Data source name in publish DS
+    Q_PROPERTY(QString dsType READ dsType WRITE setDsType NOTIFY dsTypeChanged) // DataSource Type: live/extract
+    Q_PROPERTY(bool isFullExtract READ isFullExtract WRITE setIsFullExtract NOTIFY isFullExtractChanged) // DS full extract orincremental extract
+    Q_PROPERTY(QString extractColName READ extractColName WRITE setExtractColName NOTIFY extractColNameChanged) // If incremental, then col name
+    Q_PROPERTY(int schedulerId READ schedulerId WRITE setSchedulerId NOTIFY schedulerIdChanged) // Scheduler id (fetched from API) selected
+    Q_PROPERTY(int displayRowsCount READ displayRowsCount WRITE setDisplayRowsCount NOTIFY displayRowsCountChanged) //Number of rows to display in sql preview
 
     // For Data Modeller
-    Q_PROPERTY(int joinId READ joinId WRITE setJoinId NOTIFY joinIdChanged)
+    Q_PROPERTY(int joinId READ joinId WRITE setJoinId NOTIFY joinIdChanged) // Current selected joinId in data modeler
 
     // For Filters
-    Q_PROPERTY(QString section READ section WRITE setSection NOTIFY sectionChanged)
-    Q_PROPERTY(QString category READ category WRITE setCategory NOTIFY categoryChanged)
-    Q_PROPERTY(QString subCategory READ subCategory WRITE setSubCategory NOTIFY subCategoryChanged)
-    Q_PROPERTY(QString tableName READ tableName WRITE setTableName NOTIFY tableNameChanged)
-    Q_PROPERTY(QString colName READ colName WRITE setColName NOTIFY colNameChanged)
-    Q_PROPERTY(QString relation READ relation WRITE setRelation NOTIFY relationChanged)
-    Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
-    Q_PROPERTY(bool exclude READ exclude WRITE setExclude NOTIFY excludeChanged)
-    Q_PROPERTY(bool includeNull READ includeNull WRITE setIncludeNull NOTIFY includeNullChanged)
-    Q_PROPERTY(bool selectAll READ selectAll WRITE setSelectAll NOTIFY selectAllChanged)
-    Q_PROPERTY(int filterIndex READ filterIndex WRITE setFilterIndex NOTIFY filterIndexChanged)
-    Q_PROPERTY(QString mode READ mode WRITE setMode NOTIFY modeChanged) // Create/Edit mode
+    Q_PROPERTY(QString section READ section WRITE setSection NOTIFY sectionChanged) // Categorical/Numerical/Date/Group filters
+    Q_PROPERTY(QString category READ category WRITE setCategory NOTIFY categoryChanged) // Inner sub classifications of the section
+    Q_PROPERTY(QString subCategory READ subCategory WRITE setSubCategory NOTIFY subCategoryChanged) // selection type of categories like multi/single select in categorical tab
+    Q_PROPERTY(QString tableName READ tableName WRITE setTableName NOTIFY tableNameChanged) // sql table name of the selection
+    Q_PROPERTY(QString colName READ colName WRITE setColName NOTIFY colNameChanged) // sql column name
+    Q_PROPERTY(QString relation READ relation WRITE setRelation NOTIFY relationChanged) // sql relation type, eg - like, =, !=, IN, etc
+    Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged) // right side of the relation e.g - name != "test". Here value is "test"
+    Q_PROPERTY(bool exclude READ exclude WRITE setExclude NOTIFY excludeChanged) // if the current selection needs to be excluded from result
+    Q_PROPERTY(bool includeNull READ includeNull WRITE setIncludeNull NOTIFY includeNullChanged) // if include null selected in filter list
+    Q_PROPERTY(bool selectAll READ selectAll WRITE setSelectAll NOTIFY selectAllChanged) // If select all property selected in filter list
+    Q_PROPERTY(int filterIndex READ filterIndex WRITE setFilterIndex NOTIFY filterIndexChanged) // Unique id given to each join type (filter type)
+    Q_PROPERTY(QString mode READ mode WRITE setMode NOTIFY modeChanged) // Set Create/Edit mode in a filter
 
     QString m_dsName;
     QString m_dsType;
