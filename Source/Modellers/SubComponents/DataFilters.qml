@@ -54,7 +54,6 @@ Popup {
     }
 
 
-
     // For Groups tab
 
     ListModel{
@@ -80,6 +79,11 @@ Popup {
         ListElement{
             textValue:"group2"
         }
+    }
+
+    // Listmodel for combobox
+    ListModel{
+        id: addComboDropdown
     }
 
 
@@ -123,9 +127,9 @@ Popup {
                 datesModel.append({"tableName" : element[0], "colName" : element[1]});
             });
 
-//            addMenuList.model =  categoricalModel
+//            add_btn_1.model =  categoricalModel
             add_btn_1.model =  categoricalModel
-//            addMenuList.height = categoricalModel.count * 40
+//            add_btn_1.height = categoricalModel.count * 40
 
         }
     }
@@ -255,8 +259,7 @@ Popup {
 
         onTabToggle(true,false,false,false);
 
-        addMenuList.model = categoricalModel
-        addMenuList.height = categoricalModel.count * 40
+        add_btn_1.model = categoricalModel
 
         tabBarOpen = Constants.categoricalTab
 
@@ -270,8 +273,7 @@ Popup {
 
         onTabToggle(false,true,false,false);
 
-        addMenuList.model = datesModel
-        addMenuList.height = datesModel.count * 40
+        add_btn_1.model = datesModel
 
 
         tabBarOpen = Constants.dateTab
@@ -284,8 +286,7 @@ Popup {
     function onNumericalTabClicked(){
 
         onTabToggle(false,false,true,false);
-        addMenuList.model = numericalModel
-        addMenuList.height = numericalModel.count * 40
+        add_btn_1.model = numericalModel
 
 
         tabBarOpen = Constants.numericalTab
@@ -300,7 +301,7 @@ Popup {
     function onGroupTabClicked(){
 
         onTabToggle(false,false,false,true);
-        addMenuList.model = groupModelList
+        add_btn_1.model = groupModelList
 
         // Set the section in C++
         DSParamsModel.setSection(Constants.groupTab)
