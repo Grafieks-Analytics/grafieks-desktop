@@ -126,7 +126,13 @@ Page {
     }
 
     function onRefreshBtnClicked(){
-        showInMemoryPopup()
+
+        // If already logged in, dont prompt
+        if (typeof settings.value("user/sessionToken") == "undefined"){
+            connectGrafieks1.visible = true
+        } else{
+            showInMemoryPopup()
+        }
     }
 
     function onInMemorySelected(){
@@ -156,10 +162,16 @@ Page {
 
 
     function onPublishDataSourceClicked(){
-        publishDatasource.visible = true
 
-        QueryStatsModel.setProfiling(false)
-        QueryStatsModel.setProfileStatus(false)
+        // If already logged in, dont prompt
+        if (typeof settings.value("user/sessionToken") == "undefined"){
+            connectGrafieks1.visible = true
+        } else{
+            publishDatasource.visible = true
+
+            QueryStatsModel.setProfiling(false)
+            QueryStatsModel.setProfileStatus(false)
+        }
     }
 
     function searchTable(text){
