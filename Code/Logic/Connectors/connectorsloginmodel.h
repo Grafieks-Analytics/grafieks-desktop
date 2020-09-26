@@ -16,7 +16,10 @@
 class ConnectorsLoginModel : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString connectedDB READ connectedDB WRITE setConnectedDB NOTIFY connectedDBChanged)
 
+
+    QString m_connectedDB;
 
 public:
     explicit ConnectorsLoginModel(QObject *parent = nullptr);
@@ -24,13 +27,14 @@ public:
     Q_INVOKABLE void sqliteLogin(QString filename, QString username = "", QString password = "");
 
 
-public slots:
-
+    QString connectedDB() const;
+    void setConnectedDB(QString connectedDB);
 
 signals:
     void mysqlLoginStatus(QVariantMap status);
     void sqliteLoginStatus(QVariantMap status);
 
+    void connectedDBChanged(QString connectedDB);
 };
 
 #endif // MYSQLLOGINMODEL_H

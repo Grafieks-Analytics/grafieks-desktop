@@ -18,7 +18,7 @@
 
 /*!
  * \class TableSchemaModel
- * \brief Generates schema of a given table
+ * \brief Generates schema of a given table(s) in a given query
  * \ingroup General
  */
 class TableSchemaModel : public QObject

@@ -13,12 +13,16 @@ Rectangle{
     height: parent.height
 
     readonly property string moduleName : "JoinDisplayTable"
-    property alias modelCounter: tableListView.model
+    property int modelCounter: 0
     property var allColumnsProperty : []
     property string tableNameProperty : ""
     property alias tableName: title.text
+    property var selectedKeys : new Map()
+    property var existingModel : []
 
     onTableNameChanged: loadTableColumns(tableName)
+    onModelCounterChanged: appendToModel(modelCounter)
+
 
 
     /***********************************************************************************************************************/
@@ -29,6 +33,10 @@ Rectangle{
         id:displayColList
     }
 
+    ListModel{
+        id: tableListModel
+    }
+
 
 
     // LIST MODEL ENDS
@@ -37,6 +45,16 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // SIGNALS STARTS
+
+    signal selectedColumn(string columnName, string tableName, int counter)
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
 
     Connections{
         target: TableColumnsModel
@@ -63,16 +81,6 @@ Rectangle{
         }
     }
 
-    // SIGNALS ENDS
-    /***********************************************************************************************************************/
-
-
-
-    /***********************************************************************************************************************/
-    // Connections Starts
-
-
-
     // Connections Ends
     /***********************************************************************************************************************/
 
@@ -83,6 +91,40 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+
+
+
+    function slotClearModel(haveExistingValues){
+
+        tableListModel.clear()
+
+        if(haveExistingValues === false){
+            tableListModel.append({counter: 0, currIndex: 0})
+        } else{
+
+            newItem.existingModel.forEach(function(item, index){
+
+                let newCurrIndex = 0
+                for(var i = 0; i < displayColList.count; i++){
+
+                    if (displayColList.get(i).colName === newItem.selectedKeys.get(item)){
+                        newCurrIndex = displayColList.get(i).index
+                    }
+                }
+
+                tableListModel.append({counter: parseInt(item), currIndex: newCurrIndex})
+            })
+        }
+    }
+
+    function slotDeleteModel(counter){
+        tableListModel.remove(counter)
+    }
+
+
+    function appendToModel(counter){
+        tableListModel.append({counter: counter, currIndex: 0})
+    }
 
     function loadTableColumns(tableName){
 
@@ -97,14 +139,19 @@ Rectangle{
 
         displayColList.clear()
 
-        allColumns.forEach(function(item){
+        allColumns.forEach(function(item, index){
 
             var regex = new RegExp("[.]" + item[0] + "$");
 
             if(!toHideCols.find(value => regex.test(value))){
-                displayColList.append({colName: item[0], colType: item[1]})
+                displayColList.append({colName: item[0], index: index})
             }
         })
+    }
+
+
+    function changeColumn(columnName, counter){
+        selectedColumn(columnName, tableName, counter)
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -133,9 +180,6 @@ Rectangle{
 
 
 
-    // Page Design Ends
-    /***********************************************************************************************************************/
-
     Rectangle{
         id: content
         height: parent.height
@@ -149,26 +193,18 @@ Rectangle{
 
         Rectangle{
             id: header
-
             color: Constants.lightThemeColor
-
             border.color: Constants.darkThemeColor
-
             height: 30
             width: parent.width
             anchors.left: parent.left
 
-            Row{
-                id: tableHeader
-                height: parent.height
-//                anchors.top: parent.top
 
-                Text{
-                    id : title
-                    anchors.left : parent.left
-                    anchors.leftMargin: 10
-                    anchors.verticalCenter: parent.verticalCenter
-                }
+            Text{
+                id : title
+                anchors.left : parent.left
+                anchors.leftMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
 
@@ -181,19 +217,27 @@ Rectangle{
             width: parent.width
             anchors.left: parent.left
             spacing: 2
-            model: 1
+            model: tableListModel
 
             delegate:   CustomComboBox{
                 id: columnDropDown
+                objectName: counter
                 height: 30
                 width: parent.width
                 model: displayColList
                 textRole: "colName"
-                currentIndex: 0
+                currentIndex: currIndex
+
+                onCurrentTextChanged: changeColumn(columnDropDown.currentText, columnDropDown.objectName)
+
             }
         }
 
 
     }
+
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
 
 }

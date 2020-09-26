@@ -54,21 +54,6 @@ Popup {
     }
 
 
-    // Listmodel for combobox
-    ListModel{
-        id: addComboDropdown
-
-        ListElement{
-            menuItem:"Add"
-        }
-        ListElement{
-            menuItem:"User Name"
-        }
-        ListElement{
-            menuItem:"First Name"
-        }
-    }
-
     // For Groups tab
 
     ListModel{
@@ -94,6 +79,11 @@ Popup {
         ListElement{
             textValue:"group2"
         }
+    }
+
+    // Listmodel for combobox
+    ListModel{
+        id: addComboDropdown
     }
 
 
@@ -137,8 +127,9 @@ Popup {
                 datesModel.append({"tableName" : element[0], "colName" : element[1]});
             });
 
-            addMenuList.model =  categoricalModel
-            addMenuList.height = categoricalModel.count * 40
+//            add_btn_1.model =  categoricalModel
+            add_btn_1.model =  categoricalModel
+//            add_btn_1.height = categoricalModel.count * 40
 
         }
     }
@@ -195,6 +186,7 @@ Popup {
         ColumnListModel.columnQuery(colName, tableName)
         DSParamsModel.setColName(colName)
         DSParamsModel.setTableName(tableName)
+
     }
 
     function onAddMenuItemClicked(){
@@ -267,8 +259,7 @@ Popup {
 
         onTabToggle(true,false,false,false);
 
-        addMenuList.model = categoricalModel
-        addMenuList.height = categoricalModel.count * 40
+        add_btn_1.model = categoricalModel
 
         tabBarOpen = Constants.categoricalTab
 
@@ -282,8 +273,7 @@ Popup {
 
         onTabToggle(false,true,false,false);
 
-        addMenuList.model = datesModel
-        addMenuList.height = datesModel.count * 40
+        add_btn_1.model = datesModel
 
 
         tabBarOpen = Constants.dateTab
@@ -296,8 +286,7 @@ Popup {
     function onNumericalTabClicked(){
 
         onTabToggle(false,false,true,false);
-        addMenuList.model = numericalModel
-        addMenuList.height = numericalModel.count * 40
+        add_btn_1.model = numericalModel
 
 
         tabBarOpen = Constants.numericalTab
@@ -312,7 +301,7 @@ Popup {
     function onGroupTabClicked(){
 
         onTabToggle(false,false,false,true);
-        addMenuList.model = groupModelList
+        add_btn_1.model = groupModelList
 
         // Set the section in C++
         DSParamsModel.setSection(Constants.groupTab)
@@ -408,9 +397,7 @@ Popup {
             anchors.rightMargin: 5
             MouseArea{
                 anchors.fill: parent
-                onClicked: {
-                    onCancelClicked()
-                }
+                onClicked: onCancelClicked()
             }
         }
 
@@ -453,11 +440,7 @@ Popup {
                 verticalAlignment: Text.AlignVCenter
             }
 
-            onClicked: {
-
-                onCategoricalTabClicked()
-
-            }
+            onClicked: onCategoricalTabClicked()
         }
 
         // Characters Tab button ends
@@ -483,10 +466,7 @@ Popup {
                 verticalAlignment: Text.AlignVCenter
             }
 
-            onClicked: {
-
-                onDateTabClicked()
-            }
+            onClicked: onDateTabClicked()
         }
 
         // Date Tab button ends
@@ -512,9 +492,7 @@ Popup {
                 verticalAlignment: Text.AlignVCenter
             }
 
-            onClicked: {
-                onNumericalTabClicked()
-            }
+            onClicked: onNumericalTabClicked()
         }
 
         // Numbers Tab button ends
@@ -542,10 +520,7 @@ Popup {
                 verticalAlignment: Text.AlignVCenter
             }
 
-            onClicked: {
-
-                onGroupTabClicked()
-            }
+            onClicked: onGroupTabClicked()
         }
 
         // Users Tab button ends
@@ -553,53 +528,8 @@ Popup {
 
     // Top header buttons ends
 
-    // Add button starts
 
-//    CustomButton{
-//        id: add_btn_1
-//        anchors.top: tabbar1.bottom
-//        anchors.left: parent.left
-//        anchors.topMargin: 10
-//        anchors.leftMargin: 20
-//        textValue:"Add"
-//        onClicked: {
-//            optionsMenu1.open()
-//        }
-//    }
-
-
-    // Menu options on clicking 'Add button' starts
-
-//    Menu {
-//        id: optionsMenu1
-
-//        x: 20
-//        y: headerPopup.height + tabbar1.height + add_btn_1.height + 22
-//        width: 150
-
-//        ListView{
-//            id: addMenuList
-//            anchors.top: parent.top
-//            width: 150
-//            delegate:
-
-//                MenuItem {
-//                text: colName
-//                onTriggered: {
-
-//                    onAddMenuItemTriggered(colName, tableName);
-
-//                }
-//                onClicked: {
-
-//                    onAddMenuItemClicked()
-//                }
-//            }
-//        }
-//    }
-
-    // Menu options on clicking 'Add button' ends
-
+    // Menu option starts
     CustomComboBox{
         id: add_btn_1
         anchors.top: tabbar1.bottom
@@ -607,18 +537,18 @@ Popup {
         anchors.topMargin: 10
         anchors.leftMargin: 20
 
-        currentIndex: 0
-        model: addComboDropdown
-        textRole: "menuItem"
+        textRole: "colName"
+        valueRole: "tableName"
 
-        onCurrentIndexChanged: {
+        onActivated: {
 
-//            onAddMenuItemTriggered(colName, tableName);
+            onAddMenuItemTriggered(currentText, currentValue);
+            onAddMenuItemClicked()
 
         }
     }
 
-    // Add button ends
+    // Menu option ends
 
     // Center Panel Starts
 
@@ -677,19 +607,14 @@ Popup {
         CustomButton{
             id: cancel_btn1
             textValue: "Cancel"
-            onClicked: {
-                onCancelClicked()
-            }
+            onClicked: onCancelClicked()
         }
 
 
         CustomButton{
             id: apply_btn1
             textValue: "Apply"
-            onClicked: {
-                onApplyClicked()
-
-            }
+            onClicked: onApplyClicked()
         }
     }
 

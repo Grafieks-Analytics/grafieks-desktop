@@ -14,6 +14,9 @@ public:
     explicit QtTest2(QObject *parent = nullptr);
     QString a() const;
 
+    QMap<QString, QVariant> testFunc();
+    QVariantMap testFunc2();
+
 public slots:
     void setA(QString a);
 

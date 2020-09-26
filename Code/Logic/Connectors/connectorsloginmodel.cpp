@@ -26,6 +26,8 @@ void ConnectorsLoginModel::mysqlLogin(QString host, QString db, int port, QStrin
     Statics::currentDbIntType = Constants::mysqlIntType;
     Statics::currentDbStrType = Constants::mysqlStrType;
 
+    this->setConnectedDB(db);
+
     emit mysqlLoginStatus(response);
 }
 
@@ -46,6 +48,22 @@ void ConnectorsLoginModel::sqliteLogin(QString filename, QString username, QStri
     Statics::currentDbIntType = Constants::sqliteIntType;
     Statics::currentDbStrType = Constants::sqliteStrType;
 
+    this->setConnectedDB(filename);
+
     emit sqliteLoginStatus(response);
+}
+
+QString ConnectorsLoginModel::connectedDB() const
+{
+    return m_connectedDB;
+}
+
+void ConnectorsLoginModel::setConnectedDB(QString connectedDB)
+{
+    if (m_connectedDB == connectedDB)
+        return;
+
+    m_connectedDB = connectedDB;
+    emit connectedDBChanged(m_connectedDB);
 }
 

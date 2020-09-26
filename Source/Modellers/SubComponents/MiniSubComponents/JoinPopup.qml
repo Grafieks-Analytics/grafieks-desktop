@@ -7,6 +7,7 @@ import "../../../MainSubComponents"
 import com.grafieks.singleton.constants 1.0
 
 Rectangle{
+    id: joinPopupItem
     anchors.right:parent.right
     anchors.bottom: parent.bottom
     height:parent.height + 1
@@ -15,7 +16,14 @@ Rectangle{
     border.color: Constants.darkThemeColor
     visible: false
 
-    property int counter : 1
+    property int counter : 0
+    property int refObjId : 0
+    property var leftParam : new Map()
+    property var rightParam : new Map()
+    property var leftDefaultIndex : new Map()
+    property var rightDefaultIndex : new Map()
+    property var tmpModel : []
+    property var tmpModelArray: []
 
     onVisibleChanged: fetchJoinTableInfo(visible)
 
@@ -24,6 +32,10 @@ Rectangle{
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
+    ListModel{
+        id: removeListModel
+    }
+
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
 
@@ -31,7 +43,8 @@ Rectangle{
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
-
+    signal clearModel(bool haveExistingValues)
+    signal deleteModel(int counter)
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -45,8 +58,11 @@ Rectangle{
         target: DSParamsModel
 
         function onJoinIdChanged(joinId){
+
+            refObjId = joinId
             fetchJoinTableInfo(true)
         }
+
     }
 
 
@@ -60,13 +76,40 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted: {
+        table1.selectedColumn.connect(joinPopupItem.slotColumnChanged)
+        table2.selectedColumn.connect(joinPopupItem.slotColumnChanged)
+
+        joinPopupItem.deleteModel.connect(table1.slotDeleteModel)
+        joinPopupItem.deleteModel.connect(table2.slotDeleteModel)
+
+        joinPopupItem.clearModel.connect(table1.slotClearModel)
+        joinPopupItem.clearModel.connect(table2.slotClearModel)
+
+    }
+
+
+    function slotColumnChanged(columnName, tableName, counter){
+
+        if(columnName !== "" && tableName !== "" && counter !== ""){
+            if(tableName === DSParamsModel.fetchPrimaryJoinTable(refObjId)){
+                leftParam.set(counter, columnName)
+            } else{
+                rightParam.set(counter, columnName)
+            }
+
+            DSParamsModel.addToJoinMapList(DSParamsModel.joinId, counter, leftParam.get(counter), rightParam.get(counter))
+        }
+    }
+
+
 
     function fetchJoinTableInfo(visible){
 
         if(visible === true){
 
             // Set join info in both the tables
-            let joinTableInfo = DSParamsModel.fetchJoinBoxTableMap(DSParamsModel.joinId)
+            let joinTableInfo = DSParamsModel.fetchJoinBoxTableMap(refObjId)
             table1.tableName = joinTableInfo[1]
             table2.tableName = joinTableInfo[2]
 
@@ -75,15 +118,14 @@ Rectangle{
             rightJoinRadio.radio_text = table2.tableName
 
             // Set default primary join table
+            if(DSParamsModel.fetchPrimaryJoinTable(refObjId) === ""){
 
-            if(DSParamsModel.fetchPrimaryJoinTable(DSParamsModel.joinId) === ""){
-
-                DSParamsModel.addToPrimaryJoinTable(DSParamsModel.joinId, table1.tableName)
+                DSParamsModel.addToPrimaryJoinTable(refObjId, table1.tableName)
                 leftJoinRadio.checked = true
 
             } else{
 
-                if(DSParamsModel.fetchPrimaryJoinTable(DSParamsModel.joinId) === table1.tableName){
+                if(DSParamsModel.fetchPrimaryJoinTable(refObjId) === table1.tableName){
                     leftJoinRadio.checked = true
                 } else{
                     rightJoinRadio.checked = true
@@ -93,9 +135,71 @@ Rectangle{
 
             // Reset the counter, if it appears for the first time
             // Or fetch existing counter value & joins from DSParamsModel
-            counter = 0
-            addKeyToList()
+
+
+            var tableModel = DSParamsModel.fetchJoinMapList(refObjId)
+
+
+
+            if(Object.keys(tableModel).length > 0){
+
+
+                for (var i=0; i<Object.keys(tableModel).length; i++){
+
+                    let key = Object.keys(tableModel)[i]
+
+                    leftDefaultIndex.set(key, tableModel[key][0])
+                    rightDefaultIndex.set(key, tableModel[key][1])
+                }
+
+
+                table1.existingModel = Object.keys(tableModel)
+                table2.existingModel = Object.keys(tableModel)
+
+                table1.selectedKeys = leftDefaultIndex
+                table2.selectedKeys = rightDefaultIndex
+
+                joinPopupItem.clearModel(true)
+
+                // Restore the total keys from the existing value
+                relationListView.model = []
+                relationListView.model = Object.keys(tableModel)
+                tmpModelArray = Object.keys(tableModel)
+
+            } else{
+
+                joinPopupItem.clearModel(false)
+                joinPopupItem.counter = 0
+
+                // Restore the total keys from the existing value
+                tmpModelArray = [joinPopupItem.counter]
+                relationListView.model = tmpModelArray
+
+            }
         }
+    }
+
+    function addKeyToList(){
+
+        let lastItem = tmpModelArray[tmpModelArray.length - 1]
+
+        joinPopupItem.counter = lastItem + 1
+
+        relationListView.model = tmpModelArray.push(joinPopupItem.counter)
+        table1.modelCounter = joinPopupItem.counter
+        table2.modelCounter = joinPopupItem.counter
+
+    }
+
+    function removeJoinItem(removeItem){
+
+        let itemId = tmpModelArray.indexOf(removeItem)
+        tmpModelArray.splice(itemId, 1)
+
+        relationListView.model = tmpModelArray
+        joinPopupItem.deleteModel(itemId)
+        DSParamsModel.removeJoinMapList(refObjId, removeItem, false)
+
     }
 
     function closePopup(){
@@ -129,17 +233,6 @@ Rectangle{
 
     }
 
-    function addKeyToList(){
-
-        counter++
-
-        relationListView.model = counter
-        table1.modelCounter = counter
-        table2.modelCounter = counter
-
-        DSParamsModel.addToJoinMapList(DSParamsModel.joinId, counter, "test1", "test2")
-
-    }
 
     function onDoneClicked(){
         joinPopup.visible = false
@@ -217,7 +310,6 @@ Rectangle{
                 onClicked: closePopup()
             }
         }
-
     }
 
     // header ends
@@ -254,8 +346,8 @@ Rectangle{
                     verticalAlignment: Image.AlignVCenter
                 }
             }
-
         }
+
 
         Column{
             width: parent.width/4
@@ -442,8 +534,7 @@ Rectangle{
                     anchors.top: parent.top
                     anchors.topMargin: 40
                     anchors.left: parent.left
-
-                    model: 1
+                    model:removeListModel
 
                     delegate:  Row{
 
@@ -467,6 +558,11 @@ Rectangle{
                             source: "/Images/icons/remove.png"
                             height: 12
                             width: 12
+
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: removeJoinItem(modelData)
+                            }
                         }
 
                     }
@@ -480,21 +576,15 @@ Rectangle{
                 height: parent.height
                 width: parent.width/2 - 20
 
-
                 JoinDisplayTable{
                     id: table2
                 }
-
             }
-
         }
-
     }
 
     Row{
         id:doneBtn
-        height: 80
-        width: parent.width
 
         anchors.top: tables.bottom
         anchors.topMargin: 15
@@ -502,6 +592,8 @@ Rectangle{
         anchors.rightMargin: 10
 
         CustomButton{
+            height: 80
+            width: parent.width
 
             anchors.right: parent.right
 

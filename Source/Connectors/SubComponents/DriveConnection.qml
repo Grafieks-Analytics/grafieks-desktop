@@ -50,24 +50,6 @@ Popup {
     // Connections Starts
 
 
-    Connections{
-        target: ConnectorsLoginModel
-
-        onSqliteLoginStatus:{
-
-            if(status.status === true){
-
-                popup.visible = false
-                stacklayout_home.currentIndex = 5
-            }
-            else{
-                popup.visible = true
-                msg_dialog.open()
-                msg_dialog.text = status.msg
-            }
-        }
-    }
-
     // Connections Ends
     /***********************************************************************************************************************/
 

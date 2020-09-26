@@ -34,7 +34,7 @@ Popup {
     Connections{
         target: ConnectorsLoginModel
 
-        onMysqlLoginStatus:{
+        function onMysqlLoginStatus(status){
 
              if(status.status === true){
 

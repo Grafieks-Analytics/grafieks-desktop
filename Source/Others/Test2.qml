@@ -4,25 +4,24 @@ import QtQuick.Controls 2.15
 import "../MainSubComponents"
 
 Page{
+    id: x1
     width: parent.width
     height: parent.height
 
-    Connections{
-        target: QtTest2
 
-        function onAChanged(a){
-            console.log("SECOND", "TEST2")
-            console.log("SIGNAL FIRED", a)
+    ListView{
+
+        id: list1
+        model: SchedulerModel
+        height: 1000
+
+        delegate: Rectangle{
+            height: 20
+            width: parent.width
+            Text {
+                id: name
+                text: Name
+            }
         }
-    }
-
-
-    Component.onCompleted: {
-        console.log("FIRST", "TEST2")
-        QtTest2.setA("Abhishek")
-    }
-
-    Text{
-        text: QtTest2.a
     }
 }

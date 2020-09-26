@@ -31,7 +31,7 @@ Popup {
     Connections{
         target: ConnectorsLoginModel
 
-        onSqliteLoginStatus:{
+        function onSqliteLoginStatus(status){
 
             if(status.status === true){
 
