@@ -55,6 +55,10 @@ Item{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted: {
+        reportName.text = name
+    }
+
     function destroyElement(){
         mainContainer.destroy()
         this.destroy()
@@ -90,7 +94,7 @@ Item{
 
         color: "white"
         border.width: 1
-        border.color: "grey"
+        border.color: Constants.themeColor
 
         width: parent.width
         height: parent.height
@@ -102,27 +106,52 @@ Item{
             bottom: parent.bottom
         }
 
-        Image {
-            id: deleteContainer
-            height: 12
-            width: 12
-            source: "../../../../Images/icons/remove.png"
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.topMargin: 5
-            anchors.rightMargin: 5
+        Rectangle{
 
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    destroyElement()
+            color: "transparent"
+            anchors.top: parent.top
+            height: 30
+            width: parent.width
+            border.color: Constants.themeColor
+            border.width: 2
+
+            Text {
+                id: reportName
+                text: qsTr("Report Name")
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            Image{
+                id: editReport
+                height: 12
+                width: 12
+                source: "../../../../Images/icons/Edit.png"
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.rightMargin: 25
+            }
+
+            Image {
+                id: fullScreenReport
+                height: 12
+                width: 12
+                source: "../../../../Images/icons/remove.png"
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.rightMargin: 5
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        destroyElement()
+                    }
                 }
             }
-        }
 
-        Text{
-            text: 'Choose Image'
-            anchors.centerIn: parent
+
+
         }
 
     }

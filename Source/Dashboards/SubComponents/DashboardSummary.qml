@@ -29,7 +29,8 @@ Rectangle {
     property var dynamicText : Qt.createComponent("./MiniSubComponents/DroppedText.qml");
     property var dynamicImageBox : Qt.createComponent("./MiniSubComponents/DroppedImage.qml");
 
-    property var acceptedProperties: ['text','image','report']
+//    property var acceptedProperties: ['text','image']
+    property var unAcceptedProperties: ['name','background color','report border']
 
 
 
@@ -88,7 +89,9 @@ Rectangle {
         DashboardContainerModel.setPositionX(drag.x);
         DashboardContainerModel.setPositionY(drag.y);
 
-        if(acceptedProperties.includes(listViewElem.itemName.toLocaleLowerCase())){
+        var draggedItem = listViewElem.itemName.toLocaleLowerCase();
+
+        if(!unAcceptedProperties.includes(draggedItem) ){
             rectangles.set(counter,dynamicContainer.createObject(parent,{x:drag.x, y: drag.y, name: 'Text', objectName : counter}))
             counter++;
         }
@@ -244,7 +247,6 @@ Rectangle {
         onExited: onDropAreaExited()
         onPositionChanged: onDropAreaPositionChanged(drag)
         onDropped: onDropAreaDropped(drag)
-
     }
 
 

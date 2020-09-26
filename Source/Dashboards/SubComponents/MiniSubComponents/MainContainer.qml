@@ -34,6 +34,7 @@ Rectangle {
 
     property var dynamicText : Qt.createComponent("./DroppedText.qml");
     property var dynamicImageBox : Qt.createComponent("./DroppedImage.qml");
+    property var dynamicReportBox : Qt.createComponent("./DroppedReport.qml");
 
     property int counter: 1
 
@@ -77,15 +78,21 @@ Rectangle {
 
     Component.onCompleted: {
 
+        objectType = DashboardContainerModel.lastContainerType;
+
         if(DashboardContainerModel.lastContainerType == "text"){
             rectangles.set(counter,dynamicText.createObject(parent,{name: 'Text', objectName : counter}))
         }
 
-        if(DashboardContainerModel.lastContainerType == "image"){
+        else if(DashboardContainerModel.lastContainerType == "image"){
             rectangles.set(counter, dynamicImageBox.createObject(parent, { name: 'Choose Image', objectName : counter}))
         }
 
-        objectType = DashboardContainerModel.lastContainerType;
+        else{
+            console.log(objectType);
+            rectangles.set(counter, dynamicReportBox.createObject(parent, { name: objectType, objectName : counter}))
+        }
+
         counter++;
 
     }
@@ -253,9 +260,7 @@ Rectangle {
             drag{ target: parent; axis: Drag.YAxis }
             cursorShape: Qt.SizeVerCursor
             onMouseYChanged: {
-
                 onDownResize(drag,mouseY)
-
             }
         }
     }

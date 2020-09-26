@@ -297,7 +297,7 @@ Page {
                     text: "Customize"
                     anchors.top: parent.top
                     anchors.topMargin: 6
-                    anchors.left: parent.left
+                    anchors.left: customizeIcon.left
                     anchors.leftMargin: 10
                 }
 
