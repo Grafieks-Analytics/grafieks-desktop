@@ -54,20 +54,6 @@ Popup {
     }
 
 
-    // Listmodel for combobox
-    ListModel{
-        id: addComboDropdown
-
-        ListElement{
-            menuItem:"Add"
-        }
-        ListElement{
-            menuItem:"User Name"
-        }
-        ListElement{
-            menuItem:"First Name"
-        }
-    }
 
     // For Groups tab
 
