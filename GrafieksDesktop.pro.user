@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<<<<<<< HEAD
-<!-- Written by QtCreator 4.12.3, 2020-09-26T01:51:44. -->
-=======
-<!-- Written by QtCreator 4.12.2, 2020-09-25T12:00:10. -->
->>>>>>> 85ebb1151bd33f7af2efb25fd2876523e8d155a6
+<!-- Written by QtCreator 4.12.2, 2020-09-26T17:32:02. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -310,32 +306,20 @@
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-<<<<<<< HEAD
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:D:/Grafieks/grafieks-d/grafieks-desktop/GrafieksDesktop.pro</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">D:/Grafieks/grafieks-d/grafieks-desktop/GrafieksDesktop.pro</value>
-=======
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/Users/mac/grafieks-desktop-windows/GrafieksDesktop.pro</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/Users/mac/grafieks-desktop-windows/GrafieksDesktop.pro</value>
->>>>>>> 85ebb1151bd33f7af2efb25fd2876523e8d155a6
     <value type="QString" key="RunConfiguration.Arguments"></value>
     <value type="bool" key="RunConfiguration.Arguments.multi">false</value>
     <value type="QString" key="RunConfiguration.OverrideDebuggerStartup"></value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
-<<<<<<< HEAD
-=======
     <value type="bool" key="RunConfiguration.UseDyldImageSuffix">false</value>
->>>>>>> 85ebb1151bd33f7af2efb25fd2876523e8d155a6
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseMultiProcess">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
     <value type="QString" key="RunConfiguration.WorkingDirectory"></value>
-<<<<<<< HEAD
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">D:/Grafieks/grafieks-d/build-GrafieksDesktop-Desktop_Qt_5_15_0_MSVC2019_64bit-Debug</value>
-=======
     <value type="QString" key="RunConfiguration.WorkingDirectory.default">/Users/mac/build-GrafieksDesktop-Desktop_Qt_5_15_0_clang_64bit-Debug/GrafieksDesktop.app/Contents/MacOS</value>
->>>>>>> 85ebb1151bd33f7af2efb25fd2876523e8d155a6
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>
