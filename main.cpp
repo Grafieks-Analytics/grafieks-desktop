@@ -41,12 +41,13 @@
 #include "Code/Logic/Connectors/sheetds.h"
 #include "Code/Logic/Connectors/sheetmodel.h"
 
+#include "Code/Logic/Dashboards/documenthandler.h"
+#include "Code/Logic/Dashboards/dashboardcontainer.h"
+
 #include "Code/Logic/General/tableschemamodel.h"
 #include "Code/Logic/General/tablecolumnsmodel.h"
 #include "Code/Logic/General/querysplitter.h"
-#include "Code/Logic/General/documenthandler.h"
 #include "Code/Logic/General/qttest2.h"
-#include "Code/Logic/General/dashboardcontainer.h"
 
 #include "Code/statics.h"
 

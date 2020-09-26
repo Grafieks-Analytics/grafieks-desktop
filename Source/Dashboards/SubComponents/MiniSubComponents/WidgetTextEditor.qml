@@ -152,7 +152,7 @@ Popup {
             border.color: Constants.leftDarkColor
             color: Constants.whiteColor
 
-            TextEditorTest{
+            TextEditor{
                 id: textEditor
             }
 
