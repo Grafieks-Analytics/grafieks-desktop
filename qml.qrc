@@ -102,10 +102,9 @@
         <file>Source/Modellers/SubComponents/MiniSubComponents/ConnectingLine.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/DroppedRectangle.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/WidgetTextEditor.qml</file>
-        <file>Source/Dashboards/SubComponents/MiniSubComponents/TextEditorTest.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/ToolBarSeparator.qml</file>
-        <file>Source/Dashboards/SubComponents/MiniSubComponents/example.html</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/TableColumns.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/MainContainer.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/TextEditor.qml</file>
     </qresource>
 </RCC>

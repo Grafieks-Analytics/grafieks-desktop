@@ -11,17 +11,18 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
 
 Rectangle {
-    id: selComp
+    id: mainContainer
     border {
         width: 1
         color: Constants.grafieksGreenColor
     }
 
-    width: 100
+    width: 180
     height: 100
 
     property int rulersSize: 10
@@ -36,18 +37,134 @@ Rectangle {
 
     property int counter: 1
 
+    property var objectType: "";
+
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
+
     Component.onCompleted: {
 
         if(DashboardContainer.lastContainerType == "text"){
-            rectangles.set(counter,dynamicText.createObject(parent,{x:DashboardContainer.positionX, y: DashboardContainer.positionY, name: 'Text', objectName : counter}))
+            rectangles.set(counter,dynamicText.createObject(parent,{name: 'Text', objectName : counter}))
         }
 
         if(DashboardContainer.lastContainerType == "image"){
-            rectangles.set(counter, dynamicImageBox.createObject(parent, {x:DashboardContainer.positionX, y: DashboardContainer.positionY, name: 'Select an Image', objectName : counter}))
+            rectangles.set(counter, dynamicImageBox.createObject(parent, { name: 'Choose Image', objectName : counter}))
         }
 
+        objectType = DashboardContainer.lastContainerType;
         counter++;
+
     }
+
+    function containerClicked(){
+        if(objectType == "image"){
+            fileDialog.open()
+        }
+    }
+
+    function onLeftResize(drag,mouseX){
+        if(drag.active){
+            mainContainer.width = mainContainer.width - mouseX
+            mainContainer.x = mainContainer.x + mouseX
+            if(mainContainer.width < 30)
+                mainContainer.width = 30
+        }
+    }
+
+    function onRightResize(drag,mouseX){
+
+        if(drag.active){
+            mainContainer.width = mainContainer.width + mouseX
+            if(mainContainer.width < 50)
+                mainContainer.width = 50
+        }
+    }
+
+
+    function onTopResize(drag,mouseY){
+
+        if(drag.active){
+            mainContainer.height = mainContainer.height - mouseY
+            mainContainer.y = mainContainer.y + mouseY
+            if(mainContainer.height < 50)
+                mainContainer.height = 50
+        }
+    }
+
+
+    function onDownResize(drag,mouseY){
+        if(drag.active){
+            mainContainer.height = mainContainer.height + mouseY
+            if(mainContainer.height < 50)
+                mainContainer.height = 50
+        }
+    }
+
+
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    FileDialog{
+        id: fileDialog
+        title: "Select a file (*.jpg *.jpeg *.png  only)"
+        selectMultiple: false
+        nameFilters: [ "Image files (*.jpg *.jpeg *.png )"]
+    }
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
 
 
     MouseArea {     // drag mouse area
@@ -60,6 +177,8 @@ Rectangle {
             maximumY: parent.parent.height - parent.height
             smoothed: true
         }
+
+        onClicked: containerClicked()
 
     }
 
@@ -75,12 +194,7 @@ Rectangle {
             drag{ target: parent; axis: Drag.XAxis }
             cursorShape: Qt.SizeHorCursor
             onMouseXChanged: {
-                if(drag.active){
-                    selComp.width = selComp.width - mouseX
-                    selComp.x = selComp.x + mouseX
-                    if(selComp.width < 30)
-                        selComp.width = 30
-                }
+                onLeftResize(drag,mouseX)
             }
         }
     }
@@ -97,11 +211,10 @@ Rectangle {
             drag{ target: parent; axis: Drag.XAxis }
             cursorShape: Qt.SizeHorCursor
             onMouseXChanged: {
-                if(drag.active){
-                    selComp.width = selComp.width + mouseX
-                    if(selComp.width < 50)
-                        selComp.width = 50
-                }
+
+
+                onRightResize(drag,mouseX)
+
             }
         }
     }
@@ -120,12 +233,7 @@ Rectangle {
             drag{ target: parent; axis: Drag.YAxis }
             cursorShape: Qt.SizeVerCursor
             onMouseYChanged: {
-                if(drag.active){
-                    selComp.height = selComp.height - mouseY
-                    selComp.y = selComp.y + mouseY
-                    if(selComp.height < 50)
-                        selComp.height = 50
-                }
+                onTopResize(drag,mouseY)
             }
         }
     }
@@ -145,11 +253,9 @@ Rectangle {
             drag{ target: parent; axis: Drag.YAxis }
             cursorShape: Qt.SizeVerCursor
             onMouseYChanged: {
-                if(drag.active){
-                    selComp.height = selComp.height + mouseY
-                    if(selComp.height < 50)
-                        selComp.height = 50
-                }
+
+                onDownResize(drag,mouseY)
+
             }
         }
     }
