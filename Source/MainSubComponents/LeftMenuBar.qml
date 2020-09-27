@@ -18,7 +18,7 @@ import com.grafieks.singleton.constants 1.0
 Rectangle{
     id: leftMenuBar
     height: parent.height
-    width: 49
+    width: Constants.leftMenubarWidth
 
     // selectedMenu indicates
     // 0 : Data Designer is selected

@@ -22,8 +22,8 @@ Rectangle {
         color: Constants.grafieksGreenColor
     }
 
-    width: 180
-    height: 100
+    width: 300
+    height: 200
 
     property int rulersSize: 10
 
@@ -34,11 +34,14 @@ Rectangle {
 
     property var dynamicText : Qt.createComponent("./DroppedText.qml");
     property var dynamicImageBox : Qt.createComponent("./DroppedImage.qml");
+    property var dynamicBlankBox : Qt.createComponent("./DroppedBlank.qml");
     property var dynamicReportBox : Qt.createComponent("./DroppedReport.qml");
 
     property int counter: 1
 
     property var objectType: "";
+
+    property var rulerStatus: true
 
 
     /***********************************************************************************************************************/
@@ -87,7 +90,9 @@ Rectangle {
         else if(DashboardContainerModel.lastContainerType == "image"){
             rectangles.set(counter, dynamicImageBox.createObject(parent, { name: 'Choose Image', objectName : counter}))
         }
-
+        else if(DashboardContainerModel.lastContainerType == "blank"){
+            rectangles.set(counter, dynamicBlankBox.createObject(parent, { name: 'Blank', objectName : counter}))
+        }
         else{
             console.log(objectType);
             rectangles.set(counter, dynamicReportBox.createObject(parent, { name: objectType, objectName : counter}))
@@ -97,10 +102,14 @@ Rectangle {
 
     }
 
-    function containerClicked(){
+    function containerDoubleClicked(){
         if(objectType == "image"){
             fileDialog.open()
         }
+    }
+
+    function containerClicked(){
+        customizeReport.visible = true
     }
 
     function onLeftResize(drag,mouseX){
@@ -186,6 +195,7 @@ Rectangle {
         }
 
         onClicked: containerClicked()
+        onDoubleClicked: containerDoubleClicked()
 
     }
 
@@ -195,6 +205,7 @@ Rectangle {
         color: Constants.grafieksGreenColor
         anchors.horizontalCenter: parent.left
         anchors.verticalCenter: parent.verticalCenter
+        visible: rulerStatus
 
         MouseArea {
             anchors.fill: parent
@@ -212,6 +223,7 @@ Rectangle {
         color: Constants.grafieksGreenColor
         anchors.horizontalCenter: parent.right
         anchors.verticalCenter: parent.verticalCenter
+        visible: rulerStatus
 
         MouseArea {
             anchors.fill: parent
@@ -234,6 +246,7 @@ Rectangle {
         color: Constants.grafieksGreenColor
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.top
+        visible: rulerStatus
 
         MouseArea {
             anchors.fill: parent
@@ -254,6 +267,7 @@ Rectangle {
         color: Constants.grafieksGreenColor
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.bottom
+        visible: rulerStatus
 
         MouseArea {
             anchors.fill: parent

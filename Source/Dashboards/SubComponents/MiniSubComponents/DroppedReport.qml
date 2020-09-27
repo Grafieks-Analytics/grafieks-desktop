@@ -56,7 +56,8 @@ Item{
     // JAVASCRIPT FUNCTION STARTS
 
     Component.onCompleted: {
-        reportName.text = name
+        // Add name to report
+        // reportName.text = name
     }
 
     function destroyElement(){
@@ -66,6 +67,13 @@ Item{
         // Delete from c++
     }
 
+    function editSelectedReport(){
+        stacklayout_home.currentIndex = 7
+    }
+
+    function toggleFullScreen(){
+        console.log('Toggle Full Screen')
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -110,7 +118,7 @@ Item{
 
             color: "transparent"
             anchors.top: parent.top
-            height: 30
+            height: 40
             width: parent.width
             border.color: Constants.themeColor
             border.width: 2
@@ -123,38 +131,69 @@ Item{
                 anchors.verticalCenter: parent.verticalCenter
             }
 
-            Image{
-                id: editReport
-                height: 12
-                width: 12
-                source: "../../../../Images/icons/Edit.png"
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.rightMargin: 25
-            }
 
-            Image {
-                id: fullScreenReport
-                height: 12
-                width: 12
-                source: "../../../../Images/icons/remove.png"
+            Rectangle{
                 anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.rightMargin: 5
+                anchors.top: parent.top
+                height: parent.height
 
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-                        destroyElement()
+                Row{
+
+                    height: parent.height
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10
+
+                    spacing: 10
+
+                    Image{
+                        id: editReport
+                        height: 20
+                        width: 20
+                        source: "../../../../Images/icons/Edit.png"
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: editOptions.open()
+                        }
                     }
+
+                    Image {
+                        id: fullScreenReport
+                        height: 22
+                        width: 22
+                        source: "../../../../Images/icons/fullscreen.png"
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                toggleFullScreen()
+                            }
+                        }
+                    }
+
                 }
+
             }
-
-
 
         }
+
+        Menu{
+            id: editOptions
+            MenuItem {
+                text: qsTr("Edit")
+                onTriggered: editSelectedReport()
+            }
+
+            MenuItem {
+                text: qsTr("Delete")
+                onTriggered: destroyElement()
+            }
+        }
+
 
     }
 
 }
-

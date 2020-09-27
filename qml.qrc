@@ -107,5 +107,7 @@
         <file>Source/Connectors/SubComponents/MiniSubComponents/TabBackgroundComponent.qml</file>
         <file>Source/Connectors/SubComponents/MiniSubComponents/TabTextComponent.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/DroppedReport.qml</file>
+        <file>Source/Dashboards/SubComponents/CustomizeReport.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/DroppedBlank.qml</file>
     </qresource>
 </RCC>

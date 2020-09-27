@@ -61,6 +61,10 @@ QtObject {
     //font.pointSize: Constants.fontReading = font.pixelSize: Constants.fontCategoryHeader
     //font.pointSize: Constants.fontCategoryHeader = font.pixelSize: Constants.fontHeader
 
+    //Constant Widths
+    property int leftMenubarWidth: 49
+
+
     // Menu option
     property int dataDesignerMenu : 0
     property int dashboardDesignerMenu : 1
