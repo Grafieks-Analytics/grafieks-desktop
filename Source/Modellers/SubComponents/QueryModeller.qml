@@ -63,7 +63,7 @@ Item{
     // JAVASCRIPT FUNCTION STARTS
 
     Component.onCompleted: {
-        textEditQueryModeller.text = "SELECT * FROM users WHERE id > 0"
+        textEditQueryModeller.text = "SELECT * FROM users WHERE users.id > 0"
     }
 
     function onTextEditorChanged(){

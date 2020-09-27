@@ -451,12 +451,14 @@ Page {
             anchors.right: submenu.right
             anchors.rightMargin: 10
 
+
             // Refresh button starts
 
             Button{
                 id:refresh_querymodeller
                 height: 28
                 width: 30
+                visible: radio_live.radio_checked === false ? true: false
 
                 Image{
 
