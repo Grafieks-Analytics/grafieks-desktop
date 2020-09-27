@@ -115,6 +115,10 @@ Popup {
         // Set the model of the `Add Button` in each tab
         function onTableSchemaObtained(allList, allCategorical, allNumerical, allDates, allOthers, queriedColumnNames){
 
+            categoricalModel.clear()
+            numericalModel.clear()
+            datesModel.clear()
+
             allCategorical.forEach(function (element) {
                 categoricalModel.append({"tableName" : element[0], "colName" : element[1]});
             });
