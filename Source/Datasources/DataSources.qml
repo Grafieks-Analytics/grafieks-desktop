@@ -68,6 +68,11 @@ Page {
                 color: next_btn.hovered? Constants.darkThemeColor: Constants.themeColor
             }
 
+            ToolTip.delay: Constants.tooltipShowTime
+            ToolTip.timeout: Constants.tooltipShowTime
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Edit Datasource")
+
 
         }
 
@@ -101,6 +106,11 @@ Page {
                     list_btn_background.color = Constants.themeColor
                 }
 
+                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipShowTime
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Grid view")
+
 
             }
 
@@ -120,6 +130,11 @@ Page {
                     grid_btn_background.color = Constants.themeColor
                     list_btn_background.color = Constants.darkThemeColor
                 }
+
+                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipShowTime
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("List view")
 
             }
         }

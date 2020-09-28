@@ -73,10 +73,6 @@ Page {
         }
     }
 
-    function openMenu(){
-        optionsMenu.open()
-    }
-
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -118,9 +114,7 @@ Page {
 
             MouseArea{
                 anchors.fill:parent
-                onClicked: {
-                    updateDSName(datasourceName)
-                }
+                onClicked: updateDSName(datasourceName)
             }
 
             Rectangle{
@@ -138,7 +132,7 @@ Page {
                 Text{
                     id: title
                     text:  datasourceName
-                    font: Constants.fontCategoryHeaderSmall
+                    font.pointSize: Constants.fontCategoryHeaderSmall
                     anchors.centerIn: parent
                     opacity: enabled ? 1.0 : 0.3
                     verticalAlignment: Text.AlignVCenter
@@ -169,9 +163,7 @@ Page {
                         height:width
 
                     }
-                    onClicked: {
-                        openMenu()
-                    }
+                    onClicked: optionsMenu.open()
 
                     Menu {
                         id: optionsMenu
@@ -186,12 +178,7 @@ Page {
                         }
                         MenuItem {
                             text: "Remove"
-                            onTriggered: {
-
-                                onRemoveClicked(id,index)
-
-                            }
-
+                            onTriggered: onRemoveClicked(id,index)
                         }
                     }
                 }
@@ -209,13 +196,6 @@ Page {
                 anchors.horizontalCenter: data_source_main.horizontalCenter
                 width: 250
                 height:76
-
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-
-                    }
-                }
 
 
             }
@@ -238,7 +218,7 @@ Page {
                     width:data_source_main.width - 10
                     text: descriptions
                     wrapMode: Text.WordWrap
-                    font.pixelSize: Constants.fontCategoryHeader
+                    font.pixelSize: Constants.fontCategoryHeaderSmall
                 }
             }
 
@@ -259,7 +239,7 @@ Page {
                     Text{
                         id: owner_name_id
                         text: firstname + " "+ lastname
-                        font.pixelSize: Constants.fontCategoryHeader
+                        font.pixelSize: Constants.fontCategoryHeaderSmall
                     }
 
                 }
@@ -273,7 +253,7 @@ Page {
                     Text{
                         id: mode_id
                         text: connectionType
-                        font.pixelSize: Constants.fontCategoryHeader
+                        font.pixelSize: Constants.fontCategoryHeaderSmall
                     }
 
                 }

@@ -57,27 +57,27 @@ Page {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    function onDataSourceNameClicked(){
+    function onDataSourceNameClicked(datasourceName, index){
         listView.currentIndex = index
         updateDSName(datasourceName)
     }
 
-    function onDataSourceOwnerClicked(){
+    function onDataSourceOwnerClicked(datasourceName, index){
         listView.currentIndex = index
         updateDSName(datasourceName)
     }
 
-    function onConnectionClicked(datasourceName){
+    function onConnectionClicked(datasourceName, index){
         listView.currentIndex = index;
         updateDSName(datasourceName)
     }
 
-    function onDateCreatedClicked(datasourceName){
+    function onDateCreatedClicked(datasourceName, index){
         listView.currentIndex = index;
         updateDSName(datasourceName)
     }
 
-    function onLastRefreshedClicked(){
+    function onLastRefreshedClicked(datasourceName, index){
         listView.currentIndex = index;
         updateDSName(datasourceName)
 
@@ -89,7 +89,7 @@ Page {
         DatasourceDS.deleteDatasource(id, index)
     }
 
-    function onEditClicked(){
+    function onEditClicked(datasourceName, index){
 
         if(typeof settings.value("user/sessionToken") != "undefined"){
             connectGrafieks1.visible = true
@@ -190,7 +190,7 @@ Page {
                             anchors.fill: parent
                             onClicked: {
 
-                                onDataSourceNameClicked(datasourceName)
+                                onDataSourceNameClicked(datasourceName, index)
 
                             }
                         }
@@ -217,7 +217,7 @@ Page {
                         MouseArea{
                             anchors.fill: parent
                             onClicked: {
-                                onDataSourceOwnerClicked(datasourceName)
+                                onDataSourceOwnerClicked(datasourceName, index)
                             }
                         }
                     }
@@ -244,7 +244,7 @@ Page {
                             anchors.fill: parent
                             onClicked: {
 
-                                onConnectionClicked(datasourceName)
+                                onConnectionClicked(datasourceName, index)
 
                             }
                         }
@@ -272,7 +272,7 @@ Page {
                         MouseArea{
                             anchors.fill: parent
                             onClicked: {
-                                onDateCreatedClicked(datasourceName)
+                                onDateCreatedClicked(datasourceName, index)
                             }
                         }
                     }
@@ -298,7 +298,7 @@ Page {
                         MouseArea{
                             anchors.fill: parent
                             onClicked: {
-                                onLastRefreshedClicked()
+                                onLastRefreshedClicked(datasourceName, index)
                             }
                         }
                     }
@@ -324,7 +324,7 @@ Page {
                             width: implicitWidth
 
                             onClicked: {
-                                onEditClicked()
+                                onEditClicked(datasourceName, index)
                             }
                         }
 
