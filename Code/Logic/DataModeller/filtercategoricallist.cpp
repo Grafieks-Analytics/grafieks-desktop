@@ -1,6 +1,6 @@
-#include "filterlist.h"
+#include "filtercategoricallist.h"
 
-FilterList::FilterList(const int &filterId, const QString &section, const QString &category, const QString &subcategory, const QString &tableName, const QString &columnName, const QString &relation, const QString &value, const bool &includeNull, const bool &exclude, QObject *parent):
+FilterCategoricalList::FilterCategoricalList(const int &filterId, const QString &section, const QString &category, const QString &subcategory, const QString &tableName, const QString &columnName, const QString &relation, const QString &value, const bool &includeNull, const bool &exclude, QObject *parent):
 
     QObject(parent), m_filterId(filterId), m_section(section), m_category(category), m_subCategory(subcategory), m_tableName(tableName), m_columnName(columnName), m_relation(relation), m_value(value), m_includeNull(includeNull), m_exclude(exclude)
 {
@@ -8,57 +8,57 @@ FilterList::FilterList(const int &filterId, const QString &section, const QStrin
 }
 
 
-QString FilterList::tableName() const
+QString FilterCategoricalList::tableName() const
 {
     return m_tableName;
 }
 
-QString FilterList::columnName() const
+QString FilterCategoricalList::columnName() const
 {
     return m_columnName;
 }
 
-QString FilterList::relation() const
+QString FilterCategoricalList::relation() const
 {
     return m_relation;
 }
 
-QString FilterList::value() const
+QString FilterCategoricalList::value() const
 {
     return m_value;
 }
 
-bool FilterList::includeNull() const
+bool FilterCategoricalList::includeNull() const
 {
     return m_includeNull;
 }
 
-bool FilterList::exclude() const
+bool FilterCategoricalList::exclude() const
 {
     return m_exclude;
 }
 
-QString FilterList::category() const
+QString FilterCategoricalList::category() const
 {
     return m_category;
 }
 
-QString FilterList::subCategory() const
+QString FilterCategoricalList::subCategory() const
 {
     return m_subCategory;
 }
 
-int FilterList::filterId() const
+int FilterCategoricalList::filterId() const
 {
     return m_filterId;
 }
 
-QString FilterList::section() const
+QString FilterCategoricalList::section() const
 {
     return m_section;
 }
 
-void FilterList::setTableName(QString tableName)
+void FilterCategoricalList::setTableName(QString tableName)
 {
     if (m_tableName == tableName)
         return;
@@ -67,7 +67,7 @@ void FilterList::setTableName(QString tableName)
     emit tableNameChanged(m_tableName);
 }
 
-void FilterList::setColumnName(QString columnName)
+void FilterCategoricalList::setColumnName(QString columnName)
 {
     if (m_columnName == columnName)
         return;
@@ -76,7 +76,7 @@ void FilterList::setColumnName(QString columnName)
     emit columnNameChanged(m_columnName);
 }
 
-void FilterList::setRelation(QString relation)
+void FilterCategoricalList::setRelation(QString relation)
 {
     if (m_relation == relation)
         return;
@@ -85,7 +85,7 @@ void FilterList::setRelation(QString relation)
     emit relationChanged(m_relation);
 }
 
-void FilterList::setValue(QString value)
+void FilterCategoricalList::setValue(QString value)
 {
     if (m_value == value)
         return;
@@ -94,7 +94,7 @@ void FilterList::setValue(QString value)
     emit valueChanged(m_value);
 }
 
-void FilterList::setIncludeNull(bool includeNull)
+void FilterCategoricalList::setIncludeNull(bool includeNull)
 {
     if (m_includeNull == includeNull)
         return;
@@ -103,7 +103,7 @@ void FilterList::setIncludeNull(bool includeNull)
     emit includeNullChanged(m_includeNull);
 }
 
-void FilterList::setExclude(bool exclude)
+void FilterCategoricalList::setExclude(bool exclude)
 {
     if (m_exclude == exclude)
         return;
@@ -112,7 +112,7 @@ void FilterList::setExclude(bool exclude)
     emit excludeChanged(m_exclude);
 }
 
-void FilterList::setCategory(QString category)
+void FilterCategoricalList::setCategory(QString category)
 {
     if (m_category == category)
         return;
@@ -121,7 +121,7 @@ void FilterList::setCategory(QString category)
     emit categoryChanged(m_category);
 }
 
-void FilterList::setSubCategory(QString subCategory)
+void FilterCategoricalList::setSubCategory(QString subCategory)
 {
     if (m_subCategory == subCategory)
         return;
@@ -130,7 +130,7 @@ void FilterList::setSubCategory(QString subCategory)
     emit subCategoryChanged(m_subCategory);
 }
 
-void FilterList::setFilterId(int filterId)
+void FilterCategoricalList::setFilterId(int filterId)
 {
     if (m_filterId == filterId)
         return;
@@ -139,7 +139,7 @@ void FilterList::setFilterId(int filterId)
     emit filterIdChanged(m_filterId);
 }
 
-void FilterList::setSection(QString section)
+void FilterCategoricalList::setSection(QString section)
 {
     if (m_section == section)
         return;

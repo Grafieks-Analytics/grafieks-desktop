@@ -84,10 +84,10 @@ Popup {
 
         // Save the filter
         if(DSParamsModel.mode === Constants.modeCreate){
-            FilterListModel.newFilter(section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+            FilterCategoricalListModel.newFilter(section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
 
         } else{
-            FilterListModel.updateFilter(filterIndex, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+            FilterCategoricalListModel.updateFilter(filterIndex, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
         }
 
         // Reset all DSParams

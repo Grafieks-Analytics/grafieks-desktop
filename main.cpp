@@ -29,8 +29,7 @@
 #include "Code/Logic/DataModeller/schedulerds.h"
 #include "Code/Logic/DataModeller/schedulermodel.h"
 #include "Code/Logic/DataModeller/columnlistmodel.h"
-#include "Code/Logic/DataModeller/filterlistmodel.h"
-#include "Code/Logic/DataModeller/filterlistcategoricalfilter.h"
+#include "Code/Logic/DataModeller/filtercategoricallistmodel.h"
 
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
@@ -165,8 +164,7 @@ int main(int argc, char *argv[])
     DSParamsModel dsParamsModel;
     PublishDatasourceModel publishDatasourceModel;
     ColumnListModel columnListModel;
-    FilterListModel filterListModel;
-    FilterListCategoricalFilter filterListCategoricalFilter;
+    FilterCategoricalListModel filterCategoricalListModel;
 
     QuerySplitter querySplitter;
     DashboardContainerModel dashboardContainerModel;
@@ -205,7 +203,7 @@ int main(int argc, char *argv[])
     // SIGNAL & SLOTS STARTS
 
 
-    QObject::connect(&filterListModel, &FilterListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
+    QObject::connect(&filterCategoricalListModel, &FilterCategoricalListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
 
 
     // SIGNAL & SLOTS ENDS
@@ -220,8 +218,7 @@ int main(int argc, char *argv[])
     sheetModel.setSheetds(sheet);
     schedulerModel.setScheduler(scheduler);
 
-    filterListModel.callNewFilter();
-    filterListCategoricalFilter.setSearchString("test");
+    filterCategoricalListModel.callNewFilter();
 
 
     // DEFAULT FUNCTION ENDS
@@ -262,8 +259,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("ColumnListModel", &columnListModel);
     engine.rootContext()->setContextProperty("SchedulerModel",&schedulerModel);
     engine.rootContext()->setContextProperty("SchedulerDS",scheduler);
-    engine.rootContext()->setContextProperty("FilterListModel",&filterListModel);
-    engine.rootContext()->setContextProperty("FilterListCategoricalFilter",&filterListCategoricalFilter);
+    engine.rootContext()->setContextProperty("FilterCategoricalListModel",&filterCategoricalListModel);
     engine.rootContext()->setContextProperty("QuerySplitter",&querySplitter);
 
 

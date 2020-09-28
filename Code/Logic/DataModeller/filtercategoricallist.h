@@ -1,17 +1,17 @@
-#ifndef FILTERLIST_H
-#define FILTERLIST_H
+#ifndef FILTERCATEGORICALLIST_H
+#define FILTERCATEGORICALLIST_H
 
 #include <QVariant>
 #include <QObject>
 
 /*!
- * \brief Roles required for FilterList
+ * \brief Roles required for FilterCategoricalList
  * \details This document won't explain the individual Roles in detail. Basically, the class describes the Getter/Setter functions for the Roles
  * to be used in other classes.
  * \ingroup DataModeller
  */
 
-class FilterList : public QObject
+class FilterCategoricalList : public QObject
 {
     Q_OBJECT
 
@@ -39,7 +39,7 @@ class FilterList : public QObject
     bool m_exclude;
 
 public:
-    explicit FilterList(const int & filterId, const QString & section, const QString & category, const QString & subcategory, const QString & tableName, const QString & columnName, const QString & relation, const QString & value, const bool & includeNull, const bool & exclude, QObject *parent = nullptr);
+    explicit FilterCategoricalList(const int & filterId, const QString & section, const QString & category, const QString & subcategory, const QString & tableName, const QString & columnName, const QString & relation, const QString & value, const bool & includeNull, const bool & exclude, QObject *parent = nullptr);
 
     int filterId() const;
     QString section() const;
@@ -78,4 +78,4 @@ signals:
     void excludeChanged(bool exclude);
 };
 
-#endif // FILTERLIST_H
+#endif // FILTERCATEGORICALLIST_H

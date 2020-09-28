@@ -363,18 +363,6 @@ Rectangle{
 
                 Column{
 
-                    //                        CustomRadioButton {
-                    //                            radio_text: modelData
-                    //                            parent_dimension: 16
-                    //                            ButtonGroup.group: btngrp
-
-                    //                            onRadio_checkedChanged: {
-                    //                                console.log(modelData, radio_checked)
-                    //                            }
-
-                    //                        }
-
-
                     CustomRadioButton {
                         text: modelData
                         ButtonGroup.group: btngrp

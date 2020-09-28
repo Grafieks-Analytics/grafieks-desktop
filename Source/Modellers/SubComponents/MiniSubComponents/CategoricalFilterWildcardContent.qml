@@ -125,6 +125,8 @@ Rectangle{
         let existingValues = DSParamsModel.value.split(",")
         let existingRelations = DSParamsModel.relation.split(",")
 
+        console.log(DSParamsModel.value, DSParamsModel.relation)
+
         // Set maximum length of the array
         existingValues.length = existingValues.length > selectDropdown.count ? selectDropdown.count : existingValues.length;
         existingRelations.length = existingRelations.length > selectDropdown.count ? selectDropdown.count : existingRelations.length;
@@ -154,14 +156,14 @@ Rectangle{
 
         case acceptedValues[3]:
 
-            newFilter = "%" + textValue
+            newFilter =  textValue + "%"
             newRelation = Constants.notLikeRelation
 
             break
 
         case acceptedValues[4]:
 
-            newFilter =  textValue + "%"
+            newFilter =  "%" + textValue
             newRelation = Constants.notLikeRelation
 
             break

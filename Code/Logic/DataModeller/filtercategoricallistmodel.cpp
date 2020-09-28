@@ -1,7 +1,7 @@
-#include "filterlistmodel.h"
+#include "filtercategoricallistmodel.h"
 
 
-FilterListModel::FilterListModel(QObject *parent) : QAbstractListModel(parent), counter(0)
+FilterCategoricalListModel::FilterCategoricalListModel(QObject *parent) : QAbstractListModel(parent), counter(0)
 {
 
 
@@ -24,25 +24,25 @@ FilterListModel::FilterListModel(QObject *parent) : QAbstractListModel(parent), 
     sqlComparisonOperators.append("~*"); // Case insensitive posix comparators
 }
 
-void FilterListModel::callNewFilter()
+void FilterCategoricalListModel::callNewFilter()
 {
 //    qDebug() << "CALLED new filter";
 //    addFilterList(new FilterList(1,"categorical", "categoricalList", "multiple", "reset_hash", "username", "IN", "%", true, false, this));
 }
 
-int FilterListModel::rowCount(const QModelIndex &parent) const
+int FilterCategoricalListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     return mFilter.size();
 }
 
-QVariant FilterListModel::data(const QModelIndex &index, int role) const
+QVariant FilterCategoricalListModel::data(const QModelIndex &index, int role) const
 {
 
     if (index.row() < 0 || index.row() >= mFilter.count())
         return QVariant();
     //The index is valid
-    FilterList * filterList = mFilter[index.row()];
+    FilterCategoricalList * filterList = mFilter[index.row()];
 
     if( role == FilterListIdRole)
         return filterList->filterId();
@@ -67,9 +67,9 @@ QVariant FilterListModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-bool FilterListModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool FilterCategoricalListModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    FilterList * filterList = mFilter[index.row()];
+    FilterCategoricalList * filterList = mFilter[index.row()];
     bool somethingChanged = false;
 
     switch (role) {
@@ -175,7 +175,7 @@ bool FilterListModel::setData(const QModelIndex &index, const QVariant &value, i
     return false;
 }
 
-Qt::ItemFlags FilterListModel::flags(const QModelIndex &index) const
+Qt::ItemFlags FilterCategoricalListModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return Qt::NoItemFlags;
@@ -183,7 +183,7 @@ Qt::ItemFlags FilterListModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEditable;
 }
 
-QHash<int, QByteArray> FilterListModel::roleNames() const
+QHash<int, QByteArray> FilterCategoricalListModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
     roles[FilterListIdRole] = "filterId";
@@ -202,18 +202,18 @@ QHash<int, QByteArray> FilterListModel::roleNames() const
 
 
 
-void FilterListModel::newFilter(QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString val, bool includeNull, bool exclude )
+void FilterCategoricalListModel::newFilter(QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString val, bool includeNull, bool exclude )
 {
 
 //    FilterList *filterList = new FilterList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this);
 //    qDebug << counter << section<< category<< subcategory < tableName, colName, relation, val, includeNull, exclude, this;
-    addFilterList(new FilterList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this));
+    addFilterList(new FilterCategoricalList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this));
 
     counter++;
 
 }
 
-void FilterListModel::deleteFilter(int FilterIndex)
+void FilterCategoricalListModel::deleteFilter(int FilterIndex)
 {
     beginRemoveRows(QModelIndex(), FilterIndex, FilterIndex);
     mFilter.removeAt(FilterIndex);
@@ -222,7 +222,7 @@ void FilterListModel::deleteFilter(int FilterIndex)
     emit rowCountChanged();
 }
 
-void FilterListModel::updateFilter(int FilterIndex, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString value, bool includeNull, bool exclude)
+void FilterCategoricalListModel::updateFilter(int FilterIndex, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString value, bool includeNull, bool exclude)
 {
 
     beginResetModel();
@@ -249,9 +249,9 @@ void FilterListModel::updateFilter(int FilterIndex, QString section, QString cat
 
 }
 
-void FilterListModel::callQueryModel(QString tmpSql)
+void FilterCategoricalListModel::callQueryModel(QString tmpSql)
 {
-    FilterList *filter;
+    FilterCategoricalList *filter;
     QString newWhereConditions;
     QString newQuery;
     QString existingWhereString;
@@ -274,12 +274,13 @@ void FilterListModel::callQueryModel(QString tmpSql)
     existingWhereString = whereIterator.captured(1).trimmed();
     newQuery = tmpSql.replace(existingWhereString, newWhereConditions);
 
+    qDebug() << newQuery << "FINAL QUERY";
 
     emit sendFilterQuery(newQuery);
 }
 
 
-void FilterListModel::addFilterList(FilterList *filter)
+void FilterCategoricalListModel::addFilterList(FilterCategoricalList *filter)
 {
     const int index = mFilter.size();
     beginInsertRows(QModelIndex(),index,index);
@@ -289,13 +290,13 @@ void FilterListModel::addFilterList(FilterList *filter)
     emit rowCountChanged();
 }
 
-void FilterListModel::columnList(QVariantList &columns)
+void FilterCategoricalListModel::columnList(QVariantList &columns)
 {
 
     Q_UNUSED(columns);
 }
 
-QString FilterListModel::setRelation(QString tableName, QString columnName, QString relation, QString conditions, bool exclude, bool isNull)
+QString FilterCategoricalListModel::setRelation(QString tableName, QString columnName, QString relation, QString conditions, bool exclude, bool isNull)
 {
 
     QStringList conditionList;

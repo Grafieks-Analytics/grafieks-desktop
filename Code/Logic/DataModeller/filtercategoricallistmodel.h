@@ -1,5 +1,5 @@
-#ifndef FILTERLISTMODEL_H
-#define FILTERLISTMODEL_H
+#ifndef FILTERCATEGORICALLISTMODEL_H
+#define FILTERCATEGORICALLISTMODEL_H
 
 #include <QAbstractListModel>
 #include <QVariant>
@@ -8,21 +8,21 @@
 
 #include <typeinfo>
 
-#include "filterlist.h"
+#include "filtercategoricallist.h"
 #include "../General/querysplitter.h"
 
-class FilterListModel : public QAbstractListModel
+class FilterCategoricalListModel : public QAbstractListModel
 {
     Q_OBJECT
 
     int counter;
     QuerySplitter mQuerySplitter;
-    QList <FilterList *> mFilter;
+    QList <FilterCategoricalList *> mFilter;
     QStringList sqlComparisonOperators;
 
 
 public:
-    explicit FilterListModel(QObject *parent = nullptr);
+    explicit FilterCategoricalListModel(QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
@@ -37,7 +37,7 @@ public:
     Q_INVOKABLE void updateFilter(int FilterIndex, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString value = "", bool includeNull = true, bool exclude = false);
     Q_INVOKABLE void callQueryModel(QString tmpSql);
 
-    void addFilterList(FilterList * filter);
+    void addFilterList(FilterCategoricalList * filter);
     void columnList(QVariantList &columns);
 
 
@@ -65,4 +65,4 @@ signals:
 
 };
 
-#endif // FILTERLISTMODEL_H
+#endif // FILTERCATEGORICALLISTMODEL_H

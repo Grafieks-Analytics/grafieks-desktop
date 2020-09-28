@@ -40,6 +40,7 @@ QHash<int, QByteArray> QueryModel::roleNames() const
 
 void QueryModel::callSql()
 {
+
     this->executeQuery(m_tmpSql);
 }
 

@@ -315,7 +315,7 @@ Popup {
         popupMain.visible = false
         var tmpSql = QueryModel.tmpSql
 
-        FilterListModel.callQueryModel(tmpSql)
+        FilterCategoricalListModel.callQueryModel(tmpSql)
     }
     function onCancelClicked(){
         popupMain.visible = false

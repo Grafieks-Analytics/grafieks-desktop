@@ -34,11 +34,11 @@ Rectangle{
     // Connections Starts
 
     Connections{
-        target: FilterListModel
+        target: FilterCategoricalListModel
 
         // Listview height
         function onRowCountChanged(){
-            listFiltersListView.height = FilterListModel.rowCount() * 30
+            listFiltersListView.height = FilterCategoricalListModel.rowCount() * 30
         }
     }
     // Connections Ends
@@ -53,7 +53,7 @@ Rectangle{
 
     // Called when remove filter from categorical list clicked
     function onRemoveElement(filterIndex){
-        FilterListModel.deleteFilter(filterIndex)
+        FilterCategoricalListModel.deleteFilter(filterIndex)
     }
 
     // Called when edit filter from categorical list clicked
@@ -121,7 +121,7 @@ Rectangle{
 
             ListView{
                 id: listFiltersListView
-                model: FilterListModel
+                model: FilterCategoricalListModel
                 width: parent.width
                 height: 50
                 anchors.topMargin: 10
@@ -222,22 +222,15 @@ Rectangle{
                                         onRemoveElement(model.index)
                                     }
                                 }
-
                             }
-
                         }
-
                     }
                 }
-
-
             }
         }
 
 
         // List - list view Ends
-
-
 
 
 
