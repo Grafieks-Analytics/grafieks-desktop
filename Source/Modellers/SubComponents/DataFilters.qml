@@ -131,9 +131,7 @@ Popup {
                 datesModel.append({"tableName" : element[0], "colName" : element[1]});
             });
 
-//            add_btn_1.model =  categoricalModel
             add_btn_1.model =  categoricalModel
-//            add_btn_1.height = categoricalModel.count * 40
 
         }
     }

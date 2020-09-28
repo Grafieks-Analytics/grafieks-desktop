@@ -108,7 +108,7 @@ Item {
                 DSParamsModel.removeJoinIconMap(value)
                 DSParamsModel.removeJoinTypeMap(value)
                 DSParamsModel.removePrimaryJoinTable(value)
-                DSParamsModel.removeJoinMapList(value)
+                DSParamsModel.removeJoinMapList(value, 0, true)
             })
 
         }
@@ -134,7 +134,7 @@ Item {
         DSParamsModel.removeJoinIconMap(refObject)
         DSParamsModel.removeJoinTypeMap(refObject)
         DSParamsModel.removePrimaryJoinTable(refObject)
-        DSParamsModel.removeJoinMapList(refObject)
+        DSParamsModel.removeJoinMapList(refObject, 0, true)
 
     }
 

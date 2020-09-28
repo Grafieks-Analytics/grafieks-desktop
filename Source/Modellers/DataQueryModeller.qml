@@ -408,6 +408,11 @@ Page {
                     datamodeller_querymodeller_text.color = Constants.blackColor
                 }
 
+                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipHideTime
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Use GUI interface to generate dataset from Datasource")
+
             }
 
             // Data Modeller Button ends
@@ -437,6 +442,11 @@ Page {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
+
+                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipHideTime
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Write SQL query to generate dataset")
 
             }
 
@@ -478,6 +488,11 @@ Page {
                 }
 
                 onClicked: onRefreshBtnClicked()
+
+                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipHideTime
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Configure InMemory parameters")
 
             }
 
@@ -545,6 +560,11 @@ Page {
                 }
 
                 onClicked: openDataFilters()
+
+                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipHideTime
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Apply filters to the SQL query")
             }
 
             // Filter button ends
@@ -561,6 +581,11 @@ Page {
                 parent_dimension: 16
                 ButtonGroup.group: memoryType
                 onCheckedChanged: onLiveSelected()
+
+                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipHideTime
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Save datasource for a live connection")
             }
 
             // Live radio button ends
@@ -577,6 +602,11 @@ Page {
 
                 ButtonGroup.group: memoryType
                 onCheckedChanged: onInMemorySelected()
+
+                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipHideTime
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Save datasource offline and process as an InMemory database")
             }
 
             // In memory radio button ends
@@ -745,6 +775,11 @@ Page {
                         opacity: tabPublishDashboard.hovered ? 0.42 : 1
                     }
 
+                    ToolTip.delay: Constants.tooltipShowTime
+                    ToolTip.timeout: Constants.tooltipHideTime
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Publish Datasource")
+
                 }
 
 
@@ -770,6 +805,11 @@ Page {
                     }
 
                     onClicked: onCreateDashboardClicked()
+
+                    ToolTip.delay: Constants.tooltipShowTime
+                    ToolTip.timeout: Constants.tooltipHideTime
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Create Dashboard")
 
                 }
 

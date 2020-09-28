@@ -21,7 +21,7 @@ Rectangle{
     property var existingModel : []
 
     onTableNameChanged: loadTableColumns(tableName)
-    onModelCounterChanged: appendToModel(modelCounter)
+
 
 
 
@@ -92,6 +92,10 @@ Rectangle{
     // JAVASCRIPT FUNCTION STARTS
 
 
+
+    function slotCounterModelChanged(modelCounter){
+        appendToModel(modelCounter)
+    }
 
 
     function slotClearModel(haveExistingValues){

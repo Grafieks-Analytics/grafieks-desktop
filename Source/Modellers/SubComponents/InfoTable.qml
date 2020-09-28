@@ -480,6 +480,11 @@ Item{
                     onRunQueryClicked()
                 }
 
+                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipHideTime
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Run SQL")
+
             }
 
         }

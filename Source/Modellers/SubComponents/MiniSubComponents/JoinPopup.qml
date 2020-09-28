@@ -45,6 +45,7 @@ Rectangle{
 
     signal clearModel(bool haveExistingValues)
     signal deleteModel(int counter)
+    signal modelCounterChanged(int modelCounter)
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -79,6 +80,9 @@ Rectangle{
     Component.onCompleted: {
         table1.selectedColumn.connect(joinPopupItem.slotColumnChanged)
         table2.selectedColumn.connect(joinPopupItem.slotColumnChanged)
+
+        joinPopupItem.modelCounterChanged.connect(table1.slotCounterModelChanged)
+        joinPopupItem.modelCounterChanged.connect(table2.slotCounterModelChanged)
 
         joinPopupItem.deleteModel.connect(table1.slotDeleteModel)
         joinPopupItem.deleteModel.connect(table2.slotDeleteModel)
@@ -183,11 +187,15 @@ Rectangle{
 
         let lastItem = tmpModelArray[tmpModelArray.length - 1]
 
-        joinPopupItem.counter = lastItem + 1
+        joinPopupItem.counter = parseInt(lastItem) + 1
+
 
         relationListView.model = tmpModelArray.push(joinPopupItem.counter)
-        table1.modelCounter = joinPopupItem.counter
-        table2.modelCounter = joinPopupItem.counter
+//        table1.modelCounter = joinPopupItem.counter
+//        table2.modelCounter = joinPopupItem.counter
+
+        modelCounterChanged(joinPopup.counter)
+
 
     }
 
