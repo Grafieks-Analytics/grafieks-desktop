@@ -125,5 +125,8 @@
         <file>Images/icons/align-left.png</file>
         <file>Images/icons/align-right.png</file>
         <file>Images/icons/attach-link.png</file>
+        <file>Images/icons/customize.png</file>
+        <file>Images/icons/full-screen.png</file>
+        <file>Images/icons/fullscreen.png</file>
     </qresource>
 </RCC>

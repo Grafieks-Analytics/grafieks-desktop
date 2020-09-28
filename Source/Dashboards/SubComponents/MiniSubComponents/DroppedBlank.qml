@@ -34,10 +34,5 @@ Item{
 
     }
 
-    WidgetTextEditor{
-        id: textEditor
-    }
-
-
 }
 

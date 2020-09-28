@@ -25,11 +25,15 @@ Popup {
     visible: true
 
     anchors.centerIn: parent
+
+
+
     padding: 0
 
     background: Rectangle{
         color: Constants.themeColor
     }
+
 
 
     /***********************************************************************************************************************/
@@ -64,6 +68,7 @@ Popup {
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
+
 
     function hidePopup(){
         editorPopup.visible = false;
@@ -105,6 +110,7 @@ Popup {
         anchors.left: parent.left
         anchors.topMargin: 1
         anchors.leftMargin: 1
+
 
         Text{
             id : text1

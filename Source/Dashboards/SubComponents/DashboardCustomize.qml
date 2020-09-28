@@ -28,6 +28,8 @@ Item{
     ListView {
         anchors.fill: parent
         model: nestedModel
+        interactive: false
+
         delegate: categoryDelegate
     }
 
@@ -47,6 +49,16 @@ Item{
 
         ListElement {
             categoryName: "Style"
+            collapsed: false
+            subItems: [
+                ListElement { itemName: "Background Color" },
+                ListElement { itemName: "Report Border" }
+            ]
+        }
+
+
+        ListElement {
+            categoryName: "Canvas Size"
             collapsed: false
             subItems: [
                 ListElement { itemName: "Background Color" },
@@ -131,8 +143,25 @@ Item{
 
                 visible: !collapsed
                 property variant subItemModel : subItems
-                sourceComponent: collapsed ? null : subItemColumnDelegate
-                onStatusChanged: if (status == Loader.Ready) item.model = subItemModel
+                sourceComponent: {
+                    if(collapsed){
+                        null
+                    }else{
+                        if(categoryName == "General"){
+                            return generalComponent
+                        }else if(categoryName == "Style"){
+                            return styleComponent
+                        }
+                        else{
+                            subItemColumnDelegate
+                        }
+                    }
+                }
+                onStatusChanged: {
+                    if (status == Loader.Ready && (categoryName == "Widgets" || categoryName == "Reports") ){
+                        item.model = subItemModel
+                    }
+                }
             }
         }
 
@@ -162,7 +191,7 @@ Item{
                     MouseArea {
                         id: mouseArea
                         anchors.fill: parent
-                        drag.target: dragRect
+                        drag.target:  dragRect
                         drag.minimumX: -( new_dashboard_page.width - parent.width - leftMenuBar.width)
                         drag.maximumX: 0
 
@@ -200,6 +229,152 @@ Item{
             }
         }
 
+    }
+
+    Component{
+        id: generalComponent
+
+        Rectangle{
+            height: 60
+            width: listViewElem.width
+
+
+            Column{
+
+                width: parent.width
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.leftMargin: 15
+                anchors.rightMargin: 15
+                anchors.topMargin: 5
+
+                spacing: 5
+
+                Text {
+                    text: qsTr("Dashboard Name")
+                }
+
+                TextField{
+                    id: dashboardName
+                    width: parent.width
+                    background: Rectangle {
+                        border.color: Constants.borderBlueColor
+                        radius: 6
+                        width: parent.width
+                        border.width: Constants.borderWidth
+                    }
+                }
+            }
+
+        }
+    }
+
+    Component{
+        id: styleComponent
+
+        Rectangle{
+            height: 100
+            width: listViewElem.width
+
+            Column{
+                spacing: 5
+                width: parent.width
+                height: parent.height
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.topMargin: 10
+
+                Row{
+
+                    width: parent.width
+                    height: 20
+                    anchors.left: parent.left
+                    anchors.leftMargin: 15
+                    anchors.right: parent.right
+                    anchors.rightMargin: 5
+
+                    Text {
+                        id: backgroundColor
+                        text: qsTr("Background Color")
+                    }
+
+                    Image {
+                        anchors.right: parent.right
+                        source: "/Images/icons/Edit.png"
+                        height: 20
+                        width: 20
+                    }
+
+                }
+
+                Row{
+
+                    width: parent.width
+                    height: 20
+                    anchors.left: parent.left
+                    anchors.leftMargin: 15
+                    anchors.right: parent.right
+                    anchors.rightMargin: 5
+
+                    Text {
+                        id: lineColor
+                        text: qsTr("Line Color")
+                    }
+
+                    Image {
+                        anchors.right: parent.right
+                        source: "/Images/icons/Edit.png"
+                        height: 20
+                        width: 20
+                    }
+
+                }
+
+                Row{
+
+                    width: parent.width
+                    height: 20
+                    anchors.left: parent.left
+                    anchors.leftMargin: 15
+                    anchors.right: parent.right
+                    anchors.rightMargin: 5
+
+                    Text {
+                        id: opacity
+                        text: qsTr("Opacity")
+                    }
+
+                }
+
+                Row{
+
+                    width: parent.width
+                    height: 20
+                    anchors.left: parent.left
+                    anchors.leftMargin: 15
+                    anchors.right: parent.right
+                    anchors.rightMargin: 5
+
+                    Text {
+                        text: qsTr("Grid")
+                    }
+
+                    Image {
+                        anchors.right: parent.right
+                        source: "/Images/icons/Edit.png"
+                        height: 20
+                        width: 20
+                    }
+
+                }
+
+
+
+            }
+
+        }
     }
 
 }

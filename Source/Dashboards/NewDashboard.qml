@@ -195,25 +195,23 @@ Page {
                 width: 100
                 height: 28
 
-                Image{
-                    id: report_btn_icon
-                    source: "/Images/icons/Plus_32.png"
-                    anchors.top: report_btn.top
-                    anchors.left: report_btn.left
-                    anchors.leftMargin: 10
-                    anchors.topMargin: 2
-                    width: 25
-                    height: 25
+                Row{
+                   spacing: 5
+                   anchors.centerIn: parent
 
-                }
+                   Image {
+                       source: "/Images/icons/Plus_32.png"
+                       width: 20
+                       height: 20
 
-                Text{
-                    text: "Report"
-                    anchors.top: report_btn.top
-                    anchors.left: report_btn_icon.right
-                    anchors.verticalCenter: Text.AlignVCenter
-                    anchors.topMargin: 6
-                    anchors.leftMargin: 5
+                   }
+
+                   Text{
+                       text: "Report"
+                       anchors.verticalCenter: parent.verticalCenter
+                   }
+
+
                 }
 
 
@@ -233,50 +231,45 @@ Page {
                 height: 28
                 anchors.leftMargin: 10
 
-                Image{
-                    id: filter_querymodeller
-                    source: "/Images/icons/Plus_32.png"
-                    anchors.topMargin: 4
-                    anchors.leftMargin: 10
-                    anchors.left: filter_btn.left
-                    anchors.top: filter_btn.top
-                    height: 20
-                    width: 20
+                Row{
+                   spacing: 5
+                   anchors.centerIn: parent
 
-                }
+                   Image{
+                       id: filter_querymodeller
+                       source: "/Images/icons/Plus_32.png"
+                       height: 20
+                       width: 20
 
-                Text{
-                    id: filterText
-                    text: "Filter"
-                    anchors.top: parent.top
-                    anchors.left: filter_querymodeller.right
-                    anchors.topMargin: 6
-                    anchors.leftMargin: 5
-                }
+                   }
 
-                Text {
-                    id: filterLeftSquareBracket
-                    anchors.left: filterText.right
-                    anchors.top: filter_btn.top
-                    anchors.topMargin: 6
-                    anchors.leftMargin: 2
-                    text: qsTr("[")
-                    color: Constants.grafieksGreen
-                }
-                Text {
-                    id: filterNumber
-                    anchors.left: filterLeftSquareBracket.right
-                    anchors.top: filter_btn.top
-                    anchors.topMargin: 6
-                    text: qsTr("0")
-                }
-                Text {
-                    id: filterRightSquareBracket
-                    anchors.left: filterNumber.right
-                    anchors.top: filter_btn.top
-                    anchors.topMargin: 6
-                    text: qsTr("]")
-                    color: Constants.grafieksGreen
+                   Text{
+                       id: filterText
+                       text: "Filter"
+                       anchors.verticalCenter: parent.verticalCenter
+                   }
+
+                   Text {
+                       id: filterLeftSquareBracket
+                       text: qsTr("[")
+                       color: Constants.grafieksGreen
+
+                       anchors.verticalCenter: parent.verticalCenter
+                   }
+                   Text {
+                       id: filterNumber
+                       text: qsTr("0")
+
+                       anchors.verticalCenter: parent.verticalCenter
+                   }
+                   Text {
+                       id: filterRightSquareBracket
+                       text: qsTr("]")
+                       color: Constants.grafieksGreen
+
+                       anchors.verticalCenter: parent.verticalCenter
+                   }
+
                 }
 
                 background: Rectangle{
@@ -292,13 +285,24 @@ Page {
                 height: 28
                 width: 100
 
-                Text{
-                    id: customizeText
-                    text: "Customize"
-                    anchors.top: parent.top
-                    anchors.topMargin: 6
-                    anchors.left: parent.left
-                    anchors.leftMargin: 10
+                Row{
+                   spacing: 5
+                   anchors.centerIn: parent
+
+                   Image {
+                       id: name
+                       source: "/Images/icons/customize.png"
+                       width: 18
+                       height: 18
+
+                   }
+
+                   Text{
+                       text: "Customize"
+                       anchors.verticalCenter: parent.verticalCenter
+                   }
+
+
                 }
 
                 onClicked: {
@@ -423,6 +427,9 @@ Page {
 
     // Right Dashboard Customize Ends
 
+    CustomizeReport{
+        id: customizeReport
+    }
 
     // Right Filter Starts
 
