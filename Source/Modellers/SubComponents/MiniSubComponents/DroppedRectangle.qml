@@ -151,7 +151,7 @@ Item{
         }
 
         MouseArea {
-            id: mouseArea
+            id: mouseAreaDroppedRect
             anchors.fill: parent
             drag.target: newItem
 
@@ -160,6 +160,7 @@ Item{
             onPositionChanged: newItem.dragged(newItem.x, newItem.y)
             onPressed: newItem.refObjectCount(parseInt(newItem.objectName), newItem.width, newItem.height)
         }
+
     }
 
     ListView{

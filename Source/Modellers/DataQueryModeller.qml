@@ -408,7 +408,7 @@ Page {
                     datamodeller_querymodeller_text.color = Constants.blackColor
                 }
 
-                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.delay:Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Use GUI interface to generate dataset from Datasource")
@@ -443,7 +443,7 @@ Page {
                     verticalAlignment: Text.AlignVCenter
                 }
 
-                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.delay:Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Write SQL query to generate dataset")
@@ -489,7 +489,7 @@ Page {
 
                 onClicked: onRefreshBtnClicked()
 
-                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.delay:Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Configure InMemory parameters")
@@ -561,7 +561,7 @@ Page {
 
                 onClicked: openDataFilters()
 
-                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.delay:Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Apply filters to the SQL query")
@@ -582,7 +582,7 @@ Page {
                 ButtonGroup.group: memoryType
                 onCheckedChanged: onLiveSelected()
 
-                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.delay:Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Save datasource for a live connection")
@@ -603,7 +603,7 @@ Page {
                 ButtonGroup.group: memoryType
                 onCheckedChanged: onInMemorySelected()
 
-                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.delay:Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Save datasource offline and process as an InMemory database")
@@ -775,7 +775,7 @@ Page {
                         opacity: tabPublishDashboard.hovered ? 0.42 : 1
                     }
 
-                    ToolTip.delay: Constants.tooltipShowTime
+                    ToolTip.delay:Constants.tooltipShowTime
                     ToolTip.timeout: Constants.tooltipHideTime
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Publish Datasource")
@@ -806,7 +806,7 @@ Page {
 
                     onClicked: onCreateDashboardClicked()
 
-                    ToolTip.delay: Constants.tooltipShowTime
+                    ToolTip.delay:Constants.tooltipShowTime
                     ToolTip.timeout: Constants.tooltipHideTime
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Create Dashboard")
@@ -855,11 +855,22 @@ Page {
                     anchors.rightMargin: 20
                     anchors.verticalCenter: parent.verticalCenter
 
+                    ToolTip.delay:Constants.tooltipShowTime
+                    ToolTip.timeout: Constants.tooltipHideTime
+                    ToolTip.text: qsTr("Edit datasource name")
+                    ToolTip.visible:  mouseAreaEditDS.containsMouse? true : false
+
                     MouseArea{
+                        id: mouseAreaEditDS
                         anchors.fill: parent
                         onClicked: focusDataSourceNameField()
+                        hoverEnabled: true
+
                     }
+
                 }
+
+
             }
 
             // Right item 1 ends
@@ -877,7 +888,7 @@ Page {
 
                 Text{
                     id: connected_to
-                    text: "Connected To: "
+                    text: "Connected To "
                     anchors.verticalCenter: rectangle_querymodeller_right_col2.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col2.left
                     anchors.leftMargin: 10
@@ -925,10 +936,16 @@ Page {
                         anchors.top: row_querymodeller_right_col.top
                         anchors.topMargin: 7.5
 
-                        MouseArea{
-                            anchors.fill: parent
+                        ToolTip.delay:Constants.tooltipShowTime
+                        ToolTip.timeout: Constants.tooltipHideTime
+                        ToolTip.text: qsTr("Search tables in current database")
+                        ToolTip.visible:  mouseAreaSearch.containsMouse? true : false
 
-                            onClicked: searchTable(searchTextBox.text)
+                        MouseArea{
+                            id: mouseAreaSearch
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onClicked: searchTable(searchTextBox.text)  
                         }
                     }
                 }
@@ -974,6 +991,17 @@ Page {
                         anchors.verticalCenter: parent.verticalCenter
                         font.pixelSize: Constants.fontCategoryHeaderSmall
                         text: ConnectorsLoginModel.connectedDB
+
+                        ToolTip.delay:Constants.tooltipShowTime
+                        ToolTip.timeout: Constants.tooltipHideTime
+                        ToolTip.text: qsTr("Current connected database")
+                        ToolTip.visible: mouseAreaCurrentDB.containsMouse? true: false
+
+                        MouseArea{
+                            id: mouseAreaCurrentDB
+                            anchors.fill: parent
+                            hoverEnabled: true
+                        }
                     }
 
 
@@ -987,11 +1015,18 @@ Page {
                         anchors.verticalCenter: parent.verticalCenter
                         visible: true
 
-                        MouseArea {
-                            anchors.fill: parent
+                        ToolTip.delay:Constants.tooltipShowTime
+                        ToolTip.timeout: Constants.tooltipHideTime
+                        ToolTip.text: qsTr("Hide/Show database tables")
+                        ToolTip.visible: mouseAreaShowHide.containsMouse ? true: false
 
+                        MouseArea {
+                            id: mouseAreaShowHide
+                            anchors.fill: parent
                             onClicked: collapseTables()
+                            hoverEnabled: true
                         }
+
                     }
                 }
 

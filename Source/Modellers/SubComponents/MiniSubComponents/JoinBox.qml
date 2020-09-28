@@ -103,15 +103,17 @@ Item {
         }
 
         MouseArea{
+            id: mouseAreaBox
             anchors.fill: parent
             onClicked: onJoinIconClicked()
+            hoverEnabled: true
 
         }
 
-        DropArea{
-            onDropped: console.log("drop detected")
-
-        }
+        ToolTip.delay: Constants.tooltipShowTime
+        ToolTip.timeout: Constants.tooltipHideTime
+        ToolTip.text: qsTr("Click to see join between columns and change the join type")
+        ToolTip.visible: mouseAreaBox.containsMouse ? true: false
     }
 
     Rectangle{
@@ -128,10 +130,17 @@ Item {
         }
 
         MouseArea{
+            id: mouseAreaDelete
             anchors.fill: parent
             onClicked: onDeleteIconClicked()
+            hoverEnabled: true
 
         }
+
+        ToolTip.delay: Constants.tooltipShowTime
+        ToolTip.timeout: Constants.tooltipHideTime
+        ToolTip.text: qsTr("Delete join between tables")
+        ToolTip.visible: mouseAreaDelete.containsMouse ? true: false
     }
 
 }

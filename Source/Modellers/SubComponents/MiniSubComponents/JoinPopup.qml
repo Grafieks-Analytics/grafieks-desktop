@@ -191,8 +191,8 @@ Rectangle{
 
 
         relationListView.model = tmpModelArray.push(joinPopupItem.counter)
-//        table1.modelCounter = joinPopupItem.counter
-//        table2.modelCounter = joinPopupItem.counter
+        //        table1.modelCounter = joinPopupItem.counter
+        //        table2.modelCounter = joinPopupItem.counter
 
         modelCounterChanged(joinPopup.counter)
 
@@ -353,6 +353,11 @@ Rectangle{
                     anchors.leftMargin: 22
                     verticalAlignment: Image.AlignVCenter
                 }
+
+                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipHideTime
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Inner Join")
             }
         }
 
@@ -380,6 +385,11 @@ Rectangle{
                     anchors.leftMargin: 22
                     verticalAlignment: Image.AlignVCenter
                 }
+
+                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipHideTime
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Left Join")
             }
 
         }
@@ -406,6 +416,11 @@ Rectangle{
                     anchors.leftMargin: 22
                     verticalAlignment: Image.AlignVCenter
                 }
+
+                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipHideTime
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Right Join")
             }
 
         }
@@ -431,6 +446,11 @@ Rectangle{
                     anchors.leftMargin: 22
                     verticalAlignment: Image.AlignVCenter
                 }
+
+                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipHideTime
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Full Outer Join")
             }
 
         }

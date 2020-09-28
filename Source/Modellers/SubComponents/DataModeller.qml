@@ -560,6 +560,11 @@ Item {
 
             }
 
+            ToolTip.delay: Constants.tooltipShowTime
+            ToolTip.timeout: Constants.tooltipHideTime
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Restore original")
+
         }
 
         Button{
@@ -584,6 +589,13 @@ Item {
 
             }
             onClicked: onZoomInClicked()
+
+            ToolTip.delay: Constants.tooltipShowTime
+            ToolTip.timeout: Constants.tooltipHideTime
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Zoom in")
+
+
         }
 
         Button{
@@ -611,6 +623,11 @@ Item {
             }
 
             onClicked: onZoomOutClicked()
+
+            ToolTip.delay: Constants.tooltipShowTime
+            ToolTip.timeout: Constants.tooltipHideTime
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Zoom out")
         }
 
     }

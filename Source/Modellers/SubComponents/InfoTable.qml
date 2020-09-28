@@ -281,6 +281,11 @@ Item{
                    onTestQueryClicked()
 
                 }
+
+                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipHideTime
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("SQL query performance result")
             }
 
 
@@ -328,6 +333,11 @@ Item{
                     onDataPreviewClicked()
 
                 }
+
+                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipHideTime
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("SQL result data preview")
 
 
             }
@@ -381,6 +391,11 @@ Item{
 
                 }
 
+                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipHideTime
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Limit SQL result data preview")
+
             }
 
 
@@ -428,6 +443,8 @@ Item{
                         }
                     }
                 }
+
+
 
             }
 
@@ -528,6 +545,11 @@ Item{
                 onClicked:{
                     onCollapseInfoTable()
                 }
+
+                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipHideTime
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Minimize panel")
 
 
             }
