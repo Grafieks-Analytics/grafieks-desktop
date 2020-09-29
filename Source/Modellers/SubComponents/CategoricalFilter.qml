@@ -259,9 +259,7 @@ Popup {
                 checked: false
                 parent_dimension: 16
                 ButtonGroup.group: filterType
-                onCheckedChanged: {
-                    onWildcardClicked()
-                }
+                onCheckedChanged: onWildcardClicked()
 
             }
         }
@@ -278,9 +276,7 @@ Popup {
                 checked: false
                 parent_dimension: 16
                 ButtonGroup.group: filterType
-                onCheckedChanged: {
-                    onTopClicked()
-                }
+                onCheckedChanged: onTopClicked()
             }
         }
     }
@@ -321,9 +317,7 @@ Popup {
             anchors.leftMargin: 20
 
 
-            onClicked: {
-                onResetClicked()
-            }
+            onClicked: onResetClicked()
         }
 
 
@@ -336,9 +330,7 @@ Popup {
             anchors.rightMargin: 20
 
 
-            onClicked: {
-                onApplyClicked()
-            }
+            onClicked: onApplyClicked()
         }
 
 
@@ -349,10 +341,7 @@ Popup {
             anchors.rightMargin: 20
 
             textValue: "Cancel"
-            onClicked: {
-                closeCategoricalFilterPopup()
-
-            }
+            onClicked: closeCategoricalFilterPopup()
 
         }
 

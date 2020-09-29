@@ -32,7 +32,7 @@ Popup {
 
     Connections{
         target: User
-        onLogoutStatus:{
+        function onLogoutStatus(status){
 
             if(status.code === 200){
                 popupLogout.visible = false

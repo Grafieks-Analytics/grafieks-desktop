@@ -33,7 +33,7 @@ Popup {
 
     Connections{
         target: User
-        onLoginStatus:{
+        function onLoginStatus(status){
 
             if(status.code === 200){
                 popupLoginCredentials.visible = false

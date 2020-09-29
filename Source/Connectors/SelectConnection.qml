@@ -191,9 +191,7 @@ Page {
             console.log("file chosen")
             messageDialog1.open()
         }
-        onRejected: {
-            console.log("file rejected")
-        }
+        onRejected: console.log("file rejected")
     }
 
     MessageDialog{
@@ -447,8 +445,6 @@ Page {
         cellWidth: grid1.width / 6
         cellHeight: 130
 
-        //        clip:true
-        //        boundsBehavior : Flickable.StopAtBounds
 
         delegate : Rectangle{
             scale: 1
@@ -463,7 +459,6 @@ Page {
 
                 MouseArea{
                     anchors.fill: parent
-
                     onClicked: selectAuthorization(name)
 
                 }

@@ -68,9 +68,7 @@ Column{
 
                     MouseArea{
                         anchors.fill: parent
-                        onClicked: {
-                            customizeReport.visible = false
-                        }
+                        onClicked: customizeReport.visible = false
                     }
                 }
 

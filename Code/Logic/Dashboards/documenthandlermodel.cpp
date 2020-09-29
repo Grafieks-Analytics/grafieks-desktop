@@ -11,6 +11,8 @@ DocumentHandler::DocumentHandler()
 {
 }
 
+QQuickItem *DocumentHandler::target() { return m_target; }
+
 void DocumentHandler::setTarget(QQuickItem *target)
 {
     m_doc = 0;
@@ -156,6 +158,12 @@ void DocumentHandler::setSelectionEnd(int position)
 {
     m_selectionEnd = position;
 }
+
+int DocumentHandler::cursorPosition() const { return m_cursorPosition; }
+
+int DocumentHandler::selectionStart() const { return m_selectionStart; }
+
+int DocumentHandler::selectionEnd() const { return m_selectionEnd; }
 
 void DocumentHandler::setAlignment(Qt::Alignment a)
 {
