@@ -86,6 +86,8 @@ int FilterFunctionsModel::mCount(QVariantList numbers)
 int FilterFunctionsModel::mCountdistinct(QVariantList numbers)
 {
 
+    Q_UNUSED(numbers);
+
 //    QSet<QVariant> set = QSet<QVariant>(numbers.begin(), numbers.end());
 //    numbers = set.values();
 //    std::sort(numbers.begin(),numbers.end());
@@ -130,6 +132,8 @@ float FilterFunctionsModel::mPercentile(QVariantList numbers, QVariant targetNum
 {
 
     Q_UNUSED(numbers);
+    Q_UNUSED(targetNumber);
+
     return 0.0;
 }
 

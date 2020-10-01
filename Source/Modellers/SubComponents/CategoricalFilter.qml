@@ -263,22 +263,31 @@ Popup {
 
             }
         }
-        Column{
-            id: topRadioColumn
 
-            anchors.right: fullExtactRadioBtn.right
-            topPadding: 8
-            rightPadding: 30
+        /*******************/
+        /** DO NOT DELETE **/
+        /*******************/
 
-            CustomRadioButton{
-                id: topRadio
-                text: qsTr("Top")
-                checked: false
-                parent_dimension: 16
-                ButtonGroup.group: filterType
-                onCheckedChanged: onTopClicked()
-            }
-        }
+        //        Column{
+        //            id: topRadioColumn
+
+        //            anchors.right: fullExtactRadioBtn.right
+        //            topPadding: 8
+        //            rightPadding: 30
+
+        //            CustomRadioButton{
+        //                id: topRadio
+        //                text: qsTr("Top")
+        //                checked: false
+        //                parent_dimension: 16
+        //                ButtonGroup.group: filterType
+        //                onCheckedChanged: onTopClicked()
+        //            }
+        //        }
+
+        /*******************/
+        /** DO NOT DELETE **/
+        /*******************/
     }
 
     //   Menu Ends

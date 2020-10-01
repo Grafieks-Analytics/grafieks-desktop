@@ -30,7 +30,7 @@
 #include "Code/Logic/DataModeller/schedulermodel.h"
 #include "Code/Logic/DataModeller/columnlistmodel.h"
 #include "Code/Logic/DataModeller/filtercategoricallistmodel.h"
-#include "Code/Logic/DataModeller/filterdatelistmodel.h"
+//#include "Code/Logic/DataModeller/filterdatelistmodel.h"
 
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
     PublishDatasourceModel publishDatasourceModel;
     ColumnListModel columnListModel;
     FilterCategoricalListModel filterCategoricalListModel;
-    FilterDateListModel filterDateListModel;
+//    FilterDateListModel filterDateListModel;
 
 
     QuerySplitter querySplitter;
@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
 
 
     QObject::connect(&filterCategoricalListModel, &FilterCategoricalListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
-    QObject::connect(&filterDateListModel, &FilterDateListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
+//    QObject::connect(&filterDateListModel, &FilterDateListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
 
     // SIGNAL & SLOTS ENDS
     /***********************************************************************************************************************/
@@ -222,7 +222,7 @@ int main(int argc, char *argv[])
     schedulerModel.setScheduler(scheduler);
 
     filterCategoricalListModel.callNewFilter();
-    filterDateListModel.callNewFilter();
+//    filterDateListModel.callNewFilter();
 
 
     // DEFAULT FUNCTION ENDS
@@ -264,7 +264,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("SchedulerModel",&schedulerModel);
     engine.rootContext()->setContextProperty("SchedulerDS",scheduler);
     engine.rootContext()->setContextProperty("FilterCategoricalListModel",&filterCategoricalListModel);
-    engine.rootContext()->setContextProperty("FilterDateListModel",&filterDateListModel);
+//    engine.rootContext()->setContextProperty("FilterDateListModel",&filterDateListModel);
     engine.rootContext()->setContextProperty("QuerySplitter",&querySplitter);
 
 
