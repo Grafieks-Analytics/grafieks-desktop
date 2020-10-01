@@ -27,6 +27,11 @@ class DSParamsModel : public QObject
     QMap<int, QString> primaryJoinTable; // Set the primary table in a join. ie, parameter will be on left side of relation in a join
 
 
+    // Standalone variables for Filters
+    QVariantMap joinRelation;
+    QVariantMap joinValue;
+
+
 
     // Q_PROPERTY variables
 
@@ -47,8 +52,6 @@ class DSParamsModel : public QObject
     Q_PROPERTY(QString subCategory READ subCategory WRITE setSubCategory NOTIFY subCategoryChanged) // selection type of categories like multi/single select in categorical tab
     Q_PROPERTY(QString tableName READ tableName WRITE setTableName NOTIFY tableNameChanged) // sql table name of the selection
     Q_PROPERTY(QString colName READ colName WRITE setColName NOTIFY colNameChanged) // sql column name
-    Q_PROPERTY(QString relation READ relation WRITE setRelation NOTIFY relationChanged) // sql relation type, eg - like, =, !=, IN, etc
-    Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged) // right side of the relation e.g - name != "test". Here value is "test"
     Q_PROPERTY(bool exclude READ exclude WRITE setExclude NOTIFY excludeChanged) // if the current selection needs to be excluded from result
     Q_PROPERTY(bool includeNull READ includeNull WRITE setIncludeNull NOTIFY includeNullChanged) // if include null selected in filter list
     Q_PROPERTY(bool selectAll READ selectAll WRITE setSelectAll NOTIFY selectAllChanged) // If select all property selected in filter list
@@ -71,13 +74,12 @@ class DSParamsModel : public QObject
     QString m_subCategory;
     QString m_colName;
     QString m_tableName;
-    QString m_relation;
-    QVariant m_value;
     bool m_exclude;
     bool m_includeNull;
     bool m_selectAll;
     int m_filterIndex;
     QString m_mode;
+
 
 
 public:
@@ -110,6 +112,16 @@ public:
     Q_INVOKABLE void removePrimaryJoinTable(int refObjId = 0);
     Q_INVOKABLE QString fetchPrimaryJoinTable(int refObjId = 0);
 
+    // Filters
+
+    Q_INVOKABLE void addToJoinRelation(int refObjId, QString relation = "");
+    Q_INVOKABLE void removeJoinRelation(int refObjId = 0, bool removeAll = false);
+    Q_INVOKABLE QVariantMap fetchJoinRelation(int refObjId = 0, bool fetchAll = false);
+
+    Q_INVOKABLE void addToJoinValue(int refObjId, QString value = "");
+    Q_INVOKABLE void removeJoinValue(int refObjId = 0, bool removeAll = false);
+    Q_INVOKABLE QVariantMap fetchJoinValue(int refObjId = 0, bool fetchAll = false);
+
     QString dsName() const;
     QString dsType() const;
     bool isFullExtract() const;
@@ -126,16 +138,11 @@ public:
     QString subCategory() const;
     QString colName() const;
     QString tableName() const;
-    QString relation() const;
-    QVariant value() const;
     bool exclude() const;
     bool includeNull() const;
     bool selectAll() const;
     int filterIndex() const;
     QString mode() const;
-
-
-
 
 
 public slots:
@@ -155,13 +162,12 @@ public slots:
     void setSubCategory(QString subCategory);
     void setColName(QString colName);
     void setTableName(QString tableName);
-    void setRelation(QString relation);
-    void setValue(QVariant value);
     void setExclude(bool exclude);
     void setIncludeNull(bool includeNull);
     void setFilterIndex(int filterIndex);
     void setSelectAll(bool selectAll);
     void setMode(QString mode);
+
 
 
 

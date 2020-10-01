@@ -75,26 +75,59 @@ Popup {
         var subCategory = DSParamsModel.subCategory
         var tableName = DSParamsModel.tableName
         var columnName = DSParamsModel.colName
-        var relation = DSParamsModel.relation
-        var value = DSParamsModel.value
+        var joinRelation = DSParamsModel.fetchJoinRelation(0, true)
+        var joinValue = DSParamsModel.fetchJoinValue(0, true)
         var includeNull = DSParamsModel.includeNull
         var exclude = DSParamsModel.exclude
 
-        console.log(section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+        var singleValue = "";
+        var singleRelation = "";
 
-        // Save the filter
-        if(DSParamsModel.mode === Constants.modeCreate){
-            FilterCategoricalListModel.newFilter(section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
 
-        } else{
-            FilterCategoricalListModel.updateFilter(filterIndex, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+        switch(category){
+
+        case Constants.categoryMainListType:
+
+            singleRelation = joinRelation[0]
+            singleValue = joinValue[0]
+            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleValue, includeNull, exclude, filterIndex)
+
+            break
+
+        case Constants.categoryMainWildCardType:
+
+            for(let i = 0; i < Object.keys(joinRelation).length; i++){
+                singleRelation = joinRelation[i]
+                singleValue = joinValue[i]
+                manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleValue, includeNull, exclude, filterIndex)
+            }
+
+            break
+
+        case Constants.categoryMainTopType:
+            break
+
+        default:
+            break
         }
 
         // Reset all DSParams
         DSParamsModel.resetFilter();
         FilterListCategoryListFilter.setSearchString(category)
 
+    }
 
+    function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude, filterIndex = 0){
+
+        console.log(mode, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude, filterIndex)
+
+        // Save the filter
+        if(mode === Constants.modeCreate){
+            FilterCategoricalListModel.newFilter(section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+
+        } else{
+            FilterCategoricalListModel.updateFilter(filterIndex, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+        }
     }
 
     function onResetClicked(){

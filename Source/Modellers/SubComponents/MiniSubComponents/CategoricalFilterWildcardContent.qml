@@ -122,14 +122,14 @@ Rectangle{
 
         let newFilter = ""
         let newRelation = ""
-        let existingValues = DSParamsModel.value.split(",")
-        let existingRelations = DSParamsModel.relation.split(",")
 
-        console.log(DSParamsModel.value, DSParamsModel.relation)
+
 
         // Set maximum length of the array
-        existingValues.length = existingValues.length > selectDropdown.count ? selectDropdown.count : existingValues.length;
-        existingRelations.length = existingRelations.length > selectDropdown.count ? selectDropdown.count : existingRelations.length;
+//        existingValues.length = existingValues.length > selectDropdown.count ? selectDropdown.count : existingValues.length;
+//        existingRelations.length = existingRelations.length > selectDropdown.count ? selectDropdown.count : existingRelations.length;
+
+//        console.log(selectCurrentValue, existingValues.length, existingRelations.length, existingValues, existingRelations)
 
         switch(selectCurrentValue){
 
@@ -178,11 +178,9 @@ Rectangle{
 
         }
 
-        existingValues[listIndex] = newFilter
-        existingRelations[listIndex] = newRelation
 
-        DSParamsModel.setRelation(existingRelations.toString())
-        DSParamsModel.setValue(existingValues.toString())
+        DSParamsModel.addToJoinRelation(listIndex.toString(), newRelation)
+        DSParamsModel.addToJoinValue(listIndex.toString(), newFilter)
 
     }
 
@@ -241,9 +239,7 @@ Rectangle{
             CustomButton {
                 textValue: qsTr("Add Wildcard")
 
-                onClicked: {
-                    onAddWildcard();
-                }
+                onClicked: onAddWildcard();
             }
 
         }
@@ -260,9 +256,7 @@ Rectangle{
                 text: qsTr("Exclude")
                 parent_dimension: Constants.defaultCheckBoxDimension
 
-                onCheckStateChanged: {
-                    onExcludeCheckedClicked(checked)
-                }
+                onCheckStateChanged: onExcludeCheckedClicked(checked)
             }
 
 
@@ -298,10 +292,7 @@ Rectangle{
                     textRole: "menuItem"
                     width: parent.width*2/3
                     valueRole: "compareValue"
-                    onCurrentIndexChanged: {
-                        selectDropdown.setProperty(index ,"value", currentIndex)
-                        onWildCardInput(valueText.text, wildcardDropdown.currentValue, wildcardDropdown.currentText, wildcardDropdown.currentIndex, index)
-                    }
+                    onCurrentValueChanged: onWildCardInput(valueText.text, wildcardDropdown.currentValue, wildcardDropdown.currentText, wildcardDropdown.currentIndex, index)
                 }
             }
 
@@ -323,9 +314,7 @@ Rectangle{
                         rightMargin: 50
                     }
 
-                    onTextChanged: {
-                        onWildCardInput(valueText.text, wildcardDropdown.currentValue, wildcardDropdown.currentText, wildcardDropdown.currentIndex, index)
-                    }
+                    onTextChanged: onWildCardInput(valueText.text, wildcardDropdown.currentValue, wildcardDropdown.currentText, wildcardDropdown.currentIndex, index)
 
                 }
             }

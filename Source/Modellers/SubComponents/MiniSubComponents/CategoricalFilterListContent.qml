@@ -26,7 +26,9 @@ Rectangle{
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
 
+
     property var checkedValues : []
+    readonly property string mapKey: "0"
 
 
     /***********************************************************************************************************************/
@@ -84,8 +86,9 @@ Rectangle{
 
 
     function onSingleSelectRadioSelected(modelData){
-        DSParamsModel.setValue(modelData.toString())
-        DSParamsModel.setRelation(Constants.equalRelation)
+
+        DSParamsModel.addToJoinValue(mapKey, modelData.toString())
+        DSParamsModel.addToJoinRelation(mapKey, Constants.equalRelation)
     }
 
 
@@ -99,12 +102,13 @@ Rectangle{
 
             if(DSParamsModel.mode === Constants.modeCreate){
 
-                DSParamsModel.setValue("%")
+                DSParamsModel.addToJoinValue(mapKey, "%")
+
             } else{
-                DSParamsModel.setValue(checkedValues.toString())
+                DSParamsModel.addToJoinValue(mapKey, heckedValues.toString())
             }
 
-            DSParamsModel.setRelation(Constants.likeRelation)
+            DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
             checkedValues = []
 
         }
@@ -137,8 +141,8 @@ Rectangle{
 
             // Save the array and Set relation type to IN
 
-            DSParamsModel.setValue(checkedValues.toString())
-            DSParamsModel.setRelation(Constants.inRelation)
+            DSParamsModel.addToJoinValue(mapKey, checkedValues.toString())
+            DSParamsModel.addToJoinRelation(mapKey, Constants.inRelation)
         }
 
     }

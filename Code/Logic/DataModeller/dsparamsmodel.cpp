@@ -18,8 +18,6 @@ void DSParamsModel::resetFilter()
     this->setCategory(Constants::defaultCategory);
     this->setSubCategory(Constants::defaultSubCategory);
     this->setMode(Constants::defaultMode);
-    this->setValue(Constants::defaultValue);
-    this->setRelation(Constants::defaultRelation);
     this->setExclude(Constants::defaultExclude);
     this->setIncludeNull(Constants::defaultIncludeNull);
     this->setSelectAll( Constants::defaultSelectAll);
@@ -191,6 +189,73 @@ QString DSParamsModel::fetchPrimaryJoinTable(int refObjId)
     return this->primaryJoinTable.value(refObjId);
 }
 
+void DSParamsModel::addToJoinRelation(int refObjId, QString relation)
+{
+    this->joinRelation.insert(QString::number(refObjId), relation );
+}
+
+void DSParamsModel::removeJoinRelation(int refObjId, bool removeAll)
+{
+
+    if(removeAll == true){
+        this->joinRelation.clear();
+    } else{
+        this->joinRelation.remove(QString::number(refObjId));
+    }
+}
+
+QVariantMap DSParamsModel::fetchJoinRelation(int refObjId, bool fetchAll)
+{
+
+    QVariantMap output;
+
+
+    if(fetchAll == false){
+        QVariant val;
+
+        val = this->joinRelation.value(QString::number(refObjId));
+        output.insert(QString::number(refObjId), val);
+
+    } else{
+        output = this->joinRelation;
+    }
+
+    return output;
+}
+
+void DSParamsModel::addToJoinValue(int refObjId, QString value)
+{
+    this->joinValue.insert(QString::number(refObjId), value );
+}
+
+void DSParamsModel::removeJoinValue(int refObjId, bool removeAll)
+{
+
+    if(removeAll == true){
+        this->joinValue.clear();
+    } else{
+        this->joinValue.remove(QString::number(refObjId));
+    }
+}
+
+QVariantMap DSParamsModel::fetchJoinValue(int refObjId, bool fetchAll)
+{
+
+    QVariantMap output;
+
+    if(fetchAll == false){
+        QVariant val;
+
+        val = this->joinValue.value(QString::number(refObjId));
+        output.insert(QString::number(refObjId), val);
+
+    } else{
+        output = this->joinValue;
+    }
+
+    return output;
+}
+
 QString DSParamsModel::dsName() const
 {
     return m_dsName;
@@ -278,15 +343,6 @@ QString DSParamsModel::subCategory() const
     return m_subCategory;
 }
 
-QString DSParamsModel::relation() const
-{
-    return m_relation;
-}
-
-QVariant DSParamsModel::value() const
-{
-    return m_value;
-}
 
 void DSParamsModel::setDsName(QString dsName)
 {
@@ -442,22 +498,4 @@ void DSParamsModel::setSubCategory(QString subCategory)
 
     m_subCategory = subCategory;
     emit subCategoryChanged(m_subCategory);
-}
-
-void DSParamsModel::setRelation(QString relation)
-{
-    if (m_relation == relation)
-        return;
-
-    m_relation = relation;
-    emit relationChanged(m_relation);
-}
-
-void DSParamsModel::setValue(QVariant value)
-{
-    if (m_value == value)
-        return;
-
-    m_value = value;
-    emit valueChanged(m_value);
 }
