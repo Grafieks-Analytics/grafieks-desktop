@@ -5,16 +5,21 @@ FilterFunctionsModel::FilterFunctionsModel(QObject *parent) : QObject(parent)
 
 }
 
-//bool FilterFunctionsModel::mSum(QVariantList numbers, float *output)
-//{
+/*!
+ * \brief Calculates the sum of the numbers
+ * \param numbers (QVariantlist of numbers)
+ * \return float
+ */
+float FilterFunctionsModel::mSum(QVariantList numbers)
+{
+    float output = 0.0;
+    int count = numbers.length();
 
-//}
-
-//float FilterFunctionsModel::mSum(QVariantList numbers)
-//{
-
-
-//}
+    for(int i = 0; i < count; i++){
+        output += numbers.at(i).toFloat();
+    }
+    return output;
+}
 
 /*!
  * \brief Calculates the average of the numbers
@@ -24,9 +29,13 @@ FilterFunctionsModel::FilterFunctionsModel(QObject *parent) : QObject(parent)
 
 float FilterFunctionsModel::mAverage(QVariantList numbers)
 {
+    float output = 0.0;
+    int count = numbers.length();
 
-    Q_UNUSED(numbers);
-    return 0.0;
+    for(int i = 0; i < count; i++){
+        output += numbers.at(i).toFloat();
+    }
+    return output/count;
 }
 
 /*!
@@ -37,8 +46,22 @@ float FilterFunctionsModel::mAverage(QVariantList numbers)
 
 float FilterFunctionsModel::mMedian(QVariantList numbers)
 {
-    Q_UNUSED(numbers);
-    return 0.0;
+
+    float output = 0.0;
+    int length = numbers.length();
+    int key = 0;
+
+    std::sort(numbers.begin(), numbers.end());
+
+    if(length % 2 == 0){
+        key = length / 2 - 1;
+        output = numbers.at(key).toFloat();
+
+    } else{
+        key = (length + 1) / 2 - 1;
+        output = numbers.at(key).toFloat();
+    }
+    return output;
 
 }
 
@@ -51,8 +74,7 @@ float FilterFunctionsModel::mMedian(QVariantList numbers)
 int FilterFunctionsModel::mCount(QVariantList numbers)
 {
 
-    Q_UNUSED(numbers);
-    return 0;
+    return numbers.length();
 }
 
 /*!
@@ -64,7 +86,11 @@ int FilterFunctionsModel::mCount(QVariantList numbers)
 int FilterFunctionsModel::mCountdistinct(QVariantList numbers)
 {
 
-    Q_UNUSED(numbers);
+//    QSet<QVariant> set = QSet<QVariant>(numbers.begin(), numbers.end());
+//    numbers = set.values();
+//    std::sort(numbers.begin(),numbers.end());
+
+//    return numbers.length();
     return 0;
 }
 
@@ -77,8 +103,9 @@ int FilterFunctionsModel::mCountdistinct(QVariantList numbers)
 float FilterFunctionsModel::mMinimum(QVariantList numbers)
 {
 
-    Q_UNUSED(numbers);
-    return 0.0;
+    std::sort(numbers.begin(), numbers.end());
+    float output = numbers.first().toFloat();
+    return output;
 }
 
 /*!
@@ -89,8 +116,9 @@ float FilterFunctionsModel::mMinimum(QVariantList numbers)
 float FilterFunctionsModel::mMaximum(QVariantList numbers)
 {
 
-    Q_UNUSED(numbers);
-    return 0.0;
+    std::sort(numbers.begin(), numbers.end());
+    float output = numbers.last().toFloat();
+    return output;
 }
 
 /*!
@@ -98,7 +126,7 @@ float FilterFunctionsModel::mMaximum(QVariantList numbers)
  * \param numbers (QVariantlist of numbers)
  * \return float
  */
-float FilterFunctionsModel::mPercentile(QVariantList numbers)
+float FilterFunctionsModel::mPercentile(QVariantList numbers, QVariant targetNumber)
 {
 
     Q_UNUSED(numbers);
@@ -118,21 +146,8 @@ float FilterFunctionsModel::mStddev(QVariantList numbers)
 }
 
 
-float FilterFunctionsModel::mStddevpop(QVariantList numbers)
-{
-
-    Q_UNUSED(numbers);
-    return 0.0;
-}
 
 float FilterFunctionsModel::mvariance(QVariantList numbers)
-{
-
-    Q_UNUSED(numbers);
-    return 0.0;
-}
-
-float FilterFunctionsModel::mVariancepop(QVariantList numbers)
 {
 
     Q_UNUSED(numbers);

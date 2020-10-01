@@ -3,6 +3,10 @@
 
 #include <QVariant>
 #include <QObject>
+#include <QDebug>
+#include <QSet>
+
+#include <algorithm>
 
 /*!
  * \brief Explains all the calculated functions for the Filters
@@ -17,19 +21,16 @@ public:
 
     // Mathematical functions
 
-//    Q_INVOKABLE bool mSum(QVariantList numbers, int * output);
-//    Q_INVOKABLE bool mSum(QVariantList numbers, float * output);
+    Q_INVOKABLE float mSum(QVariantList numbers);
     Q_INVOKABLE float mAverage(QVariantList numbers);
     Q_INVOKABLE float mMedian(QVariantList numbers);
     Q_INVOKABLE int mCount(QVariantList numbers);
     Q_INVOKABLE int mCountdistinct(QVariantList numbers);
     Q_INVOKABLE float mMinimum(QVariantList numbers);
     Q_INVOKABLE float mMaximum(QVariantList numbers);
-    Q_INVOKABLE float mPercentile(QVariantList numbers);
+    Q_INVOKABLE float mPercentile(QVariantList numbers, QVariant targetNumber);
     Q_INVOKABLE float mStddev(QVariantList numbers);
-    Q_INVOKABLE float mStddevpop(QVariantList numbers);
     Q_INVOKABLE float mvariance(QVariantList numbers);
-    Q_INVOKABLE float mVariancepop(QVariantList numbers);
 
     // String functions
     Q_INVOKABLE int sCount(QStringList strings);

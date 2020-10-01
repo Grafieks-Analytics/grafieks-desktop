@@ -22,8 +22,10 @@ Item{
 
         ShapePath {
             id:shapePath
+            strokeStyle: ShapePath.DashLine
             strokeColor: lineColor
-            strokeWidth: 5
+            strokeWidth: 1
+            dashPattern: [5,5]
             fillColor: "transparent"
             capStyle: ShapePath.RoundCap
             joinStyle: ShapePath.RoundJoin
