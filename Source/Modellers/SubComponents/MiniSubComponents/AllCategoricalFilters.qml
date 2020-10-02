@@ -6,10 +6,12 @@ import com.grafieks.singleton.constants 1.0
 import "../../../MainSubComponents"
 
 Rectangle{
+    id: allCategoricalId
     y:10
     width: parent.width
 
     property int rowSpacing: 8
+    readonly property int mapKey: 0
 
 
     /***********************************************************************************************************************/
@@ -23,7 +25,7 @@ Rectangle{
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
-
+    signal removeFromListModel(int refObjId)
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -53,12 +55,15 @@ Rectangle{
 
     // Called when remove filter from categorical list clicked
     function onRemoveElement(filterIndex){
+
         FilterCategoricalListModel.deleteFilter(filterIndex)
+        DSParamsModel.removeJoinRelation(filterIndex)
+        DSParamsModel.removeJoinValue(filterIndex)
     }
 
     // Called when edit filter from categorical list clicked
     function onEditElement(filterIndex, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude){
-        ColumnListModel.columnEditQuery(columnName, tableName, value)
+
 
         DSParamsModel.setMode(Constants.modeEdit)
         DSParamsModel.setFilterIndex(filterIndex)
@@ -67,9 +72,12 @@ Rectangle{
         DSParamsModel.setSubCategory(subCategory)
         DSParamsModel.setTableName(tableName)
         DSParamsModel.setColName(columnName)
-        DSParamsModel.setRelation(relation)
+        DSParamsModel.addToJoinRelation(mapKey, relation)
+        DSParamsModel.addToJoinRelation(mapKey, value)
         DSParamsModel.setIncludeNull(includeNull)
         DSParamsModel.setExclude(exclude)
+
+        ColumnListModel.columnEditQuery(columnName, tableName, value, category)
 
     }
 

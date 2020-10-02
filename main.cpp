@@ -30,7 +30,7 @@
 #include "Code/Logic/DataModeller/schedulermodel.h"
 #include "Code/Logic/DataModeller/columnlistmodel.h"
 #include "Code/Logic/DataModeller/filtercategoricallistmodel.h"
-#include "Code/Logic/DataModeller/filterdatelistmodel.h"
+//#include "Code/Logic/DataModeller/filterdatelistmodel.h"
 
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
@@ -65,7 +65,6 @@ QString Statics::sqliteFile;
 QString Statics::sqliteUsername;
 QString Statics::sqlitePassword;
 
-
 /*! \mainpage Code Documentation
  *
  * \subsection tools Development tools
@@ -94,7 +93,6 @@ QString Statics::sqlitePassword;
  * <li><b>`*.h`, `*.cpp`</b> general class files</li>
  * </ul>
  */
-
 
 /*!
  *  \defgroup Connectors
@@ -128,7 +126,6 @@ QString Statics::sqlitePassword;
  * \brief Classes related to Dashboard designing
  */
 
-
 int main(int argc, char *argv[])
 {
 
@@ -151,7 +148,6 @@ int main(int argc, char *argv[])
 
     QtTest2 qttest2;
 
-
     MysqlCon mysqlconnect;
     User User;
     ConnectorFilter connectorFilter;
@@ -166,48 +162,42 @@ int main(int argc, char *argv[])
     PublishDatasourceModel publishDatasourceModel;
     ColumnListModel columnListModel;
     FilterCategoricalListModel filterCategoricalListModel;
-    FilterDateListModel filterDateListModel;
-
+//    FilterDateListModel filterDateListModel;
 
     QuerySplitter querySplitter;
     DashboardContainerModel dashboardContainerModel;
 
-
-
     // Datasource Connector Initializations
     DatasourceModel datasourceModel;
-    DatasourceDS * datasource = new DatasourceDS(&app);
+    DatasourceDS *datasource = new DatasourceDS(&app);
 
     // Dropbox modal
     DropboxModel dropboxModel;
-    DropboxDS * dropbox = new DropboxDS(&app);
+    DropboxDS *dropbox = new DropboxDS(&app);
 
     // Google Drive modal
     DriveModel driveModel;
-    DriveDS * drive = new DriveDS(&app);
+    DriveDS *drive = new DriveDS(&app);
 
     // Box modal
     BoxModel boxModel;
-    BoxDS * box = new BoxDS(&app);
+    BoxDS *box = new BoxDS(&app);
 
     // Google sheet modal
     SheetModel sheetModel;
-    SheetDS * sheet = new SheetDS(&app);
+    SheetDS *sheet = new SheetDS(&app);
 
     // Scheduler model
     SchedulerModel schedulerModel;
-    SchedulerDS * scheduler = new SchedulerDS(&app);
-
-
+    SchedulerDS *scheduler = new SchedulerDS(&app);
 
     // OBJECT INITIALIZATION ENDS
     /***********************************************************************************************************************/
     /***********************************************************************************************************************/
     // SIGNAL & SLOTS STARTS
 
-
     QObject::connect(&filterCategoricalListModel, &FilterCategoricalListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
-    QObject::connect(&filterDateListModel, &FilterDateListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
+//    QObject::connect(&filterDateListModel, &FilterDateListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
 
     // SIGNAL & SLOTS ENDS
     /***********************************************************************************************************************/
@@ -221,18 +211,15 @@ int main(int argc, char *argv[])
     sheetModel.setSheetds(sheet);
     schedulerModel.setScheduler(scheduler);
 
-    filterCategoricalListModel.callNewFilter();
-    filterDateListModel.callNewFilter();
-
+//    filterDateListModel.callNewFilter();
 
     // DEFAULT FUNCTION ENDS
     /***********************************************************************************************************************/
     /***********************************************************************************************************************/
     // CONTEXT PROPERTY STARTS
 
-
     // Define singletons
-    qmlRegisterSingletonType( QUrl("qrc:/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants" );
+    qmlRegisterSingletonType(QUrl("qrc:/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants");
     qmlRegisterType<DocumentHandler>("io.qt.examples.texteditor", 1, 0, "DocumentHandler");
 
     // Set contexts for QML
@@ -243,30 +230,29 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("ConnectorFilter", &connectorFilter);
     engine.rootContext()->setContextProperty("ConnectorsLoginModel", &connectorsLoginModel);
     engine.rootContext()->setContextProperty("DatasourceModel", &datasourceModel);
-    engine.rootContext()->setContextProperty("DatasourceDS",datasource);
-    engine.rootContext()->setContextProperty("TableListModel",&tableListModel);
-    engine.rootContext()->setContextProperty("QueryModel",&queryModel);
-    engine.rootContext()->setContextProperty("DBListModel",&dblistModel);
-    engine.rootContext()->setContextProperty("QueryStatsModel",&queryStatsModel);
-    engine.rootContext()->setContextProperty("DropboxModel",&dropboxModel);
-    engine.rootContext()->setContextProperty("DropboxDS",dropbox);
-    engine.rootContext()->setContextProperty("DriveModel",&driveModel);
-    engine.rootContext()->setContextProperty("DriveDS",drive);
-    engine.rootContext()->setContextProperty("BoxModel",&boxModel);
-    engine.rootContext()->setContextProperty("BoxDS",box);
-    engine.rootContext()->setContextProperty("SheetModel",&sheetModel);
-    engine.rootContext()->setContextProperty("SheetDS",sheet);
+    engine.rootContext()->setContextProperty("DatasourceDS", datasource);
+    engine.rootContext()->setContextProperty("TableListModel", &tableListModel);
+    engine.rootContext()->setContextProperty("QueryModel", &queryModel);
+    engine.rootContext()->setContextProperty("DBListModel", &dblistModel);
+    engine.rootContext()->setContextProperty("QueryStatsModel", &queryStatsModel);
+    engine.rootContext()->setContextProperty("DropboxModel", &dropboxModel);
+    engine.rootContext()->setContextProperty("DropboxDS", dropbox);
+    engine.rootContext()->setContextProperty("DriveModel", &driveModel);
+    engine.rootContext()->setContextProperty("DriveDS", drive);
+    engine.rootContext()->setContextProperty("BoxModel", &boxModel);
+    engine.rootContext()->setContextProperty("BoxDS", box);
+    engine.rootContext()->setContextProperty("SheetModel", &sheetModel);
+    engine.rootContext()->setContextProperty("SheetDS", sheet);
     engine.rootContext()->setContextProperty("TableSchemaModel", &tableSchemaModel);
     engine.rootContext()->setContextProperty("TableColumnsModel", &tableColumnsModel);
-    engine.rootContext()->setContextProperty("DSParamsModel",&dsParamsModel);
+    engine.rootContext()->setContextProperty("DSParamsModel", &dsParamsModel);
     engine.rootContext()->setContextProperty("PublishDatasourceModel", &publishDatasourceModel);
     engine.rootContext()->setContextProperty("ColumnListModel", &columnListModel);
-    engine.rootContext()->setContextProperty("SchedulerModel",&schedulerModel);
-    engine.rootContext()->setContextProperty("SchedulerDS",scheduler);
-    engine.rootContext()->setContextProperty("FilterCategoricalListModel",&filterCategoricalListModel);
-    engine.rootContext()->setContextProperty("FilterDateListModel",&filterDateListModel);
-    engine.rootContext()->setContextProperty("QuerySplitter",&querySplitter);
-
+    engine.rootContext()->setContextProperty("SchedulerModel", &schedulerModel);
+    engine.rootContext()->setContextProperty("SchedulerDS", scheduler);
+    engine.rootContext()->setContextProperty("FilterCategoricalListModel", &filterCategoricalListModel);
+//    engine.rootContext()->setContextProperty("FilterDateListModel",&filterDateListModel);
+    engine.rootContext()->setContextProperty("QuerySplitter", &querySplitter);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/

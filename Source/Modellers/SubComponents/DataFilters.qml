@@ -20,7 +20,6 @@ import "../SubComponents/MiniSubComponents"
 
 Popup {
 
-    property string tabBarOpen: Constants.categoricalTab
 
     id: popupMain
     width: parent.width * 0.5
@@ -31,6 +30,8 @@ Popup {
     visible: false
     padding: 0
     closePolicy: Popup.NoAutoClose
+
+     property string tabBarOpen: Constants.categoricalTab
 
 
     /***********************************************************************************************************************/
@@ -94,7 +95,7 @@ Popup {
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
-
+    signal signalEditMode(string section, string category, string subCategory)
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -146,24 +147,44 @@ Popup {
         function onEditCalled(){
 
             if(DSParamsModel.section === Constants.categoricalTab){
+
+                // Fire the signal for show specific category
+                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory)
+
+                // show specific section for edit param
                 categoricalFilterPopup.visible = true
                 dateFilterPopup.visible = false
                 numericalFilterPopup.visible = false
                 groupFilterPopup.visible = false
             }
             else if(DSParamsModel.section === Constants.dateTab){
+
+                // Fire the signal for show specific category
+                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory)
+
+                // show specific section for edit param
                 categoricalFilterPopup.visible = false
                 dateFilterPopup.visible = true
                 numericalFilterPopup.visible = false
                 groupFilterPopup.visible = false
             }
             else if(DSParamsModel.section === Constants.numericalTab){
+
+                // Fire the signal for show specific category
+                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory)
+
+                // show specific section for edit param
                 categoricalFilterPopup.visible = false
                 dateFilterPopup.visible = false
                 numericalFilterPopup.visible = true
                 groupFilterPopup.visible = false
             }
             else if(DSParamsModel.section === Constants.groupTab){
+
+                // Fire the signal for show specific category
+                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory)
+
+                // show specific section for edit param
                 categoricalFilterPopup.visible = false
                 dateFilterPopup.visible = false
                 numericalFilterPopup.visible = false
@@ -184,6 +205,14 @@ Popup {
     // JAVASCRIPT FUNCTION STARTS
 
 
+    Component.onCompleted: {
+        popupMain.signalEditMode.connect(categoricalFilterPopup.slotEditMode)
+        popupMain.signalEditMode.connect(dateFilterPopup.slotEditMode)
+        popupMain.signalEditMode.connect(numericalFilterPopup.slotEditMode)
+        popupMain.signalEditMode.connect(groupFilterPopup.slotEditMode)
+    }
+
+
     function onAddMenuItemTriggered(colName,tableName){
         ColumnListModel.columnQuery(colName, tableName)
         DSParamsModel.setColName(colName)
@@ -194,24 +223,29 @@ Popup {
     function onAddMenuItemClicked(){
 
         if(tabBarOpen === Constants.categoricalTab){
+
+
             categoricalFilterPopup.visible = true
             dateFilterPopup.visible = false
             numericalFilterPopup.visible = false
             groupFilterPopup.visible = false
         }
         else if(tabBarOpen === Constants.dateTab){
+
             categoricalFilterPopup.visible = false
             dateFilterPopup.visible = true
             numericalFilterPopup.visible = false
             groupFilterPopup.visible = false
         }
         else if(tabBarOpen === Constants.numericalTab){
+
             categoricalFilterPopup.visible = false
             dateFilterPopup.visible = false
             numericalFilterPopup.visible = true
             groupFilterPopup.visible = false
         }
         else if(tabBarOpen === Constants.groupTab){
+
             categoricalFilterPopup.visible = false
             dateFilterPopup.visible = false
             numericalFilterPopup.visible = false

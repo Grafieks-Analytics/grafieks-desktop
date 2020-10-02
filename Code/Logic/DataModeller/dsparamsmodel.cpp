@@ -21,6 +21,9 @@ void DSParamsModel::resetFilter()
     this->setExclude(Constants::defaultExclude);
     this->setIncludeNull(Constants::defaultIncludeNull);
     this->setSelectAll( Constants::defaultSelectAll);
+
+    this->joinValue.clear();
+    this->joinRelation.clear();
 }
 
 void DSParamsModel::addToHideColumns(QString colName)
@@ -191,7 +194,10 @@ QString DSParamsModel::fetchPrimaryJoinTable(int refObjId)
 
 void DSParamsModel::addToJoinRelation(int refObjId, QString relation)
 {
+    qDebug() << "BEFORE REL" << this->joinRelation;
     this->joinRelation.insert(QString::number(refObjId), relation );
+    qDebug() << "AFTER REL" << this->joinRelation;
+
 }
 
 void DSParamsModel::removeJoinRelation(int refObjId, bool removeAll)
@@ -202,6 +208,7 @@ void DSParamsModel::removeJoinRelation(int refObjId, bool removeAll)
     } else{
         this->joinRelation.remove(QString::number(refObjId));
     }
+    qDebug() << this->joinRelation << "JOIN REL";
 }
 
 QVariantMap DSParamsModel::fetchJoinRelation(int refObjId, bool fetchAll)
@@ -225,7 +232,9 @@ QVariantMap DSParamsModel::fetchJoinRelation(int refObjId, bool fetchAll)
 
 void DSParamsModel::addToJoinValue(int refObjId, QString value)
 {
+    qDebug() << "BEFORE VAL" << this->joinValue;
     this->joinValue.insert(QString::number(refObjId), value );
+    qDebug() << "AFTER VAL" << this->joinValue;
 }
 
 void DSParamsModel::removeJoinValue(int refObjId, bool removeAll)
@@ -236,6 +245,8 @@ void DSParamsModel::removeJoinValue(int refObjId, bool removeAll)
     } else{
         this->joinValue.remove(QString::number(refObjId));
     }
+
+    emit itemRemoved(refObjId);
 }
 
 QVariantMap DSParamsModel::fetchJoinValue(int refObjId, bool fetchAll)

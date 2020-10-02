@@ -117,35 +117,41 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
  * \param tableName (table name)
  * \param fieldNames (comma separated values for a given column of sql table)
  */
-void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QString fieldNames)
+void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QString fieldNames, QString category)
 {
 
     QString queryString;
     QString finalSearchFields;
     QStringList pieces;
 
-    switch(Statics::currentDbIntType){
+    // This step is only required for Categorical-List type
+    // For the rest, we dont have to do anything as the value is not a list from database
 
-    case Constants::mysqlIntType:{
+    if(category == Constants::categoryMainListType){
 
-        pieces = fieldNames.split(",");
+        switch(Statics::currentDbIntType){
 
-        if(pieces.length() > 1){
-            finalSearchFields = pieces.join("','");
-        }else{
-            finalSearchFields = fieldNames;
+        case Constants::mysqlIntType:{
+
+            pieces = fieldNames.split(",");
+
+            if(pieces.length() > 1){
+                finalSearchFields = pieces.join("','");
+            }else{
+                finalSearchFields = fieldNames;
+            }
+
+            finalSearchFields = "'" + finalSearchFields + "'";
+
+            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+
+            QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
+            this->setQuery(queryString, dbMysql);
+
+
+            break;
         }
-
-        finalSearchFields = "'" + finalSearchFields + "'";
-
-        queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
-
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
-        this->setQuery(queryString, dbMysql);
-
-
-        break;
-    }
+        }
     }
 
     emit editCalled();

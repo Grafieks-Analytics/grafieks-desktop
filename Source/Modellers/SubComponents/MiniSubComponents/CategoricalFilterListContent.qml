@@ -65,6 +65,22 @@ Rectangle{
     // JAVASCRIPT FUNCTION STARTS
 
 
+    // SLOT function
+    function slotEditModeSubCategory(subCategory){
+
+        if(subCategory === Constants.categorySubMulti){
+            multiSelectRadio.checked = true
+
+            multiSelectCheckList.visible = true
+            singleSelectCheckList.visible = false
+
+        } else{
+            singleSelectRadio.checked = true
+
+            multiSelectCheckList.visible = false
+            singleSelectCheckList.visible = true
+        }
+    }
 
     function onMultiSelectSelected(){
         multiSelectCheckList.visible = true
@@ -105,7 +121,7 @@ Rectangle{
                 DSParamsModel.addToJoinValue(mapKey, "%")
 
             } else{
-                DSParamsModel.addToJoinValue(mapKey, heckedValues.toString())
+                DSParamsModel.addToJoinValue(mapKey, checkedValues.toString())
             }
 
             DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)

@@ -80,6 +80,14 @@ Popup {
     // JAVASCRIPT FUNCTION STARTS
 
 
+    // SLOT function
+    function slotEditMode(section, category, subCategory){
+
+        if(section === Constants.groupTab){
+            console.log("EDIT SIGNAL RECEIVED", section, category, subCategory)
+        }
+    }
+
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/

@@ -181,6 +181,10 @@ Rectangle{
     // JAVASCRIPT FUNCTION STARTS
 
 
+    // SLOT function
+    function slotEditModeSubCategory(subCategory){
+
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
