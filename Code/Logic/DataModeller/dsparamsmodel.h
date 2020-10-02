@@ -201,6 +201,8 @@ signals:
     void selectAllChanged(bool selectAll);
     void filterIndexChanged(int filterIndex);
     void modeChanged(QString mode);
+    void itemRemoved(int refObjId);
+
 
 
 };

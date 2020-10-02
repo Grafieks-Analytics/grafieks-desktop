@@ -78,6 +78,15 @@ Popup {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    // SLOT function
+    function slotEditMode(section, category, subCategory){
+
+        if(section === Constants.numericalTab){
+            console.log("EDIT SIGNAL RECEIVED", section, category, subCategory)
+        }
+    }
+
+
     function closePopup(){
         numericalFilterPopup.visible = false
     }

@@ -86,6 +86,13 @@ Rectangle{
     // Connections Starts
 
 
+    Connections{
+        target: DSParamsModel
+
+        function onItemRemoved(refObjId){
+            listviewWildCardModel.remove(refObjId)
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -123,13 +130,8 @@ Rectangle{
         let newFilter = ""
         let newRelation = ""
 
+        console.log("Text",textValue, "Current Val", selectCurrentValue, "Current Text", selectCurrentText, "Cruu index", selectCurrentIndex, "Filter index", listIndex)
 
-
-        // Set maximum length of the array
-//        existingValues.length = existingValues.length > selectDropdown.count ? selectDropdown.count : existingValues.length;
-//        existingRelations.length = existingRelations.length > selectDropdown.count ? selectDropdown.count : existingRelations.length;
-
-//        console.log(selectCurrentValue, existingValues.length, existingRelations.length, existingValues, existingRelations)
 
         switch(selectCurrentValue){
 
@@ -177,7 +179,6 @@ Rectangle{
 
 
         }
-
 
         DSParamsModel.addToJoinRelation(listIndex.toString(), newRelation)
         DSParamsModel.addToJoinValue(listIndex.toString(), newFilter)

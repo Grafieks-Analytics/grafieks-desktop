@@ -75,6 +75,15 @@ Popup {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    // SLOT function
+    function slotEditMode(section, category, subCategory){
+
+        if(section === Constants.dateTab){
+            console.log("EDIT SIGNAL RECEIVED", section, category, subCategory)
+        }
+    }
+
+
     function closeDateFilterPopup(){
      dateFilterPopup.visible = false
     }

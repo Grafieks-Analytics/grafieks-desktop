@@ -221,7 +221,6 @@ int main(int argc, char *argv[])
     sheetModel.setSheetds(sheet);
     schedulerModel.setScheduler(scheduler);
 
-    filterCategoricalListModel.callNewFilter();
 //    filterDateListModel.callNewFilter();
 
 

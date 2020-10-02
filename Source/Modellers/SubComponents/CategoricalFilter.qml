@@ -18,10 +18,13 @@ Popup {
     padding: 0
     closePolicy: Popup.NoAutoClose
 
+
     background: Rectangle{
         color: Constants.themeColor
         border.color: Constants.darkThemeColor
     }
+
+    readonly property int mapKey: 0
 
 
     /***********************************************************************************************************************/
@@ -35,7 +38,7 @@ Popup {
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
-
+    signal subCategoryEditMode(string subCategory)
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -58,6 +61,54 @@ Popup {
     // JAVASCRIPT FUNCTION STARTS
 
 
+    Component.onCompleted: {
+        categoricalFilterPopup.subCategoryEditMode.connect(listContent.slotEditModeSubCategory)
+        categoricalFilterPopup.subCategoryEditMode.connect(wildcardContent.slotEditModeSubCategory)
+        categoricalFilterPopup.subCategoryEditMode.connect(topContent.slotEditModeSubCategory)
+    }
+
+
+    // SLOT function
+    function slotEditMode(section, category, subCategory){
+
+        if(section === Constants.categoricalTab){
+
+            switch(category){
+            case Constants.categoryMainListType:
+
+                listContent.visible = true
+                wildcardContent.visible = false
+                topContent.visible = false
+
+                listRadio.checked = true
+
+                categoricalFilterPopup.subCategoryEditMode(subCategory)
+
+                break
+
+            case Constants.categoryMainWildCardType:
+
+                listContent.visible = false
+                wildcardContent.visible = true
+                topContent.visible = false
+
+                wildcardRadio.checked = true
+
+                break
+
+            case Constants.categoryMainTopType:
+
+                listContent.visible = false
+                wildcardContent.visible = false
+                topContent.visible = true
+
+                topRadio.checked = true
+
+                break
+            }
+
+        }
+    }
 
     function closeCategoricalFilterPopup(){
         categoricalFilterPopup.visible = false
@@ -96,6 +147,7 @@ Popup {
 
         case Constants.categoryMainWildCardType:
 
+            console.log("=====", Object.keys(joinRelation).length, "=====")
             for(let i = 0; i < Object.keys(joinRelation).length; i++){
                 singleRelation = joinRelation[i]
                 singleValue = joinValue[i]
@@ -113,13 +165,12 @@ Popup {
 
         // Reset all DSParams
         DSParamsModel.resetFilter();
-        FilterListCategoryListFilter.setSearchString(category)
 
     }
 
     function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude, filterIndex = 0){
 
-        console.log(mode, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude, filterIndex)
+        console.log(section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude, "FILTER LIST INSERT/UPDATE")
 
         // Save the filter
         if(mode === Constants.modeCreate){
@@ -150,7 +201,7 @@ Popup {
         // Except when "Select All" checked.
         // Then Relation will be LIKE
 
-        DSParamsModel.setRelation(Constants.likeRelation)
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
     }
 
 

@@ -4,13 +4,6 @@
 FilterCategoricalListModel::FilterCategoricalListModel(QObject *parent) : QAbstractListModel(parent), counter(0)
 {
 
-
-//    explicit FilterList(const int & filterId, const QString & section, const QString & category, const QString & subcategory, const QString & tableName, const QString & columnName, const QString & relation, const QString & value, const bool & includeNull, const bool & exclude, QObject *parent = nullptr);
-
-//    qDebug() << "CALLED model constructor";
-//    addFilterList(new FilterList(0,"categorical", "categoricalList", "multiple", "users", "username", "IN", "%", true, false, this));
-//    addFilterList(new FilterList(1,"categorical", "categoricalList", "multiple", "email", "username", "IN", "%", true, false, this));
-
     sqlComparisonOperators.append("=");
     sqlComparisonOperators.append("!=");
     sqlComparisonOperators.append("<>");
@@ -24,11 +17,6 @@ FilterCategoricalListModel::FilterCategoricalListModel(QObject *parent) : QAbstr
     sqlComparisonOperators.append("~*"); // Case insensitive posix comparators
 }
 
-void FilterCategoricalListModel::callNewFilter()
-{
-//    qDebug() << "CALLED new filter";
-//    addFilterList(new FilterList(1,"categorical", "categoricalList", "multiple", "reset_hash", "username", "IN", "%", true, false, this));
-}
 
 int FilterCategoricalListModel::rowCount(const QModelIndex &parent) const
 {
@@ -206,10 +194,11 @@ void FilterCategoricalListModel::newFilter(QString section, QString category, QS
 {
 
 //    FilterList *filterList = new FilterList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this);
-//    qDebug << counter << section<< category<< subcategory < tableName, colName, relation, val, includeNull, exclude, this;
-    addFilterList(new FilterCategoricalList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this));
+    qDebug() << counter << section<< category<< subcategory << tableName<< colName<< relation<< val<< includeNull<< exclude<< this;
+    addFilterList(new FilterCategoricalList(this->counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this));
 
-    counter++;
+    this->counter++;
+
 
 }
 
@@ -245,6 +234,8 @@ void FilterCategoricalListModel::updateFilter(int FilterIndex, QString section, 
     mFilter[FilterIndex]->setExclude(exclude);
 
     endResetModel();
+
+    emit rowCountChanged();
 
 
 }
@@ -290,11 +281,6 @@ void FilterCategoricalListModel::addFilterList(FilterCategoricalList *filter)
     emit rowCountChanged();
 }
 
-void FilterCategoricalListModel::columnList(QVariantList &columns)
-{
-
-    Q_UNUSED(columns);
-}
 
 QString FilterCategoricalListModel::setRelation(QString tableName, QString columnName, QString relation, QString conditions, bool exclude, bool isNull)
 {
@@ -312,7 +298,7 @@ QString FilterCategoricalListModel::setRelation(QString tableName, QString colum
     QString individualCondition;
     QString concetantedCondition;
 
-    int counter = 0;
+    int localCounter = 0;
 
     // If there are several relations involved
 
@@ -324,16 +310,16 @@ QString FilterCategoricalListModel::setRelation(QString tableName, QString colum
 
             notSign = sqlComparisonOperators.contains(tmpRelation)? " !" : " NOT ";
             excludeCase = exclude ? tmpRelation.prepend(notSign) : tmpRelation;
-            newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[counter] + "')" : conditionList[counter] ;
+            newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[localCounter] + "')" : conditionList[localCounter] ;
             newIncludeNull = isNull == false ? "AND " + tableName + "." + columnName + " IS NOT NULL" : "";
 
             tmpWhereConditions = QString("%1.%2 %3 %4 %5")
                             .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
 
-            counter++;
+            localCounter++;
         }
 
-        counter = 0;
+        localCounter = 0;
 
     } else{
 

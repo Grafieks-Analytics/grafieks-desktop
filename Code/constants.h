@@ -37,7 +37,7 @@ namespace Constants
     const QString categoryMainTopType = "categorical.top";
 
     // DSParams Settings
-    const QString defaultTabSection = "categorical";
+    const QString defaultTabSection = categoricalType;
     const QString defaultCategory = categoryMainListType;
     const QString defaultSubCategory = "multiple";
     const QString defaultMode = "create";
