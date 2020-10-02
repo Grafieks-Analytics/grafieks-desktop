@@ -38,6 +38,8 @@ SOURCES += \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
     Code/Logic/DataModeller/filtercategoricallist.cpp \
     Code/Logic/DataModeller/filtercategoricallistmodel.cpp \
+    Code/Logic/DataModeller/filterdatelist.cpp \
+    Code/Logic/DataModeller/filterdatelistmodel.cpp \
     Code/Logic/DataModeller/filterfunctionsmodel.cpp \
     Code/Logic/DataModeller/publishdatasourcemodel.cpp \
     Code/Logic/DataModeller/querymodel.cpp \
@@ -107,6 +109,8 @@ HEADERS += \
     Code/Logic/DataModeller/dsparamsmodel.h \
     Code/Logic/DataModeller/filtercategoricallist.h \
     Code/Logic/DataModeller/filtercategoricallistmodel.h \
+    Code/Logic/DataModeller/filterdatelist.h \
+    Code/Logic/DataModeller/filterdatelistmodel.h \
     Code/Logic/DataModeller/filterfunctionsmodel.h \
     Code/Logic/DataModeller/publishdatasourcemodel.h \
     Code/Logic/DataModeller/querymodel.h \

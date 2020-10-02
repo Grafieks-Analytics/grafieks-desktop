@@ -22,10 +22,12 @@ Rectangle{
     width: parent.width - 40
     x:20
     y:10
-//    anchors.top:  fullExtactRadioBtn.bottom
+    //    anchors.top:  fullExtactRadioBtn.bottom
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
 
+    property var checkedValues : []
+    readonly property string mapKey: "0"
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -36,42 +38,56 @@ Rectangle{
         id: dateFormatList
 
         ListElement{
-            menuItem:"DD/MM/YYYY 1"
+            menuItem:"dd/mm/yyyy"
         }
 
         ListElement{
-            menuItem:"DD/MM/YYYY 2"
+            menuItem:"dd mmmm yyyy"
         }
 
         ListElement{
-            menuItem:"DD/MM/YYYY 3"
+            menuItem:"d mmmm yyyy"
         }
 
         ListElement{
-            menuItem:"DD/MM/YYYY 4"
+            menuItem:"dddd, d mmmm yyyy"
+        }
+
+        ListElement{
+            menuItem:"dddd, dd mmmm yyyy"
+        }
+
+        ListElement{
+            menuItem:"dd/mm/yy"
+        }
+
+        ListElement{
+            menuItem:"d/m/yy"
+        }
+
+        ListElement{
+            menuItem:"d.m.yy"
+        }
+
+        ListElement{
+            menuItem:"yyyy-mm-dd"
+        }
+        ListElement{
+            menuItem:"d mmmm"
+        }
+        ListElement{
+            menuItem:"yy"
+        }
+
+        ListElement{
+            menuItem:"yyyy"
+        }
+
+        ListElement{
+            menuItem:"dd/mm/yyyy HH:MM:SS"
         }
     }
 
-    ListModel{
-        id: dateCheckListModel
-
-        ListElement{
-            textValue:"All"
-        }
-
-        ListElement{
-            textValue:"6 Jan 2019"
-        }
-        ListElement{
-            textValue:"12 Jan 2019"
-        }
-        ListElement{
-            textValue:"30 Jan 2019"
-        }
-        ListElement{
-            textValue:"6 Jan 2019"
-        }
-    }
 
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
@@ -102,11 +118,12 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-
     function onMultiSelectSelected(){
         multiSelectCheckList.visible = true
         singleSelectCheckList.visible = false
 
+        // Set the sub category for filter
+        DSParamsModel.setSubCategory(Constants.categorySubMulti)
     }
 
 
@@ -114,7 +131,74 @@ Rectangle{
 
         multiSelectCheckList.visible = false
         singleSelectCheckList.visible = true
-   }
+
+        // Set the sub category for filter
+        DSParamsModel.setSubCategory(Constants.categorySubSingle)
+    }
+
+
+    function onSingleSelectRadioSelected(modelData){
+
+        DSParamsModel.addToJoinValue(mapKey, modelData.toString())
+        DSParamsModel.addToJoinRelation(mapKey, Constants.equalRelation)
+    }
+
+
+    function onTextChangedSearch(){
+        ColumnListModel.likeColumnQuery(DSParamsModel.colName, DSParamsModel.tableName, searchText.text)
+    }
+
+    function onAllCheckBoxCheckedChanged(checked){
+        // If Select All option is true
+        if(checked === true){
+
+            if(DSParamsModel.mode === Constants.modeCreate){
+
+                DSParamsModel.addToJoinValue(mapKey, "%")
+
+            } else{
+                DSParamsModel.addToJoinValue(mapKey, checkedValues.toString())
+            }
+
+            DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+            checkedValues = []
+
+        }
+    }
+
+    function onMultiSelectCheckboxSelected(modelData,checked){
+
+        if(mainCheckBox.checked === true){
+
+            if(checked === false){
+
+                // Set SELECT ALL to false
+                DSParamsModel.setSelectAll(false)
+                mainCheckBox.checked = false
+
+            }
+        } else{
+            if(checked === true){
+
+                // Start pushing the individual checked item in the array
+                checkedValues.push(modelData)
+
+            } else{
+                // Remove item if unchecked
+                const index = checkedValues.indexOf(modelData);
+                if (index > -1) {
+                    checkedValues.splice(index, 1);
+                }
+            }
+
+            // Save the array and Set relation type to IN
+
+            DSParamsModel.addToJoinValue(mapKey, checkedValues.toString())
+            DSParamsModel.addToJoinRelation(mapKey, Constants.inRelation)
+        }
+
+    }
+
 
 
     function onIncludeCheckedClicked(checked){
@@ -164,7 +248,7 @@ Rectangle{
         Column{
 
             id: multiSelectRadioColumn
-//            anchors.top: selectTypeRadioBtn.top
+            //            anchors.top: selectTypeRadioBtn.top
 
             padding: 10
             leftPadding: 30
@@ -249,66 +333,101 @@ Rectangle{
         color: Constants.themeColor
         border.color: Constants.darkThemeColor
 
+        // Checklist Button ListView
+        // List Filters starts
 
-
-        Column{
-            width: parent.width/2
-            height: parent.height
-
-
-        ListView{
-
-            id: multiSelectCheckList
-            model: dateCheckListModel
+        Item {
+            id : somepageid
             height: parent.height
             width: parent.width
 
-            delegate: Row{
+            ButtonGroup {
+                id: childGroup
+                exclusive: false
+                checkState: mainCheckBox.checkState
+            }
 
-                height: 20
+
+
+            ListView {
+                id: multiSelectCheckList
+                model: ColumnListModel
+                height: parent.height
                 width: parent.width
+                anchors {
+                    top: mainCheckBox.top
+                    topMargin: 20
+                }
+                CheckBoxTpl {
+                    id: mainCheckBox
+                    checked: DSParamsModel.selectAll
+                    text: "All"
+                    parent_dimension: Constants.defaultCheckBoxDimension
+                    checkState: childGroup.checkState
 
-                Column{
-                    CheckBox {
-                        checked: true
-                        text: qsTr(textValue)
-                        indicator.width: 15
-                        indicator.height: 15
-
+                    onCheckedChanged: {
+                        onAllCheckBoxCheckedChanged(checked)
                     }
                 }
+                delegate: Row{
+                    height:20
+                    CheckBoxTpl {
+                        id: modelCheckBoxes
+                        checked: true
+                        text: modelData
+                        parent_dimension: Constants.defaultCheckBoxDimension
+                        ButtonGroup.group: childGroup
 
+                        onCheckedChanged: {
+                            onMultiSelectCheckboxSelected(modelData,checked)
+                        }
+                    }
+                }
             }
         }
+        // Checklist Button ListView
+        // List Filters ends
 
+
+        // Radio button ListView
+        // List Filters starts
 
         ListView{
 
             id: singleSelectCheckList
-            model: dateCheckListModel
+            model: ColumnListModel
             height: parent.height
             width: parent.width
             visible: false
-
+            spacing: 2
             delegate: Row{
 
                 height: 20
-                width: parent.width
+                width: singleSelectCheckList.width
 
                 Column{
-                    CustomRadioButton {
 
-                        radio_text: qsTr(textValue)
-                        parent_dimension: 16
+                    CustomRadioButton {
+                        text: modelData
                         ButtonGroup.group: singleSelectRadioGroup
+                        height: Constants.defaultRadioDimension
+                        width: Constants.defaultRadioDimension
+                        parent_dimension: Constants.defaultRadioDimension
+                        onCheckedChanged: {
+                            onSingleSelectRadioSelected(modelData)
+                        }
                     }
                 }
 
             }
         }
 
+        // Radio button ListView
+        // List Filters ends
 
-        }
+
+
+
 
         Column{
             width: parent.width/2
@@ -324,6 +443,7 @@ Rectangle{
                 model: dateFormatList
                 textRole: "menuItem"
                 valueRole: "compareValue"
+
                 anchors{
                     right: parent.right
                     rightMargin: 10
