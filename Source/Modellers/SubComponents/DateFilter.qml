@@ -76,10 +76,10 @@ Popup {
     // JAVASCRIPT FUNCTION STARTS
 
     // SLOT function
-    function slotEditMode(section, category, subCategory){
+    function slotEditMode(section, category, subCategory, relation, value){
 
         if(section === Constants.dateTab){
-            console.log("EDIT SIGNAL RECEIVED", section, category, subCategory)
+            console.log("EDIT SIGNAL RECEIVED", section, category, subCategory, relation, value)
         }
     }
 

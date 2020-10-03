@@ -62,7 +62,7 @@ Rectangle{
     }
 
     // Called when edit filter from categorical list clicked
-    function onEditElement(filterIndex, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude){
+    function onEditElement(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude){
 
 
         DSParamsModel.setMode(Constants.modeEdit)
@@ -73,9 +73,11 @@ Rectangle{
         DSParamsModel.setTableName(tableName)
         DSParamsModel.setColName(columnName)
         DSParamsModel.addToJoinRelation(mapKey, relation)
-        DSParamsModel.addToJoinRelation(mapKey, value)
+        DSParamsModel.addToJoinRelationSlug(mapKey, slug)
+        DSParamsModel.addToJoinValue(mapKey, value)
         DSParamsModel.setIncludeNull(includeNull)
         DSParamsModel.setExclude(exclude)
+        DSParamsModel.setInternalCounter(1)
 
         ColumnListModel.columnEditQuery(columnName, tableName, value, category)
 
@@ -209,7 +211,7 @@ Rectangle{
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onEditElement(model.index, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+                                        onEditElement(model.index, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
                                     }
                                 }
                             }

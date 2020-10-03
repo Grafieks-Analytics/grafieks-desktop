@@ -1,8 +1,8 @@
 #include "filtercategoricallist.h"
 
-FilterCategoricalList::FilterCategoricalList(const int &filterId, const QString &section, const QString &category, const QString &subcategory, const QString &tableName, const QString &columnName, const QString &relation, const QString &value, const bool &includeNull, const bool &exclude, QObject *parent):
+FilterCategoricalList::FilterCategoricalList(const int &filterId, const QString &section, const QString &category, const QString &subcategory, const QString &tableName, const QString &columnName, const QString &relation, const QString &slug, const QString &value, const bool &includeNull, const bool &exclude, QObject *parent):
 
-    QObject(parent), m_filterId(filterId), m_section(section), m_category(category), m_subCategory(subcategory), m_tableName(tableName), m_columnName(columnName), m_relation(relation), m_value(value), m_includeNull(includeNull), m_exclude(exclude)
+    QObject(parent), m_filterId(filterId), m_section(section), m_category(category), m_subCategory(subcategory), m_tableName(tableName), m_columnName(columnName), m_relation(relation), m_slug(slug), m_value(value), m_includeNull(includeNull), m_exclude(exclude)
 {
 
 }
@@ -36,6 +36,11 @@ bool FilterCategoricalList::includeNull() const
 bool FilterCategoricalList::exclude() const
 {
     return m_exclude;
+}
+
+QString FilterCategoricalList::slug() const
+{
+    return m_slug;
 }
 
 QString FilterCategoricalList::category() const
@@ -110,6 +115,16 @@ void FilterCategoricalList::setExclude(bool exclude)
 
     m_exclude = exclude;
     emit excludeChanged(m_exclude);
+}
+
+void FilterCategoricalList::setSlug(QString slug)
+{
+    if (m_slug == slug)
+        return;
+
+    m_slug = slug;
+
+    emit slugChanged(m_slug);
 }
 
 void FilterCategoricalList::setCategory(QString category)

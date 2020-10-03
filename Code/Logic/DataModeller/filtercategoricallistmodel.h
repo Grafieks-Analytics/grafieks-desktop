@@ -31,9 +31,9 @@ public:
     QHash<int, QByteArray> roleNames() const;
 
 
-    Q_INVOKABLE void newFilter(QString section = "",QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString val = "", bool includeNull = true, bool exclude = false);
+    Q_INVOKABLE void newFilter(QString section = "",QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString slug = "", QString val = "", bool includeNull = true, bool exclude = false);
     Q_INVOKABLE void deleteFilter(int FilterIndex);
-    Q_INVOKABLE void updateFilter(int FilterIndex, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString value = "", bool includeNull = true, bool exclude = false);
+    Q_INVOKABLE void updateFilter(int FilterIndex, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString slug = "", QString value = "", bool includeNull = true, bool exclude = false);
     Q_INVOKABLE void callQueryModel(QString tmpSql);
 
     void addFilterList(FilterCategoricalList * filter);
@@ -47,6 +47,7 @@ public:
         FilterListTableNameRole,
         FilterListColumnNameRole,
         FilterListRelationRole,
+        FilterListSlugRole,
         FilterListValueRole,
         FilterListIncludeNullRole,
         FilterListExcludeRole

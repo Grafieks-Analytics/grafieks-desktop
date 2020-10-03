@@ -10,6 +10,7 @@ DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent)
     m_exclude = Constants::defaultExclude;
     m_includeNull = Constants::defaultIncludeNull;
     m_selectAll = Constants::defaultSelectAll;
+    m_internalCounter = 0;
 }
 
 void DSParamsModel::resetFilter()
@@ -21,9 +22,11 @@ void DSParamsModel::resetFilter()
     this->setExclude(Constants::defaultExclude);
     this->setIncludeNull(Constants::defaultIncludeNull);
     this->setSelectAll( Constants::defaultSelectAll);
+    this->setInternalCounter(0);
 
     this->joinValue.clear();
     this->joinRelation.clear();
+    this->joinRelationSlug.clear();
 }
 
 void DSParamsModel::addToHideColumns(QString colName)
@@ -194,9 +197,7 @@ QString DSParamsModel::fetchPrimaryJoinTable(int refObjId)
 
 void DSParamsModel::addToJoinRelation(int refObjId, QString relation)
 {
-    qDebug() << "BEFORE REL" << this->joinRelation;
     this->joinRelation.insert(QString::number(refObjId), relation );
-    qDebug() << "AFTER REL" << this->joinRelation;
 
 }
 
@@ -208,7 +209,6 @@ void DSParamsModel::removeJoinRelation(int refObjId, bool removeAll)
     } else{
         this->joinRelation.remove(QString::number(refObjId));
     }
-    qDebug() << this->joinRelation << "JOIN REL";
 }
 
 QVariantMap DSParamsModel::fetchJoinRelation(int refObjId, bool fetchAll)
@@ -227,14 +227,14 @@ QVariantMap DSParamsModel::fetchJoinRelation(int refObjId, bool fetchAll)
         output = this->joinRelation;
     }
 
+
+
     return output;
 }
 
 void DSParamsModel::addToJoinValue(int refObjId, QString value)
 {
-    qDebug() << "BEFORE VAL" << this->joinValue;
     this->joinValue.insert(QString::number(refObjId), value );
-    qDebug() << "AFTER VAL" << this->joinValue;
 }
 
 void DSParamsModel::removeJoinValue(int refObjId, bool removeAll)
@@ -245,8 +245,6 @@ void DSParamsModel::removeJoinValue(int refObjId, bool removeAll)
     } else{
         this->joinValue.remove(QString::number(refObjId));
     }
-
-    emit itemRemoved(refObjId);
 }
 
 QVariantMap DSParamsModel::fetchJoinValue(int refObjId, bool fetchAll)
@@ -263,7 +261,38 @@ QVariantMap DSParamsModel::fetchJoinValue(int refObjId, bool fetchAll)
     } else{
         output = this->joinValue;
     }
+    return output;
+}
 
+void DSParamsModel::addToJoinRelationSlug(int refObjId, QString value)
+{
+    this->joinRelationSlug.insert(QString::number(refObjId), value );
+}
+
+void DSParamsModel::removeJoinRelationSlug(int refObjId, bool removeAll)
+{
+
+    if(removeAll == true){
+        this->joinRelationSlug.clear();
+    } else{
+        this->joinRelationSlug.remove(QString::number(refObjId));
+    }
+}
+
+QVariantMap DSParamsModel::fetchJoinRelationSlug(int refObjId, bool fetchAll)
+{
+
+    QVariantMap output;
+
+    if(fetchAll == false){
+        QVariant val;
+
+        val = this->joinRelationSlug.value(QString::number(refObjId));
+        output.insert(QString::number(refObjId), val);
+
+    } else{
+        output = this->joinRelationSlug;
+    }
     return output;
 }
 
@@ -301,6 +330,11 @@ int DSParamsModel::displayRowsCount() const
 int DSParamsModel::joinId() const
 {
     return m_joinId;
+}
+
+int DSParamsModel::internalCounter() const
+{
+    return m_internalCounter;
 }
 
 
@@ -418,6 +452,15 @@ void DSParamsModel::setJoinId(int joinId)
 
     m_joinId = joinId;
     emit joinIdChanged(m_joinId);
+}
+
+void DSParamsModel::setInternalCounter(int internalCounter)
+{
+    if (m_internalCounter == internalCounter)
+        return;
+
+    m_internalCounter = internalCounter;
+    emit internalCounterChanged(m_internalCounter);
 }
 
 
