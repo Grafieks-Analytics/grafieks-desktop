@@ -14,6 +14,8 @@ import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
 
+import "./MiniSubComponents"
+
 Item{
 
     id: listViewElem
@@ -151,6 +153,8 @@ Item{
                             return generalComponent
                         }else if(categoryName == "Style"){
                             return styleComponent
+                        }else if(categoryName == "Canvas Size"){
+                            return canvasMenuComponent
                         }
                         else{
                             subItemColumnDelegate
@@ -234,147 +238,31 @@ Item{
     Component{
         id: generalComponent
 
-        Rectangle{
+        CustomizeGeneralMenu{
             height: 60
             width: listViewElem.width
-
-
-            Column{
-
-                width: parent.width
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.leftMargin: 15
-                anchors.rightMargin: 15
-                anchors.topMargin: 5
-
-                spacing: 5
-
-                Text {
-                    text: qsTr("Dashboard Name")
-                }
-
-                TextField{
-                    id: dashboardName
-                    width: parent.width
-                    background: Rectangle {
-                        border.color: Constants.borderBlueColor
-                        radius: 6
-                        width: parent.width
-                        border.width: Constants.borderWidth
-                    }
-                }
-            }
-
         }
+
     }
 
     Component{
         id: styleComponent
 
-        Rectangle{
-            height: 100
+        CustomizeStyleMenu{
+            height: 150
             width: listViewElem.width
-
-            Column{
-                spacing: 5
-                width: parent.width
-                height: parent.height
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.top: parent.top
-                anchors.topMargin: 10
-
-                Row{
-
-                    width: parent.width
-                    height: 20
-                    anchors.left: parent.left
-                    anchors.leftMargin: 15
-                    anchors.right: parent.right
-                    anchors.rightMargin: 5
-
-                    Text {
-                        id: backgroundColor
-                        text: qsTr("Background Color")
-                    }
-
-                    Image {
-                        anchors.right: parent.right
-                        source: "/Images/icons/Edit.png"
-                        height: 20
-                        width: 20
-                    }
-
-                }
-
-                Row{
-
-                    width: parent.width
-                    height: 20
-                    anchors.left: parent.left
-                    anchors.leftMargin: 15
-                    anchors.right: parent.right
-                    anchors.rightMargin: 5
-
-                    Text {
-                        id: lineColor
-                        text: qsTr("Line Color")
-                    }
-
-                    Image {
-                        anchors.right: parent.right
-                        source: "/Images/icons/Edit.png"
-                        height: 20
-                        width: 20
-                    }
-
-                }
-
-                Row{
-
-                    width: parent.width
-                    height: 20
-                    anchors.left: parent.left
-                    anchors.leftMargin: 15
-                    anchors.right: parent.right
-                    anchors.rightMargin: 5
-
-                    Text {
-                        id: opacity
-                        text: qsTr("Opacity")
-                    }
-
-                }
-
-                Row{
-
-                    width: parent.width
-                    height: 20
-                    anchors.left: parent.left
-                    anchors.leftMargin: 15
-                    anchors.right: parent.right
-                    anchors.rightMargin: 5
-
-                    Text {
-                        text: qsTr("Grid")
-                    }
-
-                    Image {
-                        anchors.right: parent.right
-                        source: "/Images/icons/Edit.png"
-                        height: 20
-                        width: 20
-                    }
-
-                }
-
-
-
-            }
-
         }
+
+    }
+
+    Component{
+        id: canvasMenuComponent
+
+        CustomizeCanvasSizeMenu{
+            height: 70
+            width: listViewElem.width
+        }
+
     }
 
 }

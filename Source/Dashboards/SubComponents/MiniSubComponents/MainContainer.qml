@@ -106,6 +106,11 @@ Rectangle {
         if(objectType == "image"){
             fileDialog.open()
         }
+
+        if(objectType == "text"){
+            editorPopup.open()
+        }
+
     }
 
     function containerClicked(){

@@ -14,7 +14,7 @@ Rectangle{
     /***********************************************************************************************************************/
     // LIST MODELS STARTS
 
-
+    /*
     ListModel{
         id: timeFrameModel
         ListElement{
@@ -23,8 +23,9 @@ Rectangle{
             columnValue:"3 Months"
         }
     }
+    */
 
-
+    /*
     ListModel{
         id: listModel
         ListElement{
@@ -38,6 +39,8 @@ Rectangle{
             columnValue:"6 Jan 2018, 21 Apr 2018"
         }
     }
+
+    */
 
     ListModel{
         id: calendarModel
@@ -67,7 +70,14 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // Connections Starts
+    Connections{
+        target: FilterDateListModel
 
+        // Listview height
+        function onRowCountChanged(){
+            listFiltersListView.height = FilterDateListModel.rowCount() * 30
+        }
+    }
 
 
     // Connections Ends
@@ -79,7 +89,26 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
+    function onRemoveElement(filterIndex){
+        FilterDateListModel.deleteFilter(filterIndex)
+    }
 
+    // Called when edit filter from categorical list clicked
+    function onEditElement(filterIndex, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude){
+        ColumnListModel.columnEditQuery(columnName, tableName, value)
+
+        DSParamsModel.setMode(Constants.modeEdit)
+        DSParamsModel.setFilterIndex(filterIndex)
+        DSParamsModel.setSection(section)
+        DSParamsModel.setCategory(category)
+        DSParamsModel.setSubCategory(subCategory)
+        DSParamsModel.setTableName(tableName)
+        DSParamsModel.setColName(columnName)
+        DSParamsModel.setRelation(relation)
+        DSParamsModel.setIncludeNull(includeNull)
+        DSParamsModel.setExclude(exclude)
+
+    }
 
 
     // JAVASCRIPT FUNCTION ENDS
@@ -123,16 +152,16 @@ Rectangle{
 
         ListView{
             id: listFiltersListView
-            model: listModel
+            model: FilterDateListModel
             width: parent.width
-            height: listModel.count * 30
+            height: FilterDateListModel.count * 30
 
             anchors.topMargin: 10
             spacing: rowSpacing
 
             delegate:
 
-            Row{
+                Row{
                 id:listFiltersContent
                 height: 30
                 width: parent.width
@@ -154,11 +183,21 @@ Rectangle{
                     width: parent.width / 3 - 50
 
                     Text {
-                        text: filterKey
+
+                        text: exclude === true ? "NOT " +relation : relation
                         anchors.left: parent.left
                         leftPadding: 20
                         anchors.verticalCenter: Text.verticalCenter
+
                     }
+                    /*
+                    Text {
+                        text: filterKey
+                        anchors.left: parent.left
+                        leftPadding: 20
+
+                    }
+                    */
 
                 }
 
@@ -169,7 +208,7 @@ Rectangle{
 
                     ReadOnlyTextBox{
                         boxWidth: parent.width
-                        text: columnValue
+                        text: coulmnValue
                     }
                 }
 
@@ -196,6 +235,13 @@ Rectangle{
                             anchors.leftMargin: 20
 
                             anchors.verticalCenter: Image.verticalCenter
+
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: {
+                                    onEditElement(model.index, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+                                }
+                            }
                         }
 
                         Image{
@@ -207,6 +253,12 @@ Rectangle{
                             anchors.topMargin: 8
                             anchors.leftMargin: 10
                             anchors.verticalCenter: Image.verticalCenter
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: {
+                                    onRemoveElement(model.index)
+                                }
+                            }
 
                         }
 
@@ -254,7 +306,7 @@ Rectangle{
 
             delegate:
 
-            Row{
+                Row{
                 id:calendarFiltersContent
                 height: 30
                 width: parent.width
@@ -277,7 +329,7 @@ Rectangle{
 
                     Text {
                         text: filterKey
-//                        anchors.left: parent.left
+                        //                        anchors.left: parent.left
                         leftPadding: 20
                         anchors.verticalCenter: Text.verticalCenter
                     }
@@ -398,7 +450,7 @@ Rectangle{
 
             delegate:
 
-            Row{
+                Row{
                 id:timeFrameFiltersContent
                 height: 30
                 width: parent.width

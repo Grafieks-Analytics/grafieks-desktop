@@ -109,5 +109,10 @@
         <file>Source/Dashboards/SubComponents/MiniSubComponents/DroppedReport.qml</file>
         <file>Source/Dashboards/SubComponents/CustomizeReport.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/DroppedBlank.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/CustomizeStyleMenu.qml</file>
+        <file>Source/MainSubComponents/CustomSpinBox.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/CustomizeGeneralMenu.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/CustomizeCanvasSizeMenu.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/CustomizeReportStyleMenu.qml</file>
     </qresource>
 </RCC>
