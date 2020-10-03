@@ -11,6 +11,8 @@ import com.grafieks.singleton.constants 1.0
 
 Item{
 
+    id:newItem
+
     visible: true
     anchors{
         top: mainContainer.top
@@ -18,8 +20,6 @@ Item{
         right: mainContainer.right
         bottom: mainContainer.bottom
     }
-
-
 
 
     /***********************************************************************************************************************/
@@ -75,6 +75,17 @@ Item{
         console.log('Toggle Full Screen')
     }
 
+    function showCustomizeReport(){
+        customizeReport.visible = true;
+    }
+
+    function onItemPressed(){
+        DashboardContainerModel.setZIndex(++DashboardContainerModel.zIndex);
+        newItem.z = DashboardContainerModel.zIndex;
+        mainContainer.z = DashboardContainerModel.zIndex;
+    }
+
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -114,6 +125,22 @@ Item{
             bottom: parent.bottom
         }
 
+        MouseArea{
+            height: parent.height-4
+            width: parent.width-4
+            anchors.centerIn: parent
+            drag{
+                target: mainContainer
+                minimumX: Constants.leftMenubarWidth
+                minimumY: 29
+                maximumX: mainContainer.parent.width - mainContainer.width
+                maximumY: mainContainer.parent.height - mainContainer.height - Constants.subMenuWidth
+                smoothed: true
+            }
+            onClicked:  showCustomizeReport()
+            onPressed:  onItemPressed()
+        }
+
         Rectangle{
 
             color: "transparent"
@@ -121,7 +148,7 @@ Item{
             height: 40
             width: parent.width
             border.color: Constants.darkThemeColor
-            border.width: 2
+            border.width: 1
 
             Text {
                 id: reportName
@@ -130,7 +157,6 @@ Item{
                 anchors.leftMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
             }
-
 
             Rectangle{
                 anchors.right: parent.right

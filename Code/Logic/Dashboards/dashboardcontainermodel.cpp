@@ -20,6 +20,11 @@ int DashboardContainerModel::positionX() const
     return m_positionX;
 }
 
+int DashboardContainerModel::zIndex() const
+{
+    return m_zIndex;
+}
+
 void DashboardContainerModel::setLastContainerType(QString lastContainerType)
 {
     if (m_lastContainerType == lastContainerType)
@@ -45,4 +50,13 @@ void DashboardContainerModel::setPositionX(int positionX)
 
     m_positionX = positionX;
     emit positionXChanged(m_positionX);
+}
+
+void DashboardContainerModel::setZIndex(int zIndex)
+{
+    if (m_zIndex == zIndex)
+        return;
+
+    m_zIndex = zIndex;
+    emit zIndexChanged(m_zIndex);
 }

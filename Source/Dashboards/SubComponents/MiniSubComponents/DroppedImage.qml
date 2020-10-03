@@ -11,6 +11,8 @@ import com.grafieks.singleton.constants 1.0
 
 Item{
 
+    id:newItem
+
     visible: true
     anchors{
         top: mainContainer.top
@@ -62,6 +64,15 @@ Item{
         // Delete from c++
     }
 
+    function showCustomizeReport(){
+        customizeReport.visible = true;
+    }
+
+    function onItemPressed(){
+        DashboardContainerModel.setZIndex(++DashboardContainerModel.zIndex);
+        newItem.z = DashboardContainerModel.zIndex;
+        mainContainer.z = DashboardContainerModel.zIndex;
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -89,8 +100,9 @@ Item{
     Rectangle {
 
         color: "white"
+
         border.width: 1
-        border.color: "grey"
+        border.color: Constants.darkThemeColor
 
         width: parent.width
         height: parent.height
@@ -100,6 +112,23 @@ Item{
             left: parent.left
             right: parent.right
             bottom: parent.bottom
+        }
+
+        MouseArea{
+            anchors.centerIn: parent
+            height: parent.height-4
+            width: parent.width-4
+            drag{
+                target: mainContainer
+                minimumX: Constants.leftMenubarWidth
+                minimumY: 29
+                maximumX: mainContainer.parent.width - mainContainer.width
+                maximumY: mainContainer.parent.height - mainContainer.height - Constants.subMenuWidth
+                smoothed: true
+            }
+
+            onClicked:  showCustomizeReport()
+            onPressed:  onItemPressed()
         }
 
         Image {

@@ -66,6 +66,7 @@ QtObject {
 
     //Constant Widths
     property int leftMenubarWidth: 49
+    property int subMenuWidth: 31
 
 
     // Menu option

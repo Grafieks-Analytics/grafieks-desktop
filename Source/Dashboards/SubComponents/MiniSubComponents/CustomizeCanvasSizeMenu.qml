@@ -42,7 +42,7 @@ Rectangle{
                 CustomSpinBox {
                     value: 0
                     onValueChanged: onWidthValueChanged()
-                    maximumValue: 100
+//                    maximumValue: 100
                 }
             }
 
@@ -56,7 +56,7 @@ Rectangle{
                 CustomSpinBox {
                     value: 0
                     onValueChanged: onHeightValueChanged()
-                    maximumValue: 100
+//                    maximumValue: 100
                 }
             }
 
