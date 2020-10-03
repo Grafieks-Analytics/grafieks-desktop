@@ -102,7 +102,7 @@ Item{
 
         color: "white"
         border.width: 1
-        border.color: Constants.themeColor
+        border.color: Constants.darkThemeColor
 
         width: parent.width
         height: parent.height
@@ -120,7 +120,7 @@ Item{
             anchors.top: parent.top
             height: 40
             width: parent.width
-            border.color: Constants.themeColor
+            border.color: Constants.darkThemeColor
             border.width: 2
 
             Text {

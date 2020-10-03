@@ -24,10 +24,9 @@ Popup {
 
     visible: true
 
-    anchors.centerIn: parent
-
-
-
+    x: (parent.width - editorPopup.width)/2
+    y: (parent.height - editorPopup.height)/2
+//    anchors.centerIn: parent
     padding: 0
 
     background: Rectangle{
@@ -77,6 +76,19 @@ Popup {
         editorPopup.visible = true;
     }
 
+
+    Component.onCompleted: {
+        console.log('Position x',editorPopup.parent.x)
+        console.log('Position y',editorPopup.parent.y)
+        if(editorPopup.parent.x < 260){
+            editorPopup.x = 0
+            console.log('Changing position')
+        }
+        if(editorPopup.parent.y < 50){
+            editorPopup.y = 0
+            console.log('Changing position')
+        }
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/

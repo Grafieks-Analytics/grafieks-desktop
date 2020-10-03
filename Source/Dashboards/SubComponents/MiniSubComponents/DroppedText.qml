@@ -20,8 +20,8 @@ Item{
 
     Component.onCompleted: {
         var globalCordinates = this.mapToGlobal(0,0)
-        console.log(globalCordinates.x)
-        console.log(globalCordinates.y)
+        console.log('global x',globalCordinates.x)
+        console.log('global y',globalCordinates.y)
     }
 
     Rectangle {
