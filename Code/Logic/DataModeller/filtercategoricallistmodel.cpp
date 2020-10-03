@@ -46,6 +46,8 @@ QVariant FilterCategoricalListModel::data(const QModelIndex &index, int role) co
         return filterList->columnName();
     if( role == FilterListRelationRole)
         return filterList->relation();
+    if( role == FilterListSlugRole)
+        return filterList->slug();
     if( role == FilterListValueRole)
         return filterList->value();
     if( role == FilterListIncludeNullRole)
@@ -125,6 +127,15 @@ bool FilterCategoricalListModel::setData(const QModelIndex &index, const QVarian
         break;
     }
 
+    case FilterListSlugRole:
+    {
+        if( filterList->relation()!= value.toString()){
+            filterList->setRelation(value.toString());
+            somethingChanged = true;
+        }
+        break;
+    }
+
     case FilterListValueRole:
     {
 
@@ -181,6 +192,7 @@ QHash<int, QByteArray> FilterCategoricalListModel::roleNames() const
     roles[FilterListTableNameRole] = "tableName";
     roles[FilterListColumnNameRole] = "columnName";
     roles[FilterListRelationRole] = "relation";
+    roles[FilterListSlugRole] = "slug";
     roles[FilterListValueRole] = "value";
     roles[FilterListIncludeNullRole] = "includeNull";
     roles[FilterListExcludeRole] = "exclude";
@@ -190,12 +202,12 @@ QHash<int, QByteArray> FilterCategoricalListModel::roleNames() const
 
 
 
-void FilterCategoricalListModel::newFilter(QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString val, bool includeNull, bool exclude )
+void FilterCategoricalListModel::newFilter(QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, bool includeNull, bool exclude )
 {
 
 //    FilterList *filterList = new FilterList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this);
-    qDebug() << counter << section<< category<< subcategory << tableName<< colName<< relation<< val<< includeNull<< exclude<< this;
-    addFilterList(new FilterCategoricalList(this->counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this));
+//    qDebug() <<"FROM FilterCategoricalListModel newFilter" << counter << section<< category<< subcategory << tableName<< colName<< relation<< slug <<val<< includeNull<< exclude<< this;
+    addFilterList(new FilterCategoricalList(this->counter, section, category, subcategory, tableName, colName, relation, slug, val, includeNull, exclude, this));
 
     this->counter++;
 
@@ -211,7 +223,7 @@ void FilterCategoricalListModel::deleteFilter(int FilterIndex)
     emit rowCountChanged();
 }
 
-void FilterCategoricalListModel::updateFilter(int FilterIndex, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString value, bool includeNull, bool exclude)
+void FilterCategoricalListModel::updateFilter(int FilterIndex, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString value, bool includeNull, bool exclude)
 {
 
     beginResetModel();
@@ -227,6 +239,8 @@ void FilterCategoricalListModel::updateFilter(int FilterIndex, QString section, 
         mFilter[FilterIndex]->setColumnName(colName);
     if(relation != "")
         mFilter[FilterIndex]->setRelation(relation);
+    if(slug != "")
+        mFilter[FilterIndex]->setValue(slug);
     if(value != "")
         mFilter[FilterIndex]->setValue(value);
 

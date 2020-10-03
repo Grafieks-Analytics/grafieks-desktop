@@ -39,6 +39,7 @@ Popup {
     // SIGNALS STARTS
 
     signal subCategoryEditMode(string subCategory)
+    signal signalWildCardEditData(string relation, string slug, string value)
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -63,13 +64,12 @@ Popup {
 
     Component.onCompleted: {
         categoricalFilterPopup.subCategoryEditMode.connect(listContent.slotEditModeSubCategory)
-        categoricalFilterPopup.subCategoryEditMode.connect(wildcardContent.slotEditModeSubCategory)
-        categoricalFilterPopup.subCategoryEditMode.connect(topContent.slotEditModeSubCategory)
+        categoricalFilterPopup.signalWildCardEditData.connect(wildcardContent.slotWildCardEditData)
     }
 
 
     // SLOT function
-    function slotEditMode(section, category, subCategory){
+    function slotEditMode(section, category, subCategory, relation, slug, value){
 
         if(section === Constants.categoricalTab){
 
@@ -94,6 +94,8 @@ Popup {
 
                 wildcardRadio.checked = true
 
+                categoricalFilterPopup.signalWildCardEditData(relation, slug, value)
+
                 break
 
             case Constants.categoryMainTopType:
@@ -115,6 +117,7 @@ Popup {
 
         // Reset all DSParams
         DSParamsModel.resetFilter();
+
     }
 
     function onApplyClicked(){
@@ -128,11 +131,13 @@ Popup {
         var columnName = DSParamsModel.colName
         var joinRelation = DSParamsModel.fetchJoinRelation(0, true)
         var joinValue = DSParamsModel.fetchJoinValue(0, true)
+        var joinSlug = DSParamsModel.fetchJoinRelationSlug(0, true)
         var includeNull = DSParamsModel.includeNull
         var exclude = DSParamsModel.exclude
 
         var singleValue = "";
         var singleRelation = "";
+        var singleSlug = "";
 
 
         switch(category){
@@ -141,17 +146,18 @@ Popup {
 
             singleRelation = joinRelation[0]
             singleValue = joinValue[0]
-            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleValue, includeNull, exclude, filterIndex)
+            singleSlug = joinSlug[0]
+            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, filterIndex)
 
             break
 
         case Constants.categoryMainWildCardType:
 
-            console.log("=====", Object.keys(joinRelation).length, "=====")
             for(let i = 0; i < Object.keys(joinRelation).length; i++){
                 singleRelation = joinRelation[i]
                 singleValue = joinValue[i]
-                manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleValue, includeNull, exclude, filterIndex)
+                singleSlug = joinSlug[i]
+                manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, filterIndex)
             }
 
             break
@@ -166,18 +172,20 @@ Popup {
         // Reset all DSParams
         DSParamsModel.resetFilter();
 
+
+
     }
 
-    function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude, filterIndex = 0){
+    function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, filterIndex = 0){
 
-        console.log(section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude, "FILTER LIST INSERT/UPDATE")
+//        console.log(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, "FILTER LIST INSERT/UPDATE")
 
         // Save the filter
         if(mode === Constants.modeCreate){
-            FilterCategoricalListModel.newFilter(section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+            FilterCategoricalListModel.newFilter(section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
 
         } else{
-            FilterCategoricalListModel.updateFilter(filterIndex, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+            FilterCategoricalListModel.updateFilter(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
         }
     }
 

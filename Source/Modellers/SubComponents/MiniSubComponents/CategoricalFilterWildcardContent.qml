@@ -18,11 +18,15 @@ import "../../../MainSubComponents"
 
 
 Rectangle{
+    id: wildcardContent
     property bool listOpened: false
-    property int counter: 0
-
+    property int counter : 0
     property string selectOption: "Select Wildcard"
     property var acceptedValues:["containing", "endswith", "equalto", "doesntstartwith", "doesntendwith", "notequalto"]
+
+    property string editRelation : ""
+    property string editValue : ""
+    property string editSlug : ""
 
 
     /***********************************************************************************************************************/
@@ -85,12 +89,13 @@ Rectangle{
     /***********************************************************************************************************************/
     // Connections Starts
 
-
     Connections{
         target: DSParamsModel
 
-        function onItemRemoved(refObjId){
-            listviewWildCardModel.remove(refObjId)
+        function onInternalCounterChanged(internalCounter){
+            if(internalCounter === 0){
+                listviewWildCardModel.clear()
+            }
         }
     }
 
@@ -112,13 +117,40 @@ Rectangle{
 
     }
 
+    function slotWildCardEditData(relation, slug, value){
+
+        // Append a new ListElement on the ListView model
+        listviewWildCardModel.append({"value":0})
+
+        wildcardContent.editRelation = relation
+        wildcardContent.editSlug = slug
+        wildcardContent.editValue = value
+
+
+    }
+
+    function setValueDelegate(wildcardDropdown, valueText){
+
+        if(DSParamsModel.mode === Constants.modeEdit){
+
+            var key = acceptedValues.indexOf(editSlug)
+
+            valueText.text = wildcardContent.editValue
+            wildcardDropdown.currentIndex = key
+        }
+    }
+
+
+
     function onExcludeCheckedClicked(checked){
         DSParamsModel.setExclude(checked)
     }
 
     function onAddWildcard(){
-        if(counter < selectDropdown.count){
-            counter++;
+        if(DSParamsModel.internalCounter < selectDropdown.count){
+
+            let newCounter = DSParamsModel.internalCounter + 1
+            DSParamsModel.setInternalCounter(newCounter)
 
             // Append a new ListElement on the ListView model
             listviewWildCardModel.append({"value":0})
@@ -129,8 +161,8 @@ Rectangle{
 
         let newFilter = ""
         let newRelation = ""
+        let slug = ""
 
-        console.log("Text",textValue, "Current Val", selectCurrentValue, "Current Text", selectCurrentText, "Cruu index", selectCurrentIndex, "Filter index", listIndex)
 
 
         switch(selectCurrentValue){
@@ -139,6 +171,7 @@ Rectangle{
 
             newFilter = "%"+ textValue +"%"
             newRelation = Constants.likeRelation
+            slug = wildcardContent.acceptedValues[selectCurrentIndex]
 
             break
 
@@ -146,6 +179,7 @@ Rectangle{
 
             newFilter = "%"+ textValue
             newRelation = Constants.likeRelation
+            slug = wildcardContent.acceptedValues[selectCurrentIndex]
 
             break
 
@@ -153,6 +187,7 @@ Rectangle{
 
             newFilter = textValue
             newRelation = Constants.equalRelation
+            slug = wildcardContent.acceptedValues[selectCurrentIndex]
 
             break
 
@@ -160,6 +195,7 @@ Rectangle{
 
             newFilter =  textValue + "%"
             newRelation = Constants.notLikeRelation
+            slug = wildcardContent.acceptedValues[selectCurrentIndex]
 
             break
 
@@ -167,6 +203,7 @@ Rectangle{
 
             newFilter =  "%" + textValue
             newRelation = Constants.notLikeRelation
+            slug = wildcardContent.acceptedValues[selectCurrentIndex]
 
             break
 
@@ -174,6 +211,7 @@ Rectangle{
 
             newFilter =  textValue
             newRelation = Constants.notEqualRelation
+            slug = wildcardContent.acceptedValues[selectCurrentIndex]
 
             break
 
@@ -182,8 +220,10 @@ Rectangle{
 
         DSParamsModel.addToJoinRelation(listIndex.toString(), newRelation)
         DSParamsModel.addToJoinValue(listIndex.toString(), newFilter)
+        DSParamsModel.addToJoinRelationSlug(listIndex.toString(), slug)
 
     }
+
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -234,6 +274,7 @@ Rectangle{
 
             padding: 12
             leftPadding: 30
+            visible: DSParamsModel.mode === Constants.modeCreate? true: false
 
             anchors.verticalCenter: parent.verticalAlignment
 
@@ -281,6 +322,8 @@ Rectangle{
         delegate: Row{
             width: parent.width
             height: 40
+
+            Component.onCompleted: setValueDelegate(wildcardDropdown, valueText)
 
             Column{
 

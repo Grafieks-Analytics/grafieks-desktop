@@ -31,7 +31,8 @@ Popup {
     padding: 0
     closePolicy: Popup.NoAutoClose
 
-     property string tabBarOpen: Constants.categoricalTab
+    property string tabBarOpen: Constants.categoricalTab
+    property int mapKey : 0
 
 
     /***********************************************************************************************************************/
@@ -95,7 +96,7 @@ Popup {
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
-    signal signalEditMode(string section, string category, string subCategory)
+    signal signalEditMode(string section, string category, string subCategory, string relation, string value, string slug)
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -149,7 +150,7 @@ Popup {
             if(DSParamsModel.section === Constants.categoricalTab){
 
                 // Fire the signal for show specific category
-                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory)
+                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, DSParamsModel.fetchJoinRelation(mapKey, false)[0], DSParamsModel.fetchJoinRelationSlug(mapKey, false)[0], DSParamsModel.fetchJoinValue(mapKey, false)[0])
 
                 // show specific section for edit param
                 categoricalFilterPopup.visible = true
@@ -160,7 +161,8 @@ Popup {
             else if(DSParamsModel.section === Constants.dateTab){
 
                 // Fire the signal for show specific category
-                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory)
+                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, DSParamsModel.fetchJoinRelation(mapKey, false)[0], DSParamsModel.fetchJoinRelationSlug(mapKey, false)[0], DSParamsModel.fetchJoinValue(mapKey, false)[0])
+
 
                 // show specific section for edit param
                 categoricalFilterPopup.visible = false
@@ -171,7 +173,7 @@ Popup {
             else if(DSParamsModel.section === Constants.numericalTab){
 
                 // Fire the signal for show specific category
-                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory)
+                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, DSParamsModel.fetchJoinRelation(mapKey, false)[0], DSParamsModel.fetchJoinRelationSlug(mapKey, false)[0], DSParamsModel.fetchJoinValue(mapKey, false)[0])
 
                 // show specific section for edit param
                 categoricalFilterPopup.visible = false
@@ -182,7 +184,7 @@ Popup {
             else if(DSParamsModel.section === Constants.groupTab){
 
                 // Fire the signal for show specific category
-                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory)
+                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, DSParamsModel.fetchJoinRelation(mapKey, false)[0], DSParamsModel.fetchJoinRelationSlug(mapKey, false)[0], DSParamsModel.fetchJoinValue(mapKey, false)[0])
 
                 // show specific section for edit param
                 categoricalFilterPopup.visible = false
@@ -224,6 +226,8 @@ Popup {
 
         if(tabBarOpen === Constants.categoricalTab){
 
+            // Fire the signal for show specific category
+            popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, "", "", "")
 
             categoricalFilterPopup.visible = true
             dateFilterPopup.visible = false
@@ -232,6 +236,9 @@ Popup {
         }
         else if(tabBarOpen === Constants.dateTab){
 
+            // Fire the signal for show specific category
+            popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, "", "", "")
+
             categoricalFilterPopup.visible = false
             dateFilterPopup.visible = true
             numericalFilterPopup.visible = false
@@ -239,12 +246,18 @@ Popup {
         }
         else if(tabBarOpen === Constants.numericalTab){
 
+            // Fire the signal for show specific category
+            popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, "", "", "")
+
             categoricalFilterPopup.visible = false
             dateFilterPopup.visible = false
             numericalFilterPopup.visible = true
             groupFilterPopup.visible = false
         }
         else if(tabBarOpen === Constants.groupTab){
+
+            // Fire the signal for show specific category
+            popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, "", "", "")
 
             categoricalFilterPopup.visible = false
             dateFilterPopup.visible = false

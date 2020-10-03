@@ -105,6 +105,7 @@ Rectangle{
 
         DSParamsModel.addToJoinValue(mapKey, modelData.toString())
         DSParamsModel.addToJoinRelation(mapKey, Constants.equalRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.equalRelation)
     }
 
 
@@ -125,6 +126,7 @@ Rectangle{
             }
 
             DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+            DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
             checkedValues = []
 
         }
@@ -159,6 +161,7 @@ Rectangle{
 
             DSParamsModel.addToJoinValue(mapKey, checkedValues.toString())
             DSParamsModel.addToJoinRelation(mapKey, Constants.inRelation)
+            DSParamsModel.addToJoinRelationSlug(mapKey, Constants.inRelation)
         }
 
     }

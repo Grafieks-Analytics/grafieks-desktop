@@ -30,6 +30,7 @@ class DSParamsModel : public QObject
     // Standalone variables for Filters
     QVariantMap joinRelation;
     QVariantMap joinValue;
+    QVariantMap joinRelationSlug;
 
 
 
@@ -47,6 +48,7 @@ class DSParamsModel : public QObject
     Q_PROPERTY(int joinId READ joinId WRITE setJoinId NOTIFY joinIdChanged) // Current selected joinId in data modeler
 
     // For Filters
+    Q_PROPERTY(int internalCounter READ internalCounter WRITE setInternalCounter NOTIFY internalCounterChanged) // Counter for categorical-wildcard
     Q_PROPERTY(QString section READ section WRITE setSection NOTIFY sectionChanged) // Categorical/Numerical/Date/Group filters
     Q_PROPERTY(QString category READ category WRITE setCategory NOTIFY categoryChanged) // Inner sub classifications of the section
     Q_PROPERTY(QString subCategory READ subCategory WRITE setSubCategory NOTIFY subCategoryChanged) // selection type of categories like multi/single select in categorical tab
@@ -69,6 +71,7 @@ class DSParamsModel : public QObject
     int m_joinId;
 
     // For Filters
+    int m_internalCounter;
     QString m_section;
     QString m_category;
     QString m_subCategory;
@@ -79,7 +82,6 @@ class DSParamsModel : public QObject
     bool m_selectAll;
     int m_filterIndex;
     QString m_mode;
-
 
 
 public:
@@ -122,6 +124,10 @@ public:
     Q_INVOKABLE void removeJoinValue(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE QVariantMap fetchJoinValue(int refObjId = 0, bool fetchAll = false);
 
+    Q_INVOKABLE void addToJoinRelationSlug(int refObjId, QString value = "");
+    Q_INVOKABLE void removeJoinRelationSlug(int refObjId = 0, bool removeAll = false);
+    Q_INVOKABLE QVariantMap fetchJoinRelationSlug(int refObjId = 0, bool fetchAll = false);
+
     QString dsName() const;
     QString dsType() const;
     bool isFullExtract() const;
@@ -133,6 +139,7 @@ public:
     int joinId() const;
 
     // For Filters
+    int internalCounter() const;
     QString section() const;
     QString category() const;
     QString subCategory() const;
@@ -143,6 +150,8 @@ public:
     bool selectAll() const;
     int filterIndex() const;
     QString mode() const;
+
+
 
 
 public slots:
@@ -157,6 +166,7 @@ public slots:
     void setJoinId(int joinId);
 
     // For Filters
+    void setInternalCounter(int internalCounter);
     void setSection(QString section);
     void setCategory(QString category);
     void setSubCategory(QString subCategory);
@@ -167,9 +177,6 @@ public slots:
     void setFilterIndex(int filterIndex);
     void setSelectAll(bool selectAll);
     void setMode(QString mode);
-
-
-
 
 
 signals:
@@ -189,6 +196,7 @@ signals:
     void joinIdChanged(int joinId);
 
     // For Filters
+    void internalCounterChanged(int internalCounter);
     void sectionChanged(QString section);
     void categoryChanged(QString category);
     void subCategoryChanged(QString subCategory);
@@ -201,8 +209,6 @@ signals:
     void selectAllChanged(bool selectAll);
     void filterIndexChanged(int filterIndex);
     void modeChanged(QString mode);
-    void itemRemoved(int refObjId);
-
 
 
 };
