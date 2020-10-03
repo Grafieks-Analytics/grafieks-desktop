@@ -85,13 +85,41 @@ Popup {
 
 
     function closeDateFilterPopup(){
-     dateFilterPopup.visible = false
+        dateFilterPopup.visible = false
     }
 
     function applyDateFilter(){
         // Wrtie code to apply date filter
 
         closeDateFilterPopup()
+
+        var filterIndex = DSParamsModel.filterIndex
+        var section = DSParamsModel.section
+        var category = DSParamsModel.category
+        var subCategory = DSParamsModel.subCategory
+        var tableName = DSParamsModel.tableName
+        var columnName = DSParamsModel.colName
+        var relation = DSParamsModel.relation
+        var value = DSParamsModel.value
+        var includeNull = DSParamsModel.includeNull
+        var exclude = DSParamsModel.exclude
+
+
+        if(DSParamsModel.mode === Constants.modeCreate){
+            FilterDateListModel.newFilter(section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+
+        } else{
+            FilterDateListModel.updateFilter(filterIndex, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+        }
+
+        // Reset all DSParams
+        DSParamsModel.resetFilter();
+        FilterListDateListFilter.setSearchString(category)
+
+        // Reset all DSParams
+        // DSParamsModel.resetFilter();
+        //FilterListCategoryListFilter.setSearchString(category)
+
     }
 
     function resetDateFilter(){
@@ -104,6 +132,16 @@ Popup {
         listContent.visible = true
         calendarContent.visible = false
         dateTimeFrameContent.visible = false
+
+        DSParamsModel.resetFilter();
+        DSParamsModel.setCategory(Constants.categoryMainListType)
+
+        // For list category type
+        // The db WHERE relation can only be IN / NOT IN ARRAY type
+        // Except when "Select All" checked.
+        // Then Relation will be LIKE
+
+        DSParamsModel.setRelation(Constants.likeRelation)
     }
     function onCalendarClicked(){
         listContent.visible = false
