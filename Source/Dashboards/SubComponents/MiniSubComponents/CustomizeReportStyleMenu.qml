@@ -91,29 +91,6 @@ Rectangle{
 
         }
 
-        Row{
-
-            width: parent.width
-            height: 20
-            anchors.left: parent.left
-            anchors.leftMargin: 15
-            anchors.right: parent.right
-            anchors.rightMargin: 15
-
-            Text {
-                text: qsTr("Grid")
-            }
-
-            Image {
-                anchors.right: parent.right
-                source: "/Images/icons/Edit.png"
-                height: 20
-                width: 20
-            }
-
-        }
-
-
 
     }
 
