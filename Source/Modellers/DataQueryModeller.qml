@@ -60,6 +60,14 @@ Page {
         }
     }
 
+    Connections{
+        target: FilterCategoricalListModel
+
+        function onRowCountChanged(){
+            filterNumber.text = FilterCategoricalListModel.rowCount()
+        }
+    }
+
 
 
 
@@ -945,7 +953,7 @@ Page {
                             id: mouseAreaSearch
                             anchors.fill: parent
                             hoverEnabled: true
-                            onClicked: searchTable(searchTextBox.text)  
+                            onClicked: searchTable(searchTextBox.text)
                         }
                     }
                 }

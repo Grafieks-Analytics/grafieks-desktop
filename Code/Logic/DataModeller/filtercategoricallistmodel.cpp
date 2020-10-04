@@ -211,6 +211,8 @@ void FilterCategoricalListModel::newFilter(QString section, QString category, QS
 
     this->counter++;
 
+    emit rowCountChanged();
+
 
 }
 
