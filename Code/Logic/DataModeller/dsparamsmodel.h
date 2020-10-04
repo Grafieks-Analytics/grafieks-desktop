@@ -28,9 +28,9 @@ class DSParamsModel : public QObject
 
 
     // Standalone variables for Filters
-    QVariantMap joinRelation;
-    QVariantMap joinValue;
-    QVariantMap joinRelationSlug;
+    QVariantMap joinRelation; // Condition link between parameter and value. eg, =, !=, LIKE, etc
+    QVariantMap joinValue; // Right side parameter of the comparison (the actual value)
+    QVariantMap joinRelationSlug; // Single syllable entity for human readable entity. eg, in Categorical-Wildcard, Slug for `Ends With` is `endswith` and `Equal To` is `equalto`
 
 
 
