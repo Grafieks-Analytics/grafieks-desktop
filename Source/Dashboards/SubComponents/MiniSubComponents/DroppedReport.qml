@@ -83,6 +83,7 @@ Item{
         DashboardContainerModel.setZIndex(++DashboardContainerModel.zIndex);
         newItem.z = DashboardContainerModel.zIndex;
         mainContainer.z = DashboardContainerModel.zIndex;
+        console.log(mainContainer.rulerStatus)
     }
 
 
@@ -129,6 +130,13 @@ Item{
             height: parent.height-4
             width: parent.width-4
             anchors.centerIn: parent
+            hoverEnabled: true
+            onEntered: {
+                mainContainer.rulerStatus=true
+            }
+            onExited: {
+                mainContainer.rulerStatus=false
+            }
             drag{
                 target: mainContainer
                 minimumX: Constants.leftMenubarWidth

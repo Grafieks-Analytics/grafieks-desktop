@@ -19,6 +19,8 @@ Item{
     }
 
 
+    property var hoverStatus: false
+
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -53,7 +55,12 @@ Item{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    function destroyElement(){
+        mainContainer.destroy()
+        this.destroy()
 
+        // Delete from c++
+    }
 
     function showCustomizeReport(){
         customizeReport.visible = true;
@@ -67,6 +74,15 @@ Item{
 
     function showTextEditor(){
         textEditor.visible = true
+    }
+
+    function showMenus(){
+        hoverStatus = true
+        mainContainer.rulerStatus = true
+    }
+    function hideMenus(){
+        hoverStatus = false
+        mainContainer.rulerStatus = false
     }
 
     Component.onCompleted: {
@@ -107,11 +123,103 @@ Item{
         height: parent.height
         width: parent.width
 
+        Rectangle{
+
+            color: "transparent"
+            anchors.top: parent.top
+            height: 40
+            width: parent.width
+            z:20000
+
+            Rectangle{
+                anchors.right: parent.right
+                anchors.top: parent.top
+                height: parent.height
+
+                Row{
+                    id:menuOptions
+
+                    height: parent.height
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10
+
+                    spacing: 10
+                    z:20001
+
+                    visible: hoverStatus
+
+                    Image{
+                        id: editReport
+                        height: 20
+                        width: 20
+                        source: "../../../../Images/icons/Edit.png"
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked:  editOptions.open()
+                        }
+                    }
+
+                    Image {
+                        id: fullScreenReport
+                        height: 22
+                        width: 22
+                        source: "../../../../Images/icons/fullscreen.png"
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked:  toggleFullScreen()
+                        }
+                    }
+
+                }
+
+                Row{
+
+                    anchors.left: parent.right
+                    anchors.top: menuOptions.bottom
+                    width: parent.width
+                    height: 100
+
+                    Item {
+                        id: name
+                        anchors.left:menuOptions.left
+
+                        x: -editOptions.width
+
+                        Menu{
+                            id: editOptions
+
+                            MenuItem {
+                                text: qsTr("Edit")
+                                onTriggered: showTextEditor()
+                                onHoveredChanged: showMenus()
+                            }
+
+                            MenuItem {
+                                text: qsTr("Delete")
+                                onTriggered: destroyElement()
+                                onHoveredChanged: showMenus()
+                            }
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
         MouseArea{
             height: parent.height-4
             width: parent.width-4
             anchors.centerIn: parent
             onDoubleClicked: showTextEditor()
+            hoverEnabled: true
             drag{
                 target: mainContainer
                 minimumX: Constants.leftMenubarWidth
@@ -122,6 +230,9 @@ Item{
             }
             onClicked:  showCustomizeReport()
             onPressed:  onItemPressed()
+            onEntered: showMenus()
+            onExited: hideMenus()
+
         }
 
     }
