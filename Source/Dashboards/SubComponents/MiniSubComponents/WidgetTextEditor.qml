@@ -150,6 +150,18 @@ Popup {
             }
         }
 
+        MouseArea{
+            anchors.fill: parent
+            drag.target: editorPopup
+            onClicked: {
+                console.log('okasd')
+            }
+            onPositionChanged: {
+                console.log(mouse.x)
+                editorPopup.x += mouse.x
+                editorPopup.y += mouse.y
+            }
+        }
     }
 
 
@@ -176,6 +188,7 @@ Popup {
 
             TextEditor{
                 id: textEditor
+                z:10002
             }
 
         }

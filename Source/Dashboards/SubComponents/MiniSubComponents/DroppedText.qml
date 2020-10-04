@@ -65,6 +65,10 @@ Item{
         mainContainer.z = DashboardContainerModel.zIndex;
     }
 
+    function showTextEditor(){
+        textEditor.visible = true
+    }
+
     Component.onCompleted: {
         var globalCordinates = this.mapToGlobal(0,0)
         console.log('global x',globalCordinates.x)
@@ -107,9 +111,7 @@ Item{
             height: parent.height-4
             width: parent.width-4
             anchors.centerIn: parent
-            onDoubleClicked: {
-                console.log('double clicked')
-            }
+            onDoubleClicked: showTextEditor()
             drag{
                 target: mainContainer
                 minimumX: Constants.leftMenubarWidth
@@ -126,7 +128,6 @@ Item{
 
     WidgetTextEditor{
         id: textEditor
-
     }
 
 
