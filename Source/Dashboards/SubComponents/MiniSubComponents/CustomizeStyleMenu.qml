@@ -20,7 +20,7 @@ Rectangle{
         anchors.top: parent.top
         anchors.topMargin: 10
 
-        Row{
+        Rectangle{
 
             width: parent.width
             height: 20
@@ -43,7 +43,7 @@ Rectangle{
 
         }
 
-        Row{
+        Rectangle{
 
             width: parent.width
             height: 20
@@ -66,7 +66,7 @@ Rectangle{
 
         }
 
-        Row{
+        Rectangle{
 
             width: parent.width
             height: 30
@@ -86,12 +86,12 @@ Rectangle{
                 value: 0
                 anchors.right: parent.right
                 onValueChanged: onOpacityValueChanged()
-                maximumValue: 100
+//                maximumValue: 100
             }
 
         }
 
-        Row{
+        Rectangle{
 
             width: parent.width
             height: 20

@@ -41,7 +41,7 @@ Rectangle {
 
     property var objectType: "";
 
-    property var rulerStatus: true
+    property var rulerStatus: false
 
 
     /***********************************************************************************************************************/
@@ -84,19 +84,25 @@ Rectangle {
         objectType = DashboardContainerModel.lastContainerType;
 
         if(DashboardContainerModel.lastContainerType == "text"){
-            rectangles.set(counter,dynamicText.createObject(parent,{name: 'Text', objectName : counter}))
+            rectangles.set(counter,dynamicText.createObject(parent,{z:mainContainer.z, name: 'Text', objectName : counter}))
         }
 
         else if(DashboardContainerModel.lastContainerType == "image"){
-            rectangles.set(counter, dynamicImageBox.createObject(parent, { name: 'Choose Image', objectName : counter}))
+            rectangles.set(counter, dynamicImageBox.createObject(parent, {z:mainContainer.z, name: 'Choose Image', objectName : counter}))
         }
         else if(DashboardContainerModel.lastContainerType == "blank"){
-            rectangles.set(counter, dynamicBlankBox.createObject(parent, { name: 'Blank', objectName : counter}))
+            rectangles.set(counter, dynamicBlankBox.createObject(parent, {z:mainContainer.z, name: 'Blank', objectName : counter}))
         }
         else{
             console.log(objectType);
-            rectangles.set(counter, dynamicReportBox.createObject(parent, { name: objectType, objectName : counter}))
+            rectangles.set(counter, dynamicReportBox.createObject(parent, {z:mainContainer.z, name: objectType, objectName : counter}))
         }
+
+        DashboardContainerModel.setZIndex(++DashboardContainerModel.zIndex);
+
+        console.log('x',mainContainer.x);
+        console.log('y',mainContainer.y);
+        console.log('z',mainContainer.z);
 
         counter++;
 
@@ -104,11 +110,12 @@ Rectangle {
 
     function containerDoubleClicked(){
         if(objectType == "image"){
+
             fileDialog.open()
         }
 
         if(objectType == "text"){
-            editorPopup.open()
+
         }
 
     }
@@ -155,6 +162,9 @@ Rectangle {
         }
     }
 
+    function showRulers(){
+        rulerStatus = true
+    }
 
 
     // JAVASCRIPT FUNCTION ENDS
@@ -190,19 +200,30 @@ Rectangle {
 
     MouseArea {     // drag mouse area
         anchors.fill: parent
-        drag{
-            target: parent
-            minimumX: 0
-            minimumY: 0
-            maximumX: parent.parent.width - parent.width
-            maximumY: parent.parent.height - parent.height
-            smoothed: true
+//        drag{
+//            target: parent
+//            minimumX: 0
+//            minimumY: Constants.subMenuWidth
+//            maximumX: parent.parent.width - parent.width
+//            maximumY: parent.parent.height - parent.height - Constants.subMenuWidth
+//            smoothed: true
+//        }
+
+//        onClicked: containerClicked()
+//        onDoubleClicked: containerDoubleClicked()
+        hoverEnabled: true
+
+        onEntered: showRulers()
+        onExited: {
+
+            console.log('exit main container');
+            rulerStatus = false
         }
 
-        onClicked: containerClicked()
-        onDoubleClicked: containerDoubleClicked()
-
     }
+
+    // Rulers Starts
+    //Left Ruler
 
     Rectangle {
         width: rulersSize
@@ -216,12 +237,12 @@ Rectangle {
             anchors.fill: parent
             drag{ target: parent; axis: Drag.XAxis }
             cursorShape: Qt.SizeHorCursor
-            onMouseXChanged: {
-                onLeftResize(drag,mouseX)
-            }
+            onMouseXChanged: onLeftResize(drag,mouseX)
         }
     }
 
+
+    //Right Ruler
     Rectangle {
         width: rulersSize
         height: rulersSize
@@ -234,15 +255,11 @@ Rectangle {
             anchors.fill: parent
             drag{ target: parent; axis: Drag.XAxis }
             cursorShape: Qt.SizeHorCursor
-            onMouseXChanged: {
-
-
-                onRightResize(drag,mouseX)
-
-            }
+            onMouseXChanged: onRightResize(drag,mouseX)
         }
     }
 
+    // Top Ruler
     Rectangle {
         width: rulersSize
         height: rulersSize
@@ -257,13 +274,11 @@ Rectangle {
             anchors.fill: parent
             drag{ target: parent; axis: Drag.YAxis }
             cursorShape: Qt.SizeVerCursor
-            onMouseYChanged: {
-                onTopResize(drag,mouseY)
-            }
+            onMouseYChanged: onTopResize(drag,mouseY)
         }
     }
 
-
+    //Bottom Ruler
     Rectangle {
         width: rulersSize
         height: rulersSize
@@ -278,9 +293,7 @@ Rectangle {
             anchors.fill: parent
             drag{ target: parent; axis: Drag.YAxis }
             cursorShape: Qt.SizeVerCursor
-            onMouseYChanged: {
-                onDownResize(drag,mouseY)
-            }
+            onMouseYChanged: onDownResize(drag,mouseY)
         }
     }
 }

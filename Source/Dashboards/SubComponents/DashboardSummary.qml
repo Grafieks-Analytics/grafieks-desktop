@@ -92,7 +92,7 @@ Rectangle {
         var draggedItem = listViewElem.itemName.toLocaleLowerCase();
 
         console.log(draggedItem);
-        rectangles.set(counter,dynamicContainer.createObject(parent,{x:drag.x, y: drag.y, name: 'Text', objectName : counter}))
+        rectangles.set(counter,dynamicContainer.createObject(parent,{x:drag.x, y: drag.y, z: DashboardContainerModel.zIndex,  name: 'Text', objectName : counter}))
         counter++;
 
 
@@ -126,6 +126,10 @@ Rectangle {
     /***********************************************************************************************************************/
     // Page Design Starts
 
+    Component.onCompleted: {
+        console.log('Dashboard Summary Fired');
+        DashboardContainerModel.setZIndex(1);
+    }
 
     DropArea {
         id: dropArea

@@ -26,7 +26,9 @@ Popup {
 
     x: (parent.width - editorPopup.width)/2
     y: (parent.height - editorPopup.height)/2
-//    anchors.centerIn: parent
+
+    z:1000
+
     padding: 0
 
     background: Rectangle{
@@ -80,13 +82,15 @@ Popup {
     Component.onCompleted: {
         console.log('Position x',editorPopup.parent.x)
         console.log('Position y',editorPopup.parent.y)
+        console.log('Width',editorPopup.parent.parent.width)
         if(editorPopup.parent.x < 260){
             editorPopup.x = 0
-            console.log('Changing position')
+            console.log('Changing left position')
         }
         if(editorPopup.parent.y < 50){
             editorPopup.y = 0
-            console.log('Changing position')
+            editorPopup.parent.y = 50
+            console.log('Changing top position')
         }
     }
 
