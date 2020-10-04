@@ -344,6 +344,7 @@ Page {
         id: dashboard_summary
         anchors.left: left_menubar.right
         anchors.top: toolsep1.bottom
+        anchors.topMargin: -6
     }
 
     WebEngineView {

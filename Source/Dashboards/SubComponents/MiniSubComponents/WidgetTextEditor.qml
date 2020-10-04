@@ -144,6 +144,7 @@ Popup {
             height: 25
             width: 25
             anchors.rightMargin: 5
+            z:1001
             MouseArea{
                 anchors.fill: parent
                 onClicked: hidePopup()
@@ -153,9 +154,6 @@ Popup {
         MouseArea{
             anchors.fill: parent
             drag.target: editorPopup
-            onClicked: {
-                console.log('okasd')
-            }
             onPositionChanged: {
                 console.log(mouse.x)
                 editorPopup.x += mouse.x
