@@ -164,6 +164,7 @@ Item{
                 height: parent.height
 
                 Row{
+                    id:menuOptions
 
                     height: parent.height
                     anchors.top: parent.top
@@ -202,23 +203,40 @@ Item{
 
                 }
 
+                Row{
+
+                    anchors.left: parent.right
+                    anchors.top: menuOptions.bottom
+                    width: parent.width
+                    height: 100
+
+                    Item {
+                        id: name
+                        anchors.left:menuOptions.left
+
+                        x: -editOptions.width
+
+                        Menu{
+                            id: editOptions
+
+                            MenuItem {
+                                text: qsTr("Edit")
+                                onTriggered: editSelectedReport()
+                            }
+
+                            MenuItem {
+                                text: qsTr("Delete")
+                                onTriggered: destroyElement()
+                            }
+                        }
+
+                    }
+
+                }
+
             }
 
         }
-
-        Menu{
-            id: editOptions
-            MenuItem {
-                text: qsTr("Edit")
-                onTriggered: editSelectedReport()
-            }
-
-            MenuItem {
-                text: qsTr("Delete")
-                onTriggered: destroyElement()
-            }
-        }
-
 
     }
 
