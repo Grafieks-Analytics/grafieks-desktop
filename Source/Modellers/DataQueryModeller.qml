@@ -211,6 +211,16 @@ Page {
         console.log('Focussed')
     }
 
+
+    function clearERDiagram(){
+        DSParamsModel.resetDataModel()
+    }
+
+    function clearQueryData(){
+        DSParamsModel.resetFilter()
+        QueryModel.setTmpSql("")
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -330,6 +340,8 @@ Page {
         icon: StandardIcon.Critical
 
         onAccepted: {
+
+            clearQueryData()
             dataQueryModellerStackview.pop()
             dataQueryModellerStackview.push("./SubComponents/DataModeller.qml")
         }
@@ -342,8 +354,8 @@ Page {
         icon: StandardIcon.Critical
 
         onAccepted: {
-            QueryModel.setTmpSql("")
 
+            clearERDiagram()
             dataQueryModellerStackview.pop()
             dataQueryModellerStackview.push("./SubComponents/QueryModeller.qml")
         }

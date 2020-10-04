@@ -13,6 +13,19 @@ DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent)
     m_internalCounter = 0;
 }
 
+void DSParamsModel::resetDataModel()
+{
+
+    this->hideColumns.clear();
+    this->joinBoxTableMap.clear();
+    this->joinTypeMap.clear();
+    this->joinIconMap.clear();
+    this->joinMapList.clear();
+    this->primaryJoinTable.clear();
+
+    emit destroyLocalObjectsAndMaps();
+}
+
 void DSParamsModel::resetFilter()
 {
     this->setSection(Constants::defaultTabSection);
@@ -35,9 +48,13 @@ void DSParamsModel::addToHideColumns(QString colName)
     emit hideColumnsChanged(this->hideColumns);
 }
 
-void DSParamsModel::removeFromHideColumns(QString colName)
+void DSParamsModel::removeFromHideColumns(QString colName, bool removeAll)
 {
-    this->hideColumns.removeOne(colName);
+    if(removeAll == true){
+        this->hideColumns.clear();
+    } else{
+        this->hideColumns.removeOne(colName);
+    }
     emit hideColumnsChanged(this->hideColumns);
 }
 
@@ -51,18 +68,22 @@ void DSParamsModel::addToJoinBoxTableMap(int refObjId, QString firstTable, QStri
     QStringList joinedTables;
     joinedTables << firstTable << secondTable;
 
-    joinBoxTableMap.insert(refObjId, joinedTables);
+    this->joinBoxTableMap.insert(refObjId, joinedTables);
 }
 
-void DSParamsModel::removeJoinBoxTableMap(int refObjId)
+void DSParamsModel::removeJoinBoxTableMap(int refObjId, bool removeAll)
 {
-    joinBoxTableMap.remove(refObjId);
+    if(removeAll == true){
+        this->joinBoxTableMap.clear();
+    } else{
+        this->joinBoxTableMap.remove(refObjId);
+    }
 }
 
 QVariantList DSParamsModel::fetchJoinBoxTableMap(int refObjId)
 {
     QVariantList returnObj;
-    returnObj << refObjId << joinBoxTableMap.value(refObjId).at(0) << joinBoxTableMap.value(refObjId).at(1);
+    returnObj << refObjId << this->joinBoxTableMap.value(refObjId).at(0) << this->joinBoxTableMap.value(refObjId).at(1);
     return returnObj;
 }
 
@@ -84,9 +105,13 @@ void DSParamsModel::updateJoinTypeMap(int refObjId, QString joinType)
     emit joinTypeMapChanged(outData);
 }
 
-void DSParamsModel::removeJoinTypeMap(int refObjId)
+void DSParamsModel::removeJoinTypeMap(int refObjId, bool removeAll)
 {
-    this->joinTypeMap.remove(refObjId);
+    if(removeAll == true){
+        this->joinTypeMap.clear();
+    } else{
+        this->joinTypeMap.remove(refObjId);
+    }
 }
 
 QString DSParamsModel::fetchJoinTypeMap(int refObjId)
@@ -113,9 +138,13 @@ void DSParamsModel::updateJoinIconMap(int refObjId, QString iconLink)
     emit joinIconMapChanged(outData);
 }
 
-void DSParamsModel::removeJoinIconMap(int refObjId)
+void DSParamsModel::removeJoinIconMap(int refObjId, bool removeAll)
 {
-    this->joinIconMap.remove(refObjId);
+    if(removeAll == true){
+        this->joinIconMap.clear();
+    } else{
+        this->joinIconMap.remove(refObjId);
+    }
 }
 
 QString DSParamsModel::fetchJoinIconMap(int refObjId)
@@ -131,8 +160,8 @@ void DSParamsModel::addToJoinMapList(int refObjId, int internalCounter, QString 
 
     params << leftParam << rightParam;
 
-    if(!joinMapList[refObjId].isEmpty())
-        joinParamMap = joinMapList[refObjId];
+    if(!this->joinMapList[refObjId].isEmpty())
+        joinParamMap = this->joinMapList[refObjId];
 
 
     joinParamMap[internalCounter] = params;
@@ -185,9 +214,13 @@ void DSParamsModel::addToPrimaryJoinTable(int refObjId, QString tableName)
     this->primaryJoinTable[refObjId] = tableName;
 }
 
-void DSParamsModel::removePrimaryJoinTable(int refObjId)
+void DSParamsModel::removePrimaryJoinTable(int refObjId, bool removeAll)
 {
-    this->primaryJoinTable.remove(refObjId);
+    if(removeAll == true){
+        this->primaryJoinTable.clear();
+    } else{
+        this->primaryJoinTable.remove(refObjId);
+    }
 }
 
 QString DSParamsModel::fetchPrimaryJoinTable(int refObjId)
