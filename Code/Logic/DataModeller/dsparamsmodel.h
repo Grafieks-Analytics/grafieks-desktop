@@ -28,9 +28,9 @@ class DSParamsModel : public QObject
 
 
     // Standalone variables for Filters
-    QVariantMap joinRelation;
-    QVariantMap joinValue;
-    QVariantMap joinRelationSlug;
+    QVariantMap joinRelation; // Condition link between parameter and value. eg, =, !=, LIKE, etc
+    QVariantMap joinValue; // Right side parameter of the comparison (the actual value)
+    QVariantMap joinRelationSlug; // Single syllable entity for human readable entity. eg, in Categorical-Wildcard, Slug for `Ends With` is `endswith` and `Equal To` is `equalto`
 
 
 
@@ -87,23 +87,24 @@ class DSParamsModel : public QObject
 public:
     explicit DSParamsModel(QObject *parent = nullptr);
 
-    Q_INVOKABLE void resetFilter();
+    Q_INVOKABLE void resetDataModel();
+
     Q_INVOKABLE void addToHideColumns(QString colName);
-    Q_INVOKABLE void removeFromHideColumns(QString colName);
+    Q_INVOKABLE void removeFromHideColumns(QString colName, bool removeAll = false);
     Q_INVOKABLE QStringList fetchHideColumns(QString searchKeyword = "");
 
     Q_INVOKABLE void addToJoinBoxTableMap(int refObjId, QString firstTable, QString secondTable);
-    Q_INVOKABLE void removeJoinBoxTableMap(int refObjId = 0);
+    Q_INVOKABLE void removeJoinBoxTableMap(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE QVariantList fetchJoinBoxTableMap(int refObjId = 0);
 
     Q_INVOKABLE void addToJoinTypeMap(int refObjId, QString joinType = "");
     Q_INVOKABLE void updateJoinTypeMap(int refObjId, QString joinType = "");
-    Q_INVOKABLE void removeJoinTypeMap(int refObjId = 0);
+    Q_INVOKABLE void removeJoinTypeMap(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE QString fetchJoinTypeMap(int refObjId = 0);
 
     Q_INVOKABLE void addToJoinIconMap(int refObjId, QString iconLink = "");
     Q_INVOKABLE void updateJoinIconMap(int refObjId, QString iconLink = "");
-    Q_INVOKABLE void removeJoinIconMap(int refObjId = 0);
+    Q_INVOKABLE void removeJoinIconMap(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE QString fetchJoinIconMap(int refObjId = 0);
 
     Q_INVOKABLE void addToJoinMapList(int refObjId, int internalCounter, QString leftParam = "", QString rightParam = "");
@@ -111,10 +112,12 @@ public:
     Q_INVOKABLE QVariantMap fetchJoinMapList(int refObjId = 0);
 
     Q_INVOKABLE void addToPrimaryJoinTable(int refObjId, QString tableName);
-    Q_INVOKABLE void removePrimaryJoinTable(int refObjId = 0);
+    Q_INVOKABLE void removePrimaryJoinTable(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE QString fetchPrimaryJoinTable(int refObjId = 0);
 
     // Filters
+
+    Q_INVOKABLE void resetFilter();
 
     Q_INVOKABLE void addToJoinRelation(int refObjId, QString relation = "");
     Q_INVOKABLE void removeJoinRelation(int refObjId = 0, bool removeAll = false);
@@ -194,6 +197,7 @@ signals:
 
     // For Data Modeller
     void joinIdChanged(int joinId);
+    void destroyLocalObjectsAndMaps();
 
     // For Filters
     void internalCounterChanged(int internalCounter);

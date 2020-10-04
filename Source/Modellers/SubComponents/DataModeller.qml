@@ -68,6 +68,35 @@ Item {
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target : DSParamsModel
+
+        function onDestroyLocalObjectsAndMaps(){
+
+            // Destroy dynamic objects
+            rectangles.forEach(function(value, index){
+
+                if(newConnectingLine.has(index)) newConnectingLine.get(index).destroy()
+                if(newJoinBox.has(index)) newJoinBox.get(index).destroy()
+                if(rectangles.has(index)) rectangles.get(index).destroy()
+            })
+
+            // Clear all maps
+            frontRectangleCoordinates.clear()
+            rearRectangleCoordinates.clear()
+            existingTables.clear()
+            newConnectingLine.clear()
+            newJoinBox.clear()
+            rectangles.clear()
+            frontRectLineMaps.clear()
+            rearRectLineMaps.clear()
+
+            // Reset other variables
+            tempRearRectLineMaps = []
+            counter = 0
+            tmpOrphanTableId = 0
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
