@@ -49,7 +49,7 @@ Item{
 
         // Re render column list model when
         // a column is checked/unchecked in the right panel
-        function onHideColumnsChanged(){
+        function onHideColumnsChanged(hideColumns){
 
             if(tableNameProperty === newItem.name)
                 displayColumns(allColumnsProperty, newItem.name)

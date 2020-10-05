@@ -43,6 +43,7 @@ Item {
 
     property int refObject: 0
     property int refObjectWidth: 0
+    readonly property string moduleName: "DataModeler"
 
 
 
@@ -67,6 +68,22 @@ Item {
 
     /***********************************************************************************************************************/
     // Connections Starts
+
+    Connections{
+        target: TableColumnsModel
+
+        function onColumnListObtained(allColumns, tableName, moduleName){
+
+            if(moduleName === dataModellerItem.moduleName){
+                allColumns.forEach(function(item, index){
+
+                    let param = tableName + "." + item[0]
+                    DSParamsModel.addToQuerySelectParamsList(param)
+                })
+            }
+        }
+    }
+
 
     Connections{
         target : DSParamsModel
@@ -96,7 +113,42 @@ Item {
             counter = 0
             tmpOrphanTableId = 0
         }
+
+        // Delete select params, if signal received
+        function onHideColumnsChanged(hideColumns){
+            DSParamsModel.removeQuerySelectParamsList(hideColumns)
+        }
+
+        // Generate the dynamic query and run in on receiving the signal
+        function onProcessQuery(){
+
+            // STEPS
+            // 1. check if more than 1 rects dont have any connections in front
+            // 2. Identify the first rect
+            // 3. Recrsive function to process the back connections and reorder them
+            // 4. Write the function to create query
+            // 5. Execute query
+
+            var undefinedCounter = 0
+            dataModellerItem.rectangles.forEach(function(item, key){
+
+                if(dataModellerItem.frontRectLineMaps.has(key) === false)
+                    undefinedCounter++
+            })
+
+            // Check if the rectangles are connected to some rectangle in front (except the first one)
+            // If not throw an error
+            if(undefinedCounter <= 1){
+
+                console.log("Ready to run query")
+
+            } else{
+                // Throw an error here
+                console.log("JOIN is not complete")
+            }
+        }
     }
+
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -430,7 +482,7 @@ Item {
         var currentPoint = {x: rectLeftX, y: rectLeftY};
 
         // Get Column names of the table
-        TableColumnsModel.getColumnsForTable(tableName, "DataModeler")
+        TableColumnsModel.getColumnsForTable(tableslist.tableName, dataModellerItem.moduleName)
 
 
 

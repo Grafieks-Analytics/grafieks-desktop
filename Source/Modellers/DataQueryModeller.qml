@@ -81,17 +81,23 @@ Page {
     // JAVASCRIPT FUNCTIONS STARTS
 
 
+
     function onDataModellerClicked(){
+
         if(!dataModellerSelected){
             dataModellerSelected = !dataModellerSelected
             datamodeller_querymodeller_background.color = Constants.leftDarkColor;
             queryModellerTab_background.color = queryModellerTab_background.hovered ? Constants.leftDarkColor : Constants.themeColor
             datamodeller_querymodeller_text.color = Constants.blackColor
+
             // Prompt dialog to warn user of data deletion
             // If accepted, the clear data
             // and push to another stackview screen
             // MessageDialog defined at the bottom
             dataRemovalWarningDataModel.open()
+
+            // Finally set a parameter in DSParamsModel
+            DSParamsModel.setCurrentTab(Constants.dataModelerTab)
         }
     }
 
@@ -125,6 +131,9 @@ Page {
             // and push to another stackview screen
             // MessageDialog defined at the bottom
             dataRemovalWarningQueryModel.open()
+
+            // Finally set a parameter in DSParamsModel
+            DSParamsModel.setCurrentTab(Constants.queryModelerTab)
         }
 
     }
@@ -707,6 +716,7 @@ Page {
         }
 
         initialItem: DataModeller{}
+
     }
 
 

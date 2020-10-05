@@ -25,8 +25,6 @@ class DSParamsModel : public QObject
     QMap<int, QString> joinIconMap; // icon for various type of joins for joinTypeMap
     QMap<int, QMap<int, QStringList>> joinMapList; // relation between columns for given two tables
     QMap<int, QString> primaryJoinTable; // Set the primary table in a join. ie, parameter will be on left side of relation in a join
-
-    QMap<int, int> orderOfJoins; // Order in which tables are connected to each other (represented by their rectangle ids)
     QStringList querySelectParamsList; // select parameters of the query created by data modeler
 
 
@@ -38,6 +36,9 @@ class DSParamsModel : public QObject
 
 
     // Q_PROPERTY variables
+
+    // General
+    Q_PROPERTY(int currentTab READ currentTab WRITE setCurrentTab NOTIFY currentTabChanged)
 
     // Publish datasource
     Q_PROPERTY(QString dsName READ dsName WRITE setDsName NOTIFY dsNameChanged) // Data source name in publish DS
@@ -62,6 +63,8 @@ class DSParamsModel : public QObject
     Q_PROPERTY(bool selectAll READ selectAll WRITE setSelectAll NOTIFY selectAllChanged) // If select all property selected in filter list
     Q_PROPERTY(int filterIndex READ filterIndex WRITE setFilterIndex NOTIFY filterIndexChanged) // Unique id given to each join type (filter type)
     Q_PROPERTY(QString mode READ mode WRITE setMode NOTIFY modeChanged) // Set Create/Edit mode in a filter
+
+    int m_currentTab;
 
     QString m_dsName;
     QString m_dsType;
@@ -118,6 +121,10 @@ public:
     Q_INVOKABLE void removePrimaryJoinTable(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE QString fetchPrimaryJoinTable(int refObjId = 0);
 
+    Q_INVOKABLE void addToQuerySelectParamsList(QString selectParam);
+    Q_INVOKABLE void removeQuerySelectParamsList(QString refObjName = "");
+    Q_INVOKABLE QStringList fetchQuerySelectParamsList();
+
     // Filters
 
     Q_INVOKABLE void resetFilter();
@@ -134,6 +141,7 @@ public:
     Q_INVOKABLE void removeJoinRelationSlug(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE QVariantMap fetchJoinRelationSlug(int refObjId = 0, bool fetchAll = false);
 
+    int currentTab() const;
     QString dsName() const;
     QString dsType() const;
     bool isFullExtract() const;
@@ -159,8 +167,13 @@ public:
 
 
 
-
 public slots:
+
+    // General Slots
+    void processDataModelerQuery();
+
+    // Publish Datasource
+    void setCurrentTab(int currentTab);
     void setDsName(QString dsName);
     void setDsType(QString dsType);
     void setIsFullExtract(bool isFullExtract);
@@ -187,10 +200,11 @@ public slots:
 
 signals:
 
-    void hideColumnsChanged(QStringList hideColumns);
-    void joinTypeMapChanged(QVariantList joinTypeData);
-    void joinIconMapChanged(QVariantList joinIconData);
+    // General
+    void currentTabChanged(int currentTab);
+    void processQuery();
 
+    // Publish Datasource
     void dsNameChanged(QString dsName);
     void dsTypeChanged(QString dsType);
     void isFullExtractChanged(bool isFullExtract);
@@ -201,6 +215,9 @@ signals:
     // For Data Modeller
     void joinIdChanged(int joinId);
     void destroyLocalObjectsAndMaps();
+    void hideColumnsChanged(QStringList hideColumns);
+    void joinTypeMapChanged(QVariantList joinTypeData);
+    void joinIconMapChanged(QVariantList joinIconData);
 
     // For Filters
     void internalCounterChanged(int internalCounter);

@@ -34,7 +34,6 @@ Item{
     // SIGNALS STARTS
 
 
-
     // SIGNALS ENDS
     /***********************************************************************************************************************/
 
@@ -57,7 +56,9 @@ Item{
         // Set default value of displayLimit
         // of query results to 100
         DSParamsModel.setDisplayRowsCount(100)
-        console.log(queryModellerPage.height - submenu.height - dataQueryModellerStackview.height  - infodataTableHeader.height)
+
+        // Set default tab
+        DSParamsModel.setCurrentTab(Constants.dataModelerTab)
     }
 
     function onDragInfoTablePanel(mouse){
@@ -128,26 +129,36 @@ Item{
     function onRunQueryClicked(){
 
         testQueryBtn.visible = true
-        var isSqlSelect = QueryModel.tmpSql.toUpperCase().startsWith("SELECT");
 
-        // Set profiling on when clicking the play button
-        // Reset profiling and turn off when clicked on Publish button
+        // If current tab is queryModeler, then process
+        // else if current tab is dataModeler, fire a signal to activate a slot in DataModeller.qml
+
+        if(DSParamsModel.currentTab === Constants.queryModelerTab){
+            var isSqlSelect = QueryModel.tmpSql.toUpperCase().startsWith("SELECT");
+
+            // Set profiling on when clicking the play button
+            // Reset profiling and turn off when clicked on Publish button
 
 
-        if(QueryStatsModel.profileStatus === false){
-            QueryStatsModel.setProfiling(true)
-            QueryStatsModel.setProfileStatus(true)
-        }
+            if(QueryStatsModel.profileStatus === false){
+                QueryStatsModel.setProfiling(true)
+                QueryStatsModel.setProfileStatus(true)
+            }
 
-        // If query is SELECT query
-        // Only SELECT query allowed
+            // If query is SELECT query
+            // Only SELECT query allowed
 
-        if(isSqlSelect){
-            QueryModel.callSql()
-            QueryStatsModel.showStats()
-            TableSchemaModel.showSchema(QueryModel.tmpSql)
+            if(isSqlSelect){
+                QueryModel.callSql()
+                QueryStatsModel.showStats()
+                TableSchemaModel.showSchema(QueryModel.tmpSql)
+            } else{
+                sqlQueryNotAllowedDialog.visible = true
+            }
         } else{
-            sqlQueryNotAllowedDialog.visible = true
+
+            // Run the signal to activate the slot
+            DSParamsModel.processDataModelerQuery()
         }
     }
 
@@ -276,11 +287,7 @@ Item{
                     color: testQueryBtn.hovered ? Constants.themeColor : Constants.whiteColor
                 }
 
-                onClicked: {
-
-                   onTestQueryClicked()
-
-                }
+                onClicked: onTestQueryClicked()
 
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
@@ -372,7 +379,7 @@ Item{
                 id: displayLimitBtn
                 height: 27
                 width: parent.width
-//                leftPadding: 10
+                //                leftPadding: 10
 
                 Text{
                     id : displayLimit

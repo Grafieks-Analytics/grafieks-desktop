@@ -22,6 +22,7 @@ void DSParamsModel::resetDataModel()
     this->joinIconMap.clear();
     this->joinMapList.clear();
     this->primaryJoinTable.clear();
+    this->querySelectParamsList.clear();
 
     emit destroyLocalObjectsAndMaps();
 }
@@ -228,6 +229,23 @@ QString DSParamsModel::fetchPrimaryJoinTable(int refObjId)
     return this->primaryJoinTable.value(refObjId);
 }
 
+void DSParamsModel::addToQuerySelectParamsList(QString selectParam)
+{
+    this->querySelectParamsList.append(selectParam);
+}
+
+void DSParamsModel::removeQuerySelectParamsList(QString refObjName)
+{
+
+    if(refObjName != "") this->querySelectParamsList.removeOne(refObjName);
+}
+
+QStringList DSParamsModel::fetchQuerySelectParamsList()
+{
+
+    return this->querySelectParamsList;
+}
+
 void DSParamsModel::addToJoinRelation(int refObjId, QString relation)
 {
     this->joinRelation.insert(QString::number(refObjId), relation );
@@ -329,6 +347,11 @@ QVariantMap DSParamsModel::fetchJoinRelationSlug(int refObjId, bool fetchAll)
     return output;
 }
 
+int DSParamsModel::currentTab() const
+{
+    return m_currentTab;
+}
+
 QString DSParamsModel::dsName() const
 {
     return m_dsName;
@@ -409,6 +432,20 @@ int DSParamsModel::filterIndex() const
 QString DSParamsModel::mode() const
 {
     return m_mode;
+}
+
+void DSParamsModel::processDataModelerQuery()
+{
+    emit processQuery();
+}
+
+void DSParamsModel::setCurrentTab(int currentTab)
+{
+    if (m_currentTab == currentTab)
+        return;
+
+    m_currentTab = currentTab;
+    emit currentTabChanged(m_currentTab);
 }
 
 QString DSParamsModel::category() const
