@@ -26,9 +26,12 @@ class DSParamsModel : public QObject
     QMap<int, QMap<int, QStringList>> joinMapList; // relation between columns for given two tables
     QMap<int, QString> primaryJoinTable; // Set the primary table in a join. ie, parameter will be on left side of relation in a join
 
+    QMap<int, int> orderOfJoins; // Order in which tables are connected to each other (represented by their rectangle ids)
+    QStringList querySelectParamsList; // select parameters of the query created by data modeler
+
 
     // Standalone variables for Filters
-    QVariantMap joinRelation; // Condition link between parameter and value. eg, =, !=, LIKE, etc
+    QVariantMap joinRelation; // Condition link between parameter and value in a query. eg, =, !=, LIKE, etc
     QVariantMap joinValue; // Right side parameter of the comparison (the actual value)
     QVariantMap joinRelationSlug; // Single syllable entity for human readable entity. eg, in Categorical-Wildcard, Slug for `Ends With` is `endswith` and `Equal To` is `equalto`
 

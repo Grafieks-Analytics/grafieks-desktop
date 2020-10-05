@@ -429,6 +429,10 @@ Item {
         // Current reference Coordinate
         var currentPoint = {x: rectLeftX, y: rectLeftY};
 
+        // Get Column names of the table
+        TableColumnsModel.getColumnsForTable(tableName, "DataModeler")
+
+
 
         // Get the nearest rectangle
         // And process the rest
@@ -517,6 +521,13 @@ Item {
 
         // return table name & id
         return {"tableName" :existingTables.get(nearestIndex), tableId : nearestIndex, distance : nearestDistance}
+    }
+
+    // Create sql from the visual Data modeler
+    // and execute query
+    function executeSql(){
+
+        QueryModel.callSql()
     }
 
 
