@@ -144,12 +144,22 @@ Popup {
             height: 25
             width: 25
             anchors.rightMargin: 5
+            z:1001
             MouseArea{
                 anchors.fill: parent
                 onClicked: hidePopup()
             }
         }
 
+        MouseArea{
+            anchors.fill: parent
+            drag.target: editorPopup
+            onPositionChanged: {
+                console.log(mouse.x)
+                editorPopup.x += mouse.x
+                editorPopup.y += mouse.y
+            }
+        }
     }
 
 
@@ -176,6 +186,7 @@ Popup {
 
             TextEditor{
                 id: textEditor
+                z:10002
             }
 
         }

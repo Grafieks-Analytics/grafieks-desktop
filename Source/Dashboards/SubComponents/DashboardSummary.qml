@@ -72,9 +72,7 @@ Rectangle {
 
     function onDropAreaEntered(drag){
 
-
         dashboardArea.color = Constants.dropHighlightColor
-
         var currentPoint = {x: drag.x, y: drag.y};
         console.log("Entered", currentPoint.x, listViewElem.itemName)
 
