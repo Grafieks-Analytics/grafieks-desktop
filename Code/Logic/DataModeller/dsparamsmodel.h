@@ -26,6 +26,7 @@ class DSParamsModel : public QObject
     QMap<int, QMap<int, QStringList>> joinMapList; // relation between columns for given two tables
     QMap<int, QString> primaryJoinTable; // Set the primary table in a join. ie, parameter will be on left side of relation in a join
     QStringList querySelectParamsList; // select parameters of the query created by data modeler
+    QVariantList joinOrder; // Order of join elements in sql query
 
 
     // Standalone variables for Filters
@@ -124,6 +125,10 @@ public:
     Q_INVOKABLE void addToQuerySelectParamsList(QString selectParam);
     Q_INVOKABLE void removeQuerySelectParamsList(QString refObjName = "");
     Q_INVOKABLE QStringList fetchQuerySelectParamsList();
+
+    Q_INVOKABLE void addToJoinOrder(int joinOrderId);
+    Q_INVOKABLE void removeJoinOrder(int joinOrderId);
+    Q_INVOKABLE QVariantList fetchJoinOrder();
 
     // Filters
 

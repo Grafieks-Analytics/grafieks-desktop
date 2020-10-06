@@ -44,6 +44,8 @@ Item {
     property int refObject: 0
     property int refObjectWidth: 0
     readonly property string moduleName: "DataModeler"
+    property string joinString: ""
+    property int firstRectId : 0
 
 
 
@@ -130,8 +132,8 @@ Item {
             // 5. Execute query
 
             var undefinedCounter = 0
+            var firstRectId = 0
             dataModellerItem.rectangles.forEach(function(item, key){
-
                 if(dataModellerItem.frontRectLineMaps.has(key) === false)
                     undefinedCounter++
             })
@@ -140,7 +142,15 @@ Item {
             // If not throw an error
             if(undefinedCounter <= 1){
 
-                console.log("Ready to run query")
+                dataModellerItem.rectangles.forEach(function(item, key){
+                    if(dataModellerItem.frontRectLineMaps.has(key) === false)
+                        dataModellerItem.firstRectId  = key
+                })
+
+                // Call the function to process the rest of the query
+
+                joinOrder(dataModellerItem.firstRectId )
+
 
             } else{
                 // Throw an error here
@@ -276,6 +286,90 @@ Item {
             tmpNearestTable.tableId =  0
             tmpNearestTable.tableName =  ""
         }
+    }
+
+
+    // Set the join order for sql
+    // Form the sql join statement
+    function joinOrder(objId, recursion = false){
+
+        var objArray = []
+        var tmpArray = []
+        var tmpJoinString = ""
+
+        if(recursion === true) {
+            objArray = objId
+        }else{
+            objArray.push(objId)
+            DSParamsModel.addToJoinOrder(objId)
+        }
+
+        objArray.forEach(function(item){
+            if(dataModellerItem.rearRectLineMaps.has(item) === true){
+
+                tmpArray = tmpArray.concat(dataModellerItem.rearRectLineMaps.get(item))
+
+                tmpArray.forEach(function(innerItem){
+
+                    DSParamsModel.addToJoinOrder(innerItem)
+
+                    let joinType = DSParamsModel.fetchJoinTypeMap(innerItem)
+                    let joinCompareTableName = DSParamsModel.fetchJoinBoxTableMap(innerItem)[1]
+                    let joinCurrentTableName = DSParamsModel.fetchJoinBoxTableMap(innerItem)[2]
+                    let joinConditions = DSParamsModel.fetchJoinMapList(innerItem)
+                    let joinConditionsList = ""
+
+                    tmpJoinString += "("
+
+                    for (var i=0; i<Object.keys(joinConditions).length; i++){
+
+                        let key = Object.keys(joinConditions)[i]
+                        tmpJoinString += " " + joinCurrentTableName + "." + joinConditions[key][1] + " = " + joinCompareTableName + "."  + joinConditions[key][0] + " AND"
+                    }
+
+                    let lastIndex = tmpJoinString.lastIndexOf(" AND");
+                    tmpJoinString = tmpJoinString.substring(0, lastIndex);
+                    tmpJoinString += ")"
+
+                    joinString += " " + joinType + " " + joinCurrentTableName + " ON " + tmpJoinString
+
+                    tmpJoinString = ""
+
+                })
+
+
+            }
+        })
+
+        objArray = tmpArray
+        tmpArray = []
+
+        // Call the recursive function till the end
+        // Then generate the final query and execute it
+        if(objArray.length > 0){
+            joinOrder(objArray, true)
+
+        } else{
+
+            // Generate the final column parameters
+            let selectColumns = ""
+            let finalQuery = ""
+            DSParamsModel.fetchQuerySelectParamsList().forEach(function(item){
+                selectColumns += " " + item + ","
+            })
+
+            let lastIndex = selectColumns.lastIndexOf(",");
+            selectColumns = selectColumns.substring(0, lastIndex);
+
+            finalQuery = "SELECT " + selectColumns + " FROM " + existingTables.get(dataModellerItem.firstRectId) + " " + joinString
+
+            // Call and execute the query
+            QueryModel.setTmpSql(finalQuery)
+            QueryModel.callSql()
+            TableSchemaModel.showSchema(QueryModel.tmpSql)
+        }
+
+
     }
 
 

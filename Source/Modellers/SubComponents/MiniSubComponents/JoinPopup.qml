@@ -144,9 +144,7 @@ Rectangle{
             var tableModel = DSParamsModel.fetchJoinMapList(refObjId)
 
 
-
             if(Object.keys(tableModel).length > 0){
-
 
                 for (var i=0; i<Object.keys(tableModel).length; i++){
 

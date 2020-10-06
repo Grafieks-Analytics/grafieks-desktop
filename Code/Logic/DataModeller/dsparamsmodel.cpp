@@ -207,6 +207,7 @@ QVariantMap DSParamsModel::fetchJoinMapList(int refObjId)
         params.clear();
     }
 
+
     return output;
 }
 
@@ -244,6 +245,21 @@ QStringList DSParamsModel::fetchQuerySelectParamsList()
 {
 
     return this->querySelectParamsList;
+}
+
+void DSParamsModel::addToJoinOrder(int joinOrderId)
+{
+    this->joinOrder.append(joinOrderId);
+}
+
+void DSParamsModel::removeJoinOrder(int joinOrderId)
+{
+    this->joinOrder.removeOne(joinOrderId);
+}
+
+QVariantList DSParamsModel::fetchJoinOrder()
+{
+    return this->joinOrder;
 }
 
 void DSParamsModel::addToJoinRelation(int refObjId, QString relation)
