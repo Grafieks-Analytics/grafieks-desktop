@@ -27,6 +27,53 @@ void DSParamsModel::resetDataModel()
     emit destroyLocalObjectsAndMaps();
 }
 
+bool DSParamsModel::saveDatasource(QString filename)
+{
+    QFile file(QUrl(filename).toLocalFile());
+
+    if(!file.open(QFile::WriteOnly)){
+        qDebug() << " Could not open file for writing" << file.errorString();
+        return false;
+    }
+
+    // To write text, we use operator<<(),
+    // which is overloaded to take
+    // a QTextStream on the left
+    // and data types (including QString) on the right
+
+    // Order of components to be written in the binary file
+
+    // 1. DB Driver
+    // 2. Type of connection - live/extract (.gads for live/ .gadse for extract)
+    // 3. Type of Modeller - Query / Data Modeller
+    // 4. For Query modeller -
+
+    // Tmp sql
+    // Filter details
+
+    // 5. For Data modeller
+
+    // Hidden columns
+    // Object instance info
+    // Object connection info
+    // Object spatial info
+    // Join info - column relationship, table relationship type
+    // Exact query
+
+    // 6. Datasource information
+    // 7. InMemory config parameters
+    // 8. For Live - Login credentials (sans password). For Extract - Data
+
+    QTextStream out(&file);
+    QByteArray s("a");
+    QByteArray compressedData = qCompress(s);
+    out << "a";
+    file.flush();
+    file.close();
+
+    return true;
+}
+
 void DSParamsModel::resetFilter()
 {
     this->setSection(Constants::defaultTabSection);
@@ -450,7 +497,7 @@ QString DSParamsModel::mode() const
     return m_mode;
 }
 
-void DSParamsModel::processDataModelerQuery()
+void DSParamsModel::processDataModellerQuery()
 {
     emit processQuery();
 }

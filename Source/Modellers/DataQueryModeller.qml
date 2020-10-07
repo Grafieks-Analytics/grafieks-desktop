@@ -97,7 +97,7 @@ Page {
             dataRemovalWarningDataModel.open()
 
             // Finally set a parameter in DSParamsModel
-            DSParamsModel.setCurrentTab(Constants.dataModelerTab)
+            DSParamsModel.setCurrentTab(Constants.dataModellerTab)
         }
     }
 
@@ -133,7 +133,7 @@ Page {
             dataRemovalWarningQueryModel.open()
 
             // Finally set a parameter in DSParamsModel
-            DSParamsModel.setCurrentTab(Constants.queryModelerTab)
+            DSParamsModel.setCurrentTab(Constants.queryModellerTab)
         }
 
     }
@@ -452,7 +452,7 @@ Page {
 
             TabButton{
                 id: queryModellerTab
-                text: "Query Modeler"
+                text: "Query Modeller"
                 width:100
 
                 onClicked: onQueryModellerClicked()

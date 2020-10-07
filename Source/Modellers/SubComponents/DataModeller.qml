@@ -43,7 +43,7 @@ Item {
 
     property int refObject: 0
     property int refObjectWidth: 0
-    readonly property string moduleName: "DataModeler"
+    readonly property string moduleName: "DataModeller"
     property string joinString: ""
     property int firstRectId : 0
 
@@ -669,7 +669,7 @@ Item {
         return {"tableName" :existingTables.get(nearestIndex), tableId : nearestIndex, distance : nearestDistance}
     }
 
-    // Create sql from the visual Data modeler
+    // Create sql from the visual Data modeller
     // and execute query
     function executeSql(){
 

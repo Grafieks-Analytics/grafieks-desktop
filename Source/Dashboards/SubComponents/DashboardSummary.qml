@@ -125,7 +125,6 @@ Rectangle {
     // Page Design Starts
 
     Component.onCompleted: {
-        console.log('Dashboard Summary Fired');
         DashboardContainerModel.setZIndex(1);
     }
 

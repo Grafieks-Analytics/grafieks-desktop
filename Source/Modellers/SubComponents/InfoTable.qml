@@ -58,7 +58,7 @@ Item{
         DSParamsModel.setDisplayRowsCount(100)
 
         // Set default tab
-        DSParamsModel.setCurrentTab(Constants.dataModelerTab)
+        DSParamsModel.setCurrentTab(Constants.dataModellerTab)
     }
 
     function onDragInfoTablePanel(mouse){
@@ -130,10 +130,10 @@ Item{
 
         testQueryBtn.visible = true
 
-        // If current tab is queryModeler, then process
-        // else if current tab is dataModeler, fire a signal to activate a slot in DataModeller.qml
+        // If current tab is queryModeller, then process
+        // else if current tab is dataModeller, fire a signal to activate a slot in DataModeller.qml
 
-        if(DSParamsModel.currentTab === Constants.queryModelerTab){
+        if(DSParamsModel.currentTab === Constants.queryModellerTab){
             var isSqlSelect = QueryModel.tmpSql.toUpperCase().startsWith("SELECT");
 
             // Set profiling on when clicking the play button
@@ -158,7 +158,7 @@ Item{
         } else{
 
             // Run the signal to activate the slot
-            DSParamsModel.processDataModelerQuery()
+            DSParamsModel.processDataModellerQuery()
         }
     }
 

@@ -86,6 +86,10 @@ ApplicationWindow {
         }
     }
 
+    function saveDatasource(){
+
+    }
+
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -227,6 +231,12 @@ ApplicationWindow {
             Action{
                 id: action_new_ds
                 text: qsTr("Add New Datasource")
+            }
+            Action{
+                id: action_save_ds
+                text: qsTr("Save Datasource")
+
+                onTriggered: saveDatasource()
             }
             Action{
                 id: action_refresh_ds

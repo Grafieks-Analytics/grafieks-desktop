@@ -72,8 +72,8 @@ QtObject {
     // Menu option
     property int dataDesignerMenu : 0
     property int dashboardDesignerMenu : 1
-    property int dataModelerTab: 0
-    property int queryModelerTab: 1
+    property int dataModellerTab: 0
+    property int queryModellerTab: 1
 
     // Radio Size
     property int defaultRadioDimension: 16
