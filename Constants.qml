@@ -20,6 +20,9 @@ QtObject {
     property string dataDesignerText : qsTr("Data Designer")
     property string dashboardDesignerText : qsTr("Dashboard Designer")
 
+    property string liveDS : qsTr("live")
+    property string extractDS : qsTr("extract")
+
     property int tooltipShowTime: 1000
     property int tooltipHideTime: 5000
 

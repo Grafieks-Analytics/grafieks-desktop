@@ -156,7 +156,7 @@ Page {
 
         // Also set the C++ class
         // extract == in memory
-        DSParamsModel.setDsType("extract")
+        DSParamsModel.setDsType(Constants.extractDS)
     }
 
     function openDataFilters(){
@@ -166,13 +166,13 @@ Page {
     function onLiveSelected(){
 
         // Also set the C++ class
-        DSParamsModel.setDsType("live")
+        DSParamsModel.setDsType(Constants.liveDS)
     }
 
     function onCreateDashboardClicked(){
 
         Datasources.setDsName(ds_name.text)
-        Datasources.setSourceType("live")
+        Datasources.setSourceType(Constants.liveDS)
 
         stacklayout_home.currentIndex = 6
     }

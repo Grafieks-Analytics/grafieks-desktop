@@ -7,7 +7,7 @@ import Qt.labs.platform 1.1
 import "../MainSubComponents"
 
 Page{
-    id: x1
+    id: x
     width: parent.width
     height: parent.height
 
@@ -25,9 +25,23 @@ Page{
     }
 
     Button{
-        id: x
-        text: "Click me"
-        onClicked: DSParamsModel.saveDatasource()
+        id: x1
+        text: "Click me write"
+        onClicked: DSParamsModel.saveDatasource("file:///Users/mac/Desktop/lala.dat")
+    }
+
+    Button{
+        id: x2
+        anchors.top: x1.bottom
+        text: "Click me read"
+        onClicked: DSParamsModel.readDatasource("file:///Users/mac/Desktop/lala.dat")
+    }
+
+    Button{
+        id: x3
+        anchors.top: x2.bottom
+        text: "Click me read"
+        onClicked: QtTest2.x()
     }
 
 }

@@ -29,17 +29,29 @@ void DSParamsModel::resetDataModel()
 
 bool DSParamsModel::saveDatasource(QString filename)
 {
+    QString fileExt = "";
+
+    // Filename resource uri to filepath
     QFile file(QUrl(filename).toLocalFile());
 
+    // Check if file writable
     if(!file.open(QFile::WriteOnly)){
         qDebug() << " Could not open file for writing" << file.errorString();
         return false;
     }
 
-    // To write text, we use operator<<(),
-    // which is overloaded to take
-    // a QTextStream on the left
-    // and data types (including QString) on the right
+
+    // File extension
+    if(this->dsType() == "live") fileExt = ".gads";
+    else fileExt = ".gadse";
+
+    // If query modeller
+    // else data modeller
+    if(this->currentTab() == 0){
+
+    } else {
+
+    }
 
     // Order of components to be written in the binary file
 
@@ -64,13 +76,35 @@ bool DSParamsModel::saveDatasource(QString filename)
     // 7. InMemory config parameters
     // 8. For Live - Login credentials (sans password). For Extract - Data
 
-    QTextStream out(&file);
-    QByteArray s("a");
-    QByteArray compressedData = qCompress(s);
-    out << "a";
+    QDataStream out(&file);
+
+    out << qCompress(QString(Statics::currentDbIntType).toUtf8());  // 1. DB Driver
+    out << qCompress(this->dsType().toUtf8());  // 2. Type of connection
+    out << this->currentTab();  // 3. Type of Modeller
+
     file.flush();
     file.close();
 
+    return true;
+}
+
+bool DSParamsModel::readDatasource(QString filename)
+{
+
+    // Filename resource uri to filepath
+    QFile file(QUrl(filename).toLocalFile());
+
+    // Check if file writable
+    if(!file.open(QFile::ReadOnly)){
+        qDebug() << " Could not open file for writing" << file.errorString();
+        return false;
+    }
+
+    QDataStream in(&file);    // read the data serialized from the file
+    QString str;
+    qint32 a;
+    in >> str >> a;
+    qDebug() << str << a;
     return true;
 }
 

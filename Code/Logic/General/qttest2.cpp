@@ -11,16 +11,14 @@ QtTest2::QtTest2(QObject *parent) :QObject(parent)
 
 }
 
-QString QtTest2::a() const
+void QtTest2::x()
 {
-    return m_a;
+    QString tmp = "test";
+    int x = 1;
+    QByteArray tmpBA = tmp.toUtf8();
+    QByteArray xBA = QString::number(x).toUtf8();
+
+    qDebug() << tmp << tmpBA << xBA << "TO BYTEARRAY" << QString(tmpBA);
 }
 
-void QtTest2::setA(QString a)
-{
-    if (m_a == a)
-        return;
 
-    m_a = a;
-    emit aChanged(m_a);
-}

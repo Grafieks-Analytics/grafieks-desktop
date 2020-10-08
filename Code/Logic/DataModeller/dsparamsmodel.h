@@ -6,8 +6,10 @@
 #include <QUrl>
 #include <QDebug>
 #include <QObject>
+#include <QDataStream>
 
 #include "../../constants.h"
+#include "../../statics.h"
 
 /*!
  * \brief Sets all the temporary variables for DataModeller
@@ -20,14 +22,14 @@ class DSParamsModel : public QObject
 {
     Q_OBJECT
 
-    // Standalone variables for Data Modeler
+    // Standalone variables for Data Modeller
     QStringList hideColumns; // List of columns not available for join conditions in any given table
     QMap<int, QStringList> joinBoxTableMap; // holds the name of tables against a join id. Called when clicking a join box to show related tables
     QMap<int, QString> joinTypeMap; // left join, inner join, right join, full outer join
     QMap<int, QString> joinIconMap; // icon for various type of joins for joinTypeMap
     QMap<int, QMap<int, QStringList>> joinMapList; // relation between columns for given two tables
     QMap<int, QString> primaryJoinTable; // Set the primary table in a join. ie, parameter will be on left side of relation in a join
-    QStringList querySelectParamsList; // select parameters of the query created by data modeler
+    QStringList querySelectParamsList; // select parameters of the query created by data modeller
     QVariantList joinOrder; // Order of join elements in sql query
 
 
@@ -41,7 +43,7 @@ class DSParamsModel : public QObject
     // Q_PROPERTY variables
 
     // General
-    Q_PROPERTY(int currentTab READ currentTab WRITE setCurrentTab NOTIFY currentTabChanged)
+    Q_PROPERTY(int currentTab READ currentTab WRITE setCurrentTab NOTIFY currentTabChanged) // 0.Data modeller / 1.Query modeller
 
     // Publish datasource
     Q_PROPERTY(QString dsName READ dsName WRITE setDsName NOTIFY dsNameChanged) // Data source name in publish DS
@@ -52,7 +54,7 @@ class DSParamsModel : public QObject
     Q_PROPERTY(int displayRowsCount READ displayRowsCount WRITE setDisplayRowsCount NOTIFY displayRowsCountChanged) //Number of rows to display in sql preview
 
     // For Data Modeller
-    Q_PROPERTY(int joinId READ joinId WRITE setJoinId NOTIFY joinIdChanged) // Current selected joinId in data modeler
+    Q_PROPERTY(int joinId READ joinId WRITE setJoinId NOTIFY joinIdChanged) // Current selected joinId in data modeller
 
     // For Filters
     Q_PROPERTY(int internalCounter READ internalCounter WRITE setInternalCounter NOTIFY internalCounterChanged) // Counter for categorical-wildcard
@@ -98,6 +100,7 @@ public:
 
     Q_INVOKABLE void resetDataModel();
     Q_INVOKABLE bool saveDatasource(QString filename);
+    Q_INVOKABLE bool readDatasource(QString filename);
 
     Q_INVOKABLE void addToHideColumns(QString colName);
     Q_INVOKABLE void removeFromHideColumns(QString colName, bool removeAll = false);
@@ -178,7 +181,7 @@ public:
 public slots:
 
     // General Slots
-    void processDataModelerQuery();
+    void processDataModellerQuery();
 
     // Publish Datasource
     void setCurrentTab(int currentTab);
