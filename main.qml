@@ -89,7 +89,12 @@ ApplicationWindow {
 
     function saveDatasource(){
 
-        fileDialog.visible = true
+        dsSaveDialog.visible = true
+    }
+
+    function openDatasource(){
+
+        dsOpenDialog.visible = true
     }
 
 
@@ -124,13 +129,27 @@ ApplicationWindow {
 
 
     FileDialog {
-        id: fileDialog
+        id: dsSaveDialog
         title: "Save as"
         folder: shortcuts.documents
         fileMode: FileDialog.SaveFile
         defaultSuffix: DSParamsModel.fileExtension
         onAccepted: {
             DSParamsModel.saveDatasource(file)
+
+        }
+    }
+
+    FileDialog {
+        id: dsOpenDialog
+        title: "Add New Datasource"
+        folder: shortcuts.documents
+        fileMode: FileDialog.OpenFile
+        nameFilters: ["Extract (*.gadse)", "Live (*.gads)"]
+
+        onAccepted: {
+            console.log(file)
+//            DSParamsModel.selectDatasource(file)
 
         }
     }
@@ -227,6 +246,8 @@ ApplicationWindow {
             MenuItem{
                 id: action_new_ds
                 text: qsTr("Add New Datasource")
+
+                onTriggered: openDatasource()
             }
 
             MenuSeparator{}
