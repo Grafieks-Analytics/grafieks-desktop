@@ -89,6 +89,7 @@ ApplicationWindow {
 
     function saveDatasource(){
 
+        fileDialog.visible = true
     }
 
 
@@ -119,6 +120,19 @@ ApplicationWindow {
     // Fetch and Set Settings
     Settings{
         id: settings
+    }
+
+
+    FileDialog {
+        id: fileDialog
+        title: "Save as"
+        folder: shortcuts.documents
+        fileMode: FileDialog.SaveFile
+        defaultSuffix: DSParamsModel.fileExtension
+        onAccepted: {
+            DSParamsModel.saveDatasource(file)
+
+        }
     }
 
 
@@ -269,7 +283,7 @@ ApplicationWindow {
                 text: qsTr("Publish Datasource")
 
                 onTriggered: {
-                    Datasources.setSourceType("live")
+                    Datasources.setSourceType(Constants.liveDS)
 
                     publishGrafieks1.visible = true
                 }
@@ -318,10 +332,8 @@ ApplicationWindow {
             MenuItem{
                 text: qsTr("Grafieks Community")
             }
+
             MenuItem{
-                text: qsTr("About Grafieks")
-            }
-            Action{
                 text: qsTr("Test")
                 onTriggered: {
                     stacklayout_home.currentIndex = 1

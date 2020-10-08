@@ -134,7 +134,7 @@ Item{
         // else if current tab is dataModeller, fire a signal to activate a slot in DataModeller.qml
 
         if(DSParamsModel.currentTab === Constants.queryModellerTab){
-            var isSqlSelect = QueryModel.tmpSql.toUpperCase().startsWith("SELECT");
+            var isSqlSelect = DSParamsModel.tmpSql.toUpperCase().startsWith("SELECT");
 
             // Set profiling on when clicking the play button
             // Reset profiling and turn off when clicked on Publish button
@@ -149,9 +149,9 @@ Item{
             // Only SELECT query allowed
 
             if(isSqlSelect){
-                QueryModel.callSql()
+                QueryModel.callSql(DSParamsModel.tmpSql)
                 QueryStatsModel.showStats()
-                TableSchemaModel.showSchema(QueryModel.tmpSql)
+                TableSchemaModel.showSchema(DSParamsModel.tmpSql)
             } else{
                 sqlQueryNotAllowedDialog.visible = true
             }

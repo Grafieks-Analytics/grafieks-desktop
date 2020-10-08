@@ -38,30 +38,12 @@ QHash<int, QByteArray> QueryModel::roleNames() const
     return {{Qt::DisplayRole, "display"}};
 }
 
-void QueryModel::callSql()
+void QueryModel::callSql(QString tmpSql)
 {
 
-    this->executeQuery(m_tmpSql);
+    this->executeQuery(tmpSql);
 }
 
-QString QueryModel::tmpSql() const
-{
-    return m_tmpSql;
-}
-
-void QueryModel::setTmpSql(QString tmpSql)
-{
-    // Only select queries to be accepted
-
-    bool isSqlSelect = tmpSql.toUpper().startsWith("SELECT");
-
-
-    if (m_tmpSql == tmpSql && !isSqlSelect)
-        return;
-
-    m_tmpSql = tmpSql;
-    emit tmpSqlChanged(m_tmpSql);
-}
 
 void QueryModel::receiveFilterQuery(QString &filteredQuery)
 {

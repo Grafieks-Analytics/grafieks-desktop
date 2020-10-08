@@ -364,9 +364,9 @@ Item {
             finalQuery = "SELECT " + selectColumns + " FROM " + existingTables.get(dataModellerItem.firstRectId) + " " + joinString
 
             // Call and execute the query
-            QueryModel.setTmpSql(finalQuery)
-            QueryModel.callSql()
-            TableSchemaModel.showSchema(QueryModel.tmpSql)
+            DSParamsModel.setTmpSql(finalQuery)
+            QueryModel.callSql(DSParamsModel.tmpSql)
+            TableSchemaModel.showSchema(DSParamsModel.tmpSql)
         }
 
 
@@ -673,7 +673,7 @@ Item {
     // and execute query
     function executeSql(){
 
-        QueryModel.callSql()
+        QueryModel.callSql(DSParamsModel.tmpSql)
     }
 
 

@@ -41,18 +41,6 @@ bool DSParamsModel::saveDatasource(QString filename)
     }
 
 
-    // File extension
-    if(this->dsType() == "live") fileExt = ".gads";
-    else fileExt = ".gadse";
-
-    // If query modeller
-    // else data modeller
-    if(this->currentTab() == 0){
-
-    } else {
-
-    }
-
     // Order of components to be written in the binary file
 
     // 1. DB Driver
@@ -61,19 +49,45 @@ bool DSParamsModel::saveDatasource(QString filename)
     // 4. For Query modeller -
 
     // Tmp sql
-    // Filter details
+    // joinRelation
+    // joinValue
+    // joinRelationSlug
+    // internalCounter
+    // section
+    // category
+    // subCategory
+    // tableName
+    // colName
+    // exclude
+    // includeNull
+    // selectAll
+    // filterIndex
+    // mode
 
     // 5. For Data modeller
 
-    // Hidden columns
-    // Object instance info
-    // Object connection info
-    // Object spatial info
-    // Join info - column relationship, table relationship type
-    // Exact query
+    // hideColumns
+    // joinBoxTableMap
+    // joinTypeMap
+    // joinIconMap
+    // joinMapList
+    // primaryJoinTable
+    // querySelectParamsList
+    // joinOrder
+    // joinId
 
-    // 6. Datasource information
+    // 6. Datasource publish information
+
+    // dsName
+    // dsType
+    // displayRowsCount
+
     // 7. InMemory config parameters
+
+    // schedulerId
+    // isFullExtract
+    // extractColName
+
     // 8. For Live - Login credentials (sans password). For Extract - Data
 
     QDataStream out(&file);
@@ -81,6 +95,67 @@ bool DSParamsModel::saveDatasource(QString filename)
     out << qCompress(QString(Statics::currentDbIntType).toUtf8());  // 1. DB Driver
     out << qCompress(this->dsType().toUtf8());  // 2. Type of connection
     out << this->currentTab();  // 3. Type of Modeller
+
+    // If query modeller
+    // else data modeller
+    if(this->currentTab() == 0){
+
+        // 4. For Query Modeller
+        out << qCompress(this->tmpSql().toUtf8()); // TmpSql
+        out << this->joinRelation;
+        out << this->joinValue;
+        out << this->joinRelationSlug;
+        out << this->internalCounter();
+        out << this->section();
+        out << this->category();
+        out << this->subCategory();
+        out << this->tableName();
+        out << this->colName();
+        out << this->exclude();
+        out << this->includeNull();
+        out << this->selectAll();
+        out << this->filterIndex();
+        out << this->mode();
+    } else {
+
+        // 4. For Data Modeller
+        out << this->hideColumns;
+        out << this->joinBoxTableMap;
+        out << this->joinTypeMap;
+        out << this->joinIconMap;
+        out << this->joinMapList;
+        out << this->primaryJoinTable;
+        out << this->querySelectParamsList;
+        out << this->joinOrder;
+        out << this->joinId();
+    }
+
+    // 6. Datasource publish information
+
+    out << this->dsName();
+    out << this->dsType();
+    out << this->displayRowsCount();
+
+    // 7. InMemory config parameters
+    out << this->schedulerId();
+    out << this->isFullExtract();
+    out << this->extractColName();
+
+    // 8. For Live - Login credentials (sans password). For Extract - Data
+
+    if(this->dsType() == "live") {
+
+        QMap<QString, QString> credentials = this->datasourceCredentials();
+
+        out << qCompress(credentials.value("type").toUtf8());
+        out << qCompress(credentials.value("host").toUtf8());
+        out << qCompress(credentials.value("fileDB").toUtf8());
+        out << qCompress(credentials.value("port").toUtf8());
+        out << qCompress(credentials.value("username").toUtf8());
+        out << qCompress(credentials.value("password").toUtf8());
+
+    } else {
+    }
 
     file.flush();
     file.close();
@@ -449,6 +524,11 @@ int DSParamsModel::currentTab() const
     return m_currentTab;
 }
 
+QString DSParamsModel::fileExtension() const
+{
+    return m_fileExtension;
+}
+
 QString DSParamsModel::dsName() const
 {
     return m_dsName;
@@ -483,6 +563,11 @@ int DSParamsModel::displayRowsCount() const
 int DSParamsModel::joinId() const
 {
     return m_joinId;
+}
+
+QString DSParamsModel::tmpSql() const
+{
+    return m_tmpSql;
 }
 
 int DSParamsModel::internalCounter() const
@@ -543,6 +628,15 @@ void DSParamsModel::setCurrentTab(int currentTab)
 
     m_currentTab = currentTab;
     emit currentTabChanged(m_currentTab);
+}
+
+void DSParamsModel::setFileExtension(QString fileExtension)
+{
+    if (m_fileExtension == fileExtension)
+        return;
+
+    m_fileExtension = fileExtension;
+    emit fileExtensionChanged(m_fileExtension);
 }
 
 QString DSParamsModel::category() const
@@ -611,7 +705,6 @@ void DSParamsModel::setDisplayRowsCount(int displayRowsCount)
 }
 
 
-
 void DSParamsModel::setJoinId(int joinId)
 {
     if (m_joinId == joinId)
@@ -619,6 +712,18 @@ void DSParamsModel::setJoinId(int joinId)
 
     m_joinId = joinId;
     emit joinIdChanged(m_joinId);
+}
+
+void DSParamsModel::setTmpSql(QString tmpSql)
+{
+    // Only select queries to be accepted
+    bool isSqlSelect = tmpSql.toUpper().startsWith("SELECT");
+
+    if (m_tmpSql == tmpSql && !isSqlSelect)
+        return;
+
+    m_tmpSql = tmpSql;
+    emit tmpSqlChanged(m_tmpSql);
 }
 
 void DSParamsModel::setInternalCounter(int internalCounter)
@@ -701,6 +806,36 @@ void DSParamsModel::setMode(QString mode)
 
     m_mode = mode;
     emit modeChanged(m_mode);
+}
+
+QMap<QString, QString> DSParamsModel::datasourceCredentials()
+{
+    QMap<QString, QString> credentials;
+
+    switch(Statics::currentDbIntType){
+
+    case Constants::mysqlIntType:
+
+        credentials.insert("type", Statics::currentDbStrType);
+        credentials.insert("host", Statics::myHost);
+        credentials.insert("fileDB", Statics::myDb);
+        credentials.insert("port", QString::number(Statics::myPort));
+        credentials.insert("username", Statics::myUsername);
+        credentials.insert("password", Statics::myPassword);
+        break;
+
+    case Constants::sqliteIntType:
+        credentials.insert("type", Statics::currentDbStrType);
+        credentials.insert("host", "");
+        credentials.insert("fileDB", Statics::sqliteFile);
+        credentials.insert("port", "");
+        credentials.insert("username", Statics::sqliteUsername);
+        credentials.insert("password", Statics::sqlitePassword);
+        break;
+
+    }
+
+    return credentials;
 }
 
 void DSParamsModel::setCategory(QString category)

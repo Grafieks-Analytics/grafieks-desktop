@@ -360,7 +360,7 @@ Popup {
     function onApplyClicked(){
 
         popupMain.visible = false
-        var tmpSql = QueryModel.tmpSql
+        var tmpSql = DSParamsModel.tmpSql
 
         FilterCategoricalListModel.callQueryModel(tmpSql)
     }

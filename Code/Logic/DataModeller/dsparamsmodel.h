@@ -39,11 +39,11 @@ class DSParamsModel : public QObject
     QVariantMap joinRelationSlug; // Single syllable entity for human readable entity. eg, in Categorical-Wildcard, Slug for `Ends With` is `endswith` and `Equal To` is `equalto`
 
 
-
     // Q_PROPERTY variables
 
     // General
     Q_PROPERTY(int currentTab READ currentTab WRITE setCurrentTab NOTIFY currentTabChanged) // 0.Data modeller / 1.Query modeller
+    Q_PROPERTY(QString fileExtension READ fileExtension WRITE setFileExtension NOTIFY fileExtensionChanged)
 
     // Publish datasource
     Q_PROPERTY(QString dsName READ dsName WRITE setDsName NOTIFY dsNameChanged) // Data source name in publish DS
@@ -55,6 +55,9 @@ class DSParamsModel : public QObject
 
     // For Data Modeller
     Q_PROPERTY(int joinId READ joinId WRITE setJoinId NOTIFY joinIdChanged) // Current selected joinId in data modeller
+
+    // For Query Modeller
+    Q_PROPERTY(QString tmpSql READ tmpSql WRITE setTmpSql NOTIFY tmpSqlChanged)
 
     // For Filters
     Q_PROPERTY(int internalCounter READ internalCounter WRITE setInternalCounter NOTIFY internalCounterChanged) // Counter for categorical-wildcard
@@ -80,6 +83,9 @@ class DSParamsModel : public QObject
 
     // For Data Modeller
     int m_joinId;
+
+    // For Query Modeller
+    QString m_tmpSql;
 
     // For Filters
     int m_internalCounter;
@@ -153,6 +159,7 @@ public:
     Q_INVOKABLE QVariantMap fetchJoinRelationSlug(int refObjId = 0, bool fetchAll = false);
 
     int currentTab() const;
+    QString fileExtension() const;
     QString dsName() const;
     QString dsType() const;
     bool isFullExtract() const;
@@ -162,6 +169,9 @@ public:
 
     // For Data Modeller
     int joinId() const;
+
+    // For Query Modeller
+    QString tmpSql() const;
 
     // For Filters
     int internalCounter() const;
@@ -178,6 +188,8 @@ public:
 
 
 
+
+
 public slots:
 
     // General Slots
@@ -185,6 +197,7 @@ public slots:
 
     // Publish Datasource
     void setCurrentTab(int currentTab);
+    void setFileExtension(QString fileExtension);
     void setDsName(QString dsName);
     void setDsType(QString dsType);
     void setIsFullExtract(bool isFullExtract);
@@ -194,6 +207,9 @@ public slots:
 
     // For Data Modeller
     void setJoinId(int joinId);
+
+    // For Query Modeller
+    void setTmpSql(QString tmpSql);
 
     // For Filters
     void setInternalCounter(int internalCounter);
@@ -209,10 +225,13 @@ public slots:
     void setMode(QString mode);
 
 
+
+
 signals:
 
     // General
     void currentTabChanged(int currentTab);
+    void fileExtensionChanged(QString fileExtension);
     void processQuery();
 
     // Publish Datasource
@@ -230,6 +249,9 @@ signals:
     void joinTypeMapChanged(QVariantList joinTypeData);
     void joinIconMapChanged(QVariantList joinIconData);
 
+    // For Query Modeller
+    void tmpSqlChanged(QString tmpSql);
+
     // For Filters
     void internalCounterChanged(int internalCounter);
     void sectionChanged(QString section);
@@ -246,6 +268,11 @@ signals:
     void modeChanged(QString mode);
 
 
+
+
+private:
+    QMap<QString, QString> datasourceCredentials();
+    QString m_fileExtension;
 };
 
 #endif // DSPARAMSMODEL_H

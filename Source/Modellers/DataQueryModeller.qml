@@ -157,6 +157,7 @@ Page {
         // Also set the C++ class
         // extract == in memory
         DSParamsModel.setDsType(Constants.extractDS)
+        DSParamsModel.setFileExtension(Constants.extractFileExt)
     }
 
     function openDataFilters(){
@@ -167,6 +168,7 @@ Page {
 
         // Also set the C++ class
         DSParamsModel.setDsType(Constants.liveDS)
+        DSParamsModel.setFileExtension(Constants.liveFileExt)
     }
 
     function onCreateDashboardClicked(){
@@ -227,7 +229,7 @@ Page {
 
     function clearQueryData(){
         DSParamsModel.resetFilter()
-        QueryModel.setTmpSql("")
+        DSParamsModel.setTmpSql("")
     }
 
     // JAVASCRIPT FUNCTION ENDS

@@ -23,6 +23,10 @@ QtObject {
     property string liveDS : qsTr("live")
     property string extractDS : qsTr("extract")
 
+    property string liveFileExt: "gads"
+    property string extractFileExt: "gadse"
+    property string workbookFileExt: "gawb"
+
     property int tooltipShowTime: 1000
     property int tooltipHideTime: 5000
 
