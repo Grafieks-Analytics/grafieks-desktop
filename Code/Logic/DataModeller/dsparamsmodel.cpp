@@ -29,7 +29,8 @@ void DSParamsModel::resetDataModel()
 
 bool DSParamsModel::saveDatasource(QString filename)
 {
-    QString fileExt = "";
+    QJsonObject jsonObject;
+    QJsonDocument jsonDocument;
 
     // Filename resource uri to filepath
     QFile file(QUrl(filename).toLocalFile());
@@ -92,16 +93,17 @@ bool DSParamsModel::saveDatasource(QString filename)
 
     QDataStream out(&file);
 
-    out << qCompress(QString(Statics::currentDbIntType).toUtf8());  // 1. DB Driver
-    out << qCompress(this->dsType().toUtf8());  // 2. Type of connection
+    out << Statics::currentDbStrType;  // 1. DB Driver
+    out << this->dsType();  // 2. Type of connection
     out << this->currentTab();  // 3. Type of Modeller
+
 
     // If query modeller
     // else data modeller
     if(this->currentTab() == 0){
 
         // 4. For Query Modeller
-        out << qCompress(this->tmpSql().toUtf8()); // TmpSql
+        out << this->tmpSql(); // TmpSql
         out << this->joinRelation;
         out << this->joinValue;
         out << this->joinRelationSlug;
@@ -147,12 +149,11 @@ bool DSParamsModel::saveDatasource(QString filename)
 
         QMap<QString, QString> credentials = this->datasourceCredentials();
 
-        out << qCompress(credentials.value("type").toUtf8());
-        out << qCompress(credentials.value("host").toUtf8());
-        out << qCompress(credentials.value("fileDB").toUtf8());
-        out << qCompress(credentials.value("port").toUtf8());
-        out << qCompress(credentials.value("username").toUtf8());
-        out << qCompress(credentials.value("password").toUtf8());
+        out << credentials.value("type");
+        out << credentials.value("host");
+        out << credentials.value("fileDB");
+        out << credentials.value("port");
+        out << credentials.value("username");
 
     } else {
     }
@@ -166,6 +167,48 @@ bool DSParamsModel::saveDatasource(QString filename)
 bool DSParamsModel::readDatasource(QString filename)
 {
 
+    QString dbDriver = "",
+            typeOfConnection = "",
+            tmpSql = "",
+            section = "",
+            category = "",
+            subCategory = "",
+            tableName = "",
+            colName = "",
+            mode = "",
+            dsName = "",
+            dsType = "",
+            extractColName = "",
+            dbDriverCredential = "",
+            dbHostCredential = "",
+            dbFileNameCredential = "",
+            dbPortCredential = "",
+            dbUsernameCredential = "";
+
+    int modellerType = 0,
+            internalCounter = 0,
+            filterIndex = 0,
+            joinId = 0,
+            displayRowsCount = 0,
+            schedulerId = 0;
+
+    QVariantMap  joinRelation, joinValue, joinRelationSlug;
+    QStringList hideColumns;
+    QMap<int, QStringList> joinBoxTableMap;
+    QMap<int, QString> joinTypeMap;
+    QMap<int, QString> joinIconMap;
+    QMap<int, QMap<int, QStringList>> joinMapList;
+    QMap<int, QString> primaryJoinTable;
+    QStringList querySelectParamsList;
+    QVariantList joinOrder;
+
+    bool exclude = false,
+            includeNull = false,
+            selectAll = false,
+            isFullExtract = false;
+
+
+
     // Filename resource uri to filepath
     QFile file(QUrl(filename).toLocalFile());
 
@@ -176,10 +219,66 @@ bool DSParamsModel::readDatasource(QString filename)
     }
 
     QDataStream in(&file);    // read the data serialized from the file
-    QString str;
-    qint32 a;
-    in >> str >> a;
-    qDebug() << str << a;
+
+
+    in >> dbDriver >> typeOfConnection >> modellerType;
+
+
+    if(modellerType == 0){
+
+        // 4. For Query Modeller
+        in >> tmpSql;
+        in >> joinRelation;
+        in >> joinValue;
+        in >> joinRelationSlug;
+        in >> internalCounter;
+        in >> section;
+        in >> category;
+        in >> subCategory;
+        in >> tableName;
+        in >> colName;
+        in >> exclude;
+        in >> includeNull;
+        in >> selectAll;
+        in >> filterIndex;
+        in >> mode;
+    } else{
+
+        in >> hideColumns;
+        in >> joinBoxTableMap;
+        in >> joinTypeMap;
+        in >> joinIconMap;
+        in >> joinMapList;
+        in >> primaryJoinTable;
+        in >> querySelectParamsList;
+        in >> joinOrder;
+        in >> joinId;
+    }
+
+    in >> dsName;
+    in >> dsType;
+    in >> displayRowsCount;
+
+    // 7. InMemory config parameters
+    in >> schedulerId;
+    in >> isFullExtract;
+    in >> extractColName;
+
+    // 8. For Live - Login credentials (sans password). For Extract - Data
+
+    if(dsType == "live") {
+
+
+        in >> dbDriverCredential;
+        in >> dbHostCredential;
+        in >> dbFileNameCredential;
+        in >> dbPortCredential;
+        in >> dbUsernameCredential;
+
+    } else {
+    }
+
+    qDebug() << dbDriver  << typeOfConnection << modellerType << joinRelation << joinRelationSlug << joinTypeMap << "READ DATA";
     return true;
 }
 

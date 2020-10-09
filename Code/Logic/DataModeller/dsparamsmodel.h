@@ -7,6 +7,8 @@
 #include <QDebug>
 #include <QObject>
 #include <QDataStream>
+#include <QJsonObject>
+#include <QJsonDocument>
 
 #include "../../constants.h"
 #include "../../statics.h"
