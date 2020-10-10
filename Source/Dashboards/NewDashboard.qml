@@ -27,6 +27,19 @@ Page {
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
+    ListModel{
+        id: dashboardModel
+        ListElement{
+            dashboardName: "Dashboard 1"
+        }
+        ListElement{
+            dashboardName: "Dashboard 2"
+        }
+        ListElement{
+            dashboardName: "Dashboard 3"
+        }
+    }
+
 
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
@@ -124,37 +137,9 @@ Page {
         x: menu_width - 11
 
 
-        TabBar{
-
-            id: tabbutton_newdashboard
-
-            TabButton{
-                id: datamodeller_newdashboard
-                text: "Dashboard 1"
-                width:100
-
-                background: Rectangle {
-                    id: datamodeller_newdashboard_background
-                    color:  datamodeller_newdashboard.pressed? Constants.darkThemeColor: Constants.themeColor
-
-                }
-                contentItem: Text{
-                    id: datamodeller_newdashboard_text
-                    text: datamodeller_newdashboard.text
-                    color:  "black"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-
-            }
-
-        }
-
-
-
         Button{
             id: new_dashboard_btn
-            anchors.left: tabbutton_newdashboard.right
+            anchors.left: parent.left
             width: 50
 
             Image{
@@ -183,6 +168,85 @@ Page {
         }
 
 
+        Row{
+            height: 50
+            width: 500
+
+            anchors.left: new_dashboard_btn.right
+
+            ListView{
+                height: parent.height
+                width: 2 * 100
+
+                model: dashboardModel
+                orientation: ListView.Horizontal
+
+                delegate:
+
+                        CustomButton{
+                            width: 100
+                            textValue: dashboardName
+                        }
+
+            }
+
+            //            CustomButton{
+            //                width: 100
+            //                textValue: "Dashboard 1"
+
+            //            }
+
+            //            CustomButton{
+            //                width: 100
+            //                textValue: "Dashboard 2"
+
+            //            }
+
+            //            CustomButton{
+            //                width: 100
+            //                textValue: "Dashboard 3"
+
+            //            }
+
+        }
+
+
+
+        //        TabBar{
+
+        //            id: tabbutton_newdashboard
+        //            anchors.left: new_dashboard_btn.right
+
+        //            ListView{
+
+        //                height: 50
+        //                width: 100 * 3
+        //                model: 3
+
+        //                delegate: TabButton{
+        //                    id: datamodeller_newdashboard
+        //                    text: "Dashboard 1"
+        //                    width:100
+
+        //                    background: Rectangle {
+        //                        id: datamodeller_newdashboard_background
+        //                        color:  datamodeller_newdashboard.pressed? Constants.darkThemeColor: Constants.themeColor
+
+        //                    }
+        //                    contentItem: Text{
+        //                        id: datamodeller_newdashboard_text
+        //                        text: datamodeller_newdashboard.text
+        //                        color:  "black"
+        //                        horizontalAlignment: Text.AlignHCenter
+        //                        verticalAlignment: Text.AlignVCenter
+        //                    }
+
+        //                }
+
+
+        //            }
+
+        //        }
 
         Row{
             id: toptool_newdashboard
@@ -196,20 +260,20 @@ Page {
                 height: 28
 
                 Row{
-                   spacing: 5
-                   anchors.centerIn: parent
+                    spacing: 5
+                    anchors.centerIn: parent
 
-                   Image {
-                       source: "/Images/icons/Plus_32.png"
-                       width: 20
-                       height: 20
+                    Image {
+                        source: "/Images/icons/Plus_32.png"
+                        width: 20
+                        height: 20
 
-                   }
+                    }
 
-                   Text{
-                       text: "Report"
-                       anchors.verticalCenter: parent.verticalCenter
-                   }
+                    Text{
+                        text: "Report"
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
 
 
                 }
@@ -232,43 +296,43 @@ Page {
                 anchors.leftMargin: 10
 
                 Row{
-                   spacing: 5
-                   anchors.centerIn: parent
+                    spacing: 5
+                    anchors.centerIn: parent
 
-                   Image{
-                       id: filter_querymodeller
-                       source: "/Images/icons/Plus_32.png"
-                       height: 20
-                       width: 20
+                    Image{
+                        id: filter_querymodeller
+                        source: "/Images/icons/Plus_32.png"
+                        height: 20
+                        width: 20
 
-                   }
+                    }
 
-                   Text{
-                       id: filterText
-                       text: "Filter"
-                       anchors.verticalCenter: parent.verticalCenter
-                   }
+                    Text{
+                        id: filterText
+                        text: "Filter"
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
 
-                   Text {
-                       id: filterLeftSquareBracket
-                       text: qsTr("[")
-                       color: Constants.grafieksGreen
+                    Text {
+                        id: filterLeftSquareBracket
+                        text: qsTr("[")
+                        color: Constants.grafieksGreen
 
-                       anchors.verticalCenter: parent.verticalCenter
-                   }
-                   Text {
-                       id: filterNumber
-                       text: qsTr("0")
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Text {
+                        id: filterNumber
+                        text: qsTr("0")
 
-                       anchors.verticalCenter: parent.verticalCenter
-                   }
-                   Text {
-                       id: filterRightSquareBracket
-                       text: qsTr("]")
-                       color: Constants.grafieksGreen
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Text {
+                        id: filterRightSquareBracket
+                        text: qsTr("]")
+                        color: Constants.grafieksGreen
 
-                       anchors.verticalCenter: parent.verticalCenter
-                   }
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
 
                 }
 
@@ -286,21 +350,21 @@ Page {
                 width: 100
 
                 Row{
-                   spacing: 5
-                   anchors.centerIn: parent
+                    spacing: 5
+                    anchors.centerIn: parent
 
-                   Image {
-                       id: name
-                       source: "/Images/icons/customize.png"
-                       width: 18
-                       height: 18
+                    Image {
+                        id: name
+                        source: "/Images/icons/customize.png"
+                        width: 18
+                        height: 18
 
-                   }
+                    }
 
-                   Text{
-                       text: "Customize"
-                       anchors.verticalCenter: parent.verticalCenter
-                   }
+                    Text{
+                        text: "Customize"
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
 
 
                 }
@@ -448,7 +512,7 @@ Page {
         ToolSeparator{
             anchors.top: parent.top
             anchors.left: column_newdashboard.left
-//            anchors.leftMargin: 20
+            //            anchors.leftMargin: 20
 
             height:parent.height
 
