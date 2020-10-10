@@ -143,6 +143,10 @@ Page {
         }
     }
 
+    function createNewReport(){
+        stacklayout_home.currentIndex = 7
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -176,6 +180,8 @@ Page {
         x: menu_width - 11
 
 
+        // Add new Dashboard Button Starts
+
         Button{
             id: new_dashboard_btn
             anchors.left: parent.left
@@ -206,6 +212,9 @@ Page {
             }
         }
 
+        // Add new Dashboard Button Starts
+
+        // All Dashboards Lists Starts
 
         Row{
             height: 50
@@ -227,10 +236,15 @@ Page {
             }
         }
 
+        // Dashboard List Ends
+
+        // Sub menu Right Buttons Starts
+
         Row{
             id: toptool_newdashboard
             anchors.right: submenu.right
 
+            // left dashboard button starts
             Button{
 
                 width: 50
@@ -253,6 +267,10 @@ Page {
                 }
 
             }
+
+            // left dashboard button ends
+
+            // right dashboard button starts
 
             Button{
 
@@ -277,12 +295,16 @@ Page {
 
             }
 
+            // right dashboard button ends
 
+            // Add Report button starts
 
             Button{
-                id: report_btn
+
                 width: 100
                 height: 28
+
+                onClicked: createNewReport()
 
                 Row{
                     spacing: 5
@@ -303,14 +325,14 @@ Page {
 
                 }
 
-
                 background: Rectangle {
                     id: report_btn_background
-                    color: report_btn.hovered? Constants.darkThemeColor: Constants.whiteColor
+                    color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
                 }
 
             }
 
+            // Add Report Button Ends
 
             // Filter button starts
 
@@ -368,6 +390,9 @@ Page {
                 onClicked: openDashboardFilters()
             }
 
+            // Filter Button Ends
+
+            // Customize Button Starts
 
             Button{
                 id: customize_btn
@@ -394,9 +419,11 @@ Page {
 
                 }
 
-                onClicked: {
-                    onCustomizeBtnClicked()
-                }
+
+                // open right customize panel
+                // which display widgets, reports and general settings
+
+                onClicked:  onCustomizeBtnClicked()
 
                 background: Rectangle{
                     color: customize_btn.hovered ? Constants.darkThemeColor : "white"
@@ -404,9 +431,13 @@ Page {
 
             }
 
+            // Customize Button Ends
+
 
 
         }
+
+        // Sub menu right button ends
 
     }
 
