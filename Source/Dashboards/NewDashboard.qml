@@ -38,6 +38,45 @@ Page {
         ListElement{
             dashboardName: "Dashboard 3"
         }
+        ListElement{
+            dashboardName: "Dashboard 3"
+        }
+        ListElement{
+            dashboardName: "Dashboard 3"
+        }
+        ListElement{
+            dashboardName: "Dashboard 3"
+        }
+        ListElement{
+            dashboardName: "Dashboard 3"
+        }
+        ListElement{
+            dashboardName: "Dashboard 3"
+        }
+        ListElement{
+            dashboardName: "Dashboard 3"
+        }
+        ListElement{
+            dashboardName: "Dashboard 4"
+        }
+        ListElement{
+            dashboardName: "Dashboard 5"
+        }
+        ListElement{
+            dashboardName: "Dashboard 6"
+        }
+        ListElement{
+            dashboardName: "Dashboard 7"
+        }
+        ListElement{
+            dashboardName: "Dashboard 8"
+        }
+        ListElement{
+            dashboardName: "Dashboard 9"
+        }
+        ListElement{
+            dashboardName: "Dashboard 10"
+        }
     }
 
 
@@ -170,87 +209,73 @@ Page {
 
         Row{
             height: 50
-            width: 500
+            width: submenu.width - toptool_newdashboard.width
 
             anchors.left: new_dashboard_btn.right
 
             ListView{
                 height: parent.height
-                width: 2 * 100
+                width: parent.width
 
                 model: dashboardModel
                 orientation: ListView.Horizontal
 
-                delegate:
-
-                        CustomButton{
-                            width: 100
-                            textValue: dashboardName
-                        }
-
+                delegate: CustomButton{
+                    width: 100
+                    textValue: dashboardName
+                }
             }
-
-            //            CustomButton{
-            //                width: 100
-            //                textValue: "Dashboard 1"
-
-            //            }
-
-            //            CustomButton{
-            //                width: 100
-            //                textValue: "Dashboard 2"
-
-            //            }
-
-            //            CustomButton{
-            //                width: 100
-            //                textValue: "Dashboard 3"
-
-            //            }
-
         }
-
-
-
-        //        TabBar{
-
-        //            id: tabbutton_newdashboard
-        //            anchors.left: new_dashboard_btn.right
-
-        //            ListView{
-
-        //                height: 50
-        //                width: 100 * 3
-        //                model: 3
-
-        //                delegate: TabButton{
-        //                    id: datamodeller_newdashboard
-        //                    text: "Dashboard 1"
-        //                    width:100
-
-        //                    background: Rectangle {
-        //                        id: datamodeller_newdashboard_background
-        //                        color:  datamodeller_newdashboard.pressed? Constants.darkThemeColor: Constants.themeColor
-
-        //                    }
-        //                    contentItem: Text{
-        //                        id: datamodeller_newdashboard_text
-        //                        text: datamodeller_newdashboard.text
-        //                        color:  "black"
-        //                        horizontalAlignment: Text.AlignHCenter
-        //                        verticalAlignment: Text.AlignVCenter
-        //                    }
-
-        //                }
-
-
-        //            }
-
-        //        }
 
         Row{
             id: toptool_newdashboard
             anchors.right: submenu.right
+
+            Button{
+
+                width: 50
+                height: 28
+
+                Row{
+                    spacing: 5
+                    anchors.centerIn: parent
+
+                    Image {
+                        source: "/Images/icons/arrow_left.png"
+                        width: 20
+                        height: 20
+
+                    }
+                }
+
+                background: Rectangle {
+                   color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
+                }
+
+            }
+
+            Button{
+
+                width: 50
+                height: 28
+
+                Row{
+                    spacing: 5
+                    anchors.centerIn: parent
+
+                    Image {
+                        source: "/Images/icons/arrow_right.png"
+                        width: 20
+                        height: 20
+
+                    }
+                }
+
+                background: Rectangle {
+                   color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
+                }
+
+            }
 
 
 
