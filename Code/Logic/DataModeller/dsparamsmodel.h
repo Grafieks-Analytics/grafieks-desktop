@@ -11,6 +11,7 @@
 #include <QJsonDocument>
 
 #include "../../constants.h"
+#include "../../Messages.h"
 #include "../../statics.h"
 
 /*!
@@ -108,7 +109,7 @@ public:
 
     Q_INVOKABLE void resetDataModel();
     Q_INVOKABLE bool saveDatasource(QString filename);
-    Q_INVOKABLE bool readDatasource(QString filename);
+    Q_INVOKABLE QVariantList readDatasource(QString filename);
 
     Q_INVOKABLE void addToHideColumns(QString colName);
     Q_INVOKABLE void removeFromHideColumns(QString colName, bool removeAll = false);

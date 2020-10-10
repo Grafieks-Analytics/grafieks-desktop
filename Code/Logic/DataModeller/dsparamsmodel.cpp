@@ -93,14 +93,20 @@ bool DSParamsModel::saveDatasource(QString filename)
 
     QDataStream out(&file);
 
-    out << Statics::currentDbStrType;  // 1. DB Driver
-    out << this->dsType();  // 2. Type of connection
+    // Write a header with a "magic number" and a version
+    out << (quint32)0x785AA164;
+    out << (qint32)101;
+
+    out.setVersion(QDataStream::Qt_5_15);
+
+    out << QString(Statics::currentDbStrType);  // 1. DB Driver
+    out << QString(this->dsType());  // 2. Type of connection
     out << this->currentTab();  // 3. Type of Modeller
 
 
     // If query modeller
     // else data modeller
-    if(this->currentTab() == 0){
+    if(this->currentTab() == 1){
 
         // 4. For Query Modeller
         out << this->tmpSql(); // TmpSql
@@ -120,6 +126,8 @@ bool DSParamsModel::saveDatasource(QString filename)
         out << this->mode();
     } else {
 
+
+
         // 4. For Data Modeller
         out << this->hideColumns;
         out << this->joinBoxTableMap;
@@ -130,6 +138,8 @@ bool DSParamsModel::saveDatasource(QString filename)
         out << this->querySelectParamsList;
         out << this->joinOrder;
         out << this->joinId();
+
+
     }
 
     // 6. Datasource publish information
@@ -164,8 +174,10 @@ bool DSParamsModel::saveDatasource(QString filename)
     return true;
 }
 
-bool DSParamsModel::readDatasource(QString filename)
+QVariantList DSParamsModel::readDatasource(QString filename)
 {
+
+    QVariantList fileReadStatus;
 
     QString dbDriver = "",
             typeOfConnection = "",
@@ -212,19 +224,37 @@ bool DSParamsModel::readDatasource(QString filename)
     // Filename resource uri to filepath
     QFile file(QUrl(filename).toLocalFile());
 
-    // Check if file writable
+    // Check if file readable
     if(!file.open(QFile::ReadOnly)){
         qDebug() << " Could not open file for writing" << file.errorString();
-        return false;
+        return fileReadStatus << Messages::FILE_READ_ERROR << Messages::fileReadError;
     }
 
     QDataStream in(&file);    // read the data serialized from the file
 
+    // Read and check the header
+    quint32 magic;
+    in >> magic;
+    if (magic != 0x785AA164)
+       return fileReadStatus << Messages::FILE_FORMAT_ERROR << Messages::fileFormatInvalid;
 
-    in >> dbDriver >> typeOfConnection >> modellerType;
+    // Read the version
+    qint32 version;
+    in >> version;
+
+    if (version <= 100)
+        return fileReadStatus << Messages::FILE_TOO_OLD << Messages::fileTooOld;
 
 
-    if(modellerType == 0){
+    if (version > 100)
+        in.setVersion(QDataStream::Qt_5_15);
+
+    in >> dbDriver;
+    in >> typeOfConnection;
+    in >> modellerType;
+
+
+    if(modellerType == 1){
 
         // 4. For Query Modeller
         in >> tmpSql;
@@ -278,8 +308,13 @@ bool DSParamsModel::readDatasource(QString filename)
     } else {
     }
 
-    qDebug() << dbDriver  << typeOfConnection << modellerType << joinRelation << joinRelationSlug << joinTypeMap << "READ DATA";
-    return true;
+    qDebug() << dbDriver << typeOfConnection << modellerType << "GENERAL PARAM";
+    qDebug() << joinRelation  << joinValue << joinRelationSlug << internalCounter << section << category << subCategory << tableName << colName << exclude << includeNull << selectAll << filterIndex << mode << "QUERY MODELLER PARAM";
+    qDebug() << hideColumns << joinBoxTableMap << joinTypeMap << joinIconMap << joinMapList << querySelectParamsList << joinOrder << joinId << "DATA MODELLER PARAM";
+    qDebug() << dsName << dsType << displayRowsCount << schedulerId << isFullExtract << extractColName << "OTHER PARAMS";
+    qDebug() << dbDriverCredential << dbHostCredential << dbPortCredential << dbUsernameCredential << "CREDENTIAL PARAMS";
+
+    return fileReadStatus << Messages::FILE_READ_SUCCESS << Messages::fileReadSuccess;
 }
 
 void DSParamsModel::resetFilter()

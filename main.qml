@@ -149,7 +149,8 @@ ApplicationWindow {
 
         onAccepted: {
             console.log(file)
-            DSParamsModel.readDatasource(file)
+            var x = DSParamsModel.readDatasource(file)
+            console.log(x[0], x[1])
 
         }
     }

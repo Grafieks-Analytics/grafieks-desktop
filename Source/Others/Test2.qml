@@ -27,14 +27,14 @@ Page{
     Button{
         id: x1
         text: "Click me write"
-        onClicked: DSParamsModel.saveDatasource("file:///Users/mac/Desktop/lala.dat")
+        onClicked: QtTest2.write()
     }
 
     Button{
         id: x2
         anchors.top: x1.bottom
         text: "Click me read"
-        onClicked: DSParamsModel.readDatasource("file:///Users/mac/Desktop/lala.dat")
+        onClicked: QtTest2.read()
     }
 
     Button{
