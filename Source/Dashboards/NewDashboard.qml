@@ -36,13 +36,26 @@ Page {
             dashboardName: "Dashboard 2"
         }
         ListElement{
-            dashboardName: "Dashboard 3"
+            dashboardName: "Dashoo Dashboard 3"
+        }
+        ListElement{
+            dashboardName: "Das s3"
+        }
+        ListElement{
+            dashboardName: "dsa3"
         }
         ListElement{
             dashboardName: "Dashboard 3"
         }
         ListElement{
             dashboardName: "Dashboard 3"
+        }
+
+        ListElement{
+            dashboardName: "Das s3"
+        }
+        ListElement{
+            dashboardName: "dsa3"
         }
         ListElement{
             dashboardName: "Dashboard 3"
@@ -76,6 +89,15 @@ Page {
         }
         ListElement{
             dashboardName: "Dashboard 10"
+        }
+        ListElement{
+            dashboardName: "Dashboard 11"
+        }
+        ListElement{
+            dashboardName: "Dashboard 12"
+        }
+        ListElement{
+            dashboardName: "Dashboard 13"
         }
     }
 
@@ -145,6 +167,13 @@ Page {
 
     function createNewReport(){
         stacklayout_home.currentIndex = 7
+    }
+
+    function scrollToLeft(){
+        dashboardList.flick(600, 0)
+    }
+    function scrollToRight(){
+        dashboardList.flick(-600, 0)
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -219,20 +248,41 @@ Page {
 
         Row{
             height: 50
-            width: submenu.width - toptool_newdashboard.width
+//            width: submenu.width - toptool_newdashboard.width - 500
+            width: 300
 
             anchors.left: new_dashboard_btn.right
+            anchors.right: parent.right
+            anchors.rightMargin: 30
 
             ListView{
+                id: dashboardList
                 height: parent.height
-                width: parent.width
+                width: submenu.width - toptool_newdashboard.width
 
                 model: dashboardModel
                 orientation: ListView.Horizontal
 
-                delegate: CustomButton{
-                    width: 100
+                // When scroll end align to the nearest item
+                snapMode: ListView.SnapToItem
+                // data outside specified size during flick
+                clip: true
+                // Increase Flick speed
+                maximumFlickVelocity: 10000
+                cacheBuffer:1000
+
+
+                delegate: CustomDashboardNameButton{
+                    id: dashboardNameButton
                     textValue: dashboardName
+                    Component.onCompleted: {
+                        console.log(index,dashboardNameButton.width)
+                        if(dashboardNameButton.width > 100){
+                            dashboardNameButton.width = 100
+                        }else{
+                            dashboardNameButton.width = dashboardNameButton.width
+                        }
+                    }
                 }
             }
         }
@@ -247,7 +297,7 @@ Page {
 
             // left dashboard button starts
             Button{
-                width: 50
+                width: 25
                 height: 28
                 Row{
                     spacing: 5
@@ -258,8 +308,9 @@ Page {
                         height: 20
                     }
                 }
+                onPressed: scrollToLeft()
                 background: Rectangle {
-                   color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
+                    color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
                 }
 
             }
@@ -271,7 +322,7 @@ Page {
 
             Button{
 
-                width: 50
+                width: 25
                 height: 28
 
                 Row{
@@ -284,8 +335,10 @@ Page {
                     }
                 }
 
+                onPressed: scrollToRight()
+
                 background: Rectangle {
-                   color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
+                    color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
                 }
 
             }

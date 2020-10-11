@@ -114,5 +114,6 @@
         <file>Source/Dashboards/SubComponents/MiniSubComponents/CustomizeGeneralMenu.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/CustomizeCanvasSizeMenu.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/CustomizeReportStyleMenu.qml</file>
+        <file>Source/MainSubComponents/CustomDashboardNameButton.qml</file>
     </qresource>
 </RCC>
