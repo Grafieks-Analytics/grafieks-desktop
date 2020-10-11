@@ -534,6 +534,8 @@ Page {
 
         visible: false
 
+        z:99999999
+
 
         ToolSeparator{
 

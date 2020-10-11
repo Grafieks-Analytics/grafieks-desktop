@@ -86,7 +86,6 @@ Rectangle{
                 value: 0
                 anchors.right: parent.right
                 onValueChanged: onOpacityValueChanged()
-//                maximumValue: 100
             }
 
         }
