@@ -123,6 +123,8 @@ Item{
         height: parent.height
         width: parent.width
 
+        // Edit Menu Options Starts
+
         Rectangle{
 
             color: "transparent"
@@ -212,7 +214,10 @@ Item{
 
             }
 
+
         }
+
+        // Edit Menu Options Ends
 
         MouseArea{
             height: parent.height-4

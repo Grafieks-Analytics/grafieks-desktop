@@ -23,6 +23,7 @@ Rectangle{
     // selectedMenu indicates
     // 0 : Data Designer is selected
     // 1 : Dashboard Designer is selected
+    z:20000
 
     property int selectedMenu: 0
 

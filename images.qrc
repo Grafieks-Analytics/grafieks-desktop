@@ -128,5 +128,7 @@
         <file>Images/icons/customize.png</file>
         <file>Images/icons/full-screen.png</file>
         <file>Images/icons/fullscreen.png</file>
+        <file>Images/icons/arrow_left.png</file>
+        <file>Images/icons/arrow_right.png</file>
     </qresource>
 </RCC>
