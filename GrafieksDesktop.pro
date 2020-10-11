@@ -140,9 +140,9 @@ DISTFILES += \
 
 
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/Libraries/release/ -lduckdb
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/Libraries/debug/ -lduckdb
-else:macx: LIBS += -L$$PWD/Libraries/ -lduckdb
+#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/Libraries/release/ -lduckdb
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/Libraries/debug/ -lduckdb
+#else:macx: LIBS += -L$$PWD/Libraries/ -lduckdb
 
-INCLUDEPATH += $$PWD/Libraries
-DEPENDPATH += $$PWD/Libraries
+#INCLUDEPATH += $$PWD/Libraries
+#DEPENDPATH += $$PWD/Libraries
