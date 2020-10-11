@@ -131,9 +131,18 @@ HEADERS += \
     Code/Logic/General/tablecolumnsmodel.h \
     Code/Logic/General/tableschemamodel.h \
     Code/Logic/Menu/user.h \
+    Code/duckdb.hpp \
     Code/messages.h \
     Code/constants.h \
     Code/statics.h \
 
 DISTFILES += \
 
+
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/Libraries/release/ -lduckdb
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/Libraries/debug/ -lduckdb
+else:macx: LIBS += -L$$PWD/Libraries/ -lduckdb
+
+INCLUDEPATH += $$PWD/Libraries
+DEPENDPATH += $$PWD/Libraries

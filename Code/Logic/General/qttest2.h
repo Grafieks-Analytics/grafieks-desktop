@@ -7,6 +7,7 @@
 #include <QString>
 #include <QDataStream>
 #include <QMap>
+#include "Code/duckdb.hpp"
 
 class QtTest2 : public QObject
 {
