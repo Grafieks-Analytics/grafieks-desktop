@@ -16,6 +16,7 @@ import QtQuick.Dialogs 1.0
 
 import com.grafieks.singleton.constants 1.0
 
+import "../../MainSubComponents"
 Item{
     width: 150
     x: 60
@@ -29,13 +30,6 @@ Item{
 
 
     // Item 1 Starts
-
-    ListView {
-        anchors.fill: parent
-        model: nestedModel
-        delegate: categoryDelegate
-    }
-
 
     ListModel {
         id: nestedModel
@@ -154,6 +148,9 @@ Item{
     }
 
 
+    function openReportFilters(){
+        console.log('Open report filters')
+    }
 
 
     // JAVASCRIPT FUNCTION ENDS
@@ -220,6 +217,26 @@ Item{
 
     /***********************************************************************************************************************/
     // Page Design Starts
+
+
+
+    CustomButton{
+        id:reportFilterButton
+        width: parent.width
+        textValue: "Report Filter"
+        onClicked: openReportFilters()
+    }
+
+    ListView {
+
+        anchors.top: reportFilterButton.bottom
+        width: parent.width
+        height: parent.height - reportFilterButton.height
+        interactive: false
+
+        model: nestedModel
+        delegate: categoryDelegate
+    }
 
 
 
