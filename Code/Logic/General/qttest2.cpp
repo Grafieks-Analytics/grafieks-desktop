@@ -23,6 +23,11 @@ QtTest2::QtTest2(QObject *parent) :QObject(parent)
     mapVar2.insert(2, x);
     mapVar2.insert(3, x);
 
+    duckdb::DuckDB db(nullptr);
+    duckdb::Connection con(db);
+    auto result = con.Query("SELECT 42");
+    result->Print();
+
 }
 
 void QtTest2::x()
