@@ -3,13 +3,83 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 import com.grafieks.singleton.constants 1.0
 
+import QtQuick.Dialogs 1.3
+
 import "../../../MainSubComponents"
 
 Rectangle{
 
+
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
     function onOpacityValueChanged(){
         console.log('Opacity')
     }
+
+
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+    ColorDialog{
+        id: backgroundColorSelector
+    }
+
+
+    ColorDialog{
+        id: lineColorSelector
+    }
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
 
     Column{
         spacing: 10
@@ -39,6 +109,11 @@ Rectangle{
                 source: "/Images/icons/Edit.png"
                 height: 20
                 width: 20
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: backgroundSelector.open()
+                }
             }
 
         }
@@ -62,6 +137,11 @@ Rectangle{
                 source: "/Images/icons/Edit.png"
                 height: 20
                 width: 20
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: lineColorSelector.open()
+                }
             }
 
         }
@@ -86,7 +166,6 @@ Rectangle{
                 value: 0
                 anchors.right: parent.right
                 onValueChanged: onOpacityValueChanged()
-//                maximumValue: 100
             }
 
         }

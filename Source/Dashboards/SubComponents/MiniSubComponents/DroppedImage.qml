@@ -269,6 +269,7 @@ Item{
         textValue: "Choose Image"
         anchors.centerIn: parent
         visible: imageChooseStatus
+        onClicked: selectFile()
     }
 
 }

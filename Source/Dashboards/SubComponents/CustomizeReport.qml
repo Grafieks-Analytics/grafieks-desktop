@@ -18,6 +18,7 @@ Column{
     anchors.topMargin: 8
     spacing: 40
 
+
     visible: false
 
     ListModel {

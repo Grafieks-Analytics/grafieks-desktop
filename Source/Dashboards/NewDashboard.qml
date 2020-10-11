@@ -591,6 +591,8 @@ Page {
 
     CustomizeReport{
         id: customizeReport
+
+        z:100000000
     }
 
     // Right Filter Starts
@@ -605,6 +607,9 @@ Page {
         anchors.topMargin: 4
         spacing: 50
         visible: false
+
+        z:99999999
+
 
         ToolSeparator{
             anchors.top: parent.top
