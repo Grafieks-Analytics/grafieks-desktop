@@ -108,22 +108,6 @@ Rectangle {
 
     }
 
-    function containerDoubleClicked(){
-        if(objectType == "image"){
-
-            fileDialog.open()
-        }
-
-        if(objectType == "text"){
-
-        }
-
-    }
-
-    function containerClicked(){
-        customizeReport.visible = true
-    }
-
     function onLeftResize(drag,mouseX){
         if(drag.active){
             mainContainer.width = mainContainer.width - mouseX
@@ -178,15 +162,6 @@ Rectangle {
 
 
 
-    FileDialog{
-        id: fileDialog
-        title: "Select a file (*.jpg *.jpeg *.png  only)"
-        selectMultiple: false
-        nameFilters: [ "Image files (*.jpg *.jpeg *.png )"]
-    }
-
-
-
     // SubComponents Ends
     /***********************************************************************************************************************/
 
@@ -197,30 +172,6 @@ Rectangle {
     /***********************************************************************************************************************/
     // Page Design Starts
 
-
-    MouseArea {     // drag mouse area
-        anchors.fill: parent
-//        drag{
-//            target: parent
-//            minimumX: 0
-//            minimumY: Constants.subMenuWidth
-//            maximumX: parent.parent.width - parent.width
-//            maximumY: parent.parent.height - parent.height - Constants.subMenuWidth
-//            smoothed: true
-//        }
-
-//        onClicked: containerClicked()
-//        onDoubleClicked: containerDoubleClicked()
-        hoverEnabled: true
-
-        onEntered: showRulers()
-        onExited: {
-
-            console.log('exit main container');
-            rulerStatus = false
-        }
-
-    }
 
     // Rulers Starts
     //Left Ruler
@@ -296,5 +247,42 @@ Rectangle {
             onMouseYChanged: onDownResize(drag,mouseY)
         }
     }
+
+
+    //Ruler Ends
+
+
+    MouseArea {     // drag mouse area
+
+        anchors.fill: parent
+
+//        drag{
+//            target: parent
+//            minimumX: 0
+//            minimumY: Constants.subMenuWidth
+//            maximumX: parent.parent.width - parent.width
+//            maximumY: parent.parent.height - parent.height - Constants.subMenuWidth
+//            smoothed: true
+//        }
+
+//        onClicked: containerClicked()
+//        onDoubleClicked: containerDoubleClicked()
+
+        hoverEnabled: true
+
+        onEntered: showRulers()
+        onExited: {
+
+            console.log('exit main container');
+            rulerStatus = false
+        }
+
+    }
+
+
+    // Page Design Ends
+    /***********************************************************************************************************************/
+
+
 }
 

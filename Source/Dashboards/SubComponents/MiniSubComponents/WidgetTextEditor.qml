@@ -216,14 +216,14 @@ Popup {
              anchors.right: parent.right
 
              CustomButton{
-                 textValue: "Appply"
+                 textValue: "Cancel"
                  onClicked: hidePopup()
-
              }
 
              CustomButton{
-                 textValue: "Cancel"
+                 textValue: "Apply"
                  onClicked: hidePopup()
+
              }
 
         }

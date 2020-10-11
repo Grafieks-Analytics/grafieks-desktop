@@ -331,118 +331,118 @@ Page {
 
 
 
-            Item{
-                id: item_querymodeller
-                width: rectangle_querymodeller_right_col3.width - 10
-                anchors.top: rectangle_querymodeller_right_col3.bottom
-                anchors.topMargin: 2
+//            Item{
+//                id: item_querymodeller
+//                width: rectangle_querymodeller_right_col3.width - 10
+//                anchors.top: rectangle_querymodeller_right_col3.bottom
+//                anchors.topMargin: 2
 
-                ListView {
-                    anchors.fill: parent
-                    model: nestedModel
-                    delegate: categoryDelegate
-                }
-
-
-                ListModel {
-                    id: nestedModel
+//                ListView {
+//                    anchors.fill: parent
+//                    model: nestedModel
+//                    delegate: categoryDelegate
+//                }
 
 
-                    ListElement {
-                        categoryName: "Database 1"
-                        collapsed: true
-
-                        subItems: [
-                            ListElement { itemName: "Table 1" },
-                            ListElement { itemName: "Table 2" },
-                            ListElement { itemName: "Table 3" },
-                            ListElement { itemName: "Table 4" }
-                        ]
-                    }
+//                ListModel {
+//                    id: nestedModel
 
 
-                }
+//                    ListElement {
+//                        categoryName: "Database 1"
+//                        collapsed: true
 
-                Component {
-                    id: categoryDelegate
-                    Column {
-                        width: 200
+//                        subItems: [
+//                            ListElement { itemName: "Table 1" },
+//                            ListElement { itemName: "Table 2" },
+//                            ListElement { itemName: "Table 3" },
+//                            ListElement { itemName: "Table 4" }
+//                        ]
+//                    }
 
-                        Rectangle {
-                            id: categoryItem
-                            height: 50
-                            width: 200
 
-                            Text {
-                                anchors.verticalCenter: parent.verticalCenter
-                                x: 15
-                                font.pixelSize: 12
-                                text: categoryName
-                            }
+//                }
 
-                            Image {
-                                id: drop_icon
-                                source: "/Images/icons/Down_20.png"
-                                width: 10
-                                height: 10
-                                anchors.right: parent.right
-                                anchors.rightMargin: 15
-                                anchors.verticalCenter: parent.verticalCenter
-                                visible: true
+//                Component {
+//                    id: categoryDelegate
+//                    Column {
+//                        width: 200
 
-                                MouseArea {
-                                    anchors.fill: parent
+//                        Rectangle {
+//                            id: categoryItem
+//                            height: 50
+//                            width: 200
 
-                                    onClicked: {
-                                        nestedModel.setProperty(index, "collapsed", !collapsed)
+//                            Text {
+//                                anchors.verticalCenter: parent.verticalCenter
+//                                x: 15
+//                                font.pixelSize: 12
+//                                text: categoryName
+//                            }
 
-                                        if(collapsed === true){
-                                            drop_icon.source = "/Images/icons/Down_20.png"
-                                        }
-                                        else{
-                                            drop_icon.source = "/Images/icons/Up_20.png"
-                                        }
-                                    }
-                                }
-                            }
-                        }
+//                            Image {
+//                                id: drop_icon
+//                                source: "/Images/icons/Down_20.png"
+//                                width: 10
+//                                height: 10
+//                                anchors.right: parent.right
+//                                anchors.rightMargin: 15
+//                                anchors.verticalCenter: parent.verticalCenter
+//                                visible: true
 
-                        Loader {
-                            id: subItemLoader
+//                                MouseArea {
+//                                    anchors.fill: parent
 
-                            visible: !collapsed
-                            property variant subItemModel : subItems
-                            sourceComponent: collapsed ? null : subItemColumnDelegate
-                            onStatusChanged: if (status == Loader.Ready) item.model = subItemModel
-                        }
-                    }
+//                                    onClicked: {
+//                                        nestedModel.setProperty(index, "collapsed", !collapsed)
 
-                }
+//                                        if(collapsed === true){
+//                                            drop_icon.source = "/Images/icons/Down_20.png"
+//                                        }
+//                                        else{
+//                                            drop_icon.source = "/Images/icons/Up_20.png"
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
 
-                Component {
-                    id: subItemColumnDelegate
-                    Column {
-                        property alias model : subItemRepeater.model
-                        width: 200
-                        Repeater {
-                            id: subItemRepeater
-                            delegate: Rectangle {
-                                height: 40
-                                width: 200
+//                        Loader {
+//                            id: subItemLoader
 
-                                Text {
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    x: 30
-                                    font.pixelSize: 12
-                                    text: itemName
-                                }
-                            }
-                        }
-                    }
+//                            visible: !collapsed
+//                            property variant subItemModel : subItems
+//                            sourceComponent: collapsed ? null : subItemColumnDelegate
+//                            onStatusChanged: if (status == Loader.Ready) item.model = subItemModel
+//                        }
+//                    }
 
-                }
+//                }
 
-            }
+//                Component {
+//                    id: subItemColumnDelegate
+//                    Column {
+//                        property alias model : subItemRepeater.model
+//                        width: 200
+//                        Repeater {
+//                            id: subItemRepeater
+//                            delegate: Rectangle {
+//                                height: 40
+//                                width: 200
+
+//                                Text {
+//                                    anchors.verticalCenter: parent.verticalCenter
+//                                    x: 30
+//                                    font.pixelSize: 12
+//                                    text: itemName
+//                                }
+//                            }
+//                        }
+//                    }
+
+//                }
+
+//            }
 
 
         }

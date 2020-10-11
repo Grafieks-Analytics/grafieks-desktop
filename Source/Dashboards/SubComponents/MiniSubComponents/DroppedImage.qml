@@ -5,6 +5,8 @@ import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
 
+import "../../../MainSubComponents"
+
 // This is the Image Widget dynamically called from MainContainer
 // when a column is dropped from right side customize
 
@@ -24,6 +26,8 @@ Item{
 
     property var hoverStatus: false
 
+    // change this status to false when image is selected
+    property var imageChooseStatus: true
 
 
     /***********************************************************************************************************************/
@@ -59,6 +63,12 @@ Item{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted: selectFile()
+
+    function selectFile(){
+        fileDialog.open()
+    }
+
     function destroyElement(){
         mainContainer.destroy()
         this.destroy()
@@ -86,10 +96,6 @@ Item{
         mainContainer.rulerStatus = false
     }
 
-
-    Component.onCompleted: {
-        fileDialog.open()
-    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -214,7 +220,7 @@ Item{
 
                             MenuItem {
                                 text: qsTr("Edit")
-                                onTriggered: showTextEditor()
+                                onTriggered: selectFile()
                                 onHoveredChanged: showMenus()
                             }
 
@@ -257,6 +263,12 @@ Item{
             onExited: hideMenus()
         }
 
+    }
+
+    CustomButton{
+        textValue: "Choose Image"
+        anchors.centerIn: parent
+        visible: imageChooseStatus
     }
 
 }
