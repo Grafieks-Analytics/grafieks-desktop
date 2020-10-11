@@ -186,6 +186,7 @@ Page {
             id: new_dashboard_btn
             anchors.left: parent.left
             width: 50
+            z:1000
 
             Image{
                 id: new_dashboard_icon
@@ -246,29 +247,25 @@ Page {
 
             // left dashboard button starts
             Button{
-
                 width: 50
                 height: 28
-
                 Row{
                     spacing: 5
                     anchors.centerIn: parent
-
                     Image {
                         source: "/Images/icons/arrow_left.png"
                         width: 20
                         height: 20
-
                     }
                 }
-
                 background: Rectangle {
                    color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
                 }
 
             }
-
             // left dashboard button ends
+
+
 
             // right dashboard button starts
 
@@ -280,12 +277,10 @@ Page {
                 Row{
                     spacing: 5
                     anchors.centerIn: parent
-
                     Image {
                         source: "/Images/icons/arrow_right.png"
                         width: 20
                         height: 20
-
                     }
                 }
 
@@ -303,26 +298,20 @@ Page {
 
                 width: 100
                 height: 28
-
                 onClicked: createNewReport()
 
                 Row{
                     spacing: 5
                     anchors.centerIn: parent
-
                     Image {
                         source: "/Images/icons/Plus_32.png"
                         width: 20
                         height: 20
-
                     }
-
                     Text{
                         text: "Report"
                         anchors.verticalCenter: parent.verticalCenter
                     }
-
-
                 }
 
                 background: Rectangle {
@@ -337,7 +326,6 @@ Page {
             // Filter button starts
 
             Button{
-                id: filter_btn
                 width: 100
                 height: 28
                 anchors.leftMargin: 10
@@ -351,7 +339,6 @@ Page {
                         source: "/Images/icons/Plus_32.png"
                         height: 20
                         width: 20
-
                     }
 
                     Text{
@@ -384,7 +371,7 @@ Page {
                 }
 
                 background: Rectangle{
-                    color: filter_btn.hovered ? Constants.darkThemeColor : "white"
+                    color: parent.hovered ? Constants.darkThemeColor : "white"
                 }
 
                 onClicked: openDashboardFilters()
@@ -395,7 +382,6 @@ Page {
             // Customize Button Starts
 
             Button{
-                id: customize_btn
                 height: 28
                 width: 100
 
@@ -426,7 +412,7 @@ Page {
                 onClicked:  onCustomizeBtnClicked()
 
                 background: Rectangle{
-                    color: customize_btn.hovered ? Constants.darkThemeColor : "white"
+                    color: parent.hovered ? Constants.darkThemeColor : "white"
                 }
 
             }
@@ -568,7 +554,6 @@ Page {
         ToolSeparator{
             anchors.top: parent.top
             anchors.left: column_newdashboard.left
-            //            anchors.leftMargin: 20
 
             height:parent.height
 
