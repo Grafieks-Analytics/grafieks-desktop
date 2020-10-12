@@ -13,7 +13,6 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
-
 import "../../../MainSubComponents"
 
 Rectangle{
@@ -28,7 +27,6 @@ Rectangle{
 
     property var checkedValues : []
     readonly property string mapKey: "0"
-
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
@@ -38,53 +36,60 @@ Rectangle{
         id: dateFormatList
 
         ListElement{
-            menuItem:"dd/mm/yyyy"
+            menuItem:"Select"
+
+        }
+        ListElement{
+            menuItem:"DD/MM/YYYY"
         }
 
         ListElement{
-            menuItem:"dd mmmm yyyy"
+            menuItem:"DD MMMM YYYY"
         }
 
         ListElement{
-            menuItem:"d mmmm yyyy"
+            menuItem:"D MMMM YYYY"
         }
 
         ListElement{
-            menuItem:"dddd, d mmmm yyyy"
+            menuItem:"dddd, D MMMM YYYY"
         }
 
         ListElement{
-            menuItem:"dddd, dd mmmm yyyy"
+            menuItem:"dddd, DD MMMM YYYY"
         }
 
         ListElement{
-            menuItem:"dd/mm/yy"
+            menuItem:"DD/MM/YY"
         }
 
         ListElement{
-            menuItem:"d/m/yy"
+            menuItem:"D/M/YY"
         }
 
         ListElement{
-            menuItem:"d.m.yy"
+            menuItem:"D.M.YY"
         }
 
         ListElement{
-            menuItem:"yyyy-mm-dd"
+            menuItem:"YYYY-MM-DD"
         }
         ListElement{
-            menuItem:"d mmmm"
+            menuItem:"MMMM YYYY"
         }
         ListElement{
-            menuItem:"yy"
+            menuItem:"D MMMM"
+        }
+        ListElement{
+            menuItem : "YY"
         }
 
         ListElement{
-            menuItem:"yyyy"
+            menuItem:"YYYY"
         }
 
         ListElement{
-            menuItem:"dd/mm/yyyy HH:MM:SS"
+            menuItem:"DD/MM/YYYY hh:mm:ss"
         }
     }
 
@@ -117,7 +122,21 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
+    function slotEditModeSubCategory(subCategory){
 
+        if(subCategory === Constants.categorySubMulti){
+            multiSelectRadio.checked = true
+
+            multiSelectCheckList.visible = true
+            singleSelectCheckList.visible = false
+
+        } else{
+            singleSelectRadio.checked = true
+
+            multiSelectCheckList.visible = false
+            singleSelectCheckList.visible = true
+        }
+    }
     function onMultiSelectSelected(){
         multiSelectCheckList.visible = true
         singleSelectCheckList.visible = false
@@ -141,6 +160,7 @@ Rectangle{
 
         DSParamsModel.addToJoinValue(mapKey, modelData.toString())
         DSParamsModel.addToJoinRelation(mapKey, Constants.equalRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.equalRelation)
     }
 
 
@@ -161,6 +181,7 @@ Rectangle{
             }
 
             DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+            DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
             checkedValues = []
 
         }
@@ -195,6 +216,7 @@ Rectangle{
 
             DSParamsModel.addToJoinValue(mapKey, checkedValues.toString())
             DSParamsModel.addToJoinRelation(mapKey, Constants.inRelation)
+            DSParamsModel.addToJoinRelationSlug(mapKey, Constants.inRelation)
         }
 
     }
@@ -208,6 +230,63 @@ Rectangle{
 
     function onExcludeCheckedClicked(checked){
         DSParamsModel.setExclude(checked)
+    }
+
+    function getFormattedDate(modelData, value)
+    {
+        // Check for Selected Format
+        var formattedDate;
+        switch(value)
+        {
+            case 1:
+                formattedDate = Qt.formatDateTime(modelData,'dd/MM/yyyy')
+                break;
+            case 2:
+                formattedDate = Qt.formatDateTime(modelData,'dd MMMM yyyy')
+                break;
+            case 3:
+                formattedDate = Qt.formatDateTime(modelData,'d MMMM yyyy')
+                break;
+            case 4:
+                formattedDate = Qt.formatDateTime(modelData,'dddd, d MMMM yyyy')
+                break;
+            case 5:
+                formattedDate = Qt.formatDateTime(modelData,'dddd, dd MMMM yyyy')
+                break;
+            case 6:
+                formattedDate = Qt.formatDateTime(modelData,'dd/MM/yy')
+                break;
+            case 7:
+                formattedDate = Qt.formatDateTime(modelData,'d/M/yy')
+                break;
+            case 8:
+                formattedDate = Qt.formatDateTime(modelData,'d.M.yy')
+                break;
+            case 9:
+                formattedDate = Qt.formatDateTime(modelData,'yyyy-MM-dd')
+                break;
+            case 10:
+                formattedDate = Qt.formatDateTime(modelData,'MMMM yyyy')
+                break;
+            case 11:
+                formattedDate = Qt.formatDateTime(modelData,'d MMMM')
+                break;
+            case 12:
+                formattedDate = Qt.formatDateTime(modelData,'yy')
+                break;
+            case 13:
+                formattedDate = Qt.formatDateTime(modelData,'yyyy')
+                break;
+            case 14:
+                formattedDate = Qt.formatDateTime(modelData,'dd/MM/yyyy hh:mm:ss')
+                break;
+            default:
+                formattedDate = modelData
+
+        }
+
+        return formattedDate
+
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -315,11 +394,15 @@ Rectangle{
                     border.color: Constants.borderBlueColor
                     radius: 4
                 }
+                onTextChanged: {
+                    onTextChangedSearch()
+                }
             }
         }
 
     }
 
+    // Main Content Component
 
     Rectangle{
         id: listInnerContent
@@ -333,58 +416,54 @@ Rectangle{
         color: Constants.themeColor
         border.color: Constants.darkThemeColor
 
+
         // Checklist Button ListView
         // List Filters starts
 
-        Item {
-            id : somepageid
+        ButtonGroup {
+            id: childGroup
+            exclusive: false
+            checkState: mainCheckBox.checkState
+        }
+
+        CheckBoxTpl {
+            id: mainCheckBox
+            checked: DSParamsModel.selectAll
+            text: "All"
+            parent_dimension: Constants.defaultCheckBoxDimension
+            checkState: childGroup.checkState
+
+            onCheckedChanged: {
+                onAllCheckBoxCheckedChanged(checked)
+            }
+        }
+        ListView {
+            id: multiSelectCheckList
+            model: ColumnListModel
             height: parent.height
             width: parent.width
-
-            ButtonGroup {
-                id: childGroup
-                exclusive: false
-                checkState: mainCheckBox.checkState
+            anchors {
+                top: mainCheckBox.top
+                topMargin: 20
             }
 
-
-
-            ListView {
-                id: multiSelectCheckList
-                model: ColumnListModel
-                height: parent.height
-                width: parent.width
-                anchors {
-                    top: mainCheckBox.top
-                    topMargin: 20
-                }
+            delegate: Row{
+                height:20
                 CheckBoxTpl {
-                    id: mainCheckBox
-                    checked: DSParamsModel.selectAll
-                    text: "All"
+                    id: modelCheckBoxes
+                    checked: true
+                    text  : getFormattedDate(modelData, customBox.currentIndex)
                     parent_dimension: Constants.defaultCheckBoxDimension
-                    checkState: childGroup.checkState
+                    ButtonGroup.group: childGroup
 
                     onCheckedChanged: {
-                        onAllCheckBoxCheckedChanged(checked)
-                    }
-                }
-                delegate: Row{
-                    height:20
-                    CheckBoxTpl {
-                        id: modelCheckBoxes
-                        checked: true
-                        text: modelData
-                        parent_dimension: Constants.defaultCheckBoxDimension
-                        ButtonGroup.group: childGroup
-
-                        onCheckedChanged: {
-                            onMultiSelectCheckboxSelected(modelData,checked)
-                        }
+                        onMultiSelectCheckboxSelected(modelData,checked)
                     }
                 }
             }
         }
+
+
         // Checklist Button ListView
         // List Filters ends
 
@@ -408,7 +487,7 @@ Rectangle{
                 Column{
 
                     CustomRadioButton {
-                        text: modelData
+                        text: getFormattedDate(modelData,customBox.currentIndex)
                         ButtonGroup.group: singleSelectRadioGroup
                         height: Constants.defaultRadioDimension
                         width: Constants.defaultRadioDimension
@@ -425,10 +504,6 @@ Rectangle{
         // Radio button ListView
         // List Filters ends
 
-
-
-
-
         Column{
             width: parent.width/2
             height: parent.height
@@ -439,10 +514,14 @@ Rectangle{
             spacing: 5
 
             CustomComboBox{
+                id : customBox
                 currentIndex: 0
                 model: dateFormatList
                 textRole: "menuItem"
                 valueRole: "compareValue"
+                onActivated: {
+
+                }
 
                 anchors{
                     right: parent.right
@@ -451,8 +530,9 @@ Rectangle{
             }
 
         }
-
     }
+
+    // Main Content Component ends
 
     Rectangle{
         id: includeExcludeRow

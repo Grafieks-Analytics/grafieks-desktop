@@ -1,8 +1,8 @@
 #include "filterdatelist.h"
 
-FilterDateList::FilterDateList(const int &filterId, const QString &section, const QString &category, const QString &subcategory, const QString &tableName, const QString &columnName, const QString &relation, const QString &value, const bool &includeNull, const bool &exclude, QObject *parent):
+FilterDateList::FilterDateList(const int &filterId, const QString &section, const QString &category, const QString &subcategory, const QString &tableName, const QString &columnName, const QString &relation, const QString &slug, const QString &value, const bool &includeNull, const bool &exclude, QObject *parent):
 
-    QObject(parent), m_filterId(filterId), m_section(section), m_category(category), m_subCategory(subcategory), m_tableName(tableName), m_columnName(columnName), m_relation(relation), m_value(value), m_includeNull(includeNull), m_exclude(exclude)
+    QObject(parent), m_filterId(filterId), m_section(section), m_category(category), m_subCategory(subcategory), m_tableName(tableName), m_columnName(columnName), m_relation(relation), m_slug(slug), m_value(value), m_includeNull(includeNull), m_exclude(exclude)
 {
 
 }
@@ -36,6 +36,11 @@ bool FilterDateList::includeNull() const
 bool FilterDateList::exclude() const
 {
     return m_exclude;
+}
+
+QString FilterDateList::slug() const
+{
+    return m_slug;
 }
 
 QString FilterDateList::category() const
@@ -112,6 +117,16 @@ void FilterDateList::setExclude(bool exclude)
     emit excludeChanged(m_exclude);
 }
 
+void FilterDateList::setSlug(QString slug)
+{
+    if (m_slug == slug)
+        return;
+
+    m_slug = slug;
+
+    emit slugChanged(m_slug);
+}
+
 void FilterDateList::setCategory(QString category)
 {
     if (m_category == category)
@@ -147,3 +162,4 @@ void FilterDateList::setSection(QString section)
     m_section = section;
     emit sectionChanged(m_section);
 }
+

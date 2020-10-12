@@ -109,6 +109,10 @@ QtObject {
     property string categoryMainWildCardType: "categorical.wildcard"
     property string categoryMainTopType: "categorical.top"
 
+    property string dateMainListType: "date.list"
+    property string dateMainCalendarType: "date.calendar"
+    property string dateMainTimeFrameType: "date.timeframe"
+
     // Sub Categories
     property string categorySubMulti: "multiple"
     property string categorySubSingle: "single"

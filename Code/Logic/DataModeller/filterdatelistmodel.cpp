@@ -4,13 +4,6 @@
 FilterDateListModel::FilterDateListModel(QObject *parent) : QAbstractListModel(parent), counter(0)
 {
 
-
-//    explicit FilterList(const int & filterId, const QString & section, const QString & category, const QString & subcategory, const QString & tableName, const QString & columnName, const QString & relation, const QString & value, const bool & includeNull, const bool & exclude, QObject *parent = nullptr);
-
-//    qDebug() << "CALLED model constructor";
-//    addFilterList(new FilterList(0,"categorical", "categoricalList", "multiple", "users", "username", "IN", "%", true, false, this));
-//    addFilterList(new FilterList(1,"categorical", "categoricalList", "multiple", "email", "username", "IN", "%", true, false, this));
-
     sqlComparisonOperators.append("=");
     sqlComparisonOperators.append("!=");
     sqlComparisonOperators.append("<>");
@@ -24,11 +17,6 @@ FilterDateListModel::FilterDateListModel(QObject *parent) : QAbstractListModel(p
     sqlComparisonOperators.append("~*"); // Case insensitive posix comparators
 }
 
-void FilterDateListModel::callNewFilter()
-{
-//    qDebug() << "CALLED new filter";
-//    addFilterList(new FilterList(1,"categorical", "categoricalList", "multiple", "reset_hash", "username", "IN", "%", true, false, this));
-}
 
 int FilterDateListModel::rowCount(const QModelIndex &parent) const
 {
@@ -58,6 +46,8 @@ QVariant FilterDateListModel::data(const QModelIndex &index, int role) const
         return filterList->columnName();
     if( role == FilterListRelationRole)
         return filterList->relation();
+    if( role == FilterListSlugRole)
+        return filterList->slug();
     if( role == FilterListValueRole)
         return filterList->value();
     if( role == FilterListIncludeNullRole)
@@ -137,6 +127,15 @@ bool FilterDateListModel::setData(const QModelIndex &index, const QVariant &valu
         break;
     }
 
+    case FilterListSlugRole:
+    {
+        if( filterList->relation()!= value.toString()){
+            filterList->setRelation(value.toString());
+            somethingChanged = true;
+        }
+        break;
+    }
+
     case FilterListValueRole:
     {
 
@@ -193,6 +192,7 @@ QHash<int, QByteArray> FilterDateListModel::roleNames() const
     roles[FilterListTableNameRole] = "tableName";
     roles[FilterListColumnNameRole] = "columnName";
     roles[FilterListRelationRole] = "relation";
+    roles[FilterListSlugRole] = "slug";
     roles[FilterListValueRole] = "value";
     roles[FilterListIncludeNullRole] = "includeNull";
     roles[FilterListExcludeRole] = "exclude";
@@ -202,14 +202,17 @@ QHash<int, QByteArray> FilterDateListModel::roleNames() const
 
 
 
-void FilterDateListModel::newFilter(QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString val, bool includeNull, bool exclude )
+void FilterDateListModel::newFilter(QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, bool includeNull, bool exclude )
 {
 
 //    FilterList *filterList = new FilterList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this);
-//    qDebug << counter << section<< category<< subcategory < tableName, colName, relation, val, includeNull, exclude, this;
-    addFilterList(new FilterDateList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this));
+//    qDebug() <<"FROM FilterDateListModel newFilter" << counter << section<< category<< subcategory << tableName<< colName<< relation<< slug <<val<< includeNull<< exclude<< this;
+    addFilterList(new FilterDateList(this->counter, section, category, subcategory, tableName, colName, relation, slug, val, includeNull, exclude, this));
 
-    counter++;
+    this->counter++;
+
+    emit rowCountChanged();
+
 
 }
 
@@ -222,7 +225,7 @@ void FilterDateListModel::deleteFilter(int FilterIndex)
     emit rowCountChanged();
 }
 
-void FilterDateListModel::updateFilter(int FilterIndex, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString value, bool includeNull, bool exclude)
+void FilterDateListModel::updateFilter(int FilterIndex, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString value, bool includeNull, bool exclude)
 {
 
     beginResetModel();
@@ -238,6 +241,8 @@ void FilterDateListModel::updateFilter(int FilterIndex, QString section, QString
         mFilter[FilterIndex]->setColumnName(colName);
     if(relation != "")
         mFilter[FilterIndex]->setRelation(relation);
+    if(slug != "")
+        mFilter[FilterIndex]->setValue(slug);
     if(value != "")
         mFilter[FilterIndex]->setValue(value);
 
@@ -245,6 +250,8 @@ void FilterDateListModel::updateFilter(int FilterIndex, QString section, QString
     mFilter[FilterIndex]->setExclude(exclude);
 
     endResetModel();
+
+    emit rowCountChanged();
 
 
 }
@@ -290,11 +297,6 @@ void FilterDateListModel::addFilterList(FilterDateList *filter)
     emit rowCountChanged();
 }
 
-void FilterDateListModel::columnList(QVariantList &columns)
-{
-
-    Q_UNUSED(columns);
-}
 
 QString FilterDateListModel::setRelation(QString tableName, QString columnName, QString relation, QString conditions, bool exclude, bool isNull)
 {
@@ -312,7 +314,7 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
     QString individualCondition;
     QString concetantedCondition;
 
-    int counter = 0;
+    int localCounter = 0;
 
     // If there are several relations involved
 
@@ -324,16 +326,16 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
 
             notSign = sqlComparisonOperators.contains(tmpRelation)? " !" : " NOT ";
             excludeCase = exclude ? tmpRelation.prepend(notSign) : tmpRelation;
-            newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[counter] + "')" : conditionList[counter] ;
+            newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[localCounter] + "')" : conditionList[localCounter] ;
             newIncludeNull = isNull == false ? "AND " + tableName + "." + columnName + " IS NOT NULL" : "";
 
             tmpWhereConditions = QString("%1.%2 %3 %4 %5")
                             .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
 
-            counter++;
+            localCounter++;
         }
 
-        counter = 0;
+        localCounter = 0;
 
     } else{
 
@@ -356,4 +358,5 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
 
     return tmpWhereConditions;
 }
+
 

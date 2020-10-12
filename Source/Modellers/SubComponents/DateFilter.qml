@@ -53,7 +53,8 @@ Popup {
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
-
+    signal subCategoryEditMode(string subCategory)
+    signal signalWildCardEditData(string relation, string slug, string value)
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -74,22 +75,67 @@ Popup {
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
-
+    Component.onCompleted: {
+        dateFilterPopup.subCategoryEditMode.connect(listContent.slotEditModeSubCategory)
+       // categoricalFilterPopup.signalWildCardEditData.connect(wildcardContent.slotWildCardEditData)
+    }
     // SLOT function
-    function slotEditMode(section, category, subCategory, relation, value){
+//    function slotEditMode(section, category, subCategory, relation, value){
+
+//        if(section === Constants.dateTab){
+//            console.log("EDIT SIGNAL RECEIVED", section, category, subCategory, relation, value)
+//        }
+//    }
+    function slotEditMode(section, category, subCategory, relation, slug, value){
 
         if(section === Constants.dateTab){
-            console.log("EDIT SIGNAL RECEIVED", section, category, subCategory, relation, value)
+
+            switch(category){
+            case Constants.dateMainListType:
+
+                listContent.visible = true
+               // wildcardContent.visible = false
+                //topContent.visible = false
+
+                listRadio.checked = true
+
+                dateFilterPopup.subCategoryEditMode(subCategory)
+
+                break
+
+            case Constants.categoryMainWildCardType:
+
+                listContent.visible = false
+                wildcardContent.visible = true
+                topContent.visible = false
+
+                wildcardRadio.checked = true
+
+                //categoricalFilterPopup.signalWildCardEditData(relation, slug, value)
+
+                break
+
+            case Constants.categoryMainTopType:
+
+                listContent.visible = false
+                wildcardContent.visible = false
+                topContent.visible = true
+
+                topRadio.checked = true
+
+                break
+            }
+
         }
     }
 
 
     function closeDateFilterPopup(){
         dateFilterPopup.visible = false
+        DSParamsModel.resetFilter();
     }
 
     function applyDateFilter(){
-        // Wrtie code to apply date filter
 
         closeDateFilterPopup()
 
@@ -99,29 +145,63 @@ Popup {
         var subCategory = DSParamsModel.subCategory
         var tableName = DSParamsModel.tableName
         var columnName = DSParamsModel.colName
-        var relation = DSParamsModel.relation
-        var value = DSParamsModel.value
+        var joinRelation = DSParamsModel.fetchJoinRelation(0, true)
+        var joinValue = DSParamsModel.fetchJoinValue(0, true)
+        var joinSlug = DSParamsModel.fetchJoinRelationSlug(0, true)
         var includeNull = DSParamsModel.includeNull
         var exclude = DSParamsModel.exclude
 
+        var singleValue = "";
+        var singleRelation = "";
+        var singleSlug = "";
 
-        if(DSParamsModel.mode === Constants.modeCreate){
-            FilterDateListModel.newFilter(section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
 
-        } else{
-            FilterDateListModel.updateFilter(filterIndex, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+        switch(category){
+
+        case Constants.dateMainListType:
+
+            singleRelation = joinRelation[0]
+            singleValue = joinValue[0]
+            singleSlug = joinSlug[0]
+            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, filterIndex)
+
+            break
+
+        case Constants.dateMainCalendarType:
+
+            for(let i = 0; i < Object.keys(joinRelation).length; i++){
+                singleRelation = joinRelation[i]
+                singleValue = joinValue[i]
+                singleSlug = joinSlug[i]
+                manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, filterIndex)
+            }
+
+            break
+
+        case Constants.dateMainTimeFrameType:
+            break
+
+        default:
+            break
         }
 
         // Reset all DSParams
         DSParamsModel.resetFilter();
-        FilterListDateListFilter.setSearchString(category)
-
-        // Reset all DSParams
-        // DSParamsModel.resetFilter();
-        //FilterListCategoryListFilter.setSearchString(category)
 
     }
 
+    function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, filterIndex = 0){
+
+//        console.log(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, "FILTER LIST INSERT/UPDATE")
+
+        // Save the filter
+        if(mode === Constants.modeCreate){
+            FilterDateListModel.newFilter(section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+
+        } else{
+            FilterDateListModel.updateFilter(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+        }
+    }
     function resetDateFilter(){
         // Reset date filter here
         closeDateFilterPopup()
@@ -134,14 +214,15 @@ Popup {
         dateTimeFrameContent.visible = false
 
         DSParamsModel.resetFilter();
-        DSParamsModel.setCategory(Constants.categoryMainListType)
+        DSParamsModel.setCategory(Constants.dateMainListType)
 
         // For list category type
         // The db WHERE relation can only be IN / NOT IN ARRAY type
         // Except when "Select All" checked.
         // Then Relation will be LIKE
 
-        DSParamsModel.setRelation(Constants.likeRelation)
+        //DSParamsModel.setRelation(Constants.likeRelation)
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
     }
     function onCalendarClicked(){
         listContent.visible = false

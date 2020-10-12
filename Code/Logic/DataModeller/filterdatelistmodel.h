@@ -30,15 +30,13 @@ public:
     Qt::ItemFlags flags(const QModelIndex& index) const;
     QHash<int, QByteArray> roleNames() const;
 
-    void callNewFilter();
 
-    Q_INVOKABLE void newFilter(QString section = "",QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString val = "", bool includeNull = true, bool exclude = false);
+    Q_INVOKABLE void newFilter(QString section = "",QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString slug = "", QString val = "", bool includeNull = true, bool exclude = false);
     Q_INVOKABLE void deleteFilter(int FilterIndex);
-    Q_INVOKABLE void updateFilter(int FilterIndex, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString value = "", bool includeNull = true, bool exclude = false);
+    Q_INVOKABLE void updateFilter(int FilterIndex, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString slug = "", QString value = "", bool includeNull = true, bool exclude = false);
     Q_INVOKABLE void callQueryModel(QString tmpSql);
 
     void addFilterList(FilterDateList * filter);
-    void columnList(QVariantList &columns);
 
 
     enum Roles{
@@ -49,6 +47,7 @@ public:
         FilterListTableNameRole,
         FilterListColumnNameRole,
         FilterListRelationRole,
+        FilterListSlugRole,
         FilterListValueRole,
         FilterListIncludeNullRole,
         FilterListExcludeRole
@@ -65,5 +64,6 @@ signals:
 
 };
 
-
 #endif // FILTERDATELISTMODEL_H
+
+

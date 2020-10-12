@@ -1,15 +1,19 @@
 import QtQuick 2.15
+import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
 
 import "../../../MainSubComponents"
 
 Rectangle{
+    id : allDateId
     width: parent.width
     y:10
     anchors.left: parent.left
     anchors.leftMargin: 20
     property int rowSpacing: 8
+
+    readonly property int mapKey: 0
 
     /***********************************************************************************************************************/
     // LIST MODELS STARTS
@@ -61,7 +65,7 @@ Rectangle{
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
-
+    signal removeFromListModel(int refObjId)
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -91,10 +95,12 @@ Rectangle{
     // JAVASCRIPT FUNCTION STARTS
     function onRemoveElement(filterIndex){
         FilterDateListModel.deleteFilter(filterIndex)
+        DSParamsModel.removeJoinRelation(filterIndex)
+        DSParamsModel.removeJoinValue(filterIndex)
     }
 
     // Called when edit filter from categorical list clicked
-    function onEditElement(filterIndex, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude){
+    function onEditElement(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude){
         ColumnListModel.columnEditQuery(columnName, tableName, value)
 
         DSParamsModel.setMode(Constants.modeEdit)
@@ -104,10 +110,15 @@ Rectangle{
         DSParamsModel.setSubCategory(subCategory)
         DSParamsModel.setTableName(tableName)
         DSParamsModel.setColName(columnName)
-        DSParamsModel.setRelation(relation)
+        DSParamsModel.addToJoinRelation(mapKey, relation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, slug)
+        DSParamsModel.addToJoinValue(mapKey, value)
+        //DSParamsModel.setRelation(relation)
         DSParamsModel.setIncludeNull(includeNull)
         DSParamsModel.setExclude(exclude)
+        DSParamsModel.setInternalCounter(1)
 
+        ColumnListModel.columnEditQuery(columnName, tableName, value, category)
     }
 
 
@@ -144,17 +155,17 @@ Rectangle{
 
         spacing: rowSpacing
 
-        Text {
-            id: listFilters
-            text: qsTr("List")
-            font.pointSize: Constants.fontReading
-        }
+        //        Text {
+        //            id: listFilters
+        //            text: qsTr("List")
+        //            font.pointSize: Constants.fontReading
+        //        }
 
         ListView{
             id: listFiltersListView
             model: FilterDateListModel
             width: parent.width
-            height: FilterDateListModel.count * 30
+            height: 50
 
             anchors.topMargin: 10
             spacing: rowSpacing
@@ -187,7 +198,7 @@ Rectangle{
                         text: exclude === true ? "NOT " +relation : relation
                         anchors.left: parent.left
                         leftPadding: 20
-                        anchors.verticalCenter: Text.verticalCenter
+                        //anchors.verticalCenter: Text.verticalCenter
 
                     }
                     /*
@@ -208,7 +219,7 @@ Rectangle{
 
                     ReadOnlyTextBox{
                         boxWidth: parent.width
-                        text: coulmnValue
+                        text: value
                     }
                 }
 
@@ -239,7 +250,7 @@ Rectangle{
                             MouseArea{
                                 anchors.fill: parent
                                 onClicked: {
-                                    onEditElement(model.index, section, category, subCategory, tableName, columnName, relation, value, includeNull, exclude)
+                                    onEditElement(model.index, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
                                 }
                             }
                         }
