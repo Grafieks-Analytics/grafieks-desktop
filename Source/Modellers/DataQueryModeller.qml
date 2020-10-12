@@ -81,17 +81,23 @@ Page {
     // JAVASCRIPT FUNCTIONS STARTS
 
 
+
     function onDataModellerClicked(){
+
         if(!dataModellerSelected){
             dataModellerSelected = !dataModellerSelected
             datamodeller_querymodeller_background.color = Constants.leftDarkColor;
             queryModellerTab_background.color = queryModellerTab_background.hovered ? Constants.leftDarkColor : Constants.themeColor
             datamodeller_querymodeller_text.color = Constants.blackColor
+
             // Prompt dialog to warn user of data deletion
             // If accepted, the clear data
             // and push to another stackview screen
             // MessageDialog defined at the bottom
             dataRemovalWarningDataModel.open()
+
+            // Finally set a parameter in DSParamsModel
+            DSParamsModel.setCurrentTab(Constants.dataModellerTab)
         }
     }
 
@@ -125,6 +131,9 @@ Page {
             // and push to another stackview screen
             // MessageDialog defined at the bottom
             dataRemovalWarningQueryModel.open()
+
+            // Finally set a parameter in DSParamsModel
+            DSParamsModel.setCurrentTab(Constants.queryModellerTab)
         }
 
     }
@@ -147,7 +156,8 @@ Page {
 
         // Also set the C++ class
         // extract == in memory
-        DSParamsModel.setDsType("extract")
+        DSParamsModel.setDsType(Constants.extractDS)
+        DSParamsModel.setFileExtension(Constants.extractFileExt)
     }
 
     function openDataFilters(){
@@ -157,13 +167,14 @@ Page {
     function onLiveSelected(){
 
         // Also set the C++ class
-        DSParamsModel.setDsType("live")
+        DSParamsModel.setDsType(Constants.liveDS)
+        DSParamsModel.setFileExtension(Constants.liveFileExt)
     }
 
     function onCreateDashboardClicked(){
 
         Datasources.setDsName(ds_name.text)
-        Datasources.setSourceType("live")
+        Datasources.setSourceType(Constants.liveDS)
 
         stacklayout_home.currentIndex = 6
     }
@@ -209,6 +220,16 @@ Page {
         ds_name.readOnly= false
         ds_name.focus = true;
         console.log('Focussed')
+    }
+
+
+    function clearERDiagram(){
+        DSParamsModel.resetDataModel()
+    }
+
+    function clearQueryData(){
+        DSParamsModel.resetFilter()
+        DSParamsModel.setTmpSql("")
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -330,6 +351,8 @@ Page {
         icon: StandardIcon.Critical
 
         onAccepted: {
+
+            clearQueryData()
             dataQueryModellerStackview.pop()
             dataQueryModellerStackview.push("./SubComponents/DataModeller.qml")
         }
@@ -342,8 +365,8 @@ Page {
         icon: StandardIcon.Critical
 
         onAccepted: {
-            QueryModel.setTmpSql("")
 
+            clearERDiagram()
             dataQueryModellerStackview.pop()
             dataQueryModellerStackview.push("./SubComponents/QueryModeller.qml")
         }
@@ -431,7 +454,7 @@ Page {
 
             TabButton{
                 id: queryModellerTab
-                text: "Query Modeler"
+                text: "Query Modeller"
                 width:100
 
                 onClicked: onQueryModellerClicked()
@@ -695,6 +718,7 @@ Page {
         }
 
         initialItem: DataModeller{}
+
     }
 
 

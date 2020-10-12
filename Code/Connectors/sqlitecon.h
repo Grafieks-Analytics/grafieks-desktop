@@ -12,6 +12,7 @@
 
 #include "../statics.h"
 #include "../constants.h"
+#include "../Messages.h"
 
 /*!
  * \brief Handles the connection with Sqlite database across the application

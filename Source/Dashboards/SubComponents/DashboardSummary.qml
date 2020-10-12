@@ -29,14 +29,7 @@ Rectangle {
     property var dynamicText : Qt.createComponent("./MiniSubComponents/DroppedText.qml");
     property var dynamicImageBox : Qt.createComponent("./MiniSubComponents/DroppedImage.qml");
 
-//    property var acceptedProperties: ['text','image']
-    property var unAcceptedProperties: ['name','background color','report border']
-
-
-
     property int counter: 1
-
-    property string item: 'test'
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -72,13 +65,11 @@ Rectangle {
 
     function onDropAreaEntered(drag){
 
-
         dashboardArea.color = Constants.dropHighlightColor
-
         var currentPoint = {x: drag.x, y: drag.y};
         console.log("Entered", currentPoint.x, listViewElem.itemName)
-
     }
+
     function onDropAreaDropped(drag){
         var currentPoint = {x: drag.x, y: drag.y};
 
@@ -92,11 +83,10 @@ Rectangle {
         var draggedItem = listViewElem.itemName.toLocaleLowerCase();
 
         console.log(draggedItem);
-        rectangles.set(counter,dynamicContainer.createObject(parent,{x:drag.x, y: drag.y, z: DashboardContainerModel.zIndex,  name: 'Text', objectName : counter}))
+        rectangles.set(counter,dynamicContainer.createObject(parent,{x:drag.x, y: drag.y, z: DashboardContainerModel.zIndex,  objectName : counter}))
         counter++;
-
-
     }
+
     function onDropAreaPositionChanged(drag){
 //        console.log(drag);
     }
@@ -127,7 +117,6 @@ Rectangle {
     // Page Design Starts
 
     Component.onCompleted: {
-        console.log('Dashboard Summary Fired');
         DashboardContainerModel.setZIndex(1);
     }
 

@@ -43,6 +43,9 @@ Item {
 
     property int refObject: 0
     property int refObjectWidth: 0
+    readonly property string moduleName: "DataModeller"
+    property string joinString: ""
+    property int firstRectId : 0
 
 
 
@@ -67,6 +70,94 @@ Item {
 
     /***********************************************************************************************************************/
     // Connections Starts
+
+    Connections{
+        target: TableColumnsModel
+
+        function onColumnListObtained(allColumns, tableName, moduleName){
+
+            if(moduleName === dataModellerItem.moduleName){
+                allColumns.forEach(function(item, index){
+
+                    let param = tableName + "." + item[0]
+                    DSParamsModel.addToQuerySelectParamsList(param)
+                })
+            }
+        }
+    }
+
+
+    Connections{
+        target : DSParamsModel
+
+        function onDestroyLocalObjectsAndMaps(){
+
+            // Destroy dynamic objects
+            rectangles.forEach(function(value, index){
+
+                if(newConnectingLine.has(index)) newConnectingLine.get(index).destroy()
+                if(newJoinBox.has(index)) newJoinBox.get(index).destroy()
+                if(rectangles.has(index)) rectangles.get(index).destroy()
+            })
+
+            // Clear all maps
+            frontRectangleCoordinates.clear()
+            rearRectangleCoordinates.clear()
+            existingTables.clear()
+            newConnectingLine.clear()
+            newJoinBox.clear()
+            rectangles.clear()
+            frontRectLineMaps.clear()
+            rearRectLineMaps.clear()
+
+            // Reset other variables
+            tempRearRectLineMaps = []
+            counter = 0
+            tmpOrphanTableId = 0
+        }
+
+        // Delete select params, if signal received
+        function onHideColumnsChanged(hideColumns){
+            DSParamsModel.removeQuerySelectParamsList(hideColumns)
+        }
+
+        // Generate the dynamic query and run in on receiving the signal
+        function onProcessQuery(){
+
+            // STEPS
+            // 1. check if more than 1 rects dont have any connections in front
+            // 2. Identify the first rect
+            // 3. Recrsive function to process the back connections and reorder them
+            // 4. Write the function to create query
+            // 5. Execute query
+
+            var undefinedCounter = 0
+            var firstRectId = 0
+            dataModellerItem.rectangles.forEach(function(item, key){
+                if(dataModellerItem.frontRectLineMaps.has(key) === false)
+                    undefinedCounter++
+            })
+
+            // Check if the rectangles are connected to some rectangle in front (except the first one)
+            // If not throw an error
+            if(undefinedCounter <= 1){
+
+                dataModellerItem.rectangles.forEach(function(item, key){
+                    if(dataModellerItem.frontRectLineMaps.has(key) === false)
+                        dataModellerItem.firstRectId  = key
+                })
+
+                // Call the function to process the rest of the query
+
+                joinOrder(dataModellerItem.firstRectId )
+
+
+            } else{
+                // Throw an error here
+                console.log("JOIN is not complete")
+            }
+        }
+    }
 
 
     // Connections Ends
@@ -195,6 +286,90 @@ Item {
             tmpNearestTable.tableId =  0
             tmpNearestTable.tableName =  ""
         }
+    }
+
+
+    // Set the join order for sql
+    // Form the sql join statement
+    function joinOrder(objId, recursion = false){
+
+        var objArray = []
+        var tmpArray = []
+        var tmpJoinString = ""
+
+        if(recursion === true) {
+            objArray = objId
+        }else{
+            objArray.push(objId)
+            DSParamsModel.addToJoinOrder(objId)
+        }
+
+        objArray.forEach(function(item){
+            if(dataModellerItem.rearRectLineMaps.has(item) === true){
+
+                tmpArray = tmpArray.concat(dataModellerItem.rearRectLineMaps.get(item))
+
+                tmpArray.forEach(function(innerItem){
+
+                    DSParamsModel.addToJoinOrder(innerItem)
+
+                    let joinType = DSParamsModel.fetchJoinTypeMap(innerItem)
+                    let joinCompareTableName = DSParamsModel.fetchJoinBoxTableMap(innerItem)[1]
+                    let joinCurrentTableName = DSParamsModel.fetchJoinBoxTableMap(innerItem)[2]
+                    let joinConditions = DSParamsModel.fetchJoinMapList(innerItem)
+                    let joinConditionsList = ""
+
+                    tmpJoinString += "("
+
+                    for (var i=0; i<Object.keys(joinConditions).length; i++){
+
+                        let key = Object.keys(joinConditions)[i]
+                        tmpJoinString += " " + joinCurrentTableName + "." + joinConditions[key][1] + " = " + joinCompareTableName + "."  + joinConditions[key][0] + " AND"
+                    }
+
+                    let lastIndex = tmpJoinString.lastIndexOf(" AND");
+                    tmpJoinString = tmpJoinString.substring(0, lastIndex);
+                    tmpJoinString += ")"
+
+                    joinString += " " + joinType + " " + joinCurrentTableName + " ON " + tmpJoinString
+
+                    tmpJoinString = ""
+
+                })
+
+
+            }
+        })
+
+        objArray = tmpArray
+        tmpArray = []
+
+        // Call the recursive function till the end
+        // Then generate the final query and execute it
+        if(objArray.length > 0){
+            joinOrder(objArray, true)
+
+        } else{
+
+            // Generate the final column parameters
+            let selectColumns = ""
+            let finalQuery = ""
+            DSParamsModel.fetchQuerySelectParamsList().forEach(function(item){
+                selectColumns += " " + item + ","
+            })
+
+            let lastIndex = selectColumns.lastIndexOf(",");
+            selectColumns = selectColumns.substring(0, lastIndex);
+
+            finalQuery = "SELECT " + selectColumns + " FROM " + existingTables.get(dataModellerItem.firstRectId) + " " + joinString
+
+            // Call and execute the query
+            DSParamsModel.setTmpSql(finalQuery)
+            QueryModel.callSql(DSParamsModel.tmpSql)
+            TableSchemaModel.showSchema(DSParamsModel.tmpSql)
+        }
+
+
     }
 
 
@@ -400,6 +575,10 @@ Item {
         // Current reference Coordinate
         var currentPoint = {x: rectLeftX, y: rectLeftY};
 
+        // Get Column names of the table
+        TableColumnsModel.getColumnsForTable(tableslist.tableName, dataModellerItem.moduleName)
+
+
 
         // Get the nearest rectangle
         // And process the rest
@@ -488,6 +667,13 @@ Item {
 
         // return table name & id
         return {"tableName" :existingTables.get(nearestIndex), tableId : nearestIndex, distance : nearestDistance}
+    }
+
+    // Create sql from the visual Data modeller
+    // and execute query
+    function executeSql(){
+
+        QueryModel.callSql(DSParamsModel.tmpSql)
     }
 
 

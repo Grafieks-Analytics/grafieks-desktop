@@ -19,7 +19,7 @@ import "../../../MainSubComponents"
 Popup {
     id: editorPopup
     width: 800
-    height: 300
+    height: 340
     modal: true
 
     visible: true
@@ -144,12 +144,22 @@ Popup {
             height: 25
             width: 25
             anchors.rightMargin: 5
+            z:1001
             MouseArea{
                 anchors.fill: parent
                 onClicked: hidePopup()
             }
         }
 
+        MouseArea{
+            anchors.fill: parent
+            drag.target: editorPopup
+            onPositionChanged: {
+                console.log(mouse.x)
+                editorPopup.x += mouse.x
+                editorPopup.y += mouse.y
+            }
+        }
     }
 
 
@@ -157,7 +167,7 @@ Popup {
         id: textEditorDocument
         anchors.top: headerPopup.bottom
         anchors.topMargin: 10
-        height: editorPopup.height - (headerPopup.height + 30)
+        height: editorPopup.height - (headerPopup.height + 30) - footer.height
 
         width: parent.width - 20
 
@@ -176,6 +186,7 @@ Popup {
 
             TextEditor{
                 id: textEditor
+                z:10002
             }
 
         }
@@ -186,8 +197,36 @@ Popup {
         id: footer
         anchors.top: textEditorDocument.bottom
         anchors.topMargin: 10
+        height: 40
+        width: parent.width - 20
+
+        color: "transparent"
+
+        anchors.left: parent.left
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
 
         anchors.right: parent.right
+
+        Row{
+
+             spacing: 10
+             anchors.top: parent.top
+             anchors.topMargin: 10
+             anchors.right: parent.right
+
+             CustomButton{
+                 textValue: "Cancel"
+                 onClicked: hidePopup()
+             }
+
+             CustomButton{
+                 textValue: "Apply"
+                 onClicked: hidePopup()
+
+             }
+
+        }
 
     }
 

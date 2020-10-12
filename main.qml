@@ -12,6 +12,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Styles 1.4
 import Qt.labs.settings 1.1
+import Qt.labs.platform 1.1
 
 
 import com.grafieks.singleton.constants 1.0
@@ -86,6 +87,16 @@ ApplicationWindow {
         }
     }
 
+    function saveDatasource(){
+
+        dsSaveDialog.visible = true
+    }
+
+    function openDatasource(){
+
+        dsOpenDialog.visible = true
+    }
+
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -117,6 +128,34 @@ ApplicationWindow {
     }
 
 
+    FileDialog {
+        id: dsSaveDialog
+        title: "Save as"
+        folder: shortcuts.documents
+        fileMode: FileDialog.SaveFile
+        defaultSuffix: DSParamsModel.fileExtension
+        onAccepted: {
+            DSParamsModel.saveDatasource(file)
+
+        }
+    }
+
+    FileDialog {
+        id: dsOpenDialog
+        title: "Add New Datasource"
+        folder: shortcuts.documents
+        fileMode: FileDialog.OpenFile
+        nameFilters: ["Extract (*.gadse)", "Live (*.gads)"]
+
+        onAccepted: {
+            console.log(file)
+            var x = DSParamsModel.readDatasource(file)
+            console.log(x[0], x[1])
+
+        }
+    }
+
+
     // SubComponents Ends
     /***********************************************************************************************************************/
 
@@ -132,125 +171,117 @@ ApplicationWindow {
     /***********************************************************************************************************************/
     // Menu Bar Starts
 
+    MenuBar {
+        id: menuBar
+
+        Menu {
+            id: fileMenu
+            title: qsTr("&File")
 
 
-
-    menuBar : MenuBar{
-        id:menubar
-
-        // Menu File
-
-        Menu{
-            id: menu_file
-            x: 0
-            width: 200
-            title: qsTr("File")
-
-
-            Action{
+            MenuItem{
                 id: action_new
                 text: qsTr("New")
             }
 
-            Action{
+            MenuItem{
                 id: action_open
                 text: qsTr("Open")
             }
 
-            Action{
+            MenuSeparator{}
+
+            MenuItem{
                 id: action_sampledata
                 text: qsTr("SampleData")
             }
 
-            MenuSeparatorComponent{}
-
-            Action{
-                id: action_quit
-                text: qsTr("Exit")
-                onTriggered: Qt.quit()
-            }
-
-            delegate: MenuItemDelegate{}
 
         }
 
-        //Menu Edit
-
         Menu{
-            id: menu_edit
-            x: 0
-            //height: implicitHeight
-            width: 160
-            title: qsTr("Edit")
+            id: editMenu
+            title: qsTr("&Edit")
 
 
-            Action{
+            MenuItem{
                 id: action_undo
                 text: qsTr("Undo")
             }
 
-            Action{
+            MenuItem{
                 id: action_redo
                 text: qsTr("Redo")
             }
-            MenuSeparatorComponent{}
-            Action{
+
+            MenuSeparator{}
+
+            MenuItem{
                 id: action_cut
                 text: qsTr("Cut")
             }
 
-            Action{
+            MenuItem{
                 id: action_copy
                 text: qsTr("Copy")
             }
-            Action{
+
+            MenuItem{
                 id: action_paste
                 text: qsTr("Paste")
             }
-            Action{
+
+            MenuItem{
                 id: action_delete
                 text: qsTr("Delete")
             }
 
 
-            delegate: MenuItemDelegate{}
-
         }
 
-        // Menu Data
+        Menu {
+            id: dataMenu
+            title: qsTr("&Data")
 
-        Menu{
-            id: menu_data
-            title: qsTr("Data")
-            width:250
 
-            Action{
+            MenuItem{
                 id: action_new_ds
                 text: qsTr("Add New Datasource")
+
+                onTriggered: openDatasource()
             }
-            Action{
+
+            MenuSeparator{}
+
+            MenuItem{
+                id: action_save_ds
+                text: qsTr("Save Datasource")
+
+                onTriggered: saveDatasource()
+            }
+            MenuItem{
                 id: action_refresh_ds
                 text: qsTr("Refresh Datasource")
             }
-            Action{
+
+            MenuSeparator{}
+
+            MenuItem{
                 id: action_export_ds_csv
                 text: qsTr("Export Datasource to CSV")
             }
-            Action{
+            MenuItem{
                 id: action_export_ds_excel
                 text: qsTr("Export Datasource to Excel")
             }
-
-            delegate: MenuItemDelegate{}
         }
 
-        // Menu Server
+        Menu {
+            id: serverMenu
+            title: qsTr("&Server")
 
-        Menu{
-            id: menu_server
-            title: qsTr("Server")
 
-            Action{
+            MenuItem{
                 id: action_signin
                 text: Constants.signInText
 
@@ -266,103 +297,94 @@ ApplicationWindow {
                     }
                 }
             }
-            Action{
+
+            MenuSeparator{}
+
+            MenuItem{
                 id: action_publish_datasource
                 text: qsTr("Publish Datasource")
 
                 onTriggered: {
-                    Datasources.setSourceType("live")
+                    Datasources.setSourceType(Constants.liveDS)
 
                     publishGrafieks1.visible = true
                 }
             }
-            delegate: MenuItemDelegate{}
-
         }
 
+        Menu {
+            id: helpMenu
+            title: qsTr("&Help")
 
 
-        // Menu Help
-
-        Menu{
-            id: menu_help
-            title: qsTr("Help")
-
-            Action{
+            MenuItem{
                 text: qsTr("Open Help")
                 onTriggered: {
                     stacklayout_home.currentIndex = 2
                 }
 
             }
-            MenuSeparatorComponent{}
-            Action{
+            MenuSeparator{}
+            MenuItem{
                 text: qsTr("Manage License")
             }
 
-            Action{
+            MenuItem{
                 text: qsTr("Check for updates")
 
             }
-            MenuSeparatorComponent{}
+            MenuSeparator{}
 
-            Action{
+            MenuItem{
                 text: qsTr("Report Issue")
 
             }
-            Action{
+            MenuItem{
                 text: qsTr("Locate Log Files")
 
             }
-            MenuSeparatorComponent{}
-            Action{
+            MenuSeparator{}
+            MenuItem{
                 text: qsTr("Function List")
 
             }
-            MenuSeparatorComponent{}
+            MenuSeparator{}
 
 
-            Action{
+            MenuItem{
                 text: qsTr("Grafieks Community")
             }
-            Action{
-                text: qsTr("About Grafieks")
-            }
-            Action{
+
+            MenuItem{
                 text: qsTr("Test")
                 onTriggered: {
                     stacklayout_home.currentIndex = 1
                 }
             }
 
-            delegate: MenuItemDelegate{}
         }
 
-        Menu{
-            id: menu_signIn
-            title: Constants.signInText
-            height: 0
-            onOpened: {
+        //        Menu{
+        //            id: menu_signIn
+        //            title: Constants.signInText
+        //            height: 0
+        //            onOpened: {
 
-                if(typeof settings.value("user/sessionToken") !== "undefined"){
+        //                if(typeof settings.value("user/sessionToken") !== "undefined"){
 
-                    // Call logout
-                    logout.visible = true
+        //                    // Call logout
+        //                    logout.visible = true
 
-                } else{
+        //                } else{
 
-                    // Call login
-                    connectGrafieks1.visible = true
-                }
-            }
-        }
-        delegate: MainMenuDelegate{}
-
-        background: Rectangle {
-            color: Constants.themeColor
-        }
-
+        //                    // Call login
+        //                    connectGrafieks1.visible = true
+        //                }
+        //            }
+        //        }
+        //    }
     }
+
 
     // Menu Bar Ends
     /***********************************************************************************************************************/

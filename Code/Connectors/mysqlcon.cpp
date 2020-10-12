@@ -54,7 +54,7 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
             Statics::myPassword = password;
 
             outputStatus.insert("status", true);
-            outputStatus.insert("msg", Constants::GeneralSuccessMsg);
+            outputStatus.insert("msg", Messages::GeneralSuccessMsg);
 
             // Open another Mysql Connection
             // For Query/Data modeller
@@ -72,7 +72,7 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
 
     } else{
         outputStatus.insert("status", false);
-        outputStatus.insert("msg", Constants::GeneralNoDriver);
+        outputStatus.insert("msg", Messages::GeneralNoDriver);
     }
 
     return outputStatus;

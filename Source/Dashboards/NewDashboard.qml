@@ -27,6 +27,80 @@ Page {
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
+    ListModel{
+        id: dashboardModel
+        ListElement{
+            dashboardName: "Dashboard 1"
+        }
+        ListElement{
+            dashboardName: "Dashboard 2"
+        }
+        ListElement{
+            dashboardName: "Dashoo Dashboard 3"
+        }
+        ListElement{
+            dashboardName: "Das s3"
+        }
+        ListElement{
+            dashboardName: "dsa3"
+        }
+        ListElement{
+            dashboardName: "Dashboard 3"
+        }
+        ListElement{
+            dashboardName: "Dashboard 3"
+        }
+
+        ListElement{
+            dashboardName: "Das s3"
+        }
+        ListElement{
+            dashboardName: "dsa3"
+        }
+        ListElement{
+            dashboardName: "Dashboard 3"
+        }
+        ListElement{
+            dashboardName: "Dashboard 3"
+        }
+        ListElement{
+            dashboardName: "Dashboard 3"
+        }
+        ListElement{
+            dashboardName: "Dashboard 3"
+        }
+        ListElement{
+            dashboardName: "Dashboard 4"
+        }
+        ListElement{
+            dashboardName: "Dashboard 5"
+        }
+        ListElement{
+            dashboardName: "Dashboard 6"
+        }
+        ListElement{
+            dashboardName: "Dashboard 7"
+        }
+        ListElement{
+            dashboardName: "Dashboard 8"
+        }
+        ListElement{
+            dashboardName: "Dashboard 9"
+        }
+        ListElement{
+            dashboardName: "Dashboard 10"
+        }
+        ListElement{
+            dashboardName: "Dashboard 11"
+        }
+        ListElement{
+            dashboardName: "Dashboard 12"
+        }
+        ListElement{
+            dashboardName: "Dashboard 13"
+        }
+    }
+
 
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
@@ -91,6 +165,17 @@ Page {
         }
     }
 
+    function createNewReport(){
+        stacklayout_home.currentIndex = 7
+    }
+
+    function scrollToLeft(){
+        dashboardList.flick(600, 0)
+    }
+    function scrollToRight(){
+        dashboardList.flick(-600, 0)
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -124,38 +209,13 @@ Page {
         x: menu_width - 11
 
 
-        TabBar{
-
-            id: tabbutton_newdashboard
-
-            TabButton{
-                id: datamodeller_newdashboard
-                text: "Dashboard 1"
-                width:100
-
-                background: Rectangle {
-                    id: datamodeller_newdashboard_background
-                    color:  datamodeller_newdashboard.pressed? Constants.darkThemeColor: Constants.themeColor
-
-                }
-                contentItem: Text{
-                    id: datamodeller_newdashboard_text
-                    text: datamodeller_newdashboard.text
-                    color:  "black"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-
-            }
-
-        }
-
-
+        // Add new Dashboard Button Starts
 
         Button{
             id: new_dashboard_btn
-            anchors.left: tabbutton_newdashboard.right
+            anchors.left: parent.left
             width: 50
+            z:1000
 
             Image{
                 id: new_dashboard_icon
@@ -182,142 +242,241 @@ Page {
             }
         }
 
+        // Add new Dashboard Button Starts
 
+        // All Dashboards Lists Starts
+
+        Row{
+            height: 50
+//            width: submenu.width - toptool_newdashboard.width - 500
+            width: 300
+
+            anchors.left: new_dashboard_btn.right
+            anchors.right: parent.right
+            anchors.rightMargin: 30
+
+            ListView{
+                id: dashboardList
+                height: parent.height
+                width: submenu.width - toptool_newdashboard.width
+
+                model: dashboardModel
+                orientation: ListView.Horizontal
+
+                // When scroll end align to the nearest item
+                snapMode: ListView.SnapToItem
+                // data outside specified size during flick
+                clip: true
+                // Increase Flick speed
+                maximumFlickVelocity: 10000
+                cacheBuffer:1000
+
+
+                delegate: CustomDashboardNameButton{
+                    id: dashboardNameButton
+                    textValue: dashboardName
+                    Component.onCompleted: {
+                        console.log(index,dashboardNameButton.width)
+                        if(dashboardNameButton.width > 100){
+                            dashboardNameButton.width = 100
+                        }else{
+                            dashboardNameButton.width = dashboardNameButton.width
+                        }
+                    }
+                }
+            }
+        }
+
+        // Dashboard List Ends
+
+        // Sub menu Right Buttons Starts
 
         Row{
             id: toptool_newdashboard
             anchors.right: submenu.right
 
+            // left dashboard button starts
+            Button{
+                width: 25
+                height: 28
+                Row{
+                    spacing: 5
+                    anchors.centerIn: parent
+                    Image {
+                        source: "/Images/icons/arrow_left.png"
+                        width: 20
+                        height: 20
+                    }
+                }
+                onPressed: scrollToLeft()
+                background: Rectangle {
+                    color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
+                }
 
+            }
+            // left dashboard button ends
+
+
+
+            // right dashboard button starts
 
             Button{
-                id: report_btn
-                width: 100
+
+                width: 25
                 height: 28
 
                 Row{
-                   spacing: 5
-                   anchors.centerIn: parent
-
-                   Image {
-                       source: "/Images/icons/Plus_32.png"
-                       width: 20
-                       height: 20
-
-                   }
-
-                   Text{
-                       text: "Report"
-                       anchors.verticalCenter: parent.verticalCenter
-                   }
-
-
+                    spacing: 5
+                    anchors.centerIn: parent
+                    Image {
+                        source: "/Images/icons/arrow_right.png"
+                        width: 20
+                        height: 20
+                    }
                 }
 
+                onPressed: scrollToRight()
 
                 background: Rectangle {
-                    id: report_btn_background
-                    color: report_btn.hovered? Constants.darkThemeColor: Constants.whiteColor
+                    color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
                 }
 
             }
 
+            // right dashboard button ends
+
+            // Add Report button starts
+
+            Button{
+
+                width: 100
+                height: 28
+                onClicked: createNewReport()
+
+                Row{
+                    spacing: 5
+                    anchors.centerIn: parent
+                    Image {
+                        source: "/Images/icons/Plus_32.png"
+                        width: 20
+                        height: 20
+                    }
+                    Text{
+                        text: "Report"
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                }
+
+                background: Rectangle {
+                    id: report_btn_background
+                    color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
+                }
+
+            }
+
+            // Add Report Button Ends
 
             // Filter button starts
 
             Button{
-                id: filter_btn
                 width: 100
                 height: 28
                 anchors.leftMargin: 10
 
                 Row{
-                   spacing: 5
-                   anchors.centerIn: parent
+                    spacing: 5
+                    anchors.centerIn: parent
 
-                   Image{
-                       id: filter_querymodeller
-                       source: "/Images/icons/Plus_32.png"
-                       height: 20
-                       width: 20
+                    Image{
+                        id: filter_querymodeller
+                        source: "/Images/icons/Plus_32.png"
+                        height: 20
+                        width: 20
+                    }
 
-                   }
+                    Text{
+                        id: filterText
+                        text: "Filter"
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
 
-                   Text{
-                       id: filterText
-                       text: "Filter"
-                       anchors.verticalCenter: parent.verticalCenter
-                   }
+                    Text {
+                        id: filterLeftSquareBracket
+                        text: qsTr("[")
+                        color: Constants.grafieksGreen
 
-                   Text {
-                       id: filterLeftSquareBracket
-                       text: qsTr("[")
-                       color: Constants.grafieksGreen
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Text {
+                        id: filterNumber
+                        text: qsTr("0")
 
-                       anchors.verticalCenter: parent.verticalCenter
-                   }
-                   Text {
-                       id: filterNumber
-                       text: qsTr("0")
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Text {
+                        id: filterRightSquareBracket
+                        text: qsTr("]")
+                        color: Constants.grafieksGreen
 
-                       anchors.verticalCenter: parent.verticalCenter
-                   }
-                   Text {
-                       id: filterRightSquareBracket
-                       text: qsTr("]")
-                       color: Constants.grafieksGreen
-
-                       anchors.verticalCenter: parent.verticalCenter
-                   }
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
 
                 }
 
                 background: Rectangle{
-                    color: filter_btn.hovered ? Constants.darkThemeColor : "white"
+                    color: parent.hovered ? Constants.darkThemeColor : "white"
                 }
 
                 onClicked: openDashboardFilters()
             }
 
+            // Filter Button Ends
+
+            // Customize Button Starts
 
             Button{
-                id: customize_btn
                 height: 28
                 width: 100
 
                 Row{
-                   spacing: 5
-                   anchors.centerIn: parent
+                    spacing: 5
+                    anchors.centerIn: parent
 
-                   Image {
-                       id: name
-                       source: "/Images/icons/customize.png"
-                       width: 18
-                       height: 18
+                    Image {
+                        id: name
+                        source: "/Images/icons/customize.png"
+                        width: 18
+                        height: 18
 
-                   }
+                    }
 
-                   Text{
-                       text: "Customize"
-                       anchors.verticalCenter: parent.verticalCenter
-                   }
+                    Text{
+                        text: "Customize"
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
 
 
                 }
 
-                onClicked: {
-                    onCustomizeBtnClicked()
-                }
+
+                // open right customize panel
+                // which display widgets, reports and general settings
+
+                onClicked:  onCustomizeBtnClicked()
 
                 background: Rectangle{
-                    color: customize_btn.hovered ? Constants.darkThemeColor : "white"
+                    color: parent.hovered ? Constants.darkThemeColor : "white"
                 }
 
             }
 
+            // Customize Button Ends
+
 
 
         }
+
+        // Sub menu right button ends
 
     }
 
@@ -344,6 +503,7 @@ Page {
         id: dashboard_summary
         anchors.left: left_menubar.right
         anchors.top: toolsep1.bottom
+        anchors.topMargin: -6
     }
 
     WebEngineView {
@@ -373,6 +533,8 @@ Page {
         spacing: 50
 
         visible: false
+
+        z:99999999
 
 
         ToolSeparator{
@@ -429,6 +591,8 @@ Page {
 
     CustomizeReport{
         id: customizeReport
+
+        z:100000000
     }
 
     // Right Filter Starts
@@ -444,10 +608,12 @@ Page {
         spacing: 50
         visible: false
 
+        z:99999999
+
+
         ToolSeparator{
             anchors.top: parent.top
             anchors.left: column_newdashboard.left
-//            anchors.leftMargin: 20
 
             height:parent.height
 

@@ -20,6 +20,13 @@ QtObject {
     property string dataDesignerText : qsTr("Data Designer")
     property string dashboardDesignerText : qsTr("Dashboard Designer")
 
+    property string liveDS : qsTr("live")
+    property string extractDS : qsTr("extract")
+
+    property string liveFileExt: "gads"
+    property string extractFileExt: "gadse"
+    property string workbookFileExt: "gawb"
+
     property int tooltipShowTime: 1000
     property int tooltipHideTime: 5000
 
@@ -72,6 +79,8 @@ QtObject {
     // Menu option
     property int dataDesignerMenu : 0
     property int dashboardDesignerMenu : 1
+    property int dataModellerTab: 0
+    property int queryModellerTab: 1
 
     // Radio Size
     property int defaultRadioDimension: 16

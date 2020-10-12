@@ -49,7 +49,7 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &us
             Statics::sqlitePassword = password;
 
             outputStatus.insert("status", true);
-            outputStatus.insert("msg", Constants::GeneralSuccessMsg);
+            outputStatus.insert("msg", Messages::GeneralSuccessMsg);
 
 
             // Open another Sqlite Connection
@@ -69,7 +69,7 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &us
 
     } else{
         outputStatus.insert("status", false);
-        outputStatus.insert("msg", Constants::GeneralNoDriver);
+        outputStatus.insert("msg", Messages::GeneralNoDriver);
     }
 
     return outputStatus;

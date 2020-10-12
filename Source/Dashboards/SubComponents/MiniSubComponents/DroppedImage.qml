@@ -5,6 +5,8 @@ import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
 
+import "../../../MainSubComponents"
+
 // This is the Image Widget dynamically called from MainContainer
 // when a column is dropped from right side customize
 
@@ -22,6 +24,10 @@ Item{
     }
 
 
+    property var hoverStatus: false
+
+    // change this status to false when image is selected
+    property var imageChooseStatus: true
 
 
     /***********************************************************************************************************************/
@@ -57,6 +63,12 @@ Item{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted: selectFile()
+
+    function selectFile(){
+        fileDialog.open()
+    }
+
     function destroyElement(){
         mainContainer.destroy()
         this.destroy()
@@ -74,6 +86,17 @@ Item{
         mainContainer.z = DashboardContainerModel.zIndex;
     }
 
+
+    function showMenus(){
+        hoverStatus = true
+        mainContainer.rulerStatus = true
+    }
+    function hideMenus(){
+        hoverStatus = false
+        mainContainer.rulerStatus = false
+    }
+
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -82,6 +105,15 @@ Item{
 
     /***********************************************************************************************************************/
     // SubComponents Starts
+
+
+
+    FileDialog{
+        id: fileDialog
+        title: "Select a file (*.jpg *.jpeg *.png  only)"
+        selectMultiple: false
+        nameFilters: [ "Image files (*.jpg *.jpeg *.png )"]
+    }
 
 
 
@@ -114,10 +146,108 @@ Item{
             bottom: parent.bottom
         }
 
+        // Edit Menu Options Starts
+
+        Rectangle{
+
+            color: "transparent"
+            anchors.top: parent.top
+            height: 40
+            width: parent.width
+            z:20000
+
+            Rectangle{
+                anchors.right: parent.right
+                anchors.top: parent.top
+                height: parent.height
+
+                Row{
+                    id:menuOptions
+
+                    height: parent.height
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10
+
+                    spacing: 10
+                    z:20001
+
+                    visible: hoverStatus
+
+                    Image{
+                        id: editReport
+                        height: 20
+                        width: 20
+                        source: "../../../../Images/icons/Edit.png"
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked:  editOptions.open()
+                        }
+                    }
+
+                    Image {
+                        id: fullScreenReport
+                        height: 22
+                        width: 22
+                        source: "../../../../Images/icons/fullscreen.png"
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked:  toggleFullScreen()
+                        }
+                    }
+
+                }
+
+                Row{
+
+                    anchors.left: parent.right
+                    anchors.top: menuOptions.bottom
+                    width: parent.width
+                    height: 100
+
+                    Item {
+                        id: name
+                        anchors.left:menuOptions.left
+
+                        x: -editOptions.width
+
+                        Menu{
+                            id: editOptions
+
+                            MenuItem {
+                                text: qsTr("Edit")
+                                onTriggered: selectFile()
+                                onHoveredChanged: showMenus()
+                            }
+
+                            MenuItem {
+                                text: qsTr("Delete")
+                                onTriggered: destroyElement()
+                                onHoveredChanged: showMenus()
+                            }
+                        }
+
+                    }
+
+                }
+
+            }
+
+
+        }
+
+        // Edit Menu Options Ends
+
+
         MouseArea{
             anchors.centerIn: parent
             height: parent.height-4
             width: parent.width-4
+            hoverEnabled: true
             drag{
                 target: mainContainer
                 minimumX: Constants.leftMenubarWidth
@@ -129,31 +259,17 @@ Item{
 
             onClicked:  showCustomizeReport()
             onPressed:  onItemPressed()
+            onEntered: showMenus()
+            onExited: hideMenus()
         }
 
-        Image {
-            id: deleteContainer
-            height: 12
-            width: 12
-            source: "../../../../Images/icons/remove.png"
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.topMargin: 5
-            anchors.rightMargin: 5
+    }
 
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    destroyElement()
-                }
-            }
-        }
-
-        Text{
-            text: 'Choose Image'
-            anchors.centerIn: parent
-        }
-
+    CustomButton{
+        textValue: "Choose Image"
+        anchors.centerIn: parent
+        visible: imageChooseStatus
+        onClicked: selectFile()
     }
 
 }
