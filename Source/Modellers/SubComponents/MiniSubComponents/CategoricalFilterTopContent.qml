@@ -231,7 +231,7 @@ Rectangle{
             textRole: "menuItem"
             onCurrentIndexChanged: {
                 //                selectDropdown.setProperty(index ,"value", currentIndex)
-                console.log("TOP-BOTTOM", topType.currentValue, topType.currentIndex, topType.currentText )
+//                console.log("TOP-BOTTOM", topType.currentValue, topType.currentIndex, topType.currentText )
                 //                DSParamsModel.setSubCategory()
             }
         }
@@ -324,7 +324,7 @@ Rectangle{
                     anchors.left: topByText.right
                     anchors.leftMargin: 10
                     onCurrentIndexChanged: {
-                        console.log("FIELDS", fields.currentValue, fields.currentIndex, fields.currentText)
+//                        console.log("FIELDS", fields.currentValue, fields.currentIndex, fields.currentText)
 
                         if(fields.currentValue === "number"){
                             calculatedFieldType = "number"
@@ -332,7 +332,7 @@ Rectangle{
                             calculatedFieldType = "string"
                         }
 
-                        console.log(calculatedFieldType)
+//                        console.log(calculatedFieldType)
                     }
                 }
 
@@ -357,7 +357,7 @@ Rectangle{
         textRole: "calculationName"
         valueRole: "calculationCompareValue"
         onCurrentIndexChanged: {
-            console.log("CALCULATIONS", currentValue, currentIndex, currentText, topType.currentText)
+//            console.log("CALCULATIONS", currentValue, currentIndex, currentText, topType.currentText)
 
         }
         delegate: ItemDelegate {

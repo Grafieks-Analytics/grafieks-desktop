@@ -1,5 +1,5 @@
-#ifndef DOCUMENTHANDLER_H
-#define DOCUMENTHANDLER_H
+#ifndef DOCUMENTHANDLERMODEL_H
+#define DOCUMENTHANDLERMODEL_H
 
 #include <QQuickTextDocument>
 

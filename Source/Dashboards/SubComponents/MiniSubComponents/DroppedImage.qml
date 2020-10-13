@@ -81,9 +81,9 @@ Item{
     }
 
     function onItemPressed(){
-        DashboardContainerModel.setZIndex(++DashboardContainerModel.zIndex);
-        newItem.z = DashboardContainerModel.zIndex;
-        mainContainer.z = DashboardContainerModel.zIndex;
+        DashboardParamsModel.setZIndex(++DashboardParamsModel.zIndex);
+        newItem.z = DashboardParamsModel.zIndex;
+        mainContainer.z = DashboardParamsModel.zIndex;
     }
 
 

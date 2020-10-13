@@ -81,16 +81,16 @@ Rectangle {
 
     Component.onCompleted: {
 
-        objectType = DashboardContainerModel.lastContainerType;
+        objectType = DashboardParamsModel.lastContainerType;
 
-        if(DashboardContainerModel.lastContainerType == "text"){
+        if(DashboardParamsModel.lastContainerType == "text"){
             rectangles.set(counter,dynamicText.createObject(parent,{z:mainContainer.z, name: 'Text', objectName : counter}))
         }
 
-        else if(DashboardContainerModel.lastContainerType == "image"){
+        else if(DashboardParamsModel.lastContainerType == "image"){
             rectangles.set(counter, dynamicImageBox.createObject(parent, {z:mainContainer.z, name: 'Choose Image', objectName : counter}))
         }
-        else if(DashboardContainerModel.lastContainerType == "blank"){
+        else if(DashboardParamsModel.lastContainerType == "blank"){
             rectangles.set(counter, dynamicBlankBox.createObject(parent, {z:mainContainer.z, name: 'Blank', objectName : counter}))
         }
         else{
@@ -98,7 +98,7 @@ Rectangle {
             rectangles.set(counter, dynamicReportBox.createObject(parent, {z:mainContainer.z, name: objectType, objectName : counter}))
         }
 
-        DashboardContainerModel.setZIndex(++DashboardContainerModel.zIndex);
+        DashboardParamsModel.setZIndex(++DashboardParamsModel.zIndex);
 
         console.log('x',mainContainer.x);
         console.log('y',mainContainer.y);

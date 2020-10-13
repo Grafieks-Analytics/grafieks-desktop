@@ -76,14 +76,14 @@ Rectangle {
         dashboardArea.color = "transparent"
 
         console.log(listViewElem.itemName.toLowerCase(),'Dropped Item');
-        DashboardContainerModel.setLastContainerType(listViewElem.itemName.toLowerCase());
-        DashboardContainerModel.setPositionX(drag.x);
-        DashboardContainerModel.setPositionY(drag.y);
+        DashboardParamsModel.setLastContainerType(listViewElem.itemName.toLowerCase());
+        DashboardParamsModel.setPositionX(drag.x);
+        DashboardParamsModel.setPositionY(drag.y);
 
         var draggedItem = listViewElem.itemName.toLocaleLowerCase();
 
         console.log(draggedItem);
-        rectangles.set(counter,dynamicContainer.createObject(parent,{x:drag.x, y: drag.y, z: DashboardContainerModel.zIndex,  objectName : counter}))
+        rectangles.set(counter,dynamicContainer.createObject(parent,{x:drag.x, y: drag.y, z: DashboardParamsModel.zIndex,  objectName : counter}))
         counter++;
     }
 
@@ -117,7 +117,7 @@ Rectangle {
     // Page Design Starts
 
     Component.onCompleted: {
-        DashboardContainerModel.setZIndex(1);
+        DashboardParamsModel.setZIndex(1);
     }
 
     DropArea {
