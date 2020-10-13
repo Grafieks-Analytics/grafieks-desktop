@@ -15,6 +15,7 @@ class QtTest2 : public QObject
     QVariantMap mapVar;
     QMap<int, QString>mapVar1;
     QMap<int, QStringList> mapVar2;
+    QMultiMap<int, QString> mapVar3;
 
 public:
     explicit QtTest2(QObject *parent = nullptr);

@@ -16,6 +16,13 @@ QtTest2::QtTest2(QObject *parent) :QObject(parent)
     mapVar1.insert(2, "Two");
     mapVar1.insert(3, "Three");
 
+    mapVar3.insert(1, "One1");
+    mapVar3.insert(2, "Two1");
+    mapVar3.insert(3, "Three1");
+    mapVar3.insert(1, "One2");
+    mapVar3.insert(2, "Two2");
+    mapVar3.insert(3, "Three2");
+
     QStringList x;
     x << "Hello" << "world" << "dist";
 
@@ -64,6 +71,8 @@ void QtTest2::write()
 
     myFile.flush();
     myFile.close();
+
+    qDebug() << this->mapVar3.values(1) << "COLANA";
 }
 
 void QtTest2::read()

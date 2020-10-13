@@ -13,8 +13,8 @@ class DashboardParamsModel: public QObject
 
     // Dashboard Report Mapping
     QMap<int, QVector<int>> dashboardReportsMap; // <dashboardId, <reportId>>
-    QMap<int, QMap<int, int>> dashboardReportsZorder; // <dashboardId, <zId, reportId>>
-    QMap<int, QMap<int, QStringList>> dashboardReportCoordinates; // <dashboardId, <reportId, [x, y]>>
+    QMap<int, QMap<int, int>> dashboardReportsZorder; // <dashboardId, <reportId, zId>>
+    QMap<int, QMap<int, QVariantList>> dashboardReportCoordinates; // <dashboardId, <reportId, [x1, y1, x2, y2]>>
     QMap<int, QMap<int, int>> dashboardReportTypeMap; // <dashboardId, <reportId, reportTypeId (constant)>>
     QMap<int, QMap<int, QUrl>> dashboardReportUrl; // <dashboardId, <reportId, URI Link>>
 
@@ -25,13 +25,13 @@ class DashboardParamsModel: public QObject
     QMap<int, QString> dashboardLineColor;
     QMap<int, int> dashboardOpacity;
     QMap<int, bool> dashboardGrid;
-    QMap<int, QVector<int>> dashboardCanvasDimensions; // <dashboardId, [height, width]>
+    QMap<int, QVariantList> dashboardCanvasDimensions; // <dashboardId, [height, width]>
 
     // Customize Report parameters
-    QMap<int, QString> reportName;
-    QMap<int, QString> reportBackgroundColor;
-    QMap<int, QString> reportLineColor;
-    QMap<int, QString> reportOpacity; // <reportId, opacityValue>
+    QMap<int, QMap<int, QString>> reportName; // <dashboardId, <reportId, reportName>>
+    QMap<int, QMap<int, QString>> reportBackgroundColor; // <dashboardId, <reportId, backgroundColor>>
+    QMap<int, QMap<int, QString>> reportLineColor; // <dashboardId, <reportId, lineColor>>
+    QMap<int, QMap<int, int>> reportOpacity; // <dashboardId, <reportId, opacityValue>>
 
 
     // General
@@ -52,10 +52,10 @@ public:
     explicit DashboardParamsModel(QObject *parent = nullptr);
 
 
-    Q_INVOKABLE bool createNewDashboard();
-    Q_INVOKABLE bool destroyDashboard();
+    Q_INVOKABLE bool createNewDashboard(int dashboardId);
+    Q_INVOKABLE bool destroyDashboard(int dashboardId);
     Q_INVOKABLE QVariantMap fetchAllDashboards(); // returns [dashboardId, dashboardName]
-    Q_INVOKABLE QVariantList fetchReportsInDashboard(int dashboardId);
+    Q_INVOKABLE QVector<int> fetchReportsInDashboard(int dashboardId);
     Q_INVOKABLE QVariantMap fetchAllReportZOrder(int dashboardId);
     Q_INVOKABLE QVariantMap fetchAllReportCoordinates(int dashboardId);
     Q_INVOKABLE QVariantMap fetchAllReportUrls(int dashboardId);
@@ -70,14 +70,14 @@ public:
     Q_INVOKABLE void setReportZOrder(int dashboardId, int reportId, int zOrder);
     Q_INVOKABLE int getReportZOrder(int dashboardId, int reportId);
 
-    Q_INVOKABLE void setDashboardReportCoordinates(int dashboardId, int reportId, float x, float y);
-    Q_INVOKABLE QVector<float> getDashboardReportCoordinates(int dashboardId, int reportId);
+    Q_INVOKABLE void setDashboardReportCoordinates(int dashboardId, int reportId, float x1, float y1, float x2, float y2);
+    Q_INVOKABLE QVariantList getDashboardReportCoordinates(int dashboardId, int reportId);
 
     Q_INVOKABLE void setDashboardReportTypeMap(int dashboardId, int reportId, int reportType);
     Q_INVOKABLE int getDashboardReportTypeMap(int dashboardId, int reportId);
 
     Q_INVOKABLE void setDashboardReportUrl(int dashboardId, int reportId, QUrl url);
-    Q_INVOKABLE QUrl getDashboardReportUrl(int dashboardId, QUrl url);
+    Q_INVOKABLE QUrl getDashboardReportUrl(int dashboardId, int reportId);
 
     // Customize Dashboard parameters
 
@@ -97,7 +97,21 @@ public:
     Q_INVOKABLE bool getDashboardGrid(int dashboardId);
 
     Q_INVOKABLE void setDashboardDimensions(int dashboardId, int height, int width);
-    Q_INVOKABLE QVector<int> getDashboardDimensions(int dashboardId); // returns [height, width]
+    Q_INVOKABLE QVariantList getDashboardDimensions(int dashboardId); // returns [height, width]
+
+    // Customize Rerport parameters
+
+    Q_INVOKABLE void setReportName(int dashboardId, int reportId, QString reportName);
+    Q_INVOKABLE QString getReportName(int dashboardId, int reportId);
+
+    Q_INVOKABLE void setReportBackgroundColor(int dashboardId, int reportId, QString color);
+    Q_INVOKABLE QString getReportBackgroundColor(int dashboardId, int reportId);
+
+    Q_INVOKABLE void setReportLineColor(int dashboardId, int reportId, QString color);
+    Q_INVOKABLE QString getReportLineColor(int dashboardId, int reportId);
+
+    Q_INVOKABLE void setReportOpacity(int dashboardId, int reportId, int percent);
+    Q_INVOKABLE int getReportOpacity(int dashboardId, int reportId);
 
     QString lastContainerType() const;
     int positionY() const;
