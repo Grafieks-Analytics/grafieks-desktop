@@ -31,73 +31,7 @@ Page {
         id: dashboardModel
         ListElement{
             dashboardName: "Dashboard 1"
-        }
-        ListElement{
-            dashboardName: "Dashboard 2"
-        }
-        ListElement{
-            dashboardName: "Dashoo Dashboard 3"
-        }
-        ListElement{
-            dashboardName: "Das s3"
-        }
-        ListElement{
-            dashboardName: "dsa3"
-        }
-        ListElement{
-            dashboardName: "Dashboard 3"
-        }
-        ListElement{
-            dashboardName: "Dashboard 3"
-        }
-
-        ListElement{
-            dashboardName: "Das s3"
-        }
-        ListElement{
-            dashboardName: "dsa3"
-        }
-        ListElement{
-            dashboardName: "Dashboard 3"
-        }
-        ListElement{
-            dashboardName: "Dashboard 3"
-        }
-        ListElement{
-            dashboardName: "Dashboard 3"
-        }
-        ListElement{
-            dashboardName: "Dashboard 3"
-        }
-        ListElement{
-            dashboardName: "Dashboard 4"
-        }
-        ListElement{
-            dashboardName: "Dashboard 5"
-        }
-        ListElement{
-            dashboardName: "Dashboard 6"
-        }
-        ListElement{
-            dashboardName: "Dashboard 7"
-        }
-        ListElement{
-            dashboardName: "Dashboard 8"
-        }
-        ListElement{
-            dashboardName: "Dashboard 9"
-        }
-        ListElement{
-            dashboardName: "Dashboard 10"
-        }
-        ListElement{
-            dashboardName: "Dashboard 11"
-        }
-        ListElement{
-            dashboardName: "Dashboard 12"
-        }
-        ListElement{
-            dashboardName: "Dashboard 13"
+            dashboardId: 1
         }
     }
 
@@ -163,6 +97,19 @@ Page {
             // hide other panels
             column_filter_newdashboard.visible = false
         }
+    }
+
+    function addDashboard(){
+
+        let newCount = DashboardParamsModel.dashboardCount + 1
+        let newDashboardName =  "Dashboard "+ newCount
+        dashboardModel.append({"dashboardName" : newDashboardName, dashboardId: newCount})
+
+        DashboardParamsModel.setDashboardCount(newCount)
+    }
+
+    function setCurrentDashboard(dashboardId){
+        DashboardParamsModel.setCurrentDashboard(dashboardId)
     }
 
     function createNewReport(){
@@ -240,6 +187,8 @@ Page {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
+
+            onClicked: addDashboard()
         }
 
         // Add new Dashboard Button Starts
@@ -276,13 +225,14 @@ Page {
                     id: dashboardNameButton
                     textValue: dashboardName
                     Component.onCompleted: {
-                        console.log(index,dashboardNameButton.width)
                         if(dashboardNameButton.width > 100){
                             dashboardNameButton.width = 100
                         }else{
                             dashboardNameButton.width = dashboardNameButton.width
                         }
                     }
+
+                    onClicked: setCurrentDashboard(dashboardId)
                 }
             }
         }

@@ -3,6 +3,8 @@
 DashboardParamsModel::DashboardParamsModel(QObject *parent) : QObject(parent)
 {
 
+    this->setDashboardCount(1);
+    this->setCurrentDashboard(1);
 }
 
 bool DashboardParamsModel::createNewDashboard(int dashboardId)
@@ -564,6 +566,16 @@ int DashboardParamsModel::zIndex() const
     return m_zIndex;
 }
 
+int DashboardParamsModel::dashboardCount() const
+{
+    return m_dashboardCount;
+}
+
+int DashboardParamsModel::currentDashboard() const
+{
+    return m_currentDashboard;
+}
+
 void DashboardParamsModel::setLastContainerType(QString lastContainerType)
 {
     if (m_lastContainerType == lastContainerType)
@@ -598,4 +610,22 @@ void DashboardParamsModel::setZIndex(int zIndex)
 
     m_zIndex = zIndex;
     emit zIndexChanged(m_zIndex);
+}
+
+void DashboardParamsModel::setDashboardCount(int dashboardCount)
+{
+    if (m_dashboardCount == dashboardCount)
+        return;
+
+    m_dashboardCount = dashboardCount;
+    emit dashboardCountChanged(m_dashboardCount);
+}
+
+void DashboardParamsModel::setCurrentDashboard(int currentDashboard)
+{
+    if (m_currentDashboard == currentDashboard)
+        return;
+
+    m_currentDashboard = currentDashboard;
+    emit currentDashboardChanged(m_currentDashboard);
 }

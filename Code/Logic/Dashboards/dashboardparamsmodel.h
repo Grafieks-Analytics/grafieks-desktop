@@ -39,14 +39,17 @@ class DashboardParamsModel: public QObject
     Q_PROPERTY(int positionX READ positionX WRITE setPositionX NOTIFY positionXChanged)
     Q_PROPERTY(int positionY READ positionY WRITE setPositionY NOTIFY positionYChanged)
     Q_PROPERTY(int zIndex READ zIndex WRITE setZIndex NOTIFY zIndexChanged)
+    Q_PROPERTY(int dashboardCount READ dashboardCount WRITE setDashboardCount NOTIFY dashboardCountChanged)
+    Q_PROPERTY(int currentDashboard READ currentDashboard WRITE setCurrentDashboard NOTIFY currentDashboardChanged)
 
 
 
     QString m_lastContainerType;
     int m_positionY;
     int m_positionX;
-
     int m_zIndex;
+    int m_dashboardCount;
+    int m_currentDashboard;
 
 public:
     explicit DashboardParamsModel(QObject *parent = nullptr);
@@ -113,24 +116,29 @@ public:
     Q_INVOKABLE void setReportOpacity(int dashboardId, int reportId, int percent);
     Q_INVOKABLE int getReportOpacity(int dashboardId, int reportId);
 
+    // General
     QString lastContainerType() const;
     int positionY() const;
     int positionX() const;
-
     int zIndex() const;
+    int dashboardCount() const;
+    int currentDashboard() const;
 
 public slots:
     void setLastContainerType(QString lastContainerType);
     void setPositionY(int positionY);
     void setPositionX(int positionX);
-
     void setZIndex(int zIndex);
+    void setDashboardCount(int dashboardCount);
+    void setCurrentDashboard(int currentDashboard);
 
 signals:
     void lastContainerTypeChanged(QString lastContainerType);
     void positionYChanged(int positionY);
     void positionXChanged(int positionX);
     void zIndexChanged(int zIndex);
+    void dashboardCountChanged(int dashboardCount);
+    void currentDashboardChanged(int currentDashboard);
 };
 
 #endif // DASHBOARDPARAMSMODEL_H
