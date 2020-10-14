@@ -31,7 +31,7 @@ Page {
         id: dashboardModel
         ListElement{
             dashboardName: "Dashboard 1"
-            dashboardId: 1
+            dashboardId: 0
         }
     }
 
@@ -54,6 +54,13 @@ Page {
     // Connections Starts
 
 
+    Connections {
+        target: DashboardParamsModel
+
+        function onDashboardNameChanged(dashboardId, dashboardName){
+            dashboardModel.get(dashboardId).dashboardName = dashboardName
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -103,9 +110,9 @@ Page {
 
         let newCount = DashboardParamsModel.dashboardCount + 1
         let newDashboardName =  "Dashboard "+ newCount
-        dashboardModel.append({"dashboardName" : newDashboardName, dashboardId: newCount})
+        dashboardModel.append({"dashboardName" : newDashboardName, dashboardId: DashboardParamsModel.dashboardCount})
 
-        DashboardParamsModel.setDashboardCount(newCount)
+        DashboardParamsModel.createNewDashboard(DashboardParamsModel.dashboardCount)
     }
 
     function setCurrentDashboard(dashboardId){

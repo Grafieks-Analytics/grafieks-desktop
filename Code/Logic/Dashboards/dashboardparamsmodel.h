@@ -25,7 +25,7 @@ class DashboardParamsModel: public QObject
     QMap<int, QString> dashboardLineColor;
     QMap<int, int> dashboardOpacity;
     QMap<int, bool> dashboardGrid;
-    QMap<int, QVariantList> dashboardCanvasDimensions; // <dashboardId, [height, width]>
+    QMap<int, QVariantList> dashboardCanvasDimensions; // <dashboardId, [width, height]>
 
     // Customize Report parameters
     QMap<int, QMap<int, QString>> reportName; // <dashboardId, <reportId, reportName>>
@@ -99,8 +99,8 @@ public:
     Q_INVOKABLE void setDashboardGrid(int dashboardId, bool gridVisible);
     Q_INVOKABLE bool getDashboardGrid(int dashboardId);
 
-    Q_INVOKABLE void setDashboardDimensions(int dashboardId, int height, int width);
-    Q_INVOKABLE QVariantList getDashboardDimensions(int dashboardId); // returns [height, width]
+    Q_INVOKABLE void setDashboardDimensions(int dashboardId, int width, int height);
+    Q_INVOKABLE QVariantList getDashboardDimensions(int dashboardId); // returns [width, height]
 
     // Customize Rerport parameters
 
@@ -139,6 +139,9 @@ signals:
     void zIndexChanged(int zIndex);
     void dashboardCountChanged(int dashboardCount);
     void currentDashboardChanged(int currentDashboard);
+
+    // Customize Dashboard parameters
+    void dashboardNameChanged(int dashboardId, QString dashboardName);
 };
 
 #endif // DASHBOARDPARAMSMODEL_H

@@ -4,25 +4,42 @@ DashboardParamsModel::DashboardParamsModel(QObject *parent) : QObject(parent)
 {
 
     this->setDashboardCount(1);
-    this->setCurrentDashboard(1);
+    this->setCurrentDashboard(0);
+
+    // Create 1 default dashboard
+    QVariantList canvasDimensions;
+    canvasDimensions.append(0); // height
+    canvasDimensions.append(0); // width
+
+
+    this->dashboardName.insert(0, "Dashboard 1");
+    this->dashboardBackgroundColor.insert(0, "");
+    this->dashboardLineColor.insert(0, "");
+    this->dashboardOpacity.insert(0, 0);
+    this->dashboardGrid.insert(0, false);
+
+    this->dashboardCanvasDimensions.insert(0, canvasDimensions);
+
 }
 
 bool DashboardParamsModel::createNewDashboard(int dashboardId)
 {
 
     QVariantList canvasDimensions;
-    canvasDimensions.append(0); // x1 : Top left
-    canvasDimensions.append(0); // y1
-    canvasDimensions.append(0); // x2 : Bottom right
-    canvasDimensions.append(0); // y2
+    canvasDimensions.append(0); // height
+    canvasDimensions.append(0); // width
 
-    this->dashboardName.insert(dashboardId, "");
+
+    this->dashboardName.insert(dashboardId, "Dashboard "+ QString::number(dashboardId + 1));
     this->dashboardBackgroundColor.insert(dashboardId, "");
     this->dashboardLineColor.insert(dashboardId, "");
     this->dashboardOpacity.insert(dashboardId, 0);
     this->dashboardGrid.insert(dashboardId, false);
 
     this->dashboardCanvasDimensions.insert(dashboardId, canvasDimensions);
+
+    this->setDashboardCount(dashboardId + 1);
+    this->setCurrentDashboard(dashboardId);
 
     return true;
 }
@@ -44,6 +61,9 @@ bool DashboardParamsModel::destroyDashboard(int dashboardId)
     this->dashboardReportCoordinates.remove(dashboardId);
     this->dashboardReportsZorder.remove(dashboardId);
     this->dashboardReportsMap.remove(dashboardId);
+
+    // Decrease dashboard count
+    this->setDashboardCount(this->dashboardCount() - 1);
 
     return true;
 }
@@ -326,6 +346,8 @@ void DashboardParamsModel::setDashboardName(int dashboardId, QString dashboardNa
 {
 
     this->dashboardName.insert(dashboardId, dashboardName);
+
+    emit dashboardNameChanged(dashboardId, dashboardName);
 }
 
 QString DashboardParamsModel::getDashboardName(int dashboardId)
@@ -395,11 +417,11 @@ bool DashboardParamsModel::getDashboardGrid(int dashboardId)
     return output;
 }
 
-void DashboardParamsModel::setDashboardDimensions(int dashboardId, int height, int width)
+void DashboardParamsModel::setDashboardDimensions(int dashboardId, int width, int height)
 {
 
     QVariantList dimensions;
-    dimensions << height << width;
+    dimensions << width << height;
     this->dashboardCanvasDimensions.insert(dashboardId, dimensions);
 }
 

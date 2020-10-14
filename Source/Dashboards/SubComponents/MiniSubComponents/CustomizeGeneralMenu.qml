@@ -5,6 +5,19 @@ import com.grafieks.singleton.constants 1.0
 
 Rectangle{
 
+    Connections{
+        target: DashboardParamsModel
+
+        function onCurrentDashboardChanged(dashboardId){
+            dashboardName.text = DashboardParamsModel.getDashboardName(dashboardId)
+        }
+    }
+
+    function setDashboardName(dashboardName){
+        let currentDashboardId = DashboardParamsModel.currentDashboard
+        DashboardParamsModel.setDashboardName(currentDashboardId, dashboardName)
+    }
+
 
     Column{
 
@@ -31,6 +44,8 @@ Rectangle{
                 width: parent.width
                 border.width: Constants.borderWidth
             }
+
+            onTextChanged: setDashboardName(text)
         }
     }
 

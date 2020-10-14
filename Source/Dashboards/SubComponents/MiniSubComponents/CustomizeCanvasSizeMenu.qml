@@ -7,11 +7,28 @@ import "../../../MainSubComponents"
 
 Rectangle{
 
-    function onWidthValueChanged(){
-        console.log('Opacity')
+    Connections{
+        target: DashboardParamsModel
+
+        function onCurrentDashboardChanged(dashboardId){
+
+            let dashboardDimensions = DashboardParamsModel.getDashboardDimensions(dashboardId)
+            widthId.value = dashboardDimensions[0]
+            heightId.value = dashboardDimensions[1]
+        }
     }
-    function onHeightValueChanged(){
-        console.log('Opacity')
+
+    function onWidthValueChanged(value){
+
+        let dashboardHeight = heightId.value
+        let dashboardId = DashboardParamsModel.currentDashboard
+        DashboardParamsModel.setDashboardDimensions(dashboardId, value, dashboardHeight)
+    }
+    function onHeightValueChanged(value){
+
+        let dashboardWidth = widthId.value
+        let dashboardId = DashboardParamsModel.currentDashboard
+        DashboardParamsModel.setDashboardDimensions(dashboardId, dashboardWidth, value)
     }
 
     Column{
@@ -40,9 +57,9 @@ Rectangle{
                     text: qsTr("Width")
                 }
                 CustomSpinBox {
+                    id: widthId
                     value: 0
-                    onValueChanged: onWidthValueChanged()
-//                    maximumValue: 100
+                    onValueChanged: onWidthValueChanged(value)
                 }
             }
 
@@ -54,9 +71,9 @@ Rectangle{
                     text: qsTr("Height")
                 }
                 CustomSpinBox {
+                    id: heightId
                     value: 0
-                    onValueChanged: onHeightValueChanged()
-//                    maximumValue: 100
+                    onValueChanged: onHeightValueChanged(value)
                 }
             }
 

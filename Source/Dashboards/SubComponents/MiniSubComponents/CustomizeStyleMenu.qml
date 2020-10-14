@@ -33,6 +33,15 @@ Rectangle{
     // Connections Starts
 
 
+    Connections{
+        target: DashboardParamsModel
+
+        function onCurrentDashboardChanged(dashboardId){
+
+            fontSizeSpinBox.value = DashboardParamsModel.getDashboardOpacity(dashboardId)
+            gridHideShowId.checked = DashboardParamsModel.getDashboardGrid(dashboardId)
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -45,8 +54,21 @@ Rectangle{
     // JAVASCRIPT FUNCTION STARTS
 
 
-    function onOpacityValueChanged(){
-        console.log('Opacity')
+    function onOpacityValueChanged(value){
+        let dashboardId = DashboardParamsModel.currentDashboard
+        DashboardParamsModel.setDashboardOpacity(dashboardId, value)
+    }
+
+    function setGridVisibility(checkedState){
+
+        let dashboardId = DashboardParamsModel.currentDashboard
+        DashboardParamsModel.setDashboardGrid(dashboardId, checkedState)
+    }
+
+    function setBackgroundColor(color){
+
+        let dashboardId = DashboardParamsModel.currentDashboard
+        DashboardParamsModel.setDashboardBackgroundColor(dashboardId, color)
     }
 
 
@@ -63,12 +85,11 @@ Rectangle{
 
     ColorDialog{
         id: backgroundColorSelector
+        onAccepted: setBackgroundColor(backgroundColorSelector.color)
+
     }
 
 
-    ColorDialog{
-        id: lineColorSelector
-    }
 
     // SubComponents Ends
     /***********************************************************************************************************************/
@@ -112,39 +133,13 @@ Rectangle{
 
                 MouseArea{
                     anchors.fill: parent
-                    onClicked: backgroundSelector.open()
+                    onClicked: backgroundColorSelector.open()
                 }
             }
 
         }
 
-        Rectangle{
 
-            width: parent.width
-            height: 20
-            anchors.left: parent.left
-            anchors.leftMargin: 15
-            anchors.right: parent.right
-            anchors.rightMargin: 15
-
-            Text {
-                id: lineColor
-                text: qsTr("Line Color")
-            }
-
-            Image {
-                anchors.right: parent.right
-                source: "/Images/icons/Edit.png"
-                height: 20
-                width: 20
-
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: lineColorSelector.open()
-                }
-            }
-
-        }
 
         Rectangle{
 
@@ -165,7 +160,7 @@ Rectangle{
                 id: fontSizeSpinBox
                 value: 0
                 anchors.right: parent.right
-                onValueChanged: onOpacityValueChanged()
+                onValueChanged: onOpacityValueChanged(value)
             }
 
         }
@@ -183,11 +178,14 @@ Rectangle{
                 text: qsTr("Grid")
             }
 
-            Image {
+            CheckBoxTpl{
+                id: gridHideShowId
+                checked: false
+                parent_dimension: Constants.defaultCheckBoxDimension
                 anchors.right: parent.right
-                source: "/Images/icons/Edit.png"
-                height: 20
-                width: 20
+                anchors.top: parent.top
+
+                onCheckedChanged: setGridVisibility(checked)
             }
 
         }
