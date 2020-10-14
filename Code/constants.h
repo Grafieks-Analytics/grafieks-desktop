@@ -10,6 +10,7 @@ namespace Constants
     const QString defaultAPIEndpoint = "http://localhost:5476";
     const int ApiWaitTime = 5000; // in ms
     const int GeneralErrorCode = 403;
+    const QString DefaultBackgroundColor = "#FFFFFF";
 
 
     // Datasource type int

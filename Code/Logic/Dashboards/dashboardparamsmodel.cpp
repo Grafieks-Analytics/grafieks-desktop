@@ -5,6 +5,7 @@ DashboardParamsModel::DashboardParamsModel(QObject *parent) : QObject(parent)
 
     this->setDashboardCount(1);
     this->setCurrentDashboard(0);
+    this->setZIndex(1);
 
     // Create 1 default dashboard
     QVariantList canvasDimensions;
@@ -13,12 +14,74 @@ DashboardParamsModel::DashboardParamsModel(QObject *parent) : QObject(parent)
 
 
     this->dashboardName.insert(0, "Dashboard 1");
-    this->dashboardBackgroundColor.insert(0, "#FFFFFF");
+    this->dashboardBackgroundColor.insert(0, Constants::DefaultBackgroundColor);
     this->dashboardOpacity.insert(0, 0);
     this->dashboardGrid.insert(0, false);
 
     this->dashboardCanvasDimensions.insert(0, canvasDimensions);
 
+}
+
+bool DashboardParamsModel::dragNewReport(int dashboardId, int reportId)
+{
+
+    QVector<int> reportIds;
+    QMap<int, QString> reportNames;
+    QMap<int, QString> reportBackgroundColors;
+    QMap<int, QString> reportLineColors;
+    QMap<int, int> reportOpacities;
+
+    // Dashboard Report Mapping
+
+    if(!this->dashboardReportsMap.isEmpty()){
+        reportIds = this->dashboardReportsMap.value(dashboardId);
+        reportNames = this->reportName.value(dashboardId);
+        reportBackgroundColors = this->reportBackgroundColor.value(dashboardId);
+        reportLineColors = this->reportLineColor.value(dashboardId);
+        reportOpacities = this->reportOpacity.value(dashboardId);
+    }
+
+    reportIds.append(reportId);
+    reportNames.insert(reportId, "Report "+ QString::number(reportId));
+    reportBackgroundColors.insert(reportId, Constants::DefaultBackgroundColor);
+    reportLineColors.insert(reportId, Constants::DefaultBackgroundColor);
+    reportOpacities.insert(reportId, 0);
+
+
+    this->dashboardReportsMap[dashboardId] =  reportIds;
+    this->reportName[dashboardId] = reportNames;
+    this->reportBackgroundColor[dashboardId] = reportBackgroundColors;
+    this->reportLineColor[dashboardId] = reportLineColors;
+    this->reportOpacity[dashboardId] = reportOpacities;
+
+    return true;
+}
+
+bool DashboardParamsModel::removeReport(int dashboardId, int reportId)
+{
+
+    int reportPosition = 0;
+
+    // Remove customize report parameters
+
+    this->reportName[dashboardId].remove(reportId);
+    this->reportBackgroundColor[dashboardId].remove(reportId);
+    this->reportLineColor[dashboardId].remove(reportId);
+    this->reportOpacity[dashboardId].remove(reportId);
+
+    // Remove dashboard report mapping parameters
+
+    this->dashboardReportsZorder[dashboardId].remove(reportId);
+    this->dashboardReportCoordinates[dashboardId].remove(reportId);
+    this->dashboardReportTypeMap[dashboardId].remove(reportId);
+    this->dashboardReportUrl[dashboardId].remove(reportId);
+
+    // Remove the dashboard report mapping
+
+    reportPosition = this->dashboardReportsMap[dashboardId].indexOf(reportId);
+    this->dashboardReportsMap[dashboardId].remove(reportPosition);
+
+    return true;
 }
 
 bool DashboardParamsModel::createNewDashboard(int dashboardId)
@@ -236,20 +299,18 @@ void DashboardParamsModel::setDashboardReportCoordinates(int dashboardId, int re
 
     QMap<int, QVariantList> reportCoordinates;
     QVariantList coordinates;
+
+    coordinates << x1 << y1 << x2 << y2;
+
     if(this->dashboardReportCoordinates.value(dashboardId).isEmpty()){
 
-        coordinates << x1 << y1 << x2 << y2;
         reportCoordinates.insert(reportId, coordinates);
         this->dashboardReportCoordinates.insert(dashboardId, reportCoordinates);
     } else{
 
         reportCoordinates = this->dashboardReportCoordinates.value(dashboardId);
-        reportCoordinates[reportId][0] = x1;
-        reportCoordinates[reportId][1] = y1;
-        reportCoordinates[reportId][2] = x2;
-        reportCoordinates[reportId][3] = y2;
-
-        this->dashboardReportCoordinates.insert(dashboardId, reportCoordinates);
+        reportCoordinates[reportId] = coordinates;
+        this->dashboardReportCoordinates[dashboardId] =  reportCoordinates;
     }
 }
 

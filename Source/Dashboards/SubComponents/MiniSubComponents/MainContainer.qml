@@ -22,8 +22,8 @@ Rectangle {
         color: Constants.grafieksGreenColor
     }
 
-    width: 300
-    height: 200
+    width: Constants.defaultDroppedReportWidth
+    height: Constants.defaultDroppedReportHeight
 
     property int rulersSize: 10
 

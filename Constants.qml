@@ -132,5 +132,10 @@ QtObject {
 
     // FILTERS ends
 
+    // DASHBOARD starts
 
+    property int defaultDroppedReportWidth : 300
+    property int defaultDroppedReportHeight : 200
+
+    // DASHBOARD ends
 }

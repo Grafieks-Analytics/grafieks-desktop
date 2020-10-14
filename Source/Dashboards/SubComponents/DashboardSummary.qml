@@ -83,19 +83,28 @@ Rectangle {
     }
 
     function onDropAreaDropped(drag){
-        var currentPoint = {x: drag.x, y: drag.y};
+
+        let x1 = drag.x
+        let y1 = drag.y
+        let x2 = drag.x + Constants.defaultDroppedReportWidth
+        let y2 = drag.y + Constants.defaultDroppedReportHeight
+        let currentPoint = {x: drag.x, y: drag.y};
+        let draggedItem = listViewElem.itemName.toLocaleLowerCase();
 
         dashboardArea.color = "transparent"
 
-        console.log(listViewElem.itemName.toLowerCase(),'Dropped Item');
+        rectangles.set(counter,dynamicContainer.createObject(parent,{x: x1, y: y1, z: DashboardParamsModel.zIndex,  objectName : counter}))
+
+        DashboardParamsModel.dragNewReport(DashboardParamsModel.currentDashboard, counter)
+        DashboardParamsModel.setReportZOrder(DashboardParamsModel.currentDashboard, counter, DashboardParamsModel.zIndex)
+        DashboardParamsModel.setDashboardReportCoordinates(DashboardParamsModel.currentDashboard, counter, x1, y1, x2, y2)
+        DashboardParamsModel.setDashboardReportTypeMap(DashboardParamsModel.currentDashboard, counter, draggedItem)
+        DashboardParamsModel.setDashboardReportUrl(DashboardParamsModel.currentDashboard, counter, "")
+
         DashboardParamsModel.setLastContainerType(listViewElem.itemName.toLowerCase());
-        DashboardParamsModel.setPositionX(drag.x);
-        DashboardParamsModel.setPositionY(drag.y);
+        DashboardParamsModel.setPositionX(x1);
+        DashboardParamsModel.setPositionY(y1);
 
-        var draggedItem = listViewElem.itemName.toLocaleLowerCase();
-
-        console.log(draggedItem);
-        rectangles.set(counter,dynamicContainer.createObject(parent,{x:drag.x, y: drag.y, z: DashboardParamsModel.zIndex,  objectName : counter}))
         counter++;
     }
 
@@ -127,10 +136,6 @@ Rectangle {
 
     /***********************************************************************************************************************/
     // Page Design Starts
-
-    Component.onCompleted: {
-        DashboardParamsModel.setZIndex(1);
-    }
 
     DropArea {
         id: dropArea

@@ -7,6 +7,8 @@
 #include <QUrl>
 #include <QDebug>
 
+#include "../../constants.h"
+
 class DashboardParamsModel: public QObject
 {
     Q_OBJECT
@@ -53,6 +55,9 @@ class DashboardParamsModel: public QObject
 public:
     explicit DashboardParamsModel(QObject *parent = nullptr);
 
+
+    Q_INVOKABLE bool dragNewReport(int dashboardId, int reportId);
+    Q_INVOKABLE bool removeReport(int dashboardId, int reportId);
 
     Q_INVOKABLE bool createNewDashboard(int dashboardId);
     Q_INVOKABLE bool destroyDashboard(int dashboardId);
