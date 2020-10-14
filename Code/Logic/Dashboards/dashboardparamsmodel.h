@@ -22,7 +22,6 @@ class DashboardParamsModel: public QObject
     // Customize Dashboard parameters
     QMap<int, QString> dashboardName;
     QMap<int, QString> dashboardBackgroundColor;
-    QMap<int, QString> dashboardLineColor;
     QMap<int, int> dashboardOpacity;
     QMap<int, bool> dashboardGrid;
     QMap<int, QVariantList> dashboardCanvasDimensions; // <dashboardId, [width, height]>
@@ -90,9 +89,6 @@ public:
     Q_INVOKABLE void setDashboardBackgroundColor(int dashboardId, QString color);
     Q_INVOKABLE QString getDashboardBackgroundColor(int dashboardId);
 
-    Q_INVOKABLE void setDashboardLineColor(int dashboardId, QString color);
-    Q_INVOKABLE QString getDashboardLineColor(int dashboardId);
-
     Q_INVOKABLE void setDashboardOpacity(int dashboardId, int percent);
     Q_INVOKABLE int getDashboardOpacity(int dashboardId);
 
@@ -142,6 +138,7 @@ signals:
 
     // Customize Dashboard parameters
     void dashboardNameChanged(int dashboardId, QString dashboardName);
+    void dashboardBackgroundColorChanged(int dashboardId, QString color);
 };
 
 #endif // DASHBOARDPARAMSMODEL_H

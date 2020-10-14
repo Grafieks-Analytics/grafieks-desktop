@@ -13,8 +13,7 @@ DashboardParamsModel::DashboardParamsModel(QObject *parent) : QObject(parent)
 
 
     this->dashboardName.insert(0, "Dashboard 1");
-    this->dashboardBackgroundColor.insert(0, "");
-    this->dashboardLineColor.insert(0, "");
+    this->dashboardBackgroundColor.insert(0, "#FFFFFF");
     this->dashboardOpacity.insert(0, 0);
     this->dashboardGrid.insert(0, false);
 
@@ -31,8 +30,7 @@ bool DashboardParamsModel::createNewDashboard(int dashboardId)
 
 
     this->dashboardName.insert(dashboardId, "Dashboard "+ QString::number(dashboardId + 1));
-    this->dashboardBackgroundColor.insert(dashboardId, "");
-    this->dashboardLineColor.insert(dashboardId, "");
+    this->dashboardBackgroundColor.insert(dashboardId, "#FFFFFF");
     this->dashboardOpacity.insert(dashboardId, 0);
     this->dashboardGrid.insert(dashboardId, false);
 
@@ -50,7 +48,6 @@ bool DashboardParamsModel::destroyDashboard(int dashboardId)
 
     this->dashboardName.remove(dashboardId);
     this->dashboardBackgroundColor.remove(dashboardId);
-    this->dashboardLineColor.remove(dashboardId);
     this->dashboardOpacity.remove(dashboardId);
     this->dashboardGrid.remove(dashboardId);
     this->dashboardCanvasDimensions.remove(dashboardId);
@@ -363,6 +360,8 @@ void DashboardParamsModel::setDashboardBackgroundColor(int dashboardId, QString 
 {
 
     this->dashboardBackgroundColor.insert(dashboardId, color);
+
+    emit dashboardBackgroundColorChanged(dashboardId, color);
 }
 
 QString DashboardParamsModel::getDashboardBackgroundColor(int dashboardId)
@@ -370,21 +369,6 @@ QString DashboardParamsModel::getDashboardBackgroundColor(int dashboardId)
 
     QString output;
     output = this->dashboardBackgroundColor.value(dashboardId);
-
-    return output;
-}
-
-void DashboardParamsModel::setDashboardLineColor(int dashboardId, QString color)
-{
-
-    this->dashboardLineColor.insert(dashboardId, color);
-}
-
-QString DashboardParamsModel::getDashboardLineColor(int dashboardId)
-{
-
-    QString output;
-    output = this->dashboardLineColor.value(dashboardId);
 
     return output;
 }

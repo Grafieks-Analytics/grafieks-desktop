@@ -52,6 +52,18 @@ Rectangle {
     // Connections Starts
 
 
+    Connections{
+        target: DashboardParamsModel
+
+        function onCurrentDashboardChanged(dashboardId){
+
+            dashboardArea.color = DashboardParamsModel.getDashboardBackgroundColor(dashboardId)
+        }
+
+        function onDashboardBackgroundColorChanged(dashboardId, color){
+            dashboardArea.color = color
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
