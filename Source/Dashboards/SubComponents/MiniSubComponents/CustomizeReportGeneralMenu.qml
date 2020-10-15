@@ -9,14 +9,16 @@ Rectangle{
     Connections{
         target: DashboardParamsModel
 
-        function onCurrentDashboardChanged(dashboardId){
-            dashboardName.text = DashboardParamsModel.getDashboardName(dashboardId)
+        function onCurrentReportChanged(reportId){
+            let dashboardId = DashboardParamsModel.currentDashboard
+            reportName.text = DashboardParamsModel.getReportName(dashboardId, reportId)
         }
     }
 
-    function setDashboardName(dashboardName){
+    function setReportName(reportName){
         let currentDashboardId = DashboardParamsModel.currentDashboard
-        DashboardParamsModel.setDashboardName(currentDashboardId, dashboardName)
+        let currentReportId = DashboardParamsModel.currentReport
+        DashboardParamsModel.setReportName(currentDashboardId, currentReportId, reportName)
     }
 
 
@@ -33,11 +35,11 @@ Rectangle{
         spacing: 5
 
         Text {
-            text: qsTr("Dashboard Name")
+            text: qsTr("Report Name")
         }
 
         TextField{
-            id: dashboardName
+            id: reportName
             width: parent.width
             background: Rectangle {
                 border.color: Constants.borderBlueColor
@@ -46,7 +48,7 @@ Rectangle{
                 border.width: Constants.borderWidth
             }
 
-            onTextChanged: setDashboardName(text)
+            onTextChanged: setReportName(text)
         }
     }
 

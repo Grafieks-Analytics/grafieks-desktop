@@ -8,5 +8,4 @@ import QtQuick.Window 2.1
 SpinBox {
     id: fontSizeSpinBox
     value: 0
-    onValueChanged: console.log('Value Changed')
 }

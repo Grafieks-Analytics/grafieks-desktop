@@ -2,7 +2,7 @@
 
 
 
-DocumentHandler::DocumentHandler()
+DocumentHandlerModel::DocumentHandlerModel()
     : m_target(0)
     , m_doc(0)
     , m_cursorPosition(-1)
@@ -11,9 +11,9 @@ DocumentHandler::DocumentHandler()
 {
 }
 
-QQuickItem *DocumentHandler::target() { return m_target; }
+QQuickItem *DocumentHandlerModel::target() { return m_target; }
 
-void DocumentHandler::setTarget(QQuickItem *target)
+void DocumentHandlerModel::setTarget(QQuickItem *target)
 {
     m_doc = 0;
     m_target = target;
@@ -29,7 +29,7 @@ void DocumentHandler::setTarget(QQuickItem *target)
     emit targetChanged();
 }
 
-void DocumentHandler::setFileUrl(const QUrl &arg)
+void DocumentHandlerModel::setFileUrl(const QUrl &arg)
 {
     if (m_fileUrl != arg) {
         m_fileUrl = arg;
@@ -57,12 +57,12 @@ void DocumentHandler::setFileUrl(const QUrl &arg)
     }
 }
 
-QString DocumentHandler::documentTitle() const
+QString DocumentHandlerModel::documentTitle() const
 {
     return m_documentTitle;
 }
 
-void DocumentHandler::setDocumentTitle(QString arg)
+void DocumentHandlerModel::setDocumentTitle(QString arg)
 {
     if (m_documentTitle != arg) {
         m_documentTitle = arg;
@@ -70,7 +70,7 @@ void DocumentHandler::setDocumentTitle(QString arg)
     }
 }
 
-void DocumentHandler::setText(const QString &arg)
+void DocumentHandlerModel::setText(const QString &arg)
 {
     if (m_text != arg) {
         m_text = arg;
@@ -78,11 +78,12 @@ void DocumentHandler::setText(const QString &arg)
     }
 }
 
-void DocumentHandler::saveAs(const QUrl &arg, const QString &fileType)
+void DocumentHandlerModel::saveAs(const QUrl arg, const QString fileType)
 {
+
     bool isHtml = fileType.contains(QLatin1String("htm"));
     QLatin1String ext(isHtml ? ".html" : ".txt");
-    QString localPath = arg.toLocalFile();
+    QString localPath = arg.toEncoded();
     if (!localPath.endsWith(ext))
         localPath += ext;
     QFile f(localPath);
@@ -93,19 +94,21 @@ void DocumentHandler::saveAs(const QUrl &arg, const QString &fileType)
     f.write((isHtml ? m_doc->toHtml() : m_doc->toPlainText()).toLocal8Bit());
     f.close();
     setFileUrl(QUrl::fromLocalFile(localPath));
+    qDebug() << QUrl::fromLocalFile(localPath) << "XOXO TEXT HTML FILE PATH";
+//    qDebug() << QUrl::fromLocalFile(localPath) << m_doc->toHtml() << m_doc->toPlainText() << "X!X!" << arg << fileType;
 }
 
-QUrl DocumentHandler::fileUrl() const
+QUrl DocumentHandlerModel::fileUrl() const
 {
     return m_fileUrl;
 }
 
-QString DocumentHandler::text() const
+QString DocumentHandlerModel::text() const
 {
     return m_text;
 }
 
-void DocumentHandler::setCursorPosition(int position)
+void DocumentHandlerModel::setCursorPosition(int position)
 {
     if (position == m_cursorPosition)
         return;
@@ -115,7 +118,7 @@ void DocumentHandler::setCursorPosition(int position)
     reset();
 }
 
-void DocumentHandler::reset()
+void DocumentHandlerModel::reset()
 {
     emit fontFamilyChanged();
     emit alignmentChanged();
@@ -126,7 +129,7 @@ void DocumentHandler::reset()
     emit textColorChanged();
 }
 
-QTextCursor DocumentHandler::textCursor() const
+QTextCursor DocumentHandlerModel::textCursor() const
 {
     if (!m_doc)
         return QTextCursor();
@@ -141,7 +144,7 @@ QTextCursor DocumentHandler::textCursor() const
     return cursor;
 }
 
-void DocumentHandler::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
+void DocumentHandlerModel::mergeFormatOnWordOrSelection(const QTextCharFormat &format)
 {
     QTextCursor cursor = textCursor();
     if (!cursor.hasSelection())
@@ -149,23 +152,23 @@ void DocumentHandler::mergeFormatOnWordOrSelection(const QTextCharFormat &format
     cursor.mergeCharFormat(format);
 }
 
-void DocumentHandler::setSelectionStart(int position)
+void DocumentHandlerModel::setSelectionStart(int position)
 {
     m_selectionStart = position;
 }
 
-void DocumentHandler::setSelectionEnd(int position)
+void DocumentHandlerModel::setSelectionEnd(int position)
 {
     m_selectionEnd = position;
 }
 
-int DocumentHandler::cursorPosition() const { return m_cursorPosition; }
+int DocumentHandlerModel::cursorPosition() const { return m_cursorPosition; }
 
-int DocumentHandler::selectionStart() const { return m_selectionStart; }
+int DocumentHandlerModel::selectionStart() const { return m_selectionStart; }
 
-int DocumentHandler::selectionEnd() const { return m_selectionEnd; }
+int DocumentHandlerModel::selectionEnd() const { return m_selectionEnd; }
 
-void DocumentHandler::setAlignment(Qt::Alignment a)
+void DocumentHandlerModel::setAlignment(Qt::Alignment a)
 {
     if (!m_doc)
         return;
@@ -179,7 +182,7 @@ void DocumentHandler::setAlignment(Qt::Alignment a)
     emit alignmentChanged();
 }
 
-Qt::Alignment DocumentHandler::alignment() const
+Qt::Alignment DocumentHandlerModel::alignment() const
 {
     QTextCursor cursor = textCursor();
     if (cursor.isNull())
@@ -187,7 +190,7 @@ Qt::Alignment DocumentHandler::alignment() const
     return textCursor().blockFormat().alignment();
 }
 
-bool DocumentHandler::bold() const
+bool DocumentHandlerModel::bold() const
 {
     QTextCursor cursor = textCursor();
     if (cursor.isNull())
@@ -195,7 +198,7 @@ bool DocumentHandler::bold() const
     return textCursor().charFormat().fontWeight() == QFont::Bold;
 }
 
-bool DocumentHandler::italic() const
+bool DocumentHandlerModel::italic() const
 {
     QTextCursor cursor = textCursor();
     if (cursor.isNull())
@@ -203,7 +206,7 @@ bool DocumentHandler::italic() const
     return textCursor().charFormat().fontItalic();
 }
 
-bool DocumentHandler::underline() const
+bool DocumentHandlerModel::underline() const
 {
     QTextCursor cursor = textCursor();
     if (cursor.isNull())
@@ -211,7 +214,7 @@ bool DocumentHandler::underline() const
     return textCursor().charFormat().fontUnderline();
 }
 
-void DocumentHandler::setBold(bool arg)
+void DocumentHandlerModel::setBold(bool arg)
 {
     QTextCharFormat fmt;
     fmt.setFontWeight(arg ? QFont::Bold : QFont::Normal);
@@ -219,7 +222,7 @@ void DocumentHandler::setBold(bool arg)
     emit boldChanged();
 }
 
-void DocumentHandler::setItalic(bool arg)
+void DocumentHandlerModel::setItalic(bool arg)
 {
     QTextCharFormat fmt;
     fmt.setFontItalic(arg);
@@ -227,7 +230,7 @@ void DocumentHandler::setItalic(bool arg)
     emit italicChanged();
 }
 
-void DocumentHandler::setUnderline(bool arg)
+void DocumentHandlerModel::setUnderline(bool arg)
 {
     QTextCharFormat fmt;
     fmt.setFontUnderline(arg);
@@ -235,7 +238,7 @@ void DocumentHandler::setUnderline(bool arg)
     emit underlineChanged();
 }
 
-int DocumentHandler::fontSize() const
+int DocumentHandlerModel::fontSize() const
 {
     QTextCursor cursor = textCursor();
     if (cursor.isNull())
@@ -244,7 +247,7 @@ int DocumentHandler::fontSize() const
     return format.font().pointSize();
 }
 
-void DocumentHandler::setFontSize(int arg)
+void DocumentHandlerModel::setFontSize(int arg)
 {
     QTextCursor cursor = textCursor();
     if (cursor.isNull())
@@ -255,7 +258,7 @@ void DocumentHandler::setFontSize(int arg)
     emit fontSizeChanged();
 }
 
-QColor DocumentHandler::textColor() const
+QColor DocumentHandlerModel::textColor() const
 {
     QTextCursor cursor = textCursor();
     if (cursor.isNull())
@@ -264,7 +267,7 @@ QColor DocumentHandler::textColor() const
     return format.foreground().color();
 }
 
-void DocumentHandler::setTextColor(const QColor &c)
+void DocumentHandlerModel::setTextColor(const QColor &c)
 {
     QTextCursor cursor = textCursor();
     if (cursor.isNull())
@@ -275,7 +278,7 @@ void DocumentHandler::setTextColor(const QColor &c)
     emit textColorChanged();
 }
 
-QString DocumentHandler::fontFamily() const
+QString DocumentHandlerModel::fontFamily() const
 {
     QTextCursor cursor = textCursor();
     if (cursor.isNull())
@@ -284,7 +287,7 @@ QString DocumentHandler::fontFamily() const
     return format.font().family();
 }
 
-void DocumentHandler::setFontFamily(const QString &arg)
+void DocumentHandlerModel::setFontFamily(const QString &arg)
 {
     QTextCursor cursor = textCursor();
     if (cursor.isNull())
@@ -295,7 +298,7 @@ void DocumentHandler::setFontFamily(const QString &arg)
     emit fontFamilyChanged();
 }
 
-QStringList DocumentHandler::defaultFontSizes() const
+QStringList DocumentHandlerModel::defaultFontSizes() const
 {
     // uhm... this is quite ugly
     QStringList sizes;

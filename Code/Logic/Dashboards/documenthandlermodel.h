@@ -10,13 +10,15 @@
 #include <QtGui/QFontDatabase>
 #include <QtCore/QFileInfo>
 
+#include <QDebug>
+
 #include <qqmlfile.h>
 
 QT_BEGIN_NAMESPACE
 class QTextDocument;
 QT_END_NAMESPACE
 
-class DocumentHandler : public QObject
+class DocumentHandlerModel : public QObject
 {
     Q_OBJECT
 
@@ -44,7 +46,7 @@ class DocumentHandler : public QObject
     Q_PROPERTY(QString documentTitle READ documentTitle WRITE setDocumentTitle NOTIFY documentTitleChanged)
 
 public:
-    DocumentHandler();
+    DocumentHandlerModel();
 
     QQuickItem *target();
 
@@ -86,7 +88,7 @@ public Q_SLOTS:
 
     void setFileUrl(const QUrl &arg);
     void setText(const QString &arg);
-    void saveAs(const QUrl &arg, const QString &fileType);
+    void saveAs(const QUrl arg, const QString fileType);
 
     void setDocumentTitle(QString arg);
 

@@ -219,7 +219,7 @@ int main(int argc, char *argv[])
 
     // Define singletons
     qmlRegisterSingletonType(QUrl("qrc:/Constants.qml"), "com.grafieks.singleton.constants", 1, 0, "Constants");
-    qmlRegisterType<DocumentHandler>("io.qt.examples.texteditor", 1, 0, "DocumentHandler");
+    qmlRegisterType<DocumentHandlerModel>("io.qt.examples.texteditor", 1, 0, "DocumentHandlerModel");
 
     // Set contexts for QML
     engine.rootContext()->setContextProperty("DashboardParamsModel", &dashboardParamsModel);

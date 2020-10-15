@@ -42,6 +42,7 @@ class DashboardParamsModel: public QObject
     Q_PROPERTY(int zIndex READ zIndex WRITE setZIndex NOTIFY zIndexChanged)
     Q_PROPERTY(int dashboardCount READ dashboardCount WRITE setDashboardCount NOTIFY dashboardCountChanged)
     Q_PROPERTY(int currentDashboard READ currentDashboard WRITE setCurrentDashboard NOTIFY currentDashboardChanged)
+    Q_PROPERTY(int currentReport READ currentReport WRITE setCurrentReport NOTIFY currentReportChanged)
 
 
 
@@ -51,6 +52,7 @@ class DashboardParamsModel: public QObject
     int m_zIndex;
     int m_dashboardCount;
     int m_currentDashboard;
+    int m_currentReport;
 
 public:
     explicit DashboardParamsModel(QObject *parent = nullptr);
@@ -123,7 +125,8 @@ public:
     int positionX() const;
     int zIndex() const;
     int dashboardCount() const;
-    int currentDashboard() const;
+    int currentDashboard() const;    
+    int currentReport() const;
 
 public slots:
     void setLastContainerType(QString lastContainerType);
@@ -131,7 +134,8 @@ public slots:
     void setPositionX(int positionX);
     void setZIndex(int zIndex);
     void setDashboardCount(int dashboardCount);
-    void setCurrentDashboard(int currentDashboard);
+    void setCurrentDashboard(int currentDashboard);   
+    void setCurrentReport(int currentReport);
 
 signals:
     void lastContainerTypeChanged(QString lastContainerType);
@@ -144,6 +148,7 @@ signals:
     // Customize Dashboard parameters
     void dashboardNameChanged(int dashboardId, QString dashboardName);
     void dashboardBackgroundColorChanged(int dashboardId, QString color);
+    void currentReportChanged(int currentReport);
 };
 
 #endif // DASHBOARDPARAMSMODEL_H

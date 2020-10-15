@@ -205,7 +205,7 @@ Column{
     Component{
         id: generalComponent
 
-        CustomizeGeneralMenu{
+        CustomizeReportGeneralMenu{
             height: 60
             width: listViewElem.width
         }

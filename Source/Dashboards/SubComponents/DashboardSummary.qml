@@ -23,11 +23,8 @@ Rectangle {
     width: parent.width
 
     property var rectangles: new Map() // rectangle object
-
     property var dynamicContainer : Qt.createComponent("./MiniSubComponents/MainContainer.qml");
 
-    property var dynamicText : Qt.createComponent("./MiniSubComponents/DroppedText.qml");
-    property var dynamicImageBox : Qt.createComponent("./MiniSubComponents/DroppedImage.qml");
 
     property int counter: 1
 

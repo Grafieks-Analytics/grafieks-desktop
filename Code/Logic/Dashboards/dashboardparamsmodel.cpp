@@ -493,6 +493,7 @@ void DashboardParamsModel::setReportName(int dashboardId, int reportId, QString 
 
         this->reportName.insert(dashboardId, name);
     }
+
 }
 
 QString DashboardParamsModel::getReportName(int dashboardId, int reportId)
@@ -643,6 +644,11 @@ int DashboardParamsModel::currentDashboard() const
     return m_currentDashboard;
 }
 
+int DashboardParamsModel::currentReport() const
+{
+    return m_currentReport;
+}
+
 void DashboardParamsModel::setLastContainerType(QString lastContainerType)
 {
     if (m_lastContainerType == lastContainerType)
@@ -695,4 +701,13 @@ void DashboardParamsModel::setCurrentDashboard(int currentDashboard)
 
     m_currentDashboard = currentDashboard;
     emit currentDashboardChanged(m_currentDashboard);
+}
+
+void DashboardParamsModel::setCurrentReport(int currentReport)
+{
+    if (m_currentReport == currentReport)
+        return;
+
+    m_currentReport = currentReport;
+    emit currentReportChanged(m_currentReport);
 }

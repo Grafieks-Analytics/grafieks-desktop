@@ -76,6 +76,7 @@ Item{
     }
 
     function showCustomizeReport(){
+        DashboardParamsModel.setCurrentReport(newItem.objectName)
         customizeReport.visible = true;
     }
 

@@ -37,8 +37,6 @@ Rectangle {
     property var dynamicBlankBox : Qt.createComponent("./DroppedBlank.qml");
     property var dynamicReportBox : Qt.createComponent("./DroppedReport.qml");
 
-    property int counter: 1
-
     property var objectType: "";
 
     property var rulerStatus: false
@@ -83,19 +81,19 @@ Rectangle {
 
         objectType = DashboardParamsModel.lastContainerType;
 
-        if(DashboardParamsModel.lastContainerType == "text"){
-            rectangles.set(counter,dynamicText.createObject(parent,{z:mainContainer.z, name: 'Text', objectName : counter}))
+        if(DashboardParamsModel.lastContainerType === "text"){
+            rectangles.set(counter,dynamicText.createObject(parent,{z:mainContainer.z, name: 'Text', objectName : mainContainer.objectName}))
         }
 
-        else if(DashboardParamsModel.lastContainerType == "image"){
-            rectangles.set(counter, dynamicImageBox.createObject(parent, {z:mainContainer.z, name: 'Choose Image', objectName : counter}))
+        else if(DashboardParamsModel.lastContainerType === "image"){
+            rectangles.set(counter, dynamicImageBox.createObject(parent, {z:mainContainer.z, name: 'Choose Image', objectName : mainContainer.objectName}))
         }
-        else if(DashboardParamsModel.lastContainerType == "blank"){
-            rectangles.set(counter, dynamicBlankBox.createObject(parent, {z:mainContainer.z, name: 'Blank', objectName : counter}))
+        else if(DashboardParamsModel.lastContainerType === "blank"){
+            rectangles.set(counter, dynamicBlankBox.createObject(parent, {z:mainContainer.z, name: 'Blank', objectName : mainContainer.objectName}))
         }
         else{
             console.log(objectType);
-            rectangles.set(counter, dynamicReportBox.createObject(parent, {z:mainContainer.z, name: objectType, objectName : counter}))
+            rectangles.set(counter, dynamicReportBox.createObject(parent, {z:mainContainer.z, name: objectType, objectName : mainContainer.objectName}))
         }
 
         DashboardParamsModel.setZIndex(++DashboardParamsModel.zIndex);
@@ -103,8 +101,6 @@ Rectangle {
         console.log('x',mainContainer.x);
         console.log('y',mainContainer.y);
         console.log('z',mainContainer.z);
-
-        counter++;
 
     }
 

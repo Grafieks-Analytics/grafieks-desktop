@@ -48,7 +48,7 @@ Popup {
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
-
+    signal signalSaveTextDocument()
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -71,13 +71,6 @@ Popup {
     // JAVASCRIPT FUNCTION STARTS
 
 
-    function hidePopup(){
-        editorPopup.visible = false;
-    }
-    function openPopup(){
-        editorPopup.visible = true;
-    }
-
 
     Component.onCompleted: {
         console.log('Position x',editorPopup.parent.x)
@@ -92,6 +85,21 @@ Popup {
             editorPopup.parent.y = 50
             console.log('Changing top position')
         }
+
+        // Connect save document signal to editor slot
+        editorPopup.signalSaveTextDocument.connect(textEditor.slotSaveDocToHtml)
+    }
+
+    function saveText(){
+        editorPopup.visible = false;
+        editorPopup.signalSaveTextDocument()
+    }
+
+    function hidePopup(){
+        editorPopup.visible = false;
+    }
+    function openPopup(){
+        editorPopup.visible = true;
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -210,21 +218,21 @@ Popup {
 
         Row{
 
-             spacing: 10
-             anchors.top: parent.top
-             anchors.topMargin: 10
-             anchors.right: parent.right
+            spacing: 10
+            anchors.top: parent.top
+            anchors.topMargin: 10
+            anchors.right: parent.right
 
-             CustomButton{
-                 textValue: "Cancel"
-                 onClicked: hidePopup()
-             }
+            CustomButton{
+                textValue: "Cancel"
+                onClicked: hidePopup()
+            }
 
-             CustomButton{
-                 textValue: "Apply"
-                 onClicked: hidePopup()
+            CustomButton{
+                textValue: "Apply"
+                onClicked: saveText()
 
-             }
+            }
 
         }
 

@@ -38,7 +38,7 @@ Rectangle{
 
         function onCurrentDashboardChanged(dashboardId){
 
-            fontSizeSpinBox.value = DashboardParamsModel.getDashboardOpacity(dashboardId)
+            opacitySpinBox.value = DashboardParamsModel.getDashboardOpacity(dashboardId)
             gridHideShowId.checked = DashboardParamsModel.getDashboardGrid(dashboardId)
         }
     }
@@ -86,7 +86,6 @@ Rectangle{
     ColorDialog{
         id: backgroundColorSelector
         onAccepted: setBackgroundColor(backgroundColorSelector.color)
-
     }
 
 
@@ -157,7 +156,7 @@ Rectangle{
             }
 
             CustomSpinBox {
-                id: fontSizeSpinBox
+                id: opacitySpinBox
                 value: 0
                 anchors.right: parent.right
                 onValueChanged: onOpacityValueChanged(value)

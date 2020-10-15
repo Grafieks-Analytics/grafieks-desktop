@@ -1,6 +1,8 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+import QtQuick.Dialogs 1.2
+
 import com.grafieks.singleton.constants 1.0
 
 import "../../../MainSubComponents"
@@ -29,7 +31,15 @@ Rectangle{
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: DashboardParamsModel
 
+        function onCurrentReportChanged(reportId){
+
+            let dashboardId = DashboardParamsModel.currentDashboard
+            opacitySpinBox.value = DashboardParamsModel.getReportOpacity(dashboardId, reportId)
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -41,8 +51,29 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    function onOpacityValueChanged(){
-        console.log('Opacity')
+    function onOpacityValueChanged(value){
+        let dashboardId = DashboardParamsModel.currentDashboard
+        let reportId = DashboardParamsModel.currentReport
+
+        DashboardParamsModel.setReportOpacity(dashboardId, reportId, value)
+
+    }
+
+    function setBackgroundColor(color){
+
+        let dashboardId = DashboardParamsModel.currentDashboard
+        let reportId = DashboardParamsModel.currentReport
+
+        DashboardParamsModel.setReportBackgroundColor(dashboardId, reportId, color)
+    }
+
+    function setLineColor(color){
+
+        let dashboardId = DashboardParamsModel.currentDashboard
+        let reportId = DashboardParamsModel.currentReport
+
+        DashboardParamsModel.setReportLineColor(dashboardId, reportId, color)
+
     }
 
 
@@ -56,6 +87,15 @@ Rectangle{
     // SubComponents Starts
 
 
+    ColorDialog{
+        id: backgroundColorSelector
+        onAccepted: setBackgroundColor(backgroundColorSelector.color)
+    }
+
+    ColorDialog{
+        id: lineColorSelector
+        onAccepted: setLineColor(backgroundColorSelector.color)
+    }
 
     // SubComponents Ends
     /***********************************************************************************************************************/
@@ -99,9 +139,8 @@ Rectangle{
                 width: 20
 
                 MouseArea{
-
                     anchors.fill: parent
-
+                    onClicked: backgroundColorSelector.open()
                 }
             }
 
@@ -126,6 +165,11 @@ Rectangle{
                 source: "/Images/icons/Edit.png"
                 height: 20
                 width: 20
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: lineColorSelector.open()
+                }
             }
 
         }
@@ -146,10 +190,10 @@ Rectangle{
             }
 
             CustomSpinBox {
-                id: fontSizeSpinBox
+                id: opacitySpinBox
                 value: 0
                 anchors.right: parent.right
-                onValueChanged: onOpacityValueChanged()
+                onValueChanged: onOpacityValueChanged(value)
             }
 
         }

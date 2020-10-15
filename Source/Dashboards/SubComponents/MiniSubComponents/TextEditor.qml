@@ -108,6 +108,13 @@ Rectangle{
         textArea.copy()
     }
 
+    function slotSaveDocToHtml(){
+
+        let dashboardId = DashboardParamsModel.currentDashboard
+        document.saveAs("/Users/mac/Desktop/t12", "html")
+        DashboardParamsModel.setDashboardReportUrl(dashboardId, "/Users/mac")
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -202,7 +209,7 @@ Rectangle{
         id: italicAction
         iconName: "format-text-italic"
         onTriggered: document.italic = !document.italic
-        checkable: true
+//        checkable: true
         checked: document.italic
     }
     Action {
@@ -446,7 +453,7 @@ Rectangle{
             id: errorDialog
         }
 
-        DocumentHandler {
+        DocumentHandlerModel {
             id: document
             target: textArea
             cursorPosition: textArea.cursorPosition
