@@ -527,6 +527,8 @@ void DashboardParamsModel::setReportBackgroundColor(int dashboardId, int reportI
 
         this->reportBackgroundColor.insert(dashboardId, backgroundColor);
     }
+
+    emit reportBackgroundColorChanged(dashboardId, reportId, color);
 }
 
 QString DashboardParamsModel::getReportBackgroundColor(int dashboardId, int reportId)

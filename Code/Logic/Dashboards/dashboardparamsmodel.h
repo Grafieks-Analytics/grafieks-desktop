@@ -144,11 +144,15 @@ signals:
     void zIndexChanged(int zIndex);
     void dashboardCountChanged(int dashboardCount);
     void currentDashboardChanged(int currentDashboard);
+    void currentReportChanged(int currentReport);
 
     // Customize Dashboard parameters
     void dashboardNameChanged(int dashboardId, QString dashboardName);
     void dashboardBackgroundColorChanged(int dashboardId, QString color);
-    void currentReportChanged(int currentReport);
+
+
+    // Customize Report parameters
+    void reportBackgroundColorChanged(int dashboardId, int reportId, QString color);
 };
 
 #endif // DASHBOARDPARAMSMODEL_H
