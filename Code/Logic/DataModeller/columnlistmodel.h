@@ -30,6 +30,7 @@ public:
     Q_INVOKABLE void likeColumnQuery(QString columnName, QString tableName, QString searchString = "");
     Q_INVOKABLE void columnQuery(QString columnName, QString tableName, int pageNo = 0);
     Q_INVOKABLE void columnEditQuery(QString columnName, QString tableName, QString fieldNames, QString category);
+    Q_INVOKABLE void columnDateFormatQuery(QString columnName, QString tableName, int value , int pageNo = 0);
 
 public slots:
 

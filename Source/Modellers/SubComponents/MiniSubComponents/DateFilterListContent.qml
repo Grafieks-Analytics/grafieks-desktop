@@ -452,7 +452,7 @@ Rectangle{
                 CheckBoxTpl {
                     id: modelCheckBoxes
                     checked: true
-                    text  : getFormattedDate(modelData, customBox.currentIndex)
+                    text  : modelData
                     parent_dimension: Constants.defaultCheckBoxDimension
                     ButtonGroup.group: childGroup
 
@@ -487,7 +487,7 @@ Rectangle{
                 Column{
 
                     CustomRadioButton {
-                        text: getFormattedDate(modelData,customBox.currentIndex)
+                        text : modelData
                         ButtonGroup.group: singleSelectRadioGroup
                         height: Constants.defaultRadioDimension
                         width: Constants.defaultRadioDimension
@@ -520,7 +520,7 @@ Rectangle{
                 textRole: "menuItem"
                 valueRole: "compareValue"
                 onActivated: {
-
+                    ColumnListModel.columnDateFormatQuery(DSParamsModel.colName, DSParamsModel.tableName, currentIndex)
                 }
 
                 anchors{
