@@ -43,7 +43,18 @@ Item{
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: DashboardParamsModel
 
+        function onReportBackgroundColorChanged(refDashboardId, refReportId, refColor){
+
+            let dashboardId = DashboardParamsModel.currentDashboard
+            let reportId = DashboardParamsModel.currentReport
+
+            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName))
+                droppedReportId.color = refColor
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -113,6 +124,7 @@ Item{
 
     Rectangle {
 
+        id: droppedReportId
         color: "white"
         border.width: 1
         border.color: Constants.darkThemeColor

@@ -42,7 +42,18 @@ Item{
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: DashboardParamsModel
 
+        function onReportBackgroundColorChanged(refDashboardId, refReportId, refColor){
+
+            let dashboardId = DashboardParamsModel.currentDashboard
+            let reportId = DashboardParamsModel.currentReport
+
+            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName))
+                droppedRectangle.color = refColor
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -63,6 +74,7 @@ Item{
 
     function showCustomizeReport(){
         DashboardParamsModel.setCurrentReport(newItem.objectName)
+        console.log(newItem.objectName, DashboardParamsModel.currentReport)
         customizeReport.visible = true;
 
     }
