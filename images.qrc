@@ -130,5 +130,24 @@
         <file>Images/icons/fullscreen.png</file>
         <file>Images/icons/arrow_left.png</file>
         <file>Images/icons/arrow_right.png</file>
+        <file>Images/icons/charts/Area Chart.png</file>
+        <file>Images/icons/charts/Bar Chart.png</file>
+        <file>Images/icons/charts/Donut Chart.png</file>
+        <file>Images/icons/charts/Line Chart.png</file>
+        <file>Images/icons/charts/Pie Chart.png</file>
+        <file>Images/icons/charts/Scatter Plot.png</file>
+        <file>Images/icons/charts/Tree Map.png</file>
+        <file>Images/icons/charts/Chord Diagram.png</file>
+        <file>Images/icons/charts/Force-Directed Graph.png</file>
+        <file>Images/icons/charts/Gauge Chart.png</file>
+        <file>Images/icons/charts/Radar Chart.png</file>
+        <file>Images/icons/charts/Sunburst.png</file>
+        <file>Images/icons/charts/Tree Chart.png</file>
+        <file>Images/icons/charts/NightingaleRose.png</file>
+        <file>Images/icons/charts/Combination Chart (Line Bar).png</file>
+        <file>Images/icons/charts/waterfall chart.png</file>
+        <file>Images/icons/charts/Matrix.png</file>
+        <file>Images/icons/charts/GEO.png</file>
+        <file>Images/icons/charts/Condegram Spiral.png</file>
     </qresource>
 </RCC>
