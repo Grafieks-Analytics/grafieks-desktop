@@ -144,9 +144,7 @@ Page {
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: 14
                 verticalAlignment:TextEdit.AlignVCenter
-
                 Keys.onReturnPressed: {
-
                     report_title_text.focus = false
                 }
             }
@@ -277,32 +275,37 @@ Page {
         Rectangle{
             id: rectangle_querymodeller_right_col
             color:Constants.themeColor
-            width:column_querymodeller.width
-            height:column_querymodeller.height
+            width: parent.width
+            height: parent.height
 
-            TabBar{
+            Rectangle{
                 id: tabbar_querymodeller
-                width:rectangle_querymodeller_right_col.width
-
-                TabButton{
-
+                width:parent.width
+                height: 30
+                Button{
+                    anchors.left: parent.left
+                    width: parent.width/2-0.5
                     text:"Cancel"
-                    background: Rectangle {
+                    height: parent.height
+                    background: Rectangle{
                         color: Constants.grafieksLightGreenColor
                         opacity: parent.hovered ? 0.42 : 1
                     }
                     contentItem: Text{
                         text: parent.text
                         color:  Constants.blackColor
+                        height: parent.height
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                     }
                     onClicked: cancelReport()
-
                 }
 
-                TabButton{
+                Button{
                     text:"Add"
+                    height: parent.height
+                    anchors.right: parent.right
+                    width: parent.width/2-0.5
                     onClicked: addReport()
                     background: Rectangle {
                         color: Constants.grafieksLightGreenColor
@@ -310,7 +313,8 @@ Page {
                     }
                     contentItem: Text{
                         text: parent.text
-                        color:  "black"
+                        color:  Constants.blackColor
+                        height: parent.height
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                     }
