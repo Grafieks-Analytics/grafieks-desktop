@@ -149,5 +149,9 @@
         <file>Images/icons/charts/Matrix.png</file>
         <file>Images/icons/charts/GEO.png</file>
         <file>Images/icons/charts/Condegram Spiral.png</file>
+        <file>Images/icons/charts/radar 50 PX.png</file>
+        <file>Images/icons/charts/tree 500 px.png</file>
+        <file>Images/icons/extreme_left.png</file>
+        <file>Images/icons/extreme_right.png</file>
     </qresource>
 </RCC>

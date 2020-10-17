@@ -290,13 +290,13 @@ Page {
 
             // left dashboard button starts
             Button{
-                width: 25
+                width: 20
                 height: 28
                 Row{
                     spacing: 5
                     anchors.centerIn: parent
                     Image {
-                        source: "/Images/icons/arrow_left.png"
+                        source: "/Images/icons/extreme_left.png"
                         width: 20
                         height: 20
                     }
@@ -313,7 +313,7 @@ Page {
 
             // left dashboard button starts
             Button{
-                width: 25
+                width: 20
                 height: 28
                 Row{
                     spacing: 5
@@ -338,7 +338,7 @@ Page {
 
             Button{
 
-                width: 25
+                width: 20
                 height: 28
 
                 Row{
@@ -366,14 +366,14 @@ Page {
 
             Button{
 
-                width: 25
+                width: 20
                 height: 28
 
                 Row{
                     spacing: 5
                     anchors.centerIn: parent
                     Image {
-                        source: "/Images/icons/arrow_right.png"
+                        source: "/Images/icons/extreme_right.png"
                         width: 20
                         height: 20
                     }
@@ -393,7 +393,7 @@ Page {
 
             Button{
 
-                width: 100
+                width: 80
                 height: 28
                 onClicked: createNewReport()
 

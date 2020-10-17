@@ -90,7 +90,7 @@ Rectangle{
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "Tree Chart.png"
+            icon: "tree 500 px.png"
             chartHtml:"bar.html"
         }
         ListElement{
