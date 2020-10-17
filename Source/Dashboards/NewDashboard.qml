@@ -124,10 +124,14 @@ Page {
     }
 
     function scrollToLeft(){
-        dashboardList.flick(600, 0)
+        dashboardList.flick(300, 0)
     }
     function scrollToRight(){
-        dashboardList.flick(-600, 0)
+        dashboardList.flick(-300, 0)
+    }
+
+    function deleteDashboard(dashboardId){
+        console.log('Delete Dashboard')
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -254,7 +258,7 @@ Page {
 
                         MenuItem {
                             text: qsTr("Delete")
-                            onClicked: deleteButton()
+                            onClicked: deleteDashboard(dashboardId)
                         }
                     }
                 }
