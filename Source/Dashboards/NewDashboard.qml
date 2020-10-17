@@ -126,12 +126,27 @@ Page {
     function scrollToLeft(){
         dashboardList.flick(300, 0)
     }
+
+//    function scrollToExtremeLeft(){
+//        dashboardList.flick(300, 0)
+//    }
+
     function scrollToRight(){
         dashboardList.flick(-300, 0)
     }
 
     function deleteDashboard(dashboardId){
         console.log('Delete Dashboard')
+    }
+
+    function getEndPos(){
+        var ratio = 1.0 - flickable.visibleArea.widthRatio;
+        var endPos = dashboardList.contentWidth * ratio;
+        return endPos;
+    }
+
+    function scrollToExtremeLeft(){
+        dashboardList.contentX = getEndPos();
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -208,9 +223,6 @@ Page {
 
         Row{
             height: 50
-            //            width: submenu.width - toptool_newdashboard.width - 500
-            width: 300
-
             anchors.left: new_dashboard_btn.right
             anchors.right: parent.right
             anchors.rightMargin: 30
@@ -218,7 +230,7 @@ Page {
             ListView{
                 id: dashboardList
                 height: parent.height
-                width: submenu.width - toptool_newdashboard.width
+                width: submenu.width - toptool_newdashboard.width - 50
 
                 model: dashboardModel
                 orientation: ListView.Horizontal
@@ -230,8 +242,6 @@ Page {
                 // Increase Flick speed
                 maximumFlickVelocity: 10000
                 cacheBuffer:1000
-
-
                 delegate: CustomDashboardNameButton{
                     id: dashboardNameButton
                     textValue: dashboardName
