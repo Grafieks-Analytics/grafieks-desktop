@@ -140,13 +140,17 @@ Page {
     }
 
     function getEndPos(){
-        var ratio = 1.0 - flickable.visibleArea.widthRatio;
+        var ratio = 1.0 - dashboardList.visibleArea.widthRatio;
         var endPos = dashboardList.contentWidth * ratio;
         return endPos;
     }
 
-    function scrollToExtremeLeft(){
+    function scrollToExtremeRight(){
         dashboardList.contentX = getEndPos();
+    }
+
+    function scrollToExtremeLeft(){
+        dashboardList.contentX = 0;
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -283,6 +287,30 @@ Page {
             id: toptool_newdashboard
             anchors.right: submenu.right
 
+
+            // left dashboard button starts
+            Button{
+                width: 25
+                height: 28
+                Row{
+                    spacing: 5
+                    anchors.centerIn: parent
+                    Image {
+                        source: "/Images/icons/arrow_left.png"
+                        width: 20
+                        height: 20
+                    }
+                }
+                onPressed: scrollToExtremeLeft()
+                background: Rectangle {
+                    color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
+                }
+
+            }
+            // left dashboard button ends
+
+
+
             // left dashboard button starts
             Button{
                 width: 25
@@ -324,6 +352,34 @@ Page {
                 }
 
                 onPressed: scrollToRight()
+
+                background: Rectangle {
+                    color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
+                }
+
+            }
+
+            // right dashboard button ends
+
+
+            // right dashboard button starts
+
+            Button{
+
+                width: 25
+                height: 28
+
+                Row{
+                    spacing: 5
+                    anchors.centerIn: parent
+                    Image {
+                        source: "/Images/icons/arrow_right.png"
+                        width: 20
+                        height: 20
+                    }
+                }
+
+                onPressed: scrollToExtremeRight()
 
                 background: Rectangle {
                     color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
