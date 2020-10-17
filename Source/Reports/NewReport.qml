@@ -24,6 +24,40 @@ Page {
     width: parent.width
     property int menu_width: 60
 
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
     Component.onCompleted: {
 
         // Connect signal and slots
@@ -36,6 +70,43 @@ Page {
     function changeChart(chartname){
         primary_chart.url = chartname
     }
+
+    function addReport(){
+        // Add report to dashboard
+        stacklayout_home.currentIndex = 6
+    }
+
+    function cancelReport(){
+        // Back to dashboard
+        stacklayout_home.currentIndex = 6
+    }
+
+    function focusReportTitle(){
+        console.log('Focus Title')
+    }
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
+
 
     Row{
         id: title_menu
@@ -79,17 +150,31 @@ Page {
                     report_title_text.focus = false
                 }
             }
+
+            Image {
+                source: "/Images/icons/Edit.png"
+                height: 20
+                width: 20
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: focusReportTitle()
+                }
+            }
         }
 
 
     }
 
+    // Seperator lines
     Row{
-
         id: seperator_title_bar
         anchors.top:title_menu.bottom
         width: parent.width
 
+        // Seperator for Left Menu
         Rectangle {
             id: customize_title_bar
             width: customize_title.width
@@ -98,21 +183,17 @@ Page {
             color: Constants.darkThemeColor
         }
 
+        // Seperator for Center Panel and Title
         Rectangle {
             id: report_title_bar
             width: report_title.width
             implicitWidth: parent.vertical ? 1 : 24
             implicitHeight: parent.vertical ? 24 : 1
-            color: Constants.themeColor
+            color: Constants.darkThemeColor
         }
     }
 
-
-
-
-
-
-
+    // Left Menu Chart Icons Starts
     LeftMenuBarReports{
         id: left_menubar_reports
         anchors.top: seperator_title_bar.bottom
@@ -121,6 +202,7 @@ Page {
         }
 
     }
+    // Left Menu Chart Icons Ends
 
     ToolSeparator{
         id: tool_sep_leftmenubarreports
@@ -135,18 +217,16 @@ Page {
             implicitHeight: parent.vertical ? 24 : 1
             color: Constants.darkThemeColor
         }
-
-
     }
 
+
+    // Left Menu Customization Items
     ReportCustomizations{
         id: chartFilters1
         anchors.left: tool_sep_leftmenubarreports.right
         anchors.top: seperator_title_bar.bottom
         anchors.leftMargin: 0
     }
-
-
 
     ToolSeparator{
         id: tool_sep_chartFilters
@@ -156,23 +236,15 @@ Page {
         anchors.topMargin: -3
         height:parent.height
         padding: 0
-
         contentItem: Rectangle {
             implicitWidth: parent.vertical ? 1 : 24
             implicitHeight: parent.vertical ? 24 : 1
             color: Constants.darkThemeColor
         }
-
-
     }
 
 
-
-
     // Center Panel
-
-
-
 
     WebEngineView {
         id:primary_chart
@@ -182,10 +254,6 @@ Page {
         anchors.left: tool_sep_chartFilters.right
         anchors.top: seperator_title_bar.bottom
     }
-
-
-
-
 
 
     ToolSeparator{
@@ -214,52 +282,40 @@ Page {
 
             TabBar{
                 id: tabbar_querymodeller
-
                 width:rectangle_querymodeller_right_col.width
+
                 TabButton{
-                    id: data_btn
-                    text:"Data"
 
-
+                    text:"Cancel"
                     background: Rectangle {
-                        id: data_btn_background
-                        color:  Constants.themeColor
-
+                        color: Constants.grafieksLightGreenColor
+                        opacity: parent.hovered ? 0.42 : 1
                     }
                     contentItem: Text{
-                        id: data_btn_text
-                        text: data_btn.text
-                        color:  "black"
+                        text: parent.text
+                        color:  Constants.blackColor
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                     }
+                    onClicked: cancelReport()
+
                 }
 
                 TabButton{
-                    id: add_btn
                     text:"Add"
-
-                    onClicked: {
-                        stacklayout_home.currentIndex = 6
-                    }
-
-
+                    onClicked: addReport()
                     background: Rectangle {
-                        id: add_btn_background
-                        color:  add_btn.pressed? Constants.darkThemeColor: Constants.themeColor
-
+                        color: Constants.grafieksLightGreenColor
+                        opacity: parent.hovered ? 0.42 : 1
                     }
                     contentItem: Text{
-                        id: add_btn_text
-                        text: add_btn.text
+                        text: parent.text
                         color:  "black"
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                     }
                 }
             }
-
-
 
             Rectangle{
                 id: rectangle_querymodeller_right_col1
@@ -277,7 +333,6 @@ Page {
                     anchors.leftMargin: 10
                 }
             }
-
 
 
             Rectangle{
