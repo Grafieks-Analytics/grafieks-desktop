@@ -204,7 +204,7 @@ Page {
 
         Row{
             height: 50
-//            width: submenu.width - toptool_newdashboard.width - 500
+            //            width: submenu.width - toptool_newdashboard.width - 500
             width: 300
 
             anchors.left: new_dashboard_btn.right
@@ -239,7 +239,24 @@ Page {
                         }
                     }
 
-                    onClicked: setCurrentDashboard(dashboardId)
+                    MouseArea{
+                        anchors.fill: parent
+                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                        onClicked: (mouse.button == Qt.RightButton) ? options.open() : setCurrentDashboard(dashboardId)
+                    }
+
+                    Menu{
+                        id: options
+                        y: dashboardNameButton.height
+                        MenuItem {
+                            text: qsTr("Edit")
+                        }
+
+                        MenuItem {
+                            text: qsTr("Delete")
+                            onClicked: deleteButton()
+                        }
+                    }
                 }
             }
         }
