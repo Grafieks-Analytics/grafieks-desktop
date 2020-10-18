@@ -34,15 +34,15 @@ Rectangle{
     ListModel{
         id: allCharts
         ListElement{
-            icon: "Bar Chart.png"
+            icon: "g80.png"
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "Area Chart.png"
+            icon: "g145.png"
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "Line Chart.png"
+            icon: "FinalBar.png"
             chartHtml:"bar.html"
         }
         ListElement{
@@ -111,6 +111,12 @@ Rectangle{
         }
         ListElement{
             icon: "Table.png"
+            chartHtml:"bar.html"
+            elementHeight: 40
+            elementWidth:40
+        }
+        ListElement{
+            icon: "Table2.png"
             chartHtml:"bar.html"
         }
         ListElement{
@@ -202,8 +208,8 @@ Rectangle{
                 Image{
                     source:"/Images/icons/charts/"+icon
                     anchors.centerIn: parent
-                    height: imageHeight
-                    width: imageWidth
+                    height: elementHeight ? elementHeight : imageHeight
+                    width: elementWidth ? elementWidth : imageWidth
                 }
                 MouseArea{
                     anchors.fill: parent

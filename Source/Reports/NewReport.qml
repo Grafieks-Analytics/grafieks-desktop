@@ -263,6 +263,7 @@ Page {
         anchors.topMargin: -5
     }
 
+   // Right Panel Starts
 
     Column{
         id: column_querymodeller
@@ -281,7 +282,7 @@ Page {
             Rectangle{
                 id: tabbar_querymodeller
                 width:parent.width
-                height: 30
+                height: 31
                 Button{
                     anchors.left: parent.left
                     width: parent.width/2-0.5
@@ -508,4 +509,6 @@ Page {
 
     }
 
+
+    // Right Panel Ends
 }

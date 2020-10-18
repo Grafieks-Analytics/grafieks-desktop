@@ -17,6 +17,8 @@ import QtQuick.Dialogs 1.0
 import com.grafieks.singleton.constants 1.0
 
 import "../../MainSubComponents"
+import "../MiniSubComponents"
+
 Item{
     width: 150
     x: 60
@@ -33,16 +35,6 @@ Item{
 
     ListModel {
         id: nestedModel
-
-        ListElement {
-            categoryName: "Axis"
-            collapsed: false
-            subItems: [
-                ListElement { itemName: "X Axis" },
-                ListElement { itemName: "Y Axis" },
-                ListElement { itemName: "Edit Axis" }
-            ]
-        }
 
         ListElement {
             categoryName: "Properties"
@@ -137,13 +129,13 @@ Item{
     function onSubItemClicked(itemName){
 
         switch(itemName){
-            case "Color":
-                console.log('Open Color Dialog')
-                colorDialog.open()
-                break;
-            case "Tool Tip":
-                console.log('Opening Tool Tip')
-                break;
+        case "Color":
+            console.log('Open Color Dialog')
+            colorDialog.open()
+            break;
+        case "Tool Tip":
+            console.log('Opening Tool Tip')
+            break;
         }
     }
 
@@ -206,6 +198,10 @@ Item{
 
     }
 
+    Component{
+        id: propertiesComponent
+        PropertiesFilter{}
+    }
 
 
     // SubComponents Ends
@@ -227,77 +223,85 @@ Item{
         onClicked: openReportFilters()
     }
 
-    ListView {
+        ListView {
 
-        anchors.top: reportFilterButton.bottom
-        width: parent.width
-        height: parent.height - reportFilterButton.height
-        interactive: false
+            anchors.top: reportFilterButton.bottom
+            width: parent.width
+            height: parent.height - reportFilterButton.height
+            interactive: false
 
-        model: nestedModel
-        delegate: categoryDelegate
-    }
+            model: nestedModel
+            delegate: categoryDelegate
+        }
 
 
+        Component {
+            id: categoryDelegate
 
-    Component {
-        id: categoryDelegate
-
-        Column {
-            width: 150
-
-            Rectangle {
-                id: categoryItem
-                height: 30
+            Column {
                 width: 150
-                color: Constants.themeColor
 
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    x: 15
-                    font.pixelSize: 12
-                    text: categoryName
-                }
+                Rectangle {
+                    id: categoryItem
+                    height: 30
+                    width: 150
+                    color: Constants.themeColor
 
-                Image {
-                    id: drop_icon
-                    source: "/Images/icons/Up_20.png"
-                    width: 10
-                    height: 10
-                    anchors.right: parent.right
-                    anchors.rightMargin: 5
-                    anchors.verticalCenter: parent.verticalCenter
-                    visible: true
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        x: 15
+                        font.pixelSize: 12
+                        text: categoryName
+                    }
 
-                    MouseArea {
-                        anchors.fill: parent
+                    Image {
+                        id: drop_icon
+                        source: "/Images/icons/Up_20.png"
+                        width: 10
+                        height: 10
+                        anchors.right: parent.right
+                        anchors.rightMargin: 5
+                        anchors.verticalCenter: parent.verticalCenter
+                        visible: true
 
-                        onClicked: {
-                            nestedModel.setProperty(index, "collapsed", !collapsed)
+                        MouseArea {
+                            anchors.fill: parent
 
-                            if(collapsed === true){
-                                drop_icon.source = "/Images/icons/Down_20.png"
-                            }
-                            else{
-                                drop_icon.source = "/Images/icons/Up_20.png"
+                            onClicked: {
+                                nestedModel.setProperty(index, "collapsed", !collapsed)
+
+                                if(collapsed === true){
+                                    drop_icon.source = "/Images/icons/Down_20.png"
+                                }
+                                else{
+                                    drop_icon.source = "/Images/icons/Up_20.png"
+                                }
+
                             }
                         }
                     }
                 }
+
+                Loader {
+                    id: subItemLoader
+
+                    visible: !collapsed
+                    property variant subItemModel : subItems
+                    sourceComponent: {
+                        if(collapsed)
+                            return null
+                        else{
+                            if(categoryName.toLowerCase() === "properties"){
+                                return propertiesComponent
+                            }
+                        }
+                    }
+                    onStatusChanged: if (status == Loader.Ready) item.model = subItemModel
+
+                }
             }
 
-            Loader {
-                id: subItemLoader
-
-                visible: !collapsed
-                property variant subItemModel : subItems
-                sourceComponent: collapsed ? null : subItemColumnDelegate
-                onStatusChanged: if (status == Loader.Ready) item.model = subItemModel
-
-            }
         }
-
-    }
 
 
     // Page Design Ends

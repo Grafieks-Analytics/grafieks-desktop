@@ -153,5 +153,12 @@
         <file>Images/icons/charts/tree 500 px.png</file>
         <file>Images/icons/extreme_left.png</file>
         <file>Images/icons/extreme_right.png</file>
+        <file>Images/icons/charts/bar_chart.png</file>
+        <file>Images/icons/charts/g145.png</file>
+        <file>Images/icons/charts/g80.png</file>
+        <file>Images/icons/charts/Bar-2.png</file>
+        <file>Images/icons/charts/FinalBar.png</file>
+        <file>Images/icons/charts/Table2.png</file>
+        <file>Images/icons/charts/Gauge - chart.png</file>
     </qresource>
 </RCC>
