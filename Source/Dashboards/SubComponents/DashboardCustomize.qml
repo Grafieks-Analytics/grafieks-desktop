@@ -233,7 +233,7 @@ Item{
                         id: mouseArea
                         anchors.fill: parent
                         drag.target:  dragRect
-                        drag.minimumX: -( new_dashboard_page.width - parent.width - leftMenuBar.width)
+                        drag.minimumX: -( new_dashboard_page.width - parent.width)
                         drag.maximumX: 0
 
                         drag.onActiveChanged: {
