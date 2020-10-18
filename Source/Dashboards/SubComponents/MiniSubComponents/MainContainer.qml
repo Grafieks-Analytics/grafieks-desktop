@@ -172,6 +172,7 @@ Rectangle {
         width: rulersSize
         height: rulersSize
         color: Constants.grafieksGreenColor
+        z:mainContainer.z
         anchors.horizontalCenter: parent.left
         anchors.verticalCenter: parent.verticalCenter
         visible: rulerStatus
@@ -190,6 +191,7 @@ Rectangle {
         width: rulersSize
         height: rulersSize
         color: Constants.grafieksGreenColor
+        z:mainContainer.z
         anchors.horizontalCenter: parent.right
         anchors.verticalCenter: parent.verticalCenter
         visible: rulerStatus
@@ -208,6 +210,7 @@ Rectangle {
         height: rulersSize
         x: parent.x / 2
         y: 0
+        z:mainContainer.z
         color: Constants.grafieksGreenColor
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.top
@@ -227,6 +230,7 @@ Rectangle {
         height: rulersSize
         x: parent.x / 2
         y: parent.y
+        z:mainContainer.z
         color: Constants.grafieksGreenColor
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.bottom

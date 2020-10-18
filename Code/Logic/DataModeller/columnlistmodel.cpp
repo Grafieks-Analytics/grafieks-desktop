@@ -110,6 +110,93 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
     }
 }
 
+/*!
+ * \brief Set a new select query for a given column on the basis of date format in table
+ * \param columnName (name of the column in sql table)
+ * \param tableName (table name)
+ * \param value (type of date format)
+ * \param pageNo (page number for limit query)
+ */
+void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableName, int value, int pageNo)
+{
+    QString queryString;
+    int lowerLimit = 0;
+    int upperLimit = 0;
+    int pageLimit = 1000;
+
+    // Set the page limit
+    // for the query
+
+    if(pageNo == 0){
+        lowerLimit = 0;
+    } else{
+        lowerLimit = pageNo * pageLimit;
+    }
+
+    upperLimit = lowerLimit + pageLimit;
+
+
+    switch(Statics::currentDbIntType){
+
+    case Constants::mysqlIntType:{
+
+        switch (value) {
+        case 1:
+            queryString = "SELECT DISTINCT DATE_FORMAT(" + columnName + "," + "'%d/%m/%Y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 2:
+            queryString = "SELECT DISTINCT DATE_FORMAT(" + columnName + "," + "'%d %M %Y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 3:
+            queryString = "SELECT DISTINCT DATE_FORMAT(" + columnName + "," + "'%e %M %Y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 4:
+            queryString = "SELECT DISTINCT DATE_FORMAT(" + columnName + "," + "'%W, %e %M %Y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 5:
+            queryString = "SELECT DISTINCT DATE_FORMAT(" + columnName + "," + "'%W, %d %M %Y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 6:
+            queryString = "SELECT DISTINCT DATE_FORMAT(" + columnName + "," + "'%d/%m/%y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 7:
+            queryString = "SELECT DISTINCT DATE_FORMAT(" + columnName + "," + "'%e/%c/%y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 8:
+            queryString = "SELECT DISTINCT DATE_FORMAT(" + columnName + "," + "'%e.%c.%y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 9:
+            queryString = "SELECT DISTINCT DATE_FORMAT(" + columnName + "," + "'%Y-%m-%d'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 10:
+            queryString = "SELECT DISTINCT DATE_FORMAT(" + columnName + "," + "'%M %Y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 11:
+            queryString = "SELECT DISTINCT DATE_FORMAT(" + columnName + "," + "'%e %M'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 12:
+            queryString = "SELECT DISTINCT DATE_FORMAT(" + columnName + "," + "'%y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 13:
+            queryString = "SELECT DISTINCT DATE_FORMAT(" + columnName + "," + "'%Y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 14:
+            queryString = "SELECT DISTINCT DATE_FORMAT(" + columnName + "," + "'%d/%m/%Y %H:%i:%s'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        default:
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+        }
+
+
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
+        this->setQuery(queryString, dbMysql);
+
+        break;
+    }
+
+    }
+}
+
 
 /*!
  * \brief Set a new select query for a given column in table with select column values

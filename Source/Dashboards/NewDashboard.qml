@@ -133,10 +133,33 @@ Page {
     }
 
     function scrollToLeft(){
-        dashboardList.flick(600, 0)
+        dashboardList.flick(300, 0)
     }
+
+//    function scrollToExtremeLeft(){
+//        dashboardList.flick(300, 0)
+//    }
+
     function scrollToRight(){
-        dashboardList.flick(-600, 0)
+        dashboardList.flick(-300, 0)
+    }
+
+    function deleteDashboard(dashboardId){
+        console.log('Delete Dashboard')
+    }
+
+    function getEndPos(){
+        var ratio = 1.0 - dashboardList.visibleArea.widthRatio;
+        var endPos = dashboardList.contentWidth * ratio;
+        return endPos;
+    }
+
+    function scrollToExtremeRight(){
+        dashboardList.contentX = getEndPos();
+    }
+
+    function scrollToExtremeLeft(){
+        dashboardList.contentX = 0;
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -213,9 +236,12 @@ Page {
 
         Row{
             height: 50
+<<<<<<< HEAD
             //            width: submenu.width - toptool_newdashboard.width - 500
             width: 300
 
+=======
+>>>>>>> c7162edd94b3b870d7f618a549b0d8af76276bad
             anchors.left: new_dashboard_btn.right
             anchors.right: parent.right
             anchors.rightMargin: 30
@@ -223,7 +249,7 @@ Page {
             ListView{
                 id: dashboardList
                 height: parent.height
-                width: submenu.width - toptool_newdashboard.width
+                width: submenu.width - toptool_newdashboard.width - 50
 
                 model: dashboardModel
                 orientation: ListView.Horizontal
@@ -235,8 +261,6 @@ Page {
                 // Increase Flick speed
                 maximumFlickVelocity: 10000
                 cacheBuffer:1000
-
-
                 delegate: CustomDashboardNameButton{
                     id: dashboardNameButton
                     textValue: dashboardName
@@ -248,7 +272,24 @@ Page {
                         }
                     }
 
-                    onClicked: setCurrentDashboard(dashboardId)
+                    MouseArea{
+                        anchors.fill: parent
+                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                        onClicked: (mouse.button == Qt.RightButton) ? options.open() : setCurrentDashboard(dashboardId)
+                    }
+
+                    Menu{
+                        id: options
+                        y: dashboardNameButton.height
+                        MenuItem {
+                            text: qsTr("Edit")
+                        }
+
+                        MenuItem {
+                            text: qsTr("Delete")
+                            onClicked: deleteDashboard(dashboardId)
+                        }
+                    }
                 }
             }
         }
@@ -261,9 +302,33 @@ Page {
             id: toptool_newdashboard
             anchors.right: submenu.right
 
+
             // left dashboard button starts
             Button{
-                width: 25
+                width: 20
+                height: 28
+                Row{
+                    spacing: 5
+                    anchors.centerIn: parent
+                    Image {
+                        source: "/Images/icons/extreme_left.png"
+                        width: 20
+                        height: 20
+                    }
+                }
+                onPressed: scrollToExtremeLeft()
+                background: Rectangle {
+                    color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
+                }
+
+            }
+            // left dashboard button ends
+
+
+
+            // left dashboard button starts
+            Button{
+                width: 20
                 height: 28
                 Row{
                     spacing: 5
@@ -288,7 +353,7 @@ Page {
 
             Button{
 
-                width: 25
+                width: 20
                 height: 28
 
                 Row{
@@ -311,11 +376,39 @@ Page {
 
             // right dashboard button ends
 
+
+            // right dashboard button starts
+
+            Button{
+
+                width: 20
+                height: 28
+
+                Row{
+                    spacing: 5
+                    anchors.centerIn: parent
+                    Image {
+                        source: "/Images/icons/extreme_right.png"
+                        width: 20
+                        height: 20
+                    }
+                }
+
+                onPressed: scrollToExtremeRight()
+
+                background: Rectangle {
+                    color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
+                }
+
+            }
+
+            // right dashboard button ends
+
             // Add Report button starts
 
             Button{
 
-                width: 100
+                width: 80
                 height: 28
                 onClicked: createNewReport()
 
