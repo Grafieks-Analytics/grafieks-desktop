@@ -30,8 +30,6 @@ Rectangle {
 
     property var rectangles: new Map() // rectangle object
 
-    property var dynamicContainer : Qt.createComponent("./MiniSubComponents/MainContainer.qml");
-
     property var dynamicText : Qt.createComponent("./DroppedText.qml");
     property var dynamicImageBox : Qt.createComponent("./DroppedImage.qml");
     property var dynamicBlankBox : Qt.createComponent("./DroppedBlank.qml");
@@ -82,7 +80,7 @@ Rectangle {
         objectType = DashboardParamsModel.lastContainerType;
 
         if(DashboardParamsModel.lastContainerType === "text"){
-            rectangles.set(counter,dynamicText.createObject(parent,{z:mainContainer.z, name: 'Text', objectName : mainContainer.objectName}))
+            rectangles.set(counter,dynamicText.createObject(mainContainer,{z:mainContainer.z, name: 'Text', objectName : mainContainer.objectName}))
         }
 
         else if(DashboardParamsModel.lastContainerType === "image"){
@@ -98,9 +96,7 @@ Rectangle {
 
         DashboardParamsModel.setZIndex(++DashboardParamsModel.zIndex);
 
-        console.log('x',mainContainer.x);
-        console.log('y',mainContainer.y);
-        console.log('z',mainContainer.z);
+        console.log('x',mainContainer.x, 'y', mainContainer.y, 'z', mainContainer.z, mainContainer.width, mainContainer.height);
 
     }
 

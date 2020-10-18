@@ -12,6 +12,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtWebEngine 1.7
+import QtQuick.Layouts 1.15
 
 import com.grafieks.singleton.constants 1.0
 
@@ -22,6 +23,8 @@ Page {
 
     id: new_dashboard_page
     property int menu_width: 60
+
+    property var dashboardSummaryObj: Qt.createComponent("./SubComponents/DashboardSummary.qml")
 
 
     /***********************************************************************************************************************/
@@ -113,6 +116,12 @@ Page {
         dashboardModel.append({"dashboardName" : newDashboardName, dashboardId: DashboardParamsModel.dashboardCount})
 
         DashboardParamsModel.createNewDashboard(DashboardParamsModel.dashboardCount)
+
+        var item = dashboardSummaryObj.createObject(null,{height: dashboardStackLayout.height, width: dashboardStackLayout.width})
+        dashboardStackLayout.children.push(item)
+        //        dashboardStackLayout.currentIndex = 2
+
+        console.log(dashboardStackLayout.count, "STACK COUNT")
     }
 
     function setCurrentDashboard(dashboardId){
@@ -227,6 +236,12 @@ Page {
 
         Row{
             height: 50
+<<<<<<< HEAD
+            //            width: submenu.width - toptool_newdashboard.width - 500
+            width: 300
+
+=======
+>>>>>>> c7162edd94b3b870d7f618a549b0d8af76276bad
             anchors.left: new_dashboard_btn.right
             anchors.right: parent.right
             anchors.rightMargin: 30
@@ -543,22 +558,30 @@ Page {
 
     // Center Panel Starts
 
-    DashboardSummary{
-        id: dashboard_summary
-        anchors.left: left_menubar.right
-        anchors.top: toolsep1.bottom
-        anchors.topMargin: -6
-    }
+        StackView{
 
-    WebEngineView {
-        id:primary_chart
+            id: dashboardStackLayout
+            height: parent.height
+//            currentIndex: 0
 
-        url: "../Charts/sunburst.html"
-        height:parent.height
-        anchors.left: dashboard_summary.right
-        anchors.top:toolsep1.bottom
-        width: parent.width - dashboard_summary.width - left_menubar.width - column_newdashboard.width
-    }
+            anchors.left: left_menubar.right
+            anchors.top: toolsep1.bottom
+            width: parent.width  - left_menubar.width - column_newdashboard.width
+
+            initialItem:DashboardSummary{
+            }
+        }
+
+//    DashboardSummary{
+//        id: dashboard_summary
+//        height: parent.height
+////        width: parent.width
+
+//        anchors.left: left_menubar.right
+//        anchors.top: toolsep1.bottom
+//        width: parent.width  - left_menubar.width - column_newdashboard.width
+//    }
+
 
     // Center Panel Ends
 

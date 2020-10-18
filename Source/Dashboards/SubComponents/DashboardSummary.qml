@@ -19,9 +19,6 @@ Rectangle {
 
     id: dashboardArea
 
-    height: parent.height
-    width: parent.width
-
     property var rectangles: new Map() // rectangle object
     property var dynamicContainer : Qt.createComponent("./MiniSubComponents/MainContainer.qml");
 
@@ -72,10 +69,14 @@ Rectangle {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+
+    Component.onCompleted: {
+        console.log(dashboardArea.height, dashboardArea.width, "HEIGHT WIDTH")
+    }
+
     function onDropAreaEntered(drag){
 
         dashboardArea.color = Constants.dropHighlightColor
-        var currentPoint = {x: drag.x, y: drag.y};
         console.log("Entered", currentPoint.x, listViewElem.itemName)
     }
 
@@ -90,7 +91,7 @@ Rectangle {
 
         dashboardArea.color = "transparent"
 
-        rectangles.set(counter,dynamicContainer.createObject(parent,{x: x1, y: y1, z: DashboardParamsModel.zIndex,  objectName : counter}))
+        rectangles.set(counter, dynamicContainer.createObject(parent,{x: x1, y: y1, z: DashboardParamsModel.zIndex,  objectName : counter}))
 
         DashboardParamsModel.dragNewReport(DashboardParamsModel.currentDashboard, counter)
         DashboardParamsModel.setReportZOrder(DashboardParamsModel.currentDashboard, counter, DashboardParamsModel.zIndex)

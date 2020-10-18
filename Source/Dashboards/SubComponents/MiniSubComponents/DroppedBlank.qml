@@ -158,7 +158,7 @@ Item{
                         id: editReport
                         height: 20
                         width: 20
-                        source: "../../../../Images/icons/Edit.png"
+                        source: "/Images/icons/Edit.png"
                         anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea{
@@ -171,7 +171,7 @@ Item{
                         id: fullScreenReport
                         height: 22
                         width: 22
-                        source: "../../../../Images/icons/fullscreen.png"
+                        source: "/Images/icons/fullscreen.png"
                         anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea{
