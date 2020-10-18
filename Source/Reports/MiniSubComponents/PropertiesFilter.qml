@@ -30,7 +30,7 @@ Column{
         Text {
             id: colorByText
             x: leftMargin
-            font.pixelSize: 12
+            font.pixelSize: Constants.fontCategoryHeaderSmall
             text: "Color By"
         }
         MouseArea{
@@ -74,6 +74,11 @@ Column{
                     border.width: 1
                     border.color: "#CDE6FF"
 
+                    Text {
+                        text: textValue
+                        anchors.centerIn: parent
+                        font.pixelSize: Constants.fontCategoryHeaderSmall
+                    }
                 }
             }
 
