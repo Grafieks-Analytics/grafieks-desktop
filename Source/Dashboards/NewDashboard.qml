@@ -236,12 +236,8 @@ Page {
 
         Row{
             height: 50
-<<<<<<< HEAD
             //            width: submenu.width - toptool_newdashboard.width - 500
             width: 300
-
-=======
->>>>>>> c7162edd94b3b870d7f618a549b0d8af76276bad
             anchors.left: new_dashboard_btn.right
             anchors.right: parent.right
             anchors.rightMargin: 30

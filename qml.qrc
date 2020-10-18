@@ -118,5 +118,6 @@
         <file>Source/Dashboards/SubComponents/MiniSubComponents/CustomizeReportGeneralMenu.qml</file>
         <file>Source/Reports/MiniSubComponents/NewReport.qml</file>
         <file>Source/Reports/MiniSubComponents/PropertiesFilter.qml</file>
+        <file>Source/Reports/MiniSubComponents/CustomizeReferenceLine.qml</file>
     </qresource>
 </RCC>

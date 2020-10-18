@@ -203,6 +203,11 @@ Item{
         PropertiesFilter{}
     }
 
+    Component{
+        id: referenceLineComponent
+        CustomizeReferenceLine{}
+    }
+
 
     // SubComponents Ends
     /***********************************************************************************************************************/
@@ -293,6 +298,8 @@ Item{
                         else{
                             if(categoryName.toLowerCase() === "properties"){
                                 return propertiesComponent
+                            }else if(categoryName.toLowerCase() === "reference line"){
+                                return referenceLineComponent
                             }
                         }
                     }
