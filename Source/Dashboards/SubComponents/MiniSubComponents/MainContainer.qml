@@ -61,6 +61,19 @@ Rectangle {
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: DashboardParamsModel
+
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+
+            if(reportsInDashboard.includes(parseInt(mainContainer.objectName))){
+                console.log("VISIBLE SLOT", reportsInDashboard)
+                mainContainer.visible = true
+            } else{
+                mainContainer.visible = false
+            }
+        }
+    }
 
 
     // Connections Ends
@@ -77,21 +90,21 @@ Rectangle {
 
     Component.onCompleted: {
 
-        objectType = DashboardParamsModel.lastContainerType;
+        var objectType = DashboardParamsModel.lastContainerType;
+        var counter = mainContainer.objectName
 
         if(DashboardParamsModel.lastContainerType === "text"){
-            rectangles.set(counter,dynamicText.createObject(mainContainer,{z:mainContainer.z, name: 'Text', objectName : mainContainer.objectName}))
+            rectangles.set(counter,dynamicText.createObject(parent, {z:mainContainer.z, name: 'Text', objectName : counter}))
         }
 
         else if(DashboardParamsModel.lastContainerType === "image"){
-            rectangles.set(counter, dynamicImageBox.createObject(parent, {z:mainContainer.z, name: 'Choose Image', objectName : mainContainer.objectName}))
+            rectangles.set(counter, dynamicImageBox.createObject(parent, {z:mainContainer.z, name: 'Choose Image', objectName : counter}))
         }
         else if(DashboardParamsModel.lastContainerType === "blank"){
-            rectangles.set(counter, dynamicBlankBox.createObject(parent, {z:mainContainer.z, name: 'Blank', objectName : mainContainer.objectName}))
+            rectangles.set(counter, dynamicBlankBox.createObject(parent, {z:mainContainer.z, name: 'Blank', objectName : counter}))
         }
         else{
-            console.log(objectType);
-            rectangles.set(counter, dynamicReportBox.createObject(parent, {z:mainContainer.z, name: objectType, objectName : mainContainer.objectName}))
+            rectangles.set(counter, dynamicReportBox.createObject(parent, {z:mainContainer.z, name: objectType, objectName : counter}))
         }
 
         DashboardParamsModel.setZIndex(++DashboardParamsModel.zIndex);
@@ -99,6 +112,8 @@ Rectangle {
         console.log('x',mainContainer.x, 'y', mainContainer.y, 'z', mainContainer.z, mainContainer.width, mainContainer.height);
 
     }
+
+
 
     function onLeftResize(drag,mouseX){
         if(drag.active){
@@ -252,17 +267,17 @@ Rectangle {
 
         anchors.fill: parent
 
-//        drag{
-//            target: parent
-//            minimumX: 0
-//            minimumY: Constants.subMenuWidth
-//            maximumX: parent.parent.width - parent.width
-//            maximumY: parent.parent.height - parent.height - Constants.subMenuWidth
-//            smoothed: true
-//        }
+        //        drag{
+        //            target: parent
+        //            minimumX: 0
+        //            minimumY: Constants.subMenuWidth
+        //            maximumX: parent.parent.width - parent.width
+        //            maximumY: parent.parent.height - parent.height - Constants.subMenuWidth
+        //            smoothed: true
+        //        }
 
-//        onClicked: containerClicked()
-//        onDoubleClicked: containerDoubleClicked()
+        //        onClicked: containerClicked()
+        //        onDoubleClicked: containerDoubleClicked()
 
         hoverEnabled: true
 

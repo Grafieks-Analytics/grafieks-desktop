@@ -63,6 +63,15 @@ Item{
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName))
                 droppedImageId.color = refColor
         }
+
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+
+            if(reportsInDashboard.includes(parseInt(mainContainer.objectName))){
+                newItem.visible = true
+            } else{
+                newItem.visible = false
+            }
+        }
     }
 
     // Connections Ends

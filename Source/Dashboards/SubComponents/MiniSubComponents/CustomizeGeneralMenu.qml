@@ -9,7 +9,7 @@ Rectangle{
     Connections{
         target: DashboardParamsModel
 
-        function onCurrentDashboardChanged(dashboardId){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
             dashboardName.text = DashboardParamsModel.getDashboardName(dashboardId)
         }
     }

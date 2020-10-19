@@ -701,8 +701,11 @@ void DashboardParamsModel::setCurrentDashboard(int currentDashboard)
     if (m_currentDashboard == currentDashboard)
         return;
 
+    QVector<int> reportsInDashboard;
+    reportsInDashboard = this->dashboardReportsMap.value(currentDashboard);
+
     m_currentDashboard = currentDashboard;
-    emit currentDashboardChanged(m_currentDashboard);
+    emit currentDashboardChanged(m_currentDashboard, reportsInDashboard);
 }
 
 void DashboardParamsModel::setCurrentReport(int currentReport)

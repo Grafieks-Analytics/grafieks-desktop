@@ -36,7 +36,6 @@ Rectangle {
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
-
     // SIGNALS ENDS
     /***********************************************************************************************************************/
 
@@ -49,8 +48,9 @@ Rectangle {
     Connections{
         target: DashboardParamsModel
 
-        function onCurrentDashboardChanged(dashboardId){
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
 
+            // Fetch Dashboard customize params
             dashboardArea.color = DashboardParamsModel.getDashboardBackgroundColor(dashboardId)
         }
 
@@ -91,6 +91,9 @@ Rectangle {
 
         dashboardArea.color = "transparent"
 
+        // Set the last container type param
+        DashboardParamsModel.setLastContainerType(listViewElem.itemName.toLowerCase());
+
         rectangles.set(counter, dynamicContainer.createObject(parent,{x: x1, y: y1, z: DashboardParamsModel.zIndex,  objectName : counter}))
 
         DashboardParamsModel.dragNewReport(DashboardParamsModel.currentDashboard, counter)
@@ -99,7 +102,6 @@ Rectangle {
         DashboardParamsModel.setDashboardReportTypeMap(DashboardParamsModel.currentDashboard, counter, draggedItem)
         DashboardParamsModel.setDashboardReportUrl(DashboardParamsModel.currentDashboard, counter, "")
 
-        DashboardParamsModel.setLastContainerType(listViewElem.itemName.toLowerCase());
         DashboardParamsModel.setPositionX(x1);
         DashboardParamsModel.setPositionY(y1);
 

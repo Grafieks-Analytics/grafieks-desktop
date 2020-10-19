@@ -143,7 +143,7 @@ signals:
     void positionXChanged(int positionX);
     void zIndexChanged(int zIndex);
     void dashboardCountChanged(int dashboardCount);
-    void currentDashboardChanged(int currentDashboard);
+    void currentDashboardChanged(int currentDashboard, QVector<int> reportsInDashboard);
     void currentReportChanged(int currentReport);
 
     // Customize Dashboard parameters
