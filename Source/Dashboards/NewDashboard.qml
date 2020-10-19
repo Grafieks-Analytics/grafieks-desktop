@@ -74,6 +74,9 @@ Page {
     // JAVASCRIPT FUNCTION STARTS
 
 
+    Component.onCompleted: {
+        column_newdashboard.visible = true
+    }
 
     function openDashboardFilters(){
 
@@ -109,12 +112,14 @@ Page {
 
     function addDashboard(){
 
-        let newCount = DashboardParamsModel.dashboardCount + 1
+        let currentCount = DashboardParamsModel.dashboardCount
+        let newCount = currentCount + 1
         let newDashboardName =  "Dashboard "+ newCount
-        dashboardModel.append({"dashboardName" : newDashboardName, dashboardId: DashboardParamsModel.dashboardCount})
+        dashboardModel.append({"dashboardName" : newDashboardName, dashboardId: currentCount})
 
-        DashboardParamsModel.createNewDashboard(DashboardParamsModel.dashboardCount)
-        DashboardParamsModel.setCurrentDashboard(DashboardParamsModel.dashboardCount)
+        DashboardParamsModel.createNewDashboard(currentCount)
+        DashboardParamsModel.setCurrentDashboard(currentCount)
+        DashboardParamsModel.setDashboardName(currentCount, newDashboardName)
 
     }
 
@@ -548,19 +553,6 @@ Page {
 
     // Center Panel Starts
 
-//        StackView{
-
-//            id: dashboardStackLayout
-//            height: parent.height
-////            currentIndex: 0
-
-//            anchors.left: left_menubar.right
-//            anchors.top: toolsep1.bottom
-//            width: parent.width  - left_menubar.width - column_newdashboard.width
-
-//            initialItem:DashboardSummary{
-//            }
-//        }
 
     DashboardSummary{
         id: dashboard_summary

@@ -14,6 +14,11 @@ Rectangle{
         }
     }
 
+    Component.onCompleted: {
+        dashboardName.text = "Dashboard 1"
+    }
+
+
     function setDashboardName(dashboardName){
         let currentDashboardId = DashboardParamsModel.currentDashboard
         DashboardParamsModel.setDashboardName(currentDashboardId, dashboardName)
