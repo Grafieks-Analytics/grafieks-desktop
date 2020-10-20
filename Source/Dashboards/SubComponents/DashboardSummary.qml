@@ -70,9 +70,6 @@ Rectangle {
     // JAVASCRIPT FUNCTION STARTS
 
 
-    Component.onCompleted: {
-        console.log(dashboardArea.height, dashboardArea.width, "HEIGHT WIDTH")
-    }
 
     function onDropAreaEntered(drag){
 

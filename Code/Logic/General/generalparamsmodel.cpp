@@ -14,6 +14,14 @@ QString GeneralParamsModel::getFileToken()
 
 }
 
+QString GeneralParamsModel::getTmpPath()
+{
+    QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
+    return tmpFilePath;
+}
+
+
+
 int GeneralParamsModel::menuType() const
 {
     return m_menuType;

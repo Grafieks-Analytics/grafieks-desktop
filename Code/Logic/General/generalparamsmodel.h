@@ -2,6 +2,7 @@
 #define GENERALPARAMSMODEL_H
 
 #include <QObject>
+#include <QCoreApplication>
 #include <QSettings>
 
 class GeneralParamsModel : public QObject
@@ -14,6 +15,7 @@ public:
     explicit GeneralParamsModel(QObject *parent = nullptr);
 
     Q_INVOKABLE QString getFileToken();
+    Q_INVOKABLE QString getTmpPath();
 
     int menuType() const;
 

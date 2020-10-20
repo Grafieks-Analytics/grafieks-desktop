@@ -382,6 +382,8 @@ void DashboardParamsModel::setDashboardReportUrl(int dashboardId, int reportId, 
 
         this->dashboardReportUrl.insert(dashboardId, reportUrl);
     }
+
+    emit reportUrlChanged(dashboardId,reportId, url.toString());
 }
 
 QUrl DashboardParamsModel::getDashboardReportUrl(int dashboardId, int reportId)

@@ -1,5 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtWebEngine 1.8
+import QtWebView 1.1
 
 import com.grafieks.singleton.constants 1.0
 
@@ -20,6 +22,7 @@ Item{
 
 
     property var hoverStatus: false
+    property string webUrl: ""
 
 
     /***********************************************************************************************************************/
@@ -62,6 +65,15 @@ Item{
             } else{
                 newItem.visible = false
             }
+        }
+
+
+        function onReportUrlChanged(refDashboardId, refReportId, url){
+
+            let dashboardId = DashboardParamsModel.currentDashboard
+            let reportId = DashboardParamsModel.currentReport
+            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName))
+                webengine.reload()
         }
     }
 
@@ -149,6 +161,7 @@ Item{
 
         Rectangle{
 
+            id: textMenu
             color: "transparent"
             anchors.top: parent.top
             height: 40
@@ -259,6 +272,37 @@ Item{
             onPressed:  onItemPressed()
             onEntered: showMenus()
             onExited: hideMenus()
+
+        }
+
+        WebView{
+            id: webengine
+            anchors.top : textMenu.bottom
+            anchors.centerIn: parent
+
+            width:newItem.width - 10
+            height:newItem.height - 10 - textMenu.height
+
+            onLoadingChanged: {
+
+                switch(loadRequest.status){
+
+                case ( WebView.LoadFailedStatus):
+                    console.log(loading, "Error loading page ERR", loadRequest.status, loadRequest.errorString)
+                    webengine.visible = false
+                    break
+
+                case ( WebView.LoadSucceededStatus):
+                    webengine.visible = true
+                    break
+                }
+
+            }
+
+            Component.onCompleted: {
+                let path = GeneralParamsModel.getTmpPath() + "0_1_" + GeneralParamsModel.getFileToken() + ".html"
+                webengine.url = "file:" + path
+            }
 
         }
 
