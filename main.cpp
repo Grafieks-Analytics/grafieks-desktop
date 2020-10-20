@@ -44,6 +44,7 @@
 #include "Code/Logic/Dashboards/documenthandlermodel.h"
 #include "Code/Logic/Dashboards/dashboardparamsmodel.h"
 
+#include "Code/Logic/General/generalparamsmodel.h"
 #include "Code/Logic/General/tableschemamodel.h"
 #include "Code/Logic/General/tablecolumnsmodel.h"
 #include "Code/Logic/General/querysplitter.h"
@@ -143,6 +144,14 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("grafieks.com");
     QCoreApplication::setApplicationName("Grafieks");
 
+    // Random session token for tmp file writing purposes
+    QSettings settings;
+    settings.setValue("general/fileToken", QDateTime::currentMSecsSinceEpoch());
+
+    // Delete existing tmp folder storing dashboard files
+    QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
+    QDir(tmpFilePath).removeRecursively();
+
     /***********************************************************************************************************************/
     // OBJECT INITIALIZATION STARTS
 
@@ -164,6 +173,7 @@ int main(int argc, char *argv[])
     FilterCategoricalListModel filterCategoricalListModel;
     FilterDateListModel filterDateListModel;
 
+    GeneralParamsModel generalParamsModel;
     QuerySplitter querySplitter;
     DashboardParamsModel dashboardParamsModel;
 
@@ -252,6 +262,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("FilterCategoricalListModel", &filterCategoricalListModel);
     engine.rootContext()->setContextProperty("FilterDateListModel",&filterDateListModel);
     engine.rootContext()->setContextProperty("QuerySplitter", &querySplitter);
+    engine.rootContext()->setContextProperty("GeneralParamsModel", &generalParamsModel);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/

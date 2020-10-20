@@ -78,24 +78,41 @@ void DocumentHandlerModel::setText(const QString &arg)
     }
 }
 
-void DocumentHandlerModel::saveAs(const QUrl arg, const QString fileType)
-{
 
-    bool isHtml = fileType.contains(QLatin1String("htm"));
-    QLatin1String ext(isHtml ? ".html" : ".txt");
-    QString localPath = arg.toEncoded();
-    if (!localPath.endsWith(ext))
-        localPath += ext;
-    QFile f(localPath);
-    if (!f.open(QFile::WriteOnly | QFile::Truncate | (isHtml ? QFile::NotOpen : QFile::Text))) {
-        emit error(tr("Cannot save: ") + f.errorString());
+void DocumentHandlerModel::saveTmpFile(const QString filename, const QString fileType)
+{
+    QLatin1String ext(".html");
+
+    QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
+    QDir tmpDir(tmpFilePath);
+
+    // Check if tmp directory exists
+    if(!tmpDir.exists()){
+        QDir().mkdir(tmpFilePath);
+    }
+
+    // Save the file
+    if(!filename.contains("/")){
+
+        QUrl filePath = tmpFilePath + filename;
+
+        QString localPath = filePath.toEncoded();
+        if (!localPath.endsWith(ext))
+            localPath += ext;
+        QFile f(localPath);
+        if (!f.open(QFile::WriteOnly | QFile::Truncate | QFile::NotOpen)) {
+            emit error(tr("Cannot save: ") + f.errorString());
+            return;
+        }
+        f.write(m_doc->toHtml().toLocal8Bit());
+        f.close();
+        setFileUrl(QUrl::fromLocalFile(localPath));
+
+    } else{
+        emit error(tr("Bad filename. Cannot contain `/`"));
         return;
     }
-    f.write((isHtml ? m_doc->toHtml() : m_doc->toPlainText()).toLocal8Bit());
-    f.close();
-    setFileUrl(QUrl::fromLocalFile(localPath));
-    qDebug() << QUrl::fromLocalFile(localPath) << "XOXO TEXT HTML FILE PATH";
-//    qDebug() << QUrl::fromLocalFile(localPath) << m_doc->toHtml() << m_doc->toPlainText() << "X!X!" << arg << fileType;
+    //    qDebug() << QUrl::fromLocalFile(localPath) << m_doc->toHtml() << m_doc->toPlainText() << "X!X!" << arg << fileType;
 }
 
 QUrl DocumentHandlerModel::fileUrl() const

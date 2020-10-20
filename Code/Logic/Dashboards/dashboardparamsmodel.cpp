@@ -53,6 +53,7 @@ bool DashboardParamsModel::dragNewReport(int dashboardId, int reportId)
     this->reportBackgroundColor[dashboardId] = reportBackgroundColors;
     this->reportLineColor[dashboardId] = reportLineColors;
     this->reportOpacity[dashboardId] = reportOpacities;
+    this->setCurrentReport(reportId);
 
     return true;
 }

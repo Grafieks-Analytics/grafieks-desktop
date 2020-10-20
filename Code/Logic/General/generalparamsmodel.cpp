@@ -5,6 +5,15 @@ GeneralParamsModel::GeneralParamsModel(QObject *parent) : QObject(parent)
 
 }
 
+QString GeneralParamsModel::getFileToken()
+{
+    QSettings settings;
+    QString session = settings.value("general/fileToken").toString();
+
+    return session;
+
+}
+
 int GeneralParamsModel::menuType() const
 {
     return m_menuType;

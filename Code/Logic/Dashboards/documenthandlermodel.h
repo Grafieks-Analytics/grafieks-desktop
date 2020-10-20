@@ -9,6 +9,7 @@
 #include <QtGui/QTextCursor>
 #include <QtGui/QFontDatabase>
 #include <QtCore/QFileInfo>
+#include <QDir>
 
 #include <QDebug>
 
@@ -88,7 +89,7 @@ public Q_SLOTS:
 
     void setFileUrl(const QUrl &arg);
     void setText(const QString &arg);
-    void saveAs(const QUrl arg, const QString fileType);
+    void saveTmpFile(const QString filename, const QString fileType);
 
     void setDocumentTitle(QString arg);
 

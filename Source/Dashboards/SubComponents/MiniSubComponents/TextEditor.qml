@@ -111,8 +111,12 @@ Rectangle{
     function slotSaveDocToHtml(){
 
         let dashboardId = DashboardParamsModel.currentDashboard
-        document.saveAs("/Users/mac/Desktop/t12", "html")
-        DashboardParamsModel.setDashboardReportUrl(dashboardId, "/Users/mac")
+        let reportId = DashboardParamsModel.currentReport
+        let fileToken = GeneralParamsModel.getFileToken()
+        let fileName = dashboardId + "_" + reportId + "_" + fileToken
+
+        document.saveTmpFile(fileName, "html")
+        DashboardParamsModel.setDashboardReportUrl(dashboardId, reportId, fileName)
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -137,64 +141,31 @@ Rectangle{
     // Page Design Starts
 
 
-    MessageDialog {
-        id: aboutBox
-        title: "About Text"
-        text: "This is a basic text editor \nwritten with Qt Quick Controls"
-        icon: StandardIcon.Information
-    }
-
-    Action {
-        id: cutAction
-        text: "Cut"
-        shortcut: "ctrl+x"
-        iconSource: "images/editcut.png"
-        iconName: "edit-cut"
-        onTriggered: textArea.cut()
-    }
-
-    Action {
-        id: copyAction
-        text: "Copy"
-        shortcut: "Ctrl+C"
-        iconSource: "images/editcopy.png"
-        iconName: "edit-copy"
-        onTriggered: textArea.copy()
-    }
-
-    Action {
-        id: pasteAction
-        text: "Paste"
-        shortcut: "ctrl+v"
-        iconSource: "images/editpaste.png"
-        iconName: "edit-paste"
-        onTriggered: textArea.paste()
-    }
 
     Action {
         id: alignLeftAction
         shortcut: "ctrl+l"
         onTriggered: document.alignment = Qt.AlignLeft
         checkable: true
-        checked: document.alignment == Qt.AlignLeft
+        checked: document.alignment === Qt.AlignLeft
     }
     Action {
         id: alignCenterAction
         onTriggered: document.alignment = Qt.AlignHCenter
         checkable: true
-        checked: document.alignment == Qt.AlignHCenter
+        checked: document.alignment === Qt.AlignHCenter
     }
     Action {
         id: alignRightAction
         onTriggered: document.alignment = Qt.AlignRight
         checkable: true
-        checked: document.alignment == Qt.AlignRight
+        checked: document.alignment === Qt.AlignRight
     }
     Action {
         id: alignJustifyAction
         onTriggered: document.alignment = Qt.AlignJustify
         checkable: true
-        checked: document.alignment == Qt.AlignJustify
+        checked: document.alignment === Qt.AlignJustify
     }
 
     Action {
@@ -209,7 +180,6 @@ Rectangle{
         id: italicAction
         iconName: "format-text-italic"
         onTriggered: document.italic = !document.italic
-//        checkable: true
         checked: document.italic
     }
     Action {
@@ -220,43 +190,12 @@ Rectangle{
         checked: document.underline
     }
 
-    FileDialog {
-        id: fileDialog
-        nameFilters: ["Text files (*.txt)", "HTML files (*.html, *.htm)"]
-        onAccepted: {
-            if (fileDialog.selectExisting)
-                document.fileUrl = fileUrl
-            else
-                document.saveAs(fileUrl, selectedNameFilter)
-        }
-    }
 
     ColorDialog {
         id: colorDialog
         color: "black"
     }
 
-    Action {
-        id: fileOpenAction
-        iconSource: "images/fileopen.png"
-        iconName: "document-open"
-        text: "Open"
-        onTriggered: {
-            fileDialog.selectExisting = true
-            fileDialog.open()
-        }
-    }
-
-    Action {
-        id: fileSaveAsAction
-        iconSource: "images/filesave.png"
-        iconName: "document-save"
-        text: "Save As…"
-        onTriggered: {
-            fileDialog.selectExisting = false
-            fileDialog.open()
-        }
-    }
 
     Rectangle{
         id: textEditorMenu
@@ -408,20 +347,17 @@ Rectangle{
             }
 
 
-            Button{
-                width: 30
-                height: parent.height - 16
-                anchors.verticalCenter: parent.verticalCenter
-                Image{
-                    width: 18
-                    height: 18
-                    source: "/Images/icons/attach-link.png"
-                    anchors.centerIn: parent
-                }
-            }
-
-
-
+            //            Button{
+            //                width: 30
+            //                height: parent.height - 16
+            //                anchors.verticalCenter: parent.verticalCenter
+            //                Image{
+            //                    width: 18
+            //                    height: 18
+            //                    source: "/Images/icons/attach-link.png"
+            //                    anchors.centerIn: parent
+            //                }
+            //            }
         }
 
 
