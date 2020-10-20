@@ -55,6 +55,15 @@ Item{
                 droppedReportId.color = refColor
         }
 
+        function onReportLineColorChanged(refDashboardId, refReportId, refColor){
+
+            let dashboardId = DashboardParamsModel.currentDashboard
+            let reportId = DashboardParamsModel.currentReport
+
+            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName))
+                droppedReportId.border.color = refColor
+        }
+
         function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
 
             if(reportsInDashboard.includes(parseInt(mainContainer.objectName))){

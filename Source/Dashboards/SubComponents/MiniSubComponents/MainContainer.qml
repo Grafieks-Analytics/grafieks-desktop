@@ -67,7 +67,6 @@ Rectangle {
         function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
 
             if(reportsInDashboard.includes(parseInt(mainContainer.objectName))){
-                console.log("VISIBLE SLOT", reportsInDashboard)
                 mainContainer.visible = true
             } else{
                 mainContainer.visible = false
@@ -266,25 +265,11 @@ Rectangle {
     MouseArea {     // drag mouse area
 
         anchors.fill: parent
-
-        //        drag{
-        //            target: parent
-        //            minimumX: 0
-        //            minimumY: Constants.subMenuWidth
-        //            maximumX: parent.parent.width - parent.width
-        //            maximumY: parent.parent.height - parent.height - Constants.subMenuWidth
-        //            smoothed: true
-        //        }
-
-        //        onClicked: containerClicked()
-        //        onDoubleClicked: containerDoubleClicked()
-
         hoverEnabled: true
 
         onEntered: showRulers()
         onExited: {
 
-            console.log('exit main container');
             rulerStatus = false
         }
 

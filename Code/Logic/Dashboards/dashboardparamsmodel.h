@@ -153,6 +153,7 @@ signals:
 
     // Customize Report parameters
     void reportBackgroundColorChanged(int dashboardId, int reportId, QString color);
+    void reportLineColorChanged(int dashboardId, int reportId, QString color);
     void reportUrlChanged(int dashboardId, int reportId, QString url);
 };
 

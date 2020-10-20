@@ -72,6 +72,7 @@ Rectangle{
         let dashboardId = DashboardParamsModel.currentDashboard
         let reportId = DashboardParamsModel.currentReport
 
+        console.log("LINE COLOR", color)
         DashboardParamsModel.setReportLineColor(dashboardId, reportId, color)
 
     }
@@ -94,7 +95,7 @@ Rectangle{
 
     ColorDialog{
         id: lineColorSelector
-        onAccepted: setLineColor(backgroundColorSelector.color)
+        onAccepted: setLineColor(lineColorSelector.color)
     }
 
     // SubComponents Ends

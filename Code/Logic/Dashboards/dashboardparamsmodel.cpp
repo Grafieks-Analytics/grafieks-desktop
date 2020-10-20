@@ -566,6 +566,9 @@ void DashboardParamsModel::setReportLineColor(int dashboardId, int reportId, QSt
 
         this->reportLineColor.insert(dashboardId, lineColor);
     }
+
+    qDebug() << "LINE COLOR" << color;
+    emit reportLineColorChanged(dashboardId, reportId, color);
 }
 
 QString DashboardParamsModel::getReportLineColor(int dashboardId, int reportId)
