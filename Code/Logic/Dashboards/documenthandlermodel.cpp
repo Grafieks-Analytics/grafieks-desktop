@@ -106,7 +106,6 @@ void DocumentHandlerModel::saveTmpFile(const QString filename)
         }
 
         m_doc->setHtml(m_doc->toHtml());
-        //        qDebug() << m_doc->toHtml() << m_doc->defaultStyleSheet();
 
         f.write(m_doc->toHtml().toLocal8Bit());
         f.close();

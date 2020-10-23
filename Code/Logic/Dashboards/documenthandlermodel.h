@@ -10,10 +10,11 @@
 #include <QtGui/QFontDatabase>
 #include <QtCore/QFileInfo>
 #include <QDir>
+#include <qqmlfile.h>
 
 #include <QDebug>
 
-#include <qqmlfile.h>
+
 
 QT_BEGIN_NAMESPACE
 class QTextDocument;

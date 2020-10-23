@@ -80,10 +80,13 @@ Item{
 
         function onReportUrlChanged(refDashboardId, refReportId, url){
 
+
             let dashboardId = DashboardParamsModel.currentDashboard
             let reportId = DashboardParamsModel.currentReport
-            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName))
-                webengine.reload()
+            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName)){
+                let newUrl =  "file:" + GeneralParamsModel.getTmpPath()  + url
+                webengine.url = newUrl
+            }
         }
     }
 
@@ -132,8 +135,14 @@ Item{
     }
 
 
-    function saveImage(file, extension){
-        console.log(file, extension, "SELECTED IMAGE")
+    function saveImage(selectedFile){
+        let currentDashboard = DashboardParamsModel.currentDashboard
+        let currentReport = DashboardParamsModel.currentReport
+        let fileToken = GeneralParamsModel.getFileToken();
+
+        const newFileName = currentDashboard + "_" + currentReport + "_" + fileToken
+
+        DashboardParamsModel.saveImage(selectedFile, newFileName)
     }
 
 
@@ -154,7 +163,7 @@ Item{
         selectMultiple: false
         nameFilters: [ "Image files (*.jpg *.jpeg *.png )"]
 
-        onAccepted: saveImage(fileUrl, selectedNameFilter)
+        onAccepted: saveImage(fileUrl)
     }
 
 

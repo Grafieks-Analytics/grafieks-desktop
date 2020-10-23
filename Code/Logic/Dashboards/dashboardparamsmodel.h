@@ -5,6 +5,9 @@
 #include <QMap>
 #include <QList>
 #include <QUrl>
+#include <QCoreApplication>
+#include <QtCore/QFileInfo>
+#include <QDir>
 #include <QDebug>
 
 #include "../../constants.h"
@@ -118,6 +121,10 @@ public:
 
     Q_INVOKABLE void setReportOpacity(int dashboardId, int reportId, int percent);
     Q_INVOKABLE int getReportOpacity(int dashboardId, int reportId);
+
+    // Save and read files
+
+    Q_INVOKABLE void saveImage(QUrl originalFile, QString newFilename);
 
     // General
     QString lastContainerType() const;

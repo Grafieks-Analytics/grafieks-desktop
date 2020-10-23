@@ -622,6 +622,30 @@ int DashboardParamsModel::getReportOpacity(int dashboardId, int reportId)
     return output;
 }
 
+void DashboardParamsModel::saveImage(QUrl originalFile, QString newFilename)
+{
+    QFileInfo fi(originalFile.toString());
+    QString ext = fi.completeSuffix();
+    QString finalFileName = newFilename + "." + ext;
+
+    QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
+    QDir tmpDir(tmpFilePath);
+
+    // Check if tmp directory exists
+    if(!tmpDir.exists()){
+        QDir().mkdir(tmpFilePath);
+    }
+
+    QString filePath = tmpFilePath + finalFileName;
+
+    // Save the file
+    bool result = QFile::copy(originalFile.toLocalFile(), filePath);
+
+    if(result == true){
+        this->setDashboardReportUrl(this->currentDashboard(), this->currentReport(), finalFileName);
+    }
+}
+
 QString DashboardParamsModel::lastContainerType() const
 {
     return m_lastContainerType;
