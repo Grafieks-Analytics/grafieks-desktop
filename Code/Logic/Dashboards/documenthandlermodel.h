@@ -31,6 +31,7 @@ class DocumentHandlerModel : public QObject
     Q_PROPERTY(int selectionEnd READ selectionEnd WRITE setSelectionEnd NOTIFY selectionEndChanged)
 
     Q_PROPERTY(QColor textColor READ textColor WRITE setTextColor NOTIFY textColorChanged)
+    Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
     Q_PROPERTY(QString fontFamily READ fontFamily WRITE setFontFamily NOTIFY fontFamilyChanged)
     Q_PROPERTY(Qt::Alignment alignment READ alignment WRITE setAlignment NOTIFY alignmentChanged)
 
@@ -64,6 +65,7 @@ public:
     QString fontFamily() const;
 
     QColor textColor() const;
+    QColor backgroundColor() const;
 
     Qt::Alignment alignment() const;
     void setAlignment(Qt::Alignment a);
@@ -79,19 +81,24 @@ public:
 
     QString documentTitle() const;
 
+
+
 public Q_SLOTS:
     void setBold(bool arg);
     void setItalic(bool arg);
     void setUnderline(bool arg);
     void setFontSize(int arg);
     void setTextColor(const QColor &arg);
+    void setBackgroundColor(const QColor &color);
     void setFontFamily(const QString &arg);
 
     void setFileUrl(const QUrl &arg);
     void setText(const QString &arg);
-    void saveTmpFile(const QString filename, const QString fileType);
+    void saveTmpFile(const QString filename);
 
     void setDocumentTitle(QString arg);
+
+
 
 Q_SIGNALS:
     void targetChanged();
@@ -101,6 +108,7 @@ Q_SIGNALS:
 
     void fontFamilyChanged();
     void textColorChanged();
+    void backgroundColorChanged();
     void alignmentChanged();
 
     void boldChanged();
@@ -115,6 +123,8 @@ Q_SIGNALS:
     void textChanged();
     void documentTitleChanged();
     void error(QString message);
+
+
 
 private:
     void reset();
@@ -133,6 +143,7 @@ private:
     QUrl m_fileUrl;
     QString m_text;
     QString m_documentTitle;
+    QColor m_backgroundColor;
 };
 
 #endif

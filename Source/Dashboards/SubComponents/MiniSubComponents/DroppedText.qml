@@ -1,6 +1,5 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtWebEngine 1.8
 import QtWebView 1.1
 
 import com.grafieks.singleton.constants 1.0
@@ -98,6 +97,20 @@ Item{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted: {
+        var globalCordinates = this.mapToGlobal(0,0)
+        console.log('global x',globalCordinates.x)
+        console.log('global y',globalCordinates.y)
+
+        let currentDashboard = DashboardParamsModel.currentDashboard
+        let currentReport = DashboardParamsModel.currentReport + 1
+
+        console.log(currentDashboard, currentReport, "CURRENT")
+
+        let path = GeneralParamsModel.getTmpPath() + currentDashboard + "_" + currentReport + "_" + GeneralParamsModel.getFileToken() + ".html"
+        webengine.url = "file:" + path
+    }
+
     function destroyElement(){
         mainContainer.destroy()
         this.destroy()
@@ -129,11 +142,7 @@ Item{
         mainContainer.rulerStatus = false
     }
 
-    Component.onCompleted: {
-        var globalCordinates = this.mapToGlobal(0,0)
-        console.log('global x',globalCordinates.x)
-        console.log('global y',globalCordinates.y)
-    }
+
 
 
     // JAVASCRIPT FUNCTION ENDS
@@ -291,7 +300,7 @@ Item{
             anchors.centerIn: parent
 
             width:newItem.width - 10
-            height:newItem.height - 10 - textMenu.height
+            height:newItem.height - textMenu.height
 
             onLoadingChanged: {
 
@@ -306,11 +315,6 @@ Item{
                     break
                 }
 
-            }
-
-            Component.onCompleted: {
-                let path = GeneralParamsModel.getTmpPath() + "0_1_" + GeneralParamsModel.getFileToken() + ".html"
-                webengine.url = "file:" + path
             }
 
         }

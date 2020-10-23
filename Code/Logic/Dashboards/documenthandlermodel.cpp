@@ -79,7 +79,7 @@ void DocumentHandlerModel::setText(const QString &arg)
 }
 
 
-void DocumentHandlerModel::saveTmpFile(const QString filename, const QString fileType)
+void DocumentHandlerModel::saveTmpFile(const QString filename)
 {
     QLatin1String ext(".html");
 
@@ -104,6 +104,10 @@ void DocumentHandlerModel::saveTmpFile(const QString filename, const QString fil
             emit error(tr("Cannot save: ") + f.errorString());
             return;
         }
+
+        m_doc->setHtml(m_doc->toHtml());
+        //        qDebug() << m_doc->toHtml() << m_doc->defaultStyleSheet();
+
         f.write(m_doc->toHtml().toLocal8Bit());
         f.close();
         setFileUrl(QUrl::fromLocalFile(localPath));
@@ -112,7 +116,6 @@ void DocumentHandlerModel::saveTmpFile(const QString filename, const QString fil
         emit error(tr("Bad filename. Cannot contain `/`"));
         return;
     }
-    //    qDebug() << QUrl::fromLocalFile(localPath) << m_doc->toHtml() << m_doc->toPlainText() << "X!X!" << arg << fileType;
 }
 
 QUrl DocumentHandlerModel::fileUrl() const
@@ -144,6 +147,7 @@ void DocumentHandlerModel::reset()
     emit underlineChanged();
     emit fontSizeChanged();
     emit textColorChanged();
+    emit backgroundColorChanged();
 }
 
 QTextCursor DocumentHandlerModel::textCursor() const
@@ -284,6 +288,12 @@ QColor DocumentHandlerModel::textColor() const
     return format.foreground().color();
 }
 
+QColor DocumentHandlerModel::backgroundColor() const
+{
+    qDebug() << "CALLED BACK GROUND";
+    return m_backgroundColor;
+}
+
 void DocumentHandlerModel::setTextColor(const QColor &c)
 {
     QTextCursor cursor = textCursor();
@@ -293,6 +303,31 @@ void DocumentHandlerModel::setTextColor(const QColor &c)
     format.setForeground(QBrush(c));
     mergeFormatOnWordOrSelection(format);
     emit textColorChanged();
+}
+
+void DocumentHandlerModel::setBackgroundColor(const QColor &color)
+{
+    //    m_backgroundColor = color.name();
+    //    m_doc->setDefaultStyleSheet("body{background-color: '"+ color.name() +"'}");
+    //    m_doc->setHtml(m_doc->toHtml());
+
+    //    qDebug() << "BACKGROUND COLOR CHANGED" << color.name() ;
+    //    emit backgroundColorChanged();
+
+    const QString &bgcolor("bgcolor=\"");
+    QString html(m_doc->toHtml());
+    int n = html.indexOf(bgcolor, html.indexOf("<body"));
+    int k = n + bgcolor.length();
+
+    m_doc->setDefaultStyleSheet("body { background-color: '" + color.name() + "' }");
+
+    if (n >= 0)
+        html.replace(n + bgcolor.length(), html.mid(k, html.indexOf("\"", n + bgcolor.length()) - k).length(), color.name());
+
+    m_doc->setHtml(html);
+    m_backgroundColor = color.name(); // QColor variable
+
+    emit backgroundColorChanged();
 }
 
 QString DocumentHandlerModel::fontFamily() const

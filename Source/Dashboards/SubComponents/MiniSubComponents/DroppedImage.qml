@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-
+import QtWebView 1.1
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
@@ -25,10 +25,6 @@ Item{
 
 
     property var hoverStatus: false
-
-    // change this status to false when image is selected
-    property var imageChooseStatus: true
-
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -81,6 +77,14 @@ Item{
                 newItem.visible = false
             }
         }
+
+        function onReportUrlChanged(refDashboardId, refReportId, url){
+
+            let dashboardId = DashboardParamsModel.currentDashboard
+            let reportId = DashboardParamsModel.currentReport
+            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName))
+                webengine.reload()
+        }
     }
 
     // Connections Ends
@@ -128,6 +132,11 @@ Item{
     }
 
 
+    function saveImage(file, extension){
+        console.log(file, extension, "SELECTED IMAGE")
+    }
+
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -144,6 +153,8 @@ Item{
         title: "Select a file (*.jpg *.jpeg *.png  only)"
         selectMultiple: false
         nameFilters: [ "Image files (*.jpg *.jpeg *.png )"]
+
+        onAccepted: saveImage(fileUrl, selectedNameFilter)
     }
 
 
@@ -182,6 +193,7 @@ Item{
 
         Rectangle{
 
+            id: imageMenu
             color: "transparent"
             anchors.top: parent.top
             height: 40
@@ -295,12 +307,45 @@ Item{
             onExited: hideMenus()
         }
 
+
+
+        WebView{
+            id: webengine
+            anchors.top : imageMenu.bottom
+            anchors.centerIn: parent
+            visible: false
+
+            width:newItem.width - 10
+            height:newItem.height  - imageMenu.height
+
+            onLoadingChanged: {
+
+                switch(loadRequest.status){
+
+                case ( WebView.LoadFailedStatus):
+                    webengine.visible = false
+                    chooseImage.visible = true
+                    break
+
+                case ( WebView.LoadSucceededStatus):
+                    webengine.visible = true
+                    chooseImage.visible = false
+                    break
+                }
+
+            }
+
+        }
+
+
+
     }
 
     CustomButton{
+        id: chooseImage
         textValue: "Choose Image"
         anchors.centerIn: parent
-        visible: imageChooseStatus
+        visible: true
         onClicked: selectFile()
     }
 

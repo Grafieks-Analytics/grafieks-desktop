@@ -93,6 +93,20 @@ Rectangle{
     // Connections Starts
 
 
+    Connections{
+        target: DashboardParamsModel
+
+        function onReportBackgroundColorChanged(dashboardId, reportId, color){
+
+            let currentDashboard = DashboardParamsModel.currentDashboard
+            let currentReport = DashboardParamsModel.currentReport
+
+            if(currentDashboard === dashboardId && currentReport === reportId){
+                console.log("CALLED", reportId, dashboardId, color, currentDashboard, currentReport)
+                document.backgroundColor = color
+            }
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -103,6 +117,10 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
+
+    Component.onCompleted: {
+        DocumentHandlerModel.setBackgroundColor("green")
+    }
 
     function copyText(){
         textArea.copy()
@@ -115,7 +133,7 @@ Rectangle{
         let fileToken = GeneralParamsModel.getFileToken()
         let fileName = dashboardId + "_" + reportId + "_" + fileToken
 
-        document.saveTmpFile(fileName, "html")
+        document.saveTmpFile(fileName)
         DashboardParamsModel.setDashboardReportUrl(dashboardId, reportId, fileName)
     }
 
@@ -195,6 +213,12 @@ Rectangle{
         id: colorDialog
         color: "black"
     }
+
+//    ColorDialog {
+//        id: colorDialog2
+//        color: "green"
+//    }
+
 
 
     Rectangle{
@@ -285,9 +309,24 @@ Rectangle{
                 anchors.verticalCenter: parent.verticalCenter
                 color: colorDialog.color;
 
+
                 MouseArea{
                     anchors.fill: parent
                     onClicked: colorDialog.open()
+                }
+            }
+
+            Rectangle{
+                id: colorBox2
+                width: 30
+                height: parent.height - 16
+                anchors.verticalCenter: parent.verticalCenter
+                color: colorDialog2.color;
+
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: colorDialog2.open()
                 }
             }
 
@@ -396,6 +435,7 @@ Rectangle{
             selectionStart: textArea.selectionStart
             selectionEnd: textArea.selectionEnd
             textColor: colorDialog.color
+//            backgroundColor: colorDialog2.color
             onFontFamilyChanged: {
                 var index = Qt.fontFamilies().indexOf(document.fontFamily)
                 if (index === -1) {
@@ -413,6 +453,8 @@ Rectangle{
             onTextColorChanged: {
                 colorBox.color = colorDialog.color
             }
+
+
         }
 
     }
