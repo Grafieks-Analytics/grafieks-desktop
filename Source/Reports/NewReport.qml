@@ -28,6 +28,21 @@ Page {
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
+    ListModel{
+        id: categoricalModel
+        ListElement{
+            categoricalName: "Customer Name"
+        }
+        ListElement{
+            categoricalName: "Customer Name 1"
+        }
+        ListElement{
+            categoricalName: "Customer Name 2"
+        }
+        ListElement{
+            categoricalName: "Customer Name 3"
+        }
+    }
 
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
@@ -259,7 +274,7 @@ Page {
 
     ToolSeparator{
         id: toolsep2
-        height:parent.height
+        height:parent.height + 6
         anchors.right:parent.right
         anchors.top: parent.top
         anchors.rightMargin: 194
@@ -276,14 +291,16 @@ Page {
         anchors.right:parent.right
         spacing: 50
 
+
         Rectangle{
             id: rectangle_querymodeller_right_col
             color:Constants.themeColor
             width: parent.width
             height: parent.height
 
+            // Cancel and Add report Buttons Starts
             Rectangle{
-                id: tabbar_querymodeller
+                id: tabbarQuerymodeller
                 width:parent.width
                 height: 31
                 Button{
@@ -324,49 +341,52 @@ Page {
                     }
                 }
             }
+            // Cancel and Add report Buttons Ends
+
+            // Dashboard Name Starts
 
             Rectangle{
-                id: rectangle_querymodeller_right_col1
+                id: dashboardNameRectangle
 
-                anchors.top: tabbar_querymodeller.bottom
+                anchors.top: tabbarQuerymodeller.bottom
                 anchors.topMargin: 2
 
                 height:50
-                width: rectangle_querymodeller_right_col.width
+                width: parent.width
 
                 Text{
                     text: "Data Source Name"
-                    anchors.verticalCenter: rectangle_querymodeller_right_col1.verticalCenter
-                    anchors.left: rectangle_querymodeller_right_col1.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
                     anchors.leftMargin: 10
                 }
             }
 
+            // Dashboard Name Ends
+
+            // Search starts
 
             Rectangle{
-                id: rectangle_querymodeller_right_col3
+                id: searchRectangle
 
-                anchors.top: rectangle_querymodeller_right_col1.bottom
+                anchors.top: dashboardNameRectangle.bottom
                 anchors.topMargin: 2
                 height:50
-                width: rectangle_querymodeller_right_col.width
+                width: parent.width
 
                 Row{
 
-                    id: row_querymodeller_right_col
-
+                    id: searchBarRow
                     TextField{
-                        text: "Search"
-                        width:rectangle_querymodeller_right_col3.width - search_icon.width
+                        width: parent.parent.width - search_icon.width - 5
                         height:30
                         cursorVisible: true
-                        anchors.top: row_querymodeller_right_col.top
+                        anchors.top: parent.top
                         anchors.topMargin: 5
-
+                        placeholderText: "Search"
                         background: Rectangle{
                             border.width: 0
                         }
-
                     }
 
                     Image{
@@ -374,141 +394,165 @@ Page {
                         source:"/Images/icons/Search.png"
                         height:30
                         width:30
-                        anchors.top: row_querymodeller_right_col.top
+                        anchors.top: parent.top
                         anchors.topMargin: 5
                     }
                 }
 
                 ToolSeparator{
-                    id: toolsep3
                     orientation: Qt.Horizontal
-                    width: rectangle_querymodeller_right_col3.width - 10
-                    anchors.top: row_querymodeller_right_col.bottom
-                    anchors.horizontalCenter: row_querymodeller_right_col.horizontalCenter
+                    width: parent.width - 10
+                    anchors.top: searchBarRow.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
                     anchors.topMargin: 5
                 }
 
-
-
             }
 
+            // Search Ends
+
+            // Data Column Starts
+            Rectangle{
+                anchors.top: searchRectangle.bottom
+                height: parent.height - (searchRectangle.height + dashboardNameRectangle.height + tabbarQuerymodeller.height)
+                width: parent.width
+
+                Column{
+                    anchors.fill: parent
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    spacing: 15
+
+                    Rectangle{
+                        height: parent.height/3 - 5
+                        width: parent.width
+
+                        Text {
+                            id: categoricalHeading
+                            text: qsTr("Categorical")
+                            font.pixelSize: Constants.fontCategoryHeader
+                        }
+
+                        ListView{
+                            model: categoricalModel
+                            anchors.top: categoricalHeading.bottom
+                            anchors.topMargin: 5
+                            height: parent.height - categoricalHeading.height - 5
+                            width: parent.width
+                            delegate: Rectangle{
+                                height: 24
+                                width: parent.width
+                                Image {
+                                    id: categoricalImage
+                                    source: "/Images/icons/AB.png"
+                                    height: 16
+                                    width: 16
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
+
+                                Text {
+                                    text: categoricalName
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.left: categoricalImage.right
+                                    anchors.leftMargin: 10
+                                }
+                            }
+
+                        }
+
+                    }
+
+                    Rectangle{
+                        height: parent.height/3 - 5
+                        width: parent.width
+
+                        Text {
+                            id: dateHeading
+                            text: qsTr("Date")
+                            font.pixelSize: Constants.fontCategoryHeader
+                        }
+
+                        ListView{
+                            model: categoricalModel
+                            anchors.top: dateHeading.bottom
+                            anchors.topMargin: 5
+                            height: parent.height - dateHeading.height - 5
+                            width: parent.width
+                            delegate: Rectangle{
+                                height: 24
+                                width: parent.width
+                                Image {
+                                    id: dateImage
+                                    source: "/Images/icons/AB.png"
+                                    height: 16
+                                    width: 16
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
+
+                                Text {
+                                    text: categoricalName
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.left: dateImage.right
+                                    anchors.leftMargin: 10
+                                }
+                            }
+
+                        }
 
 
-//            Item{
-//                id: item_querymodeller
-//                width: rectangle_querymodeller_right_col3.width - 10
-//                anchors.top: rectangle_querymodeller_right_col3.bottom
-//                anchors.topMargin: 2
+                    }
 
-//                ListView {
-//                    anchors.fill: parent
-//                    model: nestedModel
-//                    delegate: categoryDelegate
-//                }
+                    Rectangle{
+                        height: parent.height/3 - 5
+                        width: parent.width
 
 
-//                ListModel {
-//                    id: nestedModel
+                        Text {
+                            id: numericalHeading
+                            text: qsTr("Date")
+                            font.pixelSize: Constants.fontCategoryHeader
+                        }
+
+                        ListView{
+                            model: categoricalModel
+                            anchors.top: numericalHeading.bottom
+                            anchors.topMargin: 5
+                            height: parent.height - numericalHeading.height - 5
+                            width: parent.width
+                            delegate: Rectangle{
+                                height: 24
+                                width: parent.width
+                                Image {
+                                    id: numericalImage
+                                    source: "/Images/icons/AB.png"
+                                    height: 16
+                                    width: 16
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
+
+                                Text {
+                                    text: categoricalName
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.left: numericalImage.right
+                                    anchors.leftMargin: 10
+                                }
+                            }
+
+                        }
 
 
-//                    ListElement {
-//                        categoryName: "Database 1"
-//                        collapsed: true
 
-//                        subItems: [
-//                            ListElement { itemName: "Table 1" },
-//                            ListElement { itemName: "Table 2" },
-//                            ListElement { itemName: "Table 3" },
-//                            ListElement { itemName: "Table 4" }
-//                        ]
-//                    }
+                    }
+                }
 
+            }
+            // Data Column Ends
 
-//                }
-
-//                Component {
-//                    id: categoryDelegate
-//                    Column {
-//                        width: 200
-
-//                        Rectangle {
-//                            id: categoryItem
-//                            height: 50
-//                            width: 200
-
-//                            Text {
-//                                anchors.verticalCenter: parent.verticalCenter
-//                                x: 15
-//                                font.pixelSize: 12
-//                                text: categoryName
-//                            }
-
-//                            Image {
-//                                id: drop_icon
-//                                source: "/Images/icons/Down_20.png"
-//                                width: 10
-//                                height: 10
-//                                anchors.right: parent.right
-//                                anchors.rightMargin: 15
-//                                anchors.verticalCenter: parent.verticalCenter
-//                                visible: true
-
-//                                MouseArea {
-//                                    anchors.fill: parent
-
-//                                    onClicked: {
-//                                        nestedModel.setProperty(index, "collapsed", !collapsed)
-
-//                                        if(collapsed === true){
-//                                            drop_icon.source = "/Images/icons/Down_20.png"
-//                                        }
-//                                        else{
-//                                            drop_icon.source = "/Images/icons/Up_20.png"
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
-
-//                        Loader {
-//                            id: subItemLoader
-
-//                            visible: !collapsed
-//                            property variant subItemModel : subItems
-//                            sourceComponent: collapsed ? null : subItemColumnDelegate
-//                            onStatusChanged: if (status == Loader.Ready) item.model = subItemModel
-//                        }
-//                    }
-
-//                }
-
-//                Component {
-//                    id: subItemColumnDelegate
-//                    Column {
-//                        property alias model : subItemRepeater.model
-//                        width: 200
-//                        Repeater {
-//                            id: subItemRepeater
-//                            delegate: Rectangle {
-//                                height: 40
-//                                width: 200
-
-//                                Text {
-//                                    anchors.verticalCenter: parent.verticalCenter
-//                                    x: 30
-//                                    font.pixelSize: 12
-//                                    text: itemName
-//                                }
-//                            }
-//                        }
-//                    }
-
-//                }
-
-//            }
 
 
         }
+
+
 
     }
 

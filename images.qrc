@@ -160,5 +160,6 @@
         <file>Images/icons/charts/FinalBar.png</file>
         <file>Images/icons/charts/Table2.png</file>
         <file>Images/icons/charts/Gauge - chart.png</file>
+        <file>Images/icons/AB.png</file>
     </qresource>
 </RCC>

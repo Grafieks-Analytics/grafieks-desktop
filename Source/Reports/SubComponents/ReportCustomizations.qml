@@ -146,6 +146,21 @@ Item{
         }
     }
 
+    Component{
+        id: propertiesComponent
+        PropertiesFilter{}
+    }
+
+    Component{
+        id: referenceLineComponent
+        CustomizeReferenceLine{}
+    }
+
+    Component{
+        id: legendComponent
+        CustomizeLegend{}
+    }
+
 
     Component {
         id: subItemColumnDelegate
@@ -175,21 +190,6 @@ Item{
             }
         }
 
-    }
-
-    Component{
-        id: propertiesComponent
-        PropertiesFilter{}
-    }
-
-    Component{
-        id: referenceLineComponent
-        CustomizeReferenceLine{}
-    }
-
-    Component{
-        id: legendComponent
-        CustomizeLegend{}
     }
 
 
@@ -279,17 +279,14 @@ Item{
                     sourceComponent: {
                         if(collapsed)
                             return null
-                        else{
-                            if(categoryName.toLowerCase() === "properties"){
-                                return propertiesComponent
-                            }else if(categoryName.toLowerCase() === "reference line"){
-                                return referenceLineComponent
-                            }else if(categoryName.toLowerCase() === "legend"){
-                                return legendComponent
-                            }
+
+                        switch(categoryName.toLowerCase()){
+                            case "properties": return propertiesComponent
+                            case "reference line": return referenceLineComponent
+                            case "legend": return legendComponent
                         }
+
                     }
-                    onStatusChanged: if (status == Loader.Ready) item.model = subItemModel
 
                 }
             }
