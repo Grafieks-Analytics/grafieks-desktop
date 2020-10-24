@@ -17,7 +17,7 @@ import QtQuick.Dialogs 1.0
 import com.grafieks.singleton.constants 1.0
 
 import "../../MainSubComponents"
-import "../MiniSubComponents"
+import "./MiniSubComponents"
 
 Item{
     width: 150
@@ -54,14 +54,6 @@ Item{
         }
 
         ListElement {
-            categoryName: "Reference Line"
-            collapsed: false
-            subItems: [
-                ListElement { itemName: "Add Reference Line" }
-            ]
-        }
-
-        ListElement {
             categoryName: "Legend"
             collapsed: false
 
@@ -71,27 +63,14 @@ Item{
             ]
         }
 
-        ListElement {
-            categoryName: "Background"
-            collapsed: false
-            subItems: [
-                ListElement { itemName: "Color" },
-                ListElement { itemName: "Show Grid" },
-                ListElement { itemName: "Show Border" }
-            ]
-        }
 
         ListElement {
-            categoryName: "Drill Through"
+            categoryName: "Reference Line"
             collapsed: false
             subItems: [
-                ListElement { itemName: "Region" },
-                ListElement { itemName: "Cluster" },
-                ListElement { itemName: "Country" },
-                ListElement { itemName: "Warehouse" }
+                ListElement { itemName: "Add Reference Line" }
             ]
         }
-
 
     }
 
@@ -208,6 +187,11 @@ Item{
         CustomizeReferenceLine{}
     }
 
+    Component{
+        id: legendComponent
+        CustomizeLegend{}
+    }
+
 
     // SubComponents Ends
     /***********************************************************************************************************************/
@@ -300,6 +284,8 @@ Item{
                                 return propertiesComponent
                             }else if(categoryName.toLowerCase() === "reference line"){
                                 return referenceLineComponent
+                            }else if(categoryName.toLowerCase() === "legend"){
+                                return legendComponent
                             }
                         }
                     }

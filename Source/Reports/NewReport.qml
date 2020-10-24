@@ -82,6 +82,8 @@ Page {
     }
 
     function focusReportTitle(){
+        report_title_text.readOnly= false
+        report_title_text.focus = true;
         console.log('Focus Title')
     }
 
@@ -137,6 +139,7 @@ Page {
             TextEdit {
                 id: report_title_text
                 text: "Report Title"
+                readOnly: true
                 cursorVisible: false
                 width:250
                 height: 40

@@ -116,8 +116,8 @@
         <file>Source/Dashboards/SubComponents/MiniSubComponents/CustomizeReportStyleMenu.qml</file>
         <file>Source/MainSubComponents/CustomDashboardNameButton.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/CustomizeReportGeneralMenu.qml</file>
-        <file>Source/Reports/MiniSubComponents/NewReport.qml</file>
-        <file>Source/Reports/MiniSubComponents/PropertiesFilter.qml</file>
-        <file>Source/Reports/MiniSubComponents/CustomizeReferenceLine.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/CustomizeLegend.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/CustomizeReferenceLine.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/PropertiesFilter.qml</file>
     </qresource>
 </RCC>

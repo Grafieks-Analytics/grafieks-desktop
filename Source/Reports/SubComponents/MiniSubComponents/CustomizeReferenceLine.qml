@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
 
-import "../../MainSubComponents"
+import "../../../MainSubComponents"
 
 Column{
 
@@ -20,18 +20,6 @@ Column{
     // LIST MODEL STARTS
 
 
-    ListModel{
-        id: colorListModel
-        ListElement{
-            textValue: "Quantity"
-        }
-        ListElement{
-            textValue: "Quantity 1"
-        }
-        ListElement{
-            textValue: "Quantity 2"
-        }
-    }
 
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
@@ -86,35 +74,30 @@ Column{
     // Page Design Starts
 
 
-    Rectangle {
-        id: colorByComponent
-        height: allParameter.height
+    // Show Legend Starts
+
+    Rectangle{
+
+        height: 20
         width: 150
 
         Rectangle{
+            anchors.fill: parent
 
-            id: allParameter
-
-            height: 20
-            width: parent.width
-
-            Rectangle{
-                anchors.fill: parent
-
-                Text {
-                    text: qsTr("Add Reference Line")
-                    anchors.left: parent.left
-                    anchors.leftMargin: leftMargin
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.fontCategoryHeaderSmall
-                }
-
-
+            Text {
+                text: qsTr("Add Reference Line")
+                anchors.left: parent.left
+                anchors.leftMargin: leftMargin
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: Constants.fontCategoryHeaderSmall
             }
 
         }
 
     }
+
+    // Show Legends Ends
+
 
 
 }
