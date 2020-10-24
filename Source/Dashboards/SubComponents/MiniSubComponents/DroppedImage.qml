@@ -83,7 +83,7 @@ Item{
 
             let dashboardId = DashboardParamsModel.currentDashboard
             let reportId = DashboardParamsModel.currentReport
-            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName)){
+            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName) && url !== ""){
                 let newUrl =  "file:" + GeneralParamsModel.getTmpPath()  + url
                 webengine.url = newUrl
             }
@@ -100,7 +100,11 @@ Item{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    Component.onCompleted: selectFile()
+    Component.onCompleted: {
+
+        selectFile()
+        webengine.url = ""
+    }
 
     function selectFile(){
         fileDialog.open()
@@ -126,12 +130,18 @@ Item{
 
 
     function showMenus(){
+        DashboardParamsModel.setCurrentReport(newItem.objectName)
         hoverStatus = true
         mainContainer.rulerStatus = true
     }
     function hideMenus(){
+        DashboardParamsModel.setCurrentReport(newItem.objectName)
         hoverStatus = false
         mainContainer.rulerStatus = false
+    }
+
+    function toggleFullScreen(){
+        DashboardParamsModel.setCurrentReport(newItem.objectName)
     }
 
 
@@ -164,6 +174,7 @@ Item{
         nameFilters: [ "Image files (*.jpg *.jpeg *.png )"]
 
         onAccepted: saveImage(fileUrl)
+        onRejected: webengine.url = ""
     }
 
 

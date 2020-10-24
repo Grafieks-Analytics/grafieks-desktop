@@ -81,6 +81,7 @@ void DocumentHandlerModel::setText(const QString &arg)
 
 void DocumentHandlerModel::saveTmpFile(const QString filename)
 {
+
     QLatin1String ext(".html");
 
     QString tmpFilePath = QCoreApplication::applicationDirPath() + "/" + "tmp/";
@@ -109,6 +110,7 @@ void DocumentHandlerModel::saveTmpFile(const QString filename)
 
         f.write(m_doc->toHtml().toLocal8Bit());
         f.close();
+
         setFileUrl(QUrl::fromLocalFile(localPath));
 
     } else{
@@ -289,7 +291,6 @@ QColor DocumentHandlerModel::textColor() const
 
 QColor DocumentHandlerModel::backgroundColor() const
 {
-    qDebug() << "CALLED BACK GROUND";
     return m_backgroundColor;
 }
 
@@ -306,12 +307,6 @@ void DocumentHandlerModel::setTextColor(const QColor &c)
 
 void DocumentHandlerModel::setBackgroundColor(const QColor &color)
 {
-    //    m_backgroundColor = color.name();
-    //    m_doc->setDefaultStyleSheet("body{background-color: '"+ color.name() +"'}");
-    //    m_doc->setHtml(m_doc->toHtml());
-
-    //    qDebug() << "BACKGROUND COLOR CHANGED" << color.name() ;
-    //    emit backgroundColorChanged();
 
     const QString &bgcolor("bgcolor=\"");
     QString html(m_doc->toHtml());
@@ -325,6 +320,7 @@ void DocumentHandlerModel::setBackgroundColor(const QColor &color)
 
     m_doc->setHtml(html);
     m_backgroundColor = color.name(); // QColor variable
+//    this->saveTmpFile()
 
     emit backgroundColorChanged();
 }

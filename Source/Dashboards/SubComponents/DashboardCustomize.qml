@@ -23,6 +23,8 @@ Item{
     height: parent.height
 
     property string itemName : ""
+    property string itemType: ""
+
 
 
     /***********************************************************************************************************************/
@@ -38,7 +40,7 @@ Item{
 
             subItems: [
 
-                ListElement { itemName: "Name" }
+                ListElement { itemName: "Name"; itemType: "name"  }
             ]
         }
 
@@ -46,8 +48,8 @@ Item{
             categoryName: "Style"
             collapsed: false
             subItems: [
-                ListElement { itemName: "Background Color" },
-                ListElement { itemName: "Report Border" }
+                ListElement { itemName: "Background Color"; itemType: "backgroundColor" },
+                ListElement { itemName: "Report Border"; itemType: "reportBorder" }
             ]
         }
 
@@ -56,8 +58,8 @@ Item{
             categoryName: "Canvas Size"
             collapsed: false
             subItems: [
-                ListElement { itemName: "Background Color" },
-                ListElement { itemName: "Report Border" }
+                ListElement { itemName: "Background Color"; itemType: "backgroundColor" },
+                ListElement { itemName: "Report Border"; itemType: "reportBorder" }
             ]
         }
 
@@ -65,9 +67,9 @@ Item{
             categoryName: "Widgets"
             collapsed: false
             subItems: [
-                ListElement { itemName: "Text" },
-                ListElement { itemName: "Blank" },
-                ListElement { itemName: "Image" }
+                ListElement { itemName: "Blank"; itemType: "blank" },
+                ListElement { itemName: "Text"; itemType: "text" },
+                ListElement { itemName: "Image"; itemType: "image" }
             ]
         }
 
@@ -76,10 +78,10 @@ Item{
             collapsed: false
 
             subItems: [
-                ListElement { itemName: "Report 1" },
-                ListElement { itemName: "Report 2" },
-                ListElement { itemName: "Report 3" },
-                ListElement { itemName: "Report 4" }
+                ListElement { itemName: "Report 1"; itemType: "chart" },
+                ListElement { itemName: "Report 2"; itemType: "chart" },
+                ListElement { itemName: "Report 3"; itemType: "chart" },
+                ListElement { itemName: "Report 4"; itemType: "chart" }
             ]
         }
 
@@ -105,7 +107,6 @@ Item{
 
     /***********************************************************************************************************************/
     // Connections Starts
-
 
 
     // Connections Ends
@@ -186,11 +187,11 @@ Item{
                     if(collapsed){
                         null
                     }else{
-                        if(categoryName == "General"){
+                        if(categoryName === "General"){
                             return generalComponent
-                        }else if(categoryName == "Style"){
+                        }else if(categoryName === "Style"){
                             return styleComponent
-                        }else if(categoryName == "Canvas Size"){
+                        }else if(categoryName === "Canvas Size"){
                             return canvasMenuComponent
                         }
                         else{
@@ -216,6 +217,7 @@ Item{
             Repeater {
                 id: subItemRepeater
                 property string itemName : ""
+                property string itemType: ""
 
                 delegate: Rectangle {
                     id: dragRect
@@ -240,6 +242,7 @@ Item{
 
                             if (mouseArea.drag.active) {
                                 listViewElem.itemName = itemName
+                                listViewElem.itemType = itemType
                             }
                             dragRect.Drag.drop();
                         }
@@ -276,6 +279,7 @@ Item{
         id: generalComponent
 
         CustomizeGeneralMenu{
+            id: mainGeneralComponent
             height: 60
             width: listViewElem.width
         }

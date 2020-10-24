@@ -137,5 +137,10 @@ QtObject {
     property int defaultDroppedReportWidth : 300
     property int defaultDroppedReportHeight : 200
 
+    property int reportTypeBlank : 0
+    property int reportTypeText: 1
+    property int reportTypeImage: 2
+    property int reportTypeChart : 3
+
     // DASHBOARD ends
 }

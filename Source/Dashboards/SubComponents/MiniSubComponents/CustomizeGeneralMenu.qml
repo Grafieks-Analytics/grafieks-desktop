@@ -6,6 +6,8 @@ import com.grafieks.singleton.constants 1.0
 
 Rectangle{
 
+    id: generalCustomize
+
     Connections{
         target: DashboardParamsModel
 
@@ -16,6 +18,7 @@ Rectangle{
 
     Component.onCompleted: {
         dashboardName.text = "Dashboard 1"
+
     }
 
 

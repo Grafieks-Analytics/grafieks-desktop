@@ -130,18 +130,24 @@ Item{
     }
 
     function showTextEditor(){
+
         textEditor.visible = true
     }
 
     function showMenus(){
+        DashboardParamsModel.setCurrentReport(newItem.objectName)
         hoverStatus = true
         mainContainer.rulerStatus = true
     }
     function hideMenus(){
+        DashboardParamsModel.setCurrentReport(newItem.objectName)
         hoverStatus = false
         mainContainer.rulerStatus = false
     }
 
+    function toggleFullScreen(){
+        DashboardParamsModel.setCurrentReport(newItem.objectName)
+    }
 
 
 

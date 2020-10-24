@@ -84,7 +84,25 @@ Rectangle {
         let x2 = drag.x + Constants.defaultDroppedReportWidth
         let y2 = drag.y + Constants.defaultDroppedReportHeight
         let currentPoint = {x: drag.x, y: drag.y};
+        let reportType = 0;
         let draggedItem = listViewElem.itemName.toLocaleLowerCase();
+
+
+        switch(listViewElem.itemType){
+
+        case "blank":
+            reportType = Constants.reportTypeBlank
+            break;
+        case "text":
+            reportType = Constants.reportTypeText
+            break;
+        case "image":
+            reportType = Constants.reportTypeImage
+            break;
+        case "chart":
+            reportType = Constants.reportTypeChart
+            break;
+        }
 
         dashboardArea.color = "transparent"
 
@@ -96,7 +114,7 @@ Rectangle {
         DashboardParamsModel.dragNewReport(DashboardParamsModel.currentDashboard, counter)
         DashboardParamsModel.setReportZOrder(DashboardParamsModel.currentDashboard, counter, DashboardParamsModel.zIndex)
         DashboardParamsModel.setDashboardReportCoordinates(DashboardParamsModel.currentDashboard, counter, x1, y1, x2, y2)
-        DashboardParamsModel.setDashboardReportTypeMap(DashboardParamsModel.currentDashboard, counter, draggedItem)
+        DashboardParamsModel.setDashboardReportTypeMap(DashboardParamsModel.currentDashboard, counter, reportType)
         DashboardParamsModel.setDashboardReportUrl(DashboardParamsModel.currentDashboard, counter, "")
 
         DashboardParamsModel.setPositionX(x1);

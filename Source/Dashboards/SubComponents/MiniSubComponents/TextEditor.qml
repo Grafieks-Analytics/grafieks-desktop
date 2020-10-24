@@ -102,7 +102,6 @@ Rectangle{
             let currentReport = DashboardParamsModel.currentReport
 
             if(currentDashboard === dashboardId && currentReport === reportId){
-                console.log("CALLED", reportId, dashboardId, color, currentDashboard, currentReport)
                 document.backgroundColor = color
             }
         }
@@ -118,9 +117,6 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    Component.onCompleted: {
-        DocumentHandlerModel.setBackgroundColor("green")
-    }
 
     function copyText(){
         textArea.copy()
@@ -213,12 +209,6 @@ Rectangle{
         id: colorDialog
         color: "black"
     }
-
-//    ColorDialog {
-//        id: colorDialog2
-//        color: "green"
-//    }
-
 
 
     Rectangle{
@@ -316,20 +306,6 @@ Rectangle{
                 }
             }
 
-            Rectangle{
-                id: colorBox2
-                width: 30
-                height: parent.height - 16
-                anchors.verticalCenter: parent.verticalCenter
-                color: colorDialog2.color;
-
-
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: colorDialog2.open()
-                }
-            }
-
 
 
             Button{
@@ -386,17 +362,17 @@ Rectangle{
             }
 
 
-            //            Button{
-            //                width: 30
-            //                height: parent.height - 16
-            //                anchors.verticalCenter: parent.verticalCenter
-            //                Image{
-            //                    width: 18
-            //                    height: 18
-            //                    source: "/Images/icons/attach-link.png"
-            //                    anchors.centerIn: parent
-            //                }
-            //            }
+            Button{
+                width: 30
+                height: parent.height - 16
+                anchors.verticalCenter: parent.verticalCenter
+                Image{
+                    width: 18
+                    height: 18
+                    source: "/Images/icons/attach-link.png"
+                    anchors.centerIn: parent
+                }
+            }
         }
 
 
@@ -435,7 +411,6 @@ Rectangle{
             selectionStart: textArea.selectionStart
             selectionEnd: textArea.selectionEnd
             textColor: colorDialog.color
-//            backgroundColor: colorDialog2.color
             onFontFamilyChanged: {
                 var index = Qt.fontFamilies().indexOf(document.fontFamily)
                 if (index === -1) {

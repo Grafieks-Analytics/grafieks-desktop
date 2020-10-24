@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-
+import QtWebView 1.1
 import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
@@ -72,6 +72,17 @@ Item{
                 newItem.visible = false
             }
         }
+
+        function onReportUrlChanged(refDashboardId, refReportId, url){
+
+            let dashboardId = DashboardParamsModel.currentDashboard
+            let reportId = DashboardParamsModel.currentReport
+            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName) && url !== ""){
+//                let newUrl =  "file:" + GeneralParamsModel.getTmpPath()  + "../area.html"
+                let newUrl = "qrc:/Source/Charts/area.html"
+                webengine.url = newUrl
+            }
+        }
     }
 
     // Connections Ends
@@ -87,6 +98,7 @@ Item{
     Component.onCompleted: {
         // Add name to report
         // reportName.text = name
+        webengine.url = "qrc:/Source/Charts/area.html"
     }
 
     function destroyElement(){
@@ -101,7 +113,7 @@ Item{
     }
 
     function toggleFullScreen(){
-        console.log('Toggle Full Screen')
+        DashboardParamsModel.setCurrentReport(newItem.objectName)
     }
 
     function showCustomizeReport(){
@@ -182,6 +194,7 @@ Item{
 
         Rectangle{
 
+            id: mainChart
             color: "transparent"
             anchors.top: parent.top
             height: 40
@@ -198,6 +211,7 @@ Item{
             }
 
             Rectangle{
+                id: chartMenu
                 anchors.right: parent.right
                 anchors.top: parent.top
                 height: parent.height
@@ -273,7 +287,36 @@ Item{
 
                 }
 
+
+
             }
+
+
+        }
+        WebView{
+            id: webengine
+            anchors.top : mainChart.bottom
+            anchors.centerIn: parent
+
+            width:newItem.width - 10
+            height:newItem.height  - mainChart.height - 20
+
+//                    onLoadingChanged: {
+
+//                        switch(loadRequest.status){
+
+//                        case ( WebView.LoadFailedStatus):
+//                            webengine.visible = false
+//                            chooseImage.visible = true
+//                            break
+
+//                        case ( WebView.LoadSucceededStatus):
+//                            webengine.visible = true
+//                            chooseImage.visible = false
+//                            break
+//                        }
+
+//                    }
 
         }
 

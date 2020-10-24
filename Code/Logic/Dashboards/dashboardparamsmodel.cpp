@@ -12,14 +12,12 @@ DashboardParamsModel::DashboardParamsModel(QObject *parent) : QObject(parent)
     canvasDimensions.append(0); // height
     canvasDimensions.append(0); // width
 
-
     this->dashboardName.insert(0, "Dashboard 1");
     this->dashboardBackgroundColor.insert(0, Constants::DefaultBackgroundColor);
     this->dashboardOpacity.insert(0, 0);
     this->dashboardGrid.insert(0, false);
 
     this->dashboardCanvasDimensions.insert(0, canvasDimensions);
-
 }
 
 bool DashboardParamsModel::dragNewReport(int dashboardId, int reportId)
@@ -33,7 +31,8 @@ bool DashboardParamsModel::dragNewReport(int dashboardId, int reportId)
 
     // Dashboard Report Mapping
 
-    if(!this->dashboardReportsMap.isEmpty()){
+    if (!this->dashboardReportsMap.isEmpty())
+    {
         reportIds = this->dashboardReportsMap.value(dashboardId);
         reportNames = this->reportName.value(dashboardId);
         reportBackgroundColors = this->reportBackgroundColor.value(dashboardId);
@@ -42,13 +41,12 @@ bool DashboardParamsModel::dragNewReport(int dashboardId, int reportId)
     }
 
     reportIds.append(reportId);
-    reportNames.insert(reportId, "Report "+ QString::number(reportId));
+    reportNames.insert(reportId, "Report " + QString::number(reportId));
     reportBackgroundColors.insert(reportId, Constants::DefaultBackgroundColor);
     reportLineColors.insert(reportId, Constants::DefaultBackgroundColor);
     reportOpacities.insert(reportId, 0);
 
-
-    this->dashboardReportsMap[dashboardId] =  reportIds;
+    this->dashboardReportsMap[dashboardId] = reportIds;
     this->reportName[dashboardId] = reportNames;
     this->reportBackgroundColor[dashboardId] = reportBackgroundColors;
     this->reportLineColor[dashboardId] = reportLineColors;
@@ -92,8 +90,7 @@ bool DashboardParamsModel::createNewDashboard(int dashboardId)
     canvasDimensions.append(0); // height
     canvasDimensions.append(0); // width
 
-
-    this->dashboardName.insert(dashboardId, "Dashboard "+ QString::number(dashboardId + 1));
+    this->dashboardName.insert(dashboardId, "Dashboard " + QString::number(dashboardId + 1));
     this->dashboardBackgroundColor.insert(dashboardId, "#FFFFFF");
     this->dashboardOpacity.insert(dashboardId, 0);
     this->dashboardGrid.insert(dashboardId, false);
@@ -135,7 +132,8 @@ QVariantMap DashboardParamsModel::fetchAllDashboards()
     int dashboardId = 0;
     QString dashboardName;
 
-    for(auto key : this->dashboardName.keys()){
+    for (auto key : this->dashboardName.keys())
+    {
 
         dashboardId = key;
         dashboardName = this->dashboardName.value(key);
@@ -163,7 +161,8 @@ QVariantMap DashboardParamsModel::fetchAllReportZOrder(int dashboardId)
     int zOrder = 0;
     QMap<int, int> reportZOrder = this->dashboardReportsZorder.value(dashboardId);
 
-    for(auto key : reportZOrder.keys()){
+    for (auto key : reportZOrder.keys())
+    {
 
         reportId = key;
         zOrder = reportZOrder.value(key);
@@ -181,7 +180,8 @@ QVariantMap DashboardParamsModel::fetchAllReportCoordinates(int dashboardId)
     QVariantList coordinates;
     QMap<int, QVariantList> reportCoordinates = this->dashboardReportCoordinates.value(dashboardId);
 
-    for(auto key : reportCoordinates.keys()){
+    for (auto key : reportCoordinates.keys())
+    {
 
         reportId = key;
         coordinates = reportCoordinates.value(key);
@@ -190,7 +190,6 @@ QVariantMap DashboardParamsModel::fetchAllReportCoordinates(int dashboardId)
     }
 
     return output;
-
 }
 
 QVariantMap DashboardParamsModel::fetchAllReportUrls(int dashboardId)
@@ -200,7 +199,8 @@ QVariantMap DashboardParamsModel::fetchAllReportUrls(int dashboardId)
     QUrl url;
     QMap<int, QUrl> reportUrl = this->dashboardReportUrl.value(dashboardId);
 
-    for(auto key : reportUrl.keys()){
+    for (auto key : reportUrl.keys())
+    {
 
         reportId = key;
         url = reportUrl.value(key);
@@ -218,7 +218,8 @@ QVariantMap DashboardParamsModel::fetchAllReportTypeMap(int dashboardId)
     int type;
     QMap<int, int> reportType = this->dashboardReportTypeMap.value(dashboardId);
 
-    for(auto key : reportType.keys()){
+    for (auto key : reportType.keys())
+    {
 
         reportId = key;
         type = reportType.value(key);
@@ -233,11 +234,14 @@ void DashboardParamsModel::addReportToDashboard(int dashboardId, int reportId)
 {
     QVector<int> reports;
 
-    if(this->dashboardReportsMap.value(dashboardId).isEmpty()){
+    if (this->dashboardReportsMap.value(dashboardId).isEmpty())
+    {
 
         reports.append(reportId);
         this->dashboardReportsMap.insert(dashboardId, reports);
-    } else{
+    }
+    else
+    {
 
         reports = this->dashboardReportsMap.value(dashboardId);
         reports.append(reportId);
@@ -250,14 +254,15 @@ void DashboardParamsModel::deleteReportFromDashboard(int dashboardId, int report
 
     QVector<int> reports;
 
-    if(!this->dashboardReportsMap.value(dashboardId).isEmpty()){
+    if (!this->dashboardReportsMap.value(dashboardId).isEmpty())
+    {
 
         reports = this->dashboardReportsMap.value(dashboardId);
-        if(reports.contains(reportId)){
+        if (reports.contains(reportId))
+        {
             reports.remove(reports.indexOf(reportId));
             this->dashboardReportsMap.insert(dashboardId, reports);
         }
-
     }
 }
 
@@ -266,11 +271,14 @@ void DashboardParamsModel::setReportZOrder(int dashboardId, int reportId, int zO
 
     QMap<int, int> reportsZOrder;
 
-    if(this->dashboardReportsZorder.value(dashboardId).isEmpty()){
+    if (this->dashboardReportsZorder.value(dashboardId).isEmpty())
+    {
 
         reportsZOrder.insert(reportId, zOrder);
         this->dashboardReportsZorder.insert(dashboardId, reportsZOrder);
-    } else{
+    }
+    else
+    {
 
         reportsZOrder = this->dashboardReportsZorder.value(dashboardId);
         reportsZOrder[reportId] = zOrder;
@@ -284,10 +292,12 @@ int DashboardParamsModel::getReportZOrder(int dashboardId, int reportId)
     int output = 0;
     QMap<int, int> reportsZOrder;
 
-    if(!this->dashboardReportsMap.value(dashboardId).isEmpty()){
+    if (!this->dashboardReportsMap.value(dashboardId).isEmpty())
+    {
 
         reportsZOrder = this->dashboardReportsZorder.value(dashboardId);
-        if(reportsZOrder.contains(reportId)){
+        if (reportsZOrder.contains(reportId))
+        {
             output = reportsZOrder.value(reportId);
         }
     }
@@ -303,15 +313,18 @@ void DashboardParamsModel::setDashboardReportCoordinates(int dashboardId, int re
 
     coordinates << x1 << y1 << x2 << y2;
 
-    if(this->dashboardReportCoordinates.value(dashboardId).isEmpty()){
+    if (this->dashboardReportCoordinates.value(dashboardId).isEmpty())
+    {
 
         reportCoordinates.insert(reportId, coordinates);
         this->dashboardReportCoordinates.insert(dashboardId, reportCoordinates);
-    } else{
+    }
+    else
+    {
 
         reportCoordinates = this->dashboardReportCoordinates.value(dashboardId);
         reportCoordinates[reportId] = coordinates;
-        this->dashboardReportCoordinates[dashboardId] =  reportCoordinates;
+        this->dashboardReportCoordinates[dashboardId] = reportCoordinates;
     }
 }
 
@@ -321,10 +334,12 @@ QVariantList DashboardParamsModel::getDashboardReportCoordinates(int dashboardId
     QVariantList output;
     QMap<int, QVariantList> reportCoordinates;
 
-    if(!this->dashboardReportCoordinates.value(dashboardId).isEmpty()){
+    if (!this->dashboardReportCoordinates.value(dashboardId).isEmpty())
+    {
 
         reportCoordinates = this->dashboardReportCoordinates.value(dashboardId);
-        if(reportCoordinates.contains(reportId)){
+        if (reportCoordinates.contains(reportId))
+        {
             output = reportCoordinates.value(reportId);
         }
     }
@@ -337,11 +352,14 @@ void DashboardParamsModel::setDashboardReportTypeMap(int dashboardId, int report
 
     QMap<int, int> reportTypeMap;
 
-    if(this->dashboardReportTypeMap.value(dashboardId).isEmpty()){
+    if (this->dashboardReportTypeMap.value(dashboardId).isEmpty())
+    {
 
         reportTypeMap.insert(reportId, reportType);
         this->dashboardReportTypeMap.insert(dashboardId, reportTypeMap);
-    } else{
+    }
+    else
+    {
 
         reportTypeMap = this->dashboardReportTypeMap.value(dashboardId);
         reportTypeMap[reportId] = reportType;
@@ -356,10 +374,11 @@ int DashboardParamsModel::getDashboardReportTypeMap(int dashboardId, int reportI
     int output = 0;
     QMap<int, int> reportTypeMap;
 
-    if(!this->dashboardReportTypeMap.value(dashboardId).isEmpty()){
-
+    if (!this->dashboardReportTypeMap.value(dashboardId).isEmpty())
+    {
         reportTypeMap = this->dashboardReportTypeMap.value(dashboardId);
-        if(reportTypeMap.contains(reportId)){
+        if (reportTypeMap.contains(reportId))
+        {
             output = reportTypeMap.value(reportId);
         }
     }
@@ -371,11 +390,14 @@ void DashboardParamsModel::setDashboardReportUrl(int dashboardId, int reportId, 
 {
     QMap<int, QUrl> reportUrl;
 
-    if(this->dashboardReportUrl.value(dashboardId).isEmpty()){
+    if (this->dashboardReportUrl.value(dashboardId).isEmpty())
+    {
 
         reportUrl.insert(reportId, url);
         this->dashboardReportUrl.insert(dashboardId, reportUrl);
-    } else{
+    }
+    else
+    {
 
         reportUrl = this->dashboardReportUrl.value(dashboardId);
         reportUrl[reportId] = url;
@@ -383,7 +405,7 @@ void DashboardParamsModel::setDashboardReportUrl(int dashboardId, int reportId, 
         this->dashboardReportUrl.insert(dashboardId, reportUrl);
     }
 
-    emit reportUrlChanged(dashboardId,reportId, url.toString());
+    emit reportUrlChanged(dashboardId, reportId, url.toString());
 }
 
 QUrl DashboardParamsModel::getDashboardReportUrl(int dashboardId, int reportId)
@@ -392,10 +414,12 @@ QUrl DashboardParamsModel::getDashboardReportUrl(int dashboardId, int reportId)
     QUrl output;
     QMap<int, QUrl> reportUrl;
 
-    if(!this->dashboardReportUrl.value(dashboardId).isEmpty()){
+    if (!this->dashboardReportUrl.value(dashboardId).isEmpty())
+    {
 
         reportUrl = this->dashboardReportUrl.value(dashboardId);
-        if(reportUrl.contains(reportId)){
+        if (reportUrl.contains(reportId))
+        {
             output = reportUrl.value(reportId);
         }
     }
@@ -479,24 +503,25 @@ QVariantList DashboardParamsModel::getDashboardDimensions(int dashboardId)
     output = this->dashboardCanvasDimensions.value(dashboardId);
 
     return output;
-
 }
 
 void DashboardParamsModel::setReportName(int dashboardId, int reportId, QString reportName)
 {
     QMap<int, QString> name;
-    if(this->reportName.value(dashboardId).isEmpty()){
+    if (this->reportName.value(dashboardId).isEmpty())
+    {
 
         name.insert(reportId, reportName);
         this->reportName.insert(dashboardId, name);
-    } else{
+    }
+    else
+    {
 
         name = this->reportName.value(dashboardId);
         name[reportId] = reportName;
 
         this->reportName.insert(dashboardId, name);
     }
-
 }
 
 QString DashboardParamsModel::getReportName(int dashboardId, int reportId)
@@ -504,10 +529,12 @@ QString DashboardParamsModel::getReportName(int dashboardId, int reportId)
     QString output;
     QMap<int, QString> name;
 
-    if(!this->reportName.value(dashboardId).isEmpty()){
+    if (!this->reportName.value(dashboardId).isEmpty())
+    {
 
         name = this->reportName.value(dashboardId);
-        if(name.contains(reportId)){
+        if (name.contains(reportId))
+        {
             output = name.value(reportId);
         }
     }
@@ -519,11 +546,14 @@ void DashboardParamsModel::setReportBackgroundColor(int dashboardId, int reportI
 {
 
     QMap<int, QString> backgroundColor;
-    if(this->reportBackgroundColor.value(dashboardId).isEmpty()){
+    if (this->reportBackgroundColor.value(dashboardId).isEmpty())
+    {
 
         backgroundColor.insert(reportId, color);
         this->reportBackgroundColor.insert(dashboardId, backgroundColor);
-    } else{
+    }
+    else
+    {
 
         backgroundColor = this->reportBackgroundColor.value(dashboardId);
         backgroundColor[reportId] = color;
@@ -540,10 +570,12 @@ QString DashboardParamsModel::getReportBackgroundColor(int dashboardId, int repo
     QString output;
     QMap<int, QString> backgroundColor;
 
-    if(!this->reportBackgroundColor.value(dashboardId).isEmpty()){
+    if (!this->reportBackgroundColor.value(dashboardId).isEmpty())
+    {
 
         backgroundColor = this->reportBackgroundColor.value(dashboardId);
-        if(backgroundColor.contains(reportId)){
+        if (backgroundColor.contains(reportId))
+        {
             output = backgroundColor.value(reportId);
         }
     }
@@ -555,11 +587,14 @@ void DashboardParamsModel::setReportLineColor(int dashboardId, int reportId, QSt
 {
 
     QMap<int, QString> lineColor;
-    if(this->reportLineColor.value(dashboardId).isEmpty()){
+    if (this->reportLineColor.value(dashboardId).isEmpty())
+    {
 
         lineColor.insert(reportId, color);
         this->reportLineColor.insert(dashboardId, lineColor);
-    } else{
+    }
+    else
+    {
 
         lineColor = this->reportLineColor.value(dashboardId);
         lineColor[reportId] = color;
@@ -577,10 +612,12 @@ QString DashboardParamsModel::getReportLineColor(int dashboardId, int reportId)
     QString output;
     QMap<int, QString> lineColor;
 
-    if(!this->reportLineColor.value(dashboardId).isEmpty()){
+    if (!this->reportLineColor.value(dashboardId).isEmpty())
+    {
 
         lineColor = this->reportLineColor.value(dashboardId);
-        if(lineColor.contains(reportId)){
+        if (lineColor.contains(reportId))
+        {
             output = lineColor.value(reportId);
         }
     }
@@ -592,11 +629,14 @@ void DashboardParamsModel::setReportOpacity(int dashboardId, int reportId, int p
 {
 
     QMap<int, int> reportOpacity;
-    if(this->reportOpacity.value(dashboardId).isEmpty()){
+    if (this->reportOpacity.value(dashboardId).isEmpty())
+    {
 
         reportOpacity.insert(reportId, percent);
         this->reportOpacity.insert(dashboardId, reportOpacity);
-    } else{
+    }
+    else
+    {
 
         reportOpacity = this->reportOpacity.value(dashboardId);
         reportOpacity[reportId] = percent;
@@ -611,10 +651,12 @@ int DashboardParamsModel::getReportOpacity(int dashboardId, int reportId)
     int output = 0;
     QMap<int, int> reportOpacity;
 
-    if(!this->reportOpacity.value(dashboardId).isEmpty()){
+    if (!this->reportOpacity.value(dashboardId).isEmpty())
+    {
 
         reportOpacity = this->reportOpacity.value(dashboardId);
-        if(reportOpacity.contains(reportId)){
+        if (reportOpacity.contains(reportId))
+        {
             output = reportOpacity.value(reportId);
         }
     }
@@ -632,7 +674,8 @@ void DashboardParamsModel::saveImage(QUrl originalFile, QString newFilename)
     QDir tmpDir(tmpFilePath);
 
     // Check if tmp directory exists
-    if(!tmpDir.exists()){
+    if (!tmpDir.exists())
+    {
         QDir().mkdir(tmpFilePath);
     }
 
@@ -641,7 +684,8 @@ void DashboardParamsModel::saveImage(QUrl originalFile, QString newFilename)
     // Save the file
     bool result = QFile::copy(originalFile.toLocalFile(), filePath);
 
-    if(result == true){
+    if (result == true)
+    {
         this->setDashboardReportUrl(this->currentDashboard(), this->currentReport(), finalFileName);
     }
 }
@@ -744,5 +788,6 @@ void DashboardParamsModel::setCurrentReport(int currentReport)
         return;
 
     m_currentReport = currentReport;
+    qDebug() << "CHANGED" << currentReport;
     emit currentReportChanged(m_currentReport);
 }

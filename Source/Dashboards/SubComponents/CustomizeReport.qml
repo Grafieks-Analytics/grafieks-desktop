@@ -21,6 +21,29 @@ Column{
 
     visible: false
 
+    property bool hideGeneral : false
+
+    Connections{
+        target: DashboardParamsModel
+
+        function onCurrentReportChanged(reportId){
+            console.log("RECEIVED in customize report general")
+            let dashboardId = DashboardParamsModel.currentDashboard
+
+            //Show/Hide Report customize
+            let reportType = DashboardParamsModel.getDashboardReportTypeMap(dashboardId, reportId)
+
+            if(reportType === Constants.reportTypeChart){
+                hideGeneral = true
+//                nestedModel.setProperty(0, "collapsed", false)
+            } else{
+                hideGeneral = false
+//                nestedModel.setProperty(0, "collapsed", true)
+            }
+        }
+
+    }
+
     ListModel {
         id: nestedModel
 
@@ -156,6 +179,7 @@ Column{
 
                     MouseArea {
                         anchors.fill: parent
+                        enabled: hideGeneral
 
                         onClicked: {
                             nestedModel.setProperty(index, "collapsed", !collapsed)

@@ -6,6 +6,9 @@ import com.grafieks.singleton.constants 1.0
 
 Rectangle{
 
+    id: reportGeneralCustomize
+    property bool categoryTab : true
+
     Connections{
         target: DashboardParamsModel
 
@@ -13,7 +16,10 @@ Rectangle{
             let dashboardId = DashboardParamsModel.currentDashboard
             reportName.text = DashboardParamsModel.getReportName(dashboardId, reportId)
         }
+
     }
+
+
 
     function setReportName(reportName){
         let currentDashboardId = DashboardParamsModel.currentDashboard
@@ -24,6 +30,7 @@ Rectangle{
 
     Column{
 
+        id: col
         width: parent.width
         anchors.top: parent.top
         anchors.left: parent.left
