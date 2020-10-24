@@ -89,11 +89,13 @@ Rectangle{
 
     ColorDialog{
         id: backgroundColorSelector
+        color: Constants.greenThemeColor
         onAccepted: setBackgroundColor(backgroundColorSelector.color)
     }
 
     ColorDialog{
         id: lineColorSelector
+        color: Constants.greenThemeColor
         onAccepted: setLineColor(lineColorSelector.color)
     }
 

@@ -106,6 +106,7 @@ Rectangle{
             if(currentDashboard === dashboardId && currentReport === reportId){
                 document.backgroundColor = color
                 document.saveTmpFile(fileName)
+                containerTextArea.color = color
             }
         }
     }
@@ -211,7 +212,7 @@ Rectangle{
 
     ColorDialog {
         id: colorDialog
-        color: "black"
+        color: Constants.greenThemeColor
     }
 
 
@@ -383,6 +384,7 @@ Rectangle{
     }
 
     Rectangle{
+        id: containerTextArea
         width: parent.width
         height: parent.height - textEditorMenu.height
         anchors.top: textEditorMenu.bottom
@@ -391,8 +393,9 @@ Rectangle{
         border.color: Constants.darkThemeColor
 
         TextArea {
-            Accessible.name: "document"
             id: textArea
+            Accessible.name: "document"
+
             frameVisible: false
             width: parent.width
             height: parent.height

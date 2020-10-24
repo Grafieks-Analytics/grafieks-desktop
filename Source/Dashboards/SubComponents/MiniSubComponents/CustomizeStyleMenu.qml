@@ -85,6 +85,7 @@ Rectangle{
 
     ColorDialog{
         id: backgroundColorSelector
+        color: Constants.greenThemeColor
         onAccepted: setBackgroundColor(backgroundColorSelector.color)
     }
 
