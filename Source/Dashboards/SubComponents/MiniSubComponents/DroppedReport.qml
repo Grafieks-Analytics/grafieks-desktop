@@ -51,8 +51,9 @@ Item{
             let dashboardId = DashboardParamsModel.currentDashboard
             let reportId = DashboardParamsModel.currentReport
 
-            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName))
+            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName)){
                 droppedReportId.color = refColor
+            }
         }
 
         function onReportLineColorChanged(refDashboardId, refReportId, refColor){

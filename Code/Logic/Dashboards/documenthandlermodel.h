@@ -132,6 +132,7 @@ private:
     QTextCursor textCursor() const;
     void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
 
+
     QQuickItem *m_target;
     QTextDocument *m_doc;
 

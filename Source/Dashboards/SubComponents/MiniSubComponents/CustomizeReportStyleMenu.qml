@@ -72,7 +72,6 @@ Rectangle{
         let dashboardId = DashboardParamsModel.currentDashboard
         let reportId = DashboardParamsModel.currentReport
 
-        console.log("LINE COLOR", color)
         DashboardParamsModel.setReportLineColor(dashboardId, reportId, color)
 
     }

@@ -105,7 +105,6 @@ void DocumentHandlerModel::saveTmpFile(const QString filename)
             emit error(tr("Cannot save: ") + f.errorString());
             return;
         }
-
         m_doc->setHtml(m_doc->toHtml());
 
         f.write(m_doc->toHtml().toLocal8Bit());
@@ -320,7 +319,13 @@ void DocumentHandlerModel::setBackgroundColor(const QColor &color)
 
     m_doc->setHtml(html);
     m_backgroundColor = color.name(); // QColor variable
-//    this->saveTmpFile()
+
+
+    // Get the filename
+    QFile f(this->fileUrl().toString());
+    QFileInfo fileInfo(f.fileName());
+    QString filename(fileInfo.fileName());
+
 
     emit backgroundColorChanged();
 }

@@ -100,12 +100,16 @@ Rectangle{
 
             let currentDashboard = DashboardParamsModel.currentDashboard
             let currentReport = DashboardParamsModel.currentReport
+            let fileToken = GeneralParamsModel.getFileToken()
+            let fileName = dashboardId + "_" + reportId + "_" + fileToken
 
             if(currentDashboard === dashboardId && currentReport === reportId){
                 document.backgroundColor = color
+                document.saveTmpFile(fileName)
             }
         }
     }
+
 
     // Connections Ends
     /***********************************************************************************************************************/
