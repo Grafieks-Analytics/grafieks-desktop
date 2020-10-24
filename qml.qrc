@@ -119,5 +119,9 @@
         <file>Source/Reports/SubComponents/MiniSubComponents/CustomizeLegend.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/CustomizeReferenceLine.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/PropertiesFilter.qml</file>
+        <file>Source/Reports/SubComponents/RightDataColumn.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/NumericalList.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/DateList.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/CategoricalList.qml</file>
     </qresource>
 </RCC>

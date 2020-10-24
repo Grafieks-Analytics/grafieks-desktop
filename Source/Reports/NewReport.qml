@@ -28,21 +28,6 @@ Page {
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
-    ListModel{
-        id: categoricalModel
-        ListElement{
-            categoricalName: "Customer Name"
-        }
-        ListElement{
-            categoricalName: "Customer Name 1"
-        }
-        ListElement{
-            categoricalName: "Customer Name 2"
-        }
-        ListElement{
-            categoricalName: "Customer Name 3"
-        }
-    }
 
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
@@ -417,133 +402,11 @@ Page {
                 height: parent.height - (searchRectangle.height + dashboardNameRectangle.height + tabbarQuerymodeller.height)
                 width: parent.width
 
-                Column{
-                    anchors.fill: parent
-                    anchors.left: parent.left
-                    anchors.leftMargin: 10
-                    spacing: 15
+                RightDataColumn{
 
-                    Rectangle{
-                        height: parent.height/3 - 5
-                        width: parent.width
-
-                        Text {
-                            id: categoricalHeading
-                            text: qsTr("Categorical")
-                            font.pixelSize: Constants.fontCategoryHeader
-                        }
-
-                        ListView{
-                            model: categoricalModel
-                            anchors.top: categoricalHeading.bottom
-                            anchors.topMargin: 5
-                            height: parent.height - categoricalHeading.height - 5
-                            width: parent.width
-                            delegate: Rectangle{
-                                height: 24
-                                width: parent.width
-                                Image {
-                                    id: categoricalImage
-                                    source: "/Images/icons/AB.png"
-                                    height: 16
-                                    width: 16
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-
-                                Text {
-                                    text: categoricalName
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    anchors.left: categoricalImage.right
-                                    anchors.leftMargin: 10
-                                }
-                            }
-
-                        }
-
-                    }
-
-                    Rectangle{
-                        height: parent.height/3 - 5
-                        width: parent.width
-
-                        Text {
-                            id: dateHeading
-                            text: qsTr("Date")
-                            font.pixelSize: Constants.fontCategoryHeader
-                        }
-
-                        ListView{
-                            model: categoricalModel
-                            anchors.top: dateHeading.bottom
-                            anchors.topMargin: 5
-                            height: parent.height - dateHeading.height - 5
-                            width: parent.width
-                            delegate: Rectangle{
-                                height: 24
-                                width: parent.width
-                                Image {
-                                    id: dateImage
-                                    source: "/Images/icons/AB.png"
-                                    height: 16
-                                    width: 16
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-
-                                Text {
-                                    text: categoricalName
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    anchors.left: dateImage.right
-                                    anchors.leftMargin: 10
-                                }
-                            }
-
-                        }
-
-
-                    }
-
-                    Rectangle{
-                        height: parent.height/3 - 5
-                        width: parent.width
-
-
-                        Text {
-                            id: numericalHeading
-                            text: qsTr("Date")
-                            font.pixelSize: Constants.fontCategoryHeader
-                        }
-
-                        ListView{
-                            model: categoricalModel
-                            anchors.top: numericalHeading.bottom
-                            anchors.topMargin: 5
-                            height: parent.height - numericalHeading.height - 5
-                            width: parent.width
-                            delegate: Rectangle{
-                                height: 24
-                                width: parent.width
-                                Image {
-                                    id: numericalImage
-                                    source: "/Images/icons/AB.png"
-                                    height: 16
-                                    width: 16
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-
-                                Text {
-                                    text: categoricalName
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    anchors.left: numericalImage.right
-                                    anchors.leftMargin: 10
-                                }
-                            }
-
-                        }
-
-
-
-                    }
                 }
+
+
 
             }
             // Data Column Ends

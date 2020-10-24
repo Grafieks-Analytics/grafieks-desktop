@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 
 import com.grafieks.singleton.constants 1.0
 
+import "../../SubComponents"
 import "../../../MainSubComponents"
 
 Column{
@@ -63,6 +64,21 @@ Column{
     // JAVASCRIPT FUNCTION STARTS
 
 
+    function onDropAreaEntered(drag){
+        console.log('Drop area in')
+    }
+
+    function onDropAreaDropped(drag){
+        console.log('dropped')
+    }
+
+    function onDropAreaPositionChanged(drag){
+        console.log('Position change!!');
+    }
+    function onDropAreaExited(){
+        console.log('Exit');
+    }
+
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -108,46 +124,56 @@ Column{
         }
 
         Rectangle{
-
             id: allParameter
 
-            height: colorList.height + colorListModel.count*spacingColorList
             width: parent.width-2*leftMargin
+            height: 30
             x:leftMargin
             anchors.top: colorByText.bottom
             anchors.topMargin: colorListTopMargin
 
-            border.color: Constants.themeColor
+            border.color: Constants.grafieksLightGreenColor
+            border.width: 1
 
-            ListView{
-                id: colorList
+            DropArea {
+                id: dropArea
+                anchors.fill: parent
+                onEntered:  parent.border.width = 2
+                onExited:  parent.border.width = 1
+                onDropped: {
+                    console.log('Dropped!!!')
+                    parent.border.width = 1
 
-                height: colorListModel.count*colorBoxHeight + spacingColorList
-                width: parent.width-10
-                x:5
-                anchors.top: parent.top
-                anchors.topMargin: 5
+//                    console.log(numericalList.itemName)
 
-                model: colorListModel
-                spacing: spacingColorList
-
-                delegate: Rectangle{
-
-                    height: colorBoxHeight
-                    width: parent.width
-
-                    color: "#BADCFF"
-
-                    border.width: 1
-                    border.color: "#CDE6FF"
-
-                    Text {
-                        text: textValue
-                        anchors.centerIn: parent
-                        font.pixelSize: Constants.fontCategoryHeaderSmall
-                    }
                 }
             }
+
+        // list view for dropped colors
+        //            ListView{
+        //                id: colorList
+        //                height: colorListModel.count*colorBoxHeight + spacingColorList
+        //                width: parent.width-10
+        //                x:5
+        //                anchors.top: parent.top
+        //                anchors.topMargin: 5
+        //                model: colorListModel
+        //                spacing: spacingColorList
+        //                delegate: Rectangle{
+        //                    height: colorBoxHeight
+        //                    width: parent.width
+        //                    color: "#BADCFF"
+        //                    border.width: 1
+        //                    border.color: "#CDE6FF"
+        //                    Text {
+        //                        text: textValue
+        //                        anchors.centerIn: parent
+        //                        font.pixelSize: Constants.fontCategoryHeaderSmall
+        //                    }
+        //                }
+        //            }
+        // list view ends!
+
 
         }
     }
