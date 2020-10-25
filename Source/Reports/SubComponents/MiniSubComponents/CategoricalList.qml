@@ -3,6 +3,8 @@ import QtQuick 2.0
 ListView{
 
     id:categoricalList
+    property string itemName: "";
+    property string itemType: "Categorical";
 
     ListModel{
         id: categoricalModel
@@ -53,7 +55,8 @@ ListView{
             drag.target: categoricalListElement
             drag.onActiveChanged: {
                 if (mouseArea.drag.active) {
-                    categoricalList.itemName = categoricalName;
+                    ReportParamsModel.itemName = categoricalName;
+                    ReportParamsModel.itemType = itemType;
                 }
                 categoricalListElement.Drag.drop();
             }

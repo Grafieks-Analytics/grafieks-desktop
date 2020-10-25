@@ -8,6 +8,10 @@ import "../../../MainSubComponents"
 
 Column{
 
+    property string dataType: "";
+
+    id: propertiesFilter
+
     property int leftMargin: 15
 
     property int spacingColorList: 5
@@ -23,15 +27,6 @@ Column{
 
     ListModel{
         id: colorListModel
-        ListElement{
-            textValue: "Quantity"
-        }
-        ListElement{
-            textValue: "Quantity 1"
-        }
-        ListElement{
-            textValue: "Quantity 2"
-        }
     }
 
     // LIST MODEL ENDS
@@ -127,7 +122,7 @@ Column{
             id: allParameter
 
             width: parent.width-2*leftMargin
-            height: 30
+            height: !colorListModel.count ? 30 : (colorList.height + 5 * colorListModel.count)
             x:leftMargin
             anchors.top: colorByText.bottom
             anchors.topMargin: colorListTopMargin
@@ -137,41 +132,55 @@ Column{
 
             DropArea {
                 id: dropArea
-                anchors.fill: parent
+                height: colorList.height
+                width: parent.width
                 onEntered:  parent.border.width = 2
                 onExited:  parent.border.width = 1
                 onDropped: {
                     console.log('Dropped!!!')
                     parent.border.width = 1
+                    console.log(ReportParamsModel.itemType)
 
-//                    console.log(numericalList.itemName)
+                    if(dataType && dataType != ReportParamsModel.itemType){
+                        return
+                    }
+
+                    if(dataType == ""){
+                        colorListModel.append({textValue: ReportParamsModel.itemName})
+                        dataType = ReportParamsModel.itemType
+                        return;
+                    }
+
+                    if(ReportParamsModel.itemType.toLowerCase() == "numerical"){
+                        colorListModel.append({textValue: ReportParamsModel.itemName})
+                    }
 
                 }
             }
 
         // list view for dropped colors
-        //            ListView{
-        //                id: colorList
-        //                height: colorListModel.count*colorBoxHeight + spacingColorList
-        //                width: parent.width-10
-        //                x:5
-        //                anchors.top: parent.top
-        //                anchors.topMargin: 5
-        //                model: colorListModel
-        //                spacing: spacingColorList
-        //                delegate: Rectangle{
-        //                    height: colorBoxHeight
-        //                    width: parent.width
-        //                    color: "#BADCFF"
-        //                    border.width: 1
-        //                    border.color: "#CDE6FF"
-        //                    Text {
-        //                        text: textValue
-        //                        anchors.centerIn: parent
-        //                        font.pixelSize: Constants.fontCategoryHeaderSmall
-        //                    }
-        //                }
-        //            }
+            ListView{
+                id: colorList
+                height: colorListModel.count*colorBoxHeight + spacingColorList
+                width: parent.width-10
+                x:5
+                anchors.top: parent.top
+                anchors.topMargin: 5
+                model: colorListModel
+                spacing: spacingColorList
+                delegate: Rectangle{
+                    height: colorBoxHeight
+                    width: parent.width
+                    color: "#BADCFF"
+                    border.width: 1
+                    border.color: "#CDE6FF"
+                    Text {
+                        text: textValue
+                        anchors.centerIn: parent
+                        font.pixelSize: Constants.fontCategoryHeaderSmall
+                    }
+                }
+            }
         // list view ends!
 
 

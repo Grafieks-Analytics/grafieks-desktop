@@ -3,7 +3,8 @@ import QtQuick 2.0
 
 ListView{
     id: numericalList
-    property string itemName: "";
+
+    property string itemType: "Numerical"
 
     ListModel{
         id: numericalModel
@@ -21,12 +22,17 @@ ListView{
         }
     }
 
+    function appendToList(name){
+          numericalModel.append({categoricalName: name});
+    }
+
     model: numericalModel
     anchors.top: numericalHeading.bottom
     anchors.topMargin: 5
     height: parent.height - numericalHeading.height - 5
     width: parent.width
     interactive: false
+
     delegate: Rectangle{
         id: numericalListElement
         height: 24
@@ -52,7 +58,8 @@ ListView{
             drag.target: numericalListElement
             drag.onActiveChanged: {
                 if (mouseArea.drag.active) {
-                    numericalList.itemName = categoricalName;
+                    ReportParamsModel.itemName = categoricalName;
+                    ReportParamsModel.itemType = itemType;
                 }
                 numericalListElement.Drag.drop();
             }

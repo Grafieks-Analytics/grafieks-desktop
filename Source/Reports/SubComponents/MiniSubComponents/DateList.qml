@@ -3,6 +3,7 @@ import QtQuick 2.0
 ListView{
 
     property string itemName: "";
+    property string itemType: "Date";
     ListModel{
         id: dateModel
         ListElement{
@@ -53,7 +54,8 @@ ListView{
             drag.target: dateListElement
             drag.onActiveChanged: {
                 if (mouseArea.drag.active) {
-                    dateList.itemName = categoricalName;
+                    ReportParamsModel.itemName = categoricalName;
+                    ReportParamsModel.itemType = itemType;
                 }
                 dateListElement.Drag.drop();
             }

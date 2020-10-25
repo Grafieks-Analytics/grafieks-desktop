@@ -44,6 +44,8 @@
 #include "Code/Logic/Dashboards/documenthandlermodel.h"
 #include "Code/Logic/Dashboards/dashboardparamsmodel.h"
 
+#include "Code/Logic/Reports/reportparamsmodel.h"
+
 #include "Code/Logic/General/generalparamsmodel.h"
 #include "Code/Logic/General/tableschemamodel.h"
 #include "Code/Logic/General/tablecolumnsmodel.h"
@@ -176,6 +178,7 @@ int main(int argc, char *argv[])
     GeneralParamsModel generalParamsModel;
     QuerySplitter querySplitter;
     DashboardParamsModel dashboardParamsModel;
+    ReportParamsModel reportParamsModel;
 
     // Datasource Connector Initializations
     DatasourceModel datasourceModel;
@@ -232,6 +235,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<DocumentHandlerModel>("io.qt.examples.texteditor", 1, 0, "DocumentHandlerModel");
 
     // Set contexts for QML
+    engine.rootContext()->setContextProperty("ReportParamsModel", &reportParamsModel);
     engine.rootContext()->setContextProperty("DashboardParamsModel", &dashboardParamsModel);
     engine.rootContext()->setContextProperty("QtTest2", &qttest2);
     engine.rootContext()->setContextProperty("MysqlConnect", &mysqlconnect);

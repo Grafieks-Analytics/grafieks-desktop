@@ -60,6 +60,7 @@ SOURCES += \
     Code/Logic/General/tablecolumnsmodel.cpp \
     Code/Logic/General/tableschemamodel.cpp \
     Code/Logic/Menu/user.cpp \
+    Code/Logic/Reports/reportparamsmodel.cpp \
     main.cpp
 
 RESOURCES += \
@@ -131,6 +132,7 @@ HEADERS += \
     Code/Logic/General/tablecolumnsmodel.h \
     Code/Logic/General/tableschemamodel.h \
     Code/Logic/Menu/user.h \
+    Code/Logic/Reports/reportparamsmodel.h \
     Code/duckdb.hpp \
     Code/messages.h \
     Code/constants.h \
