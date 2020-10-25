@@ -87,6 +87,22 @@ Page {
         console.log('Focus Title')
     }
 
+    function onDropAreaEntered(element){
+        element.border.width = 2
+        element.border.color = Constants.borderBlueColor
+    }
+
+    function onDropAreaExited(element){
+        element.border.width = 1
+        element.border.color = Constants.themeColor
+    }
+
+    function onDropAreaDropped(element){
+        element.border.width = 1
+        element.border.color = Constants.themeColor
+    }
+
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -245,17 +261,140 @@ Page {
     }
 
 
-    // Center Panel
+    // Center Panel Starts
+
+    Rectangle{
+
+        id: axis
+        height: 62
+        width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width
+
+        anchors.left: tool_sep_chartFilters.right
+        anchors.top: seperator_title_bar.bottom
+
+        Rectangle{
+            id: xaxis
+            height: 30
+            width: parent.width
+            anchors.left: parent.left
+
+            Rectangle{
+                id: xaxisText
+                width: 100
+                height: parent.height
+                Text {
+                    text: qsTr("X Axis")
+                    anchors.centerIn: parent
+                }
+            }
+
+            ToolSeparator{
+                orientation: Qt.Vertical
+                anchors.left: xaxisText.right
+                width: 1
+                background: Rectangle{
+                    color: Constants.darkThemeColor
+                }
+            }
+
+
+            Rectangle{
+                height: parent.height
+                width: parent.width - xaxisText.width - 4
+                anchors.left: xaxisText.right
+                anchors.leftMargin: 1
+
+                DropArea{
+                    id: xaxisDropArea
+                    anchors.fill: parent
+                    onEntered:  onDropAreaEntered(parent,'xaxis')
+                    onExited:  onDropAreaExited(parent,'xaxis')
+                    onDropped: onDropAreaDropped(parent,'xaxis')
+                }
+
+            }
+
+        }
+
+        ToolSeparator{
+            id: seperatorAxis
+            height: 1
+            anchors.top: xaxis.bottom
+            width: parent.width
+            background: Rectangle{
+                color: Constants.darkThemeColor
+            }
+        }
+
+        Rectangle{
+            id: yaxis
+            height: 30
+            anchors.top: seperatorAxis.bottom
+            anchors.left: parent.left
+            width: parent.width
+
+
+            Rectangle{
+                id: yaxisText
+                width: 100
+                height: parent.height
+                Text {
+                    text: qsTr("Y Axis")
+                    anchors.centerIn: parent
+                }
+
+                ToolSeparator{
+                    orientation: Qt.Vertical
+                    anchors.left: yaxisText.right
+                    width: 1
+                    background: Rectangle{
+                        color: Constants.darkThemeColor
+                    }
+                }
+            }
+
+            Rectangle{
+                height: parent.height
+                width: parent.width - yaxisText.width - 4
+                anchors.left: yaxisText.right
+                anchors.leftMargin: 1
+
+                DropArea{
+                    id: yaxisDropArea
+                    anchors.fill: parent
+                    onEntered:  onDropAreaEntered(parent,'yaxis')
+                    onExited:  onDropAreaExited(parent,'yaxis')
+                    onDropped: onDropAreaDropped(parent,'yaxis')
+                }
+
+            }
+
+        }
+
+
+        ToolSeparator{
+            id: axisChartSeperator
+            height: 1
+            anchors.top: yaxis.bottom
+            width: parent.width
+            background: Rectangle{
+                color: Constants.darkThemeColor
+            }
+        }
+
+
+    }
 
     WebEngineView {
         id:primary_chart
-        height:parent.height
+        height:parent.height - axis.height
         width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width
         url: "../Charts/horizontal-bar.html"
         anchors.left: tool_sep_chartFilters.right
-        anchors.top: seperator_title_bar.bottom
+        anchors.top: axis.bottom
     }
 
+    // Center Panel ends
 
     ToolSeparator{
         id: toolsep2
