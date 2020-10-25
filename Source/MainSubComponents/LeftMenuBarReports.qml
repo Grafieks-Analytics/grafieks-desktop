@@ -34,102 +34,104 @@ Rectangle{
     ListModel{
         id: allCharts
         ListElement{
-            icon: "g80.png"
+            icon: "bar_chart.png"
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "g145.png"
+            icon: "area.png"
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "FinalBar.png"
+            icon: "line_chart.png"
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "Combination Chart (Line Bar).png"
+            icon: "combination_chart.png"
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "HeatMap.png"
+            icon: "heatmap.png"
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "Scatter Plot.png"
+            icon: "scatter_plot.png"
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "waterfall chart.png"
+            icon: "waterfall.png"
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "Pie Chart.png"
+            icon: "pie_chart.png"
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "Donut Chart.png"
+            icon: "donut.png"
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "Radar Chart.png"
+            icon: "radar.png"
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "Sunburst.png"
+            icon: "sunburst.png"
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "NightingaleRose.png"
+            icon: "nightingales_rose.png"
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "Chord Diagram.png"
+            icon: "chord_diagram.png"
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "Funnel.png"
+            icon: "funnel.png"
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "tree 500 px.png"
+            icon: "tree_chart.png"
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "Force-Directed Graph.png"
+            icon: "force_directed.png"
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "Sankey.png"
+            icon: "sankey.png"
+            chartHtml:"bar.html"
+            elementHeight: 24
+        }
+        ListElement{
+            icon: "tree_map.png"
+            chartHtml:"bar.html"
+            elementHeight: 24
+        }
+        ListElement{
+            icon: "pivot.png"
             chartHtml:"bar.html"
         }
         ListElement{
-            icon: "Tree Map.png"
+            icon: "table.png"
             chartHtml:"bar.html"
+            elementWidth: 30
         }
         ListElement{
-            icon: "Matrix.png"
+            icon: "condegram.png"
             chartHtml:"bar.html"
+
         }
         ListElement{
-            icon: "Table.png"
+            icon: "map.png"
             chartHtml:"bar.html"
-            elementHeight: 40
+            elementHeight: 22
             elementWidth:40
         }
         ListElement{
-            icon: "Table2.png"
+            icon: "gauge_chart.png"
             chartHtml:"bar.html"
-        }
-        ListElement{
-            icon: "Condegram Spiral.png"
-            chartHtml:"bar.html"
-        }
-        ListElement{
-            icon: "GEO.png"
-            chartHtml:"bar.html"
-        }
-        ListElement{
-            icon: "Gauge Chart.png"
-            chartHtml:"bar.html"
+            elementHeight: 22
+            elementWidth:30
         }
     }
 

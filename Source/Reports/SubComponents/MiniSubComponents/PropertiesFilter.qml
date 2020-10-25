@@ -59,21 +59,56 @@ Column{
     // JAVASCRIPT FUNCTION STARTS
 
 
-    function onDropAreaEntered(drag){
-        console.log('Drop area in')
+    function onDropAreaEntered(element){
+        element.border.width = 2;
+        var itemType = ReportParamsModel.itemType;
+        if(!isDropEligible(itemType)){
+            element.border.color = Constants.redThemeColor
+            return
+        }
+        element.border.color = Constants.borderBlueColor
     }
 
-    function onDropAreaDropped(drag){
-        console.log('dropped')
+    function onDropAreaExited(element){
+        element.border.width = 1;
+        element.border.color = Constants.themeColor
+    }
+
+    function onDropAreaDropped(element){
+        element.border.width = 1
+        element.border.color = Constants.themeColor
+
+        var itemType = ReportParamsModel.itemType;
+        var itemName = ReportParamsModel.itemName;
+
+        if(!isDropEligible(itemType)){
+            return;
+        }
+
+        if(isDropEligible(itemType)){
+            colorListModel.append({textValue: itemName})
+            dataType = itemType;
+            return;
+        }
+
+    }
+
+    function isDropEligible(itemType){
+        if(dataType == ""){
+            return true;
+        }
+        if(dataType && dataType !== itemType){
+            return false;
+        }
+        if(itemType.toLowerCase() === "numerical"){
+            return true;
+        }
+        return false;
     }
 
     function onDropAreaPositionChanged(drag){
         console.log('Position change!!');
     }
-    function onDropAreaExited(){
-        console.log('Exit');
-    }
-
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -127,35 +162,17 @@ Column{
             anchors.top: colorByText.bottom
             anchors.topMargin: colorListTopMargin
 
-            border.color: Constants.grafieksLightGreenColor
+            border.color: Constants.themeColor
             border.width: 1
 
             DropArea {
                 id: dropArea
-                height: colorList.height
+                height: parent.height
                 width: parent.width
-                onEntered:  parent.border.width = 2
-                onExited:  parent.border.width = 1
-                onDropped: {
-                    console.log('Dropped!!!')
-                    parent.border.width = 1
-                    console.log(ReportParamsModel.itemType)
+                onEntered:  onDropAreaEntered(parent)
+                onExited:  onDropAreaExited(parent)
+                onDropped: onDropAreaDropped(parent)
 
-                    if(dataType && dataType != ReportParamsModel.itemType){
-                        return
-                    }
-
-                    if(dataType == ""){
-                        colorListModel.append({textValue: ReportParamsModel.itemName})
-                        dataType = ReportParamsModel.itemType
-                        return;
-                    }
-
-                    if(ReportParamsModel.itemType.toLowerCase() == "numerical"){
-                        colorListModel.append({textValue: ReportParamsModel.itemName})
-                    }
-
-                }
             }
 
         // list view for dropped colors
@@ -177,7 +194,14 @@ Column{
                     Text {
                         text: textValue
                         anchors.centerIn: parent
+                        width: parent.width - 10
+                        elide: Text.ElideRight
                         font.pixelSize: Constants.fontCategoryHeaderSmall
+                    }
+                    MouseArea{
+                        anchors.fill: parent
+                        drag.target: parent;
+
                     }
                 }
             }

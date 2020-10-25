@@ -4,13 +4,20 @@ ListView{
 
     property string itemName: "";
     property string itemType: "Date";
+
+
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
     ListModel{
         id: dateModel
         ListElement{
             categoricalName: "Date 1"
         }
         ListElement{
-            categoricalName: "Date "
+            categoricalName: "Dateas dsa dsa sasad as "
         }
         ListElement{
             categoricalName: "Date 2"
@@ -19,6 +26,63 @@ ListView{
             categoricalName: "date 3"
         }
     }
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
+
+    function openMenu(){
+        console.log('Open Menu')
+    }
+
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
 
     id: dateList
 
@@ -35,7 +99,7 @@ ListView{
         width: parent.width
         Image {
             id: dateImage
-            source: "/Images/icons/AB.png"
+            source: "/Images/icons/date_field.png"
             height: 16
             width: 16
             anchors.verticalCenter: parent.verticalCenter
@@ -43,9 +107,26 @@ ListView{
 
         Text {
             text: categoricalName
+            width: parent.width - dateImage.width - menuButton.width - 30
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: dateImage.right
             anchors.leftMargin: 10
+            elide: Text.ElideRight
+        }
+
+        Image {
+            id: menuButton
+            source: "/Images/icons/menu-button.png"
+            height: 18
+            width: 20
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            anchors.verticalCenter: parent.verticalCenter
+            z:100
+            MouseArea{
+                anchors.fill: parent
+                onClicked: openMenu()
+            }
         }
 
         MouseArea {
@@ -80,6 +161,7 @@ ListView{
         Drag.active: mouseArea.drag.active
         Drag.hotSpot.x: 2
         Drag.hotSpot.y: 2
+
     }
 
 }

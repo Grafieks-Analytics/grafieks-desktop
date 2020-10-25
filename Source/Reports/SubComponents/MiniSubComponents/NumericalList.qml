@@ -15,7 +15,7 @@ ListView{
             categoricalName: "Numerical 2"
         }
         ListElement{
-            categoricalName: "Numerical 3"
+            categoricalName: "Numerical 3 23 23 23 232"
         }
         ListElement{
             categoricalName: "Numerical 4"
@@ -39,7 +39,7 @@ ListView{
         width: parent.width
         Image {
             id: numericalImage
-            source: "/Images/icons/AB.png"
+            source: "/Images/icons/fx.png"
             height: 16
             width: 16
             anchors.verticalCenter: parent.verticalCenter
@@ -47,9 +47,26 @@ ListView{
 
         Text {
             text: categoricalName
+            width: parent.width - numericalImage.width - menuButton.width - 30
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: numericalImage.right
             anchors.leftMargin: 10
+            elide: Text.ElideRight
+        }
+
+        Image {
+            id:menuButton
+            source: "/Images/icons/menu-button.png"
+            height: 20
+            width: 20
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            anchors.verticalCenter: parent.verticalCenter
+            z:100
+            MouseArea{
+                anchors.fill: parent
+                onClicked: openMenu()
+            }
         }
 
         MouseArea {

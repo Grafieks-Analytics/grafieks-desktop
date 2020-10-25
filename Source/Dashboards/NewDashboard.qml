@@ -143,13 +143,8 @@ Page {
         dashboardList.flick(-300, 0)
     }
 
-    function deleteDashboard(dashboardId){
-        console.log('Delete Dashboard From cpp')
-        for(var i=0; i<dashboardModel.count;i++){
-            if(dashboardModel.get(i).dashboardId === dashboardId){
-                dashboardModel.remove(i);
-            }
-        }
+    function deleteDashboard(index){
+        dashboardModel.remove(index);
     }
 
     function getEndPos(){
@@ -283,7 +278,7 @@ Page {
                         y: dashboardNameButton.height
                         MenuItem {
                             text: qsTr("Delete")
-                            onClicked: deleteDashboard(dashboardId)
+                            onClicked: deleteDashboard(index)
                         }
                     }
                 }

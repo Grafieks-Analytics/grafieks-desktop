@@ -63,8 +63,8 @@ Popup {
     }
 
     function connectToMySQL(){
-//        ConnectorsLoginModel.mysqlLogin(server.text, database.text, port.text, username.text, password.text)
-        ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_my", 3306, "root", "123@312QQl")
+        ConnectorsLoginModel.mysqlLogin(server.text, database.text, port.text, username.text, password.text)
+//        ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_my", 3306, "root", "123@312QQl")
 //        ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_dummy", 3306, "root", "")
 //        ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_my", 3308, "root", "root")
 

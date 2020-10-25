@@ -37,17 +37,33 @@ ListView{
             id: categoricalImage
             source: "/Images/icons/AB.png"
             height: 16
-            width: 16
+            width: 20
             anchors.verticalCenter: parent.verticalCenter
         }
 
         Text {
             text: categoricalName
+            width: parent.width - numericalImage.width - menuButton.width - 30
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: categoricalImage.right
             anchors.leftMargin: 10
+            elide: Text.ElideRight
         }
 
+        Image {
+            id:menuButton
+            source: "/Images/icons/menu-button.png"
+            height: 20
+            width: 20
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            anchors.verticalCenter: parent.verticalCenter
+            z:100
+            MouseArea{
+                anchors.fill: parent
+                onClicked: openMenu()
+            }
+        }
 
         MouseArea {
             id: mouseArea

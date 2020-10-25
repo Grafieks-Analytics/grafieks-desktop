@@ -17,48 +17,6 @@
         <file>Images/icons/Server.png</file>
         <file>Images/icons/Up.png</file>
         <file>Images/icons/Up_20.png</file>
-        <file>Images/icons/charts/Area.png</file>
-        <file>Images/icons/charts/Area_30.png</file>
-        <file>Images/icons/charts/Bar.png</file>
-        <file>Images/icons/charts/Bar_30.png</file>
-        <file>Images/icons/charts/CandleStick.png</file>
-        <file>Images/icons/charts/CandleStick_30.png</file>
-        <file>Images/icons/charts/Chord.png</file>
-        <file>Images/icons/charts/Chord_30.png</file>
-        <file>Images/icons/charts/doughnut.png</file>
-        <file>Images/icons/charts/Doughnut_30.png</file>
-        <file>Images/icons/charts/force_directed.png</file>
-        <file>Images/icons/charts/ForceDirected_30.png</file>
-        <file>Images/icons/charts/Funnel.png</file>
-        <file>Images/icons/charts/Funnel_30.png</file>
-        <file>Images/icons/charts/Gauge.png</file>
-        <file>Images/icons/charts/Gauge_30.png</file>
-        <file>Images/icons/charts/HeatMap.png</file>
-        <file>Images/icons/charts/HeatMap_30.png</file>
-        <file>Images/icons/charts/Line.png</file>
-        <file>Images/icons/charts/Line_30.png</file>
-        <file>Images/icons/charts/Map.png</file>
-        <file>Images/icons/charts/Map_30.png</file>
-        <file>Images/icons/charts/Map2.png</file>
-        <file>Images/icons/charts/Map2_30.png</file>
-        <file>Images/icons/charts/nightingale_rose.png</file>
-        <file>Images/icons/charts/NightingaleRose_30.png</file>
-        <file>Images/icons/charts/Pie.png</file>
-        <file>Images/icons/charts/Pie_30.png</file>
-        <file>Images/icons/charts/Radar.png</file>
-        <file>Images/icons/charts/Radar_30.png</file>
-        <file>Images/icons/charts/Sankey.png</file>
-        <file>Images/icons/charts/Sankey_30.png</file>
-        <file>Images/icons/charts/ScatterPlot.png</file>
-        <file>Images/icons/charts/ScatterPlot_30.png</file>
-        <file>Images/icons/charts/Sunburst_30.png</file>
-        <file>Images/icons/charts/susburst.png</file>
-        <file>Images/icons/charts/Table.png</file>
-        <file>Images/icons/charts/Table_30.png</file>
-        <file>Images/icons/charts/Tree.png</file>
-        <file>Images/icons/charts/Tree_30.png</file>
-        <file>Images/icons/charts/TreeMap.png</file>
-        <file>Images/icons/charts/TreeMap_30.png</file>
         <file>Images/logos/logo.png</file>
         <file>Images/logos/logo_full_small.png</file>
         <file>Images/icons/outline_close_black_18dp1x.png</file>
@@ -130,36 +88,34 @@
         <file>Images/icons/fullscreen.png</file>
         <file>Images/icons/arrow_left.png</file>
         <file>Images/icons/arrow_right.png</file>
-        <file>Images/icons/charts/Area Chart.png</file>
-        <file>Images/icons/charts/Bar Chart.png</file>
-        <file>Images/icons/charts/Donut Chart.png</file>
-        <file>Images/icons/charts/Line Chart.png</file>
-        <file>Images/icons/charts/Pie Chart.png</file>
-        <file>Images/icons/charts/Scatter Plot.png</file>
-        <file>Images/icons/charts/Tree Map.png</file>
-        <file>Images/icons/charts/Chord Diagram.png</file>
-        <file>Images/icons/charts/Force-Directed Graph.png</file>
-        <file>Images/icons/charts/Gauge Chart.png</file>
-        <file>Images/icons/charts/Radar Chart.png</file>
-        <file>Images/icons/charts/Sunburst.png</file>
-        <file>Images/icons/charts/Tree Chart.png</file>
-        <file>Images/icons/charts/NightingaleRose.png</file>
-        <file>Images/icons/charts/Combination Chart (Line Bar).png</file>
-        <file>Images/icons/charts/waterfall chart.png</file>
-        <file>Images/icons/charts/Matrix.png</file>
-        <file>Images/icons/charts/GEO.png</file>
-        <file>Images/icons/charts/Condegram Spiral.png</file>
-        <file>Images/icons/charts/radar 50 PX.png</file>
-        <file>Images/icons/charts/tree 500 px.png</file>
         <file>Images/icons/extreme_left.png</file>
         <file>Images/icons/extreme_right.png</file>
-        <file>Images/icons/charts/bar_chart.png</file>
-        <file>Images/icons/charts/g145.png</file>
-        <file>Images/icons/charts/g80.png</file>
-        <file>Images/icons/charts/Bar-2.png</file>
-        <file>Images/icons/charts/FinalBar.png</file>
-        <file>Images/icons/charts/Table2.png</file>
-        <file>Images/icons/charts/Gauge - chart.png</file>
         <file>Images/icons/AB.png</file>
+        <file>Images/icons/menu-button.png</file>
+        <file>Images/icons/date_field.png</file>
+        <file>Images/icons/fx.png</file>
+        <file>Images/icons/charts/waterfall.png</file>
+        <file>Images/icons/charts/scatter_plot.png</file>
+        <file>Images/icons/charts/line_chart.png</file>
+        <file>Images/icons/charts/combination_chart.png</file>
+        <file>Images/icons/charts/bar_chart.png</file>
+        <file>Images/icons/charts/area.png</file>
+        <file>Images/icons/charts/heatmap.png</file>
+        <file>Images/icons/charts/tree_map.png</file>
+        <file>Images/icons/charts/tree_chart.png</file>
+        <file>Images/icons/charts/table.png</file>
+        <file>Images/icons/charts/sunburst.png</file>
+        <file>Images/icons/charts/sankey.png</file>
+        <file>Images/icons/charts/radar.png</file>
+        <file>Images/icons/charts/pie_chart.png</file>
+        <file>Images/icons/charts/nightingales_rose.png</file>
+        <file>Images/icons/charts/pivot.png</file>
+        <file>Images/icons/charts/map.png</file>
+        <file>Images/icons/charts/funnel.png</file>
+        <file>Images/icons/charts/force_directed.png</file>
+        <file>Images/icons/charts/donut.png</file>
+        <file>Images/icons/charts/condegram.png</file>
+        <file>Images/icons/charts/chord_diagram.png</file>
+        <file>Images/icons/charts/gauge_chart.png</file>
     </qresource>
 </RCC>
