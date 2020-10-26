@@ -156,11 +156,12 @@ Rectangle{
     }
 
 
-    function onSingleSelectRadioSelected(modelData){
+    function onSingleSelectRadioSelected(modelData, format){
 
+        DSParamsModel.setValueFormat(modelData.toString(), format)
         DSParamsModel.addToJoinValue(mapKey, modelData.toString())
-        DSParamsModel.addToJoinRelation(mapKey, Constants.equalRelation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.equalRelation)
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
     }
 
 
@@ -215,8 +216,8 @@ Rectangle{
             // Save the array and Set relation type to IN
 
             DSParamsModel.addToJoinValue(mapKey, checkedValues.toString())
-            DSParamsModel.addToJoinRelation(mapKey, Constants.inRelation)
-            DSParamsModel.addToJoinRelationSlug(mapKey, Constants.inRelation)
+            DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+            DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
         }
 
     }
@@ -493,7 +494,7 @@ Rectangle{
                         width: Constants.defaultRadioDimension
                         parent_dimension: Constants.defaultRadioDimension
                         onCheckedChanged: {
-                            onSingleSelectRadioSelected(modelData)
+                            onSingleSelectRadioSelected(modelData, customBox.currentText)
                         }
                     }
                 }

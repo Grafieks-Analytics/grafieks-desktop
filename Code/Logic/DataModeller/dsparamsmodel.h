@@ -40,8 +40,7 @@ class DSParamsModel : public QObject
     QVariantMap joinRelation; // Condition link between parameter and value in a query. eg, =, !=, LIKE, etc
     QVariantMap joinValue; // Right side parameter of the comparison (the actual value)
     QVariantMap joinRelationSlug; // Single syllable entity for human readable entity. eg, in Categorical-Wildcard, Slug for `Ends With` is `endswith` and `Equal To` is `equalto`
-
-
+    QVariantMap dateFormatMap;
     // Q_PROPERTY variables
 
     // General
@@ -160,6 +159,9 @@ public:
     Q_INVOKABLE void addToJoinRelationSlug(int refObjId, QString value = "");
     Q_INVOKABLE void removeJoinRelationSlug(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE QVariantMap fetchJoinRelationSlug(int refObjId = 0, bool fetchAll = false);
+
+    Q_INVOKABLE void setValueFormat(QString value, QString format);
+    Q_INVOKABLE QVariantMap getDateFormatMap();
 
     int currentTab() const;
     QString fileExtension() const;

@@ -137,7 +137,7 @@ Popup {
 
     function applyDateFilter(){
 
-        closeDateFilterPopup()
+        dateFilterPopup.visible = false
 
         var filterIndex = DSParamsModel.filterIndex
         var section = DSParamsModel.section
@@ -186,7 +186,7 @@ Popup {
         }
 
         // Reset all DSParams
-        DSParamsModel.resetFilter();
+        //DSParamsModel.resetFilter();
 
     }
 
@@ -213,7 +213,7 @@ Popup {
         calendarContent.visible = false
         dateTimeFrameContent.visible = false
 
-        DSParamsModel.resetFilter();
+        //DSParamsModel.resetFilter();
         DSParamsModel.setCategory(Constants.dateMainListType)
 
         // For list category type

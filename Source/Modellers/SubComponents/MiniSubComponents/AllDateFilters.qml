@@ -101,7 +101,6 @@ Rectangle{
 
     // Called when edit filter from categorical list clicked
     function onEditElement(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude){
-        ColumnListModel.columnEditQuery(columnName, tableName, value)
 
         DSParamsModel.setMode(Constants.modeEdit)
         DSParamsModel.setFilterIndex(filterIndex)
@@ -113,7 +112,6 @@ Rectangle{
         DSParamsModel.addToJoinRelation(mapKey, relation)
         DSParamsModel.addToJoinRelationSlug(mapKey, slug)
         DSParamsModel.addToJoinValue(mapKey, value)
-        //DSParamsModel.setRelation(relation)
         DSParamsModel.setIncludeNull(includeNull)
         DSParamsModel.setExclude(exclude)
         DSParamsModel.setInternalCounter(1)

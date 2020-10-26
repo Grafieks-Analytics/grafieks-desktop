@@ -269,8 +269,40 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
 
     foreach(filter, mFilter){
 
-        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), filter->value(), filter->exclude(), filter->includeNull());
+        QString value = filter->value();
+        QString format = this->dateFormatMap[filter->value()].toString();
+        QStringList dateFormatList;
+        if(format == "DD/MM/YYYY")
+        {
+            dateFormatList = value.split("/");
+            value = dateFormatList[2] + "-" + dateFormatList[1] + "-" + dateFormatList[0]+"%";
+        }
+        else if(format == "DD MMMM YYYY")
+        {
 
+        }
+        else if(format == "DD/MM/YY")
+        {
+            dateFormatList = value.split("/");
+            value = "%"+dateFormatList[2] + "-" + dateFormatList[1] + "-" + dateFormatList[0]+"%";
+        }
+        else if(format == "YYYY-MM-DD")
+        {
+
+        }
+        else if(format == "YYYY")
+        {
+            value = value+"%";
+        }
+        else if(format == "YY")
+        {
+            value = "%"+value+"-"+"%";
+        }
+        else if(format == "DD/MM/YYYY hh:mm:ss")
+        {
+            QString newValue;
+        }
+        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), value, filter->exclude(), filter->includeNull());
     }
 
     // Replace the WHERE condition with the new one
@@ -284,6 +316,11 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
     qDebug() << newQuery << "FINAL QUERY";
 
     emit sendFilterQuery(newQuery);
+}
+
+void FilterDateListModel::setDateFormatMap(QVariantMap dateFormatMap)
+{
+    this->dateFormatMap = dateFormatMap;
 }
 
 

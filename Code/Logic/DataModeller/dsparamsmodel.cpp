@@ -653,6 +653,18 @@ QVariantMap DSParamsModel::fetchJoinRelationSlug(int refObjId, bool fetchAll)
     return output;
 }
 
+void DSParamsModel::setValueFormat(QString value, QString format)
+{
+    this->dateFormatMap.insert(value, format);
+}
+
+QVariantMap DSParamsModel::getDateFormatMap()
+{
+      QVariantMap output;
+      output = this->dateFormatMap;
+      return output;
+}
+
 int DSParamsModel::currentTab() const
 {
     return m_currentTab;
