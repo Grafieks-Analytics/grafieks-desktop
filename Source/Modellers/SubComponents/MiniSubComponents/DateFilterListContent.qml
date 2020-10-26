@@ -188,7 +188,7 @@ Rectangle{
         }
     }
 
-    function onMultiSelectCheckboxSelected(modelData,checked){
+    function onMultiSelectCheckboxSelected(modelData,checked, format){
 
         if(mainCheckBox.checked === true){
 
@@ -213,8 +213,8 @@ Rectangle{
                 }
             }
 
-            // Save the array and Set relation type to IN
-
+            // Save the array and Set relation type to LIKE
+            DSParamsModel.setValueFormat(checkedValues.toString(), format)
             DSParamsModel.addToJoinValue(mapKey, checkedValues.toString())
             DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
             DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
@@ -458,7 +458,7 @@ Rectangle{
                     ButtonGroup.group: childGroup
 
                     onCheckedChanged: {
-                        onMultiSelectCheckboxSelected(modelData,checked)
+                        onMultiSelectCheckboxSelected(modelData,checked, customBox.currentText)
                     }
                 }
             }

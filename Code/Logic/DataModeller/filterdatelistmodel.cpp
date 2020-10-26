@@ -205,8 +205,8 @@ QHash<int, QByteArray> FilterDateListModel::roleNames() const
 void FilterDateListModel::newFilter(QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, bool includeNull, bool exclude )
 {
 
-//    FilterList *filterList = new FilterList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this);
-//    qDebug() <<"FROM FilterDateListModel newFilter" << counter << section<< category<< subcategory << tableName<< colName<< relation<< slug <<val<< includeNull<< exclude<< this;
+    //    FilterList *filterList = new FilterList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this);
+    //    qDebug() <<"FROM FilterDateListModel newFilter" << counter << section<< category<< subcategory << tableName<< colName<< relation<< slug <<val<< includeNull<< exclude<< this;
     addFilterList(new FilterDateList(this->counter, section, category, subcategory, tableName, colName, relation, slug, val, includeNull, exclude, this));
 
     this->counter++;
@@ -269,39 +269,8 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
 
     foreach(filter, mFilter){
 
-        QString value = filter->value();
-        QString format = this->dateFormatMap[filter->value()].toString();
-        QStringList dateFormatList;
-        if(format == "DD/MM/YYYY")
-        {
-            dateFormatList = value.split("/");
-            value = dateFormatList[2] + "-" + dateFormatList[1] + "-" + dateFormatList[0]+"%";
-        }
-        else if(format == "DD MMMM YYYY")
-        {
+        QString value = this->getFilteredValue(filter->value());
 
-        }
-        else if(format == "DD/MM/YY")
-        {
-            dateFormatList = value.split("/");
-            value = "%"+dateFormatList[2] + "-" + dateFormatList[1] + "-" + dateFormatList[0]+"%";
-        }
-        else if(format == "YYYY-MM-DD")
-        {
-
-        }
-        else if(format == "YYYY")
-        {
-            value = value+"%";
-        }
-        else if(format == "YY")
-        {
-            value = "%"+value+"-"+"%";
-        }
-        else if(format == "DD/MM/YYYY hh:mm:ss")
-        {
-            QString newValue;
-        }
         newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), value, filter->exclude(), filter->includeNull());
     }
 
@@ -332,6 +301,127 @@ void FilterDateListModel::addFilterList(FilterDateList *filter)
     endInsertRows();
 
     emit rowCountChanged();
+}
+
+QString FilterDateListModel::getFilteredValue(QString val)
+{
+    QString format = this->dateFormatMap[val].toString();
+
+    QMap <QString, QString> monthToIndex;
+    monthToIndex.insert("January", "01");
+    monthToIndex.insert("February", "02");
+    monthToIndex.insert("March", "03");
+    monthToIndex.insert("April", "04");
+    monthToIndex.insert("May", "05");
+    monthToIndex.insert("June", "06");
+    monthToIndex.insert("July", "07");
+    monthToIndex.insert("August", "08");
+    monthToIndex.insert("September", "09");
+    monthToIndex.insert("October", "10");
+    monthToIndex.insert("November", "11");
+    monthToIndex.insert("December", "12");
+
+    QString value = val;
+    QStringList dateFormatList;
+
+    if(format == "DD/MM/YYYY")
+    {
+        dateFormatList = value.split("/");
+        value = dateFormatList[2] + "-" + dateFormatList[1] + "-" + dateFormatList[0] + "%";
+    }
+    else if(format == "DD MMMM YYYY")
+    {
+        dateFormatList = value.split(" ");
+        value = dateFormatList[2] + "-" + monthToIndex[dateFormatList[1]] + "-" + dateFormatList[0] + "%";
+    }
+    else if(format == "D MMMM YYYY")
+    {
+        dateFormatList = value.split(" ");
+
+        if(dateFormatList[0].length() == 1)
+            value = dateFormatList[2] + "-" + monthToIndex[dateFormatList[1]] + "-" + "0" + dateFormatList[0] + "%";
+        else
+            value = dateFormatList[2] + "-" + monthToIndex[dateFormatList[1]] + "-" + dateFormatList[0] + "%";
+    }
+    else if(format == "dddd, D MMMM YYYY")
+    {
+        dateFormatList = value.split(" ");
+
+        if(dateFormatList[1].length() == 1)
+            value = dateFormatList[3] + "-" + monthToIndex[dateFormatList[2]] + "-" + "0" + dateFormatList[1] + "%";
+        else
+            value = dateFormatList[3] + "-" + monthToIndex[dateFormatList[2]] + "-" + dateFormatList[1] + "%";
+    }
+    else if(format == "dddd, DD MMMM YYYY")
+    {
+        dateFormatList = value.split(" ");
+        value = dateFormatList[3] + "-" + monthToIndex[dateFormatList[2]] + "-" + dateFormatList[1] + "%";
+    }
+    else if(format == "DD/MM/YY")
+    {
+        dateFormatList = value.split("/");
+        value = "%" + dateFormatList[2] + "-" + dateFormatList[1] + "-" + dateFormatList[0]+ "%";
+    }
+    else if(format == "D/M/YY")
+    {
+        dateFormatList = value.split("/");
+
+        if(dateFormatList[0].length() == 1 && dateFormatList[1].length() == 1)
+            value = "%" + dateFormatList[2] + "-" + "0" + dateFormatList[1] + "-" + "0" + dateFormatList[0]+ "%";
+        else if(dateFormatList[0].length() == 1)
+            value = "%" + dateFormatList[2] + "-" + dateFormatList[1] + "-" + "0" + dateFormatList[0]+ "%";
+        else
+            value = "%" + dateFormatList[2] + "-" + "0" + dateFormatList[1] + "-" + dateFormatList[0]+ "%";
+    }
+    else if(format == "D.M.YY")
+    {
+        dateFormatList = value.split(".");
+
+        if(dateFormatList[0].length() == 1 && dateFormatList[1].length() == 1)
+            value = "%" + dateFormatList[2] + "-" + "0" + dateFormatList[1] + "-" + "0" + dateFormatList[0]+ "%";
+        else if(dateFormatList[0].length() == 1)
+            value = "%" + dateFormatList[2] + "-" + dateFormatList[1] + "-" + "0" + dateFormatList[0]+ "%";
+        else
+            value = "%" + dateFormatList[2] + "-" + "0" + dateFormatList[1] + "-" + dateFormatList[0]+ "%";
+    }
+    else if(format == "YYYY-MM-DD")
+    {
+        dateFormatList = value.split("-");
+        value = dateFormatList[0] + "-" + dateFormatList[1] + "-" + dateFormatList[2]+ "%";
+    }
+    else if(format == "MMMM YYYY")
+    {
+        dateFormatList = value.split(" ");
+        value = dateFormatList[1] + "-" + monthToIndex[dateFormatList[0]] + "%";
+    }
+    else if(format == "D MMMM")
+    {
+        dateFormatList = value.split(" ");
+
+        if(dateFormatList[0].length() == 1)
+            value = "%-" + monthToIndex[dateFormatList[1]] + "-" + "0" + dateFormatList[0] + "%";
+        else
+            value = "%-" + monthToIndex[dateFormatList[1]] + "-" + dateFormatList[0] + "%";
+    }
+    else if(format == "YY")
+    {
+        value = "%" + value + "-" + "%";
+    }
+    else if(format == "YYYY")
+    {
+        value = value + "%";
+    }
+    else if(format == "DD/MM/YYYY hh:mm:ss")
+    {
+        dateFormatList = value.split(" ");
+        QString newValue = dateFormatList[0];
+        QStringList newDateFormatList = newValue.split("/");
+        newValue = newDateFormatList[2] + "-" + newDateFormatList[1] + "-" + newDateFormatList[0];
+        value = newValue + dateFormatList[1] + "%";
+    }
+    else{}
+
+    return value;
 }
 
 
@@ -367,7 +457,7 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
             newIncludeNull = isNull == false ? "AND " + tableName + "." + columnName + " IS NOT NULL" : "";
 
             tmpWhereConditions = QString("%1.%2 %3 %4 %5")
-                            .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+                    .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
 
             localCounter++;
         }
@@ -382,15 +472,15 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
 
             concetantedCondition.append("'" + individualCondition + "',");
         }
-       concetantedCondition.chop(1);
+        concetantedCondition.chop(1);
 
         notSign = sqlComparisonOperators.contains(relation)? " !" : " NOT ";
         excludeCase = exclude ? relation.prepend(notSign) : relation;
-        newCondition = relation.contains("in", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
+        newCondition = relation.contains("like", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
         newIncludeNull = isNull == false ? " AND " + tableName + "." + columnName + " IS NOT NULL" : "";
 
         tmpWhereConditions = QString("%1.%2 %3 %4 %5")
-                        .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+                .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
     }
 
     return tmpWhereConditions;

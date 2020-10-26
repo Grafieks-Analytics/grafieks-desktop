@@ -79,13 +79,8 @@ Popup {
         dateFilterPopup.subCategoryEditMode.connect(listContent.slotEditModeSubCategory)
        // categoricalFilterPopup.signalWildCardEditData.connect(wildcardContent.slotWildCardEditData)
     }
-    // SLOT function
-//    function slotEditMode(section, category, subCategory, relation, value){
 
-//        if(section === Constants.dateTab){
-//            console.log("EDIT SIGNAL RECEIVED", section, category, subCategory, relation, value)
-//        }
-//    }
+    // SLOT function
     function slotEditMode(section, category, subCategory, relation, slug, value){
 
         if(section === Constants.dateTab){
@@ -221,7 +216,6 @@ Popup {
         // Except when "Select All" checked.
         // Then Relation will be LIKE
 
-        //DSParamsModel.setRelation(Constants.likeRelation)
         DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
     }
     function onCalendarClicked(){

@@ -362,8 +362,13 @@ Popup {
         popupMain.visible = false
         var tmpSql = DSParamsModel.tmpSql
 
-        FilterDateListModel.setDateFormatMap(DSParamsModel.getDateFormatMap())
-        FilterDateListModel.callQueryModel(tmpSql)
+        if(DSParamsModel.section === "categorical")
+            FilterCategoricalListModel.callQueryModel(tmpSql)
+        else
+        {
+            FilterDateListModel.setDateFormatMap(DSParamsModel.getDateFormatMap())
+            FilterDateListModel.callQueryModel(tmpSql)
+        }
     }
     function onCancelClicked(){
         popupMain.visible = false

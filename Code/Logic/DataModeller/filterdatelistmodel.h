@@ -39,6 +39,7 @@ public:
     Q_INVOKABLE void setDateFormatMap(QVariantMap dateFormatMap);
 
     void addFilterList(FilterDateList * filter);
+    QString getFilteredValue(QString val);
 
 
     enum Roles{
