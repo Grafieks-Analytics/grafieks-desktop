@@ -262,16 +262,34 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
     QString newWhereConditions;
     QString newQuery;
     QString existingWhereString;
-
+    QString newValue;
+    QString value;
 
     mQuerySplitter.setQuery(tmpSql);
     newWhereConditions = mQuerySplitter.getWhereCondition();
 
+    newWhereConditions += " AND ";
+
     foreach(filter, mFilter){
 
-        QString value = this->getFilteredValue(filter->value());
+        if(filter->value().indexOf(',') > -1)
+        {
+            QStringList dateValue;
+            dateValue = filter->value().split(',');
+            foreach(newValue, dateValue)
+            {
+                QString tmpValue;
+                tmpValue = this->getFilteredValue(newValue);
+                newWhereConditions += this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull()) + "OR ";
+            }
+        }
+        else
+        {
+            value = this->getFilteredValue(filter->value());
+            newWhereConditions += this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), value, filter->exclude(), filter->includeNull()) + "OR ";
+        }
 
-        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), value, filter->exclude(), filter->includeNull());
+        //newWhereConditions += this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), value, filter->exclude(), filter->includeNull()) + " OR ";
     }
 
     // Replace the WHERE condition with the new one
@@ -281,7 +299,7 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
     QRegularExpressionMatch whereIterator = whereListRegex.match(tmpSql);
     existingWhereString = whereIterator.captured(1).trimmed();
     newQuery = tmpSql.replace(existingWhereString, newWhereConditions);
-
+    newQuery.chop(3);
     qDebug() << newQuery << "FINAL QUERY";
 
     emit sendFilterQuery(newQuery);
@@ -470,13 +488,12 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
 
         foreach(individualCondition, conditionList){
 
-            concetantedCondition.append("'" + individualCondition + "',");
+            concetantedCondition.append("'" + individualCondition + "'");
         }
-        concetantedCondition.chop(1);
 
         notSign = sqlComparisonOperators.contains(relation)? " !" : " NOT ";
         excludeCase = exclude ? relation.prepend(notSign) : relation;
-        newCondition = relation.contains("like", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
+        newCondition = relation.contains("in", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
         newIncludeNull = isNull == false ? " AND " + tableName + "." + columnName + " IS NOT NULL" : "";
 
         tmpWhereConditions = QString("%1.%2 %3 %4 %5")

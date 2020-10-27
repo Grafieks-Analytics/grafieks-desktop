@@ -214,7 +214,12 @@ Rectangle{
             }
 
             // Save the array and Set relation type to LIKE
-            DSParamsModel.setValueFormat(checkedValues.toString(), format)
+
+            for(let i = 0; i < checkedValues.length; i++)
+            {
+                   DSParamsModel.setValueFormat(checkedValues[i].toString(), format)
+            }
+
             DSParamsModel.addToJoinValue(mapKey, checkedValues.toString())
             DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
             DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
