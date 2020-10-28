@@ -264,11 +264,13 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
     QString existingWhereString;
     QString newValue;
     QString value;
+    QString tmpValue;
+    bool firstValue = true;
+
+    QSet <QString> weekDays = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
     mQuerySplitter.setQuery(tmpSql);
     newWhereConditions = mQuerySplitter.getWhereCondition();
-
-    newWhereConditions += " AND ";
 
     foreach(filter, mFilter){
 
@@ -276,20 +278,59 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
         {
             QStringList dateValue;
             dateValue = filter->value().split(',');
-            foreach(newValue, dateValue)
+
+            if(weekDays.contains(dateValue[0]))
             {
-                QString tmpValue;
-                tmpValue = this->getFilteredValue(newValue);
-                newWhereConditions += this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull()) + "OR ";
+                for(int i = 0; i < dateValue.length() - 1; i += 2)
+                {
+                    tmpValue = dateValue[i] + "," + dateValue[i+1];
+                    tmpValue = this->getFilteredValue(tmpValue);
+
+                    if(firstValue)
+                    {
+                        firstValue = false;
+                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
+                    }
+                    else if(filter->exclude() == false)
+                        newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
+                    else
+                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
+                }
             }
+            else
+            {
+                foreach(newValue, dateValue)
+                {
+                    tmpValue = this->getFilteredValue(newValue);
+
+                    if(firstValue)
+                    {
+                        firstValue = false;
+                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
+                    }
+                    else if(filter->exclude() == false)
+                        newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
+                    else
+                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
+                }
+            }
+
         }
         else
         {
             value = this->getFilteredValue(filter->value());
-            newWhereConditions += this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), value, filter->exclude(), filter->includeNull()) + "OR ";
-        }
 
-        //newWhereConditions += this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), value, filter->exclude(), filter->includeNull()) + " OR ";
+            if(firstValue)
+            {
+                firstValue = false;
+                newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), value, filter->exclude(), filter->includeNull());
+            }
+            else if(filter->exclude() == false)
+                newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), value, filter->exclude(), filter->includeNull());
+            else
+                newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), value, filter->exclude(), filter->includeNull());
+
+        }
     }
 
     // Replace the WHERE condition with the new one
@@ -299,7 +340,7 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
     QRegularExpressionMatch whereIterator = whereListRegex.match(tmpSql);
     existingWhereString = whereIterator.captured(1).trimmed();
     newQuery = tmpSql.replace(existingWhereString, newWhereConditions);
-    newQuery.chop(3);
+
     qDebug() << newQuery << "FINAL QUERY";
 
     emit sendFilterQuery(newQuery);
