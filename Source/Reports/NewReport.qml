@@ -23,6 +23,8 @@ Page {
     id: report_desiner_page
     width: parent.width
     property int menu_width: 60
+    property bool xaxisActive: ReportParamsModel.xAxisActive
+    property bool yaxisActive: ReportParamsModel.yAxisActive
 
 
     /***********************************************************************************************************************/
@@ -61,8 +63,33 @@ Page {
     Component.onCompleted: {
 
         // Connect signal and slots
+        ReportParamsModel.xAxisActive = false;
+        ReportParamsModel.yAxisActive = false;
+        ReportParamsModel.colorByActive = false;
 
     }
+
+
+    onXaxisActiveChanged: {
+        if(xaxisActive){
+            xAxisRectangle.border.color = Constants.grafieksLightGreenColor;
+            xAxisRectangle.border.width = Constants.dropEligibleBorderWitdh;
+        }else{
+            xAxisRectangle.border.color = "transparent";
+            xAxisRectangle.border.width = Constants.defaultInActiveBorderWitdh;
+        }
+    }
+
+    onYaxisActiveChanged: {
+        if(yaxisActive){
+            yAxisRectangle.border.color = Constants.grafieksLightGreenColor;
+            yAxisRectangle.border.width = Constants.dropEligibleBorderWitdh;
+        }else{
+            yAxisRectangle.border.color = "transparent";
+            yAxisRectangle.border.width = Constants.defaultInActiveBorderWitdh;
+        }
+    }
+
 
     // Slot Function
     // For changing the chart on clicking chart icons
@@ -73,12 +100,12 @@ Page {
 
     function addReport(){
         // Add report to dashboard
-        stacklayout_home.currentIndex = 6
+        stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
     }
 
     function cancelReport(){
         // Back to dashboard
-        stacklayout_home.currentIndex = 6
+        stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
     }
 
     function focusReportTitle(){
@@ -88,17 +115,15 @@ Page {
     }
 
     function onDropAreaEntered(element){
-        element.border.width = 2
-        element.border.color = Constants.borderBlueColor
+        element.border.width = Constants.dropActiveBorderWitdh
     }
 
     function onDropAreaExited(element){
-        element.border.width = 1
-        element.border.color = Constants.themeColor
+        element.border.width = Constants.dropEligibleBorderWitdh
     }
 
     function onDropAreaDropped(element){
-        element.border.width = 1
+        element.border.width = Constants.dropEligibleBorderWitdh
         element.border.color = Constants.themeColor
     }
 
@@ -272,6 +297,7 @@ Page {
         anchors.left: tool_sep_chartFilters.right
         anchors.top: seperator_title_bar.bottom
 
+        // Xaxis starts
         Rectangle{
             id: xaxis
             height: 30
@@ -299,6 +325,7 @@ Page {
 
 
             Rectangle{
+                id: xAxisRectangle
                 height: parent.height
                 width: parent.width - xaxisText.width - 4
                 anchors.left: xaxisText.right
@@ -312,10 +339,21 @@ Page {
                     onDropped: onDropAreaDropped(parent,'xaxis')
                 }
 
+                Image {
+                    source: "/Images/icons/customize.png"
+                    anchors.right: parent.right
+                    anchors.rightMargin: 15
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: 20
+                    width: 20
+                }
+
             }
 
         }
+        // xaxis ends
 
+        //
         ToolSeparator{
             id: seperatorAxis
             height: 1
@@ -351,9 +389,11 @@ Page {
                         color: Constants.darkThemeColor
                     }
                 }
+
             }
 
             Rectangle{
+                id: yAxisRectangle
                 height: parent.height
                 width: parent.width - yaxisText.width - 4
                 anchors.left: yaxisText.right
@@ -365,6 +405,15 @@ Page {
                     onEntered:  onDropAreaEntered(parent,'yaxis')
                     onExited:  onDropAreaExited(parent,'yaxis')
                     onDropped: onDropAreaDropped(parent,'yaxis')
+                }
+
+                Image {
+                    source: "/Images/icons/customize.png"
+                    anchors.right: parent.right
+                    anchors.rightMargin: 15
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: 20
+                    width: 20
                 }
 
             }

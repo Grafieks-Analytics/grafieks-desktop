@@ -12,6 +12,12 @@ import QtQuick 2.15
 
 QtObject {
 
+    // Menu Indexes
+
+    property int dataDesignerIndex: 3
+    property int dashboardDesignerIndex: 6
+    property int newReportIndex: 7
+
     // General Strings
 
     property string applicationName : qsTr("Grafieks")
@@ -47,6 +53,7 @@ QtObject {
     property color whiteColor : "#FFFFFF"
     property color grayColor : "#707070"
     property color blackColor : "#000000"
+    property color redColor: "#ff0000"
     property color grafieksGreen: "#009B8F"
     property color grafieksGreenColor: "#009B8F"
     property color grafieksLightGreenColor: "#0dd1c2"
@@ -136,6 +143,10 @@ QtObject {
 
     property int defaultDroppedReportWidth : 300
     property int defaultDroppedReportHeight : 200
+
+    property int dropActiveBorderWitdh: 2
+    property int dropEligibleBorderWitdh: 1
+    property int dropInActiveBorderWitdh: 0
 
     property int reportTypeBlank : 0
     property int reportTypeText: 1

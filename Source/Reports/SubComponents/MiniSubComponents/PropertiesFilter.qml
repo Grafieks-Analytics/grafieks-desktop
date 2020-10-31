@@ -18,6 +18,7 @@ Column{
     property int colorBoxHeight: 20
     property int colorListTopMargin: 5
     property int editImageSize: 16
+    property bool colorByActive: ReportParamsModel.colorByActive;
 
     spacing: 4
 
@@ -58,25 +59,41 @@ Column{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    onColorByActiveChanged: {
+        if(colorByActive){
+            allParameter.border.color = Constants.grafieksLightGreenColor;
+            allParameter.border.width = Constants.dropEligibleBorderWitdh;;
+        }else{
+            allParameter.border.color = Constants.themeColor;
+            allParameter.border.width = Constants.defaultActiveBorderWitdh;
+        }
+    }
+
+
+    Component.onCompleted: {
+
+        ReportParamsModel.colorByActive = false;
+        allParameter.border.color =  Constants.themeColor
+        allParameter.border.width =  2
+
+    }
 
     function onDropAreaEntered(element){
-        element.border.width = 2;
+        element.border.width = Constants.dropActiveBorderWitdh;
         var itemType = ReportParamsModel.itemType;
         if(!isDropEligible(itemType)){
-            element.border.color = Constants.redThemeColor
+            element.border.color = Constants.redColor
             return
         }
-        element.border.color = Constants.borderBlueColor
+        element.border.color = Constants.grafieksLightGreenColor
     }
 
     function onDropAreaExited(element){
-        element.border.width = 1;
-        element.border.color = Constants.themeColor
+        element.border.width = Constants.dropEligibleBorderWitdh;
     }
 
     function onDropAreaDropped(element){
-        element.border.width = 1
-        element.border.color = Constants.themeColor
+        element.border.width = Constants.dropEligibleBorderWitdh
 
         var itemType = ReportParamsModel.itemType;
         var itemName = ReportParamsModel.itemName;

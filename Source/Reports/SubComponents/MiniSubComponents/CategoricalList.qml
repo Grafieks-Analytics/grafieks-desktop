@@ -23,6 +23,19 @@ ListView{
     }
 
 
+    function isDropEligible(itemType){
+        if(dataType == ""){
+            return true;
+        }
+        if(dataType && dataType !== itemType){
+            return false;
+        }
+        if(itemType.toLowerCase() === "numerical"){
+            return true;
+        }
+        return false;
+    }
+
     model: categoricalModel
     anchors.top: categoricalHeading.bottom
     anchors.topMargin: 5
@@ -73,7 +86,19 @@ ListView{
                 if (mouseArea.drag.active) {
                     ReportParamsModel.itemName = categoricalName;
                     ReportParamsModel.itemType = itemType;
+                    ReportParamsModel.setXAxisActive(true);
+                    ReportParamsModel.setYAxisActive(true);
+                    if(isDropEligible(itemType)){
+                        ReportParamsModel.setColorByActive(true);
+                    }else{
+                        ReportParamsModel.setColorByActive(false);
+                    }
+                }else{
+                    ReportParamsModel.setXAxisActive(false);
+                    ReportParamsModel.setYAxisActive(false);
+                    ReportParamsModel.setColorByActive(false);
                 }
+
                 categoricalListElement.Drag.drop();
             }
         }
