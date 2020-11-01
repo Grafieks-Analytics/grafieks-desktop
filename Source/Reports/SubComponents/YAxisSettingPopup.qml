@@ -12,7 +12,7 @@ Popup {
     height: 600
     anchors.centerIn: parent
 
-    visible: true
+    visible: false
     modal: true
     padding: 0
     closePolicy: Popup.NoAutoClose
