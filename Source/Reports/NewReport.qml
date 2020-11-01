@@ -354,6 +354,19 @@ Page {
                 background: Rectangle{
                     color: Constants.darkThemeColor
                 }
+                MouseArea{
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.SizeVerCursor
+                    width: parent.width
+
+                    onPositionChanged: {
+
+                        onDragPanel(mouse)
+
+                    }
+
+                }
             }
 
 

@@ -143,51 +143,97 @@ Popup {
                 spacing: 5
 
                 Rectangle{
+                    id: axisMenubutton
                     height: 40
                     width: parent.width
-                    Text {
-                        id: axisMenuText
-                        text: qsTr("Axis")
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.left: parent.left
-                        anchors.leftMargin: 30
-                        font.pixelSize:  Constants.fontCategoryHeader
-                    }
+
                     Rectangle{
-                        anchors.top: axisMenuText.bottom
-                        anchors.topMargin: 10
-                        height: 2
-                        width: parent.width - 30
+                        id: axisMenuRectangle
+                        height: 38
+                        width: parent.width - 40
                         anchors.left: parent.left
-                        anchors.leftMargin: 15
+                        anchors.leftMargin: 20
+                        color: Constants.themeColor
+
+                        Text {
+                            id: axisMenuText
+                            text: qsTr("Axis")
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.left: parent.left
+                            anchors.leftMargin: 30
+                            font.pixelSize:  Constants.fontCategoryHeader
+                        }
+
+                    }
+
+                    Rectangle{
+                        id: borderAxis
+                        anchors.bottom: axisMenubutton.bottom
+                        height: 2
+                        width: parent.width - 40
+                        anchors.left: parent.left
+                        anchors.leftMargin: 20
                         color: Constants.grafieksGreenColor
+                    }
+
+                    MouseArea{
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onEntered: axisMenuRectangle.color =  Constants.darkThemeColor
+                        onExited: axisMenuRectangle.color =  Constants.themeColor
+                        onClicked: {
+                            borderMultipleAxis.visible =  false
+                            borderAxis.visible =  true
+                        }
                     }
                 }
 
                 Rectangle{
+                    id: multipleAxisMenubutton
                     height: 40
                     width: parent.width
-                    Text {
-                        id: multipleAxisMenuText
-                        text: qsTr("Multiple Axis Chart")
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.left: parent.left
-                        anchors.leftMargin: 30
-                        font.pixelSize:  Constants.fontCategoryHeader
-                    }
+
                     Rectangle{
-                        anchors.top: multipleAxisMenuText.bottom
-                        anchors.topMargin: 10
-                        height: 2
-                        width: parent.width - 30
+                        id: multipleAxisMenuRectangle
+                        height: 38
+                        width: parent.width - 40
                         anchors.left: parent.left
-                        anchors.leftMargin: 15
+                        anchors.leftMargin: 20
+                        color: Constants.themeColor
+
+                        Text {
+                            id: multipleAxisMenuText
+                            text: qsTr("Multiple Axis")
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.left: parent.left
+                            anchors.leftMargin: 30
+                            font.pixelSize:  Constants.fontCategoryHeader
+                        }
+
+                    }
+
+                    Rectangle{
+                        id: borderMultipleAxis
+                        anchors.bottom: multipleAxisMenubutton.bottom
+                        height: 2
+                        width: parent.width - 40
+                        anchors.left: parent.left
+                        anchors.leftMargin: 20
                         color: Constants.grafieksGreenColor
                         visible: false
                     }
 
+                    MouseArea{
+                        hoverEnabled: true
+                        anchors.fill: parent
+                        onClicked: {
+                            borderMultipleAxis.visible =  true
+                            borderAxis.visible =  false
+                        }
+                        onEntered: multipleAxisMenuRectangle.color =  Constants.darkThemeColor
+                        onExited: multipleAxisMenuRectangle.color =  Constants.themeColor
+                    }
                 }
-
 
             }
 
@@ -213,7 +259,11 @@ Popup {
             height: parent.height
             width: parent.width - leftMenu.width - menuContentSeparator.width
 
+            Rectangle{
 
+                anchors.fill: parent
+
+            }
 
         }
 
