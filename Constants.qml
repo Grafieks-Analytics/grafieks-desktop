@@ -160,8 +160,11 @@ QtObject {
 
     property string xAxisName: "X Axis"
     property string yAxisName: "Y Axis"
+    property string axisSettingText: "Axis Setting"
 
     property color defaultXAxisColor: "#6CD7A1"
     property color defaultYAxisColor: "#BADCFF"
+
+
     // Report Ends
 }

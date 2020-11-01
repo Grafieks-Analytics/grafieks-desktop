@@ -124,5 +124,6 @@
         <file>Source/Reports/SubComponents/MiniSubComponents/DateList.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/CategoricalList.qml</file>
         <file>Source/Reports/SubComponents/AxisDroppedRectangle.qml</file>
+        <file>Source/Reports/SubComponents/YAxisSettingPopup.qml</file>
     </qresource>
 </RCC>

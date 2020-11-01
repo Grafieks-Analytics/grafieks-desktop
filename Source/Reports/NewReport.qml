@@ -148,6 +148,9 @@ Page {
 
     }
 
+    function openYAxisSettings(){
+        yAxisSettingsPopup.visible = true
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -158,6 +161,9 @@ Page {
     /***********************************************************************************************************************/
     // SubComponents Starts
 
+    YAxisSettingPopup{
+        id: yAxisSettingsPopup
+    }
 
 
     // SubComponents Ends
@@ -291,6 +297,7 @@ Page {
         anchors.left: tool_sep_leftmenubarreports.right
         anchors.top: seperator_title_bar.bottom
         anchors.leftMargin: 0
+        z:1
     }
 
     ToolSeparator{
@@ -326,7 +333,7 @@ Page {
             height: 40
             width: parent.width
             anchors.left: parent.left
-            z:3
+
 
             Rectangle{
                 id: xaxisText
@@ -336,6 +343,7 @@ Page {
                     text: Constants.xAxisName
                     anchors.centerIn: parent
                 }
+                z:1
             }
 
             ToolSeparator{
@@ -355,7 +363,6 @@ Page {
                 width: parent.width - xaxisText.width - 4
                 anchors.left: xaxisText.right
                 anchors.leftMargin: 1
-                z:2
 
                 DropArea{
                     id: xaxisDropArea
@@ -368,7 +375,7 @@ Page {
                 ListView{
 
                     height: parent.height
-                    width: parent.width
+                    width: parent.width - xAxisSettings.width - this.x
                     x:5
                     anchors.top: parent.top
                     anchors.topMargin: 3
@@ -381,15 +388,33 @@ Page {
                     }
                 }
 
-                Image {
-                    source: "/Images/icons/customize.png"
-                    anchors.right: parent.right
-                    anchors.rightMargin: 15
-                    anchors.verticalCenter: parent.verticalCenter
-                    height: 20
-                    width: 20
-                }
+                Rectangle{
 
+                    id: xAxisSettings
+
+                    color: "#ffffff"
+                    height: parent.height - 4
+                    anchors.right: parent.right
+                    anchors.rightMargin: 1
+                    width: 50
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Image {
+                        source: "/Images/icons/customize.png"
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.right: parent.right
+                        anchors.centerIn: parent
+                        height: 20
+                        width: 20
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                // open x axis settings
+                            }
+                        }
+                    }
+
+                }
             }
 
         }
@@ -422,17 +447,17 @@ Page {
                     text: Constants.yAxisName
                     anchors.centerIn: parent
                 }
+                z:1
+            }
 
-                ToolSeparator{
-                    orientation: Qt.Vertical
-                    anchors.left: yaxisText.right
-                    width: 1
-                    height: parent.height
-                    background: Rectangle{
-                        color: Constants.darkThemeColor
-                    }
+            ToolSeparator{
+                orientation: Qt.Vertical
+                anchors.left: yaxisText.right
+                width: 1
+                height: parent.height
+                background: Rectangle{
+                    color: Constants.darkThemeColor
                 }
-
             }
 
             Rectangle{
@@ -453,7 +478,7 @@ Page {
                 ListView{
 
                     height: parent.height
-                    width: parent.width
+                    width: parent.width - yAxisSettings.width - 2*this.x
                     x:5
                     anchors.top: parent.top
                     anchors.topMargin: 3
@@ -466,13 +491,30 @@ Page {
                     }
                 }
 
-                Image {
-                    source: "/Images/icons/customize.png"
+                Rectangle{
+
+                    id: yAxisSettings
+
+                    color: "#ffffff"
+                    height: parent.height - 4
                     anchors.right: parent.right
-                    anchors.rightMargin: 15
+                    anchors.rightMargin: 1
+                    width: 50
                     anchors.verticalCenter: parent.verticalCenter
-                    height: 20
-                    width: 20
+
+                    Image {
+                        source: "/Images/icons/customize.png"
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.right: parent.right
+                        anchors.centerIn: parent
+                        height: 20
+                        width: 20
+                        MouseArea{
+                             anchors.fill: parent
+                             onClicked: openYAxisSettings()
+                        }
+                    }
+
                 }
 
             }
@@ -649,19 +691,14 @@ Page {
                 height: parent.height - (searchRectangle.height + dashboardNameRectangle.height + tabbarQuerymodeller.height)
                 width: parent.width
 
-                RightDataColumn{
-
-                }
+                RightDataColumn{}
 
             }
             // Data Column Ends
 
         }
 
-
-
     }
-
 
     // Right Panel Ends
 }
