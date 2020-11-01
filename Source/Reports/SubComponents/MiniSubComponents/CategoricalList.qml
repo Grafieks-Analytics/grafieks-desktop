@@ -59,7 +59,7 @@ ListView{
 
         Text {
             text: categoricalName
-            width: parent.width - numericalImage.width - menuButton.width - 30
+            width: parent.width - categoricalImage.width - menuButton.width - 30
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: categoricalImage.right
             anchors.leftMargin: 10

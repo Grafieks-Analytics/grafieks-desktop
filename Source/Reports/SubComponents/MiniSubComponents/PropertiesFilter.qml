@@ -197,7 +197,7 @@ Column{
 
             }
 
-        // list view for dropped colors
+            // list view for dropped colors
             ListView{
                 id: colorList
                 height: colorListModel.count*colorBoxHeight + spacingColorList
@@ -227,7 +227,7 @@ Column{
                     }
                 }
             }
-        // list view ends!
+             // list view ends!
 
 
         }

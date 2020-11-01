@@ -23,6 +23,11 @@ Page {
     id: report_desiner_page
     width: parent.width
     property int menu_width: 60
+
+    property int spacingColorList: 5
+    property int colorBoxHeight: 20
+    property int colorListTopMargin: 5
+    property int editImageSize: 16
     property bool xaxisActive: ReportParamsModel.xAxisActive
     property bool yaxisActive: ReportParamsModel.yAxisActive
 
@@ -30,6 +35,13 @@ Page {
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
+    ListModel{
+        id: xAxisListModel
+    }
+
+    ListModel{
+        id: yAxisListModel
+    }
 
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
@@ -121,9 +133,19 @@ Page {
         element.border.width = Constants.dropEligibleBorderWidth
     }
 
-    function onDropAreaDropped(element){
+    function onDropAreaDropped(element,axis){
+
         element.border.width = Constants.dropEligibleBorderWidth
         element.border.color = Constants.themeColor
+
+        var itemName = ReportParamsModel.itemName;
+
+        if(axis === Constants.xAxisName){
+            xAxisListModel.append({itemName: itemName})
+        }else{
+            yAxisListModel.append({itemName: itemName})
+        }
+
     }
 
 
@@ -176,11 +198,9 @@ Page {
 
             height: 30
 
-            TextEdit {
+            TextField{
                 id: report_title_text
-                text: "Report Title"
-                readOnly: true
-                cursorVisible: false
+                placeholderText: "Add Report Title"
                 width:250
                 height: 40
                 anchors.horizontalCenter:parent.horizontalCenter
@@ -189,6 +209,10 @@ Page {
                 verticalAlignment:TextEdit.AlignVCenter
                 Keys.onReturnPressed: {
                     report_title_text.focus = false
+                }
+                background: Rectangle{
+                    color: "transparent"
+                    border.color: "transparent"
                 }
             }
 
@@ -290,7 +314,7 @@ Page {
     Rectangle{
 
         id: axis
-        height: 62
+        height: 82
         width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width
 
         anchors.left: tool_sep_chartFilters.right
@@ -299,16 +323,17 @@ Page {
         // Xaxis starts
         Rectangle{
             id: xaxis
-            height: 30
+            height: 40
             width: parent.width
             anchors.left: parent.left
+            z:3
 
             Rectangle{
                 id: xaxisText
                 width: 100
                 height: parent.height
                 Text {
-                    text: qsTr("X Axis")
+                    text: Constants.xAxisName
                     anchors.centerIn: parent
                 }
             }
@@ -317,6 +342,7 @@ Page {
                 orientation: Qt.Vertical
                 anchors.left: xaxisText.right
                 width: 1
+                height: parent.height
                 background: Rectangle{
                     color: Constants.darkThemeColor
                 }
@@ -329,13 +355,30 @@ Page {
                 width: parent.width - xaxisText.width - 4
                 anchors.left: xaxisText.right
                 anchors.leftMargin: 1
+                z:2
 
                 DropArea{
                     id: xaxisDropArea
                     anchors.fill: parent
-                    onEntered:  onDropAreaEntered(parent,'xaxis')
-                    onExited:  onDropAreaExited(parent,'xaxis')
-                    onDropped: onDropAreaDropped(parent,'xaxis')
+                    onEntered:  onDropAreaEntered(parent,Constants.xAxisName)
+                    onExited:  onDropAreaExited(parent,Constants.xAxisName)
+                    onDropped: onDropAreaDropped(parent,Constants.xAxisName)
+                }
+
+                ListView{
+
+                    height: parent.height
+                    width: parent.width
+                    x:5
+                    anchors.top: parent.top
+                    anchors.topMargin: 3
+                    model: xAxisListModel
+                    orientation: Qt.Horizontal
+                    spacing: spacingColorList
+                    delegate: AxisDroppedRectangle{
+                        textValue: itemName
+                        color: Constants.defaultXAxisColor
+                    }
                 }
 
                 Image {
@@ -365,7 +408,7 @@ Page {
 
         Rectangle{
             id: yaxis
-            height: 30
+            height: 40
             anchors.top: seperatorAxis.bottom
             anchors.left: parent.left
             width: parent.width
@@ -376,7 +419,7 @@ Page {
                 width: 100
                 height: parent.height
                 Text {
-                    text: qsTr("Y Axis")
+                    text: Constants.yAxisName
                     anchors.centerIn: parent
                 }
 
@@ -384,6 +427,7 @@ Page {
                     orientation: Qt.Vertical
                     anchors.left: yaxisText.right
                     width: 1
+                    height: parent.height
                     background: Rectangle{
                         color: Constants.darkThemeColor
                     }
@@ -401,9 +445,25 @@ Page {
                 DropArea{
                     id: yaxisDropArea
                     anchors.fill: parent
-                    onEntered:  onDropAreaEntered(parent,'yaxis')
-                    onExited:  onDropAreaExited(parent,'yaxis')
-                    onDropped: onDropAreaDropped(parent,'yaxis')
+                    onEntered:  onDropAreaEntered(parent,Constants.yAxisName)
+                    onExited:  onDropAreaExited(parent,Constants.yAxisName)
+                    onDropped: onDropAreaDropped(parent,Constants.yAxisName)
+                }
+
+                ListView{
+
+                    height: parent.height
+                    width: parent.width
+                    x:5
+                    anchors.top: parent.top
+                    anchors.topMargin: 3
+                    model: yAxisListModel
+                    orientation: Qt.Horizontal
+                    spacing: spacingColorList
+                    delegate: AxisDroppedRectangle{
+                        textValue: itemName
+                        color: Constants.defaultYAxisColor
+                    }
                 }
 
                 Image {
@@ -593,12 +653,8 @@ Page {
 
                 }
 
-
-
             }
             // Data Column Ends
-
-
 
         }
 
