@@ -11,6 +11,7 @@ class ReportParamsModel: public QObject
     Q_PROPERTY(bool xAxisActive READ xAxisActive WRITE setXAxisActive NOTIFY xAxisActiveChanged)
     Q_PROPERTY(bool yAxisActive READ yAxisActive WRITE setYAxisActive NOTIFY yAxisActiveChanged)
     Q_PROPERTY(bool colorByActive READ colorByActive WRITE setColorByActive NOTIFY colorByActiveChanged)
+    Q_PROPERTY(QString lastDropped READ lastDropped WRITE setLastDropped NOTIFY lastDroppedChanged)
 
     QString m_itemName;
     QString m_itemType;
@@ -20,6 +21,8 @@ class ReportParamsModel: public QObject
     bool m_yAxisActive;
 
     bool m_colorByActive;
+
+    QString m_lastDropped;
 
 public:
     ReportParamsModel();
@@ -32,6 +35,8 @@ public:
 
     bool colorByActive() const;
 
+    QString lastDropped() const;
+
 public slots:
     void setItemName(QString itemName);
     void setItemType(QString itemType);
@@ -41,6 +46,8 @@ public slots:
 
     void setColorByActive(bool colorByActive);
 
+    void setLastDropped(QString lastDropped);
+
 signals:
     void itemNameChanged(QString itemName);
     void itemTypeChanged(QString itemType);
@@ -48,6 +55,7 @@ signals:
     void xAxisActiveChanged(bool xAxisActive);
     void yAxisActiveChanged(bool yAxisActive);
     void colorByActiveChanged(bool colorByActive);
+    void lastDroppedChanged(QString lastDropped);
 };
 
 #endif // REPORTPARAMSMODEL_H

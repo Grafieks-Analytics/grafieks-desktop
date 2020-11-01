@@ -27,10 +27,11 @@ ListView{
     }
 
     function isDropEligible(itemType){
-        if(dataType == ""){
+        var lastDropped = ReportParamsModel.lastDropped;
+        if(!lastDropped){
             return true;
         }
-        if(dataType && dataType !== itemType){
+        if(lastDropped !== itemType){
             return false;
         }
         if(itemType.toLowerCase() === "numerical"){

@@ -73,20 +73,19 @@ Page {
     onXaxisActiveChanged: {
         if(xaxisActive){
             xAxisRectangle.border.color = Constants.grafieksLightGreenColor;
-            xAxisRectangle.border.width = Constants.dropEligibleBorderWitdh;
+            xAxisRectangle.border.width = Constants.dropEligibleBorderWidth;
         }else{
             xAxisRectangle.border.color = "transparent";
-            xAxisRectangle.border.width = Constants.defaultInActiveBorderWitdh;
+            xAxisRectangle.border.width = Constants.dropInActiveBorderWidth;
         }
     }
 
     onYaxisActiveChanged: {
         if(yaxisActive){
             yAxisRectangle.border.color = Constants.grafieksLightGreenColor;
-            yAxisRectangle.border.width = Constants.dropEligibleBorderWitdh;
+            yAxisRectangle.border.width = Constants.dropEligibleBorderWidth;
         }else{
-            yAxisRectangle.border.color = "transparent";
-            yAxisRectangle.border.width = Constants.defaultInActiveBorderWitdh;
+            yAxisRectangle.border.width = Constants.dropInActiveBorderWidth;
         }
     }
 
@@ -115,15 +114,15 @@ Page {
     }
 
     function onDropAreaEntered(element){
-        element.border.width = Constants.dropActiveBorderWitdh
+        element.border.width = Constants.dropActiveBorderWidth
     }
 
     function onDropAreaExited(element){
-        element.border.width = Constants.dropEligibleBorderWitdh
+        element.border.width = Constants.dropEligibleBorderWidth
     }
 
     function onDropAreaDropped(element){
-        element.border.width = Constants.dropEligibleBorderWitdh
+        element.border.width = Constants.dropEligibleBorderWidth
         element.border.color = Constants.themeColor
     }
 

@@ -1,4 +1,6 @@
-import QtQuick 2.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
 
 ListView{
 
@@ -24,10 +26,11 @@ ListView{
 
 
     function isDropEligible(itemType){
-        if(dataType == ""){
+        var lastDropped = ReportParamsModel.lastDropped;
+        if(!lastDropped){
             return true;
         }
-        if(dataType && dataType !== itemType){
+        if(lastDropped !== itemType){
             return false;
         }
         if(itemType.toLowerCase() === "numerical"){

@@ -144,9 +144,9 @@ QtObject {
     property int defaultDroppedReportWidth : 300
     property int defaultDroppedReportHeight : 200
 
-    property int dropActiveBorderWitdh: 2
-    property int dropEligibleBorderWitdh: 1
-    property int dropInActiveBorderWitdh: 0
+    property int dropActiveBorderWidth: 2
+    property int dropEligibleBorderWidth: 1
+    property int dropInActiveBorderWidth: 0
 
     property int reportTypeBlank : 0
     property int reportTypeText: 1

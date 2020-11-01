@@ -30,6 +30,11 @@ bool ReportParamsModel::colorByActive() const
     return m_colorByActive;
 }
 
+QString ReportParamsModel::lastDropped() const
+{
+    return m_lastDropped;
+}
+
 void ReportParamsModel::setItemName(QString itemName)
 {
     if (m_itemName == itemName)
@@ -73,4 +78,13 @@ void ReportParamsModel::setColorByActive(bool colorByActive)
 
     m_colorByActive = colorByActive;
     emit colorByActiveChanged(m_colorByActive);
+}
+
+void ReportParamsModel::setLastDropped(QString lastDropped)
+{
+    if (m_lastDropped == lastDropped)
+        return;
+
+    m_lastDropped = lastDropped;
+    emit lastDroppedChanged(m_lastDropped);
 }

@@ -8,8 +8,6 @@ import "../../../MainSubComponents"
 
 Column{
 
-    property string dataType: "";
-
     id: propertiesFilter
 
     property int leftMargin: 15
@@ -62,10 +60,10 @@ Column{
     onColorByActiveChanged: {
         if(colorByActive){
             allParameter.border.color = Constants.grafieksLightGreenColor;
-            allParameter.border.width = Constants.dropEligibleBorderWitdh;;
+            allParameter.border.width = Constants.dropEligibleBorderWidth;;
         }else{
             allParameter.border.color = Constants.themeColor;
-            allParameter.border.width = Constants.defaultActiveBorderWitdh;
+            allParameter.border.width = Constants.dropActiveBorderWidth;
         }
     }
 
@@ -79,9 +77,8 @@ Column{
     }
 
     function onDropAreaEntered(element){
-        element.border.width = Constants.dropActiveBorderWitdh;
-        var itemType = ReportParamsModel.itemType;
-        if(!isDropEligible(itemType)){
+        element.border.width = Constants.dropActiveBorderWidth;
+        if(!isDropEligible()){
             element.border.color = Constants.redColor
             return
         }
@@ -89,32 +86,40 @@ Column{
     }
 
     function onDropAreaExited(element){
-        element.border.width = Constants.dropEligibleBorderWitdh;
+        element.border.width = Constants.dropEligibleBorderWidth;
+        if(!isDropEligible()){
+            element.border.color = Constants.themeColor
+            return
+        }
     }
 
     function onDropAreaDropped(element){
-        element.border.width = Constants.dropEligibleBorderWitdh
+        element.border.width = Constants.dropEligibleBorderWidth
 
         var itemType = ReportParamsModel.itemType;
         var itemName = ReportParamsModel.itemName;
 
-        if(!isDropEligible(itemType)){
+        if(!isDropEligible()){
+            element.border.color = Constants.themeColor
             return;
-        }
+        }        
 
-        if(isDropEligible(itemType)){
+        if(isDropEligible()){
             colorListModel.append({textValue: itemName})
-            dataType = itemType;
+            ReportParamsModel.lastDropped = itemType;
             return;
         }
 
     }
 
-    function isDropEligible(itemType){
-        if(dataType == ""){
+    function isDropEligible(){
+
+        var itemType = ReportParamsModel.itemType;
+        var lastDropped = ReportParamsModel.lastDropped;
+        if(!lastDropped){
             return true;
         }
-        if(dataType && dataType !== itemType){
+        if(lastDropped !== itemType){
             return false;
         }
         if(itemType.toLowerCase() === "numerical"){
