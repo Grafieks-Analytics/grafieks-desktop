@@ -148,11 +148,11 @@ Rectangle{
     }
 
     ToolSeparator{
-        height: leftMenuBar.height
+        height: leftMenuBar.height+5
         anchors.left: leftMenuContent.right
         anchors.top: parent.top
         padding: 0
-        anchors.topMargin: -5
+        anchors.topMargin: -4
     }
 }
 

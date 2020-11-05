@@ -30,10 +30,6 @@ Page {
 
     ListModel{
         id: dashboardModel
-        ListElement{
-            dashboardName: "Dashboard 1"
-            dashboardId: 0
-        }
     }
 
 
@@ -76,6 +72,7 @@ Page {
 
     Component.onCompleted: {
         column_newdashboard.visible = true
+        dashboardModel.append({"dashboardName" : 'Dashboard 1', 'dashboardId': 0, backgroundColorTest:"white"})
     }
 
     function openDashboardFilters(){
@@ -115,16 +112,53 @@ Page {
         let currentCount = DashboardParamsModel.dashboardCount
         let newCount = currentCount + 1
         let newDashboardName =  "Dashboard "+ newCount
-        dashboardModel.append({"dashboardName" : newDashboardName, dashboardId: currentCount})
+        var previousDashboardIndex = DashboardParamsModel.currentDashboard;
+        var themeColorCopy = Constants.themeColor.toString();
+        dashboardModel.append({"dashboardName" : newDashboardName, 'dashboardId': currentCount})
 
         DashboardParamsModel.createNewDashboard(currentCount)
         DashboardParamsModel.setCurrentDashboard(currentCount)
+        console.log(Constants.themeColor)
+
+        dashboardModel.setProperty(previousDashboardIndex,"backgroundColorTest",themeColorCopy);
         DashboardParamsModel.setDashboardName(currentCount, newDashboardName)
+
+
+
 
     }
 
-    function setCurrentDashboard(dashboardId){
+    function setCurrentDashboard(dashboardId,index){
+        var listContent = dashboardList.contentItem.children
+        var previousDashboardIndex = DashboardParamsModel.currentDashboard;
+        var themeColorCopy = Constants.themeColor.toString();
+        console.log(previousDashboardIndex);
+
+        dashboardModel.setProperty(previousDashboardIndex,"backgroundColorTest",themeColorCopy);
+         dashboardModel.setProperty(index,"backgroundColorTest","white");
+
+
+//        dashboardList.contentItem.children[index].backgroundColor = "red";
+//        for(var i=0; i<dashboardModel.count; i++){
+//            console.log(i);
+//            if(dashboardIdLoop === dashboardId){
+
+//            }else{
+//                dashboardList.contentItem.children[i].backgroundColor = "green";
+//            }
+//        }
+
+//        for(var child in listContent){
+//            var dashboardIdLoop = dashboardModel.get(child).dashboardId;
+//            var dashboardName = dashboardModel.get(child).dashboardName;
+//            console.log('Loop name',dashboardName);
+//            console.log('Text Value',listContent[child].textValue);
+//            console.log('Loop id',dashboardIdLoop)
+//            console.log('clicked',dashboardId)
+//        }
+
         DashboardParamsModel.setCurrentDashboard(dashboardId)
+
     }
 
     function createNewReport(){
@@ -259,6 +293,7 @@ Page {
                 delegate: CustomDashboardNameButton{
                     id: dashboardNameButton
                     textValue: dashboardName
+                    bgColor: (backgroundColorTest?backgroundColorTest:"white")
                     Component.onCompleted: {
                         if(dashboardNameButton.width > 100){
                             dashboardNameButton.width = 100
@@ -270,7 +305,7 @@ Page {
                     MouseArea{
                         anchors.fill: parent
                         acceptedButtons: Qt.LeftButton | Qt.RightButton
-                        onClicked: (mouse.button == Qt.RightButton) ? options.open() : setCurrentDashboard(dashboardId)
+                        onClicked: (mouse.button == Qt.RightButton) ? options.open() : setCurrentDashboard(dashboardId,index)
                     }
 
                     Menu{
@@ -537,12 +572,20 @@ Page {
         width: parent.width - left_menubar.width
         anchors.top: submenu.bottom
         anchors.left: left_menubar.right
+        anchors.leftMargin: -2
+//        anchors.bottom: submenu.bottom
+//        anchors.bottomMargin:  -10
+//                anchors.bottom: dashboard_summary.bottom
+        //        anchors.bottomMargin:  -10
         anchors.horizontalCenter: submenu.horizontalCenter
 
         contentItem: Rectangle {
             implicitWidth: parent.vertical ? 1 : 24
-            implicitHeight: parent.vertical ? 24 : 1
+            implicitHeight: parent.vertical ? 25 : 1
             color: Constants.darkThemeColor
+//            color: "red"
+
+//             anchors.leftMargin: 10
         }
 
     }
@@ -557,7 +600,9 @@ Page {
 
         anchors.left: left_menubar.right
         anchors.top: toolsep1.bottom
-        width: parent.width  - left_menubar.width - column_newdashboard.width
+        anchors.topMargin: -6
+
+        width: parent.width  - left_menubar.width
     }
 
 
@@ -603,7 +648,7 @@ Page {
             width:column_newdashboard.width
             height:column_newdashboard.height
             anchors.top: parent.top
-            anchors.topMargin: 10
+            anchors.topMargin: 3
 
             Rectangle{
                 id: rectangle_newdashboard_right_col1
