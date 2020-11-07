@@ -595,14 +595,16 @@ Page {
 
     DashboardSummary{
         id: dashboard_summary
-        height: parent.height
+//        height: parent.height
 //        width: parent.width
+        height: 600
+        width: 600
 
         anchors.left: left_menubar.right
         anchors.top: toolsep1.bottom
         anchors.topMargin: -6
 
-        width: parent.width  - left_menubar.width
+//        width: parent.width  - left_menubar.width
     }
 
 
