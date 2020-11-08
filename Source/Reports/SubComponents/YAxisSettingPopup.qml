@@ -13,7 +13,7 @@ Popup {
     height: 800
     anchors.centerIn: parent
 
-    visible: true
+    visible: false
     modal: true
     padding: 0
     closePolicy: Popup.NoAutoClose
@@ -70,6 +70,19 @@ Popup {
         popup.visible = false
     }
 
+    function toggleAxisSettings(){
+        borderMultipleAxis.visible =  false
+        borderAxis.visible =  true
+        multipleAxisSettings.visible = false
+        axisSettings.visible = true
+    }
+
+    function toggleMultipleAxissSettings(){
+        borderMultipleAxis.visible =  true
+        borderAxis.visible =  false
+        multipleAxisSettings.visible = true
+        axisSettings.visible = false
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -170,7 +183,7 @@ Popup {
                             text: qsTr("Axis")
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.left: parent.left
-                            anchors.leftMargin: 30
+                            anchors.leftMargin: 10
                             font.pixelSize:  Constants.fontCategoryHeader
                         }
 
@@ -191,10 +204,7 @@ Popup {
                         hoverEnabled: true
                         onEntered: axisMenuRectangle.color =  Constants.darkThemeColor
                         onExited: axisMenuRectangle.color =  Constants.themeColor
-                        onClicked: {
-                            borderMultipleAxis.visible =  false
-                            borderAxis.visible =  true
-                        }
+                        onClicked: toggleAxisSettings()
                     }
                 }
 
@@ -213,10 +223,10 @@ Popup {
 
                         Text {
                             id: multipleAxisMenuText
-                            text: qsTr("Multiple Axis")
+                            text: qsTr("Multiple Axis Chart")
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.left: parent.left
-                            anchors.leftMargin: 30
+                            anchors.leftMargin: 10
                             font.pixelSize:  Constants.fontCategoryHeader
                         }
 
@@ -236,10 +246,7 @@ Popup {
                     MouseArea{
                         hoverEnabled: true
                         anchors.fill: parent
-                        onClicked: {
-                            borderMultipleAxis.visible =  true
-                            borderAxis.visible =  false
-                        }
+                        onClicked: toggleMultipleAxissSettings()
                         onEntered: multipleAxisMenuRectangle.color =  Constants.darkThemeColor
                         onExited: multipleAxisMenuRectangle.color =  Constants.themeColor
                     }
@@ -265,6 +272,7 @@ Popup {
         // Content Starts
 
         Rectangle{
+            id: axisSettings
             anchors.left: menuContentSeparator.right
             height: parent.height
             width: parent.width - leftMenu.width - menuContentSeparator.width
@@ -369,7 +377,7 @@ Popup {
                                         width: parent.width
 
                                         Text {
-                                            text: qsTr("Font Size: 2")
+                                            text: qsTr("Font Size:")
                                             width: parent.width/4
                                             anchors.verticalCenter: parent.verticalCenter
                                         }
@@ -494,7 +502,7 @@ Popup {
                                         width: parent.width
 
                                         Text {
-                                            text: qsTr("Font Size: 2")
+                                            text: qsTr("Font Size:")
                                             width: parent.width/4
                                             anchors.verticalCenter: parent.verticalCenter
                                         }
@@ -637,7 +645,7 @@ Popup {
                                         width: parent.width
 
                                         Text {
-                                            text: qsTr("Font Size: 2")
+                                            text: qsTr("Font Size:")
                                             width: parent.width/4
                                             anchors.verticalCenter: parent.verticalCenter
                                         }
@@ -761,7 +769,7 @@ Popup {
                                         width: parent.width
 
                                         Text {
-                                            text: qsTr("Font Size: 2")
+                                            text: qsTr("Font Size:")
                                             width: parent.width/4
                                             anchors.verticalCenter: parent.verticalCenter
                                         }
@@ -826,6 +834,14 @@ Popup {
 
             }
 
+        }
+
+        Rectangle{
+            id: multipleAxisSettings
+            anchors.left: menuContentSeparator.right
+            height: parent.height
+            width: parent.width - leftMenu.width - menuContentSeparator.width
+            visible: false
         }
 
         // Content Ends
