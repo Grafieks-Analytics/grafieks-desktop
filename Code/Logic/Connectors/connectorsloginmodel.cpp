@@ -53,6 +53,11 @@ void ConnectorsLoginModel::sqliteLogin(QString filename, QString username, QStri
     emit sqliteLoginStatus(response);
 }
 
+void ConnectorsLoginModel::odbcLogin(QString filename, QString username, QString password)
+{
+
+}
+
 QString ConnectorsLoginModel::connectedDB() const
 {
     return m_connectedDB;
