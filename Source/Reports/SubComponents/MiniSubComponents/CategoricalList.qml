@@ -1,4 +1,6 @@
-import QtQuick 2.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
 
 ListView{
 
@@ -23,6 +25,20 @@ ListView{
     }
 
 
+    function isDropEligible(itemType){
+        var lastDropped = ReportParamsModel.lastDropped;
+        if(!lastDropped){
+            return true;
+        }
+        if(lastDropped !== itemType){
+            return false;
+        }
+        if(itemType.toLowerCase() === "numerical"){
+            return true;
+        }
+        return false;
+    }
+
     model: categoricalModel
     anchors.top: categoricalHeading.bottom
     anchors.topMargin: 5
@@ -43,7 +59,7 @@ ListView{
 
         Text {
             text: categoricalName
-            width: parent.width - numericalImage.width - menuButton.width - 30
+            width: parent.width - categoricalImage.width - menuButton.width - 30
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: categoricalImage.right
             anchors.leftMargin: 10
@@ -73,7 +89,19 @@ ListView{
                 if (mouseArea.drag.active) {
                     ReportParamsModel.itemName = categoricalName;
                     ReportParamsModel.itemType = itemType;
+                    ReportParamsModel.setXAxisActive(true);
+                    ReportParamsModel.setYAxisActive(true);
+                    if(isDropEligible(itemType)){
+                        ReportParamsModel.setColorByActive(true);
+                    }else{
+                        ReportParamsModel.setColorByActive(false);
+                    }
+                }else{
+                    ReportParamsModel.setXAxisActive(false);
+                    ReportParamsModel.setYAxisActive(false);
+                    ReportParamsModel.setColorByActive(false);
                 }
+
                 categoricalListElement.Drag.drop();
             }
         }

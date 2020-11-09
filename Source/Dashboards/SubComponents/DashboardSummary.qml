@@ -18,9 +18,15 @@ import com.grafieks.singleton.constants 1.0
 Rectangle {
 
     id: dashboardArea
+    Flickable {
+        contentWidth: 2000
+        ScrollBar.horizontal: ScrollBar { }
+    }
 
     property var rectangles: new Map() // rectangle object
     property var dynamicContainer : Qt.createComponent("./MiniSubComponents/MainContainer.qml");
+
+
 
 
     property int counter: 1

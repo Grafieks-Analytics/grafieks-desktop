@@ -10,10 +10,12 @@ Button{
     property alias textValue: contentItem.text
     property alias fontPointSize: contentItem.font.pointSize
     property alias fontPixelSize: contentItem.font.pixelSize
+    property alias backgroundColor: btnBackground.color
+    property color bgColor;
 
     background: Rectangle{
         id: btnBackground
-        color: customButton.hovered ? Constants.grafieksGreen : Constants.leftDarkColor
+        color: customButton.hovered ? Constants.grafieksGreen : bgColor
     }
 
     contentItem: Text {

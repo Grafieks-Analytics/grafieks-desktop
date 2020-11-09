@@ -9,6 +9,7 @@ import com.grafieks.singleton.constants 1.0
 // when a column is dropped from right side customize
 
 
+
 Item{
 
     id:newItem
@@ -171,6 +172,11 @@ Item{
         }
 
         MouseArea{
+            Component.onCompleted: {
+                console.log("height",mainContainer.parent.height - mainContainer.height - Constants.subMenuWidth)
+                console.log("maincontainerwidth",mainContainer.parent.width)
+
+            }
             height: parent.height-4
             width: parent.width-4
             anchors.centerIn: parent
@@ -185,9 +191,16 @@ Item{
                 target: mainContainer
                 minimumX: Constants.leftMenubarWidth
                 minimumY: 29
-                maximumX: mainContainer.parent.width - mainContainer.width
-                maximumY: mainContainer.parent.height - mainContainer.height - Constants.subMenuWidth
-                smoothed: true
+//                maximumX: (mainContainer.parent.width)
+//                maximumY: mainContainer.parent.height - mainContainer.height - Constants.subMenuWidth
+//                maximumY: mainContainer.parent.height - mainContainer.height - Constants.subMenuWidth
+
+//                 maximumY: Qt.binding(function(){ return (dashboard_summary.height - mainContainer.height + Constants.subMenuWidth) })
+//                 maximumX: Qt.binding(function(){ return (dashboard_summary.width - mainContainer.width + Constants.leftMenubarWidth) })
+
+                maximumY: dashboard_summary.height - mainContainer.height + Constants.subMenuWidth
+                maximumX: dashboard_summary.width - mainContainer.width + Constants.leftMenubarWidth
+
             }
             onClicked:  showCustomizeReport()
             onPressed:  onItemPressed()
@@ -232,6 +245,19 @@ Item{
                         height: 20
                         width: 20
                         source: "/Images/icons/Edit.png"
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: editOptions.open()
+                        }
+                    }
+
+                    Image{
+                        id: resizeReport
+                        height: 20
+                        width: 20
+                        source: "/Images/icons/Width.png"
                         anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea{

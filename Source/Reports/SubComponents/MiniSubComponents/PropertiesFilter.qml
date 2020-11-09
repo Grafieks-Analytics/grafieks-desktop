@@ -8,8 +8,6 @@ import "../../../MainSubComponents"
 
 Column{
 
-    property string dataType: "";
-
     id: propertiesFilter
 
     property int leftMargin: 15
@@ -18,6 +16,7 @@ Column{
     property int colorBoxHeight: 20
     property int colorListTopMargin: 5
     property int editImageSize: 16
+    property bool colorByActive: ReportParamsModel.colorByActive;
 
     spacing: 4
 
@@ -58,46 +57,69 @@ Column{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    onColorByActiveChanged: {
+        if(colorByActive){
+            allParameter.border.color = Constants.grafieksLightGreenColor;
+            allParameter.border.width = Constants.dropEligibleBorderWidth;;
+        }else{
+            allParameter.border.color = Constants.themeColor;
+            allParameter.border.width = Constants.dropActiveBorderWidth;
+        }
+    }
+
+
+    Component.onCompleted: {
+
+        ReportParamsModel.colorByActive = false;
+        allParameter.border.color =  Constants.themeColor
+        allParameter.border.width =  2
+
+    }
 
     function onDropAreaEntered(element){
-        element.border.width = 2;
-        var itemType = ReportParamsModel.itemType;
-        if(!isDropEligible(itemType)){
-            element.border.color = Constants.redThemeColor
+        element.border.width = Constants.dropActiveBorderWidth;
+        if(!isDropEligible()){
+            element.border.color = Constants.redColor
             return
         }
-        element.border.color = Constants.borderBlueColor
+        element.border.color = Constants.grafieksLightGreenColor
     }
 
     function onDropAreaExited(element){
-        element.border.width = 1;
-        element.border.color = Constants.themeColor
+        element.border.width = Constants.dropEligibleBorderWidth;
+        if(!isDropEligible()){
+            element.border.color = Constants.themeColor
+            return
+        }
     }
 
     function onDropAreaDropped(element){
-        element.border.width = 1
-        element.border.color = Constants.themeColor
+        element.border.width = Constants.dropEligibleBorderWidth
 
         var itemType = ReportParamsModel.itemType;
         var itemName = ReportParamsModel.itemName;
 
-        if(!isDropEligible(itemType)){
+        if(!isDropEligible()){
+            element.border.color = Constants.themeColor
             return;
-        }
+        }        
 
-        if(isDropEligible(itemType)){
+        if(isDropEligible()){
             colorListModel.append({textValue: itemName})
-            dataType = itemType;
+            ReportParamsModel.lastDropped = itemType;
             return;
         }
 
     }
 
-    function isDropEligible(itemType){
-        if(dataType == ""){
+    function isDropEligible(){
+
+        var itemType = ReportParamsModel.itemType;
+        var lastDropped = ReportParamsModel.lastDropped;
+        if(!lastDropped){
             return true;
         }
-        if(dataType && dataType !== itemType){
+        if(lastDropped !== itemType){
             return false;
         }
         if(itemType.toLowerCase() === "numerical"){
@@ -175,7 +197,7 @@ Column{
 
             }
 
-        // list view for dropped colors
+            // list view for dropped colors
             ListView{
                 id: colorList
                 height: colorListModel.count*colorBoxHeight + spacingColorList
@@ -205,7 +227,7 @@ Column{
                     }
                 }
             }
-        // list view ends!
+             // list view ends!
 
 
         }

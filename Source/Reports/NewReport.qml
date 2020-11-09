@@ -24,10 +24,24 @@ Page {
     width: parent.width
     property int menu_width: 60
 
+    property int spacingColorList: 5
+    property int colorBoxHeight: 20
+    property int colorListTopMargin: 5
+    property int editImageSize: 16
+    property bool xaxisActive: ReportParamsModel.xAxisActive
+    property bool yaxisActive: ReportParamsModel.yAxisActive
+
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
+    ListModel{
+        id: xAxisListModel
+    }
+
+    ListModel{
+        id: yAxisListModel
+    }
 
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
@@ -61,8 +75,32 @@ Page {
     Component.onCompleted: {
 
         // Connect signal and slots
+        ReportParamsModel.xAxisActive = false;
+        ReportParamsModel.yAxisActive = false;
+        ReportParamsModel.colorByActive = false;
 
     }
+
+
+    onXaxisActiveChanged: {
+        if(xaxisActive){
+            xAxisRectangle.border.color = Constants.grafieksLightGreenColor;
+            xAxisRectangle.border.width = Constants.dropEligibleBorderWidth;
+        }else{
+            xAxisRectangle.border.color = "transparent";
+            xAxisRectangle.border.width = Constants.dropInActiveBorderWidth;
+        }
+    }
+
+    onYaxisActiveChanged: {
+        if(yaxisActive){
+            yAxisRectangle.border.color = Constants.grafieksLightGreenColor;
+            yAxisRectangle.border.width = Constants.dropEligibleBorderWidth;
+        }else{
+            yAxisRectangle.border.width = Constants.dropInActiveBorderWidth;
+        }
+    }
+
 
     // Slot Function
     // For changing the chart on clicking chart icons
@@ -73,12 +111,12 @@ Page {
 
     function addReport(){
         // Add report to dashboard
-        stacklayout_home.currentIndex = 6
+        stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
     }
 
     function cancelReport(){
         // Back to dashboard
-        stacklayout_home.currentIndex = 6
+        stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
     }
 
     function focusReportTitle(){
@@ -88,20 +126,31 @@ Page {
     }
 
     function onDropAreaEntered(element){
-        element.border.width = 2
-        element.border.color = Constants.borderBlueColor
+        element.border.width = Constants.dropActiveBorderWidth
     }
 
     function onDropAreaExited(element){
-        element.border.width = 1
-        element.border.color = Constants.themeColor
+        element.border.width = Constants.dropEligibleBorderWidth
     }
 
-    function onDropAreaDropped(element){
-        element.border.width = 1
+    function onDropAreaDropped(element,axis){
+
+        element.border.width = Constants.dropEligibleBorderWidth
         element.border.color = Constants.themeColor
+
+        var itemName = ReportParamsModel.itemName;
+
+        if(axis === Constants.xAxisName){
+            xAxisListModel.append({itemName: itemName})
+        }else{
+            yAxisListModel.append({itemName: itemName})
+        }
+
     }
 
+    function openYAxisSettings(){
+        yAxisSettingsPopup.visible = true
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -112,6 +161,9 @@ Page {
     /***********************************************************************************************************************/
     // SubComponents Starts
 
+    YAxisSettingPopup{
+        id: yAxisSettingsPopup
+    }
 
 
     // SubComponents Ends
@@ -152,11 +204,9 @@ Page {
 
             height: 30
 
-            TextEdit {
+            TextField{
                 id: report_title_text
-                text: "Report Title"
-                readOnly: true
-                cursorVisible: false
+                placeholderText: "Add Report Title"
                 width:250
                 height: 40
                 anchors.horizontalCenter:parent.horizontalCenter
@@ -165,6 +215,10 @@ Page {
                 verticalAlignment:TextEdit.AlignVCenter
                 Keys.onReturnPressed: {
                     report_title_text.focus = false
+                }
+                background: Rectangle{
+                    color: "transparent"
+                    border.color: "transparent"
                 }
             }
 
@@ -243,6 +297,7 @@ Page {
         anchors.left: tool_sep_leftmenubarreports.right
         anchors.top: seperator_title_bar.bottom
         anchors.leftMargin: 0
+        z:1
     }
 
     ToolSeparator{
@@ -266,39 +321,57 @@ Page {
     Rectangle{
 
         id: axis
-        height: 62
+        height: 82
         width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width
 
         anchors.left: tool_sep_chartFilters.right
         anchors.top: seperator_title_bar.bottom
 
+        // Xaxis starts
         Rectangle{
             id: xaxis
-            height: 30
+            height: 40
             width: parent.width
             anchors.left: parent.left
+
 
             Rectangle{
                 id: xaxisText
                 width: 100
                 height: parent.height
                 Text {
-                    text: qsTr("X Axis")
+                    text: Constants.xAxisName
                     anchors.centerIn: parent
                 }
+                z:1
             }
 
             ToolSeparator{
                 orientation: Qt.Vertical
                 anchors.left: xaxisText.right
                 width: 1
+                height: parent.height
                 background: Rectangle{
                     color: Constants.darkThemeColor
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.SizeVerCursor
+                    width: parent.width
+
+                    onPositionChanged: {
+
+                        onDragPanel(mouse)
+
+                    }
+
                 }
             }
 
 
             Rectangle{
+                id: xAxisRectangle
                 height: parent.height
                 width: parent.width - xaxisText.width - 4
                 anchors.left: xaxisText.right
@@ -307,15 +380,60 @@ Page {
                 DropArea{
                     id: xaxisDropArea
                     anchors.fill: parent
-                    onEntered:  onDropAreaEntered(parent,'xaxis')
-                    onExited:  onDropAreaExited(parent,'xaxis')
-                    onDropped: onDropAreaDropped(parent,'xaxis')
+                    onEntered:  onDropAreaEntered(parent,Constants.xAxisName)
+                    onExited:  onDropAreaExited(parent,Constants.xAxisName)
+                    onDropped: onDropAreaDropped(parent,Constants.xAxisName)
                 }
 
+                ListView{
+
+                    height: parent.height
+                    width: parent.width - xAxisSettings.width - this.x
+                    x:5
+                    anchors.top: parent.top
+                    anchors.topMargin: 3
+                    model: xAxisListModel
+                    orientation: Qt.Horizontal
+                    spacing: spacingColorList
+                    delegate: AxisDroppedRectangle{
+                        textValue: itemName
+                        color: Constants.defaultXAxisColor
+                    }
+                }
+
+                Rectangle{
+
+                    id: xAxisSettings
+
+                    color: "#ffffff"
+                    height: parent.height - 4
+                    anchors.right: parent.right
+                    anchors.rightMargin: 1
+                    width: 50
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Image {
+                        source: "/Images/icons/customize.png"
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.right: parent.right
+                        anchors.centerIn: parent
+                        height: 20
+                        width: 20
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                // open x axis settings
+                            }
+                        }
+                    }
+
+                }
             }
 
         }
+        // xaxis ends
 
+        //
         ToolSeparator{
             id: seperatorAxis
             height: 1
@@ -328,7 +446,7 @@ Page {
 
         Rectangle{
             id: yaxis
-            height: 30
+            height: 40
             anchors.top: seperatorAxis.bottom
             anchors.left: parent.left
             width: parent.width
@@ -339,21 +457,24 @@ Page {
                 width: 100
                 height: parent.height
                 Text {
-                    text: qsTr("Y Axis")
+                    text: Constants.yAxisName
                     anchors.centerIn: parent
                 }
+                z:1
+            }
 
-                ToolSeparator{
-                    orientation: Qt.Vertical
-                    anchors.left: yaxisText.right
-                    width: 1
-                    background: Rectangle{
-                        color: Constants.darkThemeColor
-                    }
+            ToolSeparator{
+                orientation: Qt.Vertical
+                anchors.left: yaxisText.right
+                width: 1
+                height: parent.height
+                background: Rectangle{
+                    color: Constants.darkThemeColor
                 }
             }
 
             Rectangle{
+                id: yAxisRectangle
                 height: parent.height
                 width: parent.width - yaxisText.width - 4
                 anchors.left: yaxisText.right
@@ -362,9 +483,51 @@ Page {
                 DropArea{
                     id: yaxisDropArea
                     anchors.fill: parent
-                    onEntered:  onDropAreaEntered(parent,'yaxis')
-                    onExited:  onDropAreaExited(parent,'yaxis')
-                    onDropped: onDropAreaDropped(parent,'yaxis')
+                    onEntered:  onDropAreaEntered(parent,Constants.yAxisName)
+                    onExited:  onDropAreaExited(parent,Constants.yAxisName)
+                    onDropped: onDropAreaDropped(parent,Constants.yAxisName)
+                }
+
+                ListView{
+
+                    height: parent.height
+                    width: parent.width - yAxisSettings.width - 2*this.x
+                    x:5
+                    anchors.top: parent.top
+                    anchors.topMargin: 3
+                    model: yAxisListModel
+                    orientation: Qt.Horizontal
+                    spacing: spacingColorList
+                    delegate: AxisDroppedRectangle{
+                        textValue: itemName
+                        color: Constants.defaultYAxisColor
+                    }
+                }
+
+                Rectangle{
+
+                    id: yAxisSettings
+
+                    color: "#ffffff"
+                    height: parent.height - 4
+                    anchors.right: parent.right
+                    anchors.rightMargin: 1
+                    width: 50
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Image {
+                        source: "/Images/icons/customize.png"
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.right: parent.right
+                        anchors.centerIn: parent
+                        height: 20
+                        width: 20
+                        MouseArea{
+                             anchors.fill: parent
+                             onClicked: openYAxisSettings()
+                        }
+                    }
+
                 }
 
             }
@@ -541,23 +704,14 @@ Page {
                 height: parent.height - (searchRectangle.height + dashboardNameRectangle.height + tabbarQuerymodeller.height)
                 width: parent.width
 
-                RightDataColumn{
-
-                }
-
-
+                RightDataColumn{}
 
             }
             // Data Column Ends
 
-
-
         }
 
-
-
     }
-
 
     // Right Panel Ends
 }

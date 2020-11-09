@@ -10,14 +10,15 @@
 	</head>
 
 	<body>
+<!--                <center><div id="vis" style="background-color:red"></div></center>-->
                 <center><div id="vis"></div></center>
-		<script type="text/javascript">
-			var config = {
-				// default view background color
-				// covers the entire view component
+                <script type="text/javascript">
+                        var config = {
+                                // default view background color
+                                // covers the entire view component
                                 background: "#fff",
-				axis: {
-					labelFont: "serif",
+                                axis: {
+                labelFont: "serif",
 					labelFontSize: 16,
 					tickWidth: 3,
 					tickColor: "red"
@@ -25,9 +26,10 @@
 			};
 
 			var spec = {
+
 				$schema: "https://vega.github.io/schema/vega/v5.json",
-				width: 800,
-				height: 400,
+                                width: 800,
+                                height: 400,
 				padding: 5,
 
 				data: [
@@ -91,7 +93,7 @@
 
 				axes: [
 					{
-						orient: "bottom",
+                                                orient: "bottom",
 						scale: "x",
 						zindex: 1,
 						grid: true,

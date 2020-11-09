@@ -23,12 +23,14 @@ Rectangle{
         let dashboardHeight = heightId.value
         let dashboardId = DashboardParamsModel.currentDashboard
         DashboardParamsModel.setDashboardDimensions(dashboardId, value, dashboardHeight)
+        dashboard_summary.width=value
     }
     function onHeightValueChanged(value){
 
         let dashboardWidth = widthId.value
         let dashboardId = DashboardParamsModel.currentDashboard
         DashboardParamsModel.setDashboardDimensions(dashboardId, dashboardWidth, value)
+        dashboard_summary.height=value
     }
 
     Column{
@@ -58,7 +60,9 @@ Rectangle{
                 }
                 CustomSpinBox {
                     id: widthId
-                    value: 0
+                    value: 600
+                    minimumValue :100
+                    maximumValue:5000
                     onValueChanged: onWidthValueChanged(value)
                 }
             }
@@ -72,7 +76,9 @@ Rectangle{
                 }
                 CustomSpinBox {
                     id: heightId
-                    value: 0
+                    value: 600
+                    minimumValue :100
+                    maximumValue:5000
                     onValueChanged: onHeightValueChanged(value)
                 }
             }

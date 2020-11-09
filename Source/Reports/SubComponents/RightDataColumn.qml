@@ -1,14 +1,16 @@
-import QtQuick 2.0
-
 import QtQuick 2.15
+import QtQuick.Controls 2.15
 import com.grafieks.singleton.constants 1.0
 
 import "./MiniSubComponents";
 
 Column{
+
+    property int leftMargin: 10
+
     anchors.fill: parent
     anchors.left: parent.left
-    anchors.leftMargin: 10
+    anchors.leftMargin: leftMargin
     spacing: 15
 
     /***********************************************************************************************************************/
@@ -21,8 +23,6 @@ Column{
 
     /***********************************************************************************************************************/
     // SIGNALS STARTS
-
-    signal getItemName();
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -68,8 +68,19 @@ Column{
 
     }
 
+    ToolSeparator{
+
+        orientation: Qt.Horizontal;
+        width: parent.width + leftMargin
+        height: 1
+        x:-leftMargin
+        background: Rectangle{
+            color: Constants.darkThemeColor
+        }
+    }
+
     Rectangle{
-        height: parent.height/3 - 5
+        height: parent.height/3 - 6
         width: parent.width
 
         Text {
@@ -84,8 +95,20 @@ Column{
 
     }
 
+
+    ToolSeparator{
+        orientation: Qt.Horizontal;
+        width: parent.width + leftMargin
+        height: 1
+        x:-leftMargin
+        background: Rectangle{
+            color: Constants.darkThemeColor
+        }
+    }
+
+
     Rectangle{
-        height: parent.height/3 - 5
+        height: parent.height/3 - 6
         width: parent.width
 
         Text {

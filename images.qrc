@@ -117,5 +117,6 @@
         <file>Images/icons/charts/condegram.png</file>
         <file>Images/icons/charts/chord_diagram.png</file>
         <file>Images/icons/charts/gauge_chart.png</file>
+        <file>Images/icons/Width.png</file>
     </qresource>
 </RCC>
