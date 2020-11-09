@@ -123,11 +123,8 @@
         <file>Source/Reports/SubComponents/MiniSubComponents/NumericalList.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/DateList.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/CategoricalList.qml</file>
-<<<<<<< HEAD
         <file>Source/Connectors/SubComponents/OdbcConnection.qml</file>
-=======
         <file>Source/Reports/SubComponents/AxisDroppedRectangle.qml</file>
         <file>Source/Reports/SubComponents/YAxisSettingPopup.qml</file>
->>>>>>> 9de45709b88f1da8ce164a9f3658f3cc48d7e335
     </qresource>
 </RCC>
