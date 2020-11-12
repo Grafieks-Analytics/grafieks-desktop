@@ -12,7 +12,7 @@ windeployqt --qmldir <path-to-app-qml-files> <path-to-app-binary>
 
 > Remember to add **windeployqt** to Windows path
 
-## To overcome Slow QT download issue
+## To overcome Slow QT download issue (obsolete app)
 
 Download the binary from [https://github.com/JKSH/QtSdkRepoChooser/releases](https://github.com/JKSH/QtSdkRepoChooser/releases) and select the fastest mirror. Use the mirror in the Maintenance tool or Qt Online installer settings `user defined repository`
 
