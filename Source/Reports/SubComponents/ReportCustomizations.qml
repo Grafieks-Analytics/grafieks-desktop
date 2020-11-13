@@ -63,13 +63,18 @@ Item{
             ]
         }
 
-
         ListElement {
             categoryName: "Reference Line"
             collapsed: false
             subItems: [
                 ListElement { itemName: "Add Reference Line" }
             ]
+        }
+
+        ListElement {
+            categoryName: "Total"
+            collapsed: false
+            subItems: []
         }
 
     }
@@ -161,6 +166,11 @@ Item{
         CustomizeLegend{}
     }
 
+
+    Component{
+        id: totalComponent
+        CustomizeTotal{}
+    }
 
     Component {
         id: subItemColumnDelegate
@@ -284,6 +294,7 @@ Item{
                             case "properties": return propertiesComponent
                             case "reference line": return referenceLineComponent
                             case "legend": return legendComponent
+                            case "total": return totalComponent
                         }
 
                     }

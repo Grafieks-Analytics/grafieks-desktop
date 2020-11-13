@@ -64,6 +64,7 @@ QtObject {
     property color lightGrayTextColor: "#454545"
     property color dropAreaHighlightColor: "ivory"
 
+    property color defaultColorDialogColor: "#000000"
 
 
     // Standard Font Sizes
@@ -161,6 +162,8 @@ QtObject {
     property string xAxisName: "X Axis"
     property string yAxisName: "Y Axis"
     property string axisSettingText: "Axis Setting"
+    property string reportEditColorPopup: "Edit Color"
+
 
     property color defaultXAxisColor: "#6CD7A1"
     property color defaultYAxisColor: "#BADCFF"

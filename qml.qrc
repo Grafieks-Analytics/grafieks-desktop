@@ -125,5 +125,8 @@
         <file>Source/Reports/SubComponents/MiniSubComponents/CategoricalList.qml</file>
         <file>Source/Reports/SubComponents/AxisDroppedRectangle.qml</file>
         <file>Source/Reports/SubComponents/YAxisSettingPopup.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/CustomizeTotal.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/AxisSettings.qml</file>
+        <file>Source/Reports/SubComponents/EditColorPopup.qml</file>
     </qresource>
 </RCC>
