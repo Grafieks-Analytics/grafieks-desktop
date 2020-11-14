@@ -31,6 +31,7 @@
 #include "Code/Logic/DataModeller/columnlistmodel.h"
 #include "Code/Logic/DataModeller/filtercategoricallistmodel.h"
 #include "Code/Logic/DataModeller/filterdatelistmodel.h"
+#include "Code/Logic/DataModeller/filternumericallistmodel.h"
 
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
@@ -174,6 +175,7 @@ int main(int argc, char *argv[])
     ColumnListModel columnListModel;
     FilterCategoricalListModel filterCategoricalListModel;
     FilterDateListModel filterDateListModel;
+    FilterNumericalListModel filterNumericalListModel;
 
     GeneralParamsModel generalParamsModel;
     QuerySplitter querySplitter;
@@ -211,6 +213,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(&filterCategoricalListModel, &FilterCategoricalListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
     QObject::connect(&filterDateListModel, &FilterDateListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
+    QObject::connect(&filterNumericalListModel, &FilterNumericalListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
 
     // SIGNAL & SLOTS ENDS
     /***********************************************************************************************************************/
@@ -265,6 +268,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("SchedulerDS", scheduler);
     engine.rootContext()->setContextProperty("FilterCategoricalListModel", &filterCategoricalListModel);
     engine.rootContext()->setContextProperty("FilterDateListModel",&filterDateListModel);
+    engine.rootContext()->setContextProperty("FilterNumericalListModel",&filterNumericalListModel);
     engine.rootContext()->setContextProperty("QuerySplitter", &querySplitter);
     engine.rootContext()->setContextProperty("GeneralParamsModel", &generalParamsModel);
 

@@ -48,25 +48,61 @@ Column{
     // JAVASCRIPT FUNCTION STARTS
 
     function onLastXChecked(){
+
+        var value = lastXRadioTextField.text
+        DSParamsModel.setSubCategory("Month")
+        DSParamsModel.addToJoinValue(mapKey, value)
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = true
     }
     function onNextXChecked(){
+
+        var value = nextXRadioTextField.text
+        DSParamsModel.setSubCategory("Month")
+        DSParamsModel.addToJoinValue(mapKey, value)
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = true
         lastXRadioTextField.focus = false
     }
 
     function onThisChecked(){
+
+        var tmpDate = new Date()
+        console.log(tmpDate.getMonth())
+        DSParamsModel.setSubCategory("Month")
+        DSParamsModel.addToJoinValue(mapKey, lastMonth.toString())
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
     }
 
     function onLastChecked(){
+
+        var tmpDate = new Date()
+        console.log(tmpDate.getMonth())
+        var lastMonth = tmpDate.getMonth() - 1
+        DSParamsModel.setSubCategory("Month")
+        DSParamsModel.addToJoinValue(mapKey, lastMonth.toString())
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
     }
 
     function onNextChecked(){
+
+        var tmpDate = new Date()
+        var nextMonth = tmpDate.getMonth() + 1
+        DSParamsModel.addToJoinValue(mapKey, nextMonth.toString())
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
     }
@@ -194,7 +230,15 @@ Column{
             width: 80
             id:lastXRadioTextField
             anchors.left: lastXRadio.right
-            placeholderText: "Month"
+        }
+        Text{
+            height: 30
+            width : 80
+            text : "Month"
+            anchors.leftMargin: 5
+            anchors.top : parent.top
+            anchors.topMargin: 5
+            anchors.left:lastXRadioTextField.right
         }
 
     }
@@ -227,8 +271,15 @@ Column{
             height: 30
             width: 80
             anchors.left: nextXRadio.right
-
-            placeholderText: "Month"
+        }
+        Text{
+            height: 30
+            width : 80
+            text : "Month"
+            anchors.leftMargin: 5
+            anchors.top : parent.top
+            anchors.topMargin: 5
+            anchors.left:nextXRadioTextField.right
         }
 
     }
