@@ -12,7 +12,7 @@ Column{
     anchors.left: parent.left
     anchors.leftMargin: 80
     anchors.topMargin: 30
-
+    property var weekDays: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -48,25 +48,74 @@ Column{
     // JAVASCRIPT FUNCTION STARTS
 
     function onLastXChecked(){
+
+        var value = lastXRadioTextField.text
+        DSParamsModel.setSubCategory("Day")
+        DSParamsModel.addToJoinValue(mapKey, value)
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = true
     }
     function onNextXChecked(){
+
+        var value = nextXRadioTextField.text
+        DSParamsModel.setSubCategory("Day")
+        DSParamsModel.addToJoinValue(mapKey, value)
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = true
         lastXRadioTextField.focus = false
     }
 
     function onThisChecked(){
+
+        var tmpDate = new Date()
+        var day = tmpDate.getDay()
+        var newValue = weekDays[day]
+        DSParamsModel.setSubCategory("Day")
+        DSParamsModel.addToJoinValue(mapKey, newValue)
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
     }
 
     function onLastChecked(){
+
+        var tmpDate = new Date()
+        var day = tmpDate.getDay()
+        if(day === 0)
+            day = 6
+        else
+            day = day - 1
+        var newValue = weekDays[day]
+        DSParamsModel.setSubCategory("Day")
+        DSParamsModel.addToJoinValue(mapKey, newValue)
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
     }
 
     function onNextChecked(){
+
+        var tmpDate = new Date()
+        var day = tmpDate.getDay()
+        if(day === 6)
+            day = 0
+        else
+            day = day + 1
+        var newValue = weekDays[day]
+        DSParamsModel.setSubCategory("Day")
+        DSParamsModel.addToJoinValue(mapKey, newValue)
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
     }
@@ -194,7 +243,15 @@ Column{
             width: 80
             id:lastXRadioTextField
             anchors.left: lastXRadio.right
-            placeholderText: "Day"
+        }
+        Text{
+            height: 30
+            width : 80
+            text : "Day"
+            anchors.leftMargin: 5
+            anchors.top : parent.top
+            anchors.topMargin: 5
+            anchors.left:lastXRadioTextField.right
         }
 
     }
@@ -227,8 +284,15 @@ Column{
             height: 30
             width: 80
             anchors.left: nextXRadio.right
-
-            placeholderText: "Day"
+        }
+        Text{
+            height: 30
+            width : 80
+            text : "Day"
+            anchors.leftMargin: 5
+            anchors.top : parent.top
+            anchors.topMargin: 5
+            anchors.left:nextXRadioTextField.right
         }
 
     }

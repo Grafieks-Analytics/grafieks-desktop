@@ -103,6 +103,11 @@ QtObject {
     property string inRelation: "IN"
     property string equalRelation: "="
     property string notEqualRelation: "!="
+    property string betweenRelation: "BETWEEN"
+    property string smallerThanRelation: "<"
+    property string greaterThanRelation: ">"
+    property string smallerThanEqualRelation: "<="
+    property string greaterThanEqualRelation: ">="
 
     property string innerJoin: "INNER JOIN"
     property string fullJoin: "FULL JOIN"

@@ -21,7 +21,7 @@ Rectangle{
     width: parent.width - 40
     x:20
     y:10
-    //    anchors.top:  fullExtactRadioBtn.bottom
+    anchors.top:  fullExtactRadioBtn.bottom
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
 
@@ -333,7 +333,7 @@ Rectangle{
         Column{
 
             id: multiSelectRadioColumn
-            //            anchors.top: selectTypeRadioBtn.top
+            anchors.top: selectTypeRadioBtn.top
 
             padding: 10
             leftPadding: 30

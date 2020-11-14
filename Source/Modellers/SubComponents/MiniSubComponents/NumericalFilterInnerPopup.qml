@@ -29,6 +29,9 @@ Rectangle{
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
 
+    readonly property string mapKey: "0"
+    property var acceptedValues:["Equal", "Not Equal To", "Smaller Than", "Greater Than", "Equal or Smaller Than", "Equal or Greater Than", "Between"]
+
 
 
     /***********************************************************************************************************************/
@@ -90,6 +93,55 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    function slotEditMode(){
+        topContent.visible = true
+    }
+
+    function getNewRelation(tmpRelation){
+
+        let newRelation = ""
+
+        switch(tmpRelation){
+
+        case acceptedValues[0]:
+            newRelation = Constants.equalRelation
+            break
+
+        case acceptedValues[1]:
+            newRelation = Constants.notEqualRelation
+            break
+
+        case acceptedValues[2]:
+            newRelation = Constants.smallerThanRelation
+            break
+
+        case acceptedValues[3]:
+            newRelation = Constants.greaterThanRelation
+            break
+
+        case acceptedValues[4]:
+            newRelation = Constants.smallerThanEqualRelation
+            break
+
+        case acceptedValues[5]:
+            newRelation = Constants.greaterThanEqualRelation
+            break
+
+        case acceptedValues[6]:
+
+            newRelation = Constants.betweenRelation
+            break
+        }
+        return newRelation
+    }
+
+    function onNumericalInput(value, tmpRelation){
+
+        let relation = getNewRelation(tmpRelation)
+        DSParamsModel.addToJoinValue(mapKey, value)
+        DSParamsModel.addToJoinRelation(mapKey, relation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, tmpRelation)
+    }
 
     function onExludeCheckStateChanged(checked){
         DSParamsModel.setExclude(checked)
@@ -224,7 +276,24 @@ Rectangle{
             }
 
 
+            CustomTextBox{
+                id: textField
+                placeholderText: "Enter Text"
+                boxWidth: 200
+                boxHeight: 30
+                //width : 100
+
+                anchors{
+                    left: selectOption.right
+                    leftMargin: 100
+                }
+                onTextChanged: onNumericalInput(textField.text, selectOption.textValue)
+            }
+
+
         }
+
+        /********* DO NOT DELETE **************************
 
         Rectangle{
             id: numericalTextRow
@@ -251,10 +320,12 @@ Rectangle{
                     color: "transparent"
 
                     TextField {
+                        id : textField
                         placeholderText: "Enter Text"
                         anchors.centerIn: parent
                         width: parent.width - 10
                         height: 30
+                        onTextChanged: onNumericalInput(textField.text, selectOption.textValue)
                     }
                 }
 
@@ -303,6 +374,7 @@ Rectangle{
 
 
         }
+        ****************************************************/
 
     }
 
