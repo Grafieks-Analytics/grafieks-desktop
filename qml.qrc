@@ -128,5 +128,6 @@
         <file>Source/Reports/SubComponents/MiniSubComponents/CustomizeTotal.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/AxisSettings.qml</file>
         <file>Source/Reports/SubComponents/EditColorPopup.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/ColorSchemeRow.qml</file>
     </qresource>
 </RCC>

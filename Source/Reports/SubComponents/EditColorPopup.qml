@@ -37,6 +37,41 @@ Popup {
         }
     }
 
+    ListModel{
+        id: colorSchemeList
+        ListElement{
+            schemeName: "test 1"
+            allColors:[
+                ListElement {
+                    colorName: "blue"
+                },
+                ListElement {
+                    colorName: "green"
+                },
+                ListElement {
+                    colorName: "red"
+                }
+            ]
+        }
+        ListElement{
+            schemeName: "test 2"
+            allColors:[
+                ListElement {
+                    colorName: "purple"
+                },
+                ListElement {
+                    colorName: "black"
+                },
+                ListElement {
+                    colorName: "yellow"
+                },
+                ListElement {
+                    colorName: "pink"
+                }
+            ]
+        }
+    }
+
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
@@ -203,8 +238,8 @@ Popup {
                 ListView{
                     anchors.fill: parent
                     model: dataItemList
-                    spacing: 4
-                    topMargin: 10
+                    spacing: 10
+                    topMargin: 15
                     delegate: Row{
 
                         height: 20
@@ -229,6 +264,7 @@ Popup {
                                 text: dataItemName
                                 anchors.left: colorBox.right
                                 anchors.leftMargin: 10
+                                anchors.verticalCenter: parent.verticalCenter
                             }
 
                         }
@@ -243,19 +279,52 @@ Popup {
             width: parent.width*2/3
             height: parent.height - parent.padding
             Rectangle{
-                id: colorSchemeList
+                id: colorSchemeListRectangle
                 height: 30
                 width: parent.width
                 Text {
-                    text: qsTr("Select Color Item")
+                    text: qsTr("Select Color Scheme")
                     anchors.verticalCenter: parent.verticalCenter
                 }
             }
             Rectangle{
-                height: parent.height - colorSchemeList.height
+                height: parent.height - colorSchemeListRectangle.height
                 width: parent.width
                 border.color: Constants.borderBlueColor
                 border.width: 2
+
+                ListView{
+                    anchors.fill: parent
+                    model: colorSchemeList
+                    spacing: 10
+                    topMargin: 15
+                    leftMargin: 15
+                    rightMargin: 15
+
+                    delegate: Rectangle{
+                        height: 30
+                        width: parent.width
+
+                        ListView{
+
+                            id: listView
+                            height: parent.height
+                            width: parent.width
+
+                            orientation: ListView.Horizontal
+                            model: allColors
+                            delegate: Rectangle{
+
+                                height: 30
+                                width: 30
+                                color: colorName
+
+                            }
+                        }
+                    }
+
+                }
+
             }
         }
 
