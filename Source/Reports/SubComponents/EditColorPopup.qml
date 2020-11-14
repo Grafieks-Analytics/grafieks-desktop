@@ -12,10 +12,10 @@ Popup {
 
     id: editPopup
     width: parent.width * 0.5
-    height: 800
+    height: 600
     anchors.centerIn: parent
 
-    visible: true
+    visible: false
     modal: true
     padding: 0
     closePolicy: Popup.NoAutoClose
@@ -40,35 +40,34 @@ Popup {
     ListModel{
         id: colorSchemeList
         ListElement{
-            schemeName: "test 1"
-            allColors:[
-                ListElement {
-                    colorName: "blue"
-                },
-                ListElement {
-                    colorName: "green"
-                },
-                ListElement {
-                    colorName: "red"
-                }
-            ]
+            schemeName: "category10"
         }
         ListElement{
-            schemeName: "test 2"
-            allColors:[
-                ListElement {
-                    colorName: "purple"
-                },
-                ListElement {
-                    colorName: "black"
-                },
-                ListElement {
-                    colorName: "yellow"
-                },
-                ListElement {
-                    colorName: "pink"
-                }
-            ]
+            schemeName: "Accent"
+        }
+        ListElement{
+            schemeName: "Dark2"
+        }
+        ListElement{
+            schemeName: "Paired"
+        }
+        ListElement{
+            schemeName: "Pastel1"
+        }
+        ListElement{
+            schemeName: "Pastel2"
+        }
+        ListElement{
+            schemeName: "Set1"
+        }
+        ListElement{
+            schemeName: "Set2"
+        }
+        ListElement{
+            schemeName: "Set3"
+        }
+        ListElement{
+            schemeName: "Tableau10"
         }
     }
 
@@ -294,33 +293,23 @@ Popup {
                 border.width: 2
 
                 ListView{
-                    anchors.fill: parent
+
+                    height: parent.height
+                    width: parent.width - 2*this.leftMargin
                     model: colorSchemeList
-                    spacing: 10
+                    spacing: 12
                     topMargin: 15
                     leftMargin: 15
-                    rightMargin: 15
 
                     delegate: Rectangle{
                         height: 30
                         width: parent.width
-
-                        ListView{
-
-                            id: listView
+                        Image {
                             height: parent.height
                             width: parent.width
-
-                            orientation: ListView.Horizontal
-                            model: allColors
-                            delegate: Rectangle{
-
-                                height: 30
-                                width: 30
-                                color: colorName
-
-                            }
+                            source: "/Images/icons/reports/"+schemeName
                         }
+
                     }
 
                 }
