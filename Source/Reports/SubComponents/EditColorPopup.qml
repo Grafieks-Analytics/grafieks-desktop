@@ -10,12 +10,12 @@ import "./MiniSubComponents";
 
 Popup {
 
-    id: popup
+    id: editPopup
     width: parent.width * 0.5
     height: 800
     anchors.centerIn: parent
 
-    visible: false
+    visible: true
     modal: true
     padding: 0
     closePolicy: Popup.NoAutoClose
@@ -25,6 +25,17 @@ Popup {
     }
 
 
+    ListModel{
+        id: dataItemList
+        ListElement{
+            colorValue: "blue"
+            dataItemName: "Total Quality"
+        }
+        ListElement{
+            colorValue: "green"
+            dataItemName: "Total Discount"
+        }
+    }
 
     /***********************************************************************************************************************/
     // SIGNALS STARTS
@@ -53,7 +64,7 @@ Popup {
 
 
     function onCancelClicked(){
-        popup.visible = false
+        editPopup.visible = false
     }
 
     function toggleAxisSettings(){
@@ -163,6 +174,109 @@ Popup {
 
     // Popup Header Ends
 
+    Row{
+        id: popupContent
+        anchors.top: header.bottom
+        width: parent.width - this.padding * 2 - this.spacing
+        height: parent.height - header.height - footer.height
+        padding: 20
+        spacing: 20
 
+        Column{
+            width: parent.width/3
+            height: parent.height - parent.padding
+            Rectangle{
+                id: dataItemListRectangle
+                height: 30
+                width: parent.width
+                Text {
+                    text: qsTr("Select Data Item")
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+            }
+            Rectangle{
+                height: parent.height - dataItemListRectangle.height
+                width: parent.width
+                border.color: Constants.borderBlueColor
+                border.width: 2
+
+                ListView{
+                    anchors.fill: parent
+                    model: dataItemList
+                    spacing: 4
+                    topMargin: 10
+                    delegate: Row{
+
+                        height: 20
+                        width: parent.width
+                        leftPadding: 15
+
+
+                        Rectangle{
+                            height: 20
+                            width: parent.width - parent.leftPadding - 10
+
+                            Rectangle{
+                                id: colorBox
+                                anchors.left: parent.left
+                                height: 20
+                                width: 20
+                                color: colorValue
+                            }
+
+                            Text {
+                                id: text
+                                text: dataItemName
+                                anchors.left: colorBox.right
+                                anchors.leftMargin: 10
+                            }
+
+                        }
+
+
+                    }
+                }
+            }
+        }
+
+        Column{
+            width: parent.width*2/3
+            height: parent.height - parent.padding
+            Rectangle{
+                id: colorSchemeList
+                height: 30
+                width: parent.width
+                Text {
+                    text: qsTr("Select Color Item")
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+            }
+            Rectangle{
+                height: parent.height - colorSchemeList.height
+                width: parent.width
+                border.color: Constants.borderBlueColor
+                border.width: 2
+            }
+        }
+
+
+    }
+
+
+    Rectangle{
+        id: footer
+        anchors.top: popupContent.bottom
+        height: 60
+        width: parent.width
+
+        CustomButton{
+            anchors.top: parent.top
+            anchors.topMargin: 20
+            anchors.right: parent.right
+            anchors.rightMargin: 20
+            textValue: "Apply"
+        }
+
+    }
 
 }

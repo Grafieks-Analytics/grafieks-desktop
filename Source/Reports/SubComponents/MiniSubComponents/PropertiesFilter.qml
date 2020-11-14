@@ -132,6 +132,10 @@ Column{
         console.log('Position change!!');
     }
 
+    function openEditColorPopup(){
+        editColorPopup.visible = true
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -140,7 +144,6 @@ Column{
 
     /***********************************************************************************************************************/
     // SubComponents Starts
-
 
 
     // SubComponents Ends
@@ -168,10 +171,18 @@ Column{
             font.pixelSize: Constants.fontCategoryHeaderSmall
             text: "Color By"
         }
-        MouseArea{
-            anchors.fill: parent
-            onClicked: {
-                console.log('Okay')
+        Image {
+            height: editImageSize
+            width: editImageSize
+            source: "/Images/icons/Edit_20.png"
+            anchors.top: parent.top
+            anchors.topMargin: 5
+            anchors.right: parent.right
+            anchors.rightMargin: leftMargin
+
+            MouseArea{
+                anchors.fill: parent
+                onClicked: openEditColorPopup()
             }
         }
 
