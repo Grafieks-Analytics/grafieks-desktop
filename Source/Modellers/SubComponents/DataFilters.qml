@@ -373,6 +373,7 @@ Popup {
         else if(DSParamsModel.section === "date")
         {
             FilterDateListModel.setDateFormatMap(DSParamsModel.getDateFormatMap())
+            FilterDateListModel.setTimeFrameMap(DSParamsModel.getTimeFrameMap())
             FilterDateListModel.callQueryModel(tmpSql)
         }
         else

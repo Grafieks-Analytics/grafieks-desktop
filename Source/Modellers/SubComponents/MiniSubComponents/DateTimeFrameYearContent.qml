@@ -53,8 +53,20 @@ Column{
     function onLastXChecked(){
 
         var value = lastXRadioTextField.text
+        var newValue = Number(value)
+        var tmpDate = new Date()
+        var thisYear = tmpDate.getFullYear()
+        var tmpYear = thisYear
+        var lastXYears = []
+
+        for(let i = 0 ; i < newValue; i++){
+            tmpYear = tmpYear - 1
+            lastXYears.push(tmpYear)
+        }
+
+        DSParamsModel.setTimeFrame("Last " + value + " Year", lastXYears.toString())
         DSParamsModel.setSubCategory("Year")
-        DSParamsModel.addToJoinValue(mapKey, value)
+        DSParamsModel.addToJoinValue(mapKey, "Last " + value + " Year")
         DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
 
@@ -64,8 +76,20 @@ Column{
     function onNextXChecked(){
 
         var value = nextXRadioTextField.text
+        var newValue = Number(value)
+        var tmpDate = new Date()
+        var thisYear = tmpDate.getFullYear()
+        var tmpYear = thisYear
+        var nextXYears = []
+
+        for(let i = 0 ; i < newValue; i++){
+            tmpYear = tmpYear + 1
+            nextXYears.push(tmpYear)
+        }
+
+        DSParamsModel.setTimeFrame("Next " + value + " Year", nextXYears.toString())
         DSParamsModel.setSubCategory("Year")
-        DSParamsModel.addToJoinValue(mapKey, value)
+        DSParamsModel.addToJoinValue(mapKey, "Next " + value + " Year")
         DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
 
@@ -77,8 +101,10 @@ Column{
 
         var tmpDate = new Date()
         var thisYear = tmpDate.getFullYear()
+
+        DSParamsModel.setTimeFrame("This Year", thisYear.toString())
         DSParamsModel.setSubCategory("Year")
-        DSParamsModel.addToJoinValue(mapKey, thisYear.toString())
+        DSParamsModel.addToJoinValue(mapKey, "This Year")
         DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
 
@@ -90,8 +116,10 @@ Column{
 
         var tmpDate = new Date()
         var lastYear = tmpDate.getFullYear() - 1
-        DSParamsModel.setSubCategory("Year")
-        DSParamsModel.addToJoinValue(mapKey, lastYear.toString())
+
+        DSParamsModel.setTimeFrame("Last Year", lastYear.toString())
+        DSParamsModel.setSubCategory("Year")    
+        DSParamsModel.addToJoinValue(mapKey, "Last Year")
         DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
 
@@ -103,8 +131,10 @@ Column{
 
         var tmpDate = new Date()
         var nextYear = tmpDate.getFullYear() + 1
+
+        DSParamsModel.setTimeFrame("Next Year", nextYear.toString())
         DSParamsModel.setSubCategory("Year")
-        DSParamsModel.addToJoinValue(mapKey, nextYear.toString())
+        DSParamsModel.addToJoinValue(mapKey, "Next Year")
         DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
 

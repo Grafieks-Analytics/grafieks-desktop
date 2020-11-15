@@ -284,13 +284,34 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
 
             QString subCategory = filter->subCategory();
 
-            if(subCategory == "Year.Radio")
-                newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), filter->value()+"%", filter->exclude(), filter->includeNull());
-            else if(subCategory == "Year.inputRadio.next"){
+            if(subCategory == "Year"){
+                QString newValue = this->timeFrameMap[filter->value()].toString();
+                QStringList yearValues = newValue.split(",");
+                QString year;
+                if(yearValues.length() <= 1){
+                    foreach(year, yearValues){
+                        if(firstValue){
+                            firstValue = false;
+                            newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), year + "%", filter->exclude(), filter->includeNull());
+                        }
+                        else{
+                            newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), year + "%", filter->exclude(), filter->includeNull());
+                        }
 
-            }
-            else if(subCategory == "Year.inputRadio.last"){
-
+                    }
+                }
+                else{
+                    if(firstValue){
+                        firstValue = false;
+                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), yearValues[0] + "%", filter->exclude(), filter->includeNull());
+                    }
+                    else{
+                         newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), yearValues[0] + "%", filter->exclude(), filter->includeNull());
+                    }
+                    for(int i = 1; i < yearValues.length(); i++){
+                        newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), yearValues[i] + "%", filter->exclude(), filter->includeNull());
+                    }
+                }
             }
             else if(subCategory == "Quarter"){
 
@@ -392,6 +413,11 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
 void FilterDateListModel::setDateFormatMap(QVariantMap dateFormatMap)
 {
     this->dateFormatMap = dateFormatMap;
+}
+
+void FilterDateListModel::setTimeFrameMap(QVariantMap timeFrameMap)
+{
+    this->timeFrameMap = timeFrameMap;
 }
 
 
