@@ -150,6 +150,25 @@ Item{
 
     function toggleFullScreen(){
         DashboardParamsModel.setCurrentReport(newItem.objectName)
+
+        if(mainContainer.width === parent.width-left_menubar.width && mainContainer.height === parent.height-5)
+        {
+            mainContainer.width = Constants.defaultDroppedReportWidth
+            mainContainer.height = Constants.defaultDroppedReportHeight
+           fullScreenReport.source= "/Images/icons/zoom_in_new.png"
+
+        }
+        else{
+            mainContainer.width= Qt.binding(function(){
+                return parent.width-left_menubar.width })
+            mainContainer.height= Qt.binding(function(){
+                return parent.height-5 })
+            mainContainer.y=0
+            mainContainer.x=0
+
+             fullScreenReport.source= "/Images/icons/zoom_out_new.png"
+
+        }
     }
 
 
@@ -216,63 +235,30 @@ Item{
 
                     Image{
                         id: editReport
-                        height: 20
-                        width: 20
+                        height: 18
+                        width: 18
                         source: "/Images/icons/Edit.png"
                         anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea{
                             anchors.fill: parent
-                            onClicked:  editOptions.open()
+                            onClicked: showTextEditor()
                         }
                     }
 
                     Image {
                         id: fullScreenReport
-                        height: 22
-                        width: 22
-                        source: "/Images/icons/fullscreen.png"
+                        height: 16
+                        width: 16
+                        source: "/Images/icons/close black.png"
                         anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea{
                             anchors.fill: parent
-                            onClicked:  toggleFullScreen()
+
+                            onClicked: destroyElement()
                         }
                     }
-
-                }
-
-                Row{
-
-                    anchors.left: parent.right
-                    anchors.top: menuOptions.bottom
-                    width: parent.width
-                    height: 100
-
-                    Item {
-                        id: name
-                        anchors.left:menuOptions.left
-
-                        x: -editOptions.width
-
-                        Menu{
-                            id: editOptions
-
-                            MenuItem {
-                                text: qsTr("Edit")
-                                onTriggered: showTextEditor()
-                                onHoveredChanged: showMenus()
-                            }
-
-                            MenuItem {
-                                text: qsTr("Delete")
-                                onTriggered: destroyElement()
-                                onHoveredChanged: showMenus()
-                            }
-                        }
-
-                    }
-
                 }
 
             }
@@ -290,10 +276,11 @@ Item{
             hoverEnabled: true
             drag{
                 target: mainContainer
-                minimumX: Constants.leftMenubarWidth
-                minimumY: 29
-                maximumX: mainContainer.parent.width - mainContainer.width
-                maximumY: mainContainer.parent.height - mainContainer.height - Constants.subMenuWidth
+                minimumX: 0
+                minimumY: 0
+                maximumY: dashboard_summary.height- mainContainer.height
+                maximumX: dashboard_summary.width- mainContainer.width
+
                 smoothed: true
             }
             onClicked:  showCustomizeReport()

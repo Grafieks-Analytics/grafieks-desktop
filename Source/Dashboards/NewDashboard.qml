@@ -25,6 +25,7 @@ Page {
     property int menu_width: 60
 
 
+
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
@@ -226,6 +227,8 @@ Page {
         height: 22.5
         width: parent.width - menu_width + 11
         x: menu_width - 11
+
+
 
 
         // Add new Dashboard Button Starts
@@ -583,7 +586,6 @@ Page {
             implicitWidth: parent.vertical ? 1 : 24
             implicitHeight: parent.vertical ? 25 : 1
             color: Constants.darkThemeColor
-//            color: "red"
 
 //             anchors.leftMargin: 10
         }
@@ -592,22 +594,37 @@ Page {
 
     // Center Panel Starts
 
+Rectangle{
+    color:Constants.themeColor
+    anchors.left: left_menubar.right
+    anchors.top: toolsep1.bottom
+    anchors.topMargin: -6
+    height: parent.height
+    width:parent.width
 
     DashboardSummary{
         id: dashboard_summary
 //        height: parent.height
 //        width: parent.width
-        height: 600
-        width: 600
+        height: 800
+        width: 1280
 
-        anchors.left: left_menubar.right
-        anchors.top: toolsep1.bottom
-        anchors.topMargin: -6
+        Text{
+            id:hintText
+            text: "Add Reports and Widgets Here"
+            anchors.verticalCenter: parent.verticalCenter
+             anchors.horizontalCenter: parent.horizontalCenter
+             color: Constants.grayColor
+        }
+
+//        anchors.left: left_menubar.right
+//        anchors.top: toolsep1.bottom
+//        anchors.topMargin: -6
 
 //        width: parent.width  - left_menubar.width
     }
 
-
+}
     // Center Panel Ends
 
 
@@ -625,6 +642,7 @@ Page {
         spacing: 50
 
         visible: false
+
 
         z:99999999
 

@@ -178,29 +178,17 @@ Item{
 
                     visible: hoverStatus
 
-                    Image{
-                        id: editReport
-                        height: 20
-                        width: 20
-                        source: "/Images/icons/Edit.png"
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        MouseArea{
-                            anchors.fill: parent
-                            onClicked:  editOptions.open()
-                        }
-                    }
-
                     Image {
                         id: fullScreenReport
-                        height: 22
-                        width: 22
-                        source: "/Images/icons/fullscreen.png"
+                        height: 16
+                        width: 16
+                        source: "/Images/icons/close black.png"
                         anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea{
                             anchors.fill: parent
-                            onClicked:  toggleFullScreen()
+
+                            onClicked: destroyElement()
                         }
                     }
 
@@ -255,10 +243,10 @@ Item{
             hoverEnabled: true
             drag{
                 target: mainContainer
-                minimumX: Constants.leftMenubarWidth
-                minimumY: 29
-                maximumX: mainContainer.parent.width - mainContainer.width
-                maximumY: mainContainer.parent.height - mainContainer.height - Constants.subMenuWidth
+                minimumX: 0
+                minimumY: 0
+                maximumY: dashboard_summary.height- mainContainer.height
+                maximumX: dashboard_summary.width- mainContainer.width
                 smoothed: true
             }
 

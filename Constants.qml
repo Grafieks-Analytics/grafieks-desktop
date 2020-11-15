@@ -63,6 +63,7 @@ QtObject {
 
     property color lightGrayTextColor: "#454545"
     property color dropAreaHighlightColor: "ivory"
+    property color dashboardDefaultBackgroundColor: "white"
 
 
 
