@@ -1,5 +1,5 @@
-#ifndef FILTERDATELISTMODEL_H
-#define FILTERDATELISTMODEL_H
+#ifndef FILTERNUMERICALLISTMODEL_H
+#define FILTERNUMERICALLISTMODEL_H
 
 #include <QAbstractListModel>
 #include <QVariant>
@@ -8,22 +8,21 @@
 
 #include <typeinfo>
 
-#include "filterdatelist.h"
+#include "filternumericallist.h"
 #include "../General/querysplitter.h"
 
-class FilterDateListModel : public QAbstractListModel
+class FilterNumericalListModel : public QAbstractListModel
 {
     Q_OBJECT
 
     int counter;
     QuerySplitter mQuerySplitter;
-    QList <FilterDateList *> mFilter;
+    QList <FilterNumericalList *> mFilter;
     QStringList sqlComparisonOperators;
-    QVariantMap dateFormatMap;
-    QVariantMap timeFrameMap;
+
 
 public:
-    explicit FilterDateListModel(QObject *parent = nullptr);
+    explicit FilterNumericalListModel(QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
@@ -37,11 +36,7 @@ public:
     Q_INVOKABLE void updateFilter(int FilterIndex, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString slug = "", QString value = "", bool includeNull = true, bool exclude = false);
     Q_INVOKABLE void callQueryModel(QString tmpSql);
 
-    Q_INVOKABLE void setDateFormatMap(QVariantMap dateFormatMap);
-    Q_INVOKABLE void setTimeFrameMap(QVariantMap timeFrameMap);
-
-    void addFilterList(FilterDateList * filter);
-    QString getFilteredValue(QString val);
+    void addFilterList(FilterNumericalList * filter);
 
 
     enum Roles{
@@ -69,6 +64,4 @@ signals:
 
 };
 
-#endif // FILTERDATELISTMODEL_H
-
-
+#endif // FILTERNUMERICALLISTMODEL_H

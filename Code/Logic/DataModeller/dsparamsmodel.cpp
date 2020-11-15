@@ -665,6 +665,18 @@ QVariantMap DSParamsModel::getDateFormatMap()
       return output;
 }
 
+void DSParamsModel::setTimeFrame(QString dummy, QString actual)
+{
+    this->timeFrameMap.insert(dummy, actual);
+}
+
+QVariantMap DSParamsModel::getTimeFrameMap()
+{
+    QVariantMap output;
+    output = this->timeFrameMap;
+    return output;
+}
+
 int DSParamsModel::currentTab() const
 {
     return m_currentTab;

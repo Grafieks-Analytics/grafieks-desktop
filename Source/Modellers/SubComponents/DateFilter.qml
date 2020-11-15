@@ -54,7 +54,8 @@ Popup {
     // SIGNALS STARTS
 
     signal subCategoryEditMode(string subCategory)
-    signal signalWildCardEditData(string relation, string slug, string value)
+    signal signalCalendarEditData()
+    signal signalTimeFrameEditData()
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -77,7 +78,8 @@ Popup {
     // JAVASCRIPT FUNCTION STARTS
     Component.onCompleted: {
         dateFilterPopup.subCategoryEditMode.connect(listContent.slotEditModeSubCategory)
-       // categoricalFilterPopup.signalWildCardEditData.connect(wildcardContent.slotWildCardEditData)
+        dateFilterPopup.signalCalendarEditData.connect(calendarContent.slotEditMode())
+        dateFilterPopup.signalTimeFrameEditData.connect(dateTimeFrameContent.slostEditMode())
     }
 
     // SLOT function
@@ -89,34 +91,33 @@ Popup {
             case Constants.dateMainListType:
 
                 listContent.visible = true
-               // wildcardContent.visible = false
-                //topContent.visible = false
-
+                calendarContent.visible = false
+                dateTimeFrameContent.visible = false
                 listRadio.checked = true
 
                 dateFilterPopup.subCategoryEditMode(subCategory)
 
                 break
 
-            case Constants.categoryMainWildCardType:
+            case Constants.dateMainCalendarType:
 
                 listContent.visible = false
-                wildcardContent.visible = true
-                topContent.visible = false
+                calendarContent.visible = true
+                dateTimeFrameContent.visible = false
+                dateRadio.checked = true
 
-                wildcardRadio.checked = true
-
-                //categoricalFilterPopup.signalWildCardEditData(relation, slug, value)
+                dateFilterPopup.signalCalendarEditData()
 
                 break
 
-            case Constants.categoryMainTopType:
+            case Constants.dateMainTimeFrameType:
 
                 listContent.visible = false
-                wildcardContent.visible = false
-                topContent.visible = true
-
+                calendarContent.visible = false
+                dateTimeFrameContent.visible = true
                 topRadio.checked = true
+
+                dateFilterPopup.signalTimeFrameEditData(dateTimeFrameContent)
 
                 break
             }
@@ -174,12 +175,17 @@ Popup {
             break
 
         case Constants.dateMainTimeFrameType:
+            singleRelation = joinRelation[0]
+            singleValue = joinValue[0]
+            singleSlug = joinSlug[0]
+            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, filterIndex)
             break
 
         default:
             break
         }
 
+        DSParamsModel.setMode(Constants.modeCreate)
         // Reset all DSParams
         //DSParamsModel.resetFilter();
 
@@ -211,10 +217,8 @@ Popup {
         //DSParamsModel.resetFilter();
         DSParamsModel.setCategory(Constants.dateMainListType)
 
-        // For list category type
-        // The db WHERE relation can only be IN / NOT IN ARRAY type
-        // Except when "Select All" checked.
-        // Then Relation will be LIKE
+        // For list date type
+        // The db WHERE relation can only be LIKE / NOT LIKE ARRAY type
 
         DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
     }
@@ -222,12 +226,19 @@ Popup {
         listContent.visible = false
         calendarContent.visible = true
         dateTimeFrameContent.visible = false
+
+        DSParamsModel.setCategory(Constants.dateMainCalendarType)
+        DSParamsModel.addToJoinRelation(mapKey, Constants.betweenRelation)
     }
 
     function onTimeFrameClicked(){
         listContent.visible = false
         calendarContent.visible = false
         dateTimeFrameContent.visible = true
+
+
+        DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
     }
 
 

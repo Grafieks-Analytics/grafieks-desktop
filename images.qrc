@@ -128,5 +128,15 @@
         <file>Images/icons/view grey.png</file>
         <file>Images/icons/zoom in grey.png</file>
         <file>Images/icons/zoom out grey.png</file>
+        <file>Images/icons/reports/Accent.png</file>
+        <file>Images/icons/reports/category10.png</file>
+        <file>Images/icons/reports/Dark2.png</file>
+        <file>Images/icons/reports/Paired.png</file>
+        <file>Images/icons/reports/Pastel1.png</file>
+        <file>Images/icons/reports/Pastel2.png</file>
+        <file>Images/icons/reports/Set1.png</file>
+        <file>Images/icons/reports/Set2.png</file>
+        <file>Images/icons/reports/Set3.png</file>
+        <file>Images/icons/reports/Tableau10.png</file>
     </qresource>
 </RCC>

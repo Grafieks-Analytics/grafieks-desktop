@@ -165,6 +165,9 @@ Page {
         id: yAxisSettingsPopup
     }
 
+    EditColorPopup{
+        id: editColorPopup
+    }
 
     // SubComponents Ends
     /***********************************************************************************************************************/

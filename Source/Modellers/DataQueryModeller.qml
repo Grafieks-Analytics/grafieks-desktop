@@ -67,7 +67,13 @@ Page {
             filterNumber.text = FilterCategoricalListModel.rowCount()
         }
     }
+    Connections{
+        target: FilterDateListModel
 
+        function onRowCountChanged(){
+            filterNumber.text = FilterDateListModel.rowCount()
+        }
+    }
 
 
 

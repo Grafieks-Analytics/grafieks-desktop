@@ -227,6 +227,8 @@ Popup {
         if(tabBarOpen === Constants.categoricalTab){
 
             // Fire the signal for show specific category
+            DSParamsModel.setSection(Constants.categoricalTab)
+            DSParamsModel.setCategory(Constants.categoryMainListType)
             popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, "", "", "")
 
             categoricalFilterPopup.visible = true
@@ -237,6 +239,8 @@ Popup {
         else if(tabBarOpen === Constants.dateTab){
 
             // Fire the signal for show specific category
+            DSParamsModel.setSection(Constants.dateTab)
+            DSParamsModel.setCategory(Constants.dateMainListType)
             popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, "", "", "")
 
             categoricalFilterPopup.visible = false
@@ -247,6 +251,7 @@ Popup {
         else if(tabBarOpen === Constants.numericalTab){
 
             // Fire the signal for show specific category
+            DSParamsModel.setSection(Constants.numericalTab)
             popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, "", "", "")
 
             categoricalFilterPopup.visible = false
@@ -257,6 +262,7 @@ Popup {
         else if(tabBarOpen === Constants.groupTab){
 
             // Fire the signal for show specific category
+            DSParamsModel.setSection(groupTab)
             popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, "", "", "")
 
             categoricalFilterPopup.visible = false
@@ -364,10 +370,15 @@ Popup {
 
         if(DSParamsModel.section === "categorical")
             FilterCategoricalListModel.callQueryModel(tmpSql)
-        else
+        else if(DSParamsModel.section === "date")
         {
             FilterDateListModel.setDateFormatMap(DSParamsModel.getDateFormatMap())
+            FilterDateListModel.setTimeFrameMap(DSParamsModel.getTimeFrameMap())
             FilterDateListModel.callQueryModel(tmpSql)
+        }
+        else
+        {
+            FilterNumericalListModel.callQueryModel(tmpSql)
         }
     }
     function onCancelClicked(){

@@ -6,7 +6,8 @@ import com.grafieks.singleton.constants 1.0
 
 ComboBox{
     id:control
-
+    height: 30
+    width: 200
     background: Rectangle{
         color: Constants.whiteColor
         radius: Constants.radiusNumber

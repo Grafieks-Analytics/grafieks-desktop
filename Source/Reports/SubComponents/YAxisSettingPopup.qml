@@ -1,15 +1,18 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
 
+import "../../MainSubComponents";
+import "./MiniSubComponents";
 
 Popup {
 
     id: popup
     width: parent.width * 0.5
-    height: 600
+    height: 800
     anchors.centerIn: parent
 
     visible: false
@@ -21,14 +24,6 @@ Popup {
         color: Constants.whiteColor
     }
 
-
-
-    /***********************************************************************************************************************/
-    // LIST MODEL STARTS
-
-
-    // LIST MODEL ENDS
-    /***********************************************************************************************************************/
 
 
     /***********************************************************************************************************************/
@@ -56,10 +51,37 @@ Popup {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+
     function onCancelClicked(){
         popup.visible = false
     }
 
+    function toggleAxisSettings(){
+        borderMultipleAxis.visible =  false
+        borderAxis.visible =  true
+        multipleAxisSettings.visible = false
+        axisSettings.visible = true
+    }
+
+    function toggleMultipleAxissSettings(){
+        borderMultipleAxis.visible =  true
+        borderAxis.visible =  false
+        multipleAxisSettings.visible = true
+        axisSettings.visible = false
+    }
+
+    function openColorDialog(dialogName){
+        switch(dialogName){
+        case "xAxisLegend": xAxisLegendColorDialog.open();
+            break;
+        case "xAxisTickMark": xAxisTickMarkColorDialog.open();
+            break;
+        case "yAxisLegend": yAxisLegendColorDialog.open();
+            break;
+        case "yAxisTickMark": yAxisTickMarkColorDialog.open();
+            break;
+        }
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -70,6 +92,21 @@ Popup {
     /***********************************************************************************************************************/
     // SubComponents Starts
 
+    ColorDialog{
+        id: xAxisLegendColorDialog
+    }
+
+    ColorDialog{
+        id: xAxisTickMarkColorDialog
+    }
+
+    ColorDialog{
+        id: yAxisLegendColorDialog
+    }
+
+    ColorDialog{
+        id: yAxisTickMarkColorDialog
+    }
 
 
     // SubComponents Ends
@@ -81,6 +118,8 @@ Popup {
 
     /***********************************************************************************************************************/
     // Page Design Starts
+
+
 
 
 
@@ -160,7 +199,7 @@ Popup {
                             text: qsTr("Axis")
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.left: parent.left
-                            anchors.leftMargin: 30
+                            anchors.leftMargin: 10
                             font.pixelSize:  Constants.fontCategoryHeader
                         }
 
@@ -181,10 +220,7 @@ Popup {
                         hoverEnabled: true
                         onEntered: axisMenuRectangle.color =  Constants.darkThemeColor
                         onExited: axisMenuRectangle.color =  Constants.themeColor
-                        onClicked: {
-                            borderMultipleAxis.visible =  false
-                            borderAxis.visible =  true
-                        }
+                        onClicked: toggleAxisSettings()
                     }
                 }
 
@@ -203,10 +239,10 @@ Popup {
 
                         Text {
                             id: multipleAxisMenuText
-                            text: qsTr("Multiple Axis")
+                            text: qsTr("Multiple Axis Chart")
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.left: parent.left
-                            anchors.leftMargin: 30
+                            anchors.leftMargin: 10
                             font.pixelSize:  Constants.fontCategoryHeader
                         }
 
@@ -226,10 +262,7 @@ Popup {
                     MouseArea{
                         hoverEnabled: true
                         anchors.fill: parent
-                        onClicked: {
-                            borderMultipleAxis.visible =  true
-                            borderAxis.visible =  false
-                        }
+                        onClicked: toggleMultipleAxissSettings()
                         onEntered: multipleAxisMenuRectangle.color =  Constants.darkThemeColor
                         onExited: multipleAxisMenuRectangle.color =  Constants.themeColor
                     }
@@ -254,14 +287,24 @@ Popup {
 
         // Content Starts
 
+
+
+        AxisSettings{
+            id: axisSettings
+        }
+
+
         Rectangle{
+            id: multipleAxisSettings
             anchors.left: menuContentSeparator.right
             height: parent.height
             width: parent.width - leftMenu.width - menuContentSeparator.width
+            visible: false
 
-            Rectangle{
+            Column{
 
                 anchors.fill: parent
+
 
             }
 
