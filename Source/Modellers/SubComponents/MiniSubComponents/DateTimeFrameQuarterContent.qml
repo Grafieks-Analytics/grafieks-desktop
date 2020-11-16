@@ -48,6 +48,64 @@ Column{
     // JAVASCRIPT FUNCTION STARTS
 
     function onLastXChecked(){
+
+        var value = lastXRadioTextField.text
+        var noOfQuarter = Number(value)
+        var tmpDate = new Date()
+        var thisYear = tmpDate.getFullYear()
+        var thisMonth = tmpDate.getMonth()
+        thisMonth = thisMonth + 1
+        var tmpMonth;
+        var newValue;
+
+        var lastXQuarter = []
+
+        for(let i = 0; i < noOfQuarter; i++){
+
+            if(thisMonth >= 1 && thisMonth <= 3){
+
+                tmpMonth = 10
+                thisYear = thisYear - 1
+                newValue = thisYear.toString() + "-" + tmpMonth.toString()
+                lastXQuarter.push(newValue)
+                newValue = thisYear.toString() + "-" + (tmpMonth+1).toString()
+                lastXQuarter.push(newValue)
+                newValue = thisYear.toString() + "-" + (tmpMonth+2).toString()
+                lastXQuarter.push(newValue)
+                thisMonth = thisMonth + 3
+            }
+            else if(thisMonth >= 4 && thisMonth <= 6){
+
+                tmpMonth = 1
+                newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+                lastXQuarter.push(newValue)
+                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
+                lastQuarter.push(newValue)
+                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+                lastXQuarter.push(newValue)
+            }
+            else if(thisMonth >= 7 && thisMonth <= 9){
+
+                tmpMonth = 4
+                newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+                lastXQuarter.push(newValue)
+                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
+                lastXQuarter.push(newValue)
+                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+                lastXQuarter.push(newValue)
+            }
+            else{
+
+                tmpMonth = 7
+                newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+                lastXQuarter.push(newValue)
+                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
+                lastXQuarter.push(newValue)
+                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+                lastXQuarter.push(newValue)
+            }
+        }
+
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = true
     }
@@ -57,16 +115,186 @@ Column{
     }
 
     function onThisChecked(){
+
+        var tmpDate = new Date()
+        var thisYear = tmpDate.getFullYear()
+        var thisMonth = tmpDate.getMonth()
+        thisMonth = thisMonth + 1
+        var thisQuarter = []
+        var tmpMonth;
+        var newValue;
+
+        if(thisMonth >= 1 && thisMonth <= 3){
+
+            tmpMonth = 1
+            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+            thisQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
+            thisQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+            thisQuarter.push(newValue)
+        }
+        else if(thisMonth >= 4 && thisMonth <= 6){
+
+            tmpMonth = 4
+            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+            thisQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
+            thisQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+            thisQuarter.push(newValue)
+        }
+        else if(thisMonth >= 7 && thisMonth <= 9){
+
+            tmpMonth = 7
+            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+            thisQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
+            thisQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+            thisQuarter.push(newValue)
+        }
+        else{
+
+            tmpMonth = 10
+            newValue = thisYear.toString() + "-" + tmpMonth.toString()
+            thisQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + (tmpMonth+1).toString()
+            thisQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + (tmpMonth+2).toString()
+            thisQuarter.push(newValue)
+        }
+
+        DSParamsModel.setTimeFrame("This Quarter", thisQuarter.toString())
+        DSParamsModel.setSubCategory("Quarter")
+        DSParamsModel.addToJoinValue(mapKey, "This Quarter")
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
     }
 
     function onLastChecked(){
+
+        var tmpDate = new Date()
+        var thisYear = tmpDate.getFullYear()
+        var thisMonth = tmpDate.getMonth()
+        thisMonth = thisMonth + 1
+        var lastQuarter = []
+        var tmpMonth;
+        var newValue;
+
+        if(thisMonth >= 1 && thisMonth <= 3){
+
+            tmpMonth = 10
+            thisYear = thisYear - 1
+            newValue = thisYear.toString() + "-" + tmpMonth.toString()
+            lastQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + (tmpMonth+1).toString()
+            lastQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + (tmpMonth+2).toString()
+            lastQuarter.push(newValue)
+        }
+        else if(thisMonth >= 4 && thisMonth <= 6){
+
+            tmpMonth = 1
+            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+            lastQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
+            lastQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+            lastQuarter.push(newValue)
+        }
+        else if(thisMonth >= 7 && thisMonth <= 9){
+
+            tmpMonth = 4
+            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+            lastQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
+            lastQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+            lastQuarter.push(newValue)
+        }
+        else{
+
+            tmpMonth = 7
+            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+            lastQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
+            lastQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+            lastQuarter.push(newValue)
+        }
+
+        DSParamsModel.setTimeFrame("Last Quarter", lastQuarter.toString())
+        DSParamsModel.setSubCategory("Quarter")
+        DSParamsModel.addToJoinValue(mapKey, "Last Quarter")
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
     }
 
     function onNextChecked(){
+
+        var tmpDate = new Date()
+        var thisYear = tmpDate.getFullYear()
+        var thisMonth = tmpDate.getMonth()
+        thisMonth = thisMonth + 1
+        var nextQuarter = []
+        var tmpMonth;
+        var newValue;
+
+        if(thisMonth >= 1 && thisMonth <= 3){
+
+            tmpMonth = 4
+            newValue = thisYear.toString() + "-" + tmpMonth.toString()
+            nextQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + (tmpMonth+1).toString()
+            nextQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + (tmpMonth+2).toString()
+            nextQuarter.push(newValue)
+        }
+        else if(thisMonth >= 4 && thisMonth <= 6){
+
+            tmpMonth = 7
+            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+            nextQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
+            nextQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+            nextQuarter.push(newValue)
+        }
+        else if(thisMonth >= 7 && thisMonth <= 9){
+
+            tmpMonth = 10
+            newValue = thisYear.toString() + "-" + tmpMonth.toString()
+            nextQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + (tmpMonth+1).toString()
+            nextQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + (tmpMonth+2).toString()
+            nextQuarter.push(newValue)
+        }
+        else{
+
+            tmpMonth = 1
+            thisYear = thisYear + 1
+            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+            nextQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
+            nextQuarter.push(newValue)
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+            nextQuarter.push(newValue)
+        }
+
+        DSParamsModel.setTimeFrame("Next Quarter", nextQuarter.toString())
+        DSParamsModel.setSubCategory("Quarter")
+        DSParamsModel.addToJoinValue(mapKey, "Next Quarter")
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
     }
@@ -196,6 +424,9 @@ Column{
             width: 80
             id:lastXRadioTextField
             anchors.left: lastXRadio.right
+            onTextChanged: {
+                onLastXChecked()
+            }
         }
 
         Text{
@@ -238,6 +469,9 @@ Column{
             height: 30
             width: 80
             anchors.left: nextXRadio.right
+            onTextChanged: {
+                onNextXChecked()
+            }
         }
         Text{
             height: 30
