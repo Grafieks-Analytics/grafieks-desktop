@@ -6,56 +6,17 @@ import com.grafieks.singleton.constants 1.0
 import "../../../MainSubComponents"
 
 Rectangle{
-    id : allDateId
-    width: parent.width
+    id: allDateId
     y:10
+    width: parent.width
     anchors.left: parent.left
-    anchors.leftMargin: 20
     property int rowSpacing: 8
 
     readonly property int mapKey: 0
 
+
     /***********************************************************************************************************************/
     // LIST MODELS STARTS
-
-    /*
-    ListModel{
-        id: timeFrameModel
-        ListElement{
-            columnName:"GR Date"
-            filterKey:"Last"
-            columnValue:"3 Months"
-        }
-    }
-    */
-
-    /*
-    ListModel{
-        id: listModel
-        ListElement{
-            columnName:"Order Date"
-            filterKey:"Equals"
-            columnValue:"6 Jan 2018, 21 Apr 2018"
-        }
-        ListElement{
-            columnName:"PO Request Date"
-            filterKey:"Exlcudes"
-            columnValue:"6 Jan 2018, 21 Apr 2018"
-        }
-    }
-
-    */
-
-    ListModel{
-        id: calendarModel
-        ListElement{
-            columnName:"Requested Ship Date"
-            filterKey:"Between"
-            dateFrom:"ab"
-            dateTo:"ab"
-        }
-    }
-
 
 
     // LIST MODELS ENDS
@@ -74,6 +35,7 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // Connections Starts
+
     Connections{
         target: FilterDateListModel
 
@@ -82,8 +44,6 @@ Rectangle{
             listFiltersListView.height = FilterDateListModel.rowCount() * 30
         }
     }
-
-
     // Connections Ends
     /***********************************************************************************************************************/
 
@@ -93,15 +53,18 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
+
+    // Called when remove filter from date list clicked
     function onRemoveElement(filterIndex){
         FilterDateListModel.deleteFilter(filterIndex)
         DSParamsModel.removeJoinRelation(filterIndex)
         DSParamsModel.removeJoinValue(filterIndex)
     }
 
-    // Called when edit filter from categorical list clicked
+    // Called when edit filter from date list clicked
     function onEditElement(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude){
 
+        console.log("Edit Called" + section + " " + category + " " )
         DSParamsModel.setMode(Constants.modeEdit)
         DSParamsModel.setFilterIndex(filterIndex)
         DSParamsModel.setSection(section)
@@ -118,8 +81,6 @@ Rectangle{
 
         ColumnListModel.columnEditQuery(columnName, tableName, value, category)
     }
-
-
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -142,418 +103,178 @@ Rectangle{
     // Page Design Starts
 
 
-    // All List Filter Starts
+    // Three Columns here
+    // 1. for List - list view
+    // 2. for Calendar - list view
+    // 3. for Time Frame - list view
 
-    Column{
-        id: listFiltersColumn
-
-        anchors.left: parent.left
+    Flickable{
         width: parent.width
-        height:listFiltersListView.height + listFilters.height
+        anchors.left: parent.left
+        height: 100
 
-        spacing: rowSpacing
+        // List - list view Starts
 
-        //        Text {
-        //            id: listFilters
-        //            text: qsTr("List")
-        //            font.pointSize: Constants.fontReading
-        //        }
+        Column{
+            id: listFiltersColumn
 
-        ListView{
-            id: listFiltersListView
-            model: FilterDateListModel
+            anchors.left: parent.left
+            anchors.leftMargin: 20
             width: parent.width
-            height: 50
+            height:listFiltersListView.height + listFilters.height
 
-            anchors.topMargin: 10
-            spacing: rowSpacing
+            spacing: 10
 
-            delegate:
 
-                Row{
-                id:listFiltersContent
-                height: 30
+            ListView{
+                id: listFiltersListView
+                model: FilterDateListModel
                 width: parent.width
-                anchors.topMargin: 30
+                height: 50
+                anchors.topMargin: 10
+                spacing: rowSpacing
+                interactive: false
 
-                Column{
+
+
+                delegate:
+
+                    Row{
+                    id:listFiltersContent
                     height: 30
-                    width: parent.width / 3 - 25
+                    width: parent.width
 
-                    ReadOnlyTextBox{
-                        boxWidth: parent.width
-                        text: columnName
+                    anchors.topMargin: 30
+
+                    Column{
+                        height: 30
+                        width: parent.width / 3 - 25
+
+                        ReadOnlyTextBox{
+                            boxWidth: parent.width
+                            text: columnName
+                        }
                     }
-                }
 
 
-                Column{
-                    height: 30
-                    width: parent.width / 3 - 50
+                    Column{
+                        height: 30
+                        width: parent.width / 3 - 50
 
-                    Text {
-
-                        text: exclude === true ? "NOT " +relation : relation
-                        anchors.left: parent.left
-                        leftPadding: 20
-                        //anchors.verticalCenter: Text.verticalCenter
-
-                    }
-                    /*
-                    Text {
-                        text: filterKey
-                        anchors.left: parent.left
-                        leftPadding: 20
-
-                    }
-                    */
-
-                }
-
-
-                Column{
-                    height: 30
-                    width: parent.width / 3 - 25
-
-                    ReadOnlyTextBox{
-                        boxWidth: parent.width
-                        text: value
-                    }
-                }
-
-                Column{
-
-                    width: 100
-                    anchors.right: parent.right
-
-
-                    Rectangle{
-
-                        width: parent.width
-                        anchors.top: parent.top
-                        anchors.right: parent.right
-                        anchors.leftMargin: 10
-
-                        Image{
-                            id: editBtn
-                            source: '/Images/icons/Edit_20.png'
-
-                            anchors.top: parent.top
-                            anchors.topMargin: 5
+                        Text {
+                            text: exclude === true ? "NOT " +relation : relation
                             anchors.left: parent.left
-                            anchors.leftMargin: 20
+                            leftPadding: 20
 
-                            anchors.verticalCenter: Image.verticalCenter
-
-                            MouseArea{
-                                anchors.fill: parent
-                                onClicked: {
-                                    onEditElement(model.index, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
-                                }
-                            }
                         }
 
-                        Image{
-                            id: removeBtn
-                            source: '/Images/icons/remove.png'
+                    }
 
+
+                    Column{
+                        height: 30
+                        width: parent.width / 3 - 25
+
+                        ReadOnlyTextBox{
+                            boxWidth: parent.width
+                            text: value
+                        }
+                    }
+
+                    Column{
+
+                        width: 100
+                        anchors.right: parent.right
+
+
+                        Rectangle{
+
+                            width: parent.width
                             anchors.top: parent.top
-                            anchors.left: editBtn.right
-                            anchors.topMargin: 8
+                            anchors.right: parent.right
                             anchors.leftMargin: 10
-                            anchors.verticalCenter: Image.verticalCenter
-                            MouseArea{
-                                anchors.fill: parent
-                                onClicked: {
-                                    onRemoveElement(model.index)
+
+                            Image{
+                                id: editBtn
+                                source: '/Images/icons/Edit_20.png'
+
+                                anchors.top: parent.top
+                                anchors.topMargin: 5
+                                anchors.left: parent.left
+                                anchors.leftMargin: 20
+
+                                anchors.verticalCenter: Image.verticalCenter
+
+                                MouseArea{
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        onEditElement(model.index, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+                                    }
                                 }
                             }
 
+                            Image{
+                                id: removeBtn
+                                source: '/Images/icons/remove.png'
+
+                                anchors.top: parent.top
+                                anchors.left: editBtn.right
+                                anchors.topMargin: 8
+                                anchors.leftMargin: 10
+                                anchors.verticalCenter: Image.verticalCenter
+
+                                MouseArea{
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        onRemoveElement(model.index)
+                                    }
+                                }
+                            }
                         }
-
                     }
-
                 }
             }
-
-
-        }
-    }
-
-
-    // All Calendar Filter Ends
-
-    // All Calendar Filter Starts
-
-    Column{
-        id: calendarFiltersColumn
-
-        width: parent.width
-        height:calendarFiltersListView.height + calendarHeading.height
-
-        anchors.left: parent.left
-        anchors.top: listFiltersColumn.bottom
-        anchors.topMargin: 20
-        spacing: rowSpacing
-
-        Text {
-            id: calendarHeading
-            text: qsTr("Calendar")
-            font.pointSize: Constants.fontReading
         }
 
 
-
-        ListView{
-            id: calendarFiltersListView
-            model: calendarModel
-            width: parent.width
-            height: calendarModel.count * 30
-
-            anchors.topMargin: 10
-            spacing: rowSpacing
-
-            delegate:
-
-                Row{
-                id:calendarFiltersContent
-                height: 30
-                width: parent.width
-                anchors.topMargin: 30
-
-                Column{
-                    height: 30
-                    width: parent.width / 3 - 25
-
-                    ReadOnlyTextBox{
-                        boxWidth: parent.width
-                        text: columnName
-                    }
-                }
+        // List - list view Ends
 
 
-                Column{
-                    height: 30
-                    width: parent.width / 3 - 50
 
-                    Text {
-                        text: filterKey
-                        //                        anchors.left: parent.left
-                        leftPadding: 20
-                        anchors.verticalCenter: Text.verticalCenter
-                    }
+        ScrollBar.horizontal: ScrollBar{}
+        ScrollBar.vertical: ScrollBar{}
 
-                }
-
-
-                Column{
-                    height: 30
-                    width: (parent.width / 3 - 60)/2
-
-                    ReadOnlyTextBox{
-                        boxWidth: parent.width
-                        text: dateFrom
-                    }
-                }
-
-
-                Column{
-                    height: 30
-                    width: 30
-
-                    Text {
-                        id: name
-                        text: qsTr("To")
-                        anchors.topMargin: 5
-                    }
-                }
-
-                Column{
-                    height: 30
-                    width: (parent.width / 3 - 60)/2
-
-                    ReadOnlyTextBox{
-                        boxWidth: parent.width
-                        text: dateTo
-                    }
-                }
-
-                Column{
-
-                    width: 100
-                    anchors.right: parent.right
-
-
-                    Rectangle{
-
-                        width: parent.width
-                        anchors.top: parent.top
-                        anchors.right: parent.right
-                        anchors.leftMargin: 10
-
-                        Image{
-                            id: editBtn1
-                            source: '/Images/icons/Edit_20.png'
-
-                            anchors.top: parent.top
-                            anchors.topMargin: 5
-                            anchors.left: parent.left
-                            anchors.leftMargin: 20
-
-                            anchors.verticalCenter: Image.verticalCenter
-                        }
-
-                        Image{
-                            id: removeBtn1
-                            source: '/Images/icons/remove.png'
-
-                            anchors.top: parent.top
-                            anchors.left: editBtn1.right
-                            anchors.topMargin: 8
-                            anchors.leftMargin: 10
-                            anchors.verticalCenter: Image.verticalCenter
-
-                        }
-
-                    }
-
-                }
-            }
-
-
+        ScrollBar {
+            id: vbar
+            hoverEnabled: true
+            active: hovered || pressed
+            orientation: Qt.Vertical
+            size: parent.height / 2
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
         }
 
+        ScrollBar {
+            id: hbar
+            hoverEnabled: true
+            active: hovered || pressed
+            orientation: Qt.Horizontal
+            size: parent.width / 2
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+        }
+
+
+        ScrollIndicator.horizontal: ScrollIndicator { }
+        ScrollIndicator.vertical: ScrollIndicator { }
 
     }
-
-    // All Calendar Filter End
-
-    // All Time Frame Filter Starts
-
-    Column{
-        id: timeFrameFiltersColumn
-
-        width: parent.width
-        height:timeFrameFiltersListView.height + timeFrameHeading.height
-
-        anchors.top: calendarFiltersColumn.bottom
-        anchors.topMargin: 20
-
-        spacing: rowSpacing
-
-        Text {
-            id: timeFrameHeading
-            text: qsTr("Time Frame")
-            font.pointSize: Constants.fontReading
-        }
-
-
-        ListView{
-            id: timeFrameFiltersListView
-            model: timeFrameModel
-            width: parent.width
-            height: timeFrameModel.count * 30
-
-            anchors.topMargin: 20
-            spacing: rowSpacing
-
-            delegate:
-
-                Row{
-                id:timeFrameFiltersContent
-                height: 30
-                width: parent.width
-
-                anchors.topMargin: 30
-
-                Column{
-                    height: 30
-                    width: parent.width / 3 - 25
-
-                    ReadOnlyTextBox{
-                        boxWidth: parent.width
-                        text: columnName
-                    }
-                }
-
-
-                Column{
-                    height: 30
-                    width: parent.width / 3 - 50
-
-                    Text {
-                        text: filterKey
-                        anchors.left: parent.left
-                        leftPadding: 20
-                        anchors.verticalCenter: Text.verticalCenter
-                    }
-
-                }
-
-
-                Column{
-                    height: 30
-                    width: parent.width / 3 - 25
-
-                    ReadOnlyTextBox{
-                        boxWidth: parent.width
-                        text: columnValue
-                    }
-                }
-
-                Column{
-
-                    width: 100
-                    anchors.right: parent.right
-
-
-                    Rectangle{
-
-                        width: parent.width
-                        anchors.top: parent.top
-                        anchors.right: parent.right
-                        anchors.leftMargin: 10
-
-                        Image{
-                            id: editBtn2
-                            source: '/Images/icons/Edit_20.png'
-
-                            anchors.top: parent.top
-                            anchors.topMargin: 5
-                            anchors.left: parent.left
-                            anchors.leftMargin: 20
-
-                            anchors.verticalCenter: Image.verticalCenter
-                        }
-
-                        Image{
-                            id: removeBtn2
-                            source: '/Images/icons/remove.png'
-
-                            anchors.top: parent.top
-                            anchors.left: editBtn2.right
-                            anchors.topMargin: 8
-                            anchors.leftMargin: 10
-                            anchors.verticalCenter: Image.verticalCenter
-
-                        }
-
-                    }
-
-                }
-            }
-
-
-        }
-
-
-    }
-
-    // All Time Frame Filter Ends
-
 
 
     // Page Design Ends
     /***********************************************************************************************************************/
 
 }
+

@@ -60,6 +60,9 @@ Column{
     /***********************************************************************************************************************/
     // SubComponents Starts
 
+    ButtonGroup{
+        id: legendBtnGroup
+    }
 
 
     // SubComponents Ends
@@ -108,6 +111,135 @@ Column{
     }
 
     // Show Legends Ends
+
+    Rectangle{
+
+        height: 50
+        width: parent.width
+
+        Row{
+
+            width: parent.width
+            height: parent.height
+
+            Rectangle{
+                height: parent.height
+                width: parent.width/4
+
+
+                Column{
+                    anchors.fill: parent
+
+                    Text {
+                        text: qsTr("Right")
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.pixelSize: Constants.fontCategoryHeaderSmall
+                    }
+
+                    CustomRadioButton{
+                        radio_checked: false
+                        parent_dimension: 12
+                        width: parent.width
+                        x: (parent.width/2 - this.parent_dimension)
+                        ButtonGroup.group: legendBtnGroup
+                    }
+
+                }
+
+
+            }
+
+
+            Rectangle{
+                height: parent.height
+                width: parent.width/4
+
+
+                Column{
+                    anchors.fill: parent
+
+                    Text {
+                        text: qsTr("Left")
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.pixelSize: Constants.fontCategoryHeaderSmall
+                    }
+
+                    CustomRadioButton{
+                        radio_checked: false
+                        parent_dimension: 12
+                        width: parent.width
+
+                        x: (parent.width/2 - this.parent_dimension)
+                        ButtonGroup.group: legendBtnGroup
+                    }
+
+                }
+
+
+            }
+
+
+            Rectangle{
+                height: parent.height
+                width: parent.width/4
+
+
+                Column{
+                    anchors.fill: parent
+
+                    Text {
+                        text: qsTr("Bottom")
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.pixelSize: Constants.fontCategoryHeaderSmall
+                    }
+
+                    CustomRadioButton{
+                        radio_checked: false
+                        parent_dimension: 12
+                        width: parent.width
+
+                        x: (parent.width/2 - this.parent_dimension)
+                        ButtonGroup.group: legendBtnGroup
+                    }
+
+                }
+
+
+            }
+
+
+            Rectangle{
+                height: parent.height
+                width: parent.width/4
+
+
+                Column{
+                    anchors.fill: parent
+                    Text {
+                        text: qsTr("Top")
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.pixelSize: Constants.fontCategoryHeaderSmall
+                    }
+
+                    CustomRadioButton{
+                        radio_checked: false
+                        parent_dimension: 12
+                        width: parent.width
+
+                        x: (parent.width/2 - this.parent_dimension)
+                        ButtonGroup.group: legendBtnGroup
+                    }
+
+                }
+
+
+            }
+
+
+        }
+
+
+    }
 
     // Text Format starts
     Rectangle{

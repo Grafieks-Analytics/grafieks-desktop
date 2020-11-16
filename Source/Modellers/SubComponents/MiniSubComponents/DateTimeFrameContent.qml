@@ -19,8 +19,6 @@ import "../../../MainSubComponents"
 
 Rectangle{
 
-    id: heading
-
     height: parent.height - 80 - 40
     width: parent.width - 40
     x:20
@@ -64,6 +62,9 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    function slotEditMode(){
+        dateTimeFrameContent.visible = true
+    }
 
     function onMonthTabClicked(){
         yearTabContent.visible = false

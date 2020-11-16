@@ -20,6 +20,7 @@ class FilterDateListModel : public QAbstractListModel
     QList <FilterDateList *> mFilter;
     QStringList sqlComparisonOperators;
     QVariantMap dateFormatMap;
+    QVariantMap timeFrameMap;
 
 public:
     explicit FilterDateListModel(QObject *parent = nullptr);
@@ -37,6 +38,7 @@ public:
     Q_INVOKABLE void callQueryModel(QString tmpSql);
 
     Q_INVOKABLE void setDateFormatMap(QVariantMap dateFormatMap);
+    Q_INVOKABLE void setTimeFrameMap(QVariantMap timeFrameMap);
 
     void addFilterList(FilterDateList * filter);
     QString getFilteredValue(QString val);

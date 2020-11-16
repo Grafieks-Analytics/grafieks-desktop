@@ -196,7 +196,16 @@ Column{
             width: 80
             id:lastXRadioTextField
             anchors.left: lastXRadio.right
-            placeholderText: "Quarter"
+        }
+
+        Text{
+            height: 30
+            width : 80
+            text : "Quarter"
+            anchors.leftMargin: 5
+            anchors.top : parent.top
+            anchors.topMargin: 5
+            anchors.left:lastXRadioTextField.right
         }
 
     }
@@ -229,8 +238,15 @@ Column{
             height: 30
             width: 80
             anchors.left: nextXRadio.right
-
-            placeholderText: "Quarter"
+        }
+        Text{
+            height: 30
+            width : 80
+            text : "Quarter"
+            anchors.leftMargin: 5
+            anchors.top : parent.top
+            anchors.topMargin: 5
+            anchors.left:nextXRadioTextField.right
         }
 
     }

@@ -13,6 +13,8 @@ Column{
     anchors.leftMargin: 80
     anchors.topMargin: 30
 
+    readonly property string mapKey: "0"
+
 
 
     /***********************************************************************************************************************/
@@ -49,25 +51,93 @@ Column{
     // JAVASCRIPT FUNCTION STARTS
 
     function onLastXChecked(){
+
+        var value = lastXRadioTextField.text
+        var newValue = Number(value)
+        var tmpDate = new Date()
+        var thisYear = tmpDate.getFullYear()
+        var tmpYear = thisYear
+        var lastXYears = []
+
+        for(let i = 0 ; i < newValue; i++){
+            tmpYear = tmpYear - 1
+            lastXYears.push(tmpYear)
+        }
+
+        DSParamsModel.setTimeFrame("Last " + value + " Year", lastXYears.toString())
+        DSParamsModel.setSubCategory("Year")
+        DSParamsModel.addToJoinValue(mapKey, "Last " + value + " Year")
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = true
     }
     function onNextXChecked(){
+
+        var value = nextXRadioTextField.text
+        var newValue = Number(value)
+        var tmpDate = new Date()
+        var thisYear = tmpDate.getFullYear()
+        var tmpYear = thisYear
+        var nextXYears = []
+
+        for(let i = 0 ; i < newValue; i++){
+            tmpYear = tmpYear + 1
+            nextXYears.push(tmpYear)
+        }
+
+        DSParamsModel.setTimeFrame("Next " + value + " Year", nextXYears.toString())
+        DSParamsModel.setSubCategory("Year")
+        DSParamsModel.addToJoinValue(mapKey, "Next " + value + " Year")
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = true
         lastXRadioTextField.focus = false
     }
 
     function onThisChecked(){
+
+        var tmpDate = new Date()
+        var thisYear = tmpDate.getFullYear()
+
+        DSParamsModel.setTimeFrame("This Year", thisYear.toString())
+        DSParamsModel.setSubCategory("Year")
+        DSParamsModel.addToJoinValue(mapKey, "This Year")
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
     }
 
     function onLastChecked(){
+
+        var tmpDate = new Date()
+        var lastYear = tmpDate.getFullYear() - 1
+
+        DSParamsModel.setTimeFrame("Last Year", lastYear.toString())
+        DSParamsModel.setSubCategory("Year")    
+        DSParamsModel.addToJoinValue(mapKey, "Last Year")
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
     }
 
     function onNextChecked(){
+
+        var tmpDate = new Date()
+        var nextYear = tmpDate.getFullYear() + 1
+
+        DSParamsModel.setTimeFrame("Next Year", nextYear.toString())
+        DSParamsModel.setSubCategory("Year")
+        DSParamsModel.addToJoinValue(mapKey, "Next Year")
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
     }
@@ -197,9 +267,19 @@ Column{
             width: 80
             id:lastXRadioTextField
             anchors.left: lastXRadio.right
-            placeholderText: "Year"
+            onTextChanged: {
+                onLastXChecked()
+            }
         }
-
+        Text{
+            height: 30
+            width : 80
+            text : "Year"
+            anchors.leftMargin: 5
+            anchors.top :parent.top
+            anchors.topMargin: 5
+            anchors.left:lastXRadioTextField.right
+        }
     }
 
     Rectangle{
@@ -230,8 +310,19 @@ Column{
             height: 30
             width: 80
             anchors.left: nextXRadio.right
+            onTextChanged: {
+                onNextXChecked()
+            }
+        }
 
-            placeholderText: "Year"
+        Text{
+            height: 30
+            width : 80
+            text : "Year"
+            anchors.leftMargin: 5
+            anchors.top :parent.top
+            anchors.topMargin: 5
+            anchors.left:nextXRadioTextField.right
         }
 
     }

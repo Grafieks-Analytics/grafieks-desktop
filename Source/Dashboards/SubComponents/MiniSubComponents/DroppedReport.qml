@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtWebView 1.1
 import QtQuick.Dialogs 1.2
+import QtWebEngine 1.10
 
 import com.grafieks.singleton.constants 1.0
 
@@ -15,12 +16,14 @@ Item{
     id:newItem
 
     visible: true
+
     anchors{
         top: mainContainer.top
         left: mainContainer.left
         right: mainContainer.right
         bottom: mainContainer.bottom
     }
+     property var hoverStatusReport: false
 
 
     /***********************************************************************************************************************/
@@ -85,6 +88,7 @@ Item{
                 webengine.url = newUrl
             }
         }
+
     }
 
     // Connections Ends
@@ -116,6 +120,39 @@ Item{
 
     function toggleFullScreen(){
         DashboardParamsModel.setCurrentReport(newItem.objectName)
+//        if(mainContainer.width === dashboard_summary.width-5 && mainContainer.height === dashboard_summary.height-5)
+//        {
+//            mainContainer.width = Constants.defaultDroppedReportWidth
+//            mainContainer.height = Constants.defaultDroppedReportHeight
+//        }
+//        else{
+//            mainContainer.width= Qt.binding(function(){
+//                return dashboard_summary.width-5 })
+//            mainContainer.height= Qt.binding(function(){
+//                return dashboard_summary.height-5 })
+//            mainContainer.y=0
+//            mainContainer.x=0
+
+//        }
+        if(mainContainer.width === parent.width-left_menubar.width && mainContainer.height === parent.height-5)
+        {
+            mainContainer.width = Constants.defaultDroppedReportWidth
+            mainContainer.height = Constants.defaultDroppedReportHeight
+           fullScreenReport.source= "/Images/icons/zoom_in_new.png"
+
+        }
+        else{
+            mainContainer.width= Qt.binding(function(){
+                return parent.width-left_menubar.width })
+            mainContainer.height= Qt.binding(function(){
+                return parent.height-5 })
+            mainContainer.y=0
+            mainContainer.x=0
+
+             fullScreenReport.source= "/Images/icons/zoom_out_new.png"
+
+        }
+
     }
 
     function showCustomizeReport(){
@@ -128,6 +165,17 @@ Item{
         newItem.z = DashboardParamsModel.zIndex;
         mainContainer.z = DashboardParamsModel.zIndex;
         console.log(mainContainer.rulerStatus)
+    }
+    function showMenusReport(){
+        DashboardParamsModel.setCurrentReport(newItem.objectName)
+        hoverStatusReport = true
+        mainContainer.rulerStatus = true
+        console.log("test")
+    }
+    function hideMenusReport(){
+        DashboardParamsModel.setCurrentReport(newItem.objectName)
+        hoverStatusReport = false
+        mainContainer.rulerStatus = false
     }
 
 
@@ -172,25 +220,23 @@ Item{
         }
 
         MouseArea{
-            Component.onCompleted: {
-                console.log("height",mainContainer.parent.height - mainContainer.height - Constants.subMenuWidth)
-                console.log("maincontainerwidth",mainContainer.parent.width)
-
-            }
             height: parent.height-4
             width: parent.width-4
             anchors.centerIn: parent
             hoverEnabled: true
-            onEntered: {
-                mainContainer.rulerStatus=true
-            }
-            onExited: {
-                mainContainer.rulerStatus=false
-            }
+            onEntered: showMenusReport()
+            onExited: hideMenusReport()
+//            onEntered: {
+//                mainContainer.rulerStatus=true
+
+//            }
+//            onExited: {
+//                mainContainer.rulerStatus=false
+//            }
             drag{
                 target: mainContainer
-                minimumX: Constants.leftMenubarWidth
-                minimumY: 29
+                minimumX: 0
+                minimumY: 0
 //                maximumX: (mainContainer.parent.width)
 //                maximumY: mainContainer.parent.height - mainContainer.height - Constants.subMenuWidth
 //                maximumY: mainContainer.parent.height - mainContainer.height - Constants.subMenuWidth
@@ -198,10 +244,15 @@ Item{
 //                 maximumY: Qt.binding(function(){ return (dashboard_summary.height - mainContainer.height + Constants.subMenuWidth) })
 //                 maximumX: Qt.binding(function(){ return (dashboard_summary.width - mainContainer.width + Constants.leftMenubarWidth) })
 
-                maximumY: dashboard_summary.height - mainContainer.height + Constants.subMenuWidth
-                maximumX: dashboard_summary.width - mainContainer.width + Constants.leftMenubarWidth
+//                maximumY: dashboard_summary.height - mainContainer.height + Constants.subMenuWidth
+//                maximumX: dashboard_summary.width - mainContainer.width + Constants.leftMenubarWidth
+                maximumY: dashboard_summary.height- mainContainer.height
+                maximumX: dashboard_summary.width- mainContainer.width
+
 
             }
+//            Drag.hotSpot.x: 2
+//            Drag.hotSpot.y: 2
             onClicked:  showCustomizeReport()
             onPressed:  onItemPressed()
         }
@@ -237,14 +288,15 @@ Item{
                     anchors.top: parent.top
                     anchors.right: parent.right
                     anchors.rightMargin: 10
+                     visible: hoverStatusReport
 
                     spacing: 10
 
                     Image{
                         id: editReport
-                        height: 20
-                        width: 20
-                        source: "/Images/icons/Edit.png"
+                        height: 18
+                        width: 18
+                        source: "/Images/icons/edit grey.png"
                         anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea{
@@ -255,29 +307,32 @@ Item{
 
                     Image{
                         id: resizeReport
-                        height: 20
-                        width: 20
-                        source: "/Images/icons/Width.png"
+                        height: 16
+                        width: 16
+                        source: "/Images/icons/view.png"
                         anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea{
                             anchors.fill: parent
-                            onClicked: editOptions.open()
+                            onClicked: resizeOptions.open()
                         }
                     }
 
                     Image {
                         id: fullScreenReport
-                        height: 22
-                        width: 22
-                        source: "/Images/icons/fullscreen.png"
+                        height: 16
+                        width: 16
+                        source: "/Images/icons/zoom_in_new.png"
+//                        source: "/Images/icons/minimise.png"
                         anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea{
                             anchors.fill: parent
+
                             onClicked: {
                                 toggleFullScreen()
                             }
+
                         }
                     }
 
@@ -298,6 +353,10 @@ Item{
 
                         Menu{
                             id: editOptions
+                            background: Rectangle{
+                                implicitWidth: 200
+                                border.color: Constants.darkThemeColor
+                            }
 
                             MenuItem {
                                 text: qsTr("Edit")
@@ -309,8 +368,26 @@ Item{
                                 onTriggered: destroyElement()
                             }
                         }
+                        Menu{
+                            id: resizeOptions
+                            background: Rectangle{
+                                implicitWidth: 200
+                                border.color: Constants.darkThemeColor
+                            }
+
+                            MenuItem {
+                                text: qsTr("Standard")
+                                onTriggered: editSelectedReport()
+                            }
+
+                            MenuItem {
+                                text: qsTr("Custom")
+                                onTriggered: destroyElement()
+                            }
+                        }
 
                     }
+
 
                 }
 
@@ -320,7 +397,7 @@ Item{
 
 
         }
-        WebView{
+        WebEngineView{
             id: webengine
             anchors.top : mainChart.bottom
             anchors.centerIn: parent

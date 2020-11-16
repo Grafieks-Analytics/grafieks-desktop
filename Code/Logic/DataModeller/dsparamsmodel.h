@@ -41,6 +41,8 @@ class DSParamsModel : public QObject
     QVariantMap joinValue; // Right side parameter of the comparison (the actual value)
     QVariantMap joinRelationSlug; // Single syllable entity for human readable entity. eg, in Categorical-Wildcard, Slug for `Ends With` is `endswith` and `Equal To` is `equalto`
     QVariantMap dateFormatMap;
+    QVariantMap timeFrameMap;
+
     // Q_PROPERTY variables
 
     // General
@@ -162,6 +164,9 @@ public:
 
     Q_INVOKABLE void setValueFormat(QString value, QString format);
     Q_INVOKABLE QVariantMap getDateFormatMap();
+
+    Q_INVOKABLE void setTimeFrame(QString dummy, QString actual);
+    Q_INVOKABLE QVariantMap getTimeFrameMap();
 
     int currentTab() const;
     QString fileExtension() const;

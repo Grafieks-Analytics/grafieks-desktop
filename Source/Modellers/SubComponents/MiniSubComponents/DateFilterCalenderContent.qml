@@ -31,7 +31,7 @@ Rectangle{
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
     visible: false
-
+    readonly property string mapKey: "0"
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -66,7 +66,9 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-
+    function slotEditMode(){
+        calendarContent.visible = true
+    }
 
     function showFromDateCalendar(){
         fromDateCalendar.visible = true
@@ -101,6 +103,13 @@ Rectangle{
         closeToDateCalendar()
         let date = toDateCalendar.selectedDate.toLocaleDateString(locale,"dd/MM/yyyy")
         setToDate(date)
+    }
+
+    function onCalendarInput(fromDate,toDate){
+        var newValue = fromDate + " To "  + toDate;
+        DSParamsModel.addToJoinValue(mapKey, newValue)
+        DSParamsModel.addToJoinRelation(mapKey, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.betweenRelation)
     }
 
     function onIncludeCheckedClicked(checked){
@@ -191,6 +200,10 @@ Rectangle{
                     placeholderText: "dd/mm/yyyy"
 
                     height: parent.height
+                    onTextChanged: {
+                        onCalendarInput(fromDateInput.text,toDateInput.text)
+                    }
+
                 }
 
                 Image{
@@ -246,6 +259,9 @@ Rectangle{
                     placeholderText: "dd/mm/yyyy"
 
                     height: parent.height
+                    onTextChanged: {
+                        onCalendarInput(fromDateInput.text,toDateInput.text)
+                    }
                 }
 
 

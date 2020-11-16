@@ -15,6 +15,8 @@ import QtQuick.Layouts 1.3
 import com.grafieks.singleton.constants 1.0
 
 
+
+
 Rectangle {
 
     id: dashboardArea
@@ -26,6 +28,7 @@ Rectangle {
     property var rectangles: new Map() // rectangle object
     property var dynamicContainer : Qt.createComponent("./MiniSubComponents/MainContainer.qml");
 
+    property var previousColor:null;
 
 
 
@@ -62,6 +65,8 @@ Rectangle {
 
         function onDashboardBackgroundColorChanged(dashboardId, color){
             dashboardArea.color = color
+            previousColor = color
+
         }
     }
 
@@ -80,7 +85,8 @@ Rectangle {
     function onDropAreaEntered(drag){
 
         dashboardArea.color = Constants.dropHighlightColor
-        console.log("Entered", currentPoint.x, listViewElem.itemName)
+//        console.log("Entered", currentPoint.x, listViewElem.itemName)
+        console.log("droparaea",dropArea.height,dropArea.width)
     }
 
     function onDropAreaDropped(drag){
@@ -110,7 +116,7 @@ Rectangle {
             break;
         }
 
-        dashboardArea.color = "transparent"
+        dashboardArea.color = previousColor ? previousColor : Constants.dashboardDefaultBackgroundColor
 
         // Set the last container type param
         DashboardParamsModel.setLastContainerType(listViewElem.itemName.toLowerCase());

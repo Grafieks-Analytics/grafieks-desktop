@@ -48,25 +48,117 @@ Column{
     // JAVASCRIPT FUNCTION STARTS
 
     function onLastXChecked(){
+
+        var value = lastXRadioTextField.text
+        var newValue = Number(value)
+
+        DSParamsModel.setSubCategory("Month")
+        DSParamsModel.addToJoinValue(mapKey, value)
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = true
     }
     function onNextXChecked(){
+
+        var value = nextXRadioTextField.text
+        DSParamsModel.setSubCategory("Month")
+        DSParamsModel.addToJoinValue(mapKey, value)
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = true
         lastXRadioTextField.focus = false
     }
 
     function onThisChecked(){
+
+        var tmpDate = new Date()
+        var thisMonth = tmpDate.getMonth()
+        var thisYear = tmpDate.getFullYear()
+        thisMonth = thisMonth + 1
+        var newValue;
+
+        if(thisMonth < 10){
+            newValue = thisYear.toString() + "-" + "0" + thisMonth.toString()
+        }
+        else{
+            newValue = thisYear.toString() + "-" + thisMonth.toString()
+        }
+
+        DSParamsModel.setTimeFrame("This Month", newValue.toString())
+        DSParamsModel.setSubCategory("Month")
+        DSParamsModel.addToJoinValue(mapKey, "This Month")
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
     }
 
     function onLastChecked(){
+
+        var tmpDate = new Date()
+        var thisMonth = tmpDate.getMonth()
+        var thisYear = tmpDate.getFullYear()
+        thisMonth = thisMonth + 1
+        var newValue;
+
+        if(thisMonth === 1){
+            thisYear = thisYear - 1
+            thisMonth = 12
+            newValue = thisYear.toString() + "-" + thisMonth.toString()
+        }
+        else{
+            thisMonth = thisMonth - 1
+            if(thisMonth < 10){
+                newValue = thisYear.toString() + "-" + "0" + thisMonth.toString()
+            }
+            else{
+                newValue = thisYear.toString() + "-" + thisMonth.toString()
+            }
+        }
+
+        DSParamsModel.setTimeFrame("Last Month", newValue.toString())
+        DSParamsModel.setSubCategory("Month")
+        DSParamsModel.addToJoinValue(mapKey, "Last Month")
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
     }
 
     function onNextChecked(){
+
+        var tmpDate = new Date()
+        var thisMonth = tmpDate.getMonth()
+        var thisYear = tmpDate.getFullYear()
+        thisMonth = thisMonth + 1
+        var newValue;
+
+        if(thisMonth === 12){
+            thisYear = thisYear + 1
+            thisMonth = 1
+            newValue = thisYear.toString() + "-" + "0" + thisMonth.toString()
+        }
+        else{
+            thisMonth = thisMonth + 1
+            if(thisMonth < 10){
+                newValue = thisYear.toString() + "-" + "0" + thisMonth.toString()
+            }
+            else{
+                newValue = thisYear.toString() + "-" + thisMonth.toString()
+            }
+        }
+
+        DSParamsModel.setTimeFrame("Next Month", newValue.toString())
+        DSParamsModel.setSubCategory("Month")
+        DSParamsModel.addToJoinValue(mapKey, "Next Month")
+        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
     }
@@ -194,7 +286,15 @@ Column{
             width: 80
             id:lastXRadioTextField
             anchors.left: lastXRadio.right
-            placeholderText: "Month"
+        }
+        Text{
+            height: 30
+            width : 80
+            text : "Month"
+            anchors.leftMargin: 5
+            anchors.top : parent.top
+            anchors.topMargin: 5
+            anchors.left:lastXRadioTextField.right
         }
 
     }
@@ -227,8 +327,15 @@ Column{
             height: 30
             width: 80
             anchors.left: nextXRadio.right
-
-            placeholderText: "Month"
+        }
+        Text{
+            height: 30
+            width : 80
+            text : "Month"
+            anchors.leftMargin: 5
+            anchors.top : parent.top
+            anchors.topMargin: 5
+            anchors.left:nextXRadioTextField.right
         }
 
     }

@@ -63,7 +63,9 @@ QtObject {
 
     property color lightGrayTextColor: "#454545"
     property color dropAreaHighlightColor: "ivory"
+    property color dashboardDefaultBackgroundColor: "white"
 
+    property color defaultColorDialogColor: "#000000"
 
 
     // Standard Font Sizes
@@ -102,6 +104,11 @@ QtObject {
     property string inRelation: "IN"
     property string equalRelation: "="
     property string notEqualRelation: "!="
+    property string betweenRelation: "BETWEEN"
+    property string smallerThanRelation: "<"
+    property string greaterThanRelation: ">"
+    property string smallerThanEqualRelation: "<="
+    property string greaterThanEqualRelation: ">="
 
     property string innerJoin: "INNER JOIN"
     property string fullJoin: "FULL JOIN"
@@ -161,6 +168,8 @@ QtObject {
     property string xAxisName: "X Axis"
     property string yAxisName: "Y Axis"
     property string axisSettingText: "Axis Setting"
+    property string reportEditColorPopup: "Edit Color"
+
 
     property color defaultXAxisColor: "#6CD7A1"
     property color defaultYAxisColor: "#BADCFF"

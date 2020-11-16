@@ -60,7 +60,7 @@ Rectangle{
                 }
                 CustomSpinBox {
                     id: widthId
-                    value: 600
+                    value: 1280
                     minimumValue :100
                     maximumValue:5000
                     onValueChanged: onWidthValueChanged(value)
@@ -76,7 +76,7 @@ Rectangle{
                 }
                 CustomSpinBox {
                     id: heightId
-                    value: 600
+                    value: 800
                     minimumValue :100
                     maximumValue:5000
                     onValueChanged: onHeightValueChanged(value)
