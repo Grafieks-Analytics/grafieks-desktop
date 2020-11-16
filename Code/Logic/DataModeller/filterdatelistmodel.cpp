@@ -1,5 +1,4 @@
 #include "filterdatelistmodel.h"
-#include <QDate>
 
 FilterDateListModel::FilterDateListModel(QObject *parent) : QAbstractListModel(parent), counter(0)
 {
@@ -278,10 +277,6 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
 
         if(category == "date.timeframe"){
 
-            //QDate currentDate = QDate::currentDate();
-            //int monthIndex = currentDate.month();
-            //int weekDay = currentDate.dayOfWeek();
-
             QString subCategory = filter->subCategory();
 
             if(subCategory == "Year"){
@@ -314,7 +309,33 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
                 }
             }
             else if(subCategory == "Quarter"){
+                QString newValue = this->timeFrameMap[filter->value()].toString();
+                QStringList quarterValues = newValue.split(",");
+                QString quarter;
+                if(quarterValues.length() <= 1){
+                    foreach(quarter, quarterValues){
+                        if(firstValue){
+                            firstValue = false;
+                            newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), quarter + "%", filter->exclude(), filter->includeNull());
+                        }
+                        else{
+                            newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), quarter + "%", filter->exclude(), filter->includeNull());
+                        }
 
+                    }
+                }
+                else{
+                    if(firstValue){
+                        firstValue = false;
+                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), quarterValues[0] + "%", filter->exclude(), filter->includeNull());
+                    }
+                    else{
+                         newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), quarterValues[0] + "%", filter->exclude(), filter->includeNull());
+                    }
+                    for(int i = 1; i < quarterValues.length(); i++){
+                        newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), quarterValues[i] + "%", filter->exclude(), filter->includeNull());
+                    }
+                }
             }
             else if(subCategory == "Month"){
                 QString newValue = this->timeFrameMap[filter->value()].toString();
@@ -347,7 +368,32 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
             }
             else{
                 QString newValue = this->timeFrameMap[filter->value()].toString();
-                newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), newValue + "%", filter->exclude(), filter->includeNull());
+                QStringList dayValues = newValue.split(",");
+                QString day;
+                if(dayValues.length() <= 1){
+                    foreach(day, dayValues){
+                        if(firstValue){
+                            firstValue = false;
+                            newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), day + "%", filter->exclude(), filter->includeNull());
+                        }
+                        else{
+                            newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), day + "%", filter->exclude(), filter->includeNull());
+                        }
+
+                    }
+                }
+                else{
+                    if(firstValue){
+                        firstValue = false;
+                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), dayValues[0] + "%", filter->exclude(), filter->includeNull());
+                    }
+                    else{
+                         newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), dayValues[0] + "%", filter->exclude(), filter->includeNull());
+                    }
+                    for(int i = 1; i < dayValues.length(); i++){
+                        newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), dayValues[i] + "%", filter->exclude(), filter->includeNull());
+                    }
+                }
             }
         }
         else if(category == "date.calendar"){
@@ -357,7 +403,7 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
             QString fromDate = tmpFromDate[2] + "-" + tmpFromDate[1] + "-" + tmpFromDate[0];
             tmpFromDate = dateRange[1].split("/");
             QString toDate  = tmpFromDate[2] + "-" + tmpFromDate[1] + "-" + tmpFromDate[0];
-            QString newValue = fromDate + " AND " + toDate;
+            QString newValue = fromDate + "'" + " AND " + "'" + toDate;
             newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), newValue, filter->exclude(), filter->includeNull());
 
         }
@@ -619,6 +665,7 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
 
     } else{
 
+        /********************************** DO NOT DELETE (Version 1)***********************
         if(conditions.contains(" AND ")){
 
             conditionList = conditions.split(" AND ");
@@ -633,6 +680,15 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
                 concetantedCondition.append("'" + individualCondition + "'");
             }
         }
+        *********************************** DO NOT DELETE (Version 1)************************/
+
+        conditionList = conditions.split(",");
+
+        foreach(individualCondition, conditionList){
+
+            concetantedCondition.append("'" + individualCondition + "'");
+        }
+
 
 
         notSign = sqlComparisonOperators.contains(relation)? " !" : " NOT ";
