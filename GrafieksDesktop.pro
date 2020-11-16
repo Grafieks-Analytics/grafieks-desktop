@@ -14,6 +14,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     Code/Connectors/mysqlcon.cpp \
+    Code/Connectors/odbccon.cpp \
     Code/Connectors/sqlitecon.cpp \
     Code/Logic/Connectors/box.cpp \
     Code/Logic/Connectors/boxds.cpp \
@@ -86,6 +87,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     Code/Connectors/allconnectors.h \
     Code/Connectors/mysqlcon.h \
+    Code/Connectors/odbccon.h \
     Code/Connectors/sqlitecon.h \
     Code/Logic/Connectors/box.h \
     Code/Logic/Connectors/boxds.h \
