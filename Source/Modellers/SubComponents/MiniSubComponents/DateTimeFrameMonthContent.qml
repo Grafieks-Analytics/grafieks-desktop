@@ -51,9 +51,38 @@ Column{
 
         var value = lastXRadioTextField.text
         var newValue = Number(value)
+        var tmpDate = new Date()
+        var thisMonth = tmpDate.getMonth()
+        var thisYear = tmpDate.getFullYear()
+        thisMonth = thisMonth + 1
 
+        var tmpValue;
+        var lastXMonths = []
+
+        for(let i = 0; i < newValue; i++){
+
+            if(thisMonth === 1){
+                thisYear = thisYear - 1
+                thisMonth = 12
+                tmpValue = thisYear.toString() + "-" + thisMonth.toString()
+                lastXMonths.push(tmpValue)
+            }
+            else{
+                thisMonth = thisMonth - 1
+                if(thisMonth < 10){
+                    tmpValue = thisYear.toString() + "-" + "0" + thisMonth.toString()
+                }
+                else{
+                    tmpValue = thisYear.toString() + "-" + thisMonth.toString()
+                }
+                lastXMonths.push(tmpValue)
+            }
+        }
+
+        console.log(lastXMonths.toString())
+        DSParamsModel.setTimeFrame("Last " + value + " Month", lastXMonths.toString())
         DSParamsModel.setSubCategory("Month")
-        DSParamsModel.addToJoinValue(mapKey, value)
+        DSParamsModel.addToJoinValue(mapKey, "Last " + value + " Month")
         DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
 
@@ -63,8 +92,38 @@ Column{
     function onNextXChecked(){
 
         var value = nextXRadioTextField.text
+        var newValue = Number(value)
+        var tmpDate = new Date()
+        var thisMonth = tmpDate.getMonth()
+        var thisYear = tmpDate.getFullYear()
+        thisMonth = thisMonth + 1
+
+        var tmpValue;
+        var nextXMonths = []
+
+        for(let i = 0; i < newValue; i++){
+
+            if(thisMonth === 12){
+                thisYear = thisYear + 1
+                thisMonth = 1
+                tmpValue = thisYear.toString() + "-" + "0" + thisMonth.toString()
+                nextXMonths.push(tmpValue)
+            }
+            else{
+                thisMonth = thisMonth + 1
+                if(thisMonth < 10){
+                    tmpValue = thisYear.toString() + "-" + "0" + thisMonth.toString()
+                }
+                else{
+                    tmpValue = thisYear.toString() + "-" + thisMonth.toString()
+                }
+                nextXMonths.push(tmpValue)
+            }
+        }
+        console.log(nextXMonths.toString())
+        DSParamsModel.setTimeFrame("Next " + value + " Month", nextXMonths.toString())
         DSParamsModel.setSubCategory("Month")
-        DSParamsModel.addToJoinValue(mapKey, value)
+        DSParamsModel.addToJoinValue(mapKey, "Next " + value + " Month")
         DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
 
@@ -286,6 +345,9 @@ Column{
             width: 80
             id:lastXRadioTextField
             anchors.left: lastXRadio.right
+            onTextChanged:{
+                onLastXChecked()
+            }
         }
         Text{
             height: 30
@@ -295,6 +357,7 @@ Column{
             anchors.top : parent.top
             anchors.topMargin: 5
             anchors.left:lastXRadioTextField.right
+
         }
 
     }
@@ -327,6 +390,9 @@ Column{
             height: 30
             width: 80
             anchors.left: nextXRadio.right
+            onTextChanged: {
+                onNextXChecked()
+            }
         }
         Text{
             height: 30
@@ -336,6 +402,7 @@ Column{
             anchors.top : parent.top
             anchors.topMargin: 5
             anchors.left:nextXRadioTextField.right
+
         }
 
     }
