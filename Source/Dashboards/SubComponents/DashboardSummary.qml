@@ -29,6 +29,7 @@ Rectangle {
     property var dynamicContainer : Qt.createComponent("./MiniSubComponents/MainContainer.qml");
 
     property var previousColor:null;
+    property var currnetPointReport: null;
 
 
 
@@ -90,12 +91,15 @@ Rectangle {
     }
 
     function onDropAreaDropped(drag){
+        is_dashboard_blank = is_dashboard_blank + 1
 
         let x1 = drag.x
         let y1 = drag.y
         let x2 = drag.x + Constants.defaultDroppedReportWidth
         let y2 = drag.y + Constants.defaultDroppedReportHeight
         let currentPoint = {x: drag.x, y: drag.y};
+        currnetPointReport = {x: drag.x, y: drag.y};
+
         let reportType = 0;
         let draggedItem = listViewElem.itemName.toLocaleLowerCase();
 

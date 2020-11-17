@@ -24,7 +24,7 @@ Page {
     id: new_dashboard_page
     property int menu_width: 60
 
-
+    property int is_dashboard_blank: 0
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -136,27 +136,27 @@ Page {
         console.log(previousDashboardIndex);
 
         dashboardModel.setProperty(previousDashboardIndex,"backgroundColorTest",themeColorCopy);
-         dashboardModel.setProperty(index,"backgroundColorTest","white");
+        dashboardModel.setProperty(index,"backgroundColorTest","white");
 
 
-//        dashboardList.contentItem.children[index].backgroundColor = "red";
-//        for(var i=0; i<dashboardModel.count; i++){
-//            console.log(i);
-//            if(dashboardIdLoop === dashboardId){
+        //        dashboardList.contentItem.children[index].backgroundColor = "red";
+        //        for(var i=0; i<dashboardModel.count; i++){
+        //            console.log(i);
+        //            if(dashboardIdLoop === dashboardId){
 
-//            }else{
-//                dashboardList.contentItem.children[i].backgroundColor = "green";
-//            }
-//        }
+        //            }else{
+        //                dashboardList.contentItem.children[i].backgroundColor = "green";
+        //            }
+        //        }
 
-//        for(var child in listContent){
-//            var dashboardIdLoop = dashboardModel.get(child).dashboardId;
-//            var dashboardName = dashboardModel.get(child).dashboardName;
-//            console.log('Loop name',dashboardName);
-//            console.log('Text Value',listContent[child].textValue);
-//            console.log('Loop id',dashboardIdLoop)
-//            console.log('clicked',dashboardId)
-//        }
+        //        for(var child in listContent){
+        //            var dashboardIdLoop = dashboardModel.get(child).dashboardId;
+        //            var dashboardName = dashboardModel.get(child).dashboardName;
+        //            console.log('Loop name',dashboardName);
+        //            console.log('Text Value',listContent[child].textValue);
+        //            console.log('Loop id',dashboardIdLoop)
+        //            console.log('clicked',dashboardId)
+        //        }
 
         DashboardParamsModel.setCurrentDashboard(dashboardId)
 
@@ -170,9 +170,9 @@ Page {
         dashboardList.flick(300, 0)
     }
 
-//    function scrollToExtremeLeft(){
-//        dashboardList.flick(300, 0)
-//    }
+    //    function scrollToExtremeLeft(){
+    //        dashboardList.flick(300, 0)
+    //    }
 
     function scrollToRight(){
         dashboardList.flick(-300, 0)
@@ -576,9 +576,9 @@ Page {
         anchors.top: submenu.bottom
         anchors.left: left_menubar.right
         anchors.leftMargin: -2
-//        anchors.bottom: submenu.bottom
-//        anchors.bottomMargin:  -10
-//                anchors.bottom: dashboard_summary.bottom
+        //        anchors.bottom: submenu.bottom
+        //        anchors.bottomMargin:  -10
+        //                anchors.bottom: dashboard_summary.bottom
         //        anchors.bottomMargin:  -10
         anchors.horizontalCenter: submenu.horizontalCenter
 
@@ -587,44 +587,51 @@ Page {
             implicitHeight: parent.vertical ? 25 : 1
             color: Constants.darkThemeColor
 
-//             anchors.leftMargin: 10
+            //             anchors.leftMargin: 10
         }
 
     }
 
     // Center Panel Starts
 
-Rectangle{
-    color:Constants.themeColor
-    anchors.left: left_menubar.right
-    anchors.top: toolsep1.bottom
-    anchors.topMargin: -6
-    height: parent.height
-    width:parent.width
+    Rectangle{
+        color:Constants.themeColor
+        anchors.left: left_menubar.right
+        anchors.top: toolsep1.bottom
+        anchors.topMargin: -6
+        height: parent.height
+        width:parent.width
 
-    DashboardSummary{
-        id: dashboard_summary
-//        height: parent.height
-//        width: parent.width
-        height: 800
-        width: 1280
+        DashboardSummary{
+            id: dashboard_summary
+            //        height: parent.height
+            //        width: parent.width
+            height: 800
+            width: 1280
 
-        Text{
-            id:hintText
-            text: "Add Reports and Widgets Here"
-            anchors.verticalCenter: parent.verticalCenter
-             anchors.horizontalCenter: parent.horizontalCenter
-             color: Constants.grayColor
+            Text{
+
+                id:hintText
+
+                text:  if (is_dashboard_blank==0) {
+                           "Add Reports and Widgets Here"
+                       }
+                       else {
+                           ""
+                       }
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                color: Constants.grayColor
+            }
+
+            //        anchors.left: left_menubar.right
+            //        anchors.top: toolsep1.bottom
+            //        anchors.topMargin: -6
+
+            //        width: parent.width  - left_menubar.width
         }
 
-//        anchors.left: left_menubar.right
-//        anchors.top: toolsep1.bottom
-//        anchors.topMargin: -6
-
-//        width: parent.width  - left_menubar.width
     }
-
-}
     // Center Panel Ends
 
 
