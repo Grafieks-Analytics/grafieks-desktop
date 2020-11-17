@@ -1,6 +1,7 @@
 #include "dsparamsmodel.h"
 
-DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent)
+DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent),
+    db(nullptr), con(db), counter(1)
 {
 
     m_section = Constants::defaultTabSection;

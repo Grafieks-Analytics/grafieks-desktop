@@ -119,6 +119,7 @@ HEADERS += \
     Code/Logic/DataModeller/filterfunctionsmodel.h \
     Code/Logic/DataModeller/filternumericallist.h \
     Code/Logic/DataModeller/filternumericallistmodel.h \
+    Code/Logic/DataModeller/inmemorymodel.h \
     Code/Logic/DataModeller/publishdatasourcemodel.h \
     Code/Logic/DataModeller/querymodel.h \
     Code/Logic/DataModeller/querystatsmodel.h \

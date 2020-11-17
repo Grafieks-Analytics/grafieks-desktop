@@ -9,10 +9,14 @@
 #include <QDataStream>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QElapsedTimer>
+
 
 #include "../../constants.h"
 #include "../../Messages.h"
 #include "../../statics.h"
+#include "../../duckdb.hpp"
+
 
 /*!
  * \brief Sets all the temporary variables for DataModeller
@@ -168,6 +172,13 @@ public:
     Q_INVOKABLE void setTimeFrame(QString dummy, QString actual);
     Q_INVOKABLE QVariantMap getTimeFrameMap();
 
+
+    // Datasource Read/Write
+    void parseCsv();
+    void parseParquet();
+    void exportCsv();
+    void exportParquet();
+
     int currentTab() const;
     QString fileExtension() const;
     QString dsName() const;
@@ -283,6 +294,20 @@ signals:
 private:
     QMap<QString, QString> datasourceCredentials();
     QString m_fileExtension;
+    duckdb::DuckDB db;
+    duckdb::Connection con;
+    int counter;
+
+    // Read Write Data source file
+    void insertOne();
+    void updateOne();
+    void deleteOne();
+    void fetchOne();
+
+    void insertMany();
+    void updateMany();
+    void deleteMany();
+    void fetchMany();
 };
 
 #endif // DSPARAMSMODEL_H
