@@ -79,7 +79,6 @@ Column{
             }
         }
 
-        console.log(lastXMonths.toString())
         DSParamsModel.setTimeFrame("Last " + value + " Month", lastXMonths.toString())
         DSParamsModel.setSubCategory("Month")
         DSParamsModel.addToJoinValue(mapKey, "Last " + value + " Month")
