@@ -47,11 +47,101 @@ Column{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    function isLeapYear(year){
+
+        if(year % 400 === 0)
+            return 1
+
+        if (year % 100 == 0)
+            return 0
+
+        if (year % 4 == 0)
+            return 1
+
+        return 0
+    }
+
     function onLastXChecked(){
 
         var value = lastXRadioTextField.text
+        var numOfDays = Number(value)
+
+        var tmpDate = new Date()
+        var newDate = Qt.formatDateTime(tmpDate,'yyyy-MM-dd')
+        var dateList = newDate.split("-")
+
+        var year = Number(dateList[0])
+        var month = Number(dateList[1])
+        var day = Number(dateList[2])
+
+        var newValue;
+        var lastXDays = []
+
+        for (let i = 0; i < numOfDays; i++){
+
+            if(day === 1){
+                if(month === 1){
+                    year = year - 1
+                    month = 12
+                    day = 31
+                    newValue = year.toString() + "-" + month.toString() + "-" + day.toString()
+                }
+                else{
+                    month = month - 1
+                    if(month === 2){
+                        if(isLeapYear(year)){
+                            day = 29
+                        }
+                        else{
+                            day = 28
+                        }
+                        newValue = year.toString() + "-" + "0" + month.toString() + "-" + day.toString()
+                    }
+                    else{
+                        if(month === 4 || month === 6 || month === 9 || month === 11){
+                            day = 30
+                            if(month < 10){
+                                newValue = year.toString() + "-" + "0" + month.toString() + "-" + day.toString()
+                            }
+                            else{
+                                newValue = year.toString() + "-" + month.toString() + "-" + day.toString()
+                            }
+                        }
+                        else{
+                            day = 31
+                            if(month < 10){
+                                newValue = year.toString() + "-" + "0" + month.toString() + "-" + day.toString()
+                            }
+                            else{
+                                newValue = year.toString() + "-" + month.toString() + "-" + day.toString()
+                            }
+                        }
+                    }
+                }
+            }
+            else{
+                day = day - 1
+                if(day < 10 && month < 10){
+                    newValue = year.toString() + "-" + "0" + month.toString() + "-" + "0" + day.toString()
+                }
+                else if(month < 10){
+                    newValue = year.toString() + "-" + "0" + month.toString() + "-" + day.toString()
+                }
+                else if(day < 10){
+                    newValue = year.toString() + "-" + month.toString() + "-" + "0" + day.toString()
+                }
+                else{
+                    newValue = year.toString() + "-" + month.toString() + "-" + day.toString()
+                }
+            }
+
+            lastXDays.push(newValue)
+        }
+
+        console.log(lastXDays.toString())
+        DSParamsModel.setTimeFrame("Last " + value + " Day", lastXDays.toString())
         DSParamsModel.setSubCategory("Day")
-        DSParamsModel.addToJoinValue(mapKey, value)
+        DSParamsModel.addToJoinValue(mapKey, "Last " + value + " Day")
         DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
 
@@ -61,8 +151,96 @@ Column{
     function onNextXChecked(){
 
         var value = nextXRadioTextField.text
+        var numOfDays = Number(value)
+
+        var tmpDate = new Date()
+        var newDate = Qt.formatDateTime(tmpDate,'yyyy-MM-dd')
+        var dateList = newDate.split("-")
+
+        var year = Number(dateList[0])
+        var month = Number(dateList[1])
+        var day = Number(dateList[2])
+
+        var newValue;
+        var nextXDays = []
+
+        for(let i = 0; i < numOfDays; i++){
+
+            if(day === 31){
+                if(month === 12){
+                    year = year + 1
+                    month = 1
+                    day = 1
+                    newValue = year.toString() + "-" + "0" + month.toString() + "-" + "0" + day.toString()
+                }
+                else{
+                    month = month + 1
+                    day = 1
+                    if(month < 10)
+                        newValue = year.toString() + "-" + "0" + month.toString() + "-" + "0" + day.toString()
+                    else
+                        newValue = year.toString() + "-" + month.toString() + "-" + "0" + day.toString()
+                }
+            }
+            else if(day === 30){
+
+                if(month === 4 || month === 6 || month === 9 || month === 11){
+                        day = 1
+                        month = month + 1
+                        if(month < 10)
+                            newValue = year.toString() + "-" + "0" + month.toString() + "-" + "0" + day.toString()
+                        else
+                            newValue = year.toString() + "-" + month.toString() + "-" + "0" + day.toString()
+                }
+                else{
+                    day = day + 1
+                    if(month < 10)
+                        newValue = year.toString() + "-" + "0" + month.toString() + "-" + day.toString()
+                    else
+                        newValue = year.toString() + "-" + month.toString() + "-" + day.toString()
+
+                }
+            }
+            else{
+                if(day === 29 && month === 2){
+                    month = 3
+                    day = 1
+                    newValue = year.toString() + "-" + "0" + month.toString() + "-" + "0" + day.toString()
+                }
+                else if(day === 28 && month === 2){
+                    if(isLeapYear(year)){
+                        day = day + 1
+                        newValue = year.toString() + "-" + "0" + month.toString() + "-" + day.toString()
+                    }
+                    else{
+                        month = 3
+                        day = 1
+                        newValue = year.toString() + "-" + "0" + month.toString() + "-" + "0" + day.toString()
+                    }
+                }
+                else{
+                    day = day + 1
+                    if(day < 10 && month < 10){
+                        newValue = year.toString() + "-" + "0" + month.toString() + "-" + "0" + day.toString()
+                    }
+                    else if(month < 10){
+                        newValue = year.toString() + "-" + "0" + month.toString() + "-" + day.toString()
+                    }
+                    else if(day < 10){
+                        newValue = year.toString() + "-" + month.toString() + "-" + "0" + day.toString()
+                    }
+                    else{
+                        newValue = year.toString() + "-" + month.toString() + "-" + day.toString()
+                    }
+                }
+            }
+            nextXDays.push(newValue)
+        }
+
+        console.log(nextXDays.toString())
+        DSParamsModel.setTimeFrame("Next " + value + " Day", nextXDays.toString())
         DSParamsModel.setSubCategory("Day")
-        DSParamsModel.addToJoinValue(mapKey, value)
+        DSParamsModel.addToJoinValue(mapKey, "Next " + value + " Day")
         DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
 
@@ -73,10 +251,12 @@ Column{
     function onThisChecked(){
 
         var tmpDate = new Date()
-        var day = tmpDate.getDay()
-        var newValue = weekDays[day]
+        var newDate = Qt.formatDateTime(tmpDate,'yyyy-MM-dd')
+        var thisDay = newDate
+
+        DSParamsModel.setTimeFrame("This Day", thisDay.toString())
         DSParamsModel.setSubCategory("Day")
-        DSParamsModel.addToJoinValue(mapKey, newValue)
+        DSParamsModel.addToJoinValue(mapKey, "This Day")
         DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
 
@@ -87,14 +267,75 @@ Column{
     function onLastChecked(){
 
         var tmpDate = new Date()
-        var day = tmpDate.getDay()
-        if(day === 0)
-            day = 6
-        else
+        var newDate = Qt.formatDateTime(tmpDate,'yyyy-MM-dd')
+        var dateList = newDate.split("-")
+
+        var year = Number(dateList[0])
+        var month = Number(dateList[1])
+        var day = Number(dateList[2])
+
+        var newValue;
+
+        if(day === 1){
+            if(month === 1){
+                year = year - 1
+                month = 12
+                day = 31
+                newValue = year.toString() + "-" + month.toString() + "-" + day.toString()
+            }
+            else{
+                month = month - 1
+                if(month === 2){
+                    if(isLeapYear(year)){
+                        day = 29
+                    }
+                    else{
+                        day = 28
+                    }
+                    newValue = year.toString() + "-" + "0" + month.toString() + "-" + day.toString()
+                }
+                else{
+                    if(month === 4 || month === 6 || month === 9 || month === 11){
+                        day = 30
+                        if(month < 10){
+                            newValue = year.toString() + "-" + "0" + month.toString() + "-" + day.toString()
+                        }
+                        else{
+                            newValue = year.toString() + "-" + month.toString() + "-" + day.toString()
+                        }
+                    }
+                    else{
+                        day = 31
+                        if(month < 10){
+                            newValue = year.toString() + "-" + "0" + month.toString() + "-" + day.toString()
+                        }
+                        else{
+                            newValue = year.toString() + "-" + month.toString() + "-" + day.toString()
+                        }
+                    }
+                }
+
+            }
+        }
+        else{
             day = day - 1
-        var newValue = weekDays[day]
+            if(day < 10 && month < 10){
+                newValue = year.toString() + "-" + "0" + month.toString() + "-" + "0" + day.toString()
+            }
+            else if(month < 10){
+                newValue = year.toString() + "-" + "0" + month.toString() + "-" + day.toString()
+            }
+            else if(day < 10){
+                newValue = year.toString() + "-" + month.toString() + "-" + "0" + day.toString()
+            }
+            else{
+                newValue = year.toString() + "-" + month.toString() + "-" + day.toString()
+            }
+        }
+
+        DSParamsModel.setTimeFrame("Last Day", newValue.toString())
         DSParamsModel.setSubCategory("Day")
-        DSParamsModel.addToJoinValue(mapKey, newValue)
+        DSParamsModel.addToJoinValue(mapKey, "Last Day")
         DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
 
@@ -105,14 +346,87 @@ Column{
     function onNextChecked(){
 
         var tmpDate = new Date()
-        var day = tmpDate.getDay()
-        if(day === 6)
-            day = 0
-        else
-            day = day + 1
-        var newValue = weekDays[day]
+        var newDate = Qt.formatDateTime(tmpDate,'yyyy-MM-dd')
+        var dateList = newDate.split("-")
+
+        var year = Number(dateList[0])
+        var month = Number(dateList[1])
+        var day = Number(dateList[2])
+
+        var newValue;
+
+        if(day === 31){
+            if(month === 12){
+                year = year + 1
+                month = 1
+                day = 1
+                newValue = year.toString() + "-" + "0" + month.toString() + "-" + "0" + day.toString()
+            }
+            else{
+                month = month + 1
+                day = 1
+                if(month < 10)
+                    newValue = year.toString() + "-" + "0" + month.toString() + "-" + "0" + day.toString()
+                else
+                    newValue = year.toString() + "-" + month.toString() + "-" + "0" + day.toString()
+            }
+        }
+        else if(day === 30){
+
+            if(month === 4 || month === 6 || month === 9 || month === 11){
+                    day = 1
+                    month = month + 1
+                    if(month < 10)
+                        newValue = year.toString() + "-" + "0" + month.toString() + "-" + "0" + day.toString()
+                    else
+                        newValue = year.toString() + "-" + month.toString() + "-" + "0" + day.toString()
+            }
+            else{
+                day = day + 1
+                if(month < 10)
+                    newValue = year.toString() + "-" + "0" + month.toString() + "-" + day.toString()
+                else
+                    newValue = year.toString() + "-" + month.toString() + "-" + day.toString()
+
+            }
+        }
+        else{
+            if(day === 29 && month === 2){
+                month = 3
+                day = 1
+                newValue = year.toString() + "-" + "0" + month.toString() + "-" + "0" + day.toString()
+            }
+            else if(day === 28 && month === 2){
+                if(isLeapYear(year)){
+                    day = day + 1
+                    newValue = year.toString() + "-" + "0" + month.toString() + "-" + day.toString()
+                }
+                else{
+                    month = 3
+                    day = 1
+                    newValue = year.toString() + "-" + "0" + month.toString() + "-" + "0" + day.toString()
+                }
+            }
+            else{
+                day = day + 1
+                if(day < 10 && month < 10){
+                    newValue = year.toString() + "-" + "0" + month.toString() + "-" + "0" + day.toString()
+                }
+                else if(month < 10){
+                    newValue = year.toString() + "-" + "0" + month.toString() + "-" + day.toString()
+                }
+                else if(day < 10){
+                    newValue = year.toString() + "-" + month.toString() + "-" + "0" + day.toString()
+                }
+                else{
+                    newValue = year.toString() + "-" + month.toString() + "-" + day.toString()
+                }
+            }
+        }
+
+        DSParamsModel.setTimeFrame("Next Day", newValue.toString())
         DSParamsModel.setSubCategory("Day")
-        DSParamsModel.addToJoinValue(mapKey, newValue)
+        DSParamsModel.addToJoinValue(mapKey, "Next Day")
         DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
 
@@ -243,6 +557,9 @@ Column{
             width: 80
             id:lastXRadioTextField
             anchors.left: lastXRadio.right
+            onTextChanged: {
+                onLastXChecked()
+            }
         }
         Text{
             height: 30
@@ -284,6 +601,9 @@ Column{
             height: 30
             width: 80
             anchors.left: nextXRadio.right
+            onTextChanged: {
+                onNextXChecked()
+            }
         }
         Text{
             height: 30
