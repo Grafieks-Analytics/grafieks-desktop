@@ -163,9 +163,11 @@ public:
     Q_INVOKABLE QVariantMap fetchJoinRelationSlug(int refObjId = 0, bool fetchAll = false);
 
     Q_INVOKABLE void setValueFormat(QString value, QString format);
+    Q_INVOKABLE void removeValueFormat(QString key);
     Q_INVOKABLE QVariantMap getDateFormatMap();
 
     Q_INVOKABLE void setTimeFrame(QString dummy, QString actual);
+    Q_INVOKABLE void removeTimeFrame(QString key);
     Q_INVOKABLE QVariantMap getTimeFrameMap();
 
     int currentTab() const;

@@ -241,7 +241,7 @@ void FilterDateListModel::updateFilter(int FilterIndex, QString section, QString
     if(relation != "")
         mFilter[FilterIndex]->setRelation(relation);
     if(slug != "")
-        mFilter[FilterIndex]->setValue(slug);
+        mFilter[FilterIndex]->setSlug(slug);
     if(value != "")
         mFilter[FilterIndex]->setValue(value);
 
