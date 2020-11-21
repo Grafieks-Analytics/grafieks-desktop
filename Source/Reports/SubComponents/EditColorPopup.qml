@@ -154,6 +154,11 @@ Popup {
     }
 
 
+    ColorDialog{
+        id: colorSchemeDialog
+    }
+
+
     // SubComponents Ends
     /***********************************************************************************************************************/
 
@@ -265,7 +270,10 @@ Popup {
                                 anchors.leftMargin: 10
                                 anchors.verticalCenter: parent.verticalCenter
                             }
-
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: colorSchemeDialog.open()
+                            }
                         }
 
 

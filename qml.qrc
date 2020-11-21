@@ -129,5 +129,7 @@
         <file>Source/Reports/SubComponents/MiniSubComponents/AxisSettings.qml</file>
         <file>Source/Reports/SubComponents/EditColorPopup.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/ColorSchemeRow.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/MultipleAxisSettings.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/ComboOptions.qml</file>
     </qresource>
 </RCC>
