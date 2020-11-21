@@ -17,7 +17,7 @@ Popup {
     height: 120
     x: 10
     modal: false
-    visible: true
+    visible: false
 
     ListModel{
         id: outlined
@@ -70,8 +70,8 @@ Popup {
 
                     ListView{
                         model: outlined
-                        height: shapeHeight*4
-                        spacing: 5
+                        height: (shapeHeight+this.spacing)*outlined.count
+                        spacing: 8
                         delegate: Image {
                             source: "/Images/icons/shapes/"+icon
                             height: shapeHeight
@@ -90,8 +90,8 @@ Popup {
                     anchors.fill: parent
                     ListView{
                         model: filled
-                        height: shapeHeight*4
-                        spacing: 5
+                        height: (shapeHeight+this.spacing)*filled.count
+                        spacing: 8
                         delegate: Image {
                             source: "/Images/icons/shapes/"+icon
                             height: shapeHeight
