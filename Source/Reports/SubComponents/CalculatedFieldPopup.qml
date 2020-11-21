@@ -15,7 +15,7 @@ Popup {
     height: 600
     anchors.centerIn: parent
 
-    visible: false
+    visible: true
     modal: true
     padding: 0
     closePolicy: Popup.NoAutoClose
@@ -25,51 +25,39 @@ Popup {
     }
 
 
+
+    // Listmodel for combobox
     ListModel{
-        id: dataItemList
+        id: calculations
+
         ListElement{
-            colorValue: "blue"
-            dataItemName: "Total Quality"
+            calculationName:"Number"
         }
         ListElement{
-            colorValue: "green"
-            dataItemName: "Total Discount"
+            calculationName:"String"
         }
+        ListElement{
+            calculationName:"Date"
+        }
+        ListElement{
+            calculationName:"Date Conversion"
+        }
+        ListElement{
+            calculationName:"Logical"
+        }
+        ListElement{
+            calculationName:"Aggregate"
+        }
+        ListElement{
+            calculationName:"User"
+        }
+        ListElement{
+            calculationName:"Table Calculation"
+        }
+
     }
 
-    ListModel{
-        id: colorSchemeList
-        ListElement{
-            schemeName: "category10"
-        }
-        ListElement{
-            schemeName: "Accent"
-        }
-        ListElement{
-            schemeName: "Dark2"
-        }
-        ListElement{
-            schemeName: "Paired"
-        }
-        ListElement{
-            schemeName: "Pastel1"
-        }
-        ListElement{
-            schemeName: "Pastel2"
-        }
-        ListElement{
-            schemeName: "Set1"
-        }
-        ListElement{
-            schemeName: "Set2"
-        }
-        ListElement{
-            schemeName: "Set3"
-        }
-        ListElement{
-            schemeName: "Tableau10"
-        }
-    }
+
 
     /***********************************************************************************************************************/
     // SIGNALS STARTS
@@ -110,26 +98,7 @@ Popup {
     /***********************************************************************************************************************/
     // SubComponents Starts
 
-    ColorDialog{
-        id: xAxisLegendColorDialog
-    }
 
-    ColorDialog{
-        id: xAxisTickMarkColorDialog
-    }
-
-    ColorDialog{
-        id: yAxisLegendColorDialog
-    }
-
-    ColorDialog{
-        id: yAxisTickMarkColorDialog
-    }
-
-
-    ColorDialog{
-        id: colorSchemeDialog
-    }
 
 
     // SubComponents Ends
@@ -197,7 +166,142 @@ Popup {
         Rectangle{
             height: parent.height
             width: parent.width
-            color: "red"
+
+            Column{
+                anchors.fill: parent
+                spacing: 10
+
+                Rectangle{
+                    id: nameFieldRect
+                    height: 30
+                    width: parent.width
+
+                    Row{
+                        spacing: 15
+                        anchors.left: parent.left
+
+                        Rectangle{
+                            height: parent.parent.height
+                            width: nameLabel.width
+                            Text {
+                                id: nameLabel
+                                text: qsTr("Name")
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+                        }
+
+                        TextField{
+                            placeholderText: "Enter Name"
+                            width: 200
+                            height: parent.parent.height
+                        }
+                    }
+                }
+
+                Rectangle{
+                    height: parent.height - nameFieldRect.height
+                    width: parent.width
+
+                    Row{
+                        anchors.fill: parent
+                        spacing: 20
+
+                        Rectangle{
+                            height: parent.height
+                            width: parent.width - rightPanel.width - parent.spacing
+                            Column{
+                                anchors.fill: parent
+                                spacing: 10
+
+                                Text {
+                                    id: calculationLabel
+                                    text: qsTr("Calculation")
+                                }
+
+                                Rectangle{
+                                    height: parent.height - calculationLabel.height - 4*parent.spacing
+                                    width: parent.width
+                                    border.color: Constants.darkThemeColor
+                                }
+
+                            }
+
+                        }
+                        Rectangle{
+                            id: rightPanel
+                            height: parent.height
+                            width: 220
+
+                            Column{
+                                anchors.fill: parent
+                                spacing: 10
+
+                                Text {
+                                    id: functionsLabel
+                                    text: qsTr("Functions")
+                                }
+
+                                Rectangle{
+                                    height: parent.height - functionsLabel.height - 4*parent.spacing
+                                    width: parent.width
+
+                                    Column{
+                                        anchors.fill: parent
+                                        spacing: 10
+
+                                        Rectangle{
+                                            id: functionField
+                                            height: 30
+                                            width: parent.width
+
+                                            CustomComboBox{
+
+                                                currentIndex: 0
+                                                model: calculations
+                                                textRole: "calculationName"
+                                                width: parent.width
+                                                height: parent.height
+                                                font.pixelSize: Constants.fontCategoryHeaderMedium
+                                                anchors.centerIn: parent
+                                            }
+
+                                        }
+
+                                        Rectangle{
+                                            id: syntaxLabel
+                                            height: 30
+                                            width: parent.width
+                                            Text {
+                                                text: qsTr("Syntax")
+                                                anchors.verticalCenter: parent.verticalCenter
+                                            }
+                                        }
+
+                                        Rectangle{
+                                            height: parent.height - functionField.height - syntaxLabel.height - 2*parent.spacing
+                                            width: parent.width
+
+                                            color: Constants.themeColor
+                                            border.color: Constants.darkThemeColor
+
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+
+                }
+            }
+
+
+
         }
 
     }
@@ -217,11 +321,15 @@ Popup {
             anchors.rightMargin: 20
 
             CustomButton{
+                id: cancelBtn
                 textValue: "Cancel"
+                height: Constants.defaultElementHeight
                 onClicked: onCancelClicked()
             }
 
             CustomButton{
+                id: applyBtn
+                height: Constants.defaultElementHeight
                 textValue: "Apply"
             }
         }

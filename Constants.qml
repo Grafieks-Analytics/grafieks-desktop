@@ -86,6 +86,9 @@ QtObject {
     property int subMenuWidth: 31
 
 
+    // Constant Height
+    property int defaultElementHeight: 30
+
     // Menu option
     property int dataDesignerMenu : 0
     property int dashboardDesignerMenu : 1
