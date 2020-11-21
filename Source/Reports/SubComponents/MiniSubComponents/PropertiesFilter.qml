@@ -331,6 +331,11 @@ Column{
         Rectangle{
             anchors.fill: parent
 
+            MarkerShapePopup{
+                id: markerShapePopup
+                x: parent.width - 10
+            }
+
             Text {
                 text: qsTr("Marker Shape")
                 anchors.left: parent.left
@@ -346,6 +351,10 @@ Column{
                 anchors.right: parent.right
                 anchors.rightMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: markerShapePopup.visible = true
+                }
             }
 
         }

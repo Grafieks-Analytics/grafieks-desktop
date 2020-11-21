@@ -134,5 +134,6 @@
         <file>Source/Reports/SubComponents/MiniSubComponents/ComboOptions.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/SizePopup.qml</file>
         <file>Source/MainSubComponents/CustomSlider.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/MarkerShapePopup.qml</file>
     </qresource>
 </RCC>
