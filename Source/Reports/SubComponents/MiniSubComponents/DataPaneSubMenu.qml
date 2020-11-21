@@ -13,7 +13,7 @@ Popup {
     property int elementHeight: 20
     property bool convertToSelected: false
 
-    width: parent.width - 20
+    width: parent.width - 10
     x: 10
     height: 60
     modal: false
@@ -26,6 +26,7 @@ Popup {
 
     function openCalculatedFieldMenu(){
         console.log('openCalculatedFieldPopup');
+        calculatedFieldPopup.visible = true
     }
 
     Rectangle{
