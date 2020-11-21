@@ -53,6 +53,13 @@ Popup {
                     font.pixelSize: Constants.fontCategoryHeaderMedium
                     anchors.verticalCenter: parent.verticalCenter
                 }
+
+                HorizontalLineTpl{
+                    line_color: Constants.darkThemeColor
+                    line_width: parent.width + 20
+                    x: -10
+                    anchors.top: parent.bottom
+                }
             }
 
             Rectangle{
@@ -73,6 +80,13 @@ Popup {
                         anchors.fill: parent
                         onClicked: openSubMenu('create')
                     }
+                }
+
+                HorizontalLineTpl{
+                    line_color: Constants.darkThemeColor
+                    line_width: parent.width + 20
+                    x: -10
+                    anchors.top: parent.bottom
                 }
             }
 
@@ -96,6 +110,7 @@ Popup {
                         onClicked: openSubMenu('convertTo')
                     }
                 }
+
             }
 
 

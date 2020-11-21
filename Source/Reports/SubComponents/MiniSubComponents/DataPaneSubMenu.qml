@@ -13,7 +13,7 @@ Popup {
     property int elementHeight: 20
     property bool convertToSelected: false
 
-    width: parent.width - 10
+    width: parent.width
     x: 10
     height: 60
     modal: false
@@ -74,7 +74,16 @@ Popup {
                     font.pixelSize: Constants.fontCategoryHeaderMedium
                     anchors.verticalCenter: parent.verticalCenter
                 }
+
+                HorizontalLineTpl{
+                    line_color: Constants.darkThemeColor
+                    line_width: parent.width + 20
+                    x: -10
+                    anchors.top: parent.bottom
+                }
+
             }
+
 
             Rectangle{
                 height: elementHeight
@@ -85,6 +94,14 @@ Popup {
                     text: qsTr("Number")
                     font.pixelSize: Constants.fontCategoryHeaderMedium
                     anchors.verticalCenter: parent.verticalCenter
+                }
+
+
+                HorizontalLineTpl{
+                    line_color: Constants.darkThemeColor
+                    line_width: parent.width + 20
+                    x: -10
+                    anchors.top: parent.bottom
                 }
             }
 
