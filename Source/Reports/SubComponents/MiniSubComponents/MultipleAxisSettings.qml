@@ -29,6 +29,9 @@ Rectangle{
         ListElement{
             itemName: "Total Profit"
         }
+        ListElement{
+            itemName: "Total Profit"
+        }
     }
 
 

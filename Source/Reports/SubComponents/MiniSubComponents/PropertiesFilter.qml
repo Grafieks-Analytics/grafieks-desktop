@@ -291,6 +291,10 @@ Column{
         Rectangle{
             anchors.fill: parent
 
+            SizePopup{
+                id: sizePopup
+            }
+
             Text {
                 text: qsTr("Size")
                 anchors.left: parent.left
@@ -306,6 +310,10 @@ Column{
                 anchors.right: parent.right
                 anchors.rightMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: sizePopup.visible = true
+                }
             }
 
         }
