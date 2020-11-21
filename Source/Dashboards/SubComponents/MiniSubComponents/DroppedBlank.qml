@@ -183,7 +183,7 @@ Item{
                         id: fullScreenReport
                         height: 16
                         width: 16
-                        source: "/Images/icons/close black.png"
+                        source: "/Images/icons/close gray.png"
                         anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea{

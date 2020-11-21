@@ -127,9 +127,9 @@ Rectangle{
 
             Image {
                 anchors.right: parent.right
-                source: "/Images/icons/Edit.png"
-                height: 20
-                width: 20
+                source: "/Images/icons/edit gray.png"
+                height: 18
+                width: 18
 
                 MouseArea{
                     anchors.fill: parent

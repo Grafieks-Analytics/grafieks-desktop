@@ -79,7 +79,7 @@ Item{
             collapsed: false
 
             subItems: [
-                ListElement { itemName: "Report 1"; itemType: "chart" },
+                ListElement { itemName: "Report 1"; itemType: "chart"; },
                 ListElement { itemName: "Report 2"; itemType: "chart" },
                 ListElement { itemName: "Report 3"; itemType: "chart" },
                 ListElement { itemName: "Report 4"; itemType: "chart" }
@@ -143,6 +143,7 @@ Item{
                 id: categoryItem
                 height: 30
                 width: 200
+
                 color: Constants.themeColor
 
                 Text {
@@ -222,8 +223,9 @@ Item{
 
                 delegate: Rectangle {
                     id: dragRect
-                    height: 20
+                    height: 25
                     width: 200
+                    anchors.topMargin: 50
 
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
@@ -231,6 +233,24 @@ Item{
                         font.pixelSize: 12
                         text: itemName
                     }
+
+                    Image{
+                        id: resizeReport
+                        height: 16
+                        width: 16
+                        source: "/Images/icons/edit gray.png"
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: resizeOptions.open()
+                        }
+                    }
+
+
+
+
+
 
                     MouseArea {
                         id: mouseArea
@@ -328,7 +348,17 @@ Item{
         interactive: false
         delegate: categoryDelegate
     }
+//    Image{
+//        id: resizeReport
+//        height: 16
+//        width: 16
+//        source: "/Images/icons/view gray.png"
+//        anchors.verticalCenter: parent.verticalCenter
 
-
+//        MouseArea{
+//            anchors.fill: parent
+//            onClicked: resizeOptions.open()
+//        }
+//    }
 }
 

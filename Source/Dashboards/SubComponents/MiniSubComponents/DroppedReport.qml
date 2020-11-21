@@ -125,7 +125,7 @@ Item{
         {
             mainContainer.width = Constants.defaultDroppedReportWidth
             mainContainer.height = Constants.defaultDroppedReportHeight
-           fullScreenReport.source= "/Images/icons/zoom_in_new.png"
+           fullScreenReport.source= "/Images/icons/zoom in gray.png"
             mainContainer.y=currnetPointReport.y
             mainContainer.x=currnetPointReport.x
 
@@ -139,7 +139,7 @@ Item{
             mainContainer.x=0
 
 
-             fullScreenReport.source= "/Images/icons/zoom_out_new.png"
+             fullScreenReport.source= "/Images/icons/zoom out gray.png"
             DashboardParamsModel.setZIndex(++DashboardParamsModel.zIndex);
             newItem.z = DashboardParamsModel.zIndex;
             mainContainer.z = DashboardParamsModel.zIndex;
@@ -250,7 +250,6 @@ Item{
             }
 //            Drag.hotSpot.x: 2
 //            Drag.hotSpot.y: 2
-
             onClicked:  showCustomizeReport()
             onPressed:  onItemPressed()
             onPositionChanged:  onDropAreaPositionChangedReport(drag)
@@ -295,7 +294,7 @@ Item{
                         id: editReport
                         height: 18
                         width: 18
-                        source: "/Images/icons/edit grey.png"
+                        source: "/Images/icons/edit gray.png"
                         anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea{
@@ -308,7 +307,7 @@ Item{
                         id: resizeReport
                         height: 16
                         width: 16
-                        source: "/Images/icons/view.png"
+                        source: "/Images/icons/view gray.png"
                         anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea{
@@ -321,7 +320,7 @@ Item{
                         id: fullScreenReport
                         height: 16
                         width: 16
-                        source: "/Images/icons/zoom_in_new.png"
+                        source: "/Images/icons/zoom in gray.png"
 //                        source: "/Images/icons/minimise.png"
                         anchors.verticalCenter: parent.verticalCenter
 
