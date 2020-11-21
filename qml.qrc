@@ -135,5 +135,7 @@
         <file>Source/Reports/SubComponents/MiniSubComponents/SizePopup.qml</file>
         <file>Source/MainSubComponents/CustomSlider.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/MarkerShapePopup.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/DataPaneMenu.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/DataPaneElement.qml</file>
     </qresource>
 </RCC>
