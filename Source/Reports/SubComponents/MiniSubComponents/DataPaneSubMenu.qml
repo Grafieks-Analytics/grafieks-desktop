@@ -11,10 +11,11 @@ import "../MiniSubComponents";
 Popup {
 
     property int elementHeight: 20
+    property bool convertToSelected: false
 
     width: parent.width - 20
     x: 10
-    height: 100
+    height: 60
     modal: false
     visible: false
 
@@ -23,15 +24,8 @@ Popup {
         border.color: Constants.themeColor
     }
 
-    function openSubMenu(type){
-        switch(type){
-        case "convertTo": dataPaneSubMenu.convertToSelected = true
-            break;
-        case "create": dataPaneSubMenu.convertToSelected = false
-            break;
-        }
-
-        dataPaneSubMenu.visible = true
+    function openCalculatedFieldMenu(){
+        console.log('openCalculatedFieldPopup');
     }
 
     Rectangle{
@@ -40,16 +34,42 @@ Popup {
             anchors.fill: parent
             spacing: 8
 
-            DataPaneSubMenu{
-                id: dataPaneSubMenu
+            Rectangle{
+                height: elementHeight
+                width: parent.width
+                visible: !convertToSelected
+
+                Text {
+                    text: qsTr("Calculated Field")
+                    font.pixelSize: Constants.fontCategoryHeaderMedium
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: openCalculatedFieldMenu()
+                }
             }
 
             Rectangle{
                 height: elementHeight
                 width: parent.width
+                visible: !convertToSelected
 
                 Text {
-                    text: qsTr("Rename")
+                    text: qsTr("Group")
+                    font.pixelSize: Constants.fontCategoryHeaderMedium
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+            }
+
+
+            Rectangle{
+                height: elementHeight
+                width: parent.width
+                visible: convertToSelected
+
+                Text {
+                    text: qsTr("Date")
                     font.pixelSize: Constants.fontCategoryHeaderMedium
                     anchors.verticalCenter: parent.verticalCenter
                 }
@@ -58,46 +78,14 @@ Popup {
             Rectangle{
                 height: elementHeight
                 width: parent.width
+                visible: convertToSelected
 
                 Text {
-                    text: qsTr("Create")
+                    text: qsTr("Number")
                     font.pixelSize: Constants.fontCategoryHeaderMedium
                     anchors.verticalCenter: parent.verticalCenter
                 }
-                Image {
-                    source: "/Images/icons/arrow_right.png"
-                    height: 20
-                    width: 20
-                    anchors.right: parent.right
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: openSubMenu('create')
-                    }
-                }
             }
-
-            Rectangle{
-                height: elementHeight
-                width: parent.width
-
-                Text {
-                    text: qsTr("Convert To")
-                    font.pixelSize: Constants.fontCategoryHeaderMedium
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-
-                Image {
-                    source: "/Images/icons/arrow_right.png"
-                    height: 20
-                    width: 20
-                    anchors.right: parent.right
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: openSubMenu('convertTo')
-                    }
-                }
-            }
-
 
         }
     }
