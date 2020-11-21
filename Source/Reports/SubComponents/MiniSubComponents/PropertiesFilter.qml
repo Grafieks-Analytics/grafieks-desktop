@@ -28,6 +28,13 @@ Column{
         id: colorListModel
     }
 
+    ListModel{
+        id: fonts
+        ListElement{
+            fontName:"Default"
+        }
+    }
+
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
 
@@ -74,7 +81,9 @@ Column{
         allParameter.border.color =  Constants.themeColor
         allParameter.border.width =  2
 
+
     }
+
 
     function onDropAreaEntered(element){
         element.border.width = Constants.dropActiveBorderWidth;
@@ -274,6 +283,10 @@ Column{
                 anchors.rightMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
             }
+            MouseArea{
+                anchors.fill: parent
+                onClicked: toolTipPopup.visible = true
+            }
 
         }
 
@@ -381,19 +394,74 @@ Column{
                 font.pixelSize: Constants.fontCategoryHeaderSmall
             }
 
-            Image {
-                height: editImageSize
-                width: editImageSize
-                source: "/Images/icons/Edit_20.png"
+            CheckBoxTpl{
+
+                checked: false
+                parent_dimension: editImageSize - 2
                 anchors.right: parent.right
-                anchors.rightMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.rightMargin: 5
+                anchors.top: parent.top
+
             }
 
         }
 
     }
     // Label Ends
+
+    // Font starts
+    Rectangle{
+
+        height: 60
+        width: parent.width
+
+
+        Column{
+
+            anchors.fill: parent
+            spacing: 5
+            Rectangle{
+                height: 20
+                width: parent.width
+
+                Text {
+                    text: qsTr("Font")
+                    anchors.left: parent.left
+                    anchors.leftMargin: leftMargin
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Constants.fontCategoryHeaderSmall
+                }
+            }
+
+            Rectangle{
+                height: 30
+                width: parent.width
+                CustomComboBox{
+                    id: fontSizes
+
+                    Component.onCompleted: {
+                        let fontFamilies = Qt.fontFamilies();
+                        for(let i=0; i<fontFamilies.length;i++){
+                            fonts.append({"fontName": fontFamilies[i]});
+                        }
+                        fontSizes.model = fonts
+                    }
+
+                    model: fonts
+                    textRole: "fontName"
+                    width: parent.width-2*leftMargin
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.rightMargin: leftMargin
+                    anchors.top: parent.top
+                }
+
+            }
+        }
+
+    }
+    // Font Ends
 
 
     // Merge Axis starts

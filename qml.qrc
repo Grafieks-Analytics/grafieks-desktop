@@ -139,5 +139,6 @@
         <file>Source/Reports/SubComponents/MiniSubComponents/DataPaneElement.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/DataPaneSubMenu.qml</file>
         <file>Source/Reports/SubComponents/CalculatedFieldPopup.qml</file>
+        <file>Source/Reports/SubComponents/ToolTipPopup.qml</file>
     </qresource>
 </RCC>

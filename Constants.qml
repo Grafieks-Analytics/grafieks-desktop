@@ -174,6 +174,7 @@ QtObject {
     property string axisSettingText: "Axis Setting"
     property string reportEditColorPopup: "Edit Color"
     property string reportCalculatedFieldPopup: "Calculated Field"
+    property string reportToolTipPopupTitle: "Tool Tip"
 
 
 
