@@ -658,6 +658,11 @@ void DSParamsModel::setValueFormat(QString value, QString format)
     this->dateFormatMap.insert(value, format);
 }
 
+void DSParamsModel::removeValueFormat(QString key)
+{
+    this->dateFormatMap.remove(key);
+}
+
 QVariantMap DSParamsModel::getDateFormatMap()
 {
       QVariantMap output;
@@ -668,6 +673,11 @@ QVariantMap DSParamsModel::getDateFormatMap()
 void DSParamsModel::setTimeFrame(QString dummy, QString actual)
 {
     this->timeFrameMap.insert(dummy, actual);
+}
+
+void DSParamsModel::removeTimeFrame(QString key)
+{
+    this->timeFrameMap.remove(key);
 }
 
 QVariantMap DSParamsModel::getTimeFrameMap()

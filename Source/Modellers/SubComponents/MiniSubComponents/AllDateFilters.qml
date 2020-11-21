@@ -64,7 +64,6 @@ Rectangle{
     // Called when edit filter from date list clicked
     function onEditElement(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude){
 
-        console.log("Edit Called" + section + " " + category + " " )
         DSParamsModel.setMode(Constants.modeEdit)
         DSParamsModel.setFilterIndex(filterIndex)
         DSParamsModel.setSection(section)
@@ -226,7 +225,16 @@ Rectangle{
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
+
+                                        if(category === "date.timeframe"){
+                                            DSParamsModel.removeValueFormat(value)
+                                        }
+                                        if(category === "date.list"){
+                                            DSParamsModel.removeTimeFrame(value)
+                                        }
+
                                         onRemoveElement(model.index)
+
                                     }
                                 }
                             }

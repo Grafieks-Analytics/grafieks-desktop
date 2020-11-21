@@ -110,6 +110,7 @@ Item{
     function destroyElement(){
         mainContainer.destroy()
         this.destroy()
+        is_dashboard_blank = is_dashboard_blank - 1
 
         // Delete from c++
     }
@@ -120,25 +121,13 @@ Item{
 
     function toggleFullScreen(){
         DashboardParamsModel.setCurrentReport(newItem.objectName)
-//        if(mainContainer.width === dashboard_summary.width-5 && mainContainer.height === dashboard_summary.height-5)
-//        {
-//            mainContainer.width = Constants.defaultDroppedReportWidth
-//            mainContainer.height = Constants.defaultDroppedReportHeight
-//        }
-//        else{
-//            mainContainer.width= Qt.binding(function(){
-//                return dashboard_summary.width-5 })
-//            mainContainer.height= Qt.binding(function(){
-//                return dashboard_summary.height-5 })
-//            mainContainer.y=0
-//            mainContainer.x=0
-
-//        }
         if(mainContainer.width === parent.width-left_menubar.width && mainContainer.height === parent.height-5)
         {
             mainContainer.width = Constants.defaultDroppedReportWidth
             mainContainer.height = Constants.defaultDroppedReportHeight
            fullScreenReport.source= "/Images/icons/zoom_in_new.png"
+            mainContainer.y=currnetPointReport.y
+            mainContainer.x=currnetPointReport.x
 
         }
         else{
@@ -149,10 +138,14 @@ Item{
             mainContainer.y=0
             mainContainer.x=0
 
+
              fullScreenReport.source= "/Images/icons/zoom_out_new.png"
+            DashboardParamsModel.setZIndex(++DashboardParamsModel.zIndex);
+            newItem.z = DashboardParamsModel.zIndex;
+            mainContainer.z = DashboardParamsModel.zIndex;
+            console.log("x",DashboardParamsModel.positionX)
 
         }
-
     }
 
     function showCustomizeReport(){
@@ -178,6 +171,9 @@ Item{
         mainContainer.rulerStatus = false
     }
 
+    function onDropAreaPositionChangedReport(drag){
+        console.log("drag area change x",drag.x);
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -250,11 +246,14 @@ Item{
                 maximumX: dashboard_summary.width- mainContainer.width
 
 
+
             }
 //            Drag.hotSpot.x: 2
 //            Drag.hotSpot.y: 2
+
             onClicked:  showCustomizeReport()
             onPressed:  onItemPressed()
+            onPositionChanged:  onDropAreaPositionChangedReport(drag)
         }
 
         Rectangle{

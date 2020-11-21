@@ -135,12 +135,18 @@ Rectangle{
         return newRelation
     }
 
-    function onNumericalInput(value, tmpRelation){
+    function onNumericalInput(value1, value2, tmpRelation){
+
+        var newValue = value1
+        if(tmpRelation === "Between"){
+            newValue = value1 + " To " + value2
+        }
 
         let relation = getNewRelation(tmpRelation)
-        DSParamsModel.addToJoinValue(mapKey, value)
+        DSParamsModel.addToJoinValue(mapKey, newValue)
         DSParamsModel.addToJoinRelation(mapKey, relation)
         DSParamsModel.addToJoinRelationSlug(mapKey, tmpRelation)
+
     }
 
     function onExludeCheckStateChanged(checked){
@@ -273,109 +279,61 @@ Rectangle{
                 height: listModel.count * 30
                 anchors.left: parent.left
                 anchors.leftMargin: 20
-            }
-
-
-            CustomTextBox{
-                id: textField
-                placeholderText: "Enter Text"
-                boxWidth: 200
-                boxHeight: 30
-                //width : 100
-
-                anchors{
-                    left: selectOption.right
-                    leftMargin: 100
+                onTextValueChanged: {
+                    if(selectOption.textValue === "Between"){
+                        numericalTextBox2nd.visible = true
+                    }
+                    else{
+                        numericalTextBox2nd.visible = false
+                    }
                 }
-                onTextChanged: onNumericalInput(textField.text, selectOption.textValue)
             }
-
-
-        }
-
-        /********* DO NOT DELETE **************************
-
-        Rectangle{
-            id: numericalTextRow
-            anchors.top: parent.top
-            anchors.right: parent.right
-
-            width: parent.width / 3
-            height: 30
-            anchors.rightMargin: 20
-
-
-            color: "transparent"
 
             Rectangle{
                 id: numericalTextBox
-                height: 30
-                width: parent.width
-                anchors.left: parent.left
-                anchors.rightMargin: 20
+                width : 200
+                height : 30
+                anchors {
+                    left : selectOption.right
+                    leftMargin: 100
+                }
 
-                Rectangle{
-                    height: parent.height
-                    width: parent.width
-                    color: "transparent"
-
-                    TextField {
-                        id : textField
-                        placeholderText: "Enter Text"
-                        anchors.centerIn: parent
-                        width: parent.width - 10
-                        height: 30
-                        onTextChanged: onNumericalInput(textField.text, selectOption.textValue)
+                TextField{
+                    id : textField
+                    height : parent.height
+                    width : parent.width
+                    placeholderText: "Enter Text"
+                    onActiveFocusChanged: {
+                        numericalTextBox.border.color = "blue"
                     }
+                    onTextChanged: onNumericalInput(textField.text, textField2nd.text, selectOption.textValue)
+
                 }
 
             }
 
             Rectangle{
-                id: numericalTextBoxes
-                height: 30
-                width: parent.width
-                anchors.left: parent.left
-                anchors.rightMargin: 20
-                visible: false
-
-                Rectangle{
-                    height: parent.height
-                    width: parent.width/2
-                    anchors.left: parent.left
-                    color: "transparent"
-
-                    TextField {
-                        placeholderText: "Enter Text"
-                        anchors.centerIn: parent
-                        width: parent.width - 10
-                        height: 30
-                    }
+                id: numericalTextBox2nd
+                width : 200
+                height : 30
+                visible : false
+                anchors {
+                    left : numericalTextBox.right
+                    leftMargin: 15
                 }
 
-
-                Rectangle{
-                    height: parent.height
-                    width: parent.width/2
-                    anchors.right: parent.right
-
-                    color: "transparent"
-
-                    TextField {
-                        placeholderText: "Enter Text"
-                        anchors.centerIn: parent
-                        width: parent.width - 10
-                        height: 30
+                TextField{
+                    id : textField2nd
+                    height : parent.height
+                    width : parent.width
+                    placeholderText: "Enter Text"
+                    onActiveFocusChanged: {
+                        numericalTextBox.border.color = "blue"
                     }
+                    onTextChanged: onNumericalInput(textField.text, textField2nd.text, selectOption.textValue)
                 }
-
             }
-
-
-
         }
-        ****************************************************/
-
     }
 
 
