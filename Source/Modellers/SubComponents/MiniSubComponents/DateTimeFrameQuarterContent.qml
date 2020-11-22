@@ -61,7 +61,7 @@ Column{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    function slotEditQuarter(){
+    function slotEditQuarter(relation, slug, value){
 
         var valueList = value.split(" ")
 

@@ -60,7 +60,7 @@ Column{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    function slotEditDay(){
+    function slotEditDay(relation, slug, value){
 
         var valueList = value.split(" ")
 
