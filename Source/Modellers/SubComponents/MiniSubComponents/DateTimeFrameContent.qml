@@ -40,7 +40,10 @@ Rectangle{
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
-
+     signal signalTimeFrameRadioEditYear(string relation, string slug, string value)
+     signal signalTimeFrameRadioEditDay(string relation, string slug, string value)
+     signal signalTimeFrameRadioEditMonth(string relation, string slug, string value)
+     signal signalTimeFrameRadioEditQuarter(string relation, string slug, string value)
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -49,7 +52,15 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // Connections Starts
+    Connections{
+        target: DSParamsModel
 
+        function onResetInput(){
+            onYearTabClicked()
+            DSParamsModel.setExclude(false)
+            DSParamsModel.setIncludeNull(true)
+        }
+    }
 
 
     // Connections Ends
@@ -62,8 +73,32 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    function slotEditMode(){
+    Component.onCompleted: {
+        dateTimeFrameContent.signalTimeFrameRadioEditYear.connect(yearTabContent.slotEditYear)
+        dateTimeFrameContent.signalTimeFrameRadioEditDay.connect(dayTabContent.slotEditDay)
+        dateTimeFrameContent.signalTimeFrameRadioEditMonth.connect(monthTabContent.slotEditMonth)
+        dateTimeFrameContent.signalTimeFrameRadioEditQuarter.connect(quarterTabContent.slotEditQuarter)
+    }
+
+    function slotEditModeTimeFrame(subCategory, relation, slug, value){
         dateTimeFrameContent.visible = true
+
+        if(subCategory === "Day"){
+            onDayTabClicked()
+            dateTimeFrameContent.signalTimeFrameRadioEditDay(relation, slug, value)
+        }
+        else if(subCategory === "Year"){
+            onYearTabClicked()
+            dateTimeFrameContent.signalTimeFrameRadioEditYear(relation, slug, value)
+        }
+        else if(subCategory === "Month"){
+            onMonthTabClicked()
+            dateTimeFrameContent.signalTimeFrameRadioEditMonth(relation, slug, value)
+        }
+        else{
+            onQuarterTabClicked()
+            dateTimeFrameContent.signalTimeFrameRadioEditQuarter(relation, slug, value)
+        }
     }
 
     function onMonthTabClicked(){

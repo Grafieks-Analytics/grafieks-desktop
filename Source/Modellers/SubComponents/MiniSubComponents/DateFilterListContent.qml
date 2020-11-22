@@ -111,6 +111,15 @@ Rectangle{
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: DSParamsModel
+
+        function onResetInput(){
+            customBox.currentIndex = 0
+            DSParamsModel.setExclude(false)
+            DSParamsModel.setIncludeNull(true)
+        }
+    }
 
 
     // Connections Ends

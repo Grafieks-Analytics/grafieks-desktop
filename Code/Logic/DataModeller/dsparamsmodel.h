@@ -170,6 +170,8 @@ public:
     Q_INVOKABLE void removeTimeFrame(QString key);
     Q_INVOKABLE QVariantMap getTimeFrameMap();
 
+    Q_INVOKABLE void resetInputFields();
+
     int currentTab() const;
     QString fileExtension() const;
     QString dsName() const;
@@ -279,7 +281,7 @@ signals:
     void filterIndexChanged(int filterIndex);
     void modeChanged(QString mode);
 
-
+    void resetInput();
 
 
 private:

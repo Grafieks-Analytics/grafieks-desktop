@@ -687,6 +687,11 @@ QVariantMap DSParamsModel::getTimeFrameMap()
     return output;
 }
 
+void DSParamsModel::resetInputFields()
+{
+    emit resetInput();
+}
+
 int DSParamsModel::currentTab() const
 {
     return m_currentTab;

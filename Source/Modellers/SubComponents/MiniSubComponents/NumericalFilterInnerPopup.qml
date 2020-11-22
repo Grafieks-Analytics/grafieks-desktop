@@ -20,7 +20,7 @@ import "../../../MainSubComponents"
 Rectangle{
     property bool listOpened: false
 
-    property string selectOption: "Select numerical"
+    //property string selectOption: "Select numerical"
 
     height: parent.height - 80 - 40
     width: parent.width - 40
@@ -81,6 +81,17 @@ Rectangle{
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: DSParamsModel
+
+        function onResetInput(){
+            textField.text =""
+            textField2nd.text =""
+            selectOption.textValue ="Equal"
+            DSParamsModel.setIncludeNull(true)
+            DSParamsModel.setExclude(false)
+        }
+    }
 
 
     // Connections Ends
@@ -93,8 +104,19 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    function slotEditMode(){
+    function slotEditModeNumerical(relation, slug, value){
+
         topContent.visible = true
+        if( slug === "Between"){
+            var valueList = value.split(" And ")
+            textField.text = valueList[0]
+            textField2nd.text = valueList[1]
+            selectOption.textValue = slug
+        }
+        else{
+            textField.text = value
+            selectOption.textValue = slug
+        }
     }
 
     function getNewRelation(tmpRelation){
@@ -139,7 +161,7 @@ Rectangle{
 
         var newValue = value1
         if(tmpRelation === "Between"){
-            newValue = value1 + " To " + value2
+            newValue = value1 + " And " + value2
         }
 
         let relation = getNewRelation(tmpRelation)
@@ -214,6 +236,7 @@ Rectangle{
 
         }
 
+        /******************* DO NOT DELETE *********************
         Column{
             id: singleSelectRadioColumn
 
@@ -236,6 +259,7 @@ Rectangle{
 
 
         }
+        ************************************************************/
     }
 
     Rectangle{
@@ -286,6 +310,7 @@ Rectangle{
                     else{
                         numericalTextBox2nd.visible = false
                     }
+                    onNumericalInput(textField.text, textField2nd.text, selectOption.textValue)
                 }
             }
 
