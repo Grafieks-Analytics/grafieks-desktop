@@ -264,7 +264,6 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
     QString newValue;
     QString value;
     QString tmpValue;
-    bool firstValue = true;
 
     QSet <QString> weekDays = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
@@ -285,24 +284,11 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
                 QString year;
                 if(yearValues.length() <= 1){
                     foreach(year, yearValues){
-                        if(firstValue){
-                            firstValue = false;
-                            newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), year + "%", filter->exclude(), filter->includeNull());
-                        }
-                        else{
-                            newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), year + "%", filter->exclude(), filter->includeNull());
-                        }
-
+                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), year + "%", filter->exclude(), filter->includeNull());
                     }
                 }
                 else{
-                    if(firstValue){
-                        firstValue = false;
-                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), yearValues[0] + "%", filter->exclude(), filter->includeNull());
-                    }
-                    else{
-                         newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), yearValues[0] + "%", filter->exclude(), filter->includeNull());
-                    }
+                    newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), yearValues[0] + "%", filter->exclude(), filter->includeNull());
                     for(int i = 1; i < yearValues.length(); i++){
                         newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), yearValues[i] + "%", filter->exclude(), filter->includeNull());
                     }
@@ -314,24 +300,11 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
                 QString quarter;
                 if(quarterValues.length() <= 1){
                     foreach(quarter, quarterValues){
-                        if(firstValue){
-                            firstValue = false;
-                            newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), quarter + "%", filter->exclude(), filter->includeNull());
-                        }
-                        else{
-                            newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), quarter + "%", filter->exclude(), filter->includeNull());
-                        }
-
+                       newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), quarter + "%", filter->exclude(), filter->includeNull());
                     }
                 }
                 else{
-                    if(firstValue){
-                        firstValue = false;
-                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), quarterValues[0] + "%", filter->exclude(), filter->includeNull());
-                    }
-                    else{
-                         newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), quarterValues[0] + "%", filter->exclude(), filter->includeNull());
-                    }
+                    newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), quarterValues[0] + "%", filter->exclude(), filter->includeNull());
                     for(int i = 1; i < quarterValues.length(); i++){
                         newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), quarterValues[i] + "%", filter->exclude(), filter->includeNull());
                     }
@@ -343,24 +316,11 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
                 QString month;
                 if(monthValues.length() <= 1){
                     foreach(month, monthValues){
-                        if(firstValue){
-                            firstValue = false;
-                            newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), month + "%", filter->exclude(), filter->includeNull());
+                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), month + "%", filter->exclude(), filter->includeNull());
                         }
-                        else{
-                            newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), month + "%", filter->exclude(), filter->includeNull());
-                        }
-
-                    }
                 }
                 else{
-                    if(firstValue){
-                        firstValue = false;
-                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), monthValues[0] + "%", filter->exclude(), filter->includeNull());
-                    }
-                    else{
-                         newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), monthValues[0] + "%", filter->exclude(), filter->includeNull());
-                    }
+                    newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), monthValues[0] + "%", filter->exclude(), filter->includeNull());
                     for(int i = 1; i < monthValues.length(); i++){
                         newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), monthValues[i] + "%", filter->exclude(), filter->includeNull());
                     }
@@ -372,24 +332,11 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
                 QString day;
                 if(dayValues.length() <= 1){
                     foreach(day, dayValues){
-                        if(firstValue){
-                            firstValue = false;
-                            newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), day + "%", filter->exclude(), filter->includeNull());
-                        }
-                        else{
-                            newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), day + "%", filter->exclude(), filter->includeNull());
-                        }
-
+                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), day + "%", filter->exclude(), filter->includeNull());
                     }
                 }
                 else{
-                    if(firstValue){
-                        firstValue = false;
-                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), dayValues[0] + "%", filter->exclude(), filter->includeNull());
-                    }
-                    else{
-                         newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), dayValues[0] + "%", filter->exclude(), filter->includeNull());
-                    }
+                    newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), dayValues[0] + "%", filter->exclude(), filter->includeNull());
                     for(int i = 1; i < dayValues.length(); i++){
                         newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), dayValues[i] + "%", filter->exclude(), filter->includeNull());
                     }
@@ -413,6 +360,7 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
                 QStringList dateValue;
                 dateValue = filter->value().split(',');
 
+                bool initialValue = true;
                 if(weekDays.contains(dateValue[0]))
                 {
                     for(int i = 0; i < dateValue.length() - 1; i += 2)
@@ -420,32 +368,33 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
                         tmpValue = dateValue[i] + "," + dateValue[i+1];
                         tmpValue = this->getFilteredValue(tmpValue);
 
-                        if(firstValue)
+                        if(initialValue)
                         {
-                            firstValue = false;
+                            initialValue = false;
                             newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
                         }
-                        else if(filter->exclude() == false)
-                            newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
-                        else
+                        else if(filter->exclude() == true)
                             newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
+                        else
+                            newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
                     }
                 }
                 else
                 {
+                    bool initialValue = true;
                     foreach(newValue, dateValue)
                     {
                         tmpValue = this->getFilteredValue(newValue);
 
-                        if(firstValue)
+                        if(initialValue)
                         {
-                            firstValue = false;
+                            initialValue = false;
                             newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
                         }
-                        else if(filter->exclude() == false)
-                            newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
-                        else
+                        else if(filter->exclude() == true)
                             newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
+                        else
+                            newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
                     }
                 }
 
@@ -453,17 +402,7 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
             else
             {
                 value = this->getFilteredValue(filter->value());
-
-                if(firstValue)
-                {
-                    firstValue = false;
-                    newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), value, filter->exclude(), filter->includeNull());
-                }
-                else if(filter->exclude() == false)
-                    newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), value, filter->exclude(), filter->includeNull());
-                else
-                    newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), value, filter->exclude(), filter->includeNull());
-
+                newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), value, filter->exclude(), filter->includeNull());
             }
         }
     }
@@ -693,7 +632,7 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
 
         notSign = sqlComparisonOperators.contains(relation)? " !" : " NOT ";
         excludeCase = exclude ? relation.prepend(notSign) : relation;
-        newCondition = relation.contains("in", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
+        newCondition = relation.contains("like", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
         newIncludeNull = isNull == false ? " AND " + tableName + "." + columnName + " IS NOT NULL" : "";
 
         tmpWhereConditions = QString("%1.%2 %3 %4 %5")
