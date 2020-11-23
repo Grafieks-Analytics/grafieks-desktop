@@ -136,5 +136,15 @@
         <file>Images/icons/view gray.png</file>
         <file>Images/icons/zoom in gray.png</file>
         <file>Images/icons/zoom out gray.png</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/MultipleAxisSettings.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/ComboOptions.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/SizePopup.qml</file>
+        <file>Source/MainSubComponents/CustomSlider.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/MarkerShapePopup.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/DataPaneMenu.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/DataPaneElement.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/DataPaneSubMenu.qml</file>
+        <file>Source/Reports/SubComponents/CalculatedFieldPopup.qml</file>
+        <file>Source/Reports/SubComponents/ToolTipPopup.qml</file>
     </qresource>
 </RCC>

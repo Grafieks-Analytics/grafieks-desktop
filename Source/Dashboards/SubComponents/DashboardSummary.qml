@@ -140,7 +140,8 @@ Rectangle {
     }
 
     function onDropAreaPositionChanged(drag){
-//        console.log(drag);
+        console.log("on position change dashboard",drag.x);
+
     }
     function onDropAreaExited(){
 //        console.log('Exit');

@@ -24,6 +24,11 @@ Popup {
         color: Constants.whiteColor
     }
 
+    ListModel{
+        id: multipleAxisList
+    }
+
+
 
 
     /***********************************************************************************************************************/
@@ -291,23 +296,12 @@ Popup {
 
         AxisSettings{
             id: axisSettings
+            visible: true
         }
 
-
-        Rectangle{
+        MultipleAxisSettings{
             id: multipleAxisSettings
-            anchors.left: menuContentSeparator.right
-            height: parent.height
-            width: parent.width - leftMenu.width - menuContentSeparator.width
             visible: false
-
-            Column{
-
-                anchors.fill: parent
-
-
-            }
-
         }
 
         // Content Ends

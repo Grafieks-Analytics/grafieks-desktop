@@ -126,7 +126,7 @@ Item{
 
         id: droppedRectangle
         border.width: 1
-        border.color: "grey"
+        border.color: "red"
         height: 30
 
 

@@ -10,9 +10,9 @@ import "./MiniSubComponents";
 
 Popup {
 
-    id: editPopup
+    id: toolTipPopup
     width: parent.width * 0.5
-    height: 600
+    height: 400
     anchors.centerIn: parent
 
     visible: false
@@ -24,52 +24,6 @@ Popup {
         color: Constants.whiteColor
     }
 
-
-    ListModel{
-        id: dataItemList
-        ListElement{
-            colorValue: "blue"
-            dataItemName: "Total Quality"
-        }
-        ListElement{
-            colorValue: "green"
-            dataItemName: "Total Discount"
-        }
-    }
-
-    ListModel{
-        id: colorSchemeList
-        ListElement{
-            schemeName: "category10"
-        }
-        ListElement{
-            schemeName: "Accent"
-        }
-        ListElement{
-            schemeName: "Dark2"
-        }
-        ListElement{
-            schemeName: "Paired"
-        }
-        ListElement{
-            schemeName: "Pastel1"
-        }
-        ListElement{
-            schemeName: "Pastel2"
-        }
-        ListElement{
-            schemeName: "Set1"
-        }
-        ListElement{
-            schemeName: "Set2"
-        }
-        ListElement{
-            schemeName: "Set3"
-        }
-        ListElement{
-            schemeName: "Tableau10"
-        }
-    }
 
     /***********************************************************************************************************************/
     // SIGNALS STARTS
@@ -98,7 +52,7 @@ Popup {
 
 
     function onCancelClicked(){
-        editPopup.visible = false
+        toolTipPopup.visible = false
     }
 
     function toggleAxisSettings(){
@@ -189,7 +143,7 @@ Popup {
         anchors.leftMargin: 1
 
         Text{
-            text: Constants.reportEditColorPopup
+            text: Constants.reportToolTipPopupTitle
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -220,110 +174,6 @@ Popup {
         height: parent.height - header.height - footer.height
         padding: 20
         spacing: 20
-
-        Column{
-            width: parent.width/3
-            height: parent.height - parent.padding
-            Rectangle{
-                id: dataItemListRectangle
-                height: 30
-                width: parent.width
-                Text {
-                    text: qsTr("Select Data Item")
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-            }
-            Rectangle{
-                height: parent.height - dataItemListRectangle.height
-                width: parent.width
-                border.color: Constants.borderBlueColor
-                border.width: 2
-
-                ListView{
-                    anchors.fill: parent
-                    model: dataItemList
-                    spacing: 10
-                    topMargin: 15
-                    delegate: Row{
-
-                        height: 20
-                        width: parent.width
-                        leftPadding: 15
-
-
-                        Rectangle{
-                            height: 20
-                            width: parent.width - parent.leftPadding - 10
-
-                            Rectangle{
-                                id: colorBox
-                                anchors.left: parent.left
-                                height: 20
-                                width: 20
-                                color: colorValue
-                            }
-
-                            Text {
-                                id: text
-                                text: dataItemName
-                                anchors.left: colorBox.right
-                                anchors.leftMargin: 10
-                                anchors.verticalCenter: parent.verticalCenter
-                            }
-                            MouseArea{
-                                anchors.fill: parent
-                                onClicked: colorSchemeDialog.open()
-                            }
-                        }
-
-
-                    }
-                }
-            }
-        }
-
-        Column{
-            width: parent.width*2/3
-            height: parent.height - parent.padding
-            Rectangle{
-                id: colorSchemeListRectangle
-                height: 30
-                width: parent.width
-                Text {
-                    text: qsTr("Select Color Scheme")
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-            }
-            Rectangle{
-                height: parent.height - colorSchemeListRectangle.height
-                width: parent.width
-                border.color: Constants.borderBlueColor
-                border.width: 2
-
-                ListView{
-
-                    height: parent.height
-                    width: parent.width - 2*this.leftMargin
-                    model: colorSchemeList
-                    spacing: 12
-                    topMargin: 15
-                    leftMargin: 15
-
-                    delegate: Rectangle{
-                        height: 30
-                        width: parent.width
-                        Image {
-                            height: parent.height
-                            width: parent.width
-                            source: "/Images/icons/reports/"+schemeName
-                        }
-
-                    }
-
-                }
-
-            }
-        }
 
 
     }

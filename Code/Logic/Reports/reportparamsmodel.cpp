@@ -35,6 +35,11 @@ QString ReportParamsModel::lastDropped() const
     return m_lastDropped;
 }
 
+QString ReportParamsModel::calculatedFieldPopupStatus() const
+{
+    return m_createFieldPopupStatus;
+}
+
 void ReportParamsModel::setItemName(QString itemName)
 {
     if (m_itemName == itemName)
@@ -87,4 +92,13 @@ void ReportParamsModel::setLastDropped(QString lastDropped)
 
     m_lastDropped = lastDropped;
     emit lastDroppedChanged(m_lastDropped);
+}
+
+void ReportParamsModel::setCalculatedFieldPopupStatus(QString createFieldPopupStatus)
+{
+    if (m_createFieldPopupStatus == createFieldPopupStatus)
+        return;
+
+    m_createFieldPopupStatus = createFieldPopupStatus;
+    emit calculatedFieldPopupStatusChanged(m_createFieldPopupStatus);
 }

@@ -193,12 +193,14 @@ Item{
                             return generalComponent
                         }else if(categoryName === "Style"){
                             return styleComponent
-                        }else if(categoryName === "Canvas Size"){
-                            return canvasMenuComponent
+                        }else if(categoryName === "Widgets"){
+                            return subItemColumnDelegate
                         }
-                        else{
-                            subItemColumnDelegate
+                        else if(categoryName === "Reports"){
+                            return subItemColumnDelegateReport
                         }
+
+
                     }
                 }
                 onStatusChanged: {
@@ -234,16 +236,103 @@ Item{
                         text: itemName
                     }
 
-                    Image{
-                        id: resizeReport
-                        height: 16
-                        width: 16
-                        source: "/Images/icons/edit gray.png"
-                        anchors.verticalCenter: parent.verticalCenter
 
-                        MouseArea{
-                            anchors.fill: parent
-                            onClicked: resizeOptions.open()
+
+
+
+
+
+
+                    MouseArea {
+                        id: mouseArea
+                        anchors.fill: parent
+                        drag.target:  dragRect
+                        drag.minimumX: -( new_dashboard_page.width - parent.width)
+                        drag.maximumX: 0
+
+                        drag.onActiveChanged: {
+
+                            if (mouseArea.drag.active) {
+                                listViewElem.itemName = itemName
+                                listViewElem.itemType = itemType
+                            }
+                            dragRect.Drag.drop();
+                        }
+                    }
+
+                    states: [
+                        State {
+                            when: dragRect.Drag.active
+                            ParentChange {
+                                target: dragRect
+                                parent: subItemRepeater
+                            }
+
+                            AnchorChanges {
+                                target: dragRect
+                                anchors.horizontalCenter: undefined
+                                anchors.verticalCenter: undefined
+                            }
+                        }
+                    ]
+
+                    Drag.active: mouseArea.drag.active
+                    Drag.hotSpot.x: - dragRect.width / 2
+                    Drag.hotSpot.y: - dragRect.height / 2
+                    Drag.keys: ['1','2']
+
+                }
+            }
+        }
+
+    }
+    Component {
+        id: subItemColumnDelegateReport
+        Column {
+            property alias model : subItemRepeater.model
+            width: 200
+            Repeater {
+                id: subItemRepeater
+                property string itemName : ""
+                property string itemType: ""
+
+                delegate: Rectangle {
+                    id: dragRect
+                    height: 25
+                    width: 200
+                    anchors.topMargin: 50
+
+                    Row{
+
+
+                        spacing: 10
+                        anchors.leftMargin: 20
+                        anchors.left: parent.left
+
+
+
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            x: 30
+                            font.pixelSize: 12
+                            text: itemName
+
+
+                        }
+
+
+
+                        Image{
+                            id: resizeReport
+                            height: 16
+                            width: 16
+                            source: "/Images/icons/edit gray.png"
+                            anchors.verticalCenter: parent.verticalCenter
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: resizeOptions.open()
+
+                            }
                         }
                     }
 
@@ -348,17 +437,17 @@ Item{
         interactive: false
         delegate: categoryDelegate
     }
-//    Image{
-//        id: resizeReport
-//        height: 16
-//        width: 16
-//        source: "/Images/icons/view gray.png"
-//        anchors.verticalCenter: parent.verticalCenter
+    //    Image{
+    //        id: resizeReport
+    //        height: 16
+    //        width: 16
+    //        source: "/Images/icons/view gray.png"
+    //        anchors.verticalCenter: parent.verticalCenter
 
-//        MouseArea{
-//            anchors.fill: parent
-//            onClicked: resizeOptions.open()
-//        }
-//    }
+    //        MouseArea{
+    //            anchors.fill: parent
+    //            onClicked: resizeOptions.open()
+    //        }
+    //    }
 }
 
