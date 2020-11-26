@@ -23,3 +23,8 @@ On Mac, we need to install **[iODBC](http://www.iodbc.org/dataspace/doc/iodbc/wi
 2. Open **iODBC** on Mac or **ODBC Datasources** on Windows. Add a new record under _System DSN_ tab
 
 3. Select any of the available MySql driver available and add a new name. Use the **name/driver** inside the code, e.g "MYSQL ODBC 8.0 Unicode Driver"
+
+
+- **MS SQL**
+
+- **Postgres SQL**
