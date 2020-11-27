@@ -10,12 +10,14 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QElapsedTimer>
+#include <QFileInfo>
 
 
 #include "../../constants.h"
 #include "../../Messages.h"
 #include "../../statics.h"
 #include "../../duckdb.hpp"
+#include "../../parquet-extension.hpp"
 
 
 /*!
@@ -109,6 +111,7 @@ class DSParamsModel : public QObject
     QString m_mode;
 
 
+
 public:
     explicit DSParamsModel(QObject *parent = nullptr);
 
@@ -174,10 +177,10 @@ public:
 
 
     // Datasource Read/Write
-    void parseCsv();
-    void parseParquet();
-    void exportCsv();
-    void exportParquet();
+    Q_INVOKABLE void parseCsv(QUrl pathToCsv);
+    Q_INVOKABLE void parseParquet(QUrl pathToParquet);
+    Q_INVOKABLE void exportExtractData(QString pathToExtract);
+    Q_INVOKABLE void importExtractData(QString pathToExtract);
 
     int currentTab() const;
     QString fileExtension() const;
@@ -206,7 +209,6 @@ public:
     bool selectAll() const;
     int filterIndex() const;
     QString mode() const;
-
 
 
 
@@ -287,6 +289,13 @@ signals:
     void selectAllChanged(bool selectAll);
     void filterIndexChanged(int filterIndex);
     void modeChanged(QString mode);
+
+    // For Datasource Read/Write
+    void dataReadComplete(uint time, bool status, QString msg);
+    void csvReadComplete(uint time, bool status, QString msg);
+    void parquetReadComplete(uint time, bool status, QString msg);
+    void exportDataComplete(uint time, bool status, QString msg);
+    void importDataComplete(uint time, bool status, QString msg);
 
 
 
