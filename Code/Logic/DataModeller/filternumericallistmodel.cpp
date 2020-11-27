@@ -239,7 +239,7 @@ void FilterNumericalListModel::updateFilter(int FilterIndex, QString section, QS
     if(relation != "")
         mFilter[FilterIndex]->setRelation(relation);
     if(slug != "")
-        mFilter[FilterIndex]->setValue(slug);
+        mFilter[FilterIndex]->setSlug(slug);
     if(value != "")
         mFilter[FilterIndex]->setValue(value);
 
@@ -266,7 +266,13 @@ void FilterNumericalListModel::callQueryModel(QString tmpSql)
 
     foreach(filter, mFilter){
 
-        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), filter->value(), filter->exclude(), filter->includeNull());
+        if(filter->relation() == "BETWEEN"){
+            QStringList newValueList = filter->value().split(" And ");
+            QString newValue = newValueList[0] + "'" + " AND " + "'" + newValueList[1];
+            newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), newValue, filter->exclude(), filter->includeNull());
+        }
+        else
+            newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), filter->value(), filter->exclude(), filter->includeNull());
 
     }
 

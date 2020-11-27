@@ -74,6 +74,7 @@ QtObject {
     property int fontHeader : 20
     property int fontSubHeader : 18
     property int fontCategoryHeader : 16
+    property int fontCategoryHeaderMedium : 14
     property int fontCategoryHeaderSmall : 12
     property int fontReading: 10
 
@@ -84,6 +85,9 @@ QtObject {
     property int leftMenubarWidth: 49
     property int subMenuWidth: 31
 
+
+    // Constant Height
+    property int defaultElementHeight: 30
 
     // Menu option
     property int dataDesignerMenu : 0
@@ -169,6 +173,9 @@ QtObject {
     property string yAxisName: "Y Axis"
     property string axisSettingText: "Axis Setting"
     property string reportEditColorPopup: "Edit Color"
+    property string reportCalculatedFieldPopup: "Calculated Field"
+    property string reportToolTipPopupTitle: "Tool Tip"
+
 
 
     property color defaultXAxisColor: "#6CD7A1"

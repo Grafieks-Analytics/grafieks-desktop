@@ -130,5 +130,15 @@
         <file>Source/Reports/SubComponents/MiniSubComponents/AxisSettings.qml</file>
         <file>Source/Reports/SubComponents/EditColorPopup.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/ColorSchemeRow.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/MultipleAxisSettings.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/ComboOptions.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/SizePopup.qml</file>
+        <file>Source/MainSubComponents/CustomSlider.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/MarkerShapePopup.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/DataPaneMenu.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/DataPaneElement.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/DataPaneSubMenu.qml</file>
+        <file>Source/Reports/SubComponents/CalculatedFieldPopup.qml</file>
+        <file>Source/Reports/SubComponents/ToolTipPopup.qml</file>
     </qresource>
 </RCC>

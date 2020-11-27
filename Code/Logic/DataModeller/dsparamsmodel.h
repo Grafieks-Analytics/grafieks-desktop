@@ -12,13 +12,11 @@
 #include <QElapsedTimer>
 #include <QFileInfo>
 
-
 #include "../../constants.h"
 #include "../../Messages.h"
 #include "../../statics.h"
 #include "../../duckdb.hpp"
 #include "../../parquet-extension.hpp"
-
 
 /*!
  * \brief Sets all the temporary variables for DataModeller
@@ -32,19 +30,18 @@ class DSParamsModel : public QObject
     Q_OBJECT
 
     // Standalone variables for Data Modeller
-    QStringList hideColumns; // List of columns not available for join conditions in any given table
-    QMap<int, QStringList> joinBoxTableMap; // holds the name of tables against a join id. Called when clicking a join box to show related tables
-    QMap<int, QString> joinTypeMap; // left join, inner join, right join, full outer join
-    QMap<int, QString> joinIconMap; // icon for various type of joins for joinTypeMap
+    QStringList hideColumns;                       // List of columns not available for join conditions in any given table
+    QMap<int, QStringList> joinBoxTableMap;        // holds the name of tables against a join id. Called when clicking a join box to show related tables
+    QMap<int, QString> joinTypeMap;                // left join, inner join, right join, full outer join
+    QMap<int, QString> joinIconMap;                // icon for various type of joins for joinTypeMap
     QMap<int, QMap<int, QStringList>> joinMapList; // relation between columns for given two tables
-    QMap<int, QString> primaryJoinTable; // Set the primary table in a join. ie, parameter will be on left side of relation in a join
-    QStringList querySelectParamsList; // select parameters of the query created by data modeller
-    QVariantList joinOrder; // Order of join elements in sql query
-
+    QMap<int, QString> primaryJoinTable;           // Set the primary table in a join. ie, parameter will be on left side of relation in a join
+    QStringList querySelectParamsList;             // select parameters of the query created by data modeller
+    QVariantList joinOrder;                        // Order of join elements in sql query
 
     // Standalone variables for Filters
-    QVariantMap joinRelation; // Condition link between parameter and value in a query. eg, =, !=, LIKE, etc
-    QVariantMap joinValue; // Right side parameter of the comparison (the actual value)
+    QVariantMap joinRelation;     // Condition link between parameter and value in a query. eg, =, !=, LIKE, etc
+    QVariantMap joinValue;        // Right side parameter of the comparison (the actual value)
     QVariantMap joinRelationSlug; // Single syllable entity for human readable entity. eg, in Categorical-Wildcard, Slug for `Ends With` is `endswith` and `Equal To` is `equalto`
     QVariantMap dateFormatMap;
     QVariantMap timeFrameMap;
@@ -56,11 +53,11 @@ class DSParamsModel : public QObject
     Q_PROPERTY(QString fileExtension READ fileExtension WRITE setFileExtension NOTIFY fileExtensionChanged)
 
     // Publish datasource
-    Q_PROPERTY(QString dsName READ dsName WRITE setDsName NOTIFY dsNameChanged) // Data source name in publish DS
-    Q_PROPERTY(QString dsType READ dsType WRITE setDsType NOTIFY dsTypeChanged) // DataSource Type: live/extract
-    Q_PROPERTY(bool isFullExtract READ isFullExtract WRITE setIsFullExtract NOTIFY isFullExtractChanged) // DS full extract orincremental extract
-    Q_PROPERTY(QString extractColName READ extractColName WRITE setExtractColName NOTIFY extractColNameChanged) // If incremental, then col name
-    Q_PROPERTY(int schedulerId READ schedulerId WRITE setSchedulerId NOTIFY schedulerIdChanged) // Scheduler id (fetched from API) selected
+    Q_PROPERTY(QString dsName READ dsName WRITE setDsName NOTIFY dsNameChanged)                                     // Data source name in publish DS
+    Q_PROPERTY(QString dsType READ dsType WRITE setDsType NOTIFY dsTypeChanged)                                     // DataSource Type: live/extract
+    Q_PROPERTY(bool isFullExtract READ isFullExtract WRITE setIsFullExtract NOTIFY isFullExtractChanged)            // DS full extract orincremental extract
+    Q_PROPERTY(QString extractColName READ extractColName WRITE setExtractColName NOTIFY extractColNameChanged)     // If incremental, then col name
+    Q_PROPERTY(int schedulerId READ schedulerId WRITE setSchedulerId NOTIFY schedulerIdChanged)                     // Scheduler id (fetched from API) selected
     Q_PROPERTY(int displayRowsCount READ displayRowsCount WRITE setDisplayRowsCount NOTIFY displayRowsCountChanged) //Number of rows to display in sql preview
 
     // For Data Modeller
@@ -71,16 +68,16 @@ class DSParamsModel : public QObject
 
     // For Filters
     Q_PROPERTY(int internalCounter READ internalCounter WRITE setInternalCounter NOTIFY internalCounterChanged) // Counter for categorical-wildcard
-    Q_PROPERTY(QString section READ section WRITE setSection NOTIFY sectionChanged) // Categorical/Numerical/Date/Group filters
-    Q_PROPERTY(QString category READ category WRITE setCategory NOTIFY categoryChanged) // Inner sub classifications of the section
-    Q_PROPERTY(QString subCategory READ subCategory WRITE setSubCategory NOTIFY subCategoryChanged) // selection type of categories like multi/single select in categorical tab
-    Q_PROPERTY(QString tableName READ tableName WRITE setTableName NOTIFY tableNameChanged) // sql table name of the selection
-    Q_PROPERTY(QString colName READ colName WRITE setColName NOTIFY colNameChanged) // sql column name
-    Q_PROPERTY(bool exclude READ exclude WRITE setExclude NOTIFY excludeChanged) // if the current selection needs to be excluded from result
-    Q_PROPERTY(bool includeNull READ includeNull WRITE setIncludeNull NOTIFY includeNullChanged) // if include null selected in filter list
-    Q_PROPERTY(bool selectAll READ selectAll WRITE setSelectAll NOTIFY selectAllChanged) // If select all property selected in filter list
-    Q_PROPERTY(int filterIndex READ filterIndex WRITE setFilterIndex NOTIFY filterIndexChanged) // Unique id given to each join type (filter type)
-    Q_PROPERTY(QString mode READ mode WRITE setMode NOTIFY modeChanged) // Set Create/Edit mode in a filter
+    Q_PROPERTY(QString section READ section WRITE setSection NOTIFY sectionChanged)                             // Categorical/Numerical/Date/Group filters
+    Q_PROPERTY(QString category READ category WRITE setCategory NOTIFY categoryChanged)                         // Inner sub classifications of the section
+    Q_PROPERTY(QString subCategory READ subCategory WRITE setSubCategory NOTIFY subCategoryChanged)             // selection type of categories like multi/single select in categorical tab
+    Q_PROPERTY(QString tableName READ tableName WRITE setTableName NOTIFY tableNameChanged)                     // sql table name of the selection
+    Q_PROPERTY(QString colName READ colName WRITE setColName NOTIFY colNameChanged)                             // sql column name
+    Q_PROPERTY(bool exclude READ exclude WRITE setExclude NOTIFY excludeChanged)                                // if the current selection needs to be excluded from result
+    Q_PROPERTY(bool includeNull READ includeNull WRITE setIncludeNull NOTIFY includeNullChanged)                // if include null selected in filter list
+    Q_PROPERTY(bool selectAll READ selectAll WRITE setSelectAll NOTIFY selectAllChanged)                        // If select all property selected in filter list
+    Q_PROPERTY(int filterIndex READ filterIndex WRITE setFilterIndex NOTIFY filterIndexChanged)                 // Unique id given to each join type (filter type)
+    Q_PROPERTY(QString mode READ mode WRITE setMode NOTIFY modeChanged)                                         // Set Create/Edit mode in a filter
 
     int m_currentTab;
 
@@ -109,8 +106,6 @@ class DSParamsModel : public QObject
     bool m_selectAll;
     int m_filterIndex;
     QString m_mode;
-
-
 
 public:
     explicit DSParamsModel(QObject *parent = nullptr);
@@ -170,17 +165,19 @@ public:
     Q_INVOKABLE QVariantMap fetchJoinRelationSlug(int refObjId = 0, bool fetchAll = false);
 
     Q_INVOKABLE void setValueFormat(QString value, QString format);
+    Q_INVOKABLE void removeValueFormat(QString key);
     Q_INVOKABLE QVariantMap getDateFormatMap();
 
     Q_INVOKABLE void setTimeFrame(QString dummy, QString actual);
+    Q_INVOKABLE void removeTimeFrame(QString key);
     Q_INVOKABLE QVariantMap getTimeFrameMap();
-
 
     // Datasource Read/Write
     Q_INVOKABLE void parseCsv(QUrl pathToCsv);
     Q_INVOKABLE void parseParquet(QUrl pathToParquet);
     Q_INVOKABLE void exportExtractData(QString pathToExtract);
     Q_INVOKABLE void importExtractData(QString pathToExtract);
+    Q_INVOKABLE void resetInputFields();
 
     int currentTab() const;
     QString fileExtension() const;
@@ -209,9 +206,6 @@ public:
     bool selectAll() const;
     int filterIndex() const;
     QString mode() const;
-
-
-
 
 public slots:
 
@@ -246,9 +240,6 @@ public slots:
     void setFilterIndex(int filterIndex);
     void setSelectAll(bool selectAll);
     void setMode(QString mode);
-
-
-
 
 signals:
 
@@ -297,8 +288,7 @@ signals:
     void exportDataComplete(uint time, bool status, QString msg);
     void importDataComplete(uint time, bool status, QString msg);
 
-
-
+    void resetInput();
 
 private:
     QMap<QString, QString> datasourceCredentials();

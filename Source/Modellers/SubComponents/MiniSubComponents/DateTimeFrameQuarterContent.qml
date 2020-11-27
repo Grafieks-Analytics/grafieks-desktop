@@ -35,6 +35,20 @@ Column{
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: DSParamsModel
+
+        function onResetInput(){
+
+            thisRadio.checked = false
+            lastRadio.checked = false
+            nextRadio.checked = false
+            nextXRadio.checked = false
+            nextXRadioTextField.text = ""
+            lastXRadio.checked = false
+            lastXRadioTextField.text = ""
+        }
+    }
 
 
     // Connections Ends
@@ -46,6 +60,38 @@ Column{
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
+
+    function slotEditQuarter(relation, slug, value){
+
+        var valueList = value.split(" ")
+
+        if(valueList.length === 3){
+            if(valueList[0] === "Last"){
+                lastXRadio.checked = true
+                lastXRadioTextField.text = valueList[1]
+                lastXRadio.activeFocus = true
+            }
+            else{
+                nextXRadio.checked = true
+                nextXRadioTextField.text = valueList[1]
+                nextXRadio.activeFocus = true
+            }
+        }
+        else{
+            if(valueList[0] === "This"){
+                thisRadio.checked = true
+                thisRadio.activeFocus = true
+            }
+            else if(valueList[0] === "Last"){
+                lastRadio.checked = true
+                lastRadio.activeFocus = true
+            }
+            else{
+                nextRadio.checked = true
+                nextRadio.activeFocus = true
+            }
+        }
+    }
 
     function onLastXChecked(){
 

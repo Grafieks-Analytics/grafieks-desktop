@@ -138,5 +138,19 @@
         <file>Images/icons/reports/Set2.png</file>
         <file>Images/icons/reports/Set3.png</file>
         <file>Images/icons/reports/Tableau10.png</file>
+        <file>Images/icons/shapes/add.png</file>
+        <file>Images/icons/shapes/add2x.png</file>
+        <file>Images/icons/shapes/Ellipse.png</file>
+        <file>Images/icons/shapes/Ellipse_filled.png</file>
+        <file>Images/icons/shapes/Ellipse_filled2x.png</file>
+        <file>Images/icons/shapes/Ellipse2x.png</file>
+        <file>Images/icons/shapes/Polygon.png</file>
+        <file>Images/icons/shapes/Polygon_filled.png</file>
+        <file>Images/icons/shapes/Polygon_filled2x.png</file>
+        <file>Images/icons/shapes/Polygon2x.png</file>
+        <file>Images/icons/shapes/Rectangle.png</file>
+        <file>Images/icons/shapes/Rectangle_filled.png</file>
+        <file>Images/icons/shapes/Rectangle_filled2x.png</file>
+        <file>Images/icons/shapes/Rectangle2x.png</file>
     </qresource>
 </RCC>
