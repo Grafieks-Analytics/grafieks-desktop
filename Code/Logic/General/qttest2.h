@@ -5,6 +5,8 @@
 #include <QDebug>
 #include <QSqlDatabase>
 
+#include "../../duckdb.hpp"
+
 
 
 class QtTest2 : public QObject
@@ -18,6 +20,10 @@ public:
 public slots:
 
 signals:
+
+private:
+    duckdb::DuckDB db;
+    duckdb::Connection con;
 };
 
 #endif // QTTEST2_H

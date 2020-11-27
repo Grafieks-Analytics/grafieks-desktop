@@ -142,11 +142,11 @@ HEADERS += \
     Code/duckdb.hpp \
     Code/messages.h \
     Code/constants.h \
-    Code/statics.h \
+    Code/statics.h
 
 DISTFILES += \
 
-
+LIBS += -L$$PWD/Libraries/duckdb.dll
 
 #win32:CONFIG(release, debug|release): LIBS += -L$$PWD/Libraries/release/ -lduckdb
 #else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/Libraries/debug/ -lduckdb
