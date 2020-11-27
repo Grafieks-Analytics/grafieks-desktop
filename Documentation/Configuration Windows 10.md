@@ -14,7 +14,7 @@ Click the **Modify** button and select the **Individual Components** tab on the 
 6. C++CMake tools for Windows
 
 A few components can be automatically selected. But that is ok
-![Visual Studio 2019 Community Components](https://i.imgur.com/s1COSjT.png?1
+![Visual Studio 2019 Community Components](https://i.imgur.com/s1COSjT.png?1)
 
 #### QT Installation 5.15
 
