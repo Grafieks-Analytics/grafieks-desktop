@@ -54,8 +54,8 @@ Popup {
     // SIGNALS STARTS
 
     signal subCategoryEditMode(string subCategory)
-    signal signalCalendarEditData()
-    signal signalTimeFrameEditData()
+    signal signalCalendarEditData(string relation, string slug, string value)
+    signal signalTimeFrameEditData(string subCategory, string relation, string value, string value)
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -78,8 +78,8 @@ Popup {
     // JAVASCRIPT FUNCTION STARTS
     Component.onCompleted: {
         dateFilterPopup.subCategoryEditMode.connect(listContent.slotEditModeSubCategory)
-        dateFilterPopup.signalCalendarEditData.connect(calendarContent.slotEditMode())
-        dateFilterPopup.signalTimeFrameEditData.connect(dateTimeFrameContent.slostEditMode())
+        dateFilterPopup.signalCalendarEditData.connect(calendarContent.slotEditModeCalendar)
+        dateFilterPopup.signalTimeFrameEditData.connect(dateTimeFrameContent.slotEditModeTimeFrame)
     }
 
     // SLOT function
@@ -106,7 +106,7 @@ Popup {
                 dateTimeFrameContent.visible = false
                 dateRadio.checked = true
 
-                dateFilterPopup.signalCalendarEditData()
+                dateFilterPopup.signalCalendarEditData(relation, slug, value)
 
                 break
 
@@ -117,7 +117,7 @@ Popup {
                 dateTimeFrameContent.visible = true
                 topRadio.checked = true
 
-                dateFilterPopup.signalTimeFrameEditData(dateTimeFrameContent)
+                dateFilterPopup.signalTimeFrameEditData(subCategory, relation, slug, value)
 
                 break
             }

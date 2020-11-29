@@ -3,9 +3,10 @@
 
 #include <QObject>
 #include <QDebug>
-#include <QSqlDatabase>
+#include <QFileInfo>
 
-
+//#include "../../duckdb.hpp"
+//#include "../../parquet-extension.hpp"
 
 class QtTest2 : public QObject
 {
@@ -18,6 +19,11 @@ public:
 public slots:
 
 signals:
+
+private:
+
+//    duckdb::DuckDB db;
+
 };
 
 #endif // QTTEST2_H

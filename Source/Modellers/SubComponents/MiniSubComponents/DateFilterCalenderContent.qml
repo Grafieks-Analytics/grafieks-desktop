@@ -53,7 +53,16 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // Connections Starts
+    Connections{
+        target: DSParamsModel
 
+        function onResetInput(){
+            fromDateInput.text =""
+            toDateInput.text   =""
+            DSParamsModel.setExclude(false)
+            DSParamsModel.setIncludeNull(true)
+        }
+    }
 
 
     // Connections Ends
@@ -66,8 +75,17 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    function slotEditMode(){
+    function slotEditModeCalendar(relation, slug, value){
+
         calendarContent.visible = true
+
+        if(value !== ""){
+            var valueList = value.split(" To ")
+            fromDateInput.text = valueList[0]
+            toDateInput.text  = valueList[1]
+            fromDateInput.activeFocus = true
+            toDateInput.activeFocus = true
+        }
     }
 
     function showFromDateCalendar(){

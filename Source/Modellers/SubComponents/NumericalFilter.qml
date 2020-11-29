@@ -56,7 +56,7 @@ Popup {
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
-    signal signalNumericalEditData()
+    signal signalNumericalEditData(string relation, string sug, string value)
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -79,16 +79,15 @@ Popup {
     // JAVASCRIPT FUNCTION STARTS
 
     Component.onCompleted: {
-        numericalFilterPopup.signalNumericalEditData(topContent.slotEditMode())
+        numericalFilterPopup.signalNumericalEditData.connect(topContent.slotEditModeNumerical)
     }
     // SLOT function
-    function slotEditMode(section, category, subCategory, relation, value){
+    function slotEditMode(section, category, subCategory, relation, slug, value){
 
         if(section === Constants.numericalTab){
 
             topContent.visible = true
-            numericalFilterPopup.slotEditMode()
-            //console.log("EDIT SIGNAL RECEIVED", section, category, subCategory, relation, value)
+            numericalFilterPopup.signalNumericalEditData(relation, slug, value)
         }
     }
 
@@ -126,7 +125,6 @@ Popup {
         singleValue = joinValue[0]
         singleSlug = joinSlug[0]
         manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, filterIndex)
-
 
         DSParamsModel.setMode(Constants.modeCreate)
 
