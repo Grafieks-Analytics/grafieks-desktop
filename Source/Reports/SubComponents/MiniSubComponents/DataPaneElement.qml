@@ -27,6 +27,7 @@ Rectangle{
 
     DataPaneMenu{
         id: dataPaneMenu
+        y: parent.height
     }
 
     Image {

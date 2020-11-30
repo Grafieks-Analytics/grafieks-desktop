@@ -377,14 +377,21 @@ Column{
 
 
     // Label starts
+
+
+    // Tool tip starts
     Rectangle{
 
         height: 20
         width: parent.width
 
-
         Rectangle{
             anchors.fill: parent
+
+            LabelPopup{
+                id: labelShapePopup
+                x: parent.width - 10
+            }
 
             Text {
                 text: qsTr("Label")
@@ -394,15 +401,17 @@ Column{
                 font.pixelSize: Constants.fontCategoryHeaderSmall
             }
 
-            CheckBoxTpl{
-
-                checked: false
-                parent_dimension: editImageSize - 2
+            Image {
+                height: editImageSize
+                width: editImageSize
+                source: "/Images/icons/Edit_20.png"
                 anchors.right: parent.right
+                anchors.rightMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.rightMargin: 5
-                anchors.top: parent.top
-
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked: labelShapePopup.visible = true
             }
 
         }
@@ -410,59 +419,39 @@ Column{
     }
     // Label Ends
 
-    // Font starts
-    Rectangle{
 
-        height: 60
-        width: parent.width
+//    Rectangle{
+
+//        height: 20
+//        width: parent.width
 
 
-        Column{
+//        Rectangle{
+//            anchors.fill: parent
 
-            anchors.fill: parent
-            spacing: 5
-            Rectangle{
-                height: 20
-                width: parent.width
+//            Text {
+//                text: qsTr("Label")
+//                anchors.left: parent.left
+//                anchors.leftMargin: leftMargin
+//                anchors.verticalCenter: parent.verticalCenter
+//                font.pixelSize: Constants.fontCategoryHeaderSmall
+//            }
 
-                Text {
-                    text: qsTr("Font")
-                    anchors.left: parent.left
-                    anchors.leftMargin: leftMargin
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: Constants.fontCategoryHeaderSmall
-                }
-            }
+//            CheckBoxTpl{
 
-            Rectangle{
-                height: 30
-                width: parent.width
-                CustomComboBox{
-                    id: fontSizes
+//                checked: false
+//                parent_dimension: editImageSize - 2
+//                anchors.right: parent.right
+//                anchors.verticalCenter: parent.verticalCenter
+//                anchors.rightMargin: 5
+//                anchors.top: parent.top
 
-                    Component.onCompleted: {
-                        let fontFamilies = Qt.fontFamilies();
-                        for(let i=0; i<fontFamilies.length;i++){
-                            fonts.append({"fontName": fontFamilies[i]});
-                        }
-                        fontSizes.model = fonts
-                    }
+//            }
 
-                    model: fonts
-                    textRole: "fontName"
-                    width: parent.width-2*leftMargin
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.rightMargin: leftMargin
-                    anchors.top: parent.top
-                }
+//        }
 
-            }
-        }
-
-    }
-    // Font Ends
-
+//    }
+    // Label Ends
 
     // Merge Axis starts
     Rectangle{
