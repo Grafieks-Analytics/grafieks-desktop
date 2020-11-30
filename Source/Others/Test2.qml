@@ -14,21 +14,21 @@ Page{
         DSParamsModel.exportExtractData("/Users/mac/Desktop/l.parquet")
     }
 
-    FileDialog {
-        id: fileDialog
-        title: "Please choose a file"
-        folder: shortcuts.documents
-        onAccepted: {
-            console.log("You chose: " + fileUrl)
-//            DSParamsModel.parseCsv(fileUrl)
-            DSParamsModel.parseParquet(fileUrl)
-        }
-        onRejected: {
-            console.log("Canceled")
-//            Qt.quit()
-        }
-        Component.onCompleted: visible = true
-    }
+//    FileDialog {
+//        id: fileDialog
+//        title: "Please choose a file"
+//        folder: shortcuts.documents
+//        onAccepted: {
+//            console.log("You chose: " + fileUrl)
+////            DSParamsModel.parseCsv(fileUrl)
+//            DSParamsModel.parseParquet(fileUrl)
+//        }
+//        onRejected: {
+//            console.log("Canceled")
+////            Qt.quit()
+//        }
+//        Component.onCompleted: visible = true
+//    }
 
     Button{
         text: "Click to export data"
