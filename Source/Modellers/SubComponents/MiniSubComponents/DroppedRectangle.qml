@@ -18,6 +18,7 @@ Item{
 
     property var allColumnsProperty : []
     property string tableNameProperty : ""
+    property var hoverCrossIcon: false
 
 
     signal dragged(double x, double y);
@@ -60,7 +61,8 @@ Item{
 
     Component.onCompleted: {
         nameID.text = name
-        droppedRectangle.width = nameID.text.length * 10 + 30
+        //        droppedRectangle.width = nameID.text.length * 10 + 30
+
     }
 
 
@@ -90,7 +92,9 @@ Item{
     function onRectangleToggle(){
 
         columnListDroppedRect.visible = columnListDroppedRect.visible === true ? false : true
+        dropDownIcon.source = columnListDroppedRect.visible === true ?  "/Images/icons/Up_20.png" : "/Images/icons/Down_20.png"
         TableColumnsModel.getColumnsForTable(newItem.name, newItem.moduleName)
+
     }
 
     function destroyRectangle(counter){
@@ -105,20 +109,72 @@ Item{
         parent.dropped(newItem.x, newItem.y)
         parent.createNewJoin(parseInt(parent.objectName), newItem.name)
 
+
+    }
+
+    function showCrossIcon(){
+        //        DashboardParamsModel.setCurrentReport(newItem.objectName)
+        hoverCrossIcon = true
+
+
+    }
+    function hideCrossIcon(){
+        //        DashboardParamsModel.setCurrentReport(newItem.objectName)
+        hoverCrossIcon = false
+
     }
 
 
     Component{
         id: listviewComponent
 
+
+
         Row{
             id: innerRow
             height: 20
-
             Text{
                 text: colName
             }
+
+
+
+            Image{
+                id: columnIcon;
+                source :
+
+                     if(colType == "numerical"){"/Images/icons/integer.png";}
+                     else if(colType == "categorical"){
+                          source : "/Images/icons/string new.png";
+                     }
+                     else if(colType == "date"){
+                          source : "/Images/icons/date.png";
+                     }
+
+                height: 12
+                width: 13
+                anchors.right: parent.right
+                anchors.rightMargin:  20
+                anchors.verticalCenter: droppedRectangle.verticalCenter
+                z: 5
+            }
+            Image{
+                id: columnMenuIcon
+                source : "/Images/icons/menu-button.png"
+                height: 30
+                width: 30
+                anchors.left: parent.left
+                anchors.leftMargin:  110
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 1
+                anchors.verticalCenter: droppedRectangle.verticalCenter
+                z: 5
+            }
+
         }
+
+
+
     }
 
 
@@ -126,23 +182,68 @@ Item{
 
         id: droppedRectangle
         border.width: 1
-        border.color: "red"
+        border.color: Constants.dataModelBorderColor
+        color: "#26009B8F"
         height: 30
+        width: 200
+
+        MouseArea {
+            id: mouseAreaDroppedRect
+            anchors.fill: parent
+            drag.target: newItem
+            hoverEnabled: true
+
+            //            onDoubleClicked: onRectangleToggle()
+            onReleased: onReleasedRectangle(newItem)
+            onPositionChanged: newItem.dragged(newItem.x, newItem.y)
+            onPressed: newItem.refObjectCount(parseInt(newItem.objectName), newItem.width, newItem.height)
+            onEntered: showCrossIcon();
+            onExited: hideCrossIcon();
+        }
+
+
+
+
+
 
 
         Text{
             id: nameID
             text: text
-            anchors.centerIn: parent
+            anchors.left: droppedRectangle.left
+            anchors.leftMargin: 20
+            //            anchors.centerIn: parent
+            anchors.verticalCenter: droppedRectangle.verticalCenter
+        }
+        Image{
+            id: dropDownIcon
+
+            source : "/Images/icons/Down_20.png"
+            anchors.right: droppedRectangle.right
+            height: 15
+            width: 15
+            anchors.rightMargin: 32
+            anchors.verticalCenter: droppedRectangle.verticalCenter
+            z: 5
+            visible: hoverCrossIcon
+
+            MouseArea{
+                anchors.fill: parent
+                onClicked: onRectangleToggle()
+            }
         }
 
         Image{
-            id: removeIcon
-            source : "/Images/icons/remove.png"
+            id:removeIcon
+
+            source : "/Images/icons/close black.png"
             anchors.right: droppedRectangle.right
+            height: 12
+            width: 12
             anchors.rightMargin: 10
             anchors.verticalCenter: droppedRectangle.verticalCenter
             z: 5
+            visible: hoverCrossIcon
 
             MouseArea{
                 anchors.fill: parent
@@ -150,26 +251,40 @@ Item{
             }
         }
 
-        MouseArea {
-            id: mouseAreaDroppedRect
-            anchors.fill: parent
-            drag.target: newItem
 
-            onDoubleClicked: onRectangleToggle()
-            onReleased: onReleasedRectangle(newItem)
-            onPositionChanged: newItem.dragged(newItem.x, newItem.y)
-            onPressed: newItem.refObjectCount(parseInt(newItem.objectName), newItem.width, newItem.height)
-        }
+
+
 
     }
 
-    ListView{
+    Rectangle{
+
+        border.color: Constants.dataModelBorderColor
+        anchors.top : droppedRectangle.bottom
+        width: 200
+        height: tableId.height
         id: columnListDroppedRect
         visible: false
-        anchors.top : droppedRectangle.bottom
-        height: model.count * 30
-        model: displayColList
-        delegate: listviewComponent
+
+
+
+
+
+        ListView{
+            id:tableId
+
+            height: model.count * 30
+            anchors.left: parent.left
+            anchors.leftMargin: 50
+            anchors.top: parent.top
+            anchors.topMargin: 30
+
+            model: displayColList
+            delegate: listviewComponent
+
+
+        }
+
     }
 }
 

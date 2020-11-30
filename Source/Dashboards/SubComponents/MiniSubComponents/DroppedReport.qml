@@ -284,6 +284,7 @@ Item{
                 anchors.top: parent.top
                 height: parent.height
 
+
                 Row{
                     id:menuOptions
 
@@ -292,6 +293,9 @@ Item{
                     anchors.right: parent.right
                     anchors.rightMargin: 10
                     visible: hoverStatusReport
+                    anchors.left: parent.left
+                      anchors.fill: parent
+
 
                     spacing: 10
 
