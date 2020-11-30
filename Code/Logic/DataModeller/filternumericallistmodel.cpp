@@ -267,7 +267,7 @@ void FilterNumericalListModel::callQueryModel(QString tmpSql)
     foreach(filter, mFilter){
 
         if(filter->relation() == "BETWEEN"){
-            QStringList newValueList = filter->value().split(" To ");
+            QStringList newValueList = filter->value().split(" And ");
             QString newValue = newValueList[0] + "'" + " AND " + "'" + newValueList[1];
             newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), newValue, filter->exclude(), filter->includeNull());
         }

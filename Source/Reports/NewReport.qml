@@ -169,6 +169,14 @@ Page {
         id: editColorPopup
     }
 
+    CalculatedFieldPopup{
+        id: calculatedFieldPopup
+    }
+
+    ToolTipPopup{
+        id: toolTipPopup
+    }
+
     // SubComponents Ends
     /***********************************************************************************************************************/
 

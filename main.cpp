@@ -215,6 +215,9 @@ int main(int argc, char *argv[])
     QObject::connect(&filterDateListModel, &FilterDateListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
     QObject::connect(&filterNumericalListModel, &FilterNumericalListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
 
+    // Name of the columns
+    // Actual data
+
     // SIGNAL & SLOTS ENDS
     /***********************************************************************************************************************/
     /***********************************************************************************************************************/

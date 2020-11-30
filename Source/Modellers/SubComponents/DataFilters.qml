@@ -241,8 +241,10 @@ Popup {
             // Fire the signal for show specific category
             DSParamsModel.setSection(Constants.dateTab)
             DSParamsModel.setCategory(Constants.dateMainListType)
+            DSParamsModel.setSubCategory(Constants.categorySubMulti)
             popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, "", "", "")
 
+            DSParamsModel.resetInputFields()
             categoricalFilterPopup.visible = false
             dateFilterPopup.visible = true
             numericalFilterPopup.visible = false
@@ -254,6 +256,7 @@ Popup {
             DSParamsModel.setSection(Constants.numericalTab)
             popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, "", "", "")
 
+            DSParamsModel.resetInputFields()
             categoricalFilterPopup.visible = false
             dateFilterPopup.visible = false
             numericalFilterPopup.visible = true
@@ -368,9 +371,10 @@ Popup {
         popupMain.visible = false
         var tmpSql = DSParamsModel.tmpSql
 
-        if(DSParamsModel.section === "categorical")
+        if(tabBarOpen === "categorical"){
             FilterCategoricalListModel.callQueryModel(tmpSql)
-        else if(DSParamsModel.section === "date")
+        }
+        else if(tabBarOpen === "date")
         {
             FilterDateListModel.setDateFormatMap(DSParamsModel.getDateFormatMap())
             FilterDateListModel.setTimeFrameMap(DSParamsModel.getTimeFrameMap())
