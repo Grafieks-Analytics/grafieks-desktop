@@ -1,7 +1,8 @@
 #include "dsparamsmodel.h"
 
 DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent),
-                                                db(nullptr), con(db), counter(1)
+//                                                db(nullptr), con(db),
+                                                counter(1)
 {
 
 //    db.LoadExtension<duckdb::ParquetExtension>();
@@ -720,82 +721,82 @@ QVariantMap DSParamsModel::getTimeFrameMap()
 void DSParamsModel::parseCsv(QUrl pathToCsv)
 {
 
-    QString msg;
-    QElapsedTimer timer;
-    timer.start();
+//    QString msg;
+//    QElapsedTimer timer;
+//    timer.start();
 
-    QFileInfo fileInfo(pathToCsv.toString());
-    QString fileName = fileInfo.fileName();
-    QString fileNameWithoutExt = fileName.section(".", 0, 0);
+//    QFileInfo fileInfo(pathToCsv.toString());
+//    QString fileName = fileInfo.fileName();
+//    QString fileNameWithoutExt = fileName.section(".", 0, 0);
 
-    QString queryString = "CREATE TABLE " + fileNameWithoutExt + " AS SELECT * FROM read_csv_auto('" + pathToCsv.toLocalFile() + "')";
-    auto result = con.Query(queryString.toStdString());
-    result->Print();
+//    QString queryString = "CREATE TABLE " + fileNameWithoutExt + " AS SELECT * FROM read_csv_auto('" + pathToCsv.toLocalFile() + "')";
+//    auto result = con.Query(queryString.toStdString());
+//    result->Print();
 
-    if (!result->success)
-    {
-        msg = QString::fromStdString(result->error);
-    }
-    else
-    {
-        msg = "Success";
-    }
-    qDebug() << msg << "CSV Reading";
+//    if (!result->success)
+//    {
+//        msg = QString::fromStdString(result->error);
+//    }
+//    else
+//    {
+//        msg = "Success";
+//    }
+//    qDebug() << msg << "CSV Reading";
 
-    emit csvReadComplete(timer.elapsed(), result->success, msg);
+//    emit csvReadComplete(timer.elapsed(), result->success, msg);
 }
 
 void DSParamsModel::parseParquet(QUrl pathToParquet)
 {
 
-    QString msg;
-    QElapsedTimer timer;
-    timer.start();
+//    QString msg;
+//    QElapsedTimer timer;
+//    timer.start();
 
-    QFileInfo fileInfo(pathToParquet.toString());
-    QString fileName = fileInfo.fileName();
-    QString fileNameWithoutExt = fileName.section(".", 0, 0);
+//    QFileInfo fileInfo(pathToParquet.toString());
+//    QString fileName = fileInfo.fileName();
+//    QString fileNameWithoutExt = fileName.section(".", 0, 0);
 
-    QString queryString = "CREATE TABLE " + fileNameWithoutExt + " AS SELECT * FROM PARQUET_SCAN('" + pathToParquet.toLocalFile() + "')";
-    qDebug() << queryString << "QSTRING";
-    auto result = con.Query(queryString.toStdString());
-    result->Print();
+//    QString queryString = "CREATE TABLE " + fileNameWithoutExt + " AS SELECT * FROM PARQUET_SCAN('" + pathToParquet.toLocalFile() + "')";
+//    qDebug() << queryString << "QSTRING";
+//    auto result = con.Query(queryString.toStdString());
+//    result->Print();
 
-    if (!result->success)
-    {
-        msg = QString::fromStdString(result->error);
-    }
-    else
-    {
-        msg = "Success";
-    }
+//    if (!result->success)
+//    {
+//        msg = QString::fromStdString(result->error);
+//    }
+//    else
+//    {
+//        msg = "Success";
+//    }
 
-    emit parquetReadComplete(timer.elapsed(), result->success, msg);
+//    emit parquetReadComplete(timer.elapsed(), result->success, msg);
 }
 
 void DSParamsModel::exportExtractData(QString pathToExtract)
 {
-    QString msg;
-    QElapsedTimer timer;
-    timer.start();
+//    QString msg;
+//    QElapsedTimer timer;
+//    timer.start();
 
-    QString queryString = "EXPORT DATABASE '" + pathToExtract + "' (FORMAT PARQUET)";
-    auto result = con.Query(queryString.toStdString());
+//    QString queryString = "EXPORT DATABASE '" + pathToExtract + "' (FORMAT PARQUET)";
+//    auto result = con.Query(queryString.toStdString());
 
-    emit exportDataComplete(timer.elapsed(), result->success, msg);
+//    emit exportDataComplete(timer.elapsed(), result->success, msg);
 }
 
 void DSParamsModel::importExtractData(QString pathToExtract)
 {
 
-    QString msg;
-    QElapsedTimer timer;
-    timer.start();
+//    QString msg;
+//    QElapsedTimer timer;
+//    timer.start();
 
-    QString queryString = "IMPORT DATABASE '" + pathToExtract + "'";
-    auto result = con.Query(queryString.toStdString());
+//    QString queryString = "IMPORT DATABASE '" + pathToExtract + "'";
+//    auto result = con.Query(queryString.toStdString());
 
-    emit importDataComplete(timer.elapsed(), result->success, msg);
+//    emit importDataComplete(timer.elapsed(), result->success, msg);
 }
 
 void DSParamsModel::resetInputFields()

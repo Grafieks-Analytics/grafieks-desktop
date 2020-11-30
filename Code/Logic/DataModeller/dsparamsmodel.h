@@ -15,8 +15,8 @@
 #include "../../constants.h"
 #include "../../Messages.h"
 #include "../../statics.h"
-#include "../../duckdb.hpp"
-#include "../../parquet-extension.hpp"
+//#include "../../duckdb.hpp"
+//#include "../../parquet-extension.hpp"
 
 /*!
  * \brief Sets all the temporary variables for DataModeller
@@ -293,8 +293,8 @@ signals:
 private:
     QMap<QString, QString> datasourceCredentials();
     QString m_fileExtension;
-    duckdb::DuckDB db;
-    duckdb::Connection con;
+//    duckdb::DuckDB db;
+//    duckdb::Connection con;
     int counter;
 
     // Read Write Data source file

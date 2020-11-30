@@ -11,9 +11,10 @@ Click the **Modify** button and select the **Individual Components** tab on the 
 3. MSVC v xxxx (Choose the latest version)
 4. Windows 10 SDK
 5. Windows Universal CRT SDK
+6. C++CMake tools for Windows
 
 A few components can be automatically selected. But that is ok
-![Visual Studio 2019 Community Components](https://i.imgur.com/0uSuF3n.png)
+![Visual Studio 2019 Community Components](https://i.imgur.com/s1COSjT.png?1)
 
 #### QT Installation 5.15
 

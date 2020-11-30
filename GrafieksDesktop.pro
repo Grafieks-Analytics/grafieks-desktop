@@ -139,18 +139,18 @@ HEADERS += \
     Code/Logic/General/tableschemamodel.h \
     Code/Logic/Menu/user.h \
     Code/Logic/Reports/reportparamsmodel.h \
-    Code/duckdb.hpp \
+#    Code/duckdb.hpp \
     Code/messages.h \
     Code/constants.h \
-    Code/parquet-extension.hpp \
+#    Code/parquet-extension.hpp \
     Code/statics.h \
 
 
+
 #macx: LIBS += -L$$PWD/Libraries/ -lduckdb
-win32: LIBS += -L$$PWD/Libraries/duckdb.dll
+#win32: LIBS += -L$$PWD/Libraries/duckdb.dll
 
 #macx: LIBS += -L$$PWD/Libraries/ -lparquet_extension
-#win32: LIBS += -L$$PWD/Libraries/libp     arquet_extension.a
 
 #INCLUDEPATH += $$PWD/Libraries
 #DEPENDPATH += $$PWD/Libraries

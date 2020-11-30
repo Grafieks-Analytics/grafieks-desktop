@@ -314,24 +314,66 @@ Popup {
         width: parent.width
 
         Row{
-            spacing: 10
+            spacing: 20
             anchors.top: parent.top
-            anchors.topMargin: popupContent.padding
-            anchors.right: parent.right
-            anchors.rightMargin: 20
+            anchors.left: parent.left
+            anchors.leftMargin: 20
 
-            CustomButton{
-                id: cancelBtn
-                textValue: "Cancel"
-                height: Constants.defaultElementHeight
-                onClicked: onCancelClicked()
+            height: parent.height
+            width: parent.width
+
+            Rectangle{
+
+                width: parent.width - 280
+                height: parent.height
+
+                Row{
+                    height: Constants.defaultElementHeight
+                    width: parent.width
+                    spacing: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    Rectangle{
+                        height: parent.height
+                        width: errorLabel.width
+                        Text {
+                            id: errorLabel
+                            text: qsTr("Errors")
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                    }
+                    Rectangle{
+                        width: parent.width - errorLabel.width - parent.spacing
+                        height: parent.height
+                        border.color: Constants.darkThemeColor
+                        border.width: 1
+                    }
+                }
+
+
             }
 
-            CustomButton{
-                id: applyBtn
-                height: Constants.defaultElementHeight
-                textValue: "Apply"
+            Rectangle{
+                height: parent.height
+                width: 200
+
+                Row{
+                    width: parent.width
+                    spacing: 10
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    CustomButton{
+                        height: Constants.defaultElementHeight
+                        onClicked: onCancelClicked()
+                        textValue: "Cancel"
+                    }
+                    CustomButton{
+                        height: Constants.defaultElementHeight
+                        textValue: "Apply"
+                    }
+                }
+
             }
+
         }
 
     }

@@ -50,7 +50,7 @@ Popup {
 
     background: Rectangle{
         color: Constants.whiteColor
-        border.color: Constants.themeColor
+        border.color: Constants.darkThemeColor
     }
 
 

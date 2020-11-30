@@ -8,6 +8,7 @@
 #include "../../duckdb.hpp"
 #include "../../parquet-extension.hpp"
 
+
 class QtTest2 : public QObject
 {
     Q_OBJECT
@@ -22,7 +23,7 @@ signals:
 
 private:
 
-    duckdb::DuckDB db;
+//    duckdb::DuckDB db;
 
 };
 
