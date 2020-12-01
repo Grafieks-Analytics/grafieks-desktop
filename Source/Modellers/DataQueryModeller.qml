@@ -64,14 +64,23 @@ Page {
         target: FilterCategoricalListModel
 
         function onRowCountChanged(){
-            filterNumber.text = FilterCategoricalListModel.rowCount()
+            filterNumber.text = FilterCategoricalListModel.rowCount() + FilterDateListModel.rowCount() + FilterNumericalListModel.rowCount()
         }
     }
+
     Connections{
         target: FilterDateListModel
 
         function onRowCountChanged(){
-            filterNumber.text = FilterDateListModel.rowCount()
+            filterNumber.text = FilterCategoricalListModel.rowCount() + FilterDateListModel.rowCount() + FilterNumericalListModel.rowCount()
+        }
+    }
+
+    Connections{
+        target: FilterNumericalListModel
+
+        function onRowCountChanged(){
+            filterNumber.text = FilterCategoricalListModel.rowCount() + FilterDateListModel.rowCount() + FilterNumericalListModel.rowCount()
         }
     }
 

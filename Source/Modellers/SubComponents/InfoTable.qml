@@ -151,7 +151,7 @@ Item{
             if(isSqlSelect){
                 QueryModel.callSql(DSParamsModel.tmpSql)
                 QueryStatsModel.showStats()
-                TableSchemaModel.showSchema(DSParamsModel.tmpSql)
+                //TableSchemaModel.showSchema(DSParamsModel.tmpSql)
             } else{
                 sqlQueryNotAllowedDialog.visible = true
             }

@@ -22,6 +22,16 @@ ListView{
         }
     }
 
+    Connections{
+        target : ReportModelList
+
+
+        function onSendFilteredColumn(allCategorical, allNumerical, allDates){
+            numericalModel.clear()
+            numericalList.model =  allNumerical
+
+        }
+    }
     function appendToList(name){
           numericalModel.append({categoricalName: name});
     }
@@ -60,7 +70,7 @@ ListView{
         }
 
         Text {
-            text: categoricalName
+            text: modelData
             width: parent.width - numericalImage.width - menuButton.width - 30
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: numericalImage.right
@@ -89,7 +99,7 @@ ListView{
             drag.target: numericalListElement
             drag.onActiveChanged: {
                 if (mouseArea.drag.active) {
-                    ReportParamsModel.itemName = categoricalName;
+                    ReportParamsModel.itemName = modelData
                     ReportParamsModel.itemType = itemType;
                     ReportParamsModel.setXAxisActive(true);
                     ReportParamsModel.setYAxisActive(true);

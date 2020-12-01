@@ -38,7 +38,7 @@ Rectangle{
     }
 
     Text {
-        text: categoricalName
+        text: modelData
         width: parent.width - categoricalImage.width - menuButton.width - 30
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: categoricalImage.right
@@ -67,7 +67,7 @@ Rectangle{
         drag.target: categoricalListElement
         drag.onActiveChanged: {
             if (mouseArea.drag.active) {
-                ReportParamsModel.itemName = categoricalName;
+                ReportParamsModel.itemName = modelData;
                 ReportParamsModel.itemType = itemType;
                 ReportParamsModel.setXAxisActive(true);
                 ReportParamsModel.setYAxisActive(true);

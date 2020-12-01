@@ -44,7 +44,16 @@ ListView{
 
     /***********************************************************************************************************************/
     // Connections Starts
+    Connections{
+        target : ReportModelList
 
+
+        function onSendFilteredColumn(allCategorical, allNumerical, allDates){
+            dateModel.clear()
+            dateList.model =  allDates
+
+        }
+    }
 
 
     // Connections Ends
@@ -121,7 +130,7 @@ ListView{
         }
 
         Text {
-            text: categoricalName
+            text: modelData
             width: parent.width - dateImage.width - menuButton.width - 30
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: dateImage.right
@@ -150,7 +159,7 @@ ListView{
             drag.target: dateListElement
             drag.onActiveChanged: {
                 if (mouseArea.drag.active) {
-                    ReportParamsModel.itemName = categoricalName;
+                    ReportParamsModel.itemName = modelData;
                     ReportParamsModel.itemType = itemType;
                     ReportParamsModel.setXAxisActive(true);
                     ReportParamsModel.setYAxisActive(true);

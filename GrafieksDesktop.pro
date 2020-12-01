@@ -44,6 +44,7 @@ SOURCES += \
     Code/Logic/DataModeller/filterfunctionsmodel.cpp \
     Code/Logic/DataModeller/filternumericallist.cpp \
     Code/Logic/DataModeller/filternumericallistmodel.cpp \
+    Code/Logic/DataModeller/proxyfiltermodel.cpp \
     Code/Logic/DataModeller/publishdatasourcemodel.cpp \
     Code/Logic/DataModeller/querymodel.cpp \
     Code/Logic/DataModeller/querystatsmodel.cpp \
@@ -63,6 +64,7 @@ SOURCES += \
     Code/Logic/General/tablecolumnsmodel.cpp \
     Code/Logic/General/tableschemamodel.cpp \
     Code/Logic/Menu/user.cpp \
+    Code/Logic/Reports/reportmodellist.cpp \
     Code/Logic/Reports/reportparamsmodel.cpp \
     main.cpp
 
@@ -119,6 +121,7 @@ HEADERS += \
     Code/Logic/DataModeller/filterfunctionsmodel.h \
     Code/Logic/DataModeller/filternumericallist.h \
     Code/Logic/DataModeller/filternumericallistmodel.h \
+    Code/Logic/DataModeller/proxyfiltermodel.h \
     Code/Logic/DataModeller/publishdatasourcemodel.h \
     Code/Logic/DataModeller/querymodel.h \
     Code/Logic/DataModeller/querystatsmodel.h \
@@ -138,6 +141,7 @@ HEADERS += \
     Code/Logic/General/tablecolumnsmodel.h \
     Code/Logic/General/tableschemamodel.h \
     Code/Logic/Menu/user.h \
+    Code/Logic/Reports/reportmodellist.h \
     Code/Logic/Reports/reportparamsmodel.h \
     Code/duckdb.hpp \
     Code/messages.h \

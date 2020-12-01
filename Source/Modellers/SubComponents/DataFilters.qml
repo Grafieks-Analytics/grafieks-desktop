@@ -371,19 +371,26 @@ Popup {
         popupMain.visible = false
         var tmpSql = DSParamsModel.tmpSql
 
-        if(tabBarOpen === "categorical"){
-            FilterCategoricalListModel.callQueryModel(tmpSql)
-        }
-        else if(tabBarOpen === "date")
-        {
-            FilterDateListModel.setDateFormatMap(DSParamsModel.getDateFormatMap())
-            FilterDateListModel.setTimeFrameMap(DSParamsModel.getTimeFrameMap())
-            FilterDateListModel.callQueryModel(tmpSql)
-        }
-        else
-        {
-            FilterNumericalListModel.callQueryModel(tmpSql)
-        }
+        FilterDateListModel.setDateFormatMap(DSParamsModel.getDateFormatMap())
+        FilterDateListModel.setTimeFrameMap(DSParamsModel.getTimeFrameMap())
+        ProxyFilterModel.callQueryModels(tmpSql, FilterCategoricalListModel, FilterDateListModel, FilterNumericalListModel)
+
+          /*
+            if(tabBarOpen === "categorical"){
+                ProxyFilterModel.callQueryModels(tmpSql,FilterCategoricalListModel, FilterDateListModel, FilterNumericalListModel)
+                //FilterCategoricalListModel.callQueryModel(tmpSql)
+            }
+            else if(tabBarOpen === "date")
+            {
+                FilterDateListModel.setDateFormatMap(DSParamsModel.getDateFormatMap())
+                FilterDateListModel.setTimeFrameMap(DSParamsModel.getTimeFrameMap())
+                FilterDateListModel.callQueryModel(tmpSql)
+            }
+            else
+            {
+                FilterNumericalListModel.callQueryModel(tmpSql)
+            }
+         */
     }
     function onCancelClicked(){
         popupMain.visible = false
