@@ -19,8 +19,8 @@ Popup {
     visible: false
 
     background: Rectangle{
-        color: Constants.whiteColor
-        border.color: Constants.themeColor
+        color: Constants.themeColor
+        border.color: Constants.darkThemeColor
     }
 
     function openSubMenu(type){
@@ -34,19 +34,24 @@ Popup {
         dataPaneSubMenu.visible = true
     }
 
+
+    DataPaneSubMenu{
+        id: dataPaneSubMenu
+        y: elementHeight
+    }
+
     Rectangle{
         anchors.fill: parent
+        color: Constants.themeColor
+
         Column{
             anchors.fill: parent
             spacing: 8
 
-            DataPaneSubMenu{
-                id: dataPaneSubMenu
-            }
-
             Rectangle{
                 height: elementHeight
                 width: parent.width
+                color: Constants.themeColor
 
                 Text {
                     text: qsTr("Rename")
@@ -65,6 +70,8 @@ Popup {
             Rectangle{
                 height: elementHeight
                 width: parent.width
+
+                color: Constants.themeColor
 
                 Text {
                     text: qsTr("Create")
@@ -93,6 +100,7 @@ Popup {
             Rectangle{
                 height: elementHeight
                 width: parent.width
+                color: Constants.themeColor
 
                 Text {
                     text: qsTr("Convert To")

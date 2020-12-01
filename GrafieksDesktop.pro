@@ -66,7 +66,7 @@ SOURCES += \
     Code/Logic/Menu/user.cpp \
     Code/Logic/Reports/reportmodellist.cpp \
     Code/Logic/Reports/reportparamsmodel.cpp \
-    main.cpp
+    main.cpp \
 
 RESOURCES += \
     assets.qrc \
@@ -143,18 +143,20 @@ HEADERS += \
     Code/Logic/Menu/user.h \
     Code/Logic/Reports/reportmodellist.h \
     Code/Logic/Reports/reportparamsmodel.h \
-    Code/duckdb.hpp \
+#    Code/duckdb.hpp \
     Code/messages.h \
     Code/constants.h \
+#    Code/parquet-extension.hpp \
     Code/statics.h \
 
-DISTFILES += \
 
 
+#macx: LIBS += -L$$PWD/Libraries/ -lduckdb
+#win32: LIBS += -L$$PWD/Libraries/duckdb.dll
 
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/Libraries/release/ -lduckdb
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/Libraries/debug/ -lduckdb
-#else:macx: LIBS += -L$$PWD/Libraries/ -lduckdb
+#macx: LIBS += -L$$PWD/Libraries/ -lparquet_extension
 
 #INCLUDEPATH += $$PWD/Libraries
 #DEPENDPATH += $$PWD/Libraries
+
+#macx: PRE_TARGETDEPS += $$PWD/Libraries/libparquet_extension.a

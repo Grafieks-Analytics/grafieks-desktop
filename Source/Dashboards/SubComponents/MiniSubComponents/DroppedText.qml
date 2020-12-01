@@ -149,28 +149,7 @@ Item{
         mainContainer.rulerStatus = false
     }
 
-    function toggleFullScreen(){
-        DashboardParamsModel.setCurrentReport(newItem.objectName)
 
-        if(mainContainer.width === parent.width-left_menubar.width && mainContainer.height === parent.height-5)
-        {
-            mainContainer.width = Constants.defaultDroppedReportWidth
-            mainContainer.height = Constants.defaultDroppedReportHeight
-           fullScreenReport.source= "/Images/icons/zoom_in_new.png"
-
-        }
-        else{
-            mainContainer.width= Qt.binding(function(){
-                return parent.width-left_menubar.width })
-            mainContainer.height= Qt.binding(function(){
-                return parent.height-5 })
-            mainContainer.y=0
-            mainContainer.x=0
-
-             fullScreenReport.source= "/Images/icons/zoom_out_new.png"
-
-        }
-    }
 
 
 
@@ -238,7 +217,7 @@ Item{
                         id: editReport
                         height: 18
                         width: 18
-                        source: "/Images/icons/Edit.png"
+                        source: "/Images/icons/edit gray.png"
                         anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea{
@@ -251,7 +230,7 @@ Item{
                         id: fullScreenReport
                         height: 16
                         width: 16
-                        source: "/Images/icons/close black.png"
+                        source: "/Images/icons/close gray.png"
                         anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea{

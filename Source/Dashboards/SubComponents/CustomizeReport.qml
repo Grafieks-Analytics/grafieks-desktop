@@ -105,6 +105,7 @@ Column{
                 anchors.leftMargin: 20
                 anchors.right: parent.right
                 anchors.rightMargin: 10
+                spacing: 5
 
                 Text{
                     text: "Customize Report"
@@ -117,6 +118,7 @@ Column{
                     height: 12
                     width: 12
                     anchors.right: parent.right
+
                     anchors.verticalCenter: parent.verticalCenter
 
                     MouseArea{

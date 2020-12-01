@@ -20,25 +20,27 @@ Popup {
     visible: false
 
     background: Rectangle{
-        color: Constants.whiteColor
-        border.color: Constants.themeColor
+//        color: Constants.whiteColor
+        color: Constants.themeColor
+        border.color: Constants.darkThemeColor
     }
 
     function openCalculatedFieldMenu(){
-        console.log('openCalculatedFieldPopup');
         calculatedFieldPopup.visible = true
     }
 
     Rectangle{
         anchors.fill: parent
+        color: Constants.themeColor
         Column{
             anchors.fill: parent
-            spacing: 8
+            spacing: 4
 
             Rectangle{
                 height: elementHeight
                 width: parent.width
                 visible: !convertToSelected
+                color: Constants.themeColor
 
                 Text {
                     text: qsTr("Calculated Field")
@@ -49,12 +51,19 @@ Popup {
                     anchors.fill: parent
                     onClicked: openCalculatedFieldMenu()
                 }
+                HorizontalLineTpl{
+                    line_color: Constants.darkThemeColor
+                    line_width: parent.width + 20
+                    x: -10
+                    anchors.top: parent.bottom
+                }
             }
 
             Rectangle{
                 height: elementHeight
                 width: parent.width
                 visible: !convertToSelected
+                color: Constants.themeColor
 
                 Text {
                     text: qsTr("Group")
@@ -68,6 +77,7 @@ Popup {
                 height: elementHeight
                 width: parent.width
                 visible: convertToSelected
+                color: Constants.themeColor
 
                 Text {
                     text: qsTr("Date")
@@ -89,6 +99,7 @@ Popup {
                 height: elementHeight
                 width: parent.width
                 visible: convertToSelected
+                color: Constants.themeColor
 
                 Text {
                     text: qsTr("Number")
@@ -96,13 +107,6 @@ Popup {
                     anchors.verticalCenter: parent.verticalCenter
                 }
 
-
-                HorizontalLineTpl{
-                    line_color: Constants.darkThemeColor
-                    line_width: parent.width + 20
-                    x: -10
-                    anchors.top: parent.bottom
-                }
             }
 
         }

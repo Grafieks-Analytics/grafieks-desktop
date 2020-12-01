@@ -58,6 +58,7 @@ QtObject {
     property color grafieksGreenColor: "#009B8F"
     property color grafieksLightGreenColor: "#0dd1c2"
     property color scrollBarColor: "#CCCCCC"
+    property color dataModelBorderColor: "#66009b8f"
 
     property color dropHighlightColor: "ivory"
 

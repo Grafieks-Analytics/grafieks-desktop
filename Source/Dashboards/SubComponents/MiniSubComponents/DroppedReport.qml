@@ -23,7 +23,7 @@ Item{
         right: mainContainer.right
         bottom: mainContainer.bottom
     }
-     property var hoverStatusReport: false
+    property var hoverStatusReport: false
 
 
     /***********************************************************************************************************************/
@@ -83,7 +83,7 @@ Item{
             let dashboardId = DashboardParamsModel.currentDashboard
             let reportId = DashboardParamsModel.currentReport
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName) && url !== ""){
-//                let newUrl =  "file:" + GeneralParamsModel.getTmpPath()  + "../area.html"
+                //                let newUrl =  "file:" + GeneralParamsModel.getTmpPath()  + "../area.html"
                 let newUrl = "qrc:/Source/Charts/area.html"
                 webengine.url = newUrl
             }
@@ -125,7 +125,7 @@ Item{
         {
             mainContainer.width = Constants.defaultDroppedReportWidth
             mainContainer.height = Constants.defaultDroppedReportHeight
-           fullScreenReport.source= "/Images/icons/zoom_in_new.png"
+            fullScreenReport.source= "/Images/icons/zoom in gray.png"
             mainContainer.y=currnetPointReport.y
             mainContainer.x=currnetPointReport.x
 
@@ -139,7 +139,7 @@ Item{
             mainContainer.x=0
 
 
-             fullScreenReport.source= "/Images/icons/zoom_out_new.png"
+            fullScreenReport.source= "/Images/icons/zoom out gray.png"
             DashboardParamsModel.setZIndex(++DashboardParamsModel.zIndex);
             newItem.z = DashboardParamsModel.zIndex;
             mainContainer.z = DashboardParamsModel.zIndex;
@@ -171,8 +171,13 @@ Item{
         mainContainer.rulerStatus = false
     }
 
-    function onDropAreaPositionChangedReport(drag){
-        console.log("drag area change x",drag.x);
+    function onDropAreaPositionChangedReport(){
+        console.log("drag area change x",mainContainer.x);
+        //        dashboardArea.currnetPointReport = {x: mainContainer.x, y: mainContainer.y};
+        console.log("currnetPointReport",JSON.stringify(currnetPointReport))
+        currnetPointReport.x=mainContainer.x;
+        currnetPointReport.y=mainContainer.y;
+        console.log("currnetPointReport",JSON.stringify(currnetPointReport))
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -222,38 +227,37 @@ Item{
             hoverEnabled: true
             onEntered: showMenusReport()
             onExited: hideMenusReport()
-//            onEntered: {
-//                mainContainer.rulerStatus=true
+            //            onEntered: {
+            //                mainContainer.rulerStatus=true
 
-//            }
-//            onExited: {
-//                mainContainer.rulerStatus=false
-//            }
+            //            }
+            //            onExited: {
+            //                mainContainer.rulerStatus=false
+            //            }
             drag{
                 target: mainContainer
                 minimumX: 0
                 minimumY: 0
-//                maximumX: (mainContainer.parent.width)
-//                maximumY: mainContainer.parent.height - mainContainer.height - Constants.subMenuWidth
-//                maximumY: mainContainer.parent.height - mainContainer.height - Constants.subMenuWidth
+                //                maximumX: (mainContainer.parent.width)
+                //                maximumY: mainContainer.parent.height - mainContainer.height - Constants.subMenuWidth
+                //                maximumY: mainContainer.parent.height - mainContainer.height - Constants.subMenuWidth
 
-//                 maximumY: Qt.binding(function(){ return (dashboard_summary.height - mainContainer.height + Constants.subMenuWidth) })
-//                 maximumX: Qt.binding(function(){ return (dashboard_summary.width - mainContainer.width + Constants.leftMenubarWidth) })
+                //                 maximumY: Qt.binding(function(){ return (dashboard_summary.height - mainContainer.height + Constants.subMenuWidth) })
+                //                 maximumX: Qt.binding(function(){ return (dashboard_summary.width - mainContainer.width + Constants.leftMenubarWidth) })
 
-//                maximumY: dashboard_summary.height - mainContainer.height + Constants.subMenuWidth
-//                maximumX: dashboard_summary.width - mainContainer.width + Constants.leftMenubarWidth
+                //                maximumY: dashboard_summary.height - mainContainer.height + Constants.subMenuWidth
+                //                maximumX: dashboard_summary.width - mainContainer.width + Constants.leftMenubarWidth
                 maximumY: dashboard_summary.height- mainContainer.height
                 maximumX: dashboard_summary.width- mainContainer.width
 
 
 
             }
-//            Drag.hotSpot.x: 2
-//            Drag.hotSpot.y: 2
-
+            //            Drag.hotSpot.x: 2
+            //            Drag.hotSpot.y: 2
             onClicked:  showCustomizeReport()
             onPressed:  onItemPressed()
-            onPositionChanged:  onDropAreaPositionChangedReport(drag)
+            onPositionChanged:  onDropAreaPositionChangedReport()
         }
 
         Rectangle{
@@ -280,6 +284,7 @@ Item{
                 anchors.top: parent.top
                 height: parent.height
 
+
                 Row{
                     id:menuOptions
 
@@ -287,7 +292,10 @@ Item{
                     anchors.top: parent.top
                     anchors.right: parent.right
                     anchors.rightMargin: 10
-                     visible: hoverStatusReport
+                    visible: hoverStatusReport
+                    anchors.left: parent.left
+                      anchors.fill: parent
+
 
                     spacing: 10
 
@@ -295,7 +303,7 @@ Item{
                         id: editReport
                         height: 18
                         width: 18
-                        source: "/Images/icons/edit grey.png"
+                        source: "/Images/icons/edit gray.png"
                         anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea{
@@ -308,7 +316,7 @@ Item{
                         id: resizeReport
                         height: 16
                         width: 16
-                        source: "/Images/icons/view.png"
+                        source: "/Images/icons/view gray.png"
                         anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea{
@@ -321,8 +329,8 @@ Item{
                         id: fullScreenReport
                         height: 16
                         width: 16
-                        source: "/Images/icons/zoom_in_new.png"
-//                        source: "/Images/icons/minimise.png"
+                        source: "/Images/icons/zoom in gray.png"
+                        //                        source: "/Images/icons/minimise.png"
                         anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea{
@@ -404,22 +412,22 @@ Item{
             width:newItem.width - 10
             height:newItem.height  - mainChart.height - 20
 
-//                    onLoadingChanged: {
+            //                    onLoadingChanged: {
 
-//                        switch(loadRequest.status){
+            //                        switch(loadRequest.status){
 
-//                        case ( WebView.LoadFailedStatus):
-//                            webengine.visible = false
-//                            chooseImage.visible = true
-//                            break
+            //                        case ( WebView.LoadFailedStatus):
+            //                            webengine.visible = false
+            //                            chooseImage.visible = true
+            //                            break
 
-//                        case ( WebView.LoadSucceededStatus):
-//                            webengine.visible = true
-//                            chooseImage.visible = false
-//                            break
-//                        }
+            //                        case ( WebView.LoadSucceededStatus):
+            //                            webengine.visible = true
+            //                            chooseImage.visible = false
+            //                            break
+            //                        }
 
-//                    }
+            //                    }
 
         }
 

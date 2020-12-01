@@ -152,5 +152,11 @@
         <file>Images/icons/shapes/Rectangle_filled.png</file>
         <file>Images/icons/shapes/Rectangle_filled2x.png</file>
         <file>Images/icons/shapes/Rectangle2x.png</file>
+        <file>Images/icons/Command Bar@2x.png</file>
+        <file>Images/icons/date.png</file>
+        <file>Images/icons/drop down.png</file>
+        <file>Images/icons/integer.png</file>
+        <file>Images/icons/string 18.png</file>
+        <file>Images/icons/string new.png</file>
     </qresource>
 </RCC>

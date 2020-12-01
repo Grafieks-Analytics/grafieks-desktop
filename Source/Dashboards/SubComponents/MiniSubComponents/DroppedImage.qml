@@ -147,7 +147,7 @@ Item{
         {
             mainContainer.width = Constants.defaultDroppedReportWidth
             mainContainer.height = Constants.defaultDroppedReportHeight
-           fullScreenReport.source= "/Images/icons/zoom_in_new.png"
+           fullScreenReport.source= "/Images/icons/zoom in gray.png"
 
         }
         else{
@@ -158,7 +158,7 @@ Item{
             mainContainer.y=0
             mainContainer.x=0
 
-             fullScreenReport.source= "/Images/icons/zoom_out_new.png"
+             fullScreenReport.source= "/Images/icons/zoom out gray.png"
 
         }
 
@@ -262,7 +262,7 @@ Item{
                         id: editReport
                         height: 20
                         width: 20
-                        source: "/Images/icons/Edit.png"
+                        source: "/Images/icons/edit gray.png"
                         anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea{
@@ -275,7 +275,7 @@ Item{
                         id: fullScreenReport
                         height: 16
                         width: 16
-                        source: "/Images/icons/close black.png"
+                        source: "/Images/icons/close gray.png"
                         anchors.verticalCenter: parent.verticalCenter
 
                         MouseArea{

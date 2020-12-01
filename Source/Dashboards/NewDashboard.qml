@@ -263,6 +263,7 @@ Page {
                 verticalAlignment: Text.AlignVCenter
             }
 
+
             onClicked: addDashboard()
         }
 

@@ -221,6 +221,9 @@ int main(int argc, char *argv[])
     QObject::connect(&proxyModel, &ProxyFilterModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
 
 
+    // Name of the columns
+    // Actual data
+
     // SIGNAL & SLOTS ENDS
     /***********************************************************************************************************************/
     /***********************************************************************************************************************/
