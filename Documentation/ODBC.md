@@ -15,7 +15,9 @@ On Windows, default _ODBC Datasources (64-bit)_ & _ODBC Data sources (32-bit)_ e
 On Mac, we need to install **[iODBC](http://www.iodbc.org/dataspace/doc/iodbc/wiki/iodbcWiki/WelcomeVisitors)**. Rest, the functionalities and interface of **iODBC** is similar to that of Windows **Odbc Data sources**
 
 **Note**
+
 1. ANSI ODBC driver is faster than Unicode driver. Try to use ANSI driver if Unicode support is not required
+
 2. ODBC connections can be made from the application interface directly or the right System DSN can be used to connect
 
 # Database ODBC connections
@@ -55,4 +57,4 @@ On Mac, we need to install **[iODBC](http://www.iodbc.org/dataspace/doc/iodbc/wi
 
 1. Download MongoDB ODBC driver https://github.com/mongodb/mongo-odbc-driver/releases/
 2. Download MongoDB BI Connector https://www.mongodb.com/try/download/bi-connector
-3. General SQL query will run using the ODBC connector
+3. General Select SQL queries will run using the ODBC connector on MongoDB
