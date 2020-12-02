@@ -14,6 +14,10 @@ On Windows, default _ODBC Datasources (64-bit)_ & _ODBC Data sources (32-bit)_ e
 
 On Mac, we need to install **[iODBC](http://www.iodbc.org/dataspace/doc/iodbc/wiki/iodbcWiki/WelcomeVisitors)**. Rest, the functionalities and interface of **iODBC** is similar to that of Windows **Odbc Data sources**
 
+**Note**
+1. ANSI ODBC driver is faster than Unicode driver. Try to use ANSI driver if Unicode support is not required
+2. ODBC connections can be made from the application interface directly or the right System DSN can be used to connect
+
 # Database ODBC connections
 
 -   **Mysql**
@@ -40,3 +44,15 @@ On Mac, we need to install **[iODBC](http://www.iodbc.org/dataspace/doc/iodbc/wi
 2. After installation open the ODBC manager. Unser _System DSN_, the new Postgres driver names should be visible
 
 3. Postgres server can be managed by **PgAdmin**. Link to management - https://www.enterprisedb.com/postgres-tutorials/how-create-postgresql-database-and-users-using-psql-and-pgadmin & https://www.guru99.com/create-drop-table-postgresql.html
+
+- **MS Excel**
+
+1. For Windows 64-bit, download MS Office 64bit installer else download the 32-bit version
+2. For other detailed documentation, read https://wiki.qt.io/Handling_Microsoft_Excel_file_format#:~:text=To%20read%20an%20Excel%20file%20with%20ODBC%20%28tested,%2A.xlsb%29%7D%3BDBQ%3D%22%20%2B%20QString%20%28%22c%3A%5Cpath%5Cto%5Cyour%5Cfile%5Cfile.xlsx%22%29%29%3B%20if%20%28db.open%20%28%29%29%20%7B
+3. If at any point, there is an issue while uninstalling MS Office from the system, visit this link https://support.microsoft.com/en-us/office/uninstall-office-from-a-pc-9dd49b83-264a-477a-8fcc-2fdf5dbf61d8
+
+- **MongoDB**
+
+1. Download MongoDB ODBC driver https://github.com/mongodb/mongo-odbc-driver/releases/
+2. Download MongoDB BI Connector https://www.mongodb.com/try/download/bi-connector
+3. General SQL query will run using the ODBC connector
