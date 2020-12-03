@@ -31,6 +31,7 @@ class DashboardParamsModel: public QObject
     QMap<int, bool> dashboardGrid;
     QMap<int, QVariantList> dashboardCanvasDimensions; // <dashboardId, [width, height]>
 
+
     // Customize Report parameters
     QMap<int, QMap<int, QString>> reportName; // <dashboardId, <reportId, reportName>>
     QMap<int, QMap<int, QString>> reportBackgroundColor; // <dashboardId, <reportId, backgroundColor>>
@@ -46,6 +47,8 @@ class DashboardParamsModel: public QObject
     Q_PROPERTY(int dashboardCount READ dashboardCount WRITE setDashboardCount NOTIFY dashboardCountChanged)
     Q_PROPERTY(int currentDashboard READ currentDashboard WRITE setCurrentDashboard NOTIFY currentDashboardChanged)
     Q_PROPERTY(int currentReport READ currentReport WRITE setCurrentReport NOTIFY currentReportChanged)
+    Q_PROPERTY(int tmpCanvasHeight READ tmpCanvasHeight WRITE setTmpCanvasHeight NOTIFY tmpCanvasHeightChanged)
+    Q_PROPERTY(int tmpCanvasWidth READ tmpCanvasWidth WRITE setTmpCanvasWidth NOTIFY tmpCanvasWidthChanged)
 
 
 
@@ -56,6 +59,8 @@ class DashboardParamsModel: public QObject
     int m_dashboardCount;
     int m_currentDashboard;
     int m_currentReport;
+    int m_tmpCanvasHeight;
+    int m_tmpCanvasWidth;
 
 public:
     explicit DashboardParamsModel(QObject *parent = nullptr);
@@ -134,6 +139,8 @@ public:
     int dashboardCount() const;
     int currentDashboard() const;    
     int currentReport() const;
+    int tmpCanvasHeight() const;
+    int tmpCanvasWidth() const;
 
 public slots:
     void setLastContainerType(QString lastContainerType);
@@ -143,6 +150,8 @@ public slots:
     void setDashboardCount(int dashboardCount);
     void setCurrentDashboard(int currentDashboard);   
     void setCurrentReport(int currentReport);
+    void setTmpCanvasHeight(int tmpCanvasHeight);
+    void setTmpCanvasWidth(int tmpCanvasWidth);
 
 signals:
     void lastContainerTypeChanged(QString lastContainerType);
@@ -162,6 +171,8 @@ signals:
     void reportBackgroundColorChanged(int dashboardId, int reportId, QString color);
     void reportLineColorChanged(int dashboardId, int reportId, QString color);
     void reportUrlChanged(int dashboardId, int reportId, QString url);
+    void tmpCanvasHeightChanged(int tmpCanvasHeight);
+    void tmpCanvasWidthChanged(int tmpCanvasWidth);
 };
 
 #endif // DASHBOARDPARAMSMODEL_H

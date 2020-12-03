@@ -9,8 +9,8 @@ DashboardParamsModel::DashboardParamsModel(QObject *parent) : QObject(parent)
 
     // Create 1 default dashboard
     QVariantList canvasDimensions;
-    canvasDimensions.append(0); // height
-    canvasDimensions.append(0); // width
+    canvasDimensions.append(Constants::defaultCanvasWidth); // width
+    canvasDimensions.append(Constants::defaultCanvasHeight); // height
 
     this->dashboardName.insert(0, "Dashboard 1");
     this->dashboardBackgroundColor.insert(0, Constants::DefaultBackgroundColor);
@@ -18,6 +18,8 @@ DashboardParamsModel::DashboardParamsModel(QObject *parent) : QObject(parent)
     this->dashboardGrid.insert(0, false);
 
     this->dashboardCanvasDimensions.insert(0, canvasDimensions);
+    this->setTmpCanvasWidth(Constants::defaultCanvasWidth);
+    this->setTmpCanvasHeight(Constants::defaultCanvasHeight);
 }
 
 bool DashboardParamsModel::dragNewReport(int dashboardId, int reportId)
@@ -87,8 +89,8 @@ bool DashboardParamsModel::createNewDashboard(int dashboardId)
 {
 
     QVariantList canvasDimensions;
-    canvasDimensions.append(0); // height
-    canvasDimensions.append(0); // width
+    canvasDimensions.append(this->tmpCanvasWidth()); // default width
+    canvasDimensions.append(this->tmpCanvasHeight()); // default height
 
     this->dashboardName.insert(dashboardId, "Dashboard " + QString::number(dashboardId + 1));
     this->dashboardBackgroundColor.insert(dashboardId, "#FFFFFF");
@@ -495,6 +497,8 @@ void DashboardParamsModel::setDashboardDimensions(int dashboardId, int width, in
     QVariantList dimensions;
     dimensions << width << height;
     this->dashboardCanvasDimensions.insert(dashboardId, dimensions);
+
+
 }
 
 QVariantList DashboardParamsModel::getDashboardDimensions(int dashboardId)
@@ -725,6 +729,16 @@ int DashboardParamsModel::currentReport() const
     return m_currentReport;
 }
 
+int DashboardParamsModel::tmpCanvasHeight() const
+{
+    return m_tmpCanvasHeight;
+}
+
+int DashboardParamsModel::tmpCanvasWidth() const
+{
+    return m_tmpCanvasWidth;
+}
+
 void DashboardParamsModel::setLastContainerType(QString lastContainerType)
 {
     if (m_lastContainerType == lastContainerType)
@@ -790,4 +804,33 @@ void DashboardParamsModel::setCurrentReport(int currentReport)
     m_currentReport = currentReport;
     qDebug() << "CHANGED" << currentReport;
     emit currentReportChanged(m_currentReport);
+}
+
+void DashboardParamsModel::setTmpCanvasHeight(int tmpCanvasHeight)
+{
+    if (m_tmpCanvasHeight == tmpCanvasHeight)
+        return;
+
+    m_tmpCanvasHeight = tmpCanvasHeight;
+    // Change all the default heights of the canvases
+    for(int i = 0; i < this->dashboardCount(); i++){
+         qDebug() << m_tmpCanvasHeight << "CANVAS HEIGHT";
+        this->dashboardCanvasDimensions[i][1] = m_tmpCanvasHeight;
+    }
+    emit tmpCanvasHeightChanged(m_tmpCanvasHeight);
+}
+
+void DashboardParamsModel::setTmpCanvasWidth(int tmpCanvasWidth)
+{
+    if (m_tmpCanvasWidth == tmpCanvasWidth)
+        return;
+
+    m_tmpCanvasWidth = tmpCanvasWidth;
+
+    // Change all the default widths of the canvases
+    for(int i = 0; i < this->dashboardCount(); i++){
+        qDebug() << m_tmpCanvasWidth << "CANVAS WIDTH";
+        this->dashboardCanvasDimensions[i][0] = m_tmpCanvasWidth;
+    }
+    emit tmpCanvasWidthChanged(m_tmpCanvasWidth);
 }
