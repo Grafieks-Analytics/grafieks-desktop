@@ -69,7 +69,6 @@ SOURCES += \
     main.cpp \
 
 RESOURCES += \
-    assets.qrc \
     images.qrc \
     qml.qrc
 

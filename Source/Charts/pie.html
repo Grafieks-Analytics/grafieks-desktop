@@ -1,108 +1,11 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Pie Chart</title>
+   <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Pie Chart</title>
+   </head>
+   <body>
 
-    <script src="../../Assets/vendors/vega5.min.js"></script>
-    <script src="../../Assets/vendors/vega-embed.js"></script>
-  </head>
-
-  <body>
-    <center><div id="vis"></div></center>
-    <script type="text/javascript">
-      var config = {
-        // default view background color
-        // covers the entire view component
-        background: "#fff",
-        axis: {
-          labelFont: "serif",
-          labelFontSize: 16,
-          tickWidth: 3,
-          tickColor: "red"
-        }
-      };
-
-      var spec = {
-    $schema: "https://vega.github.io/schema/vega/v5.json",
-    width: 400,
-    height: 400,
-    autosize: "none",
-
-    signals: [
-        {
-            name: "startAngle",
-            value: 0,
-            bind: { input: "range", min: 0, max: 6.29, step: 0.01 }
-        },
-
-        {
-            name: "innerRadius",
-            value: 60,
-            bind: { input: "range", min: 0, max: 90, step: 1 }
-        }
-    ],
-
-    data: [
-        {
-            name: "table",
-            values: [
-                { id: 1, field: 4 },
-                { id: 2, field: 6 },
-                { id: 3, field: 10 },
-                { id: 4, field: 3 },
-                { id: 5, field: 7 },
-                { id: 6, field: 8 }
-            ],
-            transform: [
-                {
-                    type: "pie",
-                    field: "field",
-                    startAngle: { signal: "startAngle" }
-                }
-            ]
-        }
-    ],
-
-    scales: [
-        {
-            name: "color",
-            type: "ordinal",
-            domain: { data: "table", field: "id" },
-            range: { scheme: "category20" }
-        }
-    ],
-
-    marks: [
-        {
-            type: "arc",
-            from: { data: "table" },
-            encode: {
-                enter: {
-                    fill: { scale: "color", field: "id" },
-                    x: { signal: "width / 2" },
-                    y: { signal: "height / 2" }
-                },
-                update: {
-                    startAngle: { field: "startAngle" },
-                    endAngle: { field: "endAngle" },
-                    innerRadius: { signal: "innerRadius" },
-                    outerRadius: { signal: "width / 2" }
-                }
-            }
-        }
-    ]
-};
-
-      vegaEmbed("#vis", spec, {
-        config: config,
-        tooltip: { theme: "dark" }
-      })
-        .then(function(result) {
-          console.log(result);
-        })
-        .catch(console.error);
-    </script>
-  </body>
+   </body>
 </html>
