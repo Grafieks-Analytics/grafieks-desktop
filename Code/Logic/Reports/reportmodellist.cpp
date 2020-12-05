@@ -28,6 +28,11 @@ void ReportModelList::setTmpSql(QString query)
         QSqlQuery queryResult(query, dbMysql);
         QSqlRecord record = queryResult.record();
 
+//         while(queryResult.next()){
+//            int field_idx = queryResult.record().indexOf("email");
+//            QString email = queryResult.record().value(field_idx).toString();
+//            qDebug() <<email << " Email";
+//        }
         for(int i = 0; i < record.count(); i++){
 
             QString fieldName = record.fieldName(i);
@@ -54,12 +59,13 @@ void ReportModelList::setTmpSql(QString query)
     this->numericalList.clear();
     this->categoryList.clear();
     this->dateList.clear();
+    this->category.clear();
+    this->numerical.clear();
+    this->date.clear();
 }
 
 void ReportModelList::getColumnsForTable(QString tableName)
 {
-
-
     QString describeQueryString, fieldName, fieldType;
     QStringList outputDataList;
 
@@ -97,6 +103,35 @@ void ReportModelList::getColumnsForTable(QString tableName)
     }
     }
 }
+
+void ReportModelList::getData()
+{
+    QVariantList xAxis;
+    QVariantList yAxis;
+
+    QElapsedTimer timer;
+    timer.start();
+
+    QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
+    QString query = "SELECT * FROM test";
+
+    QSqlQuery queryResult(query, dbMysql);
+
+    while(queryResult.next()){
+
+       int field_idx = queryResult.record().indexOf("country");
+       QString country = queryResult.record().value(field_idx).toString();
+       field_idx = queryResult.record().indexOf("population");
+       int population = queryResult.record().value(field_idx).toInt();
+       xAxis.append(country);
+       yAxis.append(population);
+       qDebug() << country << " "  << population;
+   }
+
+   emit sendData(xAxis, yAxis);
+   qDebug() << timer.elapsed() << " SQL Execution Time in ms ";
+}
+
 
 
 
