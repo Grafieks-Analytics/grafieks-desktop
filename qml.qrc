@@ -147,5 +147,9 @@
         <file>Source/Reports/SubComponents/CalculatedFieldPopup.qml</file>
         <file>Source/Reports/SubComponents/ToolTipPopup.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/LabelPopup.qml</file>
+        <file>Source/Charts/Data/d3.v4-alpha.40.min.js</file>
+        <file>Source/Charts/Data/general.css</file>
+        <file>Source/Charts/BarChartArrayInput.html</file>
+        <file>Source/Charts/Data/qwebchannel.js</file>
     </qresource>
 </RCC>
