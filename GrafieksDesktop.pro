@@ -1,4 +1,4 @@
-QT += quick webengine quickcontrols2 sql networkauth
+QT += quick webengine quickcontrols2 sql networkauth webchannel
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -44,6 +44,7 @@ SOURCES += \
     Code/Logic/DataModeller/filterfunctionsmodel.cpp \
     Code/Logic/DataModeller/filternumericallist.cpp \
     Code/Logic/DataModeller/filternumericallistmodel.cpp \
+    Code/Logic/DataModeller/proxyfiltermodel.cpp \
     Code/Logic/DataModeller/publishdatasourcemodel.cpp \
     Code/Logic/DataModeller/querymodel.cpp \
     Code/Logic/DataModeller/querystatsmodel.cpp \
@@ -63,11 +64,11 @@ SOURCES += \
     Code/Logic/General/tablecolumnsmodel.cpp \
     Code/Logic/General/tableschemamodel.cpp \
     Code/Logic/Menu/user.cpp \
+    Code/Logic/Reports/reportmodellist.cpp \
     Code/Logic/Reports/reportparamsmodel.cpp \
     main.cpp \
 
 RESOURCES += \
-    assets.qrc \
     images.qrc \
     qml.qrc
 
@@ -119,6 +120,7 @@ HEADERS += \
     Code/Logic/DataModeller/filterfunctionsmodel.h \
     Code/Logic/DataModeller/filternumericallist.h \
     Code/Logic/DataModeller/filternumericallistmodel.h \
+    Code/Logic/DataModeller/proxyfiltermodel.h \
     Code/Logic/DataModeller/publishdatasourcemodel.h \
     Code/Logic/DataModeller/querymodel.h \
     Code/Logic/DataModeller/querystatsmodel.h \
@@ -138,16 +140,17 @@ HEADERS += \
     Code/Logic/General/tablecolumnsmodel.h \
     Code/Logic/General/tableschemamodel.h \
     Code/Logic/Menu/user.h \
+    Code/Logic/Reports/reportmodellist.h \
     Code/Logic/Reports/reportparamsmodel.h \
-#    Code/duckdb.hpp \
+    Code/duckdb.hpp \
     Code/messages.h \
     Code/constants.h \
-#    Code/parquet-extension.hpp \
+    Code/parquet-extension.hpp \
     Code/statics.h \
 
 
 
-#macx: LIBS += -L$$PWD/Libraries/ -lduckdb
+macx: LIBS += -L$$PWD/Libraries/ -lduckdb
 #win32: LIBS += -L$$PWD/Libraries/duckdb.dll
 
 #macx: LIBS += -L$$PWD/Libraries/ -lparquet_extension

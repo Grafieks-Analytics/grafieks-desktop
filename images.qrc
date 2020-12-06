@@ -27,7 +27,6 @@
         <file>Images/icons/dropbox-2.png</file>
         <file>Images/icons/github-1.png</file>
         <file>Images/icons/aws-redshift-logo.png</file>
-        <file>Images/icons/hadoop.png</file>
         <file>Images/icons/box.png</file>
         <file>Images/icons/google-analytics-4.png</file>
         <file>Images/icons/microsoft-access-1.png</file>
@@ -165,5 +164,8 @@
         <file>Images/icons/zoom in gray.png</file>
         <file>Images/icons/zoom out gray.png</file>
         <file>Images/icons/iconmonstr-search-thin.svg</file>
+        <file>Images/icons/hive.png</file>
+        <file>Images/icons/impala.png</file>
+        <file>Images/icons/mongodb.png</file>
     </qresource>
 </RCC>

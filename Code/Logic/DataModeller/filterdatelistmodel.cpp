@@ -255,20 +255,15 @@ void FilterDateListModel::updateFilter(int FilterIndex, QString section, QString
 
 }
 
-void FilterDateListModel::callQueryModel(QString tmpSql)
+QString FilterDateListModel::callQueryModel()
 {
     FilterDateList *filter;
-    QString newWhereConditions;
-    QString newQuery;
-    QString existingWhereString;
+    QString newWhereConditions = "";
     QString newValue;
     QString value;
     QString tmpValue;
 
     QSet <QString> weekDays = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-
-    mQuerySplitter.setQuery(tmpSql);
-    newWhereConditions = mQuerySplitter.getWhereCondition();
 
     foreach(filter, mFilter){
 
@@ -407,17 +402,7 @@ void FilterDateListModel::callQueryModel(QString tmpSql)
         }
     }
 
-    // Replace the WHERE condition with the new one
-
-    QRegularExpression whereListRegex(R"(\sWHERE\s+(.*?)(?:\s+(?:GROUP|ORDER|LIMIT)\b|\s*$))", QRegularExpression::CaseInsensitiveOption);
-
-    QRegularExpressionMatch whereIterator = whereListRegex.match(tmpSql);
-    existingWhereString = whereIterator.captured(1).trimmed();
-    newQuery = tmpSql.replace(existingWhereString, newWhereConditions);
-
-    qDebug() << newQuery << "FINAL QUERY";
-
-    emit sendFilterQuery(newQuery);
+    return newWhereConditions;
 }
 
 void FilterDateListModel::setDateFormatMap(QVariantMap dateFormatMap)

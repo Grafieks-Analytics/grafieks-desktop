@@ -253,16 +253,10 @@ void FilterNumericalListModel::updateFilter(int FilterIndex, QString section, QS
 
 }
 
-void FilterNumericalListModel::callQueryModel(QString tmpSql)
+QString FilterNumericalListModel::callQueryModel()
 {
     FilterNumericalList *filter;
-    QString newWhereConditions;
-    QString newQuery;
-    QString existingWhereString;
-
-
-    mQuerySplitter.setQuery(tmpSql);
-    newWhereConditions = mQuerySplitter.getWhereCondition();
+    QString newWhereConditions = "";
 
     foreach(filter, mFilter){
 
@@ -276,17 +270,7 @@ void FilterNumericalListModel::callQueryModel(QString tmpSql)
 
     }
 
-    // Replace the WHERE condition with the new one
-
-    QRegularExpression whereListRegex(R"(\sWHERE\s+(.*?)(?:\s+(?:GROUP|ORDER|LIMIT)\b|\s*$))", QRegularExpression::CaseInsensitiveOption);
-
-    QRegularExpressionMatch whereIterator = whereListRegex.match(tmpSql);
-    existingWhereString = whereIterator.captured(1).trimmed();
-    newQuery = tmpSql.replace(existingWhereString, newWhereConditions);
-
-    qDebug() << newQuery << "FINAL QUERY";
-
-    emit sendFilterQuery(newQuery);
+    return newWhereConditions;
 }
 
 

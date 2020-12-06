@@ -32,6 +32,7 @@
 #include "Code/Logic/DataModeller/filtercategoricallistmodel.h"
 #include "Code/Logic/DataModeller/filterdatelistmodel.h"
 #include "Code/Logic/DataModeller/filternumericallistmodel.h"
+#include "Code/Logic/DataModeller/proxyfiltermodel.h"
 
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
@@ -46,6 +47,7 @@
 #include "Code/Logic/Dashboards/dashboardparamsmodel.h"
 
 #include "Code/Logic/Reports/reportparamsmodel.h"
+#include "Code/Logic/Reports/reportmodellist.h"
 
 #include "Code/Logic/General/generalparamsmodel.h"
 #include "Code/Logic/General/tableschemamodel.h"
@@ -173,6 +175,7 @@ int main(int argc, char *argv[])
     DSParamsModel dsParamsModel;
     PublishDatasourceModel publishDatasourceModel;
     ColumnListModel columnListModel;
+    ProxyFilterModel proxyModel;
     FilterCategoricalListModel filterCategoricalListModel;
     FilterDateListModel filterDateListModel;
     FilterNumericalListModel filterNumericalListModel;
@@ -181,6 +184,7 @@ int main(int argc, char *argv[])
     QuerySplitter querySplitter;
     DashboardParamsModel dashboardParamsModel;
     ReportParamsModel reportParamsModel;
+    ReportModelList reportModelList;
 
     // Datasource Connector Initializations
     DatasourceModel datasourceModel;
@@ -211,9 +215,11 @@ int main(int argc, char *argv[])
     /***********************************************************************************************************************/
     // SIGNAL & SLOTS STARTS
 
-    QObject::connect(&filterCategoricalListModel, &FilterCategoricalListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
-    QObject::connect(&filterDateListModel, &FilterDateListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
-    QObject::connect(&filterNumericalListModel, &FilterNumericalListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
+    //    QObject::connect(&filterCategoricalListModel, &FilterCategoricalListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
+    //    QObject::connect(&filterDateListModel, &FilterDateListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
+    //    QObject::connect(&filterNumericalListModel, &FilterNumericalListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
+    QObject::connect(&proxyModel, &ProxyFilterModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
+
 
     // Name of the columns
     // Actual data
@@ -242,6 +248,7 @@ int main(int argc, char *argv[])
 
     // Set contexts for QML
     engine.rootContext()->setContextProperty("ReportParamsModel", &reportParamsModel);
+    engine.rootContext()->setContextProperty("ReportModelList", &reportModelList);
     engine.rootContext()->setContextProperty("DashboardParamsModel", &dashboardParamsModel);
     engine.rootContext()->setContextProperty("QtTest2", &qttest2);
     engine.rootContext()->setContextProperty("MysqlConnect", &mysqlconnect);
@@ -269,6 +276,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("ColumnListModel", &columnListModel);
     engine.rootContext()->setContextProperty("SchedulerModel", &schedulerModel);
     engine.rootContext()->setContextProperty("SchedulerDS", scheduler);
+    engine.rootContext()->setContextProperty("ProxyFilterModel", &proxyModel);
     engine.rootContext()->setContextProperty("FilterCategoricalListModel", &filterCategoricalListModel);
     engine.rootContext()->setContextProperty("FilterDateListModel",&filterDateListModel);
     engine.rootContext()->setContextProperty("FilterNumericalListModel",&filterNumericalListModel);

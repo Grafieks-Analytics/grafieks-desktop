@@ -26,6 +26,31 @@ Rectangle{
     z:20000
 
     property int selectedMenu: 0
+    property color dataDesignerColor : Constants.themeColor
+    property color dashboardDesignerColor : Constants.themeColor
+
+    Connections{
+        target: GeneralParamsModel
+
+        function onMenuTypeChanged(menuType){
+//            console.log(menuType,  Constants.dataDesignerMenu)
+
+            if(menuType === Constants.dataDesignerMenu){
+
+                dataDesignerBtnBackground.color = Constants.leftDarkColor
+                dashboardMenuBtnBackground.color = Constants.themeColor
+            } else{
+
+                dataDesignerBtnBackground.color = Constants.themeColor
+                dashboardMenuBtnBackground.color = Constants.leftDarkColor
+            }
+
+            dataDesignerColor = dataDesignerBtnBackground.color
+            dashboardDesignerColor = dashboardMenuBtnBackground.color
+
+//            console.log(dataDesignerBtnBackground.color, dashboardMenuBtnBackground.color, "COLOR CODE")
+        }
+    }
 
     Column{
 
@@ -38,18 +63,21 @@ Rectangle{
             id: dataDesignerRect
             height: leftMenuBar.height/2
             width: leftMenuBar.width - 1
+            hoverEnabled: true
 
             background: Rectangle{
                 id: dataDesignerBtnBackground
-                color: Constants.leftDarkColor
             }
 
             onClicked: {
 
-                dataDesignerBtnBackground.color = Qt.binding(function() { return  Constants.leftDarkColor })
-                dashboardMenuBtnBackground.color = Qt.binding(function() { return dashboardDesignerRect.hovered ? Constants.leftDarkColor : Constants.themeColor })
-
+                GeneralParamsModel.setMenuType(Constants.dataDesignerMenu)
                 stacklayout_home.currentIndex = 3
+            }
+
+            onHoveredChanged: {
+
+                dataDesignerBtnBackground.color = dataDesignerRect.hovered ? Constants.leftDarkColor : dataDesignerColor
             }
 
             Rectangle{
@@ -102,18 +130,23 @@ Rectangle{
             id: dashboardDesignerRect
             height: leftMenuBar.height/2
             width: leftMenuBar.width - 1
+            hoverEnabled: true
 
             background: Rectangle{
                 id: dashboardMenuBtnBackground
-                color: dashboardDesignerRect.hovered ? Constants.leftDarkColor : Constants.themeColor
             }
 
             onClicked: {
-                dashboardMenuBtnBackground.color = Qt.binding(function() { return  Constants.leftDarkColor })
-                dataDesignerBtnBackground.color = Qt.binding(function() { return dataDesignerRect.hovered ? Constants.leftDarkColor : Constants.themeColor })
 
+                GeneralParamsModel.setMenuType(Constants.dashboardDesignerMenu)
                 stacklayout_home.currentIndex = 6
             }
+            onHoveredChanged: {
+                dashboardMenuBtnBackground.color = dashboardDesignerRect.hovered ? Constants.leftDarkColor : dashboardDesignerColor
+            }
+
+
+
 
             Rectangle{
 

@@ -11,7 +11,7 @@ ConnectorModel::ConnectorModel(QObject *parent) : QAbstractListModel(parent)
 {
 
     addConnector(new Connector("Amazon Redshift","/Images/icons/aws-redshift-logo.png","rdbms"));
-    addConnector(new Connector("Apache Hadoop","/Images/icons/hadoop.png","nosql"));
+    addConnector(new Connector("Apache Hive","/Images/icons/hive.png","rdbms"));
     addConnector(new Connector("Box","/Images/icons/box.png","cloud"));
     addConnector(new Connector("Dropbox","/Images/icons/dropbox-2.png","cloud"));
     addConnector(new Connector("Github","/Images/icons/github-1.png","online"));
@@ -29,6 +29,8 @@ ConnectorModel::ConnectorModel(QObject *parent) : QAbstractListModel(parent)
     addConnector(new Connector("Sql Server","/Images/icons/microsoft-sql-server.png","rdbms"));
     addConnector(new Connector("Teradata","/Images/icons/Db - 60.png","rdbms"));
     addConnector(new Connector("CSV","/Images/icons/16_csv.png","file"));
+    addConnector(new Connector("Impala","/Images/icons/impala.png","rdbms"));
+    addConnector(new Connector("MongoDB","/Images/icons/mongodb.png","nosql"));
 }
 
 

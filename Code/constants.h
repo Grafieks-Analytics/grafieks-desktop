@@ -43,7 +43,9 @@ namespace Constants
     const bool defaultIncludeNull = true;
     const bool defaultSelectAll = true;
 
-    // Layout level constants
+    // DashboardParams
+    const int defaultCanvasWidth = 1280;
+    const int defaultCanvasHeight = 800;
 
     // Menu User
 

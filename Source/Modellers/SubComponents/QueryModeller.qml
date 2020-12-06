@@ -70,6 +70,9 @@ Item{
         console.log(textEditQueryModeller.text)
         // Set the Tmp SQL Query in C++
         DSParamsModel.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, ""))
+        TableSchemaModel.showSchema(DSParamsModel.tmpSql)
+        ReportModelList.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, ""))
+
 
     }
 

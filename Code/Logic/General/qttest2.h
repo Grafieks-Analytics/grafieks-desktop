@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QDebug>
+#include <QtWebChannel/QtWebChannel>
 
 #include <QFileInfo>
 #include "../../duckdb.hpp"

@@ -256,34 +256,17 @@ void FilterCategoricalListModel::updateFilter(int FilterIndex, QString section, 
 
 }
 
-void FilterCategoricalListModel::callQueryModel(QString tmpSql)
+QString FilterCategoricalListModel::callQueryModel()
 {
     FilterCategoricalList *filter;
-    QString newWhereConditions;
-    QString newQuery;
-    QString existingWhereString;
-
-
-    mQuerySplitter.setQuery(tmpSql);
-    newWhereConditions = mQuerySplitter.getWhereCondition();
+    QString newWhereConditions = "";
 
     foreach(filter, mFilter){
 
         newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), filter->value(), filter->exclude(), filter->includeNull());
 
     }
-
-    // Replace the WHERE condition with the new one
-
-    QRegularExpression whereListRegex(R"(\sWHERE\s+(.*?)(?:\s+(?:GROUP|ORDER|LIMIT)\b|\s*$))", QRegularExpression::CaseInsensitiveOption);
-
-    QRegularExpressionMatch whereIterator = whereListRegex.match(tmpSql);
-    existingWhereString = whereIterator.captured(1).trimmed();
-    newQuery = tmpSql.replace(existingWhereString, newWhereConditions);
-
-    qDebug() << newQuery << "FINAL QUERY";
-
-    emit sendFilterQuery(newQuery);
+    return newWhereConditions;
 }
 
 
