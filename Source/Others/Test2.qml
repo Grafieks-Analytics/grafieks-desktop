@@ -2,6 +2,10 @@ import QtQuick 2.15
 import QtWebEngine 1.4
 import QtWebChannel 1.5
 
+
+import QtQuick.Controls 2.15
+import com.grafieks.singleton.constants 1.0
+
 Item{
     id:root
     height: 500
@@ -12,9 +16,8 @@ Item{
     Connections {
         target: ReportModelList
         function onSendData(xAxis,yAxis){
-            console.log(xAxis)
-            console.log(yAxis)
-            dataValues.push(xAxis,yAxis);
+            myObject.dataValues.push(xAxis,yAxis);
+            webEnginView.url = "../Charts/BarChartArrayInput.html";
         }
     }
 
@@ -30,9 +33,7 @@ Item{
     QtObject {
         id: myObject
         objectName: "myObject"
-//        property var dataValues: [["India","SA","AUS","CHINA","America"],[120,211,311,324,132]];
-        property var dataValues: root.dataValues;
-
+        property var dataValues: [];
 
         // the identifier under which this object
         // will be known on the JavaScript side
@@ -58,16 +59,24 @@ Item{
         anchors.fill: parent
         color: "black"
 
+        Button{
+            text: "Click ME"
+            z: 1000
+            onClicked: {
+                ReportModelList.getData();
+            }
+        }
+
         WebEngineView{
             id : webEnginView
             anchors.fill: parent
-            url : "../Charts/BarChartArrayInput.html";
+            url : "";
             webChannel: webChannel
         }
     }
 
+
     Component.onCompleted: {
-        console.log(ReportModelList.getData());
         webChannel.registerObject("foo", myObject);
         //Expose C++ object
         webChannel.registerObject("bar", ReportModelList);

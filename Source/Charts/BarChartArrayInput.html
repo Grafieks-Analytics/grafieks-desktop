@@ -1,232 +1,197 @@
 <!DOCTYPE html>
 <head>
-	<meta charset="utf-8" />
+    <meta charset="utf-8" />
 
-	<!-- Load d3.js -->
-        <script src="./Data/d3.v4.min.js"></script>
-        <link rel="stylesheet" href="./Data/general.css" />
+    <!-- Load d3.js -->
+    <script src="./Data/d3.v4.min.js"></script>
+    <link rel="stylesheet" href="./Data/general.css" />
 
+    <style type="text/css">
+        body {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+    <title>Bar Chart</title>
 
-
-	<style type="text/css">
-		body{
-			padding: 0;
-			margin: 0;
-		}
-	</style>
-
-	<title>Bar Chart</title>
-</head>
-<body>
-
-        <script type="text/javascript" src="./Data/qwebchannel.js"></script>
-        <script type="text/javascript">
+    <script type="text/javascript" src="./Data/qwebchannel.js"></script>
+    <script type="text/javascript">
         var data = [];
 
-        new QWebChannel(qt.webChannelTransport, function(channel) {
+        console.time("Plotting");
+
+        var start = window.performance.now();
+
+        new QWebChannel(qt.webChannelTransport, function (channel) {
             // all published objects are available in channel.objects under
             // the identifier set in their attached WebChannel.id property
-            var foo = channel.objects.foo;
-            var reportModel = channel.objects.bar;
 
-            data = foo.dataValues;
-            console.log('Data',data);
+            var reportModel = channel.objects.foo;
 
-/*            reportModel.getdata()
-            .then(response=>{
-                console.log(response)
-            })
-            .catch(error=>{
-                console.log(error);
-            })
-*/
+            data = reportModel.dataValues;
+
+            drawChart();
+
+            var end = window.performance.now();
+            timeElapsed = end - start;
+            document.getElementById(
+                "timeTaken"
+            ).innerHTML = `Total Time Taken:  ${timeElapsed} ms`;
+
+            console.log(document.body.outerHTML);
+            console.log("plotting time", end - start);
 
             // connect to a signal
-            foo.someSignal.connect(function(message) {
+            reportModel.someSignal.connect(function (message) {
                 console.log("Got signal: " + message);
             });
 
             // invoke a method, and receive the return value asynchronously
-               foo.someMethod("bar", function(ret) {
-               console.log("Got return value: " + ret);
+            reportModel.someMethod("bar", function (ret) {
+                console.log("Got return value: " + ret);
             });
         });
-        </script>
+    </script>
+</head>
+<body>
+    <!-- Create a div where the graph will take place -->
+    <div style="position: fixed; top: 0; right: 20px" id="timeTaken"></div>
+    <div id="my_dataviz"></div>
+    <div id="tooltip"></div>
 
+    <script>
+        // Color Pallets - Set 3
+        const d3colors = [
+            "#8DD3C9",
+            "#FFFFAA",
+            "#B8BED6",
+            "#F98171",
+            "#78B5D1",
+            "#FFB15B",
+            "#B4E061",
+            "#FDCDE5",
+            "#DAD9D4",
+            "#BD7FBE",
+            "#CDE9C1",
+            "#FFEA77",
+        ];
 
-	<!-- Create a div where the graph will take place -->
-	<div id="my_dataviz"></div>
-	<div id="tooltip"></div>
+        function drawChart() {
+            console.log("Called drawChart");
+            d3.selectAll("#my_dataviz").html("");
 
-        <script>
+            // set the dimensions and margins of the graph
+            var margin = { top: 30, right: 30, bottom: 70, left: 60 },
+                width = window.innerWidth - margin.left - margin.right - 10,
+                height = window.innerHeight - margin.top - margin.bottom - 10;
 
-		// Color Pallets - Set 3
-		const d3colors = [
-			"#8DD3C9",
-			"#FFFFAA",
-			"#B8BED6",
-			"#F98171",
-			"#78B5D1",
-			"#FFB15B",
-			"#B4E061",
-			"#FDCDE5",
-			"#DAD9D4",
-			"#BD7FBE",
-			"#CDE9C1",
-			"#FFEA77"
-		];
+            // append the svg object to the body of the page
+            var svg = d3
+                .selectAll("#my_dataviz")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr(
+                    "transform",
+                    "translate(" + margin.left + "," + margin.top + ")"
+                );
 
-                function drawChart(){
+            var x = d3
+                .scaleBand()
+                .range([0, width])
+                .domain(data[0])
+                .padding(0.2);
 
-                // set the dimensions and margins of the graph
-		var margin = { top: 30, right: 30, bottom: 70, left: 60 },
-			// width = 1300 - margin.left - margin.right,
-			// height = 600 - margin.top - margin.bottom;
+            svg.append("g")
+                .attr("class", "x-axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x).tickSize(0).ticks(10))
+                .selectAll("text")
+                .attr("transform", "translate(-10,0)rotate(-45)")
+                .style("text-anchor", "end");
 
-			width = window.innerWidth - margin.left - margin.right - 10;
-			height = window.innerHeight - margin.top - margin.bottom - 10;
+            svg.append("g")
+                .attr("class", "grid")
+                .attr("transform", "translate(0," + height + ")")
+                .style("stroke-width", "1")
 
-		// append the svg object to the body of the page
-		var svg = d3
-			.selectAll("#my_dataviz")
-			.append("svg")
-			.attr("width", width + margin.left + margin.right)
-			.attr("height", height + margin.top + margin.bottom)
-			.append("g")
-			.attr(
-				"transform",
-				"translate(" + margin.left + "," + margin.top + ")"
-			);
+                .call(make_x_gridlines().tickSize(0).tickFormat(""));
 
-		// var x = d3.scaleTime().range([0, width]);
-		// var y = d3.scaleLinear().range([height, 0]);
+            // Add Y axis
+            var y = d3
+                .scaleLinear()
+                .domain([0, Math.max(...data[1])])
+                .range([height, 0]);
 
-		// Parse the Data
+            var yaxisTicks = height / 100;
 
-                // const data = [["India","SA","AUS","CHINA","America"],[1000,221,331,2324,1442]];
+            // Add the Y Axis
+            svg.append("g")
+                .call(d3.axisLeft(y).tickSize(0).ticks(yaxisTicks))
+                .style("stroke-width", "0.5")
+                .attr("class", "y-axis");
 
+            svg.append("g")
+                .attr("class", "grid")
+                .style("stroke-width", "1")
+                .call(make_y_gridlines().tickSize(-width).tickFormat(""));
 
-			var x = d3
-				.scaleBand()
-				.range([0, width])
-				.domain(data[0])
-				.padding(0.2);
+            // Bars
+            svg.selectAll("mybar")
+                .data(data[0])
+                .enter()
+                .append("rect")
 
-			svg.append("g")
-				.attr("class", "x-axis")
-				.attr("transform", "translate(0," + height + ")")
-				.call(
-					d3
-						.axisBottom(x)
-						.tickSize(0)
-                                                .ticks(10)
-				)
-				.selectAll("text")
-				.attr("transform", "translate(-10,0)rotate(-45)")
-				.style("text-anchor", "end");
+                .attr("x", function (d, i) {
+                    return x(data[0][i]);
+                })
+                .attr("y", function (d, i) {
+                    return y(data[1][i]);
+                })
+                .attr("width", x.bandwidth())
+                .attr("height", function (d, i) {
+                    return height - y(data[1][i]);
+                })
+                .attr("class", function (d, i) {
+                    return "bar";
+                })
+                .attr("fill", d3colors[4])
 
-			svg.append("g")
-				.attr("class", "grid")
-				.attr("transform", "translate(0," + height + ")")
-				.style("stroke-width", "1")
+                .on("mouseout", function (d, i) {
+                    d3.select("#tooltip").style("display", "none");
 
-				.call(
-					make_x_gridlines()
-						.tickSize(0)
-						.tickFormat("")
-				);
+                    d3.selectAll(".bar").style("opacity", 1);
+                })
+                .on("mouseover mousemove", function (d, i) {
+                    let xpos = d3.mouse(this)[0] + margin.left;
+                    let ypos = d3.mouse(this)[1];
 
-			// Add Y axis
-			var y = d3
-				.scaleLinear()
-                                .domain([0, Math.max(...data[1])])
-				.range([height, 0]);
+                    d3.select("#tooltip")
+                        .style("left", xpos + "px")
+                        .style("top", ypos + "px")
+                        .style("display", "block")
+                        .text(data[1][i]);
 
-                        var yaxisTicks = height/100;
+                    d3.selectAll(".bar").style("opacity", 0.3);
+                    d3.select(this).style("opacity", 1);
+                });
 
-			// Add the Y Axis
-			svg.append("g")
-				.call(
-					d3
-						.axisLeft(y)
-						.tickSize(0)
-						.ticks(yaxisTicks)
-				)
-				.style("stroke-width", "0.5")
-				.attr("class", "y-axis");
+            // Generate Grid starts
 
-			svg.append("g")
-				.attr("class", "grid")
-				.style("stroke-width", "1")
-				.call(
-					make_y_gridlines()
-						.tickSize(-width)
-						.tickFormat("")
-				);
+            function make_x_gridlines() {
+                return d3.axisBottom(x).ticks(8);
+            }
+            function make_y_gridlines() {
+                return d3.axisLeft(y).ticks(yaxisTicks);
+            }
 
-			// Bars
-			svg.selectAll("mybar")
-				.data(data[0])
-				.enter()
-				.append("rect")
+            // Generate Grid ends
+        }
 
-				.attr("x", function(d,i) {
-					return x(data[0][i]);
-				})
-				.attr("y", function(d,i) {
-					return y(data[1][i]);
-				})
-				.attr("width", x.bandwidth())
-				.attr("height", function(d,i) {
-					return height - y(data[1][i]);
-				})
-				.attr("class", function(d, i) {
-					return "bar";
-				})
-				.attr("fill", d3colors[4])
-
-				.on("mouseout", function(d, i) {
-					d3.select("#tooltip").style("display", "none");
-
-					d3.selectAll(".bar").style("opacity", 1);
-				})
-				.on("mouseover mousemove", function(d, i) {
-					let xpos = d3.mouse(this)[0] + margin.left;
-					let ypos = d3.mouse(this)[1];
-
-					d3.select("#tooltip")
-						.style("left", xpos + "px")
-						.style("top", ypos + "px")
-						.style("display", "block")
-						.text(data[1][i]);
-
-					d3.selectAll(".bar").style("opacity", 0.3);
-					d3.select(this).style("opacity", 1);
-				});
-
-			// Generate Grid starts
-
-			function make_x_gridlines() {
-				return d3.axisBottom(x).ticks(8);
-			}
-			function make_y_gridlines() {
-				return d3.axisLeft(y).ticks(yaxisTicks);
-			}
-
-			// Generate Grid ends
-
-		}
-
-                window.onload = function (){
-                    console.time("Draw");
-                    drawChart();
-                    console.timeEnd("Draw");
-                }
-
-		window.addEventListener('resize',function(){
-			d3.selectAll("#my_dataviz").html('');
-			drawChart();
-		});
-
-	</script>
+        window.addEventListener("resize", function () {
+            d3.selectAll("#my_dataviz").html("");
+            drawChart();
+        });
+    </script>
 </body>
