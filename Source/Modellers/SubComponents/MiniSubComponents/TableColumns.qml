@@ -42,7 +42,7 @@ Item {
 
             tableColumnsMap.set(tableName, itemMap)
             columnListView.model = newListModel
-            columnListView.height = newListModel.count * 40
+            columnListView.height = newListModel.count * 25
         }
     }
 
@@ -66,17 +66,20 @@ Item {
 
     ListView{
         id: columnListView
+        anchors.top: parent.top
+        anchors.topMargin: 5
+
 
         delegate: Rectangle{
             id: innerListView
-            height: 40
+            height: 25
             width: 100
 
             CheckBoxTpl{
                 id: checkBox1
                 checkbox_text: colName
                 checkbox_checked: true
-                parent_dimension: 16
+                parent_dimension: 12
 
                 onClicked: hideColumnSelection(checked, colName, tableName)
             }

@@ -281,6 +281,7 @@ Item{
             Rectangle{
                 id: chartMenu
                 anchors.right: parent.right
+                anchors.rightMargin: 80
                 anchors.top: parent.top
                 height: parent.height
 
@@ -288,7 +289,7 @@ Item{
                 Row{
                     id:menuOptions
 
-                    height: parent.height
+                    height: mainChart.height
                     anchors.top: parent.top
                     anchors.right: parent.right
                     anchors.rightMargin: 10
@@ -347,8 +348,9 @@ Item{
 
                 Row{
 
-                    anchors.left: parent.right
-                    anchors.top: menuOptions.bottom
+                    anchors.right: parent.right
+                    anchors.top: chartMenu.bottom
+                    anchors.rightMargin: -70
                     width: parent.width
                     height: 100
 

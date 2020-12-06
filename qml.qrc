@@ -130,12 +130,7 @@
         <file>Source/Reports/SubComponents/MiniSubComponents/AxisSettings.qml</file>
         <file>Source/Reports/SubComponents/EditColorPopup.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/ColorSchemeRow.qml</file>
-        <file>Images/icons/close gray.png</file>
-        <file>Images/icons/edit gray.png</file>
-        <file>Images/icons/search gray.png</file>
-        <file>Images/icons/view gray.png</file>
-        <file>Images/icons/zoom in gray.png</file>
-        <file>Images/icons/zoom out gray.png</file>
+      
         <file>Source/Reports/SubComponents/MiniSubComponents/MultipleAxisSettings.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/ComboOptions.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/SizePopup.qml</file>

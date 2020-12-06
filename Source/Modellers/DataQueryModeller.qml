@@ -33,7 +33,7 @@ Page {
     property bool collapsed: false
     property bool open: true
     property int dataPreviewNo: 6
-
+    property var tableShowToggle: false
     property Page page: queryModellerPage
     property LeftMenuBar leftMenuBar : left_menubar
 
@@ -237,6 +237,36 @@ Page {
         DSParamsModel.resetFilter()
         DSParamsModel.setTmpSql("")
     }
+    function onTableToggle(){
+
+        console.log("table table");
+//        columnListDroppedRect.visible = columnListDroppedRect.visible === true ? false : true
+
+//        TableColumnsModel.getColumnsForTable(newItem.name, newItem.moduleName)
+        TableColumnsModel.getColumnsForTable(tableName, "TableColumns")
+
+        toggleTableIcon.source = tablecolumnListView.visible === false ?  "/Images/icons/Up_20.png" : "/Images/icons/Down_20.png"
+        if(tablecolumnListView.visible === true){
+            tablecolumnListView.visible = false
+            dragRect.height -= tablecolumnListView.height
+        } else{
+            tablecolumnListView.visible = true
+            dragRect.height += tablecolumnListView.height
+        }
+
+    }
+
+    function showTableIcon(){
+        //        DashboardParamsModel.setCurrentReport(newItem.objectName)
+        tableShowToggle = true
+
+
+    }
+    function hideTableIcon(){
+        //        DashboardParamsModel.setCurrentReport(newItem.objectName)
+        tableShowToggle = false
+
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -265,19 +295,27 @@ Page {
     Component{
         id:tablelistDelegate
 
+
         Rectangle {
             id: dragRect
             width: 200
             height: 30
+
+
+
+
+
+
             property bool caught: false
 
             Image {
                 id: tableImg
-                height: 22
-                width: 22
+                height: 16
+                width: 16
                 source: "/Images/icons/table_32.png"
                 anchors.left: parent.left
-                anchors.leftMargin: 15
+                anchors.leftMargin: 35
+
             }
 
             Text {
@@ -289,9 +327,27 @@ Page {
                 font.pixelSize: Constants.fontCategoryHeaderSmall
             }
 
+            Image {
+                id: toggleTableIcon
+                height: 10
+                width: 10
+                source : "/Images/icons/Down_20.png"
+                anchors.right: parent.right
+                anchors.rightMargin: 20
+
+                visible: tableShowToggle
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: onTableToggle()
+                }
+            }
+
             TableColumns{
                 id: tablecolumnListView
                 anchors.top: tableImg.bottom
+                anchors.left: parent.left
+                anchors.leftMargin: 50
                 visible: false
                 objectName: tableName
             }
@@ -302,7 +358,10 @@ Page {
                 drag.target: dragRect
                 drag.minimumX: -(  page.width - parent.width - leftMenuBar.width)
                 drag.maximumX: 0
+                hoverEnabled: true
 
+                onEntered: showTableIcon();
+                onExited: hideTableIcon();
 
                 drag.onActiveChanged: {
                     if (mouseArea.drag.active) {
@@ -312,13 +371,17 @@ Page {
                     dragRect.Drag.drop();
                 }
 
-                onDoubleClicked: {
+
+
+                onClicked: {
                     TableColumnsModel.getColumnsForTable(tableName, "TableColumns")
 
                     if(tablecolumnListView.visible === true){
+                        toggleTableIcon.source ="/Images/icons/Down_20.png"
                         tablecolumnListView.visible = false
                         dragRect.height -= tablecolumnListView.height
                     } else{
+                         toggleTableIcon.source ="/Images/icons/Up_20.png"
                         tablecolumnListView.visible = true
                         dragRect.height += tablecolumnListView.height
                     }
@@ -949,11 +1012,12 @@ Page {
                 Row{
 
                     id: row_querymodeller_right_col
+                    width: parent.width-10
 
                     TextField{
                         id:searchTextBox
                         placeholderText: "Search"
-                        width:rectangle_querymodeller_right_col3.width - search_icon.width
+                        width: parent.width - search_icon.width
                         height:30
                         cursorVisible: true
                         anchors.top: row_querymodeller_right_col.top
@@ -967,12 +1031,12 @@ Page {
 
                     Image{
                         id:search_icon
-                        source:"/Images/icons/Search.png"
-                        height:25
-                        width:25
+                        source:"/Images/icons/iconmonstr-search-thin.svg"
+                        height:18
+                        width:18
                         anchors.rightMargin: 10
                         anchors.top: row_querymodeller_right_col.top
-                        anchors.topMargin: 7.5
+                        anchors.topMargin: 10
 
                         ToolTip.delay:Constants.tooltipShowTime
                         ToolTip.timeout: Constants.tooltipHideTime
@@ -991,7 +1055,7 @@ Page {
                 ToolSeparator{
                     id: toolsep3
                     orientation: Qt.Horizontal
-                    width: rectangle_querymodeller_right_col3.width - 10
+                    width: rectangle_querymodeller_right_col3.width - 20
                     anchors.top: row_querymodeller_right_col.bottom
                     anchors.horizontalCenter: row_querymodeller_right_col.horizontalCenter
                     anchors.topMargin: 5
@@ -1008,15 +1072,25 @@ Page {
                 anchors.top: rectangle_querymodeller_right_col3.bottom
                 anchors.topMargin: 2
 
+
+                Rectangle{
+
+
+                    height: 900
+                    width:500
+//                    color: "red"
+
+
                 Rectangle {
                     id: categoryItem
                     height: 50
                     width: 200
 
+
                     Image {
                         id: database
-                        height: 28
-                        width: 22
+                        height: 20
+                        width: 18
                         source: "/Images/icons/database_32x36.png"
                         anchors.left: parent.left
                         anchors.leftMargin: 15
@@ -1070,7 +1144,7 @@ Page {
 
                 ListView {
                     id: tableslist
-                    spacing: 2
+                    spacing: 0
                     anchors.top: categoryItem.bottom
                     height : contentHeight
                     delegate: tablelistDelegate
@@ -1080,6 +1154,7 @@ Page {
                     property string tableName : ""
                 }
 
+                 }
             }
 
         }
