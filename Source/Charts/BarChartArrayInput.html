@@ -12,13 +12,10 @@
             margin: 0;
         }
     </style>
-    <title>Bar Chart</title>
 
     <script type="text/javascript" src="./Data/qwebchannel.js"></script>
     <script type="text/javascript">
         var data = [];
-
-        console.time("Plotting");
 
         var start = window.performance.now();
 
@@ -38,7 +35,6 @@
                 "timeTaken"
             ).innerHTML = `Total Time Taken:  ${timeElapsed} ms`;
 
-            console.log(document.body.outerHTML);
             console.log("plotting time", end - start);
 
             // connect to a signal
@@ -77,7 +73,7 @@
         ];
 
         function drawChart() {
-            console.log("Called drawChart");
+            console.log("Called plotting Function");
             d3.selectAll("#my_dataviz").html("");
 
             // set the dimensions and margins of the graph
