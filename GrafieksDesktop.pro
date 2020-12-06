@@ -1,4 +1,4 @@
-QT += quick webengine quickcontrols2 sql networkauth
+QT += quick webengine quickcontrols2 sql networkauth webchannel
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -142,15 +142,15 @@ HEADERS += \
     Code/Logic/Menu/user.h \
     Code/Logic/Reports/reportmodellist.h \
     Code/Logic/Reports/reportparamsmodel.h \
-#    Code/duckdb.hpp \
+    Code/duckdb.hpp \
     Code/messages.h \
     Code/constants.h \
-#    Code/parquet-extension.hpp \
+    Code/parquet-extension.hpp \
     Code/statics.h \
 
 
 
-#macx: LIBS += -L$$PWD/Libraries/ -lduckdb
+macx: LIBS += -L$$PWD/Libraries/ -lduckdb
 #win32: LIBS += -L$$PWD/Libraries/duckdb.dll
 
 #macx: LIBS += -L$$PWD/Libraries/ -lparquet_extension
