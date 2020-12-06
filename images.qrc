@@ -157,6 +157,13 @@
         <file>Images/icons/integer.png</file>
         <file>Images/icons/string 18.png</file>
         <file>Images/icons/string new.png</file>
+          <file>Images/icons/close gray.png</file>
+        <file>Images/icons/edit gray.png</file>
+        <file>Images/icons/search gray.png</file>
+        <file>Images/icons/view gray.png</file>
+        <file>Images/icons/zoom in gray.png</file>
+        <file>Images/icons/zoom out gray.png</file>
+        <file>Images/icons/iconmonstr-search-thin.svg</file>
         <file>Images/icons/hive.png</file>
         <file>Images/icons/impala.png</file>
         <file>Images/icons/mongodb.png</file>
