@@ -4,6 +4,7 @@
 #include <QVariant>
 #include <QObject>
 #include <QDebug>
+#include <QElapsedTimer>
 
 #include <typeinfo>
 #include "../General/querysplitter.h"
@@ -21,6 +22,7 @@ public:
     void getColumnsForTable(QString tableName);
 
     Q_INVOKABLE void setTmpSql(QString query);
+    Q_INVOKABLE void getData();
 
 public slots:
 
@@ -28,6 +30,7 @@ public slots:
 
 signals:
      void sendFilteredColumn(QStringList allCategorical, QStringList allNumerical, QStringList allDates);
+     void sendData(QVariantList xAxis, QVariantList yAxis);
 
 private:
 
