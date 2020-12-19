@@ -12,42 +12,6 @@
             margin: 0;
         }
     </style>
-
-    <script type="text/javascript" src="./Data/qwebchannel.js"></script>
-    <script type="text/javascript">
-        var data = [];
-
-        var start = window.performance.now();
-
-        new QWebChannel(qt.webChannelTransport, function (channel) {
-            // all published objects are available in channel.objects under
-            // the identifier set in their attached WebChannel.id property
-
-            var reportModel = channel.objects.foo;
-
-            data = reportModel.dataValues;
-
-            drawChart();
-
-            var end = window.performance.now();
-            timeElapsed = end - start;
-            document.getElementById(
-                "timeTaken"
-            ).innerHTML = `Total Time Taken:  ${timeElapsed} ms`;
-
-            console.log("plotting time", end - start);
-
-            // connect to a signal
-            reportModel.someSignal.connect(function (message) {
-                console.log("Got signal: " + message);
-            });
-
-            // invoke a method, and receive the return value asynchronously
-            reportModel.someMethod("bar", function (ret) {
-                console.log("Got return value: " + ret);
-            });
-        });
-    </script>
 </head>
 <body>
     <!-- Create a div where the graph will take place -->
@@ -72,7 +36,10 @@
             "#FFEA77",
         ];
 
-        function drawChart() {
+        function drawChart(data) {
+            console.log(data);
+            const start = window.performance.now();
+
             console.log("Called plotting Function");
             d3.selectAll("#my_dataviz").html("");
 
@@ -183,11 +150,13 @@
             }
 
             // Generate Grid ends
-        }
 
-        window.addEventListener("resize", function () {
-            d3.selectAll("#my_dataviz").html("");
-            drawChart();
-        });
+            const end = window.performance.now();
+            timeElapsed = end - start;
+
+            document.getElementById(
+                "timeTaken"
+            ).innerHTML = `Total Time Taken:  ${timeElapsed} ms`;
+        }
     </script>
 </body>

@@ -31,6 +31,8 @@ Page {
     property bool xaxisActive: ReportParamsModel.xAxisActive
     property bool yaxisActive: ReportParamsModel.yAxisActive
 
+    property var asd: "123";
+
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -122,7 +124,6 @@ Page {
     function focusReportTitle(){
         report_title_text.readOnly= false
         report_title_text.focus = true;
-        console.log('Focus Title')
     }
 
     function onDropAreaEntered(element){
@@ -563,7 +564,7 @@ Page {
         id:primary_chart
         height:parent.height - axis.height
         width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width
-        url: "../Charts/horizontal-bar.html"
+        url: "../Charts/BarChartArrayInput.html"
         anchors.left: tool_sep_chartFilters.right
         anchors.top: axis.bottom
     }
@@ -709,7 +710,7 @@ Page {
 
             // Search Ends
 
-            // Data Column Starts
+            // Data Pane Starts
             Rectangle{
                 anchors.top: searchRectangle.bottom
                 height: parent.height - (searchRectangle.height + dashboardNameRectangle.height + tabbarQuerymodeller.height)
@@ -718,7 +719,7 @@ Page {
                 RightDataColumn{}
 
             }
-            // Data Column Ends
+            // Data Pane Ends
 
         }
 

@@ -27,11 +27,9 @@ ListView{
     Connections{
         target : ReportModelList
 
-
         function onSendFilteredColumn(allCategorical, allNumerical, allDates){
             categoricalModel.clear()
             categoricalList.model =  allCategorical
-
         }
     }
     model: categoricalModel

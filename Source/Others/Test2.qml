@@ -11,47 +11,27 @@ Item{
     height: 500
     width:  500
 
-    property var dataValues: []
+    Component.onCompleted: {
+//        ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_dummy", 3306, "root", "");
+
+    }
+
+    Connections{
+        target: ConnectorsLoginModel
+        function onMysqlLoginStatus(status){
+            console.log(status);
+        }
+    }
 
     Connections {
         target: ReportModelList
         function onSendData(xAxis,yAxis){
-            myObject.dataValues.push(xAxis,yAxis);
-            webEnginView.url = "../Charts/BarChartArrayInput.html";
-        }
-    }
-
-
-    // Create WebChannel
-    WebChannel{
-        id:webChannel
-    }
-
-
-
-    //Now, let’s create an object that we want to publish to the HTML/JavaScript clients:
-    QtObject {
-        id: myObject
-        objectName: "myObject"
-        property var dataValues: [];
-
-        // the identifier under which this object
-        // will be known on the JavaScript side
-        //WebChannel.id: "webChannel"
-
-        property var send: function (arg) {
-            sendTextMessage(arg);
-        }
-
-        // signals, methods and properties are
-        // accessible to JavaScript code
-        signal someSignal(string message);
-
-
-        function someMethod(message) {
-            console.log(message);
-            someSignal(message);
-            return dataValues;
+            const dataValues = JSON.stringify([xAxis,yAxis]);
+            var scriptValue = 'window.addEventListener("resize", function () {
+                    d3.selectAll("#my_dataviz").html("");
+                    drawChart('+dataValues+');
+                });';
+            webEngineView.runJavaScript('drawChart('+dataValues+'); '+scriptValue);
         }
     }
 
@@ -68,17 +48,10 @@ Item{
         }
 
         WebEngineView{
-            id : webEnginView
+            id : webEngineView
             anchors.fill: parent
-            url : "";
-            webChannel: webChannel
+            url : "../Charts/BarChartArrayInput.html";
         }
     }
 
-
-    Component.onCompleted: {
-        webChannel.registerObject("foo", myObject);
-        //Expose C++ object
-        webChannel.registerObject("bar", ReportModelList);
-    }
 }
