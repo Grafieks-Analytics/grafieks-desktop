@@ -13,6 +13,8 @@ class ReportParamsModel: public QObject
     Q_PROPERTY(bool colorByActive READ colorByActive WRITE setColorByActive NOTIFY colorByActiveChanged)
     Q_PROPERTY(QString lastDropped READ lastDropped WRITE setLastDropped NOTIFY lastDroppedChanged)
     Q_PROPERTY(QString calculatedFieldPopupStatus READ calculatedFieldPopupStatus WRITE setCalculatedFieldPopupStatus NOTIFY calculatedFieldPopupStatusChanged)
+    Q_PROPERTY(QList<QString> xAxisColumns READ xAxisColumns WRITE setXAxisColumns NOTIFY xAxisColumnsChanged)
+    Q_PROPERTY(QList<QString> yAxisColumns READ yAxisColumns WRITE setYAxisColumns NOTIFY yAxisColumnsChanged)
 
     QString m_itemName;
     QString m_itemType;
@@ -26,6 +28,10 @@ class ReportParamsModel: public QObject
     QString m_lastDropped;
 
     QString m_createFieldPopupStatus;
+
+    QList<QString> m_xAxisColumns;
+
+    QList<QString> m_yAxisColumns;
 
 public:
     ReportParamsModel();
@@ -42,6 +48,12 @@ public:
 
     QString calculatedFieldPopupStatus() const;
 
+
+
+    QList<QString> xAxisColumns() const;
+
+    QList<QString> yAxisColumns() const;
+
 public slots:
     void setItemName(QString itemName);
     void setItemType(QString itemType);
@@ -55,6 +67,12 @@ public slots:
 
     void setCalculatedFieldPopupStatus(QString calculatedFieldPopupStatus);
 
+
+
+    void setXAxisColumns(QList<QString> xAxisColumns);
+
+    void setYAxisColumns(QList<QString> yAxisColumns);
+
 signals:
     void itemNameChanged(QString itemName);
     void itemTypeChanged(QString itemType);
@@ -64,6 +82,9 @@ signals:
     void colorByActiveChanged(bool colorByActive);
     void lastDroppedChanged(QString lastDropped);
     void calculatedFieldPopupStatusChanged(QString calculatedFieldPopupStatus);
+
+    void xAxisColumnsChanged(QList<QString> xAxisColumns);
+    void yAxisColumnsChanged(QList<QString> yAxisColumns);
 };
 
 #endif // REPORTPARAMSMODEL_H

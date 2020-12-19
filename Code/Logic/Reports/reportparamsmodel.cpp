@@ -40,6 +40,16 @@ QString ReportParamsModel::calculatedFieldPopupStatus() const
     return m_createFieldPopupStatus;
 }
 
+QList<QString> ReportParamsModel::xAxisColumns() const
+{
+    return m_xAxisColumns;
+}
+
+QList<QString> ReportParamsModel::yAxisColumns() const
+{
+    return m_yAxisColumns;
+}
+
 void ReportParamsModel::setItemName(QString itemName)
 {
     if (m_itemName == itemName)
@@ -101,4 +111,22 @@ void ReportParamsModel::setCalculatedFieldPopupStatus(QString createFieldPopupSt
 
     m_createFieldPopupStatus = createFieldPopupStatus;
     emit calculatedFieldPopupStatusChanged(m_createFieldPopupStatus);
+}
+
+void ReportParamsModel::setXAxisColumns(QList<QString> xAxisColumns)
+{
+    if (m_xAxisColumns == xAxisColumns)
+        return;
+
+    m_xAxisColumns = xAxisColumns;
+    emit xAxisColumnsChanged(m_xAxisColumns);
+}
+
+void ReportParamsModel::setYAxisColumns(QList<QString> yAxisColumns)
+{
+    if (m_yAxisColumns == yAxisColumns)
+        return;
+
+    m_yAxisColumns = yAxisColumns;
+    emit yAxisColumnsChanged(m_yAxisColumns);
 }

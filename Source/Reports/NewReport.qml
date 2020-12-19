@@ -146,17 +146,65 @@ Page {
         element.border.width = Constants.dropEligibleBorderWidth
     }
 
+    function alreadyExists(elementsList,element){
+        if(elementsList.includes(element)){
+            return true;
+        }
+        return false;
+    }
+
+    function xAxisDropEligible(itemName){
+        var xAxisColumns  = ReportParamsModel.xAxisColumns;
+        const multiChart = true;
+        if(multiChart && !alreadyExists(xAxisColumns,itemName)){
+            return true;
+        }
+        return false;
+    }
+
+    function yAxisDropEligible(itemName){
+        var yAxisColumns  = ReportParamsModel.yAxisColumns;
+        const multiChart = true;
+        if(multiChart && !alreadyExists(yAxisColumns,itemName)){
+            return true;
+        }
+        return false;
+    }
+
     function onDropAreaDropped(element,axis){
 
         element.border.width = Constants.dropEligibleBorderWidth
         element.border.color = Constants.themeColor
 
         var itemName = ReportParamsModel.itemName;
+        var xAxisColumns = ReportParamsModel.xAxisColumns;
+        var yAxisColumns = ReportParamsModel.yAxisColumns;
 
         if(axis === Constants.xAxisName){
+
+            if(!xAxisDropEligible(itemName)){
+                return;
+            }
+
             xAxisListModel.append({itemName: itemName})
+            xAxisColumns.push(itemName);
+            ReportParamsModel.setXAxisColumns(xAxisColumns);
+            console.log('Setting X axis Array',xAxisColumns);
         }else{
+
+            if(!yAxisDropEligible(itemName)){
+                return;
+            }
+
             yAxisListModel.append({itemName: itemName})
+
+            yAxisColumns.push(itemName);
+            ReportParamsModel.setYAxisColumns(yAxisColumns);
+            console.log('Setting Y axis Array',yAxisColumns);
+        }
+
+        if(xAxisColumns.length && yAxisColumns.length){
+            ReportModelList.getData();
         }
 
     }

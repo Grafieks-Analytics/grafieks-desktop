@@ -6,8 +6,34 @@ Rectangle{
     height: 24
     width: parent.width
 
+    function alreadyExists(elementsList,element){
+        if(elementsList.includes(element)){
+            return true;
+        }
+        return false;
+    }
+
+    function xAxisDropEligible(itemName){
+        var xAxisColumns  = ReportParamsModel.xAxisColumns;
+        const multiChart = true;
+        if(multiChart && !alreadyExists(xAxisColumns,itemName)){
+            return true;
+        }
+        return false;
+    }
+
+    function yAxisDropEligible(itemName){
+        var yAxisColumns  = ReportParamsModel.yAxisColumns;
+        const multiChart = true;
+        if(multiChart && !alreadyExists(yAxisColumns,itemName)){
+            return true;
+        }
+        return false;
+    }
+
 
     function isDropEligible(itemType){
+
         var lastDropped = ReportParamsModel.lastDropped;
         if(!lastDropped){
             return true;
@@ -79,8 +105,9 @@ Rectangle{
             if (mouseArea.drag.active) {
                 ReportParamsModel.itemName = modelData;
                 ReportParamsModel.itemType = itemType;
-                ReportParamsModel.setXAxisActive(true);
-                ReportParamsModel.setYAxisActive(true);
+                ReportParamsModel.setXAxisActive(xAxisDropEligible(modelData));
+                ReportParamsModel.setYAxisActive(yAxisDropEligible(modelData));
+
                 if(isDropEligible(itemType)){
                     ReportParamsModel.setColorByActive(true);
                 }else{
