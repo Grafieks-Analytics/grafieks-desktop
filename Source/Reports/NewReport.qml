@@ -63,6 +63,18 @@ Page {
     // Connections Starts
 
 
+    Connections {
+        target: ReportModelList
+        function onSendData(xAxis,yAxis){
+            const dataValues = JSON.stringify([xAxis,yAxis]);
+            var scriptValue = 'window.addEventListener("resize", function () {
+                    d3.selectAll("#my_dataviz").html("");
+                    drawChart('+dataValues+');
+                });';
+            webEngineView.runJavaScript('drawChart('+dataValues+'); '+scriptValue);
+        }
+    }
+
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -561,7 +573,7 @@ Page {
     }
 
     WebEngineView {
-        id:primary_chart
+        id: webEngineView
         height:parent.height - axis.height
         width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width
         url: "../Charts/BarChartArrayInput.html"
