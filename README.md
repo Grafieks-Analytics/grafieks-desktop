@@ -1,4 +1,21 @@
-## Sql Driver Compilation error
+## Generate `.lib` file from `.dll`
+
+Qt needs to provided a path to the `lib` file in the `.pro`. If the lib file is missing from the third party, the lib file can be generated using the following commands
+
+
+```
+1) dumpbin /exports THIRDPARTY.dll > THIRDPARTY.def
+3) lib /def:THIRDPARTY.def /out:THIRDPARTY.lib /machine:x64
+```
+
+Clear all the data in `def` file and only keep generated function names. The `.def` file should only contain the function names in the format of
+
+```
+EXPORTS
+function_name_1
+function_name_2
+...
+```
 
 `cd $QT_PATH/5.x/Src/qtbase/src/plugins/sqldrivers`
 
