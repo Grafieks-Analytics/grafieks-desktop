@@ -164,5 +164,10 @@
         <file>Source/Reports/SubComponents/MiniSubComponents/DateTimeFrameQuarterContent.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/DateTimeFrameYearContent.qml</file>
         <file>Source/Dashboards/SubComponents/DashboardFiltersAdd.qml</file>
+        <file>Source/Charts/Data/d3.v4-alpha.40.min.js</file>
+        <file>Source/Charts/Data/general.css</file>
+        <file>Source/Charts/BarChartArrayInput.html</file>
+        <file>Source/Charts/Data/qwebchannel.js</file>
+        <file>Source/Charts/Data/d3.v4.min.js</file>
     </qresource>
 </RCC>

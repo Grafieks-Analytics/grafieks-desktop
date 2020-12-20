@@ -27,13 +27,12 @@ ListView{
     Connections{
         target : ReportModelList
 
-
         function onSendFilteredColumn(allCategorical, allNumerical, allDates){
             categoricalModel.clear()
             categoricalList.model =  allCategorical
-
         }
     }
+
     model: categoricalModel
     anchors.top: categoricalHeading.bottom
     anchors.topMargin: 5
@@ -41,8 +40,7 @@ ListView{
     width: parent.width
     interactive: false
     delegate: DataPaneElement{
-        id: categoricalListElement
-
+        id: dataPaneListElement
     }
 
 }

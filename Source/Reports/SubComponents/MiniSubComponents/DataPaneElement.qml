@@ -6,8 +6,34 @@ Rectangle{
     height: 24
     width: parent.width
 
+    function alreadyExists(elementsList,element){
+        if(elementsList.includes(element)){
+            return true;
+        }
+        return false;
+    }
+
+    function xAxisDropEligible(itemName){
+        var xAxisColumns  = ReportParamsModel.xAxisColumns;
+        const multiChart = true;
+        if(multiChart && !alreadyExists(xAxisColumns,itemName)){
+            return true;
+        }
+        return false;
+    }
+
+    function yAxisDropEligible(itemName){
+        var yAxisColumns  = ReportParamsModel.yAxisColumns;
+        const multiChart = true;
+        if(multiChart && !alreadyExists(yAxisColumns,itemName)){
+            return true;
+        }
+        return false;
+    }
+
 
     function isDropEligible(itemType){
+
         var lastDropped = ReportParamsModel.lastDropped;
         if(!lastDropped){
             return true;
@@ -25,6 +51,15 @@ Rectangle{
         dataPaneMenu.visible = true
     }
 
+    function getSourceImage(itemType){
+        switch(itemType && itemType.toLowerCase()){
+            case "categorical": return "/Images/icons/AB.png"
+            case "numerical": return "/Images/icons/fx.png"
+            case "date": return "/Images/icons/date_field.png"
+        }
+        return "";
+    }
+
     DataPaneMenu{
         id: dataPaneMenu
         y: parent.height
@@ -32,7 +67,7 @@ Rectangle{
 
     Image {
         id: categoricalImage
-        source: "/Images/icons/AB.png"
+        source: getSourceImage(itemType)
         height: 16
         width: 20
         anchors.verticalCenter: parent.verticalCenter
@@ -65,13 +100,14 @@ Rectangle{
     MouseArea {
         id: mouseArea
         anchors.fill: parent
-        drag.target: categoricalListElement
+        drag.target: dataPaneListElement
         drag.onActiveChanged: {
             if (mouseArea.drag.active) {
                 ReportParamsModel.itemName = modelData;
                 ReportParamsModel.itemType = itemType;
-                ReportParamsModel.setXAxisActive(true);
-                ReportParamsModel.setYAxisActive(true);
+                ReportParamsModel.setXAxisActive(xAxisDropEligible(modelData));
+                ReportParamsModel.setYAxisActive(yAxisDropEligible(modelData));
+
                 if(isDropEligible(itemType)){
                     ReportParamsModel.setColorByActive(true);
                 }else{
@@ -83,20 +119,20 @@ Rectangle{
                 ReportParamsModel.setColorByActive(false);
             }
 
-            categoricalListElement.Drag.drop();
+            dataPaneListElement.Drag.drop();
         }
     }
 
     states: [
         State {
-            when: categoricalListElement.Drag.active
+            when: dataPaneListElement.Drag.active
             ParentChange {
-                target: categoricalListElement
+                target: dataPaneListElement
                 parent: categoricalList
             }
 
             AnchorChanges {
-                target: categoricalListElement
+                target: dataPaneListElement
                 anchors.horizontalCenter: undefined
                 anchors.verticalCenter: undefined
             }

@@ -31,6 +31,8 @@ Page {
     property bool xaxisActive: ReportParamsModel.xAxisActive
     property bool yaxisActive: ReportParamsModel.yAxisActive
 
+    property var asd: "123";
+
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -60,6 +62,18 @@ Page {
     /***********************************************************************************************************************/
     // Connections Starts
 
+
+    Connections {
+        target: ReportModelList
+        function onSendData(xAxis,yAxis){
+            const dataValues = JSON.stringify([xAxis,yAxis]);
+            var scriptValue = 'window.addEventListener("resize", function () {
+                    d3.selectAll("#my_dataviz").html("");
+                    drawChart('+dataValues+');
+                });';
+            webEngineView.runJavaScript('drawChart('+dataValues+'); '+scriptValue);
+        }
+    }
 
 
     // Connections Ends
@@ -122,7 +136,6 @@ Page {
     function focusReportTitle(){
         report_title_text.readOnly= false
         report_title_text.focus = true;
-        console.log('Focus Title')
     }
 
     function onDropAreaEntered(element){
@@ -133,17 +146,65 @@ Page {
         element.border.width = Constants.dropEligibleBorderWidth
     }
 
+    function alreadyExists(elementsList,element){
+        if(elementsList.includes(element)){
+            return true;
+        }
+        return false;
+    }
+
+    function xAxisDropEligible(itemName){
+        var xAxisColumns  = ReportParamsModel.xAxisColumns;
+        const multiChart = true;
+        if(multiChart && !alreadyExists(xAxisColumns,itemName)){
+            return true;
+        }
+        return false;
+    }
+
+    function yAxisDropEligible(itemName){
+        var yAxisColumns  = ReportParamsModel.yAxisColumns;
+        const multiChart = true;
+        if(multiChart && !alreadyExists(yAxisColumns,itemName)){
+            return true;
+        }
+        return false;
+    }
+
     function onDropAreaDropped(element,axis){
 
         element.border.width = Constants.dropEligibleBorderWidth
         element.border.color = Constants.themeColor
 
         var itemName = ReportParamsModel.itemName;
+        var xAxisColumns = ReportParamsModel.xAxisColumns;
+        var yAxisColumns = ReportParamsModel.yAxisColumns;
 
         if(axis === Constants.xAxisName){
+
+            if(!xAxisDropEligible(itemName)){
+                return;
+            }
+
             xAxisListModel.append({itemName: itemName})
+            xAxisColumns.push(itemName);
+            ReportParamsModel.setXAxisColumns(xAxisColumns);
+            console.log('Setting X axis Array',xAxisColumns);
         }else{
+
+            if(!yAxisDropEligible(itemName)){
+                return;
+            }
+
             yAxisListModel.append({itemName: itemName})
+
+            yAxisColumns.push(itemName);
+            ReportParamsModel.setYAxisColumns(yAxisColumns);
+            console.log('Setting Y axis Array',yAxisColumns);
+        }
+
+        if(xAxisColumns.length && yAxisColumns.length){
+            ReportModelList.getData();
         }
 
     }
@@ -560,10 +621,10 @@ Page {
     }
 
     WebEngineView {
-        id:primary_chart
+        id: webEngineView
         height:parent.height - axis.height
         width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width
-        url: "../Charts/horizontal-bar.html"
+        url: "../Charts/BarChartArrayInput.html"
         anchors.left: tool_sep_chartFilters.right
         anchors.top: axis.bottom
     }
@@ -709,7 +770,7 @@ Page {
 
             // Search Ends
 
-            // Data Column Starts
+            // Data Pane Starts
             Rectangle{
                 anchors.top: searchRectangle.bottom
                 height: parent.height - (searchRectangle.height + dashboardNameRectangle.height + tabbarQuerymodeller.height)
@@ -718,7 +779,7 @@ Page {
                 RightDataColumn{}
 
             }
-            // Data Column Ends
+            // Data Pane Ends
 
         }
 

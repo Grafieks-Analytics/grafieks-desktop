@@ -73,7 +73,6 @@ Item{
         TableSchemaModel.showSchema(DSParamsModel.tmpSql)
         ReportModelList.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, ""))
 
-
     }
 
 

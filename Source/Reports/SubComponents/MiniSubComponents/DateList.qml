@@ -72,19 +72,19 @@ ListView{
     }
 
 
-    function isDropEligible(itemType){
-        var lastDropped = ReportParamsModel.lastDropped;
-        if(!lastDropped){
-            return true;
-        }
-        if(lastDropped !== itemType){
-            return false;
-        }
-        if(itemType.toLowerCase() === "numerical"){
-            return true;
-        }
-        return false;
-    }
+//    function isDropEligible(itemType){
+//        var lastDropped = ReportParamsModel.lastDropped;
+//        if(!lastDropped){
+//            return true;
+//        }
+//        if(lastDropped !== itemType){
+//            return false;
+//        }
+//        if(itemType.toLowerCase() === "numerical"){
+//            return true;
+//        }
+//        return false;
+//    }
 
 
     // JAVASCRIPT FUNCTION ENDS
@@ -116,87 +116,7 @@ ListView{
     height: parent.height - dateHeading.height - 5
     width: parent.width
     interactive: false
-
-    delegate: Rectangle{
-        id: dateListElement
-        height: 24
-        width: parent.width
-        Image {
-            id: dateImage
-            source: "/Images/icons/date_field.png"
-            height: 16
-            width: 16
-            anchors.verticalCenter: parent.verticalCenter
-        }
-
-        Text {
-            text: modelData
-            width: parent.width - dateImage.width - menuButton.width - 30
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: dateImage.right
-            anchors.leftMargin: 10
-            elide: Text.ElideRight
-        }
-
-        Image {
-            id: menuButton
-            source: "/Images/icons/menu-button.png"
-            height: 18
-            width: 20
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            anchors.verticalCenter: parent.verticalCenter
-            z:100
-            MouseArea{
-                anchors.fill: parent
-                onClicked: openMenu()
-            }
-        }
-
-        MouseArea {
-            id: mouseArea
-            anchors.fill: parent
-            drag.target: dateListElement
-            drag.onActiveChanged: {
-                if (mouseArea.drag.active) {
-                    ReportParamsModel.itemName = modelData;
-                    ReportParamsModel.itemType = itemType;
-                    ReportParamsModel.setXAxisActive(true);
-                    ReportParamsModel.setYAxisActive(true);
-                    if(isDropEligible(itemType)){
-                        ReportParamsModel.setColorByActive(true);
-                    }else{
-                        ReportParamsModel.setColorByActive(false);
-                    }
-                }else{
-                    ReportParamsModel.setXAxisActive(false);
-                    ReportParamsModel.setYAxisActive(false);
-                    ReportParamsModel.setColorByActive(false);
-                }
-                dateListElement.Drag.drop();
-            }
-        }
-
-        states: [
-            State {
-                when: dateListElement.Drag.active
-                ParentChange {
-                    target: dateListElement
-                    parent: dateList
-                }
-
-                AnchorChanges {
-                    target: dateListElement
-                    anchors.horizontalCenter: undefined
-                    anchors.verticalCenter: undefined
-                }
-            }
-        ]
-
-        Drag.active: mouseArea.drag.active
-        Drag.hotSpot.x: 2
-        Drag.hotSpot.y: 2
-
+    delegate: DataPaneElement{
+        id: dataPaneListElement
     }
-
 }
