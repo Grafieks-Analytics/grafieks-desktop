@@ -93,13 +93,32 @@ Item {
 
     Rectangle{
         id: joinBoxRectangle
-        width:35
-        height:35
-        color: "transparent"
+        width:38
+        height:38
+        color: "white"
+        radius: 50
+        border.color: "black"
+        border.width: 1
+        smooth: true
+        antialiasing: true
+
+
+
 
         Image{
             id: joinIconId
             source: "/Images/icons/inner_join_32.png"
+            anchors.fill: parent
+            anchors.top:top.parent
+            anchors.topMargin: 5
+            anchors.bottom: bottom.parent
+            anchors.bottomMargin: 5
+            anchors.left: left.parent
+            anchors.leftMargin: 5
+            anchors.right: right.parent
+            anchors.rightMargin: 5
+
+
         }
 
         MouseArea{

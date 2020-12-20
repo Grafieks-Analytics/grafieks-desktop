@@ -16,16 +16,21 @@ Item{
     property var objectName
 
     objectName: objectName
-
+    smooth: true
+    antialiasing: true
     Shape {
         containsMode: Shape.FillContains
 
+
+
+
         ShapePath {
             id:shapePath
-            strokeStyle: ShapePath.DashLine
+            strokeStyle: ShapePath.SolidLine
             strokeColor: lineColor
             strokeWidth: 1
-            dashPattern: [5,5]
+
+//            dashPattern: [5,5]
             fillColor: "transparent"
             capStyle: ShapePath.RoundCap
             joinStyle: ShapePath.RoundJoin
@@ -34,6 +39,7 @@ Item{
             startY: refRectangleRearY
 
             PathLine {
+
                 id: secondRectCoord;
                 x: incomingRectangleFrontX
                 y: incomingRectangleFrontY

@@ -126,6 +126,8 @@ Item{
 
     function openReportFilters(){
         console.log('Open report filters')
+         datafilters.visible = true
+
     }
 
 
@@ -138,6 +140,9 @@ Item{
     /***********************************************************************************************************************/
     // SubComponents Starts
 
+    DataFilters{
+        id: datafilters
+    }
 
 
     ColorDialog {
@@ -224,7 +229,9 @@ Item{
 
         ListView {
 
-            anchors.top: reportFilterButton.bottom
+            anchors.top:
+
+                reportFilterButton.bottom
             width: parent.width
             height: parent.height - reportFilterButton.height
             interactive: false

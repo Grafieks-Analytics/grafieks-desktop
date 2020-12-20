@@ -89,6 +89,24 @@ Page {
 
             // hide other panels
             column_newdashboard.visible = false
+            column_filter_newdashboard_add.visible = false
+        }
+
+    }
+    function openDashboardFiltersAdd(){
+
+        if(column_filter_newdashboard_add.visible === true){
+            column_filter_newdashboard_add.visible = false
+
+            // hide other panels
+            column_newdashboard_add.visible = false
+        }
+        else{
+            column_filter_newdashboard_add.visible = true
+
+            // hide other panels
+            column_newdashboard.visible = false
+            column_filter_newdashboard.visible = false
         }
 
     }
@@ -105,6 +123,7 @@ Page {
 
             // hide other panels
             column_filter_newdashboard.visible = false
+            column_filter_newdashboard_add.visible = false
         }
     }
 
@@ -436,129 +455,296 @@ Page {
 
             // Add Report button starts
 
-            Button{
+            ToolSeparator{
+                orientation: Qt.Vertical
+                height: 26
 
-                width: 80
-                height: 28
-                onClicked: createNewReport()
+                anchors.verticalCenter: parent.verticalCenter
 
-                Row{
-                    spacing: 5
-                    anchors.centerIn: parent
-                    Image {
-                        source: "/Images/icons/Plus_32.png"
-                        width: 20
-                        height: 20
-                    }
-                    Text{
-                        text: "Report"
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                }
-
-                background: Rectangle {
-                    id: report_btn_background
-                    color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
+                contentItem: Rectangle {
+                    implicitWidth: parent.vertical ? 1 : 24
+                    implicitHeight: parent.vertical ? 25 : 1
+                    color: Constants.grafieksGreen
                 }
 
             }
 
-            // Add Report Button Ends
-
-            // Filter button starts
-
             Button{
-                width: 100
+
+                width: 80
                 height: 28
-                anchors.leftMargin: 10
+
+
 
                 Row{
                     spacing: 5
                     anchors.centerIn: parent
 
-                    Image{
-                        id: filter_querymodeller
-                        source: "/Images/icons/Plus_32.png"
-                        height: 20
-                        width: 20
+                    Text{
+                        text: "Report"
+                        anchors.verticalCenter: parent.verticalCenter
                     }
+                    Text {
+
+                        text: qsTr(":")
+
+
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                    Button{
+                        //
+                        width: 22
+                        height: 28
+                        onClicked: createNewReport()
+                        Image {
+                            source: "/Images/icons/Plus_32.png"
+                            width: 20
+                            height: 20
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter:  parent.horizontalCenter
+                        }
+
+                        background: Rectangle {
+                            id: report_btn_background
+                            color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
+
+                        }
+
+                    }
+
+
+
+                }
+                background: Rectangle {
+
+                    color:  Constants.whiteColor
+                }
+
+
+            }
+
+            ToolSeparator{
+                orientation: Qt.Vertical
+                height: 26
+
+                anchors.verticalCenter: parent.verticalCenter
+
+                contentItem: Rectangle {
+                    implicitWidth: parent.vertical ? 1 : 24
+                    implicitHeight: parent.vertical ? 25 : 1
+                    color: Constants.grafieksGreen
+                }
+
+            }
+            // Add Report Button Ends
+
+            // Filter button starts
+
+            //            Button{
+            //                width: 100
+            //                height: 28
+            //                anchors.leftMargin: 10
+
+            //                Row{
+            //                    spacing: 5
+            //                    anchors.centerIn: parent
+
+
+
+            //                    Text{
+            //                        id: filterText
+            //                        text: "Filter"
+            //                        anchors.verticalCenter: parent.verticalCenter
+            //                    }
+
+            //                    Text {
+            //                        id: filterLeftSquareBracket
+            //                        text: qsTr(":")
+            //                        //                        color: Constants.grafieksGreen
+
+            //                        anchors.verticalCenter: parent.verticalCenter
+            //                    }
+            //                    Image{
+            //                        id: filter_querymodeller
+            //                        source: "/Images/icons/Plus_32.png"
+            //                        height: 20
+            //                        width: 20
+            //                    }
+            //                    Image{
+            //                        id: filter_show_querymodeller
+            //                        source: "/Images/icons/show.png"
+            //                        height: 12
+            //                        width: 16
+            //                        anchors.verticalCenter: parent.verticalCenter
+            //                    }
+
+
+            //                }
+
+            //                background: Rectangle{
+            //                    color: parent.hovered ? Constants.darkThemeColor : "white"
+            //                }
+
+            //                onClicked: openDashboardFilters()
+            //            }
+
+            Button{
+
+                width: 100
+                height: 28
+
+
+
+                Row{
+                    spacing: 5
+                    anchors.centerIn: parent
 
                     Text{
                         id: filterText
                         text: "Filter"
                         anchors.verticalCenter: parent.verticalCenter
                     }
-
                     Text {
-                        id: filterLeftSquareBracket
-                        text: qsTr("[")
-                        color: Constants.grafieksGreen
+                        //                        id: filterLeftSquareBracket
+                        text: qsTr(":")
+                        //                        color: Constants.grafieksGreen
 
                         anchors.verticalCenter: parent.verticalCenter
                     }
-                    Text {
-                        id: filterNumber
-                        text: qsTr("0")
 
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                    Text {
-                        id: filterRightSquareBracket
-                        text: qsTr("]")
-                        color: Constants.grafieksGreen
+                    Button{
+                        //
+                        width: 20
+                        height: 28
+                        onClicked: openDashboardFiltersAdd()
+                        Image{
+                            id: filter_querymodeller
+                            source: "/Images/icons/Plus_32.png"
+                            height: 20
+                            width: 20
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter:  parent.horizontalCenter
+                        }
 
-                        anchors.verticalCenter: parent.verticalCenter
+
+                        background: Rectangle {
+                            //                            id: report_btn_background
+                            color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
+
+                        }
+
                     }
+                    Button{
+                        //
+                        width: 20
+                        height: 28
+                        onClicked: openDashboardFilters()
+                        Image{
+                            id: filter_show_querymodeller
+                            source: "/Images/icons/show.png"
+                            height: 11
+                            width: 16
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter:  parent.horizontalCenter
+                        }
+
+
+                        background: Rectangle {
+                            //                            id: report_btn_background
+                            color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
+
+                        }
+
+                    }
+
+
 
                 }
-
-                background: Rectangle{
-                    color: parent.hovered ? Constants.darkThemeColor : "white"
+                background: Rectangle {
+                    //                        id: report_btn_background
+                    color:  Constants.whiteColor
                 }
 
-                onClicked: openDashboardFilters()
+
             }
+            ToolSeparator{
+                orientation: Qt.Vertical
+                height: 26
 
+                anchors.verticalCenter: parent.verticalCenter
+
+                contentItem: Rectangle {
+                    implicitWidth: parent.vertical ? 1 : 24
+                    implicitHeight: parent.vertical ? 25 : 1
+                    color: Constants.grafieksGreen
+                }
+
+            }
             // Filter Button Ends
 
             // Customize Button Starts
 
+
+
             Button{
+
+                width: 110
                 height: 28
-                width: 100
+                //                anchors.right: parent.right
+                anchors.rightMargin: 20
+
+
 
                 Row{
                     spacing: 5
-                    anchors.centerIn: parent
+                    //                    anchors.centerIn: parent
 
-                    Image {
-                        id: name
-                        source: "/Images/icons/customize.png"
-                        width: 18
-                        height: 18
-
-                    }
 
                     Text{
                         text: "Customize"
                         anchors.verticalCenter: parent.verticalCenter
                     }
+                    Text {
+                        //                        id: filterLeftSquareBracket
+                        text: qsTr(":")
+                        //                        color: Constants.grafieksGreen
+
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                    Button{
+                        //
+                        width: 28
+                        height: 28
+                        onClicked:onCustomizeBtnClicked()
+
+
+                        Image {
+                            source: "/Images/icons/customize.png"
+                            width: 16
+                            height: 16
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter:  parent.horizontalCenter
+                        }
+
+                        background: Rectangle {
+                            color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
+
+                        }
+
+                    }
+
 
 
                 }
-
-
-                // open right customize panel
-                // which display widgets, reports and general settings
-
-                onClicked:  onCustomizeBtnClicked()
-
-                background: Rectangle{
-                    color: parent.hovered ? Constants.darkThemeColor : "white"
+                background: Rectangle {
+                    //                        id: report_btn_background
+                    color:  Constants.whiteColor
                 }
+
 
             }
-
             // Customize Button Ends
 
 
@@ -577,10 +763,6 @@ Page {
         anchors.top: submenu.bottom
         anchors.left: left_menubar.right
         anchors.leftMargin: -2
-        //        anchors.bottom: submenu.bottom
-        //        anchors.bottomMargin:  -10
-        //                anchors.bottom: dashboard_summary.bottom
-        //        anchors.bottomMargin:  -10
         anchors.horizontalCenter: submenu.horizontalCenter
 
         contentItem: Rectangle {
@@ -588,7 +770,6 @@ Page {
             implicitHeight: parent.vertical ? 25 : 1
             color: Constants.darkThemeColor
 
-            //             anchors.leftMargin: 10
         }
 
     }
@@ -744,6 +925,41 @@ Page {
 
 
         DashboardFilters{}
+    }
+
+    // Right Filter Ends
+    // Right Filter Add Starts
+
+    Column{
+        id: column_filter_newdashboard_add
+
+        height:parent.height - submenu.height
+        width: 200
+        anchors.right:parent.right
+        anchors.top: submenu.bottom
+        anchors.topMargin: 4
+        spacing: 50
+        visible: false
+
+        z:99999999
+
+
+        ToolSeparator{
+            anchors.top: parent.top
+            anchors.left: column_newdashboard.left
+
+            height:parent.height
+
+            contentItem: Rectangle {
+                implicitWidth: parent.vertical ? 1 : 24
+                implicitHeight: parent.vertical ? 24 : 1
+                color: Constants.darkThemeColor
+
+            }
+        }
+
+
+        DashboardFiltersAdd{}
     }
 
     // Right Filter Ends
