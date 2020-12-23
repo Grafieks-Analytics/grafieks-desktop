@@ -151,11 +151,11 @@ HEADERS += \
 
 
 macx: LIBS += -L$$PWD/Libraries/ -lduckdb
-#win32: LIBS += -L$$PWD/Libraries/duckdb.dll
+win32: LIBS += $$PWD/Libraries/duckdb.lib
 
-#macx: LIBS += -L$$PWD/Libraries/ -lparquet_extension
+macx: LIBS += -L$$PWD/Libraries/ -lparquet_extension
 
-#INCLUDEPATH += $$PWD/Libraries
-#DEPENDPATH += $$PWD/Libraries
+INCLUDEPATH += $$PWD/Libraries
+DEPENDPATH += $$PWD/Libraries
 
-#macx: PRE_TARGETDEPS += $$PWD/Libraries/libparquet_extension.a
+macx: PRE_TARGETDEPS += $$PWD/Libraries/libparquet_extension.a

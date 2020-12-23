@@ -6,7 +6,8 @@
  * \qmlsignal
  * \
  */
-QtTest2::QtTest2(QObject *parent) :QObject(parent)
+QtTest2::QtTest2(QObject *parent) :QObject(parent),
+     db(nullptr), con(db)
 {
 //    db.LoadExtension<duckdb::ParquetExtension>();
 }
