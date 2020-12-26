@@ -170,5 +170,6 @@
         <file>Source/Charts/Data/qwebchannel.js</file>
         <file>Source/Charts/Data/d3.v4.min.js</file>
         <file>Source/Charts/AreaChart.html</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/ColorByMenuOption.qml</file>
     </qresource>
 </RCC>

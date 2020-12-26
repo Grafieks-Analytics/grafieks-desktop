@@ -233,7 +233,13 @@ Column{
                     color: "#BADCFF"
                     border.width: 1
                     border.color: "#CDE6FF"
+
+                    ColorByMenuOption{
+                        id: colorByOptions
+                    }
+
                     Text {
+                        id: colorByTextItem
                         text: textValue
                         anchors.centerIn: parent
                         width: parent.width - 10
@@ -242,6 +248,8 @@ Column{
                     }
                     MouseArea{
                         anchors.fill: parent                        
+                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                        onClicked: (mouse.button & Qt.RightButton) ? colorByOptions.visible = true : null
                     }
                 }
             }
