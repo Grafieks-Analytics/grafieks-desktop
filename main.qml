@@ -148,9 +148,7 @@ ApplicationWindow {
         nameFilters: ["Extract (*.gadse)", "Live (*.gads)"]
 
         onAccepted: {
-            console.log(file)
             var x = DSParamsModel.readDatasource(file)
-            console.log(x[0], x[1])
 
         }
     }

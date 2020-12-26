@@ -748,11 +748,11 @@ Page {
 
                     Image{
                         id:search_icon
-                        source:"/Images/icons/Search.png"
-                        height:30
-                        width:30
+                        source:"/Images/icons/iconmonstr-search-thin.svg"
+                        height:20
+                        width:20
                         anchors.top: parent.top
-                        anchors.topMargin: 5
+                        anchors.topMargin: 10
                     }
                 }
 
