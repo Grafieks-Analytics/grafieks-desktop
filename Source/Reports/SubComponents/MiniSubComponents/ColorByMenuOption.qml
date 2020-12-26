@@ -74,7 +74,8 @@ Popup {
             var elementName = colorListModel.get(i).textValue;
             if(elementName===deleteName){
                 colorListModel.remove(i);
-                console.log('Remove Parent ka parent');
+                ReportParamsModel.setItemType(null);
+                ReportParamsModel.setLastDropped(null);
                 break;
             }
         }
