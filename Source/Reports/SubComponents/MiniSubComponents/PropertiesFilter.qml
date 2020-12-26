@@ -241,9 +241,7 @@ Column{
                         font.pixelSize: Constants.fontCategoryHeaderSmall
                     }
                     MouseArea{
-                        anchors.fill: parent
-                        drag.target: parent;
-
+                        anchors.fill: parent                        
                     }
                 }
             }

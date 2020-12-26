@@ -120,7 +120,7 @@ Page {
     // For changing the chart on clicking chart icons
 
     function changeChart(chartname){
-        primary_chart.url = chartname
+        webEngineView.url = chartname
     }
 
     function addReport(){
@@ -189,7 +189,6 @@ Page {
             xAxisListModel.append({itemName: itemName})
             xAxisColumns.push(itemName);
             ReportParamsModel.setXAxisColumns(xAxisColumns);
-            console.log('Setting X axis Array',xAxisColumns);
         }else{
 
             if(!yAxisDropEligible(itemName)){
@@ -200,7 +199,6 @@ Page {
 
             yAxisColumns.push(itemName);
             ReportParamsModel.setYAxisColumns(yAxisColumns);
-            console.log('Setting Y axis Array',yAxisColumns);
         }
 
         if(xAxisColumns.length && yAxisColumns.length){

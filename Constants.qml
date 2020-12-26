@@ -182,6 +182,6 @@ QtObject {
     property color defaultXAxisColor: "#6CD7A1"
     property color defaultYAxisColor: "#BADCFF"
 
-
+    property string categoricalItemType: "categorical"
     // Report Ends
 }

@@ -35,11 +35,11 @@ Rectangle{
         id: allCharts
         ListElement{
             icon: "bar_chart.png"
-            chartHtml:"bar.html"
+            chartHtml:"BarChartArrayInput.html"
         }
         ListElement{
             icon: "area.png"
-            chartHtml:"bar.html"
+            chartHtml:"AreaChart.html"
         }
         ListElement{
             icon: "line_chart.png"
@@ -216,7 +216,7 @@ Rectangle{
                 MouseArea{
                     anchors.fill: parent
                     hoverEnabled: true
-                    onClicked:  rectangle_left.loadchart("../Charts/bar.html")
+                    onClicked:  loadchart("../Charts/"+chartHtml)
                     onPressed:  parent.color = "white"
                     onReleased:   parent.color = Constants.themeColor
                     onEntered:  parent.color = Constants.hoverThemeColor
