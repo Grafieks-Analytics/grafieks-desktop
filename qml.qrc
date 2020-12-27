@@ -172,5 +172,6 @@
         <file>Source/Charts/AreaChart.html</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/ColorByMenuOption.qml</file>
         <file>Source/Charts/StackedBarChart.html</file>
+        <file>Source/Connectors/SubComponents/ExcelConnection.qml</file>
     </qresource>
 </RCC>
