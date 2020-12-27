@@ -31,8 +31,17 @@ Page {
     property bool xaxisActive: ReportParamsModel.xAxisActive
     property bool yaxisActive: ReportParamsModel.yAxisActive
 
-    property var asd: "123";
+    property string reportChart:ReportParamsModel.chartType;
 
+    onReportChartChanged: {
+
+        switch(reportChart){
+            case Constants.scatteredChart:
+                changeChart("qrc:/Source/Charts/StackedBarChart.html");
+                break;
+        }
+
+    }
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS

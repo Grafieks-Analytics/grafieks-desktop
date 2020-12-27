@@ -6,6 +6,7 @@ import "../../MainSubComponents"
 Rectangle{
 
     property alias textValue: textbox.text
+    property var itemType: ReportParamsModel.itemType.toLowerCase();
 
     height: parent.height - 10
     width: 200
@@ -14,9 +15,8 @@ Rectangle{
     radius: this.width/2
 
 
-    // Listmodel for combobox
     ListModel{
-        id: calculations
+        id: categoricalCalculations
 
         ListElement{
             calculationName:"Count"
@@ -38,6 +38,12 @@ Rectangle{
             calculationType: "string"
             calculationCompareValue : "maximum"
         }
+
+    }
+
+    // Listmodel for combobox
+    ListModel{
+        id: numericalCalculations
         ListElement{
             calculationName:"Sum"
             calculationType: "number"
@@ -122,7 +128,13 @@ Rectangle{
         CustomComboBox{
             id: wildcardDropdown
             currentIndex: 0
-            model: calculations
+            model: {
+               console.log(itemType);
+               if(itemType === Constants.categoricalItemType){
+                   return categoricalCalculations;
+               }
+               return numericalCalculations
+            }
             textRole: "calculationName"
             width: parent.width
             height: parent.height

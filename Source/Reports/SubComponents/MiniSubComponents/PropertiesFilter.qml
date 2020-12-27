@@ -19,6 +19,7 @@ Column{
     property bool colorByActive: ReportParamsModel.colorByActive;
 
     spacing: 4
+    z:0
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -113,11 +114,11 @@ Column{
             return;
         }        
 
-        if(isDropEligible()){
-            colorListModel.append({textValue: itemName})
-            ReportParamsModel.lastDropped = itemType;
-            return;
-        }
+
+        colorListModel.append({textValue: itemName})
+        ReportParamsModel.setLastDropped(itemType);
+        ReportParamsModel.setChartType(Constants.scatteredChart);
+        return;
 
     }
 

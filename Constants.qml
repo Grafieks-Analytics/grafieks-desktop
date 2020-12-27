@@ -186,4 +186,11 @@ QtObject {
     property string numericalItemType: "numerical"
 
     // Report Ends
+
+
+    // Charts Start
+
+    property string scatteredChart: "Scattered Chart"
+
+    // Charts ends
 }

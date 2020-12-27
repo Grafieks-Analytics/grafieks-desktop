@@ -15,6 +15,7 @@ class ReportParamsModel: public QObject
     Q_PROPERTY(QString calculatedFieldPopupStatus READ calculatedFieldPopupStatus WRITE setCalculatedFieldPopupStatus NOTIFY calculatedFieldPopupStatusChanged)
     Q_PROPERTY(QList<QString> xAxisColumns READ xAxisColumns WRITE setXAxisColumns NOTIFY xAxisColumnsChanged)
     Q_PROPERTY(QList<QString> yAxisColumns READ yAxisColumns WRITE setYAxisColumns NOTIFY yAxisColumnsChanged)
+    Q_PROPERTY(QString chartType READ chartType WRITE setChartType NOTIFY chartTypeChanged)
 
     QString m_itemName;
     QString m_itemType;
@@ -32,6 +33,8 @@ class ReportParamsModel: public QObject
     QList<QString> m_xAxisColumns;
 
     QList<QString> m_yAxisColumns;
+
+    QString m_chartType;
 
 public:
     ReportParamsModel();
@@ -54,6 +57,8 @@ public:
 
     QList<QString> yAxisColumns() const;
 
+    QString chartType() const;
+
 public slots:
     void setItemName(QString itemName);
     void setItemType(QString itemType);
@@ -73,6 +78,8 @@ public slots:
 
     void setYAxisColumns(QList<QString> yAxisColumns);
 
+    void setChartType(QString chartType);
+
 signals:
     void itemNameChanged(QString itemName);
     void itemTypeChanged(QString itemType);
@@ -85,6 +92,7 @@ signals:
 
     void xAxisColumnsChanged(QList<QString> xAxisColumns);
     void yAxisColumnsChanged(QList<QString> yAxisColumns);
+    void chartTypeChanged(QString chartType);
 };
 
 #endif // REPORTPARAMSMODEL_H
