@@ -4,7 +4,7 @@
 ** Contact: https://grafieks.com/
 **
 ** Data/SubComponents
-** Mysql Connection
+** Postgres Connection
 **
 ****************************************************************************/
 
@@ -34,7 +34,7 @@ Popup {
     Connections{
         target: ConnectorsLoginModel
 
-        function onExcelLoginStatus(status){
+        function onPostgresLoginStatus(status){
 
              if(status.status === true){
 
@@ -62,9 +62,9 @@ Popup {
         popup.visible = false
     }
 
-    function connectToExcel(){
-//        ConnectorsLoginModel.excelOdbcLogin(server.text, database.text, port.text, username.text, password.text)
-          ConnectorsLoginModel.excelOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
+    function connectToPostgreSQL(){
+//        ConnectorsLoginModel.postgresOdbcLogin(server.text, database.text, port.text, username.text, password.text)
+          ConnectorsLoginModel.postgresOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -80,7 +80,7 @@ Popup {
 
     MessageDialog{
         id: msg_dialog
-        title: "Excel Connection"
+        title: "PostgreSQL Connection"
         text: ""
         icon: StandardIcon.Critical
     }
@@ -112,7 +112,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Select Excel File"
+            text: "Sign In to PostgreSQL"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -473,7 +473,7 @@ Popup {
             id: btn_signin
             textValue: Constants.signInText
             fontPixelSize: Constants.fontCategoryHeader
-            onClicked: connectToExcel()
+            onClicked: connectToPostgreSQL()
         }
 
     }

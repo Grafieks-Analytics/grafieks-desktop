@@ -53,9 +53,71 @@ void ConnectorsLoginModel::sqliteLogin(QString filename, QString username, QStri
     emit sqliteLoginStatus(response);
 }
 
-void ConnectorsLoginModel::odbcLogin(QString filename, QString username, QString password)
+void ConnectorsLoginModel::mysqlOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
 
+}
+
+
+void ConnectorsLoginModel::mssqlOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
+{
+
+    MSSqlCon mssqlcon;
+    QVariantMap response = mssqlcon.MSSqlInstance(host, db, port, username, password);
+
+    Statics::currentDbName = db;
+    Statics::currentDbIntType = Constants::mysqlIntType;
+    Statics::currentDbStrType = Constants::mysqlStrType;
+
+    this->setConnectedDB(db);
+
+    emit mssqlLoginStatus(response);
+}
+
+void ConnectorsLoginModel::postgresOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
+{
+    PostgresCon postgrescon;
+    QVariantMap response = postgrescon.PostgresInstance(host, db, port, username, password);
+
+    Statics::currentDbName = db;
+    Statics::currentDbIntType = Constants::mysqlIntType;
+    Statics::currentDbStrType = Constants::mysqlStrType;
+
+    this->setConnectedDB(db);
+
+    emit postgresLoginStatus(response);
+
+}
+
+void ConnectorsLoginModel::mongoOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
+{
+
+    MongoCon mongocon;
+    QVariantMap response = mongocon.MongoInstance(host, db, port, username, password);
+
+    Statics::currentDbName = db;
+    Statics::currentDbIntType = Constants::mysqlIntType;
+    Statics::currentDbStrType = Constants::mysqlStrType;
+
+    this->setConnectedDB(db);
+
+    emit mongoLoginStatus(response);
+
+}
+
+void ConnectorsLoginModel::excelOdbcLogin(QString driver, QString filename, QString password)
+{
+
+    ExcelCon excelcon;
+    QVariantMap response = excelcon.ExcelOdbcInstance(driver, filename, password);
+
+    Statics::currentDbName = filename;
+    Statics::currentDbIntType = Constants::mysqlIntType;
+    Statics::currentDbStrType = Constants::mysqlStrType;
+
+    this->setConnectedDB(filename);
+
+    emit excelLoginStatus(response);
 }
 
 QString ConnectorsLoginModel::connectedDB() const

@@ -28,6 +28,7 @@ class MSSqlCon : public QObject
 public:
     explicit MSSqlCon(QObject *parent = nullptr);
     QVariantMap MSSqlInstance(const QString & host, const QString & db, const int & port, const QString & username, const QString & password);
+    QVariantMap MSSqlOdbcInstance(const QString & driver, const QString & host, const QString & db, const int & port, const QString & username, const QString & password);
 
     ~MSSqlCon();
 

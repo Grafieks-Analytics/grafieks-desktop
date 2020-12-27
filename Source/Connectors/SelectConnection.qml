@@ -70,7 +70,7 @@ Page {
     // Set modal popup
     function selectAuthorization(param){
 
-
+console.log(param)
         switch(param.toLowerCase()){
 
         case "grs":
@@ -90,6 +90,10 @@ Page {
 
         case "sqlite":
             sqliteModal.visible = true
+            break;
+
+        case "sql server":
+            mssqlModal.visible = true
             break;
 
         case "dropbox":
@@ -146,6 +150,10 @@ Page {
 
     SqliteConnection{
         id: sqliteModal
+    }
+
+    MSSqlConnection{
+        id: mssqlModal
     }
 
     DropboxConnection{

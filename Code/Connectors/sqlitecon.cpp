@@ -76,6 +76,12 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &us
 
 }
 
+QVariantMap Sqlitecon::SqliteOdbcInstance(const QString &driver, const QString &filepath, const QString &username, const QString &password)
+{
+    QVariantMap outputStatus;
+    return outputStatus;
+}
+
 /*!
  * \fn Sqlitecon::~Sqlitecon
  * \brief Destructor function for Sqlite connection

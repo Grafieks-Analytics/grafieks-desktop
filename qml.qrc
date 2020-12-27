@@ -170,5 +170,8 @@
         <file>Source/Charts/Data/qwebchannel.js</file>
         <file>Source/Charts/Data/d3.v4.min.js</file>
         <file>Source/Connectors/SubComponents/ExcelConnection.qml</file>
+        <file>Source/Connectors/SubComponents/PostgresConnection.qml</file>
+        <file>Source/Connectors/SubComponents/MSSqlConnection.qml</file>
+        <file>Source/Connectors/SubComponents/MongoConnection.qml</file>
     </qresource>
 </RCC>

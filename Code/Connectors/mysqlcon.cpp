@@ -78,6 +78,40 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
     return outputStatus;
 }
 
+QVariantMap MysqlCon::MysqlOdbcInstance(const QString &driver, const QString &host, const QString &db, const int &port, const QString &username, const QString &password)
+{
+    QVariantMap outputStatus;
+
+    QSqlDatabase dbOdbc = QSqlDatabase::addDatabase("QODBC", "mysql_conn");
+    // Fetching from MYSQL database
+    dbOdbc.setDatabaseName("DRIVER={MySQL ODBC 8.0 Unicode Driver};Database=mysql"); // "WorkDatabase" is the name of the database we want
+    dbOdbc.setUserName("root");
+    dbOdbc.setPassword("");
+
+    bool ok = dbOdbc.open();
+    if(ok){
+        qDebug() << "Connected MySQL";
+
+        QSqlQuery q1;
+
+        // Fetch data from TABLE
+        q1.prepare("SELECT * FROM db");
+
+        if(q1.exec()){
+            while(q1.next()){
+                qDebug() << q1.value(0).toString() << q1.value(1).toString() << q1.value(2).toString()  ;
+            }
+        }else{
+            qDebug() << q1.lastError().text();
+        }
+
+    } else{
+        qDebug() << dbOdbc.lastError().text() << "ERROR";
+    }
+
+    return outputStatus;
+}
+
 /*!
  * \fn MysqlCon::~MysqlCon
  * \brief Destructor function for Mysql connection

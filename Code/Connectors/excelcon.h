@@ -28,7 +28,8 @@ class ExcelCon : public QObject
 
 public:
     explicit ExcelCon(QObject *parent = nullptr);
-    QVariantMap ExcelInstance(const QString & host, const QString & db, const int & port, const QString & username, const QString & password);
+    QVariantMap ExcelInstance(const QString & filepath, const QString & password);
+    QVariantMap ExcelOdbcInstance(const QString & driver, const QString & filepath, const QString & password);
 
     ~ExcelCon();
 
