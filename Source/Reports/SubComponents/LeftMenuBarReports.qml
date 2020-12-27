@@ -27,6 +27,8 @@ Rectangle{
     property int imageHeight: 32;
     property int imageWidth: 32;
 
+    property string selectedChart: "bar"
+    property int activeChartIndex: 0;
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -35,103 +37,127 @@ Rectangle{
         id: allCharts
         ListElement{
             icon: "bar_chart.png"
-            chartHtml:"bar.html"
+            chartHtml:"BarChartArrayInput.html"
+            name: "bar"
+            activeChart: true
         }
         ListElement{
             icon: "area.png"
-            chartHtml:"bar.html"
+            chartHtml:"AreaChart.html"
+            name:"area"
+            activeChart: false
         }
         ListElement{
             icon: "line_chart.png"
             chartHtml:"bar.html"
+            activeChart: false
         }
         ListElement{
             icon: "combination_chart.png"
+            activeChart: false
             chartHtml:"bar.html"
         }
         ListElement{
             icon: "heatmap.png"
             chartHtml:"bar.html"
+            activeChart: false
         }
         ListElement{
             icon: "scatter_plot.png"
             chartHtml:"bar.html"
+            activeChart: false
         }
         ListElement{
             icon: "waterfall.png"
             chartHtml:"bar.html"
+            activeChart: false
         }
         ListElement{
             icon: "pie_chart.png"
             chartHtml:"bar.html"
+            activeChart: false
         }
         ListElement{
             icon: "donut.png"
             chartHtml:"bar.html"
+            activeChart: false
         }
         ListElement{
             icon: "radar.png"
             chartHtml:"bar.html"
+            activeChart: false
         }
         ListElement{
             icon: "sunburst.png"
             chartHtml:"bar.html"
+            activeChart: false
         }
         ListElement{
             icon: "nightingales_rose.png"
+            activeChart: false
             chartHtml:"bar.html"
         }
         ListElement{
             icon: "chord_diagram.png"
             chartHtml:"bar.html"
+            activeChart: false
         }
         ListElement{
             icon: "funnel.png"
             chartHtml:"bar.html"
+            activeChart: false
         }
         ListElement{
             icon: "tree_chart.png"
             chartHtml:"bar.html"
+            activeChart: false
         }
         ListElement{
             icon: "force_directed.png"
             chartHtml:"bar.html"
+            activeChart: false
         }
         ListElement{
             icon: "sankey.png"
             chartHtml:"bar.html"
             elementHeight: 24
+            activeChart: false
         }
         ListElement{
             icon: "tree_map.png"
             chartHtml:"bar.html"
             elementHeight: 24
+            activeChart: false
         }
         ListElement{
             icon: "pivot.png"
             chartHtml:"bar.html"
+            activeChart: false
         }
         ListElement{
             icon: "table.png"
             chartHtml:"bar.html"
             elementWidth: 30
+            activeChart: false
         }
         ListElement{
             icon: "condegram.png"
             chartHtml:"bar.html"
-
+            activeChart: false
         }
         ListElement{
             icon: "map.png"
             chartHtml:"bar.html"
             elementHeight: 22
             elementWidth:40
+            activeChart: false
         }
         ListElement{
             icon: "gauge_chart.png"
             chartHtml:"bar.html"
             elementHeight: 22
             elementWidth:30
+            activeChart: false
         }
     }
 
@@ -165,7 +191,12 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-
+    function getChart(chartHtml,index){
+        loadchart("../Charts/"+chartHtml);
+        allCharts.set(activeChartIndex,{activeChart: false})
+        activeChartIndex = index;
+        allCharts.set(index,{activeChart: true})
+    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -206,7 +237,7 @@ Rectangle{
             delegate: Rectangle{
                 width: parent.width
                 height: imageRectangleHeight
-                color: Constants.themeColor
+                color: activeChart ? Constants.darkThemeColor :Constants.themeColor
                 Image{
                     source:"/Images/icons/charts/"+icon
                     anchors.centerIn: parent
@@ -216,11 +247,7 @@ Rectangle{
                 MouseArea{
                     anchors.fill: parent
                     hoverEnabled: true
-                    onClicked:  rectangle_left.loadchart("../Charts/bar.html")
-                    onPressed:  parent.color = "white"
-                    onReleased:   parent.color = Constants.themeColor
-                    onEntered:  parent.color = Constants.hoverThemeColor
-                    onExited: parent.color = Constants.themeColor
+                    onClicked:  getChart(chartHtml,index)
                 }
             }
 

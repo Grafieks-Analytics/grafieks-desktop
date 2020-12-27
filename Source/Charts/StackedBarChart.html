@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Load d3.js -->
+    <script src="./Data/d3.v4.min.js"></script>
+    <link rel="icon" href="logo.png" type="image/png" sizes="32x32" />
+    <link rel="stylesheet" href="Data/general.css" />
+
+    <title>Stacked Bar</title>
+</head>
+<body>
+    <div id="my_dataviz"></div>
+    <div id="tooltip"></div>
+    <script>
+        // Color Pallets - Set 3
+        const d3colors = [
+            "#8DD3C9",
+            "#FFFFAA",
+            "#B8BED6",
+            "#F98171",
+            "#78B5D1",
+            "#FFB15B",
+            "#B4E061",
+            "#FDCDE5",
+            "#DAD9D4",
+            "#BD7FBE",
+            "#CDE9C1",
+            "#FFEA77",
+        ];
+
+        var data = [
+            [
+                ["Ind", "1999", "139.81"],
+                ["Ind", "2000", "239.81"],
+                ["Ind", "2000", "100.81"],
+                ["Ind", "2001", "136.35"],
+                ["Ind", "2002", "143.22"],
+                ["Aus", "2000", "241.64"],
+                ["Aus", "2001", "48.43"],
+                ["Aus", "2002", "54.43"],
+                ["Aus", "2001", "53.97"],
+                ["Aus", "2001", "78.54"],
+                ["Uk", "2001", "103.7"],
+                ["Uk", "2002", "100.82"],
+                ["NZ", "1999", "211.31"],
+                ["NZ", "2001", "1000.36"],
+                ["NZ", "2000", "200.36"],
+            ],
+            ["Ind", "Aus", "Nz", "Uk"],
+            ["Year"],
+        ];
+
+        const symbolIndex = 0;
+        const columnIndex = 1;
+        const valueIndex = 2;
+
+        function drawChart() {
+            d3.selectAll("#my_dataviz").html("");
+            var margin = { top: 30, right: 30, bottom: 70, left: 60 },
+                width = window.innerWidth - margin.left - margin.right - 20,
+                height = window.innerHeight - margin.top - margin.bottom - 20;
+
+            var x = d3
+                .scaleBand()
+                .rangeRound([0, width])
+                .paddingInner(0.05)
+                .align(0.1);
+
+            var y = d3.scaleLinear().rangeRound([height, 0]).nice();
+
+            var z = d3.scaleOrdinal(d3colors);
+
+            // Load stocks data
+            var symbols = data[1];
+            const chartKey = data[2];
+
+            var data_nest = d3
+                .nest()
+                .key(function (d) {
+                    return d[columnIndex];
+                })
+                .key(function (d) {
+                    return d[symbolIndex];
+                })
+                .rollup(function (v) {
+                    return d3.sum(v, function (d) {
+                        return d[valueIndex];
+                    });
+                })
+                .entries(data[0]);
+
+            var keys = data_nest.map(function (d) {
+                return d.key;
+            });
+
+            var data_stack = [];
+
+            data_nest.forEach(function (d, i) {
+                d.values = d.values.map(function (e) {
+                    return e.value;
+                });
+                var t = {};
+                symbols.forEach(function (e, i) {
+                    t[e] = d.values[i] || 0;
+                });
+                t.key = d.key;
+                data_stack.push(t);
+            });
+
+            var layers = d3.stack().keys(symbols)(data_stack);
+
+            var max = d3.max(layers[layers.length - 1], function (d) {
+                return d[1];
+            });
+
+            y.domain([0, max]);
+            x.domain(keys);
+
+            var svg = d3
+                .select("#my_dataviz")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr(
+                    "transform",
+                    "translate(" + margin.left + "," + margin.top + ")"
+                );
+
+            var yaxisTicks = height / 100;
+
+            svg.append("g")
+                .attr("class", "x axis x-axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x).tickSizeOuter(0));
+
+            // Add the Y Axis
+            svg.append("g")
+                .call(d3.axisLeft(y).tickSize(0).ticks(yaxisTicks))
+                .style("stroke-width", "0.5")
+                .attr("class", "y-axis");
+
+            svg.append("g")
+                .attr("class", "grid")
+                .style("stroke-width", "1")
+                .call(make_y_gridlines().tickSize(-width).tickFormat(""));
+
+            svg.append("g")
+                .selectAll("g")
+                .data(layers)
+                .enter()
+                .append("g")
+                .style("fill", function (d) {
+                    return z(d.key);
+                })
+                .selectAll("rect")
+                .data(function (d) {
+                    // console.log(d);
+                    return d;
+                })
+                .enter()
+                .append("rect")
+                .attr("x", function (d, i) {
+                    return x(d.data.key);
+                })
+                .attr("y", function (d) {
+                    return y(d[1]);
+                })
+                .attr("height", function (d) {
+                    return y(d[0]) - y(d[1]);
+                })
+                .attr("width", x.bandwidth())
+                .attr("class", "bar")
+                .on("mouseover mousemove", function (d, i) {
+                    var x_pos = d3.mouse(this)[0] + margin.left;
+                    var y_pos = d3.mouse(this)[1] - margin.bottom;
+
+                    const { data: chartData } = d;
+                    var htmlData = "";
+
+                    for (var key in chartData) {
+                        if (key == "key") {
+                            htmlData +=
+                                "<br/>" + chartKey + " : " + chartData[key];
+                            continue;
+                        }
+                        htmlData += "<br/>" + key + " : " + chartData[key];
+                    }
+
+                    d3.select("#tooltip")
+                        .style("left", x_pos + "px")
+                        .style("top", y_pos + "px")
+                        .style("display", "block")
+                        .html(htmlData);
+                    d3.selectAll(".bar").style("opacity", 0.3);
+                    d3.select(this).style("opacity", 1);
+                })
+                .on("mouseout", function (d, i) {
+                    d3.select("#tooltip").style("display", "none");
+                    d3.selectAll(".bar").style("opacity", 1);
+                });
+
+            // Generate Grid starts
+
+            var yaxisTicks = height / 100;
+            yaxisTicks = parseInt(yaxisTicks) + 1;
+            console.log(yaxisTicks);
+
+            function make_x_gridlines() {
+                return d3.axisBottom(x).ticks(20);
+            }
+            function make_y_gridlines() {
+                return d3.axisLeft(y).ticks(yaxisTicks);
+            }
+
+            // Generate Grid ends
+        }
+
+        window.onload = function () {
+            drawChart();
+        };
+
+        window.addEventListener("resize", function () {
+            d3.selectAll("#my_dataviz").html("");
+            drawChart();
+        });
+    </script>
+</body>

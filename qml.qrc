@@ -70,7 +70,6 @@
         <file>Source/MainSubComponents/FileUploadBtn.qml</file>
         <file>Source/MainSubComponents/HorizontalLineTpl.qml</file>
         <file>Source/MainSubComponents/LeftMenuBar.qml</file>
-        <file>Source/MainSubComponents/LeftMenuBarReports.qml</file>
         <file>Source/MainSubComponents/LoginCredentials.qml</file>
         <file>Source/MainSubComponents/LoginServer.qml</file>
         <file>Source/MainSubComponents/Logout.qml</file>
@@ -116,6 +115,7 @@
         <file>Source/Dashboards/SubComponents/MiniSubComponents/CustomizeReportStyleMenu.qml</file>
         <file>Source/MainSubComponents/CustomDashboardNameButton.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/CustomizeReportGeneralMenu.qml</file>
+        <file>Source/Reports/SubComponents/LeftMenuBarReports.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/CustomizeLegend.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/CustomizeReferenceLine.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/PropertiesFilter.qml</file>
@@ -169,6 +169,9 @@
         <file>Source/Charts/BarChartArrayInput.html</file>
         <file>Source/Charts/Data/qwebchannel.js</file>
         <file>Source/Charts/Data/d3.v4.min.js</file>
+        <file>Source/Charts/AreaChart.html</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/ColorByMenuOption.qml</file>
+        <file>Source/Charts/StackedBarChart.html</file>
         <file>Source/Connectors/SubComponents/ExcelConnection.qml</file>
         <file>Source/Connectors/SubComponents/PostgresConnection.qml</file>
         <file>Source/Connectors/SubComponents/MSSqlConnection.qml</file>

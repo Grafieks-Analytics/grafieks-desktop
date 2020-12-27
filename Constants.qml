@@ -13,7 +13,7 @@ import QtQuick 2.15
 QtObject {
 
     // Menu Indexes
-
+    property int initialIndex: 3
     property int dataDesignerIndex: 3
     property int dashboardDesignerIndex: 6
     property int newReportIndex: 7
@@ -181,7 +181,16 @@ QtObject {
 
     property color defaultXAxisColor: "#6CD7A1"
     property color defaultYAxisColor: "#BADCFF"
-
+    
+    property string categoricalItemType: "categorical"
+    property string numericalItemType: "numerical"
 
     // Report Ends
+
+
+    // Charts Start
+
+    property string scatteredChart: "Scattered Chart"
+
+    // Charts ends
 }

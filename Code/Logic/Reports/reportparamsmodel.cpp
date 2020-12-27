@@ -50,6 +50,11 @@ QList<QString> ReportParamsModel::yAxisColumns() const
     return m_yAxisColumns;
 }
 
+QString ReportParamsModel::chartType() const
+{
+    return m_chartType;
+}
+
 void ReportParamsModel::setItemName(QString itemName)
 {
     if (m_itemName == itemName)
@@ -129,4 +134,13 @@ void ReportParamsModel::setYAxisColumns(QList<QString> yAxisColumns)
 
     m_yAxisColumns = yAxisColumns;
     emit yAxisColumnsChanged(m_yAxisColumns);
+}
+
+void ReportParamsModel::setChartType(QString chartType)
+{
+    if (m_chartType == chartType)
+        return;
+
+    m_chartType = chartType;
+    emit chartTypeChanged(m_chartType);
 }
