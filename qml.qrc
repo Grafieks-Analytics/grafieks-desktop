@@ -169,5 +169,6 @@
         <file>Source/Charts/BarChartArrayInput.html</file>
         <file>Source/Charts/Data/qwebchannel.js</file>
         <file>Source/Charts/Data/d3.v4.min.js</file>
+        <file>Source/Connectors/SubComponents/ExcelConnection.qml</file>
     </qresource>
 </RCC>

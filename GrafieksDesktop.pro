@@ -13,8 +13,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Code/Connectors/excelcon.cpp \
+    Code/Connectors/mongocon.cpp \
+    Code/Connectors/mssqlcon.cpp \
     Code/Connectors/mysqlcon.cpp \
     Code/Connectors/odbccon.cpp \
+    Code/Connectors/postgrescon.cpp \
     Code/Connectors/sqlitecon.cpp \
     Code/Logic/Connectors/box.cpp \
     Code/Logic/Connectors/boxds.cpp \
@@ -89,8 +93,12 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     Code/Connectors/allconnectors.h \
+    Code/Connectors/excelcon.h \
+    Code/Connectors/mongocon.h \
+    Code/Connectors/mssqlcon.h \
     Code/Connectors/mysqlcon.h \
     Code/Connectors/odbccon.h \
+    Code/Connectors/postgrescon.h \
     Code/Connectors/sqlitecon.h \
     Code/Logic/Connectors/box.h \
     Code/Logic/Connectors/boxds.h \
