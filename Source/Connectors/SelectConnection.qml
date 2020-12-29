@@ -108,6 +108,46 @@ console.log(param)
             mongoModal.visible = true
             break;
 
+        case "amazon redshift":
+            redshiftModal.visible = true
+            break;
+
+        case "apache hive":
+            hiveModal.visible = true
+            break;
+
+        case "csv":
+            csvModal.visible = true
+            break;
+
+        case "github":
+            githubModal.visible = true
+            break;
+
+        case "impala":
+            impalaModal.visible = true
+            break;
+
+        case "json":
+            jsonModal.visible = true
+            break;
+
+        case "microsoft access":
+            accessModal.visible = true
+            break;
+
+        case "oracle":
+            oracleModal.visible = true
+            break;
+
+        case "snowflake":
+            snowflakeModal.visible = true
+            break;
+
+        case "teradata":
+            teradataModal.visible = true
+            break;
+
         case "dropbox":
             dropboxModal.visible = true
             break;
@@ -178,6 +218,34 @@ console.log(param)
 
     MongoConnection{
         id: mongoModal
+    }
+
+    RedshiftConnection{
+        id: redshiftModal
+    }
+
+    HiveConnection{
+        id: hiveModal
+    }
+
+    ImpalaConnection{
+        id: impalaModal
+    }
+
+    AccessConnection{
+        id: accessModal
+    }
+
+    OracleConnection{
+        id: oracleModal
+    }
+
+    SnowflakeConnection{
+        id: snowflakeModal
+    }
+
+    TeradataConnection{
+        id: teradataModal
     }
 
     DropboxConnection{
