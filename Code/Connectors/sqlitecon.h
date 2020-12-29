@@ -25,6 +25,7 @@ class Sqlitecon : public QObject
 
     QVariantMap outputStatus;
     const QString DRIVER = "QSQLITE";
+    const QString ODBCDRIVER = "QODBC";
 
 public:
     explicit Sqlitecon(QObject *parent = nullptr);

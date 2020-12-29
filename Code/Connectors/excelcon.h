@@ -15,7 +15,7 @@
 #include "../statics.h"
 
 /*!
- * \brief Handles the connection with MSSql database across the application
+ * \brief Handles the connection with Excel database across the application
  * \ingroup Connectors
  */
 
@@ -24,12 +24,11 @@ class ExcelCon : public QObject
 {
     Q_OBJECT
     QVariantMap outputStatus;
-    const QString DRIVER = "QMYSQL";
+    const QString ODBCDRIVER = "QODBC";
 
 public:
     explicit ExcelCon(QObject *parent = nullptr);
-    QVariantMap ExcelInstance(const QString & filepath, const QString & password);
-    QVariantMap ExcelOdbcInstance(const QString & driver, const QString & filepath, const QString & password);
+    QVariantMap ExcelOdbcInstance(const QString & driver, const QString & filepath);
 
     ~ExcelCon();
 

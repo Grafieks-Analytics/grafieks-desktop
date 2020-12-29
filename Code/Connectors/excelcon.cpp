@@ -5,40 +5,43 @@ ExcelCon::ExcelCon(QObject *parent) : QObject(parent)
 
 }
 
-QVariantMap ExcelCon::ExcelOdbcInstance(const QString &driver, const QString &filepath, const QString &password)
+QVariantMap ExcelCon::ExcelOdbcInstance(const QString &driver, const QString &filepath)
 {
     QVariantMap outputStatus;
 
-    QSqlDatabase dbOdbc = QSqlDatabase::addDatabase("QODBC", "xlsx_conn");
-    dbOdbc.setDatabaseName("DRIVER={Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)};DBQ=C:\\Users\\vishal\\Desktop\\Book1.xlsx");
+    if(QSqlDatabase::isDriverAvailable(ODBCDRIVER)){
 
-    if(dbOdbc.open())
-    {
-        QSqlQuery query("select * from [" + QString("Sheet2") + "$]",dbOdbc);
-        // Select range, place A1:B5 after $r
-        while (query.next())
-        {
-            QString column1= query.value(0).toString();
-            QString column2= query.value(1).toString();
-            QString column3= query.value(2).toString();
-            qDebug() << column1 << column2 << column3;
+        // Sample Connection for Excel
+        // dbOdbc.setDatabaseName("DRIVER={Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)};DBQ=C:\\Users\\vishal\\Desktop\\Book1.xlsx");
+
+        QString dbString = "DRIVER={" + driver + "};DBQ="+ filepath;
+
+        QSqlDatabase dbExcelOdbc = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::excelOdbcStrType);
+
+        dbExcelOdbc.setDatabaseName(dbString);
+
+        if(!dbExcelOdbc.open()){
+            outputStatus.insert("status", false);
+            outputStatus.insert("msg", dbExcelOdbc.lastError().text());
+
+        } else{
+
+            outputStatus.insert("status", true);
+            outputStatus.insert("msg", Messages::GeneralSuccessMsg);
         }
-    }
-    else {
-        qDebug() << dbOdbc.lastError().text();
+
+    } else{
+        outputStatus.insert("status", false);
+        outputStatus.insert("msg", Messages::GeneralNoDriver);
     }
 
     return outputStatus;
 }
 
-QVariantMap ExcelCon::ExcelInstance(const QString &filepath, const QString &password)
-{
-    QVariantMap outputStatus;
-
-    return outputStatus;
-}
 
 ExcelCon::~ExcelCon()
 {
 
+    QSqlDatabase dbExcelOdbc = QSqlDatabase::database(Constants::excelOdbcStrType);
+    if(dbExcelOdbc.isOpen()) dbExcelOdbc.close();
 }

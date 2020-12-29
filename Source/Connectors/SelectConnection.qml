@@ -96,6 +96,18 @@ console.log(param)
             mssqlModal.visible = true
             break;
 
+        case "postgres":
+            postgresModal.visible = true
+            break;
+
+        case "microsoft excel":
+            excelModal.visible = true
+            break;
+
+        case "mongodb":
+            mongoModal.visible = true
+            break;
+
         case "dropbox":
             dropboxModal.visible = true
             break;
@@ -154,6 +166,18 @@ console.log(param)
 
     MSSqlConnection{
         id: mssqlModal
+    }
+
+    PostgresConnection{
+        id: postgresModal
+    }
+
+    ExcelConnection{
+        id: excelModal
+    }
+
+    MongoConnection{
+        id: mongoModal
     }
 
     DropboxConnection{

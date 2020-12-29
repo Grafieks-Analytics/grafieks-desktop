@@ -24,8 +24,8 @@ signals:
 
 private:
 
-    duckdb::DuckDB db;
-    duckdb::Connection con;
+//    duckdb::DuckDB db;
+//    duckdb::Connection con;
 
 };
 

@@ -168,5 +168,6 @@
         <file>Images/icons/impala.png</file>
         <file>Images/icons/mongodb.png</file>
         <file>Images/icons/show.png</file>
+        <file>Images/icons/postgres.png</file>
     </qresource>
 </RCC>

@@ -7,8 +7,13 @@ MongoCon::MongoCon(QObject *parent) : QObject(parent)
 
 QVariantMap MongoCon::MongoInstance(const QString &host, const QString &db, const int &port, const QString &username, const QString &password)
 {
-    QVariantMap outputStatus;
+    Q_UNUSED(host);
+    Q_UNUSED(db);
+    Q_UNUSED(port);
+    Q_UNUSED(username);
+    Q_UNUSED(password);
 
+    QVariantMap outputStatus;
     return outputStatus;
 }
 
@@ -16,30 +21,58 @@ QVariantMap MongoCon::MongoOdbcInstance(const QString &driver, const QString &ho
 {
     QVariantMap outputStatus;
 
-    QSqlDatabase dbOdbc = QSqlDatabase::addDatabase("QODBC", "mongo_conn");
-    // Fetching from Mongo database
-    //     dbOdbc.setDatabaseName("DRIVER={MongoDB ODBC 1.4.2 ANSI Driver};Server={cluster0.bdrhj.mongodb.net};Port=27015;Database=mongo_test");
-    dbOdbc.setDatabaseName("DRIVER={MongoDB ODBC 1.4.2 ANSI Driver};Server=127.0.0.1;Port=3307;Database=mongo_test");
-    //    dbOdbc.setHostName("cluster0.bdrhj.mongodb.net");
-    //    dbOdbc.setPort(27015);
-    //    dbOdbc.setUserName("mongouser");
-    //    dbOdbc.setPassword("Test@312");
+    if(QSqlDatabase::isDriverAvailable(ODBCDRIVER)){
+
+        // Sample Connection for MongoDB
+        // dbOdbc.setDatabaseName("DRIVER={MongoDB ODBC 1.4.2 ANSI Driver};Server={cluster0.bdrhj.mongodb.net};Port=27015;Database=mongo_test");
 
 
-    if( dbOdbc.open()){
-        qDebug() << "Connected MongoDb SQL";
+        QString dbString = "DRIVER={" + driver + "};Server="+ host +"Database=" + db + ";Tusted_Connection=True";
 
-        QSqlQuery query("select * from test_collection",dbOdbc);
-        while (query.next())
-        {
-            QString column1= query.value(0).toString();
-            QString column2= query.value(1).toString();
-            QString column3= query.value(2).toString();
-            qDebug() << column1 << column2 << column3;
+        QSqlDatabase dbMongoOdbc = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::mongoOdbcStrType);
+
+        dbMongoOdbc.setDatabaseName(dbString);
+        dbMongoOdbc.setPort(port);
+        dbMongoOdbc.setUserName(username);
+        dbMongoOdbc.setPassword(password);
+
+        if(!dbMongoOdbc.open()){
+            outputStatus.insert("status", false);
+            outputStatus.insert("msg", dbMongoOdbc.lastError().text());
+
+        } else{
+
+            // Save static values to access it later on other objects
+            // For automatic connection for other instances
+            // If correct credentials inserted once
+
+            Statics::mongoHost = host;
+            Statics::mongoDb = db;
+            Statics::mongoPort = port;
+            Statics::mongoUsername = username;
+            Statics::mongoPassword = password;
+
+            outputStatus.insert("status", true);
+            outputStatus.insert("msg", Messages::GeneralSuccessMsg);
+
+            // Open another MongoDB Connection
+            // For Query/Data modeller
+            // Else all the query statistics are listed in "Test Query" tab in Data-Query-Modeller
+
+            QSqlDatabase dbMongoOdbc2 = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::mongoOdbcStrQueryType);
+
+            dbMongoOdbc2.setDatabaseName(dbString);
+            dbMongoOdbc2.setHostName(host);
+            dbMongoOdbc2.setPort(port);
+            dbMongoOdbc2.setUserName(username);
+            dbMongoOdbc2.setPassword(password);
+
+            dbMongoOdbc2.open();
         }
 
     } else{
-        qDebug() << dbOdbc.lastError().text() << "ERROR";
+        outputStatus.insert("status", false);
+        outputStatus.insert("msg", Messages::GeneralNoDriver);
     }
 
     return outputStatus;
@@ -47,5 +80,9 @@ QVariantMap MongoCon::MongoOdbcInstance(const QString &driver, const QString &ho
 
 MongoCon::~MongoCon()
 {
+    QSqlDatabase dbMongoOdbc = QSqlDatabase::database(Constants::mongoOdbcStrType);
+    QSqlDatabase dbMongoOdbc2 = QSqlDatabase::database(Constants::mongoOdbcStrQueryType);
 
+    if(dbMongoOdbc.isOpen()) dbMongoOdbc.close();
+    if(dbMongoOdbc2.isOpen()) dbMongoOdbc2.close();
 }

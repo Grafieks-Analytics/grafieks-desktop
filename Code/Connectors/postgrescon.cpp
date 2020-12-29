@@ -7,8 +7,13 @@ PostgresCon::PostgresCon(QObject *parent) : QObject(parent)
 
 QVariantMap PostgresCon::PostgresInstance(const QString &host, const QString &db, const int &port, const QString &username, const QString &password)
 {
-    QVariantMap outputStatus;
+    Q_UNUSED(host);
+    Q_UNUSED(db);
+    Q_UNUSED(port);
+    Q_UNUSED(username);
+    Q_UNUSED(password);
 
+    QVariantMap outputStatus;
     return outputStatus;
 }
 
@@ -17,32 +22,61 @@ QVariantMap PostgresCon::PostgresOdbcInstance(const QString &driver, const QStri
     QVariantMap outputStatus;
 
     QSqlDatabase dbOdbc = QSqlDatabase::addDatabase("QODBC", "psgl_conn");
-    // Fetching from MYSQL database
-    // Windows Authentication for localservver
-    // For remote server, server ip, username and password required
-    dbOdbc.setDatabaseName("DRIVER={PostgreSQL Unicode};Server=localhost;Database=pg_test;Trusted_Connection=True;"); // "WorkDatabase" is the name of the database we want
+
     dbOdbc.setUserName("postgres");
     dbOdbc.setPassword("123@312QQl");
 
-    bool ok = dbOdbc.open();
-    if(ok){
-        qDebug() << "Connected Postgres SQL";
+    if(QSqlDatabase::isDriverAvailable(ODBCDRIVER)){
+        //        Sample connection for Postgres
+        //        dbOdbc.setDatabaseName("DRIVER={PostgreSQL Unicode};Server=localhost;Database=pg_test;Trusted_Connection=True;"); // "WorkDatabase" is the name of the database we want
 
-        QSqlQuery q1;
 
-        // Fetch data from TABLE
-        q1.prepare("SELECT * FROM test_table");
+        QString dbString = "DRIVER={" + driver + "};Server="+ host +"Database=" + db + ";Tusted_Connection=True";
 
-        if(q1.exec()){
-            while(q1.next()){
-                qDebug() << q1.value(0).toString() << q1.value(1).toString() << q1.value(2).toString()  ;
-            }
-        }else{
-            qDebug() << q1.lastError().text();
+        QSqlDatabase dbPostgresOdbc = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::postgresOdbcStrType);
+
+        dbPostgresOdbc.setDatabaseName(dbString);
+        dbPostgresOdbc.setPort(port);
+        dbPostgresOdbc.setUserName(username);
+        dbPostgresOdbc.setPassword(password);
+
+        if(!dbPostgresOdbc.open()){
+            outputStatus.insert("status", false);
+            outputStatus.insert("msg", dbPostgresOdbc.lastError().text());
+
+        } else{
+
+            // Save static values to access it later on other objects
+            // For automatic connection for other instances
+            // If correct credentials inserted once
+
+            Statics::postgresHost = host;
+            Statics::postgresDb = db;
+            Statics::postgresPort = port;
+            Statics::postgresUsername = username;
+            Statics::postgresPassword = password;
+
+            outputStatus.insert("status", true);
+            outputStatus.insert("msg", Messages::GeneralSuccessMsg);
+
+            // Open another Postgres Connection
+            // For Query/Data modeller
+            // Else all the query statistics are listed in "Test Query" tab in Data-Query-Modeller
+
+            QSqlDatabase dbPostgresOdbc2 = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::postgresOdbcStrQueryType);
+
+            dbPostgresOdbc2.setDatabaseName(dbString);
+            dbPostgresOdbc2.setHostName(host);
+            dbPostgresOdbc2.setPort(port);
+            dbPostgresOdbc2.setUserName(username);
+            dbPostgresOdbc2.setPassword(password);
+
+            dbPostgresOdbc2.open();
         }
 
     } else{
-        qDebug() << dbOdbc.lastError().text() << "ERROR";
+        outputStatus.insert("status", false);
+        outputStatus.insert("msg", Messages::GeneralNoDriver);
     }
 
     return outputStatus;
@@ -51,4 +85,10 @@ QVariantMap PostgresCon::PostgresOdbcInstance(const QString &driver, const QStri
 PostgresCon::~PostgresCon()
 {
 
+
+    QSqlDatabase dbPostgresOdbc = QSqlDatabase::database(Constants::postgresOdbcStrType);
+    QSqlDatabase dbPostgresOdbc2 = QSqlDatabase::database( Constants::postgresOdbcStrQueryType);
+
+    if(dbPostgresOdbc.isOpen()) dbPostgresOdbc.close();
+    if(dbPostgresOdbc2.isOpen()) dbPostgresOdbc2.close();
 }

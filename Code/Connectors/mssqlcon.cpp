@@ -7,40 +7,76 @@ MSSqlCon::MSSqlCon(QObject *parent) : QObject(parent)
 
 QVariantMap MSSqlCon::MSSqlInstance(const QString &host, const QString &db, const int &port, const QString &username, const QString &password)
 {
-    QVariantMap outputStatus;
+    Q_UNUSED(host);
+    Q_UNUSED(db);
+    Q_UNUSED(port);
+    Q_UNUSED(username);
+    Q_UNUSED(password);
 
+    QVariantMap outputStatus;
     return outputStatus;
 }
 
 QVariantMap MSSqlCon::MSSqlOdbcInstance(const QString &driver, const QString &host, const QString &db, const int &port, const QString &username, const QString &password)
 {
     QVariantMap outputStatus;
-    QSqlDatabase dbOdbc = QSqlDatabase::addDatabase("QODBC", "mssql_conn");
-    // Fetching from MYSQL database
-    // Windows Authentication for localservver
-    // For remote server, server ip, username and password required
-    dbOdbc.setDatabaseName("DRIVER={SQL Server};Server=DESKTOP-NSN20CD\\SQLEXPRESS;Database=mssql-test;Trusted_Connection=True;"); // "WorkDatabase" is the name of the database we want
-    dbOdbc.setUserName("DESKTOP-NSN20\\vishal");
 
-    bool ok = dbOdbc.open();
-    if(ok){
-        qDebug() << "Connected MS SQL";
+    if(QSqlDatabase::isDriverAvailable(ODBCDRIVER)){
 
-        QSqlQuery q1;
+        // Fetching from MSSQL database
+        // Windows Authentication for localservver
+        // For remote server, server ip, username and password required
+        // Sample connection below
 
-        // Fetch data from TABLE
-        q1.prepare("SELECT * FROM test_table");
+        // dbOdbc.setDatabaseName("DRIVER={SQL Server};Server=DESKTOP-NSN20CD\\SQLEXPRESS;Database=mssql-test;Trusted_Connection=True;"); // "WorkDatabase" is the name of the database we want
+        // dbOdbc.setUserName("DESKTOP-NSN20\\vishal");
 
-        if(q1.exec()){
-            while(q1.next()){
-                qDebug() << q1.value(0).toString() << q1.value(1).toString() << q1.value(2).toString()  ;
-            }
-        }else{
-            qDebug() << q1.lastError().text();
+        QString dbString = "DRIVER={" + driver + "};Server="+ host +"Database=" + db + ";Tusted_Connection=True";
+
+        QSqlDatabase dbMssqlOdbc = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::mssqlOdbcStrType);
+
+        dbMssqlOdbc.setDatabaseName(dbString);
+        dbMssqlOdbc.setPort(port);
+        dbMssqlOdbc.setUserName(username);
+        dbMssqlOdbc.setPassword(password);
+
+        if(!dbMssqlOdbc.open()){
+            outputStatus.insert("status", false);
+            outputStatus.insert("msg", dbMssqlOdbc.lastError().text());
+
+        } else{
+
+            // Save static values to access it later on other objects
+            // For automatic connection for other instances
+            // If correct credentials inserted once
+
+            Statics::msHost = host;
+            Statics::msDb = db;
+            Statics::msPort = port;
+            Statics::msUsername = username;
+            Statics::msPassword = password;
+
+            outputStatus.insert("status", true);
+            outputStatus.insert("msg", Messages::GeneralSuccessMsg);
+
+            // Open another Mssql Connection
+            // For Query/Data modeller
+            // Else all the query statistics are listed in "Test Query" tab in Data-Query-Modeller
+
+            QSqlDatabase dbMssqlOdbc2 = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::mssqlOdbcStrQueryType);
+
+            dbMssqlOdbc2.setDatabaseName(dbString);
+            dbMssqlOdbc2.setHostName(host);
+            dbMssqlOdbc2.setPort(port);
+            dbMssqlOdbc2.setUserName(username);
+            dbMssqlOdbc2.setPassword(password);
+
+            dbMssqlOdbc2.open();
         }
 
     } else{
-        qDebug() << dbOdbc.lastError().text() << "ERROR";
+        outputStatus.insert("status", false);
+        outputStatus.insert("msg", Messages::GeneralNoDriver);
     }
 
     return outputStatus;
@@ -48,5 +84,9 @@ QVariantMap MSSqlCon::MSSqlOdbcInstance(const QString &driver, const QString &ho
 
 MSSqlCon::~MSSqlCon()
 {
+    QSqlDatabase dbMssqlOdbc = QSqlDatabase::database(Constants::mssqlOdbcStrType);
+    QSqlDatabase dbMssqlOdbc2 = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
 
+    if(dbMssqlOdbc.isOpen()) dbMssqlOdbc.close();
+    if(dbMssqlOdbc2.isOpen()) dbMssqlOdbc2.close();
 }

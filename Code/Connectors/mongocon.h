@@ -23,7 +23,7 @@ class MongoCon : public QObject
 {
     Q_OBJECT
     QVariantMap outputStatus;
-    const QString DRIVER = "QMYSQL";
+    const QString ODBCDRIVER = "QODBC";
 
 public:
     explicit MongoCon(QObject *parent = nullptr);

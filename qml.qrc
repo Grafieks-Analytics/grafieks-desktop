@@ -176,5 +176,12 @@
         <file>Source/Connectors/SubComponents/PostgresConnection.qml</file>
         <file>Source/Connectors/SubComponents/MSSqlConnection.qml</file>
         <file>Source/Connectors/SubComponents/MongoConnection.qml</file>
+        <file>Source/Connectors/SubComponents/RedshiftConnection.qml</file>
+        <file>Source/Connectors/SubComponents/HiveConnection.qml</file>
+        <file>Source/Connectors/SubComponents/ImpalaConnection.qml</file>
+        <file>Source/Connectors/SubComponents/AccessConnection.qml</file>
+        <file>Source/Connectors/SubComponents/OracleConnection.qml</file>
+        <file>Source/Connectors/SubComponents/SnowflakeConnection.qml</file>
+        <file>Source/Connectors/SubComponents/TeradataConnection.qml</file>
     </qresource>
 </RCC>

@@ -24,6 +24,8 @@ class PostgresCon : public QObject
     Q_OBJECT
     QVariantMap outputStatus;
     const QString DRIVER = "QMYSQL";
+    const QString ODBCDRIVER = "QODBC";
+
 public:
     explicit PostgresCon(QObject *parent = nullptr);
     QVariantMap PostgresInstance(const QString & host, const QString & db, const int & port, const QString & username, const QString & password);

@@ -71,6 +71,24 @@ QString Statics::sqliteFile;
 QString Statics::sqliteUsername;
 QString Statics::sqlitePassword;
 
+QString Statics::msHost;
+QString Statics::msDb;
+int Statics::msPort;
+QString Statics::msUsername;
+QString Statics::msPassword;
+
+QString Statics::postgresHost;
+QString Statics::postgresDb;
+int Statics::postgresPort;
+QString Statics::postgresUsername;
+QString Statics::postgresPassword;
+
+QString Statics::mongoHost;
+QString Statics::mongoDb;
+int Statics::mongoPort;
+QString Statics::mongoUsername;
+QString Statics::mongoPassword;
+
 /*! \mainpage Code Documentation
  *
  * \subsection tools Development tools

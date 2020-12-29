@@ -31,8 +31,7 @@ public:
     Q_INVOKABLE void mssqlOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
     Q_INVOKABLE void postgresOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
     Q_INVOKABLE void mongoOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
-    Q_INVOKABLE void excelOdbcLogin(QString driver, QString filename, QString password = "");
-
+    Q_INVOKABLE void excelOdbcLogin(QString driver, QString filename);
 
     QString connectedDB() const;
     void setConnectedDB(QString connectedDB);

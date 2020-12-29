@@ -53,6 +53,7 @@ void ConnectorsLoginModel::sqliteLogin(QString filename, QString username, QStri
     emit sqliteLoginStatus(response);
 }
 
+
 void ConnectorsLoginModel::mysqlOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
 
@@ -105,11 +106,11 @@ void ConnectorsLoginModel::mongoOdbcLogin(QString driver, QString host, QString 
 
 }
 
-void ConnectorsLoginModel::excelOdbcLogin(QString driver, QString filename, QString password)
+void ConnectorsLoginModel::excelOdbcLogin(QString driver, QString filename)
 {
 
     ExcelCon excelcon;
-    QVariantMap response = excelcon.ExcelOdbcInstance(driver, filename, password);
+    QVariantMap response = excelcon.ExcelOdbcInstance(driver, filename);
 
     Statics::currentDbName = filename;
     Statics::currentDbIntType = Constants::mysqlIntType;

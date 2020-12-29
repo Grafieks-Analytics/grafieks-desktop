@@ -78,35 +78,58 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
     return outputStatus;
 }
 
-QVariantMap MysqlCon::MysqlOdbcInstance(const QString &driver, const QString &host, const QString &db, const int &port, const QString &username, const QString &password)
+QVariantMap MysqlCon::tMysqlOdbcInstance(const QString &driver, const QString &host, const QString &db, const int &port, const QString &username, const QString &password)
 {
     QVariantMap outputStatus;
 
-    QSqlDatabase dbOdbc = QSqlDatabase::addDatabase("QODBC", "mysql_conn");
-    // Fetching from MYSQL database
-    dbOdbc.setDatabaseName("DRIVER={MySQL ODBC 8.0 Unicode Driver};Database=mysql"); // "WorkDatabase" is the name of the database we want
-    dbOdbc.setUserName("root");
-    dbOdbc.setPassword("");
+    if(QSqlDatabase::isDriverAvailable(ODBCDRIVER)){
 
-    bool ok = dbOdbc.open();
-    if(ok){
-        qDebug() << "Connected MySQL";
+        QString dbString = "DRIVER={" + driver + "};Database=" + db;
 
-        QSqlQuery q1;
+        QSqlDatabase dbMysqlOdbc = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::mysqlOdbcStrType);
 
-        // Fetch data from TABLE
-        q1.prepare("SELECT * FROM db");
+        dbMysqlOdbc.setDatabaseName(dbString);
+        dbMysqlOdbc.setHostName(host);
+        dbMysqlOdbc.setPort(port);
+        dbMysqlOdbc.setUserName(username);
+        dbMysqlOdbc.setPassword(password);
 
-        if(q1.exec()){
-            while(q1.next()){
-                qDebug() << q1.value(0).toString() << q1.value(1).toString() << q1.value(2).toString()  ;
-            }
-        }else{
-            qDebug() << q1.lastError().text();
+        if(!dbMysqlOdbc.open()){
+            outputStatus.insert("status", false);
+            outputStatus.insert("msg", dbMysqlOdbc.lastError().text());
+
+        } else{
+
+            // Save static values to access it later on other objects
+            // For automatic connection for other instances
+            // If correct credentials inserted once
+
+            Statics::myHost = host;
+            Statics::myDb = db;
+            Statics::myPort = port;
+            Statics::myUsername = username;
+            Statics::myPassword = password;
+
+            outputStatus.insert("status", true);
+            outputStatus.insert("msg", Messages::GeneralSuccessMsg);
+
+            // Open another Mysql Connection
+            // For Query/Data modeller
+            // Else all the query statistics are listed in "Test Query" tab in Data-Query-Modeller
+
+            QSqlDatabase dbMysqlOdbc2 = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::mysqlOdbcStrQueryType);
+            dbMysqlOdbc2.setDatabaseName(dbString);
+            dbMysqlOdbc2.setHostName(host);
+            dbMysqlOdbc2.setPort(port);
+            dbMysqlOdbc2.setUserName(username);
+            dbMysqlOdbc2.setPassword(password);
+
+            dbMysqlOdbc2.open();
         }
 
     } else{
-        qDebug() << dbOdbc.lastError().text() << "ERROR";
+        outputStatus.insert("status", false);
+        outputStatus.insert("msg", Messages::GeneralNoDriver);
     }
 
     return outputStatus;
@@ -122,6 +145,11 @@ MysqlCon::~MysqlCon()
 {
     QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
     QSqlDatabase dbMysql2 = QSqlDatabase::database( Constants::mysqlStrQueryType);
-    dbMysql.close();
-    dbMysql2.close();
+    QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrType);
+    QSqlDatabase dbMysqlOdbc2 = QSqlDatabase::database( Constants::mysqlOdbcStrQueryType);
+
+    if(dbMysql.isOpen()) dbMysql.close();
+    if(dbMysql2.isOpen()) dbMysql2.close();
+    if(dbMysqlOdbc.isOpen()) dbMysqlOdbc.close();
+    if(dbMysqlOdbc2.isOpen()) dbMysqlOdbc2.close();
 }
