@@ -25,6 +25,7 @@ public:
     Q_INVOKABLE void setProfiling(bool status);
     Q_INVOKABLE void resetProfiling();
     Q_INVOKABLE void showStats();
+    Q_INVOKABLE QVariant showErrorMessage(const QString &query);
 
     bool profileStatus() const;
 

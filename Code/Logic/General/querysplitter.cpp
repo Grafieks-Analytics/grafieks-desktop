@@ -80,7 +80,7 @@ QString QuerySplitter::getMainTable()
     QString tableMainString;
 
     // Table params
-    QRegularExpression tableMainRegex(R"(\sFROM\s+(.*?)\s+(LEFT|RIGHT|FULL|INNER|JOIN|WHERE|GROUP|ORDER|LIMIT)\s)", QRegularExpression::CaseInsensitiveOption);
+    QRegularExpression tableMainRegex(R"(\sFROM\s+(.*?)(;|$|\s+(LEFT|RIGHT|FULL|INNER|JOIN|WHERE|GROUP|ORDER|LIMIT)\s))", QRegularExpression::CaseInsensitiveOption);
     QRegularExpressionMatch tableMainIterator = tableMainRegex.match(m_query);
     tableMainString = tableMainIterator.captured(1).trimmed();
 
