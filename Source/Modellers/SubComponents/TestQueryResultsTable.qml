@@ -117,7 +117,7 @@ TableView {
             text: modelData
             elide: Text.ElideRight
             color: Constants.lightGrayTextColor
-            leftPadding: 10
+            leftPadding: 30
             anchors.leftMargin: 30
             verticalAlignment: Text.AlignVCenter
             width: model.column === 0 ? columnsHeader.width - (200 * 4) : 200

@@ -115,3 +115,21 @@ void QueryStatsModel::generateRoleNames()
     QString roleName = "tableName";
     m_roleNames.insert(Qt::UserRole + 1, roleName.toUtf8());
 }
+
+QVariant QueryStatsModel::showErrorMessage(const QString &query)
+{
+    QVariant message;
+
+    switch(Statics::currentDbIntType){
+
+    case Constants::mysqlIntType:{
+
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
+        QSqlQuery queryResult(query, dbMysql);
+        message = queryResult.lastError().text();
+        break;
+    }
+    }
+
+    return message;
+}

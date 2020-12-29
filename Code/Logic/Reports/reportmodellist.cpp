@@ -12,14 +12,15 @@ void ReportModelList::setTmpSql(QString query)
     // Get Table Names from current query
     QString mainTableName = this->mQuerySplitter.getMainTable();
     QStringList joinTableNames = this->mQuerySplitter.getJoinTables();
-
+    QStringList columnNames = this->mQuerySplitter.getSelectParams();
+    qDebug() << columnNames << "Just Query";
+    qDebug() << mainTableName << " Main Table ";
     // Insert all Columns for queried tables into Set
     this->getColumnsForTable(mainTableName);
     foreach(QString joinTable, joinTableNames){
         this->getColumnsForTable(joinTable);
     }
 
-    // Record for resulted Column Names
     switch(Statics::currentDbIntType){
 
     case Constants::mysqlIntType:{
@@ -27,12 +28,14 @@ void ReportModelList::setTmpSql(QString query)
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
         QSqlQuery queryResult(query, dbMysql);
         QSqlRecord record = queryResult.record();
+        qDebug() << queryResult.record();
+        qDebug() << queryResult.lastError().databaseText();
 
-//         while(queryResult.next()){
-//            int field_idx = queryResult.record().indexOf("email");
-//            QString email = queryResult.record().value(field_idx).toString();
-//            qDebug() <<email << " Email";
-//        }
+        //         while(queryResult.next()){
+        //            int field_idx = queryResult.record().indexOf("email");
+        //            QString email = queryResult.record().value(field_idx).toString();
+        //            qDebug() <<email << " Email";
+        //        }
         for(int i = 0; i < record.count(); i++){
 
             QString fieldName = record.fieldName(i);
@@ -110,26 +113,50 @@ void ReportModelList::getData()
     QVariantList yAxis;
 
     QElapsedTimer timer;
+    QElapsedTimer timer2;
+    timer2.start();
     timer.start();
 
-    QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
-    QString query = "SELECT * FROM test";
+    switch(Statics::currentDbIntType){
 
-    QSqlQuery queryResult(query, dbMysql);
+    case Constants::mysqlIntType:{
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
+        QString query = "SELECT date, volume FROM testnew";
 
-    while(queryResult.next()){
+        QSqlQuery queryResult(query, dbMysql);
+        qDebug() << timer2.elapsed() << "Before ";
 
-       int field_idx = queryResult.record().indexOf("country");
-       QString country = queryResult.record().value(field_idx).toString();
-       field_idx = queryResult.record().indexOf("population");
-       int population = queryResult.record().value(field_idx).toInt();
-       xAxis.append(country);
-       yAxis.append(population);
-       qDebug() << country << " "  << population;
-   }
+        bool flag = true;
+        qDebug() << queryResult.size() << " Size ";
+        int field_idx = queryResult.record().indexOf("date");
+        int id = queryResult.record().indexOf("volume");
+        while(queryResult.next()){
 
-   emit sendData(xAxis, yAxis);
-   qDebug() << timer.elapsed() << " SQL Execution Time in ms ";
+
+            //int field_idx = queryResult.record().indexOf("date");
+            //int field_idx = queryResult.record().indexOf("date");
+
+            QString date = queryResult.record().value(field_idx).toString();
+            //field_idx = queryResult.record().indexOf("volume");
+
+            int open = queryResult.record().value(id).toInt();
+
+            xAxis.append(date);
+            yAxis.append(open);
+
+            if(flag)
+            {
+                qDebug() << date << " "  << open;
+                flag = 0;
+            }
+
+        }
+
+        //emit sendData(xAxis, yAxis);
+        qDebug() << timer.elapsed() << " SQL Execution Time in ms ";
+        //emit sendData(xAxis, yAxis);
+    }
+    }
 }
 
 

@@ -129,6 +129,7 @@ Item{
     function onRunQueryClicked(){
 
         testQueryBtn.visible = true
+        queryUpdate.visible = true
 
         // If current tab is queryModeller, then process
         // else if current tab is dataModeller, fire a signal to activate a slot in DataModeller.qml
@@ -194,6 +195,19 @@ Item{
         }
     }
 
+    function onGetErrorMsg(){
+
+        var message = QueryStatsModel.showErrorMessage(DSParamsModel.tmpSql);
+
+        if(message === ""){
+            message = "SQL query succesfully executed"
+            queryUpdate.icon = StandardIcon.NoIcon
+            return message
+        }
+        queryUpdate.icon = StandardIcon.Critical
+        return message;
+    }
+
     //JAVASCRIPT FUNCTIONS ENDS
     /***********************************************************************************************************************/
 
@@ -210,11 +224,25 @@ Item{
         id: sqlQueryNotAllowedDialog
         title: "Warning"
         text: "Only SELECT (without Common Table Expressions) query allowed"
-        icon: StandardIcon.Critical
+        //icon: StandardIcon.Critical
 
         onAccepted: {
             sqlQueryNotAllowedDialog.close()
         }
+    }
+
+
+    MessageDialog{
+        id: queryUpdate
+        visible: false
+        title: "Message"
+        text: onGetErrorMsg()
+        icon: StandardIcon.Critical
+
+        onAccepted: {
+             onTestQueryClicked()
+        }
+
     }
 
     // SubComponents Ends

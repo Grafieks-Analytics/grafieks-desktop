@@ -111,7 +111,7 @@ TableView {
         width: dataPreviewResult.width
 
         Repeater {
-            model: dataPreviewResult.columns > 0 ? dataPreviewResult.columns : 1
+            model: dataPreviewResult.columns > 0 ? dataPreviewResult.columns : 0
             Rectangle{
                 width: dataPreviewResult.columnWidthProvider(modelData)
                 height: 30
