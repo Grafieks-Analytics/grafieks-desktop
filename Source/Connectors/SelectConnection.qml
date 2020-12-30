@@ -70,7 +70,7 @@ Page {
     // Set modal popup
     function selectAuthorization(param){
 
-
+console.log(param)
         switch(param.toLowerCase()){
 
         case "grs":
@@ -90,6 +90,62 @@ Page {
 
         case "sqlite":
             sqliteModal.visible = true
+            break;
+
+        case "sql server":
+            mssqlModal.visible = true
+            break;
+
+        case "postgres":
+            postgresModal.visible = true
+            break;
+
+        case "microsoft excel":
+            excelModal.visible = true
+            break;
+
+        case "mongodb":
+            mongoModal.visible = true
+            break;
+
+        case "amazon redshift":
+            redshiftModal.visible = true
+            break;
+
+        case "apache hive":
+            hiveModal.visible = true
+            break;
+
+        case "csv":
+            csvModal.visible = true
+            break;
+
+        case "github":
+            githubModal.visible = true
+            break;
+
+        case "impala":
+            impalaModal.visible = true
+            break;
+
+        case "json":
+            jsonModal.visible = true
+            break;
+
+        case "microsoft access":
+            accessModal.visible = true
+            break;
+
+        case "oracle":
+            oracleModal.visible = true
+            break;
+
+        case "snowflake":
+            snowflakeModal.visible = true
+            break;
+
+        case "teradata":
+            teradataModal.visible = true
             break;
 
         case "dropbox":
@@ -146,6 +202,50 @@ Page {
 
     SqliteConnection{
         id: sqliteModal
+    }
+
+    MSSqlConnection{
+        id: mssqlModal
+    }
+
+    PostgresConnection{
+        id: postgresModal
+    }
+
+    ExcelConnection{
+        id: excelModal
+    }
+
+    MongoConnection{
+        id: mongoModal
+    }
+
+    RedshiftConnection{
+        id: redshiftModal
+    }
+
+    HiveConnection{
+        id: hiveModal
+    }
+
+    ImpalaConnection{
+        id: impalaModal
+    }
+
+    AccessConnection{
+        id: accessModal
+    }
+
+    OracleConnection{
+        id: oracleModal
+    }
+
+    SnowflakeConnection{
+        id: snowflakeModal
+    }
+
+    TeradataConnection{
+        id: teradataModal
     }
 
     DropboxConnection{

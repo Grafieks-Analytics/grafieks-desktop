@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import com.grafieks.singleton.constants 1.0
 
 Rectangle{
     height: 24
@@ -69,7 +70,7 @@ Rectangle{
         id: categoricalImage
         source: getSourceImage(itemType)
         height: 16
-        width: 20
+        width: itemType && itemType.toLowerCase() === Constants.categoricalItemType ? 20 : 16
         anchors.verticalCenter: parent.verticalCenter
     }
 

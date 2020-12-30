@@ -46,6 +46,19 @@ Item {
         }
 
     }
+//    js funct
+   function toggleSearch(){
+
+       if(searchFilter.visible){
+            searchFilter.visible=false
+           searchFilter.height=0
+           return
+       }
+         searchFilter.visible=true
+       searchFilter.height=30
+
+   }
+
     Component{
         id:multipleselect
         Row{
@@ -56,10 +69,15 @@ Item {
             }
         }
     }
+    ButtonGroup{
+        id:buttonGroupSingle
+    }
+
     Component{
         id:singleselect
         Row{
             CustomRadioButton{
+                ButtonGroup.group: buttonGroupSingle
                 radio_text: qsTr(name)
                 radio_checked: false
                 parent_dimension: 16
@@ -211,6 +229,10 @@ Item {
                         width: 14
                         height: 14
 
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked:  toggleSearch()
+                        }
                     }
                     Image {
                         source: "/Images/icons/customize.png"
@@ -228,19 +250,31 @@ Item {
 
         }
 
-        TextField{
+        Rectangle{
             id: searchFilter
+            visible: true
             anchors.top: columnName.bottom
-            width: parent.width-10
-            anchors.horizontalCenter: parent.horizontalCenter
-            //            visible: false
-            placeholderText: qsTr("Search")
-            background: Rectangle {
-                border.color: Constants.themeColor
-                width: parent.width
-                border.width: Constants.borderWidth
+            height: 30
+            width: parent.width
+            //                color: "red"
+            TextField{
+
+
+                width: parent.width-10
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+
+
+                placeholderText: qsTr("Search")
+                background: Rectangle {
+                    border.color: Constants.themeColor
+                    width: parent.width
+                    border.width: Constants.borderWidth
+                }
             }
+
         }
+
 
 
 
@@ -255,10 +289,10 @@ Item {
             width: parent.width
             model: filterData
             delegate:{
-                if(1){
+                if(0){
                     return multipleselect
                 }
-                else if(0){
+                else if(1){
                     return singleselect
                 }
 
@@ -351,7 +385,6 @@ Item {
                         x: parent.width-20
                         y: parent.height / 2 - height / 2
                         border.color: "black"
-//                        border.width: 2
 
                         Rectangle {
                             id: child_border
@@ -425,7 +458,7 @@ Item {
 
             Column{
 
-//                spacing: 30
+                //                spacing: 30
                 padding: 0
                 anchors.left: parent.left
                 anchors.leftMargin: 20
@@ -503,8 +536,8 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             styleColor : "white"
                         }
-//                                                text: qsTr("Value")
-                           onPressed:backgroundColor.color="red"
+                        //                                                text: qsTr("Value")
+                        onPressed:backgroundColor.color="red"
 
                     }
                     TabButton {
@@ -528,7 +561,7 @@ Item {
                             verticalAlignment: Text.AlignVCenter
                             styleColor : "white"
                         }
-//                        text: qsTr("Apply")
+                        //                        text: qsTr("Apply")
                     }
                 }
 
@@ -551,7 +584,7 @@ Item {
                         height: settingFilterRight.height
                         width: settingFilterRight.width
                         color: "white"
-                          border.color: Constants.themeColor
+                        border.color: Constants.themeColor
 
 
                     }
@@ -580,19 +613,19 @@ Item {
                             x:15
                             CustomRadioButton {
                                 checked: true
-                                 parent_dimension: 16
-                                 x:50
-//                                text: qsTr("Single Value")
-                                 Text {
-                                     id: listText23
-                                     text: qsTr("List")
-                                     font.pixelSize: 17
+                                parent_dimension: 16
+                                x:50
+                                //                                text: qsTr("Single Value")
+                                Text {
+                                    id: listText23
+                                    text: qsTr("List")
+                                    font.pixelSize: 17
 
-                                     anchors.horizontalCenter:  parent.horizontalCenter
-                                     horizontalAlignment: Text.horizontalAlignment
-                                     anchors.left: parent.left
-                                     anchors.leftMargin: -50
-                                 }
+                                    anchors.horizontalCenter:  parent.horizontalCenter
+                                    horizontalAlignment: Text.horizontalAlignment
+                                    anchors.left: parent.left
+                                    anchors.leftMargin: -50
+                                }
                             }
                             RadioButton {
                                 text: qsTr("Multiple Value")

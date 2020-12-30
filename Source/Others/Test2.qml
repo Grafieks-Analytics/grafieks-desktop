@@ -11,47 +11,15 @@ Item{
     height: 500
     width:  500
 
-    Component.onCompleted: {
-//        ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_dummy", 3306, "root", "");
-
+    function callOdbc(){
+//        MysqlConnect.tMysqlOdbcInstance("asdas","localhost", "grafieks_dummy", 3306, "root", "");
     }
 
-    Connections{
-        target: ConnectorsLoginModel
-        function onMysqlLoginStatus(status){
-            console.log(status);
-        }
-    }
 
-    Connections {
-        target: ReportModelList
-        function onSendData(xAxis,yAxis){
-            const dataValues = JSON.stringify([xAxis,yAxis]);
-            var scriptValue = 'window.addEventListener("resize", function () {
-                    d3.selectAll("#my_dataviz").html("");
-                    drawChart('+dataValues+');
-                });';
-            webEngineView.runJavaScript('drawChart('+dataValues+'); '+scriptValue);
-        }
-    }
-
-    Rectangle{
-        anchors.fill: parent
-        color: "black"
-
-        Button{
-            text: "Click ME"
-            z: 1000
-            onClicked: {
-                ReportModelList.getData();
-            }
-        }
-
-        WebEngineView{
-            id : webEngineView
-            anchors.fill: parent
-            url : "../Charts/BarChartArrayInput.html";
-        }
+    Button{
+        id: bb
+        text: "Click me"
+        onClicked: callOdbc()
     }
 
 }

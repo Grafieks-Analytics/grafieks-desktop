@@ -31,6 +31,7 @@ ConnectorModel::ConnectorModel(QObject *parent) : QAbstractListModel(parent)
     addConnector(new Connector("CSV","/Images/icons/16_csv.png","file"));
     addConnector(new Connector("Impala","/Images/icons/impala.png","rdbms"));
     addConnector(new Connector("MongoDB","/Images/icons/mongodb.png","nosql"));
+    addConnector(new Connector("Postgres","/Images/icons/postgres.png","rdbms"));
 }
 
 

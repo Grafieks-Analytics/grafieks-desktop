@@ -148,9 +148,7 @@ ApplicationWindow {
         nameFilters: ["Extract (*.gadse)", "Live (*.gads)"]
 
         onAccepted: {
-            console.log(file)
             var x = DSParamsModel.readDatasource(file)
-            console.log(x[0], x[1])
 
         }
     }
@@ -406,7 +404,7 @@ ApplicationWindow {
         id: stacklayout_home
         width: mainwindow.width
         height: mainwindow.height
-        currentIndex:3
+        currentIndex:Constants.initialIndex
 
         // 0
         Test{

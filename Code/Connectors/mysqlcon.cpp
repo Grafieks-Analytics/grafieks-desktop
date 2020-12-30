@@ -78,6 +78,63 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
     return outputStatus;
 }
 
+QVariantMap MysqlCon::tMysqlOdbcInstance(const QString &driver, const QString &host, const QString &db, const int &port, const QString &username, const QString &password)
+{
+    QVariantMap outputStatus;
+
+    if(QSqlDatabase::isDriverAvailable(ODBCDRIVER)){
+
+        QString dbString = "DRIVER={" + driver + "};Database=" + db;
+
+        QSqlDatabase dbMysqlOdbc = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::mysqlOdbcStrType);
+
+        dbMysqlOdbc.setDatabaseName(dbString);
+        dbMysqlOdbc.setHostName(host);
+        dbMysqlOdbc.setPort(port);
+        dbMysqlOdbc.setUserName(username);
+        dbMysqlOdbc.setPassword(password);
+
+        if(!dbMysqlOdbc.open()){
+            outputStatus.insert("status", false);
+            outputStatus.insert("msg", dbMysqlOdbc.lastError().text());
+
+        } else{
+
+            // Save static values to access it later on other objects
+            // For automatic connection for other instances
+            // If correct credentials inserted once
+
+            Statics::myHost = host;
+            Statics::myDb = db;
+            Statics::myPort = port;
+            Statics::myUsername = username;
+            Statics::myPassword = password;
+
+            outputStatus.insert("status", true);
+            outputStatus.insert("msg", Messages::GeneralSuccessMsg);
+
+            // Open another Mysql Connection
+            // For Query/Data modeller
+            // Else all the query statistics are listed in "Test Query" tab in Data-Query-Modeller
+
+            QSqlDatabase dbMysqlOdbc2 = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::mysqlOdbcStrQueryType);
+            dbMysqlOdbc2.setDatabaseName(dbString);
+            dbMysqlOdbc2.setHostName(host);
+            dbMysqlOdbc2.setPort(port);
+            dbMysqlOdbc2.setUserName(username);
+            dbMysqlOdbc2.setPassword(password);
+
+            dbMysqlOdbc2.open();
+        }
+
+    } else{
+        outputStatus.insert("status", false);
+        outputStatus.insert("msg", Messages::GeneralNoDriver);
+    }
+
+    return outputStatus;
+}
+
 /*!
  * \fn MysqlCon::~MysqlCon
  * \brief Destructor function for Mysql connection
@@ -88,6 +145,11 @@ MysqlCon::~MysqlCon()
 {
     QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
     QSqlDatabase dbMysql2 = QSqlDatabase::database( Constants::mysqlStrQueryType);
-    dbMysql.close();
-    dbMysql2.close();
+    QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrType);
+    QSqlDatabase dbMysqlOdbc2 = QSqlDatabase::database( Constants::mysqlOdbcStrQueryType);
+
+    if(dbMysql.isOpen()) dbMysql.close();
+    if(dbMysql2.isOpen()) dbMysql2.close();
+    if(dbMysqlOdbc.isOpen()) dbMysqlOdbc.close();
+    if(dbMysqlOdbc2.isOpen()) dbMysqlOdbc2.close();
 }

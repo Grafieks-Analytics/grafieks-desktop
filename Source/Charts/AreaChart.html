@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+
+    <!-- Load d3.js -->
+    <script src="./Data/d3.v4.min.js"></script>
+    <link rel="icon" href="logo.png" type="image/png" sizes="32x32" />
+    <link rel="stylesheet" href="Data/general.css" />
+
+    <title>Bar Chart</title>
+</head>
+<body>
+    <div id="my_dataviz"></div>
+    <div id="tooltip"></div>
+
+    <!-- load the d3.js library -->
+    <script>
+              // Color Pallets - Set 3
+              const d3colors = [
+                  "#8DD3C9",
+                  "#FFFFAA",
+                  "#B8BED6",
+                  "#F98171",
+                  "#78B5D1",
+                  "#FFB15B",
+                  "#B4E061",
+                  "#FDCDE5",
+                  "#DAD9D4",
+                  "#BD7FBE",
+                  "#CDE9C1",
+                  "#FFEA77",
+              ];
+
+        function drawChart(data){
+        	console.log(data);
+
+
+              // set the dimensions and margins of the graph
+              // set the dimensions and margins of the graph
+          var margin = { top: 30, right: 30, bottom: 70, left: 60 },
+                      width = window.innerWidth - margin.left - margin.right - 10,
+                      height = window.innerHeight - margin.top - margin.bottom - 10;
+
+              // parse the date / time
+              var parseTime = d3.timeParse("%d-%b-%y");
+
+              // set the ranges
+              var x = d3.scaleTime().range([0, width]);
+              var y = d3.scaleLinear().range([height, 0]);
+
+              // define the area
+              var area = d3
+                  .area()
+                  .x(function (d) {
+                      return x(d.date);
+                  })
+                  .y0(height)
+                  .y1(function (d) {
+                      return y(d.close);
+                  });
+              // define the line
+              var valueline = d3
+                  .line()
+                  .x(function (d) {
+                      return x(d.date);
+                  })
+                  .y(function (d) {
+                      return y(d.close);
+                  });
+
+              // append the svg obgect to the body of the page
+              // appends a 'group' element to 'svg'
+              // moves the 'group' element to the top left margin
+              var svg = d3
+                  .select("#my_dataviz")
+                  .append("svg")
+                  .attr("width", width + margin.left + margin.right)
+                  .attr("height", height + margin.top + margin.bottom)
+                  .append("g")
+                  .attr(
+                      "transform",
+                      "translate(" + margin.left + "," + margin.top + ")"
+                  );
+
+              // get the data
+              d3.csv("./Data/area.csv", function (error, data) {
+                  if (error) throw error;
+
+                  // format the data
+                  data.forEach(function (d) {
+                      d.date = parseTime(d.date);
+                      d.close = +d.close;
+                  });
+
+                  // scale the range of the data
+                  x.domain(
+                      d3.extent(data, function (d) {
+                          return d.date;
+                      })
+                  );
+                  y.domain([
+                      0,
+                      d3.max(data, function (d) {
+                          return d.close;
+                      }),
+                  ]);
+
+                  // add the X Axis
+                  svg.append("g")
+                      .attr("transform", "translate(0," + height + ")")
+                      .attr("class", "x-axis")
+                      .call(d3.axisBottom(x).tickSizeOuter(0));
+
+                  // add the Y Axis
+                  svg.append("g")
+                      .attr("class", "y-axis")
+                      .call(d3.axisLeft(y).tickSizeOuter(0));
+
+                  svg.append("g")
+                      .attr("class", "grid")
+                      .style("stroke-width", "1")
+                      .call(make_y_gridlines().tickSize(-width).tickFormat(""));
+
+                  // add the area
+                  svg.append("path")
+                      .data([data])
+                      .attr("fill", d3colors[4])
+                      .attr("d", area)
+                      .on("mouseout", function (d, i) {
+                          d3.select("#tooltip").style("display", "none");
+                      })
+                      .on("mouseover mousemove", function (d, i) {
+                          let xpos = d3.mouse(this)[0] + margin.left;
+                          let ypos = d3.mouse(this)[1];
+
+                          d3.select("#tooltip")
+                              .style("left", xpos + "px")
+                              .style("top", ypos + "px")
+                              .style("display", "block")
+                              .text(Math.round(y.invert(ypos)));
+                      });
+
+                  // add the valueline path.
+                  svg.append("path")
+                      .data([data])
+                      .attr("stroke", d3colors[2])
+                      .attr("stroke-width", 2)
+                      .attr("fill", "none")
+                      .attr("d", valueline);
+              });
+
+              // Generate Grid starts
+
+              function make_x_gridlines() {
+                  return d3.axisBottom(x).ticks(8);
+              }
+              function make_y_gridlines() {
+                  return d3.axisLeft(y).ticks(5);
+              }
+			}
+              // Generate Grid ends
+    </script>
+</body>
+</html>

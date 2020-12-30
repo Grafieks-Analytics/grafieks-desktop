@@ -19,6 +19,7 @@ Column{
     property bool colorByActive: ReportParamsModel.colorByActive;
 
     spacing: 4
+    z:0
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -113,11 +114,11 @@ Column{
             return;
         }        
 
-        if(isDropEligible()){
-            colorListModel.append({textValue: itemName})
-            ReportParamsModel.lastDropped = itemType;
-            return;
-        }
+
+        colorListModel.append({textValue: itemName})
+        ReportParamsModel.setLastDropped(itemType);
+        ReportParamsModel.setChartType(Constants.scatteredChart);
+        return;
 
     }
 
@@ -233,7 +234,13 @@ Column{
                     color: "#BADCFF"
                     border.width: 1
                     border.color: "#CDE6FF"
+
+                    ColorByMenuOption{
+                        id: colorByOptions
+                    }
+
                     Text {
+                        id: colorByTextItem
                         text: textValue
                         anchors.centerIn: parent
                         width: parent.width - 10
@@ -241,9 +248,9 @@ Column{
                         font.pixelSize: Constants.fontCategoryHeaderSmall
                     }
                     MouseArea{
-                        anchors.fill: parent
-                        drag.target: parent;
-
+                        anchors.fill: parent                        
+                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                        onClicked: (mouse.button & Qt.RightButton) ? colorByOptions.visible = true : null
                     }
                 }
             }

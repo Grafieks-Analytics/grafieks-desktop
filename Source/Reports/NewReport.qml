@@ -31,8 +31,17 @@ Page {
     property bool xaxisActive: ReportParamsModel.xAxisActive
     property bool yaxisActive: ReportParamsModel.yAxisActive
 
-    property var asd: "123";
+    property string reportChart:ReportParamsModel.chartType;
 
+    onReportChartChanged: {
+
+        switch(reportChart){
+            case Constants.scatteredChart:
+                changeChart("qrc:/Source/Charts/StackedBarChart.html");
+                break;
+        }
+
+    }
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -120,7 +129,7 @@ Page {
     // For changing the chart on clicking chart icons
 
     function changeChart(chartname){
-        primary_chart.url = chartname
+        webEngineView.url = chartname
     }
 
     function addReport(){
@@ -189,7 +198,6 @@ Page {
             xAxisListModel.append({itemName: itemName})
             xAxisColumns.push(itemName);
             ReportParamsModel.setXAxisColumns(xAxisColumns);
-            console.log('Setting X axis Array',xAxisColumns);
         }else{
 
             if(!yAxisDropEligible(itemName)){
@@ -200,7 +208,6 @@ Page {
 
             yAxisColumns.push(itemName);
             ReportParamsModel.setYAxisColumns(yAxisColumns);
-            console.log('Setting Y axis Array',yAxisColumns);
         }
 
         if(xAxisColumns.length && yAxisColumns.length){
