@@ -261,12 +261,10 @@ Page {
             Image{
                 id: new_dashboard_icon
                 source: "/Images/icons/Plus_32.png"
-                height: 25
-                width: 25
-                anchors.top: new_dashboard_btn.top
-                anchors.topMargin: 3
-                anchors.left: new_dashboard_btn.left
-                anchors.leftMargin: 13
+                height: 20
+                width: 20
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter:  parent.horizontalCenter
             }
 
             background: Rectangle {
