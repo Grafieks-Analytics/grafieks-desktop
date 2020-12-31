@@ -60,7 +60,8 @@ Item{
                 ListElement { itemName: "Report 1" },
                 ListElement { itemName: "Report 2" },
                 ListElement { itemName: "Report 3" },
-                ListElement { itemName: "Report 4" }
+                ListElement { itemName: "Report 4" },
+                ListElement { itemName: "Report 5" }
             ]
         }
     }
@@ -76,6 +77,9 @@ Item{
     /***********************************************************************************************************************/
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
+    function editSelectedReport(){
+        stacklayout_home.currentIndex = 7
+    }
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
     /***********************************************************************************************************************/
@@ -133,75 +137,28 @@ Item{
                         }else if(categoryName == "Canvas Size"){
                             return canvasMenuComponent
                         }
+                        else if(categoryName == "Widgets"){
+                            subItemColumnDelegateWidgets
+                        }
                         else{
                             subItemColumnDelegate
                         }
                     }
                 }
                 onStatusChanged: {
-                    if (status == Loader.Ready && (categoryName == "Widgets" || categoryName == "Reports") ){
+                    if (status == Loader.Ready && (categoryName == "Reports") ){
                         item.model = subItemModel
+                    }
+                    else if (status == Loader.Ready && (categoryName == "Widgets")){
+                        item.model = subItemModel
+
                     }
                 }
             }
         }
     }
-    //    Component {
-    //        id: subItemColumnDelegate
-    //        Column {
-    //            property alias model : subItemRepeater.model
-    //            width: 200
-    //            Repeater {
-    //                id: subItemRepeater
-    //                property string itemName : ""
-    //                delegate: Rectangle {
-    //                    id: dragRect
-    //                    height: 20
-    //                    width: 200
-    //                    Text {
-    //                        anchors.verticalCenter: parent.verticalCenter
-    //                        x: 30
-    //                        font.pixelSize: 12
-    //                        text: itemName
-    //                    }
-    //                    MouseArea {
-    //                        id: mouseArea
-    //                        anchors.fill: parent
-    //                        drag.target:  dragRect
-    //                        drag.minimumX: -( new_dashboard_page.width - parent.width)
-    //                        drag.maximumX: 0
-    //                        drag.onActiveChanged: {
-    //                            if (mouseArea.drag.active) {
-    //                                listViewElem.itemName = itemName
-    //                            }
-    //                            dragRect.Drag.drop();
-    //                        }
-    //                    }
-    //                    states: [
-    //                        State {
-    //                            when: dragRect.Drag.active
-    //                            ParentChange {
-    //                                target: dragRect
-    //                                parent: subItemRepeater
-    //                            }
-    //                            AnchorChanges {
-    //                                target: dragRect
-    //                                anchors.horizontalCenter: undefined
-    //                                anchors.verticalCenter: undefined
-    //                            }
-    //                        }
-    //                    ]
-    //                    Drag.active: mouseArea.drag.active
-    //                    Drag.hotSpot.x: - dragRect.width / 2
-    //                    Drag.hotSpot.y: - dragRect.height / 2
-    //                    Drag.keys: ['1','2']
-    //                }
-    //            }
-    //        }
-    //    }
-
     Component {
-        id: subItemColumnDelegate
+        id: subItemColumnDelegateWidgets
         Column {
             property alias model : subItemRepeater.model
             width: 200
@@ -212,49 +169,12 @@ Item{
                     id: dragRect
                     height: 25
                     width: 200
-                    anchors.topMargin: 50
-
-
-                    Row{
-//                        spacing: 50
-//                        anchors.leftMargin: 20
-                        anchors.left: parent.left
-                          anchors.fill: parent
-                        height: parent.height
-
-
-                        Text {
-                            anchors.verticalCenter: parent.verticalCenter
-                            x: 30
-//                            anchors.left: parent.left
-//                           anchors.leftMargin: 0
-
-                            font.pixelSize: 12
-                            text: itemName
-                        }
-//                        Rectangle {
-//                                        height: parent.height
-//                                        width: 50
-//                                        anchors.right: parent.right
-//                                       anchors.rightMargin:  20
-//                                       color: "red"
-                        Image{
-                            id: resizeReport
-                            height: 16
-                            width: 16
-                            anchors.right: parent.right
-                           anchors.rightMargin:  20
-
-                            source: "/Images/icons/edit gray.png"
-                            anchors.verticalCenter: parent.verticalCenter
-                            MouseArea{
-                                anchors.fill: parent
-                                onClicked: resizeOptions.open()
-                            }
-                        }
-                        }
-//                    }
-
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        x: 30
+                        font.pixelSize: 12
+                        text: itemName
+                    }
                     MouseArea {
                         id: mouseArea
                         anchors.fill: parent
@@ -290,6 +210,99 @@ Item{
             }
         }
     }
+
+        Component {
+            id: subItemColumnDelegate
+            Column {
+                property alias model : subItemRepeater.model
+                width: 200
+                Repeater {
+                    id: subItemRepeater
+                    property string itemName : ""
+                    delegate: Rectangle {
+                        id: dragRect
+                        height: 25
+                        width: 200
+                        anchors.topMargin: 50
+
+
+                        Row{
+    //                        spacing: 50
+    //                        anchors.leftMargin: 20
+                            anchors.left: parent.left
+                              anchors.fill: parent
+                            height: parent.height
+
+
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                x: 30
+    //                            anchors.left: parent.left
+    //                           anchors.leftMargin: 0
+
+                                font.pixelSize: 12
+                                text: itemName
+                            }
+    //                        Rectangle {
+    //                                        height: parent.height
+    //                                        width: 50
+    //                                        anchors.right: parent.right
+    //                                       anchors.rightMargin:  20
+    //                                       color: "red"
+
+                            Image{
+                                id: resizeReport
+                                height: 16
+                                width: 16
+                                anchors.right: parent.right
+                               anchors.rightMargin:  20
+
+                                source: "/Images/icons/edit gray.png"
+                                anchors.verticalCenter: parent.verticalCenter
+                                MouseArea{
+                                    anchors.fill: parent
+                                    onClicked: editSelectedReport()
+                                }
+                            }
+                            }
+
+    //                    }
+
+                        MouseArea {
+                            id: mouseArea
+                            anchors.fill: parent
+                            drag.target:  dragRect
+                            drag.minimumX: -( new_dashboard_page.width - parent.width)
+                            drag.maximumX: 0
+                            drag.onActiveChanged: {
+                                if (mouseArea.drag.active) {
+                                    listViewElem.itemName = itemName
+                                }
+                                dragRect.Drag.drop();
+                            }
+                        }
+                        states: [
+                            State {
+                                when: dragRect.Drag.active
+                                ParentChange {
+                                    target: dragRect
+                                    parent: subItemRepeater
+                                }
+                                AnchorChanges {
+                                    target: dragRect
+                                    anchors.horizontalCenter: undefined
+                                    anchors.verticalCenter: undefined
+                                }
+                            }
+                        ]
+                        Drag.active: mouseArea.drag.active
+                        Drag.hotSpot.x: - dragRect.width / 2
+                        Drag.hotSpot.y: - dragRect.height / 2
+                        Drag.keys: ['1','2']
+                    }
+                }
+            }
+        }
     Component{
         id: generalComponent
         CustomizeGeneralMenu{
