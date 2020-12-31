@@ -33,6 +33,7 @@ SOURCES += \
     Code/Logic/Connectors/dropbox.cpp \
     Code/Logic/Connectors/dropboxds.cpp \
     Code/Logic/Connectors/dropboxmodel.cpp \
+    Code/Logic/Connectors/odbcdriversmodel.cpp \
     Code/Logic/Connectors/sheet.cpp \
     Code/Logic/Connectors/sheetds.cpp \
     Code/Logic/Connectors/sheetmodel.cpp \
@@ -113,6 +114,7 @@ HEADERS += \
     Code/Logic/Connectors/dropbox.h \
     Code/Logic/Connectors/dropboxds.h \
     Code/Logic/Connectors/dropboxmodel.h \
+    Code/Logic/Connectors/odbcdriversmodel.h \
     Code/Logic/Connectors/sheet.h \
     Code/Logic/Connectors/sheetds.h \
     Code/Logic/Connectors/sheetmodel.h \
