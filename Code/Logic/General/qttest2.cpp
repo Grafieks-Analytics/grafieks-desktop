@@ -8,10 +8,9 @@
  */
 //QtTest2::QtTest2(QObject *parent) :QObject(parent)
 //     db(nullptr), con(db)
-QtTest2::QtTest2(QObject *parent) :QObject(parent)
+QtTest2::QtTest2(QObject *parent) : QObject(parent)
 {
     //    db.LoadExtension<duckdb::ParquetExtension>();
-
 }
 
 void QtTest2::x()
@@ -19,8 +18,7 @@ void QtTest2::x()
     QString path = "/Users/mac/Desktop/test.csv";
     QFileInfo fifo = path;
     QString fileName = fifo.fileName();
-    QString fileNameWithoutExt = fileName.section(".",0,0);
-
+    QString fileNameWithoutExt = fileName.section(".", 0, 0);
 
     qDebug() << fileName << fileNameWithoutExt << "FILENAME";
 }
@@ -48,6 +46,8 @@ QStringList QtTest2::fetchWindowsODBCDrivers()
 
 QStringList QtTest2::fetchMacODBCDrivers()
 {
-    QStringList out;
-    return out;
+    QSettings registry("/Library/ODBC/odbcinst.ini", QSettings::IniFormat);
+    QStringList installedDrivers = registry.childGroups();
+
+    return installedDrivers;
 }
