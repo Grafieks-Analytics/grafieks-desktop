@@ -10,7 +10,7 @@
 //     db(nullptr), con(db)
 QtTest2::QtTest2(QObject *parent) :QObject(parent)
 {
-//    db.LoadExtension<duckdb::ParquetExtension>();
+    //    db.LoadExtension<duckdb::ParquetExtension>();
 
 }
 
@@ -23,4 +23,15 @@ void QtTest2::x()
 
 
     qDebug() << fileName << fileNameWithoutExt << "FILENAME";
+}
+
+void QtTest2::osTest()
+{
+#ifdef Q_OS_MACOS
+    qDebug() << "On Mac";
+#elif Q_OS_WINDOWS
+    qDebug() << "On Windows";
+#else
+    qDebug() << "On Others";
+#endif
 }
