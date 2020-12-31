@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QtWebChannel/QtWebChannel>
 #include <QSettings>
+#include <QtGlobal>
 
 #include <QFileInfo>
 #include "../../duckdb.hpp"
@@ -31,6 +32,9 @@ private:
 
 //    duckdb::DuckDB db;
 //    duckdb::Connection con;
+
+    QStringList fetchWindowsODBCDrivers();
+    QStringList fetchMacODBCDrivers();
 
 };
 
