@@ -36,16 +36,45 @@ Popup {
 
         function onTeradataLoginStatus(status){
 
-             if(status.status === true){
+            if(status.status === true){
 
-                 popup.visible = false
-                 stacklayout_home.currentIndex = 5
-             }
-             else{
-                 popup.visible = true
-                 msg_dialog.open()
-                 msg_dialog.text = status.msg
-             }
+                popup.visible = false
+                stacklayout_home.currentIndex = 5
+            }
+            else{
+                popup.visible = true
+                msg_dialog.open()
+                msg_dialog.text = status.msg
+            }
+        }
+    }
+
+    Connections{
+        target: ODBCDriversModel
+
+        function onAvailableDrivers(driversList, database){
+            if(database === Constants.teradataOdbc){
+                if(driversList.length > 0 && typeof driversList !== "undefined"){
+                    teradataOdbcModalError.visible = false
+
+                    control.model = driversList
+                    server.readOnly = false
+                    port.readOnly = false
+                    database.readOnly = false
+                    username.readOnly = false
+                    password.readOnly = false
+                } else{
+                    popup.visible = false
+                    teradataOdbcModalError.visible = true
+
+                    control.model = ["No Drivers"]
+                    server.readOnly = true
+                    port.readOnly = true
+                    database.readOnly = true
+                    username.readOnly = true
+                    password.readOnly = true
+                }
+            }
         }
     }
 
@@ -63,8 +92,8 @@ Popup {
     }
 
     function connectToMsSQL(){
-//        ConnectorsLoginModel.mssqlOdbcLogin(server.text, database.text, port.text, username.text, password.text)
-          ConnectorsLoginModel.teradataOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
+        //        ConnectorsLoginModel.mssqlOdbcLogin(server.text, database.text, port.text, username.text, password.text)
+        ConnectorsLoginModel.teradataOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -484,6 +513,12 @@ Popup {
     // Page Design Ends
     /***********************************************************************************************************************/
 
+    MessageDialog {
+        id: teradataOdbcModalError
+        visible: false
+        title: "Teradata Driver missing"
+        text: qsTr("You don't have Teradata driver. Download it here <a href=\"https://downloads.teradata.com/tag/odbc\">https://downloads.teradata.com/tag/odbc</a>")
 
+    }
 
 }

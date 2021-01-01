@@ -86,34 +86,42 @@ console.log(param)
 
         case "mysql":
             mysqlModal.visible = true
+            ODBCDriversModel.fetchOdbcDrivers(Constants.mysqlOdbc)
             break;
 
         case "sqlite":
             sqliteModal.visible = true
+            ODBCDriversModel.fetchOdbcDrivers(Constants.sqliteOdbc)
             break;
 
         case "sql server":
             mssqlModal.visible = true
+            ODBCDriversModel.fetchOdbcDrivers(Constants.mssqlOdbc)
             break;
 
         case "postgres":
             postgresModal.visible = true
+            ODBCDriversModel.fetchOdbcDrivers(Constants.postgresOdbc)
             break;
 
         case "microsoft excel":
             excelModal.visible = true
+            ODBCDriversModel.fetchOdbcDrivers(Constants.excelOdbc)
             break;
 
         case "mongodb":
             mongoModal.visible = true
+            ODBCDriversModel.fetchOdbcDrivers(Constants.mongoOdbc)
             break;
 
         case "amazon redshift":
             redshiftModal.visible = true
+            ODBCDriversModel.fetchOdbcDrivers(Constants.redshiftOdbc)
             break;
 
         case "apache hive":
             hiveModal.visible = true
+            ODBCDriversModel.fetchOdbcDrivers(Constants.hiveOdbc)
             break;
 
         case "csv":
@@ -126,6 +134,7 @@ console.log(param)
 
         case "impala":
             impalaModal.visible = true
+            ODBCDriversModel.fetchOdbcDrivers(Constants.impalaOdbc)
             break;
 
         case "json":
@@ -134,18 +143,22 @@ console.log(param)
 
         case "microsoft access":
             accessModal.visible = true
+            ODBCDriversModel.fetchOdbcDrivers(Constants.accessOdbc)
             break;
 
         case "oracle":
             oracleModal.visible = true
+            ODBCDriversModel.fetchOdbcDrivers(Constants.oracleOdbc)
             break;
 
         case "snowflake":
             snowflakeModal.visible = true
+            ODBCDriversModel.fetchOdbcDrivers(Constants.snowflakeOdbc)
             break;
 
         case "teradata":
             teradataModal.visible = true
+            ODBCDriversModel.fetchOdbcDrivers(Constants.teradataOdbc)
             break;
 
         case "dropbox":

@@ -12,9 +12,10 @@ class ODBCDriversModel : public QObject
 public:
     explicit ODBCDriversModel(QObject *parent = nullptr);
 
-    Q_INVOKABLE QStringList fetchOdbcDrivers(QString &db);
+    Q_INVOKABLE void fetchOdbcDrivers(const QString &db);
 
 signals:
+    void availableDrivers(QStringList drivers, QString database);
 
 private:
     QStringList fetchWindowsODBCDrivers();

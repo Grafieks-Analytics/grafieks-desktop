@@ -36,16 +36,45 @@ Popup {
 
         function onSnowFlakeLoginStatus(status){
 
-             if(status.status === true){
+            if(status.status === true){
 
-                 popup.visible = false
-                 stacklayout_home.currentIndex = 5
-             }
-             else{
-                 popup.visible = true
-                 msg_dialog.open()
-                 msg_dialog.text = status.msg
-             }
+                popup.visible = false
+                stacklayout_home.currentIndex = 5
+            }
+            else{
+                popup.visible = true
+                msg_dialog.open()
+                msg_dialog.text = status.msg
+            }
+        }
+    }
+
+    Connections{
+        target: ODBCDriversModel
+
+        function onAvailableDrivers(driversList, database){
+            if(database === Constants.snowflakeOdbc){
+                if(driversList.length > 0 && typeof driversList !== "undefined"){
+                    snowflakeOdbcModalError.visible = false
+
+                    control.model = driversList
+                    server.readOnly = false
+                    port.readOnly = false
+                    database.readOnly = false
+                    username.readOnly = false
+                    password.readOnly = false
+                } else{
+                    popup.visible = false
+                    snowflakeOdbcModalError.visible = true
+
+                    control.model = ["No Drivers"]
+                    server.readOnly = true
+                    port.readOnly = true
+                    database.readOnly = true
+                    username.readOnly = true
+                    password.readOnly = true
+                }
+            }
         }
     }
 
@@ -63,8 +92,8 @@ Popup {
     }
 
     function connectToMsSQL(){
-//        ConnectorsLoginModel.mssqlOdbcLogin(server.text, database.text, port.text, username.text, password.text)
-          ConnectorsLoginModel.snowFlakeOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
+        //        ConnectorsLoginModel.mssqlOdbcLogin(server.text, database.text, port.text, username.text, password.text)
+        ConnectorsLoginModel.snowFlakeOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -484,6 +513,12 @@ Popup {
     // Page Design Ends
     /***********************************************************************************************************************/
 
+    MessageDialog {
+        id: snowflakeOdbcModalError
+        visible: false
+        title: "SnowFlake Driver missing"
+        text: qsTr("You don't have SnowFlake driver. Download it here <a href=\"https://sfc-repo.snowflakecomputing.com/odbc/index.html\">https://sfc-repo.snowflakecomputing.com/odbc/index.html</a>")
 
+    }
 
 }

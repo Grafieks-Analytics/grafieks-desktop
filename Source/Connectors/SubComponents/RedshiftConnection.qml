@@ -49,6 +49,35 @@ Popup {
         }
     }
 
+    Connections{
+        target: ODBCDriversModel
+
+        function onAvailableDrivers(driversList, database){
+            if(database === Constants.redshiftOdbc){
+                if(driversList.length > 0 && typeof driversList !== "undefined"){
+                    redshiftOdbcModalError.visible = false
+
+                    control.model = driversList
+                    server.readOnly = false
+                    port.readOnly = false
+                    database.readOnly = false
+                    username.readOnly = false
+                    password.readOnly = false
+                } else{
+                    popup.visible = false
+                    redshiftOdbcModalError.visible = true
+
+                    control.model = ["No Drivers"]
+                    server.readOnly = true
+                    port.readOnly = true
+                    database.readOnly = true
+                    username.readOnly = true
+                    password.readOnly = true
+                }
+            }
+        }
+    }
+
     // Connection  Ends
     /***********************************************************************************************************************/
 
@@ -483,7 +512,15 @@ Popup {
 
     // Page Design Ends
     /***********************************************************************************************************************/
+      MessageDialog {
+          id: redshiftOdbcModalError
+          visible: false
+          title: "Amazon Redshift Driver missing"
+          text: qsTr("You don't have Amazon Redshift driver. Download it here <a href=\"https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html
+\">https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html
+</a>")
 
+      }
 
 
 }

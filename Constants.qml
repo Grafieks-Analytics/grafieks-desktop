@@ -36,6 +36,21 @@ QtObject {
     property int tooltipShowTime: 1000
     property int tooltipHideTime: 5000
 
+    // ODBC Driver matching names
+    property string mysqlOdbc: qsTr("mysql")
+    property string postgresOdbc: qsTr("postgres")
+    property string accessOdbc: qsTr("access")
+    property string excelOdbc: qsTr("excel")
+    property string hiveOdbc: qsTr("hive")
+    property string impalaOdbc: qsTr("impala")
+    property string mongoOdbc: qsTr("mongo")
+    property string mssqlOdbc: qsTr("mssql")
+    property string oracleOdbc: qsTr("oracle")
+    property string redshiftOdbc: qsTr("redshift")
+    property string sqliteOdbc: qsTr("sqlite")
+    property string snowflakeOdbc: qsTr("snowflake")
+    property string teradataOdbc: qsTr("teradata")
+
 
     // Theme Colors
 

@@ -36,16 +36,44 @@ Popup {
 
         function onPostgresLoginStatus(status){
 
-             if(status.status === true){
+            if(status.status === true){
 
-                 popup.visible = false
-                 stacklayout_home.currentIndex = 5
-             }
-             else{
-                 popup.visible = true
-                 msg_dialog.open()
-                 msg_dialog.text = status.msg
-             }
+                popup.visible = false
+                stacklayout_home.currentIndex = 5
+            }
+            else{
+                popup.visible = true
+                msg_dialog.open()
+                msg_dialog.text = status.msg
+            }
+        }
+    }
+
+    Connections{
+        target: ODBCDriversModel
+
+        function onAvailableDrivers(driversList, database){
+            if(database === Constants.postgresOdbc){
+                if(driversList.length > 0 && typeof driversList !== "undefined"){
+                    postgresObcModalError.visible = false
+
+                    control.model = driversList
+                    server.readOnly = false
+                    port.readOnly = false
+                    database.readOnly = false
+                    username.readOnly = false
+                    password.readOnly = false
+                } else{
+                    postgresObcModalError.visible = true
+
+                    control.model = ["No Drivers"]
+                    server.readOnly = true
+                    port.readOnly = true
+                    database.readOnly = true
+                    username.readOnly = true
+                    password.readOnly = true
+                }
+            }
         }
     }
 
@@ -58,13 +86,15 @@ Popup {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+
+
     function hidePopup(){
         popup.visible = false
     }
 
     function connectToPostgreSQL(){
-//        ConnectorsLoginModel.postgresOdbcLogin(server.text, database.text, port.text, username.text, password.text)
-          ConnectorsLoginModel.postgresOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
+        //        ConnectorsLoginModel.postgresOdbcLogin(server.text, database.text, port.text, username.text, password.text)
+        ConnectorsLoginModel.postgresOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -98,6 +128,8 @@ Popup {
 
 
     // Popup Header starts
+
+
 
     Rectangle{
         id: headerPopup
@@ -476,8 +508,10 @@ Popup {
             onClicked: connectToPostgreSQL()
         }
 
+
     }
     // Row 6: Action Button ends
+
 
 
 
@@ -485,5 +519,12 @@ Popup {
     /***********************************************************************************************************************/
 
 
+    MessageDialog {
+        id: postgresObcModalError
+        visible: false
+        title: "Postgres Driver missing"
+        text: qsTr("You don't have Postgres driver. Download it here <a href=\"https://www.postgresql.org/ftp/odbc/versions\">https://www.postgresql.org/ftp/odbc/versions</a>")
+
+    }
 
 }
