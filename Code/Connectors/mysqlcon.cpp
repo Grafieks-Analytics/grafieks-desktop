@@ -78,7 +78,7 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
     return outputStatus;
 }
 
-QVariantMap MysqlCon::tMysqlOdbcInstance(const QString &driver, const QString &host, const QString &db, const int &port, const QString &username, const QString &password)
+QVariantMap MysqlCon::MysqlOdbcInstance(const QString &driver, const QString &host, const QString &db, const int &port, const QString &username, const QString &password)
 {
     QVariantMap outputStatus;
 

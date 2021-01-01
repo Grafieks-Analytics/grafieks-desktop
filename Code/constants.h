@@ -16,6 +16,24 @@ namespace Constants
     // Datasource type int
     const int mysqlIntType = 0;
     const int sqliteIntType = 1;
+    const int mssqlIntType = 2;
+    const int postgresIntType = 3;
+    const int excelIntType = 4;
+    const int mongoIntType = 5;
+    const int redshiftIntType = 6;
+    const int hiveIntType = 7;
+    const int csvIntType = 8;
+    const int githubIntType = 9;
+    const int impalaIntType = 10;
+    const int jsonIntType = 11;
+    const int accessIntType = 12;
+    const int oracleIntType = 13;
+    const int snowflakeIntType = 14;
+    const int teradataIntType = 15;
+    const int dropboxIntType = 16;
+    const int driveIntType = 17;
+    const int boxIntType = 18;
+    const int sheetIntType = 19;
 
     // Datasource type Strings
     const QString mysqlStrType = "mysql";
@@ -38,6 +56,9 @@ namespace Constants
 
     const QString mongoOdbcStrType = "mongo_odbc";
     const QString mongoOdbcStrQueryType = "mongo_odbc_query";
+
+    const QString redshiftOdbcStrType = "redshift_odbc";
+    const QString redshiftOdbcStrQueryType = "redshift_odbc_query";
 
     // Filter type Strings
     const QString categoricalType = "categorical";

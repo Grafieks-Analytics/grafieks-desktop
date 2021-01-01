@@ -56,7 +56,16 @@ void ConnectorsLoginModel::sqliteLogin(QString filename, QString username, QStri
 
 void ConnectorsLoginModel::mysqlOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
+    MysqlCon mysqlcon;
+    QVariantMap response = mysqlcon.MysqlOdbcInstance(driver, host, db, port, username, password);
 
+    Statics::currentDbName = db;
+    Statics::currentDbIntType = Constants::mysqlIntType;
+    Statics::currentDbStrType = Constants::mysqlOdbcStrType;
+
+    this->setConnectedDB(db);
+
+    emit mysqlLoginStatus(response);
 }
 
 
@@ -64,11 +73,11 @@ void ConnectorsLoginModel::mssqlOdbcLogin(QString driver, QString host, QString 
 {
 
     MSSqlCon mssqlcon;
-    QVariantMap response = mssqlcon.MSSqlInstance(host, db, port, username, password);
+    QVariantMap response = mssqlcon.MSSqlOdbcInstance(driver, host, db, port, username, password);
 
     Statics::currentDbName = db;
-    Statics::currentDbIntType = Constants::mysqlIntType;
-    Statics::currentDbStrType = Constants::mysqlStrType;
+    Statics::currentDbIntType = Constants::mssqlIntType;
+    Statics::currentDbStrType = Constants::mssqlOdbcStrType;
 
     this->setConnectedDB(db);
 
@@ -78,11 +87,11 @@ void ConnectorsLoginModel::mssqlOdbcLogin(QString driver, QString host, QString 
 void ConnectorsLoginModel::postgresOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
     PostgresCon postgrescon;
-    QVariantMap response = postgrescon.PostgresInstance(host, db, port, username, password);
+    QVariantMap response = postgrescon.PostgresOdbcInstance(driver, host, db, port, username, password);
 
     Statics::currentDbName = db;
-    Statics::currentDbIntType = Constants::mysqlIntType;
-    Statics::currentDbStrType = Constants::mysqlStrType;
+    Statics::currentDbIntType = Constants::postgresIntType;
+    Statics::currentDbStrType = Constants::postgresOdbcStrType;
 
     this->setConnectedDB(db);
 
@@ -94,11 +103,11 @@ void ConnectorsLoginModel::mongoOdbcLogin(QString driver, QString host, QString 
 {
 
     MongoCon mongocon;
-    QVariantMap response = mongocon.MongoInstance(host, db, port, username, password);
+    QVariantMap response = mongocon.MongoOdbcInstance(driver, host, db, port, username, password);
 
     Statics::currentDbName = db;
-    Statics::currentDbIntType = Constants::mysqlIntType;
-    Statics::currentDbStrType = Constants::mysqlStrType;
+    Statics::currentDbIntType = Constants::mongoIntType;
+    Statics::currentDbStrType = Constants::mongoOdbcStrType;
 
     this->setConnectedDB(db);
 
@@ -113,8 +122,8 @@ void ConnectorsLoginModel::excelOdbcLogin(QString driver, QString filename)
     QVariantMap response = excelcon.ExcelOdbcInstance(driver, filename);
 
     Statics::currentDbName = filename;
-    Statics::currentDbIntType = Constants::mysqlIntType;
-    Statics::currentDbStrType = Constants::mysqlStrType;
+    Statics::currentDbIntType = Constants::excelIntType;
+    Statics::currentDbStrType = Constants::excelOdbcStrType;
 
     this->setConnectedDB(filename);
 
