@@ -64,6 +64,7 @@ Popup {
                     username.readOnly = false
                     password.readOnly = false
                 } else{
+                    popup.visible = false
                     postgresObcModalError.visible = true
 
                     control.model = ["No Drivers"]

@@ -94,6 +94,7 @@ QVariantMap MysqlCon::MysqlOdbcInstance(const QString &driver, const QString &ho
         dbMysqlOdbc.setUserName(username);
         dbMysqlOdbc.setPassword(password);
 
+
         if(!dbMysqlOdbc.open()){
             outputStatus.insert("status", false);
             outputStatus.insert("msg", dbMysqlOdbc.lastError().text());
