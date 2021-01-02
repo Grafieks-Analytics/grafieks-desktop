@@ -145,6 +145,12 @@ Column{
         editColorPopup.visible = true
     }
 
+
+    function resizePaddingInner(value){
+        d3PropertyConfig.paddingInner = value;
+        reDrawChart();
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 

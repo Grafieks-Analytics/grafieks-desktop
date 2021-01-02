@@ -24,7 +24,6 @@ Popup {
         color: Constants.whiteColor
     }
 
-    property var d3PropertyConfig: ({});
 
     ListModel{
         id: dataItemList
@@ -136,9 +135,7 @@ Popup {
         reDrawChart();
     }
 
-    function reDrawChart(){
-        webEngineView.runJavaScript('drawChart(data,'+JSON.stringify(d3PropertyConfig)+')')
-    }
+
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/

@@ -32,6 +32,8 @@ Page {
     property bool yaxisActive: ReportParamsModel.yAxisActive
 
     property string reportChart:ReportParamsModel.chartType;
+    property var d3PropertyConfig: ({});
+
 
     onReportChartChanged: {
 
@@ -42,6 +44,7 @@ Page {
         }
 
     }
+
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -127,6 +130,10 @@ Page {
 
     // Slot Function
     // For changing the chart on clicking chart icons
+
+    function reDrawChart(){
+        webEngineView.runJavaScript('drawChart(data,'+JSON.stringify(d3PropertyConfig)+')')
+    }
 
     function changeChart(chartname){
         webEngineView.url = chartname
