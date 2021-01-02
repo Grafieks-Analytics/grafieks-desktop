@@ -24,6 +24,7 @@ Popup {
         color: Constants.whiteColor
     }
 
+    property var d3PropertyConfig: ({});
 
     ListModel{
         id: dataItemList
@@ -37,10 +38,11 @@ Popup {
         }
     }
 
+
     ListModel{
         id: colorSchemeList
         ListElement{
-            schemeName: "category10"
+            schemeName: "Category10"
         }
         ListElement{
             schemeName: "Accent"
@@ -97,7 +99,7 @@ Popup {
     // JAVASCRIPT FUNCTION STARTS
 
 
-    function onCancelClicked(){
+    function closePopup(){
         editPopup.visible = false
     }
 
@@ -126,6 +128,16 @@ Popup {
         case "yAxisTickMark": yAxisTickMarkColorDialog.open();
             break;
         }
+    }
+
+    function selectColorPallete(schemeName,colorPallete){
+        const scheme = 'scheme'+schemeName;
+        d3PropertyConfig.d3colorPalette = scheme;
+        reDrawChart();
+    }
+
+    function reDrawChart(){
+        webEngineView.runJavaScript('drawChart(data,'+JSON.stringify(d3PropertyConfig)+')')
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -205,7 +217,7 @@ Popup {
             anchors.rightMargin: 5
             MouseArea{
                 anchors.fill: parent
-                onClicked: onCancelClicked()
+                onClicked: closePopup()
             }
         }
 
@@ -317,6 +329,10 @@ Popup {
                             width: parent.width
                             source: "/Images/icons/reports/"+schemeName
                         }
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: selectColorPallete(schemeName)
+                        }
 
                     }
 
@@ -341,6 +357,7 @@ Popup {
             anchors.right: parent.right
             anchors.rightMargin: 20
             textValue: "Apply"
+            onClicked: closePopup()
         }
 
     }

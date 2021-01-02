@@ -165,7 +165,7 @@ Page {
     function xAxisDropEligible(itemName){
         var xAxisColumns  = ReportParamsModel.xAxisColumns;
         const multiChart = true;
-        if(multiChart && !alreadyExists(xAxisColumns,itemName)){
+        if(multiChart){
             return true;
         }
         return false;
@@ -174,7 +174,7 @@ Page {
     function yAxisDropEligible(itemName){
         var yAxisColumns  = ReportParamsModel.yAxisColumns;
         const multiChart = true;
-        if(multiChart && !alreadyExists(yAxisColumns,itemName)){
+        if(multiChart){
             return true;
         }
         return false;
@@ -218,6 +218,10 @@ Page {
 
     function openYAxisSettings(){
         yAxisSettingsPopup.visible = true
+    }
+
+    function exportReport(){
+        console.log('Export Report')
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -704,6 +708,10 @@ Page {
                         height: parent.height
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
+                    }
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: exportReport()
                     }
                 }
             }

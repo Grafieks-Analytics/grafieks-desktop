@@ -19,7 +19,7 @@ Column{
     property bool colorByActive: ReportParamsModel.colorByActive;
 
     spacing: 4
-    z:0
+    z: 10
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -112,8 +112,7 @@ Column{
         if(!isDropEligible()){
             element.border.color = Constants.themeColor
             return;
-        }        
-
+        }
 
         colorListModel.append({textValue: itemName})
         ReportParamsModel.setLastDropped(itemType);
