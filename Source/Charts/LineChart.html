@@ -124,7 +124,7 @@
                 .attr("cy", function (d) {
                     return yScale(d.y);
                 })
-                .attr("r", 5)
+                .attr("r", 3)
                 .on("mousemove ", function (d, i) {
                     var x_pos = d3.mouse(this)[0];
                     var y_pos = d3.mouse(this)[1];
@@ -139,11 +139,11 @@
                         .html(parseInt(xValue) + ", " + parseInt(yValue));
 
                     d3.selectAll(".circle").style("opacity", 0.3);
-                    d3.select(this).style("opacity", 1).attr("r", 7);
+                    d3.select(this).style("opacity", 1).attr("r", 5);
                 })
                 .on("mouseout", function () {
                     d3.select("#tooltip").style("display", "none");
-                    d3.selectAll(".circle").style("opacity", 1).attr("r", 5);
+                    d3.selectAll(".circle").style("opacity", 1).attr("r", 3);
                 });
         }
 
