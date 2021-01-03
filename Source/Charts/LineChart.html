@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Load in the d3 library -->
+    <script src="./Data/d3DefaultConfig.js"></script>
+    <script src="./Data/d3.v4.min.js"></script>
+    <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+    <link rel="stylesheet" href="Data/general.css" />
+</head>
+<body>
+    <!-- Create a div where the graph will take place -->
+    <div id="my_dataviz"></div>
+    <div id="tooltip"></div>
+
+    <script>
+        var n = 21;
+
+        var data = d3.range(n).map(function (d) {
+            return { y: d3.randomUniform(1)() };
+        });
+
+        function drawChart(data, plottingConfiguration = {}) {
+            let { d3colorPalette, paddingInner } = plottingConfiguration;
+            if (!d3colorPalette) {
+                d3colorPalette = defaultD3Config.d3ColorPalette;
+            }
+            d3Colors = d3[d3colorPalette];
+
+            if (!paddingInner) {
+                paddingInner = defaultD3Config.defaultPaddingInner;
+            }
+
+            d3.selectAll("#my_dataviz").html("");
+            (margin = { top: 30, right: 30, bottom: 70, left: 60 }),
+                (width = window.innerWidth - margin.left - margin.right - 20),
+                (height = window.innerHeight - margin.top - margin.bottom - 20);
+
+            xScale = d3
+                .scaleLinear()
+                .domain([0, n - 1]) // input
+                .range([0, width]); // output
+
+            yScale = d3
+                .scaleLinear()
+                .domain([0, 1]) // input
+                .range([height, 0]); // output
+
+            line = d3
+                .line()
+                .x(function (d, i) {
+                    return xScale(i);
+                })
+                .y(function (d) {
+                    return yScale(d.y);
+                })
+                .curve(d3.curveCardinal);
+
+            svg = d3
+                .select("#my_dataviz")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr(
+                    "transform",
+                    "translate(" + margin.left + "," + margin.top + ")"
+                );
+
+            svg.append("g")
+                .attr("class", "x-axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(xScale).tickSizeOuter(0).ticks(0));
+
+            svg.append("g")
+                .attr("class", "grid")
+                .attr("transform", "translate(0," + height + ")")
+                .style("stroke-width", "1")
+                .call(make_x_gridlines().tickSize(0).tickFormat(""));
+
+            svg.append("g")
+                .attr("class", "y-axis")
+                .call(d3.axisLeft(yScale).tickSizeOuter(0).ticks(3));
+
+            svg.append("g")
+                .attr("class", "grid")
+                .style("stroke-width", "1")
+                .call(make_y_gridlines().tickSize(-width).tickFormat(""));
+
+            svg.append("path")
+                .datum(data)
+                .attr("stroke", d3Colors[0])
+                .attr("stroke-width", 4)
+                .attr("fill", "none")
+                .attr("d", line);
+
+            drawMarker(false);
+
+            // Generate Grid starts
+
+            function make_x_gridlines() {
+                return d3.axisBottom(xScale).ticks(8);
+            }
+            function make_y_gridlines() {
+                return d3.axisLeft(yScale).ticks(5);
+            }
+        }
+
+        drawChart(data);
+
+        function drawMarker(fillStatus) {
+            var fill = fillStatus ? d3Colors[0] : "#ffffff";
+            var stroke = !fillStatus ? d3Colors[0] : 0;
+
+            svg.selectAll(".dot")
+                .data(data)
+                .enter()
+                .append("circle")
+                .attr("stroke", stroke)
+                .attr("class", "circle")
+                .attr("fill", fill)
+                .attr("cx", function (d, i) {
+                    return xScale(i);
+                })
+                .attr("cy", function (d) {
+                    return yScale(d.y);
+                })
+                .attr("r", 5)
+                .on("mousemove ", function (d, i) {
+                    var x_pos = d3.mouse(this)[0];
+                    var y_pos = d3.mouse(this)[1];
+
+                    const xValue = xScale.invert(x_pos);
+                    const yValue = yScale.invert(y_pos);
+
+                    d3.select("#tooltip")
+                        .style("left", x_pos + "px")
+                        .style("top", y_pos + "px")
+                        .style("display", "block")
+                        .html(parseInt(xValue) + ", " + parseInt(yValue));
+
+                    d3.selectAll(".circle").style("opacity", 0.3);
+                    d3.select(this).style("opacity", 1).attr("r", 7);
+                })
+                .on("mouseout", function () {
+                    d3.select("#tooltip").style("display", "none");
+                    d3.selectAll(".circle").style("opacity", 1).attr("r", 5);
+                });
+        }
+
+        window.addEventListener("resize", function () {
+            drawChart(data);
+        });
+
+        // Generate Grid ends
+    </script>
+</body>

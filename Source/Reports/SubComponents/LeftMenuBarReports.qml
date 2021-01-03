@@ -50,7 +50,7 @@ Rectangle{
         }
         ListElement{
             icon: "line_chart.png"
-            chartHtml:"bar.html"
+            chartHtml:"LineChart.html"
             activeChart: false
         }
         ListElement{
