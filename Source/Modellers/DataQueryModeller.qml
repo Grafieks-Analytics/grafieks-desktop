@@ -176,6 +176,7 @@ Page {
     }
 
     function openDataFilters(){
+        TableSchemaModel.showSchema(DSParamsModel.tmpSql)
         datafilters.visible = true
     }
 

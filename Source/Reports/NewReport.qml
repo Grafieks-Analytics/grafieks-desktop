@@ -32,6 +32,8 @@ Page {
     property bool yaxisActive: ReportParamsModel.yAxisActive
 
     property string reportChart:ReportParamsModel.chartType;
+    property var d3PropertyConfig: ({});
+
 
     onReportChartChanged: {
 
@@ -42,6 +44,7 @@ Page {
         }
 
     }
+
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -128,6 +131,10 @@ Page {
     // Slot Function
     // For changing the chart on clicking chart icons
 
+    function reDrawChart(){
+        webEngineView.runJavaScript('drawChart(data,'+JSON.stringify(d3PropertyConfig)+')')
+    }
+
     function changeChart(chartname){
         webEngineView.url = chartname
     }
@@ -165,7 +172,7 @@ Page {
     function xAxisDropEligible(itemName){
         var xAxisColumns  = ReportParamsModel.xAxisColumns;
         const multiChart = true;
-        if(multiChart && !alreadyExists(xAxisColumns,itemName)){
+        if(multiChart){
             return true;
         }
         return false;
@@ -174,7 +181,7 @@ Page {
     function yAxisDropEligible(itemName){
         var yAxisColumns  = ReportParamsModel.yAxisColumns;
         const multiChart = true;
-        if(multiChart && !alreadyExists(yAxisColumns,itemName)){
+        if(multiChart){
             return true;
         }
         return false;
@@ -218,6 +225,10 @@ Page {
 
     function openYAxisSettings(){
         yAxisSettingsPopup.visible = true
+    }
+
+    function exportReport(){
+        console.log('Export Report')
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -704,6 +715,10 @@ Page {
                         height: parent.height
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
+                    }
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: exportReport()
                     }
                 }
             }

@@ -183,5 +183,7 @@
         <file>Source/Connectors/SubComponents/OracleConnection.qml</file>
         <file>Source/Connectors/SubComponents/SnowflakeConnection.qml</file>
         <file>Source/Connectors/SubComponents/TeradataConnection.qml</file>
+        <file>Source/Charts/Data/d3-scale-chromatic.v1.min.js</file>
+        <file>Source/Charts/Data/d3DefaultConfig.js</file>
     </qresource>
 </RCC>

@@ -182,6 +182,7 @@ Page {
     }
 
     function createNewReport(){
+        ReportModelList.setTmpSql(DSParamsModel.tmpSql)
         stacklayout_home.currentIndex = 7
     }
 

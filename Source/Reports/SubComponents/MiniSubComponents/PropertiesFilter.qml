@@ -19,7 +19,7 @@ Column{
     property bool colorByActive: ReportParamsModel.colorByActive;
 
     spacing: 4
-    z:0
+    z: 10
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -112,8 +112,7 @@ Column{
         if(!isDropEligible()){
             element.border.color = Constants.themeColor
             return;
-        }        
-
+        }
 
         colorListModel.append({textValue: itemName})
         ReportParamsModel.setLastDropped(itemType);
@@ -144,6 +143,12 @@ Column{
 
     function openEditColorPopup(){
         editColorPopup.visible = true
+    }
+
+
+    function resizePaddingInner(value){
+        d3PropertyConfig.paddingInner = value;
+        reDrawChart();
     }
 
     // JAVASCRIPT FUNCTION ENDS
