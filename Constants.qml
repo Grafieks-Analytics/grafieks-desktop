@@ -13,7 +13,7 @@ import QtQuick 2.15
 QtObject {
 
     // Menu Indexes
-    property int initialIndex: 3
+    property int initialIndex: 7
     property int dataDesignerIndex: 3
     property int dashboardDesignerIndex: 6
     property int newReportIndex: 7
@@ -35,6 +35,21 @@ QtObject {
 
     property int tooltipShowTime: 1000
     property int tooltipHideTime: 5000
+
+    // ODBC Driver matching names
+    property string mysqlOdbc: qsTr("mysql")
+    property string postgresOdbc: qsTr("postgres")
+    property string accessOdbc: qsTr("access")
+    property string excelOdbc: qsTr("excel")
+    property string hiveOdbc: qsTr("hive")
+    property string impalaOdbc: qsTr("impala")
+    property string mongoOdbc: qsTr("mongo")
+    property string mssqlOdbc: qsTr("sql server")
+    property string oracleOdbc: qsTr("oracle")
+    property string redshiftOdbc: qsTr("redshift")
+    property string sqliteOdbc: qsTr("sqlite")
+    property string snowflakeOdbc: qsTr("snowflake")
+    property string teradataOdbc: qsTr("teradata")
 
 
     // Theme Colors

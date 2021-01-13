@@ -49,6 +49,35 @@ Popup {
         }
     }
 
+    Connections{
+        target: ODBCDriversModel
+
+        function onAvailableDrivers(driversList, database){
+            if(database === Constants.impalaOdbc){
+                if(driversList.length > 0 && typeof driversList !== "undefined"){
+                    impalaOdbcModalError.visible = false
+
+                    control.model = driversList
+                    server.readOnly = false
+                    port.readOnly = false
+                    database.readOnly = false
+                    username.readOnly = false
+                    password.readOnly = false
+                } else{
+                    popup.visible = false
+                    impalaOdbcModalError.visible = true
+
+                    control.model = ["No Drivers"]
+                    server.readOnly = true
+                    port.readOnly = true
+                    database.readOnly = true
+                    username.readOnly = true
+                    password.readOnly = true
+                }
+            }
+        }
+    }
+
     // Connection  Ends
     /***********************************************************************************************************************/
 
@@ -484,6 +513,12 @@ Popup {
     // Page Design Ends
     /***********************************************************************************************************************/
 
+    MessageDialog {
+        id: impalaOdbcModalError
+        visible: false
+        title: "Impala Driver missing"
+        text: qsTr("You don't have Impala driver. Download it here <a href=\"https://www.cloudera.com/downloads/connectors/impala/odbc/2-6-11.html\">https://www.cloudera.com/downloads/connectors/impala/odbc/2-6-11.html</a>")
 
+    }
 
 }

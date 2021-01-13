@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QDebug>
 #include <QtWebChannel/QtWebChannel>
+#include <QSettings>
+#include <QtGlobal>
 
 #include <QFileInfo>
 #include "../../duckdb.hpp"
@@ -17,6 +19,10 @@ public:
     explicit QtTest2(QObject *parent = nullptr);
     Q_INVOKABLE void x();
 
+    // Test QSettings for Windows Registry and Mac property files
+    // to fetch available ODBC drivers
+    Q_INVOKABLE void osTest();
+
 
 public slots:
 
@@ -26,6 +32,9 @@ private:
 
 //    duckdb::DuckDB db;
 //    duckdb::Connection con;
+
+    QStringList fetchWindowsODBCDrivers();
+    QStringList fetchMacODBCDrivers();
 
 };
 

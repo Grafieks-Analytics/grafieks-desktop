@@ -2,33 +2,19 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
     <!-- Load d3.js -->
-    <script src="./Data/d3.v4.min.js"></script>
-    <link rel="icon" href="logo.png" type="image/png" sizes="32x32" />
-    <link rel="stylesheet" href="Data/general.css" />
 
-    <title>Stacked Bar</title>
+    <script src="./Data/d3DefaultConfig.js"></script>
+    <script src="./Data/d3.v4.min.js"></script>
+    <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+
+    <link rel="stylesheet" href="Data/general.css" />
 </head>
 <body>
     <div id="my_dataviz"></div>
     <div id="tooltip"></div>
     <script>
         // Color Pallets - Set 3
-        const d3colors = [
-            "#8DD3C9",
-            "#FFFFAA",
-            "#B8BED6",
-            "#F98171",
-            "#78B5D1",
-            "#FFB15B",
-            "#B4E061",
-            "#FDCDE5",
-            "#DAD9D4",
-            "#BD7FBE",
-            "#CDE9C1",
-            "#FFEA77",
-        ];
 
         var data = [
             [
@@ -56,7 +42,17 @@
         const columnIndex = 1;
         const valueIndex = 2;
 
-        function drawChart() {
+        function drawChart(data, plottingConfiguration = {}) {
+            console.log(JSON.stringify(plottingConfiguration));
+            let { d3colorPalette, paddingInner } = plottingConfiguration;
+            if (!d3colorPalette) {
+                d3colorPalette = defaultD3Config.d3ColorPalette;
+            }
+            const d3Colors = d3[d3colorPalette];
+            if (!paddingInner) {
+                paddingInner = defaultD3Config.defaultPaddingInner;
+            }
+
             d3.selectAll("#my_dataviz").html("");
             var margin = { top: 30, right: 30, bottom: 70, left: 60 },
                 width = window.innerWidth - margin.left - margin.right - 20,
@@ -65,12 +61,12 @@
             var x = d3
                 .scaleBand()
                 .rangeRound([0, width])
-                .paddingInner(0.05)
+                .paddingInner(paddingInner)
                 .align(0.1);
 
             var y = d3.scaleLinear().rangeRound([height, 0]).nice();
 
-            var z = d3.scaleOrdinal(d3colors);
+            var z = d3.scaleOrdinal(d3Colors);
 
             // Load stocks data
             var symbols = data[1];
@@ -206,7 +202,6 @@
 
             var yaxisTicks = height / 100;
             yaxisTicks = parseInt(yaxisTicks) + 1;
-            console.log(yaxisTicks);
 
             function make_x_gridlines() {
                 return d3.axisBottom(x).ticks(20);
@@ -219,12 +214,12 @@
         }
 
         window.onload = function () {
-            drawChart();
+            drawChart(data);
         };
 
         window.addEventListener("resize", function () {
             d3.selectAll("#my_dataviz").html("");
-            drawChart();
+            drawChart(data);
         });
     </script>
 </body>

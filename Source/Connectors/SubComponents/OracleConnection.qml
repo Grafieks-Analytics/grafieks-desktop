@@ -49,6 +49,35 @@ Popup {
         }
     }
 
+    Connections{
+        target: ODBCDriversModel
+
+        function onAvailableDrivers(driversList, database){
+            if(database === Constants.oracleOdbc){
+                if(driversList.length > 0 && typeof driversList !== "undefined"){
+                    oracleOdbcModalError.visible = false
+
+                    control.model = driversList
+                    server.readOnly = false
+                    port.readOnly = false
+                    database.readOnly = false
+                    username.readOnly = false
+                    password.readOnly = false
+                } else{
+                    popup.visible = false
+                    oracleOdbcModalError.visible = true
+
+                    control.model = ["No Drivers"]
+                    server.readOnly = true
+                    port.readOnly = true
+                    database.readOnly = true
+                    username.readOnly = true
+                    password.readOnly = true
+                }
+            }
+        }
+    }
+
     // Connection  Ends
     /***********************************************************************************************************************/
 
@@ -484,6 +513,12 @@ Popup {
     // Page Design Ends
     /***********************************************************************************************************************/
 
+    MessageDialog {
+        id: oracleOdbcModalError
+        visible: false
+        title: "Oracle Driver missing"
+        text: qsTr("You don't have Oracle driver. Download it here <a href=\"https://www.oracle.com/database/technologies/instant-client/downloads.html\">https://www.oracle.com/database/technologies/instant-client/downloads.html</a>")
 
+    }
 
 }

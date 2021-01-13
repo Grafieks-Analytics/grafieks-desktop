@@ -36,16 +36,45 @@ Popup {
 
         function onMysqlLoginStatus(status){
 
-             if(status.status === true){
+            if(status.status === true){
 
-                 popup.visible = false
-                 stacklayout_home.currentIndex = 5
-             }
-             else{
-                 popup.visible = true
-                 msg_dialog.open()
-                 msg_dialog.text = status.msg
-             }
+                popup.visible = false
+                stacklayout_home.currentIndex = 5
+            }
+            else{
+                popup.visible = true
+                msg_dialog.open()
+                msg_dialog.text = status.msg
+            }
+        }
+    }
+
+    Connections{
+        target: ODBCDriversModel
+
+        function onAvailableDrivers(driversList, database){
+            if(database === Constants.mysqlOdbc){
+                if(driversList.length > 0 && typeof driversList !== "undefined"){
+                    mysqlOdbcModalError.visible = false
+
+                    control.model = driversList
+                    server.readOnly = false
+                    port.readOnly = false
+                    database.readOnly = false
+                    username.readOnly = false
+                    password.readOnly = false
+                } else{
+                    popup.visible = false
+                    mysqlOdbcModalError.visible = true
+
+                    control.model = ["No Drivers"]
+                    server.readOnly = true
+                    port.readOnly = true
+                    database.readOnly = true
+                    username.readOnly = true
+                    password.readOnly = true
+                }
+            }
         }
     }
 
@@ -62,12 +91,20 @@ Popup {
         popup.visible = false
     }
 
+    function connectToOdbcMySQL(){
+        ConnectorsLoginModel.mysqlOdbcLogin(control.currentText, server.text, database.text, port.text, username.text, password.text)
+        //        ConnectorsLoginModel.mysqlOdbcLogin("localhost", "grafieks_my", 3306, "root", "123@312QQl")
+        //        ConnectorsLoginModel.mysqlOdbcLogin("localhost", "grafieks_dummy", 3306, "root", "")
+        //        ConnectorsLoginModel.mysqlOdbcLogin("localhost", "grafieks_my", 3308, "root", "root")
+        //          ConnectorsLoginModel.mysqlOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
+    }
+
     function connectToMySQL(){
-//        ConnectorsLoginModel.mysqlLogin(server.text, database.text, port.text, username.text, password.text)
-//        ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_my", 3306, "root", "123@312QQl")
-//        ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_dummy", 3306, "root", "")
-//        ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_my", 3308, "root", "root")
-          ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_my", 3306, "root", "")
+        //        ConnectorsLoginModel.mysqlLogin(server.text, database.text, port.text, username.text, password.text)
+        ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_my", 3306, "root", "123@312QQl")
+        //        ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_dummy", 3306, "root", "")
+        //        ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_my", 3308, "root", "root")
+        //          ConnectorsLoginModel.mysqlLogin("localhost", "grafieks_my", 3306, "root", "")
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -181,6 +218,7 @@ Popup {
                     font: control.font
                     elide: Text.ElideRight
                     verticalAlignment: Text.AlignVCenter
+
                 }
                 highlighted: control.highlightedIndex === index
             }
@@ -476,7 +514,9 @@ Popup {
             id: btn_signin
             textValue: Constants.signInText
             fontPixelSize: Constants.fontCategoryHeader
+//            onClicked: connectToOdbcMySQL()
             onClicked: connectToMySQL()
+
         }
 
     }
@@ -487,6 +527,12 @@ Popup {
     // Page Design Ends
     /***********************************************************************************************************************/
 
+    MessageDialog {
+        id: mysqlOdbcModalError
+        visible: false
+        title: "MySql Driver missing"
+        text: qsTr("You don't have MySql driver. Download it here <a href=\"https://dev.mysql.com/downloads/connector/odbc/\">https://dev.mysql.com/downloads/connector/odbc/</a>")
 
+    }
 
 }

@@ -128,7 +128,6 @@
         <file>Images/icons/zoom in grey.png</file>
         <file>Images/icons/zoom out grey.png</file>
         <file>Images/icons/reports/Accent.png</file>
-        <file>Images/icons/reports/category10.png</file>
         <file>Images/icons/reports/Dark2.png</file>
         <file>Images/icons/reports/Paired.png</file>
         <file>Images/icons/reports/Pastel1.png</file>
@@ -170,5 +169,6 @@
         <file>Images/icons/show.png</file>
         <file>Images/icons/postgres.png</file>
         <file>Images/icons/checkmark.png</file>
+        <file>Images/icons/reports/Category10.png</file>
     </qresource>
 </RCC>

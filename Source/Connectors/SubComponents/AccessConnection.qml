@@ -49,6 +49,35 @@ Popup {
         }
     }
 
+    Connections{
+        target: ODBCDriversModel
+
+        function onAvailableDrivers(driversList, database){
+            if(database === Constants.accessOdbc){
+                if(driversList.length > 0 && typeof driversList !== "undefined"){
+                    accessOdbcModalError.visible = false
+
+                    control.model = driversList
+                    server.readOnly = false
+                    port.readOnly = false
+                    database.readOnly = false
+                    username.readOnly = false
+                    password.readOnly = false
+                } else{
+                    popup.visible = false
+                    accessOdbcModalError.visible = true
+
+                    control.model = ["No Drivers"]
+                    server.readOnly = true
+                    port.readOnly = true
+                    database.readOnly = true
+                    username.readOnly = true
+                    password.readOnly = true
+                }
+            }
+        }
+    }
+
     // Connection  Ends
     /***********************************************************************************************************************/
 
@@ -484,6 +513,12 @@ Popup {
     // Page Design Ends
     /***********************************************************************************************************************/
 
+    MessageDialog {
+        id: accessOdbcModalError
+        visible: false
+        title: "Microsft Access Driver missing"
+        text: qsTr("You don't have Microsoft Access driver. Download Microsoft Access to enable it")
 
+    }
 
 }

@@ -49,6 +49,34 @@ Popup {
         }
     }
 
+    Connections{
+        target: ODBCDriversModel
+
+        function onAvailableDrivers(driversList, database){
+            if(database === Constants.hiveOdbc){
+                if(driversList.length > 0 && typeof driversList !== "undefined"){
+                    hiveOdbcModalError.visible = false
+
+                    control.model = driversList
+                    server.readOnly = false
+                    port.readOnly = false
+                    database.readOnly = false
+                    username.readOnly = false
+                    password.readOnly = false
+                } else{
+                    popup.visible = false
+                    hiveOdbcModalError.visible = true
+
+                    control.model = ["No Drivers"]
+                    server.readOnly = true
+                    port.readOnly = true
+                    database.readOnly = true
+                    username.readOnly = true
+                    password.readOnly = true
+                }
+            }
+        }
+    }
     // Connection  Ends
     /***********************************************************************************************************************/
 
@@ -484,6 +512,12 @@ Popup {
     // Page Design Ends
     /***********************************************************************************************************************/
 
+    MessageDialog {
+        id: hiveOdbcModalError
+        visible: false
+        title: "Hive Driver missing"
+        text: qsTr("You don't have Hive driver.")
 
+    }
 
 }

@@ -49,6 +49,35 @@ Popup {
         }
     }
 
+    Connections{
+        target: ODBCDriversModel
+
+        function onAvailableDrivers(driversList, database){
+            if(database === Constants.mssqlOdbc){
+                if(driversList.length > 0 && typeof driversList !== "undefined"){
+                    mssqlOdbcModalError.visible = false
+
+                    control.model = driversList
+                    server.readOnly = false
+                    port.readOnly = false
+                    database.readOnly = false
+                    username.readOnly = false
+                    password.readOnly = false
+                } else{
+                    popup.visible = false
+                    mssqlOdbcModalError.visible = true
+
+                    control.model = ["No Drivers"]
+                    server.readOnly = true
+                    port.readOnly = true
+                    database.readOnly = true
+                    username.readOnly = true
+                    password.readOnly = true
+                }
+            }
+        }
+    }
+
     // Connection  Ends
     /***********************************************************************************************************************/
 
@@ -484,6 +513,12 @@ Popup {
     // Page Design Ends
     /***********************************************************************************************************************/
 
+    MessageDialog {
+        id: mssqlOdbcModalError
+        visible: false
+        title: "Microsoft SQL Driver missing"
+        text: qsTr("You don't have Microsoft SQL driver. Download it here <a href=\"https://www.microsoft.com/en-in/download/details.aspx?id=36434\">https://www.microsoft.com/en-in/download/details.aspx?id=36434</a>")
 
+    }
 
 }

@@ -6,6 +6,43 @@ import com.grafieks.singleton.constants 1.0
 Rectangle{
     height: 24
     width: parent.width
+    z: 1000000
+
+
+
+    /***********************************************************************************************************************/
+    // LIST MODEL STARTS
+
+
+    // LIST MODEL ENDS
+    /***********************************************************************************************************************/
+
+
+    /***********************************************************************************************************************/
+    // SIGNALS STARTS
+
+
+
+    // SIGNALS ENDS
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
+    // Connections Starts
+
+
+
+    // Connections Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // JAVASCRIPT FUNCTION STARTS
+
 
     function alreadyExists(elementsList,element){
         if(elementsList.includes(element)){
@@ -17,7 +54,7 @@ Rectangle{
     function xAxisDropEligible(itemName){
         var xAxisColumns  = ReportParamsModel.xAxisColumns;
         const multiChart = true;
-        if(multiChart && !alreadyExists(xAxisColumns,itemName)){
+        if(multiChart){
             return true;
         }
         return false;
@@ -26,7 +63,7 @@ Rectangle{
     function yAxisDropEligible(itemName){
         var yAxisColumns  = ReportParamsModel.yAxisColumns;
         const multiChart = true;
-        if(multiChart && !alreadyExists(yAxisColumns,itemName)){
+        if(multiChart){
             return true;
         }
         return false;
@@ -60,6 +97,29 @@ Rectangle{
         }
         return "";
     }
+
+
+    // JAVASCRIPT FUNCTION ENDS
+    /***********************************************************************************************************************/
+
+
+
+
+    /***********************************************************************************************************************/
+    // SubComponents Starts
+
+
+
+    // SubComponents Ends
+    /***********************************************************************************************************************/
+
+
+
+
+
+    /***********************************************************************************************************************/
+    // Page Design Starts
+
 
     DataPaneMenu{
         id: dataPaneMenu

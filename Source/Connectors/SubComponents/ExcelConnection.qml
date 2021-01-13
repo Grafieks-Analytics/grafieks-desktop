@@ -49,6 +49,35 @@ Popup {
         }
     }
 
+    Connections{
+        target: ODBCDriversModel
+
+        function onAvailableDrivers(driversList, database){
+            if(database === Constants.excelOdbc){
+                if(driversList.length > 0 && typeof driversList !== "undefined"){
+                    excelOdbcModalError.visible = false
+
+                    control.model = driversList
+                    server.readOnly = false
+                    port.readOnly = false
+                    database.readOnly = false
+                    username.readOnly = false
+                    password.readOnly = false
+                } else{
+                    popup.visible = false
+                    excelOdbcModalError.visible = true
+
+                    control.model = ["No Drivers"]
+                    server.readOnly = true
+                    port.readOnly = true
+                    database.readOnly = true
+                    username.readOnly = true
+                    password.readOnly = true
+                }
+            }
+        }
+    }
+
     // Connection  Ends
     /***********************************************************************************************************************/
 
@@ -484,6 +513,12 @@ Popup {
     // Page Design Ends
     /***********************************************************************************************************************/
 
+    MessageDialog {
+        id: excelOdbcModalError
+        visible: false
+        title: "Excel Driver missing"
+        text: qsTr("You don't have Excel driver. Download Microsoft Excel to enable this")
 
+    }
 
 }

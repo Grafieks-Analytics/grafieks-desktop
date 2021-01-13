@@ -25,7 +25,7 @@ void ReportModelList::setTmpSql(QString query)
 
     case Constants::mysqlIntType:{
 
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
         QSqlQuery queryResult(query, dbMysql);
         QSqlRecord record = queryResult.record();
         qDebug() << queryResult.record();
@@ -76,7 +76,7 @@ void ReportModelList::getColumnsForTable(QString tableName)
 
     case Constants::mysqlIntType:{
 
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
 
         describeQueryString = "DESCRIBE `" + tableName + "`";
 
@@ -120,7 +120,7 @@ void ReportModelList::getData()
     switch(Statics::currentDbIntType){
 
     case Constants::mysqlIntType:{
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
         QString query = "SELECT date, volume FROM testnew";
 
         QSqlQuery queryResult(query, dbMysql);

@@ -34,6 +34,7 @@
 #include "Code/Logic/DataModeller/filternumericallistmodel.h"
 #include "Code/Logic/DataModeller/proxyfiltermodel.h"
 
+#include "Code/Logic/Connectors/odbcdriversmodel.h"
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
 #include "Code/Logic/Connectors/driveds.h"
@@ -197,6 +198,7 @@ int main(int argc, char *argv[])
     FilterCategoricalListModel filterCategoricalListModel;
     FilterDateListModel filterDateListModel;
     FilterNumericalListModel filterNumericalListModel;
+    ODBCDriversModel odbcDriversModel;
 
     GeneralParamsModel generalParamsModel;
     QuerySplitter querySplitter;
@@ -300,6 +302,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("FilterNumericalListModel",&filterNumericalListModel);
     engine.rootContext()->setContextProperty("QuerySplitter", &querySplitter);
     engine.rootContext()->setContextProperty("GeneralParamsModel", &generalParamsModel);
+    engine.rootContext()->setContextProperty("ODBCDriversModel", &odbcDriversModel);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/

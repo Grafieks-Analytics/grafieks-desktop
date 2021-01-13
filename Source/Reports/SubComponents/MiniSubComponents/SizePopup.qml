@@ -25,6 +25,10 @@ Popup {
         value: 12
         to: 100
         width: parent.width
+
+        onValueChanged: {
+            resizePaddingInner(value/100);
+        }
     }
 
 }

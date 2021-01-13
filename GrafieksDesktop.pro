@@ -13,13 +13,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Code/Connectors/accesscon.cpp \
     Code/Connectors/excelcon.cpp \
+    Code/Connectors/hivecon.cpp \
+    Code/Connectors/impalacon.cpp \
     Code/Connectors/mongocon.cpp \
     Code/Connectors/mssqlcon.cpp \
     Code/Connectors/mysqlcon.cpp \
     Code/Connectors/odbccon.cpp \
+    Code/Connectors/oraclecon.cpp \
     Code/Connectors/postgrescon.cpp \
+    Code/Connectors/redshiftcon.cpp \
+    Code/Connectors/snowflakecon.cpp \
     Code/Connectors/sqlitecon.cpp \
+    Code/Connectors/teradatacon.cpp \
     Code/Logic/Connectors/box.cpp \
     Code/Logic/Connectors/boxds.cpp \
     Code/Logic/Connectors/boxmodel.cpp \
@@ -33,6 +40,7 @@ SOURCES += \
     Code/Logic/Connectors/dropbox.cpp \
     Code/Logic/Connectors/dropboxds.cpp \
     Code/Logic/Connectors/dropboxmodel.cpp \
+    Code/Logic/Connectors/odbcdriversmodel.cpp \
     Code/Logic/Connectors/sheet.cpp \
     Code/Logic/Connectors/sheetds.cpp \
     Code/Logic/Connectors/sheetmodel.cpp \
@@ -92,14 +100,21 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    Code/Connectors/accesscon.h \
     Code/Connectors/allconnectors.h \
     Code/Connectors/excelcon.h \
+    Code/Connectors/hivecon.h \
+    Code/Connectors/impalacon.h \
     Code/Connectors/mongocon.h \
     Code/Connectors/mssqlcon.h \
     Code/Connectors/mysqlcon.h \
     Code/Connectors/odbccon.h \
+    Code/Connectors/oraclecon.h \
     Code/Connectors/postgrescon.h \
+    Code/Connectors/redshiftcon.h \
+    Code/Connectors/snowflakecon.h \
     Code/Connectors/sqlitecon.h \
+    Code/Connectors/teradatacon.h \
     Code/Logic/Connectors/box.h \
     Code/Logic/Connectors/boxds.h \
     Code/Logic/Connectors/boxmodel.h \
@@ -113,6 +128,7 @@ HEADERS += \
     Code/Logic/Connectors/dropbox.h \
     Code/Logic/Connectors/dropboxds.h \
     Code/Logic/Connectors/dropboxmodel.h \
+    Code/Logic/Connectors/odbcdriversmodel.h \
     Code/Logic/Connectors/sheet.h \
     Code/Logic/Connectors/sheetds.h \
     Code/Logic/Connectors/sheetmodel.h \
