@@ -169,5 +169,6 @@
         <file>Images/icons/mongodb.png</file>
         <file>Images/icons/show.png</file>
         <file>Images/icons/postgres.png</file>
+        <file>Images/icons/checkmark.png</file>
     </qresource>
 </RCC>

@@ -216,14 +216,16 @@ Rectangle{
 
             id: addnumerical
             anchors.top: parent.top
+            anchors.topMargin: 10
 
             anchors.left: parent.left
             leftPadding: 20
 
             anchors.verticalCenter: parent.verticalAlignment
 
-            CheckBox {
+            CheckBoxTpl {
                 checked: DSParamsModel.includeNull
+                 parent_dimension: Constants.defaultCheckBoxDimension
                 text: qsTr("Include Null")
                 indicator.width: 15
                 indicator.height: 15
