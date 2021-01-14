@@ -14,6 +14,9 @@
 
     <script>
         var n = 21;
+        var lineStroke = 3;
+        var initialCircleRadius = 2;
+        var onHoverCircleRadius = 5;
 
         var data = d3.range(n).map(function (d) {
             return { y: d3.randomUniform(1)() };
@@ -89,11 +92,11 @@
             svg.append("path")
                 .datum(data)
                 .attr("stroke", d3Colors[0])
-                .attr("stroke-width", 4)
+                .attr("stroke-width", lineStroke)
                 .attr("fill", "none")
                 .attr("d", line);
 
-            drawMarker(false);
+            drawMarker(true);
 
             // Generate Grid starts
 
@@ -108,8 +111,14 @@
         drawChart(data);
 
         function drawMarker(fillStatus) {
-            var fill = fillStatus ? d3Colors[0] : "#ffffff";
-            var stroke = !fillStatus ? d3Colors[0] : 0;
+            var fill = "#ffffff";
+            var stroke = d3Colors[0];
+            if (fillStatus) {
+                initialCircleRadius = 3;
+                onHoverCircleRadius = 5;
+                fill = d3Colors[0];
+                stroke = 0;
+            }
 
             svg.selectAll(".dot")
                 .data(data)
@@ -124,7 +133,7 @@
                 .attr("cy", function (d) {
                     return yScale(d.y);
                 })
-                .attr("r", 3)
+                .attr("r", initialCircleRadius)
                 .on("mousemove ", function (d, i) {
                     var x_pos = d3.mouse(this)[0];
                     var y_pos = d3.mouse(this)[1];
@@ -136,14 +145,18 @@
                         .style("left", x_pos + "px")
                         .style("top", y_pos + "px")
                         .style("display", "block")
-                        .html(parseInt(xValue) + ", " + parseInt(yValue));
+                        .html(parseInt(xValue) + ", " + yValue.toFixed(2));
 
                     d3.selectAll(".circle").style("opacity", 0.3);
-                    d3.select(this).style("opacity", 1).attr("r", 5);
+                    d3.select(this)
+                        .style("opacity", 1)
+                        .attr("r", initialCircleRadius + 3);
                 })
                 .on("mouseout", function () {
                     d3.select("#tooltip").style("display", "none");
-                    d3.selectAll(".circle").style("opacity", 1).attr("r", 3);
+                    d3.selectAll(".circle")
+                        .style("opacity", 1)
+                        .attr("r", initialCircleRadius);
                 });
         }
 

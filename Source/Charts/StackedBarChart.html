@@ -43,7 +43,6 @@
         const valueIndex = 2;
 
         function drawChart(data, plottingConfiguration = {}) {
-            console.log(JSON.stringify(plottingConfiguration));
             let { d3colorPalette, paddingInner } = plottingConfiguration;
             if (!d3colorPalette) {
                 d3colorPalette = defaultD3Config.d3ColorPalette;
@@ -153,7 +152,6 @@
                 })
                 .selectAll("rect")
                 .data(function (d) {
-                    // console.log(d);
                     return d;
                 })
                 .enter()
