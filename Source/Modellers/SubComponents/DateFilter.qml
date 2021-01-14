@@ -341,10 +341,13 @@ Popup {
     Rectangle{
         id: fullExtactRadioBtn
         height: 40
-        width: parent.width
+        width: parent.width-40
+        anchors.horizontalCenter:  parent.horizontalCenter
         anchors.top: headerPopup.bottom
 
         color: "transparent"
+
+
 
         Column{
 
@@ -395,7 +398,7 @@ Popup {
 
             anchors.right: fullExtactRadioBtn.right
             topPadding: 8
-            rightPadding: 30
+            rightPadding: 35
 
             CustomRadioButton{
                 id: topRadio

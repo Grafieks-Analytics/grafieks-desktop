@@ -9,20 +9,28 @@ import "../../MainSubComponents"
 TableView {
     id: testQueryResultTable
     model: QueryStatsModel
-    columnWidthProvider: function (column) { return 200; }
+    property var columnWidths: [ 80, 200, (columnsHeader.width -imageStatus.width - numberCoulmn.width - durationColumn.width)/2, (columnsHeader.width -imageStatus.width - numberCoulmn.width - durationColumn.width)/2]
+     columnWidthProvider: function (column) {
+      console.log("#"+columnWidths[column])
+         return columnWidths[column] }
     rowHeightProvider: function (column) { return 30; }
     height:parent.height
     width: parent.width
     visible: false
     clip:true
+    columnSpacing: 1
+       rowSpacing: 1
     boundsBehavior : Flickable.StopAtBounds
 
     anchors.fill: parent
 
+
     ScrollBar.horizontal: ScrollBar{}
     ScrollBar.vertical: ScrollBar{}
 
-    topMargin: columnsHeader.implicitHeight
+    topMargin: columnsHeader.implicitHeight-4
+
+
 
 
 
@@ -62,6 +70,18 @@ TableView {
 
 
 
+function onDragColumnHeadPanel(mouse){
+
+
+       console.log("mouse x"+ mouse.x ) ;
+      columnWidths = Qt.binding(function(){
+          return ([(80+mouse.x),200, (columnsHeader.width -imageStatus.width - numberCoulmn.width - durationColumn.width)/2, (columnsHeader.width -imageStatus.width - numberCoulmn.width - durationColumn.width)/2]) })
+     console.log("column width"+  columnWidths[0] ) ;
+
+
+
+
+}
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -90,24 +110,24 @@ TableView {
         Rectangle{
         border.color: Constants.darkThemeColor
         border.width: 0.5
-//        width: 200
-
         Loader{
             active: model.column === 0
 //            width: 30
+            anchors.right: parent.right
+            anchors.rightMargin: 50
             sourceComponent:
                 Rectangle{
                 id: rect
                 width: 30
                 height: 30
-
                 border.color: Constants.darkThemeColor
                 border.width: 0.5
-
                 Image{
-                    source: "/Images/icons/tick.png"
+                    source: "/Images/icons/checkmark.png"
                     height: 18
                     width: 18
+                    anchors.horizontalCenter: parent.horizontalCenter
+                     anchors.verticalCenter:  parent.verticalCenter
                 }
             }
 
@@ -117,10 +137,20 @@ TableView {
             text: modelData
             elide: Text.ElideRight
             color: Constants.lightGrayTextColor
-            leftPadding: 30
-            anchors.leftMargin: 30
-            verticalAlignment: Text.AlignVCenter
-            width: model.column === 0 ? columnsHeader.width - (200 * 4) : 200
+//            leftPadding: 30
+
+
+            anchors.left: parent.left
+            anchors.leftMargin:  if (modelData===1) {
+                                     40
+                                 }
+                                 else{
+                                     10
+                                 }
+
+//            verticalAlignment: Text.AlignVCenter
+//            anchors.horizontalCenter: parent.horizontalCenter
+             anchors.verticalCenter:  parent.verticalCenter
         }
     }
 
@@ -134,8 +164,8 @@ TableView {
         x: testQueryResultTable.contentX
         width: testQueryResultTable.leftMargin
         height: testQueryResultTable.topMargin
-        border.color: Constants.themeColor
-        border.width: 0.2
+//        border.color: Constants.themeColor
+//        border.width: 0.2
     }
 
     // Table Header Starts
@@ -143,84 +173,177 @@ TableView {
     Row {
         id: columnsHeader
         y: testQueryResult.contentY
-        z: 3
+//        z: 3
         width: testQueryResult.width
+
 
         Label {
             id: imageStatus
-            width: 30
+            width:  29
             height: 30
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
-                border.color: Constants.darkThemeColor
+//                border.color: Constants.darkThemeColor
+                color: Constants.lightThemeColor
             }
             color: Constants.blackColor
-            font.bold: true
+            font.bold: false
+
 
         }
+        ToolSeparator{
+            id: seperator1
+            height:34
+            anchors.top: columnsHeader.top
+            anchors.topMargin: -2
+           padding: 0
+           MouseArea{
+               id: infoPanelDragMouseArea
+               anchors.fill: parent
+               cursorShape: Qt.SizeHorCursor
+               width: parent.width
+
+                    onPositionChanged: {
+
+                        onDragColumnHeadPanel(mouse)
+
+                    }
+
+       }
+        }
+
+
 
         Label {
             id: numberCoulmn
-            width: 200
+            width: columnWidths[0]-30
             height: 30
             text: "#"
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
-                border.color: Constants.darkThemeColor
+//                border.color: Constants.darkThemeColor
+                color: Constants.lightThemeColor
+
             }
             color: Constants.blackColor
             leftPadding: 10
-            font.bold: true
+            font.bold: false
+
 
         }
+        ToolSeparator{
+            id: seperator2
+            height:34
+            anchors.top: columnsHeader.top
+            anchors.topMargin: -2
+           padding: 0
+           MouseArea{
+               id: infoPanelDragMouseArea2
+               anchors.fill: parent
+               cursorShape: Qt.SizeHorCursor
+               width: parent.width
+
+                    onPositionChanged: {
+
+                        onDragColumnHeadPanel(mouse)
+
+                    }
+
+       }
+        }
+
         Label {
 
             id: durationColumn
-            width: 200
+            width: columnWidths[1]
             height: 30
             text: "Duration"
 
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
-                border.color: Constants.darkThemeColor
+//                border.color: Constants.darkThemeColor
+                color: Constants.lightThemeColor
             }
             color: Constants.blackColor
             leftPadding: 10
-            font.bold: true
+            font.bold: false
 
+        }
+        ToolSeparator{
+            id: seperator3
+            height:34
+            anchors.top: columnsHeader.top
+            anchors.topMargin: -2
+           padding: 0
+           MouseArea{
+               id: infoPanelDragMouseArea3
+               anchors.fill: parent
+               cursorShape: Qt.SizeHorCursor
+               width: parent.width
+
+                    onPositionChanged: {
+
+                        onDragColumnHeadPanel(mouse)
+
+                    }
+
+       }
         }
 
         Label {
             id: actionCoulmn
-            width: 200
+            width: columnWidths[2]
             height: 30
             text: "Action"
 
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
-                border.color: Constants.darkThemeColor
+//                border.color: Constants.darkThemeColor
+                color: Constants.lightThemeColor
+
             }
             color: Constants.blackColor
             leftPadding: 10
-            font.bold: true
+            font.bold: false
 
         }
 
+        ToolSeparator{
+            id: seperator4
+            height:34
+            anchors.top: columnsHeader.top
+            anchors.topMargin: -2
+           padding: 0
+           MouseArea{
+               id: infoPanelDragMouseArea4
+               anchors.fill: parent
+               cursorShape: Qt.SizeHorCursor
+               width: parent.width
+
+                    onPositionChanged: {
+
+                        onDragColumnHeadPanel(mouse)
+
+                    }
+
+       }
+        }
 
         Label {
 
             id: messageColumn
-            width: columnsHeader.width - (200 * 3)
+            width: columnWidths[3]
             height: 30
             text: "Message"
 
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
-                border.color: Constants.darkThemeColor
+//                border.color: Constants.darkThemeColor
+                color: Constants.lightThemeColor
             }
             color: Constants.blackColor
             leftPadding: 10
-            font.bold: true
+            font.bold: false
 
         }
 
@@ -234,7 +357,7 @@ TableView {
     Layout.fillHeight: true
 
 
-    ScrollIndicator.horizontal: CustomScrollHorizontalIndicator  {}
+//    ScrollIndicator.horizontal: CustomScrollHorizontalIndicator  {}
     ScrollIndicator.vertical: CustomScrollVerticalIndicator {}
 
 
