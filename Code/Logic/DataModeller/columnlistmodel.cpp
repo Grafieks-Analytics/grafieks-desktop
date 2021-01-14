@@ -101,7 +101,7 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
 
         queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
 
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
         this->setQuery(queryString, dbMysql);
 
         break;
@@ -188,7 +188,7 @@ void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableNam
         }
 
 
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
         this->setQuery(queryString, dbMysql);
 
         break;
@@ -232,7 +232,7 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
             queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
 
-            QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
+            QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
             this->setQuery(queryString, dbMysql);
 
 
@@ -266,7 +266,7 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
         }
 
 
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
         this->setQuery(queryString, dbMysql);
 
         break;
