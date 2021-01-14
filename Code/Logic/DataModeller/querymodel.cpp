@@ -69,6 +69,12 @@ void QueryModel::executeQuery(QString &query)
 
         break;
     }
+    case Constants::postgresIntType:{
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
+        this->setQuery(query, dbMysql);
+
+        break;
+    }
 
     }
 }

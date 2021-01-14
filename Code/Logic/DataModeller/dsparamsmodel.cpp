@@ -1113,6 +1113,15 @@ QMap<QString, QString> DSParamsModel::datasourceCredentials()
         credentials.insert("username", Statics::sqliteUsername);
         credentials.insert("password", Statics::sqlitePassword);
         break;
+
+    case Constants::postgresIntType:
+        credentials.insert("type", Statics::currentDbStrType);
+        credentials.insert("host", Statics::postgresHost);
+        credentials.insert("fileDB", Statics::postgresDb);
+        credentials.insert("port", QString::number(Statics::postgresPort));
+        credentials.insert("username", Statics::postgresUsername);
+        credentials.insert("password", Statics::postgresPassword);
+        break;
     }
 
     return credentials;
