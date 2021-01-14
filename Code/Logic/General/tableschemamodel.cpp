@@ -24,7 +24,7 @@ void TableSchemaModel::showSchema(QString query)
 
     case Constants::mysqlIntType:{
 
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
 
         // Reset Mysql Profiling so that it doesn't log the query stats
         // Then in the end of this case, Set it back again in the end

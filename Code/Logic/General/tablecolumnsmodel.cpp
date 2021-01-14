@@ -23,7 +23,7 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
     case Constants::mysqlIntType:{
 
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
 
         describeQueryString = "DESCRIBE `" + tableName + "`";
 
