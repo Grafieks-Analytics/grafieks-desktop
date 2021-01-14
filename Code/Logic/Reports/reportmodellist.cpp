@@ -55,6 +55,38 @@ void ReportModelList::setTmpSql(QString query)
 
         break;
     }
+    case Constants::mysqlOdbcIntType:{
+
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
+        QSqlQuery queryResult(query, dbMysql);
+        QSqlRecord record = queryResult.record();
+        qDebug() << queryResult.record();
+        qDebug() << queryResult.lastError().databaseText();
+
+        //         while(queryResult.next()){
+        //            int field_idx = queryResult.record().indexOf("email");
+        //            QString email = queryResult.record().value(field_idx).toString();
+        //            qDebug() <<email << " Email";
+        //        }
+        for(int i = 0; i < record.count(); i++){
+
+            QString fieldName = record.fieldName(i);
+            QString tableName = record.field(i).tableName();
+            QString tableFieldName = tableName + "." + fieldName;
+
+            if(this->category.contains(tableFieldName)){
+                this->categoryList.append(fieldName);
+            }
+            else if(this->numerical.contains(tableFieldName)){
+                this->numericalList.append(fieldName);
+            }
+            else if(this->date.contains(tableFieldName)){
+                this->dateList.append(fieldName);
+            }
+        }
+
+        break;
+    }
     }
 
     emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
@@ -104,6 +136,37 @@ void ReportModelList::getColumnsForTable(QString tableName)
         }
         break;
     }
+
+    case Constants::mysqlOdbcIntType:{
+
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
+
+        describeQueryString = "DESCRIBE `" + tableName + "`";
+
+        QSqlQuery describeQuery(describeQueryString, dbMysql);
+
+        while(describeQuery.next()){
+
+            fieldName = describeQuery.value(0).toString();
+            fieldType = describeQuery.value(1).toString();
+
+            // Remove characters after `(` and then trim whitespaces
+            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+
+            // Get filter data type for QML
+            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+
+            if(filterDataType == Constants::categoricalType){
+                this->category.insert(tableName + "." + fieldName);
+            } else if(filterDataType == Constants::numericalType){
+                this->numerical.insert(tableName + "." + fieldName);
+            } else if(filterDataType == Constants::dateType){
+                this->date.insert(tableName + "." + fieldName);
+            }
+
+        }
+        break;
+    }
     }
 }
 
@@ -121,6 +184,44 @@ void ReportModelList::getData()
 
     case Constants::mysqlIntType:{
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
+        QString query = "SELECT date, volume FROM testnew";
+
+        QSqlQuery queryResult(query, dbMysql);
+        qDebug() << timer2.elapsed() << "Before ";
+
+        bool flag = true;
+        qDebug() << queryResult.size() << " Size ";
+        int field_idx = queryResult.record().indexOf("date");
+        int id = queryResult.record().indexOf("volume");
+        while(queryResult.next()){
+
+
+            //int field_idx = queryResult.record().indexOf("date");
+            //int field_idx = queryResult.record().indexOf("date");
+
+            QString date = queryResult.record().value(field_idx).toString();
+            //field_idx = queryResult.record().indexOf("volume");
+
+            int open = queryResult.record().value(id).toInt();
+
+            xAxis.append(date);
+            yAxis.append(open);
+
+            if(flag)
+            {
+                qDebug() << date << " "  << open;
+                flag = 0;
+            }
+
+        }
+
+        //emit sendData(xAxis, yAxis);
+        qDebug() << timer.elapsed() << " SQL Execution Time in ms ";
+        //emit sendData(xAxis, yAxis);
+    }
+
+    case Constants::mysqlOdbcIntType:{
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
         QString query = "SELECT date, volume FROM testnew";
 
         QSqlQuery queryResult(query, dbMysql);
