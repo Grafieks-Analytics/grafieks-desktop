@@ -275,7 +275,7 @@ Rectangle{
                 id: searchText
                 placeholderText: "Search"
                 leftPadding: 20
-                height: 40
+                height: 30
                 width: parent.width - 20
                 x: 10
 
@@ -325,6 +325,7 @@ Rectangle{
                 id: mainCheckBox
                 checked: DSParamsModel.selectAll
                 text: "All"
+                y:2
                 parent_dimension: Constants.defaultCheckBoxDimension
                 checkState: childGroup.checkState
 
@@ -336,18 +337,24 @@ Rectangle{
             ListView {
                 id: multiSelectCheckList
                 model: ColumnListModel
-                height: parent.height
+                height: parent.height-38
                 width: parent.width
-                anchors {
-                    top: mainCheckBox.top
-                    topMargin: 20
-                }
+                anchors.top: mainCheckBox.bottom
+                anchors.topMargin: 0
+
+                flickableDirection: Flickable.VerticalFlick
+                           boundsBehavior: Flickable.StopAtBounds
+                           clip: true
+                           ScrollBar.vertical: CustomScrollBar {}
+
+
 
                 delegate: Column{
                     height:20
                     CheckBoxTpl {
                         id: modelCheckBoxes
                         checked: true
+                        y:2
                         text: modelData
                         parent_dimension: Constants.defaultCheckBoxDimension
                         ButtonGroup.group: childGroup
@@ -374,10 +381,18 @@ Rectangle{
 
             id: singleSelectCheckList
             model: ColumnListModel
-            height: parent.height
+            height: parent.height-35
             width: parent.width
             visible: false
             spacing: 2
+            anchors.top: mainCheckBox.bottom
+            anchors.topMargin: 1
+            y:30
+
+            flickableDirection: Flickable.VerticalFlick
+                       boundsBehavior: Flickable.StopAtBounds
+                       clip: true
+                       ScrollBar.vertical: CustomScrollBar {}
 
             delegate: Row{
 
@@ -409,12 +424,16 @@ Rectangle{
     Rectangle{
         id: includeExcludeRow
         anchors.top:  listInnerContent.bottom
+        anchors.topMargin: 7
         anchors.left: parent.left
         height: 30
         width: parent.width
         anchors.leftMargin: 10
 
         color: "transparent"
+
+
+
 
         Column{
             anchors.left: includeExcludeRow.left

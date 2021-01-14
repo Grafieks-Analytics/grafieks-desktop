@@ -46,6 +46,20 @@ void TableListModel::callQuery(QString queryString)
 
     case Constants::mysqlIntType:{
 
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
+
+        if (queryString != ""){
+
+            this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'", dbMysql);
+        } else{
+            this->setQuery("SHOW TABLES", dbMysql);
+        }
+
+        break;
+    }
+
+    case Constants::mysqlOdbcIntType:{
+
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
 
         if (queryString != ""){
@@ -64,6 +78,19 @@ void TableListModel::callQuery(QString queryString)
             this->setQuery("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '%"+queryString+"%'  AND name != 'sqlite_%'");
         } else{
             this->setQuery("SELECT name FROM sqlite_master WHERE type='table' AND name != 'sqlite_%'");
+        }
+
+        break;
+    }
+    case Constants::postgresIntType:{
+
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrType);
+
+        if (queryString != ""){
+
+            this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'", dbMysql);
+        } else{
+            this->setQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'", dbMysql);
         }
 
         break;

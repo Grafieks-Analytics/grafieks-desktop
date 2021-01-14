@@ -263,6 +263,7 @@ Item{
         width: parent.width
         visible: true
 
+
         HorizontalLineTpl{
             id: linebar1
             line_color: Constants.darkThemeColor
@@ -297,22 +298,24 @@ Item{
             anchors.top: infodataTableHeader.top
             anchors.topMargin: 1
             anchors.left: parent.left
-            height: 22
+            height: parent.height
+//            color: "yellow"
 
             Button{
                 id: testQueryBtn
                 height: 27
                 width: 100
-                leftPadding: 10
+//                leftPadding: 10
 
                 Text{
-                    text: "Test Query"
+                    text: "Action Output"
                     anchors.centerIn: parent
                 }
 
                 background: Rectangle{
                     id: testQueryBtnBackground
                     color: testQueryBtn.hovered ? Constants.themeColor : Constants.whiteColor
+
                 }
 
                 onClicked: onTestQueryClicked()
@@ -332,8 +335,12 @@ Item{
             id: seperator1
             height:30
             anchors.left:toolbar_querymodeller.right
+//            anchors.right: data_preview_btn.left
             anchors.top: infodataTableHeader.top
             anchors.topMargin: -1
+//            anchors.leftMargin: -5
+//            anchors.rightMargin: -5
+            padding: 0
         }
 
         // "Data Preview" Button Starts
@@ -345,6 +352,7 @@ Item{
             anchors.top: infodataTableHeader.top
             anchors.topMargin: 1
             anchors.left: seperator1.right
+//             anchors.leftMargin: -5
             height: 22
 
             Button{
@@ -388,6 +396,9 @@ Item{
             anchors.left:data_preview_btn.right
             anchors.top: infodataTableHeader.top
             anchors.topMargin: -1
+//            anchors.leftMargin: -5
+//            anchors.rightMargin: -5
+            padding: 0
         }
 
 
@@ -401,6 +412,7 @@ Item{
             anchors.top: infodataTableHeader.top
             anchors.topMargin: 1
             anchors.left: seperator2.right
+//            anchors.leftMargin: -5
             height: 22
 
             Button{
@@ -496,6 +508,8 @@ Item{
             anchors.left:display_limited_btn.right
             anchors.top: infodataTableHeader.top
             anchors.topMargin: -1
+            anchors.leftMargin: -5
+            anchors.rightMargin: -5
         }
 
         // "Play" Button Starts
@@ -504,7 +518,7 @@ Item{
 
             id: play_btn_rect
             width: 160
-            height: 22
+            height: parent.height
             anchors.top: infodataTableHeader.top
             anchors.topMargin: 1
             anchors.left: seperator3.right
@@ -606,10 +620,13 @@ Item{
         anchors.rightMargin: column_querymodeller.width + 50
         width: parent.width - column_querymodeller.width - 50
 
+
         // "Test Query Results" - Status of query section -> Execution Time starts
 
         TestQueryResultsTable{
             id: testQueryResult
+            anchors.top: top.parent
+            anchors.topMargin: -1
         }
 
         // "Test Query Results" Ends
@@ -618,6 +635,8 @@ Item{
 
         DataPreviewTable{
             id: dataPreviewResult
+            anchors.top: top.parent
+            anchors.topMargin: -1
         }
 
 
