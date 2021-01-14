@@ -10,16 +10,17 @@ TableView {
     id: testQueryResultTable
     model: QueryStatsModel
     property var columnWidths: [ 80, 200, (columnsHeader.width -imageStatus.width - numberCoulmn.width - durationColumn.width)/2, (columnsHeader.width -imageStatus.width - numberCoulmn.width - durationColumn.width)/2]
-     columnWidthProvider: function (column) {
-      console.log("#"+columnWidths[column])
-         return columnWidths[column] }
+    columnWidthProvider: function (column) {
+        console.log("#"+columnWidths[column])
+        return columnWidths[column] }
     rowHeightProvider: function (column) { return 30; }
     height:parent.height
     width: parent.width
     visible: false
     clip:true
     columnSpacing: 1
-       rowSpacing: 1
+//    rowSpacing: 1
+
     boundsBehavior : Flickable.StopAtBounds
 
     anchors.fill: parent
@@ -70,18 +71,18 @@ TableView {
 
 
 
-function onDragColumnHeadPanel(mouse){
+    function onDragColumnHeadPanel(mouse){
 
 
-       console.log("mouse x"+ mouse.x ) ;
-      columnWidths = Qt.binding(function(){
-          return ([(80+mouse.x),200, (columnsHeader.width -imageStatus.width - numberCoulmn.width - durationColumn.width)/2, (columnsHeader.width -imageStatus.width - numberCoulmn.width - durationColumn.width)/2]) })
-     console.log("column width"+  columnWidths[0] ) ;
+        console.log("mouse x"+ parseInt(mouse.x)) ;
+        columnWidths = Qt.binding(function(){
+            return ([(80+ parseInt(mouse.x))]) })
+        console.log("column width"+  columnWidths[0] ) ;
+        testQueryResultTable.columnWidthProvider= function (column) {
+            console.log("#"+columnWidths[column])
+            return columnWidths[column] }
 
-
-
-
-}
+    }
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -110,34 +111,34 @@ function onDragColumnHeadPanel(mouse){
         Rectangle{
         border.color: Constants.darkThemeColor
         border.width: 0.5
-        Loader{
-            active: model.column === 0
-//            width: 30
-            anchors.right: parent.right
-            anchors.rightMargin: 50
-            sourceComponent:
-                Rectangle{
-                id: rect
-                width: 30
-                height: 30
-                border.color: Constants.darkThemeColor
-                border.width: 0.5
-                Image{
-                    source: "/Images/icons/checkmark.png"
-                    height: 18
-                    width: 18
-                    anchors.horizontalCenter: parent.horizontalCenter
-                     anchors.verticalCenter:  parent.verticalCenter
-                }
-            }
+//        Loader{
+//            active: model.column === 0
+//            //            width: 30
+//            anchors.right: parent.right
+//            anchors.rightMargin: 50
+//            sourceComponent:
+//                Rectangle{
+//                id: rect
+//                width: 30
+//                height: 30
+//                border.color: Constants.darkThemeColor
+//                border.width: 0.5
+//                Image{
+//                    source: "/Images/icons/checkmark.png"
+//                    height: 18
+//                    width: 18
+//                    anchors.horizontalCenter: parent.horizontalCenter
+//                    anchors.verticalCenter:  parent.verticalCenter
+//                }
+//            }
 
-        }
+//        }
 
         Text {
             text: modelData
             elide: Text.ElideRight
             color: Constants.lightGrayTextColor
-//            leftPadding: 30
+            //            leftPadding: 30
 
 
             anchors.left: parent.left
@@ -148,9 +149,9 @@ function onDragColumnHeadPanel(mouse){
                                      10
                                  }
 
-//            verticalAlignment: Text.AlignVCenter
-//            anchors.horizontalCenter: parent.horizontalCenter
-             anchors.verticalCenter:  parent.verticalCenter
+            //            verticalAlignment: Text.AlignVCenter
+            //            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter:  parent.verticalCenter
         }
     }
 
@@ -164,8 +165,8 @@ function onDragColumnHeadPanel(mouse){
         x: testQueryResultTable.contentX
         width: testQueryResultTable.leftMargin
         height: testQueryResultTable.topMargin
-//        border.color: Constants.themeColor
-//        border.width: 0.2
+        //        border.color: Constants.themeColor
+        //        border.width: 0.2
     }
 
     // Table Header Starts
@@ -173,8 +174,9 @@ function onDragColumnHeadPanel(mouse){
     Row {
         id: columnsHeader
         y: testQueryResult.contentY
-//        z: 3
+                z: 3
         width: testQueryResult.width
+
 
 
         Label {
@@ -183,7 +185,7 @@ function onDragColumnHeadPanel(mouse){
             height: 30
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
-//                border.color: Constants.darkThemeColor
+                //                border.color: Constants.darkThemeColor
                 color: Constants.lightThemeColor
             }
             color: Constants.blackColor
@@ -196,20 +198,18 @@ function onDragColumnHeadPanel(mouse){
             height:34
             anchors.top: columnsHeader.top
             anchors.topMargin: -2
-           padding: 0
-           MouseArea{
-               id: infoPanelDragMouseArea
-               anchors.fill: parent
-               cursorShape: Qt.SizeHorCursor
-               width: parent.width
+            padding: 0
 
-                    onPositionChanged: {
+            MouseArea{
+                id: infoPanelDragMouseArea
+                anchors.fill: parent
+                cursorShape: Qt.SizeHorCursor
+                width: parent.width
+                onPositionChanged: {
+                    onDragColumnHeadPanel(mouse)
+                }
 
-                        onDragColumnHeadPanel(mouse)
-
-                    }
-
-       }
+            }
         }
 
 
@@ -221,7 +221,7 @@ function onDragColumnHeadPanel(mouse){
             text: "#"
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
-//                border.color: Constants.darkThemeColor
+                //                border.color: Constants.darkThemeColor
                 color: Constants.lightThemeColor
 
             }
@@ -231,25 +231,48 @@ function onDragColumnHeadPanel(mouse){
 
 
         }
-        ToolSeparator{
+//        ToolSeparator{
+//            id: seperator2
+//            height:34
+//            anchors.top: columnsHeader.top
+//            anchors.topMargin: -2
+////            width: 20
+//            padding: 0
+//            MouseArea{
+//                id: infoPanelDragMouseArea2
+//                anchors.fill: parent
+//                cursorShape: Qt.SizeHorCursor
+//                width: parent.width
+
+//                onPositionChanged: {
+
+//                    onDragColumnHeadPanel(mouse)
+
+//                }
+
+//            }
+//        }
+        Rectangle{
             id: seperator2
             height:34
             anchors.top: columnsHeader.top
             anchors.topMargin: -2
-           padding: 0
-           MouseArea{
-               id: infoPanelDragMouseArea2
-               anchors.fill: parent
-               cursorShape: Qt.SizeHorCursor
-               width: parent.width
+            color: "red"
+            width: 20
 
-                    onPositionChanged: {
+            MouseArea{
+                           id: infoPanelDragMouseArea2
+                           anchors.fill: parent
+                           cursorShape: Qt.SizeHorCursor
+                           width: parent.width
 
-                        onDragColumnHeadPanel(mouse)
+                           onPositionChanged: {
 
-                    }
+                               onDragColumnHeadPanel(mouse)
 
-       }
+                           }
+            }
+
         }
 
         Label {
@@ -261,7 +284,7 @@ function onDragColumnHeadPanel(mouse){
 
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
-//                border.color: Constants.darkThemeColor
+                //                border.color: Constants.darkThemeColor
                 color: Constants.lightThemeColor
             }
             color: Constants.blackColor
@@ -274,20 +297,20 @@ function onDragColumnHeadPanel(mouse){
             height:34
             anchors.top: columnsHeader.top
             anchors.topMargin: -2
-           padding: 0
-           MouseArea{
-               id: infoPanelDragMouseArea3
-               anchors.fill: parent
-               cursorShape: Qt.SizeHorCursor
-               width: parent.width
+            padding: 0
+//            MouseArea{
+//                id: infoPanelDragMouseArea3
+//                anchors.fill: parent
+//                cursorShape: Qt.SizeHorCursor
+//                width: parent.width
 
-                    onPositionChanged: {
+//                onPositionChanged: {
 
-                        onDragColumnHeadPanel(mouse)
+//                    onDragColumnHeadPanel(mouse)
 
-                    }
+//                }
 
-       }
+//            }
         }
 
         Label {
@@ -298,7 +321,7 @@ function onDragColumnHeadPanel(mouse){
 
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
-//                border.color: Constants.darkThemeColor
+                //                border.color: Constants.darkThemeColor
                 color: Constants.lightThemeColor
 
             }
@@ -313,20 +336,20 @@ function onDragColumnHeadPanel(mouse){
             height:34
             anchors.top: columnsHeader.top
             anchors.topMargin: -2
-           padding: 0
-           MouseArea{
-               id: infoPanelDragMouseArea4
-               anchors.fill: parent
-               cursorShape: Qt.SizeHorCursor
-               width: parent.width
+            padding: 0
+//            MouseArea{
+//                id: infoPanelDragMouseArea4
+//                anchors.fill: parent
+//                cursorShape: Qt.SizeHorCursor
+//                width: parent.width
 
-                    onPositionChanged: {
+//                onPositionChanged: {
 
-                        onDragColumnHeadPanel(mouse)
+//                    onDragColumnHeadPanel(mouse)
 
-                    }
+//                }
 
-       }
+//            }
         }
 
         Label {
@@ -338,7 +361,7 @@ function onDragColumnHeadPanel(mouse){
 
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
-//                border.color: Constants.darkThemeColor
+                //                border.color: Constants.darkThemeColor
                 color: Constants.lightThemeColor
             }
             color: Constants.blackColor
@@ -357,7 +380,7 @@ function onDragColumnHeadPanel(mouse){
     Layout.fillHeight: true
 
 
-//    ScrollIndicator.horizontal: CustomScrollHorizontalIndicator  {}
+    //    ScrollIndicator.horizontal: CustomScrollHorizontalIndicator  {}
     ScrollIndicator.vertical: CustomScrollVerticalIndicator {}
 
 
