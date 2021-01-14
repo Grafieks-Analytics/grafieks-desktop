@@ -323,14 +323,14 @@ Rectangle{
         anchors.left: parent.left
         anchors.leftMargin: 20
 
-        CheckBox {
+        CheckBoxTpl {
             checked: DSParamsModel.includeNull
             text: qsTr("Include Null")
+            parent_dimension: Constants.defaultCheckBoxDimension
 
-            onCheckedStateChanged: {
+            onCheckStateChanged: {
                 onIncludeCheckedClicked(checked)
             }
-
         }
     }
 
@@ -341,9 +341,10 @@ Rectangle{
         anchors.right: parent.right
         anchors.rightMargin: 20
 
-        CheckBox {
+        CheckBoxTpl {
             checked: DSParamsModel.exclude
             text: qsTr("Exclude")
+             parent_dimension: Constants.defaultCheckBoxDimension
 
             onCheckedChanged: {
                 onExcludeCheckedClicked(checked);

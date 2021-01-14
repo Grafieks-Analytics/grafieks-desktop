@@ -320,14 +320,16 @@ Popup {
             id: listRadioColumn
             anchors.top: fullExtactRadioBtn.top
 
-            width: parent.width/3
+            width: parent.width/2
             anchors.left: parent.left
             leftPadding: 30
             topPadding: 8
+
             anchors.verticalCenter: parent.verticalCenter
 
             CustomRadioButton{
                 id: listRadio
+                x:21
                 text: qsTr("List")
                 ButtonGroup.group: filterType
                 checked: true
@@ -340,14 +342,19 @@ Popup {
             id: wildcardRadioColumn
             topPadding: 10
             bottomPadding: 10
-            leftPadding: 50
-            width: parent.width /3
+            anchors.right: parent.right
+//            leftPadding: 293
+            width: parent.width /2
             anchors.top: fullExtactRadioBtn.top
-            anchors.centerIn: parent
+//            anchors.centerIn: parent
 
             CustomRadioButton{
                 id: wildcardRadio
                 text: qsTr("Wildcard")
+
+//                anchors.left: listRadioColumn.left
+                 anchors.right: parent.right
+                 anchors.rightMargin: 72
                 checked: false
                 parent_dimension: 16
                 ButtonGroup.group: filterType

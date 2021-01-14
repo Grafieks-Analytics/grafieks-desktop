@@ -15,25 +15,26 @@ namespace Constants
 
     // Datasource type int
     const int mysqlIntType = 0;
-    const int sqliteIntType = 1;
-    const int mssqlIntType = 2;
-    const int postgresIntType = 3;
-    const int excelIntType = 4;
-    const int mongoIntType = 5;
-    const int redshiftIntType = 6;
-    const int hiveIntType = 7;
-    const int csvIntType = 8;
-    const int githubIntType = 9;
-    const int impalaIntType = 10;
-    const int jsonIntType = 11;
-    const int accessIntType = 12;
-    const int oracleIntType = 13;
-    const int snowflakeIntType = 14;
-    const int teradataIntType = 15;
-    const int dropboxIntType = 16;
-    const int driveIntType = 17;
-    const int boxIntType = 18;
-    const int sheetIntType = 19;
+    const int mysqlOdbcIntType = 1;
+    const int sqliteIntType = 2;
+    const int mssqlIntType = 3;
+    const int postgresIntType = 4;
+    const int excelIntType = 5;
+    const int mongoIntType = 6;
+    const int redshiftIntType = 7;
+    const int hiveIntType = 8;
+    const int csvIntType = 9;
+    const int githubIntType = 10;
+    const int impalaIntType = 11;
+    const int jsonIntType = 12;
+    const int accessIntType = 13;
+    const int oracleIntType = 14;
+    const int snowflakeIntType = 15;
+    const int teradataIntType = 16;
+    const int dropboxIntType = 17;
+    const int driveIntType = 18;
+    const int boxIntType = 19;
+    const int sheetIntType = 20;
 
     // Datasource type Strings
     const QString mysqlStrType = "mysql";

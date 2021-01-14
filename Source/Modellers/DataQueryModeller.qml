@@ -350,7 +350,7 @@ Page {
                 width: 10
                 source : "/Images/icons/Down_20.png"
                 anchors.right: parent.right
-                anchors.rightMargin: 20
+                anchors.rightMargin: 22
 
                 visible: tableShowToggle
 
@@ -970,7 +970,7 @@ Page {
                     height: 20
                     width: 20
                     anchors.right: parent.right
-                    anchors.rightMargin: 20
+                    anchors.rightMargin: 17
                     anchors.verticalCenter: parent.verticalCenter
 
                     ToolTip.delay:Constants.tooltipShowTime
@@ -1030,11 +1030,12 @@ Page {
 
                     id: row_querymodeller_right_col
                     width: parent.width-10
+                    height: 30
 
                     TextField{
                         id:searchTextBox
                         placeholderText: "Search"
-                        width: parent.width - search_icon.width
+                        width: parent.width - search_icon.width-8
                         height:30
                         cursorVisible: true
                         anchors.top: row_querymodeller_right_col.top
@@ -1051,7 +1052,8 @@ Page {
                         source:"/Images/icons/iconmonstr-search-thin.svg"
                         height:18
                         width:18
-                        anchors.rightMargin: 10
+                        anchors.left: searchTextBox.right
+                        anchors.rightMargin: 50
                         anchors.top: row_querymodeller_right_col.top
                         anchors.topMargin: 10
 
@@ -1140,7 +1142,7 @@ Page {
                         width: 10
                         height: 10
                         anchors.right: parent.right
-                        anchors.rightMargin: 15
+                        anchors.rightMargin: 22
                         anchors.verticalCenter: parent.verticalCenter
                         visible: true
 

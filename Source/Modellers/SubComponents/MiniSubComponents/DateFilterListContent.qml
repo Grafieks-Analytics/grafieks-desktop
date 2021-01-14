@@ -400,7 +400,7 @@ Rectangle{
             TextField{
                 placeholderText: "Search"
                 leftPadding: 20
-                height: 40
+                height: 35
                 anchors.top: parent.top
                 width: parent.width - 20
                 x: 10
@@ -455,18 +455,22 @@ Rectangle{
         ListView {
             id: multiSelectCheckList
             model: ColumnListModel
-            height: parent.height
+          height: parent.height-38
             width: parent.width
-            anchors {
-                top: mainCheckBox.top
-                topMargin: 20
-            }
+
+             anchors.top: mainCheckBox.bottom
+            flickableDirection: Flickable.VerticalFlick
+                       boundsBehavior: Flickable.StopAtBounds
+                       clip: true
+                       ScrollBar.vertical: CustomScrollBar {}
+
 
             delegate: Row{
                 height:20
                 CheckBoxTpl {
                     id: modelCheckBoxes
                     checked: true
+                    y:2
                     text  : modelData
                     parent_dimension: Constants.defaultCheckBoxDimension
                     ButtonGroup.group: childGroup
@@ -490,10 +494,19 @@ Rectangle{
 
             id: singleSelectCheckList
             model: ColumnListModel
-            height: parent.height
-            width: parent.width
+
+
             visible: false
             spacing: 2
+            height: parent.height-38
+              width: parent.width
+
+               anchors.top: mainCheckBox.bottom
+              flickableDirection: Flickable.VerticalFlick
+                         boundsBehavior: Flickable.StopAtBounds
+                         clip: true
+                         ScrollBar.vertical: CustomScrollBar {}
+
             delegate: Row{
 
                 height: 20
@@ -552,39 +565,43 @@ Rectangle{
     Rectangle{
         id: includeExcludeRow
         anchors.top:  listInnerContent.bottom
+        anchors.topMargin: 7
         anchors.left: parent.left
         height: 30
         width: parent.width - 25
         anchors.leftMargin: 10
 
+
         Column{
             anchors.left: includeExcludeRow.left
 
-            CheckBox {
+            CheckBoxTpl {
                 checked: DSParamsModel.includeNull
                 text: qsTr("Include Null")
-                indicator.width: 15
-                indicator.height: 15
+
+                  parent_dimension: Constants.defaultCheckBoxDimension
 
                 onCheckStateChanged: {
                     onIncludeCheckedClicked(checked)
                 }
+
+
 
             }
         }
 
         Column{
             anchors.right: includeExcludeRow.right
-            anchors.rightMargin: 30
-            CheckBox {
-                checked: DSParamsModel.exclude
-                text: qsTr("Exclude")
-                indicator.width: 15
-                indicator.height: 15
+            anchors.rightMargin: 5
 
-                onCheckStateChanged: {
-                    onExcludeCheckedClicked(checked)
-                }
+                CheckBoxTpl {
+                    checked: DSParamsModel.exclude
+                    text: qsTr("Exclude")
+                    parent_dimension: Constants.defaultCheckBoxDimension
+
+                    onCheckStateChanged: {
+                        onExcludeCheckedClicked(checked)
+                    }
             }
         }
 

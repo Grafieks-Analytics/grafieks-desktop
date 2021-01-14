@@ -19,6 +19,7 @@ Rectangle{
     color: Constants.themeColor
     height: parent.height - 50
     width: 60
+    z:100
 
     signal loadchart(string chartname)
 
@@ -226,6 +227,7 @@ Rectangle{
         id: leftmenu_col
         width: parent.width
         spacing: 10
+        z:100
 
         ListView{
             height: allCharts.count * 40

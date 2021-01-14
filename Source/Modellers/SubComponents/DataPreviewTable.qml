@@ -125,7 +125,7 @@ TableView {
                     height: parent.height
                     anchors.centerIn: parent
                     padding: 10
-                    font.bold: true
+                    font.bold: false
                     verticalAlignment: Text.AlignVCenter
                 }
 
