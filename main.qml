@@ -356,7 +356,7 @@ ApplicationWindow {
             MenuItem{
                 text: qsTr("Test")
                 onTriggered: {
-                    stacklayout_home.currentIndex = 1
+                    stacklayout_home.currentIndex = 8
                 }
             }
 
@@ -444,6 +444,11 @@ ApplicationWindow {
         // 7
         NewReport{
             id: new_report_main
+        }
+
+        // 8
+        TableTest{
+            id: table_test
         }
 
 

@@ -76,7 +76,7 @@ TableView {
 
         console.log("mouse x"+ parseInt(mouse.x)) ;
         columnWidths = Qt.binding(function(){
-            return ([(80+ parseInt(mouse.x))]) })
+            return ([(80+ parseInt(mouse.x)),200, (columnsHeader.width -imageStatus.width - numberCoulmn.width - durationColumn.width)/2, (columnsHeader.width -imageStatus.width - numberCoulmn.width - durationColumn.width)/2]) })
         console.log("column width"+  columnWidths[0] ) ;
         testQueryResultTable.columnWidthProvider= function (column) {
             console.log("#"+columnWidths[column])
@@ -231,49 +231,28 @@ TableView {
 
 
         }
-//        ToolSeparator{
-//            id: seperator2
-//            height:34
-//            anchors.top: columnsHeader.top
-//            anchors.topMargin: -2
-////            width: 20
-//            padding: 0
-//            MouseArea{
-//                id: infoPanelDragMouseArea2
-//                anchors.fill: parent
-//                cursorShape: Qt.SizeHorCursor
-//                width: parent.width
-
-//                onPositionChanged: {
-
-//                    onDragColumnHeadPanel(mouse)
-
-//                }
-
-//            }
-//        }
-        Rectangle{
+        ToolSeparator{
             id: seperator2
             height:34
             anchors.top: columnsHeader.top
             anchors.topMargin: -2
-            color: "red"
-            width: 20
-
+//            width: 20
+            padding: 0
             MouseArea{
-                           id: infoPanelDragMouseArea2
-                           anchors.fill: parent
-                           cursorShape: Qt.SizeHorCursor
-                           width: parent.width
+                id: infoPanelDragMouseArea2
+                anchors.fill: parent
+                cursorShape: Qt.SizeHorCursor
+                width: parent.width
 
-                           onPositionChanged: {
+                onPositionChanged: {
 
-                               onDragColumnHeadPanel(mouse)
+                    onDragColumnHeadPanel(mouse)
 
-                           }
+                }
+
             }
-
         }
+
 
         Label {
 
