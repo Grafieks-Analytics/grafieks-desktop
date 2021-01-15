@@ -94,8 +94,8 @@ Popup {
     }
 
     function connectToPostgreSQL(){
-        //        ConnectorsLoginModel.postgresOdbcLogin(server.text, database.text, port.text, username.text, password.text)
-        ConnectorsLoginModel.postgresOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
+        ConnectorsLoginModel.postgresOdbcLogin(control.currentText, server.text, database.text, port.text, username.text, password.text)
+        //ConnectorsLoginModel.postgresOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
     }
 
     // JAVASCRIPT FUNCTION ENDS

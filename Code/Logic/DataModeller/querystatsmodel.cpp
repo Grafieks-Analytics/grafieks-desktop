@@ -56,6 +56,31 @@ void QueryStatsModel::setProfiling(bool status)
         break;
     }
 
+    case Constants::mysqlOdbcIntType:{
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
+        if(status == true){
+            this->setQuery("SET profiling = 1", dbMysql);
+
+        } else{
+            this->setQuery("SET profiling = 0", dbMysql);
+        }
+
+        break;
+    }
+
+    case Constants::postgresIntType:{
+
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
+        if(status == true){
+            this->setQuery("SET profiling = 1", dbMysql);
+
+        } else{
+            this->setQuery("SET profiling = 0", dbMysql);
+        }
+
+        break;
+    }
+
     }
 
 }
@@ -75,6 +100,28 @@ void QueryStatsModel::resetProfiling()
         break;
     }
 
+    case Constants::mysqlOdbcIntType:{
+
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
+        this->setQuery("SET profiling = 0", dbMysql);
+        this->setQuery("SET profiling_history_size = 0", dbMysql);
+        this->setQuery("SET profiling_history_size = 100", dbMysql);
+        this->setQuery("SET profiling = 1", dbMysql);
+
+        break;
+    }
+
+    case Constants::postgresIntType:{
+
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
+        this->setQuery("SET profiling = 0", dbMysql);
+        this->setQuery("SET profiling_history_size = 0", dbMysql);
+        this->setQuery("SET profiling_history_size = 100", dbMysql);
+        this->setQuery("SET profiling = 1", dbMysql);
+
+        break;
+    }
+
     }
 }
 
@@ -86,6 +133,13 @@ void QueryStatsModel::showStats()
     case Constants::mysqlIntType:{
 
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
+        this->setQuery("SHOW profiles", dbMysql);
+
+        break;
+    }
+    case Constants::postgresIntType:{
+
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
         this->setQuery("SHOW profiles", dbMysql);
 
         break;
@@ -125,6 +179,21 @@ QVariant QueryStatsModel::showErrorMessage(const QString &query)
     case Constants::mysqlIntType:{
 
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
+        QSqlQuery queryResult(query, dbMysql);
+        message = queryResult.lastError().text();
+        break;
+    }
+
+    case Constants::mysqlOdbcIntType:{
+
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
+        QSqlQuery queryResult(query, dbMysql);
+        message = queryResult.lastError().text();
+        break;
+    }
+    case Constants::postgresIntType:{
+
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
         QSqlQuery queryResult(query, dbMysql);
         message = queryResult.lastError().text();
         break;

@@ -89,6 +89,30 @@ void DBListModel::callQuery(QString queryString)
         break;
     }
 
+    case Constants::mysqlOdbcIntType:{
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
+
+        if(queryString != ""){
+            this->setQuery("SHOW DATABASES LIKE '%"+queryString+"%'", dbMysql);
+        } else{
+            this->setQuery("SHOW DATABASES", dbMysql);
+        }
+
+        break;
+    }
+    case Constants::postgresIntType:{
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrType);
+
+        if(queryString != ""){
+            this->setQuery("SHOW DATABASES LIKE '%"+queryString+"%'", dbMysql);
+        } else{
+            this->setQuery("SELECT datname FROM pg_database WHERE datistemplate = false", dbMysql);
+        }
+
+        break;
+    }
+
+
     }
 }
 
