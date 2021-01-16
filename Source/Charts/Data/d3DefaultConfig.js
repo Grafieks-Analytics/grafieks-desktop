@@ -4,7 +4,8 @@ const defaultD3Config = {
     defaultMarkerShape: "circle",
     initialCircleRadius: 2,
     onHoverCircleRadius: 5,
-    initialBoxDimension: 5,
+    initialBoxDimension: 6,
+    onHoverBoxDimension: 8,
 };
 const markerShapeConfig = {
     circle: {

@@ -193,7 +193,9 @@
                     d3.selectAll(shapeClass).style("opacity", 0.3);
                     d3.select(this)
                         .style("opacity", 1)
-                        .attr("r", onHoverCircleRadius);
+                        .attr("r", onHoverCircleRadius)
+                        .attr("height", onHoverBoxDimension)
+                        .attr("width", onHoverBoxDimension);
                 })
                 .on("mouseout", function () {
                     d3.select("#tooltip").style("display", "none");

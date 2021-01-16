@@ -186,5 +186,7 @@
         <file>Source/Charts/Data/d3-scale-chromatic.v1.min.js</file>
         <file>Source/Charts/Data/d3DefaultConfig.js</file>
         <file>Source/Charts/LineChart.html</file>
+        <file>Source/Others/Table.qml</file>
+        <file>Source/Others/TableTest.qml</file>
     </qresource>
 </RCC>

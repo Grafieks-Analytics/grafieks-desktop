@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>Grafieks Desktop</Name>
+    <Version>1.0.0</Version>
+    <Title>Grafieks Desktop</Title>
+    <Publisher>Grafieks Analytics Ltd</Publisher>
+    
+    <WizardStyle>Modern</WizardStyle>
+    <!-- <StyleSheet>style.qss</StyleSheet> -->
+    <WizardShowPageList>false</WizardShowPageList>
+    <InstallerApplicationIcon>logo</InstallerApplicationIcon>
+    <InstallerWindowIcon>logo.png</InstallerWindowIcon>
+
+    <MaintenanceToolName>Updates</MaintenanceToolName>
+    <StartMenuDir>Grafieks</StartMenuDir>
+    <TargetDir>@ApplicationsDir@/Grafieks</TargetDir>
+
+    <RunProgram>@TargetDir@/GrafieksDesktop.exe</RunProgram>
+
+    <RemoteRepositories>
+        <Repository>
+            <Url>http://13.232.48.100/grafieks/</Url>
+        </Repository>
+    </RemoteRepositories>
+</Installer>
