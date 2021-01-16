@@ -41,110 +41,131 @@ Rectangle{
             chartHtml:"BarChartArrayInput.html"
             name: "bar"
             activeChart: true
+            title: "Bar Chart"
         }
         ListElement{
             icon: "area.png"
             chartHtml:"AreaChart.html"
             name:"area"
             activeChart: false
+            title: "Area Chart"
         }
         ListElement{
             icon: "line_chart.png"
             chartHtml:"LineChart.html"
             activeChart: false
+            title: "Line Chart"
         }
         ListElement{
             icon: "combination_chart.png"
             activeChart: false
             chartHtml:"bar.html"
+            title:"Combination"
         }
         ListElement{
             icon: "heatmap.png"
             chartHtml:"bar.html"
             activeChart: false
+            title:"Heat Map"
         }
         ListElement{
             icon: "scatter_plot.png"
             chartHtml:"bar.html"
             activeChart: false
+            title:"Scatter Plot"
         }
         ListElement{
             icon: "waterfall.png"
             chartHtml:"bar.html"
             activeChart: false
+            title:"Waterfall"
         }
         ListElement{
             icon: "pie_chart.png"
             chartHtml:"bar.html"
             activeChart: false
+            title:"Pie Chart"
         }
         ListElement{
             icon: "donut.png"
             chartHtml:"bar.html"
             activeChart: false
+            title:"Donut"
         }
         ListElement{
             icon: "radar.png"
             chartHtml:"bar.html"
             activeChart: false
+            title:"Radar"
         }
         ListElement{
             icon: "sunburst.png"
             chartHtml:"bar.html"
             activeChart: false
+            title:"Sunburst"
         }
         ListElement{
             icon: "nightingales_rose.png"
             activeChart: false
             chartHtml:"bar.html"
+            title:"Nightingale Rose"
         }
         ListElement{
             icon: "chord_diagram.png"
             chartHtml:"bar.html"
             activeChart: false
+            title:"Chord Diagram"
         }
         ListElement{
             icon: "funnel.png"
             chartHtml:"bar.html"
             activeChart: false
+            title:"Funnel"
         }
         ListElement{
             icon: "tree_chart.png"
             chartHtml:"bar.html"
             activeChart: false
+            title:"Tree Chart"
         }
         ListElement{
             icon: "force_directed.png"
             chartHtml:"bar.html"
             activeChart: false
+            title:"Force Directed"
         }
         ListElement{
             icon: "sankey.png"
             chartHtml:"bar.html"
             elementHeight: 24
             activeChart: false
+            title:"Sankey"
         }
         ListElement{
             icon: "tree_map.png"
             chartHtml:"bar.html"
             elementHeight: 24
             activeChart: false
+            title: "Tree Map"
         }
         ListElement{
             icon: "pivot.png"
             chartHtml:"bar.html"
             activeChart: false
+            title:"Pivot"
         }
         ListElement{
             icon: "table.png"
             chartHtml:"bar.html"
             elementWidth: 30
             activeChart: false
+            title:"Table"
         }
         ListElement{
             icon: "condegram.png"
             chartHtml:"bar.html"
             activeChart: false
+            title:"Condegram"
         }
         ListElement{
             icon: "map.png"
@@ -152,6 +173,7 @@ Rectangle{
             elementHeight: 22
             elementWidth:40
             activeChart: false
+            title:"Map"
         }
         ListElement{
             icon: "gauge_chart.png"
@@ -159,6 +181,7 @@ Rectangle{
             elementHeight: 22
             elementWidth:30
             activeChart: false
+            title:"Gauge Chart"
         }
     }
 
@@ -240,6 +263,7 @@ Rectangle{
                 width: parent.width
                 height: imageRectangleHeight
                 color: activeChart ? Constants.darkThemeColor :Constants.themeColor
+                property bool displayToolTipVisible: false
                 Image{
                     source:"/Images/icons/charts/"+icon
                     anchors.centerIn: parent
@@ -250,7 +274,20 @@ Rectangle{
                     anchors.fill: parent
                     hoverEnabled: true
                     onClicked:  getChart(chartHtml,index)
+                    onEntered: {
+                        console.log('Display')
+                        displayToolTipVisible=true
+                    }
+                    onExited: displayToolTipVisible=false
+
                 }
+
+                ToolTip.delay: Constants.tooltipShowTime
+                ToolTip.timeout: Constants.tooltipHideTime
+                ToolTip.visible: displayToolTipVisible
+                ToolTip.text: qsTr(title)
+
+
             }
 
         }

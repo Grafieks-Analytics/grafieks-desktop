@@ -19,6 +19,7 @@
             initialCircleRadius,
             initialBoxDimension,
             onHoverCircleRadius,
+            onHoverBoxDimension,
         } = defaultD3Config;
 
         var data = [
@@ -149,6 +150,7 @@
             if (!markerShape) {
                 markerShape = defaultD3Config.defaultMarkerShape;
             }
+
             svg.selectAll(".marker-shape").remove();
 
             svg.selectAll(".dot")
@@ -189,7 +191,7 @@
                         .style("display", "block")
                         .html(parseInt(xValue) + ", " + yValue.toFixed(2));
 
-                    var shapeClass = "." + markerShape;
+                    var shapeClass = ".marker-shape";
                     d3.selectAll(shapeClass).style("opacity", 0.3);
                     d3.select(this)
                         .style("opacity", 1)
@@ -199,8 +201,7 @@
                 })
                 .on("mouseout", function () {
                     d3.select("#tooltip").style("display", "none");
-                    console.log("out");
-                    var shapeClass = "." + markerShape;
+                    var shapeClass = ".marker-shape";
                     d3.selectAll(shapeClass)
                         .style("opacity", 1)
                         .attr("r", initialCircleRadius)
