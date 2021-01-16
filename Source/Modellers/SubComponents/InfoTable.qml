@@ -91,7 +91,7 @@ Item{
 
 
     function onTestQueryClicked(){
-        testQueryBtnBackground.color = Constants.themeColor
+        testQueryBtnBackground.color = Constants.lightThemeColor
         displayLimitBtnBackground.color = displayLimitBtn.hovered ? Constants.themeColor : Constants.whiteColor
         dataPreviewBtnBackground.color = dataPreviewBtn.hovered ? Constants.themeColor : Constants.whiteColor
 
@@ -102,7 +102,7 @@ Item{
 
     function onDataPreviewClicked(){
         testQueryBtnBackground.color = testQueryBtn.hovered ? Constants.themeColor : Constants.whiteColor
-        dataPreviewBtnBackground.color = Constants.themeColor
+        dataPreviewBtnBackground.color = Constants.lightThemeColor
         displayLimitBtnBackground.color = displayLimitBtn.hovered ? Constants.themeColor : Constants.whiteColor
 
         testQueryResult.visible = false
@@ -299,7 +299,7 @@ Item{
             anchors.topMargin: 1
             anchors.left: parent.left
             height: parent.height
-//            color: "yellow"
+
 
             Button{
                 id: testQueryBtn
@@ -614,7 +614,7 @@ Item{
     Rectangle{
 
         id:queryResultsTable
-        height: queryModellerPage.height - submenu.height - dataQueryModellerStackview.height  - infodataTableHeader.height - 46
+        height: queryModellerPage.height - submenu.height - dataQueryModellerStackview.height  - infodataTableHeader.height - 16
         anchors.top: infodataTableHeader.bottom
         anchors.topMargin: 1
         anchors.rightMargin: column_querymodeller.width + 50
@@ -626,7 +626,7 @@ Item{
         TestQueryResultsTable{
             id: testQueryResult
             anchors.top: top.parent
-            anchors.topMargin: -1
+            anchors.topMargin: 0
         }
 
         // "Test Query Results" Ends

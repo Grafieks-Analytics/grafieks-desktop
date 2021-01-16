@@ -51,6 +51,13 @@ Page {
                 tableslist.model = TableListModel
             }
         }
+        function onPostgresLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                TableListModel.callQuery()
+                tableslist.model = TableListModel
+            }
+        }
         function onSqliteLoginStatus(status){
             if(status.status === true){
                 // Call functions
