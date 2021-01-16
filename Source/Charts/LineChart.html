@@ -15,15 +15,42 @@
     <script>
         var n = 21;
         var lineStroke = 3;
-        var initialCircleRadius = 2;
-        var onHoverCircleRadius = 5;
+        var {
+            initialCircleRadius,
+            initialBoxDimension,
+            onHoverCircleRadius,
+        } = defaultD3Config;
 
-        var data = d3.range(n).map(function (d) {
-            return { y: d3.randomUniform(1)() };
-        });
+        var data = [
+            30.5621003042803618,
+            50.9164824306094999,
+            40.6363092398355727,
+            32.04669478701483354,
+            13.24258060335806886,
+            10.6302204824674538,
+            20.2485817228091547,
+            32.13664898092621325,
+            15.48262469788667994,
+            43.4260795360415235,
+            32.5816480528886738,
+            16.6545035086903186,
+            10.9870338215356449,
+            20.053908030938047524,
+            7.3456829381684714,
+            8.46889152272191414,
+            32.5989143518482389,
+            16.7689590628756797,
+            22.9011566318712221,
+            32.7105180730798188,
+            12.7186652294711284,
+        ];
 
         function drawChart(data, plottingConfiguration = {}) {
-            let { d3colorPalette, paddingInner } = plottingConfiguration;
+            let {
+                d3colorPalette,
+                paddingInner,
+                markerShape,
+            } = plottingConfiguration;
             if (!d3colorPalette) {
                 d3colorPalette = defaultD3Config.d3ColorPalette;
             }
@@ -38,6 +65,7 @@
                 (width = window.innerWidth - margin.left - margin.right - 20),
                 (height = window.innerHeight - margin.top - margin.bottom - 20);
 
+            yaxisTicks = height / 100;
             xScale = d3
                 .scaleLinear()
                 .domain([0, n - 1]) // input
@@ -45,7 +73,7 @@
 
             yScale = d3
                 .scaleLinear()
-                .domain([0, 1]) // input
+                .domain([0, parseInt(Math.max(...data) + 1)]) // input
                 .range([height, 0]); // output
 
             line = d3
@@ -54,7 +82,7 @@
                     return xScale(i);
                 })
                 .y(function (d) {
-                    return yScale(d.y);
+                    return yScale(d);
                 })
                 .curve(d3.curveCardinal);
 
@@ -82,8 +110,8 @@
 
             svg.append("g")
                 .attr("class", "y-axis")
-                .call(d3.axisLeft(yScale).tickSizeOuter(0).ticks(3));
 
+                .call(d3.axisLeft(yScale).tickSizeOuter(0).ticks(yaxisTicks));
             svg.append("g")
                 .attr("class", "grid")
                 .style("stroke-width", "1")
@@ -96,7 +124,7 @@
                 .attr("fill", "none")
                 .attr("d", line);
 
-            drawMarker(true);
+            drawMarker(true, markerShape);
 
             // Generate Grid starts
 
@@ -104,36 +132,50 @@
                 return d3.axisBottom(xScale).ticks(8);
             }
             function make_y_gridlines() {
-                return d3.axisLeft(yScale).ticks(5);
+                return d3.axisLeft(yScale).ticks(yaxisTicks);
             }
         }
 
         drawChart(data);
 
-        function drawMarker(fillStatus) {
+        function drawMarker(fillStatus, markerShape) {
             var fill = "#ffffff";
             var stroke = d3Colors[0];
             if (fillStatus) {
                 initialCircleRadius = 3;
-                onHoverCircleRadius = 5;
                 fill = d3Colors[0];
                 stroke = 0;
             }
+            if (!markerShape) {
+                markerShape = defaultD3Config.defaultMarkerShape;
+            }
+            svg.selectAll(".marker-shape").remove();
 
             svg.selectAll(".dot")
                 .data(data)
                 .enter()
-                .append("circle")
+                .append(markerShape)
                 .attr("stroke", stroke)
-                .attr("class", "circle")
+                .attr("class", markerShape)
+                .attr("class", "marker-shape")
                 .attr("fill", fill)
-                .attr("cx", function (d, i) {
-                    return xScale(i);
-                })
-                .attr("cy", function (d) {
-                    return yScale(d.y);
-                })
+                .attr(
+                    markerShapeConfig[markerShape] &&
+                        markerShapeConfig[markerShape].xPositionAttrName,
+                    function (d, i) {
+                        return xScale(i);
+                    }
+                )
+                .attr(
+                    markerShapeConfig[markerShape] &&
+                        markerShapeConfig[markerShape].yPositionAttrName,
+                    function (d) {
+                        return yScale(d);
+                    }
+                )
                 .attr("r", initialCircleRadius)
+                .attr("height", initialBoxDimension)
+                .attr("width", initialBoxDimension)
                 .on("mousemove ", function (d, i) {
                     var x_pos = d3.mouse(this)[0];
                     var y_pos = d3.mouse(this)[1];
@@ -147,22 +189,28 @@
                         .style("display", "block")
                         .html(parseInt(xValue) + ", " + yValue.toFixed(2));
 
-                    d3.selectAll(".circle").style("opacity", 0.3);
+                    var shapeClass = "." + markerShape;
+                    d3.selectAll(shapeClass).style("opacity", 0.3);
                     d3.select(this)
                         .style("opacity", 1)
-                        .attr("r", initialCircleRadius + 3);
+                        .attr("r", onHoverCircleRadius);
                 })
                 .on("mouseout", function () {
                     d3.select("#tooltip").style("display", "none");
-                    d3.selectAll(".circle")
+                    console.log("out");
+                    var shapeClass = "." + markerShape;
+                    d3.selectAll(shapeClass)
                         .style("opacity", 1)
-                        .attr("r", initialCircleRadius);
+                        .attr("r", initialCircleRadius)
+                        .attr("height", initialBoxDimension)
+                        .attr("width", initialBoxDimension);
                 });
         }
 
-        window.addEventListener("resize", function () {
-            drawChart(data);
-        });
+        // Pass this from QT
+        // window.addEventListener("resize", function () {
+        //     drawChart(data);
+        // });
 
         // Generate Grid ends
     </script>

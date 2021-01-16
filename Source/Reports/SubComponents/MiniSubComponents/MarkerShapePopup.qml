@@ -28,6 +28,7 @@ Popup {
         }
         ListElement{
             icon: "Rectangle.png"
+            type: "rect"
             filled: false
         }
         ListElement{
@@ -49,11 +50,12 @@ Popup {
         }
         ListElement{
             icon: "Rectangle_filled.png"
-            filled: false
+            type: "rect"
+            filled: true
         }
         ListElement{
             icon: "Polygon_filled.png"
-            filled: false
+            filled: true
         }
     }
 
@@ -62,10 +64,8 @@ Popup {
         border.color: Constants.darkThemeColor
     }
 
-    function drawMarkerShape(filledStatus){
-        console.log(filledStatus)
-        console.log('Okay!!')
-        var query = 'drawMarker('+filledStatus+')';
+    function drawMarkerShape(filledStatus,markerShape){
+        var query = 'drawMarker('+filledStatus+',"'+markerShape+'")';
         webEngineView.runJavaScript(query)
     }
 
@@ -93,7 +93,7 @@ Popup {
                             width: shapeWidth
                             MouseArea{
                                 anchors.fill: parent
-                                onClicked: drawMarkerShape(filled)
+                                onClicked: drawMarkerShape(filled,type)
                             }
                         }
                     }
@@ -117,7 +117,7 @@ Popup {
                             width: shapeWidth
                             MouseArea{
                                 anchors.fill: parent
-                                onClicked: drawMarkerShape(filled)
+                                onClicked: drawMarkerShape(filled,type)
                             }
                         }
                     }
