@@ -7,12 +7,23 @@
     <script src="./Data/d3DefaultConfig.js"></script>
     <script src="./Data/d3.v4.min.js"></script>
     <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js"></script> -->
 
     <link rel="stylesheet" href="Data/general.css" />
 </head>
 <body>
     <div id="my_dataviz"></div>
     <div id="tooltip"></div>
+    <div
+        id="legend"
+        style="
+            right: 20px;
+            top: 10px;
+            position: absolute;
+            border: 1px solid black;
+            padding: 10px;
+        "
+    ></div>
     <script>
         // Color Pallets - Set 3
 
@@ -196,6 +207,25 @@
                     d3.selectAll(".bar").style("opacity", 1);
                 });
 
+            d3.select("#legend").html("");
+            d3.select("#legend")
+                .selectAll("div")
+                .data(symbols)
+                .enter()
+                .append("div")
+                .html((d, i) => {
+                    return (
+                        '<div style="width: 15px; background: ' +
+                        d3Colors[i] +
+                        ';">  </div>' +
+                        "<span style='margin-left: 5px'>" +
+                        d +
+                        "</span>"
+                    );
+                })
+                .style("display", "flex")
+                .style("padding", "2px");
+
             // Generate Grid starts
 
             var yaxisTicks = height / 100;
@@ -207,6 +237,8 @@
             function make_y_gridlines() {
                 return d3.axisLeft(y).ticks(yaxisTicks);
             }
+
+            // Make Legend
 
             // Generate Grid ends
         }

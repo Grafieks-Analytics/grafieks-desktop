@@ -178,6 +178,24 @@
                 .attr("r", initialCircleRadius)
                 .attr("height", initialBoxDimension)
                 .attr("width", initialBoxDimension)
+                .attr("points", function (d, i) {
+                    console.log(xScale(d, i));
+                    var x1 = xScale(i);
+                    console.log(x1);
+                    return (
+                        x1 +
+                        " " +
+                        (x1 + 3) +
+                        ", " +
+                        (x1 + 10) +
+                        " " +
+                        (x1 + 10) +
+                        ", " +
+                        (x1 - 10) +
+                        " " +
+                        (x1 + 10)
+                    );
+                })
                 .on("mousemove ", function (d, i) {
                     var x_pos = d3.mouse(this)[0];
                     var y_pos = d3.mouse(this)[1];
@@ -186,7 +204,7 @@
                     const yValue = yScale.invert(y_pos);
 
                     d3.select("#tooltip")
-                        .style("left", x_pos + "px")
+                        .style("left", x_pos - 10 + "px")
                         .style("top", y_pos + "px")
                         .style("display", "block")
                         .html(parseInt(xValue) + ", " + yValue.toFixed(2));
@@ -211,9 +229,9 @@
         }
 
         // Pass this from QT
-        // window.addEventListener("resize", function () {
-        //     drawChart(data);
-        // });
+        window.addEventListener("resize", function () {
+            drawChart(data);
+        });
 
         // Generate Grid ends
     </script>

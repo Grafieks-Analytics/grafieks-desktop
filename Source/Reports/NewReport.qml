@@ -140,6 +140,7 @@ Page {
     // For changing the chart on clicking chart icons
 
     function reDrawChart(){
+        console.log(JSON.stringify(d3PropertyConfig));
         webEngineView.runJavaScript('drawChart(data,'+JSON.stringify(d3PropertyConfig)+')')
     }
 

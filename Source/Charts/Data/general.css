@@ -62,3 +62,7 @@ text.shadow {
 ::-webkit-scrollbar-thumb:hover {
     background: #fff;
 }
+
+#legend {
+    background-color: #fff;
+}

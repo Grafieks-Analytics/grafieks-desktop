@@ -16,4 +16,8 @@ const markerShapeConfig = {
         xPositionAttrName: "x",
         yPositionAttrName: "y",
     },
+    polygon: {
+        xPositionAttrName: "x",
+        yPositionAttrName: "y",
+    },
 };
