@@ -188,5 +188,6 @@
         <file>Source/Charts/LineChart.html</file>
         <file>Source/Others/Table.qml</file>
         <file>Source/Others/TableTest.qml</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/LineTypePopup.qml</file>
     </qresource>
 </RCC>
