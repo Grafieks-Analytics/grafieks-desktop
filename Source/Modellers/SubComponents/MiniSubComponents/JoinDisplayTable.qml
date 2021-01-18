@@ -223,17 +223,72 @@ Rectangle{
             spacing: 2
             model: tableListModel
 
-            delegate:   CustomComboBox{
-                id: columnDropDown
-                objectName: counter
-                height: 30
-                width: parent.width
-                model: displayColList
-                textRole: "colName"
-                currentIndex: currIndex
+            delegate:
+//                CustomComboBox{
+//                id: columnDropDown
+//                objectName: counter
+//                height: 30
+//                width: parent.width-5
+//                anchors.horizontalCenter: parent.horizontalCenter
+//                model: displayColList
+//                textRole: "colName"
+//                currentIndex: currIndex
 
-                onCurrentTextChanged: changeColumn(columnDropDown.currentText, columnDropDown.objectName)
 
+//                background: Rectangle{
+//                    color: Constants.whiteColor
+//                    radius: 0
+//                    border.color: Constants.borderBlueColor
+//                    border.width: Constants.borderWidth
+//                }
+
+
+
+
+//                onCurrentTextChanged: changeColumn(columnDropDown.currentText, columnDropDown.objectName)
+
+//            }
+                ComboBox {
+                    id:columnDropDown
+                    objectName: counter
+                                   height: 30
+                                   width: parent.width-5
+                                   anchors.horizontalCenter: parent.horizontalCenter
+                                   model: displayColList
+                                   textRole: "colName"
+                                   currentIndex: currIndex
+                                   background: Rectangle{
+                                                       color: Constants.whiteColor
+                                                       radius: 0
+                                                       border.color: Constants.borderBlueColor
+                                                       border.width: Constants.borderWidth
+                                                   }
+
+                                   onCurrentTextChanged: changeColumn(columnDropDown.currentText, columnDropDown.objectName)
+
+                    indicator: Canvas {
+                        id: canvas
+                        x: columnDropDown.width - width - columnDropDown.rightPadding
+                        y: columnDropDown.topPadding + (columnDropDown.availableHeight - height) / 2
+                        width: 12
+                        height: 8
+                        contextType: "2d"
+
+                        Connections {
+                            target: columnDropDown
+                            onPressedChanged: canvas.requestPaint()
+                        }
+
+                        onPaint: {
+                            context.reset();
+                            context.moveTo(0, 0);
+                            context.lineTo(width, 0);
+                            context.lineTo(width / 2, height);
+                            context.closePath();
+                            context.fillStyle = columnDropDown.pressed ? "#black" : "#gray";
+                            context.fill();
+                        }
+                    }
             }
         }
 

@@ -27,7 +27,7 @@ Item{
         ShapePath {
             id:shapePath
             strokeStyle: ShapePath.SolidLine
-            strokeColor: lineColor
+            strokeColor: Constants.buttonBorderColor
             strokeWidth: 1
 
 //            dashPattern: [5,5]
