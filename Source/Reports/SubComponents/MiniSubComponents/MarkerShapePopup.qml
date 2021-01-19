@@ -20,31 +20,42 @@ Popup {
     visible: false
 
     ListModel{
-        id: outlined
+        id: outlinedIcons
         ListElement{
             icon: "Ellipse.png"
+            type: "circle"
+            filled: false
         }
         ListElement{
             icon: "Rectangle.png"
+            type: "rect"
+            filled: false
         }
         ListElement{
             icon: "Polygon.png"
+            filled: false
         }
         ListElement{
             icon: "add.png"
+            filled: false
         }
     }
 
     ListModel{
-        id: filled
+        id: filledIcons
         ListElement{
             icon: "Ellipse_filled.png"
+            type: "circle"
+            filled: true
         }
         ListElement{
             icon: "Rectangle_filled.png"
+            type: "rect"
+            filled: true
         }
         ListElement{
             icon: "Polygon_filled.png"
+            filled: true
         }
     }
 
@@ -53,6 +64,10 @@ Popup {
         border.color: Constants.darkThemeColor
     }
 
+    function drawMarkerShape(filledStatus,markerShape){
+        var query = 'drawMarker('+filledStatus+',"'+markerShape+'")';
+        webEngineView.runJavaScript(query)
+    }
 
     Rectangle{
         anchors.fill: parent
@@ -69,13 +84,17 @@ Popup {
                     anchors.fill: parent
 
                     ListView{
-                        model: outlined
-                        height: (shapeHeight+this.spacing)*outlined.count
+                        model: outlinedIcons
+                        height: (shapeHeight+this.spacing)*outlinedIcons.count
                         spacing: 8
                         delegate: Image {
                             source: "/Images/icons/shapes/"+icon
                             height: shapeHeight
                             width: shapeWidth
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: drawMarkerShape(filled,type)
+                            }
                         }
                     }
 
@@ -89,13 +108,17 @@ Popup {
 
                     anchors.fill: parent
                     ListView{
-                        model: filled
-                        height: (shapeHeight+this.spacing)*filled.count
+                        model: filledIcons
+                        height: (shapeHeight+this.spacing)*filledIcons.count
                         spacing: 8
                         delegate: Image {
                             source: "/Images/icons/shapes/"+icon
                             height: shapeHeight
                             width: shapeWidth
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: drawMarkerShape(filled,type)
+                            }
                         }
                     }
 

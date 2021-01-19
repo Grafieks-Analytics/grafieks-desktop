@@ -23,7 +23,7 @@ Popup {
     CustomSlider {
         from: 8
         value: 12
-        to: 100
+        to: 99
         width: parent.width
 
         onValueChanged: {

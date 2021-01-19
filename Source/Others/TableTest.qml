@@ -3,17 +3,25 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Controls.Styles 1.2
 
+
+
 Rectangle {
     id: win
-    width: 860
+    width: 86
     height: 560
     visible: true
 
 
     TableView {
 
-        width: parent.width
-        height: parent.height
+        width:if((tr.width+ty.width)>parent.width) {
+                  parent.width
+              }
+              else{
+                  tr.width+ty.width+17
+              }
+
+        height: parent.height/2
 
         alternatingRowColors: false
         model: QueryStatsModel

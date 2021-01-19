@@ -10,11 +10,13 @@ Rectangle{
     id: joinPopupItem
     anchors.right:parent.right
     anchors.bottom: parent.bottom
-    height:parent.height + 1
+    height:parent.height - 28
     width: 400
     z:10
+//    border.color: Constants.darkThemeColor
     border.color: Constants.darkThemeColor
     visible: false
+
 
     property int counter : 0
     property int refObjId : 0
@@ -305,11 +307,11 @@ Rectangle{
         }
         Image {
             id: closeBtn
-            source: "/Images/icons/outline_close_black_18dp2x.png"
+            source: "/Images/icons/remove.png"
             anchors.verticalCenter: parent.verticalCenter
             anchors.right:  parent.right
-            height: 18
-            width: 18
+            height: 14
+            width: 14
             anchors.rightMargin: 5
             MouseArea{
                 anchors.fill: parent
@@ -530,16 +532,24 @@ Rectangle{
         width: parent.width
         height: parent.height - selectJoin.height - headerPopup.height - addKeyRow.height - doneBtn.height - primaryTableRow.height
 
+
+
         Row{
 
             id: tableContent
             height: parent.height
             width: parent.width
+            Rectangle{
+             height: parent.height
+             width: 1
+             color: "transparent"
+            }
 
             Column{
 
                 height: parent.height
-                width: parent.width/2 - 20
+                width: parent.width/2-10
+
 
                 JoinDisplayTable{
                     id: table1
@@ -561,6 +571,8 @@ Rectangle{
                     anchors.topMargin: 40
                     anchors.left: parent.left
                     model:removeListModel
+
+
 
                     delegate:  Row{
 
@@ -600,7 +612,7 @@ Rectangle{
             Column{
 
                 height: parent.height
-                width: parent.width/2 - 20
+                width: parent.width/2 - 30
 
                 JoinDisplayTable{
                     id: table2

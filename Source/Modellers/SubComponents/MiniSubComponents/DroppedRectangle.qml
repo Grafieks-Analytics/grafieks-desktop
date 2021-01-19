@@ -220,6 +220,7 @@ Item{
                 Item {
                     id: name
                     anchors.left:parent.left
+                    anchors.leftMargin: 50
 
                     Menu{
                         id: editOptions
@@ -240,7 +241,7 @@ Item{
 
                         MenuItem {
                             text: qsTr("Remove")
-                            onClicked: hideColumnSelection(colName, tableName)
+//                            onClicked: hideColumnSelection(colName, tableName)
                         }
                     }}
             }

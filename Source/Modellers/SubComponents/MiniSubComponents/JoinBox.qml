@@ -7,6 +7,7 @@ Item {
 
     id: joinBoxItem
     property var objectName
+        property var hoverCrossIcon: false
 
     objectName: objectName // refObjectId from parent
 
@@ -78,6 +79,19 @@ Item {
             joinIconId.source = newIcon
     }
 
+
+    function showCrossIcon(){
+
+        hoverCrossIcon = true
+
+
+    }
+    function hideCrossIcon(){
+
+        hoverCrossIcon = false
+
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -93,12 +107,12 @@ Item {
 
     Rectangle{
         id: joinBoxRectangle
-        width:38
-        height:38
+        width:33
+        height:33
         color: "white"
         radius: 50
-        border.color: "black"
-        border.width: 1
+        border.color: Constants.buttonBorderColor
+        border.width: 0.5
         smooth: true
         antialiasing: true
 
@@ -110,13 +124,13 @@ Item {
             source: "/Images/icons/inner_join_32.png"
             anchors.fill: parent
             anchors.top:top.parent
-            anchors.topMargin: 5
+            anchors.topMargin: 3
             anchors.bottom: bottom.parent
-            anchors.bottomMargin: 5
+            anchors.bottomMargin: 3
             anchors.left: left.parent
-            anchors.leftMargin: 5
+            anchors.leftMargin: 3
             anchors.right: right.parent
-            anchors.rightMargin: 5
+            anchors.rightMargin: 3
 
 
         }
@@ -126,6 +140,9 @@ Item {
             anchors.fill: parent
             onClicked: onJoinIconClicked()
             hoverEnabled: true
+            onEntered: showCrossIcon();
+            onExited: hideCrossIcon();
+
 
         }
 
@@ -133,6 +150,8 @@ Item {
         ToolTip.timeout: Constants.tooltipHideTime
         ToolTip.text: qsTr("Click to see join between columns and change the join type")
         ToolTip.visible: mouseAreaBox.containsMouse ? true: false
+
+
     }
 
     Rectangle{
@@ -142,6 +161,7 @@ Item {
         width:35
         height:35
         color: "transparent"
+        visible: hoverCrossIcon
 
         Image{
             id: deleteIconId
@@ -160,6 +180,7 @@ Item {
         ToolTip.timeout: Constants.tooltipHideTime
         ToolTip.text: qsTr("Delete join between tables")
         ToolTip.visible: mouseAreaDelete.containsMouse ? true: false
+
     }
 
 }
