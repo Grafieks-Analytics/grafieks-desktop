@@ -19,7 +19,7 @@ TableView {
     visible: false
     clip:true
     columnSpacing: 1
-//    rowSpacing: 1
+    //    rowSpacing: 1
 
     boundsBehavior : Flickable.StopAtBounds
 
@@ -111,28 +111,28 @@ TableView {
         Rectangle{
         border.color: Constants.darkThemeColor
         border.width: 0.5
-//        Loader{
-//            active: model.column === 0
-//            //            width: 30
-//            anchors.right: parent.right
-//            anchors.rightMargin: 50
-//            sourceComponent:
-//                Rectangle{
-//                id: rect
-//                width: 30
-//                height: 30
-//                border.color: Constants.darkThemeColor
-//                border.width: 0.5
-//                Image{
-//                    source: "/Images/icons/checkmark.png"
-//                    height: 18
-//                    width: 18
-//                    anchors.horizontalCenter: parent.horizontalCenter
-//                    anchors.verticalCenter:  parent.verticalCenter
-//                }
-//            }
+        //        Loader{
+        //            active: model.column === 0
+        //            //            width: 30
+        //            anchors.right: parent.right
+        //            anchors.rightMargin: 50
+        //            sourceComponent:
+        //                Rectangle{
+        //                id: rect
+        //                width: 30
+        //                height: 30
+        //                border.color: Constants.darkThemeColor
+        //                border.width: 0.5
+        //                Image{
+        //                    source: "/Images/icons/checkmark.png"
+        //                    height: 18
+        //                    width: 18
+        //                    anchors.horizontalCenter: parent.horizontalCenter
+        //                    anchors.verticalCenter:  parent.verticalCenter
+        //                }
+        //            }
 
-//        }
+        //        }
 
         Text {
             text: modelData
@@ -174,7 +174,7 @@ TableView {
     Row {
         id: columnsHeader
         y: testQueryResult.contentY
-                z: 3
+        z: 3
         width: testQueryResult.width
 
 
@@ -236,7 +236,7 @@ TableView {
             height:34
             anchors.top: columnsHeader.top
             anchors.topMargin: -2
-//            width: 20
+            //            width: 20
             padding: 0
             MouseArea{
                 id: infoPanelDragMouseArea2
@@ -277,19 +277,19 @@ TableView {
             anchors.top: columnsHeader.top
             anchors.topMargin: -2
             padding: 0
-//            MouseArea{
-//                id: infoPanelDragMouseArea3
-//                anchors.fill: parent
-//                cursorShape: Qt.SizeHorCursor
-//                width: parent.width
+            //            MouseArea{
+            //                id: infoPanelDragMouseArea3
+            //                anchors.fill: parent
+            //                cursorShape: Qt.SizeHorCursor
+            //                width: parent.width
 
-//                onPositionChanged: {
+            //                onPositionChanged: {
 
-//                    onDragColumnHeadPanel(mouse)
+            //                    onDragColumnHeadPanel(mouse)
 
-//                }
+            //                }
 
-//            }
+            //            }
         }
 
         Label {
@@ -316,19 +316,19 @@ TableView {
             anchors.top: columnsHeader.top
             anchors.topMargin: -2
             padding: 0
-//            MouseArea{
-//                id: infoPanelDragMouseArea4
-//                anchors.fill: parent
-//                cursorShape: Qt.SizeHorCursor
-//                width: parent.width
+            //            MouseArea{
+            //                id: infoPanelDragMouseArea4
+            //                anchors.fill: parent
+            //                cursorShape: Qt.SizeHorCursor
+            //                width: parent.width
 
-//                onPositionChanged: {
+            //                onPositionChanged: {
 
-//                    onDragColumnHeadPanel(mouse)
+            //                    onDragColumnHeadPanel(mouse)
 
-//                }
+            //                }
 
-//            }
+            //            }
         }
 
         Label {

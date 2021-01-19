@@ -362,25 +362,6 @@ ApplicationWindow {
 
         }
 
-        //        Menu{
-        //            id: menu_signIn
-        //            title: Constants.signInText
-        //            height: 0
-        //            onOpened: {
-
-        //                if(typeof settings.value("user/sessionToken") !== "undefined"){
-
-        //                    // Call logout
-        //                    logout.visible = true
-
-        //                } else{
-
-        //                    // Call login
-        //                    connectGrafieks1.visible = true
-        //                }
-        //            }
-        //        }
-        //    }
     }
 
 
@@ -390,9 +371,7 @@ ApplicationWindow {
     header: Rectangle {
         implicitWidth: parent.vertical ? 1 : 24
         implicitHeight: parent.vertical ? 24 : 1
-//        color: Constants.darkThemeColor
         color: "red"
-//        border.color: "green"
     }
 
 

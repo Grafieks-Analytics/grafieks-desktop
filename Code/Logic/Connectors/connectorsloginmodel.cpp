@@ -60,7 +60,7 @@ void ConnectorsLoginModel::mysqlOdbcLogin(QString driver, QString host, QString 
     QVariantMap response = mysqlcon.MysqlOdbcInstance(driver, host, db, port, username, password);
 
     Statics::currentDbName = db;
-    Statics::currentDbIntType = Constants::mysqlIntType;
+    Statics::currentDbIntType = Constants::mysqlOdbcIntType;
     Statics::currentDbStrType = Constants::mysqlOdbcStrType;
 
     this->setConnectedDB(db);
