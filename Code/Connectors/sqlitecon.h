@@ -29,8 +29,8 @@ class Sqlitecon : public QObject
 
 public:
     explicit Sqlitecon(QObject *parent = nullptr);
-    QVariantMap SqliteInstance(const QString & filepath, const QString & username, const QString & password);
-    QVariantMap SqliteOdbcInstance(const QString & driver, const QString & filepath, const QString & username, const QString & password);
+    QVariantMap SqliteInstance(const QString & filepath);
+    QVariantMap SqliteOdbcInstance(const QString & driver, const QString & filepath);
 
     ~Sqlitecon();
 

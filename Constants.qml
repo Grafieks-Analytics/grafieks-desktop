@@ -23,6 +23,7 @@ QtObject {
     property string applicationName : qsTr("Grafieks")
     property string signInText : qsTr("Sign In")
     property string signOutText : qsTr("Sign Out")
+    property string openFileText : qsTr("Open")
     property string dataDesignerText : qsTr("Data Designer")
     property string dashboardDesignerText : qsTr("Dashboard Designer")
 

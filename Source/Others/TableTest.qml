@@ -1,7 +1,7 @@
-import QtQuick 2.3
-import QtQuick.Window 2.2
-import QtQuick.Controls 1.2
-import QtQuick.Controls.Styles 1.2
+import QtQuick 2.15
+//import QtQuick.Window 2.2
+import QtQuick.Controls 2.15
+//import QtQuick.Controls.Styles 1.2
 
 
 
@@ -23,32 +23,32 @@ Rectangle {
 
         height: parent.height/2
 
-        alternatingRowColors: false
-        model: QueryStatsModel
+//        alternatingRowColors: false
+//        model: QueryStatsModel
 
 
-        TableViewColumn {
-            role: "no"
-            title: "#"
-            width: parent.width/4
-        }
-        TableViewColumn {
-            role: "duration"
-            title: "Duration"
-            width: parent.width/4
-        }
-        TableViewColumn {
-            role: "action"
-            title: "Action"
-            width: parent.width/4
-        }
-        TableViewColumn {
-            role: "message"
-            title: "Message"
-            width: parent.width/4
+//        TableViewColumn {
+//            role: "no"
+//            title: "#"
+//            width: parent.width/4
+//        }
+//        TableViewColumn {
+//            role: "duration"
+//            title: "Duration"
+//            width: parent.width/4
+//        }
+//        TableViewColumn {
+//            role: "action"
+//            title: "Action"
+//            width: parent.width/4
+//        }
+//        TableViewColumn {
+//            role: "message"
+//            title: "Message"
+//            width: parent.width/4
 
 
-        }
+//        }
 
 
 
@@ -89,7 +89,7 @@ Rectangle {
         //                }
         //            }
 
-        itemDelegate: Rectangle {
+        delegate: Rectangle{
             height: textItem.implicitHeight * 1.2
             width: textItem.implicitWidth
             color: "white"
@@ -99,10 +99,13 @@ Rectangle {
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: styleData.textAlignment
                 anchors.leftMargin: 12
-                text: modelData
+                text: display
                 elide: Text.ElideRight
                 color: textColor
                 renderType: Text.NativeRendering
+                Component.onCompleted: {
+                    console.log(model)
+                }
             }
             Rectangle {
                 anchors.right: parent.right

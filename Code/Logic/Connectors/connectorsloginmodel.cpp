@@ -38,11 +38,11 @@ void ConnectorsLoginModel::mysqlLogin(QString host, QString db, int port, QStrin
  * \param username
  * \param password
  */
-void ConnectorsLoginModel::sqliteLogin(QString filename, QString username, QString password)
+void ConnectorsLoginModel::sqliteLogin(QString filename)
 {
 
     Sqlitecon sqlitecon;
-    QVariantMap response = sqlitecon.SqliteInstance(filename, username, password);
+    QVariantMap response = sqlitecon.SqliteInstance(filename);
 
     Statics::currentDbName = filename;
     Statics::currentDbIntType = Constants::sqliteIntType;
