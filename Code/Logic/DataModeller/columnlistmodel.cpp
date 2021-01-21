@@ -118,6 +118,17 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
         break;
     }
 
+    case Constants::sqliteIntType:{
+
+
+        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+
+        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
+        this->setQuery(queryString, dbSqlite);
+
+        break;
+    }
+
     }
 }
 
@@ -326,6 +337,27 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
             break;
         }
+
+        case Constants::sqliteIntType:{
+
+            pieces = fieldNames.split(",");
+
+            if(pieces.length() > 1){
+                finalSearchFields = pieces.join("','");
+            }else{
+                finalSearchFields = fieldNames;
+            }
+
+            finalSearchFields = "'" + finalSearchFields + "'";
+
+            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+
+            QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
+            this->setQuery(queryString, dbSqlite);
+
+
+            break;
+        }
         }
     }
 
@@ -356,6 +388,36 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
 
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
         this->setQuery(queryString, dbMysql);
+
+        break;
+    }
+
+    case Constants::mysqlOdbcIntType:{
+
+        if (searchString != ""){
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
+        } else{
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        }
+
+
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
+        this->setQuery(queryString, dbMysql);
+
+        break;
+    }
+
+    case Constants::sqliteIntType:{
+
+        if (searchString != ""){
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
+        } else{
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        }
+
+
+        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
+        this->setQuery(queryString, dbSqlite);
 
         break;
     }

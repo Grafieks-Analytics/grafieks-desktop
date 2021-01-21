@@ -74,10 +74,12 @@ void TableListModel::callQuery(QString queryString)
 
     case Constants::sqliteIntType:{
 
+        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
+
         if (queryString != ""){
-            this->setQuery("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '%"+queryString+"%'  AND name != 'sqlite_%'");
+            this->setQuery("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '%"+queryString+"%'  AND name != 'sqlite_%'", dbSqlite);
         } else{
-            this->setQuery("SELECT name FROM sqlite_master WHERE type='table' AND name != 'sqlite_%'");
+            this->setQuery("SELECT name FROM sqlite_master WHERE type='table' AND name != 'sqlite_%'", dbSqlite);
         }
 
         break;

@@ -75,6 +75,12 @@ void QueryModel::executeQuery(QString &query)
 
         break;
     }
+    case Constants::sqliteIntType:{
+        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrQueryType);
+        this->setQuery(query, dbSqlite);
+
+        break;
+    }
     case Constants::postgresIntType:{
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
         this->setQuery(query, dbMysql);
