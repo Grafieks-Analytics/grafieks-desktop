@@ -27,8 +27,7 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename)
     if(QSqlDatabase::isDriverAvailable(DRIVER)){
 
         QSqlDatabase dbSqlite = QSqlDatabase::addDatabase(DRIVER, Constants::sqliteStrType);
-        dbSqlite.setDatabaseName(filename);
-
+        dbSqlite.setDatabaseName(QUrl(filename).toLocalFile());
 
         if(!dbSqlite.open()){
             outputStatus.insert("status", false);
@@ -40,7 +39,7 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename)
             // For automatic connection for other instances
             // If correct credentials inserted once
 
-            Statics::sqliteFile = filename;
+            Statics::sqliteFile = QUrl(filename).toLocalFile();
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
 
@@ -50,10 +49,8 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename)
             // Else all the query statistics are listed in "Test Query" tab in Data-Query-Modeller
 
             QSqlDatabase dbSqlite2 = QSqlDatabase::addDatabase(DRIVER, Constants::sqliteStrQueryType);
-            dbSqlite2.setDatabaseName(filename);
+            dbSqlite2.setDatabaseName(QUrl(filename).toLocalFile());
             dbSqlite2.open();
-
-            qDebug() << "SQLITE DB open";
         }
 
     } else{

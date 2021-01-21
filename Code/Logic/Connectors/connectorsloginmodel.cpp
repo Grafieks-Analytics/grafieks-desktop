@@ -35,8 +35,6 @@ void ConnectorsLoginModel::mysqlLogin(QString host, QString db, int port, QStrin
 /*!
  * \brief Initiate connection with an Sqlite database
  * \param filename (database file)
- * \param username
- * \param password
  */
 void ConnectorsLoginModel::sqliteLogin(QString filename)
 {
@@ -44,11 +42,15 @@ void ConnectorsLoginModel::sqliteLogin(QString filename)
     Sqlitecon sqlitecon;
     QVariantMap response = sqlitecon.SqliteInstance(filename);
 
-    Statics::currentDbName = filename;
+    QFile sqliteFile(QUrl(filename).toLocalFile());
+    QFileInfo fileInfo(sqliteFile.fileName());
+    QString sqliteFileName = fileInfo.fileName();
+
+    Statics::currentDbName = sqliteFileName;
     Statics::currentDbIntType = Constants::sqliteIntType;
     Statics::currentDbStrType = Constants::sqliteStrType;
 
-    this->setConnectedDB(filename);
+    this->setConnectedDB(sqliteFileName);
 
     emit sqliteLoginStatus(response);
 }

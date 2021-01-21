@@ -166,7 +166,7 @@ Popup {
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
-            onClicked: ConnectorsLoginModel.sqliteLogin(sqliteFileName.text)
+            onClicked: {ConnectorsLoginModel.sqliteLogin(sqliteFileName.text); console.log(sqliteFileName.text)}
 
         }
     }
@@ -188,6 +188,7 @@ Popup {
 
         onAccepted: {
             console.log(fileUrl)
+            sqliteFileName.text = fileUrl
         }
         onRejected: {
             console.log("file rejected")

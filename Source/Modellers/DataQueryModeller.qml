@@ -319,10 +319,6 @@ Page {
             height: 30
 
 
-
-
-
-
             property bool caught: false
 
             Image {

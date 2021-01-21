@@ -70,6 +70,7 @@ SOURCES += \
     Code/Logic/Datasources/datasourcemodel.cpp \
     Code/Logic/General/datatype.cpp \
     Code/Logic/General/generalparamsmodel.cpp \
+    Code/Logic/General/qttest.cpp \
     Code/Logic/General/qttest2.cpp \
     Code/Logic/General/querysplitter.cpp \
     Code/Logic/General/tablecolumnsmodel.cpp \
@@ -157,6 +158,7 @@ HEADERS += \
     Code/Logic/Datasources/datasourcemodel.h \
     Code/Logic/General/datatype.h \
     Code/Logic/General/generalparamsmodel.h \
+    Code/Logic/General/qttest.h \
     Code/Logic/General/qttest2.h \
     Code/Logic/General/querysplitter.h \
     Code/Logic/General/tablecolumnsmodel.h \

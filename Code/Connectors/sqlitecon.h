@@ -9,6 +9,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QDebug>
+#include <QUrl>
 
 #include "../statics.h"
 #include "../constants.h"

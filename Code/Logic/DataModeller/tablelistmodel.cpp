@@ -86,13 +86,13 @@ void TableListModel::callQuery(QString queryString)
     }
     case Constants::postgresIntType:{
 
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrType);
+        QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
 
         if (queryString != ""){
 
-            this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'", dbMysql);
+            this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'", dbPostgres);
         } else{
-            this->setQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'", dbMysql);
+            this->setQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'", dbPostgres);
         }
 
         break;

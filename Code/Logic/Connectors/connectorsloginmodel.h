@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QtDebug>
+#include <QFile>
+#include <QFileInfo>
 
 #include "../../Connectors/allconnectors.h"
 #include "../../statics.h"
