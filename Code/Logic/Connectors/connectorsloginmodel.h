@@ -26,13 +26,9 @@ class ConnectorsLoginModel : public QObject
 public:
     explicit ConnectorsLoginModel(QObject *parent = nullptr);
     Q_INVOKABLE void mysqlLogin(QString host, QString db, int port, QString username, QString password);
-<<<<<<< HEAD
-    Q_INVOKABLE void sqliteLogin(QString filename, QString username = "", QString password = "");
+    Q_INVOKABLE void sqliteLogin(QString filename);
     Q_INVOKABLE void csvLogin(QString filename);
     Q_INVOKABLE QString urlToFilePath(const QUrl &url);
-=======
-    Q_INVOKABLE void sqliteLogin(QString filename);
->>>>>>> da9a77148e69c2ae827799bedfb7246b38e97b26
 
     // ODBC
     Q_INVOKABLE void mysqlOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
