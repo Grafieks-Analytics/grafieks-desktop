@@ -35,12 +35,20 @@ Page {
     property var d3PropertyConfig: ({});
 
 
+
     onReportChartChanged: {
 
         switch(reportChart){
             case Constants.scatteredChart:
                 changeChart("qrc:/Source/Charts/StackedBarChart.html");
+                let resizeQuery = 'window.addEventListener("resize", function () {' +
+                                    'console.log("resizing");'+
+                                  'd3.selectAll("#my_dataviz").html(""); '+
+                                    'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
+                console.log(resizeQuery);
+                webEngineView.runJavaScript(resizeQuery);
                 break;
+
         }
 
     }
@@ -132,6 +140,7 @@ Page {
     // For changing the chart on clicking chart icons
 
     function reDrawChart(){
+        console.log(JSON.stringify(d3PropertyConfig));
         webEngineView.runJavaScript('drawChart(data,'+JSON.stringify(d3PropertyConfig)+')')
     }
 

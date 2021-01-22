@@ -118,6 +118,17 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
         break;
     }
 
+    case Constants::sqliteIntType:{
+
+
+        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+
+        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
+        this->setQuery(queryString, dbSqlite);
+
+        break;
+    }
+
     }
 }
 
@@ -261,6 +272,62 @@ void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableNam
         break;
     }
 
+    case Constants::sqliteIntType:{
+
+        switch (value) {
+        case 1:
+            queryString = "SELECT DISTINCT STRFTIME(" + columnName + "," + "'%d/%m/%Y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 2:
+            queryString = "SELECT DISTINCT STRFTIME(" + columnName + "," + "'%d %M %Y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 3:
+            queryString = "SELECT DISTINCT STRFTIME(" + columnName + "," + "'%e %M %Y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 4:
+            queryString = "SELECT DISTINCT STRFTIME(" + columnName + "," + "'%W, %e %M %Y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 5:
+            queryString = "SELECT DISTINCT STRFTIME(" + columnName + "," + "'%W, %d %M %Y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 6:
+            queryString = "SELECT DISTINCT STRFTIME(" + columnName + "," + "'%d/%m/%y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 7:
+            queryString = "SELECT DISTINCT STRFTIME(" + columnName + "," + "'%e/%c/%y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 8:
+            queryString = "SELECT DISTINCT STRFTIME(" + columnName + "," + "'%e.%c.%y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 9:
+            queryString = "SELECT DISTINCT STRFTIME(" + columnName + "," + "'%Y-%m-%d'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 10:
+            queryString = "SELECT DISTINCT DATE_FORMAT(" + columnName + "," + "'%M %Y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 11:
+            queryString = "SELECT DISTINCT STRFTIME(" + columnName + "," + "'%e %M'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 12:
+            queryString = "SELECT DISTINCT STRFTIME(" + columnName + "," + "'%y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 13:
+            queryString = "SELECT DISTINCT STRFTIME(" + columnName + "," + "'%Y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        case 14:
+            queryString = "SELECT DISTINCT STRFTIME(" + columnName + "," + "'%d/%m/%Y %H:%i:%s'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+            break;
+        default:
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+        }
+
+
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
+        this->setQuery(queryString, dbMysql);
+
+        break;
+    }
+
     }
 }
 
@@ -326,6 +393,27 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
             break;
         }
+
+        case Constants::sqliteIntType:{
+
+            pieces = fieldNames.split(",");
+
+            if(pieces.length() > 1){
+                finalSearchFields = pieces.join("','");
+            }else{
+                finalSearchFields = fieldNames;
+            }
+
+            finalSearchFields = "'" + finalSearchFields + "'";
+
+            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+
+            QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
+            this->setQuery(queryString, dbSqlite);
+
+
+            break;
+        }
         }
     }
 
@@ -356,6 +444,36 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
 
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
         this->setQuery(queryString, dbMysql);
+
+        break;
+    }
+
+    case Constants::mysqlOdbcIntType:{
+
+        if (searchString != ""){
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
+        } else{
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        }
+
+
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
+        this->setQuery(queryString, dbMysql);
+
+        break;
+    }
+
+    case Constants::sqliteIntType:{
+
+        if (searchString != ""){
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
+        } else{
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        }
+
+
+        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
+        this->setQuery(queryString, dbSqlite);
 
         break;
     }

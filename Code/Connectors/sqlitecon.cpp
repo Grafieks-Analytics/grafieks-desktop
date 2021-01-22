@@ -21,18 +21,13 @@ Sqlitecon::Sqlitecon(QObject *parent) : QObject(parent)
  * \return QVariantMap {bool status, QString msg}
  */
 
-QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &username, const QString &password)
+QVariantMap Sqlitecon::SqliteInstance(const QString &filename)
 {
 
     if(QSqlDatabase::isDriverAvailable(DRIVER)){
 
         QSqlDatabase dbSqlite = QSqlDatabase::addDatabase(DRIVER, Constants::sqliteStrType);
-        dbSqlite.setDatabaseName(filename);
-
-        if(username != "" && password != ""){
-            dbSqlite.setUserName(username);
-            dbSqlite.setPassword(password);
-        }
+        dbSqlite.setDatabaseName(QUrl(filename).toLocalFile());
 
         if(!dbSqlite.open()){
             outputStatus.insert("status", false);
@@ -44,10 +39,7 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &us
             // For automatic connection for other instances
             // If correct credentials inserted once
 
-            Statics::sqliteFile = filename;
-            Statics::sqliteUsername = username;
-            Statics::sqlitePassword = password;
-
+            Statics::sqliteFile = QUrl(filename).toLocalFile();
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
 
@@ -57,13 +49,7 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &us
             // Else all the query statistics are listed in "Test Query" tab in Data-Query-Modeller
 
             QSqlDatabase dbSqlite2 = QSqlDatabase::addDatabase(DRIVER, Constants::sqliteStrQueryType);
-            dbSqlite2.setDatabaseName(filename);
-
-            if(username != "" && password != ""){
-                dbSqlite2.setUserName(username);
-                dbSqlite2.setPassword(password);
-            }
-
+            dbSqlite2.setDatabaseName(QUrl(filename).toLocalFile());
             dbSqlite2.open();
         }
 
@@ -76,8 +62,11 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename, const QString &us
 
 }
 
-QVariantMap Sqlitecon::SqliteOdbcInstance(const QString &driver, const QString &filepath, const QString &username, const QString &password)
+QVariantMap Sqlitecon::SqliteOdbcInstance(const QString &driver, const QString &filepath)
 {
+    Q_UNUSED(driver);
+    Q_UNUSED(filepath);
+
     QVariantMap outputStatus;
     return outputStatus;
 }

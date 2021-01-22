@@ -100,6 +100,14 @@ void DBListModel::callQuery(QString queryString)
 
         break;
     }
+
+    case Constants::sqliteIntType:{
+        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteOdbcStrType);
+
+        this->setQuery(".database", dbSqlite);
+
+        break;
+    }
     case Constants::postgresIntType:{
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrType);
 

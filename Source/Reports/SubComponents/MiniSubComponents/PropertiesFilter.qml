@@ -388,10 +388,8 @@ Column{
     // Marker Shape Ends
 
 
+
     // Label starts
-
-
-    // Tool tip starts
     Rectangle{
 
         height: 20
@@ -431,39 +429,47 @@ Column{
     }
     // Label Ends
 
+    // Line Type starts
+    Rectangle{
 
-//    Rectangle{
+        height: 20
+        width: parent.width
 
-//        height: 20
-//        width: parent.width
+        Rectangle{
+            anchors.fill: parent
 
+            LineTypePopup{
+                id: lineTypePopup
+                x: parent.width - 10
+            }
 
-//        Rectangle{
-//            anchors.fill: parent
+            Text {
+                text: qsTr("Line Type")
+                anchors.left: parent.left
+                anchors.leftMargin: leftMargin
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: Constants.fontCategoryHeaderSmall
+            }
 
-//            Text {
-//                text: qsTr("Label")
-//                anchors.left: parent.left
-//                anchors.leftMargin: leftMargin
-//                anchors.verticalCenter: parent.verticalCenter
-//                font.pixelSize: Constants.fontCategoryHeaderSmall
-//            }
+            Image {
+                height: editImageSize
+                width: editImageSize
+                source: "/Images/icons/Edit_20.png"
+                anchors.right: parent.right
+                anchors.rightMargin: leftMargin
+                anchors.verticalCenter: parent.verticalCenter
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked: lineTypePopup.visible = true
+            }
 
-//            CheckBoxTpl{
+        }
 
-//                checked: false
-//                parent_dimension: editImageSize - 2
-//                anchors.right: parent.right
-//                anchors.verticalCenter: parent.verticalCenter
-//                anchors.rightMargin: 5
-//                anchors.top: parent.top
-
-//            }
-
-//        }
-
-//    }
+    }
     // Label Ends
+
+
 
     // Merge Axis starts
     Rectangle{
