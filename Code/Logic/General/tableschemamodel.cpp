@@ -344,6 +344,42 @@ void TableSchemaModel::showSchema(QString query)
         break;
     }
 
+    case Constants::csvIntType:{
+
+        QFile file(Statics::currentDbName);
+        file.open(QIODevice::ReadOnly);
+
+        QTextStream in(&file);
+
+        QByteArrayList headers = file.readLine().split(',');
+        QByteArrayList dataRow = file.readLine().split(',');
+
+
+        for(int i = 0; i < dataRow.size(); i++){
+
+            QVariant dataType = dataRow[i];
+
+            if(dataType.userType() == QMetaType::Int
+                    || dataType.userType() == QMetaType::UInt
+                    || dataType.userType() == QMetaType::LongLong
+                    || dataType.userType() == QMetaType::ULongLong){
+
+                outputDataList << "" << headers[i];
+                allNumerical.append(outputDataList);
+            }
+            else{
+
+                outputDataList << "" << headers[i];
+                allCategorical.append(outputDataList);
+
+            }
+             outputDataList.clear();
+
+        }
+
+         break;
+    }
+
     }
 
     // Emit the signals here

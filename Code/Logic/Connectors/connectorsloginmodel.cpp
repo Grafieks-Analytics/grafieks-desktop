@@ -130,9 +130,38 @@ void ConnectorsLoginModel::excelOdbcLogin(QString driver, QString filename)
     emit excelLoginStatus(response);
 }
 
+void ConnectorsLoginModel::csvLogin(QString filename)
+{
+    CSVCon csvcon;
+    QVariantMap response = csvcon.CSVInstance(filename);
+
+    Statics::currentDbName = filename;
+    Statics::currentDbIntType = Constants::csvIntType;
+
+    this->setConnectedDB(filename);
+
+    emit csvLoginStatus(response);
+}
+
+QString ConnectorsLoginModel::urlToFilePath(const QUrl &url)
+{
+    QString path = url.toLocalFile();
+    return path;
+}
+
 QString ConnectorsLoginModel::connectedDB() const
 {
-    return m_connectedDB;
+    QString dataBase = m_connectedDB;
+
+    switch (Statics::currentDbIntType) {
+
+    case Constants::csvIntType:{
+        dataBase = QUrl(m_connectedDB).fileName();
+        break;
+    }
+    }
+    return dataBase;
+
 }
 
 void ConnectorsLoginModel::setConnectedDB(QString connectedDB)

@@ -7,5 +7,6 @@
 #include "postgrescon.h"
 #include "mongocon.h"
 #include "excelcon.h"
+#include "csvcon.h"
 
 #endif // ALLCONNECTORS_H

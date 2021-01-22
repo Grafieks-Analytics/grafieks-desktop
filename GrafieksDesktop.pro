@@ -14,6 +14,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     Code/Connectors/accesscon.cpp \
+    Code/Connectors/csvcon.cpp \
     Code/Connectors/excelcon.cpp \
     Code/Connectors/hivecon.cpp \
     Code/Connectors/impalacon.cpp \
@@ -102,6 +103,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     Code/Connectors/accesscon.h \
     Code/Connectors/allconnectors.h \
+    Code/Connectors/csvcon.h \
     Code/Connectors/excelcon.h \
     Code/Connectors/hivecon.h \
     Code/Connectors/impalacon.h \

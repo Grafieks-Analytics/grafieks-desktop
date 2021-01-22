@@ -455,6 +455,8 @@ Popup {
         nameFilters: ["Sqlite files (*.sqlite *.db)"];
 
         onAccepted: {
+            sqliteFileName.text = promptSqlite.fileUrl
+            console.log(sqliteFileName.text + "sqlite text")
             console.log(fileUrl)
         }
         onRejected: {

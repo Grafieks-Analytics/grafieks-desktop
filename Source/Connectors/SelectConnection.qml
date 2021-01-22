@@ -59,6 +59,29 @@ Page {
 
 
     /***********************************************************************************************************************/
+    // Connection  Starts
+
+    Connections{
+        target: ConnectorsLoginModel
+
+        function onCsvLoginStatus(status){
+
+            if(status.status === true){
+                stacklayout_home.currentIndex = 5
+            }
+            else{
+                msg_dialog.open()
+                msg_dialog.text = status.msg
+            }
+        }
+    }
+
+    // Connection  Ends
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTIONS STARTS
 
     function tmp_update_host(new_host){
@@ -70,7 +93,7 @@ Page {
     // Set modal popup
     function selectAuthorization(param){
 
-console.log(param)
+        console.log(param)
         switch(param.toLowerCase()){
 
         case "grs":
@@ -292,6 +315,34 @@ console.log(param)
     SheetConnectionFiles{
         id: sheetListPopup
     }
+
+    // Connection to CSV start
+    FileDialog{
+
+        id: csvModal
+        title: "Select a file"
+        folder: shortcuts.documents
+        nameFilters: ["*.csv"]
+
+        onAccepted: {
+            var path = ConnectorsLoginModel.urlToFilePath(csvModal.fileUrl)
+            ConnectorsLoginModel.csvLogin(path)
+
+        }
+        onRejected: {
+            console.log("file rejected")
+        }
+
+    }
+
+    MessageDialog{
+        id: msg_dialog
+        title: "CSV Connection"
+        text: ""
+        icon: StandardIcon.Critical
+    }
+
+    // Connection to CSV end
 
 
     // Connect to Microsoft Excel
