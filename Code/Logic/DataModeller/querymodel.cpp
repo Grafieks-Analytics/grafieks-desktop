@@ -69,14 +69,7 @@ void QueryModel::executeQuery(QString &query)
 
         break;
     }
-    case Constants::sqliteIntType:{
-        qDebug() << query << " Query Model";
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::sqliteStrQueryType);
-        qDebug() << dbMysql;
-        this->setQuery(query, dbMysql);
 
-        break;
-    }
     case Constants::mysqlOdbcIntType:{
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
         this->setQuery(query, dbMysql);
