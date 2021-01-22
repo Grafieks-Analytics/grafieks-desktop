@@ -61,20 +61,6 @@ Page {
     /***********************************************************************************************************************/
     // Connection  Starts
 
-    Connections{
-        target: ConnectorsLoginModel
-
-        function onCsvLoginStatus(status){
-
-            if(status.status === true){
-                stacklayout_home.currentIndex = 5
-            }
-            else{
-                msg_dialog.open()
-                msg_dialog.text = status.msg
-            }
-        }
-    }
 
     // Connection  Ends
     /***********************************************************************************************************************/
@@ -316,34 +302,9 @@ Page {
         id: sheetListPopup
     }
 
-    // Connection to CSV start
-    FileDialog{
-
+    CSVConnection{
         id: csvModal
-        title: "Select a file"
-        folder: shortcuts.documents
-        nameFilters: ["*.csv"]
-
-        onAccepted: {
-            var path = ConnectorsLoginModel.urlToFilePath(csvModal.fileUrl)
-            ConnectorsLoginModel.csvLogin(path)
-
-        }
-        onRejected: {
-            console.log("file rejected")
-        }
-
     }
-
-    MessageDialog{
-        id: msg_dialog
-        title: "CSV Connection"
-        text: ""
-        icon: StandardIcon.Critical
-    }
-
-    // Connection to CSV end
-
 
     // Connect to Microsoft Excel
     FileDialog{

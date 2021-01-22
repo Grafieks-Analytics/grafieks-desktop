@@ -4,7 +4,7 @@
 ** Contact: https://grafieks.com/
 **
 ** Data/SubComponents
-** Sqlite Connection
+** CSV Connection
 **
 ****************************************************************************/
 
@@ -31,10 +31,9 @@ Popup {
     Connections{
         target: ConnectorsLoginModel
 
-        function onSqliteLoginStatus(status){
+        function onCsvLoginStatus(status){
 
             if(status.status === true){
-
                 popup.visible = false
                 stacklayout_home.currentIndex = 5
             }
@@ -62,7 +61,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Signin to Sqlite"
+            text: "Signin to CSV"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -88,10 +87,6 @@ Popup {
 
     // Popup Header ends
 
-
-
-
-    // Row3: Enter port number starts
 
 
     Row{
@@ -121,20 +116,16 @@ Popup {
 
         Button{
             id : file_btn
-            text: "Select Sqlite file"
-            onClicked: promptSqlite.open();
+            text: "Select CSV file"
+            onClicked: promptCSV.open();
         }
 
         Text{
-            id: sqliteFileName
+            id: csvFileName
             text:""
         }
 
     }
-
-
-    // Row3: Enter port number ends
-
 
 
     // Row 6: Action Button starts
@@ -166,7 +157,7 @@ Popup {
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
-            onClicked: {ConnectorsLoginModel.sqliteLogin(sqliteFileName.text); console.log(sqliteFileName.text)}
+            onClicked: ConnectorsLoginModel.csvLogin(csvFileName.text)
 
         }
     }
@@ -175,20 +166,20 @@ Popup {
 
     MessageDialog{
         id: msg_dialog
-        title: "Sqlite Connection"
+        title: "CSV Connection"
         text: ""
         icon: StandardIcon.Critical
     }
 
     // Select SQLITE file
     FileDialog{
-        id: promptSqlite
-        title: "Select a file"
-        nameFilters: ["Sqlite files (*.sqlite *.db)"];
+        id: promptCSV
+        title: "Select a CSV file"
+        nameFilters: ["CSV files (*.csv)"];
 
         onAccepted: {
+            csvFileName.text = ConnectorsLoginModel.urlToFilePath(promptCSV.fileUrl)
             console.log(fileUrl)
-            sqliteFileName.text = fileUrl
         }
         onRejected: {
             console.log("file rejected")
