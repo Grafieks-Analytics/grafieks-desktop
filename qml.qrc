@@ -189,6 +189,6 @@
         <file>Source/Others/Table.qml</file>
         <file>Source/Others/TableTest.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/LineTypePopup.qml</file>
-        <file>Source/Connectors/SubComponents/CsvConnection.qml</file>
+        <file>Source/Connectors/SubComponents/CSVConnection.qml</file>
     </qresource>
 </RCC>

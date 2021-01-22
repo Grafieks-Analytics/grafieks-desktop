@@ -127,13 +127,52 @@ Popup {
 
     }
 
+    Row{
+
+        id: row4
+        anchors.top: row3.bottom
+        anchors.topMargin: 15
+        anchors.left: parent.left
+        anchors.leftMargin: 1
+
+        Rectangle{
+
+            id: label4
+            width:label_col
+            height: 40
+
+            Text{
+                text: "Separator"
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                font.pixelSize: Constants.fontCategoryHeader
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+
+        TextField{
+            id: separator
+            maximumLength: 45
+            anchors.verticalCenter: parent.verticalCenter
+            width: 370
+            height: 40
+
+            background: Rectangle {
+                border.color: Constants.borderBlueColor
+                radius: 5
+                width: 400
+
+            }
+        }
+
+    }
 
     // Row 6: Action Button starts
 
     Row{
 
         id: row6
-        anchors.top: row3.bottom
+        anchors.top: row4.bottom
         anchors.topMargin: 15
         anchors.right: parent.right
         anchors.rightMargin: label_col - 70
