@@ -354,15 +354,11 @@ void TableSchemaModel::showSchema(QString query)
         QByteArrayList headers = file.readLine().split(',');
         QByteArrayList dataRow = file.readLine().split(',');
 
-
         for(int i = 0; i < dataRow.size(); i++){
 
-            QVariant dataType = dataRow[i];
+            QString dataType = QString::fromStdString(dataRow[i].toStdString());
 
-            if(dataType.userType() == QMetaType::Int
-                    || dataType.userType() == QMetaType::UInt
-                    || dataType.userType() == QMetaType::LongLong
-                    || dataType.userType() == QMetaType::ULongLong){
+            if(dataType.toInt() || dataType.toFloat()){
 
                 outputDataList << "" << headers[i];
                 allNumerical.append(outputDataList);
@@ -371,13 +367,11 @@ void TableSchemaModel::showSchema(QString query)
 
                 outputDataList << "" << headers[i];
                 allCategorical.append(outputDataList);
-
             }
-             outputDataList.clear();
-
+            outputDataList.clear();
         }
 
-         break;
+        break;
     }
 
     }
