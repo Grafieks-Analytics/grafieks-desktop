@@ -65,6 +65,14 @@ Page {
                 tableslist.model = TableListModel
             }
         }
+        function onCsvLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                TableListModel.callQuery()
+                tableslist.model = TableListModel
+            }
+        }
+
     }
 
     Connections{
@@ -317,10 +325,6 @@ Page {
             id: dragRect
             width: 200
             height: 30
-
-
-
-
 
 
             property bool caught: false

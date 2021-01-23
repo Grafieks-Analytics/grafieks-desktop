@@ -59,6 +59,15 @@ Page {
 
 
     /***********************************************************************************************************************/
+    // Connection  Starts
+
+
+    // Connection  Ends
+    /***********************************************************************************************************************/
+
+
+
+    /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTIONS STARTS
 
     function tmp_update_host(new_host){
@@ -70,7 +79,7 @@ Page {
     // Set modal popup
     function selectAuthorization(param){
 
-console.log(param)
+        console.log(param)
         switch(param.toLowerCase()){
 
         case "grs":
@@ -293,6 +302,9 @@ console.log(param)
         id: sheetListPopup
     }
 
+    CSVConnection{
+        id: csvModal
+    }
 
     // Connect to Microsoft Excel
     FileDialog{

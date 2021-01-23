@@ -55,6 +55,7 @@
 #include "Code/Logic/General/tablecolumnsmodel.h"
 #include "Code/Logic/General/querysplitter.h"
 #include "Code/Logic/General/qttest2.h"
+#include "Code/Logic/General/qttest.h"
 
 #include "Code/statics.h"
 
@@ -180,6 +181,8 @@ int main(int argc, char *argv[])
     // OBJECT INITIALIZATION STARTS
 
     QtTest2 qttest2;
+    QtTest qttest;
+
 
     MysqlCon mysqlconnect;
     User User;

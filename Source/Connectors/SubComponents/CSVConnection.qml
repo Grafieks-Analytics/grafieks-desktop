@@ -4,7 +4,7 @@
 ** Contact: https://grafieks.com/
 **
 ** Data/SubComponents
-** Sqlite Connection
+** CSV Connection
 **
 ****************************************************************************/
 
@@ -31,10 +31,9 @@ Popup {
     Connections{
         target: ConnectorsLoginModel
 
-        function onSqliteLoginStatus(status){
+        function onCsvLoginStatus(status){
 
             if(status.status === true){
-
                 popup.visible = false
                 stacklayout_home.currentIndex = 5
             }
@@ -62,7 +61,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Signin to Sqlite"
+            text: "Signin to CSV"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -88,10 +87,6 @@ Popup {
 
     // Popup Header ends
 
-
-
-
-    // Row3: Enter port number starts
 
 
     Row{
@@ -121,28 +116,63 @@ Popup {
 
         Button{
             id : file_btn
-            text: "Select Sqlite file"
-            onClicked: promptSqlite.open();
+            text: "Select CSV file"
+            onClicked: promptCSV.open();
         }
 
         Text{
-            id: sqliteFileName
+            id: csvFileName
             text:""
         }
 
     }
 
+    Row{
 
-    // Row3: Enter port number ends
+        id: row4
+        anchors.top: row3.bottom
+        anchors.topMargin: 15
+        anchors.left: parent.left
+        anchors.leftMargin: 1
 
+        Rectangle{
 
+            id: label4
+            width:label_col
+            height: 40
+
+            Text{
+                text: "Separator"
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                font.pixelSize: Constants.fontCategoryHeader
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+
+        TextField{
+            id: separator
+            maximumLength: 45
+            anchors.verticalCenter: parent.verticalCenter
+            width: 370
+            height: 40
+
+            background: Rectangle {
+                border.color: Constants.borderBlueColor
+                radius: 5
+                width: 400
+
+            }
+        }
+
+    }
 
     // Row 6: Action Button starts
 
     Row{
 
         id: row6
-        anchors.top: row3.bottom
+        anchors.top: row4.bottom
         anchors.topMargin: 15
         anchors.right: parent.right
         anchors.rightMargin: label_col - 70
@@ -166,7 +196,7 @@ Popup {
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
-            onClicked: {ConnectorsLoginModel.sqliteLogin(sqliteFileName.text); console.log(sqliteFileName.text)}
+            onClicked: ConnectorsLoginModel.csvLogin(csvFileName.text)
 
         }
     }
@@ -175,20 +205,20 @@ Popup {
 
     MessageDialog{
         id: msg_dialog
-        title: "Sqlite Connection"
+        title: "CSV Connection"
         text: ""
         icon: StandardIcon.Critical
     }
 
     // Select SQLITE file
     FileDialog{
-        id: promptSqlite
-        title: "Select a file"
-        nameFilters: ["Sqlite files (*.sqlite *.db)"];
+        id: promptCSV
+        title: "Select a CSV file"
+        nameFilters: ["CSV files (*.csv)"];
 
         onAccepted: {
+            csvFileName.text = ConnectorsLoginModel.urlToFilePath(promptCSV.fileUrl)
             console.log(fileUrl)
-            sqliteFileName.text = fileUrl
         }
         onRejected: {
             console.log("file rejected")
