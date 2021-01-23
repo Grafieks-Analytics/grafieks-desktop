@@ -7,23 +7,13 @@
     <script src="./Data/d3DefaultConfig.js"></script>
     <script src="./Data/d3.v4.min.js"></script>
     <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js"></script> -->
 
     <link rel="stylesheet" href="Data/general.css" />
 </head>
 <body>
     <div id="my_dataviz"></div>
     <div id="tooltip"></div>
-    <div
-        id="legend"
-        style="
-            right: 20px;
-            top: 10px;
-            position: absolute;
-            border: 1px solid black;
-            padding: 10px;
-        "
-    ></div>
+    <div id="legend" style="position: absolute; border: 1px solid black"></div>
     <script>
         // Color Pallets - Set 3
 
@@ -54,7 +44,11 @@
         const valueIndex = 2;
 
         function drawChart(data, plottingConfiguration = {}) {
-            let { d3colorPalette, paddingInner } = plottingConfiguration;
+            let {
+                d3colorPalette,
+                paddingInner,
+                legendConfig,
+            } = plottingConfiguration;
             if (!d3colorPalette) {
                 d3colorPalette = defaultD3Config.d3ColorPalette;
             }
@@ -63,11 +57,75 @@
                 paddingInner = defaultD3Config.defaultPaddingInner;
             }
 
-            d3.selectAll("#my_dataviz").html("");
             var margin = { top: 30, right: 30, bottom: 70, left: 60 },
                 width = window.innerWidth - margin.left - margin.right - 20,
                 height = window.innerHeight - margin.top - margin.bottom - 20;
 
+            if (!legendConfig) {
+                legendConfig = { legendStatus: false };
+            }
+
+            let { legendStatus, legendPosition } = legendConfig;
+
+            // if (!legendStatus) {
+            //     legendStatus = true;
+            //     legendPosition = "top";
+            // }
+
+            if (legendStatus) {
+                var legendHeight = document.querySelector("#legend")
+                    .offsetHeight;
+                var legendElement = document.querySelector("#legend");
+
+                topPosition = "calc(50vh - " + legendHeight + "px)";
+                legendElement.style.padding = "10px";
+
+                switch (legendPosition) {
+                    case "left":
+                        margin.left += 100;
+                        width -= 100;
+                        d3.select("#legend")
+                            .style("top", topPosition)
+                            .style("right", "auto")
+                            .style("bottom", "auto")
+                            .style("left", "20px")
+                            .style("display", "block");
+                        break;
+                    case "top":
+                        margin.top += 80;
+                        height -= 100;
+                        d3.select("#legend")
+                            .style("top", "20px")
+                            .style("right", "auto")
+                            .style("bottom", "auto")
+                            .style("left", margin.left + "px")
+                            .style("display", "flex");
+                        d3.selectAll("#legend div").style("padding", "2px 4px");
+                        break;
+                    case "bottom":
+                        height -= 80;
+                        margin.bottom += 80;
+                        d3.select("#legend")
+                            .style("top", "auto")
+                            .style("right", "auto")
+                            .style("bottom", "80px")
+                            .style("left", margin.left + "px")
+                            .style("display", "flex");
+                        break;
+                    // For Right Legened
+                    case "right":
+                    default:
+                        width -= 100;
+                        d3.select("#legend")
+                            .style("right", "20px")
+                            .style("left", "auto")
+                            .style("top", topPosition)
+                            .style("bottom", "auto")
+                            .style("display", "block");
+                }
+            }
+
+            d3.selectAll("#my_dataviz").html("");
             var x = d3
                 .scaleBand()
                 .rangeRound([0, width])
@@ -123,6 +181,29 @@
 
             y.domain([0, max]);
             x.domain(keys);
+
+            d3.select("#legend").html("").style("padding", "");
+
+            if (legendStatus) {
+                d3.select("#legend").html("");
+                d3.select("#legend")
+                    .selectAll("div")
+                    .data(symbols)
+                    .enter()
+                    .append("div")
+                    .html((d, i) => {
+                        return (
+                            '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
+                            d3Colors[i] +
+                            ';">  </div>' +
+                            "<span style='margin-left: 5px; max-width: 80px'>" +
+                            d +
+                            "</span>"
+                        );
+                    })
+                    .style("display", "flex")
+                    .style("padding", "2px");
+            }
 
             var svg = d3
                 .select("#my_dataviz")
@@ -206,25 +287,6 @@
                     d3.select("#tooltip").style("display", "none");
                     d3.selectAll(".bar").style("opacity", 1);
                 });
-
-            d3.select("#legend").html("");
-            d3.select("#legend")
-                .selectAll("div")
-                .data(symbols)
-                .enter()
-                .append("div")
-                .html((d, i) => {
-                    return (
-                        '<div style="width: 15px; background: ' +
-                        d3Colors[i] +
-                        ';">  </div>' +
-                        "<span style='margin-left: 5px'>" +
-                        d +
-                        "</span>"
-                    );
-                })
-                .style("display", "flex")
-                .style("padding", "2px");
 
             // Generate Grid starts
 

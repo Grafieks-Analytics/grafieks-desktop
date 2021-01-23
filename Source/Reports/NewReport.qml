@@ -45,7 +45,6 @@ Page {
                                     'console.log("resizing");'+
                                   'd3.selectAll("#my_dataviz").html(""); '+
                                     'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
-                console.log(resizeQuery);
                 webEngineView.runJavaScript(resizeQuery);
                 break;
 
@@ -140,7 +139,11 @@ Page {
     // For changing the chart on clicking chart icons
 
     function reDrawChart(){
-        console.log(JSON.stringify(d3PropertyConfig));
+        let resizeQuery = 'window.addEventListener("resize", function () {' +
+                                  'd3.selectAll("#my_dataviz").html(""); '+
+                                    'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
+                webEngineView.runJavaScript(resizeQuery);
+                
         webEngineView.runJavaScript('drawChart(data,'+JSON.stringify(d3PropertyConfig)+')')
     }
 

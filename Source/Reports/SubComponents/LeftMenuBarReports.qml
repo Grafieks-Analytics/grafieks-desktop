@@ -82,7 +82,7 @@ Rectangle{
         }
         ListElement{
             icon: "pie_chart.png"
-            chartHtml:"bar.html"
+            chartHtml:"PieChart.html"
             activeChart: false
             title:"Pie Chart"
         }
