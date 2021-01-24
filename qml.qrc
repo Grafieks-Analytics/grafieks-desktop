@@ -192,5 +192,6 @@
         <file>Source/Charts/PieChart.html</file>
         <file>Source/Connectors/SubComponents/CSVConnection.qml</file>
         <file>Source/Charts/DoughnutChart.html</file>
+        <file>Source/Charts/ScatterChart.html</file>
     </qresource>
 </RCC>

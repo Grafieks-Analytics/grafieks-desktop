@@ -80,7 +80,7 @@ Rectangle{
         }
         ListElement{
             icon: "scatter_plot.png"
-            chartHtml:"bar.html"
+            chartHtml:"ScatterChart.html"
             activeChart: false
             title:"Scatter Plot"
             yAxisVisible: true
