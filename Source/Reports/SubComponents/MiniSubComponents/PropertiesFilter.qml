@@ -434,6 +434,7 @@ Column{
 
         height: 20
         width: parent.width
+        visible: report_desiner_page.lineTypeChartVisible
 
         Rectangle{
             anchors.fill: parent

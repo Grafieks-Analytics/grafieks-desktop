@@ -18,9 +18,9 @@
     <!-- Create a div where the graph will take place -->
     <div id="my_dataviz"></div>
     <div id="tooltip"></div>
+    <div id="legend"></div>
 
     <script>
-        // create 2 data_set
         var data = { a: 9, b: 20, c: 30, d: 8, e: 12, g: 45 };
 
         function drawChart(data, plottingConfiguration = {}) {
@@ -37,6 +37,88 @@
             var margin = { top: 30, right: 30, bottom: 70, left: 60 },
                 width = window.innerWidth - margin.left - margin.right - 20,
                 height = window.innerHeight - margin.top - margin.bottom - 20;
+
+            if (!legendConfig) {
+                legendConfig = { legendStatus: false };
+            }
+
+            let { legendStatus, legendPosition } = legendConfig;
+
+            if (legendStatus) {
+                var legendHeight = document.querySelector("#legend")
+                    .offsetHeight;
+                var legendElement = document.querySelector("#legend");
+
+                topPosition = "calc(50vh - " + legendHeight + "px)";
+                legendElement.style.padding = "10px";
+
+                switch (legendPosition) {
+                    case "left":
+                        margin.left += 100;
+                        width -= 100;
+                        d3.select("#legend")
+                            .style("top", topPosition)
+                            .style("right", "auto")
+                            .style("bottom", "auto")
+                            .style("left", "20px")
+                            .style("display", "block");
+                        break;
+                    case "top":
+                        margin.top += 80;
+                        height -= 100;
+                        d3.select("#legend")
+                            .style("top", "20px")
+                            .style("right", "auto")
+                            .style("bottom", "auto")
+                            .style("left", margin.left + "px")
+                            .style("display", "flex");
+                        d3.selectAll("#legend div").style("padding", "2px 4px");
+                        break;
+                    case "bottom":
+                        height -= 80;
+                        margin.bottom += 80;
+                        d3.select("#legend")
+                            .style("top", "auto")
+                            .style("right", "auto")
+                            .style("bottom", "80px")
+                            .style("left", margin.left + "px")
+                            .style("display", "flex");
+                        break;
+                    // For Right Legened
+                    case "right":
+                    default:
+                        width -= 100;
+                        d3.select("#legend")
+                            .style("right", "20px")
+                            .style("left", "auto")
+                            .style("top", topPosition)
+                            .style("bottom", "auto")
+                            .style("display", "block");
+                }
+            }
+
+            d3.select("#legend").html("").style("padding", "");
+
+            if (legendStatus) {
+                d3.select("#legend").html("");
+                d3.select("#legend")
+                    .selectAll("div")
+                    .data(Object.keys(data))
+                    .enter()
+                    .append("div")
+                    .html((d, i) => {
+                        return (
+                            '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
+                            d3Colors[i] +
+                            ';">  </div>' +
+                            "<span style='margin-left: 5px; max-width: 80px'>" +
+                            d +
+                            "</span>"
+                        );
+                    })
+                    .style("display", "flex")
+                    .style("padding", "2px");
+            }
 
             // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
             var radius = Math.min(width, height) / 2;
@@ -93,8 +175,8 @@
                 .style("stroke-width", "2px")
                 .style("opacity", 1)
                 .on("mouseover mousemove", function (d, i) {
-                    var x_pos = d3.mouse(this)[0] + width / 2;
-                    var y_pos = d3.mouse(this)[1] + height / 2;
+                    var x_pos = d3.mouse(this)[0] + width / 2 - 30;
+                    var y_pos = d3.mouse(this)[1] + height / 2 - 30;
 
                     d3.select("#tooltip")
                         .style("left", x_pos + "px")

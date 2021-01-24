@@ -32,6 +32,7 @@ Page {
     property bool yaxisActive: ReportParamsModel.yAxisActive
 
     property bool yAxisVisible: true
+    property bool lineTypeChartVisible: false
 
     property string reportChart:ReportParamsModel.chartType;
     property var d3PropertyConfig: ({});

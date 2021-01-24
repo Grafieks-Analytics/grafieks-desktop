@@ -43,6 +43,7 @@ Rectangle{
             activeChart: true
             title: "Bar Chart"
             yAxisVisible: true
+            lineTypeChartVisible: false
         }
         ListElement{
             icon: "area.png"
@@ -51,6 +52,7 @@ Rectangle{
             activeChart: false
             title: "Area Chart"
             yAxisVisible: true
+            lineTypeChartVisible: false
         }
         ListElement{
             icon: "line_chart.png"
@@ -58,6 +60,7 @@ Rectangle{
             activeChart: false
             title: "Line Chart"
             yAxisVisible: true
+            lineTypeChartVisible: true
         }
         ListElement{
             icon: "combination_chart.png"
@@ -65,6 +68,7 @@ Rectangle{
             chartHtml:"bar.html"
             title:"Combination"
             yAxisVisible: true
+            lineTypeChartVisible: false
         }
         ListElement{
             icon: "heatmap.png"
@@ -72,6 +76,7 @@ Rectangle{
             activeChart: false
             title:"Heat Map"
             yAxisVisible: true
+            lineTypeChartVisible: false
         }
         ListElement{
             icon: "scatter_plot.png"
@@ -79,6 +84,7 @@ Rectangle{
             activeChart: false
             title:"Scatter Plot"
             yAxisVisible: true
+            lineTypeChartVisible: false
         }
         ListElement{
             icon: "waterfall.png"
@@ -86,6 +92,7 @@ Rectangle{
             activeChart: false
             title:"Waterfall"
             yAxisVisible: true
+            lineTypeChartVisible: false
         }
         ListElement{
             icon: "pie_chart.png"
@@ -93,37 +100,47 @@ Rectangle{
             activeChart: false
             title:"Pie Chart"
             yAxisVisible: false
+            lineTypeChartVisible: false
         }
         ListElement{
             icon: "donut.png"
-            chartHtml:"bar.html"
+            chartHtml:"DoughnutChart.html"
             activeChart: false
             title:"Donut"
             yAxisVisible: false
+            lineTypeChartVisible: false
         }
         ListElement{
             icon: "radar.png"
             chartHtml:"bar.html"
             activeChart: false
             title:"Radar"
+            yAxisVisible: false
+            lineTypeChartVisible: false
         }
         ListElement{
             icon: "sunburst.png"
             chartHtml:"bar.html"
             activeChart: false
             title:"Sunburst"
+            yAxisVisible: false
+            lineTypeChartVisible: false
         }
         ListElement{
             icon: "nightingales_rose.png"
             activeChart: false
             chartHtml:"bar.html"
             title:"Nightingale Rose"
+            yAxisVisible: false
+            lineTypeChartVisible: false
         }
         ListElement{
             icon: "chord_diagram.png"
             chartHtml:"bar.html"
             activeChart: false
             title:"Chord Diagram"
+            yAxisVisible: false
+            lineTypeChartVisible: false
         }
         ListElement{
             icon: "funnel.png"
@@ -227,6 +244,7 @@ Rectangle{
     function getChart(chartHtml,index){
         loadchart("../Charts/"+chartHtml);
         yAxisVisible  = allCharts.get(index).yAxisVisible;
+        lineTypeChartVisible = allCharts.get(index).lineTypeChartVisible;
         allCharts.set(activeChartIndex,{activeChart: false})
         activeChartIndex = index;
         allCharts.set(index,{activeChart: true})
