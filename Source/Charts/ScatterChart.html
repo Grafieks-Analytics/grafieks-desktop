@@ -19,22 +19,6 @@
     <div id="tooltip"></div>
 
     <script>
-        // Color Pallets - Set 3
-        const d3colors = [
-            "#8DD3C9",
-            "#FFFFAA",
-            "#B8BED6",
-            "#F98171",
-            "#78B5D1",
-            "#FFB15B",
-            "#B4E061",
-            "#FDCDE5",
-            "#DAD9D4",
-            "#BD7FBE",
-            "#CDE9C1",
-            "#FFEA77",
-        ];
-
         // Categories
         var categories = ["setosa", "versicolor", "virginica", "default"];
         //Read the data
@@ -201,6 +185,8 @@
         ];
 
         function drawChart(data, plottingConfiguration = {}) {
+            d3.selectAll("#my_dataviz").html("");
+
             let {
                 d3colorPalette,
                 paddingInner,
@@ -266,7 +252,7 @@
                 .call(make_y_gridlines().tickSize(-width).tickFormat(""));
 
             // Color scale: give me a specie name, I return a color
-            var color = d3.scaleOrdinal().domain(categories).range(d3colors);
+            var color = d3.scaleOrdinal().domain(categories).range(d3Colors);
 
             var dataValues = data[0];
             // Add dots
