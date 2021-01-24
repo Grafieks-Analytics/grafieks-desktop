@@ -31,6 +31,8 @@ Page {
     property bool xaxisActive: ReportParamsModel.xAxisActive
     property bool yaxisActive: ReportParamsModel.yAxisActive
 
+    property bool yAxisVisible: true
+
     property string reportChart:ReportParamsModel.chartType;
     property var d3PropertyConfig: ({});
 
@@ -552,7 +554,7 @@ Page {
             anchors.top: seperatorAxis.bottom
             anchors.left: parent.left
             width: parent.width
-
+            visible: yAxisVisible
 
             Rectangle{
                 id: yaxisText
@@ -645,6 +647,7 @@ Page {
             background: Rectangle{
                 color: Constants.darkThemeColor
             }
+            visible: yAxisVisible
         }
 
 

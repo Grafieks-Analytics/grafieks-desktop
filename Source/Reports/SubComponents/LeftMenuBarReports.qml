@@ -42,6 +42,7 @@ Rectangle{
             name: "bar"
             activeChart: true
             title: "Bar Chart"
+            yAxisVisible: true
         }
         ListElement{
             icon: "area.png"
@@ -49,48 +50,56 @@ Rectangle{
             name:"area"
             activeChart: false
             title: "Area Chart"
+            yAxisVisible: true
         }
         ListElement{
             icon: "line_chart.png"
             chartHtml:"LineChart.html"
             activeChart: false
             title: "Line Chart"
+            yAxisVisible: true
         }
         ListElement{
             icon: "combination_chart.png"
             activeChart: false
             chartHtml:"bar.html"
             title:"Combination"
+            yAxisVisible: true
         }
         ListElement{
             icon: "heatmap.png"
             chartHtml:"bar.html"
             activeChart: false
             title:"Heat Map"
+            yAxisVisible: true
         }
         ListElement{
             icon: "scatter_plot.png"
             chartHtml:"bar.html"
             activeChart: false
             title:"Scatter Plot"
+            yAxisVisible: true
         }
         ListElement{
             icon: "waterfall.png"
             chartHtml:"bar.html"
             activeChart: false
             title:"Waterfall"
+            yAxisVisible: true
         }
         ListElement{
             icon: "pie_chart.png"
             chartHtml:"PieChart.html"
             activeChart: false
             title:"Pie Chart"
+            yAxisVisible: false
         }
         ListElement{
             icon: "donut.png"
             chartHtml:"bar.html"
             activeChart: false
             title:"Donut"
+            yAxisVisible: false
         }
         ListElement{
             icon: "radar.png"
@@ -217,6 +226,7 @@ Rectangle{
 
     function getChart(chartHtml,index){
         loadchart("../Charts/"+chartHtml);
+        yAxisVisible  = allCharts.get(index).yAxisVisible;
         allCharts.set(activeChartIndex,{activeChart: false})
         activeChartIndex = index;
         allCharts.set(index,{activeChart: true})
@@ -274,20 +284,13 @@ Rectangle{
                     anchors.fill: parent
                     hoverEnabled: true
                     onClicked:  getChart(chartHtml,index)
-                    onEntered: {
-                        console.log('Display')
-                        displayToolTipVisible=true
-                    }
+                    onEntered: displayToolTipVisible=true
                     onExited: displayToolTipVisible=false
-
                 }
-
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
                 ToolTip.visible: displayToolTipVisible
                 ToolTip.text: qsTr(title)
-
-
             }
 
         }

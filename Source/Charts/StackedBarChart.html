@@ -15,25 +15,24 @@
     <div id="tooltip"></div>
     <div id="legend" style="position: absolute; border: 1px solid black"></div>
     <script>
-        // Color Pallets - Set 3
-
         var data = [
             [
                 ["Ind", "1999", "139.81"],
-                ["Ind", "2000", "239.81"],
                 ["Ind", "2000", "100.81"],
                 ["Ind", "2001", "136.35"],
                 ["Ind", "2002", "143.22"],
+                ["Aus", "1999", "0"],
                 ["Aus", "2000", "241.64"],
                 ["Aus", "2001", "48.43"],
                 ["Aus", "2002", "54.43"],
-                ["Aus", "2001", "53.97"],
-                ["Aus", "2001", "78.54"],
+                ["NZ", "1999", "211.31"],
+                ["NZ", "2001", "0"],
+                ["NZ", "2000", "200.36"],
+                ["Nz", "2002", "0"],
+                ["Uk", "1999", "321.31"],
+                ["Uk", "2000", "500.36"],
                 ["Uk", "2001", "103.7"],
                 ["Uk", "2002", "100.82"],
-                ["NZ", "1999", "211.31"],
-                ["NZ", "2001", "1000.36"],
-                ["NZ", "2000", "200.36"],
             ],
             ["Ind", "Aus", "Nz", "Uk"],
             ["Year"],
@@ -66,11 +65,6 @@
             }
 
             let { legendStatus, legendPosition } = legendConfig;
-
-            // if (!legendStatus) {
-            //     legendStatus = true;
-            //     legendPosition = "top";
-            // }
 
             if (legendStatus) {
                 var legendHeight = document.querySelector("#legend")
@@ -149,9 +143,7 @@
                     return d[symbolIndex];
                 })
                 .rollup(function (v) {
-                    return d3.sum(v, function (d) {
-                        return d[valueIndex];
-                    });
+                    return v[0][valueIndex];
                 })
                 .entries(data[0]);
 
