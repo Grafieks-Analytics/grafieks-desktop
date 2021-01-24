@@ -147,12 +147,17 @@ Rectangle{
             chartHtml:"bar.html"
             activeChart: false
             title:"Funnel"
+
+            yAxisVisible: false
+            lineTypeChartVisible: false
         }
         ListElement{
             icon: "tree_chart.png"
-            chartHtml:"bar.html"
+            chartHtml:"TreeChart.html"
             activeChart: false
             title:"Tree Chart"
+            yAxisVisible: false
+            lineTypeChartVisible: false
         }
         ListElement{
             icon: "force_directed.png"
