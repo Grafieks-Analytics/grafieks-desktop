@@ -68,7 +68,7 @@ Rectangle{
             chartHtml:"bar.html"
             title:"Combination"
             yAxisVisible: true
-            lineTypeChartVisible: false
+            lineTypeChartVisible: true
         }
         ListElement{
             icon: "heatmap.png"

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+
+    <!-- Load d3.js -->
+    <script src="./Data/d3.v4.min.js"></script>
+    <link rel="icon" href="logo.png" type="image/png" sizes="32x32" />
+    <link rel="stylesheet" href="Data/general.css" />
+
+    <title>Bar Chart</title>
+</head>
+<body>
+    <div id="my_dataviz"></div>
+    <div id="tooltip"></div>
+
+    <!-- load the d3.js library -->
+    <script>
+        // Color Pallets - Set 3
+        const d3colors = [
+            "#8DD3C9",
+            "#FFFFAA",
+            "#B8BED6",
+            "#F98171",
+            "#78B5D1",
+            "#FFB15B",
+            "#B4E061",
+            "#FDCDE5",
+            "#DAD9D4",
+            "#BD7FBE",
+            "#CDE9C1",
+            "#FFEA77",
+        ];
+
+        data = [
+            [
+                ["2012-04-30T18:30:00.000Z", 58.13],
+                ["2012-04-29T18:30:00.000Z", 53.98],
+                ["2012-04-26T18:30:00.000Z", 67],
+                ["2012-04-25T18:30:00.000Z", 89.7],
+                ["2012-04-24T18:30:00.000Z", 99],
+                ["2012-04-23T18:30:00.000Z", 130.28],
+                ["2012-04-22T18:30:00.000Z", 166.7],
+                ["2012-04-19T18:30:00.000Z", 234.98],
+                ["2012-04-18T18:30:00.000Z", 345.44],
+                ["2012-04-17T18:30:00.000Z", 443.34],
+                ["2012-04-16T18:30:00.000Z", 543.7],
+                ["2012-04-15T18:30:00.000Z", 580.13],
+                ["2012-04-12T18:30:00.000Z", 605.23],
+                ["2012-04-11T18:30:00.000Z", 622.77],
+                ["2012-04-10T18:30:00.000Z", 626.2],
+                ["2012-04-09T18:30:00.000Z", 628.44],
+                ["2012-04-08T18:30:00.000Z", 636.23],
+                ["2012-04-04T18:30:00.000Z", 633.68],
+                ["2012-04-03T18:30:00.000Z", 624.31],
+                ["2012-04-02T18:30:00.000Z", 629.32],
+                ["2012-04-01T18:30:00.000Z", 618.63],
+                ["2012-03-29T18:30:00.000Z", 599.55],
+                ["2012-03-28T18:30:00.000Z", 609.86],
+                ["2012-03-27T18:30:00.000Z", 617.62],
+                ["2012-03-26T18:30:00.000Z", 614.48],
+                ["2012-03-25T18:30:00.000Z", 606.98],
+            ],
+            ["date", "close"],
+        ];
+
+        // set the dimensions and margins of the graph
+        var margin = { top: 20, right: 20, bottom: 30, left: 50 },
+            width = 1300 - margin.left - margin.right,
+            height = 600 - margin.top - margin.bottom;
+
+        // parse the date / time
+        var parseTime = d3.timeParse("%d-%b-%y");
+
+        // set the ranges
+        var x = d3.scaleTime().range([0, width]);
+        var y = d3.scaleLinear().range([height, 0]);
+
+        // define the area
+        var area = d3
+            .area()
+            .x(function (d) {
+                return x(d[0]);
+            })
+            .y0(height)
+            .y1(function (d) {
+                return y(d[1]);
+            });
+
+        // define the line
+        var valueline = d3
+            .line()
+            .x(function (d) {
+                return x(d[0]);
+            })
+            .y(function (d) {
+                return y(d[1]);
+            });
+
+        // append the svg obgect to the body of the page
+        // appends a 'group' element to 'svg'
+        // moves the 'group' element to the top left margin
+        var svg = d3
+            .select("#my_dataviz")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr(
+                "transform",
+                "translate(" + margin.left + "," + margin.top + ")"
+            );
+
+        // get the data
+        // d3.csv("./Data/area.csv", function (error, data) {
+        // d3.csv("./Data/area.csv", function (error, data) {
+
+        // format the data
+
+        dataValues = data[0];
+
+        dataValues.forEach(function (d) {
+            if (typeof d[0] == "string" && new Date(d[0]) != "Invalid Date")
+                d[0] = new Date(d[0]).getTime();
+            d[1] = +d[1];
+        });
+
+        // scale the range of the data
+        x.domain(
+            d3.extent(dataValues, function (d) {
+                return d[0];
+            })
+        );
+        y.domain([
+            0,
+            d3.max(dataValues, function (d) {
+                return d[1];
+            }),
+        ]);
+
+        // add the X Axis
+        svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .attr("class", "x-axis")
+            .call(d3.axisBottom(x).tickSizeOuter(0));
+
+        // add the Y Axis
+        svg.append("g")
+            .attr("class", "y-axis")
+            .call(d3.axisLeft(y).tickSizeOuter(0));
+
+        svg.append("g")
+            .attr("class", "grid")
+            .style("stroke-width", "1")
+            .call(make_y_gridlines().tickSize(-width).tickFormat(""));
+
+        // add the area
+        svg.append("path")
+            .data([dataValues])
+            .attr("fill", d3colors[4])
+            .attr("d", area)
+            .on("mouseout", function (d, i) {
+                d3.select("#tooltip").style("display", "none");
+            })
+            .on("mouseover mousemove", function (d, i) {
+                let xpos = d3.mouse(this)[0] + margin.left;
+                let ypos = d3.mouse(this)[1];
+
+                d3.select("#tooltip")
+                    .style("left", xpos + "px")
+                    .style("top", ypos + "px")
+                    .style("display", "block")
+                    .text(Math.round(y.invert(ypos)));
+            });
+
+        // add the valueline path.
+        svg.append("path")
+            .data([dataValues])
+            .attr("stroke", d3colors[2])
+            .attr("stroke-width", 2)
+            .attr("fill", "none")
+            .attr("d", valueline);
+
+        // Generate Grid starts
+
+        function make_x_gridlines() {
+            return d3.axisBottom(x).ticks(8);
+        }
+        function make_y_gridlines() {
+            return d3.axisLeft(y).ticks(5);
+        }
+
+        // Generate Grid ends
+    </script>
+</body>
