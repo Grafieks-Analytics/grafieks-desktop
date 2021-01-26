@@ -1,12 +1,11 @@
-#include "mysqlconversions.h"
+#include "mssqlconversions.h"
 
-MysqlConversions::MysqlConversions(QObject *parent) : QObject(parent),
-    queryString("")
+MssqlConversions::MssqlConversions(QObject *parent) : QObject(parent)
 {
 
 }
 
-QString MysqlConversions::convertDateQuery(QString &columnName, QString &tableName, int &lowerLimit, int &upperLimit, int value)
+QString MssqlConversions::convertDateQuery(QString &columnName, QString &tableName, int &lowerLimit, int &upperLimit, int value)
 {
 
     switch (value) {

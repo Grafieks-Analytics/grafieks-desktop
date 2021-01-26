@@ -8,6 +8,11 @@
 #include <QObject>
 #include <QDebug>
 
+#include "./Helpers/mysqlconversions.h"
+#include "./Helpers/sqliteconversions.h"
+#include "./Helpers/postgresconversions.h"
+#include "./Helpers/mssqlconversions.h"
+
 #include "../../Connectors/allconnectors.h"
 #include "../../statics.h"
 #include "../../constants.h"
@@ -20,6 +25,10 @@
 class ColumnListModel : public QSqlQueryModel
 {
     Q_OBJECT
+    MysqlConversions mysqlDateConversion;
+    SqliteConversions sqliteDateConversion;
+    PostgresConversions postgresDateConversion;
+
 public:
     explicit ColumnListModel(QObject *parent = nullptr);
     void setQuery(const QString &query, const QSqlDatabase &db = QSqlDatabase());
