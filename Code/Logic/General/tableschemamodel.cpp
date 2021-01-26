@@ -237,79 +237,31 @@ void TableSchemaModel::showSchema(QString query)
 
 
 
-        break; // Mysql Type break
+        break; // Mysql ODBC Type break
     }
-    case Constants::postgresIntType:{
 
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrType);
+    case Constants::sqliteIntType:{
 
-        QSqlQuery profilingUnsetQuery("SET profiling = 0", dbMysql);
-        QSqlQuery profilingSetQuery("SET profiling = 1", dbMysql);
+        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrQueryType);
 
-        profilingUnsetQuery.exec();
-
-        // Determine the list of table names
-        // from the last query
-
-        explainQueryString = "EXPLAIN (FORMAT JSON) "+ query;
-        QSqlQuery explainQuery(explainQueryString, dbMysql);
-
-        qDebug() << explainQuery.value(0).toString().toUtf8();
-
-        //explainQuery.first();
-
-        QJsonDocument jsonQuery = QJsonDocument::fromJson(explainQuery.value(0).toString().toUtf8());
-        qDebug() << jsonQuery;
-        QJsonObject objQuery = jsonQuery.object();
-
-        QJsonObject statusObj = objQuery["plan"].toObject();
-        QJsonArray tablesListArray = statusObj["Relation Name"].toArray();
-
-        if(tablesListArray.size() > 0){
-            for(int i = 0; i< tablesListArray.size(); i++){
-                QJsonObject table = tablesListArray.at(i).toObject();
-                QJsonObject tableData = table["table"].toObject();
-
-                // Affected column names in teh query
-                QJsonArray affectedColumns = tableData["used_columns"].toArray();
-
-                for(int j = 0; j < affectedColumns.size(); j++){
-                    queriedColumnNames << affectedColumns.at(j).toString();
-                }
-
-                // Affected table names in the query
-                tableList << tableData["table_name"].toString();
-
-            }
-        } else{
-            QJsonObject tableData = statusObj["table"].toObject();
-
-            // Affected column names in teh query
-            QJsonArray affectedColumns = tableData["used_columns"].toArray();
-
-            for(int j = 0; j < affectedColumns.size(); j++){
-                queriedColumnNames << affectedColumns.at(j).toString();
-            }
-
-            tableList << tableData["table_name"].toString();
-
-        }
+        querySplitter.setQueryForClasses(query);
+        QStringList tablesList = querySplitter.getJoinTables();
+        QString mainTable = querySplitter.getMainTable();
+        tablesList.push_back(mainTable);
 
 
-        QSqlQuery describeQuery(describeQueryString, dbMysql);
 
+        for(QString tableName: tablesList){
+            describeQueryString = "PRAGMA table_info(" + tableName + ")";
 
-        for(QString tableName: tableList){
-
-            describeQueryString = "SELECT column_name, data_type FROM information_schema.columns WHERE\n"
-                                  " table_name = '" + tableName  + "'";
-
-            QSqlQuery describeQuery(describeQueryString, dbMysql);
+            QSqlQuery describeQuery(describeQueryString, dbSqlite);
+            QSqlRecord rec = describeQuery.record();
 
             while(describeQuery.next()){
 
-                QString fieldName = describeQuery.value(0).toString();
-                QString fieldType = describeQuery.value(1).toString();
+
+                QString fieldName = describeQuery.value(1).toString();
+                QString fieldType = describeQuery.value(2).toString();
 
                 // Remove characters after `(` and then trim whitespaces
                 QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
@@ -318,6 +270,7 @@ void TableSchemaModel::showSchema(QString query)
                 QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
                 outputDataList << tableName << fieldName << fieldType << filterDataType;
+                qDebug() << outputDataList;
 
                 // Output data according to Filter type
 
@@ -339,7 +292,12 @@ void TableSchemaModel::showSchema(QString query)
             }
         }
 
-        profilingSetQuery.exec();
+        break; // Sqlite Type Break
+    }
+
+    case Constants::postgresIntType:{
+
+
 
         break;
     }

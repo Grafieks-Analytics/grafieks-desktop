@@ -104,7 +104,12 @@ void DBListModel::callQuery(QString queryString)
     case Constants::sqliteIntType:{
         QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteOdbcStrType);
 
-        this->setQuery(".database", dbSqlite);
+
+        if(queryString != ""){
+            this->setQuery("PRAGMA database_list", dbSqlite);
+        } else{
+            this->setQuery("PRAGMA database_list", dbSqlite);
+        }
 
         break;
     }

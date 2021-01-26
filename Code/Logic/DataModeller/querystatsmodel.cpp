@@ -68,6 +68,18 @@ void QueryStatsModel::setProfiling(bool status)
         break;
     }
 
+    case Constants::sqliteIntType:{
+        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrQueryType);
+        if(status == true){
+            this->setQuery("sqlite3_profile(SET profiling = 1)", dbSqlite);
+
+        } else{
+            this->setQuery("SET profiling = 0", dbSqlite);
+        }
+
+        break;
+    }
+
     case Constants::postgresIntType:{
 
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);

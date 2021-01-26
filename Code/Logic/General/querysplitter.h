@@ -25,13 +25,16 @@ public:
 
     QString query() const;
 
+    void setQueryForClasses(QString query); // Set query using C++
+
 public slots:
-    void setQuery(QString query);
+    void setQuery(QString query); // Set query using QML
 
 private:
 
 
     QString m_query;
+    void setInternalQuery(QString query);
 
 signals:
 

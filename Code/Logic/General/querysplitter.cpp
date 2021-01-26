@@ -18,20 +18,27 @@ QString QuerySplitter::query() const
     return m_query;
 }
 
+void QuerySplitter::setQueryForClasses(QString query)
+{
+    this->setInternalQuery(query);
+}
+
 /*!
  * \brief Sql query Setter method
  * \param query (sql query)
  */
 void QuerySplitter::setQuery(QString query)
 {
+    this->setInternalQuery(query);
+    emit queryChanged(query.simplified());
+}
+
+void QuerySplitter::setInternalQuery(QString query)
+{
     if (m_query == query)
         return;
 
-    // Remove whitespaces from ends
-    // Also remove any spacing chars like \n \t, etc
-
     m_query = query.simplified();
-    emit queryChanged(m_query);
 }
 
 /*!

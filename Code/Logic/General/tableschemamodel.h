@@ -15,6 +15,7 @@
 #include "../../statics.h"
 #include "../../constants.h"
 #include "datatype.h"
+#include "querysplitter.h"
 
 /*!
  * \class TableSchemaModel
@@ -25,6 +26,7 @@ class TableSchemaModel : public QObject
 {
     Q_OBJECT
     DataType dataType;
+    QuerySplitter querySplitter;
 
 public:
     explicit TableSchemaModel(QObject *parent = nullptr);

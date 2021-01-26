@@ -80,6 +80,36 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
         }
         break;
     }
+
+    case Constants::sqliteIntType:{
+
+        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrQueryType);
+
+        describeQueryString = "PRAGMA table_info(" + tableName + ")";
+
+        QSqlQuery describeQuery(describeQueryString, dbSqlite);
+
+        while(describeQuery.next()){
+
+            fieldName = describeQuery.value(1).toString();
+            fieldType = describeQuery.value(2).toString();
+
+            // Remove characters after `(` and then trim whitespaces
+            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+
+            // Get filter data type for QML
+            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+
+
+            outputDataList << fieldName << filterDataType;
+
+            // Append all data type to allList as well
+            allColumns.append(outputDataList);
+
+            outputDataList.clear();
+        }
+        break;
+    }
     case Constants::postgresIntType:{
 
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrType);
