@@ -22,7 +22,7 @@ QString DataType::dataType(QString parameter)
                 << "varying character" << "nchar" << "native character" << "clob";
 
     numerical << "int" << "tinyint" << "smallint" << "mediumint" << "bigint" << "decimal" << "float" << "double" << "real" << "integer" << "serial" << "bigserial"
-              << "double precision" << "numeric" << "smallserial" << "unsigned big int" << "int2" << "int8" << "double precision";
+              << "double precision" << "numeric" << "smallserial" << "unsigned big int" << "int2" << "int8";
 
     dateformat << "date" << "datetime" << "timestamp" << "time" << "year"
                << "timestamp without time zone" << "timestamp with time zone"

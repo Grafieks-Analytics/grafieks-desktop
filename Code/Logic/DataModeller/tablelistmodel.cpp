@@ -90,7 +90,7 @@ void TableListModel::callQuery(QString queryString)
 
         if (queryString != ""){
 
-            this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'", dbPostgres);
+            this->setQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name LIKE '%"+queryString+"%'", dbPostgres);
         } else{
             this->setQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'", dbPostgres);
         }

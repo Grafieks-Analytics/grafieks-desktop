@@ -112,12 +112,11 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
     }
     case Constants::postgresIntType:{
 
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrType);
+        QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
 
-        describeQueryString = "SELECT column_name, data_type FROM information_schema.columns WHERE\n"
-                              " table_name = '" + tableName  + "'";
+        describeQueryString = "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '" + tableName.toLower()  + "'";
 
-        QSqlQuery describeQuery(describeQueryString, dbMysql);
+        QSqlQuery describeQuery(describeQueryString, dbPostgres);
 
         while(describeQuery.next()){
 

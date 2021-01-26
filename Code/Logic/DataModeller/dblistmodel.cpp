@@ -102,7 +102,7 @@ void DBListModel::callQuery(QString queryString)
     }
 
     case Constants::sqliteIntType:{
-        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteOdbcStrType);
+        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
 
 
         if(queryString != ""){
@@ -114,12 +114,12 @@ void DBListModel::callQuery(QString queryString)
         break;
     }
     case Constants::postgresIntType:{
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrType);
+        QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
 
         if(queryString != ""){
-            this->setQuery("SHOW DATABASES LIKE '%"+queryString+"%'", dbMysql);
+            this->setQuery("SELECT datname FROM pg_database WHERE datistemplate = false AND datname LIKE '%"+queryString+"%'", dbPostgres);
         } else{
-            this->setQuery("SELECT datname FROM pg_database WHERE datistemplate = false", dbMysql);
+            this->setQuery("SELECT datname FROM pg_database WHERE datistemplate = false", dbPostgres);
         }
 
         break;

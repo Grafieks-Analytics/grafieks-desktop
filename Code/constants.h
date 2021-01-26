@@ -43,8 +43,7 @@ namespace Constants
     const QString mysqlOdbcStrQueryType = "mysql_odbc_query";
     const QString sqliteStrType = "sqlite";
     const QString sqliteStrQueryType = "sqlite_query";
-    const QString sqliteOdbcStrType = "sqlite_odbc";
-    const QString sqliteOdbcStrQueryType = "sqlite_odbc_query";
+
 
     const QString mssqlOdbcStrType = "mssql_odbc";
     const QString mssqlOdbcStrQueryType = "mssql_odbc_query";

@@ -47,6 +47,9 @@ SOURCES += \
     Code/Logic/Connectors/sheetmodel.cpp \
     Code/Logic/Dashboards/dashboardparamsmodel.cpp \
     Code/Logic/Dashboards/documenthandlermodel.cpp \
+    Code/Logic/DataModeller/Helpers/mysqlconversions.cpp \
+    Code/Logic/DataModeller/Helpers/postgresconversions.cpp \
+    Code/Logic/DataModeller/Helpers/sqliteconversions.cpp \
     Code/Logic/DataModeller/columnlistmodel.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
@@ -137,6 +140,9 @@ HEADERS += \
     Code/Logic/Connectors/sheetmodel.h \
     Code/Logic/Dashboards/dashboardparamsmodel.h \
     Code/Logic/Dashboards/documenthandlermodel.h \
+    Code/Logic/DataModeller/Helpers/mysqlconversions.h \
+    Code/Logic/DataModeller/Helpers/postgresconversions.h \
+    Code/Logic/DataModeller/Helpers/sqliteconversions.h \
     Code/Logic/DataModeller/columnlistmodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
