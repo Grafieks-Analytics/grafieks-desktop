@@ -98,9 +98,7 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
 
     case Constants::mysqlIntType:{
 
-
         queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
-
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
         this->setQuery(queryString, dbMysql);
 
@@ -109,9 +107,7 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
 
     case Constants::mysqlOdbcIntType:{
 
-
         queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
-
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
         this->setQuery(queryString, dbMysql);
 
@@ -120,9 +116,7 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
 
     case Constants::sqliteIntType:{
 
-
         queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
-
         QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
         this->setQuery(queryString, dbSqlite);
 
@@ -131,9 +125,7 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
 
     case Constants::postgresIntType:{
 
-
         queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
-
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
         this->setQuery(queryString, dbPostgres);
 
@@ -142,9 +134,7 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
 
     case Constants::mssqlIntType:{
 
-
         queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
-
         QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrType);
         this->setQuery(queryString, dbMssql);
 
@@ -214,6 +204,15 @@ void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableNam
         QString queryString = postgresDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
         this->setQuery(queryString, dbPostgres);
+
+        break;
+    }
+
+    case Constants::mssqlIntType:{
+
+        QString queryString = mssqlDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
+        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrType);
+        this->setQuery(queryString, dbMssql);
 
         break;
     }
@@ -325,6 +324,27 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
             break;
         }
+
+        case Constants::mssqlIntType:{
+
+            pieces = fieldNames.split(",");
+
+            if(pieces.length() > 1){
+                finalSearchFields = pieces.join("','");
+            }else{
+                finalSearchFields = fieldNames;
+            }
+
+            finalSearchFields = "'" + finalSearchFields + "'";
+
+            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+
+            QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrType);
+            this->setQuery(queryString, dbMssql);
+
+
+            break;
+        }
         }
     }
 
@@ -400,6 +420,21 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
 
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
         this->setQuery(queryString, dbPostgres);
+
+        break;
+    }
+
+    case Constants::mssqlIntType:{
+
+        if (searchString != ""){
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
+        } else{
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        }
+
+
+        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrType);
+        this->setQuery(queryString, dbMssql);
 
         break;
     }

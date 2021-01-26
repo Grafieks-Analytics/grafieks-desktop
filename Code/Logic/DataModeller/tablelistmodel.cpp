@@ -97,6 +97,19 @@ void TableListModel::callQuery(QString queryString)
 
         break;
     }
+    case Constants::mssqlIntType:{
+
+        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrType);
+
+        if (queryString != ""){
+
+            this->setQuery("SELECT name FROM SYSOBJECTS WHERE xtype = 'U' AND name LIKE '%"+queryString+"%'", dbMssql);
+        } else{
+            this->setQuery("SELECT name FROM SYSOBJECTS WHERE xtype = 'U'", dbMssql);
+        }
+
+        break;
+    }
 
     }
 }

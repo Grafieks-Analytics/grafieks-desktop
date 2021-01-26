@@ -93,6 +93,19 @@ void QueryStatsModel::setProfiling(bool status)
         break;
     }
 
+    case Constants::mssqlIntType:{
+
+        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
+        if(status == true){
+            this->setQuery("SET profiling = 1", dbMssql);
+
+        } else{
+            this->setQuery("SET profiling = 0", dbMssql);
+        }
+
+        break;
+    }
+
     }
 
 }
@@ -145,6 +158,17 @@ void QueryStatsModel::resetProfiling()
         break;
     }
 
+    case Constants::mssqlIntType:{
+
+        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
+        this->setQuery("SET profiling = 0", dbMssql);
+        this->setQuery("SET profiling_history_size = 0", dbMssql);
+        this->setQuery("SET profiling_history_size = 100", dbMssql);
+        this->setQuery("SET profiling = 1", dbMssql);
+
+        break;
+    }
+
     }
 }
 
@@ -180,6 +204,14 @@ void QueryStatsModel::showStats()
 
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
         this->setQuery("SHOW profiles", dbPostgres);
+
+        break;
+    }
+
+    case Constants::mssqlIntType:{
+
+        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
+        this->setQuery("SHOW profiles", dbMssql);
 
         break;
     }
@@ -242,6 +274,14 @@ QVariant QueryStatsModel::showErrorMessage(const QString &query)
 
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
         QSqlQuery queryResult(query, dbPostgres);
+        message = queryResult.lastError().text();
+        break;
+    }
+
+    case Constants::mssqlIntType:{
+
+        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
+        QSqlQuery queryResult(query, dbMssql);
         message = queryResult.lastError().text();
         break;
     }

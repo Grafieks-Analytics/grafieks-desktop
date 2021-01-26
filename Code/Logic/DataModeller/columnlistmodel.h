@@ -28,6 +28,7 @@ class ColumnListModel : public QSqlQueryModel
     MysqlConversions mysqlDateConversion;
     SqliteConversions sqliteDateConversion;
     PostgresConversions postgresDateConversion;
+    MssqlConversions mssqlDateConversion;
 
 public:
     explicit ColumnListModel(QObject *parent = nullptr);

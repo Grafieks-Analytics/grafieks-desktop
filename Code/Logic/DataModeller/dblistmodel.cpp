@@ -125,6 +125,18 @@ void DBListModel::callQuery(QString queryString)
         break;
     }
 
+    case Constants::mssqlIntType:{
+        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::postgresOdbcStrType);
+
+        if(queryString != ""){
+            this->setQuery("SELECT name FROM master.sys.databases AND name LIKE '%"+queryString+"%'", dbMssql);
+        } else{
+            this->setQuery("SELECT name FROM master.sys.databases", dbMssql);
+        }
+
+        break;
+    }
+
 
     }
 }

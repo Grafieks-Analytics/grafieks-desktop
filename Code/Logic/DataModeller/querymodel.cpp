@@ -88,6 +88,12 @@ void QueryModel::executeQuery(QString &query)
 
         break;
     }
+    case Constants::mssqlIntType:{
+        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
+        this->setQuery(query, dbMssql);
+
+        break;
+    }
 
     }
 }
