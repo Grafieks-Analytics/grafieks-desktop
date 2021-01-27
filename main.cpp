@@ -55,6 +55,7 @@
 #include "Code/Logic/General/tablecolumnsmodel.h"
 #include "Code/Logic/General/querysplitter.h"
 #include "Code/Logic/General/qttest2.h"
+#include "Code/Logic/General/qttest.h"
 
 #include "Code/statics.h"
 
@@ -83,6 +84,12 @@ QString Statics::postgresDb;
 int Statics::postgresPort;
 QString Statics::postgresUsername;
 QString Statics::postgresPassword;
+
+QString Statics::oracleHost;
+QString Statics::oracleDb;
+int Statics::oraclePort;
+QString Statics::oracleUsername;
+QString Statics::oraclePassword;
 
 QString Statics::mongoHost;
 QString Statics::mongoDb;
@@ -180,6 +187,8 @@ int main(int argc, char *argv[])
     // OBJECT INITIALIZATION STARTS
 
     QtTest2 qttest2;
+    QtTest qttest;
+
 
     MysqlCon mysqlconnect;
     User User;

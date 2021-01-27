@@ -31,6 +31,9 @@ Page {
     property bool xaxisActive: ReportParamsModel.xAxisActive
     property bool yaxisActive: ReportParamsModel.yAxisActive
 
+    property bool yAxisVisible: true
+    property bool lineTypeChartVisible: false
+
     property string reportChart:ReportParamsModel.chartType;
     property var d3PropertyConfig: ({});
 
@@ -45,7 +48,6 @@ Page {
                                     'console.log("resizing");'+
                                   'd3.selectAll("#my_dataviz").html(""); '+
                                     'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
-                console.log(resizeQuery);
                 webEngineView.runJavaScript(resizeQuery);
                 break;
 
@@ -140,7 +142,11 @@ Page {
     // For changing the chart on clicking chart icons
 
     function reDrawChart(){
-        console.log(JSON.stringify(d3PropertyConfig));
+        let resizeQuery = 'window.addEventListener("resize", function () {' +
+                                  'd3.selectAll("#my_dataviz").html(""); '+
+                                    'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
+                webEngineView.runJavaScript(resizeQuery);
+                
         webEngineView.runJavaScript('drawChart(data,'+JSON.stringify(d3PropertyConfig)+')')
     }
 
@@ -549,7 +555,7 @@ Page {
             anchors.top: seperatorAxis.bottom
             anchors.left: parent.left
             width: parent.width
-
+            visible: yAxisVisible
 
             Rectangle{
                 id: yaxisText
@@ -642,6 +648,7 @@ Page {
             background: Rectangle{
                 color: Constants.darkThemeColor
             }
+            visible: yAxisVisible
         }
 
 

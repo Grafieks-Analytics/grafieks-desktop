@@ -69,15 +69,35 @@ void QueryModel::executeQuery(QString &query)
 
         break;
     }
+
     case Constants::mysqlOdbcIntType:{
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
         this->setQuery(query, dbMysql);
 
         break;
     }
+    case Constants::sqliteIntType:{
+        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrQueryType);
+        this->setQuery(query, dbSqlite);
+
+        break;
+    }
     case Constants::postgresIntType:{
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
-        this->setQuery(query, dbMysql);
+        QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
+        this->setQuery(query, dbPostgres);
+
+        break;
+    }
+    case Constants::mssqlIntType:{
+        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
+        this->setQuery(query, dbMssql);
+
+        break;
+    }
+
+    case Constants::oracleIntType:{
+        QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrQueryType);
+        this->setQuery(query, dbOracle);
 
         break;
     }

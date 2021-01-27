@@ -68,14 +68,52 @@ void QueryStatsModel::setProfiling(bool status)
         break;
     }
 
-    case Constants::postgresIntType:{
-
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
+    case Constants::sqliteIntType:{
+        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrQueryType);
         if(status == true){
-            this->setQuery("SET profiling = 1", dbMysql);
+            this->setQuery("sqlite3_profile(SET profiling = 1)", dbSqlite);
 
         } else{
-            this->setQuery("SET profiling = 0", dbMysql);
+            this->setQuery("SET profiling = 0", dbSqlite);
+        }
+
+        break;
+    }
+
+    case Constants::postgresIntType:{
+
+        QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
+        if(status == true){
+            this->setQuery("SET profiling = 1", dbPostgres);
+
+        } else{
+            this->setQuery("SET profiling = 0", dbPostgres);
+        }
+
+        break;
+    }
+
+    case Constants::mssqlIntType:{
+
+        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
+        if(status == true){
+            this->setQuery("SET profiling = 1", dbMssql);
+
+        } else{
+            this->setQuery("SET profiling = 0", dbMssql);
+        }
+
+        break;
+    }
+
+    case Constants::oracleIntType:{
+
+        QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrQueryType);
+        if(status == true){
+            this->setQuery("SET profiling = 1", dbOracle);
+
+        } else{
+            this->setQuery("SET profiling = 0", dbOracle);
         }
 
         break;
@@ -111,13 +149,46 @@ void QueryStatsModel::resetProfiling()
         break;
     }
 
+    case Constants::sqliteIntType:{
+
+        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrQueryType);
+        this->setQuery("SET profiling = 0", dbSqlite);
+        this->setQuery("SET profiling_history_size = 0", dbSqlite);
+        this->setQuery("SET profiling_history_size = 100", dbSqlite);
+        this->setQuery("SET profiling = 1", dbSqlite);
+
+        break;
+    }
+
     case Constants::postgresIntType:{
 
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
-        this->setQuery("SET profiling = 0", dbMysql);
-        this->setQuery("SET profiling_history_size = 0", dbMysql);
-        this->setQuery("SET profiling_history_size = 100", dbMysql);
-        this->setQuery("SET profiling = 1", dbMysql);
+        QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
+        this->setQuery("SET profiling = 0", dbPostgres);
+        this->setQuery("SET profiling_history_size = 0", dbPostgres);
+        this->setQuery("SET profiling_history_size = 100", dbPostgres);
+        this->setQuery("SET profiling = 1", dbPostgres);
+
+        break;
+    }
+
+    case Constants::mssqlIntType:{
+
+        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
+        this->setQuery("SET profiling = 0", dbMssql);
+        this->setQuery("SET profiling_history_size = 0", dbMssql);
+        this->setQuery("SET profiling_history_size = 100", dbMssql);
+        this->setQuery("SET profiling = 1", dbMssql);
+
+        break;
+    }
+
+    case Constants::oracleIntType:{
+
+        QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrQueryType);
+        this->setQuery("SET profiling = 0", dbOracle);
+        this->setQuery("SET profiling_history_size = 0", dbOracle);
+        this->setQuery("SET profiling_history_size = 100", dbOracle);
+        this->setQuery("SET profiling = 1", dbOracle);
 
         break;
     }
@@ -137,10 +208,42 @@ void QueryStatsModel::showStats()
 
         break;
     }
+
+    case Constants::mysqlOdbcIntType:{
+
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
+        this->setQuery("SHOW profiles", dbMysql);
+
+        break;
+    }
+
+    case Constants::sqliteIntType:{
+
+        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrQueryType);
+        this->setQuery("SHOW profiles", dbSqlite);
+
+        break;
+    }
     case Constants::postgresIntType:{
 
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
-        this->setQuery("SHOW profiles", dbMysql);
+        QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
+        this->setQuery("SHOW profiles", dbPostgres);
+
+        break;
+    }
+
+    case Constants::mssqlIntType:{
+
+        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
+        this->setQuery("SHOW profiles", dbMssql);
+
+        break;
+    }
+
+    case Constants::oracleIntType:{
+
+        QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrQueryType);
+        this->setQuery("SHOW profiles", dbOracle);
 
         break;
     }
@@ -191,10 +294,34 @@ QVariant QueryStatsModel::showErrorMessage(const QString &query)
         message = queryResult.lastError().text();
         break;
     }
+
+    case Constants::sqliteIntType:{
+
+        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrQueryType);
+        QSqlQuery queryResult(query, dbSqlite);
+        message = queryResult.lastError().text();
+        break;
+    }
     case Constants::postgresIntType:{
 
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
-        QSqlQuery queryResult(query, dbMysql);
+        QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
+        QSqlQuery queryResult(query, dbPostgres);
+        message = queryResult.lastError().text();
+        break;
+    }
+
+    case Constants::mssqlIntType:{
+
+        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
+        QSqlQuery queryResult(query, dbMssql);
+        message = queryResult.lastError().text();
+        break;
+    }
+
+    case Constants::oracleIntType:{
+
+        QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrQueryType);
+        QSqlQuery queryResult(query, dbOracle);
         message = queryResult.lastError().text();
         break;
     }

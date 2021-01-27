@@ -100,14 +100,48 @@ void DBListModel::callQuery(QString queryString)
 
         break;
     }
-    case Constants::postgresIntType:{
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrType);
+
+    case Constants::sqliteIntType:{
+        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
+
 
         if(queryString != ""){
-            this->setQuery("SHOW DATABASES LIKE '%"+queryString+"%'", dbMysql);
+            this->setQuery("PRAGMA database_list", dbSqlite);
         } else{
-            this->setQuery("SELECT datname FROM pg_database WHERE datistemplate = false", dbMysql);
+            this->setQuery("PRAGMA database_list", dbSqlite);
         }
+
+        break;
+    }
+    case Constants::postgresIntType:{
+        QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
+
+        if(queryString != ""){
+            this->setQuery("SELECT datname FROM pg_database WHERE datistemplate = false AND datname LIKE '%"+queryString+"%'", dbPostgres);
+        } else{
+            this->setQuery("SELECT datname FROM pg_database WHERE datistemplate = false", dbPostgres);
+        }
+
+        break;
+    }
+
+    case Constants::mssqlIntType:{
+        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::postgresOdbcStrType);
+
+        if(queryString != ""){
+            this->setQuery("SELECT name FROM master.sys.databases AND name LIKE '%"+queryString+"%'", dbMssql);
+        } else{
+            this->setQuery("SELECT name FROM master.sys.databases", dbMssql);
+        }
+
+        break;
+    }
+
+    case Constants::oracleIntType:{
+        QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrType);
+
+        // No direct query available in Oracle db
+        // Will need to devise a way out when the query is required later
 
         break;
     }

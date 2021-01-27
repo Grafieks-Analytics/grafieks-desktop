@@ -13,7 +13,7 @@ import QtQuick 2.15
 QtObject {
 
     // Menu Indexes
-    property int initialIndex: 5
+    property int initialIndex: 7
     property int dataDesignerIndex: 3
     property int dashboardDesignerIndex: 6
     property int newReportIndex: 7
@@ -23,6 +23,7 @@ QtObject {
     property string applicationName : qsTr("Grafieks")
     property string signInText : qsTr("Sign In")
     property string signOutText : qsTr("Sign Out")
+    property string openFileText : qsTr("Open")
     property string dataDesignerText : qsTr("Data Designer")
     property string dashboardDesignerText : qsTr("Dashboard Designer")
 

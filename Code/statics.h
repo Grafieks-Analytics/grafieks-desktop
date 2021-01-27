@@ -37,6 +37,13 @@ public:
     static QString postgresUsername;
     static QString postgresPassword;
 
+    // Oracle
+    static QString oracleHost;
+    static QString oracleDb;
+    static int oraclePort;
+    static QString oracleUsername;
+    static QString oraclePassword;
+
     // Mongo
     static QString mongoHost;
     static QString mongoDb;

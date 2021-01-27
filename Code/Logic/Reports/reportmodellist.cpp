@@ -120,6 +120,24 @@ void ReportModelList::setTmpSql(QString query)
 
         break;
     }
+    case Constants::csvIntType:{
+
+        QFile file(Statics::currentDbName);
+        file.open(QIODevice::ReadOnly);
+
+        QTextStream in(&file);
+        QString headers = in.readLine();
+
+        QStringList rowList = headers.split(',');
+        rowList.replaceInStrings("\"", "");
+        rowList.replaceInStrings(" ", "");
+
+        QString header;
+        foreach(header , rowList){
+            this->categoryList.append(header);
+        }
+        break;
+    }
     }
 
     emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
@@ -285,6 +303,7 @@ void ReportModelList::getData()
         //emit sendData(xAxis, yAxis);
         qDebug() << timer.elapsed() << " SQL Execution Time in ms ";
         //emit sendData(xAxis, yAxis);
+        break;
     }
 
     case Constants::mysqlOdbcIntType:{
@@ -323,7 +342,27 @@ void ReportModelList::getData()
         //emit sendData(xAxis, yAxis);
         qDebug() << timer.elapsed() << " SQL Execution Time in ms ";
         //emit sendData(xAxis, yAxis);
+        break;
     }
+
+    case Constants::csvIntType:{
+
+        QFile file(Statics::currentDbName);
+        file.open(QIODevice::ReadOnly);
+
+        QTextStream in(&file);
+        QString line = in.readLine();
+        QStringList rowList = line.split(',');
+        rowList.replaceInStrings("\"", "");
+        rowList.replaceInStrings(" ", "");
+
+        QString word;
+        foreach(word , rowList){
+            this->categoryList.append(word);
+        }
+        break;
+    }
+
     }
 }
 

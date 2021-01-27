@@ -7,6 +7,7 @@ const defaultD3Config = {
     initialBoxDimension: 6,
     onHoverBoxDimension: 8,
     defaultLineCurve: "curveCardinal",
+    innerRadius: 150,
 };
 const markerShapeConfig = {
     circle: {

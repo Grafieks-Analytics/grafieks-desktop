@@ -5,7 +5,9 @@
 #include "sqlitecon.h"
 #include "mssqlcon.h"
 #include "postgrescon.h"
+#include "oraclecon.h"
 #include "mongocon.h"
 #include "excelcon.h"
+#include "csvcon.h"
 
 #endif // ALLCONNECTORS_H

@@ -43,8 +43,7 @@ namespace Constants
     const QString mysqlOdbcStrQueryType = "mysql_odbc_query";
     const QString sqliteStrType = "sqlite";
     const QString sqliteStrQueryType = "sqlite_query";
-    const QString sqliteOdbcStrType = "sqlite_odbc";
-    const QString sqliteOdbcStrQueryType = "sqlite_odbc_query";
+
 
     const QString mssqlOdbcStrType = "mssql_odbc";
     const QString mssqlOdbcStrQueryType = "mssql_odbc_query";
@@ -54,6 +53,9 @@ namespace Constants
 
     const QString postgresOdbcStrType = "postgres_odbc";
     const QString postgresOdbcStrQueryType = "postgres_odbc_query";
+
+    const QString oracleOdbcStrType = "oracle_odbc";
+    const QString oracleOdbcStrQueryType = "oracle_odbc_query";
 
     const QString mongoOdbcStrType = "mongo_odbc";
     const QString mongoOdbcStrQueryType = "mongo_odbc_query";
