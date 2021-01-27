@@ -85,6 +85,12 @@ int Statics::postgresPort;
 QString Statics::postgresUsername;
 QString Statics::postgresPassword;
 
+QString Statics::oracleHost;
+QString Statics::oracleDb;
+int Statics::oraclePort;
+QString Statics::oracleUsername;
+QString Statics::oraclePassword;
+
 QString Statics::mongoHost;
 QString Statics::mongoDb;
 int Statics::mongoPort;

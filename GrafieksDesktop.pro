@@ -49,6 +49,7 @@ SOURCES += \
     Code/Logic/Dashboards/documenthandlermodel.cpp \
     Code/Logic/DataModeller/Helpers/mssqlconversions.cpp \
     Code/Logic/DataModeller/Helpers/mysqlconversions.cpp \
+    Code/Logic/DataModeller/Helpers/oracleconversions.cpp \
     Code/Logic/DataModeller/Helpers/postgresconversions.cpp \
     Code/Logic/DataModeller/Helpers/sqliteconversions.cpp \
     Code/Logic/DataModeller/columnlistmodel.cpp \
@@ -143,6 +144,7 @@ HEADERS += \
     Code/Logic/Dashboards/documenthandlermodel.h \
     Code/Logic/DataModeller/Helpers/mssqlconversions.h \
     Code/Logic/DataModeller/Helpers/mysqlconversions.h \
+    Code/Logic/DataModeller/Helpers/oracleconversions.h \
     Code/Logic/DataModeller/Helpers/postgresconversions.h \
     Code/Logic/DataModeller/Helpers/sqliteconversions.h \
     Code/Logic/DataModeller/columnlistmodel.h \

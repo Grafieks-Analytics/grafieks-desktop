@@ -111,6 +111,20 @@ void TableListModel::callQuery(QString queryString)
         break;
     }
 
+    case Constants::oracleIntType:{
+
+        QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrType);
+
+        if (queryString != ""){
+
+            this->setQuery("SELECT table_name FROM user_tables WHERE table_name LIKE '%"+queryString+"%'", dbOracle);
+        } else{
+            this->setQuery("SELECT table_name FROM user_tables", dbOracle);
+        }
+
+        break;
+    }
+
     }
 }
 

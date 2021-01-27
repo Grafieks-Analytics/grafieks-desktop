@@ -137,6 +137,15 @@ void DBListModel::callQuery(QString queryString)
         break;
     }
 
+    case Constants::oracleIntType:{
+        QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrType);
+
+        // No direct query available in Oracle db
+        // Will need to devise a way out when the query is required later
+
+        break;
+    }
+
 
     }
 }

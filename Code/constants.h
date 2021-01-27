@@ -54,6 +54,9 @@ namespace Constants
     const QString postgresOdbcStrType = "postgres_odbc";
     const QString postgresOdbcStrQueryType = "postgres_odbc_query";
 
+    const QString oracleOdbcStrType = "oracle_odbc";
+    const QString oracleOdbcStrQueryType = "oracle_odbc_query";
+
     const QString mongoOdbcStrType = "mongo_odbc";
     const QString mongoOdbcStrQueryType = "mongo_odbc_query";
 

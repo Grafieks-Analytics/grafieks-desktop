@@ -106,6 +106,19 @@ void QueryStatsModel::setProfiling(bool status)
         break;
     }
 
+    case Constants::oracleIntType:{
+
+        QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrQueryType);
+        if(status == true){
+            this->setQuery("SET profiling = 1", dbOracle);
+
+        } else{
+            this->setQuery("SET profiling = 0", dbOracle);
+        }
+
+        break;
+    }
+
     }
 
 }
@@ -169,6 +182,17 @@ void QueryStatsModel::resetProfiling()
         break;
     }
 
+    case Constants::oracleIntType:{
+
+        QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrQueryType);
+        this->setQuery("SET profiling = 0", dbOracle);
+        this->setQuery("SET profiling_history_size = 0", dbOracle);
+        this->setQuery("SET profiling_history_size = 100", dbOracle);
+        this->setQuery("SET profiling = 1", dbOracle);
+
+        break;
+    }
+
     }
 }
 
@@ -212,6 +236,14 @@ void QueryStatsModel::showStats()
 
         QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
         this->setQuery("SHOW profiles", dbMssql);
+
+        break;
+    }
+
+    case Constants::oracleIntType:{
+
+        QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrQueryType);
+        this->setQuery("SHOW profiles", dbOracle);
 
         break;
     }
@@ -282,6 +314,14 @@ QVariant QueryStatsModel::showErrorMessage(const QString &query)
 
         QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
         QSqlQuery queryResult(query, dbMssql);
+        message = queryResult.lastError().text();
+        break;
+    }
+
+    case Constants::oracleIntType:{
+
+        QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrQueryType);
+        QSqlQuery queryResult(query, dbOracle);
         message = queryResult.lastError().text();
         break;
     }

@@ -141,6 +141,16 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
         break;
     }
 
+    case Constants::oracleIntType:{
+
+        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+        QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrType);
+        this->setQuery(queryString, dbOracle);
+
+        break;
+    }
+
+
     }
 }
 
@@ -217,6 +227,14 @@ void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableNam
         break;
     }
 
+    case Constants::oracleIntType:{
+
+        QString queryString = oracleDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
+        QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrType);
+        this->setQuery(queryString, dbOracle);
+
+        break;
+    }
     }
 }
 
@@ -345,6 +363,27 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
             break;
         }
+
+        case Constants::oracleIntType:{
+
+            pieces = fieldNames.split(",");
+
+            if(pieces.length() > 1){
+                finalSearchFields = pieces.join("','");
+            }else{
+                finalSearchFields = fieldNames;
+            }
+
+            finalSearchFields = "'" + finalSearchFields + "'";
+
+            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+
+            QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrType);
+            this->setQuery(queryString, dbOracle);
+
+
+            break;
+        }
         }
     }
 
@@ -435,6 +474,21 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
 
         QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrType);
         this->setQuery(queryString, dbMssql);
+
+        break;
+    }
+
+    case Constants::oracleIntType:{
+
+        if (searchString != ""){
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
+        } else{
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        }
+
+
+        QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrType);
+        this->setQuery(queryString, dbOracle);
 
         break;
     }

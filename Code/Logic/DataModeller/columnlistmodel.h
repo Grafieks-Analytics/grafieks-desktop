@@ -12,6 +12,7 @@
 #include "./Helpers/sqliteconversions.h"
 #include "./Helpers/postgresconversions.h"
 #include "./Helpers/mssqlconversions.h"
+#include "./Helpers/oracleconversions.h"
 
 #include "../../Connectors/allconnectors.h"
 #include "../../statics.h"
@@ -29,6 +30,7 @@ class ColumnListModel : public QSqlQueryModel
     SqliteConversions sqliteDateConversion;
     PostgresConversions postgresDateConversion;
     MssqlConversions mssqlDateConversion;
+    OracleConversions oracleDateConversion;
 
 public:
     explicit ColumnListModel(QObject *parent = nullptr);

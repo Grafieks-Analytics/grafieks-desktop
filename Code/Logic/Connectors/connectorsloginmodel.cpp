@@ -101,6 +101,21 @@ void ConnectorsLoginModel::postgresOdbcLogin(QString driver, QString host, QStri
 
 }
 
+void ConnectorsLoginModel::oracleOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
+{
+
+    OracleCon oraclecon;
+    QVariantMap response = oraclecon.OracleOdbcInstance(driver, host, db, port, username, password);
+
+    Statics::currentDbName = db;
+    Statics::currentDbIntType = Constants::oracleIntType;
+    Statics::currentDbStrType = Constants::oracleOdbcStrType;
+
+    this->setConnectedDB(db);
+
+    emit postgresLoginStatus(response);
+}
+
 void ConnectorsLoginModel::mongoOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
 

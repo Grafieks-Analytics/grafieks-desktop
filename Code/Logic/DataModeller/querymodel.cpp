@@ -95,5 +95,12 @@ void QueryModel::executeQuery(QString &query)
         break;
     }
 
+    case Constants::oracleIntType:{
+        QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrQueryType);
+        this->setQuery(query, dbOracle);
+
+        break;
+    }
+
     }
 }

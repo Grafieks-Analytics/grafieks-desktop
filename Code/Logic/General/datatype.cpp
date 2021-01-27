@@ -19,15 +19,18 @@ QString DataType::dataType(QString parameter)
 
 
     categorical << "varchar" << "char" << "text" << "tinytext" << "mediumtext" << "longtext" << "boolean" <<"character varying" << "nvarchar" << "character"
-                << "varying character" << "nchar" << "native character" << "clob" << "ntext";
+                << "varying character" << "nchar" << "native character" << "clob" << "ntext" << "varchar2" << "nvarchar2" << "nclob"
+                << "urowid" << "rowid";
 
     numerical << "int" << "tinyint" << "smallint" << "mediumint" << "bigint" << "decimal" << "float" << "double" << "real" << "integer" << "serial" << "bigserial"
-              << "double precision" << "numeric" << "smallserial" << "unsigned big int" << "int2" << "int8" << "dec" << "bit" << "smallmoney" << "money";
+              << "double precision" << "numeric" << "smallserial" << "unsigned big int" << "int2" << "int8" << "dec" << "bit" << "smallmoney" << "money"
+                << "binary_float" << "binary_double";
 
     dateformat << "date" << "datetime" << "timestamp" << "time" << "year"
                << "timestamp without time zone" << "timestamp with time zone"
                << "time without time zone" << "time with time zone" << "interval"
-                << "datetimeoffset" << "smalldatetime" << "datetime2";
+                << "datetimeoffset" << "smalldatetime" << "datetime2" << "timestamp with time zone" << "timestamp with local timezone"
+                << "interval year" << "interval day";
 
     // Match the incoming parameter and determine filter type
 
