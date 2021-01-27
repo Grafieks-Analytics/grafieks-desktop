@@ -252,7 +252,7 @@ Rectangle{
                     id:columnDropDown
                     objectName: counter
                                    height: 30
-                                   width: parent.width-5
+                                   width: parent.width-8
                                    anchors.horizontalCenter: parent.horizontalCenter
                                    model: displayColList
                                    textRole: "colName"

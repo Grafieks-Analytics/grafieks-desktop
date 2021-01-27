@@ -14,12 +14,14 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.3
 //import Qt.labs.platform 1.1
 
+
 import com.grafieks.singleton.constants 1.0
 
 
 import "../MainSubComponents"
 import "./SubComponents"
 import "./SubComponents/MiniSubComponents"
+
 
 Page {
 
@@ -36,6 +38,7 @@ Page {
     property var tableShowToggle: false
     property Page page: queryModellerPage
     property LeftMenuBar leftMenuBar : left_menubar
+    property int droppedCount: 0
 
     /***********************************************************************************************************************/
     // Connection Starts
@@ -349,8 +352,10 @@ Page {
                 height: 10
                 width: 10
                 source : "/Images/icons/Down_20.png"
-                anchors.right: parent.right
-                anchors.rightMargin: 22
+                anchors.left: parent.left
+                anchors.leftMargin:  15
+                 anchors.verticalCenter: tableImg.verticalCenter
+
 
                 visible: tableShowToggle
 
@@ -949,6 +954,8 @@ Page {
                 height:50
                 width: rectangle_querymodeller_right_col.width
 
+
+
                 TextEdit{
                     id: ds_name
                     text: "Data Source Name"
@@ -1092,12 +1099,19 @@ Page {
                 anchors.topMargin: 2
 
 
+
+
                 Rectangle{
 
 
-                    height: 900
+                    height: 710
                     width:500
-//                    color: "red"
+
+
+
+
+
+
 
 
                 Rectangle {
@@ -1111,8 +1125,8 @@ Page {
                         height: 20
                         width: 18
                         source: "/Images/icons/database_32x36.png"
-                        anchors.left: parent.left
-                        anchors.leftMargin: 15
+                        anchors.left: drop_icon.right
+                        anchors.leftMargin: 8
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -1141,8 +1155,8 @@ Page {
                         source: "/Images/icons/Up_20.png"
                         width: 10
                         height: 10
-                        anchors.right: parent.right
-                        anchors.rightMargin: 22
+                        anchors.left: parent.left
+                        anchors.leftMargin:  5
                         anchors.verticalCenter: parent.verticalCenter
                         visible: true
 
@@ -1165,9 +1179,16 @@ Page {
                     id: tableslist
                     spacing: 0
                     anchors.top: categoryItem.bottom
-                    height : contentHeight
+                    height : parent.height-categoryItem.height
+                    width: item_querymodeller.width+10
                     delegate: tablelistDelegate
                     visible: true
+                    clip: true
+                    flickableDirection: Flickable.VerticalFlick
+                            boundsBehavior: Flickable.StopAtBounds
+//                            interactive: true
+                            ScrollBar.vertical: ScrollBar {}
+
 
                     property int dragItemIndex: -1
                     property string tableName : ""

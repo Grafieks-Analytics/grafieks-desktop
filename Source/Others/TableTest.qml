@@ -47,14 +47,13 @@ Rectangle {
             title: "Message"
             width: parent.width/4
 
-
         }
 
 
 
         //        style: TableViewStyle {
         //            headerDelegate: Rectangle {
-        //                height: textItem.implicitHeight * 1.2
+        //                height: text    Item.implicitHeight * 1.2
         //                width: textItem.implicitWidth
         //                color: "lightgrey"
         //                Text {
