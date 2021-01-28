@@ -63,19 +63,14 @@ void QueryModel::executeQuery(QString &query)
 
     switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:{
+    case Constants::mysqlIntType:
+    case Constants::mysqlOdbcIntType:{
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
         this->setQuery(query, dbMysql);
 
         break;
     }
 
-    case Constants::mysqlOdbcIntType:{
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
-        this->setQuery(query, dbMysql);
-
-        break;
-    }
     case Constants::sqliteIntType:{
         QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrQueryType);
         this->setQuery(query, dbSqlite);

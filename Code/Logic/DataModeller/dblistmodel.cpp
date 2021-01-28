@@ -77,7 +77,8 @@ void DBListModel::callQuery(QString queryString)
 
     switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:{
+    case Constants::mysqlIntType:
+    case Constants::mysqlOdbcIntType:{
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
 
         if(queryString != ""){
@@ -89,17 +90,6 @@ void DBListModel::callQuery(QString queryString)
         break;
     }
 
-    case Constants::mysqlOdbcIntType:{
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
-
-        if(queryString != ""){
-            this->setQuery("SHOW DATABASES LIKE '%"+queryString+"%'", dbMysql);
-        } else{
-            this->setQuery("SHOW DATABASES", dbMysql);
-        }
-
-        break;
-    }
 
     case Constants::sqliteIntType:{
         QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);

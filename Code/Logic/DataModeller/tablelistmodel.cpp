@@ -44,7 +44,8 @@ void TableListModel::callQuery(QString queryString)
     switch(Statics::currentDbIntType){
 
 
-    case Constants::mysqlIntType:{
+    case Constants::mysqlIntType:
+    case Constants::mysqlOdbcIntType:{
 
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
 
@@ -58,19 +59,6 @@ void TableListModel::callQuery(QString queryString)
         break;
     }
 
-    case Constants::mysqlOdbcIntType:{
-
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
-
-        if (queryString != ""){
-
-            this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'", dbMysql);
-        } else{
-            this->setQuery("SHOW TABLES", dbMysql);
-        }
-
-        break;
-    }
 
     case Constants::sqliteIntType:{
 

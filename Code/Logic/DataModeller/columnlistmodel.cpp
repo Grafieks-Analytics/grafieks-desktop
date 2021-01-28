@@ -96,19 +96,11 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
 
     switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:{
-
-        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
-        this->setQuery(queryString, dbMysql);
-
-        break;
-    }
-
+    case Constants::mysqlIntType:
     case Constants::mysqlOdbcIntType:{
 
         queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
         this->setQuery(queryString, dbMysql);
 
         break;
@@ -183,7 +175,8 @@ void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableNam
 
     switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:{
+    case Constants::mysqlIntType:
+    case Constants::mysqlOdbcIntType:{
 
         QString queryString = mysqlDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
@@ -192,14 +185,6 @@ void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableNam
         break;
     }
 
-    case Constants::mysqlOdbcIntType:{
-
-        QString queryString = mysqlDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
-        this->setQuery(queryString, dbMysql);
-
-        break;
-    }
 
     case Constants::sqliteIntType:{
 
@@ -261,7 +246,8 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
         switch(Statics::currentDbIntType){
 
-        case Constants::mysqlIntType:{
+        case Constants::mysqlIntType:
+        case Constants::mysqlOdbcIntType:{
 
             pieces = fieldNames.split(",");
 
@@ -282,26 +268,6 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
             break;
         }
 
-        case Constants::mysqlOdbcIntType:{
-
-            pieces = fieldNames.split(",");
-
-            if(pieces.length() > 1){
-                finalSearchFields = pieces.join("','");
-            }else{
-                finalSearchFields = fieldNames;
-            }
-
-            finalSearchFields = "'" + finalSearchFields + "'";
-
-            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
-
-            QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
-            this->setQuery(queryString, dbMysql);
-
-
-            break;
-        }
 
         case Constants::sqliteIntType:{
 
@@ -406,7 +372,8 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
 
     switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:{
+    case Constants::mysqlIntType:
+    case Constants::mysqlOdbcIntType:{
 
         if (searchString != ""){
             queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
@@ -421,20 +388,6 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
         break;
     }
 
-    case Constants::mysqlOdbcIntType:{
-
-        if (searchString != ""){
-            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
-        } else{
-            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
-        }
-
-
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
-        this->setQuery(queryString, dbMysql);
-
-        break;
-    }
 
     case Constants::sqliteIntType:{
 
