@@ -84,7 +84,8 @@ void TableListModel::callQuery(QString queryString)
 
         break;
     }
-    case Constants::postgresIntType:{
+    case Constants::postgresIntType:
+    case Constants::redshiftIntType:{
 
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
 

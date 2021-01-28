@@ -294,7 +294,8 @@ void TableSchemaModel::showSchema(QString query)
         break; // Sqlite Type Break
     }
 
-    case Constants::postgresIntType:{
+    case Constants::postgresIntType:
+    case Constants::redshiftIntType:{
 
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
 

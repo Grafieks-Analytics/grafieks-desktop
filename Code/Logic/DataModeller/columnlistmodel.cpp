@@ -123,7 +123,8 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
         break;
     }
 
-    case Constants::postgresIntType:{
+    case Constants::postgresIntType:
+    case Constants::redshiftIntType:{
 
         queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
@@ -209,7 +210,8 @@ void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableNam
         break;
     }
 
-    case Constants::postgresIntType:{
+    case Constants::postgresIntType:
+    case Constants::redshiftIntType:{
 
         QString queryString = postgresDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
@@ -322,7 +324,8 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
             break;
         }
 
-        case Constants::postgresIntType:{
+        case Constants::postgresIntType:
+        case Constants::redshiftIntType:{
 
             pieces = fieldNames.split(",");
 
@@ -448,7 +451,8 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
         break;
     }
 
-    case Constants::postgresIntType:{
+    case Constants::postgresIntType:
+    case Constants::redshiftIntType:{
 
         if (searchString != ""){
             queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";

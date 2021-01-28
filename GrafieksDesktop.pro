@@ -51,6 +51,7 @@ SOURCES += \
     Code/Logic/DataModeller/Helpers/mysqlconversions.cpp \
     Code/Logic/DataModeller/Helpers/oracleconversions.cpp \
     Code/Logic/DataModeller/Helpers/postgresconversions.cpp \
+    Code/Logic/DataModeller/Helpers/redshiftconversions.cpp \
     Code/Logic/DataModeller/Helpers/sqliteconversions.cpp \
     Code/Logic/DataModeller/columnlistmodel.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
@@ -146,6 +147,7 @@ HEADERS += \
     Code/Logic/DataModeller/Helpers/mysqlconversions.h \
     Code/Logic/DataModeller/Helpers/oracleconversions.h \
     Code/Logic/DataModeller/Helpers/postgresconversions.h \
+    Code/Logic/DataModeller/Helpers/redshiftconversions.h \
     Code/Logic/DataModeller/Helpers/sqliteconversions.h \
     Code/Logic/DataModeller/columnlistmodel.h \
     Code/Logic/DataModeller/dblistmodel.h \

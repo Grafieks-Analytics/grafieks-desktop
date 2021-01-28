@@ -110,7 +110,8 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
         }
         break;
     }
-    case Constants::postgresIntType:{
+    case Constants::postgresIntType:
+    case Constants::redshiftIntType:{
 
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
 

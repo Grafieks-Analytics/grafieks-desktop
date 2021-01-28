@@ -80,7 +80,8 @@ void QueryStatsModel::setProfiling(bool status)
         break;
     }
 
-    case Constants::postgresIntType:{
+    case Constants::postgresIntType:
+    case Constants::redshiftIntType:{
 
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
         if(status == true){
