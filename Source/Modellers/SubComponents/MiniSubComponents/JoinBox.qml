@@ -103,6 +103,30 @@ Item {
 
     // SubComponents Ends
     /***********************************************************************************************************************/
+Rectangle{
+    height: 60
+    width: 60
+    color: "transparent"
+    radius: 50
+     scale: Constants.scaleTable
+
+    MouseArea{
+        id: mouseAreaBox1
+        anchors.fill: parent
+        onClicked: onJoinIconClicked()
+        hoverEnabled: true
+        onEntered: showCrossIcon();
+        onExited: hideCrossIcon();
+//            onDoubleClicked: showCrossIcon();
+
+
+    }
+
+    ToolTip.delay: Constants.tooltipShowTime
+    ToolTip.timeout: Constants.tooltipHideTime
+    ToolTip.text: qsTr("Click to see join between columns and change the join type")
+    ToolTip.visible: mouseAreaBox1.containsMouse ? true: false
+
 
 
     Rectangle{
@@ -115,6 +139,8 @@ Item {
         border.width: 0.5
         smooth: true
         antialiasing: true
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
 
 
 
@@ -135,46 +161,50 @@ Item {
 
         }
 
-        MouseArea{
-            id: mouseAreaBox
-            anchors.fill: parent
-            onClicked: onJoinIconClicked()
-            hoverEnabled: true
-            onEntered: showCrossIcon();
-            onExited: hideCrossIcon();
+//        MouseArea{
+//            id: mouseAreaBox
+//            anchors.fill: parent
+//            onClicked: onJoinIconClicked()
+//            hoverEnabled: true
+////            onEntered: showCrossIcon();
+////            onExited: hideCrossIcon();
+////            onDoubleClicked: showCrossIcon();
 
 
-        }
+//        }
 
-        ToolTip.delay: Constants.tooltipShowTime
-        ToolTip.timeout: Constants.tooltipHideTime
-        ToolTip.text: qsTr("Click to see join between columns and change the join type")
-        ToolTip.visible: mouseAreaBox.containsMouse ? true: false
+
 
 
     }
 
+}
     Rectangle{
         id: deleteJoinRectangle
-        anchors.verticalCenter: joinBoxRectangle.verticalCenter
+//        anchors.verticalCenter: joinBoxRectangle.verticalCenter
         anchors.left: joinBoxRectangle.right
-        width:35
-        height:35
-        color: "transparent"
+        x:35
+        width:5
+        height:5
+//        color: "yellow"
         visible: hoverCrossIcon
+
 
         Image{
             id: deleteIconId
             source: "/Images/icons/remove.png"
+            MouseArea{
+                id: mouseAreaDelete
+                anchors.fill: parent
+                onClicked: onDeleteIconClicked()
+                hoverEnabled: true
+                onEntered: showCrossIcon();
+//                onExited: hideCrossIcon();
+
+            }
+
         }
 
-        MouseArea{
-            id: mouseAreaDelete
-            anchors.fill: parent
-            onClicked: onDeleteIconClicked()
-            hoverEnabled: true
-
-        }
 
         ToolTip.delay: Constants.tooltipShowTime
         ToolTip.timeout: Constants.tooltipHideTime

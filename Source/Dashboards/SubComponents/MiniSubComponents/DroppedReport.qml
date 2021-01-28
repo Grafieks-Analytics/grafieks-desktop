@@ -236,8 +236,7 @@ Item{
             //            }
             drag{
                 target: mainContainer
-                minimumX: 0
-                minimumY: 0
+
                 //                maximumX: (mainContainer.parent.width)
                 //                maximumY: mainContainer.parent.height - mainContainer.height - Constants.subMenuWidth
                 //                maximumY: mainContainer.parent.height - mainContainer.height - Constants.subMenuWidth
@@ -247,6 +246,8 @@ Item{
 
                 //                maximumY: dashboard_summary.height - mainContainer.height + Constants.subMenuWidth
                 //                maximumX: dashboard_summary.width - mainContainer.width + Constants.leftMenubarWidth
+                minimumX: 0
+                minimumY: 0
                 maximumY: dashboard_summary.height- mainContainer.height
                 maximumX: dashboard_summary.width- mainContainer.width
 

@@ -209,4 +209,9 @@ QtObject {
     property string scatteredChart: "Scattered Chart"
 
     // Charts ends
+
+    //data modeller table Scale
+    property real scaleTable:1
+    // ends
+    property real newPosition:1
 }
