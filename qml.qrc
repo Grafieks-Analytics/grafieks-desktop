@@ -1,16 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>Source/Charts/area.html</file>
-        <file>Source/Charts/bar.html</file>
-        <file>Source/Charts/box.html</file>
-        <file>Source/Charts/horizontal-bar.html</file>
-        <file>Source/Charts/line.html</file>
-        <file>Source/Charts/pie.html</file>
-        <file>Source/Charts/radar.html</file>
-        <file>Source/Charts/scatter.html</file>
-        <file>Source/Charts/sunburst.html</file>
-        <file>Source/Charts/tree-map.html</file>
-        <file>Source/Charts/tree.html</file>
         <file>Source/Connectors/SelectConnection.qml</file>
         <file>Source/Connectors/SubComponents/BoxConnection.qml</file>
         <file>Source/Connectors/SubComponents/BoxConnectionFiles.qml</file>
@@ -189,6 +178,10 @@
         <file>Source/Others/Table.qml</file>
         <file>Source/Others/TableTest.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/LineTypePopup.qml</file>
+        <file>Source/Charts/PieChart.html</file>
         <file>Source/Connectors/SubComponents/CSVConnection.qml</file>
+        <file>Source/Charts/DoughnutChart.html</file>
+        <file>Source/Charts/ScatterChart.html</file>
+        <file>Source/Charts/TreeChart.html</file>
     </qresource>
 </RCC>

@@ -21,11 +21,6 @@ QVariantMap PostgresCon::PostgresOdbcInstance(const QString &driver, const QStri
 {
     QVariantMap outputStatus;
 
-    QSqlDatabase dbOdbc = QSqlDatabase::addDatabase("QODBC", "psgl_conn");
-
-    dbOdbc.setUserName("postgres");
-    dbOdbc.setPassword("123@312QQl");
-
     if(QSqlDatabase::isDriverAvailable(ODBCDRIVER)){
         //        Sample connection for Postgres
         //        dbOdbc.setDatabaseName("DRIVER={PostgreSQL Unicode};Server=localhost;Database=pg_test;Trusted_Connection=True;"); // "WorkDatabase" is the name of the database we want
@@ -85,8 +80,6 @@ QVariantMap PostgresCon::PostgresOdbcInstance(const QString &driver, const QStri
 
 PostgresCon::~PostgresCon()
 {
-
-
     QSqlDatabase dbPostgresOdbc = QSqlDatabase::database(Constants::postgresOdbcStrType);
     QSqlDatabase dbPostgresOdbc2 = QSqlDatabase::database( Constants::postgresOdbcStrQueryType);
 

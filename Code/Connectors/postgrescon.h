@@ -23,7 +23,7 @@ class PostgresCon : public QObject
 {
     Q_OBJECT
     QVariantMap outputStatus;
-    const QString DRIVER = "QMYSQL";
+    const QString DRIVER = "QPSQL";
     const QString ODBCDRIVER = "QODBC";
 
 public:

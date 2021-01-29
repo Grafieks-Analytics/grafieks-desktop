@@ -14,12 +14,14 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.3
 //import Qt.labs.platform 1.1
 
+
 import com.grafieks.singleton.constants 1.0
 
 
 import "../MainSubComponents"
 import "./SubComponents"
 import "./SubComponents/MiniSubComponents"
+
 
 Page {
 
@@ -36,6 +38,7 @@ Page {
     property var tableShowToggle: false
     property Page page: queryModellerPage
     property LeftMenuBar leftMenuBar : left_menubar
+    property int droppedCount: 0
 
     /***********************************************************************************************************************/
     // Connection Starts
@@ -258,9 +261,9 @@ Page {
     function onTableToggle(){
 
         console.log("table table");
-//        columnListDroppedRect.visible = columnListDroppedRect.visible === true ? false : true
+        //        columnListDroppedRect.visible = columnListDroppedRect.visible === true ? false : true
 
-//        TableColumnsModel.getColumnsForTable(newItem.name, newItem.moduleName)
+        //        TableColumnsModel.getColumnsForTable(newItem.name, newItem.moduleName)
         TableColumnsModel.getColumnsForTable(tableName, "TableColumns")
 
         toggleTableIcon.source = tablecolumnListView.visible === false ?  "/Images/icons/Up_20.png" : "/Images/icons/Down_20.png"
@@ -346,8 +349,10 @@ Page {
                 height: 10
                 width: 10
                 source : "/Images/icons/Down_20.png"
-                anchors.right: parent.right
-                anchors.rightMargin: 22
+                anchors.left: parent.left
+                anchors.leftMargin:  15
+                anchors.verticalCenter: tableImg.verticalCenter
+
 
                 visible: tableShowToggle
 
@@ -395,7 +400,7 @@ Page {
                         tablecolumnListView.visible = false
                         dragRect.height -= tablecolumnListView.height
                     } else{
-                         toggleTableIcon.source ="/Images/icons/Up_20.png"
+                        toggleTableIcon.source ="/Images/icons/Up_20.png"
                         tablecolumnListView.visible = true
                         dragRect.height += tablecolumnListView.height
                     }
@@ -946,6 +951,8 @@ Page {
                 height:50
                 width: rectangle_querymodeller_right_col.width
 
+
+
                 TextEdit{
                     id: ds_name
                     text: "Data Source Name"
@@ -1089,88 +1096,102 @@ Page {
                 anchors.topMargin: 2
 
 
+
+
                 Rectangle{
 
 
-                    height: 900
+                    height: 710
                     width:500
-//                    color: "red"
 
 
-                Rectangle {
-                    id: categoryItem
-                    height: 50
-                    width: 200
 
 
-                    Image {
-                        id: database
-                        height: 20
-                        width: 18
-                        source: "/Images/icons/database_32x36.png"
-                        anchors.left: parent.left
-                        anchors.leftMargin: 15
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
 
-                    Text {
-                        anchors.left: database.right
-                        anchors.leftMargin: 10
-                        anchors.verticalCenter: parent.verticalCenter
-                        font.pixelSize: Constants.fontCategoryHeaderSmall
-                        text: ConnectorsLoginModel.connectedDB
 
-                        ToolTip.delay:Constants.tooltipShowTime
-                        ToolTip.timeout: Constants.tooltipHideTime
-                        ToolTip.text: qsTr("Current connected database")
-                        ToolTip.visible: mouseAreaCurrentDB.containsMouse? true: false
 
-                        MouseArea{
-                            id: mouseAreaCurrentDB
-                            anchors.fill: parent
-                            hoverEnabled: true
+
+                    Rectangle {
+                        id: categoryItem
+                        height: 50
+                        width: 200
+
+
+                        Image {
+                            id: database
+                            height: 20
+                            width: 18
+                            source: "/Images/icons/database_32x36.png"
+                            anchors.left: drop_icon.right
+                            anchors.leftMargin: 8
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Text {
+                            anchors.left: database.right
+                            anchors.leftMargin: 10
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.pixelSize: Constants.fontCategoryHeaderSmall
+                            text: ConnectorsLoginModel.connectedDB
+
+                            ToolTip.delay:Constants.tooltipShowTime
+                            ToolTip.timeout: Constants.tooltipHideTime
+                            ToolTip.text: qsTr("Current connected database")
+                            ToolTip.visible: mouseAreaCurrentDB.containsMouse? true: false
+
+                            MouseArea{
+                                id: mouseAreaCurrentDB
+                                anchors.fill: parent
+                                hoverEnabled: true
+                            }
+                        }
+
+
+                        Image {
+                            id: drop_icon
+                            source: "/Images/icons/Up_20.png"
+                            width: 10
+                            height: 10
+                            anchors.left: parent.left
+                            anchors.leftMargin:  5
+                            anchors.verticalCenter: parent.verticalCenter
+                            visible: true
+
+                            ToolTip.delay:Constants.tooltipShowTime
+                            ToolTip.timeout: Constants.tooltipHideTime
+                            ToolTip.text: qsTr("Hide/Show database tables")
+                            ToolTip.visible: mouseAreaShowHide.containsMouse ? true: false
+
+                            MouseArea {
+                                id: mouseAreaShowHide
+                                anchors.fill: parent
+                                onClicked: collapseTables()
+                                hoverEnabled: true
+                            }
+
                         }
                     }
 
-
-                    Image {
-                        id: drop_icon
-                        source: "/Images/icons/Up_20.png"
-                        width: 10
-                        height: 10
-                        anchors.right: parent.right
-                        anchors.rightMargin: 22
-                        anchors.verticalCenter: parent.verticalCenter
+                    ListView {
+                        id: tableslist
+                        spacing: 0
+                        anchors.top: categoryItem.bottom
+                        height : parent.height-categoryItem.height
+                        width: item_querymodeller.width+10
+                        delegate: tablelistDelegate
                         visible: true
+                        clip: true
+                        flickableDirection: Flickable.VerticalFlick
+                        boundsBehavior: Flickable.StopAtBounds
+                        //                            interactive: true
+                        ScrollBar.vertical: ScrollBar {}
 
-                        ToolTip.delay:Constants.tooltipShowTime
-                        ToolTip.timeout: Constants.tooltipHideTime
-                        ToolTip.text: qsTr("Hide/Show database tables")
-                        ToolTip.visible: mouseAreaShowHide.containsMouse ? true: false
 
-                        MouseArea {
-                            id: mouseAreaShowHide
-                            anchors.fill: parent
-                            onClicked: collapseTables()
-                            hoverEnabled: true
-                        }
-
+                        property int dragItemIndex: -1
+                        property string tableName : ""
                     }
+
                 }
-
-                ListView {
-                    id: tableslist
-                    spacing: 0
-                    anchors.top: categoryItem.bottom
-                    height : contentHeight
-                    delegate: tablelistDelegate
-                    visible: true
-
-                    property int dragItemIndex: -1
-                    property string tableName : ""
-                }
-
-                 }
             }
 
         }

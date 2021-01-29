@@ -15,10 +15,18 @@ import QtQuick.Shapes 1.15
 
 import com.grafieks.singleton.constants 1.0
 
+import "../SubComponents"
+import "../SubComponents/MiniSubComponents"
+
+
+
 
 Item {
 
+
     id: dataModellerItem
+
+//    scale: Constants.scaleTable
     property int bufferHeight : 15 // distance between rectangle top to connectingLine point
     property int counter : 0
     property real droppedX : 0
@@ -552,7 +560,10 @@ Item {
         // listView.model.remove(listView.dragItemIndex);
         // listView.dragItemIndex = -1;
 
+//        TODO white
         highlightRect.color = "white"
+        droppedCount = droppedCount+1
+        console.log("droppedCount"+droppedCount)
 
         // Assign new variable to the created object
         // Use this variable to connect the signals and slots
@@ -679,15 +690,47 @@ Item {
 
     function onZoomOutClicked(){
         console.log('Zoom Out')
+//        highlightRect.height =  highlightRect.height-5
+//        highlightRect.width =  highlightRect.width-10
+
+//            highlightRect.scale -= 0.2;
+//         Constants.Constants -= 0.2;
+//        outer.height = outer.height-10;
+//        outer.width = outer.width-10;
+
+
+        Constants.scaleTable = Qt.binding(function(){
+                        return Constants.scaleTable-0.2 })
+
+
+//        Constants.newPosition = Constants.newPosition + 8
+
+
     }
 
     function onZoomInClicked(){
         console.log('Zoom In')
+//        highlightRect.height =  highlightRect.height+5
+//        highlightRect.width =  highlightRect.width+5
+
+//          highlightRect.scale += 0.2;
+//        Constants.Constants += 0.2;
+
+//        outer.height = outer.height+10
+//        outer.width = outer.width+10
+        Constants.scaleTable = Qt.binding(function(){
+
+                        return Constants.scaleTable+0.2 })
+
+//        Constants.newPosition = Constants.newPosition - 8
+
+
     }
 
 
     function onAlignBtnClicked(){
         console.log('Align Btn Clicked')
+
     }
 
 
@@ -817,22 +860,219 @@ Item {
         }
 
     }
-
     Rectangle{
-        id:highlightRect
-        height: parent.height
-        width: parent.width
+     id:outer
+             height: parent.height
+             width: parent.width
+//             scale: Constants.scaleTable
+
+                     Flickable {
+                                       id: flickArea
+                                       anchors {fill: parent; margins: 0; }
+                                       contentWidth: highlightRect.width* Constants.scaleTable
+                                       contentHeight: highlightRect.height* Constants.scaleTable
+
+
+                                       Rectangle {
+                                           id: highlightRect
+                                           transformOrigin: Item.TopLeft
+                                           x: 0; y: 0;
+                                           width: outer.width;
+                                           height: outer.height;
+//                                           color: "lightblue"
+
+                                           Rectangle {
+                                               id: inner
+                                               anchors { fill: parent; margins: 10; }
+//                                               color: "yellow"
+                                               DropArea {
+                                                   id: dropArea
+                                                   scale: highlightRect.scale
+                                                   anchors.fill: parent
+                                                   onEntered: onDropAreaEntered(drag)
+                                                   onExited: onDropAreaExited()
+                                                   onPositionChanged: onDropAreaPositionChanged(drag)
+                                                   onDropped: onDropAreaDropped(drag)
+                                               }
+                                           }
+                                       }
+
+    }
+
+
+//    Rectangle{
+//        id:highlightRect
+//        height: parent.height
+//        width: parent.width
+//        color: "red"
 
 
 
-        DropArea {
-            id: dropArea
-            anchors.fill: parent
-            onEntered: onDropAreaEntered(drag)
-            onExited: onDropAreaExited()
-            onPositionChanged: onDropAreaPositionChanged(drag)
-            onDropped: onDropAreaDropped(drag)
-        }
+//        Flickable {
+//                          id: flickArea
+//                          anchors {fill: parent; margins: 0; }
+//                          contentWidth: rect.width*rect.scale
+//                          contentHeight: rect.height*rect.scale
+
+//                          Rectangle {
+//                              id: rect
+//                              transformOrigin: Item.TopLeft
+//                              x: 0; y: 0;
+//                              width: highlightRect.width;
+//                              height: highlightRect.height;
+//                              color: "transparent"
+
+//                              Rectangle {
+//                                  id: inner
+//                                  anchors { fill: parent; margins: 10; }
+//                                  color: "yellow"
+//                                  DropArea {
+//                                      id: dropArea
+////                                      scale: highlightRect.scale
+//                                      anchors.fill: parent
+//                                      onEntered: onDropAreaEntered(drag)
+//                                      onExited: onDropAreaExited()
+//                                      onPositionChanged: onDropAreaPositionChanged(drag)
+//                                      onDropped: onDropAreaDropped(drag)
+//                                  }
+//                              }
+//                          }
+//                      }
+
+
+//                   Button {
+//                       anchors.bottom: parent.bottom;
+////                       anchors.horizontalCenter: parent.horizontalCenter;
+//                       text: "Scale flickArea"
+//                       onClicked: {
+//                           rect.scale -= 0.2;
+//                           abc.scale -= 0.2;
+//                       }
+
+//                   }
+//                   Button {
+//                       anchors.bottom: parent.bottom;
+//                       anchors.horizontalCenter: parent.horizontalCenter;
+//                       text: "Scale + flickArea"
+//                       onClicked: {
+//                           rect.scale += 0.2;
+//                       }
+
+//                   }
+
+//        Rectangle {
+//               anchors.fill: parent/5
+//               color: "green"
+
+//               Flickable {
+//                   id: flickArea
+//                   anchors {fill: parent; margins: 10; }
+//                   contentWidth: rect.width*rect.scale
+//                   contentHeight: rect.height*rect.scale
+//                   Rectangle {
+//                       id: rect
+//                       transformOrigin: Item.TopLeft
+//                       x: 0; y: 0;
+//                       width: 200; height: 300;
+//                       color: "lightgrey"
+
+//                       Rectangle {
+//                           id: inner
+//                           anchors { fill: parent; margins: 10; }
+//                           color: "red"
+//                       }
+//                   }
+//               }
+//           }
+//           Button {
+//               anchors.bottom: parent.bottom;
+//               anchors.horizontalCenter: parent.horizontalCenter;
+//               text: "Scale flickArea"
+//               onClicked: {
+//                   rect.scale -= 0.2;
+//               }
+//           }
+
+//        Flickable {
+//                id: flick
+//                anchors.fill: parent
+//                contentWidth: 500
+//                contentHeight: 500
+
+
+//                PinchArea {
+//                    width: Math.max(flick.contentWidth, flick.width)
+//                    height: Math.max(flick.contentHeight, flick.height)
+
+
+
+//                    property real initialWidth
+//                    property real initialHeight
+//                    property real initialTesteX
+//                    property real initialTesteY
+//                    onPinchStarted: {
+//                        initialWidth = flick.contentWidth
+//                        initialHeight = flick.contentHeight
+//                        initialTesteX = marker.canvasX
+//                        initialTesteY = marker.canvasY
+//                    }
+
+//                    onPinchUpdated: {
+//                        // adjust content pos due to drag
+//                        flick.contentX += pinch.previousCenter.x - pinch.center.x
+//                        flick.contentY += pinch.previousCenter.y - pinch.center.y
+
+//                        // resize content
+//                        flick.resizeContent(initialWidth * pinch.scale, initialHeight * pinch.scale, pinch.center)
+//                        marker.canvasX = initialTesteX*(pinch.scale)
+//                        marker.canvasY = initialTesteY*(pinch.scale)
+
+//                    }
+
+//                    onPinchFinished: {
+//                        // Move its content within bounds.
+//                        flick.returnToBounds()
+//                    }
+
+//                    Canvas {
+//                        id: marker
+//                        anchors {
+//                            top: parent.top
+//                            left: parent.left
+//                            margins: 4
+//                        }
+//                        z: 100
+//                        property real canvasX: 341
+//                        property real canvasY: 330
+
+//                        width: flick.contentWidth
+//                        height: flick.contentHeight
+
+//                        antialiasing: true
+//                        transformOrigin: Item.TopLeft
+
+//                        onPaint: {
+//                            var ctx = getContext( "2d" );
+//                            ctx.save();
+//                            ctx.clearRect( 0, 0, width, height );
+//                            ctx.lineWidth = 2;
+//                            ctx.beginPath();
+//                            ctx.strokeStyle = "blue"
+//                            ctx.arc(canvasX,
+//                                    canvasY,
+//                                    6,
+//                                    0,
+//                                    Math.PI * 2 );
+//                            ctx.stroke();
+//                            ctx.restore();
+//                        }
+//                    }
+//                }
+//        }
+
+
+
+
     }
 
 

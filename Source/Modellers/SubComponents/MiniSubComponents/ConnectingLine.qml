@@ -18,6 +18,7 @@ Item{
     objectName: objectName
     smooth: true
     antialiasing: true
+//    scale: Constants.scaleTable
     Shape {
         containsMode: Shape.FillContains
 
@@ -29,6 +30,7 @@ Item{
             strokeStyle: ShapePath.SolidLine
             strokeColor: Constants.buttonBorderColor
             strokeWidth: 1
+//             scale: Constants.scaleTable
 
 //            dashPattern: [5,5]
             fillColor: "transparent"

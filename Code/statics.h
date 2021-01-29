@@ -37,6 +37,20 @@ public:
     static QString postgresUsername;
     static QString postgresPassword;
 
+    // Amazon Redshift
+    static QString redshiftHost;
+    static QString redshiftDb;
+    static int redshiftPort;
+    static QString redshiftUsername;
+    static QString redshiftPassword;
+
+    // Oracle
+    static QString oracleHost;
+    static QString oracleDb;
+    static int oraclePort;
+    static QString oracleUsername;
+    static QString oraclePassword;
+
     // Mongo
     static QString mongoHost;
     static QString mongoDb;

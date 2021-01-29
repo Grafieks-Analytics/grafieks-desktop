@@ -49,6 +49,22 @@ Column{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    function showLegend(checked){
+        var legendConfig = d3PropertyConfig.legendConfig || {};
+        legendConfig['legendStatus'] = checked;
+        d3PropertyConfig.legendConfig = legendConfig;
+        reDrawChart();
+    }
+
+    function changeLegendPosition(checked,position){
+        if(!checked){
+            return;
+        }
+        var legendConfig = d3PropertyConfig.legendConfig || {};
+        legendConfig['legendPosition'] = position;
+        d3PropertyConfig.legendConfig = legendConfig;
+        reDrawChart();
+    }
 
 
     // JAVASCRIPT FUNCTION ENDS
@@ -103,8 +119,10 @@ Column{
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.rightMargin: 5
                 anchors.top: parent.top
+                onCheckedChanged: showLegend(checked);
 
             }
+
 
         }
 
@@ -142,6 +160,7 @@ Column{
                         width: parent.width
                         x: (parent.width/2 - this.parent_dimension)
                         ButtonGroup.group: legendBtnGroup
+                        onCheckedChanged: changeLegendPosition(checked,'right')
                     }
 
                 }
@@ -171,6 +190,8 @@ Column{
 
                         x: (parent.width/2 - this.parent_dimension)
                         ButtonGroup.group: legendBtnGroup
+                        onCheckedChanged: changeLegendPosition(checked,'left')
+
                     }
 
                 }
@@ -200,6 +221,7 @@ Column{
 
                         x: (parent.width/2 - this.parent_dimension)
                         ButtonGroup.group: legendBtnGroup
+                        onCheckedChanged: changeLegendPosition(checked,'bottom')
                     }
 
                 }
@@ -228,6 +250,8 @@ Column{
 
                         x: (parent.width/2 - this.parent_dimension)
                         ButtonGroup.group: legendBtnGroup
+                        onCheckedChanged: changeLegendPosition(checked,'top')
+
                     }
 
                 }

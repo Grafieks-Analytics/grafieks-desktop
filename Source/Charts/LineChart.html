@@ -24,30 +24,53 @@
         } = defaultD3Config;
 
         var data = [
-            30.5621003042803618,
-            50.9164824306094999,
-            40.6363092398355727,
-            32.04669478701483354,
-            13.24258060335806886,
-            10.6302204824674538,
-            20.2485817228091547,
-            32.13664898092621325,
-            15.48262469788667994,
-            43.4260795360415235,
-            32.5816480528886738,
-            16.6545035086903186,
-            10.9870338215356449,
-            20.053908030938047524,
-            7.3456829381684714,
-            8.46889152272191414,
-            32.5989143518482389,
-            16.7689590628756797,
-            22.9011566318712221,
-            32.7105180730798188,
-            12.7186652294711284,
+            [
+                30.5621003042803618,
+                50.9164824306094999,
+                40.6363092398355727,
+                32.04669478701483354,
+                13.24258060335806886,
+                10.6302204824674538,
+                20.2485817228091547,
+                32.13664898092621325,
+                15.48262469788667994,
+                43.4260795360415235,
+                32.5816480528886738,
+                16.6545035086903186,
+                10.9870338215356449,
+                20.053908030938047524,
+                7.3456829381684714,
+                8.46889152272191414,
+                32.5989143518482389,
+                16.7689590628756797,
+                22.9011566318712221,
+                32.7105180730798188,
+                12.7186652294711284,
+            ],
+            [
+                30.5621003042803618,
+                50.9164824306094999,
+                40.6363092398355727,
+                32.04669478701483354,
+                13.24258060335806886,
+                32.5816480528886738,
+                16.6545035086903186,
+                10.9870338215356449,
+                20.053908030938047524,
+                7.3456829381684714,
+                8.46889152272191414,
+                32.5989143518482389,
+                16.7689590628756797,
+                22.9011566318712221,
+                32.7105180730798188,
+                12.7186652294711284,
+            ],
+            ["Value Name"],
         ];
 
         function drawChart(data, plottingConfiguration = {}) {
+            var dataValues = data[0];
+
             let {
                 d3colorPalette,
                 paddingInner,
@@ -80,7 +103,7 @@
 
             yScale = d3
                 .scaleLinear()
-                .domain([0, parseInt(Math.max(...data) + 1)]) // input
+                .domain([0, parseInt(Math.max(...dataValues) + 1)]) // input
                 .range([height, 0]); // output
 
             line = d3
@@ -125,7 +148,7 @@
                 .call(make_y_gridlines().tickSize(-width).tickFormat(""));
 
             svg.append("path")
-                .datum(data)
+                .datum(dataValues)
                 .attr("stroke", d3Colors[0])
                 .attr("stroke-width", lineStroke)
                 .attr("fill", "none")
@@ -146,8 +169,10 @@
         drawChart(data);
 
         function drawMarker(fillStatus, markerShape) {
-            var fill = "#ffffff";
-            var stroke = d3Colors[0];
+            let dataValues = data[0],
+                fill = "#ffffff",
+                stroke = d3Colors[0];
+
             if (fillStatus) {
                 initialCircleRadius = 3;
                 fill = d3Colors[0];
@@ -160,7 +185,7 @@
             svg.selectAll(".marker-shape").remove();
 
             svg.selectAll(".dot")
-                .data(data)
+                .data(dataValues)
                 .enter()
                 .append(markerShape)
                 .attr("stroke", stroke)
@@ -187,7 +212,6 @@
                 .attr("points", function (d, i) {
                     console.log(xScale(d, i));
                     var x1 = xScale(i);
-                    console.log(x1);
                     return (
                         x1 +
                         " " +

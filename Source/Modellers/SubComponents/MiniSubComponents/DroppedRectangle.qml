@@ -7,16 +7,26 @@ import com.grafieks.singleton.constants 1.0
 // when a column is dropped from right side listview
 
 
+
+
+
 Item{
 
     id: newItem
     visible: true
     width: droppedRectangle.width
     height: droppedRectangle.height
+    //    x:newItem.x+Constants.scaleTable
+    //    y:newItem.y+Constants.scaleTable
+
+    scale: Constants.scaleTable
     property string name: nameID.text
     readonly property string moduleName : "DroppedRectangle"
 
     property var allColumnsProperty : []
+    property var colors: ["green","blue","yellow","green","blue","yellow","green","blue","yellow","green","blue","yellow"]
+
+
     property string tableNameProperty : ""
     property var hoverCrossIcon: false
 
@@ -61,7 +71,7 @@ Item{
 
     Component.onCompleted: {
         nameID.text = name
-//                droppedRectangle.width = nameID.text.length * 10 + 30
+        //                droppedRectangle.width = nameID.text.length * 10 + 30
 
     }
 
@@ -124,6 +134,9 @@ Item{
 
     }
 
+
+
+
     function hideColumnSelection(colName, tableName){
 
         console.log("remove column")
@@ -133,7 +146,7 @@ Item{
         // Else insert into DSParamsModel.hideColumns
 
 
-            DSParamsModel.removeFromHideColumns(key)
+        DSParamsModel.removeFromHideColumns(key)
 
     }
 
@@ -142,76 +155,77 @@ Item{
         id: listviewComponent
 
 
+
         Rectangle{
             id:tableContent
             color: "red"
             height: 30
-//            width: 200
+            //            width: 200
 
-        Row{
-            id: innerRow
-            height: 20
-
-
-
-            Text{
-                text: colName
-            }
+            Row{
+                id: innerRow
+                height: 20
 
 
 
-            Image{
-                id: columnIcon;
-                source :
+                Text{
+                    text: colName
+                }
 
-                     if(colType == "numerical"){"/Images/icons/integer.png";}
-                     else if(colType == "categorical"){
-                          source : "/Images/icons/string new.png";
-                     }
-                     else if(colType == "date"){
-                          source : "/Images/icons/date.png";
-                     }
 
-                height: 12
-                width: 13
-                anchors.right: parent.right
-                anchors.rightMargin:  20
-                anchors.verticalCenter: droppedRectangle.verticalCenter
-                z: 5
-            }
-            Image{
-                id: columnMenuIcon
-                source : "/Images/icons/menu-button.png"
-                height: 30
-                width: 30
-                anchors.left: parent.left
-                anchors.leftMargin:  110
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 1
-                anchors.verticalCenter: droppedRectangle.verticalCenter
-                z: 5
 
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: editOptions.open()
+                Image{
+                    id: columnIcon;
+                    source :
+
+                        if(colType == "numerical"){"/Images/icons/integer.png";}
+                        else if(colType == "categorical"){
+                            source : "/Images/icons/string new.png";
+                        }
+                        else if(colType == "date"){
+                            source : "/Images/icons/date.png";
+                        }
+
+                    height: 12
+                    width: 13
+                    anchors.right: parent.right
+                    anchors.rightMargin:  20
+                    anchors.verticalCenter: droppedRectangle.verticalCenter
+                    z: 5
+                }
+                Image{
+                    id: columnMenuIcon
+                    source : "/Images/icons/menu-button.png"
+                    height: 30
+                    width: 30
+                    anchors.left: parent.left
+                    anchors.leftMargin:  110
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 1
+                    anchors.verticalCenter: droppedRectangle.verticalCenter
+                    z: 5
+
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: editOptions.open()
+                    }
                 }
             }
-            }
-//            ToolSeparator{
-//                id: toolsep3
-//                orientation: Qt.Horizontal
-//                width: 200
-//                anchors.bottom:  innerRow.bottom
-//                anchors.bottomMargin: -10
-//                anchors.left: parent.left
-//                anchors.leftMargin: -50
-//            }
+            //            ToolSeparator{
+            //                id: toolsep3
+            //                orientation: Qt.Horizontal
+            //                width: 200
+            //                anchors.bottom:  innerRow.bottom
+            //                anchors.bottomMargin: -10
+            //                anchors.left: parent.left
+            //                anchors.leftMargin: -50
+            //            }
 
             Row{
 
                 anchors.right: parent.right
                 anchors.top: columnMenuIcon.bottom
-//                anchors.topMargin: 50
+                //                anchors.topMargin: 50
                 anchors.rightMargin: -60
                 width: parent.width
                 height: 10
@@ -230,18 +244,18 @@ Item{
                         }
 
 
-//                        MenuItem {
-//                            text: qsTr("Rename")
-//                            onTriggered: destroyElement()
-//                        }
-//                        MenuItem {
-//                            text: qsTr("Convert To")
-//                            onTriggered: destroyElement()
-//                        }
+                        //                        MenuItem {
+                        //                            text: qsTr("Rename")
+                        //                            onTriggered: destroyElement()
+                        //                        }
+                        //                        MenuItem {
+                        //                            text: qsTr("Convert To")
+                        //                            onTriggered: destroyElement()
+                        //                        }
 
                         MenuItem {
                             text: qsTr("Remove")
-//                            onClicked: hideColumnSelection(colName, tableName)
+                            //                            onClicked: hideColumnSelection(colName, tableName)
                         }
                     }}
             }
@@ -263,15 +277,28 @@ Item{
 
         id: droppedRectangle
         border.width: 1
+        //        scale: Constants.scaleTable
+        //        x:Constants.newPosition+droppedRectangle.x
+        //        y:Constants.droppedRectangle.y
         border.color: Constants.dataModelBorderColor
-        color: "#26009B8F"
+        //        color: "#26009B8F"
+        color: colors[droppedCount+1]
+
         height: 30
         width: 200
 
         MouseArea {
             id: mouseAreaDroppedRect
             anchors.fill: parent
-            drag.target: newItem
+            drag{
+
+                target: newItem
+                minimumX: 0
+                minimumY: 0
+                maximumY: outer.height
+                maximumX: outer.width
+            }
+
             hoverEnabled: true
 
             //            onDoubleClicked: onRectangleToggle()

@@ -65,4 +65,6 @@ text.shadow {
 
 #legend {
     background-color: #fff;
+    position: absolute;
+    border: 1px solid black;
 }

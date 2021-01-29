@@ -13,7 +13,7 @@ import QtQuick 2.15
 QtObject {
 
     // Menu Indexes
-    property int initialIndex: 5
+    property int initialIndex: 7
     property int dataDesignerIndex: 3
     property int dashboardDesignerIndex: 6
     property int newReportIndex: 7
@@ -209,4 +209,9 @@ QtObject {
     property string scatteredChart: "Scattered Chart"
 
     // Charts ends
+
+    //data modeller table Scale
+    property real scaleTable:1
+    // ends
+    property real newPosition:1
 }

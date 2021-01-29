@@ -34,6 +34,8 @@ public:
     Q_INVOKABLE void mysqlOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
     Q_INVOKABLE void mssqlOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
     Q_INVOKABLE void postgresOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
+    Q_INVOKABLE void redshiftOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
+    Q_INVOKABLE void oracleOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
     Q_INVOKABLE void mongoOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
     Q_INVOKABLE void excelOdbcLogin(QString driver, QString filename);
 
@@ -46,6 +48,8 @@ signals:
     void odbcLoginStatus(QVariantMap status);
     void mssqlLoginStatus(QVariantMap status);
     void postgresLoginStatus(QVariantMap status);
+    void redshiftLoginStatus(QVariantMap status);
+    void oracleLoginStatus(QVariantMap status);
     void mongoLoginStatus(QVariantMap status);
     void excelLoginStatus(QVariantMap status);
     void csvLoginStatus(QVariantMap status);
