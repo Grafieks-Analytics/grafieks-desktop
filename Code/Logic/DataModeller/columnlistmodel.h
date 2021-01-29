@@ -13,6 +13,7 @@
 #include "./Helpers/postgresconversions.h"
 #include "./Helpers/mssqlconversions.h"
 #include "./Helpers/oracleconversions.h"
+#include "./Helpers/mongoconversions.h"
 
 #include "../../Connectors/allconnectors.h"
 #include "../../statics.h"
@@ -31,6 +32,7 @@ class ColumnListModel : public QSqlQueryModel
     PostgresConversions postgresDateConversion;
     MssqlConversions mssqlDateConversion;
     OracleConversions oracleDateConversion;
+    MongoConversions mongoDateConversion;
 
 public:
     explicit ColumnListModel(QObject *parent = nullptr);

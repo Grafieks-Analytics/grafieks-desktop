@@ -138,6 +138,15 @@ void DBListModel::callQuery(QString queryString)
         break;
     }
 
+    case Constants::mongoIntType:{
+        QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrType);
+
+        // No direct query available in Mongo db
+        // Will need to devise a way out when the query is required later
+
+        break;
+    }
+
 
     }
 }

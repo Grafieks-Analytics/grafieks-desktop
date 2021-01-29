@@ -1,6 +1,7 @@
 #include "redshiftconversions.h"
 
-RedshiftConversions::RedshiftConversions(QObject *parent) : QObject(parent)
+RedshiftConversions::RedshiftConversions(QObject *parent) : QObject(parent),
+    queryString("")
 {
 
 }

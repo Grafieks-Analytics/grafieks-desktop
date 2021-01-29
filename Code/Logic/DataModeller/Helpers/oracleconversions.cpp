@@ -1,6 +1,7 @@
 #include "oracleconversions.h"
 
-OracleConversions::OracleConversions(QObject *parent) : QObject(parent)
+OracleConversions::OracleConversions(QObject *parent) : QObject(parent),
+    queryString("")
 {
 
 }

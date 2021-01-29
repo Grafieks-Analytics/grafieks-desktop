@@ -98,5 +98,12 @@ void QueryModel::executeQuery(QString &query)
         break;
     }
 
+    case Constants::mongoIntType:{
+        QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrQueryType);
+        this->setQuery(query, dbMongo);
+
+        break;
+    }
+
     }
 }

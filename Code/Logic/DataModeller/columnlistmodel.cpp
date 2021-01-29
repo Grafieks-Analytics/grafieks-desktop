@@ -142,6 +142,14 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
 
         break;
     }
+    case Constants::mongoIntType:{
+
+        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrType);
+        this->setQuery(queryString, dbMongo);
+
+        break;
+    }
 
 
     }
@@ -219,6 +227,14 @@ void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableNam
         QString queryString = oracleDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
         QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrType);
         this->setQuery(queryString, dbOracle);
+
+        break;
+    }
+    case Constants::mongoIntType:{
+
+        QString queryString = mongoDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
+        QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrType);
+        this->setQuery(queryString, dbMongo);
 
         break;
     }
@@ -353,6 +369,28 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
             break;
         }
+
+        case Constants::mongoIntType:{
+
+            pieces = fieldNames.split(",");
+
+            if(pieces.length() > 1){
+                finalSearchFields = pieces.join("','");
+            }else{
+                finalSearchFields = fieldNames;
+            }
+
+            finalSearchFields = "'" + finalSearchFields + "'";
+
+            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+
+            QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrType);
+            this->setQuery(queryString, dbMongo);
+
+
+            break;
+        }
+
         }
     }
 
@@ -381,7 +419,6 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
             queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
         }
 
-
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
         this->setQuery(queryString, dbMysql);
 
@@ -396,7 +433,6 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
         } else{
             queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
         }
-
 
         QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
         this->setQuery(queryString, dbSqlite);
@@ -413,7 +449,6 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
             queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
         }
 
-
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
         this->setQuery(queryString, dbPostgres);
 
@@ -427,7 +462,6 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
         } else{
             queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
         }
-
 
         QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrType);
         this->setQuery(queryString, dbMssql);
@@ -443,9 +477,22 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
             queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
         }
 
-
         QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrType);
         this->setQuery(queryString, dbOracle);
+
+        break;
+    }
+
+    case Constants::mongoIntType:{
+
+        if (searchString != ""){
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
+        } else{
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        }
+
+        QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrType);
+        this->setQuery(queryString, dbMongo);
 
         break;
     }

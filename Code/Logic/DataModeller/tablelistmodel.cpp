@@ -114,6 +114,20 @@ void TableListModel::callQuery(QString queryString)
         break;
     }
 
+    case Constants::mongoIntType:{
+
+        QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrType);
+
+        if (queryString != ""){
+
+            this->setQuery("SELECT table_name FROM user_tables WHERE table_name LIKE '%"+queryString+"%'", dbMongo);
+        } else{
+            this->setQuery("SELECT table_name FROM user_tables", dbMongo);
+        }
+
+        break;
+    }
+
     }
 }
 

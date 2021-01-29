@@ -171,6 +171,36 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
         break;
     }
+
+    case Constants::mongoIntType:{
+
+        QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrType);
+
+        describeQueryString = "SELECT column_name, data_type FROM user_tab_columns WHERE table_name = '" + tableName  + "'";
+
+        QSqlQuery describeQuery(describeQueryString, dbMongo);
+
+        while(describeQuery.next()){
+
+            fieldName = describeQuery.value(0).toString();
+            fieldType = describeQuery.value(1).toString();
+            // Remove characters after `(` and then trim whitespaces
+            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+
+            // Get filter data type for QML
+            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+
+            outputDataList << fieldName << filterDataType;
+
+            // Append all data type to allList as well
+            allColumns.append(outputDataList);
+
+            outputDataList.clear();
+
+        }
+
+        break;
+    }
     }
 
     emit columnListObtained(allColumns, tableName, moduleName);

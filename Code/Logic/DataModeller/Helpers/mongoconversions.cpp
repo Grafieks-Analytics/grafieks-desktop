@@ -1,14 +1,13 @@
-#include "mssqlconversions.h"
+#include "mongoconversions.h"
 
-MssqlConversions::MssqlConversions(QObject *parent) : QObject(parent),
+MongoConversions::MongoConversions(QObject *parent) : QObject(parent),
     queryString("")
 {
 
 }
 
-QString MssqlConversions::convertDateQuery(QString &columnName, QString &tableName, int &lowerLimit, int &upperLimit, int value)
+QString MongoConversions::convertDateQuery(QString &columnName, QString &tableName, int &lowerLimit, int &upperLimit, int value)
 {
-
     switch (value) {
     case 1:
         queryString = "SELECT DISTINCT DATE_FORMAT(" + columnName + "," + "'%d/%m/%Y'" + ")" + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
