@@ -183,5 +183,7 @@
         <file>Source/Charts/DoughnutChart.html</file>
         <file>Source/Charts/ScatterChart.html</file>
         <file>Source/Charts/TreeChart.html</file>
+        <file>Source/Charts/RadialTreeChart.html</file>
+        <file>Source/Charts/Data/d3.v3.min.js</file>
     </qresource>
 </RCC>
