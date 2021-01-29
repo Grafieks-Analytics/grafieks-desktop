@@ -351,21 +351,27 @@ void TableSchemaModel::showSchema(QString query)
 
         QTextStream in(&file);
 
-        QByteArrayList headers = file.readLine().split(',');
-        QByteArrayList dataRow = file.readLine().split(',');
+        char separator = Statics::separator[0].toLatin1();
+        QStringList headers = in.readLine().split(separator);
+        QStringList dataRow = in.readLine().split(separator);
 
         for(int i = 0; i < dataRow.size(); i++){
 
             QString dataType = QString::fromStdString(dataRow[i].toStdString());
+            dataType = dataType.trimmed();
 
             if(dataType.toInt() || dataType.toFloat()){
-
-                outputDataList << "" << headers[i];
+                QString columnName = headers[i].trimmed();
+                QString index = QString::number(i);
+                outputDataList << index << columnName;
                 allNumerical.append(outputDataList);
+
             }
             else{
 
-                outputDataList << "" << headers[i];
+                QString columnName = headers[i].trimmed();
+                QString index = QString::number(i);
+                outputDataList << index << columnName;
                 allCategorical.append(outputDataList);
             }
             outputDataList.clear();

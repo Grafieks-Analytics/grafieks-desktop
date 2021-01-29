@@ -44,6 +44,9 @@ public:
     static QString mongoUsername;
     static QString mongoPassword;
 
+    // CSV
+    static QString separator;
+
     // Dropbox
 };
 

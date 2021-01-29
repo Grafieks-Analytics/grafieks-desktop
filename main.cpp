@@ -91,6 +91,8 @@ int Statics::mongoPort;
 QString Statics::mongoUsername;
 QString Statics::mongoPassword;
 
+QString Statics::separator;
+
 /*! \mainpage Code Documentation
  *
  * \subsection tools Development tools

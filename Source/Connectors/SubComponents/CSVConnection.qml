@@ -154,7 +154,7 @@ Popup {
             id: separator
             maximumLength: 45
             anchors.verticalCenter: parent.verticalCenter
-            width: 370
+            width: 200
             height: 40
 
             background: Rectangle {
@@ -196,7 +196,7 @@ Popup {
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
-            onClicked: ConnectorsLoginModel.csvLogin(csvFileName.text)
+            onClicked: ConnectorsLoginModel.csvLogin(csvFileName.text, separator.text)
 
         }
     }
