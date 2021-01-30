@@ -112,7 +112,7 @@ Rectangle{
         }
         ListElement{
             icon: "radar.png"
-            chartHtml:"bar.html"
+            chartHtml:"RadarChart.html"
             activeChart: false
             title:"Radar"
             yAxisVisible: false
@@ -174,7 +174,7 @@ Rectangle{
         }
         ListElement{
             icon: "tree_map.png"
-            chartHtml:"bar.html"
+            chartHtml:"TreeMapChart.html"
             elementHeight: 24
             activeChart: false
             title: "Tree Map"
