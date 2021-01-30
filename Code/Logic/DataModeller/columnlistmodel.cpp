@@ -96,19 +96,11 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
 
     switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:{
-
-        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
-        this->setQuery(queryString, dbMysql);
-
-        break;
-    }
-
+    case Constants::mysqlIntType:
     case Constants::mysqlOdbcIntType:{
 
         queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
         this->setQuery(queryString, dbMysql);
 
         break;
@@ -123,7 +115,8 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
         break;
     }
 
-    case Constants::postgresIntType:{
+    case Constants::postgresIntType:
+    case Constants::redshiftIntType:{
 
         queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
@@ -146,6 +139,14 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
         queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
         QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrType);
         this->setQuery(queryString, dbOracle);
+
+        break;
+    }
+    case Constants::mongoIntType:{
+
+        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrType);
+        this->setQuery(queryString, dbMongo);
 
         break;
     }
@@ -182,7 +183,8 @@ void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableNam
 
     switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:{
+    case Constants::mysqlIntType:
+    case Constants::mysqlOdbcIntType:{
 
         QString queryString = mysqlDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
@@ -191,14 +193,6 @@ void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableNam
         break;
     }
 
-    case Constants::mysqlOdbcIntType:{
-
-        QString queryString = mysqlDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
-        this->setQuery(queryString, dbMysql);
-
-        break;
-    }
 
     case Constants::sqliteIntType:{
 
@@ -209,7 +203,8 @@ void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableNam
         break;
     }
 
-    case Constants::postgresIntType:{
+    case Constants::postgresIntType:
+    case Constants::redshiftIntType:{
 
         QString queryString = postgresDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
@@ -232,6 +227,14 @@ void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableNam
         QString queryString = oracleDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
         QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrType);
         this->setQuery(queryString, dbOracle);
+
+        break;
+    }
+    case Constants::mongoIntType:{
+
+        QString queryString = mongoDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
+        QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrType);
+        this->setQuery(queryString, dbMongo);
 
         break;
     }
@@ -259,7 +262,8 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
         switch(Statics::currentDbIntType){
 
-        case Constants::mysqlIntType:{
+        case Constants::mysqlIntType:
+        case Constants::mysqlOdbcIntType:{
 
             pieces = fieldNames.split(",");
 
@@ -280,26 +284,6 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
             break;
         }
 
-        case Constants::mysqlOdbcIntType:{
-
-            pieces = fieldNames.split(",");
-
-            if(pieces.length() > 1){
-                finalSearchFields = pieces.join("','");
-            }else{
-                finalSearchFields = fieldNames;
-            }
-
-            finalSearchFields = "'" + finalSearchFields + "'";
-
-            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
-
-            QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
-            this->setQuery(queryString, dbMysql);
-
-
-            break;
-        }
 
         case Constants::sqliteIntType:{
 
@@ -322,7 +306,8 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
             break;
         }
 
-        case Constants::postgresIntType:{
+        case Constants::postgresIntType:
+        case Constants::redshiftIntType:{
 
             pieces = fieldNames.split(",");
 
@@ -384,6 +369,28 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
             break;
         }
+
+        case Constants::mongoIntType:{
+
+            pieces = fieldNames.split(",");
+
+            if(pieces.length() > 1){
+                finalSearchFields = pieces.join("','");
+            }else{
+                finalSearchFields = fieldNames;
+            }
+
+            finalSearchFields = "'" + finalSearchFields + "'";
+
+            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+
+            QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrType);
+            this->setQuery(queryString, dbMongo);
+
+
+            break;
+        }
+
         }
     }
 
@@ -403,21 +410,7 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
 
     switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:{
-
-        if (searchString != ""){
-            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
-        } else{
-            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
-        }
-
-
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
-        this->setQuery(queryString, dbMysql);
-
-        break;
-    }
-
+    case Constants::mysqlIntType:
     case Constants::mysqlOdbcIntType:{
 
         if (searchString != ""){
@@ -426,12 +419,12 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
             queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
         }
 
-
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
+        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
         this->setQuery(queryString, dbMysql);
 
         break;
     }
+
 
     case Constants::sqliteIntType:{
 
@@ -441,21 +434,20 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
             queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
         }
 
-
         QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
         this->setQuery(queryString, dbSqlite);
 
         break;
     }
 
-    case Constants::postgresIntType:{
+    case Constants::postgresIntType:
+    case Constants::redshiftIntType:{
 
         if (searchString != ""){
             queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
         } else{
             queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
         }
-
 
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
         this->setQuery(queryString, dbPostgres);
@@ -471,7 +463,6 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
             queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
         }
 
-
         QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrType);
         this->setQuery(queryString, dbMssql);
 
@@ -486,9 +477,22 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
             queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
         }
 
-
         QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrType);
         this->setQuery(queryString, dbOracle);
+
+        break;
+    }
+
+    case Constants::mongoIntType:{
+
+        if (searchString != ""){
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
+        } else{
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        }
+
+        QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrType);
+        this->setQuery(queryString, dbMongo);
 
         break;
     }

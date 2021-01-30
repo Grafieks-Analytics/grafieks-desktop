@@ -44,7 +44,8 @@ void TableListModel::callQuery(QString queryString)
     switch(Statics::currentDbIntType){
 
 
-    case Constants::mysqlIntType:{
+    case Constants::mysqlIntType:
+    case Constants::mysqlOdbcIntType:{
 
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
 
@@ -58,19 +59,6 @@ void TableListModel::callQuery(QString queryString)
         break;
     }
 
-    case Constants::mysqlOdbcIntType:{
-
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
-
-        if (queryString != ""){
-
-            this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'", dbMysql);
-        } else{
-            this->setQuery("SHOW TABLES", dbMysql);
-        }
-
-        break;
-    }
 
     case Constants::sqliteIntType:{
 
@@ -84,7 +72,8 @@ void TableListModel::callQuery(QString queryString)
 
         break;
     }
-    case Constants::postgresIntType:{
+    case Constants::postgresIntType:
+    case Constants::redshiftIntType:{
 
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
 
@@ -120,6 +109,20 @@ void TableListModel::callQuery(QString queryString)
             this->setQuery("SELECT table_name FROM user_tables WHERE table_name LIKE '%"+queryString+"%'", dbOracle);
         } else{
             this->setQuery("SELECT table_name FROM user_tables", dbOracle);
+        }
+
+        break;
+    }
+
+    case Constants::mongoIntType:{
+
+        QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrType);
+
+        if (queryString != ""){
+
+            this->setQuery("SELECT table_name FROM user_tables WHERE table_name LIKE '%"+queryString+"%'", dbMongo);
+        } else{
+            this->setQuery("SELECT table_name FROM user_tables", dbMongo);
         }
 
         break;

@@ -1,6 +1,7 @@
 #include "postgresconversions.h"
 
-PostgresConversions::PostgresConversions(QObject *parent) : QObject(parent)
+PostgresConversions::PostgresConversions(QObject *parent) : QObject(parent),
+    queryString("")
 {
 
 }

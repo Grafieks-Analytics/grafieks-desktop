@@ -77,7 +77,8 @@ void DBListModel::callQuery(QString queryString)
 
     switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:{
+    case Constants::mysqlIntType:
+    case Constants::mysqlOdbcIntType:{
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
 
         if(queryString != ""){
@@ -89,17 +90,6 @@ void DBListModel::callQuery(QString queryString)
         break;
     }
 
-    case Constants::mysqlOdbcIntType:{
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrType);
-
-        if(queryString != ""){
-            this->setQuery("SHOW DATABASES LIKE '%"+queryString+"%'", dbMysql);
-        } else{
-            this->setQuery("SHOW DATABASES", dbMysql);
-        }
-
-        break;
-    }
 
     case Constants::sqliteIntType:{
         QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
@@ -113,7 +103,9 @@ void DBListModel::callQuery(QString queryString)
 
         break;
     }
-    case Constants::postgresIntType:{
+
+    case Constants::postgresIntType:
+    case Constants::redshiftIntType:{
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
 
         if(queryString != ""){
@@ -141,6 +133,15 @@ void DBListModel::callQuery(QString queryString)
         QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrType);
 
         // No direct query available in Oracle db
+        // Will need to devise a way out when the query is required later
+
+        break;
+    }
+
+    case Constants::mongoIntType:{
+        QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrType);
+
+        // No direct query available in Mongo db
         // Will need to devise a way out when the query is required later
 
         break;

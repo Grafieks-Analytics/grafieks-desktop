@@ -16,7 +16,7 @@ QVariantMap OracleCon::OracleOdbcInstance(const QString &driver, const QString &
 
         QString dbString = "DRIVER={" + driver + "};Server="+ host +"Database=" + db + ";Tusted_Connection=True";
 
-        QSqlDatabase dbOracleOdbc = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::mssqlOdbcStrType);
+        QSqlDatabase dbOracleOdbc = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::oracleOdbcStrType);
 
         dbOracleOdbc.setDatabaseName(dbString);
         dbOracleOdbc.setPort(port);
@@ -46,7 +46,7 @@ QVariantMap OracleCon::OracleOdbcInstance(const QString &driver, const QString &
             // For Query/Data modeller
             // Else all the query statistics are listed in "Test Query" tab in Data-Query-Modeller
 
-            QSqlDatabase dbOracleOdbc2 = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::mssqlOdbcStrQueryType);
+            QSqlDatabase dbOracleOdbc2 = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::oracleOdbcStrQueryType);
 
             dbOracleOdbc2.setDatabaseName(dbString);
             dbOracleOdbc2.setHostName(host);

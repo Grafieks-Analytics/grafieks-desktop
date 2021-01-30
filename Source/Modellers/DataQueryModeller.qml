@@ -68,13 +68,6 @@ Page {
                 tableslist.model = TableListModel
             }
         }
-        function onCsvLoginStatus(status){
-            if(status.status === true){
-                // Call functions
-                TableListModel.callQuery()
-                tableslist.model = TableListModel
-            }
-        }
 
     }
 

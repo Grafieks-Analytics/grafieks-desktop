@@ -5,6 +5,7 @@
 #include "sqlitecon.h"
 #include "mssqlcon.h"
 #include "postgrescon.h"
+#include "redshiftcon.h"
 #include "oraclecon.h"
 #include "mongocon.h"
 #include "excelcon.h"

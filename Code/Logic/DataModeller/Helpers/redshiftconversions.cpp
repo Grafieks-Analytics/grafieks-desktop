@@ -1,12 +1,12 @@
-#include "oracleconversions.h"
+#include "redshiftconversions.h"
 
-OracleConversions::OracleConversions(QObject *parent) : QObject(parent),
+RedshiftConversions::RedshiftConversions(QObject *parent) : QObject(parent),
     queryString("")
 {
 
 }
 
-QString OracleConversions::convertDateQuery(QString &columnName, QString &tableName, int &lowerLimit, int &upperLimit, int value)
+QString RedshiftConversions::convertDateQuery(QString &columnName, QString &tableName, int &lowerLimit, int &upperLimit, int value)
 {
 
     switch (value) {

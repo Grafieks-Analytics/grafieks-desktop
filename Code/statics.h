@@ -37,6 +37,13 @@ public:
     static QString postgresUsername;
     static QString postgresPassword;
 
+    // Amazon Redshift
+    static QString redshiftHost;
+    static QString redshiftDb;
+    static int redshiftPort;
+    static QString redshiftUsername;
+    static QString redshiftPassword;
+
     // Oracle
     static QString oracleHost;
     static QString oracleDb;
@@ -50,6 +57,9 @@ public:
     static int mongoPort;
     static QString mongoUsername;
     static QString mongoPassword;
+
+    // CSV
+    static QString separator;
 
     // Dropbox
 };

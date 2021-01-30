@@ -101,6 +101,20 @@ void ConnectorsLoginModel::postgresOdbcLogin(QString driver, QString host, QStri
 
 }
 
+void ConnectorsLoginModel::redshiftOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
+{
+    RedshiftCon redshiftcon;
+    QVariantMap response = redshiftcon.RedshiftOdbcInstance(driver, host, db, port, username, password);
+
+    Statics::currentDbName = db;
+    Statics::currentDbIntType = Constants::redshiftIntType;
+    Statics::currentDbStrType = Constants::redshiftOdbcStrType;
+
+    this->setConnectedDB(db);
+
+    emit redshiftLoginStatus(response);
+}
+
 void ConnectorsLoginModel::oracleOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
 
@@ -147,13 +161,14 @@ void ConnectorsLoginModel::excelOdbcLogin(QString driver, QString filename)
     emit excelLoginStatus(response);
 }
 
-void ConnectorsLoginModel::csvLogin(QString filename)
+void ConnectorsLoginModel::csvLogin(QString filename, QString separator)
 {
     CSVCon csvcon;
     QVariantMap response = csvcon.CSVInstance(filename);
 
     Statics::currentDbName = filename;
     Statics::currentDbIntType = Constants::csvIntType;
+    Statics::separator = separator;
 
     this->setConnectedDB(filename);
 

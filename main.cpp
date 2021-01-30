@@ -85,6 +85,12 @@ int Statics::postgresPort;
 QString Statics::postgresUsername;
 QString Statics::postgresPassword;
 
+QString Statics::redshiftHost;
+QString Statics::redshiftDb;
+int Statics::redshiftPort;
+QString Statics::redshiftUsername;
+QString Statics::redshiftPassword;
+
 QString Statics::oracleHost;
 QString Statics::oracleDb;
 int Statics::oraclePort;
@@ -96,6 +102,8 @@ QString Statics::mongoDb;
 int Statics::mongoPort;
 QString Statics::mongoUsername;
 QString Statics::mongoPassword;
+
+QString Statics::separator;
 
 /*! \mainpage Code Documentation
  *
