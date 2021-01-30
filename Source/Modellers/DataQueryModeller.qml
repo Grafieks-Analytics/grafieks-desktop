@@ -150,6 +150,44 @@ Page {
         }
     }
 
+    function onDragRightPanel(mouse){
+
+//        if(infoTableResizingFixed){
+//            if(mouse.y > 0){
+//                dataQueryModellerStackview.height += mouse.y
+//                if(dataQueryModellerStackview.height > 200){
+//                    infoTableResizingFixed = false
+//                }
+//            }
+//        }
+
+//        if(dataQueryModellerStackview.height > 200){
+
+//            if(dataQueryModellerStackview.height + mouse.y < 200){
+//                dataQueryModellerStackview.height = 200
+//            }else{
+//                dataQueryModellerStackview.height += mouse.y
+//            }
+
+//        }else{
+//            infoTableResizingFixed = true;
+//        }
+
+//        infodata_table.height = Qt.binding(function(){
+//            return queryModellerPage.height - submenu.height - dataQueryModellerStackview.height
+//        })
+
+        if(column_querymodeller.width-mouse.x > 160 && column_querymodeller.width-mouse.x < 450 ){
+              column_querymodeller.width = column_querymodeller.width - mouse.x
+        }
+//        if( column_querymodeller.width-mouse.x < 450){
+//              column_querymodeller.width = column_querymodeller.width - mouse.x
+//        }
+
+
+    }
+
+
     function onQueryModellerClicked(){
 
         if(dataModellerSelected){
@@ -234,12 +272,12 @@ Page {
     function collapseTables(){
 
         if(collapsed === true){
-            drop_icon.source = "/Images/icons/Up_20.png"
+            drop_icon.source = "/Images/icons/Down_20.png"
             collapsed = false
             tableslist.visible = true
         }
         else{
-            drop_icon.source = "/Images/icons/Down_20.png"
+            drop_icon.source = "/Images/icons/Right_20.png"
             collapsed = true
             tableslist.visible = false
         }
@@ -273,7 +311,7 @@ Page {
         //        TableColumnsModel.getColumnsForTable(newItem.name, newItem.moduleName)
         TableColumnsModel.getColumnsForTable(tableName, "TableColumns")
 
-        toggleTableIcon.source = tablecolumnListView.visible === false ?  "/Images/icons/Up_20.png" : "/Images/icons/Down_20.png"
+        toggleTableIcon.source = tablecolumnListView.visible === false ?  "/Images/icons/Down_20.png" : "/Images/icons/Right_20.png"
         if(tablecolumnListView.visible === true){
             tablecolumnListView.visible = false
             dragRect.height -= tablecolumnListView.height
@@ -355,7 +393,7 @@ Page {
                 id: toggleTableIcon
                 height: 10
                 width: 10
-                source : "/Images/icons/Down_20.png"
+                source : "/Images/icons/Right_20.png"
                 anchors.left: parent.left
                 anchors.leftMargin:  15
                 anchors.verticalCenter: tableImg.verticalCenter
@@ -403,11 +441,11 @@ Page {
                     TableColumnsModel.getColumnsForTable(tableName, "TableColumns")
 
                     if(tablecolumnListView.visible === true){
-                        toggleTableIcon.source ="/Images/icons/Down_20.png"
+                        toggleTableIcon.source ="/Images/icons/Right_20.png"
                         tablecolumnListView.visible = false
                         dragRect.height -= tablecolumnListView.height
                     } else{
-                        toggleTableIcon.source ="/Images/icons/Up_20.png"
+                        toggleTableIcon.source ="/Images/icons/Down_20.png"
                         tablecolumnListView.visible = true
                         dragRect.height += tablecolumnListView.height
                     }
@@ -837,14 +875,14 @@ Page {
     // Info table Ends
 
 
-    ToolSeparator{
-        id: toolsep2
-        height:parent.height
-        anchors.right:parent.right
-        anchors.top: parent.top
-        anchors.rightMargin: 194
-        anchors.topMargin: -5
-    }
+//    ToolSeparator{
+//        id: toolsep2
+//        height:parent.height
+//        anchors.right:parent.right
+//        anchors.top: parent.top
+//        anchors.rightMargin: 194
+//        anchors.topMargin: -5
+//    }
 
     JoinPopup{
         id: joinPopup
@@ -863,12 +901,42 @@ Page {
         spacing: 50
 
 
+
         Rectangle{
             id: rectangle_querymodeller_right_col
             color:Constants.themeColor
             width:column_querymodeller.width
             height:column_querymodeller.height
             border.color: Constants.darkThemeColor
+
+
+                ToolSeparator{
+                    id: toolsep2
+                    height:parent.height
+                    anchors.left:parent.left
+                    anchors.top: parent.top
+                    anchors.leftMargin:  -8
+                    anchors.topMargin: -5
+
+
+
+                MouseArea{
+                    id: rightPanelDragMouseArea
+                    anchors.fill: parent
+                    cursorShape: Qt.SizeHorCursor
+                    width: parent.width
+                    height: parent.height
+
+                    onPositionChanged: {
+
+                        onDragRightPanel(mouse)
+
+                    }
+
+                }
+
+            }
+
 
             // Tab button starts
 
@@ -1156,7 +1224,7 @@ Page {
 
                         Image {
                             id: drop_icon
-                            source: "/Images/icons/Up_20.png"
+                            source: "/Images/icons/Down_20.png"
                             width: 10
                             height: 10
                             anchors.left: parent.left

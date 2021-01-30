@@ -183,5 +183,6 @@
         <file>Source/Charts/DoughnutChart.html</file>
         <file>Source/Charts/ScatterChart.html</file>
         <file>Source/Charts/TreeChart.html</file>
+        <file>Source/MainSubComponents/VerticalLineTpl.qml</file>
     </qresource>
 </RCC>
