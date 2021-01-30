@@ -120,7 +120,7 @@ Rectangle{
         }
         ListElement{
             icon: "sunburst.png"
-            chartHtml:"bar.html"
+            chartHtml:"SunburstChart.html"
             activeChart: false
             title:"Sunburst"
             yAxisVisible: false
@@ -144,10 +144,9 @@ Rectangle{
         }
         ListElement{
             icon: "funnel.png"
-            chartHtml:"bar.html"
+            chartHtml:"FunnelChart.html"
             activeChart: false
             title:"Funnel"
-
             yAxisVisible: false
             lineTypeChartVisible: false
         }
