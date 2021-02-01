@@ -9,6 +9,9 @@ class SqliteConversions : public QObject
     Q_OBJECT
     QString queryString;
 
+    QString monthNameShort;
+    QString monthNameLong;
+
 public:
     explicit SqliteConversions(QObject *parent = nullptr);
 
