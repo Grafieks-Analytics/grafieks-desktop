@@ -16,6 +16,7 @@
 #include "../../constants.h"
 #include "datatype.h"
 #include "querysplitter.h"
+#include "../../duckdb.hpp"
 
 /*!
  * \class TableSchemaModel
@@ -37,6 +38,8 @@ signals:
     void tableSchemaObtained(QList<QStringList> allList, QList<QStringList> allCategorical, QList<QStringList> allNumerical, QList<QStringList> allDates, QList<QStringList> allOthers, QStringList queriedColumnNames);
 
 private:
+    duckdb::DuckDB db;
+    duckdb::Connection con;
     QList<QStringList> allList;
     QList<QStringList> allCategorical;
     QList<QStringList> allNumerical;

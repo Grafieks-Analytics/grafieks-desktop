@@ -24,7 +24,7 @@ Item{
     readonly property string moduleName : "DroppedRectangle"
 
     property var allColumnsProperty : []
-    property var colors: ["green","blue","yellow","green","blue","yellow","green","blue","yellow","green","blue","yellow"]
+    property var colors: ["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462","#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"]
 
 
     property string tableNameProperty : ""
@@ -280,7 +280,7 @@ Item{
         //        scale: Constants.scaleTable
         //        x:Constants.newPosition+droppedRectangle.x
         //        y:Constants.droppedRectangle.y
-        border.color: Constants.dataModelBorderColor
+        border.color: colors[droppedCount+1]
         //        color: "#26009B8F"
         color: colors[droppedCount+1]
 
@@ -370,7 +370,7 @@ Item{
 
     Rectangle{
 
-        border.color: Constants.dataModelBorderColor
+        border.color: colors[droppedCount+1]
         anchors.top : droppedRectangle.bottom
         width: 200
         height: tableId.height

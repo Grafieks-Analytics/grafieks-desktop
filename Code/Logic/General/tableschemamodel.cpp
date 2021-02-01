@@ -1,6 +1,7 @@
 #include "tableschemamodel.h"
-
-TableSchemaModel::TableSchemaModel(QObject *parent) : QObject(parent)
+#include "iostream"
+TableSchemaModel::TableSchemaModel(QObject *parent) : QObject(parent),
+    db(nullptr), con(db)
 {
 
 }
@@ -406,30 +407,83 @@ void TableSchemaModel::showSchema(QString query)
 
     case Constants::csvIntType:{
 
-        QFile file(Statics::currentDbName);
-        file.open(QIODevice::ReadOnly);
 
-        QTextStream in(&file);
+        QString db = Statics::currentDbName;
+        std::string csvFile = db.toStdString();
 
-        QByteArrayList headers = file.readLine().split(',');
-        QByteArrayList dataRow = file.readLine().split(',');
+        std::string csvdb = "'" + csvFile + "'";
 
-        for(int i = 0; i < dataRow.size(); i++){
+        con.Query("CREATE TABLE dataType AS SELECT * FROM read_csv_auto(" + csvdb + ")");
+        auto result = con.Query("DESCRIBE dataType");
+        result->Print();
+        int rows = result->collection.count;
+        int i = 0;
+        while(i < rows){
 
-            QString dataType = QString::fromStdString(dataRow[i].toStdString());
+            duckdb::Value fieldName = result->GetValue(0, i);
+            duckdb::Value fieldType = result->GetValue(1, i);
 
-            if(dataType.toInt() || dataType.toFloat()){
+            // string to qstring conversion
+            QString newFieldName = QString::fromStdString(fieldName.ToString());
+            QString newFilterType = QString::fromStdString(fieldType.ToString());
+            QString filterDataType = dataType.dataType(QString::fromStdString(fieldType.ToString()));
 
-                outputDataList << "" << headers[i];
-                allNumerical.append(outputDataList);
-            }
-            else{
+            qDebug() << i << "  " << newFieldName << " Col ID";
 
-                outputDataList << "" << headers[i];
+            QString index = QString::number(i);
+            outputDataList << index << newFieldName << newFilterType << filterDataType;
+
+            if(filterDataType == Constants::categoricalType){
                 allCategorical.append(outputDataList);
+            } else if(filterDataType == Constants::numericalType){
+                allNumerical.append(outputDataList);
+            } else if(filterDataType == Constants::dateType){
+                allDates.append(outputDataList);
+            } else{
+                allOthers.append(outputDataList);
             }
+
+            // Append all data type to allList as well
+            allList.append(outputDataList);
+
+            // Clear Stringlist for future
             outputDataList.clear();
+
+            i++;
         }
+
+        //        result->Print();
+
+        //        QFile file(Statics::currentDbName);
+        //        file.open(QIODevice::ReadOnly);
+
+        //        QTextStream in(&file);
+
+        //        char separator = Statics::separator[0].toLatin1();
+        //        QStringList headers = in.readLine().split(separator);
+        //        QStringList dataRow = in.readLine().split(separator);
+
+        //        for(int i = 0; i < dataRow.size(); i++){
+
+        //            QString dataType = QString::fromStdString(dataRow[i].toStdString());
+        //            dataType = dataType.trimmed();
+
+        //            if(dataType.toInt() || dataType.toFloat()){
+        //                QString columnName = headers[i].trimmed();
+        //                QString index = QString::number(i);
+        //                outputDataList << index << columnName;
+        //                allNumerical.append(outputDataList);
+
+        //            }
+        //            else{
+
+        //                QString columnName = headers[i].trimmed();
+        //                QString index = QString::number(i);
+        //                outputDataList << index << columnName;
+        //                allCategorical.append(outputDataList);
+        //            }
+        //            outputDataList.clear();
+        //        }
 
         break;
     }

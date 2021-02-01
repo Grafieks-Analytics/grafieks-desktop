@@ -161,13 +161,14 @@ void ConnectorsLoginModel::excelOdbcLogin(QString driver, QString filename)
     emit excelLoginStatus(response);
 }
 
-void ConnectorsLoginModel::csvLogin(QString filename)
+void ConnectorsLoginModel::csvLogin(QString filename, QString separator)
 {
     CSVCon csvcon;
     QVariantMap response = csvcon.CSVInstance(filename);
 
     Statics::currentDbName = filename;
     Statics::currentDbIntType = Constants::csvIntType;
+    Statics::separator = separator;
 
     this->setConnectedDB(filename);
 

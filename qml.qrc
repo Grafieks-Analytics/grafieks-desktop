@@ -183,5 +183,15 @@
         <file>Source/Charts/DoughnutChart.html</file>
         <file>Source/Charts/ScatterChart.html</file>
         <file>Source/Charts/TreeChart.html</file>
+        <file>Source/MainSubComponents/VerticalLineTpl.qml</file>
+        <file>Source/Charts/RadialTreeChart.html</file>
+        <file>Source/Charts/Data/d3.v3.min.js</file>
+        <file>Source/Charts/FunnelChart.html</file>
+        <file>Source/Charts/TreeMapChart.html</file>
+        <file>Source/Charts/SunburstChart.html</file>
+        <file>Source/Charts/RadarChart.html</file>
+        <file>Source/Charts/Data/d3.v5.min.js</file>
+        <file>Source/Charts/Data/funnel.js</file>
+        <file>Source/Charts/Data/radar.js</file>
     </qresource>
 </RCC>

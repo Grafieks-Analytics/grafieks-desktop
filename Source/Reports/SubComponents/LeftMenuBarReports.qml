@@ -112,7 +112,7 @@ Rectangle{
         }
         ListElement{
             icon: "radar.png"
-            chartHtml:"bar.html"
+            chartHtml:"RadarChart.html"
             activeChart: false
             title:"Radar"
             yAxisVisible: false
@@ -120,7 +120,7 @@ Rectangle{
         }
         ListElement{
             icon: "sunburst.png"
-            chartHtml:"bar.html"
+            chartHtml:"SunburstChart.html"
             activeChart: false
             title:"Sunburst"
             yAxisVisible: false
@@ -144,10 +144,9 @@ Rectangle{
         }
         ListElement{
             icon: "funnel.png"
-            chartHtml:"bar.html"
+            chartHtml:"FunnelChart.html"
             activeChart: false
             title:"Funnel"
-
             yAxisVisible: false
             lineTypeChartVisible: false
         }
@@ -174,7 +173,7 @@ Rectangle{
         }
         ListElement{
             icon: "tree_map.png"
-            chartHtml:"bar.html"
+            chartHtml:"TreeMapChart.html"
             elementHeight: 24
             activeChart: false
             title: "Tree Map"
