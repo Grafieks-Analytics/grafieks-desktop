@@ -1,6 +1,7 @@
 #include "reportmodellist.h"
 
-ReportModelList::ReportModelList(QObject *parent) : QObject(parent)
+ReportModelList::ReportModelList(QObject *parent) : QObject(parent),
+    db(nullptr), con(db)
 {
 
 }
@@ -13,8 +14,7 @@ void ReportModelList::setTmpSql(QString query)
     QString mainTableName = this->mQuerySplitter.getMainTable();
     QStringList joinTableNames = this->mQuerySplitter.getJoinTables();
     QStringList columnNames = this->mQuerySplitter.getSelectParams();
-    qDebug() << columnNames << "Just Query";
-    qDebug() << mainTableName << " Main Table ";
+
     // Insert all Columns for queried tables into Set
     this->getColumnsForTable(mainTableName);
     foreach(QString joinTable, joinTableNames){
@@ -63,11 +63,6 @@ void ReportModelList::setTmpSql(QString query)
         qDebug() << queryResult.record();
         qDebug() << queryResult.lastError().databaseText();
 
-        //         while(queryResult.next()){
-        //            int field_idx = queryResult.record().indexOf("email");
-        //            QString email = queryResult.record().value(field_idx).toString();
-        //            qDebug() <<email << " Email";
-        //        }
         for(int i = 0; i < record.count(); i++){
 
             QString fieldName = record.fieldName(i);
@@ -96,11 +91,6 @@ void ReportModelList::setTmpSql(QString query)
         qDebug() << queryResult.record();
         qDebug() << queryResult.lastError().databaseText();
 
-        //         while(queryResult.next()){
-        //            int field_idx = queryResult.record().indexOf("email");
-        //            QString email = queryResult.record().value(field_idx).toString();
-        //            qDebug() <<email << " Email";
-        //        }
         for(int i = 0; i < record.count(); i++){
 
             QString fieldName = record.fieldName(i);
@@ -120,22 +110,44 @@ void ReportModelList::setTmpSql(QString query)
 
         break;
     }
+
     case Constants::csvIntType:{
 
-        QFile file(Statics::currentDbName);
-        file.open(QIODevice::ReadOnly);
 
-        QTextStream in(&file);
-        QString headers = in.readLine();
+        QString db = Statics::currentDbName;
+        std::string csvFile = db.toStdString();
 
-        QStringList rowList = headers.split(',');
-        rowList.replaceInStrings("\"", "");
-        rowList.replaceInStrings(" ", "");
+        std::string csvdb = "'" + csvFile + "'";
 
-        QString header;
-        foreach(header , rowList){
-            this->categoryList.append(header);
+        con.Query("CREATE TABLE dataType AS SELECT * FROM read_csv_auto(" + csvdb + ")");
+        auto result = con.Query("DESCRIBE dataType");
+
+        int rows = result->collection.count;
+        int i = 0;
+        while(i < rows){
+
+            duckdb::Value fieldName = result->GetValue(0, i);
+            duckdb::Value fieldType = result->GetValue(1, i);
+
+            // string to qstring conversion
+            QString newFieldName = QString::fromStdString(fieldName.ToString());
+            QString newFilterType = QString::fromStdString(fieldType.ToString());
+            QString filterDataType = dataType.dataType(QString::fromStdString(fieldType.ToString()));
+
+
+            if(filterDataType == Constants::categoricalType){
+                this->categoryList.append(newFieldName);
+            } else if(filterDataType == Constants::numericalType){
+                this->numericalList.append(newFieldName);
+            } else if(filterDataType == Constants::dateType){
+               this->dateList.append(newFieldName);
+            }
+
+            i++;
         }
+
+
+
         break;
     }
     }

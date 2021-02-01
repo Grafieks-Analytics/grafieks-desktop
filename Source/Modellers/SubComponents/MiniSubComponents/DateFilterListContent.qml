@@ -121,6 +121,15 @@ Rectangle{
         }
     }
 
+    Connections{
+        target: CsvColumnListModel
+
+        function onCsvColData(colData){
+            singleSelectCheckList.model = colData
+            multiSelectCheckList.model  = colData
+        }
+    }
+
 
     // Connections Ends
     /***********************************************************************************************************************/

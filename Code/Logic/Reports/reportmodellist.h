@@ -9,6 +9,7 @@
 #include <typeinfo>
 #include "../General/querysplitter.h"
 #include "../General/tableschemamodel.h"
+#include "../../duckdb.hpp"
 
 class ReportModelList : public QObject
 {
@@ -34,6 +35,8 @@ signals:
 
 private:
 
+    duckdb::DuckDB db;
+    duckdb::Connection con;
     QSet<QString> category;
     QSet<QString> date;
     QSet<QString> numerical;

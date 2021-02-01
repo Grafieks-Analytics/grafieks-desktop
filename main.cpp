@@ -33,6 +33,7 @@
 #include "Code/Logic/DataModeller/filterdatelistmodel.h"
 #include "Code/Logic/DataModeller/filternumericallistmodel.h"
 #include "Code/Logic/DataModeller/proxyfiltermodel.h"
+#include "Code/Logic/DataModeller/csvcolumnlistmodel.h"
 
 #include "Code/Logic/Connectors/odbcdriversmodel.h"
 #include "Code/Logic/Connectors/dropboxds.h"
@@ -216,6 +217,7 @@ int main(int argc, char *argv[])
     FilterDateListModel filterDateListModel;
     FilterNumericalListModel filterNumericalListModel;
     ODBCDriversModel odbcDriversModel;
+    CsvColumnListModel csvColListModel;
 
     GeneralParamsModel generalParamsModel;
     QuerySplitter querySplitter;
@@ -320,6 +322,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("QuerySplitter", &querySplitter);
     engine.rootContext()->setContextProperty("GeneralParamsModel", &generalParamsModel);
     engine.rootContext()->setContextProperty("ODBCDriversModel", &odbcDriversModel);
+    engine.rootContext()->setContextProperty("CsvColumnListModel", &csvColListModel);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/
