@@ -305,42 +305,89 @@ QString FilterNumericalListModel::setRelation(QString tableName, QString columnN
 
     // If there are several relations involved
 
-    if(relation.contains(",", Qt::CaseInsensitive)){
-        relationList = relation.split(",");
-        conditionList = conditions.split(",");
+    switch (Statics::currentDbIntType) {
 
-        foreach(tmpRelation, relationList){
+    case Constants::csvIntType:{
 
-            notSign = sqlComparisonOperators.contains(tmpRelation)? " !" : " NOT ";
-            excludeCase = exclude ? tmpRelation.prepend(notSign) : tmpRelation;
-            newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[localCounter] + "')" : conditionList[localCounter] ;
-            newIncludeNull = isNull == false ? "AND " + tableName + "." + columnName + " IS NOT NULL" : "";
+        if(relation.contains(",", Qt::CaseInsensitive)){
+            relationList = relation.split(",");
+            conditionList = conditions.split(",");
+
+            foreach(tmpRelation, relationList){
+
+                notSign = sqlComparisonOperators.contains(tmpRelation)? " !" : " NOT ";
+                excludeCase = exclude ? tmpRelation.prepend(notSign) : tmpRelation;
+                newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[localCounter] + "')" : conditionList[localCounter] ;
+                newIncludeNull = isNull == false ? "AND " + columnName + " IS NOT NULL" : "";
+
+                tmpWhereConditions = QString("%1 %2 %3 %4")
+                        .arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+
+                localCounter++;
+            }
+
+            localCounter = 0;
+
+        } else{
+
+            conditionList = conditions.split(",");
+
+            foreach(individualCondition, conditionList){
+
+                concetantedCondition.append("'" + individualCondition + "',");
+            }
+            concetantedCondition.chop(1);
+
+            notSign = sqlComparisonOperators.contains(relation)? " !" : " NOT ";
+            excludeCase = exclude ? relation.prepend(notSign) : relation;
+            newCondition = relation.contains("in", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
+            newIncludeNull = isNull == false ? " AND " + columnName + " IS NOT NULL" : "";
+
+            tmpWhereConditions = QString("%1 %2 %3 %4")
+                    .arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+        }
+        break;
+    }
+
+    default:
+        if(relation.contains(",", Qt::CaseInsensitive)){
+            relationList = relation.split(",");
+            conditionList = conditions.split(",");
+
+            foreach(tmpRelation, relationList){
+
+                notSign = sqlComparisonOperators.contains(tmpRelation)? " !" : " NOT ";
+                excludeCase = exclude ? tmpRelation.prepend(notSign) : tmpRelation;
+                newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[localCounter] + "')" : conditionList[localCounter] ;
+                newIncludeNull = isNull == false ? "AND " + tableName + "." + columnName + " IS NOT NULL" : "";
+
+                tmpWhereConditions = QString("%1.%2 %3 %4 %5")
+                        .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+
+                localCounter++;
+            }
+
+            localCounter = 0;
+
+        } else{
+
+            conditionList = conditions.split(",");
+
+            foreach(individualCondition, conditionList){
+
+                concetantedCondition.append("'" + individualCondition + "',");
+            }
+            concetantedCondition.chop(1);
+
+            notSign = sqlComparisonOperators.contains(relation)? " !" : " NOT ";
+            excludeCase = exclude ? relation.prepend(notSign) : relation;
+            newCondition = relation.contains("in", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
+            newIncludeNull = isNull == false ? " AND " + tableName + "." + columnName + " IS NOT NULL" : "";
 
             tmpWhereConditions = QString("%1.%2 %3 %4 %5")
-                            .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
-
-            localCounter++;
+                    .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
         }
-
-        localCounter = 0;
-
-    } else{
-
-        conditionList = conditions.split(",");
-
-        foreach(individualCondition, conditionList){
-
-            concetantedCondition.append("'" + individualCondition + "',");
-        }
-       concetantedCondition.chop(1);
-
-        notSign = sqlComparisonOperators.contains(relation)? " !" : " NOT ";
-        excludeCase = exclude ? relation.prepend(notSign) : relation;
-        newCondition = relation.contains("in", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
-        newIncludeNull = isNull == false ? " AND " + tableName + "." + columnName + " IS NOT NULL" : "";
-
-        tmpWhereConditions = QString("%1.%2 %3 %4 %5")
-                        .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+        break;
     }
 
     return tmpWhereConditions;

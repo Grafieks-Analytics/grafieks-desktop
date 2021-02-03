@@ -11,6 +11,8 @@
 #include "filterdatelistmodel.h"
 #include "filternumericallistmodel.h"
 #include "../General/querysplitter.h"
+#include "../../statics.h"
+#include "../../constants.h"
 
 class ProxyFilterModel : public QObject
 {
@@ -24,7 +26,8 @@ public:
     Q_INVOKABLE void callQueryModels(QString tmpSql, FilterCategoricalListModel *categoryModel, FilterDateListModel * dateModel, FilterNumericalListModel *numericalModel);
 
 signals:
-    void sendFilterQuery(QString & filteredQuery);
+    void sendFilterQuery(QString &filteredQuery);
+    void sendCsvFilterQuery(QString &filteredQuery);
 
 };
 

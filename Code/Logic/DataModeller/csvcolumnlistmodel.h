@@ -16,6 +16,9 @@ public:
     explicit CsvColumnListModel(QObject *parent = nullptr);
     Q_INVOKABLE void columnCsvData(QString colName, QString index);
 
+public slots:
+    void receiveCsvFilterQuery(QString query);
+
 signals:
     void csvColData(QStringList colData);
 

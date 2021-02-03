@@ -10,6 +10,8 @@
 
 #include "filternumericallist.h"
 #include "../General/querysplitter.h"
+#include "../../statics.h"
+#include "../../constants.h"
 
 class FilterNumericalListModel : public QAbstractListModel
 {

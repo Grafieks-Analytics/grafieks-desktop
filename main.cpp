@@ -258,6 +258,7 @@ int main(int argc, char *argv[])
     //    QObject::connect(&filterDateListModel, &FilterDateListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
     //    QObject::connect(&filterNumericalListModel, &FilterNumericalListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
     QObject::connect(&proxyModel, &ProxyFilterModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
+    QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, &csvColListModel, &CsvColumnListModel::receiveCsvFilterQuery);
 
 
     // Name of the columns
