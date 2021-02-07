@@ -128,6 +128,34 @@ void TableListModel::callQuery(QString queryString)
         break;
     }
 
+    case Constants::impalaIntType:{
+
+        QSqlDatabase dbImpala = QSqlDatabase::database(Constants::impalaOdbcStrType);
+
+        if (queryString != ""){
+
+            this->setQuery("SELECT table_name FROM user_tables WHERE table_name LIKE '%"+queryString+"%'", dbImpala);
+        } else{
+            this->setQuery("SELECT table_name FROM user_tables", dbImpala);
+        }
+
+        break;
+    }
+
+    case Constants::hiveIntType:{
+
+        QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrType);
+
+        if (queryString != ""){
+
+            this->setQuery("SELECT table_name FROM user_tables WHERE table_name LIKE '%"+queryString+"%'", dbHive);
+        } else{
+            this->setQuery("SELECT table_name FROM user_tables", dbHive);
+        }
+
+        break;
+    }
+
     }
 }
 

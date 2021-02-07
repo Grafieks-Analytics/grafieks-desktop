@@ -147,6 +147,23 @@ void DBListModel::callQuery(QString queryString)
         break;
     }
 
+    case Constants::impalaIntType:{
+        QSqlDatabase dbImpala = QSqlDatabase::database(Constants::impalaOdbcStrType);
+
+        // No direct query available in Impala db
+        // Will need to devise a way out when the query is required later
+
+        break;
+    }
+    case Constants::hiveIntType:{
+        QSqlDatabase dbMongo = QSqlDatabase::database(Constants::hiveOdbcStrType);
+
+        // No direct query available in Hive db
+        // Will need to devise a way out when the query is required later
+
+        break;
+    }
+
 
     }
 }

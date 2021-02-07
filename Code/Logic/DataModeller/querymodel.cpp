@@ -105,5 +105,19 @@ void QueryModel::executeQuery(QString &query)
         break;
     }
 
+    case Constants::impalaIntType:{
+        QSqlDatabase dbImpala = QSqlDatabase::database(Constants::impalaOdbcStrQueryType);
+        this->setQuery(query, dbImpala);
+
+        break;
+    }
+
+    case Constants::hiveIntType:{
+        QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrQueryType);
+        this->setQuery(query, dbHive);
+
+        break;
+    }
+
     }
 }

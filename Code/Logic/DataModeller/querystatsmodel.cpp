@@ -123,6 +123,32 @@ void QueryStatsModel::setProfiling(bool status)
         break;
     }
 
+    case Constants::impalaIntType:{
+
+        QSqlDatabase dbImpala = QSqlDatabase::database(Constants::impalaOdbcStrQueryType);
+        if(status == true){
+            this->setQuery("SET profiling = 1", dbImpala);
+
+        } else{
+            this->setQuery("SET profiling = 0", dbImpala);
+        }
+
+        break;
+    }
+
+    case Constants::hiveIntType:{
+
+        QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrQueryType);
+        if(status == true){
+            this->setQuery("SET profiling = 1", dbHive);
+
+        } else{
+            this->setQuery("SET profiling = 0", dbHive);
+        }
+
+        break;
+    }
+
     }
 
 }
@@ -199,6 +225,28 @@ void QueryStatsModel::resetProfiling()
         break;
     }
 
+    case Constants::impalaIntType:{
+
+        QSqlDatabase dbImpala = QSqlDatabase::database(Constants::impalaOdbcStrQueryType);
+        this->setQuery("SET profiling = 0", dbImpala);
+        this->setQuery("SET profiling_history_size = 0", dbImpala);
+        this->setQuery("SET profiling_history_size = 100", dbImpala);
+        this->setQuery("SET profiling = 1", dbImpala);
+
+        break;
+    }
+
+    case Constants::hiveIntType:{
+
+        QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrQueryType);
+        this->setQuery("SET profiling = 0", dbHive);
+        this->setQuery("SET profiling_history_size = 0", dbHive);
+        this->setQuery("SET profiling_history_size = 100", dbHive);
+        this->setQuery("SET profiling = 1", dbHive);
+
+        break;
+    }
+
     }
 }
 
@@ -252,6 +300,22 @@ void QueryStatsModel::showStats()
 
         QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrQueryType);
         this->setQuery("SHOW profiles", dbMongo);
+
+        break;
+    }
+
+    case Constants::impalaIntType:{
+
+        QSqlDatabase dbImpala = QSqlDatabase::database(Constants::impalaOdbcStrQueryType);
+        this->setQuery("SHOW profiles", dbImpala);
+
+        break;
+    }
+
+    case Constants::hiveIntType:{
+
+        QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrQueryType);
+        this->setQuery("SHOW profiles", dbHive);
 
         break;
     }
@@ -332,6 +396,22 @@ QVariant QueryStatsModel::showErrorMessage(const QString &query)
 
         QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrQueryType);
         QSqlQuery queryResult(query, dbMongo);
+        message = queryResult.lastError().text();
+        break;
+    }
+
+    case Constants::impalaIntType:{
+
+        QSqlDatabase dbImpala = QSqlDatabase::database(Constants::impalaOdbcStrQueryType);
+        QSqlQuery queryResult(query, dbImpala);
+        message = queryResult.lastError().text();
+        break;
+    }
+
+    case Constants::hiveIntType:{
+
+        QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrQueryType);
+        QSqlQuery queryResult(query, dbHive);
         message = queryResult.lastError().text();
         break;
     }

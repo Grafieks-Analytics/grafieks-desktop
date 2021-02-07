@@ -151,6 +151,24 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
         break;
     }
 
+    case Constants::impalaIntType:{
+
+        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        QSqlDatabase dbImpala = QSqlDatabase::database(Constants::impalaOdbcStrType);
+        this->setQuery(queryString, dbImpala);
+
+        break;
+    }
+
+    case Constants::hiveIntType:{
+
+        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrType);
+        this->setQuery(queryString, dbHive);
+
+        break;
+    }
+
 
     }
 }
@@ -235,6 +253,23 @@ void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableNam
         QString queryString = mongoDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
         QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrType);
         this->setQuery(queryString, dbMongo);
+
+        break;
+    }
+
+    case Constants::impalaIntType:{
+
+        QString queryString = oracleDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
+        QSqlDatabase dbImpala = QSqlDatabase::database(Constants::impalaOdbcStrType);
+        this->setQuery(queryString, dbImpala);
+
+        break;
+    }
+    case Constants::hiveIntType:{
+
+        QString queryString = mongoDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
+        QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrType);
+        this->setQuery(queryString, dbHive);
 
         break;
     }
@@ -391,6 +426,47 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
             break;
         }
 
+        case Constants::impalaIntType:{
+
+            pieces = fieldNames.split(",");
+
+            if(pieces.length() > 1){
+                finalSearchFields = pieces.join("','");
+            }else{
+                finalSearchFields = fieldNames;
+            }
+
+            finalSearchFields = "'" + finalSearchFields + "'";
+
+            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+
+            QSqlDatabase dbImpala = QSqlDatabase::database(Constants::impalaOdbcStrType);
+            this->setQuery(queryString, dbImpala);
+
+
+            break;
+        }
+
+        case Constants::hiveIntType:{
+
+            pieces = fieldNames.split(",");
+
+            if(pieces.length() > 1){
+                finalSearchFields = pieces.join("','");
+            }else{
+                finalSearchFields = fieldNames;
+            }
+
+            finalSearchFields = "'" + finalSearchFields + "'";
+
+            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+
+            QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrType);
+            this->setQuery(queryString, dbHive);
+
+
+            break;
+        }
         }
     }
 
@@ -493,6 +569,34 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
 
         QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrType);
         this->setQuery(queryString, dbMongo);
+
+        break;
+    }
+
+    case Constants::impalaIntType:{
+
+        if (searchString != ""){
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
+        } else{
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        }
+
+        QSqlDatabase dbImpala = QSqlDatabase::database(Constants::impalaOdbcStrType);
+        this->setQuery(queryString, dbImpala);
+
+        break;
+    }
+
+    case Constants::hiveIntType:{
+
+        if (searchString != ""){
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
+        } else{
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        }
+
+        QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrType);
+        this->setQuery(queryString, dbHive);
 
         break;
     }
