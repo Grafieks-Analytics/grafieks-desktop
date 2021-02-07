@@ -24,21 +24,20 @@ QVariantMap MongoCon::MongoOdbcInstance(const QString &driver, const QString &ho
     if(QSqlDatabase::isDriverAvailable(ODBCDRIVER)){
 
         // Sample Connection for MongoDB
-        // dbOdbc.setDatabaseName("DRIVER={MongoDB ODBC 1.4.2 ANSI Driver};Server={cluster0.bdrhj.mongodb.net};Port=27015;Database=mongo_test");
+//         dbOdbc.setDatabaseName("DRIVER={MongoDB ODBC 1.4.2 ANSI Driver};Server={cluster0.bdrhj.mongodb.net};Port=27015;Database=mongo_test");
 
 
-        QString dbString = "DRIVER={" + driver + "};Server="+ host +"Database=" + db + ";Tusted_Connection=True";
+        QString dbString = "DRIVER={"+ driver +"};Server="+ host +";Port="+ QString::number(port) +";Database="+ db;
+        qDebug() << dbString << "MONGO";
 
         QSqlDatabase dbMongoOdbc = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::mongoOdbcStrType);
 
         dbMongoOdbc.setDatabaseName(dbString);
-        dbMongoOdbc.setPort(port);
-        dbMongoOdbc.setUserName(username);
-        dbMongoOdbc.setPassword(password);
 
         if(!dbMongoOdbc.open()){
             outputStatus.insert("status", false);
             outputStatus.insert("msg", dbMongoOdbc.lastError().text());
+            qDebug() << dbMongoOdbc.lastError();
 
         } else{
 

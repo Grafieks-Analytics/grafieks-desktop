@@ -2,6 +2,7 @@
 #define CREDENTIALS_H
 
 #include <QString>
+#include "duckdb.hpp"
 
 class Statics
 {
@@ -57,6 +58,34 @@ public:
     static int mongoPort;
     static QString mongoUsername;
     static QString mongoPassword;
+
+    // Impala
+    static QString impalaHost;
+    static QString impalaDb;
+    static int impalaPort;
+    static QString impalaUsername;
+    static QString impalaPassword;
+
+    // Hive
+    static QString hiveHost;
+    static QString hiveDb;
+    static int hivePort;
+    static QString hiveUsername;
+    static QString hivePassword;
+
+    // SnowFlake
+    static QString snowflakeHost;
+    static QString snowflakeDb;
+    static int snowflakePort;
+    static QString snowflakeUsername;
+    static QString snowflakePassword;
+
+    // Teradata
+    static QString teradataHost;
+    static QString teradataDb;
+    static int teradataPort;
+    static QString teradataUsername;
+    static QString teradataPassword;
 
     // CSV
     static QString separator;

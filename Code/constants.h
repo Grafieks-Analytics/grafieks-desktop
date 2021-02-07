@@ -41,9 +41,9 @@ namespace Constants
     const QString mysqlStrQueryType = "mysql_query";
     const QString mysqlOdbcStrType = "mysql_odbc";
     const QString mysqlOdbcStrQueryType = "mysql_odbc_query";
+
     const QString sqliteStrType = "sqlite";
     const QString sqliteStrQueryType = "sqlite_query";
-
 
     const QString mssqlOdbcStrType = "mssql_odbc";
     const QString mssqlOdbcStrQueryType = "mssql_odbc_query";
@@ -62,6 +62,18 @@ namespace Constants
 
     const QString redshiftOdbcStrType = "redshift_odbc";
     const QString redshiftOdbcStrQueryType = "redshift_odbc_query";
+
+    const QString impalaOdbcStrType = "impala_odbc";
+    const QString impalaOdbcStrQueryType = "impala_odbc_query";
+
+    const QString hiveOdbcStrType = "hive_odbc";
+    const QString hiveOdbcStrQueryType = "hive_odbc_query";
+
+    const QString snowflakeOdbcStrType = "snowflake_odbc";
+    const QString snowflakeOdbcStrQueryType = "snowflake_odbc_query";
+
+    const QString teradataOdbcStrType = "teradata_odbc";
+    const QString teradataOdbcStrQueryType = "teradata_odbc_query";
 
     // Filter type Strings
     const QString categoricalType = "categorical";

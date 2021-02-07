@@ -37,6 +37,10 @@ public:
     Q_INVOKABLE void redshiftOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
     Q_INVOKABLE void oracleOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
     Q_INVOKABLE void mongoOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
+    Q_INVOKABLE void impalaOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
+    Q_INVOKABLE void hiveOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
+    Q_INVOKABLE void snowflakeOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
+    Q_INVOKABLE void teradataOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
     Q_INVOKABLE void excelOdbcLogin(QString driver, QString filename);
 
     QString connectedDB() const;
@@ -51,6 +55,10 @@ signals:
     void redshiftLoginStatus(QVariantMap status);
     void oracleLoginStatus(QVariantMap status);
     void mongoLoginStatus(QVariantMap status);
+    void impalaLoginStatus(QVariantMap status);
+    void hiveLoginStatus(QVariantMap status);
+    void snowflakeLoginStatus(QVariantMap status);
+    void teradataLoginStatus(QVariantMap status);
     void excelLoginStatus(QVariantMap status);
     void csvLoginStatus(QVariantMap status);
     void connectedDBChanged(QString connectedDB);

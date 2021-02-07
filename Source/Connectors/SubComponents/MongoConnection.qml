@@ -92,8 +92,8 @@ Popup {
     }
 
     function connectToMsSQL(){
-        //        ConnectorsLoginModel.mssqlOdbcLogin(server.text, database.text, port.text, username.text, password.text)
-        ConnectorsLoginModel.mongoOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
+        ConnectorsLoginModel.mongoOdbcLogin(control.currentText, server.text, database.text, port.text, username.text, password.text)
+        //        ConnectorsLoginModel.mongoOdbcLogin("", "localhost", "grafieks_mo", 27017, "root", "")
     }
 
     // JAVASCRIPT FUNCTION ENDS
