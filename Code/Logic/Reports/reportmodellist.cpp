@@ -359,19 +359,30 @@ void ReportModelList::getData()
 
     case Constants::csvIntType:{
 
-        QFile file(Statics::currentDbName);
-        file.open(QIODevice::ReadOnly);
+        QString db = Statics::currentDbName;
+        std::string csvFile = db.toStdString();
 
-        QTextStream in(&file);
-        QString line = in.readLine();
-        QStringList rowList = line.split(',');
-        rowList.replaceInStrings("\"", "");
-        rowList.replaceInStrings(" ", "");
+        std::string csvdb = "'" + csvFile + "'";
 
-        QString word;
-        foreach(word , rowList){
-            this->categoryList.append(word);
+        auto data = con.Query("SELECT * FROM read_csv_auto(" + csvdb + ")");
+
+        int rows = data->collection.count;
+        int colidx = 0;
+        int colIdx = 1;
+
+        for(int i = 0; i < rows; i++){
+
+            duckdb::Value fcolData = data->GetValue(colidx, i);
+            QString fnewColData = QString::fromStdString(fcolData.ToString());
+
+            duckdb::Value sColData = data->GetValue(colIdx, i);
+            QString snewColData = QString::fromStdString(sColData.ToString());
+
+            xAxis.append(fnewColData);
+            yAxis.append(snewColData.toInt());
         }
+
+        emit sendData(xAxis, yAxis);
         break;
     }
 

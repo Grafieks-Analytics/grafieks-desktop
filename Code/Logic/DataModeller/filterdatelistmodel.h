@@ -10,6 +10,8 @@
 
 #include "filterdatelist.h"
 #include "../General/querysplitter.h"
+#include "../../statics.h"
+#include "../../constants.h"
 
 class FilterDateListModel : public QAbstractListModel
 {
