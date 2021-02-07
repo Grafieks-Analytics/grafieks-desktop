@@ -73,6 +73,20 @@ public:
     static QString hiveUsername;
     static QString hivePassword;
 
+    // SnowFlake
+    static QString snowflakeHost;
+    static QString snowflakeDb;
+    static int snowflakePort;
+    static QString snowflakeUsername;
+    static QString snowflakePassword;
+
+    // Teradata
+    static QString teradataHost;
+    static QString teradataDb;
+    static int teradataPort;
+    static QString teradataUsername;
+    static QString teradataPassword;
+
     // CSV
     static QString separator;
 

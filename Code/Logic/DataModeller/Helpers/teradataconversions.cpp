@@ -1,13 +1,14 @@
-#include "impalaconversions.h"
+#include "teradataconversions.h"
 
-ImpalaConversions::ImpalaConversions(QObject *parent) : QObject(parent),
+TeradataConversions::TeradataConversions(QObject *parent) : QObject(parent),
     queryString("")
 {
 
 }
 
-QString ImpalaConversions::convertDateQuery(QString &columnName, QString &tableName, int &lowerLimit, int &upperLimit, int value)
+QString TeradataConversions::convertDateQuery(QString &columnName, QString &tableName, int &lowerLimit, int &upperLimit, int value)
 {
+
     int limit = upperLimit - lowerLimit;
     int offset = lowerLimit;
 

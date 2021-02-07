@@ -415,6 +415,22 @@ QVariant QueryStatsModel::showErrorMessage(const QString &query)
         message = queryResult.lastError().text();
         break;
     }
+
+    case Constants::snowflakeIntType:{
+
+        QSqlDatabase dbSnowflake = QSqlDatabase::database(Constants::snowflakeOdbcStrQueryType);
+        QSqlQuery queryResult(query, dbSnowflake);
+        message = queryResult.lastError().text();
+        break;
+    }
+
+    case Constants::teradataIntType:{
+
+        QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::teradataOdbcStrQueryType);
+        QSqlQuery queryResult(query, dbTeradata);
+        message = queryResult.lastError().text();
+        break;
+    }
     }
 
     return message;

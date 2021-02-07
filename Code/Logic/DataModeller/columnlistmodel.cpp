@@ -169,6 +169,24 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
         break;
     }
 
+    case Constants::snowflakeIntType:{
+
+        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        QSqlDatabase dbSnowflake = QSqlDatabase::database(Constants::snowflakeOdbcStrType);
+        this->setQuery(queryString, dbSnowflake);
+
+        break;
+    }
+
+    case Constants::teradataIntType:{
+
+        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::teradataOdbcStrType);
+        this->setQuery(queryString, dbTeradata);
+
+        break;
+    }
+
 
     }
 }
@@ -259,7 +277,7 @@ void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableNam
 
     case Constants::impalaIntType:{
 
-        QString queryString = oracleDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
+        QString queryString = impalaDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
         QSqlDatabase dbImpala = QSqlDatabase::database(Constants::impalaOdbcStrType);
         this->setQuery(queryString, dbImpala);
 
@@ -267,9 +285,26 @@ void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableNam
     }
     case Constants::hiveIntType:{
 
-        QString queryString = mongoDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
+        QString queryString = hiveDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
         QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrType);
         this->setQuery(queryString, dbHive);
+
+        break;
+    }
+
+    case Constants::snowflakeIntType:{
+
+        QString queryString = snowflakeDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
+        QSqlDatabase dbSnowflake = QSqlDatabase::database(Constants::snowflakeOdbcStrType);
+        this->setQuery(queryString, dbSnowflake);
+
+        break;
+    }
+    case Constants::teradataIntType:{
+
+        QString queryString = teradataDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
+        QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::teradataOdbcStrType);
+        this->setQuery(queryString, dbTeradata);
 
         break;
     }
@@ -467,6 +502,48 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
             break;
         }
+
+        case Constants::snowflakeIntType:{
+
+            pieces = fieldNames.split(",");
+
+            if(pieces.length() > 1){
+                finalSearchFields = pieces.join("','");
+            }else{
+                finalSearchFields = fieldNames;
+            }
+
+            finalSearchFields = "'" + finalSearchFields + "'";
+
+            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+
+            QSqlDatabase dbSnowflake = QSqlDatabase::database(Constants::snowflakeOdbcStrType);
+            this->setQuery(queryString, dbSnowflake);
+
+
+            break;
+        }
+
+        case Constants::teradataIntType:{
+
+            pieces = fieldNames.split(",");
+
+            if(pieces.length() > 1){
+                finalSearchFields = pieces.join("','");
+            }else{
+                finalSearchFields = fieldNames;
+            }
+
+            finalSearchFields = "'" + finalSearchFields + "'";
+
+            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+
+            QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::teradataOdbcStrType);
+            this->setQuery(queryString, dbTeradata);
+
+
+            break;
+        }
         }
     }
 
@@ -597,6 +674,34 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
 
         QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrType);
         this->setQuery(queryString, dbHive);
+
+        break;
+    }
+
+    case Constants::snowflakeIntType:{
+
+        if (searchString != ""){
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
+        } else{
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        }
+
+        QSqlDatabase dbSnowflake = QSqlDatabase::database(Constants::snowflakeOdbcStrType);
+        this->setQuery(queryString, dbSnowflake);
+
+        break;
+    }
+
+    case Constants::teradataIntType:{
+
+        if (searchString != ""){
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
+        } else{
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        }
+
+        QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::hiveOdbcStrType);
+        this->setQuery(queryString, dbTeradata);
 
         break;
     }

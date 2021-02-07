@@ -119,5 +119,19 @@ void QueryModel::executeQuery(QString &query)
         break;
     }
 
+    case Constants::snowflakeIntType:{
+        QSqlDatabase dbSnowflake = QSqlDatabase::database(Constants::snowflakeOdbcStrQueryType);
+        this->setQuery(query, dbSnowflake);
+
+        break;
+    }
+
+    case Constants::teradataIntType:{
+        QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::teradataOdbcStrQueryType);
+        this->setQuery(query, dbTeradata);
+
+        break;
+    }
+
     }
 }

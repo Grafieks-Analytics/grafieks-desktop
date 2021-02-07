@@ -116,6 +116,18 @@ int Statics::hivePort;
 QString Statics::hiveUsername;
 QString Statics::hivePassword;
 
+QString Statics::snowflakeHost;
+QString Statics::snowflakeDb;
+int Statics::snowflakePort;
+QString Statics::snowflakeUsername;
+QString Statics::snowflakePassword;
+
+QString Statics::teradataHost;
+QString Statics::teradataDb;
+int Statics::teradataPort;
+QString Statics::teradataUsername;
+QString Statics::teradataPassword;
+
 QString Statics::separator;
 
 // DuckDB

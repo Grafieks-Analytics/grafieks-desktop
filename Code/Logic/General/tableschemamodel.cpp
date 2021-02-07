@@ -513,6 +513,114 @@ void TableSchemaModel::showSchema(QString query)
         break;
     }
 
+    case Constants::snowflakeIntType:{
+
+        QSqlDatabase dbSnowflake = QSqlDatabase::database(Constants::snowflakeOdbcStrQueryType);
+
+        querySplitter.setQueryForClasses(query);
+        QStringList tablesList = querySplitter.getJoinTables();
+        QString mainTable = querySplitter.getMainTable();
+        tablesList.push_back(mainTable);
+
+
+
+        for(QString tableName: tablesList){
+            describeQueryString = "SELECT column_name, data_type FROM user_tab_columns WHERE table_name = '" + tableName + "'";
+
+            QSqlQuery describeQuery(describeQueryString, dbSnowflake);
+            QSqlRecord rec = describeQuery.record();
+
+            while(describeQuery.next()){
+
+
+                QString fieldName = describeQuery.value(0).toString();
+                QString fieldType = describeQuery.value(1).toString();
+
+                // Remove characters after `(` and then trim whitespaces
+                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+
+                // Get filter data type for QML
+                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+
+                outputDataList << tableName << fieldName << fieldType << filterDataType;
+
+                // Output data according to Filter type
+
+                if(filterDataType == Constants::categoricalType){
+                    allCategorical.append(outputDataList);
+                } else if(filterDataType == Constants::numericalType){
+                    allNumerical.append(outputDataList);
+                } else if(filterDataType == Constants::dateType){
+                    allDates.append(outputDataList);
+                } else{
+                    allOthers.append(outputDataList);
+                }
+
+                // Append all data type to allList as well
+                allList.append(outputDataList);
+
+                // Clear Stringlist for future
+                outputDataList.clear();
+            }
+        }
+
+        break;
+    }
+
+    case Constants::teradataIntType:{
+
+        QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::teradataOdbcStrQueryType);
+
+        querySplitter.setQueryForClasses(query);
+        QStringList tablesList = querySplitter.getJoinTables();
+        QString mainTable = querySplitter.getMainTable();
+        tablesList.push_back(mainTable);
+
+
+
+        for(QString tableName: tablesList){
+            describeQueryString = "SELECT column_name, data_type FROM user_tab_columns WHERE table_name = '" + tableName + "'";
+
+            QSqlQuery describeQuery(describeQueryString, dbTeradata);
+            QSqlRecord rec = describeQuery.record();
+
+            while(describeQuery.next()){
+
+
+                QString fieldName = describeQuery.value(0).toString();
+                QString fieldType = describeQuery.value(1).toString();
+
+                // Remove characters after `(` and then trim whitespaces
+                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+
+                // Get filter data type for QML
+                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+
+                outputDataList << tableName << fieldName << fieldType << filterDataType;
+
+                // Output data according to Filter type
+
+                if(filterDataType == Constants::categoricalType){
+                    allCategorical.append(outputDataList);
+                } else if(filterDataType == Constants::numericalType){
+                    allNumerical.append(outputDataList);
+                } else if(filterDataType == Constants::dateType){
+                    allDates.append(outputDataList);
+                } else{
+                    allOthers.append(outputDataList);
+                }
+
+                // Append all data type to allList as well
+                allList.append(outputDataList);
+
+                // Clear Stringlist for future
+                outputDataList.clear();
+            }
+        }
+
+        break;
+    }
+
     case Constants::csvIntType:{
 
 
