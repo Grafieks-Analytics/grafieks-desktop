@@ -9,6 +9,8 @@
 #include "oraclecon.h"
 #include "mongocon.h"
 #include "excelcon.h"
+#include "impalacon.h"
+#include "hivecon.h"
 #include "csvcon.h"
 
 #endif // ALLCONNECTORS_H

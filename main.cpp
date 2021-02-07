@@ -104,7 +104,23 @@ int Statics::mongoPort;
 QString Statics::mongoUsername;
 QString Statics::mongoPassword;
 
+QString Statics::impalaHost;
+QString Statics::impalaDb;
+int Statics::impalaPort;
+QString Statics::impalaUsername;
+QString Statics::impalaPassword;
+
+QString Statics::hiveHost;
+QString Statics::hiveDb;
+int Statics::hivePort;
+QString Statics::hiveUsername;
+QString Statics::hivePassword;
+
 QString Statics::separator;
+
+// DuckDB
+duckdb::DuckDB duckDb(nullptr);
+duckdb::Connection duckConnection(duckDb);
 
 /*! \mainpage Code Documentation
  *

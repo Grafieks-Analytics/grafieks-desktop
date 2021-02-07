@@ -14,6 +14,8 @@
 #include "./Helpers/mssqlconversions.h"
 #include "./Helpers/oracleconversions.h"
 #include "./Helpers/mongoconversions.h"
+#include "./Helpers/impalaconversions.h"
+#include "./Helpers/hiveconversions.h"
 
 #include "../../Connectors/allconnectors.h"
 #include "../../statics.h"
@@ -33,6 +35,8 @@ class ColumnListModel : public QSqlQueryModel
     MssqlConversions mssqlDateConversion;
     OracleConversions oracleDateConversion;
     MongoConversions mongoDateConversion;
+    ImpalaConversions impalaDateConversion;
+    HiveConversions hiveDateConversion;
 
 public:
     explicit ColumnListModel(QObject *parent = nullptr);

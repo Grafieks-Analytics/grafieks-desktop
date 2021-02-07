@@ -47,6 +47,8 @@ SOURCES += \
     Code/Logic/Connectors/sheetmodel.cpp \
     Code/Logic/Dashboards/dashboardparamsmodel.cpp \
     Code/Logic/Dashboards/documenthandlermodel.cpp \
+    Code/Logic/DataModeller/Helpers/hiveconversions.cpp \
+    Code/Logic/DataModeller/Helpers/impalaconversions.cpp \
     Code/Logic/DataModeller/Helpers/mongoconversions.cpp \
     Code/Logic/DataModeller/Helpers/mssqlconversions.cpp \
     Code/Logic/DataModeller/Helpers/mysqlconversions.cpp \
@@ -145,6 +147,8 @@ HEADERS += \
     Code/Logic/Connectors/sheetmodel.h \
     Code/Logic/Dashboards/dashboardparamsmodel.h \
     Code/Logic/Dashboards/documenthandlermodel.h \
+    Code/Logic/DataModeller/Helpers/hiveconversions.h \
+    Code/Logic/DataModeller/Helpers/impalaconversions.h \
     Code/Logic/DataModeller/Helpers/mongoconversions.h \
     Code/Logic/DataModeller/Helpers/mssqlconversions.h \
     Code/Logic/DataModeller/Helpers/mysqlconversions.h \
