@@ -193,5 +193,9 @@
         <file>Source/Charts/Data/d3.v5.min.js</file>
         <file>Source/Charts/Data/funnel.js</file>
         <file>Source/Charts/Data/radar.js</file>
+        <file>Source/Charts/GeoChart.html</file>
+        <file>Source/Charts/Data/d3-geo-projection.v2.min.js</file>
+        <file>Source/Charts/ChordChart.html</file>
+        <file>Source/Charts/SankeyChart.html</file>
     </qresource>
 </RCC>

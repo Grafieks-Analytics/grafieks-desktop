@@ -166,7 +166,7 @@ Rectangle{
         }
         ListElement{
             icon: "sankey.png"
-            chartHtml:"bar.html"
+            chartHtml:"SankeyChart.html"
             elementHeight: 24
             activeChart: false
             title:"Sankey"
@@ -199,7 +199,7 @@ Rectangle{
         }
         ListElement{
             icon: "map.png"
-            chartHtml:"bar.html"
+            chartHtml:"GeoChart.html"
             elementHeight: 22
             elementWidth:40
             activeChart: false
