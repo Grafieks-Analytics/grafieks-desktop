@@ -17,6 +17,7 @@
 #include <QtDebug>
 
 #include "drive.h"
+#include "../../secrets.h"
 
 /*!
  * \brief Fetches data records from Google Drive API
