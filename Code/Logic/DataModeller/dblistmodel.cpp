@@ -164,6 +164,23 @@ void DBListModel::callQuery(QString queryString)
         break;
     }
 
+    case Constants::snowflakeIntType:{
+        QSqlDatabase dbImpala = QSqlDatabase::database(Constants::snowflakeOdbcStrType);
+
+        // No direct query available in Snowflake db
+        // Will need to devise a way out when the query is required later
+
+        break;
+    }
+    case Constants::teradataIntType:{
+        QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::teradataOdbcStrType);
+
+        // No direct query available in Teradata db
+        // Will need to devise a way out when the query is required later
+
+        break;
+    }
+
 
     }
 }

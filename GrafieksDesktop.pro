@@ -41,6 +41,9 @@ SOURCES += \
     Code/Logic/Connectors/dropbox.cpp \
     Code/Logic/Connectors/dropboxds.cpp \
     Code/Logic/Connectors/dropboxmodel.cpp \
+    Code/Logic/Connectors/github.cpp \
+    Code/Logic/Connectors/githubds.cpp \
+    Code/Logic/Connectors/githubmodel.cpp \
     Code/Logic/Connectors/odbcdriversmodel.cpp \
     Code/Logic/Connectors/sheet.cpp \
     Code/Logic/Connectors/sheetds.cpp \
@@ -55,7 +58,9 @@ SOURCES += \
     Code/Logic/DataModeller/Helpers/oracleconversions.cpp \
     Code/Logic/DataModeller/Helpers/postgresconversions.cpp \
     Code/Logic/DataModeller/Helpers/redshiftconversions.cpp \
+    Code/Logic/DataModeller/Helpers/snowflakeconversions.cpp \
     Code/Logic/DataModeller/Helpers/sqliteconversions.cpp \
+    Code/Logic/DataModeller/Helpers/teradataconversions.cpp \
     Code/Logic/DataModeller/columnlistmodel.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
@@ -141,6 +146,9 @@ HEADERS += \
     Code/Logic/Connectors/dropbox.h \
     Code/Logic/Connectors/dropboxds.h \
     Code/Logic/Connectors/dropboxmodel.h \
+    Code/Logic/Connectors/github.h \
+    Code/Logic/Connectors/githubds.h \
+    Code/Logic/Connectors/githubmodel.h \
     Code/Logic/Connectors/odbcdriversmodel.h \
     Code/Logic/Connectors/sheet.h \
     Code/Logic/Connectors/sheetds.h \
@@ -155,7 +163,9 @@ HEADERS += \
     Code/Logic/DataModeller/Helpers/oracleconversions.h \
     Code/Logic/DataModeller/Helpers/postgresconversions.h \
     Code/Logic/DataModeller/Helpers/redshiftconversions.h \
+    Code/Logic/DataModeller/Helpers/snowflakeconversions.h \
     Code/Logic/DataModeller/Helpers/sqliteconversions.h \
+    Code/Logic/DataModeller/Helpers/teradataconversions.h \
     Code/Logic/DataModeller/columnlistmodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
@@ -194,6 +204,7 @@ HEADERS += \
     Code/messages.h \
     Code/constants.h \
     Code/parquet-extension.hpp \
+    Code/secrets.h \
     Code/statics.h \
 
 

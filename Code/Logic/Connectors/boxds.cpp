@@ -30,11 +30,11 @@ BoxDS::BoxDS(QObject *parent) : QObject(parent),
 
 
     this->box->setAuthorizationUrl(QUrl("https://account.box.com/api/oauth2/authorize"));
-    this->box->setClientIdentifier("xmv0g8l02pkfolfw0eofxsifmd2o0w6z");
+    this->box->setClientIdentifier(Secret::boxClient);
     this->box->setAccessTokenUrl(QUrl("https://api.box.com/oauth2/token"));
-    this->box->setClientIdentifierSharedKey("U0sHm7ESB7MgSoeD66OD2GSSQOSkno9s");
+    this->box->setClientIdentifierSharedKey(Secret::boxSecret);
 
-    auto replyHandler = new QOAuthHttpServerReplyHandler(5476, this);
+    auto replyHandler = new QOAuthHttpServerReplyHandler(Secret::boxPort, this);
     this->box->setReplyHandler(replyHandler);
 
     connect(this->box, &QOAuth2AuthorizationCodeFlow::granted, [=]() {

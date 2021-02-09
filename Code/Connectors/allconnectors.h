@@ -11,6 +11,8 @@
 #include "excelcon.h"
 #include "impalacon.h"
 #include "hivecon.h"
+#include "snowflakecon.h"
+#include "teradatacon.h"
 #include "csvcon.h"
 
 #endif // ALLCONNECTORS_H

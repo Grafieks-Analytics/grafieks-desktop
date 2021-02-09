@@ -1,16 +1,17 @@
-#ifndef IMPALACONVERSIONS_H
-#define IMPALACONVERSIONS_H
+#ifndef TERADATACONVERSIONS_H
+#define TERADATACONVERSIONS_H
 
 #include <QObject>
 #include <QString>
 
 
-class ImpalaConversions : public QObject
+class TeradataConversions : public QObject
 {
     Q_OBJECT
     QString queryString;
+
 public:
-    explicit ImpalaConversions(QObject *parent = nullptr);
+    explicit TeradataConversions(QObject *parent = nullptr);
     QString convertDateQuery(QString &columnName, QString &tableName, int &lowerLimit, int &upperLimit, int value);
 
 
@@ -18,4 +19,4 @@ signals:
 
 };
 
-#endif // IMPALACONVERSIONS_H
+#endif // TERADATACONVERSIONS_H

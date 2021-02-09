@@ -176,6 +176,36 @@ void ConnectorsLoginModel::hiveOdbcLogin(QString driver, QString host, QString d
     emit hiveLoginStatus(response);
 }
 
+void ConnectorsLoginModel::snowflakeOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
+{
+
+    SnowflakeCon snowflakecon;
+    QVariantMap response = snowflakecon.SnowflakeOdbcInstance(driver, host, db, port, username, password);
+
+    Statics::currentDbName = db;
+    Statics::currentDbIntType = Constants::snowflakeIntType;
+    Statics::currentDbStrType = Constants::snowflakeOdbcStrType;
+
+    this->setConnectedDB(db);
+
+    emit snowflakeLoginStatus(response);
+}
+
+void ConnectorsLoginModel::teradataOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
+{
+
+    TeradataCon teradatacon;
+    QVariantMap response = teradatacon.TeradataOdbcInstance(driver, host, db, port, username, password);
+
+    Statics::currentDbName = db;
+    Statics::currentDbIntType = Constants::teradataIntType;
+    Statics::currentDbStrType = Constants::teradataOdbcStrType;
+
+    this->setConnectedDB(db);
+
+    emit teradataLoginStatus(response);
+}
+
 void ConnectorsLoginModel::excelOdbcLogin(QString driver, QString filename)
 {
 

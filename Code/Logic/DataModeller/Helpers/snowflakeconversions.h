@@ -1,16 +1,16 @@
-#ifndef IMPALACONVERSIONS_H
-#define IMPALACONVERSIONS_H
+#ifndef SNOWFLAKECONVERSIONS_H
+#define SNOWFLAKECONVERSIONS_H
 
 #include <QObject>
 #include <QString>
 
-
-class ImpalaConversions : public QObject
+class SnowflakeConversions : public QObject
 {
     Q_OBJECT
     QString queryString;
+
 public:
-    explicit ImpalaConversions(QObject *parent = nullptr);
+    explicit SnowflakeConversions(QObject *parent = nullptr);
     QString convertDateQuery(QString &columnName, QString &tableName, int &lowerLimit, int &upperLimit, int value);
 
 
@@ -18,4 +18,4 @@ signals:
 
 };
 
-#endif // IMPALACONVERSIONS_H
+#endif // SNOWFLAKECONVERSIONS_H

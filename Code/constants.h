@@ -69,6 +69,12 @@ namespace Constants
     const QString hiveOdbcStrType = "hive_odbc";
     const QString hiveOdbcStrQueryType = "hive_odbc_query";
 
+    const QString snowflakeOdbcStrType = "snowflake_odbc";
+    const QString snowflakeOdbcStrQueryType = "snowflake_odbc_query";
+
+    const QString teradataOdbcStrType = "teradata_odbc";
+    const QString teradataOdbcStrQueryType = "teradata_odbc_query";
+
     // Filter type Strings
     const QString categoricalType = "categorical";
     const QString numericalType = "numerical";

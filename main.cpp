@@ -45,6 +45,8 @@
 #include "Code/Logic/Connectors/boxmodel.h"
 #include "Code/Logic/Connectors/sheetds.h"
 #include "Code/Logic/Connectors/sheetmodel.h"
+#include "Code/Logic/Connectors/githubds.h"
+#include "Code/Logic/Connectors/githubmodel.h"
 
 #include "Code/Logic/Dashboards/documenthandlermodel.h"
 #include "Code/Logic/Dashboards/dashboardparamsmodel.h"
@@ -116,6 +118,18 @@ QString Statics::hiveDb;
 int Statics::hivePort;
 QString Statics::hiveUsername;
 QString Statics::hivePassword;
+
+QString Statics::snowflakeHost;
+QString Statics::snowflakeDb;
+int Statics::snowflakePort;
+QString Statics::snowflakeUsername;
+QString Statics::snowflakePassword;
+
+QString Statics::teradataHost;
+QString Statics::teradataDb;
+int Statics::teradataPort;
+QString Statics::teradataUsername;
+QString Statics::teradataPassword;
 
 QString Statics::separator;
 
@@ -261,6 +275,10 @@ int main(int argc, char *argv[])
     SheetModel sheetModel;
     SheetDS *sheet = new SheetDS(&app);
 
+    // Github modal
+//    GithubModel githubModel;
+    GithubDS *github = new GithubDS(&app);
+
     // Scheduler model
     SchedulerModel schedulerModel;
     SchedulerDS *scheduler = new SchedulerDS(&app);
@@ -296,6 +314,7 @@ int main(int argc, char *argv[])
     driveModel.setDriveds(drive);
     boxModel.setBoxds(box);
     sheetModel.setSheetds(sheet);
+//    githubModel.setGithubds(github);
     schedulerModel.setScheduler(scheduler);
 
 
@@ -327,6 +346,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("DropboxDS", dropbox);
     engine.rootContext()->setContextProperty("DriveModel", &driveModel);
     engine.rootContext()->setContextProperty("DriveDS", drive);
+//    engine.rootContext()->setContextProperty("GithubModel", &githubModel);
+    engine.rootContext()->setContextProperty("GithubDS", github);
     engine.rootContext()->setContextProperty("BoxModel", &boxModel);
     engine.rootContext()->setContextProperty("BoxDS", box);
     engine.rootContext()->setContextProperty("SheetModel", &sheetModel);
