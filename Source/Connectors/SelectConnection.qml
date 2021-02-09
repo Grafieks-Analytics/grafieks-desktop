@@ -302,6 +302,14 @@ Page {
         id: sheetListPopup
     }
 
+    GithubConnection{
+        id: githubModal
+    }
+
+    GithubConnectionFiles{
+        id: githubListPopup
+    }
+
     CSVConnection{
         id: csvModal
     }

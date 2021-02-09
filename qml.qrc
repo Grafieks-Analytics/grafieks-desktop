@@ -193,5 +193,7 @@
         <file>Source/Charts/Data/d3.v5.min.js</file>
         <file>Source/Charts/Data/funnel.js</file>
         <file>Source/Charts/Data/radar.js</file>
+        <file>Source/Connectors/SubComponents/GithubConnection.qml</file>
+        <file>Source/Connectors/SubComponents/GithubConnectionFiles.qml</file>
     </qresource>
 </RCC>
