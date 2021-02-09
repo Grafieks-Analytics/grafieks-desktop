@@ -34,6 +34,7 @@
 #include "Code/Logic/DataModeller/filternumericallistmodel.h"
 #include "Code/Logic/DataModeller/proxyfiltermodel.h"
 #include "Code/Logic/DataModeller/csvcolumnlistmodel.h"
+#include "Code/Logic/DataModeller/duckcrud.h"
 
 #include "Code/Logic/Connectors/odbcdriversmodel.h"
 #include "Code/Logic/Connectors/dropboxds.h"
@@ -214,7 +215,6 @@ int main(int argc, char *argv[])
     QtTest2 qttest2;
     QtTest qttest;
 
-
     MysqlCon mysqlconnect;
     User User;
     ConnectorFilter connectorFilter;
@@ -265,6 +265,11 @@ int main(int argc, char *argv[])
     SchedulerModel schedulerModel;
     SchedulerDS *scheduler = new SchedulerDS(&app);
 
+    // Duck CRUD Model
+    DuckCRUD *duckCRUD            = new DuckCRUD();
+    TableSchemaModel *tableSchema = new TableSchemaModel(duckCRUD);
+    ReportModelList *reportModel  = new ReportModelList(duckCRUD);
+
     // OBJECT INITIALIZATION ENDS
     /***********************************************************************************************************************/
     /***********************************************************************************************************************/
@@ -274,7 +279,8 @@ int main(int argc, char *argv[])
     //    QObject::connect(&filterDateListModel, &FilterDateListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
     //    QObject::connect(&filterNumericalListModel, &FilterNumericalListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
     QObject::connect(&proxyModel, &ProxyFilterModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
-    QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, &csvColListModel, &CsvColumnListModel::receiveCsvFilterQuery);
+    QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, duckCRUD, &DuckCRUD::receiveCsvFilterQuery);
+    QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::sendDbName, duckCRUD, &DuckCRUD::createTable);
 
 
     // Name of the columns
@@ -340,6 +346,9 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("GeneralParamsModel", &generalParamsModel);
     engine.rootContext()->setContextProperty("ODBCDriversModel", &odbcDriversModel);
     engine.rootContext()->setContextProperty("CsvColumnListModel", &csvColListModel);
+    engine.rootContext()->setContextProperty("DuckCRUD", duckCRUD);
+    engine.rootContext()->setContextProperty("TableSchemaModel", tableSchema);
+    engine.rootContext()->setContextProperty("ReportModelList", reportModel);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/

@@ -57,9 +57,9 @@ SOURCES += \
     Code/Logic/DataModeller/Helpers/redshiftconversions.cpp \
     Code/Logic/DataModeller/Helpers/sqliteconversions.cpp \
     Code/Logic/DataModeller/columnlistmodel.cpp \
-    Code/Logic/DataModeller/csvcolumnlistmodel.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
+    Code/Logic/DataModeller/duckcrud.cpp \
     Code/Logic/DataModeller/filtercategoricallist.cpp \
     Code/Logic/DataModeller/filtercategoricallistmodel.cpp \
     Code/Logic/DataModeller/filterdatelist.cpp \
@@ -157,9 +157,9 @@ HEADERS += \
     Code/Logic/DataModeller/Helpers/redshiftconversions.h \
     Code/Logic/DataModeller/Helpers/sqliteconversions.h \
     Code/Logic/DataModeller/columnlistmodel.h \
-    Code/Logic/DataModeller/csvcolumnlistmodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
+    Code/Logic/DataModeller/duckcrud.h \
     Code/Logic/DataModeller/filtercategoricallist.h \
     Code/Logic/DataModeller/filtercategoricallistmodel.h \
     Code/Logic/DataModeller/filterdatelist.h \

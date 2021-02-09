@@ -10,13 +10,14 @@
 #include <QJsonArray>
 #include <QObject>
 #include <QDebug>
+#include "datatype.h"
+#include "querysplitter.h"
 
 #include "../../Connectors/allconnectors.h"
 #include "../../statics.h"
 #include "../../constants.h"
-#include "datatype.h"
-#include "querysplitter.h"
 #include "../../duckdb.hpp"
+#include "../DataModeller/duckcrud.h"
 
 /*!
  * \class TableSchemaModel
@@ -28,18 +29,18 @@ class TableSchemaModel : public QObject
     Q_OBJECT
     DataType dataType;
     QuerySplitter querySplitter;
+    DuckCRUD *duckCRUD;
 
 public:
     explicit TableSchemaModel(QObject *parent = nullptr);
-
+    explicit TableSchemaModel(DuckCRUD *duckCRUD, QObject *parent = nullptr);
     Q_INVOKABLE void showSchema(QString query = "");
 
 signals:
     void tableSchemaObtained(QList<QStringList> allList, QList<QStringList> allCategorical, QList<QStringList> allNumerical, QList<QStringList> allDates, QList<QStringList> allOthers, QStringList queriedColumnNames);
 
 private:
-    duckdb::DuckDB db;
-    duckdb::Connection con;
+
     QList<QStringList> allList;
     QList<QStringList> allCategorical;
     QList<QStringList> allNumerical;

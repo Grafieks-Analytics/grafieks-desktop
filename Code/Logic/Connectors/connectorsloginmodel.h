@@ -58,6 +58,7 @@ signals:
     void excelLoginStatus(QVariantMap status);
     void csvLoginStatus(QVariantMap status);
     void connectedDBChanged(QString connectedDB);
+    void sendDbName();
 };
 
 #endif // MYSQLLOGINMODEL_H

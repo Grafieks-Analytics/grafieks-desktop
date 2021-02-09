@@ -202,6 +202,7 @@ void ConnectorsLoginModel::csvLogin(QString filename, QString separator)
 
     this->setConnectedDB(filename);
 
+    emit sendDbName();
     emit csvLoginStatus(response);
 }
 
