@@ -276,7 +276,7 @@ int main(int argc, char *argv[])
     SheetDS *sheet = new SheetDS(&app);
 
     // Github modal
-    GithubModel githubModel;
+//    GithubModel githubModel;
     GithubDS *github = new GithubDS(&app);
 
     // Scheduler model
@@ -308,7 +308,7 @@ int main(int argc, char *argv[])
     driveModel.setDriveds(drive);
     boxModel.setBoxds(box);
     sheetModel.setSheetds(sheet);
-    githubModel.setGithubds(github);
+//    githubModel.setGithubds(github);
     schedulerModel.setScheduler(scheduler);
 
 
@@ -340,7 +340,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("DropboxDS", dropbox);
     engine.rootContext()->setContextProperty("DriveModel", &driveModel);
     engine.rootContext()->setContextProperty("DriveDS", drive);
-    engine.rootContext()->setContextProperty("GithubModel", &githubModel);
+//    engine.rootContext()->setContextProperty("GithubModel", &githubModel);
     engine.rootContext()->setContextProperty("GithubDS", github);
     engine.rootContext()->setContextProperty("BoxModel", &boxModel);
     engine.rootContext()->setContextProperty("BoxDS", box);
