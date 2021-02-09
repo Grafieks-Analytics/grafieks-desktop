@@ -12,13 +12,13 @@ namespace Secret
     const int dropBoxPort = 5477;
 
     // Google Drive
-    const QString driveClient = "501622253923-0va5canbm287hm9g6150phf3lqk61752.apps.googleusercontent.com";
-    const QString driveSecret = "OuAtxew5-7sN7ydVFs7BPtaU";
+    const QString driveClient = "264358057899-drn3pf67qv1jdqikj9frbta7louuv6uu.apps.googleusercontent.com";
+    const QString driveSecret = "Ti7fcpT3jPGXwi4kCoabITtr";
     const int drivePort = 5478;
 
     // Google Sheet
-    const QString sheetClient = "501622253923-b16hqa3tqlvigvukvnngq2aovfdmu2j8.apps.googleusercontent.com";
-    const QString sheetSecret = "V3wtGlQUIiSeu06ZhyO8Pnyk";
+    const QString sheetClient = "787860446324-7pm7r8j74q64gk7432tbukf2g40693s7.apps.googleusercontent.com";
+    const QString sheetSecret = "f7kxDMAoe7B7wHXCA1tXOUnh";
      const int sheetPort = 5479;
 
     // Box
