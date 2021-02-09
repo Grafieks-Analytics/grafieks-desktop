@@ -33,7 +33,6 @@
 #include "Code/Logic/DataModeller/filterdatelistmodel.h"
 #include "Code/Logic/DataModeller/filternumericallistmodel.h"
 #include "Code/Logic/DataModeller/proxyfiltermodel.h"
-#include "Code/Logic/DataModeller/csvcolumnlistmodel.h"
 #include "Code/Logic/DataModeller/duckcrud.h"
 
 #include "Code/Logic/Connectors/odbcdriversmodel.h"
@@ -247,7 +246,6 @@ int main(int argc, char *argv[])
     FilterDateListModel filterDateListModel;
     FilterNumericalListModel filterNumericalListModel;
     ODBCDriversModel odbcDriversModel;
-    CsvColumnListModel csvColListModel;
 
     GeneralParamsModel generalParamsModel;
     QuerySplitter querySplitter;
@@ -366,7 +364,6 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("QuerySplitter", &querySplitter);
     engine.rootContext()->setContextProperty("GeneralParamsModel", &generalParamsModel);
     engine.rootContext()->setContextProperty("ODBCDriversModel", &odbcDriversModel);
-    engine.rootContext()->setContextProperty("CsvColumnListModel", &csvColListModel);
     engine.rootContext()->setContextProperty("DuckCRUD", duckCRUD);
     engine.rootContext()->setContextProperty("TableSchemaModel", tableSchema);
     engine.rootContext()->setContextProperty("ReportModelList", reportModel);
