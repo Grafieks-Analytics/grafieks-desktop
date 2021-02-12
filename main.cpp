@@ -33,8 +33,8 @@
 #include "Code/Logic/DataModeller/filterdatelistmodel.h"
 #include "Code/Logic/DataModeller/filternumericallistmodel.h"
 #include "Code/Logic/DataModeller/proxyfiltermodel.h"
-#include "Code/Logic/DataModeller/duckcrud.h"
 
+#include "Code/Logic/Connectors/duckcrud.h"
 #include "Code/Logic/Connectors/odbcdriversmodel.h"
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
@@ -52,6 +52,7 @@
 
 #include "Code/Logic/Reports/reportparamsmodel.h"
 #include "Code/Logic/Reports/reportmodellist.h"
+#include "Code/Logic/Reports/duckdata.h"
 
 #include "Code/Logic/General/generalparamsmodel.h"
 #include "Code/Logic/General/tableschemamodel.h"
@@ -285,6 +286,7 @@ int main(int argc, char *argv[])
     DuckCRUD *duckCRUD            = new DuckCRUD();
     TableSchemaModel *tableSchema = new TableSchemaModel(duckCRUD);
     ReportModelList *reportModel  = new ReportModelList(duckCRUD);
+    DuckData *duckData            = new DuckData(duckCRUD);
 
     // OBJECT INITIALIZATION ENDS
     /***********************************************************************************************************************/
@@ -367,6 +369,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("DuckCRUD", duckCRUD);
     engine.rootContext()->setContextProperty("TableSchemaModel", tableSchema);
     engine.rootContext()->setContextProperty("ReportModelList", reportModel);
+    engine.rootContext()->setContextProperty("DuckData", duckData);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/

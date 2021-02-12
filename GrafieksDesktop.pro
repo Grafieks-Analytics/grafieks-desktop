@@ -41,6 +41,7 @@ SOURCES += \
     Code/Logic/Connectors/dropbox.cpp \
     Code/Logic/Connectors/dropboxds.cpp \
     Code/Logic/Connectors/dropboxmodel.cpp \
+    Code/Logic/Connectors/duckcrud.cpp \
     Code/Logic/Connectors/github.cpp \
     Code/Logic/Connectors/githubds.cpp \
     Code/Logic/Connectors/githubmodel.cpp \
@@ -64,7 +65,6 @@ SOURCES += \
     Code/Logic/DataModeller/columnlistmodel.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
-    Code/Logic/DataModeller/duckcrud.cpp \
     Code/Logic/DataModeller/filtercategoricallist.cpp \
     Code/Logic/DataModeller/filtercategoricallistmodel.cpp \
     Code/Logic/DataModeller/filterdatelist.cpp \
@@ -93,6 +93,7 @@ SOURCES += \
     Code/Logic/General/tableschemamodel.cpp \
     Code/Logic/General/typecheck.cpp \
     Code/Logic/Menu/user.cpp \
+    Code/Logic/Reports/duckdata.cpp \
     Code/Logic/Reports/reportmodellist.cpp \
     Code/Logic/Reports/reportparamsmodel.cpp \
     main.cpp \
@@ -146,6 +147,7 @@ HEADERS += \
     Code/Logic/Connectors/dropbox.h \
     Code/Logic/Connectors/dropboxds.h \
     Code/Logic/Connectors/dropboxmodel.h \
+    Code/Logic/Connectors/duckcrud.h \
     Code/Logic/Connectors/github.h \
     Code/Logic/Connectors/githubds.h \
     Code/Logic/Connectors/githubmodel.h \
@@ -169,7 +171,6 @@ HEADERS += \
     Code/Logic/DataModeller/columnlistmodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
-    Code/Logic/DataModeller/duckcrud.h \
     Code/Logic/DataModeller/filtercategoricallist.h \
     Code/Logic/DataModeller/filtercategoricallistmodel.h \
     Code/Logic/DataModeller/filterdatelist.h \
@@ -198,6 +199,7 @@ HEADERS += \
     Code/Logic/General/tableschemamodel.h \
     Code/Logic/General/typecheck.h \
     Code/Logic/Menu/user.h \
+    Code/Logic/Reports/duckdata.h \
     Code/Logic/Reports/reportmodellist.h \
     Code/Logic/Reports/reportparamsmodel.h \
     Code/duckdb.hpp \

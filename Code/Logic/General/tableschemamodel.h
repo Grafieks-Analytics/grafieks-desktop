@@ -17,7 +17,7 @@
 #include "../../statics.h"
 #include "../../constants.h"
 #include "../../duckdb.hpp"
-#include "../DataModeller/duckcrud.h"
+#include "../Connectors/duckcrud.h"
 
 /*!
  * \class TableSchemaModel
