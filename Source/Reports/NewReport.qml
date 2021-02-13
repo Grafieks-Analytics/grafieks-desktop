@@ -35,6 +35,8 @@ Page {
     property bool lineTypeChartVisible: false
 
     property string reportChart:ReportParamsModel.chartType;
+    property string reportId:ReportParamsModel.reportId;
+
     property var d3PropertyConfig: ({});
 
 
@@ -42,7 +44,7 @@ Page {
     onReportChartChanged: {
 
         switch(reportChart){
-            case Constants.scatteredChart:
+            case Constants.stackedBarChart:
                 changeChart("qrc:/Source/Charts/StackedBarChart.html");
                 let resizeQuery = 'window.addEventListener("resize", function () {' +
                                     'console.log("resizing");'+
@@ -115,6 +117,11 @@ Page {
         ReportParamsModel.yAxisActive = false;
         ReportParamsModel.colorByActive = false;
 
+        if(!reportId){
+            var newReportId = generateReportId();
+            ReportParamsModel.setReportId(newReportId);
+        }
+
     }
 
 
@@ -137,6 +144,11 @@ Page {
         }
     }
 
+
+    // generate Report Id
+    function generateReportId(){
+        return Qt.btoa(new Date().getTime());
+    }
 
     // Slot Function
     // For changing the chart on clicking chart icons

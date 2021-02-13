@@ -55,6 +55,11 @@ QString ReportParamsModel::chartType() const
     return m_chartType;
 }
 
+QString ReportParamsModel::reportId() const
+{
+    return m_reportId;
+}
+
 void ReportParamsModel::setItemName(QString itemName)
 {
     if (m_itemName == itemName)
@@ -143,4 +148,13 @@ void ReportParamsModel::setChartType(QString chartType)
 
     m_chartType = chartType;
     emit chartTypeChanged(m_chartType);
+}
+
+void ReportParamsModel::setReportId(QString reportId)
+{
+    if (m_reportId == reportId)
+        return;
+
+    m_reportId = reportId;
+    emit reportIdChanged(m_reportId);
 }

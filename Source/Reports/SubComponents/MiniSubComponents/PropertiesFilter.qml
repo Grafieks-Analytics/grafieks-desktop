@@ -116,7 +116,7 @@ Column{
 
         colorListModel.append({textValue: itemName})
         ReportParamsModel.setLastDropped(itemType);
-        ReportParamsModel.setChartType(Constants.scatteredChart);
+        ReportParamsModel.setChartType(Constants.stackedBarChart);
         return;
 
     }

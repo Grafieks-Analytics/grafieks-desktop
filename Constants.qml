@@ -207,6 +207,7 @@ QtObject {
     // Charts Start
 
     property string scatteredChart: "Scattered Chart"
+    property string stackedBarChart: "Stacked Bar Chart"
 
     // Charts ends
 

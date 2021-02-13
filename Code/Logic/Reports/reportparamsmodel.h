@@ -2,10 +2,15 @@
 #define REPORTPARAMSMODEL_H
 
 #include <QObject>
+#include <QMap>
 
 class ReportParamsModel: public QObject
 {
     Q_OBJECT
+
+    // Customize Report parameters
+    QMap<int, QVector<int>> reportsMap; // <<reportId, reportObj>>
+
     Q_PROPERTY(QString itemName READ itemName WRITE setItemName NOTIFY itemNameChanged)
     Q_PROPERTY(QString itemType READ itemType WRITE setItemType NOTIFY itemTypeChanged)
     Q_PROPERTY(bool xAxisActive READ xAxisActive WRITE setXAxisActive NOTIFY xAxisActiveChanged)
@@ -16,6 +21,7 @@ class ReportParamsModel: public QObject
     Q_PROPERTY(QList<QString> xAxisColumns READ xAxisColumns WRITE setXAxisColumns NOTIFY xAxisColumnsChanged)
     Q_PROPERTY(QList<QString> yAxisColumns READ yAxisColumns WRITE setYAxisColumns NOTIFY yAxisColumnsChanged)
     Q_PROPERTY(QString chartType READ chartType WRITE setChartType NOTIFY chartTypeChanged)
+    Q_PROPERTY(QString reportId READ reportId WRITE setReportId NOTIFY reportIdChanged)
 
     QString m_itemName;
     QString m_itemType;
@@ -35,6 +41,8 @@ class ReportParamsModel: public QObject
     QList<QString> m_yAxisColumns;
 
     QString m_chartType;
+
+    QString m_reportId;
 
 public:
     ReportParamsModel();
@@ -59,6 +67,8 @@ public:
 
     QString chartType() const;
 
+    QString reportId() const;
+
 public slots:
     void setItemName(QString itemName);
     void setItemType(QString itemType);
@@ -80,6 +90,8 @@ public slots:
 
     void setChartType(QString chartType);
 
+    void setReportId(QString reportId);
+
 signals:
     void itemNameChanged(QString itemName);
     void itemTypeChanged(QString itemType);
@@ -93,6 +105,7 @@ signals:
     void xAxisColumnsChanged(QList<QString> xAxisColumns);
     void yAxisColumnsChanged(QList<QString> yAxisColumns);
     void chartTypeChanged(QString chartType);
+    void reportIdChanged(QString reportId);
 };
 
 #endif // REPORTPARAMSMODEL_H
