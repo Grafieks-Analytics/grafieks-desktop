@@ -72,7 +72,7 @@ Rectangle{
         }
         ListElement{
             icon: "heatmap.png"
-            chartHtml:"bar.html"
+            chartHtml:"HeatmapChart.html"
             activeChart: false
             title:"Heat Map"
             yAxisVisible: true

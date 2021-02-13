@@ -200,5 +200,6 @@
         <file>Source/Connectors/SubComponents/GithubConnection.qml</file>
         <file>Source/Connectors/SubComponents/GithubConnectionFiles.qml</file>
         <file>Source/Charts/Data/geoCoordinates.js</file>
+        <file>Source/Charts/HeatmapChart.html</file>
     </qresource>
 </RCC>
