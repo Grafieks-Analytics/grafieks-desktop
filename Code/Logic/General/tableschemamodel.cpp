@@ -1,9 +1,14 @@
 #include "tableschemamodel.h"
 #include "iostream"
-TableSchemaModel::TableSchemaModel(QObject *parent) : QObject(parent),
-    db(nullptr), con(db)
+TableSchemaModel::TableSchemaModel(QObject *parent) : QObject(parent)
 {
 
+}
+
+TableSchemaModel::TableSchemaModel(DuckCRUD *duckCRUD, QObject *parent)
+{
+    Q_UNUSED(parent);
+    this->duckCRUD = duckCRUD;
 }
 
 /*!
@@ -623,14 +628,14 @@ void TableSchemaModel::showSchema(QString query)
 
     case Constants::csvIntType:{
 
+        //        QString db = Statics::currentDbName;
+        //        std::string csvFile = db.toStdString();
+        //        std::string csvdb = "'" + csvFile + "'";
+        //this->duckCRUD->con.Query("CREATE TABLE dataType AS SELECT * FROM read_csv_auto(" + csvdb + ")");
 
         QString db = Statics::currentDbName;
-        std::string csvFile = db.toStdString();
 
-        std::string csvdb = "'" + csvFile + "'";
-
-        con.Query("CREATE TABLE dataType AS SELECT * FROM read_csv_auto(" + csvdb + ")");
-        auto result = con.Query("DESCRIBE dataType");
+        auto result = this->duckCRUD->con.Query("DESCRIBE " + db.toStdString());
         result->Print();
         int rows = result->collection.count;
         int i = 0;
@@ -644,7 +649,7 @@ void TableSchemaModel::showSchema(QString query)
             QString newFilterType = QString::fromStdString(fieldType.ToString());
             QString filterDataType = dataType.dataType(QString::fromStdString(fieldType.ToString()));
 
-            qDebug() << i << "  " << newFieldName << " Col ID";
+            // qDebug() << i << "  " << newFieldName << " Col ID";
 
             QString index = QString::number(i);
             outputDataList << index << newFieldName << newFilterType << filterDataType;

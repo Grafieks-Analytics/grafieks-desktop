@@ -33,6 +33,8 @@ Page {
 
     property bool yAxisVisible: true
     property bool lineTypeChartVisible: false
+    property string yAxisLabelName: Constants.yAxisName
+    property string xAxisLabelName: Constants.xAxisName
 
     property string reportChart:ReportParamsModel.chartType;
     property string reportId:ReportParamsModel.reportId;
@@ -41,7 +43,7 @@ Page {
 
 
 
-    onReportChartChanged: {
+    onReportChartChanged: {        
 
         switch(reportChart){
             case Constants.stackedBarChart:
@@ -52,6 +54,8 @@ Page {
                                     'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
                 webEngineView.runJavaScript(resizeQuery);
                 break;
+
+
 
         }
 
@@ -258,6 +262,10 @@ Page {
         console.log('Export Report')
     }
 
+    function updateReportTitle(){
+        ReportParamsModel.setReportTitle(report_title_text.text);
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -330,9 +338,8 @@ Page {
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: 14
                 verticalAlignment:TextEdit.AlignVCenter
-                Keys.onReturnPressed: {
-                    report_title_text.focus = false
-                }
+                Keys.onReturnPressed: report_title_text.focus = false
+                onTextChanged: updateReportTitle()
                 background: Rectangle{
                     color: "transparent"
                     border.color: "transparent"
@@ -457,7 +464,7 @@ Page {
                 width: 100
                 height: parent.height
                 Text {
-                    text: Constants.xAxisName
+                    text: xAxisLabelName
                     anchors.centerIn: parent
                 }
                 z:1
@@ -567,14 +574,14 @@ Page {
             anchors.top: seperatorAxis.bottom
             anchors.left: parent.left
             width: parent.width
-            visible: yAxisVisible
+//            visible: yAxisVisible
 
             Rectangle{
                 id: yaxisText
                 width: 100
                 height: parent.height
                 Text {
-                    text: Constants.yAxisName
+                    text: yAxisLabelName
                     anchors.centerIn: parent
                 }
                 z:1
@@ -660,7 +667,7 @@ Page {
             background: Rectangle{
                 color: Constants.darkThemeColor
             }
-            visible: yAxisVisible
+//            visible: yAxisVisible
         }
 
 

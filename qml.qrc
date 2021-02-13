@@ -197,5 +197,8 @@
         <file>Source/Charts/Data/d3-geo-projection.v2.min.js</file>
         <file>Source/Charts/ChordChart.html</file>
         <file>Source/Charts/SankeyChart.html</file>
+        <file>Source/Connectors/SubComponents/GithubConnection.qml</file>
+        <file>Source/Connectors/SubComponents/GithubConnectionFiles.qml</file>
+        <file>Source/Charts/Data/geoCoordinates.js</file>
     </qresource>
 </RCC>

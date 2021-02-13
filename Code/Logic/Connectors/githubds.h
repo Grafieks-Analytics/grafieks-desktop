@@ -1,5 +1,5 @@
-#ifndef DRIVEDS_H
-#define DRIVEDS_H
+#ifndef GITHUBDS_H
+#define GITHUBDS_H
 
 #include <QObject>
 #include <QOAuth2AuthorizationCodeFlow>
@@ -16,30 +16,30 @@
 #include <QSettings>
 #include <QtDebug>
 
-#include "drive.h"
+#include "github.h"
 #include "../../secrets.h"
 
 /*!
- * \brief Fetches data records from Google Drive API
+ * \brief Fetches data records from Github API
  * \details This class lists all the methods which interact with the Box API documented in
- * <a href="https://developers.google.com/drive/api/v3/reference/files">https://developers.google.com/drive/api/v3/reference/files</a>
+ * <a href="https://docs.github.com/en/developers/apps/authorizing-oauth-apps">https://docs.github.com/en/developers/apps/authorizing-oauth-apps</a>
  * \ingroup ConnectorScreen
  */
 
-class DriveDS : public QObject
+class GithubDS : public QObject
 {
     Q_OBJECT
 public:
-    explicit DriveDS(QObject *parent = nullptr);
+    explicit GithubDS(QObject *parent = nullptr);
 
     Q_INVOKABLE void fetchDatasources();
     Q_INVOKABLE void searchQuer(QString path);
     Q_INVOKABLE void homeBut();
 
-    void addDataSource(Drive * drive);
+    void addDataSource(Github * github);
     Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & kind,const QString & modifiedTime,const QString & extension);
 
-    QList<Drive *> dataItems();
+    QList<Github *> dataItems();
 
 signals:
     void preItemAdded();
@@ -56,11 +56,11 @@ private slots:
 
 private:
     QNetworkAccessManager * m_networkAccessManager;
-    QOAuth2AuthorizationCodeFlow * google;
+    QOAuth2AuthorizationCodeFlow * github;
     QNetworkReply * m_networkReply;
     QByteArray * m_dataBuffer;
-    QList<Drive*> m_drive;
+    QList<Github *> m_drive;
 
 };
 
-#endif // DRIVEDS_H
+#endif // GITHUBDS_H

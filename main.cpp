@@ -33,8 +33,8 @@
 #include "Code/Logic/DataModeller/filterdatelistmodel.h"
 #include "Code/Logic/DataModeller/filternumericallistmodel.h"
 #include "Code/Logic/DataModeller/proxyfiltermodel.h"
-#include "Code/Logic/DataModeller/csvcolumnlistmodel.h"
 
+#include "Code/Logic/Connectors/duckcrud.h"
 #include "Code/Logic/Connectors/odbcdriversmodel.h"
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
@@ -44,12 +44,15 @@
 #include "Code/Logic/Connectors/boxmodel.h"
 #include "Code/Logic/Connectors/sheetds.h"
 #include "Code/Logic/Connectors/sheetmodel.h"
+#include "Code/Logic/Connectors/githubds.h"
+#include "Code/Logic/Connectors/githubmodel.h"
 
 #include "Code/Logic/Dashboards/documenthandlermodel.h"
 #include "Code/Logic/Dashboards/dashboardparamsmodel.h"
 
 #include "Code/Logic/Reports/reportparamsmodel.h"
 #include "Code/Logic/Reports/reportmodellist.h"
+#include "Code/Logic/Reports/duckdata.h"
 
 #include "Code/Logic/General/generalparamsmodel.h"
 #include "Code/Logic/General/tableschemamodel.h"
@@ -226,7 +229,6 @@ int main(int argc, char *argv[])
     QtTest2 qttest2;
     QtTest qttest;
 
-
     MysqlCon mysqlconnect;
     User User;
     ConnectorFilter connectorFilter;
@@ -245,7 +247,6 @@ int main(int argc, char *argv[])
     FilterDateListModel filterDateListModel;
     FilterNumericalListModel filterNumericalListModel;
     ODBCDriversModel odbcDriversModel;
-    CsvColumnListModel csvColListModel;
 
     GeneralParamsModel generalParamsModel;
     QuerySplitter querySplitter;
@@ -273,9 +274,19 @@ int main(int argc, char *argv[])
     SheetModel sheetModel;
     SheetDS *sheet = new SheetDS(&app);
 
+    // Github modal
+//    GithubModel githubModel;
+    GithubDS *github = new GithubDS(&app);
+
     // Scheduler model
     SchedulerModel schedulerModel;
     SchedulerDS *scheduler = new SchedulerDS(&app);
+
+    // Duck CRUD Model
+    DuckCRUD *duckCRUD            = new DuckCRUD();
+    TableSchemaModel *tableSchema = new TableSchemaModel(duckCRUD);
+    ReportModelList *reportModel  = new ReportModelList(duckCRUD);
+    DuckData *duckData            = new DuckData(duckCRUD);
 
     // OBJECT INITIALIZATION ENDS
     /***********************************************************************************************************************/
@@ -286,7 +297,8 @@ int main(int argc, char *argv[])
     //    QObject::connect(&filterDateListModel, &FilterDateListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
     //    QObject::connect(&filterNumericalListModel, &FilterNumericalListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
     QObject::connect(&proxyModel, &ProxyFilterModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
-    QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, &csvColListModel, &CsvColumnListModel::receiveCsvFilterQuery);
+    QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, duckCRUD, &DuckCRUD::receiveCsvFilterQuery);
+    QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::sendDbName, duckCRUD, &DuckCRUD::createTable);
 
 
     // Name of the columns
@@ -302,6 +314,7 @@ int main(int argc, char *argv[])
     driveModel.setDriveds(drive);
     boxModel.setBoxds(box);
     sheetModel.setSheetds(sheet);
+//    githubModel.setGithubds(github);
     schedulerModel.setScheduler(scheduler);
 
 
@@ -333,6 +346,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("DropboxDS", dropbox);
     engine.rootContext()->setContextProperty("DriveModel", &driveModel);
     engine.rootContext()->setContextProperty("DriveDS", drive);
+//    engine.rootContext()->setContextProperty("GithubModel", &githubModel);
+    engine.rootContext()->setContextProperty("GithubDS", github);
     engine.rootContext()->setContextProperty("BoxModel", &boxModel);
     engine.rootContext()->setContextProperty("BoxDS", box);
     engine.rootContext()->setContextProperty("SheetModel", &sheetModel);
@@ -351,7 +366,10 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("QuerySplitter", &querySplitter);
     engine.rootContext()->setContextProperty("GeneralParamsModel", &generalParamsModel);
     engine.rootContext()->setContextProperty("ODBCDriversModel", &odbcDriversModel);
-    engine.rootContext()->setContextProperty("CsvColumnListModel", &csvColListModel);
+    engine.rootContext()->setContextProperty("DuckCRUD", duckCRUD);
+    engine.rootContext()->setContextProperty("TableSchemaModel", tableSchema);
+    engine.rootContext()->setContextProperty("ReportModelList", reportModel);
+    engine.rootContext()->setContextProperty("DuckData", duckData);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/

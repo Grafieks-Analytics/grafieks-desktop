@@ -122,7 +122,7 @@ Rectangle{
     }
 
     Connections{
-        target: CsvColumnListModel
+        target: DuckCRUD
 
         function onCsvColData(colData){
             singleSelectCheckList.model = colData

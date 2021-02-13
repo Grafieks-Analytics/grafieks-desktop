@@ -1,9 +1,14 @@
 #include "reportmodellist.h"
-
-ReportModelList::ReportModelList(QObject *parent) : QObject(parent),
-    db(nullptr), con(db)
+#include "iostream"
+ReportModelList::ReportModelList(QObject *parent) : QObject(parent)
 {
 
+}
+
+ReportModelList::ReportModelList(DuckCRUD *duckCRUD, QObject *parent)
+{
+    Q_UNUSED(parent);
+    this->duckCRUD = duckCRUD;
 }
 
 void ReportModelList::setTmpSql(QString query)
@@ -115,14 +120,11 @@ void ReportModelList::setTmpSql(QString query)
 
 
         QString db = Statics::currentDbName;
-        std::string csvFile = db.toStdString();
 
-        std::string csvdb = "'" + csvFile + "'";
-
-        con.Query("CREATE TABLE dataType AS SELECT * FROM read_csv_auto(" + csvdb + ")");
-        auto result = con.Query("DESCRIBE dataType");
+        auto result = this->duckCRUD->con.Query("DESCRIBE " + db.toStdString());
 
         int rows = result->collection.count;
+
         int i = 0;
         while(i < rows){
 
@@ -360,11 +362,8 @@ void ReportModelList::getData()
     case Constants::csvIntType:{
 
         QString db = Statics::currentDbName;
-        std::string csvFile = db.toStdString();
 
-        std::string csvdb = "'" + csvFile + "'";
-
-        auto data = con.Query("SELECT * FROM read_csv_auto(" + csvdb + ")");
+        auto data = this->duckCRUD->con.Query("SELECT * FROM " + db.toStdString());
 
         int rows = data->collection.count;
         int colidx = 0;

@@ -2,7 +2,6 @@
 #define CREDENTIALS_H
 
 #include <QString>
-#include "duckdb.hpp"
 
 class Statics
 {

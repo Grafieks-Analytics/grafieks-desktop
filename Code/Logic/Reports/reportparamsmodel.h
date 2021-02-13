@@ -22,6 +22,7 @@ class ReportParamsModel: public QObject
     Q_PROPERTY(QList<QString> yAxisColumns READ yAxisColumns WRITE setYAxisColumns NOTIFY yAxisColumnsChanged)
     Q_PROPERTY(QString chartType READ chartType WRITE setChartType NOTIFY chartTypeChanged)
     Q_PROPERTY(QString reportId READ reportId WRITE setReportId NOTIFY reportIdChanged)
+    Q_PROPERTY(QString reportTitle READ reportTitle WRITE setReportTitle NOTIFY reportTitleChanged)
 
     QString m_itemName;
     QString m_itemType;
@@ -43,6 +44,8 @@ class ReportParamsModel: public QObject
     QString m_chartType;
 
     QString m_reportId;
+
+    QString m_reportTitle;
 
 public:
     ReportParamsModel();
@@ -69,6 +72,8 @@ public:
 
     QString reportId() const;
 
+    QString reportTitle() const;
+
 public slots:
     void setItemName(QString itemName);
     void setItemType(QString itemType);
@@ -92,6 +97,8 @@ public slots:
 
     void setReportId(QString reportId);
 
+    void setReportTitle(QString reportTitle);
+
 signals:
     void itemNameChanged(QString itemName);
     void itemTypeChanged(QString itemType);
@@ -106,6 +113,7 @@ signals:
     void yAxisColumnsChanged(QList<QString> yAxisColumns);
     void chartTypeChanged(QString chartType);
     void reportIdChanged(QString reportId);
+    void reportTitleChanged(QString reportTitle);
 };
 
 #endif // REPORTPARAMSMODEL_H

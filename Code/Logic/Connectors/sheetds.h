@@ -14,7 +14,9 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QSettings>
+
 #include "sheet.h"
+#include "../../secrets.h"
 
 /*!
  * \brief Fetches data records from Google Sheet API

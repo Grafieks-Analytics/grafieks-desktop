@@ -41,6 +41,10 @@ SOURCES += \
     Code/Logic/Connectors/dropbox.cpp \
     Code/Logic/Connectors/dropboxds.cpp \
     Code/Logic/Connectors/dropboxmodel.cpp \
+    Code/Logic/Connectors/duckcrud.cpp \
+    Code/Logic/Connectors/github.cpp \
+    Code/Logic/Connectors/githubds.cpp \
+    Code/Logic/Connectors/githubmodel.cpp \
     Code/Logic/Connectors/odbcdriversmodel.cpp \
     Code/Logic/Connectors/sheet.cpp \
     Code/Logic/Connectors/sheetds.cpp \
@@ -59,7 +63,6 @@ SOURCES += \
     Code/Logic/DataModeller/Helpers/sqliteconversions.cpp \
     Code/Logic/DataModeller/Helpers/teradataconversions.cpp \
     Code/Logic/DataModeller/columnlistmodel.cpp \
-    Code/Logic/DataModeller/csvcolumnlistmodel.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
     Code/Logic/DataModeller/filtercategoricallist.cpp \
@@ -90,6 +93,7 @@ SOURCES += \
     Code/Logic/General/tableschemamodel.cpp \
     Code/Logic/General/typecheck.cpp \
     Code/Logic/Menu/user.cpp \
+    Code/Logic/Reports/duckdata.cpp \
     Code/Logic/Reports/reportmodellist.cpp \
     Code/Logic/Reports/reportparamsmodel.cpp \
     main.cpp \
@@ -143,6 +147,10 @@ HEADERS += \
     Code/Logic/Connectors/dropbox.h \
     Code/Logic/Connectors/dropboxds.h \
     Code/Logic/Connectors/dropboxmodel.h \
+    Code/Logic/Connectors/duckcrud.h \
+    Code/Logic/Connectors/github.h \
+    Code/Logic/Connectors/githubds.h \
+    Code/Logic/Connectors/githubmodel.h \
     Code/Logic/Connectors/odbcdriversmodel.h \
     Code/Logic/Connectors/sheet.h \
     Code/Logic/Connectors/sheetds.h \
@@ -161,7 +169,6 @@ HEADERS += \
     Code/Logic/DataModeller/Helpers/sqliteconversions.h \
     Code/Logic/DataModeller/Helpers/teradataconversions.h \
     Code/Logic/DataModeller/columnlistmodel.h \
-    Code/Logic/DataModeller/csvcolumnlistmodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
     Code/Logic/DataModeller/filtercategoricallist.h \
@@ -192,12 +199,14 @@ HEADERS += \
     Code/Logic/General/tableschemamodel.h \
     Code/Logic/General/typecheck.h \
     Code/Logic/Menu/user.h \
+    Code/Logic/Reports/duckdata.h \
     Code/Logic/Reports/reportmodellist.h \
     Code/Logic/Reports/reportparamsmodel.h \
     Code/duckdb.hpp \
     Code/messages.h \
     Code/constants.h \
     Code/parquet-extension.hpp \
+    Code/secrets.h \
     Code/statics.h \
 
 

@@ -60,6 +60,11 @@ QString ReportParamsModel::reportId() const
     return m_reportId;
 }
 
+QString ReportParamsModel::reportTitle() const
+{
+    return m_reportTitle;
+}
+
 void ReportParamsModel::setItemName(QString itemName)
 {
     if (m_itemName == itemName)
@@ -157,4 +162,13 @@ void ReportParamsModel::setReportId(QString reportId)
 
     m_reportId = reportId;
     emit reportIdChanged(m_reportId);
+}
+
+void ReportParamsModel::setReportTitle(QString reportTitle)
+{
+    if (m_reportTitle == reportTitle)
+        return;
+
+    m_reportTitle = reportTitle;
+    emit reportTitleChanged(m_reportTitle);
 }

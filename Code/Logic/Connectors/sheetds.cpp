@@ -34,15 +34,15 @@ SheetDS::SheetDS(QObject *parent) : QObject(parent),
     // Attached screenshot of JSON file and Google Console
 
     this->google->setAuthorizationUrl(QUrl("https://accounts.google.com/o/oauth2/auth"));
-    this->google->setClientIdentifier("1075668792200-4mt2rbu1t7jjsi8hcb9d1p3b29982p98.apps.googleusercontent.com");
+    this->google->setClientIdentifier(Secret::sheetClient);
     this->google->setAccessTokenUrl(QUrl("https://oauth2.googleapis.com/token"));
-    this->google->setClientIdentifierSharedKey("hXXkqrprnYZSNyCLedSraCaN");
+    this->google->setClientIdentifierSharedKey(Secret::sheetSecret);
 
     // In my case, I have hardcoded 5476
     // This is set in Redirect URI in Google Developers Console of the app
     // Same can be seen in the downloaded JSON file
 
-    auto replyHandler = new QOAuthHttpServerReplyHandler(3000, this);
+    auto replyHandler = new QOAuthHttpServerReplyHandler(Secret::sheetPort, this);
     this->google->setReplyHandler(replyHandler);
 
     connect(this->google, &QOAuth2AuthorizationCodeFlow::granted, [=]() {

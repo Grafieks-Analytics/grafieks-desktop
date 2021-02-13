@@ -18,6 +18,7 @@
 #include <QtDebug>
 
 #include "box.h"
+#include "../../secrets.h"
 
 /*!
  * \brief Fetches data records from Box API

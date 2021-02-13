@@ -99,6 +99,8 @@ Rectangle{
             chartHtml:"PieChart.html"
             activeChart: false
             title:"Pie Chart"
+            xAxisLabelName: "Categorical"
+            yAxisLabelName: "Numerical"
             yAxisVisible: false
             lineTypeChartVisible: false
         }
@@ -107,6 +109,8 @@ Rectangle{
             chartHtml:"DoughnutChart.html"
             activeChart: false
             title:"Donut"
+            xAxisLabelName: "Categorical"
+            yAxisLabelName: "Numerical"
             yAxisVisible: false
             lineTypeChartVisible: false
         }
@@ -114,6 +118,8 @@ Rectangle{
             icon: "radar.png"
             chartHtml:"RadarChart.html"
             activeChart: false
+            xAxisLabelName: "Categorical"
+            yAxisLabelName: "Numerical"
             title:"Radar"
             yAxisVisible: false
             lineTypeChartVisible: false
@@ -123,6 +129,8 @@ Rectangle{
             chartHtml:"SunburstChart.html"
             activeChart: false
             title:"Sunburst"
+            xAxisLabelName: "Categorical"
+            yAxisLabelName: "Numerical"
             yAxisVisible: false
             lineTypeChartVisible: false
         }
@@ -136,9 +144,11 @@ Rectangle{
         }
         ListElement{
             icon: "chord_diagram.png"
-            chartHtml:"bar.html"
+            chartHtml:"ChordChart.html"
             activeChart: false
             title:"Chord Diagram"
+            xAxisLabelName: "Source"
+            yAxisLabelName: "Numerical"
             yAxisVisible: false
             lineTypeChartVisible: false
         }
@@ -148,6 +158,8 @@ Rectangle{
             activeChart: false
             title:"Funnel"
             yAxisVisible: false
+            xAxisLabelName: "Categorical"
+            yAxisLabelName: "Numerical"
             lineTypeChartVisible: false
         }
         ListElement{
@@ -155,6 +167,8 @@ Rectangle{
             chartHtml:"TreeChart.html"
             activeChart: false
             title:"Tree Chart"
+            xAxisLabelName: "Categorical"
+            yAxisLabelName: "Numerical"
             yAxisVisible: false
             lineTypeChartVisible: false
         }
@@ -176,6 +190,8 @@ Rectangle{
             chartHtml:"TreeMapChart.html"
             elementHeight: 24
             activeChart: false
+            xAxisLabelName: "Categorical"
+            yAxisLabelName: "Numerical"
             title: "Tree Map"
         }
         ListElement{
@@ -203,6 +219,8 @@ Rectangle{
             elementHeight: 22
             elementWidth:40
             activeChart: false
+            xAxisLabelName: "Location"
+            yAxisLabelName: "Numerical"
             title:"Map"
         }
         ListElement{
@@ -247,7 +265,22 @@ Rectangle{
 
     function getChart(chartHtml,index){
         loadchart("../Charts/"+chartHtml);
-        yAxisVisible  = allCharts.get(index).yAxisVisible;
+//        yAxisVisible  = allCharts.get(index).yAxisVisible;
+
+        const yAxisLabelNameData = allCharts.get(index).yAxisLabelName;
+        if(yAxisLabelNameData){
+            yAxisLabelName = yAxisLabelNameData;
+        }else{
+            yAxisLabelName = Constants.yAxisName
+        }
+
+        const xAxisLabelNameData = allCharts.get(index).xAxisLabelName;
+        if(xAxisLabelNameData){
+            xAxisLabelName = xAxisLabelNameData;
+        }else{
+            xAxisLabelName = Constants.xAxisName
+        }
+
         lineTypeChartVisible = allCharts.get(index).lineTypeChartVisible;
         allCharts.set(activeChartIndex,{activeChart: false})
         activeChartIndex = index;

@@ -33,15 +33,15 @@ DriveDS::DriveDS(QObject *parent) : QObject(parent),
     // Attached screenshot of JSON file and Google Console
 
     this->google->setAuthorizationUrl(QUrl("https://accounts.google.com/o/oauth2/auth"));
-    this->google->setClientIdentifier("452291785459-1ldhc2q2ahqfl7sv0mh1veuov740bj5f.apps.googleusercontent.com");
+    this->google->setClientIdentifier(Secret::driveClient);
     this->google->setAccessTokenUrl(QUrl("https://oauth2.googleapis.com/token"));
-    this->google->setClientIdentifierSharedKey("I09LKhYI21Svp-QWPe2nsJvb");
+    this->google->setClientIdentifierSharedKey(Secret::driveSecret);
 
     // In my case, I have hardcoded 5476
     // This is set in Redirect URI in Google Developers Console of the app
     // Same can be seen in the downloaded JSON file
 
-    auto replyHandler = new QOAuthHttpServerReplyHandler(59376, this);
+    auto replyHandler = new QOAuthHttpServerReplyHandler(Secret::drivePort, this);
     this->google->setReplyHandler(replyHandler);
 
     connect(this->google, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
