@@ -65,20 +65,19 @@ Popup {
 
 
     function hidePopup(){
-        boxfilePopup.visible = false
+        popup.visible = false
     }
 
     function updatePath(text){
         hidePopup()
-        path.text="Drive";
+        path.text=text;
     }
 
 
     function onHomeClicked(){
-        console.log("HOME CLOCKED")
         DriveDS.folderNav("0")
         // refer boxds.cpp for function info
-        updatePath("Drive")
+        updatePath(pathFolder)
     }
 
     function searchFiles(){
@@ -94,28 +93,36 @@ Popup {
         fileNotSelectedMsg.visible = false
     }
 
-    function onFileClicked(name,type){
+    function onFileClicked(name, type, modifiedTime){
 
         showSelectedFileDetails();
         hideFileNotSelectedMessage();
 
-        detailName.text = name;
 
+//        if(type === "folder"){
+//            pathFolder = id;
+//            folderName = name;
+//        }
 
-        if(type === "folder"){
-            pathFolder = id;
-            folderName = name;
-        }
+//        if(type === "file")
+//        {
+            console.log("CLICKED ON FILE")
+            let newDate = new Date(modifiedTime);
+            let dateString = newDate.getUTCFullYear() +"/"+ (newDate.getUTCMonth()+1) +"/"+ newDate.getUTCDate() + " " + newDate.getUTCHours() + ":" + newDate.getUTCMinutes() + ":" + newDate.getUTCSeconds();
 
-        if(type === "file")
-        {
             path.text = name
-            detailName.text = name;
-        }
+            detailNameDisplay.text = name;
+            documentTypeDisplay.text = type;
+            modifiedTimeDisplay.text = dateString;
+
+
+//        }
 
     }
 
     function onFolderDoubleClicked(name,type){
+
+        console.log(type, "TYPE")
         if(type === "folder")
             DriveDS.folderNav(pathFolder)
 
@@ -157,10 +164,7 @@ Popup {
             anchors.rightMargin: 5
             MouseArea{
                 anchors.fill: parent
-                onClicked: {
-                    console.log("CLOSE ICON")
-                    updatePath("Drive")
-                }
+                onClicked: updatePath(pathFolder)
             }
         }
 
@@ -259,7 +263,7 @@ Popup {
                         id: fileList
                         model:DriveModel
 
-                        height: 200
+                        height: parent.height
                         width: popup.width * 0.6
 
                         header: Row{
@@ -361,8 +365,8 @@ Popup {
                                     MouseArea{
 
                                         anchors.fill:parent
-                                        onClicked:onFileClicked(name,extension);
-                                        onDoubleClicked: onFolderDoubleClicked(name,extension)
+                                        onClicked:onFileClicked(name, extension, modifiedTime);
+                                        onDoubleClicked: onFolderDoubleClicked(name, extension)
                                     }
                                 }
 
@@ -397,7 +401,7 @@ Popup {
                                     anchors.left: parent
 
                                     Text {
-                                        text: qsTr(modifiedAt)
+                                        text: qsTr(modifiedTime)
                                         padding: 5
                                         leftPadding: 20
                                     }
@@ -484,11 +488,6 @@ Popup {
                                 padding: 5
                                 text: qsTr("Last Modified")
                             }
-                            Text {
-                                anchors.right: parent.right
-                                padding: 5
-                                text: qsTr("Size")
-                            }
 
                         }
 
@@ -498,24 +497,17 @@ Popup {
                             width: parent.width/2 + 5
 
                             Text {
-                                id: detailName
-                                text: qsTr("Test.xlsx")
+                                id: detailNameDisplay
                                 padding: 5
                             }
                             Text {
-                                text: qsTr("Document")
+                                id: documentTypeDisplay
                                 padding: 5
                             }
                             Text {
-                                text: qsTr("24/05/2020 14:30")
+                                id: modifiedTimeDisplay
                                 padding: 5
                             }
-                            Text {
-                                text: qsTr("50 MB")
-                                padding: 5
-                            }
-
-
                         }
                     }
 

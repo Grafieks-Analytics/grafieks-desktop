@@ -35,6 +35,7 @@ public:
     Q_INVOKABLE void fetchDatasources();
     Q_INVOKABLE void searchQuer(QString path);
     Q_INVOKABLE void homeBut();
+    Q_INVOKABLE void getUserName();
 
     void addDataSource(Drive * drive);
     Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & kind,const QString & modifiedTime,const QString & extension);
@@ -48,6 +49,7 @@ signals:
     void postItemRemoved();
     void preReset();
     void postReset();
+    void getUsername(QString username);
 
 private slots:
     void resetDatasource();
@@ -60,6 +62,8 @@ private:
     QNetworkReply * m_networkReply;
     QByteArray * m_dataBuffer;
     QList<Drive*> m_drive;
+
+    QString username;
 
 };
 
