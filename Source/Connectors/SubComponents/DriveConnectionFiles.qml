@@ -36,26 +36,6 @@ Popup {
     // LIST MODEL STARTS
 
 
-    ListModel{
-        id : allFileData
-        ListElement{
-            fileName: "file1.txt"
-            kind:"text"
-            lastModified:"20/04/05"
-        }
-        ListElement{
-            fileName: "file2.txt"
-            kind:"text"
-            lastModified:"20/04/04"
-        }
-        ListElement{
-            fileName: "file3.txt"
-            kind:"text"
-            lastModified:"27/04/05"
-        }
-    }
-
-
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
 
@@ -95,6 +75,7 @@ Popup {
 
 
     function onHomeClicked(){
+        console.log("HOME CLOCKED")
         DriveDS.folderNav("0")
         // refer boxds.cpp for function info
         updatePath("Drive")
@@ -119,6 +100,7 @@ Popup {
         hideFileNotSelectedMessage();
 
         detailName.text = name;
+
 
         if(type === "folder"){
             pathFolder = id;
@@ -175,7 +157,10 @@ Popup {
             anchors.rightMargin: 5
             MouseArea{
                 anchors.fill: parent
-                onClicked: updatePath("Drive")
+                onClicked: {
+                    console.log("CLOSE ICON")
+                    updatePath("Drive")
+                }
             }
         }
 
@@ -376,8 +361,8 @@ Popup {
                                     MouseArea{
 
                                         anchors.fill:parent
-                                        onClicked:onFileClicked(name,tag);
-                                        onDoubleClicked: onFolderDoubleClicked(name,tag)
+                                        onClicked:onFileClicked(name,extension);
+                                        onDoubleClicked: onFolderDoubleClicked(name,extension)
                                     }
                                 }
 
