@@ -167,23 +167,23 @@ void DriveDS::dataReadFinished()
             QJsonObject dataObj = dataArray.at(i).toObject();
 
 
-                QString DriveID = dataObj["id"].toString();
-                QString DriveName = dataObj["name"].toString();
-                QString DriveKind = dataObj["kind"].toString();
-                QString DriveModiTime = dataObj["modifiedTime"].toString();
-                QString DriveExtension = "file";
-                QString DriveMimeType = dataObj["mimeType"].toString();
-                QStringList extensionList;
+            QString DriveID = dataObj["id"].toString();
+            QString DriveName = dataObj["name"].toString();
+            QString DriveKind = dataObj["kind"].toString();
+            QString DriveModiTime = dataObj["modifiedTime"].toString();
+            QString DriveExtension = "";
+            QString DriveMimeType = dataObj["mimeType"].toString();
+            QStringList extensionList;
 
-                if(DriveName.contains(".")){
-                    extensionList = DriveName.split('.');
-                    DriveExtension = "." + extensionList.last();
-                }else if(DriveMimeType == "application/vnd.google-apps.spreadsheet"){
-                    DriveExtension = ".gsheet";
-                }
+            if(DriveName.contains(".")){
+                extensionList = DriveName.split('.');
+                DriveExtension = "." + extensionList.last();
+            }else if(DriveMimeType == "application/vnd.google-apps.spreadsheet"){
+                DriveExtension = ".gsheet";
+            }
 
-                if(DriveMimeType != "application/vnd.google-apps.folder" && requiredExtensions.indexOf(DriveExtension) >= 0){
-                 this->addDataSource(DriveID,DriveName,DriveKind,DriveModiTime,DriveExtension);
+            if(DriveMimeType != "application/vnd.google-apps.folder" && requiredExtensions.indexOf(DriveExtension) >= 0){
+                this->addDataSource(DriveID,DriveName,DriveKind,DriveModiTime,DriveExtension);
             }
         }
 

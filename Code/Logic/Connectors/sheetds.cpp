@@ -72,7 +72,7 @@ void SheetDS::searchQuer(QString path)
     if(path == "")
         m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType+contains+%27application%2Fvnd.google-apps.spreadsheet%27"));
     else
-    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name+contains+%27" + path +"%27+and+mimeType+contains+%27application%2Fvnd.google-apps.spreadsheet%27"));
+        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name+contains+%27" + path +"%27+and+mimeType+contains+%27application%2Fvnd.google-apps.spreadsheet%27"));
 
     connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
 }
@@ -85,6 +85,11 @@ void SheetDS::homeBut()
     m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'"));
 
     connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
+}
+
+void SheetDS::getUserName()
+{
+
 }
 
 
@@ -143,6 +148,9 @@ void SheetDS::dataReadFinished()
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
     }else{
+        QStringList requiredExtensions;
+        requiredExtensions << ".gsheet";
+
         this->resetDatasource();
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
@@ -156,18 +164,17 @@ void SheetDS::dataReadFinished()
             QString SheetName = dataObj["name"].toString();
             QString SheetKind = dataObj["kind"].toString();
             QString SheetModiTime = dataObj["modifiedTime"].toString();
-            QString SheetExtension = "file";
+            QString SheetExtension = "";
             QString SheetMimeType = dataObj["mimeType"].toString();
+
             QStringList extensionList;
-            if(SheetName.contains(".")){
-                extensionList = SheetName.split('.');
-                SheetExtension = "." + extensionList.last();
-            }else if(SheetMimeType == "application/vnd.google-apps.spreadsheet"){
+            if(SheetMimeType == "application/vnd.google-apps.spreadsheet"){
                 SheetExtension = ".gsheet";
             }
 
-
-            this->addDataSource(SheetID,SheetName,SheetKind,SheetModiTime,SheetExtension);
+            if(SheetMimeType != "application/vnd.google-apps.folder" && requiredExtensions.indexOf(SheetExtension) >= 0){
+                this->addDataSource(SheetID,SheetName,SheetKind,SheetModiTime,SheetExtension);
+            }
         }
 
         m_dataBuffer->clear();

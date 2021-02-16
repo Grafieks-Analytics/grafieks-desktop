@@ -98,31 +98,20 @@ Popup {
         showSelectedFileDetails();
         hideFileNotSelectedMessage();
 
+        let newDate = new Date(modifiedTime);
+        let dateString = newDate.getUTCFullYear() +"/"+ (newDate.getUTCMonth()+1) +"/"+ newDate.getUTCDate() + " " + newDate.getUTCHours() + ":" + newDate.getUTCMinutes() + ":" + newDate.getUTCSeconds();
 
-//        if(type === "folder"){
-//            pathFolder = id;
-//            folderName = name;
-//        }
-
-//        if(type === "file")
-//        {
-            console.log("CLICKED ON FILE")
-            let newDate = new Date(modifiedTime);
-            let dateString = newDate.getUTCFullYear() +"/"+ (newDate.getUTCMonth()+1) +"/"+ newDate.getUTCDate() + " " + newDate.getUTCHours() + ":" + newDate.getUTCMinutes() + ":" + newDate.getUTCSeconds();
-
-            path.text = name
-            detailNameDisplay.text = name;
-            documentTypeDisplay.text = type;
-            modifiedTimeDisplay.text = dateString;
+        path.text = name
+        detailNameDisplay.text = name;
+        documentTypeDisplay.text = type;
+        modifiedTimeDisplay.text = dateString;
 
 
-//        }
 
     }
 
     function onFolderDoubleClicked(name,type){
 
-        console.log(type, "TYPE")
         if(type === "folder")
             DriveDS.folderNav(pathFolder)
 
@@ -190,17 +179,6 @@ Popup {
                 id: connectedById
                 text: qsTr("Connected by: test@test.com")
             }
-
-            //            Column{
-            //                x: parent.width * 0.75
-
-            //                Text {
-            //                    id: signOutBtn
-            //                    x:popup.width - popup.parent.width * 0.125 - 30
-            //                    text: qsTr("Sign Out")
-            //                    color: "blue"
-            //                }
-            //            }
         }
 
         // Row  User Details Ends
