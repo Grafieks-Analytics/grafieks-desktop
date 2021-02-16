@@ -36,25 +36,6 @@ Popup {
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
-    ListModel{
-        id : allFileData
-        ListElement{
-            fileName: "file1.txt"
-            kind:"text"
-            lastModified:"20/04/05"
-        }
-        ListElement{
-            fileName: "file2.txt"
-            kind:"text"
-            lastModified:"20/04/04"
-        }
-        ListElement{
-            fileName: "file3.txt"
-            kind:"text"
-            lastModified:"27/04/05"
-        }
-    }
-
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
 
@@ -97,23 +78,22 @@ Popup {
         SheetDS.searchQuer(server_files.text);
     }
 
-    function onFileSelected(name,id,type){
+    function onFileSelected(name, id, type, modifiedTime){
+
+        console.log(name, id, type, modifiedTime, "TEST")
 
         fileSelected.visible = true
         fileNotSelectedMsg.visible = false
 
-        detailName.text = name;
+        updatePath(name)
 
-        if(type === "folder"){
-            pathFolder = id;
-            folderName = name;
-        }
+        let newDate = new Date(modifiedTime);
+        let dateString = newDate.getUTCFullYear() +"/"+ (newDate.getUTCMonth()+1) +"/"+ newDate.getUTCDate() + " " + newDate.getUTCHours() + ":" + newDate.getUTCMinutes() + ":" + newDate.getUTCSeconds();
 
-        if(type === "file")
-        {
-            updatePath(name)
-            detailName.text = name;
-        }
+        path.text = name
+        detailNameDisplay.text = name;
+        documentTypeDisplay.text = type;
+        modifiedTimeDisplay.text = dateString;
     }
 
     function onFolderClicked(name,type,pathFolder){
@@ -126,7 +106,7 @@ Popup {
     function onHomeClicked(){
         SheetDS.folderNav("0")
         // refer SheetDS.cpp for function info
-        updatePath("Sheet")
+        updatePath(pathFolder)
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -183,7 +163,7 @@ Popup {
                 anchors.fill: parent
                 onClicked: {
                     closePopup();
-                    updatePath("Sheet")
+                    updatePath(pathFolder)
                 }
             }
         }
@@ -211,16 +191,6 @@ Popup {
                 text: qsTr("Connected by: test@test.com")
             }
 
-            //            Column{
-            //                x: parent.width * 0.75
-
-            //                Text {
-            //                    id: signOutBtn
-            //                    x:popup.width - popup.parent.width * 0.125 - 30
-            //                    text: qsTr("Sign Out")
-            //                    color: "blue"
-            //                }
-            //            }
         }
 
         // Row  User Details Ends
@@ -384,7 +354,7 @@ Popup {
                                     MouseArea{
 
                                         anchors.fill:parent
-                                        onClicked: onFileSelected(name,id,type)
+                                        onClicked: onFileSelected(name, id, extension, modifiedTime)
                                         onDoubleClicked: onFolderClicked()
                                     }
                                 }
@@ -420,7 +390,7 @@ Popup {
                                     anchors.left: parent
 
                                     Text {
-                                        text: qsTr(modifiedAt)
+                                        text: qsTr(modifiedTime)
                                         padding: 5
                                         leftPadding: 20
                                     }
@@ -507,11 +477,6 @@ Popup {
                                 padding: 5
                                 text: qsTr("Last Modified")
                             }
-                            Text {
-                                anchors.right: parent.right
-                                padding: 5
-                                text: qsTr("Size")
-                            }
 
                         }
 
@@ -521,23 +486,17 @@ Popup {
                             width: parent.width/2 + 5
 
                             Text {
-                                id: detailName
-                                text: qsTr("Test.xlsx")
+                                id: detailNameDisplay
                                 padding: 5
                             }
                             Text {
-                                text: qsTr("Document")
+                                id: documentTypeDisplay
                                 padding: 5
                             }
                             Text {
-                                text: qsTr("24/05/2020 14:30")
+                                id: modifiedTimeDisplay
                                 padding: 5
                             }
-                            Text {
-                                text: qsTr("50 MB")
-                                padding: 5
-                            }
-
 
                         }
                     }
