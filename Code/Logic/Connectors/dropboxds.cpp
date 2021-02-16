@@ -37,9 +37,9 @@ DropboxDS::DropboxDS(QObject *parent) : QObject(parent),
     // Attached screenshot of JSON file and dropbox Console
 
     this->dropbox->setAuthorizationUrl(QUrl("https://www.dropbox.com/oauth2/authorize"));
-    this->dropbox->setClientIdentifier("o4py8vuaqeyxiiy");
+    this->dropbox->setClientIdentifier(Secret::dropBoxClient);
     this->dropbox->setAccessTokenUrl(QUrl("https://api.dropboxapi.com/oauth2/token"));
-    this->dropbox->setClientIdentifierSharedKey("zkhfjibgh2tfiyu");
+    this->dropbox->setClientIdentifierSharedKey(Secret::dropBoxSecret);
 
 
 
@@ -47,9 +47,9 @@ DropboxDS::DropboxDS(QObject *parent) : QObject(parent),
     // This is set in Redirect URI in dropbox Developers Console of the app
     // Same can be seen in the downloaded JSON file
 
-    auto replyHandler = new QOAuthHttpServerReplyHandler(5476, this);
+    auto replyHandler = new QOAuthHttpServerReplyHandler(Secret::dropBoxPort, this);
     this->dropbox->setReplyHandler(replyHandler);
-//    connect(this->dropbox,&QOAuth2AuthorizationCodeFlow::granted,this,&DropboxDS::folderNav);
+    //    connect(this->dropbox,&QOAuth2AuthorizationCodeFlow::granted,this,&DropboxDS::folderNav);
 
     connect(this->dropbox, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
         qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
@@ -170,6 +170,11 @@ void DropboxDS::searchQuer(QString path)
 
 }
 
+void DropboxDS::getUserName()
+{
+
+}
+
 /*!
  * \brief Notify model after adding new record in QList<Dropbox *>
  * \param box (Dropbox *)
@@ -279,21 +284,28 @@ void DropboxDS::dataSearchedFinished()
     if(m_networkReply->error()){
         qDebug()<< "There was some error :" << m_networkReply->errorString();
     }else{
+        QStringList requiredExtensions;
+        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json" << ".ods";
+
         this->resetDatasource();
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
         QJsonArray dataArray = resultObj["matches"].toArray();
+
         for(int i=0;i<dataArray.size();i++){
             QJsonObject dataObj = dataArray.at(i).toObject();
             QJsonObject dataObj2 = dataObj["metadata"].toObject();
             QJsonObject dataObj3 = dataObj2["metadata"].toObject();
+
             QString DropboxID = dataObj3["id"].toString();
             QString DropboxTag = dataObj3[".tag"].toString();
             QString DropboxName = dataObj3["name"].toString();
+
             QStringList extensionList;
             QString DropboxExtension;
             QString DropboxPathLower = dataObj3["path_lower"].toString();
             QString DropboxClientModi;
+
             if(DropboxTag  == "file"){
                 DropboxClientModi = dataObj3["client_modified"].toString();
                 extensionList = DropboxName.split('.');
@@ -304,7 +316,9 @@ void DropboxDS::dataSearchedFinished()
                 DropboxExtension = "--";
 
             }
-            this->addDataSource(DropboxID,DropboxTag,DropboxName,DropboxPathLower,DropboxClientModi,DropboxExtension);
+            if(requiredExtensions.indexOf(DropboxExtension) >= 0){
+                this->addDataSource(DropboxID,DropboxTag,DropboxName,DropboxPathLower,DropboxClientModi,DropboxExtension);
+            }
 
         }
         m_dataBuffer->clear();

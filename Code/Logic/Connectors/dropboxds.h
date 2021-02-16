@@ -19,6 +19,7 @@
 
 
 #include "dropbox.h"
+#include "../../secrets.h"
 
 
 /*!
@@ -38,6 +39,7 @@ public:
     Q_INVOKABLE QString goingBack(QString path,QString name);
     Q_INVOKABLE void folderNav(QString path);
     Q_INVOKABLE void searchQuer(QString path);
+    Q_INVOKABLE void getUserName();
 
     void addDataSource(Dropbox * dropbox);
 
@@ -53,6 +55,7 @@ signals:
     void postItemRemoved();
     void preReset();
     void postReset();
+    void getUsername(QString username);
 
 private slots:
     void resetDatasource();
@@ -70,6 +73,7 @@ private:
     QList<Dropbox*> m_dropbox;
     QOAuth2AuthorizationCodeFlow * dropbox;
     QString token;
+    QString username;
 };
 
 #endif // DROPBOXDS_H
