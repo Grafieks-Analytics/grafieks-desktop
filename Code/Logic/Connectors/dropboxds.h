@@ -74,6 +74,8 @@ private:
     QOAuth2AuthorizationCodeFlow * dropbox;
     QString token;
     QString username;
+
+    void addDatasourceHelper(QJsonDocument &doc);
 };
 
 #endif // DROPBOXDS_H
