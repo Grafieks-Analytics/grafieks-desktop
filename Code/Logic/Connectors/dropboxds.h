@@ -19,6 +19,7 @@
 
 
 #include "dropbox.h"
+#include "../../secrets.h"
 
 
 /*!

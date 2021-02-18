@@ -37,9 +37,9 @@ DropboxDS::DropboxDS(QObject *parent) : QObject(parent),
     // Attached screenshot of JSON file and dropbox Console
 
     this->dropbox->setAuthorizationUrl(QUrl("https://www.dropbox.com/oauth2/authorize"));
-    this->dropbox->setClientIdentifier("o4py8vuaqeyxiiy");
+    this->dropbox->setClientIdentifier(Secret::dropBoxClient);
     this->dropbox->setAccessTokenUrl(QUrl("https://api.dropboxapi.com/oauth2/token"));
-    this->dropbox->setClientIdentifierSharedKey("zkhfjibgh2tfiyu");
+    this->dropbox->setClientIdentifierSharedKey(Secret::dropBoxSecret);
 
 
 
@@ -47,7 +47,7 @@ DropboxDS::DropboxDS(QObject *parent) : QObject(parent),
     // This is set in Redirect URI in dropbox Developers Console of the app
     // Same can be seen in the downloaded JSON file
 
-    auto replyHandler = new QOAuthHttpServerReplyHandler(5476, this);
+    auto replyHandler = new QOAuthHttpServerReplyHandler(Secret::dropBoxPort, this);
     this->dropbox->setReplyHandler(replyHandler);
 //    connect(this->dropbox,&QOAuth2AuthorizationCodeFlow::granted,this,&DropboxDS::folderNav);
 
