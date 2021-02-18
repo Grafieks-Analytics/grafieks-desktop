@@ -92,16 +92,15 @@ Popup {
     }
 
     function updatePath(text){
-        closePopup();
         path.text=text;
     }
 
-    function onFileClicked(name,tag,pathLower){
+    function onFileClicked(name, tag, pathLower,extension, modifiedTime){
 
         fileSelected.visible = true
         fileNotSelectedMsg.visible = false
 
-        detailName.text = name;
+//        detailName.text = name;
         if(tag === "folder"){
             pathFolder = pathLower;
             folderName = name;
@@ -109,8 +108,14 @@ Popup {
 
         if(tag === "file")
         {
+
+            let newDate = new Date(modifiedTime);
+            let dateString = newDate.getUTCFullYear() +"/"+ (newDate.getUTCMonth()+1) +"/"+ newDate.getUTCDate() + " " + newDate.getUTCHours() + ":" + newDate.getUTCMinutes() + ":" + newDate.getUTCSeconds();
+
             updatePath(pathLower)
-            detailName.text = name;
+            detailNameDisplay.text = name;
+            documentTypeDisplay.text = extension;
+            modifiedTimeDisplay.text = dateString;
         }
 
     }
@@ -125,7 +130,7 @@ Popup {
     function onHomeClicked(){
         DropboxDS.folderNav("")
         //refer function folderNav of dropboxds.cpp
-        updatePath("Dropbox")
+        updatePath(pathFolder)
     }
 
 
@@ -191,7 +196,10 @@ Popup {
             anchors.rightMargin: 5
             MouseArea{
                 anchors.fill: parent
-                onClicked: updatePath("Dropbox")
+                onClicked: {
+                    closePopup();
+                    updatePath("Dropbox")
+                }
             }
         }
 
@@ -217,17 +225,6 @@ Popup {
                 id: connectedById
                 text: qsTr("Connected by: test@test.com")
             }
-
-            //            Column{
-            //                x: parent.width * 0.75
-
-            //                Text {
-            //                    id: signOutBtn
-            //                    x:popup.width - popup.parent.width * 0.125 - 30
-            //                    text: qsTr("Sign Out")
-            //                    color: "blue"
-            //                }
-            //            }
         }
 
 
@@ -264,9 +261,7 @@ Popup {
 
                 }
 
-
             }
-
 
         }
 
@@ -393,8 +388,8 @@ Popup {
                                     MouseArea{
 
                                         anchors.fill:parent
-                                        onClicked: onFileClicked(name,tag,pathLower)
-                                        onDoubleClicked: onFolderClicked(name,tag,pathFolder,pathLower);
+                                        onClicked: onFileClicked(name, tag, pathLower, extension, clientModified)
+                                        onDoubleClicked: onFolderClicked(name, tag, pathFolder, pathLower);
                                     }
                                 }
 
@@ -516,11 +511,6 @@ Popup {
                                 padding: 5
                                 text: qsTr("Last Modified")
                             }
-                            Text {
-                                anchors.right: parent.right
-                                padding: 5
-                                text: qsTr("Size")
-                            }
 
                         }
 
@@ -530,24 +520,17 @@ Popup {
                             width: parent.width/2 + 5
 
                             Text {
-                                id: detailName
-                                text: qsTr("Test.xlsx")
+                                id: detailNameDisplay
                                 padding: 5
                             }
                             Text {
-                                text: qsTr("Document")
+                                id: documentTypeDisplay
                                 padding: 5
                             }
                             Text {
-                                text: qsTr("24/05/2020 14:30")
+                                id: modifiedTimeDisplay
                                 padding: 5
                             }
-                            Text {
-                                text: qsTr("50 MB")
-                                padding: 5
-                            }
-
-
                         }
                     }
 
