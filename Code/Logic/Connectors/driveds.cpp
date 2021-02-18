@@ -85,6 +85,11 @@ void DriveDS::homeBut()
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
 }
 
+void DriveDS::getUserName()
+{
+
+}
+
 /*!
  * \brief Notify model after adding new record in QList<Drive *>
  * \param drive (Drive *)
@@ -149,6 +154,9 @@ void DriveDS::dataReadFinished()
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
     }else{
+        QStringList requiredExtensions;
+        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json" << ".ods" << ".gsheet";
+
         this->resetDatasource();
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
@@ -158,13 +166,15 @@ void DriveDS::dataReadFinished()
 
             QJsonObject dataObj = dataArray.at(i).toObject();
 
+
             QString DriveID = dataObj["id"].toString();
             QString DriveName = dataObj["name"].toString();
             QString DriveKind = dataObj["kind"].toString();
             QString DriveModiTime = dataObj["modifiedTime"].toString();
-            QString DriveExtension = "file";
+            QString DriveExtension = "";
             QString DriveMimeType = dataObj["mimeType"].toString();
             QStringList extensionList;
+
             if(DriveName.contains(".")){
                 extensionList = DriveName.split('.');
                 DriveExtension = "." + extensionList.last();
@@ -172,8 +182,9 @@ void DriveDS::dataReadFinished()
                 DriveExtension = ".gsheet";
             }
 
-
-            this->addDataSource(DriveID,DriveName,DriveKind,DriveModiTime,DriveExtension);
+            if(DriveMimeType != "application/vnd.google-apps.folder" && requiredExtensions.indexOf(DriveExtension) >= 0){
+                this->addDataSource(DriveID,DriveName,DriveKind,DriveModiTime,DriveExtension);
+            }
         }
 
         m_dataBuffer->clear();
