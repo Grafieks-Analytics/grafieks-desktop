@@ -7,6 +7,10 @@
 #include <QUrl>
 #include <QDir>
 #include <QDebug>
+#include <QJsonDocument>
+#include <QJsonValue>
+#include <QJsonArray>
+#include <QJsonObject>
 
 #include "../Connectors/duckcrud.h"
 
@@ -21,42 +25,55 @@ public:
 
     // Need to check Return types and paramter's type;
 
-    Q_INVOKABLE QJsonArray getBarChartValues(  QVariant xAxisColumn
-                                             , QVariant xAxisCalculationType
-                                             , QVariant yAxisColumn
-                                             , QVariant yAxisCalculationType
-                                            );
+    Q_INVOKABLE void getBarChartValues(  QString xAxisColumn
+                                         , QString yAxisColumn
+                                         , QString yAxisCalculationType
+                                         );
 
-    Q_INVOKABLE QJsonArray getStackedBarChartValues(  QVariant xAxisColumn
-                                                    , QVariant xAxisCalculationType
-                                                    , QVariant yAxisColumn
-                                                    , QVariant yAxisCalculationType
-                                                    , QVariant groupedBy
-                                                   );
+    Q_INVOKABLE void getStackedBarChartValues(  QString xAxisColumn
+                                                , QString yAxisColumn
+                                                , QString yAxisCalculationType
+                                                , QString groupedBy
+                                                );
 
-    Q_INVOKABLE QJsonArray getAreaChartValues(  QVariant xAxisColumn
-                                              , QVariant xAxisCalculationType
-                                              , QVariant yAxisColumn
-                                              , QVariant yAxisCalculationType
-                                             );
-
-    Q_INVOKABLE QJsonArray getLineChartValues(  QVariant xAxisColumn
-                                              , QVariant xAxisCalculationType
-                                              , QVariant yAxisColumn
-                                              , QVariant yAxisCalculationType
-                                             );
-
-    Q_INVOKABLE QJsonArray getPieChartValues(  QVariant xAxisColumn
-                                             , QVariant xAxisCalculationType
-                                             , QVariant yAxisColumn
-                                             , QVariant yAxisCalculationType
-                                            );
-
-    Q_INVOKABLE QJsonArray getFunnelChartValues(  QVariant xAxisColumn
-                                                , QVariant xAxisCalculationType
-                                                , QVariant yAxisColumn
-                                                , QVariant yAxisCalculationType
+    Q_INVOKABLE void getAreaChartValues(       QString xAxisColumn
+                                               , QString yAxisColumn
+                                               , QString xAxisCalculationType
+                                               , QString yAxisCalculationType
                                                );
+
+    Q_INVOKABLE void getLineChartValues(  QString xAxisColumn
+                                          , QString xAxisCalculationType
+                                          , QString yAxisColumn
+                                          , QString yAxisCalculationType
+                                          );
+
+    Q_INVOKABLE void getPieChartValues(  QString xAxisColumn
+                                         , QString yAxisColumn
+                                         , QString yAxisCalculationType
+                                         );
+
+    Q_INVOKABLE void getFunnelChartValues(  QString xAxisColumn
+                                            , QString yAxisColumn
+                                            , QString yAxisCalculationType
+                                            );
+
+    Q_INVOKABLE void getRadarChartValues(   QString xAxisColumn
+                                            , QString yAxisColumn
+                                            , QString yAxisCalculationType
+                                            );
+
+    Q_INVOKABLE void getScatterChartValues( QString xAxisColumn
+                                            , QString yAxisColumn
+                                            , QString xAxisCalculationType
+                                            , QString yAxisCalculationType
+                                            , QString groupedBy
+                                            );
+
+    Q_INVOKABLE void getHeatMapChartValues( QString xAxisColumn
+                                            , QString yAxisColumn
+                                            , QString groupedBy
+                                            );
 
 signals:
 
