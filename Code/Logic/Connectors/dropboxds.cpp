@@ -272,9 +272,9 @@ void DropboxDS::dataReadFinished()
                 DropboxExtension = "--";
 
             }
-//            if(requiredExtensions.indexOf(DropboxExtension) >= 0){
+            if(requiredExtensions.indexOf(DropboxExtension) >= 0 || DropboxExtension == "--"){
                 this->addDataSource(DropboxID,DropboxTag,DropboxName,DropboxPathLower,DropboxClientModi,DropboxExtension);
-//            }
+            }
         }
 
         m_dataBuffer->clear();
@@ -322,11 +322,9 @@ void DropboxDS::dataSearchedFinished()
 
             }
 
-
-//            if(requiredExtensions.indexOf(DropboxExtension) >= 0){
-//                qDebug() << DropboxExtension << "EXTE";
+            if(requiredExtensions.indexOf(DropboxExtension) >= 0 || DropboxExtension == "--"){
                 this->addDataSource(DropboxID,DropboxTag,DropboxName,DropboxPathLower,DropboxClientModi,DropboxExtension);
-//            }
+            }
 
         }
         m_dataBuffer->clear();
