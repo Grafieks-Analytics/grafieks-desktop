@@ -81,12 +81,20 @@ void DriveDS::searchQuer(QString path)
 void DriveDS::homeBut()
 {
     m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)"));
-
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
 }
 
 void DriveDS::getUserName()
 {
+
+}
+
+void DriveDS::downloadFile(QString fileID)
+{
+    qDebug() << this->google->token() << "ACCESS TOKEM";
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files/1E5svQOzBkvgOw012Peuisa-JUP0fsPVp?alt=media"));
+
+    connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::saveFile);
 
 }
 
@@ -161,6 +169,8 @@ void DriveDS::dataReadFinished()
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
 
+        qDebug() << "FILES" << resultObj;
+
         QJsonArray dataArray = resultObj["files"].toArray();
         for(int i=0;i<dataArray.size();i++){
 
@@ -190,6 +200,16 @@ void DriveDS::dataReadFinished()
         m_dataBuffer->clear();
     }
 
+}
+
+void DriveDS::saveFile()
+{
+    QByteArray arr = m_networkReply->readAll();
+
+    QFile file("C:\\Users\\chill\\Desktop\\x.xlsx");
+    file.open(QIODevice::WriteOnly);
+    file.write(arr);
+    file.close();
 }
 
 

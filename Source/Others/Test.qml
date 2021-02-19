@@ -9,18 +9,9 @@ import "../MainSubComponents"
 
 Rectangle {
 
-    width: parent.width / 2
-    height: parent.height
-    anchors.right: parent.right
-    anchors.rightMargin: -100
-    color: "#aaff0011"
-
-    DropArea {
-        id: dropArea
-        anchors.fill: parent
-        onDropped: {
-            listView.model.remove(listView.dragItemIndex);
-            listView.dragItemIndex = -1;
-        }
+    Button{
+        id: downloadBtn
+        text: "Click to Download"
+        onClicked: DriveDS.downloadFile("1swdjquWqq5tjMm9tpxMa-9C8rjCyWVWHs-ODdAXfWDw")
     }
 }
