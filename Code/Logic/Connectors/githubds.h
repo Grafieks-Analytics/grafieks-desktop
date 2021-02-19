@@ -59,7 +59,7 @@ private:
     QOAuth2AuthorizationCodeFlow * github;
     QNetworkReply * m_networkReply;
     QByteArray * m_dataBuffer;
-    QList<Github *> m_drive;
+    QList<Github *> m_github;
 
 };
 

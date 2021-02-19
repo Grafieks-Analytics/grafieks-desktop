@@ -194,6 +194,9 @@ void BoxDS::dataReadFinished()
     }
     else{
 
+        QStringList requiredExtensions;
+        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json" << ".ods";
+
         this->resetDatasource();
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
@@ -218,7 +221,10 @@ void BoxDS::dataReadFinished()
                 extensionList = BoxName.split('.');
                 BoxExtension = "." + extensionList.last();
             }
-            this->addDataSource(BoxID,BoxName,BoxType,BoxModifiedAt,BoxExtension);
+
+            if(requiredExtensions.indexOf(BoxExtension) >= 0 || BoxExtension == "--"){
+                this->addDataSource(BoxID,BoxName,BoxType,BoxModifiedAt,BoxExtension);
+            }
         }
         m_dataBuffer->clear();
     }
