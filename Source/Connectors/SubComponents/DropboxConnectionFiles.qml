@@ -37,26 +37,6 @@ Popup {
     // LIST MODEL STARTS
 
 
-    ListModel{
-        id : allFileData
-        ListElement{
-            fileName: "file1.txt"
-            kind:"text"
-            lastModified:"20/04/05"
-        }
-        ListElement{
-            fileName: "file2.txt"
-            kind:"text"
-            lastModified:"20/04/04"
-        }
-        ListElement{
-            fileName: "file3.txt"
-            kind:"text"
-            lastModified:"27/04/05"
-        }
-    }
-
-
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
 
@@ -92,25 +72,34 @@ Popup {
     }
 
     function updatePath(text){
-        closePopup();
+//        closePopup();
         path.text=text;
     }
 
-    function onFileClicked(name,tag,pathLower){
+    function onFileClicked(name, tag, pathLower, clientModified){
 
-        fileSelected.visible = true
-        fileNotSelectedMsg.visible = false
 
-        detailName.text = name;
-        if(tag === "folder"){
-            pathFolder = pathLower;
-            folderName = name;
-        }
+
+//        fileSelected.visible = true
+//        fileNotSelectedMsg.visible = false
+
+//        if(tag === "folder"){
+//            pathFolder = pathLower;
+//            folderName = name;
+//        }
 
         if(tag === "file")
         {
             updatePath(pathLower)
-            detailName.text = name;
+console.log(name,tag,pathLower, "CLICKED DROP", clientModified)
+
+            let newDate = new Date(clientModified);
+            let dateString = newDate.getUTCFullYear() +"/"+ (newDate.getUTCMonth()+1) +"/"+ newDate.getUTCDate() + " " + newDate.getUTCHours() + ":" + newDate.getUTCMinutes() + ":" + newDate.getUTCSeconds();
+
+            path.text = name
+            detailNameDisplay.text = name;
+            documentTypeDisplay.text = "sample" //type;
+            modifiedTimeDisplay.text = dateString;
         }
 
     }
@@ -125,7 +114,7 @@ Popup {
     function onHomeClicked(){
         DropboxDS.folderNav("")
         //refer function folderNav of dropboxds.cpp
-        updatePath("Dropbox")
+        updatePath(pathFolder)
     }
 
 
@@ -191,7 +180,7 @@ Popup {
             anchors.rightMargin: 5
             MouseArea{
                 anchors.fill: parent
-                onClicked: updatePath("Dropbox")
+                onClicked: updatePath(pathFolder)
             }
         }
 
@@ -217,17 +206,6 @@ Popup {
                 id: connectedById
                 text: qsTr("Connected by: test@test.com")
             }
-
-            //            Column{
-            //                x: parent.width * 0.75
-
-            //                Text {
-            //                    id: signOutBtn
-            //                    x:popup.width - popup.parent.width * 0.125 - 30
-            //                    text: qsTr("Sign Out")
-            //                    color: "blue"
-            //                }
-            //            }
         }
 
 
@@ -393,7 +371,7 @@ Popup {
                                     MouseArea{
 
                                         anchors.fill:parent
-                                        onClicked: onFileClicked(name,tag,pathLower)
+                                        onClicked: onFileClicked(name,tag,pathLower, clientModified)
                                         onDoubleClicked: onFolderClicked(name,tag,pathFolder,pathLower);
                                     }
                                 }
@@ -530,24 +508,18 @@ Popup {
                             width: parent.width/2 + 5
 
                             Text {
-                                id: detailName
-                                text: qsTr("Test.xlsx")
+                                id: detailNameDisplay
                                 padding: 5
                             }
                             Text {
-                                text: qsTr("Document")
+                                id: documentTypeDisplay
                                 padding: 5
                             }
                             Text {
-                                text: qsTr("24/05/2020 14:30")
+                                id: modifiedTimeDisplay
+                                text: "TESTING"
                                 padding: 5
                             }
-                            Text {
-                                text: qsTr("50 MB")
-                                padding: 5
-                            }
-
-
                         }
                     }
 
@@ -579,7 +551,7 @@ Popup {
                         id: path
                         anchors.verticalCenter: parent.verticalCenter
                         leftPadding: 10
-                        text: qsTr("Dropbox")
+                        text: qsTr(pathFolder)
                     }
                 }
             }
