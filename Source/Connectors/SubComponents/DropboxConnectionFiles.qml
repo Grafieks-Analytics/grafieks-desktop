@@ -87,12 +87,6 @@ Popup {
         if(tag === "file")
         {
 
-            let newDate = new Date(modifiedTime);
-            let dateString = newDate.getUTCFullYear() +"/"+ (newDate.getUTCMonth()+1) +"/"+ newDate.getUTCDate() + " " + newDate.getUTCHours() + ":" + newDate.getUTCMinutes() + ":" + newDate.getUTCSeconds();
-
-            updatePath(pathLower)
-console.log(name,tag,pathLower, "CLICKED DROP", clientModified)
-
             let newDate = new Date(clientModified);
             let dateString = newDate.getUTCFullYear() +"/"+ (newDate.getUTCMonth()+1) +"/"+ newDate.getUTCDate() + " " + newDate.getUTCHours() + ":" + newDate.getUTCMinutes() + ":" + newDate.getUTCSeconds();
 
@@ -100,6 +94,8 @@ console.log(name,tag,pathLower, "CLICKED DROP", clientModified)
             detailNameDisplay.text = name;
             documentTypeDisplay.text = "sample" //type;
             modifiedTimeDisplay.text = dateString;
+
+            updatePath(pathLower)
         }
 
     }
