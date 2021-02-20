@@ -44,6 +44,8 @@ Rectangle{
             title: "Bar Chart"
             yAxisVisible: true
             lineTypeChartVisible: false
+            maxDropOnXaxis: 3
+            maxDropOnYaxis: 3
         }
         ListElement{
             icon: "area.png"
@@ -134,24 +136,24 @@ Rectangle{
             yAxisVisible: false
             lineTypeChartVisible: false
         }
-        ListElement{
-            icon: "nightingales_rose.png"
-            activeChart: false
-            chartHtml:"bar.html"
-            title:"Nightingale Rose"
-            yAxisVisible: false
-            lineTypeChartVisible: false
-        }
-        ListElement{
-            icon: "chord_diagram.png"
-            chartHtml:"ChordChart.html"
-            activeChart: false
-            title:"Chord Diagram"
-            xAxisLabelName: "Source"
-            yAxisLabelName: "Numerical"
-            yAxisVisible: false
-            lineTypeChartVisible: false
-        }
+//        ListElement{
+//            icon: "nightingales_rose.png"
+//            activeChart: false
+//            chartHtml:"bar.html"
+//            title:"Nightingale Rose"
+//            yAxisVisible: false
+//            lineTypeChartVisible: false
+//        }
+//        ListElement{
+//            icon: "chord_diagram.png"
+//            chartHtml:"ChordChart.html"
+//            activeChart: false
+//            title:"Chord Diagram"
+//            xAxisLabelName: "Source"
+//            yAxisLabelName: "Numerical"
+//            yAxisVisible: false
+//            lineTypeChartVisible: false
+//        }
         ListElement{
             icon: "funnel.png"
             chartHtml:"FunnelChart.html"
@@ -207,12 +209,12 @@ Rectangle{
             activeChart: false
             title:"Table"
         }
-        ListElement{
-            icon: "condegram.png"
-            chartHtml:"bar.html"
-            activeChart: false
-            title:"Condegram"
-        }
+//        ListElement{
+//            icon: "condegram.png"
+//            chartHtml:"bar.html"
+//            activeChart: false
+//            title:"Condegram"
+//        }
         ListElement{
             icon: "map.png"
             chartHtml:"GeoChart.html"

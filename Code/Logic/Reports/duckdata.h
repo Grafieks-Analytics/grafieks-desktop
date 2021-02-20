@@ -25,52 +25,52 @@ public:
 
     // Need to check Return types and paramter's type;
 
-    Q_INVOKABLE void getBarChartValues(  QString xAxisColumn
+    Q_INVOKABLE QString getBarChartValues(  QString xAxisColumn
                                          , QString yAxisColumn
                                          , QString yAxisCalculationType
                                          );
 
-    Q_INVOKABLE void getStackedBarChartValues(  QString xAxisColumn
+    Q_INVOKABLE QString getStackedBarChartValues(  QString xAxisColumn
                                                 , QString yAxisColumn
                                                 , QString yAxisCalculationType
                                                 , QString groupedBy
                                                 );
 
-    Q_INVOKABLE void getAreaChartValues(       QString xAxisColumn
+    Q_INVOKABLE QString getAreaChartValues(       QString xAxisColumn
                                                , QString yAxisColumn
                                                , QString xAxisCalculationType
                                                , QString yAxisCalculationType
                                                );
 
-    Q_INVOKABLE void getLineChartValues(  QString xAxisColumn
+    Q_INVOKABLE QString getLineChartValues(  QString xAxisColumn
                                           , QString xAxisCalculationType
                                           , QString yAxisColumn
                                           , QString yAxisCalculationType
                                           );
 
-    Q_INVOKABLE void getPieChartValues(  QString xAxisColumn
+    Q_INVOKABLE QString getPieChartValues(  QString xAxisColumn
                                          , QString yAxisColumn
                                          , QString yAxisCalculationType
                                          );
 
-    Q_INVOKABLE void getFunnelChartValues(  QString xAxisColumn
+    Q_INVOKABLE QString getFunnelChartValues(  QString xAxisColumn
                                             , QString yAxisColumn
                                             , QString yAxisCalculationType
                                             );
 
-    Q_INVOKABLE void getRadarChartValues(   QString xAxisColumn
+    Q_INVOKABLE QString getRadarChartValues(   QString xAxisColumn
                                             , QString yAxisColumn
                                             , QString yAxisCalculationType
                                             );
 
-    Q_INVOKABLE void getScatterChartValues( QString xAxisColumn
+    Q_INVOKABLE QString getScatterChartValues( QString xAxisColumn
                                             , QString yAxisColumn
                                             , QString xAxisCalculationType
                                             , QString yAxisCalculationType
                                             , QString groupedBy
                                             );
 
-    Q_INVOKABLE void getHeatMapChartValues( QString xAxisColumn
+    Q_INVOKABLE QString getHeatMapChartValues( QString xAxisColumn
                                             , QString yAxisColumn
                                             , QString groupedBy
                                             );
