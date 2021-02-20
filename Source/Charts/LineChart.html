@@ -13,7 +13,6 @@
     <div id="tooltip"></div>
 
     <script>
-        var n = 21;
         var lineStroke = 3;
         var {
             initialCircleRadius,
@@ -25,48 +24,31 @@
 
         var data = [
             [
-                30.5621003042803618,
-                50.9164824306094999,
-                40.6363092398355727,
-                32.04669478701483354,
-                13.24258060335806886,
-                10.6302204824674538,
-                20.2485817228091547,
-                32.13664898092621325,
-                15.48262469788667994,
-                43.4260795360415235,
-                32.5816480528886738,
-                16.6545035086903186,
-                10.9870338215356449,
-                20.053908030938047524,
-                7.3456829381684714,
-                8.46889152272191414,
-                32.5989143518482389,
-                16.7689590628756797,
-                22.9011566318712221,
-                32.7105180730798188,
-                12.7186652294711284,
-            ],
-            [
-                30.5621003042803618,
-                50.9164824306094999,
-                40.6363092398355727,
-                32.04669478701483354,
-                13.24258060335806886,
-                32.5816480528886738,
-                16.6545035086903186,
-                10.9870338215356449,
-                20.053908030938047524,
-                7.3456829381684714,
-                8.46889152272191414,
-                32.5989143518482389,
-                16.7689590628756797,
-                22.9011566318712221,
-                32.7105180730798188,
-                12.7186652294711284,
+                [0, 30.5621003042803618],
+                [1, 50.9164824306094999],
+                [2, 40.6363092398355727],
+                [3, 10.6302204824674538],
+                [4, 20.2485817228091547],
+                [5, 32.13664898092621325],
             ],
             ["Value Name"],
         ];
+
+        // var data = [
+        //     [
+        //         [30.5621003042803618, 1],
+        //         [50.9164824306094999, 2],
+        //         [40.6363092398355727, 3],
+        //         [32.04669478701483354, 4],
+        //         [13.24258060335806886, 5],
+        //         [10.6302204824674538, 6],
+        //         [20.2485817228091547, 7],
+        //         [32.13664898092621325, 8],
+        //         [15.48262469788667994, 9],
+        //         [43.4260795360415235, 10],
+        //     ],
+        //     ["Value Name"],
+        // ];
 
         function drawChart(data, plottingConfiguration = {}) {
             var dataValues = data[0];
@@ -98,21 +80,26 @@
             yaxisTicks = height / 100;
             xScale = d3
                 .scaleLinear()
-                .domain([0, n - 1]) // input
+                .domain([0, dataValues.length - 1]) // input
                 .range([0, width]); // output
 
             yScale = d3
                 .scaleLinear()
-                .domain([0, parseInt(Math.max(...dataValues) + 1)]) // input
+                .domain([
+                    0,
+                    d3.max(dataValues, function (d) {
+                        return +d[1];
+                    }),
+                ]) // input
                 .range([height, 0]); // output
 
             line = d3
                 .line()
                 .x(function (d, i) {
-                    return xScale(i);
+                    return xScale(d[0]);
                 })
                 .y(function (d) {
-                    return yScale(d);
+                    return yScale(d[1]);
                 })
                 .curve(d3[curveType]);
 
@@ -130,7 +117,12 @@
             svg.append("g")
                 .attr("class", "x-axis")
                 .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(xScale).tickSizeOuter(0).ticks(0));
+                .call(
+                    d3
+                        .axisBottom(xScale)
+                        .tickSizeOuter(0)
+                        .ticks(dataValues.length)
+                );
 
             svg.append("g")
                 .attr("class", "grid")
@@ -140,8 +132,8 @@
 
             svg.append("g")
                 .attr("class", "y-axis")
-
                 .call(d3.axisLeft(yScale).tickSizeOuter(0).ticks(yaxisTicks));
+
             svg.append("g")
                 .attr("class", "grid")
                 .style("stroke-width", "1")
@@ -196,21 +188,22 @@
                     markerShapeConfig[markerShape] &&
                         markerShapeConfig[markerShape].xPositionAttrName,
                     function (d, i) {
-                        return xScale(i);
+                        console.log(d);
+                        return xScale(d[0]);
                     }
                 )
                 .attr(
                     markerShapeConfig[markerShape] &&
                         markerShapeConfig[markerShape].yPositionAttrName,
                     function (d) {
-                        return yScale(d);
+                        return yScale(d[1]);
                     }
                 )
                 .attr("r", initialCircleRadius)
                 .attr("height", initialBoxDimension)
                 .attr("width", initialBoxDimension)
                 .attr("points", function (d, i) {
-                    console.log(xScale(d, i));
+                    // console.log(xScale(d, i));
                     var x1 = xScale(i);
                     return (
                         x1 +
