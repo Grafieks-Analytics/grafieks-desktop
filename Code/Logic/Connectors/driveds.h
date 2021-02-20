@@ -40,7 +40,6 @@ public:
     Q_INVOKABLE void searchQuer(QString path);
     Q_INVOKABLE void homeBut();
     Q_INVOKABLE void getUserName();
-    Q_INVOKABLE void downloadFile(QString fileID);
 
     void addDataSource(Drive * drive);
     Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & kind,const QString & modifiedTime,const QString & extension);
