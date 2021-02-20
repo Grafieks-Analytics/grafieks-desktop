@@ -42,11 +42,20 @@
             "#FFEA77",
         ];
 
+        var data = [
+            [
+                ["India", "Aus"],
+                [200, 800],
+            ],
+            ["Countries", "Population"],
+        ];
+
+        drawChart(data);
+
         function drawChart(data) {
-            console.log(data);
+            dataValues = data[0];
             const start = window.performance.now();
 
-            console.log("Called plotting Function");
             d3.selectAll("#my_dataviz").html("");
 
             // set the dimensions and margins of the graph
@@ -69,7 +78,7 @@
             var x = d3
                 .scaleBand()
                 .range([0, width])
-                .domain(data[0])
+                .domain(dataValues[0])
                 .padding(0.2);
 
             svg.append("g")
@@ -90,7 +99,7 @@
             // Add Y axis
             var y = d3
                 .scaleLinear()
-                .domain([0, Math.max(...data[1])])
+                .domain([0, Math.max(...dataValues[1])])
                 .range([height, 0]);
 
             var yaxisTicks = height / 100;
@@ -108,19 +117,19 @@
 
             // Bars
             svg.selectAll("mybar")
-                .data(data[0])
+                .data(dataValues[0])
                 .enter()
                 .append("rect")
 
                 .attr("x", function (d, i) {
-                    return x(data[0][i]);
+                    return x(dataValues[0][i]);
                 })
                 .attr("y", function (d, i) {
-                    return y(data[1][i]);
+                    return y(dataValues[1][i]);
                 })
                 .attr("width", x.bandwidth())
                 .attr("height", function (d, i) {
-                    return height - y(data[1][i]);
+                    return height - y(dataValues[1][i]);
                 })
                 .attr("class", function (d, i) {
                     return "bar";
@@ -140,7 +149,7 @@
                         .style("left", xpos + "px")
                         .style("top", ypos + "px")
                         .style("display", "block")
-                        .text(data[1][i]);
+                        .text(dataValues[1][i]);
 
                     d3.selectAll(".bar").style("opacity", 0.3);
                     d3.select(this).style("opacity", 1);
