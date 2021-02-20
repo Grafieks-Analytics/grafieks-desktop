@@ -80,7 +80,6 @@ Popup {
 
     function onFileSelected(name, id, type, modifiedTime){
 
-        console.log(name, id, type, modifiedTime, "TEST")
 
         fileSelected.visible = true
         fileNotSelectedMsg.visible = false

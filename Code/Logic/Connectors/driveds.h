@@ -45,6 +45,8 @@ public:
     void addDataSource(Drive * drive);
     Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & kind,const QString & modifiedTime,const QString & extension);
 
+    Q_INVOKABLE void downloadFile(QString filePath);
+
     QList<Drive *> dataItems();
 
 signals:

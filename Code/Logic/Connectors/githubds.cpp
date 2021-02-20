@@ -59,7 +59,6 @@ void GithubDS::fetchDatasources()
 void GithubDS::searchQuer(QString path)
 {
     m_networkReply = this->github->get(QUrl("https://www.githubapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name  +contains+%27" + path+ "%27"));
-
     connect(m_networkReply,&QNetworkReply::finished,this,&GithubDS::dataReadFinished);
 
 }
@@ -67,33 +66,31 @@ void GithubDS::searchQuer(QString path)
 void GithubDS::homeBut()
 {
     m_networkReply = this->github->get(QUrl("https://www.githubapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)"));
-
-    connect(m_networkReply,&QNetworkReply::finished,this,&GithubDS::dataReadFinished);
-
+    connect(m_networkReply, &QNetworkReply::finished, this, &GithubDS::dataReadFinished);
 }
 
 void GithubDS::addDataSource(Github *github)
 {
     emit preItemAdded();
-    m_drive.append(github);
+    m_github.append(github);
     emit postItemAdded();
 }
 
 void GithubDS::addDataSource(const QString &id, const QString &name, const QString &kind, const QString &modifiedTime, const QString &extension)
 {
-    Github *drive = new Github(id,name,kind,modifiedTime,extension);
-    addDataSource(drive);
+    Github *github = new Github(id,name,kind,modifiedTime,extension);
+    addDataSource(github);
 }
 
 QList<Github *> GithubDS::dataItems()
 {
-    return m_drive;
+    return m_github;
 }
 
 void GithubDS::resetDatasource()
 {
     emit preReset();
-    m_drive.clear();
+    m_github.clear();
     emit postReset();
 }
 
@@ -109,33 +106,39 @@ void GithubDS::dataReadFinished()
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
     }else{
+        QStringList requiredExtensions;
+        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json" << ".ods";
+
         this->resetDatasource();
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
 
+        qDebug() << resultJson;
+
         QJsonArray dataArray = resultObj["files"].toArray();
 
-        qDebug() << resultJson;
-        for(int i=0;i<dataArray.size();i++){
+        for(int i=0; i<dataArray.size(); i++){
 
             QJsonObject dataObj = dataArray.at(i).toObject();
 
-            QString DriveID = dataObj["id"].toString();
-            QString DriveName = dataObj["name"].toString();
-            QString DriveKind = dataObj["kind"].toString();
-            QString DriveModiTime = dataObj["modifiedTime"].toString();
-            QString DriveExtension = "file";
-            QString DriveMimeType = dataObj["mimeType"].toString();
+            QString GithubID = dataObj["id"].toString();
+            QString GithubName = dataObj["name"].toString();
+            QString GithubKind = dataObj["kind"].toString();
+            QString GithubModiTime = dataObj["modifiedTime"].toString();
+            QString GithubExtension = "file";
+            QString GithubMimeType = dataObj["mimeType"].toString();
             QStringList extensionList;
-            if(DriveName.contains(".")){
-                extensionList = DriveName.split('.');
-                DriveExtension = "." + extensionList.last();
-            }else if(DriveMimeType == "application/vnd.github-apps.spreadsheet"){
-                DriveExtension = ".gsheet";
+
+            if(GithubName.contains(".")){
+                extensionList = GithubName.split('.');
+                GithubExtension = "." + extensionList.last();
+            }else if(GithubMimeType == "application/vnd.github-apps.spreadsheet"){
+                GithubExtension = ".gsheet";
             }
 
-
-            this->addDataSource(DriveID,DriveName,DriveKind,DriveModiTime,DriveExtension);
+            if(requiredExtensions.indexOf(GithubExtension) >= 0 || GithubExtension == "--"){
+                this->addDataSource(GithubID, GithubName, GithubKind, GithubModiTime, GithubExtension);
+            }
         }
 
         m_dataBuffer->clear();

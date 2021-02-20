@@ -123,6 +123,11 @@ void DriveDS::addDataSource(const QString &id, const QString &name, const QStrin
     addDataSource(drive);
 }
 
+void DriveDS::downloadFile(QString filePath)
+{
+
+}
+
 /*!
  * \brief List the values in QList<Drive *>
  * \return QList<Drive *>
