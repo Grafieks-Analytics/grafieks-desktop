@@ -37,26 +37,6 @@ Popup {
     // LIST MODEL STARTS
 
 
-    ListModel{
-        id : allFileData
-        ListElement{
-            fileName: "file1.txt"
-            kind:"text"
-            lastModified:"20/04/05"
-        }
-        ListElement{
-            fileName: "file2.txt"
-            kind:"text"
-            lastModified:"20/04/04"
-        }
-        ListElement{
-            fileName: "file3.txt"
-            kind:"text"
-            lastModified:"27/04/05"
-        }
-    }
-
-
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
 
@@ -97,8 +77,6 @@ Popup {
 
     function onFileClicked(name, tag, pathLower,extension, modifiedTime){
 
-        fileSelected.visible = true
-        fileNotSelectedMsg.visible = false
 
 //        detailName.text = name;
         if(tag === "folder"){
@@ -109,13 +87,15 @@ Popup {
         if(tag === "file")
         {
 
-            let newDate = new Date(modifiedTime);
+            let newDate = new Date(clientModified);
             let dateString = newDate.getUTCFullYear() +"/"+ (newDate.getUTCMonth()+1) +"/"+ newDate.getUTCDate() + " " + newDate.getUTCHours() + ":" + newDate.getUTCMinutes() + ":" + newDate.getUTCSeconds();
 
-            updatePath(pathLower)
+            path.text = name
             detailNameDisplay.text = name;
-            documentTypeDisplay.text = extension;
+            documentTypeDisplay.text = "sample" //type;
             modifiedTimeDisplay.text = dateString;
+
+            updatePath(pathLower)
         }
 
     }
@@ -562,7 +542,7 @@ Popup {
                         id: path
                         anchors.verticalCenter: parent.verticalCenter
                         leftPadding: 10
-                        text: qsTr("Dropbox")
+                        text: qsTr(pathFolder)
                     }
                 }
             }

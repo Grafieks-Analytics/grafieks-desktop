@@ -91,11 +91,8 @@ void DriveDS::getUserName()
 
 void DriveDS::downloadFile(QString fileID)
 {
-    qDebug() << this->google->token() << "ACCESS TOKEM";
-    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files/1E5svQOzBkvgOw012Peuisa-JUP0fsPVp?alt=media"));
-
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files/"+fileID+"?alt=media"));
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::saveFile);
-
 }
 
 /*!
@@ -123,10 +120,7 @@ void DriveDS::addDataSource(const QString &id, const QString &name, const QStrin
     addDataSource(drive);
 }
 
-void DriveDS::downloadFile(QString filePath)
-{
 
-}
 
 /*!
  * \brief List the values in QList<Drive *>
@@ -211,7 +205,7 @@ void DriveDS::saveFile()
 {
     QByteArray arr = m_networkReply->readAll();
 
-    QFile file("C:\\Users\\chill\\Desktop\\x.xlsx");
+    QFile file("/Users/mac/Desktop/x.xlsx");
     file.open(QIODevice::WriteOnly);
     file.write(arr);
     file.close();

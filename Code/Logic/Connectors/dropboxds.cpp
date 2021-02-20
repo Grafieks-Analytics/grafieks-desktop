@@ -175,6 +175,12 @@ void DropboxDS::getUserName()
 
 }
 
+void DropboxDS::downloadFile(QString filePath)
+{
+    m_networkReply = this->dropbox->get(QUrl("https://www.googleapis.com/drive/v3/files/1E5svQOzBkvgOw012Peuisa-JUP0fsPVp?alt=media"));
+    connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::saveFile);
+}
+
 /*!
  * \brief Notify model after adding new record in QList<Dropbox *>
  * \param box (Dropbox *)
@@ -329,6 +335,11 @@ void DropboxDS::dataSearchedFinished()
         }
         m_dataBuffer->clear();
     }
+}
+
+void DropboxDS::saveFile()
+{
+
 }
 
 void DropboxDS::addDatasourceHelper(QJsonDocument &doc)
