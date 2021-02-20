@@ -72,24 +72,24 @@ Popup {
     }
 
     function updatePath(text){
-//        closePopup();
         path.text=text;
     }
 
-    function onFileClicked(name, tag, pathLower, clientModified){
+    function onFileClicked(name, tag, pathLower,extension, modifiedTime){
 
 
-
-//        fileSelected.visible = true
-//        fileNotSelectedMsg.visible = false
-
-//        if(tag === "folder"){
-//            pathFolder = pathLower;
-//            folderName = name;
-//        }
+//        detailName.text = name;
+        if(tag === "folder"){
+            pathFolder = pathLower;
+            folderName = name;
+        }
 
         if(tag === "file")
         {
+
+            let newDate = new Date(modifiedTime);
+            let dateString = newDate.getUTCFullYear() +"/"+ (newDate.getUTCMonth()+1) +"/"+ newDate.getUTCDate() + " " + newDate.getUTCHours() + ":" + newDate.getUTCMinutes() + ":" + newDate.getUTCSeconds();
+
             updatePath(pathLower)
 console.log(name,tag,pathLower, "CLICKED DROP", clientModified)
 
@@ -180,7 +180,10 @@ console.log(name,tag,pathLower, "CLICKED DROP", clientModified)
             anchors.rightMargin: 5
             MouseArea{
                 anchors.fill: parent
-                onClicked: updatePath(pathFolder)
+                onClicked: {
+                    closePopup();
+                    updatePath("Dropbox")
+                }
             }
         }
 
@@ -242,9 +245,7 @@ console.log(name,tag,pathLower, "CLICKED DROP", clientModified)
 
                 }
 
-
             }
-
 
         }
 
@@ -270,7 +271,7 @@ console.log(name,tag,pathLower, "CLICKED DROP", clientModified)
                         id: fileList
                         model:DropboxModel
 
-                        height: 200
+                        height: parent.height
                         width: popup.width * 0.6
 
                         header: Row{
@@ -371,8 +372,8 @@ console.log(name,tag,pathLower, "CLICKED DROP", clientModified)
                                     MouseArea{
 
                                         anchors.fill:parent
-                                        onClicked: onFileClicked(name,tag,pathLower, clientModified)
-                                        onDoubleClicked: onFolderClicked(name,tag,pathFolder,pathLower);
+                                        onClicked: onFileClicked(name, tag, pathLower, extension, clientModified)
+                                        onDoubleClicked: onFolderClicked(name, tag, pathFolder, pathLower);
                                     }
                                 }
 
@@ -494,11 +495,6 @@ console.log(name,tag,pathLower, "CLICKED DROP", clientModified)
                                 padding: 5
                                 text: qsTr("Last Modified")
                             }
-                            Text {
-                                anchors.right: parent.right
-                                padding: 5
-                                text: qsTr("Size")
-                            }
 
                         }
 
@@ -517,7 +513,6 @@ console.log(name,tag,pathLower, "CLICKED DROP", clientModified)
                             }
                             Text {
                                 id: modifiedTimeDisplay
-                                text: "TESTING"
                                 padding: 5
                             }
                         }
