@@ -16,6 +16,10 @@
 #include <QSettings>
 #include <QtDebug>
 
+#include <QFile>
+#include <QCoreApplication>
+#include <QDataStream>
+
 #include "drive.h"
 #include "../../secrets.h"
 
@@ -36,6 +40,7 @@ public:
     Q_INVOKABLE void searchQuer(QString path);
     Q_INVOKABLE void homeBut();
     Q_INVOKABLE void getUserName();
+    Q_INVOKABLE void downloadFile(QString fileID);
 
     void addDataSource(Drive * drive);
     Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & kind,const QString & modifiedTime,const QString & extension);
@@ -57,6 +62,7 @@ private slots:
     void resetDatasource();
     void dataReadyRead();
     void dataReadFinished();
+    void saveFile();
 
 private:
     QNetworkAccessManager * m_networkAccessManager;
