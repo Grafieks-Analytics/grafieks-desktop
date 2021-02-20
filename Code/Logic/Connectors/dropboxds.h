@@ -40,6 +40,7 @@ public:
     Q_INVOKABLE void folderNav(QString path);
     Q_INVOKABLE void searchQuer(QString path);
     Q_INVOKABLE void getUserName();
+    Q_INVOKABLE void downloadFile(QString filePath);
 
     void addDataSource(Dropbox * dropbox);
 
@@ -63,6 +64,7 @@ private slots:
     void dataReadFinished();
     void dataSearchedFinished();
 //    void datadeleteFinished();
+    void saveFile();
 
 public slots:
 

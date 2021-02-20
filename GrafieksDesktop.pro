@@ -35,7 +35,6 @@ SOURCES += \
     Code/Logic/Connectors/connectorfilter.cpp \
     Code/Logic/Connectors/connectormodel.cpp \
     Code/Logic/Connectors/connectorsloginmodel.cpp \
-    Code/Logic/Connectors/downloadfile.cpp \
     Code/Logic/Connectors/drive.cpp \
     Code/Logic/Connectors/driveds.cpp \
     Code/Logic/Connectors/drivemodel.cpp \
@@ -142,7 +141,6 @@ HEADERS += \
     Code/Logic/Connectors/connectorfilter.h \
     Code/Logic/Connectors/connectormodel.h \
     Code/Logic/Connectors/connectorsloginmodel.h \
-    Code/Logic/Connectors/downloadfile.h \
     Code/Logic/Connectors/drive.h \
     Code/Logic/Connectors/driveds.h \
     Code/Logic/Connectors/drivemodel.h \
