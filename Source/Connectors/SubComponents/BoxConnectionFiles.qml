@@ -38,26 +38,6 @@ Popup {
     // LIST MODEL STARTS
 
 
-    ListModel{
-        id : allFileData
-        ListElement{
-            fileName: "file1.txt"
-            kind:"text"
-            lastModified:"20/04/05"
-        }
-        ListElement{
-            fileName: "file2.txt"
-            kind:"text"
-            lastModified:"20/04/04"
-        }
-        ListElement{
-            fileName: "file3.txt"
-            kind:"text"
-            lastModified:"27/04/05"
-        }
-    }
-
-
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
 
@@ -93,7 +73,6 @@ Popup {
     }
 
     function updatePath(text){
-        closePopup()
         path.text=text;
     }
 
@@ -101,7 +80,7 @@ Popup {
     function onHomeClicked(){
         BoxDS.folderNav("0")
         // refer boxds.cpp for function info
-        updatePath("Box")
+        updatePath(pathFolder)
     }
 
     function searchFiles(){
@@ -117,29 +96,36 @@ Popup {
         fileNotSelectedMsg.visible = false
     }
 
-    function onFileClicked(name,type){
+    function onFileClicked(name, type, extension, modifiedTime){
 
         showSelectedFileDetails();
         hideFileNotSelectedMessage();
 
-        detailName.text = name;
 
         if(type === "folder"){
-            pathFolder = id;
             folderName = name;
+            detailNameDisplay.text = name;
+            documentTypeDisplay.text = "--";
+            modifiedTimeDisplay.text = "--";
         }
-
-        if(type === "file")
-        {
+        else{
             path.text = name
-            detailName.text = name;
+            let newDate = new Date(modifiedTime);
+            let dateString = newDate.getUTCFullYear() +"/"+ (newDate.getUTCMonth()+1) +"/"+ newDate.getUTCDate() + " " + newDate.getUTCHours() + ":" + newDate.getUTCMinutes() + ":" + newDate.getUTCSeconds();
+
+            path.text = name
+            detailNameDisplay.text = name;
+            documentTypeDisplay.text = extension;
+            modifiedTimeDisplay.text = dateString;
+
         }
 
     }
 
-    function onFolderDoubleClicked(name,type){
+    function onFolderDoubleClicked(name, type, folder_id = null){
+
         if(type === "folder")
-            BoxDS.folderNav(pathFolder)
+            BoxDS.folderNav(folder_id)
 
         updatePath(name);
     }
@@ -196,7 +182,10 @@ Popup {
             anchors.rightMargin: 5
             MouseArea{
                 anchors.fill: parent
-                onClicked: updatePath("Box")
+                onClicked: {
+                    updatePath(pathFolder)
+                    closePopup()
+                }
 
             }
         }
@@ -223,17 +212,6 @@ Popup {
                 id: connectedById
                 text: qsTr("Connected by: test@test.com")
             }
-
-            //            Column{
-            //                x: parent.width * 0.75
-
-            //                Text {
-            //                    id: signOutBtn
-            //                    x:popup.width - popup.parent.width * 0.125 - 30
-            //                    text: qsTr("Sign Out")
-            //                    color: "blue"
-            //                }
-            //            }
         }
 
         // Row  User Details Ends
@@ -296,7 +274,7 @@ Popup {
                         id: fileList
                         model:BoxModel
 
-                        height: 200
+                        height: parent.height
                         width: popup.width * 0.6
 
                         header: Row{
@@ -397,8 +375,8 @@ Popup {
                                     MouseArea{
 
                                         anchors.fill:parent
-                                        onClicked: onFileClicked(name,type);
-                                        onDoubleClicked: onFolderDoubleClicked(name,type)
+                                        onClicked: onFileClicked(name, type, extension, modifiedAt);
+                                        onDoubleClicked: onFolderDoubleClicked(name, type, id)
                                     }
                                 }
 
@@ -520,11 +498,7 @@ Popup {
                                 padding: 5
                                 text: qsTr("Last Modified")
                             }
-                            Text {
-                                anchors.right: parent.right
-                                padding: 5
-                                text: qsTr("Size")
-                            }
+
 
                         }
 
@@ -534,20 +508,15 @@ Popup {
                             width: parent.width/2 + 5
 
                             Text {
-                                id: detailName
-                                text: qsTr("Test.xlsx")
+                                id: detailNameDisplay
                                 padding: 5
                             }
                             Text {
-                                text: qsTr("Document")
+                                id: documentTypeDisplay
                                 padding: 5
                             }
                             Text {
-                                text: qsTr("24/05/2020 14:30")
-                                padding: 5
-                            }
-                            Text {
-                                text: qsTr("50 MB")
+                                id: modifiedTimeDisplay
                                 padding: 5
                             }
 

@@ -57,7 +57,7 @@ DropboxDS::DropboxDS(QObject *parent) : QObject(parent),
         QJsonObject obj;
         obj.insert("limit", 100);
         obj.insert("path","");
-        obj.insert("recursive",false);
+        obj.insert("recursive",true);
         obj.insert("include_media_info",false);
         obj.insert("include_deleted",false);
         obj.insert("include_has_explicit_shared_members",false);
@@ -241,6 +241,9 @@ void DropboxDS::dataReadFinished()
     }
     else{
 
+        QStringList requiredExtensions;
+        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json" << ".ods";
+
         this->resetDatasource();
 
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
@@ -269,7 +272,9 @@ void DropboxDS::dataReadFinished()
                 DropboxExtension = "--";
 
             }
-            this->addDataSource(DropboxID,DropboxTag,DropboxName,DropboxPathLower,DropboxClientModi,DropboxExtension);
+            if(requiredExtensions.indexOf(DropboxExtension) >= 0 || DropboxExtension == "--"){
+                this->addDataSource(DropboxID,DropboxTag,DropboxName,DropboxPathLower,DropboxClientModi,DropboxExtension);
+            }
         }
 
         m_dataBuffer->clear();
@@ -316,13 +321,19 @@ void DropboxDS::dataSearchedFinished()
                 DropboxExtension = "--";
 
             }
-            if(requiredExtensions.indexOf(DropboxExtension) >= 0){
+
+            if(requiredExtensions.indexOf(DropboxExtension) >= 0 || DropboxExtension == "--"){
                 this->addDataSource(DropboxID,DropboxTag,DropboxName,DropboxPathLower,DropboxClientModi,DropboxExtension);
             }
 
         }
         m_dataBuffer->clear();
     }
+}
+
+void DropboxDS::addDatasourceHelper(QJsonDocument &doc)
+{
+
 }
 
 
