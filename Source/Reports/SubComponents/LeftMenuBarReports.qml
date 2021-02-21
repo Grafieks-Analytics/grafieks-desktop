@@ -158,7 +158,7 @@ Rectangle{
             icon: "funnel.png"
             chartHtml:"FunnelChart.html"
             activeChart: false
-            title:"Funnel"
+            title: "Funnel Chart"
             yAxisVisible: false
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"

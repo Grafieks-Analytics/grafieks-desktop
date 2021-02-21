@@ -213,6 +213,7 @@ QtObject {
     property string headMapChartTitle:"Heat Map"
     property string pieChartTitle: "Pie Chart"
     property string donutChartTitle:"Donut Chart"
+    property string funnelChartTitle:"Funnel Chart"
 
     property string scatteredChart: "Scattered Chart"
     property string stackedBarChart: "Stacked Bar Chart"

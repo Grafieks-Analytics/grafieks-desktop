@@ -300,6 +300,10 @@ Page {
             case Constants.pieChartTitle:
             case Constants.donutChartTitle:
                 dataValues = DuckData.getPieChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.funnelChartTitle:
+                dataValues = DuckData.getFunnelChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+
             }
 
             console.log(dataValues);
