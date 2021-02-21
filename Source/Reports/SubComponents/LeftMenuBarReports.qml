@@ -266,6 +266,7 @@ Rectangle{
     // JAVASCRIPT FUNCTION STARTS
 
     function getChart(chartHtml,index){
+        report_desiner_page.chartUrl = chartHtml;
         loadchart("../Charts/"+chartHtml);
 //        yAxisVisible  = allCharts.get(index).yAxisVisible;
 
