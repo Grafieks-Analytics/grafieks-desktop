@@ -139,39 +139,31 @@ QString DuckData::getStackedBarChartValues(QString xAxisColumn, QString yAxisCol
 QString DuckData::getAreaChartValues(QString xAxisColumn, QString yAxisColumn, QString xAxisCalculationType, QString yAxisCalculationType)
 {
     QJsonArray data;
-    QJsonArray xAxisData;
-    QJsonArray yAxisData;
+    QJsonArray colData;
 
     QString db = Statics::currentDbName;
+
     std::string query = " SELECT " + xAxisColumn.toStdString() + " FROM " + db.toStdString();
-
-    auto result = this->duckCRUD->con.Query(query);
-
-    int rows = result->collection.count;
-
-    for(int i = 0; i < rows; i++){
-
-        duckdb::Value value = result->GetValue(0 , i);
-        QJsonValue newValue = QString::fromStdString(value.ToString());
-        xAxisData.append(newValue);
-
-    }
+    auto resultX = this->duckCRUD->con.Query(query);
 
     query = " SELECT " + yAxisColumn.toStdString() + " FROM " + db.toStdString();
-    result = this->duckCRUD->con.Query(query);
-    rows  = result->collection.count;
+    auto resultY = this->duckCRUD->con.Query(query);
 
+    int rows = resultX->collection.count;
     for(int i = 0; i < rows; i++){
 
-        duckdb::Value value = result->GetValue(0 , i);
-        QJsonValue newValue = QString::fromStdString(value.ToString());
-        yAxisData.append(newValue);
+        duckdb::Value valueX = resultX->GetValue(0 , i);
+        duckdb::Value valueY = resultY->GetValue(0, i);
+
+        QJsonArray axisData;
+        QJsonValue newValueX = QString::fromStdString(valueX.ToString());
+        QJsonValue newValueY = QString::fromStdString(valueY.ToString());
+
+        axisData.append(newValueX);
+        axisData.append(newValueY);
+        colData.append(axisData);
 
     }
-
-    QJsonArray colData;
-    colData.append(xAxisData);
-    colData.append(yAxisData);
 
     QJsonArray columns;
     columns.append(xAxisColumn);
@@ -185,51 +177,41 @@ QString DuckData::getAreaChartValues(QString xAxisColumn, QString yAxisColumn, Q
     doc.setArray(data);
 
     QString strData = doc.toJson();
-
     return strData;
 }
 
 QString DuckData::getLineChartValues(QString xAxisColumn, QString xAxisCalculationType, QString yAxisColumn, QString yAxisCalculationType)
 {
     QJsonArray data;
-    QJsonArray xAxisData;
-    QJsonArray yAxisData;
+    QJsonArray colData;
 
     QString db = Statics::currentDbName;
+
     std::string query = " SELECT " + xAxisColumn.toStdString() + " FROM " + db.toStdString();
-
-    auto result = this->duckCRUD->con.Query(query);
-
-    int rows = result->collection.count;
-
-    for(int i = 0; i < rows; i++){
-
-        duckdb::Value value = result->GetValue(0 , i);
-        QJsonValue newValue = QString::fromStdString(value.ToString());
-        xAxisData.append(newValue);
-
-    }
+    auto resultX = this->duckCRUD->con.Query(query);
 
     query = " SELECT " + yAxisColumn.toStdString() + " FROM " + db.toStdString();
-    result = this->duckCRUD->con.Query(query);
-    rows  = result->collection.count;
+    auto resultY = this->duckCRUD->con.Query(query);
 
+    int rows = resultX->collection.count;
     for(int i = 0; i < rows; i++){
 
-        duckdb::Value value = result->GetValue(0 , i);
-        QJsonValue newValue = QString::fromStdString(value.ToString());
-        yAxisData.append(newValue);
+        duckdb::Value valueX = resultX->GetValue(0 , i);
+        duckdb::Value valueY = resultY->GetValue(0, i);
+
+        QJsonArray axisData;
+        QJsonValue newValueX = QString::fromStdString(valueX.ToString());
+        QJsonValue newValueY = QString::fromStdString(valueY.ToString());
+
+        axisData.append(newValueX);
+        axisData.append(newValueY);
+        colData.append(axisData);
 
     }
-
-    QJsonArray colData;
-    colData.append(xAxisData);
-    colData.append(yAxisData);
 
     QJsonArray columns;
     columns.append(xAxisColumn);
     columns.append(yAxisColumn);
-
 
     data.append(colData);
     data.append(columns);
@@ -238,113 +220,82 @@ QString DuckData::getLineChartValues(QString xAxisColumn, QString xAxisCalculati
     doc.setArray(data);
 
     QString strData = doc.toJson();
-
     return strData;
 }
 
 QString DuckData::getPieChartValues(QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType)
 {
     QJsonArray data;
-    QJsonArray xAxisData;
-    QJsonArray yAxisData;
+    QJsonObject obj;
 
     QString db = Statics::currentDbName;
+
     std::string query = " SELECT " + xAxisColumn.toStdString() + " FROM " + db.toStdString();
-
-    auto result = this->duckCRUD->con.Query(query);
-
-    int rows = result->collection.count;
-
-    for(int i = 0; i < rows; i++){
-
-        duckdb::Value value = result->GetValue(0 , i);
-        QJsonValue newValue = QString::fromStdString(value.ToString());
-        xAxisData.append(newValue);
-
-    }
+    auto resultX = this->duckCRUD->con.Query(query);
 
     query = " SELECT " + yAxisColumn.toStdString() + " FROM " + db.toStdString();
-    result = this->duckCRUD->con.Query(query);
-    rows  = result->collection.count;
+    auto resultY = this->duckCRUD->con.Query(query);
 
+    int rows = resultX->collection.count;
     for(int i = 0; i < rows; i++){
 
-        duckdb::Value value = result->GetValue(0 , i);
-        QJsonValue newValue = QString::fromStdString(value.ToString());
-        yAxisData.append(newValue);
+        duckdb::Value valueX = resultX->GetValue(0 , i);
+        duckdb::Value valueY = resultY->GetValue(0, i);
+
+        QString newValueX = QString::fromStdString(valueX.ToString());
+        QJsonValue newValueY = QString::fromStdString(valueY.ToString());
+        obj.insert(newValueX, newValueY);
 
     }
 
-    QJsonArray colData;
-    colData.append(xAxisData);
-    colData.append(yAxisData);
-
-    QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(yAxisColumn);
-
-
-    data.append(colData);
-    data.append(columns);
-
     QJsonDocument doc;
-    doc.setArray(data);
+    doc.setObject(obj);
 
     QString strData = doc.toJson();
-
     return strData;
 }
 
 QString DuckData::getFunnelChartValues(QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType)
 {
     QJsonArray data;
-    QJsonArray xAxisData;
-    QJsonArray yAxisData;
+    QJsonArray axisData;
 
     QString db = Statics::currentDbName;
+
     std::string query = " SELECT " + xAxisColumn.toStdString() + " FROM " + db.toStdString();
-
-    auto result = this->duckCRUD->con.Query(query);
-
-    int rows = result->collection.count;
-
-    for(int i = 0; i < rows; i++){
-
-        duckdb::Value value = result->GetValue(0 , i);
-        QJsonValue newValue = QString::fromStdString(value.ToString());
-        xAxisData.append(newValue);
-
-    }
+    auto resultX = this->duckCRUD->con.Query(query);
 
     query = " SELECT " + yAxisColumn.toStdString() + " FROM " + db.toStdString();
-    result = this->duckCRUD->con.Query(query);
-    rows  = result->collection.count;
+    auto resultY = this->duckCRUD->con.Query(query);
 
+    int rows = resultX->collection.count;
     for(int i = 0; i < rows; i++){
 
-        duckdb::Value value = result->GetValue(0 , i);
-        QJsonValue newValue = QString::fromStdString(value.ToString());
-        yAxisData.append(newValue);
+        duckdb::Value valueX = resultX->GetValue(0 , i);
+        duckdb::Value valueY = resultY->GetValue(0, i);
+
+        QJsonObject obj;
+
+        QJsonValue newValueX = QString::fromStdString(valueX.ToString());
+        QJsonValue newValueY = QString::fromStdString(valueY.ToString());
+        obj.insert("key", newValueX);
+        obj.insert("value", newValueY);
+        axisData.append(obj);
 
     }
 
-    QJsonArray colData;
-    colData.append(xAxisData);
-    colData.append(yAxisData);
+    data.append(axisData);
 
     QJsonArray columns;
     columns.append(xAxisColumn);
     columns.append(yAxisColumn);
 
-
-    data.append(colData);
     data.append(columns);
 
     QJsonDocument doc;
     doc.setArray(data);
 
     QString strData = doc.toJson();
-
     return strData;
 }
 

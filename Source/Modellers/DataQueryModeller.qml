@@ -226,6 +226,10 @@ Page {
 
     function openDataFilters(){
         TableSchemaModel.showSchema(DSParamsModel.tmpSql)
+        var data = DuckData.getFunnelChartValues("LatD", "LatS", "")
+        console.log(data);
+        var newData = JSON.parse(data);
+        console.log(newData)
         datafilters.visible = true
     }
 
