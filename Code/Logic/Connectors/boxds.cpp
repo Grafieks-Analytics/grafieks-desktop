@@ -152,6 +152,14 @@ void BoxDS::addDataSource(const QString &id, const QString &name, const QString 
     addDataSource(box);
 }
 
+void BoxDS::downloadFile(QString filePath)
+{
+
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files/"+fileID+"?alt=media"));
+    connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::saveFile);
+
+}
+
 /*!
  * \brief List the values in QList<Box *>
  * \return QList<Box *>
@@ -228,6 +236,16 @@ void BoxDS::dataReadFinished()
         }
         m_dataBuffer->clear();
     }
+}
+
+void BoxDS::saveFile()
+{
+    QByteArray arr = m_networkReply->readAll();
+
+    QFile file("/Users/mac/Desktop/x.xlsx");
+    file.open(QIODevice::WriteOnly);
+    file.write(arr);
+    file.close();
 }
 
 

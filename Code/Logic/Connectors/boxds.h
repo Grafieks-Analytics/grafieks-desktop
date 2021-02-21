@@ -38,8 +38,9 @@ public:
     Q_INVOKABLE void searchQuer(QString path);
 
     void addDataSource(Box *box);
-
     Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & type,const QString & modifiedAt,const QString & extension);
+
+    Q_INVOKABLE void downloadFile(QString filePath);
 
     QList<Box *> dataItems();
 
@@ -55,6 +56,7 @@ private slots:
     void resetDatasource();
     void dataReadyRead();
     void dataReadFinished();
+    void saveFile();
 
 public slots:
 
