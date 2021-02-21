@@ -16,6 +16,7 @@
 #include <QDesktopServices>
 #include <QOAuthHttpServerReplyHandler>
 #include <QtDebug>
+#include <QByteArray>
 
 
 #include "dropbox.h"
@@ -40,7 +41,7 @@ public:
     Q_INVOKABLE void folderNav(QString path);
     Q_INVOKABLE void searchQuer(QString path);
     Q_INVOKABLE void getUserName();
-    Q_INVOKABLE void downloadFile(QString filePath);
+    Q_INVOKABLE void downloadFile(QString fileId);
 
     void addDataSource(Dropbox * dropbox);
 

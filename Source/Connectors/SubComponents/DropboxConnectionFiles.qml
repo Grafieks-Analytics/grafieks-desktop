@@ -13,6 +13,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.3
 
+
 import com.grafieks.singleton.constants 1.0
 
 import "../../MainSubComponents"
@@ -30,6 +31,7 @@ Popup {
     property int label_col : 135
     property var pathFolder: "Dropbox"
     property var folderName: "Folder name"
+    property var selectedId: ""
 
 
 
@@ -75,10 +77,11 @@ Popup {
         path.text=text;
     }
 
-    function onFileClicked(name, tag, pathLower,extension, modifiedTime){
+    function onFileClicked(id, name, tag, pathLower,extension, modifiedTime){
 
+        fileSelected.visible = true
+        fileNotSelectedMsg.visible = false
 
-//        detailName.text = name;
         if(tag === "folder"){
             pathFolder = pathLower;
             folderName = name;
@@ -87,7 +90,7 @@ Popup {
         if(tag === "file")
         {
 
-            let newDate = new Date(clientModified);
+            let newDate = new Date(modifiedTime);
             let dateString = newDate.getUTCFullYear() +"/"+ (newDate.getUTCMonth()+1) +"/"+ newDate.getUTCDate() + " " + newDate.getUTCHours() + ":" + newDate.getUTCMinutes() + ":" + newDate.getUTCSeconds();
 
             path.text = name
@@ -100,9 +103,14 @@ Popup {
 
     }
 
-    function onFolderClicked(name,tag,pathFolder,pathLower){
-        if(tag === "folder")
+    function onFileDoubleClicked(id, name, tag, pathFolder, pathLower){
+
+        if(tag === "folder"){
             DropboxDS.folderNav(pathFolder)
+        } else{
+            dropboxSaveDialog.visible = true
+            selectedId = id
+        }
 
         updatePath(pathLower)
     }
@@ -368,11 +376,11 @@ Popup {
                                     MouseArea{
 
                                         anchors.fill:parent
-                                        onClicked: onFileClicked(name, tag, pathLower, extension, clientModified)
-                                        onDoubleClicked: onFolderClicked(name, tag, pathFolder, pathLower);
+                                        onClicked: onFileClicked(id, name, tag, pathLower, extension, clientModified)
+                                        onDoubleClicked: onFileDoubleClicked(id, name, tag, pathFolder, pathLower);
+
                                     }
                                 }
-
                             }
 
 
@@ -514,6 +522,13 @@ Popup {
                         }
                     }
 
+                    BusyIndicator {
+                        id: busyindicator
+                        running: image.status === Image.Loading
+                        anchors.top: fileSelected.bottom
+                        anchors.horizontalCenter: fileSelected.horizontalCenter
+                    }
+
                 }
             }
 
@@ -600,8 +615,6 @@ Popup {
 
     // Page Design Ends
     /***********************************************************************************************************************/
-
-
 
 
 }
