@@ -24,15 +24,17 @@
 
         var data = [
             [
-                [0, 30.5621003042803618],
-                [1, 50.9164824306094999],
-                [2, 40.6363092398355727],
-                [3, 10.6302204824674538],
-                [4, 20.2485817228091547],
-                [5, 32.13664898092621325],
+                ["01-01-1998", 30.5621003042803618],
+                ["01-01-1999", 50.9164824306094999],
+                ["01-01-2000", 40.6363092398355727],
+                ["01-01-2001", 10.6302204824674538],
+                ["01-01-2002", 20.2485817228091547],
+                ["01-01-2003", 32.13664898092621325],
             ],
             ["Value Name"],
         ];
+
+        valueDateType = false;
 
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
@@ -63,9 +65,30 @@
                 (height = window.innerHeight - margin.top - margin.bottom - 20);
 
             yaxisTicks = height / 100;
-            xScale = d3
-                .scaleLinear()
-                .domain([0, dataValues.length - 1]) // input
+
+            dataValues.forEach(function (d) {
+                if (
+                    typeof d[0] == "string" &&
+                    new Date(d[0]) != "Invalid Date"
+                ) {
+                    d[0] = new Date(d[0]).getTime();
+                    valueDateType = true;
+                }
+                d[1] = +d[1];
+            });
+
+            if (valueDateType) {
+                xScale = d3.scaleTime();
+            } else {
+                xScale = d3.scaleLinear();
+            }
+
+            xScale
+                .domain(
+                    d3.extent(dataValues, function (d) {
+                        return d[0];
+                    })
+                ) // input
                 .range([0, width]); // output
 
             yScale = d3
@@ -134,9 +157,8 @@
             drawMarker(true, markerShape);
 
             // Generate Grid starts
-
             function make_x_gridlines() {
-                return d3.axisBottom(xScale).ticks(8);
+                return d3.axisBottom(xScale).ticks(dataValues.length);
             }
             function make_y_gridlines() {
                 return d3.axisLeft(yScale).ticks(yaxisTicks);
@@ -173,7 +195,6 @@
                     markerShapeConfig[markerShape] &&
                         markerShapeConfig[markerShape].xPositionAttrName,
                     function (d, i) {
-                        console.log(d);
                         return xScale(d[0]);
                     }
                 )
@@ -188,8 +209,7 @@
                 .attr("height", initialBoxDimension)
                 .attr("width", initialBoxDimension)
                 .attr("points", function (d, i) {
-                    // console.log(xScale(d, i));
-                    var x1 = xScale(i);
+                    var x1 = xScale(d[0]);
                     return (
                         x1 +
                         " " +
@@ -215,7 +235,7 @@
                         .style("left", x_pos - 10 + "px")
                         .style("top", y_pos + "px")
                         .style("display", "block")
-                        .html(parseInt(xValue) + ", " + yValue.toFixed(2));
+                        .html(xValue + ", " + yValue.toFixed(2));
 
                     var shapeClass = ".marker-shape";
                     d3.selectAll(shapeClass).style("opacity", 0.3);
