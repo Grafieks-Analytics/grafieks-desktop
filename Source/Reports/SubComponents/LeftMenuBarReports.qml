@@ -76,7 +76,7 @@ Rectangle{
             icon: "heatmap.png"
             chartHtml:"HeatmapChart.html"
             activeChart: false
-            title:"Heat Map"
+            title: "Heat Map"
             yAxisVisible: true
             lineTypeChartVisible: false
         }
@@ -100,7 +100,7 @@ Rectangle{
             icon: "pie_chart.png"
             chartHtml:"PieChart.html"
             activeChart: false
-            title:"Pie Chart"
+            title: "Pie Chart"
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
             yAxisVisible: false
@@ -110,7 +110,7 @@ Rectangle{
             icon: "donut.png"
             chartHtml:"DoughnutChart.html"
             activeChart: false
-            title:"Donut"
+            title:"Donut Chart"
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
             yAxisVisible: false
@@ -196,19 +196,6 @@ Rectangle{
             yAxisLabelName: "Numerical"
             title: "Tree Map"
         }
-        ListElement{
-            icon: "pivot.png"
-            chartHtml:"bar.html"
-            activeChart: false
-            title:"Pivot"
-        }
-        ListElement{
-            icon: "table.png"
-            chartHtml:"bar.html"
-            elementWidth: 30
-            activeChart: false
-            title:"Table"
-        }
 //        ListElement{
 //            icon: "condegram.png"
 //            chartHtml:"bar.html"
@@ -232,6 +219,27 @@ Rectangle{
             elementWidth:30
             activeChart: false
             title:"Gauge Chart"
+        }
+        ListElement{
+            icon: "pivot.png"
+            chartHtml:"bar.html"
+            activeChart: false
+            title:"Pivot"
+        }
+        ListElement{
+            icon: "table.png"
+            chartHtml:"bar.html"
+            elementWidth: 30
+            activeChart: false
+            title:"Table"
+        }
+        ListElement{
+            icon: "123.png"
+            chartHtml:"bar.html"
+            elementWidth: 30
+            elementHeight: 20
+            activeChart: false
+            title:"KPI"
         }
     }
 
@@ -265,8 +273,10 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    function getChart(chartHtml,index){
+    function getChart(chartHtml,index,chartTitle){
         report_desiner_page.chartUrl = chartHtml;
+        report_desiner_page.chartTitle = chartTitle;
+
         loadchart("../Charts/"+chartHtml);
 //        yAxisVisible  = allCharts.get(index).yAxisVisible;
 
@@ -341,7 +351,7 @@ Rectangle{
                 MouseArea{
                     anchors.fill: parent
                     hoverEnabled: true
-                    onClicked:  getChart(chartHtml,index)
+                    onClicked:  getChart(chartHtml,index,title)
                     onEntered: displayToolTipVisible=true
                     onExited: displayToolTipVisible=false
                 }

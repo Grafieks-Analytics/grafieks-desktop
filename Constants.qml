@@ -206,7 +206,14 @@ QtObject {
 
     // Charts Start
 
-    property string barChart: "BarChart"
+
+    property string barChartTitle: "Bar Chart"
+    property string areaChartTitle:"Area Chart"
+    property string lineChartTitle: "Line Chart"
+    property string headMapChartTitle:"Heat Map"
+    property string pieChartTitle: "Pie Chart"
+    property string donutChartTitle:"Donut Chart"
+
     property string scatteredChart: "Scattered Chart"
     property string stackedBarChart: "Stacked Bar Chart"
 
