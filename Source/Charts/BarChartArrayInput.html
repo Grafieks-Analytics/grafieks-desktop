@@ -3,8 +3,10 @@
     <meta charset="utf-8" />
 
     <!-- Load d3.js -->
+    <script src="./Data/d3DefaultConfig.js"></script>
     <script src="./Data/d3.v4.min.js"></script>
-    <link rel="stylesheet" href="./Data/general.css" />
+    <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+    <link rel="stylesheet" href="Data/general.css" />
 
     <style type="text/css">
         body {
@@ -50,11 +52,28 @@
             ["Countries", "Population"],
         ];
 
-        drawChart(data);
+        // drawChart(data);
 
-        function drawChart(data) {
+        function drawChart(data, plottingConfiguration = {}) {
+            window.data = data;
             dataValues = data[0];
-            const start = window.performance.now();
+
+            var dataValues = data[0];
+
+            let {
+                d3colorPalette,
+                paddingInner,
+                markerShape,
+                curveType,
+            } = plottingConfiguration;
+            if (!d3colorPalette) {
+                d3colorPalette = defaultD3Config.d3ColorPalette;
+            }
+            d3Colors = d3[d3colorPalette];
+
+            if (!paddingInner) {
+                paddingInner = defaultD3Config.defaultPaddingInner;
+            }
 
             d3.selectAll("#my_dataviz").html("");
 
@@ -165,13 +184,6 @@
             }
 
             // Generate Grid ends
-
-            const end = window.performance.now();
-            timeElapsed = end - start;
-
-            document.getElementById(
-                "timeTaken"
-            ).innerHTML = `Total Time Taken:  ${timeElapsed} ms`;
         }
     </script>
 </body>
