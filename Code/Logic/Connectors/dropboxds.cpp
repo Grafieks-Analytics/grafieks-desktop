@@ -175,9 +175,22 @@ void DropboxDS::getUserName()
 
 }
 
-void DropboxDS::downloadFile(QString filePath)
+void DropboxDS::downloadFile(QString fileId)
 {
-    m_networkReply = this->dropbox->get(QUrl("https://www.googleapis.com/drive/v3/files/1E5svQOzBkvgOw012Peuisa-JUP0fsPVp?alt=media"));
+    QJsonObject obj;
+    QJsonDocument doc(obj);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+
+    QString headerArg = "{path: "+fileId+"}";
+
+    QNetworkRequest m_networkRequest;
+    m_networkRequest.setUrl(QUrl("https://content.dropboxapi.com/2/files/download"));
+
+    m_networkRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
+    m_networkRequest.setRawHeader("Authorization", "Bearer " + token.toUtf8());
+    m_networkRequest.setRawHeader("Dropbox-API-Arg", headerArg.toUtf8());
+
+    m_networkReply = m_networkAccessManager->post(m_networkRequest, strJson.toUtf8());
     connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::saveFile);
 }
 
@@ -340,6 +353,12 @@ void DropboxDS::dataSearchedFinished()
 void DropboxDS::saveFile()
 {
 
+    QByteArray arr = m_networkReply->readAll();
+
+    QFile file("C:\\Users\\chill\\Desktop\\x2.xlsx");
+    file.open(QIODevice::WriteOnly);
+    file.write(arr);
+    file.close();
 }
 
 void DropboxDS::addDatasourceHelper(QJsonDocument &doc)
