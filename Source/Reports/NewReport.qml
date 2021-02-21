@@ -39,15 +39,30 @@ Page {
     property string reportChart:ReportParamsModel.chartType;
     property string reportId:ReportParamsModel.reportId;
 
+    property string chartUrl: 'BarChartArrayInput.html';
+
+
     property var d3PropertyConfig: ({});
 
+    onChartUrlChanged: {
 
+        ReportParamsModel.setXAxisColumns([]);
+        ReportParamsModel.setYAxisColumns([]);
+
+        xAxisListModel.clear();
+        yAxisListModel.clear();
+
+    }
 
     onReportChartChanged: {        
+
+        console.log(ReportParamsModel.xAxisColumns);
+        console.log(ReportParamsModel.yAxisColumns);
 
         switch(reportChart){
             case Constants.stackedBarChart:
                 changeChart("qrc:/Source/Charts/StackedBarChart.html");
+
                 let resizeQuery = 'window.addEventListener("resize", function () {' +
                                     'console.log("resizing");'+
                                   'd3.selectAll("#my_dataviz").html(""); '+
@@ -249,7 +264,45 @@ Page {
         }
 
         if(xAxisColumns.length && yAxisColumns.length){
-            ReportModelList.getData();
+               console.log(xAxisColumns);
+            console.log(yAxisColumns);
+//            ReportModelList.getData();
+
+            var dataValues = null;
+            console.log('Chart Url',chartUrl)
+
+            switch(chartUrl){
+                case 'BarChartArrayInput.html':
+                  dataValues =  DuckData.getAreaChartValues(xAxisColumns[0],yAxisColumns[0],'Sum','Sum');
+                    break;
+                case 'AreaChart.html':
+                    dataValues =  DuckData.getAreaChartValues(xAxisColumns[0],yAxisColumns[0],'Sum','Sum');
+                    break;
+
+                case 'LineChart.html':
+                    dataValues = DuckData.getAreaChartValues(xAxisColumns[0],yAxisColumns[0],'Sum','Sum');
+
+                    break;
+                 case 'PieChart.html':
+                     dataValues = DuckData.getPieChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+
+            }
+
+            console.log(dataValues);
+            if(!dataValues){
+                return;
+            }
+
+//            const dataValues = DuckData.getBarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+//            console.log(dataValues);
+
+            var scriptValue = 'window.addEventListener("resize", function () {
+                    d3.selectAll("#my_dataviz").html("");
+                    drawChart('+dataValues+');
+                });';
+
+            webEngineView.runJavaScript('drawChart('+dataValues+'); '+scriptValue);
+
         }
 
     }
