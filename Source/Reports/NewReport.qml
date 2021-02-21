@@ -45,16 +45,6 @@ Page {
 
     property var d3PropertyConfig: ({});
 
-    onChartUrlChanged: {
-
-        //        ReportParamsModel.setXAxisColumns([]);
-        //        ReportParamsModel.setYAxisColumns([]);
-
-        //        xAxisListModel.clear();
-        //        yAxisListModel.clear();
-
-    }
-
     onChartTitleChanged: {
         drawChart();
     }
@@ -146,6 +136,12 @@ Page {
             ReportParamsModel.setReportId(newReportId);
         }
 
+        ReportParamsModel.setXAxisColumns([]);
+        ReportParamsModel.setYAxisColumns([]);
+
+        xAxisListModel.clear();
+        yAxisListModel.clear();
+
     }
 
 
@@ -178,11 +174,6 @@ Page {
     // For changing the chart on clicking chart icons
 
     function reDrawChart(){
-//        let resizeQuery = 'window.addEventListener("resize", function () {' +
-//            'd3.selectAll("#my_dataviz").html(""); '+
-//            'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
-
-//        webEngineView.runJavaScript('drawChart(data,'+JSON.stringify(d3PropertyConfig)+')')
         drawChart();
     }
 
@@ -467,6 +458,7 @@ Page {
         id: left_menubar_reports
         anchors.top: seperator_title_bar.bottom
         Component.onCompleted: {
+
             loadchart.connect(report_desiner_page.changeChart)
         }
 
