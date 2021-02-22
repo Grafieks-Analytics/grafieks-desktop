@@ -39,21 +39,31 @@ Page {
     property string reportChart:ReportParamsModel.chartType;
     property string reportId:ReportParamsModel.reportId;
 
+    property string chartUrl: 'BarChartArrayInput.html';
+    property string chartTitle: Constants.barChartTitle;
+
+
     property var d3PropertyConfig: ({});
 
+    onChartTitleChanged: {
+        drawChart();
+    }
 
+    onReportChartChanged: {
 
-    onReportChartChanged: {        
+        console.log(ReportParamsModel.xAxisColumns);
+        console.log(ReportParamsModel.yAxisColumns);
 
         switch(reportChart){
-            case Constants.stackedBarChart:
-                changeChart("qrc:/Source/Charts/StackedBarChart.html");
-                let resizeQuery = 'window.addEventListener("resize", function () {' +
-                                    'console.log("resizing");'+
-                                  'd3.selectAll("#my_dataviz").html(""); '+
-                                    'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
-                webEngineView.runJavaScript(resizeQuery);
-                break;
+        case Constants.stackedBarChart:
+            changeChart("qrc:/Source/Charts/StackedBarChart.html");
+
+            let resizeQuery = 'window.addEventListener("resize", function () {' +
+                'console.log("resizing");'+
+                'd3.selectAll("#my_dataviz").html(""); '+
+                'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
+            webEngineView.runJavaScript(resizeQuery);
+            break;
 
 
 
@@ -126,6 +136,12 @@ Page {
             ReportParamsModel.setReportId(newReportId);
         }
 
+        ReportParamsModel.setXAxisColumns([]);
+        ReportParamsModel.setYAxisColumns([]);
+
+        xAxisListModel.clear();
+        yAxisListModel.clear();
+
     }
 
 
@@ -158,12 +174,7 @@ Page {
     // For changing the chart on clicking chart icons
 
     function reDrawChart(){
-        let resizeQuery = 'window.addEventListener("resize", function () {' +
-                                  'd3.selectAll("#my_dataviz").html(""); '+
-                                    'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
-                webEngineView.runJavaScript(resizeQuery);
-                
-        webEngineView.runJavaScript('drawChart(data,'+JSON.stringify(d3PropertyConfig)+')')
+        drawChart();
     }
 
     function changeChart(chartname){
@@ -248,8 +259,62 @@ Page {
             ReportParamsModel.setYAxisColumns(yAxisColumns);
         }
 
+
+        drawChart();
+
+    }
+
+    function drawChart(){
+
+        var xAxisColumns = ReportParamsModel.xAxisColumns;
+        var yAxisColumns = ReportParamsModel.yAxisColumns;
+
+        console.log(xAxisColumns);
+        console.log(yAxisColumns);
+
         if(xAxisColumns.length && yAxisColumns.length){
-            ReportModelList.getData();
+
+            console.log(xAxisColumns);
+            console.log(yAxisColumns);
+
+            var dataValues = null;
+            console.log('Chart Title',chartTitle)
+
+            switch(chartTitle){
+            case Constants.barChartTitle:
+                dataValues =  DuckData.getBarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break
+            case Constants.areaChartTitle:
+            case Constants.lineChartTitle:
+                dataValues =  DuckData.getAreaChartValues(xAxisColumns[0],yAxisColumns[0],'Sum','Sum');
+                break;
+            case Constants.pieChartTitle:
+            case Constants.donutChartTitle:
+                dataValues = DuckData.getPieChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.funnelChartTitle:
+                dataValues = DuckData.getFunnelChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+
+            }
+
+            console.log(dataValues);
+            if(!dataValues){
+                return;
+            }
+
+
+            console.log(dataValues);
+            console.log(webEngineView.loading);
+            console.log(report_desiner_page.chartTitle)
+            console.log(report_desiner_page.chartUrl)
+
+            var scriptValue = 'window.addEventListener("resize", function () {
+                    d3.selectAll("#my_dataviz").html("");
+                    drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
+            });';
+
+            webEngineView.runJavaScript('drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue);
+
         }
 
     }
@@ -393,6 +458,7 @@ Page {
         id: left_menubar_reports
         anchors.top: seperator_title_bar.bottom
         Component.onCompleted: {
+
             loadchart.connect(report_desiner_page.changeChart)
         }
 
@@ -574,7 +640,7 @@ Page {
             anchors.top: seperatorAxis.bottom
             anchors.left: parent.left
             width: parent.width
-//            visible: yAxisVisible
+            //            visible: yAxisVisible
 
             Rectangle{
                 id: yaxisText
@@ -647,8 +713,8 @@ Page {
                         height: 20
                         width: 20
                         MouseArea{
-                             anchors.fill: parent
-                             onClicked: openYAxisSettings()
+                            anchors.fill: parent
+                            onClicked: openYAxisSettings()
                         }
                     }
 
@@ -667,7 +733,7 @@ Page {
             background: Rectangle{
                 color: Constants.darkThemeColor
             }
-//            visible: yAxisVisible
+            //            visible: yAxisVisible
         }
 
 
@@ -693,7 +759,7 @@ Page {
         anchors.topMargin: -5
     }
 
-   // Right Panel Starts
+    // Right Panel Starts
 
     Column{
         id: column_querymodeller
