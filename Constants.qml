@@ -13,7 +13,7 @@ import QtQuick 2.15
 QtObject {
 
     // Menu Indexes
-    property int initialIndex: 7
+    property int initialIndex: 3
     property int dataDesignerIndex: 3
     property int dashboardDesignerIndex: 6
     property int newReportIndex: 7
@@ -205,6 +205,15 @@ QtObject {
 
 
     // Charts Start
+
+
+    property string barChartTitle: "Bar Chart"
+    property string areaChartTitle:"Area Chart"
+    property string lineChartTitle: "Line Chart"
+    property string headMapChartTitle:"Heat Map"
+    property string pieChartTitle: "Pie Chart"
+    property string donutChartTitle:"Donut Chart"
+    property string funnelChartTitle:"Funnel Chart"
 
     property string scatteredChart: "Scattered Chart"
     property string stackedBarChart: "Stacked Bar Chart"
