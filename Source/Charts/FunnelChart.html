@@ -41,17 +41,18 @@
             ];
 
             var data = [
-                { sales_process: "Leads1", value: "70" },
-                { sales_process: "Leads32", value: "175" },
-                { sales_process: "Leads12", value: "105" },
-                { sales_process: "Phone Calls", value: "61" },
-                { sales_process: "Leads23", value: "135" },
-                { sales_process: "Pitches", value: "46" },
-                { sales_process: "Negotiations", value: "29" },
-                { sales_process: "Final Closure", value: "15" },
+                { key: "Leads1", value: "70" },
+                { key: "Leads32", value: "175" },
+                { key: "Leads12", value: "105" },
+                { key: "Phone Calls", value: "61" },
+                { key: "Leads23", value: "135" },
+                { key: "Pitches", value: "46" },
+                { key: "Negotiations", value: "29" },
+                { key: "Final Closure", value: "15" },
             ];
 
             function drawChart(root, plottingConfiguration = {}) {
+                window.data = root[0];
                 let {
                     d3colorPalette,
                     paddingInner,
@@ -119,7 +120,7 @@
                         return line(d.coordinates);
                     })
                     .style("fill", function (d) {
-                        return color(d.sales_process);
+                        return color(d.key);
                     })
                     .attr("class", function (d, i) {
                         return "funnel";
@@ -136,7 +137,7 @@
                             .style("postion", "absolute")
                             .html(
                                 "Sales Process: " +
-                                    d.sales_process +
+                                    d.key +
                                     "<br/>Value: " +
                                     d.value
                             );
@@ -178,7 +179,7 @@
                     });
             }
 
-            drawChart(data);
+            // drawChart(data);
         </script>
     </body>
 </html>

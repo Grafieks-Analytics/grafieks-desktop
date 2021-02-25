@@ -180,7 +180,7 @@ QString DuckData::getAreaChartValues(QString xAxisColumn, QString yAxisColumn, Q
     return strData;
 }
 
-QString DuckData::getLineChartValues(QString xAxisColumn, QString xAxisCalculationType, QString yAxisColumn, QString yAxisCalculationType)
+QString DuckData::getLineChartValues(QString xAxisColumn, QString yAxisColumn, QString xAxisCalculationType, QString yAxisCalculationType)
 {
     QJsonArray data;
     QJsonArray colData;

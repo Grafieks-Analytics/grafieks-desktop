@@ -24,6 +24,7 @@
         var data = { a: 9, b: 20, c: 30, d: 8, e: 12, g: 45 };
 
         function drawChart(data, plottingConfiguration = {}) {
+            window.data = data;
             let {
                 d3colorPalette,
                 paddingInner,
@@ -199,6 +200,6 @@
         }
 
         // Initialize the plot with the first dataset
-        drawChart(data);
+        // drawChart(data);
     </script>
 </body>
