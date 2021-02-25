@@ -14,4 +14,11 @@ Rectangle {
         text: "Click to Download"
         onClicked: DriveDS.downloadFile("1swdjquWqq5tjMm9tpxMa-9C8rjCyWVWHs-ODdAXfWDw")
     }
+
+    Button{
+        id: downloadBtnBox
+        anchors.top: downloadBtn.bottom
+        text: "Click to Box"
+        onClicked: BoxDS.downloadFile("773507838319")
+    }
 }

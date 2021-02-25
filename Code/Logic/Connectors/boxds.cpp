@@ -152,6 +152,27 @@ void BoxDS::addDataSource(const QString &id, const QString &name, const QString 
     addDataSource(box);
 }
 
+void BoxDS::downloadFile(QString fileID)
+{
+
+    qDebug() << "OAUTHO" << this->box->token() << "URL" << "https://api.box.com/2.0/files/"+fileID+"/content";
+    m_networkReply = this->box->get(QUrl("https://api.box.com/2.0/files/773507838319/content"));
+    connect(m_networkReply,&QIODevice::readyRead,this,&BoxDS::dataReadyRead);
+    connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::saveFile);
+
+    //    QNetworkRequest m_networkRequest;
+
+    //    QUrl api("https://api.box.com/2.0/files/"+fileID+"/content");
+    //    m_networkRequest.setUrl(api);
+
+    //    m_networkRequest.setRawHeader("Authorization", "Bearer " + this->box->token().toUtf8());
+
+    //    m_networkReply = m_networkAccessManager->get(m_networkRequest);
+    //    connect(m_networkReply,&QIODevice::readyRead,this,&BoxDS::dataReadyRead);
+    //    connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::saveFile);
+
+}
+
 /*!
  * \brief List the values in QList<Box *>
  * \return QList<Box *>
@@ -227,6 +248,22 @@ void BoxDS::dataReadFinished()
             }
         }
         m_dataBuffer->clear();
+    }
+}
+
+void BoxDS::saveFile()
+{
+    if(m_networkReply->error()){
+        qDebug() <<"There was some error1 : "<< m_networkReply->errorString();
+    }
+    else{
+        QByteArray arr = m_networkReply->readAll();
+        qDebug() << arr << "OUTPIT" << m_networkReply->bytesAvailable();
+
+        QFile file("C:\\Users\\chill\\Desktop\\c.pdfr");
+        file.open(QIODevice::WriteOnly);
+        file.write(arr);
+        file.close();
     }
 }
 
