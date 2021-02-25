@@ -520,16 +520,15 @@ Popup {
                                 padding: 5
                             }
                         }
+
                     }
 
-                    BusyIndicator {
-                        id: busyindicator
-                        running: image.status === Image.Loading
-                        anchors.top: fileSelected.bottom
-                        anchors.horizontalCenter: fileSelected.horizontalCenter
-                    }
+
+
+
 
                 }
+
             }
 
 
@@ -601,7 +600,11 @@ Popup {
                     textValue: "Next"
                     anchors.left: cancelBtn.right
                     anchors.leftMargin: 30
+                }
 
+                BusyIndicator {
+                    id: busyindicator
+                    running: true
                 }
 
             }
