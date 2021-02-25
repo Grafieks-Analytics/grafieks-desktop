@@ -28,6 +28,8 @@ SOURCES += \
     Code/Connectors/snowflakecon.cpp \
     Code/Connectors/sqlitecon.cpp \
     Code/Connectors/teradatacon.cpp \
+    Code/Logic/Connectors/Helpers/exceltocsv.cpp \
+    Code/Logic/Connectors/Helpers/jsontocsv.cpp \
     Code/Logic/Connectors/box.cpp \
     Code/Logic/Connectors/boxds.cpp \
     Code/Logic/Connectors/boxmodel.cpp \
@@ -134,6 +136,8 @@ HEADERS += \
     Code/Connectors/snowflakecon.h \
     Code/Connectors/sqlitecon.h \
     Code/Connectors/teradatacon.h \
+    Code/Logic/Connectors/Helpers/exceltocsv.h \
+    Code/Logic/Connectors/Helpers/jsontocsv.h \
     Code/Logic/Connectors/box.h \
     Code/Logic/Connectors/boxds.h \
     Code/Logic/Connectors/boxmodel.h \
