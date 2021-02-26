@@ -47,6 +47,7 @@
 #include "Code/Logic/Connectors/githubds.h"
 #include "Code/Logic/Connectors/githubmodel.h"
 #include "Code/Logic/Connectors/Helpers/jsontocsv.h"
+#include "Code/Logic/Connectors/Helpers/exceltocsv.h"
 
 #include "Code/Logic/Dashboards/documenthandlermodel.h"
 #include "Code/Logic/Dashboards/dashboardparamsmodel.h"
@@ -249,6 +250,7 @@ int main(int argc, char *argv[])
     FilterNumericalListModel filterNumericalListModel;
     ODBCDriversModel odbcDriversModel;
     JsonToCsv jsonToCsv;
+    ExcelToCsv excelToCsv;
 
     GeneralParamsModel generalParamsModel;
     QuerySplitter querySplitter;

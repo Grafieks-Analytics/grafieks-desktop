@@ -2,12 +2,16 @@
 #define EXCELTOCSV_H
 
 #include <QObject>
+#include <QAxObject>
+#include <QDebug>
+#include <QFile>
+#include <QDir>
 
 class ExcelToCsv : public QObject
 {
     Q_OBJECT
 public:
-    explicit ExcelToCsv(QString &jsonPath, QObject *parent = nullptr);
+    explicit ExcelToCsv(QObject *parent = nullptr);
 
 signals:
     void excelConverted(QString status);

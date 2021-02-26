@@ -1,4 +1,4 @@
-QT += quick webengine quickcontrols2 sql networkauth webchannel network
+QT += quick webengine quickcontrols2 sql networkauth webchannel network axcontainer
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
