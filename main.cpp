@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
     FilterDateListModel filterDateListModel;
     FilterNumericalListModel filterNumericalListModel;
     ODBCDriversModel odbcDriversModel;
-//    JsonToCsv jsonToCsv("sadsad", app);
+    JsonToCsv jsonToCsv;
 
     GeneralParamsModel generalParamsModel;
     QuerySplitter querySplitter;
