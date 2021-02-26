@@ -8,11 +8,17 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
+#include <jsoncons/json.hpp>
+#include <jsoncons_ext/csv/csv.hpp>
+
+using namespace jsoncons;
+using namespace jsoncons::csv;
+
 class JsonToCsv : public QObject
 {
     Q_OBJECT
 public:
-    explicit JsonToCsv(QString &jsonPath, QObject *parent = nullptr);
+    explicit JsonToCsv(QObject *parent = nullptr);
 
 signals:
     void jsonConverted(QString status);
