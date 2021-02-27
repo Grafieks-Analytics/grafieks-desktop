@@ -43,8 +43,8 @@ public:
                                                );
 
     Q_INVOKABLE QString getLineChartValues(  QString xAxisColumn
-                                          , QString xAxisCalculationType
                                           , QString yAxisColumn
+                                          , QString xAxisCalculationType
                                           , QString yAxisCalculationType
                                           );
 

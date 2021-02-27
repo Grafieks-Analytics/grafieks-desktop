@@ -204,8 +204,9 @@ void DriveDS::dataReadFinished()
 void DriveDS::saveFile()
 {
     QByteArray arr = m_networkReply->readAll();
+    qDebug() << arr << "SAVE FILE";
 
-    QFile file("/Users/mac/Desktop/x.xlsx");
+    QFile file("C:\\Users\\chill\\Desktop\\x.xlsx");
     file.open(QIODevice::WriteOnly);
     file.write(arr);
     file.close();
