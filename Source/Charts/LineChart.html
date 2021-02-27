@@ -45,6 +45,7 @@
                 paddingInner,
                 markerShape,
                 curveType,
+                timeParseFormat,
             } = plottingConfiguration;
             if (!d3colorPalette) {
                 d3colorPalette = defaultD3Config.d3ColorPalette;
@@ -58,6 +59,13 @@
             if (!curveType) {
                 curveType = defaultLineCurve;
             }
+
+            if (!timeParseFormat) {
+                timeParseFormat = defaultD3Config.defaultTimeParseFormat;
+            }
+
+            var parseTime = d3.timeParse(timeParseFormat);
+            console.log(parseTime);
 
             d3.selectAll("#my_dataviz").html("");
             (margin = { top: 30, right: 30, bottom: 70, left: 60 }),
@@ -86,6 +94,7 @@
             xScale
                 .domain(
                     d3.extent(dataValues, function (d) {
+                        console.log(parseTime(d[0]));
                         return d[0];
                     })
                 ) // input

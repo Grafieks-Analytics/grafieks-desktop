@@ -8,6 +8,7 @@ const defaultD3Config = {
     onHoverBoxDimension: 8,
     defaultLineCurve: "curveCardinal",
     innerRadius: 150,
+    defaultTimeParseFormat: "%d-%m-%Y",
 };
 const markerShapeConfig = {
     circle: {
