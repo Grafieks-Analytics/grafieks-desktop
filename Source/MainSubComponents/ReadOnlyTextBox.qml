@@ -18,6 +18,8 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: 10
+        elide: Text.ElideRight
+        width: parent.width - 20
     }
 
 
