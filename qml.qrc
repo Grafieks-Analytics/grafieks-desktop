@@ -202,5 +202,6 @@
         <file>Source/Charts/Data/geoCoordinates.js</file>
         <file>Source/Charts/HeatmapChart.html</file>
         <file>Source/Charts/MultipleLineChart.html</file>
+        <file>Source/Charts/Data/sankeySingle.js</file>
     </qresource>
 </RCC>
