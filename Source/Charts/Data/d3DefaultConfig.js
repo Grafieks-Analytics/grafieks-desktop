@@ -9,6 +9,7 @@ const defaultD3Config = {
     defaultLineCurve: "curveCardinal",
     innerRadius: 150,
     defaultTimeParseFormat: "%d-%m-%Y",
+    defaultSpace: 30,
 };
 const markerShapeConfig = {
     circle: {
