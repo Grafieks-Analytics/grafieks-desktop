@@ -14,11 +14,18 @@ void DuckCRUD::createTable(){
     std::string csvdb      = "'" + csvFile + "'";
 
     QString fileName       = QFileInfo(db).baseName();
-    std::string table      = fileName.toStdString();
 
-    Statics::currentDbName = fileName;
+    QString table = "";
+    for(int i = 0; i < fileName.length(); i++){
 
-    con.Query("CREATE TABLE " + table + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
+        if(fileName[i].isLetter() || fileName[i].isDigit()){
+            table = table + fileName[i];
+        }
+    }
+
+    Statics::currentDbName = table;
+
+    con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
 }
 
 void DuckCRUD::columnData(QString colName, QString index)
