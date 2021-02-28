@@ -202,6 +202,7 @@
         <file>Source/Charts/Data/geoCoordinates.js</file>
         <file>Source/Charts/HeatmapChart.html</file>
         <file>Source/Charts/MultipleLineChart.html</file>
+        <file>Source/Charts/Data/sankeySingle.js</file>
         <file>Source/Connectors/SubComponents/JsonConnection.qml</file>
         <file>Source/Connectors/SubComponents/ExcelConnection.qml</file>
     </qresource>
