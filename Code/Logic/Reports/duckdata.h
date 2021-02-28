@@ -78,7 +78,6 @@ public:
 signals:
 
 private:
-    QMap<QString,QPair<int, QString>> colInfo;
 
 };
 
