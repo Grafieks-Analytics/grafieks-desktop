@@ -12,6 +12,7 @@ class ExcelToCsv : public QObject
     Q_OBJECT
 public:
     explicit ExcelToCsv(QObject *parent = nullptr);
+    QString convertExcelToCsv(QString &excelPath);
 
 signals:
     void excelConverted(QString status);

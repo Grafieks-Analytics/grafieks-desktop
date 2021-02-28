@@ -2,12 +2,15 @@
 
 ExcelToCsv::ExcelToCsv(QObject *parent) : QObject(parent)
 {
+}
 
-    QString excelFileName  = "C:\\Users\\chill\\Downloads\\Book.xlsx";
+QString ExcelToCsv::convertExcelToCsv(QString &excelPath)
+{
+
     QString csvFileName = "C:\\Users\\chill\\Desktop\\asd.csv";
 
-    if (!QFile::exists(excelFileName)){
-            qDebug() << "excelFileName  " << excelFileName << "exist";
+    if (!QFile::exists(excelPath)){
+            qDebug() << "excelFileName  " << excelPath << "exist";
 //            return false;
         }
 
@@ -30,7 +33,7 @@ ExcelToCsv::ExcelToCsv(QObject *parent) : QObject(parent)
 //            return false;
         }
              /* Get the current workbook */
-             QAxObject *workbook = workbooks->querySubObject("Open(const QString &)", excelFileName); // Open an Excel file
+             QAxObject *workbook = workbooks->querySubObject("Open(const QString &)", excelPath); // Open an Excel file
         if (workbook == nullptr){
             qDebug() << "get workbook fail!" ;
 //            return false;
@@ -55,4 +58,6 @@ ExcelToCsv::ExcelToCsv(QObject *parent) : QObject(parent)
         workbook->dynamicCall("Close()");
         excel->dynamicCall("Quit()");
         qDebug() << "save as success";
+
+        return "Out Test";
 }
