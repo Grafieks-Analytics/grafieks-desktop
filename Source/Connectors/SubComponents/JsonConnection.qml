@@ -187,6 +187,7 @@ Popup {
         title: "Select a file"
         nameFilters: ["Json files (*.json)"];
 
+
         onAccepted: {
             console.log(fileUrl)
             jsonFileName.text = ConnectorsLoginModel.urlToFilePath(promptJson.fileUrl)

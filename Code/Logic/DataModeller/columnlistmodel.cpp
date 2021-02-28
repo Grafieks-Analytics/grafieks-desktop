@@ -125,6 +125,15 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
         break;
     }
 
+    case Constants::excelIntType:{
+
+        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+        QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelStrType);
+        this->setQuery(queryString, dbExcel);
+
+        break;
+    }
+
     case Constants::mssqlIntType:{
 
         queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);

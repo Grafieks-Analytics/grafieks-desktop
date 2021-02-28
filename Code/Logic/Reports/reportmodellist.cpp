@@ -116,6 +116,7 @@ void ReportModelList::setTmpSql(QString query)
         break;
     }
 
+    case Constants::excelIntType:
     case Constants::jsonIntType:
     case Constants::csvIntType:{
 

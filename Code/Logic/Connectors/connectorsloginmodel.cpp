@@ -241,7 +241,6 @@ void ConnectorsLoginModel::jsonLogin(QString filename)
 {
     JsonCon jsoncon;
     QVariantMap response = jsoncon.JsonInstance(filename);
-    qDebug() << "FILEWA" << filename << "JSON";
 
     Statics::currentDbName = filename;
     Statics::currentDbIntType = Constants::jsonIntType;
@@ -250,6 +249,21 @@ void ConnectorsLoginModel::jsonLogin(QString filename)
 
     emit sendDbName();
     emit jsonLoginStatus(response);
+}
+
+void ConnectorsLoginModel::excelLogin(QString filename)
+{
+
+    ExcelCon excelcon;
+    QVariantMap response = excelcon.ExcelInstance(filename);
+
+    Statics::currentDbName = filename;
+    Statics::currentDbIntType = Constants::excelIntType;
+
+    this->setConnectedDB(filename);
+
+    emit sendDbName();
+    emit excelLoginStatus(response);
 }
 
 QString ConnectorsLoginModel::urlToFilePath(const QUrl &url)
