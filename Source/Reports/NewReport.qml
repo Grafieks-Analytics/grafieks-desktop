@@ -283,7 +283,7 @@ Page {
             switch(chartTitle){
             case Constants.barChartTitle:
                 dataValues =  DuckData.getBarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
-                break
+                break;
             case Constants.areaChartTitle:
             case Constants.lineChartTitle:
                 dataValues =  DuckData.getAreaChartValues(xAxisColumns[0],yAxisColumns[0],'Sum','Sum');

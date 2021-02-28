@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Load d3.js -->
+    <script src="./Data/d3.v4.min.js"></script>
+
+    <script src="./Data/d3DefaultConfig.js"></script>
+    <script src="./Data/d3.v4.min.js"></script>
+    <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+    <link rel="stylesheet" href="Data/general.css" />
+
+    <title>Grouped Bar</title>
+</head>
+<body>
+    <div id="my_dataviz"></div>
+    <div id="tooltip"></div>
+    <div id="legend"></div>
+    <script>
+        // Color Pallets - Set 3
+        const d3colors = [
+            "#8DD3C9",
+            "#FFFFAA",
+            "#B8BED6",
+            "#F98171",
+            "#78B5D1",
+            "#FFB15B",
+            "#B4E061",
+            "#FDCDE5",
+            "#DAD9D4",
+            "#BD7FBE",
+            "#CDE9C1",
+            "#FFEA77",
+        ];
+
+        // var n = 4, // number of samples
+        //     m = 5; // number of series
+
+        // var data = d3.range(m).map(function () {
+        //     return d3.range(n).map(Math.random);
+        // });
+        // console.log(data);
+
+        var data = [
+            [
+                [
+                    0.5215006178285715,
+                    0.879956964191245,
+                    0.683374438511001,
+                    0.15639057560101666,
+                ],
+                [
+                    0.9059941028680165,
+                    0.04053971428701386,
+                    0.560832188517802,
+                    0.5415644339529739,
+                ],
+                [
+                    0.5812547575965434,
+                    0.8676665725388477,
+                    0.36303058844051406,
+                    0.8873522828290739,
+                ],
+            ],
+            ["Consumer", "Corporate", "Home Office"],
+        ];
+
+        function drawChart(data, plottingConfiguration = {}) {
+            window.data = data;
+            dataValues = data[0];
+
+            var n = dataValues[0].length,
+                m = data[1].length;
+
+            let {
+                d3colorPalette,
+                paddingInner,
+                markerShape,
+                curveType,
+                spaceBetweenCharts,
+            } = plottingConfiguration;
+            if (!d3colorPalette) {
+                d3colorPalette = defaultD3Config.d3ColorPalette;
+            }
+            d3Colors = d3[d3colorPalette];
+
+            if (!spaceBetweenCharts) {
+                spaceBetweenCharts = defaultD3Config.defaultSpace;
+            }
+
+            if (!paddingInner) {
+                paddingInner = defaultD3Config.defaultPaddingInner;
+            }
+
+            d3.selectAll("#my_dataviz").html("");
+
+            // set the dimensions and margins of the graph
+            var margin = { top: 30, right: 30, bottom: 70, left: 60 },
+                width = window.innerWidth - margin.left - margin.right - 20,
+                height = window.innerHeight - margin.top - margin.bottom - 20;
+
+            var legend_padding = 120;
+
+            var y = d3.scaleLinear().domain([0, 1]).range([height, 0]);
+
+            var x0 = d3
+                .scaleBand()
+                .domain(d3.range(n))
+                .range([0, width - legend_padding], 0.1);
+
+            var x1 = d3
+                .scaleBand()
+                .domain(d3.range(m))
+                .range([0, x0.bandwidth() - spaceBetweenCharts]);
+
+            var z = d3.scaleOrdinal().range(d3Colors);
+
+            var svg = d3
+                .select("#my_dataviz")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr(
+                    "transform",
+                    "translate(" + margin.left + "," + margin.top + ")"
+                );
+
+            svg.append("g")
+                .attr("class", "x-axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x0).tickSizeOuter(0));
+
+            svg.append("g")
+                .attr("class", "y-axis")
+                .attr("transform", "translate(" + 0 + ", 0)")
+                .call(d3.axisLeft().scale(y).tickSizeOuter(0));
+
+            svg.append("g")
+                .attr("class", "grid")
+                .style("stroke-width", "1")
+                .call(
+                    make_y_gridlines()
+                        .tickSize(-width + legend_padding)
+                        .tickFormat("")
+                );
+
+            svg.append("g")
+                .selectAll("g")
+                .data(dataValues)
+                .enter()
+                .append("g")
+                .style("fill", function (d, i) {
+                    return z(i);
+                })
+                .attr("transform", function (d, i) {
+                    return "translate(" + x1(i) + ",0)";
+                })
+
+                .selectAll("rect")
+                .data(function (d) {
+                    return d;
+                })
+                .enter()
+                .append("rect")
+                .attr("width", x1.bandwidth())
+                .attr("height", y)
+                .attr("x", function (d, i) {
+                    return x0(i);
+                })
+                .attr("y", function (d) {
+                    return height - y(d);
+                })
+                .attr("class", "bar")
+                .on("mouseover mousemove", function (d, i) {
+                    var x_pos = d3.mouse(this)[0] + margin.left + margin.right;
+                    var y_pos = d3.mouse(this)[1];
+
+                    d3.select("#tooltip")
+                        .style("left", x_pos + "px")
+                        .style("top", y_pos + "px")
+                        .style("display", "block")
+                        .html(d.toFixed(4));
+
+                    d3.selectAll(".bar").style("opacity", 0.3);
+                    d3.select(this).style("opacity", 1);
+                })
+                .on("mouseout", function (d, i) {
+                    d3.select("#tooltip").style("display", "none");
+                    d3.selectAll(".bar").style("opacity", 1);
+                });
+
+            // Generate Grid starts
+
+            function make_x_gridlines() {
+                return d3.axisBottom(x).ticks(8);
+            }
+            function make_y_gridlines() {
+                return d3.axisLeft(y).ticks(5);
+            }
+        }
+
+        drawChart(data);
+
+        // Pass this from QT
+        window.addEventListener("resize", function () {
+            drawChart(data);
+        });
+
+        // Generate Grid ends
+
+        // Legend ends
+    </script>
+</body>
