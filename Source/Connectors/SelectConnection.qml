@@ -254,6 +254,10 @@ Page {
         id: impalaModal
     }
 
+    JsonConnection{
+        id: jsonModal
+    }
+
     AccessConnection{
         id: accessModal
     }
