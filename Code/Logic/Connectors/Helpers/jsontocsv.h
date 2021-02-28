@@ -7,6 +7,7 @@
 #include <QJsonValue>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QDir>
 
 #include <jsoncons/json.hpp>
 #include <jsoncons_ext/csv/csv.hpp>
@@ -19,6 +20,7 @@ class JsonToCsv : public QObject
     Q_OBJECT
 public:
     explicit JsonToCsv(QObject *parent = nullptr);
+    QString convertJsonToCsv(QString &jsonPath);
 
 signals:
     void jsonConverted(QString status);

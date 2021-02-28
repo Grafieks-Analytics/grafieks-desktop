@@ -9,9 +9,15 @@
 #include "../../statics.h"
 #include "../../constants.h"
 
+#include "Helpers/exceltocsv.h"
+#include "Helpers/jsontocsv.h"
+
 class DuckCRUD : public QObject
 {
     Q_OBJECT
+    ExcelToCsv excelToCsv;
+    JsonToCsv jsonToCsv;
+
 public:
     explicit DuckCRUD(QObject *parent = nullptr);
 

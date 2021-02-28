@@ -18,6 +18,7 @@ SOURCES += \
     Code/Connectors/excelcon.cpp \
     Code/Connectors/hivecon.cpp \
     Code/Connectors/impalacon.cpp \
+    Code/Connectors/jsoncon.cpp \
     Code/Connectors/mongocon.cpp \
     Code/Connectors/mssqlcon.cpp \
     Code/Connectors/mysqlcon.cpp \
@@ -126,6 +127,7 @@ HEADERS += \
     Code/Connectors/excelcon.h \
     Code/Connectors/hivecon.h \
     Code/Connectors/impalacon.h \
+    Code/Connectors/jsoncon.h \
     Code/Connectors/mongocon.h \
     Code/Connectors/mssqlcon.h \
     Code/Connectors/mysqlcon.h \
