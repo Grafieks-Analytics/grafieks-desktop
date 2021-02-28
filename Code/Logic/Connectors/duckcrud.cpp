@@ -8,31 +8,43 @@ DuckCRUD::DuckCRUD(QObject *parent) : QObject(parent),
 
 void DuckCRUD::createTable(){
 
+    QStringList excelSheetsList;
     QString db = Statics::currentDbName;
     std::string csvFile    = db.toStdString();
-    qDebug() << "DB Name" << db;
 
     QString fileName       = QFileInfo(db).baseName();
     std::string table      = fileName.toStdString();
+    std::string csvdb       = "";
 
     QString fileExtension = QFileInfo(db).completeSuffix();
 
     if(fileExtension.toLower() == "json"){
-       csvFile = jsonToCsv.convertJsonToCsv(Statics::currentDbName).toStdString();
+        csvFile = jsonToCsv.convertJsonToCsv(Statics::currentDbName).toStdString();
+
+        csvdb      = "'" + csvFile + "'";
+        Statics::currentDbName = fileName;
+        con.Query("CREATE TABLE " + table + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
 
     } else if(fileExtension.toLower() == "xls" || fileExtension.toLower() == "xlsx"){
+        excelSheetsList = excelToCsv.convertExcelToCsv(Statics::currentDbName);
 
-        csvFile = excelToCsv.convertExcelToCsv(fileName).toStdString();
+
+        for ( const QString& csvFile : excelSheetsList  ) {
+
+            csvdb      = "'" + csvFile.toStdString() + "'";
+            qDebug() << csvFile << "FILES NAMES";
+            Statics::currentDbName = fileName;
+            con.Query("CREATE TABLE " + table + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
+        }
+
+    } else{
+        csvdb      = "'" + csvFile + "'";
+        Statics::currentDbName = fileName;
+        con.Query("CREATE TABLE " + table + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
     }
 
 
-    std::string csvdb      = "'" + csvFile + "'";
-    Statics::currentDbName = fileName;
 
-    qDebug() << csvdb.c_str() << "final db";
-
-    con.Query("CREATE TABLE " + table + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
-//    con.Query("CREATE TABLE table AS SELECT * FROM read_csv_auto('C:\\Users\\chill\\Desktop\\last.csv')");
 }
 
 void DuckCRUD::columnData(QString colName, QString index)

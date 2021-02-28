@@ -29,6 +29,7 @@ public:
     Q_INVOKABLE void sqliteLogin(QString filename);
     Q_INVOKABLE void csvLogin(QString filename, QString separator);
     Q_INVOKABLE void jsonLogin(QString filename);
+    Q_INVOKABLE void excelLogin(QString filename);
     Q_INVOKABLE QString urlToFilePath(const QUrl &url);
 
     // ODBC
