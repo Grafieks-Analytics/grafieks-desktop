@@ -279,7 +279,16 @@ QString ConnectorsLoginModel::connectedDB() const
     switch (Statics::currentDbIntType) {
 
     case Constants::csvIntType:{
-        dataBase = QUrl(m_connectedDB).fileName();
+
+        dataBase = QFileInfo(m_connectedDB).baseName();
+        QString baseDb = "";
+        for(int i = 0; i < dataBase.length(); i++){
+
+            if(dataBase[i].isLetter() || dataBase[i].isDigit()){
+                baseDb = baseDb + dataBase[i];
+            }
+        }
+        dataBase = baseDb;
         break;
     }
     }
