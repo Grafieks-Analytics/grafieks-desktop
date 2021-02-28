@@ -1,4 +1,4 @@
-QT += quick webengine quickcontrols2 sql networkauth webchannel network
+QT += quick webengine quickcontrols2 sql networkauth webchannel network axcontainer
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -18,6 +18,7 @@ SOURCES += \
     Code/Connectors/excelcon.cpp \
     Code/Connectors/hivecon.cpp \
     Code/Connectors/impalacon.cpp \
+    Code/Connectors/jsoncon.cpp \
     Code/Connectors/mongocon.cpp \
     Code/Connectors/mssqlcon.cpp \
     Code/Connectors/mysqlcon.cpp \
@@ -28,6 +29,8 @@ SOURCES += \
     Code/Connectors/snowflakecon.cpp \
     Code/Connectors/sqlitecon.cpp \
     Code/Connectors/teradatacon.cpp \
+    Code/Logic/Connectors/Helpers/exceltocsv.cpp \
+    Code/Logic/Connectors/Helpers/jsontocsv.cpp \
     Code/Logic/Connectors/box.cpp \
     Code/Logic/Connectors/boxds.cpp \
     Code/Logic/Connectors/boxmodel.cpp \
@@ -124,6 +127,7 @@ HEADERS += \
     Code/Connectors/excelcon.h \
     Code/Connectors/hivecon.h \
     Code/Connectors/impalacon.h \
+    Code/Connectors/jsoncon.h \
     Code/Connectors/mongocon.h \
     Code/Connectors/mssqlcon.h \
     Code/Connectors/mysqlcon.h \
@@ -134,6 +138,8 @@ HEADERS += \
     Code/Connectors/snowflakecon.h \
     Code/Connectors/sqlitecon.h \
     Code/Connectors/teradatacon.h \
+    Code/Logic/Connectors/Helpers/exceltocsv.h \
+    Code/Logic/Connectors/Helpers/jsontocsv.h \
     Code/Logic/Connectors/box.h \
     Code/Logic/Connectors/boxds.h \
     Code/Logic/Connectors/boxmodel.h \
@@ -202,7 +208,131 @@ HEADERS += \
     Code/Logic/Reports/duckdata.h \
     Code/Logic/Reports/reportmodellist.h \
     Code/Logic/Reports/reportparamsmodel.h \
+    Code/ThirdParty/jsoncons/include/jsoncons/json.hpp \
+    Code/ThirdParty/jsoncons/include/jsoncons_ext/csv/csv.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/allocator_holder.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/basic_json.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/bigint.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/byte_string.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/config/binary_config.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/config/compiler_support.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/config/jsoncons_config.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/config/version.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/conv_error.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/converter.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/decode_json.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/decode_traits.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/detail/endian.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/detail/grisu3.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/detail/more_type_traits.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/detail/optional.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/detail/parse_number.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/detail/span.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/detail/string_view.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/detail/string_wrapper.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/detail/write_number.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/encode_json.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/encode_traits.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/json.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/json_container_types.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/json_content_handler.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/json_cursor.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/json_decoder.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/json_encoder.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/json_error.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/json_exception.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/json_filter.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/json_fwd.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/json_options.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/json_parser.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/json_reader.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/json_traits_macros.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/json_traits_macros_deprecated.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/json_type.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/json_type_traits.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/json_visitor.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/json_visitor2.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/pretty_print.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/ser_context.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/sink.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/source.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/staj_cursor.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/staj_iterator.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/tag_type.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/unicode_traits.hpp \
+    Code/ThirdParty/jsoncons/jsoncons/uri.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/bson/bson.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/bson/bson_cursor.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/bson/bson_detail.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/bson/bson_encoder.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/bson/bson_error.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/bson/bson_options.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/bson/bson_parser.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/bson/bson_reader.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/bson/decode_bson.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/bson/encode_bson.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/cbor/cbor.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/cbor/cbor_cursor.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/cbor/cbor_detail.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/cbor/cbor_encoder.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/cbor/cbor_error.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/cbor/cbor_options.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/cbor/cbor_parser.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/cbor/cbor_reader.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/cbor/decode_cbor.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/cbor/encode_cbor.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/csv/csv.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/csv/csv_cursor.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/csv/csv_encoder.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/csv/csv_error.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/csv/csv_options.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/csv/csv_parser.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/csv/csv_reader.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/csv/csv_serializer.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/csv/decode_csv.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/csv/encode_csv.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/jmespath/jmespath.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/jmespath/jmespath_error.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/jsonpatch/jsonpatch.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/jsonpatch/jsonpatch_error.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/jsonpath/flatten.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/jsonpath/json_query.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/jsonpath/jsonpath.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/jsonpath/jsonpath_error.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/jsonpath/path_expression.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/jsonpointer/jsonpointer.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/jsonpointer/jsonpointer_error.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/jsonschema/format_checkers.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/jsonschema/json_schema_draft7.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/jsonschema/json_validator.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/jsonschema/jsonschema.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/jsonschema/jsonschema_error.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/jsonschema/schema_keywords.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/jsonschema/schema_loader.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/jsonschema/subschema.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/msgpack/decode_msgpack.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/msgpack/encode_msgpack.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/msgpack/msgpack.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/msgpack/msgpack_cursor.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/msgpack/msgpack_detail.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/msgpack/msgpack_encoder.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/msgpack/msgpack_error.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/msgpack/msgpack_options.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/msgpack/msgpack_parser.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/msgpack/msgpack_reader.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/ubjson/decode_ubjson.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/ubjson/encode_ubjson.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/ubjson/ubjson.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/ubjson/ubjson_cursor.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/ubjson/ubjson_detail.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/ubjson/ubjson_encoder.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/ubjson/ubjson_error.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/ubjson/ubjson_options.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/ubjson/ubjson_parser.hpp \
+    Code/ThirdParty/jsoncons/jsoncons_ext/ubjson/ubjson_reader.hpp \
     Code/duckdb.hpp \
+    Code/jsoncons/include/jsoncons/json.hpp \
+    Code/jsoncons/include/jsoncons_ext/csv/csv.hpp \
     Code/messages.h \
     Code/constants.h \
     Code/parquet-extension.hpp \
@@ -210,13 +340,15 @@ HEADERS += \
     Code/statics.h \
 
 
+INCLUDEPATH += $$PWD/Libraries
+INCLUDEPATH += $$PWD/Libraries/jsoncons
+INCLUDEPATH += $$PWD/Libraries/jsoncons_ext
+INCLUDEPATH += $$PWD/Libraries/ParquetDuckDb
+
+DEPENDPATH += $$PWD/Libraries
 
 macx: LIBS += -L$$PWD/Libraries/ -lduckdb
 win32: LIBS += $$PWD/Libraries/duckdb.lib
 
 macx: LIBS += -L$$PWD/Libraries/ -lparquet_extension
-
-INCLUDEPATH += $$PWD/Libraries
-DEPENDPATH += $$PWD/Libraries
-
 macx: PRE_TARGETDEPS += $$PWD/Libraries/libparquet_extension.a
