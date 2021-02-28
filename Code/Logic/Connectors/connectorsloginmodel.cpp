@@ -225,6 +225,7 @@ void ConnectorsLoginModel::csvLogin(QString filename, QString separator)
 {
     CSVCon csvcon;
     QVariantMap response = csvcon.CSVInstance(filename);
+    qDebug() << "FILEWA" << filename << "CSV";
 
     Statics::currentDbName = filename;
     Statics::currentDbIntType = Constants::csvIntType;
@@ -234,6 +235,35 @@ void ConnectorsLoginModel::csvLogin(QString filename, QString separator)
 
     emit sendDbName();
     emit csvLoginStatus(response);
+}
+
+void ConnectorsLoginModel::jsonLogin(QString filename)
+{
+    JsonCon jsoncon;
+    QVariantMap response = jsoncon.JsonInstance(filename);
+
+    Statics::currentDbName = filename;
+    Statics::currentDbIntType = Constants::jsonIntType;
+
+    this->setConnectedDB(filename);
+
+    emit sendDbName();
+    emit jsonLoginStatus(response);
+}
+
+void ConnectorsLoginModel::excelLogin(QString filename)
+{
+
+    ExcelCon excelcon;
+    QVariantMap response = excelcon.ExcelInstance(filename);
+
+    Statics::currentDbName = filename;
+    Statics::currentDbIntType = Constants::excelIntType;
+
+    this->setConnectedDB(filename);
+
+    emit sendDbName();
+    emit excelLoginStatus(response);
 }
 
 QString ConnectorsLoginModel::urlToFilePath(const QUrl &url)
@@ -249,7 +279,16 @@ QString ConnectorsLoginModel::connectedDB() const
     switch (Statics::currentDbIntType) {
 
     case Constants::csvIntType:{
-        dataBase = QUrl(m_connectedDB).fileName();
+
+        dataBase = QFileInfo(m_connectedDB).baseName();
+        QString baseDb = "";
+        for(int i = 0; i < dataBase.length(); i++){
+
+            if(dataBase[i].isLetter() || dataBase[i].isDigit()){
+                baseDb = baseDb + dataBase[i];
+            }
+        }
+        dataBase = baseDb;
         break;
     }
     }

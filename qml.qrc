@@ -161,7 +161,7 @@
         <file>Source/Charts/AreaChart.html</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/ColorByMenuOption.qml</file>
         <file>Source/Charts/StackedBarChart.html</file>
-        <file>Source/Connectors/SubComponents/ExcelConnection.qml</file>
+        <file>Source/Connectors/SubComponents/ExcelOdbcConnection.qml</file>
         <file>Source/Connectors/SubComponents/PostgresConnection.qml</file>
         <file>Source/Connectors/SubComponents/MSSqlConnection.qml</file>
         <file>Source/Connectors/SubComponents/MongoConnection.qml</file>
@@ -203,5 +203,7 @@
         <file>Source/Charts/HeatmapChart.html</file>
         <file>Source/Charts/MultipleLineChart.html</file>
         <file>Source/Charts/Data/sankeySingle.js</file>
+        <file>Source/Connectors/SubComponents/JsonConnection.qml</file>
+        <file>Source/Connectors/SubComponents/ExcelConnection.qml</file>
     </qresource>
 </RCC>

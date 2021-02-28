@@ -14,5 +14,6 @@
 #include "snowflakecon.h"
 #include "teradatacon.h"
 #include "csvcon.h"
+#include "jsoncon.h"
 
 #endif // ALLCONNECTORS_H

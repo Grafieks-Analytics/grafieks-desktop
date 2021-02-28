@@ -122,17 +122,14 @@ Popup {
             datesModel.clear()
 
             allCategorical.forEach(function (element) {
-                console.log(element[0] + " cat " + element[1]);
                 categoricalModel.append({"tableName" : element[0], "colName" : element[1]});
             });
 
             allNumerical.forEach(function (element) {
-                console.log(element[0] + " num " + element[1]);
                 numericalModel.append({"tableName" : element[0], "colName" : element[1]});
             });
 
             allDates.forEach(function (element) {
-                console.log(element[0] + " date " + element[1]);
                 datesModel.append({"tableName" : element[0], "colName" : element[1]});
             });
 
@@ -620,7 +617,6 @@ Popup {
         valueRole: "tableName"
 
         onActivated: {
-            console.log(currentValue + " current value")
             onAddMenuItemTriggered(currentText, currentValue)
             onAddMenuItemClicked()
 
