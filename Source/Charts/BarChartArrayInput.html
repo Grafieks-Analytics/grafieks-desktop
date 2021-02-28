@@ -4,6 +4,7 @@
 
     <!-- Load d3.js -->
     <script src="./Data/d3DefaultConfig.js"></script>
+    <script src="./Data/utils.js"></script>
     <script src="./Data/d3.v4.min.js"></script>
     <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
     <link rel="stylesheet" href="Data/general.css" />
@@ -46,17 +47,19 @@
 
         var data = [
             [
-                ["India", "Aus"],
-                [200, 800],
+                ["2020-01-01", "2021-02-01", "2022-03-01"],
+                [200, 800, 400],
             ],
             ["Countries", "Population"],
         ];
 
-        // drawChart(data);
+        drawChart(data);
 
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
             dataValues = data[0];
+
+            var parseTime = d3.timeParse("%d-%b-%y");
 
             var dataValues = data[0];
 
@@ -141,6 +144,12 @@
                 .append("rect")
 
                 .attr("x", function (d, i) {
+                    let value = dataValues[0][i];
+                    if (isDateFormat(value)) {
+                        console.log("Yes date");
+                        console.log(parseTime(value));
+                        // dataValues[0][i] = parseTime(value);
+                    }
                     return x(dataValues[0][i]);
                 })
                 .attr("y", function (d, i) {
