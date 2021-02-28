@@ -14,55 +14,39 @@ void DuckCRUD::createTable(){
     std::string csvFile    = db.toStdString();
 
     QString fileName       = QFileInfo(db).baseName();
-    std::string table      = fileName.toStdString();
     std::string csvdb       = "";
 
     QString fileExtension = QFileInfo(db).completeSuffix();
+
+
+    for(int i = 0; i < fileName.length(); i++){
+
+        if(fileName[i].isLetter() || fileName[i].isDigit()){
+             table.append(fileName[i]);
+        }
+    }
 
     if(fileExtension.toLower() == "json"){
         csvFile = jsonToCsv.convertJsonToCsv(Statics::currentDbName).toStdString();
 
         csvdb      = "'" + csvFile + "'";
         Statics::currentDbName = fileName;
-
-         for(int i = 0; i < fileName.length(); i++){
-
-            if(fileName[i].isLetter() || fileName[i].isDigit()){
-                table = table + fileName[i];
-            }
-        }
-        con.Query("CREATE TABLE " + table + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
+        con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
 
     } else if(fileExtension.toLower() == "xls" || fileExtension.toLower() == "xlsx"){
         excelSheetsList = excelToCsv.convertExcelToCsv(Statics::currentDbName);
-
 
         for ( const QString& csvFile : excelSheetsList  ) {
 
             csvdb      = "'" + csvFile.toStdString() + "'";
             Statics::currentDbName = fileName;
-
-            for(int i = 0; i < fileName.length(); i++){
-
-                if(fileName[i].isLetter() || fileName[i].isDigit()){
-                    table = table + fileName[i];
-                }
-            }
-
-            con.Query("CREATE TABLE " + table + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
+            con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
         }
 
     } else{
         csvdb      = "'" + csvFile + "'";
         Statics::currentDbName = fileName;
-
-        for(int i = 0; i < fileName.length(); i++){
-
-            if(fileName[i].isLetter() || fileName[i].isDigit()){
-                table = table + fileName[i];
-            }
-        }
-        con.Query("CREATE TABLE " + table + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
+        con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
     }
 }
 
