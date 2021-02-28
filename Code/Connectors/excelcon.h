@@ -9,6 +9,7 @@
 #include <QSqlError>
 #include <QtDebug>
 #include <QObject>
+#include <QFile>
 
 #include "../constants.h"
 #include "../Messages.h"
@@ -28,6 +29,7 @@ class ExcelCon : public QObject
 
 public:
     explicit ExcelCon(QObject *parent = nullptr);
+    QVariantMap ExcelInstance(const QString & filepath);
     QVariantMap ExcelOdbcInstance(const QString & driver, const QString & filepath);
 
     ~ExcelCon();

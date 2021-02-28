@@ -48,6 +48,8 @@ namespace Constants
     const QString mssqlOdbcStrType = "mssql_odbc";
     const QString mssqlOdbcStrQueryType = "mssql_odbc_query";
 
+    const QString excelStrType = "excel";
+    const QString excelStrQueryType = "excel_query";
     const QString excelOdbcStrType = "excel_odbc";
     const QString excelOdbcStrQueryType = "excel_odbc_query";
 
