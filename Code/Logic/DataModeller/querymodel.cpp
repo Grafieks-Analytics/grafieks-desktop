@@ -84,6 +84,13 @@ void QueryModel::executeQuery(QString &query)
 
         break;
     }
+
+    case Constants::excelIntType:{
+        QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelStrQueryType);
+        this->setQuery(query, dbExcel);
+
+        break;
+    }
     case Constants::mssqlIntType:{
         QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
         this->setQuery(query, dbMssql);
