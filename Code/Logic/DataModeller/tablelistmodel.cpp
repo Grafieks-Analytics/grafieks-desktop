@@ -86,6 +86,20 @@ void TableListModel::callQuery(QString queryString)
 
         break;
     }
+
+    case Constants::excelIntType:{
+
+        QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelStrType);
+
+        if (queryString != ""){
+
+            this->setQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name LIKE '%"+queryString+"%'", dbExcel);
+        } else{
+            this->setQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'", dbExcel);
+        }
+
+        break;
+    }
     case Constants::mssqlIntType:{
 
         QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrType);

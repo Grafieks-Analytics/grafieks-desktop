@@ -28,6 +28,8 @@ public:
     Q_INVOKABLE void mysqlLogin(QString host, QString db, int port, QString username, QString password);
     Q_INVOKABLE void sqliteLogin(QString filename);
     Q_INVOKABLE void csvLogin(QString filename, QString separator);
+    Q_INVOKABLE void jsonLogin(QString filename);
+    Q_INVOKABLE void excelLogin(QString filename);
     Q_INVOKABLE QString urlToFilePath(const QUrl &url);
 
     // ODBC
@@ -60,6 +62,7 @@ signals:
     void snowflakeLoginStatus(QVariantMap status);
     void teradataLoginStatus(QVariantMap status);
     void excelLoginStatus(QVariantMap status);
+    void jsonLoginStatus(QVariantMap status);
     void csvLoginStatus(QVariantMap status);
     void connectedDBChanged(QString connectedDB);
     void sendDbName();

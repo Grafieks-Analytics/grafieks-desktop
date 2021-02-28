@@ -116,6 +116,8 @@ void ReportModelList::setTmpSql(QString query)
         break;
     }
 
+    case Constants::excelIntType:
+    case Constants::jsonIntType:
     case Constants::csvIntType:{
 
 
@@ -142,7 +144,7 @@ void ReportModelList::setTmpSql(QString query)
             } else if(filterDataType == Constants::numericalType){
                 this->numericalList.append(newFieldName);
             } else if(filterDataType == Constants::dateType){
-               this->dateList.append(newFieldName);
+                this->dateList.append(newFieldName);
             }
 
             i++;

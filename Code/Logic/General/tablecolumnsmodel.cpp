@@ -112,6 +112,36 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
         break;
     }
 
+    case Constants::excelIntType:{
+
+        QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelStrQueryType);
+
+        describeQueryString = "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '" + tableName.toLower()  + "'";
+
+        QSqlQuery describeQuery(describeQueryString, dbExcel);
+
+        while(describeQuery.next()){
+
+            fieldName = describeQuery.value(0).toString();
+            fieldType = describeQuery.value(1).toString();
+            // Remove characters after `(` and then trim whitespaces
+            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+
+            // Get filter data type for QML
+            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+
+            outputDataList << fieldName << filterDataType;
+
+            // Append all data type to allList as well
+            allColumns.append(outputDataList);
+
+            outputDataList.clear();
+
+        }
+
+        break;
+    }
+
     case Constants::mssqlIntType:{
 
         QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrType);
