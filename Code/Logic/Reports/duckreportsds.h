@@ -1,5 +1,5 @@
-#ifndef DUCKDATA_H
-#define DUCKDATA_H
+#ifndef DUCKREPORTSDS_H
+#define DUCKREPORTSDS_H
 
 #include <QObject>
 #include <QMap>
@@ -12,16 +12,16 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
-#include "../Connectors/duckcrud.h"
+#include "../Connectors/duckcon.h"
 
-class DuckData : public QObject
+class DuckReportsDS : public QObject
 {
     Q_OBJECT
-    DuckCRUD *duckCRUD;
+    DuckCon *duckCRUD;
 
 public:
-    explicit DuckData(QObject *parent = nullptr);
-    explicit DuckData(DuckCRUD *duckCRUD, QObject *parent = nullptr);
+    explicit DuckReportsDS(QObject *parent = nullptr);
+    explicit DuckReportsDS(DuckCon *duckCRUD, QObject *parent = nullptr);
 
     // Need to check Return types and paramter's type;
 
@@ -81,4 +81,4 @@ private:
 
 };
 
-#endif // DUCKDATA_H
+#endif // DUCKREPORTSDS_H

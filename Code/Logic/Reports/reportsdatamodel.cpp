@@ -1,17 +1,17 @@
-#include "reportmodellist.h"
-#include "iostream"
-ReportModelList::ReportModelList(QObject *parent) : QObject(parent)
+#include "reportsdatamodel.h"
+
+ReportsDataModel::ReportsDataModel(QObject *parent) : QObject(parent)
 {
 
 }
 
-ReportModelList::ReportModelList(DuckCRUD *duckCRUD, QObject *parent)
+ReportsDataModel::ReportsDataModel(DuckCon *duckCRUD, QObject *parent)
 {
     Q_UNUSED(parent);
     this->duckCRUD = duckCRUD;
 }
 
-void ReportModelList::setTmpSql(QString query)
+void ReportsDataModel::setTmpSql(QString query)
 {
     this->mQuerySplitter.setQuery(query);
 
@@ -166,7 +166,7 @@ void ReportModelList::setTmpSql(QString query)
     this->date.clear();
 }
 
-void ReportModelList::getColumnsForTable(QString tableName)
+void ReportsDataModel::getColumnsForTable(QString tableName)
 {
     QString describeQueryString, fieldName, fieldType;
     QStringList outputDataList;
@@ -271,7 +271,7 @@ void ReportModelList::getColumnsForTable(QString tableName)
     }
 }
 
-void ReportModelList::getData()
+void ReportsDataModel::getData()
 {
     QVariantList xAxis;
     QVariantList yAxis;

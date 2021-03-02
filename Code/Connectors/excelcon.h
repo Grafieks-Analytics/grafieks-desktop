@@ -8,12 +8,19 @@
 #include <QSqlRecord>
 #include <QSqlError>
 #include <QtDebug>
-#include <QObject>
 #include <QFile>
+#include <QAxObject>
+#include <QDir>
+
+#include <jsoncons/json.hpp>
+#include <jsoncons_ext/csv/csv.hpp>
 
 #include "../constants.h"
 #include "../Messages.h"
 #include "../statics.h"
+
+using namespace jsoncons;
+using namespace jsoncons::csv;
 
 /*!
  * \brief Handles the connection with Excel database across the application
@@ -32,9 +39,12 @@ public:
     QVariantMap ExcelInstance(const QString & filepath);
     QVariantMap ExcelOdbcInstance(const QString & driver, const QString & filepath);
 
+     QStringList convertExcelToCsv(QString &excelPath);
+
     ~ExcelCon();
 
 signals:
+     void excelConverted(QString status);
 
 };
 
