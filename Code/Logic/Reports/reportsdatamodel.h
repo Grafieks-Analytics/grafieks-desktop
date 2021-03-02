@@ -1,5 +1,5 @@
-#ifndef REPORTMODELLIST_H
-#define REPORTMODELLIST_H
+#ifndef REPORTSDATAMODEL_H
+#define REPORTSDATAMODEL_H
 
 #include <QVariant>
 #include <QObject>
@@ -12,7 +12,7 @@
 #include "../../duckdb.hpp"
 #include "../Connectors/duckcrud.h"
 
-class ReportModelList : public QObject
+class ReportsDataModel : public QObject
 {
     Q_OBJECT
 
@@ -21,8 +21,8 @@ class ReportModelList : public QObject
     DuckCRUD *duckCRUD;
 
 public:
-    explicit ReportModelList(QObject *parent = nullptr);
-    explicit ReportModelList(DuckCRUD *duckCRUD, QObject *parent = nullptr);
+    explicit ReportsDataModel(QObject *parent = nullptr);
+    explicit ReportsDataModel(DuckCRUD *duckCRUD, QObject *parent = nullptr);
     void getColumnsForTable(QString tableName);
 
     Q_INVOKABLE void setTmpSql(QString query);
@@ -47,4 +47,4 @@ private:
 
 };
 
-#endif // REPORTMODELLIST_H
+#endif // REPORTSDATAMODEL_H
