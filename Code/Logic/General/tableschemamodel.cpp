@@ -5,7 +5,7 @@ TableSchemaModel::TableSchemaModel(QObject *parent) : QObject(parent)
 
 }
 
-TableSchemaModel::TableSchemaModel(DuckCRUD *duckCRUD, QObject *parent)
+TableSchemaModel::TableSchemaModel(DuckCon *duckCRUD, QObject *parent)
 {
     Q_UNUSED(parent);
     this->duckCRUD = duckCRUD;
