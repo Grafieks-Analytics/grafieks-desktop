@@ -13,6 +13,7 @@ QString FilterCategoricalList::tableName() const
     return m_tableName;
 }
 
+
 QString FilterCategoricalList::columnName() const
 {
     return m_columnName;

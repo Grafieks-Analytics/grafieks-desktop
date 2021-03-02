@@ -1,18 +1,18 @@
-#include "duckdata.h"
+#include "duckreportsds.h"
 
-DuckData::DuckData(QObject *parent) : QObject(parent)
+DuckReportsDS::DuckReportsDS(QObject *parent) : QObject(parent)
 {
 
 }
 
-DuckData::DuckData(DuckCRUD *duckCRUD, QObject *parent)
+DuckReportsDS::DuckReportsDS(DuckCRUD *duckCRUD, QObject *parent)
 {
     Q_UNUSED(parent);
     this->duckCRUD = duckCRUD;
 
 }
 
-QString DuckData::getBarChartValues(QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType)
+QString DuckReportsDS::getBarChartValues(QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType)
 {
     QJsonArray data;
     QJsonArray xAxisData;
@@ -66,7 +66,7 @@ QString DuckData::getBarChartValues(QString xAxisColumn, QString yAxisColumn, QS
 }
 
 
-QString DuckData::getStackedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType, QString groupedBy)
+QString DuckReportsDS::getStackedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType, QString groupedBy)
 {
     QJsonArray data;
     QJsonArray xAxisData;
@@ -119,7 +119,7 @@ QString DuckData::getStackedBarChartValues(QString xAxisColumn, QString yAxisCol
     return strData;
 }
 
-QString DuckData::getAreaChartValues(QString xAxisColumn, QString yAxisColumn, QString xAxisCalculationType, QString yAxisCalculationType)
+QString DuckReportsDS::getAreaChartValues(QString xAxisColumn, QString yAxisColumn, QString xAxisCalculationType, QString yAxisCalculationType)
 {
     QJsonArray data;
     QJsonArray colData;
@@ -163,7 +163,7 @@ QString DuckData::getAreaChartValues(QString xAxisColumn, QString yAxisColumn, Q
     return strData;
 }
 
-QString DuckData::getLineChartValues(QString xAxisColumn, QString yAxisColumn, QString xAxisCalculationType, QString yAxisCalculationType)
+QString DuckReportsDS::getLineChartValues(QString xAxisColumn, QString yAxisColumn, QString xAxisCalculationType, QString yAxisCalculationType)
 {
     QJsonArray data;
     QJsonArray colData;
@@ -206,7 +206,7 @@ QString DuckData::getLineChartValues(QString xAxisColumn, QString yAxisColumn, Q
     return strData;
 }
 
-QString DuckData::getPieChartValues(QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType)
+QString DuckReportsDS::getPieChartValues(QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType)
 {
     QJsonArray data;
     QJsonObject obj;
@@ -238,7 +238,7 @@ QString DuckData::getPieChartValues(QString xAxisColumn, QString yAxisColumn, QS
     return strData;
 }
 
-QString DuckData::getFunnelChartValues(QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType)
+QString DuckReportsDS::getFunnelChartValues(QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType)
 {
     QJsonArray data;
     QJsonArray axisData;
@@ -286,7 +286,7 @@ QString DuckData::getFunnelChartValues(QString xAxisColumn, QString yAxisColumn,
                                 **** Starting from here => charts are not working ***
                                 ******************************************************/
 
-QString DuckData::getRadarChartValues(QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType)
+QString DuckReportsDS::getRadarChartValues(QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType)
 {
     QJsonArray data;
     QJsonArray xAxisData;
@@ -339,7 +339,7 @@ QString DuckData::getRadarChartValues(QString xAxisColumn, QString yAxisColumn, 
     return strData;
 }
 
-QString DuckData::getScatterChartValues(QString xAxisColumn, QString yAxisColumn, QString xAxisCalculationType, QString yAxisCalculationType, QString groupedBy)
+QString DuckReportsDS::getScatterChartValues(QString xAxisColumn, QString yAxisColumn, QString xAxisCalculationType, QString yAxisCalculationType, QString groupedBy)
 {
     QJsonArray data;
     QJsonArray xAxisData;
@@ -392,7 +392,7 @@ QString DuckData::getScatterChartValues(QString xAxisColumn, QString yAxisColumn
     return strData;
 }
 
-QString DuckData::getHeatMapChartValues(QString xAxisColumn, QString yAxisColumn, QString groupedBy)
+QString DuckReportsDS::getHeatMapChartValues(QString xAxisColumn, QString yAxisColumn, QString groupedBy)
 {
     QJsonArray data;
     QJsonArray xAxisData;

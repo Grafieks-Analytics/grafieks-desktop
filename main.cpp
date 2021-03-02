@@ -51,8 +51,8 @@
 #include "Code/Logic/Dashboards/dashboardparamsmodel.h"
 
 #include "Code/Logic/Reports/reportparamsmodel.h"
-#include "Code/Logic/Reports/reportmodellist.h"
-#include "Code/Logic/Reports/duckdata.h"
+#include "Code/Logic/Reports/reportsdatamodel.h"
+#include "Code/Logic/Reports/duckreportsds.h"
 
 #include "Code/Logic/General/generalparamsmodel.h"
 #include "Code/Logic/General/tableschemamodel.h"
@@ -252,7 +252,7 @@ int main(int argc, char *argv[])
     QuerySplitter querySplitter;
     DashboardParamsModel dashboardParamsModel;
     ReportParamsModel reportParamsModel;
-    ReportModelList reportModelList;
+    ReportsDataModel reportModelList;
 
     // Datasource Connector Initializations
     DatasourceModel datasourceModel;
@@ -285,8 +285,8 @@ int main(int argc, char *argv[])
     // Duck CRUD Model
     DuckCRUD *duckCRUD            = new DuckCRUD();
     TableSchemaModel *tableSchema = new TableSchemaModel(duckCRUD);
-    ReportModelList *reportModel  = new ReportModelList(duckCRUD);
-    DuckData *duckData            = new DuckData(duckCRUD);
+    ReportsDataModel *reportModel  = new ReportsDataModel(duckCRUD);
+    DuckReportsDS *duckReportsDS            = new DuckReportsDS(duckCRUD);
 
     // OBJECT INITIALIZATION ENDS
     /***********************************************************************************************************************/
@@ -369,7 +369,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("DuckCRUD", duckCRUD);
     engine.rootContext()->setContextProperty("TableSchemaModel", tableSchema);
     engine.rootContext()->setContextProperty("ReportModelList", reportModel);
-    engine.rootContext()->setContextProperty("DuckData", duckData);
+    engine.rootContext()->setContextProperty("DuckReportsDS", duckReportsDS);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/
