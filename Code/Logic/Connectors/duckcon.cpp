@@ -1,12 +1,17 @@
-#include "duckcrud.h"
+#include "duckcon.h"
 
-DuckCRUD::DuckCRUD(QObject *parent) : QObject(parent),
+DuckCon::DuckCon(QObject *parent) : QObject(parent),
     db(nullptr), con(db)
 {
 
 }
 
-void DuckCRUD::createTable(){
+DuckCon::~DuckCon()
+{
+
+}
+
+void DuckCon::createTable(){
 
     QStringList excelSheetsList;
     QString table = "";
@@ -27,6 +32,7 @@ void DuckCRUD::createTable(){
     }
 
     if(fileExtension.toLower() == "json"){
+        qDebug() << "JSON ENTERER";
         csvFile = jsonToCsv.convertJsonToCsv(Statics::currentDbName).toStdString();
 
         csvdb      = "'" + csvFile + "'";
@@ -34,6 +40,7 @@ void DuckCRUD::createTable(){
         con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
 
     } else if(fileExtension.toLower() == "xls" || fileExtension.toLower() == "xlsx"){
+        qDebug() << "Sheet name" << Statics::currentDbName;
         excelSheetsList = excelToCsv.convertExcelToCsv(Statics::currentDbName);
 
         for ( const QString& csvFile : excelSheetsList  ) {
@@ -50,38 +57,4 @@ void DuckCRUD::createTable(){
     }
 }
 
-void DuckCRUD::columnData(QString colName, QString index)
-{
-    Q_UNUSED(colName);
-
-    QString db = Statics::currentDbName;
-    qDebug() << "LISTING" << db;
-
-    auto data = con.Query("SELECT * FROM " + db.toStdString());
-    int rows = data->collection.count;
-    int colidx = index.toInt();
-
-    for(int i = 0; i < rows; i++){
-
-        duckdb::Value colData = data->GetValue(colidx, i);
-        QString newColData = QString::fromStdString(colData.ToString());
-
-        this->colData.append(newColData);
-    }
-
-    emit csvColData(this->colData);
-    this->colData.clear();
-}
-
-void DuckCRUD::receiveCsvFilterQuery(QString query)
-{
-    QString db = Statics::currentDbName;
-
-    std::string newQuery = query.toStdString();
-    std::string csvQuery = "SELECT * FROM " + db.toStdString() + newQuery;
-
-    auto data = con.Query(csvQuery);
-    data->Print();
-
-}
 

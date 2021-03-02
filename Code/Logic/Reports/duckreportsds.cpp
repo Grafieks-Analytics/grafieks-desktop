@@ -5,7 +5,7 @@ DuckReportsDS::DuckReportsDS(QObject *parent) : QObject(parent)
 
 }
 
-DuckReportsDS::DuckReportsDS(DuckCRUD *duckCRUD, QObject *parent)
+DuckReportsDS::DuckReportsDS(DuckCon *duckCRUD, QObject *parent)
 {
     Q_UNUSED(parent);
     this->duckCRUD = duckCRUD;

@@ -10,7 +10,7 @@
 #include "../General/querysplitter.h"
 #include "../General/tableschemamodel.h"
 #include "../../duckdb.hpp"
-#include "../Connectors/duckcrud.h"
+#include "../Connectors/duckcon.h"
 
 class ReportsDataModel : public QObject
 {
@@ -18,11 +18,11 @@ class ReportsDataModel : public QObject
 
     QuerySplitter mQuerySplitter;
     DataType dataType;
-    DuckCRUD *duckCRUD;
+    DuckCon *duckCRUD;
 
 public:
     explicit ReportsDataModel(QObject *parent = nullptr);
-    explicit ReportsDataModel(DuckCRUD *duckCRUD, QObject *parent = nullptr);
+    explicit ReportsDataModel(DuckCon *duckCRUD, QObject *parent = nullptr);
     void getColumnsForTable(QString tableName);
 
     Q_INVOKABLE void setTmpSql(QString query);
