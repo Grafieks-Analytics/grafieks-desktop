@@ -5,7 +5,7 @@ ReportsDataModel::ReportsDataModel(QObject *parent) : QObject(parent)
 
 }
 
-ReportsDataModel::ReportsDataModel(DuckCRUD *duckCRUD, QObject *parent)
+ReportsDataModel::ReportsDataModel(DuckCon *duckCRUD, QObject *parent)
 {
     Q_UNUSED(parent);
     this->duckCRUD = duckCRUD;

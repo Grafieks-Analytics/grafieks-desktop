@@ -29,8 +29,6 @@ SOURCES += \
     Code/Connectors/snowflakecon.cpp \
     Code/Connectors/sqlitecon.cpp \
     Code/Connectors/teradatacon.cpp \
-    Code/Logic/Connectors/Helpers/exceltocsv.cpp \
-    Code/Logic/Connectors/Helpers/jsontocsv.cpp \
     Code/Logic/Connectors/box.cpp \
     Code/Logic/Connectors/boxds.cpp \
     Code/Logic/Connectors/boxmodel.cpp \
@@ -44,7 +42,7 @@ SOURCES += \
     Code/Logic/Connectors/dropbox.cpp \
     Code/Logic/Connectors/dropboxds.cpp \
     Code/Logic/Connectors/dropboxmodel.cpp \
-    Code/Logic/Connectors/duckcrud.cpp \
+    Code/Logic/Connectors/duckcon.cpp \
     Code/Logic/Connectors/github.cpp \
     Code/Logic/Connectors/githubds.cpp \
     Code/Logic/Connectors/githubmodel.cpp \
@@ -68,6 +66,7 @@ SOURCES += \
     Code/Logic/DataModeller/columnlistmodel.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
+    Code/Logic/DataModeller/duckdatamodel.cpp \
     Code/Logic/DataModeller/filtercategoricallist.cpp \
     Code/Logic/DataModeller/filtercategoricallistmodel.cpp \
     Code/Logic/DataModeller/filterdatelist.cpp \
@@ -96,6 +95,7 @@ SOURCES += \
     Code/Logic/General/tableschemamodel.cpp \
     Code/Logic/General/typecheck.cpp \
     Code/Logic/Menu/user.cpp \
+    Code/Logic/Reports/chartsmodel.cpp \
     Code/Logic/Reports/duckreportsds.cpp \
     Code/Logic/Reports/reportparamsmodel.cpp \
     Code/Logic/Reports/reportsdatamodel.cpp \
@@ -139,8 +139,6 @@ HEADERS += \
     Code/Connectors/snowflakecon.h \
     Code/Connectors/sqlitecon.h \
     Code/Connectors/teradatacon.h \
-    Code/Logic/Connectors/Helpers/exceltocsv.h \
-    Code/Logic/Connectors/Helpers/jsontocsv.h \
     Code/Logic/Connectors/box.h \
     Code/Logic/Connectors/boxds.h \
     Code/Logic/Connectors/boxmodel.h \
@@ -154,7 +152,7 @@ HEADERS += \
     Code/Logic/Connectors/dropbox.h \
     Code/Logic/Connectors/dropboxds.h \
     Code/Logic/Connectors/dropboxmodel.h \
-    Code/Logic/Connectors/duckcrud.h \
+    Code/Logic/Connectors/duckcon.h \
     Code/Logic/Connectors/github.h \
     Code/Logic/Connectors/githubds.h \
     Code/Logic/Connectors/githubmodel.h \
@@ -178,6 +176,7 @@ HEADERS += \
     Code/Logic/DataModeller/columnlistmodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
+    Code/Logic/DataModeller/duckdatamodel.h \
     Code/Logic/DataModeller/filtercategoricallist.h \
     Code/Logic/DataModeller/filtercategoricallistmodel.h \
     Code/Logic/DataModeller/filterdatelist.h \
@@ -206,6 +205,7 @@ HEADERS += \
     Code/Logic/General/tableschemamodel.h \
     Code/Logic/General/typecheck.h \
     Code/Logic/Menu/user.h \
+    Code/Logic/Reports/chartsmodel.h \
     Code/Logic/Reports/duckreportsds.h \
     Code/Logic/Reports/reportparamsmodel.h \
     Code/Logic/Reports/reportsdatamodel.h \

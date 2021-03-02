@@ -12,16 +12,16 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
-#include "../Connectors/duckcrud.h"
+#include "../Connectors/duckcon.h"
 
 class DuckReportsDS : public QObject
 {
     Q_OBJECT
-    DuckCRUD *duckCRUD;
+    DuckCon *duckCRUD;
 
 public:
     explicit DuckReportsDS(QObject *parent = nullptr);
-    explicit DuckReportsDS(DuckCRUD *duckCRUD, QObject *parent = nullptr);
+    explicit DuckReportsDS(DuckCon *duckCRUD, QObject *parent = nullptr);
 
     // Need to check Return types and paramter's type;
 
