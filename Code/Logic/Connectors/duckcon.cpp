@@ -32,29 +32,30 @@ void DuckCon::createTable(){
     }
 
     if(fileExtension.toLower() == "json"){
-        qDebug() << "JSON ENTERER";
         csvFile = jsonToCsv.convertJsonToCsv(Statics::currentDbName).toStdString();
 
-        csvdb      = "'" + csvFile + "'";
+        csvdb = "'" + csvFile + "'";
         Statics::currentDbName = fileName;
         con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
 
     } else if(fileExtension.toLower() == "xls" || fileExtension.toLower() == "xlsx"){
-        qDebug() << "Sheet name" << Statics::currentDbName;
         excelSheetsList = excelToCsv.convertExcelToCsv(Statics::currentDbName);
 
         for ( const QString& csvFile : excelSheetsList  ) {
-
-            csvdb      = "'" + csvFile.toStdString() + "'";
+            csvdb = "'" + (csvFile + ".csv").toStdString() + "'";
             Statics::currentDbName = fileName;
-            con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
+           unique_ptr<duckdb::MaterializedQueryResult> res2 = con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
+            res2->Print();
         }
 
     } else{
-        csvdb      = "'" + csvFile + "'";
+        csvdb = "'" + csvFile + "'";
         Statics::currentDbName = fileName;
         con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
     }
+
+    unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("PRAGMA show_tables");
+    res->Print();
 }
 
 
