@@ -196,6 +196,15 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
         break;
     }
 
+    case Constants::accessIntType:{
+
+        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        QSqlDatabase dbAccess = QSqlDatabase::database(Constants::accessOdbcStrType);
+        this->setQuery(queryString, dbAccess);
+
+        break;
+    }
+
 
     }
 }
@@ -314,6 +323,15 @@ void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableNam
         QString queryString = teradataDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
         QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::teradataOdbcStrType);
         this->setQuery(queryString, dbTeradata);
+
+        break;
+    }
+
+    case Constants::accessIntType:{
+
+        QString queryString = accessDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
+        QSqlDatabase dbAccess = QSqlDatabase::database(Constants::accessOdbcStrType);
+        this->setQuery(queryString, dbAccess);
 
         break;
     }
@@ -553,6 +571,27 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
             break;
         }
+
+        case Constants::accessIntType:{
+
+            pieces = fieldNames.split(",");
+
+            if(pieces.length() > 1){
+                finalSearchFields = pieces.join("','");
+            }else{
+                finalSearchFields = fieldNames;
+            }
+
+            finalSearchFields = "'" + finalSearchFields + "'";
+
+            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+
+            QSqlDatabase dbAccess = QSqlDatabase::database(Constants::accessOdbcStrType);
+            this->setQuery(queryString, dbAccess);
+
+
+            break;
+        }
         }
     }
 
@@ -709,8 +748,22 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
             queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
         }
 
-        QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::hiveOdbcStrType);
+        QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::teradataOdbcStrType);
         this->setQuery(queryString, dbTeradata);
+
+        break;
+    }
+
+    case Constants::accessIntType:{
+
+        if (searchString != ""){
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
+        } else{
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
+        }
+
+        QSqlDatabase dbAccess = QSqlDatabase::database(Constants::accessOdbcStrType);
+        this->setQuery(queryString, dbAccess);
 
         break;
     }

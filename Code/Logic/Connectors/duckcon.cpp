@@ -27,7 +27,7 @@ void DuckCon::createTable(){
     for(int i = 0; i < fileName.length(); i++){
 
         if(fileName[i].isLetter() || fileName[i].isDigit()){
-             table.append(fileName[i]);
+            table.append(fileName[i]);
         }
     }
 
@@ -44,7 +44,7 @@ void DuckCon::createTable(){
         for ( const QString& csvFile : excelSheetsList  ) {
             csvdb = "'" + (csvFile + ".csv").toStdString() + "'";
             Statics::currentDbName = fileName;
-           unique_ptr<duckdb::MaterializedQueryResult> res2 = con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
+            unique_ptr<duckdb::MaterializedQueryResult> res2 = con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
             res2->Print();
         }
 

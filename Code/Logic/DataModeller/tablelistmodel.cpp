@@ -198,6 +198,20 @@ void TableListModel::callQuery(QString queryString)
         break;
     }
 
+    case Constants::accessIntType:{
+
+        QSqlDatabase dbAccess = QSqlDatabase::database(Constants::accessOdbcStrType);
+
+        if (queryString != ""){
+
+            this->setQuery("SELECT MSysObjects.name FROM MSysObjects WHERE MSysObjects.type IN (1,4,6) AND MSysObjects.name NOT LIKE '~*'  AND MSysObjects.name NOT LIKE 'MSys*' ORDER BY MSysObjects.name LIKE '%"+queryString+"%'", dbAccess);
+        } else{
+            this->setQuery("SELECT MSysObjects.name FROM MSysObjects WHERE MSysObjects.type IN (1,4,6) AND MSysObjects.name NOT LIKE '~*'  AND MSysObjects.name NOT LIKE 'MSys*' ORDER BY MSysObjects.name", dbAccess);
+        }
+
+        break;
+    }
+
     }
 }
 
