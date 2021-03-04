@@ -17,11 +17,11 @@
 class DuckReportsDS : public QObject
 {
     Q_OBJECT
-    DuckCon *duckCRUD;
+    DuckCon *duckCon;
 
 public:
     explicit DuckReportsDS(QObject *parent = nullptr);
-    explicit DuckReportsDS(DuckCon *duckCRUD, QObject *parent = nullptr);
+    explicit DuckReportsDS(DuckCon *duckCon, QObject *parent = nullptr);
 
     // Need to check Return types and paramter's type;
 

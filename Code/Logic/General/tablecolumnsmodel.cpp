@@ -5,6 +5,11 @@ TableColumnsModel::TableColumnsModel(QObject *parent) : QObject(parent)
 
 }
 
+TableColumnsModel::TableColumnsModel(DuckCon *duckCon, QObject *parent)
+{
+    this->duckCon = duckCon;
+}
+
 /*!
  * \brief Accepts a tableName and displays all the columns
  * \code
@@ -114,29 +119,20 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
     case Constants::excelIntType:{
 
-        QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelStrQueryType);
+        auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+        int rows = data->collection.count;
 
-        describeQueryString = "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '" + tableName.toLower()  + "'";
-
-        QSqlQuery describeQuery(describeQueryString, dbExcel);
-
-        while(describeQuery.next()){
-
-            fieldName = describeQuery.value(0).toString();
-            fieldType = describeQuery.value(1).toString();
-            // Remove characters after `(` and then trim whitespaces
-            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+        for(int i = 0; i < rows; i++){
+            fieldName =  data->GetValue(1, i).ToString().c_str();
+            fieldType =  data->GetValue(2, i).ToString().c_str();
 
             // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
+            QString filterDataType = dataType.dataType(fieldType);
             outputDataList << fieldName << filterDataType;
 
             // Append all data type to allList as well
             allColumns.append(outputDataList);
-
             outputDataList.clear();
-
         }
 
         break;
