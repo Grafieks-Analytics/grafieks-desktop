@@ -181,6 +181,14 @@ void DBListModel::callQuery(QString queryString)
         break;
     }
 
+    case Constants::accessIntType:{
+        QSqlDatabase dbAccess = QSqlDatabase::database(Constants::accessOdbcStrType);
+
+        // No direct query available in Access db
+        // Will need to devise a way out when the query is required later
+
+        break;
+    }
 
     }
 }

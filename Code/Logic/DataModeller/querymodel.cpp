@@ -140,5 +140,12 @@ void QueryModel::executeQuery(QString &query)
         break;
     }
 
+    case Constants::accessIntType:{
+        QSqlDatabase dbAccess = QSqlDatabase::database(Constants::accessOdbcStrQueryType);
+        this->setQuery(query, dbAccess);
+
+        break;
+    }
+
     }
 }

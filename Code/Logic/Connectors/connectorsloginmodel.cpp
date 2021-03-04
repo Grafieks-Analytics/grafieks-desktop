@@ -206,6 +206,20 @@ void ConnectorsLoginModel::teradataOdbcLogin(QString driver, QString host, QStri
     emit teradataLoginStatus(response);
 }
 
+void ConnectorsLoginModel::accessOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
+{
+    AccessCon accesscon;
+    QVariantMap response = accesscon.AccessOdbcInstance(driver, host, db, port, username, password);
+
+    Statics::currentDbName = db;
+    Statics::currentDbIntType = Constants::accessIntType;
+    Statics::currentDbStrType = Constants::accessOdbcStrType;
+
+    this->setConnectedDB(db);
+
+    emit accessLoginStatus(response);
+}
+
 void ConnectorsLoginModel::excelOdbcLogin(QString driver, QString filename)
 {
 

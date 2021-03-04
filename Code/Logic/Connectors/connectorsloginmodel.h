@@ -43,6 +43,7 @@ public:
     Q_INVOKABLE void hiveOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
     Q_INVOKABLE void snowflakeOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
     Q_INVOKABLE void teradataOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
+    Q_INVOKABLE void accessOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
     Q_INVOKABLE void excelOdbcLogin(QString driver, QString filename);
 
     QString connectedDB() const;
@@ -64,6 +65,7 @@ signals:
     void excelLoginStatus(QVariantMap status);
     void jsonLoginStatus(QVariantMap status);
     void csvLoginStatus(QVariantMap status);
+    void accessLoginStatus(QVariantMap status);
     void connectedDBChanged(QString connectedDB);
     void sendDbName();
 };

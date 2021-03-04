@@ -77,6 +77,9 @@ namespace Constants
     const QString teradataOdbcStrType = "teradata_odbc";
     const QString teradataOdbcStrQueryType = "teradata_odbc_query";
 
+    const QString accessOdbcStrType = "access_odbc";
+    const QString accessOdbcStrQueryType = "access_odbc_query";
+
     // Filter type Strings
     const QString categoricalType = "categorical";
     const QString numericalType = "numerical";
