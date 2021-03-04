@@ -5,10 +5,10 @@ TableSchemaModel::TableSchemaModel(QObject *parent) : QObject(parent)
 
 }
 
-TableSchemaModel::TableSchemaModel(DuckCon *duckCRUD, QObject *parent)
+TableSchemaModel::TableSchemaModel(DuckCon *duckCon, QObject *parent)
 {
     Q_UNUSED(parent);
-    this->duckCRUD = duckCRUD;
+    this->duckCon = duckCon;
 }
 
 /*!
@@ -251,8 +251,6 @@ void TableSchemaModel::showSchema(QString query)
 
     case Constants::excelIntType:{
 
-        QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelStrQueryType);
-
         querySplitter.setQueryForClasses(query);
         QStringList tablesList = querySplitter.getJoinTables();
         QString mainTable = querySplitter.getMainTable();
@@ -261,27 +259,20 @@ void TableSchemaModel::showSchema(QString query)
 
 
         for(QString tableName: tablesList){
-            describeQueryString = "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '" + tableName.toLower() + "'";
+            auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+            int rows = data->collection.count;
+            data->Print();
 
-            QSqlQuery describeQuery(describeQueryString, dbExcel);
-            QSqlRecord rec = describeQuery.record();
-
-            while(describeQuery.next()){
-
-
-                QString fieldName = describeQuery.value(0).toString();
-                QString fieldType = describeQuery.value(1).toString();
-
-                // Remove characters after `(` and then trim whitespaces
-                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+            for(int i = 0; i < rows; i++){
+                QString fieldName =  data->GetValue(1, i).ToString().c_str();
+                QString fieldType =  data->GetValue(2, i).ToString().c_str();
 
                 // Get filter data type for QML
-                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
+                QString filterDataType = dataType.dataType(fieldType);
                 outputDataList << tableName << fieldName << fieldType << filterDataType;
 
-                // Output data according to Filter type
 
+                qDebug() << outputDataList << "OUTPUT";
                 if(filterDataType == Constants::categoricalType){
                     allCategorical.append(outputDataList);
                 } else if(filterDataType == Constants::numericalType){
@@ -295,7 +286,6 @@ void TableSchemaModel::showSchema(QString query)
                 // Append all data type to allList as well
                 allList.append(outputDataList);
 
-                // Clear Stringlist for future
                 outputDataList.clear();
             }
         }
@@ -740,12 +730,11 @@ void TableSchemaModel::showSchema(QString query)
         //        QString db = Statics::currentDbName;
         //        std::string csvFile = db.toStdString();
         //        std::string csvdb = "'" + csvFile + "'";
-        //this->duckCRUD->con.Query("CREATE TABLE dataType AS SELECT * FROM read_csv_auto(" + csvdb + ")");
+        //this->duckCon->con.Query("CREATE TABLE dataType AS SELECT * FROM read_csv_auto(" + csvdb + ")");
 
         QString db = Statics::currentDbName;
 
-        auto result = this->duckCRUD->con.Query("DESCRIBE " + db.toStdString());
-        result->Print();
+        auto result = this->duckCon->con.Query("DESCRIBE " + db.toStdString());
         int rows = result->collection.count;
         int i = 0;
         while(i < rows){

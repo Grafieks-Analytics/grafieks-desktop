@@ -19,6 +19,6 @@ Rectangle {
         id: downloadBtnBox
         anchors.top: downloadBtn.bottom
         text: "Click to Box"
-        onClicked: BoxDS.downloadFile("773507838319")
+        onClicked: DuckDataModel.getColumnList("sheet1")
     }
 }

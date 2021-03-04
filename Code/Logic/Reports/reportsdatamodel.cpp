@@ -5,10 +5,10 @@ ReportsDataModel::ReportsDataModel(QObject *parent) : QObject(parent)
 
 }
 
-ReportsDataModel::ReportsDataModel(DuckCon *duckCRUD, QObject *parent)
+ReportsDataModel::ReportsDataModel(DuckCon *duckCon, QObject *parent)
 {
     Q_UNUSED(parent);
-    this->duckCRUD = duckCRUD;
+    this->duckCon = duckCon;
 }
 
 void ReportsDataModel::setTmpSql(QString query)
@@ -123,7 +123,7 @@ void ReportsDataModel::setTmpSql(QString query)
 
         QString db = Statics::currentDbName;
 
-        auto result = this->duckCRUD->con.Query("DESCRIBE " + db.toStdString());
+        auto result = this->duckCon->con.Query("DESCRIBE " + db.toStdString());
 
         int rows = result->collection.count;
 
@@ -365,7 +365,7 @@ void ReportsDataModel::getData()
 
         QString db = Statics::currentDbName;
 
-        auto data = this->duckCRUD->con.Query("SELECT * FROM " + db.toStdString());
+        auto data = this->duckCon->con.Query("SELECT * FROM " + db.toStdString());
 
         int rows = data->collection.count;
         int colidx = 0;

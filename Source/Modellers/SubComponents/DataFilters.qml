@@ -217,7 +217,7 @@ Popup {
 
     function onAddMenuItemTriggered(colName,tableName){
         ColumnListModel.columnQuery(colName, tableName)
-        DuckCRUD.columnData(colName, tableName)
+        DuckDataModel.columnData(colName, tableName)
         DSParamsModel.setColName(colName)
         DSParamsModel.setTableName(tableName)
 
