@@ -5,6 +5,8 @@
 #include <QCoreApplication>
 #include <QSettings>
 
+#include "../../statics.h"
+
 class GeneralParamsModel : public QObject
 {
     Q_OBJECT
@@ -16,6 +18,7 @@ public:
 
     Q_INVOKABLE QString getFileToken();
     Q_INVOKABLE QString getTmpPath();
+    Q_INVOKABLE QString getDbClassification();
 
     int menuType() const;
 

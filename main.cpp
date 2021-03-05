@@ -67,6 +67,7 @@
 QString Statics::currentDbName;
 int Statics::currentDbIntType;
 QString Statics::currentDbStrType;
+QString Statics::currentDbClassification;
 
 QString Statics::myHost;
 QString Statics::myDb;

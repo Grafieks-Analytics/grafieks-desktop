@@ -122,9 +122,9 @@ Rectangle{
     }
 
     Connections{
-        target: DuckCon
+        target: DuckDataModel
 
-        function onCsvColData(colData){
+        function onDuckColData(colData){
             singleSelectCheckList.model = colData
             multiSelectCheckList.model  = colData
         }

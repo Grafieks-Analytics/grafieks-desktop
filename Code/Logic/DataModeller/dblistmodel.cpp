@@ -77,14 +77,25 @@ void DBListModel::callQuery(QString queryString)
 
     switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:
-    case Constants::mysqlOdbcIntType:{
+    case Constants::mysqlIntType:{
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
 
         if(queryString != ""){
             this->setQuery("SHOW DATABASES LIKE '%"+queryString+"%'", dbMysql);
         } else{
             this->setQuery("SHOW DATABASES", dbMysql);
+        }
+
+        break;
+    }
+
+    case Constants::mysqlOdbcIntType:{
+        QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrType);
+
+        if(queryString != ""){
+            this->setQuery("SHOW DATABASES LIKE '%"+queryString+"%'", dbMysqlOdbc);
+        } else{
+            this->setQuery("SHOW DATABASES", dbMysqlOdbc);
         }
 
         break;
@@ -104,14 +115,25 @@ void DBListModel::callQuery(QString queryString)
         break;
     }
 
-    case Constants::postgresIntType:
-    case Constants::redshiftIntType:{
+    case Constants::postgresIntType:{
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
 
         if(queryString != ""){
             this->setQuery("SELECT datname FROM pg_database WHERE datistemplate = false AND datname LIKE '%"+queryString+"%'", dbPostgres);
         } else{
             this->setQuery("SELECT datname FROM pg_database WHERE datistemplate = false", dbPostgres);
+        }
+
+        break;
+    }
+
+    case Constants::redshiftIntType:{
+        QSqlDatabase dbRedshift = QSqlDatabase::database(Constants::redshiftOdbcStrType);
+
+        if(queryString != ""){
+            this->setQuery("SELECT datname FROM pg_database WHERE datistemplate = false AND datname LIKE '%"+queryString+"%'", dbRedshift);
+        } else{
+            this->setQuery("SELECT datname FROM pg_database WHERE datistemplate = false", dbRedshift);
         }
 
         break;

@@ -63,10 +63,16 @@ void QueryModel::executeQuery(QString &query)
 
     switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:
-    case Constants::mysqlOdbcIntType:{
+    case Constants::mysqlIntType:{
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
         this->setQuery(query, dbMysql);
+
+        break;
+    }
+
+    case Constants::mysqlOdbcIntType:{
+        QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
+        this->setQuery(query, dbMysqlOdbc);
 
         break;
     }
@@ -77,10 +83,16 @@ void QueryModel::executeQuery(QString &query)
 
         break;
     }
-    case Constants::postgresIntType:
-    case Constants::redshiftIntType:{
+    case Constants::postgresIntType:{
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
         this->setQuery(query, dbPostgres);
+
+        break;
+    }
+
+    case Constants::redshiftIntType:{
+        QSqlDatabase dbRedshift = QSqlDatabase::database(Constants::redshiftOdbcStrQueryType);
+        this->setQuery(query, dbRedshift);
 
         break;
     }

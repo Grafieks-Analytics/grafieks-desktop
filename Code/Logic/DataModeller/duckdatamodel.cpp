@@ -27,7 +27,7 @@ void DuckDataModel::columnData(QString col, QString index)
         this->colData.append(newColData);
     }
 
-    emit csvColData(this->colData);
+    emit duckColData(this->colData);
     this->colData.clear();
 }
 
@@ -40,7 +40,6 @@ QStringList DuckDataModel::getColumnList(QString tableName, QString moduleName)
 
     auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
     int rows = data->collection.count;
-    data->Print();
 
     for(int i = 0; i < rows; i++){
         output << data->GetValue(0, i).ToString().c_str();
@@ -86,6 +85,34 @@ QStringList DuckDataModel::getDbList()
     }
 
     return output;
+}
+
+void DuckDataModel::setQuery(QString query)
+{
+    this->query = query;
+    querySplitter.setQueryForClasses(this->query);
+}
+
+QStringList DuckDataModel::getRoles()
+{
+    QStringList output;
+    output = querySplitter.getSelectParams();
+    qDebug() << "QUERY" << output;
+    return output;
+}
+
+QList<QStringList> DuckDataModel::getQueryResult()
+{
+    QList<QStringList> output;
+    auto result = duckCon->con.Query(this->query.toStdString());
+    result->Print();
+    return output;
+}
+
+void DuckDataModel::getQueryStats()
+{
+    auto result = duckCon->con.Query("PRAGMA profiling_output");
+    result->Print();
 }
 
 
