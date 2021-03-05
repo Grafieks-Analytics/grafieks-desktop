@@ -82,6 +82,8 @@ Page {
                                    duckTableList.append({tableName: item})
                                })
                 tableslist.model = duckTableList
+
+
             }
         }
 
@@ -241,8 +243,17 @@ Page {
     }
 
     function openDataFilters(){
+        console.log("OPEN DATA FILTERS")
         TableSchemaModel.showSchema(DSParamsModel.tmpSql)
         datafilters.visible = true
+
+        DuckDataModel.setQuery(DSParamsModel.tmpSql)
+//        console.log("ROLES")
+//        DuckDataModel.getRoles()
+        console.log("RESULT")
+        DuckDataModel.getQueryResult()
+//        console.log("STATS")
+//        DuckDataModel.getQueryStats()
     }
 
     function onLiveSelected(){

@@ -11,6 +11,7 @@
 #include "../Connectors/duckcon.h"
 
 #include "../General/datatype.h"
+#include "../General/querysplitter.h"
 
 class DuckDataModel : public QObject
 {
@@ -18,8 +19,10 @@ class DuckDataModel : public QObject
     QStringList colData;
     DuckCon *duckCon;
     DataType dataType;
+    QuerySplitter querySplitter;
 
     QList<QStringList> allColumns;
+    QString query;
 
 public:
     explicit DuckDataModel(QObject *parent = nullptr);
@@ -30,12 +33,16 @@ public:
     Q_INVOKABLE QStringList getColumnList(QString tableName, QString moduleName);
     Q_INVOKABLE QStringList getTableList();
     Q_INVOKABLE QStringList getDbList();
+    Q_INVOKABLE void setQuery(QString query);
+    Q_INVOKABLE QStringList getRoles();
+    Q_INVOKABLE QList<QStringList> getQueryResult();
+    Q_INVOKABLE void getQueryStats();
 
 public slots:
     void receiveCsvFilterQuery(QString query);
 
 signals:
-    void csvColData(QStringList colData);
+    void duckColData(QStringList colData);
     void columnListObtained(QList<QStringList> allColumns, QString tableName, QString moduleName);
 
 

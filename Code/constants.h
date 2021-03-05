@@ -36,6 +36,10 @@ namespace Constants
     const int boxIntType = 19;
     const int sheetIntType = 20;
 
+    // DB Classification
+    const QString sqlType = "SQL";
+    const QString duckType = "Duck";
+
     // Datasource type Strings
     const QString mysqlStrType = "mysql";
     const QString mysqlStrQueryType = "mysql_query";

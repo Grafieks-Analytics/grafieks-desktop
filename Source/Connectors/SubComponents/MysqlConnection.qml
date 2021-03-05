@@ -92,8 +92,8 @@ Popup {
     }
 
     function connectToOdbcMySQL(){
-//        ConnectorsLoginModel.mysqlOdbcLogin(control.currentText, server.text, database.text, port.text, username.text, password.text)
-                ConnectorsLoginModel.mysqlOdbcLogin("localhost", "grafieks_my", 3306, "root", "123@312QQl")
+        ConnectorsLoginModel.mysqlOdbcLogin(control.currentText, server.text, database.text, port.text, username.text, password.text)
+//                ConnectorsLoginModel.mysqlOdbcLogin("localhost", "grafieks_my", 3306, "root", "123@312QQl")
         //        ConnectorsLoginModel.mysqlOdbcLogin("localhost", "grafieks_dummy", 3306, "root", "")
         //        ConnectorsLoginModel.mysqlOdbcLogin("localhost", "grafieks_my", 3308, "root", "root")
 //                  ConnectorsLoginModel.mysqlOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
@@ -514,8 +514,8 @@ Popup {
             id: btn_signin
             textValue: Constants.signInText
             fontPixelSize: Constants.fontCategoryHeader
-//            onClicked: connectToOdbcMySQL()
-            onClicked: connectToMySQL()
+            onClicked: connectToOdbcMySQL()
+//            onClicked: connectToMySQL()
 
         }
 
