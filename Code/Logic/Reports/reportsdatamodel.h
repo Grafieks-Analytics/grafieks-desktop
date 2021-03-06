@@ -18,11 +18,11 @@ class ReportsDataModel : public QObject
 
     QuerySplitter mQuerySplitter;
     DataType dataType;
-    DuckCon *duckCRUD;
+    DuckCon *duckCon;
 
 public:
     explicit ReportsDataModel(QObject *parent = nullptr);
-    explicit ReportsDataModel(DuckCon *duckCRUD, QObject *parent = nullptr);
+    explicit ReportsDataModel(DuckCon *duckCon, QObject *parent = nullptr);
     void getColumnsForTable(QString tableName);
 
     Q_INVOKABLE void setTmpSql(QString query);

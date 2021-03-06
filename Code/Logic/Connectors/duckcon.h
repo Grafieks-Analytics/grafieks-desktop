@@ -28,7 +28,6 @@ public slots:
     void createTable();
 
 signals:
-    void csvColData(QStringList colData);
 
 };
 

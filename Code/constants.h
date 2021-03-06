@@ -36,6 +36,10 @@ namespace Constants
     const int boxIntType = 19;
     const int sheetIntType = 20;
 
+    // DB Classification
+    const QString sqlType = "SQL";
+    const QString duckType = "Duck";
+
     // Datasource type Strings
     const QString mysqlStrType = "mysql";
     const QString mysqlStrQueryType = "mysql_query";
@@ -76,6 +80,9 @@ namespace Constants
 
     const QString teradataOdbcStrType = "teradata_odbc";
     const QString teradataOdbcStrQueryType = "teradata_odbc_query";
+
+    const QString accessOdbcStrType = "access_odbc";
+    const QString accessOdbcStrQueryType = "access_odbc_query";
 
     // Filter type Strings
     const QString categoricalType = "categorical";
