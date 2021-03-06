@@ -70,6 +70,7 @@ Page {
         function onSqliteLoginStatus(status){
             if(status.status === true){
                 // Call functions
+                console.log("SQLITE LOGGED IN")
                 TableListModel.callQuery()
                 tableslist.model = TableListModel
             }
@@ -451,6 +452,7 @@ Page {
 
                 onClicked: {
                     TableColumnsModel.getColumnsForTable(tableName, "TableColumns")
+                    console.log("Table name", tableName)
 
                     if(tablecolumnListView.visible === true){
                         toggleTableIcon.source ="/Images/icons/Right_20.png"

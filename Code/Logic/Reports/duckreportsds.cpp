@@ -23,7 +23,7 @@ QString DuckReportsDS::getBarChartValues(QString xAxisColumn, QString yAxisColum
 
     auto result = this->duckCon->con.Query(query);
 
-    int rows = result->collection.count;
+    int rows = result->collection.Count();
 
     for(int i = 0; i < rows; i++){
 
@@ -35,7 +35,7 @@ QString DuckReportsDS::getBarChartValues(QString xAxisColumn, QString yAxisColum
 
     query = " SELECT " + yAxisColumn.toStdString() + " FROM " + db.toStdString();
     result = this->duckCon->con.Query(query);
-    rows  = result->collection.count;
+    rows  = result->collection.Count();
 
     for(int i = 0; i < rows; i++){
 
@@ -77,7 +77,7 @@ QString DuckReportsDS::getStackedBarChartValues(QString xAxisColumn, QString yAx
 
     auto result = this->duckCon->con.Query(query);
 
-    int rows = result->collection.count;
+    int rows = result->collection.Count();
 
     for(int i = 0; i < rows; i++){
 
@@ -89,7 +89,7 @@ QString DuckReportsDS::getStackedBarChartValues(QString xAxisColumn, QString yAx
 
     query = " SELECT " + yAxisColumn.toStdString() + " FROM " + db.toStdString();
     result = this->duckCon->con.Query(query);
-    rows  = result->collection.count;
+    rows  = result->collection.Count();
 
     for(int i = 0; i < rows; i++){
 
@@ -132,7 +132,7 @@ QString DuckReportsDS::getAreaChartValues(QString xAxisColumn, QString yAxisColu
     query = " SELECT " + yAxisColumn.toStdString() + " FROM " + db.toStdString();
     auto resultY = this->duckCon->con.Query(query);
 
-    int rows = resultX->collection.count;
+    int rows = resultX->collection.Count();
     for(int i = 0; i < rows; i++){
 
         duckdb::Value valueX = resultX->GetValue(0 , i);
@@ -176,7 +176,7 @@ QString DuckReportsDS::getLineChartValues(QString xAxisColumn, QString yAxisColu
     query = " SELECT " + yAxisColumn.toStdString() + " FROM " + db.toStdString();
     auto resultY = this->duckCon->con.Query(query);
 
-    int rows = resultX->collection.count;
+    int rows = resultX->collection.Count();
     for(int i = 0; i < rows; i++){
 
         duckdb::Value valueX = resultX->GetValue(0 , i);
@@ -219,7 +219,7 @@ QString DuckReportsDS::getPieChartValues(QString xAxisColumn, QString yAxisColum
     query = " SELECT " + yAxisColumn.toStdString() + " FROM " + db.toStdString();
     auto resultY = this->duckCon->con.Query(query);
 
-    int rows = resultX->collection.count;
+    int rows = resultX->collection.Count();
     for(int i = 0; i < rows; i++){
 
         duckdb::Value valueX = resultX->GetValue(0 , i);
@@ -251,7 +251,7 @@ QString DuckReportsDS::getFunnelChartValues(QString xAxisColumn, QString yAxisCo
     query = " SELECT " + yAxisColumn.toStdString() + " FROM " + db.toStdString();
     auto resultY = this->duckCon->con.Query(query);
 
-    int rows = resultX->collection.count;
+    int rows = resultX->collection.Count();
     for(int i = 0; i < rows; i++){
 
         duckdb::Value valueX = resultX->GetValue(0 , i);
@@ -297,7 +297,7 @@ QString DuckReportsDS::getRadarChartValues(QString xAxisColumn, QString yAxisCol
 
     auto result = this->duckCon->con.Query(query);
 
-    int rows = result->collection.count;
+    int rows = result->collection.Count();
 
     for(int i = 0; i < rows; i++){
 
@@ -309,7 +309,7 @@ QString DuckReportsDS::getRadarChartValues(QString xAxisColumn, QString yAxisCol
 
     query = " SELECT " + yAxisColumn.toStdString() + " FROM " + db.toStdString();
     result = this->duckCon->con.Query(query);
-    rows  = result->collection.count;
+    rows  = result->collection.Count();
 
     for(int i = 0; i < rows; i++){
 
@@ -350,7 +350,7 @@ QString DuckReportsDS::getScatterChartValues(QString xAxisColumn, QString yAxisC
 
     auto result = this->duckCon->con.Query(query);
 
-    int rows = result->collection.count;
+    int rows = result->collection.Count();
 
     for(int i = 0; i < rows; i++){
 
@@ -362,7 +362,7 @@ QString DuckReportsDS::getScatterChartValues(QString xAxisColumn, QString yAxisC
 
     query = " SELECT " + yAxisColumn.toStdString() + " FROM " + db.toStdString();
     result = this->duckCon->con.Query(query);
-    rows  = result->collection.count;
+    rows  = result->collection.Count();
 
     for(int i = 0; i < rows; i++){
 
@@ -403,7 +403,7 @@ QString DuckReportsDS::getHeatMapChartValues(QString xAxisColumn, QString yAxisC
 
     auto result = this->duckCon->con.Query(query);
 
-    int rows = result->collection.count;
+    int rows = result->collection.Count();
 
     for(int i = 0; i < rows; i++){
 
@@ -415,7 +415,7 @@ QString DuckReportsDS::getHeatMapChartValues(QString xAxisColumn, QString yAxisC
 
     query = " SELECT " + yAxisColumn.toStdString() + " FROM " + db.toStdString();
     result = this->duckCon->con.Query(query);
-    rows  = result->collection.count;
+    rows  = result->collection.Count();
 
     for(int i = 0; i < rows; i++){
 

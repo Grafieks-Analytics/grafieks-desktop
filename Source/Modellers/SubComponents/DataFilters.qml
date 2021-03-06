@@ -216,11 +216,12 @@ Popup {
 
 
     function onAddMenuItemTriggered(colName,tableName){
-        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
-            ColumnListModel.columnQuery(colName, tableName)
-        } else{
-            DuckDataModel.columnData(colName, tableName)
-        }
+        ColumnListModel.columnQuery(colName, tableName)
+//        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+//            ColumnListModel.columnQuery(colName, tableName)
+//        } else{
+//            DuckDataModel.columnData(colName, tableName)
+//        }
         DSParamsModel.setColName(colName)
         DSParamsModel.setTableName(tableName)
 

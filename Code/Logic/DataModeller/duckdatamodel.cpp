@@ -16,7 +16,7 @@ void DuckDataModel::columnData(QString col, QString index)
     QString db = Statics::currentDbName;
 
     auto data = duckCon->con.Query("SELECT * FROM " + db.toStdString());
-    int rows = data->collection.count;
+    int rows = data->collection.Count();
     int colidx = index.toInt();
 
     for(int i = 0; i < rows; i++){
@@ -39,7 +39,7 @@ QStringList DuckDataModel::getColumnList(QString tableName, QString moduleName)
     QStringList outputDataList;
 
     auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
-    int rows = data->collection.count;
+    int rows = data->collection.Count();
 
     for(int i = 0; i < rows; i++){
         output << data->GetValue(0, i).ToString().c_str();
@@ -65,7 +65,7 @@ QStringList DuckDataModel::getTableList()
 
     QStringList output;
     auto data = duckCon->con.Query("PRAGMA show_tables");
-    int rows = data->collection.count;
+    int rows = data->collection.Count();
 
     for(int i = 0; i < rows; i++){
         output << data->GetValue(0, i).ToString().c_str();
@@ -78,7 +78,7 @@ QStringList DuckDataModel::getDbList()
 {
     QStringList output;
     auto data = duckCon->con.Query("PRAGMA database_list");
-    int rows = data->collection.count;
+    int rows = data->collection.Count();
 
     for(int i = 0; i < rows; i++){
         output << data->GetValue(0, i).ToString().c_str();
@@ -95,17 +95,43 @@ void DuckDataModel::setQuery(QString query)
 
 QStringList DuckDataModel::getRoles()
 {
-    QStringList output;
+    QStringList output, outputList;
     output = querySplitter.getSelectParams();
-    qDebug() << "QUERY" << output;
-    return output;
+
+    QRegularExpression selectListRegex(R"(SELECT\s+(.*?)\sFROM\s)", QRegularExpression::CaseInsensitiveOption);
+    QRegularExpressionMatch selectIterator = selectListRegex.match(this->query);
+    QString containsStar = selectIterator.captured(1);
+
+    if(containsStar.contains("*", Qt::CaseInsensitive) == true){
+        QStringList tablesList;
+        tablesList << querySplitter.getMainTable();
+        tablesList << querySplitter.getJoinTables();
+
+        QString tableName;
+        foreach(tableName, tablesList){
+            auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+            int rows = data->collection.Count();
+            QString fieldName;
+
+            for(int i = 0; i < rows; i++){
+                fieldName =  data->GetValue(1, i).ToString().c_str();
+                outputList.append(fieldName);
+            }
+        }
+
+    } else{
+        outputList = output;
+    }
+
+    return outputList;
 }
 
 QList<QStringList> DuckDataModel::getQueryResult()
 {
     QList<QStringList> output;
     auto result = duckCon->con.Query(this->query.toStdString());
-    result->Print();
+   result->collection.Print();
+
     return output;
 }
 
