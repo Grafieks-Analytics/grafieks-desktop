@@ -44,14 +44,25 @@ void QueryStatsModel::setProfiling(bool status)
 
     switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:
-    case Constants::mysqlOdbcIntType:{
+    case Constants::mysqlIntType:{
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
         if(status == true){
             this->setQuery("SET profiling = 1", dbMysql);
 
         } else{
             this->setQuery("SET profiling = 0", dbMysql);
+        }
+
+        break;
+    }
+
+    case Constants::mysqlOdbcIntType:{
+        QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
+        if(status == true){
+            this->setQuery("SET profiling = 1", dbMysqlOdbc);
+
+        } else{
+            this->setQuery("SET profiling = 0", dbMysqlOdbc);
         }
 
         break;
@@ -70,8 +81,7 @@ void QueryStatsModel::setProfiling(bool status)
         break;
     }
 
-    case Constants::postgresIntType:
-    case Constants::redshiftIntType:{
+    case Constants::postgresIntType:{
 
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
         if(status == true){
@@ -84,6 +94,18 @@ void QueryStatsModel::setProfiling(bool status)
         break;
     }
 
+    case Constants::redshiftIntType:{
+
+        QSqlDatabase dbRedshift = QSqlDatabase::database(Constants::redshiftOdbcStrQueryType);
+        if(status == true){
+            this->setQuery("SET profiling = 1", dbRedshift);
+
+        } else{
+            this->setQuery("SET profiling = 0", dbRedshift);
+        }
+
+        break;
+    }
     case Constants::mssqlIntType:{
 
         QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
@@ -157,14 +179,24 @@ void QueryStatsModel::resetProfiling()
 {
     switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:
-    case Constants::mysqlOdbcIntType:{
+    case Constants::mysqlIntType:{
 
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
         this->setQuery("SET profiling = 0", dbMysql);
         this->setQuery("SET profiling_history_size = 0", dbMysql);
         this->setQuery("SET profiling_history_size = 100", dbMysql);
         this->setQuery("SET profiling = 1", dbMysql);
+
+        break;
+    }
+
+    case Constants::mysqlOdbcIntType:{
+
+        QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
+        this->setQuery("SET profiling = 0", dbMysqlOdbc);
+        this->setQuery("SET profiling_history_size = 0", dbMysqlOdbc);
+        this->setQuery("SET profiling_history_size = 100", dbMysqlOdbc);
+        this->setQuery("SET profiling = 1", dbMysqlOdbc);
 
         break;
     }
@@ -188,6 +220,17 @@ void QueryStatsModel::resetProfiling()
         this->setQuery("SET profiling_history_size = 0", dbPostgres);
         this->setQuery("SET profiling_history_size = 100", dbPostgres);
         this->setQuery("SET profiling = 1", dbPostgres);
+
+        break;
+    }
+
+    case Constants::redshiftIntType:{
+
+        QSqlDatabase dbRedshift = QSqlDatabase::database(Constants::redshiftOdbcStrQueryType);
+        this->setQuery("SET profiling = 0", dbRedshift);
+        this->setQuery("SET profiling_history_size = 0", dbRedshift);
+        this->setQuery("SET profiling_history_size = 100", dbRedshift);
+        this->setQuery("SET profiling = 1", dbRedshift);
 
         break;
     }
@@ -255,8 +298,7 @@ void QueryStatsModel::showStats()
 
     switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:
-    case Constants::mysqlOdbcIntType:{
+    case Constants::mysqlIntType:{
 
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
         this->setQuery("SHOW profiles", dbMysql);
@@ -264,6 +306,13 @@ void QueryStatsModel::showStats()
         break;
     }
 
+    case Constants::mysqlOdbcIntType:{
+
+        QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
+        this->setQuery("SHOW profiles", dbMysqlOdbc);
+
+        break;
+    }
 
     case Constants::sqliteIntType:{
 
@@ -276,6 +325,14 @@ void QueryStatsModel::showStats()
 
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
         this->setQuery("SHOW profiles", dbPostgres);
+
+        break;
+    }
+
+    case Constants::redshiftIntType:{
+
+        QSqlDatabase dbRedshift = QSqlDatabase::database(Constants::redshiftOdbcStrQueryType);
+        this->setQuery("SHOW profiles", dbRedshift);
 
         break;
     }
@@ -351,11 +408,18 @@ QVariant QueryStatsModel::showErrorMessage(const QString &query)
 
     switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:
-    case Constants::mysqlOdbcIntType:{
+    case Constants::mysqlIntType:{
 
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
         QSqlQuery queryResult(query, dbMysql);
+        message = queryResult.lastError().text();
+        break;
+    }
+
+    case Constants::mysqlOdbcIntType:{
+
+        QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
+        QSqlQuery queryResult(query, dbMysqlOdbc);
         message = queryResult.lastError().text();
         break;
     }
@@ -372,6 +436,14 @@ QVariant QueryStatsModel::showErrorMessage(const QString &query)
 
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
         QSqlQuery queryResult(query, dbPostgres);
+        message = queryResult.lastError().text();
+        break;
+    }
+
+    case Constants::redshiftIntType:{
+
+        QSqlDatabase dbRedshift = QSqlDatabase::database(Constants::redshiftOdbcStrQueryType);
+        QSqlQuery queryResult(query, dbRedshift);
         message = queryResult.lastError().text();
         break;
     }

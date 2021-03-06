@@ -18,6 +18,7 @@
 #include "./Helpers/hiveconversions.h"
 #include "./Helpers/snowflakeconversions.h"
 #include "./Helpers/teradataconversions.h"
+#include "./Helpers/accessconversions.h"
 
 #include "../../Connectors/allconnectors.h"
 #include "../../statics.h"
@@ -41,6 +42,7 @@ class ColumnListModel : public QSqlQueryModel
     HiveConversions hiveDateConversion;
     SnowflakeConversions snowflakeDateConversion;
     TeradataConversions teradataDateConversion;
+    AccessConversions accessDateConversion;
 
 public:
     explicit ColumnListModel(QObject *parent = nullptr);
