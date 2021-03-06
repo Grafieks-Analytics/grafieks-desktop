@@ -125,7 +125,7 @@ void ReportsDataModel::setTmpSql(QString query)
 
         auto result = this->duckCon->con.Query("DESCRIBE " + db.toStdString());
 
-        int rows = result->collection.count;
+        int rows = result->collection.Count();
 
         int i = 0;
         while(i < rows){
@@ -367,7 +367,7 @@ void ReportsDataModel::getData()
 
         auto data = this->duckCon->con.Query("SELECT * FROM " + db.toStdString());
 
-        int rows = data->collection.count;
+        int rows = data->collection.Count();
         int colidx = 0;
         int colIdx = 1;
 

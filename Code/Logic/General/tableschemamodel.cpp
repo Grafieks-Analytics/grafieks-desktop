@@ -421,7 +421,7 @@ void TableSchemaModel::showSchema(QString query)
 
         for(QString tableName: tablesList){
             auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
-            int rows = data->collection.count;
+            int rows = data->collection.Count();
             data->Print();
 
             for(int i = 0; i < rows; i++){
@@ -895,7 +895,7 @@ void TableSchemaModel::showSchema(QString query)
         QString db = Statics::currentDbName;
 
         auto result = this->duckCon->con.Query("DESCRIBE " + db.toStdString());
-        int rows = result->collection.count;
+        int rows = result->collection.Count();
         int i = 0;
         while(i < rows){
 

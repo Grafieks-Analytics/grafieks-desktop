@@ -19,7 +19,7 @@ class DuckCon : public QObject
 
 public:
     explicit DuckCon(QObject *parent = nullptr);
-    ~DuckCon();
+//    ~DuckCon();
 
     duckdb::DuckDB db;
     duckdb::Connection con;

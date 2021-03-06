@@ -23,6 +23,7 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
     QString describeQueryString, fieldName, fieldType;
     QStringList outputDataList;
+    qDebug() << tableName <<  moduleName<< Statics::currentDbIntType;
 
     switch(Statics::currentDbIntType){
 
@@ -77,6 +78,7 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
 
             outputDataList << fieldName << filterDataType;
+            qDebug() << outputDataList << "MYSQL ODBC";
 
             // Append all data type to allList as well
             allColumns.append(outputDataList);
@@ -178,7 +180,7 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
     case Constants::excelIntType:{
 
         auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
-        int rows = data->collection.count;
+        int rows = data->collection.Count();
 
         for(int i = 0; i < rows; i++){
             fieldName =  data->GetValue(1, i).ToString().c_str();

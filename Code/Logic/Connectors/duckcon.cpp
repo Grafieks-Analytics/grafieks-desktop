@@ -6,10 +6,10 @@ DuckCon::DuckCon(QObject *parent) : QObject(parent),
 
 }
 
-DuckCon::~DuckCon()
-{
+//DuckCon::~DuckCon()
+//{
 
-}
+//}
 
 
 void DuckCon::createTable(){
@@ -48,7 +48,7 @@ void DuckCon::createTable(){
             Statics::currentDbName = fileName;
             QFileInfo fi(csvdb.c_str());
             qDebug() << csvdb.c_str() << "Table name" << fi.baseName();
-            unique_ptr<duckdb::MaterializedQueryResult> res2 = con.Query("CREATE TABLE " + fi.baseName().toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
+            std::unique_ptr<duckdb::MaterializedQueryResult> res2 = con.Query("CREATE TABLE " + fi.baseName().toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
         }
 
     } else{
