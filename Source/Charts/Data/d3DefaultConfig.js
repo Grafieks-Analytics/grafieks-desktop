@@ -10,6 +10,7 @@ const defaultD3Config = {
     innerRadius: 150,
     defaultTimeParseFormat: "%d-%m-%Y",
     defaultSpace: 30,
+    dateFormat: "%b %Y",
 };
 const markerShapeConfig = {
     circle: {
