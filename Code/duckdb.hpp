@@ -7734,7 +7734,7 @@ public:
     }
 
 private:
-    DUCKDB_API unique_ptr<QueryResult> QueryParamsRecursive(const string &query, vector<Value> &values);
+    unique_ptr<QueryResult> QueryParamsRecursive(const string &query, vector<Value> &values);
 
     template <typename T, typename... Args>
     unique_ptr<QueryResult> QueryParamsRecursive(const string &query, vector<Value> &values, T value,
