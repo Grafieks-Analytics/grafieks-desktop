@@ -205,5 +205,6 @@
         <file>Source/Charts/Data/sankeySingle.js</file>
         <file>Source/Connectors/SubComponents/JsonConnection.qml</file>
         <file>Source/Connectors/SubComponents/ExcelConnection.qml</file>
+        <file>Source/Charts/WaterfallChart.html</file>
     </qresource>
 </RCC>

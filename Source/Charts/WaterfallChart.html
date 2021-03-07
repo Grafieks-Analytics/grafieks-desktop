@@ -1,314 +1,179 @@
-<!DOCTYPE html>
-<head>
-    <meta charset="utf-8" />
-
-    <!-- Load d3.js -->
-
-    <script src="./Data/d3DefaultConfig.js"></script>
-    <script src="./Data/d3.v4.min.js"></script>
-    <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
-    <link rel="stylesheet" href="Data/general.css" />
-
-    <title>Waterfall Chart</title>
-    <style>
-        .bar.total rect {
-            fill: #8dd3c7;
-        }
-
-        .bar.positive rect {
-            fill: #fb8072;
-        }
-        .bar.negative rect {
-            fill: #80b1d3;
-        }
-
-        .bar line.connector {
-            stroke: #b3de69;
-            stroke-dasharray: 3;
-        }
-
-        .bar text {
-            text-anchor: middle;
-        }
-    </style>
-</head>
-<body>
-    <div style="text-align: center">
-        <!-- Create a div where the graph will take place -->
-        <svg class="chart"><div id="tooltip"></div></svg>
-    </div>
-
-    <script>
-        var keys = [];
-
-        // Color Pallets - Set 3
-        const d3colors = [
-            "#8DD3C9",
-            "#FFFFAA",
-            "#B8BED6",
-            "#F98171",
-            "#78B5D1",
-            "#FFB15B",
-            "#B4E061",
-            "#FDCDE5",
-            "#DAD9D4",
-            "#BD7FBE",
-            "#CDE9C1",
-            "#FFEA77",
-        ];
-
-        const margin = { top: 80, right: 30, bottom: 30, left: 50 };
-        const width = 960 - margin.left - margin.right;
-        const height = 500 - margin.top - margin.bottom;
-        const padding = 0.3;
-
-        const x = d3.scaleBand().rangeRound([0, width]).padding(padding);
-
-        const y = d3.scaleLinear().range([height, 0]);
-
-        const xAxis = d3.axisBottom(x).tickSizeOuter(0);
-
-        const yAxis = d3
-            .axisLeft(y)
-            .tickFormat((d) => {
-                return d;
-            })
-            .tickSizeOuter(0);
-
-        const chart = d3
-            .select(".chart")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
-
-        const type = (d) => {
-            d.value = +d.value;
-            return d;
-        }; // type
-
-        const eurFormat = (amount) => {
-            if (Math.abs(amount) > 1000000) {
-                return `${Math.round(amount / 1000000)}M€`;
+<html>
+    <head>
+        <script src="./Data/d3DefaultConfig.js"></script>
+        <script src="./Data/d3.v4.min.js"></script>
+        <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+        <link rel="stylesheet" href="Data/general.css" />
+    </head>
+    <body>
+        <div id="my_dataviz">
+            <svg class="chart"></svg>
+        </div>
+        <style>
+            .bar.total rect {
+                fill: #44a4f6;
             }
-            if (Math.abs(amount) > 1000) {
-                return `${Math.round(amount / 1000)}K€`;
+
+            .bar.positive rect {
+                fill: #009b8f;
             }
-            return `${amount}€`;
-        }; // eurFormat
+            .bar.negative rect {
+                fill: #ed2526;
+            }
+        </style>
 
-        const drawWaterfall = (data) => {
-            x.domain(
-                data.map((d) => {
-                    return d.name;
-                })
-            );
+        <script>
+            const waterfallTransformedData = {};
 
-            y.domain([
-                0,
-                d3.max(data, (d) => {
-                    return d.end;
-                }),
-            ]);
+            let sampleData = [
+                [
+                    ["one", 3.5],
+                    ["two", -5.94],
+                    ["three", 0.29],
+                    ["four", 5.12],
+                    ["five", 2.21],
+                ],
+                ["XLabels", "YLabels"],
+            ];
 
-            chart
-                .append("g")
-                .attr("class", "x-axis")
-                .attr("transform", `translate(0,${height})`)
-                .call(xAxis);
+            function waterfall(bind, data, config) {
+                config = {
+                    f: d3.format(".1f"),
+                    margin: { top: 20, right: 50, bottom: 70, left: 60 },
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                    domainPadding: 1.1,
+                    ...config,
+                };
+                const { f, margin, width, height, domainPadding } = config;
+                const w = width - margin.left - margin.right - 20;
+                const h = height - margin.top - margin.bottom - 20;
+                var dataValues = data[0];
+                const _data = waterfallData(dataValues);
 
-            chart.append("g").attr("class", "y-axis").call(yAxis);
-
-            const bar = chart
-                .selectAll(".bar")
-                .data(data)
-                .enter()
-                .append("g")
-                .attr("class", (d) => {
-                    return `bar ${d.class}`;
-                })
-                .attr("transform", (d) => {
-                    return `translate(${x(d.name)},0)`;
-                });
-
-            bar.append("rect")
-                .attr("y", (d) => {
-                    return y(Math.max(d.start, d.end));
-                })
-                .attr("height", (d) => {
-                    return Math.abs(y(d.start) - y(d.end));
-                })
-                .attr("width", x.bandwidth());
-
-            bar.on("mouseover mousemove", function (d, i) {
-                var x_pos = d3.mouse(this.parentNode)[0] + 200;
-                var y_pos = d3.mouse(this.parentNode)[1];
-
-                const percentage = d3.format(".1f")(
-                    (100 * (d.end - d.start)) / d.start
-                );
-
-                d3.select("#tooltip")
-                    .style("left", x_pos + "px")
-                    .style("top", y_pos + "px")
-                    .style("display", "block")
-                    .html(
-                        "Name: " +
-                            d.name +
-                            "<br/>Class: " +
-                            d.class +
-                            "<br/>" +
-                            percentage +
-                            "%"
+                d3.select(bind).html("");
+                const chart = d3
+                    .select(bind)
+                    .attr("width", width - 20)
+                    .attr("height", height - 20)
+                    .append("g")
+                    .attr(
+                        "transform",
+                        "translate(" + margin.left + "," + margin.top + ")"
                     );
-                d3.select(this).classed("newfill", true);
-                d3.selectAll(".bar").style("opacity", 0.3);
-                d3.select(this).style("opacity", 1);
-            }).on("mouseout", function () {
-                d3.select("#tooltip").style("display", "none");
-                d3.select(this).classed("newfill", false);
-                d3.selectAll(".bar").style("opacity", 1);
-            });
 
-            // bar.filter((d, i) => {
-            // 	// filter out first bar and total bars
-            // 	return d.class !== "total" && i !== 0;
-            // })
-            // 	.append("ellipse")
-            // 	.attr("class", "bubble")
-            // 	.attr("class", "ellipse")
-            // 	.attr("cx", x.bandwidth() / 2)
-            // 	.attr("cy", (0 - margin.top) / 2)
-            // 	.attr("rx", 30)
-            // 	.attr("ry", "1em");
+                const x = d3
+                    .scaleBand()
+                    .domain(_data.map((d) => d.label))
+                    .range([0, w])
+                    .padding(0.2);
 
-            // bar.filter((d, i) => {
-            // 	// filter out first bar and total bars
-            // 	return d.class !== "total" && i !== 0;
-            // })
-            // 	.append("text")
-            // 	.attr("x", x.bandwidth() / 2)
-            // 	.attr("y", (0 - margin.top) / 2)
-            // 	.attr("dy", ".3em")
-            // 	.attr("class", "bubble")
-            // 	.text(d => {
-            // 		const percentage = d3.format(".1f")(
-            // 			(100 * (d.end - d.start)) / d.start
-            // 		);
-            // 		return `${percentage}%`;
-            // 	});
+                const y = d3.scaleLinear().range([h, 0]);
 
-            // Add the connecting line between each bar
-            bar.filter((d, i) => {
-                return i !== data.length - 1;
-            })
-                .append("line")
-                .attr("class", "connector")
-                .attr("x1", x.bandwidth() + 5)
-                .attr("y1", (d) => {
-                    return d.class === "total" ? y(d.start) : y(d.end);
-                })
-                .attr("x2", x.bandwidth() / (1 - padding) - 5)
-                .attr("y2", (d) => {
-                    return d.class === "total" ? y(d.start) : y(d.end);
+                const xAxis = d3.axisBottom(x);
+                const yAxis = d3.axisLeft(y);
+
+                const d3Min = d3.min(_data, (d) => d.end);
+                const d3Max = d3.max(_data, (d) => d.end);
+                const maxValue = d3Max > 0 ? d3Max : 0;
+                const minValue = d3Min < 0 ? d3Min : 0;
+
+                x.domain(_data.map((d) => d.label));
+                y.domain([minValue * domainPadding, maxValue * domainPadding]);
+
+                chart
+                    .append("g")
+                    .attr("class", "x-axis axis")
+                    .attr("transform", "translate(0," + h + ")")
+                    .call(xAxis);
+
+                chart.append("g").attr("class", "y-axis axis").call(yAxis);
+
+                // render some gridlines
+                gridlines(chart, -h, -w);
+
+                const bar = chart
+                    .selectAll(".bar")
+                    .data(_data)
+                    .enter()
+                    .append("g")
+                    .attr("class", (d) => "bar " + d.class)
+                    .attr(
+                        "transform",
+                        (d) => "translate(" + x(d.label) + ",0)"
+                    );
+
+                bar.append("rect")
+                    .attr("class", (d) => "rect bar " + d.class)
+                    .attr("y", (d) => y(Math.max(d.start, d.end)))
+                    .attr("height", (d) => Math.abs(y(d.start) - y(d.end)))
+                    .attr("width", x.bandwidth());
+
+                bar.append("text")
+                    .attr("x", x.bandwidth() / 2)
+                    .attr("y", (d) => y(d.end) + 5)
+                    .attr(
+                        "dy",
+                        (d) => (d.class === "negative" ? "-" : "") + ".75em"
+                    )
+                    .text((d) => f(d.end - d.start));
+                // .text(d => f(d.value))
+            }
+
+            // generate gridlines using tick groups
+            function gridlines(selection, h, w) {
+                selection
+                    .selectAll("g.x-axis g.tick")
+                    .append("line")
+                    .classed("gridline", true)
+                    .attr("x1", 0)
+                    .attr("y1", 0)
+                    .attr("x2", 0)
+                    .attr("y2", h);
+                selection
+                    .selectAll("g.y-axis g.tick")
+                    .append("line")
+                    .classed("gridline", true)
+                    .attr("x1", 0)
+                    .attr("y1", 0)
+                    .attr("x2", w)
+                    .attr("y2", 0);
+            }
+            // transform data for floating bars
+            function waterfallData(data) {
+                let cumulativeValue = 0;
+                data = data.map((d, i) => {
+                    return { label: d[0], value: d[1] };
                 });
-        }; // drawWaterfall
-
-        const prepData = (data) => {
-            // create stacked remainder
-            const insertStackedRemainderAfter = (dataName, newDataName) => {
-                const index = data.findIndex((datum) => {
-                    return datum.name === dataName;
-                }); // data.findIndex
-
-                console.log(data);
-
-                return data.splice(index, 0, {
-                    name: newDataName,
-                    start: dataName.end,
-                    end: 0,
+                data.forEach((d) => {
+                    d.start = cumulativeValue;
+                    cumulativeValue += d.value;
+                    d.end = cumulativeValue;
+                    d.class = d.value >= 0 ? "positive" : "negative";
+                });
+                data.push({
+                    label: "Total",
+                    end: cumulativeValue,
+                    start: 0,
                     class: "total",
-                }); // data.splice
-            }; // insertStackedRemainder
-
-            // retrieve total value
-            let cumulative = 0;
-
-            // Transform data (i.e., finding cumulative values and total) for easier charting
-            data.map((datum) => {
-                datum.start = cumulative;
-                cumulative += datum.value;
-                datum.end = cumulative;
-                return (datum.class =
-                    datum.value >= 0 ? "positive" : "negative");
-            }); // data.map
-
-            // insert stacked remainders where approriate
-            console.log(data[parseInt(data.length / 2)][keys[0]]);
-            // insertStackedRemainderAfter(
-            //     data[parseInt(data.length / 2)],
-            //     "intermediate total"
-            // );
-
-            return drawWaterfall(data);
-        }; // prepData
-
-        var data = [
-            [
-                ["1st revenue", -2000],
-                ["2nd revenue", 2000],
-                ["1st spend", 3000],
-                ["3rd revenue", 4000],
-                ["2nd spend", -5500],
-                ["3rd spend", 5100],
-                ["4th revenue", 800],
-            ],
-            ["name", "value"],
-        ];
-
-        function drawChart(data, plottingConfiguration = {}) {
-            window.data = data;
-            var dataValues = data[0];
-
-            let {
-                d3colorPalette,
-                paddingInner,
-                markerShape,
-                curveType,
-            } = plottingConfiguration;
-            if (!d3colorPalette) {
-                d3colorPalette = defaultD3Config.d3ColorPalette;
-            }
-            d3Colors = d3[d3colorPalette];
-
-            if (!paddingInner) {
-                paddingInner = defaultD3Config.defaultPaddingInner;
+                });
+                return data;
             }
 
-            let transformData = [];
-            keys = data[1];
+            function drawChart(data, plottingConfiguration = {}) {
+                window.sampleData = data;
+                waterfall(".chart", sampleData);
+            }
 
-            transformData = dataValues.map((d) => {
-                var obj = {};
-                obj[keys[0]] = d[0];
-                obj[keys[1]] = d[1];
-                return obj;
+            window.onload = function () {
+                // render the chart
+                drawChart(sampleData);
+            };
+
+            window.addEventListener("resize", function () {
+                // render the chart
+                drawChart(sampleData);
             });
-            console.log(transformData);
-            prepData(transformData);
-        }
-
-        drawChart(data);
-
-        // Generate Grid starts
-
-        function make_x_gridlines() {
-            return d3.axisBottom(x).ticks(8);
-        }
-        function make_y_gridlines() {
-            return d3.axisLeft(y).ticks(5);
-        }
-
-        // Generate Grid ends
-    </script>
-</body>
+        </script>
+    </body>
+</html>
