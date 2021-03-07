@@ -214,6 +214,7 @@ QtObject {
     property string pieChartTitle: "Pie Chart"
     property string donutChartTitle:"Donut Chart"
     property string funnelChartTitle:"Funnel Chart"
+    property string gaugeChart: "Gauge Chart"
 
     property string scatteredChart: "Scattered Chart"
     property string stackedBarChart: "Stacked Bar Chart"
