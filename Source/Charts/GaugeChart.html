@@ -5,6 +5,8 @@
         <meta name="viewport" content="width=320" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <title>Gauge Chart</title>
+
+        <script src="./Data/d3DefaultConfig.js"></script>
         <script type="text/javascript" src="./Data/d3.v3.min.js"></script>
         <style>
             body {
@@ -108,14 +110,16 @@
                         .domain([config.minValue, config.maxValue]);
 
                     ticks = scale.ticks(config.majorTicks);
-                    console.log(d3.range(config.majorTicks));
-                    // debugger;
 
-                    // tickData = d3.range(config.majorTicks).map(function () {
-                    //     return 1 / config.majorTicks;
-                    // });
+                    const { maxValue, redValue, yellowValue } = config;
 
-                    tickData = [0.3333, 0.4333, 0.2333];
+                    var redValueData = redValue / maxValue;
+
+                    tickData = [
+                        redValue / maxValue,
+                        (yellowValue - redValue) / maxValue,
+                        (maxValue - yellowValue) / maxValue,
+                    ];
                     var covered = 0;
 
                     arc = d3.svg
@@ -128,7 +132,6 @@
                             return deg2rad(config.minAngle + ratio * range);
                         })
                         .endAngle(function (d, i) {
-                            var ratio = d * (i + 1);
                             return deg2rad(config.minAngle + covered * range);
                         });
                 }
@@ -165,11 +168,11 @@
                         .attr("fill", function (d, i) {
                             switch (i) {
                                 case 0:
-                                    return "#f3f12f";
+                                    return constants.redColor;
                                 case 1:
-                                    return "#99f12f";
+                                    return constants.yellowColor;
                                 case 2:
-                                    return "#ddd";
+                                    return constants.greenColor;
                             }
                         })
                         .attr("d", arc);
@@ -242,43 +245,32 @@
 
                 return that;
             };
-        </script>
 
-        <script>
-            function onDocumentReady() {
+            function drawChart(data, plottingConfiguration = {}) {
+                const [maxValue, redValue, yellowValue, readingValue] = data[0];
                 var powerGauge = gauge("#power-gauge", {
                     size: 600,
                     clipWidth: 600,
                     clipHeight: 600,
-                    ringWidth: 60,
-                    maxValue: 100,
-                    transitionMs: 4000,
+                    ringWidth: 100,
+                    maxValue,
+                    yellowValue,
+                    redValue,
+                    transitionMs: 3000,
                 });
                 powerGauge.render();
 
-                function updateReadings() {
+                function updateReadings(value) {
                     // just pump in random data here...
-                    powerGauge.update(Math.random() * 10);
+                    powerGauge.update(value);
                 }
 
                 // every few seconds update reading values
-                updateReadings();
-                setInterval(function () {
-                    updateReadings();
-                }, 5 * 1000);
+                updateReadings(readingValue);
             }
 
-            if (!window.isLoaded) {
-                window.addEventListener(
-                    "load",
-                    function () {
-                        onDocumentReady();
-                    },
-                    false
-                );
-            } else {
-                onDocumentReady();
-            }
+            const data = [[100, 50, 75, 43], ["Labels"]];
+            drawChart(data);
         </script>
     </body>
 </html>
