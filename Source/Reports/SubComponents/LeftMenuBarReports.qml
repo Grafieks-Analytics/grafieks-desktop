@@ -90,7 +90,7 @@ Rectangle{
         }
         ListElement{
             icon: "waterfall.png"
-            chartHtml:"bar.html"
+            chartHtml:"WaterfallChart.html"
             activeChart: false
             title:"Waterfall"
             yAxisVisible: true
@@ -214,7 +214,7 @@ Rectangle{
         }
         ListElement{
             icon: "gauge_chart.png"
-            chartHtml:"bar.html"
+            chartHtml:"GaugeChart.html"
             elementHeight: 22
             elementWidth:30
             activeChart: false

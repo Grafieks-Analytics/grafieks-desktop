@@ -13,6 +13,8 @@
     <div id="tooltip"></div>
 
     <script>
+        // dateFormat = "%b %Y";
+
         var lineStroke = 3;
         var {
             initialCircleRadius,
@@ -46,6 +48,7 @@
                 markerShape,
                 curveType,
                 timeParseFormat,
+                dateFormat,
             } = plottingConfiguration;
             if (!d3colorPalette) {
                 d3colorPalette = defaultD3Config.d3ColorPalette;
@@ -64,8 +67,11 @@
                 timeParseFormat = defaultD3Config.defaultTimeParseFormat;
             }
 
+            if (!dateFormat) {
+                dateFormat = defaultD3Config.dateFormat;
+            }
+
             var parseTime = d3.timeParse(timeParseFormat);
-            console.log(parseTime);
 
             d3.selectAll("#my_dataviz").html("");
             (margin = { top: 30, right: 30, bottom: 70, left: 60 }),
@@ -79,7 +85,7 @@
                     typeof d[0] == "string" &&
                     new Date(d[0]) != "Invalid Date"
                 ) {
-                    d[0] = new Date(d[0]).getTime();
+                    d[0] = new Date(d[0]);
                     valueDateType = true;
                 }
                 d[1] = +d[1];
@@ -94,7 +100,6 @@
             xScale
                 .domain(
                     d3.extent(dataValues, function (d) {
-                        console.log(parseTime(d[0]));
                         return d[0];
                     })
                 ) // input
@@ -131,21 +136,33 @@
                     "translate(" + margin.left + "," + margin.top + ")"
                 );
 
-            svg.append("g")
+            var bottomAxis = svg
+                .append("g")
                 .attr("class", "x-axis")
-                .attr("transform", "translate(0," + height + ")")
-                .call(
+                .attr("transform", "translate(0," + height + ")");
+
+            if (valueDateType) {
+                bottomAxis.call(
+                    d3
+                        .axisBottom(xScale)
+                        .tickSizeOuter(0)
+                        .ticks(dataValues.length)
+                        .tickFormat(d3.timeFormat(dateFormat))
+                );
+            } else {
+                bottomAxis.call(
                     d3
                         .axisBottom(xScale)
                         .tickSizeOuter(0)
                         .ticks(dataValues.length)
                 );
+            }
 
-            svg.append("g")
-                .attr("class", "grid")
-                .attr("transform", "translate(0," + height + ")")
-                .style("stroke-width", "1")
-                .call(make_x_gridlines().tickSize(0).tickFormat(""));
+            // svg.append("g")
+            //     .attr("class", "grid")
+            //     .attr("transform", "translate(0," + height + ")")
+            //     .style("stroke-width", "1")
+            //     .call(make_x_gridlines().tickSize(0).tickFormat(""));
 
             svg.append("g")
                 .attr("class", "y-axis")
