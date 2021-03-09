@@ -129,30 +129,42 @@ Item{
     function onRunQueryClicked(){
 
         testQueryBtn.visible = true
-        queryUpdate.visible = true
+
 
         // If current tab is queryModeller, then process
         // else if current tab is dataModeller, fire a signal to activate a slot in DataModeller.qml
 
         if(DSParamsModel.currentTab === Constants.queryModellerTab){
             var isSqlSelect = DSParamsModel.tmpSql.toUpperCase().startsWith("SELECT");
-
-            // Set profiling on when clicking the play button
-            // Reset profiling and turn off when clicked on Publish button
-
-
-            if(QueryStatsModel.profileStatus === false){
-                QueryStatsModel.setProfiling(true)
-                QueryStatsModel.setProfileStatus(true)
-            }
-
             // If query is SELECT query
             // Only SELECT query allowed
 
             if(isSqlSelect){
-                QueryModel.callSql(DSParamsModel.tmpSql)
-                QueryStatsModel.showStats()
-                //TableSchemaModel.showSchema(DSParamsModel.tmpSql)
+                if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+
+                    queryUpdate.visible = true
+
+                    // Set profiling on when clicking the play button
+                    // Reset profiling and turn off when clicked on Publish button
+
+                    if(QueryStatsModel.profileStatus === false){
+                        QueryStatsModel.setProfiling(true)
+                        QueryStatsModel.setProfileStatus(true)
+                    }
+
+                    QueryModel.callSql(DSParamsModel.tmpSql)
+                    QueryStatsModel.showStats()
+                    //TableSchemaModel.showSchema(DSParamsModel.tmpSql)
+
+                } else{
+                    DuckQueryModel.setQuery(DSParamsModel.tmpSql)
+                    //        DuckDataModel.getRoles()
+//                    var a = DuckQueryModel.getQueryResult()
+//                    console.log(a, "DUCK RES")
+
+                    testQueryResult.visible = true
+                    dataPreviewResult.visible = false
+                }
             } else{
                 sqlQueryNotAllowedDialog.visible = true
             }
@@ -240,7 +252,7 @@ Item{
         icon: StandardIcon.Critical
 
         onAccepted: {
-             onTestQueryClicked()
+            onTestQueryClicked()
         }
 
     }
@@ -305,7 +317,7 @@ Item{
                 id: testQueryBtn
                 height: 27
                 width: 100
-//                leftPadding: 10
+                //                leftPadding: 10
 
                 Text{
                     text: "Action Output"
@@ -335,11 +347,11 @@ Item{
             id: seperator1
             height:30
             anchors.left:toolbar_querymodeller.right
-//            anchors.right: data_preview_btn.left
+            //            anchors.right: data_preview_btn.left
             anchors.top: infodataTableHeader.top
             anchors.topMargin: -1
-//            anchors.leftMargin: -5
-//            anchors.rightMargin: -5
+            //            anchors.leftMargin: -5
+            //            anchors.rightMargin: -5
             padding: 0
         }
 
@@ -352,7 +364,7 @@ Item{
             anchors.top: infodataTableHeader.top
             anchors.topMargin: 1
             anchors.left: seperator1.right
-//             anchors.leftMargin: -5
+            //             anchors.leftMargin: -5
             height: 22
 
             Button{
@@ -396,8 +408,6 @@ Item{
             anchors.left:data_preview_btn.right
             anchors.top: infodataTableHeader.top
             anchors.topMargin: -1
-//            anchors.leftMargin: -5
-//            anchors.rightMargin: -5
             padding: 0
         }
 
@@ -412,14 +422,12 @@ Item{
             anchors.top: infodataTableHeader.top
             anchors.topMargin: 1
             anchors.left: seperator2.right
-//            anchors.leftMargin: -5
             height: 22
 
             Button{
                 id: displayLimitBtn
                 height: 27
                 width: parent.width
-                //                leftPadding: 10
 
                 Text{
                     id : displayLimit
@@ -433,9 +441,7 @@ Item{
                 }
 
                 onClicked: {
-
                     openDisplayLimitMenu()
-
                 }
 
                 ToolTip.delay: Constants.tooltipShowTime

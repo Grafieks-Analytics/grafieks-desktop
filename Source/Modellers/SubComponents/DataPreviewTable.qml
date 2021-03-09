@@ -16,7 +16,9 @@ TableView {
     anchors.fill: parent
     topMargin: columnsHeader1.implicitHeight
     width: parent.width
-    model: QueryModel
+//    model: QueryModel
+    model: DuckQueryModel
+//    model: GeneralParamsModel.getDbClassification() === Constants.sqlType? QueryModel: DuckQueryModel
     ScrollBar.horizontal: ScrollBar{}
     ScrollBar.vertical: ScrollBar{}
     clip: true

@@ -2029,14 +2029,14 @@ public:
     DUCKDB_API string ToString() const;
 
     //! Cast this value to another type
-    Value CastAs(const LogicalType &target_type, bool strict = false) const;
+    DUCKDB_API Value CastAs(const LogicalType &target_type, bool strict = false) const;
     //! Tries to cast value to another type, throws exception if its not possible
-    bool TryCastAs(const LogicalType &target_type, bool strict = false);
+    DUCKDB_API bool TryCastAs(const LogicalType &target_type, bool strict = false);
 
     //! Serializes a Value to a stand-alone binary blob
-    void Serialize(Serializer &serializer);
+    DUCKDB_API void Serialize(Serializer &serializer);
     //! Deserializes a Value from a blob
-    static Value Deserialize(Deserializer &source);
+    DUCKDB_API static Value Deserialize(Deserializer &source);
 
     //===--------------------------------------------------------------------===//
     // Numeric Operators
@@ -2074,13 +2074,13 @@ public:
 
     //! Returns true if the values are (approximately) equivalent. Note this is NOT the SQL equivalence. For this
     //! function, NULL values are equivalent and floating point values that are close are equivalent.
-    static bool ValuesAreEqual(const Value &result_value, const Value &value);
+    DUCKDB_API static bool ValuesAreEqual(const Value &result_value, const Value &value);
 
     friend std::ostream &operator<<(std::ostream &out, const Value &val) {
         out << val.ToString();
         return out;
     }
-    void Print();
+    DUCKDB_API void Print();
 
 private:
     //! The logical of the value
@@ -2165,59 +2165,59 @@ template <>
 Value DUCKDB_API Value::CreateValue(Value value);
 
 template <>
-bool Value::GetValue() const;
+DUCKDB_API bool Value::GetValue() const;
 template <>
-int8_t Value::GetValue() const;
+DUCKDB_API int8_t Value::GetValue() const;
 template <>
-int16_t Value::GetValue() const;
+DUCKDB_API int16_t Value::GetValue() const;
 template <>
-int32_t Value::GetValue() const;
+DUCKDB_API int32_t Value::GetValue() const;
 template <>
-int64_t Value::GetValue() const;
+DUCKDB_API int64_t Value::GetValue() const;
 template <>
-uint8_t Value::GetValue() const;
+DUCKDB_API uint8_t Value::GetValue() const;
 template <>
-uint16_t Value::GetValue() const;
+DUCKDB_API uint16_t Value::GetValue() const;
 template <>
-hugeint_t Value::GetValue() const;
+DUCKDB_API hugeint_t Value::GetValue() const;
 template <>
-string Value::GetValue() const;
+DUCKDB_API string Value::GetValue() const;
 template <>
-float Value::GetValue() const;
+DUCKDB_API float Value::GetValue() const;
 template <>
-double Value::GetValue() const;
+DUCKDB_API double Value::GetValue() const;
 template <>
-uintptr_t Value::GetValue() const;
+DUCKDB_API uintptr_t Value::GetValue() const;
 
 template <>
-int8_t &Value::GetValueUnsafe();
+DUCKDB_API int8_t &Value::GetValueUnsafe();
 template <>
-int16_t &Value::GetValueUnsafe();
+DUCKDB_API int16_t &Value::GetValueUnsafe();
 template <>
-int32_t &Value::GetValueUnsafe();
+DUCKDB_API int32_t &Value::GetValueUnsafe();
 template <>
-int64_t &Value::GetValueUnsafe();
+DUCKDB_API int64_t &Value::GetValueUnsafe();
 template <>
-hugeint_t &Value::GetValueUnsafe();
+DUCKDB_API hugeint_t &Value::GetValueUnsafe();
 template <>
-uint8_t &Value::GetValueUnsafe();
+DUCKDB_API uint8_t &Value::GetValueUnsafe();
 template <>
-uint16_t &Value::GetValueUnsafe();
+DUCKDB_API uint16_t &Value::GetValueUnsafe();
 template <>
-uint32_t &Value::GetValueUnsafe();
+DUCKDB_API uint32_t &Value::GetValueUnsafe();
 template <>
-uint64_t &Value::GetValueUnsafe();
+DUCKDB_API uint64_t &Value::GetValueUnsafe();
 template <>
-string &Value::GetValueUnsafe();
+DUCKDB_API string &Value::GetValueUnsafe();
 template <>
-float &Value::GetValueUnsafe();
+DUCKDB_API float &Value::GetValueUnsafe();
 template <>
-double &Value::GetValueUnsafe();
+DUCKDB_API double &Value::GetValueUnsafe();
 
 template <>
-bool Value::IsValid(float value);
+DUCKDB_API bool Value::IsValid(float value);
 template <>
-bool Value::IsValid(double value);
+DUCKDB_API bool Value::IsValid(double value);
 
 } // namespace duckdb
 
@@ -3189,6 +3189,7 @@ struct SequenceVector {
 
 
 
+
 struct ArrowArray;
 
 namespace duckdb {
@@ -3220,10 +3221,10 @@ public:
     vector<Vector> data;
 
 public:
-    idx_t size() const {
+    DUCKDB_API idx_t size() const {
         return count;
     }
-    idx_t ColumnCount() const {
+    DUCKDB_API idx_t ColumnCount() const {
         return data.size();
     }
     void SetCardinality(idx_t count) {
@@ -3234,11 +3235,11 @@ public:
         this->count = other.size();
     }
 
-    Value GetValue(idx_t col_idx, idx_t index) const;
-    void SetValue(idx_t col_idx, idx_t index, const Value &val);
+    DUCKDB_API Value GetValue(idx_t col_idx, idx_t index) const;
+    DUCKDB_API void SetValue(idx_t col_idx, idx_t index, const Value &val);
 
     //! Set the DataChunk to reference another data chunk
-    void Reference(DataChunk &chunk);
+    DUCKDB_API void Reference(DataChunk &chunk);
 
     //! Initializes the DataChunk with the specified types to an empty DataChunk
     //! This will create one vector of the specified type for each LogicalType in the
@@ -3250,49 +3251,49 @@ public:
     //! Append the other DataChunk to this one. The column count and types of
     //! the two DataChunks have to match exactly. Throws an exception if there
     //! is not enough space in the chunk.
-    void Append(DataChunk &other);
+    DUCKDB_API void Append(DataChunk &other);
     //! Destroy all data and columns owned by this DataChunk
-    void Destroy();
+    DUCKDB_API void Destroy();
 
     //! Copies the data from this vector to another vector.
-    void Copy(DataChunk &other, idx_t offset = 0);
+    DUCKDB_API void Copy(DataChunk &other, idx_t offset = 0);
 
     //! Turn all the vectors from the chunk into flat vectors
-    void Normalify();
+    DUCKDB_API void Normalify();
 
-    unique_ptr<VectorData[]> Orrify();
+    DUCKDB_API unique_ptr<VectorData[]> Orrify();
 
-    void Slice(const SelectionVector &sel_vector, idx_t count);
-    void Slice(DataChunk &other, const SelectionVector &sel, idx_t count, idx_t col_offset = 0);
+    DUCKDB_API void Slice(const SelectionVector &sel_vector, idx_t count);
+    DUCKDB_API void Slice(DataChunk &other, const SelectionVector &sel, idx_t count, idx_t col_offset = 0);
 
     //! Resets the DataChunk to its state right after the DataChunk::Initialize
     //! function was called. This sets the count to 0, and resets each member
     //! Vector to point back to the data owned by this DataChunk.
-    void Reset();
+    DUCKDB_API void Reset();
 
     //! Serializes a DataChunk to a stand-alone binary blob
-    void Serialize(Serializer &serializer);
+    DUCKDB_API void Serialize(Serializer &serializer);
     //! Deserializes a blob back into a DataChunk
-    void Deserialize(Deserializer &source);
+    DUCKDB_API void Deserialize(Deserializer &source);
 
     //! Hashes the DataChunk to the target vector
-    void Hash(Vector &result);
+    DUCKDB_API void Hash(Vector &result);
 
     //! Returns a list of types of the vectors of this data chunk
-    vector<LogicalType> GetTypes();
+    DUCKDB_API vector<LogicalType> GetTypes();
 
     //! Converts this DataChunk to a printable string representation
-    string ToString() const;
-    void Print();
+    DUCKDB_API string ToString() const;
+    DUCKDB_API void Print();
 
     DataChunk(const DataChunk &) = delete;
 
     //! Verify that the DataChunk is in a consistent, not corrupt state. DEBUG
     //! FUNCTION ONLY!
-    void Verify();
+    DUCKDB_API void Verify();
 
     //! export data chunk as a arrow struct array that can be imported as arrow record batch
-    void ToArrowArray(ArrowArray *out_array);
+    DUCKDB_API void ToArrowArray(ArrowArray *out_array);
 
 private:
     idx_t count;

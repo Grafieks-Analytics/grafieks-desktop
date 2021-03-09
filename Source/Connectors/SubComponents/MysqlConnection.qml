@@ -507,8 +507,8 @@ Popup {
             id: btn_signin
             textValue: Constants.signInText
             fontPixelSize: Constants.fontCategoryHeader
-                        onClicked: connectToOdbcMySQL()
-//            onClicked: connectToMySQL()
+//                        onClicked: connectToOdbcMySQL()
+            onClicked: connectToMySQL()
 
         }
 

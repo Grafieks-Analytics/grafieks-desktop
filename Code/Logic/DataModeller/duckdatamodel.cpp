@@ -10,6 +10,7 @@ DuckDataModel::DuckDataModel(DuckCon *duckCon, QObject *parent)
     this->duckCon = duckCon;
 }
 
+
 void DuckDataModel::columnData(QString col, QString index)
 {
 
@@ -87,59 +88,6 @@ QStringList DuckDataModel::getDbList()
     return output;
 }
 
-void DuckDataModel::setQuery(QString query)
-{
-    this->query = query;
-    querySplitter.setQueryForClasses(this->query);
-}
-
-QStringList DuckDataModel::getRoles()
-{
-    QStringList output, outputList;
-    output = querySplitter.getSelectParams();
-
-    QRegularExpression selectListRegex(R"(SELECT\s+(.*?)\sFROM\s)", QRegularExpression::CaseInsensitiveOption);
-    QRegularExpressionMatch selectIterator = selectListRegex.match(this->query);
-    QString containsStar = selectIterator.captured(1);
-
-    if(containsStar.contains("*", Qt::CaseInsensitive) == true){
-        QStringList tablesList;
-        tablesList << querySplitter.getMainTable();
-        tablesList << querySplitter.getJoinTables();
-
-        QString tableName;
-        foreach(tableName, tablesList){
-            auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
-            int rows = data->collection.Count();
-            QString fieldName;
-
-            for(int i = 0; i < rows; i++){
-                fieldName =  data->GetValue(1, i).ToString().c_str();
-                outputList.append(fieldName);
-            }
-        }
-
-    } else{
-        outputList = output;
-    }
-
-    return outputList;
-}
-
-QList<QStringList> DuckDataModel::getQueryResult()
-{
-    QList<QStringList> output;
-    auto result = duckCon->con.Query(this->query.toStdString());
-   result->collection.Print();
-
-    return output;
-}
-
-void DuckDataModel::getQueryStats()
-{
-    auto result = duckCon->con.Query("PRAGMA profiling_output");
-    result->Print();
-}
 
 
 void DuckDataModel::receiveCsvFilterQuery(QString query)
