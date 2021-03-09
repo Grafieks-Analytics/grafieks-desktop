@@ -10,6 +10,7 @@ const defaultD3Config = {
     innerRadius: 150,
     defaultTimeParseFormat: "%d-%m-%Y",
     defaultSpace: 30,
+    dateFormat: "%Y",
 };
 const markerShapeConfig = {
     circle: {
@@ -24,4 +25,10 @@ const markerShapeConfig = {
         xPositionAttrName: "x",
         yPositionAttrName: "y",
     },
+};
+
+const constants = {
+    redColor: "#E15759",
+    yellowColor: "#EDC949",
+    greenColor: "#59A14F",
 };
