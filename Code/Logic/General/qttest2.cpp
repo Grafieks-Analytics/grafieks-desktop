@@ -6,48 +6,47 @@
  * \qmlsignal
  * \
  */
-//QtTest2::QtTest2(QObject *parent) :QObject(parent)
-//     db(nullptr), con(db)
-QtTest2::QtTest2(QObject *parent) : QObject(parent)
+
+QtTest2::QtTest2(QObject *parent) : QAbstractTableModel(parent)
 {
-    //    db.LoadExtension<duckdb::ParquetExtension>();
+    contactNames << "a" << "b" << "c";
+    contactPhoneNums << "1"<< "2" << "3";
 }
 
-void QtTest2::x()
+int QtTest2::rowCount(const QModelIndex &) const
 {
-    QString path = "/Users/mac/Desktop/test.csv";
-    QFileInfo fifo = path;
-    QString fileName = fifo.fileName();
-    QString fileNameWithoutExt = fileName.section(".", 0, 0);
-
-    qDebug() << fileName << fileNameWithoutExt << "FILENAME";
+    return 2;
 }
 
-void QtTest2::osTest()
+int QtTest2::columnCount(const QModelIndex &) const
 {
-#ifdef Q_OS_WIN
-    qDebug() << "On Windows";
-    QStringList winODBCDrivers = fetchWindowsODBCDrivers();
-#endif
-
-#ifdef Q_OS_MACOS
-    qDebug() << "On Mac";
-    QStringList macODBCDrivers = fetchMacODBCDrivers();
-#endif
+    return 2;
 }
 
-QStringList QtTest2::fetchWindowsODBCDrivers()
+QVariant QtTest2::data(const QModelIndex &index, int role) const
 {
-    QSettings registry("HKEY_LOCAL_MACHINE\\SOFTWARE\\ODBC\\ODBCINST.INI", QSettings::NativeFormat);
-    QStringList installedDrivers = registry.childGroups();
+    switch (role) {
+    case Qt::DisplayRole:
+        return QString("%1, %2").arg(index.column()).arg(index.row());
+    default:
+        break;
+    }
 
-    return installedDrivers;
+    return QVariant();
 }
 
-QStringList QtTest2::fetchMacODBCDrivers()
+QVariant QtTest2::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    QSettings registry("/Library/ODBC/odbcinst.ini", QSettings::IniFormat);
-    QStringList installedDrivers = registry.childGroups();
+    if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
+       return QString("Name" + QString::number(section));
+    }
+    return QVariant();
 
-    return installedDrivers;
 }
+
+QHash<int, QByteArray> QtTest2::roleNames() const
+{
+    return { {Qt::DisplayRole, "display"} };
+}
+
+

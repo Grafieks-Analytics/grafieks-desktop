@@ -3,25 +3,23 @@
 
 #include <QObject>
 #include <QDebug>
-#include <QtWebChannel/QtWebChannel>
-#include <QSettings>
-#include <QtGlobal>
-
-#include <QFileInfo>
-#include "../../duckdb.hpp"
-#include "../../parquet-extension.hpp"
+#include <QAbstractTableModel>
 
 
-class QtTest2 : public QObject
+class QtTest2 : public QAbstractTableModel
 {
     Q_OBJECT
+    QMap<int, QString> m_map;
+    QHash<int, QByteArray> m_roles;
+
 public:
     explicit QtTest2(QObject *parent = nullptr);
-    Q_INVOKABLE void x();
 
-    // Test QSettings for Windows Registry and Mac property files
-    // to fetch available ODBC drivers
-    Q_INVOKABLE void osTest();
+    int rowCount(const QModelIndex & = QModelIndex()) const override;
+    int columnCount(const QModelIndex & = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    QHash<int, QByteArray> roleNames() const override;
 
 
 public slots:
@@ -29,12 +27,8 @@ public slots:
 signals:
 
 private:
-
-//    duckdb::DuckDB db;
-//    duckdb::Connection con;
-
-    QStringList fetchWindowsODBCDrivers();
-    QStringList fetchMacODBCDrivers();
+    QList<QString> contactNames;
+    QList<QString> contactPhoneNums;
 
 };
 

@@ -24,52 +24,40 @@ void DuckQueryModel::setQuery(QString query)
 int DuckQueryModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return this->resultData.size();
-    //    return 5;
+//    return this->resultData.size();
+        return 2;
 }
 
-bool DuckQueryModel::setData(const QModelIndex &index, const QVariant &value, int role)
-{
+//bool DuckQueryModel::setData(const QModelIndex &index, const QVariant &value, int role)
+//{
 
-    bool somethingChanged = false;
+//    bool somethingChanged = false;
 
-        qDebug() << index << value << role << "HEXA";
+//        qDebug() << index << value << role << "HEXA";
 
-//    this->resultData[index.row()][role] = value;
-    somethingChanged = true;
+////    this->resultData[index.row()][role] = value;
+//    somethingChanged = true;
 
-    if( somethingChanged){
-        emit dataChanged(index,index,QVector<int>() << role);
-        return true;
-    }
-    return false;
-}
+//    if( somethingChanged){
+//        emit dataChanged(index,index,QVector<int>() << role);
+//        return true;
+//    }
+//    return false;
+//}
 
 
 QVariant DuckQueryModel::data(const QModelIndex &index, int role) const
 {
     QVariant value;
 
-    if(role < Qt::UserRole) {
-        return QVariant();
-    }
-    else {
-        int columnIdx = role - Qt::UserRole - 1;
-        value = this->resultData.at(index.row()).at(columnIdx);
-        qDebug() << value << "Cork";
-    }
+    value = 1;
     return value;
 }
 
 QHash<int, QByteArray> DuckQueryModel::roleNames() const
 {
-//    return this->m_roleNames;
-    QHash<int, QByteArray> roles;
-    foreach(auto x, m_roleNames){
-        qDebug() << x << "COCOC";
-//        roles.insert(1, "asdsad");
-    }
-    return {{Qt::DisplayRole, "display"}};
+
+    return {{Qt::UserRole + 1, "display1"}, {Qt::UserRole + 2, "display2"}, {Qt::UserRole + 3, "display3"}};
 }
 
 

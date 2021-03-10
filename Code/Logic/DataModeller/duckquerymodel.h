@@ -22,7 +22,7 @@ public:
 
     Q_INVOKABLE void setQuery(QString query);
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role);
+//    bool setData(const QModelIndex &index, const QVariant &value, int role);
     QVariant data(const QModelIndex &index, int role) const;
     QHash<int, QByteArray> roleNames() const;
 

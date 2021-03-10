@@ -17,7 +17,8 @@ TableView {
     topMargin: columnsHeader1.implicitHeight
     width: parent.width
 //    model: QueryModel
-    model: DuckQueryModel
+//    model: DuckQueryModel
+    model: QtTest2
 //    model: GeneralParamsModel.getDbClassification() === Constants.sqlType? QueryModel: DuckQueryModel
     ScrollBar.horizontal: ScrollBar{}
     ScrollBar.vertical: ScrollBar{}
@@ -122,7 +123,7 @@ TableView {
                 border.width: 1
                 Text {
                     id: name
-                    text: QueryModel.headerData(modelData, Qt.Horizontal)
+                    text: QtTest2.headerData(modelData, Qt.Horizontal)
                     width: parent.width
                     height: parent.height
                     anchors.centerIn: parent
