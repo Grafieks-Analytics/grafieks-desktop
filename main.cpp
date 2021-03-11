@@ -34,6 +34,7 @@
 #include "Code/Logic/DataModeller/filternumericallistmodel.h"
 #include "Code/Logic/DataModeller/proxyfiltermodel.h"
 #include "Code/Logic/DataModeller/duckdatamodel.h"
+#include "Code/Logic/DataModeller/duckquerymodel.h"
 
 #include "Code/Logic/Connectors/duckcon.h"
 #include "Code/Logic/Connectors/odbcdriversmodel.h"
@@ -283,12 +284,13 @@ int main(int argc, char *argv[])
     SchedulerDS *scheduler = new SchedulerDS(&app);
 
     // Duck CRUD Model
-    DuckCon *duckCon            = new DuckCon();
-    TableSchemaModel *tableSchemaModel = new TableSchemaModel(duckCon);
-    TableColumnsModel *tableColumnsModel = new TableColumnsModel(duckCon);
-    ReportsDataModel *reportModel  = new ReportsDataModel(duckCon);
-    DuckReportsDS *duckReportsDS   = new DuckReportsDS(duckCon);
+    DuckCon *duckCon = new DuckCon();
+    TableSchemaModel tableSchemaModel(duckCon);
+    TableColumnsModel tableColumnsModel(duckCon);
+    ReportsDataModel reportModel(duckCon);
+    DuckReportsDS duckReportsDS(duckCon);
     DuckDataModel *duckDataModel = new DuckDataModel(duckCon);
+    DuckQueryModel duckQueryModel(duckCon);
 
     // OBJECT INITIALIZATION ENDS
     /***********************************************************************************************************************/
@@ -355,7 +357,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("BoxDS", box);
     engine.rootContext()->setContextProperty("SheetModel", &sheetModel);
     engine.rootContext()->setContextProperty("SheetDS", sheet);
-    engine.rootContext()->setContextProperty("TableColumnsModel", tableColumnsModel);
+    engine.rootContext()->setContextProperty("TableColumnsModel", &tableColumnsModel);
     engine.rootContext()->setContextProperty("DSParamsModel", &dsParamsModel);
     engine.rootContext()->setContextProperty("PublishDatasourceModel", &publishDatasourceModel);
     engine.rootContext()->setContextProperty("ColumnListModel", &columnListModel);
@@ -369,10 +371,11 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("GeneralParamsModel", &generalParamsModel);
     engine.rootContext()->setContextProperty("ODBCDriversModel", &odbcDriversModel);
     engine.rootContext()->setContextProperty("DuckCon", duckCon);
-    engine.rootContext()->setContextProperty("TableSchemaModel", tableSchemaModel);
-    engine.rootContext()->setContextProperty("ReportModelList", reportModel);
-    engine.rootContext()->setContextProperty("DuckReportsDS", duckReportsDS);
+    engine.rootContext()->setContextProperty("TableSchemaModel", &tableSchemaModel);
+    engine.rootContext()->setContextProperty("ReportModelList", &reportModel);
+    engine.rootContext()->setContextProperty("DuckReportsDS", &duckReportsDS);
     engine.rootContext()->setContextProperty("DuckDataModel", duckDataModel);
+    engine.rootContext()->setContextProperty("DuckQueryModel", &duckQueryModel);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/
