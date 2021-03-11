@@ -2050,7 +2050,7 @@ public:
     //===--------------------------------------------------------------------===//
     // Comparison Operators
     //===--------------------------------------------------------------------===//
-    bool operator==(const Value &rhs) const;
+    DUCKDB_API bool operator==(const Value &rhs) const;
     bool operator!=(const Value &rhs) const;
     bool operator<(const Value &rhs) const;
     bool operator>(const Value &rhs) const;

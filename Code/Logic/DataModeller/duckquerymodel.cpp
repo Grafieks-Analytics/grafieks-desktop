@@ -1,12 +1,13 @@
 #include "duckquerymodel.h"
 
-DuckQueryModel::DuckQueryModel(QObject *parent) : QAbstractListModel(parent)
+DuckQueryModel::DuckQueryModel(QObject *parent) : QAbstractTableModel(parent)
 {
 
 }
 
 DuckQueryModel::DuckQueryModel(DuckCon *duckCon, QObject *parent)
 {
+    Q_UNUSED(parent);
     this->duckCon = duckCon;
 }
 
@@ -17,47 +18,51 @@ void DuckQueryModel::setQuery(QString query)
     querySplitter.setQueryForClasses(this->query);
 
     this->setQueryResult();
-    //    this->setData();
     this->generateRoleNames();
 }
 
 int DuckQueryModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-//    return this->resultData.size();
-        return 2;
+    return this->internalRowCount;
 }
 
-//bool DuckQueryModel::setData(const QModelIndex &index, const QVariant &value, int role)
-//{
+int DuckQueryModel::columnCount(const QModelIndex &) const
+{
+    return this->internalColCount;
+}
 
-//    bool somethingChanged = false;
+QVariant DuckQueryModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
 
-//        qDebug() << index << value << role << "HEXA";
-
-////    this->resultData[index.row()][role] = value;
-//    somethingChanged = true;
-
-//    if( somethingChanged){
-//        emit dataChanged(index,index,QVector<int>() << role);
-//        return true;
-//    }
-//    return false;
-//}
+    if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
+        return QString(this->m_roleNames[section]);
+    }
+    emit headerDataChanged(Qt::Horizontal, 1, this->internalColCount);
+    return QVariant();
+}
 
 
 QVariant DuckQueryModel::data(const QModelIndex &index, int role) const
 {
-    QVariant value;
+    switch (role) {
+    case Qt::DisplayRole:
+        return this->resultData[index.row()][index.column()];
+    default:
+        break;
+    }
 
-    value = 1;
-    return value;
+    return QVariant();
+}
+
+bool DuckQueryModel::setData(const QModelIndex &index, const QVariant &value, int role) const
+{
+    return true;
 }
 
 QHash<int, QByteArray> DuckQueryModel::roleNames() const
 {
-
-    return {{Qt::UserRole + 1, "display1"}, {Qt::UserRole + 2, "display2"}, {Qt::UserRole + 3, "display3"}};
+    return {{Qt::DisplayRole, "display"}};
 }
 
 
@@ -86,66 +91,43 @@ void DuckQueryModel::generateRoleNames()
 
             for(int i = 0; i < rows; i++){
                 fieldName =  data->GetValue(1, i).ToString().c_str();
-                m_roleNames.insert(Qt::UserRole + i + 1, fieldName.toUtf8());
-
+                m_roleNames.insert(i, fieldName.toUtf8());
             }
         }
 
     } else{
         for(int i =0; i < output.length(); i++){
-            m_roleNames.insert(Qt::UserRole + i + 1, output[i].toUtf8());
+            m_roleNames.insert(i, output[i].toUtf8());
         }
     }
 }
 
 void DuckQueryModel::setQueryResult()
 {
-    QList<QVector<duckdb::Value>> output;
+    beginResetModel();
     std::vector<duckdb::Value> stdData;
-    std::vector<duckdb::Value> stdData2;
-    QVector<duckdb::Value> convertedData;
-
-
-
 
     // Tmp
     QStringList list;
 
     auto result = duckCon->con.Query(this->query.toStdString());
-    int colCount = result->collection.ColumnCount();
-    stdData2 = result->collection.GetRow(0);
 
-    for(auto a: stdData2){
-       qDebug()<< a.str_value.c_str();
-    }
-
-    // Set the internalRowCount for the QAbstractListModel rowCount method
+    // Set the internalRowCount & internalColCount for the QAbstractListModel rowCount method
+    this->internalColCount = result->collection.ColumnCount();
     this->internalRowCount = result->collection.Count();
 
-    //    You can iterate through a column value like this
-    //    auto a = result->collection.GetRow(0);
-
-    //    for(auto b: a){
-    //        qDebug() << b.ToString().c_str();
-    //    }
-
-    for(int i = 0; i < colCount; i++){
+    for(int i = 0; i < this->internalRowCount; i++){
 
         stdData = result->collection.GetRow(i);
-
-        // Convert std::Vector to QVector
-        // convertedData =  QVector<duckdb::Value>(stdData.begin(), stdData.end());
 
         for(auto data: stdData){
             list << data.ToString().c_str();
         }
-
-        const int index = this->resultData.size();
-        beginInsertRows(QModelIndex(),index,index);
-        this->resultData.push_back(list);
-        endInsertRows();
+        this->resultData.append(list);
         list.clear();
+
     }
+    endResetModel();
 }
 
 void DuckQueryModel::getQueryStats()
