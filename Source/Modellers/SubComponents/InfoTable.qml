@@ -158,9 +158,6 @@ Item{
 
                 } else{
                     DuckQueryModel.setQuery(DSParamsModel.tmpSql)
-                    //        DuckDataModel.getRoles()
-//                    var a = DuckQueryModel.getQueryResult()
-//                    console.log(a, "DUCK RES")
 
                     testQueryResult.visible = true
                     dataPreviewResult.visible = false

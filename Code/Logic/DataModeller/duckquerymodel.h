@@ -1,7 +1,7 @@
 #ifndef DUCKQUERYMODEL_H
 #define DUCKQUERYMODEL_H
 
-#include<QAbstractListModel>
+#include<QAbstractTableModel>
 #include <QObject>
 
 #include "../../duckdb.hpp"
@@ -12,7 +12,7 @@
 #include "../General/datatype.h"
 #include "../General/querysplitter.h"
 
-class DuckQueryModel : public QAbstractListModel
+class DuckQueryModel : public QAbstractTableModel
 {
     Q_OBJECT
 
@@ -21,10 +21,12 @@ public:
     explicit DuckQueryModel(DuckCon *duckCon, QObject *parent = nullptr);
 
     Q_INVOKABLE void setQuery(QString query);
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-//    bool setData(const QModelIndex &index, const QVariant &value, int role);
-    QVariant data(const QModelIndex &index, int role) const;
-    QHash<int, QByteArray> roleNames() const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex & = QModelIndex()) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role) const;
+    QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void getQueryStats();
 
@@ -35,12 +37,14 @@ private:
     QHash<int, QByteArray> m_roleNames;
     QList<QStringList> resultData;
     int internalRowCount;
+    int internalColCount;
 
     DuckCon *duckCon;
     QString query;
     QuerySplitter querySplitter;
 
 signals:
+    void headerDataChanged(Qt::Orientation orientation, int first, int last) const;
 
 };
 
