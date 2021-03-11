@@ -55,10 +55,6 @@ QVariant DuckQueryModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-bool DuckQueryModel::setData(const QModelIndex &index, const QVariant &value, int role) const
-{
-    return true;
-}
 
 QHash<int, QByteArray> DuckQueryModel::roleNames() const
 {
