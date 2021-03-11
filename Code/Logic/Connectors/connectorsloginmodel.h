@@ -67,6 +67,7 @@ signals:
     void csvLoginStatus(QVariantMap status);
     void accessLoginStatus(QVariantMap status);
     void connectedDBChanged(QString connectedDB);
+    void connectedDBType(QString conType);
     void sendDbName();
 };
 
