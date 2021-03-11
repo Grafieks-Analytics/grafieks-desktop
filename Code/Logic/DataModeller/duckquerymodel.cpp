@@ -1,0 +1,137 @@
+#include "duckquerymodel.h"
+
+DuckQueryModel::DuckQueryModel(QObject *parent) : QAbstractTableModel(parent)
+{
+
+}
+
+DuckQueryModel::DuckQueryModel(DuckCon *duckCon, QObject *parent)
+{
+    Q_UNUSED(parent);
+    this->duckCon = duckCon;
+}
+
+
+void DuckQueryModel::setQuery(QString query)
+{
+    this->query = query;
+    querySplitter.setQueryForClasses(this->query);
+
+    this->setQueryResult();
+    this->generateRoleNames();
+}
+
+int DuckQueryModel::rowCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent);
+    return this->internalRowCount;
+}
+
+int DuckQueryModel::columnCount(const QModelIndex &) const
+{
+    return this->internalColCount;
+}
+
+QVariant DuckQueryModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+
+    if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
+        return QString(this->m_roleNames[section]);
+    }
+    emit headerDataChanged(Qt::Horizontal, 1, this->internalColCount);
+    return QVariant();
+}
+
+
+QVariant DuckQueryModel::data(const QModelIndex &index, int role) const
+{
+    switch (role) {
+    case Qt::DisplayRole:
+        return this->resultData[index.row()][index.column()];
+    default:
+        break;
+    }
+
+    return QVariant();
+}
+
+bool DuckQueryModel::setData(const QModelIndex &index, const QVariant &value, int role) const
+{
+    return true;
+}
+
+QHash<int, QByteArray> DuckQueryModel::roleNames() const
+{
+    return {{Qt::DisplayRole, "display"}};
+}
+
+
+void DuckQueryModel::generateRoleNames()
+{
+    QStringList output;
+    m_roleNames.clear();
+
+
+    output = querySplitter.getSelectParams();
+
+    QRegularExpression selectListRegex(R"(SELECT\s+(.*?)\sFROM\s)", QRegularExpression::CaseInsensitiveOption);
+    QRegularExpressionMatch selectIterator = selectListRegex.match(this->query);
+    QString containsStar = selectIterator.captured(1);
+
+    if(containsStar.contains("*", Qt::CaseInsensitive) == true){
+        QStringList tablesList;
+        tablesList << querySplitter.getMainTable();
+        tablesList << querySplitter.getJoinTables();
+
+        QString tableName;
+        foreach(tableName, tablesList){
+            auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+            int rows = data->collection.Count();
+            QString fieldName;
+
+            for(int i = 0; i < rows; i++){
+                fieldName =  data->GetValue(1, i).ToString().c_str();
+                m_roleNames.insert(i, fieldName.toUtf8());
+            }
+        }
+
+    } else{
+        for(int i =0; i < output.length(); i++){
+            m_roleNames.insert(i, output[i].toUtf8());
+        }
+    }
+}
+
+void DuckQueryModel::setQueryResult()
+{
+    beginResetModel();
+    std::vector<duckdb::Value> stdData;
+
+    // Tmp
+    QStringList list;
+
+    auto result = duckCon->con.Query(this->query.toStdString());
+
+    // Set the internalRowCount & internalColCount for the QAbstractListModel rowCount method
+    this->internalColCount = result->collection.ColumnCount();
+    this->internalRowCount = result->collection.Count();
+
+    for(int i = 0; i < this->internalRowCount; i++){
+
+        stdData = result->collection.GetRow(i);
+
+        for(auto data: stdData){
+            list << data.ToString().c_str();
+        }
+        this->resultData.append(list);
+        list.clear();
+
+    }
+    endResetModel();
+}
+
+void DuckQueryModel::getQueryStats()
+{
+    auto result = duckCon->con.Query("PRAGMA profiling_output");
+    result->Print();
+}

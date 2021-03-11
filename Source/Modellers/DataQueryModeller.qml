@@ -70,6 +70,7 @@ Page {
         function onSqliteLoginStatus(status){
             if(status.status === true){
                 // Call functions
+                console.log("SQLITE LOGGED IN")
                 TableListModel.callQuery()
                 tableslist.model = TableListModel
             }
@@ -243,17 +244,8 @@ Page {
     }
 
     function openDataFilters(){
-        console.log("OPEN DATA FILTERS")
         TableSchemaModel.showSchema(DSParamsModel.tmpSql)
         datafilters.visible = true
-
-        DuckDataModel.setQuery(DSParamsModel.tmpSql)
-//        console.log("ROLES")
-//        DuckDataModel.getRoles()
-        console.log("RESULT")
-        DuckDataModel.getQueryResult()
-//        console.log("STATS")
-//        DuckDataModel.getQueryStats()
     }
 
     function onLiveSelected(){
@@ -451,6 +443,7 @@ Page {
 
                 onClicked: {
                     TableColumnsModel.getColumnsForTable(tableName, "TableColumns")
+                    console.log("Table name", tableName)
 
                     if(tablecolumnListView.visible === true){
                         toggleTableIcon.source ="/Images/icons/Right_20.png"
