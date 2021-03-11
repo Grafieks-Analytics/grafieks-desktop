@@ -22,7 +22,7 @@ TableView {
     boundsBehavior : Flickable.StopAtBounds
 
 
-    property string globalConType: ""
+    property string globalConType: Constants.sqlType
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
