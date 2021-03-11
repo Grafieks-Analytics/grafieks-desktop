@@ -83,8 +83,28 @@ Page {
                                    duckTableList.append({tableName: item})
                                })
                 tableslist.model = duckTableList
+            }
+        }
 
+        function onCsvLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                let tables =  DuckDataModel.getTableList()
+                tables.forEach((item)=>{
+                                   duckTableList.append({tableName: item})
+                               })
+                tableslist.model = duckTableList
+            }
+        }
 
+        function onJsonLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                let tables =  DuckDataModel.getTableList()
+                tables.forEach((item)=>{
+                                   duckTableList.append({tableName: item})
+                               })
+                tableslist.model = duckTableList
             }
         }
 
