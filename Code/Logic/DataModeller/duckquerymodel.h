@@ -25,7 +25,6 @@ public:
     int columnCount(const QModelIndex & = QModelIndex()) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
     QVariant data(const QModelIndex &index, int role) const override;
-    bool setData(const QModelIndex &index, const QVariant &value, int role) const;
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void getQueryStats();

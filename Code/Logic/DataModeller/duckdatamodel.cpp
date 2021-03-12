@@ -11,18 +11,18 @@ DuckDataModel::DuckDataModel(DuckCon *duckCon, QObject *parent)
 }
 
 
-void DuckDataModel::columnData(QString col, QString index)
+void DuckDataModel::columnData(QString col, QString tableName)
 {
 
+    qDebug() << col << tableName << "DUCK CALL";
     QString db = Statics::currentDbName;
 
-    auto data = duckCon->con.Query("SELECT * FROM " + db.toStdString());
+    auto data = duckCon->con.Query("SELECT " + col.toStdString() + " FROM " + tableName.toStdString());
     int rows = data->collection.Count();
-    int colidx = index.toInt();
 
     for(int i = 0; i < rows; i++){
 
-        duckdb::Value colData = data->GetValue(colidx, i);
+        duckdb::Value colData = data->GetValue(0, i);
         QString newColData = QString::fromStdString(colData.ToString());
 
         this->colData.append(newColData);
@@ -38,6 +38,7 @@ QStringList DuckDataModel::getColumnList(QString tableName, QString moduleName)
     QString fieldName;
     QString fieldType;
     QStringList outputDataList;
+
 
     auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
     int rows = data->collection.Count();
@@ -65,12 +66,27 @@ QStringList DuckDataModel::getTableList()
 {
 
     QStringList output;
-    auto data = duckCon->con.Query("PRAGMA show_tables");
-    int rows = data->collection.Count();
 
-    for(int i = 0; i < rows; i++){
-        output << data->GetValue(0, i).ToString().c_str();
+    switch (Statics::currentDbIntType) {
+
+    case Constants::excelIntType:{
+        auto data = duckCon->con.Query("PRAGMA show_tables");
+        int rows = data->collection.Count();
+
+        for(int i = 0; i < rows; i++){
+            output << data->GetValue(0, i).ToString().c_str();
+        }
+        break;
     }
+
+    case Constants::jsonIntType:
+    case Constants::csvIntType:{
+        output << Statics::currentDbName;
+        break;
+
+    }
+    }
+
 
     return output;
 }

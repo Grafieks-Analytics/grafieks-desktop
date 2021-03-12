@@ -29,6 +29,7 @@ void ConnectorsLoginModel::mysqlLogin(QString host, QString db, int port, QStrin
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit mysqlLoginStatus(response);
 }
 
@@ -54,6 +55,7 @@ void ConnectorsLoginModel::sqliteLogin(QString filename)
 
     this->setConnectedDB(sqliteFileName);
 
+    emit connectedDBType(Constants::sqlType);
     emit sqliteLoginStatus(response);
 }
 
@@ -70,6 +72,7 @@ void ConnectorsLoginModel::mysqlOdbcLogin(QString driver, QString host, QString 
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit mysqlLoginStatus(response);
 }
 
@@ -87,6 +90,7 @@ void ConnectorsLoginModel::mssqlOdbcLogin(QString driver, QString host, QString 
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit mssqlLoginStatus(response);
 }
 
@@ -102,6 +106,7 @@ void ConnectorsLoginModel::postgresOdbcLogin(QString driver, QString host, QStri
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit postgresLoginStatus(response);
 
 }
@@ -118,6 +123,7 @@ void ConnectorsLoginModel::redshiftOdbcLogin(QString driver, QString host, QStri
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit redshiftLoginStatus(response);
 }
 
@@ -134,6 +140,7 @@ void ConnectorsLoginModel::oracleOdbcLogin(QString driver, QString host, QString
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit postgresLoginStatus(response);
 }
 
@@ -150,6 +157,7 @@ void ConnectorsLoginModel::mongoOdbcLogin(QString driver, QString host, QString 
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit mongoLoginStatus(response);
 
 }
@@ -167,6 +175,7 @@ void ConnectorsLoginModel::impalaOdbcLogin(QString driver, QString host, QString
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit impalaLoginStatus(response);
 }
 
@@ -183,6 +192,7 @@ void ConnectorsLoginModel::hiveOdbcLogin(QString driver, QString host, QString d
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit hiveLoginStatus(response);
 }
 
@@ -199,6 +209,7 @@ void ConnectorsLoginModel::snowflakeOdbcLogin(QString driver, QString host, QStr
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit snowflakeLoginStatus(response);
 }
 
@@ -215,6 +226,7 @@ void ConnectorsLoginModel::teradataOdbcLogin(QString driver, QString host, QStri
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit teradataLoginStatus(response);
 }
 
@@ -230,6 +242,7 @@ void ConnectorsLoginModel::accessOdbcLogin(QString driver, QString host, QString
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit accessLoginStatus(response);
 }
 
@@ -246,6 +259,7 @@ void ConnectorsLoginModel::excelOdbcLogin(QString driver, QString filename)
 
     this->setConnectedDB(filename);
 
+    emit connectedDBType(Constants::sqlType);
     emit excelLoginStatus(response);
 }
 
@@ -262,6 +276,7 @@ void ConnectorsLoginModel::csvLogin(QString filename, QString separator)
 
     this->setConnectedDB(filename);
 
+    emit connectedDBType(Constants::duckType);
     emit sendDbName();
     emit csvLoginStatus(response);
 }
@@ -277,6 +292,7 @@ void ConnectorsLoginModel::jsonLogin(QString filename)
 
     this->setConnectedDB(filename);
 
+    emit connectedDBType(Constants::duckType);
     emit sendDbName();
     emit jsonLoginStatus(response);
 }
@@ -293,6 +309,7 @@ void ConnectorsLoginModel::excelLogin(QString filename)
 
     this->setConnectedDB(filename);
 
+    emit connectedDBType(Constants::duckType);
     emit sendDbName();
     emit excelLoginStatus(response);
 }
