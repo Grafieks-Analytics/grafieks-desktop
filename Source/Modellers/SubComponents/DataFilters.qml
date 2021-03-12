@@ -34,6 +34,8 @@ Popup {
     property string tabBarOpen: Constants.categoricalTab
     property int mapKey : 0
 
+    property string globalConType: Constants.sqlType
+
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -195,6 +197,14 @@ Popup {
         }
     }
 
+    Connections{
+        target: ConnectorsLoginModel
+
+        function onConnectedDBType(conType){
+            globalConType = conType
+        }
+    }
+
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -216,12 +226,12 @@ Popup {
 
 
     function onAddMenuItemTriggered(colName,tableName){
-        ColumnListModel.columnQuery(colName, tableName)
-//        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
-//            ColumnListModel.columnQuery(colName, tableName)
-//        } else{
-//            DuckDataModel.columnData(colName, tableName)
-//        }
+//        ColumnListModel.columnQuery(colName, tableName)
+        if(globalConType === Constants.sqlType){
+            ColumnListModel.columnQuery(colName, tableName)
+        } else{
+            DuckDataModel.columnData(colName, tableName)
+        }
         DSParamsModel.setColName(colName)
         DSParamsModel.setTableName(tableName)
 
@@ -621,6 +631,7 @@ Popup {
         valueRole: "tableName"
 
         onActivated: {
+            console.log(currentText, currentValue, "TRIGGER")
             onAddMenuItemTriggered(currentText, currentValue)
             onAddMenuItemClicked()
 

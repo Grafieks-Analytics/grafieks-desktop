@@ -887,82 +887,86 @@ void TableSchemaModel::showSchema(QString query)
 
     case Constants::csvIntType:{
 
-        //        QString db = Statics::currentDbName;
-        //        std::string csvFile = db.toStdString();
-        //        std::string csvdb = "'" + csvFile + "'";
-        //this->duckCon->con.Query("CREATE TABLE dataType AS SELECT * FROM read_csv_auto(" + csvdb + ")");
+        querySplitter.setQueryForClasses(query);
+        QStringList tablesList = querySplitter.getJoinTables();
+        QString mainTable = querySplitter.getMainTable();
+        tablesList.push_back(mainTable);
 
-        QString db = Statics::currentDbName;
 
-        auto result = this->duckCon->con.Query("DESCRIBE " + db.toStdString());
-        int rows = result->collection.Count();
-        int i = 0;
-        while(i < rows){
 
-            duckdb::Value fieldName = result->GetValue(0, i);
-            duckdb::Value fieldType = result->GetValue(1, i);
+        for(QString tableName: tablesList){
+            auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+            int rows = data->collection.Count();
+            data->Print();
 
-            // string to qstring conversion
-            QString newFieldName = QString::fromStdString(fieldName.ToString());
-            QString newFilterType = QString::fromStdString(fieldType.ToString());
-            QString filterDataType = dataType.dataType(QString::fromStdString(fieldType.ToString()));
+            for(int i = 0; i < rows; i++){
+                QString fieldName =  data->GetValue(1, i).ToString().c_str();
+                QString fieldType =  data->GetValue(2, i).ToString().c_str();
 
-            // qDebug() << i << "  " << newFieldName << " Col ID";
+                // Get filter data type for QML
+                QString filterDataType = dataType.dataType(fieldType);
+                outputDataList << tableName << fieldName << fieldType << filterDataType;
 
-            QString index = QString::number(i);
-            outputDataList << index << newFieldName << newFilterType << filterDataType;
 
-            if(filterDataType == Constants::categoricalType){
-                allCategorical.append(outputDataList);
-            } else if(filterDataType == Constants::numericalType){
-                allNumerical.append(outputDataList);
-            } else if(filterDataType == Constants::dateType){
-                allDates.append(outputDataList);
-            } else{
-                allOthers.append(outputDataList);
+                if(filterDataType == Constants::categoricalType){
+                    allCategorical.append(outputDataList);
+                } else if(filterDataType == Constants::numericalType){
+                    allNumerical.append(outputDataList);
+                } else if(filterDataType == Constants::dateType){
+                    allDates.append(outputDataList);
+                } else{
+                    allOthers.append(outputDataList);
+                }
+
+                // Append all data type to allList as well
+                allList.append(outputDataList);
+
+                outputDataList.clear();
             }
-
-            // Append all data type to allList as well
-            allList.append(outputDataList);
-
-            // Clear Stringlist for future
-            outputDataList.clear();
-
-            i++;
         }
 
-        //        result->Print();
+        break;
+    }
 
-        //        QFile file(Statics::currentDbName);
-        //        file.open(QIODevice::ReadOnly);
+    case Constants::jsonIntType:{
 
-        //        QTextStream in(&file);
+        querySplitter.setQueryForClasses(query);
+        QStringList tablesList = querySplitter.getJoinTables();
+        QString mainTable = querySplitter.getMainTable();
+        tablesList.push_back(mainTable);
 
-        //        char separator = Statics::separator[0].toLatin1();
-        //        QStringList headers = in.readLine().split(separator);
-        //        QStringList dataRow = in.readLine().split(separator);
 
-        //        for(int i = 0; i < dataRow.size(); i++){
 
-        //            QString dataType = QString::fromStdString(dataRow[i].toStdString());
-        //            dataType = dataType.trimmed();
+        for(QString tableName: tablesList){
+            auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+            int rows = data->collection.Count();
+            data->Print();
 
-        //            if(dataType.toInt() || dataType.toFloat()){
-        //                QString columnName = headers[i].trimmed();
-        //                QString index = QString::number(i);
-        //                outputDataList << index << columnName;
-        //                allNumerical.append(outputDataList);
+            for(int i = 0; i < rows; i++){
+                QString fieldName =  data->GetValue(1, i).ToString().c_str();
+                QString fieldType =  data->GetValue(2, i).ToString().c_str();
 
-        //            }
-        //            else{
+                // Get filter data type for QML
+                QString filterDataType = dataType.dataType(fieldType);
+                outputDataList << tableName << fieldName << fieldType << filterDataType;
 
-        //                QString columnName = headers[i].trimmed();
-        //                QString index = QString::number(i);
-        //                outputDataList << index << columnName;
-        //                allCategorical.append(outputDataList);
-        //            }
-        //            outputDataList.clear();
-        //        }
+
+                if(filterDataType == Constants::categoricalType){
+                    allCategorical.append(outputDataList);
+                } else if(filterDataType == Constants::numericalType){
+                    allNumerical.append(outputDataList);
+                } else if(filterDataType == Constants::dateType){
+                    allDates.append(outputDataList);
+                } else{
+                    allOthers.append(outputDataList);
+                }
+
+                // Append all data type to allList as well
+                allList.append(outputDataList);
+
+                outputDataList.clear();
+            }
+        }
 
         break;
     }
