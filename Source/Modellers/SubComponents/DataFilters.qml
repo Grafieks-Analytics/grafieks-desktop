@@ -631,6 +631,7 @@ Popup {
         valueRole: "tableName"
 
         onActivated: {
+            console.log(currentText, currentValue, "TRIGGER")
             onAddMenuItemTriggered(currentText, currentValue)
             onAddMenuItemClicked()
 
