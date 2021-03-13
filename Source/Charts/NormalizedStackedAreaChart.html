@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Load d3.js -->
+    <!-- Load d3.js -->
+    <script src="./Data/d3DefaultConfig.js"></script>
+    <script src="./Data/utils.js"></script>
+    <script src="./Data/d3.v3.min.js"></script>
+    <!-- <script src="./Data/d3-scale-chromatic.v1.min.js"></script> -->
+    <link rel="stylesheet" href="Data/general.css" />
+
+    <title>100% Stacked Bar</title>
+
+    <style>
+        .axis path,
+        .axis line {
+            fill: none;
+            shape-rendering: crispEdges;
+        }
+
+        .browser text {
+            text-anchor: end;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div id="my_dataviz"></div>
+    <div id="tooltip"></div>
+    <script>
+        // Color Pallets - Set 3
+        const d3colors = [
+            "#8DD3C9",
+            "#FFFFAA",
+            "#B8BED6",
+            "#F98171",
+            "#78B5D1",
+            "#FFB15B",
+            "#B4E061",
+            "#FDCDE5",
+            "#DAD9D4",
+            "#BD7FBE",
+            "#CDE9C1",
+            "#FFEA77",
+        ];
+
+        var data = [
+            [
+                ["11-Oct-13", "IE", "41.62"],
+                ["11-Oct-13", "Chrome", "22.36"],
+                ["11-Oct-13", "Firefox", "25.58"],
+                ["11-Oct-13", "Safari", "9.13"],
+                ["11-Oct-13", "Opera", "1.22"],
+                ["11-Oct-14", "IE", "41.95"],
+                ["11-Oct-14", "Chrome", "22.15"],
+                ["11-Oct-14", "Firefox", "25.78"],
+                ["11-Oct-14", "Safari", "8.79"],
+                ["11-Oct-14", "Opera", "1.25"],
+                ["11-Oct-15", "IE", "37.64"],
+                ["11-Oct-15", "Chrome", "24.77"],
+                ["11-Oct-15", "Firefox", "25.96"],
+                ["11-Oct-15", "Safari", "10.16"],
+                ["11-Oct-15", "Opera", "1.39"],
+                ["11-Oct-16", "IE", "37.27"],
+                ["11-Oct-16", "Chrome", "24.65"],
+                ["11-Oct-16", "Firefox", "25.98"],
+                ["11-Oct-16", "Safari", "10.59"],
+                ["11-Oct-16", "Opera", "1.44"],
+                ["11-Oct-17", "IE", "42.74"],
+                ["11-Oct-17", "Chrome", "21.87"],
+                ["11-Oct-17", "Firefox", "25.01"],
+                ["11-Oct-17", "Safari", "9.12"],
+                ["11-Oct-17", "Opera", "1.17"],
+                ["11-Oct-18", "IE", "42.14"],
+                ["11-Oct-18", "Chrome", "22.22"],
+                ["11-Oct-18", "Firefox", "25.26"],
+                ["11-Oct-18", "Safari", "9.1"],
+                ["11-Oct-18", "Opera", "1.19"],
+            ],
+            ["Year", "Browser", "Value"],
+        ];
+
+        function drawChart(data, plottingConfiguration = {}) {
+            window.data = data;
+            var dataValues = data[0];
+
+            let {
+                d3colorPalette,
+                paddingInner,
+                markerShape,
+                curveType,
+                timeParseFormat,
+                dateFormat,
+            } = plottingConfiguration;
+            if (!d3colorPalette) {
+                d3colorPalette = defaultD3Config.d3ColorPalette;
+            }
+            d3Colors = d3[d3colorPalette];
+
+            if (!paddingInner) {
+                paddingInner = defaultD3Config.defaultPaddingInner;
+            }
+
+            if (!timeParseFormat) {
+                timeParseFormat = defaultD3Config.defaultTimeParseFormat;
+            }
+
+            if (!dateFormat) {
+                dateFormat = defaultD3Config.dateFormat;
+            }
+
+            d3.selectAll("#my_dataviz").html("");
+            let margin = { top: 30, right: 30, bottom: 70, left: 60 },
+                width = window.innerWidth - margin.left - margin.right - 20,
+                height = window.innerHeight - margin.top - margin.bottom - 20;
+
+            yaxisTicks = height / 100;
+            var parseDate = d3.time.format("%y-%b-%d").parse,
+                formatPercent = d3.format(".0%");
+
+            var x = d3.time.scale().range([0, width]);
+
+            if (!dateFormat) {
+                dateFormat = defaultD3Config.dateFormat;
+            }
+
+            var y = d3.scale.linear().range([height, 0]);
+
+            var color = d3.scale.category20();
+
+            var xAxis = d3.svg
+                .axis()
+                .scale(x)
+                .orient("bottom")
+                .outerTickSize(0);
+
+            var yAxis = d3.svg
+                .axis()
+                .scale(y)
+                .orient("left")
+                .tickFormat(formatPercent)
+                .outerTickSize(0);
+
+            var area = d3.svg
+                .area()
+                .x(function (d) {
+                    return x(d.key);
+                })
+                .y0(function (d) {
+                    return y(d.y0);
+                })
+                .y1(function (d) {
+                    return y(d.y0 + d.y);
+                });
+
+            var stack = d3.layout.stack().values(function (d) {
+                return d.values;
+            });
+
+            var svg = d3
+                .select("#my_dataviz")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr(
+                    "transform",
+                    "translate(" + margin.left + "," + margin.top + ")"
+                );
+
+            var [data, labels] = data;
+
+            var dataValues = {};
+
+            var domainValues = [];
+
+            data.forEach(function (d, i) {
+                console.log(d, i);
+                var xAxisValue = d[0];
+                var name = d[1];
+                if (!domainValues[xAxisValue]) {
+                    domainValues[xAxisValue] = {};
+                }
+                if (!domainValues[xAxisValue][name]) {
+                    domainValues[xAxisValue][name] = 0;
+                }
+                domainValues[xAxisValue][name] += +d[2];
+            });
+
+            var data = [];
+            for (var key in domainValues) {
+                console.log(key);
+                console.log(domainValues[key]);
+                var obj = {
+                    key,
+                    ...domainValues[key],
+                };
+                data.push(obj);
+            }
+
+            console.log(data);
+            color.domain(
+                d3.keys(data[0]).filter(function (key) {
+                    return key !== "key";
+                })
+            );
+
+            data.forEach(function (d) {
+                if (isDateFormat(d.key)) {
+                    d.key = parseDate(d.key);
+                }
+            });
+
+            var browsers = stack(
+                color.domain().map(function (name) {
+                    // console.log(name);
+                    return {
+                        name: name,
+                        values: data.map(function (d) {
+                            return { key: d.key, y: d[name] / 100 };
+                        }),
+                    };
+                })
+            );
+
+            x.domain(
+                d3.extent(data, function (d) {
+                    return d.key;
+                })
+            );
+
+            var browser = svg
+                .selectAll(".browser")
+                .data(browsers)
+                .enter()
+                .append("g")
+                .attr("class", "browser");
+
+            browser
+                .append("path")
+
+                .attr("d", function (d) {
+                    var ar = area(d.values);
+                    return ar;
+                })
+                .style("fill", function (d) {
+                    return color(d.name);
+                });
+
+            browser
+                .on("mousemove", function (d, i) {
+                    var x_pos = d3.mouse(this)[0] + margin.left;
+                    var y_pos = d3.mouse(this)[1] - margin.bottom;
+
+                    d3.select("#tooltip")
+                        .style("left", x_pos + "px")
+                        .style("top", y_pos + "px")
+                        .style("display", "block")
+                        .html(d.name);
+
+                    d3.selectAll(".browser").style("opacity", 0.3);
+                    d3.select(this).style("opacity", 1);
+                })
+                .on("mouseout", function (d, i) {
+                    d3.select("#tooltip").style("display", "none");
+                    d3.selectAll(".browser").style("opacity", 1);
+                });
+
+            browser
+                .append("text")
+                .datum(function (d) {
+                    return {
+                        name: d.name,
+                        value: d.values[d.values.length - 1],
+                    };
+                })
+                .attr("transform", function (d) {
+                    return (
+                        "translate(" +
+                        x(d.value.key) +
+                        "," +
+                        y(d.value.y0 + d.value.y / 2) +
+                        ")"
+                    );
+                })
+                .attr("x", -6)
+                .attr("dy", ".35em")
+                .text(function (d) {
+                    return d.name;
+                });
+
+            svg.append("g")
+                .attr("class", "axis x-axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis)
+                .style("font-size", "12px");
+
+            svg.append("g")
+                .attr("class", "y axis y-axis")
+                .call(yAxis)
+                .style("font-size", "12px");
+        }
+
+        function setFontFamily(className, fontFamily) {
+            d3.selectAll(className).attr("font-family", fontFamily);
+        }
+
+        drawChart(data);
+    </script>
+</body>
