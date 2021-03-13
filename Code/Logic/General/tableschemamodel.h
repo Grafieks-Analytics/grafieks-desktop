@@ -16,8 +16,9 @@
 #include "../../Connectors/allconnectors.h"
 #include "../../statics.h"
 #include "../../constants.h"
-#include "../../duckdb.hpp"
-#include "../Connectors/duckcrud.h"
+
+#include "datatype.h"
+#include "../Connectors/duckcon.h"
 
 /*!
  * \class TableSchemaModel
@@ -29,11 +30,11 @@ class TableSchemaModel : public QObject
     Q_OBJECT
     DataType dataType;
     QuerySplitter querySplitter;
-    DuckCRUD *duckCRUD;
+    DuckCon *duckCon;
 
 public:
     explicit TableSchemaModel(QObject *parent = nullptr);
-    explicit TableSchemaModel(DuckCRUD *duckCRUD, QObject *parent = nullptr);
+    explicit TableSchemaModel(DuckCon *duckCon, QObject *parent = nullptr);
     Q_INVOKABLE void showSchema(QString query = "");
 
 signals:

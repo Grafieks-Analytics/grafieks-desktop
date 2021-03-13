@@ -37,6 +37,10 @@ QtObject {
     property int tooltipShowTime: 1000
     property int tooltipHideTime: 5000
 
+    // DB Classification
+    property string duckType: "DUCK"
+    property string sqlType: "SQL"
+
     // ODBC Driver matching names
     property string mysqlOdbc: qsTr("mysql")
     property string postgresOdbc: qsTr("postgres")

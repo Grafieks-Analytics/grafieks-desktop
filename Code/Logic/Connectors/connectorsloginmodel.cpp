@@ -25,9 +25,11 @@ void ConnectorsLoginModel::mysqlLogin(QString host, QString db, int port, QStrin
     Statics::currentDbName = db;
     Statics::currentDbIntType = Constants::mysqlIntType;
     Statics::currentDbStrType = Constants::mysqlStrType;
+    Statics::currentDbClassification = Constants::sqlType;
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit mysqlLoginStatus(response);
 }
 
@@ -49,9 +51,11 @@ void ConnectorsLoginModel::sqliteLogin(QString filename)
     Statics::currentDbName = sqliteFileName;
     Statics::currentDbIntType = Constants::sqliteIntType;
     Statics::currentDbStrType = Constants::sqliteStrType;
+    Statics::currentDbClassification = Constants::sqlType;
 
     this->setConnectedDB(sqliteFileName);
 
+    emit connectedDBType(Constants::sqlType);
     emit sqliteLoginStatus(response);
 }
 
@@ -64,9 +68,11 @@ void ConnectorsLoginModel::mysqlOdbcLogin(QString driver, QString host, QString 
     Statics::currentDbName = db;
     Statics::currentDbIntType = Constants::mysqlOdbcIntType;
     Statics::currentDbStrType = Constants::mysqlOdbcStrType;
+    Statics::currentDbClassification = Constants::sqlType;
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit mysqlLoginStatus(response);
 }
 
@@ -80,9 +86,11 @@ void ConnectorsLoginModel::mssqlOdbcLogin(QString driver, QString host, QString 
     Statics::currentDbName = db;
     Statics::currentDbIntType = Constants::mssqlIntType;
     Statics::currentDbStrType = Constants::mssqlOdbcStrType;
+    Statics::currentDbClassification = Constants::sqlType;
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit mssqlLoginStatus(response);
 }
 
@@ -94,9 +102,11 @@ void ConnectorsLoginModel::postgresOdbcLogin(QString driver, QString host, QStri
     Statics::currentDbName = db;
     Statics::currentDbIntType = Constants::postgresIntType;
     Statics::currentDbStrType = Constants::postgresOdbcStrType;
+    Statics::currentDbClassification = Constants::sqlType;
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit postgresLoginStatus(response);
 
 }
@@ -109,9 +119,11 @@ void ConnectorsLoginModel::redshiftOdbcLogin(QString driver, QString host, QStri
     Statics::currentDbName = db;
     Statics::currentDbIntType = Constants::redshiftIntType;
     Statics::currentDbStrType = Constants::redshiftOdbcStrType;
+    Statics::currentDbClassification = Constants::sqlType;
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit redshiftLoginStatus(response);
 }
 
@@ -124,9 +136,11 @@ void ConnectorsLoginModel::oracleOdbcLogin(QString driver, QString host, QString
     Statics::currentDbName = db;
     Statics::currentDbIntType = Constants::oracleIntType;
     Statics::currentDbStrType = Constants::oracleOdbcStrType;
+    Statics::currentDbClassification = Constants::sqlType;
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit postgresLoginStatus(response);
 }
 
@@ -139,9 +153,11 @@ void ConnectorsLoginModel::mongoOdbcLogin(QString driver, QString host, QString 
     Statics::currentDbName = db;
     Statics::currentDbIntType = Constants::mongoIntType;
     Statics::currentDbStrType = Constants::mongoOdbcStrType;
+    Statics::currentDbClassification = Constants::sqlType;
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit mongoLoginStatus(response);
 
 }
@@ -155,9 +171,11 @@ void ConnectorsLoginModel::impalaOdbcLogin(QString driver, QString host, QString
     Statics::currentDbName = db;
     Statics::currentDbIntType = Constants::impalaIntType;
     Statics::currentDbStrType = Constants::impalaOdbcStrType;
+    Statics::currentDbClassification = Constants::sqlType;
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit impalaLoginStatus(response);
 }
 
@@ -170,9 +188,11 @@ void ConnectorsLoginModel::hiveOdbcLogin(QString driver, QString host, QString d
     Statics::currentDbName = db;
     Statics::currentDbIntType = Constants::hiveIntType;
     Statics::currentDbStrType = Constants::hiveOdbcStrType;
+    Statics::currentDbClassification = Constants::sqlType;
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit hiveLoginStatus(response);
 }
 
@@ -185,9 +205,11 @@ void ConnectorsLoginModel::snowflakeOdbcLogin(QString driver, QString host, QStr
     Statics::currentDbName = db;
     Statics::currentDbIntType = Constants::snowflakeIntType;
     Statics::currentDbStrType = Constants::snowflakeOdbcStrType;
+    Statics::currentDbClassification = Constants::sqlType;
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit snowflakeLoginStatus(response);
 }
 
@@ -200,10 +222,28 @@ void ConnectorsLoginModel::teradataOdbcLogin(QString driver, QString host, QStri
     Statics::currentDbName = db;
     Statics::currentDbIntType = Constants::teradataIntType;
     Statics::currentDbStrType = Constants::teradataOdbcStrType;
+    Statics::currentDbClassification = Constants::sqlType;
 
     this->setConnectedDB(db);
 
+    emit connectedDBType(Constants::sqlType);
     emit teradataLoginStatus(response);
+}
+
+void ConnectorsLoginModel::accessOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
+{
+    AccessCon accesscon;
+    QVariantMap response = accesscon.AccessOdbcInstance(driver, host, db, port, username, password);
+
+    Statics::currentDbName = db;
+    Statics::currentDbIntType = Constants::accessIntType;
+    Statics::currentDbStrType = Constants::accessOdbcStrType;
+    Statics::currentDbClassification = Constants::sqlType;
+
+    this->setConnectedDB(db);
+
+    emit connectedDBType(Constants::sqlType);
+    emit accessLoginStatus(response);
 }
 
 void ConnectorsLoginModel::excelOdbcLogin(QString driver, QString filename)
@@ -215,9 +255,11 @@ void ConnectorsLoginModel::excelOdbcLogin(QString driver, QString filename)
     Statics::currentDbName = filename;
     Statics::currentDbIntType = Constants::excelIntType;
     Statics::currentDbStrType = Constants::excelOdbcStrType;
+    Statics::currentDbClassification = Constants::sqlType;
 
     this->setConnectedDB(filename);
 
+    emit connectedDBType(Constants::sqlType);
     emit excelLoginStatus(response);
 }
 
@@ -229,10 +271,12 @@ void ConnectorsLoginModel::csvLogin(QString filename, QString separator)
 
     Statics::currentDbName = filename;
     Statics::currentDbIntType = Constants::csvIntType;
+    Statics::currentDbClassification = Constants::duckType;
     Statics::separator = separator;
 
     this->setConnectedDB(filename);
 
+    emit connectedDBType(Constants::duckType);
     emit sendDbName();
     emit csvLoginStatus(response);
 }
@@ -244,9 +288,11 @@ void ConnectorsLoginModel::jsonLogin(QString filename)
 
     Statics::currentDbName = filename;
     Statics::currentDbIntType = Constants::jsonIntType;
+    Statics::currentDbClassification = Constants::duckType;
 
     this->setConnectedDB(filename);
 
+    emit connectedDBType(Constants::duckType);
     emit sendDbName();
     emit jsonLoginStatus(response);
 }
@@ -259,9 +305,11 @@ void ConnectorsLoginModel::excelLogin(QString filename)
 
     Statics::currentDbName = filename;
     Statics::currentDbIntType = Constants::excelIntType;
+    Statics::currentDbClassification = Constants::duckType;
 
     this->setConnectedDB(filename);
 
+    emit connectedDBType(Constants::duckType);
     emit sendDbName();
     emit excelLoginStatus(response);
 }

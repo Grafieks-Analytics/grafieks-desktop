@@ -12,19 +12,17 @@ TableView {
     property var columnWidths: [ 80, 200, (columnsHeader.width -imageStatus.width - numberCoulmn.width - durationColumn.width)/2, (columnsHeader.width -imageStatus.width - numberCoulmn.width - durationColumn.width)/2]
     columnWidthProvider: function (column) {
         console.log("#"+columnWidths[column])
-        return columnWidths[column] }
+        return columnWidths[column]
+    }
     rowHeightProvider: function (column) { return 30; }
     height:parent.height
     width: parent.width
     visible: false
     clip:true
     columnSpacing: 1
-    //    rowSpacing: 1
 
     boundsBehavior : Flickable.StopAtBounds
-
     anchors.fill: parent
-
 
     ScrollBar.horizontal: ScrollBar{}
     ScrollBar.vertical: ScrollBar{}
@@ -74,13 +72,12 @@ TableView {
     function onDragColumnHeadPanel(mouse){
 
 
-        console.log("mouse x"+ parseInt(mouse.x)) ;
         columnWidths = Qt.binding(function(){
-            return ([(80+ parseInt(mouse.x)),200, (columnsHeader.width -imageStatus.width - numberCoulmn.width - durationColumn.width)/2, (columnsHeader.width -imageStatus.width - numberCoulmn.width - durationColumn.width)/2]) })
-        console.log("column width"+  columnWidths[0] ) ;
+            return ([(80+ parseInt(mouse.x)),200, (columnsHeader.width -imageStatus.width - numberCoulmn.width - durationColumn.width)/2, (columnsHeader.width -imageStatus.width - numberCoulmn.width - durationColumn.width)/2])
+        })
         testQueryResultTable.columnWidthProvider= function (column) {
-            console.log("#"+columnWidths[column])
-            return columnWidths[column] }
+            return columnWidths[column]
+        }
 
     }
     // JAVASCRIPT FUNCTION ENDS
@@ -106,56 +103,20 @@ TableView {
 
 
 
-    delegate:
+    delegate:Rectangle{
 
-        Rectangle{
         border.color: Constants.darkThemeColor
         border.width: 0.5
-        //        Loader{
-        //            active: model.column === 0
-        //            //            width: 30
-        //            anchors.right: parent.right
-        //            anchors.rightMargin: 50
-        //            sourceComponent:
-        //                Rectangle{
-        //                id: rect
-        //                width: 30
-        //                height: 30
-        //                border.color: Constants.darkThemeColor
-        //                border.width: 0.5
-        //                Image{
-        //                    source: "/Images/icons/checkmark.png"
-        //                    height: 18
-        //                    width: 18
-        //                    anchors.horizontalCenter: parent.horizontalCenter
-        //                    anchors.verticalCenter:  parent.verticalCenter
-        //                }
-        //            }
-
-        //        }
 
         Text {
             text: modelData
             elide: Text.ElideRight
             color: Constants.lightGrayTextColor
-            //            leftPadding: 30
-
-
             anchors.left: parent.left
-            anchors.leftMargin:  if (modelData===1) {
-                                     40
-                                 }
-                                 else{
-                                     10
-                                 }
-
-            //            verticalAlignment: Text.AlignVCenter
-            //            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.leftMargin:  modelData === 1? 40: 10
             anchors.verticalCenter:  parent.verticalCenter
         }
     }
-
-
 
 
     Rectangle { // mask the headers
@@ -165,8 +126,6 @@ TableView {
         x: testQueryResultTable.contentX
         width: testQueryResultTable.leftMargin
         height: testQueryResultTable.topMargin
-        //        border.color: Constants.themeColor
-        //        border.width: 0.2
     }
 
     // Table Header Starts
@@ -185,7 +144,6 @@ TableView {
             height: 30
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
-                //                border.color: Constants.darkThemeColor
                 color: Constants.lightThemeColor
             }
             color: Constants.blackColor
@@ -221,9 +179,7 @@ TableView {
             text: "#"
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
-                //                border.color: Constants.darkThemeColor
                 color: Constants.lightThemeColor
-
             }
             color: Constants.blackColor
             leftPadding: 10
@@ -236,7 +192,6 @@ TableView {
             height:34
             anchors.top: columnsHeader.top
             anchors.topMargin: -2
-            //            width: 20
             padding: 0
             MouseArea{
                 id: infoPanelDragMouseArea2
@@ -245,11 +200,8 @@ TableView {
                 width: parent.width
 
                 onPositionChanged: {
-
                     onDragColumnHeadPanel(mouse)
-
                 }
-
             }
         }
 
@@ -263,7 +215,6 @@ TableView {
 
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
-                //                border.color: Constants.darkThemeColor
                 color: Constants.lightThemeColor
             }
             color: Constants.blackColor
@@ -277,19 +228,6 @@ TableView {
             anchors.top: columnsHeader.top
             anchors.topMargin: -2
             padding: 0
-            //            MouseArea{
-            //                id: infoPanelDragMouseArea3
-            //                anchors.fill: parent
-            //                cursorShape: Qt.SizeHorCursor
-            //                width: parent.width
-
-            //                onPositionChanged: {
-
-            //                    onDragColumnHeadPanel(mouse)
-
-            //                }
-
-            //            }
         }
 
         Label {
@@ -300,7 +238,6 @@ TableView {
 
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
-                //                border.color: Constants.darkThemeColor
                 color: Constants.lightThemeColor
 
             }
@@ -316,19 +253,6 @@ TableView {
             anchors.top: columnsHeader.top
             anchors.topMargin: -2
             padding: 0
-            //            MouseArea{
-            //                id: infoPanelDragMouseArea4
-            //                anchors.fill: parent
-            //                cursorShape: Qt.SizeHorCursor
-            //                width: parent.width
-
-            //                onPositionChanged: {
-
-            //                    onDragColumnHeadPanel(mouse)
-
-            //                }
-
-            //            }
         }
 
         Label {
@@ -340,7 +264,6 @@ TableView {
 
             verticalAlignment: Text.AlignVCenter
             background: Rectangle{
-                //                border.color: Constants.darkThemeColor
                 color: Constants.lightThemeColor
             }
             color: Constants.blackColor
@@ -359,7 +282,6 @@ TableView {
     Layout.fillHeight: true
 
 
-    //    ScrollIndicator.horizontal: CustomScrollHorizontalIndicator  {}
     ScrollIndicator.vertical: CustomScrollVerticalIndicator {}
 
 

@@ -40,6 +40,12 @@ Page {
     property LeftMenuBar leftMenuBar : left_menubar
     property int droppedCount: 0
 
+
+    // Dont delete this
+    ListModel{
+        id: duckTableList
+    }
+
     /***********************************************************************************************************************/
     // Connection Starts
 
@@ -64,8 +70,41 @@ Page {
         function onSqliteLoginStatus(status){
             if(status.status === true){
                 // Call functions
+                console.log("SQLITE LOGGED IN")
                 TableListModel.callQuery()
                 tableslist.model = TableListModel
+            }
+        }
+        function onExcelLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                let tables =  DuckDataModel.getTableList()
+                tables.forEach((item)=>{
+                                   duckTableList.append({tableName: item})
+                               })
+                tableslist.model = duckTableList
+            }
+        }
+
+        function onCsvLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                let tables =  DuckDataModel.getTableList()
+                tables.forEach((item)=>{
+                                   duckTableList.append({tableName: item})
+                               })
+                tableslist.model = duckTableList
+            }
+        }
+
+        function onJsonLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                let tables =  DuckDataModel.getTableList()
+                tables.forEach((item)=>{
+                                   duckTableList.append({tableName: item})
+                               })
+                tableslist.model = duckTableList
             }
         }
 
@@ -145,37 +184,37 @@ Page {
 
     function onDragRightPanel(mouse){
 
-//        if(infoTableResizingFixed){
-//            if(mouse.y > 0){
-//                dataQueryModellerStackview.height += mouse.y
-//                if(dataQueryModellerStackview.height > 200){
-//                    infoTableResizingFixed = false
-//                }
-//            }
-//        }
+        //        if(infoTableResizingFixed){
+        //            if(mouse.y > 0){
+        //                dataQueryModellerStackview.height += mouse.y
+        //                if(dataQueryModellerStackview.height > 200){
+        //                    infoTableResizingFixed = false
+        //                }
+        //            }
+        //        }
 
-//        if(dataQueryModellerStackview.height > 200){
+        //        if(dataQueryModellerStackview.height > 200){
 
-//            if(dataQueryModellerStackview.height + mouse.y < 200){
-//                dataQueryModellerStackview.height = 200
-//            }else{
-//                dataQueryModellerStackview.height += mouse.y
-//            }
+        //            if(dataQueryModellerStackview.height + mouse.y < 200){
+        //                dataQueryModellerStackview.height = 200
+        //            }else{
+        //                dataQueryModellerStackview.height += mouse.y
+        //            }
 
-//        }else{
-//            infoTableResizingFixed = true;
-//        }
+        //        }else{
+        //            infoTableResizingFixed = true;
+        //        }
 
-//        infodata_table.height = Qt.binding(function(){
-//            return queryModellerPage.height - submenu.height - dataQueryModellerStackview.height
-//        })
+        //        infodata_table.height = Qt.binding(function(){
+        //            return queryModellerPage.height - submenu.height - dataQueryModellerStackview.height
+        //        })
 
         if(column_querymodeller.width-mouse.x > 160 && column_querymodeller.width-mouse.x < 450 ){
-              column_querymodeller.width = column_querymodeller.width - mouse.x
+            column_querymodeller.width = column_querymodeller.width - mouse.x
         }
-//        if( column_querymodeller.width-mouse.x < 450){
-//              column_querymodeller.width = column_querymodeller.width - mouse.x
-//        }
+        //        if( column_querymodeller.width-mouse.x < 450){
+        //              column_querymodeller.width = column_querymodeller.width - mouse.x
+        //        }
 
 
     }
@@ -284,7 +323,6 @@ Page {
     function focusDataSourceNameField(){
         ds_name.readOnly= false
         ds_name.focus = true;
-        console.log('Focussed')
     }
 
 
@@ -297,11 +335,6 @@ Page {
         DSParamsModel.setTmpSql("")
     }
     function onTableToggle(){
-
-        console.log("table table");
-        //        columnListDroppedRect.visible = columnListDroppedRect.visible === true ? false : true
-
-        //        TableColumnsModel.getColumnsForTable(newItem.name, newItem.moduleName)
         TableColumnsModel.getColumnsForTable(tableName, "TableColumns")
 
         toggleTableIcon.source = tablecolumnListView.visible === false ?  "/Images/icons/Down_20.png" : "/Images/icons/Right_20.png"
@@ -390,8 +423,6 @@ Page {
                 anchors.left: parent.left
                 anchors.leftMargin:  15
                 anchors.verticalCenter: tableImg.verticalCenter
-
-
                 visible: tableShowToggle
 
                 MouseArea{
@@ -432,6 +463,7 @@ Page {
 
                 onClicked: {
                     TableColumnsModel.getColumnsForTable(tableName, "TableColumns")
+                    console.log("Table name", tableName)
 
                     if(tablecolumnListView.visible === true){
                         toggleTableIcon.source ="/Images/icons/Right_20.png"
@@ -868,14 +900,14 @@ Page {
     // Info table Ends
 
 
-//    ToolSeparator{
-//        id: toolsep2
-//        height:parent.height
-//        anchors.right:parent.right
-//        anchors.top: parent.top
-//        anchors.rightMargin: 194
-//        anchors.topMargin: -5
-//    }
+    //    ToolSeparator{
+    //        id: toolsep2
+    //        height:parent.height
+    //        anchors.right:parent.right
+    //        anchors.top: parent.top
+    //        anchors.rightMargin: 194
+    //        anchors.topMargin: -5
+    //    }
 
     JoinPopup{
         id: joinPopup
@@ -903,13 +935,13 @@ Page {
             border.color: Constants.darkThemeColor
 
 
-                ToolSeparator{
-                    id: toolsep2
-                    height:parent.height
-                    anchors.left:parent.left
-                    anchors.top: parent.top
-                    anchors.leftMargin:  -8
-                    anchors.topMargin: -5
+            ToolSeparator{
+                id: toolsep2
+                height:parent.height
+                anchors.left:parent.left
+                anchors.top: parent.top
+                anchors.leftMargin:  -8
+                anchors.topMargin: -5
 
 
 

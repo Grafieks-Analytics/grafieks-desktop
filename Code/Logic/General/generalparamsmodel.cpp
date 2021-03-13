@@ -20,6 +20,11 @@ QString GeneralParamsModel::getTmpPath()
     return tmpFilePath;
 }
 
+QString GeneralParamsModel::getDbClassification()
+{
+    return Statics::currentDbClassification;
+}
+
 
 
 int GeneralParamsModel::menuType() const
