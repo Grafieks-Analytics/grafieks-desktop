@@ -207,5 +207,6 @@
         <file>Source/Connectors/SubComponents/ExcelConnection.qml</file>
         <file>Source/Charts/WaterfallChart.html</file>
         <file>Source/Charts/GaugeChart.html</file>
+        <file>Source/Charts/Data/utils.js</file>
     </qresource>
 </RCC>

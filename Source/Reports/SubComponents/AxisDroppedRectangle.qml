@@ -16,25 +16,25 @@ Rectangle{
 
 
     ListModel{
-        id: categoricalCalculations
+        id: dateCalculations
 
         ListElement{
-            calculationName:"Count"
+            calculationName:"Day"
             calculationType: "string"
             calculationCompareValue : "count"
         }
         ListElement{
-            calculationName:"Count (Distinct)"
+            calculationName:"Month"
             calculationType: "string"
             calculationCompareValue : "countdistinct"
         }
         ListElement{
-            calculationName:"Minimum"
+            calculationName:"Quarter"
             calculationType: "string"
             calculationCompareValue : "minimum"
         }
         ListElement{
-            calculationName:"Maximum"
+            calculationName:"Year"
             calculationType: "string"
             calculationCompareValue : "maximum"
         }
@@ -125,16 +125,11 @@ Rectangle{
         color: Constants.whiteColor
         radius: 10
 
+
         CustomComboBox{
-            id: wildcardDropdown
+            id: dateDropdown
             currentIndex: 0
-            model: {
-               console.log(itemType);
-               if(itemType === Constants.categoricalItemType){
-                   return categoricalCalculations;
-               }
-               return numericalCalculations
-            }
+            model: dateCalculations
             textRole: "calculationName"
             width: parent.width
             height: parent.height
