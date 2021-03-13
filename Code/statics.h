@@ -10,6 +10,7 @@ public:
     static QString currentDbName;
     static int currentDbIntType;
     static QString currentDbStrType;
+    static QString currentDbClassification;
 
     // Mysql
     static QString myHost;

@@ -15,5 +15,7 @@
 #include "teradatacon.h"
 #include "csvcon.h"
 #include "jsoncon.h"
+#include "accesscon.h"
+
 
 #endif // ALLCONNECTORS_H

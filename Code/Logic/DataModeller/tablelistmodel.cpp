@@ -44,8 +44,7 @@ void TableListModel::callQuery(QString queryString)
     switch(Statics::currentDbIntType){
 
 
-    case Constants::mysqlIntType:
-    case Constants::mysqlOdbcIntType:{
+    case Constants::mysqlIntType:{
 
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
 
@@ -60,6 +59,20 @@ void TableListModel::callQuery(QString queryString)
     }
 
 
+    case Constants::mysqlOdbcIntType:{
+
+        QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrType);
+
+        if (queryString != ""){
+
+            this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'", dbMysqlOdbc);
+        } else{
+            this->setQuery("SHOW TABLES", dbMysqlOdbc);
+        }
+
+        break;
+    }
+
     case Constants::sqliteIntType:{
 
         QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
@@ -72,8 +85,7 @@ void TableListModel::callQuery(QString queryString)
 
         break;
     }
-    case Constants::postgresIntType:
-    case Constants::redshiftIntType:{
+    case Constants::postgresIntType:{
 
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
 
@@ -82,6 +94,19 @@ void TableListModel::callQuery(QString queryString)
             this->setQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name LIKE '%"+queryString+"%'", dbPostgres);
         } else{
             this->setQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'", dbPostgres);
+        }
+
+        break;
+    }
+    case Constants::redshiftIntType:{
+
+        QSqlDatabase dbRedshift = QSqlDatabase::database(Constants::redshiftOdbcStrType);
+
+        if (queryString != ""){
+
+            this->setQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name LIKE '%"+queryString+"%'", dbRedshift);
+        } else{
+            this->setQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'", dbRedshift);
         }
 
         break;
@@ -193,6 +218,20 @@ void TableListModel::callQuery(QString queryString)
             this->setQuery("SELECT table_name FROM user_tables WHERE table_name LIKE '%"+queryString+"%'", dbTeradata);
         } else{
             this->setQuery("SELECT table_name FROM user_tables", dbTeradata);
+        }
+
+        break;
+    }
+
+    case Constants::accessIntType:{
+
+        QSqlDatabase dbAccess = QSqlDatabase::database(Constants::accessOdbcStrType);
+
+        if (queryString != ""){
+
+            this->setQuery("SELECT MSysObjects.name FROM MSysObjects WHERE MSysObjects.type IN (1,4,6) AND MSysObjects.name NOT LIKE '~*'  AND MSysObjects.name NOT LIKE 'MSys*' ORDER BY MSysObjects.name LIKE '%"+queryString+"%'", dbAccess);
+        } else{
+            this->setQuery("SELECT MSysObjects.name FROM MSysObjects WHERE MSysObjects.type IN (1,4,6) AND MSysObjects.name NOT LIKE '~*'  AND MSysObjects.name NOT LIKE 'MSys*' ORDER BY MSysObjects.name", dbAccess);
         }
 
         break;

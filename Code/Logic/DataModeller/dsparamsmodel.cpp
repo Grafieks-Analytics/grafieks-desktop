@@ -1,8 +1,6 @@
 #include "dsparamsmodel.h"
 
-DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent),
-//                                                db(nullptr), con(db),
-                                                counter(1)
+DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent),counter(1)
 {
 
 //    db.LoadExtension<duckdb::ParquetExtension>();

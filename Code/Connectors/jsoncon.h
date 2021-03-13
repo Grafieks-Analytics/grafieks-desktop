@@ -5,10 +5,22 @@
 #include <QtDebug>
 #include <QUrl>
 #include <QFile>
+#include <QJsonDocument>
+#include <QJsonValue>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QDir>
+
+#include <jsoncons/json.hpp>
+#include <jsoncons_ext/csv/csv.hpp>
 
 #include "../constants.h"
 #include "../Messages.h"
 #include "../statics.h"
+
+using namespace jsoncons;
+using namespace jsoncons::csv;
+
 
 class JsonCon : public QObject
 {
@@ -19,7 +31,10 @@ public:
     explicit JsonCon(QObject *parent = nullptr);
     QVariantMap JsonInstance(const QString & filepath);
 
+    QString convertJsonToCsv(QString &jsonPath);
+
 signals:
+    void jsonConverted(QString status);
 
 };
 

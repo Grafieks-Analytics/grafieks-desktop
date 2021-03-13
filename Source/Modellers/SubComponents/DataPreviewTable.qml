@@ -16,12 +16,13 @@ TableView {
     anchors.fill: parent
     topMargin: columnsHeader1.implicitHeight
     width: parent.width
-    model: QueryModel
     ScrollBar.horizontal: ScrollBar{}
     ScrollBar.vertical: ScrollBar{}
     clip: true
     boundsBehavior : Flickable.StopAtBounds
 
+
+    property string globalConType: Constants.sqlType
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -44,7 +45,14 @@ TableView {
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: ConnectorsLoginModel
 
+        function onConnectedDBType(conType){
+            globalConType = conType
+            dataPreviewResult.model = globalConType === Constants.sqlType? QueryModel: DuckQueryModel
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -119,14 +127,15 @@ TableView {
                 color: Constants.lightThemeColor
                 border.width: 1
                 Text {
-                    id: name
-                    text: QueryModel.headerData(modelData, Qt.Horizontal)
+                    id: textName
+                    text: globalConType ===Constants.sqlType?  QueryModel.headerData(modelData, Qt.Horizontal): DuckQueryModel.headerData(modelData, Qt.Horizontal)
                     width: parent.width
                     height: parent.height
                     anchors.centerIn: parent
                     padding: 10
                     font.bold: false
                     verticalAlignment: Text.AlignVCenter
+
                 }
 
             }

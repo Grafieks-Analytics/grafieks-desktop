@@ -33,8 +33,10 @@
 #include "Code/Logic/DataModeller/filterdatelistmodel.h"
 #include "Code/Logic/DataModeller/filternumericallistmodel.h"
 #include "Code/Logic/DataModeller/proxyfiltermodel.h"
+#include "Code/Logic/DataModeller/duckdatamodel.h"
+#include "Code/Logic/DataModeller/duckquerymodel.h"
 
-#include "Code/Logic/Connectors/duckcrud.h"
+#include "Code/Logic/Connectors/duckcon.h"
 #include "Code/Logic/Connectors/odbcdriversmodel.h"
 #include "Code/Logic/Connectors/dropboxds.h"
 #include "Code/Logic/Connectors/dropboxmodel.h"
@@ -51,8 +53,8 @@
 #include "Code/Logic/Dashboards/dashboardparamsmodel.h"
 
 #include "Code/Logic/Reports/reportparamsmodel.h"
-#include "Code/Logic/Reports/reportmodellist.h"
-#include "Code/Logic/Reports/duckdata.h"
+#include "Code/Logic/Reports/reportsdatamodel.h"
+#include "Code/Logic/Reports/duckreportsds.h"
 
 #include "Code/Logic/General/generalparamsmodel.h"
 #include "Code/Logic/General/tableschemamodel.h"
@@ -66,6 +68,7 @@
 QString Statics::currentDbName;
 int Statics::currentDbIntType;
 QString Statics::currentDbStrType;
+QString Statics::currentDbClassification;
 
 QString Statics::myHost;
 QString Statics::myDb;
@@ -237,8 +240,6 @@ int main(int argc, char *argv[])
     QueryModel queryModel;
     QueryStatsModel queryStatsModel;
     DBListModel dblistModel;
-    TableSchemaModel tableSchemaModel;
-    TableColumnsModel tableColumnsModel;
     DSParamsModel dsParamsModel;
     PublishDatasourceModel publishDatasourceModel;
     ColumnListModel columnListModel;
@@ -252,7 +253,7 @@ int main(int argc, char *argv[])
     QuerySplitter querySplitter;
     DashboardParamsModel dashboardParamsModel;
     ReportParamsModel reportParamsModel;
-    ReportModelList reportModelList;
+    ReportsDataModel reportModelList;
 
     // Datasource Connector Initializations
     DatasourceModel datasourceModel;
@@ -283,10 +284,13 @@ int main(int argc, char *argv[])
     SchedulerDS *scheduler = new SchedulerDS(&app);
 
     // Duck CRUD Model
-    DuckCRUD *duckCRUD            = new DuckCRUD();
-    TableSchemaModel *tableSchema = new TableSchemaModel(duckCRUD);
-    ReportModelList *reportModel  = new ReportModelList(duckCRUD);
-    DuckData *duckData            = new DuckData(duckCRUD);
+    DuckCon *duckCon = new DuckCon();
+    TableSchemaModel tableSchemaModel(duckCon);
+    TableColumnsModel tableColumnsModel(duckCon);
+    ReportsDataModel reportModel(duckCon);
+    DuckReportsDS duckReportsDS(duckCon);
+    DuckDataModel *duckDataModel = new DuckDataModel(duckCon);
+    DuckQueryModel duckQueryModel(duckCon);
 
     // OBJECT INITIALIZATION ENDS
     /***********************************************************************************************************************/
@@ -297,8 +301,9 @@ int main(int argc, char *argv[])
     //    QObject::connect(&filterDateListModel, &FilterDateListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
     //    QObject::connect(&filterNumericalListModel, &FilterNumericalListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
     QObject::connect(&proxyModel, &ProxyFilterModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
-    QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, duckCRUD, &DuckCRUD::receiveCsvFilterQuery);
-    QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::sendDbName, duckCRUD, &DuckCRUD::createTable);
+    QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::sendDbName, duckCon, &DuckCon::createTable);
+    QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, duckDataModel, &DuckDataModel::receiveCsvFilterQuery);
+
 
 
     // Name of the columns
@@ -352,7 +357,6 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("BoxDS", box);
     engine.rootContext()->setContextProperty("SheetModel", &sheetModel);
     engine.rootContext()->setContextProperty("SheetDS", sheet);
-    engine.rootContext()->setContextProperty("TableSchemaModel", &tableSchemaModel);
     engine.rootContext()->setContextProperty("TableColumnsModel", &tableColumnsModel);
     engine.rootContext()->setContextProperty("DSParamsModel", &dsParamsModel);
     engine.rootContext()->setContextProperty("PublishDatasourceModel", &publishDatasourceModel);
@@ -366,10 +370,12 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("QuerySplitter", &querySplitter);
     engine.rootContext()->setContextProperty("GeneralParamsModel", &generalParamsModel);
     engine.rootContext()->setContextProperty("ODBCDriversModel", &odbcDriversModel);
-    engine.rootContext()->setContextProperty("DuckCRUD", duckCRUD);
-    engine.rootContext()->setContextProperty("TableSchemaModel", tableSchema);
-    engine.rootContext()->setContextProperty("ReportModelList", reportModel);
-    engine.rootContext()->setContextProperty("DuckData", duckData);
+    engine.rootContext()->setContextProperty("DuckCon", duckCon);
+    engine.rootContext()->setContextProperty("TableSchemaModel", &tableSchemaModel);
+    engine.rootContext()->setContextProperty("ReportModelList", &reportModel);
+    engine.rootContext()->setContextProperty("DuckReportsDS", &duckReportsDS);
+    engine.rootContext()->setContextProperty("DuckDataModel", duckDataModel);
+    engine.rootContext()->setContextProperty("DuckQueryModel", &duckQueryModel);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/

@@ -282,18 +282,18 @@ Page {
 
             switch(chartTitle){
             case Constants.barChartTitle:
-                dataValues =  DuckData.getBarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                dataValues =  DuckReportsDS.getBarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.areaChartTitle:
             case Constants.lineChartTitle:
-                dataValues =  DuckData.getAreaChartValues(xAxisColumns[0],yAxisColumns[0],'Sum','Sum');
+                dataValues =  DuckReportsDS.getAreaChartValues(xAxisColumns[0],yAxisColumns[0],'Sum','Sum');
                 break;
             case Constants.pieChartTitle:
             case Constants.donutChartTitle:
-                dataValues = DuckData.getPieChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                dataValues = DuckReportsDS.getPieChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.funnelChartTitle:
-                dataValues = DuckData.getFunnelChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                dataValues = DuckReportsDS.getFunnelChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
 
             }
 
