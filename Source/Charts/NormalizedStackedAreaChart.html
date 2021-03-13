@@ -247,7 +247,7 @@
             browser
                 .on("mousemove", function (d, i) {
                     var x_pos = d3.mouse(this)[0] + margin.left;
-                    var y_pos = d3.mouse(this)[1] - margin.bottom;
+                    var y_pos = d3.mouse(this)[1] - 10;
 
                     d3.select("#tooltip")
                         .style("left", x_pos + "px")
