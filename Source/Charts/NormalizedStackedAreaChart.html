@@ -117,14 +117,9 @@
                 height = window.innerHeight - margin.top - margin.bottom - 20;
 
             yaxisTicks = height / 100;
-            var parseDate = d3.time.format("%y-%b-%d").parse,
-                formatPercent = d3.format(".0%");
+            var formatPercent = d3.format(".0%");
 
             var x = d3.time.scale().range([0, width]);
-
-            if (!dateFormat) {
-                dateFormat = defaultD3Config.dateFormat;
-            }
 
             var y = d3.scale.linear().range([height, 0]);
 
@@ -209,7 +204,7 @@
 
             data.forEach(function (d) {
                 if (isDateFormat(d.key)) {
-                    d.key = parseDate(d.key);
+                    d.key = new Date(d.key);
                 }
             });
 
