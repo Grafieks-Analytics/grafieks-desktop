@@ -88,12 +88,14 @@ void DuckQueryModel::generateRoleNames()
             for(int i = 0; i < rows; i++){
                 fieldName =  data->GetValue(1, i).ToString().c_str();
                 m_roleNames.insert(i, fieldName.toUtf8());
+                this->duckChartHeader.insert(i, fieldName);
             }
         }
 
     } else{
         for(int i =0; i < output.length(); i++){
             m_roleNames.insert(i, output[i].toUtf8());
+            this->duckChartHeader.insert(i, output[i]);
         }
     }
 }
@@ -112,9 +114,12 @@ void DuckQueryModel::setQueryResult()
     this->internalColCount = result->collection.ColumnCount();
     this->internalRowCount = result->collection.Count();
 
+    this->setChartData(result);
+
     for(int i = 0; i < this->internalRowCount; i++){
 
         stdData = result->collection.GetRow(i);
+
 
         for(auto data: stdData){
             list << data.ToString().c_str();
@@ -124,6 +129,31 @@ void DuckQueryModel::setQueryResult()
 
     }
     endResetModel();
+}
+
+void DuckQueryModel::setChartData(std::unique_ptr<duckdb::MaterializedQueryResult> &totalRows)
+{
+
+    int i;
+    int j;
+
+    for(j = 0; j < this->internalRowCount; j++){
+        for(i = 0; i < this->internalColCount; i++){
+
+            if(j == 0){
+                this->duckChartData[i] = new QStringList(totalRows->GetValue(i, j).ToString().c_str());
+            } else{
+                this->duckChartData.value(i)->append(totalRows->GetValue(i, j).ToString().c_str());
+                this->duckChartData[i] = duckChartData.value(i);
+//                qDebug() << *duckChartData.value(i) << "XS" << i;
+            }
+        }
+    }
+}
+
+void DuckQueryModel::setChartHeader(int index, QString colName)
+{
+    this->duckChartHeader.insert(index, colName);
 }
 
 void DuckQueryModel::getQueryStats()
