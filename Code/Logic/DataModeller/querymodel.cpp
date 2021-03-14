@@ -23,6 +23,7 @@ QVariant QueryModel::data(const QModelIndex &index, int role) const
     QVariant value;
 
     if(role < Qt::UserRole) {
+
         value = QSqlQueryModel::data(index, role);
     }
     else {
@@ -32,6 +33,7 @@ QVariant QueryModel::data(const QModelIndex &index, int role) const
     }
     return value;
 }
+
 
 QHash<int, QByteArray> QueryModel::roleNames() const
 {
@@ -44,6 +46,29 @@ void QueryModel::callSql(QString tmpSql)
     this->executeQuery(tmpSql);
 }
 
+void QueryModel::setChartData(int totalRows)
+{
+    int totalCols = this->columnCount();
+
+    for(int j = 0; j < totalRows; j++){
+        for(int i = 0; i < totalCols; i++){
+
+            if(j == 0){
+               this->sqlChartData[i] = new QStringList(record(0).field(i).value().toString());
+            } else{
+                this->sqlChartData.value(i)->append(record(j).field(i).value().toString());
+                this->sqlChartData[i] = sqlChartData.value(i);
+//                qDebug() << *sqlChartData.value(i) << "XS" << i;
+            }
+        }
+    }
+}
+
+void QueryModel::setChartHeader(int index, QString colName)
+{
+    this->sqlChartHeader.insert(index, colName);
+}
+
 
 void QueryModel::receiveFilterQuery(QString &filteredQuery)
 {
@@ -53,8 +78,10 @@ void QueryModel::receiveFilterQuery(QString &filteredQuery)
 void QueryModel::generateRoleNames()
 {
     m_roleNames.clear();
+
     for( int i = 0; i < record().count(); i ++) {
         m_roleNames.insert(Qt::UserRole + i + 1, record().fieldName(i).toUtf8());
+        this->setChartHeader(i, record().fieldName(i));
     }
 }
 
@@ -66,7 +93,8 @@ void QueryModel::executeQuery(QString &query)
     case Constants::mysqlIntType:{
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
         this->setQuery(query, dbMysql);
-
+        //        qDebug() << record() << "RECORDER";
+        this->setChartData(query.size());
         break;
     }
 
