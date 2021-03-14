@@ -149,11 +149,14 @@ void DuckQueryModel::setChartData(std::unique_ptr<duckdb::MaterializedQueryResul
             }
         }
     }
+
+    emit chartDataChanged(this->duckChartData);
 }
 
 void DuckQueryModel::setChartHeader(int index, QString colName)
 {
     this->duckChartHeader.insert(index, colName);
+    emit chartHeaderChanged(this->duckChartHeader);
 }
 
 void DuckQueryModel::getQueryStats()
