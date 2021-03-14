@@ -11,19 +11,20 @@ QString ChartsModel::getBarChartValues(QString xAxisColumn, QString yAxisColumn,
     QJsonArray xAxisData;
     QJsonArray yAxisData;
 
-// Fetch data here
-    xAxisData = QJsonArray::fromStringList(*newChartData.value(0));
-    yAxisData = QJsonArray::fromStringList(*newChartData.value(1));
+    // Fetch data here
+    int xKey = newChartHeader.key( xAxisColumn );
+    int yKey = newChartHeader.key( yAxisColumn );
+
+    xAxisData = QJsonArray::fromStringList(*newChartData.value(xKey));
+    yAxisData = QJsonArray::fromStringList(*newChartData.value(yKey));
 
     QJsonArray colData;
     colData.append(xAxisData);
     colData.append(yAxisData);
 
-
     QJsonArray columns;
     columns.append(xAxisColumn);
     columns.append(yAxisColumn);
-
 
     data.append(colData);
     data.append(columns);
