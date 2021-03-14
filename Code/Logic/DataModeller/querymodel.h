@@ -31,7 +31,7 @@ public:
 
 public slots:
     void receiveFilterQuery(QString & filteredQuery);
-    void setChartData(int totalRows);
+    void setChartData();
     void setChartHeader(int index, QString colName);
 
 signals:
