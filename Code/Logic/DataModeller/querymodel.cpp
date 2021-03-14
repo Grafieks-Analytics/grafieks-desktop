@@ -62,11 +62,14 @@ void QueryModel::setChartData(int totalRows)
             }
         }
     }
+
+    emit chartDataChanged(this->sqlChartData);
 }
 
 void QueryModel::setChartHeader(int index, QString colName)
 {
     this->sqlChartHeader.insert(index, colName);
+    emit chartHeaderChanged(this->sqlChartHeader);
 }
 
 

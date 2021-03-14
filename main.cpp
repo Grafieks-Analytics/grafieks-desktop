@@ -55,6 +55,7 @@
 #include "Code/Logic/Reports/reportparamsmodel.h"
 #include "Code/Logic/Reports/reportsdatamodel.h"
 #include "Code/Logic/Reports/duckreportsds.h"
+#include "Code/Logic/Reports/chartsmodel.h"
 
 #include "Code/Logic/General/generalparamsmodel.h"
 #include "Code/Logic/General/tableschemamodel.h"
@@ -248,6 +249,7 @@ int main(int argc, char *argv[])
     FilterDateListModel filterDateListModel;
     FilterNumericalListModel filterNumericalListModel;
     ODBCDriversModel odbcDriversModel;
+    ChartsModel chartsModel;
 
     GeneralParamsModel generalParamsModel;
     QuerySplitter querySplitter;
@@ -304,10 +306,11 @@ int main(int argc, char *argv[])
     QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::sendDbName, duckCon, &DuckCon::createTable);
     QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, duckDataModel, &DuckDataModel::receiveCsvFilterQuery);
 
-
-
-    // Name of the columns
-    // Actual data
+    // Common data and headers for reports and dashboards
+    QObject::connect(&queryModel, &QueryModel::chartDataChanged, &chartsModel, &ChartsModel::getChartData);
+    QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::getChartHeader);
+    QObject::connect(&duckQueryModel, &DuckQueryModel::chartDataChanged, &chartsModel, &ChartsModel::getChartData);
+    QObject::connect(&duckQueryModel, &DuckQueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::getChartHeader);
 
     // SIGNAL & SLOTS ENDS
     /***********************************************************************************************************************/
@@ -376,6 +379,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("DuckReportsDS", &duckReportsDS);
     engine.rootContext()->setContextProperty("DuckDataModel", duckDataModel);
     engine.rootContext()->setContextProperty("DuckQueryModel", &duckQueryModel);
+    engine.rootContext()->setContextProperty("ChartsModel", &chartsModel);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/
