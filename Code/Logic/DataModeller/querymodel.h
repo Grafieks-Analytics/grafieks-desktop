@@ -6,6 +6,7 @@
 #include <QSqlField>
 #include <QSqlDatabase>
 #include <QObject>
+#include <QMap>
 
 #include "../../Connectors/allconnectors.h"
 #include "../../constants.h"
@@ -30,15 +31,23 @@ public:
 
 public slots:
     void receiveFilterQuery(QString & filteredQuery);
+    void setChartData(int totalRows);
+    void setChartHeader(int index, QString colName);
 
 signals:
 
 
 private:
-    void generateRoleNames();
     QHash<int, QByteArray> m_roleNames;
-
+    void generateRoleNames();
     void executeQuery(QString & query);
+
+    // Data variables for Charts
+    QMap<int, QStringList*> sqlChartData;
+    QMap<int, QString> sqlChartHeader;
+
+
+
 };
 
 #endif // QUERYMODELLER_H
