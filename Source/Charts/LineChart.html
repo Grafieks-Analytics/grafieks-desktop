@@ -74,9 +74,9 @@
             var parseTime = d3.timeParse(timeParseFormat);
 
             d3.selectAll("#my_dataviz").html("");
-            (margin = { top: 30, right: 30, bottom: 70, left: 60 }),
-                (width = window.innerWidth - margin.left - margin.right - 20),
-                (height = window.innerHeight - margin.top - margin.bottom - 20);
+            let margin = { top: 30, right: 30, bottom: 70, left: 60 },
+                width = window.innerWidth - margin.left - margin.right - 20,
+                height = window.innerHeight - margin.top - margin.bottom - 20;
 
             yaxisTicks = height / 100;
 

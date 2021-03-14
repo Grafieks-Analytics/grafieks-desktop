@@ -611,9 +611,7 @@ Page {
                         width: 20
                         MouseArea{
                             anchors.fill: parent
-                            onClicked: {
-                                // open x axis settings
-                            }
+                            onClicked: openYAxisSettings()
                         }
                     }
 
