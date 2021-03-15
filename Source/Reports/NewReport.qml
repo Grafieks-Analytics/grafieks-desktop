@@ -296,8 +296,6 @@ Page {
                 dataValues = ChartsModel.getFunnelChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
 
             }
-
-            console.log(dataValues);
             if(!dataValues){
                 return;
             }

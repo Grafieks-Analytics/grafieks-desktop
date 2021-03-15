@@ -88,14 +88,14 @@ void DuckQueryModel::generateRoleNames()
             for(int i = 0; i < rows; i++){
                 fieldName =  data->GetValue(1, i).ToString().c_str();
                 m_roleNames.insert(i, fieldName.toUtf8());
-                this->duckChartHeader.insert(i, fieldName);
+                this->setChartHeader(i, fieldName);
             }
         }
 
     } else{
         for(int i =0; i < output.length(); i++){
             m_roleNames.insert(i, output[i].toUtf8());
-            this->duckChartHeader.insert(i, output[i]);
+            this->setChartHeader(i, output[i]);
         }
     }
 }
