@@ -294,7 +294,55 @@ Page {
                 break;
             case Constants.funnelChartTitle:
                 dataValues = ChartsModel.getFunnelChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
-
+                break;
+                //            case Constants.stackedBarChartTitle:
+                //                dataValues = DuckReportsDS.getStackedBarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                //                break;
+                //            case Constants.groupedBarChartTitle:
+                //                dataValues = DuckReportsDS.getGroupedBarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                //                break;
+                //            case Constants.geoChartTitle:
+                //                dataValues = DuckReportsDS.getGeoChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                //                break;
+                //            case Constants.combinationChartTitle:
+                //                dataValues = DuckReportsDS.getCombinationChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                //                break;
+            case Constants.radarChartTitle:
+                dataValues = DuckReportsDS.getRadarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.scatterChartTitle:
+                dataValues = DuckReportsDS.getScatterChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.treeChartTitle:
+                dataValues = DuckReportsDS.getTreeChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.treeMapChartTitle:
+                dataValues = DuckReportsDS.getTreeMapChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.heatMapChartTitle:
+                dataValues = DuckReportsDS.getHeatMapChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.sunburstChartTitle:
+                dataValues = DuckReportsDS.getSunburstChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.waterfallChartTitle:
+                dataValues = DuckReportsDS.getWaterfallChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.gaugeChartTitle:
+                dataValues = DuckReportsDS.getGaugeChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.sankeyChartTitle:
+                dataValues = DuckReportsDS.getSankeyChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.kpiTitle:
+                dataValues = DuckReportsDS.getKPIChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.tableTitle:
+                dataValues = DuckReportsDS.getTableChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.pivotTitle:
+                dataValues = DuckReportsDS.getPivotChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
             }
             if(!dataValues){
                 return;
