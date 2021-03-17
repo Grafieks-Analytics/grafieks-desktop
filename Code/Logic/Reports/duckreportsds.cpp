@@ -324,6 +324,8 @@ QString DuckReportsDS::getRadarChartValues(QString xAxisColumn, QString yAxisCol
 
     }
 
+    qDebug() << "DATS" << xAxisData << yAxisData << "DATA";
+
     QJsonArray colData;
     colData.append(xAxisData);
     colData.append(yAxisData);

@@ -219,7 +219,7 @@ QtObject {
     property string donutChartTitle:"Donut Chart"
     property string funnelChartTitle:"Funnel Chart"
     property string gaugeChartTitle: "Gauge Chart"
-    property string scatterChartTitle: "Scattered Chart"
+    property string scatterChartTitle: "Scatter Plot"
     property string stackedBarChartTitle: "Stacked Bar Chart"
     property string geoChartTitle: "Map"
     property string treeChartTitle: "Tree Chart"
