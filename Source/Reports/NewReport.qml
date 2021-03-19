@@ -282,22 +282,68 @@ Page {
 
             switch(chartTitle){
             case Constants.barChartTitle:
-                dataValues =  DuckReportsDS.getBarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.areaChartTitle:
             case Constants.lineChartTitle:
-                dataValues =  DuckReportsDS.getAreaChartValues(xAxisColumns[0],yAxisColumns[0],'Sum','Sum');
+                dataValues =  ChartsModel.getAreaChartValues(xAxisColumns[0],yAxisColumns[0],'Sum','Sum');
                 break;
             case Constants.pieChartTitle:
             case Constants.donutChartTitle:
-                dataValues = DuckReportsDS.getPieChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                dataValues = ChartsModel.getPieChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.funnelChartTitle:
-                dataValues = DuckReportsDS.getFunnelChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
-
+                dataValues = ChartsModel.getFunnelChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+                //            case Constants.stackedBarChartTitle:
+                //                dataValues = DuckReportsDS.getStackedBarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                //                break;
+                //            case Constants.groupedBarChartTitle:
+                //                dataValues = DuckReportsDS.getGroupedBarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                //                break;
+                //            case Constants.geoChartTitle:
+                //                dataValues = DuckReportsDS.getGeoChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                //                break;
+                //            case Constants.combinationChartTitle:
+                //                dataValues = DuckReportsDS.getCombinationChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                //                break;
+            case Constants.radarChartTitle:
+                dataValues = ChartsModel.getRadarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.scatterChartTitle:
+                dataValues = ChartsModel.getScatterChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.treeChartTitle:
+                dataValues = ChartsModel.getTreeChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.treeMapChartTitle:
+                dataValues = ChartsModel.getTreeMapChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.heatMapChartTitle:
+                dataValues = ChartsModel.getHeatMapChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.sunburstChartTitle:
+                dataValues = ChartsModel.getSunburstChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.waterfallChartTitle:
+                dataValues = ChartsModel.getWaterfallChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.gaugeChartTitle:
+                dataValues = ChartsModel.getGaugeChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.sankeyChartTitle:
+                dataValues = ChartsModel.getSankeyChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.kpiTitle:
+                dataValues = ChartsModel.getKPIChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.tableTitle:
+                dataValues = DuckReportsDS.getTableChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.pivotTitle:
+                dataValues = ChartsModel.getPivotChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
             }
-
-            console.log(dataValues);
             if(!dataValues){
                 return;
             }
