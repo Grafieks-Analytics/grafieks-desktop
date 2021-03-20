@@ -520,6 +520,7 @@ QString ChartsModel::getParentChildValues()
     json output(json_array_arg);
     QMap<QString, json> tmpJsonOutput;
     json emptyJsonArray(json_array_arg);
+    QMap<QString, int> positions;
 
     // masterHash will be used to compare if any map has been generated earlier
     // if there is an exact match with the hash, then it exists. Else create a new hash
@@ -551,7 +552,7 @@ QString ChartsModel::getParentChildValues()
     long measure = 0;
 
     //    for(int i = 0; i < totalData; i++){
-    for(int i = 0; i < 1; i++){
+    for(int i = 0; i < 2; i++){
 
         measure = (*newChartData.value(yKey)).at(i).toLong();
 
@@ -588,8 +589,43 @@ QString ChartsModel::getParentChildValues()
                     tmpJsonArray.push_back(tmpOutput);
                     output.push_back(tmpOutput);
                     tmpJsonOutput.insert(hashKeyword, tmpJsonArray);
+//                    positions.insert(hashKeyword, 0);
                     pastHashKeyword = hashKeyword;
 
+
+                } else{
+                    tmpOutput["name"] = paramName.toStdString();
+                    tmpOutput["size"] = measure;
+                    tmpOutput["children"] = emptyJsonArray;
+
+                    tmpJsonArray = tmpJsonOutput.value(pastHashKeyword).at(0).at("children");
+                    tmpJsonArray.push_back(tmpOutput);
+
+
+                    json *jsonPointer = new json;
+                    jsonPointer = &output;
+                    for(int k =0; k < j; k++){
+
+                        if(j - k == 1){
+                            jsonPointer->at(0).at("children").push_back(tmpOutput);
+                             qDebug() << jsonPointer->size()<< "SIZE IF";
+                        } else{
+                            jsonPointer = &jsonPointer->at(0).at("children");
+                            qDebug() << jsonPointer->size()<< "SIZE ELSE";
+                        }
+                    }
+                    tmpJsonOutput.insert(hashKeyword, tmpJsonArray);
+//                    positions.insert(hashKeyword, 0);
+                    pastHashKeyword = hashKeyword;
+                }
+
+            } else{
+
+                long newValue = totalCount->value(hashKeyword) + measure;
+                totalCount->insert(hashKeyword, newValue);
+
+                if(j == 0){
+                    pastHashKeyword = hashKeyword;
 
                 } else{
                     tmpOutput["name"] = paramName.toStdString();
@@ -613,16 +649,7 @@ QString ChartsModel::getParentChildValues()
                     pastHashKeyword = hashKeyword;
                 }
 
-            } else{
 
-                //                long newValue = totalCount->value(hashKeyword) + measure;
-                //                totalCount->insert(hashKeyword, newValue);
-
-                //                if(tmpJsonOutput.contains(hashKeyword)){
-                //                    tmp = tmpJsonOutput.value(hashKeyword);
-                //                    qDebug() << hashKeyword << tmpJsonOutput.value(hashKeyword).to_string().c_str();
-                //                    tmp.push_back(newValue);
-                //                }
             }
 
         }
@@ -667,6 +694,7 @@ void ChartsModel::testing()
     color_spaces.push_back(a);
     color_spaces.push_back("AdobeRGB");
     color_spaces.push_back("ProPhoto RGB");
+    qDebug() <<color_spaces.size() << "SIZE1";
 
     json color_spaces1(json_array_arg); // an empty array
     json x;
