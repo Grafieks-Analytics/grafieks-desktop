@@ -599,7 +599,16 @@ QString ChartsModel::getParentChildValues()
                     tmpJsonArray = tmpJsonOutput.value(pastHashKeyword).at(0).at("children");
                     tmpJsonArray.push_back(tmpOutput);
 
-                    output.at(0).at("children").push_back(tmpOutput);
+                    json *jsonPointer = new json;
+                    jsonPointer = &output;
+                    for(int k =0; k < j; k++){
+
+                        if(j - k == 1){
+                            jsonPointer->at(0).at("children").push_back(tmpOutput);
+                        } else{
+                            jsonPointer = &jsonPointer->at(0).at("children");
+                        }
+                    }
                     tmpJsonOutput.insert(hashKeyword, tmpJsonArray);
                     pastHashKeyword = hashKeyword;
                 }
