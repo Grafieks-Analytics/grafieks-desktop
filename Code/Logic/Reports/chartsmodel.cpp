@@ -560,7 +560,8 @@ QString ChartsModel::getParentChildValues()
         QString pastHashKeyword;
         json tmpJsonArray(json_array_arg);
 
-        for(int j = 0; j < groupKeySize; j++){
+        for(int j = 0; j < 3; j++){
+//        for(int j = 0; j < groupKeySize; j++){
 
             yKeyLoop = newChartHeader.key( xAxisColumn.at(j));
             paramName = newChartData.value(yKeyLoop)->at(i);
@@ -589,7 +590,7 @@ QString ChartsModel::getParentChildValues()
                     tmpJsonArray.push_back(tmpOutput);
                     output.push_back(tmpOutput);
                     tmpJsonOutput.insert(hashKeyword, tmpJsonArray);
-//                    positions.insert(hashKeyword, 0);
+                    positions.insert(hashKeyword, 0);
                     pastHashKeyword = hashKeyword;
 
 
@@ -598,7 +599,7 @@ QString ChartsModel::getParentChildValues()
                     tmpOutput["size"] = measure;
                     tmpOutput["children"] = emptyJsonArray;
 
-                    tmpJsonArray = tmpJsonOutput.value(pastHashKeyword).at(0).at("children");
+                    tmpJsonArray = tmpJsonOutput.value(pastHashKeyword).at(positions.value(hashKeyword)).at("children");
                     tmpJsonArray.push_back(tmpOutput);
 
 
@@ -607,15 +608,15 @@ QString ChartsModel::getParentChildValues()
                     for(int k =0; k < j; k++){
 
                         if(j - k == 1){
-                            jsonPointer->at(0).at("children").push_back(tmpOutput);
-                             qDebug() << jsonPointer->size()<< "SIZE IF";
+                            jsonPointer->at(positions.value(hashKeyword)).at("children").push_back(tmpOutput);
+                             qDebug() << jsonPointer->size()<< "SIZE IF k" << k;
                         } else{
-                            jsonPointer = &jsonPointer->at(0).at("children");
-                            qDebug() << jsonPointer->size()<< "SIZE ELSE";
+                            jsonPointer = &jsonPointer->at(positions.value(hashKeyword)).at("children");
+                            qDebug() << jsonPointer->size()<< "SIZE ELSE k" << k;
                         }
                     }
                     tmpJsonOutput.insert(hashKeyword, tmpJsonArray);
-//                    positions.insert(hashKeyword, 0);
+                    positions.insert(hashKeyword, jsonPointer->size() - 1);
                     pastHashKeyword = hashKeyword;
                 }
 
@@ -632,7 +633,7 @@ QString ChartsModel::getParentChildValues()
                     tmpOutput["size"] = measure;
                     tmpOutput["children"] = emptyJsonArray;
 
-                    tmpJsonArray = tmpJsonOutput.value(pastHashKeyword).at(0).at("children");
+                    tmpJsonArray = tmpJsonOutput.value(pastHashKeyword).at(positions.value(hashKeyword)).at("children");
                     tmpJsonArray.push_back(tmpOutput);
 
                     json *jsonPointer = new json;
@@ -640,12 +641,13 @@ QString ChartsModel::getParentChildValues()
                     for(int k =0; k < j; k++){
 
                         if(j - k == 1){
-                            jsonPointer->at(0).at("children").push_back(tmpOutput);
+                            jsonPointer->at(positions.value(hashKeyword)).at("children").push_back(tmpOutput);
                         } else{
-                            jsonPointer = &jsonPointer->at(0).at("children");
+                            jsonPointer = &jsonPointer->at(positions.value(hashKeyword)).at("children");
                         }
                     }
                     tmpJsonOutput.insert(hashKeyword, tmpJsonArray);
+                    positions.insert(hashKeyword, jsonPointer->size() - 1);
                     pastHashKeyword = hashKeyword;
                 }
 
