@@ -529,6 +529,7 @@ QString ChartsModel::getParentChildValues()
     long measure = 0;
 
     json *jsonPointer = new json;
+    json *jsonPointerMeasure = new json;
 
     // masterHash will be used to compare if any map has been generated earlier
     // if there is an exact match with the hash, then it exists. Else create a new hash
@@ -558,7 +559,8 @@ QString ChartsModel::getParentChildValues()
     // Considering the measure as string here to avoid unwanted errors in wrong casting
     // The front in javascript can easily handle this
 
-    for(int i = 0; i < totalData; i++){
+        for(int i = 0; i < totalData; i++){
+//    for(int i = 2; i < 10; i++){
 
         measure = (*newChartData.value(yKey)).at(i).toLong();
 
@@ -636,20 +638,20 @@ QString ChartsModel::getParentChildValues()
                 totalCount->insert(hashKeyword, newValue);
                 pastHashKeyword.insert(j, hashKeyword);
 
-                if(j == 0){
-                    output.at(positions.value(hashKeyword)).at("size") = newValue;
+                jsonPointerMeasure = &output;
+                for(int k = 0; k <= j; k++){
 
-                } else{
-
+                    if(k == j){
+                        jsonPointerMeasure->at(positions.value(hashKeyword)).at("size") = newValue;
+                    } else{
+                        jsonPointerMeasure = &jsonPointerMeasure->at(positions.value(pastHashKeyword.value(k))).at("children");
+                    }
                 }
-
             }
-
         }
     }
 
-    qDebug() << output.to_string().c_str();
-    return "";
+    return output.to_string().c_str();
 }
 
 

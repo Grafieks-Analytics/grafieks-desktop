@@ -334,7 +334,7 @@ Page {
             case Constants.sunburstChartTitle:
                 console.log("SUNBURST CLICKED")
 //                dataValues = ChartsModel.getSunburstChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
-                ChartsModel.getParentChildValues();
+                dataValues = ChartsModel.getParentChildValues();
                 break;
             case Constants.waterfallChartTitle:
                 console.log("WATERFALL CLICKED")
