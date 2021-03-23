@@ -282,17 +282,21 @@ Page {
 
             switch(chartTitle){
             case Constants.barChartTitle:
+                console.log("BAR CLICKED")
                 dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.areaChartTitle:
             case Constants.lineChartTitle:
+                console.log("LINE/AREA CLICKED")
                 dataValues =  ChartsModel.getAreaChartValues(xAxisColumns[0],yAxisColumns[0],'Sum','Sum');
                 break;
             case Constants.pieChartTitle:
             case Constants.donutChartTitle:
+                console.log("DONUT/PIE CLICKED")
                 dataValues = ChartsModel.getPieChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.funnelChartTitle:
+                console.log("FUNNEL CLICKED")
                 dataValues = ChartsModel.getFunnelChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
                 //            case Constants.stackedBarChartTitle:
@@ -308,39 +312,52 @@ Page {
                 //                dataValues = DuckReportsDS.getCombinationChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 //                break;
             case Constants.radarChartTitle:
+                console.log("RADAR CLICKED")
                 dataValues = ChartsModel.getRadarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.scatterChartTitle:
+                console.log("SCATTER CLICKED")
                 dataValues = ChartsModel.getScatterChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.treeChartTitle:
+                console.log("TREECHART CLICKED")
                 dataValues = ChartsModel.getTreeChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.treeMapChartTitle:
+                console.log("TREEMAP CLICKED")
                 dataValues = ChartsModel.getTreeMapChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.heatMapChartTitle:
+                console.log("HEATMAP CLICKED")
                 dataValues = ChartsModel.getHeatMapChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.sunburstChartTitle:
-                dataValues = ChartsModel.getSunburstChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                console.log("SUNBURST CLICKED")
+//                dataValues = ChartsModel.getSunburstChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                dataValues = ChartsModel.getParentChildValues();
                 break;
             case Constants.waterfallChartTitle:
+                console.log("WATERFALL CLICKED")
                 dataValues = ChartsModel.getWaterfallChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.gaugeChartTitle:
+                console.log("GAUGE CLICKED")
                 dataValues = ChartsModel.getGaugeChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.sankeyChartTitle:
+                console.log("SANKEY CLICKED")
                 dataValues = ChartsModel.getSankeyChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.kpiTitle:
+                console.log("KPI CLICKED")
                 dataValues = ChartsModel.getKPIChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.tableTitle:
+                console.log("TABLE CLICKED")
                 dataValues = DuckReportsDS.getTableChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.pivotTitle:
+                console.log("PIVOT CLICKED")
                 dataValues = ChartsModel.getPivotChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             }

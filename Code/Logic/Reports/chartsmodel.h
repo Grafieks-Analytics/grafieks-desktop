@@ -6,6 +6,8 @@
 
 #include "duckreportsds.h"
 #include "sqlreportsds.h"
+#include "jsoncons/json.hpp"
+using namespace jsoncons;
 
 class ChartsModel : public QObject
 {
@@ -37,7 +39,8 @@ public:
     Q_INVOKABLE QString getTableChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
     Q_INVOKABLE QString getPivotChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
 
-    Q_INVOKABLE QString getParentChildValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
+//    Q_INVOKABLE QString getParentChildValues( QStringList xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE QString getParentChildValues();
 
 public slots:
     void getChartData(QMap<int, QStringList*> chartData);

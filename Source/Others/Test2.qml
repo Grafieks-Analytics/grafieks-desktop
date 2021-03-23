@@ -11,25 +11,8 @@ Item{
     height: 500
     width:  500
 
-    function callOdbc(){
-//        MysqlConnect.tMysqlOdbcInstance("asdas","localhost", "grafieks_dummy", 3306, "root", "");
-    }
-
-    function osTest(){
-        QtTest2.osTest()
-    }
-
-
-    Button{
-        id: bb
-        text: "Click me"
-        onClicked: callOdbc()
-    }
-
-    Button{
-        id: bb2
-        text: "Click OS Test"
-        onClicked: osTest()
+    Component.onCompleted: {
+        ChartsModel.testing()
     }
 
 }
