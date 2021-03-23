@@ -41,9 +41,6 @@ public:
 
 //    Q_INVOKABLE QString getParentChildValues( QStringList xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getParentChildValues();
-    Q_INVOKABLE void testing();
-
-    Q_INVOKABLE void finalTesting();
 
 public slots:
     void getChartData(QMap<int, QStringList*> chartData);

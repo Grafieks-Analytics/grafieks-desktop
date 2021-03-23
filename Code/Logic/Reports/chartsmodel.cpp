@@ -508,19 +508,27 @@ QString ChartsModel::getPivotChartValues(QString xAxisColumn, QString yAxisColum
 //QString ChartsModel::getParentChildValues(QStringList xAxisColumn, QString yAxisColumn)
 QString ChartsModel::getParentChildValues()
 {
+
+    // [a,b,c]
+    // [x,y,z]
     qDebug() << "CLICKED ME";
     QStringList xAxisColumn;
     QString yAxisColumn;
+    int pointerSize;
+    int tmpSize;
 
-    xAxisColumn << "country" << "state" << "district";
+    xAxisColumn << "country" << "state" << "city" <<  "district";
     yAxisColumn = "population";
 
     QJsonArray data;
     QJsonArray axisArray;
     json output(json_array_arg);
-    QMap<QString, json> tmpJsonOutput;
     json emptyJsonArray(json_array_arg);
     QMap<QString, int> positions;
+    QMap<int, QString> pastHashKeyword;
+    long measure = 0;
+
+    json *jsonPointer = new json;
 
     // masterHash will be used to compare if any map has been generated earlier
     // if there is an exact match with the hash, then it exists. Else create a new hash
@@ -549,15 +557,13 @@ QString ChartsModel::getParentChildValues()
 
     // Considering the measure as string here to avoid unwanted errors in wrong casting
     // The front in javascript can easily handle this
-    long measure = 0;
-for(int i = 0; i < 2; i++){
-//    for(int i = 0; i < totalData; i++){
+
+    for(int i = 0; i < totalData; i++){
 
         measure = (*newChartData.value(yKey)).at(i).toLong();
 
         json tmpOutput;
-        QString pastHashKeyword;
-        json tmpJsonArray(json_array_arg);
+        pastHashKeyword.clear();
 
         for(int j = 0; j < groupKeySize; j++){
 
@@ -585,11 +591,9 @@ for(int i = 0; i < 2; i++){
                     tmpOutput["size"] = measure;
                     tmpOutput["children"] = emptyJsonArray;
 
-                    tmpJsonArray.push_back(tmpOutput);
                     output.push_back(tmpOutput);
-                    tmpJsonOutput.insert(hashKeyword, tmpJsonArray);
-                    positions.insert(hashKeyword, 0);
-                    pastHashKeyword = hashKeyword;
+                    positions.insert(hashKeyword, output.size() - 1);
+                    pastHashKeyword[0] = hashKeyword;
 
 
                 } else{
@@ -597,62 +601,47 @@ for(int i = 0; i < 2; i++){
                     tmpOutput["size"] = measure;
                     tmpOutput["children"] = emptyJsonArray;
 
-                    tmpJsonArray = tmpJsonOutput.value(pastHashKeyword).at(positions.value(pastHashKeyword)).at("children");
-                    tmpJsonArray.push_back(tmpOutput);
 
-
-                    json *jsonPointer = new json;
                     jsonPointer = &output;
                     for(int k =0; k < j; k++){
 
                         if(j - k == 1){
-                            jsonPointer->at(positions.value(pastHashKeyword)).at("children").push_back(tmpOutput);
-                        } else{
-                            jsonPointer = &jsonPointer->at(positions.value(pastHashKeyword)).at("children");
-                            positions.insert(hashKeyword, jsonPointer->size() - 1);
-                            pastHashKeyword = hashKeyword;
+                            try{
 
+                                jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children").push_back(tmpOutput);
+                                pastHashKeyword.insert(j, hashKeyword);
+
+                                pointerSize = jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children").size() - 1;
+                                positions.insert(hashKeyword, pointerSize);
+                            }catch (std::exception &e) {
+                                qDebug() << "C2" << e.what()
+                                         << k << jsonPointer->to_string().c_str()
+                                         << pointerSize << pastHashKeyword.value(j) << positions.value(hashKeyword);
+                            }
+
+                        } else{
+                            try{
+                                jsonPointer = &jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children");
+
+                            }catch (std::exception &e) {
+                                qDebug() << "C3" << e.what();
+                            }
                         }
                     }
-
-                    tmpJsonOutput.insert(hashKeyword, tmpJsonArray);
-                    positions.insert(hashKeyword, jsonPointer->size() - 1);
-                    pastHashKeyword = hashKeyword;
                 }
 
             } else{
 
                 long newValue = totalCount->value(hashKeyword) + measure;
                 totalCount->insert(hashKeyword, newValue);
+                pastHashKeyword.insert(j, hashKeyword);
 
                 if(j == 0){
-                    pastHashKeyword = hashKeyword;
+                    output.at(positions.value(hashKeyword)).at("size") = newValue;
 
                 } else{
-                    tmpOutput["name"] = paramName.toStdString();
-                    tmpOutput["size"] = measure;
-                    tmpOutput["children"] = emptyJsonArray;
 
-                    tmpJsonArray = tmpJsonOutput.value(pastHashKeyword).at(positions.value(pastHashKeyword)).at("children");
-                    tmpJsonArray.push_back(tmpOutput);
-
-                    json *jsonPointer = new json;
-                    jsonPointer = &output;
-                    for(int k =0; k < j; k++){
-
-                        if(j - k == 1){
-                            jsonPointer->at(positions.value(pastHashKeyword)).at("children").push_back(tmpOutput);
-                        } else{
-                            jsonPointer = &jsonPointer->at(positions.value(pastHashKeyword)).at("children");
-                            positions.insert(hashKeyword, jsonPointer->size() - 1);
-                            pastHashKeyword = hashKeyword;
-                        }
-                    }
-                    tmpJsonOutput.insert(hashKeyword, tmpJsonArray);
-                    positions.insert(hashKeyword, jsonPointer->size() - 1);
-                    pastHashKeyword = hashKeyword;
                 }
-
 
             }
 
@@ -663,62 +652,6 @@ for(int i = 0; i < 2; i++){
     return "";
 }
 
-void ChartsModel::testing()
-{
-    qDebug() << "TESTING TRAIN";
-    // create an empty structure (null)
-    json j;
-
-    // add a number that is stored as double (note the implicit conversion of j to an object)
-    j["pi"] = 3.141;
-
-    //    // add a Boolean that is stored as bool
-    j["happy"] = true;
-
-    //    // add a string that is stored as std::string
-    j["name"] = "Niels";
-
-    //    // add another null object by passing nullptr
-    //    j["nothing"] = nullptr;
-
-    //    // add an object inside the object
-    j["answer"]["everything"] = 42;
-    j["answer"]["everything2"]["a"] = 11;
-    //    j["answer"]["everything2"]["a"] = 21;
-    j["answer"]["everything2"]["b"]["b1"] = 2;
-    //    j["answer"]["everything2"]["b"]["b2"] = 3;
-
-    json a = json::make_array(2,0); // angle brackets can be omitted when N = 1
-    a[0] = j;
-    a[1] = j;
-
-    json b = a;
-
-    json color_spaces(json_array_arg); // an empty array
-    color_spaces.push_back(a);
-    color_spaces.push_back("AdobeRGB");
-    color_spaces.push_back("ProPhoto RGB");
-    qDebug() <<color_spaces.size() << "SIZE1";
-
-    json color_spaces1(json_array_arg); // an empty array
-    json x;
-    x["children"] = color_spaces1;
-
-    qDebug() <<x.at("children").to_string().c_str() << "CORO";
-    //    qDebug() <<a.to_string().c_str() << "TRAINING" << j.at("answer").at("everything").to_string().c_str() << j.contains("answer") << color_spaces.to_string().c_str();
-
-}
-
-void ChartsModel::finalTesting()
-{
-    json finale;
-
-    finale.make_array(5,0);
-    finale.push_back(1);
-    finale.push_back(2);
-    finale.push_back(3);
-    finale.push_back(4);
-}
 
 void ChartsModel::getChartData(QMap<int, QStringList *> chartData)
 {
