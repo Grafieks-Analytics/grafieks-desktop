@@ -221,7 +221,7 @@ HEADERS += \
     Code/constants.h \
     Code/parquet-extension.hpp \
     Code/secrets.h \
-    Code/statics.h \
+    Code/statics.h
 
 
 INCLUDEPATH += $$PWD/Libraries
