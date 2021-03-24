@@ -5,7 +5,6 @@
 #include <QDebug>
 
 #include "duckreportsds.h"
-#include "sqlreportsds.h"
 #include "jsoncons/json.hpp"
 using namespace jsoncons;
 
@@ -28,19 +27,19 @@ public:
     Q_INVOKABLE QString getScatterChartValues( QString xAxisColumn, QString yAxisColumn, QString groupName);
     Q_INVOKABLE QString getHeatMapChartValues( QString xAxisColumn, QString yAxisColumn, QString groupName);
 
-    Q_INVOKABLE QString getSunburstChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
+    Q_INVOKABLE QString getSunburstChartValues( QStringList xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getWaterfallChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
     Q_INVOKABLE QString getGaugeChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
     Q_INVOKABLE QString getSankeyChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
 
-    Q_INVOKABLE QString getTreeChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
-    Q_INVOKABLE QString getTreeMapChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
+    Q_INVOKABLE QString getTreeChartValues( QStringList xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE QString getTreeMapChartValues( QStringList xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getKPIChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
     Q_INVOKABLE QString getTableChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
     Q_INVOKABLE QString getPivotChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
 
 //    Q_INVOKABLE QString getParentChildValues( QStringList xAxisColumn, QString yAxisColumn);
-    Q_INVOKABLE QString getParentChildValues();
+    Q_INVOKABLE QString getTreeSunburstValues(QStringList & xAxisColumn, QString & yAxisColum);
 
 public slots:
     void getChartData(QMap<int, QStringList*> chartData);

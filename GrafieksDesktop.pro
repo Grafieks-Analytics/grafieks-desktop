@@ -101,7 +101,6 @@ SOURCES += \
     Code/Logic/Reports/duckreportsds.cpp \
     Code/Logic/Reports/reportparamsmodel.cpp \
     Code/Logic/Reports/reportsdatamodel.cpp \
-    Code/Logic/Reports/sqlreportsds.cpp \
     main.cpp \
 
 RESOURCES += \
@@ -213,7 +212,6 @@ HEADERS += \
     Code/Logic/Reports/duckreportsds.h \
     Code/Logic/Reports/reportparamsmodel.h \
     Code/Logic/Reports/reportsdatamodel.h \
-    Code/Logic/Reports/sqlreportsds.h \
     Code/duckdb.hpp \
     Code/jsoncons/include/jsoncons/json.hpp \
     Code/jsoncons/include/jsoncons_ext/csv/csv.hpp \

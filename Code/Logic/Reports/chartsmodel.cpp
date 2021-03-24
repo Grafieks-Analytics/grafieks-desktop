@@ -306,52 +306,12 @@ QString ChartsModel::getHeatMapChartValues(QString xAxisColumn, QString yAxisCol
     return strData;
 }
 
-QString ChartsModel::getSunburstChartValues(QString xAxisColumn, QString yAxisColumn, QStringList groupNames)
+QString ChartsModel::getSunburstChartValues(QStringList xAxisColumn, QString yAxisColumn)
 {
 
-    QJsonArray data;
-    QJsonArray axisArray;
-
-    // Fetch data here
-    int xKey = newChartHeader.key( xAxisColumn );
-    int yKey = newChartHeader.key( yAxisColumn );
-
-    // Group name operations
-    QVector<int> groupKeyValues;
-    int groupKeySize = groupNames.length();
-
-    for(int i = 0; i < groupKeySize; i++){
-        groupKeyValues.append(newChartHeader.key(groupNames.at(i)));
-    }
-
-    int totalData = (*newChartData.value(xKey)).length();
-
-    for(int i = 0; i < totalData; i++){
-        QJsonObject axisData;
-        axisData.insert("name", (*newChartData.value(xKey)).at(i));
-        axisData.insert("size", (*newChartData.value(yKey)).at(i));
-        axisArray.append(axisData);
-
-    }
-
-    QJsonObject colData;
-    colData.insert("name", groupNames.at(0));
-    colData.insert("children", axisArray);
-
-    QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(yAxisColumn);
-
-    data.append(colData);
-    data.append(columns);
-
-    QJsonDocument doc;
-    doc.setArray(data);
-
-    QString strData = doc.toJson();
-
-    return strData;
-    return "";
+    QString output;
+    output = this->getTreeSunburstValues(xAxisColumn, yAxisColumn);
+    return output;
 }
 
 QString ChartsModel::getWaterfallChartValues(QString xAxisColumn, QString yAxisColumn, QStringList groupNames)
@@ -437,57 +397,18 @@ QString ChartsModel::getSankeyChartValues(QString xAxisColumn, QString yAxisColu
     return strData;
 }
 
-QString ChartsModel::getTreeChartValues(QString xAxisColumn, QString yAxisColumn, QStringList groupNames)
+QString ChartsModel::getTreeChartValues(QStringList xAxisColumn, QString yAxisColumn)
 {
-
-    return "";
+    QString output;
+    output = this->getTreeSunburstValues(xAxisColumn, yAxisColumn);
+    return output;
 }
 
-QString ChartsModel::getTreeMapChartValues(QString xAxisColumn, QString yAxisColumn, QStringList groupNames)
+QString ChartsModel::getTreeMapChartValues(QStringList xAxisColumn, QString yAxisColumn)
 {
-    QJsonArray data;
-    QJsonArray axisArray;
-
-    // Fetch data here
-    int xKey = newChartHeader.key( xAxisColumn );
-    int yKey = newChartHeader.key( yAxisColumn );
-
-    // Group name operations
-    QVector<int> groupKeyValues;
-    int groupKeySize = groupNames.length();
-
-    for(int i = 0; i < groupKeySize; i++){
-        groupKeyValues.append(newChartHeader.key(groupNames.at(i)));
-    }
-
-    int totalData = (*newChartData.value(xKey)).length();
-
-    for(int i = 0; i < totalData; i++){
-        QJsonObject axisData;
-        axisData.insert("name", (*newChartData.value(xKey)).at(i));
-        axisData.insert("size", (*newChartData.value(yKey)).at(i));
-        axisArray.append(axisData);
-
-    }
-
-    QJsonObject colData;
-    colData.insert("name", groupNames.at(0));
-    colData.insert("children", axisArray);
-
-    QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(yAxisColumn);
-
-    data.append(colData);
-    data.append(columns);
-
-    QJsonDocument doc;
-    doc.setArray(data);
-
-    QString strData = doc.toJson();
-
-    return strData;
-    return "";
+    QString output;
+    output = this->getTreeSunburstValues(xAxisColumn, yAxisColumn);
+    return output;
 }
 
 QString ChartsModel::getKPIChartValues(QString xAxisColumn, QString yAxisColumn, QStringList groupNames)
@@ -505,20 +426,9 @@ QString ChartsModel::getPivotChartValues(QString xAxisColumn, QString yAxisColum
     return "";
 }
 
-//QString ChartsModel::getParentChildValues(QStringList xAxisColumn, QString yAxisColumn)
-QString ChartsModel::getParentChildValues()
+QString ChartsModel::getTreeSunburstValues(QStringList & xAxisColumn, QString & yAxisColumn)
 {
-
-    // [a,b,c]
-    // [x,y,z]
-    qDebug() << "CLICKED ME";
-    QStringList xAxisColumn;
-    QString yAxisColumn;
     int pointerSize;
-    int tmpSize;
-
-    xAxisColumn << "country" << "state" << "city" <<  "district";
-    yAxisColumn = "population";
 
     QJsonArray data;
     QJsonArray axisArray;
@@ -530,6 +440,10 @@ QString ChartsModel::getParentChildValues()
 
     json *jsonPointer = new json;
     json *jsonPointerMeasure = new json;
+
+    int yKeyLoop = 0;
+    QString paramName = "";
+    QString hashKeyword = "";
 
     // masterHash will be used to compare if any map has been generated earlier
     // if there is an exact match with the hash, then it exists. Else create a new hash
@@ -552,15 +466,11 @@ QString ChartsModel::getParentChildValues()
 
     int totalData = (*newChartData.value(xKey)).length();
 
-    int yKeyLoop = 0;
-    QString paramName = "";
-    QString hashKeyword = "";
 
     // Considering the measure as string here to avoid unwanted errors in wrong casting
     // The front in javascript can easily handle this
 
-        for(int i = 0; i < totalData; i++){
-//    for(int i = 2; i < 10; i++){
+    for(int i = 0; i < totalData; i++){
 
         measure = (*newChartData.value(yKey)).at(i).toLong();
 
@@ -585,24 +495,18 @@ QString ChartsModel::getParentChildValues()
                 masterHash->append(hashKeyword);
                 totalCount->insert(hashKeyword, measure);
 
+                tmpOutput["name"] = paramName.toStdString();
+                tmpOutput["size"] = measure;
+                tmpOutput["children"] = emptyJsonArray;
+
                 // Check if first element of json is already there
                 // If not, then add it
                 if(j == 0){
-
-                    tmpOutput["name"] = paramName.toStdString();
-                    tmpOutput["size"] = measure;
-                    tmpOutput["children"] = emptyJsonArray;
-
                     output.push_back(tmpOutput);
                     positions.insert(hashKeyword, output.size() - 1);
                     pastHashKeyword[0] = hashKeyword;
 
-
                 } else{
-                    tmpOutput["name"] = paramName.toStdString();
-                    tmpOutput["size"] = measure;
-                    tmpOutput["children"] = emptyJsonArray;
-
 
                     jsonPointer = &output;
                     for(int k =0; k < j; k++){
@@ -616,9 +520,7 @@ QString ChartsModel::getParentChildValues()
                                 pointerSize = jsonPointer->at(positions.value(pastHashKeyword.value(k))).at("children").size() - 1;
                                 positions.insert(hashKeyword, pointerSize);
                             }catch (std::exception &e) {
-                                qDebug() << "C2" << e.what()
-                                         << k << jsonPointer->to_string().c_str()
-                                         << pointerSize << pastHashKeyword.value(j) << positions.value(hashKeyword);
+                                qDebug() << "C2" << e.what();
                             }
 
                         } else{
