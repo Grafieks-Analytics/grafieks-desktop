@@ -358,7 +358,7 @@ ApplicationWindow {
             MenuItem{
                 text: qsTr("Test")
                 onTriggered: {
-                    stacklayout_home.currentIndex = 1
+                    stacklayout_home.currentIndex = 8
                 }
             }
 
