@@ -241,7 +241,7 @@ QString ChartsModel::getLineChartValues(QString xAxisColumn, QString yAxisColumn
     return output;
 }
 
-QString ChartsModel::getPieChartValues(QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType)
+QString ChartsModel::getPieChartValues(QString xAxisColumn, QString yAxisColumn)
 {
     QJsonArray data;
     QJsonObject obj;
@@ -263,28 +263,47 @@ QString ChartsModel::getPieChartValues(QString xAxisColumn, QString yAxisColumn,
     return strData;
 }
 
-QString ChartsModel::getFunnelChartValues(QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType)
+QString ChartsModel::getFunnelChartValues(QString xAxisColumn, QString yAxisColumn)
 {
     QJsonArray data;
-    QJsonArray axisData;
+    QJsonArray axisDataArray;
+    QStringList *uniqueHashKeywords = new QStringList;
 
     // Fetch data here
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
 
-    int totalData = (*newChartData.value(xKey)).length();
+    QStringList *xAxisDataPointer = &(*newChartData.value(xKey));
+    QStringList *yAxisDataPointer = &(*newChartData.value(yKey));
 
-    for(int i = 0; i < totalData; i++){
+    QStringList xAxisData;
+    QStringList yAxisData;
 
-        QJsonObject obj;
+    QJsonObject obj;
+    int index;
 
-        obj.insert("key", (*newChartData.value(xKey)).at(i));
-        obj.insert("value", (*newChartData.value(yKey)).at(i));
-        axisData.append(obj);
+    for(int i = 0; i < xAxisDataPointer->length(); i++){
 
+        obj.empty();
+
+        if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
+            uniqueHashKeywords->append(xAxisDataPointer->at(i));
+
+            obj.insert("key", xAxisDataPointer->at(i));
+            obj.insert("value", yAxisDataPointer->at(i));
+            axisDataArray.append(obj);
+
+        } else{
+
+            index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
+            obj = axisDataArray[index].toObject();
+            obj["value"] = QString::number(obj.value("value").toString().toDouble() + yAxisDataPointer->at(i).toFloat());
+
+            axisDataArray.replace(index, obj);
+        }
     }
 
-    data.append(axisData);
+    data.append(axisDataArray);
 
     QJsonArray columns;
     columns.append(xAxisColumn);
