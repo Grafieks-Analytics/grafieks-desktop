@@ -17,11 +17,11 @@ class ChartsModel : public QObject
 public:
     explicit ChartsModel(QObject *parent = nullptr);
 
-    Q_INVOKABLE QString getBarChartValues(QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType);
+    Q_INVOKABLE QString getBarChartValues(QString xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getStackedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
     Q_INVOKABLE QString getGroupedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
-    Q_INVOKABLE QString getAreaChartValues(QString xAxisColumn, QString yAxisColumn, QString xAxisCalculationType, QString yAxisCalculationType);
-    Q_INVOKABLE QString getLineChartValues(QString xAxisColumn, QString yAxisColumn, QString xAxisCalculationType, QString yAxisCalculationType);
+    Q_INVOKABLE QString getAreaChartValues(QString xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE QString getLineChartValues(QString xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getPieChartValues( QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType);
     Q_INVOKABLE QString getFunnelChartValues( QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType);
     Q_INVOKABLE QString getRadarChartValues( QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType);
@@ -39,8 +39,8 @@ public:
     Q_INVOKABLE QString getTableChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
     Q_INVOKABLE QString getPivotChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
 
-//    Q_INVOKABLE QString getParentChildValues( QStringList xAxisColumn, QString yAxisColumn);
-    Q_INVOKABLE QString getTreeSunburstValues(QStringList & xAxisColumn, QString & yAxisColum);
+    Q_INVOKABLE QString getLineAreaValues( QString &xAxisColumn, QString &yAxisColumn);
+    Q_INVOKABLE QString getTreeSunburstValues(QStringList &xAxisColumn, QString &yAxisColum);
 
 public slots:
     void getChartData(QMap<int, QStringList*> chartData);
