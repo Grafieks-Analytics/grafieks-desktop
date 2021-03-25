@@ -282,8 +282,10 @@ Page {
 
             switch(chartTitle){
             case Constants.barChartTitle:
-                console.log("BAR CLICKED")
-                dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                console.log("BAR CLICKED", xAxisColumns[0])
+//                dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+//                dataValues = ChartsModel.getStackedBarChartValues("country","population","state")
+                dataValues = ChartsModel.getGroupedBarChartValues("country","population", "state")
                 break;
             case Constants.areaChartTitle:
             case Constants.lineChartTitle:
@@ -349,7 +351,7 @@ Page {
                 break;
             case Constants.kpiTitle:
                 console.log("KPI CLICKED")
-                dataValues = ChartsModel.getKPIChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                dataValues = ChartsModel.getKPIChartValues(xAxisColumns[0]);
                 break;
             case Constants.tableTitle:
                 console.log("TABLE CLICKED")

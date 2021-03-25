@@ -18,7 +18,8 @@ public:
     explicit ChartsModel(QObject *parent = nullptr);
 
     Q_INVOKABLE QString getBarChartValues(QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType);
-    Q_INVOKABLE QString getStackedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType, QString groupedBy);
+    Q_INVOKABLE QString getStackedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
+    Q_INVOKABLE QString getGroupedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
     Q_INVOKABLE QString getAreaChartValues(QString xAxisColumn, QString yAxisColumn, QString xAxisCalculationType, QString yAxisCalculationType);
     Q_INVOKABLE QString getLineChartValues(QString xAxisColumn, QString yAxisColumn, QString xAxisCalculationType, QString yAxisCalculationType);
     Q_INVOKABLE QString getPieChartValues( QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType);
@@ -29,12 +30,12 @@ public:
 
     Q_INVOKABLE QString getSunburstChartValues( QStringList xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getWaterfallChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
-    Q_INVOKABLE QString getGaugeChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
+    Q_INVOKABLE QString getGaugeChartValues(QString calculateColumn);
     Q_INVOKABLE QString getSankeyChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
 
     Q_INVOKABLE QString getTreeChartValues( QStringList xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getTreeMapChartValues( QStringList xAxisColumn, QString yAxisColumn);
-    Q_INVOKABLE QString getKPIChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
+    Q_INVOKABLE QString getKPIChartValues( QString calculateColumn);
     Q_INVOKABLE QString getTableChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
     Q_INVOKABLE QString getPivotChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
 
