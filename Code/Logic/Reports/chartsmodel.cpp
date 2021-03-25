@@ -33,7 +33,7 @@ QString ChartsModel::getBarChartValues(QString xAxisColumn, QString yAxisColumn)
         } else{
 
             index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
-            yAxisData[index] = QString::number(yAxisData[index].toFloat() + yAxisDataPointer->at(i).toFloat());
+            yAxisData[index] = yAxisData[index].toFloat() + yAxisDataPointer->at(i).toFloat();
 
         }
     }
@@ -62,7 +62,7 @@ QString ChartsModel::getStackedBarChartValues(QString xAxisColumn, QString yAxis
 {
 
     QJsonArray data;
-    QStringList tmpData;
+    QVariantList tmpData;
     float yAxisTmpData;
 
     // Order of QMap - xAxisCol, SplitKey, Value
@@ -103,7 +103,7 @@ QString ChartsModel::getStackedBarChartValues(QString xAxisColumn, QString yAxis
             tmpData.append(splitDataPointerPre.at(j));
             tmpData.append("0");
 
-            colData.append(QJsonArray::fromStringList(tmpData));
+            colData.append(QJsonArray::fromVariantList(tmpData));
         }
     }
 
@@ -120,9 +120,9 @@ QString ChartsModel::getStackedBarChartValues(QString xAxisColumn, QString yAxis
 
         tmpData.append(xAxisDataPointer->at(i));
         tmpData.append(splitDataPointer->at(i));
-        tmpData.append(QString::number(yAxisTmpData));
+        tmpData.append(yAxisTmpData);
 
-        colData.replace(index, QJsonArray::fromStringList(tmpData));
+        colData.replace(index, QJsonArray::fromVariantList(tmpData));
 
     }
 
@@ -245,15 +245,25 @@ QString ChartsModel::getPieChartValues(QString xAxisColumn, QString yAxisColumn)
 {
     QJsonArray data;
     QJsonObject obj;
+    QStringList *uniqueHashKeywords = new QStringList;
 
     // Fetch data here
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
 
-    int totalData = (*newChartData.value(xKey)).length();
+    QStringList *xAxisDataPointer = &(*newChartData.value(xKey));
+    QStringList *yAxisDataPointer = &(*newChartData.value(yKey));
 
-    for(int i = 0; i < totalData; i++){
-        obj.insert((*newChartData.value(xKey)).at(i), (*newChartData.value(yKey)).at(i));
+    for(int i = 0; i < xAxisDataPointer->length(); i++){
+
+        if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
+            uniqueHashKeywords->append(xAxisDataPointer->at(i));
+
+             obj.insert(xAxisDataPointer->at(i), yAxisDataPointer->at(i));
+        } else{
+
+            obj[xAxisDataPointer->at(i)] = obj[xAxisDataPointer->at(i)].toDouble() + yAxisDataPointer->at(i).toDouble();
+        }
     }
 
     QJsonDocument doc;
@@ -290,14 +300,14 @@ QString ChartsModel::getFunnelChartValues(QString xAxisColumn, QString yAxisColu
             uniqueHashKeywords->append(xAxisDataPointer->at(i));
 
             obj.insert("key", xAxisDataPointer->at(i));
-            obj.insert("value", yAxisDataPointer->at(i));
+            obj.insert("value", yAxisDataPointer->at(i).toDouble());
             axisDataArray.append(obj);
 
         } else{
 
             index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
             obj = axisDataArray[index].toObject();
-            obj["value"] = QString::number(obj.value("value").toString().toDouble() + yAxisDataPointer->at(i).toFloat());
+            obj["value"] = obj.value("value").toDouble() + yAxisDataPointer->at(i).toDouble();
 
             axisDataArray.replace(index, obj);
         }
@@ -318,41 +328,58 @@ QString ChartsModel::getFunnelChartValues(QString xAxisColumn, QString yAxisColu
     return strData;
 }
 
-QString ChartsModel::getRadarChartValues(QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType)
+QString ChartsModel::getRadarChartValues(QString xAxisColumn, QString yAxisColumn)
 {
     QJsonArray data;
-    QJsonArray axisArray;
+    QJsonArray axisDataArray;
+    QStringList *uniqueHashKeywords = new QStringList;
 
     // Fetch data here
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
 
-    int totalData = (*newChartData.value(xKey)).length();
+    QStringList *xAxisDataPointer = &(*newChartData.value(xKey));
+    QStringList *yAxisDataPointer = &(*newChartData.value(yKey));
 
-    for(int i = 0; i < totalData; i++){
-        QJsonArray axisData;
-        axisData.append((*newChartData.value(xKey)).at(i));
-        axisData.append((*newChartData.value(yKey)).at(i));
-        axisArray.append(axisData);
+    QStringList xAxisData;
+    QStringList yAxisData;
+
+    QJsonObject obj;
+    int index;
+
+    for(int i = 0; i < xAxisDataPointer->length(); i++){
+
+        obj.empty();
+
+        if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
+            uniqueHashKeywords->append(xAxisDataPointer->at(i));
+
+            obj.insert("axis", xAxisDataPointer->at(i));
+            obj.insert("value", yAxisDataPointer->at(i).toDouble());
+            axisDataArray.append(obj);
+
+        } else{
+
+            index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
+            obj = axisDataArray[index].toObject();
+            obj["value"] = obj.value("value").toDouble() + yAxisDataPointer->at(i).toDouble();
+
+            axisDataArray.replace(index, obj);
+        }
     }
 
-
-    QJsonArray colData;
-    colData.append(axisArray);
+    data.append(axisDataArray);
 
     QJsonArray columns;
     columns.append(xAxisColumn);
     columns.append(yAxisColumn);
 
-
-    data.append(colData);
     data.append(columns);
 
     QJsonDocument doc;
     doc.setArray(data);
 
     QString strData = doc.toJson();
-
     return strData;
 }
 
@@ -481,7 +508,7 @@ QString ChartsModel::getWaterfallChartValues(QString xAxisColumn, QString yAxisC
     return strData;
 }
 
-QString ChartsModel::getGaugeChartValues(QString calculateColumn)
+float ChartsModel::getGaugeChartValues(QString calculateColumn)
 {
     int calculateColumnKey = newChartHeader.key( calculateColumn );
     QStringList *calculateColumnPointer = &(*newChartData.value(calculateColumnKey));
@@ -492,7 +519,7 @@ QString ChartsModel::getGaugeChartValues(QString calculateColumn)
         output += calculateColumnPointer->at(i).toFloat();
     }
     qDebug() << output << "GAUGE";
-    return QString::number(output);
+    return output;
 }
 
 QString ChartsModel::getSankeyChartValues(QString xAxisColumn, QString yAxisColumn, QStringList groupNames)
@@ -548,7 +575,7 @@ QString ChartsModel::getTreeMapChartValues(QStringList xAxisColumn, QString yAxi
     return output;
 }
 
-QString ChartsModel::getKPIChartValues(QString calculateColumn)
+float ChartsModel::getKPIChartValues(QString calculateColumn)
 {
 
     int calculateColumnKey = newChartHeader.key( calculateColumn );
@@ -560,7 +587,7 @@ QString ChartsModel::getKPIChartValues(QString calculateColumn)
         output += calculateColumnPointer->at(i).toFloat();
     }
     qDebug() << output << "KPI";
-    return QString::number(output);
+    return output;
 }
 
 QString ChartsModel::getTableChartValues(QString xAxisColumn, QString yAxisColumn, QStringList groupNames)
@@ -596,7 +623,7 @@ QString ChartsModel::getLineAreaValues(QString &xAxisColumn, QString &yAxisColum
             uniqueHashKeywords->append(xAxisDataPointer->at(i));
 
             tmpData.append(xAxisDataPointer->at(i));
-            tmpData.append(yAxisDataPointer->at(i));
+            tmpData.append(yAxisDataPointer->at(i).toFloat());
 
             colData.append(QJsonArray::fromVariantList(tmpData));
         } else{
@@ -604,7 +631,7 @@ QString ChartsModel::getLineAreaValues(QString &xAxisColumn, QString &yAxisColum
             index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
             tmpData.append(colData.at(index).toArray().toVariantList());
 
-            tmpData[1] = QString::number(tmpData[1].toFloat() + yAxisDataPointer->at(i).toFloat());
+            tmpData[1] = tmpData[1].toFloat() + yAxisDataPointer->at(i).toFloat();
             colData.replace(index, QJsonArray::fromVariantList(tmpData));
 
         }

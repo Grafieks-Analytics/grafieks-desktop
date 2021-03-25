@@ -313,7 +313,7 @@ Page {
                 break;
             case Constants.radarChartTitle:
                 console.log("RADAR CLICKED")
-                dataValues = ChartsModel.getRadarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                dataValues = ChartsModel.getRadarChartValues(xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.scatterChartTitle:
                 console.log("SCATTER CLICKED")
