@@ -36,7 +36,7 @@ public:
     Q_INVOKABLE QString getTreeChartValues( QStringList xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getTreeMapChartValues( QStringList xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE float getKPIChartValues( QString calculateColumn);
-    Q_INVOKABLE QString getTableChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
+    Q_INVOKABLE QString getTableChartValues( QStringList xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getPivotChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
 
     Q_INVOKABLE QString getLineAreaValues( QString &xAxisColumn, QString &yAxisColumn);

@@ -353,7 +353,7 @@ Page {
                 break;
             case Constants.tableTitle:
                 console.log("TABLE CLICKED")
-                dataValues = DuckReportsDS.getTableChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                dataValues = ChartsModel.getTableChartValues(["state", "district"], "population",'Sum');
                 break;
             case Constants.pivotTitle:
                 console.log("PIVOT CLICKED")
