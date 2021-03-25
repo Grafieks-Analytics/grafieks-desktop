@@ -22,8 +22,8 @@ public:
     Q_INVOKABLE QString getGroupedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
     Q_INVOKABLE QString getAreaChartValues(QString xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getLineChartValues(QString xAxisColumn, QString yAxisColumn);
-    Q_INVOKABLE QString getPieChartValues( QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType);
-    Q_INVOKABLE QString getFunnelChartValues( QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType);
+    Q_INVOKABLE QString getPieChartValues( QString xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE QString getFunnelChartValues( QString xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getRadarChartValues( QString xAxisColumn, QString yAxisColumn, QString yAxisCalculationType);
     Q_INVOKABLE QString getScatterChartValues( QString xAxisColumn, QString yAxisColumn, QString groupName);
     Q_INVOKABLE QString getHeatMapChartValues( QString xAxisColumn, QString yAxisColumn, QString groupName);
