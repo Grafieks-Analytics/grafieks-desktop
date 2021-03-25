@@ -259,7 +259,7 @@ QString ChartsModel::getPieChartValues(QString xAxisColumn, QString yAxisColumn)
         if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
             uniqueHashKeywords->append(xAxisDataPointer->at(i));
 
-             obj.insert(xAxisDataPointer->at(i), yAxisDataPointer->at(i));
+            obj.insert(xAxisDataPointer->at(i), yAxisDataPointer->at(i));
         } else{
 
             obj[xAxisDataPointer->at(i)] = obj[xAxisDataPointer->at(i)].toDouble() + yAxisDataPointer->at(i).toDouble();
@@ -590,9 +590,82 @@ float ChartsModel::getKPIChartValues(QString calculateColumn)
     return output;
 }
 
-QString ChartsModel::getTableChartValues(QString xAxisColumn, QString yAxisColumn, QStringList groupNames)
+QString ChartsModel::getTableChartValues(QStringList xAxisColumn, QString yAxisColumn)
 {
-    return "";
+    QJsonArray data;
+    QStringList *uniqueHashKeywords = new QStringList;
+    QString masterKeyword;
+
+    // Fetch data here
+    QVector<int> xKey;
+    int yKey = newChartHeader.key( yAxisColumn );
+
+    QMap<int, QStringList> *xAxisDataPointer = new QMap<int, QStringList>;
+    QStringList *yAxisDataPointer = &(*newChartData.value(yKey));
+
+    QJsonArray columns;
+
+    for(int i = 0; i < xAxisColumn.length(); i++){
+        xKey.append(newChartHeader.key( xAxisColumn.at(i)));
+        xAxisDataPointer->insert(i, *newChartData.value(xKey.at(i)));
+
+        // Append to output columns -- all x axis names
+        columns.append(xAxisColumn.at(i));
+    }
+
+    // Append to output columns -- all y axis name
+    columns.append(yAxisColumn);
+
+    QStringList xAxisData;
+    QStringList yAxisData;
+    int index;
+
+    QVariantList tmpData;
+    QJsonArray colData;
+
+    int xAxisLength = xAxisColumn.length();
+
+
+    for(int i = 0; i < xAxisDataPointer->value(0).length(); i++){
+
+        tmpData.clear();
+        masterKeyword.clear();
+
+        for(int j = 0; j < xAxisLength; j++){
+            masterKeyword.append(xAxisDataPointer->value(j).at(i));
+        }
+
+
+        if(!uniqueHashKeywords->contains(masterKeyword)){
+            uniqueHashKeywords->append(masterKeyword);
+
+            for(int j = 0; j < xAxisLength; j++){
+                tmpData.append(xAxisDataPointer->value(j).at(i));
+            }
+
+            tmpData.append(yAxisDataPointer->at(i));
+            colData.append(QJsonArray::fromVariantList(tmpData));
+
+        } else{
+
+            index = uniqueHashKeywords->indexOf(masterKeyword);
+            tmpData.append(colData.at(index).toArray().toVariantList());
+
+            tmpData[xAxisLength] = tmpData[xAxisLength].toFloat() + yAxisDataPointer->at(i).toFloat();
+            colData.replace(index, QJsonArray::fromVariantList(tmpData));
+        }
+
+    }
+
+    data.append(colData);
+    data.append(columns);
+
+    QJsonDocument doc;
+    doc.setArray(data);
+
+    QString strData = doc.toJson();
+
+    return strData;
 }
 
 QString ChartsModel::getPivotChartValues(QString xAxisColumn, QString yAxisColumn, QStringList groupNames)
