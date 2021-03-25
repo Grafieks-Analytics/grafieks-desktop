@@ -283,14 +283,24 @@ Page {
             switch(chartTitle){
             case Constants.barChartTitle:
                 console.log("BAR CLICKED", xAxisColumns[0])
-//                dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
-//                dataValues = ChartsModel.getStackedBarChartValues("country","population","state")
+                // Bar - xAxis(String), yAxis(String)
+                // dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
+
+                // Stacked Bar - xAxis(String), yAxis(String), Split(String)
+                // dataValues = ChartsModel.getStackedBarChartValues("country","population","state")
+
+                // Grouped Bar - xAxis(String), yAxis(String), Split(String)
                 dataValues = ChartsModel.getGroupedBarChartValues("country","population", "state")
                 break;
             case Constants.areaChartTitle:
+                console.log("AREA CLICKED")
+                // Area - xAxis(String), yAxis(String)
+                dataValues =  ChartsModel.getAreaChartValues(xAxisColumns[0],yAxisColumns[0]);
+                break;
             case Constants.lineChartTitle:
-                console.log("LINE/AREA CLICKED")
-                dataValues =  ChartsModel.getAreaChartValues(xAxisColumns[0],yAxisColumns[0],'Sum','Sum');
+                console.log("LINE CLICKED")
+                // Line - xAxis(String), yAxis(String)
+                dataValues =  ChartsModel.getLineChartValues(xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.pieChartTitle:
             case Constants.donutChartTitle:
@@ -301,18 +311,6 @@ Page {
                 console.log("FUNNEL CLICKED")
                 dataValues = ChartsModel.getFunnelChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
-                //            case Constants.stackedBarChartTitle:
-                //                dataValues = DuckReportsDS.getStackedBarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
-                //                break;
-                //            case Constants.groupedBarChartTitle:
-                //                dataValues = DuckReportsDS.getGroupedBarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
-                //                break;
-                //            case Constants.geoChartTitle:
-                //                dataValues = DuckReportsDS.getGeoChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
-                //                break;
-                //            case Constants.combinationChartTitle:
-                //                dataValues = DuckReportsDS.getCombinationChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
-                //                break;
             case Constants.radarChartTitle:
                 console.log("RADAR CLICKED")
                 dataValues = ChartsModel.getRadarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
