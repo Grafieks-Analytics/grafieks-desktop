@@ -241,6 +241,12 @@ QString ChartsModel::getLineChartValues(QString xAxisColumn, QString yAxisColumn
     return output;
 }
 
+QString ChartsModel::getLineBarChartValues(QString xAxisColumn, QString yBarAxisColumn, QString yLineAxisColumn)
+{
+
+    return "";
+}
+
 QString ChartsModel::getPieChartValues(QString xAxisColumn, QString yAxisColumn)
 {
     QJsonArray data;
@@ -383,43 +389,83 @@ QString ChartsModel::getRadarChartValues(QString xAxisColumn, QString yAxisColum
     return strData;
 }
 
-QString ChartsModel::getScatterChartValues(QString xAxisColumn, QString yAxisColumn, QString groupName)
+QString ChartsModel::getScatterChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
     QJsonArray data;
-    QJsonArray axisArray;
+    QVariantList tmpData;
+    float yAxisTmpData;
+    QStringList *uniqueHashKeywords = new QStringList;
+
+    // Order of QMap - xAxisCol, SplitKey, Value
+    QStringList masterKeywordList;
+    QString masterKeyword;
 
     // Fetch data here
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
-    int groupNameKey = newChartHeader.key( groupName );
+    int splitKey = newChartHeader.key( xSplitKey );
 
-    int totalData = (*newChartData.value(xKey)).length();
+    QStringList *xAxisDataPointer = &(*newChartData.value(xKey));
+    QStringList *yAxisDataPointer = &(*newChartData.value(yKey));
+    QStringList *splitDataPointer = &(*newChartData.value(splitKey));
 
-    for(int i = 0; i < totalData; i++){
-        QJsonArray axisData;
-        axisData.append((*newChartData.value(xKey)).at(i));
-        axisData.append((*newChartData.value(yKey)).at(i));
-        axisData.append((*newChartData.value(groupNameKey)).at(i));
-        axisArray.append(axisData);
+    // To pre-populate json array
+    QStringList xAxisDataPointerPre = (*newChartData.value(xKey));
+    QStringList splitDataPointerPre = (*newChartData.value(splitKey));
+
+    // Fetch unique xAxisData & splitter
+    xAxisDataPointerPre.removeDuplicates();
+    splitDataPointerPre.removeDuplicates();
+
+    int index;
+    QJsonArray colData;
+
+
+    // Populate the actual data
+    for(int i = 0; i < xAxisDataPointer->length(); i++){
+
+        masterKeyword = xAxisDataPointer->at(i) + splitDataPointer->at(i);
+        tmpData.clear();
+        yAxisTmpData = 0.0;
+
+        if(!uniqueHashKeywords->contains(masterKeyword)){
+            uniqueHashKeywords->append(masterKeyword);
+
+            tmpData.append(yAxisDataPointer->at(i));
+            tmpData.append(splitDataPointer->at(i));
+            tmpData.append(xAxisDataPointer->at(i));
+
+            colData.append(QJsonArray::fromVariantList(tmpData));
+        } else{
+
+            index = uniqueHashKeywords->indexOf(masterKeyword);
+            yAxisTmpData =  colData.at(index).toArray().at(0).toString().toFloat() + yAxisDataPointer->at(i).toFloat();
+
+            tmpData.append(yAxisTmpData);
+            tmpData.append(splitDataPointer->at(i));
+            tmpData.append(xAxisDataPointer->at(i));
+
+            colData.replace(index, QJsonArray::fromVariantList(tmpData));
+
+        }
+
+
+
     }
 
-    qDebug() << axisArray << "Scatter";
+//    QJsonArray columns;
+//    columns.append(xSplitKey);
+//    columns.append(yAxisColumn);
 
-    QJsonArray colData;
-    colData.append(axisArray);
-
-    QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(yAxisColumn);
 
     data.append(colData);
-    data.append(columns);
+//    data.append(QJsonArray::fromStringList(xAxisDataPointerPre));
+//    data.append(columns);
 
     QJsonDocument doc;
     doc.setArray(data);
 
     QString strData = doc.toJson();
-
     return strData;
 }
 

@@ -317,7 +317,7 @@ Page {
                 break;
             case Constants.scatterChartTitle:
                 console.log("SCATTER CLICKED")
-                dataValues = ChartsModel.getScatterChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                dataValues = ChartsModel.getScatterChartValues(xAxisColumns[0],yAxisColumns[0],xAxisColumns[1]);
                 break;
             case Constants.treeChartTitle:
                 console.log("TREECHART CLICKED")
