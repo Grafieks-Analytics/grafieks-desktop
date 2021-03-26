@@ -304,7 +304,6 @@ Page {
                 // Grouped Bar - xAxis(String), yAxis(String), Split(String)
                 // dataValues = ChartsModel.getGroupedBarChartValues("country","population", "state")
 
-
                 break;
             case Constants.areaChartTitle:
                 console.log("AREA CLICKED")
@@ -314,7 +313,10 @@ Page {
             case Constants.lineChartTitle:
                 console.log("LINE CLICKED")
                 // Line - xAxis(String), yAxis(String)
-                dataValues =  ChartsModel.getLineChartValues(xAxisColumns[0],yAxisColumns[0]);
+                // dataValues =  ChartsModel.getLineChartValues(xAxisColumns[0],yAxisColumns[0]);
+
+                // Line Bar - xAxis(String), yAxis(String)
+                dataValues =  ChartsModel.getLineBarChartValues("state", "id", "population");
                 break;
             case Constants.pieChartTitle:
             case Constants.donutChartTitle:
