@@ -281,7 +281,7 @@ void DropboxDS::dataReadFinished()
             QString DropboxPathLower = dataObj["path_lower"].toString();
             QString DropboxClientModi;
             if(DropboxTag  == "file"){
-                DropboxClientModi = dataObj["client_modified"].toString();
+                DropboxClientModi = QDateTime::fromString(dataObj["client_modified"].toString(), Qt::ISODate).toString("yyyy/MM/dd HH:mm ap");
                 extensionList = DropboxName.split('.');
                 DropboxExtension = "." + extensionList.last();
             }
@@ -335,7 +335,7 @@ void DropboxDS::dataSearchedFinished()
             QString DropboxClientModi;
 
             if(DropboxTag  == "file"){
-                DropboxClientModi = dataObj3["client_modified"].toString();
+                DropboxClientModi = QDateTime::fromString(dataObj["client_modified"].toString(), Qt::ISODate).toString("yyyy/MM/dd HH:mm ap");
                 extensionList = DropboxName.split('.');
                 DropboxExtension = "." + extensionList.last();
             }

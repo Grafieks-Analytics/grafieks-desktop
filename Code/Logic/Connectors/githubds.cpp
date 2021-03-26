@@ -124,7 +124,7 @@ void GithubDS::dataReadFinished()
             QString GithubID = dataObj["id"].toString();
             QString GithubName = dataObj["name"].toString();
             QString GithubKind = dataObj["kind"].toString();
-            QString GithubModiTime = dataObj["modifiedTime"].toString();
+            QString GithubModiTime = QDateTime::fromString(dataObj["modifiedTime"].toString(), Qt::ISODate).toString("yyyy/MM/dd HH:mm ap");
             QString GithubExtension = "file";
             QString GithubMimeType = dataObj["mimeType"].toString();
             QStringList extensionList;

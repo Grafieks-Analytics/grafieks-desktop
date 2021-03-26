@@ -97,13 +97,10 @@ Popup {
         if(tag === "file")
         {
 
-            let newDate = new Date(modifiedTime);
-            let dateString = newDate.getUTCFullYear() +"/"+ (newDate.getUTCMonth()+1) +"/"+ newDate.getUTCDate() + " " + newDate.getUTCHours() + ":" + newDate.getUTCMinutes() + ":" + newDate.getUTCSeconds();
-
             path.text = name
             detailNameDisplay.text = name;
             documentTypeDisplay.text = "sample" //type;
-            modifiedTimeDisplay.text = dateString;
+            modifiedTimeDisplay.text = modifiedTime;
 
             updatePath(pathLower)
         }
