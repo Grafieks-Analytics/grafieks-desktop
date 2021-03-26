@@ -48,9 +48,10 @@ SheetDS::SheetDS(QObject *parent) : QObject(parent),
     connect(this->google, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
         qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
 
+        // Get Files list
         m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'"));
-
         connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
+
 
     });
 }
@@ -85,11 +86,6 @@ void SheetDS::homeBut()
     m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'"));
 
     connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
-}
-
-void SheetDS::getUserName()
-{
-
 }
 
 
@@ -178,8 +174,42 @@ void SheetDS::dataReadFinished()
         }
 
         m_dataBuffer->clear();
+
+        // Get user email
+        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/about/?fields=user"));
+        connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::userReadFinished);
+
     }
 
+}
+
+void SheetDS::userReadFinished()
+{
+
+    m_dataBuffer->append(m_networkReply->readAll());
+    if(m_networkReply->error() ){
+        qDebug() <<"There was some error : " << m_networkReply->errorString() ;
+
+    }else{
+
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
+        QJsonObject resultObj = resultJson.object();
+
+        QJsonObject user = resultObj.value("user").toObject();
+        emit getSheetUsername(user["emailAddress"].toString());
+    }
+}
+
+void SheetDS::saveFile()
+{
+
+    QByteArray arr = m_networkReply->readAll();
+    qDebug() << arr << "SAVE FILE";
+
+    QFile file("C:\\Users\\chill\\Desktop\\x.xlsx");
+    file.open(QIODevice::WriteOnly);
+    file.write(arr);
+    file.close();
 }
 
 

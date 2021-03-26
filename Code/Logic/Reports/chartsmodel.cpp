@@ -687,7 +687,7 @@ float ChartsModel::getKPIChartValues(QString calculateColumn)
     return output;
 }
 
-QString ChartsModel::getTableChartValues(QStringList xAxisColumn, QString yAxisColumn)
+QString ChartsModel::getTableChartValues(QStringList xAxisColumn, QStringList yAxisColumn)
 {
     QJsonArray data;
     QString masterKeyword;
@@ -699,7 +699,7 @@ QString ChartsModel::getTableChartValues(QStringList xAxisColumn, QString yAxisC
 
     // Fetch data here
     QVector<int> xKey;
-    int yKey = newChartHeader.key( yAxisColumn );
+    int yKey = newChartHeader.key( yAxisColumn.at(0) );
 
     *yAxisDataPointer = *newChartData.value(yKey);
 
@@ -714,7 +714,7 @@ QString ChartsModel::getTableChartValues(QStringList xAxisColumn, QString yAxisC
     }
 
     // Append to output columns -- all y axis name
-    columns.append(yAxisColumn);
+    columns.append(yAxisColumn.at(0));
 
     QStringList xAxisData;
     QStringList yAxisData;

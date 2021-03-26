@@ -47,8 +47,8 @@ DriveDS::DriveDS(QObject *parent) : QObject(parent),
     connect(this->google, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
         qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
 
+        // Get files list
         m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)"));
-
         connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
 
     });
@@ -84,10 +84,6 @@ void DriveDS::homeBut()
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
 }
 
-void DriveDS::getUserName()
-{
-
-}
 
 void DriveDS::downloadFile(QString fileID)
 {
@@ -197,8 +193,30 @@ void DriveDS::dataReadFinished()
         }
 
         m_dataBuffer->clear();
+
+        // Get user email
+        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/about/?fields=user"));
+        connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::userReadFinished);
+
     }
 
+}
+
+void DriveDS::userReadFinished()
+{
+
+    m_dataBuffer->append(m_networkReply->readAll());
+    if(m_networkReply->error() ){
+        qDebug() <<"There was some error : " << m_networkReply->errorString() ;
+
+    }else{
+
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
+        QJsonObject resultObj = resultJson.object();
+
+        QJsonObject user = resultObj.value("user").toObject();
+        emit getDriveUsername(user["emailAddress"].toString());
+    }
 }
 
 void DriveDS::saveFile()
