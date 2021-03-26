@@ -222,13 +222,17 @@ Rectangle{
         }
         ListElement{
             icon: "pivot.png"
-            chartHtml:"bar.html"
+            chartHtml:"PivotTableTest.html"
             activeChart: false
             title:"Pivot"
+            xAxisLabelName: "Rows"
+            yAxisLabelName: "Columns"
         }
         ListElement{
             icon: "table.png"
-            chartHtml:"bar.html"
+            chartHtml:"TableChart.html"
+            xAxisLabelName: "Rows"
+            yAxisLabelName: "Columns"
             elementWidth: 30
             activeChart: false
             title:"Table"

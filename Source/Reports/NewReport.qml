@@ -46,13 +46,28 @@ Page {
     property var d3PropertyConfig: ({});
 
     onChartTitleChanged: {
+
+        ReportParamsModel.setXAxisColumns([]);
+        ReportParamsModel.setYAxisColumns([]);
+
+        xAxisListModel.clear();
+        yAxisListModel.clear();
+
         drawChart();
     }
 
     onReportChartChanged: {
 
+        ReportParamsModel.setXAxisColumns([]);
+        ReportParamsModel.setYAxisColumns([]);
+
+        xAxisListModel.clear();
+        yAxisListModel.clear();
+
+
         console.log(ReportParamsModel.xAxisColumns);
         console.log(ReportParamsModel.yAxisColumns);
+
 
         switch(reportChart){
         case Constants.stackedBarChart:
@@ -64,9 +79,6 @@ Page {
                 'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
             webEngineView.runJavaScript(resizeQuery);
             break;
-
-
-
         }
 
     }
@@ -321,7 +333,7 @@ Page {
                 break;
             case Constants.treeChartTitle:
                 console.log("TREECHART CLICKED")
-                dataValues = ChartsModel.getTreeChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                dataValues = ChartsModel.getTreeChartValues(xAxisColumns,yAxisColumns[0],'Sum');
                 break;
             case Constants.treeMapChartTitle:
                 console.log("TREEMAP CLICKED")
@@ -333,7 +345,7 @@ Page {
                 break;
             case Constants.sunburstChartTitle:
                 console.log("SUNBURST CLICKED")
-                dataValues = ChartsModel.getSunburstChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                dataValues = ChartsModel.getSunburstChartValues(xAxisColumns,yAxisColumns[0],'Sum');
                 break;
             case Constants.waterfallChartTitle:
                 console.log("WATERFALL CLICKED")
