@@ -31,11 +31,12 @@ public:
 
 public slots:
     void receiveFilterQuery(QString & filteredQuery);
-    void setChartData(int totalRows);
+    void setChartData();
     void setChartHeader(int index, QString colName);
 
 signals:
-
+    void chartDataChanged(QMap<int, QStringList*> chartData);
+    void chartHeaderChanged(QMap<int, QString> chartHeader);
 
 private:
     QHash<int, QByteArray> m_roleNames;
