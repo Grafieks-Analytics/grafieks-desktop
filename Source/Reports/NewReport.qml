@@ -296,13 +296,14 @@ Page {
             case Constants.barChartTitle:
                 console.log("BAR CLICKED", xAxisColumns[0])
                 // Bar - xAxis(String), yAxis(String)
-                // dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
+                 dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
 
                 // Stacked Bar - xAxis(String), yAxis(String), Split(String)
                 // dataValues = ChartsModel.getStackedBarChartValues("country","population","state")
 
                 // Grouped Bar - xAxis(String), yAxis(String), Split(String)
-                dataValues = ChartsModel.getGroupedBarChartValues("country","population", "state")
+                // dataValues = ChartsModel.getGroupedBarChartValues("country","population", "state")
+
                 break;
             case Constants.areaChartTitle:
                 console.log("AREA CLICKED")
@@ -312,7 +313,10 @@ Page {
             case Constants.lineChartTitle:
                 console.log("LINE CLICKED")
                 // Line - xAxis(String), yAxis(String)
-                dataValues =  ChartsModel.getLineChartValues(xAxisColumns[0],yAxisColumns[0]);
+                // dataValues =  ChartsModel.getLineChartValues(xAxisColumns[0],yAxisColumns[0]);
+
+                // Line Bar - xAxis(String), yAxis(String)
+                dataValues =  ChartsModel.getLineBarChartValues("state", "id", "population");
                 break;
             case Constants.pieChartTitle:
             case Constants.donutChartTitle:
@@ -357,7 +361,9 @@ Page {
                 break;
             case Constants.sankeyChartTitle:
                 console.log("SANKEY CLICKED")
-                dataValues = ChartsModel.getSankeyChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                // dataValues = ChartsModel.getSankeyChartValues(xAxisColumns[0],xAxisColumns[1], yAxisColumns[0]);
+                // Sankey
+                 dataValues = ChartsModel.getSankeyChartValues("state", "district", "population");
                 break;
             case Constants.kpiTitle:
                 console.log("KPI CLICKED")
