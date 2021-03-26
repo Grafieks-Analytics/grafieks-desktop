@@ -30,6 +30,9 @@ Popup {
     property var pathFolder: "Drive"
     property var folderName: "Folder name"
 
+    property var fileName: ""
+    property var fileExtension: ""
+
     closePolicy: Popup.NoAutoClose
 
     /***********************************************************************************************************************/
@@ -52,7 +55,13 @@ Popup {
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: DriveDS
 
+        function onGetDriveUsername(username){
+            connectedById.text = "Connected to: "+ username
+        }
+    }
 
 
     // Connections Ends
@@ -106,8 +115,8 @@ Popup {
         documentTypeDisplay.text = type;
         modifiedTimeDisplay.text = dateString;
 
-
-
+        fileName = name
+        fileExtension = type
     }
 
     function onFolderDoubleClicked(name,type){
@@ -177,7 +186,7 @@ Popup {
 
             Text {
                 id: connectedById
-                text: qsTr("Connected by: test@test.com")
+                text: qsTr("Not Connected")
             }
         }
 
@@ -560,6 +569,8 @@ Popup {
                     textValue: "Next"
                     anchors.left: cancelBtn.right
                     anchors.leftMargin: 30
+
+                    onClicked: onFolderDoubleClicked(fileName, fileExtension)
 
                 }
 

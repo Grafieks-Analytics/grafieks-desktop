@@ -14,6 +14,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QSettings>
+#include <QFile>
 
 #include "sheet.h"
 #include "../../secrets.h"
@@ -35,7 +36,6 @@ public:
     Q_INVOKABLE void fetchDatasources();
     Q_INVOKABLE void searchQuer(QString path);
     Q_INVOKABLE void homeBut();
-    Q_INVOKABLE void getUserName();
 
     void addDataSource(Sheet * Sheet);
     Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & kind,const QString & modifiedTime,const QString & extension);
@@ -49,12 +49,14 @@ signals:
     void postItemRemoved();
     void preReset();
     void postReset();
-    void getUsername(QString username);
+    void getSheetUsername(QString username);
 
 private slots:
     void resetDatasource();
 //    void dataReadyRead();
     void dataReadFinished();
+    void userReadFinished();
+    void saveFile();
 
 private:
     QNetworkAccessManager * m_networkAccessManager;
