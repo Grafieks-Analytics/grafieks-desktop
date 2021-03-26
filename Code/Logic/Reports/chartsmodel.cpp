@@ -26,7 +26,7 @@ QString ChartsModel::getBarChartValues(QString xAxisColumn, QString yAxisColumn)
     *yAxisDataPointer = *newChartData.value(yKey);
 
     QStringList xAxisData;
-    QStringList yAxisData;
+    QVariantList yAxisData;
 
     int index;
 
@@ -37,7 +37,7 @@ QString ChartsModel::getBarChartValues(QString xAxisColumn, QString yAxisColumn)
             uniqueHashKeywords->append(xAxisDataPointer->at(i));
 
             xAxisData.append(xAxisDataPointer->at(i));
-            yAxisData.append(yAxisDataPointer->at(i));
+            yAxisData.append(yAxisDataPointer->at(i).toFloat());
         } else{
 
             index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
@@ -48,7 +48,7 @@ QString ChartsModel::getBarChartValues(QString xAxisColumn, QString yAxisColumn)
 
     QJsonArray colData;
     colData.append(QJsonArray::fromStringList(xAxisData));
-    colData.append(QJsonArray::fromStringList(yAxisData));
+    colData.append(QJsonArray::fromVariantList(yAxisData));
 
 
     QJsonArray columns;
@@ -159,7 +159,7 @@ QString ChartsModel::getGroupedBarChartValues(QString xAxisColumn, QString yAxis
 {
 
     QJsonArray data;
-    QStringList tmpData;
+    QVariantList tmpData;
     QVariantList tmpStringList;
 
     // Order of QMap - xAxisCol, SplitKey, Value
@@ -203,7 +203,7 @@ QString ChartsModel::getGroupedBarChartValues(QString xAxisColumn, QString yAxis
             tmpData.append("0");
         }
 
-        colData.append(QJsonArray::fromStringList(tmpData));
+        colData.append(QJsonArray::fromVariantList(tmpData));
     }
 
     // Populate the actual data
