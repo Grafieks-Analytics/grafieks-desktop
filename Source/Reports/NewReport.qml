@@ -303,6 +303,8 @@ Page {
 
                 // Grouped Bar - xAxis(String), yAxis(String), Split(String)
                 // dataValues = ChartsModel.getGroupedBarChartValues("country","population", "state")
+
+
                 break;
             case Constants.areaChartTitle:
                 console.log("AREA CLICKED")
@@ -357,7 +359,9 @@ Page {
                 break;
             case Constants.sankeyChartTitle:
                 console.log("SANKEY CLICKED")
-                dataValues = ChartsModel.getSankeyChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                // dataValues = ChartsModel.getSankeyChartValues(xAxisColumns[0],xAxisColumns[1], yAxisColumns[0]);
+                // Sankey
+                 dataValues = ChartsModel.getSankeyChartValues("state", "district", "population");
                 break;
             case Constants.kpiTitle:
                 console.log("KPI CLICKED")

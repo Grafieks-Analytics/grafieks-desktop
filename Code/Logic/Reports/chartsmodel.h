@@ -33,7 +33,7 @@ public:
     Q_INVOKABLE QString getSunburstChartValues( QStringList xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getWaterfallChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
     Q_INVOKABLE float getGaugeChartValues(QString calculateColumn);
-    Q_INVOKABLE QString getSankeyChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
+    Q_INVOKABLE QString getSankeyChartValues(QString sourceColumn, QString destinationColumn, QString measureColumn);
 
     Q_INVOKABLE QString getTreeChartValues( QStringList xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getTreeMapChartValues( QStringList xAxisColumn, QString yAxisColumn);
@@ -41,7 +41,7 @@ public:
     Q_INVOKABLE QString getTableChartValues( QStringList xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getPivotChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
 
-    Q_INVOKABLE QString getLineAreaValues( QString &xAxisColumn, QString &yAxisColumn);
+    Q_INVOKABLE QString getLineAreaWaterfallValues( QString &xAxisColumn, QString &yAxisColumn);
     Q_INVOKABLE QString getTreeSunburstValues(QStringList &xAxisColumn, QString &yAxisColum);
 
 public slots:
