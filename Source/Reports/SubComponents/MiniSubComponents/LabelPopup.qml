@@ -113,8 +113,10 @@ Popup {
             Rectangle{
                 height: 30
                 width: parent.width
+
                 CustomComboBox{
                     id: fontSizes
+                    height: 500
 
                     Component.onCompleted: {
                         let fontFamilies = Qt.fontFamilies();
@@ -123,6 +125,31 @@ Popup {
                         }
                         fontSizes.model = fonts
                     }
+//                    popup: Popup {
+//                //                            y: control.height - 1
+//                            implicitWidth:  200
+
+//                //                            implicitHeight: contentItem.implicitHeight
+//                        implicitHeight: 500
+//                //                            padding: 1
+
+
+//                        contentItem: ListView {
+//                                     clip: true
+//                                     implicitHeight: 20
+//                                     model:  fonts
+//                                     currentIndex: fontSizes.highlightedIndex
+
+//                                     ScrollIndicator.vertical: ScrollIndicator { }
+//                                 }
+
+//                    }
+
+
+
+
+
+
 
                     model: fonts
                     textRole: "fontName"
@@ -131,6 +158,7 @@ Popup {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.rightMargin: leftMargin
                     anchors.top: parent.top
+
                 }
 
             }

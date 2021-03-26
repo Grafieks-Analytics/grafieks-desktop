@@ -22,12 +22,12 @@ Popup {
 
     CustomSlider {
         from: 8
-        value: 12
+        value: 20
         to: 99
         width: parent.width
 
         onValueChanged: {
-            resizePaddingInner(value/100);
+            resizePaddingInner(1-value/100);
         }
     }
 

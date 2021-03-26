@@ -61,6 +61,7 @@ Popup {
         popup.visible = false
     }
 
+
     function toggleAxisSettings(){
         borderMultipleAxis.visible =  false
         borderAxis.visible =  true
@@ -99,10 +100,17 @@ Popup {
 
     ColorDialog{
         id: xAxisLegendColorDialog
+
     }
 
     ColorDialog{
         id: xAxisTickMarkColorDialog
+        onColorChanged:{
+
+             Constants.defaultXAxisTickColor = xAxisTickMarkColorDialog.color;
+
+            webEngineView.runJavaScript("changeChartAttributes('.x-axis text','fill', '"+xAxisTickMarkColorDialog.color+"')")
+        }
     }
 
     ColorDialog{
@@ -111,6 +119,11 @@ Popup {
 
     ColorDialog{
         id: yAxisTickMarkColorDialog
+        onColorChanged:{
+
+             Constants.defaultYAxisTickColor = yAxisTickMarkColorDialog.color;
+            webEngineView.runJavaScript("changeChartAttributes('.y-axis text','fill', '"+yAxisTickMarkColorDialog.color+"')")
+        }
     }
 
 

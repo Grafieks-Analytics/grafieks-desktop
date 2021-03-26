@@ -9,3 +9,8 @@ function isDateFormat(date) {
     }
     return false;
 }
+
+
+function changeChartAttributes(selector, attributeName, attributeValue) {
+  d3.selectAll(selector).attr(attributeName, attributeValue);
+}

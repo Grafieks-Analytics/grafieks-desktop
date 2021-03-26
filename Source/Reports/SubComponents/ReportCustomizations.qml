@@ -164,6 +164,8 @@ Item{
     Component{
         id: referenceLineComponent
         CustomizeReferenceLine{}
+
+
     }
 
     Component{
@@ -187,7 +189,6 @@ Item{
                 delegate: Rectangle {
                     height: 20
                     width: 150
-
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
                         x: 30
