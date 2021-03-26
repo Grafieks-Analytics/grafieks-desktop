@@ -46,6 +46,7 @@ Rectangle{
             lineTypeChartVisible: false
             maxDropOnXaxis: 3
             maxDropOnYaxis: 3
+            mainCustomizations: "Properties,Legend"
         }
         ListElement{
             icon: "area.png"
@@ -55,6 +56,7 @@ Rectangle{
             title: "Area Chart"
             yAxisVisible: true
             lineTypeChartVisible: false
+            mainCustomizations: "Properties,Legend"
         }
         ListElement{
             icon: "line_chart.png"
@@ -63,6 +65,7 @@ Rectangle{
             title: "Line Chart"
             yAxisVisible: true
             lineTypeChartVisible: true
+            mainCustomizations: "Properties,Legend,Reference Line"
         }
         ListElement{
             icon: "combination_chart.png"
@@ -79,6 +82,7 @@ Rectangle{
             title: "Heat Map"
             yAxisVisible: true
             lineTypeChartVisible: false
+            mainCustomizations: "Properties,Legend,Reference Line"
         }
         ListElement{
             icon: "scatter_plot.png"
@@ -87,6 +91,7 @@ Rectangle{
             title:"Scatter Plot"
             yAxisVisible: true
             lineTypeChartVisible: false
+            mainCustomizations: "Properties,Legend,Reference Line"
         }
         ListElement{
             icon: "waterfall.png"
@@ -95,6 +100,7 @@ Rectangle{
             title:"Waterfall"
             yAxisVisible: true
             lineTypeChartVisible: false
+            mainCustomizations: "Properties,Legend,Reference Line"
         }
         ListElement{
             icon: "pie_chart.png"
@@ -105,6 +111,7 @@ Rectangle{
             yAxisLabelName: "Numerical"
             yAxisVisible: false
             lineTypeChartVisible: false
+            mainCustomizations: "Properties,Legend,Reference Line"
         }
         ListElement{
             icon: "donut.png"
@@ -115,6 +122,7 @@ Rectangle{
             yAxisLabelName: "Numerical"
             yAxisVisible: false
             lineTypeChartVisible: false
+            mainCustomizations: "Properties,Legend,Reference Line"
         }
         ListElement{
             icon: "radar.png"
@@ -125,6 +133,7 @@ Rectangle{
             title:"Radar"
             yAxisVisible: false
             lineTypeChartVisible: false
+            mainCustomizations: "Properties,Legend,Reference Line"
         }
         ListElement{
             icon: "sunburst.png"
@@ -135,6 +144,7 @@ Rectangle{
             yAxisLabelName: "Numerical"
             yAxisVisible: false
             lineTypeChartVisible: false
+            mainCustomizations: "Properties,Legend,Reference Line"
         }
 //        ListElement{
 //            icon: "nightingales_rose.png"
@@ -163,6 +173,7 @@ Rectangle{
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
             lineTypeChartVisible: false
+            mainCustomizations: "Properties,Legend,Reference Line"
         }
         ListElement{
             icon: "tree_chart.png"
@@ -173,12 +184,14 @@ Rectangle{
             yAxisLabelName: "Numerical"
             yAxisVisible: false
             lineTypeChartVisible: false
+            mainCustomizations: "Properties,Legend,Reference Line"
         }
         ListElement{
             icon: "force_directed.png"
             chartHtml:"bar.html"
             activeChart: false
             title:"Force Directed"
+            mainCustomizations: "Properties,Legend,Reference Line"
         }
         ListElement{
             icon: "sankey.png"
@@ -186,6 +199,7 @@ Rectangle{
             elementHeight: 24
             activeChart: false
             title:"Sankey"
+            mainCustomizations: "Properties,Legend,Reference Line"
         }
         ListElement{
             icon: "tree_map.png"
@@ -195,6 +209,7 @@ Rectangle{
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
             title: "Tree Map"
+            mainCustomizations: "Properties,Legend,Reference Line"
         }
 //        ListElement{
 //            icon: "condegram.png"
@@ -211,6 +226,7 @@ Rectangle{
             xAxisLabelName: "Location"
             yAxisLabelName: "Numerical"
             title:"Map"
+            mainCustomizations: "Properties,Legend,Reference Line"
         }
         ListElement{
             icon: "gauge_chart.png"
@@ -219,6 +235,7 @@ Rectangle{
             elementWidth:30
             activeChart: false
             title:"Gauge Chart"
+            mainCustomizations: "Properties,Legend,Reference Line"
         }
         ListElement{
             icon: "pivot.png"
@@ -227,6 +244,7 @@ Rectangle{
             title:"Pivot"
             xAxisLabelName: "Rows"
             yAxisLabelName: "Columns"
+            mainCustomizations: "Properties,Legend,Reference Line,Total"
         }
         ListElement{
             icon: "table.png"
@@ -236,6 +254,7 @@ Rectangle{
             elementWidth: 30
             activeChart: false
             title:"Table"
+            mainCustomizations: "Properties,Legend,Reference Line,Total"
         }
         ListElement{
             icon: "123.png"
@@ -244,6 +263,7 @@ Rectangle{
             elementHeight: 20
             activeChart: false
             title:"KPI"
+            mainCustomizations: "Properties,Legend,Reference Line"
         }
     }
 
@@ -277,9 +297,11 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    function getChart(chartHtml,index,chartTitle){
+    function getChart(chartHtml,index,chartTitle,mainCustomizations){
         report_desiner_page.chartUrl = chartHtml;
         report_desiner_page.chartTitle = chartTitle;
+
+        report_desiner_page.customizationsAvailable = mainCustomizations;
 
         loadchart("../Charts/"+chartHtml);
 //        yAxisVisible  = allCharts.get(index).yAxisVisible;
@@ -355,7 +377,7 @@ Rectangle{
                 MouseArea{
                     anchors.fill: parent
                     hoverEnabled: true
-                    onClicked:  getChart(chartHtml,index,title)
+                    onClicked:  getChart(chartHtml,index,title,mainCustomizations)
                     onEntered: displayToolTipVisible=true
                     onExited: displayToolTipVisible=false
                 }
