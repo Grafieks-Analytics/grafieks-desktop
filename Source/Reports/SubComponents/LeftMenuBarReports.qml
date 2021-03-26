@@ -245,6 +245,14 @@ Rectangle{
             activeChart: false
             title:"KPI"
         }
+        ListElement{
+            icon: "123.png"
+            chartHtml:"bar.html"
+            elementWidth: 30
+            elementHeight: 20
+            activeChart: false
+            title:"Line Bar"
+        }
     }
 
 
