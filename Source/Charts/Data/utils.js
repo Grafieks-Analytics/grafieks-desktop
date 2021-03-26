@@ -9,3 +9,7 @@ function isDateFormat(date) {
     }
     return false;
 }
+
+function setFontFamily(className, fontFamily) {
+    d3.selectAll(className).attr("font-family", fontFamily);
+}

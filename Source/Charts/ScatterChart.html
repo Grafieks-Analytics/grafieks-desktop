@@ -175,13 +175,7 @@
                 ["6.2", "5.4", "virginica"],
                 ["5.9", "5.1", "virginica"],
             ],
-            [
-                "Sepal_Length",
-                "Sepal_Width",
-                "Petal_Length",
-                "Petal_Width",
-                "Species",
-            ],
+            ["Sepal_Length", "Sepal_Width", "Petal_Length"],
             categories,
         ];
 
@@ -283,7 +277,7 @@
                         .style("left", x_pos + "px")
                         .style("top", y_pos + "px")
                         .style("display", "block")
-                        .html("Sepal Length: " + d[0]);
+                        .html(data[1][0] + ": " + d[0]);
                     d3.select(".scatter" + i + d.Species);
 
                     d3.select(this).attr("r", 10);
