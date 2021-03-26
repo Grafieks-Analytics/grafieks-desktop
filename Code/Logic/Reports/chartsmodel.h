@@ -16,6 +16,7 @@ class ChartsModel : public QObject
 
 public:
     explicit ChartsModel(QObject *parent = nullptr);
+    ~ChartsModel();
 
     Q_INVOKABLE QString getBarChartValues(QString xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getStackedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
