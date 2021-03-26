@@ -46,13 +46,28 @@ Page {
     property var d3PropertyConfig: ({});
 
     onChartTitleChanged: {
+
+        ReportParamsModel.setXAxisColumns([]);
+        ReportParamsModel.setYAxisColumns([]);
+
+        xAxisListModel.clear();
+        yAxisListModel.clear();
+
         drawChart();
     }
 
     onReportChartChanged: {
 
+        ReportParamsModel.setXAxisColumns([]);
+        ReportParamsModel.setYAxisColumns([]);
+
+        xAxisListModel.clear();
+        yAxisListModel.clear();
+
+
         console.log(ReportParamsModel.xAxisColumns);
         console.log(ReportParamsModel.yAxisColumns);
+
 
         switch(reportChart){
         case Constants.stackedBarChart:
@@ -64,9 +79,6 @@ Page {
                 'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
             webEngineView.runJavaScript(resizeQuery);
             break;
-
-
-
         }
 
     }
