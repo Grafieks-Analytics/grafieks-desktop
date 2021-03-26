@@ -248,6 +248,25 @@ void BoxDS::dataReadFinished()
             }
         }
         m_dataBuffer->clear();
+
+        // Get user email
+        m_networkReply = this->box->get(QUrl("https://api.box.com/2.0/users/me/"));
+        connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::userReadFinished);
+
+    }
+}
+
+void BoxDS::userReadFinished()
+{
+    m_dataBuffer->append(m_networkReply->readAll());
+    if(m_networkReply->error() ){
+        qDebug() <<"There was some error : " << m_networkReply->errorString() ;
+
+    }else{
+
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
+        QJsonObject resultObj = resultJson.object();
+        emit getBoxUsername(resultObj["login"].toString());
     }
 }
 

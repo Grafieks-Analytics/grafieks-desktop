@@ -170,10 +170,6 @@ void DropboxDS::searchQuer(QString path)
 
 }
 
-void DropboxDS::getUserName()
-{
-
-}
 
 void DropboxDS::downloadFile(QString fileId)
 {
@@ -256,7 +252,7 @@ void DropboxDS::dataReadyRead()
 void DropboxDS::dataReadFinished()
 {
     if(m_networkReply->error()){
-        qDebug() <<"There was some error : "<< m_networkReply->errorString();
+        qDebug() <<"There was some error : "<< m_networkReply->errorString() << m_networkReply->readAll();
     }
     else{
 
@@ -265,8 +261,11 @@ void DropboxDS::dataReadFinished()
 
         this->resetDatasource();
 
+
+
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
+        qDebug() << "RES" <<resultObj;
 
         QJsonArray dataArray = resultObj["entries"].toArray();
 
@@ -297,6 +296,11 @@ void DropboxDS::dataReadFinished()
         }
 
         m_dataBuffer->clear();
+
+        // Get user email
+        m_networkReply = this->dropbox->post(QUrl("https://api.dropboxapi.com/2/users/get_current_account/"));
+        connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::userReadFinished);
+
     }
 }
 
@@ -347,6 +351,26 @@ void DropboxDS::dataSearchedFinished()
 
         }
         m_dataBuffer->clear();
+
+    }
+}
+
+void DropboxDS::userReadFinished()
+{
+
+    m_dataBuffer->append(m_networkReply->readAll());
+    if(m_networkReply->error() ){
+        qDebug() <<"There was some error : " << m_networkReply->errorString() ;
+
+    }else{
+
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
+//        QJsonObject resultObj = resultJson.object();
+
+        qDebug() << "USERD" << resultJson;
+
+//        QJsonObject user = resultObj.value("user").toObject();
+//        emit getDropboxUsername(user["emailAddress"].toString());
     }
 }
 

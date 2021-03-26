@@ -51,11 +51,13 @@ signals:
     void postItemRemoved();
     void preReset();
     void postReset();
+    void getBoxUsername(QString username);
 
 private slots:
     void resetDatasource();
     void dataReadyRead();
     void dataReadFinished();
+    void userReadFinished();
     void saveFile();
 
 public slots:
