@@ -265,6 +265,14 @@ Rectangle{
             title:"KPI"
             mainCustomizations: "Properties,Legend,Reference Line"
         }
+        ListElement{
+            icon: "123.png"
+            chartHtml:"bar.html"
+            elementWidth: 30
+            elementHeight: 20
+            activeChart: false
+            title:"Line Bar"
+        }
     }
 
 

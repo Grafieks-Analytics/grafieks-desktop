@@ -232,6 +232,7 @@ QtObject {
     property string kpiTitle: "KPI"
     property string tableTitle: "Table"
     property string pivotTitle: "Pivot"
+    property string lineBarTitle: "Line Bar"
 
     // Charts ends
 
