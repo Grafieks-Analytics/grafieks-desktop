@@ -277,7 +277,7 @@ Popup {
                     ListView{
                         id: fileList
                         model:BoxModel
-
+                        clip: true
                         height: parent.height
                         width: popup.width * 0.6
 
