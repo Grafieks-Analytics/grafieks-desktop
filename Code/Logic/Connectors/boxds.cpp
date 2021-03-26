@@ -231,7 +231,7 @@ void BoxDS::dataReadFinished()
             QString BoxID = dataObj["id"].toString();
             QString BoxName = dataObj["name"].toString();
             QString BoxType = dataObj["type"].toString();
-            QString BoxModifiedAt = dataObj["modified_at"].toString();
+            QString BoxModifiedAt = QDateTime::fromString(dataObj["modified_at"].toString(), Qt::ISODate).toString("yyyy/MM/dd HH:mm ap");
             QString BoxExtension;
             QStringList extensionList;
             if(BoxType == "folder"){

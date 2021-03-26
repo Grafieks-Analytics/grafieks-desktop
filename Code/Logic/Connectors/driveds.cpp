@@ -175,10 +175,11 @@ void DriveDS::dataReadFinished()
             QString DriveID = dataObj["id"].toString();
             QString DriveName = dataObj["name"].toString();
             QString DriveKind = dataObj["kind"].toString();
-            QString DriveModiTime = dataObj["modifiedTime"].toString();
+            QString DriveModiTime = QDateTime::fromString(dataObj["modifiedTime"].toString(), Qt::ISODate).toString("yyyy/MM/dd HH:mm ap");
             QString DriveExtension = "";
             QString DriveMimeType = dataObj["mimeType"].toString();
             QStringList extensionList;
+
 
             if(DriveName.contains(".")){
                 extensionList = DriveName.split('.');

@@ -116,13 +116,11 @@ Popup {
         }
         else{
             path.text = name
-            let newDate = new Date(modifiedTime);
-            let dateString = newDate.getUTCFullYear() +"/"+ (newDate.getUTCMonth()+1) +"/"+ newDate.getUTCDate() + " " + newDate.getUTCHours() + ":" + newDate.getUTCMinutes() + ":" + newDate.getUTCSeconds();
 
             path.text = name
             detailNameDisplay.text = name;
             documentTypeDisplay.text = extension;
-            modifiedTimeDisplay.text = dateString;
+            modifiedTimeDisplay.text = modifiedTime;
 
         }
 

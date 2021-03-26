@@ -159,7 +159,7 @@ void SheetDS::dataReadFinished()
             QString SheetID = dataObj["id"].toString();
             QString SheetName = dataObj["name"].toString();
             QString SheetKind = dataObj["kind"].toString();
-            QString SheetModiTime = dataObj["modifiedTime"].toString();
+            QString SheetModiTime = QDateTime::fromString(dataObj["modifiedTime"].toString(), Qt::ISODate).toString("yyyy/MM/dd HH:mm ap");
             QString SheetExtension = "";
             QString SheetMimeType = dataObj["mimeType"].toString();
 
