@@ -294,22 +294,84 @@ Page {
 
             switch(chartTitle){
             case Constants.barChartTitle:
-                dataValues =  DuckReportsDS.getBarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                console.log("BAR CLICKED", xAxisColumns[0])
+                // Bar - xAxis(String), yAxis(String)
+                // dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
+
+                // Stacked Bar - xAxis(String), yAxis(String), Split(String)
+                // dataValues = ChartsModel.getStackedBarChartValues("country","population","state")
+
+                // Grouped Bar - xAxis(String), yAxis(String), Split(String)
+                dataValues = ChartsModel.getGroupedBarChartValues("country","population", "state")
                 break;
             case Constants.areaChartTitle:
+                console.log("AREA CLICKED")
+                // Area - xAxis(String), yAxis(String)
+                dataValues =  ChartsModel.getAreaChartValues(xAxisColumns[0],yAxisColumns[0]);
+                break;
             case Constants.lineChartTitle:
-                dataValues =  DuckReportsDS.getAreaChartValues(xAxisColumns[0],yAxisColumns[0],'Sum','Sum');
+                console.log("LINE CLICKED")
+                // Line - xAxis(String), yAxis(String)
+                dataValues =  ChartsModel.getLineChartValues(xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.pieChartTitle:
             case Constants.donutChartTitle:
-                dataValues = DuckReportsDS.getPieChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                console.log("DONUT/PIE CLICKED")
+                dataValues = ChartsModel.getPieChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.funnelChartTitle:
-                dataValues = DuckReportsDS.getFunnelChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
-
+                console.log("FUNNEL CLICKED")
+                dataValues = ChartsModel.getFunnelChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.radarChartTitle:
+                console.log("RADAR CLICKED")
+                dataValues = ChartsModel.getRadarChartValues(xAxisColumns[0],yAxisColumns[0]);
+                break;
+            case Constants.scatterChartTitle:
+                console.log("SCATTER CLICKED")
+                dataValues = ChartsModel.getScatterChartValues(xAxisColumns[0],yAxisColumns[0],xAxisColumns[1]);
+                break;
+            case Constants.treeChartTitle:
+                console.log("TREECHART CLICKED")
+                dataValues = ChartsModel.getTreeChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.treeMapChartTitle:
+                console.log("TREEMAP CLICKED")
+                dataValues = ChartsModel.getTreeMapChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.heatMapChartTitle:
+                console.log("HEATMAP CLICKED")
+                dataValues = ChartsModel.getHeatMapChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.sunburstChartTitle:
+                console.log("SUNBURST CLICKED")
+                dataValues = ChartsModel.getSunburstChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.waterfallChartTitle:
+                console.log("WATERFALL CLICKED")
+                dataValues = ChartsModel.getWaterfallChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.gaugeChartTitle:
+                console.log("GAUGE CLICKED")
+                dataValues = ChartsModel.getGaugeChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.sankeyChartTitle:
+                console.log("SANKEY CLICKED")
+                dataValues = ChartsModel.getSankeyChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.kpiTitle:
+                console.log("KPI CLICKED")
+                dataValues = ChartsModel.getKPIChartValues(xAxisColumns[0]);
+                break;
+            case Constants.tableTitle:
+                console.log("TABLE CLICKED")
+                dataValues = ChartsModel.getTableChartValues(["state", "district"], "population",'Sum');
+                break;
+            case Constants.pivotTitle:
+                console.log("PIVOT CLICKED")
+                dataValues = ChartsModel.getPivotChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
             }
-
-            console.log(dataValues);
             if(!dataValues){
                 return;
             }

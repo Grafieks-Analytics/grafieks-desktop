@@ -88,14 +88,14 @@ void DuckQueryModel::generateRoleNames()
             for(int i = 0; i < rows; i++){
                 fieldName =  data->GetValue(1, i).ToString().c_str();
                 m_roleNames.insert(i, fieldName.toUtf8());
-                this->duckChartHeader.insert(i, fieldName);
+                this->setChartHeader(i, fieldName);
             }
         }
 
     } else{
         for(int i =0; i < output.length(); i++){
             m_roleNames.insert(i, output[i].toUtf8());
-            this->duckChartHeader.insert(i, output[i]);
+            this->setChartHeader(i, output[i]);
         }
     }
 }
@@ -149,11 +149,14 @@ void DuckQueryModel::setChartData(std::unique_ptr<duckdb::MaterializedQueryResul
             }
         }
     }
+
+    emit chartDataChanged(this->duckChartData);
 }
 
 void DuckQueryModel::setChartHeader(int index, QString colName)
 {
     this->duckChartHeader.insert(index, colName);
+    emit chartHeaderChanged(this->duckChartHeader);
 }
 
 void DuckQueryModel::getQueryStats()

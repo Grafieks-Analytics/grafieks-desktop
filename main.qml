@@ -41,6 +41,8 @@ ApplicationWindow {
     title: Constants.applicationName
 
 
+
+
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
@@ -356,7 +358,7 @@ ApplicationWindow {
             MenuItem{
                 text: qsTr("Test")
                 onTriggered: {
-                    stacklayout_home.currentIndex = 0
+                    stacklayout_home.currentIndex = 8
                 }
             }
 
