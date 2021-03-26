@@ -201,6 +201,11 @@ QtObject {
 
     property color defaultXAxisColor: "#6CD7A1"
     property color defaultYAxisColor: "#BADCFF"
+
+    property color defaultXAxisTickColor: "#000000"
+    property color defaultYAxisTickColor: "#000000"
+    property color defaultXAxisLabelColor: "#000000"
+    property color defaultYAxisLabelColor: "#000000"
     
     property string categoricalItemType: "categorical"
     property string numericalItemType: "numerical"

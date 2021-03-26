@@ -175,6 +175,7 @@ Page {
 
     function reDrawChart(){
         drawChart();
+
     }
 
     function changeChart(chartname){
@@ -307,6 +308,9 @@ Page {
             console.log(webEngineView.loading);
             console.log(report_desiner_page.chartTitle)
             console.log(report_desiner_page.chartUrl)
+            console.log("color final "+JSON.stringify(d3PropertyConfig))
+
+//            need to initialise only once
 
             var scriptValue = 'window.addEventListener("resize", function () {
                     d3.selectAll("#my_dataviz").html("");
