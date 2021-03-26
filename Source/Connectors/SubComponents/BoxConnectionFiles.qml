@@ -54,7 +54,13 @@ Popup {
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: BoxDS
 
+        function onGetBoxUsername(username){
+            connectedById.text = "Connected to: "+ username
+        }
+    }
 
 
     // Connections Ends
@@ -210,7 +216,7 @@ Popup {
 
             Text {
                 id: connectedById
-                text: qsTr("Connected by: test@test.com")
+                text: qsTr("Not Connected")
             }
         }
 

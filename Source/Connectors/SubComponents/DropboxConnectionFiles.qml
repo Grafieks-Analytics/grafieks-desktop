@@ -57,6 +57,13 @@ Popup {
     // Connections Starts
 
 
+    Connections{
+        target: DropboxDS
+
+        function onGetDropboxUsername(username){
+            connectedById.text = "Connected to: "+ username
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -211,7 +218,7 @@ Popup {
 
             Text {
                 id: connectedById
-                text: qsTr("Connected by: test@test.com")
+                text: qsTr("Not Connected")
             }
         }
 

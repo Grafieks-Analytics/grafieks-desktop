@@ -142,5 +142,41 @@ void GithubDS::dataReadFinished()
         }
 
         m_dataBuffer->clear();
+
+        // Get user email
+        m_networkReply = this->github->get(QUrl("https://api.github.com/user"));
+        connect(m_networkReply,&QNetworkReply::finished,this,&GithubDS::userReadFinished);
+
     }
+}
+
+void GithubDS::userReadFinished()
+{
+
+    m_dataBuffer->append(m_networkReply->readAll());
+    if(m_networkReply->error() ){
+        qDebug() <<"There was some error : " << m_networkReply->errorString() ;
+
+    }else{
+
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
+        QJsonObject resultObj = resultJson.object();
+        emit getGithubUsername(resultObj["email"].toString());
+
+        qDebug() << "USERG" <<resultJson;
+
+
+    }
+}
+
+void GithubDS::saveFile()
+{
+
+    QByteArray arr = m_networkReply->readAll();
+    qDebug() << arr << "SAVE FILE";
+
+    QFile file("C:\\Users\\chill\\Desktop\\x.xlsx");
+    file.open(QIODevice::WriteOnly);
+    file.write(arr);
+    file.close();
 }
