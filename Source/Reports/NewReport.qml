@@ -284,13 +284,13 @@ Page {
             case Constants.barChartTitle:
                 console.log("BAR CLICKED", xAxisColumns[0])
                 // Bar - xAxis(String), yAxis(String)
-                // dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
+                 dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
 
                 // Stacked Bar - xAxis(String), yAxis(String), Split(String)
                 // dataValues = ChartsModel.getStackedBarChartValues("country","population","state")
 
                 // Grouped Bar - xAxis(String), yAxis(String), Split(String)
-                dataValues = ChartsModel.getGroupedBarChartValues("country","population", "state")
+                // dataValues = ChartsModel.getGroupedBarChartValues("country","population", "state")
                 break;
             case Constants.areaChartTitle:
                 console.log("AREA CLICKED")
