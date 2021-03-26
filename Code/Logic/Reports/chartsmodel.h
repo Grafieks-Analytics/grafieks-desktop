@@ -31,14 +31,14 @@ public:
     Q_INVOKABLE QString getHeatMapChartValues( QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
 
     Q_INVOKABLE QString getSunburstChartValues( QStringList xAxisColumn, QString yAxisColumn);
-    Q_INVOKABLE QString getWaterfallChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
+    Q_INVOKABLE QString getWaterfallChartValues( QString xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE float getGaugeChartValues(QString calculateColumn);
     Q_INVOKABLE QString getSankeyChartValues(QString sourceColumn, QString destinationColumn, QString measureColumn);
 
     Q_INVOKABLE QString getTreeChartValues( QStringList xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getTreeMapChartValues( QStringList xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE float getKPIChartValues( QString calculateColumn);
-    Q_INVOKABLE QString getTableChartValues( QStringList xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE QString getTableChartValues( QStringList xAxisColumn, QStringList yAxisColumn);
     Q_INVOKABLE QString getPivotChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
     Q_INVOKABLE QString getStackedAreaChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey );
     Q_INVOKABLE QString getMultiLineChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey );

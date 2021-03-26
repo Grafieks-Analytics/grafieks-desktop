@@ -558,7 +558,7 @@ QString ChartsModel::getSunburstChartValues(QStringList xAxisColumn, QString yAx
     return output;
 }
 
-QString ChartsModel::getWaterfallChartValues(QString xAxisColumn, QString yAxisColumn, QStringList groupNames)
+QString ChartsModel::getWaterfallChartValues(QString xAxisColumn, QString yAxisColumn)
 {
     QString output;
     output = this->getLineAreaWaterfallValues(xAxisColumn, yAxisColumn);
