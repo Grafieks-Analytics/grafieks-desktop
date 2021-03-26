@@ -41,6 +41,7 @@ Page {
 
     property string chartUrl: 'BarChartArrayInput.html';
     property string chartTitle: Constants.barChartTitle;
+    property var customizationsAvailable: "Properties,Legend";
 
 
     property var d3PropertyConfig: ({});
