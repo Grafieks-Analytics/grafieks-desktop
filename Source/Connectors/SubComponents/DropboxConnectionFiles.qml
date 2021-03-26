@@ -278,7 +278,7 @@ Popup {
                     ListView{
                         id: fileList
                         model:DropboxModel
-
+                        clip: true
                         height: parent.height
                         width: popup.width * 0.6
 

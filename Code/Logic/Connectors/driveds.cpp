@@ -188,9 +188,9 @@ void DriveDS::dataReadFinished()
                 DriveExtension = ".gsheet";
             }
 
-            if(DriveMimeType != "application/vnd.google-apps.folder" && requiredExtensions.indexOf(DriveExtension) >= 0){
+//            if(DriveMimeType != "application/vnd.google-apps.folder" && requiredExtensions.indexOf(DriveExtension) >= 0){
                 this->addDataSource(DriveID,DriveName,DriveKind,DriveModiTime,DriveExtension);
-            }
+//            }
         }
 
         m_dataBuffer->clear();

@@ -181,6 +181,7 @@ Popup {
         Row{
             id: userDetails
 
+
             Text {
                 id: connectedById
                 text: qsTr("Not Connected")
@@ -246,6 +247,7 @@ Popup {
                     ListView{
                         id: fileList
                         model:DriveModel
+                        clip: true
 
                         height: parent.height
                         width: popup.width * 0.6
@@ -253,6 +255,7 @@ Popup {
                         header: Row{
 
                             width: popup.width * 0.6
+
                             Column{
                                 width: 20
                                 Rectangle{
@@ -331,6 +334,7 @@ Popup {
                             Column{
                                 width: parent.width / 2
                                 height: parent.height
+
 
                                 Rectangle{
                                     height: parent.height

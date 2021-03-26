@@ -278,7 +278,7 @@ Popup {
                     ListView{
                         id: fileList
                         model:DriveModel
-
+                        clip: true
                         height: 200
                         width: popup.width * 0.6
 
