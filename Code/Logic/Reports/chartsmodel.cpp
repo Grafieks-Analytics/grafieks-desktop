@@ -488,32 +488,80 @@ QString ChartsModel::getScatterChartValues(QString xAxisColumn, QString yAxisCol
     return strData;
 }
 
-QString ChartsModel::getHeatMapChartValues(QString xAxisColumn, QString yAxisColumn, QString groupName)
+QString ChartsModel::getHeatMapChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
     QJsonArray data;
-    QJsonArray axisArray;
+    QVariantList tmpData;
+    float yAxisTmpData;
+
+    QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
+    QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
+    QScopedPointer<QStringList> splitDataPointer(new QStringList);
+
+    // Order of QMap - xAxisCol, SplitKey, Value
+    QStringList masterKeywordList;
+    QString masterKeyword;
 
     // Fetch data here
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
-    int groupNameKey = newChartHeader.key( groupName );
+    int splitKey = newChartHeader.key( xSplitKey );
 
-    int totalData = (*newChartData.value(xKey)).length();
+    *xAxisDataPointer = *newChartData.value(xKey);
+    *yAxisDataPointer = *newChartData.value(yKey);
+    *splitDataPointer = *newChartData.value(splitKey);
 
-    for(int i = 0; i < totalData; i++){
-        QJsonArray axisData;
-        axisData.append((*newChartData.value(groupNameKey)).at(i));
-        axisData.append((*newChartData.value(xKey)).at(i));
-        axisData.append((*newChartData.value(yKey)).at(i));
-        axisArray.append(axisData);
+    // To pre-populate json array
+    QStringList xAxisDataPointerPre = (*newChartData.value(xKey));
+    QStringList splitDataPointerPre = (*newChartData.value(splitKey));
+
+    // Fetch unique xAxisData & splitter
+    xAxisDataPointerPre.removeDuplicates();
+    splitDataPointerPre.removeDuplicates();
+
+    int index;
+    QJsonArray colData;
+
+    // Pre - Populate the json array
+    for(int i = 0; i < xAxisDataPointerPre.length(); i++){
+
+        for(int j = 0; j < splitDataPointerPre.length(); j++){
+
+            masterKeyword = xAxisDataPointerPre.at(i) + splitDataPointerPre.at(j);
+
+            masterKeywordList.append(masterKeyword);
+
+            tmpData.clear();
+            tmpData.append(xAxisDataPointerPre.at(i));
+            tmpData.append(splitDataPointerPre.at(j));
+            tmpData.append(0);
+
+            colData.append(QJsonArray::fromVariantList(tmpData));
+        }
     }
 
-    QJsonArray colData;
-    colData.append(axisArray);
+
+    // Populate the actual data
+    for(int i = 0; i < xAxisDataPointer->length(); i++){
+
+        masterKeyword = xAxisDataPointer->at(i) + splitDataPointer->at(i);
+        tmpData.clear();
+        yAxisTmpData = 0.0;
+
+        index = masterKeywordList.indexOf(masterKeyword);
+        yAxisTmpData =  colData.at(index).toArray().at(2).toString().toFloat() + yAxisDataPointer->at(i).toFloat();
+
+        tmpData.append(xAxisDataPointer->at(i));
+        tmpData.append(splitDataPointer->at(i));
+        tmpData.append(yAxisTmpData);
+
+        colData.replace(index, QJsonArray::fromVariantList(tmpData));
+
+    }
 
     QJsonArray columns;
-    columns.append(xAxisColumn);
-    columns.append(yAxisColumn);
+    columns.append(QJsonArray::fromStringList(xAxisDataPointerPre));
+    columns.append(QJsonArray::fromStringList(splitDataPointerPre));
 
     data.append(colData);
     data.append(columns);

@@ -28,7 +28,7 @@ public:
     Q_INVOKABLE QString getFunnelChartValues( QString xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getRadarChartValues( QString xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getScatterChartValues( QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
-    Q_INVOKABLE QString getHeatMapChartValues( QString xAxisColumn, QString yAxisColumn, QString groupName);
+    Q_INVOKABLE QString getHeatMapChartValues( QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
 
     Q_INVOKABLE QString getSunburstChartValues( QStringList xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getWaterfallChartValues( QString xAxisColumn, QString yAxisColumn, QStringList groupNames);
