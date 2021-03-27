@@ -33,7 +33,8 @@ Popup {
     property var folderName: "Folder name"
 
     property var fileName: ""
-    property var fileExtension: ""
+    property var fileType: ""
+    property var folderId: ""
 
 
 
@@ -113,7 +114,7 @@ Popup {
         fileNotSelectedMsg.visible = false
     }
 
-    function onFileClicked(name, type, extension, modifiedTime){
+    function onFileClicked(name, type, extension, modifiedTime, id){
 
         showSelectedFileDetails();
         hideFileNotSelectedMessage();
@@ -137,7 +138,8 @@ Popup {
         }
 
         fileName = name
-        fileExtension = type
+        fileType = type
+        folderId = id
 
     }
 
@@ -394,7 +396,7 @@ Popup {
                                     MouseArea{
 
                                         anchors.fill:parent
-                                        onClicked: onFileClicked(name, type, extension, modifiedAt);
+                                        onClicked: onFileClicked(name, type, extension, modifiedAt, id);
                                         onDoubleClicked: onFolderDoubleClicked(name, type, id)
                                     }
                                 }
@@ -609,7 +611,7 @@ Popup {
                     width: 100
                     textValue: "Back"
                     anchors.leftMargin: 10
-                    onClicked: closePopup()
+                    onClicked: backCalled()
 
                 }
 
@@ -622,7 +624,7 @@ Popup {
                     anchors.left: cancelBtn.right
                     anchors.leftMargin: 10
 
-                    onClicked: onFolderDoubleClicked(fileName, fileExtension)
+                    onClicked: onFolderDoubleClicked(fileName, fileType, folderId)
 
                 }
 
