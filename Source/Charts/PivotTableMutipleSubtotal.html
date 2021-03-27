@@ -43,8 +43,8 @@
         <script>
             var plottingConfiguration = {
                 pivotTableConfiguration: {
-                    cols: ["Gender", "Program"],
-                    rows: ["Department", "Fee Paid"],
+                    cols: ["Gender"],
+                    rows: ["Department", "Program", "Fee Paid"],
                     values: ["English Marks", "History Marks", "Maths Marks"],
                 },
             };
@@ -756,6 +756,99 @@
                 var firstRow = $(".pvtTable tbody th.pvtTotalLabel")[0]
                     .parentElement;
                 $(lastRow.get(0)).after(firstRow);
+            }
+
+            function subTotals() {
+                console.clear();
+                var tableRows = $(".pvtTable tbody tr");
+
+                var firstTableRow = $(tableRows[1]).find("th.pvtRowLabel");
+                var totalRowColumns =
+                    (firstTableRow && firstTableRow.length) || 0;
+
+                var totalSubRows = totalRowColumns - 1;
+                var totalColumns = tableRows[1].children.length;
+
+                console.log({ totalColumns, totalRowColumns, totalSubRows });
+
+                stack = [[], [], []];
+
+                var subTotalRow = [];
+                for (var i = 1; i < tableRows.length - 1; i++) {
+                    var tableRow = tableRows[i];
+
+                    var cellValues = tableRow.children;
+                    var initPoint = (initPoint =
+                        totalColumns - cellValues.length);
+
+                    console.log(initPoint);
+                    if (initPoint == 0 && subTotalRow.length) {
+                        addSubTotalRow(
+                            tableRow,
+                            subTotalRow,
+                            totalRowColumns + 1,
+                            totalSubRows
+                        );
+                        //             subTotalRow = [];
+                    }
+                    var totalTraversing = totalRowColumns - initPoint;
+                    for (var j = 0; j < totalTraversing; j++) {
+                        var rowHeading = cellValues[j];
+                        var rowSpan = rowHeading.rowSpan;
+                        console.log(rowSpan, rowHeading.innerText);
+                        if (
+                            rowSpan > 1 &&
+                            rowHeading.innerText &&
+                            subTotalRow.length
+                        ) {
+                            addSubTotalRow(tableRow, subTotalRow, 3, rowSpan);
+                            //                 subTotalRow = [];
+                        }
+                    }
+
+                    for (
+                        var j = totalRowColumns - initPoint, k = 0;
+                        j < cellValues.length;
+                        j++, k++
+                    ) {
+                        if (
+                            subTotalRow.length !=
+                            totalColumns - totalRowColumns
+                        ) {
+                            var value = +cellValues[j].innerText || 0;
+                            subTotalRow.push(+value);
+                        } else {
+                            var lastValue =
+                                +subTotalRow[k] +
+                                +(cellValues[j].innerText || 0);
+                            subTotalRow[k] = +lastValue;
+                        }
+                    }
+
+                    console.log(subTotalRow);
+                }
+            }
+
+            function addSubTotalRow(currentRow, subTotalRow, colSpan, rowSpan) {
+                console.log(currentRow);
+                var tr = document.createElement("tr");
+
+                var th = document.createElement("th");
+                th.className = "pvtRowLabel";
+                th.setAttribute("colspan", colSpan);
+                th.setAttribute("rowspan", rowSpan);
+                th.innerHTML = "Sub Total";
+                tr.appendChild(th);
+
+                for (var i = 0; i < subTotalRow.length; i++) {
+                    var td = document.createElement("td");
+                    td.className = "pvtVal row1 col0 stat0";
+                    td.innerHTML =
+                        "<span><span>" + subTotalRow[i] + "</span></span>";
+                    tr.appendChild(td);
+                }
+                $(currentRow).before(tr);
+                console.log(currentRow, subTotalRow);
             }
         </script>
     </body>
