@@ -54,6 +54,7 @@ signals:
     void preReset();
     void postReset();
     void getDriveUsername(QString username);
+    void showBusyIndicator(bool status);
 
 private slots:
     void resetDatasource();

@@ -5,6 +5,8 @@ GithubDS::GithubDS(QObject *parent) : QObject(parent),
     m_networkReply(nullptr),
     m_dataBuffer(new QByteArray)
 {
+    emit showBusyIndicator(true);
+
     this->github = new QOAuth2AuthorizationCodeFlow(this);
 
     // More scopes https://docs.github.com/en/developers/apps/scopes-for-oauth-apps
@@ -58,6 +60,8 @@ void GithubDS::fetchDatasources()
 
 void GithubDS::searchQuer(QString path)
 {
+    emit showBusyIndicator(true);
+
     m_networkReply = this->github->get(QUrl("https://www.githubapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name  +contains+%27" + path+ "%27"));
     connect(m_networkReply,&QNetworkReply::finished,this,&GithubDS::dataReadFinished);
 
@@ -65,6 +69,8 @@ void GithubDS::searchQuer(QString path)
 
 void GithubDS::homeBut()
 {
+    emit showBusyIndicator(true);
+
     m_networkReply = this->github->get(QUrl("https://www.githubapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)"));
     connect(m_networkReply, &QNetworkReply::finished, this, &GithubDS::dataReadFinished);
 }
@@ -148,6 +154,8 @@ void GithubDS::dataReadFinished()
         connect(m_networkReply,&QNetworkReply::finished,this,&GithubDS::userReadFinished);
 
     }
+
+    emit showBusyIndicator(false);
 }
 
 void GithubDS::userReadFinished()
@@ -167,6 +175,8 @@ void GithubDS::userReadFinished()
 
 
     }
+
+    emit showBusyIndicator(false);
 }
 
 void GithubDS::saveFile()
@@ -179,4 +189,6 @@ void GithubDS::saveFile()
     file.open(QIODevice::WriteOnly);
     file.write(arr);
     file.close();
+
+    emit showBusyIndicator(false);
 }

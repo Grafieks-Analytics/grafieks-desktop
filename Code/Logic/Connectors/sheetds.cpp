@@ -13,6 +13,8 @@ SheetDS::SheetDS(QObject *parent) : QObject(parent),
     m_networkReply(nullptr),
     m_dataBuffer(new QByteArray)
 {
+    emit showBusyIndicator(true);
+
     this->google = new QOAuth2AuthorizationCodeFlow(this);
 
     // Set Scope or Permissions required from Google
@@ -70,6 +72,8 @@ void SheetDS::fetchDatasources()
  */
 void SheetDS::searchQuer(QString path)
 {
+    emit showBusyIndicator(true);
+
     if(path == "")
         m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType+contains+%27application%2Fvnd.google-apps.spreadsheet%27"));
     else
@@ -83,6 +87,8 @@ void SheetDS::searchQuer(QString path)
  */
 void SheetDS::homeBut()
 {
+    emit showBusyIndicator(true);
+
     m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'"));
 
     connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
@@ -181,6 +187,8 @@ void SheetDS::dataReadFinished()
 
     }
 
+    emit showBusyIndicator(false);
+
 }
 
 void SheetDS::userReadFinished()
@@ -198,6 +206,8 @@ void SheetDS::userReadFinished()
         QJsonObject user = resultObj.value("user").toObject();
         emit getSheetUsername(user["emailAddress"].toString());
     }
+
+    emit showBusyIndicator(false);
 }
 
 void SheetDS::saveFile()
@@ -210,6 +220,8 @@ void SheetDS::saveFile()
     file.open(QIODevice::WriteOnly);
     file.write(arr);
     file.close();
+
+    emit showBusyIndicator(false);
 }
 
 

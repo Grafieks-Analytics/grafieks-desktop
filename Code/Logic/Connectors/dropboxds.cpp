@@ -12,6 +12,8 @@ DropboxDS::DropboxDS(QObject *parent) : QObject(parent),
     m_networkReply(nullptr),
     m_dataBuffer(new QByteArray)
 {
+    emit showBusyIndicator(true);
+
     this->dropbox = new QOAuth2AuthorizationCodeFlow(this);
 
     // Set Scope or Permissions required from dropbox
@@ -102,6 +104,8 @@ void DropboxDS::fetchDatasources()
  */
 QString DropboxDS::goingBack(QString path,QString name)
 {
+    emit showBusyIndicator(true);
+
     int len = name.length();
     QString p = path;
     p.chop(len);
@@ -122,6 +126,8 @@ QString DropboxDS::goingBack(QString path,QString name)
  */
 void DropboxDS::folderNav(QString path)
 {
+    emit showBusyIndicator(true);
+
     const QUrl API_ENDPOINT("https://api.dropboxapi.com/2/files/list_folder");
     QJsonObject obj;
     obj.insert("limit", 100);
@@ -154,6 +160,8 @@ void DropboxDS::folderNav(QString path)
  */
 void DropboxDS::searchQuer(QString path)
 {
+    emit showBusyIndicator(true);
+
     QJsonObject obj;
     obj.insert("query",path);
     obj.insert("include_highlights",false);
@@ -173,6 +181,9 @@ void DropboxDS::searchQuer(QString path)
 
 void DropboxDS::downloadFile(QString fileId)
 {
+
+    emit showBusyIndicator(true);
+
     QJsonObject obj;
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
@@ -251,6 +262,7 @@ void DropboxDS::dataReadyRead()
 
 void DropboxDS::dataReadFinished()
 {
+
     if(m_networkReply->error()){
         qDebug() <<"There was some error : "<< m_networkReply->errorString() << m_networkReply->readAll();
     }
@@ -260,8 +272,6 @@ void DropboxDS::dataReadFinished()
         requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json" << ".ods";
 
         this->resetDatasource();
-
-
 
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
@@ -298,10 +308,11 @@ void DropboxDS::dataReadFinished()
         m_dataBuffer->clear();
 
         // Get user email
-        m_networkReply = this->dropbox->post(QUrl("https://api.dropboxapi.com/2/users/get_current_account/"));
-        connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::userReadFinished);
+//        m_networkReply = this->dropbox->post(QUrl("https://api.dropboxapi.com/2/users/get_current_account/"));
+//        connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::userReadFinished);
 
     }
+    emit showBusyIndicator(false);
 }
 
 /*!
@@ -309,6 +320,7 @@ void DropboxDS::dataReadFinished()
  */
 void DropboxDS::dataSearchedFinished()
 {
+
     if(m_networkReply->error()){
         qDebug()<< "There was some error :" << m_networkReply->errorString();
     }else{
@@ -351,13 +363,13 @@ void DropboxDS::dataSearchedFinished()
 
         }
         m_dataBuffer->clear();
-
     }
+
+    emit showBusyIndicator(false);
 }
 
 void DropboxDS::userReadFinished()
 {
-
     m_dataBuffer->append(m_networkReply->readAll());
     if(m_networkReply->error() ){
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
@@ -372,6 +384,8 @@ void DropboxDS::userReadFinished()
 //        QJsonObject user = resultObj.value("user").toObject();
 //        emit getDropboxUsername(user["emailAddress"].toString());
     }
+
+    emit showBusyIndicator(false);
 }
 
 void DropboxDS::saveFile()
@@ -383,6 +397,8 @@ void DropboxDS::saveFile()
     file.open(QIODevice::WriteOnly);
     file.write(arr);
     file.close();
+
+    emit showBusyIndicator(false);
 }
 
 void DropboxDS::addDatasourceHelper(QJsonDocument &doc)

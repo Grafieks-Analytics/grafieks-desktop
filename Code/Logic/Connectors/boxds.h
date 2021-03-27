@@ -52,6 +52,7 @@ signals:
     void preReset();
     void postReset();
     void getBoxUsername(QString username);
+    void showBusyIndicator(bool status);
 
 private slots:
     void resetDatasource();

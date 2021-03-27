@@ -63,6 +63,15 @@ Popup {
         function onGetDropboxUsername(username){
             connectedById.text = "Connected to: "+ username
         }
+
+        function onShowBusyIndicator(status){
+            console.log(status, "STATUS")
+            if(status === true){
+                busyindicator.running = true
+            } else{
+                busyindicator.running = false
+            }
+        }
     }
 
     // Connections Ends
@@ -274,6 +283,8 @@ Popup {
                     height: popup.height * 0.75 - 100
                     width: popup.width * 0.6
                     border.color: Constants.themeColor
+
+
 
                     ListView{
                         id: fileList
@@ -571,6 +582,13 @@ Popup {
                 anchors.left:breadcrumb.right
                 anchors.leftMargin: popup.width * 0.4  - 270
 
+                BusyIndicatorTpl {
+                    id: busyindicator
+                    running: true
+                    anchors.right: homeBtn.left
+                    anchors.rightMargin: 20
+                }
+
                 CustomButton{
 
                     id: homeBtn
@@ -606,10 +624,8 @@ Popup {
                     anchors.leftMargin: 30
                 }
 
-                BusyIndicator {
-                    id: busyindicator
-                    running: true
-                }
+
+
 
             }
         }

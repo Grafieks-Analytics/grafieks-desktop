@@ -50,6 +50,7 @@ signals:
     void preReset();
     void postReset();
     void getGithubUsername(QString username);
+    void showBusyIndicator(bool status);
 
 private slots:
     void resetDatasource();
