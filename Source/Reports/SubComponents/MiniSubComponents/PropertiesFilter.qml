@@ -116,7 +116,9 @@ Column{
 
         colorListModel.append({textValue: itemName})
         ReportParamsModel.setLastDropped(itemType);
-        ReportParamsModel.setChartType(Constants.stackedBarChart);
+        ReportParamsModel.setChartType(Constants.stackedBarChartTitle);
+
+        report_desiner_page.chartTitle = Constants.stackedBarChartTitle;
         return;
 
     }

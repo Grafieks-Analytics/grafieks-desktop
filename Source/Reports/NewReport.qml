@@ -48,39 +48,39 @@ Page {
 
     onChartTitleChanged: {
 
-        ReportParamsModel.setXAxisColumns([]);
-        ReportParamsModel.setYAxisColumns([]);
+        switch(chartTitle){
+            case Constants.stackedBarChartTitle:
+                console.log('Load stacked bar chart')
+                webEngineView.url = 'qrc:/Source/Charts/StackedBarChart.html';
+                break;
+        }
 
-        xAxisListModel.clear();
-        yAxisListModel.clear();
-
-        drawChart();
     }
 
     onReportChartChanged: {
 
-        ReportParamsModel.setXAxisColumns([]);
-        ReportParamsModel.setYAxisColumns([]);
+          chartTitle = reportChart;
 
-        xAxisListModel.clear();
-        yAxisListModel.clear();
+//        ReportParamsModel.setXAxisColumns([]);
+//        ReportParamsModel.setYAxisColumns([]);
 
+//        xAxisListModel.clear();
+//        yAxisListModel.clear();
 
-        console.log(ReportParamsModel.xAxisColumns);
-        console.log(ReportParamsModel.yAxisColumns);
+//        console.log(ReportParamsModel.xAxisColumns);
+//        console.log(ReportParamsModel.yAxisColumns);
 
+//        switch(reportChart){
+//        case Constants.stackedBarChart:
+//            changeChart("qrc:/Source/Charts/StackedBarChart.html");
 
-        switch(reportChart){
-        case Constants.stackedBarChart:
-            changeChart("qrc:/Source/Charts/StackedBarChart.html");
-
-            let resizeQuery = 'window.addEventListener("resize", function () {' +
-                'console.log("resizing");'+
-                'd3.selectAll("#my_dataviz").html(""); '+
-                'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
-            webEngineView.runJavaScript(resizeQuery);
-            break;
-        }
+//            let resizeQuery = 'window.addEventListener("resize", function () {' +
+//                'console.log("resizing");'+
+//                'd3.selectAll("#my_dataviz").html(""); '+
+//                'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
+//            webEngineView.runJavaScript(resizeQuery);
+//            break;
+//        }
 
     }
 
@@ -191,6 +191,7 @@ Page {
     }
 
     function changeChart(chartname){
+        console.log('Changing Chart Name',chartname)
         webEngineView.url = chartname
     }
 
@@ -277,6 +278,11 @@ Page {
 
     }
 
+    function onChartLoaded(){
+        console.log('Loading!!');
+        drawChart();
+    }
+
     function drawChart(){
 
         var xAxisColumns = ReportParamsModel.xAxisColumns;
@@ -304,6 +310,11 @@ Page {
 
                 // Grouped Bar - xAxis(String), yAxis(String), Split(String)
                 // dataValues = ChartsModel.getGroupedBarChartValues("country","population", "state")
+
+                break;
+            case Constants.stackedBarChartTitle:
+                console.log('Stacked bar chart!');
+                dataValues =  ChartsModel.getStackedBarChartValues(xAxisColumns[0],yAxisColumns[0], ReportParamsModel.itemName);
 
                 break;
             case Constants.areaChartTitle:
@@ -355,6 +366,7 @@ Page {
             case Constants.waterfallChartTitle:
                 console.log("WATERFALL CLICKED")
                 dataValues = ChartsModel.getWaterfallChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                console.log('Waterfall Data values',dataValues);
                 break;
             case Constants.gaugeChartTitle:
                 console.log("GAUGE CLICKED")
@@ -823,6 +835,7 @@ Page {
         height:parent.height - axis.height
         width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width
         url: "../Charts/BarChartArrayInput.html"
+        onLoadingChanged: onChartLoaded()
         anchors.left: tool_sep_chartFilters.right
         anchors.top: axis.bottom
     }
