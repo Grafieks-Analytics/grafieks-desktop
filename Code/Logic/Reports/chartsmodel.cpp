@@ -550,11 +550,12 @@ QString ChartsModel::getHeatMapChartValues(QString xAxisColumn, QString yAxisCol
     return strData;
 }
 
-QString ChartsModel::getSunburstChartValues(QStringList xAxisColumn, QString yAxisColumn)
+QString ChartsModel::getSunburstChartValues(QVariantList xAxisColumn, QString yAxisColumn)
 {
 
     QString output;
     output = this->getTreeSunburstValues(xAxisColumn, yAxisColumn);
+//    output = this->getSunburstChartValues2();
     return output;
 }
 
@@ -656,14 +657,14 @@ QString ChartsModel::getSankeyChartValues(QString sourceColumn, QString destinat
     return strJson;
 }
 
-QString ChartsModel::getTreeChartValues(QStringList xAxisColumn, QString yAxisColumn)
+QString ChartsModel::getTreeChartValues(QVariantList xAxisColumn, QString yAxisColumn)
 {
     QString output;
     output = this->getTreeSunburstValues(xAxisColumn, yAxisColumn);
     return output;
 }
 
-QString ChartsModel::getTreeMapChartValues(QStringList xAxisColumn, QString yAxisColumn)
+QString ChartsModel::getTreeMapChartValues(QVariantList xAxisColumn, QString yAxisColumn)
 {
     QString output;
     output = this->getTreeSunburstValues(xAxisColumn, yAxisColumn);
@@ -687,7 +688,7 @@ float ChartsModel::getKPIChartValues(QString calculateColumn)
     return output;
 }
 
-QString ChartsModel::getTableChartValues(QStringList xAxisColumn, QStringList yAxisColumn)
+QString ChartsModel::getTableChartValues(QVariantList xAxisColumn, QVariantList yAxisColumn)
 {
     QJsonArray data;
     QString masterKeyword;
@@ -699,22 +700,22 @@ QString ChartsModel::getTableChartValues(QStringList xAxisColumn, QStringList yA
 
     // Fetch data here
     QVector<int> xKey;
-    int yKey = newChartHeader.key( yAxisColumn.at(0) );
+    int yKey = newChartHeader.key( yAxisColumn.at(0).toString() );
 
     *yAxisDataPointer = *newChartData.value(yKey);
 
     QJsonArray columns;
 
     for(int i = 0; i < xAxisColumn.length(); i++){
-        xKey.append(newChartHeader.key( xAxisColumn.at(i)));
+        xKey.append(newChartHeader.key( xAxisColumn.at(i).toString()));
         xAxisDataPointer->insert(i, *newChartData.value(xKey.at(i)));
 
         // Append to output columns -- all x axis names
-        columns.append(xAxisColumn.at(i));
+        columns.append(xAxisColumn.at(i).toString());
     }
 
     // Append to output columns -- all y axis name
-    columns.append(yAxisColumn.at(0));
+    columns.append(yAxisColumn.at(0).toString());
 
     QStringList xAxisData;
     QStringList yAxisData;
@@ -777,7 +778,7 @@ QString ChartsModel::getTableChartValues(QStringList xAxisColumn, QStringList yA
     return strData;
 }
 
-QString ChartsModel::getPivotChartValues(QString xAxisColumn, QString yAxisColumn, QStringList groupNames)
+QString ChartsModel::getPivotChartValues(QString xAxisColumn, QString yAxisColumn, QVariantList groupNames)
 {
     return "";
 }
@@ -934,9 +935,12 @@ QString ChartsModel::getLineAreaWaterfallValues(QString &xAxisColumn, QString &y
 
 }
 
-QString ChartsModel::getTreeSunburstValues(QStringList & xAxisColumn, QString & yAxisColumn)
+QString ChartsModel::getTreeSunburstValues(QVariantList & xAxisColumn, QString & yAxisColumn)
 {
     int pointerSize;
+
+    xAxisColumn << "state" << "city" << "ward";
+    yAxisColumn = "population";
 
     QJsonArray data;
     QJsonArray axisArray;
@@ -960,7 +964,7 @@ QString ChartsModel::getTreeSunburstValues(QStringList & xAxisColumn, QString & 
     QString hashKeyword = "";
 
     // Fetch data here
-    int xKey = newChartHeader.key( xAxisColumn.at(0) );
+    int xKey = newChartHeader.key( xAxisColumn.at(0).toString() );
     int yKey = newChartHeader.key( yAxisColumn );
 
     // Group name operations
@@ -968,7 +972,7 @@ QString ChartsModel::getTreeSunburstValues(QStringList & xAxisColumn, QString & 
     int groupKeySize = xAxisColumn.length();
 
     for(int i = 0; i < groupKeySize; i++){
-        groupKeyValues.append(newChartHeader.key(xAxisColumn.at(i)));
+        groupKeyValues.append(newChartHeader.key(xAxisColumn.at(i).toString()));
     }
 
     int totalData = (*newChartData.value(xKey)).length();
@@ -986,7 +990,7 @@ QString ChartsModel::getTreeSunburstValues(QStringList & xAxisColumn, QString & 
 
         for(int j = 0; j < groupKeySize; j++){
 
-            yKeyLoop = newChartHeader.key( xAxisColumn.at(j));
+            yKeyLoop = newChartHeader.key( xAxisColumn.at(j).toString());
             paramName = newChartData.value(yKeyLoop)->at(i);
 
             // Generate unique hash to strings to be stored in master hash
@@ -1061,8 +1065,6 @@ QString ChartsModel::getTreeSunburstValues(QStringList & xAxisColumn, QString & 
         }
     }
 
-    delete jsonPointer;
-    delete jsonPointerMeasure;
 
     return output.to_string().c_str();
 }
