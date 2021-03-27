@@ -13,7 +13,7 @@ import QtQuick 2.15
 QtObject {
 
     // Menu Indexes
-    property int initialIndex: 3
+    property int initialIndex: 7
     property int dataDesignerIndex: 3
     property int dashboardDesignerIndex: 6
     property int newReportIndex: 7
@@ -192,6 +192,7 @@ QtObject {
 
     property string xAxisName: "X Axis"
     property string yAxisName: "Y Axis"
+    property string row3Name: "row3Name"
     property string axisSettingText: "Axis Setting"
     property string reportEditColorPopup: "Edit Color"
     property string reportCalculatedFieldPopup: "Calculated Field"
@@ -209,6 +210,8 @@ QtObject {
 
 
     // Charts Start
+
+    property string chartsBaseUrl: "qrc:/Source/Charts/"
 
 
     property string barChartTitle: "Bar Chart"
@@ -235,6 +238,11 @@ QtObject {
     property string pivotTitle: "Pivot"
     property string lineBarTitle: "Line Bar"
     property string sankeyChartTitle: "Sankey"
+    property string multiLineChartTitle: "Multi Line"
+    property string stackedAreaChartTitle: "Stacked Area Chart"
+
+    property string stackedBarChartUrl: "StackedBarChart.html"
+    property string stackedAreaChartUrl: "StackedAreaChart.html"
 
     // Charts ends
 
