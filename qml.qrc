@@ -213,7 +213,6 @@
         <file>Source/Charts/NormalizedStackedBarChart.html</file>
         <file>Source/Charts/NormalizedStackedAreaChart.html</file>
         <file>Source/Charts/StackedAreaChart.html</file>
-        <file>Source/Charts/PivotTableTest.html</file>
         <file>Source/Charts/Data/pivot.min.css</file>
         <file>Source/Charts/Data/pivot.min.js</file>
     </qresource>

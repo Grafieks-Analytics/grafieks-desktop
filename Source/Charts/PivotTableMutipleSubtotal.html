@@ -19,14 +19,11 @@
 
         <link rel="stylesheet" type="text/css" href="./Data/pivot.min.css" />
 
-        <script type="text/javascript" src="./Data/subtotal.js"></script>
-        <link href="./Data/subtotal.css" rel="stylesheet" />
         <script
             type="text/javascript"
             src="./Data/multifact-pivottable.js"
         ></script>
 
-        <link href="css/styles.css" rel="stylesheet" />
         <link rel="stylesheet" href="Data/general.css" />
 
         <!-- PivotTable.js libs from cdnjs -->
@@ -613,16 +610,16 @@
                 customAggs[
                     "Multifact Aggregators"
                 ] = $.pivotUtilities.multifactAggregatorGenerator(aggMap, []);
-                customAggs["Total Subtotal"] =
-                    $.pivotUtilities.subtotal_renderers["Table With Subtotal"];
+                // customAggs["Total Subtotal"] =
+                //     $.pivotUtilities.subtotal_renderers["Table With Subtotal"];
 
-                var dataClass = $.pivotUtilities.SubtotalPivotData;
-                console.log(dataClass);
-                var renderer =
-                    $.pivotUtilities.subtotal_renderers["Table With Subtotal"];
+                // var dataClass = $.pivotUtilities.SubtotalPivotData;
+                // console.log(dataClass);
+                // var renderer =
+                //     $.pivotUtilities.subtotal_renderers["Table With Subtotal"];
 
                 var config = {
-                    dataClass,
+                    // dataClass,
                     cols,
                     rows,
                     rowOrder: "key_a_to_z",
@@ -635,7 +632,7 @@
                             defaultAggregations: aggMap,
                         },
                     },
-                    renderer,
+                    // renderer,
                     showUI: false,
                 };
 
