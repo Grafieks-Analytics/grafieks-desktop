@@ -15,6 +15,7 @@
 #include <QJsonArray>
 #include <QSettings>
 #include <QtDebug>
+#include <QFile>
 
 #include "github.h"
 #include "../../secrets.h"
@@ -48,11 +49,15 @@ signals:
     void postItemRemoved();
     void preReset();
     void postReset();
+    void getGithubUsername(QString username);
+    void showBusyIndicator(bool status);
 
 private slots:
     void resetDatasource();
     void dataReadyRead();
     void dataReadFinished();
+    void userReadFinished();
+    void saveFile();
 
 private:
     QNetworkAccessManager * m_networkAccessManager;

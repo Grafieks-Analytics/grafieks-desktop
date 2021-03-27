@@ -40,14 +40,11 @@ public:
     Q_INVOKABLE QString goingBack(QString path,QString name);
     Q_INVOKABLE void folderNav(QString path);
     Q_INVOKABLE void searchQuer(QString path);
-    Q_INVOKABLE void getUserName();
     Q_INVOKABLE void downloadFile(QString fileId);
 
     void addDataSource(Dropbox * dropbox);
 
     Q_INVOKABLE void addDataSource(const QString & id,const QString & tag,const QString & name,const QString & pathLower,const QString & clientModified,const QString & extension);
-
-//    Q_INVOKABLE void removeDatasource(int index);
     QList<Dropbox *> dataItems();
 
 signals:
@@ -57,14 +54,15 @@ signals:
     void postItemRemoved();
     void preReset();
     void postReset();
-    void getUsername(QString username);
+    void getDropboxUsername(QString username);
+    void showBusyIndicator(bool status);
 
 private slots:
     void resetDatasource();
     void dataReadyRead();
     void dataReadFinished();
     void dataSearchedFinished();
-//    void datadeleteFinished();
+    void userReadFinished();
     void saveFile();
 
 public slots:
