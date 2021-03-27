@@ -46,7 +46,7 @@ Rectangle{
             lineTypeChartVisible: false
             maxDropOnXaxis: 3
             maxDropOnYaxis: 3
-            mainCustomizations: "Properties,Legend"
+            mainCustomizations: "Properties,Legend,Reference Line"
         }
         ListElement{
             icon: "area.png"
@@ -56,7 +56,7 @@ Rectangle{
             title: "Area Chart"
             yAxisVisible: true
             lineTypeChartVisible: false
-            mainCustomizations: "Properties,Legend"
+            mainCustomizations: "Properties,Legend,Reference Line"
         }
         ListElement{
             icon: "line_chart.png"
@@ -74,6 +74,7 @@ Rectangle{
             title:"Combination"
             yAxisVisible: true
             lineTypeChartVisible: true
+            mainCustomizations: "Properties,Legend,Reference Line"
         }
         ListElement{
             icon: "heatmap.png"
@@ -226,7 +227,7 @@ Rectangle{
             xAxisLabelName: "Location"
             yAxisLabelName: "Numerical"
             title:"Map"
-            mainCustomizations: "Properties,Legend,Reference Line"
+            mainCustomizations: "Properties,Legend"
         }
         ListElement{
             icon: "gauge_chart.png"
@@ -239,7 +240,7 @@ Rectangle{
         }
         ListElement{
             icon: "pivot.png"
-            chartHtml:"PivotTableTest.html"
+            chartHtml:"PivotTableMultipleSubtotalTest.html"
             activeChart: false
             title:"Pivot"
             xAxisLabelName: "Rows"
