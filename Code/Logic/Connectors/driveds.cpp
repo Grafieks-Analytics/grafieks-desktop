@@ -12,6 +12,9 @@ DriveDS::DriveDS(QObject *parent) : QObject(parent),
     m_networkReply(nullptr),
     m_dataBuffer(new QByteArray)
 {
+
+    emit showBusyIndicator(true);
+
     this->google = new QOAuth2AuthorizationCodeFlow(this);
 
     // Set Scope or Permissions required from Google
@@ -47,8 +50,8 @@ DriveDS::DriveDS(QObject *parent) : QObject(parent),
     connect(this->google, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
         qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
 
+        // Get files list
         m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)"));
-
         connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
 
     });
@@ -70,9 +73,10 @@ void DriveDS::fetchDatasources()
  */
 void DriveDS::searchQuer(QString path)
 {
-    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name  +contains+%27" + path+ "%27"));
-
-    connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
+    emit showBusyIndicator(true);
+    qDebug() << "SEARCH KEY" << path;
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name contains '"+ path +"'"));
+    connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataSearchFinished);
 }
 
 /*!
@@ -80,17 +84,17 @@ void DriveDS::searchQuer(QString path)
  */
 void DriveDS::homeBut()
 {
+    emit showBusyIndicator(true);
+
     m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)"));
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
 }
 
-void DriveDS::getUserName()
-{
-
-}
 
 void DriveDS::downloadFile(QString fileID)
 {
+    emit showBusyIndicator(true);
+
     m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files/"+fileID+"?alt=media"));
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::saveFile);
 }
@@ -168,7 +172,7 @@ void DriveDS::dataReadFinished()
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
 
-        qDebug() << "FILES" << resultObj;
+        qDebug() << "FILES" << resultJson;
 
         QJsonArray dataArray = resultObj["files"].toArray();
         for(int i=0;i<dataArray.size();i++){
@@ -179,10 +183,11 @@ void DriveDS::dataReadFinished()
             QString DriveID = dataObj["id"].toString();
             QString DriveName = dataObj["name"].toString();
             QString DriveKind = dataObj["kind"].toString();
-            QString DriveModiTime = dataObj["modifiedTime"].toString();
+            QString DriveModiTime = QDateTime::fromString(dataObj["modifiedTime"].toString(), Qt::ISODate).toString("yyyy/MM/dd HH:mm ap");
             QString DriveExtension = "";
             QString DriveMimeType = dataObj["mimeType"].toString();
             QStringList extensionList;
+
 
             if(DriveName.contains(".")){
                 extensionList = DriveName.split('.');
@@ -191,14 +196,95 @@ void DriveDS::dataReadFinished()
                 DriveExtension = ".gsheet";
             }
 
-            if(DriveMimeType != "application/vnd.google-apps.folder" && requiredExtensions.indexOf(DriveExtension) >= 0){
+//            if(DriveMimeType != "application/vnd.google-apps.folder" && requiredExtensions.indexOf(DriveExtension) >= 0){
                 this->addDataSource(DriveID,DriveName,DriveKind,DriveModiTime,DriveExtension);
-            }
+//            }
         }
 
         m_dataBuffer->clear();
+
+        // Get user email
+        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/about/?fields=user"));
+        connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::userReadFinished);
+
     }
 
+    emit showBusyIndicator(false);
+
+}
+
+void DriveDS::dataSearchFinished()
+{
+    m_dataBuffer->append(m_networkReply->readAll());
+    if(m_networkReply->error() ){
+        qDebug() <<"There was some error : " << m_networkReply->errorString() ;
+
+    }else{
+        QStringList requiredExtensions;
+        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json" << ".ods" << ".gsheet";
+
+        this->resetDatasource();
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
+        QJsonObject resultObj = resultJson.object();
+
+        qDebug() << "FILES" << resultJson;
+
+        QJsonArray dataArray = resultObj["files"].toArray();
+        for(int i=0;i<dataArray.size();i++){
+
+            QJsonObject dataObj = dataArray.at(i).toObject();
+
+
+            QString DriveID = dataObj["id"].toString();
+            QString DriveName = dataObj["name"].toString();
+            QString DriveKind = dataObj["kind"].toString();
+            QString DriveModiTime = QDateTime::fromString(dataObj["modifiedTime"].toString(), Qt::ISODate).toString("yyyy/MM/dd HH:mm ap");
+            QString DriveExtension = "";
+            QString DriveMimeType = dataObj["mimeType"].toString();
+            QStringList extensionList;
+
+
+            if(DriveName.contains(".")){
+                extensionList = DriveName.split('.');
+                DriveExtension = "." + extensionList.last();
+            }else if(DriveMimeType == "application/vnd.google-apps.spreadsheet"){
+                DriveExtension = ".gsheet";
+            }
+
+//            if(DriveMimeType != "application/vnd.google-apps.folder" && requiredExtensions.indexOf(DriveExtension) >= 0){
+                this->addDataSource(DriveID,DriveName,DriveKind,DriveModiTime,DriveExtension);
+//            }
+        }
+
+        m_dataBuffer->clear();
+
+        // Get user email
+        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/about/?fields=user"));
+        connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::userReadFinished);
+
+    }
+
+    emit showBusyIndicator(false);
+
+}
+
+void DriveDS::userReadFinished()
+{
+
+    m_dataBuffer->append(m_networkReply->readAll());
+    if(m_networkReply->error() ){
+        qDebug() <<"There was some error : " << m_networkReply->errorString() ;
+
+    }else{
+
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
+        QJsonObject resultObj = resultJson.object();
+
+        QJsonObject user = resultObj.value("user").toObject();
+        emit getDriveUsername(user["emailAddress"].toString());
+    }
+
+    emit showBusyIndicator(false);
 }
 
 void DriveDS::saveFile()
@@ -210,6 +296,8 @@ void DriveDS::saveFile()
     file.open(QIODevice::WriteOnly);
     file.write(arr);
     file.close();
+
+    emit showBusyIndicator(false);
 }
 
 

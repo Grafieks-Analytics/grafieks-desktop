@@ -39,7 +39,6 @@ public:
     Q_INVOKABLE void fetchDatasources();
     Q_INVOKABLE void searchQuer(QString path);
     Q_INVOKABLE void homeBut();
-    Q_INVOKABLE void getUserName();
     Q_INVOKABLE void downloadFile(QString filePath);
 
     void addDataSource(Drive * drive);
@@ -54,12 +53,15 @@ signals:
     void postItemRemoved();
     void preReset();
     void postReset();
-    void getUsername(QString username);
+    void getDriveUsername(QString username);
+    void showBusyIndicator(bool status);
 
 private slots:
     void resetDatasource();
     void dataReadyRead();
     void dataReadFinished();
+    void dataSearchFinished();
+    void userReadFinished();
     void saveFile();
 
 private:
