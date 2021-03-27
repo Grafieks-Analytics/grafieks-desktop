@@ -73,7 +73,21 @@ Popup {
     // Connections Starts
 
 
+    Connections{
+        target: GithubDS
 
+        function onGetGithubUsername(username){
+            connectedById.text = "Connected to: "+ username
+        }
+
+        function onShowBusyIndicator(status){
+            if(status === true){
+                busyindicator.running = true
+            } else{
+                busyindicator.running = false
+            }
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -198,7 +212,7 @@ Popup {
 
             Text {
                 id: connectedById
-                text: qsTr("Connected by: test@test.com")
+                text: qsTr("Not Connected")
             }
 
             //            Column{
@@ -272,7 +286,7 @@ Popup {
                     ListView{
                         id: fileList
                         model:DriveModel
-
+                        clip: true
                         height: 200
                         width: popup.width * 0.6
 
@@ -570,7 +584,14 @@ Popup {
             Rectangle{
                 width: popup.width * 0.4
                 anchors.left:breadcrumb.right
-                anchors.leftMargin: popup.width * 0.4  - 270
+                anchors.leftMargin: popup.width * 0.4  - 250
+
+                BusyIndicatorTpl {
+                    id: busyindicator
+                    running: true
+                    anchors.right: homeBtn.left
+                    anchors.rightMargin: 10
+                }
 
                 CustomButton{
 
@@ -579,7 +600,7 @@ Popup {
                     width: 100
                     textValue: "Home"
                     anchors.right: cancelBtn.left
-                    anchors.rightMargin: 30
+                    anchors.rightMargin: 10
 
                     onClicked: onHomeClicked();
 
@@ -591,7 +612,7 @@ Popup {
                     height: 40
                     width: 100
                     textValue: "Back"
-                    anchors.leftMargin: 30
+                    anchors.leftMargin: 10
                     onClicked: hidePopup()
 
                 }
@@ -603,7 +624,7 @@ Popup {
                     width: 100
                     textValue: "Next"
                     anchors.left: cancelBtn.right
-                    anchors.leftMargin: 30
+                    anchors.leftMargin: 10
 
                 }
 
