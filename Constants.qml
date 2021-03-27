@@ -221,6 +221,7 @@ QtObject {
     property string gaugeChartTitle: "Gauge Chart"
     property string scatterChartTitle: "Scatter Plot"
     property string stackedBarChartTitle: "Stacked Bar Chart"
+    property string groupBarChartTitle: "Grouped Bar Chart"
     property string geoChartTitle: "Map"
     property string treeChartTitle: "Tree Chart"
     property string treeMapChartTitle: "Tree Map"
