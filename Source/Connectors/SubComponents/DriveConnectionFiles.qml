@@ -542,15 +542,15 @@ Popup {
 
 
             Rectangle{
+                id: r
                 width: popup.width * 0.4
                 anchors.left:breadcrumb.right
-                anchors.leftMargin: popup.width * 0.4  - 270
+                anchors.leftMargin: popup.width * 0.4  - 300
 
                 BusyIndicatorTpl {
                     id: busyindicator
                     running: true
-                    anchors.right: homeBtn.left
-                    anchors.rightMargin: 20
+                    anchors.left: parent.left
                 }
 
                 CustomButton{
@@ -559,23 +559,13 @@ Popup {
                     height: 40
                     width: 100
                     textValue: "Home"
-                    anchors.right: cancelBtn.left
-                    anchors.rightMargin: 30
+                    anchors.left: busyindicator.right
+                    anchors.leftMargin: 10
 
                     onClicked: onHomeClicked();
 
                 }
 
-                CustomButton{
-
-                    id: cancelBtn
-                    height: 40
-                    width: 100
-                    textValue: "Back"
-                    anchors.leftMargin: 30
-                    onClicked: hidePopup()
-
-                }
 
                 CustomButton{
 
@@ -583,8 +573,8 @@ Popup {
                     height: 40
                     width: 100
                     textValue: "Next"
-                    anchors.left: cancelBtn.right
-                    anchors.leftMargin: 30
+                    anchors.left: homeBtn.right
+                    anchors.leftMargin: 10
 
                     onClicked: onFolderDoubleClicked(fileName, fileExtension)
 
