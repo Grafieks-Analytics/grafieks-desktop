@@ -55,6 +55,7 @@ signals:
     void preReset();
     void postReset();
     void getDropboxUsername(QString username);
+    void showBusyIndicator(bool status);
 
 private slots:
     void resetDatasource();

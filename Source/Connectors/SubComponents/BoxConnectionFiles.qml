@@ -60,6 +60,14 @@ Popup {
         function onGetBoxUsername(username){
             connectedById.text = "Connected to: "+ username
         }
+
+        function onShowBusyIndicator(status){
+            if(status === true){
+                busyindicator.running = true
+            } else{
+                busyindicator.running = false
+            }
+        }
     }
 
 
@@ -566,6 +574,13 @@ Popup {
                 width: popup.width * 0.4
                 anchors.left:breadcrumb.right
                 anchors.leftMargin: popup.width * 0.4  - 270
+
+                BusyIndicatorTpl {
+                    id: busyindicator
+                    running: true
+                    anchors.right: homeBtn.left
+                    anchors.rightMargin: 20
+                }
 
                 CustomButton{
 

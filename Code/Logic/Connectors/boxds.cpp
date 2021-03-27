@@ -12,6 +12,8 @@ BoxDS::BoxDS(QObject *parent) : QObject(parent),
     m_networkReply(nullptr),
     m_dataBuffer(new QByteArray)
 {
+    emit showBusyIndicator(true);
+
     this->box = new QOAuth2AuthorizationCodeFlow(this);
 
     this->box->setScope("");
@@ -77,6 +79,8 @@ void BoxDS::fetchDatasources()
 
 void BoxDS::folderNav(QString path)
 {
+    emit showBusyIndicator(true);
+
     QNetworkRequest m_networkRequest;
     QUrl api("https://api.box.com/2.0/folders/" + path + "/items");
     QUrlQuery quer(api);
@@ -103,6 +107,8 @@ void BoxDS::folderNav(QString path)
 
 void BoxDS::searchQuer(QString path)
 {
+    emit showBusyIndicator(true);
+
     QNetworkRequest m_networkRequest;
 
     // api link - https://developer.box.com/reference/get-search/
@@ -154,6 +160,8 @@ void BoxDS::addDataSource(const QString &id, const QString &name, const QString 
 
 void BoxDS::downloadFile(QString fileID)
 {
+
+    emit showBusyIndicator(true);
 
     qDebug() << "OAUTHO" << this->box->token() << "URL" << "https://api.box.com/2.0/files/"+fileID+"/content";
     m_networkReply = this->box->get(QUrl("https://api.box.com/2.0/files/773507838319/content"));
@@ -254,6 +262,8 @@ void BoxDS::dataReadFinished()
         connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::userReadFinished);
 
     }
+
+    emit showBusyIndicator(false);
 }
 
 void BoxDS::userReadFinished()
@@ -268,6 +278,8 @@ void BoxDS::userReadFinished()
         QJsonObject resultObj = resultJson.object();
         emit getBoxUsername(resultObj["login"].toString());
     }
+
+    emit showBusyIndicator(false);
 }
 
 void BoxDS::saveFile()
@@ -284,6 +296,8 @@ void BoxDS::saveFile()
         file.write(arr);
         file.close();
     }
+
+    emit showBusyIndicator(false);
 }
 
 

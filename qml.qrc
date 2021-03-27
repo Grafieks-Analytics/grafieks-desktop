@@ -216,5 +216,6 @@
         <file>Source/Charts/PivotTableTest.html</file>
         <file>Source/Charts/Data/pivot.min.css</file>
         <file>Source/Charts/Data/pivot.min.js</file>
+        <file>Source/MainSubComponents/BusyIndicatorTpl.qml</file>
     </qresource>
 </RCC>

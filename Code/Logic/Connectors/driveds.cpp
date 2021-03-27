@@ -12,6 +12,9 @@ DriveDS::DriveDS(QObject *parent) : QObject(parent),
     m_networkReply(nullptr),
     m_dataBuffer(new QByteArray)
 {
+
+    emit showBusyIndicator(true);
+
     this->google = new QOAuth2AuthorizationCodeFlow(this);
 
     // Set Scope or Permissions required from Google
@@ -70,6 +73,8 @@ void DriveDS::fetchDatasources()
  */
 void DriveDS::searchQuer(QString path)
 {
+    emit showBusyIndicator(true);
+
     m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name  +contains+%27" + path+ "%27"));
 
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
@@ -80,6 +85,8 @@ void DriveDS::searchQuer(QString path)
  */
 void DriveDS::homeBut()
 {
+    emit showBusyIndicator(true);
+
     m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)"));
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataReadFinished);
 }
@@ -87,6 +94,8 @@ void DriveDS::homeBut()
 
 void DriveDS::downloadFile(QString fileID)
 {
+    emit showBusyIndicator(true);
+
     m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files/"+fileID+"?alt=media"));
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::saveFile);
 }
@@ -201,6 +210,8 @@ void DriveDS::dataReadFinished()
 
     }
 
+    emit showBusyIndicator(false);
+
 }
 
 void DriveDS::userReadFinished()
@@ -218,6 +229,8 @@ void DriveDS::userReadFinished()
         QJsonObject user = resultObj.value("user").toObject();
         emit getDriveUsername(user["emailAddress"].toString());
     }
+
+    emit showBusyIndicator(false);
 }
 
 void DriveDS::saveFile()
@@ -229,6 +242,8 @@ void DriveDS::saveFile()
     file.open(QIODevice::WriteOnly);
     file.write(arr);
     file.close();
+
+    emit showBusyIndicator(false);
 }
 
 
