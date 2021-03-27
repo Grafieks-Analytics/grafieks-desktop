@@ -200,6 +200,8 @@ Rectangle{
             elementHeight: 24
             activeChart: false
             title:"Sankey"
+            xAxisLabelName: "Source"
+            yAxisLabelName: "Target"
             mainCustomizations: "Properties,Legend,Reference Line"
         }
         ListElement{

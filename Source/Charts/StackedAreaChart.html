@@ -157,7 +157,7 @@
                 .call(make_y_gridlines().tickSize(-width).tickFormat(""));
 
             // color palette
-            var color = d3.scaleOrdinal().domain(mygroups).range(d3colors);
+            var color = d3.scaleOrdinal().domain(mygroups).range(d3Colors);
 
             // Show the areas
             svg.selectAll("mylayers")
@@ -190,7 +190,7 @@
                 )
                 .on("mouseover mousemove", function (d, i) {
                     var x_pos = d3.mouse(this)[0] + margin.left;
-                    var y_pos = d3.mouse(this)[1] - margin.bottom;
+                    var y_pos = d3.mouse(this)[1] - 10;
 
                     const xValue = x.invert(x_pos);
                     const yValue = y.invert(y_pos);

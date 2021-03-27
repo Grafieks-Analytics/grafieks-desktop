@@ -116,9 +116,23 @@ Column{
 
         colorListModel.append({textValue: itemName})
         ReportParamsModel.setLastDropped(itemType);
-        ReportParamsModel.setChartType(Constants.stackedBarChartTitle);
 
-        report_desiner_page.chartTitle = Constants.stackedBarChartTitle;
+        switch(report_desiner_page.chartTitle){
+            case Constants.barChartTitle:
+
+                ReportParamsModel.setChartType(Constants.stackedBarChartTitle);
+                report_desiner_page.chartTitle = Constants.stackedBarChartTitle;
+                break;
+            case Constants.areaChartTitle:
+                ReportParamsModel.setChartType(Constants.stackedAreaChartTitle);
+                report_desiner_page.chartTitle = Constants.stackedAreaChartTitle;
+                break;
+            case Constants.lineChartTitle:
+                ReportParamsModel.setChartType(Constants.multiLineChartTitle);
+                report_desiner_page.chartTitle = Constants.multiLineChartTitle;
+                break;
+        }
+
         return;
 
     }
