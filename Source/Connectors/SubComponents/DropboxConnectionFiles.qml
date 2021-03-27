@@ -33,6 +33,12 @@ Popup {
     property var folderName: "Folder name"
     property var selectedId: ""
 
+    property var fileId: ""
+    property var fileName: ""
+    property var fileTag: ""
+    property var filePathFolder: ""
+    property var filePathLower: ""
+
 
 
     /***********************************************************************************************************************/
@@ -113,6 +119,12 @@ Popup {
 
             updatePath(pathLower)
         }
+
+        fileId = id
+        fileName = name
+        fileTag = tag
+        filePathFolder = pathLower
+        filePathLower = pathLower
 
     }
 
@@ -580,13 +592,13 @@ Popup {
             Rectangle{
                 width: popup.width * 0.4
                 anchors.left:breadcrumb.right
-                anchors.leftMargin: popup.width * 0.4  - 270
+                anchors.leftMargin: popup.width * 0.4  - 250
 
                 BusyIndicatorTpl {
                     id: busyindicator
                     running: true
                     anchors.right: homeBtn.left
-                    anchors.rightMargin: 20
+                    anchors.rightMargin: 10
                 }
 
                 CustomButton{
@@ -596,7 +608,7 @@ Popup {
                     width: 100
                     textValue: "Home"
                     anchors.right: cancelBtn.left
-                    anchors.rightMargin: 30
+                    anchors.rightMargin: 10
 
                     onClicked: onHomeClicked()
 
@@ -608,7 +620,7 @@ Popup {
                     height: 40
                     width: 100
                     textValue: "Back"
-                    anchors.leftMargin: 30
+                    anchors.leftMargin: 10
 
                     onClicked: onBackPressed()
 
@@ -621,7 +633,9 @@ Popup {
                     width: 100
                     textValue: "Next"
                     anchors.left: cancelBtn.right
-                    anchors.leftMargin: 30
+                    anchors.leftMargin: 10
+
+                    onClicked: onFileDoubleClicked(fileId, fileName, fileTag, filePathFolder, filePathLower)
                 }
 
 
