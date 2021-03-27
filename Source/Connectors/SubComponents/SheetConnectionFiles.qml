@@ -120,6 +120,13 @@ Popup {
         updatePath(name)
     }
 
+    function onFolderDoubleClicked(name,type){
+
+        if(type === "folder")
+            DriveDS.folderNav(pathFolder)
+
+        path.text = name
+    }
 
     function onHomeClicked(){
         SheetDS.folderNav("0")
@@ -373,7 +380,7 @@ Popup {
 
                                         anchors.fill:parent
                                         onClicked: onFileSelected(name, id, extension, modifiedTime)
-                                        onDoubleClicked: onFolderClicked()
+                                        onDoubleClicked: onFolderDoubleClicked(name, extension)
                                     }
                                 }
 
