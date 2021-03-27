@@ -13,7 +13,7 @@ import QtQuick 2.15
 QtObject {
 
     // Menu Indexes
-    property int initialIndex: 7
+    property int initialIndex: 3
     property int dataDesignerIndex: 3
     property int dashboardDesignerIndex: 6
     property int newReportIndex: 7
@@ -233,6 +233,7 @@ QtObject {
     property string tableTitle: "Table"
     property string pivotTitle: "Pivot"
     property string lineBarTitle: "Line Bar"
+    property string sankeyChartTitle: "Sankey"
 
     // Charts ends
 
