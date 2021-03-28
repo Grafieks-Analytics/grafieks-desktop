@@ -7,6 +7,8 @@ import "../../../MainSubComponents"
 
 Column{
 
+
+
     property int leftMargin: 15
 
     property int spacingColorList: 5
@@ -78,7 +80,7 @@ Column{
 
     Rectangle{
 
-        height: 20
+        height: 50
         width: 150
 
         Rectangle{

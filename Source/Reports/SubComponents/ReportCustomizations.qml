@@ -41,6 +41,7 @@ Item{
             collapsed: false
             display: false
 
+
             subItems: [
 
                 ListElement {
@@ -188,6 +189,8 @@ Item{
     Component{
         id: referenceLineComponent
         CustomizeReferenceLine{}
+
+
     }
 
     Component{
@@ -211,7 +214,6 @@ Item{
                 delegate: Rectangle {
                     height: 20
                     width: 150
-
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
                         x: 30
@@ -268,6 +270,7 @@ Item{
         Component {
             id: categoryDelegate
 
+
             Column {
                 width: 150
 
@@ -277,6 +280,7 @@ Item{
                     width: 150
                     color: Constants.themeColor
                     visible: display
+
 
                     Text {
                         anchors.verticalCenter: parent.verticalCenter

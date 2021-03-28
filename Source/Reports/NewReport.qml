@@ -206,6 +206,7 @@ Page {
 
     function reDrawChart(){
         drawChart();
+
     }
 
     function changeChart(chartname){
@@ -438,6 +439,14 @@ Page {
                 return;
             }
 
+
+            console.log(dataValues);
+            console.log(webEngineView.loading);
+            console.log(report_desiner_page.chartTitle)
+            console.log(report_desiner_page.chartUrl)
+            console.log("color final "+JSON.stringify(d3PropertyConfig))
+
+//            need to initialise only once
             console.log('Starting to plot');
             console.log('Data Values',dataValues);
             console.log('Chart Url',report_desiner_page.chartUrl)

@@ -19,6 +19,7 @@
             top: 0;
             right: 20px;
         }
+
     </style>
 </head>
 <body>
@@ -69,6 +70,8 @@
             window.data = data;
             dataValues = data[0];
 
+console.log(JSON.stringify(plottingConfiguration));
+
             var parseTime = d3.timeParse("%d-%b-%y");
 
             var dataValues = data[0];
@@ -91,7 +94,7 @@
 
             if (!dateFormat) {
                 dateFormat = defaultD3Config.dateFormat;
-            }
+            }   
 
             d3.selectAll("#my_dataviz").html("");
 
@@ -133,7 +136,7 @@
                 .scaleBand()
                 .range([0, width])
                 .domain(dataValues[0])
-                .padding(0.2);
+                .padding(paddingInner);
 
             if (valueDateType) {
                 xAxisBottom
@@ -208,7 +211,7 @@
                 .attr("class", function (d, i) {
                     return "bar";
                 })
-                .attr("fill", d3colors[4])
+                .attr("fill", d3Colors[4])
 
                 .on("mouseout", function (d, i) {
                     d3.select("#tooltip").style("display", "none");
@@ -230,6 +233,12 @@
                 });
 
             // Generate Grid starts
+
+            const [xAxisLabel,yAxisLabel]=data[1];
+           
+            setLabel(xAxisLabel, "y_label", false);
+            setLabel(yAxisLabel, "x_label", false);
+
 
             function make_x_gridlines() {
                 return d3.axisBottom(x).ticks(8);

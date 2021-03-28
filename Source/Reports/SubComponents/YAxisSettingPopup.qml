@@ -61,6 +61,7 @@ Popup {
         popup.visible = false
     }
 
+
     function toggleAxisSettings(){
         borderMultipleAxis.visible =  false
         borderAxis.visible =  true
@@ -99,18 +100,43 @@ Popup {
 
     ColorDialog{
         id: xAxisLegendColorDialog
+
+        onColorChanged:{
+
+             Constants.defaultXAxisLabelColor =  xAxisLegendColorDialog.color;
+
+            webEngineView.runJavaScript("changeChartAttributes('.x_label','fill', '"+xAxisLegendColorDialog.color+"')")
+        }
+
     }
 
     ColorDialog{
         id: xAxisTickMarkColorDialog
+        onColorChanged:{
+
+             Constants.defaultXAxisTickColor = xAxisTickMarkColorDialog.color;
+
+            webEngineView.runJavaScript("changeChartAttributes('.x-axis text','fill', '"+xAxisTickMarkColorDialog.color+"')")
+        }
     }
 
     ColorDialog{
         id: yAxisLegendColorDialog
+        onColorChanged:{
+
+             Constants.defaultYAxisLabelColor = yAxisLegendColorDialog.color;
+
+            webEngineView.runJavaScript("changeChartAttributes('.x-axis text','fill', '"+yAxisLegendColorDialog.color+"')")
+        }
     }
 
     ColorDialog{
         id: yAxisTickMarkColorDialog
+        onColorChanged:{
+
+             Constants.defaultYAxisTickColor = yAxisTickMarkColorDialog.color;
+            webEngineView.runJavaScript("changeChartAttributes('.y-axis text','fill', '"+yAxisTickMarkColorDialog.color+"')")
+        }
     }
 
 
