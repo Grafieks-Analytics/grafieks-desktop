@@ -24,7 +24,7 @@ Item{
     x: 60
     height: parent.height
 
-
+    property var customizationsAvailable: report_desiner_page.customizationsAvailable;
 
 
     /***********************************************************************************************************************/
@@ -39,6 +39,7 @@ Item{
         ListElement {
             categoryName: "Properties"
             collapsed: false
+            display: false
 
             subItems: [
 
@@ -56,6 +57,7 @@ Item{
         ListElement {
             categoryName: "Legend"
             collapsed: false
+            display: false
 
             subItems: [
                 ListElement { itemName: "Show Legend" },
@@ -66,6 +68,7 @@ Item{
         ListElement {
             categoryName: "Reference Line"
             collapsed: false
+            display: false
             subItems: [
                 ListElement { itemName: "Add Reference Line" }
             ]
@@ -73,6 +76,7 @@ Item{
 
         ListElement {
             categoryName: "Total"
+            display: false
             collapsed: false
             subItems: []
         }
@@ -109,6 +113,26 @@ Item{
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
+
+
+    onCustomizationsAvailableChanged: {
+        var availableToDisplay = customizationsAvailable && customizationsAvailable.split(',');
+        if(!availableToDisplay){
+            availableToDisplay = [];
+        }
+
+        for(var i=0; i<nestedModel.count;i++){
+            const categoryName = nestedModel.get(i).categoryName
+            if(availableToDisplay.includes(categoryName)){
+                nestedModel.setProperty(i, "display", true)
+                nestedModel.setProperty(i, "collapsed", false)
+            }else{
+                nestedModel.setProperty(i, "display", false)
+                nestedModel.setProperty(i, "collapsed", true)
+            }
+        }
+
+    }
 
     function onSubItemClicked(itemName){
 
@@ -252,6 +276,7 @@ Item{
                     height: 30
                     width: 150
                     color: Constants.themeColor
+                    visible: display
 
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
