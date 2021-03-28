@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <head>
+    <script src="./Data/d3DefaultConfig.js"></script>
+    <script src="./Data/utils.js"></script>
     <script src="./Data/d3.v4.min.js"></script>
-    <link rel="icon" href="logo.png" type="image/png" sizes="32x32" />
+    <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
     <link rel="stylesheet" href="Data/general.css" />
 
     <meta charset="UTF-8" />
@@ -35,54 +37,162 @@
         ];
 
         var treeData = {
-            name: "Country",
+            name: "",
+            size: 4000,
             children: [
                 {
-                    name: "India: 1000",
-                    children: [{ name: "400" }, { name: "600" }],
+                    children: [
+                        {
+                            children: [
+                                { children: [], name: "a", size: 2121 },
+                                { children: [], name: "b", size: 443 },
+                            ],
+                            name: "City",
+                            size: 2564,
+                        },
+                    ],
+                    name: "NepalState1",
+                    size: 2564,
                 },
-                { name: "Aus: 1000" },
+                {
+                    children: [
+                        {
+                            children: [{ children: [], name: "c", size: 1121 }],
+                            name: "Citya",
+                            size: 1121,
+                        },
+                        {
+                            children: [
+                                { children: [], name: "d", size: 4243 },
+                                { children: [], name: "e", size: 4625 },
+                            ],
+                            name: "Cityb",
+                            size: 8868,
+                        },
+                    ],
+                    name: "Delhi",
+                    size: 9989,
+                },
+                {
+                    children: [
+                        {
+                            children: [
+                                { children: [], name: "f", size: 2010 },
+                                { children: [], name: "g", size: 222 },
+                            ],
+                            name: "Guwahati",
+                            size: 2232,
+                        },
+                    ],
+                    name: "ssam",
+                    size: 2232,
+                },
+                {
+                    children: [
+                        {
+                            children: [
+                                { children: [], name: "h", size: 3112 },
+                                { children: [], name: "r", size: 524 },
+                            ],
+                            name: "Capital",
+                            size: 3636,
+                        },
+                        {
+                            children: [{ children: [], name: "r", size: 100 }],
+                            name: "Allahbad",
+                            size: 100,
+                        },
+                    ],
+                    name: "UP",
+                    size: 3736,
+                },
+                {
+                    children: [
+                        {
+                            children: [
+                                { children: [], name: "g", size: 11053 },
+                            ],
+                            name: "C1",
+                            size: 11053,
+                        },
+                    ],
+                    name: "Thimpu",
+                    size: 11053,
+                },
+                {
+                    children: [
+                        {
+                            children: [{ children: [], name: "j", size: 10 }],
+                            name: "C2",
+                            size: 10,
+                        },
+                    ],
+                    name: "B1",
+                    size: 10,
+                },
             ],
         };
 
-        // Set the dimensions and margins of the diagram
-        var margin = { top: 20, right: 90, bottom: 30, left: 90 },
-            width = 960 - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
+        function drawChart(data, plottingConfiguration = {}) {
+            window.data = data;
+            let {
+                d3colorPalette,
+                paddingInner,
+                markerShape,
+                curveType,
+            } = plottingConfiguration;
+            if (!d3colorPalette) {
+                d3colorPalette = defaultD3Config.d3ColorPalette;
+            }
+            d3Colors = d3[d3colorPalette];
 
-        // append the svg object to the body of the page
-        // appends a 'group' element to 'svg'
-        // moves the 'group' element to the top left margin
-        var svg = d3
-            .select("#my_dataviz")
-            .append("svg")
-            .attr("width", width + margin.right + margin.left)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr(
-                "transform",
-                "translate(" + margin.left + "," + margin.top + ")"
-            );
+            if (!paddingInner) {
+                paddingInner = defaultD3Config.defaultPaddingInner;
+            }
 
-        var i = 0,
-            duration = 750,
-            root;
+            d3.selectAll("#my_dataviz").html("");
+            (margin = { top: 30, right: 30, bottom: 70, left: 60 }),
+                (width = window.innerWidth - margin.left - margin.right - 20),
+                (height = window.innerHeight - margin.top - margin.bottom - 20),
+                (color = d3.scaleOrdinal().range(d3Colors));
 
-        // declares a tree layout and assigns the size
-        var treemap = d3.tree().size([height, width]);
+            // append the svg object to the body of the page
+            // appends a 'group' element to 'svg'
+            // moves the 'group' element to the top left margin
+            svg = d3
+                .select("#my_dataviz")
+                .append("svg")
+                .attr("width", width + margin.right + margin.left)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr(
+                    "transform",
+                    "translate(" + margin.left + "," + margin.top + ")"
+                );
 
-        // Assigns parent, children, height, depth
-        root = d3.hierarchy(treeData, function (d) {
-            return d.children;
-        });
-        root.x0 = height / 2;
-        root.y0 = 0;
+            (i = 0), (duration = 750);
 
-        // Collapse after the second level
-        root.children.forEach(collapse);
-        root.each(collapse);
+            // declares a tree layout and assigns the size
+            treemap = d3.tree().size([height, width]);
 
-        update(root);
+            // Assigns parent, children, height, depth
+            root = d3.hierarchy(treeData, function (d) {
+                return d.children;
+            });
+            root.x0 = height / 2;
+            root.y0 = 0;
+
+            // Collapse after the second level
+            // root.children.forEach(collapse);
+            // root.each(collapse);
+
+            update(root);
+        }
+
+        // // Set the dimensions and margins of the diagram
+        // var margin = { top: 20, right: 90, bottom: 30, left: 90 },
+        //     width = 960 - margin.left - margin.right,
+        //     height = 500 - margin.top - margin.bottom;
 
         // Collapse the node and all it's children
         function collapse(d) {
@@ -149,7 +259,11 @@
                         .style("display", "block")
                         .style("z-index", 1000)
                         .style("postion", "absolute")
-                        .text(d.data.name);
+                        .text(
+                            d.data.name
+                                ? d.data.name + " : " + d.data.size
+                                : d.data.size
+                        );
                     d3.select(this).style("fill", d3colors[1]);
                 })
                 .on("mouseout", function (d, i) {
@@ -168,7 +282,9 @@
                     return d.children || d._children ? "end" : "start";
                 })
                 .text(function (d) {
-                    return d.data.name;
+                    return d.data.name
+                        ? d.data.name + " : " + d.data.size
+                        : d.data.size;
                 })
                 .attr("stroke", "black")
                 .attr("stroke-width", 0)
@@ -279,5 +395,7 @@
                 update(d);
             }
         }
+
+        drawChart(treeData);
     </script>
 </body>
