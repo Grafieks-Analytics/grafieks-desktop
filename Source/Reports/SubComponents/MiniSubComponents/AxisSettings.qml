@@ -138,11 +138,12 @@ Rectangle{
                         onCheckStateChanged: {
                             if(xaxisCheckbox.checked){
 
-                                webEngineView.runJavaScript("changeChartAttributes('g .x-axis','style','display: block');")
+                                webEngineView.runJavaScript("changeChartAttributes('g .x-axis','style','display: block');changeChartAttributes('.x_label','style','display: block');")
+
 
                             }
                             else{
-                                webEngineView.runJavaScript("changeChartAttributes('g .x-axis','style','display: none');")
+                                webEngineView.runJavaScript("changeChartAttributes('g .x-axis','style','display: none');changeChartAttributes('.x_label','style','display: none');")
 
 
                             }
@@ -194,8 +195,14 @@ Rectangle{
                                 }
                                 CustomTextBox {
 
+                                    id:xAxisLabelNameBox
                                     width: parent.width*3/4
                                     text: qsTr(ReportParamsModel.xAxisColumns[0])
+                                    onTextChanged: {
+
+                                         webEngineView.runJavaScript("setText('.x_label','"+xAxisLabelNameBox.text+"');")
+
+                                    }
                                 }
                             }
 
@@ -214,6 +221,11 @@ Rectangle{
                                         id: xAxisLegendFonts
                                         width: parent.width
                                         textRole: "fontName"
+
+                                        onCurrentValueChanged: {
+                                                webEngineView.runJavaScript("changeChartAttributes('.x_label','font-family', '"+xAxisLegendFonts.currentValue+"')")
+
+                                        }
                                     }
                                 }
 
@@ -244,9 +256,15 @@ Rectangle{
                                         border.color: Constants.borderBlueColor
 
                                         CustomComboBox{
+                                            id:xAxisLabelFontSize
                                             model: fontSizes
                                             textRole: "size"
                                             width: parent.width
+                                            onCurrentValueChanged: {
+
+                                                    webEngineView.runJavaScript("changeChartAttributes('.x_label','font-size', '"+xAxisLabelFontSize.currentValue+"')")
+
+                                            }
                                         }
 
                                     }
@@ -470,11 +488,11 @@ Rectangle{
                         onCheckStateChanged: {
                             if(yaxisCheckbox.checked){
 
-                                webEngineView.runJavaScript("changeChartAttributes('g .y-axis','style','display: block');")
+                                webEngineView.runJavaScript("changeChartAttributes('g .y-axis','style','display: block');changeChartAttributes('.y_label','style','display: block');")
 
                             }
                             else{
-                                webEngineView.runJavaScript("changeChartAttributes('g .y-axis','style','display: none');")
+                                webEngineView.runJavaScript("changeChartAttributes('g .y-axis','style','display: none');changeChartAttributes('.y_label','style','display: none');")
 
 
                             }
@@ -524,8 +542,14 @@ Rectangle{
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
                                 CustomTextBox {
+                                    id:yAxisLabelNameBox
                                     width: parent.width*3/4
                                       text: qsTr(ReportParamsModel.yAxisColumns[0])
+                                      onTextChanged: {
+
+                                           webEngineView.runJavaScript("setText('.y_label','"+yAxisLabelNameBox.text+"');")
+
+                                      }
                                 }
                             }
 
@@ -544,6 +568,10 @@ Rectangle{
                                         id: yAxisLegendFonts
                                         width: parent.width
                                         textRole: "fontName"
+                                        onCurrentValueChanged: {
+                                                webEngineView.runJavaScript("changeChartAttributes('.y_label','font-family', '"+yAxisLegendFonts.currentValue+"')")
+
+                                        }
                                     }
                                 }
 
