@@ -397,7 +397,7 @@ Page {
                 break;
             case Constants.heatMapChartTitle:
                 console.log("HEATMAP CLICKED")
-                dataValues = ChartsModel.getHeatMapChartValues(xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
+                dataValues = ChartsModel.getHeatMapChartValues(xAxisColumns[0],yAxisColumns[0], ReportParamsModel.itemName);
                 break;
             case Constants.sunburstChartTitle:
                 console.log("SUNBURST CLICKED")
