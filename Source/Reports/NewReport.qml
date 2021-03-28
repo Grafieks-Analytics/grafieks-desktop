@@ -62,8 +62,11 @@ Page {
                 webEngineView.url = Constants.chartsBaseUrl+Constants.stackedAreaChartUrl;
                 break;
             case Constants.sankeyChartTitle:
+            case Constants.pivotTitle:
                 row3Visible =  true;
                 break;
+            default:
+                row3Visible = false;
         }
 
     }
@@ -382,7 +385,7 @@ Page {
                 break;
             case Constants.scatterChartTitle:
                 console.log("SCATTER CLICKED")
-                dataValues = ChartsModel.getScatterChartValues(xAxisColumns[0],yAxisColumns[0],xAxisColumns[1]);
+                dataValues = ChartsModel.getScatterChartValues(xAxisColumns[0],yAxisColumns[0],yAxisColumns[1]);
                 break;
             case Constants.treeChartTitle:
                 console.log("TREECHART CLICKED")
@@ -394,7 +397,7 @@ Page {
                 break;
             case Constants.heatMapChartTitle:
                 console.log("HEATMAP CLICKED")
-                dataValues = ChartsModel.getHeatMapChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                dataValues = ChartsModel.getHeatMapChartValues(xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
                 break;
             case Constants.sunburstChartTitle:
                 console.log("SUNBURST CLICKED")
@@ -413,7 +416,7 @@ Page {
                 break;
             case Constants.sankeyChartTitle:
                 console.log("SANKEY CLICKED")
-                 dataValues = ChartsModel.getSankeyChartValues(xAxisColumns[0],xAxisColumns[1], yAxisColumns[0]);
+                 dataValues = ChartsModel.getSankeyChartValues(xAxisColumns[0],  xAxisColumns[1], yAxisColumns[0] );
                 // Sankey
 //                 dataValues = ChartsModel.getSankeyChartValues("state", "district", "population");
                 break;

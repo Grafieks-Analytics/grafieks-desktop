@@ -244,6 +244,8 @@ QtObject {
     property string stackedBarChartUrl: "StackedBarChart.html"
     property string stackedAreaChartUrl: "StackedAreaChart.html"
 
+
+
     // Charts ends
 
     //data modeller table Scale
