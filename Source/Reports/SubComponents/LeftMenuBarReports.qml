@@ -315,6 +315,10 @@ Rectangle{
         report_desiner_page.customizationsAvailable = mainCustomizations;
 
         loadchart("../Charts/"+chartHtml);
+
+//        add toggle left menu
+
+
 //        yAxisVisible  = allCharts.get(index).yAxisVisible;
 
         const yAxisLabelNameData = allCharts.get(index).yAxisLabelName;

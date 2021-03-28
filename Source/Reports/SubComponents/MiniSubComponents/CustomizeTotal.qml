@@ -86,7 +86,7 @@ Column{
 
     Rectangle{
 
-        height: 20
+        height: 35
         width: 150
 
         Rectangle{
@@ -111,6 +111,16 @@ Column{
 
             }
 
+//            HorizontalLineTpl{
+//                id: linebar1
+//                line_color: Constants.darkThemeColor
+//                line_width: parent.width
+//                anchors.top: parent.bottom
+//                width: parent.width
+//                height: 4
+
+//            }
+
         }
 
     }
@@ -118,7 +128,7 @@ Column{
 
     Rectangle{
 
-        height: 50
+        height: 35
         width: parent.width
 
         Row{
@@ -210,11 +220,12 @@ Column{
 
     Rectangle{
 
-        height: 20
+        height: 35
         width: 150
 
         Rectangle{
             anchors.fill: parent
+            anchors.horizontalCenter: parent.horizontalCenter
 
             Text {
                 text: qsTr("Grand Total")
@@ -235,6 +246,17 @@ Column{
 
             }
 
+//            HorizontalLineTpl{
+//                id: linebar2
+//                line_color: Constants.darkThemeColor
+//                line_width: parent.width-25
+//                anchors.horizontalCenter: parent.horizontalCenter
+//                anchors.top: parent.bottom
+//                width: parent.width-20
+//                height: 4
+
+//            }
+
         }
 
     }
@@ -242,8 +264,9 @@ Column{
 
     Rectangle{
 
-        height: 50
+        height: 35
         width: parent.width
+
 
         Row{
 
@@ -288,6 +311,7 @@ Column{
             Rectangle{
                 height: parent.height
                 width: parent.width/2
+
 
 
                 Column{
@@ -335,7 +359,7 @@ Column{
 
     Rectangle{
 
-        height: 20
+        height: 35
         width: 150
 
         Rectangle{

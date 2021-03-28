@@ -7,6 +7,7 @@ import com.grafieks.singleton.constants 1.0
 
 import "../../../MainSubComponents";
 
+
 Rectangle{
     anchors.left: menuContentSeparator.right
     height: parent.height
@@ -85,6 +86,14 @@ Rectangle{
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
 
+    //javascript function
+
+    function onApplyClicked(){
+        popup.visible = false
+        webEngineView.runJavaScript("changeChartAttributes(selector, attributeName, attributeValue)")
+    }
+
+
 
     Component.onCompleted: {
         let fontFamilies = Qt.fontFamilies();
@@ -102,12 +111,14 @@ Rectangle{
     {
 
         id: axisSettingsContent
-        width: parent.width
+        width: parent.width-150
         height: parent.height - axisSettingsFooter.height
 
         Rectangle{
             height: (parent.height - parent.spacing) / 2
             width: parent.width
+           anchors.left: parent.left
+           anchors.leftMargin: 50
 
             Column{
 
@@ -121,9 +132,22 @@ Rectangle{
                     height: 50
                     CheckBoxTpl{
                         id: xaxisCheckbox
-                        checked: false
+                        checked: true
                         parent_dimension: Constants.defaultCheckBoxDimension
                         anchors.verticalCenter: parent.verticalCenter
+                        onCheckStateChanged: {
+                            if(xaxisCheckbox.checked){
+
+                                webEngineView.runJavaScript("changeChartAttributes('g .x-axis','style','display: block');changeChartAttributes('.x_label','style','display: block');")
+
+
+                            }
+                            else{
+                                webEngineView.runJavaScript("changeChartAttributes('g .x-axis','style','display: none');changeChartAttributes('.x_label','style','display: none');")
+
+
+                            }
+                        }
                     }
 
                     Text {
@@ -170,7 +194,15 @@ Rectangle{
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
                                 CustomTextBox {
+
+                                    id:xAxisLabelNameBox
                                     width: parent.width*3/4
+                                    text: qsTr(ReportParamsModel.xAxisColumns[0])
+                                    onTextChanged: {
+
+                                         webEngineView.runJavaScript("setText('.x_label','"+xAxisLabelNameBox.text+"');")
+
+                                    }
                                 }
                             }
 
@@ -189,6 +221,11 @@ Rectangle{
                                         id: xAxisLegendFonts
                                         width: parent.width
                                         textRole: "fontName"
+
+                                        onCurrentValueChanged: {
+                                                webEngineView.runJavaScript("changeChartAttributes('.x_label','font-family', '"+xAxisLegendFonts.currentValue+"')")
+
+                                        }
                                     }
                                 }
 
@@ -219,9 +256,15 @@ Rectangle{
                                         border.color: Constants.borderBlueColor
 
                                         CustomComboBox{
+                                            id:xAxisLabelFontSize
                                             model: fontSizes
                                             textRole: "size"
                                             width: parent.width
+                                            onCurrentValueChanged: {
+
+                                                    webEngineView.runJavaScript("changeChartAttributes('.x_label','font-size', '"+xAxisLabelFontSize.currentValue+"')")
+
+                                            }
                                         }
 
                                     }
@@ -264,10 +307,12 @@ Rectangle{
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
                                 Rectangle {
-                                    color: Constants.defaultColorDialogColor
+
+
+                                    color:  Constants.defaultXAxisLabelColor
                                     border.color: Constants.borderBlueColor
-                                    width: 50
-                                    height: nameInputRow.height
+                                    width: 20
+                                    height: 20
                                     MouseArea{
                                         anchors.fill: parent
                                         onClicked: openColorDialog("xAxisLegend");
@@ -309,18 +354,7 @@ Rectangle{
                             anchors.fill: parent
                             spacing: 10
 
-                            // Name Input
-                            Row{
-                                width: parent.width
-                                Text {
-                                    text: qsTr("Name: ")
-                                    width: parent.width/4
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                                CustomTextBox {
-                                    width: parent.width*3/4
-                                }
-                            }
+
 
                             ///Font
                             Row{
@@ -337,6 +371,11 @@ Rectangle{
                                         id: xAxisTickMarkFonts
                                         width: parent.width
                                         textRole: "fontName"
+                                        onCurrentValueChanged: {
+
+                                                webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-family', '"+xAxisTickMarkFonts.currentValue+"')")
+
+                                        }
                                     }
                                 }
 
@@ -367,9 +406,15 @@ Rectangle{
                                         border.color: Constants.borderBlueColor
 
                                         CustomComboBox{
+                                            id:xAxisTickMarkFontSize
                                             model: fontSizes
                                             textRole: "size"
                                             width: parent.width
+                                            onCurrentValueChanged: {
+                                                console.log("fontsize"+xAxisTickMarkFontSize.currentValue);
+                                                    webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-size', '"+xAxisTickMarkFontSize.currentValue+"')")
+
+                                            }
                                         }
 
                                     }
@@ -411,11 +456,11 @@ Rectangle{
                                     width: parent.width/4
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
-                                Rectangle {
-                                    color: Constants.defaultColorDialogColor
+                                Rectangle {     
+                                    color: Constants.defaultXAxisTickColor
                                     border.color: Constants.borderBlueColor
-                                    width: 50
-                                    height: nameInputRow.height
+                                    width: 20
+                                    height: 20
                                     MouseArea{
                                         anchors.fill: parent
                                         onClicked: openColorDialog("xAxisTickMark");
@@ -436,9 +481,22 @@ Rectangle{
                     height: 50
 
                     CheckBoxTpl{
-                        checked: false
+                        id:yaxisCheckbox
+                        checked: true
                         parent_dimension: Constants.defaultCheckBoxDimension
                         anchors.verticalCenter: parent.verticalCenter
+                        onCheckStateChanged: {
+                            if(yaxisCheckbox.checked){
+
+                                webEngineView.runJavaScript("changeChartAttributes('g .y-axis','style','display: block');changeChartAttributes('.y_label','style','display: block');")
+
+                            }
+                            else{
+                                webEngineView.runJavaScript("changeChartAttributes('g .y-axis','style','display: none');changeChartAttributes('.y_label','style','display: none');")
+
+
+                            }
+                        }
                     }
 
                     Text {
@@ -449,153 +507,6 @@ Rectangle{
                 }
 
                 // Label
-                Row{
-
-                    height: (parent.height - 50)/2
-                    width: parent.width
-
-                    Rectangle{
-                        width: parent.width/4 - 10
-                        height: nameInputRow.height
-
-                        Text {
-                            text: qsTr("Tick Mark")
-                            anchors.left: parent.left
-                            anchors.leftMargin: xaxisCheckbox.width
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-
-                    }
-
-                    Rectangle{
-                        width: (parent.width*3)/4 - 20
-                        height: parent.height
-
-                        Column{
-                            anchors.fill: parent
-                            spacing: 10
-
-                            // Name Input
-                            Row{
-                                width: parent.width
-                                Text {
-                                    text: qsTr("Name: ")
-                                    width: parent.width/4
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                                CustomTextBox {
-                                    width: parent.width*3/4
-                                }
-                            }
-
-                            ///Font
-                            Row{
-                                width: parent.width
-                                Text {
-                                    text: qsTr("Font: ")
-                                    width: parent.width/4
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                                Rectangle{
-                                    height: nameInputRow.height
-                                    width: parent.width*3/4
-                                    CustomComboBox{
-                                        id: yAxisLegendFonts
-                                        width: parent.width
-                                        textRole: "fontName"
-                                    }
-                                }
-
-                            }
-
-                            // Font Size
-
-                            Row{
-                                height: nameInputRow.height
-                                width: parent.width
-
-                                Text {
-                                    text: qsTr("Font Size:")
-                                    width: parent.width/4
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-
-                                Row{
-                                    anchors.right: parent.right
-                                    width: parent.width*3/4
-                                    height: parent.height
-                                    spacing: 5
-
-                                    Rectangle{
-                                        height: parent.height
-                                        width: parent.width/3 - parent.spacing
-                                        border.width: 1
-                                        border.color: Constants.borderBlueColor
-
-                                        CustomComboBox{
-                                            model: fontSizes
-                                            textRole: "size"
-                                            width: parent.width
-                                        }
-
-                                    }
-
-                                    Rectangle{
-                                        height: parent.height
-                                        width: parent.width/3 - parent.spacing
-                                        border.width: 1
-                                        border.color: Constants.borderBlueColor
-                                        Text {
-                                            anchors.centerIn: parent
-                                            text: qsTr("B")
-                                            font.bold: true
-                                        }
-                                    }
-
-                                    Rectangle{
-                                        height: parent.height
-                                        width: parent.width/3 - parent.spacing
-                                        border.width: 1
-                                        border.color: Constants.borderBlueColor
-                                        Text {
-                                            anchors.centerIn: parent
-                                            text: qsTr("I")
-                                            font.bold: true
-                                            font.italic: true
-                                        }
-                                    }
-
-                                }
-
-                            }
-
-                            // Font Color
-                            Row{
-                                width: parent.width
-                                Text {
-                                    text: qsTr("Font Color: ")
-                                    width: parent.width/4
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                                Rectangle {
-                                    color: Constants.defaultColorDialogColor
-                                    border.color: Constants.borderBlueColor
-                                    width: 50
-                                    height: nameInputRow.height
-                                    MouseArea{
-                                        anchors.fill: parent
-                                        onClicked: openColorDialog("yAxisLegend");
-                                    }
-                                }
-                            }
-
-                        }
-
-                    }
-
-                }
-
-                // Tick Marks
                 Row{
 
                     height: (parent.height - 50)/2
@@ -631,7 +542,14 @@ Rectangle{
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
                                 CustomTextBox {
+                                    id:yAxisLabelNameBox
                                     width: parent.width*3/4
+                                      text: qsTr(ReportParamsModel.yAxisColumns[0])
+                                      onTextChanged: {
+
+                                           webEngineView.runJavaScript("setText('.y_label','"+yAxisLabelNameBox.text+"');")
+
+                                      }
                                 }
                             }
 
@@ -647,9 +565,13 @@ Rectangle{
                                     height: nameInputRow.height
                                     width: parent.width*3/4
                                     CustomComboBox{
-                                        id: yAxisTickMarkFonts
+                                        id: yAxisLegendFonts
                                         width: parent.width
                                         textRole: "fontName"
+                                        onCurrentValueChanged: {
+                                                webEngineView.runJavaScript("changeChartAttributes('.y_label','font-family', '"+yAxisLegendFonts.currentValue+"')")
+
+                                        }
                                     }
                                 }
 
@@ -725,10 +647,159 @@ Rectangle{
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
                                 Rectangle {
-                                    color: Constants.defaultColorDialogColor
+                                    color: Constants.defaultYAxisLabelColor
                                     border.color: Constants.borderBlueColor
-                                    width: 50
+                                    width: 20
+                                    height: 20
+                                    MouseArea{
+                                        anchors.fill: parent
+                                        onClicked: openColorDialog("yAxisLegend");
+                                    }
+                                }
+                            }
+
+                        }
+
+                    }
+
+                }
+
+                // Tick Marks
+                Row{
+
+                    height: (parent.height - 50)/2
+                    width: parent.width
+
+                    Rectangle{
+                        width: parent.width/4 - 10
+                        height: nameInputRow.height
+
+                        Text {
+                            text: qsTr("Tick Marks")
+                            anchors.left: parent.left
+                            anchors.leftMargin: xaxisCheckbox.width
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                    }
+
+                    Rectangle{
+                        width: (parent.width*3)/4 - 20
+                        height: parent.height
+
+                        Column{
+                            anchors.fill: parent
+                            spacing: 10
+
+
+
+                            ///Font
+                            Row{
+                                width: parent.width
+                                Text {
+                                    text: qsTr("Font: ")
+                                    width: parent.width/4
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
+                                Rectangle{
                                     height: nameInputRow.height
+                                    width: parent.width*3/4
+                                    CustomComboBox{
+                                        id: yAxisTickMarkFonts
+                                        width: parent.width
+                                        textRole: "fontName"
+                                        onCurrentValueChanged: {
+
+                                                      webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-family', '"+yAxisTickMarkFonts.currentValue+"')")
+
+                                              }
+
+
+                                    }
+                                }
+
+                            }
+
+                            // Font Size
+
+                            Row{
+                                height: nameInputRow.height
+                                width: parent.width
+
+                                Text {
+                                    text: qsTr("Font Size:")
+                                    width: parent.width/4
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
+
+                                Row{
+                                    anchors.right: parent.right
+                                    width: parent.width*3/4
+                                    height: parent.height
+                                    spacing: 5
+
+                                    Rectangle{
+                                        height: parent.height
+                                        width: parent.width/3 - parent.spacing
+                                        border.width: 1
+                                        border.color: Constants.borderBlueColor
+
+                                        CustomComboBox{
+                                            id:yAxisTickMarkFontSize
+                                            model: fontSizes
+                                            textRole: "size"
+                                            width: parent.width
+                                            onCurrentValueChanged: {
+                                                console.log("fontsize"+yAxisTickMarkFontSize.currentValue);
+                                                    webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-size', '"+yAxisTickMarkFontSize.currentValue+"')")
+
+                                            }
+                                        }
+
+                                    }
+
+                                    Rectangle{
+                                        height: parent.height
+                                        width: parent.width/3 - parent.spacing
+                                        border.width: 1
+                                        border.color: Constants.borderBlueColor
+                                        Text {
+                                            anchors.centerIn: parent
+                                            text: qsTr("B")
+                                            font.bold: true
+                                        }
+                                    }
+
+                                    Rectangle{
+                                        height: parent.height
+                                        width: parent.width/3 - parent.spacing
+                                        border.width: 1
+                                        border.color: Constants.borderBlueColor
+                                        Text {
+                                            anchors.centerIn: parent
+                                            text: qsTr("I")
+                                            font.bold: true
+                                            font.italic: true
+                                        }
+                                    }
+
+                                }
+
+                            }
+
+                            // Font Color
+                            Row{
+                                width: parent.width
+                                Text {
+                                    text: qsTr("Font Color: ")
+                                    width: parent.width/4
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
+                                Rectangle {
+                                    color: Constants.defaultYAxisTickColor
+                                    border.color: Constants.borderBlueColor
+                                    width: 20
+                                    height: 20
                                     MouseArea{
                                         anchors.fill: parent
                                         onClicked: openColorDialog("yAxisTickMark");
@@ -771,7 +842,7 @@ Rectangle{
             CustomButton{
                 textValue: "Apply"
                 anchors.verticalCenter: parent.verticalCenter
-                onClicked: onCancelClicked()
+                onClicked: onApplyClicked()
             }
         }
     }
