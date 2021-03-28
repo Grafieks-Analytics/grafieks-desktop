@@ -302,17 +302,17 @@
                     ["A", "v4", "14"],
                     ["A", "v5", "59"],
                     ["A", "v6", "52"],
-                    ["A", "v7", "88"],
+                    ["A", "v7", "83"],
                     ["A", "v8", "20"],
                     ["A", "v9", "99"],
                     ["A", "v10", "66"],
                     ["B", "v1", "37"],
                     ["B", "v2", "50"],
-                    ["B", "v3", "81"],
-                    ["B", "v4", "79"],
-                    ["B", "v5", "84"],
+                    ["B", "v3", "83"],
+                    ["B", "v4", "74"],
+                    ["B", "v5", "85"],
                     ["B", "v7", "82"],
-                    ["B", "v8", "89"],
+                    ["B", "v8", "14"],
                     ["B", "v9", "6"],
                     ["B", "v10", "67"],
                     ["C", "v1", "96"],
@@ -375,7 +375,7 @@
                     .scaleBand()
                     .range([0, width])
                     .domain(myGroups)
-                    .padding(0.01);
+                    .padding(paddingInner);
                 svg.append("g")
                     .attr("class", "x-axis")
                     .attr("transform", "translate(0," + height + ")")
@@ -386,7 +386,7 @@
                     .scaleBand()
                     .range([height, 0])
                     .domain(myVars)
-                    .padding(0.01);
+                    .padding(0.1);
                 svg.append("g")
                     .attr("class", "y-axis")
                     .call(d3.axisLeft(y).tickSizeOuter(0));
@@ -395,7 +395,11 @@
                 var myColor = d3
                     .scaleLinear()
                     .range([d3colors[0], d3colors[d3colors.length - 1]])
-                    .domain([1, 100]);
+                    .domain(
+                        d3.extent(dataValues, function (d) {
+                            return +d[2];
+                        })
+                    );
 
                 //Read the data
                 // d3.csv("Data/heatmap.csv", function (data) {
@@ -446,7 +450,7 @@
                     });
             }
 
-            drawChart(data);
+            // drawChart(data);
         </script>
     </body>
 </html>
