@@ -27,7 +27,7 @@
 
             let sampleData = [
                 [
-                    ["one", 3.5],
+                    ["one", "3.5"],
                     ["two", -5.94],
                     ["three", 0.29],
                     ["four", 5.12],
@@ -143,7 +143,7 @@
             function waterfallData(data) {
                 let cumulativeValue = 0;
                 data = data.map((d, i) => {
-                    return { label: d[0], value: d[1] };
+                    return { label: d[0], value: +d[1] };
                 });
                 data.forEach((d) => {
                     d.start = cumulativeValue;

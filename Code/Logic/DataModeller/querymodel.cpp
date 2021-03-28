@@ -46,9 +46,11 @@ void QueryModel::callSql(QString tmpSql)
     this->executeQuery(tmpSql);
 }
 
-void QueryModel::setChartData(int totalRows)
+void QueryModel::setChartData()
 {
     int totalCols = this->columnCount();
+    int totalRows = this->rowCount();
+    qDebug() << "COLROW" << totalCols << totalRows;
 
     for(int j = 0; j < totalRows; j++){
         for(int i = 0; i < totalCols; i++){
@@ -62,11 +64,14 @@ void QueryModel::setChartData(int totalRows)
             }
         }
     }
+
+    emit chartDataChanged(this->sqlChartData);
 }
 
 void QueryModel::setChartHeader(int index, QString colName)
 {
     this->sqlChartHeader.insert(index, colName);
+    emit chartHeaderChanged(this->sqlChartHeader);
 }
 
 
@@ -93,8 +98,7 @@ void QueryModel::executeQuery(QString &query)
     case Constants::mysqlIntType:{
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
         this->setQuery(query, dbMysql);
-        //        qDebug() << record() << "RECORDER";
-        this->setChartData(query.size());
+        this->setChartData();
         break;
     }
 

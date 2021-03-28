@@ -31,6 +31,9 @@ Popup {
     property var folderName: "Folder name"
     closePolicy: Popup.NoAutoClose
 
+    property var fileName: ""
+    property var fileExtension: ""
+
 
 
     /***********************************************************************************************************************/
@@ -54,6 +57,21 @@ Popup {
     // Connections Starts
 
 
+    Connections{
+        target: SheetDS
+
+        function onGetSheetUsername(username){
+            connectedById.text = "Connected to: "+ username
+        }
+
+        function onShowBusyIndicator(status){
+            if(status === true){
+                busyindicator.running = true
+            } else{
+                busyindicator.running = false
+            }
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -86,13 +104,14 @@ Popup {
 
         updatePath(name)
 
-        let newDate = new Date(modifiedTime);
-        let dateString = newDate.getUTCFullYear() +"/"+ (newDate.getUTCMonth()+1) +"/"+ newDate.getUTCDate() + " " + newDate.getUTCHours() + ":" + newDate.getUTCMinutes() + ":" + newDate.getUTCSeconds();
 
         path.text = name
         detailNameDisplay.text = name;
         documentTypeDisplay.text = type;
-        modifiedTimeDisplay.text = dateString;
+        modifiedTimeDisplay.text = modifiedTime;
+
+        fileName = name
+        fileExtension = type
     }
 
     function onFolderClicked(name,type,pathFolder){
@@ -187,7 +206,7 @@ Popup {
 
             Text {
                 id: connectedById
-                text: qsTr("Connected by: test@test.com")
+                text: qsTr("Not Connected")
             }
 
         }
@@ -251,7 +270,7 @@ Popup {
                     ListView{
                         id: fileList
                         model:SheetModel
-
+                        clip: true
                         height: 200
                         width: popup.width * 0.6
 
@@ -537,7 +556,13 @@ Popup {
             Rectangle{
                 width: popup.width * 0.4
                 anchors.left:breadcrumb.right
-                anchors.leftMargin: popup.width * 0.4  - 270
+                anchors.leftMargin: popup.width * 0.4  - 300
+
+                BusyIndicatorTpl {
+                    id: busyindicator
+                    running: true
+                    anchors.left: parent.left
+                }
 
                 CustomButton{
 
@@ -545,24 +570,13 @@ Popup {
                     height: 40
                     width: 100
                     textValue: "Home"
-                    anchors.right: cancelBtn.left
-                    anchors.rightMargin: 30
+                    anchors.left: busyindicator.right
+                    anchors.leftMargin: 10
 
-                    onClicked: onHomeClicked()
-
-                }
-
-                CustomButton{
-
-                    id: cancelBtn
-                    height: 40
-                    width: 100
-                    textValue: "Back"
-                    anchors.leftMargin: 30
-
-                    onClicked: closePopup()
+                    onClicked: onHomeClicked();
 
                 }
+
 
                 CustomButton{
 
@@ -570,8 +584,10 @@ Popup {
                     height: 40
                     width: 100
                     textValue: "Next"
-                    anchors.left: cancelBtn.right
-                    anchors.leftMargin: 30
+                    anchors.left: homeBtn.right
+                    anchors.leftMargin: 10
+
+                    onClicked: onFolderDoubleClicked(fileName, fileExtension)
 
                 }
 
