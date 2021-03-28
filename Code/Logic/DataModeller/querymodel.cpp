@@ -56,11 +56,12 @@ void QueryModel::setChartData()
         for(int i = 0; i < totalCols; i++){
 
             if(j == 0){
-               this->sqlChartData[i] = new QStringList(record(0).field(i).value().toString());
+                QVariantList *q = new QVariantList;
+                q->append(record(0).field(i).value());
+               this->sqlChartData[i] = q;
             } else{
                 this->sqlChartData.value(i)->append(record(j).field(i).value().toString());
                 this->sqlChartData[i] = sqlChartData.value(i);
-//                qDebug() << *sqlChartData.value(i) << "XS" << i;
             }
         }
     }
