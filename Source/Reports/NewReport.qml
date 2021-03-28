@@ -33,41 +33,68 @@ Page {
 
     property bool yAxisVisible: true
     property bool lineTypeChartVisible: false
+
+    property bool row3Visible: false
+
     property string yAxisLabelName: Constants.yAxisName
     property string xAxisLabelName: Constants.xAxisName
+    property string valuesLabelName: 'Values'
 
     property string reportChart:ReportParamsModel.chartType;
     property string reportId:ReportParamsModel.reportId;
 
     property string chartUrl: 'BarChartArrayInput.html';
     property string chartTitle: Constants.barChartTitle;
+    property var customizationsAvailable: "Properties,Legend";
 
 
     property var d3PropertyConfig: ({});
 
     onChartTitleChanged: {
-        drawChart();
+        console.log(chartTitle);
+        switch(chartTitle){
+            case Constants.stackedBarChartTitle:
+                chartUrl=Constants.stackedBarChartUrl
+                webEngineView.url = Constants.chartsBaseUrl+Constants.stackedBarChartUrl;
+                break;
+            case Constants.stackedAreaChartTitle:
+                chartUrl=Constants.stackedAreaChartUrl;
+                webEngineView.url = Constants.chartsBaseUrl+Constants.stackedAreaChartUrl;
+                break;
+            case Constants.sankeyChartTitle:
+            case Constants.pivotTitle:
+                row3Visible =  true;
+                break;
+            default:
+                row3Visible = false;
+        }
+
     }
 
     onReportChartChanged: {
 
-        console.log(ReportParamsModel.xAxisColumns);
-        console.log(ReportParamsModel.yAxisColumns);
+          chartTitle = reportChart;
 
-        switch(reportChart){
-        case Constants.stackedBarChart:
-            changeChart("qrc:/Source/Charts/StackedBarChart.html");
+//        ReportParamsModel.setXAxisColumns([]);
+//        ReportParamsModel.setYAxisColumns([]);
 
-            let resizeQuery = 'window.addEventListener("resize", function () {' +
-                'console.log("resizing");'+
-                'd3.selectAll("#my_dataviz").html(""); '+
-                'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
-            webEngineView.runJavaScript(resizeQuery);
-            break;
+//        xAxisListModel.clear();
+//        yAxisListModel.clear();
 
+//        console.log(ReportParamsModel.xAxisColumns);
+//        console.log(ReportParamsModel.yAxisColumns);
 
+//        switch(reportChart){
+//        case Constants.stackedBarChart:
+//            changeChart("qrc:/Source/Charts/StackedBarChart.html");
 
-        }
+//            let resizeQuery = 'window.addEventListener("resize", function () {' +
+//                'console.log("resizing");'+
+//                'd3.selectAll("#my_dataviz").html(""); '+
+//                'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
+//            webEngineView.runJavaScript(resizeQuery);
+//            break;
+//        }
 
     }
 
@@ -81,6 +108,10 @@ Page {
 
     ListModel{
         id: yAxisListModel
+    }
+
+    ListModel{
+        id: valuesListModel
     }
 
     // LIST MODEL ENDS
@@ -179,7 +210,8 @@ Page {
     }
 
     function changeChart(chartname){
-        webEngineView.url = chartname
+        console.log('Changing Chart Name',chartname)
+        webEngineView.url = chartname;
     }
 
     function addReport(){
@@ -238,6 +270,7 @@ Page {
         var itemName = ReportParamsModel.itemName;
         var xAxisColumns = ReportParamsModel.xAxisColumns;
         var yAxisColumns = ReportParamsModel.yAxisColumns;
+        var valuesColumns = [];
 
         if(axis === Constants.xAxisName){
 
@@ -248,30 +281,49 @@ Page {
             xAxisListModel.append({itemName: itemName})
             xAxisColumns.push(itemName);
             ReportParamsModel.setXAxisColumns(xAxisColumns);
-        }else{
-
+        }else if(axis === Constants.yAxisName){
             if(!yAxisDropEligible(itemName)){
                 return;
             }
-
             yAxisListModel.append({itemName: itemName})
-
             yAxisColumns.push(itemName);
             ReportParamsModel.setYAxisColumns(yAxisColumns);
+        }else{
+            if(!yAxisDropEligible(itemName)){
+                return;
+            }
+            valuesListModel.append({itemName: itemName});
+            valuesColumns.push(itemName);
         }
 
 
+        if(ReportParamsModel.xAxisColumns.length > 1 && yAxisColumns.length && (chartTitle === Constants.barChartTitle  || chartTitle === Constants.stackedBarChartTitle)){
+            console.log('Make Grouped Bar Chart')
+            webEngineView.url = 'qrc:/Source/Charts/BarGroupedChart.html';
+            chartTitle = Constants.groupBarChartTitle;
+            chartUrl = 'BarGroupedChart.html';
+        }
+
         drawChart();
 
+    }
+
+    function onChartLoaded(loadRequest){
+
+        if(loadRequest.status === WebEngineLoadRequest.LoadFailedStatus){
+            console.log('Page Loading Failed')
+            console.log('Error',JSON.stringify(loadRequest))
+            return;
+        }
+
+        console.log(webEngineView.location)
+        drawChart();
     }
 
     function drawChart(){
 
         var xAxisColumns = ReportParamsModel.xAxisColumns;
         var yAxisColumns = ReportParamsModel.yAxisColumns;
-
-        console.log(xAxisColumns);
-        console.log(yAxisColumns);
 
         if(xAxisColumns.length && yAxisColumns.length){
 
@@ -283,22 +335,105 @@ Page {
 
             switch(chartTitle){
             case Constants.barChartTitle:
-                dataValues =  DuckReportsDS.getBarChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                console.log("BAR CLICKED", xAxisColumns[0])
+                // Bar - xAxis(String), yAxis(String)
+                dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
+
+                // Stacked Bar - xAxis(String), yAxis(String), Split(String)
+                // dataValues = ChartsModel.getStackedBarChartValues("country","population","state")
+
+                // Grouped Bar - xAxis(String), yAxis(String), Split(String)
+                // dataValues = ChartsModel.getGroupedBarChartValues("country","population", "state")
+
+                break;
+            case Constants.stackedBarChartTitle:
+                console.log('Stacked bar chart!');
+                dataValues =  ChartsModel.getStackedBarChartValues(ReportParamsModel.itemName,yAxisColumns[0], xAxisColumns[0]);
+                break;
+            case Constants.groupBarChartTitle:
+                console.log('Grouped bar chart!');
+                dataValues =  ChartsModel.getGroupedBarChartValues(xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
                 break;
             case Constants.areaChartTitle:
+                console.log("AREA CLICKED")
+                // Area - xAxis(String), yAxis(String)
+                dataValues =  ChartsModel.getAreaChartValues(xAxisColumns[0],yAxisColumns[0]);
+                break;
+            case Constants.stackedAreaChartTitle:
+                console.log('Stacked Area Chart')
+                dataValues =  ChartsModel.getStackedAreaChartValues(ReportParamsModel.itemName,yAxisColumns[0],xAxisColumns[0]);
+                break;
             case Constants.lineChartTitle:
-                dataValues =  DuckReportsDS.getAreaChartValues(xAxisColumns[0],yAxisColumns[0],'Sum','Sum');
+                console.log("LINE CLICKED")
+                // Line - xAxis(String), yAxis(String)
+                // dataValues =  ChartsModel.getLineChartValues(xAxisColumns[0],yAxisColumns[0]);
+
+                // Line Bar - xAxis(String), yAxis(String)
+                dataValues =  ChartsModel.getLineBarChartValues("state", "id", "population");
                 break;
             case Constants.pieChartTitle:
             case Constants.donutChartTitle:
-                dataValues = DuckReportsDS.getPieChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                console.log("DONUT/PIE CLICKED")
+                dataValues = ChartsModel.getPieChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.funnelChartTitle:
-                dataValues = DuckReportsDS.getFunnelChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                console.log("FUNNEL CLICKED")
+                dataValues = ChartsModel.getFunnelChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.radarChartTitle:
+                console.log("RADAR CLICKED")
+                dataValues = ChartsModel.getRadarChartValues(xAxisColumns[0],yAxisColumns[0]);
+                break;
+            case Constants.scatterChartTitle:
+                console.log("SCATTER CLICKED")
+                dataValues = ChartsModel.getScatterChartValues(xAxisColumns[0],yAxisColumns[0],yAxisColumns[1]);
+                break;
+            case Constants.treeChartTitle:
+                console.log("TREECHART CLICKED")
+                dataValues = ChartsModel.getTreeChartValues(xAxisColumns,yAxisColumns[0],'Sum');
+                break;
+            case Constants.treeMapChartTitle:
+                console.log("TREEMAP CLICKED")
+                dataValues = ChartsModel.getTreeMapChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.heatMapChartTitle:
+                console.log("HEATMAP CLICKED")
+                dataValues = ChartsModel.getHeatMapChartValues(xAxisColumns[0],yAxisColumns[0], ReportParamsModel.itemName);
+                break;
+            case Constants.sunburstChartTitle:
+                console.log("SUNBURST CLICKED")
+                dataValues = ChartsModel.getSunburstChartValues(xAxisColumns,yAxisColumns[0],'Sum');
 
+//                dataValues = ChartsModel.getSunburstChartValues(["state", "district", "ward"], "population",'Sum');
+                break;
+            case Constants.waterfallChartTitle:
+                console.log("WATERFALL CLICKED")
+                dataValues = ChartsModel.getWaterfallChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                console.log('Waterfall Data values',dataValues);
+                break;
+            case Constants.gaugeChartTitle:
+                console.log("GAUGE CLICKED")
+                dataValues = ChartsModel.getGaugeChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.sankeyChartTitle:
+                console.log("SANKEY CLICKED")
+                 dataValues = ChartsModel.getSankeyChartValues(xAxisColumns[0],  xAxisColumns[1], yAxisColumns[0] );
+                // Sankey
+//                 dataValues = ChartsModel.getSankeyChartValues("state", "district", "population");
+                break;
+            case Constants.kpiTitle:
+                console.log("KPI CLICKED")
+                dataValues = ChartsModel.getKPIChartValues(xAxisColumns[0]);
+                break;
+            case Constants.tableTitle:
+                console.log("TABLE CLICKED")
+                dataValues = ChartsModel.getTableChartValues(["state", "district"], "population",'Sum');
+                break;
+            case Constants.pivotTitle:
+                console.log("PIVOT CLICKED")
+                dataValues = ChartsModel.getPivotChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
             }
-
-            console.log(dataValues);
             if(!dataValues){
                 return;
             }
@@ -311,6 +446,9 @@ Page {
             console.log("color final "+JSON.stringify(d3PropertyConfig))
 
 //            need to initialise only once
+            console.log('Starting to plot');
+            console.log('Data Values',dataValues);
+            console.log('Chart Url',report_desiner_page.chartUrl)
 
             var scriptValue = 'window.addEventListener("resize", function () {
                     d3.selectAll("#my_dataviz").html("");
@@ -515,7 +653,7 @@ Page {
     Rectangle{
 
         id: axis
-        height: 82
+        height: row3Visible ? 123 : 82
         width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width
 
         anchors.left: tool_sep_chartFilters.right
@@ -738,6 +876,110 @@ Page {
             //            visible: yAxisVisible
         }
 
+        Rectangle{
+            id: row3
+            height: 40
+            anchors.top: axisChartSeperator.bottom
+            anchors.left: parent.left
+            width: parent.width
+            visible: row3Visible
+
+            Rectangle{
+                id: row3Text
+                width: 100
+                height: parent.height
+                Text {
+                    text: valuesLabelName
+                    anchors.centerIn: parent
+                }
+                z:1
+            }
+
+            ToolSeparator{
+                orientation: Qt.Vertical
+                anchors.left: row3Text.right
+                width: 1
+                height: parent.height
+                background: Rectangle{
+                    color: Constants.darkThemeColor
+                }
+            }
+
+            Rectangle{
+                id: row3DropAreaRectangle
+                height: parent.height
+                width: parent.width - yaxisText.width - 4
+                anchors.left: row3Text.right
+                anchors.leftMargin: 1
+
+                DropArea{
+                    id: row3DropArea
+                    anchors.fill: parent
+                    onEntered:  onDropAreaEntered(parent,Constants.row3Name)
+                    onExited:  onDropAreaExited(parent,Constants.row3Name)
+                    onDropped: onDropAreaDropped(parent,Constants.row3Name)
+                }
+
+                ListView{
+
+                    height: parent.height
+                    width: parent.width - yAxisSettings.width - 2*this.x
+                    x:5
+                    anchors.top: parent.top
+                    anchors.topMargin: 3
+                    model: valuesListModel
+                    orientation: Qt.Horizontal
+                    spacing: spacingColorList
+                    delegate: AxisDroppedRectangle{
+                        textValue: itemName
+                        color: Constants.defaultYAxisColor
+                    }
+                }
+
+                Rectangle{
+
+                    id: valuesSettings
+
+                    color: "#ffffff"
+                    height: parent.height - 4
+                    anchors.right: parent.right
+                    anchors.rightMargin: 1
+                    width: 50
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Image {
+                        source: "/Images/icons/customize.png"
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.right: parent.right
+                        anchors.centerIn: parent
+                        height: 20
+                        width: 20
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: openYAxisSettings()
+                        }
+                    }
+
+                    visible: false
+
+                }
+
+            }
+
+        }
+
+
+        //
+        ToolSeparator{
+            id: axisSeperator3
+            height: 1
+            anchors.top: row3.bottom
+            width: parent.width
+            background: Rectangle{
+                color: Constants.darkThemeColor
+            }
+            visible: row3Visible
+        }
 
     }
 
@@ -746,6 +988,7 @@ Page {
         height:parent.height - axis.height
         width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width
         url: "../Charts/BarChartArrayInput.html"
+        onLoadingChanged: onChartLoaded(loadRequest)
         anchors.left: tool_sep_chartFilters.right
         anchors.top: axis.bottom
     }

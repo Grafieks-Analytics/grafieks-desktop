@@ -13,6 +13,8 @@ SheetDS::SheetDS(QObject *parent) : QObject(parent),
     m_networkReply(nullptr),
     m_dataBuffer(new QByteArray)
 {
+    emit showBusyIndicator(true);
+
     this->google = new QOAuth2AuthorizationCodeFlow(this);
 
     // Set Scope or Permissions required from Google
@@ -48,9 +50,10 @@ SheetDS::SheetDS(QObject *parent) : QObject(parent),
     connect(this->google, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
         qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
 
+        // Get Files list
         m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'"));
-
         connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
+
 
     });
 }
@@ -69,6 +72,8 @@ void SheetDS::fetchDatasources()
  */
 void SheetDS::searchQuer(QString path)
 {
+    emit showBusyIndicator(true);
+
     if(path == "")
         m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType+contains+%27application%2Fvnd.google-apps.spreadsheet%27"));
     else
@@ -82,14 +87,11 @@ void SheetDS::searchQuer(QString path)
  */
 void SheetDS::homeBut()
 {
+    emit showBusyIndicator(true);
+
     m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'"));
 
     connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
-}
-
-void SheetDS::getUserName()
-{
-
 }
 
 
@@ -163,7 +165,7 @@ void SheetDS::dataReadFinished()
             QString SheetID = dataObj["id"].toString();
             QString SheetName = dataObj["name"].toString();
             QString SheetKind = dataObj["kind"].toString();
-            QString SheetModiTime = dataObj["modifiedTime"].toString();
+            QString SheetModiTime = QDateTime::fromString(dataObj["modifiedTime"].toString(), Qt::ISODate).toString("yyyy/MM/dd HH:mm ap");
             QString SheetExtension = "";
             QString SheetMimeType = dataObj["mimeType"].toString();
 
@@ -178,8 +180,48 @@ void SheetDS::dataReadFinished()
         }
 
         m_dataBuffer->clear();
+
+        // Get user email
+        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/about/?fields=user"));
+        connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::userReadFinished);
+
     }
 
+    emit showBusyIndicator(false);
+
+}
+
+void SheetDS::userReadFinished()
+{
+
+    m_dataBuffer->append(m_networkReply->readAll());
+    if(m_networkReply->error() ){
+        qDebug() <<"There was some error : " << m_networkReply->errorString() ;
+
+    }else{
+
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
+        QJsonObject resultObj = resultJson.object();
+
+        QJsonObject user = resultObj.value("user").toObject();
+        emit getSheetUsername(user["emailAddress"].toString());
+    }
+
+    emit showBusyIndicator(false);
+}
+
+void SheetDS::saveFile()
+{
+
+    QByteArray arr = m_networkReply->readAll();
+    qDebug() << arr << "SAVE FILE";
+
+    QFile file("C:\\Users\\chill\\Desktop\\x.xlsx");
+    file.open(QIODevice::WriteOnly);
+    file.write(arr);
+    file.close();
+
+    emit showBusyIndicator(false);
 }
 
 

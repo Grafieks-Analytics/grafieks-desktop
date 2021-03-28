@@ -32,6 +32,9 @@ Popup {
     property var pathFolder: "Box"
     property var folderName: "Folder name"
 
+    property var fileName: ""
+    property var fileExtension: ""
+
 
 
     /***********************************************************************************************************************/
@@ -54,7 +57,21 @@ Popup {
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: BoxDS
 
+        function onGetBoxUsername(username){
+            connectedById.text = "Connected to: "+ username
+        }
+
+        function onShowBusyIndicator(status){
+            if(status === true){
+                busyindicator.running = true
+            } else{
+                busyindicator.running = false
+            }
+        }
+    }
 
 
     // Connections Ends
@@ -107,18 +124,20 @@ Popup {
             detailNameDisplay.text = name;
             documentTypeDisplay.text = "--";
             modifiedTimeDisplay.text = "--";
+
         }
         else{
             path.text = name
-            let newDate = new Date(modifiedTime);
-            let dateString = newDate.getUTCFullYear() +"/"+ (newDate.getUTCMonth()+1) +"/"+ newDate.getUTCDate() + " " + newDate.getUTCHours() + ":" + newDate.getUTCMinutes() + ":" + newDate.getUTCSeconds();
 
             path.text = name
             detailNameDisplay.text = name;
             documentTypeDisplay.text = extension;
-            modifiedTimeDisplay.text = dateString;
+            modifiedTimeDisplay.text = modifiedTime;
 
         }
+
+        fileName = name
+        fileExtension = type
 
     }
 
@@ -210,7 +229,7 @@ Popup {
 
             Text {
                 id: connectedById
-                text: qsTr("Connected by: test@test.com")
+                text: qsTr("Not Connected")
             }
         }
 
@@ -273,7 +292,7 @@ Popup {
                     ListView{
                         id: fileList
                         model:BoxModel
-
+                        clip: true
                         height: parent.height
                         width: popup.width * 0.6
 
@@ -561,7 +580,14 @@ Popup {
             Rectangle{
                 width: popup.width * 0.4
                 anchors.left:breadcrumb.right
-                anchors.leftMargin: popup.width * 0.4  - 270
+                anchors.leftMargin: popup.width * 0.4  - 250
+
+                BusyIndicatorTpl {
+                    id: busyindicator
+                    running: true
+                    anchors.right: homeBtn.left
+                    anchors.rightMargin: 10
+                }
 
                 CustomButton{
 
@@ -570,7 +596,7 @@ Popup {
                     width: 100
                     textValue: "Home"
                     anchors.right: cancelBtn.left
-                    anchors.rightMargin: 30
+                    anchors.rightMargin: 10
 
                     onClicked: onHomeClicked();
 
@@ -582,7 +608,7 @@ Popup {
                     height: 40
                     width: 100
                     textValue: "Back"
-                    anchors.leftMargin: 30
+                    anchors.leftMargin: 10
                     onClicked: closePopup()
 
                 }
@@ -594,7 +620,9 @@ Popup {
                     width: 100
                     textValue: "Next"
                     anchors.left: cancelBtn.right
-                    anchors.leftMargin: 30
+                    anchors.leftMargin: 10
+
+                    onClicked: onFolderDoubleClicked(fileName, fileExtension)
 
                 }
 

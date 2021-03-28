@@ -5,6 +5,8 @@ GithubDS::GithubDS(QObject *parent) : QObject(parent),
     m_networkReply(nullptr),
     m_dataBuffer(new QByteArray)
 {
+    emit showBusyIndicator(true);
+
     this->github = new QOAuth2AuthorizationCodeFlow(this);
 
     // More scopes https://docs.github.com/en/developers/apps/scopes-for-oauth-apps
@@ -58,6 +60,8 @@ void GithubDS::fetchDatasources()
 
 void GithubDS::searchQuer(QString path)
 {
+    emit showBusyIndicator(true);
+
     m_networkReply = this->github->get(QUrl("https://www.githubapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name  +contains+%27" + path+ "%27"));
     connect(m_networkReply,&QNetworkReply::finished,this,&GithubDS::dataReadFinished);
 
@@ -65,6 +69,8 @@ void GithubDS::searchQuer(QString path)
 
 void GithubDS::homeBut()
 {
+    emit showBusyIndicator(true);
+
     m_networkReply = this->github->get(QUrl("https://www.githubapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)"));
     connect(m_networkReply, &QNetworkReply::finished, this, &GithubDS::dataReadFinished);
 }
@@ -124,7 +130,7 @@ void GithubDS::dataReadFinished()
             QString GithubID = dataObj["id"].toString();
             QString GithubName = dataObj["name"].toString();
             QString GithubKind = dataObj["kind"].toString();
-            QString GithubModiTime = dataObj["modifiedTime"].toString();
+            QString GithubModiTime = QDateTime::fromString(dataObj["modifiedTime"].toString(), Qt::ISODate).toString("yyyy/MM/dd HH:mm ap");
             QString GithubExtension = "file";
             QString GithubMimeType = dataObj["mimeType"].toString();
             QStringList extensionList;
@@ -142,5 +148,47 @@ void GithubDS::dataReadFinished()
         }
 
         m_dataBuffer->clear();
+
+        // Get user email
+        m_networkReply = this->github->get(QUrl("https://api.github.com/user"));
+        connect(m_networkReply,&QNetworkReply::finished,this,&GithubDS::userReadFinished);
+
     }
+
+    emit showBusyIndicator(false);
+}
+
+void GithubDS::userReadFinished()
+{
+
+    m_dataBuffer->append(m_networkReply->readAll());
+    if(m_networkReply->error() ){
+        qDebug() <<"There was some error : " << m_networkReply->errorString() ;
+
+    }else{
+
+        QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
+        QJsonObject resultObj = resultJson.object();
+        emit getGithubUsername(resultObj["email"].toString());
+
+        qDebug() << "USERG" <<resultJson;
+
+
+    }
+
+    emit showBusyIndicator(false);
+}
+
+void GithubDS::saveFile()
+{
+
+    QByteArray arr = m_networkReply->readAll();
+    qDebug() << arr << "SAVE FILE";
+
+    QFile file("C:\\Users\\chill\\Desktop\\x.xlsx");
+    file.open(QIODevice::WriteOnly);
+    file.write(arr);
+    file.close();
+
+    emit showBusyIndicator(false);
 }

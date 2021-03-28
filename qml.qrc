@@ -208,5 +208,15 @@
         <file>Source/Charts/WaterfallChart.html</file>
         <file>Source/Charts/GaugeChart.html</file>
         <file>Source/Charts/Data/utils.js</file>
+        <file>Source/Charts/TableChart.html</file>
+        <file>Source/Charts/LineBarChart.html</file>
+        <file>Source/Charts/NormalizedStackedBarChart.html</file>
+        <file>Source/Charts/NormalizedStackedAreaChart.html</file>
+        <file>Source/Charts/StackedAreaChart.html</file>
+        <file>Source/Charts/Data/pivot.min.css</file>
+        <file>Source/Charts/Data/pivot.min.js</file>
+        <file>Source/MainSubComponents/BusyIndicatorTpl.qml</file>
+        <file>Source/Charts/BarGroupedChart.html</file>
+        <file>Source/Charts/Error.html</file>
     </qresource>
 </RCC>

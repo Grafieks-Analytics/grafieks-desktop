@@ -148,6 +148,8 @@ QString DuckReportsDS::getAreaChartValues(QString xAxisColumn, QString yAxisColu
 
     }
 
+    qDebug() << "COL_DATA" << colData ;
+
     QJsonArray columns;
     columns.append(xAxisColumn);
     columns.append(yAxisColumn);
@@ -231,6 +233,8 @@ QString DuckReportsDS::getPieChartValues(QString xAxisColumn, QString yAxisColum
 
     }
 
+    qDebug() << obj << "OBJ";
+
     QJsonDocument doc;
     doc.setObject(obj);
 
@@ -266,6 +270,7 @@ QString DuckReportsDS::getFunnelChartValues(QString xAxisColumn, QString yAxisCo
         axisData.append(obj);
 
     }
+    qDebug() << "FUNN" << axisData;
 
     data.append(axisData);
 
@@ -318,6 +323,8 @@ QString DuckReportsDS::getRadarChartValues(QString xAxisColumn, QString yAxisCol
         yAxisData.append(newValue);
 
     }
+
+    qDebug() << "DATS" << xAxisData << yAxisData << "DATA";
 
     QJsonArray colData;
     colData.append(xAxisData);

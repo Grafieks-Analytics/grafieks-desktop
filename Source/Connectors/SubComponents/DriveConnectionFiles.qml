@@ -30,6 +30,9 @@ Popup {
     property var pathFolder: "Drive"
     property var folderName: "Folder name"
 
+    property var fileName: ""
+    property var fileExtension: ""
+
     closePolicy: Popup.NoAutoClose
 
     /***********************************************************************************************************************/
@@ -52,7 +55,21 @@ Popup {
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: DriveDS
 
+        function onGetDriveUsername(username){
+            connectedById.text = "Connected to: "+ username
+        }
+
+        function onShowBusyIndicator(status){
+            if(status === true){
+                busyindicator.running = true
+            } else{
+                busyindicator.running = false
+            }
+        }
+    }
 
 
     // Connections Ends
@@ -98,16 +115,13 @@ Popup {
         showSelectedFileDetails();
         hideFileNotSelectedMessage();
 
-        let newDate = new Date(modifiedTime);
-        let dateString = newDate.getUTCFullYear() +"/"+ (newDate.getUTCMonth()+1) +"/"+ newDate.getUTCDate() + " " + newDate.getUTCHours() + ":" + newDate.getUTCMinutes() + ":" + newDate.getUTCSeconds();
-
         path.text = name
         detailNameDisplay.text = name;
         documentTypeDisplay.text = type;
-        modifiedTimeDisplay.text = dateString;
+        modifiedTimeDisplay.text = modifiedTime;
 
-
-
+        fileName = name
+        fileExtension = type
     }
 
     function onFolderDoubleClicked(name,type){
@@ -175,9 +189,10 @@ Popup {
         Row{
             id: userDetails
 
+
             Text {
                 id: connectedById
-                text: qsTr("Connected by: test@test.com")
+                text: qsTr("Not Connected")
             }
         }
 
@@ -240,6 +255,7 @@ Popup {
                     ListView{
                         id: fileList
                         model:DriveModel
+                        clip: true
 
                         height: parent.height
                         width: popup.width * 0.6
@@ -247,6 +263,7 @@ Popup {
                         header: Row{
 
                             width: popup.width * 0.6
+
                             Column{
                                 width: 20
                                 Rectangle{
@@ -325,6 +342,7 @@ Popup {
                             Column{
                                 width: parent.width / 2
                                 height: parent.height
+
 
                                 Rectangle{
                                     height: parent.height
@@ -524,9 +542,16 @@ Popup {
 
 
             Rectangle{
+                id: r
                 width: popup.width * 0.4
                 anchors.left:breadcrumb.right
-                anchors.leftMargin: popup.width * 0.4  - 270
+                anchors.leftMargin: popup.width * 0.4  - 300
+
+                BusyIndicatorTpl {
+                    id: busyindicator
+                    running: true
+                    anchors.left: parent.left
+                }
 
                 CustomButton{
 
@@ -534,23 +559,13 @@ Popup {
                     height: 40
                     width: 100
                     textValue: "Home"
-                    anchors.right: cancelBtn.left
-                    anchors.rightMargin: 30
+                    anchors.left: busyindicator.right
+                    anchors.leftMargin: 10
 
                     onClicked: onHomeClicked();
 
                 }
 
-                CustomButton{
-
-                    id: cancelBtn
-                    height: 40
-                    width: 100
-                    textValue: "Back"
-                    anchors.leftMargin: 30
-                    onClicked: hidePopup()
-
-                }
 
                 CustomButton{
 
@@ -558,8 +573,10 @@ Popup {
                     height: 40
                     width: 100
                     textValue: "Next"
-                    anchors.left: cancelBtn.right
-                    anchors.leftMargin: 30
+                    anchors.left: homeBtn.right
+                    anchors.leftMargin: 10
+
+                    onClicked: onFolderDoubleClicked(fileName, fileExtension)
 
                 }
 
