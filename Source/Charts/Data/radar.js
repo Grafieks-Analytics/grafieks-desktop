@@ -121,7 +121,8 @@ function RadarChart(id, data, options) {
 		.style("font-size", "10px")
 		.attr("fill", "#737373")
 		.text(function(d, i) {
-			return Format((maxValue * d) / cfg.levels);
+			// return Format((maxValue * d) / cfg.levels);
+			return (maxValue * d) / cfg.levels;
 		});
 
 	/////////////////////////////////////////////////////////
@@ -296,13 +297,11 @@ function RadarChart(id, data, options) {
 		.style("fill", "none")
 		.style("pointer-events", "all")
 
-		.on("mousemove", function(d, i, j) {
-			newX = parseFloat(d3.select(this).attr("cx")) + radius;
-			newY = parseFloat(d3.select(this).attr("cy")) + radius;
-
+		.on("mouseover mousemove", function(d, i, j) {
+			
 			d3.select("#tooltip")
-				.style("left", newX + "px")
-				.style("top", newY + "px")
+				.style("left", mouseX + "px")
+				.style("top", mouseY + "px")
 				.style("display", "block")
 				.style("z-index", 1000)
 				.style("postion", "absolute")
