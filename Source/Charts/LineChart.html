@@ -24,17 +24,17 @@
             defaultLineCurve,
         } = defaultD3Config;
 
-        // var data = [
-        //     [
-        //         ["01-01-1998", 30.5621003042803618],
-        //         ["01-01-1999", 50.9164824306094999],
-        //         ["01-01-2000", 40.6363092398355727],
-        //         ["01-01-2001", 10.6302204824674538],
-        //         ["01-01-2002", 20.2485817228091547],
-        //         ["01-01-2003", 32.13664898092621325],
-        //     ],
-        //     ["Value Name"],
-        // ];
+        var data = [
+            [
+                ["01-01-1998", 30.5621003042803618],
+                ["01-01-1999", 50.9164824306094999],
+                ["01-01-2000", 40.6363092398355727],
+                ["01-01-2001", 10.6302204824674538],
+                ["01-01-2002", 20.2485817228091547],
+                ["01-01-2003", 32.13664898092621325],
+            ],
+            ["Value Name"],
+        ];
 
         var data = [
             [
@@ -80,6 +80,10 @@
                 dateFormat = defaultD3Config.dateFormat;
             }
 
+            dateformatValue = function (value) {
+                return value;
+            };
+
             // var parseTime = d3.timeParse(timeParseFormat);
 
             d3.selectAll("#my_dataviz").html("");
@@ -101,6 +105,7 @@
             });
 
             if (valueDateType) {
+                dateformatValue = d3.timeFormat(dateFormat);
                 xScale = d3
                     .scaleTime()
                     .range([0, width])
@@ -154,7 +159,7 @@
             var bottomAxis = svg
                 .append("g")
                 .attr("class", "x-axis")
-                .attr("transform", "translate(0," + height + ")");
+                .attr("transform", "translate(10," + height + ")");
 
             if (valueDateType) {
                 console.log("Date type?");
@@ -166,7 +171,7 @@
                         .tickFormat(d3.timeFormat(dateFormat))
                 );
             } else {
-                bottomAxis.call(d3.axisBottom(xScale));
+                bottomAxis.call(d3.axisBottom(xScale).ticks(dataValues.length));
             }
 
             // svg.append("g")
@@ -202,7 +207,7 @@
             }
         }
 
-        drawChart(data);
+        // drawChart(data);
 
         function drawMarker(fillStatus, markerShape) {
             let dataValues = data[0],
@@ -266,7 +271,7 @@
                     var y_pos = d3.mouse(this)[1];
 
                     // console.log(d);
-                    const xValue = d[0];
+                    const xValue = dateformatValue(d[0]);
                     const yValue = d[1];
 
                     d3.select("#tooltip")
