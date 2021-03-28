@@ -430,7 +430,8 @@ Page {
                 break;
             case Constants.pivotTitle:
                 console.log("PIVOT CLICKED")
-                dataValues = ChartsModel.getPivotChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+//                dataValues = ChartsModel.getPivotChartValues(["state", "district"],xAxisColumns[0],'Sum');
+                dataValues = ChartsModel.getTableChartValues(["state", "district"], "population",'Sum');
                 break;
             }
             if(!dataValues){
