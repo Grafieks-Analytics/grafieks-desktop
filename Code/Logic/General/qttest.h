@@ -7,6 +7,7 @@
 #include <QSqlQueryModel>
 #include <QString>
 #include <QVariant>
+#include <QSet>
 
 #include "../../Connectors/allconnectors.h"
 #include "../../constants.h"
