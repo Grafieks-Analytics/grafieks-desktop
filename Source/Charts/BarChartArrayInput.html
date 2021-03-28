@@ -19,6 +19,7 @@
             top: 0;
             right: 20px;
         }
+
     </style>
 </head>
 <body>
@@ -232,6 +233,12 @@ console.log(JSON.stringify(plottingConfiguration));
                 });
 
             // Generate Grid starts
+
+            const [xAxisLabel,yAxisLabel]=data[1];
+           
+            setLabel(xAxisLabel, "y_label", false);
+            setLabel(yAxisLabel, "x_label", false);
+
 
             function make_x_gridlines() {
                 return d3.axisBottom(x).ticks(8);

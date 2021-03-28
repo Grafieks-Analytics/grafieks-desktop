@@ -101,6 +101,13 @@ Popup {
     ColorDialog{
         id: xAxisLegendColorDialog
 
+        onColorChanged:{
+
+             Constants.defaultXAxisLabelColor =  xAxisLegendColorDialog.color;
+
+            webEngineView.runJavaScript("changeChartAttributes('.x_label','fill', '"+xAxisLegendColorDialog.color+"')")
+        }
+
     }
 
     ColorDialog{
@@ -115,6 +122,12 @@ Popup {
 
     ColorDialog{
         id: yAxisLegendColorDialog
+        onColorChanged:{
+
+             Constants.defaultYAxisLabelColor = yAxisLegendColorDialog.color;
+
+            webEngineView.runJavaScript("changeChartAttributes('.x-axis text','fill', '"+yAxisLegendColorDialog.color+"')")
+        }
     }
 
     ColorDialog{

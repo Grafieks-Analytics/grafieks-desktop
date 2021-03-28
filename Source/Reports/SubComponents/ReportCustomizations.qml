@@ -40,6 +40,7 @@ Item{
             categoryName: "Properties"
             collapsed: false
 
+
             subItems: [
 
                 ListElement {
@@ -245,6 +246,7 @@ Item{
         Component {
             id: categoryDelegate
 
+
             Column {
                 width: 150
 
@@ -253,6 +255,7 @@ Item{
                     height: 30
                     width: 150
                     color: Constants.themeColor
+
 
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
