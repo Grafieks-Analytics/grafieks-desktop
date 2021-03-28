@@ -434,7 +434,7 @@ QString ChartsModel::getScatterChartValues(QString xAxisColumn, QString yAxisCol
         } else{
 
             index = uniqueHashKeywords->indexOf(masterKeyword);
-            yAxisTmpData =  colData.at(index).toArray().at(0).toString().toFloat() + yAxisDataPointer->at(i).toFloat();
+            yAxisTmpData =  colData.at(index).toArray().at(0).toDouble() + yAxisDataPointer->at(i).toDouble();
 
             tmpData.append(yAxisTmpData);
             tmpData.append(splitDataPointer->at(i));
@@ -525,7 +525,7 @@ QString ChartsModel::getHeatMapChartValues(QString xAxisColumn, QString yAxisCol
         yAxisTmpData = 0.0;
 
         index = masterKeywordList.indexOf(masterKeyword);
-        yAxisTmpData =  colData.at(index).toArray().at(2).toString().toFloat() + yAxisDataPointer->at(i).toFloat();
+        yAxisTmpData =  colData.at(index).toArray().at(2).toDouble() + yAxisDataPointer->at(i).toDouble();
 
         tmpData.append(xAxisDataPointer->at(i));
         tmpData.append(splitDataPointer->at(i));
@@ -555,7 +555,7 @@ QString ChartsModel::getSunburstChartValues(QVariantList xAxisColumn, QString yA
 
     QString output;
     output = this->getTreeSunburstValues(xAxisColumn, yAxisColumn);
-//    output = this->getSunburstChartValues2();
+    //    output = this->getSunburstChartValues2();
     return output;
 }
 
@@ -852,7 +852,7 @@ QString ChartsModel::getMultiLineChartValues(QString xAxisColumn, QString yAxisC
         yAxisTmpData = 0.0;
 
         index = masterKeywordList.indexOf(masterKeyword);
-        yAxisTmpData =  colData.at(index).toArray().at(2).toString().toFloat() + yAxisDataPointer->at(i).toFloat();
+        yAxisTmpData =  colData.at(index).toArray().at(2).toDouble() + yAxisDataPointer->at(i).toDouble();
 
         tmpData.append(xAxisDataPointer->at(i));
         tmpData.append(splitDataPointer->at(i));
@@ -949,6 +949,7 @@ QString ChartsModel::getTreeSunburstValues(QVariantList & xAxisColumn, QString &
     QMap<QString, int> positions;
     QMap<int, QString> pastHashKeyword;
     long measure = 0;
+    int total = 0;
 
     json *jsonPointer = new json;
     json *jsonPointerMeasure = new json;
@@ -1017,6 +1018,7 @@ QString ChartsModel::getTreeSunburstValues(QVariantList & xAxisColumn, QString &
                     output.push_back(tmpOutput);
                     positions.insert(hashKeyword, output.size() - 1);
                     pastHashKeyword[0] = hashKeyword;
+                    total += measure;
 
                 } else{
 
@@ -1052,11 +1054,17 @@ QString ChartsModel::getTreeSunburstValues(QVariantList & xAxisColumn, QString &
                 totalCount->insert(hashKeyword, newValue);
                 pastHashKeyword.insert(j, hashKeyword);
 
+                if(j == 0){
+                    total += measure;
+                }
+
                 jsonPointerMeasure = &output;
                 for(int k = 0; k <= j; k++){
 
+
                     if(k == j){
                         jsonPointerMeasure->at(positions.value(hashKeyword)).at("size") = newValue;
+
                     } else{
                         jsonPointerMeasure = &jsonPointerMeasure->at(positions.value(pastHashKeyword.value(k))).at("children");
                     }
@@ -1065,8 +1073,17 @@ QString ChartsModel::getTreeSunburstValues(QVariantList & xAxisColumn, QString &
         }
     }
 
+    QString s = output.to_string().c_str();
+    QJsonDocument d = QJsonDocument::fromJson(s.toUtf8());
 
-    return output.to_string().c_str();
+    QJsonObject obj;
+    obj.insert("name", yAxisColumn);
+    obj.insert("size", total);
+    obj.insert("children", d.array());
+
+
+    QJsonDocument doc(obj);
+    return doc.toJson();
 }
 
 QString ChartsModel::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey)
@@ -1131,7 +1148,7 @@ QString ChartsModel::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxi
         yAxisTmpData = 0.0;
 
         index = masterKeywordList.indexOf(masterKeyword);
-        yAxisTmpData =  colData.at(index).toArray().at(2).toString().toFloat() + yAxisDataPointer->at(i).toFloat();
+        yAxisTmpData =  colData.at(index).toArray().at(2).toDouble() + yAxisDataPointer->at(i).toDouble();
 
         tmpData.append(xAxisDataPointer->at(i));
         tmpData.append(splitDataPointer->at(i));
