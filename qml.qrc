@@ -218,5 +218,6 @@
         <file>Source/MainSubComponents/BusyIndicatorTpl.qml</file>
         <file>Source/Charts/BarGroupedChart.html</file>
         <file>Source/Charts/Error.html</file>
+        <file>Source/Charts/PivotTableMultipleSubtotal.html</file>
     </qresource>
 </RCC>
