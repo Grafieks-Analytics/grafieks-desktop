@@ -27,6 +27,8 @@ QtObject {
     property string dataDesignerText : qsTr("Data Designer")
     property string dashboardDesignerText : qsTr("Dashboard Designer")
 
+    property string gaugePointerLabel: 'Pointer/Actual';
+
     property string liveDS : qsTr("live")
     property string extractDS : qsTr("extract")
 
