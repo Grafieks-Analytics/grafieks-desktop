@@ -37,10 +37,17 @@
         <div id="my_dataviz" class="radarChart"></div>
         <div id="tooltip"></div>
 
+        <script>
+            var mouseX = 0,
+                mouseY = 0;
+            window.onmousemove = function (event) {
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+            };
+        </script>
         <script src="./Data/radar.js"></script>
         <script>
             var data = [
-
                 [
                     //iPhone
                     { axis: "Battery Life", value: 100 },
@@ -109,10 +116,10 @@
                 RadarChart("#my_dataviz", data, radarChartOptions);
             }
 
-            drawChart(data);
-            window.addEventListener("resize", function () {
-                drawChart(data);
-            });
+            // drawChart(data);
+            // window.addEventListener("resize", function () {
+            //     drawChart(data);
+            // });
         </script>
     </body>
 </html>
