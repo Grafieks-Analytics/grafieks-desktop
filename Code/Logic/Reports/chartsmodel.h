@@ -30,7 +30,7 @@ public:
     Q_INVOKABLE QString getScatterChartValues( QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
     Q_INVOKABLE QString getHeatMapChartValues( QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
 
-    Q_INVOKABLE QString getSunburstChartValues( QVariantList xAxisColumn, QString yAxisColumn);
+    Q_INVOKABLE QString getSunburstChartValues(QVariantList xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getWaterfallChartValues( QString xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE float getGaugeChartValues(QString calculateColumn);
     Q_INVOKABLE QString getSankeyChartValues(QString sourceColumn, QString destinationColumn, QString measureColumn);

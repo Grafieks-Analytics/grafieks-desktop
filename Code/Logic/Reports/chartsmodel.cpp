@@ -555,7 +555,6 @@ QString ChartsModel::getSunburstChartValues(QVariantList xAxisColumn, QString yA
 
     QString output;
     output = this->getTreeSunburstValues(xAxisColumn, yAxisColumn);
-    //    output = this->getSunburstChartValues2();
     return output;
 }
 
@@ -938,9 +937,6 @@ QString ChartsModel::getLineAreaWaterfallValues(QString &xAxisColumn, QString &y
 QString ChartsModel::getTreeSunburstValues(QVariantList & xAxisColumn, QString & yAxisColumn)
 {
     int pointerSize;
-
-    xAxisColumn << "state" << "city" << "ward";
-    yAxisColumn = "population";
 
     QJsonArray data;
     QJsonArray axisArray;
