@@ -68,3 +68,8 @@ text.shadow {
     position: absolute;
     border: 1px solid black;
 }
+
+.xLabel{
+    text-align: center;
+    background-color: red;
+}

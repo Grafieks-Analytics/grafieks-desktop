@@ -46,6 +46,7 @@
         const valueIndex = 2;
 
         function drawChart(data, plottingConfiguration = {}) {
+            window.data = data;
             let {
                 d3colorPalette,
                 paddingInner,
@@ -298,8 +299,8 @@
             // Generate Grid ends
         }
 
-        window.onload = function () {
-            drawChart(data);
-        };
+        // window.onload = function () {
+        //     drawChart(data);
+        // };
     </script>
 </body>

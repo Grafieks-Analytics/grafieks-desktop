@@ -97,11 +97,17 @@ Column{
 
     Rectangle{
 
-        height: 20
+        id:showLegendText1
+
+        height: 30
         width: 150
+
 
         Rectangle{
             anchors.fill: parent
+            anchors.top: parent.top
+            anchors.topMargin: 10
+
 
             Text {
                 text: qsTr("Show Legend")
@@ -132,17 +138,24 @@ Column{
 
     Rectangle{
 
-        height: 50
+        height: 110
         width: parent.width
+
+
+
 
         Row{
 
+            id:rightLeft
+            anchors.top: parent.top
+            anchors.topMargin: 8
+
             width: parent.width
-            height: parent.height
+            height: parent.height/2
 
             Rectangle{
                 height: parent.height
-                width: parent.width/4
+                width: parent.width/2
 
 
                 Column{
@@ -171,7 +184,7 @@ Column{
 
             Rectangle{
                 height: parent.height
-                width: parent.width/4
+                width: parent.width/2
 
 
                 Column{
@@ -200,9 +213,18 @@ Column{
             }
 
 
+
+        }
+
+        Row{
+
+            anchors.top: rightLeft.bottom
+
+            width: parent.width
+            height: parent.height/2
             Rectangle{
                 height: parent.height
-                width: parent.width/4
+                width: parent.width/2
 
 
                 Column{
@@ -232,7 +254,7 @@ Column{
 
             Rectangle{
                 height: parent.height
-                width: parent.width/4
+                width: parent.width/2
 
 
                 Column{
@@ -272,8 +294,14 @@ Column{
         width: parent.width
 
 
+
         Rectangle{
             anchors.fill: parent
+            anchors.top: parent.top
+            anchors.topMargin: 5
+            anchors.bottom:  parent.bottom
+            anchors.bottomMargin:  20
+
 
             Text {
                 text: qsTr("Text Format")
