@@ -70,6 +70,26 @@
                     "PG",
                 ],
                 [
+                    "Johnathan Howard",
+                    "FEMALE",
+                    "4",
+                    "6",
+                    "5",
+                    "N",
+                    "Biotech",
+                    "yNPG",
+                ],
+                [
+                    "Johnathan Howard",
+                    "FEMALE",
+                    "4",
+                    "6",
+                    "5",
+                    "Y",
+                    "Biotech",
+                    "yNPG",
+                ],
+                [
                     "Chantal Norton",
                     "FEMALE",
                     "10",
@@ -288,8 +308,12 @@
                 $(lastRow.get(0)).after(firstRow);
             }
 
-            function subTotals() {
+            function subTotal() {
                 console.clear();
+
+                flag = false;
+                var subtotalData = {};
+
                 var tableRows = $(".pvtTable tbody tr");
 
                 var firstTableRow = $(tableRows[1]).find("th.pvtRowLabel");
@@ -304,35 +328,85 @@
                 stack = [[], [], []];
 
                 var subTotalRow = [];
-                for (var i = 1; i < tableRows.length - 1; i++) {
+                var parents = [];
+                var lastLevel = 0;
+
+                var parentRow = null;
+                for (var i = 1; i < tableRows.length; i++) {
                     var tableRow = tableRows[i];
 
                     var cellValues = tableRow.children;
-                    var initPoint = (initPoint =
-                        totalColumns - cellValues.length);
+                    var initPoint = totalColumns - cellValues.length;
 
-                    console.log(initPoint);
-                    if (initPoint == 0 && subTotalRow.length) {
-                        addSubTotalRow(
-                            tableRow,
-                            subTotalRow,
-                            totalRowColumns + 1,
-                            totalSubRows
-                        );
-                        //             subTotalRow = [];
-                    }
                     var totalTraversing = totalRowColumns - initPoint;
                     for (var j = 0; j < totalTraversing; j++) {
+                        var level = j + initPoint;
+                        console.log({ level });
+
+                        if (
+                            (!level || lastLevel != level) &&
+                            totalSubRows > level
+                        ) {
+                            parents.push({ level, tableRow });
+                            lastLevel = level;
+                        }
+
                         var rowHeading = cellValues[j];
                         var rowSpan = rowHeading.rowSpan;
-                        console.log(rowSpan, rowHeading.innerText);
+                        var colSpan = rowHeading.colSpan;
+
                         if (
-                            rowSpan > 1 &&
-                            rowHeading.innerText &&
-                            subTotalRow.length
+                            (rowHeading.innerText &&
+                                subTotalRow.length &&
+                                level < totalSubRows) ||
+                            rowHeading.className.includes("pvtColTotalLabel")
                         ) {
-                            addSubTotalRow(tableRow, subTotalRow, 3, rowSpan);
-                            //                 subTotalRow = [];
+                            console.log("Subtotal Checkpoint");
+                            var targetRow = tableRows[i - 1];
+
+                            if (!parentRow) {
+                                parentRow = parents.splice(-1)[0];
+                            }
+                            console.log("Parent Row", parentRow);
+
+                            subtotalData[level] = {
+                                parentRow,
+                                columnNumber: j,
+                            };
+
+                            if (rowHeading.innerText == "Totals") {
+                                console.log({ targetRow });
+                                processSubtotal(
+                                    parentRow,
+                                    targetRow,
+                                    subtotalData,
+                                    level,
+                                    totalRowColumns,
+                                    initPoint,
+                                    totalColumns,
+                                    subTotalRow,
+                                    totalSubRows,
+                                    totalColumns
+                                );
+                            } else {
+                                processSubtotal(
+                                    parentRow,
+                                    targetRow,
+                                    subtotalData,
+                                    level,
+                                    totalRowColumns,
+                                    initPoint,
+                                    totalColumns,
+                                    subTotalRow,
+                                    totalSubRows,
+                                    totalColumns
+                                );
+                                parentRow = { tableRow };
+                            }
+                            if (!flag) {
+                                delete subtotalData[level];
+                            }
+                            subTotalRow = [];
                         }
                     }
 
@@ -354,12 +428,92 @@
                             subTotalRow[k] = +lastValue;
                         }
                     }
-
-                    console.log(subTotalRow);
                 }
+
+                console.log(parents);
             }
 
-            function addSubTotalRow(currentRow, subTotalRow, colSpan, rowSpan) {
+            function processSubtotal(
+                parentRow,
+                targetRow,
+                subtotalData,
+                level,
+                totalRowColumns,
+                initPoint,
+                totalColumns,
+                subTotalRow,
+                totalSubRows,
+                totalColumns
+            ) {
+                console.log({ subTotalRow, targetRow, subtotalData, level });
+
+                if (level == totalSubRows) {
+                    level = totalSubRows - 1;
+                }
+                if (!parentRow) {
+                    return;
+                }
+                var parentRow = parentRow.tableRow;
+                var currentRowTotalLength = parentRow.children.length;
+                var changeColumn = false;
+                if (totalColumns != currentRowTotalLength) {
+                    changeColumn = true;
+                }
+                for (var i = level; i >= 0; i--) {
+                    var columnIndex = i;
+                    if (changeColumn) {
+                        columnIndex = i - 1;
+                    }
+                    if (columnIndex < 0) {
+                        continue;
+                    }
+                    var column = parentRow.children[columnIndex];
+                    column.rowSpan = column.rowSpan + 1;
+                }
+
+                var trRow = document.createElement("tr");
+
+                console.log("Uodate Column", targetRow.children[level - 1]);
+                console.log(
+                    "Update column",
+                    targetRow.children[level - 1].colSpan
+                );
+                console.log(
+                    "Update column",
+                    targetRow.children[level - 1].rowSpan
+                );
+
+                var th = document.createElement("th");
+                th.className = "pvtRowLabel";
+                th.setAttribute(
+                    "colspan",
+                    targetRow.children[level - 1].colSpan
+                );
+                th.setAttribute(
+                    "rowspan",
+                    targetRow.children[level - 1].rowSpan
+                );
+                th.innerHTML = "Sub Total";
+                trRow.appendChild(th);
+
+                for (var i = 0; i < subTotalRow.length; i++) {
+                    var td = document.createElement("td");
+                    td.className = "pvtVal row1 col0 stat0";
+                    td.innerHTML =
+                        "<span><span>" + subTotalRow[i] + "</span></span>";
+                    trRow.appendChild(td);
+                }
+
+                $(targetRow).after(trRow);
+            }
+
+            function addSubTotalRow(
+                currentRow,
+                subTotalRow,
+                colSpan,
+                rowSpan,
+                columnNumber
+            ) {
                 console.log(currentRow);
                 var tr = document.createElement("tr");
 
