@@ -426,7 +426,7 @@ Page {
                 break;
             case Constants.tableTitle:
                 console.log("TABLE CLICKED")
-                dataValues = ChartsModel.getTableChartValues(["state", "district"], "population",'Sum');
+                dataValues = ChartsModel.getTableChartValues(["state", "city", "district"], ["population", "id"],'Sum');
                 break;
             case Constants.pivotTitle:
                 console.log("PIVOT CLICKED")
