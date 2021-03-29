@@ -466,6 +466,8 @@ QString ChartsModel::getScatterChartValues(QString xAxisColumn, QString yAxisCol
 
 QString ChartsModel::getHeatMapChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
+
+    qDebug() << xAxisColumn << yAxisColumn << xSplitKey << "HEATMA{";
     QJsonArray data;
     QVariantList tmpData;
     float yAxisTmpData;
@@ -498,24 +500,6 @@ QString ChartsModel::getHeatMapChartValues(QString xAxisColumn, QString yAxisCol
     int index;
     QJsonArray colData;
 
-    // Pre - Populate the json array
-    for(int i = 0; i < xAxisDataPointerPre.length(); i++){
-
-        for(int j = 0; j < splitDataPointerPre.length(); j++){
-
-            masterKeyword = xAxisDataPointerPre.at(i) + splitDataPointerPre.at(j);
-
-            masterKeywordList.append(masterKeyword);
-
-            tmpData.clear();
-            tmpData.append(xAxisDataPointerPre.at(i));
-            tmpData.append(splitDataPointerPre.at(j));
-            tmpData.append(0);
-
-            colData.append(QJsonArray::fromVariantList(tmpData));
-        }
-    }
-
 
     // Populate the actual data
     for(int i = 0; i < xAxisDataPointer->length(); i++){
@@ -524,14 +508,30 @@ QString ChartsModel::getHeatMapChartValues(QString xAxisColumn, QString yAxisCol
         tmpData.clear();
         yAxisTmpData = 0.0;
 
-        index = masterKeywordList.indexOf(masterKeyword);
-        yAxisTmpData =  colData.at(index).toArray().at(2).toDouble() + yAxisDataPointer->at(i).toDouble();
+        if(!masterKeywordList.contains(masterKeyword)){
+            masterKeywordList.append(masterKeyword);
 
-        tmpData.append(xAxisDataPointer->at(i));
-        tmpData.append(splitDataPointer->at(i));
-        tmpData.append(yAxisTmpData);
+            try{
+                tmpData.append(xAxisDataPointer->at(i));
+                tmpData.append(splitDataPointer->at(i));
+                tmpData.append(yAxisDataPointer->at(i).toDouble());
 
-        colData.replace(index, QJsonArray::fromVariantList(tmpData));
+                colData.append(QJsonArray::fromVariantList(tmpData));
+            } catch(std::exception &e){
+                qDebug() << "C1" << e.what();
+            }
+
+        } else{
+
+            index = masterKeywordList.indexOf(masterKeyword);
+            yAxisTmpData =  colData.at(index).toArray().at(2).toDouble() + yAxisDataPointer->at(i).toDouble();
+
+            tmpData.append(xAxisDataPointer->at(i));
+            tmpData.append(splitDataPointer->at(i));
+            tmpData.append(yAxisTmpData);
+
+            colData.replace(index, QJsonArray::fromVariantList(tmpData));
+        }
 
     }
 
