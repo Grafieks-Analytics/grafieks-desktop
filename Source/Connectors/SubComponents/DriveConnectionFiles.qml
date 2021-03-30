@@ -32,6 +32,7 @@ Popup {
 
     property var fileName: ""
     property var fileExtension: ""
+    property var googleFileId: ""
 
     closePolicy: Popup.NoAutoClose
 
@@ -110,7 +111,7 @@ Popup {
         fileNotSelectedMsg.visible = false
     }
 
-    function onFileClicked(name, type, modifiedTime){
+    function onFileClicked(id, name, type, modifiedTime){
 
         showSelectedFileDetails();
         hideFileNotSelectedMessage();
@@ -122,12 +123,16 @@ Popup {
 
         fileName = name
         fileExtension = type
+        googleFileId = id
     }
 
-    function onFolderDoubleClicked(name,type){
+    function onFolderDoubleClicked(googleFileId, name, extension){
 
-        if(type === "folder")
+        if(extension === "folder"){
             DriveDS.folderNav(pathFolder)
+        }else{
+            DriveDS.fetchFileData(googleFileId, extension)
+        }
 
         path.text = name
     }
@@ -364,8 +369,8 @@ Popup {
                                     MouseArea{
 
                                         anchors.fill:parent
-                                        onClicked:onFileClicked(name, extension, modifiedTime);
-                                        onDoubleClicked: onFolderDoubleClicked(name, extension)
+                                        onClicked:onFileClicked(id, name, extension, modifiedTime);
+                                        onDoubleClicked: onFolderDoubleClicked(id, name, extension)
                                     }
                                 }
 
@@ -579,7 +584,7 @@ Popup {
                     anchors.left: homeBtn.right
                     anchors.leftMargin: 10
 
-                    onClicked: onFolderDoubleClicked(fileName, fileExtension)
+                    onClicked: onFolderDoubleClicked(googleFileId, fileName, fileExtension)
 
                 }
 
