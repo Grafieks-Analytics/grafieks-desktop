@@ -33,6 +33,7 @@ Popup {
 
     property var fileName: ""
     property var fileExtension: ""
+    property var googleSheetId : ""
 
 
 
@@ -112,6 +113,7 @@ Popup {
 
         fileName = name
         fileExtension = type
+        googleSheetId = id;
     }
 
     function onFolderClicked(name,type,pathFolder){
@@ -120,10 +122,16 @@ Popup {
         updatePath(name)
     }
 
-    function onFolderDoubleClicked(name,type){
+    function onFolderDoubleClicked(gSheetId, name,type){
 
-        if(type === "folder")
-            DriveDS.folderNav(pathFolder)
+        // If double clicked on folder navigate to new location
+        // else if its a file, fetch file content and process data
+        if(type === "folder"){
+            SheetDS.folderNav(pathFolder)
+        }
+        else{
+            SheetDS.fetchFileData(gSheetId)
+        }
 
         path.text = name
     }
@@ -384,7 +392,7 @@ Popup {
 
                                         anchors.fill:parent
                                         onClicked: onFileSelected(name, id, extension, modifiedTime)
-                                        onDoubleClicked: onFolderDoubleClicked(name, extension)
+                                        onDoubleClicked: onFolderDoubleClicked(id, name, extension)
                                     }
                                 }
 
@@ -598,7 +606,7 @@ Popup {
                     anchors.left: homeBtn.right
                     anchors.leftMargin: 10
 
-                    onClicked: onFolderDoubleClicked(fileName, fileExtension)
+                    onClicked: onFolderDoubleClicked(googleSheetId, fileName, fileExtension)
 
                 }
 

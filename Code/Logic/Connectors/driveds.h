@@ -39,7 +39,7 @@ public:
     Q_INVOKABLE void fetchDatasources();
     Q_INVOKABLE void searchQuer(QString path);
     Q_INVOKABLE void homeBut();
-    Q_INVOKABLE void downloadFile(QString filePath);
+    Q_INVOKABLE void fetchFileData(QString gFileId, QString extension);
 
     void addDataSource(Drive * drive);
     Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & kind,const QString & modifiedTime,const QString & extension);
@@ -62,7 +62,7 @@ private slots:
     void dataReadFinished();
     void dataSearchFinished();
     void userReadFinished();
-    void saveFile();
+    void fileDownloadFinished();
 
 private:
     QNetworkAccessManager * m_networkAccessManager;
@@ -72,6 +72,8 @@ private:
     QList<Drive*> m_drive;
 
     QString username;
+    QString gFileId;
+    QString extension;
 
 };
 
