@@ -197,13 +197,17 @@ void DropboxDS::fetchFileData(QString fileId, QString fileName, QString extensio
 
     QNetworkRequest m_networkRequest;
     m_networkRequest.setUrl(QUrl("https://content.dropboxapi.com/2/files/download"));
+    m_networkRequest.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+    m_networkRequest.setMaximumRedirectsAllowed(5);
 
     m_networkRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/octet-stream; charset=utf-8");
     m_networkRequest.setRawHeader("Authorization", "Bearer " + token.toUtf8());
     m_networkRequest.setRawHeader("Dropbox-API-Arg", strJson.toUtf8());
 
-    m_networkReply = m_networkAccessManager->post(m_networkRequest, "");
-//    connect(m_networkReply,&QIODevice::readyRead,this,&DropboxDS::dataReadyRead);
+    QByteArray b;
+    b.clear();
+    m_networkReply = m_networkAccessManager->post(m_networkRequest, b);
+    //    connect(m_networkReply,&QIODevice::readyRead,this,&DropboxDS::dataReadyRead);
     connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::saveFile);
 }
 
@@ -314,8 +318,8 @@ void DropboxDS::dataReadFinished()
         m_dataBuffer->clear();
 
         //        Get user email
-//        m_networkReply = this->dropbox->post(QUrl("https://api.dropboxapi.com/2/users/get_current_account/"), "");
-//        connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::userReadFinished);
+        //        m_networkReply = this->dropbox->post(QUrl("https://api.dropboxapi.com/2/users/get_current_account/"), "");
+        //        connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::userReadFinished);
 
     }
     emit showBusyIndicator(false);
@@ -396,7 +400,6 @@ void DropboxDS::userReadFinished()
 void DropboxDS::saveFile()
 {
 
-    m_dataBuffer->append(m_networkReply->readAll());
     if(m_networkReply->error() ){
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
@@ -415,6 +418,3 @@ void DropboxDS::addDatasourceHelper(QJsonDocument &doc)
 {
 
 }
-
-
-
