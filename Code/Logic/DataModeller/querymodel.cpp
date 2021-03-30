@@ -60,7 +60,6 @@ void QueryModel::setChartData()
             } else{
                 this->sqlChartData.value(i)->append(record(j).field(i).value().toString());
                 this->sqlChartData[i] = sqlChartData.value(i);
-//                qDebug() << *sqlChartData.value(i) << "XS" << i;
             }
         }
     }
