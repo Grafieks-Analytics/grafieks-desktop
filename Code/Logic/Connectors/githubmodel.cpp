@@ -29,6 +29,9 @@ QVariant GithubModel::data(const QModelIndex &index, int role) const
         return drive->modifiedTime();
     if(role == ExtensionRole)
         return drive->extension();
+    if(role == UrlRole)
+        return drive->url();
+
 
     return QVariant();
 }
@@ -68,6 +71,12 @@ bool GithubModel::setData(const QModelIndex &index, const QVariant &value, int r
             somethingChanged= true;
         }
         break;
+    case UrlRole:
+        if(drive->url() != value.toString()){
+            drive->setUrl(value.toString());
+            somethingChanged= true;
+        }
+        break;
 
 
     }
@@ -96,6 +105,7 @@ QHash<int, QByteArray> GithubModel::roleNames() const
     roles[KindRole] = "kind";
     roles[ModifiedTimeRole] = "modifiedTime";
     roles[ExtensionRole] = "extension";
+    roles[UrlRole] = "url";
 
     return roles;
 }
