@@ -401,7 +401,7 @@ Page {
                 dataValues = ChartsModel.getHeatMapChartValues(xAxisColumns[0],yAxisColumns[0], ReportParamsModel.itemName);
                 break;
             case Constants.sunburstChartTitle:
-                console.log("SUNBURST CLICKED")
+                console.log("SUNBURST CLICKED", typeof xAxisColumns)
                 dataValues = ChartsModel.getSunburstChartValues(xAxisColumns,yAxisColumns[0],'Sum');
 
 //                dataValues = ChartsModel.getSunburstChartValues(["state", "district", "ward"], "population",'Sum');
@@ -427,7 +427,7 @@ Page {
                 break;
             case Constants.tableTitle:
                 console.log("TABLE CLICKED")
-                dataValues = ChartsModel.getTableChartValues(["state", "district"], "population",'Sum');
+                dataValues = ChartsModel.getTableChartValues(["state", "city", "district"], ["population", "id"],'Sum');
                 break;
             case Constants.pivotTitle:
                 console.log("PIVOT CLICKED")
