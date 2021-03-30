@@ -52,6 +52,7 @@ BoxDS::BoxDS(QObject *parent) : QObject(parent),
         api.setQuery(quer);
         m_networkRequest.setUrl(api);
 
+
         m_networkRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
         m_networkRequest.setRawHeader("Authorization", "Bearer " + this->box->token().toUtf8());
         token = this->box->token();
@@ -158,27 +159,29 @@ void BoxDS::addDataSource(const QString &id, const QString &name, const QString 
     addDataSource(box);
 }
 
-void BoxDS::downloadFile(QString fileID)
+void BoxDS::fetchFileData(QString fileId, QString fileExtension)
 {
 
     emit showBusyIndicator(true);
+    qDebug() << fileId << fileExtension;
 
-    qDebug() << "OAUTHO" << this->box->token() << "URL" << "https://api.box.com/2.0/files/"+fileID+"/content";
-    m_networkReply = this->box->get(QUrl("https://api.box.com/2.0/files/773507838319/content"));
-    connect(m_networkReply,&QIODevice::readyRead,this,&BoxDS::dataReadyRead);
-    connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::saveFile);
+    this->boxFileId = fileId;
+    this->boxExtension = fileExtension;
 
-    //    QNetworkRequest m_networkRequest;
+    QNetworkRequest m_networkRequest;
+    m_networkReply = this->box->get(QUrl("https://api.box.com/2.0/files/"+ fileId +"/content"));
 
-    //    QUrl api("https://api.box.com/2.0/files/"+fileID+"/content");
-    //    m_networkRequest.setUrl(api);
+    QUrl api("https://api.box.com/2.0/files/"+ fileId +"/content");
+    m_networkRequest.setUrl(api);
+//    m_networkRequest.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+//    m_networkRequest.setMaximumRedirectsAllowed(10);
 
-    //    m_networkRequest.setRawHeader("Authorization", "Bearer " + this->box->token().toUtf8());
+    m_networkRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
+//    m_networkRequest.setRawHeader("Content-Type","application/json");
+    m_networkRequest.setRawHeader("Authorization", "Bearer " + this->box->token().toUtf8());
 
-    //    m_networkReply = m_networkAccessManager->get(m_networkRequest);
-    //    connect(m_networkReply,&QIODevice::readyRead,this,&BoxDS::dataReadyRead);
-    //    connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::saveFile);
-
+    m_networkReply = m_networkAccessManager->get(m_networkRequest);
+    connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::fileDownloadFinished);
 }
 
 /*!
@@ -282,23 +285,24 @@ void BoxDS::userReadFinished()
     emit showBusyIndicator(false);
 }
 
-void BoxDS::saveFile()
+void BoxDS::fileDownloadFinished()
 {
-    if(m_networkReply->error()){
-        qDebug() <<"There was some error1 : "<< m_networkReply->errorString();
-    }
-    else{
-        QByteArray arr = m_networkReply->readAll();
-        qDebug() << arr << "OUTPIT" << m_networkReply->bytesAvailable();
+//    m_dataBuffer->append(m_networkReply->readAll());
+//    if(m_networkReply->error()){
+//        qDebug() <<"There was some error : "<< m_networkReply->errorString();
+//    }
+//    else{
 
-        QFile file("C:\\Users\\chill\\Desktop\\c.pdfr");
-        file.open(QIODevice::WriteOnly);
-        file.write(arr);
-        file.close();
-    }
+//        QFile file("C:\\Users\\chill\\Desktop\\"+ this->boxFileId + "." + this->boxExtension);
+//        file.open(QIODevice::WriteOnly);
+//        file.write(m_networkReply->readAll().data(), m_networkReply->readAll().size());
+//        file.close();
+//    }
+
+    QFile file("C:\\Users\\chill\\Desktop\\"+ this->boxFileId + "." + this->boxExtension+"a");
+    file.open(QIODevice::WriteOnly);
+    file.write(m_networkReply->readAll().data(), m_networkReply->readAll().size());
+    file.close();
 
     emit showBusyIndicator(false);
 }
-
-
-

@@ -35,6 +35,7 @@ Popup {
     property var fileName: ""
     property var fileType: ""
     property var folderId: ""
+    property var fileId: ""
 
 
 
@@ -140,6 +141,7 @@ Popup {
         fileName = name
         fileType = type
         folderId = id
+        fileId = id
 
     }
 
@@ -147,6 +149,8 @@ Popup {
 
         if(type === "folder")
             BoxDS.folderNav(folder_id)
+
+        BoxDS.fetchFileData(fileId, fileType)
 
         updatePath(name);
     }
