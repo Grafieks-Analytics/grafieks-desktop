@@ -330,9 +330,7 @@ Popup {
                     onClicked: searchFiles()
 
                 }
-
             }
-
         }
 
         // Row  File Search Ends
@@ -458,7 +456,6 @@ Popup {
                                         padding: 5
                                         leftPadding: 20
                                     }
-
 
                                     MouseArea{
 

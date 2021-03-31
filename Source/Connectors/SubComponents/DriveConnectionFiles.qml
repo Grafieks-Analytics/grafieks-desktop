@@ -627,7 +627,6 @@ Popup {
                     onClicked: onFolderDoubleClicked(googleFileId, fileName, fileExtension)
 
                 }
-
             }
         }
     }
