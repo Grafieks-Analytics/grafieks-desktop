@@ -311,7 +311,15 @@ void BoxDS::fileDownloadFinished()
         file.write(bytes.data(), bytes.size());
         file.close();
 
+        if(this->boxExtension.contains("xls")){
+            emit fileDownloaded(fileName, "excel");
 
+        } else if(this->boxExtension.contains("csv")){
+            emit fileDownloaded(fileName,"csv");
+
+        } else if(this->boxExtension.contains("json")){
+            emit fileDownloaded(fileName, "json");
+        }
     }
 
     emit showBusyIndicator(false);

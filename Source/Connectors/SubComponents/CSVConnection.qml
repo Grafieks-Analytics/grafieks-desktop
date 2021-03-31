@@ -31,16 +31,17 @@ Popup {
     Connections{
         target: ConnectorsLoginModel
 
-        function onCsvLoginStatus(status){
-
-            if(status.status === true){
-                popup.visible = false
-                stacklayout_home.currentIndex = 5
-            }
-            else{
-                popup.visible = true
-                msg_dialog.open()
-                msg_dialog.text = status.msg
+        function onCsvLoginStatus(status, directLogin){
+            if(directLogin === true){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
             }
         }
     }
@@ -196,7 +197,7 @@ Popup {
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
-            onClicked: ConnectorsLoginModel.csvLogin(csvFileName.text, separator.text)
+            onClicked: ConnectorsLoginModel.csvLogin(csvFileName.text, true, separator.text)
 
         }
     }
