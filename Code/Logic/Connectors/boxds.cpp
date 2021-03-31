@@ -287,22 +287,29 @@ void BoxDS::userReadFinished()
 
 void BoxDS::fileDownloadFinished()
 {
-//    m_dataBuffer->append(m_networkReply->readAll());
-//    if(m_networkReply->error()){
-//        qDebug() <<"There was some error : "<< m_networkReply->errorString();
-//    }
-//    else{
+    QByteArray bytes = m_networkReply->readAll();
+    int statusCode = m_networkReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 
-//        QFile file("C:\\Users\\chill\\Desktop\\"+ this->boxFileId + "." + this->boxExtension);
-//        file.open(QIODevice::WriteOnly);
-//        file.write(m_networkReply->readAll().data(), m_networkReply->readAll().size());
-//        file.close();
-//    }
 
-    QFile file("C:\\Users\\chill\\Desktop\\"+ this->boxFileId + "." + this->boxExtension+"a");
-    file.open(QIODevice::WriteOnly);
-    file.write(m_networkReply->readAll().data(), m_networkReply->readAll().size());
-    file.close();
+    if(statusCode == 302)
+    {
+        QUrl newUrl = m_networkReply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
+        qDebug() << "redirected  to " + newUrl.toString();
+        QNetworkRequest newRequest(newUrl);
+
+        m_networkReply = m_networkAccessManager->get(newRequest);
+        connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::fileDownloadFinished);
+
+        return ;
+    }
+
+    if(statusCode == 200)
+    {
+        QFile file("C:\\Users\\chill\\Desktop\\"+ this->boxFileId +"." + this->boxExtension);
+        file.open(QIODevice::WriteOnly);
+        file.write(bytes.data(), bytes.size());
+        file.close();
+    }
 
     emit showBusyIndicator(false);
 }
