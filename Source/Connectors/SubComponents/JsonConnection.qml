@@ -31,18 +31,19 @@ Popup {
     Connections{
         target: ConnectorsLoginModel
 
-        function onJsonLoginStatus(status){
-            console.log(status)
+        function onJsonLoginStatus(status, directLogin){
 
-            if(status.status === true){
+            if(directLogin === true){
+                if(status.status === true){
 
-                popup.visible = false
-                stacklayout_home.currentIndex = 5
-            }
-            else{
-                popup.visible = true
-                msg_dialog.open()
-                msg_dialog.text = status.msg
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
             }
         }
     }
@@ -167,7 +168,7 @@ Popup {
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
-            onClicked: {ConnectorsLoginModel.jsonLogin(jsonFileName.text)}
+            onClicked: {ConnectorsLoginModel.jsonLogin(jsonFileName.text, true)}
 
         }
     }

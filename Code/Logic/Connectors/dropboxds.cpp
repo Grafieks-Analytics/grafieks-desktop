@@ -419,6 +419,16 @@ void DropboxDS::saveFile()
         file.open(QIODevice::WriteOnly);
         file.write(m_networkReply->readAll());
         file.close();
+
+        if(this->extension.contains("xls")){
+            emit fileDownloaded(fileName, "excel");
+
+        } else if(this->extension.contains("csv")){
+            emit fileDownloaded(fileName,"csv");
+
+        } else if(this->extension.contains("json")){
+            emit fileDownloaded(fileName, "json");
+        }
     }
 
     emit showBusyIndicator(false);

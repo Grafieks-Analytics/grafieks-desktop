@@ -72,6 +72,66 @@ Popup {
                 busyindicator.running = false
             }
         }
+
+        function onFileDownloaded(filePath, fileType){
+
+            if(fileType === "csv"){
+                ConnectorsLoginModel.csvLogin(filePath, false, ",")
+            } else if(fileType === "excel"){
+                ConnectorsLoginModel.excelLogin(filePath, false)
+            } else if(fileType === "json"){
+                ConnectorsLoginModel.jsonLogin(filePath, false)
+            }
+        }
+    }
+
+    Connections{
+        target: ConnectorsLoginModel
+
+        function onCsvLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
+
+        function onExcelLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
+
+        function onJsonLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
     }
 
     // Connections Ends

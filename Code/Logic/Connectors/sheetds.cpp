@@ -162,6 +162,8 @@ void SheetDS::fileDownloadFinished()
         file.open(QIODevice::WriteOnly);
         file.write(m_networkReply->readAll(), m_networkReply->size());
         file.close();
+
+        emit fileDownloaded(fileName, "excel");
     }
 
     emit showBusyIndicator(false);

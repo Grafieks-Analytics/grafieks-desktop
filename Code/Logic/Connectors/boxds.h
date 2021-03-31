@@ -53,6 +53,7 @@ signals:
     void postReset();
     void getBoxUsername(QString username);
     void showBusyIndicator(bool status);
+    void fileDownloaded(QString filePath, QString fileType);
 
 private slots:
     void resetDatasource();

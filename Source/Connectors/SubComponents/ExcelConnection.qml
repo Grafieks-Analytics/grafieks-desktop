@@ -31,18 +31,19 @@ Popup {
     Connections{
         target: ConnectorsLoginModel
 
-        function onExcelLoginStatus(status){
-            console.log(status)
+        function onExcelLoginStatus(status, directLogin){
 
-            if(status.status === true){
+            if(directLogin === true){
+                if(status.status === true){
 
-                popup.visible = false
-                stacklayout_home.currentIndex = 5
-            }
-            else{
-                popup.visible = true
-                msg_dialog.open()
-                msg_dialog.text = status.msg
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
             }
         }
     }
@@ -167,7 +168,7 @@ Popup {
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
-            onClicked: {ConnectorsLoginModel.excelLogin(excelFileName.text)}
+            onClicked: {ConnectorsLoginModel.excelLogin(excelFileName.text, true)}
 
         }
     }
@@ -185,7 +186,7 @@ Popup {
     FileDialog{
         id: promptExcel
         title: "Select a file"
-         nameFilters: ["Excel files (*.xls *.xlsx)"];
+        nameFilters: ["Excel files (*.xls *.xlsx)"];
 
 
         onAccepted: {
