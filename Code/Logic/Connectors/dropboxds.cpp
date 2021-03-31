@@ -318,8 +318,14 @@ void DropboxDS::dataReadFinished()
         m_dataBuffer->clear();
 
         //        Get user email
-        //        m_networkReply = this->dropbox->post(QUrl("https://api.dropboxapi.com/2/users/get_current_account/"), "");
-        //        connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::userReadFinished);
+        QByteArray blankPostReq;
+
+        QNetworkRequest m_networkRequest;
+        m_networkRequest.setRawHeader("Authorization", "Bearer " + token.toUtf8());
+        m_networkRequest.setUrl(QUrl("https://api.dropboxapi.com/2/users/get_current_account"));
+
+        m_networkReply = m_networkAccessManager->post(m_networkRequest, blankPostReq);
+        connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::userReadFinished);
 
     }
     emit showBusyIndicator(false);
@@ -381,15 +387,18 @@ void DropboxDS::dataSearchedFinished()
 void DropboxDS::userReadFinished()
 {
     m_dataBuffer->append(m_networkReply->readAll());
+    int statusCode = m_networkReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+    qDebug() << statusCode << "STATUS" << this->dropbox->token();
     if(m_networkReply->error() ){
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
     }else{
 
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
-        //        QJsonObject resultObj = resultJson.object();
+        QJsonObject resultObj = resultJson.object();
 
-        qDebug() << "USERD" << resultJson;
+        emit getDropboxUsername(resultObj.value("email").toString());
     }
 
 
@@ -405,7 +414,7 @@ void DropboxDS::saveFile()
 
     }else{
 
-        QFile file("C:\\Users\\chill\\Desktop\\"+ this->dropBoxFileId.remove(0,3) + this->extension);
+        QFile file("C:\\Users\\chill\\Downloads\\"+ this->dropBoxFileId.remove(0,3) + this->extension);
         file.open(QIODevice::WriteOnly);
         file.write(m_networkReply->readAll());
         file.close();
