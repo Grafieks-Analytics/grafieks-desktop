@@ -59,6 +59,7 @@ private slots:
     void resetDatasource();
     void fileDownloadFinished();
     void dataReadFinished();
+    void dataSearchFinished();
     void userReadFinished();
 
 

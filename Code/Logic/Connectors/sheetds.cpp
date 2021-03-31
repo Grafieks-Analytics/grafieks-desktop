@@ -73,13 +73,8 @@ void SheetDS::fetchDatasources()
 void SheetDS::searchQuer(QString path)
 {
     emit showBusyIndicator(true);
-
-    if(path == "")
-        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType+contains+%27application%2Fvnd.google-apps.spreadsheet%27"));
-    else
-        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name+contains+%27" + path +"%27+and+mimeType+contains+%27application%2Fvnd.google-apps.spreadsheet%27"));
-
-    connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name+contains+%27" + path +"%27+and+mimeType+contains+%27application%2Fvnd.google-apps.spreadsheet%27"));
+    connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataSearchFinished);
 }
 
 /*!
@@ -220,6 +215,48 @@ void SheetDS::dataReadFinished()
 
     emit showBusyIndicator(false);
 
+}
+
+void SheetDS::dataSearchFinished()
+{
+
+    if(m_networkReply->error() ){
+        qDebug() <<"There was some error : " << m_networkReply->errorString() ;
+
+    }else{
+        QStringList requiredExtensions;
+        requiredExtensions << ".gsheet";
+
+        this->resetDatasource();
+        QJsonDocument resultJson = QJsonDocument::fromJson(m_networkReply->readAll().data());
+        QJsonObject resultObj = resultJson.object();
+
+        QJsonArray dataArray = resultObj["files"].toArray();
+        for(int i=0;i<dataArray.size();i++){
+
+            QJsonObject dataObj = dataArray.at(i).toObject();
+
+            QString SheetID = dataObj["id"].toString();
+            QString SheetName = dataObj["name"].toString();
+            QString SheetKind = dataObj["kind"].toString();
+            QString SheetModiTime = QDateTime::fromString(dataObj["modifiedTime"].toString(), Qt::ISODate).toString("yyyy/MM/dd HH:mm ap");
+            QString SheetExtension = "";
+            QString SheetMimeType = dataObj["mimeType"].toString();
+
+            QStringList extensionList;
+            if(SheetMimeType == "application/vnd.google-apps.spreadsheet"){
+                SheetExtension = ".gsheet";
+            }
+
+            if(SheetMimeType != "application/vnd.google-apps.folder" && requiredExtensions.indexOf(SheetExtension) >= 0){
+                this->addDataSource(SheetID,SheetName,SheetKind,SheetModiTime,SheetExtension);
+            }
+        }
+
+        m_dataBuffer->clear();
+    }
+
+    emit showBusyIndicator(false);
 }
 
 void SheetDS::userReadFinished()
