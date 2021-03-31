@@ -291,10 +291,10 @@ void BoxDS::fileDownloadFinished()
     int statusCode = m_networkReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 
 
+    // Handle redirection 302
     if(statusCode == 302)
     {
         QUrl newUrl = m_networkReply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
-        qDebug() << "redirected  to " + newUrl.toString();
         QNetworkRequest newRequest(newUrl);
 
         m_networkReply = m_networkAccessManager->get(newRequest);
@@ -305,10 +305,13 @@ void BoxDS::fileDownloadFinished()
 
     if(statusCode == 200)
     {
-        QFile file("C:\\Users\\chill\\Desktop\\"+ this->boxFileId +"." + this->boxExtension);
+        QString fileName = QDir::temp().tempPath() +"/" + this->boxFileId + this->boxExtension;
+        QFile file(fileName);
         file.open(QIODevice::WriteOnly);
         file.write(bytes.data(), bytes.size());
         file.close();
+
+
     }
 
     emit showBusyIndicator(false);

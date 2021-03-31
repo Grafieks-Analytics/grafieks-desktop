@@ -157,7 +157,8 @@ void SheetDS::fileDownloadFinished()
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
     }else{
-        QFile file("C:\\Users\\chill\\Desktop\\"+ this->gFileId +".xlsx");
+        QString fileName = QDir::temp().tempPath() +"/" + this->gFileId +".xlsx";
+        QFile file(fileName);
         file.open(QIODevice::WriteOnly);
         file.write(m_networkReply->readAll(), m_networkReply->size());
         file.close();

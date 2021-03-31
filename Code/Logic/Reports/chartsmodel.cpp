@@ -876,7 +876,15 @@ QString ChartsModel::getTreeSunburstValues(QVariantList & xAxisColumn, QString &
     QString hashKeyword = "";
 
     // Fetch data here
-    int xKey = newChartHeader.key( xAxisColumn.at(0).toString() );
+    int xKey ;
+    try{
+        xKey = newChartHeader.key( xAxisColumn.at(0).toString() );
+    }
+    catch(std::exception &e){
+        qDebug() << e.what();
+        return "{}";
+    }
+
     int yKey = newChartHeader.key( yAxisColumn );
 
     // Group name operations
@@ -1101,8 +1109,16 @@ QString ChartsModel::getTablePivotValues(QVariantList &xAxisColumn, QVariantList
     QVector<int> xKey;
     QVector<int> yKey;
 
-    int xAxisLength = xAxisColumn.length();
-    int yAxisLength = yAxisColumn.length();
+    int xAxisLength;
+    int yAxisLength;
+
+    try{
+        xAxisLength = xAxisColumn.length();
+        yAxisLength = yAxisColumn.length();
+    } catch(std::exception &e){
+        qDebug() << "Pivot table error" << e.what();
+        return "{}";
+    }
 
     QJsonArray columns;
 

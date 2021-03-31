@@ -16,6 +16,7 @@
 #include <QSettings>
 #include <QtDebug>
 #include <QFile>
+#include <QDir>
 
 #include "github.h"
 #include "../../secrets.h"
