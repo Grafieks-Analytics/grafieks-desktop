@@ -173,11 +173,6 @@ Popup {
     }
 
 
-    function onHomeClicked(){
-        DriveDS.folderNav("0")
-        updatePath("Github")
-    }
-
     function searchFiles(){
         DriveDS.searchQuer(server_files.text)
     }
@@ -640,38 +635,15 @@ Popup {
             Rectangle{
                 width: popup.width * 0.4
                 anchors.left:breadcrumb.right
-                anchors.leftMargin: popup.width * 0.4  - 250
+                anchors.leftMargin: popup.width * 0.4  - 190
 
                 BusyIndicatorTpl {
                     id: busyindicator
                     running: true
-                    anchors.right: homeBtn.left
-                    anchors.rightMargin: 10
+                    anchors.left: parent.left
                 }
 
-                CustomButton{
 
-                    id: homeBtn
-                    height: 40
-                    width: 100
-                    textValue: "Home"
-                    anchors.right: cancelBtn.left
-                    anchors.rightMargin: 10
-
-                    onClicked: onHomeClicked();
-
-                }
-
-                CustomButton{
-
-                    id: cancelBtn
-                    height: 40
-                    width: 100
-                    textValue: "Back"
-                    anchors.leftMargin: 10
-                    onClicked: hidePopup()
-
-                }
 
                 CustomButton{
 
@@ -679,7 +651,7 @@ Popup {
                     height: 40
                     width: 100
                     textValue: "Next"
-                    anchors.left: cancelBtn.right
+                    anchors.left: busyindicator.right
                     anchors.leftMargin: 10
 
                     onClicked: onFolderDoubleClicked()
