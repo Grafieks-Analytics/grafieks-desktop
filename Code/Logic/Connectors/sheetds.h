@@ -15,6 +15,7 @@
 #include <QJsonArray>
 #include <QSettings>
 #include <QFile>
+#include <QDir>
 
 #include "sheet.h"
 #include "../../secrets.h"

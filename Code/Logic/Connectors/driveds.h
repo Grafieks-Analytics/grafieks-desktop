@@ -15,6 +15,7 @@
 #include <QJsonArray>
 #include <QSettings>
 #include <QtDebug>
+#include <QDir>
 
 #include <QFile>
 #include <QCoreApplication>

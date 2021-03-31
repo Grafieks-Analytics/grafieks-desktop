@@ -414,7 +414,8 @@ void DropboxDS::saveFile()
 
     }else{
 
-        QFile file("C:\\Users\\chill\\Downloads\\"+ this->dropBoxFileId.remove(0,3) + this->extension);
+        QString fileName = QDir::temp().tempPath() +"/" + this->dropBoxFileId.remove(0,3) + this->extension;
+        QFile file(fileName);
         file.open(QIODevice::WriteOnly);
         file.write(m_networkReply->readAll());
         file.close();

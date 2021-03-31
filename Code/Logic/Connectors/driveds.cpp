@@ -295,7 +295,8 @@ void DriveDS::fileDownloadFinished()
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
     }else{
-        QFile file("C:\\Users\\chill\\Desktop\\"+ this->gFileId +"." + this->extension);
+        QString fileName = QDir::temp().tempPath() +"/" + this->gFileId +"." + this->extension;
+        QFile file(fileName);
         file.open(QIODevice::WriteOnly);
         file.write(m_networkReply->readAll(), m_networkReply->size());
         file.close();

@@ -17,6 +17,7 @@
 #include <QOAuthHttpServerReplyHandler>
 #include <QtDebug>
 #include <QByteArray>
+#include <QDir>
 
 
 #include "dropbox.h"

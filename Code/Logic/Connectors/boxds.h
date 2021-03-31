@@ -16,6 +16,7 @@
 #include <QDesktopServices>
 #include <QOAuthHttpServerReplyHandler>
 #include <QtDebug>
+#include <QDir>
 
 #include "box.h"
 #include "../../secrets.h"
