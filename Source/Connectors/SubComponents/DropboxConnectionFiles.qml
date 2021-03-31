@@ -31,10 +31,10 @@ Popup {
     property int label_col : 135
     property var pathFolder: "Dropbox"
     property var folderName: "Folder name"
-    property var selectedId: ""
 
     property var fileId: ""
     property var fileName: ""
+    property var fileExtension: ""
     property var fileTag: ""
     property var filePathFolder: ""
     property var filePathLower: ""
@@ -71,7 +71,6 @@ Popup {
         }
 
         function onShowBusyIndicator(status){
-            console.log(status, "STATUS")
             if(status === true){
                 busyindicator.running = true
             } else{
@@ -99,7 +98,7 @@ Popup {
         path.text=text;
     }
 
-    function onFileClicked(id, name, tag, pathLower,extension, modifiedTime){
+    function onFileClicked(id, name, extension, tag, pathLower,extension, modifiedTime){
 
         fileSelected.visible = true
         fileNotSelectedMsg.visible = false
@@ -111,7 +110,6 @@ Popup {
 
         if(tag === "file")
         {
-
             path.text = name
             detailNameDisplay.text = name;
             documentTypeDisplay.text = "sample" //type;
@@ -122,6 +120,7 @@ Popup {
 
         fileId = id
         fileName = name
+        fileExtension = extension
         fileTag = tag
         filePathFolder = pathLower
         filePathLower = pathLower
@@ -133,8 +132,7 @@ Popup {
         if(tag === "folder"){
             DropboxDS.folderNav(pathFolder)
         } else{
-            dropboxSaveDialog.visible = true
-            selectedId = id
+            DropboxDS.fetchFileData(fileId, fileName, fileExtension)
         }
 
         updatePath(pathLower)
@@ -304,10 +302,13 @@ Popup {
                         clip: true
                         height: parent.height
                         width: popup.width * 0.6
+                        ScrollBar.vertical: ScrollBar {}
+                        headerPositioning: ListView.OverlayHeader
 
                         header: Row{
 
                             width: popup.width * 0.6
+                            z: 10
                             Column{
                                 width: 20
                                 Rectangle{
@@ -403,8 +404,8 @@ Popup {
                                     MouseArea{
 
                                         anchors.fill:parent
-                                        onClicked: onFileClicked(id, name, tag, pathLower, extension, clientModified)
-                                        onDoubleClicked: onFileDoubleClicked(id, name, tag, pathFolder, pathLower);
+                                        onClicked: onFileClicked(id, name, extension, tag, pathLower, extension, clientModified)
+                                        onDoubleClicked: onFileDoubleClicked(id, name, extension, tag, pathFolder, pathLower);
 
                                     }
                                 }
@@ -549,11 +550,6 @@ Popup {
                         }
 
                     }
-
-
-
-
-
                 }
 
             }
@@ -635,7 +631,7 @@ Popup {
                     anchors.left: cancelBtn.right
                     anchors.leftMargin: 10
 
-                    onClicked: onFileDoubleClicked(fileId, fileName, fileTag, filePathFolder, filePathLower)
+                    onClicked: onFileDoubleClicked(fileId, fileName, fileExtension, fileTag, filePathFolder, filePathLower)
                 }
 
 

@@ -33,6 +33,9 @@ Popup {
     property var folderName: "Folder name"
 
     property var fileName: ""
+    property var fileType: ""
+    property var folderId: ""
+    property var fileId: ""
     property var fileExtension: ""
 
 
@@ -113,7 +116,7 @@ Popup {
         fileNotSelectedMsg.visible = false
     }
 
-    function onFileClicked(name, type, extension, modifiedTime){
+    function onFileClicked(name, type, extension, modifiedTime, id){
 
         showSelectedFileDetails();
         hideFileNotSelectedMessage();
@@ -137,7 +140,10 @@ Popup {
         }
 
         fileName = name
-        fileExtension = type
+        fileType = type
+        folderId = id
+        fileExtension = extension
+        fileId = id
 
     }
 
@@ -145,6 +151,8 @@ Popup {
 
         if(type === "folder")
             BoxDS.folderNav(folder_id)
+
+        BoxDS.fetchFileData(fileId, fileExtension)
 
         updatePath(name);
     }
@@ -295,10 +303,13 @@ Popup {
                         clip: true
                         height: parent.height
                         width: popup.width * 0.6
+                        ScrollBar.vertical: ScrollBar {}
+                        headerPositioning: ListView.OverlayHeader
 
                         header: Row{
 
                             width: popup.width * 0.6
+                            z: 10
                             Column{
                                 width: 20
                                 Rectangle{
@@ -394,7 +405,7 @@ Popup {
                                     MouseArea{
 
                                         anchors.fill:parent
-                                        onClicked: onFileClicked(name, type, extension, modifiedAt);
+                                        onClicked: onFileClicked(name, type, extension, modifiedAt, id);
                                         onDoubleClicked: onFolderDoubleClicked(name, type, id)
                                     }
                                 }
@@ -609,7 +620,7 @@ Popup {
                     width: 100
                     textValue: "Back"
                     anchors.leftMargin: 10
-                    onClicked: closePopup()
+                    onClicked: backCalled()
 
                 }
 
@@ -622,7 +633,7 @@ Popup {
                     anchors.left: cancelBtn.right
                     anchors.leftMargin: 10
 
-                    onClicked: onFolderDoubleClicked(fileName, fileExtension)
+                    onClicked: onFolderDoubleClicked(fileName, fileType, folderId)
 
                 }
 

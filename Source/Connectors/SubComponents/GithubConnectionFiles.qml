@@ -30,6 +30,11 @@ Popup {
     property var pathFolder: "Github"
     property var folderName: "Folder name"
 
+    property var fileId: ""
+    property var fileName: ""
+    property var fileExtension: ""
+    property var fileUrl: ""
+
     closePolicy: Popup.NoAutoClose
 
     /***********************************************************************************************************************/
@@ -126,31 +131,25 @@ Popup {
         fileNotSelectedMsg.visible = false
     }
 
-    function onFileClicked(name,type){
+    function onFileClicked(id, name, modifiedTime, extension, url){
 
         showSelectedFileDetails();
         hideFileNotSelectedMessage();
 
-        detailName.text = name;
+        detailNameDisplay.text = name;
+        documentTypeDisplay.text = extension;
+        modifiedTimeDisplay.text = modifiedTime;
 
-        if(type === "folder"){
-            pathFolder = id;
-            folderName = name;
-        }
-
-        if(type === "file")
-        {
-            path.text = name
-            detailName.text = name;
-        }
+        fileId = id
+        fileName = name
+        fileExtension = extension
+        fileUrl = url
 
     }
 
-    function onFolderDoubleClicked(name,type){
-        if(type === "folder")
-            DriveDS.folderNav(pathFolder)
+    function onFolderDoubleClicked(){
 
-        path.text = name
+        GithubDS.fetchFileData(fileId, fileExtension, fileUrl)
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -270,7 +269,7 @@ Popup {
         // Row  File List Table Starts
 
         Row{
-            id: dropdriveFilesList
+            id: dropGithubFilesList
             anchors.top : searchFileRow.bottom
 
             anchors.topMargin: 20
@@ -285,14 +284,17 @@ Popup {
 
                     ListView{
                         id: fileList
-                        model:DriveModel
+                        model:GithubModel
                         clip: true
                         height: 200
                         width: popup.width * 0.6
+                        ScrollBar.vertical: ScrollBar {}
+                        headerPositioning: ListView.OverlayHeader
 
                         header: Row{
 
                             width: popup.width * 0.6
+                            z: 10
                             Column{
                                 width: 20
                                 Rectangle{
@@ -389,8 +391,8 @@ Popup {
                                     MouseArea{
 
                                         anchors.fill:parent
-                                        onClicked:onFileClicked(name,tag);
-                                        onDoubleClicked: onFolderDoubleClicked(name,tag)
+                                        onClicked:onFileClicked(id, name, modifiedTime, extension, url);
+                                        onDoubleClicked: onFolderDoubleClicked()
                                     }
                                 }
 
@@ -425,7 +427,7 @@ Popup {
                                     anchors.left: parent
 
                                     Text {
-                                        text: qsTr(modifiedAt)
+                                        text: qsTr(modifiedTime)
                                         padding: 5
                                         leftPadding: 20
                                     }
@@ -512,11 +514,7 @@ Popup {
                                 padding: 5
                                 text: qsTr("Last Modified")
                             }
-                            Text {
-                                anchors.right: parent.right
-                                padding: 5
-                                text: qsTr("Size")
-                            }
+
 
                         }
 
@@ -526,20 +524,18 @@ Popup {
                             width: parent.width/2 + 5
 
                             Text {
-                                id: detailName
+                                id: detailNameDisplay
                                 text: qsTr("Test.xlsx")
                                 padding: 5
                             }
                             Text {
+                                id: documentTypeDisplay
                                 text: qsTr("Document")
                                 padding: 5
                             }
                             Text {
+                                id: modifiedTimeDisplay
                                 text: qsTr("24/05/2020 14:30")
-                                padding: 5
-                            }
-                            Text {
-                                text: qsTr("50 MB")
                                 padding: 5
                             }
 
@@ -558,7 +554,7 @@ Popup {
 
 
         Row{
-            anchors.top: dropdriveFilesList.bottom
+            anchors.top: dropGithubFilesList.bottom
 
             anchors.topMargin: 20
 
@@ -625,6 +621,8 @@ Popup {
                     textValue: "Next"
                     anchors.left: cancelBtn.right
                     anchors.leftMargin: 10
+
+                    onClicked: onFolderDoubleClicked()
 
                 }
 

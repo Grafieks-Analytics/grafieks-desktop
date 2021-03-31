@@ -278,7 +278,7 @@ int main(int argc, char *argv[])
     SheetDS *sheet = new SheetDS(&app);
 
     // Github modal
-//    GithubModel githubModel;
+    GithubModel githubModel;
     GithubDS *github = new GithubDS(&app);
 
     // Scheduler model
@@ -299,9 +299,6 @@ int main(int argc, char *argv[])
     /***********************************************************************************************************************/
     // SIGNAL & SLOTS STARTS
 
-    //    QObject::connect(&filterCategoricalListModel, &FilterCategoricalListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
-    //    QObject::connect(&filterDateListModel, &FilterDateListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
-    //    QObject::connect(&filterNumericalListModel, &FilterNumericalListModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
     QObject::connect(&proxyModel, &ProxyFilterModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
     QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::sendDbName, duckCon, &DuckCon::createTable);
     QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, duckDataModel, &DuckDataModel::receiveCsvFilterQuery);
@@ -322,7 +319,7 @@ int main(int argc, char *argv[])
     driveModel.setDriveds(drive);
     boxModel.setBoxds(box);
     sheetModel.setSheetds(sheet);
-//    githubModel.setGithubds(github);
+    githubModel.setGithubds(github);
     schedulerModel.setScheduler(scheduler);
 
 
@@ -354,7 +351,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("DropboxDS", dropbox);
     engine.rootContext()->setContextProperty("DriveModel", &driveModel);
     engine.rootContext()->setContextProperty("DriveDS", drive);
-//    engine.rootContext()->setContextProperty("GithubModel", &githubModel);
+    engine.rootContext()->setContextProperty("GithubModel", &githubModel);
     engine.rootContext()->setContextProperty("GithubDS", github);
     engine.rootContext()->setContextProperty("BoxModel", &boxModel);
     engine.rootContext()->setContextProperty("BoxDS", box);

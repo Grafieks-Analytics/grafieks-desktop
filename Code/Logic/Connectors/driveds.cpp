@@ -91,12 +91,14 @@ void DriveDS::homeBut()
 }
 
 
-void DriveDS::downloadFile(QString fileID)
+void DriveDS::fetchFileData(QString gFileId, QString extension)
 {
     emit showBusyIndicator(true);
+    this->gFileId = gFileId;
+    this->extension = extension;
 
-    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files/"+fileID+"?alt=media"));
-    connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::saveFile);
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files/"+gFileId+"?alt=media"));
+    connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::fileDownloadFinished);
 }
 
 /*!
@@ -166,7 +168,7 @@ void DriveDS::dataReadFinished()
 
     }else{
         QStringList requiredExtensions;
-        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json" << ".ods" << ".gsheet";
+        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json";
 
         this->resetDatasource();
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
@@ -196,9 +198,9 @@ void DriveDS::dataReadFinished()
                 DriveExtension = ".gsheet";
             }
 
-//            if(DriveMimeType != "application/vnd.google-apps.folder" && requiredExtensions.indexOf(DriveExtension) >= 0){
+            if(DriveMimeType != "application/vnd.google-apps.folder" && requiredExtensions.indexOf(DriveExtension) >= 0){
                 this->addDataSource(DriveID,DriveName,DriveKind,DriveModiTime,DriveExtension);
-//            }
+            }
         }
 
         m_dataBuffer->clear();
@@ -221,7 +223,7 @@ void DriveDS::dataSearchFinished()
 
     }else{
         QStringList requiredExtensions;
-        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json" << ".ods" << ".gsheet";
+        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json";
 
         this->resetDatasource();
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
@@ -251,9 +253,9 @@ void DriveDS::dataSearchFinished()
                 DriveExtension = ".gsheet";
             }
 
-//            if(DriveMimeType != "application/vnd.google-apps.folder" && requiredExtensions.indexOf(DriveExtension) >= 0){
+            if(DriveMimeType != "application/vnd.google-apps.folder" && requiredExtensions.indexOf(DriveExtension) >= 0){
                 this->addDataSource(DriveID,DriveName,DriveKind,DriveModiTime,DriveExtension);
-//            }
+            }
         }
 
         m_dataBuffer->clear();
@@ -287,15 +289,17 @@ void DriveDS::userReadFinished()
     emit showBusyIndicator(false);
 }
 
-void DriveDS::saveFile()
+void DriveDS::fileDownloadFinished()
 {
-    QByteArray arr = m_networkReply->readAll();
-    qDebug() << arr << "SAVE FILE";
+    if(m_networkReply->error() ){
+        qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
-    QFile file("C:\\Users\\chill\\Desktop\\x.xlsx");
-    file.open(QIODevice::WriteOnly);
-    file.write(arr);
-    file.close();
+    }else{
+        QFile file("C:\\Users\\chill\\Desktop\\"+ this->gFileId +"." + this->extension);
+        file.open(QIODevice::WriteOnly);
+        file.write(m_networkReply->readAll(), m_networkReply->size());
+        file.close();
+    }
 
     emit showBusyIndicator(false);
 }
