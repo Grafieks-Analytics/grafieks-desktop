@@ -341,7 +341,7 @@ Popup {
                         id: fileList
                         model:SheetModel
                         clip: true
-                        height: 200
+                        height: parent.height
                         width: popup.width * 0.6
                         ScrollBar.vertical: ScrollBar {}
                         headerPositioning: ListView.OverlayHeader

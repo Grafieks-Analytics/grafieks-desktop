@@ -72,6 +72,10 @@ private:
     QString extension;
     QString url;
 
+    QStringList filesList;
+    QMap<int, QStringList> mainResultData;
+    int totalData;
+
 };
 
 #endif // GITHUBDS_H
