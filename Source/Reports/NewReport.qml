@@ -32,6 +32,8 @@ Page {
     property bool yaxisActive: ReportParamsModel.yAxisActive
 
     property bool yAxisVisible: true
+    property bool xAxisVisible: true
+    property bool row4Visible: false
     property bool lineTypeChartVisible: false
 
     property bool row3Visible: false
@@ -53,48 +55,60 @@ Page {
     onChartTitleChanged: {
         console.log(chartTitle);
         switch(chartTitle){
-            case Constants.stackedBarChartTitle:
-                chartUrl=Constants.stackedBarChartUrl
-                webEngineView.url = Constants.chartsBaseUrl+Constants.stackedBarChartUrl;
-                break;
-            case Constants.stackedAreaChartTitle:
-                chartUrl=Constants.stackedAreaChartUrl;
-                webEngineView.url = Constants.chartsBaseUrl+Constants.stackedAreaChartUrl;
-                break;
-            case Constants.sankeyChartTitle:
-            case Constants.pivotTitle:
-                row3Visible =  true;
-                break;
-            default:
-                row3Visible = false;
+        case Constants.stackedBarChartTitle:
+            chartUrl=Constants.stackedBarChartUrl
+            webEngineView.url = Constants.chartsBaseUrl+Constants.stackedBarChartUrl;
+            break;
+        case Constants.stackedAreaChartTitle:
+            chartUrl=Constants.stackedAreaChartUrl;
+            webEngineView.url = Constants.chartsBaseUrl+Constants.stackedAreaChartUrl;
+            break;
+        case Constants.sankeyChartTitle:
+        case Constants.pivotTitle:
+            row3Visible =  true;
+            break;
+        case Constants.tableTitle:
+            yAxisVisible = false;
+            break;
+        case Constants.gaugeChartTitle:
+            row4Visible = true
+            xAxisVisible =  false
+            yAxisVisible =  false
+            row3Visible =  false
+            break
+        default:
+            xAxisVisible = true
+            yAxisVisible = true;
+            row3Visible = false;
+            row4Visible = false
         }
 
     }
 
     onReportChartChanged: {
 
-          chartTitle = reportChart;
+        chartTitle = reportChart;
 
-//        ReportParamsModel.setXAxisColumns([]);
-//        ReportParamsModel.setYAxisColumns([]);
+        //        ReportParamsModel.setXAxisColumns([]);
+        //        ReportParamsModel.setYAxisColumns([]);
 
-//        xAxisListModel.clear();
-//        yAxisListModel.clear();
+        //        xAxisListModel.clear();
+        //        yAxisListModel.clear();
 
-//        console.log(ReportParamsModel.xAxisColumns);
-//        console.log(ReportParamsModel.yAxisColumns);
+        //        console.log(ReportParamsModel.xAxisColumns);
+        //        console.log(ReportParamsModel.yAxisColumns);
 
-//        switch(reportChart){
-//        case Constants.stackedBarChart:
-//            changeChart("qrc:/Source/Charts/StackedBarChart.html");
+        //        switch(reportChart){
+        //        case Constants.stackedBarChart:
+        //            changeChart("qrc:/Source/Charts/StackedBarChart.html");
 
-//            let resizeQuery = 'window.addEventListener("resize", function () {' +
-//                'console.log("resizing");'+
-//                'd3.selectAll("#my_dataviz").html(""); '+
-//                'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
-//            webEngineView.runJavaScript(resizeQuery);
-//            break;
-//        }
+        //            let resizeQuery = 'window.addEventListener("resize", function () {' +
+        //                'console.log("resizing");'+
+        //                'd3.selectAll("#my_dataviz").html(""); '+
+        //                'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
+        //            webEngineView.runJavaScript(resizeQuery);
+        //            break;
+        //        }
 
     }
 
@@ -366,10 +380,10 @@ Page {
             case Constants.lineChartTitle:
                 console.log("LINE CLICKED")
                 // Line - xAxis(String), yAxis(String)
-                // dataValues =  ChartsModel.getLineChartValues(xAxisColumns[0],yAxisColumns[0]);
+                dataValues =  ChartsModel.getLineChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
 
                 // Line Bar - xAxis(String), yAxis(String)
-                dataValues =  ChartsModel.getLineBarChartValues("state", "id", "population");
+                //                dataValues =  ChartsModel.getLineBarChartValues("state", "id", "population");
                 break;
             case Constants.pieChartTitle:
             case Constants.donutChartTitle:
@@ -404,7 +418,7 @@ Page {
                 console.log("SUNBURST CLICKED", typeof xAxisColumns)
                 dataValues = ChartsModel.getSunburstChartValues(xAxisColumns,yAxisColumns[0],'Sum');
 
-//                dataValues = ChartsModel.getSunburstChartValues(["state", "district", "ward"], "population",'Sum');
+                //                dataValues = ChartsModel.getSunburstChartValues(["state", "district", "ward"], "population",'Sum');
                 break;
             case Constants.waterfallChartTitle:
                 console.log("WATERFALL CLICKED")
@@ -417,9 +431,9 @@ Page {
                 break;
             case Constants.sankeyChartTitle:
                 console.log("SANKEY CLICKED")
-                 dataValues = ChartsModel.getSankeyChartValues(xAxisColumns[0],  xAxisColumns[1], yAxisColumns[0] );
+                dataValues = ChartsModel.getSankeyChartValues(xAxisColumns[0],  xAxisColumns[1], yAxisColumns[0] );
                 // Sankey
-//                 dataValues = ChartsModel.getSankeyChartValues("state", "district", "population");
+                //                 dataValues = ChartsModel.getSankeyChartValues("state", "district", "population");
                 break;
             case Constants.kpiTitle:
                 console.log("KPI CLICKED")
@@ -431,7 +445,8 @@ Page {
                 break;
             case Constants.pivotTitle:
                 console.log("PIVOT CLICKED")
-                dataValues = ChartsModel.getPivotChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                //                dataValues = ChartsModel.getPivotChartValues(["state", "district"],xAxisColumns[0],'Sum');
+                dataValues = ChartsModel.getTableChartValues(["state", "district"], "population",'Sum');
                 break;
             }
             if(!dataValues){
@@ -445,7 +460,7 @@ Page {
             console.log(report_desiner_page.chartUrl)
             console.log("color final "+JSON.stringify(d3PropertyConfig))
 
-//            need to initialise only once
+            //            need to initialise only once
             console.log('Starting to plot');
             console.log('Data Values',dataValues);
             console.log('Chart Url',report_desiner_page.chartUrl)
@@ -653,7 +668,7 @@ Page {
     Rectangle{
 
         id: axis
-        height: row3Visible ? 123 : 82
+        height: row4Visible ? 42 : (row3Visible ? 123 : 82)
         width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width
 
         anchors.left: tool_sep_chartFilters.right
@@ -665,6 +680,7 @@ Page {
             height: 40
             width: parent.width
             anchors.left: parent.left
+            visible: xAxisVisible
 
 
             Rectangle{
@@ -766,6 +782,7 @@ Page {
         //
         ToolSeparator{
             id: seperatorAxis
+            visible: xAxisVisible
             height: 1
             anchors.top: xaxis.bottom
             width: parent.width
@@ -780,7 +797,7 @@ Page {
             anchors.top: seperatorAxis.bottom
             anchors.left: parent.left
             width: parent.width
-            //            visible: yAxisVisible
+            visible: yAxisVisible
 
             Rectangle{
                 id: yaxisText
@@ -873,7 +890,7 @@ Page {
             background: Rectangle{
                 color: Constants.darkThemeColor
             }
-            //            visible: yAxisVisible
+            visible: yAxisVisible
         }
 
         Rectangle{
@@ -908,7 +925,7 @@ Page {
             Rectangle{
                 id: row3DropAreaRectangle
                 height: parent.height
-                width: parent.width - yaxisText.width - 4
+                width: parent.width - row3Text.width - 4
                 anchors.left: row3Text.right
                 anchors.leftMargin: 1
 
@@ -923,7 +940,7 @@ Page {
                 ListView{
 
                     height: parent.height
-                    width: parent.width - yAxisSettings.width - 2*this.x
+                    width: parent.width
                     x:5
                     anchors.top: parent.top
                     anchors.topMargin: 3
@@ -979,6 +996,249 @@ Page {
                 color: Constants.darkThemeColor
             }
             visible: row3Visible
+        }
+
+
+        Rectangle{
+            id: row4
+            height: 40
+            anchors.top: axis.top
+            anchors.left: parent.left
+            width: parent.width
+            visible: row4Visible
+
+            Rectangle{
+                id: row4Text
+                width: 100
+                height: parent.height
+                Text {
+                    text: Constants.gaugePointerLabel
+                    anchors.centerIn: parent
+                }
+                z:1
+            }
+
+            ToolSeparator{
+                orientation: Qt.Vertical
+                anchors.left: row4Text.right
+                width: 1
+                height: parent.height
+                background: Rectangle{
+                    color: Constants.darkThemeColor
+                }
+            }
+
+            Rectangle{
+                id: row4DropAreaRectangle
+                height: parent.height
+                width: 204
+                anchors.left: row4Text.right
+                anchors.leftMargin: 1
+
+                DropArea{
+                    id: row4DropArea
+                    anchors.fill: parent
+                    onEntered:  onDropAreaEntered(parent,Constants.gaugePointerLabel)
+                    onExited:  onDropAreaExited(parent,Constants.gaugePointerLabel)
+                    onDropped: onDropAreaDropped(parent,Constants.gaugePointerLabel)
+                }
+
+                ListView{
+                    id: pointerValueList
+                    height: parent.height
+                    width: 100
+                    x:5
+                    anchors.top: parent.top
+                    anchors.topMargin: 3
+                    model: valuesListModel
+                    orientation: Qt.Horizontal
+                    spacing: spacingColorList
+                    delegate: AxisDroppedRectangle{
+                        textValue: itemName
+                        color: Constants.defaultYAxisColor
+                    }
+                }
+
+            }
+
+            ToolSeparator{
+                id: row4Valueseparator
+                orientation: Qt.Vertical
+                anchors.left: row4DropAreaRectangle.right
+                width: 1
+                height: parent.height
+                background: Rectangle{
+                    color: Constants.darkThemeColor
+                }
+            }
+
+            Rectangle{
+                id: row4TextInput1Label
+                width: 100
+                height: parent.height
+                anchors.left: row4Valueseparator.right
+                Text {
+                    id: input1Label
+                    text: 'Max/Green'
+                    anchors.centerIn: parent
+                }
+                z:1
+            }
+
+            ToolSeparator{
+                id: row4Valueseparator2
+                orientation: Qt.Vertical
+                anchors.left: row4TextInput1Label.right
+                width: 1
+                height: parent.height
+                background: Rectangle{
+                    color: Constants.darkThemeColor
+                }
+            }
+
+            Rectangle{
+                id: row4TextInput1
+                width: 200
+                height: parent.height
+                anchors.left: row4Valueseparator2.right
+                border.color: Constants.borderBlueColor
+
+                TextEdit {
+                    leftPadding: 10
+                    rightPadding: 10
+                    width: parent.width
+                    anchors.centerIn: parent
+                    verticalAlignment: Text.AlignVCenter
+                }
+                z:1
+            }
+
+
+            ToolSeparator{
+                id: row4Valueseparator3
+                orientation: Qt.Vertical
+                anchors.left: row4TextInput1.right
+                width: 1
+                height: parent.height
+                background: Rectangle{
+                    color: Constants.darkThemeColor
+                }
+            }
+
+
+
+            Rectangle{
+                id: row4TextInput2Label
+                width: 200
+                height: parent.height
+                anchors.left: row4Valueseparator3.right
+
+                Text{
+                    text: 'Yellow'
+                    width: parent.width
+                    anchors.centerIn: parent
+                }
+                z:1
+            }
+
+            ToolSeparator{
+                id: row4Valueseparator4
+                orientation: Qt.Vertical
+                anchors.left: row4TextInput2Label.right
+                width: 1
+                height: parent.height
+                background: Rectangle{
+                    color: Constants.darkThemeColor
+                }
+            }
+
+            Rectangle{
+                id: row4TextInput2
+                width: 200
+                height: parent.height
+                anchors.left: row4Valueseparator4.right
+                border.color: Constants.borderBlueColor
+
+                TextEdit {
+                    leftPadding: 10
+                    rightPadding: 10
+                    width: parent.width
+                    anchors.centerIn: parent
+                    verticalAlignment: Text.AlignVCenter
+                }
+                z:1
+            }
+
+
+            ToolSeparator{
+                id: row4Valueseparator5
+                orientation: Qt.Vertical
+                anchors.left: row4TextInput2.right
+                width: 1
+                height: parent.height
+                background: Rectangle{
+                    color: Constants.darkThemeColor
+                }
+            }
+
+
+            Rectangle{
+                id: row4TextInput3Label
+                width: 100
+                height: parent.height
+                anchors.left: row4Valueseparator5.right
+
+                Text{
+                    text: 'Red'
+                    width: parent.width
+                    anchors.leftMargin: 20
+                    anchors.centerIn: parent
+                }
+                z:1
+            }
+
+            ToolSeparator{
+                id: row4Valueseparator6
+                orientation: Qt.Vertical
+                anchors.left: row4TextInput3Label.right
+                width: 1
+                height: parent.height
+                background: Rectangle{
+                    color: Constants.darkThemeColor
+                }
+            }
+
+            Rectangle{
+                id: row4TextInput3
+                width: 200
+                height: parent.height
+                anchors.left: row4Valueseparator6.right
+                border.color: Constants.borderBlueColor
+
+                TextEdit {
+                    leftPadding: 10
+                    rightPadding: 10
+                    width: parent.width
+                    anchors.centerIn: parent
+                    verticalAlignment: Text.AlignVCenter
+                }
+                z:1
+            }
+
+
+        }
+
+
+        //
+        ToolSeparator{
+            id: axisSeperator4
+            height: 1
+            anchors.top: row4.bottom
+            width: parent.width
+            background: Rectangle{
+                color: Constants.darkThemeColor
+            }
+            visible: row4Visible
         }
 
     }

@@ -242,7 +242,7 @@ Rectangle{
         }
         ListElement{
             icon: "pivot.png"
-            chartHtml:"PivotTableMultipleSubtotalTest.html"
+            chartHtml:"PivotTableMultipleSubtotal.html"
             activeChart: false
             title:"Pivot"
             xAxisLabelName: "Rows"

@@ -179,7 +179,29 @@
             categories,
         ];
 
+        data = [
+            [
+                [2121, "1", "Nepal"],
+                [443, "2", "Nepal"],
+                [1121, "3", "India"],
+                [4243, "4", "India"],
+                [210, "5", "India"],
+                [4415, "6", "India"],
+                [2010, "7", "India"],
+                [222, "8", "India"],
+                [3112, "9", "India"],
+                [524, "10", "India"],
+                [6341, "11", "Bhutan"],
+                [4712, "12", "Bhutan"],
+                [10, "13", "Bhutan"],
+                [100, "14", "India"],
+            ],
+            ["population", "id", "country"],
+            ["Nepal", "India", "Bhutan"],
+        ];
+
         function drawChart(data, plottingConfiguration = {}) {
+            window.data = data;
             d3.selectAll("#my_dataviz").html("");
 
             let {
@@ -222,8 +244,18 @@
                     "translate(" + margin.left + "," + margin.top + ")"
                 );
 
+            var dataValues = data[0];
+
             // Add X axis
-            var x = d3.scaleLinear().domain([4, 8]).range([0, width]);
+            var x = d3
+                .scaleLinear()
+                .domain(
+                    d3.extent(dataValues, function (d) {
+                        return +d[0];
+                    })
+                )
+                .range([0, width]);
+
             svg.append("g")
                 .attr("transform", "translate(0," + height + ")")
                 .call(d3.axisBottom(x).tickSizeOuter(0))
@@ -236,7 +268,14 @@
             //     .call(make_x_gridlines().tickSize(-height).tickFormat(""));
 
             // Add Y axis
-            var y = d3.scaleLinear().domain([0, 9]).range([height, 0]);
+            var y = d3
+                .scaleLinear()
+                .domain(
+                    d3.extent(dataValues, function (d) {
+                        return +d[1];
+                    })
+                )
+                .range([height, 0]);
             svg.append("g")
                 .call(d3.axisLeft(y).tickSizeOuter(0))
                 .attr("class", "y-axis");
@@ -249,7 +288,6 @@
             // Color scale: give me a specie name, I return a color
             var color = d3.scaleOrdinal().domain(categories).range(d3Colors);
 
-            var dataValues = data[0];
             // Add dots
             svg.append("g")
                 .selectAll("dot")
@@ -257,10 +295,10 @@
                 .enter()
                 .append("circle")
                 .attr("cx", function (d) {
-                    return x(d[0]);
+                    return x(+d[0]);
                 })
                 .attr("cy", function (d) {
-                    return y(d[1]);
+                    return y(+d[1]);
                 })
                 .attr("r", 5)
                 .style("fill", function (d) {
@@ -271,20 +309,28 @@
                 })
                 .on("mouseover mousemove", function (d, i) {
                     var x_pos = d3.mouse(this)[0] - 20;
-                    var y_pos = d3.mouse(this)[1];
+                    var y_pos = d3.mouse(this)[1] - 30;
 
                     d3.select("#tooltip")
                         .style("left", x_pos + "px")
                         .style("top", y_pos + "px")
                         .style("display", "block")
-                        .html(data[1][0] + ": " + d[0]);
-                    d3.select(".scatter" + i + d.Species);
+                        .html(
+                            data[1][0] +
+                                ": " +
+                                d[0] +
+                                "<br>" +
+                                data[1][1] +
+                                ": " +
+                                d[1]
+                        );
+                    d3.select(".scatter" + i + d[2]);
 
                     d3.select(this).attr("r", 10);
                 })
                 .on("mouseout", function (d, i) {
                     d3.select("#tooltip").style("display", "none");
-                    d3.select(".scatter" + i + d.Species);
+                    d3.select(".scatter" + i + d[2]);
 
                     d3.select(this).attr("r", 5);
                 });
