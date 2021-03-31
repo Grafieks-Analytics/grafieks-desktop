@@ -196,11 +196,6 @@ Popup {
         path.text = name
     }
 
-    function onHomeClicked(){
-        SheetDS.folderNav("0")
-        // refer SheetDS.cpp for function info
-        updatePath(pathFolder)
-    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -635,7 +630,7 @@ Popup {
             Rectangle{
                 width: popup.width * 0.4
                 anchors.left:breadcrumb.right
-                anchors.leftMargin: popup.width * 0.4  - 300
+                anchors.leftMargin: popup.width * 0.4 - 190
 
                 BusyIndicatorTpl {
                     id: busyindicator
@@ -645,25 +640,11 @@ Popup {
 
                 CustomButton{
 
-                    id: homeBtn
-                    height: 40
-                    width: 100
-                    textValue: "Home"
-                    anchors.left: busyindicator.right
-                    anchors.leftMargin: 10
-
-                    onClicked: onHomeClicked();
-
-                }
-
-
-                CustomButton{
-
                     id: nextBtn
                     height: 40
                     width: 100
                     textValue: "Next"
-                    anchors.left: homeBtn.right
+                    anchors.left: busyindicator.right
                     anchors.leftMargin: 10
 
                     onClicked: onFolderDoubleClicked(googleSheetId, fileName, fileExtension)

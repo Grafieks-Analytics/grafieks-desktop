@@ -94,8 +94,6 @@ Popup {
 
         function onCsvLoginStatus(status, directLogin){
 
-            console.log("S!S = CSV", status, directLogin)
-
             if(directLogin === false){
                 if(status.status === true){
                     popup.visible = false
@@ -111,8 +109,6 @@ Popup {
 
         function onExcelLoginStatus(status, directLogin){
 
-            console.log("S!S = EXCEL", status, directLogin)
-
             if(directLogin === false){
                 if(status.status === true){
                     popup.visible = false
@@ -127,8 +123,6 @@ Popup {
         }
 
         function onJsonLoginStatus(status, directLogin){
-
-            console.log("S!S = JSON", status, directLogin)
 
             if(directLogin === false){
                 if(status.status === true){
@@ -698,9 +692,6 @@ Popup {
 
                     onClicked: onFileDoubleClicked(fileId, fileName, fileExtension, fileTag, filePathFolder, filePathLower)
                 }
-
-
-
 
             }
         }
