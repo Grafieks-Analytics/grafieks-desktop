@@ -575,6 +575,8 @@
             };
 
             function drawChart(root, plottingConfiguration = {}) {
+                window.data = root;
+                // root = { name: "", children: root };
                 let {
                     d3colorPalette,
                     paddingInner,
@@ -771,9 +773,9 @@
             }
             drawChart(data);
 
-            window.addEventListener("resize", function () {
-                drawChart(data);
-            });
+            // window.addEventListener("resize", function () {
+            //     drawChart(data);
+            // });
         </script>
     </body>
 </html>
