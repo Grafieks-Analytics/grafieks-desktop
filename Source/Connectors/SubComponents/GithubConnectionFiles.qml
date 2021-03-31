@@ -174,7 +174,7 @@ Popup {
 
 
     function searchFiles(){
-        DriveDS.searchQuer(server_files.text)
+        GithubDS.searchQuer(server_files.text)
     }
 
 
@@ -341,7 +341,7 @@ Popup {
                         id: fileList
                         model:GithubModel
                         clip: true
-                        height: 200
+                        height: parent.height
                         width: popup.width * 0.6
                         ScrollBar.vertical: ScrollBar {}
                         headerPositioning: ListView.OverlayHeader

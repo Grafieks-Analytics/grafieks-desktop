@@ -3,7 +3,8 @@
 GithubDS::GithubDS(QObject *parent) : QObject(parent),
     m_networkAccessManager(new QNetworkAccessManager(this)),
     m_networkReply(nullptr),
-    m_dataBuffer(new QByteArray)
+    m_dataBuffer(new QByteArray),
+    totalData(0)
 {
     emit showBusyIndicator(true);
 
@@ -61,9 +62,22 @@ void GithubDS::fetchDatasources()
 void GithubDS::searchQuer(QString path)
 {
     emit showBusyIndicator(true);
+    this->resetDatasource();
 
-    m_networkReply = this->github->get(QUrl("https://www.githubapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name  +contains+%27" + path+ "%27"));
-    connect(m_networkReply,&QNetworkReply::finished,this,&GithubDS::dataReadFinished);
+    for(int i = 0; i < this->filesList.length(); i++){
+
+        if(this->filesList.at(i).contains(path)){
+
+            this->addDataSource(this->mainResultData.value(i).at(0),
+                                this->mainResultData.value(i).at(1),
+                                this->mainResultData.value(i).at(2),
+                                this->mainResultData.value(i).at(3),
+                                this->mainResultData.value(i).at(4),
+                                this->mainResultData.value(i).at(5)
+                                );
+        }
+    }
+    emit showBusyIndicator(false);
 
 }
 
@@ -146,8 +160,17 @@ void GithubDS::dataReadFinished()
             }
 
             if(requiredExtensions.indexOf(GithubMimeType) >= 0 || GithubExtension == "--"){
-                qDebug() << GithubName;
+
+                // This data is required for search later
+                // As there is no search API for Gists
+                this->filesList << GithubName;
+                QStringList tmpData;
+                tmpData << GithubID << GithubName <<  GithubKind <<  GithubModifiedTime << GithubExtension << GithubLink;
+                this->mainResultData.insert(totalData, tmpData);
+                totalData++;
+
                 this->addDataSource(GithubID, GithubName, GithubKind, GithubModifiedTime, GithubExtension, GithubLink);
+
             }
         }
 
