@@ -74,7 +74,6 @@ void DriveDS::fetchDatasources()
 void DriveDS::searchQuer(QString path)
 {
     emit showBusyIndicator(true);
-    qDebug() << "SEARCH KEY" << path;
     m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name contains '"+ path +"'"));
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::dataSearchFinished);
 }
@@ -217,7 +216,6 @@ void DriveDS::dataReadFinished()
 
 void DriveDS::dataSearchFinished()
 {
-    m_dataBuffer->append(m_networkReply->readAll());
     if(m_networkReply->error() ){
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
@@ -226,7 +224,7 @@ void DriveDS::dataSearchFinished()
         requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json";
 
         this->resetDatasource();
-        QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
+        QJsonDocument resultJson = QJsonDocument::fromJson(m_networkReply->readAll().data());
         QJsonObject resultObj = resultJson.object();
 
         qDebug() << "FILES" << resultJson;

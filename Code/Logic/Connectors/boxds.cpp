@@ -109,7 +109,6 @@ void BoxDS::folderNav(QString path)
 void BoxDS::searchQuer(QString path)
 {
     emit showBusyIndicator(true);
-    qDebug() << path << "BOX SEARCH" << this->box->token();
 
     QNetworkRequest m_networkRequest;
 
@@ -224,7 +223,7 @@ void BoxDS::dataReadFinished()
     else{
 
         QStringList requiredExtensions;
-        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json" << ".ods";
+        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json";
 
         this->resetDatasource();
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
@@ -275,7 +274,7 @@ void BoxDS::dataSearchFinished()
     else{
 
         QStringList requiredExtensions;
-        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json" << ".ods";
+        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json";
 
         this->resetDatasource();
         QJsonDocument resultJson = QJsonDocument::fromJson(m_networkReply->readAll().data());
