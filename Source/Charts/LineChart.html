@@ -36,6 +36,15 @@
             ["Value Name"],
         ];
 
+        var data = [
+            [
+                ["a", 1],
+                ["b", 4],
+                ["c", 5],
+            ],
+            ["username", "is_active"],
+        ];
+
         valueDateType = false;
 
         function drawChart(data, plottingConfiguration = {}) {
@@ -71,7 +80,11 @@
                 dateFormat = defaultD3Config.dateFormat;
             }
 
-            var parseTime = d3.timeParse(timeParseFormat);
+            dateformatValue = function (value) {
+                return value;
+            };
+
+            // var parseTime = d3.timeParse(timeParseFormat);
 
             d3.selectAll("#my_dataviz").html("");
             let margin = { top: 30, right: 30, bottom: 70, left: 60 },
@@ -92,27 +105,34 @@
             });
 
             if (valueDateType) {
-                xScale = d3.scaleTime();
+                dateformatValue = d3.timeFormat(dateFormat);
+                xScale = d3
+                    .scaleTime()
+                    .range([0, width])
+                    .domain(
+                        d3.extent(dataValues, function (d) {
+                            return d[0];
+                        })
+                    ); // input;
             } else {
-                xScale = d3.scaleLinear();
+                console.log("Scale band");
+                xScale = d3
+                    .scaleBand()
+                    .range([0, width])
+                    .domain(
+                        dataValues.map((d, i) => {
+                            return d[0];
+                        })
+                    ); // input;
             }
-
-            xScale
-                .domain(
-                    d3.extent(dataValues, function (d) {
-                        return d[0];
-                    })
-                ) // input
-                .range([0, width]); // output
 
             yScale = d3
                 .scaleLinear()
-                .domain([
-                    0,
-                    d3.max(dataValues, function (d) {
-                        return +d[1];
-                    }),
-                ]) // input
+                .domain(
+                    d3.extent(dataValues, function (d) {
+                        return d[1];
+                    })
+                )
                 .range([height, 0]); // output
 
             line = d3
@@ -139,9 +159,10 @@
             var bottomAxis = svg
                 .append("g")
                 .attr("class", "x-axis")
-                .attr("transform", "translate(0," + height + ")");
+                .attr("transform", "translate(10," + height + ")");
 
             if (valueDateType) {
+                console.log("Date type?");
                 bottomAxis.call(
                     d3
                         .axisBottom(xScale)
@@ -150,12 +171,7 @@
                         .tickFormat(d3.timeFormat(dateFormat))
                 );
             } else {
-                bottomAxis.call(
-                    d3
-                        .axisBottom(xScale)
-                        .tickSizeOuter(0)
-                        .ticks(dataValues.length)
-                );
+                bottomAxis.call(d3.axisBottom(xScale).ticks(dataValues.length));
             }
 
             // svg.append("g")
@@ -254,8 +270,9 @@
                     var x_pos = d3.mouse(this)[0];
                     var y_pos = d3.mouse(this)[1];
 
-                    const xValue = xScale.invert(x_pos);
-                    const yValue = yScale.invert(y_pos);
+                    // console.log(d);
+                    const xValue = dateformatValue(d[0]);
+                    const yValue = d[1];
 
                     d3.select("#tooltip")
                         .style("left", x_pos - 10 + "px")
