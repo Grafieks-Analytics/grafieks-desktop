@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>orb</title>
+
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="./Data/bootstrap-3.3.1/css/bootstrap.css"
+        />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="./Data/bootstrap-3.3.1/css/bootstrap-theme.css"
+        />
+
+        <link rel="stylesheet" type="text/css" href="./Data/orb.min.css" />
+        <script
+            type="text/javascript"
+            src="./Data/react-0.12.2.min.js"
+        ></script>
+        <script type="text/javascript" src="./Data/orb.min.js"></script>
+
+        <script type="text/javascript" src="./Data/demo.data.js"></script>
+
+        <style type="text/css">
+            body {
+                font-size: 1.2em;
+            }
+            .orb-toolbar,
+            .drp-trgt {
+                display: none;
+            }
+
+            .inner-table.upper-buttons {
+                display: none;
+            }
+
+            .orb-container {
+                margin-left: 50px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="rr" style="padding: 7px"></div>
+        <div id="export" style="padding: 7px"></div>
+
+        <script type="text/javascript">
+            function refreshData() {
+                pgridwidget.refreshData(window.demo.data);
+            }
+
+            function changeTheme() {
+                pgridwidget.changeTheme("bootstrap");
+            }
+
+            function exportToExcel(anchor) {
+                anchor.href = orb.export(pgridwidget);
+                return true;
+            }
+
+            function changeThemeColour(themeColor) {
+                pgridwidget.changeTheme(themeColor.toLowerCase());
+            }
+
+            var config = {
+                dataSource: window.demo.data,
+                canMoveFields: true,
+                dataHeadersLocation: "columns",
+                width: window.innerWidth - 100,
+                height: window.innerHeight - 40,
+                theme: "blue",
+                toolbar: {
+                    visible: true,
+                },
+                grandTotal: {
+                    rowsvisible: true,
+                    columnsvisible: true,
+                },
+                subTotal: {
+                    visible: true,
+                    collapsed: false,
+                    collapsible: false,
+                },
+                rowSettings: {
+                    subTotal: {
+                        visible: true,
+                        collapsed: false,
+                        collapsible: false,
+                    },
+                },
+                columnSettings: {
+                    subTotal: {
+                        visible: true,
+                        collapsed: false,
+                        collapsible: true,
+                    },
+                },
+                fields: [
+                    {
+                        name: "6",
+                        caption: "Amount",
+                        dataSettings: {
+                            aggregateFunc: "sum",
+                            aggregateFuncName: "whatever",
+                            formatFunc: function (value) {
+                                return value
+                                    ? Number(value).toFixed(0) + " $"
+                                    : "";
+                            },
+                        },
+                    },
+                    {
+                        name: "0",
+                        caption: "Entity",
+                    },
+                    {
+                        name: "1",
+                        caption: "Product",
+                    },
+                    {
+                        name: "2",
+                        caption: "Manufacturer",
+                        sort: {
+                            order: "asc",
+                        },
+                        rowSettings: {
+                            subTotal: {
+                                visible: true,
+                                collapsed: false,
+                                collapsible: false,
+                            },
+                        },
+                    },
+                    {
+                        name: "3",
+                        caption: "Class",
+                    },
+                    {
+                        name: "4",
+                        caption: "Category",
+                        sort: {
+                            order: "desc",
+                        },
+                    },
+                    {
+                        name: "5",
+                        caption: "Quantity",
+                        aggregateFunc: "sum",
+                    },
+                ],
+                rows: ["Manufacturer", "Category"],
+                columns: ["Class"],
+                data: ["Quantity", "Amount"],
+                /*preFilters : {
+            'Class': { 'Matches': 'Regular' },
+            'Manufacturer': { 'Matches': /^a|^c/ },
+            'Category'    : { 'Does Not Match': 'D' },
+           // 'Amount'      : { '>':  40 },
+         //   'Quantity'    : [4, 8, 12]
+        }*/
+            };
+
+            var elem = document.getElementById("rr");
+
+            var pgridwidget = new orb.pgridwidget(config);
+            pgridwidget.render(elem);
+        </script>
+    </body>
+</html>
