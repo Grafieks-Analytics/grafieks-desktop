@@ -36,9 +36,10 @@ public:
     Q_INVOKABLE void fetchDatasources();
     Q_INVOKABLE void searchQuer(QString path);
     Q_INVOKABLE void homeBut();
+    Q_INVOKABLE void fetchFileData(QString gFileId, QString extension, QString url);
 
     void addDataSource(Github * github);
-    Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & kind,const QString & modifiedTime,const QString & extension);
+    Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & kind,const QString & modifiedTime,const QString & extension, const QString &url);
 
     QList<Github *> dataItems();
 
@@ -57,7 +58,7 @@ private slots:
     void dataReadyRead();
     void dataReadFinished();
     void userReadFinished();
-    void saveFile();
+    void fileDownloadFinished();
 
 private:
     QNetworkAccessManager * m_networkAccessManager;
@@ -65,6 +66,10 @@ private:
     QNetworkReply * m_networkReply;
     QByteArray * m_dataBuffer;
     QList<Github *> m_github;
+
+    QString gFileId;
+    QString extension;
+    QString url;
 
 };
 

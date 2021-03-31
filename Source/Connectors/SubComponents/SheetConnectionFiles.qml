@@ -33,6 +33,7 @@ Popup {
 
     property var fileName: ""
     property var fileExtension: ""
+    property var googleSheetId : ""
 
 
 
@@ -112,6 +113,7 @@ Popup {
 
         fileName = name
         fileExtension = type
+        googleSheetId = id;
     }
 
     function onFolderClicked(name,type,pathFolder){
@@ -120,6 +122,19 @@ Popup {
         updatePath(name)
     }
 
+    function onFolderDoubleClicked(gSheetId, name,type){
+
+        // If double clicked on folder navigate to new location
+        // else if its a file, fetch file content and process data
+        if(type === "folder"){
+            SheetDS.folderNav(pathFolder)
+        }
+        else{
+            SheetDS.fetchFileData(gSheetId)
+        }
+
+        path.text = name
+    }
 
     function onHomeClicked(){
         SheetDS.folderNav("0")
@@ -273,10 +288,14 @@ Popup {
                         clip: true
                         height: 200
                         width: popup.width * 0.6
+                        ScrollBar.vertical: ScrollBar {}
+                        headerPositioning: ListView.OverlayHeader
 
                         header: Row{
 
                             width: popup.width * 0.6
+                            z: 10
+
                             Column{
                                 width: 20
                                 Rectangle{
@@ -373,7 +392,7 @@ Popup {
 
                                         anchors.fill:parent
                                         onClicked: onFileSelected(name, id, extension, modifiedTime)
-                                        onDoubleClicked: onFolderClicked()
+                                        onDoubleClicked: onFolderDoubleClicked(id, name, extension)
                                     }
                                 }
 
@@ -587,7 +606,7 @@ Popup {
                     anchors.left: homeBtn.right
                     anchors.leftMargin: 10
 
-                    onClicked: onFolderDoubleClicked(fileName, fileExtension)
+                    onClicked: onFolderDoubleClicked(googleSheetId, fileName, fileExtension)
 
                 }
 

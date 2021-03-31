@@ -90,9 +90,20 @@ void SheetDS::homeBut()
     emit showBusyIndicator(true);
 
     m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'"));
-
     connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
 }
+
+void SheetDS::fetchFileData(QString gFileId)
+{
+    emit showBusyIndicator(true);
+    this->gFileId = gFileId;
+
+    QUrl sheetDownloadUrl("https://www.googleapis.com/drive/v3/files/" + gFileId +"/export?mimeType=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&key="+Secret::sheetClient);
+    m_networkReply = this->google->get(sheetDownloadUrl);
+
+    connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::fileDownloadFinished);
+}
+
 
 
 /*!
@@ -139,6 +150,22 @@ void SheetDS::resetDatasource()
     emit postReset();
 }
 
+void SheetDS::fileDownloadFinished()
+{
+
+    if(m_networkReply->error() ){
+        qDebug() <<"There was some error : " << m_networkReply->errorString() ;
+
+    }else{
+        QFile file("C:\\Users\\chill\\Desktop\\"+ this->gFileId +".xlsx");
+        file.open(QIODevice::WriteOnly);
+        file.write(m_networkReply->readAll(), m_networkReply->size());
+        file.close();
+    }
+
+    emit showBusyIndicator(false);
+}
+
 /*!
  * \brief Processes the data buffer
  * \details Process the data buffer and append new values to QList<Sheet*>
@@ -146,6 +173,7 @@ void SheetDS::resetDatasource()
 void SheetDS::dataReadFinished()
 {
     m_dataBuffer->append(m_networkReply->readAll());
+
     if(m_networkReply->error() ){
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
@@ -209,20 +237,3 @@ void SheetDS::userReadFinished()
 
     emit showBusyIndicator(false);
 }
-
-void SheetDS::saveFile()
-{
-
-    QByteArray arr = m_networkReply->readAll();
-    qDebug() << arr << "SAVE FILE";
-
-    QFile file("C:\\Users\\chill\\Desktop\\x.xlsx");
-    file.open(QIODevice::WriteOnly);
-    file.write(arr);
-    file.close();
-
-    emit showBusyIndicator(false);
-}
-
-
-

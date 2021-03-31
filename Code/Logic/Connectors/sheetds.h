@@ -36,6 +36,7 @@ public:
     Q_INVOKABLE void fetchDatasources();
     Q_INVOKABLE void searchQuer(QString path);
     Q_INVOKABLE void homeBut();
+    Q_INVOKABLE void fetchFileData(QString gFileId);
 
     void addDataSource(Sheet * Sheet);
     Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & kind,const QString & modifiedTime,const QString & extension);
@@ -54,10 +55,10 @@ signals:
 
 private slots:
     void resetDatasource();
-//    void dataReadyRead();
+    void fileDownloadFinished();
     void dataReadFinished();
     void userReadFinished();
-    void saveFile();
+
 
 private:
     QNetworkAccessManager * m_networkAccessManager;
@@ -67,6 +68,7 @@ private:
     QList<Sheet*> m_Sheet;
 
     QString username;
+    QString gFileId;
 };
 
 #endif // SHEETDS_H
