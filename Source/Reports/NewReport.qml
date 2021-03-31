@@ -37,6 +37,8 @@ Page {
     property bool lineTypeChartVisible: false
 
     property bool row3Visible: false
+    property bool pivotThemeVisible: false
+
 
     property string yAxisLabelName: Constants.yAxisName
     property string xAxisLabelName: Constants.xAxisName
@@ -53,33 +55,47 @@ Page {
     property var d3PropertyConfig: ({});
 
     onChartTitleChanged: {
-        console.log(chartTitle);
+
         switch(chartTitle){
         case Constants.stackedBarChartTitle:
             chartUrl=Constants.stackedBarChartUrl
             webEngineView.url = Constants.chartsBaseUrl+Constants.stackedBarChartUrl;
+            xAxisVisible = true
+            yAxisVisible = true
+            row3Visible = false
+            row4Visible = false
             break;
         case Constants.stackedAreaChartTitle:
             chartUrl=Constants.stackedAreaChartUrl;
             webEngineView.url = Constants.chartsBaseUrl+Constants.stackedAreaChartUrl;
+            xAxisVisible = true
+            yAxisVisible = true
+            row3Visible = false
+            row4Visible = false
             break;
-        case Constants.sankeyChartTitle:
         case Constants.pivotTitle:
             row3Visible =  true;
+            xAxisVisible = true
+            yAxisVisible = true
+            row4Visible = false
+            pivotThemeVisible=true
             break;
         case Constants.tableTitle:
-            yAxisVisible = false;
+            yAxisVisible = false
+            xAxisVisible = true
+            row3Visible = false
+            row4Visible = false
             break;
         case Constants.gaugeChartTitle:
             row4Visible = true
             xAxisVisible =  false
             yAxisVisible =  false
             row3Visible =  false
-            break
+            break;
         default:
             xAxisVisible = true
-            yAxisVisible = true;
-            row3Visible = false;
+            yAxisVisible = true
+            row3Visible = false
             row4Visible = false
         }
 
@@ -283,6 +299,9 @@ Page {
 
         var itemName = ReportParamsModel.itemName;
         var xAxisColumns = ReportParamsModel.xAxisColumns;
+
+        var xAxisColumnsT = ReportParamsModel.xAxisColumnsT;
+
         var yAxisColumns = ReportParamsModel.yAxisColumns;
         var valuesColumns = [];
 
@@ -294,7 +313,12 @@ Page {
 
             xAxisListModel.append({itemName: itemName})
             xAxisColumns.push(itemName);
+
+            xAxisColumnsT.push(itemName);
             ReportParamsModel.setXAxisColumns(xAxisColumns);
+            ReportParamsModel.setXAxisColumnsT(xAxisColumnsT);
+
+            T
         }else if(axis === Constants.yAxisName){
             if(!yAxisDropEligible(itemName)){
                 return;
@@ -339,6 +363,8 @@ Page {
         var xAxisColumns = ReportParamsModel.xAxisColumns;
         var yAxisColumns = ReportParamsModel.yAxisColumns;
 
+        var xAxisColumnsT = ReportParamsModel.xAxisColumnsT;
+
         if(xAxisColumns.length && yAxisColumns.length){
 
             console.log(xAxisColumns);
@@ -366,7 +392,7 @@ Page {
                 break;
             case Constants.groupBarChartTitle:
                 console.log('Grouped bar chart!');
-                dataValues =  ChartsModel.getGroupedBarChartValues(xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
+                dataValues =  ChartsModel.getGroupedBarChartValues(xAxisColumns[1],yAxisColumns[0], xAxisColumns[0]);
                 break;
             case Constants.areaChartTitle:
                 console.log("AREA CLICKED")
@@ -415,10 +441,10 @@ Page {
                 dataValues = ChartsModel.getHeatMapChartValues(xAxisColumns[0],yAxisColumns[0], ReportParamsModel.itemName);
                 break;
             case Constants.sunburstChartTitle:
-                console.log("SUNBURST CLICKED", typeof xAxisColumns)
-                dataValues = ChartsModel.getSunburstChartValues(xAxisColumns,yAxisColumns[0],'Sum');
-
-                //                dataValues = ChartsModel.getSunburstChartValues(["state", "district", "ward"], "population",'Sum');
+                console.log("SUNBURST CLICKED", typeof xAxisColumns, typeof xAxisColumnsT)
+//                dataValues = ChartsModel.getSunburstChartValues(xAxisColumns,yAxisColumns[0],'Sum');
+                console.log('Array? ',Array.isArray(xAxisColumns), Array.isArray(xAxisColumnsT));
+                  dataValues = ChartsModel.getSunburstChartValues(xAxisColumnsT, "population",'Sum');
                 break;
             case Constants.waterfallChartTitle:
                 console.log("WATERFALL CLICKED")
