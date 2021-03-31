@@ -109,6 +109,7 @@ void BoxDS::folderNav(QString path)
 void BoxDS::searchQuer(QString path)
 {
     emit showBusyIndicator(true);
+    qDebug() << path << "BOX SEARCH" << this->box->token();
 
     QNetworkRequest m_networkRequest;
 
@@ -127,8 +128,7 @@ void BoxDS::searchQuer(QString path)
     token = this->box->token();
 
     m_networkReply = m_networkAccessManager->get(m_networkRequest);
-    connect(m_networkReply,&QIODevice::readyRead,this,&BoxDS::dataReadyRead);
-    connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::dataReadFinished);
+    connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::dataSearchFinished);
 }
 
 /*!
@@ -173,11 +173,8 @@ void BoxDS::fetchFileData(QString fileId, QString fileExtension)
 
     QUrl api("https://api.box.com/2.0/files/"+ fileId +"/content");
     m_networkRequest.setUrl(api);
-//    m_networkRequest.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
-//    m_networkRequest.setMaximumRedirectsAllowed(10);
 
     m_networkRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
-//    m_networkRequest.setRawHeader("Content-Type","application/json");
     m_networkRequest.setRawHeader("Authorization", "Bearer " + this->box->token().toUtf8());
 
     m_networkReply = m_networkAccessManager->get(m_networkRequest);
@@ -234,6 +231,7 @@ void BoxDS::dataReadFinished()
         QJsonObject resultObj = resultJson.object();
 
         QJsonArray dataArray = resultObj["entries"].toArray();
+        qDebug() << m_dataBuffer->data();
 
         for(int i=0;i<dataArray.size();i++){
 
@@ -263,6 +261,52 @@ void BoxDS::dataReadFinished()
         // Get user email
         m_networkReply = this->box->get(QUrl("https://api.box.com/2.0/users/me/"));
         connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::userReadFinished);
+
+    }
+
+    emit showBusyIndicator(false);
+}
+
+void BoxDS::dataSearchFinished()
+{
+    if(m_networkReply->error()){
+        qDebug() <<"There was some error : "<< m_networkReply->errorString();
+    }
+    else{
+
+        QStringList requiredExtensions;
+        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json" << ".ods";
+
+        this->resetDatasource();
+        QJsonDocument resultJson = QJsonDocument::fromJson(m_networkReply->readAll().data());
+        QJsonObject resultObj = resultJson.object();
+
+        QJsonArray dataArray = resultObj["entries"].toArray();
+
+        for(int i=0;i<dataArray.size();i++){
+
+            QJsonObject dataObj = dataArray.at(i).toObject();
+
+            QString BoxID = dataObj["id"].toString();
+            QString BoxName = dataObj["name"].toString();
+            QString BoxType = dataObj["type"].toString();
+            QString BoxModifiedAt = QDateTime::fromString(dataObj["modified_at"].toString(), Qt::ISODate).toString("yyyy/MM/dd HH:mm ap");
+            QString BoxExtension;
+            QStringList extensionList;
+            if(BoxType == "folder"){
+                BoxModifiedAt = "--";
+                BoxExtension = "--";
+            }
+            if(BoxType == "file"){
+                extensionList = BoxName.split('.');
+                BoxExtension = "." + extensionList.last();
+            }
+
+            if(requiredExtensions.indexOf(BoxExtension) >= 0 || BoxExtension == "--"){
+                this->addDataSource(BoxID,BoxName,BoxType,BoxModifiedAt,BoxExtension);
+            }
+        }
+        m_dataBuffer->clear();
 
     }
 

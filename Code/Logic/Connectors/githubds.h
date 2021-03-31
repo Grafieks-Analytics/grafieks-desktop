@@ -36,7 +36,6 @@ public:
 
     Q_INVOKABLE void fetchDatasources();
     Q_INVOKABLE void searchQuer(QString path);
-    Q_INVOKABLE void homeBut();
     Q_INVOKABLE void fetchFileData(QString gFileId, QString extension, QString url);
 
     void addDataSource(Github * github);

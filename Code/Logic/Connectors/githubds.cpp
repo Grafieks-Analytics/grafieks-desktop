@@ -67,14 +67,6 @@ void GithubDS::searchQuer(QString path)
 
 }
 
-void GithubDS::homeBut()
-{
-    emit showBusyIndicator(true);
-
-    m_networkReply = this->github->get(QUrl("https://www.githubapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)"));
-    connect(m_networkReply, &QNetworkReply::finished, this, &GithubDS::dataReadFinished);
-}
-
 void GithubDS::fetchFileData(QString gFileId, QString extension, QString url)
 {
     emit showBusyIndicator(true);
