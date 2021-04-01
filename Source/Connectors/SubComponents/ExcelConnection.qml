@@ -14,7 +14,7 @@ import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
 
-
+import "../../MainSubComponents"
 
 Popup {
     id: popup
@@ -173,6 +173,13 @@ Popup {
         }
     }
     // Row 6: Action Button ends
+
+    BusyIndicatorTpl {
+        id: busyindicator
+        running: true
+        anchors.right: homeBtn.left
+        anchors.rightMargin: 10
+    }
 
 
     MessageDialog{
