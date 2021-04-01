@@ -128,7 +128,6 @@ void DropboxDS::folderNav(QString path)
 {
     emit showBusyIndicator(true);
 
-    const QUrl API_ENDPOINT("https://api.dropboxapi.com/2/files/list_folder");
     QJsonObject obj;
     obj.insert("limit", 100);
     obj.insert("path",path);

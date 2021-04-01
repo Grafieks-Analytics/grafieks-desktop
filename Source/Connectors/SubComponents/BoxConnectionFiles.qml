@@ -210,10 +210,13 @@ Popup {
 
     function onFolderDoubleClicked(name, type, folder_id = null){
 
-        if(type === "folder")
+        if(fileType === "folder"){
             BoxDS.folderNav(folder_id)
+        } else{
+            BoxDS.fetchFileData(fileId, fileExtension)
+        }
 
-        BoxDS.fetchFileData(fileId, fileExtension)
+
 
         updatePath(name);
     }

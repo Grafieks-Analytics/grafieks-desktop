@@ -313,10 +313,7 @@ Popup {
                     onClicked: searchFiles();
 
                 }
-
             }
-
-
         }
 
         // Row  File Search Ends
