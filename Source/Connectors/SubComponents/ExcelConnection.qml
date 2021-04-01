@@ -45,8 +45,23 @@ Popup {
                     msg_dialog.text = status.msg
                 }
             }
+
+            busyindicator.running = false
         }
     }
+
+
+    Component.onCompleted: {
+        busyindicator.running = false
+    }
+
+
+    function handleExcel(excelFileName){
+
+        busyindicator.running = true
+        ConnectorsLoginModel.excelLogin(excelFileName, true)
+    }
+
 
 
     // Popup Header starts
@@ -64,7 +79,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Choose a Excel file"
+            text: "Choose an Excel file"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -93,12 +108,12 @@ Popup {
 
 
 
-    // Row3: Enter port number starts
+    // Row1: Select excel starts
 
 
     Row{
 
-        id: row3
+        id: row1
         anchors.top: header_popup.bottom
         anchors.topMargin: 15
         anchors.left: parent.left
@@ -135,20 +150,27 @@ Popup {
     }
 
 
-    // Row3: Enter port number ends
+    // Row1: Select excel ends
 
 
 
-    // Row 6: Action Button starts
+    // Row 2: Action Button starts
 
     Row{
 
-        id: row6
-        anchors.top: row3.bottom
+        id: row2
+        anchors.top: row1.bottom
         anchors.topMargin: 15
         anchors.right: parent.right
-        anchors.rightMargin: label_col - 70
+        anchors.rightMargin: label_col
         spacing: 10
+
+        BusyIndicatorTpl {
+            id: busyindicator
+            running: false
+            anchors.right: btn_cancel.left
+            anchors.rightMargin: 10
+        }
 
         Button{
             id: btn_cancel
@@ -168,18 +190,11 @@ Popup {
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
-            onClicked: {ConnectorsLoginModel.excelLogin(excelFileName.text, true)}
+            onClicked: handleExcel(excelFileName.text)
 
         }
     }
-    // Row 6: Action Button ends
-
-    BusyIndicatorTpl {
-        id: busyindicator
-        running: true
-        anchors.right: homeBtn.left
-        anchors.rightMargin: 10
-    }
+    // Row 2: Action Button ends
 
 
     MessageDialog{
