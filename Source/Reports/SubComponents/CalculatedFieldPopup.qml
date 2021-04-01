@@ -24,10 +24,19 @@ Popup {
         color: Constants.whiteColor
     }
 
+    /*
+    var formulaKeys = Object.keys(formulajs);
+    formulaKeys.forEach((key) => {
+        window[key] = formulajs[key];
+    });
+
+    console.log(window)
+*/
+
     // Formula.js v 2.6.8
     // Available functions formula.js
 
-    var funcs = [
+    property var funcs : [
     "DATE", "DATEVALUE", "DAY", "DAYS", "DAYS360", "EDATE", "EOMONTH", "HOUR", "MINUTE", "ISOWEEKNUM", "MONTH", "NETWORKDAYS", "NETWORKDAYSINTL", "NOW", "SECOND", "TIME", "TIMEVALUE", "TODAY", "WEEKDAY", "YEAR", "WEEKNUM", "WORKDAY", "WORKDAYINTL", "YEARFRAC",
     "ACCRINT", "CUMIPMT", "CUMPRINC", "DB", "DDB", "DOLLARDE", "DOLLARFR", "EFFECT", "FV", "FVSCHEDULE", "IPMT", "IRR", "ISPMT", "MIRR", "NOMINAL", "NPER", "NPV", "PDURATION", "PMT", "PPMT", "PV", "RATE",
     "BIN2DEC", "BIN2HEX", "BIN2OCT", "BITAND", "BITLSHIFT", "BITOR", "BITRSHIFT", "BITXOR", "COMPLEX", "CONVERT", "DEC2BIN", "DEC2HEX", "DEC2OCT", "DELTA", "ERF", "ERFC", "GESTEP", "HEX2BIN", "HEX2DEC", "HEX2OCT", "IMABS", "IMAGINARY", "IMARGUMENT", "IMCONJUGATE", "IMCOS", "IMCOSH", "IMCOT", "IMCSC", "IMCSCH", "IMDIV", "IMEXP", "IMLN", "IMLOG10", "IMLOG2", "IMPOWER", "IMPRODUCT", "IMREAL", "IMSEC", "IMSECH", "IMSIN", "IMSINH", "IMSQRT", "IMSUB", "IMSUM", "IMTAN", "OCT2BIN", "OCT2DEC", "OCT2HEX",
@@ -38,7 +47,7 @@ Popup {
     ]
 
     // Formulajs example usage
-    var examples = [
+    property var examples : [
     "DATE(2008, 7, 8)", "DATEVALUE('8/22/2011')", "DAY('15-Apr-11')", "DAYS('3/15/11', '2/1/11')", "DAYS360('1-Jan-11', '31-Dec-11')", "EDATE('1/15/11', -1)", "EOMONTH('1/1/11', -3)", "HOUR('7/18/2011 7:45:00 AM')", "MINUTE('2/1/2011 12:45:00 PM')", "ISOWEEKNUM('3/9/2012')", "MONTH('15-Apr-11')", "NETWORKDAYS('10/1/2012', '3/1/2013', ['11/22/2012'])", "NETWORKDAYSINTL('1/1/2006', '2/1/2006', 7, ['1/2/2006'])", "NOW()", "SECOND('2/1/2011 4:48:18 PM')", "TIME(16, 48, 10)", "TIMEVALUE('22-Aug-2011 6:35 AM')", "TODAY()", "WEEKDAY('2/14/2008', 3)", "YEAR('7/5/2008')", "WEEKNUM('3/9/2012', 2)", "WORKDAY('10/1/2008', 151, ['11/26/2008', '12/4/2008'])", "WORKDAYINTL('1/1/2012', 30, 17)", "YEARFRAC('1/1/2012', '7/30/2012', 3)",
     "ACCRINT('01/01/2011', '02/01/2011', '07/01/2014', 0.1, 1000, 1, 0)", "CUMIPMT(0.1/12, 30*12, 100000, 13, 24, 0)", "CUMPRINC(0.1/12, 30*12, 100000, 13, 24, 0)", "DB(1000000, 100000, 6, 1, 6)", "DDB(1000000, 100000, 6, 1, 1.5)", "DOLLARDE(1.1, 16)", "DOLLARFR(1.625, 16)", "EFFECT(0.1, 4)", "FV(0.1/12, 10, -100, -1000, 0)", "FVSCHEDULE(100, [0.09,0.1,0.11])", "IPMT(0.1/12, 6, 2*12, 100000, 1000000, 0)", "IRR([-75000,12000,15000,18000,21000,24000], 0.075)", "ISPMT(0.1/12, 6, 2*12, 100000)", "MIRR([-75000,12000,15000,18000,21000,24000], 0.1, 0.12)", "NOMINAL(0.1, 4)", "NPER(0.1/12, -100, -1000, 10000, 0)", "NPV(0.1, -10000, 2000, 4000, 8000)", "PDURATION(0.1, 1000, 2000)", "PMT(0.1/12, 2*12, 100000, 1000000, 0)", "PPMT(0.1/12, 6, 2*12, 100000, 1000000, 0)", "PV(0.1/12, 2*12, 1000, 10000, 0)", "RATE(2*12, -1000, -10000, 100000, 0, 0.1)",
     "BIN2DEC(101010)", "BIN2HEX(101010)", "BIN2OCT(101010)", "BITAND(42, 24)", "BITLSHIFT(42, 24)", "BITOR(42, 24)", "BITRSHIFT(42, 2)", "BITXOR(42, 24)", "COMPLEX(3, 4)", "CONVERT(64, 'kibyte', 'bit')", "DEC2BIN(42)", "DEC2HEX(42)", "DEC2OCT(42)", "DELTA(42, 42)", "ERF(1)", "ERFC(1)", "GESTEP(42, 24)", "HEX2BIN('2a')", "HEX2DEC('2a')", "HEX2OCT('2a')", "IMABS('3+4i')", "IMAGINARY('3+4i')", "IMARGUMENT('3+4i')", "IMCONJUGATE('3+4i')", "IMCOS('1+i')", "IMCOSH('1+i')", "IMCOT('1+i')", "IMCSC('1+i')", "IMCSCH('1+i')", "IMDIV('1+2i', '3+4i')", "IMEXP('1+i')", "IMLN('1+i')", "IMLOG10('1+i')", "IMLOG2('1+i')", "IMPOWER('1+i', 2)", "IMPRODUCT('1+2i', '3+4i', '5+6i')", "IMREAL('3+4i')", "IMSEC('1+i')", "IMSECH('1+i')", "IMSIN('1+i')", "IMSINH('1+i')", "IMSQRT('1+i')", "IMSUB('3+4i', '1+2i')", "IMSUM('1+2i', '3+4i', '5+6i')", "IMTAN('1+i')", "OCT2BIN('52')", "OCT2DEC('52')", "OCT2HEX('52')",
@@ -48,8 +57,8 @@ Popup {
     "CHAR(65)", "CLEAN('Monthly report')", "CODE('A')", "CONCATENATE('Andreas', ' ', 'Hauser')", "EXACT('Word', 'word')", "FIND('M', 'Miriam&nbsp;McGovern', 3)", "LEFT('Sale Price', 4)", "LEN('Phoenix, AZ')", "LOWER('E. E. Cummings')", "MID('Fluid Flow', 7, 20)", "NUMBERVALUE('2.500,27', ',', '.')", "PROPER('this is a TITLE')", "REGEXEXTRACT('Palo Alto', 'Alto')", "REGEXMATCH('Palo Alto', 'Alto')", "REGEXREPLACE('Sutoiku', 'utoiku', 'TOIC')", "REPLACE('abcdefghijk', 6, 5, '*')", "REPT('*-', 3)", "RIGHT('Sale Price', 5)", "ROMAN(499)", "SEARCH('margin', 'Profit Margin')", "SPLIT('A,B,C', ',')", "SUBSTITUTE('Quarter 1, 2011', '1', '2', 3)", "T('Rainfall')", "TRIM(' First Quarter Earnings ')", "UNICHAR(66)", "UNICODE('B')", "UPPER('total')"
     ]
 
-     // Formulajs example usage data output
-    var out = [
+    // Formulajs example usage data output
+    property var out : [
     "Tue Jul 08 2008 00:00:00 GMT-0700 (PDT)","Mon Aug 22 2011 00:00:00 GMT-0700 (PDT)","15","42","360","Wed Dec 15 2010 00:00:00 GMT-0800 (PST)","Sun Oct 31 2010 00:00:00 GMT-0700 (PDT)","7","45","10","4","109","23","Thu Feb 20 2020 23:02:55 GMT+0100 (Central European Standard Time)","18","0.7001157407","0.2743055556","Thu Feb 20 2020 23:02:55 GMT+0100 (Central European Standard Time)","3","2008","11","Mon May 04 2009 00:00:00 GMT-0700 (PDT)","Sun Feb 05 2012 00:00:00 GMT-0800 (PST)","0.5780821918",
     "350","-9916.772514","-614.0863271","159500","250000","1.625","1.1","0.1038128906","2124.874409","133.089","928.8235718","0.05715142887","-625","0.07971710361","0.09645475634","63.39385423","1031.350318","7.272540897","-42426.08564","-43354.90921","-29864.95026","0.06517891177",
     "42","2a","52","8","704643072","58","10","50","3+4i","524288","101010","2a","52","1","0.8427007929","0.1572992071","1","101010","42","52","5","4","0.927295218","3-4i","0.8337300251311491-0.9888977057628651i","0.8337300251311491+0.9888977057628651i","0.21762156185440265-0.8680141428959249i","0.6215180171704283-0.3039310016284264i","0.3039310016284264-0.6215180171704283i","0.44+0.08i","1.4686939399158851+2.2873552871788423i","0.3465735902799727+0.7853981633974483i","0.1505149978319906+0.3410940884604603i","0.5000000000000001+1.1330900354567985i","1.2246063538223775e-16+2.0000000000000004i","-85+20i","3","0.4983370305551868+0.591083841721045i","0.4983370305551868-0.591083841721045i","1.2984575814159773+0.6349639147847361i","0.6349639147847361+1.2984575814159773i","1.0986841134678098+0.45508986056222733i","2+2i","9+12i","0.2717525853195117+1.0839233273386946i","101010","42","2a",
