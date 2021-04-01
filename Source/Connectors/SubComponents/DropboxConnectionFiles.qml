@@ -39,6 +39,8 @@ Popup {
     property var filePathFolder: ""
     property var filePathLower: ""
 
+    property var navigationPaths: []
+
 
 
     /***********************************************************************************************************************/
@@ -188,8 +190,8 @@ Popup {
 
     function onFileDoubleClicked(id, name, tag, pathFolder, pathLower){
 
-        if(tag === "folder"){
-            DropboxDS.folderNav(pathFolder)
+        if(fileTag === "folder"){
+            DropboxDS.folderNav(filePathFolder)
         } else{
             DropboxDS.fetchFileData(fileId, fileName, fileExtension)
         }
