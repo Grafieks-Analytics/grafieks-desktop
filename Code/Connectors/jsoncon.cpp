@@ -42,7 +42,7 @@ QString JsonCon::convertJsonToCsv(QString &jsonPath)
     QFile csvFile;
     QFileInfo fi(jsonPath);
 
-    QString outPath = QDir::tempPath() + fi.completeBaseName();
+    QString outPath = QDir::tempPath() + "/" + fi.completeBaseName();
     csvFile.setFileName(outPath);
     if( csvFile.open(QIODevice::WriteOnly | QIODevice::Text))
     {

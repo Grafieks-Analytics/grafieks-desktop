@@ -289,7 +289,8 @@ void ConnectorsLoginModel::jsonLogin(QString filename, bool directLogin)
     Statics::currentDbIntType = Constants::jsonIntType;
     Statics::currentDbClassification = Constants::duckType;
 
-    this->setConnectedDB(filename);
+    QFileInfo fi(filename);
+    this->setConnectedDB(fi.baseName());
 
     emit connectedDBType(Constants::duckType);
     emit sendDbName();
@@ -307,7 +308,8 @@ void ConnectorsLoginModel::excelLogin(QString filename, bool directLogin)
     Statics::currentDbIntType = Constants::excelIntType;
     Statics::currentDbClassification = Constants::duckType;
 
-    this->setConnectedDB(filename);
+    QFileInfo fi(filename);
+    this->setConnectedDB(fi.baseName());
 
     emit connectedDBType(Constants::duckType);
     emit sendDbName();
