@@ -46,11 +46,18 @@ TableView {
     // Connections Starts
 
     Connections{
-        target: ConnectorsLoginModel
+        target: QueryModel
 
-        function onConnectedDBType(conType){
-            globalConType = conType
-            dataPreviewResult.model = globalConType === Constants.sqlType? QueryModel: DuckQueryModel
+        function onSqlHasData(hasData){
+            dataPreviewResult.model = hasData === true? QueryModel: ""
+        }
+    }
+
+    Connections{
+        target: DuckQueryModel
+
+        function onDuckHasData(hasData){
+            dataPreviewResult.model = hasData === true? DuckQueryModel: ""
         }
     }
 
