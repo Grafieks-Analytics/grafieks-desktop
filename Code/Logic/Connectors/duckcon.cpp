@@ -48,6 +48,7 @@ void DuckCon::createTable(){
             Statics::currentDbName = fileName;
             QFileInfo fi(csvdb.c_str());
             std::unique_ptr<duckdb::MaterializedQueryResult> res2 = con.Query("CREATE TABLE " + fi.baseName().toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
+            qDebug() << "ERROR HAPP" <<res2->error.c_str() << res2->error.empty();
         }
 
     } else{
