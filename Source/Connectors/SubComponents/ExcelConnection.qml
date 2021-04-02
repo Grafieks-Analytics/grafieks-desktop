@@ -50,6 +50,18 @@ Popup {
         }
     }
 
+    Connections{
+        target: DuckCon
+
+        function onImportError(errorString){
+            if(errorString.length > 0){
+                // Show on import csv error
+                error_dialog.open();
+                error_dialog.text = errorString
+            }
+        }
+    }
+
 
     Component.onCompleted: {
         busyindicator.running = false
@@ -200,6 +212,13 @@ Popup {
     MessageDialog{
         id: msg_dialog
         title: "Excel Connection"
+        text: ""
+        icon: StandardIcon.Critical
+    }
+
+    MessageDialog{
+        id: error_dialog
+        title: "Excel Import Error"
         text: ""
         icon: StandardIcon.Critical
     }

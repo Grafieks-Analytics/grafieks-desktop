@@ -37,7 +37,11 @@ void DuckCon::createTable(){
 
         csvdb = "'" + csvFile + "'";
         Statics::currentDbName = fileName;
-        con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
+        std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
+        if(res->error.empty() == false){
+            emit importError("Please remove special characters from input Json file");
+            qWarning() << "JSON import issue" << res->error.c_str();
+        }
 
     } else if(fileExtension.toLower() == "xls" || fileExtension.toLower() == "xlsx"){
         excelSheetsList = excelToCsv.convertExcelToCsv(Statics::currentDbName);
@@ -45,16 +49,24 @@ void DuckCon::createTable(){
 
         for ( const QString& csvFile : excelSheetsList  ) {
             csvdb = "'" + (csvFile + ".csv").toStdString() + "'";
-            Statics::currentDbName = fileName;
             QFileInfo fi(csvdb.c_str());
-            std::unique_ptr<duckdb::MaterializedQueryResult> res2 = con.Query("CREATE TABLE " + fi.baseName().toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
-            qDebug() << "ERROR HAPP" <<res2->error.c_str() << res2->error.empty();
+            Statics::currentDbName = fi.baseName();
+            std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + fi.baseName().toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
+            if(res->error.empty() == false){
+                emit importError("Please remove special characters from input Excel file");
+                qWarning() << "Excel import issue" << res->error.c_str();
+                break;
+            }
         }
 
     } else{
         csvdb = "'" + csvFile + "'";
         Statics::currentDbName = fileName;
-        con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
+        std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
+        if(res->error.empty() == false){
+            emit importError("Please remove special characters from input CSV file");
+            qWarning() << "CSV import issue" << res->error.c_str();
+        }
     }
 
 }
