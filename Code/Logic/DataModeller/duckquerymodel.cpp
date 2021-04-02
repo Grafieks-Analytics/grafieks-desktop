@@ -14,6 +14,7 @@ DuckQueryModel::DuckQueryModel(DuckCon *duckCon, QObject *parent)
 
 void DuckQueryModel::setQuery(QString query)
 {
+    this->resultData.clear();
     this->query = query;
     querySplitter.setQueryForClasses(this->query);
 
