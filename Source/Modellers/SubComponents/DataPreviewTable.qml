@@ -50,6 +50,7 @@ TableView {
 
         function onSqlHasData(hasData){
             dataPreviewResult.model = hasData === true? QueryModel: ""
+            globalConType = Constants.sqlType
         }
     }
 
@@ -58,6 +59,7 @@ TableView {
 
         function onDuckHasData(hasData){
             dataPreviewResult.model = hasData === true? DuckQueryModel: ""
+            globalConType = Constants.duckType
         }
     }
 
