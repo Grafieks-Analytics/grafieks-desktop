@@ -50,7 +50,7 @@ void DuckCon::createTable(){
         for ( const QString& csvFile : excelSheetsList  ) {
             csvdb = "'" + (csvFile + ".csv").toStdString() + "'";
             QFileInfo fi(csvdb.c_str());
-            Statics::currentDbName = fi.baseName();
+            Statics::currentDbName = fileName;
             std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + fi.baseName().toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ")");
             if(res->error.empty() == false){
                 emit importError("Please remove special characters from input Excel file");
