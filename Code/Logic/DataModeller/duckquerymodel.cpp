@@ -128,6 +128,12 @@ void DuckQueryModel::setQueryResult()
         list.clear();
 
     }
+
+    if(this->internalRowCount > 0){
+        emit duckHasData(true);
+    } else{
+        emit duckHasData(false);
+    }
     endResetModel();
 }
 

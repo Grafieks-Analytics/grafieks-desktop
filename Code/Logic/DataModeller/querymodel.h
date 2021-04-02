@@ -37,6 +37,7 @@ public slots:
 signals:
     void chartDataChanged(QMap<int, QStringList*> chartData);
     void chartHeaderChanged(QMap<int, QString> chartHeader);
+    void sqlHasData(bool hasData);
 
 private:
     QHash<int, QByteArray> m_roleNames;
