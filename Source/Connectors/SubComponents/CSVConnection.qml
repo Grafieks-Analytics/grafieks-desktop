@@ -46,6 +46,18 @@ Popup {
         }
     }
 
+    Connections{
+        target: DuckCon
+
+        function onImportError(errorString){
+            if(errorString.length > 0){
+                // Show on import csv error
+                error_dialog.open();
+                error_dialog.text = errorString
+            }
+        }
+    }
+
 
     // Popup Header starts
 
@@ -207,6 +219,13 @@ Popup {
     MessageDialog{
         id: msg_dialog
         title: "CSV Connection"
+        text: ""
+        icon: StandardIcon.Critical
+    }
+
+    MessageDialog{
+        id: error_dialog
+        title: "CSV Impoer Error"
         text: ""
         icon: StandardIcon.Critical
     }
