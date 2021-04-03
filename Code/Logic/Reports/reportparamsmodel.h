@@ -9,7 +9,7 @@ class ReportParamsModel: public QObject
     Q_OBJECT
 
     // Customize Report parameters
-    QMap<int, QVector<int>> reportsMap; // <<reportId, reportObj>>
+    QMap<int, QMap<QString, QString>> reportsMap; // <<reportId, reportObj>>
 
     Q_PROPERTY(QString itemName READ itemName WRITE setItemName NOTIFY itemNameChanged)
     Q_PROPERTY(QString itemType READ itemType WRITE setItemType NOTIFY itemTypeChanged)
@@ -20,6 +20,10 @@ class ReportParamsModel: public QObject
     Q_PROPERTY(QString calculatedFieldPopupStatus READ calculatedFieldPopupStatus WRITE setCalculatedFieldPopupStatus NOTIFY calculatedFieldPopupStatusChanged)
     Q_PROPERTY(QList<QString> xAxisColumns READ xAxisColumns WRITE setXAxisColumns NOTIFY xAxisColumnsChanged)
     Q_PROPERTY(QList<QString> yAxisColumns READ yAxisColumns WRITE setYAxisColumns NOTIFY yAxisColumnsChanged)
+    Q_PROPERTY(QList<QString> dataValuesColumns READ dataValuesColumns WRITE setDataValuesColumns NOTIFY dataValuesChanged)
+
+    Q_PROPERTY(QString pointerValue READ pointerValue WRITE setPointerValue NOTIFY pointerValueChanged)
+
     Q_PROPERTY(QString chartType READ chartType WRITE setChartType NOTIFY chartTypeChanged)
     Q_PROPERTY(QString reportId READ reportId WRITE setReportId NOTIFY reportIdChanged)
     Q_PROPERTY(QString reportTitle READ reportTitle WRITE setReportTitle NOTIFY reportTitleChanged)
@@ -47,6 +51,10 @@ class ReportParamsModel: public QObject
 
     QString m_reportTitle;
 
+    QList<QString> m_dataValuesColumns;
+
+    QString m_pointerValue;
+
 public:
     ReportParamsModel();
     QString itemName() const;
@@ -62,17 +70,17 @@ public:
 
     QString calculatedFieldPopupStatus() const;
 
-
-
     QList<QString> xAxisColumns() const;
-
     QList<QString> yAxisColumns() const;
-
     QString chartType() const;
-
     QString reportId() const;
-
     QString reportTitle() const;
+
+    Q_INVOKABLE void addReport(int reportId);
+
+    QList<QString> dataValuesColumns() const;
+
+    QString pointerValue() const;
 
 public slots:
     void setItemName(QString itemName);
@@ -99,6 +107,10 @@ public slots:
 
     void setReportTitle(QString reportTitle);
 
+    void setDataValuesColumns(QList<QString> dataValuesColumns);
+
+    void setPointerValue(QString pointerValue);
+
 signals:
     void itemNameChanged(QString itemName);
     void itemTypeChanged(QString itemType);
@@ -114,6 +126,8 @@ signals:
     void chartTypeChanged(QString chartType);
     void reportIdChanged(QString reportId);
     void reportTitleChanged(QString reportTitle);
+    void dataValuesChanged(QList<QString> dataValuesColumns);
+    void pointerValueChanged(QString pointerValue);
 };
 
 #endif // REPORTPARAMSMODEL_H

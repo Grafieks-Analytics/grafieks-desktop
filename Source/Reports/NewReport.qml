@@ -37,6 +37,8 @@ Page {
     property bool lineTypeChartVisible: false
 
     property bool row3Visible: false
+    property bool pivotThemeVisible: false
+
 
     property string yAxisLabelName: Constants.yAxisName
     property string xAxisLabelName: Constants.xAxisName
@@ -53,63 +55,54 @@ Page {
     property var d3PropertyConfig: ({});
 
     onChartTitleChanged: {
-        console.log(chartTitle);
+
         switch(chartTitle){
         case Constants.stackedBarChartTitle:
             chartUrl=Constants.stackedBarChartUrl
             webEngineView.url = Constants.chartsBaseUrl+Constants.stackedBarChartUrl;
+            xAxisVisible = true
+            yAxisVisible = true
+            row3Visible = false
+            row4Visible = false
             break;
         case Constants.stackedAreaChartTitle:
             chartUrl=Constants.stackedAreaChartUrl;
             webEngineView.url = Constants.chartsBaseUrl+Constants.stackedAreaChartUrl;
+            xAxisVisible = true
+            yAxisVisible = true
+            row3Visible = false
+            row4Visible = false
             break;
-        case Constants.sankeyChartTitle:
         case Constants.pivotTitle:
             row3Visible =  true;
+            xAxisVisible = true
+            yAxisVisible = true
+            row4Visible = false
+            pivotThemeVisible=true
             break;
         case Constants.tableTitle:
-            yAxisVisible = false;
+            yAxisVisible = false
+            xAxisVisible = true
+            row3Visible = false
+            row4Visible = false
             break;
         case Constants.gaugeChartTitle:
             row4Visible = true
             xAxisVisible =  false
             yAxisVisible =  false
             row3Visible =  false
-            break
+            break;
         default:
             xAxisVisible = true
-            yAxisVisible = true;
-            row3Visible = false;
+            yAxisVisible = true
+            row3Visible = false
             row4Visible = false
         }
 
     }
 
     onReportChartChanged: {
-
         chartTitle = reportChart;
-
-        //        ReportParamsModel.setXAxisColumns([]);
-        //        ReportParamsModel.setYAxisColumns([]);
-
-        //        xAxisListModel.clear();
-        //        yAxisListModel.clear();
-
-        //        console.log(ReportParamsModel.xAxisColumns);
-        //        console.log(ReportParamsModel.yAxisColumns);
-
-        //        switch(reportChart){
-        //        case Constants.stackedBarChart:
-        //            changeChart("qrc:/Source/Charts/StackedBarChart.html");
-
-        //            let resizeQuery = 'window.addEventListener("resize", function () {' +
-        //                'console.log("resizing");'+
-        //                'd3.selectAll("#my_dataviz").html(""); '+
-        //                'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
-        //            webEngineView.runJavaScript(resizeQuery);
-        //            break;
-        //        }
-
     }
 
 
@@ -223,8 +216,8 @@ Page {
 
     }
 
+    // Load New Chart
     function changeChart(chartname){
-        console.log('Changing Chart Name',chartname)
         webEngineView.url = chartname;
     }
 
@@ -283,6 +276,7 @@ Page {
 
         var itemName = ReportParamsModel.itemName;
         var xAxisColumns = ReportParamsModel.xAxisColumns;
+
         var yAxisColumns = ReportParamsModel.yAxisColumns;
         var valuesColumns = [];
 
@@ -295,6 +289,7 @@ Page {
             xAxisListModel.append({itemName: itemName})
             xAxisColumns.push(itemName);
             ReportParamsModel.setXAxisColumns(xAxisColumns);
+
         }else if(axis === Constants.yAxisName){
             if(!yAxisDropEligible(itemName)){
                 return;
@@ -341,8 +336,10 @@ Page {
 
         if(xAxisColumns.length && yAxisColumns.length){
 
-            console.log(xAxisColumns);
-            console.log(yAxisColumns);
+            var xAxisColumnNamesArray = [];
+            for(var i=0;i<xAxisColumns.length;i++){
+                xAxisColumnNamesArray.push(xAxisColumns[i]);
+            }
 
             var dataValues = null;
             console.log('Chart Title',chartTitle)
@@ -366,7 +363,7 @@ Page {
                 break;
             case Constants.groupBarChartTitle:
                 console.log('Grouped bar chart!');
-                dataValues =  ChartsModel.getGroupedBarChartValues(xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
+                dataValues =  ChartsModel.getGroupedBarChartValues(xAxisColumns[1],yAxisColumns[0], xAxisColumns[0]);
                 break;
             case Constants.areaChartTitle:
                 console.log("AREA CLICKED")
@@ -404,21 +401,19 @@ Page {
                 break;
             case Constants.treeChartTitle:
                 console.log("TREECHART CLICKED")
-                dataValues = ChartsModel.getTreeChartValues(xAxisColumns,yAxisColumns[0],'Sum');
+                dataValues = ChartsModel.getTreeChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
                 break;
             case Constants.treeMapChartTitle:
-                console.log("TREEMAP CLICKED")
-                dataValues = ChartsModel.getTreeMapChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                dataValues = ChartsModel.getTreeMapChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
+                console.log(dataValues);
                 break;
             case Constants.heatMapChartTitle:
                 console.log("HEATMAP CLICKED")
                 dataValues = ChartsModel.getHeatMapChartValues(xAxisColumns[0],yAxisColumns[0], ReportParamsModel.itemName);
                 break;
             case Constants.sunburstChartTitle:
-                console.log("SUNBURST CLICKED", typeof xAxisColumns)
-//                dataValues = ChartsModel.getSunburstChartValues(xAxisColumns,yAxisColumns[0],'Sum');
-
-                                dataValues = ChartsModel.getSunburstChartValues(["state", "district", "ward"], "population",'Sum');
+                console.log("SUNBURST CLICKED");
+                dataValues = ChartsModel.getSunburstChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
                 break;
             case Constants.waterfallChartTitle:
                 console.log("WATERFALL CLICKED")
@@ -432,8 +427,6 @@ Page {
             case Constants.sankeyChartTitle:
                 console.log("SANKEY CLICKED")
                 dataValues = ChartsModel.getSankeyChartValues(xAxisColumns[0],  xAxisColumns[1], yAxisColumns[0] );
-                // Sankey
-                //                 dataValues = ChartsModel.getSankeyChartValues("state", "district", "population");
                 break;
             case Constants.kpiTitle:
                 console.log("KPI CLICKED")
