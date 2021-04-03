@@ -345,8 +345,7 @@ Rectangle{
 
         }
 
-        console.log('LeftMenu Running')
-
+        // Setting initial default values
         allowedXAxisDataPanes = 2;
         allowedYAxisDataPanes = 1;
     }
