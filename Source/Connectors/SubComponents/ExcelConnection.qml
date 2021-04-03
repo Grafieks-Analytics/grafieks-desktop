@@ -14,7 +14,7 @@ import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
 
-
+import "../../MainSubComponents"
 
 Popup {
     id: popup
@@ -31,21 +31,49 @@ Popup {
     Connections{
         target: ConnectorsLoginModel
 
-        function onExcelLoginStatus(status){
-            console.log(status)
+        function onExcelLoginStatus(status, directLogin){
 
-            if(status.status === true){
+            if(directLogin === true){
+                if(status.status === true){
 
-                popup.visible = false
-                stacklayout_home.currentIndex = 5
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
             }
-            else{
-                popup.visible = true
-                msg_dialog.open()
-                msg_dialog.text = status.msg
+
+            busyindicator.running = false
+        }
+    }
+
+    Connections{
+        target: DuckCon
+
+        function onImportError(errorString){
+            if(errorString.length > 0){
+                // Show on import csv error
+                error_dialog.open();
+                error_dialog.text = errorString
             }
         }
     }
+
+
+    Component.onCompleted: {
+        busyindicator.running = false
+    }
+
+
+    function handleExcel(excelFileName){
+
+        busyindicator.running = true
+        ConnectorsLoginModel.excelLogin(excelFileName, true)
+    }
+
 
 
     // Popup Header starts
@@ -63,7 +91,7 @@ Popup {
 
         Text{
             id : text1
-            text: "Choose a Excel file"
+            text: "Choose an Excel file"
             anchors.verticalCenter: parent.verticalCenter
             anchors.left : parent.left
             font.pixelSize: Constants.fontCategoryHeader
@@ -92,12 +120,12 @@ Popup {
 
 
 
-    // Row3: Enter port number starts
+    // Row1: Select excel starts
 
 
     Row{
 
-        id: row3
+        id: row1
         anchors.top: header_popup.bottom
         anchors.topMargin: 15
         anchors.left: parent.left
@@ -134,20 +162,27 @@ Popup {
     }
 
 
-    // Row3: Enter port number ends
+    // Row1: Select excel ends
 
 
 
-    // Row 6: Action Button starts
+    // Row 2: Action Button starts
 
     Row{
 
-        id: row6
-        anchors.top: row3.bottom
+        id: row2
+        anchors.top: row1.bottom
         anchors.topMargin: 15
         anchors.right: parent.right
-        anchors.rightMargin: label_col - 70
+        anchors.rightMargin: label_col
         spacing: 10
+
+        BusyIndicatorTpl {
+            id: busyindicator
+            running: false
+            anchors.right: btn_cancel.left
+            anchors.rightMargin: 10
+        }
 
         Button{
             id: btn_cancel
@@ -167,11 +202,11 @@ Popup {
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
-            onClicked: {ConnectorsLoginModel.excelLogin(excelFileName.text)}
+            onClicked: handleExcel(excelFileName.text)
 
         }
     }
-    // Row 6: Action Button ends
+    // Row 2: Action Button ends
 
 
     MessageDialog{
@@ -181,11 +216,18 @@ Popup {
         icon: StandardIcon.Critical
     }
 
+    MessageDialog{
+        id: error_dialog
+        title: "Excel Import Error"
+        text: ""
+        icon: StandardIcon.Critical
+    }
+
     // Select Excel file
     FileDialog{
         id: promptExcel
         title: "Select a file"
-         nameFilters: ["Excel files (*.xls *.xlsx)"];
+        nameFilters: ["Excel files (*.xls *.xlsx)"];
 
 
         onAccepted: {

@@ -31,18 +31,31 @@ Popup {
     Connections{
         target: ConnectorsLoginModel
 
-        function onJsonLoginStatus(status){
-            console.log(status)
+        function onJsonLoginStatus(status, directLogin){
 
-            if(status.status === true){
+            if(directLogin === true){
+                if(status.status === true){
 
-                popup.visible = false
-                stacklayout_home.currentIndex = 5
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
             }
-            else{
-                popup.visible = true
-                msg_dialog.open()
-                msg_dialog.text = status.msg
+        }
+    }
+
+    Connections{
+        target: DuckCon
+
+        function onImportError(errorString){
+            if(errorString.length > 0){
+                // Show on import csv error
+                error_dialog.open();
+                error_dialog.text = errorString
             }
         }
     }
@@ -167,7 +180,7 @@ Popup {
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
-            onClicked: {ConnectorsLoginModel.jsonLogin(jsonFileName.text)}
+            onClicked: {ConnectorsLoginModel.jsonLogin(jsonFileName.text, true)}
 
         }
     }
@@ -177,6 +190,13 @@ Popup {
     MessageDialog{
         id: msg_dialog
         title: "Json Connection"
+        text: ""
+        icon: StandardIcon.Critical
+    }
+
+    MessageDialog{
+        id: error_dialog
+        title: "JSON import Error"
         text: ""
         icon: StandardIcon.Critical
     }

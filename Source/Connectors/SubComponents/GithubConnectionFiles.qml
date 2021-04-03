@@ -30,6 +30,11 @@ Popup {
     property var pathFolder: "Github"
     property var folderName: "Folder name"
 
+    property var fileId: ""
+    property var fileName: ""
+    property var fileExtension: ""
+    property var fileUrl: ""
+
     closePolicy: Popup.NoAutoClose
 
     /***********************************************************************************************************************/
@@ -87,6 +92,66 @@ Popup {
                 busyindicator.running = false
             }
         }
+
+        function onFileDownloaded(filePath, fileType){
+
+            if(fileType === "csv"){
+                ConnectorsLoginModel.csvLogin(filePath, false, ",")
+            } else if(fileType === "excel"){
+                ConnectorsLoginModel.excelLogin(filePath, false)
+            } else if(fileType === "json"){
+                ConnectorsLoginModel.jsonLogin(filePath, false)
+            }
+        }
+    }
+
+    Connections{
+        target: ConnectorsLoginModel
+
+        function onCsvLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
+
+        function onExcelLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
+
+        function onJsonLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
     }
 
     // Connections Ends
@@ -108,13 +173,8 @@ Popup {
     }
 
 
-    function onHomeClicked(){
-        DriveDS.folderNav("0")
-        updatePath("Github")
-    }
-
     function searchFiles(){
-        DriveDS.searchQuer(server_files.text)
+        GithubDS.searchQuer(server_files.text)
     }
 
 
@@ -126,31 +186,25 @@ Popup {
         fileNotSelectedMsg.visible = false
     }
 
-    function onFileClicked(name,type){
+    function onFileClicked(id, name, modifiedTime, extension, url){
 
         showSelectedFileDetails();
         hideFileNotSelectedMessage();
 
-        detailName.text = name;
+        detailNameDisplay.text = name;
+        documentTypeDisplay.text = extension;
+        modifiedTimeDisplay.text = modifiedTime;
 
-        if(type === "folder"){
-            pathFolder = id;
-            folderName = name;
-        }
-
-        if(type === "file")
-        {
-            path.text = name
-            detailName.text = name;
-        }
+        fileId = id
+        fileName = name
+        fileExtension = extension
+        fileUrl = url
 
     }
 
-    function onFolderDoubleClicked(name,type){
-        if(type === "folder")
-            DriveDS.folderNav(pathFolder)
+    function onFolderDoubleClicked(){
 
-        path.text = name
+        GithubDS.fetchFileData(fileId, fileExtension, fileUrl)
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -270,7 +324,7 @@ Popup {
         // Row  File List Table Starts
 
         Row{
-            id: dropdriveFilesList
+            id: dropGithubFilesList
             anchors.top : searchFileRow.bottom
 
             anchors.topMargin: 20
@@ -285,14 +339,17 @@ Popup {
 
                     ListView{
                         id: fileList
-                        model:DriveModel
+                        model:GithubModel
                         clip: true
-                        height: 200
+                        height: parent.height
                         width: popup.width * 0.6
+                        ScrollBar.vertical: ScrollBar {}
+                        headerPositioning: ListView.OverlayHeader
 
                         header: Row{
 
                             width: popup.width * 0.6
+                            z: 10
                             Column{
                                 width: 20
                                 Rectangle{
@@ -389,8 +446,8 @@ Popup {
                                     MouseArea{
 
                                         anchors.fill:parent
-                                        onClicked:onFileClicked(name,tag);
-                                        onDoubleClicked: onFolderDoubleClicked(name,tag)
+                                        onClicked:onFileClicked(id, name, modifiedTime, extension, url);
+                                        onDoubleClicked: onFolderDoubleClicked()
                                     }
                                 }
 
@@ -425,7 +482,7 @@ Popup {
                                     anchors.left: parent
 
                                     Text {
-                                        text: qsTr(modifiedAt)
+                                        text: qsTr(modifiedTime)
                                         padding: 5
                                         leftPadding: 20
                                     }
@@ -512,11 +569,7 @@ Popup {
                                 padding: 5
                                 text: qsTr("Last Modified")
                             }
-                            Text {
-                                anchors.right: parent.right
-                                padding: 5
-                                text: qsTr("Size")
-                            }
+
 
                         }
 
@@ -526,20 +579,18 @@ Popup {
                             width: parent.width/2 + 5
 
                             Text {
-                                id: detailName
+                                id: detailNameDisplay
                                 text: qsTr("Test.xlsx")
                                 padding: 5
                             }
                             Text {
+                                id: documentTypeDisplay
                                 text: qsTr("Document")
                                 padding: 5
                             }
                             Text {
+                                id: modifiedTimeDisplay
                                 text: qsTr("24/05/2020 14:30")
-                                padding: 5
-                            }
-                            Text {
-                                text: qsTr("50 MB")
                                 padding: 5
                             }
 
@@ -558,7 +609,7 @@ Popup {
 
 
         Row{
-            anchors.top: dropdriveFilesList.bottom
+            anchors.top: dropGithubFilesList.bottom
 
             anchors.topMargin: 20
 
@@ -584,38 +635,15 @@ Popup {
             Rectangle{
                 width: popup.width * 0.4
                 anchors.left:breadcrumb.right
-                anchors.leftMargin: popup.width * 0.4  - 250
+                anchors.leftMargin: popup.width * 0.4  - 190
 
                 BusyIndicatorTpl {
                     id: busyindicator
                     running: true
-                    anchors.right: homeBtn.left
-                    anchors.rightMargin: 10
+                    anchors.left: parent.left
                 }
 
-                CustomButton{
 
-                    id: homeBtn
-                    height: 40
-                    width: 100
-                    textValue: "Home"
-                    anchors.right: cancelBtn.left
-                    anchors.rightMargin: 10
-
-                    onClicked: onHomeClicked();
-
-                }
-
-                CustomButton{
-
-                    id: cancelBtn
-                    height: 40
-                    width: 100
-                    textValue: "Back"
-                    anchors.leftMargin: 10
-                    onClicked: hidePopup()
-
-                }
 
                 CustomButton{
 
@@ -623,8 +651,10 @@ Popup {
                     height: 40
                     width: 100
                     textValue: "Next"
-                    anchors.left: cancelBtn.right
+                    anchors.left: busyindicator.right
                     anchors.leftMargin: 10
+
+                    onClicked: onFolderDoubleClicked()
 
                 }
 

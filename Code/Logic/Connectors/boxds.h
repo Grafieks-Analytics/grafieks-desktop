@@ -16,6 +16,7 @@
 #include <QDesktopServices>
 #include <QOAuthHttpServerReplyHandler>
 #include <QtDebug>
+#include <QDir>
 
 #include "box.h"
 #include "../../secrets.h"
@@ -36,11 +37,10 @@ public:
     Q_INVOKABLE void fetchDatasources();
     Q_INVOKABLE void folderNav(QString path);
     Q_INVOKABLE void searchQuer(QString path);
+    Q_INVOKABLE void fetchFileData(QString fileId, QString fileExtension);
 
     void addDataSource(Box *box);
     Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & type,const QString & modifiedAt,const QString & extension);
-
-    Q_INVOKABLE void downloadFile(QString filePath);
 
     QList<Box *> dataItems();
 
@@ -53,13 +53,15 @@ signals:
     void postReset();
     void getBoxUsername(QString username);
     void showBusyIndicator(bool status);
+    void fileDownloaded(QString filePath, QString fileType);
 
 private slots:
     void resetDatasource();
     void dataReadyRead();
     void dataReadFinished();
+    void dataSearchFinished();
     void userReadFinished();
-    void saveFile();
+    void fileDownloadFinished();
 
 public slots:
 
@@ -71,7 +73,8 @@ private:
     QOAuth2AuthorizationCodeFlow * box;
     QString token;
 
-
+    QString boxFileId;
+    QString boxExtension;
 };
 
 #endif // BOXDS_H

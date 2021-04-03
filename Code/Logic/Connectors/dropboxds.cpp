@@ -128,7 +128,6 @@ void DropboxDS::folderNav(QString path)
 {
     emit showBusyIndicator(true);
 
-    const QUrl API_ENDPOINT("https://api.dropboxapi.com/2/files/list_folder");
     QJsonObject obj;
     obj.insert("limit", 100);
     obj.insert("path",path);
@@ -179,25 +178,35 @@ void DropboxDS::searchQuer(QString path)
 }
 
 
-void DropboxDS::downloadFile(QString fileId)
+void DropboxDS::fetchFileData(QString fileId, QString fileName, QString extension)
 {
 
     emit showBusyIndicator(true);
+    qDebug() << fileId << extension << "DROPBOX" << this->dropbox->token();
+
+    this->dropBoxFileId = fileId;
+    this->dropBoxFileName = fileName;
+    this->extension = extension;
 
     QJsonObject obj;
+    obj.insert("path",fileId);
     QJsonDocument doc(obj);
     QString strJson(doc.toJson(QJsonDocument::Compact));
 
-    QString headerArg = "{path: "+fileId+"}";
 
     QNetworkRequest m_networkRequest;
     m_networkRequest.setUrl(QUrl("https://content.dropboxapi.com/2/files/download"));
+    m_networkRequest.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+    m_networkRequest.setMaximumRedirectsAllowed(5);
 
-    m_networkRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
+    m_networkRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/octet-stream; charset=utf-8");
     m_networkRequest.setRawHeader("Authorization", "Bearer " + token.toUtf8());
-    m_networkRequest.setRawHeader("Dropbox-API-Arg", headerArg.toUtf8());
+    m_networkRequest.setRawHeader("Dropbox-API-Arg", strJson.toUtf8());
 
-    m_networkReply = m_networkAccessManager->post(m_networkRequest, strJson.toUtf8());
+    QByteArray b;
+    b.clear();
+    m_networkReply = m_networkAccessManager->post(m_networkRequest, b);
+    //    connect(m_networkReply,&QIODevice::readyRead,this,&DropboxDS::dataReadyRead);
     connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::saveFile);
 }
 
@@ -269,7 +278,7 @@ void DropboxDS::dataReadFinished()
     else{
 
         QStringList requiredExtensions;
-        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json" << ".ods";
+        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json";
 
         this->resetDatasource();
 
@@ -307,9 +316,15 @@ void DropboxDS::dataReadFinished()
 
         m_dataBuffer->clear();
 
-        // Get user email
-//        m_networkReply = this->dropbox->post(QUrl("https://api.dropboxapi.com/2/users/get_current_account/"));
-//        connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::userReadFinished);
+        //        Get user email
+        QByteArray blankPostReq;
+
+        QNetworkRequest m_networkRequest;
+        m_networkRequest.setRawHeader("Authorization", "Bearer " + token.toUtf8());
+        m_networkRequest.setUrl(QUrl("https://api.dropboxapi.com/2/users/get_current_account"));
+
+        m_networkReply = m_networkAccessManager->post(m_networkRequest, blankPostReq);
+        connect(m_networkReply,&QNetworkReply::finished,this,&DropboxDS::userReadFinished);
 
     }
     emit showBusyIndicator(false);
@@ -325,7 +340,7 @@ void DropboxDS::dataSearchedFinished()
         qDebug()<< "There was some error :" << m_networkReply->errorString();
     }else{
         QStringList requiredExtensions;
-        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json" << ".ods";
+        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json";
 
         this->resetDatasource();
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
@@ -371,32 +386,49 @@ void DropboxDS::dataSearchedFinished()
 void DropboxDS::userReadFinished()
 {
     m_dataBuffer->append(m_networkReply->readAll());
+    int statusCode = m_networkReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+    qDebug() << statusCode << "STATUS" << this->dropbox->token();
     if(m_networkReply->error() ){
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
     }else{
 
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
-//        QJsonObject resultObj = resultJson.object();
+        QJsonObject resultObj = resultJson.object();
 
-        qDebug() << "USERD" << resultJson;
-
-//        QJsonObject user = resultObj.value("user").toObject();
-//        emit getDropboxUsername(user["emailAddress"].toString());
+        emit getDropboxUsername(resultObj.value("email").toString());
     }
 
+
+    m_dataBuffer->clear();
     emit showBusyIndicator(false);
 }
 
 void DropboxDS::saveFile()
 {
 
-    QByteArray arr = m_networkReply->readAll();
+    if(m_networkReply->error() ){
+        qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
-    QFile file("C:\\Users\\chill\\Desktop\\x2.xlsx");
-    file.open(QIODevice::WriteOnly);
-    file.write(arr);
-    file.close();
+    }else{
+
+        QString fileName = QDir::temp().tempPath() +"/" + this->dropBoxFileId.remove(0,3) + this->extension;
+        QFile file(fileName);
+        file.open(QIODevice::WriteOnly);
+        file.write(m_networkReply->readAll());
+        file.close();
+
+        if(this->extension.contains("xls")){
+            emit fileDownloaded(fileName, "excel");
+
+        } else if(this->extension.contains("csv")){
+            emit fileDownloaded(fileName,"csv");
+
+        } else if(this->extension.contains("json")){
+            emit fileDownloaded(fileName, "json");
+        }
+    }
 
     emit showBusyIndicator(false);
 }
@@ -405,6 +437,3 @@ void DropboxDS::addDatasourceHelper(QJsonDocument &doc)
 {
 
 }
-
-
-

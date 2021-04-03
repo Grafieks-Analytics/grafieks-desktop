@@ -52,6 +52,7 @@ BoxDS::BoxDS(QObject *parent) : QObject(parent),
         api.setQuery(quer);
         m_networkRequest.setUrl(api);
 
+
         m_networkRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
         m_networkRequest.setRawHeader("Authorization", "Bearer " + this->box->token().toUtf8());
         token = this->box->token();
@@ -126,8 +127,7 @@ void BoxDS::searchQuer(QString path)
     token = this->box->token();
 
     m_networkReply = m_networkAccessManager->get(m_networkRequest);
-    connect(m_networkReply,&QIODevice::readyRead,this,&BoxDS::dataReadyRead);
-    connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::dataReadFinished);
+    connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::dataSearchFinished);
 }
 
 /*!
@@ -158,27 +158,26 @@ void BoxDS::addDataSource(const QString &id, const QString &name, const QString 
     addDataSource(box);
 }
 
-void BoxDS::downloadFile(QString fileID)
+void BoxDS::fetchFileData(QString fileId, QString fileExtension)
 {
 
     emit showBusyIndicator(true);
+    qDebug() << fileId << fileExtension;
 
-    qDebug() << "OAUTHO" << this->box->token() << "URL" << "https://api.box.com/2.0/files/"+fileID+"/content";
-    m_networkReply = this->box->get(QUrl("https://api.box.com/2.0/files/773507838319/content"));
-    connect(m_networkReply,&QIODevice::readyRead,this,&BoxDS::dataReadyRead);
-    connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::saveFile);
+    this->boxFileId = fileId;
+    this->boxExtension = fileExtension;
 
-    //    QNetworkRequest m_networkRequest;
+    QNetworkRequest m_networkRequest;
+    m_networkReply = this->box->get(QUrl("https://api.box.com/2.0/files/"+ fileId +"/content"));
 
-    //    QUrl api("https://api.box.com/2.0/files/"+fileID+"/content");
-    //    m_networkRequest.setUrl(api);
+    QUrl api("https://api.box.com/2.0/files/"+ fileId +"/content");
+    m_networkRequest.setUrl(api);
 
-    //    m_networkRequest.setRawHeader("Authorization", "Bearer " + this->box->token().toUtf8());
+    m_networkRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
+    m_networkRequest.setRawHeader("Authorization", "Bearer " + this->box->token().toUtf8());
 
-    //    m_networkReply = m_networkAccessManager->get(m_networkRequest);
-    //    connect(m_networkReply,&QIODevice::readyRead,this,&BoxDS::dataReadyRead);
-    //    connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::saveFile);
-
+    m_networkReply = m_networkAccessManager->get(m_networkRequest);
+    connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::fileDownloadFinished);
 }
 
 /*!
@@ -224,13 +223,14 @@ void BoxDS::dataReadFinished()
     else{
 
         QStringList requiredExtensions;
-        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json" << ".ods";
+        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json";
 
         this->resetDatasource();
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
 
         QJsonArray dataArray = resultObj["entries"].toArray();
+        qDebug() << m_dataBuffer->data();
 
         for(int i=0;i<dataArray.size();i++){
 
@@ -266,6 +266,52 @@ void BoxDS::dataReadFinished()
     emit showBusyIndicator(false);
 }
 
+void BoxDS::dataSearchFinished()
+{
+    if(m_networkReply->error()){
+        qDebug() <<"There was some error : "<< m_networkReply->errorString();
+    }
+    else{
+
+        QStringList requiredExtensions;
+        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json";
+
+        this->resetDatasource();
+        QJsonDocument resultJson = QJsonDocument::fromJson(m_networkReply->readAll().data());
+        QJsonObject resultObj = resultJson.object();
+
+        QJsonArray dataArray = resultObj["entries"].toArray();
+
+        for(int i=0;i<dataArray.size();i++){
+
+            QJsonObject dataObj = dataArray.at(i).toObject();
+
+            QString BoxID = dataObj["id"].toString();
+            QString BoxName = dataObj["name"].toString();
+            QString BoxType = dataObj["type"].toString();
+            QString BoxModifiedAt = QDateTime::fromString(dataObj["modified_at"].toString(), Qt::ISODate).toString("yyyy/MM/dd HH:mm ap");
+            QString BoxExtension;
+            QStringList extensionList;
+            if(BoxType == "folder"){
+                BoxModifiedAt = "--";
+                BoxExtension = "--";
+            }
+            if(BoxType == "file"){
+                extensionList = BoxName.split('.');
+                BoxExtension = "." + extensionList.last();
+            }
+
+            if(requiredExtensions.indexOf(BoxExtension) >= 0 || BoxExtension == "--"){
+                this->addDataSource(BoxID,BoxName,BoxType,BoxModifiedAt,BoxExtension);
+            }
+        }
+        m_dataBuffer->clear();
+
+    }
+
+    emit showBusyIndicator(false);
+}
+
 void BoxDS::userReadFinished()
 {
     m_dataBuffer->append(m_networkReply->readAll());
@@ -282,23 +328,42 @@ void BoxDS::userReadFinished()
     emit showBusyIndicator(false);
 }
 
-void BoxDS::saveFile()
+void BoxDS::fileDownloadFinished()
 {
-    if(m_networkReply->error()){
-        qDebug() <<"There was some error1 : "<< m_networkReply->errorString();
-    }
-    else{
-        QByteArray arr = m_networkReply->readAll();
-        qDebug() << arr << "OUTPIT" << m_networkReply->bytesAvailable();
+    QByteArray bytes = m_networkReply->readAll();
+    int statusCode = m_networkReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 
-        QFile file("C:\\Users\\chill\\Desktop\\c.pdfr");
+
+    // Handle redirection 302
+    if(statusCode == 302)
+    {
+        QUrl newUrl = m_networkReply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
+        QNetworkRequest newRequest(newUrl);
+
+        m_networkReply = m_networkAccessManager->get(newRequest);
+        connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::fileDownloadFinished);
+
+        return ;
+    }
+
+    if(statusCode == 200)
+    {
+        QString fileName = QDir::temp().tempPath() +"/" + this->boxFileId + this->boxExtension;
+        QFile file(fileName);
         file.open(QIODevice::WriteOnly);
-        file.write(arr);
+        file.write(bytes.data(), bytes.size());
         file.close();
+
+        if(this->boxExtension.contains("xls")){
+            emit fileDownloaded(fileName, "excel");
+
+        } else if(this->boxExtension.contains("csv")){
+            emit fileDownloaded(fileName,"csv");
+
+        } else if(this->boxExtension.contains("json")){
+            emit fileDownloaded(fileName, "json");
+        }
     }
 
     emit showBusyIndicator(false);
 }
-
-
-

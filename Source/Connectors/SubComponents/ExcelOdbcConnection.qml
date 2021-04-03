@@ -34,18 +34,20 @@ Popup {
     Connections{
         target: ConnectorsLoginModel
 
-        function onExcelLoginStatus(status){
+        function onExcelLoginStatus(status, directLogin){
 
-             if(status.status === true){
+            if(directLogin === true){
+                if(status.status === true){
 
-                 popup.visible = false
-                 stacklayout_home.currentIndex = 5
-             }
-             else{
-                 popup.visible = true
-                 msg_dialog.open()
-                 msg_dialog.text = status.msg
-             }
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
         }
     }
 
@@ -92,8 +94,8 @@ Popup {
     }
 
     function connectToExcel(){
-//        ConnectorsLoginModel.excelOdbcLogin(server.text, database.text, port.text, username.text, password.text)
-          ConnectorsLoginModel.excelOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
+        //        ConnectorsLoginModel.excelOdbcLogin(server.text, database.text, port.text, username.text, password.text)
+        ConnectorsLoginModel.excelOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
     }
 
     // JAVASCRIPT FUNCTION ENDS

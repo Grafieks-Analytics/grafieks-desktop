@@ -15,6 +15,7 @@
 #include <QJsonArray>
 #include <QSettings>
 #include <QtDebug>
+#include <QDir>
 
 #include <QFile>
 #include <QCoreApplication>
@@ -39,7 +40,7 @@ public:
     Q_INVOKABLE void fetchDatasources();
     Q_INVOKABLE void searchQuer(QString path);
     Q_INVOKABLE void homeBut();
-    Q_INVOKABLE void downloadFile(QString filePath);
+    Q_INVOKABLE void fetchFileData(QString gFileId, QString extension);
 
     void addDataSource(Drive * drive);
     Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & kind,const QString & modifiedTime,const QString & extension);
@@ -55,6 +56,7 @@ signals:
     void postReset();
     void getDriveUsername(QString username);
     void showBusyIndicator(bool status);
+    void fileDownloaded(QString filePath, QString fileType);
 
 private slots:
     void resetDatasource();
@@ -62,7 +64,7 @@ private slots:
     void dataReadFinished();
     void dataSearchFinished();
     void userReadFinished();
-    void saveFile();
+    void fileDownloadFinished();
 
 private:
     QNetworkAccessManager * m_networkAccessManager;
@@ -72,6 +74,8 @@ private:
     QList<Drive*> m_drive;
 
     QString username;
+    QString gFileId;
+    QString extension;
 
 };
 

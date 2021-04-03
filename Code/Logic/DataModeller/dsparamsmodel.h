@@ -293,8 +293,6 @@ signals:
 private:
     QMap<QString, QString> datasourceCredentials();
     QString m_fileExtension;
-//    duckdb::DuckDB db;
-//    duckdb::Connection con;
     int counter;
 
     // Read Write Data source file

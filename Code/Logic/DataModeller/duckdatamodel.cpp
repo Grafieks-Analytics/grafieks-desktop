@@ -7,6 +7,7 @@ DuckDataModel::DuckDataModel(QObject *parent) : QObject(parent)
 
 DuckDataModel::DuckDataModel(DuckCon *duckCon, QObject *parent)
 {
+    Q_UNUSED(parent);
     this->duckCon = duckCon;
 }
 
@@ -14,7 +15,6 @@ DuckDataModel::DuckDataModel(DuckCon *duckCon, QObject *parent)
 void DuckDataModel::columnData(QString col, QString tableName)
 {
 
-    qDebug() << col << tableName << "DUCK CALL";
     QString db = Statics::currentDbName;
 
     auto data = duckCon->con.Query("SELECT " + col.toStdString() + " FROM " + tableName.toStdString());
