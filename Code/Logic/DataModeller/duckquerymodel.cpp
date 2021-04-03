@@ -14,6 +14,7 @@ DuckQueryModel::DuckQueryModel(DuckCon *duckCon, QObject *parent)
 
 void DuckQueryModel::setQuery(QString query)
 {
+    this->resultData.clear();
     this->query = query;
     querySplitter.setQueryForClasses(this->query);
 
@@ -109,6 +110,7 @@ void DuckQueryModel::setQueryResult()
     QStringList list;
 
     auto result = duckCon->con.Query(this->query.toStdString());
+    qDebug() << result->error.c_str() << "ERROR IN DUCK";
 
     // Set the internalRowCount & internalColCount for the QAbstractListModel rowCount method
     this->internalColCount = result->collection.ColumnCount();
@@ -127,6 +129,12 @@ void DuckQueryModel::setQueryResult()
         this->resultData.append(list);
         list.clear();
 
+    }
+
+    if(this->internalRowCount > 0){
+        emit duckHasData(true);
+    } else{
+        emit duckHasData(false);
     }
     endResetModel();
 }

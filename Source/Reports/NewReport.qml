@@ -416,9 +416,9 @@ Page {
                 break;
             case Constants.sunburstChartTitle:
                 console.log("SUNBURST CLICKED", typeof xAxisColumns)
-                dataValues = ChartsModel.getSunburstChartValues(xAxisColumns,yAxisColumns[0],'Sum');
+//                dataValues = ChartsModel.getSunburstChartValues(xAxisColumns,yAxisColumns[0],'Sum');
 
-                //                dataValues = ChartsModel.getSunburstChartValues(["state", "district", "ward"], "population",'Sum');
+                                dataValues = ChartsModel.getSunburstChartValues(["state", "district", "ward"], "population",'Sum');
                 break;
             case Constants.waterfallChartTitle:
                 console.log("WATERFALL CLICKED")

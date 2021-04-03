@@ -127,8 +127,7 @@ void BoxDS::searchQuer(QString path)
     token = this->box->token();
 
     m_networkReply = m_networkAccessManager->get(m_networkRequest);
-    connect(m_networkReply,&QIODevice::readyRead,this,&BoxDS::dataReadyRead);
-    connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::dataReadFinished);
+    connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::dataSearchFinished);
 }
 
 /*!
@@ -173,11 +172,8 @@ void BoxDS::fetchFileData(QString fileId, QString fileExtension)
 
     QUrl api("https://api.box.com/2.0/files/"+ fileId +"/content");
     m_networkRequest.setUrl(api);
-//    m_networkRequest.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
-//    m_networkRequest.setMaximumRedirectsAllowed(10);
 
     m_networkRequest.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
-//    m_networkRequest.setRawHeader("Content-Type","application/json");
     m_networkRequest.setRawHeader("Authorization", "Bearer " + this->box->token().toUtf8());
 
     m_networkReply = m_networkAccessManager->get(m_networkRequest);
@@ -227,13 +223,14 @@ void BoxDS::dataReadFinished()
     else{
 
         QStringList requiredExtensions;
-        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json" << ".ods";
+        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json";
 
         this->resetDatasource();
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
 
         QJsonArray dataArray = resultObj["entries"].toArray();
+        qDebug() << m_dataBuffer->data();
 
         for(int i=0;i<dataArray.size();i++){
 
@@ -269,6 +266,52 @@ void BoxDS::dataReadFinished()
     emit showBusyIndicator(false);
 }
 
+void BoxDS::dataSearchFinished()
+{
+    if(m_networkReply->error()){
+        qDebug() <<"There was some error : "<< m_networkReply->errorString();
+    }
+    else{
+
+        QStringList requiredExtensions;
+        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json";
+
+        this->resetDatasource();
+        QJsonDocument resultJson = QJsonDocument::fromJson(m_networkReply->readAll().data());
+        QJsonObject resultObj = resultJson.object();
+
+        QJsonArray dataArray = resultObj["entries"].toArray();
+
+        for(int i=0;i<dataArray.size();i++){
+
+            QJsonObject dataObj = dataArray.at(i).toObject();
+
+            QString BoxID = dataObj["id"].toString();
+            QString BoxName = dataObj["name"].toString();
+            QString BoxType = dataObj["type"].toString();
+            QString BoxModifiedAt = QDateTime::fromString(dataObj["modified_at"].toString(), Qt::ISODate).toString("yyyy/MM/dd HH:mm ap");
+            QString BoxExtension;
+            QStringList extensionList;
+            if(BoxType == "folder"){
+                BoxModifiedAt = "--";
+                BoxExtension = "--";
+            }
+            if(BoxType == "file"){
+                extensionList = BoxName.split('.');
+                BoxExtension = "." + extensionList.last();
+            }
+
+            if(requiredExtensions.indexOf(BoxExtension) >= 0 || BoxExtension == "--"){
+                this->addDataSource(BoxID,BoxName,BoxType,BoxModifiedAt,BoxExtension);
+            }
+        }
+        m_dataBuffer->clear();
+
+    }
+
+    emit showBusyIndicator(false);
+}
+
 void BoxDS::userReadFinished()
 {
     m_dataBuffer->append(m_networkReply->readAll());
@@ -291,10 +334,10 @@ void BoxDS::fileDownloadFinished()
     int statusCode = m_networkReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 
 
+    // Handle redirection 302
     if(statusCode == 302)
     {
         QUrl newUrl = m_networkReply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
-        qDebug() << "redirected  to " + newUrl.toString();
         QNetworkRequest newRequest(newUrl);
 
         m_networkReply = m_networkAccessManager->get(newRequest);
@@ -305,10 +348,21 @@ void BoxDS::fileDownloadFinished()
 
     if(statusCode == 200)
     {
-        QFile file("C:\\Users\\chill\\Desktop\\"+ this->boxFileId +"." + this->boxExtension);
+        QString fileName = QDir::temp().tempPath() +"/" + this->boxFileId + this->boxExtension;
+        QFile file(fileName);
         file.open(QIODevice::WriteOnly);
         file.write(bytes.data(), bytes.size());
         file.close();
+
+        if(this->boxExtension.contains("xls")){
+            emit fileDownloaded(fileName, "excel");
+
+        } else if(this->boxExtension.contains("csv")){
+            emit fileDownloaded(fileName,"csv");
+
+        } else if(this->boxExtension.contains("json")){
+            emit fileDownloaded(fileName, "json");
+        }
     }
 
     emit showBusyIndicator(false);

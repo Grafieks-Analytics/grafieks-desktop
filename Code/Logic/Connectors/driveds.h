@@ -15,6 +15,7 @@
 #include <QJsonArray>
 #include <QSettings>
 #include <QtDebug>
+#include <QDir>
 
 #include <QFile>
 #include <QCoreApplication>
@@ -55,6 +56,7 @@ signals:
     void postReset();
     void getDriveUsername(QString username);
     void showBusyIndicator(bool status);
+    void fileDownloaded(QString filePath, QString fileType);
 
 private slots:
     void resetDatasource();

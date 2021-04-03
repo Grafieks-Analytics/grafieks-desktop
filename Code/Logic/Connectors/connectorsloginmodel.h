@@ -27,9 +27,9 @@ public:
     explicit ConnectorsLoginModel(QObject *parent = nullptr);
     Q_INVOKABLE void mysqlLogin(QString host, QString db, int port, QString username, QString password);
     Q_INVOKABLE void sqliteLogin(QString filename);
-    Q_INVOKABLE void csvLogin(QString filename, QString separator);
-    Q_INVOKABLE void jsonLogin(QString filename);
-    Q_INVOKABLE void excelLogin(QString filename);
+    Q_INVOKABLE void csvLogin(QString filename, bool directLogin, QString separator);
+    Q_INVOKABLE void jsonLogin(QString filename, bool directLogin);
+    Q_INVOKABLE void excelLogin(QString filename, bool directLogin);
     Q_INVOKABLE QString urlToFilePath(const QUrl &url);
 
     // ODBC
@@ -62,9 +62,9 @@ signals:
     void hiveLoginStatus(QVariantMap status);
     void snowflakeLoginStatus(QVariantMap status);
     void teradataLoginStatus(QVariantMap status);
-    void excelLoginStatus(QVariantMap status);
-    void jsonLoginStatus(QVariantMap status);
-    void csvLoginStatus(QVariantMap status);
+    void excelLoginStatus(QVariantMap status, bool directLogin);
+    void jsonLoginStatus(QVariantMap status, bool directLogin);
+    void csvLoginStatus(QVariantMap status, bool directLogin);
     void accessLoginStatus(QVariantMap status);
     void connectedDBChanged(QString connectedDB);
     void connectedDBType(QString conType);

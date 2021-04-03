@@ -260,14 +260,13 @@ void ConnectorsLoginModel::excelOdbcLogin(QString driver, QString filename)
     this->setConnectedDB(filename);
 
     emit connectedDBType(Constants::sqlType);
-    emit excelLoginStatus(response);
+    emit excelLoginStatus(response, true);
 }
 
-void ConnectorsLoginModel::csvLogin(QString filename, QString separator)
+void ConnectorsLoginModel::csvLogin(QString filename, bool directLogin, QString separator)
 {
     CSVCon csvcon;
     QVariantMap response = csvcon.CSVInstance(filename);
-    qDebug() << "FILEWA" << filename << "CSV";
 
     Statics::currentDbName = filename;
     Statics::currentDbIntType = Constants::csvIntType;
@@ -278,10 +277,10 @@ void ConnectorsLoginModel::csvLogin(QString filename, QString separator)
 
     emit connectedDBType(Constants::duckType);
     emit sendDbName();
-    emit csvLoginStatus(response);
+    emit csvLoginStatus(response, directLogin);
 }
 
-void ConnectorsLoginModel::jsonLogin(QString filename)
+void ConnectorsLoginModel::jsonLogin(QString filename, bool directLogin)
 {
     JsonCon jsoncon;
     QVariantMap response = jsoncon.JsonInstance(filename);
@@ -290,28 +289,31 @@ void ConnectorsLoginModel::jsonLogin(QString filename)
     Statics::currentDbIntType = Constants::jsonIntType;
     Statics::currentDbClassification = Constants::duckType;
 
-    this->setConnectedDB(filename);
+    QFileInfo fi(filename);
+    this->setConnectedDB(fi.baseName());
 
     emit connectedDBType(Constants::duckType);
     emit sendDbName();
-    emit jsonLoginStatus(response);
+    emit jsonLoginStatus(response, directLogin);
 }
 
-void ConnectorsLoginModel::excelLogin(QString filename)
+void ConnectorsLoginModel::excelLogin(QString filename, bool directLogin)
 {
 
     ExcelCon excelcon;
     QVariantMap response = excelcon.ExcelInstance(filename);
+    qDebug() << "ExcelLogin" << filename << directLogin;
 
     Statics::currentDbName = filename;
     Statics::currentDbIntType = Constants::excelIntType;
     Statics::currentDbClassification = Constants::duckType;
 
-    this->setConnectedDB(filename);
+    QFileInfo fi(filename);
+    this->setConnectedDB(fi.baseName());
 
     emit connectedDBType(Constants::duckType);
     emit sendDbName();
-    emit excelLoginStatus(response);
+    emit excelLoginStatus(response, directLogin);
 }
 
 QString ConnectorsLoginModel::urlToFilePath(const QUrl &url)
