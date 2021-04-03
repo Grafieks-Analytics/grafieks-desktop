@@ -33,6 +33,7 @@ Popup {
 
     property var fileName: ""
     property var fileExtension: ""
+    property var googleSheetId : ""
 
 
 
@@ -69,6 +70,66 @@ Popup {
                 busyindicator.running = true
             } else{
                 busyindicator.running = false
+            }
+        }
+
+        function onFileDownloaded(filePath, fileType){
+
+            if(fileType === "csv"){
+                ConnectorsLoginModel.csvLogin(filePath, false, ",")
+            } else if(fileType === "excel"){
+                ConnectorsLoginModel.excelLogin(filePath, false)
+            } else if(fileType === "json"){
+                ConnectorsLoginModel.jsonLogin(filePath, false)
+            }
+        }
+    }
+
+    Connections{
+        target: ConnectorsLoginModel
+
+        function onCsvLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
+
+        function onExcelLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
+
+        function onJsonLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
             }
         }
     }
@@ -112,6 +173,7 @@ Popup {
 
         fileName = name
         fileExtension = type
+        googleSheetId = id;
     }
 
     function onFolderClicked(name,type,pathFolder){
@@ -120,12 +182,20 @@ Popup {
         updatePath(name)
     }
 
+    function onFolderDoubleClicked(gSheetId, name,type){
 
-    function onHomeClicked(){
-        SheetDS.folderNav("0")
-        // refer SheetDS.cpp for function info
-        updatePath(pathFolder)
+        // If double clicked on folder navigate to new location
+        // else if its a file, fetch file content and process data
+        if(type === "folder"){
+            SheetDS.folderNav(pathFolder)
+        }
+        else{
+            SheetDS.fetchFileData(gSheetId)
+        }
+
+        path.text = name
     }
+
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -243,10 +313,7 @@ Popup {
                     onClicked: searchFiles();
 
                 }
-
             }
-
-
         }
 
         // Row  File Search Ends
@@ -271,12 +338,16 @@ Popup {
                         id: fileList
                         model:SheetModel
                         clip: true
-                        height: 200
+                        height: parent.height
                         width: popup.width * 0.6
+                        ScrollBar.vertical: ScrollBar {}
+                        headerPositioning: ListView.OverlayHeader
 
                         header: Row{
 
                             width: popup.width * 0.6
+                            z: 10
+
                             Column{
                                 width: 20
                                 Rectangle{
@@ -373,7 +444,7 @@ Popup {
 
                                         anchors.fill:parent
                                         onClicked: onFileSelected(name, id, extension, modifiedTime)
-                                        onDoubleClicked: onFolderClicked()
+                                        onDoubleClicked: onFolderDoubleClicked(id, name, extension)
                                     }
                                 }
 
@@ -556,7 +627,7 @@ Popup {
             Rectangle{
                 width: popup.width * 0.4
                 anchors.left:breadcrumb.right
-                anchors.leftMargin: popup.width * 0.4  - 300
+                anchors.leftMargin: popup.width * 0.4 - 190
 
                 BusyIndicatorTpl {
                     id: busyindicator
@@ -566,28 +637,14 @@ Popup {
 
                 CustomButton{
 
-                    id: homeBtn
-                    height: 40
-                    width: 100
-                    textValue: "Home"
-                    anchors.left: busyindicator.right
-                    anchors.leftMargin: 10
-
-                    onClicked: onHomeClicked();
-
-                }
-
-
-                CustomButton{
-
                     id: nextBtn
                     height: 40
                     width: 100
                     textValue: "Next"
-                    anchors.left: homeBtn.right
+                    anchors.left: busyindicator.right
                     anchors.leftMargin: 10
 
-                    onClicked: onFolderDoubleClicked(fileName, fileExtension)
+                    onClicked: onFolderDoubleClicked(googleSheetId, fileName, fileExtension)
 
                 }
 

@@ -437,6 +437,28 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
         break;
     }
+
+    case Constants::csvIntType:
+    case Constants::jsonIntType:{
+
+        auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+        int rows = data->collection.Count();
+
+        for(int i = 0; i < rows; i++){
+            fieldName =  data->GetValue(1, i).ToString().c_str();
+            fieldType =  data->GetValue(2, i).ToString().c_str();
+
+            // Get filter data type for QML
+            QString filterDataType = dataType.dataType(fieldType);
+            outputDataList << fieldName << filterDataType;
+
+            // Append all data type to allList as well
+            allColumns.append(outputDataList);
+            outputDataList.clear();
+        }
+
+        break;
+    }
     }
 
     emit columnListObtained(allColumns, tableName, moduleName);

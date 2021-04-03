@@ -28,6 +28,7 @@ public slots:
     void createTable();
 
 signals:
+    void importError(QString errorString);
 
 };
 

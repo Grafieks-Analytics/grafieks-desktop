@@ -32,6 +32,7 @@ Popup {
 
     property var fileName: ""
     property var fileExtension: ""
+    property var googleFileId: ""
 
     closePolicy: Popup.NoAutoClose
 
@@ -69,6 +70,66 @@ Popup {
                 busyindicator.running = false
             }
         }
+
+        function onFileDownloaded(filePath, fileType){
+
+            if(fileType === "csv"){
+                ConnectorsLoginModel.csvLogin(filePath, false, ",")
+            } else if(fileType === "excel"){
+                ConnectorsLoginModel.excelLogin(filePath, false)
+            } else if(fileType === "json"){
+                ConnectorsLoginModel.jsonLogin(filePath, false)
+            }
+        }
+    }
+
+    Connections{
+        target: ConnectorsLoginModel
+
+        function onCsvLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
+
+        function onExcelLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
+
+        function onJsonLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
     }
 
 
@@ -90,13 +151,6 @@ Popup {
         path.text=text;
     }
 
-
-    function onHomeClicked(){
-        DriveDS.folderNav("0")
-        // refer boxds.cpp for function info
-        updatePath(pathFolder)
-    }
-
     function searchFiles(){
         DriveDS.searchQuer(server_files.text)
     }
@@ -110,7 +164,7 @@ Popup {
         fileNotSelectedMsg.visible = false
     }
 
-    function onFileClicked(name, type, modifiedTime){
+    function onFileClicked(id, name, type, modifiedTime){
 
         showSelectedFileDetails();
         hideFileNotSelectedMessage();
@@ -122,12 +176,16 @@ Popup {
 
         fileName = name
         fileExtension = type
+        googleFileId = id
     }
 
-    function onFolderDoubleClicked(name,type){
+    function onFolderDoubleClicked(googleFileId, name, extension){
 
-        if(type === "folder")
+        if(extension === "folder"){
             DriveDS.folderNav(pathFolder)
+        }else{
+            DriveDS.fetchFileData(googleFileId, extension)
+        }
 
         path.text = name
     }
@@ -259,10 +317,13 @@ Popup {
 
                         height: parent.height
                         width: popup.width * 0.6
+                        ScrollBar.vertical: ScrollBar {}
+                        headerPositioning: ListView.OverlayHeader
 
                         header: Row{
 
                             width: popup.width * 0.6
+                            z: 10
 
                             Column{
                                 width: 20
@@ -361,8 +422,8 @@ Popup {
                                     MouseArea{
 
                                         anchors.fill:parent
-                                        onClicked:onFileClicked(name, extension, modifiedTime);
-                                        onDoubleClicked: onFolderDoubleClicked(name, extension)
+                                        onClicked:onFileClicked(id, name, extension, modifiedTime);
+                                        onDoubleClicked: onFolderDoubleClicked(id, name, extension)
                                     }
                                 }
 
@@ -545,25 +606,12 @@ Popup {
                 id: r
                 width: popup.width * 0.4
                 anchors.left:breadcrumb.right
-                anchors.leftMargin: popup.width * 0.4  - 300
+                anchors.leftMargin: popup.width * 0.4  - 190
 
                 BusyIndicatorTpl {
                     id: busyindicator
                     running: true
                     anchors.left: parent.left
-                }
-
-                CustomButton{
-
-                    id: homeBtn
-                    height: 40
-                    width: 100
-                    textValue: "Home"
-                    anchors.left: busyindicator.right
-                    anchors.leftMargin: 10
-
-                    onClicked: onHomeClicked();
-
                 }
 
 
@@ -573,13 +621,12 @@ Popup {
                     height: 40
                     width: 100
                     textValue: "Next"
-                    anchors.left: homeBtn.right
+                    anchors.left: busyindicator.right
                     anchors.leftMargin: 10
 
-                    onClicked: onFolderDoubleClicked(fileName, fileExtension)
+                    onClicked: onFolderDoubleClicked(googleFileId, fileName, fileExtension)
 
                 }
-
             }
         }
     }

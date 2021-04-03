@@ -1,7 +1,7 @@
 #include "github.h"
 
-Github::Github(const QString &id, const QString &name, const QString &kind, const QString &modifiedTime, const QString &extension, QObject *parent) :
-    QObject(parent),m_id(id),m_name(name),m_kind(kind),m_modifiedTime(modifiedTime),m_extension(extension)
+Github::Github(const QString &id, const QString &name, const QString &kind, const QString &modifiedTime, const QString &extension, const QString &url, QObject *parent) :
+    QObject(parent),m_id(id),m_name(name),m_kind(kind),m_modifiedTime(modifiedTime),m_extension(extension), m_url(url)
 {
 
 }
@@ -29,6 +29,11 @@ QString Github::modifiedTime() const
 QString Github::extension() const
 {
     return m_extension;
+}
+
+QString Github::url() const
+{
+    return m_url;
 }
 
 void Github::setId(QString id)
@@ -74,4 +79,13 @@ void Github::setExtension(QString extension)
 
     m_extension = extension;
     emit extensionChanged(m_extension);
+}
+
+void Github::setUrl(QString url)
+{
+    if (m_url == url)
+        return;
+
+    m_url = url;
+    emit urlChanged(m_url);
 }

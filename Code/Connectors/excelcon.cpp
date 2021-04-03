@@ -92,7 +92,8 @@ QStringList ExcelCon::convertExcelToCsv(QString &excelPath)
         QString saveCsvName =   worksheet->dynamicCall("Name()").toString();
 
         /* Save as file, 3: txt file (space separated) | 6: csv file (comma separated)*/
-        worksheet->dynamicCall("SaveAs(const QString&, int)", QDir::toNativeSeparators(QDir::tempPath() +"/"+ saveCsvName), 6);
+        // For the Save As integer values, visit https://docs.microsoft.com/en-us/office/vba/api/excel.xlfileformat
+        worksheet->dynamicCall("SaveAs(const QString&, int)", QDir::toNativeSeparators(QDir::tempPath() +"/"+ saveCsvName), 62);
         outputList << QDir::tempPath() +"/"+ saveCsvName;
     }
 
