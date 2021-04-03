@@ -39,6 +39,8 @@ Popup {
     property var filePathFolder: ""
     property var filePathLower: ""
 
+    property var navigationPaths: []
+
 
 
     /***********************************************************************************************************************/
@@ -75,6 +77,65 @@ Popup {
                 busyindicator.running = true
             } else{
                 busyindicator.running = false
+            }
+        }
+        function onFileDownloaded(filePath, fileType){
+
+            if(fileType === "csv"){
+                ConnectorsLoginModel.csvLogin(filePath, false, ",")
+            } else if(fileType === "excel"){
+                ConnectorsLoginModel.excelLogin(filePath, false)
+            } else if(fileType === "json"){
+                ConnectorsLoginModel.jsonLogin(filePath, false)
+            }
+        }
+    }
+
+    Connections{
+        target: ConnectorsLoginModel
+
+        function onCsvLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
+
+        function onExcelLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
+
+        function onJsonLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
             }
         }
     }
@@ -129,8 +190,8 @@ Popup {
 
     function onFileDoubleClicked(id, name, tag, pathFolder, pathLower){
 
-        if(tag === "folder"){
-            DropboxDS.folderNav(pathFolder)
+        if(fileTag === "folder"){
+            DropboxDS.folderNav(filePathFolder)
         } else{
             DropboxDS.fetchFileData(fileId, fileName, fileExtension)
         }
@@ -271,9 +332,7 @@ Popup {
                     onClicked: searchFiles()
 
                 }
-
             }
-
         }
 
         // Row  File Search Ends
@@ -399,7 +458,6 @@ Popup {
                                         padding: 5
                                         leftPadding: 20
                                     }
-
 
                                     MouseArea{
 
@@ -633,9 +691,6 @@ Popup {
 
                     onClicked: onFileDoubleClicked(fileId, fileName, fileExtension, fileTag, filePathFolder, filePathLower)
                 }
-
-
-
 
             }
         }

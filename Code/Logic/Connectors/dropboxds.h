@@ -17,6 +17,7 @@
 #include <QOAuthHttpServerReplyHandler>
 #include <QtDebug>
 #include <QByteArray>
+#include <QDir>
 
 
 #include "dropbox.h"
@@ -56,6 +57,7 @@ signals:
     void postReset();
     void getDropboxUsername(QString username);
     void showBusyIndicator(bool status);
+    void fileDownloaded(QString filePath, QString fileType);
 
 private slots:
     void resetDatasource();

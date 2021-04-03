@@ -64,6 +64,12 @@ void QueryModel::setChartData()
         }
     }
 
+    if(totalRows > 0){
+        emit sqlHasData(true);
+    } else{
+        emit sqlHasData(false);
+    }
+
     emit chartDataChanged(this->sqlChartData);
 }
 

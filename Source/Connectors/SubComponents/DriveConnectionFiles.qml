@@ -70,6 +70,66 @@ Popup {
                 busyindicator.running = false
             }
         }
+
+        function onFileDownloaded(filePath, fileType){
+
+            if(fileType === "csv"){
+                ConnectorsLoginModel.csvLogin(filePath, false, ",")
+            } else if(fileType === "excel"){
+                ConnectorsLoginModel.excelLogin(filePath, false)
+            } else if(fileType === "json"){
+                ConnectorsLoginModel.jsonLogin(filePath, false)
+            }
+        }
+    }
+
+    Connections{
+        target: ConnectorsLoginModel
+
+        function onCsvLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
+
+        function onExcelLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
+
+        function onJsonLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
     }
 
 
@@ -89,13 +149,6 @@ Popup {
     function updatePath(text){
         hidePopup()
         path.text=text;
-    }
-
-
-    function onHomeClicked(){
-        DriveDS.folderNav("0")
-        // refer boxds.cpp for function info
-        updatePath(pathFolder)
     }
 
     function searchFiles(){
@@ -553,25 +606,12 @@ Popup {
                 id: r
                 width: popup.width * 0.4
                 anchors.left:breadcrumb.right
-                anchors.leftMargin: popup.width * 0.4  - 300
+                anchors.leftMargin: popup.width * 0.4  - 190
 
                 BusyIndicatorTpl {
                     id: busyindicator
                     running: true
                     anchors.left: parent.left
-                }
-
-                CustomButton{
-
-                    id: homeBtn
-                    height: 40
-                    width: 100
-                    textValue: "Home"
-                    anchors.left: busyindicator.right
-                    anchors.leftMargin: 10
-
-                    onClicked: onHomeClicked();
-
                 }
 
 
@@ -581,13 +621,12 @@ Popup {
                     height: 40
                     width: 100
                     textValue: "Next"
-                    anchors.left: homeBtn.right
+                    anchors.left: busyindicator.right
                     anchors.leftMargin: 10
 
                     onClicked: onFolderDoubleClicked(googleFileId, fileName, fileExtension)
 
                 }
-
             }
         }
     }

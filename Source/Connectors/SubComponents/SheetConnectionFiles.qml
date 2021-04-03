@@ -72,6 +72,66 @@ Popup {
                 busyindicator.running = false
             }
         }
+
+        function onFileDownloaded(filePath, fileType){
+
+            if(fileType === "csv"){
+                ConnectorsLoginModel.csvLogin(filePath, false, ",")
+            } else if(fileType === "excel"){
+                ConnectorsLoginModel.excelLogin(filePath, false)
+            } else if(fileType === "json"){
+                ConnectorsLoginModel.jsonLogin(filePath, false)
+            }
+        }
+    }
+
+    Connections{
+        target: ConnectorsLoginModel
+
+        function onCsvLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
+
+        function onExcelLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
+
+        function onJsonLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
     }
 
     // Connections Ends
@@ -136,11 +196,6 @@ Popup {
         path.text = name
     }
 
-    function onHomeClicked(){
-        SheetDS.folderNav("0")
-        // refer SheetDS.cpp for function info
-        updatePath(pathFolder)
-    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -258,10 +313,7 @@ Popup {
                     onClicked: searchFiles();
 
                 }
-
             }
-
-
         }
 
         // Row  File Search Ends
@@ -286,7 +338,7 @@ Popup {
                         id: fileList
                         model:SheetModel
                         clip: true
-                        height: 200
+                        height: parent.height
                         width: popup.width * 0.6
                         ScrollBar.vertical: ScrollBar {}
                         headerPositioning: ListView.OverlayHeader
@@ -575,7 +627,7 @@ Popup {
             Rectangle{
                 width: popup.width * 0.4
                 anchors.left:breadcrumb.right
-                anchors.leftMargin: popup.width * 0.4  - 300
+                anchors.leftMargin: popup.width * 0.4 - 190
 
                 BusyIndicatorTpl {
                     id: busyindicator
@@ -585,25 +637,11 @@ Popup {
 
                 CustomButton{
 
-                    id: homeBtn
-                    height: 40
-                    width: 100
-                    textValue: "Home"
-                    anchors.left: busyindicator.right
-                    anchors.leftMargin: 10
-
-                    onClicked: onHomeClicked();
-
-                }
-
-
-                CustomButton{
-
                     id: nextBtn
                     height: 40
                     width: 100
                     textValue: "Next"
-                    anchors.left: homeBtn.right
+                    anchors.left: busyindicator.right
                     anchors.leftMargin: 10
 
                     onClicked: onFolderDoubleClicked(googleSheetId, fileName, fileExtension)

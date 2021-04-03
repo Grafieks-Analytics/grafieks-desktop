@@ -16,6 +16,7 @@
 #include <QSettings>
 #include <QtDebug>
 #include <QFile>
+#include <QDir>
 
 #include "github.h"
 #include "../../secrets.h"
@@ -35,7 +36,6 @@ public:
 
     Q_INVOKABLE void fetchDatasources();
     Q_INVOKABLE void searchQuer(QString path);
-    Q_INVOKABLE void homeBut();
     Q_INVOKABLE void fetchFileData(QString gFileId, QString extension, QString url);
 
     void addDataSource(Github * github);
@@ -52,6 +52,7 @@ signals:
     void postReset();
     void getGithubUsername(QString username);
     void showBusyIndicator(bool status);
+    void fileDownloaded(QString filePath, QString fileType);
 
 private slots:
     void resetDatasource();
@@ -70,6 +71,10 @@ private:
     QString gFileId;
     QString extension;
     QString url;
+
+    QStringList filesList;
+    QMap<int, QStringList> mainResultData;
+    int totalData;
 
 };
 

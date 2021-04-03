@@ -128,7 +128,6 @@ void DropboxDS::folderNav(QString path)
 {
     emit showBusyIndicator(true);
 
-    const QUrl API_ENDPOINT("https://api.dropboxapi.com/2/files/list_folder");
     QJsonObject obj;
     obj.insert("limit", 100);
     obj.insert("path",path);
@@ -414,10 +413,21 @@ void DropboxDS::saveFile()
 
     }else{
 
-        QFile file("C:\\Users\\chill\\Downloads\\"+ this->dropBoxFileId.remove(0,3) + this->extension);
+        QString fileName = QDir::temp().tempPath() +"/" + this->dropBoxFileId.remove(0,3) + this->extension;
+        QFile file(fileName);
         file.open(QIODevice::WriteOnly);
         file.write(m_networkReply->readAll());
         file.close();
+
+        if(this->extension.contains("xls")){
+            emit fileDownloaded(fileName, "excel");
+
+        } else if(this->extension.contains("csv")){
+            emit fileDownloaded(fileName,"csv");
+
+        } else if(this->extension.contains("json")){
+            emit fileDownloaded(fileName, "json");
+        }
     }
 
     emit showBusyIndicator(false);

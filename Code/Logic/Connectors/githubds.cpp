@@ -3,7 +3,8 @@
 GithubDS::GithubDS(QObject *parent) : QObject(parent),
     m_networkAccessManager(new QNetworkAccessManager(this)),
     m_networkReply(nullptr),
-    m_dataBuffer(new QByteArray)
+    m_dataBuffer(new QByteArray),
+    totalData(0)
 {
     emit showBusyIndicator(true);
 
@@ -61,18 +62,23 @@ void GithubDS::fetchDatasources()
 void GithubDS::searchQuer(QString path)
 {
     emit showBusyIndicator(true);
+    this->resetDatasource();
 
-    m_networkReply = this->github->get(QUrl("https://www.githubapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name  +contains+%27" + path+ "%27"));
-    connect(m_networkReply,&QNetworkReply::finished,this,&GithubDS::dataReadFinished);
+    for(int i = 0; i < this->filesList.length(); i++){
 
-}
+        if(this->filesList.at(i).contains(path)){
 
-void GithubDS::homeBut()
-{
-    emit showBusyIndicator(true);
+            this->addDataSource(this->mainResultData.value(i).at(0),
+                                this->mainResultData.value(i).at(1),
+                                this->mainResultData.value(i).at(2),
+                                this->mainResultData.value(i).at(3),
+                                this->mainResultData.value(i).at(4),
+                                this->mainResultData.value(i).at(5)
+                                );
+        }
+    }
+    emit showBusyIndicator(false);
 
-    m_networkReply = this->github->get(QUrl("https://www.githubapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)"));
-    connect(m_networkReply, &QNetworkReply::finished, this, &GithubDS::dataReadFinished);
 }
 
 void GithubDS::fetchFileData(QString gFileId, QString extension, QString url)
@@ -154,8 +160,17 @@ void GithubDS::dataReadFinished()
             }
 
             if(requiredExtensions.indexOf(GithubMimeType) >= 0 || GithubExtension == "--"){
-                qDebug() << GithubName;
+
+                // This data is required for search later
+                // As there is no search API for Gists
+                this->filesList << GithubName;
+                QStringList tmpData;
+                tmpData << GithubID << GithubName <<  GithubKind <<  GithubModifiedTime << GithubExtension << GithubLink;
+                this->mainResultData.insert(totalData, tmpData);
+                totalData++;
+
                 this->addDataSource(GithubID, GithubName, GithubKind, GithubModifiedTime, GithubExtension, GithubLink);
+
             }
         }
 
@@ -193,10 +208,21 @@ void GithubDS::fileDownloadFinished()
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
     }else{
-        QFile file("C:\\Users\\chill\\Desktop\\"+ this->gFileId +"." + this->extension);
+        QString fileName = QDir::temp().tempPath() +"/" + this->gFileId +"." + this->extension;
+        QFile file(fileName);
         file.open(QIODevice::WriteOnly);
         file.write(m_networkReply->readAll(), m_networkReply->size());
         file.close();
+
+        if(this->extension.contains("xls")){
+            emit fileDownloaded(fileName, "excel");
+
+        } else if(this->extension.contains("csv")){
+            emit fileDownloaded(fileName,"csv");
+
+        } else if(this->extension.contains("json")){
+            emit fileDownloaded(fileName, "json");
+        }
     }
 
     emit showBusyIndicator(false);

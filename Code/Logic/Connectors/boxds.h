@@ -16,6 +16,7 @@
 #include <QDesktopServices>
 #include <QOAuthHttpServerReplyHandler>
 #include <QtDebug>
+#include <QDir>
 
 #include "box.h"
 #include "../../secrets.h"
@@ -52,11 +53,13 @@ signals:
     void postReset();
     void getBoxUsername(QString username);
     void showBusyIndicator(bool status);
+    void fileDownloaded(QString filePath, QString fileType);
 
 private slots:
     void resetDatasource();
     void dataReadyRead();
     void dataReadFinished();
+    void dataSearchFinished();
     void userReadFinished();
     void fileDownloadFinished();
 

@@ -15,6 +15,7 @@
 #include <QJsonArray>
 #include <QSettings>
 #include <QFile>
+#include <QDir>
 
 #include "sheet.h"
 #include "../../secrets.h"
@@ -52,11 +53,13 @@ signals:
     void postReset();
     void getSheetUsername(QString username);
     void showBusyIndicator(bool status);
+    void fileDownloaded(QString filePath, QString fileType);
 
 private slots:
     void resetDatasource();
     void fileDownloadFinished();
     void dataReadFinished();
+    void dataSearchFinished();
     void userReadFinished();
 
 
