@@ -31,6 +31,9 @@ Page {
     property bool xaxisActive: ReportParamsModel.xAxisActive
     property bool yaxisActive: ReportParamsModel.yAxisActive
 
+    property var maxDropOnXAxis: 1;
+    property var maxDropOnYAxis: 1;
+
     property bool yAxisVisible: true
     property bool xAxisVisible: true
     property bool row4Visible: false
@@ -54,7 +57,60 @@ Page {
 
     property var d3PropertyConfig: ({});
 
+    property var reportDataPanes: ({});  // Report Data Panes Object
+
+    property var dragActiveObject: ({});
+
+    property var allChartsMapping: ({});
+
+    property var allowedXAxisDataPanes: 0;
+    property var allowedYAxisDataPanes: 0;
+
     onChartTitleChanged: {
+
+        console.log('Chart Title Changed!');
+        const chartDetailsConfig = allChartsMapping[chartTitle];
+        console.log('Chart Config',chartDetailsConfig);
+        console.log('Stringify Config',JSON.stringify(chartDetailsConfig));
+
+        console.log('Chart config',chartDetailsConfig);
+        const { maxDropOnXAxis, maxDropOnYAxis } = chartDetailsConfig;
+
+        console.log('Max Drops? ', maxDropOnXAxis, maxDropOnYAxis);
+
+        var xAxisColumns = ReportParamsModel.xAxisColumns;
+        var yAxisColumns = ReportParamsModel.yAxisColumns;
+
+        // check if maximum drop is less than in config?
+        // if less then remove all the extra values
+        // else no change -> Plot the graph
+
+        if(maxDropOnXAxis > 0 && maxDropOnXAxis < xAxisColumns.length){
+            console.log('Noooooo, Remove extra values');
+            xAxisColumns.splice(0,1);
+            ReportParamsModel.setXAxisColumns(xAxisColumns);
+
+            // update the x axis list model
+            xAxisListModel.clear();
+            for(var i=0; i<xAxisColumns.length;i++){
+                xAxisListModel.append({ itemName: xAxisColumns[i] })
+            }
+        }
+
+        if(maxDropOnYAxis > 0 && maxDropOnYAxis < yAxisColumns.length){
+            console.log('Noooooo, Remove extra values');
+            yAxisColumns.splice(0,1);
+            ReportParamsModel.setYAxisColumns(yAxisColumns);
+
+            // update the y axis list model
+            yAxisListModel.clear();
+            for(var i=0; i<yAxisColumns.length;i++){
+                yAxisListModel.append({ itemName: yAxisColumns[i] })
+            }
+        }
+
+        allowedXAxisDataPanes = maxDropOnXAxis;
+        allowedYAxisDataPanes = maxDropOnYAxis;
 
         switch(chartTitle){
         case Constants.stackedBarChartTitle:
@@ -71,6 +127,12 @@ Page {
             xAxisVisible = true
             yAxisVisible = true
             row3Visible = false
+            row4Visible = false
+            break;
+        case Constants.sankeyTitle:
+            row3Visible =  true;
+            xAxisVisible = true
+            yAxisVisible = true
             row4Visible = false
             break;
         case Constants.pivotTitle:
@@ -253,6 +315,10 @@ Page {
 
     function xAxisDropEligible(itemName){
         var xAxisColumns  = ReportParamsModel.xAxisColumns;
+        // Check if condition more data pills can be added or not';
+        if(xAxisColumns.length === allowedXAxisDataPanes){
+            return false;
+        }
         const multiChart = true;
         if(multiChart){
             return true;
@@ -324,8 +390,6 @@ Page {
             console.log('Error',JSON.stringify(loadRequest))
             return;
         }
-
-        console.log(webEngineView.location)
         drawChart();
     }
 
@@ -405,7 +469,6 @@ Page {
                 break;
             case Constants.treeMapChartTitle:
                 dataValues = ChartsModel.getTreeMapChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
-                console.log(dataValues);
                 break;
             case Constants.heatMapChartTitle:
                 console.log("HEATMAP CLICKED")
@@ -446,12 +509,11 @@ Page {
                 return;
             }
 
-
-            console.log(dataValues);
-            console.log(webEngineView.loading);
-            console.log(report_desiner_page.chartTitle)
-            console.log(report_desiner_page.chartUrl)
-            console.log("color final "+JSON.stringify(d3PropertyConfig))
+            console.log('Data Values',dataValues);
+            console.log('Webengine View Loading Status',webEngineView.loading);
+            console.log('Selected Chart Title',report_desiner_page.chartTitle)
+            console.log('Selected Chart URL',report_desiner_page.chartUrl)
+            console.log("D3Config : "+JSON.stringify(d3PropertyConfig))
 
             //            need to initialise only once
             console.log('Starting to plot');
