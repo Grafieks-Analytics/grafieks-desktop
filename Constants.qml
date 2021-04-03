@@ -247,10 +247,12 @@ QtObject {
     property string sankeyChartTitle: "Sankey"
     property string multiLineChartTitle: "Multi Line"
     property string stackedAreaChartTitle: "Stacked Area Chart"
+    property string horizontalBarChartTitle: "HorizontalBarChart.html"
 
     property string stackedBarChartUrl: "StackedBarChart.html"
     property string stackedAreaChartUrl: "StackedAreaChart.html"
 
+    property string horizontalBarChartUrl: "HorizontalBarChart.html"
 
 
     // Charts ends
