@@ -102,30 +102,7 @@ Page {
     }
 
     onReportChartChanged: {
-
         chartTitle = reportChart;
-
-        //        ReportParamsModel.setXAxisColumns([]);
-        //        ReportParamsModel.setYAxisColumns([]);
-
-        //        xAxisListModel.clear();
-        //        yAxisListModel.clear();
-
-        //        console.log(ReportParamsModel.xAxisColumns);
-        //        console.log(ReportParamsModel.yAxisColumns);
-
-        //        switch(reportChart){
-        //        case Constants.stackedBarChart:
-        //            changeChart("qrc:/Source/Charts/StackedBarChart.html");
-
-        //            let resizeQuery = 'window.addEventListener("resize", function () {' +
-        //                'console.log("resizing");'+
-        //                'd3.selectAll("#my_dataviz").html(""); '+
-        //                'drawChart(data,'+JSON.stringify(d3PropertyConfig)+'); })';
-        //            webEngineView.runJavaScript(resizeQuery);
-        //            break;
-        //        }
-
     }
 
 
@@ -239,8 +216,8 @@ Page {
 
     }
 
+    // Load New Chart
     function changeChart(chartname){
-        console.log('Changing Chart Name',chartname)
         webEngineView.url = chartname;
     }
 
@@ -300,8 +277,6 @@ Page {
         var itemName = ReportParamsModel.itemName;
         var xAxisColumns = ReportParamsModel.xAxisColumns;
 
-        var xAxisColumnsT = ReportParamsModel.xAxisColumnsT;
-
         var yAxisColumns = ReportParamsModel.yAxisColumns;
         var valuesColumns = [];
 
@@ -313,12 +288,8 @@ Page {
 
             xAxisListModel.append({itemName: itemName})
             xAxisColumns.push(itemName);
-
-            xAxisColumnsT.push(itemName);
             ReportParamsModel.setXAxisColumns(xAxisColumns);
-            ReportParamsModel.setXAxisColumnsT(xAxisColumnsT);
 
-            T
         }else if(axis === Constants.yAxisName){
             if(!yAxisDropEligible(itemName)){
                 return;
@@ -363,12 +334,12 @@ Page {
         var xAxisColumns = ReportParamsModel.xAxisColumns;
         var yAxisColumns = ReportParamsModel.yAxisColumns;
 
-        var xAxisColumnsT = ReportParamsModel.xAxisColumnsT;
-
         if(xAxisColumns.length && yAxisColumns.length){
 
-            console.log(xAxisColumns);
-            console.log(yAxisColumns);
+            var xAxisColumnNamesArray = [];
+            for(var i=0;i<xAxisColumns.length;i++){
+                xAxisColumnNamesArray.push(xAxisColumns[i]);
+            }
 
             var dataValues = null;
             console.log('Chart Title',chartTitle)
@@ -430,21 +401,19 @@ Page {
                 break;
             case Constants.treeChartTitle:
                 console.log("TREECHART CLICKED")
-                dataValues = ChartsModel.getTreeChartValues(xAxisColumns,yAxisColumns[0],'Sum');
+                dataValues = ChartsModel.getTreeChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
                 break;
             case Constants.treeMapChartTitle:
-                console.log("TREEMAP CLICKED")
-                dataValues = ChartsModel.getTreeMapChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                dataValues = ChartsModel.getTreeMapChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
+                console.log(dataValues);
                 break;
             case Constants.heatMapChartTitle:
                 console.log("HEATMAP CLICKED")
                 dataValues = ChartsModel.getHeatMapChartValues(xAxisColumns[0],yAxisColumns[0], ReportParamsModel.itemName);
                 break;
             case Constants.sunburstChartTitle:
-                console.log("SUNBURST CLICKED", typeof xAxisColumns, typeof xAxisColumnsT)
-//                dataValues = ChartsModel.getSunburstChartValues(xAxisColumns,yAxisColumns[0],'Sum');
-                console.log('Array? ',Array.isArray(xAxisColumns), Array.isArray(xAxisColumnsT));
-                  dataValues = ChartsModel.getSunburstChartValues(xAxisColumnsT, "population",'Sum');
+                console.log("SUNBURST CLICKED");
+                dataValues = ChartsModel.getSunburstChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
                 break;
             case Constants.waterfallChartTitle:
                 console.log("WATERFALL CLICKED")
@@ -458,8 +427,6 @@ Page {
             case Constants.sankeyChartTitle:
                 console.log("SANKEY CLICKED")
                 dataValues = ChartsModel.getSankeyChartValues(xAxisColumns[0],  xAxisColumns[1], yAxisColumns[0] );
-                // Sankey
-                //                 dataValues = ChartsModel.getSankeyChartValues("state", "district", "population");
                 break;
             case Constants.kpiTitle:
                 console.log("KPI CLICKED")
