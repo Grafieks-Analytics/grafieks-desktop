@@ -354,7 +354,7 @@ void BoxDS::fileDownloadFinished()
         file.write(bytes.data(), bytes.size());
         file.close();
 
-        if(this->boxExtension.contains("xls")){
+        if(this->boxExtension.contains("xls") || this->extension.contains("xlsx")){
             emit fileDownloaded(fileName, "excel");
 
         } else if(this->boxExtension.contains("csv")){
