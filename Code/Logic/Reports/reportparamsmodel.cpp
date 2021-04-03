@@ -65,6 +65,27 @@ QString ReportParamsModel::reportTitle() const
     return m_reportTitle;
 }
 
+void ReportParamsModel::addReport(int reportId)
+{
+    QMap<QString, QString> tmp;
+    tmp.insert("reportTitle",this->reportTitle());
+    tmp.insert("d3PropertiesConfig",this->reportTitle());
+    tmp.insert("columns",this->reportTitle());
+    tmp.insert("rows",this->reportTitle());
+
+    this->reportsMap.insert(reportId,tmp);
+}
+
+QList<QString> ReportParamsModel::dataValuesColumns() const
+{
+    return m_dataValuesColumns;
+}
+
+QString ReportParamsModel::pointerValue() const
+{
+    return m_pointerValue;
+}
+
 void ReportParamsModel::setItemName(QString itemName)
 {
     if (m_itemName == itemName)
@@ -171,4 +192,22 @@ void ReportParamsModel::setReportTitle(QString reportTitle)
 
     m_reportTitle = reportTitle;
     emit reportTitleChanged(m_reportTitle);
+}
+
+void ReportParamsModel::setDataValuesColumns(QList<QString> dataValuesColumns)
+{
+    if (m_dataValuesColumns == dataValuesColumns)
+        return;
+
+    m_dataValuesColumns = dataValuesColumns;
+    emit dataValuesChanged(m_dataValuesColumns);
+}
+
+void ReportParamsModel::setPointerValue(QString pointerValue)
+{
+    if (m_pointerValue == pointerValue)
+        return;
+
+    m_pointerValue = pointerValue;
+    emit pointerValueChanged(m_pointerValue);
 }
