@@ -102,9 +102,19 @@
 
             var legend_padding = 120;
 
-            var y = d3.scaleLinear().domain([0, 1]).range([height, 0]);
+            var y = d3
+                .scaleLinear()
+                .domain(
+                    d3.extent(dataValues, function (d) {
+                        return d[0];
+                    })
+                )
+                .range([height, 0]);
 
-            var x0 = d3.scaleBand().domain(d3.range(n)).range([0, width], 0.1);
+            var x0 = d3
+                .scaleBand()
+                .domain(d3.range(n))
+                .range([0, width], paddingInner);
 
             var x1 = d3
                 .scaleBand()

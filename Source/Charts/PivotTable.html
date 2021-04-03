@@ -27,10 +27,6 @@
             body {
                 font-size: 1.2em;
             }
-            .orb-toolbar,
-            .drp-trgt {
-                display: none;
-            }
 
             .inner-table.upper-buttons {
                 display: none;
@@ -162,10 +158,15 @@
         }*/
             };
 
-            var elem = document.getElementById("rr");
-
             var pgridwidget = new orb.pgridwidget(config);
-            pgridwidget.render(elem);
+
+            function drawChart(data, plotConfiguration = {}) {
+                var elem = document.getElementById("rr");
+                pgridwidget = new orb.pgridwidget(config);
+                pgridwidget.render(elem);
+            }
+
+            drawChart();
         </script>
     </body>
 </html>
