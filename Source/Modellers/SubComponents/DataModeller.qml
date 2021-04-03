@@ -89,7 +89,7 @@ Item {
             if(moduleName === dataModellerItem.moduleName){
                 allColumns.forEach(function(item, index){
 
-                    let param = tableName + "." + item[0]
+                    let param = "\"" + tableName + "\"" + "." + "\"" + item[0] + "\""
                     DSParamsModel.addToQuerySelectParamsList(param)
                 })
             }
