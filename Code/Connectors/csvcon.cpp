@@ -24,4 +24,9 @@ QVariantMap CSVCon::CSVInstance(const QString &filepath)
     return outputStatus;
 }
 
+CSVCon::~CSVCon()
+{
+
+}
+
 

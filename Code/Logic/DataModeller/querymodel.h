@@ -19,6 +19,7 @@ class QueryModel : public QSqlQueryModel
 
 public:
     explicit QueryModel(QObject *parent = 0);
+    ~QueryModel();
 
     // QSqlQueryModel method override
 
@@ -28,6 +29,7 @@ public:
     QHash<int, QByteArray> roleNames() const;
 
     Q_INVOKABLE void callSql(QString tmpSql);
+    Q_INVOKABLE void removeTmpChartData();
 
 public slots:
     void receiveFilterQuery(QString & filteredQuery);
