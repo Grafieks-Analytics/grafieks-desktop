@@ -32,6 +32,8 @@
     <script>
         var valueDateType = false;
 
+    
+
         // Color Pallets - Set 3
         const d3colors = [
             "#8DD3C9",
@@ -236,8 +238,8 @@ console.log(JSON.stringify(plottingConfiguration));
 
             const [xAxisLabel,yAxisLabel]=data[1];
            
-            setLabel(xAxisLabel, "x_label", false);
-            setLabel(yAxisLabel, "y_label", false);
+            setLabel(xAxisLabel, "x_label", 20,30);
+            setLabel(yAxisLabel, "y_label", 20,30);
 
 
             function make_x_gridlines() {
