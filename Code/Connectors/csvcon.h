@@ -19,6 +19,8 @@ public:
     explicit CSVCon(QObject *parent = nullptr);
     QVariantMap CSVInstance(const QString & filepath);
 
+    ~CSVCon();
+
 signals:
 
 };

@@ -25,7 +25,7 @@ void DuckCon::createTable(){
     QString fileExtension = QFileInfo(db).completeSuffix();
 
 
-    fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]."));
+    fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
     table = fileName;
 
     if(fileExtension.toLower() == "json"){
@@ -71,5 +71,3 @@ void DuckCon::createTable(){
     }
 
 }
-
-

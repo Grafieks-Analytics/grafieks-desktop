@@ -1211,9 +1211,15 @@ QString ChartsModel::getTablePivotValues(QVariantList &xAxisColumn, QVariantList
     return strData;
 }
 
+void ChartsModel::removeTmpChartData()
+{
+    this->~ChartsModel();
+}
+
 
 void ChartsModel::getChartData(QMap<int, QStringList *> chartData)
 {
+    qDebug() << "CHART DATA" << chartData.value(1) << "VALUE AT 1";
     this->newChartData = chartData;
 }
 
