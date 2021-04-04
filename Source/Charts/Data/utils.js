@@ -17,20 +17,37 @@ function changeChartAttributes(selector, attributeName, attributeValue) {
 
 function changeLabelPostionsAttributes(selectorTick,selectorLabel, attributeName) {
   var value = getAttributesValues(selectorTick);
-  var isFirstInitialValueSet = window[initialLabelPosition + attributeName];
+  var isFirstInitialValueSet = window["initialLabelPosition" + attributeName];
   if (!isFirstInitialValueSet)
   {
-    window[initialLabelPosition + attributeName] = d3
+    window["initialLabelPosition" + attributeName] = d3
       .selectAll(selectorLabel)
       .attr(attributeName);
     
     window.isFirstInitialValueSet=true;
-    }
-   
-  d3.selectAll(selectorLabel).attr(
-    attributeName,
-    (+window[initialLabelPosition + attributeName]) + +value
+  }
+  
+  console.log(
+    "window['initialLabelPosition' + attributeName]" +
+      window['initialLabelPosition' + attributeName]
   );
+   
+  if (selectorLabel == ".y_label") {
+      d3.selectAll(selectorLabel).attr(
+        attributeName,
+        +window["initialLabelPosition" + attributeName] - +value
+      );
+  }
+  else if (selectorLabel == ".x_label") {
+      d3.selectAll(selectorLabel).attr(
+        attributeName,
+        +window["initialLabelPosition" + attributeName] + +value
+      );
+  }
+  
+
+
+
 }
 
 // function getLabelPosition(selectorLabel , axis) {

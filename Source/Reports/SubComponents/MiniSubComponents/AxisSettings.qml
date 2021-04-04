@@ -415,6 +415,9 @@ Rectangle{
                                             onCurrentValueChanged: {
 
                                                     webEngineView.runJavaScript("changeChartAttributes('.x_label','font-size', '"+xAxisLabelFontSize.currentValue+"')")
+                                                d3PropertyConfig["xLabelFontSize"]=xAxisLabelFontSize.currentValue;
+                                                console.log(xAxisLabelFontSize.currentValue);
+                                                console.log("plotconfig"+JSON.stringify(d3PropertyConfig));
 
                                             }
                                         }
@@ -982,7 +985,7 @@ Rectangle{
                                             width: parent.width
                                             onCurrentValueChanged: {
                                                 console.log("fontsize"+yAxisTickMarkFontSize.currentValue);
-                                                    webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-size', '"+yAxisTickMarkFontSize.currentValue+"');changeLabelPostionsAttributes('.y-axis .tick text','.y_label','x')")
+                                                    webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-size', '"+yAxisTickMarkFontSize.currentValue+"');changeLabelPostionsAttributes('.y-axis .tick text','.y_label','y')")
 
                                             }
                                         }

@@ -84,6 +84,7 @@ console.log(JSON.stringify(plottingConfiguration));
                 markerShape,
                 curveType,
                 dateFormat,
+                xLabelFontSize,
             } = plottingConfiguration;
             if (!d3colorPalette) {
                 d3colorPalette = defaultD3Config.d3ColorPalette;
@@ -96,7 +97,9 @@ console.log(JSON.stringify(plottingConfiguration));
 
             if (!dateFormat) {
                 dateFormat = defaultD3Config.dateFormat;
-            }   
+            } 
+        
+       
 
             d3.selectAll("#my_dataviz").html("");
 
@@ -240,7 +243,15 @@ console.log(JSON.stringify(plottingConfiguration));
            
             setLabel(xAxisLabel, "x_label", 20,30);
             setLabel(yAxisLabel, "y_label", 20,30);
+        console.log("xLabelFontSize1" + xLabelFontSize)
+            if(xLabelFontSize){
+                  console.log("xLabelFontSize2" + xLabelFontSize)
+              
+                changeChartAttributes('.x_label', 'font-size',xLabelFontSize);
 
+                
+            }
+            
 
             function make_x_gridlines() {
                 return d3.axisBottom(x).ticks(8);
@@ -248,6 +259,8 @@ console.log(JSON.stringify(plottingConfiguration));
             function make_y_gridlines() {
                 return d3.axisLeft(y).ticks(yaxisTicks);
             }
+
+
 
             // Generate Grid ends
         }
