@@ -39,6 +39,7 @@ Page {
     property Page page: queryModellerPage
     property LeftMenuBar leftMenuBar : left_menubar
     property int droppedCount: 0
+    property var connectionType: Constants.sqlType
 
 
     // Dont delete this
@@ -52,6 +53,13 @@ Page {
 
     Connections{
         target: ConnectorsLoginModel
+
+        // Check connection type
+        function onConnectedDBType(conType){
+            connectionType = conType
+        }
+
+        // Rest fetch data model from datasources
 
         function onMysqlLoginStatus(status){
             if(status.status === true){
@@ -360,6 +368,20 @@ Page {
 
     }
 
+    function disconnectDS(){
+        if(connectionType === Constants.sqlType){
+            QueryModel.removeTmpChartData()
+        } else{
+            DuckQueryModel.removeTmpChartData()
+        }
+
+        ConnectorsLoginModel.sqlLogout()
+        ChartsModel.removeTmpChartData()
+
+        // Take back to select connection screen
+        stacklayout_home.currentIndex = 3
+    }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -650,6 +672,23 @@ Page {
             anchors.right: submenu.right
             anchors.rightMargin: 10
 
+            // Disconnect Button starts
+
+            Button{
+                id: disconnect_btn
+                width: disconnect_text.text.length * 8
+                height: 28
+
+                Text{
+                    id: disconnect_text
+                    text: "Disconnect " + ConnectorsLoginModel.connectedDB
+                    anchors.centerIn: parent
+                }
+
+                onClicked: disconnectDS()
+            }
+
+            // Disconnect Button ends
 
             // Refresh button starts
 
@@ -1200,16 +1239,8 @@ Page {
 
                 Rectangle{
 
-
                     height: 710
                     width:500
-
-
-
-
-
-
-
 
                     Rectangle {
                         id: categoryItem
@@ -1283,7 +1314,6 @@ Page {
                         clip: true
                         flickableDirection: Flickable.VerticalFlick
                         boundsBehavior: Flickable.StopAtBounds
-                        //                            interactive: true
                         ScrollBar.vertical: ScrollBar {}
 
 

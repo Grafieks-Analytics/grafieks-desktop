@@ -11,9 +11,17 @@ DuckQueryModel::DuckQueryModel(DuckCon *duckCon, QObject *parent)
     this->duckCon = duckCon;
 }
 
+DuckQueryModel::~DuckQueryModel()
+{
+    this->duckChartData.clear();
+    this->duckChartHeader.clear();
+    this->resultData.clear();
+}
+
 
 void DuckQueryModel::setQuery(QString query)
 {
+    this->resultData.clear();
     this->query = query;
     querySplitter.setQueryForClasses(this->query);
 
@@ -109,6 +117,8 @@ void DuckQueryModel::setQueryResult()
     QStringList list;
 
     auto result = duckCon->con.Query(this->query.toStdString());
+    if(!result->error.empty())
+        qDebug() << result->error.c_str() << "ERROR IN DUCK";
 
     // Set the internalRowCount & internalColCount for the QAbstractListModel rowCount method
     this->internalColCount = result->collection.ColumnCount();
@@ -127,6 +137,12 @@ void DuckQueryModel::setQueryResult()
         this->resultData.append(list);
         list.clear();
 
+    }
+
+    if(this->internalRowCount > 0){
+        emit duckHasData(true);
+    } else{
+        emit duckHasData(false);
     }
     endResetModel();
 }
@@ -163,4 +179,9 @@ void DuckQueryModel::getQueryStats()
 {
     auto result = duckCon->con.Query("PRAGMA profiling_output");
     result->Print();
+}
+
+void DuckQueryModel::removeTmpChartData()
+{
+    this->~DuckQueryModel();
 }

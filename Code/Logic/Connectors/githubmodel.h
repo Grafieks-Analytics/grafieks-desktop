@@ -11,7 +11,7 @@
  * \details This class lists all the methods which interact with the view in QtQuick
  * \ingroup ConnectorScreen
  */
-class GithubModel : QAbstractListModel
+class GithubModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(GithubDS * githubds READ githubds WRITE setGithubds);
@@ -32,7 +32,8 @@ public:
         NameRole,
         KindRole,
         ModifiedTimeRole,
-        ExtensionRole
+        ExtensionRole,
+        UrlRole
     };
 
 signals:

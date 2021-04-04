@@ -73,13 +73,8 @@ void SheetDS::fetchDatasources()
 void SheetDS::searchQuer(QString path)
 {
     emit showBusyIndicator(true);
-
-    if(path == "")
-        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType+contains+%27application%2Fvnd.google-apps.spreadsheet%27"));
-    else
-        m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name+contains+%27" + path +"%27+and+mimeType+contains+%27application%2Fvnd.google-apps.spreadsheet%27"));
-
-    connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
+    m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name+contains+%27" + path +"%27+and+mimeType+contains+%27application%2Fvnd.google-apps.spreadsheet%27"));
+    connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataSearchFinished);
 }
 
 /*!
@@ -90,9 +85,20 @@ void SheetDS::homeBut()
     emit showBusyIndicator(true);
 
     m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=mimeType='application/vnd.google-apps.spreadsheet'"));
-
     connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::dataReadFinished);
 }
+
+void SheetDS::fetchFileData(QString gFileId)
+{
+    emit showBusyIndicator(true);
+    this->gFileId = gFileId;
+
+    QUrl sheetDownloadUrl("https://www.googleapis.com/drive/v3/files/" + gFileId +"/export?mimeType=application%2Fvnd.openxmlformats-officedocument.spreadsheetml.sheet&key="+Secret::sheetClient);
+    m_networkReply = this->google->get(sheetDownloadUrl);
+
+    connect(m_networkReply,&QNetworkReply::finished,this,&SheetDS::fileDownloadFinished);
+}
+
 
 
 /*!
@@ -139,6 +145,25 @@ void SheetDS::resetDatasource()
     emit postReset();
 }
 
+void SheetDS::fileDownloadFinished()
+{
+
+    if(m_networkReply->error() ){
+        qDebug() <<"There was some error : " << m_networkReply->errorString() ;
+
+    }else{
+        QString fileName = QDir::temp().tempPath() +"/" + this->gFileId +".xlsx";
+        QFile file(fileName);
+        file.open(QIODevice::WriteOnly);
+        file.write(m_networkReply->readAll(), m_networkReply->size());
+        file.close();
+
+        emit fileDownloaded(fileName, "excel");
+    }
+
+    emit showBusyIndicator(false);
+}
+
 /*!
  * \brief Processes the data buffer
  * \details Process the data buffer and append new values to QList<Sheet*>
@@ -146,6 +171,7 @@ void SheetDS::resetDatasource()
 void SheetDS::dataReadFinished()
 {
     m_dataBuffer->append(m_networkReply->readAll());
+
     if(m_networkReply->error() ){
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
@@ -191,6 +217,48 @@ void SheetDS::dataReadFinished()
 
 }
 
+void SheetDS::dataSearchFinished()
+{
+
+    if(m_networkReply->error() ){
+        qDebug() <<"There was some error : " << m_networkReply->errorString() ;
+
+    }else{
+        QStringList requiredExtensions;
+        requiredExtensions << ".gsheet";
+
+        this->resetDatasource();
+        QJsonDocument resultJson = QJsonDocument::fromJson(m_networkReply->readAll().data());
+        QJsonObject resultObj = resultJson.object();
+
+        QJsonArray dataArray = resultObj["files"].toArray();
+        for(int i=0;i<dataArray.size();i++){
+
+            QJsonObject dataObj = dataArray.at(i).toObject();
+
+            QString SheetID = dataObj["id"].toString();
+            QString SheetName = dataObj["name"].toString();
+            QString SheetKind = dataObj["kind"].toString();
+            QString SheetModiTime = QDateTime::fromString(dataObj["modifiedTime"].toString(), Qt::ISODate).toString("yyyy/MM/dd HH:mm ap");
+            QString SheetExtension = "";
+            QString SheetMimeType = dataObj["mimeType"].toString();
+
+            QStringList extensionList;
+            if(SheetMimeType == "application/vnd.google-apps.spreadsheet"){
+                SheetExtension = ".gsheet";
+            }
+
+            if(SheetMimeType != "application/vnd.google-apps.folder" && requiredExtensions.indexOf(SheetExtension) >= 0){
+                this->addDataSource(SheetID,SheetName,SheetKind,SheetModiTime,SheetExtension);
+            }
+        }
+
+        m_dataBuffer->clear();
+    }
+
+    emit showBusyIndicator(false);
+}
+
 void SheetDS::userReadFinished()
 {
 
@@ -209,20 +277,3 @@ void SheetDS::userReadFinished()
 
     emit showBusyIndicator(false);
 }
-
-void SheetDS::saveFile()
-{
-
-    QByteArray arr = m_networkReply->readAll();
-    qDebug() << arr << "SAVE FILE";
-
-    QFile file("C:\\Users\\chill\\Desktop\\x.xlsx");
-    file.open(QIODevice::WriteOnly);
-    file.write(arr);
-    file.close();
-
-    emit showBusyIndicator(false);
-}
-
-
-

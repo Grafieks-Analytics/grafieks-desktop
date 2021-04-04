@@ -9,6 +9,7 @@
 #include "../../Connectors/allconnectors.h"
 #include "../../statics.h"
 #include "../../constants.h"
+#include "../General/generalparamsmodel.h"
 
 /*!
  * \brief Initiates connection to a datasource from the view
@@ -20,16 +21,33 @@ class ConnectorsLoginModel : public QObject
     Q_OBJECT
     Q_PROPERTY(QString connectedDB READ connectedDB WRITE setConnectedDB NOTIFY connectedDBChanged)
 
+    QScopedPointer<MysqlCon> mysqlcon;
+    QScopedPointer<Sqlitecon> sqlitecon;
+    QScopedPointer<MSSqlCon> mssqlcon;
+    QScopedPointer<PostgresCon> postgrescon;
+    QScopedPointer<RedshiftCon> redshiftcon;
+    QScopedPointer<OracleCon> oraclecon;
+    QScopedPointer<MongoCon> mongocon;
+    QScopedPointer<ImpalaCon> impalacon;
+    QScopedPointer<HiveCon> hivecon;
+    QScopedPointer<SnowflakeCon> snowflakecon;
+    QScopedPointer<TeradataCon> teradatacon;
+    QScopedPointer<AccessCon> accesscon;
+    QScopedPointer<ExcelCon> excelcon;
+    QScopedPointer<CSVCon> csvcon;
+    QScopedPointer<JsonCon> jsoncon;
 
     QString m_connectedDB;
+    GeneralParamsModel generalParamsModel;
+
 
 public:
     explicit ConnectorsLoginModel(QObject *parent = nullptr);
     Q_INVOKABLE void mysqlLogin(QString host, QString db, int port, QString username, QString password);
     Q_INVOKABLE void sqliteLogin(QString filename);
-    Q_INVOKABLE void csvLogin(QString filename, QString separator);
-    Q_INVOKABLE void jsonLogin(QString filename);
-    Q_INVOKABLE void excelLogin(QString filename);
+    Q_INVOKABLE void csvLogin(QString filename, bool directLogin, QString separator);
+    Q_INVOKABLE void jsonLogin(QString filename, bool directLogin);
+    Q_INVOKABLE void excelLogin(QString filename, bool directLogin);
     Q_INVOKABLE QString urlToFilePath(const QUrl &url);
 
     // ODBC
@@ -45,6 +63,8 @@ public:
     Q_INVOKABLE void teradataOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
     Q_INVOKABLE void accessOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
     Q_INVOKABLE void excelOdbcLogin(QString driver, QString filename);
+
+    Q_INVOKABLE void sqlLogout();
 
     QString connectedDB() const;
     void setConnectedDB(QString connectedDB);
@@ -62,13 +82,18 @@ signals:
     void hiveLoginStatus(QVariantMap status);
     void snowflakeLoginStatus(QVariantMap status);
     void teradataLoginStatus(QVariantMap status);
-    void excelLoginStatus(QVariantMap status);
-    void jsonLoginStatus(QVariantMap status);
-    void csvLoginStatus(QVariantMap status);
+    void excelLoginStatus(QVariantMap status, bool directLogin);
+    void jsonLoginStatus(QVariantMap status, bool directLogin);
+    void csvLoginStatus(QVariantMap status, bool directLogin);
     void accessLoginStatus(QVariantMap status);
     void connectedDBChanged(QString connectedDB);
     void connectedDBType(QString conType);
     void sendDbName();
+    void dSSelected(bool dsStatus);
+
+private:
+    void staticSetter(QString dbName, QString classification, int intType, QString strType = NULL);
+    void staticRemover();
 };
 
 #endif // MYSQLLOGINMODEL_H

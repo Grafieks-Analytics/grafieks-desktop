@@ -242,17 +242,18 @@ Rectangle{
         }
         ListElement{
             icon: "pivot.png"
-            chartHtml:"PivotTableMultipleSubtotalTest.html"
+            chartHtml:"PivotTable.html"
             activeChart: false
             title:"Pivot"
             xAxisLabelName: "Rows"
             yAxisLabelName: "Columns"
+            themeVisible: true
             mainCustomizations: "Properties,Legend,Reference Line,Total"
         }
         ListElement{
             icon: "table.png"
             chartHtml:"TableChart.html"
-            xAxisLabelName: "Rows"
+            xAxisLabelName: "Columns"
             yAxisLabelName: "Columns"
             elementWidth: 30
             activeChart: false
@@ -336,6 +337,8 @@ Rectangle{
         }
 
         lineTypeChartVisible = allCharts.get(index).lineTypeChartVisible;
+        pivotThemeVisible = !!allCharts.get(index).themeVisible;
+
         allCharts.set(activeChartIndex,{activeChart: false})
         activeChartIndex = index;
         allCharts.set(index,{activeChart: true})

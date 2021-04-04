@@ -7,7 +7,6 @@ CSVCon::CSVCon(QObject *parent) : QObject(parent)
 
 QVariantMap CSVCon::CSVInstance(const QString &filepath)
 {
-    qDebug() << filepath;
     QVariantMap outputStatus;
     QFile file(filepath);
 
@@ -23,6 +22,11 @@ QVariantMap CSVCon::CSVInstance(const QString &filepath)
     }
 
     return outputStatus;
+}
+
+CSVCon::~CSVCon()
+{
+
 }
 
 
