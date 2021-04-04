@@ -126,7 +126,7 @@ Popup {
 
              Constants.defaultYAxisLabelColor = yAxisLegendColorDialog.color;
 
-            webEngineView.runJavaScript("changeChartAttributes('.x-axis text','fill', '"+yAxisLegendColorDialog.color+"')")
+            webEngineView.runJavaScript("changeChartAttributes('.y_label','fill', '"+yAxisLegendColorDialog.color+"')")
         }
     }
 
