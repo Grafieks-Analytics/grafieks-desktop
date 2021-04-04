@@ -218,5 +218,20 @@
         <file>Source/MainSubComponents/BusyIndicatorTpl.qml</file>
         <file>Source/Charts/BarGroupedChart.html</file>
         <file>Source/Charts/Error.html</file>
+        <file>Source/Charts/PivotTableMultipleSubtotal.html</file>
+        <file>Source/Charts/PivotTable.html</file>
+        <file>Source/Charts/Data/bootstrap-3.3.1/js/bootstrap.js</file>
+        <file>Source/Charts/Data/bootstrap-3.3.1/js/bootstrap.min.js</file>
+        <file>Source/Charts/Data/bootstrap-3.3.1/js/npm.js</file>
+        <file>Source/Charts/Data/orb.css</file>
+        <file>Source/Charts/Data/orb.js</file>
+        <file>Source/Charts/Data/orb.min.css</file>
+        <file>Source/Charts/Data/orb.min.js</file>
+        <file>Source/Charts/Data/react-0.12.2.js</file>
+        <file>Source/Charts/Data/react-0.12.2.min.js</file>
+        <file>Source/Charts/Data/demo.data.js</file>
+        <file>Source/Charts/Data/bootstrap-3.3.1/css/bootstrap.css</file>
+        <file>Source/Charts/Data/bootstrap-3.3.1/css/bootstrap-theme.css</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/PivotThemesPopup.qml</file>
     </qresource>
 </RCC>

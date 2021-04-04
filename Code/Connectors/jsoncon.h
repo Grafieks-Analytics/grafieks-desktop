@@ -29,8 +29,9 @@ class JsonCon : public QObject
 
 public:
     explicit JsonCon(QObject *parent = nullptr);
-    QVariantMap JsonInstance(const QString & filepath);
+    ~JsonCon();
 
+    QVariantMap JsonInstance(const QString & filepath);
     QString convertJsonToCsv(QString &jsonPath);
 
 signals:

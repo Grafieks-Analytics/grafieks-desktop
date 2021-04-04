@@ -11,6 +11,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
+import QtQuick.Dialogs 1.3
 
 import com.grafieks.singleton.constants 1.0
 
@@ -28,12 +29,13 @@ Rectangle{
     property int selectedMenu: 0
     property color dataDesignerColor : Constants.themeColor
     property color dashboardDesignerColor : Constants.themeColor
+    property int redirectLayoutId: 3
+    property bool dsSelected: false
 
     Connections{
         target: GeneralParamsModel
 
         function onMenuTypeChanged(menuType){
-//            console.log(menuType,  Constants.dataDesignerMenu)
 
             if(menuType === Constants.dataDesignerMenu){
 
@@ -47,8 +49,33 @@ Rectangle{
 
             dataDesignerColor = dataDesignerBtnBackground.color
             dashboardDesignerColor = dashboardMenuBtnBackground.color
+        }
+    }
 
-//            console.log(dataDesignerBtnBackground.color, dashboardMenuBtnBackground.color, "COLOR CODE")
+    Connections{
+        target: ConnectorsLoginModel
+
+        function onDSSelected(dsStatus){
+
+            console.log(dsStatus, "DS SELECTED")
+
+            if(dsStatus === true){
+
+                // Enable Dashboard menu
+                dsSelected = true
+
+                // Dont redirect the Datasource menu to connectors screen
+                // Instead take to Query modeler
+                redirectLayoutId = 5
+
+            } else{
+
+                // Disable Dashboard menu
+                dsSelected = false
+
+                // Redirect the Datasource menu to connectors screen
+                redirectLayoutId = 3
+            }
         }
     }
 
@@ -70,13 +97,11 @@ Rectangle{
             }
 
             onClicked: {
-
                 GeneralParamsModel.setMenuType(Constants.dataDesignerMenu)
-                stacklayout_home.currentIndex = 3
+                stacklayout_home.currentIndex = redirectLayoutId
             }
 
             onHoveredChanged: {
-
                 dataDesignerBtnBackground.color = dataDesignerRect.hovered ? Constants.leftDarkColor : dataDesignerColor
             }
 
@@ -138,8 +163,12 @@ Rectangle{
 
             onClicked: {
 
-                GeneralParamsModel.setMenuType(Constants.dashboardDesignerMenu)
-                stacklayout_home.currentIndex = 6
+                if(dsSelected === true){
+                    GeneralParamsModel.setMenuType(Constants.dashboardDesignerMenu)
+                    stacklayout_home.currentIndex = 6
+                } else{
+                    errorDialog.open()
+                }
             }
             onHoveredChanged: {
                 dashboardMenuBtnBackground.color = dashboardDesignerRect.hovered ? Constants.leftDarkColor : dashboardDesignerColor
@@ -186,6 +215,12 @@ Rectangle{
         anchors.top: parent.top
         padding: 0
         anchors.topMargin: -4
+    }
+
+    MessageDialog{
+        id: errorDialog
+        title: "Dashboard Disabled"
+        text: "Create or Select a Datasource before creating a dashboard"
     }
 }
 

@@ -486,6 +486,49 @@ Column{
     }
     // Label Ends
 
+    // Pivot Theme starts
+    Rectangle{
+
+        height: 20
+        width: parent.width
+        visible: pivotThemeVisible
+
+        Rectangle{
+            anchors.fill: parent
+
+
+            PivotThemesPopup{
+                id: pivotThemePopup
+                x: parent.width - 10
+            }
+
+            Text {
+                text: qsTr("Themes")
+                anchors.left: parent.left
+                anchors.leftMargin: leftMargin
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: Constants.fontCategoryHeaderSmall
+            }
+
+            Image {
+                height: editImageSize
+                width: editImageSize
+                source: "/Images/icons/Edit_20.png"
+                anchors.right: parent.right
+                anchors.rightMargin: leftMargin
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            MouseArea{
+                anchors.fill: parent
+                onClicked: pivotThemePopup.visible = true
+            }
+
+        }
+
+    }
+    // Theme Ends
+
 
 
     // Merge Axis starts

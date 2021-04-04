@@ -17,6 +17,7 @@
 #include <QOAuthHttpServerReplyHandler>
 #include <QtDebug>
 #include <QByteArray>
+#include <QDir>
 
 
 #include "dropbox.h"
@@ -40,7 +41,7 @@ public:
     Q_INVOKABLE QString goingBack(QString path,QString name);
     Q_INVOKABLE void folderNav(QString path);
     Q_INVOKABLE void searchQuer(QString path);
-    Q_INVOKABLE void downloadFile(QString fileId);
+    Q_INVOKABLE void fetchFileData(QString fileId, QString fileName, QString extension);
 
     void addDataSource(Dropbox * dropbox);
 
@@ -56,6 +57,7 @@ signals:
     void postReset();
     void getDropboxUsername(QString username);
     void showBusyIndicator(bool status);
+    void fileDownloaded(QString filePath, QString fileType);
 
 private slots:
     void resetDatasource();
@@ -75,6 +77,10 @@ private:
     QOAuth2AuthorizationCodeFlow * dropbox;
     QString token;
     QString username;
+
+    QString dropBoxFileId;
+    QString dropBoxFileName;
+    QString extension;
 
     void addDatasourceHelper(QJsonDocument &doc);
 };

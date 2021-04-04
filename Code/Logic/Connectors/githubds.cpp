@@ -3,7 +3,8 @@
 GithubDS::GithubDS(QObject *parent) : QObject(parent),
     m_networkAccessManager(new QNetworkAccessManager(this)),
     m_networkReply(nullptr),
-    m_dataBuffer(new QByteArray)
+    m_dataBuffer(new QByteArray),
+    totalData(0)
 {
     emit showBusyIndicator(true);
 
@@ -61,18 +62,34 @@ void GithubDS::fetchDatasources()
 void GithubDS::searchQuer(QString path)
 {
     emit showBusyIndicator(true);
+    this->resetDatasource();
 
-    m_networkReply = this->github->get(QUrl("https://www.githubapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)&q=name  +contains+%27" + path+ "%27"));
-    connect(m_networkReply,&QNetworkReply::finished,this,&GithubDS::dataReadFinished);
+    for(int i = 0; i < this->filesList.length(); i++){
+
+        if(this->filesList.at(i).contains(path)){
+
+            this->addDataSource(this->mainResultData.value(i).at(0),
+                                this->mainResultData.value(i).at(1),
+                                this->mainResultData.value(i).at(2),
+                                this->mainResultData.value(i).at(3),
+                                this->mainResultData.value(i).at(4),
+                                this->mainResultData.value(i).at(5)
+                                );
+        }
+    }
+    emit showBusyIndicator(false);
 
 }
 
-void GithubDS::homeBut()
+void GithubDS::fetchFileData(QString gFileId, QString extension, QString url)
 {
     emit showBusyIndicator(true);
+    this->gFileId = gFileId;
+    this->extension = extension;
+    this->url = url;
 
-    m_networkReply = this->github->get(QUrl("https://www.githubapis.com/drive/v3/files?fields=files(id,name,kind,modifiedTime,mimeType)"));
-    connect(m_networkReply, &QNetworkReply::finished, this, &GithubDS::dataReadFinished);
+    m_networkReply = this->github->get(QUrl(this->url));
+    connect(m_networkReply,&QNetworkReply::finished,this,&GithubDS::fileDownloadFinished);
 }
 
 void GithubDS::addDataSource(Github *github)
@@ -82,9 +99,9 @@ void GithubDS::addDataSource(Github *github)
     emit postItemAdded();
 }
 
-void GithubDS::addDataSource(const QString &id, const QString &name, const QString &kind, const QString &modifiedTime, const QString &extension)
+void GithubDS::addDataSource(const QString &id, const QString &name, const QString &kind, const QString &modifiedTime, const QString &extension, const QString &url)
 {
-    Github *github = new Github(id,name,kind,modifiedTime,extension);
+    Github *github = new Github(id, name, kind, modifiedTime, extension, url);
     addDataSource(github);
 }
 
@@ -113,37 +130,47 @@ void GithubDS::dataReadFinished()
 
     }else{
         QStringList requiredExtensions;
-        requiredExtensions << ".xls" << ".xlsx" << ".csv" << ".json" << ".ods";
+        requiredExtensions << "text/csv" << "application/json";
 
         this->resetDatasource();
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
-        QJsonObject resultObj = resultJson.object();
 
-        qDebug() << resultJson;
 
-        QJsonArray dataArray = resultObj["files"].toArray();
+        QJsonArray dataArray = resultJson.array();
 
         for(int i=0; i<dataArray.size(); i++){
 
             QJsonObject dataObj = dataArray.at(i).toObject();
 
-            QString GithubID = dataObj["id"].toString();
-            QString GithubName = dataObj["name"].toString();
-            QString GithubKind = dataObj["kind"].toString();
-            QString GithubModiTime = QDateTime::fromString(dataObj["modifiedTime"].toString(), Qt::ISODate).toString("yyyy/MM/dd HH:mm ap");
+            QStringList key =  dataObj.value("files").toObject().keys();
+            QJsonObject fileData = dataObj.value("files").toObject().value(key[0]).toObject();
+
+            QString GithubID = dataObj.value("id").toString();
+            QString GithubName = fileData.value("filename").toString();
+            QString GithubKind = fileData.value("language").toString();
+            QString GithubLink = fileData.value("raw_url").toString();
+            QString GithubModifiedTime = QDateTime::fromString(dataObj.value("updated_at").toString(), Qt::ISODate).toString("yyyy/MM/dd HH:mm ap");
             QString GithubExtension = "file";
-            QString GithubMimeType = dataObj["mimeType"].toString();
+            QString GithubMimeType = fileData.value("type").toString();
             QStringList extensionList;
 
             if(GithubName.contains(".")){
                 extensionList = GithubName.split('.');
                 GithubExtension = "." + extensionList.last();
-            }else if(GithubMimeType == "application/vnd.github-apps.spreadsheet"){
-                GithubExtension = ".gsheet";
             }
 
-            if(requiredExtensions.indexOf(GithubExtension) >= 0 || GithubExtension == "--"){
-                this->addDataSource(GithubID, GithubName, GithubKind, GithubModiTime, GithubExtension);
+            if(requiredExtensions.indexOf(GithubMimeType) >= 0 || GithubExtension == "--"){
+
+                // This data is required for search later
+                // As there is no search API for Gists
+                this->filesList << GithubName;
+                QStringList tmpData;
+                tmpData << GithubID << GithubName <<  GithubKind <<  GithubModifiedTime << GithubExtension << GithubLink;
+                this->mainResultData.insert(totalData, tmpData);
+                totalData++;
+
+                this->addDataSource(GithubID, GithubName, GithubKind, GithubModifiedTime, GithubExtension, GithubLink);
+
             }
         }
 
@@ -170,25 +197,34 @@ void GithubDS::userReadFinished()
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
         emit getGithubUsername(resultObj["email"].toString());
-
-        qDebug() << "USERG" <<resultJson;
-
-
     }
 
     emit showBusyIndicator(false);
 }
 
-void GithubDS::saveFile()
+void GithubDS::fileDownloadFinished()
 {
+    if(m_networkReply->error() ){
+        qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
-    QByteArray arr = m_networkReply->readAll();
-    qDebug() << arr << "SAVE FILE";
+    }else{
+        QString fileName = QDir::temp().tempPath() +"/" + this->gFileId +"." + this->extension;
+        QFile file(fileName);
+        file.open(QIODevice::WriteOnly);
+        file.write(m_networkReply->readAll(), m_networkReply->size());
+        file.close();
 
-    QFile file("C:\\Users\\chill\\Desktop\\x.xlsx");
-    file.open(QIODevice::WriteOnly);
-    file.write(arr);
-    file.close();
+        if(this->extension.contains("xls")){
+            emit fileDownloaded(fileName, "excel");
+
+        } else if(this->extension.contains("csv")){
+            emit fileDownloaded(fileName,"csv");
+
+        } else if(this->extension.contains("json")){
+            emit fileDownloaded(fileName, "json");
+        }
+    }
 
     emit showBusyIndicator(false);
 }
+
