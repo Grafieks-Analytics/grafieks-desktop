@@ -48,6 +48,7 @@ public:
     Q_INVOKABLE QString getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey);
     Q_INVOKABLE QString getTablePivotValues(QVariantList &xAxisColumn, QVariantList &yAxisColumn);
 
+    Q_INVOKABLE void removeTmpChartData();
 
 public slots:
     void getChartData(QMap<int, QStringList*> chartData);
