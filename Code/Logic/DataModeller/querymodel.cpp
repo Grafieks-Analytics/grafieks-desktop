@@ -6,6 +6,12 @@ QueryModel::QueryModel(QObject *parent): QSqlQueryModel(parent)
 
 }
 
+QueryModel::~QueryModel()
+{
+    this->sqlChartData.clear();
+    this->sqlChartHeader.clear();
+}
+
 void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
     QSqlQueryModel::setQuery(query, db);
@@ -44,6 +50,11 @@ void QueryModel::callSql(QString tmpSql)
 {
 
     this->executeQuery(tmpSql);
+}
+
+void QueryModel::removeTmpChartData()
+{
+    this->~QueryModel();
 }
 
 void QueryModel::setChartData()

@@ -11,6 +11,12 @@ DuckDataModel::DuckDataModel(DuckCon *duckCon, QObject *parent)
     this->duckCon = duckCon;
 }
 
+DuckDataModel::~DuckDataModel()
+{
+    this->allColumns.clear();
+    this->colData.clear();
+}
+
 
 void DuckDataModel::columnData(QString col, QString tableName)
 {

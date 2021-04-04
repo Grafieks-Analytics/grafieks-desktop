@@ -5,6 +5,11 @@ JsonCon::JsonCon(QObject *parent) : QObject(parent)
 
 }
 
+JsonCon::~JsonCon()
+{
+
+}
+
 QVariantMap JsonCon::JsonInstance(const QString &filepath)
 {
     QVariantMap outputStatus;

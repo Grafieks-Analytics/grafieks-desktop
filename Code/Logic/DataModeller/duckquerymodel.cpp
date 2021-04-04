@@ -11,6 +11,13 @@ DuckQueryModel::DuckQueryModel(DuckCon *duckCon, QObject *parent)
     this->duckCon = duckCon;
 }
 
+DuckQueryModel::~DuckQueryModel()
+{
+    this->duckChartData.clear();
+    this->duckChartHeader.clear();
+    this->resultData.clear();
+}
+
 
 void DuckQueryModel::setQuery(QString query)
 {
@@ -172,4 +179,9 @@ void DuckQueryModel::getQueryStats()
 {
     auto result = duckCon->con.Query("PRAGMA profiling_output");
     result->Print();
+}
+
+void DuckQueryModel::removeTmpChartData()
+{
+    this->~DuckQueryModel();
 }
