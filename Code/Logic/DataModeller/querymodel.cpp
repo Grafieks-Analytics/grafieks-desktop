@@ -10,6 +10,10 @@ QueryModel::~QueryModel()
 {
     this->sqlChartData.clear();
     this->sqlChartHeader.clear();
+
+//    QSqlQueryModel::beginResetModel();
+    QSqlQueryModel::clear();
+//    QSqlQueryModel::endResetModel();
 }
 
 void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
@@ -61,7 +65,6 @@ void QueryModel::setChartData()
 {
     int totalCols = this->columnCount();
     int totalRows = this->rowCount();
-    qDebug() << "COLROW" << totalCols << totalRows;
 
     for(int j = 0; j < totalRows; j++){
         for(int i = 0; i < totalCols; i++){
