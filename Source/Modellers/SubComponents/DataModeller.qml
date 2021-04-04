@@ -56,6 +56,7 @@ Item {
     property int firstRectId : 0
 
     property var connectionType: Constants.sqlType
+    property var query_joiner: ""
 
 
 
@@ -82,21 +83,6 @@ Item {
     // Connections Starts
 
     Connections{
-        target: TableColumnsModel
-
-        function onColumnListObtained(allColumns, tableName, moduleName){
-
-            if(moduleName === dataModellerItem.moduleName){
-                allColumns.forEach(function(item, index){
-
-                    let param = "\"" + tableName + "\"" + "." + "\"" + item[0] + "\""
-                    DSParamsModel.addToQuerySelectParamsList(param)
-                })
-            }
-        }
-    }
-
-    Connections{
         target: ConnectorsLoginModel
 
         function onConnectedDBType(conType){
@@ -105,6 +91,68 @@ Item {
                 connectionType = Constants.sqlType
             } else{
                 connectionType = Constants.duckType
+            }
+        }
+
+        // Query joiner
+
+        function onMysqlLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "`"
+            }
+        }
+        function onPostgresLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "\""
+            }
+        }
+        function onOracleLoginStatus(status){
+            if(status.status === true){
+                query_joiner = ""
+            }
+        }
+        function onMssqlLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "\""
+            }
+        }
+        function onSqliteLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "`"
+            }
+        }
+
+        function onExcelLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "\""
+            }
+        }
+
+        function onCsvLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "\""
+            }
+        }
+
+        function onJsonLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "\""
+            }
+        }
+    }
+
+
+    Connections{
+        target: TableColumnsModel
+
+        function onColumnListObtained(allColumns, tableName, moduleName){
+
+            if(moduleName === dataModellerItem.moduleName){
+                allColumns.forEach(function(item, index){
+
+                    let param = query_joiner + tableName + query_joiner + "." + query_joiner + item[0] + query_joiner
+                    DSParamsModel.addToQuerySelectParamsList(param)
+                })
             }
         }
     }
