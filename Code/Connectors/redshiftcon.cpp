@@ -10,7 +10,7 @@ QVariantMap RedshiftCon::RedshiftOdbcInstance(const QString &driver, const QStri
 
     QVariantMap outputStatus;
 
-    if(QSqlDatabase::isDriverAvailable(ODBCDRIVER)){
+    if(QSqlDatabase::isDriverAvailable("QODBC")){
         // Redshift is almost Postgres db
         // Sample connection for Postgres
         // dbOdbc.setDatabaseName("DRIVER={PostgreSQL Unicode};Server=localhost;Database=pg_test;Trusted_Connection=True;"); // "WorkDatabase" is the name of the database we want
@@ -18,7 +18,7 @@ QVariantMap RedshiftCon::RedshiftOdbcInstance(const QString &driver, const QStri
 
         QString dbString = "DRIVER={" + driver + "};" + "Database=" + db + ";Tusted_Connection=True";
 
-        QSqlDatabase dbRedshiftOdbc = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::redshiftOdbcStrType);
+        QSqlDatabase dbRedshiftOdbc = QSqlDatabase::addDatabase("QODBC", Constants::redshiftOdbcStrType);
 
         dbRedshiftOdbc.setDatabaseName(dbString);
         dbRedshiftOdbc.setPort(port);
@@ -49,7 +49,7 @@ QVariantMap RedshiftCon::RedshiftOdbcInstance(const QString &driver, const QStri
             // For Query/Data modeller
             // Else all the query statistics are listed in "Test Query" tab in Data-Query-Modeller
 
-            QSqlDatabase dbRedshiftOdbc2 = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::redshiftOdbcStrQueryType);
+            QSqlDatabase dbRedshiftOdbc2 = QSqlDatabase::addDatabase("QODBC", Constants::redshiftOdbcStrQueryType);
 
             dbRedshiftOdbc2.setDatabaseName(dbString);
             dbRedshiftOdbc2.setHostName(host);

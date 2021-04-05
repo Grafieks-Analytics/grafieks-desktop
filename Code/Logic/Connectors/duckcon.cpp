@@ -19,7 +19,7 @@ void DuckCon::createTable(){
     QString db = Statics::currentDbName;
     std::string csvFile    = db.toStdString();
 
-    QString fileName       = QFileInfo(db).baseName();
+    QString fileName       = QFileInfo(db).baseName().toLower();
     std::string csvdb       = "";
 
     QString fileExtension = QFileInfo(db).completeSuffix();

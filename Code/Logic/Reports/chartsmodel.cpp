@@ -13,6 +13,8 @@ ChartsModel::~ChartsModel()
 
 QString ChartsModel::getBarChartValues(QString xAxisColumn, QString yAxisColumn)
 {
+
+    qDebug() << xAxisColumn << yAxisColumn;
     QJsonArray data;
     QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
@@ -41,6 +43,7 @@ QString ChartsModel::getBarChartValues(QString xAxisColumn, QString yAxisColumn)
 
             index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
             yAxisData[index] = yAxisData[index].toFloat() + yAxisDataPointer->at(i).toFloat();
+            qDebug() << "Y DATA" << yAxisData[index] << yAxisDataPointer->at(i) << yAxisDataPointer->at(i).toFloat();
 
         }
     }
@@ -1219,11 +1222,15 @@ void ChartsModel::removeTmpChartData()
 
 void ChartsModel::getChartData(QMap<int, QStringList *> chartData)
 {
-    qDebug() << "CHART DATA" << chartData.value(1) << "VALUE AT 1";
+//    qDebug() << "CHART DATA" << *chartData.value(0) << "VALUE AT 0";
+//    qDebug() << "CHART DATA" << *chartData.value(1) << "VALUE AT 1";
+//    qDebug() << "CHART DATA" << *chartData.value(2) << "VALUE AT 2";
+//    qDebug() << "CHART DATA" << *chartData.value(3) << "VALUE AT 3";
     this->newChartData = chartData;
 }
 
 void ChartsModel::getChartHeader(QMap<int, QString> chartHeader)
 {
+    qDebug() << "HEADERS" << chartHeader.value(0) <<  chartHeader.value(1);
     this->newChartHeader = chartHeader;
 }
