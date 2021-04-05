@@ -21,14 +21,15 @@ QVariantMap PostgresCon::PostgresOdbcInstance(const QString &driver, const QStri
 {
     QVariantMap outputStatus;
 
-    if(QSqlDatabase::isDriverAvailable(ODBCDRIVER)){
+
+    if(QSqlDatabase::isDriverAvailable("QODBC")){
         //        Sample connection for Postgres
         //        dbOdbc.setDatabaseName("DRIVER={PostgreSQL Unicode};Server=localhost;Database=pg_test;Trusted_Connection=True;"); // "WorkDatabase" is the name of the database we want
 
 
         QString dbString = "DRIVER={" + driver + "};" + "Database=" + db + ";Tusted_Connection=True";
 
-        QSqlDatabase dbPostgresOdbc = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::postgresOdbcStrType);
+        QSqlDatabase dbPostgresOdbc = QSqlDatabase::addDatabase("QODBC", Constants::postgresOdbcStrType);
 
         dbPostgresOdbc.setDatabaseName(dbString);
         dbPostgresOdbc.setPort(port);
@@ -59,7 +60,7 @@ QVariantMap PostgresCon::PostgresOdbcInstance(const QString &driver, const QStri
             // For Query/Data modeller
             // Else all the query statistics are listed in "Test Query" tab in Data-Query-Modeller
 
-            QSqlDatabase dbPostgresOdbc2 = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::postgresOdbcStrQueryType);
+            QSqlDatabase dbPostgresOdbc2 = QSqlDatabase::addDatabase("QODBC", Constants::postgresOdbcStrQueryType);
 
             dbPostgresOdbc2.setDatabaseName(dbString);
             dbPostgresOdbc2.setHostName(host);

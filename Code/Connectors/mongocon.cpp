@@ -21,7 +21,7 @@ QVariantMap MongoCon::MongoOdbcInstance(const QString &driver, const QString &ho
 {
     QVariantMap outputStatus;
 
-    if(QSqlDatabase::isDriverAvailable(ODBCDRIVER)){
+    if(QSqlDatabase::isDriverAvailable("QODBC")){
 
         // Sample Connection for MongoDB
 //         dbOdbc.setDatabaseName("DRIVER={MongoDB ODBC 1.4.2 ANSI Driver};Server={cluster0.bdrhj.mongodb.net};Port=27015;Database=mongo_test");
@@ -30,7 +30,7 @@ QVariantMap MongoCon::MongoOdbcInstance(const QString &driver, const QString &ho
         QString dbString = "DRIVER={"+ driver +"};Server="+ host +";Port="+ QString::number(port) +";Database="+ db;
         qDebug() << dbString << "MONGO";
 
-        QSqlDatabase dbMongoOdbc = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::mongoOdbcStrType);
+        QSqlDatabase dbMongoOdbc = QSqlDatabase::addDatabase("QODBC", Constants::mongoOdbcStrType);
 
         dbMongoOdbc.setDatabaseName(dbString);
 
@@ -58,7 +58,7 @@ QVariantMap MongoCon::MongoOdbcInstance(const QString &driver, const QString &ho
             // For Query/Data modeller
             // Else all the query statistics are listed in "Test Query" tab in Data-Query-Modeller
 
-            QSqlDatabase dbMongoOdbc2 = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::mongoOdbcStrQueryType);
+            QSqlDatabase dbMongoOdbc2 = QSqlDatabase::addDatabase("QODBC", Constants::mongoOdbcStrQueryType);
 
             dbMongoOdbc2.setDatabaseName(dbString);
             dbMongoOdbc2.setHostName(host);

@@ -10,13 +10,13 @@ QVariantMap HiveCon::HiveOdbcInstance(const QString &driver, const QString &host
 
     QVariantMap outputStatus;
 
-    if(QSqlDatabase::isDriverAvailable(ODBCDRIVER)){
+    if(QSqlDatabase::isDriverAvailable("QODBC")){
 
         // Fetching from Hive database
 
         QString dbString = "DRIVER={" + driver + "};Server="+ host +"Database=" + db + ";Tusted_Connection=True";
 
-        QSqlDatabase dbHiveOdbc = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::hiveOdbcStrType);
+        QSqlDatabase dbHiveOdbc = QSqlDatabase::addDatabase("QODBC", Constants::hiveOdbcStrType);
 
         dbHiveOdbc.setDatabaseName(dbString);
         dbHiveOdbc.setPort(port);
@@ -46,7 +46,7 @@ QVariantMap HiveCon::HiveOdbcInstance(const QString &driver, const QString &host
             // For Query/Data modeller
             // Else all the query statistics are listed in "Test Query" tab in Data-Query-Modeller
 
-            QSqlDatabase dbHiveOdbc2 = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::hiveOdbcStrQueryType);
+            QSqlDatabase dbHiveOdbc2 = QSqlDatabase::addDatabase("QODBC", Constants::hiveOdbcStrQueryType);
 
             dbHiveOdbc2.setDatabaseName(dbString);
             dbHiveOdbc2.setHostName(host);
