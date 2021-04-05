@@ -54,7 +54,6 @@
 
 #include "Code/Logic/Reports/reportparamsmodel.h"
 #include "Code/Logic/Reports/reportsdatamodel.h"
-#include "Code/Logic/Reports/duckreportsds.h"
 #include "Code/Logic/Reports/chartsmodel.h"
 
 #include "Code/Logic/General/generalparamsmodel.h"
@@ -290,7 +289,6 @@ int main(int argc, char *argv[])
     TableSchemaModel tableSchemaModel(duckCon);
     TableColumnsModel tableColumnsModel(duckCon);
     ReportsDataModel reportModel(duckCon);
-    DuckReportsDS duckReportsDS(duckCon);
     DuckDataModel *duckDataModel = new DuckDataModel(duckCon);
     DuckQueryModel duckQueryModel(duckCon);
 
@@ -373,7 +371,6 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("DuckCon", duckCon);
     engine.rootContext()->setContextProperty("TableSchemaModel", &tableSchemaModel);
     engine.rootContext()->setContextProperty("ReportModelList", &reportModel);
-    engine.rootContext()->setContextProperty("DuckReportsDS", &duckReportsDS);
     engine.rootContext()->setContextProperty("DuckDataModel", duckDataModel);
     engine.rootContext()->setContextProperty("DuckQueryModel", &duckQueryModel);
     engine.rootContext()->setContextProperty("ChartsModel", &chartsModel);

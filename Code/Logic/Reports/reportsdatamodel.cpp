@@ -271,124 +271,124 @@ void ReportsDataModel::getColumnsForTable(QString tableName)
     }
 }
 
-void ReportsDataModel::getData()
-{
-    QVariantList xAxis;
-    QVariantList yAxis;
+//void ReportsDataModel::getData()
+//{
+//    QVariantList xAxis;
+//    QVariantList yAxis;
 
-    QElapsedTimer timer;
-    QElapsedTimer timer2;
-    timer2.start();
-    timer.start();
+//    QElapsedTimer timer;
+//    QElapsedTimer timer2;
+//    timer2.start();
+//    timer.start();
 
-    switch(Statics::currentDbIntType){
+//    switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:{
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
-        QString query = "SELECT date, volume FROM testnew";
+//    case Constants::mysqlIntType:{
+//        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
+//        QString query = "SELECT date, volume FROM testnew";
 
-        QSqlQuery queryResult(query, dbMysql);
-        qDebug() << timer2.elapsed() << "Before ";
+//        QSqlQuery queryResult(query, dbMysql);
+//        qDebug() << timer2.elapsed() << "Before ";
 
-        bool flag = true;
-        qDebug() << queryResult.size() << " Size ";
-        int field_idx = queryResult.record().indexOf("date");
-        int id = queryResult.record().indexOf("volume");
-        while(queryResult.next()){
-
-
-            //int field_idx = queryResult.record().indexOf("date");
-            //int field_idx = queryResult.record().indexOf("date");
-
-            QString date = queryResult.record().value(field_idx).toString();
-            //field_idx = queryResult.record().indexOf("volume");
-
-            int open = queryResult.record().value(id).toInt();
-
-            xAxis.append(date);
-            yAxis.append(open);
-
-            if(flag)
-            {
-                qDebug() << date << " "  << open;
-                flag = 0;
-            }
-
-        }
-
-        //emit sendData(xAxis, yAxis);
-        qDebug() << timer.elapsed() << " SQL Execution Time in ms ";
-        //emit sendData(xAxis, yAxis);
-        break;
-    }
-
-    case Constants::mysqlOdbcIntType:{
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
-        QString query = "SELECT date, volume FROM testnew";
-
-        QSqlQuery queryResult(query, dbMysql);
-        qDebug() << timer2.elapsed() << "Before ";
-
-        bool flag = true;
-        qDebug() << queryResult.size() << " Size ";
-        int field_idx = queryResult.record().indexOf("date");
-        int id = queryResult.record().indexOf("volume");
-        while(queryResult.next()){
+//        bool flag = true;
+//        qDebug() << queryResult.size() << " Size ";
+//        int field_idx = queryResult.record().indexOf("date");
+//        int id = queryResult.record().indexOf("volume");
+//        while(queryResult.next()){
 
 
-            //int field_idx = queryResult.record().indexOf("date");
-            //int field_idx = queryResult.record().indexOf("date");
+//            //int field_idx = queryResult.record().indexOf("date");
+//            //int field_idx = queryResult.record().indexOf("date");
 
-            QString date = queryResult.record().value(field_idx).toString();
-            //field_idx = queryResult.record().indexOf("volume");
+//            QString date = queryResult.record().value(field_idx).toString();
+//            //field_idx = queryResult.record().indexOf("volume");
 
-            int open = queryResult.record().value(id).toInt();
+//            int open = queryResult.record().value(id).toInt();
 
-            xAxis.append(date);
-            yAxis.append(open);
+//            xAxis.append(date);
+//            yAxis.append(open);
 
-            if(flag)
-            {
-                qDebug() << date << " "  << open;
-                flag = 0;
-            }
+//            if(flag)
+//            {
+//                qDebug() << date << " "  << open;
+//                flag = 0;
+//            }
 
-        }
+//        }
 
-        //emit sendData(xAxis, yAxis);
-        qDebug() << timer.elapsed() << " SQL Execution Time in ms ";
-        //emit sendData(xAxis, yAxis);
-        break;
-    }
+//        //emit sendData(xAxis, yAxis);
+//        qDebug() << timer.elapsed() << " SQL Execution Time in ms ";
+//        //emit sendData(xAxis, yAxis);
+//        break;
+//    }
 
-    case Constants::csvIntType:{
+//    case Constants::mysqlOdbcIntType:{
+//        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
+//        QString query = "SELECT date, volume FROM testnew";
 
-        QString db = Statics::currentDbName;
+//        QSqlQuery queryResult(query, dbMysql);
+//        qDebug() << timer2.elapsed() << "Before ";
 
-        auto data = this->duckCon->con.Query("SELECT * FROM " + db.toStdString());
+//        bool flag = true;
+//        qDebug() << queryResult.size() << " Size ";
+//        int field_idx = queryResult.record().indexOf("date");
+//        int id = queryResult.record().indexOf("volume");
+//        while(queryResult.next()){
 
-        int rows = data->collection.Count();
-        int colidx = 0;
-        int colIdx = 1;
 
-        for(int i = 0; i < rows; i++){
+//            //int field_idx = queryResult.record().indexOf("date");
+//            //int field_idx = queryResult.record().indexOf("date");
 
-            duckdb::Value fcolData = data->GetValue(colidx, i);
-            QString fnewColData = QString::fromStdString(fcolData.ToString());
+//            QString date = queryResult.record().value(field_idx).toString();
+//            //field_idx = queryResult.record().indexOf("volume");
 
-            duckdb::Value sColData = data->GetValue(colIdx, i);
-            QString snewColData = QString::fromStdString(sColData.ToString());
+//            int open = queryResult.record().value(id).toInt();
 
-            xAxis.append(fnewColData);
-            yAxis.append(snewColData.toInt());
-        }
+//            xAxis.append(date);
+//            yAxis.append(open);
 
-        emit sendData(xAxis, yAxis);
-        break;
-    }
+//            if(flag)
+//            {
+//                qDebug() << date << " "  << open;
+//                flag = 0;
+//            }
 
-    }
-}
+//        }
+
+//        //emit sendData(xAxis, yAxis);
+//        qDebug() << timer.elapsed() << " SQL Execution Time in ms ";
+//        //emit sendData(xAxis, yAxis);
+//        break;
+//    }
+
+//    case Constants::csvIntType:{
+
+//        QString db = Statics::currentDbName;
+
+//        auto data = this->duckCon->con.Query("SELECT * FROM " + db.toStdString());
+
+//        int rows = data->collection.Count();
+//        int colidx = 0;
+//        int colIdx = 1;
+
+//        for(int i = 0; i < rows; i++){
+
+//            duckdb::Value fcolData = data->GetValue(colidx, i);
+//            QString fnewColData = QString::fromStdString(fcolData.ToString());
+
+//            duckdb::Value sColData = data->GetValue(colIdx, i);
+//            QString snewColData = QString::fromStdString(sColData.ToString());
+
+//            xAxis.append(fnewColData);
+//            yAxis.append(snewColData.toInt());
+//        }
+
+//        emit sendData(xAxis, yAxis);
+//        break;
+//    }
+
+//    }
+//}
 
 
 

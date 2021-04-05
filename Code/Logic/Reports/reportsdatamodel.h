@@ -26,7 +26,7 @@ public:
     void getColumnsForTable(QString tableName);
 
     Q_INVOKABLE void setTmpSql(QString query);
-    Q_INVOKABLE void getData();
+//    Q_INVOKABLE void getData();
 
 public slots:
 
