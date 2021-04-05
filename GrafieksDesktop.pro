@@ -98,7 +98,6 @@ SOURCES += \
     Code/Logic/General/typecheck.cpp \
     Code/Logic/Menu/user.cpp \
     Code/Logic/Reports/chartsmodel.cpp \
-    Code/Logic/Reports/duckreportsds.cpp \
     Code/Logic/Reports/reportparamsmodel.cpp \
     Code/Logic/Reports/reportsdatamodel.cpp \
     main.cpp \
@@ -209,7 +208,6 @@ HEADERS += \
     Code/Logic/General/typecheck.h \
     Code/Logic/Menu/user.h \
     Code/Logic/Reports/chartsmodel.h \
-    Code/Logic/Reports/duckreportsds.h \
     Code/Logic/Reports/reportparamsmodel.h \
     Code/Logic/Reports/reportsdatamodel.h \
     Code/duckdb.hpp \

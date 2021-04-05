@@ -106,6 +106,7 @@ void QueryModel::generateRoleNames()
     for( int i = 0; i < record().count(); i ++) {
         m_roleNames.insert(Qt::UserRole + i + 1, record().fieldName(i).toUtf8());
         this->setChartHeader(i, record().fieldName(i));
+        qDebug() << record().fieldName(i) << "FIELDS";
     }
 }
 
