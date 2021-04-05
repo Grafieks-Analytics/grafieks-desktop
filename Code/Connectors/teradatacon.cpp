@@ -9,11 +9,11 @@ QVariantMap TeradataCon::TeradataOdbcInstance(const QString &driver, const QStri
 {
     QVariantMap outputStatus;
 
-    if(QSqlDatabase::isDriverAvailable(ODBCDRIVER)){
+    if(QSqlDatabase::isDriverAvailable("QODBC")){
 
         QString dbString = "DRIVER={" + driver + "};" + "Database=" + db + ";Tusted_Connection=True";
 
-        QSqlDatabase dbTeradataOdbc = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::teradataOdbcStrType);
+        QSqlDatabase dbTeradataOdbc = QSqlDatabase::addDatabase("QODBC", Constants::teradataOdbcStrType);
 
         dbTeradataOdbc.setDatabaseName(dbString);
         dbTeradataOdbc.setPort(port);
@@ -44,7 +44,7 @@ QVariantMap TeradataCon::TeradataOdbcInstance(const QString &driver, const QStri
             // For Query/Data modeller
             // Else all the query statistics are listed in "Test Query" tab in Data-Query-Modeller
 
-            QSqlDatabase dbTeradataOdbc2 = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::teradataOdbcStrQueryType);
+            QSqlDatabase dbTeradataOdbc2 = QSqlDatabase::addDatabase("QODBC", Constants::teradataOdbcStrQueryType);
 
             dbTeradataOdbc2.setDatabaseName(dbString);
             dbTeradataOdbc2.setHostName(host);

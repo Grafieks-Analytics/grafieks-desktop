@@ -10,13 +10,13 @@ QVariantMap ImpalaCon::ImpalaOdbcInstance(const QString &driver, const QString &
 
     QVariantMap outputStatus;
 
-    if(QSqlDatabase::isDriverAvailable(ODBCDRIVER)){
+    if(QSqlDatabase::isDriverAvailable("QODBC")){
 
         // Fetching from Impala database
 
         QString dbString = "DRIVER={" + driver + "};Server="+ host +"Database=" + db + ";Tusted_Connection=True";
 
-        QSqlDatabase dbImpalaOdbc = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::impalaOdbcStrType);
+        QSqlDatabase dbImpalaOdbc = QSqlDatabase::addDatabase("QODBC", Constants::impalaOdbcStrType);
 
         dbImpalaOdbc.setDatabaseName(dbString);
         dbImpalaOdbc.setPort(port);
@@ -46,7 +46,7 @@ QVariantMap ImpalaCon::ImpalaOdbcInstance(const QString &driver, const QString &
             // For Query/Data modeller
             // Else all the query statistics are listed in "Test Query" tab in Data-Query-Modeller
 
-            QSqlDatabase dbImpalaOdbc2 = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::impalaOdbcStrQueryType);
+            QSqlDatabase dbImpalaOdbc2 = QSqlDatabase::addDatabase("QODBC", Constants::impalaOdbcStrQueryType);
 
             dbImpalaOdbc2.setDatabaseName(dbString);
             dbImpalaOdbc2.setHostName(host);
