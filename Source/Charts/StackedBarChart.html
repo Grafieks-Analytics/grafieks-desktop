@@ -126,9 +126,8 @@
             d3.selectAll("#my_dataviz").html("");
             var x = d3
                 .scaleBand()
-                .rangeRound([0, width])
-                .paddingInner(paddingInner)
-                .align(0.1);
+                .rangeRound([50, width])
+                .paddingInner(paddingInner);
 
             var y = d3.scaleLinear().rangeRound([height, 0]).nice();
 
