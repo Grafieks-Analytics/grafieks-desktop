@@ -10,11 +10,11 @@ QVariantMap SnowflakeCon::SnowflakeOdbcInstance(const QString &driver, const QSt
 
     QVariantMap outputStatus;
 
-    if(QSqlDatabase::isDriverAvailable(ODBCDRIVER)){
+    if(QSqlDatabase::isDriverAvailable("QODBC")){
 
         QString dbString = "DRIVER={" + driver + "};" + "Database=" + db + ";Tusted_Connection=True";
 
-        QSqlDatabase dbSnowflakeOdbc = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::snowflakeOdbcStrType);
+        QSqlDatabase dbSnowflakeOdbc = QSqlDatabase::addDatabase("QODBC", Constants::snowflakeOdbcStrType);
 
         dbSnowflakeOdbc.setDatabaseName(dbString);
         dbSnowflakeOdbc.setPort(port);
@@ -45,7 +45,7 @@ QVariantMap SnowflakeCon::SnowflakeOdbcInstance(const QString &driver, const QSt
             // For Query/Data modeller
             // Else all the query statistics are listed in "Test Query" tab in Data-Query-Modeller
 
-            QSqlDatabase dbSnowflakeOdbc2 = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::snowflakeOdbcStrQueryType);
+            QSqlDatabase dbSnowflakeOdbc2 = QSqlDatabase::addDatabase("QODBC", Constants::snowflakeOdbcStrQueryType);
 
             dbSnowflakeOdbc2.setDatabaseName(dbString);
             dbSnowflakeOdbc2.setHostName(host);
