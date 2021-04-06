@@ -11,9 +11,7 @@ QueryModel::~QueryModel()
     this->sqlChartData.clear();
     this->sqlChartHeader.clear();
 
-//    QSqlQueryModel::beginResetModel();
     QSqlQueryModel::clear();
-//    QSqlQueryModel::endResetModel();
 }
 
 void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
@@ -31,7 +29,6 @@ void QueryModel::setQuery(const QSqlQuery &query)
 QVariant QueryModel::data(const QModelIndex &index, int role) const
 {
     QVariant value;
-
     if(role < Qt::UserRole) {
 
         value = QSqlQueryModel::data(index, role);
@@ -66,6 +63,8 @@ void QueryModel::setChartData()
     int totalCols = this->columnCount();
     int totalRows = this->rowCount();
 
+    qDebug() << "CHART DATA CALLED" << "QSQLQUERY";
+
     for(int j = 0; j < totalRows; j++){
         for(int i = 0; i < totalCols; i++){
 
@@ -89,6 +88,7 @@ void QueryModel::setChartData()
 
 void QueryModel::setChartHeader(int index, QString colName)
 {
+    qDebug() << "CHART HEADER CALLED" << "QSQLQUERY";
     this->sqlChartHeader.insert(index, colName);
     emit chartHeaderChanged(this->sqlChartHeader);
 }
@@ -106,7 +106,6 @@ void QueryModel::generateRoleNames()
     for( int i = 0; i < record().count(); i ++) {
         m_roleNames.insert(Qt::UserRole + i + 1, record().fieldName(i).toUtf8());
         this->setChartHeader(i, record().fieldName(i));
-        qDebug() << record().fieldName(i) << "FIELDS";
     }
 }
 
@@ -125,61 +124,61 @@ void QueryModel::executeQuery(QString &query)
     case Constants::mysqlOdbcIntType:{
         QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
         this->setQuery(query, dbMysqlOdbc);
-
+        this->setChartData();
         break;
     }
 
     case Constants::sqliteIntType:{
         QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrQueryType);
         this->setQuery(query, dbSqlite);
-
+        this->setChartData();
         break;
     }
     case Constants::postgresIntType:{
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
         this->setQuery(query, dbPostgres);
-
+        this->setChartData();
         break;
     }
 
     case Constants::redshiftIntType:{
         QSqlDatabase dbRedshift = QSqlDatabase::database(Constants::redshiftOdbcStrQueryType);
         this->setQuery(query, dbRedshift);
-
+        this->setChartData();
         break;
     }
 
     case Constants::excelIntType:{
         QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelStrQueryType);
         this->setQuery(query, dbExcel);
-
+        this->setChartData();
         break;
     }
     case Constants::mssqlIntType:{
         QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
         this->setQuery(query, dbMssql);
-
+        this->setChartData();
         break;
     }
 
     case Constants::oracleIntType:{
         QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrQueryType);
         this->setQuery(query, dbOracle);
-
+        this->setChartData();
         break;
     }
 
     case Constants::mongoIntType:{
         QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrQueryType);
         this->setQuery(query, dbMongo);
-
+        this->setChartData();
         break;
     }
 
     case Constants::impalaIntType:{
         QSqlDatabase dbImpala = QSqlDatabase::database(Constants::impalaOdbcStrQueryType);
         this->setQuery(query, dbImpala);
-
+        this->setChartData();
         break;
     }
 
@@ -193,21 +192,21 @@ void QueryModel::executeQuery(QString &query)
     case Constants::snowflakeIntType:{
         QSqlDatabase dbSnowflake = QSqlDatabase::database(Constants::snowflakeOdbcStrQueryType);
         this->setQuery(query, dbSnowflake);
-
+        this->setChartData();
         break;
     }
 
     case Constants::teradataIntType:{
         QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::teradataOdbcStrQueryType);
         this->setQuery(query, dbTeradata);
-
+        this->setChartData();
         break;
     }
 
     case Constants::accessIntType:{
         QSqlDatabase dbAccess = QSqlDatabase::database(Constants::accessOdbcStrQueryType);
         this->setQuery(query, dbAccess);
-
+        this->setChartData();
         break;
     }
 
