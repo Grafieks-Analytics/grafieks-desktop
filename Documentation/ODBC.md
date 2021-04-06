@@ -60,4 +60,6 @@ On Mac, we need to install **[iODBC](http://www.iodbc.org/dataspace/doc/iodbc/wi
 
 1. Download MongoDB ODBC driver https://github.com/mongodb/mongo-odbc-driver/releases/
 2. Download MongoDB BI Connector https://www.mongodb.com/try/download/bi-connector
-3. General Select SQL queries will run using the ODBC connector on MongoDB
+3. Run mongo db using `mongod.exe` installed in `C:\Programfiles\Mongo\bin`
+4. General Select SQL queries will run using the ODBC connector on MongoDB
+5. On Windows, you might need to create `C:\data\db` folder before running mongodb server. 
