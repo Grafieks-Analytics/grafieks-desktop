@@ -41,8 +41,6 @@ QHash<int, QByteArray> TableListModel::roleNames() const
 void TableListModel::callQuery(QString queryString)
 {
 
-    qDebug() << Statics::currentDbIntType << "CURR DB";
-
     switch(Statics::currentDbIntType){
 
     case Constants::mysqlIntType:{
