@@ -38,6 +38,9 @@ On Mac, we need to install **[iODBC](http://www.iodbc.org/dataspace/doc/iodbc/wi
 2. MS SQL has multiple authentication methods. By default, _Windows Authentication_ is selected. Login using username and password must be selected for remote servers. There you do not need any password. For details on managing users on server, visit this link https://docs.microsoft.com/en-us/sql/ssms/tutorials/ssms-tricks?view=sql-server-ver15
 
 3. To manage Sql server, visit https://docs.microsoft.com/en-us/sql/ssms/tutorials/ssms-tricks?view=sql-server-ver15
+4. For Logging in using Username and a Password, remember to create a new user and login. Also, remember to enable `SQL Authentication or Mixed Authentication`
+5. Lastly, from sql server configuration manager, enable TCP/IP, Shared memory and Named pipes.
+6. Restart SQL Server express after going to `services.msc`
 
 - **Postgres SQL**
 
