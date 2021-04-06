@@ -17,7 +17,6 @@ QueryModel::~QueryModel()
 void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
     QSqlQueryModel::setQuery(query, db);
-    qDebug() << QSqlQueryModel::lastError();
     generateRoleNames();
 }
 
@@ -30,8 +29,6 @@ void QueryModel::setQuery(const QSqlQuery &query)
 QVariant QueryModel::data(const QModelIndex &index, int role) const
 {
     QVariant value;
-    qDebug() << "DATA CALLED" << "QSQLQUERY";
-
     if(role < Qt::UserRole) {
 
         value = QSqlQueryModel::data(index, role);
