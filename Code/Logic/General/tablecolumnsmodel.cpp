@@ -220,7 +220,6 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
             // Append all data type to allList as well
             allColumns.append(outputDataList);
-
             outputDataList.clear();
 
         }

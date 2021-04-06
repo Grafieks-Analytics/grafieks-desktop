@@ -34,7 +34,7 @@ Popup {
     Connections{
         target: ConnectorsLoginModel
 
-        function onMSSqlLoginStatus(status){
+        function onMssqlLoginStatus(status){
 
              if(status.status === true){
 
@@ -92,8 +92,9 @@ Popup {
     }
 
     function connectToMsSQL(){
-//        ConnectorsLoginModel.mssqlOdbcLogin(server.text, database.text, port.text, username.text, password.text)
-          ConnectorsLoginModel.mssqlOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
+        console.log(control.currentText, server.text, database.text, port.text, username.text, password.text)
+        ConnectorsLoginModel.mssqlOdbcLogin(control.currentText, server.text, database.text, port.text, username.text, password.text)
+//          ConnectorsLoginModel.mssqlOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
     }
 
     // JAVASCRIPT FUNCTION ENDS

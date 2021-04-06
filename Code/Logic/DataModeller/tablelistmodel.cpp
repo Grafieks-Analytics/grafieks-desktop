@@ -43,7 +43,6 @@ void TableListModel::callQuery(QString queryString)
 
     switch(Statics::currentDbIntType){
 
-
     case Constants::mysqlIntType:{
 
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);

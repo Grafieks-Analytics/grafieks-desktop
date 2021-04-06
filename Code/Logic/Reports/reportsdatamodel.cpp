@@ -36,11 +36,6 @@ void ReportsDataModel::setTmpSql(QString query)
         qDebug() << queryResult.record();
         qDebug() << queryResult.lastError().databaseText();
 
-        //         while(queryResult.next()){
-        //            int field_idx = queryResult.record().indexOf("email");
-        //            QString email = queryResult.record().value(field_idx).toString();
-        //            qDebug() <<email << " Email";
-        //        }
         for(int i = 0; i < record.count(); i++){
 
             QString fieldName = record.fieldName(i);
@@ -89,9 +84,38 @@ void ReportsDataModel::setTmpSql(QString query)
     }
     case Constants::postgresIntType:{
 
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrType);
+        QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
 
-        QSqlQuery queryResult(query, dbMysql);
+        QSqlQuery queryResult(query, dbPostgres);
+        QSqlRecord record = queryResult.record();
+        qDebug() << queryResult.record();
+        qDebug() << queryResult.lastError().databaseText();
+
+        for(int i = 0; i < record.count(); i++){
+
+            QString fieldName = record.fieldName(i);
+            QString tableName = record.field(i).tableName().toUtf8();
+            QString tableFieldName = tableName + "." + fieldName;
+
+            if(this->category.contains(tableFieldName)){
+                this->categoryList.append(fieldName);
+            }
+            else if(this->numerical.contains(tableFieldName)){
+                this->numericalList.append(fieldName);
+            }
+            else if(this->date.contains(tableFieldName)){
+                this->dateList.append(fieldName);
+            }
+        }
+
+        break;
+    }
+
+    case Constants::mssqlIntType:{
+
+        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrType);
+
+        QSqlQuery queryResult(query, dbMssql);
         QSqlRecord record = queryResult.record();
         qDebug() << queryResult.record();
         qDebug() << queryResult.lastError().databaseText();
@@ -251,6 +275,38 @@ void ReportsDataModel::getColumnsForTable(QString tableName)
             qDebug() << fieldName << " " << fieldType << "Postgres";
             // Remove characters after `(` and then trim whitespaces
             QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+
+            // Get filter data type for QML
+            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+
+            if(filterDataType == Constants::categoricalType){
+                this->category.insert(tableName + "." + fieldName);
+            } else if(filterDataType == Constants::numericalType){
+                this->numerical.insert(tableName + "." + fieldName);
+            } else if(filterDataType == Constants::dateType){
+                this->date.insert(tableName + "." + fieldName);
+            }
+
+        }
+
+        break;
+    }
+
+    case Constants::mssqlIntType:{
+
+        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrType);
+
+        describeQueryString = "SELECT column_name, data_type FROM information_schema.columns where table_name = '" + tableName  + "'";
+
+        QSqlQuery describeQuery(describeQueryString, dbMssql);
+
+        while(describeQuery.next()){
+
+            fieldName = describeQuery.value(0).toString();
+            fieldType = describeQuery.value(1).toString();
+            // Remove characters after `(` and then trim whitespaces
+            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+            qDebug() << "fieldTypeTrimmed" <<fieldTypeTrimmed << fieldName << fieldType;
 
             // Get filter data type for QML
             QString filterDataType = dataType.dataType(fieldTypeTrimmed);
