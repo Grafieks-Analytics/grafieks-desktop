@@ -28,6 +28,7 @@ ListView{
         target : ReportsDataModel
 
         function onSendFilteredColumn(allCategorical, allNumerical, allDates){
+            console.log(allCategorical, allNumerical, allDates)
             categoricalModel.clear()
             categoricalList.model =  allCategorical
         }
