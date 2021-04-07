@@ -49,11 +49,13 @@ private:
     // Data variables for Charts
     QMap<int, QStringList*> duckChartData;
     QMap<int, QString> duckChartHeader;
+    QStringList tableHeaders;
 
 signals:
     void headerDataChanged(Qt::Orientation orientation, int first, int last) const;
     void chartDataChanged(QMap<int, QStringList*> chartData);
     void chartHeaderChanged(QMap<int, QString> chartHeader);
+    void duckHeaderDataChanged(QStringList tableHeaders);
     void duckHasData(bool hasData);
 
 };

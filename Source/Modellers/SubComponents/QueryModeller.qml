@@ -69,7 +69,7 @@ Item{
     function onTextEditorChanged(){
         console.log(textEditQueryModeller.text)
         // Set the Tmp SQL Query in C++
-        DSParamsModel.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, ""))
+        DSParamsModel.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, " "))
     }
 
 
