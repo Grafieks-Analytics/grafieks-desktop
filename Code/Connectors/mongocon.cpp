@@ -28,7 +28,6 @@ QVariantMap MongoCon::MongoOdbcInstance(const QString &driver, const QString &ho
 
 
         QString dbString = "DRIVER={"+ driver +"};Server="+ host +";Port="+ QString::number(port) +";Database="+ db;
-        qDebug() << dbString << "MONGO";
 
         QSqlDatabase dbMongoOdbc = QSqlDatabase::addDatabase("QODBC", Constants::mongoOdbcStrType);
         dbMongoOdbc.setHostName(host);
