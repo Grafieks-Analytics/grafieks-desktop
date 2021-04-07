@@ -107,7 +107,6 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
             // Get filter data type for QML
             QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-
             outputDataList << fieldName << filterDataType;
 
             // Append all data type to allList as well
