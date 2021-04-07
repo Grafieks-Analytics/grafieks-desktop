@@ -16,29 +16,23 @@ QueryModel::~QueryModel()
 
 void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
-    QSqlQueryModel::beginResetModel();
-    QSqlQueryModel::clear();
-    QSqlQueryModel::query().clear();
+
     QSqlQueryModel::setQuery(query, db);
     generateRoleNames();
-    QSqlQueryModel::endResetModel();
 }
 
 void QueryModel::setQuery(const QSqlQuery &query)
 {
-    QSqlQueryModel::beginResetModel();
-    QSqlQueryModel::clear();
-    QSqlQueryModel::query().clear();
+
     QSqlQueryModel::setQuery(query);
     generateRoleNames();
-    QSqlQueryModel::endResetModel();
 }
 
 QVariant QueryModel::data(const QModelIndex &index, int role) const
 {
     QVariant value;
-    if(role < Qt::UserRole) {
 
+    if(role < Qt::UserRole) {
         value = QSqlQueryModel::data(index, role);
     }
     else {
@@ -46,6 +40,7 @@ QVariant QueryModel::data(const QModelIndex &index, int role) const
         QModelIndex modelIndex = this->index(index.row(), columnIdx);
         value = QSqlQueryModel::data(modelIndex, Qt::DisplayRole);
     }
+
     return value;
 }
 
@@ -75,7 +70,7 @@ void QueryModel::setChartData()
         for(int i = 0; i < totalCols; i++){
 
             if(j == 0){
-               this->sqlChartData[i] = new QStringList(record(0).field(i).value().toString());
+                this->sqlChartData[i] = new QStringList(record(0).field(i).value().toString());
             } else{
                 this->sqlChartData.value(i)->append(record(j).field(i).value().toString());
                 this->sqlChartData[i] = sqlChartData.value(i);
