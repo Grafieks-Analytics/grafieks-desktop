@@ -65,7 +65,7 @@ void ReportsDataModel::setTmpSql(QString query)
         for(int i = 0; i < record.count(); i++){
 
             QString fieldName = record.fieldName(i);
-            QString tableName = record.field(i).tableName();
+            QString tableName = record.field(i).tableName().toUtf8();
             QString tableFieldName = tableName + "." + fieldName;
 
             if(this->category.contains(tableFieldName)){
@@ -141,7 +141,8 @@ void ReportsDataModel::getColumnsForTable(QString tableName)
     case Constants::mysqlIntType:
     case Constants::mysqlOdbcIntType:
     case Constants::postgresIntType:
-    case Constants::mssqlIntType:{
+    case Constants::mssqlIntType:
+    case Constants::sqliteIntType:{
 
         switch (Statics::currentDbIntType) {
 
@@ -180,8 +181,14 @@ void ReportsDataModel::getColumnsForTable(QString tableName)
 
         while(describeQuery.next()){
 
-            fieldName = describeQuery.value(0).toString();
-            fieldType = describeQuery.value(1).toString();
+            if(Statics::currentDbIntType == Constants::sqliteIntType){
+                fieldName = describeQuery.value(1).toString();
+                fieldType = describeQuery.value(2).toString();
+            } else{
+                fieldName = describeQuery.value(0).toString();
+                fieldType = describeQuery.value(1).toString();
+            }
+
             // Remove characters after `(` and then trim whitespaces
             QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
             qDebug() << "fieldTypeTrimmed" <<fieldTypeTrimmed << fieldName << fieldType;
