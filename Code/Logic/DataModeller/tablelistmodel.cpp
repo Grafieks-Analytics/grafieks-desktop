@@ -158,9 +158,9 @@ void TableListModel::callQuery(QString queryString)
 
         if (queryString != ""){
 
-            this->setQuery("SELECT table_name FROM user_tables WHERE table_name LIKE '%"+queryString+"%'", dbMongo);
+            this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'", dbMongo);
         } else{
-            this->setQuery("SELECT table_name FROM user_tables", dbMongo);
+            this->setQuery("SHOW TABLES", dbMongo);
         }
 
         break;

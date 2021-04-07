@@ -1231,6 +1231,5 @@ void ChartsModel::getChartData(QMap<int, QStringList *> chartData)
 
 void ChartsModel::getChartHeader(QMap<int, QString> chartHeader)
 {
-    qDebug() << "HEADERS" << chartHeader.value(0) <<  chartHeader.value(1);
     this->newChartHeader = chartHeader;
 }

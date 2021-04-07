@@ -22,7 +22,7 @@ TableView {
     boundsBehavior : Flickable.StopAtBounds
 
 
-    property string globalConType: Constants.sqlType
+    property string globalConType: ""
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -52,6 +52,10 @@ TableView {
             dataPreviewResult.model = hasData === true? QueryModel: ""
             globalConType = Constants.sqlType
         }
+
+        function onHeaderDataChanged(tableHeaders){
+            mainRepeater.model = tableHeaders
+        }
     }
 
     Connections{
@@ -60,6 +64,10 @@ TableView {
         function onDuckHasData(hasData){
             dataPreviewResult.model = hasData === true? DuckQueryModel: ""
             globalConType = Constants.duckType
+        }
+
+        function onDuckHeaderDataChanged(tableHeaders){
+            mainRepeater.model = tableHeaders
         }
     }
 
@@ -100,6 +108,7 @@ TableView {
     delegate: Rectangle {
         border.color: Constants.darkThemeColor
         border.width: 0.5
+
         Text {
             text: display
             anchors.fill: parent
@@ -128,7 +137,8 @@ TableView {
         width: dataPreviewResult.width
 
         Repeater {
-            model: dataPreviewResult.columns > 0 ? dataPreviewResult.columns : 0
+            id: mainRepeater
+
             Rectangle{
                 width: dataPreviewResult.columnWidthProvider(modelData)
                 height: 30
@@ -137,16 +147,14 @@ TableView {
                 border.width: 1
                 Text {
                     id: textName
-                    text: globalConType ===Constants.sqlType?  QueryModel.headerData(modelData, Qt.Horizontal): DuckQueryModel.headerData(modelData, Qt.Horizontal)
+                    text: modelData
                     width: parent.width
                     height: parent.height
                     anchors.centerIn: parent
                     padding: 10
                     font.bold: false
                     verticalAlignment: Text.AlignVCenter
-
                 }
-
             }
         }
     }
