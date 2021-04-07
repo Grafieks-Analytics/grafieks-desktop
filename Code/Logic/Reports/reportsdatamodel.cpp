@@ -28,102 +28,44 @@ void ReportsDataModel::setTmpSql(QString query)
 
     switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:{
+    case Constants::mysqlIntType:
+    case Constants::mysqlOdbcIntType:
+    case Constants::postgresIntType:
+    case Constants::mssqlIntType:
+    case Constants::sqliteIntType:{
 
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
-        QSqlQuery queryResult(query, dbMysql);
+        QString conString;
+        switch (Statics::currentDbIntType) {
+        case Constants::mysqlIntType:
+            conString = Constants::mysqlStrQueryType;
+            break;
+
+        case Constants::mysqlOdbcIntType:
+            conString = Constants::mysqlOdbcStrQueryType;
+            break;
+
+        case Constants::postgresIntType:
+            conString = Constants::postgresOdbcStrType;
+            break;
+
+        case Constants::mssqlIntType:
+            conString = Constants::mssqlOdbcStrType;
+            break;
+
+        case Constants::sqliteIntType:
+            conString = Constants::sqliteStrType;
+            break;
+        }
+
+        QSqlDatabase dbString = QSqlDatabase::database(conString);
+
+        QSqlQuery queryResult(query, dbString);
         QSqlRecord record = queryResult.record();
-        qDebug() << queryResult.record();
-        qDebug() << queryResult.lastError().databaseText();
 
         for(int i = 0; i < record.count(); i++){
 
             QString fieldName = record.fieldName(i);
             QString tableName = record.field(i).tableName();
-            QString tableFieldName = tableName + "." + fieldName;
-
-            if(this->category.contains(tableFieldName)){
-                this->categoryList.append(fieldName);
-            }
-            else if(this->numerical.contains(tableFieldName)){
-                this->numericalList.append(fieldName);
-            }
-            else if(this->date.contains(tableFieldName)){
-                this->dateList.append(fieldName);
-            }
-        }
-
-        break;
-    }
-    case Constants::mysqlOdbcIntType:{
-
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
-        QSqlQuery queryResult(query, dbMysql);
-        QSqlRecord record = queryResult.record();
-        qDebug() << queryResult.record();
-        qDebug() << queryResult.lastError().databaseText();
-
-        for(int i = 0; i < record.count(); i++){
-
-            QString fieldName = record.fieldName(i);
-            QString tableName = record.field(i).tableName().toUtf8();
-            QString tableFieldName = tableName + "." + fieldName;
-
-            if(this->category.contains(tableFieldName)){
-                this->categoryList.append(fieldName);
-            }
-            else if(this->numerical.contains(tableFieldName)){
-                this->numericalList.append(fieldName);
-            }
-            else if(this->date.contains(tableFieldName)){
-                this->dateList.append(fieldName);
-            }
-        }
-
-        break;
-    }
-    case Constants::postgresIntType:{
-
-        QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
-
-        QSqlQuery queryResult(query, dbPostgres);
-        QSqlRecord record = queryResult.record();
-        qDebug() << queryResult.record();
-        qDebug() << queryResult.lastError().databaseText();
-
-        for(int i = 0; i < record.count(); i++){
-
-            QString fieldName = record.fieldName(i);
-            QString tableName = record.field(i).tableName().toUtf8();
-            QString tableFieldName = tableName + "." + fieldName;
-
-            if(this->category.contains(tableFieldName)){
-                this->categoryList.append(fieldName);
-            }
-            else if(this->numerical.contains(tableFieldName)){
-                this->numericalList.append(fieldName);
-            }
-            else if(this->date.contains(tableFieldName)){
-                this->dateList.append(fieldName);
-            }
-        }
-
-        break;
-    }
-
-    case Constants::mssqlIntType:{
-
-        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrType);
-
-        QSqlQuery queryResult(query, dbMssql);
-        QSqlRecord record = queryResult.record();
-        qDebug() << queryResult.record();
-        qDebug() << queryResult.lastError().databaseText();
-
-        for(int i = 0; i < record.count(); i++){
-
-            QString fieldName = record.fieldName(i);
-            QString tableName = record.field(i).tableName().toUtf8();
             QString tableFieldName = tableName + "." + fieldName;
 
             if(this->category.contains(tableFieldName)){
@@ -174,8 +116,6 @@ void ReportsDataModel::setTmpSql(QString query)
             i++;
         }
 
-
-
         break;
     }
     }
@@ -194,111 +134,49 @@ void ReportsDataModel::getColumnsForTable(QString tableName)
 {
     QString describeQueryString, fieldName, fieldType;
     QStringList outputDataList;
+    QString conString;
 
     switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:{
-
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
-
-        describeQueryString = "DESCRIBE `" + tableName + "`";
-
-        QSqlQuery describeQuery(describeQueryString, dbMysql);
-
-        while(describeQuery.next()){
-
-            fieldName = describeQuery.value(0).toString();
-            fieldType = describeQuery.value(1).toString();
-
-            // Remove characters after `(` and then trim whitespaces
-            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-
-            // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
-            if(filterDataType == Constants::categoricalType){
-                this->category.insert(tableName + "." + fieldName);
-            } else if(filterDataType == Constants::numericalType){
-                this->numerical.insert(tableName + "." + fieldName);
-            } else if(filterDataType == Constants::dateType){
-                this->date.insert(tableName + "." + fieldName);
-            }
-
-        }
-        break;
-    }
-
-    case Constants::mysqlOdbcIntType:{
-
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
-
-        describeQueryString = "DESCRIBE `" + tableName + "`";
-
-        QSqlQuery describeQuery(describeQueryString, dbMysql);
-
-        while(describeQuery.next()){
-
-            fieldName = describeQuery.value(0).toString();
-            fieldType = describeQuery.value(1).toString();
-
-            // Remove characters after `(` and then trim whitespaces
-            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-
-            // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
-            if(filterDataType == Constants::categoricalType){
-                this->category.insert(tableName + "." + fieldName);
-            } else if(filterDataType == Constants::numericalType){
-                this->numerical.insert(tableName + "." + fieldName);
-            } else if(filterDataType == Constants::dateType){
-                this->date.insert(tableName + "." + fieldName);
-            }
-
-        }
-        break;
-    }
-    case Constants::postgresIntType:{
-
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::postgresOdbcStrType);
-
-
-        describeQueryString = "SELECT column_name, data_type FROM information_schema.columns WHERE\n"
-                              " table_name = '" + tableName  + "'";
-
-        QSqlQuery describeQuery(describeQueryString, dbMysql);
-
-        while(describeQuery.next()){
-
-            fieldName = describeQuery.value(0).toString();
-            fieldType = describeQuery.value(1).toString();
-            qDebug() << fieldName << " " << fieldType << "Postgres";
-            // Remove characters after `(` and then trim whitespaces
-            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-
-            // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
-            if(filterDataType == Constants::categoricalType){
-                this->category.insert(tableName + "." + fieldName);
-            } else if(filterDataType == Constants::numericalType){
-                this->numerical.insert(tableName + "." + fieldName);
-            } else if(filterDataType == Constants::dateType){
-                this->date.insert(tableName + "." + fieldName);
-            }
-
-        }
-
-        break;
-    }
-
+    case Constants::mysqlIntType:
+    case Constants::mysqlOdbcIntType:
+    case Constants::postgresIntType:
     case Constants::mssqlIntType:{
 
-        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrType);
+        switch (Statics::currentDbIntType) {
 
-        describeQueryString = "SELECT column_name, data_type FROM information_schema.columns where table_name = '" + tableName  + "'";
+        case Constants::mysqlIntType:
+            conString = Constants::mysqlStrQueryType;
+            describeQueryString = "DESCRIBE `" + tableName + "`";
+            break;
 
-        QSqlQuery describeQuery(describeQueryString, dbMssql);
+        case Constants::mysqlOdbcIntType:
+            conString = Constants::mysqlOdbcStrQueryType;
+            describeQueryString = "DESCRIBE `" + tableName + "`";
+            break;
+
+        case Constants::postgresIntType:
+            conString = Constants::postgresOdbcStrType;
+            describeQueryString = "SELECT column_name, data_type FROM information_schema.columns WHERE\n"
+                                  " table_name = '" + tableName  + "'";
+            break;
+
+        case Constants::mssqlIntType:
+            conString = Constants::mssqlOdbcStrType;
+            describeQueryString = "SELECT column_name, data_type FROM information_schema.columns where table_name = '" + tableName  + "'";
+            break;
+
+        case Constants::sqliteIntType:
+            conString = Constants::sqliteStrType;
+            describeQueryString = "PRAGMA table_info(" + tableName + ")";
+            break;
+        }
+
+
+        QSqlDatabase dbString = QSqlDatabase::database(conString);
+
+
+        QSqlQuery describeQuery(describeQueryString, dbString);
 
         while(describeQuery.next()){
 

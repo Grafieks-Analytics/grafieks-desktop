@@ -25,7 +25,7 @@ ListView{
     }
 
     Connections{
-        target : ReportModelList
+        target : ReportsDataModel
 
         function onSendFilteredColumn(allCategorical, allNumerical, allDates){
             categoricalModel.clear()
