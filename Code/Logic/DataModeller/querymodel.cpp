@@ -16,14 +16,22 @@ QueryModel::~QueryModel()
 
 void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
+    QSqlQueryModel::beginResetModel();
+    QSqlQueryModel::clear();
+    QSqlQueryModel::query().clear();
     QSqlQueryModel::setQuery(query, db);
     generateRoleNames();
+    QSqlQueryModel::endResetModel();
 }
 
 void QueryModel::setQuery(const QSqlQuery &query)
 {
+    QSqlQueryModel::beginResetModel();
+    QSqlQueryModel::clear();
+    QSqlQueryModel::query().clear();
     QSqlQueryModel::setQuery(query);
     generateRoleNames();
+    QSqlQueryModel::endResetModel();
 }
 
 QVariant QueryModel::data(const QModelIndex &index, int role) const
@@ -49,8 +57,8 @@ QHash<int, QByteArray> QueryModel::roleNames() const
 
 void QueryModel::callSql(QString tmpSql)
 {
-
-    this->executeQuery(tmpSql);
+    QString simpliFiedSql = tmpSql.simplified();
+    this->executeQuery(simpliFiedSql);
 }
 
 void QueryModel::removeTmpChartData()
@@ -62,8 +70,6 @@ void QueryModel::setChartData()
 {
     int totalCols = this->columnCount();
     int totalRows = this->rowCount();
-
-    qDebug() << "CHART DATA CALLED" << "QSQLQUERY";
 
     for(int j = 0; j < totalRows; j++){
         for(int i = 0; i < totalCols; i++){
@@ -88,7 +94,6 @@ void QueryModel::setChartData()
 
 void QueryModel::setChartHeader(int index, QString colName)
 {
-    qDebug() << "CHART HEADER CALLED" << "QSQLQUERY";
     this->sqlChartHeader.insert(index, colName);
     emit chartHeaderChanged(this->sqlChartHeader);
 }
@@ -102,11 +107,15 @@ void QueryModel::receiveFilterQuery(QString &filteredQuery)
 void QueryModel::generateRoleNames()
 {
     m_roleNames.clear();
+    this->tableHeaders.clear();
 
     for( int i = 0; i < record().count(); i ++) {
         m_roleNames.insert(Qt::UserRole + i + 1, record().fieldName(i).toUtf8());
         this->setChartHeader(i, record().fieldName(i));
+        this->tableHeaders.append(record().fieldName(i));
     }
+
+    emit headerDataChanged(this->tableHeaders);
 }
 
 void QueryModel::executeQuery(QString &query)

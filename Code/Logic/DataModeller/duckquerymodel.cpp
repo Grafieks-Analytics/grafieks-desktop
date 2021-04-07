@@ -74,6 +74,7 @@ void DuckQueryModel::generateRoleNames()
 {
     QStringList output;
     m_roleNames.clear();
+    this->tableHeaders.clear();
 
     output = querySplitter.getSelectParams();
 
@@ -97,6 +98,7 @@ void DuckQueryModel::generateRoleNames()
                 fieldName = fieldName.trimmed();
                 m_roleNames.insert(i, fieldName.toUtf8());
                 this->setChartHeader(i, fieldName);
+                this->tableHeaders.append(fieldName);
             }
         }
 
@@ -105,9 +107,11 @@ void DuckQueryModel::generateRoleNames()
             QString fieldName = output[i].remove("\"").trimmed();
             m_roleNames.insert(i, fieldName.toUtf8());
             this->setChartHeader(i, fieldName);
-            qDebug() << fieldName << "YY";
+            this->tableHeaders.append(fieldName);
         }
     }
+
+    emit duckHeaderDataChanged(this->tableHeaders);
 }
 
 void DuckQueryModel::setQueryResult()
@@ -163,7 +167,6 @@ void DuckQueryModel::setChartData(std::unique_ptr<duckdb::MaterializedQueryResul
             } else{
                 this->duckChartData.value(i)->append(totalRows->GetValue(i, j).ToString().c_str());
                 this->duckChartData[i] = duckChartData.value(i);
-//                qDebug() << *duckChartData.value(i) << "XS" << i;
             }
         }
     }

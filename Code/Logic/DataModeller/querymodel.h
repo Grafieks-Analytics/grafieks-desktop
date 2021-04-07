@@ -39,6 +39,7 @@ public slots:
 signals:
     void chartDataChanged(QMap<int, QStringList*> chartData);
     void chartHeaderChanged(QMap<int, QString> chartHeader);
+    void headerDataChanged(QStringList tableHeaders);
     void sqlHasData(bool hasData);
 
 private:
@@ -49,6 +50,7 @@ private:
     // Data variables for Charts
     QMap<int, QStringList*> sqlChartData;
     QMap<int, QString> sqlChartHeader;
+    QStringList tableHeaders;
 
 
 
