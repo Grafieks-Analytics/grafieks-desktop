@@ -5,15 +5,24 @@ import "../../MainSubComponents"
 
 Rectangle{
 
+    id: axisRectangle
+    property var itemType: null;
+
     property alias textValue: textbox.text
-    property var itemType: ReportParamsModel.itemType.toLowerCase();
+    property alias itemType: axisRectangle.itemType
 
     height: parent.height - 10
     width: 200
     border.width: 1
     border.color: this.color
     radius: this.width/2
+    z: 1000000
 
+
+    Component.onCompleted: {
+        console.log('Item Type',itemType, typeof(itemType));
+        axisRectangle.color = itemType.toLowerCase() === 'numerical' ? Constants.defaultYAxisColor : Constants.defaultXAxisColor
+    }
 
     ListModel{
         id: dateCalculations
@@ -124,7 +133,7 @@ Rectangle{
         width: 80
         color: Constants.whiteColor
         radius: 10
-
+        visible: (itemType && itemType.toLowerCase()) === 'date' ? true : false
 
         CustomComboBox{
             id: dateDropdown
