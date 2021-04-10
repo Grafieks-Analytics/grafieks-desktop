@@ -33,6 +33,7 @@ void ReportsDataModel::setTmpSql(QString query)
     case Constants::postgresIntType:
     case Constants::mssqlIntType:
     case Constants::sqliteIntType:
+    case Constants::mongoIntType:
     case Constants::redshiftIntType:{
 
         QString conString;
@@ -55,6 +56,10 @@ void ReportsDataModel::setTmpSql(QString query)
 
         case Constants::sqliteIntType:
             conString = Constants::sqliteStrType;
+            break;
+
+        case Constants::mongoIntType:
+            conString = Constants::mongoOdbcStrType;
             break;
 
         case Constants::redshiftIntType:
@@ -150,6 +155,7 @@ void ReportsDataModel::getColumnsForTable(QString tableName)
     case Constants::postgresIntType:
     case Constants::mssqlIntType:
     case Constants::sqliteIntType:
+    case Constants::mongoIntType:
     case Constants::redshiftIntType:{
 
         switch (Statics::currentDbIntType) {
@@ -178,6 +184,11 @@ void ReportsDataModel::getColumnsForTable(QString tableName)
         case Constants::sqliteIntType:
             conString = Constants::sqliteStrType;
             describeQueryString = "PRAGMA table_info(" + tableName + ")";
+            break;
+
+        case Constants::mongoIntType:
+            conString = Constants::mongoOdbcStrType;
+            describeQueryString = describeQueryString = "DESCRIBE `" + tableName + "`";
             break;
 
         case Constants::redshiftIntType:

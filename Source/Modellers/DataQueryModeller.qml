@@ -89,6 +89,13 @@ Page {
                 tableslist.model = TableListModel
             }
         }
+        function onMongoLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                TableListModel.callQuery()
+                tableslist.model = TableListModel
+            }
+        }
         function onRedshiftLoginStatus(status){
             if(status.status === true){
                 // Call functions
@@ -100,6 +107,7 @@ Page {
                 tableslist.model = otherSqlTableList
             }
         }
+
         function onExcelLoginStatus(status){
             if(status.status === true){
                 // Call functions
