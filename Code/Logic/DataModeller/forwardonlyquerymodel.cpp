@@ -140,6 +140,14 @@ void ForwardOnlyQueryModel::setQueryResult()
     while(q.next()){
         for(int i = 0; i < this->internalColCount; i++){
             list << q.value(i).toString();
+
+            // Add to chart data
+            if(totalRowCount == 0){
+                this->forwardOnlyChartData[i] = new QStringList(q.value(i).toString());
+            } else{
+                this->forwardOnlyChartData.value(i)->append(q.value(i).toString());
+                this->forwardOnlyChartData[i] = forwardOnlyChartData.value(i);
+            }
         }
         this->resultData.append(list);
         list.clear();
@@ -151,9 +159,11 @@ void ForwardOnlyQueryModel::setQueryResult()
 
     if(this->internalRowCount > 0){
         emit forwardOnlyHasData(true);
+
     } else{
         emit forwardOnlyHasData(false);
     }
+    emit chartDataChanged(this->forwardOnlyChartData);
     endResetModel();
 }
 
@@ -164,5 +174,6 @@ void ForwardOnlyQueryModel::setQueryResult()
 
 void ForwardOnlyQueryModel::setChartHeader(int index, QString colName)
 {
-
+    this->forwardOnlyChartHeader.insert(index, colName);
+    emit chartHeaderChanged(this->forwardOnlyChartHeader);
 }

@@ -1222,14 +1222,12 @@ void ChartsModel::removeTmpChartData()
 
 void ChartsModel::getChartData(QMap<int, QStringList *> chartData)
 {
-//    qDebug() << "CHART DATA" << *chartData.value(0) << "VALUE AT 0";
-//    qDebug() << "CHART DATA" << *chartData.value(1) << "VALUE AT 1";
-//    qDebug() << "CHART DATA" << *chartData.value(2) << "VALUE AT 2";
-//    qDebug() << "CHART DATA" << *chartData.value(3) << "VALUE AT 3";
+    qDebug() << "CALLED CHART" << *chartData.value(0) << *chartData.value(1);
     this->newChartData = chartData;
 }
 
 void ChartsModel::getChartHeader(QMap<int, QString> chartHeader)
 {
+    qDebug() << "Chart HEADER" << chartHeader.value(0) << chartHeader.value(1);
     this->newChartHeader = chartHeader;
 }
