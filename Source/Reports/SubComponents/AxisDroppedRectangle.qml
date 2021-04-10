@@ -2,6 +2,7 @@ import QtQuick 2.0
 
 import com.grafieks.singleton.constants 1.0
 import "../../MainSubComponents"
+import "./MiniSubComponents"
 
 Rectangle{
 
@@ -112,6 +113,18 @@ Rectangle{
             calculationName:"Variance (Pop.)"
             calculationType: "number"
             calculationCompareValue : "variancepop"
+        }
+    }
+
+
+    AxisItemMenuPopup{
+        id: axisMenu
+    }
+
+    MouseArea{
+        anchors.fill: parent
+        onClicked: {
+            axisMenu.visible = true
         }
     }
 
