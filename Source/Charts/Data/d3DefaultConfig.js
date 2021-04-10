@@ -21,7 +21,7 @@ const defaultD3Config = {
     defaultTimeParseFormat: "%d-%m-%Y",
     defaultSpace: 30,
     dateFormat: "%Y",
-    chartType: constants.chartType.STANDARD,
+    chartType: constants.chartType.FIT_WIDTH,
     standartThresholdWidth: 200,
 };
 const markerShapeConfig = {
