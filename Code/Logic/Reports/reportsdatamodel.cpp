@@ -171,6 +171,11 @@ void ReportsDataModel::getColumnsForTable(QString tableName)
             conString = Constants::sqliteStrType;
             describeQueryString = "PRAGMA table_info(" + tableName + ")";
             break;
+
+        case Constants::redshiftIntType:
+            conString = Constants::redshiftOdbcStrType;
+            describeQueryString = "select \"column\", type from pg_table_def where tablename = '" + tableName  + "'";
+            break;
         }
 
 

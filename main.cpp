@@ -35,6 +35,8 @@
 #include "Code/Logic/DataModeller/proxyfiltermodel.h"
 #include "Code/Logic/DataModeller/duckdatamodel.h"
 #include "Code/Logic/DataModeller/duckquerymodel.h"
+#include "Code/Logic/DataModeller/forwardonlydatamodel.h"
+#include "Code/Logic/DataModeller/forwardonlyquerymodel.h"
 
 #include "Code/Logic/Connectors/duckcon.h"
 #include "Code/Logic/Connectors/odbcdriversmodel.h"
@@ -254,7 +256,8 @@ int main(int argc, char *argv[])
     QuerySplitter querySplitter;
     DashboardParamsModel dashboardParamsModel;
     ReportParamsModel reportParamsModel;
-//    ReportsDataModel reportModelList;
+    ForwardOnlyDataModel forwardOnlyDataModel;
+    ForwardOnlyQueryModel forwardOnlyQueryModel;
 
     // Datasource Connector Initializations
     DatasourceModel datasourceModel;
@@ -332,7 +335,6 @@ int main(int argc, char *argv[])
 
     // Set contexts for QML
     engine.rootContext()->setContextProperty("ReportParamsModel", &reportParamsModel);
-//    engine.rootContext()->setContextProperty("ReportModelList", &reportModelList);
     engine.rootContext()->setContextProperty("DashboardParamsModel", &dashboardParamsModel);
     engine.rootContext()->setContextProperty("QtTest2", &qttest2);
     engine.rootContext()->setContextProperty("MysqlConnect", &mysqlconnect);
@@ -374,6 +376,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("DuckDataModel", duckDataModel);
     engine.rootContext()->setContextProperty("DuckQueryModel", &duckQueryModel);
     engine.rootContext()->setContextProperty("ChartsModel", &chartsModel);
+    engine.rootContext()->setContextProperty("ForwardOnlyDataModel", &forwardOnlyDataModel);
+    engine.rootContext()->setContextProperty("ForwardOnlyQueryModel", &forwardOnlyQueryModel);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/

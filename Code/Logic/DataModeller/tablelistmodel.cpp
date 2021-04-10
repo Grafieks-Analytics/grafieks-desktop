@@ -43,6 +43,8 @@ void TableListModel::callQuery(QString queryString)
 
     switch(Statics::currentDbIntType){
 
+    // case Constants::redshiftIntType: Check ForwardOnlyQueryModel
+
     case Constants::mysqlIntType:{
 
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
@@ -93,19 +95,6 @@ void TableListModel::callQuery(QString queryString)
             this->setQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name LIKE '%"+queryString+"%'", dbPostgres);
         } else{
             this->setQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'", dbPostgres);
-        }
-
-        break;
-    }
-    case Constants::redshiftIntType:{
-
-        QSqlDatabase dbRedshift = QSqlDatabase::database(Constants::redshiftOdbcStrType);
-
-        if (queryString != ""){
-
-            this->setQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name LIKE '%"+queryString+"%'", dbRedshift);
-        } else{
-            this->setQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'", dbRedshift);
         }
 
         break;
@@ -245,6 +234,7 @@ void TableListModel::generateRoleNames()
 
     m_roleNames.clear();
     QString roleName = "tableName";
+    qDebug() << this->rowCount() << this->columnCount() << "COUNTS";
     m_roleNames.insert(Qt::UserRole + 1, roleName.toUtf8());
 
 }

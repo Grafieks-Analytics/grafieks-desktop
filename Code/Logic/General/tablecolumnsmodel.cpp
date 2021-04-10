@@ -150,7 +150,7 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
         QSqlDatabase dbRedshift = QSqlDatabase::database(Constants::redshiftOdbcStrType);
 
-        describeQueryString = "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '" + tableName.toLower()  + "'";
+        describeQueryString = "select \"column\", type from pg_table_def where tablename = '" + tableName  + "'";
 
         QSqlQuery describeQuery(describeQueryString, dbRedshift);
 
