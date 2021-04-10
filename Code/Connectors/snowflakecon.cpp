@@ -9,10 +9,13 @@ QVariantMap SnowflakeCon::SnowflakeOdbcInstance(const QString &driver, const QSt
 {
 
     QVariantMap outputStatus;
+    QSqlDatabase dbSnowflakeOdbc = QSqlDatabase::addDatabase("QODBC", Constants::snowflakeOdbcStrType);
+
 
     if(QSqlDatabase::isDriverAvailable("QODBC")){
+        qDebug() << "AVAILABLE";
 
-        QString dbString = "DRIVER={" + driver + "};" + "Database=" + db + ";Tusted_Connection=True";
+        QString dbString = "driver={"+ driver +"};server="+ host +";database= "+ db;
 
         QSqlDatabase dbSnowflakeOdbc = QSqlDatabase::addDatabase("QODBC", Constants::snowflakeOdbcStrType);
 
@@ -21,6 +24,7 @@ QVariantMap SnowflakeCon::SnowflakeOdbcInstance(const QString &driver, const QSt
         dbSnowflakeOdbc.setHostName(host);
         dbSnowflakeOdbc.setUserName(username);
         dbSnowflakeOdbc.setPassword(password);
+
 
         if(!dbSnowflakeOdbc.open()){
             outputStatus.insert("status", false);
