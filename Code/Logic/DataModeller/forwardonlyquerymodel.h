@@ -43,8 +43,8 @@ private:
     QuerySplitter querySplitter;
 
     // Data variables for Charts
-    QMap<int, QStringList*> duckChartData;
-    QMap<int, QString> duckChartHeader;
+    QMap<int, QStringList*> forwardOnlyChartData;
+    QMap<int, QString> forwardOnlyChartHeader;
     QStringList tableHeaders;
 
 signals:

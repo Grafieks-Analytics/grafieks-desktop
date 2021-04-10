@@ -32,7 +32,8 @@ void ReportsDataModel::setTmpSql(QString query)
     case Constants::mysqlOdbcIntType:
     case Constants::postgresIntType:
     case Constants::mssqlIntType:
-    case Constants::sqliteIntType:{
+    case Constants::sqliteIntType:
+    case Constants::redshiftIntType:{
 
         QString conString;
         switch (Statics::currentDbIntType) {
@@ -55,12 +56,18 @@ void ReportsDataModel::setTmpSql(QString query)
         case Constants::sqliteIntType:
             conString = Constants::sqliteStrType;
             break;
+
+        case Constants::redshiftIntType:
+            conString = Constants::redshiftOdbcStrType;
+            break;
         }
 
         QSqlDatabase dbString = QSqlDatabase::database(conString);
 
         QSqlQuery queryResult(query, dbString);
         QSqlRecord record = queryResult.record();
+
+
 
         for(int i = 0; i < record.count(); i++){
 
@@ -142,7 +149,8 @@ void ReportsDataModel::getColumnsForTable(QString tableName)
     case Constants::mysqlOdbcIntType:
     case Constants::postgresIntType:
     case Constants::mssqlIntType:
-    case Constants::sqliteIntType:{
+    case Constants::sqliteIntType:
+    case Constants::redshiftIntType:{
 
         switch (Statics::currentDbIntType) {
 
