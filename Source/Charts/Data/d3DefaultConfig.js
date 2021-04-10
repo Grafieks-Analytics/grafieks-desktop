@@ -1,3 +1,13 @@
+const constants = {
+    redColor: "#E15759",
+    yellowColor: "#EDC949",
+    greenColor: "#59A14F",
+    chartType: {
+        FIT_WIDTH: "FitWidth",
+        STANDARD: "Standard",
+    },
+};
+
 const defaultD3Config = {
     d3ColorPalette: "schemeSet3",
     defaultPaddingInner: 0.25,
@@ -11,6 +21,8 @@ const defaultD3Config = {
     defaultTimeParseFormat: "%d-%m-%Y",
     defaultSpace: 30,
     dateFormat: "%Y",
+    chartType: constants.chartType.STANDARD,
+    standartThresholdWidth: 200,
 };
 const markerShapeConfig = {
     circle: {
@@ -25,10 +37,4 @@ const markerShapeConfig = {
         xPositionAttrName: "x",
         yPositionAttrName: "y",
     },
-};
-
-const constants = {
-    redColor: "#E15759",
-    yellowColor: "#EDC949",
-    greenColor: "#59A14F",
 };
