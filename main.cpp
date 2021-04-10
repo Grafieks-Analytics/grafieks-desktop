@@ -233,6 +233,7 @@ int main(int argc, char *argv[])
 
     QtTest2 qttest2;
     QtTest qttest;
+//    qttest.calla();
 
     MysqlCon mysqlconnect;
     User User;

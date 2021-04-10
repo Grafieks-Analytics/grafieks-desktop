@@ -28,6 +28,16 @@ void ForwardOnlyDataModel::columnData(QString col, QString tableName, QString se
         queryString = "";
         break;
 
+    case Constants::snowflakeIntType:
+        conType = Constants::snowflakeOdbcStrType;
+        if (searchString != ""){
+            queryString = "SELECT " + col + " FROM "+ tableName + " WHERE " + col + " LIKE '%"+searchString+"%'";
+        } else{
+            queryString = "SELECT " + col + " FROM "+ tableName;
+        }
+        queryString = "";
+        break;
+
     }
     QSqlDatabase forwardOnlyDb = QSqlDatabase::database(conType);
     QSqlQuery query(queryString, forwardOnlyDb);
@@ -54,6 +64,12 @@ QStringList ForwardOnlyDataModel::getColumnList(QString tableName, QString modul
 
     case Constants::redshiftIntType:
         conType = Constants::redshiftOdbcStrType;
+        queryString = "select \"column\", type from pg_table_def where tablename = '" + tableName  + "'";
+
+        break;
+
+    case Constants::snowflakeIntType:
+        conType = Constants::snowflakeOdbcStrType;
         queryString = "select \"column\", type from pg_table_def where tablename = '" + tableName  + "'";
 
         break;
@@ -104,6 +120,12 @@ QStringList ForwardOnlyDataModel::getTableList()
 
         break;
 
+    case Constants::snowflakeIntType:
+        conType = Constants::snowflakeOdbcStrType;
+        queryString = "SHOW TABLES";
+
+        break;
+
     }
     QSqlDatabase forwardOnlyDb = QSqlDatabase::database(conType);
     QSqlQuery tableQuery(queryString, forwardOnlyDb);
@@ -131,6 +153,12 @@ QStringList ForwardOnlyDataModel::getDbList()
     case Constants::redshiftIntType:
         conType = Constants::redshiftOdbcStrType;
         queryString = "SELECT * FROM pg_database";
+
+        break;
+
+    case Constants::snowflakeIntType:
+        conType = Constants::snowflakeOdbcStrType;
+        queryString = "SHOW DATABASES";
 
         break;
 

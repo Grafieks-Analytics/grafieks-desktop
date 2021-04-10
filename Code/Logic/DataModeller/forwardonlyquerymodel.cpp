@@ -72,8 +72,13 @@ void ForwardOnlyQueryModel::removeTmpChartData()
 void ForwardOnlyQueryModel::generateRoleNames()
 {
     QStringList output;
+    QString colListQuery;
+    QString conType;
+
     m_roleNames.clear();
     this->tableHeaders.clear();
+
+
 
     QRegularExpression selectListRegex(R"(SELECT\s+(.*?)\sFROM\s)", QRegularExpression::CaseInsensitiveOption);
     QRegularExpressionMatch selectIterator = selectListRegex.match(this->query);
@@ -86,8 +91,21 @@ void ForwardOnlyQueryModel::generateRoleNames()
 
         QString tableName;
         foreach(tableName, tablesList){
-            QString colListQuery = "select \"column\" from pg_table_def where tablename = '" + tableName  + "'";
-            QSqlDatabase dbForward = QSqlDatabase::database(Constants::redshiftOdbcStrType);
+
+            switch(Statics::currentDbIntType){
+                case Constants::redshiftIntType:
+                colListQuery = "select \"column\" from pg_table_def where tablename = '" + tableName  + "'";
+                conType = Constants::redshiftOdbcStrType;
+                break;
+
+            case Constants::snowflakeIntType:
+                colListQuery = "select \"column\" from pg_table_def where tablename = '" + tableName  + "'";
+                conType = Constants::redshiftOdbcStrType;
+                break;
+
+            }
+
+            QSqlDatabase dbForward = QSqlDatabase::database(conType);
             QSqlQuery q(colListQuery, dbForward);
             int i = 0;
 
@@ -126,10 +144,21 @@ void ForwardOnlyQueryModel::setQueryResult()
 
     // Tmp
     QStringList list;
+    QString conType;
 
-    QSqlDatabase dbForward = QSqlDatabase::database(Constants::redshiftOdbcStrType);
+    switch(Statics::currentDbIntType){
+        case Constants::redshiftIntType:
+        conType = Constants::redshiftOdbcStrType;
+        break;
+
+    case Constants::snowflakeIntType:
+        conType = Constants::redshiftOdbcStrType;
+        break;
+
+    }
+
+    QSqlDatabase dbForward = QSqlDatabase::database(conType);
     QSqlQuery q(this->query, dbForward);
-    qDebug() << q.lastError();
     if(q.lastError().type() != QSqlError::NoError)
         qDebug() << Q_FUNC_INFO << q.lastError();
 

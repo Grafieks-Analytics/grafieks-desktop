@@ -96,11 +96,20 @@ Page {
                 tableslist.model = TableListModel
             }
         }
+        function onSnowflakeLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                let tables = ForwardOnlyDataModel.getTableList()
+                tables.forEach((item)=>{
+                                   otherSqlTableList.append({tableName: item})
+                               })
+                tableslist.model = otherSqlTableList
+            }
+        }
         function onRedshiftLoginStatus(status){
             if(status.status === true){
                 // Call functions
                 let tables = ForwardOnlyDataModel.getTableList()
-                console.log(tables)
                 tables.forEach((item)=>{
                                    otherSqlTableList.append({tableName: item})
                                })

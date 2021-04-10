@@ -34,7 +34,8 @@ void ReportsDataModel::setTmpSql(QString query)
     case Constants::mssqlIntType:
     case Constants::sqliteIntType:
     case Constants::mongoIntType:
-    case Constants::redshiftIntType:{
+    case Constants::redshiftIntType:
+    case Constants::snowflakeIntType:{
 
         QString conString;
         switch (Statics::currentDbIntType) {
@@ -64,6 +65,10 @@ void ReportsDataModel::setTmpSql(QString query)
 
         case Constants::redshiftIntType:
             conString = Constants::redshiftOdbcStrType;
+            break;
+
+        case Constants::snowflakeIntType:
+            conString = Constants::snowflakeOdbcStrType;
             break;
         }
 
@@ -156,7 +161,8 @@ void ReportsDataModel::getColumnsForTable(QString tableName)
     case Constants::mssqlIntType:
     case Constants::sqliteIntType:
     case Constants::mongoIntType:
-    case Constants::redshiftIntType:{
+    case Constants::redshiftIntType:
+    case Constants::snowflakeIntType:{
 
         switch (Statics::currentDbIntType) {
 
@@ -193,6 +199,11 @@ void ReportsDataModel::getColumnsForTable(QString tableName)
 
         case Constants::redshiftIntType:
             conString = Constants::redshiftOdbcStrType;
+            describeQueryString = "select \"column\", type from pg_table_def where tablename = '" + tableName  + "'";
+            break;
+
+        case Constants::snowflakeIntType:
+            conString = Constants::snowflakeOdbcStrType;
             describeQueryString = "select \"column\", type from pg_table_def where tablename = '" + tableName  + "'";
             break;
         }
