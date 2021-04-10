@@ -89,8 +89,10 @@ Item {
 
             if(conType === Constants.sqlType){
                 connectionType = Constants.sqlType
-            } else{
+            } else if(conType === Constants.duckType){
                 connectionType = Constants.duckType
+            } else{
+                connectionType = Constants.forwardType
             }
         }
 
@@ -116,6 +118,13 @@ Item {
                 query_joiner = "\""
             }
         }
+
+        function onRedshiftLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "\""
+            }
+        }
+
         function onSqliteLoginStatus(status){
             if(status.status === true){
                 query_joiner = "`"
@@ -440,9 +449,12 @@ Item {
             if(connectionType === Constants.sqlType){
                 console.log("QUERY set QUERYMODEL", DSParamsModel.tmpSql)
                 QueryModel.callSql(DSParamsModel.tmpSql)
-            } else{
+            } else if(connectionType === Constants.duckType){
                 console.log("QUERY set DUCKQUERYMODEL", DSParamsModel.tmpSql)
                 DuckQueryModel.setQuery(DSParamsModel.tmpSql)
+            } else{
+                console.log("QUERY set FORWARDONLYQUERYMODEL", DSParamsModel.tmpSql)
+                ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
             }
 
             TableSchemaModel.showSchema(DSParamsModel.tmpSql)
@@ -757,9 +769,11 @@ Item {
 
         if(connectionType === Constants.sqlType){
             QueryModel.callSql(DSParamsModel.tmpSql)
-        } else{
+        } else if(connectionType === Constants.duckType){
             console.log("QUERY exe", DSParamsModel.tmpSql)
             DuckQueryModel.setQuery(DSParamsModel.tmpSql)
+        } else{
+            ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
         }
     }
 

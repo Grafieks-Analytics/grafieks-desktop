@@ -42,6 +42,7 @@ QtObject {
     // DB Classification
     property string duckType: "DUCK"
     property string sqlType: "SQL"
+    property string forwardType: "FORWARD"
 
     // ODBC Driver matching names
     property string mysqlOdbc: qsTr("mysql")

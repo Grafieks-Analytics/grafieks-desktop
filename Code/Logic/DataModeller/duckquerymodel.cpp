@@ -76,8 +76,6 @@ void DuckQueryModel::generateRoleNames()
     m_roleNames.clear();
     this->tableHeaders.clear();
 
-    output = querySplitter.getSelectParams();
-
     QRegularExpression selectListRegex(R"(SELECT\s+(.*?)\sFROM\s)", QRegularExpression::CaseInsensitiveOption);
     QRegularExpressionMatch selectIterator = selectListRegex.match(this->query);
     QString containsStar = selectIterator.captured(1);
@@ -103,6 +101,7 @@ void DuckQueryModel::generateRoleNames()
         }
 
     } else{
+        output = querySplitter.getSelectParams();
         for(int i =0; i < output.length(); i++){
             QString fieldName = output[i].remove("\"").trimmed();
             m_roleNames.insert(i, fieldName.toUtf8());
