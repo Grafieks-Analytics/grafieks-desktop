@@ -65,3 +65,11 @@ On Mac, we need to install **[iODBC](http://www.iodbc.org/dataspace/doc/iodbc/wi
 5. General Select SQL queries will run using the ODBC connector on `C:\Programfiles\Mongodb\Connector for BI\x.x\bin`
 6. On Windows, you might need to create `C:\data\db` folder before running mongodb server. 
 7. Dont use the port from mongod.exe (default 27017) but use the one provided by the BI Connector, mongosqld.exe (default 3307) to connect using ODBC
+
+- **Redshift**
+
+1. Create a new cluster in Redshift
+2. Select the created cluster and go to `Properties` click the link to `VPC`
+3. Inside the `VPC` from the left panel, select Subnets
+4. Select any Subnet ID from the selected VPC.
+5. Select the `routes` tab and add a new route `0.0.0.0/0` for connecting from any IP address
