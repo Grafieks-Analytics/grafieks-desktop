@@ -1,0 +1,181 @@
+<html>
+    <head>
+        <script src="./Data/d3DefaultConfig.js"></script>
+        <script src="./Data/utils.js"></script>
+        <script src="./Data/d3.v4.min.js"></script>
+        <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+        <link rel="stylesheet" href="Data/general.css" />
+        <style type="text/css">
+            body {
+                padding: 0;
+                margin: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="tooltip"></div>
+        <script>
+            var data = [
+                [
+                    ["2020-01-01", "2021-02-01", "2022-03-01", "2023-03-01"],
+                    [200, 800, 400, -200],
+                ],
+                ["Countries", "Population"],
+            ];
+
+            drawChart(data);
+
+            function drawChart(data, plottingConfiguration = {}) {
+                window.data = data;
+                dataValues = data[0];
+
+                console.log(JSON.stringify(plottingConfiguration));
+
+                var parseTime = d3.timeParse("%d-%b-%y");
+
+                var dataValues = data[0];
+
+                let {
+                    d3colorPalette,
+                    paddingInner,
+                    markerShape,
+                    curveType,
+                    dateFormat,
+                } = plottingConfiguration;
+                if (!d3colorPalette) {
+                    d3colorPalette = defaultD3Config.d3ColorPalette;
+                }
+                d3Colors = d3[d3colorPalette];
+
+                if (!paddingInner) {
+                    paddingInner = defaultD3Config.defaultPaddingInner;
+                }
+
+                var margin = { top: 40, right: 20, bottom: 80, left: 70 };
+                var width = window.innerWidth - margin.left - margin.right;
+                var height = window.innerHeight - margin.top - margin.bottom;
+
+                //add svg with margin !important
+                //this is svg is actually group
+                var svg = d3
+                    .select("body")
+                    .append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g") //add group to leave margin for axis
+                    .attr(
+                        "transform",
+                        "translate(" + margin.left + "," + margin.top + ")"
+                    );
+
+                var dataset = [4, 2, -6, 13, 4, 0, -20];
+                var xAxisDataSet = [0, 1, 2, 3, 4, 5, 6];
+
+                var maxHeight = d3.max(dataset, function (d) {
+                    return Math.abs(d);
+                });
+                var minHeight = d3.min(dataset, function (d) {
+                    return Math.abs(d);
+                });
+
+                //set y scale
+                var yScale = d3
+                    .scaleLinear()
+                    .rangeRound([0, height])
+                    .domain([maxHeight, -maxHeight]);
+                //show negative
+                //add x axis
+                var xScale = d3
+                    .scaleBand()
+                    .domain(xAxisDataSet)
+                    .rangeRound([0, width])
+                    .padding(0.1); //scaleBand is used for  bar chart
+
+                /*if domain is specified, sets the domain to the specified array of values.
+            The first element in domain will be mapped to the first band, the second domain value to the second band, and so on.
+            Domain values are stored internally in a map from stringified value to index; the resulting index is then used to determine the band.
+            Thus, a band scale’s values must be coercible to a string, and the stringified version of the domain value uniquely identifies the corresponding band.
+            If domain is not specified, this method returns the current domain.*/
+
+                var barpadding = 10;
+                var bars = svg
+                    .selectAll("rect")
+                    .data(dataset)
+                    .enter()
+                    .append("rect");
+                bars.attr("x", function (d, i) {
+                    console.log(xScale(i));
+                    return xScale(i); //i*(width/dataset.length);
+                })
+                    .attr("y", function (d) {
+                        if (d < 0) {
+                            return height / 2;
+                        } else {
+                            return yScale(d);
+                        }
+                    }) //for bottom to top
+                    .attr(
+                        "width",
+                        xScale.bandwidth() /*width/dataset.length-barpadding*/
+                    )
+                    .attr("height", function (d) {
+                        return height / 2 - yScale(Math.abs(d));
+                    })
+                    .attr(
+                        "fill",
+                        d3Colors[4]
+                        //function (d) {
+                        // if (d >= 0) {
+                        //     return "green";
+                        // } else {
+                        //     return "green";
+                        // }
+                        // }
+                    )
+                    .on("mouseout", function (d, i) {
+                        d3.select("#tooltip").style("display", "none");
+
+                        d3.selectAll(".bar").style("opacity", 1);
+                    })
+                    .on("mouseover mousemove", function (d, i) {
+                        let xpos = d3.mouse(this)[0] + margin.left;
+                        let ypos = d3.mouse(this)[1];
+
+                        d3.select("#tooltip")
+                            .style("left", xpos + "px")
+                            .style("top", ypos + "px")
+                            .style("display", "block")
+                            .text(dataset[i]);
+
+                        d3.selectAll(".bar").style("opacity", 0.3);
+                        d3.select(this).style("opacity", 1);
+                    });
+
+                //add x and y axis
+                var yAxis = d3.axisLeft(yScale);
+                svg.append("g").call(yAxis);
+
+                var xAxis = d3.axisBottom(
+                    xScale
+                ); /*.tickFormat("");remove tick label*/
+                svg.append("g")
+                    .call(xAxis)
+                    .attr("transform", "translate(0," + height / 2 + ")");
+
+                // //add label for x axis and y axis
+                // svg.append("text")
+                //     .text("Y Label")
+                //     .attr("x", 0 - height / 2)
+                //     .attr("y", 0 - margin.left)
+                //     .attr("dy", "1em")
+                //     .style("text-anchor", "middle")
+                //     .attr("transform", "rotate(-90)");
+                // svg.append("text")
+                //     .text("X Label")
+                //     .attr("x", width / 2)
+                //     .attr("y", height + margin.bottom)
+                //     .style("text-anchor", "middle");
+            }
+        </script>
+    </body>
+</html>
