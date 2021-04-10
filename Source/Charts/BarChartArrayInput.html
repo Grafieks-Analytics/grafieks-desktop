@@ -13,6 +13,7 @@
         </style>
     </head>
     <body>
+        <div id="my_dataviz"></div>
         <div id="tooltip"></div>
         <script>
             var data = [
@@ -40,7 +41,10 @@
                     markerShape,
                     curveType,
                     dateFormat,
+                    chartType,
+                    standartThresholdWidth,
                 } = plottingConfiguration;
+
                 if (!d3colorPalette) {
                     d3colorPalette = defaultD3Config.d3ColorPalette;
                 }
@@ -54,14 +58,29 @@
                     dateFormat = defaultD3Config.dateFormat;
                 }
 
+                if (!chartType) {
+                    chartType = defaultD3Config.chartType;
+                }
+
+                if (!standartThresholdWidth) {
+                    standartThresholdWidth =
+                        defaultD3Config.standartThresholdWidth;
+                }
+
                 var margin = { top: 40, right: 20, bottom: 80, left: 70 };
                 var width = window.innerWidth - margin.left - margin.right;
+                if (chartType == constants.chartType.STANDARD) {
+                    width = dataValues.length * standartThresholdWidth;
+                }
+                console.log(width);
                 var height = window.innerHeight - margin.top - margin.bottom;
 
                 //add svg with margin !important
                 //this is svg is actually group
+                d3.selectAll("#my_dataviz").html("");
+
                 var svg = d3
-                    .select("body")
+                    .selectAll("#my_dataviz")
                     .append("svg")
                     .attr("width", width + margin.left + margin.right)
                     .attr("height", height + margin.top + margin.bottom)
