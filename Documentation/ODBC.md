@@ -68,8 +68,9 @@ On Mac, we need to install **[iODBC](http://www.iodbc.org/dataspace/doc/iodbc/wi
 
 - **Redshift**
 
-1. Create a new cluster in Redshift
-2. Select the created cluster and go to `Properties` click the link to `VPC`
-3. Inside the `VPC` from the left panel, select Subnets
-4. Select any Subnet ID from the selected VPC.
-5. Select the `routes` tab and add a new route `0.0.0.0/0` for connecting from any IP address
+1. ODBC Driver link https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html
+2. Create a new cluster in Redshift
+3. Select the created cluster and go to `Properties` click the link to `VPC`
+4. Inside the `VPC` from the left panel, select Subnets
+5. Select any Subnet ID from the selected VPC.
+6. Select the `routes` tab and add a new route `0.0.0.0/0` for connecting from any IP address
