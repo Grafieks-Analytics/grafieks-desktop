@@ -95,34 +95,21 @@ Page {
 
         var dataValuesRemoved = false;
         if(maxDropOnXAxis > 0 && maxDropOnXAxis < xAxisColumns.length){
-
-            xAxisColumns = xAxisColumns.splice(0,1);
+            xAxisColumns = xAxisColumns.splice(0,maxDropOnXAxis);
             ReportParamsModel.setXAxisColumns(xAxisColumns);
-
-            // update the x axis list model
-            xAxisListModel.clear();
-            for(var i=0; i<xAxisColumns.length;i++){
-                xAxisListModel.append({ itemName: xAxisColumns[i] })
-            }
+            xAxisListModel.remove(maxDropOnXAxis,xAxisListModel.count - maxDropOnXAxis);
             dataValuesRemoved = true;
         }
 
         if(maxDropOnYAxis > 0 && maxDropOnYAxis < yAxisColumns.length){
-
-            yAxisColumns = yAxisColumns.splice(0,1);
+            yAxisColumns = yAxisColumns.splice(0,maxDropOnYAxis);
             ReportParamsModel.setYAxisColumns(yAxisColumns);
-
-            // update the y axis list model
-            yAxisListModel.clear();
-            for(var i=0; i<yAxisColumns.length;i++){
-                yAxisListModel.append({ itemName: yAxisColumns[i] })
-            }
+            yAxisListModel.remove(maxDropOnYAxis,yAxisListModel.count - maxDropOnYAxis);
             dataValuesRemoved = true;
         }
 
         allowedXAxisDataPanes = maxDropOnXAxis;
         allowedYAxisDataPanes = maxDropOnYAxis;
-
 
         // change axis on the basis of chart title
         switch(chartTitle){
