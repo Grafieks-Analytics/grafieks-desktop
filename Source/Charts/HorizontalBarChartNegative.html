@@ -20,8 +20,6 @@
         </style>
     </head>
     <body>
-        <div id="my_dataviz"></div>
-
         <div id="tooltip"></div>
         <script>
             var data = [
@@ -80,11 +78,9 @@
                 var width = window.innerWidth - margin.left - margin.right;
                 var height = window.innerHeight - margin.top - margin.bottom;
 
-                d3.selectAll("#my_dataviz").html("");
-
                 // Add svg to
                 var svg = d3
-                    .selectAll("#my_dataviz")
+                    .select("body")
                     .append("svg")
                     .attr("width", width + margin.left + margin.right)
                     .attr("height", height + margin.top + margin.bottom)

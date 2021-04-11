@@ -71,12 +71,12 @@ Page {
 
     onIsHorizontalGraphChanged: {
         switch(chartTitle){
-            case Constants.barChartTitle:
-                chartUrl = Constants.horizontalBarChartUrl;
-                console.log('Loading horizontal bar chart')
-                webEngineView.url = 'qrc:/Source/Charts/'+chartUrl;
-                chartTitle = Constants.horizontalBarChartTitle;
-                break;
+        case Constants.barChartTitle:
+            chartUrl = Constants.horizontalBarChartUrl;
+            console.log('Loading horizontal bar chart')
+            webEngineView.url = 'qrc:/Source/Charts/'+chartUrl;
+            chartTitle = Constants.horizontalBarChartTitle;
+            break;
         }
     }
 
@@ -95,34 +95,23 @@ Page {
 
         var dataValuesRemoved = false;
         if(maxDropOnXAxis > 0 && maxDropOnXAxis < xAxisColumns.length){
-            console.log('Noooooo, Remove extra values');
-            xAxisColumns.splice(0,1);
+            xAxisColumns = xAxisColumns.splice(0,maxDropOnXAxis);
             ReportParamsModel.setXAxisColumns(xAxisColumns);
-
-            // update the x axis list model
-            xAxisListModel.clear();
-            for(var i=0; i<xAxisColumns.length;i++){
-                xAxisListModel.append({ itemName: xAxisColumns[i] })
-            }
+            xAxisListModel.remove(maxDropOnXAxis,xAxisListModel.count - maxDropOnXAxis);
             dataValuesRemoved = true;
         }
 
         if(maxDropOnYAxis > 0 && maxDropOnYAxis < yAxisColumns.length){
-            console.log('Noooooo, Remove extra values');
-            yAxisColumns.splice(0,1);
+            yAxisColumns = yAxisColumns.splice(0,maxDropOnYAxis);
             ReportParamsModel.setYAxisColumns(yAxisColumns);
-
-            // update the y axis list model
-            yAxisListModel.clear();
-            for(var i=0; i<yAxisColumns.length;i++){
-                yAxisListModel.append({ itemName: yAxisColumns[i] })
-            }
+            yAxisListModel.remove(maxDropOnYAxis,yAxisListModel.count - maxDropOnYAxis);
             dataValuesRemoved = true;
         }
 
         allowedXAxisDataPanes = maxDropOnXAxis;
         allowedYAxisDataPanes = maxDropOnYAxis;
 
+        // change axis on the basis of chart title
         switch(chartTitle){
         case Constants.stackedBarChartTitle:
             chartUrl=Constants.stackedBarChartUrl
@@ -315,18 +304,6 @@ Page {
 
     function onDropAreaEntered(element,elementName){
         element.border.width = Constants.dropActiveBorderWidth
-//        switch(elementName){
-//            case Constants.xAxisName:
-//                if(!xAxisDropEligible()){
-//                    element.border.color = Constants.redColor
-//                }
-//                return;
-//            case Constants.yAxisName:
-//                if(!yAxisDropEligible()){
-//                    element.border.color = Constants.redColor
-//                }
-//                return;
-//        }
     }
 
     function onDropAreaExited(element){
@@ -372,10 +349,6 @@ Page {
         var yAxisColumns = ReportParamsModel.yAxisColumns;
 
         var itemType = lastPickedDataPaneElementProperties.itemType;
-//        console.log('Axis',axis);
-//        console.log('Horizontal Check?',itemType && itemType.toLowerCase() === 'categorical' && !xAxisColumns.length && !yAxisColumns.length);
-//        console.log('Horizontal Check?',itemType && itemType.toLowerCase(), !xAxisColumns.length, !yAxisColumns.length);
-
         if(itemType && itemType.toLowerCase() === 'categorical' && axis === Constants.yAxisName  && !xAxisColumns.length && !yAxisColumns.length){
             isHorizontalGraph = true;
         }
@@ -393,7 +366,7 @@ Page {
                 return;
             }
 
-            xAxisListModel.append({itemName: itemName})
+            xAxisListModel.append({itemName: itemName, droppedItemType: itemType})
             xAxisColumns.push(itemName);
             ReportParamsModel.setXAxisColumns(xAxisColumns);
 
@@ -401,7 +374,8 @@ Page {
             if(!yAxisDropEligible(itemName)){
                 return;
             }
-            yAxisListModel.append({itemName: itemName})
+            console.log('itemType',itemType);
+            yAxisListModel.append({itemName: itemName, droppedItemType: itemType})
             yAxisColumns.push(itemName);
             ReportParamsModel.setYAxisColumns(yAxisColumns);
         }else{
@@ -831,8 +805,8 @@ Page {
                     onEntered:  onDropAreaEntered(parent,Constants.xAxisName)
                     onExited:  onDropAreaExited(parent,Constants.xAxisName)
                     onDropped: onDropAreaDropped(parent,Constants.xAxisName)
-                }
 
+                }
                 ListView{
 
                     height: parent.height
@@ -843,9 +817,14 @@ Page {
                     model: xAxisListModel
                     orientation: Qt.Horizontal
                     spacing: spacingColorList
+                    interactive: false
                     delegate: AxisDroppedRectangle{
+                        id: dragRect
                         textValue: itemName
-                        color: Constants.defaultXAxisColor
+                        itemType: droppedItemType
+                        Component.onCompleted: {
+                            console.log(itemName,itemType)
+                        }
                     }
                 }
 
@@ -947,7 +926,7 @@ Page {
                     spacing: spacingColorList
                     delegate: AxisDroppedRectangle{
                         textValue: itemName
-                        color: Constants.defaultYAxisColor
+                        itemType: droppedItemType
                     }
                 }
 
