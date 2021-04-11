@@ -63,8 +63,8 @@ Item{
     // JAVASCRIPT FUNCTION STARTS
 
     Component.onCompleted: {
-//        textEditQueryModeller.text = "SELECT * FROM users WHERE users.id > 0"
-       textEditQueryModeller.text = "<span style='color:yellow;'> SELECT </span> * FROM users WHERE users.id > 0 "
+        //        textEditQueryModeller.text = "SELECT * FROM users WHERE users.id > 0"
+        textEditQueryModeller.text = " SELECT * FROM users WHERE users.id > 0 "
 
 
 
@@ -76,31 +76,55 @@ Item{
         DSParamsModel.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, " "))
     }
 
-//    function to onTextFormatSqlKeyword
+    //    function to onTextFormatSqlKeyword
     function onTextFormatSqlKeyword(){
 
         var arraySqlKeyword =["SELECT","FROM"]
 
-        var textArrayQuery = textEditQueryModeller.text.split(" ")
-        var textArrayQueryOutput = []
-        textArrayQuery.forEach((element)=>
-                               {
-                                   if( arraySqlKeyword.includes(element) )
-                                   {
-                                       textArrayQueryOutput.push("<span style='color:red'>"+element+"</span>")
-                                   }
-                                   else{
-                                       textArrayQueryOutput.push(element)
-                                   }
-
-                               }
-
-                               )
 
 
-         textEditQueryModeller.text=textArrayQueryOutput.join(" ")
 
-}
+
+        var textArrayQueryNewLine = textEditQueryModeller.text.split("\n")
+        var textArrayQueryOutputNewLine = []
+
+        console.log("textArrayQueryNewLine"+JSON.stringify(textArrayQueryNewLine))
+
+
+        textArrayQueryNewLine.forEach((elementNew)=>{
+                                          //                                           console.log("elementNew"+elementNew)
+
+                                          var textArrayQuery = elementNew.split(" ")
+                                          var textArrayQueryOutput = []
+
+
+
+                                          textArrayQuery.forEach((element)=>
+                                                                 {
+                                                                     console.log("element"+element.replace(/\n|\r/g, " "))
+                                                                     if( arraySqlKeyword.includes(element) )
+                                                                     {
+                                                                         textArrayQueryOutput.push("<span style='color:red'>"+element+"</span>")
+                                                                     }
+                                                                     else{
+                                                                         textArrayQueryOutput.push(element)
+                                                                     }
+
+                                                                 }
+
+                                                                 )
+                                          //                                           console.log("textArrayQueryOutput"+textArrayQueryOutput)
+
+
+                                          textArrayQueryOutputNewLine.push(textArrayQueryOutput.join(" "))
+
+                                      }
+                                      )
+
+        textEditQueryModeller.text=textArrayQueryOutputNewLine.join("\n")
+        //        console.log("textArrayQueryOutputNewLine"+textArrayQueryOutputNewLine)
+
+    }
 
 
     function onEditorLineCountChanged(){
@@ -207,11 +231,11 @@ Item{
         wrapMode: TextEdit.WordWrap
         padding: 10
 
-//        text: {
-//            if(textEditQueryModeller.WordWrap === "SELECT * FROM users WHERE users.id > 0"){
-//            color:"yellow"
-//            }
-//        }
+        //        text: {
+        //            if(textEditQueryModeller.WordWrap === "SELECT * FROM users WHERE users.id > 0"){
+        //            color:"yellow"
+        //            }
+        //        }
 
         textFormat:TextEdit.AutoText
 
