@@ -416,8 +416,6 @@ Rectangle{
 
                                                     webEngineView.runJavaScript("changeChartAttributes('.x_label','font-size', '"+xAxisLabelFontSize.currentValue+"')")
                                                 d3PropertyConfig["xLabelFontSize"]=xAxisLabelFontSize.currentValue;
-                                                console.log(xAxisLabelFontSize.currentValue);
-                                                console.log("plotconfig"+JSON.stringify(d3PropertyConfig));
 
                                             }
                                         }

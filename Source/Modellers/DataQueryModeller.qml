@@ -434,7 +434,7 @@ Page {
                 anchors.left: tableImg.right
                 anchors.leftMargin: 10
                 anchors.verticalCenter: tableImg.verticalCenter
-                font.pixelSize: Constants.fontCategoryHeaderSmall
+                font.pixelSize: Constants.fontCategoryHeaderMedium
             }
 
             Image {
@@ -1239,7 +1239,7 @@ Page {
 
                 Rectangle{
 
-                    height: 710
+                    height: column_querymodeller.height - 180
                     width:500
 
                     Rectangle {
@@ -1262,8 +1262,9 @@ Page {
                             anchors.left: database.right
                             anchors.leftMargin: 10
                             anchors.verticalCenter: parent.verticalCenter
-                            font.pixelSize: Constants.fontCategoryHeaderSmall
+                            font.pixelSize: Constants.fontCategoryHeaderMedium
                             text: ConnectorsLoginModel.connectedDB
+
 
                             ToolTip.delay:Constants.tooltipShowTime
                             ToolTip.timeout: Constants.tooltipHideTime

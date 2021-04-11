@@ -1239,7 +1239,7 @@ Page {
     WebEngineView {
         id: webEngineView
         height:parent.height - axis.height -100
-        width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width-100
+        width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width - 100
         url: "../Charts/BarChartArrayInput.html"
         onLoadingChanged: onChartLoaded(loadRequest)
         anchors.left: tool_sep_chartFilters.right
