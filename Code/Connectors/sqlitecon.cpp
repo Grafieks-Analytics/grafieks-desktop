@@ -23,10 +23,11 @@ Sqlitecon::Sqlitecon(QObject *parent) : QObject(parent)
 
 QVariantMap Sqlitecon::SqliteInstance(const QString &filename)
 {
+     QVariantMap outputStatus;
 
-    if(QSqlDatabase::isDriverAvailable(DRIVER)){
+    if(QSqlDatabase::isDriverAvailable("QSQLITE")){
 
-        QSqlDatabase dbSqlite = QSqlDatabase::addDatabase(DRIVER, Constants::sqliteStrType);
+        QSqlDatabase dbSqlite = QSqlDatabase::addDatabase("QSQLITE", Constants::sqliteStrType);
         dbSqlite.setDatabaseName(QUrl(filename).toLocalFile());
 
         if(!dbSqlite.open()){
@@ -48,7 +49,7 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename)
             // For Query/Data modeller
             // Else all the query statistics are listed in "Test Query" tab in Data-Query-Modeller
 
-            QSqlDatabase dbSqlite2 = QSqlDatabase::addDatabase(DRIVER, Constants::sqliteStrQueryType);
+            QSqlDatabase dbSqlite2 = QSqlDatabase::addDatabase("QSQLITE", Constants::sqliteStrQueryType);
             dbSqlite2.setDatabaseName(QUrl(filename).toLocalFile());
             dbSqlite2.open();
         }

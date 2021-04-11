@@ -2,18 +2,28 @@ import QtQuick 2.0
 
 import com.grafieks.singleton.constants 1.0
 import "../../MainSubComponents"
+import "./MiniSubComponents"
 
 Rectangle{
 
+    id: axisRectangle
+    property var itemType: null;
+
     property alias textValue: textbox.text
-    property var itemType: ReportParamsModel.itemType.toLowerCase();
+    property alias itemType: axisRectangle.itemType
 
     height: parent.height - 10
     width: 200
     border.width: 1
     border.color: this.color
     radius: this.width/2
+    z: 1000000
 
+
+    Component.onCompleted: {
+        console.log('Item Type',itemType, typeof(itemType));
+        axisRectangle.color = itemType.toLowerCase() === 'numerical' ? Constants.defaultYAxisColor : Constants.defaultXAxisColor
+    }
 
     ListModel{
         id: dateCalculations
@@ -106,6 +116,19 @@ Rectangle{
         }
     }
 
+
+    AxisItemMenuPopup{
+        id: axisMenu
+        rectIndex: index
+    }
+
+    MouseArea{
+        anchors.fill: parent
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        onClicked: (mouse.button == Qt.RightButton) ? (axisMenu.visible = true) : null
+
+    }
+
     Text {
         id: textbox
         anchors.verticalCenter: parent.verticalCenter
@@ -124,7 +147,7 @@ Rectangle{
         width: 80
         color: Constants.whiteColor
         radius: 10
-
+        visible: (itemType && itemType.toLowerCase()) === 'date' ? true : false
 
         CustomComboBox{
             id: dateDropdown

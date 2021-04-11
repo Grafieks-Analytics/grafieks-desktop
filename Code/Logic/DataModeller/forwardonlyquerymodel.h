@@ -1,25 +1,22 @@
-#ifndef DUCKQUERYMODEL_H
-#define DUCKQUERYMODEL_H
+#ifndef FORWARDONLYQUERYMODEL_H
+#define FORWARDONLYQUERYMODEL_H
 
-#include<QAbstractTableModel>
 #include <QObject>
+#include<QAbstractTableModel>
 
-#include "../../duckdb.hpp"
 #include "../../statics.h"
 #include "../../constants.h"
-#include "../Connectors/duckcon.h"
 
 #include "../General/datatype.h"
 #include "../General/querysplitter.h"
 
-class DuckQueryModel : public QAbstractTableModel
+class ForwardOnlyQueryModel : public QAbstractTableModel
 {
     Q_OBJECT
 
 public:
-    explicit DuckQueryModel(QObject *parent = nullptr);
-    explicit DuckQueryModel(DuckCon *duckCon, QObject *parent = nullptr);
-    ~DuckQueryModel();
+    explicit ForwardOnlyQueryModel(QObject *parent = nullptr);
+    ~ForwardOnlyQueryModel();
 
     Q_INVOKABLE void setQuery(QString query);
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -34,7 +31,7 @@ public:
 private:
     void generateRoleNames();
     void setQueryResult();
-    void setChartData(std::unique_ptr<duckdb::MaterializedQueryResult> &totalRows);
+//    void setChartData(std::unique_ptr<duckdb::MaterializedQueryResult> &totalRows);
     void setChartHeader(int index, QString colName);
 
     QHash<int, QByteArray> m_roleNames;
@@ -42,22 +39,21 @@ private:
     int internalRowCount;
     int internalColCount;
 
-    DuckCon *duckCon;
     QString query;
     QuerySplitter querySplitter;
 
     // Data variables for Charts
-    QMap<int, QStringList*> duckChartData;
-    QMap<int, QString> duckChartHeader;
+    QMap<int, QStringList*> forwardOnlyChartData;
+    QMap<int, QString> forwardOnlyChartHeader;
     QStringList tableHeaders;
 
 signals:
     void headerDataChanged(Qt::Orientation orientation, int first, int last) const;
     void chartDataChanged(QMap<int, QStringList*> chartData);
     void chartHeaderChanged(QMap<int, QString> chartHeader);
-    void duckHeaderDataChanged(QStringList tableHeaders);
-    void duckHasData(bool hasData);
+    void forwardOnlyHeaderDataChanged(QStringList tableHeaders);
+    void forwardOnlyHasData(bool hasData);
 
 };
 
-#endif // DUCKQUERYMODEL_H
+#endif // FORWARDONLYQUERYMODEL_H

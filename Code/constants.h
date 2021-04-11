@@ -39,6 +39,7 @@ namespace Constants
     // DB Classification
     const QString sqlType = "SQL";
     const QString duckType = "DUCK";
+    const QString forwardType = "FORWARD";
 
     // Datasource type Strings
     const QString mysqlStrType = "mysql";

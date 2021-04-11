@@ -13,19 +13,18 @@
         </style>
     </head>
     <body>
-        <div id="my_dataviz"></div>
         <div id="tooltip"></div>
         <script>
             var data = [
                 [
                     // ["2020-01-01", "2021-02-01", "2022-03-01", "2023-03-01"],
-                    ["India", "Aus", "NZ", "Pak5", "Pak4", "Pak3", "Pak2"],
-                    [200, 800, 400, -200, 100, 100, 300, 200],
+                    ["India", "Aus", "NZ", "Pak"],
+                    [200, 800, 400, -200],
                 ],
                 ["Countries", "Population"],
             ];
 
-            // drawChart(data);
+            drawChart(data);
 
             function drawChart(data, plottingConfiguration = {}) {
                 window.data = data;
@@ -41,10 +40,7 @@
                     markerShape,
                     curveType,
                     dateFormat,
-                    chartType,
-                    standartThresholdWidth,
                 } = plottingConfiguration;
-
                 if (!d3colorPalette) {
                     d3colorPalette = defaultD3Config.d3ColorPalette;
                 }
@@ -54,33 +50,14 @@
                     paddingInner = defaultD3Config.defaultPaddingInner;
                 }
 
-                if (!dateFormat) {
-                    dateFormat = defaultD3Config.dateFormat;
-                }
-
-                if (!chartType) {
-                    chartType = defaultD3Config.chartType;
-                }
-
-                if (!standartThresholdWidth) {
-                    standartThresholdWidth =
-                        defaultD3Config.standartThresholdWidth;
-                }
-
                 var margin = { top: 40, right: 20, bottom: 80, left: 70 };
                 var width = window.innerWidth - margin.left - margin.right;
-                if (chartType == constants.chartType.STANDARD) {
-                    width = dataValues[0].length * standartThresholdWidth;
-                }
-                console.log(width);
                 var height = window.innerHeight - margin.top - margin.bottom;
 
                 //add svg with margin !important
                 //this is svg is actually group
-                d3.selectAll("#my_dataviz").html("");
-
                 var svg = d3
-                    .selectAll("#my_dataviz")
+                    .select("body")
                     .append("svg")
                     .attr("width", width + margin.left + margin.right)
                     .attr("height", height + margin.top + margin.bottom)
@@ -90,19 +67,8 @@
                         "translate(" + margin.left + "," + margin.top + ")"
                     );
 
-                var dataset = dataValues[1];
-                var xAxisDataSet = dataValues[0];
-
-                var valueDateType = false;
-                if (isDateFormat(xAxisDataSet[0])) {
-                    valueDateType = true;
-                }
-
-                if (valueDateType) {
-                    xAxisDataSet.forEach((d, i) => {
-                        xAxisDataSet[i] = new Date(xAxisDataSet[i]);
-                    });
-                }
+                var dataset = [4, 2, -6, 13, 4, 0, -20];
+                var xAxisDataSet = ["a", "b", "c", "d", "d", "e", "f"];
 
                 var maxHeight = d3.max(dataset, function (d) {
                     return Math.abs(d);
@@ -146,6 +112,9 @@
                     .enter()
                     .append("rect");
                 bars.attr("x", function (d, i) {
+                    console.log(d);
+                    console.log(i);
+                    console.log(xScale(i));
                     return xScale(xAxisDataSet[i]); //i*(width/dataset.length);
                 })
                     .attr("y", function (d) {
@@ -162,7 +131,17 @@
                     .attr("height", function (d) {
                         return height / 2 - yScale(Math.abs(d));
                     })
-                    .attr("fill", d3Colors[4])
+                    .attr(
+                        "fill",
+                        d3Colors[4]
+                        //function (d) {
+                        // if (d >= 0) {
+                        //     return "green";
+                        // } else {
+                        //     return "green";
+                        // }
+                        // }
+                    )
                     .on("mouseout", function (d, i) {
                         d3.select("#tooltip").style("display", "none");
 
@@ -186,20 +165,13 @@
                 var yAxis = d3.axisLeft(yScale).tickSize(0).ticks(yaxisTicks);
                 svg.append("g").attr("class", "y-axis").call(yAxis);
 
-                var xAxis = d3.axisBottom(xScale);
-                if (valueDateType) {
-                    xAxis.tickFormat(d3.timeFormat(dateFormat));
-                }
-                /*.tickFormat("");remove tick label*/
+                var xAxis = d3.axisBottom(
+                    xScale
+                ); /*.tickFormat("");remove tick label*/
                 svg.append("g")
                     .call(xAxis)
                     .attr("class", "x-axis")
                     .attr("transform", "translate(0," + height / 2 + ")");
-
-                const [xAxisLabel, yAxisLabel] = data[1];
-
-                setLabel(xAxisLabel, "y_label", false);
-                setLabel(yAxisLabel, "x_label", false);
 
                 // //add label for x axis and y axis
                 // svg.append("text")

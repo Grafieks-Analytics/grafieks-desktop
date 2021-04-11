@@ -42,6 +42,7 @@ QtObject {
     // DB Classification
     property string duckType: "DUCK"
     property string sqlType: "SQL"
+    property string forwardType: "FORWARD"
 
     // ODBC Driver matching names
     property string mysqlOdbc: qsTr("mysql")
@@ -202,6 +203,10 @@ QtObject {
 
 
 
+
+    property color defaultCategoricalColor: "#6CD7A1"
+    property color defaultNumericalColor: "#BADCFF"
+
     property color defaultXAxisColor: "#6CD7A1"
     property color defaultYAxisColor: "#BADCFF"
 
@@ -247,10 +252,12 @@ QtObject {
     property string sankeyChartTitle: "Sankey"
     property string multiLineChartTitle: "Multi Line"
     property string stackedAreaChartTitle: "Stacked Area Chart"
+    property string horizontalBarChartTitle: "HorizontalBarChart.html"
 
     property string stackedBarChartUrl: "StackedBarChart.html"
     property string stackedAreaChartUrl: "StackedAreaChart.html"
 
+    property string horizontalBarChartUrl: "HorizontalBarChart.html"
 
 
     // Charts ends

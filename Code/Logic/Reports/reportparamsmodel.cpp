@@ -86,6 +86,11 @@ QString ReportParamsModel::pointerValue() const
     return m_pointerValue;
 }
 
+QList<QString> ReportParamsModel::colorBy() const
+{
+    return m_colorBy;
+}
+
 void ReportParamsModel::setItemName(QString itemName)
 {
     if (m_itemName == itemName)
@@ -210,4 +215,13 @@ void ReportParamsModel::setPointerValue(QString pointerValue)
 
     m_pointerValue = pointerValue;
     emit pointerValueChanged(m_pointerValue);
+}
+
+void ReportParamsModel::setColorBy(QList<QString> colorBy)
+{
+    if (m_colorBy == colorBy)
+        return;
+
+    m_colorBy = colorBy;
+    emit colorByChanged(m_colorBy);
 }

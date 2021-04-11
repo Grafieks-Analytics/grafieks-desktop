@@ -43,33 +43,6 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-
-    function alreadyExists(elementsList,element){
-        if(elementsList.includes(element)){
-            return true;
-        }
-        return false;
-    }
-
-    function xAxisDropEligible(itemName){
-        var xAxisColumns  = ReportParamsModel.xAxisColumns;
-        const multiChart = true;
-        if(multiChart){
-            return true;
-        }
-        return false;
-    }
-
-    function yAxisDropEligible(itemName){
-        var yAxisColumns  = ReportParamsModel.yAxisColumns;
-        const multiChart = true;
-        if(multiChart){
-            return true;
-        }
-        return false;
-    }
-
-
     function isDropEligible(itemType){
 
         var lastDropped = ReportParamsModel.lastDropped;
@@ -164,6 +137,10 @@ Rectangle{
         drag.target: dataPaneListElement
         drag.onActiveChanged: {
             if (mouseArea.drag.active) {
+
+                report_desiner_page.lastPickedDataPaneElementProperties = { itemName: modelData, itemType: itemType };
+                console.log(modelData);
+
                 ReportParamsModel.itemName = modelData;
                 ReportParamsModel.itemType = itemType;
                 ReportParamsModel.setXAxisActive(xAxisDropEligible(modelData));

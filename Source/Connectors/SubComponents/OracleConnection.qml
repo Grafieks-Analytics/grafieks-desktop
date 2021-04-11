@@ -92,8 +92,8 @@ Popup {
     }
 
     function connectToMsSQL(){
-//        ConnectorsLoginModel.mssqlOdbcLogin(server.text, database.text, port.text, username.text, password.text)
-          ConnectorsLoginModel.oracleOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
+        ConnectorsLoginModel.oracleOdbcLogin(control.currentText, server.text, database.text, port.text, username.text, password.text)
+//          ConnectorsLoginModel.oracleOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
     }
 
     // JAVASCRIPT FUNCTION ENDS

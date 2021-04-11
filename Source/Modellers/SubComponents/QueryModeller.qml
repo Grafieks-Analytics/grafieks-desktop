@@ -63,7 +63,8 @@ Item{
     // JAVASCRIPT FUNCTION STARTS
 
     Component.onCompleted: {
-        textEditQueryModeller.text = "SELECT * FROM users WHERE users.id > 0"
+//        textEditQueryModeller.text = "SELECT * FROM users WHERE users.id > 0"
+       textEditQueryModeller.text = "<span style='color:yellow;'> SELECT </span> * FROM users WHERE users.id > 0 "
 
 
 
@@ -72,10 +73,34 @@ Item{
     function onTextEditorChanged(){
         console.log(textEditQueryModeller.text)
         // Set the Tmp SQL Query in C++
-        DSParamsModel.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, ""))
-
-        console.log( textEditQueryModeller.text.split("\n"))
+        DSParamsModel.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, " "))
     }
+
+//    function to onTextFormatSqlKeyword
+    function onTextFormatSqlKeyword(){
+
+        var arraySqlKeyword =["SELECT","FROM"]
+
+        var textArrayQuery = textEditQueryModeller.text.split(" ")
+        var textArrayQueryOutput = []
+        textArrayQuery.forEach((element)=>
+                               {
+                                   if( arraySqlKeyword.includes(element) )
+                                   {
+                                       textArrayQueryOutput.push("<span style='color:red'>"+element+"</span>")
+                                   }
+                                   else{
+                                       textArrayQueryOutput.push(element)
+                                   }
+
+                               }
+
+                               )
+
+
+         textEditQueryModeller.text=textArrayQueryOutput.join(" ")
+
+}
 
 
     function onEditorLineCountChanged(){
@@ -182,14 +207,14 @@ Item{
         wrapMode: TextEdit.WordWrap
         padding: 10
 
-
-        color: "yellow"
-
 //        text: {
 //            if(textEditQueryModeller.WordWrap === "SELECT * FROM users WHERE users.id > 0"){
 //            color:"yellow"
 //            }
 //        }
+
+        textFormat:TextEdit.AutoText
+
 
         selectByMouse: true
         selectionColor:Constants.grafieksLightGreenColor;
@@ -205,6 +230,8 @@ Item{
 
         onTextChanged: {
             onTextEditorChanged()
+            onTextFormatSqlKeyword()
+
         }
 
     }
