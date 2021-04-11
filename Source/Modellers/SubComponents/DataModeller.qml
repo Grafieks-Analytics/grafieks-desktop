@@ -56,6 +56,7 @@ Item {
     property int firstRectId : 0
 
     property var connectionType: Constants.sqlType
+    property var query_joiner: ""
 
 
 
@@ -82,6 +83,75 @@ Item {
     // Connections Starts
 
     Connections{
+        target: ConnectorsLoginModel
+
+        function onConnectedDBType(conType){
+
+            if(conType === Constants.sqlType){
+                connectionType = Constants.sqlType
+            } else if(conType === Constants.duckType){
+                connectionType = Constants.duckType
+            } else{
+                connectionType = Constants.forwardType
+            }
+        }
+
+        // Query joiner
+
+        function onMysqlLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "`"
+            }
+        }
+        function onPostgresLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "\""
+            }
+        }
+        function onOracleLoginStatus(status){
+            if(status.status === true){
+                query_joiner = ""
+            }
+        }
+        function onMssqlLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "\""
+            }
+        }
+
+        function onRedshiftLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "\""
+            }
+        }
+
+        function onSqliteLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "`"
+            }
+        }
+
+        function onExcelLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "\""
+            }
+        }
+
+        function onCsvLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "\""
+            }
+        }
+
+        function onJsonLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "\""
+            }
+        }
+    }
+
+
+    Connections{
         target: TableColumnsModel
 
         function onColumnListObtained(allColumns, tableName, moduleName){
@@ -89,22 +159,9 @@ Item {
             if(moduleName === dataModellerItem.moduleName){
                 allColumns.forEach(function(item, index){
 
-                    let param = tableName + "." + item[0]
+                    let param = query_joiner + tableName + query_joiner + "." + query_joiner + item[0] + query_joiner
                     DSParamsModel.addToQuerySelectParamsList(param)
                 })
-            }
-        }
-    }
-
-    Connections{
-        target: ConnectorsLoginModel
-
-        function onConnectedDBType(conType){
-
-            if(conType === Constants.sqlType){
-                connectionType = Constants.sqlType
-            } else{
-                connectionType = Constants.duckType
             }
         }
     }
@@ -392,9 +449,12 @@ Item {
             if(connectionType === Constants.sqlType){
                 console.log("QUERY set QUERYMODEL", DSParamsModel.tmpSql)
                 QueryModel.callSql(DSParamsModel.tmpSql)
-            } else{
+            } else if(connectionType === Constants.duckType){
                 console.log("QUERY set DUCKQUERYMODEL", DSParamsModel.tmpSql)
                 DuckQueryModel.setQuery(DSParamsModel.tmpSql)
+            } else{
+                console.log("QUERY set FORWARDONLYQUERYMODEL", DSParamsModel.tmpSql)
+                ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
             }
 
             TableSchemaModel.showSchema(DSParamsModel.tmpSql)
@@ -709,9 +769,11 @@ Item {
 
         if(connectionType === Constants.sqlType){
             QueryModel.callSql(DSParamsModel.tmpSql)
-        } else{
+        } else if(connectionType === Constants.duckType){
             console.log("QUERY exe", DSParamsModel.tmpSql)
             DuckQueryModel.setQuery(DSParamsModel.tmpSql)
+        } else{
+            ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
         }
     }
 

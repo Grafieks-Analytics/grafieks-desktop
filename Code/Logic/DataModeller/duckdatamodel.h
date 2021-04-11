@@ -26,9 +26,10 @@ class DuckDataModel : public QObject
 public:
     explicit DuckDataModel(QObject *parent = nullptr);
     explicit DuckDataModel(DuckCon *duckCon, QObject *parent = nullptr);
+    ~DuckDataModel();
 
 
-    Q_INVOKABLE void columnData(QString col, QString index);
+    Q_INVOKABLE void columnData(QString col, QString tableName);
     Q_INVOKABLE QStringList getColumnList(QString tableName, QString moduleName);
     Q_INVOKABLE QStringList getTableList();
     Q_INVOKABLE QStringList getDbList();

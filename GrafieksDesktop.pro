@@ -76,6 +76,8 @@ SOURCES += \
     Code/Logic/DataModeller/filterfunctionsmodel.cpp \
     Code/Logic/DataModeller/filternumericallist.cpp \
     Code/Logic/DataModeller/filternumericallistmodel.cpp \
+    Code/Logic/DataModeller/forwardonlydatamodel.cpp \
+    Code/Logic/DataModeller/forwardonlyquerymodel.cpp \
     Code/Logic/DataModeller/proxyfiltermodel.cpp \
     Code/Logic/DataModeller/publishdatasourcemodel.cpp \
     Code/Logic/DataModeller/querymodel.cpp \
@@ -98,7 +100,6 @@ SOURCES += \
     Code/Logic/General/typecheck.cpp \
     Code/Logic/Menu/user.cpp \
     Code/Logic/Reports/chartsmodel.cpp \
-    Code/Logic/Reports/duckreportsds.cpp \
     Code/Logic/Reports/reportparamsmodel.cpp \
     Code/Logic/Reports/reportsdatamodel.cpp \
     main.cpp \
@@ -187,6 +188,8 @@ HEADERS += \
     Code/Logic/DataModeller/filterfunctionsmodel.h \
     Code/Logic/DataModeller/filternumericallist.h \
     Code/Logic/DataModeller/filternumericallistmodel.h \
+    Code/Logic/DataModeller/forwardonlydatamodel.h \
+    Code/Logic/DataModeller/forwardonlyquerymodel.h \
     Code/Logic/DataModeller/proxyfiltermodel.h \
     Code/Logic/DataModeller/publishdatasourcemodel.h \
     Code/Logic/DataModeller/querymodel.h \
@@ -209,7 +212,6 @@ HEADERS += \
     Code/Logic/General/typecheck.h \
     Code/Logic/Menu/user.h \
     Code/Logic/Reports/chartsmodel.h \
-    Code/Logic/Reports/duckreportsds.h \
     Code/Logic/Reports/reportparamsmodel.h \
     Code/Logic/Reports/reportsdatamodel.h \
     Code/duckdb.hpp \

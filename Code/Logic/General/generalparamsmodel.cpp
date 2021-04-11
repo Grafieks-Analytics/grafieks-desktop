@@ -25,12 +25,11 @@ QString GeneralParamsModel::getDbClassification()
     return Statics::currentDbClassification;
 }
 
-
-
 int GeneralParamsModel::menuType() const
 {
     return m_menuType;
 }
+
 
 void GeneralParamsModel::setMenuType(int menuType)
 {
@@ -40,3 +39,4 @@ void GeneralParamsModel::setMenuType(int menuType)
     m_menuType = menuType;
     emit menuTypeChanged(m_menuType);
 }
+

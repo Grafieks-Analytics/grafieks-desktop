@@ -206,7 +206,7 @@ Page {
 
 
     Connections {
-        target: ReportModelList
+        target: ReportsDataModel
         function onSendData(xAxis,yAxis){
             const dataValues = JSON.stringify([xAxis,yAxis]);
             var scriptValue = 'window.addEventListener("resize", function () {

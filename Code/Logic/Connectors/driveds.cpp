@@ -299,7 +299,7 @@ void DriveDS::fileDownloadFinished()
         file.write(m_networkReply->readAll(), m_networkReply->size());
         file.close();
 
-        if(this->extension.contains("xls")){
+        if(this->extension.contains("xls") || this->extension.contains("xlsx")){
             emit fileDownloaded(fileName, "excel");
 
         } else if(this->extension.contains("csv")){
