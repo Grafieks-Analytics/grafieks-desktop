@@ -124,9 +124,9 @@ Rectangle{
 
     MouseArea{
         anchors.fill: parent
-        onClicked: {
-            axisMenu.visible = true
-        }
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        onClicked: (mouse.button == Qt.RightButton) ? (axisMenu.visible = true) : null
+
     }
 
     Text {
