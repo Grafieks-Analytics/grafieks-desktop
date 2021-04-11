@@ -20,12 +20,12 @@
                 [
                     // ["2020-01-01", "2021-02-01", "2022-03-01", "2023-03-01"],
                     ["India", "Aus", "NZ", "Pak5", "Pak4", "Pak3", "Pak2"],
-                    [200, 800, 400, -200, 100, 100, 300, 200],
+                    [200, 800, 400, -200, 100, 100, 300],
                 ],
                 ["Countries", "Population"],
             ];
 
-            // drawChart(data);
+            drawChart(data);
 
             function drawChart(data, plottingConfiguration = {}) {
                 window.data = data;
@@ -72,13 +72,12 @@
                 if (chartType == constants.chartType.STANDARD) {
                     width = dataValues[0].length * standartThresholdWidth;
                 }
-                console.log(width);
                 var height = window.innerHeight - margin.top - margin.bottom;
+
+                d3.selectAll("#my_dataviz").html("");
 
                 //add svg with margin !important
                 //this is svg is actually group
-                d3.selectAll("#my_dataviz").html("");
-
                 var svg = d3
                     .selectAll("#my_dataviz")
                     .append("svg")
@@ -108,17 +107,18 @@
                     return Math.abs(d);
                 });
                 var minHeight = d3.min(dataset, function (d) {
-                    return Math.abs(d);
+                    return d;
                 });
 
                 //set y scale
                 var yScale = d3
                     .scaleLinear()
                     .rangeRound([0, height])
-                    .domain([maxHeight, -maxHeight]);
+                    .domain([maxHeight, minHeight]);
                 //show negative
 
-                yaxisTicks = height / 100;
+                yaxisTicks = height / 70;
+
                 svg.append("g")
                     .attr("class", "grid")
                     .style("stroke-width", "1")
@@ -144,13 +144,14 @@
                     .selectAll("rect")
                     .data(dataset)
                     .enter()
-                    .append("rect");
-                bars.attr("x", function (d, i) {
-                    return xScale(xAxisDataSet[i]); //i*(width/dataset.length);
-                })
+                    .append("rect")
+                    .attr("class", "bar")
+                    .attr("x", function (d, i) {
+                        return xScale(xAxisDataSet[i]); //i*(width/dataset.length);
+                    })
                     .attr("y", function (d) {
                         if (d < 0) {
-                            return height / 2;
+                            return yScale(0);
                         } else {
                             return yScale(d);
                         }
@@ -160,12 +161,11 @@
                         xScale.bandwidth() /*width/dataset.length-barpadding*/
                     )
                     .attr("height", function (d) {
-                        return height / 2 - yScale(Math.abs(d));
+                        return Math.abs(yScale(0) - yScale(Math.abs(d)));
                     })
                     .attr("fill", d3Colors[4])
                     .on("mouseout", function (d, i) {
                         d3.select("#tooltip").style("display", "none");
-
                         d3.selectAll(".bar").style("opacity", 1);
                     })
                     .on("mouseover mousemove", function (d, i) {
@@ -190,11 +190,13 @@
                 if (valueDateType) {
                     xAxis.tickFormat(d3.timeFormat(dateFormat));
                 }
+
                 /*.tickFormat("");remove tick label*/
+
                 svg.append("g")
                     .call(xAxis)
                     .attr("class", "x-axis")
-                    .attr("transform", "translate(0," + height / 2 + ")");
+                    .attr("transform", "translate(0," + yScale(0) + ")");
 
                 const [xAxisLabel, yAxisLabel] = data[1];
 
