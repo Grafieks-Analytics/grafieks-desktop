@@ -86,7 +86,7 @@ Page {
         const chartDetailsConfig = allChartsMapping[chartTitle];
         const { maxDropOnXAxis, maxDropOnYAxis } = chartDetailsConfig || {maxDropOnXAxis: allowedXAxisDataPanes, maxDropOnYAxis: allowedYAxisDataPanes};
 
-        var xAxisColumns = ReportParamsModel.xAxisColumns;
+        var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = ReportParamsModel.yAxisColumns;
 
         // check if maximum drop is less than in config?
@@ -271,16 +271,19 @@ Page {
     function getAxisColumnNames(axisName){
         var model = null;
         switch(axisName){
-            case Constants.xAxisName:
-                model = xAxisListModel;
+        case Constants.xAxisName:
+            model = xAxisListModel;
+            break
+        case Constants.yAxisName:
+            model = yAxisListModel;
             break;
         }
         if(!model){
             return [];
         }
         var columnsName = [];
-        for(var i=0; i< xAxisListModel.count; i++){
-            columnsName.push(xAxisListModel.get(i).itemName);
+        for(var i=0; i< model.count; i++){
+            columnsName.push(model.get(i).itemName);
         }
         return columnsName;
     }
