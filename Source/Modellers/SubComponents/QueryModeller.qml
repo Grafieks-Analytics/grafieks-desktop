@@ -64,12 +64,17 @@ Item{
 
     Component.onCompleted: {
         textEditQueryModeller.text = "SELECT * FROM users WHERE users.id > 0"
+
+
+
     }
 
     function onTextEditorChanged(){
         console.log(textEditQueryModeller.text)
         // Set the Tmp SQL Query in C++
         DSParamsModel.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, ""))
+
+        console.log( textEditQueryModeller.text.split("\n"))
     }
 
 
@@ -176,9 +181,19 @@ Item{
         width: parent.width - toolSeperator1.width
         wrapMode: TextEdit.WordWrap
         padding: 10
-        selectByMouse: true
-        selectByKeyboard: true
 
+
+        color: "yellow"
+
+//        text: {
+//            if(textEditQueryModeller.WordWrap === "SELECT * FROM users WHERE users.id > 0"){
+//            color:"yellow"
+//            }
+//        }
+
+        selectByMouse: true
+        selectionColor:Constants.grafieksLightGreenColor;
+        selectByKeyboard: true
         Keys.onReturnPressed: {
 
             onEnterKeyPressed(event)

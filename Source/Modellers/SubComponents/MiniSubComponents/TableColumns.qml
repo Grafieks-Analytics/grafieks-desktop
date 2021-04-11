@@ -70,14 +70,17 @@ Item {
         anchors.topMargin: 5
 
 
+
         delegate: Rectangle{
             id: innerListView
             height: 25
             width: 100
 
+
             CheckBoxTpl{
                 id: checkBox1
                 checkbox_text: colName
+                font.pointSize: 8
                 checkbox_checked: true
                 parent_dimension: 12
 

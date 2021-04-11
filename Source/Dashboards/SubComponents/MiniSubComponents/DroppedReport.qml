@@ -410,7 +410,14 @@ Item{
         WebEngineView{
             id: webengine
             anchors.top : mainChart.bottom
-            anchors.centerIn: parent
+            anchors.topMargin: 10
+//            anchors.right: parent.right
+            anchors.horizontalCenter: parent.horizontalCenter
+
+
+
+
+//            anchors.centerIn: parent
 
             width:newItem.width - 10
             height:newItem.height  - mainChart.height - 20
