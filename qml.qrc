@@ -234,5 +234,6 @@
         <file>Source/Charts/Data/bootstrap-3.3.1/css/bootstrap-theme.css</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/PivotThemesPopup.qml</file>
         <file>Source/Charts/HorizontalBarChart.html</file>
+        <file>Source/Reports/SubComponents/MiniSubComponents/AxisItemMenuPopup.qml</file>
     </qresource>
 </RCC>
