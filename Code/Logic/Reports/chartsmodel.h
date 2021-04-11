@@ -3,8 +3,10 @@
 
 #include <QObject>
 #include <QDebug>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 
-#include "duckreportsds.h"
 #include "jsoncons/json.hpp"
 using namespace jsoncons;
 
@@ -48,6 +50,7 @@ public:
     Q_INVOKABLE QString getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey);
     Q_INVOKABLE QString getTablePivotValues(QVariantList &xAxisColumn, QVariantList &yAxisColumn);
 
+    Q_INVOKABLE void removeTmpChartData();
 
 public slots:
     void getChartData(QMap<int, QStringList*> chartData);

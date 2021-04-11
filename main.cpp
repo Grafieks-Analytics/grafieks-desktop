@@ -35,6 +35,8 @@
 #include "Code/Logic/DataModeller/proxyfiltermodel.h"
 #include "Code/Logic/DataModeller/duckdatamodel.h"
 #include "Code/Logic/DataModeller/duckquerymodel.h"
+#include "Code/Logic/DataModeller/forwardonlydatamodel.h"
+#include "Code/Logic/DataModeller/forwardonlyquerymodel.h"
 
 #include "Code/Logic/Connectors/duckcon.h"
 #include "Code/Logic/Connectors/odbcdriversmodel.h"
@@ -54,7 +56,6 @@
 
 #include "Code/Logic/Reports/reportparamsmodel.h"
 #include "Code/Logic/Reports/reportsdatamodel.h"
-#include "Code/Logic/Reports/duckreportsds.h"
 #include "Code/Logic/Reports/chartsmodel.h"
 
 #include "Code/Logic/General/generalparamsmodel.h"
@@ -232,6 +233,7 @@ int main(int argc, char *argv[])
 
     QtTest2 qttest2;
     QtTest qttest;
+//    qttest.calla();
 
     MysqlCon mysqlconnect;
     User User;
@@ -255,7 +257,8 @@ int main(int argc, char *argv[])
     QuerySplitter querySplitter;
     DashboardParamsModel dashboardParamsModel;
     ReportParamsModel reportParamsModel;
-    ReportsDataModel reportModelList;
+    ForwardOnlyDataModel forwardOnlyDataModel;
+    ForwardOnlyQueryModel forwardOnlyQueryModel;
 
     // Datasource Connector Initializations
     DatasourceModel datasourceModel;
@@ -289,8 +292,7 @@ int main(int argc, char *argv[])
     DuckCon *duckCon = new DuckCon();
     TableSchemaModel tableSchemaModel(duckCon);
     TableColumnsModel tableColumnsModel(duckCon);
-    ReportsDataModel reportModel(duckCon);
-    DuckReportsDS duckReportsDS(duckCon);
+    ReportsDataModel reportsDataModel(duckCon);
     DuckDataModel *duckDataModel = new DuckDataModel(duckCon);
     DuckQueryModel duckQueryModel(duckCon);
 
@@ -308,6 +310,8 @@ int main(int argc, char *argv[])
     QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::getChartHeader);
     QObject::connect(&duckQueryModel, &DuckQueryModel::chartDataChanged, &chartsModel, &ChartsModel::getChartData);
     QObject::connect(&duckQueryModel, &DuckQueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::getChartHeader);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartDataChanged, &chartsModel, &ChartsModel::getChartData);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::getChartHeader);
 
     // SIGNAL & SLOTS ENDS
     /***********************************************************************************************************************/
@@ -334,7 +338,6 @@ int main(int argc, char *argv[])
 
     // Set contexts for QML
     engine.rootContext()->setContextProperty("ReportParamsModel", &reportParamsModel);
-    engine.rootContext()->setContextProperty("ReportModelList", &reportModelList);
     engine.rootContext()->setContextProperty("DashboardParamsModel", &dashboardParamsModel);
     engine.rootContext()->setContextProperty("QtTest2", &qttest2);
     engine.rootContext()->setContextProperty("MysqlConnect", &mysqlconnect);
@@ -372,11 +375,12 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("ODBCDriversModel", &odbcDriversModel);
     engine.rootContext()->setContextProperty("DuckCon", duckCon);
     engine.rootContext()->setContextProperty("TableSchemaModel", &tableSchemaModel);
-    engine.rootContext()->setContextProperty("ReportModelList", &reportModel);
-    engine.rootContext()->setContextProperty("DuckReportsDS", &duckReportsDS);
+    engine.rootContext()->setContextProperty("ReportsDataModel", &reportsDataModel);
     engine.rootContext()->setContextProperty("DuckDataModel", duckDataModel);
     engine.rootContext()->setContextProperty("DuckQueryModel", &duckQueryModel);
     engine.rootContext()->setContextProperty("ChartsModel", &chartsModel);
+    engine.rootContext()->setContextProperty("ForwardOnlyDataModel", &forwardOnlyDataModel);
+    engine.rootContext()->setContextProperty("ForwardOnlyQueryModel", &forwardOnlyQueryModel);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/

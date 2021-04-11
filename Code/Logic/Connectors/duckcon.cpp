@@ -19,13 +19,13 @@ void DuckCon::createTable(){
     QString db = Statics::currentDbName;
     std::string csvFile    = db.toStdString();
 
-    QString fileName       = QFileInfo(db).baseName();
+    QString fileName       = QFileInfo(db).baseName().toLower();
     std::string csvdb       = "";
 
     QString fileExtension = QFileInfo(db).completeSuffix();
 
 
-    fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]."));
+    fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
     table = fileName;
 
     if(fileExtension.toLower() == "json"){
@@ -71,5 +71,3 @@ void DuckCon::createTable(){
     }
 
 }
-
-

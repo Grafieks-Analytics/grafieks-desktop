@@ -34,7 +34,7 @@ Popup {
     Connections{
         target: ConnectorsLoginModel
 
-        function onSnowFlakeLoginStatus(status){
+        function onSnowflakeLoginStatus(status){
 
             if(status.status === true){
 
@@ -91,9 +91,8 @@ Popup {
         popup.visible = false
     }
 
-    function connectToMsSQL(){
-        //        ConnectorsLoginModel.mssqlOdbcLogin(server.text, database.text, port.text, username.text, password.text)
-        ConnectorsLoginModel.snowFlakeOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
+    function connectToSnowflake(){
+        ConnectorsLoginModel.snowflakeOdbcLogin(control.currentText, server.text, database.text, port.text, username.text, password.text)
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -502,7 +501,7 @@ Popup {
             id: btn_signin
             textValue: Constants.signInText
             fontPixelSize: Constants.fontCategoryHeader
-            onClicked: connectToMsSQL()
+            onClicked: connectToSnowflake()
         }
 
     }

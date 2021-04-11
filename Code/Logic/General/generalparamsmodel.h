@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QCoreApplication>
 #include <QSettings>
+#include <QDebug>
 
 #include "../../statics.h"
 
@@ -11,6 +12,7 @@ class GeneralParamsModel : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int menuType READ menuType WRITE setMenuType NOTIFY menuTypeChanged)
+
     int m_menuType;
 
 public:

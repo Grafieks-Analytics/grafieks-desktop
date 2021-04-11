@@ -38,6 +38,9 @@ On Mac, we need to install **[iODBC](http://www.iodbc.org/dataspace/doc/iodbc/wi
 2. MS SQL has multiple authentication methods. By default, _Windows Authentication_ is selected. Login using username and password must be selected for remote servers. There you do not need any password. For details on managing users on server, visit this link https://docs.microsoft.com/en-us/sql/ssms/tutorials/ssms-tricks?view=sql-server-ver15
 
 3. To manage Sql server, visit https://docs.microsoft.com/en-us/sql/ssms/tutorials/ssms-tricks?view=sql-server-ver15
+4. For Logging in using Username and a Password, remember to create a new user and login. Also, remember to enable `SQL Authentication or Mixed Authentication`
+5. Lastly, from sql server configuration manager, enable TCP/IP, Shared memory and Named pipes.
+6. Restart SQL Server express after going to `services.msc`
 
 - **Postgres SQL**
 
@@ -57,4 +60,17 @@ On Mac, we need to install **[iODBC](http://www.iodbc.org/dataspace/doc/iodbc/wi
 
 1. Download MongoDB ODBC driver https://github.com/mongodb/mongo-odbc-driver/releases/
 2. Download MongoDB BI Connector https://www.mongodb.com/try/download/bi-connector
-3. General Select SQL queries will run using the ODBC connector on MongoDB
+3. Run mongo db using `mongod.exe` installed in `C:\Programfiles\Mongo\bin`
+4. Also need to start `mongosqld.exe` installed in `C:\Programfiles\Mongodb\server\x.x\bin`
+5. General Select SQL queries will run using the ODBC connector on `C:\Programfiles\Mongodb\Connector for BI\x.x\bin`
+6. On Windows, you might need to create `C:\data\db` folder before running mongodb server. 
+7. Dont use the port from mongod.exe (default 27017) but use the one provided by the BI Connector, mongosqld.exe (default 3307) to connect using ODBC
+
+- **Redshift**
+
+1. ODBC Driver link https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html
+2. Create a new cluster in Redshift
+3. Select the created cluster and go to `Properties` click the link to `VPC`
+4. Inside the `VPC` from the left panel, select Subnets
+5. Select any Subnet ID from the selected VPC.
+6. Select the `routes` tab and add a new route `0.0.0.0/0` for connecting from any IP address

@@ -19,6 +19,7 @@ class DuckQueryModel : public QAbstractTableModel
 public:
     explicit DuckQueryModel(QObject *parent = nullptr);
     explicit DuckQueryModel(DuckCon *duckCon, QObject *parent = nullptr);
+    ~DuckQueryModel();
 
     Q_INVOKABLE void setQuery(QString query);
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -28,6 +29,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void getQueryStats();
+    Q_INVOKABLE void removeTmpChartData();
 
 private:
     void generateRoleNames();
@@ -47,11 +49,13 @@ private:
     // Data variables for Charts
     QMap<int, QStringList*> duckChartData;
     QMap<int, QString> duckChartHeader;
+    QStringList tableHeaders;
 
 signals:
     void headerDataChanged(Qt::Orientation orientation, int first, int last) const;
     void chartDataChanged(QMap<int, QStringList*> chartData);
     void chartHeaderChanged(QMap<int, QString> chartHeader);
+    void duckHeaderDataChanged(QStringList tableHeaders);
     void duckHasData(bool hasData);
 
 };
