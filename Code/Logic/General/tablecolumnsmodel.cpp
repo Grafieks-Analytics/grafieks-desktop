@@ -309,9 +309,11 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
         QSqlDatabase dbSnowflake = QSqlDatabase::database(Constants::snowflakeOdbcStrType);
 
-        describeQueryString = "SELECT column_name, data_type FROM user_tab_columns WHERE table_name = '" + tableName  + "'";
+        describeQueryString = "DESC TABLE " + tableName;
 
         QSqlQuery describeQuery(describeQueryString, dbSnowflake);
+        if(describeQuery.lastError().type() != QSqlError::NoError)
+            qWarning() << Q_FUNC_INFO << describeQuery.lastError();
 
         while(describeQuery.next()){
 
