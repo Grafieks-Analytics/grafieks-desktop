@@ -203,6 +203,10 @@ QtObject {
 
 
 
+
+    property color defaultCategoricalColor: "#6CD7A1"
+    property color defaultNumericalColor: "#BADCFF"
+
     property color defaultXAxisColor: "#6CD7A1"
     property color defaultYAxisColor: "#BADCFF"
 

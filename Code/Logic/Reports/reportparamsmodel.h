@@ -24,6 +24,8 @@ class ReportParamsModel: public QObject
 
     Q_PROPERTY(QString pointerValue READ pointerValue WRITE setPointerValue NOTIFY pointerValueChanged)
 
+    Q_PROPERTY(QList<QString> colorBy READ colorBy WRITE setColorBy NOTIFY colorByChanged)
+
     Q_PROPERTY(QString chartType READ chartType WRITE setChartType NOTIFY chartTypeChanged)
     Q_PROPERTY(QString reportId READ reportId WRITE setReportId NOTIFY reportIdChanged)
     Q_PROPERTY(QString reportTitle READ reportTitle WRITE setReportTitle NOTIFY reportTitleChanged)
@@ -55,17 +57,16 @@ class ReportParamsModel: public QObject
 
     QString m_pointerValue;
 
+    QList<QString> m_colorBy;
+
 public:
     ReportParamsModel();
     QString itemName() const;
     QString itemType() const;
 
     bool xAxisActive() const;
-
     bool yAxisActive() const;
-
     bool colorByActive() const;
-
     QString lastDropped() const;
 
     QString calculatedFieldPopupStatus() const;
@@ -82,7 +83,10 @@ public:
 
     QString pointerValue() const;
 
+    QList<QString> colorBy() const;
+
 public slots:
+
     void setItemName(QString itemName);
     void setItemType(QString itemType);
 
@@ -90,26 +94,21 @@ public slots:
     void setYAxisActive(bool yAxisActive);
 
     void setColorByActive(bool colorByActive);
-
     void setLastDropped(QString lastDropped);
-
     void setCalculatedFieldPopupStatus(QString calculatedFieldPopupStatus);
 
 
 
     void setXAxisColumns(QList<QString> xAxisColumns);
-
     void setYAxisColumns(QList<QString> yAxisColumns);
-
     void setChartType(QString chartType);
-
     void setReportId(QString reportId);
-
     void setReportTitle(QString reportTitle);
-
     void setDataValuesColumns(QList<QString> dataValuesColumns);
 
     void setPointerValue(QString pointerValue);
+
+    void setColorBy(QList<QString> colorBy);
 
 signals:
     void itemNameChanged(QString itemName);
@@ -128,6 +127,7 @@ signals:
     void reportTitleChanged(QString reportTitle);
     void dataValuesChanged(QList<QString> dataValuesColumns);
     void pointerValueChanged(QString pointerValue);
+    void colorByChanged(QList<QString> colorBy);
 };
 
 #endif // REPORTPARAMSMODEL_H
