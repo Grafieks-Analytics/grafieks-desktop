@@ -10,15 +10,19 @@ import "../MiniSubComponents";
 
 Popup {
 
+    id: axisItemMenuPopup
     property int menuItemheight: 30
+    property int currentIndexValue: 0
 
     width: 100
-    height: colorOptionsList.height
+    height: menuList.height
     x: parent.width - 20
     modal: false
     visible: false
     margins: 0
     padding: 1
+
+    property alias rectIndex: axisItemMenuPopup.currentIndexValue;
 
     background: Rectangle{
         color: Constants.whiteColor
@@ -30,7 +34,7 @@ Popup {
     // LIST MODEL STARTS
 
     ListModel{
-        id: colorByMenuListModel
+        id: menuListModal
         ListElement{
             menuName: "Remove"
         }
@@ -67,21 +71,10 @@ Popup {
     // JAVASCRIPT FUNCTION STARTS
 
 
-
-    function deleteColorByChild(){
-        var deleteName = colorByTextItem.text;
-        for(var i=0; i<colorListModel.count;i++){
-            var elementName = colorListModel.get(i).textValue;
-            if(elementName===deleteName){
-                colorListModel.remove(i);
-                ReportParamsModel.setItemType(null);
-                ReportParamsModel.setLastDropped(null);
-                ReportParamsModel.setChartType(Constants.barChartTitle);
-                break;
-            }
-        }
+    function removeElement(index){
+       var axisModel = axisItemMenuPopup.parent.parent.parent.model;
+       axisModel.remove(index);
     }
-
 
 
     // JAVASCRIPT FUNCTION ENDS
@@ -113,9 +106,9 @@ Popup {
 
 
         ListView{
-            id: colorOptionsList
-            model: colorByMenuListModel
-            height: (menuItemheight+this.spacing)*colorByMenuListModel.count
+            id: menuList
+            model: menuListModal
+            height: (menuItemheight+this.spacing)*menuListModal.count
             width: parent.width
             interactive: false
             spacing: 2
@@ -133,7 +126,7 @@ Popup {
                     onClicked: {
                         switch(menuName){
                         case "Remove":
-                            console.log('Remove This Item')
+                            removeElement(currentIndexValue)
                         }
                     }
                 }

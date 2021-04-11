@@ -1028,7 +1028,6 @@ Page {
                     spacing: spacingColorList
                     delegate: AxisDroppedRectangle{
                         textValue: itemName
-                        color: Constants.defaultYAxisColor
                     }
                 }
 
@@ -1134,7 +1133,6 @@ Page {
                     spacing: spacingColorList
                     delegate: AxisDroppedRectangle{
                         textValue: itemName
-                        color: Constants.defaultYAxisColor
                     }
                 }
 
