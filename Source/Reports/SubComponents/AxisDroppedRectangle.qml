@@ -119,6 +119,7 @@ Rectangle{
 
     AxisItemMenuPopup{
         id: axisMenu
+        rectIndex: index
     }
 
     MouseArea{
