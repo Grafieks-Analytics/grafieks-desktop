@@ -8,6 +8,8 @@ RedshiftCon::RedshiftCon(QObject *parent) : QObject(parent)
 QVariantMap RedshiftCon::RedshiftOdbcInstance(const QString &driver, const QString &host, const QString &db, const int &port, const QString &username, const QString &password)
 {
 
+    qDebug() << driver << host << db << port << username << password;
+
     QVariantMap outputStatus;
 
     if(QSqlDatabase::isDriverAvailable("QODBC")){
@@ -15,8 +17,7 @@ QVariantMap RedshiftCon::RedshiftOdbcInstance(const QString &driver, const QStri
         // Sample connection for Postgres
         // dbOdbc.setDatabaseName("DRIVER={PostgreSQL Unicode};Server=localhost;Database=pg_test;Trusted_Connection=True;"); // "WorkDatabase" is the name of the database we want
 
-
-        QString dbString = "DRIVER={" + driver + "};" + "Database=" + db + ";Tusted_Connection=True";
+        QString dbString = "DRIVER={" + driver + "};" + "Server=" +host + ";Database=" + db + ";Tusted_Connection=True";
 
         QSqlDatabase dbRedshiftOdbc = QSqlDatabase::addDatabase("QODBC", Constants::redshiftOdbcStrType);
 

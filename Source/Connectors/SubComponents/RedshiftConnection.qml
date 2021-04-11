@@ -91,9 +91,9 @@ Popup {
         popup.visible = false
     }
 
-    function connectToMsSQL(){
-//        ConnectorsLoginModel.mssqlOdbcLogin(server.text, database.text, port.text, username.text, password.text)
-          ConnectorsLoginModel.redshiftOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
+    function connectToRedshift(){
+//        ConnectorsLoginModel.mssqlOdbcLogin(control.currentText, server.text, database.text, port.text, username.text, password.text)
+        ConnectorsLoginModel.redshiftOdbcLogin(control.currentText, "redshift-cluster-1.cahcrqdskrvh.ap-south-1.redshift.amazonaws.com", database.text, port.text, username.text, password.text)
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -299,6 +299,7 @@ Popup {
                 text: "Server"
                 anchors.right: parent.right
                 anchors.rightMargin: 10
+
                 font.pixelSize: Constants.fontCategoryHeader
                 anchors.verticalCenter: parent.verticalCenter
             }
@@ -502,7 +503,7 @@ Popup {
             id: btn_signin
             textValue: Constants.signInText
             fontPixelSize: Constants.fontCategoryHeader
-            onClicked: connectToMsSQL()
+            onClicked: connectToRedshift()
         }
 
     }

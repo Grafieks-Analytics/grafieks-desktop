@@ -44,7 +44,7 @@ Page {
 
     // Dont delete this
     ListModel{
-        id: duckTableList
+        id: otherSqlTableList
     }
 
     /***********************************************************************************************************************/
@@ -85,19 +85,46 @@ Page {
         function onSqliteLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                console.log("SQLITE LOGGED IN")
                 TableListModel.callQuery()
                 tableslist.model = TableListModel
             }
         }
+        function onMongoLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                TableListModel.callQuery()
+                tableslist.model = TableListModel
+            }
+        }
+        function onSnowflakeLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                let tables = ForwardOnlyDataModel.getTableList()
+                tables.forEach((item)=>{
+                                   otherSqlTableList.append({tableName: item})
+                               })
+                tableslist.model = otherSqlTableList
+            }
+        }
+        function onRedshiftLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                let tables = ForwardOnlyDataModel.getTableList()
+                tables.forEach((item)=>{
+                                   otherSqlTableList.append({tableName: item})
+                               })
+                tableslist.model = otherSqlTableList
+            }
+        }
+
         function onExcelLoginStatus(status){
             if(status.status === true){
                 // Call functions
                 let tables =  DuckDataModel.getTableList()
                 tables.forEach((item)=>{
-                                   duckTableList.append({tableName: item})
+                                   otherSqlTableList.append({tableName: item})
                                })
-                tableslist.model = duckTableList
+                tableslist.model = otherSqlTableList
             }
         }
 
@@ -106,9 +133,9 @@ Page {
                 // Call functions
                 let tables =  DuckDataModel.getTableList()
                 tables.forEach((item)=>{
-                                   duckTableList.append({tableName: item})
+                                   otherSqlTableList.append({tableName: item})
                                })
-                tableslist.model = duckTableList
+                tableslist.model = otherSqlTableList
             }
         }
 
@@ -117,9 +144,9 @@ Page {
                 // Call functions
                 let tables =  DuckDataModel.getTableList()
                 tables.forEach((item)=>{
-                                   duckTableList.append({tableName: item})
+                                   otherSqlTableList.append({tableName: item})
                                })
-                tableslist.model = duckTableList
+                tableslist.model = otherSqlTableList
             }
         }
 
@@ -378,8 +405,10 @@ Page {
     function disconnectDS(){
         if(connectionType === Constants.sqlType){
             QueryModel.removeTmpChartData()
-        } else{
+        } else if(connectionType === Constants.duckType){
             DuckQueryModel.removeTmpChartData()
+        } else{
+            ForwardOnlyQueryModel.removeTmpChartData()
         }
 
         ConnectorsLoginModel.sqlLogout()

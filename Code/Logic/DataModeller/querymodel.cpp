@@ -18,6 +18,7 @@ void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
 
     QSqlQueryModel::setQuery(query, db);
+    qDebug() << "SS ERR2" <<QSqlQueryModel::lastError();
     generateRoleNames();
 }
 
@@ -25,6 +26,7 @@ void QueryModel::setQuery(const QSqlQuery &query)
 {
 
     QSqlQueryModel::setQuery(query);
+    qDebug() << "SS ERR" <<QSqlQueryModel::lastError();
     generateRoleNames();
 }
 
@@ -34,6 +36,7 @@ QVariant QueryModel::data(const QModelIndex &index, int role) const
 
     if(role < Qt::UserRole) {
         value = QSqlQueryModel::data(index, role);
+        qDebug() << value;
     }
     else {
         int columnIdx = role - Qt::UserRole - 1;
@@ -65,6 +68,7 @@ void QueryModel::setChartData()
 {
     int totalCols = this->columnCount();
     int totalRows = this->rowCount();
+    qDebug() << totalCols << totalRows;
 
     for(int j = 0; j < totalRows; j++){
         for(int i = 0; i < totalCols; i++){

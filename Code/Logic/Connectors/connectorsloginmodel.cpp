@@ -71,7 +71,7 @@ void ConnectorsLoginModel::postgresOdbcLogin(QString driver, QString host, QStri
 void ConnectorsLoginModel::redshiftOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
     QVariantMap response = redshiftcon->RedshiftOdbcInstance(driver, host, db, port, username, password);
-    this->staticSetter(db, Constants::sqlType, Constants::redshiftIntType, Constants::redshiftOdbcStrType);
+    this->staticSetter(db, Constants::forwardType, Constants::redshiftIntType, Constants::redshiftOdbcStrType);
     emit redshiftLoginStatus(response);
 }
 

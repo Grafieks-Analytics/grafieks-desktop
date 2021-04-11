@@ -76,6 +76,8 @@ SOURCES += \
     Code/Logic/DataModeller/filterfunctionsmodel.cpp \
     Code/Logic/DataModeller/filternumericallist.cpp \
     Code/Logic/DataModeller/filternumericallistmodel.cpp \
+    Code/Logic/DataModeller/forwardonlydatamodel.cpp \
+    Code/Logic/DataModeller/forwardonlyquerymodel.cpp \
     Code/Logic/DataModeller/proxyfiltermodel.cpp \
     Code/Logic/DataModeller/publishdatasourcemodel.cpp \
     Code/Logic/DataModeller/querymodel.cpp \
@@ -186,6 +188,8 @@ HEADERS += \
     Code/Logic/DataModeller/filterfunctionsmodel.h \
     Code/Logic/DataModeller/filternumericallist.h \
     Code/Logic/DataModeller/filternumericallistmodel.h \
+    Code/Logic/DataModeller/forwardonlydatamodel.h \
+    Code/Logic/DataModeller/forwardonlyquerymodel.h \
     Code/Logic/DataModeller/proxyfiltermodel.h \
     Code/Logic/DataModeller/publishdatasourcemodel.h \
     Code/Logic/DataModeller/querymodel.h \

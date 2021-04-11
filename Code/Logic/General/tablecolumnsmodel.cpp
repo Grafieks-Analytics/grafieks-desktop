@@ -27,13 +27,32 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
     switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:{
+    case Constants::mysqlIntType:
+    case Constants::mysqlOdbcIntType:
+    case Constants::mongoIntType:{
+        QString dbString;
 
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
+        switch (Statics::currentDbIntType) {
+
+        case Constants::mysqlIntType:
+            dbString = Constants::mysqlStrQueryType;
+            break;
+
+        case Constants::mysqlOdbcIntType:
+            dbString = Constants::mysqlOdbcStrQueryType;
+            break;
+
+        case Constants::mongoIntType:
+            dbString = Constants::mongoOdbcStrQueryType;
+            break;
+
+        }
+
+        QSqlDatabase dbCon = QSqlDatabase::database(dbString);
 
         describeQueryString = "DESCRIBE `" + tableName + "`";
 
-        QSqlQuery describeQuery(describeQueryString, dbMysql);
+        QSqlQuery describeQuery(describeQueryString, dbCon);
 
         while(describeQuery.next()){
 
@@ -57,36 +76,6 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
         break;
     }
 
-    case Constants::mysqlOdbcIntType:{
-
-        QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
-
-        describeQueryString = "DESCRIBE `" + tableName + "`";
-
-        QSqlQuery describeQuery(describeQueryString, dbMysqlOdbc);
-
-        while(describeQuery.next()){
-
-            fieldName = describeQuery.value(0).toString();
-            fieldType = describeQuery.value(1).toString();
-
-            // Remove characters after `(` and then trim whitespaces
-            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-
-            // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
-
-            outputDataList << fieldName << filterDataType;
-            qDebug() << outputDataList << "MYSQL ODBC";
-
-            // Append all data type to allList as well
-            allColumns.append(outputDataList);
-
-            outputDataList.clear();
-        }
-        break;
-    }
 
     case Constants::sqliteIntType:{
 
@@ -150,7 +139,7 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
         QSqlDatabase dbRedshift = QSqlDatabase::database(Constants::redshiftOdbcStrType);
 
-        describeQueryString = "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '" + tableName.toLower()  + "'";
+        describeQueryString = "select \"column\", type from pg_table_def where tablename = '" + tableName  + "'";
 
         QSqlQuery describeQuery(describeQueryString, dbRedshift);
 
@@ -233,36 +222,6 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
         describeQueryString = "SELECT column_name, data_type FROM user_tab_columns WHERE table_name = '" + tableName  + "'";
 
         QSqlQuery describeQuery(describeQueryString, dbOracle);
-
-        while(describeQuery.next()){
-
-            fieldName = describeQuery.value(0).toString();
-            fieldType = describeQuery.value(1).toString();
-            // Remove characters after `(` and then trim whitespaces
-            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-
-            // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
-            outputDataList << fieldName << filterDataType;
-
-            // Append all data type to allList as well
-            allColumns.append(outputDataList);
-
-            outputDataList.clear();
-
-        }
-
-        break;
-    }
-
-    case Constants::mongoIntType:{
-
-        QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrType);
-
-        describeQueryString = "SELECT column_name, data_type FROM user_tab_columns WHERE table_name = '" + tableName  + "'";
-
-        QSqlQuery describeQuery(describeQueryString, dbMongo);
 
         while(describeQuery.next()){
 
