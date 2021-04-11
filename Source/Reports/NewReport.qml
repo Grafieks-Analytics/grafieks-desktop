@@ -268,6 +268,23 @@ Page {
         }
     }
 
+    function getAxisColumnNames(axisName){
+        var model = null;
+        switch(axisName){
+            case Constants.xAxisName:
+                model = xAxisListModel;
+            break;
+        }
+        if(!model){
+            return [];
+        }
+        var columnsName = [];
+        for(var i=0; i< xAxisListModel.count; i++){
+            columnsName.push(xAxisListModel.get(i).itemName);
+        }
+        return columnsName;
+    }
+
 
     // generate Report Id
     function generateReportId(){
@@ -410,7 +427,8 @@ Page {
 
     function drawChart(){
 
-        var xAxisColumns = ReportParamsModel.xAxisColumns;
+        var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
+        console.log(xAxisColumns);
         var yAxisColumns = ReportParamsModel.yAxisColumns;
 
         if(xAxisColumns.length && yAxisColumns.length){
