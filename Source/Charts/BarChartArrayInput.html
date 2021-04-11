@@ -18,14 +18,14 @@
         <script>
             var data = [
                 [
-                    ["2020-01-01", "2021-02-01", "2022-03-01", "2023-03-01"],
-                    // ["India", "Aus", "NZ", "Pak"],
-                    [200, 800, 400, -200],
+                    // ["2020-01-01", "2021-02-01", "2022-03-01", "2023-03-01"],
+                    ["India", "Aus", "NZ", "Pak5", "Pak4", "Pak3", "Pak2"],
+                    [200, 800, 400, -200, 100, 100, 300, 200],
                 ],
                 ["Countries", "Population"],
             ];
 
-            drawChart(data);
+            // drawChart(data);
 
             function drawChart(data, plottingConfiguration = {}) {
                 window.data = data;
@@ -70,7 +70,7 @@
                 var margin = { top: 40, right: 20, bottom: 80, left: 70 };
                 var width = window.innerWidth - margin.left - margin.right;
                 if (chartType == constants.chartType.STANDARD) {
-                    width = dataValues.length * standartThresholdWidth;
+                    width = dataValues[0].length * standartThresholdWidth;
                 }
                 console.log(width);
                 var height = window.innerHeight - margin.top - margin.bottom;

@@ -22,7 +22,7 @@ const defaultD3Config = {
     defaultSpace: 30,
     dateFormat: "%Y",
     chartType: constants.chartType.FIT_WIDTH,
-    standartThresholdWidth: 200,
+    standartThresholdWidth: 100,
 };
 const markerShapeConfig = {
     circle: {
