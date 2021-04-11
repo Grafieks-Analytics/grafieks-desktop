@@ -74,7 +74,7 @@ Page {
         case Constants.barChartTitle:
             chartUrl = Constants.horizontalBarChartUrl;
             console.log('Loading horizontal bar chart')
-            webEngineView.url = 'qrc:/Source/Charts/'+chartUrl;
+            webEngineView.url = Constants.baseChartUrl+chartUrl;
             chartTitle = Constants.horizontalBarChartTitle;
             break;
         }
@@ -87,7 +87,9 @@ Page {
         const { maxDropOnXAxis, maxDropOnYAxis } = chartDetailsConfig || {maxDropOnXAxis: allowedXAxisDataPanes, maxDropOnYAxis: allowedYAxisDataPanes};
 
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
-        var yAxisColumns = ReportParamsModel.yAxisColumns;
+        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);;
+
+        console.log(xAxisColumns);
 
         // check if maximum drop is less than in config?
         // if less then remove all the extra values
@@ -240,9 +242,6 @@ Page {
             ReportParamsModel.setReportId(newReportId);
         }
 
-        ReportParamsModel.setXAxisColumns([]);
-        ReportParamsModel.setYAxisColumns([]);
-
         xAxisListModel.clear();
         yAxisListModel.clear();
 
@@ -268,6 +267,7 @@ Page {
         }
     }
 
+    // function to get the columnName from model
     function getAxisColumnNames(axisName){
         var model = null;
         switch(axisName){
@@ -298,8 +298,24 @@ Page {
     // For changing the chart on clicking chart icons
 
     function reDrawChart(){
-        drawChart();
 
+        var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
+        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
+
+        // Check graph type for redrawing
+        // If length = 1 and type of chart is
+        // 1. Grouped Bar Chart and no Colour By is there => Bar chart
+        // 1. Grouped Bar Chart and Colour By Present => Stacked Bar Chart
+
+        if(xAxisColumns.length === 1 && yAxisColumns.length === 1){
+            if(chartTitle === Constants.groupBarChartTitle){
+                chartUrl = Constants.barChartUrl;
+                webEngineView.url = Constants.baseChartUrl+chartUrl;
+                chartTitle = Constants.barChartTitle;
+            }
+        }
+
+        drawChart();
     }
 
     // Load New Chart
@@ -338,7 +354,7 @@ Page {
     }
 
     function xAxisDropEligible(itemName){
-        var xAxisColumns  = ReportParamsModel.xAxisColumns;
+        var xAxisColumns  = getAxisColumnNames(Constants.xAxisName);
         // Check if condition more data pills can be added or not';
         if(xAxisColumns.length === allowedXAxisDataPanes){
             return false;
@@ -351,7 +367,7 @@ Page {
     }
 
     function yAxisDropEligible(itemName){
-        var yAxisColumns  = ReportParamsModel.yAxisColumns;
+        var yAxisColumns  = getAxisColumnNames(Constants.yAxisName);
         const multiChart = true;
         // Check if condition more data pills can be added or not';
         if(yAxisColumns.length === allowedYAxisDataPanes){
@@ -365,8 +381,8 @@ Page {
 
     function onDropAreaDropped(element,axis){
 
-        var xAxisColumns = ReportParamsModel.xAxisColumns;
-        var yAxisColumns = ReportParamsModel.yAxisColumns;
+        var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
+        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
 
         var itemType = lastPickedDataPaneElementProperties.itemType;
         if(itemType && itemType.toLowerCase() === 'categorical' && axis === Constants.yAxisName  && !xAxisColumns.length && !yAxisColumns.length){
@@ -388,7 +404,6 @@ Page {
 
             xAxisListModel.append({itemName: itemName, droppedItemType: itemType})
             xAxisColumns.push(itemName);
-            ReportParamsModel.setXAxisColumns(xAxisColumns);
 
         }else if(axis === Constants.yAxisName){
             if(!yAxisDropEligible(itemName)){
@@ -397,7 +412,7 @@ Page {
             console.log('itemType',itemType);
             yAxisListModel.append({itemName: itemName, droppedItemType: itemType})
             yAxisColumns.push(itemName);
-            ReportParamsModel.setYAxisColumns(yAxisColumns);
+
         }else{
             if(!yAxisDropEligible(itemName)){
                 return;
@@ -407,11 +422,15 @@ Page {
         }
 
 
-        if(ReportParamsModel.xAxisColumns.length > 1 && yAxisColumns.length && (chartTitle === Constants.barChartTitle  || chartTitle === Constants.stackedBarChartTitle)){
+        // To Make group chart: Make sure to have 2 xAxisValueColumn and 1 yAxisColumn
+
+        if( getAxisColumnNames(Constants.xAxisName).length > 1
+                && getAxisColumnNames(Constants.yAxisName).length
+                && (chartTitle === Constants.barChartTitle  || chartTitle === Constants.stackedBarChartTitle)){
             console.log('Make Grouped Bar Chart')
-            webEngineView.url = 'qrc:/Source/Charts/BarGroupedChart.html';
+            webEngineView.url = Constants.baseChartUrl+Constants.barGroupedChartUrl;
             chartTitle = Constants.groupBarChartTitle;
-            chartUrl = 'BarGroupedChart.html';
+            chartUrl = Constants.barGroupedChartUrl;
         }
 
         drawChart();
@@ -431,8 +450,7 @@ Page {
     function drawChart(){
 
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
-        console.log(xAxisColumns);
-        var yAxisColumns = ReportParamsModel.yAxisColumns;
+        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
 
         if(xAxisColumns.length && yAxisColumns.length){
 

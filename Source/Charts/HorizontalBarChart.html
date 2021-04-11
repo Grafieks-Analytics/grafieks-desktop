@@ -25,16 +25,6 @@
         <div id="tooltip"></div>
         <script>
             var data = [
-                { value: 10, dataset: "barbaz" },
-                { value: 40, dataset: "barbar" },
-                { value: -10, dataset: "foobaz" },
-                { value: 50, dataset: "foobar" },
-                { value: 30, dataset: "baz" },
-                { value: -20, dataset: "bar" },
-                { value: 70, dataset: "foo" },
-            ];
-
-            var data = [
                 [
                     [
                         "barbaz",
@@ -50,7 +40,7 @@
                 ["value 1", "value 2Z"],
             ];
 
-            drawChart(data);
+            // drawChart(data);
 
             function drawChart(data, plottingConfiguration = {}) {
                 window.data = data;
@@ -95,7 +85,7 @@
                     );
 
                 // set the ranges
-                var y = d3.scaleBand().range([height, 0]).padding(0.1);
+                var y = d3.scaleBand().range([height, 0]).padding(paddingInner);
 
                 var x = d3.scaleLinear().range([0, width]);
 
