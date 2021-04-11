@@ -20,7 +20,7 @@
                 [
                     // ["2020-01-01", "2021-02-01", "2022-03-01", "2023-03-01"],
                     ["India", "Aus", "NZ", "Pak5", "Pak4", "Pak3", "Pak2"],
-                    [200, 800, 400, -200, 100, 100, 300],
+                    [200, 800, 400, 200, 100, 100, 300],
                 ],
                 ["Countries", "Population"],
             ];
@@ -109,6 +109,10 @@
                 var minHeight = d3.min(dataset, function (d) {
                     return d;
                 });
+
+                if (minHeight > 0) {
+                    minHeight = 0;
+                }
 
                 //set y scale
                 var yScale = d3
