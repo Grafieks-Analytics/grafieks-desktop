@@ -70,13 +70,20 @@ Page {
     property bool isHorizontalGraph: false;
 
     onIsHorizontalGraphChanged: {
-        switch(chartTitle){
-        case Constants.barChartTitle:
-            chartUrl = Constants.horizontalBarChartUrl;
-            console.log('Loading horizontal bar chart')
+        if(isHorizontalGraph){
+            switch(chartTitle){
+            case Constants.barChartTitle:
+                chartUrl = Constants.horizontalBarChartUrl;
+                console.log('Loading horizontal bar chart')
+                webEngineView.url = Constants.baseChartUrl+chartUrl;
+                chartTitle = Constants.horizontalBarChartTitle;
+                break;
+            }
+        }else{
+            chartUrl = Constants.barChartUrl;
+            console.log('Loading bar chart')
             webEngineView.url = Constants.baseChartUrl+chartUrl;
-            chartTitle = Constants.horizontalBarChartTitle;
-            break;
+            chartTitle = Constants.barChartTitle;
         }
     }
 
@@ -301,6 +308,10 @@ Page {
 
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
+
+        if((xAxisListModel.count && xAxisListModel.get(0).droppedItemType.toLowerCase() !== 'numerical')  || (yAxisListModel.count && yAxisListModel.get(0).droppedItemType.toLowerCase() === 'numerical')){
+            isHorizontalGraph = false
+        }
 
         // Check graph type for redrawing
         // If length = 1 and type of chart is
