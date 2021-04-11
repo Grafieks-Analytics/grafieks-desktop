@@ -74,9 +74,7 @@ void DuckQueryModel::generateRoleNames()
 {
     QStringList output;
     m_roleNames.clear();
-
-
-    output = querySplitter.getSelectParams();
+    this->tableHeaders.clear();
 
     QRegularExpression selectListRegex(R"(SELECT\s+(.*?)\sFROM\s)", QRegularExpression::CaseInsensitiveOption);
     QRegularExpressionMatch selectIterator = selectListRegex.match(this->query);
@@ -95,17 +93,24 @@ void DuckQueryModel::generateRoleNames()
 
             for(int i = 0; i < rows; i++){
                 fieldName =  data->GetValue(1, i).ToString().c_str();
+                fieldName = fieldName.trimmed();
                 m_roleNames.insert(i, fieldName.toUtf8());
                 this->setChartHeader(i, fieldName);
+                this->tableHeaders.append(fieldName);
             }
         }
 
     } else{
+        output = querySplitter.getSelectParams();
         for(int i =0; i < output.length(); i++){
-            m_roleNames.insert(i, output[i].toUtf8());
-            this->setChartHeader(i, output[i]);
+            QString fieldName = output[i].remove("\"").trimmed();
+            m_roleNames.insert(i, fieldName.toUtf8());
+            this->setChartHeader(i, fieldName);
+            this->tableHeaders.append(fieldName);
         }
     }
+
+    emit duckHeaderDataChanged(this->tableHeaders);
 }
 
 void DuckQueryModel::setQueryResult()
@@ -161,11 +166,9 @@ void DuckQueryModel::setChartData(std::unique_ptr<duckdb::MaterializedQueryResul
             } else{
                 this->duckChartData.value(i)->append(totalRows->GetValue(i, j).ToString().c_str());
                 this->duckChartData[i] = duckChartData.value(i);
-//                qDebug() << *duckChartData.value(i) << "XS" << i;
             }
         }
     }
-
     emit chartDataChanged(this->duckChartData);
 }
 

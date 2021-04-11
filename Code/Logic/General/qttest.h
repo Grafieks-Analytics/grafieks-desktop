@@ -22,7 +22,7 @@ class QtTest : public QObject
     Q_OBJECT
 public:
     explicit QtTest(QObject *parent = nullptr);
-
+    void calla();
 
 signals:
 

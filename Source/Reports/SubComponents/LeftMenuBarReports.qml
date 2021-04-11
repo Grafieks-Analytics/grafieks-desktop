@@ -44,8 +44,8 @@ Rectangle{
             title: "Bar Chart"
             yAxisVisible: true
             lineTypeChartVisible: false
-            maxDropOnXaxis: 3
-            maxDropOnYaxis: 3
+            maxDropOnXAxis: 2
+            maxDropOnYAxis: 1
             mainCustomizations: "Properties,Legend,Reference Line"
         }
         ListElement{
@@ -56,6 +56,8 @@ Rectangle{
             title: "Area Chart"
             yAxisVisible: true
             lineTypeChartVisible: false
+            maxDropOnXAxis: 2
+            maxDropOnYAxis: 1
             mainCustomizations: "Properties,Legend,Reference Line"
         }
         ListElement{
@@ -64,6 +66,8 @@ Rectangle{
             activeChart: false
             title: "Line Chart"
             yAxisVisible: true
+            maxDropOnXAxis: 2
+            maxDropOnYAxis: 1
             lineTypeChartVisible: true
             mainCustomizations: "Properties,Legend,Reference Line"
         }
@@ -73,6 +77,7 @@ Rectangle{
             chartHtml:"bar.html"
             title:"Combination"
             yAxisVisible: true
+            maxDropOnXAxis: 1
             lineTypeChartVisible: true
             mainCustomizations: "Properties,Legend,Reference Line"
         }
@@ -81,6 +86,8 @@ Rectangle{
             chartHtml:"HeatmapChart.html"
             activeChart: false
             title: "Heat Map"
+            maxDropOnXAxis: 2
+            maxDropOnYAxis: 1
             yAxisVisible: true
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
@@ -100,6 +107,8 @@ Rectangle{
             activeChart: false
             title:"Waterfall"
             yAxisVisible: true
+            maxDropOnXAxis: 1
+            maxDropOnYAxis: 1
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
         }
@@ -110,6 +119,8 @@ Rectangle{
             title: "Pie Chart"
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
+            maxDropOnXAxis: 1
+            maxDropOnYAxis: 1
             yAxisVisible: false
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
@@ -120,6 +131,8 @@ Rectangle{
             activeChart: false
             title:"Donut Chart"
             xAxisLabelName: "Categorical"
+            maxDropOnXAxis: 1
+            maxDropOnYAxis: 1
             yAxisLabelName: "Numerical"
             yAxisVisible: false
             lineTypeChartVisible: false
@@ -143,6 +156,7 @@ Rectangle{
             title:"Sunburst"
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
+            maxDropOnYAxis: 1
             yAxisVisible: false
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
@@ -171,6 +185,8 @@ Rectangle{
             activeChart: false
             title: "Funnel Chart"
             yAxisVisible: false
+            maxDropOnXAxis: 1
+            maxDropOnYAxis: 1
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
             lineTypeChartVisible: false
@@ -181,6 +197,7 @@ Rectangle{
             chartHtml:"TreeChart.html"
             activeChart: false
             title:"Tree Chart"
+            maxDropOnYAxis: 1
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
             yAxisVisible: false
@@ -309,6 +326,30 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted: {
+
+        // create all charts mapping from the list model
+
+        for(var i=0; i< allCharts.count; i++){
+            var chartTitle = allCharts.get(i).title;
+
+            console.log('Chart Title, Making Mapping',chartTitle)
+
+            var maxDropOnXAxis = allCharts.get(i).maxDropOnXAxis;
+            var maxDropOnYAxis = allCharts.get(i).maxDropOnYAxis;
+
+            allChartsMapping[chartTitle] = {
+                'maxDropOnXAxis': maxDropOnXAxis || -1,
+                'maxDropOnYAxis': maxDropOnYAxis || -1,
+            };
+
+        }
+
+        // Setting initial default values
+        allowedXAxisDataPanes = 2;
+        allowedYAxisDataPanes = 1;
+    }
+
     function getChart(chartHtml,index,chartTitle,mainCustomizations){
         report_desiner_page.chartUrl = chartHtml;
         report_desiner_page.chartTitle = chartTitle;
@@ -336,12 +377,16 @@ Rectangle{
             xAxisLabelName = Constants.xAxisName
         }
 
+
+        var chartObject = allCharts.get(index);
+
         lineTypeChartVisible = allCharts.get(index).lineTypeChartVisible;
         pivotThemeVisible = !!allCharts.get(index).themeVisible;
 
         allCharts.set(activeChartIndex,{activeChart: false})
         activeChartIndex = index;
         allCharts.set(index,{activeChart: true})
+
     }
 
     // JAVASCRIPT FUNCTION ENDS

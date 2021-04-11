@@ -156,8 +156,13 @@ Item{
                     QueryStatsModel.showStats()
                     //TableSchemaModel.showSchema(DSParamsModel.tmpSql)
 
-                } else{
+                } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
                     DuckQueryModel.setQuery(DSParamsModel.tmpSql)
+
+                    testQueryResult.visible = true
+                    dataPreviewResult.visible = false
+                } else {
+                    ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
 
                     testQueryResult.visible = true
                     dataPreviewResult.visible = false

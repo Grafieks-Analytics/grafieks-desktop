@@ -229,9 +229,12 @@ Popup {
 //        ColumnListModel.columnQuery(colName, tableName)
         if(globalConType === Constants.sqlType){
             ColumnListModel.columnQuery(colName, tableName)
-        } else{
+        } else if(globalConType === Constants.duckType){
             DuckDataModel.columnData(colName, tableName)
+        } else{
+            ForwardOnlyDataModel.columnData(colName, tableName)
         }
+
         DSParamsModel.setColName(colName)
         DSParamsModel.setTableName(tableName)
 

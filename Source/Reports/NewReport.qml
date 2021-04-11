@@ -31,6 +31,9 @@ Page {
     property bool xaxisActive: ReportParamsModel.xAxisActive
     property bool yaxisActive: ReportParamsModel.yAxisActive
 
+    property var maxDropOnXAxis: 1;
+    property var maxDropOnYAxis: 1;
+
     property bool yAxisVisible: true
     property bool xAxisVisible: true
     property bool row4Visible: false
@@ -54,8 +57,61 @@ Page {
 
     property var d3PropertyConfig: ({});
 
+    property var lastPickedDataPaneElementProperties: ({});
+    property var reportDataPanes: ({});  // Report Data Panes Object
+
+    property var dragActiveObject: ({});
+
+    property var allChartsMapping: ({});
+
+    property var allowedXAxisDataPanes: 0;
+    property var allowedYAxisDataPanes: 0;
+
+    property bool isHorizontalGraph: false;
+
+    onIsHorizontalGraphChanged: {
+        switch(chartTitle){
+        case Constants.barChartTitle:
+            chartUrl = Constants.horizontalBarChartUrl;
+            console.log('Loading horizontal bar chart')
+            webEngineView.url = 'qrc:/Source/Charts/'+chartUrl;
+            chartTitle = Constants.horizontalBarChartTitle;
+            break;
+        }
+    }
+
+
     onChartTitleChanged: {
 
+        const chartDetailsConfig = allChartsMapping[chartTitle];
+        const { maxDropOnXAxis, maxDropOnYAxis } = chartDetailsConfig || {maxDropOnXAxis: allowedXAxisDataPanes, maxDropOnYAxis: allowedYAxisDataPanes};
+
+        var xAxisColumns = ReportParamsModel.xAxisColumns;
+        var yAxisColumns = ReportParamsModel.yAxisColumns;
+
+        // check if maximum drop is less than in config?
+        // if less then remove all the extra values
+        // else no change -> Plot the graph
+
+        var dataValuesRemoved = false;
+        if(maxDropOnXAxis > 0 && maxDropOnXAxis < xAxisColumns.length){
+            xAxisColumns = xAxisColumns.splice(0,maxDropOnXAxis);
+            ReportParamsModel.setXAxisColumns(xAxisColumns);
+            xAxisListModel.remove(maxDropOnXAxis,xAxisListModel.count - maxDropOnXAxis);
+            dataValuesRemoved = true;
+        }
+
+        if(maxDropOnYAxis > 0 && maxDropOnYAxis < yAxisColumns.length){
+            yAxisColumns = yAxisColumns.splice(0,maxDropOnYAxis);
+            ReportParamsModel.setYAxisColumns(yAxisColumns);
+            yAxisListModel.remove(maxDropOnYAxis,yAxisListModel.count - maxDropOnYAxis);
+            dataValuesRemoved = true;
+        }
+
+        allowedXAxisDataPanes = maxDropOnXAxis;
+        allowedYAxisDataPanes = maxDropOnYAxis;
+
+        // change axis on the basis of chart title
         switch(chartTitle){
         case Constants.stackedBarChartTitle:
             chartUrl=Constants.stackedBarChartUrl
@@ -71,6 +127,12 @@ Page {
             xAxisVisible = true
             yAxisVisible = true
             row3Visible = false
+            row4Visible = false
+            break;
+        case Constants.sankeyTitle:
+            row3Visible =  true;
+            xAxisVisible = true
+            yAxisVisible = true
             row4Visible = false
             break;
         case Constants.pivotTitle:
@@ -97,6 +159,10 @@ Page {
             yAxisVisible = true
             row3Visible = false
             row4Visible = false
+        }
+
+        if(dataValuesRemoved){
+            drawChart();
         }
 
     }
@@ -140,7 +206,7 @@ Page {
 
 
     Connections {
-        target: ReportModelList
+        target: ReportsDataModel
         function onSendData(xAxis,yAxis){
             const dataValues = JSON.stringify([xAxis,yAxis]);
             var scriptValue = 'window.addEventListener("resize", function () {
@@ -236,7 +302,7 @@ Page {
         report_title_text.focus = true;
     }
 
-    function onDropAreaEntered(element){
+    function onDropAreaEntered(element,elementName){
         element.border.width = Constants.dropActiveBorderWidth
     }
 
@@ -253,6 +319,10 @@ Page {
 
     function xAxisDropEligible(itemName){
         var xAxisColumns  = ReportParamsModel.xAxisColumns;
+        // Check if condition more data pills can be added or not';
+        if(xAxisColumns.length === allowedXAxisDataPanes){
+            return false;
+        }
         const multiChart = true;
         if(multiChart){
             return true;
@@ -263,6 +333,10 @@ Page {
     function yAxisDropEligible(itemName){
         var yAxisColumns  = ReportParamsModel.yAxisColumns;
         const multiChart = true;
+        // Check if condition more data pills can be added or not';
+        if(yAxisColumns.length === allowedYAxisDataPanes){
+            return false;
+        }
         if(multiChart){
             return true;
         }
@@ -271,13 +345,19 @@ Page {
 
     function onDropAreaDropped(element,axis){
 
+        var xAxisColumns = ReportParamsModel.xAxisColumns;
+        var yAxisColumns = ReportParamsModel.yAxisColumns;
+
+        var itemType = lastPickedDataPaneElementProperties.itemType;
+        if(itemType && itemType.toLowerCase() === 'categorical' && axis === Constants.yAxisName  && !xAxisColumns.length && !yAxisColumns.length){
+            isHorizontalGraph = true;
+        }
+
         element.border.width = Constants.dropEligibleBorderWidth
         element.border.color = Constants.themeColor
 
         var itemName = ReportParamsModel.itemName;
-        var xAxisColumns = ReportParamsModel.xAxisColumns;
 
-        var yAxisColumns = ReportParamsModel.yAxisColumns;
         var valuesColumns = [];
 
         if(axis === Constants.xAxisName){
@@ -286,7 +366,7 @@ Page {
                 return;
             }
 
-            xAxisListModel.append({itemName: itemName})
+            xAxisListModel.append({itemName: itemName, droppedItemType: itemType})
             xAxisColumns.push(itemName);
             ReportParamsModel.setXAxisColumns(xAxisColumns);
 
@@ -294,7 +374,8 @@ Page {
             if(!yAxisDropEligible(itemName)){
                 return;
             }
-            yAxisListModel.append({itemName: itemName})
+            console.log('itemType',itemType);
+            yAxisListModel.append({itemName: itemName, droppedItemType: itemType})
             yAxisColumns.push(itemName);
             ReportParamsModel.setYAxisColumns(yAxisColumns);
         }else{
@@ -324,8 +405,6 @@ Page {
             console.log('Error',JSON.stringify(loadRequest))
             return;
         }
-
-        console.log(webEngineView.location)
         drawChart();
     }
 
@@ -345,6 +424,10 @@ Page {
             console.log('Chart Title',chartTitle)
 
             switch(chartTitle){
+            case Constants.horizontalBarChartTitle:
+                console.log("BAR CLICKED");
+                dataValues =  ChartsModel.getBarChartValues(yAxisColumns[0],xAxisColumns[0]);
+                break;
             case Constants.barChartTitle:
                 console.log("BAR CLICKED", xAxisColumns[0])
                 // Bar - xAxis(String), yAxis(String)
@@ -405,7 +488,6 @@ Page {
                 break;
             case Constants.treeMapChartTitle:
                 dataValues = ChartsModel.getTreeMapChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
-                console.log(dataValues);
                 break;
             case Constants.heatMapChartTitle:
                 console.log("HEATMAP CLICKED")
@@ -446,16 +528,15 @@ Page {
                 return;
             }
 
-
-            console.log(dataValues);
-            console.log(webEngineView.loading);
-            console.log(report_desiner_page.chartTitle)
-            console.log(report_desiner_page.chartUrl)
-            console.log("color final "+JSON.stringify(d3PropertyConfig))
+            console.log('Data Values:',JSON.stringify(dataValues));
+            console.log('Webengine View Loading Status:',webEngineView.loading);
+            console.log('Selected Chart Title:',report_desiner_page.chartTitle)
+            console.log('Selected Chart URL:',report_desiner_page.chartUrl)
+            console.log("D3Config: "+JSON.stringify(d3PropertyConfig))
 
             //            need to initialise only once
             console.log('Starting to plot');
-            console.log('Data Values',dataValues);
+            // console.log('Data Values',dataValues);
             console.log('Chart Url',report_desiner_page.chartUrl)
 
             var scriptValue = 'window.addEventListener("resize", function () {
@@ -724,8 +805,8 @@ Page {
                     onEntered:  onDropAreaEntered(parent,Constants.xAxisName)
                     onExited:  onDropAreaExited(parent,Constants.xAxisName)
                     onDropped: onDropAreaDropped(parent,Constants.xAxisName)
-                }
 
+                }
                 ListView{
 
                     height: parent.height
@@ -736,9 +817,14 @@ Page {
                     model: xAxisListModel
                     orientation: Qt.Horizontal
                     spacing: spacingColorList
+                    interactive: false
                     delegate: AxisDroppedRectangle{
+                        id: dragRect
                         textValue: itemName
-                        color: Constants.defaultXAxisColor
+                        itemType: droppedItemType
+                        Component.onCompleted: {
+                            console.log(itemName,itemType)
+                        }
                     }
                 }
 
@@ -840,7 +926,7 @@ Page {
                     spacing: spacingColorList
                     delegate: AxisDroppedRectangle{
                         textValue: itemName
-                        color: Constants.defaultYAxisColor
+                        itemType: droppedItemType
                     }
                 }
 
@@ -942,7 +1028,6 @@ Page {
                     spacing: spacingColorList
                     delegate: AxisDroppedRectangle{
                         textValue: itemName
-                        color: Constants.defaultYAxisColor
                     }
                 }
 
@@ -1048,7 +1133,6 @@ Page {
                     spacing: spacingColorList
                     delegate: AxisDroppedRectangle{
                         textValue: itemName
-                        color: Constants.defaultYAxisColor
                     }
                 }
 

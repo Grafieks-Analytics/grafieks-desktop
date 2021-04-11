@@ -3,8 +3,10 @@
 
 #include <QObject>
 #include <QDebug>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 
-#include "duckreportsds.h"
 #include "jsoncons/json.hpp"
 using namespace jsoncons;
 

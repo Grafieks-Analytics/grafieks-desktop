@@ -57,8 +57,6 @@ Rectangle{
 
         function onDSSelected(dsStatus){
 
-            console.log(dsStatus, "DS SELECTED")
-
             if(dsStatus === true){
 
                 // Enable Dashboard menu
