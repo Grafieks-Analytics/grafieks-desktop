@@ -8,12 +8,14 @@ TableListModel::TableListModel(QObject *parent): QSqlQueryModel(parent)
 void TableListModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
     QSqlQueryModel::setQuery(query, db);
+    qDebug() << QSqlQueryModel::lastError();
     generateRoleNames();
 }
 
 void TableListModel::setQuery(const QSqlQuery &query)
 {
     QSqlQueryModel::setQuery(query);
+    qDebug() << QSqlQueryModel::lastError();
     generateRoleNames();
 }
 
@@ -23,12 +25,14 @@ QVariant TableListModel::data(const QModelIndex &index, int role) const
 
     if(role < Qt::UserRole) {
         value = QSqlQueryModel::data(index, role);
+
     }
     else {
         int columnIdx = role - Qt::UserRole - 1;
         QModelIndex modelIndex = this->index(index.row(), columnIdx);
         value = QSqlQueryModel::data(modelIndex, Qt::DisplayRole);
     }
+    qDebug() << "SNOWFLAKE DATA" << value;
     return value;
 }
 
@@ -42,6 +46,8 @@ void TableListModel::callQuery(QString queryString)
 {
 
     switch(Statics::currentDbIntType){
+
+    // case Constants::redshiftIntType: Check ForwardOnlyQueryModel
 
     case Constants::mysqlIntType:{
 
@@ -93,19 +99,6 @@ void TableListModel::callQuery(QString queryString)
             this->setQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name LIKE '%"+queryString+"%'", dbPostgres);
         } else{
             this->setQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'", dbPostgres);
-        }
-
-        break;
-    }
-    case Constants::redshiftIntType:{
-
-        QSqlDatabase dbRedshift = QSqlDatabase::database(Constants::redshiftOdbcStrType);
-
-        if (queryString != ""){
-
-            this->setQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name LIKE '%"+queryString+"%'", dbRedshift);
-        } else{
-            this->setQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'", dbRedshift);
         }
 
         break;
@@ -197,12 +190,13 @@ void TableListModel::callQuery(QString queryString)
     case Constants::snowflakeIntType:{
 
         QSqlDatabase dbSnowflake = QSqlDatabase::database(Constants::snowflakeOdbcStrType);
+        qDebug() << "SNOWFLAKE TABLE LIST";
 
         if (queryString != ""){
 
-            this->setQuery("SELECT table_name FROM user_tables WHERE table_name LIKE '%"+queryString+"%'", dbSnowflake);
+            this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'", dbSnowflake);
         } else{
-            this->setQuery("SELECT table_name FROM user_tables", dbSnowflake);
+            this->setQuery("SHOW TABLES", dbSnowflake);
         }
 
         break;
@@ -245,6 +239,7 @@ void TableListModel::generateRoleNames()
 
     m_roleNames.clear();
     QString roleName = "tableName";
+    qDebug() << "ROLES" << roleName.toUtf8();
     m_roleNames.insert(Qt::UserRole + 1, roleName.toUtf8());
 
 }

@@ -32,7 +32,10 @@ void ReportsDataModel::setTmpSql(QString query)
     case Constants::mysqlOdbcIntType:
     case Constants::postgresIntType:
     case Constants::mssqlIntType:
-    case Constants::sqliteIntType:{
+    case Constants::sqliteIntType:
+    case Constants::mongoIntType:
+    case Constants::redshiftIntType:
+    case Constants::snowflakeIntType:{
 
         QString conString;
         switch (Statics::currentDbIntType) {
@@ -55,12 +58,26 @@ void ReportsDataModel::setTmpSql(QString query)
         case Constants::sqliteIntType:
             conString = Constants::sqliteStrType;
             break;
+
+        case Constants::mongoIntType:
+            conString = Constants::mongoOdbcStrType;
+            break;
+
+        case Constants::redshiftIntType:
+            conString = Constants::redshiftOdbcStrType;
+            break;
+
+        case Constants::snowflakeIntType:
+            conString = Constants::snowflakeOdbcStrType;
+            break;
         }
 
         QSqlDatabase dbString = QSqlDatabase::database(conString);
 
         QSqlQuery queryResult(query, dbString);
         QSqlRecord record = queryResult.record();
+
+
 
         for(int i = 0; i < record.count(); i++){
 
@@ -142,7 +159,10 @@ void ReportsDataModel::getColumnsForTable(QString tableName)
     case Constants::mysqlOdbcIntType:
     case Constants::postgresIntType:
     case Constants::mssqlIntType:
-    case Constants::sqliteIntType:{
+    case Constants::sqliteIntType:
+    case Constants::mongoIntType:
+    case Constants::redshiftIntType:
+    case Constants::snowflakeIntType:{
 
         switch (Statics::currentDbIntType) {
 
@@ -170,6 +190,21 @@ void ReportsDataModel::getColumnsForTable(QString tableName)
         case Constants::sqliteIntType:
             conString = Constants::sqliteStrType;
             describeQueryString = "PRAGMA table_info(" + tableName + ")";
+            break;
+
+        case Constants::mongoIntType:
+            conString = Constants::mongoOdbcStrType;
+            describeQueryString = describeQueryString = "DESCRIBE `" + tableName + "`";
+            break;
+
+        case Constants::redshiftIntType:
+            conString = Constants::redshiftOdbcStrType;
+            describeQueryString = "select \"column\", type from pg_table_def where tablename = '" + tableName  + "'";
+            break;
+
+        case Constants::snowflakeIntType:
+            conString = Constants::snowflakeOdbcStrType;
+            describeQueryString = "select \"column\", type from pg_table_def where tablename = '" + tableName  + "'";
             break;
         }
 
