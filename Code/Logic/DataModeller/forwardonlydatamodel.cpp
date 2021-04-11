@@ -70,7 +70,7 @@ QStringList ForwardOnlyDataModel::getColumnList(QString tableName, QString modul
 
     case Constants::snowflakeIntType:
         conType = Constants::snowflakeOdbcStrType;
-        queryString = "select \"column\", type from pg_table_def where tablename = '" + tableName  + "'";
+        queryString = "DESC TABLE " + tableName;
 
         break;
 
@@ -131,8 +131,14 @@ QStringList ForwardOnlyDataModel::getTableList()
     QSqlQuery tableQuery(queryString, forwardOnlyDb);
 
     if(tableQuery.lastError().type() == QSqlError::NoError){
+
         while(tableQuery.next()){
-            output << tableQuery.value(0).toString();
+            if(Statics::currentDbIntType == Constants::snowflakeIntType){
+                output << tableQuery.value(1).toString();
+            } else{
+                output << tableQuery.value(0).toString();
+            }
+
         }
     } else{
         qWarning() << Q_FUNC_INFO << tableQuery.lastError();

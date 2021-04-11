@@ -77,13 +77,15 @@ void ReportsDataModel::setTmpSql(QString query)
         QSqlQuery queryResult(query, dbString);
         QSqlRecord record = queryResult.record();
 
-
+        qDebug() << "RECORD" <<record;
 
         for(int i = 0; i < record.count(); i++){
+            qDebug() << record.fieldName(i) << record.field(i).tableName().toUtf8() << "FIELS";
 
             QString fieldName = record.fieldName(i);
             QString tableName = record.field(i).tableName().toUtf8();
             QString tableFieldName = tableName + "." + fieldName;
+            qDebug() << tableFieldName;
 
             if(this->category.contains(tableFieldName)){
                 this->categoryList.append(fieldName);
@@ -137,6 +139,7 @@ void ReportsDataModel::setTmpSql(QString query)
     }
     }
 
+    qDebug() << this->categoryList<< this->numericalList<< this->dateList;
     emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
 
     this->numericalList.clear();
@@ -204,7 +207,7 @@ void ReportsDataModel::getColumnsForTable(QString tableName)
 
         case Constants::snowflakeIntType:
             conString = Constants::snowflakeOdbcStrType;
-            describeQueryString = "select \"column\", type from pg_table_def where tablename = '" + tableName  + "'";
+            describeQueryString = "DESC TABLE " + tableName;
             break;
         }
 
@@ -216,6 +219,8 @@ void ReportsDataModel::getColumnsForTable(QString tableName)
 
         while(describeQuery.next()){
 
+            qDebug() << describeQuery.value(0).toString() << describeQuery.value(1).toString();
+
             if(Statics::currentDbIntType == Constants::sqliteIntType){
                 fieldName = describeQuery.value(1).toString();
                 fieldType = describeQuery.value(2).toString();
@@ -226,10 +231,11 @@ void ReportsDataModel::getColumnsForTable(QString tableName)
 
             // Remove characters after `(` and then trim whitespaces
             QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-            qDebug() << "fieldTypeTrimmed" <<fieldTypeTrimmed << fieldName << fieldType;
 
             // Get filter data type for QML
             QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+
+            qDebug() << "Cols for table" << filterDataType << tableName << fieldName;
 
             if(filterDataType == Constants::categoricalType){
                 this->category.insert(tableName + "." + fieldName);
@@ -238,7 +244,6 @@ void ReportsDataModel::getColumnsForTable(QString tableName)
             } else if(filterDataType == Constants::dateType){
                 this->date.insert(tableName + "." + fieldName);
             }
-
         }
 
         break;

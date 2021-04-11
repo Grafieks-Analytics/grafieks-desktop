@@ -100,7 +100,7 @@ void ForwardOnlyQueryModel::generateRoleNames()
 
             case Constants::snowflakeIntType:
                 colListQuery = "select \"column\" from pg_table_def where tablename = '" + tableName  + "'";
-                conType = Constants::redshiftOdbcStrType;
+                conType = Constants::snowflakeOdbcStrType;
                 break;
 
             }
@@ -152,7 +152,7 @@ void ForwardOnlyQueryModel::setQueryResult()
         break;
 
     case Constants::snowflakeIntType:
-        conType = Constants::redshiftOdbcStrType;
+        conType = Constants::snowflakeOdbcStrType;
         break;
 
     }

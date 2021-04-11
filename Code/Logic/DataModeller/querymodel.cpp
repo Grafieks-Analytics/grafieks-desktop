@@ -120,6 +120,11 @@ void QueryModel::generateRoleNames()
 void QueryModel::executeQuery(QString &query)
 {
 
+    // For Databases which only allow Forward Only queries
+    // Look into ForwardOnlyQueryModel, ForwardOnlyDataModel
+    // SnowFlake
+    // Redshift
+
     switch(Statics::currentDbIntType){
 
     case Constants::mysqlIntType:{
@@ -194,13 +199,6 @@ void QueryModel::executeQuery(QString &query)
         QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrQueryType);
         this->setQuery(query, dbHive);
 
-        break;
-    }
-
-    case Constants::snowflakeIntType:{
-        QSqlDatabase dbSnowflake = QSqlDatabase::database(Constants::snowflakeOdbcStrQueryType);
-        this->setQuery(query, dbSnowflake);
-        this->setChartData();
         break;
     }
 

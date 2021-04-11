@@ -125,6 +125,12 @@ Item {
             }
         }
 
+        function onSnowflakeLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "\""
+            }
+        }
+
         function onSqliteLoginStatus(status){
             if(status.status === true){
                 query_joiner = "`"
