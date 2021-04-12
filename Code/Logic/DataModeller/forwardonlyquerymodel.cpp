@@ -99,7 +99,7 @@ void ForwardOnlyQueryModel::generateRoleNames()
                 break;
 
             case Constants::snowflakeIntType:
-                colListQuery = "select \"column\" from pg_table_def where tablename = '" + tableName  + "'";
+                colListQuery = "desc table " + tableName;
                 conType = Constants::snowflakeOdbcStrType;
                 break;
 

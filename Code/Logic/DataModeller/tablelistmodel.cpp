@@ -32,7 +32,6 @@ QVariant TableListModel::data(const QModelIndex &index, int role) const
         QModelIndex modelIndex = this->index(index.row(), columnIdx);
         value = QSqlQueryModel::data(modelIndex, Qt::DisplayRole);
     }
-    qDebug() << "SNOWFLAKE DATA" << value;
     return value;
 }
 
@@ -47,7 +46,9 @@ void TableListModel::callQuery(QString queryString)
 
     switch(Statics::currentDbIntType){
 
-    // case Constants::redshiftIntType: Check ForwardOnlyQueryModel
+    // Check ForwardOnlyQueryModel for the following sql
+    // Constants::redshiftIntType
+    // Constants::snowflakeIntType
 
     case Constants::mysqlIntType:{
 
@@ -182,21 +183,6 @@ void TableListModel::callQuery(QString queryString)
             this->setQuery("SELECT table_name FROM user_tables WHERE table_name LIKE '%"+queryString+"%'", dbHive);
         } else{
             this->setQuery("SELECT table_name FROM user_tables", dbHive);
-        }
-
-        break;
-    }
-
-    case Constants::snowflakeIntType:{
-
-        QSqlDatabase dbSnowflake = QSqlDatabase::database(Constants::snowflakeOdbcStrType);
-        qDebug() << "SNOWFLAKE TABLE LIST";
-
-        if (queryString != ""){
-
-            this->setQuery("SHOW TABLES LIKE '%"+queryString+"%'", dbSnowflake);
-        } else{
-            this->setQuery("SHOW TABLES", dbSnowflake);
         }
 
         break;
