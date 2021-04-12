@@ -115,3 +115,15 @@ QStringList QuerySplitter::getJoinTables()
     return joinTableList;
 }
 
+QString QuerySplitter::getAliasName(QString columnString)
+{
+    QStringList list;
+    QRegExp separator("\\sas\\s", Qt::CaseInsensitive);
+
+    if(columnString.contains(separator)){
+        list = columnString.split(separator);
+    }
+
+    return list[1];
+}
+
