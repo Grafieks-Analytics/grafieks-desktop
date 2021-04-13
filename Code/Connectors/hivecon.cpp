@@ -22,8 +22,9 @@ QVariantMap HiveCon::HiveOdbcInstance(const QString &driver, const QString &host
         dbHiveOdbc.setPort(port);
         dbHiveOdbc.setUserName(username);
         dbHiveOdbc.setPassword(password);
+        dbHiveOdbc.open();
 
-        if(!dbHiveOdbc.open()){
+        if(!dbHiveOdbc.isOpen()){
             outputStatus.insert("status", false);
             outputStatus.insert("msg", dbHiveOdbc.lastError().text());
 

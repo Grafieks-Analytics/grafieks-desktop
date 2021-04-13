@@ -72,7 +72,8 @@ QHash<int, QByteArray> DuckQueryModel::roleNames() const
 
 void DuckQueryModel::generateRoleNames()
 {
-    QStringList output;
+    QStringList tablesList, output;
+    QString fieldName;
     m_roleNames.clear();
     this->tableHeaders.clear();
 
@@ -81,15 +82,12 @@ void DuckQueryModel::generateRoleNames()
     QString containsStar = selectIterator.captured(1);
 
     if(containsStar.contains("*", Qt::CaseInsensitive) == true){
-        QStringList tablesList;
         tablesList << querySplitter.getMainTable();
         tablesList << querySplitter.getJoinTables();
 
-        QString tableName;
-        foreach(tableName, tablesList){
+        foreach(QString tableName, tablesList){
             auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
             int rows = data->collection.Count();
-            QString fieldName;
 
             for(int i = 0; i < rows; i++){
                 fieldName =  data->GetValue(1, i).ToString().c_str();
@@ -103,7 +101,7 @@ void DuckQueryModel::generateRoleNames()
     } else{
         output = querySplitter.getSelectParams();
         for(int i =0; i < output.length(); i++){
-            QString fieldName = output[i].remove("\"").trimmed();
+            fieldName = output[i].remove("\"").trimmed();
             m_roleNames.insert(i, fieldName.toUtf8());
             this->setChartHeader(i, fieldName);
             this->tableHeaders.append(fieldName);
@@ -135,13 +133,11 @@ void DuckQueryModel::setQueryResult()
 
         stdData = result->collection.GetRow(i);
 
-
         for(auto data: stdData){
             list << data.ToString().c_str();
         }
         this->resultData.append(list);
         list.clear();
-
     }
 
     if(this->internalRowCount > 0){
@@ -155,8 +151,7 @@ void DuckQueryModel::setQueryResult()
 void DuckQueryModel::setChartData(std::unique_ptr<duckdb::MaterializedQueryResult> &totalRows)
 {
 
-    int i;
-    int j;
+    int i, j;
 
     for(j = 0; j < this->internalRowCount; j++){
         for(i = 0; i < this->internalColCount; i++){
@@ -175,7 +170,7 @@ void DuckQueryModel::setChartData(std::unique_ptr<duckdb::MaterializedQueryResul
 void DuckQueryModel::setChartHeader(int index, QString colName)
 {
     this->duckChartHeader.insert(index, colName);
-    emit chartHeaderChanged(this->duckChartHeader);
+//    emit chartHeaderChanged(this->duckChartHeader);
 }
 
 void DuckQueryModel::getQueryStats()

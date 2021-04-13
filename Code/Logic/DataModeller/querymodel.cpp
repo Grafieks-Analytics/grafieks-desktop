@@ -18,7 +18,9 @@ void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
 
     QSqlQueryModel::setQuery(query, db);
-    qDebug() << "SS ERR2" <<QSqlQueryModel::lastError();
+    if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
+        qWarning() << QSqlQueryModel::lastError();
+
     generateRoleNames();
 }
 
@@ -26,7 +28,9 @@ void QueryModel::setQuery(const QSqlQuery &query)
 {
 
     QSqlQueryModel::setQuery(query);
-    qDebug() << "SS ERR" <<QSqlQueryModel::lastError();
+    if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
+        qWarning() << QSqlQueryModel::lastError();
+
     generateRoleNames();
 }
 
@@ -36,7 +40,6 @@ QVariant QueryModel::data(const QModelIndex &index, int role) const
 
     if(role < Qt::UserRole) {
         value = QSqlQueryModel::data(index, role);
-        qDebug() << value;
     }
     else {
         int columnIdx = role - Qt::UserRole - 1;
@@ -94,7 +97,7 @@ void QueryModel::setChartData()
 void QueryModel::setChartHeader(int index, QString colName)
 {
     this->sqlChartHeader.insert(index, colName);
-    emit chartHeaderChanged(this->sqlChartHeader);
+//    emit chartHeaderChanged(this->sqlChartHeader);
 }
 
 

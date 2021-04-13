@@ -26,8 +26,9 @@ QVariantMap RedshiftCon::RedshiftOdbcInstance(const QString &driver, const QStri
         dbRedshiftOdbc.setHostName(host);
         dbRedshiftOdbc.setUserName(username);
         dbRedshiftOdbc.setPassword(password);
+        dbRedshiftOdbc.open();
 
-        if(!dbRedshiftOdbc.open()){
+        if(!dbRedshiftOdbc.isOpen()){
             outputStatus.insert("status", false);
             outputStatus.insert("msg", dbRedshiftOdbc.lastError().text());
 

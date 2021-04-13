@@ -24,6 +24,9 @@ void DuckDataModel::columnData(QString col, QString tableName)
     QString db = Statics::currentDbName;
 
     auto data = duckCon->con.Query("SELECT " + col.toStdString() + " FROM " + tableName.toStdString());
+    if(!data->error.empty())
+        qWarning() << Q_FUNC_INFO << data->error.c_str();
+
     int rows = data->collection.Count();
 
     for(int i = 0; i < rows; i++){
@@ -47,6 +50,9 @@ QStringList DuckDataModel::getColumnList(QString tableName, QString moduleName)
 
 
     auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+    if(!data->error.empty())
+        qWarning() << Q_FUNC_INFO << data->error.c_str();
+
     int rows = data->collection.Count();
 
     for(int i = 0; i < rows; i++){
@@ -77,6 +83,9 @@ QStringList DuckDataModel::getTableList()
 
     case Constants::excelIntType:{
         auto data = duckCon->con.Query("PRAGMA show_tables");
+        if(!data->error.empty())
+            qWarning() << Q_FUNC_INFO << data->error.c_str();
+
         int rows = data->collection.Count();
 
         for(int i = 0; i < rows; i++){
@@ -101,6 +110,9 @@ QStringList DuckDataModel::getDbList()
 {
     QStringList output;
     auto data = duckCon->con.Query("PRAGMA database_list");
+    if(!data->error.empty())
+        qWarning() << Q_FUNC_INFO << data->error.c_str();
+
     int rows = data->collection.Count();
 
     for(int i = 0; i < rows; i++){
@@ -120,5 +132,8 @@ void DuckDataModel::receiveCsvFilterQuery(QString query)
     std::string csvQuery = "SELECT * FROM " + db.toStdString() + newQuery;
 
     auto data = duckCon->con.Query(csvQuery);
+    if(!data->error.empty())
+        qWarning() << Q_FUNC_INFO << data->error.c_str();
+
     data->Print();
 }

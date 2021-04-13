@@ -71,13 +71,13 @@ void ForwardOnlyQueryModel::removeTmpChartData()
 
 void ForwardOnlyQueryModel::generateRoleNames()
 {
-    QStringList output;
-    QString colListQuery;
-    QString conType;
+    QString colListQuery, conType, fieldName, fieldType, tmpTableName, tmpFieldName;
+    DataType dataType;
+    QStringList colInfo, tablesList, output;
+    QMap<QString, QString> colTypeMap;
 
     m_roleNames.clear();
     this->tableHeaders.clear();
-
 
 
     QRegularExpression selectListRegex(R"(SELECT\s+(.*?)\sFROM\s)", QRegularExpression::CaseInsensitiveOption);
@@ -85,51 +85,82 @@ void ForwardOnlyQueryModel::generateRoleNames()
     QString containsStar = selectIterator.captured(1);
 
     if(containsStar.contains("*", Qt::CaseInsensitive) == true){
-        QStringList tablesList;
         tablesList << querySplitter.getMainTable();
         tablesList << querySplitter.getJoinTables();
 
-        QString tableName;
-        foreach(tableName, tablesList){
+        foreach(QString tableName, tablesList){
 
-            switch(Statics::currentDbIntType){
-                case Constants::redshiftIntType:
-                colListQuery = "select \"column\" from pg_table_def where tablename = '" + tableName  + "'";
-                conType = Constants::redshiftOdbcStrType;
-                break;
+            QString conQuery = this->returnDatatypeQuery(tableName);
+            QString conName = this->returnConnectionName();
 
-            case Constants::snowflakeIntType:
-                colListQuery = "desc table " + tableName;
-                conType = Constants::snowflakeOdbcStrType;
-                break;
+            QSqlDatabase dbForward = QSqlDatabase::database(conName);
+            QSqlQuery q(conQuery, dbForward);
 
+            if(q.lastError().type() == QSqlError::NoError){
+                int i = 0;
+
+                while(q.next()){
+                    fieldName = q.value(0).toString().trimmed();
+                    fieldType = q.value(1).toString().trimmed();
+                    colInfo << fieldName << dataType.dataType(fieldType) << tableName;
+
+                    m_roleNames.insert(i, fieldName.toUtf8());
+                    this->setChartHeader(i, colInfo);
+
+                    this->tableHeaders.append(fieldName);
+                    this->internalColCount++;
+                }
+            } else{
+                qWarning() << Q_FUNC_INFO << q.lastError();
             }
-
-            QSqlDatabase dbForward = QSqlDatabase::database(conType);
-            QSqlQuery q(colListQuery, dbForward);
-            int i = 0;
-
-            while(q.next()){
-                QString fieldName;
-                fieldName = q.value(0).toString().trimmed();
-
-                m_roleNames.insert(i, fieldName.toUtf8());
-                this->setChartHeader(i, fieldName);
-                this->tableHeaders.append(fieldName);
-                this->internalColCount++;
-            }
-
         }
 
     } else{
         output = querySplitter.getSelectParams();
+        tablesList << querySplitter.getMainTable();
+        tablesList << querySplitter.getJoinTables();
+
         this->internalColCount = output.length();
 
         for(int i =0; i < output.length(); i++){
-            QString fieldName = output[i].remove("\"").trimmed();
+            fieldName = output[i].remove(QRegularExpression("[\"`']+")).trimmed();
+
+            // If fieldname contains a dot(.), then probably it might have joins
+            // Else for sure it doesnt contain a join
+            if(fieldName.contains(".")){
+                int i=0;
+                foreach(QString tableName, tablesList){
+
+                    if(tmpTableName != tableName){
+                        colTypeMap = this->returnColumnList(tableName);
+                    }
+
+                    if(fieldName.contains(tableName)){
+
+                        tmpFieldName = fieldName;
+                        fieldName.remove(tableName + ".");
+                        fieldType = colTypeMap.value(fieldName);
+                        colInfo << fieldName << dataType.dataType(fieldType.left(fieldType.indexOf("("))) << tablesList.at(i);
+                    }
+                    tmpTableName = tableName;
+                    i++;
+
+                }
+            } else{
+
+                if(tmpTableName != tablesList.at(0)){
+                    colTypeMap = this->returnColumnList(tablesList.at(0));
+                }
+                tmpTableName = tablesList.at(0);
+
+                fieldType = colTypeMap.value(fieldName);
+                colInfo << fieldName << dataType.dataType(fieldType.left(fieldType.indexOf("("))) << tablesList.at(0);
+            }
+
             m_roleNames.insert(i, fieldName.toUtf8());
-            this->setChartHeader(i, fieldName);
+            this->setChartHeader(i, colInfo);
             this->tableHeaders.append(fieldName);
+
         }
     }
 
@@ -144,20 +175,10 @@ void ForwardOnlyQueryModel::setQueryResult()
 
     // Tmp
     QStringList list;
-    QString conType;
 
-    switch(Statics::currentDbIntType){
-        case Constants::redshiftIntType:
-        conType = Constants::redshiftOdbcStrType;
-        break;
+    QString connectionName = this->returnConnectionName();
 
-    case Constants::snowflakeIntType:
-        conType = Constants::snowflakeOdbcStrType;
-        break;
-
-    }
-
-    QSqlDatabase dbForward = QSqlDatabase::database(conType);
+    QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
     QSqlQuery q(this->query, dbForward);
     if(q.lastError().type() != QSqlError::NoError)
         qDebug() << Q_FUNC_INFO << q.lastError();
@@ -167,18 +188,24 @@ void ForwardOnlyQueryModel::setQueryResult()
 
     int totalRowCount = 0;
     while(q.next()){
-        for(int i = 0; i < this->internalColCount; i++){
-            list << q.value(i).toString();
 
-            // Add to chart data
-            if(totalRowCount == 0){
-                this->forwardOnlyChartData[i] = new QStringList(q.value(i).toString());
-            } else{
-                this->forwardOnlyChartData.value(i)->append(q.value(i).toString());
-                this->forwardOnlyChartData[i] = forwardOnlyChartData.value(i);
+        try{
+            for(int i = 0; i < this->internalColCount; i++){
+                list << q.value(i).toString();
+
+                // Add to chart data
+                if(totalRowCount == 0){
+                    this->forwardOnlyChartData[i] = new QStringList(q.value(i).toString());
+                } else{
+                    this->forwardOnlyChartData.value(i)->append(q.value(i).toString());
+                    this->forwardOnlyChartData[i] = forwardOnlyChartData.value(i);
+                }
             }
+            this->resultData.append(list);
+        } catch(std::exception &e){
+            qWarning() << Q_FUNC_INFO << e.what();
         }
-        this->resultData.append(list);
+
         list.clear();
 
         totalRowCount++;
@@ -196,13 +223,71 @@ void ForwardOnlyQueryModel::setQueryResult()
     endResetModel();
 }
 
-//void ForwardOnlyQueryModel::setChartData(std::unique_ptr<duckdb::MaterializedQueryResult> &totalRows)
-//{
 
-//}
-
-void ForwardOnlyQueryModel::setChartHeader(int index, QString colName)
+void ForwardOnlyQueryModel::setChartHeader(int index, QStringList colInfo)
 {
-    this->forwardOnlyChartHeader.insert(index, colName);
+    this->forwardOnlyChartHeader.insert(index, colInfo);
+    //    QMap<int, QString>a;
+    //    emit chartHeaderChanged(a);
     emit chartHeaderChanged(this->forwardOnlyChartHeader);
+}
+
+QString ForwardOnlyQueryModel::returnDatatypeQuery(QString tableName)
+{
+    QString colListQuery;
+
+    switch(Statics::currentDbIntType){
+    case Constants::redshiftIntType:
+        colListQuery = "select \"column\", type from pg_table_def where tablename = '" + tableName  + "'";
+        break;
+
+    case Constants::snowflakeIntType:
+        colListQuery = "desc table " + tableName;
+        break;
+
+    }
+
+    return colListQuery;
+}
+
+QString ForwardOnlyQueryModel::returnConnectionName()
+{
+
+    QString conType;
+
+    switch(Statics::currentDbIntType){
+
+    case Constants::redshiftIntType:
+        conType = Constants::redshiftOdbcStrType;
+        break;
+
+    case Constants::snowflakeIntType:
+        conType = Constants::snowflakeOdbcStrType;
+        break;
+    }
+
+    return conType;
+}
+
+QMap<QString, QString> ForwardOnlyQueryModel::returnColumnList(QString tableName)
+{
+    QString conQuery = this->returnDatatypeQuery(tableName);
+    QString conName = this->returnConnectionName();
+    QMap<QString, QString>colTypeMap;
+
+    QSqlDatabase dbForward = QSqlDatabase::database(conName);
+    QSqlQuery q(conQuery, dbForward);
+
+    if(q.lastError().type() == QSqlError::NoError){
+        while(q.next()){
+            QString fieldName = q.value(0).toString().trimmed();
+            QString fieldType = q.value(1).toString().trimmed();
+            qDebug() << "COL TYOE" << fieldName << fieldType;
+            colTypeMap.insert(fieldName, fieldType);
+        }
+    } else{
+        qWarning() << Q_FUNC_INFO << q.lastError();
+    }
+
+    return colTypeMap;
 }

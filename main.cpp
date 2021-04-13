@@ -307,9 +307,9 @@ int main(int argc, char *argv[])
 
     // Common data and headers for reports and dashboards
     QObject::connect(&queryModel, &QueryModel::chartDataChanged, &chartsModel, &ChartsModel::getChartData);
-    QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::getChartHeader);
+//    QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::getChartHeader);
     QObject::connect(&duckQueryModel, &DuckQueryModel::chartDataChanged, &chartsModel, &ChartsModel::getChartData);
-    QObject::connect(&duckQueryModel, &DuckQueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::getChartHeader);
+//    QObject::connect(&duckQueryModel, &DuckQueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::getChartHeader);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartDataChanged, &chartsModel, &ChartsModel::getChartData);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::getChartHeader);
 
