@@ -205,17 +205,17 @@ Page {
     // Connections Starts
 
 
-    Connections {
-        target: ReportsDataModel
-        function onSendData(xAxis,yAxis){
-            const dataValues = JSON.stringify([xAxis,yAxis]);
-            var scriptValue = 'window.addEventListener("resize", function () {
-                    d3.selectAll("#my_dataviz").html("");
-                    drawChart('+dataValues+');
-                });';
-            webEngineView.runJavaScript('drawChart('+dataValues+'); '+scriptValue);
-        }
-    }
+//    Connections {
+//        target: ReportsDataModel
+//        function onSendData(xAxis,yAxis){
+//            const dataValues = JSON.stringify([xAxis,yAxis]);
+//            var scriptValue = 'window.addEventListener("resize", function () {
+//                    d3.selectAll("#my_dataviz").html("");
+//                    drawChart('+dataValues+');
+//                });';
+//            webEngineView.runJavaScript('drawChart('+dataValues+'); '+scriptValue);
+//        }
+//    }
 
 
     // Connections Ends

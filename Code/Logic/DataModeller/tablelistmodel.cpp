@@ -8,14 +8,18 @@ TableListModel::TableListModel(QObject *parent): QSqlQueryModel(parent)
 void TableListModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
     QSqlQueryModel::setQuery(query, db);
-    qDebug() << QSqlQueryModel::lastError();
+    if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
+        qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
+
     generateRoleNames();
 }
 
 void TableListModel::setQuery(const QSqlQuery &query)
 {
     QSqlQueryModel::setQuery(query);
-    qDebug() << QSqlQueryModel::lastError();
+    if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
+        qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
+
     generateRoleNames();
 }
 

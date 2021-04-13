@@ -8,6 +8,7 @@
 #include <QJsonObject>
 
 #include "jsoncons/json.hpp"
+#include "../../constants.h"
 using namespace jsoncons;
 
 class ChartsModel : public QObject
@@ -15,6 +16,11 @@ class ChartsModel : public QObject
     Q_OBJECT
     QMap<int, QStringList *> newChartData;
     QMap<int, QString> newChartHeader;
+    QMap<int, QStringList> chartHeaderDetails;
+
+    QStringList numericalList;
+    QStringList categoryList;
+    QStringList dateList;
 
 public:
     explicit ChartsModel(QObject *parent = nullptr);
@@ -54,9 +60,11 @@ public:
 
 public slots:
     void getChartData(QMap<int, QStringList*> chartData);
-    void getChartHeader(QMap<int, QString> chartHeader);
+    void getChartHeader(QMap<int, QStringList> chartHeader);
 
 signals:
+    void sendFilteredColumn(QStringList allCategorical, QStringList allNumerical, QStringList allDates);
+    void sendData(QVariantList xAxis, QVariantList yAxis);
 
 };
 
