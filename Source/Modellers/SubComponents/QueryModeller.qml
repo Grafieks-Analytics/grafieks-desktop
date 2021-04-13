@@ -21,6 +21,7 @@ Item{
     property int totalLineCount: 1
     property int lineCount: 30
 
+    property bool stateValue:false
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -30,6 +31,12 @@ Item{
     ListModel {
         id: elementModel
         ListElement { content: "1"}
+    }
+
+    onStateValueChanged: {
+        if(stateValue==false){
+//            onTextFormatSqlKeyword()
+        }
     }
 
 
@@ -64,7 +71,7 @@ Item{
 
     Component.onCompleted: {
         //        textEditQueryModeller.text = "SELECT * FROM users WHERE users.id > 0"
-        textEditQueryModeller.text = " SELECT * FROM users WHERE users.id > 0 "
+        textEditQueryModeller.text = "SELECT * FROM users WHERE users.id > 0 "
 
 
 
@@ -72,8 +79,13 @@ Item{
 
     function onTextEditorChanged(){
         console.log(textEditQueryModeller.text)
+
         // Set the Tmp SQL Query in C++
         DSParamsModel.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, " "))
+        if(!stateValue){
+            onTextFormatSqlKeyword()
+        }
+
     }
 
     //    function to onTextFormatSqlKeyword
@@ -81,18 +93,17 @@ Item{
 
         var arraySqlKeyword =["SELECT","FROM"]
 
+        var textData = textEditQueryModeller.getText(0,textEditQueryModeller.text.length);
+        console.log('textData',textData, typeof textEditQueryModeller.text);
 
-
-
-
-        var textArrayQueryNewLine = textEditQueryModeller.text.split("\n")
+        textData = textData.replace(/?/g,'');
+        var textArrayQueryNewLine = textData.split("<br>");
         var textArrayQueryOutputNewLine = []
 
         console.log("textArrayQueryNewLine"+JSON.stringify(textArrayQueryNewLine))
 
-
         textArrayQueryNewLine.forEach((elementNew)=>{
-                                          //                                           console.log("elementNew"+elementNew)
+//                                            console.log("elementNew"+elementNew)
 
                                           var textArrayQuery = elementNew.split(" ")
                                           var textArrayQueryOutput = []
@@ -101,10 +112,10 @@ Item{
 
                                           textArrayQuery.forEach((element)=>
                                                                  {
-                                                                     console.log("element"+element.replace(/\n|\r/g, " "))
+                                                                     //                                                                     console.log("element"+element.replace(/\n|\r/g, " "))
                                                                      if( arraySqlKeyword.includes(element) )
                                                                      {
-                                                                         textArrayQueryOutput.push("<span style='color:red'>"+element+"</span>")
+                                                                        textArrayQueryOutput.push("<span style='color:"+Constants.grafieksGreenColor+"'>"+element+"</span>")
                                                                      }
                                                                      else{
                                                                          textArrayQueryOutput.push(element)
@@ -121,7 +132,12 @@ Item{
                                       }
                                       )
 
-        textEditQueryModeller.text=textArrayQueryOutputNewLine.join("\n")
+        var finalOutput =textArrayQueryOutputNewLine.join("<br>")
+
+//        console.log('Final Output',finalOutput, typeof finalOutput);
+        stateValue = true;
+        textEditQueryModeller.text = finalOutput;
+
         //        console.log("textArrayQueryOutputNewLine"+textArrayQueryOutputNewLine)
 
     }
@@ -155,11 +171,11 @@ Item{
 
         if(totalLineCount < lineCount){
             event.accepted = true
-            textEditQueryModeller.text += "\n"
+            textEditQueryModeller.text += "<br>"
             textEditQueryModeller.cursorPosition = textEditQueryModeller.text.length
             totalLineCount++
-
         }
+
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -228,7 +244,7 @@ Item{
         anchors.left: toolSeperator1.right
         height:parent.height
         width: parent.width - toolSeperator1.width
-        wrapMode: TextEdit.WordWrap
+//        wrapMode: TextEdit.WordWrap
         padding: 10
 
         //        text: {
@@ -237,25 +253,24 @@ Item{
         //            }
         //        }
 
-        textFormat:TextEdit.AutoText
-
-
+        textFormat:TextEdit.RichText
         selectByMouse: true
         selectionColor:Constants.grafieksLightGreenColor;
         selectByKeyboard: true
         Keys.onReturnPressed: {
-
             onEnterKeyPressed(event)
         }
 
         onLineCountChanged: {
             onEditorLineCountChanged()
         }
-
+        Keys.onPressed: {
+            if (event.key === Qt.Key_Space) {
+                stateValue=false
+            }
+        }
         onTextChanged: {
             onTextEditorChanged()
-            onTextFormatSqlKeyword()
-
         }
 
     }
