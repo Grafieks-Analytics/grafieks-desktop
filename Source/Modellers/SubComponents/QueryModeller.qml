@@ -35,7 +35,7 @@ Item{
 
     onStateValueChanged: {
         if(stateValue==false){
-//            onTextFormatSqlKeyword()
+            // onTextFormatSqlKeyword()
         }
     }
 
@@ -78,10 +78,11 @@ Item{
     }
 
     function onTextEditorChanged(){
-        console.log(textEditQueryModeller.text)
+//        console.log("TEXTED", textEditQueryModeller.text)
 
         // Set the Tmp SQL Query in C++
         DSParamsModel.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, " "))
+//        console.log("TEXTED", textEditQueryModeller.text.replace(/\n|\r/g, ""))
         if(!stateValue){
             onTextFormatSqlKeyword()
         }
@@ -94,16 +95,17 @@ Item{
         var arraySqlKeyword =["SELECT","FROM"]
 
         var textData = textEditQueryModeller.getText(0,textEditQueryModeller.text.length);
-        console.log('textData',textData, typeof textEditQueryModeller.text);
+        console.log('textData',textEditQueryModeller.text.length, typeof textEditQueryModeller.text);
+        textEditQueryModeller.cursorPosition = textEditQueryModeller.text.length
 
         textData = textData.replace(/?/g,'');
-        var textArrayQueryNewLine = textData.split("<br>");
+        var textArrayQueryNewLine = textData.split("<br />");
         var textArrayQueryOutputNewLine = []
 
         console.log("textArrayQueryNewLine"+JSON.stringify(textArrayQueryNewLine))
 
         textArrayQueryNewLine.forEach((elementNew)=>{
-//                                            console.log("elementNew"+elementNew)
+                                          // console.log("elementNew"+elementNew)
 
                                           var textArrayQuery = elementNew.split(" ")
                                           var textArrayQueryOutput = []
@@ -112,19 +114,18 @@ Item{
 
                                           textArrayQuery.forEach((element)=>
                                                                  {
-                                                                     //                                                                     console.log("element"+element.replace(/\n|\r/g, " "))
+                                                                     // console.log("element"+element.replace(/\n|\r/g, " "))
                                                                      if( arraySqlKeyword.includes(element) )
                                                                      {
-                                                                        textArrayQueryOutput.push("<span style='color:"+Constants.grafieksGreenColor+"'>"+element+"</span>")
+                                                                         textArrayQueryOutput.push("<span style='color:"+Constants.grafieksGreenColor+"'>"+element+"</span>")
                                                                      }
                                                                      else{
                                                                          textArrayQueryOutput.push(element)
                                                                      }
-
                                                                  }
 
                                                                  )
-                                          //                                           console.log("textArrayQueryOutput"+textArrayQueryOutput)
+                                          // console.log("textArrayQueryOutput"+textArrayQueryOutput)
 
 
                                           textArrayQueryOutputNewLine.push(textArrayQueryOutput.join(" "))
@@ -134,7 +135,7 @@ Item{
 
         var finalOutput =textArrayQueryOutputNewLine.join("<br>")
 
-//        console.log('Final Output',finalOutput, typeof finalOutput);
+        //        console.log('Final Output',finalOutput, typeof finalOutput);
         stateValue = true;
         textEditQueryModeller.text = finalOutput;
 
@@ -171,7 +172,7 @@ Item{
 
         if(totalLineCount < lineCount){
             event.accepted = true
-            textEditQueryModeller.text += "<br>"
+            textEditQueryModeller.text += "<br />"
             textEditQueryModeller.cursorPosition = textEditQueryModeller.text.length
             totalLineCount++
         }
@@ -244,7 +245,7 @@ Item{
         anchors.left: toolSeperator1.right
         height:parent.height
         width: parent.width - toolSeperator1.width
-//        wrapMode: TextEdit.WordWrap
+        //        wrapMode: TextEdit.WordWrap
         padding: 10
 
         //        text: {
