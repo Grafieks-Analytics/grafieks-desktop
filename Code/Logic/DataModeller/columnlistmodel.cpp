@@ -19,6 +19,8 @@ ColumnListModel::ColumnListModel(QObject *parent) : QSqlQueryModel(parent)
 void ColumnListModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
     QSqlQueryModel::setQuery(query, db);
+    if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
+        qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
     generateRoleNames();
 }
 
@@ -31,6 +33,8 @@ void ColumnListModel::setQuery(const QString &query, const QSqlDatabase &db)
 void ColumnListModel::setQuery(const QSqlQuery &query)
 {
     QSqlQueryModel::setQuery(query);
+    if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
+        qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
     generateRoleNames();
 }
 

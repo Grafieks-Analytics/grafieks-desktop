@@ -252,12 +252,17 @@ QtObject {
     property string sankeyChartTitle: "Sankey"
     property string multiLineChartTitle: "Multi Line"
     property string stackedAreaChartTitle: "Stacked Area Chart"
+
+    // Chart Urls
+    property string baseChartUrl: "qrc:/Source/Charts/";
     property string horizontalBarChartTitle: "HorizontalBarChart.html"
 
     property string stackedBarChartUrl: "StackedBarChart.html"
     property string stackedAreaChartUrl: "StackedAreaChart.html"
 
     property string horizontalBarChartUrl: "HorizontalBarChart.html"
+    property string barGroupedChartUrl: "BarGroupedChart.html";
+    property string barChartUrl: "BarChartArrayInput.html";
 
 
     // Charts ends

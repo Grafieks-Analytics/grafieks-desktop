@@ -97,11 +97,9 @@ SOURCES += \
     Code/Logic/General/querysplitter.cpp \
     Code/Logic/General/tablecolumnsmodel.cpp \
     Code/Logic/General/tableschemamodel.cpp \
-    Code/Logic/General/typecheck.cpp \
     Code/Logic/Menu/user.cpp \
     Code/Logic/Reports/chartsmodel.cpp \
     Code/Logic/Reports/reportparamsmodel.cpp \
-    Code/Logic/Reports/reportsdatamodel.cpp \
     main.cpp \
 
 RESOURCES += \
@@ -209,11 +207,9 @@ HEADERS += \
     Code/Logic/General/querysplitter.h \
     Code/Logic/General/tablecolumnsmodel.h \
     Code/Logic/General/tableschemamodel.h \
-    Code/Logic/General/typecheck.h \
     Code/Logic/Menu/user.h \
     Code/Logic/Reports/chartsmodel.h \
     Code/Logic/Reports/reportparamsmodel.h \
-    Code/Logic/Reports/reportsdatamodel.h \
     Code/duckdb.hpp \
     Code/jsoncons/include/jsoncons/json.hpp \
     Code/jsoncons/include/jsoncons_ext/csv/csv.hpp \
