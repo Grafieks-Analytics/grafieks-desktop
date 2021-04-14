@@ -131,6 +131,12 @@ Item {
             }
         }
 
+        function onTeradataLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "\""
+            }
+        }
+
         function onSqliteLoginStatus(status){
             if(status.status === true){
                 query_joiner = "`"
@@ -446,6 +452,8 @@ Item {
 
             let lastIndex = selectColumns.lastIndexOf(",");
             selectColumns = selectColumns.substring(0, lastIndex);
+
+//            let mainTable =
 
             finalQuery = "SELECT " + selectColumns + " FROM " + existingTables.get(dataModellerItem.firstRectId) + " " + joinString
 

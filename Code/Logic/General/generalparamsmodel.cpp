@@ -25,6 +25,11 @@ QString GeneralParamsModel::getDbClassification()
     return Statics::currentDbClassification;
 }
 
+QString GeneralParamsModel::getCurrentDB()
+{
+    return Statics::currentDbName;
+}
+
 int GeneralParamsModel::menuType() const
 {
     return m_menuType;

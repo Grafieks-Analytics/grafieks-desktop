@@ -249,6 +249,10 @@ QString ForwardOnlyQueryModel::returnDatatypeQuery(QString tableName)
         colListQuery = "desc table " + tableName;
         break;
 
+    case Constants::teradataIntType:
+        colListQuery = "SELECT ColumnName, ColumnType FROM DBC.Columns WHERE DatabaseName = '" + Statics::currentDbName + "' AND TableName = '" + tableName + "'";
+        break;
+
     }
 
     return colListQuery;
@@ -267,6 +271,10 @@ QString ForwardOnlyQueryModel::returnConnectionName()
 
     case Constants::snowflakeIntType:
         conType = Constants::snowflakeOdbcStrType;
+        break;
+
+    case Constants::teradataIntType:
+        conType = Constants::teradataOdbcStrType;
         break;
     }
 
