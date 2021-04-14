@@ -9,6 +9,12 @@ ChartsModel::~ChartsModel()
 {
     newChartData.clear();
     newChartHeader.clear();
+    chartHeaderDetails.clear();
+
+    numericalList.clear();
+    categoryList.clear();
+    dateList.clear();
+
 }
 
 QString ChartsModel::getBarChartValues(QString xAxisColumn, QString yAxisColumn)

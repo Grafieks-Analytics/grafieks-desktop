@@ -8,6 +8,8 @@ ForwardOnlyQueryModel::ForwardOnlyQueryModel(QObject *parent) : QAbstractTableMo
 ForwardOnlyQueryModel::~ForwardOnlyQueryModel()
 {
 
+    this->forwardOnlyChartHeader.clear();
+    this->forwardOnlyChartData.clear();
 }
 
 void ForwardOnlyQueryModel::setQuery(QString query)
@@ -128,7 +130,7 @@ void ForwardOnlyQueryModel::generateRoleNames()
             // If fieldname contains a dot(.), then probably it might have joins
             // Else for sure it doesnt contain a join
             if(fieldName.contains(".")){
-                int i=0;
+                int j=0;
                 foreach(QString tableName, tablesList){
 
                     if(tmpTableName != tableName){
@@ -140,10 +142,10 @@ void ForwardOnlyQueryModel::generateRoleNames()
                         tmpFieldName = fieldName;
                         fieldName.remove(tableName + ".");
                         fieldType = colTypeMap.value(fieldName);
-                        colInfo << fieldName << dataType.dataType(fieldType.left(fieldType.indexOf("("))) << tablesList.at(i);
+                        colInfo << fieldName << dataType.dataType(fieldType.left(fieldType.indexOf("("))) << tablesList.at(j);
                     }
                     tmpTableName = tableName;
-                    i++;
+                    j++;
 
                 }
             } else{
@@ -157,14 +159,19 @@ void ForwardOnlyQueryModel::generateRoleNames()
                 colInfo << fieldName << dataType.dataType(fieldType.left(fieldType.indexOf("("))) << tablesList.at(0);
             }
 
+
             m_roleNames.insert(i, fieldName.toUtf8());
             this->setChartHeader(i, colInfo);
             this->tableHeaders.append(fieldName);
 
+            colInfo.clear();
+
         }
     }
 
+    // Emit signals for reports
     emit forwardOnlyHeaderDataChanged(this->tableHeaders);
+    emit chartHeaderChanged(this->forwardOnlyChartHeader);
 
 }
 
@@ -181,7 +188,7 @@ void ForwardOnlyQueryModel::setQueryResult()
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
     QSqlQuery q(this->query, dbForward);
     if(q.lastError().type() != QSqlError::NoError)
-        qDebug() << Q_FUNC_INFO << q.lastError();
+        qWarning() << Q_FUNC_INFO << q.lastError();
 
 
     // this->setChartData(result);
@@ -227,9 +234,6 @@ void ForwardOnlyQueryModel::setQueryResult()
 void ForwardOnlyQueryModel::setChartHeader(int index, QStringList colInfo)
 {
     this->forwardOnlyChartHeader.insert(index, colInfo);
-    //    QMap<int, QString>a;
-    //    emit chartHeaderChanged(a);
-    emit chartHeaderChanged(this->forwardOnlyChartHeader);
 }
 
 QString ForwardOnlyQueryModel::returnDatatypeQuery(QString tableName)
@@ -282,7 +286,6 @@ QMap<QString, QString> ForwardOnlyQueryModel::returnColumnList(QString tableName
         while(q.next()){
             QString fieldName = q.value(0).toString().trimmed();
             QString fieldType = q.value(1).toString().trimmed();
-            qDebug() << "COL TYOE" << fieldName << fieldType;
             colTypeMap.insert(fieldName, fieldType);
         }
     } else{

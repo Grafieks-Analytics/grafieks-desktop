@@ -54,7 +54,7 @@ QStringList QuerySplitter::getSelectParams()
     QRegularExpression selectListRegex(R"(SELECT\s+(.*?)\sFROM\s)", QRegularExpression::CaseInsensitiveOption);
     QRegularExpressionMatch selectIterator = selectListRegex.match(m_query);
     selectList << selectIterator.captured(1).trimmed().replace("DISTINCT", "", Qt::CaseInsensitive).split(",");
-    selectList.sort(Qt::CaseInsensitive);
+//    selectList.sort(Qt::CaseInsensitive);
 
     return selectList;
 }
