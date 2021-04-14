@@ -74,3 +74,10 @@ On Mac, we need to install **[iODBC](http://www.iodbc.org/dataspace/doc/iodbc/wi
 4. Inside the `VPC` from the left panel, select Subnets
 5. Select any Subnet ID from the selected VPC.
 6. Select the `routes` tab and add a new route `0.0.0.0/0` for connecting from any IP address
+
+- **Snowflake**
+1. Create a trial account on Snowflake
+2. Just after creating an account, a welcome mail will arrive with server login link.
+3. Use the link to manage the databases online. Also use the same link without `https://` as server address in Grafieks
+4. The username and passwords are same. Default port number is 443
+5. Snowflake ODBC driver https://docs.snowflake.com/en/user-guide/odbc-download.html
