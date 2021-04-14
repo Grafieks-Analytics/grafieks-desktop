@@ -72,7 +72,11 @@ QHash<int, QByteArray> DuckQueryModel::roleNames() const
 
 void DuckQueryModel::generateRoleNames()
 {
-    QStringList output;
+    QString colListQuery, conType, fieldName, fieldType, tmpTableName, tmpFieldName;
+    DataType dataType;
+    QStringList colInfo, tablesList, output;
+    QMap<QString, QString> colTypeMap;
+
     m_roleNames.clear();
     this->tableHeaders.clear();
 
@@ -81,36 +85,82 @@ void DuckQueryModel::generateRoleNames()
     QString containsStar = selectIterator.captured(1);
 
     if(containsStar.contains("*", Qt::CaseInsensitive) == true){
-        QStringList tablesList;
         tablesList << querySplitter.getMainTable();
         tablesList << querySplitter.getJoinTables();
 
-        QString tableName;
-        foreach(tableName, tablesList){
+        foreach(QString tableName, tablesList){
             auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
-            int rows = data->collection.Count();
-            QString fieldName;
+            if(data->error.empty()){
+                int rows = data->collection.Count();
 
-            for(int i = 0; i < rows; i++){
-                fieldName =  data->GetValue(1, i).ToString().c_str();
-                fieldName = fieldName.trimmed();
-                m_roleNames.insert(i, fieldName.toUtf8());
-                this->setChartHeader(i, fieldName);
-                this->tableHeaders.append(fieldName);
+                for(int i = 0; i < rows; i++){
+                    fieldName =  data->GetValue(1, i).ToString().c_str();
+                    fieldName = fieldName.trimmed();
+                    fieldType = data->GetValue(2, i).ToString().c_str();
+                    colInfo << fieldName << fieldType << tableName;
+
+                    m_roleNames.insert(i, fieldName.toUtf8());
+                    this->setChartHeader(i, colInfo);
+                    this->tableHeaders.append(fieldName);
+                }
+            } else{
+                qWarning() << Q_FUNC_INFO << data->error.c_str();
             }
         }
 
     } else{
         output = querySplitter.getSelectParams();
+        tablesList << querySplitter.getMainTable();
+        tablesList << querySplitter.getJoinTables();
+
+        this->internalColCount = output.length();
+
         for(int i =0; i < output.length(); i++){
-            QString fieldName = output[i].remove("\"").trimmed();
+            fieldName = output[i].remove(QRegularExpression("[\"`']+")).trimmed();
+
+            // If fieldname contains a dot(.), then probably it might have joins
+            // Else for sure it doesnt contain a join
+            if(fieldName.contains(".")){
+                int j=0;
+                foreach(QString tableName, tablesList){
+
+                    if(tmpTableName != tableName){
+                        colTypeMap = this->returnColumnList(tableName);
+                    }
+
+                    if(fieldName.contains(tableName)){
+
+                        tmpFieldName = fieldName;
+                        fieldName.remove(tableName + ".");
+                        fieldType = colTypeMap.value(fieldName);
+
+                        colInfo << fieldName << dataType.dataType(fieldType) << tablesList.at(j);
+                    }
+                    tmpTableName = tableName;
+                    j++;
+
+                }
+            } else{
+
+                if(tmpTableName != tablesList.at(0)){
+                    colTypeMap = this->returnColumnList(tablesList.at(0));
+                }
+                tmpTableName = tablesList.at(0);
+
+                fieldType = colTypeMap.value(fieldName);
+                colInfo << fieldName << dataType.dataType(fieldType) << tablesList.at(0);
+            }
+
             m_roleNames.insert(i, fieldName.toUtf8());
-            this->setChartHeader(i, fieldName);
+            this->setChartHeader(i, colInfo);
             this->tableHeaders.append(fieldName);
+
+            colInfo.clear();
         }
     }
 
     emit duckHeaderDataChanged(this->tableHeaders);
+    emit chartHeaderChanged(this->duckChartHeader);
 }
 
 void DuckQueryModel::setQueryResult()
@@ -123,7 +173,7 @@ void DuckQueryModel::setQueryResult()
 
     auto result = duckCon->con.Query(this->query.toStdString());
     if(!result->error.empty())
-        qDebug() << result->error.c_str() << "ERROR IN DUCK";
+        qWarning() << Q_FUNC_INFO << result->error.c_str();
 
     // Set the internalRowCount & internalColCount for the QAbstractListModel rowCount method
     this->internalColCount = result->collection.ColumnCount();
@@ -135,13 +185,11 @@ void DuckQueryModel::setQueryResult()
 
         stdData = result->collection.GetRow(i);
 
-
         for(auto data: stdData){
             list << data.ToString().c_str();
         }
         this->resultData.append(list);
         list.clear();
-
     }
 
     if(this->internalRowCount > 0){
@@ -155,8 +203,7 @@ void DuckQueryModel::setQueryResult()
 void DuckQueryModel::setChartData(std::unique_ptr<duckdb::MaterializedQueryResult> &totalRows)
 {
 
-    int i;
-    int j;
+    int i, j;
 
     for(j = 0; j < this->internalRowCount; j++){
         for(i = 0; i < this->internalColCount; i++){
@@ -172,10 +219,33 @@ void DuckQueryModel::setChartData(std::unique_ptr<duckdb::MaterializedQueryResul
     emit chartDataChanged(this->duckChartData);
 }
 
-void DuckQueryModel::setChartHeader(int index, QString colName)
+void DuckQueryModel::setChartHeader(int index, QStringList colInfo)
 {
-    this->duckChartHeader.insert(index, colName);
-    emit chartHeaderChanged(this->duckChartHeader);
+    this->duckChartHeader.insert(index, colInfo);
+}
+
+
+QMap<QString, QString> DuckQueryModel::returnColumnList(QString tableName)
+{
+
+    QMap<QString, QString>colTypeMap;
+
+    auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
+
+    if(data->error.empty()){
+        int rows = data->collection.Count();
+
+        for(int i = 0; i < rows; i++){
+            QString fieldName =  data->GetValue(1, i).ToString().c_str();
+            fieldName = fieldName.trimmed();
+            QString fieldType = data->GetValue(2, i).ToString().c_str();
+            colTypeMap.insert(fieldName, fieldType);
+        }
+    } else{
+        qWarning() << Q_FUNC_INFO << data->error.c_str();
+    }
+
+    return colTypeMap;
 }
 
 void DuckQueryModel::getQueryStats()

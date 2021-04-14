@@ -35,7 +35,8 @@ private:
     void generateRoleNames();
     void setQueryResult();
     void setChartData(std::unique_ptr<duckdb::MaterializedQueryResult> &totalRows);
-    void setChartHeader(int index, QString colName);
+    void setChartHeader(int index, QStringList colInfo);
+    QMap<QString, QString> returnColumnList(QString tableName);
 
     QHash<int, QByteArray> m_roleNames;
     QList<QStringList> resultData;
@@ -48,13 +49,13 @@ private:
 
     // Data variables for Charts
     QMap<int, QStringList*> duckChartData;
-    QMap<int, QString> duckChartHeader;
+    QMap<int, QStringList> duckChartHeader;
     QStringList tableHeaders;
 
 signals:
     void headerDataChanged(Qt::Orientation orientation, int first, int last) const;
     void chartDataChanged(QMap<int, QStringList*> chartData);
-    void chartHeaderChanged(QMap<int, QString> chartHeader);
+    void chartHeaderChanged(QMap<int, QStringList> chartHeader);
     void duckHeaderDataChanged(QStringList tableHeaders);
     void duckHasData(bool hasData);
 

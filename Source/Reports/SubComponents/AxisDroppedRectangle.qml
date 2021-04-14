@@ -12,13 +12,12 @@ Rectangle{
     property alias textValue: textbox.text
     property alias itemType: axisRectangle.itemType
 
-    height: parent.height - 10
+    height: ((parent && parent.height) - 10) || 0
     width: 200
     border.width: 1
     border.color: this.color
     radius: this.width/2
     z: 1000000
-
 
     Component.onCompleted: {
         console.log('Item Type',itemType, typeof(itemType));

@@ -18,7 +18,9 @@ void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
 
     QSqlQueryModel::setQuery(query, db);
-    qDebug() << "SS ERR2" <<QSqlQueryModel::lastError();
+    if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
+        qWarning() << QSqlQueryModel::lastError();
+
     generateRoleNames();
 }
 
@@ -26,7 +28,9 @@ void QueryModel::setQuery(const QSqlQuery &query)
 {
 
     QSqlQueryModel::setQuery(query);
-    qDebug() << "SS ERR" <<QSqlQueryModel::lastError();
+    if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
+        qWarning() << QSqlQueryModel::lastError();
+
     generateRoleNames();
 }
 
@@ -36,7 +40,6 @@ QVariant QueryModel::data(const QModelIndex &index, int role) const
 
     if(role < Qt::UserRole) {
         value = QSqlQueryModel::data(index, role);
-        qDebug() << value;
     }
     else {
         int columnIdx = role - Qt::UserRole - 1;
@@ -68,7 +71,6 @@ void QueryModel::setChartData()
 {
     int totalCols = this->columnCount();
     int totalRows = this->rowCount();
-    qDebug() << totalCols << totalRows;
 
     for(int j = 0; j < totalRows; j++){
         for(int i = 0; i < totalCols; i++){
@@ -91,10 +93,9 @@ void QueryModel::setChartData()
     emit chartDataChanged(this->sqlChartData);
 }
 
-void QueryModel::setChartHeader(int index, QString colName)
+void QueryModel::setChartHeader(int index, QStringList colInfo)
 {
-    this->sqlChartHeader.insert(index, colName);
-    emit chartHeaderChanged(this->sqlChartHeader);
+    this->sqlChartHeader.insert(index, colInfo);
 }
 
 
@@ -105,20 +106,36 @@ void QueryModel::receiveFilterQuery(QString &filteredQuery)
 
 void QueryModel::generateRoleNames()
 {
+
+    QStringList colInfo;
+    QVariant fieldType;
+    DataType dataType;
+
     m_roleNames.clear();
     this->tableHeaders.clear();
 
     for( int i = 0; i < record().count(); i ++) {
+
         m_roleNames.insert(Qt::UserRole + i + 1, record().fieldName(i).toUtf8());
-        this->setChartHeader(i, record().fieldName(i));
+        fieldType = record().field(i).value();
+        colInfo << record().fieldName(i) << dataType.dataType(fieldType.typeName())  << record().field(i).tableName();
+
+        this->setChartHeader(i, colInfo);
         this->tableHeaders.append(record().fieldName(i));
+        colInfo.clear();
     }
 
     emit headerDataChanged(this->tableHeaders);
+    emit chartHeaderChanged(this->sqlChartHeader);
 }
 
 void QueryModel::executeQuery(QString &query)
 {
+
+    // For Databases which only allow Forward Only queries
+    // Look into ForwardOnlyQueryModel, ForwardOnlyDataModel
+    // SnowFlake
+    // Redshift
 
     switch(Statics::currentDbIntType){
 
@@ -194,13 +211,6 @@ void QueryModel::executeQuery(QString &query)
         QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrQueryType);
         this->setQuery(query, dbHive);
 
-        break;
-    }
-
-    case Constants::snowflakeIntType:{
-        QSqlDatabase dbSnowflake = QSqlDatabase::database(Constants::snowflakeOdbcStrQueryType);
-        this->setQuery(query, dbSnowflake);
-        this->setChartData();
         break;
     }
 

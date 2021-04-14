@@ -24,9 +24,10 @@ QVariantMap SnowflakeCon::SnowflakeOdbcInstance(const QString &driver, const QSt
         dbSnowflakeOdbc.setHostName(host);
         dbSnowflakeOdbc.setUserName(username);
         dbSnowflakeOdbc.setPassword(password);
+        dbSnowflakeOdbc.open();
 
 
-        if(!dbSnowflakeOdbc.open()){
+        if(!dbSnowflakeOdbc.isOpen()){
             outputStatus.insert("status", false);
             outputStatus.insert("msg", dbSnowflakeOdbc.lastError().text());
 

@@ -20,8 +20,9 @@ QVariantMap TeradataCon::TeradataOdbcInstance(const QString &driver, const QStri
         dbTeradataOdbc.setHostName(host);
         dbTeradataOdbc.setUserName(username);
         dbTeradataOdbc.setPassword(password);
+        dbTeradataOdbc.open();
 
-        if(!dbTeradataOdbc.open()){
+        if(!dbTeradataOdbc.isOpen()){
             outputStatus.insert("status", false);
             outputStatus.insert("msg", dbTeradataOdbc.lastError().text());
 

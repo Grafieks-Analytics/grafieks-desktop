@@ -36,8 +36,9 @@ QVariantMap MongoCon::MongoOdbcInstance(const QString &driver, const QString &ho
         dbMongoOdbc.setPassword(password);
 
         dbMongoOdbc.setDatabaseName(dbString);
+        dbMongoOdbc.open();
 
-        if(!dbMongoOdbc.open()){
+        if(!dbMongoOdbc.isOpen()){
             outputStatus.insert("status", false);
             outputStatus.insert("msg", dbMongoOdbc.lastError().text());
             qDebug() << dbMongoOdbc.lastError();
