@@ -7,6 +7,7 @@ TableColumnsModel::TableColumnsModel(QObject *parent) : QObject(parent)
 
 TableColumnsModel::TableColumnsModel(DuckCon *duckCon, QObject *parent)
 {
+    Q_UNUSED(parent);
     this->duckCon = duckCon;
 }
 
@@ -23,7 +24,6 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
     QString describeQueryString, fieldName, fieldType;
     QStringList outputDataList;
-    qDebug() << tableName <<  moduleName<< Statics::currentDbIntType;
 
     switch(Statics::currentDbIntType){
 
@@ -54,24 +54,28 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
         QSqlQuery describeQuery(describeQueryString, dbCon);
 
-        while(describeQuery.next()){
+        if(describeQuery.lastError().type() == QSqlError::NoError){
+            while(describeQuery.next()){
 
-            fieldName = describeQuery.value(0).toString();
-            fieldType = describeQuery.value(1).toString();
+                fieldName = describeQuery.value(0).toString();
+                fieldType = describeQuery.value(1).toString();
 
-            // Remove characters after `(` and then trim whitespaces
-            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+                // Remove characters after `(` and then trim whitespaces
+                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
 
-            // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+                // Get filter data type for QML
+                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
 
-            outputDataList << fieldName << filterDataType;
+                outputDataList << fieldName << filterDataType;
 
-            // Append all data type to allList as well
-            allColumns.append(outputDataList);
+                // Append all data type to allList as well
+                allColumns.append(outputDataList);
 
-            outputDataList.clear();
+                outputDataList.clear();
+            }
+        } else{
+            qWarning() << Q_FUNC_INFO << describeQuery.lastError();
         }
         break;
     }
@@ -85,23 +89,27 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
         QSqlQuery describeQuery(describeQueryString, dbSqlite);
 
-        while(describeQuery.next()){
+        if(describeQuery.lastError().type() == QSqlError::NoError){
+            while(describeQuery.next()){
 
-            fieldName = describeQuery.value(1).toString();
-            fieldType = describeQuery.value(2).toString();
+                fieldName = describeQuery.value(1).toString();
+                fieldType = describeQuery.value(2).toString();
 
-            // Remove characters after `(` and then trim whitespaces
-            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+                // Remove characters after `(` and then trim whitespaces
+                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
 
-            // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+                // Get filter data type for QML
+                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-            outputDataList << fieldName << filterDataType;
+                outputDataList << fieldName << filterDataType;
 
-            // Append all data type to allList as well
-            allColumns.append(outputDataList);
+                // Append all data type to allList as well
+                allColumns.append(outputDataList);
 
-            outputDataList.clear();
+                outputDataList.clear();
+            }
+        } else{
+            qWarning() << Q_FUNC_INFO << describeQuery.lastError();
         }
         break;
     }
@@ -113,25 +121,28 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
         QSqlQuery describeQuery(describeQueryString, dbPostgres);
 
-        while(describeQuery.next()){
+        if(describeQuery.lastError().type() == QSqlError::NoError){
+            while(describeQuery.next()){
 
-            fieldName = describeQuery.value(0).toString();
-            fieldType = describeQuery.value(1).toString();
-            // Remove characters after `(` and then trim whitespaces
-            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+                fieldName = describeQuery.value(0).toString();
+                fieldType = describeQuery.value(1).toString();
+                // Remove characters after `(` and then trim whitespaces
+                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
 
-            // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+                // Get filter data type for QML
+                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-            outputDataList << fieldName << filterDataType;
+                outputDataList << fieldName << filterDataType;
 
-            // Append all data type to allList as well
-            allColumns.append(outputDataList);
+                // Append all data type to allList as well
+                allColumns.append(outputDataList);
 
-            outputDataList.clear();
+                outputDataList.clear();
 
+            }
+        } else{
+            qWarning() << Q_FUNC_INFO << describeQuery.lastError();
         }
-
         break;
     }
 
@@ -143,25 +154,28 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
         QSqlQuery describeQuery(describeQueryString, dbRedshift);
 
-        while(describeQuery.next()){
+        if(describeQuery.lastError().type() == QSqlError::NoError){
+            while(describeQuery.next()){
 
-            fieldName = describeQuery.value(0).toString();
-            fieldType = describeQuery.value(1).toString();
-            // Remove characters after `(` and then trim whitespaces
-            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+                fieldName = describeQuery.value(0).toString();
+                fieldType = describeQuery.value(1).toString();
+                // Remove characters after `(` and then trim whitespaces
+                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
 
-            // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+                // Get filter data type for QML
+                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-            outputDataList << fieldName << filterDataType;
+                outputDataList << fieldName << filterDataType;
 
-            // Append all data type to allList as well
-            allColumns.append(outputDataList);
+                // Append all data type to allList as well
+                allColumns.append(outputDataList);
 
-            outputDataList.clear();
+                outputDataList.clear();
 
+            }
+        } else{
+            qWarning() << Q_FUNC_INFO << describeQuery.lastError();
         }
-
         break;
     }
 
@@ -194,24 +208,27 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
         QSqlQuery describeQuery(describeQueryString, dbMssql);
 
-        while(describeQuery.next()){
+        if(describeQuery.lastError().type() == QSqlError::NoError){
+            while(describeQuery.next()){
 
-            fieldName = describeQuery.value(0).toString();
-            fieldType = describeQuery.value(1).toString();
-            // Remove characters after `(` and then trim whitespaces
-            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+                fieldName = describeQuery.value(0).toString();
+                fieldType = describeQuery.value(1).toString();
+                // Remove characters after `(` and then trim whitespaces
+                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
 
-            // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+                // Get filter data type for QML
+                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-            outputDataList << fieldName << filterDataType;
+                outputDataList << fieldName << filterDataType;
 
-            // Append all data type to allList as well
-            allColumns.append(outputDataList);
-            outputDataList.clear();
+                // Append all data type to allList as well
+                allColumns.append(outputDataList);
+                outputDataList.clear();
 
+            }
+        } else{
+            qWarning() << Q_FUNC_INFO << describeQuery.lastError();
         }
-
         break;
     }
 
@@ -223,25 +240,28 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
         QSqlQuery describeQuery(describeQueryString, dbOracle);
 
-        while(describeQuery.next()){
+        if(describeQuery.lastError().type() == QSqlError::NoError){
+            while(describeQuery.next()){
 
-            fieldName = describeQuery.value(0).toString();
-            fieldType = describeQuery.value(1).toString();
-            // Remove characters after `(` and then trim whitespaces
-            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+                fieldName = describeQuery.value(0).toString();
+                fieldType = describeQuery.value(1).toString();
+                // Remove characters after `(` and then trim whitespaces
+                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
 
-            // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+                // Get filter data type for QML
+                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-            outputDataList << fieldName << filterDataType;
+                outputDataList << fieldName << filterDataType;
 
-            // Append all data type to allList as well
-            allColumns.append(outputDataList);
+                // Append all data type to allList as well
+                allColumns.append(outputDataList);
 
-            outputDataList.clear();
+                outputDataList.clear();
 
+            }
+        } else{
+            qWarning() << Q_FUNC_INFO << describeQuery.lastError();
         }
-
         break;
     }
 
@@ -253,25 +273,28 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
         QSqlQuery describeQuery(describeQueryString, dbImpala);
 
-        while(describeQuery.next()){
+        if(describeQuery.lastError().type() == QSqlError::NoError){
+            while(describeQuery.next()){
 
-            fieldName = describeQuery.value(0).toString();
-            fieldType = describeQuery.value(1).toString();
-            // Remove characters after `(` and then trim whitespaces
-            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+                fieldName = describeQuery.value(0).toString();
+                fieldType = describeQuery.value(1).toString();
+                // Remove characters after `(` and then trim whitespaces
+                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
 
-            // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+                // Get filter data type for QML
+                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-            outputDataList << fieldName << filterDataType;
+                outputDataList << fieldName << filterDataType;
 
-            // Append all data type to allList as well
-            allColumns.append(outputDataList);
+                // Append all data type to allList as well
+                allColumns.append(outputDataList);
 
-            outputDataList.clear();
+                outputDataList.clear();
 
+            }
+        } else{
+            qWarning() << Q_FUNC_INFO << describeQuery.lastError();
         }
-
         break;
     }
 
@@ -283,25 +306,28 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
         QSqlQuery describeQuery(describeQueryString, dbHive);
 
-        while(describeQuery.next()){
+        if(describeQuery.lastError().type() == QSqlError::NoError){
+            while(describeQuery.next()){
 
-            fieldName = describeQuery.value(0).toString();
-            fieldType = describeQuery.value(1).toString();
-            // Remove characters after `(` and then trim whitespaces
-            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+                fieldName = describeQuery.value(0).toString();
+                fieldType = describeQuery.value(1).toString();
+                // Remove characters after `(` and then trim whitespaces
+                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
 
-            // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+                // Get filter data type for QML
+                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-            outputDataList << fieldName << filterDataType;
+                outputDataList << fieldName << filterDataType;
 
-            // Append all data type to allList as well
-            allColumns.append(outputDataList);
+                // Append all data type to allList as well
+                allColumns.append(outputDataList);
 
-            outputDataList.clear();
+                outputDataList.clear();
 
+            }
+        } else{
+            qWarning() << Q_FUNC_INFO << describeQuery.lastError();
         }
-
         break;
     }
 
@@ -309,29 +335,32 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
         QSqlDatabase dbSnowflake = QSqlDatabase::database(Constants::snowflakeOdbcStrType);
 
-        describeQueryString = "SELECT column_name, data_type FROM user_tab_columns WHERE table_name = '" + tableName  + "'";
+        describeQueryString = "DESC TABLE " + tableName;
 
         QSqlQuery describeQuery(describeQueryString, dbSnowflake);
 
-        while(describeQuery.next()){
+        if(describeQuery.lastError().type() == QSqlError::NoError){
+            while(describeQuery.next()){
 
-            fieldName = describeQuery.value(0).toString();
-            fieldType = describeQuery.value(1).toString();
-            // Remove characters after `(` and then trim whitespaces
-            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+                fieldName = describeQuery.value(0).toString();
+                fieldType = describeQuery.value(1).toString();
+                // Remove characters after `(` and then trim whitespaces
+                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
 
-            // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+                // Get filter data type for QML
+                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-            outputDataList << fieldName << filterDataType;
+                outputDataList << fieldName << filterDataType;
 
-            // Append all data type to allList as well
-            allColumns.append(outputDataList);
+                // Append all data type to allList as well
+                allColumns.append(outputDataList);
 
-            outputDataList.clear();
+                outputDataList.clear();
 
+            }
+        } else{
+            qWarning() << Q_FUNC_INFO << describeQuery.lastError();
         }
-
         break;
     }
 
@@ -343,25 +372,28 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
         QSqlQuery describeQuery(describeQueryString, dbTeradata);
 
-        while(describeQuery.next()){
+        if(describeQuery.lastError().type() == QSqlError::NoError){
+            while(describeQuery.next()){
 
-            fieldName = describeQuery.value(0).toString();
-            fieldType = describeQuery.value(1).toString();
-            // Remove characters after `(` and then trim whitespaces
-            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+                fieldName = describeQuery.value(0).toString();
+                fieldType = describeQuery.value(1).toString();
+                // Remove characters after `(` and then trim whitespaces
+                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
 
-            // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+                // Get filter data type for QML
+                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-            outputDataList << fieldName << filterDataType;
+                outputDataList << fieldName << filterDataType;
 
-            // Append all data type to allList as well
-            allColumns.append(outputDataList);
+                // Append all data type to allList as well
+                allColumns.append(outputDataList);
 
-            outputDataList.clear();
+                outputDataList.clear();
 
+            }
+        } else{
+            qWarning() << Q_FUNC_INFO << describeQuery.lastError();
         }
-
         break;
     }
 
@@ -373,25 +405,28 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
         QSqlQuery describeQuery(describeQueryString, dbTeradata);
 
-        while(describeQuery.next()){
+        if(describeQuery.lastError().type() == QSqlError::NoError){
+            while(describeQuery.next()){
 
-            fieldName = describeQuery.value(0).toString();
-            fieldType = describeQuery.value(1).toString();
-            // Remove characters after `(` and then trim whitespaces
-            QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+                fieldName = describeQuery.value(0).toString();
+                fieldType = describeQuery.value(1).toString();
+                // Remove characters after `(` and then trim whitespaces
+                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
 
-            // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+                // Get filter data type for QML
+                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-            outputDataList << fieldName << filterDataType;
+                outputDataList << fieldName << filterDataType;
 
-            // Append all data type to allList as well
-            allColumns.append(outputDataList);
+                // Append all data type to allList as well
+                allColumns.append(outputDataList);
 
-            outputDataList.clear();
+                outputDataList.clear();
 
+            }
+        } else{
+            qWarning() << Q_FUNC_INFO << describeQuery.lastError();
         }
-
         break;
     }
 
@@ -399,19 +434,23 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
     case Constants::jsonIntType:{
 
         auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
-        int rows = data->collection.Count();
+        if(data->error.empty()){
+            int rows = data->collection.Count();
 
-        for(int i = 0; i < rows; i++){
-            fieldName =  data->GetValue(1, i).ToString().c_str();
-            fieldType =  data->GetValue(2, i).ToString().c_str();
+            for(int i = 0; i < rows; i++){
+                fieldName =  data->GetValue(1, i).ToString().c_str();
+                fieldType =  data->GetValue(2, i).ToString().c_str();
 
-            // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldType);
-            outputDataList << fieldName << filterDataType;
+                // Get filter data type for QML
+                QString filterDataType = dataType.dataType(fieldType);
+                outputDataList << fieldName << filterDataType;
 
-            // Append all data type to allList as well
-            allColumns.append(outputDataList);
-            outputDataList.clear();
+                // Append all data type to allList as well
+                allColumns.append(outputDataList);
+                outputDataList.clear();
+            }
+        }  else{
+            qWarning() << Q_FUNC_INFO << data->error.c_str();
         }
 
         break;

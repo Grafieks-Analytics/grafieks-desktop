@@ -40,8 +40,9 @@ QVariantMap MSSqlCon::MSSqlOdbcInstance(const QString &driver, const QString &ho
         dbMssqlOdbc.setHostName(host);
         dbMssqlOdbc.setUserName(username);
         dbMssqlOdbc.setPassword(password);
+        dbMssqlOdbc.open();
 
-        if(!dbMssqlOdbc.open()){
+        if(!dbMssqlOdbc.isOpen()){
             outputStatus.insert("status", false);
             outputStatus.insert("msg", dbMssqlOdbc.lastError().text());
 
@@ -85,9 +86,9 @@ QVariantMap MSSqlCon::MSSqlOdbcInstance(const QString &driver, const QString &ho
 
 MSSqlCon::~MSSqlCon()
 {
-//    QSqlDatabase dbMssqlOdbc = QSqlDatabase::database(Constants::mssqlOdbcStrType);
-//    QSqlDatabase dbMssqlOdbc2 = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
+    QSqlDatabase dbMssqlOdbc = QSqlDatabase::database(Constants::mssqlOdbcStrType);
+    QSqlDatabase dbMssqlOdbc2 = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
 
-//    if(dbMssqlOdbc.isOpen()) dbMssqlOdbc.close();
-//    if(dbMssqlOdbc2.isOpen()) dbMssqlOdbc2.close();
+    if(dbMssqlOdbc.isOpen()) dbMssqlOdbc.close();
+    if(dbMssqlOdbc2.isOpen()) dbMssqlOdbc2.close();
 }

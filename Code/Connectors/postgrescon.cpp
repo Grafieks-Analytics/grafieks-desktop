@@ -36,8 +36,9 @@ QVariantMap PostgresCon::PostgresOdbcInstance(const QString &driver, const QStri
         dbPostgresOdbc.setHostName(host);
         dbPostgresOdbc.setUserName(username);
         dbPostgresOdbc.setPassword(password);
+        dbPostgresOdbc.open();
 
-        if(!dbPostgresOdbc.open()){
+        if(!dbPostgresOdbc.isOpen()){
             outputStatus.insert("status", false);
             outputStatus.insert("msg", dbPostgresOdbc.lastError().text());
 

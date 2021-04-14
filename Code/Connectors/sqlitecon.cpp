@@ -29,8 +29,9 @@ QVariantMap Sqlitecon::SqliteInstance(const QString &filename)
 
         QSqlDatabase dbSqlite = QSqlDatabase::addDatabase("QSQLITE", Constants::sqliteStrType);
         dbSqlite.setDatabaseName(QUrl(filename).toLocalFile());
+        dbSqlite.open();
 
-        if(!dbSqlite.open()){
+        if(!dbSqlite.isOpen()){
             outputStatus.insert("status", false);
             outputStatus.insert("msg", dbSqlite.lastError().text());
 
