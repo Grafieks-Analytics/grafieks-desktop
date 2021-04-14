@@ -10,6 +10,7 @@
 
 #include "../../Connectors/allconnectors.h"
 #include "../../constants.h"
+#include "../General/datatype.h"
 
 
 class QueryModel : public QSqlQueryModel
@@ -34,11 +35,11 @@ public:
 public slots:
     void receiveFilterQuery(QString & filteredQuery);
     void setChartData();
-    void setChartHeader(int index, QString colName);
+    void setChartHeader(int index, QStringList colInfo);
 
 signals:
     void chartDataChanged(QMap<int, QStringList*> chartData);
-//    void chartHeaderChanged(QMap<int, QString> chartHeader);
+    void chartHeaderChanged(QMap<int, QStringList> chartHeader);
     void headerDataChanged(QStringList tableHeaders);
     void sqlHasData(bool hasData);
 
@@ -49,7 +50,7 @@ private:
 
     // Data variables for Charts
     QMap<int, QStringList*> sqlChartData;
-    QMap<int, QString> sqlChartHeader;
+    QMap<int, QStringList> sqlChartHeader;
     QStringList tableHeaders;
 
 

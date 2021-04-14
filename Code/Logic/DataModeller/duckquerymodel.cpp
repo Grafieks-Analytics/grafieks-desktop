@@ -90,7 +90,6 @@ void DuckQueryModel::generateRoleNames()
 
         foreach(QString tableName, tablesList){
             auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
-            data->Print();
             if(data->error.empty()){
                 int rows = data->collection.Count();
 
