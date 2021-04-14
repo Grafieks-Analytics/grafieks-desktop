@@ -96,6 +96,16 @@ Page {
                 tableslist.model = TableListModel
             }
         }
+        function onTeradataLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                let tables = ForwardOnlyDataModel.getTableList()
+                tables.forEach((item)=>{
+                                   otherSqlTableList.append({tableName: item})
+                               })
+                tableslist.model = otherSqlTableList
+            }
+        }
         function onSnowflakeLoginStatus(status){
             if(status.status === true){
                 // Call functions

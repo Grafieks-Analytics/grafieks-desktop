@@ -368,7 +368,7 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
         QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::teradataOdbcStrType);
 
-        describeQueryString = "SELECT column_name, data_type FROM user_tab_columns WHERE table_name = '" + tableName  + "'";
+        describeQueryString = "SELECT ColumnName, ColumnType FROM DBC.Columns WHERE DatabaseName = '" + Statics::currentDbName + "' AND TableName = '" + tableName + "'";
 
         QSqlQuery describeQuery(describeQueryString, dbTeradata);
 

@@ -21,6 +21,7 @@ public:
     Q_INVOKABLE QString getFileToken();
     Q_INVOKABLE QString getTmpPath();
     Q_INVOKABLE QString getDbClassification();
+    Q_INVOKABLE QString getCurrentDB();
 
     int menuType() const;
 
