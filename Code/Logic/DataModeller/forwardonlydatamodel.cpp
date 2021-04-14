@@ -42,12 +42,14 @@ void ForwardOnlyDataModel::columnData(QString col, QString tableName, QString se
     QSqlDatabase forwardOnlyDb = QSqlDatabase::database(conType);
     QSqlQuery query(queryString, forwardOnlyDb);
 
-    if(query.lastError().NoError){
+    if(query.lastError().type() == QSqlError::NoError){
         int i = 0;
         while(query.next()){
             qDebug() << query.value(i);
             i++;
         }
+    } else{
+        qWarning() << Q_FUNC_INFO << query.lastError();
     }
 }
 
@@ -70,7 +72,7 @@ QStringList ForwardOnlyDataModel::getColumnList(QString tableName, QString modul
 
     case Constants::snowflakeIntType:
         conType = Constants::snowflakeOdbcStrType;
-        queryString = "select \"column\", type from pg_table_def where tablename = '" + tableName  + "'";
+        queryString = "DESC TABLE " + tableName;
 
         break;
 
@@ -78,7 +80,7 @@ QStringList ForwardOnlyDataModel::getColumnList(QString tableName, QString modul
     QSqlDatabase forwardOnlyDb = QSqlDatabase::database(conType);
     QSqlQuery describeQuery(queryString, forwardOnlyDb);
 
-    if(describeQuery.lastError().NoError){
+    if(describeQuery.lastError().type() == QSqlError::NoError){
         while(describeQuery.next()){
 
             fieldName = describeQuery.value(0).toString();
@@ -100,6 +102,8 @@ QStringList ForwardOnlyDataModel::getColumnList(QString tableName, QString modul
                 this->date.insert(tableName + "." + fieldName);
             }
         }
+    } else{
+         qWarning() << Q_FUNC_INFO << describeQuery.lastError();
     }
 
     return output;
@@ -131,8 +135,14 @@ QStringList ForwardOnlyDataModel::getTableList()
     QSqlQuery tableQuery(queryString, forwardOnlyDb);
 
     if(tableQuery.lastError().type() == QSqlError::NoError){
+
         while(tableQuery.next()){
-            output << tableQuery.value(0).toString();
+            if(Statics::currentDbIntType == Constants::snowflakeIntType){
+                output << tableQuery.value(1).toString();
+            } else{
+                output << tableQuery.value(0).toString();
+            }
+
         }
     } else{
         qWarning() << Q_FUNC_INFO << tableQuery.lastError();

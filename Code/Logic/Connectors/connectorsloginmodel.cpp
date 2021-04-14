@@ -107,7 +107,7 @@ void ConnectorsLoginModel::hiveOdbcLogin(QString driver, QString host, QString d
 void ConnectorsLoginModel::snowflakeOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
     QVariantMap response = snowflakecon->SnowflakeOdbcInstance(driver, host, db, port, username, password);
-    this->staticSetter(db, Constants::sqlType, Constants::snowflakeIntType, Constants::snowflakeOdbcStrType);
+    this->staticSetter(db, Constants::forwardType, Constants::snowflakeIntType, Constants::snowflakeOdbcStrType);
     emit snowflakeLoginStatus(response);
 }
 

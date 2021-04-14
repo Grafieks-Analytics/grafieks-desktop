@@ -12,7 +12,7 @@ QtTest::QtTest(QObject *parent) : QObject(parent)
 
 void QtTest::calla()
 {
-    qDebug() << "Snowflake CALLED";
+//    qDebug() << "Snowflake CALLED";
 //    QString dbStringRed = "DRIVER={Amazon Redshift (x64)};Server=redshift-cluster-1.cahcrqdskrvh.ap-south-1.redshift.amazonaws.com;Database=grafieks_rs;Tusted_Connection=True";
 //    QSqlDatabase dbRedshiftOdbc2 = QSqlDatabase::addDatabase("QODBC", Constants::redshiftOdbcStrType);
 
@@ -37,5 +37,8 @@ void QtTest::calla()
                  qDebug() <<  q.value(0) << q.value(1) << q.value(2);
              }
     }
+
+
+
 }
 

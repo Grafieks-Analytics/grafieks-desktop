@@ -88,7 +88,7 @@ namespace Constants
     // Filter type Strings
     const QString categoricalType = "categorical";
     const QString numericalType = "numerical";
-    const QString dateType = "date";
+    const QString dateType = "dateformat";
     const QString otherType = "other";
 
     // Main Category

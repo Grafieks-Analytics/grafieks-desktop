@@ -38,8 +38,9 @@ QVariantMap ExcelCon::ExcelOdbcInstance(const QString &driver, const QString &fi
         QSqlDatabase dbExcelOdbc = QSqlDatabase::addDatabase(ODBCDRIVER, Constants::excelOdbcStrType);
 
         dbExcelOdbc.setDatabaseName(dbString);
+        dbExcelOdbc.open();
 
-        if(!dbExcelOdbc.open()){
+        if(!dbExcelOdbc.isOpen()){
             outputStatus.insert("status", false);
             outputStatus.insert("msg", dbExcelOdbc.lastError().text());
 
