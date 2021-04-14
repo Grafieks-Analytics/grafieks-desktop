@@ -74,6 +74,7 @@ Popup {
     function removeElement(index){
        var axisModel = axisItemMenuPopup.parent.parent.parent.model;
        axisModel.remove(index);
+       reDrawChart();
     }
 
 
