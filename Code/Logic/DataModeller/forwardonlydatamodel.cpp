@@ -86,6 +86,9 @@ QStringList ForwardOnlyDataModel::getColumnList(QString tableName, QString modul
 
     case Constants::teradataIntType:
         conType = Constants::teradataOdbcStrType;
+        tableName.remove("\"" + Statics::currentDbName + "\".");
+        tableName.remove(Statics::currentDbName + ".");
+        tableName.remove("\"");
         queryString = "SELECT ColumnName, ColumnType FROM DBC.Columns WHERE DatabaseName = '" + Statics::currentDbName + "' AND TableName = '" + tableName + "'";
         break;
     }
@@ -95,8 +98,8 @@ QStringList ForwardOnlyDataModel::getColumnList(QString tableName, QString modul
     if(describeQuery.lastError().type() == QSqlError::NoError){
         while(describeQuery.next()){
 
-            fieldName = describeQuery.value(0).toString();
-            fieldType = describeQuery.value(1).toString();
+            fieldName = describeQuery.value(0).toString().trimmed();
+            fieldType = describeQuery.value(1).toString().trimmed();
 
 
             // Remove characters after `(` and then trim whitespaces

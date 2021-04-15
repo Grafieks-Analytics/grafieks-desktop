@@ -799,6 +799,9 @@ void TableSchemaModel::showSchema(QString query)
 
 
         for(QString tableName: tablesList){
+            tableName.remove("\"" + Statics::currentDbName + "\".");
+            tableName.remove(Statics::currentDbName + ".");
+            tableName.remove("\"");
             describeQueryString = "SELECT ColumnName, ColumnType FROM DBC.Columns WHERE DatabaseName = '" + Statics::currentDbName + "' AND TableName = '" + tableName + "'";
 
             QSqlQuery describeQuery(describeQueryString, dbTeradata);
@@ -807,8 +810,8 @@ void TableSchemaModel::showSchema(QString query)
             while(describeQuery.next()){
 
 
-                QString fieldName = describeQuery.value(0).toString();
-                QString fieldType = describeQuery.value(1).toString();
+                QString fieldName = describeQuery.value(0).toString().trimmed();
+                QString fieldType = describeQuery.value(1).toString().trimmed();
 
                 // Remove characters after `(` and then trim whitespaces
                 QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
