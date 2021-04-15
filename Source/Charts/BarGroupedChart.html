@@ -1,222 +1,244 @@
 <!DOCTYPE html>
+
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <!-- Load d3.js -->
-    <script src="./Data/d3.v4.min.js"></script>
-
     <script src="./Data/d3DefaultConfig.js"></script>
+    <script src="./Data/utils.js"></script>
     <script src="./Data/d3.v4.min.js"></script>
     <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
     <link rel="stylesheet" href="Data/general.css" />
-
-    <title>Grouped Bar</title>
+    <style type="text/css">
+        body {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+    <style>
+        .axis .domain {
+            display: none;
+        }
+    </style>
 </head>
+
+<script src="./Data/d3.v4.min.js"></script>
 <body>
     <div id="my_dataviz"></div>
     <div id="tooltip"></div>
-    <div id="legend"></div>
     <script>
-        // Color Pallets - Set 3
-        const d3colors = [
-            "#8DD3C9",
-            "#FFFFAA",
-            "#B8BED6",
-            "#F98171",
-            "#78B5D1",
-            "#FFB15B",
-            "#B4E061",
-            "#FDCDE5",
-            "#DAD9D4",
-            "#BD7FBE",
-            "#CDE9C1",
-            "#FFEA77",
-        ];
+        var keys = ["Under 5 Years", "5 to 13 Years", "14 to 17 Years"];
 
-        // var n = 4, // number of samples
-        //     m = 5; // number of series
-
-        // var data = d3.range(m).map(function () {
-        //     return d3.range(n).map(Math.random);
-        // });
-        // console.log(data);
+        var states = ["Ind", "Aus", "Nz", "Pak", "DE", "asd"];
 
         var data = [
             [
-                [
-                    0.5215006178285715,
-                    0.879956964191245,
-                    0.683374438511001,
-                    0.15639057560101666,
-                ],
-                [
-                    0.9059941028680165,
-                    0.04053971428701386,
-                    0.560832188517802,
-                    0.5415644339529739,
-                ],
-                [
-                    0.5812547575965434,
-                    0.8676665725388477,
-                    0.36303058844051406,
-                    0.8873522828290739,
-                ],
+                [2704659, 4499890, -2659981],
+                [2027307, 3277946, 1420518],
+                [1208495, 2141490, 1058031],
+                [1140516, -1938695, 925060],
+                [894368, 1558919, 725973],
+                [737462, 1345341, -1879201],
             ],
-            ["Consumer", "Corporate", "Home Office"],
+            ["Ind", "Aus", "Nz", "Pak", "DE", "asd"],
+            ["Under 5 Years", "5 to 13 Years", "14 to 17 Years"],
         ];
+
+        drawChart(data);
 
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
             dataValues = data[0];
+            states = data[1];
+            keys = data[2];
 
-            var n = dataValues[0].length,
-                m = data[1].length;
+            var parseTime = d3.timeParse("%d-%b-%y");
 
             let {
                 d3colorPalette,
                 paddingInner,
                 markerShape,
                 curveType,
-                spaceBetweenCharts,
+                dateFormat,
+                chartType,
+                standartThresholdWidth,
             } = plottingConfiguration;
+
             if (!d3colorPalette) {
                 d3colorPalette = defaultD3Config.d3ColorPalette;
             }
             d3Colors = d3[d3colorPalette];
 
-            if (!spaceBetweenCharts) {
-                spaceBetweenCharts = defaultD3Config.defaultSpace;
-            }
-
             if (!paddingInner) {
                 paddingInner = defaultD3Config.defaultPaddingInner;
             }
 
+            if (!dateFormat) {
+                dateFormat = defaultD3Config.dateFormat;
+            }
+
+            if (!chartType) {
+                chartType = defaultD3Config.chartType;
+            }
+
+            if (!standartThresholdWidth) {
+                standartThresholdWidth = defaultD3Config.standartThresholdWidth;
+            }
+
+            var margin = { top: 40, right: 20, bottom: 80, left: 70 };
+            var width = window.innerWidth - margin.left - margin.right - 70;
+            if (chartType == constants.chartType.STANDARD) {
+                width = dataValues[0].length * standartThresholdWidth;
+            }
+
+            var height = window.innerHeight - margin.top - margin.bottom;
+
             d3.selectAll("#my_dataviz").html("");
 
-            // set the dimensions and margins of the graph
-            var margin = { top: 30, right: 30, bottom: 70, left: 60 },
-                width = window.innerWidth - margin.left - margin.right - 20,
-                height = window.innerHeight - margin.top - margin.bottom - 20;
+            var minHeight = d3.min(dataValues, function (d) {
+                return d3.min(d);
+            });
 
-            var legend_padding = 120;
+            var maxHeight = d3.max(dataValues, function (d) {
+                return d3.max(d);
+            });
 
-            var y = d3
-                .scaleLinear()
-                .domain(
-                    d3.extent(dataValues, function (d) {
-                        return d[0];
-                    })
-                )
-                .range([height, 0]);
-
-            var x0 = d3
-                .scaleBand()
-                .domain(d3.range(n))
-                .range([0, width], paddingInner);
-
-            var x1 = d3
-                .scaleBand()
-                .domain(d3.range(m))
-                .range([0, x0.bandwidth() - spaceBetweenCharts]);
-
-            var z = d3.scaleOrdinal().range(d3Colors);
-
+            //add svg with margin !important
+            //this is svg is actually group
             var svg = d3
-                .select("#my_dataviz")
+                .selectAll("#my_dataviz")
                 .append("svg")
-                .attr("width", width + margin.left + margin.right)
+                .attr("width", width + 100)
                 .attr("height", height + margin.top + margin.bottom)
-                .append("g")
+                .append("g") //add group to leave margin for axis
                 .attr(
                     "transform",
                     "translate(" + margin.left + "," + margin.top + ")"
                 );
 
-            svg.append("g")
-                .attr("class", "x-axis")
-                .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x0).tickSizeOuter(0));
+            var x0 = d3
+                .scaleBand()
+                .rangeRound([0, width])
+                .paddingInner(paddingInner);
 
-            svg.append("g")
-                .attr("class", "y-axis")
-                .attr("transform", "translate(" + 0 + ", 0)")
-                .call(d3.axisLeft().scale(y).tickSizeOuter(0));
+            var x1 = d3.scaleBand().padding(paddingInner);
+
+            var y = d3
+                .scaleLinear()
+                .rangeRound([0, height])
+                .domain([maxHeight * 1.1, minHeight * 1.1]);
+
+            var z = d3.scaleOrdinal().range([d3Colors[4]]);
+
+            x0.domain(states);
+            x1.domain(keys).rangeRound([0, x0.bandwidth()]);
 
             svg.append("g")
                 .attr("class", "grid")
                 .style("stroke-width", "1")
-                .call(
-                    make_y_gridlines()
-                        .tickSize(-width + legend_padding)
-                        .tickFormat("")
-                );
+                .call(make_y_gridlines(y).tickSize(-width).tickFormat(""));
 
             svg.append("g")
                 .selectAll("g")
                 .data(dataValues)
                 .enter()
                 .append("g")
-                .style("fill", function (d, i) {
-                    return z(i);
-                })
                 .attr("transform", function (d, i) {
-                    return "translate(" + x1(i) + ",0)";
+                    return "translate(" + x0(states[i]) + ",0)";
                 })
-
                 .selectAll("rect")
                 .data(function (d) {
-                    return d;
+                    return keys.map(function (key, j) {
+                        return { key: key, value: d[j] };
+                    });
                 })
                 .enter()
                 .append("rect")
-                .attr("width", x1.bandwidth())
-                .attr("height", y)
-                .attr("x", function (d, i) {
-                    return x0(i);
+                .attr("class", "bar")
+                .attr("x", function (d) {
+                    return x1(d.key);
                 })
                 .attr("y", function (d) {
-                    return height - y(d);
+                    if (d.value < 0) {
+                        return y(0);
+                    }
+                    return y(d.value);
                 })
-                .attr("class", "bar")
-                .on("mouseover mousemove", function (d, i) {
-                    var x_pos = d3.mouse(this)[0] + margin.left + margin.right;
-                    var y_pos = d3.mouse(this)[1];
-
-                    d3.select("#tooltip")
-                        .style("left", x_pos + "px")
-                        .style("top", y_pos + "px")
-                        .style("display", "block")
-                        .html(d.toFixed(4));
-
-                    d3.selectAll(".bar").style("opacity", 0.3);
-                    d3.select(this).style("opacity", 1);
+                .attr("width", x1.bandwidth())
+                .attr("height", function (d) {
+                    return Math.abs(y(0) - y(Math.abs(d.value)));
+                })
+                .attr("fill", function (d) {
+                    return z(d.key);
                 })
                 .on("mouseout", function (d, i) {
                     d3.select("#tooltip").style("display", "none");
                     d3.selectAll(".bar").style("opacity", 1);
+                })
+                .on("mouseover mousemove", function (d, i) {
+                    let xpos = d3.mouse(this)[0] + margin.left;
+                    let ypos = d3.mouse(this)[1];
+
+                    d3.select("#tooltip")
+                        .style("left", xpos + "px")
+                        .style("top", ypos + "px")
+                        .style("display", "block")
+                        .text(d.value);
+
+                    d3.selectAll(".bar").style("opacity", 0.3);
+                    d3.select(this).style("opacity", 1);
                 });
 
-            // Generate Grid starts
+            svg.append("g")
+                .attr("class", "x-axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x0).ticks(8));
 
-            function make_x_gridlines() {
+            svg.append("g")
+                .attr("class", "y-axis")
+                .call(d3.axisLeft(y).ticks(null, "s"));
+
+            // .append("text")
+            // .attr("x", -50)
+            // .attr("y", y(y.ticks().pop()) + 0.5)
+            // .attr("dy", "2.32em")
+            // .attr("fill", "#000")
+            // .attr("font-weight", "bold")
+            // .attr("text-anchor", "start");
+            // .text("Population");
+
+            // var legend = g
+            //     .append("g")
+            //     .attr("font-family", "sans-serif")
+            //     .attr("font-size", 10)
+            //     .attr("text-anchor", "end")
+            //     .selectAll("g")
+            //     .data(keys.slice().reverse())
+            //     .enter()
+            //     .append("g")
+            //     .attr("transform", function (d, i) {
+            //         return "translate(0," + i * 20 + ")";
+            //     });
+
+            // legend
+            //     .append("rect")
+            //     .attr("x", width - 19)
+            //     .attr("width", 19)
+            //     .attr("height", 19)
+            //     .attr("fill", z);
+
+            // legend
+            //     .append("text")
+            //     .attr("x", width - 24)
+            //     .attr("y", 9.5)
+            //     .attr("dy", "0.32em")
+            //     .text(function (d) {
+            //     return d;
+            // });
+
+            function make_x_gridlines(x) {
                 return d3.axisBottom(x).ticks(8);
             }
-            function make_y_gridlines() {
-                return d3.axisLeft(y).ticks(5);
+            function make_y_gridlines(y) {
+                return d3.axisLeft(y).ticks(10);
             }
         }
-
-        drawChart(data);
-
-        // Pass this from QT
-        window.addEventListener("resize", function () {
-            drawChart(data);
-        });
-
-        // Generate Grid ends
-
-        // Legend ends
     </script>
 </body>
