@@ -87,3 +87,8 @@ On Mac, we need to install **[iODBC](http://www.iodbc.org/dataspace/doc/iodbc/wi
 3. Use the link to manage the databases online. Also use the same link without `https://` as server address in Grafieks
 4. The username and passwords are same. Default port number is 443
 5. Snowflake ODBC driver https://docs.snowflake.com/en/user-guide/odbc-download.html
+
+
+- **TeraData**
+1. Install Teradata on a VM on Windows and host it as a server. Visit this link for details: https://www.youtube.com/watch?v=22kJdybzi60
+2. Download Teradata ODBC driver https://downloads.teradata.com/download/connectivity
