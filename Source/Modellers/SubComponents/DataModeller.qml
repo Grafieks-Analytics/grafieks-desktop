@@ -57,6 +57,7 @@ Item {
 
     property var connectionType: Constants.sqlType
     property var query_joiner: ""
+    property var dbPrefix: ""
 
 
 
@@ -101,63 +102,74 @@ Item {
         function onMysqlLoginStatus(status){
             if(status.status === true){
                 query_joiner = "`"
+                dbPrefix = ""
             }
         }
         function onPostgresLoginStatus(status){
             if(status.status === true){
                 query_joiner = "\""
+                dbPrefix = ""
             }
         }
         function onOracleLoginStatus(status){
             if(status.status === true){
                 query_joiner = ""
+                dbPrefix = ""
             }
         }
         function onMssqlLoginStatus(status){
             if(status.status === true){
                 query_joiner = "\""
+                dbPrefix = ""
             }
         }
 
         function onRedshiftLoginStatus(status){
             if(status.status === true){
                 query_joiner = "\""
+                dbPrefix = ""
             }
         }
 
         function onSnowflakeLoginStatus(status){
             if(status.status === true){
                 query_joiner = "\""
+                dbPrefix = ""
             }
         }
 
         function onTeradataLoginStatus(status){
             if(status.status === true){
                 query_joiner = "\""
+                dbPrefix = "\"" + GeneralParamsModel.getCurrentDB() + "\"."
             }
         }
 
         function onSqliteLoginStatus(status){
             if(status.status === true){
                 query_joiner = "`"
+                dbPrefix = ""
             }
         }
 
         function onExcelLoginStatus(status){
             if(status.status === true){
                 query_joiner = "\""
+                dbPrefix = ""
             }
         }
 
         function onCsvLoginStatus(status){
             if(status.status === true){
                 query_joiner = "\""
+                dbPrefix = ""
             }
         }
 
         function onJsonLoginStatus(status){
             if(status.status === true){
                 query_joiner = "\""
+                dbPrefix = ""
             }
         }
     }
@@ -416,14 +428,14 @@ Item {
                     for (var i=0; i<Object.keys(joinConditions).length; i++){
 
                         let key = Object.keys(joinConditions)[i]
-                        tmpJoinString += " " + joinCurrentTableName + "." + joinConditions[key][1] + " = " + joinCompareTableName + "."  + joinConditions[key][0] + " AND"
+                        tmpJoinString += " " + dbPrefix + joinCurrentTableName + "." + joinConditions[key][1] + " = " + dbPrefix + joinCompareTableName + "."  + joinConditions[key][0] + " AND"
                     }
 
                     let lastIndex = tmpJoinString.lastIndexOf(" AND");
                     tmpJoinString = tmpJoinString.substring(0, lastIndex);
                     tmpJoinString += ")"
 
-                    joinString += " " + joinType + " " + joinCurrentTableName + " ON " + tmpJoinString
+                    joinString += " " + joinType + " " + dbPrefix + joinCurrentTableName + " ON " + tmpJoinString
 
                     tmpJoinString = ""
 
@@ -455,7 +467,7 @@ Item {
 
 //            let mainTable =
 
-            finalQuery = "SELECT " + selectColumns + " FROM " + existingTables.get(dataModellerItem.firstRectId) + " " + joinString
+            finalQuery = "SELECT " + selectColumns + " FROM " + dbPrefix + existingTables.get(dataModellerItem.firstRectId) + " " + joinString
 
             // Call and execute the query
             DSParamsModel.setTmpSql(finalQuery)
