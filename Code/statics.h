@@ -31,6 +31,11 @@ public:
     static QString msUsername;
     static QString msPassword;
 
+    // Access
+    static QString acDb;
+    static QString acUsername;
+    static QString acPassword;
+
     // Postgres
     static QString postgresHost;
     static QString postgresDb;

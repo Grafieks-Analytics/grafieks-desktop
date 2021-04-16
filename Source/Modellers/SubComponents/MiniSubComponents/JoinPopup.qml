@@ -26,6 +26,7 @@ Rectangle{
     property var rightDefaultIndex : new Map()
     property var tmpModel : []
     property var tmpModelArray: []
+    property int availableJoins: 4
 
     onVisibleChanged: fetchJoinTableInfo(visible)
 
@@ -66,6 +67,115 @@ Rectangle{
             fetchJoinTableInfo(true)
         }
 
+    }
+
+    Connections{
+        target: ConnectorsLoginModel
+
+        function onMysqlLoginStatus(status){
+            if(status.status === true){
+
+                availableJoins = 3
+
+                leftJoinCol.visible = true
+                rightJoinCol.visible = true
+                innerJoinCol.visible = true
+                fullJoinCol.visible = false
+            }
+        }
+        function onPostgresLoginStatus(status){
+            if(status.status.status === true){
+                availableJoins = 4
+
+                leftJoinCol.visible = true
+                rightJoinCol.visible = true
+                innerJoinCol.visible = true
+                fullJoinCol.visible = true
+            }
+        }
+        function onMssqlLoginStatus(status){
+            if(status.status.status === true){
+                availableJoins = 4
+
+                leftJoinCol.visible = true
+                rightJoinCol.visible = true
+                innerJoinCol.visible = true
+                fullJoinCol.visible = true
+            }
+        }
+        function onSqliteLoginStatus(status){
+            if(status.status.status === true){
+                availableJoins = 2
+
+                leftJoinCol.visible = true
+                rightJoinCol.visible = false
+                innerJoinCol.visible = true
+                fullJoinCol.visible = false
+            }
+        }
+        function onMongoLoginStatus(status){
+            if(status.status.status === true){
+                availableJoins = 3
+
+                leftJoinCol.visible = true
+                rightJoinCol.visible = true
+                innerJoinCol.visible = true
+                fullJoinCol.visible = true
+            }
+        }
+        function onSnowflakeLoginStatus(status){
+            if(status.status.status === true){
+                availableJoins = 4
+
+                leftJoinCol.visible = true
+                rightJoinCol.visible = true
+                innerJoinCol.visible = true
+                fullJoinCol.visible = true
+            }
+        }
+        function onRedshiftLoginStatus(status){
+            if(status.status.status === true){
+                availableJoins = 4
+
+                leftJoinCol.visible = true
+                rightJoinCol.visible = true
+                innerJoinCol.visible = true
+                fullJoinCol.visible = true
+            }
+        }
+
+        function onExcelLoginStatus(status){
+            if(status.status.status === true){
+                availableJoins = 4
+
+                leftJoinCol.visible = true
+                rightJoinCol.visible = true
+                innerJoinCol.visible = true
+                fullJoinCol.visible = true
+            }
+        }
+
+        function onCsvLoginStatus(status){
+            if(status.status.status === true){
+                availableJoins = 4
+
+                leftJoinCol.visible = true
+                rightJoinCol.visible = true
+                innerJoinCol.visible = true
+                fullJoinCol.visible = true
+            }
+        }
+
+        function onJsonLoginStatus(status){
+            if(status.status.status === true){
+                availableJoins = 4
+
+                leftJoinCol.visible = true
+                rightJoinCol.visible = true
+                innerJoinCol.visible = true
+                fullJoinCol.visible = true
+            }
+        }
     }
 
 
@@ -331,7 +441,8 @@ Rectangle{
         width: parent.width
 
         Column{
-            width: parent.width/4
+            id: innerJoinCol
+            width: parent.width/availableJoins
             height: parent.height
             anchors.top: parent.top
             anchors.topMargin: 5
@@ -363,7 +474,8 @@ Rectangle{
 
 
         Column{
-            width: parent.width/4
+            id: leftJoinCol
+            width: parent.width/availableJoins
             height: parent.height
             anchors.top: parent.top
             anchors.topMargin: 5
@@ -394,7 +506,8 @@ Rectangle{
 
         }
         Column{
-            width: parent.width/4
+            id: rightJoinCol
+            width: parent.width/availableJoins
             height: parent.height
             anchors.top: parent.top
             anchors.topMargin: 5
@@ -425,7 +538,8 @@ Rectangle{
 
         }
         Column{
-            width: parent.width/4
+            id: fullJoinCol
+            width: parent.width/availableJoins
             height: parent.height
             anchors.top: parent.top
             anchors.topMargin: 5
