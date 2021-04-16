@@ -118,9 +118,9 @@ void ConnectorsLoginModel::teradataOdbcLogin(QString driver, QString host, QStri
     emit teradataLoginStatus(response);
 }
 
-void ConnectorsLoginModel::accessOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
+void ConnectorsLoginModel::accessOdbcLogin(QString driver, QString db, QString username, QString password)
 {
-    QVariantMap response = accesscon->AccessOdbcInstance(driver, host, db, port, username, password);
+    QVariantMap response = accesscon->AccessOdbcInstance(driver, db, username, password);
     this->staticSetter(db, Constants::sqlType, Constants::accessIntType, Constants::accessOdbcStrType);
     emit accessLoginStatus(response);
 }
