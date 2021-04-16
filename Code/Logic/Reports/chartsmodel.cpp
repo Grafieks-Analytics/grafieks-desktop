@@ -1326,13 +1326,11 @@ void ChartsModel::removeTmpChartData()
 
 void ChartsModel::getChartData(QMap<int, QStringList *> chartData)
 {
-    qDebug() << "CALLED CHART" << *chartData.value(0) << *chartData.value(1);
     this->newChartData = chartData;
 }
 
 void ChartsModel::getChartHeader(QMap<int, QStringList> chartHeader)
 {
-    qDebug() << "Chart HEADER" << chartHeader.value(0) << chartHeader.value(1);
     this->chartHeaderDetails = chartHeader;
 
     foreach(auto key, chartHeader.keys()){
