@@ -20,7 +20,6 @@
 #include "Code/Logic/Datasources/datasourcemodel.h"
 #include "Code/Logic/Datasources/datasourceds.h"
 
-#include "Code/Logic/DataModeller/tablelistmodel.h"
 #include "Code/Logic/DataModeller/querymodel.h"
 #include "Code/Logic/DataModeller/dblistmodel.h"
 #include "Code/Logic/DataModeller/querystatsmodel.h"
@@ -37,6 +36,7 @@
 #include "Code/Logic/DataModeller/duckquerymodel.h"
 #include "Code/Logic/DataModeller/forwardonlydatamodel.h"
 #include "Code/Logic/DataModeller/forwardonlyquerymodel.h"
+#include "Code/Logic/DataModeller/newtablelistmodel.h"
 
 #include "Code/Logic/Connectors/duckcon.h"
 #include "Code/Logic/Connectors/odbcdriversmodel.h"
@@ -242,7 +242,6 @@ int main(int argc, char *argv[])
     User User;
     ConnectorFilter connectorFilter;
     ConnectorsLoginModel connectorsLoginModel;
-    TableListModel tableListModel;
     QueryModel queryModel;
     QueryStatsModel queryStatsModel;
     DBListModel dblistModel;
@@ -262,6 +261,7 @@ int main(int argc, char *argv[])
     ReportParamsModel reportParamsModel;
     ForwardOnlyDataModel forwardOnlyDataModel;
     ForwardOnlyQueryModel forwardOnlyQueryModel;
+    NewTableListModel newTableListModel;
 
     // Datasource Connector Initializations
     DatasourceModel datasourceModel;
@@ -348,7 +348,6 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("ConnectorsLoginModel", &connectorsLoginModel);
     engine.rootContext()->setContextProperty("DatasourceModel", &datasourceModel);
     engine.rootContext()->setContextProperty("DatasourceDS", datasource);
-    engine.rootContext()->setContextProperty("TableListModel", &tableListModel);
     engine.rootContext()->setContextProperty("QueryModel", &queryModel);
     engine.rootContext()->setContextProperty("DBListModel", &dblistModel);
     engine.rootContext()->setContextProperty("QueryStatsModel", &queryStatsModel);
@@ -382,6 +381,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("ChartsModel", &chartsModel);
     engine.rootContext()->setContextProperty("ForwardOnlyDataModel", &forwardOnlyDataModel);
     engine.rootContext()->setContextProperty("ForwardOnlyQueryModel", &forwardOnlyQueryModel);
+    engine.rootContext()->setContextProperty("NewTableListModel", &newTableListModel);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/

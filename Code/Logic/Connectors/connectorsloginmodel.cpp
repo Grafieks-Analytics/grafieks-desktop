@@ -122,9 +122,9 @@ void ConnectorsLoginModel::accessOdbcLogin(QString driver, QString db, QString u
 {
     QVariantMap response = accesscon->AccessOdbcInstance(driver, db, username, password);
 
-    QFile accessFile(QUrl(db).toLocalFile());
-    QFileInfo fileInfo(accessFile.fileName());
+    QFileInfo fileInfo(db);
     QString accessFileName = fileInfo.fileName();
+
 
     this->staticSetter(accessFileName, Constants::sqlType, Constants::accessIntType, Constants::accessOdbcStrType);
     emit accessLoginStatus(response);
