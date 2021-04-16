@@ -53,6 +53,7 @@ void TableListModel::callQuery(QString queryString)
     // Check ForwardOnlyQueryModel for the following sql
     // Constants::redshiftIntType
     // Constants::snowflakeIntType
+    // Constants::teraDataIntType
 
     case Constants::mysqlIntType:{
 
@@ -192,19 +193,6 @@ void TableListModel::callQuery(QString queryString)
         break;
     }
 
-    case Constants::teradataIntType:{
-
-        QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::teradataOdbcStrType);
-
-        if (queryString != ""){
-
-            this->setQuery("SELECT table_name FROM user_tables WHERE table_name LIKE '%"+queryString+"%'", dbTeradata);
-        } else{
-            this->setQuery("SELECT table_name FROM user_tables", dbTeradata);
-        }
-
-        break;
-    }
 
     case Constants::accessIntType:{
 
