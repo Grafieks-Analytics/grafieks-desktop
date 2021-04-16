@@ -61,7 +61,7 @@ public:
     Q_INVOKABLE void hiveOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
     Q_INVOKABLE void snowflakeOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
     Q_INVOKABLE void teradataOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
-    Q_INVOKABLE void accessOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password);
+    Q_INVOKABLE void accessOdbcLogin(QString driver, QString db, QString username, QString password);
     Q_INVOKABLE void excelOdbcLogin(QString driver, QString filename);
 
     Q_INVOKABLE void sqlLogout();
