@@ -12,7 +12,7 @@ On Windows, default _ODBC Datasources (64-bit)_ & _ODBC Data sources (32-bit)_ e
 
 ### Kill Process on Windows using Port and PID
 ```
-netstat -ano|findstr "PID :8080"
+netstat -ano|findstr "8080"
 taskkill /PID 18264 /f
 ```
 ## Mac
