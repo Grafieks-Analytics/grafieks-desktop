@@ -136,6 +136,7 @@ void QueryModel::executeQuery(QString &query)
     // Look into ForwardOnlyQueryModel, ForwardOnlyDataModel
     // SnowFlake
     // Redshift
+    // Teradata
 
     switch(Statics::currentDbIntType){
 
@@ -162,13 +163,6 @@ void QueryModel::executeQuery(QString &query)
     case Constants::postgresIntType:{
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
         this->setQuery(query, dbPostgres);
-        this->setChartData();
-        break;
-    }
-
-    case Constants::redshiftIntType:{
-        QSqlDatabase dbRedshift = QSqlDatabase::database(Constants::redshiftOdbcStrQueryType);
-        this->setQuery(query, dbRedshift);
         this->setChartData();
         break;
     }
@@ -211,13 +205,6 @@ void QueryModel::executeQuery(QString &query)
         QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrQueryType);
         this->setQuery(query, dbHive);
 
-        break;
-    }
-
-    case Constants::teradataIntType:{
-        QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::teradataOdbcStrQueryType);
-        this->setQuery(query, dbTeradata);
-        this->setChartData();
         break;
     }
 

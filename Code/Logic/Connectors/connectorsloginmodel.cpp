@@ -114,7 +114,7 @@ void ConnectorsLoginModel::snowflakeOdbcLogin(QString driver, QString host, QStr
 void ConnectorsLoginModel::teradataOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
     QVariantMap response = teradatacon->TeradataOdbcInstance(driver, host, db, port, username, password);
-    this->staticSetter(db, Constants::sqlType, Constants::teradataIntType, Constants::teradataOdbcStrType);
+    this->staticSetter(db, Constants::forwardType, Constants::teradataIntType, Constants::teradataOdbcStrType);
     emit teradataLoginStatus(response);
 }
 

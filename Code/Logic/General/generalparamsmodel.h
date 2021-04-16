@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QCoreApplication>
 #include <QSettings>
+#include <QTextDocument>
 #include <QDebug>
 
 #include "../../statics.h"
@@ -21,6 +22,8 @@ public:
     Q_INVOKABLE QString getFileToken();
     Q_INVOKABLE QString getTmpPath();
     Q_INVOKABLE QString getDbClassification();
+    Q_INVOKABLE QString getCurrentDB();
+    Q_INVOKABLE QString returnPlainTextFromHtml(QString s);
 
     int menuType() const;
 
