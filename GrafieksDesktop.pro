@@ -78,6 +78,7 @@ SOURCES += \
     Code/Logic/DataModeller/filternumericallistmodel.cpp \
     Code/Logic/DataModeller/forwardonlydatamodel.cpp \
     Code/Logic/DataModeller/forwardonlyquerymodel.cpp \
+    Code/Logic/DataModeller/newtablelistmodel.cpp \
     Code/Logic/DataModeller/proxyfiltermodel.cpp \
     Code/Logic/DataModeller/publishdatasourcemodel.cpp \
     Code/Logic/DataModeller/querymodel.cpp \
@@ -85,7 +86,6 @@ SOURCES += \
     Code/Logic/DataModeller/scheduler.cpp \
     Code/Logic/DataModeller/schedulerds.cpp \
     Code/Logic/DataModeller/schedulermodel.cpp \
-    Code/Logic/DataModeller/tablelistmodel.cpp \
     Code/Logic/Datasources/datasource.cpp \
     Code/Logic/Datasources/datasourceds.cpp \
     Code/Logic/Datasources/datasourcefilter.cpp \
@@ -188,6 +188,7 @@ HEADERS += \
     Code/Logic/DataModeller/filternumericallistmodel.h \
     Code/Logic/DataModeller/forwardonlydatamodel.h \
     Code/Logic/DataModeller/forwardonlyquerymodel.h \
+    Code/Logic/DataModeller/newtablelistmodel.h \
     Code/Logic/DataModeller/proxyfiltermodel.h \
     Code/Logic/DataModeller/publishdatasourcemodel.h \
     Code/Logic/DataModeller/querymodel.h \
@@ -195,7 +196,6 @@ HEADERS += \
     Code/Logic/DataModeller/scheduler.h \
     Code/Logic/DataModeller/schedulerds.h \
     Code/Logic/DataModeller/schedulermodel.h \
-    Code/Logic/DataModeller/tablelistmodel.h \
     Code/Logic/Datasources/datasource.h \
     Code/Logic/Datasources/datasourceds.h \
     Code/Logic/Datasources/datasourcefilter.h \
