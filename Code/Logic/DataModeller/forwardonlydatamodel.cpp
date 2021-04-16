@@ -38,6 +38,16 @@ void ForwardOnlyDataModel::columnData(QString col, QString tableName, QString se
         queryString = "";
         break;
 
+    case Constants::teradataIntType:
+        conType = Constants::teradataOdbcStrType;
+        if (searchString != ""){
+            queryString = "SELECT " + col + " FROM "+ tableName + " WHERE " + col + " LIKE '%"+searchString+"%'";
+        } else{
+            queryString = "SELECT " + col + " FROM "+ tableName;
+        }
+        queryString = "";
+        break;
+
     }
     QSqlDatabase forwardOnlyDb = QSqlDatabase::database(conType);
     QSqlQuery query(queryString, forwardOnlyDb);
@@ -67,15 +77,20 @@ QStringList ForwardOnlyDataModel::getColumnList(QString tableName, QString modul
     case Constants::redshiftIntType:
         conType = Constants::redshiftOdbcStrType;
         queryString = "select \"column\", type from pg_table_def where tablename = '" + tableName  + "'";
-
         break;
 
     case Constants::snowflakeIntType:
         conType = Constants::snowflakeOdbcStrType;
         queryString = "DESC TABLE " + tableName;
-
         break;
 
+    case Constants::teradataIntType:
+        conType = Constants::teradataOdbcStrType;
+        tableName.remove("\"" + Statics::currentDbName + "\".");
+        tableName.remove(Statics::currentDbName + ".");
+        tableName.remove("\"");
+        queryString = "SELECT ColumnName, ColumnType FROM DBC.Columns WHERE DatabaseName = '" + Statics::currentDbName + "' AND TableName = '" + tableName + "'";
+        break;
     }
     QSqlDatabase forwardOnlyDb = QSqlDatabase::database(conType);
     QSqlQuery describeQuery(queryString, forwardOnlyDb);
@@ -83,8 +98,8 @@ QStringList ForwardOnlyDataModel::getColumnList(QString tableName, QString modul
     if(describeQuery.lastError().type() == QSqlError::NoError){
         while(describeQuery.next()){
 
-            fieldName = describeQuery.value(0).toString();
-            fieldType = describeQuery.value(1).toString();
+            fieldName = describeQuery.value(0).toString().trimmed();
+            fieldType = describeQuery.value(1).toString().trimmed();
 
 
             // Remove characters after `(` and then trim whitespaces
@@ -121,13 +136,16 @@ QStringList ForwardOnlyDataModel::getTableList()
     case Constants::redshiftIntType:
         conType = Constants::redshiftOdbcStrType;
         queryString = "SELECT DISTINCT tablename FROM pg_table_def WHERE schemaname = 'public'";
-
         break;
 
     case Constants::snowflakeIntType:
         conType = Constants::snowflakeOdbcStrType;
         queryString = "SHOW TABLES";
+        break;
 
+    case Constants::teradataIntType:
+        conType = Constants::teradataOdbcStrType;
+        queryString = "SELECT TableName FROM DBC.TablesV WHERE TableKind = 'T' and DatabaseName = '" + Statics::currentDbName + "'";
         break;
 
     }
@@ -163,13 +181,16 @@ QStringList ForwardOnlyDataModel::getDbList()
     case Constants::redshiftIntType:
         conType = Constants::redshiftOdbcStrType;
         queryString = "SELECT * FROM pg_database";
-
         break;
 
     case Constants::snowflakeIntType:
         conType = Constants::snowflakeOdbcStrType;
         queryString = "SHOW DATABASES";
+        break;
 
+    case Constants::teradataIntType:
+        conType = Constants::teradataOdbcStrType;
+        queryString = "SELECT  DatabaseName FROM DBC.TablesV WHERE TableKind = 'T' AND DatabaseName NOT IN ('All', 'DBC', 'Crashdumps', 'dbcmngr', 'Default', 'External_AP', 'EXTUSER', 'LockLogShredder', 'PUBLIC', 'SQLJ', 'Sys_Calendar', 'SysAdmin', 'SYSBAR', 'SYSJDBC', 'SYSLIB', 'SYSSPATIAL', 'SystemFe', 'SYSUDTLIB', 'SYSUIF', 'TD_SERVER_DB', 'TD_SYSFNLIB', 'TD_SYSGPL', 'TD_SYSXML', 'TDMaps', 'TDPUSER', 'TDQCD', 'TDStats', 'tdwm')";
         break;
 
     }

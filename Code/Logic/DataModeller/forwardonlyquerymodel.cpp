@@ -16,7 +16,7 @@ void ForwardOnlyQueryModel::setQuery(QString query)
 {
 
     this->resultData.clear();
-    this->query = query;
+    this->query = query.simplified();
     querySplitter.setQueryForClasses(this->query);
 
     this->generateRoleNames();
@@ -130,8 +130,13 @@ void ForwardOnlyQueryModel::generateRoleNames()
             // If fieldname contains a dot(.), then probably it might have joins
             // Else for sure it doesnt contain a join
             if(fieldName.contains(".")){
-                int j=0;
                 foreach(QString tableName, tablesList){
+
+                    if(Statics::currentDbIntType == Constants::teradataIntType){
+                        tableName.remove("\"" + Statics::currentDbName + "\".");
+                        tableName.remove(Statics::currentDbName + ".");
+                        tableName.remove("\"");
+                    }
 
                     if(tmpTableName != tableName){
                         colTypeMap = this->returnColumnList(tableName);
@@ -139,13 +144,16 @@ void ForwardOnlyQueryModel::generateRoleNames()
 
                     if(fieldName.contains(tableName)){
 
-                        tmpFieldName = fieldName;
-                        fieldName.remove(tableName + ".");
-                        fieldType = colTypeMap.value(fieldName);
-                        colInfo << fieldName << dataType.dataType(fieldType.left(fieldType.indexOf("("))) << tablesList.at(j);
+                        try{
+                            tmpFieldName = fieldName;
+                            fieldName.remove(tableName + ".");
+                            fieldType = colTypeMap.value(fieldName);
+                            colInfo << fieldName << dataType.dataType(fieldType.left(fieldType.indexOf("("))) << tableName;
+                        } catch(std::exception &e){
+                            qDebug() << e.what();
+                        }
                     }
                     tmpTableName = tableName;
-                    j++;
 
                 }
             } else{
@@ -160,13 +168,18 @@ void ForwardOnlyQueryModel::generateRoleNames()
             }
 
 
-            m_roleNames.insert(i, fieldName.toUtf8());
-            this->setChartHeader(i, colInfo);
-            this->tableHeaders.append(fieldName);
+            try{
+                m_roleNames.insert(i, fieldName.toUtf8());
+                this->setChartHeader(i, colInfo);
+                this->tableHeaders.append(fieldName);
+            }catch(std::exception &er){
+                qDebug() << er.what();
+            }
 
             colInfo.clear();
 
         }
+
     }
 
     // Emit signals for reports
@@ -249,6 +262,13 @@ QString ForwardOnlyQueryModel::returnDatatypeQuery(QString tableName)
         colListQuery = "desc table " + tableName;
         break;
 
+    case Constants::teradataIntType:
+        tableName.remove("\"" + Statics::currentDbName + "\".");
+        tableName.remove(Statics::currentDbName + ".");
+        tableName.remove("\"");
+        colListQuery = "SELECT ColumnName, ColumnType FROM DBC.Columns WHERE DatabaseName = '" + Statics::currentDbName + "' AND TableName = '" + tableName + "'";
+        break;
+
     }
 
     return colListQuery;
@@ -268,6 +288,10 @@ QString ForwardOnlyQueryModel::returnConnectionName()
     case Constants::snowflakeIntType:
         conType = Constants::snowflakeOdbcStrType;
         break;
+
+    case Constants::teradataIntType:
+        conType = Constants::teradataOdbcStrType;
+        break;
     }
 
     return conType;
@@ -275,6 +299,7 @@ QString ForwardOnlyQueryModel::returnConnectionName()
 
 QMap<QString, QString> ForwardOnlyQueryModel::returnColumnList(QString tableName)
 {
+
     QString conQuery = this->returnDatatypeQuery(tableName);
     QString conName = this->returnConnectionName();
     QMap<QString, QString>colTypeMap;
