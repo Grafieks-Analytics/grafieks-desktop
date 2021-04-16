@@ -67,6 +67,8 @@ Item{
 
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName))
                 droppedReportId.border.color = refColor
+                mainChart.border.color = refColor
+
         }
 
         function onCurrentDashboardChanged(dashboardId, reportsInDashboard){

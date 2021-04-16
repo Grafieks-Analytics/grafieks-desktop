@@ -184,7 +184,7 @@ Item{
             queryResultsTable.visible = false
 
             dataQueryModellerStackview.height = Qt.binding(function(){
-                return queryModellerPage.height - 70
+                return queryModellerPage.height - 65
             })
 
             infodata_table.height = Qt.binding(function(){
