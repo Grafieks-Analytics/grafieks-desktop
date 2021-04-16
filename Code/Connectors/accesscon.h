@@ -7,6 +7,7 @@
 #include <QSqlQueryModel>
 #include <QSqlRecord>
 #include <QSqlError>
+#include <QUrl>
 #include <QtDebug>
 #include <QObject>
 
@@ -26,7 +27,7 @@ class AccessCon : public QObject
     const QString ODBCDRIVER = "QODBC";
 public:
     explicit AccessCon(QObject *parent = nullptr);
-    QVariantMap AccessOdbcInstance(const QString & driver, const QString & host, const QString & db, const int & port, const QString & username, const QString & password);
+    QVariantMap AccessOdbcInstance(const QString &driver, const QString &db, const QString &username, const QString &password);
 
     ~AccessCon();
 

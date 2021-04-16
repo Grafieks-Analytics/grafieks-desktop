@@ -87,6 +87,10 @@ int Statics::msPort;
 QString Statics::msUsername;
 QString Statics::msPassword;
 
+QString Statics::acDb;
+QString Statics::acUsername;
+QString Statics::acPassword;
+
 QString Statics::postgresHost;
 QString Statics::postgresDb;
 int Statics::postgresPort;
