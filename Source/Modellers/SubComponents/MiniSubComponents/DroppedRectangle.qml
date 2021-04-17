@@ -43,7 +43,7 @@ Item{
     }
 
     Connections{
-        target: TableColumnsModel
+        target: NewTableColumnsModel
 
         function onColumnListObtained(allColumns, tableName, moduleName){
 
@@ -103,7 +103,7 @@ Item{
 
         columnListDroppedRect.visible = columnListDroppedRect.visible === true ? false : true
         dropDownIcon.source = columnListDroppedRect.visible === true ?  "/Images/icons/Up_20.png" : "/Images/icons/Down_20.png"
-        TableColumnsModel.getColumnsForTable(newItem.name, newItem.moduleName)
+        NewTableColumnsModel.getColumnsForTable(newItem.name, newItem.moduleName)
 
     }
 

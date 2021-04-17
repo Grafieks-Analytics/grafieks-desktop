@@ -31,7 +31,6 @@ QVariantMap AccessCon::AccessOdbcInstance(const QString &driver, const QString &
             // Save static values to access it later on other objects
             // For automatic connection for other instances
             // If correct credentials inserted once
-            qDebug() << dbAccessOdbc.record("Contacts");
 
             Statics::acDb = QUrl(db).toLocalFile();
             Statics::acUsername = username;
