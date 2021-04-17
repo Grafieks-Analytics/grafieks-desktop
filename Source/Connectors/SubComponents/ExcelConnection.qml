@@ -27,6 +27,8 @@ Popup {
     padding: 0
     property int label_col : 135
 
+    property var selectedFile: ""
+
 
     Connections{
         target: ConnectorsLoginModel
@@ -202,7 +204,7 @@ Popup {
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
-            onClicked: handleExcel(excelFileName.text)
+            onClicked: handleExcel(selectedFile)
 
         }
     }
@@ -232,7 +234,8 @@ Popup {
 
         onAccepted: {
             console.log(fileUrl)
-            excelFileName.text = ConnectorsLoginModel.urlToFilePath(promptExcel.fileUrl)
+            selectedFile = ConnectorsLoginModel.urlToFilePath(fileUrl)
+            excelFileName.text = selectedFile.replace(/^.*[\\\/]/, '')
         }
         onRejected: {
             console.log("file rejected")
