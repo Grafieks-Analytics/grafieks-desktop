@@ -59,8 +59,6 @@ Popup {
                     accessOdbcModalError.visible = false
 
                     control.model = driversList
-//                    server.readOnly = false
-//                    port.readOnly = false
                     database.readOnly = false
                     username.readOnly = false
                     password.readOnly = false
@@ -69,8 +67,6 @@ Popup {
                     accessOdbcModalError.visible = true
 
                     control.model = ["No Drivers"]
-//                    server.readOnly = true
-//                    port.readOnly = true
                     database.readOnly = true
                     username.readOnly = true
                     password.readOnly = true
@@ -93,7 +89,7 @@ Popup {
     }
 
     function connectToAccess(){
-          ConnectorsLoginModel.accessOdbcLogin(control.currentText, database.text, username.text, password.text)
+          ConnectorsLoginModel.accessOdbcLogin(control.currentText, fileName, username.text, password.text)
     }
 
     // JAVASCRIPT FUNCTION ENDS
