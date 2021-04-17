@@ -38,6 +38,18 @@ QVariantMap AccessCon::AccessOdbcInstance(const QString &driver, const QString &
 
             outputStatus.insert("status", true);
             outputStatus.insert("msg", Messages::GeneralSuccessMsg);
+
+            // Open another Access Connection
+            // For Query/Data modeller
+            // Else all the query statistics are listed in "Test Query" tab in Data-Query-Modeller
+
+            QSqlDatabase dbAccessOdbc2 = QSqlDatabase::addDatabase("QODBC", Constants::accessOdbcStrQueryType);
+
+            dbAccessOdbc2.setDatabaseName(dbString);
+            dbAccessOdbc2.setUserName(username);
+            dbAccessOdbc2.setPassword(password);
+
+            dbAccessOdbc2.open();
         }
 
     } else{
