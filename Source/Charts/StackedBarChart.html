@@ -38,63 +38,6 @@
     <div id="my_dataviz"></div>
 
     <script>
-        // var data = [
-        //     {
-        //         date: "2006",
-        //         p_i: 0.22223944220154104,
-        //         eu_h: 0.3081915039468961,
-        //         c_h: 0.19676893384525085,
-        //         so_i: 0,
-        //         // cfnai: 0.6946062367045835,
-        //         // cfnai_ma3: 0.6808993560176488,
-        //     },
-        //     {
-        //         date: "2007",
-        //         p_i: -0.14041661938637418,
-        //         eu_h: 0.11938649695551841,
-        //         c_h: 0.10883814177134275,
-        //         so_i: 0.06877071673048095,
-        //         cfnai: 0.15660976516921954,
-        //         cfnai_ma3: 0.43272116501229063,
-        //     },
-        //     {
-        //         date: "2008",
-        //         p_i: 0.008033199706744827,
-        //         eu_h: 0.12526447608986105,
-        //         c_h: 0.09510738081737188,
-        //         so_i: 0.06630399126323569,
-        //         cfnai: 0.2947400769754649,
-        //         cfnai_ma3: 0.38198535961642266,
-        //     },
-        //     {
-        //         date: "2009",
-        //         p_i: 0.15808953899544972,
-        //         eu_h: 0.02439408754249622,
-        //         c_h: 0.07334096467024503,
-        //         so_i: -0.28273786104429527,
-        //         cfnai: -0.026882240737852652,
-        //         cfnai_ma3: 0.14148920046894392,
-        //     },
-        //     {
-        //         date: "2010",
-        //         p_i: -0.25363630469405596,
-        //         eu_h: -0.1805407045852621,
-        //         c_h: 0.0505481231711666,
-        //         so_i: 0.19306485317626762,
-        //         cfnai: -0.1905330038336324,
-        //         cfnai_ma3: 0.025774944134659954,
-        //     },
-        //     {
-        //         date: "2011",
-        //         p_i: 0.09516101294046557,
-        //         eu_h: -0.03191958292842715,
-        //         c_h: 0.0527927906075872,
-        //         so_i: -0.07994805991395718,
-        //         cfnai: 0.03611718980392002,
-        //         cfnai_ma3: -0.06043268492252168,
-        //     },
-        // ];
-
         var data = [
             [
                 ["Ind", "1999", "139.81"],
@@ -191,13 +134,6 @@
             var center = d3.scaleLinear().range([0, width]);
             var color = d3.scaleOrdinal().range(d3Colors);
 
-            var labels = [
-                "Production and Income",
-                "Employment, Unemployment, and Hours",
-                "Consumption and Housing",
-                "Sales, Orders, and Inventories",
-            ];
-
             var xAxis = d3.axisBottom(x);
             var yAxis = d3.axisLeft(y);
 
@@ -245,7 +181,7 @@
                     return d.key;
                 })
             );
-            y.domain([y_min * 1.2, y_max * 1.2]);
+            y.domain([y_min, y_max]);
             color.domain(keys);
             const barWidth = x.bandwidth();
 
@@ -327,7 +263,6 @@
                         .style("display", "block")
                         .style("position", "absolute")
                         .text(function () {
-                            console.log(d);
                             var textValue = d.y0 - d.y1;
                             if (d.y1 < 0) {
                                 textValue = d.y1 - d.y0;
@@ -353,30 +288,6 @@
                 a = a.replace("translate(", "");
                 return a.substr(0, a.indexOf(","));
             }
-
-            //.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-            // legend
-            //     .append("rect")
-            //     .attr("x", 675)
-            //     .attr("y", function (d, i) {
-            //         return i * 25 + 300;
-            //     })
-            //     .attr("width", 18)
-            //     .attr("height", 18)
-            //     .style("fill", color);
-
-            // legend
-            //     .append("text")
-            //     .attr("x", 700)
-            //     .attr("y", function (d, i) {
-            //         return i * 25 + 309;
-            //     })
-            //     .attr("dy", ".35em")
-            //     .style("text-anchor", "start")
-            //     .text(function (d, i) {
-            //         return labels[i];
-            //     });
         }
     </script>
 </body>
