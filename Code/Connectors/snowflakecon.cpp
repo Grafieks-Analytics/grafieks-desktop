@@ -13,7 +13,6 @@ QVariantMap SnowflakeCon::SnowflakeOdbcInstance(const QString &driver, const QSt
 
 
     if(QSqlDatabase::isDriverAvailable("QODBC")){
-        qDebug() << "AVAILABLE";
 
         QString dbString = "driver={"+ driver +"};server="+ host +";database= "+ db;
 
@@ -59,6 +58,8 @@ QVariantMap SnowflakeCon::SnowflakeOdbcInstance(const QString &driver, const QSt
             dbSnowflakeOdbc2.setPassword(password);
 
             dbSnowflakeOdbc2.open();
+
+            qDebug() << "SNOW" << dbSnowflakeOdbc.tables() << dbSnowflakeOdbc.connectionNames();
         }
 
     } else{

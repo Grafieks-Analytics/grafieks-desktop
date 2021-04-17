@@ -7,6 +7,7 @@
 #include <QSqlQueryModel>
 #include <QSqlRecord>
 #include <QSqlError>
+#include <QUrl>
 #include <QtDebug>
 #include <QObject>
 

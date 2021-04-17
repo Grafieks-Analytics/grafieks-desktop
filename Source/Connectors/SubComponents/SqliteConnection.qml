@@ -166,7 +166,7 @@ Popup {
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
-            onClicked: {ConnectorsLoginModel.sqliteLogin(sqliteFileName.text); console.log(sqliteFileName.text)}
+            onClicked: ConnectorsLoginModel.sqliteLogin(sqliteFileName.text)
 
         }
     }
