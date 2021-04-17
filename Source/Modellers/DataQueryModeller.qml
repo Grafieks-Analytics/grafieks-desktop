@@ -107,34 +107,40 @@ Page {
         function onSnowflakeLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                tableslist.model = NewTableListModel.getTableList()
+                tableslist.model = ForwardOnlyDataModel.getTableList()
             }
         }
         function onRedshiftLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                tableslist.model = NewTableListModel.getTableList()
+                tableslist.model = ForwardOnlyDataModel.getTableList()
             }
         }
 
+        function onTeradataLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                tableslist.model = ForwardOnlyDataModel.getTableList()
+            }
+        }
         function onExcelLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                tableslist.model = NewTableListModel.getTableList()
+                tableslist.model = DuckDataModel.getTableList()
             }
         }
 
         function onCsvLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                tableslist.model = NewTableListModel.getTableList()
+                tableslist.model = DuckDataModel.getTableList()
             }
         }
 
         function onJsonLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                tableslist.model = NewTableListModel.getTableList()
+                tableslist.model = DuckDataModel.getTableList()
             }
         }
 
@@ -365,7 +371,7 @@ Page {
         DSParamsModel.setTmpSql("")
     }
     function onTableToggle(){
-        TableColumnsModel.getColumnsForTable(modelData, "TableColumns")
+        NewTableColumnsModel.getColumnsForTable(modelData, "TableColumns")
 
         toggleTableIcon.source = tablecolumnListView.visible === false ?  "/Images/icons/Down_20.png" : "/Images/icons/Right_20.png"
         if(tablecolumnListView.visible === true){
@@ -500,7 +506,7 @@ Page {
                 drag.onActiveChanged: {
                     if (mouseArea.drag.active) {
                         tableslist.dragItemIndex = index;
-                        tableslist.modelData = modelData
+                        tableslist.tableName = modelData
                     }
                     dragRect.Drag.drop();
                 }
@@ -508,7 +514,7 @@ Page {
 
 
                 onClicked: {
-                    TableColumnsModel.getColumnsForTable(modelData, "TableColumns")
+                    NewTableColumnsModel.getColumnsForTable(modelData, "TableColumns")
                     console.log("Table name", modelData)
 
                     if(tablecolumnListView.visible === true){

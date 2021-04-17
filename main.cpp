@@ -59,7 +59,7 @@
 
 #include "Code/Logic/General/generalparamsmodel.h"
 #include "Code/Logic/General/tableschemamodel.h"
-#include "Code/Logic/General/tablecolumnsmodel.h"
+#include "Code/Logic/General/newtablecolumnsmodel.h"
 #include "Code/Logic/General/querysplitter.h"
 #include "Code/Logic/General/qttest2.h"
 #include "Code/Logic/General/qttest.h"
@@ -294,7 +294,7 @@ int main(int argc, char *argv[])
     // Duck CRUD Model
     DuckCon *duckCon = new DuckCon();
     TableSchemaModel tableSchemaModel(duckCon);
-    TableColumnsModel tableColumnsModel(duckCon);
+    NewTableColumnsModel newTableColumnsModel(duckCon);
     DuckDataModel *duckDataModel = new DuckDataModel(duckCon);
     DuckQueryModel duckQueryModel(duckCon);
 
@@ -361,7 +361,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("BoxDS", box);
     engine.rootContext()->setContextProperty("SheetModel", &sheetModel);
     engine.rootContext()->setContextProperty("SheetDS", sheet);
-    engine.rootContext()->setContextProperty("TableColumnsModel", &tableColumnsModel);
+    engine.rootContext()->setContextProperty("NewTableColumnsModel", &newTableColumnsModel);
     engine.rootContext()->setContextProperty("DSParamsModel", &dsParamsModel);
     engine.rootContext()->setContextProperty("PublishDatasourceModel", &publishDatasourceModel);
     engine.rootContext()->setContextProperty("ColumnListModel", &columnListModel);
