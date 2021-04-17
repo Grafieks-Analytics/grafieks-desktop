@@ -1,39 +1,116 @@
 <!DOCTYPE html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Load d3.js -->
+<meta charset="utf-8" />
 
+<head>
     <script src="./Data/d3DefaultConfig.js"></script>
+    <script src="./Data/utils.js"></script>
     <script src="./Data/d3.v4.min.js"></script>
     <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
-
     <link rel="stylesheet" href="Data/general.css" />
+    <style>
+        .title {
+            font: 15px sans-serif;
+        }
+
+        .legend {
+            font: 10px sans-serif;
+        }
+        .axis path,
+        .axis line {
+            fill: none;
+            shape-rendering: crispEdges;
+            stroke-width: 1px;
+        }
+
+        .x.axis.path {
+            display: none;
+        }
+
+        .line {
+            fill: none;
+            /* stroke: black; */
+            stroke-width: 1.2px;
+        }
+    </style>
 </head>
 <body>
-    <div id="my_dataviz"></div>
     <div id="tooltip"></div>
-    <div id="legend"></div>
+    <div id="my_dataviz"></div>
+
     <script>
+        // var data = [
+        //     {
+        //         date: "2006",
+        //         p_i: 0.22223944220154104,
+        //         eu_h: 0.3081915039468961,
+        //         c_h: 0.19676893384525085,
+        //         so_i: 0,
+        //         // cfnai: 0.6946062367045835,
+        //         // cfnai_ma3: 0.6808993560176488,
+        //     },
+        //     {
+        //         date: "2007",
+        //         p_i: -0.14041661938637418,
+        //         eu_h: 0.11938649695551841,
+        //         c_h: 0.10883814177134275,
+        //         so_i: 0.06877071673048095,
+        //         cfnai: 0.15660976516921954,
+        //         cfnai_ma3: 0.43272116501229063,
+        //     },
+        //     {
+        //         date: "2008",
+        //         p_i: 0.008033199706744827,
+        //         eu_h: 0.12526447608986105,
+        //         c_h: 0.09510738081737188,
+        //         so_i: 0.06630399126323569,
+        //         cfnai: 0.2947400769754649,
+        //         cfnai_ma3: 0.38198535961642266,
+        //     },
+        //     {
+        //         date: "2009",
+        //         p_i: 0.15808953899544972,
+        //         eu_h: 0.02439408754249622,
+        //         c_h: 0.07334096467024503,
+        //         so_i: -0.28273786104429527,
+        //         cfnai: -0.026882240737852652,
+        //         cfnai_ma3: 0.14148920046894392,
+        //     },
+        //     {
+        //         date: "2010",
+        //         p_i: -0.25363630469405596,
+        //         eu_h: -0.1805407045852621,
+        //         c_h: 0.0505481231711666,
+        //         so_i: 0.19306485317626762,
+        //         cfnai: -0.1905330038336324,
+        //         cfnai_ma3: 0.025774944134659954,
+        //     },
+        //     {
+        //         date: "2011",
+        //         p_i: 0.09516101294046557,
+        //         eu_h: -0.03191958292842715,
+        //         c_h: 0.0527927906075872,
+        //         so_i: -0.07994805991395718,
+        //         cfnai: 0.03611718980392002,
+        //         cfnai_ma3: -0.06043268492252168,
+        //     },
+        // ];
+
         var data = [
             [
                 ["Ind", "1999", "139.81"],
                 ["Ind", "2000", "100.81"],
                 ["Ind", "2001", "136.35"],
                 ["Ind", "2002", "143.22"],
-
                 ["Aus", "1999", "0"],
                 ["Aus", "2000", "241.64"],
                 ["Aus", "2001", "48.43"],
                 ["Aus", "2002", "54.43"],
-
-                ["NZ", "1999", "211.31"],
-                ["NZ", "2000", "200.36"],
-                ["NZ", "2001", "0"],
+                ["Nz", "1999", "-211.31"],
+                ["Nz", "2000", "-200.36"],
+                ["Nz", "2001", "0"],
                 ["Nz", "2002", "0"],
-
                 ["Uk", "1999", "321.31"],
-                ["Uk", "2000", "500.36"],
+                ["Uk", "2000", "-500.36"],
                 ["Uk", "2001", "103.7"],
                 ["Uk", "2002", "100.82"],
             ],
@@ -41,167 +118,143 @@
             ["Year"],
         ];
 
-        const symbolIndex = 0;
-        const columnIndex = 1;
-        const valueIndex = 2;
+        drawChart(data);
+
+        function transformData(dataValue) {
+            json = {};
+            dataValue.forEach((d) => {
+                var key = d[1];
+                if (!json[key]) {
+                    json[key] = {};
+                }
+                var key2 = d[0];
+                var value = d[2];
+
+                json[key][key2] = +value;
+            });
+
+            var response = [];
+            for (var key in json) {
+                response.push({ ...json[key], key });
+            }
+            return response;
+        }
 
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
+
+            var keys = data[1];
+            data = transformData(data[0]);
+
+            var margin = { top: 20, right: 20, bottom: 30, left: 40 };
+            var width = window.innerWidth - margin.left - margin.right - 50;
+            var height = window.innerHeight - margin.top - margin.bottom - 50;
+            var timeFormat = d3.timeFormat("%m-%Y");
+            var parseDate = d3.timeParse("%Y");
+
             let {
                 d3colorPalette,
                 paddingInner,
-                legendConfig,
+                markerShape,
+                curveType,
+                dateFormat,
+                chartType,
+                standartThresholdWidth,
             } = plottingConfiguration;
+
             if (!d3colorPalette) {
                 d3colorPalette = defaultD3Config.d3ColorPalette;
             }
-            const d3Colors = d3[d3colorPalette];
+            d3Colors = d3[d3colorPalette];
+
             if (!paddingInner) {
                 paddingInner = defaultD3Config.defaultPaddingInner;
             }
 
-            var margin = { top: 30, right: 30, bottom: 70, left: 60 },
-                width = window.innerWidth - margin.left - margin.right - 20,
-                height = window.innerHeight - margin.top - margin.bottom - 20;
-
-            if (!legendConfig) {
-                legendConfig = { legendStatus: false };
+            if (!dateFormat) {
+                dateFormat = defaultD3Config.dateFormat;
             }
 
-            let { legendStatus, legendPosition } = legendConfig;
-
-            if (legendStatus) {
-                var legendHeight = document.querySelector("#legend")
-                    .offsetHeight;
-                var legendElement = document.querySelector("#legend");
-
-                topPosition = "calc(50vh - " + legendHeight + "px)";
-                legendElement.style.padding = "10px";
-
-                switch (legendPosition) {
-                    case "left":
-                        margin.left += 100;
-                        width -= 100;
-                        d3.select("#legend")
-                            .style("top", topPosition)
-                            .style("right", "auto")
-                            .style("bottom", "auto")
-                            .style("left", "20px")
-                            .style("display", "block");
-                        break;
-                    case "top":
-                        margin.top += 80;
-                        height -= 100;
-                        d3.select("#legend")
-                            .style("top", "20px")
-                            .style("right", "auto")
-                            .style("bottom", "auto")
-                            .style("left", margin.left + "px")
-                            .style("display", "flex");
-                        d3.selectAll("#legend div").style("padding", "2px 4px");
-                        break;
-                    case "bottom":
-                        height -= 80;
-                        margin.bottom += 80;
-                        d3.select("#legend")
-                            .style("top", "auto")
-                            .style("right", "auto")
-                            .style("bottom", "80px")
-                            .style("left", margin.left + "px")
-                            .style("display", "flex");
-                        break;
-                    // For Right Legened
-                    case "right":
-                    default:
-                        width -= 100;
-                        d3.select("#legend")
-                            .style("right", "20px")
-                            .style("left", "auto")
-                            .style("top", topPosition)
-                            .style("bottom", "auto")
-                            .style("display", "block");
-                }
+            if (!chartType) {
+                chartType = defaultD3Config.chartType;
             }
 
-            d3.selectAll("#my_dataviz").html("");
+            if (!standartThresholdWidth) {
+                standartThresholdWidth = defaultD3Config.standartThresholdWidth;
+            }
+
             var x = d3
                 .scaleBand()
-                .rangeRound([50, width])
+                .rangeRound([paddingInner * 100, width])
                 .paddingInner(paddingInner);
+            var y = d3.scaleLinear().range([height, margin.top]);
+            var center = d3.scaleLinear().range([0, width]);
+            var color = d3.scaleOrdinal().range(d3Colors);
 
-            var y = d3.scaleLinear().rangeRound([height, 0]).nice();
+            var labels = [
+                "Production and Income",
+                "Employment, Unemployment, and Hours",
+                "Consumption and Housing",
+                "Sales, Orders, and Inventories",
+            ];
 
-            var z = d3.scaleOrdinal(d3Colors);
+            var xAxis = d3.axisBottom(x);
+            var yAxis = d3.axisLeft(y);
 
-            // Load stocks data
-            var symbols = data[1];
-            const chartKey = data[2];
+            var centerLine = d3.axisTop(center).ticks(0);
 
-            var data_nest = d3
-                .nest()
-                .key(function (d) {
-                    return d[columnIndex];
-                })
-                .key(function (d) {
-                    return d[symbolIndex];
-                })
-                .rollup(function (v) {
-                    return v[0][valueIndex];
-                })
-                .entries(data[0]);
+            data.forEach(function (d) {
+                var y0_positive = 0;
+                var y0_negative = 0;
 
-            var keys = data_nest.map(function (d) {
-                return d.key;
-            });
-
-            var data_stack = [];
-
-            data_nest.forEach(function (d, i) {
-                d.values = d.values.map(function (e) {
-                    return e.value;
+                d.components = keys.map(function (key) {
+                    if (d[key] >= 0) {
+                        return {
+                            key,
+                            y1: y0_positive,
+                            y0: (y0_positive += d[key]),
+                        };
+                    } else if (d[key] < 0) {
+                        return {
+                            key,
+                            y0: y0_negative,
+                            y1: (y0_negative += d[key]),
+                        };
+                    }
                 });
-                var t = {};
-                symbols.forEach(function (e, i) {
-                    t[e] = d.values[i] || 0;
-                });
-                t.key = d.key;
-                data_stack.push(t);
             });
 
-            var layers = d3.stack().keys(symbols)(data_stack);
-
-            var max = d3.max(layers[layers.length - 1], function (d) {
-                return d[1];
-            });
-
-            y.domain([0, max]);
-            x.domain(keys);
-
-            d3.select("#legend").html("").style("padding", "");
-
-            if (legendStatus) {
-                d3.select("#legend").html("");
-                d3.select("#legend")
-                    .selectAll("div")
-                    .data(symbols)
-                    .enter()
-                    .append("div")
-                    .html((d, i) => {
-                        return (
-                            '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
-                            d3Colors[i] +
-                            ';">  </div>' +
-                            "<span style='margin-left: 5px; max-width: 80px'>" +
-                            d +
-                            "</span>"
-                        );
+            var y_min = d3.min(data, function (d) {
+                return d3.min(
+                    d.components.map((d1) => {
+                        return d1.y1;
                     })
-                    .style("display", "flex")
-                    .style("padding", "2px");
-            }
+                );
+            });
 
+            var y_max = d3.max(data, function (d) {
+                return d3.max(
+                    d.components.map((d1) => {
+                        return d1.y0;
+                    })
+                );
+            });
+
+            x.domain(
+                data.map((d) => {
+                    return d.key;
+                })
+            );
+            y.domain([y_min * 1.2, y_max * 1.2]);
+            color.domain(keys);
+            const barWidth = x.bandwidth();
+
+            d3.selectAll("#my_dataviz").html("");
+
+            //add svg with margin !important
+            //this is svg is actually group
             var svg = d3
-                .select("#my_dataviz")
+                .selectAll("#my_dataviz")
                 .append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
@@ -211,95 +264,119 @@
                     "translate(" + margin.left + "," + margin.top + ")"
                 );
 
-            var yaxisTicks = height / 100;
-
             svg.append("g")
-                .attr("class", "x axis x-axis")
+                .attr("class", "x axis")
                 .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x).tickSizeOuter(0));
-
-            // Add the Y Axis
-            svg.append("g")
-                .call(d3.axisLeft(y).tickSize(0).ticks(yaxisTicks))
-                .style("stroke-width", "0.5")
-                .attr("class", "y-axis");
+                .call(xAxis.tickSize(0));
 
             svg.append("g")
-                .attr("class", "grid")
-                .style("stroke-width", "1")
-                .call(make_y_gridlines().tickSize(-width).tickFormat(""));
+                .attr("class", "y axis grid")
+                .call(yAxis.tickSize(-width - paddingInner * 100));
 
             svg.append("g")
-                .selectAll("g")
-                .data(layers)
+                .attr("class", "centerline")
+                .attr("transform", "translate(0," + y(0) + ")")
+                .call(centerLine);
+
+            var entry = svg
+                .selectAll(".entry")
+                .data(data)
                 .enter()
                 .append("g")
-                .style("fill", function (d) {
-                    return z(d.key);
-                })
+                .attr("class", "g")
+                .attr("transform", function (d) {
+                    return (
+                        "translate(" +
+                        (+getLeftAxisDistance() - barWidth / 2 + x(d.key)) +
+                        ", 0)"
+                    );
+                });
+
+            entry
                 .selectAll("rect")
                 .data(function (d) {
-                    return d;
+                    return d.components;
                 })
                 .enter()
                 .append("rect")
-                .attr("x", function (d, i) {
-                    return x(d.data.key);
-                })
+                .attr("class", "bar")
+                .attr("width", x.bandwidth())
                 .attr("y", function (d) {
-                    return y(d[1]);
+                    return y(d.y0);
                 })
                 .attr("height", function (d) {
-                    return y(d[0]) - y(d[1]);
+                    return Math.abs(y(d.y0) - y(d.y1));
                 })
-                .attr("width", x.bandwidth())
-                .attr("class", "bar")
-                .on("mouseover mousemove", function (d, i) {
-                    var x_pos = d3.mouse(this)[0] + margin.left;
-                    var y_pos = d3.mouse(this)[1] - margin.bottom;
-
-                    const { data: chartData } = d;
-                    var htmlData = "";
-
-                    for (var key in chartData) {
-                        if (key == "key") {
-                            htmlData +=
-                                "<br/>" + chartKey + " : " + chartData[key];
-                            continue;
-                        }
-                        htmlData += "<br/>" + key + " : " + chartData[key];
-                    }
-
-                    d3.select("#tooltip")
-                        .style("left", x_pos + "px")
-                        .style("top", y_pos + "px")
-                        .style("display", "block")
-                        .html(htmlData);
-                    d3.selectAll(".bar").style("opacity", 0.3);
-                    d3.select(this).style("opacity", 1);
+                .style("fill", function (d) {
+                    return color(d.key);
                 })
                 .on("mouseout", function (d, i) {
                     d3.select("#tooltip").style("display", "none");
                     d3.selectAll(".bar").style("opacity", 1);
+                })
+                .on("mouseover mousemove", function (d, i) {
+                    var computedValues = this.getClientRects()[0];
+
+                    let xpos = computedValues.x + barWidth / 2;
+
+                    let ypos = d3.mouse(this)[1] - 20;
+
+                    d3.select("#tooltip")
+                        .style("left", xpos + "px")
+                        .style("top", ypos + "px")
+                        .style("display", "block")
+                        .style("position", "absolute")
+                        .text(function () {
+                            console.log(d);
+                            var textValue = d.y0 - d.y1;
+                            if (d.y1 < 0) {
+                                textValue = d.y1 - d.y0;
+                            }
+                            return d.key + ":" + textValue.toFixed(3);
+                        });
+
+                    d3.selectAll(".bar").style("opacity", 0.3);
+                    d3.select(this).style("opacity", 1);
                 });
 
-            // Generate Grid starts
-
-            var yaxisTicks = height / 100;
-            yaxisTicks = parseInt(yaxisTicks) + 1;
-
-            function make_x_gridlines() {
-                return d3.axisBottom(x).ticks(20);
+            function make_x_gridlines(x) {
+                return d3.axisBottom(x).ticks(10);
             }
-            function make_y_gridlines() {
-                return d3.axisLeft(y).ticks(yaxisTicks);
+            function make_y_gridlines(y) {
+                return d3.axisLeft(y).ticks(10);
             }
 
-            // Generate Grid ends
+            function getLeftAxisDistance() {
+                var a = document
+                    .querySelector(".tick")
+                    .getAttribute("transform");
+                a = a.replace("translate(", "");
+                return a.substr(0, a.indexOf(","));
+            }
+
+            //.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+            // legend
+            //     .append("rect")
+            //     .attr("x", 675)
+            //     .attr("y", function (d, i) {
+            //         return i * 25 + 300;
+            //     })
+            //     .attr("width", 18)
+            //     .attr("height", 18)
+            //     .style("fill", color);
+
+            // legend
+            //     .append("text")
+            //     .attr("x", 700)
+            //     .attr("y", function (d, i) {
+            //         return i * 25 + 309;
+            //     })
+            //     .attr("dy", ".35em")
+            //     .style("text-anchor", "start")
+            //     .text(function (d, i) {
+            //         return labels[i];
+            //     });
         }
-
-        // window.onload = function () {
-        //     drawChart(data);
-        // };
     </script>
 </body>

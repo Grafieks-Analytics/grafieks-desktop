@@ -21,7 +21,8 @@ text.shadow {
 }
 
 .x-axis path,
-.y-axis path {
+.y-axis path,
+.domain {
     stroke: lightgray;
 }
 
@@ -69,7 +70,7 @@ text.shadow {
     border: 1px solid black;
 }
 
-.xLabel{
+.xLabel {
     text-align: center;
     background-color: red;
 }
