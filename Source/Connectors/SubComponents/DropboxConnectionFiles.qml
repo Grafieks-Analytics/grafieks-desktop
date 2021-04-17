@@ -17,6 +17,7 @@ import QtQuick.Layouts 1.3
 import com.grafieks.singleton.constants 1.0
 
 import "../../MainSubComponents"
+import "./MiniSubComponents"
 
 Popup {
     id: popup
@@ -38,6 +39,8 @@ Popup {
     property var fileTag: ""
     property var filePathFolder: ""
     property var filePathLower: ""
+
+    property var generalObjectName : ""
 
     property var navigationPaths: []
 
@@ -173,7 +176,7 @@ Popup {
         {
             path.text = name
             detailNameDisplay.text = name;
-            documentTypeDisplay.text = "sample" //type;
+            documentTypeDisplay.text = extension;
             modifiedTimeDisplay.text = modifiedTime;
 
             updatePath(pathLower)
@@ -425,87 +428,7 @@ Popup {
 
                         }
 
-                        delegate: Row{
-                            height:30
-                            width: popup.width * 0.6
-
-                            Column{
-                                width: 20
-                                height: parent.height
-                                Row{
-
-                                    Image{
-                                        id: fileMenuIcon
-                                        source: tag=="folder"?"/Images/icons/folder-invoices.png" :"/Images/icons/file-icon.png"
-                                        width:25
-                                        height: 25
-                                    }
-                                }
-                            }
-
-                            Column{
-                                width: parent.width / 2
-                                height: parent.height
-
-                                Row{
-                                    height: parent.height
-                                    width: parent.width
-                                    anchors.left: parent
-                                    anchors.leftMargin: 2
-
-                                    Text {
-                                        text: qsTr(name)
-                                        padding: 5
-                                        leftPadding: 20
-                                    }
-
-                                    MouseArea{
-
-                                        anchors.fill:parent
-                                        onClicked: onFileClicked(id, name, extension, tag, pathLower, extension, clientModified)
-                                        onDoubleClicked: onFileDoubleClicked(id, name, extension, tag, pathFolder, pathLower);
-
-                                    }
-                                }
-                            }
-
-
-                            Column{
-                                width: parent.width / 4
-                                height: 30
-
-                                Row{
-                                    height: parent.height
-                                    width: parent.width
-                                    anchors.left: parent
-
-                                    Text {
-                                        text: qsTr(extension)
-                                        padding: 5
-                                        leftPadding: 20
-                                    }
-                                }
-
-                            }
-
-                            Column{
-                                width: parent.width / 4
-                                height: 30
-
-                                Row{
-                                    height: parent.height
-                                    width: parent.width
-                                    anchors.left: parent
-
-                                    Text {
-                                        text: qsTr(clientModified)
-                                        padding: 5
-                                        leftPadding: 20
-                                    }
-                                }
-                            }
-
-                        }
+                        delegate: dropboxDelegate
 
                     }
                 }
@@ -704,5 +627,9 @@ Popup {
     // Page Design Ends
     /***********************************************************************************************************************/
 
+    Component{
+        id: dropboxDelegate
+        DropboxDelegate{}
+    }
 
 }
