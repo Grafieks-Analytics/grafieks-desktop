@@ -40,7 +40,7 @@
                 ["value 1", "value 2Z"],
             ];
 
-            // drawChart(data);
+            drawChart(data);
 
             function drawChart(data, plottingConfiguration = {}) {
                 window.data = data;
@@ -145,7 +145,7 @@
                 svg.append("g")
                     .attr("class", "y-axis")
                     .attr("transform", "translate(" + x(0) + ",0)")
-                    .call(d3.axisRight(y));
+                    .call(d3.axisLeft(y));
             }
         </script>
     </body>
