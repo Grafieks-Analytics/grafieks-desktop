@@ -241,5 +241,6 @@
         <file>Source/Connectors/SubComponents/MiniSubComponents/DriveDelegate.qml</file>
         <file>Source/Connectors/SubComponents/MiniSubComponents/DropboxDelegate.qml</file>
         <file>Source/Connectors/SubComponents/MiniSubComponents/BoxDelegate.qml</file>
+        <file>Source/Charts/HorizontalBarGroupedChart.html</file>
     </qresource>
 </RCC>

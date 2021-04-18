@@ -14,7 +14,7 @@
             function drawChart(data, plottingConfiguration = {}) {
                 window.data = data;
                 var keys = data[2];
-                var [xAxisLabel, yAxisLabel] = data[3];
+                var [xAxisLabel, yAxisLabel] = data[3] || [];
 
                 data = transformData(data);
 
@@ -163,7 +163,7 @@
                 g.append("g")
                     .attr("class", "axis")
                     .attr("transform", "translate(0," + height + ")")
-                    .call(d3.axisBottom(x).ticks(10).tickSize(0))
+                    .call(d3.axisBottom(x).ticks(null, "s").tickSize(0))
                     .append("text")
                     .attr("x", width / 2)
                     .attr("y", 40)
@@ -175,7 +175,7 @@
 
                 g.append("g")
                     .attr("class", "axis")
-                    .call(d3.axisLeft(y0).ticks(null, "s").tickSize(0))
+                    .call(d3.axisLeft(y0).tickSize(0))
                     .append("text")
                     .attr("x", height * 0.4 * -1)
                     .attr("y", margin.left * 0.8 * -1) //y(y.ticks().pop()) + 0.5)
@@ -249,7 +249,7 @@
                 return d3.axisBottom(x);
             }
             function make_y_gridlines(y) {
-                return d3.axisLeft(y).ticks(10);
+                return d3.axisLeft(y).ticks(20);
             }
         </script>
     </body>

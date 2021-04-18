@@ -450,6 +450,16 @@ Page {
             chartUrl = Constants.barGroupedChartUrl;
         }
 
+        if( getAxisColumnNames(Constants.yAxisName).length > 1
+                && getAxisColumnNames(Constants.xAxisName).length
+                && (chartTitle === Constants.horizontalBarChartTitle  || chartTitle === Constants.horizontalStackedBarChartTitle)){
+
+            chartUrl = Constants.horizontalBarGroupedChartUrl;
+            webEngineView.url = Constants.baseChartUrl+chartUrl;
+            chartTitle = Constants.horizontalBarGroupedChartTitle;
+
+        }
+
         drawChart();
 
     }
@@ -472,8 +482,13 @@ Page {
         if(xAxisColumns.length && yAxisColumns.length){
 
             var xAxisColumnNamesArray = [];
-            for(var i=0;i<xAxisColumns.length;i++){
-                xAxisColumnNamesArray.push(xAxisColumns[i]);
+            var i = 0; // itereator => By passing warning
+            for(i=0;i<xAxisColumns.length;i++){
+                xAxisColumnNamesArray.push(yAxisColumns[i]);
+            }
+            var yAxisColumnNamesArray = [];
+            for(i=0;i<yAxisColumns.length;i++){
+                yAxisColumnNamesArray.push(yAxisColumns[i]);
             }
 
             var dataValues = null;
@@ -497,6 +512,13 @@ Page {
                 console.log('Stacked bar chart!');
                 colorByColumnName = colorByData[0].columnName;
                 dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,yAxisColumns[0], xAxisColumns[0]);
+                break;
+            case Constants.horizontalBarGroupedChartTitle:
+                console.log('horizontalBarGroupedChart chart!');
+                dataValues =  ChartsModel.getGroupedBarChartValues(yAxisColumnNamesArray[1],xAxisColumns[0], yAxisColumnNamesArray[0]);
+                var tempDataValues = JSON.parse(dataValues);
+                tempDataValues.push([yAxisColumnNamesArray[0],yAxisColumnNamesArray[1]]);
+                dataValues = JSON.stringify(tempDataValues);
                 break;
             case Constants.groupBarChartTitle:
                 console.log('Grouped bar chart!');

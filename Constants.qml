@@ -265,6 +265,9 @@ QtObject {
     property string horizontalStackedBarChartTitle: "Horizontal Stack Bar Chart"
     property string horizontalStackedBarChartUrl: "HorizontalStackBarChart.html"
 
+    property string horizontalBarGroupedChartUrl: "HorizontalBarGroupedChart.html"
+    property string horizontalBarGroupedChartTitle: "Horizontal Bar Grouped Chart"
+
     property string barGroupedChartUrl: "BarGroupedChart.html";
     property string barChartUrl: "BarChartArrayInput.html";
 
