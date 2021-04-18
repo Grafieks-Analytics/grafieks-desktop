@@ -84,7 +84,7 @@ Rectangle{
             }
         }
         function onPostgresLoginStatus(status){
-            if(status.status.status === true){
+            if(status.status === true){
                 availableJoins = 4
 
                 leftJoinCol.visible = true
@@ -94,7 +94,7 @@ Rectangle{
             }
         }
         function onMssqlLoginStatus(status){
-            if(status.status.status === true){
+            if(status.status === true){
                 availableJoins = 4
 
                 leftJoinCol.visible = true
@@ -104,7 +104,7 @@ Rectangle{
             }
         }
         function onSqliteLoginStatus(status){
-            if(status.status.status === true){
+            if(status.status === true){
                 availableJoins = 2
 
                 leftJoinCol.visible = true
@@ -114,7 +114,7 @@ Rectangle{
             }
         }
         function onMongoLoginStatus(status){
-            if(status.status.status === true){
+            if(status.status === true){
                 availableJoins = 3
 
                 leftJoinCol.visible = true
@@ -124,7 +124,7 @@ Rectangle{
             }
         }
         function onSnowflakeLoginStatus(status){
-            if(status.status.status === true){
+            if(status.status === true){
                 availableJoins = 4
 
                 leftJoinCol.visible = true
@@ -134,7 +134,7 @@ Rectangle{
             }
         }
         function onRedshiftLoginStatus(status){
-            if(status.status.status === true){
+            if(status.status === true){
                 availableJoins = 4
 
                 leftJoinCol.visible = true
@@ -145,7 +145,7 @@ Rectangle{
         }
 
         function onExcelLoginStatus(status){
-            if(status.status.status === true){
+            if(status.status === true){
                 availableJoins = 4
 
                 leftJoinCol.visible = true
@@ -156,7 +156,7 @@ Rectangle{
         }
 
         function onCsvLoginStatus(status){
-            if(status.status.status === true){
+            if(status.status === true){
                 availableJoins = 4
 
                 leftJoinCol.visible = true
@@ -167,7 +167,7 @@ Rectangle{
         }
 
         function onJsonLoginStatus(status){
-            if(status.status.status === true){
+            if(status.status === true){
                 availableJoins = 4
 
                 leftJoinCol.visible = true
