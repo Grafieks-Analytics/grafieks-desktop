@@ -449,8 +449,9 @@ Popup {
         nameFilters: ["Access files (*.mdb, *.accdb )"];
 
         onAccepted: {
-//            csvFileName.text = ConnectorsLoginModel.urlToFilePath(promptAccess.fileUrl)
+
             fileName = ConnectorsLoginModel.urlToFilePath(promptAccess.fileUrl)
+            accessFileName.text = fileName.replace(/^.*[\\\/]/, '')
             console.log(fileUrl)
         }
         onRejected: {

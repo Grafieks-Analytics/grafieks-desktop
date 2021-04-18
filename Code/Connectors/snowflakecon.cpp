@@ -58,8 +58,6 @@ QVariantMap SnowflakeCon::SnowflakeOdbcInstance(const QString &driver, const QSt
             dbSnowflakeOdbc2.setPassword(password);
 
             dbSnowflakeOdbc2.open();
-
-            qDebug() << "SNOW" << dbSnowflakeOdbc.tables() << dbSnowflakeOdbc.connectionNames();
         }
 
     } else{
