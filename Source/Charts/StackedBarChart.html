@@ -58,7 +58,7 @@
                 ["Uk", "2002", "100.82"],
             ],
             ["Ind", "Aus", "Nz", "Uk"],
-            ["Year"],
+            ["1999", "2000", "2001", "2002"],
         ];
 
         drawChart(data);
@@ -87,6 +87,7 @@
             window.data = data;
 
             var keys = data[1];
+            var labels = data[2];
             data = transformData(data[0]);
 
             var margin = { top: 20, right: 20, bottom: 30, left: 40 };
@@ -126,10 +127,11 @@
                 standartThresholdWidth = defaultD3Config.standartThresholdWidth;
             }
 
-            var x = d3
-                .scaleBand()
-                .rangeRound([paddingInner * 100, width])
-                .paddingInner(paddingInner);
+            // if (chartType == constants.chartType.STANDARD) {
+            //     width = keys.length * standartThresholdWidth;
+            // }
+
+            var x = d3.scaleBand().rangeRound([0, width]).padding(paddingInner);
             var y = d3.scaleLinear().range([height, margin.top]);
             var center = d3.scaleLinear().range([0, width]);
             var color = d3.scaleOrdinal().range(d3Colors);
@@ -181,7 +183,7 @@
                     return d.key;
                 })
             );
-            y.domain([y_min, y_max]);
+            y.domain([y_min, y_max]).nice();
             color.domain(keys);
             const barWidth = x.bandwidth();
 
