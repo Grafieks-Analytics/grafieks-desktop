@@ -63,6 +63,7 @@ Page {
     property var dragActiveObject: ({});
 
     property var allChartsMapping: ({});
+    property var colorByData: [];
 
     property var allowedXAxisDataPanes: 0;
     property var allowedYAxisDataPanes: 0;
@@ -122,6 +123,16 @@ Page {
 
         // change axis on the basis of chart title
         switch(chartTitle){
+
+        case Constants.horizontalStackedBarChartTitle:
+            console.log('Make Horizontal stacked bar chart');
+            chartUrl=Constants.horizontalStackedBarChartUrl
+            webEngineView.url = Constants.chartsBaseUrl+chartUrl;
+            xAxisVisible = true
+            yAxisVisible = true
+            row3Visible = false
+            row4Visible = false
+            break;
         case Constants.stackedBarChartTitle:
             chartUrl=Constants.stackedBarChartUrl
             webEngineView.url = Constants.chartsBaseUrl+Constants.stackedBarChartUrl;
@@ -472,27 +483,25 @@ Page {
 
             var dataValues = null;
             console.log('Chart Title',chartTitle)
+            var colorByColumnName = '';
 
             switch(chartTitle){
             case Constants.horizontalBarChartTitle:
-                console.log("BAR CLICKED");
+                console.log("Horizontal BAR");
                 dataValues =  ChartsModel.getBarChartValues(yAxisColumns[0],xAxisColumns[0]);
                 break;
             case Constants.barChartTitle:
                 console.log("BAR CLICKED", xAxisColumns[0])
-                // Bar - xAxis(String), yAxis(String)
                 dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
-
-                // Stacked Bar - xAxis(String), yAxis(String), Split(String)
-                // dataValues = ChartsModel.getStackedBarChartValues("country","population","state")
-
-                // Grouped Bar - xAxis(String), yAxis(String), Split(String)
-                // dataValues = ChartsModel.getGroupedBarChartValues("country","population", "state")
-
+                break;
+            case Constants.horizontalStackedBarChartTitle:
+                colorByColumnName = colorByData[0].columnName;
+                dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,xAxisColumns[0], yAxisColumns[0]);
                 break;
             case Constants.stackedBarChartTitle:
                 console.log('Stacked bar chart!');
-                dataValues =  ChartsModel.getStackedBarChartValues(ReportParamsModel.itemName,yAxisColumns[0], xAxisColumns[0]);
+                colorByColumnName = colorByData[0].columnName;
+                dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,yAxisColumns[0], xAxisColumns[0]);
                 break;
             case Constants.groupBarChartTitle:
                 console.log('Grouped bar chart!');
@@ -505,7 +514,9 @@ Page {
                 break;
             case Constants.stackedAreaChartTitle:
                 console.log('Stacked Area Chart')
-                dataValues =  ChartsModel.getStackedAreaChartValues(ReportParamsModel.itemName,yAxisColumns[0],xAxisColumns[0]);
+                colorByColumnName = colorByData[0].columnName;
+                console.log('Colour By columnName',columnName)
+                dataValues =  ChartsModel.getStackedAreaChartValues(colorByColumnName,yAxisColumns[0],xAxisColumns[0]);
                 break;
             case Constants.lineChartTitle:
                 console.log("LINE CLICKED")

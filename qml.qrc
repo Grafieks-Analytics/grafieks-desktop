@@ -235,5 +235,6 @@
         <file>Source/Reports/SubComponents/MiniSubComponents/PivotThemesPopup.qml</file>
         <file>Source/Charts/HorizontalBarChart.html</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/AxisItemMenuPopup.qml</file>
+        <file>Source/Charts/HorizontalStackBarChart.html</file>
     </qresource>
 </RCC>
