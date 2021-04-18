@@ -720,19 +720,19 @@ Page {
 
             // Disconnect Button starts
 
-            Button{
-                id: disconnect_btn
-                width: disconnect_text.text.length * 8
-                height: 28
+//            Button{
+//                id: disconnect_btn
+//                width: disconnect_text.text.length * 8
+//                height: 28
 
-                Text{
-                    id: disconnect_text
-                    text: "Disconnect " + ConnectorsLoginModel.connectedDB
-                    anchors.centerIn: parent
-                }
+//                Text{
+//                    id: disconnect_text
+//                    text: "Disconnect " + ConnectorsLoginModel.connectedDB
+//                    anchors.centerIn: parent
+//                }
 
-                onClicked: disconnectDS()
-            }
+//                onClicked: disconnectDS()
+//            }
 
             // Disconnect Button ends
 
@@ -1286,12 +1286,14 @@ Page {
                 Rectangle{
 
                     height: column_querymodeller.height - 180
-                    width:500
+                    width:column_querymodeller.width
 
                     Rectangle {
                         id: categoryItem
                         height: 50
-                        width: 200
+                        width: column_querymodeller.width
+//                        color: "red"
+
 
 
                         Image {
@@ -1305,25 +1307,56 @@ Page {
                         }
 
                         Text {
+                            id:database_name
                             anchors.left: database.right
                             anchors.leftMargin: 10
+                            width: categoryItem.width-100
                             anchors.verticalCenter: parent.verticalCenter
                             font.pixelSize: Constants.fontCategoryHeaderMedium
-                            text: ConnectorsLoginModel.connectedDB
+//                            text: ConnectorsLoginModel.connectedDB
+                            text: "radjfbjkd aadbjlkgdd dgjb  jfgb ajbjdfb"
+                            elide: Text.ElideRight
 
 
                             ToolTip.delay:Constants.tooltipShowTime
                             ToolTip.timeout: Constants.tooltipHideTime
-                            ToolTip.text: qsTr("Current connected database")
+                            ToolTip.text: qsTr("Current connected database:" + ConnectorsLoginModel.connectedDB + " ")
                             ToolTip.visible: mouseAreaCurrentDB.containsMouse? true: false
 
                             MouseArea{
                                 id: mouseAreaCurrentDB
                                 anchors.fill: parent
                                 hoverEnabled: true
+
                             }
                         }
 
+                        Image {
+                            id: power_icon
+                            source: "/Images/icons/PowerOff.png"
+                            width: 18
+                            height: 18
+                            anchors.left: database_name.right
+                            anchors.leftMargin:  0
+                            anchors.verticalCenter: parent.verticalCenter
+                            visible: true
+
+                            ToolTip.delay:Constants.tooltipShowTime
+                            ToolTip.timeout: Constants.tooltipHideTime
+                            ToolTip.text: qsTr("Disconnect")
+                            ToolTip.visible: mousePowerIcon.containsMouse ? true: false
+
+                            MouseArea{
+                                id:mousePowerIcon
+                                anchors.fill: parent
+                                onClicked: disconnectDS()
+                                hoverEnabled: true
+                            }
+
+
+
+
+                        }
 
                         Image {
                             id: drop_icon
