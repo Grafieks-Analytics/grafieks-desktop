@@ -187,7 +187,7 @@ Popup {
         if(extension === "folder"){
             DriveDS.folderNav(pathFolder)
         }else{
-            DriveDS.fetchFileData(googleFileId, extension)
+            DriveDS.fetchFileData(googleFileId, name, extension)
         }
 
         path.text = name

@@ -177,6 +177,18 @@ void QueryStatsModel::setProfiling(bool status)
         break;
     }
 
+    case Constants::accessIntType:{
+        QSqlDatabase dbAccessOdbc = QSqlDatabase::database(Constants::accessOdbcStrQueryType);
+        if(status == true){
+            this->setQuery("SET profiling = 1", dbAccessOdbc);
+
+        } else{
+            this->setQuery("SET profiling = 0", dbAccessOdbc);
+        }
+
+        break;
+    }
+
     }
 
 }
@@ -296,6 +308,17 @@ void QueryStatsModel::resetProfiling()
         break;
     }
 
+    case Constants::accessIntType:{
+
+        QSqlDatabase dbAccess = QSqlDatabase::database(Constants::accessOdbcStrQueryType);
+        this->setQuery("SET profiling = 0", dbAccess);
+        this->setQuery("SET profiling_history_size = 0", dbAccess);
+        this->setQuery("SET profiling_history_size = 100", dbAccess);
+        this->setQuery("SET profiling = 1", dbAccess);
+
+        break;
+    }
+
     }
 }
 
@@ -379,6 +402,14 @@ void QueryStatsModel::showStats()
 
         QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrQueryType);
         this->setQuery("SHOW profiles", dbHive);
+
+        break;
+    }
+
+    case Constants::accessIntType:{
+
+        QSqlDatabase dbAccess = QSqlDatabase::database(Constants::accessOdbcStrQueryType);
+        this->setQuery("SHOW profiles", dbAccess);
 
         break;
     }
@@ -506,6 +537,14 @@ QVariant QueryStatsModel::showErrorMessage(const QString &query)
 
         QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::teradataOdbcStrQueryType);
         QSqlQuery queryResult(query, dbTeradata);
+        message = queryResult.lastError().text();
+        break;
+    }
+
+    case Constants::accessIntType:{
+
+        QSqlDatabase dbAccess = QSqlDatabase::database(Constants::accessOdbcStrQueryType);
+        QSqlQuery queryResult(query, dbAccess);
         message = queryResult.lastError().text();
         break;
     }

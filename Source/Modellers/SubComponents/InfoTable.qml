@@ -139,6 +139,8 @@ Item{
             // If query is SELECT query
             // Only SELECT query allowed
 
+            console.log(GeneralParamsModel.getDbClassification(), "DB TYPE")
+
             if(isSqlSelect){
                 if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
 
@@ -162,6 +164,7 @@ Item{
                     testQueryResult.visible = true
                     dataPreviewResult.visible = false
                 } else {
+                    console.log("FORWARD ONLY", DSParamsModel.tmpSql)
                     ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
 
                     testQueryResult.visible = true
@@ -212,7 +215,6 @@ Item{
     function onGetErrorMsg(){
 
         var message = QueryStatsModel.showErrorMessage(DSParamsModel.tmpSql);
-
         if(message === ""){
             message = "SQL query succesfully executed"
             queryUpdate.icon = StandardIcon.NoIcon

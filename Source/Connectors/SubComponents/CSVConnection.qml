@@ -27,6 +27,8 @@ Popup {
     padding: 0
     property int label_col : 135
 
+    property var selectedFile: ""
+
 
     Connections{
         target: ConnectorsLoginModel
@@ -209,7 +211,7 @@ Popup {
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
-            onClicked: ConnectorsLoginModel.csvLogin(csvFileName.text, true, separator.text)
+            onClicked: ConnectorsLoginModel.csvLogin(selectedFile, true, separator.text)
 
         }
     }
@@ -237,8 +239,9 @@ Popup {
         nameFilters: ["CSV files (*.csv)"];
 
         onAccepted: {
-            csvFileName.text = ConnectorsLoginModel.urlToFilePath(promptCSV.fileUrl)
-            console.log(fileUrl)
+
+            selectedFile = ConnectorsLoginModel.urlToFilePath(promptCSV.fileUrl)
+            csvFileName.text = selectedFile.replace(/^.*[\\\/]/, '')
         }
         onRejected: {
             console.log("file rejected")

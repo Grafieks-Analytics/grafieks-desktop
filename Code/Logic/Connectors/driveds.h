@@ -16,6 +16,7 @@
 #include <QSettings>
 #include <QtDebug>
 #include <QDir>
+#include <QFileInfo>
 
 #include <QFile>
 #include <QCoreApplication>
@@ -40,7 +41,7 @@ public:
     Q_INVOKABLE void fetchDatasources();
     Q_INVOKABLE void searchQuer(QString path);
     Q_INVOKABLE void homeBut();
-    Q_INVOKABLE void fetchFileData(QString gFileId, QString extension);
+    Q_INVOKABLE void fetchFileData(QString gFileId, QString fileName, QString extension);
 
     void addDataSource(Drive * drive);
     Q_INVOKABLE void addDataSource(const QString & id,const QString & name,const QString & kind,const QString & modifiedTime,const QString & extension);
@@ -75,6 +76,7 @@ private:
 
     QString username;
     QString gFileId;
+    QString newFileName;
     QString extension;
 
 };

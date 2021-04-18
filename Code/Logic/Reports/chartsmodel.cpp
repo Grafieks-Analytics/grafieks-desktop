@@ -1335,6 +1335,8 @@ void ChartsModel::getChartHeader(QMap<int, QStringList> chartHeader)
 
     foreach(auto key, chartHeader.keys()){
 
+        qDebug() << chartHeader.value(key).at(1) << "CHART HEADER";
+
         if(chartHeader.value(key).at(1).contains(Constants::categoricalType)){
             this->categoryList.append(chartHeader.value(key).at(0));
         } else if(chartHeader.value(key).at(1).contains(Constants::numericalType)){

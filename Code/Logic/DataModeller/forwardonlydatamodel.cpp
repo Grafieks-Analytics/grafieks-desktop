@@ -207,8 +207,3 @@ QStringList ForwardOnlyDataModel::getDbList()
 
     return output;
 }
-
-void ForwardOnlyDataModel::receiveCsvFilterQuery(QString query)
-{
-
-}

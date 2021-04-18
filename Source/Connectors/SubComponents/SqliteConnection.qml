@@ -27,6 +27,8 @@ Popup {
     padding: 0
     property int label_col : 135
 
+    property var selectedFile: ""
+
 
     Connections{
         target: ConnectorsLoginModel
@@ -101,6 +103,7 @@ Popup {
         anchors.topMargin: 15
         anchors.left: parent.left
         anchors.leftMargin: 1
+        padding: 10
 
 
 
@@ -127,6 +130,7 @@ Popup {
 
         Text{
             id: sqliteFileName
+            anchors.bottom: file_btn.bottom
             text:""
         }
 
@@ -166,7 +170,7 @@ Popup {
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
-            onClicked: ConnectorsLoginModel.sqliteLogin(sqliteFileName.text)
+            onClicked: ConnectorsLoginModel.sqliteLogin(selectedFile)
 
         }
     }
@@ -187,8 +191,8 @@ Popup {
         nameFilters: ["Sqlite files (*.sqlite *.db)"];
 
         onAccepted: {
-            console.log(fileUrl)
-            sqliteFileName.text = fileUrl
+            sqliteFileName.text = ConnectorsLoginModel.urlToFilePath(fileUrl).replace(/^.*[\\\/]/, '')
+            selectedFile = fileUrl
         }
         onRejected: {
             console.log("file rejected")
