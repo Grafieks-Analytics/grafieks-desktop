@@ -57,7 +57,7 @@ Rectangle{
     // Connections Starts
 
     Connections{
-        target: TableColumnsModel
+        target: NewTableColumnsModel
 
         function onColumnListObtained(allColumns, tableName, moduleName){
 
@@ -132,7 +132,7 @@ Rectangle{
 
     function loadTableColumns(tableName){
 
-        TableColumnsModel.getColumnsForTable(tableName, newItem.moduleName)
+        NewTableColumnsModel.getColumnsForTable(tableName, newItem.moduleName)
     }
 
 

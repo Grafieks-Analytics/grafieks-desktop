@@ -21,7 +21,10 @@ DuckQueryModel::~DuckQueryModel()
 
 void DuckQueryModel::setQuery(QString query)
 {
+    this->internalColCount = 0;
+    this->internalRowCount = 0;
     this->resultData.clear();
+
     this->query = query;
     querySplitter.setQueryForClasses(this->query);
 
@@ -102,10 +105,12 @@ void DuckQueryModel::generateRoleNames()
                     m_roleNames.insert(i, fieldName.toUtf8());
                     this->setChartHeader(i, colInfo);
                     this->tableHeaders.append(fieldName);
+                    colInfo.clear();
                 }
             } else{
                 qWarning() << Q_FUNC_INFO << data->error.c_str();
             }
+
         }
 
     } else{

@@ -1,11 +1,11 @@
-#include "tablecolumnsmodel.h"
+#include "newtablecolumnsmodel.h"
 
-TableColumnsModel::TableColumnsModel(QObject *parent) : QObject(parent)
+NewTableColumnsModel::NewTableColumnsModel(QObject *parent) : QObject(parent)
 {
 
 }
 
-TableColumnsModel::TableColumnsModel(DuckCon *duckCon, QObject *parent)
+NewTableColumnsModel::NewTableColumnsModel(DuckCon *duckCon, QObject *parent)
 {
     Q_UNUSED(parent);
     this->duckCon = duckCon;
@@ -18,7 +18,7 @@ TableColumnsModel::TableColumnsModel(DuckCon *duckCon, QObject *parent)
  * \endcode
  *
  */
-void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName)
+void NewTableColumnsModel::getColumnsForTable(QString tableName, QString moduleName)
 {
 
 
@@ -29,6 +29,11 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
     case Constants::mysqlIntType:
     case Constants::mysqlOdbcIntType:
+    case Constants::sqliteIntType:
+    case Constants::postgresIntType:
+    case Constants::oracleIntType:
+    case Constants::mssqlIntType:
+    case Constants::accessIntType:
     case Constants::mongoIntType:{
         QString dbString;
 
@@ -37,11 +42,24 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
         case Constants::mysqlIntType:
             dbString = Constants::mysqlStrQueryType;
             break;
-
         case Constants::mysqlOdbcIntType:
             dbString = Constants::mysqlOdbcStrQueryType;
             break;
-
+        case Constants::sqliteIntType:
+            dbString = Constants::sqliteStrQueryType;
+            break;
+        case Constants::postgresIntType:
+            dbString = Constants::postgresOdbcStrQueryType;
+            break;
+        case Constants::oracleIntType:
+            dbString = Constants::oracleOdbcStrQueryType;
+            break;
+        case Constants::mssqlIntType:
+            dbString = Constants::mssqlOdbcStrQueryType;
+            break;
+        case Constants::accessIntType:
+            dbString = Constants::accessOdbcStrQueryType;
+            break;
         case Constants::mongoIntType:
             dbString = Constants::mongoOdbcStrQueryType;
             break;
@@ -49,24 +67,17 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
         }
 
         QSqlDatabase dbCon = QSqlDatabase::database(dbString);
+        QSqlRecord record = dbCon.record(tableName);
 
-        describeQueryString = "DESCRIBE `" + tableName + "`";
+        if(!record.isEmpty()){
 
-        QSqlQuery describeQuery(describeQueryString, dbCon);
+            for(int i=0; i < record.count(); i++){
 
-        if(describeQuery.lastError().type() == QSqlError::NoError){
-            while(describeQuery.next()){
-
-                fieldName = describeQuery.value(0).toString();
-                fieldType = describeQuery.value(1).toString();
-
-                // Remove characters after `(` and then trim whitespaces
-                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+                fieldName = record.fieldName(i);
+                fieldType = record.field(i).value().typeName();
 
                 // Get filter data type for QML
-                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
-
+                QString filterDataType = dataType.dataType(fieldType);
                 outputDataList << fieldName << filterDataType;
 
                 // Append all data type to allList as well
@@ -74,77 +85,10 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
 
                 outputDataList.clear();
             }
-        } else{
-            qWarning() << Q_FUNC_INFO << describeQuery.lastError();
         }
         break;
     }
 
-
-    case Constants::sqliteIntType:{
-
-        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrQueryType);
-
-        describeQueryString = "PRAGMA table_info(" + tableName + ")";
-
-        QSqlQuery describeQuery(describeQueryString, dbSqlite);
-
-        if(describeQuery.lastError().type() == QSqlError::NoError){
-            while(describeQuery.next()){
-
-                fieldName = describeQuery.value(1).toString();
-                fieldType = describeQuery.value(2).toString();
-
-                // Remove characters after `(` and then trim whitespaces
-                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-
-                // Get filter data type for QML
-                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
-                outputDataList << fieldName << filterDataType;
-
-                // Append all data type to allList as well
-                allColumns.append(outputDataList);
-
-                outputDataList.clear();
-            }
-        } else{
-            qWarning() << Q_FUNC_INFO << describeQuery.lastError();
-        }
-        break;
-    }
-    case Constants::postgresIntType:{
-
-        QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
-
-        describeQueryString = "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '" + tableName.toLower()  + "'";
-
-        QSqlQuery describeQuery(describeQueryString, dbPostgres);
-
-        if(describeQuery.lastError().type() == QSqlError::NoError){
-            while(describeQuery.next()){
-
-                fieldName = describeQuery.value(0).toString();
-                fieldType = describeQuery.value(1).toString();
-                // Remove characters after `(` and then trim whitespaces
-                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-
-                // Get filter data type for QML
-                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
-                outputDataList << fieldName << filterDataType;
-
-                // Append all data type to allList as well
-                allColumns.append(outputDataList);
-
-                outputDataList.clear();
-
-            }
-        } else{
-            qWarning() << Q_FUNC_INFO << describeQuery.lastError();
-        }
-        break;
-    }
 
     case Constants::redshiftIntType:{
 
@@ -179,91 +123,7 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
         break;
     }
 
-    case Constants::excelIntType:{
 
-        auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
-        int rows = data->collection.Count();
-
-        for(int i = 0; i < rows; i++){
-            fieldName =  data->GetValue(1, i).ToString().c_str();
-            fieldType =  data->GetValue(2, i).ToString().c_str();
-
-            // Get filter data type for QML
-            QString filterDataType = dataType.dataType(fieldType);
-            outputDataList << fieldName << filterDataType;
-
-            // Append all data type to allList as well
-            allColumns.append(outputDataList);
-            outputDataList.clear();
-        }
-
-        break;
-    }
-
-    case Constants::mssqlIntType:{
-
-        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrType);
-
-        describeQueryString = "SELECT column_name, data_type FROM information_schema.columns where table_name = '" + tableName  + "'";
-
-        QSqlQuery describeQuery(describeQueryString, dbMssql);
-
-        if(describeQuery.lastError().type() == QSqlError::NoError){
-            while(describeQuery.next()){
-
-                fieldName = describeQuery.value(0).toString();
-                fieldType = describeQuery.value(1).toString();
-                // Remove characters after `(` and then trim whitespaces
-                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-
-                // Get filter data type for QML
-                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
-                outputDataList << fieldName << filterDataType;
-
-                // Append all data type to allList as well
-                allColumns.append(outputDataList);
-                outputDataList.clear();
-
-            }
-        } else{
-            qWarning() << Q_FUNC_INFO << describeQuery.lastError();
-        }
-        break;
-    }
-
-    case Constants::oracleIntType:{
-
-        QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrType);
-
-        describeQueryString = "SELECT column_name, data_type FROM user_tab_columns WHERE table_name = '" + tableName  + "'";
-
-        QSqlQuery describeQuery(describeQueryString, dbOracle);
-
-        if(describeQuery.lastError().type() == QSqlError::NoError){
-            while(describeQuery.next()){
-
-                fieldName = describeQuery.value(0).toString();
-                fieldType = describeQuery.value(1).toString();
-                // Remove characters after `(` and then trim whitespaces
-                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-
-                // Get filter data type for QML
-                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
-                outputDataList << fieldName << filterDataType;
-
-                // Append all data type to allList as well
-                allColumns.append(outputDataList);
-
-                outputDataList.clear();
-
-            }
-        } else{
-            qWarning() << Q_FUNC_INFO << describeQuery.lastError();
-        }
-        break;
-    }
 
     case Constants::impalaIntType:{
 
@@ -400,39 +260,8 @@ void TableColumnsModel::getColumnsForTable(QString tableName, QString moduleName
         break;
     }
 
-    case Constants::accessIntType:{
 
-        QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::accessOdbcStrType);
-
-        describeQueryString = "SELECT column_name, data_type FROM user_tab_columns WHERE table_name = '" + tableName  + "'";
-
-        QSqlQuery describeQuery(describeQueryString, dbTeradata);
-
-        if(describeQuery.lastError().type() == QSqlError::NoError){
-            while(describeQuery.next()){
-
-                fieldName = describeQuery.value(0).toString();
-                fieldType = describeQuery.value(1).toString();
-                // Remove characters after `(` and then trim whitespaces
-                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-
-                // Get filter data type for QML
-                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
-                outputDataList << fieldName << filterDataType;
-
-                // Append all data type to allList as well
-                allColumns.append(outputDataList);
-
-                outputDataList.clear();
-
-            }
-        } else{
-            qWarning() << Q_FUNC_INFO << describeQuery.lastError();
-        }
-        break;
-    }
-
+    case Constants::excelIntType:
     case Constants::csvIntType:
     case Constants::jsonIntType:{
 

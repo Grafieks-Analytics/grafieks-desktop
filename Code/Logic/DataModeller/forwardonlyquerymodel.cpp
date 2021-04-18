@@ -15,9 +15,13 @@ ForwardOnlyQueryModel::~ForwardOnlyQueryModel()
 void ForwardOnlyQueryModel::setQuery(QString query)
 {
 
+    this->internalColCount = 0;
+    this->internalRowCount = 0;
     this->resultData.clear();
+
     this->query = query.simplified();
     querySplitter.setQueryForClasses(this->query);
+
 
     this->generateRoleNames();
     this->setQueryResult();
@@ -106,11 +110,14 @@ void ForwardOnlyQueryModel::generateRoleNames()
                     fieldType = q.value(1).toString().trimmed();
                     colInfo << fieldName << dataType.dataType(fieldType) << tableName;
 
+                    qDebug() << "COL INFO" << colInfo;
                     m_roleNames.insert(i, fieldName.toUtf8());
                     this->setChartHeader(i, colInfo);
 
                     this->tableHeaders.append(fieldName);
                     this->internalColCount++;
+                    colInfo.clear();
+                    i++;
                 }
             } else{
                 qWarning() << Q_FUNC_INFO << q.lastError();
@@ -149,6 +156,7 @@ void ForwardOnlyQueryModel::generateRoleNames()
                             fieldName.remove(tableName + ".");
                             fieldType = colTypeMap.value(fieldName);
                             colInfo << fieldName << dataType.dataType(fieldType.left(fieldType.indexOf("("))) << tableName;
+
                         } catch(std::exception &e){
                             qDebug() << e.what();
                         }
