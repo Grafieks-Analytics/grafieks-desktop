@@ -72,6 +72,8 @@ Page {
 
     onIsHorizontalGraphChanged: {
         if(isHorizontalGraph){
+            allowedXAxisDataPanes = 1;
+            allowedYAxisDataPanes = 2;
             switch(chartTitle){
             case Constants.barChartTitle:
                 chartUrl = Constants.horizontalBarChartUrl;
@@ -81,6 +83,10 @@ Page {
                 break;
             }
         }else{
+
+            allowedXAxisDataPanes = 2;
+            allowedYAxisDataPanes = 1;
+
             chartUrl = Constants.barChartUrl;
             console.log('Loading bar chart')
             webEngineView.url = Constants.baseChartUrl+chartUrl;

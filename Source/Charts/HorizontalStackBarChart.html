@@ -6,6 +6,11 @@
     <script src="./Data/d3.v4.min.js"></script>
     <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
     <link rel="stylesheet" href="Data/general.css" />
+    <style>
+        .y-axis .domain {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <div id="tooltip"></div>
@@ -19,18 +24,21 @@
                 ["Ind", "2000", "100.81"],
                 ["Ind", "2001", "136.35"],
                 ["Ind", "2002", "143.22"],
+                ["Aus", "1999", "0"],
                 ["Aus", "2000", "241.64"],
                 ["Aus", "2001", "48.43"],
                 ["Aus", "2002", "54.43"],
                 ["Nz", "1999", "-211.31"],
                 ["Nz", "2000", "-200.36"],
+                ["Nz", "2001", "0"],
+                ["Nz", "2002", "0"],
                 ["Uk", "1999", "321.31"],
                 ["Uk", "2000", "-500.36"],
                 ["Uk", "2001", "103.7"],
                 ["Uk", "2002", "100.82"],
             ],
             ["Ind", "Aus", "Nz", "Uk"],
-            ["Year"],
+            ["1999", "2000", "2001", "2002"],
         ];
 
         function transformData(dataValue) {
@@ -118,7 +126,7 @@
             var x = d3
                 .scaleLinear()
                 .domain([d3.min(series, stackMin), d3.max(series, stackMax)])
-                .rangeRound([margin.left, width - margin.right]);
+                .rangeRound([0, width - margin.right]);
 
             var z = d3.scaleOrdinal(d3Colors);
 
@@ -133,6 +141,11 @@
                     "transform",
                     "translate(" + margin.left + "," + margin.top + ")"
                 );
+
+            svg.append("g")
+                .attr("class", "grid")
+                .style("stroke-width", "1")
+                .call(make_x_gridlines(x).tickSize(height).tickFormat(""));
 
             var keysIterator = 0;
             svg.append("g")
@@ -186,12 +199,13 @@
                 });
 
             svg.append("g")
-                .attr("transform", "translate(" + x(0) + ", 0)")
+                .attr("transform", "translate(0, 0)")
+                .attr("class", "y-axis")
                 .call(d3.axisLeft(y).tickSize(0));
 
             svg.append("g")
-                .attr("transform", "translate(0," + margin.top + ")")
-                .call(d3.axisTop(x).tickSize(0));
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x).tickSize(0));
 
             function stackMin(series) {
                 return d3.min(series, function (d) {
@@ -203,6 +217,13 @@
                 return d3.max(series, function (d) {
                     return d[1];
                 });
+            }
+
+            function make_x_gridlines(x) {
+                return d3.axisBottom(x);
+            }
+            function make_y_gridlines(y) {
+                return d3.axisLeft(y).ticks(10);
             }
         }
     </script>
