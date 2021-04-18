@@ -106,6 +106,8 @@ void ForwardOnlyQueryModel::generateRoleNames()
                     fieldType = q.value(1).toString().trimmed();
                     colInfo << fieldName << dataType.dataType(fieldType) << tableName;
 
+                    qDebug() << "TERADATA IF " << colInfo;
+
                     m_roleNames.insert(i, fieldName.toUtf8());
                     this->setChartHeader(i, colInfo);
 
@@ -149,6 +151,8 @@ void ForwardOnlyQueryModel::generateRoleNames()
                             fieldName.remove(tableName + ".");
                             fieldType = colTypeMap.value(fieldName);
                             colInfo << fieldName << dataType.dataType(fieldType.left(fieldType.indexOf("("))) << tableName;
+
+                            qDebug() << "TERADATA ELSE 1" << colInfo;
                         } catch(std::exception &e){
                             qDebug() << e.what();
                         }
