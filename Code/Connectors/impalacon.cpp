@@ -22,8 +22,9 @@ QVariantMap ImpalaCon::ImpalaOdbcInstance(const QString &driver, const QString &
         dbImpalaOdbc.setPort(port);
         dbImpalaOdbc.setUserName(username);
         dbImpalaOdbc.setPassword(password);
+        dbImpalaOdbc.open();
 
-        if(!dbImpalaOdbc.open()){
+        if(!dbImpalaOdbc.isOpen()){
             outputStatus.insert("status", false);
             outputStatus.insert("msg", dbImpalaOdbc.lastError().text());
 

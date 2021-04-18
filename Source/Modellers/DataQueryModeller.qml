@@ -64,89 +64,83 @@ Page {
         function onMysqlLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                TableListModel.callQuery()
-                tableslist.model = TableListModel
+                tableslist.model = NewTableListModel.getTableList()
             }
         }
         function onPostgresLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                TableListModel.callQuery()
-                tableslist.model = TableListModel
+                tableslist.model = NewTableListModel.getTableList()
             }
         }
         function onMssqlLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                TableListModel.callQuery()
-                tableslist.model = TableListModel
+                tableslist.model = NewTableListModel.getTableList()
+            }
+        }
+        function onAccessLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                tableslist.model = NewTableListModel.getTableList()
+            }
+        }
+
+        function onLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                tableslist.model = NewTableListModel.getTableList()
             }
         }
         function onSqliteLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                TableListModel.callQuery()
-                tableslist.model = TableListModel
+                tableslist.model = NewTableListModel.getTableList()
             }
         }
         function onMongoLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                TableListModel.callQuery()
-                tableslist.model = TableListModel
+                tableslist.model = NewTableListModel.getTableList()
             }
         }
         function onSnowflakeLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                let tables = ForwardOnlyDataModel.getTableList()
-                tables.forEach((item)=>{
-                                   otherSqlTableList.append({tableName: item})
-                               })
-                tableslist.model = otherSqlTableList
+                tableslist.model = ForwardOnlyDataModel.getTableList()
             }
         }
         function onRedshiftLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                let tables = ForwardOnlyDataModel.getTableList()
-                tables.forEach((item)=>{
-                                   otherSqlTableList.append({tableName: item})
-                               })
-                tableslist.model = otherSqlTableList
+                tableslist.model = ForwardOnlyDataModel.getTableList()
             }
         }
 
+        function onTeradataLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                tableslist.model = ForwardOnlyDataModel.getTableList()
+            }
+        }
         function onExcelLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                let tables =  DuckDataModel.getTableList()
-                tables.forEach((item)=>{
-                                   otherSqlTableList.append({tableName: item})
-                               })
-                tableslist.model = otherSqlTableList
+                tableslist.model = DuckDataModel.getTableList()
             }
         }
 
         function onCsvLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                let tables =  DuckDataModel.getTableList()
-                tables.forEach((item)=>{
-                                   otherSqlTableList.append({tableName: item})
-                               })
-                tableslist.model = otherSqlTableList
+                tableslist.model = DuckDataModel.getTableList()
             }
         }
 
         function onJsonLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                let tables =  DuckDataModel.getTableList()
-                tables.forEach((item)=>{
-                                   otherSqlTableList.append({tableName: item})
-                               })
-                tableslist.model = otherSqlTableList
+                tableslist.model = DuckDataModel.getTableList()
             }
         }
 
@@ -377,7 +371,7 @@ Page {
         DSParamsModel.setTmpSql("")
     }
     function onTableToggle(){
-        TableColumnsModel.getColumnsForTable(tableName, "TableColumns")
+        NewTableColumnsModel.getColumnsForTable(modelData, "TableColumns")
 
         toggleTableIcon.source = tablecolumnListView.visible === false ?  "/Images/icons/Down_20.png" : "/Images/icons/Right_20.png"
         if(tablecolumnListView.visible === true){
@@ -466,7 +460,7 @@ Page {
 
             Text {
                 id: contactInfo
-                text: tableName
+                text: modelData
                 anchors.left: tableImg.right
                 anchors.leftMargin: 10
                 anchors.verticalCenter: tableImg.verticalCenter
@@ -495,7 +489,7 @@ Page {
                 anchors.left: parent.left
                 anchors.leftMargin: 50
                 visible: false
-                objectName: tableName
+                objectName: modelData
             }
 
             MouseArea {
@@ -512,7 +506,7 @@ Page {
                 drag.onActiveChanged: {
                     if (mouseArea.drag.active) {
                         tableslist.dragItemIndex = index;
-                        tableslist.tableName = tableName
+                        tableslist.tableName = modelData
                     }
                     dragRect.Drag.drop();
                 }
@@ -520,8 +514,8 @@ Page {
 
 
                 onClicked: {
-                    TableColumnsModel.getColumnsForTable(tableName, "TableColumns")
-                    console.log("Table name", tableName)
+                    NewTableColumnsModel.getColumnsForTable(modelData, "TableColumns")
+                    console.log("Table name", modelData)
 
                     if(tablecolumnListView.visible === true){
                         toggleTableIcon.source ="/Images/icons/Right_20.png"

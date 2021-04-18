@@ -107,7 +107,7 @@ void ConnectorsLoginModel::hiveOdbcLogin(QString driver, QString host, QString d
 void ConnectorsLoginModel::snowflakeOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
     QVariantMap response = snowflakecon->SnowflakeOdbcInstance(driver, host, db, port, username, password);
-    this->staticSetter(db, Constants::sqlType, Constants::snowflakeIntType, Constants::snowflakeOdbcStrType);
+    this->staticSetter(db, Constants::forwardType, Constants::snowflakeIntType, Constants::snowflakeOdbcStrType);
     emit snowflakeLoginStatus(response);
 }
 
@@ -118,10 +118,15 @@ void ConnectorsLoginModel::teradataOdbcLogin(QString driver, QString host, QStri
     emit teradataLoginStatus(response);
 }
 
-void ConnectorsLoginModel::accessOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
+void ConnectorsLoginModel::accessOdbcLogin(QString driver, QString db, QString username, QString password)
 {
-    QVariantMap response = accesscon->AccessOdbcInstance(driver, host, db, port, username, password);
-    this->staticSetter(db, Constants::sqlType, Constants::accessIntType, Constants::accessOdbcStrType);
+    QVariantMap response = accesscon->AccessOdbcInstance(driver, db, username, password);
+
+    QFileInfo fileInfo(db);
+    QString accessFileName = fileInfo.fileName();
+
+
+    this->staticSetter(accessFileName, Constants::sqlType, Constants::accessIntType, Constants::accessOdbcStrType);
     emit accessLoginStatus(response);
 }
 

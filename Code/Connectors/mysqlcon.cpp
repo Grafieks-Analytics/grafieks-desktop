@@ -36,9 +36,10 @@ QVariantMap MysqlCon::MysqlInstance(const QString &host, const QString &db, cons
         dbMysql.setDatabaseName(db);
         dbMysql.setUserName(username);
         dbMysql.setPassword(password);
+        dbMysql.open();
 
 
-        if(!dbMysql.open()){
+        if(!dbMysql.isOpen()){
             outputStatus.insert("status", false);
             outputStatus.insert("msg", dbMysql.lastError().text());
 
@@ -94,9 +95,10 @@ QVariantMap MysqlCon::MysqlOdbcInstance(const QString &driver, const QString &ho
         dbMysqlOdbc.setPort(port);
         dbMysqlOdbc.setUserName(username);
         dbMysqlOdbc.setPassword(password);
+        dbMysqlOdbc.open();
 
 
-        if(!dbMysqlOdbc.open()){
+        if(!dbMysqlOdbc.isOpen()){
             outputStatus.insert("status", false);
             outputStatus.insert("msg", dbMysqlOdbc.lastError().text());
 

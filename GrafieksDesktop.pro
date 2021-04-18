@@ -78,6 +78,7 @@ SOURCES += \
     Code/Logic/DataModeller/filternumericallistmodel.cpp \
     Code/Logic/DataModeller/forwardonlydatamodel.cpp \
     Code/Logic/DataModeller/forwardonlyquerymodel.cpp \
+    Code/Logic/DataModeller/newtablelistmodel.cpp \
     Code/Logic/DataModeller/proxyfiltermodel.cpp \
     Code/Logic/DataModeller/publishdatasourcemodel.cpp \
     Code/Logic/DataModeller/querymodel.cpp \
@@ -85,23 +86,20 @@ SOURCES += \
     Code/Logic/DataModeller/scheduler.cpp \
     Code/Logic/DataModeller/schedulerds.cpp \
     Code/Logic/DataModeller/schedulermodel.cpp \
-    Code/Logic/DataModeller/tablelistmodel.cpp \
     Code/Logic/Datasources/datasource.cpp \
     Code/Logic/Datasources/datasourceds.cpp \
     Code/Logic/Datasources/datasourcefilter.cpp \
     Code/Logic/Datasources/datasourcemodel.cpp \
     Code/Logic/General/datatype.cpp \
     Code/Logic/General/generalparamsmodel.cpp \
+    Code/Logic/General/newtablecolumnsmodel.cpp \
     Code/Logic/General/qttest.cpp \
     Code/Logic/General/qttest2.cpp \
     Code/Logic/General/querysplitter.cpp \
-    Code/Logic/General/tablecolumnsmodel.cpp \
     Code/Logic/General/tableschemamodel.cpp \
-    Code/Logic/General/typecheck.cpp \
     Code/Logic/Menu/user.cpp \
     Code/Logic/Reports/chartsmodel.cpp \
     Code/Logic/Reports/reportparamsmodel.cpp \
-    Code/Logic/Reports/reportsdatamodel.cpp \
     main.cpp \
 
 RESOURCES += \
@@ -190,6 +188,7 @@ HEADERS += \
     Code/Logic/DataModeller/filternumericallistmodel.h \
     Code/Logic/DataModeller/forwardonlydatamodel.h \
     Code/Logic/DataModeller/forwardonlyquerymodel.h \
+    Code/Logic/DataModeller/newtablelistmodel.h \
     Code/Logic/DataModeller/proxyfiltermodel.h \
     Code/Logic/DataModeller/publishdatasourcemodel.h \
     Code/Logic/DataModeller/querymodel.h \
@@ -197,23 +196,20 @@ HEADERS += \
     Code/Logic/DataModeller/scheduler.h \
     Code/Logic/DataModeller/schedulerds.h \
     Code/Logic/DataModeller/schedulermodel.h \
-    Code/Logic/DataModeller/tablelistmodel.h \
     Code/Logic/Datasources/datasource.h \
     Code/Logic/Datasources/datasourceds.h \
     Code/Logic/Datasources/datasourcefilter.h \
     Code/Logic/Datasources/datasourcemodel.h \
     Code/Logic/General/datatype.h \
     Code/Logic/General/generalparamsmodel.h \
+    Code/Logic/General/newtablecolumnsmodel.h \
     Code/Logic/General/qttest.h \
     Code/Logic/General/qttest2.h \
     Code/Logic/General/querysplitter.h \
-    Code/Logic/General/tablecolumnsmodel.h \
     Code/Logic/General/tableschemamodel.h \
-    Code/Logic/General/typecheck.h \
     Code/Logic/Menu/user.h \
     Code/Logic/Reports/chartsmodel.h \
     Code/Logic/Reports/reportparamsmodel.h \
-    Code/Logic/Reports/reportsdatamodel.h \
     Code/duckdb.hpp \
     Code/jsoncons/include/jsoncons/json.hpp \
     Code/jsoncons/include/jsoncons_ext/csv/csv.hpp \

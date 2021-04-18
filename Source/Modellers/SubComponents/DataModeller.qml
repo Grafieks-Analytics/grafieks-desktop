@@ -125,6 +125,12 @@ Item {
             }
         }
 
+        function onSnowflakeLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "\""
+            }
+        }
+
         function onSqliteLoginStatus(status){
             if(status.status === true){
                 query_joiner = "`"
@@ -152,7 +158,7 @@ Item {
 
 
     Connections{
-        target: TableColumnsModel
+        target: NewTableColumnsModel
 
         function onColumnListObtained(allColumns, tableName, moduleName){
 
@@ -670,7 +676,7 @@ Item {
         var currentPoint = {x: rectLeftX, y: rectLeftY};
 
         // Get Column names of the table
-        TableColumnsModel.getColumnsForTable(tableslist.tableName, dataModellerItem.moduleName)
+        NewTableColumnsModel.getColumnsForTable(tableslist.tableName, dataModellerItem.moduleName)
 
 
 

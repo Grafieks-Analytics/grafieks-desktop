@@ -91,9 +91,8 @@ Popup {
         popup.visible = false
     }
 
-    function connectToMsSQL(){
-        //        ConnectorsLoginModel.mssqlOdbcLogin(server.text, database.text, port.text, username.text, password.text)
-        ConnectorsLoginModel.teradataOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
+    function connectToTeradata(){
+        ConnectorsLoginModel.teradataOdbcLogin(control.currentText, server.text, database.text, port.text, username.text, password.text)
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -502,7 +501,7 @@ Popup {
             id: btn_signin
             textValue: Constants.signInText
             fontPixelSize: Constants.fontCategoryHeader
-            onClicked: connectToMsSQL()
+            onClicked: connectToTeradata()
         }
 
     }
