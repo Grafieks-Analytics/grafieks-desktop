@@ -33,7 +33,6 @@ public:
 
 
 public slots:
-    void receiveCsvFilterQuery(QString query);
 
 signals:
     void forwardColData(QStringList colData);

@@ -90,11 +90,12 @@ void DriveDS::homeBut()
 }
 
 
-void DriveDS::fetchFileData(QString gFileId, QString extension)
+void DriveDS::fetchFileData(QString gFileId, QString fileName, QString extension)
 {
     emit showBusyIndicator(true);
     this->gFileId = gFileId;
     this->extension = extension;
+    this->newFileName = fileName;
 
     m_networkReply = this->google->get(QUrl("https://www.googleapis.com/drive/v3/files/"+gFileId+"?alt=media"));
     connect(m_networkReply,&QNetworkReply::finished,this,&DriveDS::fileDownloadFinished);
@@ -293,7 +294,11 @@ void DriveDS::fileDownloadFinished()
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 
     }else{
-        QString fileName = QDir::temp().tempPath() +"/" + this->gFileId +"." + this->extension;
+
+        QFileInfo f(this->newFileName);
+        qDebug() << this->newFileName << "FILENAME" << f.baseName().toUtf8();
+
+        QString fileName = QDir::temp().tempPath() +"/" + this->newFileName +"." + this->extension;
         QFile file(fileName);
         file.open(QIODevice::WriteOnly);
         file.write(m_networkReply->readAll(), m_networkReply->size());
