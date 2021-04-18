@@ -22,8 +22,9 @@ QVariantMap OracleCon::OracleOdbcInstance(const QString &driver, const QString &
         dbOracleOdbc.setPort(port);
         dbOracleOdbc.setUserName(username);
         dbOracleOdbc.setPassword(password);
+        dbOracleOdbc.open();
 
-        if(!dbOracleOdbc.open()){
+        if(!dbOracleOdbc.isOpen()){
             outputStatus.insert("status", false);
             outputStatus.insert("msg", dbOracleOdbc.lastError().text());
 

@@ -26,6 +26,7 @@ Popup {
     y: parent.height/2 - 300
     padding: 0
     property int label_col : 135
+    property var fileName: ""
 
 
     /***********************************************************************************************************************/
@@ -58,8 +59,6 @@ Popup {
                     accessOdbcModalError.visible = false
 
                     control.model = driversList
-                    server.readOnly = false
-                    port.readOnly = false
                     database.readOnly = false
                     username.readOnly = false
                     password.readOnly = false
@@ -68,8 +67,6 @@ Popup {
                     accessOdbcModalError.visible = true
 
                     control.model = ["No Drivers"]
-                    server.readOnly = true
-                    port.readOnly = true
                     database.readOnly = true
                     username.readOnly = true
                     password.readOnly = true
@@ -91,9 +88,8 @@ Popup {
         popup.visible = false
     }
 
-    function connectToMsSQL(){
-//        ConnectorsLoginModel.mssqlOdbcLogin(server.text, database.text, port.text, username.text, password.text)
-          ConnectorsLoginModel.accessOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
+    function connectToAccess(){
+          ConnectorsLoginModel.accessOdbcLogin(control.currentText, fileName, username.text, password.text)
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -280,83 +276,14 @@ Popup {
 
     // Row1: Enter server address ends
 
-    // Row2: Enter database name starts
-
-    Row{
-
-        id: row2
-        anchors.top: row1.bottom
-        anchors.topMargin: 15
-        anchors.left: parent.left
-        anchors.leftMargin: 1
-
-        Rectangle{
-
-            id: label3
-            width:label_col
-            height: 40
-            Text{
-                text: "Server"
-                anchors.right: parent.right
-                anchors.rightMargin: 10
-                font.pixelSize: Constants.fontCategoryHeader
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-
-        TextField{
-            id: server
-            maximumLength: 45
-            anchors.verticalCenter: parent.verticalCenter
-            height: 40
-            width: 200
-
-            background: Rectangle {
-                border.color: Constants.borderBlueColor
-                radius: 5
-                width: 200
-            }
-        }
-        Rectangle{
-
-            id: labelPort
-            width: 40
-            height: 40
-
-            Text{
-                text: "Port"
-                leftPadding: 10
-                anchors.left: server.right
-                anchors.rightMargin: 20
-                font.pixelSize: Constants.fontCategoryHeader
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-        TextField{
-            id: port
-            maximumLength: 45
-            anchors.verticalCenter: parent.verticalCenter
-            //width: 130
-            height: 40
-            background: Rectangle {
-                border.color: Constants.borderBlueColor
-                radius: 5
-                width: 160
-
-            }
-        }
-
-    }
-
-    // Row2: Enter database name ends
 
     // Row3: Enter port number starts
 
 
     Row{
 
-        id: row3
-        anchors.top: row2.bottom
+        id: row2
+        anchors.top: row1.bottom
         anchors.topMargin: 15
         anchors.left: parent.left
         anchors.leftMargin: 1
@@ -375,33 +302,27 @@ Popup {
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
-
-        TextField{
-            id: database
-            maximumLength: 45
-            anchors.verticalCenter: parent.verticalCenter
-            width: 370
-            height: 40
-
-            background: Rectangle {
-                border.color: Constants.borderBlueColor
-                radius: 5
-                width: 400
-
-            }
+        Button{
+            text: "Choose file"
+            onClicked: promptAccess.open();
         }
+
+        Text{
+            id: accessFileName
+        }
+
 
     }
 
 
-    // Row3: Enter port number ends
+    // Row2: Enter port number ends
 
-    // Row 4: Enter user name starts
+    // Row 3: Enter user name starts
 
     Row{
 
-        id: row4
-        anchors.top: row3.bottom
+        id: row3
+        anchors.top: row2.bottom
         anchors.topMargin: 15
         anchors.left: parent.left
         anchors.leftMargin: 1
@@ -438,14 +359,14 @@ Popup {
 
     }
 
-    // Row 4: Enter user name ends
+    // Row 3: Enter user name ends
 
-    // Row 5: Enter password starts
+    // Row 4: Enter password starts
 
     Row{
 
-        id: row5
-        anchors.top: row4.bottom
+        id: row4
+        anchors.top: row3.bottom
         anchors.topMargin: 15
         anchors.left: parent.left
         anchors.leftMargin: 1
@@ -483,14 +404,14 @@ Popup {
 
     }
 
-    // Row 5: Enter password ends
+    // Row 4: Enter password ends
 
-    // Row 6: Action Button starts
+    // Row 5: Action Button starts
 
     Row{
 
-        id: row6
-        anchors.top: row5.bottom
+        id: row5
+        anchors.top: row4.bottom
         anchors.topMargin: 15
         anchors.right: parent.right
         anchors.rightMargin: label_col - 70
@@ -502,11 +423,11 @@ Popup {
             id: btn_signin
             textValue: Constants.signInText
             fontPixelSize: Constants.fontCategoryHeader
-            onClicked: connectToMsSQL()
+            onClicked: connectToAccess()
         }
 
     }
-    // Row 6: Action Button ends
+    // Row 5: Action Button ends
 
 
 
@@ -519,6 +440,22 @@ Popup {
         title: "Microsft Access Driver missing"
         text: qsTr("You don't have Microsoft Access driver. Download Microsoft Access to enable it")
 
+    }
+
+    // Select Access file
+    FileDialog{
+        id: promptAccess
+        title: "Select an Access db file"
+        nameFilters: ["Access files (*.mdb, *.accdb )"];
+
+        onAccepted: {
+//            csvFileName.text = ConnectorsLoginModel.urlToFilePath(promptAccess.fileUrl)
+            fileName = ConnectorsLoginModel.urlToFilePath(promptAccess.fileUrl)
+            console.log(fileUrl)
+        }
+        onRejected: {
+            console.log("file rejected")
+        }
     }
 
 }

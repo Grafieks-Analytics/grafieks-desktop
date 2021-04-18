@@ -95,37 +95,41 @@ void TableSchemaModel::showSchema(QString query)
             describeQueryString = "DESCRIBE " + tableName;
 
             QSqlQuery describeQuery(describeQueryString, dbMysql);
+            if(describeQuery.lastError().type() == QSqlError::NoError){
 
-            while(describeQuery.next()){
+                while(describeQuery.next()){
 
-                QString fieldName = describeQuery.value(0).toString();
-                QString fieldType = describeQuery.value(1).toString();
+                    QString fieldName = describeQuery.value(0).toString();
+                    QString fieldType = describeQuery.value(1).toString();
 
-                // Remove characters after `(` and then trim whitespaces
-                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+                    // Remove characters after `(` and then trim whitespaces
+                    QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
 
-                // Get filter data type for QML
-                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+                    // Get filter data type for QML
+                    QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
+                    outputDataList << tableName << fieldName << fieldType << filterDataType;
 
-                // Output data according to Filter type
+                    // Output data according to Filter type
 
-                if(filterDataType == Constants::categoricalType){
-                    allCategorical.append(outputDataList);
-                } else if(filterDataType == Constants::numericalType){
-                    allNumerical.append(outputDataList);
-                } else if(filterDataType == Constants::dateType){
-                    allDates.append(outputDataList);
-                } else{
-                    allOthers.append(outputDataList);
+                    if(filterDataType == Constants::categoricalType){
+                        allCategorical.append(outputDataList);
+                    } else if(filterDataType == Constants::numericalType){
+                        allNumerical.append(outputDataList);
+                    } else if(filterDataType == Constants::dateType){
+                        allDates.append(outputDataList);
+                    } else{
+                        allOthers.append(outputDataList);
+                    }
+
+                    // Append all data type to allList as well
+                    allList.append(outputDataList);
+
+                    // Clear Stringlist for future
+                    outputDataList.clear();
                 }
-
-                // Append all data type to allList as well
-                allList.append(outputDataList);
-
-                // Clear Stringlist for future
-                outputDataList.clear();
+            } else{
+                qWarning() << Q_FUNC_INFO << describeQuery.lastError();
             }
         }
 
@@ -157,19 +161,33 @@ void TableSchemaModel::showSchema(QString query)
         explainQueryString = "EXPLAIN FORMAT = JSON "+ query;
         QSqlQuery explainQuery(explainQueryString, dbMysqlOdbc);
 
+        if(explainQuery.lastError().type() == QSqlError::NoError){
+            explainQuery.first();
 
-        explainQuery.first();
+            QJsonDocument jsonQuery = QJsonDocument::fromJson(explainQuery.value(0).toString().toUtf8());
+            QJsonObject objQuery = jsonQuery.object();
 
-        QJsonDocument jsonQuery = QJsonDocument::fromJson(explainQuery.value(0).toString().toUtf8());
-        QJsonObject objQuery = jsonQuery.object();
+            QJsonObject statusObj = objQuery["query_block"].toObject();
+            QJsonArray tablesListArray = statusObj["nested_loop"].toArray();
 
-        QJsonObject statusObj = objQuery["query_block"].toObject();
-        QJsonArray tablesListArray = statusObj["nested_loop"].toArray();
+            if(tablesListArray.size() > 0){
+                for(int i = 0; i< tablesListArray.size(); i++){
+                    QJsonObject table = tablesListArray.at(i).toObject();
+                    QJsonObject tableData = table["table"].toObject();
 
-        if(tablesListArray.size() > 0){
-            for(int i = 0; i< tablesListArray.size(); i++){
-                QJsonObject table = tablesListArray.at(i).toObject();
-                QJsonObject tableData = table["table"].toObject();
+                    // Affected column names in teh query
+                    QJsonArray affectedColumns = tableData["used_columns"].toArray();
+
+                    for(int j = 0; j < affectedColumns.size(); j++){
+                        queriedColumnNames << affectedColumns.at(j).toString();
+                    }
+
+                    // Affected table names in the query
+                    tableList << tableData["table_name"].toString();
+
+                }
+            } else{
+                QJsonObject tableData = statusObj["table"].toObject();
 
                 // Affected column names in teh query
                 QJsonArray affectedColumns = tableData["used_columns"].toArray();
@@ -178,22 +196,11 @@ void TableSchemaModel::showSchema(QString query)
                     queriedColumnNames << affectedColumns.at(j).toString();
                 }
 
-                // Affected table names in the query
                 tableList << tableData["table_name"].toString();
 
             }
         } else{
-            QJsonObject tableData = statusObj["table"].toObject();
-
-            // Affected column names in teh query
-            QJsonArray affectedColumns = tableData["used_columns"].toArray();
-
-            for(int j = 0; j < affectedColumns.size(); j++){
-                queriedColumnNames << affectedColumns.at(j).toString();
-            }
-
-            tableList << tableData["table_name"].toString();
-
+            qWarning() << Q_FUNC_INFO << explainQuery.lastError();
         }
 
 
@@ -204,37 +211,40 @@ void TableSchemaModel::showSchema(QString query)
             describeQueryString = "DESCRIBE " + tableName;
 
             QSqlQuery describeQuery(describeQueryString, dbMysqlOdbc);
+            if(describeQuery.lastError().type() == QSqlError::NoError){
+                while(describeQuery.next()){
 
-            while(describeQuery.next()){
+                    QString fieldName = describeQuery.value(0).toString();
+                    QString fieldType = describeQuery.value(1).toString();
 
-                QString fieldName = describeQuery.value(0).toString();
-                QString fieldType = describeQuery.value(1).toString();
+                    // Remove characters after `(` and then trim whitespaces
+                    QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
 
-                // Remove characters after `(` and then trim whitespaces
-                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+                    // Get filter data type for QML
+                    QString filterDataType = dataType.dataType(fieldTypeTrimmed);
 
-                // Get filter data type for QML
-                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
+                    outputDataList << tableName << fieldName << fieldType << filterDataType;
 
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
+                    // Output data according to Filter type
 
-                // Output data according to Filter type
+                    if(filterDataType == Constants::categoricalType){
+                        allCategorical.append(outputDataList);
+                    } else if(filterDataType == Constants::numericalType){
+                        allNumerical.append(outputDataList);
+                    } else if(filterDataType == Constants::dateType){
+                        allDates.append(outputDataList);
+                    } else{
+                        allOthers.append(outputDataList);
+                    }
 
-                if(filterDataType == Constants::categoricalType){
-                    allCategorical.append(outputDataList);
-                } else if(filterDataType == Constants::numericalType){
-                    allNumerical.append(outputDataList);
-                } else if(filterDataType == Constants::dateType){
-                    allDates.append(outputDataList);
-                } else{
-                    allOthers.append(outputDataList);
+                    // Append all data type to allList as well
+                    allList.append(outputDataList);
+
+                    // Clear Stringlist for future
+                    outputDataList.clear();
                 }
-
-                // Append all data type to allList as well
-                allList.append(outputDataList);
-
-                // Clear Stringlist for future
-                outputDataList.clear();
+            } else{
+                qWarning() << Q_FUNC_INFO << describeQuery.lastError();
             }
         }
 
@@ -789,7 +799,10 @@ void TableSchemaModel::showSchema(QString query)
 
 
         for(QString tableName: tablesList){
-            describeQueryString = "SELECT column_name, data_type FROM user_tab_columns WHERE table_name = '" + tableName + "'";
+            tableName.remove("\"" + Statics::currentDbName + "\".");
+            tableName.remove(Statics::currentDbName + ".");
+            tableName.remove("\"");
+            describeQueryString = "SELECT ColumnName, ColumnType FROM DBC.Columns WHERE DatabaseName = '" + Statics::currentDbName + "' AND TableName = '" + tableName + "'";
 
             QSqlQuery describeQuery(describeQueryString, dbTeradata);
             QSqlRecord rec = describeQuery.record();
@@ -797,8 +810,8 @@ void TableSchemaModel::showSchema(QString query)
             while(describeQuery.next()){
 
 
-                QString fieldName = describeQuery.value(0).toString();
-                QString fieldType = describeQuery.value(1).toString();
+                QString fieldName = describeQuery.value(0).toString().trimmed();
+                QString fieldType = describeQuery.value(1).toString().trimmed();
 
                 // Remove characters after `(` and then trim whitespaces
                 QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();

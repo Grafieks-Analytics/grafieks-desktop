@@ -54,6 +54,7 @@ QStringList QuerySplitter::getSelectParams()
     QRegularExpression selectListRegex(R"(SELECT\s+(.*?)\sFROM\s)", QRegularExpression::CaseInsensitiveOption);
     QRegularExpressionMatch selectIterator = selectListRegex.match(m_query);
     selectList << selectIterator.captured(1).trimmed().replace("DISTINCT", "", Qt::CaseInsensitive).split(",");
+//    selectList.sort(Qt::CaseInsensitive);
 
     return selectList;
 }
@@ -113,5 +114,18 @@ QStringList QuerySplitter::getJoinTables()
     }
 
     return joinTableList;
+}
+
+QString QuerySplitter::getAliasName(QString columnString)
+{
+    QStringList list;
+    QRegExp separator("\\sas\\s", Qt::CaseInsensitive);
+
+    if(columnString.contains(separator)){
+        list = columnString.split(separator);
+    }
+
+    qDebug() << "LIST" << list;
+    return list[1];
 }
 

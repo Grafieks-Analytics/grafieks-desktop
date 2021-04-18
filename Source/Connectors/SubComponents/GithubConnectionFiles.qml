@@ -16,6 +16,7 @@ import QtQuick.Layouts 1.3
 import com.grafieks.singleton.constants 1.0
 
 import "../../MainSubComponents"
+import "./MiniSubComponents"
 
 Popup {
     id: popup
@@ -34,6 +35,9 @@ Popup {
     property var fileName: ""
     property var fileExtension: ""
     property var fileUrl: ""
+
+
+    property var generalObjectName : ""
 
     closePolicy: Popup.NoAutoClose
 
@@ -207,6 +211,7 @@ Popup {
         GithubDS.fetchFileData(fileId, fileExtension, fileUrl)
     }
 
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -268,17 +273,6 @@ Popup {
                 id: connectedById
                 text: qsTr("Not Connected")
             }
-
-            //            Column{
-            //                x: parent.width * 0.75
-
-            //                Text {
-            //                    id: signOutBtn
-            //                    x:popup.width - popup.parent.width * 0.125 - 30
-            //                    text: qsTr("Sign Out")
-            //                    color: "blue"
-            //                }
-            //            }
         }
 
         // Row  User Details Ends
@@ -407,90 +401,7 @@ Popup {
 
                         }
 
-                        delegate: Row{
-                            height:30
-                            width: popup.width * 0.6
-
-                            Column{
-                                width: 20
-                                height: parent.height
-                                Row{
-
-                                    Image{
-                                        id: fileMenuIcon
-                                        source: type=="folder"?"/Images/icons/folder-invoices.png" :"/Images/icons/file-icon.png"
-                                        width:25
-                                        height: 25
-                                    }
-                                }
-                            }
-
-                            Column{
-                                width: parent.width / 2
-                                height: parent.height
-
-                                Rectangle{
-                                    height: parent.height
-                                    width: parent.width
-                                    anchors.left: parent
-                                    anchors.leftMargin: 2
-                                    color: "transparent"
-
-                                    Text {
-                                        text: qsTr(name)
-                                        padding: 5
-                                        leftPadding: 20
-                                    }
-
-
-                                    MouseArea{
-
-                                        anchors.fill:parent
-                                        onClicked:onFileClicked(id, name, modifiedTime, extension, url);
-                                        onDoubleClicked: onFolderDoubleClicked()
-                                    }
-                                }
-
-                            }
-
-
-                            Column{
-                                width: parent.width / 4
-                                height: 30
-
-                                Row{
-                                    height: parent.height
-                                    width: parent.width
-                                    anchors.left: parent
-
-                                    Text {
-                                        text: qsTr(extension)
-                                        padding: 5
-                                        leftPadding: 20
-                                    }
-                                }
-
-                            }
-
-                            Column{
-                                width: parent.width / 4
-                                height: 30
-
-                                Row{
-                                    height: parent.height
-                                    width: parent.width
-                                    anchors.left: parent
-
-                                    Text {
-                                        text: qsTr(modifiedTime)
-                                        padding: 5
-                                        leftPadding: 20
-                                    }
-                                }
-                            }
-
-                        }
-
+                        delegate: githubDelegate
                     }
                 }
 
@@ -580,17 +491,14 @@ Popup {
 
                             Text {
                                 id: detailNameDisplay
-                                text: qsTr("Test.xlsx")
                                 padding: 5
                             }
                             Text {
                                 id: documentTypeDisplay
-                                text: qsTr("Document")
                                 padding: 5
                             }
                             Text {
                                 id: modifiedTimeDisplay
-                                text: qsTr("24/05/2020 14:30")
                                 padding: 5
                             }
 
@@ -626,7 +534,6 @@ Popup {
                         id: path
                         anchors.verticalCenter: parent.verticalCenter
                         leftPadding: 10
-                        text: qsTr("Drive")
                     }
                 }
             }
@@ -666,5 +573,9 @@ Popup {
 
 
 
+    Component{
+        id: githubDelegate
+        GithubDelegate{}
+    }
 
 }

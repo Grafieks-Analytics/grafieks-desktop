@@ -10,6 +10,11 @@ ODBC Administrator registers and configures the databases ( data sources) availa
 
 On Windows, default _ODBC Datasources (64-bit)_ & _ODBC Data sources (32-bit)_ exists which can be used to find the required DSN name for the required connection.
 
+### Kill Process on Windows using Port and PID
+```
+netstat -ano|findstr "8080"
+taskkill /PID 18264 /f
+```
 ## Mac
 
 On Mac, we need to install **[iODBC](http://www.iodbc.org/dataspace/doc/iodbc/wiki/iodbcWiki/WelcomeVisitors)**. Rest, the functionalities and interface of **iODBC** is similar to that of Windows **Odbc Data sources**
@@ -22,7 +27,13 @@ On Mac, we need to install **[iODBC](http://www.iodbc.org/dataspace/doc/iodbc/wi
 
 # Database ODBC connections
 
--   **Mysql**
+- **Sqlite**
+1. Works without any external drivers. Simply fire the connection.
+
+- **CSV/JSON/Excel/Online Storages & Services**
+1. Works with system integrated DuckDB. Just fire the connection
+
+-  **Mysql**
 
 1. Download [Mysql Odbc installer](https://dev.mysql.com/downloads/connector/odbc/5.3.html) for the respective Operating system.
 
@@ -62,7 +73,7 @@ On Mac, we need to install **[iODBC](http://www.iodbc.org/dataspace/doc/iodbc/wi
 2. Download MongoDB BI Connector https://www.mongodb.com/try/download/bi-connector
 3. Run mongo db using `mongod.exe` installed in `C:\Programfiles\Mongo\bin`
 4. Also need to start `mongosqld.exe` installed in `C:\Programfiles\Mongodb\server\x.x\bin`
-5. General Select SQL queries will run using the ODBC connector on `C:\Programfiles\Mongodb\Connector for BI\x.x\bin`
+5. General Select SQL queries will run using the BI connector on `C:\Programfiles\Mongodb\Connector for BI\x.x\bin`. You need to start the exe
 6. On Windows, you might need to create `C:\data\db` folder before running mongodb server. 
 7. Dont use the port from mongod.exe (default 27017) but use the one provided by the BI Connector, mongosqld.exe (default 3307) to connect using ODBC
 
@@ -74,3 +85,15 @@ On Mac, we need to install **[iODBC](http://www.iodbc.org/dataspace/doc/iodbc/wi
 4. Inside the `VPC` from the left panel, select Subnets
 5. Select any Subnet ID from the selected VPC.
 6. Select the `routes` tab and add a new route `0.0.0.0/0` for connecting from any IP address
+
+- **Snowflake**
+1. Create a trial account on Snowflake
+2. Just after creating an account, a welcome mail will arrive with server login link.
+3. Use the link to manage the databases online. Also use the same link without `https://` as server address in Grafieks
+4. The username and passwords are same. Default port number is 443
+5. Snowflake ODBC driver https://docs.snowflake.com/en/user-guide/odbc-download.html
+
+
+- **TeraData**
+1. Install Teradata on a VM on Windows and host it as a server. Visit this link for details: https://www.youtube.com/watch?v=22kJdybzi60
+2. Download Teradata ODBC driver https://downloads.teradata.com/download/connectivity
