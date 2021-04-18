@@ -174,5 +174,6 @@
         <file>Images/icons/keyboard_arrow_right-black-48dp.svg</file>
         <file>Images/icons/Right_20.png</file>
         <file>Images/icons/charts/123.png</file>
+        <file>Images/icons/PowerOff.png</file>
     </qresource>
 </RCC>

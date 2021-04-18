@@ -99,7 +99,7 @@ Item{
         textEditQueryModeller.cursorPosition = textEditQueryModeller.text.length
 
         textData = textData.replace(/?/g,'');
-        var textArrayQueryNewLine = textData.split("<br/>");
+        var textArrayQueryNewLine = textData.split("<br>");
         var textArrayQueryOutputNewLine = []
 
         console.log("textArrayQueryNewLine"+JSON.stringify(textArrayQueryNewLine))
