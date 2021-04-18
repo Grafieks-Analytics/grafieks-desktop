@@ -114,14 +114,19 @@ Column{
             return;
         }
 
+        colorByData.push({ columnName: itemName, itemType: itemType })
         colorListModel.append({textValue: itemName})
+
         ReportParamsModel.setLastDropped(itemType);
 
         switch(report_desiner_page.chartTitle){
             case Constants.barChartTitle:
-
                 ReportParamsModel.setChartType(Constants.stackedBarChartTitle);
                 report_desiner_page.chartTitle = Constants.stackedBarChartTitle;
+                break;
+            case Constants.horizontalBarChartTitle:
+                ReportParamsModel.setChartType(Constants.horizontalStackedBarChartTitle);
+                report_desiner_page.chartTitle = Constants.horizontalStackedBarChartTitle;
                 break;
             case Constants.areaChartTitle:
                 ReportParamsModel.setChartType(Constants.stackedAreaChartTitle);

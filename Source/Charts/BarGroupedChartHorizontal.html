@@ -85,8 +85,7 @@
             var margin = { top: 40, right: 20, bottom: 80, left: 70 };
             var width = window.innerWidth - margin.left - margin.right - 70;
             if (chartType == constants.chartType.STANDARD) {
-                width =
-                    dataValues.length * keys.length * standartThresholdWidth;
+                width = dataValues[0].length * standartThresholdWidth;
             }
 
             var height = window.innerHeight - margin.top - margin.bottom;
@@ -147,7 +146,7 @@
                 .selectAll("rect")
                 .data(function (d) {
                     return keys.map(function (key, j) {
-                        return { key, value: d[j] };
+                        return { key: key, value: d[j] };
                     });
                 })
                 .enter()
@@ -174,15 +173,7 @@
                     d3.selectAll(".bar").style("opacity", 1);
                 })
                 .on("mouseover mousemove", function (d, i) {
-                    var computedValues = this.getClientRects()[0];
-                    const barsWidth = computedValues.width;
-
-                    let xpos =
-                        computedValues.x +
-                        barsWidth *
-                            ((dataValues[0].length - 1) /
-                                dataValues[0].length) +
-                        barsWidth;
+                    let xpos = d3.mouse(this)[0] + margin.left;
                     let ypos = d3.mouse(this)[1];
 
                     d3.select("#tooltip")

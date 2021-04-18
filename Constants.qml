@@ -255,12 +255,16 @@ QtObject {
 
     // Chart Urls
     property string baseChartUrl: "qrc:/Source/Charts/";
-    property string horizontalBarChartTitle: "HorizontalBarChart.html"
 
     property string stackedBarChartUrl: "StackedBarChart.html"
     property string stackedAreaChartUrl: "StackedAreaChart.html"
 
+    property string horizontalBarChartTitle: "HorizontalBarChart"
     property string horizontalBarChartUrl: "HorizontalBarChart.html"
+
+    property string horizontalStackedBarChartTitle: "Horizontal Stack Bar Chart"
+    property string horizontalStackedBarChartUrl: "HorizontalStackBarChart.html"
+
     property string barGroupedChartUrl: "BarGroupedChart.html";
     property string barChartUrl: "BarChartArrayInput.html";
 
