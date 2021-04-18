@@ -212,7 +212,6 @@ Item{
     function onGetErrorMsg(){
 
         var message = QueryStatsModel.showErrorMessage(DSParamsModel.tmpSql);
-
         if(message === ""){
             message = "SQL query succesfully executed"
             queryUpdate.icon = StandardIcon.NoIcon
