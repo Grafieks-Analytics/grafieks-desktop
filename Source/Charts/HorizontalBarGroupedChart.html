@@ -8,17 +8,15 @@
     </head>
     <body>
         <div id="my_dataviz"></div>
-
         <div id="tooltip"></div>
 
         <script>
             function drawChart(data, plottingConfiguration = {}) {
                 window.data = data;
-                dataValues = data[0];
+                var keys = data[2];
+                var [xAxisLabel, yAxisLabel] = data[3];
 
-                console.log(JSON.stringify(plottingConfiguration));
-
-                var parseTime = d3.timeParse("%d-%b-%y");
+                data = transformData(data);
 
                 let {
                     d3colorPalette,
@@ -35,49 +33,37 @@
                 if (!paddingInner) {
                     paddingInner = defaultD3Config.defaultPaddingInner;
                 }
-            }
 
-            function horizontalGroupBarChart(config) {
-                drawHorizontalGroupBarChartChart(config);
-            }
-
-            function drawHorizontalGroupBarChartChart(config) {
-                var data = config.data;
-                var columnsInfo = config.columnsInfo;
-                var xAxis = config.xAxis;
-                var yAxis = config.yAxis;
-                var colorRange = config.colorRange;
-                var mainDiv = config.mainDiv;
-                var mainDivName = mainDiv.substr(1, mainDiv.length);
-                var label = config.label;
-                var requireLegend = config.requireLegend;
+                var requireLegend = false;
 
                 var margin = { top: 40, right: 20, bottom: 80, left: 70 };
                 var width = window.innerWidth - margin.left - margin.right - 70;
-                var height = window.innerHeight - margin.top - margin.bottom;
+                var height =
+                    window.innerHeight - margin.top - margin.bottom - 20;
 
                 d3.selectAll("#my_dataviz").html("");
 
                 var y0 = d3
                     .scaleBand()
                     .rangeRound([height, 0])
-                    .paddingInner(0.1);
+                    .padding(paddingInner);
 
-                var y1 = d3.scaleBand().padding(0.05);
-
+                var y1 = d3.scaleBand().padding(paddingInner);
                 var x = d3.scaleLinear().rangeRound([0, width]);
+                var z = d3.scaleOrdinal().range([d3Colors[4]]);
 
-                var z = d3.scaleOrdinal().range(colorRange);
-
-                var keys = Object.keys(columnsInfo);
                 y0.domain(
                     data.map(function (d) {
-                        return d[yAxis];
+                        return d.key;
                     })
                 );
                 y1.domain(keys).rangeRound([0, y0.bandwidth()]);
                 x.domain([
-                    -10,
+                    d3.min(data, function (d) {
+                        return d3.min(keys, function (key) {
+                            return d[key];
+                        });
+                    }),
                     d3.max(data, function (d) {
                         return d3.max(keys, function (key) {
                             return d[key];
@@ -98,17 +84,17 @@
                     .attr("height", height + margin.top + margin.bottom)
                     .attr("transform", "translate(0,0)");
 
-                // svg.append("g")
-                //     .attr("class", "grid")
-                //     .style("stroke-width", "1")
-                //     .call(make_x_gridlines(x).tickSize(height).tickFormat(""));
-
                 var g = svg
                     .append("g")
                     .attr(
                         "transform",
                         "translate(" + margin.left + "," + margin.top + ")"
                     );
+
+                g.append("g")
+                    .attr("class", "axis grid")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(make_x_gridlines(x).tickSize(-height).tickFormat(""));
 
                 var element = g
                     .append("g")
@@ -117,22 +103,25 @@
                     .enter()
                     .append("g")
                     .attr("transform", function (d) {
-                        return "translate(0," + y0(d[yAxis]) + ")";
+                        return "translate(0," + y0(d.key) + ")";
                     });
+
                 var rect = element
                     .selectAll("rect")
                     .data(function (d, i) {
                         return keys.map(function (key) {
+                            console.log(key);
                             return {
                                 key: key,
                                 value: d[key],
-                                index: key + "_" + i + "_" + d[yAxis],
+                                index: key + "_" + i + "_" + d.key,
                             };
                         });
                     })
                     .enter()
                     .append("rect")
                     .attr("x", function (d) {
+                        console.log(d);
                         if (d.value < 0) {
                             return x(d.value);
                         }
@@ -151,17 +140,6 @@
                     .attr("fill", function (d) {
                         return z(d.key);
                     });
-                //CBT:add tooltips
-                var self = {};
-                self.svg = svg;
-                self.cssPrefix = "horgroupBar0_";
-                self.data = data;
-                self.keys = keys;
-                self.height = height;
-                self.width = width;
-                self.label = label;
-                self.yAxis = yAxis;
-                self.xAxis = xAxis;
 
                 rect.on("mouseover mousemove", function () {
                     var currentEl = d3.select(this);
@@ -176,7 +154,7 @@
                 g.append("g")
                     .attr("class", "axis")
                     .attr("transform", "translate(0," + height + ")")
-                    .call(d3.axisBottom(x).ticks(maxTicks))
+                    .call(d3.axisBottom(x).ticks(10).tickSize(0))
                     .append("text")
                     .attr("x", width / 2)
                     .attr("y", 40)
@@ -184,11 +162,11 @@
                     .attr("fill", "#000")
                     .attr("font-weight", "bold")
                     .attr("text-anchor", "start")
-                    .text(label.xAxis);
+                    .text(xAxisLabel);
 
                 g.append("g")
                     .attr("class", "axis")
-                    .call(d3.axisLeft(y0).ticks(null, "s"))
+                    .call(d3.axisLeft(y0).ticks(null, "s").tickSize(0))
                     .append("text")
                     .attr("x", height * 0.4 * -1)
                     .attr("y", margin.left * 0.8 * -1) //y(y.ticks().pop()) + 0.5)
@@ -196,37 +174,68 @@
                     .attr("fill", "#000")
                     .attr("transform", "rotate(-90)")
                     .attr("font-weight", "bold")
-                    // .attr("text-anchor", "start")
-                    .text(label.yAxis);
+                    .attr("text-anchor", "start")
+                    .text(yAxisLabel);
             }
 
-            var groupChartData = [
-                { 2614: -8, 4449: 15, over: 1 },
-                { 2614: 7, 4449: 2, over: 2 },
-                { 2614: 4, 4449: 5, over: 3 },
-                { 2614: 19, 4449: 8, over: 4 },
-                { 2614: 3, 4449: -7, over: 5 },
-                { 2614: 6, 4449: 1, over: 6 },
-                { 2614: 7, 4449: 6, over: 7 },
-                { 2614: 13, 4449: -2, over: 8 },
-                { 2614: 1, 4449: 8, over: 9 },
-                { 2614: -8, 4449: 9, over: 10 },
+            var data = [
+                [
+                    { 2614: -8, 4449: 15, data2: 2, over: 1 },
+                    { 2614: 7, 4449: 2, data2: 1, over: 2 },
+                    { 2614: 4, 4449: 5, data2: 3, over: 3 },
+                    { 2614: 19, 4449: 8, data2: 21, over: 4 },
+                    { 2614: 3, 4449: -7, data2: 41, over: 5 },
+                    { 2614: 6, 4449: 1, data2: 11, over: 6 },
+                    { 2614: 7, 4449: 6, data2: 41, over: 7 },
+                    { 2614: 13, 4449: -2, data2: 11, over: 8 },
+                    { 2614: 1, 4449: 8, data2: 41, over: 9 },
+                    { 2614: -8, 4449: 9, data2: 21, over: "ads" },
+                ],
+                [2614, 4449, "data2"],
+                ["runs", "over"],
             ];
-            var columnsInfo = { 2614: "Team A", 4449: "Team B" };
-            var barChartConfig = {
-                mainDiv: "#chart",
-                colorRange: ["#2a98cd", "#df7247"],
-                data: groupChartData,
-                columnsInfo: columnsInfo,
-                xAxis: "runs",
-                yAxis: "over",
-                label: {
-                    xAxis: "Runs",
-                    yAxis: "Over",
-                },
-                requireLegend: true,
-            };
-            var groupChart = new horizontalGroupBarChart(barChartConfig);
+
+            var data = [
+                [
+                    [2704659, 4499890, -2659981],
+                    [2027307, 3277946, 1420518],
+                    [1208495, 2141490, 1058031],
+                    [1140516, -1938695, 925060],
+                    [894368, 1558919, 725973],
+                    [737462, 1345341, -1879201],
+                ],
+                ["Over 1", "Over 2", "Over 3", "Over 4", "Over 5", "Over 6"],
+                ["Team 1", "Team 2", "Team 3"],
+                ["X Axis Label", "Y Axis Label"],
+            ];
+
+            drawChart(data);
+
+            function transformData(data) {
+                var dataValues = data[0];
+                var uniqueValues = data[1];
+                var keys = data[2];
+
+                var response = {};
+
+                for (var j = 0; j < dataValues.length; j++) {
+                    var dataRow = dataValues[j];
+                    for (var i = 0; i < dataRow.length; i++) {
+                        var x1Key = uniqueValues[j];
+                        if (!response[x1Key]) {
+                            response[x1Key] = {};
+                        }
+                        response[x1Key][keys[i]] = dataRow[i];
+                    }
+                }
+
+                var sendResponseData = [];
+                for (var key in response) {
+                    sendResponseData.push({ ...response[key], key });
+                }
+                console.log(sendResponseData);
+                return sendResponseData;
+            }
 
             function make_x_gridlines(x) {
                 return d3.axisBottom(x);
