@@ -121,7 +121,12 @@ void ConnectorsLoginModel::teradataOdbcLogin(QString driver, QString host, QStri
 void ConnectorsLoginModel::accessOdbcLogin(QString driver, QString db, QString username, QString password)
 {
     QVariantMap response = accesscon->AccessOdbcInstance(driver, db, username, password);
-    this->staticSetter(db, Constants::sqlType, Constants::accessIntType, Constants::accessOdbcStrType);
+
+    QFileInfo fileInfo(db);
+    QString accessFileName = fileInfo.fileName();
+
+
+    this->staticSetter(accessFileName, Constants::sqlType, Constants::accessIntType, Constants::accessOdbcStrType);
     emit accessLoginStatus(response);
 }
 

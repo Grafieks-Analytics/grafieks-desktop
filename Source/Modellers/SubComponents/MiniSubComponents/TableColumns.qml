@@ -19,7 +19,7 @@ Item {
 
 
     Connections{
-        target: TableColumnsModel
+        target: NewTableColumnsModel
 
         function onColumnListObtained(allColumns, tableName, moduleName){
             if(moduleName === "TableColumns")

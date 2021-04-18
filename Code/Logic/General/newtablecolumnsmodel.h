@@ -1,5 +1,5 @@
-#ifndef TABLECOLUMNSMODEL_H
-#define TABLECOLUMNSMODEL_H
+#ifndef NEWTABLECOLUMNSMODEL_H
+#define NEWTABLECOLUMNSMODEL_H
 
 #include <QSqlRecord>
 #include <QSqlField>
@@ -18,20 +18,15 @@
 #include "datatype.h"
 #include "../Connectors/duckcon.h"
 
-/*!
- * \class TableColumnsModel
- * \brief Lists column names and data types for a given sql table
- * \ingroup General
- */
-class TableColumnsModel : public QObject
+class NewTableColumnsModel : public QObject
 {
     Q_OBJECT
     DuckCon *duckCon;
     DataType dataType;
 
 public:
-    explicit TableColumnsModel(QObject *parent = nullptr);
-    explicit TableColumnsModel(DuckCon *duckCon, QObject *parent = nullptr);
+    explicit NewTableColumnsModel(QObject *parent = nullptr);
+    explicit NewTableColumnsModel(DuckCon *duckCon, QObject *parent = nullptr);
 
     Q_INVOKABLE void getColumnsForTable(QString tableName = "", QString moduleName = "");
 
@@ -41,6 +36,7 @@ signals:
 
 private:
     QList<QStringList> allColumns;
+
 };
 
-#endif // TABLECOLUMNSMODEL_H
+#endif // NEWTABLECOLUMNSMODEL_H

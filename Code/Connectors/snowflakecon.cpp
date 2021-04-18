@@ -13,7 +13,6 @@ QVariantMap SnowflakeCon::SnowflakeOdbcInstance(const QString &driver, const QSt
 
 
     if(QSqlDatabase::isDriverAvailable("QODBC")){
-        qDebug() << "AVAILABLE";
 
         QString dbString = "driver={"+ driver +"};server="+ host +";database= "+ db;
 

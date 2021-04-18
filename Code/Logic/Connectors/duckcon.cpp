@@ -23,6 +23,7 @@ void DuckCon::createTable(){
     std::string csvdb       = "";
 
     QString fileExtension = QFileInfo(db).completeSuffix();
+    qDebug() << fileName << fileExtension << "DUCK FILE INFO";
 
 
     fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));

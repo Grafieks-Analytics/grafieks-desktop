@@ -10,6 +10,11 @@ ODBC Administrator registers and configures the databases ( data sources) availa
 
 On Windows, default _ODBC Datasources (64-bit)_ & _ODBC Data sources (32-bit)_ exists which can be used to find the required DSN name for the required connection.
 
+### Kill Process on Windows using Port and PID
+```
+netstat -ano|findstr "8080"
+taskkill /PID 18264 /f
+```
 ## Mac
 
 On Mac, we need to install **[iODBC](http://www.iodbc.org/dataspace/doc/iodbc/wiki/iodbcWiki/WelcomeVisitors)**. Rest, the functionalities and interface of **iODBC** is similar to that of Windows **Odbc Data sources**
