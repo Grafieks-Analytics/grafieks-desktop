@@ -50,7 +50,7 @@
 
                 var y1 = d3.scaleBand().padding(paddingInner);
                 var x = d3.scaleLinear().rangeRound([0, width]);
-                var z = d3.scaleOrdinal().range([d3Colors[4]]);
+                var z = d3.scaleOrdinal().range(d3Colors);
 
                 y0.domain(
                     data.map(function (d) {
@@ -110,18 +110,16 @@
                     .selectAll("rect")
                     .data(function (d, i) {
                         return keys.map(function (key) {
-                            console.log(key);
                             return {
                                 key: key,
                                 value: d[key],
-                                index: key + "_" + i + "_" + d.key,
+                                // index:  + d.key,
                             };
                         });
                     })
                     .enter()
                     .append("rect")
                     .attr("x", function (d) {
-                        console.log(d);
                         if (d.value < 0) {
                             return x(d.value);
                         }
@@ -133,23 +131,34 @@
                     .attr("width", function (d) {
                         return Math.abs(x(d.value) - x(0));
                     })
-                    .attr("data-index", function (d, i) {
-                        return d.index;
-                    })
                     .attr("height", y1.bandwidth())
                     .attr("fill", function (d) {
                         return z(d.key);
+                    })
+                    .on("mouseout", function (d, i) {
+                        d3.select("#tooltip").style("display", "none");
+                        d3.selectAll(".bar").style("opacity", 1);
+                    })
+                    .on("mouseover mousemove", function (d, i) {
+                        var computedValues = this.getClientRects()[0];
+
+                        let ypos = computedValues.y + 20;
+                        let xpos = d3.mouse(this)[0] - 20;
+
+                        d3.select("#tooltip")
+                            .style("left", xpos + "px")
+                            .style("top", ypos + "px")
+                            .style("display", "block")
+                            .style("position", "absolute")
+                            .text(function () {
+                                var textValue = d.value;
+                                // var labelName = d.data.key;
+                                return textValue.toFixed(3);
+                            });
+
+                        d3.selectAll(".bar").style("opacity", 0.3);
+                        d3.select(this).style("opacity", 1);
                     });
-
-                rect.on("mouseover mousemove", function () {
-                    var currentEl = d3.select(this);
-                    var index = currentEl.attr("data-index");
-                });
-
-                rect.on("mouseout", function () {
-                    var currentEl = d3.select(this);
-                    var index = currentEl.attr("data-index");
-                });
 
                 g.append("g")
                     .attr("class", "axis")
@@ -233,7 +242,6 @@
                 for (var key in response) {
                     sendResponseData.push({ ...response[key], key });
                 }
-                console.log(sendResponseData);
                 return sendResponseData;
             }
 
