@@ -221,11 +221,7 @@
                 .append("g")
                 .attr("class", "g")
                 .attr("transform", function (d) {
-                    return (
-                        "translate(" +
-                        (+getLeftAxisDistance() - barWidth / 2 + x(d.key)) +
-                        ", 0)"
-                    );
+                    return "translate(" + x(d.key) + ", 0)";
                 });
 
             entry
