@@ -75,7 +75,6 @@ TableView {
         target: ForwardOnlyQueryModel
 
         function onForwardOnlyHasData(hasData){
-            console.log("FORWARD SIGNAL RECEIVED")
             dataPreviewResult.model = hasData === true? ForwardOnlyQueryModel: ""
             globalConType = Constants.forwardType
         }
