@@ -235,10 +235,12 @@
         <file>Source/Reports/SubComponents/MiniSubComponents/PivotThemesPopup.qml</file>
         <file>Source/Charts/HorizontalBarChart.html</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/AxisItemMenuPopup.qml</file>
+        <file>Source/Charts/HorizontalStackBarChart.html</file>
         <file>Source/Connectors/SubComponents/MiniSubComponents/GithubDelegate.qml</file>
         <file>Source/Connectors/SubComponents/MiniSubComponents/SheetDelegate.qml</file>
         <file>Source/Connectors/SubComponents/MiniSubComponents/DriveDelegate.qml</file>
         <file>Source/Connectors/SubComponents/MiniSubComponents/DropboxDelegate.qml</file>
         <file>Source/Connectors/SubComponents/MiniSubComponents/BoxDelegate.qml</file>
+        <file>Source/Charts/HorizontalBarGroupedChart.html</file>
     </qresource>
 </RCC>
