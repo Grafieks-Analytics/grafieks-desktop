@@ -35,7 +35,7 @@
                         "bar",
                         "foo",
                     ],
-                    [10, 40, -10, 50, 30, -20, 70],
+                    [10, 40, 10, 50, 30, 20, 70],
                 ],
                 ["value 1", "value 2Z"],
             ];
@@ -87,15 +87,23 @@
                 // set the ranges
                 var y = d3.scaleBand().range([height, 0]).padding(paddingInner);
 
-                var x = d3.scaleLinear().range([0, width]);
-
                 // Scale the range of the data in the domains
-                x.domain(
-                    d3.extent(dataValues[1], function (d) {
+
+                var [minValue, maxValue] = d3.extent(
+                    dataValues[1],
+                    function (d) {
                         return d;
-                    })
+                    }
                 );
+
+                var x = d3.scaleLinear().range([0, width]);
+                x.domain([minValue > 0 ? 0 : minValue, maxValue]);
                 y.domain(dataValues[0]);
+
+                svg.append("g")
+                    .attr("class", "grid")
+                    .style("stroke-width", "1")
+                    .call(make_x_gridlines(x).tickSize(height).tickFormat(""));
 
                 // append the rectangles for the bar chart
                 svg.selectAll(".bar")
@@ -106,6 +114,9 @@
                         return "bar bar--" + (d < 0 ? "negative" : "positive");
                     })
                     .attr("x", function (d) {
+                        if (minValue > 0) {
+                            return 0;
+                        }
                         return x(Math.min(0, d));
                     })
                     .attr("y", function (d, i) {
@@ -144,8 +155,16 @@
                 // add the y Axis
                 svg.append("g")
                     .attr("class", "y-axis")
-                    .attr("transform", "translate(" + x(0) + ",0)")
+                    .attr("dy", "2.32em")
+                    .attr("transform", "translate(0,0)")
                     .call(d3.axisLeft(y));
+            }
+
+            function make_x_gridlines(x) {
+                return d3.axisBottom(x);
+            }
+            function make_y_gridlines(y) {
+                return d3.axisLeft(y).ticks(10);
             }
         </script>
     </body>
