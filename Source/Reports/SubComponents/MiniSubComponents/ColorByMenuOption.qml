@@ -77,6 +77,7 @@ Popup {
                 ReportParamsModel.setItemType(null);
                 ReportParamsModel.setLastDropped(null);
                 ReportParamsModel.setChartType(Constants.barChartTitle);
+                report_desiner_page.colorByData = [];
                 break;
             }
         }
