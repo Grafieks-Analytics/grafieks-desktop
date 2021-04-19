@@ -446,7 +446,7 @@ Popup {
     FileDialog{
         id: promptAccess
         title: "Select an Access db file"
-        nameFilters: ["Access files (*.mdb, *.accdb )"];
+        nameFilters: ["Access files (*.mdb *.accdb )"];
 
         onAccepted: {
 
