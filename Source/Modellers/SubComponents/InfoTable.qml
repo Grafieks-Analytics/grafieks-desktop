@@ -187,7 +187,7 @@ Item{
             queryResultsTable.visible = false
 
             dataQueryModellerStackview.height = Qt.binding(function(){
-                return queryModellerPage.height - 95
+                return queryModellerPage.height - 65
             })
 
             infodata_table.height = Qt.binding(function(){
@@ -580,7 +580,7 @@ Item{
             anchors.topMargin: 1
             height: 26
 
-            x: parent.width - 278
+            x: parent.width - (column_querymodeller.width+100)
 
             Button{
                 id: collapseBtn
@@ -631,12 +631,15 @@ Item{
         width: parent.width - column_querymodeller.width - 50
 
 
+
+
         // "Test Query Results" - Status of query section -> Execution Time starts
 
         TestQueryResultsTable{
             id: testQueryResult
             anchors.top: top.parent
             anchors.topMargin: 0
+
         }
 
         // "Test Query Results" Ends
@@ -650,32 +653,13 @@ Item{
         }
 
 
+
+
         // "Data Priview" Table Ends
 
     }
 
 
-    ScrollBar {
-        id: vbar
-        hoverEnabled: true
-        active: hovered || pressed
-        orientation: Qt.Vertical
-        size: parent.height / 2
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-    }
-
-    ScrollBar {
-        id: hbar
-        hoverEnabled: true
-        active: hovered || pressed
-        orientation: Qt.Horizontal
-        size: parent.width / 2
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-    }
 
     // Result Ends
 

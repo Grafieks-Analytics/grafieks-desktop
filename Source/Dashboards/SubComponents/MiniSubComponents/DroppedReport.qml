@@ -67,6 +67,8 @@ Item{
 
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName))
                 droppedReportId.border.color = refColor
+                mainChart.border.color = refColor
+
         }
 
         function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
@@ -410,7 +412,14 @@ Item{
         WebEngineView{
             id: webengine
             anchors.top : mainChart.bottom
-            anchors.centerIn: parent
+            anchors.topMargin: 10
+//            anchors.right: parent.right
+            anchors.horizontalCenter: parent.horizontalCenter
+
+
+
+
+//            anchors.centerIn: parent
 
             width:newItem.width - 10
             height:newItem.height  - mainChart.height - 20

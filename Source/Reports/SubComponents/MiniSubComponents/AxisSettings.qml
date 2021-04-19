@@ -13,6 +13,16 @@ Rectangle{
     height: parent.height
     width: parent.width - leftMenu.width - menuContentSeparator.width
 
+    property bool toggleBoldYLabel: false;
+    property bool toggleBoldXLabel: false;
+    property bool toggleBoldYTick: false;
+    property bool toggleBoldXTick: false;
+
+    property bool toggleItalicYLabel: false;
+    property bool toggleItalicXLabel: false;
+    property bool toggleItalicYTick: false;
+    property bool toggleItalicXTick: false;
+
 
 
     /***********************************************************************************************************************/
@@ -65,21 +75,21 @@ Rectangle{
         ListElement{
             size: 24
         }
-        ListElement{
-            size: 28
-        }
-        ListElement{
-            size: 32
-        }
-        ListElement{
-            size: 48
-        }
-        ListElement{
-            size: 64
-        }
-        ListElement{
-            size: 78
-        }
+//        ListElement{
+//            size: 28
+//        }
+//        ListElement{
+//            size: 32
+//        }
+//        ListElement{
+//            size: 48
+//        }
+//        ListElement{
+//            size: 64
+//        }
+//        ListElement{
+//            size: 78
+//        }
     }
 
 
@@ -92,6 +102,148 @@ Rectangle{
         popup.visible = false
         webEngineView.runJavaScript("changeChartAttributes(selector, attributeName, attributeValue)")
     }
+
+//    bold
+    function boldToggleYLabel(){
+
+        if(toggleBoldYLabel == false){
+            toggleBoldYLabel = true;
+            yAxisLabelBold.color="lightGrey"
+            webEngineView.runJavaScript("changeChartAttributes('.y_label','font-weight','bold')")
+
+
+        }
+        else if(toggleBoldYLabel == true){
+            toggleBoldYLabel = false;
+            yAxisLabelBold.color="transparent"
+              webEngineView.runJavaScript("changeChartAttributes('.y_label','font-weight','normal')")
+        }
+        console.log("bold"+toggleBoldYLabel)
+
+    }
+    function boldToggleXLabel(){
+
+        if(toggleBoldXLabel == false){
+            toggleBoldXLabel = true;
+            xAxisLabelBold.color="lightGrey"
+            webEngineView.runJavaScript("changeChartAttributes('.x_label','font-weight','bold')")
+
+
+        }
+        else if(toggleBoldXLabel == true){
+            toggleBoldXLabel = false;
+            xAxisLabelBold.color="transparent"
+              webEngineView.runJavaScript("changeChartAttributes('.x_label','font-weight','normal')")
+        }
+        console.log("bold"+toggleBoldXLabel)
+
+    }
+    function boldToggleXTick(){
+
+        if(toggleBoldXTick == false){
+            toggleBoldXTick = true;
+            xAxisTickBold.color="lightGrey"
+            webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-weight','bold')")
+
+
+        }
+        else if(toggleBoldXTick == true){
+            toggleBoldXTick = false;
+            xAxisTickBold.color="transparent"
+              webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-weight','normal')")
+        }
+        console.log("bold"+toggleBoldXTick)
+
+    }
+    function boldToggleYTick(){
+
+        if(toggleBoldYTick == false){
+            toggleBoldYTick = true;
+            yAxisTickBold.color="lightGrey"
+            webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-weight','bold')")
+
+
+        }
+        else if(toggleBoldYTick == true){
+            toggleBoldYTick = false;
+            yAxisTickBold.color="transparent"
+              webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-weight','normal')")
+        }
+        console.log("bold"+toggleBoldYTick)
+
+    }
+
+//    italic
+    function italicToggleXLabel(){
+
+        if(toggleItalicXLabel == false){
+            toggleItalicXLabel = true;
+            xAxisLabelItalilc.color="lightGrey"
+            webEngineView.runJavaScript("changeChartAttributes('.x_label','font-style','italic')")
+
+
+        }
+        else if(toggleItalicXLabel == true){
+            toggleItalicXLabel = false;
+            xAxisLabelItalilc.color="transparent"
+              webEngineView.runJavaScript("changeChartAttributes('.x_label','font-style','normal')")
+        }
+        console.log("bold"+toggleItalicXLabel)
+
+    }
+    function italicToggleYLabel(){
+
+        if(toggleItalicYLabel == false){
+            toggleItalicYLabel = true;
+            yAxisLabelItalilc.color="lightGrey"
+            webEngineView.runJavaScript("changeChartAttributes('.y_label','font-style','italic')")
+
+
+        }
+        else if(toggleItalicYLabel == true){
+            toggleItalicYLabel = false;
+            yAxisLabelItalilc.color="transparent"
+              webEngineView.runJavaScript("changeChartAttributes('.y_label','font-style','normal')")
+        }
+        console.log("bold"+toggleItalicYLabel)
+
+    }
+    function italicToggleXTick(){
+
+        if(toggleItalicXTick == false){
+            toggleItalicXTick = true;
+            xAxisTickItalilc.color="lightGrey"
+            webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-style','italic')")
+
+
+        }
+        else if(toggleItalicXTick == true){
+            toggleItalicXTick = false;
+            xAxisTickItalilc.color="transparent"
+              webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-style','normal')")
+        }
+        console.log("bold"+toggleItalicYLabel)
+
+    }
+    function italicToggleYTick(){
+
+        if(toggleItalicYTick == false){
+            toggleItalicYTick = true;
+            yAxisTickItalilc.color="lightGrey"
+            webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-style','italic')")
+
+
+        }
+        else if(toggleItalicYTick == true){
+            toggleItalicYTick = false;
+            yAxisTickItalilc.color="transparent"
+              webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-style','normal')")
+        }
+        console.log("bold"+toggleItalicYTick)
+
+    }
+
+
 
 
 
@@ -263,37 +415,63 @@ Rectangle{
                                             onCurrentValueChanged: {
 
                                                     webEngineView.runJavaScript("changeChartAttributes('.x_label','font-size', '"+xAxisLabelFontSize.currentValue+"')")
+                                                d3PropertyConfig["xLabelFontSize"]=xAxisLabelFontSize.currentValue;
 
                                             }
                                         }
 
                                     }
 
-                                    Rectangle{
-                                        height: parent.height
-                                        width: parent.width/3 - parent.spacing
-                                        border.width: 1
-                                        border.color: Constants.borderBlueColor
-                                        Text {
-                                            anchors.centerIn: parent
-                                            text: qsTr("B")
-                                            font.bold: true
-                                        }
-                                    }
 
-                                    Rectangle{
-                                        height: parent.height
-                                        width: parent.width/3 - parent.spacing
-                                        border.width: 1
-                                        border.color: Constants.borderBlueColor
-                                        Text {
+
+
+                                        Button {
+                                            height: parent.height
+                                            width: parent.width/3 - parent.spacing
+                                            Text {
+                                             anchors.centerIn: parent
+                                             text: qsTr("B")
+                                             font.bold: true
+                                              }
+                                            onClicked: boldToggleXLabel();
+                                            background: Rectangle{
+                                                id:xAxisLabelBold
+                                                border.width: 1
+                                                border.color: Constants.borderBlueColor
+                                                color: "transparent"
+                                                height: parent.height
+                                                width:parent.width
+                                            }
+                                        }
+
+
+
+
+
+
+
+                                        Button {
+                                            height: parent.height
+                                            width: parent.width/3 - parent.spacing
+                                            Text {
                                             anchors.centerIn: parent
                                             text: qsTr("I")
                                             font.bold: true
                                             font.italic: true
-                                        }
-                                    }
+                                            }
 
+                                            onClicked: italicToggleXLabel();
+                                            background: Rectangle{
+                                                id:xAxisLabelItalilc
+                                                border.width: 1
+                                                border.color: Constants.borderBlueColor
+                                                color: "transparent"
+                                                height: parent.height
+                                                width:parent.width
+                                            }
+
+
+                                    }
                                 }
 
                             }
@@ -412,37 +590,62 @@ Rectangle{
                                             width: parent.width
                                             onCurrentValueChanged: {
                                                 console.log("fontsize"+xAxisTickMarkFontSize.currentValue);
-                                                    webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-size', '"+xAxisTickMarkFontSize.currentValue+"')")
+                                                webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-size', '"+xAxisTickMarkFontSize.currentValue+"');changeLabelPostionsAttributes('.x-axis .tick text','.x_label','y')")
 
                                             }
                                         }
 
                                     }
 
-                                    Rectangle{
-                                        height: parent.height
-                                        width: parent.width/3 - parent.spacing
-                                        border.width: 1
-                                        border.color: Constants.borderBlueColor
-                                        Text {
-                                            anchors.centerIn: parent
-                                            text: qsTr("B")
-                                            font.bold: true
-                                        }
-                                    }
 
-                                    Rectangle{
-                                        height: parent.height
-                                        width: parent.width/3 - parent.spacing
-                                        border.width: 1
-                                        border.color: Constants.borderBlueColor
-                                        Text {
-                                            anchors.centerIn: parent
-                                            text: qsTr("I")
-                                            font.bold: true
-                                            font.italic: true
+
+
+                                        Button {
+                                            height: parent.height
+                                            width: parent.width/3 - parent.spacing
+                                            Text {
+                                                anchors.centerIn: parent
+                                                text: qsTr("B")
+                                                font.bold: true
+                                            }
+                                            onClicked: boldToggleXTick();
+                                            background: Rectangle{
+                                                id:xAxisTickBold
+                                                border.width: 1
+                                                border.color: Constants.borderBlueColor
+                                                color: "transparent"
+                                                height: parent.height
+                                                width:parent.width
+                                            }
                                         }
-                                    }
+
+
+
+
+
+
+
+                                        Button {
+                                            height: parent.height
+                                            width: parent.width/3 - parent.spacing
+                                            Text {
+                                                anchors.centerIn: parent
+                                                text: qsTr("I")
+                                                font.bold: true
+                                                font.italic: true
+                                            }
+                                            onClicked: italicToggleXTick();
+                                            background: Rectangle{
+                                                id:xAxisTickItalilc
+                                                border.width: 1
+                                                border.color: Constants.borderBlueColor
+                                                color: "transparent"
+                                                height: parent.height
+                                                width:parent.width
+                                            }
+                                        }
+
+
 
                                 }
 
@@ -602,37 +805,66 @@ Rectangle{
                                         border.color: Constants.borderBlueColor
 
                                         CustomComboBox{
+                                            id:yAxisLabelFontSize
                                             model: fontSizes
                                             textRole: "size"
                                             width: parent.width
+                                            onCurrentValueChanged: {
+                                                console.log("fontsize"+yAxisLabelFontSize.currentValue);
+                                                    webEngineView.runJavaScript("changeChartAttributes('.y_label','font-size', '"+yAxisLabelFontSize.currentValue+"')")
+
+                                            }
                                         }
 
                                     }
 
-                                    Rectangle{
-                                        height: parent.height
-                                        width: parent.width/3 - parent.spacing
-                                        border.width: 1
-                                        border.color: Constants.borderBlueColor
-                                        Text {
-                                            anchors.centerIn: parent
-                                            text: qsTr("B")
-                                            font.bold: true
-                                        }
-                                    }
 
-                                    Rectangle{
-                                        height: parent.height
-                                        width: parent.width/3 - parent.spacing
-                                        border.width: 1
-                                        border.color: Constants.borderBlueColor
-                                        Text {
-                                            anchors.centerIn: parent
-                                            text: qsTr("I")
-                                            font.bold: true
-                                            font.italic: true
+
+
+                                        Button {
+                                            height: parent.height
+                                            width: parent.width/3 - parent.spacing
+                                            Text {
+                                                anchors.centerIn: parent
+                                                text: qsTr("B")
+                                                font.bold: true
+                                            }
+                                            onClicked: boldToggleYLabel();
+                                            background: Rectangle{
+                                                id:yAxisLabelBold
+                                                border.width: 1
+                                                border.color: Constants.borderBlueColor
+                                                color: "transparent"
+                                                height: parent.height
+                                                width:parent.width
+                                            }
                                         }
-                                    }
+
+
+
+
+
+                                        Button {
+                                            height: parent.height
+                                            width: parent.width/3 - parent.spacing
+                                            Text {
+                                                anchors.centerIn: parent
+                                                text: qsTr("I")
+                                                font.bold: true
+                                                font.italic: true
+                                            }
+                                            onClicked: italicToggleYLabel();
+                                            background: Rectangle{
+                                                id:yAxisLabelItalilc
+                                                border.width: 1
+                                                border.color: Constants.borderBlueColor
+                                                color: "transparent"
+                                                height: parent.height
+                                                width:parent.width
+                                            }
+                                        }
+
+
 
                                 }
 
@@ -751,37 +983,60 @@ Rectangle{
                                             width: parent.width
                                             onCurrentValueChanged: {
                                                 console.log("fontsize"+yAxisTickMarkFontSize.currentValue);
-                                                    webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-size', '"+yAxisTickMarkFontSize.currentValue+"')")
+                                                    webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-size', '"+yAxisTickMarkFontSize.currentValue+"');changeLabelPostionsAttributes('.y-axis .tick text','.y_label','y')")
 
                                             }
                                         }
 
                                     }
 
-                                    Rectangle{
-                                        height: parent.height
-                                        width: parent.width/3 - parent.spacing
-                                        border.width: 1
-                                        border.color: Constants.borderBlueColor
-                                        Text {
-                                            anchors.centerIn: parent
-                                            text: qsTr("B")
-                                            font.bold: true
-                                        }
-                                    }
 
-                                    Rectangle{
-                                        height: parent.height
-                                        width: parent.width/3 - parent.spacing
-                                        border.width: 1
-                                        border.color: Constants.borderBlueColor
-                                        Text {
-                                            anchors.centerIn: parent
-                                            text: qsTr("I")
-                                            font.bold: true
-                                            font.italic: true
+
+
+                                        Button {
+                                            height: parent.height
+                                            width: parent.width/3 - parent.spacing
+                                            Text {
+                                                anchors.centerIn: parent
+                                                text: qsTr("B")
+                                                font.bold: true
+                                            }
+                                            onClicked: boldToggleYTick();
+                                            background: Rectangle{
+                                                id:yAxisTickBold
+                                                border.width: 1
+                                                border.color: Constants.borderBlueColor
+                                                color: "transparent"
+                                                height: parent.height
+                                                width:parent.width
+                                            }
                                         }
-                                    }
+
+
+
+
+
+                                        Button {
+                                            height: parent.height
+                                            width: parent.width/3 - parent.spacing
+                                            Text {
+                                                anchors.centerIn: parent
+                                                text: qsTr("I")
+                                                font.bold: true
+                                                font.italic: true
+                                            }
+                                            onClicked: italicToggleYTick();
+                                            background: Rectangle{
+                                                id:yAxisTickItalilc
+                                                border.width: 1
+                                                border.color: Constants.borderBlueColor
+                                                color: "transparent"
+                                                height: parent.height
+                                                width:parent.width
+                                            }
+                                        }
+
+
 
                                 }
 

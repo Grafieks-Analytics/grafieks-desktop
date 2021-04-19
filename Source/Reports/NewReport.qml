@@ -841,7 +841,7 @@ Page {
                 height: parent.height
                 Text {
                     text: xAxisLabelName
-                    anchors.centerIn: parent
+                    anchors.centerIn: parent 
                 }
                 z:1
             }
@@ -1400,11 +1400,12 @@ Page {
 
     WebEngineView {
         id: webEngineView
-        height:parent.height - axis.height
-        width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width
+        height:parent.height - axis.height -50
+        width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width - 50
         url: "../Charts/BarChartArrayInput.html"
         onLoadingChanged: onChartLoaded(loadRequest)
         anchors.left: tool_sep_chartFilters.right
+        anchors.leftMargin: 50
         anchors.top: axis.bottom
     }
 
