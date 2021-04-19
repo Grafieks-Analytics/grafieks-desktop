@@ -4,6 +4,7 @@
 
     <!-- Load d3.js -->
     <script src="./Data/d3DefaultConfig.js"></script>
+        <script src="./Data/utils.js"></script>
     <script src="./Data/d3.v4.min.js"></script>
     <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
     <link rel="icon" href="logo.png" type="image/png" sizes="32x32" />
@@ -172,6 +173,12 @@
             //     .attr("d", valueline);
 
             // Generate Grid starts
+
+               const [xAxisLabel, yAxisLabel] = data[1];
+
+            setLabel(xAxisLabel, "x_label", false);
+            setLabel(yAxisLabel, "y_label", false);
+
 
             function make_x_gridlines() {
                 return d3.axisBottom(x).ticks(8);
