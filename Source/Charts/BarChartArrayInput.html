@@ -20,7 +20,7 @@
                 [
                     // ["2020-01-01", "2021-02-01", "2022-03-01", "2023-03-01"],
                     ["India", "Aus", "NZ", "Pak5", "Pak4", "Pak3", "Pak2"],
-                    [200, 800, 400, 200, -100, 100, 300],
+                    [200, 800, 400, 200, -120, 100, 300],
                 ],
                 ["Countries", "Population"],
             ];
@@ -118,7 +118,8 @@
                 var yScale = d3
                     .scaleLinear()
                     .rangeRound([0, height])
-                    .domain([maxHeight, minHeight]);
+                    .domain([maxHeight, minHeight])
+                    .nice();
                 //show negative
 
                 yaxisTicks = height / 70;
