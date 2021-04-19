@@ -3,6 +3,7 @@
     <meta charset="utf-8" />
     <!-- Load in the d3 library -->
     <script src="./Data/d3DefaultConfig.js"></script>
+        <script src="./Data/utils.js"></script>
     <script src="./Data/d3.v4.min.js"></script>
     <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
     <link rel="stylesheet" href="Data/general.css" />
@@ -33,7 +34,7 @@
                 ["01-01-2002", 20.2485817228091547],
                 ["01-01-2003", 32.13664898092621325],
             ],
-            ["Value Name"],
+            ["Countries", "Population"],
         ];
 
         var data = [
@@ -199,6 +200,14 @@
             drawMarker(true, markerShape);
 
             // Generate Grid starts
+              const [xAxisLabel, yAxisLabel] = data[1];
+
+              console.log(data[1]);
+
+            setLabel(xAxisLabel, "x_label", false);
+            setLabel(yAxisLabel, "y_label", false);
+
+
             function make_x_gridlines() {
                 return d3.axisBottom(xScale).ticks(dataValues.length);
             }

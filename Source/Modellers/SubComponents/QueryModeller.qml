@@ -63,7 +63,11 @@ Item{
     // JAVASCRIPT FUNCTION STARTS
 
     Component.onCompleted: {
-        textEditQueryModeller.text = "SELECT * FROM users WHERE users.id > 0"
+        //        textEditQueryModeller.text = "SELECT * FROM users WHERE users.id > 0"
+        textEditQueryModeller.text = " SELECT * FROM users WHERE users.id > 0 "
+
+
+
     }
 
     function onTextEditorChanged(){
@@ -72,14 +76,81 @@ Item{
         DSParamsModel.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, " "))
     }
 
+    //    function to onTextFormatSqlKeyword
+    function onTextFormatSqlKeyword(){
+
+        var arraySqlKeyword =["SELECT","FROM","WHERE"]
+
+
+
+        var formmattedData = textEditQueryModeller.text.replace(/text-indent:0px;\"\>/g,'text-indent:0px;">' )
+        console.log("formmattedData"+formmattedData);
+        var textArrayQueryNewLine = formmattedData.split("\n")
+        var textArrayQueryOutputNewLine = []
+
+//        console.log("textArrayQueryNewLine"+JSON.stringify(textArrayQueryNewLine))
+
+
+        textArrayQueryNewLine.forEach((elementNew)=>{
+                                          //  console.log("elementNew"+elementNew)
+
+
+                                          var textArrayQuery = elementNew.split(' ')
+//                                          var textArrayQuery = elementNew.split('text-indent:0px;\"\>')
+//                                          textArrayQuery = elementNew.split(" ")
+                                          var textArrayQueryOutput = []
+
+
+
+                                          textArrayQuery.forEach((element)=>
+                                                                 {
+                                                                     console.log("element"+GeneralParamsModel.returnPlainTextFromHtml(element))
+//                                                                     var a = element;
+//                                                                     console.log("txt"+a.getText(0,10));
+                                                                     //     console.log("element"+element.replace(/\n|\r/g, " "))
+
+//                                                                     if(element.includes("SELECT")){
+//                                                                         console.log("ravi123"+element)
+////                                                                         textArrayQueryOutput.push("text-indent:0px;"><span style='color:"+Constants.grafieksGreenColor+"'>"+element+"</span>")
+//                                                                         textArrayQueryOutput.push("<span style='color:"+Constants.grafieksGreenColor+"'>"+"SELECT"+"</span>")
+//                                                                     }
+
+                                                                     /*else*/ if( arraySqlKeyword.includes(element) )
+                                                                     {
+                                                                         console.log("ravi1234"+element)
+
+                                                                         textArrayQueryOutput.push("<span style='color:"+Constants.grafieksGreenColor+"'>"+element+"</span>")
+                                                                     }
+                                                                     else{
+                                                                         textArrayQueryOutput.push(element)
+                                                                     }
+
+                                                                 }
+
+                                                                 )
+                                          //                                           console.log("textArrayQueryOutput"+textArrayQueryOutput)
+
+
+                                          textArrayQueryOutputNewLine.push(textArrayQueryOutput.join(" "))
+
+                                      }
+                                      )
+
+        textEditQueryModeller.text=textArrayQueryOutputNewLine.join("\n")
+        //        console.log("textArrayQueryOutputNewLine"+textArrayQueryOutputNewLine)
+
+    }
+
 
     function onEditorLineCountChanged(){
         var lineCount = textEditQueryModeller.lineCount
-        console.log(lineCount);
+        console.log("linecount"+totalLineCount);
         // Append line numbers on query modeller
 
         if(totalLineCount <= lineCount){
-            var content = totalLineCount +1
+            console.log("yes")
+            var content = totalLineCount + 1
+            console.log("content"+content)
             elementModel.insert(totalLineCount, { "content": content.toString()})
         }
 
@@ -104,7 +175,6 @@ Item{
             textEditQueryModeller.text += "\n"
             textEditQueryModeller.cursorPosition = textEditQueryModeller.text.length
             totalLineCount++
-
         }
     }
 
@@ -176,9 +246,12 @@ Item{
         width: parent.width - toolSeperator1.width
         wrapMode: TextEdit.WordWrap
         padding: 10
-        selectByMouse: true
-        selectByKeyboard: true
 
+        textFormat:TextEdit.AutoText
+
+        selectByMouse: true
+        selectionColor:Constants.grafieksLightGreenColor;
+        selectByKeyboard: true
         Keys.onReturnPressed: {
 
             onEnterKeyPressed(event)
@@ -190,6 +263,8 @@ Item{
 
         onTextChanged: {
             onTextEditorChanged()
+            onTextFormatSqlKeyword()
+
         }
 
     }
