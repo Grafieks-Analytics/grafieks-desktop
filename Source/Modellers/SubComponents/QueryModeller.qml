@@ -77,8 +77,7 @@ Item{
     }
 
     //    function to onTextFormatSqlKeyword
-    function onTextFormatSqlKeyword(event){
-        event.accepted = true
+    function onTextFormatSqlKeyword(){
 
 
         var finalQueryString = ""
@@ -191,7 +190,7 @@ Item{
 
         onTextChanged: {
             onTextEditorChanged()
-            onTextFormatSqlKeyword(event)
+            onTextFormatSqlKeyword()
         }
 
     }
