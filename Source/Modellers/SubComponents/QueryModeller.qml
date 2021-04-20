@@ -63,120 +63,56 @@ Item{
     // JAVASCRIPT FUNCTION STARTS
 
     Component.onCompleted: {
-        //        textEditQueryModeller.text = "SELECT * FROM users WHERE users.id > 0"
-        textEditQueryModeller.text = " SELECT * FROM users WHERE users.id > 0 "
+        //                textEditQueryModeller.text = "<h1>SELECT * FROM users WHERE users.id > 0</h1>"
+        //        textEditQueryModeller.text = " SELECT * FROM users WHERE users.id > 0 "
 
 
 
     }
 
     function onTextEditorChanged(){
-        console.log(textEditQueryModeller.text)
+        //        console.log(textEditQueryModeller.text)
         // Set the Tmp SQL Query in C++
-        DSParamsModel.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, " "))
+        //        DSParamsModel.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, " "))
     }
 
     //    function to onTextFormatSqlKeyword
-    function onTextFormatSqlKeyword(){
+    function onTextFormatSqlKeyword(event){
+        event.accepted = true
 
+
+        var finalQueryString = ""
+        var lineItemElementArray = []
         var arraySqlKeyword =["SELECT","FROM","WHERE"]
 
+        var headerString = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd"><html><head><meta name="qrichtext" content="1" /><style type="text/css">p, li { white-space: pre-wrap; }</style></head><body style=" font-family:\'MS Shell Dlg 2\'; font-size:7.8pt; font-weight:400; font-style:normal;">'
+        var footerString = '</body></html>'
+        var startString = '<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">'
+        var endString = '</p>'
 
+        finalQueryString = headerString
 
-        var formmattedData = textEditQueryModeller.text.replace(/text-indent:0px;\"\>/g,'text-indent:0px;">' )
-        console.log("formmattedData"+formmattedData);
-        var textArrayQueryNewLine = formmattedData.split("\n")
-        var textArrayQueryOutputNewLine = []
+        var elems = textEditQueryModeller.text.match(/<p [^>]+>(.*?)<\/p>/g)
+        elems.forEach((item, index) => {
+                          finalQueryString += startString
+                          lineItemElementArray[index] = GeneralParamsModel.returnPlainTextFromHtml(item).split(" ")
+                          lineItemElementArray[index].forEach((innerItem, innerIndex) => {
+                                                                  if(arraySqlKeyword.indexOf(innerItem.toUpperCase()) > -1){
+                                                                      finalQueryString += "<span style='color:"+Constants.grafieksGreenColor+"'>"+innerItem+"</span> ";
 
-//        console.log("textArrayQueryNewLine"+JSON.stringify(textArrayQueryNewLine))
-
-
-        textArrayQueryNewLine.forEach((elementNew)=>{
-                                          //  console.log("elementNew"+elementNew)
-
-
-                                          var textArrayQuery = elementNew.split(' ')
-//                                          var textArrayQuery = elementNew.split('text-indent:0px;\"\>')
-//                                          textArrayQuery = elementNew.split(" ")
-                                          var textArrayQueryOutput = []
-
-
-
-                                          textArrayQuery.forEach((element)=>
-                                                                 {
-                                                                     console.log("element"+GeneralParamsModel.returnPlainTextFromHtml(element))
-//                                                                     var a = element;
-//                                                                     console.log("txt"+a.getText(0,10));
-                                                                     //     console.log("element"+element.replace(/\n|\r/g, " "))
-
-//                                                                     if(element.includes("SELECT")){
-//                                                                         console.log("ravi123"+element)
-////                                                                         textArrayQueryOutput.push("text-indent:0px;"><span style='color:"+Constants.grafieksGreenColor+"'>"+element+"</span>")
-//                                                                         textArrayQueryOutput.push("<span style='color:"+Constants.grafieksGreenColor+"'>"+"SELECT"+"</span>")
-//                                                                     }
-
-                                                                     /*else*/ if( arraySqlKeyword.includes(element) )
-                                                                     {
-                                                                         console.log("ravi1234"+element)
-
-                                                                         textArrayQueryOutput.push("<span style='color:"+Constants.grafieksGreenColor+"'>"+element+"</span>")
-                                                                     }
-                                                                     else{
-                                                                         textArrayQueryOutput.push(element)
-                                                                     }
-
-                                                                 }
-
-                                                                 )
-                                          //                                           console.log("textArrayQueryOutput"+textArrayQueryOutput)
-
-
-                                          textArrayQueryOutputNewLine.push(textArrayQueryOutput.join(" "))
-
-                                      }
-                                      )
-
-        textEditQueryModeller.text=textArrayQueryOutputNewLine.join("\n")
-        //        console.log("textArrayQueryOutputNewLine"+textArrayQueryOutputNewLine)
+                                                                  } else{
+                                                                      finalQueryString += innerItem + " "
+                                                                  }
+                                                              })
+                          finalQueryString +=endString
+                      })
+        finalQueryString += footerString
+        console.log(finalQueryString)
 
     }
 
 
-    function onEditorLineCountChanged(){
-        var lineCount = textEditQueryModeller.lineCount
-        console.log("linecount"+totalLineCount);
-        // Append line numbers on query modeller
 
-        if(totalLineCount <= lineCount){
-            console.log("yes")
-            var content = totalLineCount + 1
-            console.log("content"+content)
-            elementModel.insert(totalLineCount, { "content": content.toString()})
-        }
-
-        // Remove line numbers on deleting query from the line
-        else if(totalLineCount > lineCount){
-            for(var i = totalLineCount; i > lineCount; i--){
-                var counter = i-1
-                elementModel.remove(counter)
-                totalLineCount--
-            }
-        }
-
-    }
-
-    function onEnterKeyPressed(event){
-
-        console.log('enter pressed')
-        console.log(textEditQueryModeller.lineCount)
-
-        if(totalLineCount < lineCount){
-            event.accepted = true
-            textEditQueryModeller.text += "\n"
-            textEditQueryModeller.cursorPosition = textEditQueryModeller.text.length
-            totalLineCount++
-        }
-    }
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -209,9 +145,9 @@ Item{
         height:parent.height  + 6
 
         Repeater {
-            model: elementModel
+            model: textEditQueryModeller.lineCount
             Text {
-                text: content
+                text: modelData + 1
                 anchors.horizontalCenter: Text.AlignHCenter
             }
         }
@@ -247,24 +183,15 @@ Item{
         wrapMode: TextEdit.WordWrap
         padding: 10
 
-        textFormat:TextEdit.AutoText
+        textFormat:TextEdit.RichText
 
         selectByMouse: true
         selectionColor:Constants.grafieksLightGreenColor;
         selectByKeyboard: true
-        Keys.onReturnPressed: {
-
-            onEnterKeyPressed(event)
-        }
-
-        onLineCountChanged: {
-            onEditorLineCountChanged()
-        }
 
         onTextChanged: {
             onTextEditorChanged()
-            onTextFormatSqlKeyword()
-
+            onTextFormatSqlKeyword(event)
         }
 
     }
