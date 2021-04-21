@@ -31,6 +31,15 @@ QVariantMap OdbcCon::OdbcInstance(const QString &host, const QString &db, const 
     return output;
 }
 
+void OdbcCon::closeConnection()
+{
+
+    Statics::currentDbName = "";
+    Statics::currentDbClassification = "";
+    Statics::currentDbIntType = -1;
+    Statics::currentDbStrType = "";
+}
+
 /*!
  * \fn OdbcCon::~OdbcCon
  * \brief Destructor function for ODBC connection

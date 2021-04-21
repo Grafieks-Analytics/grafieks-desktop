@@ -28,6 +28,7 @@ class OdbcCon : public QObject
 public:
     explicit OdbcCon(QObject *parent = nullptr);
     QVariantMap OdbcInstance(const QString & host, const QString & db, const int & port, const QString & username, const QString & password);
+    void closeConnection();
 
     ~OdbcCon();
 

@@ -27,6 +27,7 @@ class SnowflakeCon : public QObject
 public:
     explicit SnowflakeCon(QObject *parent = nullptr);
     QVariantMap SnowflakeOdbcInstance(const QString & driver, const QString & host, const QString & db, const int & port, const QString & username, const QString & password);
+    void closeConnection();
 
     ~SnowflakeCon();
 

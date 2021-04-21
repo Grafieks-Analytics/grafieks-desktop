@@ -29,6 +29,7 @@ class JsonCon : public QObject
 
 public:
     explicit JsonCon(QObject *parent = nullptr);
+    void closeConnection();
     ~JsonCon();
 
     QVariantMap JsonInstance(const QString & filepath);

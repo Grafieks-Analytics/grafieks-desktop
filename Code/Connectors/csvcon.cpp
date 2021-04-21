@@ -27,6 +27,15 @@ QVariantMap CSVCon::CSVInstance(const QString &filepath)
     return outputStatus;
 }
 
+void CSVCon::closeConnection()
+{
+
+    Statics::currentDbName = "";
+    Statics::currentDbClassification = "";
+    Statics::currentDbIntType = -1;
+    Statics::currentDbStrType = "";
+}
+
 CSVCon::~CSVCon()
 {
 }

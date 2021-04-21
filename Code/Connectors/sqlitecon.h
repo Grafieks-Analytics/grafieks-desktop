@@ -32,6 +32,7 @@ public:
     explicit Sqlitecon(QObject *parent = nullptr);
     QVariantMap SqliteInstance(const QString & filepath);
     QVariantMap SqliteOdbcInstance(const QString & driver, const QString & filepath);
+    void closeConnection();
 
     ~Sqlitecon();
 

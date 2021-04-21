@@ -70,7 +70,7 @@ QVariantMap RedshiftCon::RedshiftOdbcInstance(const QString &driver, const QStri
     return outputStatus;
 }
 
-RedshiftCon::~RedshiftCon()
+void RedshiftCon::closeConnection()
 {
     QSqlDatabase dbRedshiftOdbc = QSqlDatabase::database(Constants::redshiftOdbcStrType);
     QSqlDatabase dbRedshiftOdbc2 = QSqlDatabase::database( Constants::redshiftOdbcStrQueryType);
@@ -83,4 +83,19 @@ RedshiftCon::~RedshiftCon()
         dbRedshiftOdbc2.removeDatabase(Constants::redshiftOdbcStrQueryType);
         dbRedshiftOdbc2.close();
     }
+
+    Statics::redshiftHost = "";
+    Statics::redshiftDb = "";
+    Statics::redshiftPort = 0;
+    Statics::redshiftUsername = "";
+    Statics::redshiftPassword = "";
+
+    Statics::currentDbName = "";
+    Statics::currentDbClassification = "";
+    Statics::currentDbIntType = -1;
+    Statics::currentDbStrType = "";
+}
+
+RedshiftCon::~RedshiftCon()
+{
 }

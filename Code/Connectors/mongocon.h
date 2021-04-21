@@ -29,6 +29,7 @@ public:
     explicit MongoCon(QObject *parent = nullptr);
     QVariantMap MongoInstance(const QString & host, const QString & db, const int & port, const QString & username, const QString & password);
     QVariantMap MongoOdbcInstance(const QString & driver, const QString & host, const QString & db, const int & port, const QString & username, const QString & password);
+    void closeConnection();
 
     ~MongoCon();
 

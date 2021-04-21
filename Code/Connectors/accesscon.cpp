@@ -60,9 +60,8 @@ QVariantMap AccessCon::AccessOdbcInstance(const QString &driver, const QString &
     return outputStatus;
 }
 
-AccessCon::~AccessCon()
+void AccessCon::closeConnection()
 {
-
     QSqlDatabase dbAccessOdbc = QSqlDatabase::database(Constants::accessOdbcStrType);
     QSqlDatabase dbAccessOdbc2 = QSqlDatabase::database( Constants::accessOdbcStrQueryType);
 
@@ -75,4 +74,17 @@ AccessCon::~AccessCon()
         dbAccessOdbc2.removeDatabase(Constants::accessOdbcStrQueryType);
         dbAccessOdbc2.close();
     }
+
+    Statics::acDb = "";
+    Statics::acUsername = "";
+    Statics::acPassword = "";
+
+    Statics::currentDbName = "";
+    Statics::currentDbClassification = "";
+    Statics::currentDbIntType = -1;
+    Statics::currentDbStrType = "";
+}
+
+AccessCon::~AccessCon()
+{
 }

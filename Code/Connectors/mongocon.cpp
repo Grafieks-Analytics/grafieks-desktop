@@ -81,7 +81,7 @@ QVariantMap MongoCon::MongoOdbcInstance(const QString &driver, const QString &ho
     return outputStatus;
 }
 
-MongoCon::~MongoCon()
+void MongoCon::closeConnection()
 {
     QSqlDatabase dbMongoOdbc = QSqlDatabase::database(Constants::mongoOdbcStrType);
     QSqlDatabase dbMongoOdbc2 = QSqlDatabase::database(Constants::mongoOdbcStrQueryType);
@@ -94,4 +94,20 @@ MongoCon::~MongoCon()
         dbMongoOdbc2.removeDatabase(Constants::mongoOdbcStrQueryType);
         dbMongoOdbc2.close();
     }
+
+    Statics::mongoHost = "";
+    Statics::mongoDb = "";
+    Statics::mongoPort = 0;
+    Statics::mongoUsername = "";
+    Statics::mongoPassword = "";
+
+    Statics::currentDbName = "";
+    Statics::currentDbClassification = "";
+    Statics::currentDbIntType = -1;
+    Statics::currentDbStrType = "";
+}
+
+MongoCon::~MongoCon()
+{
+
 }

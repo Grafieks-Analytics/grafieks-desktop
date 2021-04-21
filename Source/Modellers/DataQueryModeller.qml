@@ -411,7 +411,7 @@ Page {
             ForwardOnlyQueryModel.removeTmpChartData()
         }
 
-//        ConnectorsLoginModel.sqlLogout()
+        ConnectorsLoginModel.sqlLogout()
         ChartsModel.removeTmpChartData()
 
         // Take back to select connection screen
