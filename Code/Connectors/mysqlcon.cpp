@@ -139,13 +139,7 @@ QVariantMap MysqlCon::MysqlOdbcInstance(const QString &driver, const QString &ho
     return outputStatus;
 }
 
-/*!
- * \fn MysqlCon::~MysqlCon
- * \brief Destructor function for Mysql connection
- * \details The function closes the two MySql open connections
- */
-
-MysqlCon::~MysqlCon()
+void MysqlCon::closeConnection()
 {
     QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
     QSqlDatabase dbMysql2 = QSqlDatabase::database( Constants::mysqlStrQueryType);
@@ -171,4 +165,26 @@ MysqlCon::~MysqlCon()
         dbMysql2.removeDatabase(Constants::mysqlOdbcStrQueryType);
         dbMysqlOdbc2.close();
     }
+
+    Statics::myHost = "";
+    Statics::myDb = "";
+    Statics::myPort = 0;
+    Statics::myUsername = "";
+    Statics::myPassword = "";
+
+    Statics::currentDbName = "";
+    Statics::currentDbClassification = "";
+    Statics::currentDbIntType = -1;
+    Statics::currentDbStrType = "";
+}
+
+/*!
+ * \fn MysqlCon::~MysqlCon
+ * \brief Destructor function for Mysql connection
+ * \details The function closes the two MySql open connections
+ */
+
+MysqlCon::~MysqlCon()
+{
+
 }

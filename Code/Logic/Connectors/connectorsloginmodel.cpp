@@ -167,63 +167,63 @@ void ConnectorsLoginModel::sqlLogout()
     case Constants::mysqlIntType:
     case Constants::mysqlOdbcIntType:
 
-        mysqlcon->~MysqlCon();
+        mysqlcon->closeConnection();
         break;
 
     case Constants::sqliteIntType:
-        sqlitecon->~Sqlitecon();
+        sqlitecon->closeConnection();
         break;
 
     case Constants::mssqlIntType:
-        mssqlcon->~MSSqlCon();
+        mssqlcon->closeConnection();
         break;
 
     case Constants::postgresIntType:
-        postgrescon->~PostgresCon();
+        postgrescon->closeConnection();
         break;
 
     case Constants::excelIntType:
-        excelcon->~ExcelCon();
+        excelcon->closeConnection();
         break;
 
     case Constants::mongoIntType:
-        mongocon->~MongoCon();
+        mongocon->closeConnection();
         break;
 
     case Constants::redshiftIntType:
-        redshiftcon->~RedshiftCon();
+        redshiftcon->closeConnection();
         break;
 
     case Constants::hiveIntType:
-        hivecon->~HiveCon();
+        hivecon->closeConnection();
         break;
 
     case Constants::csvIntType:
-        csvcon->~CSVCon();
+        csvcon->closeConnection();
         break;
 
     case Constants::impalaIntType:
-        impalacon->~ImpalaCon();
+        impalacon->closeConnection();
         break;
 
     case Constants::jsonIntType:
-        jsoncon->~JsonCon();
+        jsoncon->closeConnection();
         break;
 
     case Constants::accessIntType:
-        accesscon->~AccessCon();
+        accesscon->closeConnection();
         break;
 
     case Constants::oracleIntType:
-        oraclecon->~OracleCon();
+        oraclecon->closeConnection();
         break;
 
     case Constants::snowflakeIntType:
-        snowflakecon->~SnowflakeCon();
+        snowflakecon->closeConnection();
         break;
 
     case Constants::teradataIntType:
-        teradatacon->~TeradataCon();
+        teradatacon->closeConnection();
         break;
     }
 

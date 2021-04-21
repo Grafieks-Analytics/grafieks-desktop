@@ -5,6 +5,15 @@ JsonCon::JsonCon(QObject *parent) : QObject(parent)
 
 }
 
+void JsonCon::closeConnection()
+{
+
+    Statics::currentDbName = "";
+    Statics::currentDbClassification = "";
+    Statics::currentDbIntType = -1;
+    Statics::currentDbStrType = "";
+}
+
 JsonCon::~JsonCon()
 {
 

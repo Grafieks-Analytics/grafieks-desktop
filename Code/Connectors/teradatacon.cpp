@@ -9,8 +9,6 @@ QVariantMap TeradataCon::TeradataOdbcInstance(const QString &driver, const QStri
 {
     QVariantMap outputStatus;
 
-    qDebug() << driver << host << db << port << username << password;
-
     if(QSqlDatabase::isDriverAvailable("QODBC")){
 
         QString dbString = "DRIVER={" + driver + "};" + "DBCName=" + host + ";Tusted_Connection=True";
@@ -66,9 +64,8 @@ QVariantMap TeradataCon::TeradataOdbcInstance(const QString &driver, const QStri
     return outputStatus;
 }
 
-TeradataCon::~TeradataCon()
+void TeradataCon::closeConnection()
 {
-
     QSqlDatabase dbTeradataOdbc = QSqlDatabase::database(Constants::teradataOdbcStrType);
     QSqlDatabase dbTeradataOdbc2 = QSqlDatabase::database( Constants::teradataOdbcStrQueryType);
 
@@ -80,4 +77,21 @@ TeradataCon::~TeradataCon()
         dbTeradataOdbc2.removeDatabase(Constants::teradataOdbcStrQueryType);
         dbTeradataOdbc2.close();
     }
+
+    Statics::teradataHost = "";
+    Statics::teradataDb = "";
+    Statics::teradataPort = 0;
+    Statics::teradataUsername = "";
+    Statics::teradataPassword = "";
+
+    Statics::currentDbName = "";
+    Statics::currentDbClassification = "";
+    Statics::currentDbIntType = -1;
+    Statics::currentDbStrType = "";
+}
+
+TeradataCon::~TeradataCon()
+{
+
+
 }

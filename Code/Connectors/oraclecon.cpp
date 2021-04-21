@@ -66,9 +66,8 @@ QVariantMap OracleCon::OracleOdbcInstance(const QString &driver, const QString &
     return outputStatus;
 }
 
-OracleCon::~OracleCon()
+void OracleCon::closeConnection()
 {
-
     QSqlDatabase dbOracleOdbc = QSqlDatabase::database(Constants::oracleOdbcStrType);
     QSqlDatabase dbOracleOdbc2 = QSqlDatabase::database( Constants::oracleOdbcStrQueryType);
 
@@ -80,4 +79,21 @@ OracleCon::~OracleCon()
         dbOracleOdbc2.removeDatabase(Constants::oracleOdbcStrQueryType);
         dbOracleOdbc2.close();
     }
+
+    Statics::oracleHost = "";
+    Statics::oracleDb = "";
+    Statics::oraclePort = 0;
+    Statics::oracleUsername = "";
+    Statics::oraclePassword = "";
+
+    Statics::currentDbName = "";
+    Statics::currentDbClassification = "";
+    Statics::currentDbIntType = -1;
+    Statics::currentDbStrType = "";
+}
+
+OracleCon::~OracleCon()
+{
+
+
 }

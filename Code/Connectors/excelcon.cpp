@@ -60,6 +60,21 @@ QVariantMap ExcelCon::ExcelOdbcInstance(const QString &driver, const QString &fi
     return outputStatus;
 }
 
+void ExcelCon::closeConnection()
+{
+
+    QSqlDatabase dbExcelOdbc = QSqlDatabase::database(Constants::excelOdbcStrType);
+    if(dbExcelOdbc.isOpen()) {
+        dbExcelOdbc.removeDatabase(Constants::excelOdbcStrType);
+        dbExcelOdbc.close();
+    }
+
+    Statics::currentDbName = "";
+    Statics::currentDbClassification = "";
+    Statics::currentDbIntType = -1;
+    Statics::currentDbStrType = "";
+}
+
 QStringList ExcelCon::convertExcelToCsv(QString &excelPath)
 {
     QStringList outputList;
@@ -110,10 +125,4 @@ QStringList ExcelCon::convertExcelToCsv(QString &excelPath)
 
 ExcelCon::~ExcelCon()
 {
-
-    QSqlDatabase dbExcelOdbc = QSqlDatabase::database(Constants::excelOdbcStrType);
-    if(dbExcelOdbc.isOpen()) {
-        dbExcelOdbc.removeDatabase(Constants::excelOdbcStrType);
-        dbExcelOdbc.close();
-    }
 }

@@ -66,9 +66,8 @@ QVariantMap ImpalaCon::ImpalaOdbcInstance(const QString &driver, const QString &
     return outputStatus;
 }
 
-ImpalaCon::~ImpalaCon()
+void ImpalaCon::closeConnection()
 {
-
     QSqlDatabase dbImpalaOdbc = QSqlDatabase::database(Constants::impalaOdbcStrType);
     QSqlDatabase dbImpalaOdbc2 = QSqlDatabase::database(Constants::impalaOdbcStrQueryType);
 
@@ -80,4 +79,19 @@ ImpalaCon::~ImpalaCon()
         dbImpalaOdbc2.removeDatabase(Constants::impalaOdbcStrQueryType);
         dbImpalaOdbc2.close();
     }
+
+    Statics::impalaHost = "";
+    Statics::impalaDb = "";
+    Statics::impalaPort = 0;
+    Statics::impalaUsername = "";
+    Statics::impalaPassword = "";
+
+    Statics::currentDbName = "";
+    Statics::currentDbClassification = "";
+    Statics::currentDbIntType = -1;
+    Statics::currentDbStrType = "";
+}
+
+ImpalaCon::~ImpalaCon()
+{  
 }

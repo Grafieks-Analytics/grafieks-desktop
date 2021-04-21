@@ -8,8 +8,7 @@ ForwardOnlyQueryModel::ForwardOnlyQueryModel(QObject *parent) : QAbstractTableMo
 ForwardOnlyQueryModel::~ForwardOnlyQueryModel()
 {
 
-    this->forwardOnlyChartHeader.clear();
-    this->forwardOnlyChartData.clear();
+
 }
 
 void ForwardOnlyQueryModel::setQuery(QString query)
@@ -72,7 +71,8 @@ void ForwardOnlyQueryModel::getQueryStats()
 
 void ForwardOnlyQueryModel::removeTmpChartData()
 {
-    this->~ForwardOnlyQueryModel();
+    this->forwardOnlyChartHeader.clear();
+    this->forwardOnlyChartData.clear();
 }
 
 void ForwardOnlyQueryModel::generateRoleNames()

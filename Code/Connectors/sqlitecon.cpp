@@ -73,12 +73,7 @@ QVariantMap Sqlitecon::SqliteOdbcInstance(const QString &driver, const QString &
     return outputStatus;
 }
 
-/*!
- * \fn Sqlitecon::~Sqlitecon
- * \brief Destructor function for Sqlite connection
- * \details The function closes the two Sqlite open connections
- */
-Sqlitecon::~Sqlitecon()
+void Sqlitecon::closeConnection()
 {
     QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
     QSqlDatabase dbSqlite2 = QSqlDatabase::database(Constants::sqliteStrQueryType);
@@ -91,4 +86,21 @@ Sqlitecon::~Sqlitecon()
         dbSqlite2.removeDatabase(Constants::sqliteStrQueryType);
         dbSqlite2.close();
     }
+
+    Statics::sqliteFile = "";
+
+    Statics::currentDbName = "";
+    Statics::currentDbClassification = "";
+    Statics::currentDbIntType = -1;
+    Statics::currentDbStrType = "";
+}
+
+/*!
+ * \fn Sqlitecon::~Sqlitecon
+ * \brief Destructor function for Sqlite connection
+ * \details The function closes the two Sqlite open connections
+ */
+Sqlitecon::~Sqlitecon()
+{
+
 }

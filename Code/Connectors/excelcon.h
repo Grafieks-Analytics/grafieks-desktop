@@ -38,6 +38,7 @@ public:
     explicit ExcelCon(QObject *parent = nullptr);
     QVariantMap ExcelInstance(const QString & filepath);
     QVariantMap ExcelOdbcInstance(const QString & driver, const QString & filepath);
+    void closeConnection();
 
      QStringList convertExcelToCsv(QString &excelPath);
 

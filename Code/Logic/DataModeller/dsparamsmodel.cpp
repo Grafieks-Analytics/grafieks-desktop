@@ -15,6 +15,18 @@ DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent),counter(1)
     m_internalCounter = 0;
 }
 
+void DSParamsModel::closeModel()
+{
+
+    this->hideColumns.clear();
+    this->joinBoxTableMap.clear();
+    this->joinTypeMap.clear();
+    this->joinIconMap.clear();
+    this->joinMapList.clear();
+    this->primaryJoinTable.clear();
+    this->querySelectParamsList.clear();
+}
+
 DSParamsModel::~DSParamsModel()
 {
 
