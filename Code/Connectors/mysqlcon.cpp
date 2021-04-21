@@ -152,8 +152,23 @@ MysqlCon::~MysqlCon()
     QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrType);
     QSqlDatabase dbMysqlOdbc2 = QSqlDatabase::database( Constants::mysqlOdbcStrQueryType);
 
-    if(dbMysql.isOpen()) dbMysql.close();
-    if(dbMysql2.isOpen()) dbMysql2.close();
-    if(dbMysqlOdbc.isOpen()) dbMysqlOdbc.close();
-    if(dbMysqlOdbc2.isOpen()) dbMysqlOdbc2.close();
+    if(dbMysql.isOpen()) {
+        dbMysql.removeDatabase(Constants::mysqlStrType);
+        dbMysql.close();
+    }
+
+    if(dbMysql2.isOpen()) {
+        dbMysql2.removeDatabase(Constants::mysqlStrQueryType);
+        dbMysql2.close();
+    }
+
+    if(dbMysqlOdbc.isOpen()) {
+        dbMysql2.removeDatabase(Constants::mysqlOdbcStrType);
+        dbMysqlOdbc.close();
+    }
+
+    if(dbMysqlOdbc2.isOpen()) {
+        dbMysql2.removeDatabase(Constants::mysqlOdbcStrQueryType);
+        dbMysqlOdbc2.close();
+    }
 }
