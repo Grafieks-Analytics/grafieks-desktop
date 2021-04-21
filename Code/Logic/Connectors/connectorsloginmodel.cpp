@@ -184,6 +184,7 @@ void ConnectorsLoginModel::sqlLogout()
 
     case Constants::excelIntType:
         excelcon->closeConnection();
+        emit dropTables();
         break;
 
     case Constants::mongoIntType:
@@ -200,6 +201,7 @@ void ConnectorsLoginModel::sqlLogout()
 
     case Constants::csvIntType:
         csvcon->closeConnection();
+        emit dropTables();
         break;
 
     case Constants::impalaIntType:
@@ -208,6 +210,7 @@ void ConnectorsLoginModel::sqlLogout()
 
     case Constants::jsonIntType:
         jsoncon->closeConnection();
+        emit dropTables();
         break;
 
     case Constants::accessIntType:

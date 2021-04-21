@@ -5,10 +5,16 @@ ForwardOnlyDataModel::ForwardOnlyDataModel(QObject *parent) : QObject(parent)
 
 }
 
-ForwardOnlyDataModel::~ForwardOnlyDataModel()
+void ForwardOnlyDataModel::clearData()
 {
     this->allColumns.clear();
     this->colData.clear();
+    this->tables.clear();
+}
+
+ForwardOnlyDataModel::~ForwardOnlyDataModel()
+{
+
 }
 
 void ForwardOnlyDataModel::columnData(QString col, QString tableName, QString searchString)

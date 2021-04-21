@@ -24,6 +24,7 @@ class ForwardOnlyDataModel : public QObject
 
 public:
     explicit ForwardOnlyDataModel(QObject *parent = nullptr);
+    Q_INVOKABLE void clearData();
     ~ForwardOnlyDataModel();
 
 

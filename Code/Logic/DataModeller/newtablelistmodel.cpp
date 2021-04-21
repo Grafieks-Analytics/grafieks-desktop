@@ -5,6 +5,11 @@ NewTableListModel::NewTableListModel(QObject *parent) : QObject(parent)
 
 }
 
+void NewTableListModel::clearData()
+{
+    this->tables.clear();
+}
+
 QStringList NewTableListModel::getTableList()
 {
     QSqlDatabase dbCon;
