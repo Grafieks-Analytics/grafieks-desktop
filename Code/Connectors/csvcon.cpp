@@ -14,6 +14,8 @@ QVariantMap CSVCon::CSVInstance(const QString &filepath)
 
             outputStatus.insert("status", false);
             outputStatus.insert("msg", file.errorString());
+
+            file.close();
     }
     else{
 
@@ -21,12 +23,12 @@ QVariantMap CSVCon::CSVInstance(const QString &filepath)
         outputStatus.insert("msg", Messages::GeneralSuccessMsg);
     }
 
+
     return outputStatus;
 }
 
 CSVCon::~CSVCon()
 {
-
 }
 
 

@@ -89,6 +89,12 @@ MSSqlCon::~MSSqlCon()
     QSqlDatabase dbMssqlOdbc = QSqlDatabase::database(Constants::mssqlOdbcStrType);
     QSqlDatabase dbMssqlOdbc2 = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
 
-    if(dbMssqlOdbc.isOpen()) dbMssqlOdbc.close();
-    if(dbMssqlOdbc2.isOpen()) dbMssqlOdbc2.close();
+    if(dbMssqlOdbc.isOpen()) {
+        dbMssqlOdbc.removeDatabase(Constants::mssqlOdbcStrType);
+        dbMssqlOdbc.close();
+    }
+    if(dbMssqlOdbc2.isOpen()) {
+        dbMssqlOdbc2.removeDatabase(Constants::mssqlOdbcStrQueryType);
+        dbMssqlOdbc2.close();
+    }
 }

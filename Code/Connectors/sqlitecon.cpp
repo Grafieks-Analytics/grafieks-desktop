@@ -83,6 +83,12 @@ Sqlitecon::~Sqlitecon()
     QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
     QSqlDatabase dbSqlite2 = QSqlDatabase::database(Constants::sqliteStrQueryType);
 
-    if(dbSqlite.isOpen()) dbSqlite.close();
-    if(dbSqlite2.isOpen()) dbSqlite2.close();
+    if(dbSqlite.isOpen()) {
+        dbSqlite.removeDatabase(Constants::sqliteStrType);
+        dbSqlite.close();
+    }
+    if(dbSqlite2.isOpen()) {
+        dbSqlite2.removeDatabase(Constants::sqliteStrQueryType);
+        dbSqlite2.close();
+    }
 }

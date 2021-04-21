@@ -14,6 +14,8 @@ QVariantMap ExcelCon::ExcelInstance(const QString &filepath)
 
             outputStatus.insert("status", false);
             outputStatus.insert("msg", file.errorString());
+
+            file.close();
     }
     else{
 
@@ -110,5 +112,8 @@ ExcelCon::~ExcelCon()
 {
 
     QSqlDatabase dbExcelOdbc = QSqlDatabase::database(Constants::excelOdbcStrType);
-    if(dbExcelOdbc.isOpen()) dbExcelOdbc.close();
+    if(dbExcelOdbc.isOpen()) {
+        dbExcelOdbc.removeDatabase(Constants::excelOdbcStrType);
+        dbExcelOdbc.close();
+    }
 }

@@ -72,6 +72,12 @@ ImpalaCon::~ImpalaCon()
     QSqlDatabase dbImpalaOdbc = QSqlDatabase::database(Constants::impalaOdbcStrType);
     QSqlDatabase dbImpalaOdbc2 = QSqlDatabase::database(Constants::impalaOdbcStrQueryType);
 
-    if(dbImpalaOdbc.isOpen()) dbImpalaOdbc.close();
-    if(dbImpalaOdbc2.isOpen()) dbImpalaOdbc2.close();
+    if(dbImpalaOdbc.isOpen()) {
+        dbImpalaOdbc.removeDatabase(Constants::impalaOdbcStrType);
+        dbImpalaOdbc.close();
+    }
+    if(dbImpalaOdbc2.isOpen()) {
+        dbImpalaOdbc2.removeDatabase(Constants::impalaOdbcStrQueryType);
+        dbImpalaOdbc2.close();
+    }
 }

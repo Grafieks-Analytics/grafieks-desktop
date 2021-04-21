@@ -85,6 +85,12 @@ PostgresCon::~PostgresCon()
     QSqlDatabase dbPostgresOdbc = QSqlDatabase::database(Constants::postgresOdbcStrType);
     QSqlDatabase dbPostgresOdbc2 = QSqlDatabase::database( Constants::postgresOdbcStrQueryType);
 
-    if(dbPostgresOdbc.isOpen()) dbPostgresOdbc.close();
-    if(dbPostgresOdbc2.isOpen()) dbPostgresOdbc2.close();
+    if(dbPostgresOdbc.isOpen()) {
+        dbPostgresOdbc.removeDatabase(Constants::postgresOdbcStrType);
+        dbPostgresOdbc.close();
+    }
+    if(dbPostgresOdbc2.isOpen()) {
+        dbPostgresOdbc2.removeDatabase(Constants::postgresOdbcStrQueryType);
+        dbPostgresOdbc2.close();
+    }
 }
