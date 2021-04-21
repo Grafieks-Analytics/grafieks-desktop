@@ -298,7 +298,7 @@ void DriveDS::fileDownloadFinished()
         QFileInfo f(this->newFileName);
         qDebug() << this->newFileName << "FILENAME" << f.baseName().toUtf8();
 
-        QString fileName = QDir::temp().tempPath() +"/" + this->newFileName +"." + this->extension;
+        QString fileName = QDir::temp().tempPath() +"/" + this->newFileName;
         QFile file(fileName);
         file.open(QIODevice::WriteOnly);
         file.write(m_networkReply->readAll(), m_networkReply->size());

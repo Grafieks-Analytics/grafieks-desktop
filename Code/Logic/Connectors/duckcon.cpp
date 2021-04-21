@@ -34,7 +34,7 @@ void DuckCon::createTable(){
     bool errorStatus = false;
 
     QString fileExtension = QFileInfo(db).completeSuffix();
-    qDebug() << fileName << fileExtension << "DUCK FILE INFO`";
+    qDebug() << fileName << fileExtension << db << "DUCK FILE INFO`";
 
 
     fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
