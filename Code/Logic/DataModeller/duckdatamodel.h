@@ -27,6 +27,7 @@ class DuckDataModel : public QObject
 public:
     explicit DuckDataModel(QObject *parent = nullptr);
     explicit DuckDataModel(DuckCon *duckCon, QObject *parent = nullptr);
+    Q_INVOKABLE void clearData();
     ~DuckDataModel();
 
 

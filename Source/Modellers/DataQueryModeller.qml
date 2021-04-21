@@ -405,10 +405,13 @@ Page {
     function disconnectDS(){
         if(connectionType === Constants.sqlType){
             QueryModel.removeTmpChartData()
+            NewTableListModel.clearData()
         } else if(connectionType === Constants.duckType){
             DuckQueryModel.removeTmpChartData()
+            DuckDataModel.clearData()
         } else{
             ForwardOnlyQueryModel.removeTmpChartData()
+            ForwardOnlyDataModel.clearData()
         }
 
         ConnectorsLoginModel.sqlLogout()
@@ -1304,8 +1307,7 @@ Page {
                             width: categoryItem.width-100
                             anchors.verticalCenter: parent.verticalCenter
                             font.pixelSize: Constants.fontCategoryHeaderMedium
-                            //                            text: ConnectorsLoginModel.connectedDB
-                            text: "radjfbjkd aadbjlkgdd dgjb  jfgb ajbjdfb"
+                            text: ConnectorsLoginModel.connectedDB
                             elide: Text.ElideRight
 
 

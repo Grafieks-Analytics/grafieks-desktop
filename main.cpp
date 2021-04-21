@@ -310,6 +310,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(&proxyModel, &ProxyFilterModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
     QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::sendDbName, duckCon, &DuckCon::createTable);
+    QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::dropTables, duckCon, &DuckCon::dropTables);
     QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, duckDataModel, &DuckDataModel::receiveCsvFilterQuery);
 
     // Common data and headers for reports and dashboards
