@@ -139,6 +139,45 @@ QVariantMap MysqlCon::MysqlOdbcInstance(const QString &driver, const QString &ho
     return outputStatus;
 }
 
+void MysqlCon::closeConnection()
+{
+    QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
+    QSqlDatabase dbMysql2 = QSqlDatabase::database( Constants::mysqlStrQueryType);
+    QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrType);
+    QSqlDatabase dbMysqlOdbc2 = QSqlDatabase::database( Constants::mysqlOdbcStrQueryType);
+
+    if(dbMysql.isOpen()) {
+        dbMysql.removeDatabase(Constants::mysqlStrType);
+        dbMysql.close();
+    }
+
+    if(dbMysql2.isOpen()) {
+        dbMysql2.removeDatabase(Constants::mysqlStrQueryType);
+        dbMysql2.close();
+    }
+
+    if(dbMysqlOdbc.isOpen()) {
+        dbMysql2.removeDatabase(Constants::mysqlOdbcStrType);
+        dbMysqlOdbc.close();
+    }
+
+    if(dbMysqlOdbc2.isOpen()) {
+        dbMysql2.removeDatabase(Constants::mysqlOdbcStrQueryType);
+        dbMysqlOdbc2.close();
+    }
+
+    Statics::myHost = "";
+    Statics::myDb = "";
+    Statics::myPort = 0;
+    Statics::myUsername = "";
+    Statics::myPassword = "";
+
+    Statics::currentDbName = "";
+    Statics::currentDbClassification = "";
+    Statics::currentDbIntType = -1;
+    Statics::currentDbStrType = "";
+}
+
 /*!
  * \fn MysqlCon::~MysqlCon
  * \brief Destructor function for Mysql connection
@@ -147,13 +186,5 @@ QVariantMap MysqlCon::MysqlOdbcInstance(const QString &driver, const QString &ho
 
 MysqlCon::~MysqlCon()
 {
-    QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
-    QSqlDatabase dbMysql2 = QSqlDatabase::database( Constants::mysqlStrQueryType);
-    QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrType);
-    QSqlDatabase dbMysqlOdbc2 = QSqlDatabase::database( Constants::mysqlOdbcStrQueryType);
 
-    if(dbMysql.isOpen()) dbMysql.close();
-    if(dbMysql2.isOpen()) dbMysql2.close();
-    if(dbMysqlOdbc.isOpen()) dbMysqlOdbc.close();
-    if(dbMysqlOdbc2.isOpen()) dbMysqlOdbc2.close();
 }

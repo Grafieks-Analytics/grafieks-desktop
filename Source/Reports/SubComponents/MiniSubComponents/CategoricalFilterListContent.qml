@@ -274,6 +274,7 @@ Rectangle{
             TextField{
                 id: searchText
                 placeholderText: "Search"
+                selectByMouse: true
                 leftPadding: 20
                 height: 40
                 width: parent.width - 20

@@ -46,6 +46,8 @@ class ColumnListModel : public QSqlQueryModel
 
 public:
     explicit ColumnListModel(QObject *parent = nullptr);
+    ~ColumnListModel();
+
     void setQuery(const QString &query, const QSqlDatabase &db = QSqlDatabase());
     void setQuery(const QSqlQuery &query);
     QVariant data(const QModelIndex &index, int role) const;

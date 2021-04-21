@@ -706,6 +706,7 @@ Page {
             TextField{
                 id: report_title_text
                 placeholderText: "Add Report Title"
+                selectByMouse: true
                 width:250
                 height: 40
                 anchors.horizontalCenter:parent.horizontalCenter
@@ -1522,6 +1523,7 @@ Page {
                     id: searchBarRow
                     TextField{
                         width: parent.parent.width - search_icon.width - 5
+                        selectByMouse: true
                         height:30
                         cursorVisible: true
                         anchors.top: parent.top

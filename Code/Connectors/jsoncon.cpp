@@ -5,6 +5,15 @@ JsonCon::JsonCon(QObject *parent) : QObject(parent)
 
 }
 
+void JsonCon::closeConnection()
+{
+
+    Statics::currentDbName = "";
+    Statics::currentDbClassification = "";
+    Statics::currentDbIntType = -1;
+    Statics::currentDbStrType = "";
+}
+
 JsonCon::~JsonCon()
 {
 
@@ -19,6 +28,8 @@ QVariantMap JsonCon::JsonInstance(const QString &filepath)
 
             outputStatus.insert("status", false);
             outputStatus.insert("msg", file.errorString());
+
+            file.close();
     }
     else{
 

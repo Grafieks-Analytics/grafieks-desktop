@@ -9,6 +9,11 @@ ColumnListModel::ColumnListModel(QObject *parent) : QSqlQueryModel(parent)
 
 }
 
+ColumnListModel::~ColumnListModel()
+{
+    m_roleNames.clear();
+}
+
 /*!
  * \brief Override QSqlQueryModel::setQuery (Overloaded)
  * \details Executes the query query for the given database connection db. If no database (or an invalid database) is specified,

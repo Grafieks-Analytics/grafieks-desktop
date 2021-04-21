@@ -33,6 +33,7 @@ public:
     explicit MysqlCon(QObject *parent = nullptr);
     QVariantMap MysqlInstance(const QString & host, const QString & db, const int & port, const QString & username, const QString & password);
     Q_INVOKABLE QVariantMap MysqlOdbcInstance(const QString & driver, const QString & host, const QString & db, const int & port, const QString & username, const QString & password);
+    void closeConnection();
 
     ~MysqlCon();
 

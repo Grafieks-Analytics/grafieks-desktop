@@ -11,9 +11,12 @@
 class NewTableListModel : public QObject
 {
     Q_OBJECT
+    QStringList tables;
 public:
     explicit NewTableListModel(QObject *parent = nullptr);
+    Q_INVOKABLE void clearData();
     Q_INVOKABLE QStringList getTableList();
+    Q_INVOKABLE QStringList filterTableList(QString keyword);
 
 private:
 

@@ -318,6 +318,7 @@ Popup {
             TextField{
                 id: server_files
                 placeholderText: "file name"
+                selectByMouse: true
 
                 width: popup.width * 0.6
                 height: 40

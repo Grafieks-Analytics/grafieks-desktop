@@ -80,11 +80,33 @@ QVariantMap PostgresCon::PostgresOdbcInstance(const QString &driver, const QStri
     return outputStatus;
 }
 
-PostgresCon::~PostgresCon()
+void PostgresCon::closeConnection()
 {
+
     QSqlDatabase dbPostgresOdbc = QSqlDatabase::database(Constants::postgresOdbcStrType);
     QSqlDatabase dbPostgresOdbc2 = QSqlDatabase::database( Constants::postgresOdbcStrQueryType);
 
-    if(dbPostgresOdbc.isOpen()) dbPostgresOdbc.close();
-    if(dbPostgresOdbc2.isOpen()) dbPostgresOdbc2.close();
+    if(dbPostgresOdbc.isOpen()) {
+        dbPostgresOdbc.removeDatabase(Constants::postgresOdbcStrType);
+        dbPostgresOdbc.close();
+    }
+    if(dbPostgresOdbc2.isOpen()) {
+        dbPostgresOdbc2.removeDatabase(Constants::postgresOdbcStrQueryType);
+        dbPostgresOdbc2.close();
+    }
+
+    Statics::postgresHost = "";
+    Statics::postgresDb = "";
+    Statics::postgresPort = 0;
+    Statics::postgresUsername = "";
+    Statics::postgresPassword = "";
+
+    Statics::currentDbName = "";
+    Statics::currentDbClassification = "";
+    Statics::currentDbIntType = -1;
+    Statics::currentDbStrType = "";
+}
+
+PostgresCon::~PostgresCon()
+{
 }

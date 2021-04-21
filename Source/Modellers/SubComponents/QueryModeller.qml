@@ -18,23 +18,7 @@ Item{
     id : queryModellerItem
     height:parent.height
     width: parent.width
-    property int totalLineCount: 1
-    property int lineCount: 30
 
-
-    /***********************************************************************************************************************/
-    // LIST MODEL STARTS
-
-
-    // For line numbers
-    ListModel {
-        id: elementModel
-        ListElement { content: "1"}
-    }
-
-
-    // LIST MODEL ENDS
-    /***********************************************************************************************************************/
 
 
     /***********************************************************************************************************************/
@@ -64,7 +48,7 @@ Item{
 
     Component.onCompleted: {
         //                textEditQueryModeller.text = "<h1>SELECT * FROM users WHERE users.id > 0</h1>"
-        //        textEditQueryModeller.text = " SELECT * FROM users WHERE users.id > 0 "
+                textEditQueryModeller.text = " SELECT * FROM users WHERE users.id > 0 "
 
 
 
