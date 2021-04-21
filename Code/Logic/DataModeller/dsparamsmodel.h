@@ -15,8 +15,6 @@
 #include "../../constants.h"
 #include "../../Messages.h"
 #include "../../statics.h"
-//#include "../../duckdb.hpp"
-//#include "../../parquet-extension.hpp"
 
 /*!
  * \brief Sets all the temporary variables for DataModeller
@@ -109,6 +107,8 @@ class DSParamsModel : public QObject
 
 public:
     explicit DSParamsModel(QObject *parent = nullptr);
+    void closeModel();
+    ~DSParamsModel();
 
     Q_INVOKABLE void resetDataModel();
     Q_INVOKABLE bool saveDatasource(QString filename);

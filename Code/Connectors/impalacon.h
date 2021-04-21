@@ -28,6 +28,7 @@ class ImpalaCon : public QObject
 public:
     explicit ImpalaCon(QObject *parent = nullptr);
     QVariantMap ImpalaOdbcInstance(const QString & driver, const QString & host, const QString & db, const int & port, const QString & username, const QString & password);
+    void closeConnection();
 
     ~ImpalaCon();
 

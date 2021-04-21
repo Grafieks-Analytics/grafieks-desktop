@@ -66,11 +66,32 @@ QVariantMap HiveCon::HiveOdbcInstance(const QString &driver, const QString &host
     return outputStatus;
 }
 
-HiveCon::~HiveCon()
+void HiveCon::closeConnection()
 {
     QSqlDatabase dbHiveOdbc = QSqlDatabase::database(Constants::hiveOdbcStrType);
     QSqlDatabase dbHiveOdbc2 = QSqlDatabase::database(Constants::hiveOdbcStrQueryType);
 
-    if(dbHiveOdbc.isOpen()) dbHiveOdbc.close();
-    if(dbHiveOdbc2.isOpen()) dbHiveOdbc2.close();
+    if(dbHiveOdbc.isOpen()) {
+        dbHiveOdbc.removeDatabase(Constants::hiveOdbcStrType);
+        dbHiveOdbc.close();
+    }
+    if(dbHiveOdbc2.isOpen()) {
+        dbHiveOdbc2.removeDatabase(Constants::hiveOdbcStrQueryType);
+        dbHiveOdbc2.close();
+    }
+
+    Statics::impalaHost = "";
+    Statics::impalaDb = "";
+    Statics::impalaPort = 0;
+    Statics::impalaUsername = "";
+    Statics::impalaPassword = "";
+
+    Statics::currentDbName = "";
+    Statics::currentDbClassification = "";
+    Statics::currentDbIntType = -1;
+    Statics::currentDbStrType = "";
+}
+
+HiveCon::~HiveCon()
+{
 }

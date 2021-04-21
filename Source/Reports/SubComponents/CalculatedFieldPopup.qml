@@ -236,6 +236,7 @@ Popup {
 
                         TextField{
                             placeholderText: "Enter Name"
+                            selectByMouse: true
                             width: 200
                             height: parent.parent.height
                         }

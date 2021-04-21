@@ -21,6 +21,7 @@ class DBListModel : public QSqlQueryModel
 
 public:
     explicit DBListModel(QObject *parent = 0);
+    ~DBListModel();
 
     void setQuery(const QString &query, const QSqlDatabase &db = QSqlDatabase());
     void setQuery(const QSqlQuery &query);

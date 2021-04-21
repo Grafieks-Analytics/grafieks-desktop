@@ -103,6 +103,11 @@ Item {
                 query_joiner = "`"
             }
         }
+        function onMongoLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "`"
+            }
+        }
         function onPostgresLoginStatus(status){
             if(status.status === true){
                 query_joiner = "\""
@@ -118,8 +123,18 @@ Item {
                 query_joiner = "\""
             }
         }
+        function onAccessLoginStatus(status){
+            if(status.statu === true){
+                 query_joiner = "\""
+            }
+        }
 
         function onRedshiftLoginStatus(status){
+            if(status.status === true){
+                query_joiner = "\""
+            }
+        }
+        function onTeradataLoginStatus(status){
             if(status.status === true){
                 query_joiner = "\""
             }

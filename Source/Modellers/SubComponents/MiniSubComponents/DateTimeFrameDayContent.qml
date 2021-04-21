@@ -600,6 +600,7 @@ Column{
         TextField{
             height: 30
             width: 80
+            selectByMouse: true
             id:lastXRadioTextField
             anchors.left: lastXRadio.right
             onTextChanged: {
@@ -643,6 +644,7 @@ Column{
 
         TextField{
             id: nextXRadioTextField
+            selectByMouse: true
             height: 30
             width: 80
             anchors.left: nextXRadio.right
