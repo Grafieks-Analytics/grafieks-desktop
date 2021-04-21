@@ -102,8 +102,13 @@ QStringList DuckDataModel::getTableList()
     }
     }
 
+    this->tables = output;
+    return this->tables;
+}
 
-    return output;
+QStringList DuckDataModel::filterTableList(QString keyword)
+{
+    return this->tables.filter(keyword);
 }
 
 QStringList DuckDataModel::getDbList()

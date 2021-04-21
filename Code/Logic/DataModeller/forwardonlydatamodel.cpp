@@ -166,7 +166,13 @@ QStringList ForwardOnlyDataModel::getTableList()
         qWarning() << Q_FUNC_INFO << tableQuery.lastError();
     }
 
-    return output;
+    this->tables = output;
+    return this->tables;
+}
+
+QStringList ForwardOnlyDataModel::filterTableList(QString keyword)
+{
+    return this->tables.filter(keyword);
 }
 
 QStringList ForwardOnlyDataModel::getDbList()
