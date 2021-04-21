@@ -15,6 +15,11 @@ DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent),counter(1)
     m_internalCounter = 0;
 }
 
+DSParamsModel::~DSParamsModel()
+{
+
+}
+
 void DSParamsModel::resetDataModel()
 {
 

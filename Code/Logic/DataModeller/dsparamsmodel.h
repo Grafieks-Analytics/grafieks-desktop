@@ -109,6 +109,7 @@ class DSParamsModel : public QObject
 
 public:
     explicit DSParamsModel(QObject *parent = nullptr);
+    ~DSParamsModel();
 
     Q_INVOKABLE void resetDataModel();
     Q_INVOKABLE bool saveDatasource(QString filename);
