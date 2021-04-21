@@ -22,6 +22,7 @@ class DuckDataModel : public QObject
     DataType dataType;
 
     QList<QStringList> allColumns;
+    QStringList tables;
 
 public:
     explicit DuckDataModel(QObject *parent = nullptr);
@@ -32,6 +33,7 @@ public:
     Q_INVOKABLE void columnData(QString col, QString tableName);
     Q_INVOKABLE QStringList getColumnList(QString tableName, QString moduleName);
     Q_INVOKABLE QStringList getTableList();
+    Q_INVOKABLE QStringList filterTableList(QString keyword);
     Q_INVOKABLE QStringList getDbList();
 
 

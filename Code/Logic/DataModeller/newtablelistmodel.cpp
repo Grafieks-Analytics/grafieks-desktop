@@ -63,5 +63,12 @@ QStringList NewTableListModel::getTableList()
     }
     }
 
-    return dbCon.tables();
+    this->tables = dbCon.tables();
+
+    return this->tables;
+}
+
+QStringList NewTableListModel::filterTableList(QString keyword)
+{
+    return this->tables.filter(keyword);
 }

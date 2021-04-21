@@ -334,7 +334,13 @@ Page {
     }
 
     function searchTable(text){
-        TableListModel.callQuery(text)
+        if(connectionType === Constants.sqlType){
+            tableslist.model = NewTableListModel.filterTableList(text)
+        } else if(connectionType === Constants.duckType){
+            tableslist.model = DuckDataModel.filterTableList(text)
+        } else{
+            tableslist.model = ForwardOnlyDataModel.filterTableList(text)
+        }
     }
 
     function collapseTables(){
@@ -704,19 +710,19 @@ Page {
 
             // Disconnect Button starts
 
-//            Button{
-//                id: disconnect_btn
-//                width: disconnect_text.text.length * 8
-//                height: 28
+            //            Button{
+            //                id: disconnect_btn
+            //                width: disconnect_text.text.length * 8
+            //                height: 28
 
-//                Text{
-//                    id: disconnect_text
-//                    text: "Disconnect " + ConnectorsLoginModel.connectedDB
-//                    anchors.centerIn: parent
-//                }
+            //                Text{
+            //                    id: disconnect_text
+            //                    text: "Disconnect " + ConnectorsLoginModel.connectedDB
+            //                    anchors.centerIn: parent
+            //                }
 
-//                onClicked: disconnectDS()
-//            }
+            //                onClicked: disconnectDS()
+            //            }
 
             // Disconnect Button ends
 
@@ -1276,7 +1282,7 @@ Page {
                         id: categoryItem
                         height: 50
                         width: column_querymodeller.width
-//                        color: "red"
+                        //                        color: "red"
 
 
 
@@ -1297,7 +1303,7 @@ Page {
                             width: categoryItem.width-100
                             anchors.verticalCenter: parent.verticalCenter
                             font.pixelSize: Constants.fontCategoryHeaderMedium
-//                            text: ConnectorsLoginModel.connectedDB
+                            //                            text: ConnectorsLoginModel.connectedDB
                             text: "radjfbjkd aadbjlkgdd dgjb  jfgb ajbjdfb"
                             elide: Text.ElideRight
 
