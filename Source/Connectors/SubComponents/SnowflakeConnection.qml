@@ -306,6 +306,7 @@ Popup {
         TextField{
             id: server
             maximumLength: 45
+            selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             height: 40
             width: 200
@@ -334,6 +335,7 @@ Popup {
         TextField{
             id: port
             maximumLength: 45
+            selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             //width: 130
             height: 40
@@ -378,6 +380,7 @@ Popup {
         TextField{
             id: database
             maximumLength: 45
+            selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 370
             height: 40
@@ -423,6 +426,7 @@ Popup {
         TextField{
             id: username
             maximumLength: 45
+            selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 370
             height: 40
@@ -467,6 +471,7 @@ Popup {
         TextField{
             id: password
             maximumLength: 45
+            selectByMouse: true
             echoMode: "Password"
             anchors.verticalCenter: parent.verticalCenter
             width: 370

@@ -277,6 +277,7 @@ Item {
 
 
                 width: parent.width-10
+                selectByMouse: true
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
 
@@ -682,6 +683,7 @@ Item {
 
                             TextField{
                                 width: 130
+                                selectByMouse: true
                                 //                                anchors.horizontalCenter: parent.horizontalCenter
                                 //                                anchors.top: parent.top
                                 anchors.left: rename.right

@@ -327,6 +327,7 @@ Rectangle{
 
                 TextField{
                     id : textField
+                    selectByMouse: true
                     height : parent.height
                     width : parent.width
                     placeholderText: "Enter Text"
@@ -351,6 +352,7 @@ Rectangle{
 
                 TextField{
                     id : textField2nd
+                    selectByMouse: true
                     height : parent.height
                     width : parent.width
                     placeholderText: "Enter Text"

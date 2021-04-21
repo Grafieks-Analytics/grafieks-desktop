@@ -47,6 +47,7 @@ Rectangle{
         TextField{
             id: dashboardName
             width: parent.width
+            selectByMouse: true
             background: Rectangle {
                 border.color: Constants.borderBlueColor
                 radius: 6

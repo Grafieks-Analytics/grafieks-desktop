@@ -411,7 +411,7 @@ Page {
             ForwardOnlyQueryModel.removeTmpChartData()
         }
 
-        ConnectorsLoginModel.sqlLogout()
+//        ConnectorsLoginModel.sqlLogout()
         ChartsModel.removeTmpChartData()
 
         // Take back to select connection screen
@@ -1214,6 +1214,7 @@ Page {
                     TextField{
                         id:searchTextBox
                         placeholderText: "Search"
+                        selectByMouse: true
                         width: parent.width - search_icon.width-8
                         height:30
                         cursorVisible: true

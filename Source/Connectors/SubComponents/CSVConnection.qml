@@ -168,6 +168,7 @@ Popup {
         TextField{
             id: separator
             maximumLength: 45
+            selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 200
             height: 40
