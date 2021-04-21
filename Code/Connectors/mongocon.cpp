@@ -86,6 +86,12 @@ MongoCon::~MongoCon()
     QSqlDatabase dbMongoOdbc = QSqlDatabase::database(Constants::mongoOdbcStrType);
     QSqlDatabase dbMongoOdbc2 = QSqlDatabase::database(Constants::mongoOdbcStrQueryType);
 
-    if(dbMongoOdbc.isOpen()) dbMongoOdbc.close();
-    if(dbMongoOdbc2.isOpen()) dbMongoOdbc2.close();
+    if(dbMongoOdbc.isOpen()) {
+        dbMongoOdbc.removeDatabase(Constants::mongoOdbcStrType);
+        dbMongoOdbc.close();
+    }
+    if(dbMongoOdbc2.isOpen()) {
+        dbMongoOdbc2.removeDatabase(Constants::mongoOdbcStrQueryType);
+        dbMongoOdbc2.close();
+    }
 }

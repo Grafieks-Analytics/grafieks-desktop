@@ -72,6 +72,12 @@ OracleCon::~OracleCon()
     QSqlDatabase dbOracleOdbc = QSqlDatabase::database(Constants::oracleOdbcStrType);
     QSqlDatabase dbOracleOdbc2 = QSqlDatabase::database( Constants::oracleOdbcStrQueryType);
 
-    if(dbOracleOdbc.isOpen()) dbOracleOdbc.close();
-    if(dbOracleOdbc2.isOpen()) dbOracleOdbc2.close();
+    if(dbOracleOdbc.isOpen()) {
+        dbOracleOdbc.removeDatabase(Constants::oracleOdbcStrType);
+        dbOracleOdbc.close();
+    }
+    if(dbOracleOdbc2.isOpen()) {
+        dbOracleOdbc2.removeDatabase(Constants::oracleOdbcStrQueryType);
+        dbOracleOdbc2.close();
+    }
 }

@@ -71,6 +71,12 @@ HiveCon::~HiveCon()
     QSqlDatabase dbHiveOdbc = QSqlDatabase::database(Constants::hiveOdbcStrType);
     QSqlDatabase dbHiveOdbc2 = QSqlDatabase::database(Constants::hiveOdbcStrQueryType);
 
-    if(dbHiveOdbc.isOpen()) dbHiveOdbc.close();
-    if(dbHiveOdbc2.isOpen()) dbHiveOdbc2.close();
+    if(dbHiveOdbc.isOpen()) {
+        dbHiveOdbc.removeDatabase(Constants::hiveOdbcStrType);
+        dbHiveOdbc.close();
+    }
+    if(dbHiveOdbc2.isOpen()) {
+        dbHiveOdbc2.removeDatabase(Constants::hiveOdbcStrQueryType);
+        dbHiveOdbc2.close();
+    }
 }

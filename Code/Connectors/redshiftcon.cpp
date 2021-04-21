@@ -75,6 +75,12 @@ RedshiftCon::~RedshiftCon()
     QSqlDatabase dbRedshiftOdbc = QSqlDatabase::database(Constants::redshiftOdbcStrType);
     QSqlDatabase dbRedshiftOdbc2 = QSqlDatabase::database( Constants::redshiftOdbcStrQueryType);
 
-    if(dbRedshiftOdbc.isOpen()) dbRedshiftOdbc.close();
-    if(dbRedshiftOdbc2.isOpen()) dbRedshiftOdbc2.close();
+    if(dbRedshiftOdbc.isOpen()) {
+        dbRedshiftOdbc.removeDatabase(Constants::redshiftOdbcStrType);
+        dbRedshiftOdbc.close();
+    }
+    if(dbRedshiftOdbc2.isOpen()) {
+        dbRedshiftOdbc2.removeDatabase(Constants::redshiftOdbcStrQueryType);
+        dbRedshiftOdbc2.close();
+    }
 }

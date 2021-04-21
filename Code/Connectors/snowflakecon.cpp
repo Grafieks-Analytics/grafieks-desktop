@@ -74,6 +74,12 @@ SnowflakeCon::~SnowflakeCon()
     QSqlDatabase dbSnowflakeOdbc = QSqlDatabase::database(Constants::snowflakeOdbcStrType);
     QSqlDatabase dbSnowflakeOdbc2 = QSqlDatabase::database( Constants::snowflakeOdbcStrQueryType);
 
-    if(dbSnowflakeOdbc.isOpen()) dbSnowflakeOdbc2.close();
-    if(dbSnowflakeOdbc2.isOpen()) dbSnowflakeOdbc2.close();
+    if(dbSnowflakeOdbc.isOpen()) {
+        dbSnowflakeOdbc.removeDatabase(Constants::snowflakeOdbcStrType);
+        dbSnowflakeOdbc.close();
+    }
+    if(dbSnowflakeOdbc2.isOpen()) {
+        dbSnowflakeOdbc2.removeDatabase(Constants::snowflakeOdbcStrQueryType);
+        dbSnowflakeOdbc2.close();
+    }
 }

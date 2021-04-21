@@ -72,6 +72,12 @@ TeradataCon::~TeradataCon()
     QSqlDatabase dbTeradataOdbc = QSqlDatabase::database(Constants::teradataOdbcStrType);
     QSqlDatabase dbTeradataOdbc2 = QSqlDatabase::database( Constants::teradataOdbcStrQueryType);
 
-    if(dbTeradataOdbc.isOpen()) dbTeradataOdbc.close();
-    if(dbTeradataOdbc2.isOpen()) dbTeradataOdbc2.close();
+    if(dbTeradataOdbc.isOpen()) {
+        dbTeradataOdbc.removeDatabase(Constants::teradataOdbcStrType);
+        dbTeradataOdbc.close();
+    }
+    if(dbTeradataOdbc2.isOpen()) {
+        dbTeradataOdbc2.removeDatabase(Constants::teradataOdbcStrQueryType);
+        dbTeradataOdbc2.close();
+    }
 }

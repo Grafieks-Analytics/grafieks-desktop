@@ -19,6 +19,8 @@ QVariantMap JsonCon::JsonInstance(const QString &filepath)
 
             outputStatus.insert("status", false);
             outputStatus.insert("msg", file.errorString());
+
+            file.close();
     }
     else{
 
