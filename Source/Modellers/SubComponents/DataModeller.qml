@@ -124,7 +124,7 @@ Item {
             }
         }
         function onAccessLoginStatus(status){
-            if(status.statu === true){
+            if(status.status === true){
                  query_joiner = "\""
             }
         }
@@ -405,10 +405,12 @@ Item {
             DSParamsModel.addToJoinOrder(objId)
         }
 
+        console.log(objArray, "OBJ ARRAY")
         objArray.forEach(function(item){
             if(dataModellerItem.rearRectLineMaps.has(item) === true){
 
                 tmpArray = tmpArray.concat(dataModellerItem.rearRectLineMaps.get(item))
+
 
                 tmpArray.forEach(function(innerItem){
 
@@ -425,14 +427,15 @@ Item {
                     for (var i=0; i<Object.keys(joinConditions).length; i++){
 
                         let key = Object.keys(joinConditions)[i]
-                        tmpJoinString += " " + joinCurrentTableName + "." + joinConditions[key][1] + " = " + joinCompareTableName + "."  + joinConditions[key][0] + " AND"
+                        console.log("KEY", key)
+                        tmpJoinString += " " + query_joiner + joinCurrentTableName + query_joiner + "." + query_joiner+ joinConditions[key][1] + query_joiner + " = " + query_joiner + joinCompareTableName + query_joiner + "."  + query_joiner + joinConditions[key][0] + query_joiner+  " AND"
                     }
 
                     let lastIndex = tmpJoinString.lastIndexOf(" AND");
                     tmpJoinString = tmpJoinString.substring(0, lastIndex);
                     tmpJoinString += ")"
 
-                    joinString += " " + joinType + " " + joinCurrentTableName + " ON " + tmpJoinString
+                    joinString += " " + joinType + " " + query_joiner + joinCurrentTableName + query_joiner + " ON " + tmpJoinString
 
                     tmpJoinString = ""
 
@@ -462,7 +465,7 @@ Item {
             let lastIndex = selectColumns.lastIndexOf(",");
             selectColumns = selectColumns.substring(0, lastIndex);
 
-            finalQuery = "SELECT " + selectColumns + " FROM " + existingTables.get(dataModellerItem.firstRectId) + " " + joinString
+            finalQuery = "SELECT " + selectColumns + " FROM " + query_joiner + existingTables.get(dataModellerItem.firstRectId) + query_joiner + " " + joinString
 
             // Call and execute the query
             DSParamsModel.setTmpSql(finalQuery)
@@ -481,7 +484,7 @@ Item {
             TableSchemaModel.showSchema(DSParamsModel.tmpSql)
         }
 
-
+        joinString = ""
     }
 
 
