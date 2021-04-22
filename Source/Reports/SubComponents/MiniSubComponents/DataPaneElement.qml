@@ -4,9 +4,12 @@ import QtQuick.Controls 2.15
 import com.grafieks.singleton.constants 1.0
 
 Rectangle{
+    id:rightDataDrag
     height: 24
     width: parent.width
-    z: 1000000
+    anchors.leftMargin: 5
+
+    z: 999
 
 
 
@@ -114,6 +117,7 @@ Rectangle{
         anchors.left: categoricalImage.right
         anchors.leftMargin: 10
         elide: Text.ElideRight
+
     }
 
     Image {
@@ -137,6 +141,16 @@ Rectangle{
         drag.target: dataPaneListElement
         drag.onActiveChanged: {
             if (mouseArea.drag.active) {
+                console.log("dragdrag")
+                if(itemType == "Numerical"){
+                    console.log("itemtypecolor"+itemType)
+                  rightDataDrag.color= Constants.defaultNumericalColor
+                    rightDataDrag.radius=15
+                    rightDataDrag.width=parent.width+5
+
+                }
+
+
 
                 report_desiner_page.lastPickedDataPaneElementProperties = { itemName: modelData, itemType: itemType };
                 console.log(modelData);
@@ -152,6 +166,7 @@ Rectangle{
                     ReportParamsModel.setColorByActive(false);
                 }
             }else{
+                rightDataDrag.color= "red"
                 ReportParamsModel.setXAxisActive(false);
                 ReportParamsModel.setYAxisActive(false);
                 ReportParamsModel.setColorByActive(false);

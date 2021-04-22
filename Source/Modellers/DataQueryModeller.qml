@@ -1297,8 +1297,8 @@ Page {
                             width: categoryItem.width-100
                             anchors.verticalCenter: parent.verticalCenter
                             font.pixelSize: Constants.fontCategoryHeaderMedium
-//                            text: ConnectorsLoginModel.connectedDB
-                            text: "radjfbjkd aadbjlkgdd dgjb  jfgb ajbjdfb"
+                            text: ConnectorsLoginModel.connectedDB
+//                            text: "radjfbjkd aadbjlkgdd dgjb  jfgb ajbjdfb"
                             elide: Text.ElideRight
 
 
@@ -1321,7 +1321,7 @@ Page {
                             width: 18
                             height: 18
                             anchors.left: database_name.right
-                            anchors.leftMargin:  0
+                            anchors.leftMargin:  13
                             anchors.verticalCenter: parent.verticalCenter
                             visible: true
 
