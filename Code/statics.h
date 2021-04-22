@@ -11,6 +11,7 @@ public:
     static int currentDbIntType;
     static QString currentDbStrType;
     static QString currentDbClassification;
+    static int onlineStorageType;
 
     // Mysql
     static QString myHost;

@@ -24,6 +24,8 @@
 
 #include "drive.h"
 #include "../../secrets.h"
+#include "../../statics.h"
+#include "../../constants.h"
 
 /*!
  * \brief Fetches data records from Google Drive API
@@ -60,12 +62,14 @@ signals:
     void fileDownloaded(QString filePath, QString fileType);
 
 private slots:
-    void resetDatasource();
     void dataReadyRead();
     void dataReadFinished();
     void dataSearchFinished();
     void userReadFinished();
     void fileDownloadFinished();
+
+public slots:
+    void resetDatasource();
 
 private:
     QNetworkAccessManager * m_networkAccessManager;

@@ -30,6 +30,11 @@ QString GeneralParamsModel::getCurrentDB()
     return Statics::currentDbName;
 }
 
+int GeneralParamsModel::getOnlineStorageType()
+{
+    return Statics::onlineStorageType;
+}
+
 QString GeneralParamsModel::returnPlainTextFromHtml(QString s)
 {
         QTextDocument td;
