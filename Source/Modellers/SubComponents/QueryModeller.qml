@@ -104,7 +104,7 @@ Item{
 
                                           textArrayQuery.forEach((element)=>
                                                                  {
-                                                                     console.log("element"+GeneralParamsModel.returnPlainTextFromHtml(element))
+                                                                     console.log("element"+element)
 //                                                                     var a = element;
 //                                                                     console.log("txt"+a.getText(0,10));
                                                                      //     console.log("element"+element.replace(/\n|\r/g, " "))
