@@ -431,7 +431,6 @@ Item {
                     for (var i=0; i<Object.keys(joinConditions).length; i++){
 
                         let key = Object.keys(joinConditions)[i]
-                        console.log("KEY", key, i , joinPrimaryJoinTable)
                         tmpJoinString += " " + query_joiner + joinCurrentTableName + query_joiner + "." + query_joiner+ joinConditions[key][1] + query_joiner + " = " + query_joiner + joinCompareTableName + query_joiner + "."  + query_joiner + joinConditions[key][0] + query_joiner+  " AND"
                     }
 
