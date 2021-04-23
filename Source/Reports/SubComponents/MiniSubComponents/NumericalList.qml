@@ -10,7 +10,6 @@ ListView{
     Connections{
         target : ChartsModel
 
-
         function onSendFilteredColumn(allCategorical, allNumerical, allDates){
             numericalList.model =  allNumerical
 

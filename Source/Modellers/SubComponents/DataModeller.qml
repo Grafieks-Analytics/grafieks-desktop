@@ -11,6 +11,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Shapes 1.15
+import QtQuick.Dialogs 1.2
 
 
 import com.grafieks.singleton.constants 1.0
@@ -255,7 +256,9 @@ Item {
 
             } else{
                 // Throw an error here
-                console.log("JOIN is not complete")
+                queryErrorModal.text = "JOIN is not complete"
+                queryErrorModal.open();
+
             }
         }
     }
@@ -1201,4 +1204,11 @@ Item {
     // Page Design Ends
     /***********************************************************************************************************************/
 
+    MessageDialog{
+        id: queryErrorModal
+
+        modality: Qt.ApplicationModal
+        title: "Query Error"
+        standardButtons: StandardButton.Close
+    }
 }
