@@ -1394,6 +1394,12 @@ void ChartsModel::getChartHeader(QMap<int, QStringList> chartHeader)
 {
     this->chartHeaderDetails = chartHeader;
 
+    // Clear existing chart headers data
+    this->numericalList.clear();
+    this->categoryList.clear();
+    this->dateList.clear();
+
+    // Update new data
     foreach(auto key, chartHeader.keys()){
 
 
