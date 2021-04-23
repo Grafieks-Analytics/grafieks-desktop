@@ -28,7 +28,8 @@ QString DataType::dataType(QString parameter)
                 << "double precision" << "numeric" << "smallserial" << "unsigned big int" << "int2" << "int8" << "dec" << "bit" << "smallmoney" << "money"
                 << "binary_float" << "binary_double" << "int1" << "int2" << "short" << "float4" << "int4" << "signed" << "float8" << "long" << "int8"
                 << "large number" << "autonumber" << "number"
-                << "I8" << "I1" << "D" << "F" << "I" << "N" << "D" << "I2";
+                << "I8" << "I1" << "D" << "F" << "I" << "N" << "D" << "I2"
+                << "uint" << "ushort" << "ulong";
 
     dateformat << "date" << "datetime" << "timestamp" << "time" << "year"
                << "timestamp without time zone" << "timestamp with time zone"
@@ -36,7 +37,8 @@ QString DataType::dataType(QString parameter)
                << "datetimeoffset" << "smalldatetime" << "datetime2" << "timestamp with time zone" << "timestamp with local timezone"
                << "interval year" << "interval day"
                << "date/time" << "date/time extended"
-               << "DA" << "DY" << "DH" << "DM" << "DS" << "HR" << "HM" << "HS" << "MI" << "MS" << "MO" << "SC" << "YR" << "YM" << "PD" << "PZ" << "PT" << "PS" << "PM" << "AT" << "TS" << "TZ" << "SZ";
+               << "DA" << "DY" << "DH" << "DM" << "DS" << "HR" << "HM" << "HS" << "MI" << "MS" << "MO" << "SC" << "YR" << "YM" << "PD" << "PZ" << "PT" << "PS" << "PM" << "AT" << "TS" << "TZ" << "SZ"
+               << "QDateTime";
 
     // Match the incoming parameter and determine filter type
 
@@ -47,6 +49,7 @@ QString DataType::dataType(QString parameter)
     } else if(dateformat.contains(parameter, Qt::CaseInsensitive)){
         output =  Constants::dateType;
     } else{
+        qDebug() << "INPUT PARAM OTHER TYPE" << parameter;
         output =  Constants::otherType;
     }
 

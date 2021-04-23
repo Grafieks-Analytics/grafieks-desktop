@@ -36,6 +36,8 @@ GithubDS::GithubDS(QObject *parent) : QObject(parent),
     connect(this->github, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
         qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
 
+        Statics::onlineStorageType = Constants::githubIntType;
+
         // api link - https://docs.github.com/en/rest/reference
 
         QNetworkRequest m_networkRequest;

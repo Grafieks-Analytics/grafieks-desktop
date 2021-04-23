@@ -19,9 +19,7 @@ DuckQueryModel::~DuckQueryModel()
 
 void DuckQueryModel::setQuery(QString query)
 {
-    this->internalColCount = 0;
-    this->internalRowCount = 0;
-    this->resultData.clear();
+    this->removeTmpChartData();
 
     this->query = query;
     querySplitter.setQueryForClasses(this->query);
@@ -126,6 +124,8 @@ void DuckQueryModel::generateRoleNames()
             if(fieldName.contains(".")){
                 int j=0;
                 foreach(QString tableName, tablesList){
+
+                    tableName = tableName.remove(QRegularExpression("[\"`']+")).trimmed();
 
                     if(tmpTableName != tableName){
                         colTypeMap = this->returnColumnList(tableName);

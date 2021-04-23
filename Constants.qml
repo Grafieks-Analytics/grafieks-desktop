@@ -59,6 +59,14 @@ QtObject {
     property string snowflakeOdbc: qsTr("snowflake")
     property string teradataOdbc: qsTr("teradata")
 
+    // Online Storage Types
+    // These values are matched with Constants.h file
+    property int driveType: 18
+    property int githubType: 10
+    property int sheetType: 20
+    property int boxType: 19
+    property int dropBoxType: 17
+
 
     // Theme Colors
 

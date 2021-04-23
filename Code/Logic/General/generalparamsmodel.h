@@ -23,6 +23,7 @@ public:
     Q_INVOKABLE QString getTmpPath();
     Q_INVOKABLE QString getDbClassification();
     Q_INVOKABLE QString getCurrentDB();
+    Q_INVOKABLE int getOnlineStorageType();
     Q_INVOKABLE QString returnPlainTextFromHtml(QString s);
 
     int menuType() const;
