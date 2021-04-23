@@ -1398,10 +1398,10 @@ void ChartsModel::getChartHeader(QMap<int, QStringList> chartHeader)
     this->numericalList.clear();
     this->categoryList.clear();
     this->dateList.clear();
+    this->newChartHeader.clear();
 
     // Update new data
     foreach(auto key, chartHeader.keys()){
-
 
         if(chartHeader.value(key).at(1).contains(Constants::categoricalType)){
             this->categoryList.append(chartHeader.value(key).at(0));
@@ -1409,6 +1409,8 @@ void ChartsModel::getChartHeader(QMap<int, QStringList> chartHeader)
             this->numericalList.append(chartHeader.value(key).at(0));
         } else if(chartHeader.value(key).at(1).contains(Constants::dateType)){
             this->dateList.append(chartHeader.value(key).at(0));
+        } else{
+            qDebug() << "OTHER UNDETECTED FIELD TYPE" <<   chartHeader.value(key).at(0);
         }
 
         this->newChartHeader.insert(key, chartHeader.value(key).at(0));

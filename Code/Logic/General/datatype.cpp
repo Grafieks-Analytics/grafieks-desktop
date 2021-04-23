@@ -28,9 +28,9 @@ QString DataType::dataType(QString parameter)
                 << "double precision" << "numeric" << "smallserial" << "unsigned big int" << "int2" << "int8" << "dec" << "bit" << "smallmoney" << "money"
                 << "binary_float" << "binary_double" << "int1" << "int2" << "short" << "float4" << "int4" << "signed" << "float8" << "long" << "int8"
                 << "large number" << "autonumber" << "number"
-                << "I8" << "I1" << "D" << "F" << "I" << "N" << "D" << "I2";
+                << "I8" << "I1" << "D" << "F" << "I" << "N" << "D" << "I2" << "uint";
 
-    dateformat << "date" << "datetime" << "timestamp" << "time" << "year"
+    dateformat << "date" << "datetime" << "timestamp" << "time" << "year" << "QDateTime"
                << "timestamp without time zone" << "timestamp with time zone"
                << "time without time zone" << "time with time zone" << "interval"
                << "datetimeoffset" << "smalldatetime" << "datetime2" << "timestamp with time zone" << "timestamp with local timezone"
@@ -47,6 +47,7 @@ QString DataType::dataType(QString parameter)
     } else if(dateformat.contains(parameter, Qt::CaseInsensitive)){
         output =  Constants::dateType;
     } else{
+        qDebug() << "INPUT PARAM OTHER TYPE" << parameter;
         output =  Constants::otherType;
     }
 

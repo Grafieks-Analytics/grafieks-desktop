@@ -14,9 +14,7 @@ ForwardOnlyQueryModel::~ForwardOnlyQueryModel()
 void ForwardOnlyQueryModel::setQuery(QString query)
 {
 
-    this->internalColCount = 0;
-    this->internalRowCount = 0;
-    this->resultData.clear();
+    this->removeTmpChartData();
 
     this->query = query.simplified();
     querySplitter.setQueryForClasses(this->query);
