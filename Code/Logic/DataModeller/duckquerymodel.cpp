@@ -127,6 +127,8 @@ void DuckQueryModel::generateRoleNames()
                 int j=0;
                 foreach(QString tableName, tablesList){
 
+                    tableName = tableName.remove(QRegularExpression("[\"`']+")).trimmed();
+
                     if(tmpTableName != tableName){
                         colTypeMap = this->returnColumnList(tableName);
                     }

@@ -145,6 +145,8 @@ void ForwardOnlyQueryModel::generateRoleNames()
                         tableName.remove("\"");
                     }
 
+                    tableName = tableName.remove(QRegularExpression("[\"`']+")).trimmed();
+
                     if(tmpTableName != tableName){
                         colTypeMap = this->returnColumnList(tableName);
                     }
