@@ -11,23 +11,6 @@ ListView{
     // LIST MODEL STARTS
 
 
-    ListModel{
-        id: dateModel
-        ListElement{
-            categoricalName: "Date 1"
-        }
-        ListElement{
-            categoricalName: "Dateas dsa dsa sasad as "
-        }
-        ListElement{
-            categoricalName: "Date 2"
-        }
-        ListElement{
-            categoricalName: "date 3"
-        }
-    }
-
-
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
 
@@ -49,7 +32,6 @@ ListView{
 
 
         function onSendFilteredColumn(allCategorical, allNumerical, allDates){
-            dateModel.clear()
             dateList.model =  allDates
 
         }
@@ -110,7 +92,6 @@ ListView{
 
     id: dateList
 
-    model: dateModel
     anchors.top: dateHeading.bottom
     anchors.topMargin: 5
     height: parent.height - dateHeading.height - 5

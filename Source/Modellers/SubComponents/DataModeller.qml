@@ -458,9 +458,15 @@ Item {
             // Generate the final column parameters
             let selectColumns = ""
             let finalQuery = ""
+            let hideColumns = DSParamsModel.fetchHideColumns()
             DSParamsModel.fetchQuerySelectParamsList().forEach(function(item){
-                selectColumns += " " + item + ","
+
+                // Check if the column is unselected by a user
+                if(hideColumns.indexOf(item.replace(/[\"'`]/g, '')) === -1)
+                    selectColumns += " " + item + ","
             })
+
+
 
             let lastIndex = selectColumns.lastIndexOf(",");
             selectColumns = selectColumns.substring(0, lastIndex);
@@ -485,6 +491,7 @@ Item {
         }
 
         joinString = ""
+        selectColumns = ""
     }
 
 
