@@ -19,6 +19,8 @@
 
 #include "sheet.h"
 #include "../../secrets.h"
+#include "../../statics.h"
+#include "../../constants.h"
 
 /*!
  * \brief Fetches data records from Google Sheet API
@@ -56,11 +58,13 @@ signals:
     void fileDownloaded(QString filePath, QString fileType);
 
 private slots:
-    void resetDatasource();
     void fileDownloadFinished();
     void dataReadFinished();
     void dataSearchFinished();
     void userReadFinished();
+
+public slots:
+    void resetDatasource();
 
 
 private:

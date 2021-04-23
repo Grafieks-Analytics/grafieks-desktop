@@ -48,16 +48,15 @@ Item{
 
     Component.onCompleted: {
         //                textEditQueryModeller.text = "<h1>SELECT * FROM users WHERE users.id > 0</h1>"
-                textEditQueryModeller.text = " SELECT * FROM users WHERE users.id > 0 "
+        textEditQueryModeller.text = " SELECT * FROM users WHERE users.id > 0 "
 
 
 
     }
 
     function onTextEditorChanged(){
-        //        console.log(textEditQueryModeller.text)
         // Set the Tmp SQL Query in C++
-        //        DSParamsModel.setTmpSql(textEditQueryModeller.text.replace(/\n|\r/g, " "))
+        DSParamsModel.setTmpSql(GeneralParamsModel.returnPlainTextFromHtml(textEditQueryModeller.text))
     }
 
     //    function to onTextFormatSqlKeyword

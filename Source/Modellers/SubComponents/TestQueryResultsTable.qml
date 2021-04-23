@@ -8,7 +8,7 @@ import "../../MainSubComponents"
 
 TableView {
     id: testQueryResultTable
-    model: QueryStatsModel
+//    model: QueryStatsModel
     property var columnWidths: [ 80, 200, (columnsHeader.width -imageStatus.width - numberCoulmn.width - durationColumn.width)/2, (columnsHeader.width -imageStatus.width - numberCoulmn.width - durationColumn.width)/2]
     columnWidthProvider: function (column) {
         console.log("#"+columnWidths[column])

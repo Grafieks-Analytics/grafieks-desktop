@@ -55,6 +55,9 @@ DropboxDS::DropboxDS(QObject *parent) : QObject(parent),
 
     connect(this->dropbox, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
         qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
+
+        Statics::onlineStorageType = Constants::dropboxIntType;
+
         const QUrl API_ENDPOINT("https://api.dropboxapi.com/2/files/list_folder");
         QJsonObject obj;
         obj.insert("limit", 100);

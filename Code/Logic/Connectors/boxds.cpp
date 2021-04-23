@@ -42,6 +42,8 @@ BoxDS::BoxDS(QObject *parent) : QObject(parent),
     connect(this->box, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
         qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
 
+        Statics::onlineStorageType = Constants::boxIntType;
+
         // api link - https://developer.box.com/reference/get-folders-id-items/
 
         QNetworkRequest m_networkRequest;

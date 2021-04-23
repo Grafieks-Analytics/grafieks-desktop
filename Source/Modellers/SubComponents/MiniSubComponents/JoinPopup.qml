@@ -207,8 +207,9 @@ Rectangle{
 
     function slotColumnChanged(columnName, tableName, counter){
 
+        let joinTableInfo = DSParamsModel.fetchJoinBoxTableMap(refObjId)
         if(columnName !== "" && tableName !== "" && counter !== ""){
-            if(tableName === DSParamsModel.fetchPrimaryJoinTable(refObjId)){
+            if(tableName === joinTableInfo[1]){
                 leftParam.set(counter, columnName)
             } else{
                 rightParam.set(counter, columnName)
@@ -236,8 +237,8 @@ Rectangle{
             // Set default primary join table
             if(DSParamsModel.fetchPrimaryJoinTable(refObjId) === ""){
 
-                DSParamsModel.addToPrimaryJoinTable(refObjId, table1.tableName)
-                leftJoinRadio.checked = true
+                DSParamsModel.addToPrimaryJoinTable(refObjId, table2.tableName)
+                rightJoinRadio.checked = true
 
             } else{
 
@@ -481,6 +482,7 @@ Rectangle{
             anchors.topMargin: 5
 
             CustomRadioDelegate{
+
                 width: 90
                 height: 90
 
@@ -604,6 +606,7 @@ Rectangle{
             // Default Checked set from the function
             CustomRadioButton{
                 id: rightJoinRadio
+                checked: true
                 parent_dimension: 16
                 ButtonGroup.group: tableLeftRightJoinGrp
                 onClicked: changePrimaryJoinTable(rightJoinRadio.radio_text)

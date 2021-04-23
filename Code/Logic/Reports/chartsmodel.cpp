@@ -11,6 +11,9 @@ ChartsModel::~ChartsModel()
 
 QString ChartsModel::getBarChartValues(QString xAxisColumn, QString yAxisColumn)
 {
+    if(newChartHeader.empty() || newChartData.empty()){
+        return "";
+    }
 
     QJsonArray data;
     QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
@@ -78,6 +81,9 @@ QString ChartsModel::getStackedBarChartValues(QString xAxisColumn, QString yAxis
 
 QString ChartsModel::getGroupedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
+    if(newChartHeader.empty() || newChartData.empty()){
+        return "";
+    }
 
     QJsonArray data;
     QVariantList tmpData;
@@ -180,6 +186,9 @@ QString ChartsModel::getLineChartValues(QString xAxisColumn, QString yAxisColumn
 
 QString ChartsModel::getLineBarChartValues(QString xAxisColumn, QString yLineAxisColumn, QString yBarAxisColumn)
 {
+    if(newChartHeader.empty() || newChartData.empty()){
+        return "";
+    }
 
     QJsonArray data;
     QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
@@ -188,6 +197,7 @@ QString ChartsModel::getLineBarChartValues(QString xAxisColumn, QString yLineAxi
     QScopedPointer<QStringList> yLineAxisDataPointer(new QStringList);
 
     // Fetch data here
+
     int xKey = newChartHeader.key( xAxisColumn );
     int yBarKey = newChartHeader.key( yBarAxisColumn );
     int yLineKey = newChartHeader.key( yLineAxisColumn );
@@ -247,6 +257,10 @@ QString ChartsModel::getLineBarChartValues(QString xAxisColumn, QString yLineAxi
 
 QString ChartsModel::getPieChartValues(QString xAxisColumn, QString yAxisColumn)
 {
+    if(newChartHeader.empty() || newChartData.empty()){
+        return "";
+    }
+
     QJsonArray data;
     QJsonObject obj;
 
@@ -286,6 +300,10 @@ QString ChartsModel::getPieChartValues(QString xAxisColumn, QString yAxisColumn)
 
 QString ChartsModel::getFunnelChartValues(QString xAxisColumn, QString yAxisColumn)
 {
+    if(newChartHeader.empty() || newChartData.empty()){
+        return "";
+    }
+
     QJsonArray data;
     QJsonArray axisDataArray;
     QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
@@ -293,6 +311,8 @@ QString ChartsModel::getFunnelChartValues(QString xAxisColumn, QString yAxisColu
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
 
     // Fetch data here
+
+
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
 
@@ -347,6 +367,11 @@ QString ChartsModel::getFunnelChartValues(QString xAxisColumn, QString yAxisColu
 
 QString ChartsModel::getRadarChartValues(QString xAxisColumn, QString yAxisColumn)
 {
+
+    if(newChartHeader.empty() || newChartData.empty()){
+        return "";
+    }
+
     QJsonArray data;
     QJsonArray axisDataArray;
     QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
@@ -355,6 +380,7 @@ QString ChartsModel::getRadarChartValues(QString xAxisColumn, QString yAxisColum
 
 
     // Fetch data here
+
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
 
@@ -409,6 +435,10 @@ QString ChartsModel::getRadarChartValues(QString xAxisColumn, QString yAxisColum
 
 QString ChartsModel::getScatterChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
+    if(newChartHeader.empty() || newChartData.empty()){
+        return "";
+    }
+
     QJsonArray data;
     QVariantList tmpData;
     float yAxisTmpData;
@@ -422,6 +452,7 @@ QString ChartsModel::getScatterChartValues(QString xAxisColumn, QString yAxisCol
     QString masterKeyword;
 
     // Fetch data here
+
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
     int splitKey = newChartHeader.key( xSplitKey );
@@ -494,6 +525,10 @@ QString ChartsModel::getScatterChartValues(QString xAxisColumn, QString yAxisCol
 
 QString ChartsModel::getHeatMapChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
+    if(newChartHeader.empty() || newChartData.empty()){
+        return "";
+    }
+
     QJsonArray data;
     QVariantList tmpData;
     float yAxisTmpData;
@@ -507,6 +542,7 @@ QString ChartsModel::getHeatMapChartValues(QString xAxisColumn, QString yAxisCol
     QString masterKeyword;
 
     // Fetch data here
+
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
     int splitKey = newChartHeader.key( xSplitKey );
@@ -597,6 +633,10 @@ QString ChartsModel::getWaterfallChartValues(QString xAxisColumn, QString yAxisC
 
 float ChartsModel::getGaugeChartValues(QString calculateColumn)
 {
+    if(newChartHeader.empty() || newChartData.empty()){
+        return 0;
+    }
+
     int calculateColumnKey = newChartHeader.key( calculateColumn );
     QStringList *calculateColumnPointer = &(*newChartData.value(calculateColumnKey));
     float output = 0.0;
@@ -614,6 +654,10 @@ float ChartsModel::getGaugeChartValues(QString calculateColumn)
 
 QString ChartsModel::getSankeyChartValues(QString sourceColumn, QString destinationColumn, QString measureColumn)
 {
+    if(newChartHeader.empty() || newChartData.empty()){
+        return "";
+    }
+
     QJsonArray data;
     QJsonObject dataObject;
     QJsonArray nodeData;
@@ -627,6 +671,7 @@ QString ChartsModel::getSankeyChartValues(QString sourceColumn, QString destinat
     QString keyword;
 
     // Fetch data here
+
     int sourceKey = newChartHeader.key( sourceColumn );
     int destinationKey = newChartHeader.key( destinationColumn );
     int measureKey = newChartHeader.key( measureColumn );
@@ -715,6 +760,9 @@ QString ChartsModel::getTreeMapChartValues(QVariantList xAxisColumn, QString yAx
 
 float ChartsModel::getKPIChartValues(QString calculateColumn)
 {
+    if(newChartHeader.empty() || newChartData.empty()){
+        return 0;
+    }
 
     int calculateColumnKey = newChartHeader.key( calculateColumn );
     QScopedPointer<QStringList> calculateColumnPointer(new QStringList);
@@ -757,6 +805,10 @@ QString ChartsModel::getStackedAreaChartValues(QString xAxisColumn, QString yAxi
 
 QString ChartsModel::getMultiLineChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
+
+    if(newChartHeader.empty() || newChartData.empty()){
+        return "";
+    }
 
     QJsonArray data;
     QVariantList tmpData;
@@ -855,12 +907,17 @@ QString ChartsModel::getMultiLineChartValues(QString xAxisColumn, QString yAxisC
 
 QString ChartsModel::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAxisColumn)
 {
+    if(newChartHeader.empty() || newChartData.empty()){
+        return "";
+    }
+
     QJsonArray data;
     QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
     QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
 
     // Fetch data here
+
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
 
@@ -914,6 +971,11 @@ QString ChartsModel::getLineAreaWaterfallValues(QString &xAxisColumn, QString &y
 
 QString ChartsModel::getTreeSunburstValues(QVariantList & xAxisColumn, QString & yAxisColumn)
 {
+
+    if(newChartHeader.empty() || newChartData.empty()){
+        return "";
+    }
+
     int pointerSize;
 
     QJsonArray data;
@@ -1075,6 +1137,10 @@ QString ChartsModel::getTreeSunburstValues(QVariantList & xAxisColumn, QString &
 QString ChartsModel::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey)
 {
 
+    if(newChartHeader.empty() || newChartData.empty()){
+        return "";
+    }
+
     QJsonArray data;
     QVariantList tmpData;
     float yAxisTmpData;
@@ -1088,6 +1154,8 @@ QString ChartsModel::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxi
     QString masterKeyword;
 
     // Fetch data here
+
+
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
     int splitKey = newChartHeader.key( xSplitKey );
@@ -1171,6 +1239,10 @@ QString ChartsModel::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxi
 
 QString ChartsModel::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &yAxisColumn)
 {
+    if(newChartHeader.empty() || newChartData.empty()){
+        return "";
+    }
+
     QJsonArray data;
     QString masterKeyword;
     QVariantList masterTotal;
@@ -1322,9 +1394,14 @@ void ChartsModel::getChartHeader(QMap<int, QStringList> chartHeader)
 {
     this->chartHeaderDetails = chartHeader;
 
-    foreach(auto key, chartHeader.keys()){
+    // Clear existing chart headers data
+    this->numericalList.clear();
+    this->categoryList.clear();
+    this->dateList.clear();
+    this->newChartHeader.clear();
 
-        qDebug() << chartHeader.value(key).at(1) << "CHART HEADER";
+    // Update new data
+    foreach(auto key, chartHeader.keys()){
 
         if(chartHeader.value(key).at(1).contains(Constants::categoricalType)){
             this->categoryList.append(chartHeader.value(key).at(0));
@@ -1332,10 +1409,12 @@ void ChartsModel::getChartHeader(QMap<int, QStringList> chartHeader)
             this->numericalList.append(chartHeader.value(key).at(0));
         } else if(chartHeader.value(key).at(1).contains(Constants::dateType)){
             this->dateList.append(chartHeader.value(key).at(0));
+        } else{
+            qDebug() << "OTHER UNDETECTED FIELD TYPE" <<   chartHeader.value(key).at(0);
         }
 
         this->newChartHeader.insert(key, chartHeader.value(key).at(0));
     }
 
-     emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
+    emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
 }
