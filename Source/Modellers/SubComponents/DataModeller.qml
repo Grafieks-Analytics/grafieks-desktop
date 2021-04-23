@@ -423,6 +423,7 @@ Item {
                     let joinCompareTableName = DSParamsModel.fetchJoinBoxTableMap(innerItem)[1]
                     let joinCurrentTableName = DSParamsModel.fetchJoinBoxTableMap(innerItem)[2]
                     let joinConditions = DSParamsModel.fetchJoinMapList(innerItem)
+                    let joinPrimaryJoinTable = DSParamsModel.fetchPrimaryJoinTable(innerItem)
                     let joinConditionsList = ""
 
                     tmpJoinString += "("
@@ -430,7 +431,7 @@ Item {
                     for (var i=0; i<Object.keys(joinConditions).length; i++){
 
                         let key = Object.keys(joinConditions)[i]
-                        console.log("KEY", key)
+                        console.log("KEY", key, i , joinPrimaryJoinTable)
                         tmpJoinString += " " + query_joiner + joinCurrentTableName + query_joiner + "." + query_joiner+ joinConditions[key][1] + query_joiner + " = " + query_joiner + joinCompareTableName + query_joiner + "."  + query_joiner + joinConditions[key][0] + query_joiner+  " AND"
                     }
 
@@ -438,7 +439,7 @@ Item {
                     tmpJoinString = tmpJoinString.substring(0, lastIndex);
                     tmpJoinString += ")"
 
-                    joinString += " " + joinType + " " + query_joiner + joinCurrentTableName + query_joiner + " ON " + tmpJoinString
+                    joinString += " " + joinType + " " + query_joiner + joinPrimaryJoinTable + query_joiner + " ON " + tmpJoinString
 
                     tmpJoinString = ""
 
@@ -494,7 +495,7 @@ Item {
         }
 
         joinString = ""
-        selectColumns = ""
+
     }
 
 
