@@ -10,7 +10,8 @@
 BoxDS::BoxDS(QObject *parent) : QObject(parent),
     m_networkAccessManager(new QNetworkAccessManager(this)),
     m_networkReply(nullptr),
-    m_dataBuffer(new QByteArray)
+    m_dataBuffer(new QByteArray),
+    emailSet(false)
 {
     emit showBusyIndicator(true);
 
@@ -41,6 +42,8 @@ BoxDS::BoxDS(QObject *parent) : QObject(parent),
 
     connect(this->box, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
         qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
+
+        Statics::onlineStorageType = Constants::boxIntType;
 
         // api link - https://developer.box.com/reference/get-folders-id-items/
 
@@ -162,7 +165,6 @@ void BoxDS::fetchFileData(QString fileId, QString fileExtension)
 {
 
     emit showBusyIndicator(true);
-    qDebug() << fileId << fileExtension;
 
     this->boxFileId = fileId;
     this->boxExtension = fileExtension;
@@ -230,7 +232,6 @@ void BoxDS::dataReadFinished()
         QJsonObject resultObj = resultJson.object();
 
         QJsonArray dataArray = resultObj["entries"].toArray();
-        qDebug() << m_dataBuffer->data();
 
         for(int i=0;i<dataArray.size();i++){
 
@@ -258,8 +259,13 @@ void BoxDS::dataReadFinished()
         m_dataBuffer->clear();
 
         // Get user email
-        m_networkReply = this->box->get(QUrl("https://api.box.com/2.0/users/me/"));
-        connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::userReadFinished);
+
+        if(!emailSet){
+             qDebug() << "EMAIL SER" << emailSet;
+            m_networkReply = this->box->get(QUrl("https://api.box.com/2.0/users/me/"));
+            connect(m_networkReply,&QNetworkReply::finished,this,&BoxDS::userReadFinished);
+            emailSet = true;
+        }
 
     }
 
@@ -325,6 +331,7 @@ void BoxDS::userReadFinished()
         emit getBoxUsername(resultObj["login"].toString());
     }
 
+    m_dataBuffer->clear();
     emit showBusyIndicator(false);
 }
 

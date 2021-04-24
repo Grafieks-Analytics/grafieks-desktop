@@ -6,28 +6,11 @@ ListView{
 
     property string itemType: "Numerical"
 
-    ListModel{
-        id: numericalModel
-        ListElement{
-            categoricalName: "Numerical "
-        }
-        ListElement{
-            categoricalName: "Numerical 2"
-        }
-        ListElement{
-            categoricalName: "Numerical 3 23 23 23 232"
-        }
-        ListElement{
-            categoricalName: "Numerical 4"
-        }
-    }
 
     Connections{
         target : ChartsModel
 
-
         function onSendFilteredColumn(allCategorical, allNumerical, allDates){
-            numericalModel.clear()
             numericalList.model =  allNumerical
 
         }
@@ -50,7 +33,6 @@ ListView{
         return false;
     }
 
-    model: numericalModel
     anchors.top: numericalHeading.bottom
     anchors.topMargin: 5
     height: parent.height - numericalHeading.height - 5

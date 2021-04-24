@@ -20,6 +20,8 @@
 
 #include "box.h"
 #include "../../secrets.h"
+#include "../../statics.h"
+#include "../../constants.h"
 
 /*!
  * \brief Fetches data records from Box API
@@ -56,7 +58,6 @@ signals:
     void fileDownloaded(QString filePath, QString fileType);
 
 private slots:
-    void resetDatasource();
     void dataReadyRead();
     void dataReadFinished();
     void dataSearchFinished();
@@ -64,6 +65,7 @@ private slots:
     void fileDownloadFinished();
 
 public slots:
+    void resetDatasource();
 
 private:
     QNetworkAccessManager * m_networkAccessManager;
@@ -75,6 +77,7 @@ private:
 
     QString boxFileId;
     QString boxExtension;
+    bool emailSet;
 };
 
 #endif // BOXDS_H

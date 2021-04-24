@@ -55,6 +55,9 @@ DropboxDS::DropboxDS(QObject *parent) : QObject(parent),
 
     connect(this->dropbox, &QOAuth2AuthorizationCodeFlow::granted, [=]() {
         qDebug() << __FUNCTION__ << __LINE__ << "Access Granted!";
+
+        Statics::onlineStorageType = Constants::dropboxIntType;
+
         const QUrl API_ENDPOINT("https://api.dropboxapi.com/2/files/list_folder");
         QJsonObject obj;
         obj.insert("limit", 100);
@@ -182,7 +185,6 @@ void DropboxDS::fetchFileData(QString fileId, QString fileName, QString extensio
 {
 
     emit showBusyIndicator(true);
-    qDebug() << fileId << extension << "DROPBOX" << this->dropbox->token();
 
     this->dropBoxFileId = fileId;
     this->dropBoxFileName = fileName;
@@ -284,7 +286,6 @@ void DropboxDS::dataReadFinished()
 
         QJsonDocument resultJson = QJsonDocument::fromJson(* m_dataBuffer);
         QJsonObject resultObj = resultJson.object();
-        qDebug() << "RES" <<resultObj;
 
         QJsonArray dataArray = resultObj["entries"].toArray();
 
@@ -388,7 +389,6 @@ void DropboxDS::userReadFinished()
     m_dataBuffer->append(m_networkReply->readAll());
     int statusCode = m_networkReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 
-    qDebug() << statusCode << "STATUS" << this->dropbox->token();
     if(m_networkReply->error() ){
         qDebug() <<"There was some error : " << m_networkReply->errorString() ;
 

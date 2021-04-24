@@ -22,6 +22,8 @@
 
 #include "dropbox.h"
 #include "../../secrets.h"
+#include "../../statics.h"
+#include "../../constants.h"
 
 
 /*!
@@ -60,7 +62,6 @@ signals:
     void fileDownloaded(QString filePath, QString fileType);
 
 private slots:
-    void resetDatasource();
     void dataReadyRead();
     void dataReadFinished();
     void dataSearchedFinished();
@@ -68,6 +69,7 @@ private slots:
     void saveFile();
 
 public slots:
+    void resetDatasource();
 
 private:
     QNetworkAccessManager * m_networkAccessManager;

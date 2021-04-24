@@ -418,8 +418,38 @@ Page {
         ConnectorsLoginModel.sqlLogout()
         ChartsModel.removeTmpChartData()
 
+        resetOnlineStorageType()
+
         // Take back to select connection screen
         stacklayout_home.currentIndex = 3
+    }
+
+    function resetOnlineStorageType(){
+
+        let onlineStorageType = GeneralParamsModel.getOnlineStorageType()
+
+        switch(onlineStorageType){
+        case Constants.driveType:
+            DriveDS.resetDatasource()
+            break;
+
+        case Constants.sheetType:
+            SheetDS.resetDatasource()
+            break;
+
+        case Constants.boxType:
+            BoxDS.resetDatasource()
+            break;
+
+        case Constants.dropBoxType:
+            DropboxDS.resetDatasource()
+            break;
+
+        case Constants.githubType:
+            GithubDS.resetDatasource()
+            break;
+
+        }
     }
 
     // JAVASCRIPT FUNCTION ENDS

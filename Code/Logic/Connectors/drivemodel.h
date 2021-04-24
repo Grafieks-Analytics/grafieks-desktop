@@ -29,6 +29,7 @@ public:
     DriveDS * driveds() const;
     void setDriveds(DriveDS * driveds);
 
+
     enum DriveRoles{
         IdRole = Qt::UserRole +1,
         NameRole,
