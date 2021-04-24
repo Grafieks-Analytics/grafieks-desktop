@@ -286,4 +286,10 @@ QtObject {
     property real scaleTable:1
     // ends
     property real newPosition:1
+
+
+    // Data modeller
+    property int joinBoxWidth: 30
+    property int joinBoxHeight: 30
+    property int joinBoxRadius: 25
 }

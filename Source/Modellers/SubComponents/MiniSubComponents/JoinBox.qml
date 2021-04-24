@@ -7,7 +7,7 @@ Item {
 
     id: joinBoxItem
     property var objectName
-        property var hoverCrossIcon: false
+    property var hoverCrossIcon: false
 
     objectName: objectName // refObjectId from parent
 
@@ -103,90 +103,90 @@ Item {
 
     // SubComponents Ends
     /***********************************************************************************************************************/
-Rectangle{
-    height: 60
-    width: 60
-    color: "transparent"
-    radius: 50
-     scale: Constants.scaleTable
-
-    MouseArea{
-        id: mouseAreaBox1
-        anchors.fill: parent
-        onClicked: onJoinIconClicked()
-        hoverEnabled: true
-        onEntered: showCrossIcon();
-        onExited: hideCrossIcon();
-//            onDoubleClicked: showCrossIcon();
-
-
-    }
-
-    ToolTip.delay: Constants.tooltipShowTime
-    ToolTip.timeout: Constants.tooltipHideTime
-    ToolTip.text: qsTr("Click to see join between columns and change the join type")
-    ToolTip.visible: mouseAreaBox1.containsMouse ? true: false
-
-
-
     Rectangle{
-        id: joinBoxRectangle
-        width:33
-        height:33
-        color: "white"
-        radius: 50
-        border.color: Constants.buttonBorderColor
-        border.width: 0.5
-        smooth: true
-        antialiasing: true
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
+        height: Constants.joinBoxHeight * 2
+        width: Constants.joinBoxWidth * 2
+        color: "transparent"
+        radius: Constants.joinBoxRadius * 2
+        scale: Constants.scaleTable
 
-
-
-
-        Image{
-            id: joinIconId
-            source: "/Images/icons/inner_join_32.png"
+        MouseArea{
+            id: mouseAreaBox1
             anchors.fill: parent
-            anchors.top:top.parent
-            anchors.topMargin: 3
-            anchors.bottom: bottom.parent
-            anchors.bottomMargin: 3
-            anchors.left: left.parent
-            anchors.leftMargin: 3
-            anchors.right: right.parent
-            anchors.rightMargin: 3
+            onClicked: onJoinIconClicked()
+            hoverEnabled: true
+            onEntered: showCrossIcon();
+            onExited: hideCrossIcon();
+            //            onDoubleClicked: showCrossIcon();
 
 
         }
 
-//        MouseArea{
-//            id: mouseAreaBox
-//            anchors.fill: parent
-//            onClicked: onJoinIconClicked()
-//            hoverEnabled: true
-////            onEntered: showCrossIcon();
-////            onExited: hideCrossIcon();
-////            onDoubleClicked: showCrossIcon();
-
-
-//        }
+        ToolTip.delay: Constants.tooltipShowTime
+        ToolTip.timeout: Constants.tooltipHideTime
+        ToolTip.text: qsTr("Click to see join between columns and change the join type")
+        ToolTip.visible: mouseAreaBox1.containsMouse ? true: false
 
 
 
+        Rectangle{
+            id: joinBoxRectangle
+            width:33
+            height:33
+            color: "white"
+            radius: 50
+            border.color: Constants.buttonBorderColor
+            border.width: 0.5
+            smooth: true
+            antialiasing: true
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+
+
+
+
+            Image{
+                id: joinIconId
+                source: "/Images/icons/inner_join_32.png"
+                anchors.fill: parent
+                anchors.top:top.parent
+                anchors.topMargin: 3
+                anchors.bottom: bottom.parent
+                anchors.bottomMargin: 3
+                anchors.left: left.parent
+                anchors.leftMargin: 3
+                anchors.right: right.parent
+                anchors.rightMargin: 3
+
+
+            }
+
+            //        MouseArea{
+            //            id: mouseAreaBox
+            //            anchors.fill: parent
+            //            onClicked: onJoinIconClicked()
+            //            hoverEnabled: true
+            ////            onEntered: showCrossIcon();
+            ////            onExited: hideCrossIcon();
+            ////            onDoubleClicked: showCrossIcon();
+
+
+            //        }
+
+
+
+
+        }
 
     }
-
-}
     Rectangle{
         id: deleteJoinRectangle
-//        anchors.verticalCenter: joinBoxRectangle.verticalCenter
+        //        anchors.verticalCenter: joinBoxRectangle.verticalCenter
         anchors.left: joinBoxRectangle.right
         x:35
         width:5
         height:5
-//        color: "yellow"
+        //        color: "yellow"
         visible: hoverCrossIcon
 
 
@@ -199,7 +199,7 @@ Rectangle{
                 onClicked: onDeleteIconClicked()
                 hoverEnabled: true
                 onEntered: showCrossIcon();
-//                onExited: hideCrossIcon();
+                //                onExited: hideCrossIcon();
 
             }
 

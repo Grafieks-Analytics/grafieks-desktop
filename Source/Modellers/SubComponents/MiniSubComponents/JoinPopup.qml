@@ -24,6 +24,7 @@ Rectangle{
     property var rightParam : new Map()
     property var leftDefaultIndex : new Map()
     property var rightDefaultIndex : new Map()
+    property var joinType: ""
     property var tmpModel : []
     property var tmpModelArray: []
     property int availableJoins: 4
@@ -65,6 +66,7 @@ Rectangle{
 
             refObjId = joinId
             fetchJoinTableInfo(true)
+            setPreviousJoin(DSParamsModel.fetchJoinTypeMap(refObjId))
         }
 
     }
@@ -219,6 +221,27 @@ Rectangle{
         }
     }
 
+
+    function setPreviousJoin(joinType){
+
+        switch(joinType){
+        case Constants.innerJoin:
+            innerJoinRadioBtn.checked = true
+            break;
+
+        case Constants.fullJoin:
+            fullJoinRadioBtn.checked = true
+            break;
+
+        case Constants.leftJoin:
+            leftJoinRadioBtn.checked = true
+            break;
+
+        case Constants.rightJoin:
+            rightJoinRadioBtn.checked = true
+            break;
+        }
+    }
 
 
     function fetchJoinTableInfo(visible){
@@ -449,6 +472,7 @@ Rectangle{
             anchors.topMargin: 5
 
             CustomRadioDelegate{
+                id: innerJoinRadioBtn
                 checked: true
                 width: 90
                 height: 90
@@ -482,7 +506,7 @@ Rectangle{
             anchors.topMargin: 5
 
             CustomRadioDelegate{
-
+                id: leftJoinRadioBtn
                 width: 90
                 height: 90
 
@@ -515,7 +539,7 @@ Rectangle{
             anchors.topMargin: 5
 
             CustomRadioDelegate{
-
+                id: rightJoinRadioBtn
                 width: 90
                 height: 90
 
@@ -547,6 +571,7 @@ Rectangle{
             anchors.topMargin: 5
 
             CustomRadioDelegate{
+                id: fullJoinRadioBtn
                 width: 90
                 height: 90
 
