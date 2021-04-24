@@ -1259,12 +1259,23 @@ Page {
                 anchors.left: row4Valueseparator2.right
                 border.color: Constants.borderBlueColor
 
-                TextEdit {
-                    leftPadding: 10
-                    rightPadding: 10
-                    width: parent.width
+                Rectangle{
+                    width: 160
+                    height: 30
+                    radius: 15
+//                    color: "red"
+                    border.color: Constants.borderBlueColor
+
                     anchors.centerIn: parent
-                    verticalAlignment: Text.AlignVCenter
+
+                    TextEdit {
+                        leftPadding: 10
+                        rightPadding: 10
+                        width: parent.width
+                        height:  parent.height
+                        anchors.centerIn: parent
+                        verticalAlignment: Text.AlignVCenter
+                    }
                 }
                 z:1
             }
@@ -1288,10 +1299,9 @@ Page {
                 width: 200
                 height: parent.height
                 anchors.left: row4Valueseparator3.right
-
                 Text{
                     text: 'Yellow'
-                    width: parent.width
+
                     anchors.centerIn: parent
                 }
                 z:1
@@ -1313,15 +1323,27 @@ Page {
                 width: 200
                 height: parent.height
                 anchors.left: row4Valueseparator4.right
-                border.color: Constants.borderBlueColor
 
-                TextEdit {
-                    leftPadding: 10
-                    rightPadding: 10
-                    width: parent.width
+                Rectangle{
+                    width: 160
+                    height: 30
+                    radius: 15
+//                    color: "red"
+                    border.color: Constants.borderBlueColor
+
                     anchors.centerIn: parent
-                    verticalAlignment: Text.AlignVCenter
+
+                    TextEdit {
+                        leftPadding: 10
+                        rightPadding: 10
+                        width: parent.width
+                        height:  parent.height
+                        anchors.centerIn: parent
+                        verticalAlignment: Text.AlignVCenter
+                    }
                 }
+
+
                 z:1
             }
 
@@ -1346,7 +1368,6 @@ Page {
 
                 Text{
                     text: 'Red'
-                    width: parent.width
                     anchors.leftMargin: 20
                     anchors.centerIn: parent
                 }
@@ -1370,13 +1391,23 @@ Page {
                 height: parent.height
                 anchors.left: row4Valueseparator6.right
                 border.color: Constants.borderBlueColor
+                Rectangle{
+                    width: 160
+                    height: 30
+                    radius: 15
+//                    color: "red"
+                    border.color: Constants.borderBlueColor
 
-                TextEdit {
-                    leftPadding: 10
-                    rightPadding: 10
-                    width: parent.width
                     anchors.centerIn: parent
-                    verticalAlignment: Text.AlignVCenter
+
+                    TextEdit {
+                        leftPadding: 10
+                        rightPadding: 10
+                        width: parent.width
+                        height:  parent.height
+                        anchors.centerIn: parent
+                        verticalAlignment: Text.AlignVCenter
+                    }
                 }
                 z:1
             }

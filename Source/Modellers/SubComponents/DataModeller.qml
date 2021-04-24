@@ -594,8 +594,8 @@ Item {
             let diffX = Math.abs(rectLeftX - tmpRearRectCoordinatesX) /2
             let diffY = Math.abs(rectLeftY - tmpRearRectCoordinatesY) /2
 
-            newJoinBox.get(refObject).x = rectLeftX <= tmpRearRectCoordinatesX ? ( rectLeftX +diffX ) : ( tmpRearRectCoordinatesX + diffX )
-            newJoinBox.get(refObject).y = rectLeftY <= tmpRearRectCoordinatesY ? ( rectLeftY +diffY ) : ( tmpRearRectCoordinatesY + diffY )
+            newJoinBox.get(refObject).x = rectLeftX <= tmpRearRectCoordinatesX ? ( rectLeftX + diffX -30 ) : ( tmpRearRectCoordinatesX + diffX )
+            newJoinBox.get(refObject).y = rectLeftY <= tmpRearRectCoordinatesY ? ( rectLeftY + diffY  ) : ( tmpRearRectCoordinatesY + diffY )
 
         }
 
@@ -988,6 +988,7 @@ Item {
         id:outer
         height: parent.height
         width: parent.width
+
         //             scale: Constants.scaleTable
 
         Flickable {
@@ -1008,6 +1009,7 @@ Item {
                 Rectangle {
                     id: inner
                     anchors { fill: parent; margins: 10; }
+                    color: "transparent"
                     //                                               color: "yellow"
                     DropArea {
                         id: dropArea
