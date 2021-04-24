@@ -679,7 +679,6 @@ Item {
         //        TODO white
         highlightRect.color = "white"
         droppedCount = droppedCount+1
-        console.log("droppedCount"+droppedCount)
 
         // Assign new variable to the created object
         // Use this variable to connect the signals and slots
@@ -743,8 +742,6 @@ Item {
             var rectY = nearestRectangleCoordinates.y <= currentPoint.y ? nearestRectangleCoordinates.y + midLengthY : currentPoint.y + midLengthY
 
             newJoinBox.set(counter, dynamicJoinBox.createObject(parent, {x: rectX, y: rectY, objectName : counter}))
-
-            console.log("X VALUES", rectX, nearestRectangleCoordinates.x, currentPoint.x, midLengthX)
 
             // Connect join box destroy signal and slot
             newJoinBox.get(counter).destroyJoin.connect(destroyComponents)

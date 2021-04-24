@@ -549,10 +549,6 @@ Page {
                     if (mouseArea.drag.active) {
                         tableslist.dragItemIndex = index;
                         tableslist.tableName = modelData
-
-                        dragRect.z=100000
-                        console.log("dragRect"+dragRect.z)
-
                     }
                     dragRect.Drag.drop();
                 }
@@ -561,7 +557,6 @@ Page {
 
                 onClicked: {
                     NewTableColumnsModel.getColumnsForTable(modelData, "TableColumns")
-                    console.log("Table name", modelData)
 
                     if(tablecolumnListView.visible === true){
                         toggleTableIcon.source ="/Images/icons/Right_20.png"
