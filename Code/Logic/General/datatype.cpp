@@ -29,7 +29,7 @@ QString DataType::dataType(QString parameter)
                 << "binary_float" << "binary_double" << "int1" << "int2" << "short" << "float4" << "int4" << "signed" << "float8" << "long" << "int8"
                 << "large number" << "autonumber" << "number"
                 << "I8" << "I1" << "D" << "F" << "I" << "N" << "D" << "I2"
-                << "uint" << "ushort" << "ulong";
+                << "uint" << "ushort" << "ulong" << "qulonglong";
 
     dateformat << "date" << "datetime" << "timestamp" << "time" << "year"
                << "timestamp without time zone" << "timestamp with time zone"

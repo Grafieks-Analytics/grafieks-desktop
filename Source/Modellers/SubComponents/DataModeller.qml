@@ -274,7 +274,6 @@ Item {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-
     // SLOT
     // Set the current selected rectangle
     function setRefObject(newRefObject, newRefObejectWidth){
@@ -594,7 +593,7 @@ Item {
             let diffX = Math.abs(rectLeftX - tmpRearRectCoordinatesX) /2
             let diffY = Math.abs(rectLeftY - tmpRearRectCoordinatesY) /2
 
-            newJoinBox.get(refObject).x = rectLeftX <= tmpRearRectCoordinatesX ? ( rectLeftX + diffX -30 ) : ( tmpRearRectCoordinatesX + diffX )
+            newJoinBox.get(refObject).x = rectLeftX <= tmpRearRectCoordinatesX ? ( rectLeftX + diffX - Constants.joinBoxWidth ) : ( tmpRearRectCoordinatesX + diffX - Constants.joinBoxWidth )
             newJoinBox.get(refObject).y = rectLeftY <= tmpRearRectCoordinatesY ? ( rectLeftY + diffY  ) : ( tmpRearRectCoordinatesY + diffY )
 
         }
@@ -617,7 +616,7 @@ Item {
                 let diffX = Math.abs(rectRightX - tmpFrontRectCoordinatesX) /2
                 let diffY = Math.abs(rectRightY - tmpFrontRectCoordinatesY) /2
 
-                newJoinBox.get(value).x = rectRightX <= tmpFrontRectCoordinatesX ? ( rectRightX +diffX ) : ( tmpFrontRectCoordinatesX + diffX )
+                newJoinBox.get(value).x = rectRightX <= tmpFrontRectCoordinatesX ? ( rectRightX +diffX - Constants.joinBoxWidth ) : ( tmpFrontRectCoordinatesX + diffX - Constants.joinBoxWidth)
                 newJoinBox.get(value).y = rectRightY <= tmpFrontRectCoordinatesY ? ( rectRightY +diffY ) : ( tmpFrontRectCoordinatesY + diffY )
             })
         }
@@ -680,7 +679,6 @@ Item {
         //        TODO white
         highlightRect.color = "white"
         droppedCount = droppedCount+1
-        console.log("droppedCount"+droppedCount)
 
         // Assign new variable to the created object
         // Use this variable to connect the signals and slots
@@ -740,7 +738,7 @@ Item {
             var midLengthX = Math.abs(nearestRectangleCoordinates.x - currentPoint.x) / 2;
             var midLengthY = Math.abs(nearestRectangleCoordinates.y - currentPoint.y) / 2;
 
-            var rectX = nearestRectangleCoordinates.x <= currentPoint.x ? nearestRectangleCoordinates.x + midLengthX : currentPoint.x + midLengthX
+            var rectX = nearestRectangleCoordinates.x <= currentPoint.x ? nearestRectangleCoordinates.x + midLengthX - Constants.joinBoxWidth : currentPoint.x + midLengthX - Constants.joinBoxWidth
             var rectY = nearestRectangleCoordinates.y <= currentPoint.y ? nearestRectangleCoordinates.y + midLengthY : currentPoint.y + midLengthY
 
             newJoinBox.set(counter, dynamicJoinBox.createObject(parent, {x: rectX, y: rectY, objectName : counter}))
