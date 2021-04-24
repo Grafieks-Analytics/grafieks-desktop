@@ -158,7 +158,7 @@ Item{
 
         Rectangle{
             id:tableContent
-            color: "red"
+
             height: 30
             //            width: 200
 
@@ -299,7 +299,7 @@ Item{
                 maximumX: outer.width
             }
 
-            hoverEnabled: true
+            //            hoverEnabled: true
 
             //            onDoubleClicked: onRectangleToggle()
             onReleased: onReleasedRectangle(newItem)
@@ -334,7 +334,7 @@ Item{
             anchors.rightMargin: 32
             anchors.verticalCenter: droppedRectangle.verticalCenter
             z: 5
-            visible: hoverCrossIcon
+            //            visible: hoverCrossIcon
 
             MouseArea{
                 anchors.fill: parent
@@ -352,7 +352,7 @@ Item{
             anchors.rightMargin: 10
             anchors.verticalCenter: droppedRectangle.verticalCenter
             z: 5
-            visible: hoverCrossIcon
+            //            visible: hoverCrossIcon
 
             MouseArea{
                 anchors.fill: parent
