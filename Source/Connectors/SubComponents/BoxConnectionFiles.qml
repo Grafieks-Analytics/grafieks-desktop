@@ -40,6 +40,7 @@ Popup {
     property var fileExtension: ""
 
     property var generalObjectName : ""
+    property var navigationPaths: []
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -69,6 +70,7 @@ Popup {
         }
 
         function onShowBusyIndicator(status){
+            console.log(status, "status")
             if(status === true){
                 busyindicator.running = true
             } else{
@@ -212,14 +214,28 @@ Popup {
     function onFolderDoubleClicked(name, type, folder_id = null){
 
         if(fileType === "folder"){
+            console.log(folder_id, "FOLDER ID")
             BoxDS.folderNav(folder_id)
+            navigationPaths.push({"path": folder_id, "name": name})
         } else{
             BoxDS.fetchFileData(fileId, fileExtension)
         }
 
-
-
         updatePath(name);
+    }
+
+    function backCalled(){
+        navigationPaths.pop()
+        let lastElement = navigationPaths.length - 1
+        let navPaths = navigationPaths[lastElement]
+
+        if(lastElement >= 0){
+            BoxDS.folderNav(navPaths.path);
+        } else{
+            onHomeClicked()
+        }
+
+        updatePath(navPaths.name);
     }
 
     // JAVASCRIPT FUNCTION ENDS
