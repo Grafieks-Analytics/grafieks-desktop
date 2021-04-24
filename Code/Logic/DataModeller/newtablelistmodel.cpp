@@ -5,6 +5,11 @@ NewTableListModel::NewTableListModel(QObject *parent) : QObject(parent)
 
 }
 
+void NewTableListModel::clearData()
+{
+    this->tables.clear();
+}
+
 QStringList NewTableListModel::getTableList()
 {
     QSqlDatabase dbCon;
@@ -63,5 +68,12 @@ QStringList NewTableListModel::getTableList()
     }
     }
 
-    return dbCon.tables();
+    this->tables = dbCon.tables();
+
+    return this->tables;
+}
+
+QStringList NewTableListModel::filterTableList(QString keyword)
+{
+    return this->tables.filter(keyword);
 }

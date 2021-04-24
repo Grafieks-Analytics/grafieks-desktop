@@ -84,11 +84,33 @@ QVariantMap MSSqlCon::MSSqlOdbcInstance(const QString &driver, const QString &ho
     return outputStatus;
 }
 
-MSSqlCon::~MSSqlCon()
+void MSSqlCon::closeConnection()
 {
     QSqlDatabase dbMssqlOdbc = QSqlDatabase::database(Constants::mssqlOdbcStrType);
     QSqlDatabase dbMssqlOdbc2 = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
 
-    if(dbMssqlOdbc.isOpen()) dbMssqlOdbc.close();
-    if(dbMssqlOdbc2.isOpen()) dbMssqlOdbc2.close();
+    if(dbMssqlOdbc.isOpen()) {
+        dbMssqlOdbc.removeDatabase(Constants::mssqlOdbcStrType);
+        dbMssqlOdbc.close();
+    }
+    if(dbMssqlOdbc2.isOpen()) {
+        dbMssqlOdbc2.removeDatabase(Constants::mssqlOdbcStrQueryType);
+        dbMssqlOdbc2.close();
+    }
+
+    Statics::msHost = "";
+    Statics::msDb = "";
+    Statics::msPort = 0;
+    Statics::msUsername = "";
+    Statics::msPassword = "";
+
+    Statics::currentDbName = "";
+    Statics::currentDbClassification = "";
+    Statics::currentDbIntType = -1;
+    Statics::currentDbStrType = "";
+}
+
+MSSqlCon::~MSSqlCon()
+{
+
 }

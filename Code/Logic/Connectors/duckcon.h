@@ -16,6 +16,7 @@ class DuckCon : public QObject
     Q_OBJECT
     ExcelCon excelToCsv;
     JsonCon jsonToCsv;
+    QStringList tables;
 
 public:
     explicit DuckCon(QObject *parent = nullptr);
@@ -26,6 +27,7 @@ public:
 
 public slots:
     void createTable();
+    void dropTables();
 
 signals:
     void importError(QString errorString);

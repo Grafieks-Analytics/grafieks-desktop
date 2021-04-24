@@ -28,6 +28,7 @@ class TeradataCon : public QObject
 public:
     explicit TeradataCon(QObject *parent = nullptr);
     QVariantMap TeradataOdbcInstance(const QString & driver, const QString & host, const QString & db, const int & port, const QString & username, const QString & password);
+    void closeConnection();
 
     ~TeradataCon();
 

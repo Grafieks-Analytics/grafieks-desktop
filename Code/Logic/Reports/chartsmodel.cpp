@@ -7,16 +7,6 @@ ChartsModel::ChartsModel(QObject *parent) : QObject(parent)
 
 ChartsModel::~ChartsModel()
 {
-    this->newChartData.clear();
-    this->newChartHeader.clear();
-    this->chartHeaderDetails.clear();
-
-    this->numericalList.clear();
-    this->categoryList.clear();
-    this->dateList.clear();
-
-    emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
-
 }
 
 QString ChartsModel::getBarChartValues(QString xAxisColumn, QString yAxisColumn)
@@ -1311,7 +1301,6 @@ QString ChartsModel::getTablePivotValues(QVariantList &xAxisColumn, QVariantList
 
 void ChartsModel::removeTmpChartData()
 {
-//    this->~ChartsModel();
     this->newChartData.clear();
     this->newChartHeader.clear();
     this->chartHeaderDetails.clear();

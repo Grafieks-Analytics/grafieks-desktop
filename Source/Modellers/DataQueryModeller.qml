@@ -29,6 +29,7 @@ Page {
     height: parent.height
 
 
+
     property int menu_width: 60
     property bool dataModellerSelected: true
     property int statusIndex: 1
@@ -334,7 +335,13 @@ Page {
     }
 
     function searchTable(text){
-        TableListModel.callQuery(text)
+        if(connectionType === Constants.sqlType){
+            tableslist.model = NewTableListModel.filterTableList(text)
+        } else if(connectionType === Constants.duckType){
+            tableslist.model = DuckDataModel.filterTableList(text)
+        } else{
+            tableslist.model = ForwardOnlyDataModel.filterTableList(text)
+        }
     }
 
     function collapseTables(){
@@ -399,10 +406,13 @@ Page {
     function disconnectDS(){
         if(connectionType === Constants.sqlType){
             QueryModel.removeTmpChartData()
+            NewTableListModel.clearData()
         } else if(connectionType === Constants.duckType){
             DuckQueryModel.removeTmpChartData()
+            DuckDataModel.clearData()
         } else{
             ForwardOnlyQueryModel.removeTmpChartData()
+            ForwardOnlyDataModel.clearData()
         }
 
         ConnectorsLoginModel.sqlLogout()
@@ -500,6 +510,7 @@ Page {
                 drag.maximumX: 0
                 hoverEnabled: true
 
+
                 onEntered: showTableIcon();
                 onExited: hideTableIcon();
 
@@ -507,6 +518,10 @@ Page {
                     if (mouseArea.drag.active) {
                         tableslist.dragItemIndex = index;
                         tableslist.tableName = modelData
+
+                        dragRect.z=100000
+                        console.log("dragRect"+dragRect.z)
+
                     }
                     dragRect.Drag.drop();
                 }
@@ -704,19 +719,19 @@ Page {
 
             // Disconnect Button starts
 
-//            Button{
-//                id: disconnect_btn
-//                width: disconnect_text.text.length * 8
-//                height: 28
+            //            Button{
+            //                id: disconnect_btn
+            //                width: disconnect_text.text.length * 8
+            //                height: 28
 
-//                Text{
-//                    id: disconnect_text
-//                    text: "Disconnect " + ConnectorsLoginModel.connectedDB
-//                    anchors.centerIn: parent
-//                }
+            //                Text{
+            //                    id: disconnect_text
+            //                    text: "Disconnect " + ConnectorsLoginModel.connectedDB
+            //                    anchors.centerIn: parent
+            //                }
 
-//                onClicked: disconnectDS()
-//            }
+            //                onClicked: disconnectDS()
+            //            }
 
             // Disconnect Button ends
 
@@ -1208,6 +1223,7 @@ Page {
                     TextField{
                         id:searchTextBox
                         placeholderText: "Search"
+                        selectByMouse: true
                         width: parent.width - search_icon.width-8
                         height:30
                         cursorVisible: true
@@ -1276,7 +1292,7 @@ Page {
                         id: categoryItem
                         height: 50
                         width: column_querymodeller.width
-//                        color: "red"
+                        //                        color: "red"
 
 
 
@@ -1298,7 +1314,6 @@ Page {
                             anchors.verticalCenter: parent.verticalCenter
                             font.pixelSize: Constants.fontCategoryHeaderMedium
                             text: ConnectorsLoginModel.connectedDB
-//                            text: "radjfbjkd aadbjlkgdd dgjb  jfgb ajbjdfb"
                             elide: Text.ElideRight
 
 

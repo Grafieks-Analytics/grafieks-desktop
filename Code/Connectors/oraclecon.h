@@ -28,6 +28,7 @@ class OracleCon : public QObject
 public:
     explicit OracleCon(QObject *parent = nullptr);
     QVariantMap OracleOdbcInstance(const QString & driver, const QString & host, const QString & db, const int & port, const QString & username, const QString & password);
+    void closeConnection();
 
     ~OracleCon();
 

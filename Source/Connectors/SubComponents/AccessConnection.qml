@@ -345,6 +345,7 @@ Popup {
         TextField{
             id: username
             maximumLength: 45
+            selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 370
             height: 40
@@ -389,6 +390,7 @@ Popup {
         TextField{
             id: password
             maximumLength: 45
+            selectByMouse: true
             echoMode: "Password"
             anchors.verticalCenter: parent.verticalCenter
             width: 370
@@ -446,7 +448,7 @@ Popup {
     FileDialog{
         id: promptAccess
         title: "Select an Access db file"
-        nameFilters: ["Access files (*.mdb, *.accdb )"];
+        nameFilters: ["Access files (*.mdb *.accdb )"];
 
         onAccepted: {
 

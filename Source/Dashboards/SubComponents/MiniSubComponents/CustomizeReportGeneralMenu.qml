@@ -48,6 +48,7 @@ Rectangle{
         TextField{
             id: reportName
             width: parent.width
+            selectByMouse: true
             background: Rectangle {
                 border.color: Constants.borderBlueColor
                 radius: 6

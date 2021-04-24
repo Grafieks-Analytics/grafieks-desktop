@@ -11,10 +11,21 @@ DuckDataModel::DuckDataModel(DuckCon *duckCon, QObject *parent)
     this->duckCon = duckCon;
 }
 
+void DuckDataModel::clearData()
+{
+    this->colData.clear();
+
+    this->allColumns.clear();
+    this->tables.clear();
+    duckCon->disconnect();
+}
+
 DuckDataModel::~DuckDataModel()
 {
     this->allColumns.clear();
     this->colData.clear();
+
+    this->duckCon->disconnect();
 }
 
 
@@ -102,8 +113,13 @@ QStringList DuckDataModel::getTableList()
     }
     }
 
+    this->tables = output;
+    return this->tables;
+}
 
-    return output;
+QStringList DuckDataModel::filterTableList(QString keyword)
+{
+    return this->tables.filter(keyword);
 }
 
 QStringList DuckDataModel::getDbList()

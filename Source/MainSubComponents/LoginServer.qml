@@ -96,6 +96,7 @@ Popup {
         TextField{
             id: server_address
             placeholderText: "http://"
+            selectByMouse: true
             maximumLength: 45
             font.pixelSize: Constants.fontCategoryHeader
             anchors.verticalCenter: parent.verticalCenter

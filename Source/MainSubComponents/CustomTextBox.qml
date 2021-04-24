@@ -9,6 +9,7 @@ TextField{
     property alias maxLength: textField.maximumLength
     property alias boxWidth: textField.width
     property alias boxHeight: textField.height
+    selectByMouse: true
 
     background: Rectangle {
         border.color: Constants.borderBlueColor

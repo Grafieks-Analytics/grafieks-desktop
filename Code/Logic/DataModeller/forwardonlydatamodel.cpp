@@ -5,10 +5,16 @@ ForwardOnlyDataModel::ForwardOnlyDataModel(QObject *parent) : QObject(parent)
 
 }
 
-ForwardOnlyDataModel::~ForwardOnlyDataModel()
+void ForwardOnlyDataModel::clearData()
 {
     this->allColumns.clear();
     this->colData.clear();
+    this->tables.clear();
+}
+
+ForwardOnlyDataModel::~ForwardOnlyDataModel()
+{
+
 }
 
 void ForwardOnlyDataModel::columnData(QString col, QString tableName, QString searchString)
@@ -166,7 +172,13 @@ QStringList ForwardOnlyDataModel::getTableList()
         qWarning() << Q_FUNC_INFO << tableQuery.lastError();
     }
 
-    return output;
+    this->tables = output;
+    return this->tables;
+}
+
+QStringList ForwardOnlyDataModel::filterTableList(QString keyword)
+{
+    return this->tables.filter(keyword);
 }
 
 QStringList ForwardOnlyDataModel::getDbList()
