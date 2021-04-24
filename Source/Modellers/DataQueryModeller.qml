@@ -1421,7 +1421,6 @@ Page {
                         width: item_querymodeller.width+10
                         delegate: tablelistDelegate
                         visible: true
-                        clip: true
                         flickableDirection: Flickable.VerticalFlick
                         boundsBehavior: Flickable.StopAtBounds
                         ScrollBar.vertical: ScrollBar {}
