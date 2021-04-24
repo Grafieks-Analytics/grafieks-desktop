@@ -274,7 +274,6 @@ Item {
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-
     // SLOT
     // Set the current selected rectangle
     function setRefObject(newRefObject, newRefObejectWidth){
