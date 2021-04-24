@@ -29,6 +29,7 @@ Page {
     height: parent.height
 
 
+
     property int menu_width: 60
     property bool dataModellerSelected: true
     property int statusIndex: 1
@@ -539,6 +540,7 @@ Page {
                 drag.maximumX: 0
                 hoverEnabled: true
 
+
                 onEntered: showTableIcon();
                 onExited: hideTableIcon();
 
@@ -546,6 +548,10 @@ Page {
                     if (mouseArea.drag.active) {
                         tableslist.dragItemIndex = index;
                         tableslist.tableName = modelData
+
+                        dragRect.z=100000
+                        console.log("dragRect"+dragRect.z)
+
                     }
                     dragRect.Drag.drop();
                 }
@@ -1360,7 +1366,7 @@ Page {
                             width: 18
                             height: 18
                             anchors.left: database_name.right
-                            anchors.leftMargin:  0
+                            anchors.leftMargin:  13
                             anchors.verticalCenter: parent.verticalCenter
                             visible: true
 
