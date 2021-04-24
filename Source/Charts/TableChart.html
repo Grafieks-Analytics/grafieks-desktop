@@ -41,7 +41,7 @@
         <div id="my_div"></div>
 
         <table id="tableChart" style="display: none; width: 100%">
-            <thead>
+            <!-- <thead>
                 <th>Company</th>
                 <th>Contact</th>
                 <th>Country</th>
@@ -197,14 +197,55 @@
                     <td>Giovanni Rovelli</td>
                     <td>Italy</td>
                 </tr>
-            </tbody>
+            </tbody> -->
         </table>
 
         <script>
+            var data = [
+                [
+                    ["Abhishek", 600],
+                    ["Hirak", 20],
+                    ["Abhishek 2", 300],
+                    ["Chilarai", 400],
+                    ["Hirak 4", 550],
+                    ["Ravi", 800],
+                ],
+                ["", 4000],
+                ["name", "value"],
+            ];
+
+            d3.selectAll("#tableChart").append("thead");
+            d3.selectAll("#tableChart").append("tbody");
+            const [dataValues, totals, headings] = data;
+
+            var theadingRow = document.createElement("tr");
+
+            headings.forEach((d, i) => {
+                console.log(d);
+                var trRowData = d;
+                var th = document.createElement("th");
+                th.innerText = d;
+                theadingRow.appendChild(th);
+            });
+
+            d3.select("#tableChat thead").append(theadingRow);
+
+            dataValues.forEach((d, i) => {
+                var tr = document.createElement("tr");
+                var trRowData = d;
+                trRowData.forEach((rowData, rowIndex) => {
+                    console.log(rowData);
+                    var td = document.createElement("td");
+                    td.innerText = rowData;
+                    tr.appendChild(td);
+                });
+                document.querySelector("#tableChart tbody").appendChild(tr);
+            });
+
             $(document).ready(function () {
                 $("#tableChart").css("display", "");
                 $("#tableChart").DataTable({
-                    // paging: false,
+                    paging: false,
                     bPaginate: false,
                     bFilter: false,
                     bInfo: false,

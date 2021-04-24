@@ -90,6 +90,7 @@ signals:
     void connectedDBType(QString conType);
     void sendDbName();
     void dSSelected(bool dsStatus);
+    void dropTables();
 
 private:
     void staticSetter(QString dbName, QString classification, int intType, QString strType = NULL);

@@ -116,6 +116,7 @@ Item {
             TextField{
                 id:searchTextBox
                 placeholderText: "Search"
+                selectByMouse: true
                 width: parent.width - search_icon.width
                 height:30
                 cursorVisible: true

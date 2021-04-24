@@ -20,15 +20,18 @@ class ForwardOnlyDataModel : public QObject
     DataType dataType;
 
     QList<QStringList> allColumns;
+    QStringList tables;
 
 public:
     explicit ForwardOnlyDataModel(QObject *parent = nullptr);
+    Q_INVOKABLE void clearData();
     ~ForwardOnlyDataModel();
 
 
     Q_INVOKABLE void columnData(QString col, QString tableName, QString searchString = "");
     Q_INVOKABLE QStringList getColumnList(QString tableName, QString moduleName, QString searchString = "");
     Q_INVOKABLE QStringList getTableList();
+    Q_INVOKABLE QStringList filterTableList(QString keyword);
     Q_INVOKABLE QStringList getDbList();
 
 

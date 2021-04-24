@@ -212,6 +212,11 @@ int main(int argc, char *argv[])
     // Application basic initialization
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
+    // For Shape drawing antialiasing
+    QSurfaceFormat format;
+    format.setSamples(10);
+    QSurfaceFormat::setDefaultFormat(format);
+
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
@@ -236,7 +241,7 @@ int main(int argc, char *argv[])
 
     QtTest2 qttest2;
     QtTest qttest;
-//    qttest.calla();
+    //    qttest.calla();
 
     MysqlCon mysqlconnect;
     User User;
@@ -305,6 +310,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(&proxyModel, &ProxyFilterModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
     QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::sendDbName, duckCon, &DuckCon::createTable);
+    QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::dropTables, duckCon, &DuckCon::dropTables);
     QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, duckDataModel, &DuckDataModel::receiveCsvFilterQuery);
 
     // Common data and headers for reports and dashboards

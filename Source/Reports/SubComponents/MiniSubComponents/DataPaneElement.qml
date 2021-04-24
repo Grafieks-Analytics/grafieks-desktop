@@ -149,6 +149,20 @@ Rectangle{
                     rightDataDrag.width=parent.width+5
 
                 }
+                else if(itemType == "Categorical"){
+                    console.log("itemtypecolor"+itemType)
+                  rightDataDrag.color= Constants.defaultCategoricalColor
+                    rightDataDrag.radius=15
+                    rightDataDrag.width=parent.width+5
+
+                }
+                else if(itemType == "Date"){
+                    console.log("itemtypecolor"+itemType)
+                  rightDataDrag.color= "yellow"
+                    rightDataDrag.radius=15
+                    rightDataDrag.width=parent.width+5
+
+                }
 
 
 
@@ -166,7 +180,8 @@ Rectangle{
                     ReportParamsModel.setColorByActive(false);
                 }
             }else{
-                rightDataDrag.color= "red"
+                rightDataDrag.color= "white"
+                 rightDataDrag.radius=0
                 ReportParamsModel.setXAxisActive(false);
                 ReportParamsModel.setYAxisActive(false);
                 ReportParamsModel.setColorByActive(false);

@@ -601,6 +601,7 @@ Column{
             height: 30
             width: 80
             id:lastXRadioTextField
+            selectByMouse: true
             anchors.left: lastXRadio.right
             onTextChanged: {
                 onLastXChecked()
@@ -643,6 +644,7 @@ Column{
 
         TextField{
             id: nextXRadioTextField
+            selectByMouse: true
             height: 30
             width: 80
             anchors.left: nextXRadio.right

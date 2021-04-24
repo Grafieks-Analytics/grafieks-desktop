@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <meta charset="utf-8" />
-
 <head>
     <script src="./Data/d3DefaultConfig.js"></script>
     <script src="./Data/utils.js"></script>
@@ -8,28 +7,8 @@
     <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
     <link rel="stylesheet" href="Data/general.css" />
     <style>
-        .title {
-            font: 15px sans-serif;
-        }
-
-        .legend {
-            font: 10px sans-serif;
-        }
-        .axis path,
-        .axis line {
-            fill: none;
-            shape-rendering: crispEdges;
-            stroke-width: 1px;
-        }
-
-        .x.axis.path {
+        .y-axis .domain {
             display: none;
-        }
-
-        .line {
-            fill: none;
-            /* stroke: black; */
-            stroke-width: 1.2px;
         }
     </style>
 </head>
@@ -38,6 +17,7 @@
     <div id="my_dataviz"></div>
 
     <script>
+        // reference: https://bl.ocks.org/seasmith/b72e6b8be1978eae046e0cff131668b1
         var data = [
             [
                 ["Ind", "1999", "139.81"],
@@ -61,8 +41,6 @@
             ["1999", "2000", "2001", "2002"],
         ];
 
-        drawChart(data);
-
         function transformData(dataValue) {
             json = {};
             dataValue.forEach((d) => {
@@ -83,11 +61,13 @@
             return response;
         }
 
+        drawChart(data);
+
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
 
             var keys = data[1];
-            var labels = data[2];
+            // keys = ["apples", "bananas", "cherries", "dates"];
             data = transformData(data[0]);
 
             var margin = { top: 20, right: 20, bottom: 30, left: 40 };
@@ -127,70 +107,30 @@
                 standartThresholdWidth = defaultD3Config.standartThresholdWidth;
             }
 
-            // if (chartType == constants.chartType.STANDARD) {
-            //     width = keys.length * standartThresholdWidth;
-            // }
-
-            var x = d3.scaleBand().rangeRound([0, width]).padding(paddingInner);
-            var y = d3.scaleLinear().range([height, margin.top]);
-            var center = d3.scaleLinear().range([0, width]);
-            var color = d3.scaleOrdinal().range(d3Colors);
-
-            var xAxis = d3.axisBottom(x);
-            var yAxis = d3.axisLeft(y);
-
-            var centerLine = d3.axisTop(center).ticks(0);
-
-            data.forEach(function (d) {
-                var y0_positive = 0;
-                var y0_negative = 0;
-
-                d.components = keys.map(function (key) {
-                    if (d[key] >= 0) {
-                        return {
-                            key,
-                            y1: y0_positive,
-                            y0: (y0_positive += d[key]),
-                        };
-                    } else if (d[key] < 0) {
-                        return {
-                            key,
-                            y0: y0_negative,
-                            y1: (y0_negative += d[key]),
-                        };
-                    }
-                });
-            });
-
-            var y_min = d3.min(data, function (d) {
-                return d3.min(
-                    d.components.map((d1) => {
-                        return d1.y1;
+            var y = d3
+                .scaleBand()
+                .domain(
+                    data.map(function (d) {
+                        return d.key;
                     })
-                );
-            });
+                )
+                .rangeRound([margin.top, height - margin.bottom])
+                .padding(paddingInner);
 
-            var y_max = d3.max(data, function (d) {
-                return d3.max(
-                    d.components.map((d1) => {
-                        return d1.y0;
-                    })
-                );
-            });
+            var barWidth = y.bandwidth();
 
-            x.domain(
-                data.map((d) => {
-                    return d.key;
-                })
+            var series = d3.stack().keys(keys).offset(d3.stackOffsetDiverging)(
+                data
             );
-            y.domain([y_min, y_max]).nice();
-            color.domain(keys);
-            const barWidth = x.bandwidth();
+
+            var x = d3
+                .scaleLinear()
+                .domain([d3.min(series, stackMin), d3.max(series, stackMax)])
+                .rangeRound([0, width - margin.right]);
+
+            var z = d3.scaleOrdinal(d3Colors);
 
             d3.selectAll("#my_dataviz").html("");
-
-            //add svg with margin !important
-            //this is svg is actually group
             var svg = d3
                 .selectAll("#my_dataviz")
                 .append("svg")
@@ -203,46 +143,35 @@
                 );
 
             svg.append("g")
-                .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis.tickSize(0));
+                .attr("class", "grid")
+                .style("stroke-width", "1")
+                .call(make_x_gridlines(x).tickSize(height).tickFormat(""));
 
+            var keysIterator = 0;
             svg.append("g")
-                .attr("class", "y axis grid")
-                .call(yAxis.tickSize(-width - paddingInner * 100));
-
-            svg.append("g")
-                .attr("class", "centerline")
-                .attr("transform", "translate(0," + y(0) + ")")
-                .call(centerLine);
-
-            var entry = svg
-                .selectAll(".entry")
-                .data(data)
+                .selectAll("g")
+                .data(series)
                 .enter()
                 .append("g")
-                .attr("class", "g")
-                .attr("transform", function (d) {
-                    return "translate(" + x(d.key) + ", 0)";
-                });
-
-            entry
+                .attr("fill", function (d) {
+                    return z(d.key);
+                })
                 .selectAll("rect")
-                .data(function (d) {
-                    return d.components;
+                .data(function (d, i) {
+                    return d;
                 })
                 .enter()
                 .append("rect")
+                .attr("height", y.bandwidth)
                 .attr("class", "bar")
-                .attr("width", x.bandwidth())
                 .attr("y", function (d) {
-                    return y(d.y0);
+                    return y(d.data.key);
                 })
-                .attr("height", function (d) {
-                    return Math.abs(y(d.y0) - y(d.y1));
+                .attr("x", function (d, i) {
+                    return x(d[0]);
                 })
-                .style("fill", function (d) {
-                    return color(d.key);
+                .attr("width", function (d) {
+                    return x(d[1]) - x(d[0]);
                 })
                 .on("mouseout", function (d, i) {
                     d3.select("#tooltip").style("display", "none");
@@ -252,7 +181,6 @@
                     var computedValues = this.getClientRects()[0];
 
                     let xpos = computedValues.x + barWidth / 2;
-
                     let ypos = d3.mouse(this)[1] - 20;
 
                     d3.select("#tooltip")
@@ -261,30 +189,41 @@
                         .style("display", "block")
                         .style("position", "absolute")
                         .text(function () {
-                            var textValue = d.y0 - d.y1;
-                            if (d.y1 < 0) {
-                                textValue = d.y1 - d.y0;
-                            }
-                            return d.key + ":" + textValue.toFixed(3);
+                            var textValue = d[1] - d[0];
+                            var labelName = d.data.key;
+                            return textValue.toFixed(3);
                         });
 
                     d3.selectAll(".bar").style("opacity", 0.3);
                     d3.select(this).style("opacity", 1);
                 });
 
+            svg.append("g")
+                .attr("transform", "translate(0, 0)")
+                .attr("class", "y-axis")
+                .call(d3.axisLeft(y).tickSize(0));
+
+            svg.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x).tickSize(0));
+
+            function stackMin(series) {
+                return d3.min(series, function (d) {
+                    return d[0];
+                });
+            }
+
+            function stackMax(series) {
+                return d3.max(series, function (d) {
+                    return d[1];
+                });
+            }
+
             function make_x_gridlines(x) {
-                return d3.axisBottom(x).ticks(10);
+                return d3.axisBottom(x);
             }
             function make_y_gridlines(y) {
                 return d3.axisLeft(y).ticks(10);
-            }
-
-            function getLeftAxisDistance() {
-                var a = document
-                    .querySelector(".tick")
-                    .getAttribute("transform");
-                a = a.replace("translate(", "");
-                return a.substr(0, a.indexOf(","));
             }
         }
     </script>

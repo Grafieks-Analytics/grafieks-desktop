@@ -18,6 +18,7 @@ class CSVCon : public QObject
 public:
     explicit CSVCon(QObject *parent = nullptr);
     QVariantMap CSVInstance(const QString & filepath);
+    void closeConnection();
 
     ~CSVCon();
 

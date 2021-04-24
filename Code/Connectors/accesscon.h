@@ -28,6 +28,7 @@ class AccessCon : public QObject
 public:
     explicit AccessCon(QObject *parent = nullptr);
     QVariantMap AccessOdbcInstance(const QString &driver, const QString &db, const QString &username, const QString &password);
+    void closeConnection();
 
     ~AccessCon();
 

@@ -63,6 +63,7 @@ Page {
     property var dragActiveObject: ({});
 
     property var allChartsMapping: ({});
+    property var colorByData: [];
 
     property var allowedXAxisDataPanes: 0;
     property var allowedYAxisDataPanes: 0;
@@ -71,6 +72,8 @@ Page {
 
     onIsHorizontalGraphChanged: {
         if(isHorizontalGraph){
+            allowedXAxisDataPanes = 1;
+            allowedYAxisDataPanes = 2;
             switch(chartTitle){
             case Constants.barChartTitle:
                 chartUrl = Constants.horizontalBarChartUrl;
@@ -80,6 +83,10 @@ Page {
                 break;
             }
         }else{
+
+            allowedXAxisDataPanes = 2;
+            allowedYAxisDataPanes = 1;
+
             chartUrl = Constants.barChartUrl;
             console.log('Loading bar chart')
             webEngineView.url = Constants.baseChartUrl+chartUrl;
@@ -122,6 +129,16 @@ Page {
 
         // change axis on the basis of chart title
         switch(chartTitle){
+
+        case Constants.horizontalStackedBarChartTitle:
+            console.log('Make Horizontal stacked bar chart');
+            chartUrl=Constants.horizontalStackedBarChartUrl
+            webEngineView.url = Constants.chartsBaseUrl+chartUrl;
+            xAxisVisible = true
+            yAxisVisible = true
+            row3Visible = false
+            row4Visible = false
+            break;
         case Constants.stackedBarChartTitle:
             chartUrl=Constants.stackedBarChartUrl
             webEngineView.url = Constants.chartsBaseUrl+Constants.stackedBarChartUrl;
@@ -433,6 +450,16 @@ Page {
             chartUrl = Constants.barGroupedChartUrl;
         }
 
+        if( getAxisColumnNames(Constants.yAxisName).length > 1
+                && getAxisColumnNames(Constants.xAxisName).length
+                && (chartTitle === Constants.horizontalBarChartTitle  || chartTitle === Constants.horizontalStackedBarChartTitle)){
+
+            chartUrl = Constants.horizontalBarGroupedChartUrl;
+            webEngineView.url = Constants.baseChartUrl+chartUrl;
+            chartTitle = Constants.horizontalBarGroupedChartTitle;
+
+        }
+
         drawChart();
 
     }
@@ -455,33 +482,43 @@ Page {
         if(xAxisColumns.length && yAxisColumns.length){
 
             var xAxisColumnNamesArray = [];
-            for(var i=0;i<xAxisColumns.length;i++){
-                xAxisColumnNamesArray.push(xAxisColumns[i]);
+            var i = 0; // itereator => By passing warning
+            for(i=0;i<xAxisColumns.length;i++){
+                xAxisColumnNamesArray.push(yAxisColumns[i]);
+            }
+            var yAxisColumnNamesArray = [];
+            for(i=0;i<yAxisColumns.length;i++){
+                yAxisColumnNamesArray.push(yAxisColumns[i]);
             }
 
             var dataValues = null;
             console.log('Chart Title',chartTitle)
+            var colorByColumnName = '';
 
             switch(chartTitle){
             case Constants.horizontalBarChartTitle:
-                console.log("BAR CLICKED");
+                console.log("Horizontal BAR");
                 dataValues =  ChartsModel.getBarChartValues(yAxisColumns[0],xAxisColumns[0]);
                 break;
             case Constants.barChartTitle:
                 console.log("BAR CLICKED", xAxisColumns[0])
-                // Bar - xAxis(String), yAxis(String)
                 dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
-
-                // Stacked Bar - xAxis(String), yAxis(String), Split(String)
-                // dataValues = ChartsModel.getStackedBarChartValues("country","population","state")
-
-                // Grouped Bar - xAxis(String), yAxis(String), Split(String)
-                // dataValues = ChartsModel.getGroupedBarChartValues("country","population", "state")
-
+                break;
+            case Constants.horizontalStackedBarChartTitle:
+                colorByColumnName = colorByData[0].columnName;
+                dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,xAxisColumns[0], yAxisColumns[0]);
                 break;
             case Constants.stackedBarChartTitle:
                 console.log('Stacked bar chart!');
-                dataValues =  ChartsModel.getStackedBarChartValues(ReportParamsModel.itemName,yAxisColumns[0], xAxisColumns[0]);
+                colorByColumnName = colorByData[0].columnName;
+                dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,yAxisColumns[0], xAxisColumns[0]);
+                break;
+            case Constants.horizontalBarGroupedChartTitle:
+                console.log('horizontalBarGroupedChart chart!');
+                dataValues =  ChartsModel.getGroupedBarChartValues(yAxisColumnNamesArray[1],xAxisColumns[0], yAxisColumnNamesArray[0]);
+                var tempDataValues = JSON.parse(dataValues);
+                tempDataValues.push([yAxisColumnNamesArray[0],yAxisColumnNamesArray[1]]);
+                dataValues = JSON.stringify(tempDataValues);
                 break;
             case Constants.groupBarChartTitle:
                 console.log('Grouped bar chart!');
@@ -494,7 +531,9 @@ Page {
                 break;
             case Constants.stackedAreaChartTitle:
                 console.log('Stacked Area Chart')
-                dataValues =  ChartsModel.getStackedAreaChartValues(ReportParamsModel.itemName,yAxisColumns[0],xAxisColumns[0]);
+                colorByColumnName = colorByData[0].columnName;
+                console.log('Colour By columnName',columnName)
+                dataValues =  ChartsModel.getStackedAreaChartValues(colorByColumnName,yAxisColumns[0],xAxisColumns[0]);
                 break;
             case Constants.lineChartTitle:
                 console.log("LINE CLICKED")
@@ -667,6 +706,7 @@ Page {
             TextField{
                 id: report_title_text
                 placeholderText: "Add Report Title"
+                selectByMouse: true
                 width:250
                 height: 40
                 anchors.horizontalCenter:parent.horizontalCenter
@@ -1514,6 +1554,7 @@ Page {
                     id: searchBarRow
                     TextField{
                         width: parent.parent.width - search_icon.width - 5
+                        selectByMouse: true
                         height:30
                         cursorVisible: true
                         anchors.top: parent.top

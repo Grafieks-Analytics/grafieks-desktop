@@ -13,9 +13,7 @@ DuckQueryModel::DuckQueryModel(DuckCon *duckCon, QObject *parent)
 
 DuckQueryModel::~DuckQueryModel()
 {
-    this->duckChartData.clear();
-    this->duckChartHeader.clear();
-    this->resultData.clear();
+
 }
 
 
@@ -261,5 +259,11 @@ void DuckQueryModel::getQueryStats()
 
 void DuckQueryModel::removeTmpChartData()
 {
-    this->~DuckQueryModel();
+    this->duckChartData.clear();
+    this->duckChartHeader.clear();
+    this->resultData.clear();
+    this->tableHeaders.clear();
+
+    this->internalColCount = 0;
+    this->internalRowCount = 0;
 }
