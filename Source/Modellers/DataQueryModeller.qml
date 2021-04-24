@@ -416,6 +416,7 @@ Page {
 
         ConnectorsLoginModel.sqlLogout()
         ChartsModel.removeTmpChartData()
+        DSParamsModel.resetDataModel();
 
         resetOnlineStorageType()
 
