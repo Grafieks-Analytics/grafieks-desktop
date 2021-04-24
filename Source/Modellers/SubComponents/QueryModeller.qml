@@ -48,7 +48,7 @@ Item{
 
     Component.onCompleted: {
         //                textEditQueryModeller.text = "<h1>SELECT * FROM users WHERE users.id > 0</h1>"
-                textEditQueryModeller.text = " SELECT * FROM users WHERE users.id > 0 "
+        textEditQueryModeller.text = " SELECT * FROM users WHERE users.id > 0 "
 
 
 
@@ -98,7 +98,7 @@ Item{
 
 
 
-        console.log( finalQueryString)
+        console.log( "finalQueryString"+finalQueryString)
 
     }
 
@@ -166,24 +166,82 @@ Item{
 
     }
 
-    TextEdit{
-        id: textEditQueryModeller
-        anchors.left: toolSeperator1.right
+    //    TextEdit{
+    //        id: textEditQueryModeller
+    //        anchors.left: toolSeperator1.right
+    //        width: parent.width - toolSeperator1.width
+    //        wrapMode: TextEdit.WordWrap
+    //        padding: 10
+
+    //        textFormat:TextEdit.RichText
+
+    //        selectByMouse: true
+    //        selectionColor:Constants.grafieksLightGreenColor;
+    //        selectByKeyboard: true
+
+    //        onTextChanged: {
+    //            onTextEditorChanged()
+    //            onTextFormatSqlKeyword()
+    //        }
+
+    //    }
+    Flickable {
+        id: flickArea
+
+
         width: parent.width - toolSeperator1.width
-        wrapMode: TextEdit.WordWrap
-        padding: 10
+        height: parent.height
+        anchors.left: toolSeperator1.right
 
-        textFormat:TextEdit.RichText
 
-        selectByMouse: true
-        selectionColor:Constants.grafieksLightGreenColor;
-        selectByKeyboard: true
+        boundsBehavior: Flickable.StopAtBounds
+        flickableDirection: Flickable.HorizontalFlick
 
-        onTextChanged: {
-            onTextEditorChanged()
-            onTextFormatSqlKeyword()
+        interactive: true
+        function ensureVisible(r) {
+            if (contentX >= r.x)
+                contentX = r.x;
+            else if (contentX+width <= r.x+r.width)
+                contentX = r.x+r.width-width;
+            if (contentY >= r.y)
+                contentY = r.y;
+            else if (contentY+height <= r.y+r.height)
+                contentY = r.y+r.height-height;
         }
 
+        TextEdit {
+            id: textEditQueryModeller
+
+
+            anchors.left: toolSeperator1.right
+            width: parent.width - toolSeperator1.width
+
+            padding: 10
+
+
+
+            onTextChanged: {
+                onTextEditorChanged()
+                onTextFormatSqlKeyword()
+                console.log("testtes")
+            }
+            focus: true
+            wrapMode: TextEdit.Wrap
+
+            onCursorRectangleChanged:{
+
+                flickArea.ensureVisible(cursorRectangle)
+
+            }
+
+
+            selectionColor:Constants.grafieksLightGreenColor;
+            selectByKeyboard: true
+
+
+            selectByMouse: true
+
+        }
     }
 
 

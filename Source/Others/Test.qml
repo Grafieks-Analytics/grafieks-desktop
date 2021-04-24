@@ -55,8 +55,8 @@ import QtQuick 2.15
 
 //}
 
-//import QtQuick 2.12
-//import QtQuick.Controls 2.12
+import QtQuick 2.12
+import QtQuick.Controls 2.12
 
 //ApplicationWindow {
 //    visible: true
@@ -64,96 +64,96 @@ import QtQuick 2.15
 //    height: 480
 //    title: qsTr("Scroll")
 
-//    ScrollView {
-//        anchors.fill: parent
+    ScrollView {
+        anchors.fill: parent
 
-//        ScrollBar.vertical: ScrollBar {
-//            id: verticalBar
-//            anchors.top: parent.top
-//            anchors.bottom: parent.bottom
-//            anchors.right: parent.right
-//            hoverEnabled: true
-//            active: hovered || pressed
+        ScrollBar.vertical: ScrollBar {
+            id: verticalBar
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            hoverEnabled: true
+            active: hovered || pressed
 
-//            property bool showIt: hovered || pressed
+            property bool showIt: hovered || pressed
 
-//            background: Rectangle {
-//                implicitWidth: 25
-//                implicitHeight: 40
-//                radius: 5
-//                color: verticalBar.showIt ? "grey" : "transparent"
-//            }
+            background: Rectangle {
+                implicitWidth: 25
+                implicitHeight: 40
+                radius: 5
+                color: verticalBar.showIt ? "grey" : "transparent"
+            }
 
-//            contentItem: Item {
-//                implicitWidth: 25
-//                implicitHeight: 40
-//                Rectangle {
-//                    anchors.fill: parent
-//                    anchors.topMargin: 6
-//                    anchors.leftMargin: 4
-//                    anchors.rightMargin: 4
-//                    anchors.bottomMargin: 6
-//                    radius: 10
-//                    color: verticalBar.showIt ? "#424246" : "transparent"
-//                }
-//            }
-//        }
+            contentItem: Item {
+                implicitWidth: 25
+                implicitHeight: 40
+                Rectangle {
+                    anchors.fill: parent
+                    anchors.topMargin: 6
+                    anchors.leftMargin: 4
+                    anchors.rightMargin: 4
+                    anchors.bottomMargin: 6
+                    radius: 10
+                    color: verticalBar.showIt ? "#424246" : "transparent"
+                }
+            }
+        }
 
-//        TextEdit {
-//            width: parent.width
+        TextEdit {
+            width: parent.width
 
-//            textFormat: Text.AutoText
-//            focus: true
-//            selectByMouse: true
+            textFormat: Text.AutoText
+            focus: true
+            selectByMouse: true
 
-//            text: "asdf\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nasdfasdf\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nasdfasdf\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nasdf"
-//        }
-//    }
+            text: "asdf\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nasdfasdf\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nasdfasdf\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nasdf"
+        }
+    }
 //}
 
-Flickable {
-              id: flickArea
-              x: 0
-              y: 0
-              width: parent.width; height: parent.height
-              anchors.rightMargin: 0
-              anchors.bottomMargin: 0
-              anchors.leftMargin: 0
-              anchors.topMargin: 0
-              anchors.fill:parent
+//Flickable {
+//              id: flickArea
+//              x: 0
+//              y: 0
+//              width: parent.width; height: parent.height
+//              anchors.rightMargin: 0
+//              anchors.bottomMargin: 0
+//              anchors.leftMargin: 0
+//              anchors.topMargin: 0
+//              anchors.fill:parent
 
-              boundsBehavior: Flickable.StopAtBounds
-              flickableDirection: Flickable.HorizontalFlick
+//              boundsBehavior: Flickable.StopAtBounds
+//              flickableDirection: Flickable.HorizontalFlick
 
-              interactive: true
-                            function ensureVisible(r) {
-                  if (contentX >= r.x)
-                  contentX = r.x;
-                  else if (contentX+width <= r.x+r.width)
-                  contentX = r.x+r.width-width;
-                  if (contentY >= r.y)
-                  contentY = r.y;
-                  else if (contentY+height <= r.y+r.height)
-                  contentY = r.y+r.height-height;
-              }
+//              interactive: true
+//                            function ensureVisible(r) {
+//                  if (contentX >= r.x)
+//                  contentX = r.x;
+//                  else if (contentX+width <= r.x+r.width)
+//                  contentX = r.x+r.width-width;
+//                  if (contentY >= r.y)
+//                  contentY = r.y;
+//                  else if (contentY+height <= r.y+r.height)
+//                  contentY = r.y+r.height-height;
+//              }
 
-              TextEdit {
-                  id: textEdit
-                  x: 0
-                  y: 0
+//              TextEdit {
+//                  id: textEdit
+//                  x: 0
+//                  y: 0
 
-                  anchors.fill:parent
-                  width:parent.width; height:parent.height
-                  color:fontColor
-                  anchors.rightMargin: 0
-                  anchors.bottomMargin: 0
-                  anchors.leftMargin: 0
-                  anchors.topMargin: 0
-                  focus: true
-                  wrapMode: TextEdit.Wrap
-                  font.pointSize:10
-                  onCursorRectangleChanged: flickArea.ensureVisible(cursorRectangle)
+//                  anchors.fill:parent
+//                  width:parent.width; height:parent.height
+//                  color:fontColor
+//                  anchors.rightMargin: 0
+//                  anchors.bottomMargin: 0
+//                  anchors.leftMargin: 0
+//                  anchors.topMargin: 0
+//                  focus: true
+//                  wrapMode: TextEdit.Wrap
+//                  font.pointSize:10
+//                  onCursorRectangleChanged: flickArea.ensureVisible(cursorRectangle)
 
-                  selectByMouse: true
-              }
-          }
+//                  selectByMouse: true
+//              }
+//          }
