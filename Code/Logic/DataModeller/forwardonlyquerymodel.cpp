@@ -14,9 +14,7 @@ ForwardOnlyQueryModel::~ForwardOnlyQueryModel()
 void ForwardOnlyQueryModel::setQuery(QString query)
 {
 
-    this->internalColCount = 0;
-    this->internalRowCount = 0;
-    this->resultData.clear();
+    this->removeTmpChartData();
 
     this->query = query.simplified();
     querySplitter.setQueryForClasses(this->query);
@@ -144,6 +142,8 @@ void ForwardOnlyQueryModel::generateRoleNames()
                         tableName.remove(Statics::currentDbName + ".");
                         tableName.remove("\"");
                     }
+
+                    tableName = tableName.remove(QRegularExpression("[\"`']+")).trimmed();
 
                     if(tmpTableName != tableName){
                         colTypeMap = this->returnColumnList(tableName);

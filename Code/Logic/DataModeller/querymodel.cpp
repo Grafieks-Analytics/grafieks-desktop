@@ -12,6 +12,7 @@ QueryModel::~QueryModel()
 
 void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
+    this->removeTmpChartData();
 
     QSqlQueryModel::setQuery(query, db);
     if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
@@ -22,6 +23,8 @@ void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 
 void QueryModel::setQuery(const QSqlQuery &query)
 {
+
+    this->removeTmpChartData();
 
     QSqlQueryModel::setQuery(query);
     if(QSqlQueryModel::lastError().type() != QSqlError::NoError)

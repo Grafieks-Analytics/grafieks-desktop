@@ -11,6 +11,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Shapes 1.15
+import QtQuick.Dialogs 1.2
 
 
 import com.grafieks.singleton.constants 1.0
@@ -124,7 +125,7 @@ Item {
             }
         }
         function onAccessLoginStatus(status){
-            if(status.statu === true){
+            if(status.status === true){
                  query_joiner = "\""
             }
         }
@@ -255,7 +256,9 @@ Item {
 
             } else{
                 // Throw an error here
-                console.log("JOIN is not complete")
+                queryErrorModal.text = "JOIN is not complete"
+                queryErrorModal.open();
+
             }
         }
     }
@@ -405,10 +408,12 @@ Item {
             DSParamsModel.addToJoinOrder(objId)
         }
 
+        console.log(objArray, "OBJ ARRAY")
         objArray.forEach(function(item){
             if(dataModellerItem.rearRectLineMaps.has(item) === true){
 
                 tmpArray = tmpArray.concat(dataModellerItem.rearRectLineMaps.get(item))
+
 
                 tmpArray.forEach(function(innerItem){
 
@@ -418,6 +423,7 @@ Item {
                     let joinCompareTableName = DSParamsModel.fetchJoinBoxTableMap(innerItem)[1]
                     let joinCurrentTableName = DSParamsModel.fetchJoinBoxTableMap(innerItem)[2]
                     let joinConditions = DSParamsModel.fetchJoinMapList(innerItem)
+                    let joinPrimaryJoinTable = DSParamsModel.fetchPrimaryJoinTable(innerItem)
                     let joinConditionsList = ""
 
                     tmpJoinString += "("
@@ -425,14 +431,14 @@ Item {
                     for (var i=0; i<Object.keys(joinConditions).length; i++){
 
                         let key = Object.keys(joinConditions)[i]
-                        tmpJoinString += " " + joinCurrentTableName + "." + joinConditions[key][1] + " = " + joinCompareTableName + "."  + joinConditions[key][0] + " AND"
+                        tmpJoinString += " " + query_joiner + joinCurrentTableName + query_joiner + "." + query_joiner+ joinConditions[key][1] + query_joiner + " = " + query_joiner + joinCompareTableName + query_joiner + "."  + query_joiner + joinConditions[key][0] + query_joiner+  " AND"
                     }
 
                     let lastIndex = tmpJoinString.lastIndexOf(" AND");
                     tmpJoinString = tmpJoinString.substring(0, lastIndex);
                     tmpJoinString += ")"
 
-                    joinString += " " + joinType + " " + joinCurrentTableName + " ON " + tmpJoinString
+                    joinString += " " + joinType + " " + query_joiner + joinPrimaryJoinTable + query_joiner + " ON " + tmpJoinString
 
                     tmpJoinString = ""
 
@@ -455,14 +461,20 @@ Item {
             // Generate the final column parameters
             let selectColumns = ""
             let finalQuery = ""
+            let hideColumns = DSParamsModel.fetchHideColumns()
             DSParamsModel.fetchQuerySelectParamsList().forEach(function(item){
-                selectColumns += " " + item + ","
+
+                // Check if the column is unselected by a user
+                if(hideColumns.indexOf(item.replace(/[\"'`]/g, '')) === -1)
+                    selectColumns += " " + item + ","
             })
+
+
 
             let lastIndex = selectColumns.lastIndexOf(",");
             selectColumns = selectColumns.substring(0, lastIndex);
 
-            finalQuery = "SELECT " + selectColumns + " FROM " + existingTables.get(dataModellerItem.firstRectId) + " " + joinString
+            finalQuery = "SELECT " + selectColumns + " FROM " + query_joiner + existingTables.get(dataModellerItem.firstRectId) + query_joiner + " " + joinString
 
             // Call and execute the query
             DSParamsModel.setTmpSql(finalQuery)
@@ -481,6 +493,7 @@ Item {
             TableSchemaModel.showSchema(DSParamsModel.tmpSql)
         }
 
+        joinString = ""
 
     }
 
@@ -1193,4 +1206,11 @@ Item {
     // Page Design Ends
     /***********************************************************************************************************************/
 
+    MessageDialog{
+        id: queryErrorModal
+
+        modality: Qt.ApplicationModal
+        title: "Query Error"
+        standardButtons: StandardButton.Close
+    }
 }

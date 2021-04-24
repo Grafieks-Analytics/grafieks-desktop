@@ -41,7 +41,6 @@ Popup {
     property var filePathLower: ""
 
     property var generalObjectName : ""
-
     property var navigationPaths: []
 
 
@@ -195,6 +194,7 @@ Popup {
 
         if(fileTag === "folder"){
             DropboxDS.folderNav(filePathFolder)
+            navigationPaths.push({"path": filePathFolder, "name": name})
         } else{
             DropboxDS.fetchFileData(fileId, fileName, fileExtension)
         }
@@ -215,7 +215,10 @@ Popup {
 
 
     function onBackPressed(){
-        updatePath(DropboxDS.goingBack(pathFolder,folderName));
+        let lastElement = navigationPaths.length - 1
+        let navPaths = navigationPaths[lastElement]
+        navigationPaths.pop()
+        updatePath(DropboxDS.goingBack(navPaths.path, navPaths.name));
     }
 
     // JAVASCRIPT FUNCTION ENDS

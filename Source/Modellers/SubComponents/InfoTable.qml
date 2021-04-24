@@ -135,7 +135,8 @@ Item{
         // else if current tab is dataModeller, fire a signal to activate a slot in DataModeller.qml
 
         if(DSParamsModel.currentTab === Constants.queryModellerTab){
-            var isSqlSelect = DSParamsModel.tmpSql.toUpperCase().startsWith("SELECT");
+            var isSqlSelect = GeneralParamsModel.returnPlainTextFromHtml(DSParamsModel.tmpSql).toUpperCase().startsWith("SELECT");
+            console.log(isSqlSelect, GeneralParamsModel.returnPlainTextFromHtml(DSParamsModel.tmpSql).toUpperCase())
             // If query is SELECT query
             // Only SELECT query allowed
 
@@ -159,6 +160,7 @@ Item{
                     //TableSchemaModel.showSchema(DSParamsModel.tmpSql)
 
                 } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
+                    console.log("DUCK QUERY MDEl", DSParamsModel.tmpSql)
                     DuckQueryModel.setQuery(DSParamsModel.tmpSql)
 
                     testQueryResult.visible = true
