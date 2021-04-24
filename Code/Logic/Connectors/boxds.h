@@ -77,6 +77,7 @@ private:
 
     QString boxFileId;
     QString boxExtension;
+    bool emailSet;
 };
 
 #endif // BOXDS_H
