@@ -34,11 +34,11 @@ QString DataType::dataType(QString parameter)
     dateformat << "date" << "datetime" << "timestamp" << "time" << "year"
                << "timestamp without time zone" << "timestamp with time zone"
                << "time without time zone" << "time with time zone" << "interval"
-               << "datetimeoffset" << "smalldatetime" << "datetime2" << "timestamp with time zone" << "timestamp with local timezone"
+               << "datetimeoffset" << "smalldatetime" << "datetime2" << "timestamp with time zone" << "timestamp with local timezone" << "TIMESTAMPTZ" << "TIMETZ"
                << "interval year" << "interval day"
                << "date/time" << "date/time extended"
                << "DA" << "DY" << "DH" << "DM" << "DS" << "HR" << "HM" << "HS" << "MI" << "MS" << "MO" << "SC" << "YR" << "YM" << "PD" << "PZ" << "PT" << "PS" << "PM" << "AT" << "TS" << "TZ" << "SZ"
-               << "QDateTime";
+               << "QDateTime" << "QDate";
 
     // Match the incoming parameter and determine filter type
 
