@@ -234,7 +234,7 @@ Item {
             // 5. Execute query
 
             var undefinedCounter = 0
-            var firstRectId = 0
+//            var firstRectId = 0
             dataModellerItem.rectangles.forEach(function(item, key){
                 if(dataModellerItem.frontRectLineMaps.has(key) === false)
                     undefinedCounter++
@@ -355,7 +355,7 @@ Item {
             let rectY = orphanY <= nearestY ? ( orphanY +diffY ) : ( nearestY + diffY )
 
             // Add the line component on stage
-            newConnectingLine.set(tmpOrphanTableId, dynamicConnectorLine.createObject(parent, {incomingRectangleFrontX:orphanX, incomingRectangleFrontY: orphanY, refRectangleRearX : nearestX, refRectangleRearY: nearestY, lineColor: "black", objectName : tmpOrphanTableId}))
+            newConnectingLine.set(tmpOrphanTableId, dynamicConnectorLine.createObject(parent, {incomingRectangleFrontX:orphanX, incomingRectangleFrontY: orphanY + bufferHeight, refRectangleRearX : nearestX, refRectangleRearY: nearestY + bufferHeight, lineColor: "black", objectName : tmpOrphanTableId}))
 
             // Add joinBox
             newJoinBox.set(tmpOrphanTableId, dynamicJoinBox.createObject(parent, {x: rectX, y: rectY, objectName : tmpOrphanTableId}))
