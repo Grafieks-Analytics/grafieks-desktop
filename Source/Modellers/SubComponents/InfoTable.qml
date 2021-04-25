@@ -93,10 +93,10 @@ Item{
     function onTestQueryClicked(){
         testQueryBtnBackground.color = Constants.lightThemeColor
         displayLimitBtnBackground.color = displayLimitBtn.hovered ? Constants.themeColor : Constants.whiteColor
-        dataPreviewBtnBackground.color = dataPreviewBtn.hovered ? Constants.themeColor : Constants.whiteColor
+        dataPreviewBtnBackground.color = Constants.lightThemeColor
 
-        testQueryResult.visible = true
-        dataPreviewResult.visible = false
+        testQueryResult.visible = false
+        dataPreviewResult.visible = true
     }
 
 
@@ -113,7 +113,7 @@ Item{
     function openDisplayLimitMenu(){
 
         testQueryBtnBackground.color = testQueryBtn.hovered ? Constants.themeColor : Constants.whiteColor
-        dataPreviewBtnBackground.color = dataPreviewBtn.hovered ? Constants.themeColor : Constants.whiteColor
+        dataPreviewBtnBackground.color = Constants.lightThemeColor
 
         selectLimitOptions.open()
     }
@@ -128,7 +128,8 @@ Item{
 
     function onRunQueryClicked(){
 
-        testQueryBtn.visible = true
+//        testQueryBtn.visible = true
+        queryUpdate.visible = true
 
 
         // If current tab is queryModeller, then process
@@ -163,14 +164,14 @@ Item{
                     console.log("DUCK QUERY MDEl", DSParamsModel.tmpSql)
                     DuckQueryModel.setQuery(DSParamsModel.tmpSql)
 
-                    testQueryResult.visible = true
-                    dataPreviewResult.visible = false
+                    testQueryResult.visible = false
+                    dataPreviewResult.visible = true
                 } else {
                     console.log("FORWARD ONLY", DSParamsModel.tmpSql)
                     ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
 
-                    testQueryResult.visible = true
-                    dataPreviewResult.visible = false
+                    testQueryResult.visible = false
+                    dataPreviewResult.visible = true
                 }
             } else{
                 sqlQueryNotAllowedDialog.visible = true
@@ -312,17 +313,19 @@ Item{
 
             id: toolbar_querymodeller
 
-            width: 100
+            width: 0
             anchors.top: infodataTableHeader.top
             anchors.topMargin: 1
             anchors.left: parent.left
             height: parent.height
+            visible: false
 
 
             Button{
                 id: testQueryBtn
                 height: 27
-                width: 100
+                width: 0
+                visible: false
                 //                leftPadding: 10
 
                 Text{
