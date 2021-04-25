@@ -71,7 +71,7 @@ Item{
 
     Component.onCompleted: {
         nameID.text = name
-        //                droppedRectangle.width = nameID.text.length * 10 + 30
+        droppedRectangle.width = nameID.text.length * 10 + 30
 
     }
 
@@ -153,9 +153,6 @@ Item{
 
     Component{
         id: listviewComponent
-
-
-
         Rectangle{
             id:tableContent
 
@@ -260,15 +257,7 @@ Item{
                     }}
             }
 
-
-
-
-
         }
-
-
-
-
 
     }
 
@@ -285,7 +274,7 @@ Item{
         color: colors[droppedCount+1]
 
         height: 30
-        width: 200
+//        width: 200
 
         MouseArea {
             id: mouseAreaDroppedRect
@@ -308,12 +297,6 @@ Item{
             onEntered: showCrossIcon();
             onExited: hideCrossIcon();
         }
-
-
-
-
-
-
 
 
         Text{
@@ -359,11 +342,6 @@ Item{
                 onClicked: destroyRectangle(parseInt(newItem.objectName))
             }
         }
-
-
-
-
-
 
     }
 

@@ -22,7 +22,7 @@ QString DataType::dataType(QString parameter)
                 << "varying character" << "nchar" << "native character" << "clob" << "ntext" << "varchar2" << "nvarchar2" << "nclob"
                 << "urowid" << "rowid" << "string" << "symbol" << "bpchar"
                 << "memo" << "yes/no" << "hyperlink" << "short text" << "long text"
-                << "QString" << "CF" << "CV";
+                << "QString" << "CF" << "CV" << "uchar";
 
     numerical   << "int" << "tinyint" << "smallint" << "mediumint" << "bigint" << "decimal" << "float" << "double" << "real" << "integer" << "serial" << "bigserial"
                 << "double precision" << "numeric" << "smallserial" << "unsigned big int" << "int2" << "int8" << "dec" << "bit" << "smallmoney" << "money"
