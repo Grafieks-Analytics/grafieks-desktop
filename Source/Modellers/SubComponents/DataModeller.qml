@@ -754,6 +754,7 @@ Item {
         // Push the coordinates in the array
         frontRectangleCoordinates.set(counter, {x: rectLeftX, y: rectLeftY})
         rearRectangleCoordinates.set(counter, {x: rectRightX, y: rectRightY})
+        lastRectX.text = "LX:"+ rectLeftX+ " RX:"+ rectRightX
         existingTables.set(counter, tableslist.tableName)
     }
 
@@ -979,6 +980,15 @@ Item {
             ToolTip.timeout: Constants.tooltipHideTime
             ToolTip.visible: hovered
             ToolTip.text: qsTr("Zoom out")
+        }
+
+        Text{
+            id: lastRectX
+            text: "LAST RECT X"
+        }
+
+        Text{
+            id: currentRectX
         }
 
     }
