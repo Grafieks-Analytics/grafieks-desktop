@@ -126,7 +126,7 @@ Item {
         }
         function onAccessLoginStatus(status){
             if(status.status === true){
-                 query_joiner = "\""
+                query_joiner = "\""
             }
         }
 
@@ -234,7 +234,7 @@ Item {
             // 5. Execute query
 
             var undefinedCounter = 0
-//            var firstRectId = 0
+            //            var firstRectId = 0
             dataModellerItem.rectangles.forEach(function(item, key){
                 if(dataModellerItem.frontRectLineMaps.has(key) === false)
                     undefinedCounter++
@@ -289,25 +289,28 @@ Item {
         // IF the main object is deleted
         if(depth === "all"){
 
-            rearRectLineMaps.get(refObject).forEach(function(value){
-                newConnectingLine.get(value).destroy();
-                newJoinBox.get(value).destroy();
+            if(rearRectLineMaps.has(refObject) === true){
+                rearRectLineMaps.get(refObject).forEach(function(value){
+                    newConnectingLine.get(value).destroy();
+                    newJoinBox.get(value).destroy();
 
-                // Delete values from the map
-                newConnectingLine.delete(value)
-                newJoinBox.delete(value)
+                    // Delete values from the map
+                    newConnectingLine.delete(value)
+                    newJoinBox.delete(value)
 
-                // Delete from DSParamsModel
-                DSParamsModel.removeJoinBoxTableMap(value)
-                DSParamsModel.removeJoinIconMap(value)
-                DSParamsModel.removeJoinTypeMap(value)
-                DSParamsModel.removePrimaryJoinTable(value)
-                DSParamsModel.removeJoinMapList(value, 0, true)
-            })
+                    // Delete from DSParamsModel
+                    DSParamsModel.removeJoinBoxTableMap(value)
+                    DSParamsModel.removeJoinIconMap(value)
+                    DSParamsModel.removeJoinTypeMap(value)
+                    DSParamsModel.removePrimaryJoinTable(value)
+                    DSParamsModel.removeJoinMapList(value, 0, true)
+                })
+            }
 
         }
 
         // Destroy dynamically created components
+        console.log("REF OBJECT", refObject)
         newConnectingLine.get(refObject).destroy();
         newJoinBox.get(refObject).destroy();
 
@@ -693,7 +696,7 @@ Item {
 
         // Created rectangle front & back coordinates
         var rectLeftX = drag.x
-        var rectRightX = rectLeftX + tableslist.tableName.length * 10 + 30
+        var rectRightX = rectLeftX + tableslist.tableName.length * 10 + Constants.droppedRectBufferWidth
         var rectLeftY = drag.y
         var rectRightY = rectLeftY
 
