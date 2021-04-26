@@ -47,11 +47,7 @@ Item{
     // JAVASCRIPT FUNCTION STARTS
 
     Component.onCompleted: {
-        //                textEditQueryModeller.text = "<h1>SELECT * FROM users WHERE users.id > 0</h1>"
         textEditQueryModeller.text = " SELECT * FROM users WHERE users.id > 0 "
-
-
-
     }
 
     function onTextEditorChanged(){
@@ -60,10 +56,9 @@ Item{
     }
 
     //    function to onTextFormatSqlKeyword
-    function onTextFormatSqlKeyword(){
+    function onTextFormatSqlKeyword(event){
+        event.accepted = false
 
-
-        console.log("textEditQueryModeller.text"+textEditQueryModeller.text);
         var finalQueryString = ""
         var lineItemElementArray = []
         var arraySqlKeyword =["SELECT","FROM","WHERE"]
@@ -81,10 +76,7 @@ Item{
                           lineItemElementArray[index] = GeneralParamsModel.returnPlainTextFromHtml(item).split(" ")
                           lineItemElementArray[index].forEach((innerItem, innerIndex) => {
                                                                   if(arraySqlKeyword.indexOf(innerItem.toUpperCase()) > -1){
-                                                                      console.log("change"+innerItem)
                                                                       finalQueryString += "<span style='color:"+Constants.grafieksGreenColor+";'>"+innerItem+"</span> ";
-
-                                                                      console.log("changeq"+finalQueryString)
                                                                   } else{
                                                                       finalQueryString += innerItem + " "
                                                                   }
@@ -92,14 +84,11 @@ Item{
                           finalQueryString +=endString
                       })
         finalQueryString += footerString;
-
-
-
-
-
-        console.log( "finalQueryString"+finalQueryString)
-
+        textEditQueryModeller.text = finalQueryString
+        textEditQueryModeller.insert(textEditQueryModeller.cursorPosition, " ")
+        textEditQueryModeller.cursorPosition = textEditQueryModeller.length
     }
+
 
 
 
@@ -165,25 +154,6 @@ Item{
 
     }
 
-    //    TextEdit{
-    //        id: textEditQueryModeller
-    //        anchors.left: toolSeperator1.right
-    //        width: parent.width - toolSeperator1.width
-    //        wrapMode: TextEdit.WordWrap
-    //        padding: 10
-
-    //        textFormat:TextEdit.RichText
-
-    //        selectByMouse: true
-    //        selectionColor:Constants.grafieksLightGreenColor;
-    //        selectByKeyboard: true
-
-    //        onTextChanged: {
-    //            onTextEditorChanged()
-    //            onTextFormatSqlKeyword()
-    //        }
-
-    //    }
     Flickable {
         id: flickArea
 
@@ -211,33 +181,17 @@ Item{
         TextEdit {
             id: textEditQueryModeller
 
-
+            textFormat:TextEdit.RichText
             anchors.left: toolSeperator1.right
             width: parent.width - toolSeperator1.width
-
             padding: 10
-
-
-
-            onTextChanged: {
-                onTextEditorChanged()
-                onTextFormatSqlKeyword()
-                console.log("testtes")
-            }
+            onTextChanged: onTextEditorChanged()
+            Keys.onSpacePressed: onTextFormatSqlKeyword(event)
             focus: true
             wrapMode: TextEdit.Wrap
-
-            onCursorRectangleChanged:{
-
-                flickArea.ensureVisible(cursorRectangle)
-
-            }
-
-
+            onCursorRectangleChanged: flickArea.ensureVisible(cursorRectangle)
             selectionColor:Constants.grafieksLightGreenColor;
             selectByKeyboard: true
-
-
             selectByMouse: true
 
         }
