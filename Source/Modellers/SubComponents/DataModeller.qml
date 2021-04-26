@@ -314,8 +314,6 @@ Item {
         }
 
         // Destroy dynamically created components
-        console.log("REF OBJECT", refObject)
-
         if(newConnectingLine.has(refObject))
             newConnectingLine.get(refObject).destroy();
 
