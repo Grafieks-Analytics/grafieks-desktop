@@ -71,7 +71,8 @@ Item{
 
     Component.onCompleted: {
         nameID.text = name
-        droppedRectangle.width = nameID.text.length * 10 + 30
+        droppedRectangle.width = nameID.text.length * 10 + Constants.droppedRectBufferWidth
+        columnListDroppedRect.width = nameID.text.length * 10 + Constants.droppedRectBufferWidth
 
     }
 
@@ -344,7 +345,6 @@ Item{
 
 
     Rectangle{
-
         border.color: colors[droppedCount+1]
         anchors.top : droppedRectangle.bottom
         width: 200
