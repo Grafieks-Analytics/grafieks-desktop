@@ -291,6 +291,9 @@ Item {
 
             if(rearRectLineMaps.has(refObject) === true){
                 rearRectLineMaps.get(refObject).forEach(function(value){
+
+                    frontRectLineMaps.delete((value))
+
                     newConnectingLine.get(value).destroy();
                     newJoinBox.get(value).destroy();
 
@@ -305,18 +308,27 @@ Item {
                     DSParamsModel.removePrimaryJoinTable(value)
                     DSParamsModel.removeJoinMapList(value, 0, true)
                 })
+                rearRectLineMaps.delete(refObject)
             }
 
         }
 
         // Destroy dynamically created components
         console.log("REF OBJECT", refObject)
-        newConnectingLine.get(refObject).destroy();
-        newJoinBox.get(refObject).destroy();
+
+        if(newConnectingLine.has(refObject))
+            newConnectingLine.get(refObject).destroy();
+
+        if(newJoinBox.has(refObject))
+            newJoinBox.get(refObject).destroy();
 
         // Delete values from the map
-        newConnectingLine.delete(refObject)
-        newJoinBox.delete(refObject)
+
+        if(newConnectingLine.has(refObject))
+            newConnectingLine.delete(refObject)
+
+        if(newJoinBox.has(refObject))
+            newJoinBox.delete(refObject)
 
         let frontItemOfConcernedRect = frontRectLineMaps.get(refObject)
         let rearItemsOfFrontRect = rearRectLineMaps.get(frontItemOfConcernedRect);
@@ -324,8 +336,17 @@ Item {
         let itemToRemoveFromRearRect = rearItemsOfFrontRect.indexOf(refObject)
         rearItemsOfFrontRect.splice(itemToRemoveFromRearRect, 1)
 
-        frontRectLineMaps.delete(refObject);
+        if(frontRectLineMaps.has(refObject))
+            frontRectLineMaps.delete(refObject);
+
         rearRectLineMaps.set(frontItemOfConcernedRect, rearItemsOfFrontRect);
+
+        if(rectangles.has(refObject)){
+            rectangles.delete(refObject);
+            frontRectangleCoordinates.delete(refObject)
+            rearRectangleCoordinates.delete(refObject)
+        }
+
 
         DSParamsModel.removeJoinBoxTableMap(refObject)
         DSParamsModel.removeJoinIconMap(refObject)
