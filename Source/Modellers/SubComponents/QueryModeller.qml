@@ -19,8 +19,6 @@ Item{
     height:parent.height
     width: parent.width
 
-
-
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
@@ -56,8 +54,19 @@ Item{
     }
 
     //    function to onTextFormatSqlKeyword
-    function onTextFormatSqlKeyword(event){
+    function onTextFormatSqlKeyword(event, newText){
         event.accepted = false
+        let finalQueryString = this.processText(newText)
+        let cursorPosition = textEditQueryModeller.cursorPosition
+
+
+        textEditQueryModeller.text = finalQueryString
+        textEditQueryModeller.insert(cursorPosition, " ")
+        textEditQueryModeller.cursorPosition = cursorPosition
+
+    }
+
+    function processText(newText){
 
         var finalQueryString = ""
         var lineItemElementArray = []
@@ -70,7 +79,7 @@ Item{
 
         finalQueryString = headerString
 
-        var elems = textEditQueryModeller.text.match(/<p [^>]+>(.*?)<\/p>/g)
+        var elems = newText.match(/<p [^>]+>(.*?)<\/p>/g)
         elems.forEach((item, index) => {
                           finalQueryString += startString
                           lineItemElementArray[index] = GeneralParamsModel.returnPlainTextFromHtml(item).split(" ")
@@ -84,14 +93,9 @@ Item{
                           finalQueryString +=endString
                       })
         finalQueryString += footerString;
-        textEditQueryModeller.text = finalQueryString
-        textEditQueryModeller.insert(textEditQueryModeller.cursorPosition, " ")
-        textEditQueryModeller.cursorPosition = textEditQueryModeller.length
+
+        return finalQueryString;
     }
-
-
-
-
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -156,16 +160,11 @@ Item{
 
     Flickable {
         id: flickArea
-
-
         width: parent.width - toolSeperator1.width
         height: parent.height
         anchors.left: toolSeperator1.right
-
-
         boundsBehavior: Flickable.StopAtBounds
         flickableDirection: Flickable.HorizontalFlick
-
         interactive: true
         function ensureVisible(r) {
             if (contentX >= r.x)
@@ -180,21 +179,19 @@ Item{
 
         TextEdit {
             id: textEditQueryModeller
-
             textFormat:TextEdit.RichText
             anchors.left: toolSeperator1.right
             width: parent.width - toolSeperator1.width
             padding: 10
-            onTextChanged: onTextEditorChanged()
-            Keys.onSpacePressed: onTextFormatSqlKeyword(event)
+            Keys.onReleased: onTextFormatSqlKeyword(event, text)
             focus: true
             wrapMode: TextEdit.Wrap
             onCursorRectangleChanged: flickArea.ensureVisible(cursorRectangle)
             selectionColor:Constants.grafieksLightGreenColor;
             selectByKeyboard: true
             selectByMouse: true
-
         }
+
     }
 
 
