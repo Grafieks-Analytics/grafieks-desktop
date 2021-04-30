@@ -133,6 +133,7 @@ Popup {
         const scheme = 'scheme'+schemeName;
         d3PropertyConfig.d3colorPalette = scheme;
         console.log("color"+d3PropertyConfig.d3colorPalette)
+       console.log("dataname")
         reDrawChart();
     }
 

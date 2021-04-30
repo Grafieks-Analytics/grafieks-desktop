@@ -64,51 +64,94 @@ import QtQuick.Controls 2.12
 //    height: 480
 //    title: qsTr("Scroll")
 
-    ScrollView {
-        anchors.fill: parent
 
-        ScrollBar.vertical: ScrollBar {
-            id: verticalBar
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            hoverEnabled: true
-            active: hovered || pressed
 
-            property bool showIt: hovered || pressed
+//    Flickable {
+//         id: flick
 
-            background: Rectangle {
-                implicitWidth: 25
-                implicitHeight: 40
-                radius: 5
-                color: verticalBar.showIt ? "grey" : "transparent"
-            }
+//         width: 300;
+//         height: 200;
+//         contentWidth: edit.paintedWidth
+//         contentHeight: edit.paintedHeight
+//         clip: true
+//         ScrollBar.vertical: ScrollBar {
+//                    active: flick.moving || !flick.moving
+//                }
 
-            contentItem: Item {
-                implicitWidth: 25
-                implicitHeight: 40
-                Rectangle {
-                    anchors.fill: parent
-                    anchors.topMargin: 6
-                    anchors.leftMargin: 4
-                    anchors.rightMargin: 4
-                    anchors.bottomMargin: 6
-                    radius: 10
-                    color: verticalBar.showIt ? "#424246" : "transparent"
-                }
-            }
-        }
+//         function ensureVisible(r)
+//         {
+//             if (contentX >= r.x)
+//                 contentX = r.x;
+//             else if (contentX+width <= r.x+r.width)
+//                 contentX = r.x+r.width-width;
+//             if (contentY >= r.y)
+//                 contentY = r.y;
+//             else if (contentY+height <= r.y+r.height)
+//                 contentY = r.y+r.height-height;
+//         }
 
-        TextEdit {
-            width: parent.width
+//         TextEdit {
+//             id: edit
+//             width: flick.width
+//             focus: true
+//             wrapMode: TextEdit.Wrap
+//             onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
+//         }
+//     }
 
-            textFormat: Text.AutoText
-            focus: true
-            selectByMouse: true
 
-            text: "asdf\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nasdfasdf\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nasdfasdf\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nasdf"
-        }
-    }
+
+//ScrollView {
+////    anchors.fill: parent
+//    anchors.top: a.bottom
+//    height: 500
+//    width: parent.width
+
+
+//    ScrollBar.vertical: ScrollBar {
+//        id: verticalBar
+//        anchors.top: parent.top
+//        anchors.bottom: parent.bottom
+//        anchors.right: parent.right
+//        hoverEnabled: true
+//        active: hovered || pressed
+
+//        property bool showIt: hovered || pressed
+
+//        background: Rectangle {
+//            implicitWidth: 25
+//            implicitHeight: 40
+//            radius: 5
+//            color: verticalBar.showIt ? "grey" : "transparent"
+//        }
+
+//        contentItem: Item {
+//            implicitWidth: 25
+//            implicitHeight: 40
+//            Rectangle {
+//                anchors.fill: parent
+//                anchors.topMargin: 6
+//                anchors.leftMargin: 4
+//                anchors.rightMargin: 4
+//                anchors.bottomMargin: 6
+//                radius: 10
+//                color: verticalBar.showIt ? "#424246" : "transparent"
+//            }
+//        }
+//    }
+
+//    TextEdit {
+//        width: parent.width
+// wrapMode: TextEdit.WordWrap
+//textMargin : 50
+//        textFormat: Text.AutoText
+//        focus: true
+//        selectByMouse: true
+//z:-5
+//        text: "asdf\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nasdfasdf\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nasdfasdf\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nasdf\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nasdfasdf\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nasdf\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nasdfasdf\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nasdf"
+//    }
+//}
+//}
 //}
 
 //Flickable {
@@ -157,3 +200,164 @@ import QtQuick.Controls 2.12
 //                  selectByMouse: true
 //              }
 //          }
+
+//import QtQuick 2.3
+//import QtQuick.Window 2.2
+import QtQuick.Controls 1.2
+import QtQuick.Controls.Styles 1.2
+
+Rectangle {
+    id: win
+    width: 860
+    height: 560
+    visible: true
+
+    ListModel {
+        id: libraryModel
+        ListElement {
+            title: "A Masterpiece"
+            author: "Gabriel"
+
+        }
+        ListElement {
+            title: "Brilliance"
+            author: "Jens"
+        }
+        ListElement {
+            title: "Outstanding"
+            author: "Frederik"
+        }
+        ListElement {
+            title: "Outstanding"
+            author: "Frederik"
+        }
+        ListElement {
+            title: "Outstanding"
+            author: "Frederik"
+        }
+        ListElement {
+            title: "Outstanding"
+            author: "Frederik"
+        }
+        ListElement {
+            title: "Outstanding"
+            author: "Frederik"
+        }
+        ListElement {
+            title: "Outstanding"
+            author: "Frederik"
+        }
+    }
+
+    TableView {
+
+        width: parent.width
+        height: parent.height
+
+        alternatingRowColors: false
+
+
+        TableViewColumn {
+            role: "title"
+            title: "Title"
+            width: parent.width/2
+        }
+        TableViewColumn {
+            role: "author"
+            title: "Author"
+            width: parent.width/2
+        }
+
+
+        model: libraryModel
+
+        style: TableViewStyle {
+            headerDelegate: Rectangle {
+                height: textItem.implicitHeight * 1.2
+                width: textItem.implicitWidth
+                color: "lightgrey"
+                Text {
+                    id: textItem
+                    anchors.fill: parent
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: styleData.textAlignment
+                    anchors.leftMargin: 12
+                    text: styleData.value
+                    elide: Text.ElideRight
+                    color: textColor
+                    renderType: Text.NativeRendering
+
+                }
+                Rectangle {
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 1
+                    anchors.topMargin: 1
+                    width: 1
+                    color: "black"
+                    border.color: "black"
+                }
+                Rectangle {
+                    //                    anchors.right: parent.right
+                    //                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    //                    anchors.bottomMargin: 1
+                    //                    anchors.topMargin: 1
+                    width: parent.width
+                    height: 1
+
+                    color: "black"
+                    border.color: "black"
+                }
+            }
+
+            itemDelegate: Rectangle {
+                height: textItem.implicitHeight * 1.2
+                width: textItem.implicitWidth
+                color: "white"
+                //                border.color: "black"
+                Text {
+                    id: textItem1
+                    anchors.fill: parent
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: styleData.textAlignment
+                    anchors.leftMargin: 12
+                    text: styleData.value
+                    elide: Text.ElideRight
+                    color: textColor
+                    renderType: Text.NativeRendering
+                }
+                Rectangle {
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    //                    anchors.bottomMargin: 1
+                    //                    anchors.topMargin: 1
+                    width: 1
+                    color: "black"
+                    border.color: "black"
+                }
+                Rectangle {
+                    //                    anchors.right: parent.right
+                    //                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    //                    anchors.bottomMargin: 1
+                    //                    anchors.topMargin: 1
+                    width: parent.width
+                    height: 1
+
+                    color: "black"
+                    border.color: "black"
+                }
+            }
+
+
+
+        }
+    }
+}
+
+
+
+
