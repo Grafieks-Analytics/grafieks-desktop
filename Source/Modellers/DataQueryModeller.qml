@@ -417,6 +417,7 @@ Page {
 
         ConnectorsLoginModel.sqlLogout()
         ChartsModel.removeTmpChartData()
+        DSParamsModel.resetDataModel();
 
         resetOnlineStorageType()
 
@@ -548,10 +549,6 @@ Page {
                     if (mouseArea.drag.active) {
                         tableslist.dragItemIndex = index;
                         tableslist.tableName = modelData
-
-                        dragRect.z=100000
-                        console.log("dragRect"+dragRect.z)
-
                     }
                     dragRect.Drag.drop();
                 }
@@ -560,7 +557,6 @@ Page {
 
                 onClicked: {
                     NewTableColumnsModel.getColumnsForTable(modelData, "TableColumns")
-                    console.log("Table name", modelData)
 
                     if(tablecolumnListView.visible === true){
                         toggleTableIcon.source ="/Images/icons/Right_20.png"
@@ -1420,7 +1416,6 @@ Page {
                         width: item_querymodeller.width+10
                         delegate: tablelistDelegate
                         visible: true
-                        clip: true
                         flickableDirection: Flickable.VerticalFlick
                         boundsBehavior: Flickable.StopAtBounds
                         ScrollBar.vertical: ScrollBar {}
