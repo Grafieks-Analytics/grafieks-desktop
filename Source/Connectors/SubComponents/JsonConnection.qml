@@ -110,40 +110,57 @@ Popup {
     // Row3: Enter port number starts
 
 
-    Row{
+    Column{
 
         id: row3
         anchors.top: header_popup.bottom
         anchors.topMargin: 15
         anchors.left: parent.left
-        anchors.leftMargin: 1
+        anchors.leftMargin: 100
 
 
 
         Rectangle{
 
-            id: label2
+            id: name1
             width:label_col
             height: 40
 
             Text{
                 text: "Json"
-                anchors.right: parent.right
-                anchors.rightMargin: 10
+                anchors.left: parent.left
+                anchors.leftMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
+        Rectangle{
+
+                  id: name2
+                  width:label_col
+                  height: 40
 
         Button{
             id : file_btn
+            anchors.left: parent.left
+                       anchors.leftMargin:  10
             text: "Select JSON file"
             onClicked: promptJson.open();
         }
+        }
 
+        Rectangle{
+
+                   id: name3
+                   width:label_col
+                   height: 40
         Text{
             id: jsonFileName
-            text:""
+            anchors.left: parent.left
+                        anchors.leftMargin:  10
+                        anchors.verticalCenter: parent.verticalCenter
+            text:"cbxcf gc gh "
+        }
         }
 
     }
@@ -158,10 +175,12 @@ Popup {
     Row{
 
         id: row6
-        anchors.top: row3.bottom
-        anchors.topMargin: 15
+//        anchors.top: row3.bottom
+//        anchors.topMargin: 15
         anchors.right: parent.right
         anchors.rightMargin: label_col - 70
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 70
         spacing: 10
 
         Button{

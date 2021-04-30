@@ -47,8 +47,9 @@ Item{
     // JAVASCRIPT FUNCTION STARTS
 
     Component.onCompleted: {
-        //                textEditQueryModeller.text = "<h1>SELECT * FROM users WHERE users.id > 0</h1>"
-        textEditQueryModeller.text = " SELECT * FROM users WHERE users.id > 0 "
+                        textEditQueryModeller.text = "SELECT * FROM users WHERE users.id > 0"
+//        textEditQueryModeller.text = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd"><html><head><meta name="qrichtext" content="1" /><style type="text/css">p, li { white-space: pre-wrap; }</style></head><body style=" font-family:"MS Shell Dlg 2"; font-size:7.8pt; font-weight:400; font-style:normal;"><p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style="color:#009b8f;">SELECTq</span> * <span style="color:#009b8f;">FROM</span> users <span style="color:#009b8f;">WHERE</span> users.id > 0  </p><p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">SELECV </p></body></html>';
+
 
 
 
@@ -62,42 +63,44 @@ Item{
     //    function to onTextFormatSqlKeyword
     function onTextFormatSqlKeyword(){
 
+//        console.log("textEditQueryModeller.text"+textEditQueryModeller.text);
+//        var finalQueryString = ""
+//        var lineItemElementArray = []
+//        var arraySqlKeyword =["SELECT","FROM","WHERE"]
 
-        console.log("textEditQueryModeller.text"+textEditQueryModeller.text);
-        var finalQueryString = ""
-        var lineItemElementArray = []
-        var arraySqlKeyword =["SELECT","FROM","WHERE"]
+//        var headerString = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd"><html><head><meta name="qrichtext" content="1" /><style type="text/css">p, li { white-space: pre-wrap; }</style></head><body style=" font-family:"MS Shell Dlg 2"; font-size:7.8pt; font-weight:400; font-style:normal;">'
+//        var footerString = '</body></html>'
+//        var startString = '<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">'
+//        var endString = '</p>'
 
-        var headerString = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd"><html><head><meta name="qrichtext" content="1" /><style type="text/css">p, li { white-space: pre-wrap; }</style></head><body style=" font-family:\'MS Shell Dlg 2\'; font-size:7.8pt; font-weight:400; font-style:normal;">'
-        var footerString = '</body></html>'
-        var startString = '<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">'
-        var endString = '</p>'
+//        finalQueryString = headerString
 
-        finalQueryString = headerString
+//        var elems = textEditQueryModeller.text.match(/<p [^>]+>(.*?)<\/p>/g)
+//        elems.forEach((item, index) => {
+//                          finalQueryString += startString
+//                          lineItemElementArray[index] = GeneralParamsModel.returnPlainTextFromHtml(item).split(" ")
+//                          lineItemElementArray[index].forEach((innerItem, innerIndex) => {
+//                                                                  if(arraySqlKeyword.indexOf(innerItem.toUpperCase()) > -1){
+//                                                                      console.log("change"+innerItem)
+//                                                                      finalQueryString += "<span style='color:"+Constants.grafieksGreenColor+";'>"+innerItem+"</span> ";
 
-        var elems = textEditQueryModeller.text.match(/<p [^>]+>(.*?)<\/p>/g)
-        elems.forEach((item, index) => {
-                          finalQueryString += startString
-                          lineItemElementArray[index] = GeneralParamsModel.returnPlainTextFromHtml(item).split(" ")
-                          lineItemElementArray[index].forEach((innerItem, innerIndex) => {
-                                                                  if(arraySqlKeyword.indexOf(innerItem.toUpperCase()) > -1){
-                                                                      console.log("change"+innerItem)
-                                                                      finalQueryString += "<span style='color:"+Constants.grafieksGreenColor+";'>"+innerItem+"</span> ";
+//                                                                      console.log("changeq"+finalQueryString)
+//                                                                  } else{
+//                                                                      finalQueryString += innerItem + " "
+//                                                                  }
+//                                                              })
+//                          finalQueryString +=endString
+//                      })
+//        finalQueryString += footerString;
 
-                                                                      console.log("changeq"+finalQueryString)
-                                                                  } else{
-                                                                      finalQueryString += innerItem + " "
-                                                                  }
-                                                              })
-                          finalQueryString +=endString
-                      })
-        finalQueryString += footerString;
+//    textEditQueryModeller.text = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd"><html><head><meta name="qrichtext" content="1" /><style type="text/css">p, li { white-space: pre-wrap; }</style></head><body style=" font-family:"MS Shell Dlg 2"; font-size:7.8pt; font-weight:400; font-style:normal;"><p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style="color:#009b8f;">SELECTq</span> * <span style="color:#009b8f;">FROM</span> users <span style="color:#009b8f;">WHERE</span> users.id > 0  </p><p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">SELECV </p></body></html>';
 
+//        textEditQueryModeller.text = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd"><html><head><meta name="qrichtext" content="1" /><style type="text/css">p, li { white-space: pre-wrap; }</style></head><body style=" font-family:"MS Shell Dlg 2"; font-size:7.8pt; font-weight:400; font-style:normal;"><p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style="color:#009b8f;">SELECTq</span> * <span style="color:#009b8f;">FROM</span> users <span style="color:#009b8f;">WHERE</span> users.id > 0  </p><p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">SELECV </p></body></html>';
 
+//        textEditQueryModeller.text = "<h1>test</h1>";
 
+//        console.log( "finalQueryString"+finalQueryString)
 
-
-        console.log( "finalQueryString"+finalQueryString)
 
     }
 
@@ -126,44 +129,7 @@ Item{
     // Page Design Starts
 
 
-    Column{
-        id: queryNumbersColumn
 
-        anchors.top:parent.top
-        topPadding: 10
-        leftPadding: 10
-        height:parent.height  + 6
-
-        Repeater {
-            model: textEditQueryModeller.lineCount
-            Text {
-                text: modelData + 1
-                anchors.horizontalCenter: Text.AlignHCenter
-            }
-        }
-
-    }
-
-    ToolSeparator{
-        id: toolSeperator1
-        anchors.top:parent.top
-        anchors.topMargin: - 6
-        height:parent.height  + 6
-        anchors.left: queryNumbersColumn.right
-        anchors.leftMargin: 10
-        padding: 15
-        width: 1
-        contentItem: Rectangle {
-            implicitWidth: parent.vertical ? 3 : 24
-            implicitHeight: parent.vertical ? 24 : 3
-            color: Constants.darkThemeColor
-        }
-
-        background: Rectangle{
-            color: Constants.darkThemeColor
-        }
-
-    }
 
     //    TextEdit{
     //        id: textEditQueryModeller
@@ -185,19 +151,23 @@ Item{
 
     //    }
     Flickable {
-        id: flickArea
+        id: flickText
 
-
-        width: parent.width - toolSeperator1.width
-        height: parent.height
         anchors.left: toolSeperator1.right
-
-
-        boundsBehavior: Flickable.StopAtBounds
-        flickableDirection: Flickable.HorizontalFlick
-
+        width: parent.width + toolSeperator1.width;
+        height: parent.height;
+        contentWidth: edit.paintedWidth
+        contentHeight: edit.paintedHeight
+        clip: true
         interactive: true
-        function ensureVisible(r) {
+        ScrollBar.vertical: ScrollBar {
+             active: flick.moving || !flick.moving
+        }
+
+
+
+        function ensureVisible(r)
+        {
             if (contentX >= r.x)
                 contentX = r.x;
             else if (contentX+width <= r.x+r.width)
@@ -208,41 +178,66 @@ Item{
                 contentY = r.y+r.height-height;
         }
 
-        TextEdit {
-            id: textEditQueryModeller
+        Column{
+            id: queryNumbersColumn
 
+            anchors.top:parent.top
+            topPadding: 10
+            leftPadding: 10
+            height:parent.height  + 6
 
-            anchors.left: toolSeperator1.right
-            width: parent.width - toolSeperator1.width
-
-            padding: 10
-
-
-
-            onTextChanged: {
-                onTextEditorChanged()
-                onTextFormatSqlKeyword()
-                console.log("testtes")
+            Repeater {
+                model: textEditQueryModeller.lineCount
+                Text {
+                    text: modelData + 1
+                    anchors.horizontalCenter: Text.AlignHCenter
+                }
             }
-            focus: true
-            wrapMode: TextEdit.Wrap
-
-            onCursorRectangleChanged:{
-
-                flickArea.ensureVisible(cursorRectangle)
-
-            }
-
-
-            selectionColor:Constants.grafieksLightGreenColor;
-            selectByKeyboard: true
-
-
-            selectByMouse: true
 
         }
-    }
 
+        ToolSeparator{
+            id: toolSeperator1
+            anchors.top:parent.top
+            anchors.topMargin: - 6
+            height:parent.height  + 60000
+            anchors.left: queryNumbersColumn.right
+            anchors.leftMargin: 10
+            padding: 15
+            width: 1
+            contentItem: Rectangle {
+                implicitWidth: parent.vertical ? 3 : 24
+                implicitHeight: parent.vertical ? 24 : 3
+                color: Constants.darkThemeColor
+            }
+
+            background: Rectangle{
+                color: Constants.darkThemeColor
+            }
+
+        }
+
+        TextEdit {
+            id: textEditQueryModeller
+            anchors.left: toolSeperator1.right
+            width: flickText.width
+            padding: 10
+            focus: true
+//            text: '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd"><html><head><meta name="qrichtext" content="1" /><style type="text/css">p, li { white-space: pre-wrap; }</style></head><body style=" font-family:"MS Shell Dlg 2"; font-size:7.8pt; font-weight:400; font-style:normal;"><p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style="color:#009b8f;">SELECTq</span> * <span style="color:#009b8f;">FROM</span> users <span style="color:#009b8f;">WHERE</span> users.id > 0  </p><p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">SELECV </p></body></html>'
+            selectByMouse: true
+            textFormat:TextEdit.AutoText
+            wrapMode: TextEdit.WordWrap
+            selectByKeyboard: true
+            selectionColor:Constants.grafieksLightGreenColor;
+            onCursorRectangleChanged: flickText.ensureVisible(cursorRectangle);
+            onTextChanged: {
+//                onTextEditorChanged();
+                onTextFormatSqlKeyword();
+
+
+            }
+        }
+    }
 
     // Page Design Ends
     /***********************************************************************************************************************/

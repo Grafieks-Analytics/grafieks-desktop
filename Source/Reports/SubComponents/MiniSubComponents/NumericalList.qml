@@ -1,8 +1,15 @@
 import QtQuick 2.0
+import QtQuick.Controls 2.15
 
 
 ListView{
     id: numericalList
+
+    flickableDirection: Flickable.VerticalFlick
+            boundsBehavior: Flickable.StopAtBounds
+            interactive: true
+             clip: true
+             ScrollBar.vertical: ScrollBar {}
 
     property string itemType: "Numerical"
 
@@ -37,7 +44,6 @@ ListView{
     anchors.topMargin: 5
     height: parent.height - numericalHeading.height - 5
     width: parent.width
-    interactive: false
 
     delegate: DataPaneElement{
         id: dataPaneListElement

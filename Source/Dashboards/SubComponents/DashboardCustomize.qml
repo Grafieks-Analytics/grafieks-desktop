@@ -17,6 +17,7 @@ Item{
     width:200
     height: parent.height
     property string itemName : ""
+    property var editIconVisible: false
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
     ListModel {
@@ -80,6 +81,20 @@ Item{
     function editSelectedReport(){
         stacklayout_home.currentIndex = 7
     }
+
+
+    function showEditIcon(){
+
+        editIconVisible = true
+
+    }
+    function hideEditIcon(){
+
+        editIconVisible = false
+
+    }
+
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
     /***********************************************************************************************************************/
@@ -234,6 +249,8 @@ Item{
                             height: parent.height
 
 
+
+
                             Text {
                                 anchors.verticalCenter: parent.verticalCenter
                                 x: 30
@@ -243,12 +260,12 @@ Item{
                                 font.pixelSize: 12
                                 text: itemName
                             }
-    //                        Rectangle {
-    //                                        height: parent.height
-    //                                        width: 50
-    //                                        anchors.right: parent.right
-    //                                       anchors.rightMargin:  20
-    //                                       color: "red"
+                            Rectangle {
+                                            height: parent.height
+                                            width: 50
+                                            anchors.right: parent.right
+                                           anchors.rightMargin:  20
+//                                           color: "red"
 
                             Image{
                                 id: resizeReport
@@ -256,6 +273,7 @@ Item{
                                 width: 16
                                 anchors.right: parent.right
                                anchors.rightMargin:  20
+                               visible: editIconVisible
 
                                 source: "/Images/icons/edit gray.png"
                                 anchors.verticalCenter: parent.verticalCenter
@@ -266,7 +284,7 @@ Item{
                             }
                             }
 
-    //                    }
+                        }
 
                         MouseArea {
                             id: mouseArea
@@ -280,6 +298,9 @@ Item{
                                 }
                                 dragRect.Drag.drop();
                             }
+                            hoverEnabled: true
+                            onEntered: showEditIcon()
+                            onExited: hideEditIcon()
                         }
                         states: [
                             State {

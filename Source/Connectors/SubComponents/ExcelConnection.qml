@@ -125,13 +125,13 @@ Popup {
     // Row1: Select excel starts
 
 
-    Row{
+    Column{
 
         id: row1
         anchors.top: header_popup.bottom
         anchors.topMargin: 15
         anchors.left: parent.left
-        anchors.leftMargin: 1
+        anchors.leftMargin: 100
 
 
 
@@ -143,22 +143,42 @@ Popup {
 
             Text{
                 text: "Excel"
-                anchors.right: parent.right
-                anchors.rightMargin: 10
+                anchors.left: parent.left
+                anchors.leftMargin:  10
                 font.pixelSize: Constants.fontCategoryHeader
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
 
+        Rectangle{
+
+            id: label3
+            width:label_col
+            height: 40
+
         Button{
             id : file_btn
+
+            anchors.left: parent.left
+            anchors.leftMargin:  10
             text: "Select Excel file"
             onClicked: promptExcel.open();
         }
+        }
 
+
+        Rectangle{
+
+            id: label4
+            width:label_col
+            height: 40
         Text{
             id: excelFileName
+            anchors.left: parent.left
+            anchors.leftMargin:  10
+            anchors.verticalCenter: parent.verticalCenter
             text:""
+        }
         }
 
     }
@@ -173,10 +193,12 @@ Popup {
     Row{
 
         id: row2
-        anchors.top: row1.bottom
-        anchors.topMargin: 15
+//        anchors.top: row1.bottom
+//        anchors.topMargin: 15
         anchors.right: parent.right
         anchors.rightMargin: label_col
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 70
         spacing: 10
 
         BusyIndicatorTpl {
