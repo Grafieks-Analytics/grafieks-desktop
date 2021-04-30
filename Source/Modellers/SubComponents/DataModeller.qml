@@ -234,7 +234,6 @@ Item {
             // 5. Execute query
 
             var undefinedCounter = 0
-            //            var firstRectId = 0
             dataModellerItem.rectangles.forEach(function(item, key){
                 if(dataModellerItem.frontRectLineMaps.has(key) === false)
                     undefinedCounter++
@@ -286,20 +285,57 @@ Item {
     // or destroying main rectangle
     function destroyComponents(refObject, depth){
 
+        // Strategy
+
+        // a. If "all" selected, delete these 9 components
+        // 1. Main rect (deleted the object in DroppedRectangle.qml)
+        // 2. Rect back
+        // 3. Rect front
+        // 4. Rect Front map
+        // 5. Rect Back map
+        // 6. Immediately behind line
+        // 7. Immediately behind join box
+        // 8. Immediately behind rect front map
+        // 9. Immediately front line
+        // 10. Immediately front join box
+        // 11. Immediately front rect back map
+
+        // b. Else if only joinbox deleted, delete these 4 components
+        // 1. Line
+        // 2. Join box
+        // 3. Main rect front map
+        // 4. Front rect back map
+
         // IF the main object is deleted
         if(depth === "all"){
+
+            // Delete rectangle front and back coordinates. Also delete the rectangle
+            // a.1.Main rect(value)
+            // a.2.Rect front
+            // a.3.Rect back
+            if(rectangles.has(refObject)){
+                rectangles.delete(refObject);
+                frontRectangleCoordinates.delete(refObject)
+                rearRectangleCoordinates.delete(refObject)
+            }
+
 
             if(rearRectLineMaps.has(refObject) === true){
                 rearRectLineMaps.get(refObject).forEach(function(value){
 
-                    frontRectLineMaps.delete((value))
-
+                    // a.6.Immediately behind line (delete object and map value)
+                    // a.7.Immediately behind join box (delete object and map value)
+                    // Delete object
                     newConnectingLine.get(value).destroy();
                     newJoinBox.get(value).destroy();
 
                     // Delete values from the map
                     newConnectingLine.delete(value)
                     newJoinBox.delete(value)
+
+
+                    // a.8.Immediately behind rect front map
+                    frontRectLineMaps.delete((value))
 
                     // Delete from DSParamsModel
                     DSParamsModel.removeJoinBoxTableMap(value)
@@ -308,11 +344,15 @@ Item {
                     DSParamsModel.removePrimaryJoinTable(value)
                     DSParamsModel.removeJoinMapList(value, 0, true)
                 })
+
+                // a.5.Rect Back map
                 rearRectLineMaps.delete(refObject)
             }
-
         }
 
+        // Delete front line and joinbox (object and values)
+        // a.9 | b.1.Immediately front line
+        // a.10 | b.2.Immediately front join box
         // Destroy dynamically created components
         if(newConnectingLine.has(refObject))
             newConnectingLine.get(refObject).destroy();
@@ -321,29 +361,25 @@ Item {
             newJoinBox.get(refObject).destroy();
 
         // Delete values from the map
-
         if(newConnectingLine.has(refObject))
             newConnectingLine.delete(refObject)
 
         if(newJoinBox.has(refObject))
             newJoinBox.delete(refObject)
 
+
+        // a.11 | b.3.Immediately front rect back map
         let frontItemOfConcernedRect = frontRectLineMaps.get(refObject)
         let rearItemsOfFrontRect = rearRectLineMaps.get(frontItemOfConcernedRect);
 
         let itemToRemoveFromRearRect = rearItemsOfFrontRect.indexOf(refObject)
         rearItemsOfFrontRect.splice(itemToRemoveFromRearRect, 1)
 
-        if(frontRectLineMaps.has(refObject))
-            frontRectLineMaps.delete(refObject);
-
         rearRectLineMaps.set(frontItemOfConcernedRect, rearItemsOfFrontRect);
 
-        if(rectangles.has(refObject)){
-            rectangles.delete(refObject);
-            frontRectangleCoordinates.delete(refObject)
-            rearRectangleCoordinates.delete(refObject)
-        }
+        // a.4 | b.4 Rect front map
+        if(frontRectLineMaps.has(refObject))
+            frontRectLineMaps.delete(refObject);
 
 
         DSParamsModel.removeJoinBoxTableMap(refObject)
@@ -360,6 +396,20 @@ Item {
     function createNewJoin(refObject, refObjectName){
 
         if(tmpOrphanTableId === refObject && tmpNearestTable.tableId > 0){
+
+            console.log(refObject, tmpOrphanTableId, "ORPHAN")
+
+            // Check if First rectangle is also connected to the back of some rectangle
+            // If so, check the only rectanglw which has nothing connected on front
+            // That becomes the first/primary rectangle
+            //            if(refObject === dataModellerItem.firstRectId){
+            //                dataModellerItem.rectangles.forEach((item, key) => {
+            //                                                        if(frontRectLineMaps.has(key) === false){
+            //                                                            dataModellerItem.firstRectId = key
+            //                                                            console.log("Primary rectangle is", key)
+            //                                                        }
+            //                                                    })
+            //            }
 
             // Get front coordinates of the orphan rectangle
             // Get the rear coordinates of the nearest rectangle
@@ -429,8 +479,9 @@ Item {
             DSParamsModel.addToJoinOrder(objId)
         }
 
-        console.log(objArray, "OBJ ARRAY")
         objArray.forEach(function(item){
+            console.log(dataModellerItem.rearRectLineMaps.has(item), "RECT BACK FOR", item)
+
             if(dataModellerItem.rearRectLineMaps.has(item) === true){
 
                 tmpArray = tmpArray.concat(dataModellerItem.rearRectLineMaps.get(item))
@@ -464,8 +515,6 @@ Item {
                     tmpJoinString = ""
 
                 })
-
-
             }
         })
 
@@ -533,7 +582,6 @@ Item {
 
         frontRectangleCoordinates.set(refObject, frontVal)
         rearRectangleCoordinates.set(refObject, rearVal)
-
 
         // This block is for orphan rectangles and when they are brought near other rectangle
         // to create new joins
@@ -776,7 +824,6 @@ Item {
         // Push the coordinates in the array
         frontRectangleCoordinates.set(counter, {x: rectLeftX, y: rectLeftY})
         rearRectangleCoordinates.set(counter, {x: rectRightX, y: rectRightY})
-        lastRectX.text = "LX:"+ rectLeftX+ " RX:"+ rectRightX
         existingTables.set(counter, tableslist.tableName)
     }
 
@@ -1002,15 +1049,6 @@ Item {
             ToolTip.timeout: Constants.tooltipHideTime
             ToolTip.visible: hovered
             ToolTip.text: qsTr("Zoom out")
-        }
-
-        Text{
-            id: lastRectX
-            text: "LAST RECT X"
-        }
-
-        Text{
-            id: currentRectX
         }
 
     }
