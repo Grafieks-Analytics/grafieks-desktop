@@ -412,6 +412,9 @@ Item {
             // Connect join box destroy signal and slot
             newJoinBox.get(tmpOrphanTableId).destroyJoin.connect(destroyComponents)
 
+            // Popup join details
+            showJoinPopup(tmpOrphanTableId)
+
             // Front Rectangle Line Maps
             frontRectLineMaps.set(tmpOrphanTableId, tmpNearestTable.tableId)
 
@@ -464,6 +467,14 @@ Item {
         tempRearRectLineMaps = []
         counter = 0
         tmpOrphanTableId = 0
+    }
+
+    // Display join popup
+    function showJoinPopup(counter){
+
+        // Set joinId. Required to get value from Map() in the parent component
+        DSParamsModel.setJoinId(counter)
+        joinPopup.visible = true
     }
 
 
@@ -821,6 +832,9 @@ Item {
 
             // Save the Join Box Table map for join manipulation later
             DSParamsModel.addToJoinBoxTableMap(counter, nearestTable.tableName, tableslist.tableName)
+
+            // Popup join details
+            showJoinPopup(counter)
 
         }
 
