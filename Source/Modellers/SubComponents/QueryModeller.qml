@@ -44,14 +44,7 @@ Item{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    Component.onCompleted: {
-        textEditQueryModeller.text = " SELECT * FROM users WHERE users.id > 0 "
-    }
 
-    function onTextEditorChanged(){
-        // Set the Tmp SQL Query in C++
-        DSParamsModel.setTmpSql(GeneralParamsModel.returnPlainTextFromHtml(textEditQueryModeller.text))
-    }
 
     //    function to onTextFormatSqlKeyword
     function onTextFormatSqlKeyword(event, newText){
@@ -63,6 +56,9 @@ Item{
         textEditQueryModeller.text = finalQueryString
         textEditQueryModeller.insert(cursorPosition, " ")
         textEditQueryModeller.cursorPosition = cursorPosition
+
+        // Save the plain query for execution
+        DSParamsModel.setTmpSql(GeneralParamsModel.returnPlainTextFromHtml(textEditQueryModeller.text))
 
     }
 

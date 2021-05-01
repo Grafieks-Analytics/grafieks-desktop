@@ -54,10 +54,9 @@ Item {
     property int refObjectWidth: 0
     readonly property string moduleName: "DataModeller"
     property string joinString: ""
-    property int firstRectId : 0
+    property int firstRectId : 1
 
     property var connectionType: Constants.sqlType
-    property var query_joiner: ""
 
 
 
@@ -101,73 +100,73 @@ Item {
 
         function onMysqlLoginStatus(status){
             if(status.status === true){
-                query_joiner = "`"
+                DSParamsModel.setQueryJoiner("`")
             }
         }
         function onMongoLoginStatus(status){
             if(status.status === true){
-                query_joiner = "`"
+                DSParamsModel.setQueryJoiner("`")
             }
         }
         function onPostgresLoginStatus(status){
             if(status.status === true){
-                query_joiner = "\""
+                DSParamsModel.setQueryJoiner("\"")
             }
         }
         function onOracleLoginStatus(status){
             if(status.status === true){
-                query_joiner = ""
+                DSParamsModel.setQueryJoiner("")
             }
         }
         function onMssqlLoginStatus(status){
             if(status.status === true){
-                query_joiner = "\""
+                DSParamsModel.setQueryJoiner("\"")
             }
         }
         function onAccessLoginStatus(status){
             if(status.status === true){
-                query_joiner = "\""
+                DSParamsModel.setQueryJoiner("\"")
             }
         }
 
         function onRedshiftLoginStatus(status){
             if(status.status === true){
-                query_joiner = "\""
+                DSParamsModel.setQueryJoiner("\"")
             }
         }
         function onTeradataLoginStatus(status){
             if(status.status === true){
-                query_joiner = "\""
+                DSParamsModel.setQueryJoiner("\"")
             }
         }
 
         function onSnowflakeLoginStatus(status){
             if(status.status === true){
-                query_joiner = "\""
+                DSParamsModel.setQueryJoiner("\"")
             }
         }
 
         function onSqliteLoginStatus(status){
             if(status.status === true){
-                query_joiner = "`"
+                DSParamsModel.setQueryJoiner("`")
             }
         }
 
         function onExcelLoginStatus(status){
             if(status.status === true){
-                query_joiner = "\""
+                DSParamsModel.setQueryJoiner("\"")
             }
         }
 
         function onCsvLoginStatus(status){
             if(status.status === true){
-                query_joiner = "\""
+                DSParamsModel.setQueryJoiner("\"")
             }
         }
 
         function onJsonLoginStatus(status){
             if(status.status === true){
-                query_joiner = "\""
+                DSParamsModel.setQueryJoiner("\"")
             }
         }
     }
@@ -181,7 +180,7 @@ Item {
             if(moduleName === dataModellerItem.moduleName){
                 allColumns.forEach(function(item, index){
 
-                    let param = query_joiner + tableName + query_joiner + "." + query_joiner + item[0] + query_joiner
+                    let param = DSParamsModel.queryJoiner + tableName + DSParamsModel.queryJoiner + "." + DSParamsModel.queryJoiner + item[0] + DSParamsModel.queryJoiner
                     DSParamsModel.addToQuerySelectParamsList(param)
                 })
             }
@@ -193,29 +192,7 @@ Item {
         target : DSParamsModel
 
         function onDestroyLocalObjectsAndMaps(){
-
-            // Destroy dynamic objects
-            rectangles.forEach(function(value, index){
-
-                if(newConnectingLine.has(index)) newConnectingLine.get(index).destroy()
-                if(newJoinBox.has(index)) newJoinBox.get(index).destroy()
-                if(rectangles.has(index)) rectangles.get(index).destroy()
-            })
-
-            // Clear all maps
-            frontRectangleCoordinates.clear()
-            rearRectangleCoordinates.clear()
-            existingTables.clear()
-            newConnectingLine.clear()
-            newJoinBox.clear()
-            rectangles.clear()
-            frontRectLineMaps.clear()
-            rearRectLineMaps.clear()
-
-            // Reset other variables
-            tempRearRectLineMaps = []
-            counter = 0
-            tmpOrphanTableId = 0
+            deleteAll()
         }
 
         // Delete select params, if signal received
@@ -234,7 +211,6 @@ Item {
             // 5. Execute query
 
             var undefinedCounter = 0
-            //            var firstRectId = 0
             dataModellerItem.rectangles.forEach(function(item, key){
                 if(dataModellerItem.frontRectLineMaps.has(key) === false)
                     undefinedCounter++
@@ -286,72 +262,123 @@ Item {
     // or destroying main rectangle
     function destroyComponents(refObject, depth){
 
-        // IF the main object is deleted
-        if(depth === "all"){
+        // Delete cases
 
-            if(rearRectLineMaps.has(refObject) === true){
-                rearRectLineMaps.get(refObject).forEach(function(value){
+        // a. If "all" selected, delete these 9 components
+        // 1. Main rect (deleted the object in DroppedRectangle.qml)
+        // 2. Rect back
+        // 3. Rect front
+        // 4. Rect Front map
+        // 5. Rect Back map
+        // 6. Immediately behind line
+        // 7. Immediately behind join box
+        // 8. Immediately behind rect front map
+        // 9. Immediately front line
+        // 10. Immediately front join box
+        // 11. Immediately front rect back map
 
-                    frontRectLineMaps.delete((value))
+        // b. Else if only joinbox deleted, delete these 4 components
+        // 1. Line
+        // 2. Join box
+        // 3. Main rect front map
+        // 4. Front rect back map
 
-                    newConnectingLine.get(value).destroy();
-                    newJoinBox.get(value).destroy();
+        console.log(refObject, dataModellerItem.firstRectId, "FRECT")
+        if(refObject === dataModellerItem.firstRectId){
+            console.log("FIRST RECT INt")
+            DSParamsModel.resetDataModel()
+            deleteAll()
 
-                    // Delete values from the map
-                    newConnectingLine.delete(value)
-                    newJoinBox.delete(value)
+        } else{
 
-                    // Delete from DSParamsModel
-                    DSParamsModel.removeJoinBoxTableMap(value)
-                    DSParamsModel.removeJoinIconMap(value)
-                    DSParamsModel.removeJoinTypeMap(value)
-                    DSParamsModel.removePrimaryJoinTable(value)
-                    DSParamsModel.removeJoinMapList(value, 0, true)
-                })
-                rearRectLineMaps.delete(refObject)
+            // IF the main object is deleted
+            if(depth === "all"){
+
+                // Delete rectangle front and back coordinates. Also delete the rectangle
+                // a.1.Main rect(value)
+                // a.2.Rect front
+                // a.3.Rect back
+                if(rectangles.has(refObject)){
+
+                    // Ensure that deleted tables are not reflected in generated query later
+                    let dynamicObjectName =  DSParamsModel.queryJoiner + rectangles.get(refObject).name + DSParamsModel.queryJoiner + "."
+                    DSParamsModel.removeQuerySelectParamsList(dynamicObjectName, true)
+
+                    rectangles.delete(refObject);
+                    frontRectangleCoordinates.delete(refObject)
+                    rearRectangleCoordinates.delete(refObject)
+                }
+
+
+                if(rearRectLineMaps.has(refObject) === true){
+                    rearRectLineMaps.get(refObject).forEach(function(value){
+
+                        // a.6.Immediately behind line (delete object and map value)
+                        // a.7.Immediately behind join box (delete object and map value)
+                        // Delete object
+                        newConnectingLine.get(value).destroy();
+                        newJoinBox.get(value).destroy();
+
+                        // Delete values from the map
+                        newConnectingLine.delete(value)
+                        newJoinBox.delete(value)
+
+
+                        // a.8.Immediately behind rect front map
+                        frontRectLineMaps.delete((value))
+
+                        // Delete from DSParamsModel
+                        DSParamsModel.removeJoinBoxTableMap(value)
+                        DSParamsModel.removeJoinIconMap(value)
+                        DSParamsModel.removeJoinTypeMap(value)
+                        DSParamsModel.removePrimaryJoinTable(value)
+                        DSParamsModel.removeJoinMapList(value, 0, true)
+
+                    })
+
+                    // a.5.Rect Back map
+                    rearRectLineMaps.delete(refObject)
+                }
             }
 
+            // Delete front line and joinbox (object and values)
+            // a.9 | b.1.Immediately front line
+            // a.10 | b.2.Immediately front join box
+            // Destroy dynamically created components
+            if(newConnectingLine.has(refObject))
+                newConnectingLine.get(refObject).destroy();
+
+            if(newJoinBox.has(refObject))
+                newJoinBox.get(refObject).destroy();
+
+            // Delete values from the map
+            if(newConnectingLine.has(refObject))
+                newConnectingLine.delete(refObject)
+
+            if(newJoinBox.has(refObject))
+                newJoinBox.delete(refObject)
+
+
+            // a.11 | b.3.Immediately front rect back map
+            let frontItemOfConcernedRect = frontRectLineMaps.get(refObject)
+            let rearItemsOfFrontRect = rearRectLineMaps.get(frontItemOfConcernedRect);
+
+            let itemToRemoveFromRearRect = rearItemsOfFrontRect.indexOf(refObject)
+            rearItemsOfFrontRect.splice(itemToRemoveFromRearRect, 1)
+
+            rearRectLineMaps.set(frontItemOfConcernedRect, rearItemsOfFrontRect);
+
+            // a.4 | b.4 Rect front map
+            if(frontRectLineMaps.has(refObject))
+                frontRectLineMaps.delete(refObject);
+
+
+            DSParamsModel.removeJoinBoxTableMap(refObject)
+            DSParamsModel.removeJoinIconMap(refObject)
+            DSParamsModel.removeJoinTypeMap(refObject)
+            DSParamsModel.removePrimaryJoinTable(refObject)
+            DSParamsModel.removeJoinMapList(refObject, 0, true)
         }
-
-        // Destroy dynamically created components
-        if(newConnectingLine.has(refObject))
-            newConnectingLine.get(refObject).destroy();
-
-        if(newJoinBox.has(refObject))
-            newJoinBox.get(refObject).destroy();
-
-        // Delete values from the map
-
-        if(newConnectingLine.has(refObject))
-            newConnectingLine.delete(refObject)
-
-        if(newJoinBox.has(refObject))
-            newJoinBox.delete(refObject)
-
-        let frontItemOfConcernedRect = frontRectLineMaps.get(refObject)
-        let rearItemsOfFrontRect = rearRectLineMaps.get(frontItemOfConcernedRect);
-
-        let itemToRemoveFromRearRect = rearItemsOfFrontRect.indexOf(refObject)
-        rearItemsOfFrontRect.splice(itemToRemoveFromRearRect, 1)
-
-        if(frontRectLineMaps.has(refObject))
-            frontRectLineMaps.delete(refObject);
-
-        rearRectLineMaps.set(frontItemOfConcernedRect, rearItemsOfFrontRect);
-
-        if(rectangles.has(refObject)){
-            rectangles.delete(refObject);
-            frontRectangleCoordinates.delete(refObject)
-            rearRectangleCoordinates.delete(refObject)
-        }
-
-
-        DSParamsModel.removeJoinBoxTableMap(refObject)
-        DSParamsModel.removeJoinIconMap(refObject)
-        DSParamsModel.removeJoinTypeMap(refObject)
-        DSParamsModel.removePrimaryJoinTable(refObject)
-        DSParamsModel.removeJoinMapList(refObject, 0, true)
-
     }
 
 
@@ -414,6 +441,32 @@ Item {
     }
 
 
+    function deleteAll(){
+        // Destroy dynamic objects
+        rectangles.forEach(function(value, index){
+
+            if(newConnectingLine.has(index)) newConnectingLine.get(index).destroy()
+            if(newJoinBox.has(index)) newJoinBox.get(index).destroy()
+            if(rectangles.has(index)) rectangles.get(index).destroy()
+        })
+
+        // Clear all maps
+        frontRectangleCoordinates.clear()
+        rearRectangleCoordinates.clear()
+        existingTables.clear()
+        newConnectingLine.clear()
+        newJoinBox.clear()
+        rectangles.clear()
+        frontRectLineMaps.clear()
+        rearRectLineMaps.clear()
+
+        // Reset other variables
+        tempRearRectLineMaps = []
+        counter = 0
+        tmpOrphanTableId = 0
+    }
+
+
     // Set the join order for sql
     // Form the sql join statement
     function joinOrder(objId, recursion = false){
@@ -429,8 +482,8 @@ Item {
             DSParamsModel.addToJoinOrder(objId)
         }
 
-        console.log(objArray, "OBJ ARRAY")
         objArray.forEach(function(item){
+
             if(dataModellerItem.rearRectLineMaps.has(item) === true){
 
                 tmpArray = tmpArray.concat(dataModellerItem.rearRectLineMaps.get(item))
@@ -452,20 +505,18 @@ Item {
                     for (var i=0; i<Object.keys(joinConditions).length; i++){
 
                         let key = Object.keys(joinConditions)[i]
-                        tmpJoinString += " " + query_joiner + joinCurrentTableName + query_joiner + "." + query_joiner+ joinConditions[key][1] + query_joiner + " = " + query_joiner + joinCompareTableName + query_joiner + "."  + query_joiner + joinConditions[key][0] + query_joiner+  " AND"
+                        tmpJoinString += " " + DSParamsModel.queryJoiner + joinCurrentTableName + DSParamsModel.queryJoiner + "." + DSParamsModel.queryJoiner+ joinConditions[key][1] + DSParamsModel.queryJoiner + " = " + DSParamsModel.queryJoiner + joinCompareTableName + DSParamsModel.queryJoiner + "."  + DSParamsModel.queryJoiner + joinConditions[key][0] + DSParamsModel.queryJoiner+  " AND"
                     }
 
                     let lastIndex = tmpJoinString.lastIndexOf(" AND");
                     tmpJoinString = tmpJoinString.substring(0, lastIndex);
                     tmpJoinString += ")"
 
-                    joinString += " " + joinType + " " + query_joiner + joinPrimaryJoinTable + query_joiner + " ON " + tmpJoinString
+                    joinString += " " + joinType + " " + DSParamsModel.queryJoiner + joinPrimaryJoinTable + DSParamsModel.queryJoiner + " ON " + tmpJoinString
 
                     tmpJoinString = ""
 
                 })
-
-
             }
         })
 
@@ -494,8 +545,9 @@ Item {
 
             let lastIndex = selectColumns.lastIndexOf(",");
             selectColumns = selectColumns.substring(0, lastIndex);
+            console.log("FIRST RECT", dataModellerItem.firstRectId, existingTables.get(dataModellerItem.firstRectId))
 
-            finalQuery = "SELECT " + selectColumns + " FROM " + query_joiner + existingTables.get(dataModellerItem.firstRectId) + query_joiner + " " + joinString
+            finalQuery = "SELECT " + selectColumns + " FROM " + DSParamsModel.queryJoiner + existingTables.get(dataModellerItem.firstRectId) + DSParamsModel.queryJoiner + " " + joinString
 
             // Call and execute the query
             DSParamsModel.setTmpSql(finalQuery)
@@ -533,7 +585,6 @@ Item {
 
         frontRectangleCoordinates.set(refObject, frontVal)
         rearRectangleCoordinates.set(refObject, rearVal)
-
 
         // This block is for orphan rectangles and when they are brought near other rectangle
         // to create new joins
@@ -776,7 +827,6 @@ Item {
         // Push the coordinates in the array
         frontRectangleCoordinates.set(counter, {x: rectLeftX, y: rectLeftY})
         rearRectangleCoordinates.set(counter, {x: rectRightX, y: rectRightY})
-        lastRectX.text = "LX:"+ rectLeftX+ " RX:"+ rectRightX
         existingTables.set(counter, tableslist.tableName)
     }
 
@@ -1002,15 +1052,6 @@ Item {
             ToolTip.timeout: Constants.tooltipHideTime
             ToolTip.visible: hovered
             ToolTip.text: qsTr("Zoom out")
-        }
-
-        Text{
-            id: lastRectX
-            text: "LAST RECT X"
-        }
-
-        Text{
-            id: currentRectX
         }
 
     }
@@ -1241,6 +1282,14 @@ Item {
 
         modality: Qt.ApplicationModal
         title: "Query Error"
+        standardButtons: StandardButton.Close
+    }
+
+    MessageDialog{
+        id: promptPrimaryTableModal
+
+        modality: Qt.ApplicationModal
+        title: "Select Primary table"
         standardButtons: StandardButton.Close
     }
 }

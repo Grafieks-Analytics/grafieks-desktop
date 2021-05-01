@@ -266,4 +266,11 @@ void DuckQueryModel::removeTmpChartData()
 
     this->internalColCount = 0;
     this->internalRowCount = 0;
+
+    this->tableHeaders.clear();
+
+    emit duckHeaderDataChanged(this->tableHeaders);
+    emit chartHeaderChanged(this->duckChartHeader);
+    emit duckHasData(false);
+    emit chartDataChanged(this->duckChartData);
 }
