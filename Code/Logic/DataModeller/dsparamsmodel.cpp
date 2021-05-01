@@ -558,7 +558,11 @@ QString DSParamsModel::fetchPrimaryJoinTable(int refObjId)
 
 void DSParamsModel::addToQuerySelectParamsList(QString selectParam)
 {
-    this->querySelectParamsList.append(selectParam);
+    QStringList filteredData = this->querySelectParamsList.filter(selectParam);
+
+    if(filteredData.empty()){
+        this->querySelectParamsList.append(selectParam);
+    }
 }
 
 void DSParamsModel::removeQuerySelectParamsList(QString refObjName, bool deleteAllMatching)
@@ -872,6 +876,11 @@ int DSParamsModel::joinId() const
     return m_joinId;
 }
 
+QString DSParamsModel::queryJoiner() const
+{
+    return m_queryJoiner;
+}
+
 QString DSParamsModel::tmpSql() const
 {
     return m_tmpSql;
@@ -1016,6 +1025,15 @@ void DSParamsModel::setJoinId(int joinId)
 
     m_joinId = joinId;
     emit joinIdChanged(m_joinId);
+}
+
+void DSParamsModel::setQueryJoiner(QString queryJoiner)
+{
+    if (m_queryJoiner == queryJoiner)
+        return;
+
+    m_queryJoiner = queryJoiner;
+    emit queryJoinerChanged(m_queryJoiner);
 }
 
 void DSParamsModel::setTmpSql(QString tmpSql)

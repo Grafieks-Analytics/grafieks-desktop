@@ -60,6 +60,7 @@ class DSParamsModel : public QObject
 
     // For Data Modeller
     Q_PROPERTY(int joinId READ joinId WRITE setJoinId NOTIFY joinIdChanged) // Current selected joinId in data modeller
+    Q_PROPERTY(QString queryJoiner READ queryJoiner WRITE setQueryJoiner NOTIFY queryJoinerChanged)
 
     // For Query Modeller
     Q_PROPERTY(QString tmpSql READ tmpSql WRITE setTmpSql NOTIFY tmpSqlChanged)
@@ -88,6 +89,7 @@ class DSParamsModel : public QObject
 
     // For Data Modeller
     int m_joinId;
+    QString m_queryJoiner;
 
     // For Query Modeller
     QString m_tmpSql;
@@ -190,6 +192,7 @@ public:
 
     // For Data Modeller
     int joinId() const;
+    QString queryJoiner() const;
 
     // For Query Modeller
     QString tmpSql() const;
@@ -206,6 +209,8 @@ public:
     bool selectAll() const;
     int filterIndex() const;
     QString mode() const;
+
+
 
 public slots:
 
@@ -224,6 +229,7 @@ public slots:
 
     // For Data Modeller
     void setJoinId(int joinId);
+    void setQueryJoiner(QString queryJoiner);
 
     // For Query Modeller
     void setTmpSql(QString tmpSql);
@@ -240,6 +246,8 @@ public slots:
     void setFilterIndex(int filterIndex);
     void setSelectAll(bool selectAll);
     void setMode(QString mode);
+
+
 
 signals:
 
@@ -265,6 +273,7 @@ signals:
 
     // For Query Modeller
     void tmpSqlChanged(QString tmpSql);
+    void queryJoinerChanged(QString queryJoiner);
 
     // For Filters
     void internalCounterChanged(int internalCounter);
@@ -290,6 +299,7 @@ signals:
 
     void resetInput();
 
+
 private:
     QMap<QString, QString> datasourceCredentials();
     QString m_fileExtension;
@@ -305,6 +315,7 @@ private:
     void updateMany();
     void deleteMany();
     void fetchMany();
+
 };
 
 #endif // DSPARAMSMODEL_H

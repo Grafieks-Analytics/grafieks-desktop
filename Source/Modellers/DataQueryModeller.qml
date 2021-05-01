@@ -371,12 +371,28 @@ Page {
 
     function clearERDiagram(){
         DSParamsModel.resetDataModel()
+        clearModelQueryData()
     }
 
     function clearQueryData(){
         DSParamsModel.resetFilter()
         DSParamsModel.setTmpSql("")
+        clearModelQueryData()
     }
+
+    function clearModelQueryData(){
+
+        if(connectionType === Constants.sqlType){
+            QueryModel.removeTmpChartData()
+        } else if(connectionType === Constants.duckType){
+            DuckQueryModel.removeTmpChartData()
+        } else{
+            ForwardOnlyQueryModel.removeTmpChartData()
+        }
+
+        NewTableColumnsModel.clearColumns();
+    }
+
     function onTableToggle(){
         NewTableColumnsModel.getColumnsForTable(modelData, "TableColumns")
 
