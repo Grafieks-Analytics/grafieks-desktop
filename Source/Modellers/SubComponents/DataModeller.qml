@@ -285,7 +285,7 @@ Item {
     // or destroying main rectangle
     function destroyComponents(refObject, depth){
 
-        // Strategy
+        // Delete cases
 
         // a. If "all" selected, delete these 9 components
         // 1. Main rect (deleted the object in DroppedRectangle.qml)
@@ -314,6 +314,11 @@ Item {
             // a.2.Rect front
             // a.3.Rect back
             if(rectangles.has(refObject)){
+
+                // Ensure that deleted tables are not reflected in generated query later
+                let dynamicObjectName =  query_joiner + rectangles.get(refObject).name + query_joiner + "."
+                DSParamsModel.removeQuerySelectParamsList(dynamicObjectName, true)
+
                 rectangles.delete(refObject);
                 frontRectangleCoordinates.delete(refObject)
                 rearRectangleCoordinates.delete(refObject)
@@ -343,6 +348,7 @@ Item {
                     DSParamsModel.removeJoinTypeMap(value)
                     DSParamsModel.removePrimaryJoinTable(value)
                     DSParamsModel.removeJoinMapList(value, 0, true)
+
                 })
 
                 // a.5.Rect Back map
@@ -396,20 +402,6 @@ Item {
     function createNewJoin(refObject, refObjectName){
 
         if(tmpOrphanTableId === refObject && tmpNearestTable.tableId > 0){
-
-            console.log(refObject, tmpOrphanTableId, "ORPHAN")
-
-            // Check if First rectangle is also connected to the back of some rectangle
-            // If so, check the only rectanglw which has nothing connected on front
-            // That becomes the first/primary rectangle
-            //            if(refObject === dataModellerItem.firstRectId){
-            //                dataModellerItem.rectangles.forEach((item, key) => {
-            //                                                        if(frontRectLineMaps.has(key) === false){
-            //                                                            dataModellerItem.firstRectId = key
-            //                                                            console.log("Primary rectangle is", key)
-            //                                                        }
-            //                                                    })
-            //            }
 
             // Get front coordinates of the orphan rectangle
             // Get the rear coordinates of the nearest rectangle
@@ -480,7 +472,6 @@ Item {
         }
 
         objArray.forEach(function(item){
-            console.log(dataModellerItem.rearRectLineMaps.has(item), "RECT BACK FOR", item)
 
             if(dataModellerItem.rearRectLineMaps.has(item) === true){
 

@@ -141,7 +141,7 @@ public:
     Q_INVOKABLE QString fetchPrimaryJoinTable(int refObjId = 0);
 
     Q_INVOKABLE void addToQuerySelectParamsList(QString selectParam);
-    Q_INVOKABLE void removeQuerySelectParamsList(QString refObjName = "");
+    Q_INVOKABLE void removeQuerySelectParamsList(QString refObjName = "", bool deleteAllMatching = false);
     Q_INVOKABLE QStringList fetchQuerySelectParamsList();
 
     Q_INVOKABLE void addToJoinOrder(int joinOrderId);
