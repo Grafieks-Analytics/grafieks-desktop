@@ -96,7 +96,7 @@ void DuckQueryModel::generateRoleNames()
                     fieldName =  data->GetValue(1, i).ToString().c_str();
                     fieldName = fieldName.trimmed();
                     fieldType = data->GetValue(2, i).ToString().c_str();
-                    colInfo << fieldName << fieldType << tableName;
+                    colInfo << fieldName << dataType.dataType(fieldType) << tableName;
 
                     m_roleNames.insert(i, fieldName.toUtf8());
                     this->setChartHeader(i, colInfo);

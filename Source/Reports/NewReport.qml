@@ -347,7 +347,7 @@ Page {
     function cancelReport(){
         // Back to dashboard
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
-        ChartsModel.removeTmpChartData()
+//        ChartsModel.removeTmpChartData()
     }
 
     function focusReportTitle(){

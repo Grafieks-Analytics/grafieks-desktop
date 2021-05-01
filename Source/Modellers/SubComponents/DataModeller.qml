@@ -126,7 +126,7 @@ Item {
         }
         function onAccessLoginStatus(status){
             if(status.status === true){
-                 query_joiner = "\""
+                query_joiner = "\""
             }
         }
 
@@ -234,7 +234,7 @@ Item {
             // 5. Execute query
 
             var undefinedCounter = 0
-            var firstRectId = 0
+            //            var firstRectId = 0
             dataModellerItem.rectangles.forEach(function(item, key){
                 if(dataModellerItem.frontRectLineMaps.has(key) === false)
                     undefinedCounter++
@@ -289,31 +289,44 @@ Item {
         // IF the main object is deleted
         if(depth === "all"){
 
-            rearRectLineMaps.get(refObject).forEach(function(value){
-                newConnectingLine.get(value).destroy();
-                newJoinBox.get(value).destroy();
+            if(rearRectLineMaps.has(refObject) === true){
+                rearRectLineMaps.get(refObject).forEach(function(value){
 
-                // Delete values from the map
-                newConnectingLine.delete(value)
-                newJoinBox.delete(value)
+                    frontRectLineMaps.delete((value))
 
-                // Delete from DSParamsModel
-                DSParamsModel.removeJoinBoxTableMap(value)
-                DSParamsModel.removeJoinIconMap(value)
-                DSParamsModel.removeJoinTypeMap(value)
-                DSParamsModel.removePrimaryJoinTable(value)
-                DSParamsModel.removeJoinMapList(value, 0, true)
-            })
+                    newConnectingLine.get(value).destroy();
+                    newJoinBox.get(value).destroy();
+
+                    // Delete values from the map
+                    newConnectingLine.delete(value)
+                    newJoinBox.delete(value)
+
+                    // Delete from DSParamsModel
+                    DSParamsModel.removeJoinBoxTableMap(value)
+                    DSParamsModel.removeJoinIconMap(value)
+                    DSParamsModel.removeJoinTypeMap(value)
+                    DSParamsModel.removePrimaryJoinTable(value)
+                    DSParamsModel.removeJoinMapList(value, 0, true)
+                })
+                rearRectLineMaps.delete(refObject)
+            }
 
         }
 
         // Destroy dynamically created components
-        newConnectingLine.get(refObject).destroy();
-        newJoinBox.get(refObject).destroy();
+        if(newConnectingLine.has(refObject))
+            newConnectingLine.get(refObject).destroy();
+
+        if(newJoinBox.has(refObject))
+            newJoinBox.get(refObject).destroy();
 
         // Delete values from the map
-        newConnectingLine.delete(refObject)
-        newJoinBox.delete(refObject)
+
+        if(newConnectingLine.has(refObject))
+            newConnectingLine.delete(refObject)
+
+        if(newJoinBox.has(refObject))
+            newJoinBox.delete(refObject)
 
         let frontItemOfConcernedRect = frontRectLineMaps.get(refObject)
         let rearItemsOfFrontRect = rearRectLineMaps.get(frontItemOfConcernedRect);
@@ -321,8 +334,17 @@ Item {
         let itemToRemoveFromRearRect = rearItemsOfFrontRect.indexOf(refObject)
         rearItemsOfFrontRect.splice(itemToRemoveFromRearRect, 1)
 
-        frontRectLineMaps.delete(refObject);
+        if(frontRectLineMaps.has(refObject))
+            frontRectLineMaps.delete(refObject);
+
         rearRectLineMaps.set(frontItemOfConcernedRect, rearItemsOfFrontRect);
+
+        if(rectangles.has(refObject)){
+            rectangles.delete(refObject);
+            frontRectangleCoordinates.delete(refObject)
+            rearRectangleCoordinates.delete(refObject)
+        }
+
 
         DSParamsModel.removeJoinBoxTableMap(refObject)
         DSParamsModel.removeJoinIconMap(refObject)
@@ -355,7 +377,7 @@ Item {
             let rectY = orphanY <= nearestY ? ( orphanY +diffY ) : ( nearestY + diffY )
 
             // Add the line component on stage
-            newConnectingLine.set(tmpOrphanTableId, dynamicConnectorLine.createObject(parent, {incomingRectangleFrontX:orphanX, incomingRectangleFrontY: orphanY, refRectangleRearX : nearestX, refRectangleRearY: nearestY, lineColor: "black", objectName : tmpOrphanTableId}))
+            newConnectingLine.set(tmpOrphanTableId, dynamicConnectorLine.createObject(parent, {incomingRectangleFrontX:orphanX, incomingRectangleFrontY: orphanY + bufferHeight, refRectangleRearX : nearestX, refRectangleRearY: nearestY + bufferHeight, lineColor: "black", objectName : tmpOrphanTableId}))
 
             // Add joinBox
             newJoinBox.set(tmpOrphanTableId, dynamicJoinBox.createObject(parent, {x: rectX, y: rectY, objectName : tmpOrphanTableId}))
@@ -693,7 +715,7 @@ Item {
 
         // Created rectangle front & back coordinates
         var rectLeftX = drag.x
-        var rectRightX = rectLeftX + tableslist.tableName.length * 10 + 30
+        var rectRightX = rectLeftX + tableslist.tableName.length * 10 + Constants.droppedRectBufferWidth
         var rectLeftY = drag.y
         var rectRightY = rectLeftY
 
@@ -754,6 +776,7 @@ Item {
         // Push the coordinates in the array
         frontRectangleCoordinates.set(counter, {x: rectLeftX, y: rectLeftY})
         rearRectangleCoordinates.set(counter, {x: rectRightX, y: rectRightY})
+        lastRectX.text = "LX:"+ rectLeftX+ " RX:"+ rectRightX
         existingTables.set(counter, tableslist.tableName)
     }
 
@@ -979,6 +1002,15 @@ Item {
             ToolTip.timeout: Constants.tooltipHideTime
             ToolTip.visible: hovered
             ToolTip.text: qsTr("Zoom out")
+        }
+
+        Text{
+            id: lastRectX
+            text: "LAST RECT X"
+        }
+
+        Text{
+            id: currentRectX
         }
 
     }
