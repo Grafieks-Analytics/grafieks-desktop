@@ -1416,5 +1416,8 @@ void ChartsModel::getChartHeader(QMap<int, QStringList> chartHeader)
         this->newChartHeader.insert(key, chartHeader.value(key).at(0));
     }
 
+    this->categoryList.sort(Qt::CaseInsensitive);
+    this->numericalList.sort(Qt::CaseInsensitive);
+    this->dateList.sort(Qt::CaseInsensitive);
     emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
 }

@@ -71,7 +71,8 @@ Item{
 
     Component.onCompleted: {
         nameID.text = name
-        //                droppedRectangle.width = nameID.text.length * 10 + 30
+        droppedRectangle.width = nameID.text.length * 10 + Constants.droppedRectBufferWidth
+        columnListDroppedRect.width = nameID.text.length * 10 + Constants.droppedRectBufferWidth
 
     }
 
@@ -153,26 +154,18 @@ Item{
 
     Component{
         id: listviewComponent
-
-
-
         Rectangle{
             id:tableContent
 
             height: 30
-            //            width: 200
 
             Row{
                 id: innerRow
                 height: 20
 
-
-
                 Text{
                     text: colName
                 }
-
-
 
                 Image{
                     id: columnIcon;
@@ -244,31 +237,26 @@ Item{
                         }
 
 
-                        //                        MenuItem {
-                        //                            text: qsTr("Rename")
-                        //                            onTriggered: destroyElement()
-                        //                        }
-                        //                        MenuItem {
-                        //                            text: qsTr("Convert To")
-                        //                            onTriggered: destroyElement()
-                        //                        }
+                        MenuItem {
+                            text: qsTr("Rename")
+                            onTriggered: destroyElement()
+                            visible: false
+                        }
+                        MenuItem {
+                            text: qsTr("Convert To")
+                            onTriggered: destroyElement()
+                            visible: false
+                        }
 
                         MenuItem {
                             text: qsTr("Remove")
-                            //                            onClicked: hideColumnSelection(colName, tableName)
+                            onClicked: hideColumnSelection(colName, tableName)
+                            visible: false
                         }
                     }}
             }
 
-
-
-
-
         }
-
-
-
-
 
     }
 
@@ -285,7 +273,6 @@ Item{
         color: colors[droppedCount+1]
 
         height: 30
-        width: 200
 
         MouseArea {
             id: mouseAreaDroppedRect
@@ -308,12 +295,6 @@ Item{
             onEntered: showCrossIcon();
             onExited: hideCrossIcon();
         }
-
-
-
-
-
-
 
 
         Text{
@@ -360,16 +341,10 @@ Item{
             }
         }
 
-
-
-
-
-
     }
 
 
     Rectangle{
-
         border.color: colors[droppedCount+1]
         anchors.top : droppedRectangle.bottom
         width: 200
