@@ -65,8 +65,14 @@ void QueryModel::removeTmpChartData()
 {
     this->sqlChartData.clear();
     this->sqlChartHeader.clear();
+    this->tableHeaders.clear();
 
     QSqlQueryModel::clear();
+
+    emit sqlHasData(false);
+    emit chartDataChanged(this->sqlChartData);
+    emit headerDataChanged(this->tableHeaders);
+    emit chartHeaderChanged(this->sqlChartHeader);
 }
 
 void QueryModel::setChartData()
