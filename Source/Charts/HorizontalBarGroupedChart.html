@@ -58,12 +58,17 @@
                     })
                 );
                 y1.domain(keys).rangeRound([0, y0.bandwidth()]);
+
+                var minValue = d3.min(data, function (d) {
+                    return d3.min(keys, function (key) {
+                        return d[key];
+                    });
+                });
+                if (minValue > 0) {
+                    minValue = 0;
+                }
                 x.domain([
-                    d3.min(data, function (d) {
-                        return d3.min(keys, function (key) {
-                            return d[key];
-                        });
-                    }),
+                    minValue,
                     d3.max(data, function (d) {
                         return d3.max(keys, function (key) {
                             return d[key];
@@ -206,12 +211,12 @@
 
             var data = [
                 [
-                    [2704659, 4499890, -2659981],
+                    [2704659, 4499890, 2659981],
                     [2027307, 3277946, 1420518],
                     [1208495, 2141490, 1058031],
-                    [1140516, -1938695, 925060],
+                    [1140516, 1938695, 925060],
                     [894368, 1558919, 725973],
-                    [737462, 1345341, -1879201],
+                    [737462, 1345341, 1879201],
                 ],
                 ["Over 1", "Over 2", "Over 3", "Over 4", "Over 5", "Over 6"],
                 ["Team 1", "Team 2", "Team 3"],

@@ -29,12 +29,12 @@
 
         var data = [
             [
-                [2704659, 4499890, -2659981],
+                [2704659, 4499890, 2659981],
                 [2027307, 3277946, 1420518],
                 [1208495, 2141490, 1058031],
-                [1140516, -1938695, 925060],
+                [1140516, 1938695, 925060],
                 [894368, 1558919, 725973],
-                [737462, 1345341, -1879201],
+                [737462, 1345341, 1879201],
             ],
             ["Over 1", "Over 2", "Over 3", "Over 4", "Over 5", "Over 6"],
             ["Team 1", "Team 2", "Team 3"],
@@ -96,6 +96,10 @@
                 return d3.min(d);
             });
 
+            if (minHeight > 0) {
+                minHeight = 0;
+            }
+
             var maxHeight = d3.max(dataValues, function (d) {
                 return d3.max(d);
             });
@@ -123,7 +127,8 @@
             var y = d3
                 .scaleLinear()
                 .rangeRound([0, height])
-                .domain([maxHeight * 1.1, minHeight * 1.1]);
+                .domain([maxHeight, minHeight])
+                .nice();
 
             var z = d3.scaleOrdinal().range([d3Colors[4]]);
 
