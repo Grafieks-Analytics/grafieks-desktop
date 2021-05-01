@@ -766,7 +766,7 @@ Item {
 
         // Created rectangle front & back coordinates
         var rectLeftX = drag.x
-        var rectRightX = rectLeftX + tableslist.tableName.length * 10 + Constants.droppedRectBufferWidth
+        var rectRightX = rectLeftX + Constants.droppedRectBufferWidth
         var rectLeftY = drag.y
         var rectRightY = rectLeftY
 

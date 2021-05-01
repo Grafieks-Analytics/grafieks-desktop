@@ -71,8 +71,8 @@ Item{
 
     Component.onCompleted: {
         nameID.text = name
-        droppedRectangle.width = nameID.text.length * 10 + Constants.droppedRectBufferWidth
-        columnListDroppedRect.width = nameID.text.length * 10 + Constants.droppedRectBufferWidth
+        droppedRectangle.width = Constants.droppedRectBufferWidth
+        columnListDroppedRect.width = Constants.droppedRectBufferWidth
 
     }
 
@@ -192,7 +192,7 @@ Item{
                     height: 30
                     width: 30
                     anchors.left: parent.left
-                    anchors.leftMargin:  110
+                    anchors.leftMargin:  160
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: 1
                     anchors.verticalCenter: droppedRectangle.verticalCenter
