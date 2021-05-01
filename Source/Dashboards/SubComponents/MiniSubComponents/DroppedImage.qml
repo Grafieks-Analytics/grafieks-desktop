@@ -112,7 +112,7 @@ Item{
 
     function destroyElement(){
         mainContainer.destroy()
-        this.destroy()
+        destroy()
         is_dashboard_blank = is_dashboard_blank - 1
 
         // Delete from c++
