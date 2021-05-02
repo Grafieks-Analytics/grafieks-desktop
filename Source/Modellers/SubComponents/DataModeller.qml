@@ -283,9 +283,7 @@ Item {
         // 3. Main rect front map
         // 4. Front rect back map
 
-        console.log(refObject, dataModellerItem.firstRectId, "FRECT")
         if(refObject === dataModellerItem.firstRectId){
-            console.log("FIRST RECT INt")
             DSParamsModel.resetDataModel()
             deleteAll()
 
@@ -412,8 +410,6 @@ Item {
             // Connect join box destroy signal and slot
             newJoinBox.get(tmpOrphanTableId).destroyJoin.connect(destroyComponents)
 
-            // Popup join details
-            showJoinPopup(tmpOrphanTableId)
 
             // Front Rectangle Line Maps
             frontRectLineMaps.set(tmpOrphanTableId, tmpNearestTable.tableId)
@@ -425,7 +421,6 @@ Item {
             }
             tmpArray.push(tmpOrphanTableId)
 
-
             rearRectLineMaps.set(tmpNearestTable.tableId, tmpArray)
 
             // Reset glow color of nearest rectangle
@@ -435,15 +430,21 @@ Item {
             // Add to DSParamsModel
             DSParamsModel.addToJoinBoxTableMap(tmpOrphanTableId, refObjectName, tmpNearestTable.tableName)
 
+            // Popup join details
+            showJoinPopup(tmpOrphanTableId)
+
             // Reset orphane and nearest tables
             tmpOrphanTableId = 0
 
             tmpNearestTable.tableId =  0
             tmpNearestTable.tableName =  ""
+
+
         }
     }
 
 
+    // Destroy components and maps
     function deleteAll(){
         // Destroy dynamic objects
         rectangles.forEach(function(value, index){
@@ -556,7 +557,6 @@ Item {
 
             let lastIndex = selectColumns.lastIndexOf(",");
             selectColumns = selectColumns.substring(0, lastIndex);
-            console.log("FIRST RECT", dataModellerItem.firstRectId, existingTables.get(dataModellerItem.firstRectId))
 
             finalQuery = "SELECT " + selectColumns + " FROM " + DSParamsModel.queryJoiner + existingTables.get(dataModellerItem.firstRectId) + DSParamsModel.queryJoiner + " " + joinString
 
