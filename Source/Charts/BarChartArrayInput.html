@@ -9,18 +9,262 @@
             body {
                 padding: 0;
                 margin: 0;
+                overflow-y: hidden;
+            }
+            #yAxisDiv {
+                position: fixed;
+                background: #fff;
             }
         </style>
     </head>
     <body>
-        <div id="my_dataviz"></div>
+        <div style="display: flex">
+            <div id="yAxisDiv"></div>
+            <div id="my_dataviz"></div>
+        </div>
         <div id="tooltip"></div>
         <script>
             var data = [
                 [
                     // ["2020-01-01", "2021-02-01", "2022-03-01", "2023-03-01"],
-                    ["India", "Aus", "NZ", "Pak5", "Pak4", "Pak3", "Pak2"],
-                    [200, 800, 400, 200, -120, 100, 300],
+                    [
+                        "India",
+                        "Aus",
+                        "NZ",
+                        "Pak5",
+                        "Pak4",
+                        "Pak3",
+                        "Pak2",
+                        "A",
+                        "B",
+                        "C",
+                        "D",
+                        "D",
+                        "E",
+                        "F",
+                        "G",
+                        "H",
+                        "I",
+                        "J",
+                        "K",
+                        "L",
+                        "M",
+                        "N",
+                        "O",
+                        "P",
+                        "Q",
+                        "R",
+                        "S",
+                        "T",
+                        "U",
+                        "V",
+                        "W",
+                        "X",
+                        "Y",
+                        "N1",
+                        "O1",
+                        "P1",
+                        "Q1",
+                        "1R",
+                        "S1",
+                        "T1",
+                        "U1",
+                        "V1",
+                        "W1",
+                        "X1",
+                        "Y1",
+
+                        "N2",
+                        "O2",
+                        "P2",
+                        "Q2",
+                        "R2",
+                        "S2",
+                        "T2",
+                        "U2",
+                        "V2",
+                        "W2",
+                        "X2",
+                        "Y2",
+
+                        "L3",
+                        "M3",
+                        "N3",
+                        "O3",
+                        "P3",
+                        "Q3",
+                        "R3",
+                        "S3",
+                        "T3",
+                        "U3",
+                        "V3",
+                        "W3",
+                        "X3",
+                        "Y3",
+
+                        "L4",
+                        "M4",
+                        "N4",
+                        "O4",
+                        "P4",
+                        "Q4",
+                        "R4",
+                        "S4",
+                        "T4",
+                        "U4",
+                        "V4",
+                        "W4",
+                        "X4",
+                        "Y4",
+
+                        "L5",
+                        "M5",
+                        "N5",
+                        "O5",
+                        "P5",
+                        "Q5",
+                        "R5",
+                        "S5",
+                        "T5",
+                        "U5",
+                        "V5",
+                        "W5",
+                        "X5",
+                        "Y5",
+
+                        "L6",
+                        "M6",
+                        "N6",
+                        "O6",
+                        "P6",
+                        "Q6",
+                        "R6",
+                        "S6",
+                        "T6",
+                        "U6",
+                        "V6",
+                        "W6",
+                        "X6",
+                        "Y6",
+                    ],
+                    [
+                        200,
+                        800,
+                        400,
+                        200,
+                        -1,
+                        100,
+                        300,
+
+                        10,
+                        2,
+                        30,
+                        40,
+                        100,
+                        300,
+                        10,
+                        2,
+                        30,
+                        40,
+                        100,
+                        300,
+                        10,
+                        10,
+                        2,
+                        30,
+                        40,
+                        100,
+                        300,
+                        10,
+                        2,
+                        30,
+                        40,
+                        100,
+                        300,
+                        10,
+                        10,
+                        2,
+                        30,
+                        40,
+                        100,
+                        300,
+                        10,
+                        2,
+                        30,
+                        40,
+                        100,
+                        300,
+                        10,
+                        10,
+                        2,
+                        30,
+                        40,
+                        100,
+                        300,
+                        10,
+                        2,
+                        30,
+                        40,
+                        100,
+                        300,
+                        10,
+
+                        10,
+                        2,
+                        30,
+                        40,
+                        100,
+                        300,
+                        10,
+                        2,
+                        30,
+                        40,
+                        100,
+                        300,
+                        10,
+                        10,
+                        2,
+                        30,
+                        40,
+                        100,
+                        300,
+                        10,
+                        2,
+                        30,
+                        40,
+                        100,
+                        300,
+                        10,
+                        10,
+                        2,
+                        30,
+                        40,
+                        100,
+                        300,
+                        10,
+                        2,
+                        30,
+                        40,
+                        100,
+                        300,
+                        10,
+                        2,
+                        30,
+                        40,
+                        100,
+                        300,
+                        10,
+                        2,
+                        30,
+                        40,
+
+                        10,
+                        2,
+                        30,
+                        40,
+                        100,
+                        0,
+                    ],
                 ],
                 ["Countries", "Population"],
             ];
@@ -75,6 +319,7 @@
                 var height = window.innerHeight - margin.top - margin.bottom;
 
                 d3.selectAll("#my_dataviz").html("");
+                d3.selectAll("#yAxisDiv").html("");
 
                 //add svg with margin !important
                 //this is svg is actually group
@@ -124,6 +369,21 @@
 
                 yaxisTicks = height / 70;
 
+                //add x and y axis
+                var yAxis = d3.axisLeft(yScale).tickSize(0).ticks(yaxisTicks);
+                d3.select("#yAxisDiv")
+                    .append("svg")
+                    .attr("width", "72")
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g") //add group to leave margin for axis
+                    .attr(
+                        "transform",
+                        "translate(" + margin.left + "," + margin.top + ")"
+                    )
+                    .append("g")
+                    .attr("class", "y-axis")
+                    .call(yAxis);
+
                 svg.append("g")
                     .attr("class", "grid")
                     .style("stroke-width", "1")
@@ -135,8 +395,10 @@
                 var xScale = d3
                     .scaleBand()
                     .domain(xAxisDataSet)
-                    .rangeRound([0, width])
-                    .padding(paddingInner); //scaleBand is used for  bar chart
+                    .range([0, width])
+                    .padding(paddingInner)
+                    .paddingInner(paddingInner);
+                //scaleBand is used for  bar chart
 
                 /*if domain is specified, sets the domain to the specified array of values.
             The first element in domain will be mapped to the first band, the second domain value to the second band, and so on.
@@ -166,7 +428,11 @@
                         xScale.bandwidth() /*width/dataset.length-barpadding*/
                     )
                     .attr("height", function (d) {
-                        return Math.abs(yScale(0) - yScale(Math.abs(d)));
+                        var height = Math.abs(yScale(0) - yScale(Math.abs(d)));
+                        if (!height) {
+                            height = 1;
+                        }
+                        return height;
                     })
                     .attr("fill", d3Colors[4])
                     .on("mouseout", function (d, i) {
@@ -187,10 +453,6 @@
                         d3.select(this).style("opacity", 1);
                     });
 
-                //add x and y axis
-                var yAxis = d3.axisLeft(yScale).tickSize(0).ticks(yaxisTicks);
-                svg.append("g").attr("class", "y-axis").call(yAxis);
-
                 var xAxis = d3.axisBottom(xScale);
                 if (valueDateType) {
                     xAxis.tickFormat(d3.timeFormat(dateFormat));
@@ -205,8 +467,8 @@
 
                 const [xAxisLabel, yAxisLabel] = data[1];
 
-                setLabel(xAxisLabel, "y_label", false);
-                setLabel(yAxisLabel, "x_label", false);
+                // setLabel(xAxisLabel, "y_label", false);
+                // setLabel(yAxisLabel, "x_label", false);
 
                 // //add label for x axis and y axis
                 // svg.append("text")
@@ -221,6 +483,31 @@
                 //     .attr("x", width / 2)
                 //     .attr("y", height + margin.bottom)
                 //     .style("text-anchor", "middle");
+
+                setYaxisWidth();
+
+                function setYaxisWidth() {
+                    var allYAxisTicks = document.querySelectorAll(
+                        ".y-axis .tick"
+                    );
+                    var maxWidth = 72;
+                    for (var i = 0; i < allYAxisTicks.length; i++) {
+                        var tick = allYAxisTicks[i];
+                        var width = tick.getBBox().width + 25;
+                        if (width > maxWidth) {
+                            maxWidth = width;
+                        }
+                    }
+
+                    var yAxisDiv = document.querySelector("#yAxisDiv svg");
+
+                    yAxisDiv.setAttribute("width", maxWidth);
+                    yAxisDiv.setAttribute(
+                        "transform",
+                        "translate(" + (maxWidth - margin.left) + "," + 0 + ")"
+                    );
+                    console.log(maxWidth);
+                }
 
                 function make_x_gridlines(x) {
                     return d3.axisBottom(x).ticks(8);
