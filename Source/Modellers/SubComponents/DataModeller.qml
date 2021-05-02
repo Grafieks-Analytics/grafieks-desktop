@@ -833,9 +833,11 @@ Item {
             // Save the Join Box Table map for join manipulation later
             DSParamsModel.addToJoinBoxTableMap(counter, nearestTable.tableName, tableslist.tableName)
 
+            // Set the table name for the query in a join
+            DSParamsModel.addToPrimaryJoinTable(counter, tableslist.tableName)
+
             // Popup join details
             showJoinPopup(counter)
-
         }
 
         // Push the coordinates in the array

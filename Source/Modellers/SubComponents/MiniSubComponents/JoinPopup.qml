@@ -253,25 +253,6 @@ Rectangle{
             table1.tableName = joinTableInfo[1]
             table2.tableName = joinTableInfo[2]
 
-            // Set tablenames in primary join table radio boxes
-            leftJoinRadio.radio_text = table1.tableName
-            rightJoinRadio.radio_text = table2.tableName
-
-            // Set default primary join table
-            if(DSParamsModel.fetchPrimaryJoinTable(refObjId) === ""){
-
-                DSParamsModel.addToPrimaryJoinTable(refObjId, table2.tableName)
-                rightJoinRadio.checked = true
-
-            } else{
-
-                if(DSParamsModel.fetchPrimaryJoinTable(refObjId) === table1.tableName){
-                    leftJoinRadio.checked = true
-                } else{
-                    rightJoinRadio.checked = true
-                }
-            }
-
 
             // Reset the counter, if it appears for the first time
             // Or fetch existing counter value & joins from DSParamsModel
@@ -382,10 +363,6 @@ Rectangle{
 
     function onDragJoinPopup(mouse){
         console.log('Write here to drag the panel')
-    }
-
-    function changePrimaryJoinTable(tableName){
-        DSParamsModel.addToPrimaryJoinTable(DSParamsModel.joinId, tableName)
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -608,35 +585,6 @@ Rectangle{
 
         anchors.left: parent.left
         anchors.leftMargin: 12
-
-        Text{
-            text: "Select Primary Table"
-        }
-
-        Row{
-            // For Table 1
-            // Text set by function
-            // Default Checked set from the function
-            CustomRadioButton{
-
-                id: leftJoinRadio
-                parent_dimension: 16
-                ButtonGroup.group: tableLeftRightJoinGrp
-                onClicked: changePrimaryJoinTable(leftJoinRadio.radio_text)
-
-            }
-
-            // For Table 2
-            // Text set by function
-            // Default Checked set from the function
-            CustomRadioButton{
-                id: rightJoinRadio
-                checked: true
-                parent_dimension: 16
-                ButtonGroup.group: tableLeftRightJoinGrp
-                onClicked: changePrimaryJoinTable(rightJoinRadio.radio_text)
-            }
-        }
 
 
     }
