@@ -226,7 +226,6 @@ import QtQuick.Controls 2.12
 //        ListElement {
 //            title: "A Masterpiece"
 //            author: "Gabriel"
-
 //        }
 //        ListElement {
 //            title: "Brilliance"
