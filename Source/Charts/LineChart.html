@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
     <!-- Load in the d3 library -->
     <script src="./Data/d3DefaultConfig.js"></script>
-        <script src="./Data/utils.js"></script>
+    <script src="./Data/utils.js"></script>
     <script src="./Data/d3.v4.min.js"></script>
     <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
     <link rel="stylesheet" href="Data/general.css" />
@@ -63,7 +63,7 @@
             if (!d3colorPalette) {
                 d3colorPalette = defaultD3Config.d3ColorPalette;
             }
-            d3Colors = d3[d3colorPalette];
+            d3Colors = d3colorPalette;
 
             if (!paddingInner) {
                 paddingInner = defaultD3Config.defaultPaddingInner;
@@ -200,13 +200,12 @@
             drawMarker(true, markerShape);
 
             // Generate Grid starts
-              const [xAxisLabel, yAxisLabel] = data[1];
+            const [xAxisLabel, yAxisLabel] = data[1];
 
-              console.log(data[1]);
+            console.log(data[1]);
 
             setLabel(xAxisLabel, "x_label", false);
             setLabel(yAxisLabel, "y_label", false);
-
 
             function make_x_gridlines() {
                 return d3.axisBottom(xScale).ticks(dataValues.length);
