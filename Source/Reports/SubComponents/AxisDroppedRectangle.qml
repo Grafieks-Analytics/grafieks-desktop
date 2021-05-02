@@ -24,28 +24,37 @@ Rectangle{
         axisRectangle.color = itemType.toLowerCase() === 'numerical' ? Constants.defaultYAxisColor : Constants.defaultXAxisColor
     }
 
+    function onDateFormatSelected(index){
+        var dateFormat = dateCalculations.get(index).dateFormat;
+        report_desiner_page.d3PropertyConfig['dateFormat'] = dateFormat;
+        report_desiner_page.reDrawChart();
+    }
+
     ListModel{
         id: dateCalculations
-
+        ListElement{
+            calculationName:"Year"
+            dateFormat: "%Y"
+        }
         ListElement{
             calculationName:"Day"
-            calculationType: "string"
-            calculationCompareValue : "count"
+            dateFormat: "%d"
         }
         ListElement{
             calculationName:"Month"
-            calculationType: "string"
-            calculationCompareValue : "countdistinct"
+            dateFormat: "%b"
+        }
+        ListElement{
+            calculationName:"Day-Month-Year"
+            dateFormat: "%d %b %Y"
+        }
+        ListElement{
+            calculationName:"Month & Year"
+            dateFormat: "%b %Y"
         }
         ListElement{
             calculationName:"Quarter"
-            calculationType: "string"
-            calculationCompareValue : "minimum"
-        }
-        ListElement{
-            calculationName:"Year"
-            calculationType: "string"
-            calculationCompareValue : "maximum"
+            dateFormat: "%d-%m-%Y"
         }
 
     }
@@ -157,6 +166,7 @@ Rectangle{
             height: parent.height
             font.pixelSize: Constants.fontReading
             anchors.centerIn: parent
+            onCurrentIndexChanged: onDateFormatSelected(currentIndex)
         }
 
     }
