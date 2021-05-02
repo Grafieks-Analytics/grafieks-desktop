@@ -152,7 +152,7 @@
                         800,
                         400,
                         200,
-                        -1,
+                        1,
                         100,
                         300,
 
@@ -263,11 +263,14 @@
                         30,
                         40,
                         100,
-                        0,
+                        20,
                     ],
                 ],
                 ["Countries", "Population"],
             ];
+
+            data[0][0] = data[0][0].splice(0, 100);
+            data[0][1] = data[0][1].splice(0, 100);
 
             drawChart(data);
 
@@ -485,6 +488,33 @@
                 //     .style("text-anchor", "middle");
 
                 setYaxisWidth();
+
+                if (
+                    chartType == constants.chartType.FIT_WIDTH &&
+                    dataValues[0].length > 20
+                ) {
+                    setXaxisWidth();
+                }
+
+                function setXaxisWidth() {
+                    var allYAxisTicks = document.querySelectorAll(
+                        ".x-axis .tick"
+                    );
+                    var maxWidth = 0;
+                    for (var i = 0; i < allYAxisTicks.length; i++) {
+                        var tick = allYAxisTicks[i];
+                        var width = tick.getBBox().width;
+                        if (width > maxWidth) {
+                            maxWidth = width;
+                        }
+                    }
+
+                    d3.selectAll(".x-axis text")
+                        .attr("transform", "rotate(-90)")
+                        .attr("dy", "0.3em")
+                        .attr("x", "-" + maxWidth)
+                        .attr("y", "0");
+                }
 
                 function setYaxisWidth() {
                     var allYAxisTicks = document.querySelectorAll(
