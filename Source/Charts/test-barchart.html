@@ -10,14 +10,10 @@
                 padding: 0;
                 margin: 0;
                 overflow-y: hidden;
-                /* overflow-x: hidden; */
             }
             #yAxisDiv {
                 position: fixed;
                 background: #fff;
-            }
-            #my_dataviz {
-                /* overflow-x: scroll; */
             }
         </style>
     </head>
@@ -27,6 +23,7 @@
             <div id="my_dataviz"></div>
         </div>
         <div id="tooltip"></div>
+
         <script>
             var data = [
                 [
@@ -42,6 +39,7 @@
                         "A",
                         "B",
                         "C",
+                        "D",
                         "D",
                         "E",
                         "F",
@@ -77,162 +75,97 @@
                         "X1",
                         "Y1",
 
-                        "N2",
-                        "O2",
-                        "P2",
-                        "Q2",
-                        "R2",
-                        "S2",
-                        "T2",
-                        "U2",
-                        "V2",
-                        "W2",
-                        "X2",
-                        "Y2",
+                        // "N2",
+                        // "O2",
+                        // "P2",
+                        // "Q2",
+                        // "R2",
+                        // "S2",
+                        // "T2",
+                        // "U2",
+                        // "V2",
+                        // "W2",
+                        // "X2",
+                        // "Y2",
 
-                        "L3",
-                        "M3",
-                        "N3",
-                        "O3",
-                        "P3",
-                        "Q3",
-                        "R3",
-                        "S3",
-                        "T3",
-                        "U3",
-                        "V3",
-                        "W3",
-                        "X3",
-                        "Y3",
+                        // "L3",
+                        // "M3",
+                        // "N3",
+                        // "O3",
+                        // "P3",
+                        // "Q3",
+                        // "R3",
+                        // "S3",
+                        // "T3",
+                        // "U3",
+                        // "V3",
+                        // "W3",
+                        // "X3",
+                        // "Y3",
 
-                        "L4",
-                        "M4",
-                        "N4",
-                        "O4",
-                        "P4",
-                        "Q4",
-                        "R4",
-                        "S4",
-                        "T4",
-                        "U4",
-                        "V4",
-                        "W4",
-                        "X4",
-                        "Y4",
+                        // "L4",
+                        // "M4",
+                        // "N4",
+                        // "O4",
+                        // "P4",
+                        // "Q4",
+                        // "R4",
+                        // "S4",
+                        // "T4",
+                        // "U4",
+                        // "V4",
+                        // "W4",
+                        // "X4",
+                        // "Y4",
 
-                        "L5",
-                        "M5",
-                        "N5",
-                        "O5",
-                        "P5",
-                        "Q5",
-                        "R5",
-                        "S5",
-                        "T5",
-                        "U5",
-                        "V5",
-                        "W5",
-                        "X5",
-                        "Y5",
+                        // "L5",
+                        // "M5",
+                        // "N5",
+                        // "O5",
+                        // "P5",
+                        // "Q5",
+                        // "R5",
+                        // "S5",
+                        // "T5",
+                        // "U5",
+                        // "V5",
+                        // "W5",
+                        // "X5",
+                        // "Y5",
 
-                        "L6",
-                        "M6",
-                        "N6",
-                        "O6",
-                        "P6",
-                        "Q6",
-                        "R6",
-                        "S6",
-                        "T6",
-                        "U6",
-                        "V6",
-                        "W6",
-                        "X6",
-                        "Y6",
+                        // "L6",
+                        // "M6",
+                        // "N6",
+                        // "O6",
+                        // "P6",
+                        // "Q6",
+                        // "R6",
+                        // "S6",
+                        // "T6",
+                        // "U6",
+                        // "V6",
+                        // "W6",
+                        // "X6",
+                        // "Y6",
                     ],
                     [
-                        200,
-                        830,
+                        12020,
+                        99200,
                         400,
                         200,
-                        1,
-                        100,
-                        -820,
-                        10,
-                        2,
-                        30,
-                        40,
+                        20992,
                         100,
                         300,
-                        10,
-                        2,
-                        30,
-                        40,
-                        100,
-                        300,
-                        10,
-                        10,
-                        2,
-                        30,
-                        40,
-                        100,
-                        300,
-                        10,
-                        2,
-                        30,
-                        40,
-                        100,
-                        300,
-                        10,
-                        10,
-                        2,
-                        30,
-                        40,
-                        100,
-                        300,
-                        10,
-                        2,
-                        30,
-                        40,
-                        100,
-                        300,
-                        10,
-                        10,
-                        2,
-                        30,
-                        40,
-                        100,
-                        300,
-                        10,
-                        2,
-                        30,
-                        40,
-                        100,
-                        300,
-                        10,
 
                         10,
-                        2,
+                        20921,
                         30,
-                        40,
-                        100,
                         300,
-                        10,
-                        2,
-                        30,
-                        40,
-                        100,
-                        300,
-                        10,
-                        10,
-                        2,
-                        30,
-                        40,
-                        100,
-                        300,
-                        10,
-                        2,
-                        30,
+                        13300,
+                        30330,
+                        321203,
+                        23232,
+                        333220,
                         40,
                         100,
                         300,
@@ -241,9 +174,16 @@
                         2,
                         30,
                         40,
-                        100,
+                        223100,
                         300,
-                        10,
+                        3310,
+                        23232,
+                        332330,
+                        2240,
+                        12200,
+                        32200,
+                        222222,
+                        100099,
                         2,
                         30,
                         40,
@@ -251,20 +191,83 @@
                         300,
                         10,
                         2,
-                        30,
-                        40,
-                        100,
-                        300,
-                        10,
-                        2,
-                        30,
-                        40,
 
-                        10,
-                        2,
-                        -30,
+                        30,
+                        40,
                         100,
-                        20,
+                        300,
+
+                        // 10,
+                        // 10,
+
+                        // 2,
+                        // 30,
+                        // 40,
+                        // 100,
+                        // 300,
+                        // 10,
+                        // 2,
+                        // 30,
+                        // 40,
+                        // 100,
+                        // 300,
+                        // 10,
+
+                        // 10,
+                        // 2,
+                        // 30,
+                        // 40,
+                        // 100,
+                        // 300,
+                        // 10,
+                        // 2,
+                        // 30,
+                        // 40,
+                        // 100,
+                        // 300,
+                        // 10,
+                        // 10,
+                        // 2,
+                        // 30,
+                        // 40,
+                        // 100,
+                        // 300,
+                        // 10,
+                        // 2,
+                        // 30,
+                        // 40,
+                        // 100,
+                        // 300,
+                        // 10,
+                        // 10,
+                        // 2,
+                        // 30,
+                        // 40,
+                        // 100,
+                        // 300,
+                        // 10,
+                        // 2,
+                        // 30,
+                        // 40,
+                        // 100,
+                        // 300,
+                        // 10,
+                        // 2,
+                        // 30,
+                        // 40,
+                        // 100,
+                        // 300,
+                        // 10,
+                        // 2,
+                        // 30,
+                        // 40,
+
+                        // 10,
+                        // 2,
+                        // 30,
+                        // 40,
+                        // 100,
+                        // 0,
                     ],
                 ],
                 ["Countries", "Population"],
@@ -2796,49 +2799,12 @@
 
                 var margin = { top: 40, right: 20, bottom: 80, left: 70 };
                 var width = window.innerWidth - margin.left - margin.right;
-
-                var xAxisDataSet = dataValues[0];
-
-                var xAxisDateWiseValues = {};
-
-                var valueDateType = false;
-                if (isDateFormat(xAxisDataSet[0])) {
-                    valueDateType = true;
-                }
-
-                if (valueDateType) {
-                    xAxisDataSet.forEach((d, i) => {
-                        xAxisDataSet[i] = new Date(xAxisDataSet[i]);
-                        var requiredTypeData = getDateFormattedData(
-                            d,
-                            dateFormat
-                        );
-
-                        if (!xAxisDateWiseValues[requiredTypeData]) {
-                            xAxisDateWiseValues[requiredTypeData] = 0;
-                        }
-
-                        xAxisDateWiseValues[requiredTypeData] +=
-                            dataValues[1][i];
-                    });
-
-                    var sortedKeys = sortDates(xAxisDateWiseValues, dateFormat);
-
-                    dataValues[0] = sortedKeys;
-                    dataValues[1] = sortedKeys.map(
-                        (d, i) => xAxisDateWiseValues[d]
-                    );
-                    data[0] = dataValues;
-                }
-
                 if (chartType == constants.chartType.STANDARD) {
                     width = dataValues[0].length * standartThresholdWidth;
                 }
-
                 var height = window.innerHeight - margin.top - margin.bottom;
 
                 d3.selectAll("#my_dataviz").html("");
-                d3.selectAll("#yAxisDiv").html("");
 
                 //add svg with margin !important
                 //this is svg is actually group
@@ -2854,6 +2820,18 @@
                     );
 
                 var dataset = dataValues[1];
+                var xAxisDataSet = dataValues[0];
+
+                var valueDateType = false;
+                if (isDateFormat(xAxisDataSet[0])) {
+                    valueDateType = true;
+                }
+
+                if (valueDateType) {
+                    xAxisDataSet.forEach((d, i) => {
+                        xAxisDataSet[i] = new Date(xAxisDataSet[i]);
+                    });
+                }
 
                 var maxHeight = d3.max(dataset, function (d) {
                     return Math.abs(d);
@@ -2901,11 +2879,9 @@
                 //add x axis
                 var xScale = d3
                     .scaleBand()
-                    .domain(dataValues[0])
-                    .range([0, width])
-                    .padding(paddingInner)
-                    .paddingInner(paddingInner);
-                //scaleBand is used for  bar chart
+                    .domain(xAxisDataSet)
+                    .rangeRound([0, width])
+                    .paddingInner(paddingInner); //scaleBand is used for  bar chart
 
                 /*if domain is specified, sets the domain to the specified array of values.
             The first element in domain will be mapped to the first band, the second domain value to the second band, and so on.
@@ -2921,7 +2897,7 @@
                     .append("rect")
                     .attr("class", "bar")
                     .attr("x", function (d, i) {
-                        return xScale(dataValues[0][i]); //i*(width/dataset.length);
+                        return xScale(xAxisDataSet[i]); //i*(width/dataset.length);
                     })
                     .attr("y", function (d) {
                         if (d < 0) {
@@ -2961,9 +2937,9 @@
                     });
 
                 var xAxis = d3.axisBottom(xScale);
-                // if (valueDateType) {
-                //     xAxis.tickFormat(d3.timeFormat(dateFormat));
-                // }
+                if (valueDateType) {
+                    xAxis.tickFormat(d3.timeFormat(dateFormat));
+                }
 
                 /*.tickFormat("");remove tick label*/
 
@@ -2993,33 +2969,6 @@
 
                 setYaxisWidth();
 
-                if (
-                    chartType == constants.chartType.FIT_WIDTH &&
-                    dataValues[0].length > 20
-                ) {
-                    setXaxisWidth();
-                }
-
-                function setXaxisWidth() {
-                    var allYAxisTicks = document.querySelectorAll(
-                        ".x-axis .tick"
-                    );
-                    var maxWidth = 0;
-                    for (var i = 0; i < allYAxisTicks.length; i++) {
-                        var tick = allYAxisTicks[i];
-                        var width = tick.getBBox().width;
-                        if (width > maxWidth) {
-                            maxWidth = width;
-                        }
-                    }
-
-                    d3.selectAll(".x-axis text")
-                        .attr("transform", "rotate(-90)")
-                        .attr("dy", "0.3em")
-                        .attr("x", "-" + maxWidth)
-                        .attr("y", "0");
-                }
-
                 function setYaxisWidth() {
                     var allYAxisTicks = document.querySelectorAll(
                         ".y-axis .tick"
@@ -3040,30 +2989,7 @@
                         "transform",
                         "translate(" + (maxWidth - margin.left) + "," + 0 + ")"
                     );
-                }
-
-                function sortDates(dateDataset, dateFormat) {
-                    var parseTime = d3.timeParse(dateFormat);
-                    var dates = Object.keys(dateDataset);
-                    var newDataSet = [];
-                    dates.forEach((d) => {
-                        d = new Date(parseTime(d)).getTime();
-                        newDataSet.push(d);
-                    });
-                    dates = newDataSet.sort();
-                    dates = dates.map((d) => {
-                        return d3.timeFormat(dateFormat)(new Date(d));
-                    });
-
-                    if (
-                        dateFormat == "%b" ||
-                        dateFormat == "%m" ||
-                        dateFormat == "%B" ||
-                        dateFormat == "%d"
-                    ) {
-                        dates = dates.reverse();
-                    }
-                    return dates;
+                    console.log(maxWidth);
                 }
 
                 function make_x_gridlines(x) {
@@ -3071,10 +2997,6 @@
                 }
                 function make_y_gridlines(y) {
                     return d3.axisLeft(y).ticks(yaxisTicks);
-                }
-
-                function getDateFormattedData(dateValue, dateFormat) {
-                    return d3.timeFormat(dateFormat)(new Date(dateValue));
                 }
             }
         </script>
