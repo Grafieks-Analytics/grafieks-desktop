@@ -111,6 +111,7 @@ Item{
     function destroyRectangle(counter){
         newItem.destroy()
         destroyComponents(counter, "all")
+        joinPopup.visible = false
     }
 
 
