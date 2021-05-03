@@ -283,100 +283,93 @@ Item {
         // 3. Main rect front map
         // 4. Front rect back map
 
-        if(refObject === dataModellerItem.firstRectId){
-            DSParamsModel.resetDataModel()
-            deleteAll()
+        // IF the main object is deleted
+        if(depth === "all"){
 
-        } else{
+            // Delete rectangle front and back coordinates. Also delete the rectangle
+            // a.1.Main rect(value)
+            // a.2.Rect front
+            // a.3.Rect back
+            if(rectangles.has(refObject)){
 
-            // IF the main object is deleted
-            if(depth === "all"){
+                // Ensure that deleted tables are not reflected in generated query later
+                let dynamicObjectName =  DSParamsModel.queryJoiner + rectangles.get(refObject).name + DSParamsModel.queryJoiner + "."
+                DSParamsModel.removeQuerySelectParamsList(dynamicObjectName, true)
 
-                // Delete rectangle front and back coordinates. Also delete the rectangle
-                // a.1.Main rect(value)
-                // a.2.Rect front
-                // a.3.Rect back
-                if(rectangles.has(refObject)){
-
-                    // Ensure that deleted tables are not reflected in generated query later
-                    let dynamicObjectName =  DSParamsModel.queryJoiner + rectangles.get(refObject).name + DSParamsModel.queryJoiner + "."
-                    DSParamsModel.removeQuerySelectParamsList(dynamicObjectName, true)
-
-                    rectangles.delete(refObject);
-                    frontRectangleCoordinates.delete(refObject)
-                    rearRectangleCoordinates.delete(refObject)
-                }
-
-
-                if(rearRectLineMaps.has(refObject) === true){
-                    rearRectLineMaps.get(refObject).forEach(function(value){
-
-                        // a.6.Immediately behind line (delete object and map value)
-                        // a.7.Immediately behind join box (delete object and map value)
-                        // Delete object
-                        newConnectingLine.get(value).destroy();
-                        newJoinBox.get(value).destroy();
-
-                        // Delete values from the map
-                        newConnectingLine.delete(value)
-                        newJoinBox.delete(value)
-
-
-                        // a.8.Immediately behind rect front map
-                        frontRectLineMaps.delete((value))
-
-                        // Delete from DSParamsModel
-                        DSParamsModel.removeJoinBoxTableMap(value)
-                        DSParamsModel.removeJoinIconMap(value)
-                        DSParamsModel.removeJoinTypeMap(value)
-                        DSParamsModel.removePrimaryJoinTable(value)
-                        DSParamsModel.removeJoinMapList(value, 0, true)
-
-                    })
-
-                    // a.5.Rect Back map
-                    rearRectLineMaps.delete(refObject)
-                }
+                rectangles.delete(refObject);
+                frontRectangleCoordinates.delete(refObject)
+                rearRectangleCoordinates.delete(refObject)
             }
 
-            // Delete front line and joinbox (object and values)
-            // a.9 | b.1.Immediately front line
-            // a.10 | b.2.Immediately front join box
-            // Destroy dynamically created components
-            if(newConnectingLine.has(refObject))
-                newConnectingLine.get(refObject).destroy();
 
-            if(newJoinBox.has(refObject))
-                newJoinBox.get(refObject).destroy();
+            if(rearRectLineMaps.has(refObject) === true){
+                rearRectLineMaps.get(refObject).forEach(function(value){
 
-            // Delete values from the map
-            if(newConnectingLine.has(refObject))
-                newConnectingLine.delete(refObject)
+                    // a.6.Immediately behind line (delete object and map value)
+                    // a.7.Immediately behind join box (delete object and map value)
+                    // Delete object
+                    newConnectingLine.get(value).destroy();
+                    newJoinBox.get(value).destroy();
 
-            if(newJoinBox.has(refObject))
-                newJoinBox.delete(refObject)
+                    // Delete values from the map
+                    newConnectingLine.delete(value)
+                    newJoinBox.delete(value)
 
 
-            // a.11 | b.3.Immediately front rect back map
-            let frontItemOfConcernedRect = frontRectLineMaps.get(refObject)
-            let rearItemsOfFrontRect = rearRectLineMaps.get(frontItemOfConcernedRect);
+                    // a.8.Immediately behind rect front map
+                    frontRectLineMaps.delete((value))
 
-            let itemToRemoveFromRearRect = rearItemsOfFrontRect.indexOf(refObject)
-            rearItemsOfFrontRect.splice(itemToRemoveFromRearRect, 1)
+                    // Delete from DSParamsModel
+                    DSParamsModel.removeJoinBoxTableMap(value)
+                    DSParamsModel.removeJoinIconMap(value)
+                    DSParamsModel.removeJoinTypeMap(value)
+                    DSParamsModel.removePrimaryJoinTable(value)
+                    DSParamsModel.removeJoinMapList(value, 0, true)
 
-            rearRectLineMaps.set(frontItemOfConcernedRect, rearItemsOfFrontRect);
+                })
 
-            // a.4 | b.4 Rect front map
-            if(frontRectLineMaps.has(refObject))
-                frontRectLineMaps.delete(refObject);
-
-
-            DSParamsModel.removeJoinBoxTableMap(refObject)
-            DSParamsModel.removeJoinIconMap(refObject)
-            DSParamsModel.removeJoinTypeMap(refObject)
-            DSParamsModel.removePrimaryJoinTable(refObject)
-            DSParamsModel.removeJoinMapList(refObject, 0, true)
+                // a.5.Rect Back map
+                rearRectLineMaps.delete(refObject)
+            }
         }
+
+        // Delete front line and joinbox (object and values)
+        // a.9 | b.1.Immediately front line
+        // a.10 | b.2.Immediately front join box
+        // Destroy dynamically created components
+        if(newConnectingLine.has(refObject))
+            newConnectingLine.get(refObject).destroy();
+
+        if(newJoinBox.has(refObject))
+            newJoinBox.get(refObject).destroy();
+
+        // Delete values from the map
+        if(newConnectingLine.has(refObject))
+            newConnectingLine.delete(refObject)
+
+        if(newJoinBox.has(refObject))
+            newJoinBox.delete(refObject)
+
+
+        // a.11 | b.3.Immediately front rect back map
+        let frontItemOfConcernedRect = frontRectLineMaps.get(refObject)
+        let rearItemsOfFrontRect = rearRectLineMaps.get(frontItemOfConcernedRect);
+
+        let itemToRemoveFromRearRect = rearItemsOfFrontRect.indexOf(refObject)
+        rearItemsOfFrontRect.splice(itemToRemoveFromRearRect, 1)
+
+        rearRectLineMaps.set(frontItemOfConcernedRect, rearItemsOfFrontRect);
+
+        // a.4 | b.4 Rect front map
+        if(frontRectLineMaps.has(refObject))
+            frontRectLineMaps.delete(refObject);
+
+
+        DSParamsModel.removeJoinBoxTableMap(refObject)
+        DSParamsModel.removeJoinIconMap(refObject)
+        DSParamsModel.removeJoinTypeMap(refObject)
+        DSParamsModel.removePrimaryJoinTable(refObject)
+        DSParamsModel.removeJoinMapList(refObject, 0, true)
     }
 
 
