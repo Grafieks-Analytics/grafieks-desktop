@@ -226,6 +226,7 @@ Item {
                 })
 
                 // Call the function to process the rest of the query
+                console.log("FIRST RECT",  dataModellerItem.firstRectId);
                 joinOrder(dataModellerItem.firstRectId )
 
 
@@ -322,6 +323,7 @@ Item {
                     DSParamsModel.removeJoinBoxTableMap(value)
                     DSParamsModel.removeJoinIconMap(value)
                     DSParamsModel.removeJoinTypeMap(value)
+                    DSParamsModel.removePrimaryJoinTable(value)
                     DSParamsModel.removeJoinMapList(value, 0, true)
 
                 })
@@ -366,7 +368,6 @@ Item {
         DSParamsModel.removeJoinBoxTableMap(refObject)
         DSParamsModel.removeJoinIconMap(refObject)
         DSParamsModel.removeJoinTypeMap(refObject)
-        DSParamsModel.removePrimaryJoinTable(refObject)
         DSParamsModel.removeJoinMapList(refObject, 0, true)
     }
 
@@ -549,7 +550,6 @@ Item {
             let lastIndex = selectColumns.lastIndexOf(",");
             selectColumns = selectColumns.substring(0, lastIndex);
 
-            console.log("FIRST RECT 2", dataModellerItem.firstRectId, existingTables.get(dataModellerItem.firstRectId))
 
             finalQuery = "SELECT " + selectColumns + " FROM " + DSParamsModel.queryJoiner + existingTables.get(dataModellerItem.firstRectId) + DSParamsModel.queryJoiner + " " + joinString
 
@@ -826,12 +826,12 @@ Item {
             // Save the Join Box Table map for join manipulation later
             DSParamsModel.addToJoinBoxTableMap(counter, nearestTable.tableName, tableslist.tableName)
 
-            // Set the table name for the query in a join
-            DSParamsModel.addToPrimaryJoinTable(counter, tableslist.tableName)
-
             // Popup join details
             showJoinPopup(counter)
         }
+
+        // Set the table name for the query in a join
+        DSParamsModel.addToPrimaryJoinTable(counter, tableslist.tableName)
 
         // Push the coordinates in the array
         frontRectangleCoordinates.set(counter, {x: rectLeftX, y: rectLeftY})
