@@ -226,7 +226,6 @@ Item {
                 })
 
                 // Call the function to process the rest of the query
-
                 joinOrder(dataModellerItem.firstRectId )
 
 
@@ -323,7 +322,6 @@ Item {
                     DSParamsModel.removeJoinBoxTableMap(value)
                     DSParamsModel.removeJoinIconMap(value)
                     DSParamsModel.removeJoinTypeMap(value)
-                    DSParamsModel.removePrimaryJoinTable(value)
                     DSParamsModel.removeJoinMapList(value, 0, true)
 
                 })
@@ -550,6 +548,8 @@ Item {
 
             let lastIndex = selectColumns.lastIndexOf(",");
             selectColumns = selectColumns.substring(0, lastIndex);
+
+            console.log("FIRST RECT 2", dataModellerItem.firstRectId, existingTables.get(dataModellerItem.firstRectId))
 
             finalQuery = "SELECT " + selectColumns + " FROM " + DSParamsModel.queryJoiner + existingTables.get(dataModellerItem.firstRectId) + DSParamsModel.queryJoiner + " " + joinString
 
