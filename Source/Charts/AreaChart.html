@@ -4,13 +4,13 @@
 
     <!-- Load d3.js -->
     <script src="./Data/d3DefaultConfig.js"></script>
-        <script src="./Data/utils.js"></script>
+    <script src="./Data/utils.js"></script>
     <script src="./Data/d3.v4.min.js"></script>
     <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
     <link rel="icon" href="logo.png" type="image/png" sizes="32x32" />
     <link rel="stylesheet" href="Data/general.css" />
 
-    <title>Bar Chart</title>
+    <title>Area Chart</title>
 </head>
 <body>
     <div id="my_dataviz"></div>
@@ -37,7 +37,7 @@
         data = [
             [
                 ["2012-04-30T18:30:00.000Z", 58.13],
-                ["2012-04-29T18:30:00.000Z", 53.98],
+                ["2012-04-29T18:30:00.000Z", 103.98],
             ],
             ["date", "close"],
         ];
@@ -52,7 +52,7 @@
             if (!d3colorPalette) {
                 d3colorPalette = defaultD3Config.d3ColorPalette;
             }
-            const d3Colors = d3[d3colorPalette];
+            const d3Colors = d3colorPalette;
             if (!paddingInner) {
                 paddingInner = defaultD3Config.defaultPaddingInner;
             }
@@ -174,11 +174,10 @@
 
             // Generate Grid starts
 
-               const [xAxisLabel, yAxisLabel] = data[1];
+            const [xAxisLabel, yAxisLabel] = data[1];
 
             setLabel(xAxisLabel, "x_label", false);
             setLabel(yAxisLabel, "y_label", false);
-
 
             function make_x_gridlines() {
                 return d3.axisBottom(x).ticks(8);
@@ -188,7 +187,7 @@
             }
         }
 
-        // drawChart(data);
+        drawChart(data);
 
         // Generate Grid ends
     </script>
