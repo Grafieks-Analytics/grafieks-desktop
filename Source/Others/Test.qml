@@ -66,38 +66,38 @@ import QtQuick.Controls 2.12
 
 
 
-    Flickable {
-         id: flick
+//    Flickable {
+//         id: flick
 
-         width: 300;
-         height: 200;
-         contentWidth: edit.paintedWidth
-         contentHeight: edit.paintedHeight
-         clip: true
-         ScrollBar.vertical: ScrollBar {
-                    active: flick.moving || !flick.moving
-                }
+//         width: 300;
+//         height: 200;
+//         contentWidth: edit.paintedWidth
+//         contentHeight: edit.paintedHeight
+//         clip: true
+//         ScrollBar.vertical: ScrollBar {
+//                    active: flick.moving || !flick.moving
+//                }
 
-         function ensureVisible(r)
-         {
-             if (contentX >= r.x)
-                 contentX = r.x;
-             else if (contentX+width <= r.x+r.width)
-                 contentX = r.x+r.width-width;
-             if (contentY >= r.y)
-                 contentY = r.y;
-             else if (contentY+height <= r.y+r.height)
-                 contentY = r.y+r.height-height;
-         }
+//         function ensureVisible(r)
+//         {
+//             if (contentX >= r.x)
+//                 contentX = r.x;
+//             else if (contentX+width <= r.x+r.width)
+//                 contentX = r.x+r.width-width;
+//             if (contentY >= r.y)
+//                 contentY = r.y;
+//             else if (contentY+height <= r.y+r.height)
+//                 contentY = r.y+r.height-height;
+//         }
 
-         TextEdit {
-             id: edit
-             width: flick.width
-             focus: true
-             wrapMode: TextEdit.Wrap
-             onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
-         }
-     }
+//         TextEdit {
+//             id: edit
+//             width: flick.width
+//             focus: true
+//             wrapMode: TextEdit.Wrap
+//             onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
+//         }
+//     }
 
 
 
@@ -210,161 +210,160 @@ import QtQuick.Controls 2.12
 //              }
 //          }
 
-//import QtQuick 2.3
-//import QtQuick.Window 2.2
-//import QtQuick.Controls 1.2
-//import QtQuick.Controls.Styles 1.2
+import QtQuick 2.3
+import QtQuick.Window 2.2
+import QtQuick.Controls 1.2
+import QtQuick.Controls.Styles 1.2
 
-//Rectangle {
-//    id: win
-//    width: 860
-//    height: 560
-//    visible: true
+Rectangle {
+    id: win
+    width: 860
+    height: 560
+    visible: true
 
-//    ListModel {
-//        id: libraryModel
-//        ListElement {
-//            title: "A Masterpiece"
-//            author: "Gabriel"
-//        }
-//        ListElement {
-//            title: "Brilliance"
-//            author: "Jens"
-//        }
-//        ListElement {
-//            title: "Outstanding"
-//            author: "Frederik"
-//        }
-//        ListElement {
-//            title: "Outstanding"
-//            author: "Frederik"
-//        }
-//        ListElement {
-//            title: "Outstanding"
-//            author: "Frederik"
-//        }
-//        ListElement {
-//            title: "Outstanding"
-//            author: "Frederik"
-//        }
-//        ListElement {
-//            title: "Outstanding"
-//            author: "Frederik"
-//        }
-//        ListElement {
-//            title: "Outstanding"
-//            author: "Frederik"
-//        }
-//    }
+    ListModel {
+        id: libraryModel
+        ListElement {
+            title: "A Masterpiece"
+            author: "Gabriel"
+        }
+        ListElement {
+            title: "Brilliance"
+            author: "Jens"
+        }
+        ListElement {
+            title: "Outstanding"
+            author: "Frederik"
+        }
+        ListElement {
+            title: "Outstanding"
+            author: "Frederik"
+        }
+        ListElement {
+            title: "Outstanding"
+            author: "Frederik"
+        }
+        ListElement {
+            title: "Outstanding"
+            author: "Frederik"
+        }
+        ListElement {
+            title: "Outstanding"
+            author: "Frederik"
+        }
+        ListElement {
+            title: "Outstanding"
+            author: "Frederik"
+        }
+    }
 
-//    TableView {
+    TableView {
 
-//        width: parent.width
-//        height: parent.height
+        width: parent.width
+        height: parent.height
 
-//        alternatingRowColors: false
-
-
-//        TableViewColumn {
-//            role: "title"
-//            title: "Title"
-//            width: parent.width/2
-//        }
-//        TableViewColumn {
-//            role: "author"
-//            title: "Author"
-//            width: parent.width/2
-//        }
+        alternatingRowColors: false
 
 
-//        model: libraryModel
+        TableViewColumn {
+            role: "title"
+            title: "Title"
+            width: parent.width/2
+        }
+        TableViewColumn {
+            role: "author"
+            title: "Author"
+            width: parent.width/2
+        }
 
-//        style: TableViewStyle {
-//            headerDelegate: Rectangle {
-//                height: textItem.implicitHeight * 1.2
-//                width: textItem.implicitWidth
-//                color: "lightgrey"
-//                Text {
-//                    id: textItem
-//                    anchors.fill: parent
-//                    verticalAlignment: Text.AlignVCenter
-//                    horizontalAlignment: styleData.textAlignment
-//                    anchors.leftMargin: 12
-//                    text: styleData.value
-//                    elide: Text.ElideRight
-//                    color: textColor
-//                    renderType: Text.NativeRendering
+        model: libraryModel
 
-//                }
-//                Rectangle {
-//                    anchors.right: parent.right
-//                    anchors.top: parent.top
-//                    anchors.bottom: parent.bottom
-//                    anchors.bottomMargin: 1
-//                    anchors.topMargin: 1
-//                    width: 1
-//                    color: "black"
-//                    border.color: "black"
-//                }
-//                Rectangle {
-//                    //                    anchors.right: parent.right
-//                    //                    anchors.top: parent.top
-//                    anchors.bottom: parent.bottom
-//                    //                    anchors.bottomMargin: 1
-//                    //                    anchors.topMargin: 1
-//                    width: parent.width
-//                    height: 1
+        style: TableViewStyle {
+            headerDelegate: Rectangle {
+                height: textItem.implicitHeight * 1.2
+                width: textItem.implicitWidth
+                color: "lightgrey"
+                Text {
+                    id: textItem
+                    anchors.fill: parent
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: styleData.textAlignment
+                    anchors.leftMargin: 12
+                    text: styleData.value
+                    elide: Text.ElideRight
+                    color: textColor
+                    renderType: Text.NativeRendering
 
-//                    color: "black"
-//                    border.color: "black"
-//                }
-//            }
+                }
+                Rectangle {
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 1
+                    anchors.topMargin: 1
+                    width: 1
+                    color: "black"
+                    border.color: "black"
+                }
+                Rectangle {
+                    //                    anchors.right: parent.right
+                    //                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    //                    anchors.bottomMargin: 1
+                    //                    anchors.topMargin: 1
+                    width: parent.width
+                    height: 1
 
-//            itemDelegate: Rectangle {
-//                height: textItem.implicitHeight * 1.2
-//                width: textItem.implicitWidth
-//                color: "white"
-//                //                border.color: "black"
-//                Text {
-//                    id: textItem1
-//                    anchors.fill: parent
-//                    verticalAlignment: Text.AlignVCenter
-//                    horizontalAlignment: styleData.textAlignment
-//                    anchors.leftMargin: 12
-//                    text: styleData.value
-//                    elide: Text.ElideRight
-//                    color: textColor
-//                    renderType: Text.NativeRendering
-//                }
-//                Rectangle {
-//                    anchors.right: parent.right
-//                    anchors.top: parent.top
-//                    anchors.bottom: parent.bottom
-//                    //                    anchors.bottomMargin: 1
-//                    //                    anchors.topMargin: 1
-//                    width: 1
-//                    color: "black"
-//                    border.color: "black"
-//                }
-//                Rectangle {
-//                    //                    anchors.right: parent.right
-//                    //                    anchors.top: parent.top
-//                    anchors.bottom: parent.bottom
-//                    //                    anchors.bottomMargin: 1
-//                    //                    anchors.topMargin: 1
-//                    width: parent.width
-//                    height: 1
+                    color: "black"
+                    border.color: "black"
+                }
+            }
 
-//                    color: "black"
-//                    border.color: "black"
-//                }
-//            }
+            itemDelegate: Rectangle {
+                height: textItem.implicitHeight * 1.2
+                width: textItem.implicitWidth
+                color: "white"
+                //                border.color: "black"
+                Text {
+                    id: textItem1
+                    anchors.fill: parent
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: styleData.textAlignment
+                    anchors.leftMargin: 12
+                    text: styleData.value
+                    elide: Text.ElideRight
+                    color: textColor
+                    renderType: Text.NativeRendering
+                }
+                Rectangle {
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    //                    anchors.bottomMargin: 1
+                    //                    anchors.topMargin: 1
+                    width: 1
+                    color: "black"
+                    border.color: "black"
+                }
+                Rectangle {
+                    //                    anchors.right: parent.right
+                    //                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    //                    anchors.bottomMargin: 1
+                    //                    anchors.topMargin: 1
+                    width: parent.width
+                    height: 1
+
+                    color: "black"
+                    border.color: "black"
+                }
+            }
 
 
 
-//        }
-//    }
-//}
+        }
+    }
+}
 
 
 

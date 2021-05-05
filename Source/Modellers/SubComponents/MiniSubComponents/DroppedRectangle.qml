@@ -175,7 +175,7 @@ Item{
                         else if(colType == "categorical"){
                             source : "/Images/icons/string new.png";
                         }
-                        else if(colType == "date"){
+                        else {
                             source : "/Images/icons/date.png";
                         }
 
@@ -268,9 +268,10 @@ Item{
         //        scale: Constants.scaleTable
         //        x:Constants.newPosition+droppedRectangle.x
         //        y:Constants.droppedRectangle.y
-        border.color: colors[droppedCount+1]
-        //        color: "#26009B8F"
-        color: colors[droppedCount+1]
+//        border.color: colors[droppedCount+1]
+         border.color: "#fdb462"
+                color: "#fdb462"
+//        color: colors[droppedCount+1]
 
         height: 30
 
@@ -345,7 +346,8 @@ Item{
 
 
     Rectangle{
-        border.color: colors[droppedCount+1]
+//        border.color: colors[droppedCount+1]
+         border.color:"#fdb462"
         anchors.top : droppedRectangle.bottom
         width: 200
         height: tableId.height
