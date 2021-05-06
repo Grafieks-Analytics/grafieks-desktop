@@ -1,4 +1,4 @@
-import QtQuick 2.15
+//import QtQuick 2.15
 
 //Rectangle {
 
@@ -55,8 +55,8 @@ import QtQuick 2.15
 
 //}
 
-import QtQuick 2.12
-import QtQuick.Controls 2.12
+//import QtQuick 2.12
+//import QtQuick.Controls 2.12
 
 //ApplicationWindow {
 //    visible: true
@@ -214,12 +214,35 @@ import QtQuick 2.3
 import QtQuick.Window 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Controls.Styles 1.2
+import com.grafieks.singleton.constants 1.0
+
+
 
 Rectangle {
     id: win
     width: 860
     height: 560
     visible: true
+
+    property var roleList:[];
+
+    Connections{
+        target: QueryModel
+
+        function onSqlHasData(hasData){
+            view.model = hasData === true? QueryModel: ""
+//            globalConType = Constants.sqlType
+
+        }
+
+        function onHeaderDataChanged(tableHeaders){
+            roleList = tableHeaders
+            console.log("tableHeaders",tableHeaders)
+        }
+
+    }
+
+    property var name: [{"role":"title","title":"Title"},{"role":"author","title":"author"}]
 
     ListModel {
         id: libraryModel
@@ -257,7 +280,16 @@ Rectangle {
         }
     }
 
+    Component{
+        id:columnComponent
+        TableViewColumn {
+
+            width: 100
+        }
+    }
+
     TableView {
+        id:view
 
         width: parent.width
         height: parent.height
@@ -265,18 +297,31 @@ Rectangle {
         alternatingRowColors: false
 
 
-        TableViewColumn {
-            role: "title"
-            title: "Title"
-            width: parent.width/2
-        }
-        TableViewColumn {
-            role: "author"
-            title: "Author"
-            width: parent.width/2
-        }
+//        TableViewColumn {
+//            role: "title"
+//            title: "Title"
+//            width: parent.width/2
+//        }
+//        TableViewColumn {
+//            role: "author"
+//            title: "Author"
+//            width: parent.width/2
+//        }
 
-        model: libraryModel
+        resources:
+        {
+
+
+            var roleList = ["id","country","country2","state","city","district","ward","population"]
+            var temp = []
+            for(var i=0; i<roleList.length; i++)
+            {
+                var role  = roleList[i]
+                temp.push(columnComponent.createObject(view, { "role": role, "title": role}))
+            }
+            return temp
+        }
+//        model: libraryModel
 
         style: TableViewStyle {
             headerDelegate: Rectangle {
@@ -330,7 +375,7 @@ Rectangle {
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: styleData.textAlignment
                     anchors.leftMargin: 12
-                    text: styleData.value
+                    text: modelData
                     elide: Text.ElideRight
                     color: textColor
                     renderType: Text.NativeRendering
