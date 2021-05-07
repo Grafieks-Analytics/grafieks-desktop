@@ -79,8 +79,11 @@ Item{
 
     function slotDisplayColor(glowColor, tableId){
 
-        if(tableId === parseInt(newItem.objectName))
-            droppedRectangle.color = glowColor
+        if(typeof newItem.objectName !== "undefined"){
+            if(tableId === parseInt(newItem.objectName))
+                droppedRectangle.color = glowColor
+        }
+
     }
 
     function displayColumns(allColumns, tableName){
