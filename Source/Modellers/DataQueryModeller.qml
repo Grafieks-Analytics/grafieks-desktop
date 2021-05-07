@@ -40,7 +40,7 @@ Page {
     property Page page: queryModellerPage
     property LeftMenuBar leftMenuBar : left_menubar
     property int droppedCount: 0
-    property var connectionType: Constants.sqlType
+    property var connectionType: GeneralParamsModel.getDbClassification()
 
 
     // Dont delete this
@@ -382,13 +382,13 @@ Page {
 
     function clearModelQueryData(){
 
-        if(connectionType === Constants.sqlType){
-            QueryModel.removeTmpChartData()
-        } else if(connectionType === Constants.duckType){
-            DuckQueryModel.removeTmpChartData()
-        } else{
-            ForwardOnlyQueryModel.removeTmpChartData()
-        }
+//        if(connectionType === Constants.sqlType){
+//            QueryModel.removeTmpChartData()
+//        } else if(connectionType === Constants.duckType){
+//            DuckQueryModel.removeTmpChartData()
+//        } else{
+//            ForwardOnlyQueryModel.removeTmpChartData()
+//        }
 
         NewTableColumnsModel.clearColumns();
     }
@@ -434,6 +434,13 @@ Page {
         ConnectorsLoginModel.sqlLogout()
         ChartsModel.removeTmpChartData()
         DSParamsModel.resetDataModel();
+        DSParamsModel.resetFilter()
+
+        // Clear filters
+        FilterCategoricalListModel.clearFilters()
+        FilterNumericalListModel.clearFilters()
+        FilterDateListModel.clearFilters()
+        TableSchemaModel.clearSchema()
 
         resetOnlineStorageType()
 

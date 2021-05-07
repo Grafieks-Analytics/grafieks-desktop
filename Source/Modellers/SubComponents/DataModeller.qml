@@ -55,7 +55,7 @@ Item {
     property string joinString: ""
     property int firstRectId : 1
 
-    property var connectionType: Constants.sqlType
+    property var connectionType: GeneralParamsModel.getDbClassification()
 
 
 
@@ -82,17 +82,6 @@ Item {
 
     Connections{
         target: ConnectorsLoginModel
-
-        function onConnectedDBType(conType){
-
-            if(conType === Constants.sqlType){
-                connectionType = Constants.sqlType
-            } else if(conType === Constants.duckType){
-                connectionType = Constants.duckType
-            } else{
-                connectionType = Constants.forwardType
-            }
-        }
 
         // Query joiner
 
