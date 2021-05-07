@@ -44,6 +44,8 @@ void DSParamsModel::resetDataModel()
     this->joinMapList.clear();
     this->primaryJoinTable.clear();
     this->querySelectParamsList.clear();
+    this->joinOrder.clear();
+    this->existingTables.clear();
 
     emit destroyLocalObjectsAndMaps();
 }
@@ -597,6 +599,160 @@ void DSParamsModel::removeJoinOrder(int joinOrderId)
 QVariantList DSParamsModel::fetchJoinOrder()
 {
     return this->joinOrder;
+}
+
+void DSParamsModel::addToExistingTables(int refObjId, QString tableName)
+{
+    this->existingTables.insert(refObjId, tableName);
+}
+
+void DSParamsModel::removeExistingTables(int refObjId)
+{
+    this->existingTables.remove(refObjId);
+}
+
+QVariant DSParamsModel::fetchExistingTables(int refObjId)
+{
+    return this->existingTables.value(refObjId);
+}
+
+int DSParamsModel::existingTablesSize()
+{
+    return this->existingTables.size();
+}
+
+void DSParamsModel::addToRectangles(int refObjId, const QVariant &rectangleObject)
+{
+    this->rectangles.insert(refObjId, rectangleObject);
+}
+
+void DSParamsModel::removeRectangles(int refObjId)
+{
+    this->rectangles.remove(refObjId);
+}
+
+QVariant DSParamsModel::fetchRectangles(int refObjId)
+{
+    return this->rectangles.value(refObjId);
+}
+
+QVariantMap DSParamsModel::fetchAllRectangles()
+{
+    QVariantMap output;
+    QMap<int, QVariant>::const_iterator i = this->rectangles.constBegin();
+    while (i != this->rectangles.constEnd()) {
+        output.insert(QString::number(i.key()), i.value());
+        ++i;
+    }
+
+    return output;
+}
+
+int DSParamsModel::rectanglesSize()
+{
+    return this->rectangles.size();
+}
+
+void DSParamsModel::addToFrontRectangleCoordinates(int refObjId, QVariant rectangleCoordinates)
+{
+    this->frontRectangleCoordinates.insert(refObjId, rectangleCoordinates);
+}
+
+void DSParamsModel::removeFrontRectangleCoordinates(int refObjId)
+{
+    this->frontRectangleCoordinates.remove(refObjId);
+}
+
+QVariant DSParamsModel::fetchFrontRectangleCoordinates(int refObjId)
+{
+    return this->frontRectangleCoordinates.value(refObjId);
+}
+
+void DSParamsModel::addToRearRectangleCoordinates(int refObjId, QVariant rectangleCoordinates)
+{
+    this->rearRectangleCoordinates.insert(refObjId, rectangleCoordinates);
+}
+
+void DSParamsModel::removeRearRectangleCoordinates(int refObjId)
+{
+    this->rearRectangleCoordinates.remove(refObjId);
+}
+
+QVariant DSParamsModel::fetchRearRectangleCoordinates(int refObjId)
+{
+    return this->rearRectangleCoordinates.value(refObjId);
+}
+
+QVariantMap DSParamsModel::fetchAllRearRectangleCoordinates()
+{
+    QVariantMap output;
+    QMap<int, QVariant>::const_iterator i = this->rearRectangleCoordinates.constBegin();
+    while (i != this->rearRectangleCoordinates.constEnd()) {
+        output.insert(QString::number(i.key()), i.value());
+        ++i;
+    }
+
+    return output;
+}
+
+void DSParamsModel::addToNewConnectingLine(int refObjId, const QVariant &lineObject)
+{
+    this->newConnectingLine.insert(refObjId, lineObject);
+}
+
+void DSParamsModel::removeNewConnectingLine(int refObjId)
+{
+    this->newConnectingLine.remove(refObjId);
+}
+
+QVariant DSParamsModel::fetchNewConnectingLine(int refObjId)
+{
+    return this->newConnectingLine.value(refObjId);
+}
+
+void DSParamsModel::addToFrontLineMap(int refObjId, QVariant lineObject)
+{
+    this->frontLineMap.insert(refObjId, lineObject);
+}
+
+void DSParamsModel::removeFrontLineMap(int refObjId)
+{
+    this->frontLineMap.remove(refObjId);
+}
+
+QVariant DSParamsModel::fetchFrontLineMap(int refObjId)
+{
+    return this->frontLineMap.value(refObjId);
+}
+
+void DSParamsModel::addToRearLineMap(int refObjId, QVariant lineObject)
+{
+    this->rearLineMap.insert(refObjId, lineObject);
+}
+
+void DSParamsModel::removeRearLineMap(int refObjId)
+{
+    this->rearLineMap.remove(refObjId);
+}
+
+QVariant DSParamsModel::fetchRearLineMap(int refObjId)
+{
+    return this->rearLineMap.value(refObjId);
+}
+
+void DSParamsModel::addToNewJoinBox(int refObjId, const QVariant &joinBoxObject)
+{
+    this->newJoinBox.insert(refObjId, joinBoxObject);
+}
+
+void DSParamsModel::removeNewJoinBox(int refObjId)
+{
+    this->newJoinBox.remove(refObjId);
+}
+
+QVariant DSParamsModel::fetchNewJoinBox(int refObjId)
+{
+    return this->newJoinBox.value(refObjId);
 }
 
 void DSParamsModel::addToJoinRelation(int refObjId, QString relation)
