@@ -37,6 +37,9 @@ DSParamsModel::~DSParamsModel()
 void DSParamsModel::resetDataModel()
 {
 
+    // First emit the signals to destroy the visual objects in qml
+    emit destroyLocalObjectsAndMaps();
+
     this->hideColumns.clear();
     this->joinBoxTableMap.clear();
     this->joinTypeMap.clear();
@@ -46,8 +49,14 @@ void DSParamsModel::resetDataModel()
     this->querySelectParamsList.clear();
     this->joinOrder.clear();
     this->existingTables.clear();
+    this->rectangles.clear();
+    this->frontRectangleCoordinates.clear();
+    this->rearRectangleCoordinates.clear();
+    this->newConnectingLine.clear();
+    this->frontLineMap.clear();
+    this->rearLineMap.clear();
+    this->newJoinBox.clear();
 
-    emit destroyLocalObjectsAndMaps();
 }
 
 bool DSParamsModel::saveDatasource(QString filename)
