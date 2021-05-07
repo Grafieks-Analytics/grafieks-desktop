@@ -34,7 +34,7 @@ Popup {
     property string tabBarOpen: Constants.categoricalTab
     property int mapKey : 0
 
-    property string globalConType: Constants.sqlType
+    property string globalConType: GeneralParamsModel.getDbClassification()
 
 
     /***********************************************************************************************************************/
@@ -137,6 +137,15 @@ Popup {
 
             add_btn_1.model =  categoricalModel
 
+        }
+
+        function onTableSchemaCleared(){
+            console.log("WHAT THE HELL")
+            categoricalModel.clear()
+            numericalModel.clear()
+            datesModel.clear()
+
+            add_btn_1.model =  categoricalModel
         }
     }
 
