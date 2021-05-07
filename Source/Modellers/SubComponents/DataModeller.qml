@@ -442,21 +442,17 @@ Item {
     // Destroy components and maps
     function deleteAll(){
         // Destroy dynamic objects
-        rectangles.forEach(function(value, index){
 
-            if(newConnectingLine.has(index)) newConnectingLine.get(index).destroy()
-            if(newJoinBox.has(index)) newJoinBox.get(index).destroy()
-            if(rectangles.has(index)) rectangles.get(index).destroy()
-        })
+        var rectangleObjects = DSParamsModel.fetchAllRectangles()
 
-        // Clear all maps
-        frontRectangleCoordinates.clear()
-        rearRectangleCoordinates.clear()
-        newConnectingLine.clear()
-        newJoinBox.clear()
-        rectangles.clear()
-        frontRectLineMaps.clear()
-        rearRectLineMaps.clear()
+        for (var prop in rectangleObjects) {
+            if(typeof DSParamsModel.fetchFrontRectangleCoordinates(prop) !== "undefined"){
+                if(typeof DSParamsModel.fetchNewConnectingLine(prop) !== "undefined") DSParamsModel.fetchNewConnectingLine(prop).destroy()
+                if(typeof DSParamsModel.fetchNewJoinBox(prop) !== "undefined") DSParamsModel.fetchNewJoinBox(prop).destroy()
+                if(typeof DSParamsModel.fetchRectangles(prop) !== "undefined") DSParamsModel.fetchRectangles(prop).destroy()
+
+            }
+        }
 
         // Reset other variables
         tempRearRectLineMaps = []
@@ -492,7 +488,7 @@ Item {
 
         objArray.forEach(function(item){
 
-            if(DSParamsModel.fetchRearLineMap(item) !== ""){
+            if(typeof DSParamsModel.fetchRearLineMap(item) !== "undefined"){
 
                 tmpArray = tmpArray.concat(DSParamsModel.fetchRearLineMap(item))
 
