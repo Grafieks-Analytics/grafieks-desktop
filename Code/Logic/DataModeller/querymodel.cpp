@@ -16,7 +16,7 @@ void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 
     QSqlQueryModel::setQuery(query, db);
     if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
-        qWarning() << QSqlQueryModel::lastError();
+        qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
 
     generateRoleNames();
 }
@@ -28,7 +28,7 @@ void QueryModel::setQuery(const QSqlQuery &query)
 
     QSqlQueryModel::setQuery(query);
     if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
-        qWarning() << QSqlQueryModel::lastError();
+        qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
 
     generateRoleNames();
 }
@@ -67,7 +67,7 @@ void QueryModel::removeTmpChartData()
     this->sqlChartHeader.clear();
     this->tableHeaders.clear();
 
-    QSqlQueryModel::clear();
+//    QSqlQueryModel::clear();
 
     emit sqlHasData(false);
     emit chartDataChanged(this->sqlChartData);
@@ -152,6 +152,7 @@ void QueryModel::executeQuery(QString &query)
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
         this->setQuery(query, dbMysql);
         this->setChartData();
+
         break;
     }
 

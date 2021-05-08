@@ -40,7 +40,6 @@ Page {
     property Page page: queryModellerPage
     property LeftMenuBar leftMenuBar : left_menubar
     property int droppedCount: 0
-    property var connectionType: Constants.sqlType
 
 
     // Dont delete this
@@ -54,11 +53,6 @@ Page {
 
     Connections{
         target: ConnectorsLoginModel
-
-        // Check connection type
-        function onConnectedDBType(conType){
-            connectionType = conType
-        }
 
         // Rest fetch data model from datasources
 
@@ -335,9 +329,9 @@ Page {
     }
 
     function searchTable(text){
-        if(connectionType === Constants.sqlType){
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             tableslist.model = NewTableListModel.filterTableList(text)
-        } else if(connectionType === Constants.duckType){
+        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
             tableslist.model = DuckDataModel.filterTableList(text)
         } else{
             tableslist.model = ForwardOnlyDataModel.filterTableList(text)
@@ -382,13 +376,13 @@ Page {
 
     function clearModelQueryData(){
 
-        if(connectionType === Constants.sqlType){
-            QueryModel.removeTmpChartData()
-        } else if(connectionType === Constants.duckType){
-            DuckQueryModel.removeTmpChartData()
-        } else{
-            ForwardOnlyQueryModel.removeTmpChartData()
-        }
+//        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+//            QueryModel.removeTmpChartData()
+//        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
+//            DuckQueryModel.removeTmpChartData()
+//        } else{
+//            ForwardOnlyQueryModel.removeTmpChartData()
+//        }
 
         NewTableColumnsModel.clearColumns();
     }
@@ -420,10 +414,10 @@ Page {
     }
 
     function disconnectDS(){
-        if(connectionType === Constants.sqlType){
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryModel.removeTmpChartData()
             NewTableListModel.clearData()
-        } else if(connectionType === Constants.duckType){
+        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
             DuckQueryModel.removeTmpChartData()
             DuckDataModel.clearData()
         } else{
@@ -434,6 +428,13 @@ Page {
         ConnectorsLoginModel.sqlLogout()
         ChartsModel.removeTmpChartData()
         DSParamsModel.resetDataModel();
+        DSParamsModel.resetFilter()
+
+        // Clear filters
+        FilterCategoricalListModel.clearFilters()
+        FilterNumericalListModel.clearFilters()
+        FilterDateListModel.clearFilters()
+        TableSchemaModel.clearSchema()
 
         resetOnlineStorageType()
 

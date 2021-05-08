@@ -34,9 +34,8 @@ Item {
     property real droppedY : 0
     property var frontRectangleCoordinates : new Map()
     property var rearRectangleCoordinates : new Map()
-    property var existingTables : new Map()
     property var tmpNearestTable: {"tableId" : 0, "tableName" : ""} // 0 // for highlighting nearest rect when an orphan rectangle is moved
-    property int tmpOrphanTableId:  0 // dragged orphan table id
+    property int tmpOrphanTableId:  1 // dragged orphan table id
 
     property var dynamicRectangle : Qt.createComponent("./MiniSubComponents/DroppedRectangle.qml");
     property var dynamicConnectorLine : Qt.createComponent("./MiniSubComponents/ConnectingLine.qml")
@@ -55,9 +54,6 @@ Item {
     readonly property string moduleName: "DataModeller"
     property string joinString: ""
     property int firstRectId : 1
-
-    property var connectionType: Constants.sqlType
-
 
 
 
@@ -84,17 +80,6 @@ Item {
 
     Connections{
         target: ConnectorsLoginModel
-
-        function onConnectedDBType(conType){
-
-            if(conType === Constants.sqlType){
-                connectionType = Constants.sqlType
-            } else if(conType === Constants.duckType){
-                connectionType = Constants.duckType
-            } else{
-                connectionType = Constants.forwardType
-            }
-        }
 
         // Query joiner
 
@@ -211,23 +196,25 @@ Item {
             // 5. Execute query
 
             var undefinedCounter = 0
-            dataModellerItem.rectangles.forEach(function(item, key){
-                if(dataModellerItem.frontRectLineMaps.has(key) === false)
+
+            // DSParams rectangle
+            var rectangleObjects = DSParamsModel.fetchAllRectangles()
+            for (var prop in rectangleObjects) {
+                if(DSParamsModel.fetchFrontRectangleCoordinates(prop) === "")
                     undefinedCounter++
-            })
+            }
 
             // Check if the rectangles are connected to some rectangle in front (except the first one)
             // If not throw an error
             if(undefinedCounter <= 1){
 
-                dataModellerItem.rectangles.forEach(function(item, key){
-                    if(dataModellerItem.frontRectLineMaps.has(key) === false)
-                        dataModellerItem.firstRectId  = key
-                })
+                for (let prop in rectangleObjects) {
+                    if(DSParamsModel.fetchFrontRectangleCoordinates(prop) === "")
+                        firstRectId  = prop
+                }
 
                 // Call the function to process the rest of the query
-
-                joinOrder(dataModellerItem.firstRectId )
+                joinOrder(firstRectId )
 
 
             } else{
@@ -236,6 +223,7 @@ Item {
                 queryErrorModal.open();
 
             }
+
         }
     }
 
@@ -283,100 +271,94 @@ Item {
         // 3. Main rect front map
         // 4. Front rect back map
 
-        if(refObject === dataModellerItem.firstRectId){
-            DSParamsModel.resetDataModel()
-            deleteAll()
+        // IF the main object is deleted
+        if(depth === "all"){
 
-        } else{
+            // Delete rectangle front and back coordinates. Also delete the rectangle
+            // a.1.Main rect(value)
+            // a.2.Rect front
+            // a.3.Rect back
+            if(DSParamsModel.fetchRectangles(refObject) !== ""){
 
-            // IF the main object is deleted
-            if(depth === "all"){
+                // Ensure that deleted tables are not reflected in generated query later
+                let dynamicObjectName =  DSParamsModel.queryJoiner + DSParamsModel.fetchRectangles(refObject).name + DSParamsModel.queryJoiner + "."
+                DSParamsModel.removeQuerySelectParamsList(dynamicObjectName, true)
 
-                // Delete rectangle front and back coordinates. Also delete the rectangle
-                // a.1.Main rect(value)
-                // a.2.Rect front
-                // a.3.Rect back
-                if(rectangles.has(refObject)){
-
-                    // Ensure that deleted tables are not reflected in generated query later
-                    let dynamicObjectName =  DSParamsModel.queryJoiner + rectangles.get(refObject).name + DSParamsModel.queryJoiner + "."
-                    DSParamsModel.removeQuerySelectParamsList(dynamicObjectName, true)
-
-                    rectangles.delete(refObject);
-                    frontRectangleCoordinates.delete(refObject)
-                    rearRectangleCoordinates.delete(refObject)
-                }
-
-
-                if(rearRectLineMaps.has(refObject) === true){
-                    rearRectLineMaps.get(refObject).forEach(function(value){
-
-                        // a.6.Immediately behind line (delete object and map value)
-                        // a.7.Immediately behind join box (delete object and map value)
-                        // Delete object
-                        newConnectingLine.get(value).destroy();
-                        newJoinBox.get(value).destroy();
-
-                        // Delete values from the map
-                        newConnectingLine.delete(value)
-                        newJoinBox.delete(value)
-
-
-                        // a.8.Immediately behind rect front map
-                        frontRectLineMaps.delete((value))
-
-                        // Delete from DSParamsModel
-                        DSParamsModel.removeJoinBoxTableMap(value)
-                        DSParamsModel.removeJoinIconMap(value)
-                        DSParamsModel.removeJoinTypeMap(value)
-                        DSParamsModel.removePrimaryJoinTable(value)
-                        DSParamsModel.removeJoinMapList(value, 0, true)
-
-                    })
-
-                    // a.5.Rect Back map
-                    rearRectLineMaps.delete(refObject)
-                }
+                DSParamsModel.removeRectangles(refObject);
+                DSParamsModel.removeFrontRectangleCoordinates(refObject)
+                DSParamsModel.removeRearRectangleCoordinates(refObject)
             }
 
-            // Delete front line and joinbox (object and values)
-            // a.9 | b.1.Immediately front line
-            // a.10 | b.2.Immediately front join box
-            // Destroy dynamically created components
-            if(newConnectingLine.has(refObject))
-                newConnectingLine.get(refObject).destroy();
 
-            if(newJoinBox.has(refObject))
-                newJoinBox.get(refObject).destroy();
+            if(typeof DSParamsModel.fetchRearLineMap(refObject) !== "undefined"){
+                DSParamsModel.fetchRearLineMap(refObject).forEach(function(value){
 
-            // Delete values from the map
-            if(newConnectingLine.has(refObject))
-                newConnectingLine.delete(refObject)
+                    // a.6.Immediately behind line (delete object and map value)
+                    // a.7.Immediately behind join box (delete object and map value)
+                    // Delete object
+                    DSParamsModel.fetchNewConnectingLine(value).destroy();
+                    DSParamsModel.fetchNewJoinBox(value).destroy();
 
-            if(newJoinBox.has(refObject))
-                newJoinBox.delete(refObject)
+                    // Delete values from the map
+                    DSParamsModel.removeNewConnectingLine(value)
+                    DSParamsModel.removeNewJoinBox(value)
 
 
-            // a.11 | b.3.Immediately front rect back map
-            let frontItemOfConcernedRect = frontRectLineMaps.get(refObject)
-            let rearItemsOfFrontRect = rearRectLineMaps.get(frontItemOfConcernedRect);
+                    // a.8.Immediately behind rect front map
+                    DSParamsModel.removeFrontLineMap((value))
+
+                    // Delete from DSParamsModel
+                    DSParamsModel.removeJoinBoxTableMap(value)
+                    DSParamsModel.removeJoinIconMap(value)
+                    DSParamsModel.removeJoinTypeMap(value)
+                    DSParamsModel.removePrimaryJoinTable(value)
+                    DSParamsModel.removeJoinMapList(value, 0, true)
+
+                })
+
+                // a.5.Rect Back map
+                DSParamsModel.removeRearLineMap(refObject)
+            }
+        }
+
+        // Delete front line and joinbox (object and values)
+        // a.9 | b.1.Immediately front line
+        // a.10 | b.2.Immediately front join box
+        // Destroy dynamically created components
+        if(typeof DSParamsModel.fetchNewConnectingLine(refObject) !== "undefined")
+            DSParamsModel.fetchNewConnectingLine(refObject).destroy();
+
+        if(typeof DSParamsModel.fetchNewJoinBox(refObject) !== "undefined")
+            DSParamsModel.fetchNewJoinBox(refObject).destroy();
+
+        // Delete values from the map
+        if(typeof DSParamsModel.fetchNewConnectingLine(refObject) !== "undefined")
+            DSParamsModel.removeNewConnectingLine(refObject)
+
+        if(typeof DSParamsModel.fetchNewJoinBox(refObject) !== "undefined")
+            DSParamsModel.removeNewJoinBox(refObject)
+
+
+        // a.11 | b.3.Immediately front rect back map
+        if(typeof DSParamsModel.fetchFrontLineMap(refObject) !== "undefined"){
+            let frontItemOfConcernedRect = DSParamsModel.fetchFrontLineMap(refObject)
+            let rearItemsOfFrontRect = DSParamsModel.fetchRearLineMap(frontItemOfConcernedRect);
 
             let itemToRemoveFromRearRect = rearItemsOfFrontRect.indexOf(refObject)
             rearItemsOfFrontRect.splice(itemToRemoveFromRearRect, 1)
 
-            rearRectLineMaps.set(frontItemOfConcernedRect, rearItemsOfFrontRect);
-
-            // a.4 | b.4 Rect front map
-            if(frontRectLineMaps.has(refObject))
-                frontRectLineMaps.delete(refObject);
-
-
-            DSParamsModel.removeJoinBoxTableMap(refObject)
-            DSParamsModel.removeJoinIconMap(refObject)
-            DSParamsModel.removeJoinTypeMap(refObject)
-            DSParamsModel.removePrimaryJoinTable(refObject)
-            DSParamsModel.removeJoinMapList(refObject, 0, true)
+            DSParamsModel.addToRearLineMap(frontItemOfConcernedRect, rearItemsOfFrontRect);
         }
+
+        // a.4 | b.4 Rect front map
+        //        if(frontRectLineMaps.has(refObject))
+        DSParamsModel.removeFrontLineMap(refObject);
+
+
+        DSParamsModel.removeJoinBoxTableMap(refObject)
+        DSParamsModel.removeJoinIconMap(refObject)
+        DSParamsModel.removeJoinTypeMap(refObject)
+        DSParamsModel.removeJoinMapList(refObject, 0, true)
     }
 
 
@@ -389,10 +371,10 @@ Item {
             // Get front coordinates of the orphan rectangle
             // Get the rear coordinates of the nearest rectangle
 
-            let orphanX = frontRectangleCoordinates.get(tmpOrphanTableId).x
-            let orphanY = frontRectangleCoordinates.get(tmpOrphanTableId).y
-            let nearestX = rearRectangleCoordinates.get(tmpNearestTable.tableId).x
-            let nearestY = rearRectangleCoordinates.get(tmpNearestTable.tableId).y
+            let orphanX = DSParamsModel.fetchFrontRectangleCoordinates(tmpOrphanTableId).x
+            let orphanY = DSParamsModel.fetchFrontRectangleCoordinates(tmpOrphanTableId).y
+            let nearestX = DSParamsModel.fetchRearRectangleCoordinates(tmpNearestTable.tableId).x
+            let nearestY = DSParamsModel.fetchRearRectangleCoordinates(tmpNearestTable.tableId).y
 
             // Get the center of the line for JoinBox
             let diffX = Math.abs(orphanX - nearestX) /2
@@ -402,26 +384,26 @@ Item {
             let rectY = orphanY <= nearestY ? ( orphanY +diffY ) : ( nearestY + diffY )
 
             // Add the line component on stage
-            newConnectingLine.set(tmpOrphanTableId, dynamicConnectorLine.createObject(parent, {incomingRectangleFrontX:orphanX, incomingRectangleFrontY: orphanY + bufferHeight, refRectangleRearX : nearestX, refRectangleRearY: nearestY + bufferHeight, lineColor: "black", objectName : tmpOrphanTableId}))
+            DSParamsModel.addToNewConnectingLine(tmpOrphanTableId, dynamicConnectorLine.createObject(parent, {incomingRectangleFrontX:orphanX, incomingRectangleFrontY: orphanY + bufferHeight, refRectangleRearX : nearestX, refRectangleRearY: nearestY + bufferHeight, lineColor: "black", objectName : tmpOrphanTableId}))
 
             // Add joinBox
-            newJoinBox.set(tmpOrphanTableId, dynamicJoinBox.createObject(parent, {x: rectX, y: rectY, objectName : tmpOrphanTableId}))
+            DSParamsModel.addToNewJoinBox(tmpOrphanTableId, dynamicJoinBox.createObject(parent, {x: rectX, y: rectY, objectName : tmpOrphanTableId}))
 
             // Connect join box destroy signal and slot
-            newJoinBox.get(tmpOrphanTableId).destroyJoin.connect(destroyComponents)
+            DSParamsModel.fetchNewJoinBox(tmpOrphanTableId).destroyJoin.connect(destroyComponents)
 
 
             // Front Rectangle Line Maps
-            frontRectLineMaps.set(tmpOrphanTableId, tmpNearestTable.tableId)
+            DSParamsModel.addToFrontLineMap(tmpOrphanTableId, tmpNearestTable.tableId)
 
             // Rear Rectangle Line Maps
             let tmpArray = []
-            if(typeof rearRectLineMaps.get(tmpNearestTable.tableId) !== "undefined" && rearRectLineMaps.get(tmpNearestTable.tableId).length > 0){
-                tmpArray = rearRectLineMaps.get(tmpNearestTable.tableId)
+            if(typeof DSParamsModel.fetchRearLineMap(tmpNearestTable.tableId) !== "undefined" && DSParamsModel.fetchRearLineMap(tmpNearestTable.tableId).length > 0){
+                tmpArray = DSParamsModel.fetchRearLineMap(tmpNearestTable.tableId)
             }
             tmpArray.push(tmpOrphanTableId)
 
-            rearRectLineMaps.set(tmpNearestTable.tableId, tmpArray)
+            DSParamsModel.addToRearLineMap(tmpNearestTable.tableId, tmpArray)
 
             // Reset glow color of nearest rectangle
             dataModellerItem.changeGlowColor("white", tmpNearestTable.tableId)
@@ -447,27 +429,23 @@ Item {
     // Destroy components and maps
     function deleteAll(){
         // Destroy dynamic objects
-        rectangles.forEach(function(value, index){
 
-            if(newConnectingLine.has(index)) newConnectingLine.get(index).destroy()
-            if(newJoinBox.has(index)) newJoinBox.get(index).destroy()
-            if(rectangles.has(index)) rectangles.get(index).destroy()
-        })
+        var rectangleObjects = DSParamsModel.fetchAllRectangles()
 
-        // Clear all maps
-        frontRectangleCoordinates.clear()
-        rearRectangleCoordinates.clear()
-        existingTables.clear()
-        newConnectingLine.clear()
-        newJoinBox.clear()
-        rectangles.clear()
-        frontRectLineMaps.clear()
-        rearRectLineMaps.clear()
+        for (var prop in rectangleObjects) {
+            if(typeof DSParamsModel.fetchFrontRectangleCoordinates(prop) !== "undefined"){
+                if(typeof DSParamsModel.fetchNewConnectingLine(prop) !== "undefined") DSParamsModel.fetchNewConnectingLine(prop).destroy()
+                if(typeof DSParamsModel.fetchNewJoinBox(prop) !== "undefined") DSParamsModel.fetchNewJoinBox(prop).destroy()
+                if(typeof DSParamsModel.fetchRectangles(prop) !== "undefined") DSParamsModel.fetchRectangles(prop).destroy()
+
+            }
+        }
 
         // Reset other variables
         tempRearRectLineMaps = []
         counter = 0
-        tmpOrphanTableId = 0
+        tmpOrphanTableId = 1
+        firstRectId = 1
     }
 
     // Display join popup
@@ -494,11 +472,12 @@ Item {
             DSParamsModel.addToJoinOrder(objId)
         }
 
+
         objArray.forEach(function(item){
 
-            if(dataModellerItem.rearRectLineMaps.has(item) === true){
+            if(typeof DSParamsModel.fetchRearLineMap(item) !== "undefined"){
 
-                tmpArray = tmpArray.concat(dataModellerItem.rearRectLineMaps.get(item))
+                tmpArray = tmpArray.concat(DSParamsModel.fetchRearLineMap(item))
 
 
                 tmpArray.forEach(function(innerItem){
@@ -527,7 +506,6 @@ Item {
                     joinString += " " + joinType + " " + DSParamsModel.queryJoiner + joinPrimaryJoinTable + DSParamsModel.queryJoiner + " ON " + tmpJoinString
 
                     tmpJoinString = ""
-
                 })
             }
         })
@@ -558,15 +536,15 @@ Item {
             let lastIndex = selectColumns.lastIndexOf(",");
             selectColumns = selectColumns.substring(0, lastIndex);
 
-            finalQuery = "SELECT " + selectColumns + " FROM " + DSParamsModel.queryJoiner + existingTables.get(dataModellerItem.firstRectId) + DSParamsModel.queryJoiner + " " + joinString
+            finalQuery = "SELECT " + selectColumns + " FROM " + DSParamsModel.queryJoiner + DSParamsModel.fetchExistingTables(firstRectId) + DSParamsModel.queryJoiner + " " + joinString
 
             // Call and execute the query
             DSParamsModel.setTmpSql(finalQuery)
 
-            if(connectionType === Constants.sqlType){
+            if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
                 console.log("QUERY set QUERYMODEL", DSParamsModel.tmpSql)
                 QueryModel.callSql(DSParamsModel.tmpSql)
-            } else if(connectionType === Constants.duckType){
+            } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
                 console.log("QUERY set DUCKQUERYMODEL", DSParamsModel.tmpSql)
                 DuckQueryModel.setQuery(DSParamsModel.tmpSql)
             } else{
@@ -594,17 +572,17 @@ Item {
         var frontVal = {x: rectLeftX, y: rectLeftY}
         var rearVal = {x: rectRightX, y: rectRightY}
 
-        frontRectangleCoordinates.set(refObject, frontVal)
-        rearRectangleCoordinates.set(refObject, rearVal)
+        DSParamsModel.addToFrontRectangleCoordinates(refObject, frontVal)
+        DSParamsModel.addToRearRectangleCoordinates(refObject, rearVal)
 
         // This block is for orphan rectangles and when they are brought near other rectangle
         // to create new joins
 
         // if its not the first dragged rectangle
         // and if the moved rectangle doesnot have any connections to other objects
-        if(typeof refObject !== "undefined" && frontRectLineMaps.has(refObject) === false){
+        if(typeof refObject !== "undefined" && typeof DSParamsModel.fetchFrontLineMap(refObject) === "undefined"){
 
-            var nearestTable = nearestRectangle(rearRectangleCoordinates, frontVal)
+            var nearestTable = nearestRectangle(DSParamsModel.fetchAllRearRectangleCoordinates(), frontVal)
 
             if(nearestTable.tableId !== refObject){
 
@@ -612,8 +590,8 @@ Item {
                 let ifRearRelationExists = false
                 let ifFrontRelationExists = false
 
-                if(typeof rearRectLineMaps.get(refObject) !== "undefined"){
-                    rearRectLineMaps.get(refObject).every(function(item){
+                if(typeof DSParamsModel.fetchRearLineMap(refObject) !== "undefined"){
+                    DSParamsModel.fetchRearLineMap(refObject).every(function(item){
 
                         if(item === nearestTable.tableId){
                             ifRearRelationExists = true;
@@ -627,7 +605,7 @@ Item {
 
                 // check for front relations
                 if(ifRearRelationExists === false){
-                    if(frontRectLineMaps.get(refObject) === nearestTable.tableId){
+                    if(DSParamsModel.fetchFrontLineMap(refObject) === nearestTable.tableId){
                         ifFrontRelationExists = true
                     }
                 }
@@ -665,43 +643,43 @@ Item {
 
 
         // Adjust the lines connected to the object front
-        if(newConnectingLine.has(refObject)){
-            newConnectingLine.get(refObject).incomingRectangleFrontX = x
-            newConnectingLine.get(refObject).incomingRectangleFrontY = y + bufferHeight
+        if(typeof DSParamsModel.fetchNewConnectingLine(refObject) !== "undefined"){
+            DSParamsModel.fetchNewConnectingLine(refObject).incomingRectangleFrontX = x
+            DSParamsModel.fetchNewConnectingLine(refObject).incomingRectangleFrontY = y + bufferHeight
 
-            let frontVal = frontRectLineMaps.get(refObject)
+            let frontVal = DSParamsModel.fetchFrontLineMap(refObject)
 
-            let tmpRearRectCoordinatesX = rearRectangleCoordinates.get(frontVal).x
-            let tmpRearRectCoordinatesY = rearRectangleCoordinates.get(frontVal).y
+            let tmpRearRectCoordinatesX = DSParamsModel.fetchRearRectangleCoordinates(frontVal).x
+            let tmpRearRectCoordinatesY = DSParamsModel.fetchRearRectangleCoordinates(frontVal).y
 
             let diffX = Math.abs(rectLeftX - tmpRearRectCoordinatesX) /2
             let diffY = Math.abs(rectLeftY - tmpRearRectCoordinatesY) /2
 
-            newJoinBox.get(refObject).x = rectLeftX <= tmpRearRectCoordinatesX ? ( rectLeftX + diffX - Constants.joinBoxWidth ) : ( tmpRearRectCoordinatesX + diffX - Constants.joinBoxWidth )
-            newJoinBox.get(refObject).y = rectLeftY <= tmpRearRectCoordinatesY ? ( rectLeftY + diffY  ) : ( tmpRearRectCoordinatesY + diffY )
+            DSParamsModel.fetchNewJoinBox(refObject).x = rectLeftX <= tmpRearRectCoordinatesX ? ( rectLeftX + diffX - Constants.joinBoxWidth ) : ( tmpRearRectCoordinatesX + diffX - Constants.joinBoxWidth )
+            DSParamsModel.fetchNewJoinBox(refObject).y = rectLeftY <= tmpRearRectCoordinatesY ? ( rectLeftY + diffY  ) : ( tmpRearRectCoordinatesY + diffY )
 
         }
 
 
         // Adjust the lines connected to object rear
         // Also adjust the join objects
-        if(rearRectLineMaps.has(refObject)){
+        if(DSParamsModel.fetchRearLineMap(refObject)){
 
 
-            rearRectLineMaps.get(refObject).forEach(function(value, index){
+            DSParamsModel.fetchRearLineMap(refObject).forEach(function(value, index){
 
                 // Adjust the rear
-                newConnectingLine.get(value).refRectangleRearX = x + refObjectWidth
-                newConnectingLine.get(value).refRectangleRearY = y + bufferHeight
+                DSParamsModel.fetchNewConnectingLine(value).refRectangleRearX = x + refObjectWidth
+                DSParamsModel.fetchNewConnectingLine(value).refRectangleRearY = y + bufferHeight
 
-                let tmpFrontRectCoordinatesX = frontRectangleCoordinates.get(value).x
-                let tmpFrontRectCoordinatesY = frontRectangleCoordinates.get(value).y
+                let tmpFrontRectCoordinatesX = DSParamsModel.fetchFrontRectangleCoordinates(value).x
+                let tmpFrontRectCoordinatesY = DSParamsModel.fetchFrontRectangleCoordinates(value).y
 
                 let diffX = Math.abs(rectRightX - tmpFrontRectCoordinatesX) /2
                 let diffY = Math.abs(rectRightY - tmpFrontRectCoordinatesY) /2
 
-                newJoinBox.get(value).x = rectRightX <= tmpFrontRectCoordinatesX ? ( rectRightX +diffX - Constants.joinBoxWidth ) : ( tmpFrontRectCoordinatesX + diffX - Constants.joinBoxWidth)
-                newJoinBox.get(value).y = rectRightY <= tmpFrontRectCoordinatesY ? ( rectRightY +diffY ) : ( tmpFrontRectCoordinatesY + diffY )
+                DSParamsModel.fetchNewJoinBox(value).x = rectRightX <= tmpFrontRectCoordinatesX ? ( rectRightX +diffX - Constants.joinBoxWidth ) : ( tmpFrontRectCoordinatesX + diffX - Constants.joinBoxWidth)
+                DSParamsModel.fetchNewJoinBox(value).y = rectRightY <= tmpFrontRectCoordinatesY ? ( rectRightY +diffY ) : ( tmpFrontRectCoordinatesY + diffY )
             })
         }
 
@@ -711,26 +689,26 @@ Item {
 
         // Show light shaded line between the current rectangle
         // and the nearest rectangle
-        if(existingTables.size > 0){
+        if(DSParamsModel.existingTablesSize() > 0){
 
             // Current reference Coordinate
             var currentPoint = {x: drag.x, y: drag.y};
 
-            var nearestTable = nearestRectangle(rearRectangleCoordinates, currentPoint)
+            var nearestTable = nearestRectangle(DSParamsModel.fetchAllRearRectangleCoordinates(), currentPoint)
 
             // Get the coordinates for the nearest rectangle
-            var nearestRectangleCoordinates = rearRectangleCoordinates.get(nearestTable.tableId)
-            newConnectingLine.get(counter).incomingRectangleFrontX = drag.x
-            newConnectingLine.get(counter).incomingRectangleFrontY = drag.y + bufferHeight
-            newConnectingLine.get(counter).refRectangleRearX = nearestRectangleCoordinates.x
-            newConnectingLine.get(counter).refRectangleRearY = nearestRectangleCoordinates.y + bufferHeight
+            var nearestRectangleCoordinates = DSParamsModel.fetchRearRectangleCoordinates(nearestTable.tableId)
+            DSParamsModel.fetchNewConnectingLine(counter).incomingRectangleFrontX = drag.x
+            DSParamsModel.fetchNewConnectingLine(counter).incomingRectangleFrontY = drag.y + bufferHeight
+            DSParamsModel.fetchNewConnectingLine(counter).refRectangleRearX = nearestRectangleCoordinates.x
+            DSParamsModel.fetchNewConnectingLine(counter).refRectangleRearY = nearestRectangleCoordinates.y + bufferHeight
         }
     }
 
     function onDropAreaExited(){
         highlightRect.color = "white"
 
-        newConnectingLine.get(counter).destroy()
+        DSParamsModel.fetchNewConnectingLine(counter).destroy()
     }
 
     function onDropAreaEntered(drag){
@@ -740,18 +718,18 @@ Item {
 
         // Show light shaded line between the current rectangle
         // and the nearest rectangle
-        if(existingTables.size > 0){
+        if(DSParamsModel.existingTablesSize() > 0){
+
 
             // Current reference Coordinate
             var currentPoint = {x: drag.x, y: drag.y};
-            var nearestTable = nearestRectangle(rearRectangleCoordinates, currentPoint)
+            var nearestTable = nearestRectangle(DSParamsModel.fetchAllRearRectangleCoordinates(), currentPoint)
 
             // Get the coordinates for the nearest rectangle
-            var nearestRectangleCoordinates = rearRectangleCoordinates.get(nearestTable.tableId)
+            var nearestRectangleCoordinates = DSParamsModel.fetchRearRectangleCoordinates(nearestTable.tableId)
 
             // Add the line component on stage
-            newConnectingLine.set(counter, dynamicConnectorLine.createObject(parent, {incomingRectangleFrontX:drag.x, incomingRectangleFrontY: drag.y, refRectangleRearX : nearestRectangleCoordinates.x, refRectangleRearY: nearestRectangleCoordinates.y, lineColor: "grey", objectName : counter}))
-
+            DSParamsModel.addToNewConnectingLine(counter, dynamicConnectorLine.createObject(parent, {incomingRectangleFrontX:drag.x, incomingRectangleFrontY: drag.y, refRectangleRearX : nearestRectangleCoordinates.x, refRectangleRearY: nearestRectangleCoordinates.y, lineColor: "grey", objectName : counter}))
         }
     }
 
@@ -766,13 +744,15 @@ Item {
 
         // Assign new variable to the created object
         // Use this variable to connect the signals and slots
-        rectangles.set(counter, dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName, objectName : counter, glowColor: "white"}))
+        // DSParams Rectangle
+        DSParamsModel.addToRectangles(counter, dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName, objectName : counter, glowColor: "white"}))
 
-        rectangles.get(counter).dragged.connect(onDropAreaDraggedNewComponent)
-        rectangles.get(counter).destroyComponents.connect(destroyComponents)
-        rectangles.get(counter).refObjectCount.connect(setRefObject)
-        rectangles.get(counter).createNewJoin.connect(createNewJoin)
-        dataModellerItem.changeGlowColor.connect(rectangles.get(counter).slotDisplayColor)
+        // DSParams Rectangle
+        DSParamsModel.fetchRectangles(counter).dragged.connect(onDropAreaDraggedNewComponent)
+        DSParamsModel.fetchRectangles(counter).destroyComponents.connect(destroyComponents)
+        DSParamsModel.fetchRectangles(counter).refObjectCount.connect(setRefObject)
+        DSParamsModel.fetchRectangles(counter).createNewJoin.connect(createNewJoin)
+        dataModellerItem.changeGlowColor.connect(DSParamsModel.fetchRectangles(counter).slotDisplayColor)
 
 
         // Created rectangle front & back coordinates
@@ -792,27 +772,28 @@ Item {
 
         // Get the nearest rectangle
         // And process the rest
-        if(existingTables.size > 0){
-            var nearestTable = nearestRectangle(rearRectangleCoordinates, currentPoint)
+        if(DSParamsModel.existingTablesSize() > 0){
+            var nearestTable = nearestRectangle(DSParamsModel.fetchAllRearRectangleCoordinates(), currentPoint)
 
             //Change the line color to black
-            newConnectingLine.get(counter).lineColor = "black"
+            DSParamsModel.fetchNewConnectingLine(counter).lineColor = "black"
 
             // Get the coordinates for the nearest rectangle
-            var nearestRectangleCoordinates = rearRectangleCoordinates.get(nearestTable.tableId)
+            var nearestRectangleCoordinates = DSParamsModel.fetchRearRectangleCoordinates(nearestTable.tableId)
 
             // Update the front and rear line arrays
             // Front will just have a single Connection
             // While back can have multiple connections
-            frontRectLineMaps.set(counter, nearestTable.tableId)
+            DSParamsModel.addToFrontLineMap(counter, nearestTable.tableId)
 
-            if(typeof rearRectLineMaps.get(nearestTable.tableId) !== "undefined"){
-                tempRearRectLineMaps = rearRectLineMaps.get(nearestTable.tableId)
+
+            if(typeof DSParamsModel.fetchRearLineMap(nearestTable.tableId) !== "undefined"){
+                tempRearRectLineMaps = DSParamsModel.fetchRearLineMap(nearestTable.tableId)
             }
 
-            tempRearRectLineMaps.push(counter)
+            dataModellerItem.tempRearRectLineMaps.push(counter)
 
-            rearRectLineMaps.set(nearestTable.tableId, tempRearRectLineMaps)
+            DSParamsModel.addToRearLineMap(nearestTable.tableId, tempRearRectLineMaps)
 
             // Reset temp array of the rear connections
             tempRearRectLineMaps = []
@@ -825,25 +806,25 @@ Item {
             var rectX = nearestRectangleCoordinates.x <= currentPoint.x ? nearestRectangleCoordinates.x + midLengthX - Constants.joinBoxWidth : currentPoint.x + midLengthX - Constants.joinBoxWidth
             var rectY = nearestRectangleCoordinates.y <= currentPoint.y ? nearestRectangleCoordinates.y + midLengthY : currentPoint.y + midLengthY
 
-            newJoinBox.set(counter, dynamicJoinBox.createObject(parent, {x: rectX, y: rectY, objectName : counter}))
+            DSParamsModel.addToNewJoinBox(counter, dynamicJoinBox.createObject(parent, {x: rectX, y: rectY, objectName : counter}))
 
             // Connect join box destroy signal and slot
-            newJoinBox.get(counter).destroyJoin.connect(destroyComponents)
+            DSParamsModel.fetchNewJoinBox(counter).destroyJoin.connect(destroyComponents)
 
             // Save the Join Box Table map for join manipulation later
             DSParamsModel.addToJoinBoxTableMap(counter, nearestTable.tableName, tableslist.tableName)
-
-            // Set the table name for the query in a join
-            DSParamsModel.addToPrimaryJoinTable(counter, tableslist.tableName)
 
             // Popup join details
             showJoinPopup(counter)
         }
 
+        // Set the table name for the query in a join
+        DSParamsModel.addToPrimaryJoinTable(counter, tableslist.tableName)
+
         // Push the coordinates in the array
-        frontRectangleCoordinates.set(counter, {x: rectLeftX, y: rectLeftY})
-        rearRectangleCoordinates.set(counter, {x: rectRightX, y: rectRightY})
-        existingTables.set(counter, tableslist.tableName)
+        DSParamsModel.addToFrontRectangleCoordinates(counter, {x: rectLeftX, y: rectLeftY})
+        DSParamsModel.addToRearRectangleCoordinates(counter, {x: rectRightX, y: rectRightY})
+        DSParamsModel.addToExistingTables(counter, tableslist.tableName)
     }
 
 
@@ -862,17 +843,12 @@ Item {
 
         // Find the distance b/w all rear of a rectangle
         // and the current point
-        if(tmpRearRectangleCoordinates.size > 0){
-
-            const mapIterator = tmpRearRectangleCoordinates[Symbol.iterator]();
-
-            for (const item of mapIterator) {
-
-                // calculate the distance b/w coordinates
-                var newDistance = distance(currentPoint,item[1])
-                tmpArray.push({"index": item[0], "coordinates" : item[1], "distance" : newDistance})
-            }
+        var rectangleObjects = tmpRearRectangleCoordinates
+        for (var prop in rectangleObjects) {
+            var newDistance = distance(currentPoint,rectangleObjects[prop])
+            tmpArray.push({"index": prop, "coordinates" : rectangleObjects[prop], "distance" : newDistance})
         }
+
 
         // Sort all the coordinates based on distance
         // and find the nearest distance
@@ -881,16 +857,16 @@ Item {
         var nearestDistance = sortByDistance[0].distance
 
         // return table name & id
-        return {"tableName" :existingTables.get(nearestIndex), tableId : nearestIndex, distance : nearestDistance}
+        return {"tableName" :DSParamsModel.fetchExistingTables(nearestIndex), "tableId" : nearestIndex, "distance" : nearestDistance}
     }
 
     // Create sql from the visual Data modeller
     // and execute query
     function executeSql(){
 
-        if(connectionType === Constants.sqlType){
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryModel.callSql(DSParamsModel.tmpSql)
-        } else if(connectionType === Constants.duckType){
+        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
             console.log("QUERY exe", DSParamsModel.tmpSql)
             DuckQueryModel.setQuery(DSParamsModel.tmpSql)
         } else{
