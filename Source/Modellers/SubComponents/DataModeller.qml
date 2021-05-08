@@ -55,8 +55,6 @@ Item {
     property string joinString: ""
     property int firstRectId : 1
 
-    property var connectionType: GeneralParamsModel.getDbClassification()
-
 
 
     /***********************************************************************************************************************/
@@ -543,10 +541,10 @@ Item {
             // Call and execute the query
             DSParamsModel.setTmpSql(finalQuery)
 
-            if(connectionType === Constants.sqlType){
+            if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
                 console.log("QUERY set QUERYMODEL", DSParamsModel.tmpSql)
                 QueryModel.callSql(DSParamsModel.tmpSql)
-            } else if(connectionType === Constants.duckType){
+            } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
                 console.log("QUERY set DUCKQUERYMODEL", DSParamsModel.tmpSql)
                 DuckQueryModel.setQuery(DSParamsModel.tmpSql)
             } else{
@@ -866,9 +864,9 @@ Item {
     // and execute query
     function executeSql(){
 
-        if(connectionType === Constants.sqlType){
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryModel.callSql(DSParamsModel.tmpSql)
-        } else if(connectionType === Constants.duckType){
+        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
             console.log("QUERY exe", DSParamsModel.tmpSql)
             DuckQueryModel.setQuery(DSParamsModel.tmpSql)
         } else{
