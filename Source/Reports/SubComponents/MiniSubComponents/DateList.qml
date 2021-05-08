@@ -1,9 +1,15 @@
 import QtQuick 2.0
+import QtQuick.Controls 2.15
 
 ListView{
 
     property string itemName: "";
     property string itemType: "Date";
+    flickableDirection: Flickable.VerticalFlick
+            boundsBehavior: Flickable.StopAtBounds
+            interactive: true
+             clip: true
+             ScrollBar.vertical: ScrollBar {}
 
 
 
@@ -96,7 +102,6 @@ ListView{
     anchors.topMargin: 5
     height: parent.height - dateHeading.height - 5
     width: parent.width
-    interactive: false
     delegate: DataPaneElement{
         id: dataPaneListElement
     }

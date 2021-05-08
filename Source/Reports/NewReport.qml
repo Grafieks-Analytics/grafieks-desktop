@@ -70,6 +70,9 @@ Page {
 
     property bool isHorizontalGraph: false;
 
+
+    property var colorData:any;
+
     onIsHorizontalGraphChanged: {
         if(isHorizontalGraph){
             allowedXAxisDataPanes = 1;
@@ -607,6 +610,9 @@ Page {
             }
 
             console.log('Data Values:',JSON.stringify(dataValues));
+            colorData = dataValues;
+            console.log("dataValues" ,JSON.parse(dataValues))
+
             console.log('Webengine View Loading Status:',webEngineView.loading);
             console.log('Selected Chart Title:',report_desiner_page.chartTitle)
             console.log('Selected Chart URL:',report_desiner_page.chartUrl)

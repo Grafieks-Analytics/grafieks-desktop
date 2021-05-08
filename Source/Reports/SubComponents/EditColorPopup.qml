@@ -25,17 +25,17 @@ Popup {
     }
 
 
-    ListModel{
-        id: dataItemList
-        ListElement{
-            colorValue: "blue"
-            dataItemName: "Total Quality"
-        }
-        ListElement{
-            colorValue: "green"
-            dataItemName: "Total Discount"
-        }
-    }
+//    ListModel{
+//        id: dataItemList
+//        ListElement{
+//            colorValue: "blue"
+//            dataItemName: colorData
+//        }
+////        ListElement{
+////            colorValue: "green"
+////            dataItemName: "Total Discount"
+////        }
+//    }
 
 
     ListModel{
@@ -142,6 +142,7 @@ Popup {
     function selectColorPallete(schemeName,colorPallete){
         d3PropertyConfig.d3colorPalette = JSON.parse(colorPallete);
         console.log("color"+d3PropertyConfig.d3colorPalette)
+//        console.log("colorData",colorData)
         reDrawChart();
     }
 
@@ -260,7 +261,7 @@ Popup {
 
                 ListView{
                     anchors.fill: parent
-                    model: dataItemList
+                    model: colorData
                     spacing: 10
                     topMargin: 15
                     delegate: Row{
@@ -274,17 +275,17 @@ Popup {
                             height: 20
                             width: parent.width - parent.leftPadding - 10
 
-                            Rectangle{
-                                id: colorBox
-                                anchors.left: parent.left
-                                height: 20
-                                width: 20
-                                color: colorValue
-                            }
+//                            Rectangle{
+//                                id: colorBox
+//                                anchors.left: parent.left
+//                                height: 20
+//                                width: 20
+//                                color: colorValue
+//                            }
 
                             Text {
                                 id: text
-                                text: dataItemName
+                                text: colorData[index]
                                 anchors.left: colorBox.right
                                 anchors.leftMargin: 10
                                 anchors.verticalCenter: parent.verticalCenter
