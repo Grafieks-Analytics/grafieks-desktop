@@ -292,4 +292,5 @@ QtObject {
     property int joinBoxWidth: 30
     property int joinBoxHeight: 30
     property int joinBoxRadius: 25
+    property int droppedRectBufferWidth: 250
 }

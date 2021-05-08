@@ -1003,3 +1003,18 @@ void TableSchemaModel::showSchema(QString query)
 
 
 }
+
+void TableSchemaModel::clearSchema()
+{
+    // Clear all stringlist for new values
+    queriedColumnNames.clear();
+    allCategorical.clear();
+    allNumerical.clear();
+    allDates.clear();
+    allOthers.clear();
+    allList.clear();
+
+
+    emit tableSchemaCleared();
+
+}

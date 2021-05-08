@@ -34,8 +34,6 @@ Popup {
     property string tabBarOpen: Constants.categoricalTab
     property int mapKey : 0
 
-    property string globalConType: Constants.sqlType
-
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -138,6 +136,12 @@ Popup {
             add_btn_1.model =  categoricalModel
 
         }
+
+        function onTableSchemaCleared(){
+            categoricalModel.clear()
+            numericalModel.clear()
+            datesModel.clear()
+        }
     }
 
     // This section is called when
@@ -197,15 +201,6 @@ Popup {
         }
     }
 
-    Connections{
-        target: ConnectorsLoginModel
-
-        function onConnectedDBType(conType){
-            globalConType = conType
-        }
-    }
-
-
     // Connections Ends
     /***********************************************************************************************************************/
 
@@ -227,9 +222,9 @@ Popup {
 
     function onAddMenuItemTriggered(colName,tableName){
 //        ColumnListModel.columnQuery(colName, tableName)
-        if(globalConType === Constants.sqlType){
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             ColumnListModel.columnQuery(colName, tableName)
-        } else if(globalConType === Constants.duckType){
+        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
             DuckDataModel.columnData(colName, tableName)
         } else{
             ForwardOnlyDataModel.columnData(colName, tableName)

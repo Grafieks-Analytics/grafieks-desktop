@@ -70,6 +70,7 @@ Item {
     function onDeleteIconClicked(){
 
         destroyJoin(parseInt(joinBoxItem.objectName), "single")
+        joinPopup.visible = false
     }
 
 
@@ -181,12 +182,10 @@ Item {
     }
     Rectangle{
         id: deleteJoinRectangle
-        //        anchors.verticalCenter: joinBoxRectangle.verticalCenter
         anchors.left: joinBoxRectangle.right
         x:35
         width:5
         height:5
-        //        color: "yellow"
         visible: hoverCrossIcon
 
 

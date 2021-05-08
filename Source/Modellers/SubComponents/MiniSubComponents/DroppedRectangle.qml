@@ -71,15 +71,19 @@ Item{
 
     Component.onCompleted: {
         nameID.text = name
-        //                droppedRectangle.width = nameID.text.length * 10 + 30
+        droppedRectangle.width = Constants.droppedRectBufferWidth
+        columnListDroppedRect.width = Constants.droppedRectBufferWidth
 
     }
 
 
     function slotDisplayColor(glowColor, tableId){
 
-        if(tableId === parseInt(newItem.objectName))
-            droppedRectangle.color = glowColor
+        if(typeof newItem.objectName !== "undefined"){
+            if(tableId === parseInt(newItem.objectName))
+                droppedRectangle.color = glowColor
+        }
+
     }
 
     function displayColumns(allColumns, tableName){
@@ -110,6 +114,7 @@ Item{
     function destroyRectangle(counter){
         newItem.destroy()
         destroyComponents(counter, "all")
+        joinPopup.visible = false
     }
 
 
@@ -153,26 +158,18 @@ Item{
 
     Component{
         id: listviewComponent
-
-
-
         Rectangle{
             id:tableContent
 
             height: 30
-            //            width: 200
 
             Row{
                 id: innerRow
                 height: 20
 
-
-
                 Text{
                     text: colName
                 }
-
-
 
                 Image{
                     id: columnIcon;
@@ -199,7 +196,7 @@ Item{
                     height: 30
                     width: 30
                     anchors.left: parent.left
-                    anchors.leftMargin:  110
+                    anchors.leftMargin:  160
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: 1
                     anchors.verticalCenter: droppedRectangle.verticalCenter
@@ -244,31 +241,26 @@ Item{
                         }
 
 
-                        //                        MenuItem {
-                        //                            text: qsTr("Rename")
-                        //                            onTriggered: destroyElement()
-                        //                        }
-                        //                        MenuItem {
-                        //                            text: qsTr("Convert To")
-                        //                            onTriggered: destroyElement()
-                        //                        }
+                        MenuItem {
+                            text: qsTr("Rename")
+                            onTriggered: destroyElement()
+                            visible: false
+                        }
+                        MenuItem {
+                            text: qsTr("Convert To")
+                            onTriggered: destroyElement()
+                            visible: false
+                        }
 
                         MenuItem {
                             text: qsTr("Remove")
-                            //                            onClicked: hideColumnSelection(colName, tableName)
+                            onClicked: hideColumnSelection(colName, tableName)
+                            visible: false
                         }
                     }}
             }
 
-
-
-
-
         }
-
-
-
-
 
     }
 
@@ -285,7 +277,6 @@ Item{
         color: colors[droppedCount+1]
 
         height: 30
-        width: 200
 
         MouseArea {
             id: mouseAreaDroppedRect
@@ -308,12 +299,6 @@ Item{
             onEntered: showCrossIcon();
             onExited: hideCrossIcon();
         }
-
-
-
-
-
-
 
 
         Text{
@@ -360,16 +345,10 @@ Item{
             }
         }
 
-
-
-
-
-
     }
 
 
     Rectangle{
-
         border.color: colors[droppedCount+1]
         anchors.top : droppedRectangle.bottom
         width: 200

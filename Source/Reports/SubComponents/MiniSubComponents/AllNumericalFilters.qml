@@ -119,7 +119,7 @@ Rectangle{
             anchors.left: parent.left
             anchors.leftMargin: 20
             width: parent.width
-            height:listFiltersListView.height + listFilters.height
+            height:listFiltersListView.height
 
             spacing: 10
 
@@ -129,6 +129,7 @@ Rectangle{
                 model: FilterNumericalListModel
                 width: parent.width
                 height: 50
+
                 anchors.topMargin: 10
                 spacing: rowSpacing
                 interactive: false
