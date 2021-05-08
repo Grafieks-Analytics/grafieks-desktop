@@ -205,8 +205,6 @@ QHash<int, QByteArray> FilterCategoricalListModel::roleNames() const
 void FilterCategoricalListModel::newFilter(QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, bool includeNull, bool exclude )
 {
 
-//    FilterList *filterList = new FilterList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this);
-//    qDebug() <<"FROM FilterCategoricalListModel newFilter" << counter << section<< category<< subcategory << tableName<< colName<< relation<< slug <<val<< includeNull<< exclude<< this;
     addFilterList(new FilterCategoricalList(this->counter, section, category, subcategory, tableName, colName, relation, slug, val, includeNull, exclude, this));
 
     this->counter++;
@@ -267,6 +265,15 @@ QString FilterCategoricalListModel::callQueryModel()
 
     }
     return newWhereConditions;
+}
+
+void FilterCategoricalListModel::clearFilters()
+{
+    beginResetModel();
+    mFilter.clear();
+    endResetModel();
+
+    emit rowCountChanged();
 }
 
 

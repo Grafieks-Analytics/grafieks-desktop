@@ -19,8 +19,6 @@ Item{
     height:parent.height
     width: parent.width
 
-
-
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
@@ -46,24 +44,26 @@ Item{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    Component.onCompleted: {
-        //                textEditQueryModeller.text = "<h1>SELECT * FROM users WHERE users.id > 0</h1>"
-        textEditQueryModeller.text = " SELECT * FROM users WHERE users.id > 0 "
 
-
-
-    }
-
-    function onTextEditorChanged(){
-        // Set the Tmp SQL Query in C++
-        DSParamsModel.setTmpSql(GeneralParamsModel.returnPlainTextFromHtml(textEditQueryModeller.text))
-    }
 
     //    function to onTextFormatSqlKeyword
-    function onTextFormatSqlKeyword(){
+    function onTextFormatSqlKeyword(event, newText){
+        event.accepted = false
+        let finalQueryString = this.processText(newText)
+        let cursorPosition = textEditQueryModeller.cursorPosition
 
 
-        console.log("textEditQueryModeller.text"+textEditQueryModeller.text);
+        textEditQueryModeller.text = finalQueryString
+        textEditQueryModeller.insert(cursorPosition, " ")
+        textEditQueryModeller.cursorPosition = cursorPosition
+
+        // Save the plain query for execution
+        DSParamsModel.setTmpSql(GeneralParamsModel.returnPlainTextFromHtml(textEditQueryModeller.text))
+
+    }
+
+    function processText(newText){
+
         var finalQueryString = ""
         var lineItemElementArray = []
         var arraySqlKeyword =["SELECT","FROM","WHERE"]
@@ -75,16 +75,13 @@ Item{
 
         finalQueryString = headerString
 
-        var elems = textEditQueryModeller.text.match(/<p [^>]+>(.*?)<\/p>/g)
+        var elems = newText.match(/<p [^>]+>(.*?)<\/p>/g)
         elems.forEach((item, index) => {
                           finalQueryString += startString
                           lineItemElementArray[index] = GeneralParamsModel.returnPlainTextFromHtml(item).split(" ")
                           lineItemElementArray[index].forEach((innerItem, innerIndex) => {
                                                                   if(arraySqlKeyword.indexOf(innerItem.toUpperCase()) > -1){
-                                                                      console.log("change"+innerItem)
                                                                       finalQueryString += "<span style='color:"+Constants.grafieksGreenColor+";'>"+innerItem+"</span> ";
-
-                                                                      console.log("changeq"+finalQueryString)
                                                                   } else{
                                                                       finalQueryString += innerItem + " "
                                                                   }
@@ -93,16 +90,8 @@ Item{
                       })
         finalQueryString += footerString;
 
-
-
-
-
-        console.log( "finalQueryString"+finalQueryString)
-
+        return finalQueryString;
     }
-
-
-
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -165,37 +154,13 @@ Item{
 
     }
 
-    //    TextEdit{
-    //        id: textEditQueryModeller
-    //        anchors.left: toolSeperator1.right
-    //        width: parent.width - toolSeperator1.width
-    //        wrapMode: TextEdit.WordWrap
-    //        padding: 10
-
-    //        textFormat:TextEdit.RichText
-
-    //        selectByMouse: true
-    //        selectionColor:Constants.grafieksLightGreenColor;
-    //        selectByKeyboard: true
-
-    //        onTextChanged: {
-    //            onTextEditorChanged()
-    //            onTextFormatSqlKeyword()
-    //        }
-
-    //    }
     Flickable {
         id: flickArea
-
-
         width: parent.width - toolSeperator1.width
         height: parent.height
         anchors.left: toolSeperator1.right
-
-
         boundsBehavior: Flickable.StopAtBounds
         flickableDirection: Flickable.HorizontalFlick
-
         interactive: true
         function ensureVisible(r) {
             if (contentX >= r.x)
@@ -210,37 +175,19 @@ Item{
 
         TextEdit {
             id: textEditQueryModeller
-
-
+            textFormat:TextEdit.RichText
             anchors.left: toolSeperator1.right
             width: parent.width - toolSeperator1.width
-
             padding: 10
-
-
-
-            onTextChanged: {
-                onTextEditorChanged()
-                onTextFormatSqlKeyword()
-                console.log("testtes")
-            }
+            Keys.onReleased: onTextFormatSqlKeyword(event, text)
             focus: true
             wrapMode: TextEdit.Wrap
-
-            onCursorRectangleChanged:{
-
-                flickArea.ensureVisible(cursorRectangle)
-
-            }
-
-
+            onCursorRectangleChanged: flickArea.ensureVisible(cursorRectangle)
             selectionColor:Constants.grafieksLightGreenColor;
             selectByKeyboard: true
-
-
             selectByMouse: true
-
         }
+
     }
 
 
