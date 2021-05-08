@@ -405,6 +405,15 @@ QString FilterDateListModel::callQueryModel()
     return newWhereConditions;
 }
 
+void FilterDateListModel::clearFilters()
+{
+    beginResetModel();
+    mFilter.clear();
+    endResetModel();
+
+    emit rowCountChanged();
+}
+
 void FilterDateListModel::setDateFormatMap(QVariantMap dateFormatMap)
 {
     this->dateFormatMap = dateFormatMap;
