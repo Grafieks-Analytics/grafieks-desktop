@@ -55,10 +55,7 @@ TableView {
         function onSqlHasData(hasData){
             dataPreviewResult.model = hasData === true? QueryModel: ""
             globalConType = Constants.sqlType
-//            console.log("QueryModel1",QueryModel,typeof QueryModel,Object.values(QueryModel))
-            for (const [key, value] of Object.entries(QueryModel)) {
-              console.log("tag1",`${key}: ${value}`);
-            }
+            console.log("QueryModel1",QueryModel)
         }
 
         function onHeaderDataChanged(tableHeaders){
@@ -128,70 +125,68 @@ TableView {
     // Page Design Starts
 
 
+    delegate: Rectangle {
+        border.color: Constants.darkThemeColor
+        border.width: 0.5
+
+        Text {
+            text: display
+            anchors.fill: parent
+            anchors.margins: 10
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+            color: Constants.lightGrayTextColor
+        }
+    }
+    Rectangle { // mask the headers
+        z: 3
+        y: dataPreviewResult.contentY
+        x: dataPreviewResult.contentX
+        width: dataPreviewResult.leftMargin
+        height: dataPreviewResult.topMargin
+        border.color: Constants.themeColor
+        border.width: 0.2
+    }
+
+    // Table Header Starts
+
+    Row {
+        id: columnsHeader1
+        y: dataPreviewResult.contentY
+        z: 2
+        width: dataPreviewResult.width
+
+        Repeater {
+            id: mainRepeater
+
+            Rectangle{
+                width: dataPreviewResult.columnWidthProvider(modelData)
+                height: 30
+                border.color: Constants.darkThemeColor
+                color: Constants.lightThemeColor
+                border.width: 1
+                Text {
+                    id: textName
+                    text: modelData
+                    width: parent.width
+                    height: parent.height
+                    anchors.centerIn: parent
+                    padding: 10
+                    font.bold: false
+                    verticalAlignment: Text.AlignVCenter
+                }
+            }
+        }
+    }
+
+    Layout.fillWidth: true
+    Layout.fillHeight: true
 
 
-//    delegate: Rectangle {
-//        border.color: Constants.darkThemeColor
-//        border.width: 0.5
+    // Table Header Ends
 
-//        Text {
-//            text: display
-//            anchors.fill: parent
-//            anchors.margins: 10
-//            verticalAlignment: Text.AlignVCenter
-//            elide: Text.ElideRight
-//            color: Constants.lightGrayTextColor
-//        }
-//    }
-//    Rectangle { // mask the headers
-//        z: 3
-//        y: dataPreviewResult.contentY
-//        x: dataPreviewResult.contentX
-//        width: dataPreviewResult.leftMargin
-//        height: dataPreviewResult.topMargin
-//        border.color: Constants.themeColor
-//        border.width: 0.2
-//    }
-
-//    // Table Header Starts
-
-//    Row {
-//        id: columnsHeader1
-//        y: dataPreviewResult.contentY
-//        z: 2
-//        width: dataPreviewResult.width
-
-//        Repeater {
-//            id: mainRepeater
-
-//            Rectangle{
-//                width: dataPreviewResult.columnWidthProvider(modelData)
-//                height: 30
-//                border.color: Constants.darkThemeColor
-//                color: Constants.lightThemeColor
-//                border.width: 1
-//                Text {
-//                    id: textName
-//                    text: modelData
-//                    width: parent.width
-//                    height: parent.height
-//                    anchors.centerIn: parent
-//                    padding: 10
-//                    font.bold: false
-//                    verticalAlignment: Text.AlignVCenter
-//                }
-//            }
-//        }
-//    }
-
-//    Layout.fillWidth: true
-//    Layout.fillHeight: true
-
-
-//    // Table Header Ends
-
-//    ScrollIndicator.horizontal: CustomScrollHorizontalIndicator  {}
-//    ScrollIndicator.vertical: CustomScrollVerticalIndicator {}
+    ScrollIndicator.horizontal: CustomScrollHorizontalIndicator  {}
+    ScrollIndicator.vertical: CustomScrollVerticalIndicator {}
 
 
     // Page Design Ends
