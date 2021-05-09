@@ -657,6 +657,18 @@ QVariantMap DSParamsModel::fetchAllRectangles()
     return output;
 }
 
+QVector<int> DSParamsModel::fetchAllRectangleKeys()
+{
+    QVector<int> output;
+    QMap<int, QVariant>::const_iterator i = this->rectangles.constBegin();
+    while (i != this->rectangles.constEnd()) {
+        output.append(i.key());
+        ++i;
+    }
+
+    return output;
+}
+
 int DSParamsModel::rectanglesSize()
 {
     return this->rectangles.size();
@@ -717,6 +729,18 @@ void DSParamsModel::removeNewConnectingLine(int refObjId)
 QVariant DSParamsModel::fetchNewConnectingLine(int refObjId)
 {
     return this->newConnectingLine.value(refObjId);
+}
+
+QVector<int> DSParamsModel::fetchAllLineKeys()
+{
+    QVector<int> output;
+    QMap<int, QVariant>::const_iterator i = this->newConnectingLine.constBegin();
+    while (i != this->newConnectingLine.constEnd()) {
+        output.append(i.key());
+        ++i;
+    }
+
+    return output;
 }
 
 int DSParamsModel::linesSize()

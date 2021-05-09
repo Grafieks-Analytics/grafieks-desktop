@@ -167,6 +167,7 @@ public:
     Q_INVOKABLE void removeRectangles(int refObjId = 0);
     Q_INVOKABLE QVariant fetchRectangles(int refObjId = 0);
     Q_INVOKABLE QVariantMap fetchAllRectangles();
+    Q_INVOKABLE QVector<int> fetchAllRectangleKeys();
     Q_INVOKABLE int rectanglesSize();
 
     Q_INVOKABLE void addToFrontRectangleCoordinates(int refObjId, QVariant rectangleCoordinates);
@@ -181,6 +182,7 @@ public:
     Q_INVOKABLE void addToNewConnectingLine(int refObjId, const QVariant &lineObject);
     Q_INVOKABLE void removeNewConnectingLine(int refObjId = 0);
     Q_INVOKABLE QVariant fetchNewConnectingLine(int refObjId = 0);
+    Q_INVOKABLE QVector<int> fetchAllLineKeys();
     Q_INVOKABLE int linesSize();
 
     Q_INVOKABLE void addToFrontLineMap(int refObjId, QVariant lineObject);
