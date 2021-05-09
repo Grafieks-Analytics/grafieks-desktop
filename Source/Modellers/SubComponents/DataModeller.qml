@@ -275,6 +275,7 @@ Item {
             // a.1.Main rect(value)
             // a.2.Rect front
             // a.3.Rect back
+            console.log(DSParamsModel.fetchRectangles(refObject), "POINT")
             if(DSParamsModel.fetchRectangles(refObject) !== ""){
 
                 // Ensure that deleted tables are not reflected in generated query later
@@ -284,6 +285,7 @@ Item {
                 DSParamsModel.removeRectangles(refObject);
                 DSParamsModel.removeFrontRectangleCoordinates(refObject)
                 DSParamsModel.removeRearRectangleCoordinates(refObject)
+                DSParamsModel.removeExistingTables(refObject)
             }
 
 
@@ -694,6 +696,7 @@ Item {
 
             var nearestTable = nearestRectangle(DSParamsModel.fetchAllRearRectangleCoordinates(), currentPoint)
 
+
             // Get the coordinates for the nearest rectangle
             var nearestRectangleCoordinates = DSParamsModel.fetchRearRectangleCoordinates(nearestTable.tableId)
             DSParamsModel.fetchNewConnectingLine(counter).incomingRectangleFrontX = drag.x
@@ -837,7 +840,6 @@ Item {
     function nearestRectangle(tmpRearRectangleCoordinates, currentPoint){
 
         var tmpArray = []
-
 
         // Find the distance b/w all rear of a rectangle
         // and the current point
