@@ -200,18 +200,16 @@ Item {
             // DSParams rectangle
             var rectangleObjectsSize = DSParamsModel.rectanglesSize()
             var lineObjectsSize = DSParamsModel.linesSize()
-            var rectangleObjects = DSParamsModel.fetchAllRectangles()
+            var rectangleObjectKeys = DSParamsModel.fetchAllRectangleKeys()
+            var newLineObjectKeys = DSParamsModel.fetchAllLineKeys()
 
 
             // Check if the rectangles are connected to some rectangle in front (except the first one)
             // If not throw an error
             if(rectangleObjectsSize - lineObjectsSize === 1){
 
-                for (let prop in rectangleObjects) {
-                    if(DSParamsModel.fetchFrontRectangleCoordinates(prop) === "")
-                        firstRectId  = prop
-                }
-
+                var firstRectArr = rectangleObjectKeys.filter(x => newLineObjectKeys.indexOf(x) === -1)
+                firstRectId = firstRectArr[0]
                 // Call the function to process the rest of the query
                 joinOrder(firstRectId )
 
@@ -471,12 +469,8 @@ Item {
             DSParamsModel.addToJoinOrder(objId)
         }
 
-        console.log(objArray, "OBJ ARRAY")
-
 
         objArray.forEach(function(item){
-
-            console.log(item, DSParamsModel.fetchRearLineMap(item), "ITEM")
 
             if(typeof DSParamsModel.fetchRearLineMap(item) !== "undefined"){
 
