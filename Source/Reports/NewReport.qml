@@ -1536,7 +1536,7 @@ Page {
                 width: parent.width
 
                 Text{
-                    text: "Data Source Name"
+                    text: DSParamsModel.dsName
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
                     anchors.leftMargin: 10
