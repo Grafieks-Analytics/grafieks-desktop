@@ -1633,7 +1633,6 @@
             drawChart(data);
 
             function drawChart(data, plottingConfiguration = {}) {
-                console.log({ extraHeight });
                 window.data = data;
                 dataValues = data[0];
 
@@ -1880,7 +1879,6 @@
                 setYaxisWidth();
 
                 var barWidth = document.querySelector(".bar").getBBox().width;
-                console.log({ barWidth });
                 if (
                     chartType == constants.chartType.FIT_WIDTH &&
                     barWidth < 40
@@ -1937,8 +1935,6 @@
                         }
                     }
                 }
-
-                console.log({ extraHeightWorked, redrawn });
 
                 if (extraHeightWorked && !redrawn) {
                     extraHeightWorked = false;
