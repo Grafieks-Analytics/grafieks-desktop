@@ -181,6 +181,7 @@ public:
     Q_INVOKABLE void addToNewConnectingLine(int refObjId, const QVariant &lineObject);
     Q_INVOKABLE void removeNewConnectingLine(int refObjId = 0);
     Q_INVOKABLE QVariant fetchNewConnectingLine(int refObjId = 0);
+    Q_INVOKABLE int linesSize();
 
     Q_INVOKABLE void addToFrontLineMap(int refObjId, QVariant lineObject);
     Q_INVOKABLE void removeFrontLineMap(int refObjId = 0);

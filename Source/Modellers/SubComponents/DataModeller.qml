@@ -198,15 +198,14 @@ Item {
             var undefinedCounter = 0
 
             // DSParams rectangle
+            var rectangleObjectsSize = DSParamsModel.rectanglesSize()
+            var lineObjectsSize = DSParamsModel.linesSize()
             var rectangleObjects = DSParamsModel.fetchAllRectangles()
-            for (var prop in rectangleObjects) {
-                if(DSParamsModel.fetchFrontRectangleCoordinates(prop) === "")
-                    undefinedCounter++
-            }
+
 
             // Check if the rectangles are connected to some rectangle in front (except the first one)
             // If not throw an error
-            if(undefinedCounter <= 1){
+            if(rectangleObjectsSize - lineObjectsSize === 1){
 
                 for (let prop in rectangleObjects) {
                     if(DSParamsModel.fetchFrontRectangleCoordinates(prop) === "")
@@ -472,8 +471,12 @@ Item {
             DSParamsModel.addToJoinOrder(objId)
         }
 
+        console.log(objArray, "OBJ ARRAY")
+
 
         objArray.forEach(function(item){
+
+            console.log(item, DSParamsModel.fetchRearLineMap(item), "ITEM")
 
             if(typeof DSParamsModel.fetchRearLineMap(item) !== "undefined"){
 

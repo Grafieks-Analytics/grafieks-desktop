@@ -719,6 +719,11 @@ QVariant DSParamsModel::fetchNewConnectingLine(int refObjId)
     return this->newConnectingLine.value(refObjId);
 }
 
+int DSParamsModel::linesSize()
+{
+    return this->newConnectingLine.size();
+}
+
 void DSParamsModel::addToFrontLineMap(int refObjId, QVariant lineObject)
 {
     this->frontLineMap.insert(refObjId, lineObject);
