@@ -293,7 +293,7 @@ Popup {
         categoricalTabBackground.color =  Constants.whiteColor
         dateTabBackground.color =  Constants.whiteColor
         numericalTabBackground.color = Constants.whiteColor
-        groupTabBackground.color = Constants.whiteColor
+//        groupTabBackground.color = Constants.whiteColor
 
         allCategoricalFilterContent.visible = false
         allDateFilterContent.visible = false
@@ -512,7 +512,7 @@ Popup {
         TabButton{
             id: character_btn
             text: "Categorical"
-            width:popupMain.width/4 - 1
+            width:popupMain.width/3 - 1
 
             background: Rectangle {
                 id: categoricalTabBackground
@@ -538,7 +538,7 @@ Popup {
         TabButton{
             id: date_btn
             text: "Date"
-            width:popupMain.width/4 - 1
+            width:popupMain.width/3 - 1
 
             background: Rectangle {
                 id: dateTabBackground
@@ -564,7 +564,7 @@ Popup {
         TabButton{
             id: numbers_btn
             text: "Numerical"
-            width:popupMain.width/4 - 1
+            width:popupMain.width/3 - 1
 
             background: Rectangle {
                 id: numericalTabBackground
@@ -587,29 +587,29 @@ Popup {
 
         // Users Tab button starts
 
-        TabButton{
-            id: users_btn
-            text: "Group"
-            width:popupMain.width/4 - 2
+//        TabButton{
+//            id: users_btn
+//            text: "Group"
+//            width:popupMain.width/4 - 2
 
 
-            background: Rectangle {
-                id: groupTabBackground
-                border.color: Constants.darkThemeColor
-                color: users_btn.pressed? Constants.themeColor: Constants.whiteColor
+//            background: Rectangle {
+//                id: groupTabBackground
+//                border.color: Constants.darkThemeColor
+//                color: users_btn.pressed? Constants.themeColor: Constants.whiteColor
 
-            }
+//            }
 
-            contentItem: Text{
-                id:users_btn_text
-                text: users_btn.text
-                color:"black"
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+//            contentItem: Text{
+//                id:users_btn_text
+//                text: users_btn.text
+//                color:"black"
+//                horizontalAlignment: Text.AlignHCenter
+//                verticalAlignment: Text.AlignVCenter
+//            }
 
-            onClicked: onGroupTabClicked()
-        }
+//            onClicked: onGroupTabClicked()
+//        }
 
         // Users Tab button ends
     }
