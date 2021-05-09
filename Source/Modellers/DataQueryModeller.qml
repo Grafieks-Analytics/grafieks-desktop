@@ -308,9 +308,6 @@ Page {
 
     function onCreateDashboardClicked(){
 
-        Datasources.setDsName(ds_name.text)
-        Datasources.setSourceType(Constants.liveDS)
-
         stacklayout_home.currentIndex = 6
     }
 
