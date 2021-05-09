@@ -408,6 +408,7 @@ Item {
 
             // Add to DSParamsModel
             DSParamsModel.addToJoinBoxTableMap(tmpOrphanTableId, refObjectName, tmpNearestTable.tableName)
+            DSParamsModel.addToPrimaryJoinTable(tmpOrphanTableId, refObjectName)
 
             // Popup join details
             showJoinPopup(tmpOrphanTableId)
