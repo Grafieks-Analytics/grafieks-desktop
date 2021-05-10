@@ -275,7 +275,6 @@ Item {
             // a.1.Main rect(value)
             // a.2.Rect front
             // a.3.Rect back
-            console.log(DSParamsModel.fetchRectangles(refObject), "POINT")
             if(DSParamsModel.fetchRectangles(refObject) !== ""){
 
                 // Ensure that deleted tables are not reflected in generated query later
@@ -867,7 +866,6 @@ Item {
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryModel.callSql(DSParamsModel.tmpSql)
         } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-            console.log("QUERY exe", DSParamsModel.tmpSql)
             DuckQueryModel.setQuery(DSParamsModel.tmpSql)
         } else{
             ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
