@@ -374,11 +374,10 @@ void TableSchemaModel::showSchema(QString query)
         QString mainTable = querySplitter.getMainTable();
         tablesList.push_back(mainTable);
 
-
-
         for(QString tableName: tablesList){
-            describeQueryString = "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '" + tableName.toLower() + "'";
+            describeQueryString = "select \"column\", type from pg_table_def where tablename = '" + tableName.replace(QRegularExpression("\""), "")  + "'";
 
+            qDebug() << describeQueryString;
             QSqlQuery describeQuery(describeQueryString, dbRedshift);
             QSqlRecord rec = describeQuery.record();
 
