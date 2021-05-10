@@ -48,6 +48,12 @@ Popup {
                  msg_dialog.text = status.msg
              }
         }
+
+        function onLogout(){
+            fileName = ""
+            username.text = ""
+            password.text = ""
+        }
     }
 
     Connections{

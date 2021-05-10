@@ -46,6 +46,10 @@ Popup {
                 msg_dialog.text = status.msg
             }
         }
+
+        function onLogout(){
+            selectedFile = ""
+        }
     }
 
 
