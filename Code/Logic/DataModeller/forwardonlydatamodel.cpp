@@ -27,46 +27,46 @@ void ForwardOnlyDataModel::columnData(QString col, QString tableName, QString se
     case Constants::redshiftIntType:
         conType = Constants::redshiftOdbcStrType;
         if (searchString != ""){
-            queryString = "SELECT " + col + " FROM "+ tableName + " WHERE " + col + " LIKE '%"+searchString+"%'";
+            queryString = "SELECT DISTINCT " + col + " FROM "+ tableName + " WHERE " + col + " LIKE '%"+searchString+"%'";
         } else{
-            queryString = "SELECT " + col + " FROM "+ tableName;
+            queryString = "SELECT DISTINCT " + col + " FROM "+ tableName;
         }
-        queryString = "";
         break;
 
     case Constants::snowflakeIntType:
         conType = Constants::snowflakeOdbcStrType;
         if (searchString != ""){
-            queryString = "SELECT " + col + " FROM "+ tableName + " WHERE " + col + " LIKE '%"+searchString+"%'";
+            queryString = "SELECT DISTINCT " + col + " FROM "+ tableName + " WHERE " + col + " LIKE '%"+searchString+"%'";
         } else{
-            queryString = "SELECT " + col + " FROM "+ tableName;
+            queryString = "SELECT DISTINCT " + col + " FROM "+ tableName;
         }
-        queryString = "";
         break;
 
     case Constants::teradataIntType:
         conType = Constants::teradataOdbcStrType;
         if (searchString != ""){
-            queryString = "SELECT " + col + " FROM "+ tableName + " WHERE " + col + " LIKE '%"+searchString+"%'";
+            queryString = "SELECT DISTINCT " + col + " FROM "+ tableName + " WHERE " + col + " LIKE '%"+searchString+"%'";
         } else{
-            queryString = "SELECT " + col + " FROM "+ tableName;
+            queryString = "SELECT DISTINCT " + col + " FROM "+ tableName;
         }
-        queryString = "";
         break;
 
     }
+
     QSqlDatabase forwardOnlyDb = QSqlDatabase::database(conType);
     QSqlQuery query(queryString, forwardOnlyDb);
 
+
     if(query.lastError().type() == QSqlError::NoError){
-        int i = 0;
         while(query.next()){
-            qDebug() << query.value(i);
-            i++;
+            this->colData.append(query.value(0).toString());
         }
     } else{
         qWarning() << Q_FUNC_INFO << query.lastError();
     }
+
+    emit forwardColData(this->colData);
+    this->colData.clear();
 }
 
 QStringList ForwardOnlyDataModel::getColumnList(QString tableName, QString moduleName, QString searchString)

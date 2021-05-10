@@ -41,14 +41,7 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // SIGNALS STARTS
-    Connections{
-        target: DuckDataModel
 
-        function onDuckColData(colData){
-            singleSelectCheckList.model = colData
-            multiSelectCheckList.model  = colData
-        }
-    }
 
 
     // SIGNALS ENDS
@@ -59,7 +52,23 @@ Rectangle{
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: DuckDataModel
 
+        function onDuckColData(colData){
+            singleSelectCheckList.model = colData
+            multiSelectCheckList.model  = colData
+        }
+    }
+
+    Connections{
+        target: ForwardOnlyDataModel
+
+        function onForwardColData(colData){
+            singleSelectCheckList.model = colData
+            multiSelectCheckList.model  = colData
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -181,6 +190,7 @@ Rectangle{
     function onExcludeCheckedClicked(checked){
         DSParamsModel.setExclude(checked)
     }
+
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/

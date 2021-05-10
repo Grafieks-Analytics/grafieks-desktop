@@ -34,7 +34,7 @@ void DuckDataModel::columnData(QString col, QString tableName)
 
     QString db = Statics::currentDbName;
 
-    auto data = duckCon->con.Query("SELECT " + col.toStdString() + " FROM " + tableName.toStdString());
+    auto data = duckCon->con.Query("SELECT DISTINCT " + col.toStdString() + " FROM " + tableName.toStdString());
     if(!data->error.empty())
         qWarning() << Q_FUNC_INFO << data->error.c_str();
 
