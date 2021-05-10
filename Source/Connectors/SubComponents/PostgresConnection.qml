@@ -47,6 +47,14 @@ Popup {
                 msg_dialog.text = status.msg
             }
         }
+
+        function onLogout(){
+            server.text = ""
+            database.text = ""
+            port.text = ""
+            username.text = ""
+            password.text = ""
+        }
     }
 
     Connections{
@@ -95,7 +103,6 @@ Popup {
 
     function connectToPostgreSQL(){
         ConnectorsLoginModel.postgresOdbcLogin(control.currentText, server.text, database.text, port.text, username.text, password.text)
-        //ConnectorsLoginModel.postgresOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
     }
 
     // JAVASCRIPT FUNCTION ENDS
