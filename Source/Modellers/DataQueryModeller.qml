@@ -426,6 +426,7 @@ Page {
         ChartsModel.removeTmpChartData()
         DSParamsModel.resetDataModel();
         DSParamsModel.resetFilter()
+        DSParamsModel.setTmpSql("")
 
         // Clear filters
         FilterCategoricalListModel.clearFilters()
