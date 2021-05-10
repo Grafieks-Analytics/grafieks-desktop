@@ -149,14 +149,14 @@ Item{
                     // Set profiling on when clicking the play button
                     // Reset profiling and turn off when clicked on Publish button
 
-                    if(QueryStatsModel.profileStatus === false){
-                        QueryStatsModel.setProfiling(true)
-                        QueryStatsModel.setProfileStatus(true)
-                    }
+                    // if(QueryStatsModel.profileStatus === false){
+                    //     QueryStatsModel.setProfiling(true)
+                    //     QueryStatsModel.setProfileStatus(true)
+                    // }
 
                     QueryModel.callSql(DSParamsModel.tmpSql)
-                    QueryStatsModel.showStats()
-                    //TableSchemaModel.showSchema(DSParamsModel.tmpSql)
+                    // QueryStatsModel.showStats()
+                    // TableSchemaModel.showSchema(DSParamsModel.tmpSql)
 
                 } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
                     console.log("DUCK QUERY MDEl", DSParamsModel.tmpSql)
@@ -215,7 +215,9 @@ Item{
 
     function onGetErrorMsg(){
 
-        var message = QueryStatsModel.showErrorMessage(DSParamsModel.tmpSql);
+        var message = ""
+
+        // message = QueryStatsModel.showErrorMessage(DSParamsModel.tmpSql);
         if(message === ""){
             message = "SQL query succesfully executed"
             queryUpdate.icon = StandardIcon.NoIcon
