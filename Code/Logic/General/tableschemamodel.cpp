@@ -78,7 +78,6 @@ void TableSchemaModel::showSchema(QString query)
             tableName = tableName.replace(QRegularExpression("[\"`']"), "");
 
             QSqlRecord record = dbCon.record(tableName);
-            qDebug() << "SQLITE SQUEAL" << record << tableName << record.isEmpty();
 
             if(!record.isEmpty()){
 

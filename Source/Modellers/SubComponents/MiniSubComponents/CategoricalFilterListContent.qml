@@ -80,6 +80,10 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    Component.onCompleted: {
+        setCheckedAll(true)
+        mainCheckBox.visible = true
+    }
 
     // SLOT function
     function slotEditModeSubCategory(subCategory){
@@ -104,6 +108,7 @@ Rectangle{
 
         // Set the sub category for filter
         DSParamsModel.setSubCategory(Constants.categorySubMulti)
+        mainCheckBox.visible = true
     }
 
 
@@ -114,6 +119,7 @@ Rectangle{
 
         // Set the sub category for filter
         DSParamsModel.setSubCategory(Constants.categorySubSingle)
+        mainCheckBox.visible = false
     }
 
 
@@ -130,6 +136,10 @@ Rectangle{
     }
 
     function onAllCheckBoxCheckedChanged(checked){
+        setCheckedAll(checked)
+    }
+
+    function setCheckedAll(checked){
         // If Select All option is true
         if(checked === true){
 
@@ -164,6 +174,7 @@ Rectangle{
 
                 // Start pushing the individual checked item in the array
                 checkedValues.push(modelData)
+                console.log(checkedValues)
 
             } else{
                 // Remove item if unchecked
@@ -361,9 +372,9 @@ Rectangle{
                 anchors.topMargin: 0
 
                 flickableDirection: Flickable.VerticalFlick
-                           boundsBehavior: Flickable.StopAtBounds
-                           clip: true
-                           ScrollBar.vertical: CustomScrollBar {}
+                boundsBehavior: Flickable.StopAtBounds
+                clip: true
+                ScrollBar.vertical: CustomScrollBar {}
 
 
 
@@ -408,9 +419,9 @@ Rectangle{
             y:30
 
             flickableDirection: Flickable.VerticalFlick
-                       boundsBehavior: Flickable.StopAtBounds
-                       clip: true
-                       ScrollBar.vertical: CustomScrollBar {}
+            boundsBehavior: Flickable.StopAtBounds
+            clip: true
+            ScrollBar.vertical: CustomScrollBar {}
 
             delegate: Row{
 
