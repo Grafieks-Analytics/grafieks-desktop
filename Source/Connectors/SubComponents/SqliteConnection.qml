@@ -49,6 +49,7 @@ Popup {
 
         function onLogout(){
             selectedFile = ""
+            sqliteFileName.text = ""
         }
     }
 
