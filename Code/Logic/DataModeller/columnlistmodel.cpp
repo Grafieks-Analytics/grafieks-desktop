@@ -107,7 +107,7 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
 
     case Constants::mysqlIntType:{
 
-        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
         this->setQuery(queryString, dbMysql);
 
@@ -115,7 +115,7 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
     }
     case Constants::mysqlOdbcIntType:{
 
-        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
         QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrType);
         this->setQuery(queryString, dbMysqlOdbc);
 
@@ -124,43 +124,27 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
 
     case Constants::sqliteIntType:{
 
-        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+
+        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
         QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
         this->setQuery(queryString, dbSqlite);
+        qDebug() << "ISUDE" << queryString;
 
         break;
     }
 
     case Constants::postgresIntType:{
 
-        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
         this->setQuery(queryString, dbPostgres);
 
         break;
     }
 
-    case Constants::redshiftIntType:{
-
-        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
-        QSqlDatabase dbRedshift = QSqlDatabase::database(Constants::redshiftOdbcStrType);
-        this->setQuery(queryString, dbRedshift);
-
-        break;
-    }
-
-    case Constants::excelIntType:{
-
-        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
-        QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelStrType);
-        this->setQuery(queryString, dbExcel);
-
-        break;
-    }
-
     case Constants::mssqlIntType:{
 
-        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
         QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrType);
         this->setQuery(queryString, dbMssql);
 
@@ -169,7 +153,7 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
 
     case Constants::oracleIntType:{
 
-        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " LIMIT " + QString::number(lowerLimit) + ", "+ QString::number(upperLimit);
+        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
         QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrType);
         this->setQuery(queryString, dbOracle);
 
@@ -202,23 +186,6 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
         break;
     }
 
-    case Constants::snowflakeIntType:{
-
-        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
-        QSqlDatabase dbSnowflake = QSqlDatabase::database(Constants::snowflakeOdbcStrType);
-        this->setQuery(queryString, dbSnowflake);
-
-        break;
-    }
-
-    case Constants::teradataIntType:{
-
-        queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
-        QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::teradataOdbcStrType);
-        this->setQuery(queryString, dbTeradata);
-
-        break;
-    }
 
     case Constants::accessIntType:{
 
@@ -297,14 +264,6 @@ void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableNam
         break;
     }
 
-    case Constants::redshiftIntType:{
-
-        QString queryString = postgresDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
-        QSqlDatabase dbRedshift = QSqlDatabase::database(Constants::redshiftOdbcStrType);
-        this->setQuery(queryString, dbRedshift);
-
-        break;
-    }
     case Constants::mssqlIntType:{
 
         QString queryString = mssqlDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
@@ -344,23 +303,6 @@ void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableNam
         QString queryString = hiveDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
         QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrType);
         this->setQuery(queryString, dbHive);
-
-        break;
-    }
-
-    case Constants::snowflakeIntType:{
-
-        QString queryString = snowflakeDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
-        QSqlDatabase dbSnowflake = QSqlDatabase::database(Constants::snowflakeOdbcStrType);
-        this->setQuery(queryString, dbSnowflake);
-
-        break;
-    }
-    case Constants::teradataIntType:{
-
-        QString queryString = teradataDateConversion.convertDateQuery(columnName, tableName, lowerLimit, upperLimit, value);
-        QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::teradataOdbcStrType);
-        this->setQuery(queryString, dbTeradata);
 
         break;
     }
@@ -482,27 +424,6 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
             break;
         }
 
-        case Constants::redshiftIntType:{
-
-            pieces = fieldNames.split(",");
-
-            if(pieces.length() > 1){
-                finalSearchFields = pieces.join("','");
-            }else{
-                finalSearchFields = fieldNames;
-            }
-
-            finalSearchFields = "'" + finalSearchFields + "'";
-
-            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
-
-            QSqlDatabase dbRedshift = QSqlDatabase::database(Constants::redshiftOdbcStrType);
-            this->setQuery(queryString, dbRedshift);
-
-
-            break;
-        }
-
         case Constants::mssqlIntType:{
 
             pieces = fieldNames.split(",");
@@ -608,48 +529,6 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
             break;
         }
 
-        case Constants::snowflakeIntType:{
-
-            pieces = fieldNames.split(",");
-
-            if(pieces.length() > 1){
-                finalSearchFields = pieces.join("','");
-            }else{
-                finalSearchFields = fieldNames;
-            }
-
-            finalSearchFields = "'" + finalSearchFields + "'";
-
-            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
-
-            QSqlDatabase dbSnowflake = QSqlDatabase::database(Constants::snowflakeOdbcStrType);
-            this->setQuery(queryString, dbSnowflake);
-
-
-            break;
-        }
-
-        case Constants::teradataIntType:{
-
-            pieces = fieldNames.split(",");
-
-            if(pieces.length() > 1){
-                finalSearchFields = pieces.join("','");
-            }else{
-                finalSearchFields = fieldNames;
-            }
-
-            finalSearchFields = "'" + finalSearchFields + "'";
-
-            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
-
-            QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::teradataOdbcStrType);
-            this->setQuery(queryString, dbTeradata);
-
-
-            break;
-        }
-
         case Constants::accessIntType:{
 
             pieces = fieldNames.split(",");
@@ -746,19 +625,6 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
         break;
     }
 
-    case Constants::redshiftIntType:{
-
-        if (searchString != ""){
-            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
-        } else{
-            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
-        }
-
-        QSqlDatabase dbRedshift = QSqlDatabase::database(Constants::redshiftOdbcStrType);
-        this->setQuery(queryString, dbRedshift);
-
-        break;
-    }
 
     case Constants::mssqlIntType:{
 
@@ -826,34 +692,6 @@ void ColumnListModel::likeColumnQuery(QString columnName, QString tableName, QSt
 
         QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrType);
         this->setQuery(queryString, dbHive);
-
-        break;
-    }
-
-    case Constants::snowflakeIntType:{
-
-        if (searchString != ""){
-            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
-        } else{
-            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
-        }
-
-        QSqlDatabase dbSnowflake = QSqlDatabase::database(Constants::snowflakeOdbcStrType);
-        this->setQuery(queryString, dbSnowflake);
-
-        break;
-    }
-
-    case Constants::teradataIntType:{
-
-        if (searchString != ""){
-            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE " + columnName + " LIKE '%"+searchString+"%'";
-        } else{
-            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
-        }
-
-        QSqlDatabase dbTeradata = QSqlDatabase::database(Constants::teradataOdbcStrType);
-        this->setQuery(queryString, dbTeradata);
 
         break;
     }

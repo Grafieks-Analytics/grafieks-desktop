@@ -25,89 +25,70 @@ void TableSchemaModel::showSchema(QString query)
     QString explainQueryString, describeQueryString;
     QStringList tableList, outputDataList;
 
-
     switch(Statics::currentDbIntType){
 
-    case Constants::mysqlIntType:{
+    case Constants::mysqlIntType:
+    case Constants::mysqlOdbcIntType:
+    case Constants::sqliteIntType:
+    case Constants::postgresIntType:
+    case Constants::oracleIntType:
+    case Constants::mssqlIntType:
+    case Constants::accessIntType:
+    case Constants::mongoIntType:{
+        QString dbString;
 
-        QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
+        switch (Statics::currentDbIntType) {
 
-        // Reset Mysql Profiling so that it doesn't log the query stats
-        // Then in the end of this case, Set it back again in the end
-        // We donot want to show "EXPLAIN" & "DESCRIBE" output
-        // in Test Query Tab
-
-        QSqlQuery profilingUnsetQuery("SET profiling = 0", dbMysql);
-        QSqlQuery profilingSetQuery("SET profiling = 1", dbMysql);
-
-        profilingUnsetQuery.exec();
-
-        // Determine the list of table names
-        // from the last query
-
-        explainQueryString = "EXPLAIN FORMAT = JSON "+ query;
-        QSqlQuery explainQuery(explainQueryString, dbMysql);
-
-
-        explainQuery.first();
-
-        QJsonDocument jsonQuery = QJsonDocument::fromJson(explainQuery.value(0).toString().toUtf8());
-        QJsonObject objQuery = jsonQuery.object();
-
-        QJsonObject statusObj = objQuery["query_block"].toObject();
-        QJsonArray tablesListArray = statusObj["nested_loop"].toArray();
-
-        if(tablesListArray.size() > 0){
-            for(int i = 0; i< tablesListArray.size(); i++){
-                QJsonObject table = tablesListArray.at(i).toObject();
-                QJsonObject tableData = table["table"].toObject();
-
-                // Affected column names in teh query
-                QJsonArray affectedColumns = tableData["used_columns"].toArray();
-
-                for(int j = 0; j < affectedColumns.size(); j++){
-                    queriedColumnNames << affectedColumns.at(j).toString();
-                }
-
-                // Affected table names in the query
-                tableList << tableData["table_name"].toString();
-
-            }
-        } else{
-            QJsonObject tableData = statusObj["table"].toObject();
-
-            // Affected column names in teh query
-            QJsonArray affectedColumns = tableData["used_columns"].toArray();
-
-            for(int j = 0; j < affectedColumns.size(); j++){
-                queriedColumnNames << affectedColumns.at(j).toString();
-            }
-
-            tableList << tableData["table_name"].toString();
+        case Constants::mysqlIntType:
+            dbString = Constants::mysqlStrQueryType;
+            break;
+        case Constants::mysqlOdbcIntType:
+            dbString = Constants::mysqlOdbcStrQueryType;
+            break;
+        case Constants::sqliteIntType:
+            dbString = Constants::sqliteStrQueryType;
+            break;
+        case Constants::postgresIntType:
+            dbString = Constants::postgresOdbcStrQueryType;
+            break;
+        case Constants::oracleIntType:
+            dbString = Constants::oracleOdbcStrQueryType;
+            break;
+        case Constants::mssqlIntType:
+            dbString = Constants::mssqlOdbcStrQueryType;
+            break;
+        case Constants::accessIntType:
+            dbString = Constants::accessOdbcStrQueryType;
+            break;
+        case Constants::mongoIntType:
+            dbString = Constants::mongoOdbcStrQueryType;
+            break;
 
         }
 
+        querySplitter.setQueryForClasses(query);
+        QStringList tablesList = querySplitter.getJoinTables();
+        QString mainTable = querySplitter.getMainTable();
+        tablesList.push_back(mainTable);
 
+        QSqlDatabase dbCon = QSqlDatabase::database(dbString);
 
-        // Determine the Table structure
+        for(QString tableName: tablesList){
 
-        for(QString tableName: tableList){
-            describeQueryString = "DESCRIBE " + tableName;
+            tableName = tableName.replace(QRegularExpression("[\"`']"), "");
 
-            QSqlQuery describeQuery(describeQueryString, dbMysql);
-            if(describeQuery.lastError().type() == QSqlError::NoError){
+            QSqlRecord record = dbCon.record(tableName);
+            qDebug() << "SQLITE SQUEAL" << record << tableName << record.isEmpty();
 
-                while(describeQuery.next()){
+            if(!record.isEmpty()){
 
-                    QString fieldName = describeQuery.value(0).toString();
-                    QString fieldType = describeQuery.value(1).toString();
+                for(int i=0; i < record.count(); i++){
 
-                    // Remove characters after `(` and then trim whitespaces
-                    QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
+                    QString fieldName = record.fieldName(i);
+                    QString fieldType = record.field(i).value().typeName();
 
                     // Get filter data type for QML
-                    QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
+                    QString filterDataType = dataType.dataType(fieldType);
                     outputDataList << tableName << fieldName << fieldType << filterDataType;
 
                     // Output data according to Filter type
@@ -125,245 +106,14 @@ void TableSchemaModel::showSchema(QString query)
                     // Append all data type to allList as well
                     allList.append(outputDataList);
 
-                    // Clear Stringlist for future
                     outputDataList.clear();
                 }
-            } else{
-                qWarning() << Q_FUNC_INFO << describeQuery.lastError();
             }
         }
-
-        // Set mysql profiling back again
-        profilingSetQuery.exec();
-
-
-
-        break; // Mysql Type break
-    }
-
-    case Constants::mysqlOdbcIntType:{
-
-        QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
-
-        // Reset Mysql Profiling so that it doesn't log the query stats
-        // Then in the end of this case, Set it back again in the end
-        // We donot want to show "EXPLAIN" & "DESCRIBE" output
-        // in Test Query Tab
-
-        QSqlQuery profilingUnsetQuery("SET profiling = 0", dbMysqlOdbc);
-        QSqlQuery profilingSetQuery("SET profiling = 1", dbMysqlOdbc);
-
-        profilingUnsetQuery.exec();
-
-        // Determine the list of table names
-        // from the last query
-
-        explainQueryString = "EXPLAIN FORMAT = JSON "+ query;
-        QSqlQuery explainQuery(explainQueryString, dbMysqlOdbc);
-
-        if(explainQuery.lastError().type() == QSqlError::NoError){
-            explainQuery.first();
-
-            QJsonDocument jsonQuery = QJsonDocument::fromJson(explainQuery.value(0).toString().toUtf8());
-            QJsonObject objQuery = jsonQuery.object();
-
-            QJsonObject statusObj = objQuery["query_block"].toObject();
-            QJsonArray tablesListArray = statusObj["nested_loop"].toArray();
-
-            if(tablesListArray.size() > 0){
-                for(int i = 0; i< tablesListArray.size(); i++){
-                    QJsonObject table = tablesListArray.at(i).toObject();
-                    QJsonObject tableData = table["table"].toObject();
-
-                    // Affected column names in teh query
-                    QJsonArray affectedColumns = tableData["used_columns"].toArray();
-
-                    for(int j = 0; j < affectedColumns.size(); j++){
-                        queriedColumnNames << affectedColumns.at(j).toString();
-                    }
-
-                    // Affected table names in the query
-                    tableList << tableData["table_name"].toString();
-
-                }
-            } else{
-                QJsonObject tableData = statusObj["table"].toObject();
-
-                // Affected column names in teh query
-                QJsonArray affectedColumns = tableData["used_columns"].toArray();
-
-                for(int j = 0; j < affectedColumns.size(); j++){
-                    queriedColumnNames << affectedColumns.at(j).toString();
-                }
-
-                tableList << tableData["table_name"].toString();
-
-            }
-        } else{
-            qWarning() << Q_FUNC_INFO << explainQuery.lastError();
-        }
-
-
-
-        // Determine the Table structure
-
-        for(QString tableName: tableList){
-            describeQueryString = "DESCRIBE " + tableName;
-
-            QSqlQuery describeQuery(describeQueryString, dbMysqlOdbc);
-            if(describeQuery.lastError().type() == QSqlError::NoError){
-                while(describeQuery.next()){
-
-                    QString fieldName = describeQuery.value(0).toString();
-                    QString fieldType = describeQuery.value(1).toString();
-
-                    // Remove characters after `(` and then trim whitespaces
-                    QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-
-                    // Get filter data type for QML
-                    QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
-                    outputDataList << tableName << fieldName << fieldType << filterDataType;
-
-                    // Output data according to Filter type
-
-                    if(filterDataType == Constants::categoricalType){
-                        allCategorical.append(outputDataList);
-                    } else if(filterDataType == Constants::numericalType){
-                        allNumerical.append(outputDataList);
-                    } else if(filterDataType == Constants::dateType){
-                        allDates.append(outputDataList);
-                    } else{
-                        allOthers.append(outputDataList);
-                    }
-
-                    // Append all data type to allList as well
-                    allList.append(outputDataList);
-
-                    // Clear Stringlist for future
-                    outputDataList.clear();
-                }
-            } else{
-                qWarning() << Q_FUNC_INFO << describeQuery.lastError();
-            }
-        }
-
-        // Set mysql profiling back again
-        profilingSetQuery.exec();
-
-
-
-        break; // Mysql Type break
-    }
-
-
-    case Constants::sqliteIntType:{
-
-        QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrQueryType);
-
-        querySplitter.setQueryForClasses(query);
-        QStringList tablesList = querySplitter.getJoinTables();
-        QString mainTable = querySplitter.getMainTable();
-        tablesList.push_back(mainTable);
-
-
-
-        for(QString tableName: tablesList){
-            describeQueryString = "PRAGMA table_info(" + tableName + ")";
-
-            QSqlQuery describeQuery(describeQueryString, dbSqlite);
-            QSqlRecord rec = describeQuery.record();
-
-            while(describeQuery.next()){
-
-
-                QString fieldName = describeQuery.value(1).toString();
-                QString fieldType = describeQuery.value(2).toString();
-
-                // Remove characters after `(` and then trim whitespaces
-                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-
-                // Get filter data type for QML
-                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
-
-                // Output data according to Filter type
-
-                if(filterDataType == Constants::categoricalType){
-                    allCategorical.append(outputDataList);
-                } else if(filterDataType == Constants::numericalType){
-                    allNumerical.append(outputDataList);
-                } else if(filterDataType == Constants::dateType){
-                    allDates.append(outputDataList);
-                } else{
-                    allOthers.append(outputDataList);
-                }
-
-                // Append all data type to allList as well
-                allList.append(outputDataList);
-
-                // Clear Stringlist for future
-                outputDataList.clear();
-            }
-        }
-
-        break; // Sqlite Type Break
-    }
-
-    case Constants::postgresIntType:{
-
-        QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
-
-        querySplitter.setQueryForClasses(query);
-        QStringList tablesList = querySplitter.getJoinTables();
-        QString mainTable = querySplitter.getMainTable();
-        tablesList.push_back(mainTable);
-
-
-
-        for(QString tableName: tablesList){
-            describeQueryString = "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '" + tableName.toLower() + "'";
-
-            QSqlQuery describeQuery(describeQueryString, dbPostgres);
-            QSqlRecord rec = describeQuery.record();
-
-            while(describeQuery.next()){
-
-
-                QString fieldName = describeQuery.value(0).toString();
-                QString fieldType = describeQuery.value(1).toString();
-
-                // Remove characters after `(` and then trim whitespaces
-                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-
-                // Get filter data type for QML
-                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
-
-                // Output data according to Filter type
-
-                if(filterDataType == Constants::categoricalType){
-                    allCategorical.append(outputDataList);
-                } else if(filterDataType == Constants::numericalType){
-                    allNumerical.append(outputDataList);
-                } else if(filterDataType == Constants::dateType){
-                    allDates.append(outputDataList);
-                } else{
-                    allOthers.append(outputDataList);
-                }
-
-                // Append all data type to allList as well
-                allList.append(outputDataList);
-
-                // Clear Stringlist for future
-                outputDataList.clear();
-            }
-        }
-
         break;
     }
+
+
 
     case Constants::redshiftIntType:{
 
@@ -377,214 +127,7 @@ void TableSchemaModel::showSchema(QString query)
         for(QString tableName: tablesList){
             describeQueryString = "select \"column\", type from pg_table_def where tablename = '" + tableName.replace(QRegularExpression("\""), "")  + "'";
 
-            qDebug() << describeQueryString;
             QSqlQuery describeQuery(describeQueryString, dbRedshift);
-            QSqlRecord rec = describeQuery.record();
-
-            while(describeQuery.next()){
-
-
-                QString fieldName = describeQuery.value(0).toString();
-                QString fieldType = describeQuery.value(1).toString();
-
-                // Remove characters after `(` and then trim whitespaces
-                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-
-                // Get filter data type for QML
-                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
-
-                // Output data according to Filter type
-
-                if(filterDataType == Constants::categoricalType){
-                    allCategorical.append(outputDataList);
-                } else if(filterDataType == Constants::numericalType){
-                    allNumerical.append(outputDataList);
-                } else if(filterDataType == Constants::dateType){
-                    allDates.append(outputDataList);
-                } else{
-                    allOthers.append(outputDataList);
-                }
-
-                // Append all data type to allList as well
-                allList.append(outputDataList);
-
-                // Clear Stringlist for future
-                outputDataList.clear();
-            }
-        }
-
-        break;
-    }
-
-
-    case Constants::excelIntType:{
-
-        querySplitter.setQueryForClasses(query);
-        QStringList tablesList = querySplitter.getJoinTables();
-        QString mainTable = querySplitter.getMainTable();
-        tablesList.push_back(mainTable);
-
-
-
-        for(QString tableName: tablesList){
-            auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
-            int rows = data->collection.Count();
-            data->Print();
-
-            for(int i = 0; i < rows; i++){
-                QString fieldName =  data->GetValue(1, i).ToString().c_str();
-                QString fieldType =  data->GetValue(2, i).ToString().c_str();
-
-                // Get filter data type for QML
-                QString filterDataType = dataType.dataType(fieldType);
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
-
-
-                if(filterDataType == Constants::categoricalType){
-                    allCategorical.append(outputDataList);
-                } else if(filterDataType == Constants::numericalType){
-                    allNumerical.append(outputDataList);
-                } else if(filterDataType == Constants::dateType){
-                    allDates.append(outputDataList);
-                } else{
-                    allOthers.append(outputDataList);
-                }
-
-                // Append all data type to allList as well
-                allList.append(outputDataList);
-
-                outputDataList.clear();
-            }
-        }
-
-        break;
-    }
-
-    case Constants::mssqlIntType:{
-
-        QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
-
-        querySplitter.setQueryForClasses(query);
-        QStringList tablesList = querySplitter.getJoinTables();
-        QString mainTable = querySplitter.getMainTable();
-        tablesList.push_back(mainTable);
-
-
-
-        for(QString tableName: tablesList){
-            describeQueryString = "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '" + tableName + "'";
-
-            QSqlQuery describeQuery(describeQueryString, dbMssql);
-            QSqlRecord rec = describeQuery.record();
-
-            while(describeQuery.next()){
-
-
-                QString fieldName = describeQuery.value(0).toString();
-                QString fieldType = describeQuery.value(1).toString();
-
-                // Remove characters after `(` and then trim whitespaces
-                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-
-                // Get filter data type for QML
-                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
-
-                // Output data according to Filter type
-
-                if(filterDataType == Constants::categoricalType){
-                    allCategorical.append(outputDataList);
-                } else if(filterDataType == Constants::numericalType){
-                    allNumerical.append(outputDataList);
-                } else if(filterDataType == Constants::dateType){
-                    allDates.append(outputDataList);
-                } else{
-                    allOthers.append(outputDataList);
-                }
-
-                // Append all data type to allList as well
-                allList.append(outputDataList);
-
-                // Clear Stringlist for future
-                outputDataList.clear();
-            }
-        }
-
-        break;
-    }
-
-    case Constants::oracleIntType:{
-
-        QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrQueryType);
-
-        querySplitter.setQueryForClasses(query);
-        QStringList tablesList = querySplitter.getJoinTables();
-        QString mainTable = querySplitter.getMainTable();
-        tablesList.push_back(mainTable);
-
-
-
-        for(QString tableName: tablesList){
-            describeQueryString = "SELECT column_name, data_type FROM user_tab_columns WHERE table_name = '" + tableName + "'";
-
-            QSqlQuery describeQuery(describeQueryString, dbOracle);
-            QSqlRecord rec = describeQuery.record();
-
-            while(describeQuery.next()){
-
-
-                QString fieldName = describeQuery.value(0).toString();
-                QString fieldType = describeQuery.value(1).toString();
-
-                // Remove characters after `(` and then trim whitespaces
-                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-
-                // Get filter data type for QML
-                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
-
-                // Output data according to Filter type
-
-                if(filterDataType == Constants::categoricalType){
-                    allCategorical.append(outputDataList);
-                } else if(filterDataType == Constants::numericalType){
-                    allNumerical.append(outputDataList);
-                } else if(filterDataType == Constants::dateType){
-                    allDates.append(outputDataList);
-                } else{
-                    allOthers.append(outputDataList);
-                }
-
-                // Append all data type to allList as well
-                allList.append(outputDataList);
-
-                // Clear Stringlist for future
-                outputDataList.clear();
-            }
-        }
-
-        break;
-    }
-
-    case Constants::mongoIntType:{
-
-        QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrQueryType);
-
-        querySplitter.setQueryForClasses(query);
-        QStringList tablesList = querySplitter.getJoinTables();
-        QString mainTable = querySplitter.getMainTable();
-        tablesList.push_back(mainTable);
-
-
-
-        for(QString tableName: tablesList){
-            describeQueryString = "SELECT column_name, data_type FROM user_tab_columns WHERE table_name = '" + tableName + "'";
-
-            QSqlQuery describeQuery(describeQueryString, dbMongo);
             QSqlRecord rec = describeQuery.record();
 
             while(describeQuery.next()){
@@ -636,6 +179,7 @@ void TableSchemaModel::showSchema(QString query)
 
 
         for(QString tableName: tablesList){
+            tableName = tableName.replace(QRegularExpression("[\"`']"), "");
             describeQueryString = "SELECT column_name, data_type FROM user_tab_columns WHERE table_name = '" + tableName + "'";
 
             QSqlQuery describeQuery(describeQueryString, dbImpala);
@@ -688,8 +232,8 @@ void TableSchemaModel::showSchema(QString query)
         tablesList.push_back(mainTable);
 
 
-
         for(QString tableName: tablesList){
+            tableName = tableName.replace(QRegularExpression("[\"`']"), "");
             describeQueryString = "SELECT column_name, data_type FROM user_tab_columns WHERE table_name = '" + tableName + "'";
 
             QSqlQuery describeQuery(describeQueryString, dbHive);
@@ -742,9 +286,9 @@ void TableSchemaModel::showSchema(QString query)
         tablesList.push_back(mainTable);
 
 
-
         for(QString tableName: tablesList){
-            describeQueryString = "SELECT column_name, data_type FROM user_tab_columns WHERE table_name = '" + tableName + "'";
+            tableName = tableName.replace(QRegularExpression("[\"`']"), "");
+            describeQueryString = "DESC TABLE " + tableName;
 
             QSqlQuery describeQuery(describeQueryString, dbSnowflake);
             QSqlRecord rec = describeQuery.record();
@@ -843,103 +387,8 @@ void TableSchemaModel::showSchema(QString query)
         break;
     }
 
-    case Constants::accessIntType:{
-
-        QSqlDatabase dbAccess = QSqlDatabase::database(Constants::accessOdbcStrQueryType);
-
-        querySplitter.setQueryForClasses(query);
-        QStringList tablesList = querySplitter.getJoinTables();
-        QString mainTable = querySplitter.getMainTable();
-        tablesList.push_back(mainTable);
-
-
-
-        for(QString tableName: tablesList){
-            describeQueryString = "SELECT column_name, data_type FROM user_tab_columns WHERE table_name = '" + tableName + "'";
-
-            QSqlQuery describeQuery(describeQueryString, dbAccess);
-            QSqlRecord rec = describeQuery.record();
-
-            while(describeQuery.next()){
-
-
-                QString fieldName = describeQuery.value(0).toString();
-                QString fieldType = describeQuery.value(1).toString();
-
-                // Remove characters after `(` and then trim whitespaces
-                QString fieldTypeTrimmed = fieldType.mid(0, fieldType.indexOf("(")).trimmed();
-
-                // Get filter data type for QML
-                QString filterDataType = dataType.dataType(fieldTypeTrimmed);
-
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
-
-                // Output data according to Filter type
-
-                if(filterDataType == Constants::categoricalType){
-                    allCategorical.append(outputDataList);
-                } else if(filterDataType == Constants::numericalType){
-                    allNumerical.append(outputDataList);
-                } else if(filterDataType == Constants::dateType){
-                    allDates.append(outputDataList);
-                } else{
-                    allOthers.append(outputDataList);
-                }
-
-                // Append all data type to allList as well
-                allList.append(outputDataList);
-
-                // Clear Stringlist for future
-                outputDataList.clear();
-            }
-        }
-
-        break;
-    }
-
-    case Constants::csvIntType:{
-
-        querySplitter.setQueryForClasses(query);
-        QStringList tablesList = querySplitter.getJoinTables();
-        QString mainTable = querySplitter.getMainTable();
-        tablesList.push_back(mainTable);
-
-
-
-        for(QString tableName: tablesList){
-            auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
-            int rows = data->collection.Count();
-            data->Print();
-
-            for(int i = 0; i < rows; i++){
-                QString fieldName =  data->GetValue(1, i).ToString().c_str();
-                QString fieldType =  data->GetValue(2, i).ToString().c_str();
-
-                // Get filter data type for QML
-                QString filterDataType = dataType.dataType(fieldType);
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
-
-
-                if(filterDataType == Constants::categoricalType){
-                    allCategorical.append(outputDataList);
-                } else if(filterDataType == Constants::numericalType){
-                    allNumerical.append(outputDataList);
-                } else if(filterDataType == Constants::dateType){
-                    allDates.append(outputDataList);
-                } else{
-                    allOthers.append(outputDataList);
-                }
-
-                // Append all data type to allList as well
-                allList.append(outputDataList);
-
-                outputDataList.clear();
-            }
-        }
-
-        break;
-    }
-
+    case Constants::excelIntType:
+    case Constants::csvIntType:
     case Constants::jsonIntType:{
 
         querySplitter.setQueryForClasses(query);
@@ -947,40 +396,42 @@ void TableSchemaModel::showSchema(QString query)
         QString mainTable = querySplitter.getMainTable();
         tablesList.push_back(mainTable);
 
-
-
         for(QString tableName: tablesList){
+            tableName = tableName.replace(QRegularExpression("[\"`']"), "");
             auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
-            int rows = data->collection.Count();
-            data->Print();
+            if(data->error.empty()){
+                int rows = data->collection.Count();
 
-            for(int i = 0; i < rows; i++){
-                QString fieldName =  data->GetValue(1, i).ToString().c_str();
-                QString fieldType =  data->GetValue(2, i).ToString().c_str();
+                for(int i = 0; i < rows; i++){
+                    QString fieldName =  data->GetValue(1, i).ToString().c_str();
+                    QString fieldType =  data->GetValue(2, i).ToString().c_str();
 
-                // Get filter data type for QML
-                QString filterDataType = dataType.dataType(fieldType);
-                outputDataList << tableName << fieldName << fieldType << filterDataType;
+                    // Get filter data type for QML
+                    QString filterDataType = dataType.dataType(fieldType);
+                    outputDataList << tableName << fieldName << fieldType << filterDataType;
 
+                    // Output data according to Filter type
 
-                if(filterDataType == Constants::categoricalType){
-                    allCategorical.append(outputDataList);
-                } else if(filterDataType == Constants::numericalType){
-                    allNumerical.append(outputDataList);
-                } else if(filterDataType == Constants::dateType){
-                    allDates.append(outputDataList);
-                } else{
-                    allOthers.append(outputDataList);
+                    if(filterDataType == Constants::categoricalType){
+                        allCategorical.append(outputDataList);
+                    } else if(filterDataType == Constants::numericalType){
+                        allNumerical.append(outputDataList);
+                    } else if(filterDataType == Constants::dateType){
+                        allDates.append(outputDataList);
+                    } else{
+                        allOthers.append(outputDataList);
+                    }
+
+                    // Append all data type to allList as well
+                    allList.append(outputDataList);
+                    outputDataList.clear();
                 }
-
-                // Append all data type to allList as well
-                allList.append(outputDataList);
-
-                outputDataList.clear();
+            }  else{
+                qWarning() << Q_FUNC_INFO << data->error.c_str();
             }
-        }
 
-        break;
+            break;
+        }
     }
 
     }

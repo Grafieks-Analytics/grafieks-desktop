@@ -1,3 +1,8 @@
+import QtQuick 2.3
+import QtQuick.Window 2.2
+import QtQuick.Controls 1.2
+import QtQuick.Controls.Styles 1.2
+import com.grafieks.singleton.constants 1.0
 //import QtQuick 2.15
 
 //Rectangle {
@@ -210,11 +215,6 @@
 //              }
 //          }
 
-import QtQuick 2.3
-import QtQuick.Window 2.2
-import QtQuick.Controls 1.2
-import QtQuick.Controls.Styles 1.2
-import com.grafieks.singleton.constants 1.0
 
 
 
@@ -325,8 +325,8 @@ Rectangle {
 
         style: TableViewStyle {
             headerDelegate: Rectangle {
-                height: textItem.implicitHeight * 1.2
-                width: textItem.implicitWidth
+//                height: textItem.implicitHeight * 1.2
+//                width: textItem.implicitWidth
                 color: "lightgrey"
                 Text {
                     id: textItem
@@ -365,8 +365,8 @@ Rectangle {
             }
 
             itemDelegate: Rectangle {
-                height: textItem.implicitHeight * 1.2
-                width: textItem.implicitWidth
+//                height: textItem.implicitHeight * 1.2
+//                width: textItem.implicitWidth
                 color: "white"
                 //                border.color: "black"
                 Text {
