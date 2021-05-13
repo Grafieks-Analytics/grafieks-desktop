@@ -36,6 +36,14 @@ class DSParamsModel : public QObject
     QMap<int, QString> primaryJoinTable;           // Set the primary table in a join. ie, parameter will be on left side of relation in a join
     QStringList querySelectParamsList;             // select parameters of the query created by data modeller
     QVariantList joinOrder;                        // Order of join elements in sql query
+    QMap<int, QVariant>  existingTables;           // List of tables mapped to their ids
+    QMap<int, QVariant> rectangles;                // Created rectangles object
+    QMap<int, QVariant> frontRectangleCoordinates; // Rectangle front coordinates
+    QMap<int, QVariant> rearRectangleCoordinates;  // Rectangle rear coordinates
+    QMap<int, QVariant> newConnectingLine;         // Connecting line object
+    QMap<int, QVariant> frontLineMap;              // Line front coordinates
+    QMap<int, QVariant> rearLineMap;               // Line rear coordinates
+    QMap<int, QVariant> newJoinBox;                // Join box between 2 rectangles
 
     // Standalone variables for Filters
     QVariantMap joinRelation;     // Condition link between parameter and value in a query. eg, =, !=, LIKE, etc
@@ -60,6 +68,7 @@ class DSParamsModel : public QObject
 
     // For Data Modeller
     Q_PROPERTY(int joinId READ joinId WRITE setJoinId NOTIFY joinIdChanged) // Current selected joinId in data modeller
+    Q_PROPERTY(QString queryJoiner READ queryJoiner WRITE setQueryJoiner NOTIFY queryJoinerChanged)
 
     // For Query Modeller
     Q_PROPERTY(QString tmpSql READ tmpSql WRITE setTmpSql NOTIFY tmpSqlChanged)
@@ -88,6 +97,7 @@ class DSParamsModel : public QObject
 
     // For Data Modeller
     int m_joinId;
+    QString m_queryJoiner;
 
     // For Query Modeller
     QString m_tmpSql;
@@ -141,12 +151,48 @@ public:
     Q_INVOKABLE QString fetchPrimaryJoinTable(int refObjId = 0);
 
     Q_INVOKABLE void addToQuerySelectParamsList(QString selectParam);
-    Q_INVOKABLE void removeQuerySelectParamsList(QString refObjName = "");
+    Q_INVOKABLE void removeQuerySelectParamsList(QString refObjName = "", bool deleteAllMatching = false);
     Q_INVOKABLE QStringList fetchQuerySelectParamsList();
 
     Q_INVOKABLE void addToJoinOrder(int joinOrderId);
     Q_INVOKABLE void removeJoinOrder(int joinOrderId);
     Q_INVOKABLE QVariantList fetchJoinOrder();
+
+    Q_INVOKABLE void addToExistingTables(int refObjId, QString tableName);
+    Q_INVOKABLE void removeExistingTables(int refObjId = 0);
+    Q_INVOKABLE QVariant fetchExistingTables(int refObjId = 0);
+    Q_INVOKABLE int existingTablesSize();
+
+    Q_INVOKABLE void addToRectangles(int refObjId, const QVariant &rectangleObject);
+    Q_INVOKABLE void removeRectangles(int refObjId = 0);
+    Q_INVOKABLE QVariant fetchRectangles(int refObjId = 0);
+    Q_INVOKABLE QVariantMap fetchAllRectangles();
+    Q_INVOKABLE int rectanglesSize();
+
+    Q_INVOKABLE void addToFrontRectangleCoordinates(int refObjId, QVariant rectangleCoordinates);
+    Q_INVOKABLE void removeFrontRectangleCoordinates(int refObjId = 0);
+    Q_INVOKABLE QVariant fetchFrontRectangleCoordinates(int refObjId = 0);
+
+    Q_INVOKABLE void addToRearRectangleCoordinates(int refObjId, QVariant rectangleCoordinates);
+    Q_INVOKABLE void removeRearRectangleCoordinates(int refObjId = 0);
+    Q_INVOKABLE QVariant fetchRearRectangleCoordinates(int refObjId = 0);
+    Q_INVOKABLE QVariantMap fetchAllRearRectangleCoordinates();
+
+    Q_INVOKABLE void addToNewConnectingLine(int refObjId, const QVariant &lineObject);
+    Q_INVOKABLE void removeNewConnectingLine(int refObjId = 0);
+    Q_INVOKABLE QVariant fetchNewConnectingLine(int refObjId = 0);
+
+    Q_INVOKABLE void addToFrontLineMap(int refObjId, QVariant lineObject);
+    Q_INVOKABLE void removeFrontLineMap(int refObjId = 0);
+    Q_INVOKABLE QVariant fetchFrontLineMap(int refObjId = 0);
+
+    Q_INVOKABLE void addToRearLineMap(int refObjId, QVariant lineObject);
+    Q_INVOKABLE void removeRearLineMap(int refObjId = 0);
+    Q_INVOKABLE QVariant fetchRearLineMap(int refObjId = 0);
+
+    Q_INVOKABLE void addToNewJoinBox(int refObjId, const QVariant &joinBoxObject);
+    Q_INVOKABLE void removeNewJoinBox(int refObjId = 0);
+    Q_INVOKABLE QVariant fetchNewJoinBox(int refObjId = 0);
 
     // Filters
 
@@ -190,6 +236,7 @@ public:
 
     // For Data Modeller
     int joinId() const;
+    QString queryJoiner() const;
 
     // For Query Modeller
     QString tmpSql() const;
@@ -206,6 +253,8 @@ public:
     bool selectAll() const;
     int filterIndex() const;
     QString mode() const;
+
+
 
 public slots:
 
@@ -224,6 +273,7 @@ public slots:
 
     // For Data Modeller
     void setJoinId(int joinId);
+    void setQueryJoiner(QString queryJoiner);
 
     // For Query Modeller
     void setTmpSql(QString tmpSql);
@@ -240,6 +290,8 @@ public slots:
     void setFilterIndex(int filterIndex);
     void setSelectAll(bool selectAll);
     void setMode(QString mode);
+
+
 
 signals:
 
@@ -265,6 +317,7 @@ signals:
 
     // For Query Modeller
     void tmpSqlChanged(QString tmpSql);
+    void queryJoinerChanged(QString queryJoiner);
 
     // For Filters
     void internalCounterChanged(int internalCounter);
@@ -290,6 +343,7 @@ signals:
 
     void resetInput();
 
+
 private:
     QMap<QString, QString> datasourceCredentials();
     QString m_fileExtension;
@@ -305,6 +359,7 @@ private:
     void updateMany();
     void deleteMany();
     void fetchMany();
+
 };
 
 #endif // DSPARAMSMODEL_H

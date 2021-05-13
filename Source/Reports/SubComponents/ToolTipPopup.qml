@@ -173,8 +173,31 @@ Popup {
         width: parent.width - this.padding * 2 - this.spacing
         height: parent.height - header.height - footer.height
         padding: 20
-        spacing: 20
+        spacing: 300
 
+        Row{
+            spacing: 100
+
+                Column{
+                    Text {
+                        id: label1
+                        text: qsTr("Axis")
+                    }
+                }
+                Column{
+                    Text {
+                        id: label2
+                        text: qsTr("Column")
+                    }
+                }
+                Column{
+                    Text {
+                        id: label3
+                        text: qsTr("Tooltip Label")
+                    }
+                }
+
+        }
 
     }
 
@@ -184,7 +207,6 @@ Popup {
         anchors.top: popupContent.bottom
         height: 60
         width: parent.width
-
         CustomButton{
             anchors.top: parent.top
             anchors.topMargin: 20
@@ -192,7 +214,5 @@ Popup {
             anchors.rightMargin: 20
             textValue: "Apply"
         }
-
     }
-
 }

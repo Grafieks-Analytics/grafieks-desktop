@@ -3,7 +3,7 @@
 DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent),counter(1)
 {
 
-//    db.LoadExtension<duckdb::ParquetExtension>();
+    //    db.LoadExtension<duckdb::ParquetExtension>();
 
     m_section = Constants::defaultTabSection;
     m_category = Constants::defaultCategory;
@@ -37,6 +37,9 @@ DSParamsModel::~DSParamsModel()
 void DSParamsModel::resetDataModel()
 {
 
+    // First emit the signals to destroy the visual objects in qml
+    emit destroyLocalObjectsAndMaps();
+
     this->hideColumns.clear();
     this->joinBoxTableMap.clear();
     this->joinTypeMap.clear();
@@ -44,8 +47,16 @@ void DSParamsModel::resetDataModel()
     this->joinMapList.clear();
     this->primaryJoinTable.clear();
     this->querySelectParamsList.clear();
+    this->joinOrder.clear();
+    this->existingTables.clear();
+    this->rectangles.clear();
+    this->frontRectangleCoordinates.clear();
+    this->rearRectangleCoordinates.clear();
+    this->newConnectingLine.clear();
+    this->frontLineMap.clear();
+    this->rearLineMap.clear();
+    this->newJoinBox.clear();
 
-    emit destroyLocalObjectsAndMaps();
 }
 
 bool DSParamsModel::saveDatasource(QString filename)
@@ -219,11 +230,11 @@ QVariantList DSParamsModel::readDatasource(QString filename)
             dbUsernameCredential = "";
 
     int modellerType = 0,
-        internalCounter = 0,
-        filterIndex = 0,
-        joinId = 0,
-        displayRowsCount = 0,
-        schedulerId = 0;
+            internalCounter = 0,
+            filterIndex = 0,
+            joinId = 0,
+            displayRowsCount = 0,
+            schedulerId = 0;
 
     QVariantMap joinRelation, joinValue, joinRelationSlug;
     QStringList hideColumns;
@@ -236,9 +247,9 @@ QVariantList DSParamsModel::readDatasource(QString filename)
     QVariantList joinOrder;
 
     bool exclude = false,
-         includeNull = false,
-         selectAll = false,
-         isFullExtract = false;
+            includeNull = false,
+            selectAll = false,
+            isFullExtract = false;
 
     // Filename resource uri to filepath
     QFile file(QUrl(filename).toLocalFile());
@@ -558,14 +569,24 @@ QString DSParamsModel::fetchPrimaryJoinTable(int refObjId)
 
 void DSParamsModel::addToQuerySelectParamsList(QString selectParam)
 {
-    this->querySelectParamsList.append(selectParam);
+    QStringList filteredData = this->querySelectParamsList.filter(selectParam);
+
+    if(filteredData.empty()){
+        this->querySelectParamsList.append(selectParam);
+    }
 }
 
-void DSParamsModel::removeQuerySelectParamsList(QString refObjName)
+void DSParamsModel::removeQuerySelectParamsList(QString refObjName, bool deleteAllMatching)
 {
 
     if (refObjName != "")
         this->querySelectParamsList.removeOne(refObjName);
+
+    if(deleteAllMatching == true){
+        const auto toRemove = this->querySelectParamsList.filter(refObjName);
+        for(const auto &item : toRemove)
+            this->querySelectParamsList.removeAll(item);
+    }
 }
 
 QStringList DSParamsModel::fetchQuerySelectParamsList()
@@ -587,6 +608,160 @@ void DSParamsModel::removeJoinOrder(int joinOrderId)
 QVariantList DSParamsModel::fetchJoinOrder()
 {
     return this->joinOrder;
+}
+
+void DSParamsModel::addToExistingTables(int refObjId, QString tableName)
+{
+    this->existingTables.insert(refObjId, tableName);
+}
+
+void DSParamsModel::removeExistingTables(int refObjId)
+{
+    this->existingTables.remove(refObjId);
+}
+
+QVariant DSParamsModel::fetchExistingTables(int refObjId)
+{
+    return this->existingTables.value(refObjId);
+}
+
+int DSParamsModel::existingTablesSize()
+{
+    return this->existingTables.size();
+}
+
+void DSParamsModel::addToRectangles(int refObjId, const QVariant &rectangleObject)
+{
+    this->rectangles.insert(refObjId, rectangleObject);
+}
+
+void DSParamsModel::removeRectangles(int refObjId)
+{
+    this->rectangles.remove(refObjId);
+}
+
+QVariant DSParamsModel::fetchRectangles(int refObjId)
+{
+    return this->rectangles.value(refObjId);
+}
+
+QVariantMap DSParamsModel::fetchAllRectangles()
+{
+    QVariantMap output;
+    QMap<int, QVariant>::const_iterator i = this->rectangles.constBegin();
+    while (i != this->rectangles.constEnd()) {
+        output.insert(QString::number(i.key()), i.value());
+        ++i;
+    }
+
+    return output;
+}
+
+int DSParamsModel::rectanglesSize()
+{
+    return this->rectangles.size();
+}
+
+void DSParamsModel::addToFrontRectangleCoordinates(int refObjId, QVariant rectangleCoordinates)
+{
+    this->frontRectangleCoordinates.insert(refObjId, rectangleCoordinates);
+}
+
+void DSParamsModel::removeFrontRectangleCoordinates(int refObjId)
+{
+    this->frontRectangleCoordinates.remove(refObjId);
+}
+
+QVariant DSParamsModel::fetchFrontRectangleCoordinates(int refObjId)
+{
+    return this->frontRectangleCoordinates.value(refObjId);
+}
+
+void DSParamsModel::addToRearRectangleCoordinates(int refObjId, QVariant rectangleCoordinates)
+{
+    this->rearRectangleCoordinates.insert(refObjId, rectangleCoordinates);
+}
+
+void DSParamsModel::removeRearRectangleCoordinates(int refObjId)
+{
+    this->rearRectangleCoordinates.remove(refObjId);
+}
+
+QVariant DSParamsModel::fetchRearRectangleCoordinates(int refObjId)
+{
+    return this->rearRectangleCoordinates.value(refObjId);
+}
+
+QVariantMap DSParamsModel::fetchAllRearRectangleCoordinates()
+{
+    QVariantMap output;
+    QMap<int, QVariant>::const_iterator i = this->rearRectangleCoordinates.constBegin();
+    while (i != this->rearRectangleCoordinates.constEnd()) {
+        output.insert(QString::number(i.key()), i.value());
+        ++i;
+    }
+
+    return output;
+}
+
+void DSParamsModel::addToNewConnectingLine(int refObjId, const QVariant &lineObject)
+{
+    this->newConnectingLine.insert(refObjId, lineObject);
+}
+
+void DSParamsModel::removeNewConnectingLine(int refObjId)
+{
+    this->newConnectingLine.remove(refObjId);
+}
+
+QVariant DSParamsModel::fetchNewConnectingLine(int refObjId)
+{
+    return this->newConnectingLine.value(refObjId);
+}
+
+void DSParamsModel::addToFrontLineMap(int refObjId, QVariant lineObject)
+{
+    this->frontLineMap.insert(refObjId, lineObject);
+}
+
+void DSParamsModel::removeFrontLineMap(int refObjId)
+{
+    this->frontLineMap.remove(refObjId);
+}
+
+QVariant DSParamsModel::fetchFrontLineMap(int refObjId)
+{
+    return this->frontLineMap.value(refObjId);
+}
+
+void DSParamsModel::addToRearLineMap(int refObjId, QVariant lineObject)
+{
+    this->rearLineMap.insert(refObjId, lineObject);
+}
+
+void DSParamsModel::removeRearLineMap(int refObjId)
+{
+    this->rearLineMap.remove(refObjId);
+}
+
+QVariant DSParamsModel::fetchRearLineMap(int refObjId)
+{
+    return this->rearLineMap.value(refObjId);
+}
+
+void DSParamsModel::addToNewJoinBox(int refObjId, const QVariant &joinBoxObject)
+{
+    this->newJoinBox.insert(refObjId, joinBoxObject);
+}
+
+void DSParamsModel::removeNewJoinBox(int refObjId)
+{
+    this->newJoinBox.remove(refObjId);
+}
+
+QVariant DSParamsModel::fetchNewJoinBox(int refObjId)
+{
+    return this->newJoinBox.value(refObjId);
 }
 
 void DSParamsModel::addToJoinRelation(int refObjId, QString relation)
@@ -738,82 +913,82 @@ QVariantMap DSParamsModel::getTimeFrameMap()
 void DSParamsModel::parseCsv(QUrl pathToCsv)
 {
 
-//    QString msg;
-//    QElapsedTimer timer;
-//    timer.start();
+    //    QString msg;
+    //    QElapsedTimer timer;
+    //    timer.start();
 
-//    QFileInfo fileInfo(pathToCsv.toString());
-//    QString fileName = fileInfo.fileName();
-//    QString fileNameWithoutExt = fileName.section(".", 0, 0);
+    //    QFileInfo fileInfo(pathToCsv.toString());
+    //    QString fileName = fileInfo.fileName();
+    //    QString fileNameWithoutExt = fileName.section(".", 0, 0);
 
-//    QString queryString = "CREATE TABLE " + fileNameWithoutExt + " AS SELECT * FROM read_csv_auto('" + pathToCsv.toLocalFile() + "')";
-//    auto result = con.Query(queryString.toStdString());
-//    result->Print();
+    //    QString queryString = "CREATE TABLE " + fileNameWithoutExt + " AS SELECT * FROM read_csv_auto('" + pathToCsv.toLocalFile() + "')";
+    //    auto result = con.Query(queryString.toStdString());
+    //    result->Print();
 
-//    if (!result->success)
-//    {
-//        msg = QString::fromStdString(result->error);
-//    }
-//    else
-//    {
-//        msg = "Success";
-//    }
-//    qDebug() << msg << "CSV Reading";
+    //    if (!result->success)
+    //    {
+    //        msg = QString::fromStdString(result->error);
+    //    }
+    //    else
+    //    {
+    //        msg = "Success";
+    //    }
+    //    qDebug() << msg << "CSV Reading";
 
-//    emit csvReadComplete(timer.elapsed(), result->success, msg);
+    //    emit csvReadComplete(timer.elapsed(), result->success, msg);
 }
 
 void DSParamsModel::parseParquet(QUrl pathToParquet)
 {
 
-//    QString msg;
-//    QElapsedTimer timer;
-//    timer.start();
+    //    QString msg;
+    //    QElapsedTimer timer;
+    //    timer.start();
 
-//    QFileInfo fileInfo(pathToParquet.toString());
-//    QString fileName = fileInfo.fileName();
-//    QString fileNameWithoutExt = fileName.section(".", 0, 0);
+    //    QFileInfo fileInfo(pathToParquet.toString());
+    //    QString fileName = fileInfo.fileName();
+    //    QString fileNameWithoutExt = fileName.section(".", 0, 0);
 
-//    QString queryString = "CREATE TABLE " + fileNameWithoutExt + " AS SELECT * FROM PARQUET_SCAN('" + pathToParquet.toLocalFile() + "')";
-//    qDebug() << queryString << "QSTRING";
-//    auto result = con.Query(queryString.toStdString());
-//    result->Print();
+    //    QString queryString = "CREATE TABLE " + fileNameWithoutExt + " AS SELECT * FROM PARQUET_SCAN('" + pathToParquet.toLocalFile() + "')";
+    //    qDebug() << queryString << "QSTRING";
+    //    auto result = con.Query(queryString.toStdString());
+    //    result->Print();
 
-//    if (!result->success)
-//    {
-//        msg = QString::fromStdString(result->error);
-//    }
-//    else
-//    {
-//        msg = "Success";
-//    }
+    //    if (!result->success)
+    //    {
+    //        msg = QString::fromStdString(result->error);
+    //    }
+    //    else
+    //    {
+    //        msg = "Success";
+    //    }
 
-//    emit parquetReadComplete(timer.elapsed(), result->success, msg);
+    //    emit parquetReadComplete(timer.elapsed(), result->success, msg);
 }
 
 void DSParamsModel::exportExtractData(QString pathToExtract)
 {
-//    QString msg;
-//    QElapsedTimer timer;
-//    timer.start();
+    //    QString msg;
+    //    QElapsedTimer timer;
+    //    timer.start();
 
-//    QString queryString = "EXPORT DATABASE '" + pathToExtract + "' (FORMAT PARQUET)";
-//    auto result = con.Query(queryString.toStdString());
+    //    QString queryString = "EXPORT DATABASE '" + pathToExtract + "' (FORMAT PARQUET)";
+    //    auto result = con.Query(queryString.toStdString());
 
-//    emit exportDataComplete(timer.elapsed(), result->success, msg);
+    //    emit exportDataComplete(timer.elapsed(), result->success, msg);
 }
 
 void DSParamsModel::importExtractData(QString pathToExtract)
 {
 
-//    QString msg;
-//    QElapsedTimer timer;
-//    timer.start();
+    //    QString msg;
+    //    QElapsedTimer timer;
+    //    timer.start();
 
-//    QString queryString = "IMPORT DATABASE '" + pathToExtract + "'";
-//    auto result = con.Query(queryString.toStdString());
+    //    QString queryString = "IMPORT DATABASE '" + pathToExtract + "'";
+    //    auto result = con.Query(queryString.toStdString());
 
-//    emit importDataComplete(timer.elapsed(), result->success, msg);
+    //    emit importDataComplete(timer.elapsed(), result->success, msg);
 }
 
 void DSParamsModel::resetInputFields()
@@ -864,6 +1039,11 @@ int DSParamsModel::displayRowsCount() const
 int DSParamsModel::joinId() const
 {
     return m_joinId;
+}
+
+QString DSParamsModel::queryJoiner() const
+{
+    return m_queryJoiner;
 }
 
 QString DSParamsModel::tmpSql() const
@@ -1010,6 +1190,15 @@ void DSParamsModel::setJoinId(int joinId)
 
     m_joinId = joinId;
     emit joinIdChanged(m_joinId);
+}
+
+void DSParamsModel::setQueryJoiner(QString queryJoiner)
+{
+    if (m_queryJoiner == queryJoiner)
+        return;
+
+    m_queryJoiner = queryJoiner;
+    emit queryJoinerChanged(m_queryJoiner);
 }
 
 void DSParamsModel::setTmpSql(QString tmpSql)

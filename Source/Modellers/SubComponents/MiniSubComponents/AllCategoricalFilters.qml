@@ -64,7 +64,6 @@ Rectangle{
     // Called when edit filter from categorical list clicked
     function onEditElement(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude){
 
-
         DSParamsModel.setMode(Constants.modeEdit)
         DSParamsModel.setFilterIndex(filterIndex)
         DSParamsModel.setSection(section)
@@ -124,7 +123,7 @@ Rectangle{
             anchors.left: parent.left
             anchors.leftMargin: 20
             width: parent.width
-            height:listFiltersListView.height + listFilters.height
+            height:listFiltersListView.height
 
             spacing: 10
 

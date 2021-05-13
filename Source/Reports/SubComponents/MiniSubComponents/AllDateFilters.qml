@@ -120,7 +120,7 @@ Rectangle{
             anchors.left: parent.left
             anchors.leftMargin: 20
             width: parent.width
-            height:listFiltersListView.height + listFilters.height
+            height:listFiltersListView.height
 
             spacing: 10
 
