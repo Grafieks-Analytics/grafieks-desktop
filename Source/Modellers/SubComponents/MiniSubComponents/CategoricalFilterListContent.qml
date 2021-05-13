@@ -28,6 +28,7 @@ Rectangle{
 
 
     property var checkedValues : []
+    property var radioSelected: ""
     readonly property string mapKey: "0"
 
 
@@ -85,6 +86,7 @@ Rectangle{
         mainCheckBox.visible = true
     }
 
+
     // SLOT function
     function slotEditModeSubCategory(subCategory){
 
@@ -100,6 +102,11 @@ Rectangle{
             multiSelectCheckList.visible = false
             singleSelectCheckList.visible = true
         }
+    }
+
+    function slotDataCleared(){
+        checkedValues = []
+        radioSelected = ""
     }
 
     function onMultiSelectSelected(){
@@ -128,11 +135,21 @@ Rectangle{
         DSParamsModel.addToJoinValue(mapKey, modelData.toString())
         DSParamsModel.addToJoinRelation(mapKey, Constants.equalRelation)
         DSParamsModel.addToJoinRelationSlug(mapKey, Constants.equalRelation)
+
+        radioSelected = modelData.toString()
     }
 
 
     function onTextChangedSearch(){
         ColumnListModel.likeColumnQuery(DSParamsModel.colName, DSParamsModel.tableName, searchText.text)
+
+        if(DSParamsModel.subCategory === Constants.categorySubMulti){
+            if(searchText.text.length > 0){
+                mainCheckBox.visible = false
+            } else{
+                mainCheckBox.visible = true
+            }
+        }
     }
 
     function onAllCheckBoxCheckedChanged(checked){
@@ -153,7 +170,6 @@ Rectangle{
 
             DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
             DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
-            checkedValues = []
 
         }
     }
@@ -173,8 +189,8 @@ Rectangle{
             if(checked === true){
 
                 // Start pushing the individual checked item in the array
-                checkedValues.push(modelData)
-                console.log(checkedValues)
+                if(checkedValues.indexOf(modelData) < 0)
+                    checkedValues.push(modelData)
 
             } else{
                 // Remove item if unchecked
@@ -382,7 +398,7 @@ Rectangle{
                     height:20
                     CheckBoxTpl {
                         id: modelCheckBoxes
-                        checked: true
+                        checked: false
                         y:2
                         text: modelData
                         parent_dimension: Constants.defaultCheckBoxDimension
@@ -390,6 +406,9 @@ Rectangle{
 
                         onCheckedChanged: {
                             onMultiSelectCheckboxSelected(modelData,checked)
+                        }
+                        Component.onCompleted: {
+                            modelCheckBoxes.checked = checkedValues.indexOf(modelData) >= 0 ? true: false
                         }
                     }
                 }
@@ -431,6 +450,7 @@ Rectangle{
                 Column{
 
                     CustomRadioButton {
+                        id: modelRadioButton
                         text: modelData
                         ButtonGroup.group: btngrp
                         height: Constants.defaultRadioDimension
@@ -438,6 +458,10 @@ Rectangle{
                         parent_dimension: Constants.defaultRadioDimension
                         onCheckedChanged: {
                             onSingleSelectRadioSelected(modelData)
+                        }
+
+                        Component.onCompleted: {
+                            modelRadioButton.checked = radioSelected === modelData ? true: false
                         }
                     }
                 }

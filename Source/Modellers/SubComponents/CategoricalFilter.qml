@@ -40,6 +40,7 @@ Popup {
 
     signal subCategoryEditMode(string subCategory)
     signal signalWildCardEditData(string relation, string slug, string value)
+    signal clearData()
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -65,6 +66,7 @@ Popup {
     Component.onCompleted: {
         categoricalFilterPopup.subCategoryEditMode.connect(listContent.slotEditModeSubCategory)
         categoricalFilterPopup.signalWildCardEditData.connect(wildcardContent.slotWildCardEditData)
+        categoricalFilterPopup.clearData.connect(listContent.slotDataCleared)
     }
 
 
@@ -117,6 +119,9 @@ Popup {
 
         // Reset all DSParams
         DSParamsModel.resetFilter();
+
+        // Clear tabs individual temp data
+        categoricalFilterPopup.clearData()
 
     }
 
@@ -172,13 +177,14 @@ Popup {
         // Reset all DSParams
         DSParamsModel.resetFilter();
 
+        // Clear tabs individual temp data
+        categoricalFilterPopup.clearData()
+
 
 
     }
 
     function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, filterIndex = 0){
-
-//        console.log(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, "FILTER LIST INSERT/UPDATE")
 
         // Save the filter
         if(mode === Constants.modeCreate){
@@ -192,6 +198,9 @@ Popup {
     function onResetClicked(){
         categoricalFilterPopup.visible = false
         DSParamsModel.resetFilter();
+
+        // Clear tabs individual temp data
+        categoricalFilterPopup.clearData()
     }
 
     function onListClicked(){
