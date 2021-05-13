@@ -241,9 +241,8 @@ void FilterCategoricalListModel::updateFilter(int FilterIndex, QString section, 
         mFilter[FilterIndex]->setRelation(relation);
     if(slug != "")
         mFilter[FilterIndex]->setValue(slug);
-    if(value != "")
-        mFilter[FilterIndex]->setValue(value);
 
+    mFilter[FilterIndex]->setValue(value);
     mFilter[FilterIndex]->setIncludeNull(includeNull);
     mFilter[FilterIndex]->setExclude(exclude);
 
