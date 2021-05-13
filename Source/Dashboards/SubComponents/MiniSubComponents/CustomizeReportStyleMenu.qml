@@ -136,7 +136,7 @@ Rectangle{
 
             Image {
                 anchors.right: parent.right
-                source: "/Images/icons/Edit.png"
+                source: "/Images/icons/edit gray.png"
                 height: 20
                 width: 20
 
@@ -164,7 +164,7 @@ Rectangle{
 
             Image {
                 anchors.right: parent.right
-                source: "/Images/icons/Edit.png"
+                source: "/Images/icons/edit gray.png"
                 height: 20
                 width: 20
 

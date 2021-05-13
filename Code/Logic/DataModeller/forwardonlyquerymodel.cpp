@@ -71,6 +71,12 @@ void ForwardOnlyQueryModel::removeTmpChartData()
 {
     this->forwardOnlyChartHeader.clear();
     this->forwardOnlyChartData.clear();
+    this->tableHeaders.clear();
+
+    emit forwardOnlyHeaderDataChanged(this->tableHeaders);
+    emit chartHeaderChanged(this->forwardOnlyChartHeader);
+    emit chartDataChanged(this->forwardOnlyChartData);
+    emit forwardOnlyHasData(false);
 }
 
 void ForwardOnlyQueryModel::generateRoleNames()

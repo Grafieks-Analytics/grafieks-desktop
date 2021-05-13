@@ -273,6 +273,15 @@ QString FilterNumericalListModel::callQueryModel()
     return newWhereConditions;
 }
 
+void FilterNumericalListModel::clearFilters()
+{
+    beginResetModel();
+    mFilter.clear();
+    endResetModel();
+
+    emit rowCountChanged();
+}
+
 
 void FilterNumericalListModel::addFilterList(FilterNumericalList *filter)
 {

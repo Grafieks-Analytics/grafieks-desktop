@@ -29,6 +29,7 @@ public:
     explicit NewTableColumnsModel(DuckCon *duckCon, QObject *parent = nullptr);
 
     Q_INVOKABLE void getColumnsForTable(QString tableName = "", QString moduleName = "");
+    Q_INVOKABLE void clearColumns();
 
 signals:
     void columnListObtained(QList<QStringList> allColumns, QString tableName, QString moduleName);

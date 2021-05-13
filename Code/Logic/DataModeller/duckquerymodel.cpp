@@ -96,7 +96,7 @@ void DuckQueryModel::generateRoleNames()
                     fieldName =  data->GetValue(1, i).ToString().c_str();
                     fieldName = fieldName.trimmed();
                     fieldType = data->GetValue(2, i).ToString().c_str();
-                    colInfo << fieldName << fieldType << tableName;
+                    colInfo << fieldName << dataType.dataType(fieldType) << tableName;
 
                     m_roleNames.insert(i, fieldName.toUtf8());
                     this->setChartHeader(i, colInfo);
@@ -266,4 +266,11 @@ void DuckQueryModel::removeTmpChartData()
 
     this->internalColCount = 0;
     this->internalRowCount = 0;
+
+    this->tableHeaders.clear();
+
+    emit duckHeaderDataChanged(this->tableHeaders);
+    emit chartHeaderChanged(this->duckChartHeader);
+    emit duckHasData(false);
+    emit chartDataChanged(this->duckChartData);
 }

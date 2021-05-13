@@ -292,3 +292,11 @@ void NewTableColumnsModel::getColumnsForTable(QString tableName, QString moduleN
     emit columnListObtained(allColumns, tableName, moduleName);
     allColumns.clear();
 }
+
+void NewTableColumnsModel::clearColumns()
+{
+    allColumns.clear();
+    QString tableName = "";
+    QString moduleName = "";
+    emit columnListObtained(allColumns, tableName, moduleName);
+}
