@@ -93,6 +93,7 @@
             var margin = { top: 20, right: 20, bottom: 30, left: 40 };
             var width = window.innerWidth - margin.left - margin.right - 50;
             var height = window.innerHeight - margin.top - margin.bottom - 50;
+            yaxisTicks = height / 70;
             var timeFormat = d3.timeFormat("%m-%Y");
             var parseDate = d3.timeParse("%Y");
 
@@ -137,7 +138,7 @@
             var color = d3.scaleOrdinal().range(d3Colors);
 
             var xAxis = d3.axisBottom(x);
-            var yAxis = d3.axisLeft(y);
+            var yAxis = d3.axisLeft(y).ticks(yaxisTicks);
 
             var centerLine = d3.axisTop(center).ticks(0);
 
@@ -273,10 +274,10 @@
                 });
 
             function make_x_gridlines(x) {
-                return d3.axisBottom(x).ticks(10);
+                return d3.axisBottom(x).ticks(yaxisTicks);
             }
             function make_y_gridlines(y) {
-                return d3.axisLeft(y).ticks(10);
+                return d3.axisLeft(y).ticks(yaxisTicks);
             }
 
             function getLeftAxisDistance() {
