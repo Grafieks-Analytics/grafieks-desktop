@@ -351,7 +351,7 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
             finalSearchFields = "'" + finalSearchFields + "'";
 
-            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
 
             QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
             this->setQuery(queryString, dbMysql);
@@ -372,7 +372,7 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
             finalSearchFields = "'" + finalSearchFields + "'";
 
-            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
 
             QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrType);
             this->setQuery(queryString, dbMysqlOdbc);
@@ -394,7 +394,7 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
             finalSearchFields = "'" + finalSearchFields + "'";
 
-            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
 
             QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
             this->setQuery(queryString, dbSqlite);
@@ -415,7 +415,7 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
             finalSearchFields = "'" + finalSearchFields + "'";
 
-            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
 
             QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrType);
             this->setQuery(queryString, dbPostgres);
@@ -436,7 +436,7 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
             finalSearchFields = "'" + finalSearchFields + "'";
 
-            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
 
             QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrType);
             this->setQuery(queryString, dbMssql);
@@ -457,7 +457,7 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
             finalSearchFields = "'" + finalSearchFields + "'";
 
-            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
 
             QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrType);
             this->setQuery(queryString, dbOracle);
@@ -478,7 +478,7 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
             finalSearchFields = "'" + finalSearchFields + "'";
 
-            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
 
             QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrType);
             this->setQuery(queryString, dbMongo);
@@ -499,7 +499,7 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
             finalSearchFields = "'" + finalSearchFields + "'";
 
-            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
 
             QSqlDatabase dbImpala = QSqlDatabase::database(Constants::impalaOdbcStrType);
             this->setQuery(queryString, dbImpala);
@@ -520,7 +520,7 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
             finalSearchFields = "'" + finalSearchFields + "'";
 
-            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
 
             QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrType);
             this->setQuery(queryString, dbHive);
@@ -541,7 +541,7 @@ void ColumnListModel::columnEditQuery(QString columnName, QString tableName, QSt
 
             finalSearchFields = "'" + finalSearchFields + "'";
 
-            queryString = "SELECT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
+            queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName + " WHERE "+ columnName + " IN (" + finalSearchFields + ")";
 
             QSqlDatabase dbAccess = QSqlDatabase::database(Constants::accessOdbcStrType);
             this->setQuery(queryString, dbAccess);
