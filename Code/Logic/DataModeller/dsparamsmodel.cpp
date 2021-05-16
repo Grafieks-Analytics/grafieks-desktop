@@ -9,10 +9,11 @@ DSParamsModel::DSParamsModel(QObject *parent) : QObject(parent),counter(1)
     m_category = Constants::defaultCategory;
     m_subCategory = Constants::defaultSubCategory;
     m_mode = Constants::defaultMode;
-    m_exclude = Constants::defaultExclude;
-    m_includeNull = Constants::defaultIncludeNull;
-    m_selectAll = Constants::defaultSelectAll;
+    //    m_exclude = Constants::defaultExclude;
+    //    m_includeNull = Constants::defaultIncludeNull;
+    //    m_selectAll = Constants::defaultSelectAll;
     m_internalCounter = 0;
+    m_filterIndex = 0;
 }
 
 void DSParamsModel::closeModel()
@@ -151,9 +152,9 @@ bool DSParamsModel::saveDatasource(QString filename)
         out << this->subCategory();
         out << this->tableName();
         out << this->colName();
-        out << this->exclude();
-        out << this->includeNull();
-        out << this->selectAll();
+        //        out << this->exclude();
+        //        out << this->includeNull();
+        //        out << this->selectAll();
         out << this->filterIndex();
         out << this->mode();
     }
@@ -355,11 +356,10 @@ void DSParamsModel::resetFilter()
     this->setSection(Constants::defaultTabSection);
     this->setCategory(Constants::defaultCategory);
     this->setSubCategory(Constants::defaultSubCategory);
-    this->setMode(Constants::defaultMode);
-    this->setExclude(Constants::defaultExclude);
-    this->setIncludeNull(Constants::defaultIncludeNull);
-    this->setSelectAll(Constants::defaultSelectAll);
-    this->setInternalCounter(0);
+//    this->setMode(Constants::defaultMode);
+    //    this->setExclude(Constants::defaultExclude);
+    //    this->setIncludeNull(Constants::defaultIncludeNull);
+    //    this->setSelectAll(Constants::defaultSelectAll);
 
     this->joinValue.clear();
     this->joinRelation.clear();
@@ -939,6 +939,159 @@ QVariantMap DSParamsModel::getTimeFrameMap()
     return output;
 }
 
+void DSParamsModel::setExcludeMap(int refObjId, bool value)
+{
+    this->excludeMap.insert(refObjId, value);
+    qDebug() << "EXCLUDE MAP" << refObjId << value;
+}
+
+void DSParamsModel::removeExcludeMap(int refObjId)
+{
+    this->excludeMap.remove(refObjId);
+}
+
+QVariantMap DSParamsModel::getExcludeMap(int refObjId, bool fetchAll)
+{
+    QVariantMap output;
+
+    if(fetchAll == false){
+        output.insert(QString::number(refObjId), QString::number(this->excludeMap.value(refObjId)));
+
+    } else{
+
+        QMapIterator<int, bool> iterator(this->excludeMap);
+
+        while(iterator.hasNext()) {
+            iterator.next();
+            output.insert(QString::number(iterator.key()), QString::number(iterator.value()));
+        }
+    }
+
+    return output;
+}
+
+void DSParamsModel::setIncludeNullMap(int refObjId, bool value)
+{
+    this->includeNullMap.insert(refObjId, value);
+}
+
+void DSParamsModel::removeIncludeNullMap(int refObjId)
+{
+    this->includeNullMap.remove(refObjId);
+}
+
+QVariantMap DSParamsModel::getIncludeNullMap(int refObjId, bool fetchAll)
+{
+    QVariantMap output;
+
+    if(fetchAll == false){
+        output.insert(QString::number(refObjId), QString::number(this->includeNullMap.value(refObjId)));
+
+    } else{
+
+        QMapIterator<int, bool> iterator(this->includeNullMap);
+
+        while(iterator.hasNext()) {
+            iterator.next();
+            output.insert(QString::number(iterator.key()), QString::number(iterator.value()));
+        }
+    }
+
+    return output;
+}
+
+void DSParamsModel::setSelectAllMap(bool refObjId, bool value)
+{
+    this->selectAllMap.insert(refObjId, value);
+}
+
+void DSParamsModel::removeSelectAllMap(int refObjId)
+{
+    this->selectAllMap.remove(refObjId);
+}
+
+QVariantMap DSParamsModel::getSelectAllMap(int refObjId, bool fetchAll)
+{
+    QVariantMap output;
+
+    if(fetchAll == false){
+        output.insert(QString::number(refObjId), QString::number(this->selectAllMap.value(refObjId)));
+
+    } else{
+
+        QMapIterator<int, bool> iterator(this->selectAllMap);
+
+        while(iterator.hasNext()) {
+            iterator.next();
+            output.insert(QString::number(iterator.key()), QString::number(iterator.value()));
+        }
+    }
+
+    return output;
+}
+
+void DSParamsModel::setTmpSelectedValues(QString value)
+{
+    this->tmpSelectedValues.append(value);
+
+    emit tmpSelectedValuesChanged(this->tmpSelectedValues);
+}
+
+void DSParamsModel::removeTmpSelectedValues(int refObjId, bool removeAll)
+{
+    if(removeAll == true){
+        this->tmpSelectedValues.clear();
+    } else{
+        this->tmpSelectedValues.removeAt(refObjId);
+    }
+}
+
+QStringList DSParamsModel::getTmpSelectedValues(int refObjId, bool fetchAll)
+{
+    QStringList output;
+
+    if(fetchAll == false){
+        output.append(this->tmpSelectedValues.value(refObjId));
+    } else{
+        output = this->tmpSelectedValues;
+    }
+
+    return output;
+}
+
+int DSParamsModel::searchTmpSelectedValues(QString keyword)
+{
+    return this->tmpSelectedValues.indexOf(keyword);
+}
+
+void DSParamsModel::setTmpFilterIndex(int value)
+{
+    this->tmpFilterIndex.append(value);
+    qDebug() << this->tmpFilterIndex << "TMP FILTER INDEX";
+}
+
+void DSParamsModel::removeTmpFilterIndex(int refObjId, bool removeAll)
+{
+    if(removeAll == false){
+        this->tmpFilterIndex.remove(refObjId);
+    } else{
+        this->tmpFilterIndex.clear();
+    }
+}
+
+QVector<int> DSParamsModel::getTmpFilterIndex(int refObjId, bool fetchAll)
+{
+    QVector<int> output;
+
+    if(fetchAll == false){
+        output.append(this->tmpFilterIndex.value(refObjId));
+    } else{
+        output = this->tmpFilterIndex;
+    }
+
+    return output;
+}
+
 void DSParamsModel::parseCsv(QUrl pathToCsv)
 {
 
@@ -1100,20 +1253,6 @@ QString DSParamsModel::tableName() const
     return m_tableName;
 }
 
-bool DSParamsModel::exclude() const
-{
-    return m_exclude;
-}
-
-bool DSParamsModel::includeNull() const
-{
-    return m_includeNull;
-}
-
-bool DSParamsModel::selectAll() const
-{
-    return m_selectAll;
-}
 
 int DSParamsModel::filterIndex() const
 {
@@ -1123,6 +1262,11 @@ int DSParamsModel::filterIndex() const
 QString DSParamsModel::mode() const
 {
     return m_mode;
+}
+
+int DSParamsModel::filterModelIndex() const
+{
+    return m_filterModelIndex;
 }
 
 void DSParamsModel::processDataModellerQuery()
@@ -1278,24 +1422,6 @@ void DSParamsModel::setTableName(QString tableName)
     emit tableNameChanged(m_tableName);
 }
 
-void DSParamsModel::setExclude(bool exclude)
-{
-    if (m_exclude == exclude)
-        return;
-
-    m_exclude = exclude;
-    emit excludeChanged(m_exclude);
-}
-
-void DSParamsModel::setIncludeNull(bool includeNull)
-{
-    if (m_includeNull == includeNull)
-        return;
-
-    m_includeNull = includeNull;
-    emit includeNullChanged(m_includeNull);
-}
-
 void DSParamsModel::setFilterIndex(int filterIndex)
 {
     if (m_filterIndex == filterIndex)
@@ -1305,14 +1431,6 @@ void DSParamsModel::setFilterIndex(int filterIndex)
     emit filterIndexChanged(m_filterIndex);
 }
 
-void DSParamsModel::setSelectAll(bool selectAll)
-{
-    if (m_selectAll == selectAll)
-        return;
-
-    m_selectAll = selectAll;
-    emit selectAllChanged(m_selectAll);
-}
 
 void DSParamsModel::setMode(QString mode)
 {
@@ -1321,6 +1439,15 @@ void DSParamsModel::setMode(QString mode)
 
     m_mode = mode;
     emit modeChanged(m_mode);
+}
+
+void DSParamsModel::setFilterModelIndex(int filterModelIndex)
+{
+    if (m_filterModelIndex == filterModelIndex)
+        return;
+
+    m_filterModelIndex = filterModelIndex;
+    emit filterModelIndexChanged(m_filterModelIndex);
 }
 
 QMap<QString, QString> DSParamsModel::datasourceCredentials()

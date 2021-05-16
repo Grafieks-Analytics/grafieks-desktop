@@ -83,25 +83,10 @@ QHash<int, QByteArray> ColumnListModel::roleNames() const
  * \param tableName (table name)
  * \param pageNo (page number for limit query)
  */
-void ColumnListModel::columnQuery(QString columnName, QString tableName, int pageNo)
+void ColumnListModel::columnQuery(QString columnName, QString tableName, QString options )
 {
 
     QString queryString;
-    int lowerLimit = 0;
-    int upperLimit = 0;
-    int pageLimit = 1000;
-
-    // Set the page limit
-    // for the query
-
-    if(pageNo == 0){
-        lowerLimit = 0;
-    } else{
-        lowerLimit = pageNo * pageLimit;
-    }
-
-    upperLimit = lowerLimit + pageLimit;
-
 
     switch(Statics::currentDbIntType){
 
@@ -128,7 +113,6 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
         queryString = "SELECT DISTINCT " + columnName + " FROM "+ tableName;
         QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrType);
         this->setQuery(queryString, dbSqlite);
-        qDebug() << "ISUDE" << queryString;
 
         break;
     }
@@ -198,6 +182,8 @@ void ColumnListModel::columnQuery(QString columnName, QString tableName, int pag
 
 
     }
+
+    emit columnListModelDataChanged(options);
 }
 
 /*!
