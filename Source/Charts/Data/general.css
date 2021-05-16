@@ -79,3 +79,17 @@ text.shadow {
     text-align: center;
     background-color: red;
 }
+
+body {
+    padding: 0;
+    margin: 0;
+    overflow-y: hidden;
+    /* overflow-x: hidden; */
+}
+#yAxisDiv {
+    position: fixed;
+    background: #fff;
+}
+#my_dataviz {
+    /* overflow-x: scroll; */
+}
