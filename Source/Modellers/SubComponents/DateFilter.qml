@@ -185,7 +185,7 @@ Popup {
             break
         }
 
-        DSParamsModel.setMode(Constants.modeCreate)
+//        DSParamsModel.setMode(Constants.modeCreate)
         // Reset all DSParams
         //DSParamsModel.resetFilter();
 

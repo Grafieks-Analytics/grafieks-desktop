@@ -26,10 +26,8 @@ Rectangle{
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
 
-
-    property var checkedValues : []
     property var radioSelected: ""
-    readonly property string mapKey: "0"
+    property int counter: 0
 
 
     /***********************************************************************************************************************/
@@ -54,6 +52,18 @@ Rectangle{
     // Connections Starts
 
     Connections{
+        target: DSParamsModel
+
+        function onInternalCounterChanged(){
+            counter = DSParamsModel.internalCounter
+        }
+
+        function onFilterIndexChanged(){
+            counter = DSParamsModel.filterIndex
+        }
+    }
+
+    Connections{
         target: DuckDataModel
 
         function onDuckColData(colData){
@@ -68,6 +78,37 @@ Rectangle{
         function onForwardColData(colData){
             singleSelectCheckList.model = colData
             multiSelectCheckList.model  = colData
+        }
+    }
+
+    Connections{
+        target: ColumnListModel
+
+        function onColumnListModelDataChanged(options){
+
+            var jsonOptions = JSON.parse(options)
+
+            if(jsonOptions.subCategory === Constants.categorySubMulti){
+                multiSelectRadio.checked = true
+
+                multiSelectCheckList.visible = true
+                singleSelectCheckList.visible = false
+
+                if(jsonOptions.values.length > 0){
+                    var checkedValues = jsonOptions.values.split(",")
+                    checkedValues.forEach((item) => {
+                                              DSParamsModel.setTmpSelectedValues(item)
+                                          })
+                }
+
+            } else{
+                singleSelectRadio.checked = true
+
+                multiSelectCheckList.visible = false
+                singleSelectCheckList.visible = true
+
+                radioSelected = jsonOptions.values
+            }
         }
     }
 
@@ -88,24 +129,8 @@ Rectangle{
 
 
     // SLOT function
-    function slotEditModeSubCategory(subCategory){
-
-        if(subCategory === Constants.categorySubMulti){
-            multiSelectRadio.checked = true
-
-            multiSelectCheckList.visible = true
-            singleSelectCheckList.visible = false
-
-        } else{
-            singleSelectRadio.checked = true
-
-            multiSelectCheckList.visible = false
-            singleSelectCheckList.visible = true
-        }
-    }
-
     function slotDataCleared(){
-        checkedValues = []
+        DSParamsModel.removeTmpSelectedValues(0, true)
         radioSelected = ""
     }
 
@@ -132,9 +157,10 @@ Rectangle{
 
     function onSingleSelectRadioSelected(modelData){
 
-        DSParamsModel.addToJoinValue(mapKey, modelData.toString())
-        DSParamsModel.addToJoinRelation(mapKey, Constants.equalRelation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.equalRelation)
+
+        DSParamsModel.addToJoinValue(counter, modelData.toString())
+        DSParamsModel.addToJoinRelation(counter, Constants.equalRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.equalRelation)
 
         radioSelected = modelData.toString()
     }
@@ -157,20 +183,13 @@ Rectangle{
     }
 
     function setCheckedAll(checked){
+
         // If Select All option is true
         if(checked === true){
 
-            if(DSParamsModel.mode === Constants.modeCreate){
-
-                DSParamsModel.addToJoinValue(mapKey, "%")
-
-            } else{
-                DSParamsModel.addToJoinValue(mapKey, checkedValues.toString())
-            }
-
-            DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
-            DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
-
+            DSParamsModel.addToJoinValue(counter, "%")
+            DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
+            DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
         }
     }
 
@@ -179,43 +198,44 @@ Rectangle{
         if(mainCheckBox.checked === true){
 
             if(checked === false){
-
                 // Set SELECT ALL to false
-                DSParamsModel.setSelectAll(false)
+                DSParamsModel.setSelectAllMap(counter, false)
                 mainCheckBox.checked = false
-
             }
         } else{
             if(checked === true){
 
                 // Start pushing the individual checked item in the array
-                if(checkedValues.indexOf(modelData) < 0)
-                    checkedValues.push(modelData)
+                if(DSParamsModel.searchTmpSelectedValues(modelData) < 0){
+                    DSParamsModel.setTmpSelectedValues(modelData)
+                    console.log(DSParamsModel.getTmpSelectedValues(0, true), "VALUES FETCHES")
+                }
 
             } else{
                 // Remove item if unchecked
-                const index = checkedValues.indexOf(modelData);
+                const index = DSParamsModel.searchTmpSelectedValues(modelData);
                 if (index > -1) {
-                    checkedValues.splice(index, 1);
+                    DSParamsModel.removeTmpSelectedValues(index);
                 }
             }
 
             // Save the array and Set relation type to IN
 
-            DSParamsModel.addToJoinValue(mapKey, checkedValues.toString())
-            DSParamsModel.addToJoinRelation(mapKey, Constants.inRelation)
-            DSParamsModel.addToJoinRelationSlug(mapKey, Constants.inRelation)
+
+            DSParamsModel.addToJoinValue(counter, DSParamsModel.getTmpSelectedValues(0, true).toString())
+            DSParamsModel.addToJoinRelation(counter, Constants.inRelation)
+            DSParamsModel.addToJoinRelationSlug(counter, Constants.inRelation)
         }
 
     }
 
     function onIncludeCheckedClicked(checked){
-        DSParamsModel.setIncludeNull(checked)
+        DSParamsModel.setIncludeNullMap(counter,checked)
     }
 
 
     function onExcludeCheckedClicked(checked){
-        DSParamsModel.setExclude(checked)
+        DSParamsModel.setExcludeMap(counter, checked)
     }
 
 
@@ -284,6 +304,7 @@ Rectangle{
             id: singleSelectRadioColumn
 
             padding: 10
+
             anchors.right: selectTypeRadioBtn.right
             rightPadding: 30
 
@@ -368,7 +389,7 @@ Rectangle{
 
             CheckBoxTpl {
                 id: mainCheckBox
-                checked: DSParamsModel.selectAll
+                checked: DSParamsModel.getSelectAllMap(counter)[counter] === "1" ? true : false
                 text: "All"
                 y:2
                 parent_dimension: Constants.defaultCheckBoxDimension
@@ -403,12 +424,25 @@ Rectangle{
                         text: modelData
                         parent_dimension: Constants.defaultCheckBoxDimension
                         ButtonGroup.group: childGroup
+                        objectName: modelData
 
                         onCheckedChanged: {
                             onMultiSelectCheckboxSelected(modelData,checked)
                         }
+                        // On search, highlight selected option
                         Component.onCompleted: {
-                            modelCheckBoxes.checked = checkedValues.indexOf(modelData) >= 0 ? true: false
+                            modelCheckBoxes.checked = DSParamsModel.searchTmpSelectedValues(modelData) >= 0 ? true: false
+                        }
+
+                        // On edit, highlight the selected option
+                        Connections{
+                            target: DSParamsModel
+                            function onTmpSelectedValuesChanged(values){
+                                if(DSParamsModel.mode === Constants.modeEdit && DSParamsModel.category === Constants.categoryMainListType && DSParamsModel.subCategory === Constants.categorySubMulti){
+                                    modelCheckBoxes.checked = values.indexOf(modelCheckBoxes.objectName) >= 0 ? true: false
+                                    console.log("CHECK", values, modelCheckBoxes.objectName)
+                                }
+                            }
                         }
                     }
                 }
@@ -452,6 +486,7 @@ Rectangle{
                     CustomRadioButton {
                         id: modelRadioButton
                         text: modelData
+                        objectName: modelData
                         ButtonGroup.group: btngrp
                         height: Constants.defaultRadioDimension
                         width: Constants.defaultRadioDimension
@@ -460,8 +495,22 @@ Rectangle{
                             onSingleSelectRadioSelected(modelData)
                         }
 
+                        // On search, highlight the selected radio
                         Component.onCompleted: {
                             modelRadioButton.checked = radioSelected === modelData ? true: false
+                        }
+
+                        // On edit, highlight the selected option
+                        Connections{
+                            target: ColumnListModel
+
+                            function onColumnListModelDataChanged(options){
+                                if(DSParamsModel.mode === Constants.modeEdit && DSParamsModel.category === Constants.categoryMainListType && DSParamsModel.subCategory === Constants.categorySubSingle){
+                                    var jsonOptions = JSON.parse(options)
+                                    console.log("RADIO", jsonOptions.values, modelRadioButton.objectName)
+                                    modelRadioButton.checked = jsonOptions.values === modelRadioButton.objectName ? true: false
+                                }
+                            }
                         }
                     }
                 }
@@ -492,7 +541,7 @@ Rectangle{
             anchors.left: includeExcludeRow.left
 
             CheckBoxTpl {
-                checked: DSParamsModel.includeNull
+                checked: DSParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
                 text: qsTr("Include Null")
                 parent_dimension: Constants.defaultCheckBoxDimension
 
@@ -507,7 +556,7 @@ Rectangle{
             anchors.right: includeExcludeRow.right
             anchors.rightMargin: 30
             CheckBoxTpl {
-                checked: DSParamsModel.exclude
+                checked: DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
                 text: qsTr("Exclude")
                 parent_dimension: Constants.defaultCheckBoxDimension
 

@@ -46,9 +46,14 @@ class DSParamsModel : public QObject
     QMap<int, QVariant> newJoinBox;                // Join box between 2 rectangles
 
     // Standalone variables for Filters
-    QVariantMap joinRelation;     // Condition link between parameter and value in a query. eg, =, !=, LIKE, etc
-    QVariantMap joinValue;        // Right side parameter of the comparison (the actual value)
-    QVariantMap joinRelationSlug; // Single syllable entity for human readable entity. eg, in Categorical-Wildcard, Slug for `Ends With` is `endswith` and `Equal To` is `equalto`
+    QVariantMap joinRelation;           // Condition link between parameter and value in a query. eg, =, !=, LIKE, etc
+    QVariantMap joinValue;              // Right side parameter of the comparison (the actual value)
+    QVariantMap joinRelationSlug;       // Single syllable entity for human readable entity. eg, in Categorical-Wildcard, Slug for `Ends With` is `endswith` and `Equal To` is `equalto`
+    QMap<int, bool> excludeMap;         // Map for exclude all checks
+    QMap<int, bool> includeNullMap;     // Map for include nulls
+    QMap<int, bool> selectAllMap;       // Map for select alls
+    QStringList tmpSelectedValues;     // Tmp selected values in a filter list - used in categorical filter list
+    QVector<int> tmpFilterIndex;        // Tmp created filter index - used in categorical filter wildcard
     QVariantMap dateFormatMap;
     QVariantMap timeFrameMap;
 
@@ -80,11 +85,9 @@ class DSParamsModel : public QObject
     Q_PROPERTY(QString subCategory READ subCategory WRITE setSubCategory NOTIFY subCategoryChanged)             // selection type of categories like multi/single select in categorical tab
     Q_PROPERTY(QString tableName READ tableName WRITE setTableName NOTIFY tableNameChanged)                     // sql table name of the selection
     Q_PROPERTY(QString colName READ colName WRITE setColName NOTIFY colNameChanged)                             // sql column name
-    Q_PROPERTY(bool exclude READ exclude WRITE setExclude NOTIFY excludeChanged)                                // if the current selection needs to be excluded from result
-    Q_PROPERTY(bool includeNull READ includeNull WRITE setIncludeNull NOTIFY includeNullChanged)                // if include null selected in filter list
-    Q_PROPERTY(bool selectAll READ selectAll WRITE setSelectAll NOTIFY selectAllChanged)                        // If select all property selected in filter list
     Q_PROPERTY(int filterIndex READ filterIndex WRITE setFilterIndex NOTIFY filterIndexChanged)                 // Unique id given to each join type (filter type)
     Q_PROPERTY(QString mode READ mode WRITE setMode NOTIFY modeChanged)                                         // Set Create/Edit mode in a filter
+    Q_PROPERTY(int filterModelIndex READ filterModelIndex WRITE setFilterModelIndex NOTIFY filterModelIndexChanged)
 
     int m_currentTab;
 
@@ -109,11 +112,9 @@ class DSParamsModel : public QObject
     QString m_subCategory;
     QString m_colName;
     QString m_tableName;
-    bool m_exclude;
-    bool m_includeNull;
-    bool m_selectAll;
     int m_filterIndex;
     QString m_mode;
+    int m_filterModelIndex;
 
 public:
     explicit DSParamsModel(QObject *parent = nullptr);
@@ -221,6 +222,27 @@ public:
     Q_INVOKABLE void removeTimeFrame(QString key);
     Q_INVOKABLE QVariantMap getTimeFrameMap();
 
+    Q_INVOKABLE void setExcludeMap(int refObjId, bool value = false);
+    Q_INVOKABLE void removeExcludeMap(int refObjId);
+    Q_INVOKABLE QVariantMap getExcludeMap(int refObjId = 0, bool fetchAll = false);
+
+    Q_INVOKABLE void setIncludeNullMap(int refObjId, bool value = false);
+    Q_INVOKABLE void removeIncludeNullMap(int refObjId);
+    Q_INVOKABLE QVariantMap getIncludeNullMap(int refObjId = 0, bool fetchAll = false);
+
+    Q_INVOKABLE void setSelectAllMap(bool refObjId, bool value = false);
+    Q_INVOKABLE void removeSelectAllMap(int refObjId);
+    Q_INVOKABLE QVariantMap getSelectAllMap(int refObjId = 0, bool fetchAll = false);
+
+    Q_INVOKABLE void setTmpSelectedValues(QString value);
+    Q_INVOKABLE void removeTmpSelectedValues(int refObjId, bool removeAll = false);
+    Q_INVOKABLE QStringList getTmpSelectedValues(int refObjId = 0, bool fetchAll = false);
+    Q_INVOKABLE int searchTmpSelectedValues(QString keyword);
+
+    Q_INVOKABLE void setTmpFilterIndex(int value);
+    Q_INVOKABLE void removeTmpFilterIndex(int refObjId, bool removeAll = false);
+    Q_INVOKABLE QVector<int> getTmpFilterIndex(int refObjId = 0, bool fetchAll = false);
+
     // Datasource Read/Write
     Q_INVOKABLE void parseCsv(QUrl pathToCsv);
     Q_INVOKABLE void parseParquet(QUrl pathToParquet);
@@ -251,13 +273,9 @@ public:
     QString subCategory() const;
     QString colName() const;
     QString tableName() const;
-    bool exclude() const;
-    bool includeNull() const;
-    bool selectAll() const;
     int filterIndex() const;
     QString mode() const;
-
-
+    int filterModelIndex() const;
 
 public slots:
 
@@ -288,13 +306,9 @@ public slots:
     void setSubCategory(QString subCategory);
     void setColName(QString colName);
     void setTableName(QString tableName);
-    void setExclude(bool exclude);
-    void setIncludeNull(bool includeNull);
     void setFilterIndex(int filterIndex);
-    void setSelectAll(bool selectAll);
     void setMode(QString mode);
-
-
+    void setFilterModelIndex(int filterModelIndex);
 
 signals:
 
@@ -331,11 +345,9 @@ signals:
     void tableNameChanged(QString tableName);
     void relationChanged(QString relation);
     void valueChanged(QVariant value);
-    void excludeChanged(bool exclude);
-    void includeNullChanged(bool includeNull);
-    void selectAllChanged(bool selectAll);
     void filterIndexChanged(int filterIndex);
     void modeChanged(QString mode);
+    void tmpSelectedValuesChanged(QStringList values);
 
     // For Datasource Read/Write
     void dataReadComplete(uint time, bool status, QString msg);
@@ -347,10 +359,13 @@ signals:
     void resetInput();
 
 
+    void filterModelIndexChanged(int filterModelIndex);
+
 private:
     QMap<QString, QString> datasourceCredentials();
     QString m_fileExtension;
     int counter;
+
 
     // Read Write Data source file
     void insertOne();

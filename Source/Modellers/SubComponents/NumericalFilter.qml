@@ -126,7 +126,7 @@ Popup {
         singleSlug = joinSlug[0]
         manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, filterIndex)
 
-        DSParamsModel.setMode(Constants.modeCreate)
+//        DSParamsModel.setMode(Constants.modeCreate)
 
         // Reset all DSParams
         //DSParamsModel.resetFilter();

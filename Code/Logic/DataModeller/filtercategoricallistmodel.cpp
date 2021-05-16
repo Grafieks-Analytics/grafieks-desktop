@@ -1,7 +1,7 @@
 #include "filtercategoricallistmodel.h"
 
 
-FilterCategoricalListModel::FilterCategoricalListModel(QObject *parent) : QAbstractListModel(parent), counter(0)
+FilterCategoricalListModel::FilterCategoricalListModel(QObject *parent) : QAbstractListModel(parent)
 {
 
     sqlComparisonOperators.append("=");
@@ -164,7 +164,6 @@ bool FilterCategoricalListModel::setData(const QModelIndex &index, const QVarian
         break;
     }
 
-
     }
 
     if( somethingChanged){
@@ -202,16 +201,10 @@ QHash<int, QByteArray> FilterCategoricalListModel::roleNames() const
 
 
 
-void FilterCategoricalListModel::newFilter(QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, bool includeNull, bool exclude )
+void FilterCategoricalListModel::newFilter(int counter, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, bool includeNull, bool exclude )
 {
-
-    addFilterList(new FilterCategoricalList(this->counter, section, category, subcategory, tableName, colName, relation, slug, val, includeNull, exclude, this));
-
-    this->counter++;
-
+    addFilterList(new FilterCategoricalList(counter, section, category, subcategory, tableName, colName, relation, slug, val, includeNull, exclude, this));
     emit rowCountChanged();
-
-
 }
 
 void FilterCategoricalListModel::deleteFilter(int FilterIndex)
@@ -225,7 +218,6 @@ void FilterCategoricalListModel::deleteFilter(int FilterIndex)
 
 void FilterCategoricalListModel::updateFilter(int FilterIndex, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString value, bool includeNull, bool exclude)
 {
-
     beginResetModel();
     if(section != "")
         mFilter[FilterIndex]->setSection(section);
