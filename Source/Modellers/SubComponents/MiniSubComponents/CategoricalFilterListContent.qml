@@ -170,7 +170,17 @@ Rectangle{
 
 
     function onTextChangedSearch(){
-        QueryDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text)
+        var options = {
+            "section" : DSParamsModel.section,
+            "category" : DSParamsModel.category,
+            "subCategory" : DSParamsModel.subCategory,
+            "values" : DSParamsModel.fetchJoinValue(counter),
+            "relation" : DSParamsModel.fetchJoinRelation(counter),
+            "slug" : DSParamsModel.fetchJoinRelationSlug(counter)
+
+        }
+
+        QueryDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))
 
         if(DSParamsModel.subCategory === Constants.categorySubMulti){
             if(searchText.text.length > 0){
