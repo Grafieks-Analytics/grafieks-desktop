@@ -1,4 +1,7 @@
 function isDateFormat(date) {
+    if (typeof date == "number") {
+        return false;
+    }
     if (typeof date == "string") {
         if (date.length < 6) {
             return false;

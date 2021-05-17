@@ -54,7 +54,7 @@
                     curveType,
                     dateFormat,
                     chartType,
-                    standartThresholdWidth,
+                    standardThresholdWidth,
                     subCategoryColour,
                     categoryColor,
                 } = plottingConfiguration;
@@ -76,16 +76,16 @@
                     chartType = defaultD3Config.chartType;
                 }
 
-                if (!standartThresholdWidth) {
-                    standartThresholdWidth =
-                        defaultD3Config.standartThresholdWidth;
+                if (!standardThresholdWidth) {
+                    standardThresholdWidth =
+                        defaultD3Config.standardThresholdWidth;
                 }
 
                 var margin = { top: 40, right: 20, bottom: 0, left: 70 };
                 var width = window.innerWidth - margin.left - margin.right - 70;
 
                 if (chartType == constants.chartType.STANDARD) {
-                    width = numberOfBars(data) * standartThresholdWidth;
+                    width = numberOfBars(data) * standardThresholdWidth;
                 }
 
                 function numberOfBars(data) {
@@ -324,7 +324,7 @@
                     model_name: "f1",
                     field1: 19,
                     field2: 83,
-                    field3: 100,
+                    field3: 2,
                     field4: 30,
                 },
                 {
