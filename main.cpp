@@ -21,6 +21,7 @@
 #include "Code/Logic/Datasources/datasourceds.h"
 
 #include "Code/Logic/DataModeller/querymodel.h"
+#include "Code/Logic/DataModeller/querydatamodel.h"
 #include "Code/Logic/DataModeller/dblistmodel.h"
 #include "Code/Logic/DataModeller/querystatsmodel.h"
 #include "Code/Logic/DataModeller/dsparamsmodel.h"
@@ -249,6 +250,7 @@ int main(int argc, char *argv[])
     ConnectorFilter connectorFilter;
     ConnectorsLoginModel connectorsLoginModel;
     QueryModel queryModel;
+    QueryDataModel queryDataModel;
     QueryStatsModel queryStatsModel;
     DBListModel dblistModel;
     DSParamsModel dsParamsModel;
@@ -356,6 +358,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("DatasourceModel", &datasourceModel);
     engine.rootContext()->setContextProperty("DatasourceDS", datasource);
     engine.rootContext()->setContextProperty("QueryModel", &queryModel);
+    engine.rootContext()->setContextProperty("QueryDataModel", &queryDataModel);
     engine.rootContext()->setContextProperty("DBListModel", &dblistModel);
     engine.rootContext()->setContextProperty("QueryStatsModel", &queryStatsModel);
     engine.rootContext()->setContextProperty("DropboxModel", &dropboxModel);

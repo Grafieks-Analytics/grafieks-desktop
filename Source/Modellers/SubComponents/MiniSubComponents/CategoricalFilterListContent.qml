@@ -82,9 +82,12 @@ Rectangle{
     }
 
     Connections{
-        target: ColumnListModel
+        target: QueryDataModel
 
-        function onColumnListModelDataChanged(options){
+        function onColumnListModelDataChanged(colData, options){
+
+            singleSelectCheckList.model = colData
+            multiSelectCheckList.model  = colData
 
             var jsonOptions = JSON.parse(options)
 
@@ -167,7 +170,7 @@ Rectangle{
 
 
     function onTextChangedSearch(){
-        ColumnListModel.likeColumnQuery(DSParamsModel.colName, DSParamsModel.tableName, searchText.text)
+        QueryDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text)
 
         if(DSParamsModel.subCategory === Constants.categorySubMulti){
             if(searchText.text.length > 0){
@@ -502,9 +505,9 @@ Rectangle{
 
                         // On edit, highlight the selected option
                         Connections{
-                            target: ColumnListModel
+                            target: QueryDataModel
 
-                            function onColumnListModelDataChanged(options){
+                            function onColumnListModelDataChanged(colData, options){
                                 if(DSParamsModel.mode === Constants.modeEdit && DSParamsModel.category === Constants.categoryMainListType && DSParamsModel.subCategory === Constants.categorySubSingle){
                                     var jsonOptions = JSON.parse(options)
                                     console.log("RADIO", jsonOptions.values, modelRadioButton.objectName)

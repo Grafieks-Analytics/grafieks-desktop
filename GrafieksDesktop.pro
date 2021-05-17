@@ -81,6 +81,7 @@ SOURCES += \
     Code/Logic/DataModeller/newtablelistmodel.cpp \
     Code/Logic/DataModeller/proxyfiltermodel.cpp \
     Code/Logic/DataModeller/publishdatasourcemodel.cpp \
+    Code/Logic/DataModeller/querydatamodel.cpp \
     Code/Logic/DataModeller/querymodel.cpp \
     Code/Logic/DataModeller/querystatsmodel.cpp \
     Code/Logic/DataModeller/scheduler.cpp \
@@ -191,6 +192,7 @@ HEADERS += \
     Code/Logic/DataModeller/newtablelistmodel.h \
     Code/Logic/DataModeller/proxyfiltermodel.h \
     Code/Logic/DataModeller/publishdatasourcemodel.h \
+    Code/Logic/DataModeller/querydatamodel.h \
     Code/Logic/DataModeller/querymodel.h \
     Code/Logic/DataModeller/querystatsmodel.h \
     Code/Logic/DataModeller/scheduler.h \

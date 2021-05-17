@@ -58,6 +58,7 @@ public:
     Q_INVOKABLE void columnEditQuery(QString columnName, QString tableName, QString fieldNames, QString category);
     Q_INVOKABLE void columnDateFormatQuery(QString columnName, QString tableName, int value , int pageNo = 0);
 
+
 public slots:
 
 signals:

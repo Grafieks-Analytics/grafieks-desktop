@@ -75,12 +75,6 @@ Rectangle{
         DSParamsModel.setTableName(tableName)
         DSParamsModel.setColName(columnName)
 
-//        DSParamsModel.addToJoinRelation(filterIndex, relation)
-//        DSParamsModel.addToJoinRelationSlug(filterIndex, slug)
-//        DSParamsModel.addToJoinValue(filterIndex, value)
-//        DSParamsModel.setIncludeNullMap(filterIndex, includeNull)
-//        DSParamsModel.setExcludeMap(filterIndex, exclude)
-
         var options = {
             "section" : section,
             "category" : category,
@@ -91,7 +85,7 @@ Rectangle{
 
         }
 
-        ColumnListModel.columnQuery(columnName, tableName, JSON.stringify(options))
+        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
         console.log("EDIT CLICKED", DSParamsModel.mode)
 
     }
