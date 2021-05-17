@@ -77,7 +77,18 @@ Rectangle{
         DSParamsModel.setExclude(exclude)
         DSParamsModel.setInternalCounter(1)
 
-        ColumnListModel.columnEditQuery(columnName, tableName, value, category)
+        var options = {
+            "section" : section,
+            "category" : category,
+            "subCategory" : subCategory,
+            "values" : value,
+            "relation" : relation,
+            "slug" : slug
+
+        }
+
+        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        console.log("EDIT CLICKED", DSParamsModel.mode)
     }
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
