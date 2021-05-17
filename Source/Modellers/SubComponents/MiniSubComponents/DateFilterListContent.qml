@@ -26,7 +26,23 @@ Rectangle{
     border.color: Constants.darkThemeColor
 
     property var checkedValues : []
+    property var masterColData: []
     readonly property string mapKey: "0"
+    readonly property var availableformats : ["default", "year", "quarter_year", "month_year", "week_year", "full_date", "date_time"]
+    readonly property var months : ["Jan", "Feb", "Mar", "Apr", "May","Jun","Jul", "Aug", "Sep", "Oct", "Nov","Dec"];
+
+    onMasterColDataChanged: {
+        var tmpColData = []
+        masterColData.forEach((item, index) => {
+                                  // Just push "Year" data as default
+                                  if(tmpColData.indexOf(item[0]) < 0){
+                                      tmpColData.push(item[0])
+                                  }
+                              })
+        singleSelectCheckList.model = tmpColData
+        multiSelectCheckList.model  = tmpColData
+    }
+
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
@@ -37,8 +53,9 @@ Rectangle{
 
         ListElement{
             menuItem:"Select"
-
+            format: ""
         }
+
         ListElement{
             menuItem:"Year"
             format: "2020"
@@ -103,9 +120,15 @@ Rectangle{
         target: DuckDataModel
 
         function onDuckColData(colData){
-            console.log(colData, "COL DATA")
-            singleSelectCheckList.model = colData
-            multiSelectCheckList.model  = colData
+            convertDate(colData)
+        }
+    }
+
+    Connections{
+        target: QueryDataModel
+
+        function onColumnListModelDataChanged(colData, options){
+            convertDate(colData)
         }
     }
 
@@ -134,6 +157,8 @@ Rectangle{
             singleSelectCheckList.visible = true
         }
     }
+
+
     function onMultiSelectSelected(){
         multiSelectCheckList.visible = true
         singleSelectCheckList.visible = false
@@ -163,7 +188,7 @@ Rectangle{
 
 
     function onTextChangedSearch(){
-        ColumnListModel.likeColumnQuery(DSParamsModel.colName, DSParamsModel.tableName, searchText.text)
+        QueryDataModel.likeColumnQuery(DSParamsModel.colName, DSParamsModel.tableName, searchText.text)
     }
 
     function onAllCheckBoxCheckedChanged(checked){
@@ -214,21 +239,17 @@ Rectangle{
 
             for(let i = 0; i < checkedValues.length; i++)
             {
-                   DSParamsModel.setValueFormat(checkedValues[i].toString(), format)
+                DSParamsModel.setValueFormat(checkedValues[i].toString(), format)
             }
 
             DSParamsModel.addToJoinValue(mapKey, checkedValues.toString())
             DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
             DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
         }
-
     }
 
-
-
     function onIncludeCheckedClicked(checked){
-//        DSParamsModel.setIncludeNull(checked)
-        convertDate()
+        DSParamsModel.setIncludeNull(checked)
     }
 
 
@@ -236,70 +257,112 @@ Rectangle{
         DSParamsModel.setExclude(checked)
     }
 
-    function getFormattedDate(modelData, value)
-    {
-        // Check for Selected Format
-        var formattedDate;
-        console.log("VALUE", value)
 
-        switch(value)
-        {
-            case 1:
-                formattedDate = Qt.formatDateTime(modelData,'yyyy')
-                break;
-            case 2:
-                formattedDate = Qt.formatDateTime(modelData,'dd MMMM yyyy')
-                break;
-            case 3:
-                formattedDate = Qt.formatDateTime(modelData,'d MMMM yyyy')
-                break;
-            case 4:
-                formattedDate = Qt.formatDateTime(modelData,'dddd, d MMMM yyyy')
-                break;
-            case 5:
-                formattedDate = Qt.formatDateTime(modelData,'dddd, dd MMMM yyyy')
-                break;
-            case 6:
-                formattedDate = Qt.formatDateTime(modelData,'dd/MM/yy')
-                break;
-            case 7:
-                formattedDate = Qt.formatDateTime(modelData,'d/M/yy')
-                break;
-            case 8:
-                formattedDate = Qt.formatDateTime(modelData,'d.M.yy')
-                break;
-            case 9:
-                formattedDate = Qt.formatDateTime(modelData,'yyyy-MM-dd')
-                break;
-            case 10:
-                formattedDate = Qt.formatDateTime(modelData,'MMMM yyyy')
-                break;
-            case 11:
-                formattedDate = Qt.formatDateTime(modelData,'d MMMM')
-                break;
-            case 12:
-                formattedDate = Qt.formatDateTime(modelData,'yy')
-                break;
-            case 13:
-                formattedDate = Qt.formatDateTime(modelData,'yyyy')
-                break;
-            case 14:
-                formattedDate = Qt.formatDateTime(modelData,'dd/MM/yyyy hh:mm:ss')
-                break;
-            default:
-                formattedDate = modelData
+    function changeDateFormat(currentIndex){
 
-        }
-
-        return formattedDate
-
+        var tmpColData = []
+        masterColData.forEach((item, index) => {
+                                  // Just push "Year" data as default
+                                  if(tmpColData.indexOf(item[currentIndex]) < 0){
+                                      tmpColData.push(item[currentIndex])
+                                  }
+                              })
+        singleSelectCheckList.model = tmpColData
+        multiSelectCheckList.model  = tmpColData
     }
 
-    function convertDate(){
-        console.log(Object.keys(ColumnListModel))
-        for(var i = 0; i < ColumnListModel.rowCount(); i++){
-            console.log(ColumnListModel.data(1, "tableName"), "PINGO")
+    function convertDate(dateColumnData){
+
+        let sortedMasterColData = []
+        for(var i = 0; i < dateColumnData.length; i++){
+
+            let dateData = dateColumnData[i]
+
+            let getYear = getYearValue(dateData)
+            let getQuarterYear = getQuarterYearValue(dateData)
+            let getMonthYear = getMonthYearValue(dateData)
+            let getWeekYear = getWeekYearValue(dateData)
+            let getFullDate = getFullDateValue(dateData)
+            let getDateTime = getDateTimeValue(dateData)
+
+            var tmpColData = [dateData, getYear, getQuarterYear, getMonthYear, getWeekYear, getFullDate, getDateTime]
+            sortedMasterColData.push(tmpColData)
         }
+
+        masterColData = sortedMasterColData
+    }
+
+    function getYearValue(inputDate){
+        let t = Date.parse(inputDate)
+        let d = new Date(t);
+
+        let outYear = d.getFullYear();
+        return outYear;
+    }
+
+    function getQuarterYearValue(inputDate){
+        let t = Date.parse(inputDate)
+        let d = new Date(t);
+
+        let outYear = d.getFullYear();
+        let outMonth = d.getMonth();
+        let outQuarter = Math.ceil((outMonth) / 3);
+
+        let out = "Q" + outQuarter + " " + outYear
+        return out;
+    }
+
+    function getMonthYearValue(inputDate){
+        let t = Date.parse(inputDate)
+        let d = new Date(t);
+
+        let outYear = d.getFullYear();
+        let outMonth = months[d.getMonth()]
+
+        let out = outMonth + " " + outYear
+        return out;
+    }
+
+    function getWeekYearValue(inputDate){
+        let t = Date.parse(inputDate)
+        let d = new Date(t);
+
+        let outYear = d.getFullYear();
+
+        let oneJan =  new Date(d.getFullYear(), 0, 1);
+        let numberOfDays =  Math.floor((d - oneJan) / (24 * 60 * 60 * 1000));
+        let outWeek = Math.ceil(( d.getDay() + 1 + numberOfDays) / 7);
+
+
+        let out = "Week " + outWeek + " " + outYear
+        return out;
+    }
+
+    function getFullDateValue(inputDate){
+        let t = Date.parse(inputDate)
+        let d = new Date(t);
+
+        let outDate = d.getDate();
+        let outMonth = months[d.getMonth()]
+        let outYear = d.getFullYear();
+
+        let out = outDate + " " + outMonth + " " + outYear
+        return out;
+    }
+
+    function getDateTimeValue(inputDate){
+        let t = Date.parse(inputDate)
+        let d = new Date(t);
+
+        let outDate = d.getDate();
+        let outMonth = months[d.getMonth()]
+        let outYear = d.getFullYear();
+        let outHour = d.getHours();
+        let outMin = d.getMinutes();
+        let outSec = d.getSeconds();
+
+        let out = outDate + " " + outMonth + " " + outYear + " " + outHour + ":" + outMin + ":" + outSec + " Hrs"
+        return out;
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -454,14 +517,14 @@ Rectangle{
         ListView {
             id: multiSelectCheckList
             model: ColumnListModel
-          height: parent.height-38
+            height: parent.height-38
             width: parent.width
 
-             anchors.top: mainCheckBox.bottom
+            anchors.top: mainCheckBox.bottom
             flickableDirection: Flickable.VerticalFlick
-                       boundsBehavior: Flickable.StopAtBounds
-                       clip: true
-                       ScrollBar.vertical: CustomScrollBar {}
+            boundsBehavior: Flickable.StopAtBounds
+            clip: true
+            ScrollBar.vertical: CustomScrollBar {}
 
 
             delegate: Row{
@@ -498,13 +561,13 @@ Rectangle{
             visible: false
             spacing: 2
             height: parent.height-38
-              width: parent.width
+            width: parent.width
 
-               anchors.top: mainCheckBox.bottom
-              flickableDirection: Flickable.VerticalFlick
-                         boundsBehavior: Flickable.StopAtBounds
-                         clip: true
-                         ScrollBar.vertical: CustomScrollBar {}
+            anchors.top: mainCheckBox.bottom
+            flickableDirection: Flickable.VerticalFlick
+            boundsBehavior: Flickable.StopAtBounds
+            clip: true
+            ScrollBar.vertical: CustomScrollBar {}
 
             delegate: Row{
 
@@ -547,7 +610,7 @@ Rectangle{
                 textRole: "menuItem"
                 valueRole: "compareValue"
                 onActivated: {
-                    ColumnListModel.columnDateFormatQuery(DSParamsModel.colName, DSParamsModel.tableName, currentIndex)
+                    changeDateFormat(currentIndex)
                 }
 
                 anchors{
@@ -578,7 +641,7 @@ Rectangle{
                 checked: DSParamsModel.includeNull
                 text: qsTr("Include Null")
 
-                  parent_dimension: Constants.defaultCheckBoxDimension
+                parent_dimension: Constants.defaultCheckBoxDimension
 
                 onCheckStateChanged: {
                     onIncludeCheckedClicked(checked)
@@ -593,14 +656,14 @@ Rectangle{
             anchors.right: includeExcludeRow.right
             anchors.rightMargin: 5
 
-                CheckBoxTpl {
-                    checked: DSParamsModel.exclude
-                    text: qsTr("Exclude")
-                    parent_dimension: Constants.defaultCheckBoxDimension
+            CheckBoxTpl {
+                checked: DSParamsModel.exclude
+                text: qsTr("Exclude")
+                parent_dimension: Constants.defaultCheckBoxDimension
 
-                    onCheckStateChanged: {
-                        onExcludeCheckedClicked(checked)
-                    }
+                onCheckStateChanged: {
+                    onExcludeCheckedClicked(checked)
+                }
             }
         }
 
