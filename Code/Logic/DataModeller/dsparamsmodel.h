@@ -49,12 +49,12 @@ class DSParamsModel : public QObject
     QVariantMap joinRelation;           // Condition link between parameter and value in a query. eg, =, !=, LIKE, etc
     QVariantMap joinValue;              // Right side parameter of the comparison (the actual value)
     QVariantMap joinRelationSlug;       // Single syllable entity for human readable entity. eg, in Categorical-Wildcard, Slug for `Ends With` is `endswith` and `Equal To` is `equalto`
-    QMap<int, bool> excludeMap;         // Map for exclude all checks
-    QMap<int, bool> includeNullMap;     // Map for include nulls
-    QMap<int, bool> selectAllMap;       // Map for select alls
-    QStringList tmpSelectedValues;     // Tmp selected values in a filter list - used in categorical filter list
+    QMap<int, bool> excludeMap;         // Map for exclude all checks, QMap<filterId, bool>
+    QMap<int, bool> includeNullMap;     // Map for include nulls, QMap<filterId, bool>
+    QMap<int, bool> selectAllMap;       // Map for select alls, QMap<filterId, bool>
+    QStringList tmpSelectedValues;      // Tmp selected values in a filter list - used in categorical filter list
     QVector<int> tmpFilterIndex;        // Tmp created filter index - used in categorical filter wildcard
-    QVariantMap dateFormatMap;
+    QMap<int, int> dateFormatMap;       // Date selected format QMap<filterId, formatId>
     QVariantMap timeFrameMap;
 
     // Q_PROPERTY variables
@@ -214,9 +214,9 @@ public:
     Q_INVOKABLE void removeJoinRelationSlug(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE QVariantMap fetchJoinRelationSlug(int refObjId = 0, bool fetchAll = false);
 
-    Q_INVOKABLE void setValueFormat(QString value, QString format);
-    Q_INVOKABLE void removeValueFormat(QString key);
-    Q_INVOKABLE QVariantMap getDateFormatMap();
+    Q_INVOKABLE void setValueFormat(int refObjId, int formatId);
+    Q_INVOKABLE void removeValueFormat(int refObjId = 0, bool removeAll = false);
+    Q_INVOKABLE int getDateFormatMap(int refObjId);
 
     Q_INVOKABLE void setTimeFrame(QString dummy, QString actual);
     Q_INVOKABLE void removeTimeFrame(QString key);

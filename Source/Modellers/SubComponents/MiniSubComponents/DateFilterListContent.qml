@@ -27,7 +27,10 @@ Rectangle{
 
     property var checkedValues : []
     property var masterColData: []
-    readonly property string mapKey: "0"
+    property var radioSelected: ""
+    property int counter: 0
+    property int selectedFormat: 6
+
     readonly property var availableformats : ["default", "year", "quarter_year", "month_year", "week_year", "full_date", "date_time"]
     readonly property var months : ["Jan", "Feb", "Mar", "Apr", "May","Jun","Jul", "Aug", "Sep", "Oct", "Nov","Dec"];
 
@@ -35,8 +38,8 @@ Rectangle{
         var tmpColData = []
         masterColData.forEach((item, index) => {
                                   // Just push "Year" data as default
-                                  if(tmpColData.indexOf(item[0]) < 0){
-                                      tmpColData.push(item[0])
+                                  if(tmpColData.indexOf(item[selectedFormat]) < 0){
+                                      tmpColData.push(item[selectedFormat])
                                   }
                               })
         singleSelectCheckList.model = tmpColData
@@ -106,13 +109,22 @@ Rectangle{
     /***********************************************************************************************************************/
     // Connections Starts
 
+
     Connections{
         target: DSParamsModel
 
         function onResetInput(){
             customBox.currentIndex = 0
-            DSParamsModel.setExclude(false)
-            DSParamsModel.setIncludeNull(true)
+            DSParamsModel.setExcludeMap(counter, false)
+            DSParamsModel.setIncludeNullMap(counter, true)
+        }
+
+        function onInternalCounterChanged(){
+            counter = DSParamsModel.internalCounter
+        }
+
+        function onFilterIndexChanged(){
+            counter = DSParamsModel.filterIndex
         }
     }
 
@@ -128,7 +140,34 @@ Rectangle{
         target: QueryDataModel
 
         function onColumnListModelDataChanged(colData, options){
+            selectedFormat = DSParamsModel.getDateFormatMap(counter)
+            customBox.currentIndex = selectedFormat
+
             convertDate(colData)
+            var jsonOptions = JSON.parse(options)
+
+            if(jsonOptions.subCategory === Constants.categorySubMulti){
+                multiSelectRadio.checked = true
+
+                multiSelectCheckList.visible = true
+                singleSelectCheckList.visible = false
+
+                if(jsonOptions.values.length > 0){
+                    var checkedValues = jsonOptions.values.split(",")
+                    checkedValues.forEach((item) => {
+                                              DSParamsModel.setTmpSelectedValues(item)
+                                          })
+                }
+
+            } else{
+                singleSelectRadio.checked = true
+
+                multiSelectCheckList.visible = false
+                singleSelectCheckList.visible = true
+
+                radioSelected = jsonOptions.values
+            }
+
         }
     }
 
@@ -165,6 +204,7 @@ Rectangle{
 
         // Set the sub category for filter
         DSParamsModel.setSubCategory(Constants.categorySubMulti)
+        mainCheckBox.visible = true
     }
 
 
@@ -175,49 +215,51 @@ Rectangle{
 
         // Set the sub category for filter
         DSParamsModel.setSubCategory(Constants.categorySubSingle)
+        mainCheckBox.visible = false
     }
 
 
     function onSingleSelectRadioSelected(modelData, format){
 
-        DSParamsModel.setValueFormat(modelData.toString(), format)
-        DSParamsModel.addToJoinValue(mapKey, modelData.toString())
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinValue(counter, modelData.toString())
+        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+
+        radioSelected = modelData.toString()
     }
 
 
     function onTextChangedSearch(){
-        QueryDataModel.likeColumnQuery(DSParamsModel.colName, DSParamsModel.tableName, searchText.text)
+        var options = {}
+        QueryDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))
+
+        if(DSParamsModel.subCategory === Constants.categorySubMulti){
+            if(searchText.text.length > 0){
+                mainCheckBox.visible = false
+            } else{
+                mainCheckBox.visible = true
+            }
+        }
     }
 
     function onAllCheckBoxCheckedChanged(checked){
         // If Select All option is true
         if(checked === true){
 
-            if(DSParamsModel.mode === Constants.modeCreate){
-
-                DSParamsModel.addToJoinValue(mapKey, "%")
-
-            } else{
-                DSParamsModel.addToJoinValue(mapKey, checkedValues.toString())
-            }
-
-            DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
-            DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
-            checkedValues = []
-
+            DSParamsModel.addToJoinValue(counter, "%")
+            DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
+            DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
         }
     }
 
-    function onMultiSelectCheckboxSelected(modelData,checked, format){
+    function onMultiSelectCheckboxSelected(modelData,checked){
 
         if(mainCheckBox.checked === true){
 
             if(checked === false){
 
                 // Set SELECT ALL to false
-                DSParamsModel.setSelectAll(false)
+                DSParamsModel.setSelectAllMap(counter, false)
                 mainCheckBox.checked = false
 
             }
@@ -225,50 +267,56 @@ Rectangle{
             if(checked === true){
 
                 // Start pushing the individual checked item in the array
-                checkedValues.push(modelData)
+                if(DSParamsModel.searchTmpSelectedValues(modelData) < 0){
+                    DSParamsModel.setTmpSelectedValues(modelData)
+                    console.log(DSParamsModel.getTmpSelectedValues(0, true), "VALUES FETCHES")
+                }
 
             } else{
                 // Remove item if unchecked
-                const index = checkedValues.indexOf(modelData);
+                const index = DSParamsModel.searchTmpSelectedValues(modelData);
                 if (index > -1) {
-                    checkedValues.splice(index, 1);
+                    DSParamsModel.removeTmpSelectedValues(index);
                 }
             }
 
-            // Save the array and Set relation type to LIKE
-
-            for(let i = 0; i < checkedValues.length; i++)
-            {
-                DSParamsModel.setValueFormat(checkedValues[i].toString(), format)
-            }
-
-            DSParamsModel.addToJoinValue(mapKey, checkedValues.toString())
-            DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
-            DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+            DSParamsModel.addToJoinValue(counter, DSParamsModel.getTmpSelectedValues(0, true).toString())
+            DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
+            DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+            console.log("V1S", counter, DSParamsModel.getTmpSelectedValues(0, true).toString())
         }
     }
 
     function onIncludeCheckedClicked(checked){
-        DSParamsModel.setIncludeNull(checked)
+        DSParamsModel.setIncludeNullMap(counter, checked)
     }
 
 
     function onExcludeCheckedClicked(checked){
-        DSParamsModel.setExclude(checked)
+        DSParamsModel.setExcludeMap(counter, checked)
     }
 
 
     function changeDateFormat(currentIndex){
 
         var tmpColData = []
+        selectedFormat = currentIndex
+
         masterColData.forEach((item, index) => {
                                   // Just push "Year" data as default
-                                  if(tmpColData.indexOf(item[currentIndex]) < 0){
-                                      tmpColData.push(item[currentIndex])
+                                  if(tmpColData.indexOf(item[selectedFormat]) < 0){
+                                      tmpColData.push(item[selectedFormat])
                                   }
                               })
         singleSelectCheckList.model = tmpColData
         multiSelectCheckList.model  = tmpColData
+
+
+        DSParamsModel.setValueFormat(counter, selectedFormat)
+        DSParamsModel.removeTmpSelectedValues(0, true)
+        DSParamsModel.removeJoinValue(counter)
+        DSParamsModel.removeJoinRelation(counter)
+        DSParamsModel.removeJoinRelationSlug(counter)
     }
 
     function convertDate(dateColumnData){
@@ -538,7 +586,23 @@ Rectangle{
                     ButtonGroup.group: childGroup
 
                     onCheckedChanged: {
-                        onMultiSelectCheckboxSelected(modelData,checked, customBox.currentText)
+                        onMultiSelectCheckboxSelected(modelData,checked)
+                    }
+
+                    // On search, highlight selected option
+                    Component.onCompleted: {
+                        modelCheckBoxes.checked = DSParamsModel.searchTmpSelectedValues(modelData) >= 0 ? true: false
+                    }
+
+                    // On edit, highlight the selected option
+                    Connections{
+                        target: DSParamsModel
+                        function onTmpSelectedValuesChanged(values){
+                            if(DSParamsModel.mode === Constants.modeEdit && DSParamsModel.category === Constants.categoryMainListType && DSParamsModel.subCategory === Constants.categorySubMulti){
+                                modelCheckBoxes.checked = values.indexOf(modelCheckBoxes.objectName) >= 0 ? true: false
+                                console.log("CHECK", values, modelCheckBoxes.objectName)
+                            }
+                        }
                     }
                 }
             }
@@ -577,6 +641,7 @@ Rectangle{
                 Column{
 
                     CustomRadioButton {
+                        id: modelRadioButton
                         text : modelData
                         ButtonGroup.group: singleSelectRadioGroup
                         height: Constants.defaultRadioDimension
@@ -584,6 +649,24 @@ Rectangle{
                         parent_dimension: Constants.defaultRadioDimension
                         onCheckedChanged: {
                             onSingleSelectRadioSelected(modelData, customBox.currentText)
+                        }
+
+                        // On search, highlight the selected radio
+                        Component.onCompleted: {
+                            modelRadioButton.checked = radioSelected === modelData ? true: false
+                        }
+
+                        // On edit, highlight the selected option
+                        Connections{
+                            target: QueryDataModel
+
+                            function onColumnListModelDataChanged(colData, options){
+                                if(DSParamsModel.mode === Constants.modeEdit && DSParamsModel.category === Constants.categoryMainListType && DSParamsModel.subCategory === Constants.categorySubSingle){
+                                    var jsonOptions = JSON.parse(options)
+                                    console.log("RADIO", jsonOptions.values, modelRadioButton.objectName)
+                                    modelRadioButton.checked = jsonOptions.values === modelRadioButton.objectName ? true: false
+                                }
+                            }
                         }
                     }
                 }
@@ -605,7 +688,6 @@ Rectangle{
 
             CustomComboBox{
                 id : customBox
-                currentIndex: 0
                 model: dateFormatList
                 textRole: "menuItem"
                 valueRole: "compareValue"

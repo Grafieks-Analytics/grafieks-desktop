@@ -356,7 +356,7 @@ void DSParamsModel::resetFilter()
     this->setSection(Constants::defaultTabSection);
     this->setCategory(Constants::defaultCategory);
     this->setSubCategory(Constants::defaultSubCategory);
-//    this->setMode(Constants::defaultMode);
+    //    this->setMode(Constants::defaultMode);
     //    this->setExclude(Constants::defaultExclude);
     //    this->setIncludeNull(Constants::defaultIncludeNull);
     //    this->setSelectAll(Constants::defaultSelectAll);
@@ -905,21 +905,23 @@ QVariantMap DSParamsModel::fetchJoinRelationSlug(int refObjId, bool fetchAll)
     return output;
 }
 
-void DSParamsModel::setValueFormat(QString value, QString format)
+void DSParamsModel::setValueFormat(int refObjId, int formatId)
 {
-    this->dateFormatMap.insert(value, format);
+    this->dateFormatMap.insert(refObjId, formatId);
 }
 
-void DSParamsModel::removeValueFormat(QString key)
+void DSParamsModel::removeValueFormat(int refObjId, bool removeAll)
 {
-    this->dateFormatMap.remove(key);
+    if(removeAll == false){
+        this->dateFormatMap.remove(refObjId);
+    } else{
+        this->dateFormatMap.clear();
+    }
 }
 
-QVariantMap DSParamsModel::getDateFormatMap()
+int DSParamsModel::getDateFormatMap(int refObjId)
 {
-    QVariantMap output;
-    output = this->dateFormatMap;
-    return output;
+    return this->dateFormatMap.value(refObjId);
 }
 
 void DSParamsModel::setTimeFrame(QString dummy, QString actual)
