@@ -112,9 +112,9 @@ Rectangle{
     }
 
     Connections{
-        target: ColumnListModel
+        target: QueryDataModel
 
-        function onColumnListModelDataChanged(options){
+        function onColumnListModelDataChanged(colData, options){
 
             if(DSParamsModel.category === Constants.categoryMainWildCardType){
                 var finalValue;

@@ -72,11 +72,6 @@ Rectangle{
         DSParamsModel.setSubCategory(subCategory)
         DSParamsModel.setTableName(tableName)
         DSParamsModel.setColName(columnName)
-        DSParamsModel.addToJoinRelation(mapKey, relation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, slug)
-        DSParamsModel.addToJoinValue(mapKey, value)
-        DSParamsModel.setIncludeNull(includeNull)
-        DSParamsModel.setExclude(exclude)
 
         ColumnListModel.columnEditQuery(columnName, tableName, value, category)
 

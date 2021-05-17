@@ -304,7 +304,6 @@ void ColumnListModel::columnDateFormatQuery(QString columnName, QString tableNam
     }
 }
 
-
 /*!
  * \brief Set a new select query for a given column in table with select column values
  * \param columnName (name of the column in sql table)

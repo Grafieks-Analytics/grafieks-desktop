@@ -16,7 +16,7 @@ import com.grafieks.singleton.constants 1.0
 import "../../../MainSubComponents"
 
 Rectangle{
-    id: listContent
+    id: listContent_backup
     height: parent.height - 80 - 40
     width: parent.width - 40
     x:20
@@ -40,35 +40,57 @@ Rectangle{
 
         }
         ListElement{
-            menuItem:"Year"
-            format: "2020"
+            menuItem:"DD/MM/YYYY"
         }
 
         ListElement{
-            menuItem:"Quarter & Year"
-            format: "Q4 2020"
+            menuItem:"DD MMMM YYYY"
         }
 
         ListElement{
-            menuItem:"Month & Year"
-            format: "Jan 2020"
+            menuItem:"D MMMM YYYY"
         }
 
         ListElement{
-            menuItem:"Week & Year"
-            format: "Week 5 2020"
+            menuItem:"dddd, D MMMM YYYY"
         }
 
         ListElement{
-            menuItem:"Full Date"
-            format: "20 Jan 2020"
+            menuItem:"dddd, DD MMMM YYYY"
         }
 
         ListElement{
-            menuItem:"Date & Time"
-            format: "20 Jan 2020 00:00:20 hrs"
+            menuItem:"DD/MM/YY"
         }
 
+        ListElement{
+            menuItem:"D/M/YY"
+        }
+
+        ListElement{
+            menuItem:"D.M.YY"
+        }
+
+        ListElement{
+            menuItem:"YYYY-MM-DD"
+        }
+        ListElement{
+            menuItem:"MMMM YYYY"
+        }
+        ListElement{
+            menuItem:"D MMMM"
+        }
+        ListElement{
+            menuItem : "YY"
+        }
+
+        ListElement{
+            menuItem:"YYYY"
+        }
+
+        ListElement{
+            menuItem:"DD/MM/YYYY hh:mm:ss"
+        }
     }
 
 
@@ -103,7 +125,6 @@ Rectangle{
         target: DuckDataModel
 
         function onDuckColData(colData){
-            console.log(colData, "COL DATA")
             singleSelectCheckList.model = colData
             multiSelectCheckList.model  = colData
         }
@@ -227,8 +248,7 @@ Rectangle{
 
 
     function onIncludeCheckedClicked(checked){
-//        DSParamsModel.setIncludeNull(checked)
-        convertDate()
+        DSParamsModel.setIncludeNull(checked)
     }
 
 
@@ -240,12 +260,10 @@ Rectangle{
     {
         // Check for Selected Format
         var formattedDate;
-        console.log("VALUE", value)
-
         switch(value)
         {
             case 1:
-                formattedDate = Qt.formatDateTime(modelData,'yyyy')
+                formattedDate = Qt.formatDateTime(modelData,'dd/MM/yyyy')
                 break;
             case 2:
                 formattedDate = Qt.formatDateTime(modelData,'dd MMMM yyyy')
@@ -293,13 +311,6 @@ Rectangle{
 
         return formattedDate
 
-    }
-
-    function convertDate(){
-        console.log(Object.keys(ColumnListModel))
-        for(var i = 0; i < ColumnListModel.rowCount(); i++){
-            console.log(ColumnListModel.data(1, "tableName"), "PINGO")
-        }
     }
 
     // JAVASCRIPT FUNCTION ENDS

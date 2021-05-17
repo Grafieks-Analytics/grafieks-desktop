@@ -149,9 +149,9 @@ Popup {
     // On receiving the signal from C++, it will popup the relevant screen
 
     Connections{
-        target: ColumnListModel
+        target: QueryDataModel
 
-        function onColumnListModelDataChanged(values){
+        function onColumnListModelDataChanged(colData, values){
 
             if(DSParamsModel.section === Constants.categoricalTab){
 
@@ -235,7 +235,7 @@ Popup {
         }
 
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
-            ColumnListModel.columnQuery(colName, tableName, JSON.stringify(options))
+            QueryDataModel.columnData(colName, tableName, JSON.stringify(options));
         } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
             DuckDataModel.columnData(colName, tableName)
         } else{
@@ -250,6 +250,7 @@ Popup {
     function onAddMenuItemClicked(){
 
         DSParamsModel.setFilterIndex(DSParamsModel.filterIndex + 1)
+        DSParamsModel.setMode(Constants.modeCreate)
 
         if(tabBarOpen === Constants.categoricalTab){
 

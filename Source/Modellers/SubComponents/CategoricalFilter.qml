@@ -64,9 +64,9 @@ Popup {
 
 
     Connections{
-        target: ColumnListModel
+        target: QueryDataModel
 
-        function onColumnListModelDataChanged(options){
+        function onColumnListModelDataChanged(colData, options){
 
             var jsonOptions = JSON.parse(options)
 
