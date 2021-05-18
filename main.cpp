@@ -28,7 +28,6 @@
 #include "Code/Logic/DataModeller/publishdatasourcemodel.h"
 #include "Code/Logic/DataModeller/schedulerds.h"
 #include "Code/Logic/DataModeller/schedulermodel.h"
-#include "Code/Logic/DataModeller/columnlistmodel.h"
 #include "Code/Logic/DataModeller/filtercategoricallistmodel.h"
 #include "Code/Logic/DataModeller/filterdatelistmodel.h"
 #include "Code/Logic/DataModeller/filternumericallistmodel.h"
@@ -255,7 +254,6 @@ int main(int argc, char *argv[])
     DBListModel dblistModel;
     DSParamsModel dsParamsModel;
     PublishDatasourceModel publishDatasourceModel;
-    ColumnListModel columnListModel;
     ProxyFilterModel proxyModel;
     FilterCategoricalListModel filterCategoricalListModel;
     FilterDateListModel filterDateListModel;
@@ -374,7 +372,6 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("NewTableColumnsModel", &newTableColumnsModel);
     engine.rootContext()->setContextProperty("DSParamsModel", &dsParamsModel);
     engine.rootContext()->setContextProperty("PublishDatasourceModel", &publishDatasourceModel);
-    engine.rootContext()->setContextProperty("ColumnListModel", &columnListModel);
     engine.rootContext()->setContextProperty("SchedulerModel", &schedulerModel);
     engine.rootContext()->setContextProperty("SchedulerDS", scheduler);
     engine.rootContext()->setContextProperty("ProxyFilterModel", &proxyModel);
