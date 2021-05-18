@@ -11,7 +11,7 @@ import "./MiniSubComponents";
 Popup {
 
     id: editPopup
-    width: parent.width * 0.5
+    width: parent.width * 0.4
     height: 600
     anchors.centerIn: parent
 
