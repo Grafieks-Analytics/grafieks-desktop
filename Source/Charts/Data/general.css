@@ -86,10 +86,17 @@ body {
     /* overflow-y: hidden; */
     /* overflow-x: hidden; */
 }
+
 #yAxisDiv {
     position: fixed;
     background: #fff;
 }
 #my_dataviz {
     /* overflow-x: scroll; */
+}
+
+#xAxisDiv {
+    position: fixed;
+    background: #fff;
+    bottom: 0;
 }

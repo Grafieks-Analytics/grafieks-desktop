@@ -14,7 +14,10 @@
 </head>
 <body>
     <div id="tooltip"></div>
-    <div id="my_dataviz"></div>
+    <div style="display: flex; flex-direction: column">
+        <div id="my_dataviz"></div>
+        <div id="xAxisDiv"></div>
+    </div>
 
     <script>
         // reference: https://bl.ocks.org/seasmith/b72e6b8be1978eae046e0cff131668b1
@@ -70,12 +73,6 @@
             // keys = ["apples", "bananas", "cherries", "dates"];
             data = transformData(data[0]);
 
-            var margin = { top: 20, right: 20, bottom: 30, left: 40 };
-            var width = window.innerWidth - margin.left - margin.right - 50;
-            var height = window.innerHeight - margin.top - margin.bottom - 50;
-            var timeFormat = d3.timeFormat("%m-%Y");
-            var parseDate = d3.timeParse("%Y");
-
             let {
                 d3colorPalette,
                 paddingInner,
@@ -83,7 +80,7 @@
                 curveType,
                 dateFormat,
                 chartType,
-                standardThresholdWidth,
+                standardThresholdHeight,
             } = plottingConfiguration;
 
             if (!d3colorPalette) {
@@ -100,12 +97,25 @@
             }
 
             if (!chartType) {
-                chartType = defaultD3Config.chartType;
+                chartType = defaultD3Config.horizontalChartType;
             }
 
-            if (!standardThresholdWidth) {
-                standardThresholdWidth = defaultD3Config.standardThresholdWidth;
+            if (!standardThresholdHeight) {
+                standardThresholdHeight =
+                    defaultD3Config.standardThresholdHeight;
             }
+
+            var margin = { top: 20, right: 20, bottom: 30, left: 40 };
+            var width = window.innerWidth - margin.left - margin.right - 50;
+            var height = window.innerHeight - margin.top - margin.bottom - 50;
+
+            if (chartType == constants.chartType.STANDARD) {
+                height = keys.length * standardThresholdHeight;
+                console.log(height);
+            }
+
+            var timeFormat = d3.timeFormat("%m-%Y");
+            var parseDate = d3.timeParse("%Y");
 
             var y = d3
                 .scaleBand()
@@ -126,7 +136,8 @@
             var x = d3
                 .scaleLinear()
                 .domain([d3.min(series, stackMin), d3.max(series, stackMax)])
-                .rangeRound([0, width - margin.right]);
+                .rangeRound([0, width - margin.right])
+                .nice();
 
             var z = d3.scaleOrdinal(d3Colors);
 
@@ -139,7 +150,7 @@
                 .append("g")
                 .attr(
                     "transform",
-                    "translate(" + margin.left + "," + margin.top + ")"
+                    "translate(" + margin.left + "," + (margin.top + 10) + ")"
                 );
 
             svg.append("g")
@@ -203,9 +214,25 @@
                 .attr("class", "y-axis")
                 .call(d3.axisLeft(y).tickSize(0));
 
-            svg.append("g")
-                .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x).tickSize(0));
+            // svg.append("g")
+            //     .attr("transform", "translate(0," + height + ")")
+            //     .call(d3.axisBottom(x).tickSize(0));
+
+            var xAxis = d3.axisBottom(x).tickSize(0).ticks(10);
+
+            d3.select("#xAxisDiv")
+                .append("svg")
+                .attr("height", "72")
+                .attr("width", width + margin.left + margin.right)
+                .append("g") //add group to leave margin for axis
+                .attr(
+                    "transform",
+                    "translate(" + margin.left + ",0)"
+                    // "translate(0,0)"
+                )
+                .append("g")
+                .attr("class", "x-axis")
+                .call(xAxis);
 
             function stackMin(series) {
                 return d3.min(series, function (d) {
