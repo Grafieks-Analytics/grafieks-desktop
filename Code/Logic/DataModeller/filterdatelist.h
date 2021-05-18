@@ -17,6 +17,7 @@ class FilterDateList : public QObject
     Q_OBJECT
 
     Q_PROPERTY(int filterId READ filterId WRITE setFilterId NOTIFY filterIdChanged)
+    Q_PROPERTY(int dateFormatId READ dateFormatId WRITE setDateFormatId NOTIFY dateFormatIdChanged)
     Q_PROPERTY(QString section READ section WRITE setSection NOTIFY sectionChanged)
     Q_PROPERTY(QString category READ category WRITE setCategory NOTIFY categoryChanged)
     Q_PROPERTY(QString subCategory READ subCategory WRITE setSubCategory NOTIFY subCategoryChanged)
@@ -31,6 +32,7 @@ class FilterDateList : public QObject
 
 
     int m_filterId;
+    int m_dateFormatId;
     QString m_section;
     QString m_category;
     QString m_subCategory;
@@ -43,11 +45,11 @@ class FilterDateList : public QObject
     bool m_exclude;
 
 
-
 public:
-    explicit FilterDateList(const int & filterId, const QString & section, const QString & category, const QString & subcategory, const QString & tableName, const QString & columnName, const QString & relation, const QString & slug, const QString & value, const bool & includeNull, const bool & exclude, QObject *parent = nullptr);
+    explicit FilterDateList(const int & filterId, const int &dateFormatId, const QString & section, const QString & category, const QString & subcategory, const QString & tableName, const QString & columnName, const QString & relation, const QString & slug, const QString & value, const bool & includeNull, const bool & exclude, QObject *parent = nullptr);
 
     int filterId() const;
+    int dateFormatId() const;
     QString section() const;
     QString category() const;
     QString subCategory() const;
@@ -62,6 +64,7 @@ public:
 
 public slots:
     void setFilterId(int filterId);
+    void setDateFormatId(int dateFormatId);
     void setSection(QString section);
     void setCategory(QString category);
     void setSubCategory(QString subCategory);
@@ -77,6 +80,7 @@ public slots:
 signals:
 
     void filterIdChanged(int filterId);
+    void dateFormatIdChanged(int dateFormatId);
     void sectionChanged(QString section);
     void categoryChanged(QString category);
     void subCategoryChanged(QString subCategory);

@@ -1,8 +1,8 @@
 #include "filterdatelist.h"
 
-FilterDateList::FilterDateList(const int &filterId, const QString &section, const QString &category, const QString &subcategory, const QString &tableName, const QString &columnName, const QString &relation, const QString &slug, const QString &value, const bool &includeNull, const bool &exclude, QObject *parent):
+FilterDateList::FilterDateList(const int &filterId, const int &dateFormatId, const QString &section, const QString &category, const QString &subcategory, const QString &tableName, const QString &columnName, const QString &relation, const QString &slug, const QString &value, const bool &includeNull, const bool &exclude, QObject *parent):
 
-    QObject(parent), m_filterId(filterId), m_section(section), m_category(category), m_subCategory(subcategory), m_tableName(tableName), m_columnName(columnName), m_relation(relation), m_slug(slug), m_value(value), m_includeNull(includeNull), m_exclude(exclude)
+    QObject(parent), m_filterId(filterId), m_dateFormatId(dateFormatId), m_section(section), m_category(category), m_subCategory(subcategory), m_tableName(tableName), m_columnName(columnName), m_relation(relation), m_slug(slug), m_value(value), m_includeNull(includeNull), m_exclude(exclude)
 {
 
 }
@@ -56,6 +56,11 @@ QString FilterDateList::subCategory() const
 int FilterDateList::filterId() const
 {
     return m_filterId;
+}
+
+int FilterDateList::dateFormatId() const
+{
+    return m_dateFormatId;
 }
 
 QString FilterDateList::section() const
@@ -152,6 +157,15 @@ void FilterDateList::setFilterId(int filterId)
 
     m_filterId = filterId;
     emit filterIdChanged(m_filterId);
+}
+
+void FilterDateList::setDateFormatId(int dateFormatId)
+{
+    if (m_dateFormatId == dateFormatId)
+        return;
+
+    m_dateFormatId = dateFormatId;
+    emit dateFormatIdChanged(m_dateFormatId);
 }
 
 void FilterDateList::setSection(QString section)
