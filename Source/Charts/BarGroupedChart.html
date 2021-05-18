@@ -167,7 +167,7 @@
                     .attr("class", "y-axis")
                     .call(yAxis);
 
-                xScale0.domain(data.map((d) => d.model_name));
+                xScale0.domain(data.map((d) => d.mainCategory));
 
                 svg.append("g")
                     .attr("class", "grid")
@@ -180,7 +180,7 @@
                     .data(data)
                     .enter()
                     .append("g")
-                    .attr("class", "model_name")
+                    .attr("class", "mainCategory")
                     .each(function (group_data) {
                         const bar_data = getBars(group_data),
                             x_offset = groupOffset(group_data),
@@ -196,7 +196,7 @@
                                 "transform",
                                 (d) =>
                                     `translate(${
-                                        xScale0(d.model_name) + x_offset
+                                        xScale0(d.mainCategory) + x_offset
                                     },0)`
                             )
                             .selectAll(".bar")
@@ -206,7 +206,7 @@
                             .attr("class", "bar")
                             .attr("fill", function (d) {
                                 if (categoryColor) {
-                                    return zScale(d.data.model_name);
+                                    return zScale(d.data.mainCategory);
                                 }
                                 if (subCategoryColour) {
                                     return zScale(d.name);
@@ -321,50 +321,50 @@
 
             var data = [
                 {
-                    model_name: "f1",
+                    mainCategory: "f1",
                     field1: 19,
                     field2: 83,
                     field3: 2,
                     field4: 30,
                 },
                 {
-                    model_name: "f2",
+                    mainCategory: "f2",
                     field1: 67,
                     field2: 29,
                     field3: 100,
                     field4: 130,
                 },
                 {
-                    model_name: "f3",
+                    mainCategory: "f3",
                     field1: 10,
                     field3: 100,
                 },
                 {
-                    model_name: "f4",
+                    mainCategory: "f4",
                     field1: 98,
                     field2: 43,
                     field3: 100,
                 },
                 {
-                    model_name: "f5",
+                    mainCategory: "f5",
                     field1: 98,
                     field2: 43,
                     field3: 100,
                 },
                 {
-                    model_name: "f6",
+                    mainCategory: "f6",
                     field1: -98,
                     field2: 43,
                     field3: 100,
                 },
                 {
-                    model_name: "f7",
+                    mainCategory: "f7",
                     field1: 98,
                     field2: 43,
                     field3: 100,
                 },
                 {
-                    model_name: "f8",
+                    mainCategory: "f8",
                     field1: 98,
                     field2: 43,
                     field3: 100,
