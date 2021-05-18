@@ -18,6 +18,8 @@ Popup {
     padding: 0
     closePolicy: Popup.NoAutoClose
 
+    property int counter: 0
+
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -66,6 +68,63 @@ Popup {
     // Connections Starts
 
 
+    Connections{
+        target: DSParamsModel
+
+        function onInternalCounterChanged(){
+            counter = DSParamsModel.internalCounter
+        }
+
+        function onFilterIndexChanged(){
+            counter = DSParamsModel.filterIndex
+        }
+    }
+
+
+    Connections{
+        target: QueryDataModel
+
+        function onColumnListModelDataChanged(colData, options){
+
+            var jsonOptions = JSON.parse(options)
+
+            if(jsonOptions.section === Constants.categoricalTab){
+
+                switch(jsonOptions.category){
+                case Constants.categoryMainListType:
+
+                    listContent.visible = true
+                    calendarContent.visible = false
+                    dateTimeFrameContent.visible = false
+
+                    listRadio.checked = true
+
+                    break
+
+                case Constants.categoryMainWildCardType:
+
+                    listContent.visible = false
+                    calendarContent.visible = true
+                    dateTimeFrameContent.visible = false
+
+                    dateRadio.checked = true
+
+                    break
+
+                case Constants.categoryMainTopType:
+
+                    listContent.visible = false
+                    calendarContent.visible = false
+                    dateTimeFrameContent.visible = true
+
+                    topRadio.checked = true
+
+                    break
+                }
+
+            }
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -141,25 +200,28 @@ Popup {
         var subCategory = DSParamsModel.subCategory
         var tableName = DSParamsModel.tableName
         var columnName = DSParamsModel.colName
-        var joinRelation = DSParamsModel.fetchJoinRelation(0, true)
-        var joinValue = DSParamsModel.fetchJoinValue(0, true)
-        var joinSlug = DSParamsModel.fetchJoinRelationSlug(0, true)
-        var includeNull = DSParamsModel.includeNull
-        var exclude = DSParamsModel.exclude
+        var tmpFilterIndexes = DSParamsModel.getTmpFilterIndex(0, true)
 
         var singleValue = "";
         var singleRelation = "";
         var singleSlug = "";
 
-
         switch(category){
 
         case Constants.dateMainListType:
 
-            singleRelation = joinRelation[0]
-            singleValue = joinValue[0]
-            singleSlug = joinSlug[0]
-            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, filterIndex)
+            let joinRelation = DSParamsModel.fetchJoinRelation(counter)
+            let joinValue = DSParamsModel.fetchJoinValue(counter)
+            let joinSlug = DSParamsModel.fetchJoinRelationSlug(counter)
+            let includeNull = DSParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
+            let exclude = DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
+            let dateFormatId = DSParamsModel.getDateFormatMap(counter)
+
+
+            singleRelation = joinRelation[counter]
+            singleValue = joinValue[counter]
+            singleSlug = joinSlug[counter]
+            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, dateFormatId, counter, DSParamsModel.filterModelIndex)
 
             break
 
@@ -169,38 +231,35 @@ Popup {
                 singleRelation = joinRelation[i]
                 singleValue = joinValue[i]
                 singleSlug = joinSlug[i]
-                manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, filterIndex)
+                manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, 0, fi, DSParamsModel.filterModelIndex)
             }
 
             break
 
         case Constants.dateMainTimeFrameType:
-            singleRelation = joinRelation[0]
-            singleValue = joinValue[0]
-            singleSlug = joinSlug[0]
-            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, filterIndex)
+            singleRelation = joinRelation[counter]
+            singleValue = joinValue[counter]
+            singleSlug = joinSlug[counter]
+            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, 0, counter, DSParamsModel.filterModelIndex)
             break
 
         default:
             break
         }
 
-//        DSParamsModel.setMode(Constants.modeCreate)
-        // Reset all DSParams
-        //DSParamsModel.resetFilter();
 
     }
 
-    function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, filterIndex = 0){
+    function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, dateFormatId, counter = 0, filterId = 0){
 
 //        console.log(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, "FILTER LIST INSERT/UPDATE")
 
         // Save the filter
         if(mode === Constants.modeCreate){
-            FilterDateListModel.newFilter(section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+            FilterDateListModel.newFilter(counter, dateFormatId,  section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
 
         } else{
-            FilterDateListModel.updateFilter(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+            FilterDateListModel.updateFilter(filterId, dateFormatId, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
         }
     }
     function resetDateFilter(){

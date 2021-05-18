@@ -1,6 +1,6 @@
 #include "filterdatelistmodel.h"
 
-FilterDateListModel::FilterDateListModel(QObject *parent) : QAbstractListModel(parent), counter(0)
+FilterDateListModel::FilterDateListModel(QObject *parent) : QAbstractListModel(parent)
 {
 
     sqlComparisonOperators.append("=");
@@ -201,15 +201,10 @@ QHash<int, QByteArray> FilterDateListModel::roleNames() const
 
 
 
-void FilterDateListModel::newFilter(QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, bool includeNull, bool exclude )
+void FilterDateListModel::newFilter(int counter, int dateFormatId, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, bool includeNull, bool exclude )
 {
 
-    //    FilterList *filterList = new FilterList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this);
-    //    qDebug() <<"FROM FilterDateListModel newFilter" << counter << section<< category<< subcategory << tableName<< colName<< relation<< slug <<val<< includeNull<< exclude<< this;
-    addFilterList(new FilterDateList(this->counter, section, category, subcategory, tableName, colName, relation, slug, val, includeNull, exclude, this));
-
-    this->counter++;
-
+    addFilterList(new FilterDateList(counter, dateFormatId, section, category, subcategory, tableName, colName, relation, slug, val, includeNull, exclude, this));
     emit rowCountChanged();
 
 
@@ -224,7 +219,7 @@ void FilterDateListModel::deleteFilter(int FilterIndex)
     emit rowCountChanged();
 }
 
-void FilterDateListModel::updateFilter(int FilterIndex, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString value, bool includeNull, bool exclude)
+void FilterDateListModel::updateFilter(int FilterIndex, int dateFormatId, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString value, bool includeNull, bool exclude)
 {
 
     beginResetModel();
@@ -247,6 +242,7 @@ void FilterDateListModel::updateFilter(int FilterIndex, QString section, QString
 
     mFilter[FilterIndex]->setIncludeNull(includeNull);
     mFilter[FilterIndex]->setExclude(exclude);
+    mFilter[FilterIndex]->setDateFormatId(dateFormatId);
 
     endResetModel();
 
@@ -602,22 +598,6 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
 
         } else{
 
-            /********************************** DO NOT DELETE (Version 1)***********************
-            if(conditions.contains(" AND ")){
-
-                conditionList = conditions.split(" AND ");
-                concetantedCondition.append("'" + conditionList[0] + "'" + " AND "  + "'" + conditionList[1] + "'");
-
-            }
-            else{
-                conditionList = conditions.split(",");
-
-                foreach(individualCondition, conditionList){
-
-                    concetantedCondition.append("'" + individualCondition + "'");
-                }
-            }
-            *********************************** DO NOT DELETE (Version 1)************************/
 
             conditionList = conditions.split(",");
 
@@ -659,24 +639,6 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
             localCounter = 0;
 
         } else{
-
-            /********************************** DO NOT DELETE (Version 1)***********************
-            if(conditions.contains(" AND ")){
-
-                conditionList = conditions.split(" AND ");
-                concetantedCondition.append("'" + conditionList[0] + "'" + " AND "  + "'" + conditionList[1] + "'");
-
-            }
-            else{
-                conditionList = conditions.split(",");
-
-                foreach(individualCondition, conditionList){
-
-                    concetantedCondition.append("'" + individualCondition + "'");
-                }
-            }
-            *********************************** DO NOT DELETE (Version 1)************************/
-
             conditionList = conditions.split(",");
 
             foreach(individualCondition, conditionList){
