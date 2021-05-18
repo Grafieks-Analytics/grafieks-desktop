@@ -29,27 +29,18 @@ DuckDataModel::~DuckDataModel()
 }
 
 
-void DuckDataModel::columnData(QString col, QString tableName)
+void DuckDataModel::columnData(QString col, QString tableName, QString options)
 {
+    QStringList output;
+    output = this->getData("SELECT DISTINCT " + col + " FROM " + tableName);
+    emit columnListModelDataChanged(output, options);
+}
 
-    QString db = Statics::currentDbName;
-
-    auto data = duckCon->con.Query("SELECT " + col.toStdString() + " FROM " + tableName.toStdString());
-    if(!data->error.empty())
-        qWarning() << Q_FUNC_INFO << data->error.c_str();
-
-    int rows = data->collection.Count();
-
-    for(int i = 0; i < rows; i++){
-
-        duckdb::Value colData = data->GetValue(0, i);
-        QString newColData = QString::fromStdString(colData.ToString());
-
-        this->colData.append(newColData);
-    }
-
-    emit duckColData(this->colData);
-    this->colData.clear();
+void DuckDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
+{
+    QStringList output;
+    output = this->getData("SELECT DISTINCT " + col + " FROM "+ tableName + " WHERE " + col + " LIKE '%"+searchString+"%'");
+    emit columnListModelDataChanged(output, options);
 }
 
 QStringList DuckDataModel::getColumnList(QString tableName, QString moduleName)
@@ -152,4 +143,29 @@ void DuckDataModel::receiveCsvFilterQuery(QString query)
         qWarning() << Q_FUNC_INFO << data->error.c_str();
 
     data->Print();
+}
+
+QStringList DuckDataModel::getData(QString query)
+{
+    QString db = Statics::currentDbName;
+    QStringList out;
+
+    auto data = duckCon->con.Query(query.toStdString());
+    if(!data->error.empty())
+        qWarning() << Q_FUNC_INFO << data->error.c_str();
+
+    int rows = data->collection.Count();
+
+    for(int i = 0; i < rows; i++){
+
+        duckdb::Value colData = data->GetValue(0, i);
+        QString newColData = QString::fromStdString(colData.ToString());
+
+        this->colData.append(newColData);
+    }
+
+    out = this->colData;
+    emit duckColData(this->colData);
+    this->colData.clear();
+    return out;
 }

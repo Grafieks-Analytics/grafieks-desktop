@@ -25,6 +25,7 @@ Rectangle{
     y:30
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
+    property int counter: 0
 
     visible: false
 
@@ -59,6 +60,14 @@ Rectangle{
             onYearTabClicked()
             DSParamsModel.setExclude(false)
             DSParamsModel.setIncludeNull(true)
+        }
+
+        function onInternalCounterChanged(){
+            counter = DSParamsModel.internalCounter
+        }
+
+        function onFilterIndexChanged(){
+            counter = DSParamsModel.filterIndex
         }
     }
 

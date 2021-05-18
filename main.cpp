@@ -21,13 +21,13 @@
 #include "Code/Logic/Datasources/datasourceds.h"
 
 #include "Code/Logic/DataModeller/querymodel.h"
+#include "Code/Logic/DataModeller/querydatamodel.h"
 #include "Code/Logic/DataModeller/dblistmodel.h"
 #include "Code/Logic/DataModeller/querystatsmodel.h"
 #include "Code/Logic/DataModeller/dsparamsmodel.h"
 #include "Code/Logic/DataModeller/publishdatasourcemodel.h"
 #include "Code/Logic/DataModeller/schedulerds.h"
 #include "Code/Logic/DataModeller/schedulermodel.h"
-#include "Code/Logic/DataModeller/columnlistmodel.h"
 #include "Code/Logic/DataModeller/filtercategoricallistmodel.h"
 #include "Code/Logic/DataModeller/filterdatelistmodel.h"
 #include "Code/Logic/DataModeller/filternumericallistmodel.h"
@@ -249,11 +249,11 @@ int main(int argc, char *argv[])
     ConnectorFilter connectorFilter;
     ConnectorsLoginModel connectorsLoginModel;
     QueryModel queryModel;
+    QueryDataModel queryDataModel;
     QueryStatsModel queryStatsModel;
     DBListModel dblistModel;
     DSParamsModel dsParamsModel;
     PublishDatasourceModel publishDatasourceModel;
-    ColumnListModel columnListModel;
     ProxyFilterModel proxyModel;
     FilterCategoricalListModel filterCategoricalListModel;
     FilterDateListModel filterDateListModel;
@@ -356,6 +356,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("DatasourceModel", &datasourceModel);
     engine.rootContext()->setContextProperty("DatasourceDS", datasource);
     engine.rootContext()->setContextProperty("QueryModel", &queryModel);
+    engine.rootContext()->setContextProperty("QueryDataModel", &queryDataModel);
     engine.rootContext()->setContextProperty("DBListModel", &dblistModel);
     engine.rootContext()->setContextProperty("QueryStatsModel", &queryStatsModel);
     engine.rootContext()->setContextProperty("DropboxModel", &dropboxModel);
@@ -371,7 +372,6 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("NewTableColumnsModel", &newTableColumnsModel);
     engine.rootContext()->setContextProperty("DSParamsModel", &dsParamsModel);
     engine.rootContext()->setContextProperty("PublishDatasourceModel", &publishDatasourceModel);
-    engine.rootContext()->setContextProperty("ColumnListModel", &columnListModel);
     engine.rootContext()->setContextProperty("SchedulerModel", &schedulerModel);
     engine.rootContext()->setContextProperty("SchedulerDS", scheduler);
     engine.rootContext()->setContextProperty("ProxyFilterModel", &proxyModel);

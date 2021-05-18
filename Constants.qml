@@ -191,6 +191,11 @@ QtObject {
     // Sub Categories
     property string categorySubMulti: "multiple"
     property string categorySubSingle: "single"
+    property string categorySubYear: "year"
+    property string categorySubQuarter: "quarter"
+    property string categorySubMonth: "month"
+    property string categorySubDay: "day"
+
 
     // Mode
     property string modeCreate: "create"

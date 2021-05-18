@@ -327,10 +327,9 @@ QString FilterNumericalListModel::setRelation(QString tableName, QString columnN
                 notSign = sqlComparisonOperators.contains(tmpRelation)? " !" : " NOT ";
                 excludeCase = exclude ? tmpRelation.prepend(notSign) : tmpRelation;
                 newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[localCounter] + "')" : conditionList[localCounter] ;
-                newIncludeNull = isNull == false ? "AND " + columnName + " IS NOT NULL" : "";
 
-                tmpWhereConditions = QString("%1 %2 %3 %4")
-                        .arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+                tmpWhereConditions = QString("%1 %2 %3")
+                        .arg(columnName).arg(excludeCase).arg(newCondition);
 
                 localCounter++;
             }
@@ -350,10 +349,9 @@ QString FilterNumericalListModel::setRelation(QString tableName, QString columnN
             notSign = sqlComparisonOperators.contains(relation)? " !" : " NOT ";
             excludeCase = exclude ? relation.prepend(notSign) : relation;
             newCondition = relation.contains("in", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
-            newIncludeNull = isNull == false ? " AND " + columnName + " IS NOT NULL" : "";
 
-            tmpWhereConditions = QString("%1 %2 %3 %4")
-                    .arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+            tmpWhereConditions = QString("%1 %2 %3")
+                    .arg(columnName).arg(excludeCase).arg(newCondition);
         }
         break;
     }
@@ -368,10 +366,9 @@ QString FilterNumericalListModel::setRelation(QString tableName, QString columnN
                 notSign = sqlComparisonOperators.contains(tmpRelation)? " !" : " NOT ";
                 excludeCase = exclude ? tmpRelation.prepend(notSign) : tmpRelation;
                 newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[localCounter] + "')" : conditionList[localCounter] ;
-                newIncludeNull = isNull == false ? "AND " + tableName + "." + columnName + " IS NOT NULL" : "";
 
-                tmpWhereConditions = QString("%1.%2 %3 %4 %5")
-                        .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+                tmpWhereConditions = QString("%1.%2 %3 %4")
+                        .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition);
 
                 localCounter++;
             }
@@ -391,10 +388,9 @@ QString FilterNumericalListModel::setRelation(QString tableName, QString columnN
             notSign = sqlComparisonOperators.contains(relation)? " !" : " NOT ";
             excludeCase = exclude ? relation.prepend(notSign) : relation;
             newCondition = relation.contains("in", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
-            newIncludeNull = isNull == false ? " AND " + tableName + "." + columnName + " IS NOT NULL" : "";
 
-            tmpWhereConditions = QString("%1.%2 %3 %4 %5")
-                    .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+            tmpWhereConditions = QString("%1.%2 %3 %4")
+                    .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition);
         }
         break;
     }

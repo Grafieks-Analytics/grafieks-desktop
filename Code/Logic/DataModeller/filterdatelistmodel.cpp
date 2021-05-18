@@ -1,6 +1,6 @@
 #include "filterdatelistmodel.h"
 
-FilterDateListModel::FilterDateListModel(QObject *parent) : QAbstractListModel(parent), counter(0)
+FilterDateListModel::FilterDateListModel(QObject *parent) : QAbstractListModel(parent)
 {
 
     sqlComparisonOperators.append("=");
@@ -201,15 +201,10 @@ QHash<int, QByteArray> FilterDateListModel::roleNames() const
 
 
 
-void FilterDateListModel::newFilter(QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, bool includeNull, bool exclude )
+void FilterDateListModel::newFilter(int counter, int dateFormatId, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, QString actualValue, bool includeNull, bool exclude )
 {
 
-    //    FilterList *filterList = new FilterList(counter, section, category, subcategory, tableName, colName, relation, val, includeNull, exclude, this);
-    //    qDebug() <<"FROM FilterDateListModel newFilter" << counter << section<< category<< subcategory << tableName<< colName<< relation<< slug <<val<< includeNull<< exclude<< this;
-    addFilterList(new FilterDateList(this->counter, section, category, subcategory, tableName, colName, relation, slug, val, includeNull, exclude, this));
-
-    this->counter++;
-
+    addFilterList(new FilterDateList(counter, dateFormatId, section, category, subcategory, tableName, colName, relation, slug, val, includeNull, exclude, this));
     emit rowCountChanged();
 
 
@@ -224,7 +219,7 @@ void FilterDateListModel::deleteFilter(int FilterIndex)
     emit rowCountChanged();
 }
 
-void FilterDateListModel::updateFilter(int FilterIndex, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString value, bool includeNull, bool exclude)
+void FilterDateListModel::updateFilter(int FilterIndex, int dateFormatId, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString value, QString actualValue, bool includeNull, bool exclude)
 {
 
     beginResetModel();
@@ -244,9 +239,12 @@ void FilterDateListModel::updateFilter(int FilterIndex, QString section, QString
         mFilter[FilterIndex]->setSlug(slug);
     if(value != "")
         mFilter[FilterIndex]->setValue(value);
+    if(actualValue != "")
+        mFilter[FilterIndex]->setActualValue(actualValue);
 
     mFilter[FilterIndex]->setIncludeNull(includeNull);
     mFilter[FilterIndex]->setExclude(exclude);
+    mFilter[FilterIndex]->setDateFormatId(dateFormatId);
 
     endResetModel();
 
@@ -295,7 +293,7 @@ QString FilterDateListModel::callQueryModel()
                 QString quarter;
                 if(quarterValues.length() <= 1){
                     foreach(quarter, quarterValues){
-                       newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), quarter + "%", filter->exclude(), filter->includeNull());
+                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), quarter + "%", filter->exclude(), filter->includeNull());
                     }
                 }
                 else{
@@ -312,7 +310,7 @@ QString FilterDateListModel::callQueryModel()
                 if(monthValues.length() <= 1){
                     foreach(month, monthValues){
                         newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), month + "%", filter->exclude(), filter->includeNull());
-                        }
+                    }
                 }
                 else{
                     newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), monthValues[0] + "%", filter->exclude(), filter->includeNull());
@@ -354,6 +352,7 @@ QString FilterDateListModel::callQueryModel()
             {
                 QStringList dateValue;
                 dateValue = filter->value().split(',');
+                qDebug() << "FVALUE" << filter->value();
 
                 bool initialValue = true;
                 if(weekDays.contains(dateValue[0]))
@@ -376,21 +375,8 @@ QString FilterDateListModel::callQueryModel()
                 }
                 else
                 {
-                    bool initialValue = true;
-                    foreach(newValue, dateValue)
-                    {
-                        tmpValue = this->getFilteredValue(newValue);
-
-                        if(initialValue)
-                        {
-                            initialValue = false;
-                            newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
-                        }
-                        else if(filter->exclude() == true)
-                            newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
-                        else
-                            newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
-                    }
+                    qDebug() << "DATE VALUE" <<dateValue;
+                    newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), dateValue.join(","), filter->exclude(), filter->includeNull());
                 }
 
             }
@@ -579,6 +565,8 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
 
     switch (Statics::currentDbIntType) {
 
+    case Constants::jsonIntType:
+    case Constants::excelIntType:
     case Constants::csvIntType:{
 
         if(relation.contains(",", Qt::CaseInsensitive)){
@@ -590,10 +578,9 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
                 notSign = sqlComparisonOperators.contains(tmpRelation)? " !" : " NOT ";
                 excludeCase = exclude ? tmpRelation.prepend(notSign) : tmpRelation;
                 newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[localCounter] + "')" : conditionList[localCounter] ;
-                newIncludeNull = isNull == false ? "AND " + columnName + " IS NOT NULL" : "";
 
-                tmpWhereConditions = QString("%1 %2 %3 %4")
-                        .arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+                tmpWhereConditions = QString("%1 %2 %3")
+                        .arg(columnName).arg(excludeCase).arg(newCondition);
 
                 localCounter++;
             }
@@ -602,22 +589,6 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
 
         } else{
 
-            /********************************** DO NOT DELETE (Version 1)***********************
-            if(conditions.contains(" AND ")){
-
-                conditionList = conditions.split(" AND ");
-                concetantedCondition.append("'" + conditionList[0] + "'" + " AND "  + "'" + conditionList[1] + "'");
-
-            }
-            else{
-                conditionList = conditions.split(",");
-
-                foreach(individualCondition, conditionList){
-
-                    concetantedCondition.append("'" + individualCondition + "'");
-                }
-            }
-            *********************************** DO NOT DELETE (Version 1)************************/
 
             conditionList = conditions.split(",");
 
@@ -631,14 +602,15 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
             notSign = sqlComparisonOperators.contains(relation)? " !" : " NOT ";
             excludeCase = exclude ? relation.prepend(notSign) : relation;
             newCondition = relation.contains("like", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
-            newIncludeNull = isNull == false ? " AND " + columnName + " IS NOT NULL" : "";
 
-            tmpWhereConditions = QString("%1 %2 %3 %4")
-                    .arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+            tmpWhereConditions = QString("%1 %2 %3")
+                    .arg(columnName).arg(excludeCase).arg(newCondition);
         }
         break;
     }
     default:
+
+
         if(relation.contains(",", Qt::CaseInsensitive)){
             relationList = relation.split(",");
             conditionList = conditions.split(",");
@@ -650,8 +622,8 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
                 newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[localCounter] + "')" : conditionList[localCounter] ;
                 newIncludeNull = isNull == false ? "AND " + tableName + "." + columnName + " IS NOT NULL" : "";
 
-                tmpWhereConditions = QString("%1.%2 %3 %4 %5")
-                        .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+                tmpWhereConditions = QString("%1.%2 %3 %4")
+                        .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition);
 
                 localCounter++;
             }
@@ -660,39 +632,20 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
 
         } else{
 
-            /********************************** DO NOT DELETE (Version 1)***********************
-            if(conditions.contains(" AND ")){
-
-                conditionList = conditions.split(" AND ");
-                concetantedCondition.append("'" + conditionList[0] + "'" + " AND "  + "'" + conditionList[1] + "'");
-
-            }
-            else{
-                conditionList = conditions.split(",");
-
-                foreach(individualCondition, conditionList){
-
-                    concetantedCondition.append("'" + individualCondition + "'");
-                }
-            }
-            *********************************** DO NOT DELETE (Version 1)************************/
-
             conditionList = conditions.split(",");
 
             foreach(individualCondition, conditionList){
 
-                concetantedCondition.append("'" + individualCondition + "'");
+                concetantedCondition.append("'" + individualCondition + "',");
             }
-
-
+            concetantedCondition.chop(1);
 
             notSign = sqlComparisonOperators.contains(relation)? " !" : " NOT ";
             excludeCase = exclude ? relation.prepend(notSign) : relation;
-            newCondition = relation.contains("like", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
-            newIncludeNull = isNull == false ? " AND " + tableName + "." + columnName + " IS NOT NULL" : "";
+            newCondition = relation.contains("in", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
 
-            tmpWhereConditions = QString("%1.%2 %3 %4 %5")
-                    .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+            tmpWhereConditions = QString("%1.%2 %3 %4")
+                    .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition);
         }
         break;
     }

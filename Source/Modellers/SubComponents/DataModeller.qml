@@ -198,21 +198,18 @@ Item {
             var undefinedCounter = 0
 
             // DSParams rectangle
-            var rectangleObjects = DSParamsModel.fetchAllRectangles()
-            for (var prop in rectangleObjects) {
-                if(DSParamsModel.fetchFrontRectangleCoordinates(prop) === "")
-                    undefinedCounter++
-            }
+            var rectangleObjectsSize = DSParamsModel.rectanglesSize()
+            var lineObjectsSize = DSParamsModel.linesSize()
+            var rectangleObjectKeys = DSParamsModel.fetchAllRectangleKeys()
+            var newLineObjectKeys = DSParamsModel.fetchAllLineKeys()
+
 
             // Check if the rectangles are connected to some rectangle in front (except the first one)
             // If not throw an error
-            if(undefinedCounter <= 1){
+            if(rectangleObjectsSize - lineObjectsSize === 1){
 
-                for (let prop in rectangleObjects) {
-                    if(DSParamsModel.fetchFrontRectangleCoordinates(prop) === "")
-                        firstRectId  = prop
-                }
-
+                var firstRectArr = rectangleObjectKeys.filter(x => newLineObjectKeys.indexOf(x) === -1)
+                firstRectId = firstRectArr[0]
                 // Call the function to process the rest of the query
                 joinOrder(firstRectId )
 
@@ -287,6 +284,7 @@ Item {
                 DSParamsModel.removeRectangles(refObject);
                 DSParamsModel.removeFrontRectangleCoordinates(refObject)
                 DSParamsModel.removeRearRectangleCoordinates(refObject)
+                DSParamsModel.removeExistingTables(refObject)
             }
 
 
@@ -411,6 +409,7 @@ Item {
 
             // Add to DSParamsModel
             DSParamsModel.addToJoinBoxTableMap(tmpOrphanTableId, refObjectName, tmpNearestTable.tableName)
+            DSParamsModel.addToPrimaryJoinTable(tmpOrphanTableId, refObjectName)
 
             // Popup join details
             showJoinPopup(tmpOrphanTableId)
@@ -696,6 +695,7 @@ Item {
 
             var nearestTable = nearestRectangle(DSParamsModel.fetchAllRearRectangleCoordinates(), currentPoint)
 
+
             // Get the coordinates for the nearest rectangle
             var nearestRectangleCoordinates = DSParamsModel.fetchRearRectangleCoordinates(nearestTable.tableId)
             DSParamsModel.fetchNewConnectingLine(counter).incomingRectangleFrontX = drag.x
@@ -840,7 +840,6 @@ Item {
 
         var tmpArray = []
 
-
         // Find the distance b/w all rear of a rectangle
         // and the current point
         var rectangleObjects = tmpRearRectangleCoordinates
@@ -867,7 +866,6 @@ Item {
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryModel.callSql(DSParamsModel.tmpSql)
         } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-            console.log("QUERY exe", DSParamsModel.tmpSql)
             DuckQueryModel.setQuery(DSParamsModel.tmpSql)
         } else{
             ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)

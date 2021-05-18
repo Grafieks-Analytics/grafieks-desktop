@@ -231,6 +231,7 @@ void ConnectorsLoginModel::sqlLogout()
     }
 
     this->staticRemover();
+    emit logout();
 }
 
 QString ConnectorsLoginModel::urlToFilePath(const QUrl &url)
