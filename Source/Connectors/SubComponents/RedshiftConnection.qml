@@ -47,6 +47,14 @@ Popup {
                  msg_dialog.text = status.msg
              }
         }
+
+        function onLogout(){
+            server.text = ""
+            database.text = ""
+            port.text = ""
+            username.text = ""
+            password.text = ""
+        }
     }
 
     Connections{

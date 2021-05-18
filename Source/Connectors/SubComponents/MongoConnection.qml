@@ -47,6 +47,14 @@ Popup {
                 msg_dialog.text = status.msg
             }
         }
+
+        function onLogout(){
+            server.text = ""
+            database.text = ""
+            port.text = ""
+            username.text = ""
+            password.text = ""
+        }
     }
 
     Connections{
@@ -93,7 +101,6 @@ Popup {
 
     function connectToMsSQL(){
         ConnectorsLoginModel.mongoOdbcLogin(control.currentText, server.text, database.text, port.text, username.text, password.text)
-        //        ConnectorsLoginModel.mongoOdbcLogin("", "localhost", "grafieks_mo", 27017, "root", "")
     }
 
     // JAVASCRIPT FUNCTION ENDS

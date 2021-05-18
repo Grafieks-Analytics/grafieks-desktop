@@ -49,6 +49,14 @@ Popup {
                 }
             }
         }
+
+        function onLogout(){
+            server.text = ""
+            database.text = ""
+            port.text = ""
+            username.text = ""
+            password.text = ""
+        }
     }
 
     Connections{
@@ -94,8 +102,7 @@ Popup {
     }
 
     function connectToExcel(){
-        //        ConnectorsLoginModel.excelOdbcLogin(server.text, database.text, port.text, username.text, password.text)
-        ConnectorsLoginModel.excelOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
+        ConnectorsLoginModel.excelOdbcLogin(server.text, database.text, port.text, username.text, password.text)
     }
 
     // JAVASCRIPT FUNCTION ENDS

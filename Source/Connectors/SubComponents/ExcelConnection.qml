@@ -50,6 +50,11 @@ Popup {
 
             busyindicator.running = false
         }
+
+        function onLogout(){
+            selectedFile = ""
+            excelFileName.text = ""
+        }
     }
 
     Connections{

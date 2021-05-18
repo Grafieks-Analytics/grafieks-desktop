@@ -48,6 +48,11 @@ Popup {
                 }
             }
         }
+
+        function onLogout(){
+            selectedFile = ""
+            jsonFileName.text = ""
+        }
     }
 
     Connections{

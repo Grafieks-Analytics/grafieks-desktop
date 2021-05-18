@@ -1,7 +1,7 @@
 #include "filtercategoricallistmodel.h"
 
 
-FilterCategoricalListModel::FilterCategoricalListModel(QObject *parent) : QAbstractListModel(parent), counter(0)
+FilterCategoricalListModel::FilterCategoricalListModel(QObject *parent) : QAbstractListModel(parent)
 {
 
     sqlComparisonOperators.append("=");
@@ -164,7 +164,6 @@ bool FilterCategoricalListModel::setData(const QModelIndex &index, const QVarian
         break;
     }
 
-
     }
 
     if( somethingChanged){
@@ -202,16 +201,10 @@ QHash<int, QByteArray> FilterCategoricalListModel::roleNames() const
 
 
 
-void FilterCategoricalListModel::newFilter(QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, bool includeNull, bool exclude )
+void FilterCategoricalListModel::newFilter(int counter, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, bool includeNull, bool exclude )
 {
-
-    addFilterList(new FilterCategoricalList(this->counter, section, category, subcategory, tableName, colName, relation, slug, val, includeNull, exclude, this));
-
-    this->counter++;
-
+    addFilterList(new FilterCategoricalList(counter, section, category, subcategory, tableName, colName, relation, slug, val, includeNull, exclude, this));
     emit rowCountChanged();
-
-
 }
 
 void FilterCategoricalListModel::deleteFilter(int FilterIndex)
@@ -225,7 +218,6 @@ void FilterCategoricalListModel::deleteFilter(int FilterIndex)
 
 void FilterCategoricalListModel::updateFilter(int FilterIndex, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString value, bool includeNull, bool exclude)
 {
-
     beginResetModel();
     if(section != "")
         mFilter[FilterIndex]->setSection(section);
@@ -241,9 +233,8 @@ void FilterCategoricalListModel::updateFilter(int FilterIndex, QString section, 
         mFilter[FilterIndex]->setRelation(relation);
     if(slug != "")
         mFilter[FilterIndex]->setValue(slug);
-    if(value != "")
-        mFilter[FilterIndex]->setValue(value);
 
+    mFilter[FilterIndex]->setValue(value);
     mFilter[FilterIndex]->setIncludeNull(includeNull);
     mFilter[FilterIndex]->setExclude(exclude);
 
@@ -320,10 +311,9 @@ QString FilterCategoricalListModel::setRelation(QString tableName, QString colum
                 notSign = sqlComparisonOperators.contains(tmpRelation)? " !" : " NOT ";
                 excludeCase = exclude ? tmpRelation.prepend(notSign) : tmpRelation;
                 newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[localCounter] + "')" : conditionList[localCounter] ;
-                newIncludeNull = isNull == false ? "AND " + columnName + " IS NOT NULL" : "";
 
-                tmpWhereConditions = QString("%1 %2 %3 %4")
-                        .arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+                tmpWhereConditions = QString("%1 %2 %3")
+                        .arg(columnName).arg(excludeCase).arg(newCondition);
 
                 localCounter++;
             }
@@ -343,10 +333,9 @@ QString FilterCategoricalListModel::setRelation(QString tableName, QString colum
             notSign = sqlComparisonOperators.contains(relation)? " !" : " NOT ";
             excludeCase = exclude ? relation.prepend(notSign) : relation;
             newCondition = relation.contains("in", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
-            newIncludeNull = isNull == false ? " AND " + columnName + " IS NOT NULL" : "";
 
-            tmpWhereConditions = QString("%1 %2 %3 %4")
-                    .arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+            tmpWhereConditions = QString("%1 %2 %3")
+                    .arg(columnName).arg(excludeCase).arg(newCondition);
         }
 
         break;
@@ -363,10 +352,9 @@ QString FilterCategoricalListModel::setRelation(QString tableName, QString colum
                 notSign = sqlComparisonOperators.contains(tmpRelation)? " !" : " NOT ";
                 excludeCase = exclude ? tmpRelation.prepend(notSign) : tmpRelation;
                 newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[localCounter] + "')" : conditionList[localCounter] ;
-                newIncludeNull = isNull == false ? "AND " + tableName + "." + columnName + " IS NOT NULL" : "";
 
-                tmpWhereConditions = QString("%1.%2 %3 %4 %5")
-                        .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+                tmpWhereConditions = QString("%1.%2 %3 %4")
+                        .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition);
 
                 localCounter++;
             }
@@ -386,10 +374,9 @@ QString FilterCategoricalListModel::setRelation(QString tableName, QString colum
             notSign = sqlComparisonOperators.contains(relation)? " !" : " NOT ";
             excludeCase = exclude ? relation.prepend(notSign) : relation;
             newCondition = relation.contains("in", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
-            newIncludeNull = isNull == false ? " AND " + tableName + "." + columnName + " IS NOT NULL" : "";
 
-            tmpWhereConditions = QString("%1.%2 %3 %4 %5")
-                    .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition).arg(newIncludeNull);
+            tmpWhereConditions = QString("%1.%2 %3 %4")
+                    .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition);
         }
         break;
     }

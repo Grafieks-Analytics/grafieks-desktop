@@ -29,6 +29,7 @@ QString FilterCategoricalList::value() const
     return m_value;
 }
 
+
 bool FilterCategoricalList::includeNull() const
 {
     return m_includeNull;
@@ -99,6 +100,8 @@ void FilterCategoricalList::setValue(QString value)
     m_value = value;
     emit valueChanged(m_value);
 }
+
+
 
 void FilterCategoricalList::setIncludeNull(bool includeNull)
 {

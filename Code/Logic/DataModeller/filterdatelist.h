@@ -4,6 +4,7 @@
 #include <QVariant>
 #include <QObject>
 #include <QDebug>
+#include <QStringList>
 
 /*!
  * \brief Roles required for FilterDateList
@@ -17,6 +18,7 @@ class FilterDateList : public QObject
     Q_OBJECT
 
     Q_PROPERTY(int filterId READ filterId WRITE setFilterId NOTIFY filterIdChanged)
+    Q_PROPERTY(int dateFormatId READ dateFormatId WRITE setDateFormatId NOTIFY dateFormatIdChanged)
     Q_PROPERTY(QString section READ section WRITE setSection NOTIFY sectionChanged)
     Q_PROPERTY(QString category READ category WRITE setCategory NOTIFY categoryChanged)
     Q_PROPERTY(QString subCategory READ subCategory WRITE setSubCategory NOTIFY subCategoryChanged)
@@ -25,12 +27,14 @@ class FilterDateList : public QObject
     Q_PROPERTY(QString relation READ relation WRITE setRelation NOTIFY relationChanged)
     Q_PROPERTY(QString slug READ slug WRITE setSlug NOTIFY slugChanged)
     Q_PROPERTY(QString value READ value WRITE setValue NOTIFY valueChanged)
+    Q_PROPERTY(QString actualValue READ actualValue WRITE setActualValue NOTIFY actualValueChanged)
     Q_PROPERTY(bool includeNull READ includeNull WRITE setIncludeNull NOTIFY includeNullChanged)
     Q_PROPERTY(bool exclude READ exclude WRITE setExclude NOTIFY excludeChanged)
 
 
 
     int m_filterId;
+    int m_dateFormatId;
     QString m_section;
     QString m_category;
     QString m_subCategory;
@@ -39,15 +43,16 @@ class FilterDateList : public QObject
     QString m_relation;
     QString m_slug;
     QString m_value;
+    QString m_actualValue;
     bool m_includeNull;
     bool m_exclude;
 
 
-
 public:
-    explicit FilterDateList(const int & filterId, const QString & section, const QString & category, const QString & subcategory, const QString & tableName, const QString & columnName, const QString & relation, const QString & slug, const QString & value, const bool & includeNull, const bool & exclude, QObject *parent = nullptr);
+    explicit FilterDateList(const int & filterId, const int &dateFormatId, const QString & section, const QString & category, const QString & subcategory, const QString & tableName, const QString & columnName, const QString & relation, const QString & slug, const QString & value, const bool & includeNull, const bool & exclude, QObject *parent = nullptr);
 
     int filterId() const;
+    int dateFormatId() const;
     QString section() const;
     QString category() const;
     QString subCategory() const;
@@ -56,12 +61,14 @@ public:
     QString relation() const;
     QString slug() const;
     QString value() const;
+    QString actualValue() const;
     bool includeNull() const;
     bool exclude() const;
 
 
 public slots:
     void setFilterId(int filterId);
+    void setDateFormatId(int dateFormatId);
     void setSection(QString section);
     void setCategory(QString category);
     void setSubCategory(QString subCategory);
@@ -70,6 +77,7 @@ public slots:
     void setRelation(QString relation);
     void setSlug(QString slug);
     void setValue(QString value);
+    void setActualValue(QString actualValue);
     void setIncludeNull(bool includeNull);
     void setExclude(bool exclude);
 
@@ -77,6 +85,7 @@ public slots:
 signals:
 
     void filterIdChanged(int filterId);
+    void dateFormatIdChanged(int dateFormatId);
     void sectionChanged(QString section);
     void categoryChanged(QString category);
     void subCategoryChanged(QString subCategory);
@@ -85,8 +94,10 @@ signals:
     void relationChanged(QString relation);
     void slugChanged(QString slug);
     void valueChanged(QString value);
+    void actualValueChanged(QString actualValue);
     void includeNullChanged(bool includeNull);
     void excludeChanged(bool exclude);
+
 
 };
 

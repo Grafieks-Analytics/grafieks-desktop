@@ -12,6 +12,7 @@ Column{
     anchors.left: parent.left
     anchors.leftMargin: 80
     anchors.topMargin: 30
+    property int counter: 0
 
 
     /***********************************************************************************************************************/
@@ -47,6 +48,14 @@ Column{
             nextXRadioTextField.text = ""
             lastXRadio.checked = false
             lastXRadioTextField.text = ""
+        }
+
+        function onInternalCounterChanged(){
+            counter = DSParamsModel.internalCounter
+        }
+
+        function onFilterIndexChanged(){
+            counter = DSParamsModel.filterIndex
         }
     }
 
@@ -169,16 +178,19 @@ Column{
             }
         }
 
-        console.log(lastXQuarter.toString())
-        DSParamsModel.setTimeFrame("Last " + value + " Quarter", lastXQuarter.toString())
-        DSParamsModel.setSubCategory("Quarter")
-        DSParamsModel.addToJoinValue(mapKey, "Last " + value + " Quarter")
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+        lastXQuarter.sort()
+
+        console.log("Last "+ noOfQuarter + " Quarters", lastXQuarter[0], lastXQuarter[lastXQuarter.length - 1])
+        DSParamsModel.setSubCategory(Constants.categorySubQuarter)
+        DSParamsModel.setActualDateValues(counter, lastXQuarter[0], lastXQuarter[lastXQuarter.length - 1])
+        DSParamsModel.addToJoinValue(counter, "Last " + value + " Quarter")
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = true
     }
+
     function onNextXChecked(){
 
         var value = nextXRadioTextField.text
@@ -255,12 +267,14 @@ Column{
             }
         }
 
-        console.log(nextXQuarter.toString())
-        DSParamsModel.setTimeFrame("Next " + value + " Quarter", nextXQuarter.toString())
-        DSParamsModel.setSubCategory("Quarter")
-        DSParamsModel.addToJoinValue(mapKey, "Next " + value + " Quarter")
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+        nextXQuarter.sort()
+
+        console.log("Next "+ noOfQuarter + " Quarters", nextXQuarter[0], nextXQuarter[nextXQuarter.length - 1])
+        DSParamsModel.setSubCategory(Constants.categorySubQuarter)
+        DSParamsModel.setActualDateValues(counter, nextXQuarter[0], nextXQuarter[nextXQuarter.length - 1])
+        DSParamsModel.addToJoinValue(counter, "Next " + value + " Quarter")
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = true
         lastXRadioTextField.focus = false
@@ -317,11 +331,14 @@ Column{
             thisQuarter.push(newValue)
         }
 
-        DSParamsModel.setTimeFrame("This Quarter", thisQuarter.toString())
-        DSParamsModel.setSubCategory("Quarter")
-        DSParamsModel.addToJoinValue(mapKey, "This Quarter")
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+        thisQuarter.sort()
+
+        console.log("This Quarter", thisQuarter[0], thisQuarter[thisQuarter.length - 1])
+        DSParamsModel.setSubCategory(Constants.categorySubQuarter)
+        DSParamsModel.setActualDateValues(counter, thisQuarter[0], thisQuarter[thisQuarter - 1])
+        DSParamsModel.addToJoinValue(counter, "This Quarter")
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -379,11 +396,14 @@ Column{
             lastQuarter.push(newValue)
         }
 
-        DSParamsModel.setTimeFrame("Last Quarter", lastQuarter.toString())
-        DSParamsModel.setSubCategory("Quarter")
-        DSParamsModel.addToJoinValue(mapKey, "Last Quarter")
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+        lastQuarter.sort()
+
+        console.log("Last Quarter", lastQuarter[0], lastQuarter[lastQuarter.length - 1])
+        DSParamsModel.setSubCategory(Constants.categorySubQuarter)
+        DSParamsModel.setActualDateValues(counter, lastQuarter[0], lastQuarter[lastQuarter - 1])
+        DSParamsModel.addToJoinValue(counter, "Last Quarter")
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -441,11 +461,15 @@ Column{
             nextQuarter.push(newValue)
         }
 
-        DSParamsModel.setTimeFrame("Next Quarter", nextQuarter.toString())
-        DSParamsModel.setSubCategory("Quarter")
-        DSParamsModel.addToJoinValue(mapKey, "Next Quarter")
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
+        nextQuarter.sort()
+
+        console.log("Next Quarter", nextQuarter[0], nextQuarter[nextQuarter.length - 1])
+        DSParamsModel.setSubCategory(Constants.categorySubQuarter)
+        DSParamsModel.setActualDateValues(counter, nextQuarter[0], nextQuarter[nextQuarter - 1])
+        DSParamsModel.addToJoinValue(counter, "Next Quarter")
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false

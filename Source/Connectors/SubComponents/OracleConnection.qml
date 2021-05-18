@@ -47,6 +47,14 @@ Popup {
                  msg_dialog.text = status.msg
              }
         }
+
+        function onLogout(){
+            server.text = ""
+            database.text = ""
+            port.text = ""
+            username.text = ""
+            password.text = ""
+        }
     }
 
     Connections{
@@ -93,7 +101,6 @@ Popup {
 
     function connectToMsSQL(){
         ConnectorsLoginModel.oracleOdbcLogin(control.currentText, server.text, database.text, port.text, username.text, password.text)
-//          ConnectorsLoginModel.oracleOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
     }
 
     // JAVASCRIPT FUNCTION ENDS
