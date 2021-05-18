@@ -29,10 +29,6 @@ QString FilterCategoricalList::value() const
     return m_value;
 }
 
-QStringList FilterCategoricalList::actualValue() const
-{
-    return m_actualValue;
-}
 
 bool FilterCategoricalList::includeNull() const
 {
@@ -105,14 +101,7 @@ void FilterCategoricalList::setValue(QString value)
     emit valueChanged(m_value);
 }
 
-void FilterCategoricalList::setActualValue(QStringList actualValue)
-{
-    if (m_actualValue == actualValue)
-        return;
 
-    m_actualValue = actualValue;
-    emit actualValueChanged(m_actualValue);
-}
 
 void FilterCategoricalList::setIncludeNull(bool includeNull)
 {
