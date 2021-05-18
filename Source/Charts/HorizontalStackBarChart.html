@@ -111,7 +111,15 @@
 
             if (chartType == constants.chartType.STANDARD) {
                 height = keys.length * standardThresholdHeight;
-                console.log(height);
+                if (height + margin.top + margin.bottom < window.innerHeight) {
+                    // console.log("Change Position");
+                    d3.select("#xAxisDiv").style(
+                        "top",
+                        height + margin.top + "px"
+                    );
+                } else {
+                    d3.select("#xAxisDiv").style("bottom", "0");
+                }
             }
 
             var timeFormat = d3.timeFormat("%m-%Y");

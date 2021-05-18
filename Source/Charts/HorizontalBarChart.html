@@ -92,6 +92,18 @@
 
                 if (chartType == constants.chartType.STANDARD) {
                     height = dataValues[0].length * standardThresholdHeight;
+                    if (
+                        height + margin.top + margin.bottom <
+                        window.innerHeight
+                    ) {
+                        // console.log("Change Position");
+                        d3.select("#xAxisDiv").style(
+                            "top",
+                            height + margin.top + "px"
+                        );
+                    } else {
+                        d3.select("#xAxisDiv").style("bottom", "0");
+                    }
                 }
 
                 d3.selectAll("#my_dataviz").html("");
@@ -192,6 +204,7 @@
                         "translate(" + margin.left + ",0)"
                         // "translate(0,0)"
                     )
+                    // .style(  ?  :, ? : )
                     .append("g")
                     .attr("class", "x-axis")
                     .call(xAxis);
