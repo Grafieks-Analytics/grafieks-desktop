@@ -269,7 +269,6 @@ Rectangle{
                 // Start pushing the individual checked item in the array
                 if(DSParamsModel.searchTmpSelectedValues(modelData) < 0){
                     DSParamsModel.setTmpSelectedValues(modelData)
-                    console.log(DSParamsModel.getTmpSelectedValues(0, true), "VALUES FETCHES")
                 }
 
             } else{
@@ -283,7 +282,6 @@ Rectangle{
             DSParamsModel.addToJoinValue(counter, DSParamsModel.getTmpSelectedValues(0, true).toString())
             DSParamsModel.addToJoinRelation(counter, Constants.inRelation)
             DSParamsModel.addToJoinRelationSlug(counter, Constants.inRelation)
-            console.log("V1S", counter, DSParamsModel.getTmpSelectedValues(0, true).toString())
         }
     }
 

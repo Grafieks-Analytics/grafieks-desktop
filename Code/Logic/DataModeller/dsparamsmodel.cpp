@@ -27,7 +27,7 @@ void DSParamsModel::closeModel()
     this->joinValue.clear();
     this->joinRelationSlug.clear();
     this->dateFormatMap.clear();
-    this->timeFrameMap.clear();
+    this->actualDateValues.clear();
 }
 
 DSParamsModel::~DSParamsModel()

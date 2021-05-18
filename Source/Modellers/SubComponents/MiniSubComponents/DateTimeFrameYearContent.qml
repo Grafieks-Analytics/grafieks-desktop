@@ -121,9 +121,10 @@ Column{
 
         DSParamsModel.setTimeFrame("Last " + value + " Year", lastXYears.toString())
         DSParamsModel.setSubCategory("Year")
+        DSParamsModel.setActualDateValues(counter, value)
         DSParamsModel.addToJoinValue(counter, "Last " + value + " Year")
-        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = true
