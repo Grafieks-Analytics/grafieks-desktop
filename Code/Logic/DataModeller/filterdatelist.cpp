@@ -28,7 +28,7 @@ QString FilterDateList::value() const
     return m_value;
 }
 
-QString FilterDateList::actualValue() const
+QStringList FilterDateList::actualValue() const
 {
     return m_actualValue;
 }
@@ -109,7 +109,7 @@ void FilterDateList::setValue(QString value)
     emit valueChanged(m_value);
 }
 
-void FilterDateList::setActualValue(QString actualValue)
+void FilterDateList::setActualValue(QStringList actualValue)
 {
     if (m_actualValue == actualValue)
         return;
