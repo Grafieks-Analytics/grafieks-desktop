@@ -291,7 +291,7 @@ QString FilterDateListModel::callQueryModel()
                 QString quarter;
                 if(quarterValues.length() <= 1){
                     foreach(quarter, quarterValues){
-                       newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), quarter + "%", filter->exclude(), filter->includeNull());
+                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), quarter + "%", filter->exclude(), filter->includeNull());
                     }
                 }
                 else{
@@ -308,7 +308,7 @@ QString FilterDateListModel::callQueryModel()
                 if(monthValues.length() <= 1){
                     foreach(month, monthValues){
                         newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), month + "%", filter->exclude(), filter->includeNull());
-                        }
+                    }
                 }
                 else{
                     newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), monthValues[0] + "%", filter->exclude(), filter->includeNull());
@@ -350,6 +350,7 @@ QString FilterDateListModel::callQueryModel()
             {
                 QStringList dateValue;
                 dateValue = filter->value().split(',');
+                qDebug() << "FVALUE" << filter->value();
 
                 bool initialValue = true;
                 if(weekDays.contains(dateValue[0]))
@@ -372,21 +373,8 @@ QString FilterDateListModel::callQueryModel()
                 }
                 else
                 {
-                    bool initialValue = true;
-                    foreach(newValue, dateValue)
-                    {
-                        tmpValue = this->getFilteredValue(newValue);
-
-                        if(initialValue)
-                        {
-                            initialValue = false;
-                            newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
-                        }
-                        else if(filter->exclude() == true)
-                            newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
-                        else
-                            newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
-                    }
+                    qDebug() << "DATE VALUE" <<dateValue;
+                    newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), dateValue.join(","), filter->exclude(), filter->includeNull());
                 }
 
             }
@@ -575,6 +563,8 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
 
     switch (Statics::currentDbIntType) {
 
+    case Constants::jsonIntType:
+    case Constants::excelIntType:
     case Constants::csvIntType:{
 
         if(relation.contains(",", Qt::CaseInsensitive)){
@@ -619,6 +609,8 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
         break;
     }
     default:
+
+
         if(relation.contains(",", Qt::CaseInsensitive)){
             relationList = relation.split(",");
             conditionList = conditions.split(",");
@@ -639,18 +631,18 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
             localCounter = 0;
 
         } else{
+
             conditionList = conditions.split(",");
 
             foreach(individualCondition, conditionList){
 
-                concetantedCondition.append("'" + individualCondition + "'");
+                concetantedCondition.append("'" + individualCondition + "',");
             }
-
-
+            concetantedCondition.chop(1);
 
             notSign = sqlComparisonOperators.contains(relation)? " !" : " NOT ";
             excludeCase = exclude ? relation.prepend(notSign) : relation;
-            newCondition = relation.contains("like", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
+            newCondition = relation.contains("in", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
             newIncludeNull = isNull == false ? " AND " + tableName + "." + columnName + " IS NOT NULL" : "";
 
             tmpWhereConditions = QString("%1.%2 %3 %4 %5")

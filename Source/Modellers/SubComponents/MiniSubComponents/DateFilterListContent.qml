@@ -222,8 +222,8 @@ Rectangle{
     function onSingleSelectRadioSelected(modelData, format){
 
         DSParamsModel.addToJoinValue(counter, modelData.toString())
-        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+        DSParamsModel.addToJoinRelation(counter, Constants.inRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.inRelation)
 
         radioSelected = modelData.toString()
     }
@@ -281,8 +281,8 @@ Rectangle{
             }
 
             DSParamsModel.addToJoinValue(counter, DSParamsModel.getTmpSelectedValues(0, true).toString())
-            DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-            DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+            DSParamsModel.addToJoinRelation(counter, Constants.inRelation)
+            DSParamsModel.addToJoinRelationSlug(counter, Constants.inRelation)
             console.log("V1S", counter, DSParamsModel.getTmpSelectedValues(0, true).toString())
         }
     }

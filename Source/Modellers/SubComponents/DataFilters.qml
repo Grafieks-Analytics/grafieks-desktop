@@ -403,11 +403,7 @@ Popup {
 
         onTabToggle(true,false,false,false);
 
-
         var tmpSql = DSParamsModel.tmpSql
-
-        FilterDateListModel.setDateFormatMap(DSParamsModel.getDateFormatMap())
-        FilterDateListModel.setTimeFrameMap(DSParamsModel.getTimeFrameMap())
         ProxyFilterModel.callQueryModels(tmpSql, FilterCategoricalListModel, FilterDateListModel, FilterNumericalListModel)
 
     }

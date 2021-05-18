@@ -17,6 +17,8 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
 
     switch (Statics::currentDbIntType) {
 
+    case Constants::jsonIntType:
+    case Constants::excelIntType:
     case Constants::csvIntType:{
 
         tmpWhereConditions = "";
