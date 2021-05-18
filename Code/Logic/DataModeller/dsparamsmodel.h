@@ -55,7 +55,7 @@ class DSParamsModel : public QObject
     QStringList tmpSelectedValues;              // Tmp selected values in a filter list - used in categorical filter list
     QVector<int> tmpFilterIndex;                // Tmp created filter index - used in categorical filter wildcard
     QMap<int, int> dateFormatMap;               // Date selected format QMap<filterId, formatId>
-    QMap<int, QString> actualDateValues;        // For dates like This year, last 10 years, quarter, etc, the original values are stored in this variable
+    QMap<int, QStringList> actualDateValues;    // For dates like This year, last 10 years, quarter, etc, the original values are stored in this variable
 
     // Q_PROPERTY variables
 
@@ -218,9 +218,9 @@ public:
     Q_INVOKABLE void removeValueFormat(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE int getDateFormatMap(int refObjId);
 
-    Q_INVOKABLE void setActualDateValues(int refObjId, QString value);
+    Q_INVOKABLE void setActualDateValues(int refObjId, QString value1, QString value2 = "");
     Q_INVOKABLE void removeActualDateValues(int refObjId, bool removeAll = false);
-    Q_INVOKABLE QString getActualDateValues(int refObjId);
+    Q_INVOKABLE QStringList getActualDateValues(int refObjId);
 
     Q_INVOKABLE void setExcludeMap(int refObjId, bool value = false);
     Q_INVOKABLE void removeExcludeMap(int refObjId);

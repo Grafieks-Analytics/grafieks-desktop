@@ -924,9 +924,15 @@ int DSParamsModel::getDateFormatMap(int refObjId)
     return this->dateFormatMap.value(refObjId);
 }
 
-void DSParamsModel::setActualDateValues(int refObjId, QString value)
+void DSParamsModel::setActualDateValues(int refObjId, QString value1, QString value2)
 {
-    this->actualDateValues.insert(refObjId, value);
+    QStringList input;
+
+    input << value1;
+    if(value2 != ""){
+        input << value2;
+    }
+    this->actualDateValues.insert(refObjId, input);
 }
 
 void DSParamsModel::removeActualDateValues(int refObjId, bool removeAll)
@@ -938,9 +944,9 @@ void DSParamsModel::removeActualDateValues(int refObjId, bool removeAll)
     }
 }
 
-QString DSParamsModel::getActualDateValues(int refObjId)
+QStringList DSParamsModel::getActualDateValues(int refObjId)
 {
-    QString output;
+    QStringList output;
     output = this->actualDateValues.value(refObjId);
     return output;
 }
@@ -948,7 +954,6 @@ QString DSParamsModel::getActualDateValues(int refObjId)
 void DSParamsModel::setExcludeMap(int refObjId, bool value)
 {
     this->excludeMap.insert(refObjId, value);
-    qDebug() << "EXCLUDE MAP" << refObjId << value;
 }
 
 void DSParamsModel::removeExcludeMap(int refObjId)

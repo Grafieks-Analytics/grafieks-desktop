@@ -68,11 +68,16 @@ QStringList NewTableListModel::getTableList()
     }
     }
 
+    // Obtain tables list
     this->tables = dbCon.tables();
 
     // Remove unwanted default tables
-    this->tables.removeAll("trace_xe_action_map");      // MSSql
-    this->tables.removeAll("trace_xe_event_map");       // MSSql
+
+    // MSSql
+    if(Statics::currentDbIntType == Constants::mssqlIntType){
+        this->tables.removeAll("trace_xe_action_map");
+        this->tables.removeAll("trace_xe_event_map");
+    }
 
     return this->tables;
 }

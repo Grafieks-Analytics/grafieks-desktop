@@ -135,15 +135,20 @@ Column{
             }
         }
 
-        DSParamsModel.setTimeFrame("Last " + value + " Month", lastXMonths.toString())
-        DSParamsModel.setSubCategory("Month")
-        DSParamsModel.addToJoinValue(counter, "Last " + value + " Month")
-        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+        lastXMonths.sort()
+
+        console.log("Last " + value + " Months", lastXMonths.toString())
+        DSParamsModel.setSubCategory(Constants.categorySubMonth)
+        DSParamsModel.setActualDateValues(counter, lastXMonths[0], lastXMonths[lastXMonths.length - 1])
+        DSParamsModel.addToJoinValue(counter, "Last " + value + " Months")
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = true
     }
+
+
     function onNextXChecked(){
 
         var value = nextXRadioTextField.text
@@ -175,12 +180,15 @@ Column{
                 nextXMonths.push(tmpValue)
             }
         }
-        console.log(nextXMonths.toString())
-        DSParamsModel.setTimeFrame("Next " + value + " Month", nextXMonths.toString())
-        DSParamsModel.setSubCategory("Month")
-        DSParamsModel.addToJoinValue(counter, "Next " + value + " Month")
-        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+
+        nextXMonths.sort()
+
+        console.log("Next " + value + " Month", nextXMonths.toString())
+        DSParamsModel.setSubCategory(Constants.categorySubMonth)
+        DSParamsModel.setActualDateValues(counter, nextXMonths[0], nextXMonths[nextXMonths.length - 1])
+        DSParamsModel.addToJoinValue(counter, "Next " + value + " Months")
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = true
         lastXRadioTextField.focus = false
@@ -201,8 +209,10 @@ Column{
             newValue = thisYear.toString() + "-" + thisMonth.toString()
         }
 
-        DSParamsModel.setTimeFrame("This Month", newValue.toString())
-        DSParamsModel.setSubCategory("Month")
+
+        console.log("This Month", newValue)
+        DSParamsModel.setSubCategory(Constants.categorySubMonth)
+        DSParamsModel.setActualDateValues(counter, newValue)
         DSParamsModel.addToJoinValue(counter, "This Month")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
@@ -234,8 +244,9 @@ Column{
             }
         }
 
-        DSParamsModel.setTimeFrame("Last Month", newValue.toString())
-        DSParamsModel.setSubCategory("Month")
+        console.log("Last Month", newValue)
+        DSParamsModel.setSubCategory(Constants.categorySubMonth)
+        DSParamsModel.setActualDateValues(counter, newValue)
         DSParamsModel.addToJoinValue(counter, "Last Month")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
@@ -267,8 +278,9 @@ Column{
             }
         }
 
-        DSParamsModel.setTimeFrame("Next Month", newValue.toString())
-        DSParamsModel.setSubCategory("Month")
+        console.log("Next Month", newValue)
+        DSParamsModel.setSubCategory(Constants.categorySubMonth)
+        DSParamsModel.setActualDateValues(counter, newValue)
         DSParamsModel.addToJoinValue(counter, "Next Month")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
