@@ -28,7 +28,8 @@ public:
     ~ForwardOnlyDataModel();
 
 
-    Q_INVOKABLE void columnData(QString col, QString tableName, QString searchString = "");
+    Q_INVOKABLE void columnData(QString col, QString tableName, QString options);
+    Q_INVOKABLE void columnSearchData(QString col, QString tableName, QString searchString, QString options);
     Q_INVOKABLE QStringList getColumnList(QString tableName, QString moduleName, QString searchString = "");
     Q_INVOKABLE QStringList getTableList();
     Q_INVOKABLE QStringList filterTableList(QString keyword);
@@ -40,6 +41,7 @@ public slots:
 signals:
     void forwardColData(QStringList colData);
     void forwardColumnListObtained(QList<QStringList> allColumns, QString tableName, QString moduleName);
+    void columnListModelDataChanged(QStringList colData, QString options);
 
 private:
     QSet<QString> category;
@@ -48,6 +50,8 @@ private:
     QStringList numericalList;
     QStringList categoryList;
     QStringList dateList;
+
+    QStringList getData(QString queryString);
 };
 
 #endif // FORWARDONLYDATAMODEL_H
