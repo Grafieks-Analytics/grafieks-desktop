@@ -629,9 +629,10 @@ Page {
             });';
 
             webEngineView.runJavaScript('drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue);
-
+            return;
         }
 
+        webEngineView.runJavaScript('clearChart()');
     }
 
     function openYAxisSettings(){

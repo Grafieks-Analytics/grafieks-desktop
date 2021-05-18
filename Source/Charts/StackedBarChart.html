@@ -8,6 +8,10 @@
     <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
     <link rel="stylesheet" href="Data/general.css" />
     <style>
+        body {
+            overflow-y: hidden;
+            /* overflow-x: hidden; */
+        }
         .title {
             font: 15px sans-serif;
         }
@@ -61,44 +65,6 @@
             ],
             ["2018-08-05", "2019-08-05", "2019-08-05", "2019-08-05"],
             ["2019", "2018"],
-        ];
-
-        var data = [
-            [
-                [
-                    114880.0078125, 328449.21875, 0, 206965.5625, 0,
-                    91705.3046875, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                ],
-                [
-                    0, 0, 12486.3125, 0, 223843.703125, 0, 27118.76953125, 0,
-                    203413, 107532.140625, 78479.1953125, 0, 16476.404296875,
-                    3024.280029296875, 46673.53515625, 0, 0,
-                ],
-                [
-                    0, 0, 0, 0, 0, 0, 0, 330006.6875, 0, 0, 0, 167380.234375, 0,
-                    0, 0, 189238.53125, 149528.015625,
-                ],
-            ],
-            ["Furniture", "OfficeSupplies", "Technology"],
-            [
-                "Bookcases",
-                "Chairs",
-                "Labels",
-                "Tables",
-                "Storage",
-                "Furnishings",
-                "Art",
-                "Phones",
-                "Binders",
-                "Appliances",
-                "Paper",
-                "Accessories",
-                "Envelopes",
-                "Fasteners",
-                "Supplies",
-                "Machines",
-                "Copiers",
-            ],
         ];
 
         var extraHeightWorked = false;
@@ -186,7 +152,7 @@
                 dateFormat,
                 dateFormat1,
                 chartType,
-                standartThresholdWidth,
+                standardThresholdWidth,
             } = plottingConfiguration;
 
             if (!d3colorPalette) {
@@ -210,8 +176,8 @@
                 chartType = defaultD3Config.chartType;
             }
 
-            if (!standartThresholdWidth) {
-                standartThresholdWidth = defaultD3Config.standartThresholdWidth;
+            if (!standardThresholdWidth) {
+                standardThresholdWidth = defaultD3Config.standardThresholdWidth;
             }
 
             var margin = { top: 40, right: 20, bottom: 80, left: 70 };
@@ -224,7 +190,7 @@
             );
 
             if (chartType == constants.chartType.STANDARD) {
-                width = data.length * standartThresholdWidth;
+                width = data.length * standardThresholdWidth;
             }
 
             var height =
@@ -295,8 +261,7 @@
             color.domain(keys);
             const barWidth = x.bandwidth();
 
-            d3.selectAll("#my_dataviz").html("");
-            d3.selectAll("#yAxisDiv").html("");
+            clearChart();
 
             //add svg with margin !important
             //this is svg is actually group

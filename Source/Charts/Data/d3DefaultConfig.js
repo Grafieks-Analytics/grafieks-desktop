@@ -35,8 +35,8 @@ const defaultD3Config = {
     defaultTimeParseFormat: "%d-%m-%Y",
     defaultSpace: 30,
     dateFormat: "%Y",
-    chartType: constants.chartType.FIT_WIDTH,
-    horizontalChartType: constants.chartType.FIT_HEIGHT,
+    chartType: constants.chartType.STANDARD,
+    horizontalChartType: constants.chartType.STANDARD,
     standardThresholdWidth: 100,
     standardThresholdHeight: 100,
 };

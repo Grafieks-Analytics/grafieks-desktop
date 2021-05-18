@@ -112,3 +112,9 @@ function setLabel(
             .attr("transform", "rotate(-90)");
     }
 }
+
+function clearChart() {
+    d3.selectAll("#my_dataviz").html("");
+    d3.selectAll("#yAxisDiv").html("");
+    d3.selectAll("#xAxisDiv").html("");
+}
