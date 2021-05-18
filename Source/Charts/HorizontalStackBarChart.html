@@ -197,13 +197,11 @@
                     d3.selectAll(".bar").style("opacity", 1);
                 })
                 .on("mouseover mousemove", function (d, i) {
-                    var computedValues = this.getClientRects()[0];
-
-                    let xpos = computedValues.x + barWidth / 2;
+                    let xpos1 = d3.mouse(this)[0] + margin.left;
                     let ypos = d3.mouse(this)[1] - 20;
 
                     d3.select("#tooltip")
-                        .style("left", xpos + "px")
+                        .style("left", xpos1 + "px")
                         .style("top", ypos + "px")
                         .style("display", "block")
                         .style("position", "absolute")
