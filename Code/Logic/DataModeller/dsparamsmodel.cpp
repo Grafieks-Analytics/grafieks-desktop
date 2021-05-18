@@ -924,20 +924,24 @@ int DSParamsModel::getDateFormatMap(int refObjId)
     return this->dateFormatMap.value(refObjId);
 }
 
-void DSParamsModel::setTimeFrame(QString dummy, QString actual)
+void DSParamsModel::setActualDateValues(int refObjId, QString value)
 {
-    this->timeFrameMap.insert(dummy, actual);
+    this->actualDateValues.insert(refObjId, value);
 }
 
-void DSParamsModel::removeTimeFrame(QString key)
+void DSParamsModel::removeActualDateValues(int refObjId, bool removeAll)
 {
-    this->timeFrameMap.remove(key);
+    if(removeAll == false){
+        this->actualDateValues.remove(refObjId);
+    } else{
+        this->actualDateValues.clear();
+    }
 }
 
-QVariantMap DSParamsModel::getTimeFrameMap()
+QString DSParamsModel::getActualDateValues(int refObjId)
 {
-    QVariantMap output;
-    output = this->timeFrameMap;
+    QString output;
+    output = this->actualDateValues.value(refObjId);
     return output;
 }
 

@@ -33,9 +33,9 @@ public:
     QHash<int, QByteArray> roleNames() const;
 
 
-    Q_INVOKABLE void newFilter(int counter, int dateFormatId, QString section = "",QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString slug = "", QString val = "", bool includeNull = true, bool exclude = false);
+    Q_INVOKABLE void newFilter(int counter, int dateFormatId, QString section = "",QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString slug = "", QString val = "", QString actualValue = "", bool includeNull = true, bool exclude = false);
     Q_INVOKABLE void deleteFilter(int FilterIndex);
-    Q_INVOKABLE void updateFilter(int FilterIndex, int dateFormatId, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString slug = "", QString value = "", bool includeNull = true, bool exclude = false);
+    Q_INVOKABLE void updateFilter(int FilterIndex, int dateFormatId, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString slug = "", QString value = "", QString actualValue = "", bool includeNull = true, bool exclude = false);
     Q_INVOKABLE QString callQueryModel();
     Q_INVOKABLE void clearFilters();
 
@@ -57,6 +57,7 @@ public:
         FilterListRelationRole,
         FilterListSlugRole,
         FilterListValueRole,
+        FilterListActualValueRole,
         FilterListIncludeNullRole,
         FilterListExcludeRole
     };
