@@ -27,7 +27,6 @@ signals:
      void columnListModelDataChanged(QStringList colData, QString options);
 
 private:
-
      QStringList getData(QString query);
 
 
