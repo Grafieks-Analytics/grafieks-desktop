@@ -111,18 +111,12 @@ Column{
         var newValue = Number(value)
         var tmpDate = new Date()
         var thisYear = tmpDate.getFullYear()
-        var tmpYear = thisYear
-        var lastXYears = []
+        var pastYear = thisYear - newValue
 
-        for(let i = 0 ; i < newValue; i++){
-            tmpYear = tmpYear - 1
-            lastXYears.push(tmpYear)
-        }
-
-        DSParamsModel.setTimeFrame("Last " + value + " Year", lastXYears.toString())
-        DSParamsModel.setSubCategory("Year")
-        DSParamsModel.setActualDateValues(counter, value)
-        DSParamsModel.addToJoinValue(counter, "Last " + value + " Year")
+        console.log("Past " + value + " Year", pastYear)
+        DSParamsModel.setSubCategory(Constants.categorySubYear)
+        DSParamsModel.setActualDateValues(counter, pastYear, thisYear)
+        DSParamsModel.addToJoinValue(counter, "Last " + value + " Years")
         DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
@@ -135,19 +129,14 @@ Column{
         var newValue = Number(value)
         var tmpDate = new Date()
         var thisYear = tmpDate.getFullYear()
-        var tmpYear = thisYear
-        var nextXYears = []
+        var futureYear = tmpDate.thisYear + newValue
 
-        for(let i = 0 ; i < newValue; i++){
-            tmpYear = tmpYear + 1
-            nextXYears.push(tmpYear)
-        }
-
-        DSParamsModel.setTimeFrame("Next " + value + " Year", nextXYears.toString())
-        DSParamsModel.setSubCategory("Year")
-        DSParamsModel.addToJoinValue(counter, "Next " + value + " Year")
-        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+        console.log("Next " + value + " Year", futureYear)
+        DSParamsModel.setSubCategory(Constants.categorySubYear)
+        DSParamsModel.setActualDateValues(counter, thisYear, futureYear)
+        DSParamsModel.addToJoinValue(counter, "Next " + value + " Years")
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = true
         lastXRadioTextField.focus = false
@@ -158,8 +147,9 @@ Column{
         var tmpDate = new Date()
         var thisYear = tmpDate.getFullYear()
 
-        DSParamsModel.setTimeFrame("This Year", thisYear.toString())
-        DSParamsModel.setSubCategory("Year")
+        console.log("This Year", thisYear)
+        DSParamsModel.setSubCategory(Constants.categorySubYear)
+        DSParamsModel.setActualDateValues(counter, thisYear)
         DSParamsModel.addToJoinValue(counter, "This Year")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
@@ -173,8 +163,9 @@ Column{
         var tmpDate = new Date()
         var lastYear = tmpDate.getFullYear() - 1
 
-        DSParamsModel.setTimeFrame("Last Year", lastYear.toString())
-        DSParamsModel.setSubCategory("Year")    
+        console.log("Last Year", lastYear)
+        DSParamsModel.setSubCategory(Constants.categorySubYear)
+        DSParamsModel.setActualDateValues(counter, lastYear)
         DSParamsModel.addToJoinValue(counter, "Last Year")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
@@ -188,8 +179,9 @@ Column{
         var tmpDate = new Date()
         var nextYear = tmpDate.getFullYear() + 1
 
-        DSParamsModel.setTimeFrame("Next Year", nextYear.toString())
-        DSParamsModel.setSubCategory("Year")
+        console.log("Next Year", nextYear)
+        DSParamsModel.setSubCategory(Constants.categorySubYear)
+        DSParamsModel.setActualDateValues(counter, nextYear)
         DSParamsModel.addToJoinValue(counter, "Next Year")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)

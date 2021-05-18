@@ -192,16 +192,19 @@ Column{
             lastXDays.push(newValue)
         }
 
-        console.log(lastXDays.toString())
-        DSParamsModel.setTimeFrame("Last " + value + " Day", lastXDays.toString())
-        DSParamsModel.setSubCategory("Day")
+        lastXDays.sort()
+
+        console.log("Last " + value + " Days", lastXDays[0], lastXDays[lastXDays.length - 1])
+        DSParamsModel.setSubCategory(Constants.categorySubDay)
+        DSParamsModel.setActualDateValues(counter, lastXDays[0], lastXDays[lastXDays.length - 1])
         DSParamsModel.addToJoinValue(counter, "Last " + value + " Day")
-        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = true
     }
+
     function onNextXChecked(){
 
         var value = nextXRadioTextField.text
@@ -291,12 +294,14 @@ Column{
             nextXDays.push(newValue)
         }
 
-        console.log(nextXDays.toString())
-        DSParamsModel.setTimeFrame("Next " + value + " Day", nextXDays.toString())
-        DSParamsModel.setSubCategory("Day")
+        nextXDays.sort()
+
+        console.log("Next " + value + " Day", nextXDays[0], nextXDays[nextXDays.length - 1])
+        DSParamsModel.setSubCategory(Constants.categorySubDay)
+        DSParamsModel.setActualDateValues(counter, nextXDays[0], nextXDays[nextXDays.length - 1])
         DSParamsModel.addToJoinValue(counter, "Next " + value + " Day")
-        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = true
         lastXRadioTextField.focus = false
@@ -308,8 +313,9 @@ Column{
         var newDate = Qt.formatDateTime(tmpDate,'yyyy-MM-dd')
         var thisDay = newDate
 
-        DSParamsModel.setTimeFrame("This Day", thisDay.toString())
-        DSParamsModel.setSubCategory("Day")
+        console.log("This Day", thisDay.toString())
+        DSParamsModel.setSubCategory(Constants.categorySubDay)
+        DSParamsModel.setActualDateValues(counter, thisDay)
         DSParamsModel.addToJoinValue(counter, "This Day")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
@@ -387,8 +393,9 @@ Column{
             }
         }
 
-        DSParamsModel.setTimeFrame("Last Day", newValue.toString())
-        DSParamsModel.setSubCategory("Day")
+        console.log("Last Day", newValue.toString())
+        DSParamsModel.setSubCategory(Constants.categorySubDay)
+        DSParamsModel.setActualDateValues(counter, newValue)
         DSParamsModel.addToJoinValue(counter, "Last Day")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
@@ -478,8 +485,9 @@ Column{
             }
         }
 
-        DSParamsModel.setTimeFrame("Next Day", newValue.toString())
-        DSParamsModel.setSubCategory("Day")
+        console.log("Next Day", newValue.toString())
+        DSParamsModel.setSubCategory(Constants.categorySubDay)
+        DSParamsModel.setActualDateValues(counter, newValue)
         DSParamsModel.addToJoinValue(counter, "Next Day")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
