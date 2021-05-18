@@ -242,6 +242,5 @@
         <file>Source/Connectors/SubComponents/MiniSubComponents/DropboxDelegate.qml</file>
         <file>Source/Connectors/SubComponents/MiniSubComponents/BoxDelegate.qml</file>
         <file>Source/Charts/HorizontalBarGroupedChart.html</file>
-        <file>Source/Modellers/SubComponents/MiniSubComponents/DateFilterListContentBackup.qml</file>
     </qresource>
 </RCC>
