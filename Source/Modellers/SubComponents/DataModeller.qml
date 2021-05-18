@@ -406,8 +406,8 @@ Item {
             DSParamsModel.addToRearLineMap(tmpNearestTable.tableId, tmpArray)
 
             // Reset glow color of nearest rectangle
-            dataModellerItem.changeGlowColor("white", tmpNearestTable.tableId)
-            dataModellerItem.changeGlowColor("white", tmpOrphanTableId)
+            dataModellerItem.changeGlowColor(Constants.defaultDroppedRectangleColor, tmpNearestTable.tableId)
+            dataModellerItem.changeGlowColor(Constants.defaultDroppedRectangleColor, tmpOrphanTableId)
 
             // Add to DSParamsModel
             DSParamsModel.addToJoinBoxTableMap(tmpOrphanTableId, refObjectName, tmpNearestTable.tableName)
@@ -616,7 +616,7 @@ Item {
                     if(nearestTable.distance <= 100){
 
                         if(tmpNearestTable.tableId !== nearestTable.tableId){
-                            dataModellerItem.changeGlowColor("white", tmpNearestTable.tableId)
+                            dataModellerItem.changeGlowColor(Constants.defaultDroppedRectangleColor, tmpNearestTable.tableId)
                         }
 
                         // Set the temporary nearest table
@@ -630,8 +630,8 @@ Item {
                         dataModellerItem.changeGlowColor(Constants.grafieksLightGreenColor, refObject)
 
                     } else{
-                        dataModellerItem.changeGlowColor("white", tmpNearestTable.tableId)
-                        dataModellerItem.changeGlowColor("white", refObject)
+                        dataModellerItem.changeGlowColor(Constants.defaultDroppedRectangleColor, tmpNearestTable.tableId)
+                        dataModellerItem.changeGlowColor(Constants.defaultDroppedRectangleColor, refObject)
 
                         // Reset tmpNearestTable
                         tmpNearestTable.tableId = 0
@@ -745,7 +745,7 @@ Item {
         // Assign new variable to the created object
         // Use this variable to connect the signals and slots
         // DSParams Rectangle
-        DSParamsModel.addToRectangles(counter, dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName, objectName : counter, glowColor: "white"}))
+        DSParamsModel.addToRectangles(counter, dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName, objectName : counter, glowColor:Constants.defaultDroppedRectangleColor}))
 
         // DSParams Rectangle
         DSParamsModel.fetchRectangles(counter).dragged.connect(onDropAreaDraggedNewComponent)

@@ -170,36 +170,150 @@ Popup {
     Row{
         id: popupContent
         anchors.top: header.bottom
-        width: parent.width - this.padding * 2 - this.spacing
+        anchors.topMargin: 30
+        width: parent.width-100
+        anchors.horizontalCenter: parent.horizontalCenter
         height: parent.height - header.height - footer.height
         padding: 20
         spacing: 300
 
-        Row{
+
+            Column{
+                id:firstCol
+                spacing: 100
+
+                width: parent.width/2
+
+                Text {
+                    id: label2
+                    text: qsTr("Column")
+                }
+
+
+
+
+                Rectangle{
+                    id:xAxisToolTip
+                    height:30
+                    width:parent.width
+
+                    anchors.top: label2.bottom
+                    anchors.topMargin: 15
+
+
+
+                    ListView{
+
+                        height: parent.height
+                        width: parent.width
+
+                        anchors.top: parent.top
+                        anchors.topMargin: 3
+                        model: xAxisListModel
+                        orientation: Qt.Vertical
+                        spacing: 5
+                        interactive: false
+                        delegate:  Text {
+
+                            text: qsTr(itemName)
+                        }
+
+                    }
+                }
+                Rectangle{
+                    id:yAxisToolTip
+                    height:30
+                    width:parent.width
+
+                    anchors.top: xAxisToolTip.bottom
+                        anchors.topMargin: 15
+
+
+
+                    ListView{
+
+                        height: parent.height
+                        width: parent.width
+
+                        anchors.top: parent.top
+                        anchors.topMargin: 3
+                        model: yAxisListModel
+                        orientation: Qt.Vertical
+                        spacing: 5
+                        interactive: false
+                        delegate:  Text {
+
+                            text: qsTr(itemName)
+                        }
+
+                    }
+                }
+
+
+
+            }
+
+        Column{
             spacing: 100
+            width: parent.width/2
+            anchors.right: parent.right
+            Text {
+                id: label3
+                text: qsTr("Tooltip Label")
+            }
 
-                Column{
-                    Text {
-                        id: label1
-                        text: qsTr("Axis")
-                    }
-                }
-                Column{
-                    Text {
-                        id: label2
-                        text: qsTr("Column")
-                    }
-                }
-                Column{
-                    Text {
-                        id: label3
-                        text: qsTr("Tooltip Label")
-                    }
-                }
+            Rectangle{
+                id:toolTipEdit1
+                height:25
+                width:parent.width
 
+                anchors.top: label3.bottom
+                    anchors.topMargin: 15
+
+                TextField{
+                    width: parent.width-150
+                    selectByMouse: true
+                    height:25
+                    cursorVisible: true
+                    anchors.top: parent.top
+                    anchors.topMargin: 5
+                    placeholderText: "column1"
+
+
+                    background: Rectangle{
+                        border.width: 1
+
+                    }
+                }
+            }
+            Rectangle{
+                id:toolTipEdit2
+                height:25
+                width:parent.width
+
+                anchors.top: toolTipEdit1.bottom
+                    anchors.topMargin: 15
+
+                TextField{
+                    width: parent.width-150
+                    selectByMouse: true
+                    height:25
+                    cursorVisible: true
+                    anchors.top: parent.top
+                    anchors.topMargin: 5
+                    placeholderText: "column2"
+                    background: Rectangle{
+                        border.width: 1
+
+                    }
+                }
+            }
         }
 
     }
+
+
+
 
 
     Rectangle{

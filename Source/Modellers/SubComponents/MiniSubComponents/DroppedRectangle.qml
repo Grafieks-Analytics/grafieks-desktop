@@ -273,8 +273,8 @@ Item{
         //        x:Constants.newPosition+droppedRectangle.x
         //        y:Constants.droppedRectangle.y
 //        border.color: colors[droppedCount+1]
-         border.color: "#fdb462"
-                color: "#fdb462"
+         border.color: Constants.defaultDroppedRectangleColor
+                color: Constants.defaultDroppedRectangleColor
 //        color: colors[droppedCount+1]
 
         height: 30
