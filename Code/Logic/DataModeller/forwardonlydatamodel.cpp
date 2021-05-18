@@ -17,56 +17,18 @@ ForwardOnlyDataModel::~ForwardOnlyDataModel()
 
 }
 
-void ForwardOnlyDataModel::columnData(QString col, QString tableName, QString searchString)
+void ForwardOnlyDataModel::columnData(QString col, QString tableName, QString options)
 {
+    QStringList output;
+    output = this->getData("SELECT DISTINCT " + col + " FROM "+ tableName);
+    emit columnListModelDataChanged(output, options);
+}
 
-    QString conType;
-    QString queryString;
-    switch (Statics::currentDbIntType) {
-
-    case Constants::redshiftIntType:
-        conType = Constants::redshiftOdbcStrType;
-        if (searchString != ""){
-            queryString = "SELECT DISTINCT " + col + " FROM "+ tableName + " WHERE " + col + " LIKE '%"+searchString+"%'";
-        } else{
-            queryString = "SELECT DISTINCT " + col + " FROM "+ tableName;
-        }
-        break;
-
-    case Constants::snowflakeIntType:
-        conType = Constants::snowflakeOdbcStrType;
-        if (searchString != ""){
-            queryString = "SELECT DISTINCT " + col + " FROM "+ tableName + " WHERE " + col + " LIKE '%"+searchString+"%'";
-        } else{
-            queryString = "SELECT DISTINCT " + col + " FROM "+ tableName;
-        }
-        break;
-
-    case Constants::teradataIntType:
-        conType = Constants::teradataOdbcStrType;
-        if (searchString != ""){
-            queryString = "SELECT DISTINCT " + col + " FROM "+ tableName + " WHERE " + col + " LIKE '%"+searchString+"%'";
-        } else{
-            queryString = "SELECT DISTINCT " + col + " FROM "+ tableName;
-        }
-        break;
-
-    }
-
-    QSqlDatabase forwardOnlyDb = QSqlDatabase::database(conType);
-    QSqlQuery query(queryString, forwardOnlyDb);
-
-
-    if(query.lastError().type() == QSqlError::NoError){
-        while(query.next()){
-            this->colData.append(query.value(0).toString());
-        }
-    } else{
-        qWarning() << Q_FUNC_INFO << query.lastError();
-    }
-
-    emit forwardColData(this->colData);
-    this->colData.clear();
+void ForwardOnlyDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
+{
+    QStringList output;
+    output = this->getData("SELECT DISTINCT " + col + " FROM "+ tableName + " WHERE " + col + " LIKE '%"+searchString+"%'");
+    emit columnListModelDataChanged(output, options);
 }
 
 QStringList ForwardOnlyDataModel::getColumnList(QString tableName, QString moduleName, QString searchString)
@@ -124,7 +86,7 @@ QStringList ForwardOnlyDataModel::getColumnList(QString tableName, QString modul
             }
         }
     } else{
-         qWarning() << Q_FUNC_INFO << describeQuery.lastError();
+        qWarning() << Q_FUNC_INFO << describeQuery.lastError();
     }
 
     return output;
@@ -218,4 +180,43 @@ QStringList ForwardOnlyDataModel::getDbList()
     }
 
     return output;
+}
+
+QStringList ForwardOnlyDataModel::getData(QString queryString)
+{
+
+    QString conType;
+    QStringList out;
+    switch (Statics::currentDbIntType) {
+
+    case Constants::redshiftIntType:
+        conType = Constants::redshiftOdbcStrType;
+        break;
+
+    case Constants::snowflakeIntType:
+        conType = Constants::snowflakeOdbcStrType;
+        break;
+
+    case Constants::teradataIntType:
+        conType = Constants::teradataOdbcStrType;
+        break;
+
+    }
+
+    QSqlDatabase forwardOnlyDb = QSqlDatabase::database(conType);
+    QSqlQuery query(queryString, forwardOnlyDb);
+
+
+    if(query.lastError().type() == QSqlError::NoError){
+        while(query.next()){
+            this->colData.append(query.value(0).toString());
+        }
+    } else{
+        qWarning() << Q_FUNC_INFO << query.lastError();
+    }
+
+    out = this->colData;
+    emit forwardColData(this->colData);
+    this->colData.clear();
+    return out;
 }
