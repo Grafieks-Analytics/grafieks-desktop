@@ -31,7 +31,7 @@ Rectangle{
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
     visible: false
-    readonly property string mapKey: "0"
+    property int counter: 0
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -61,6 +61,14 @@ Rectangle{
             toDateInput.text   =""
             DSParamsModel.setExclude(false)
             DSParamsModel.setIncludeNull(true)
+        }
+
+        function onInternalCounterChanged(){
+            counter = DSParamsModel.internalCounter
+        }
+
+        function onFilterIndexChanged(){
+            counter = DSParamsModel.filterIndex
         }
     }
 
@@ -124,19 +132,19 @@ Rectangle{
     }
 
     function onCalendarInput(fromDate,toDate){
-        var newValue = fromDate + " To "  + toDate;
-        DSParamsModel.addToJoinValue(mapKey, newValue)
-        DSParamsModel.addToJoinRelation(mapKey, Constants.betweenRelation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.betweenRelation)
+        var newValue = fromDate + ","  + toDate;
+        DSParamsModel.addToJoinValue(counter, newValue)
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
     }
 
     function onIncludeCheckedClicked(checked){
-        DSParamsModel.setIncludeNull(checked)
+        DSParamsModel.setIncludeNullMap(counter,checked)
     }
 
 
     function onExcludeCheckedClicked(checked){
-        DSParamsModel.setExclude(checked)
+        DSParamsModel.setExcludeMap(counter,checked)
     }
 
     // JAVASCRIPT FUNCTION ENDS

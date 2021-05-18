@@ -209,13 +209,15 @@ Popup {
         switch(category){
 
         case Constants.dateMainListType:
+        case Constants.dateMainTimeFrameType:
+
 
             let joinRelation = DSParamsModel.fetchJoinRelation(counter)
             let joinValue = DSParamsModel.fetchJoinValue(counter)
             let joinSlug = DSParamsModel.fetchJoinRelationSlug(counter)
             let includeNull = DSParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
             let exclude = DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
-            let dateFormatId = DSParamsModel.getDateFormatMap(counter)
+            let dateFormatId = category === Constants.dateMainTimeFrameType ? DSParamsModel.getDateFormatMap(counter): 0
 
 
             singleRelation = joinRelation[counter]
@@ -227,21 +229,25 @@ Popup {
 
         case Constants.dateMainCalendarType:
 
-            for(let i = 0; i < Object.keys(joinRelation).length; i++){
-                singleRelation = joinRelation[i]
-                singleValue = joinValue[i]
-                singleSlug = joinSlug[i]
+            for(let i = 0; i < tmpFilterIndexes.length; i++){
+                let fi = tmpFilterIndexes[i]
+
+                let joinRelation = DSParamsModel.fetchJoinRelation(fi)
+                let joinValue = DSParamsModel.fetchJoinValue(fi)
+                let joinSlug = DSParamsModel.fetchJoinRelationSlug(fi)
+                let includeNull = false
+                let exclude = DSParamsModel.getExcludeMap(fi)[fi] === "1" ? true : false
+
+                singleRelation = joinRelation[fi]
+                singleValue = joinValue[fi]
+                singleSlug = joinSlug[fi]
+
+                console.log("Mode 2", DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, fi, DSParamsModel.filterModelIndex)
                 manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, 0, fi, DSParamsModel.filterModelIndex)
             }
 
             break
 
-        case Constants.dateMainTimeFrameType:
-            singleRelation = joinRelation[counter]
-            singleValue = joinValue[counter]
-            singleSlug = joinSlug[counter]
-            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, 0, counter, DSParamsModel.filterModelIndex)
-            break
 
         default:
             break
@@ -252,7 +258,7 @@ Popup {
 
     function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, dateFormatId, counter = 0, filterId = 0){
 
-//        console.log(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, "FILTER LIST INSERT/UPDATE")
+        //        console.log(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, "FILTER LIST INSERT/UPDATE")
 
         // Save the filter
         if(mode === Constants.modeCreate){

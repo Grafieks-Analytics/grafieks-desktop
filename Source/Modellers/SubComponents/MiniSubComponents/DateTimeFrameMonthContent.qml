@@ -12,6 +12,7 @@ Column{
     anchors.left: parent.left
     anchors.leftMargin: 80
     anchors.topMargin: 30
+    property int counter: 0
 
 
     /***********************************************************************************************************************/
@@ -48,6 +49,14 @@ Column{
             lastXRadio.checked = false
             lastXRadioTextField.text = ""
 
+        }
+
+        function onInternalCounterChanged(){
+            counter = DSParamsModel.internalCounter
+        }
+
+        function onFilterIndexChanged(){
+            counter = DSParamsModel.filterIndex
         }
     }
 
@@ -128,9 +137,9 @@ Column{
 
         DSParamsModel.setTimeFrame("Last " + value + " Month", lastXMonths.toString())
         DSParamsModel.setSubCategory("Month")
-        DSParamsModel.addToJoinValue(mapKey, "Last " + value + " Month")
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinValue(counter, "Last " + value + " Month")
+        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = true
@@ -169,9 +178,9 @@ Column{
         console.log(nextXMonths.toString())
         DSParamsModel.setTimeFrame("Next " + value + " Month", nextXMonths.toString())
         DSParamsModel.setSubCategory("Month")
-        DSParamsModel.addToJoinValue(mapKey, "Next " + value + " Month")
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinValue(counter, "Next " + value + " Month")
+        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
 
         nextXRadioTextField.focus = true
         lastXRadioTextField.focus = false
@@ -194,9 +203,9 @@ Column{
 
         DSParamsModel.setTimeFrame("This Month", newValue.toString())
         DSParamsModel.setSubCategory("Month")
-        DSParamsModel.addToJoinValue(mapKey, "This Month")
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinValue(counter, "This Month")
+        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -227,9 +236,9 @@ Column{
 
         DSParamsModel.setTimeFrame("Last Month", newValue.toString())
         DSParamsModel.setSubCategory("Month")
-        DSParamsModel.addToJoinValue(mapKey, "Last Month")
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinValue(counter, "Last Month")
+        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -260,9 +269,9 @@ Column{
 
         DSParamsModel.setTimeFrame("Next Month", newValue.toString())
         DSParamsModel.setSubCategory("Month")
-        DSParamsModel.addToJoinValue(mapKey, "Next Month")
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinValue(counter, "Next Month")
+        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
