@@ -20,17 +20,22 @@ Popup {
     padding: 0
     closePolicy: Popup.NoAutoClose
 
+    property var currentIndex;
+
     background: Rectangle{
         color: Constants.whiteColor
     }
 
 
+
+
+
 //    ListModel{
 //        id: dataItemList
-//        ListElement{
-//            colorValue: "blue"
-//            dataItemName: colorData
-//        }
+////        ListElement{
+////            colorValue: "blue"
+////            dataItemName: "Total Discount"
+////        }
 ////        ListElement{
 ////            colorValue: "green"
 ////            dataItemName: "Total Discount"
@@ -141,8 +146,15 @@ Popup {
 
     function selectColorPallete(schemeName,colorPallete){
         d3PropertyConfig.d3colorPalette = JSON.parse(colorPallete);
+        d3PropertyConfig.tooltipColumn1="tooltest";
         console.log("color"+d3PropertyConfig.d3colorPalette)
-//        console.log("colorData",colorData)
+        console.log("colorData3",colorData)
+        Constants.d3ColorPalette = JSON.parse(colorPallete)
+//        colorData.forEach(function (element,index) {
+
+//            dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
+//        });
+
         reDrawChart();
     }
 
@@ -176,6 +188,24 @@ Popup {
 
     ColorDialog{
         id: colorSchemeDialog
+
+        onColorChanged: {
+            console.log("colorChanged",color,currentIndex)
+              Constants.d3ColorPalette[currentIndex]=color.toString();
+            console.log("constantcolor1",Constants.d3ColorPalette)
+//                      d3PropertyConfig.d3colorPalette = JSON.parse(colorPallete);
+            d3PropertyConfig.d3colorPalette =  Constants.d3ColorPalette;
+            drawChart()
+
+        }
+//        on__ValueSetChanged: {
+//            console.log("colorChanged1",color,currentIndex)
+//            Constants.d3ColorPalette[currentIndex]=color;
+//            console.log("constantcolor",Constants.d3ColorPalette)
+//            drawChart()
+
+//        }
+
     }
 
 
@@ -260,8 +290,9 @@ Popup {
                 border.width: 2
 
                 ListView{
+                    id:colorByDataItem
                     anchors.fill: parent
-                    model: colorData
+                    model: dataItemList
                     spacing: 10
                     topMargin: 15
                     delegate: Row{
@@ -275,24 +306,31 @@ Popup {
                             height: 20
                             width: parent.width - parent.leftPadding - 10
 
-//                            Rectangle{
-//                                id: colorBox
-//                                anchors.left: parent.left
-//                                height: 20
-//                                width: 20
-//                                color: colorValue
-//                            }
+
+                            Rectangle{
+                                id: colorBox
+                                anchors.left: parent.left
+                                height: 20
+                                width: 20
+                                color: colorValue
+                            }
 
                             Text {
                                 id: text
-                                text: colorData[index]
+                                text: dataItemName
                                 anchors.left: colorBox.right
                                 anchors.leftMargin: 10
                                 anchors.verticalCenter: parent.verticalCenter
                             }
                             MouseArea{
                                 anchors.fill: parent
-                                onClicked: colorSchemeDialog.open()
+                                onClicked: {
+
+                                    console.log("index",index)
+                                    currentIndex=index;
+                                    colorSchemeDialog.open()
+
+                                }
                             }
                         }
 
