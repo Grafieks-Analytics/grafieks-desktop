@@ -4,6 +4,7 @@
 #include <QVariant>
 #include <QObject>
 #include <QDebug>
+#include <QStringList>
 
 /*!
  * \brief Roles required for FilterCategoricalList
@@ -41,7 +42,6 @@ class FilterCategoricalList : public QObject
     QString m_value;
     bool m_includeNull;
     bool m_exclude;
-
 
 
 public:
@@ -87,6 +87,7 @@ signals:
     void valueChanged(QString value);
     void includeNullChanged(bool includeNull);
     void excludeChanged(bool exclude);
+
 
 };
 

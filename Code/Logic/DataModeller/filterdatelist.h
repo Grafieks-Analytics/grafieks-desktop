@@ -4,6 +4,7 @@
 #include <QVariant>
 #include <QObject>
 #include <QDebug>
+#include <QStringList>
 
 /*!
  * \brief Roles required for FilterDateList
@@ -26,7 +27,7 @@ class FilterDateList : public QObject
     Q_PROPERTY(QString relation READ relation WRITE setRelation NOTIFY relationChanged)
     Q_PROPERTY(QString slug READ slug WRITE setSlug NOTIFY slugChanged)
     Q_PROPERTY(QString value READ value WRITE setValue NOTIFY valueChanged)
-    Q_PROPERTY(QString actualValue READ actualValue WRITE setActualValue NOTIFY actualValueChanged)
+    Q_PROPERTY(QStringList actualValue READ actualValue WRITE setActualValue NOTIFY actualValueChanged)
     Q_PROPERTY(bool includeNull READ includeNull WRITE setIncludeNull NOTIFY includeNullChanged)
     Q_PROPERTY(bool exclude READ exclude WRITE setExclude NOTIFY excludeChanged)
 
@@ -42,7 +43,7 @@ class FilterDateList : public QObject
     QString m_relation;
     QString m_slug;
     QString m_value;
-    QString m_actualValue;
+    QStringList m_actualValue;
     bool m_includeNull;
     bool m_exclude;
 
@@ -60,7 +61,7 @@ public:
     QString relation() const;
     QString slug() const;
     QString value() const;
-    QString actualValue() const;
+    QStringList actualValue() const;
     bool includeNull() const;
     bool exclude() const;
 
@@ -76,7 +77,7 @@ public slots:
     void setRelation(QString relation);
     void setSlug(QString slug);
     void setValue(QString value);
-    void setActualValue(QString actualValue);
+    void setActualValue(QStringList actualValue);
     void setIncludeNull(bool includeNull);
     void setExclude(bool exclude);
 
@@ -93,7 +94,7 @@ signals:
     void relationChanged(QString relation);
     void slugChanged(QString slug);
     void valueChanged(QString value);
-    void actualValueChanged(QString actualValue);
+    void actualValueChanged(QStringList actualValue);
     void includeNullChanged(bool includeNull);
     void excludeChanged(bool exclude);
 
