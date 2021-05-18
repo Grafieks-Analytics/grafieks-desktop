@@ -150,11 +150,6 @@ Popup {
         console.log("color"+d3PropertyConfig.d3colorPalette)
         console.log("colorData3",colorData)
         Constants.d3ColorPalette = JSON.parse(colorPallete)
-//        colorData.forEach(function (element,index) {
-
-//            dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
-//        });
-
         reDrawChart();
     }
 
