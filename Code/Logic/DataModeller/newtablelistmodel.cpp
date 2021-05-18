@@ -70,6 +70,10 @@ QStringList NewTableListModel::getTableList()
 
     this->tables = dbCon.tables();
 
+    // Remove unwanted default tables
+    this->tables.removeAll("trace_xe_action_map");      // MSSql
+    this->tables.removeAll("trace_xe_event_map");       // MSSql
+
     return this->tables;
 }
 
