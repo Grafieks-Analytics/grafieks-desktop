@@ -46,16 +46,16 @@ class DSParamsModel : public QObject
     QMap<int, QVariant> newJoinBox;                // Join box between 2 rectangles
 
     // Standalone variables for Filters
-    QVariantMap joinRelation;           // Condition link between parameter and value in a query. eg, =, !=, LIKE, etc
-    QVariantMap joinValue;              // Right side parameter of the comparison (the actual value)
-    QVariantMap joinRelationSlug;       // Single syllable entity for human readable entity. eg, in Categorical-Wildcard, Slug for `Ends With` is `endswith` and `Equal To` is `equalto`
-    QMap<int, bool> excludeMap;         // Map for exclude all checks, QMap<filterId, bool>
-    QMap<int, bool> includeNullMap;     // Map for include nulls, QMap<filterId, bool>
-    QMap<int, bool> selectAllMap;       // Map for select alls, QMap<filterId, bool>
-    QStringList tmpSelectedValues;      // Tmp selected values in a filter list - used in categorical filter list
-    QVector<int> tmpFilterIndex;        // Tmp created filter index - used in categorical filter wildcard
-    QMap<int, int> dateFormatMap;       // Date selected format QMap<filterId, formatId>
-    QVariantMap timeFrameMap;
+    QVariantMap joinRelation;                   // Condition link between parameter and value in a query. eg, =, !=, LIKE, etc
+    QVariantMap joinValue;                      // Right side parameter of the comparison (the actual value)
+    QVariantMap joinRelationSlug;               // Single syllable entity for human readable entity. eg, in Categorical-Wildcard, Slug for `Ends With` is `endswith` and `Equal To` is `equalto`
+    QMap<int, bool> excludeMap;                 // Map for exclude all checks, QMap<filterId, bool>
+    QMap<int, bool> includeNullMap;             // Map for include nulls, QMap<filterId, bool>
+    QMap<int, bool> selectAllMap;               // Map for select alls, QMap<filterId, bool>
+    QStringList tmpSelectedValues;              // Tmp selected values in a filter list - used in categorical filter list
+    QVector<int> tmpFilterIndex;                // Tmp created filter index - used in categorical filter wildcard
+    QMap<int, int> dateFormatMap;               // Date selected format QMap<filterId, formatId>
+    QMap<int, QString> actualDateValues;        // For dates like This year, last 10 years, quarter, etc, the original values are stored in this variable
 
     // Q_PROPERTY variables
 
@@ -218,9 +218,9 @@ public:
     Q_INVOKABLE void removeValueFormat(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE int getDateFormatMap(int refObjId);
 
-    Q_INVOKABLE void setTimeFrame(QString dummy, QString actual);
-    Q_INVOKABLE void removeTimeFrame(QString key);
-    Q_INVOKABLE QVariantMap getTimeFrameMap();
+    Q_INVOKABLE void setActualDateValues(int refObjId, QString value);
+    Q_INVOKABLE void removeActualDateValues(int refObjId, bool removeAll = false);
+    Q_INVOKABLE QString getActualDateValues(int refObjId);
 
     Q_INVOKABLE void setExcludeMap(int refObjId, bool value = false);
     Q_INVOKABLE void removeExcludeMap(int refObjId);

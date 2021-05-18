@@ -28,6 +28,11 @@ QString FilterDateList::value() const
     return m_value;
 }
 
+QString FilterDateList::actualValue() const
+{
+    return m_actualValue;
+}
+
 bool FilterDateList::includeNull() const
 {
     return m_includeNull;
@@ -102,6 +107,15 @@ void FilterDateList::setValue(QString value)
 
     m_value = value;
     emit valueChanged(m_value);
+}
+
+void FilterDateList::setActualValue(QString actualValue)
+{
+    if (m_actualValue == actualValue)
+        return;
+
+    m_actualValue = actualValue;
+    emit actualValueChanged(m_actualValue);
 }
 
 void FilterDateList::setIncludeNull(bool includeNull)
