@@ -140,6 +140,11 @@ Rectangle{
         target: QueryDataModel
 
         function onColumnListModelDataChanged(colData, options){
+
+            // Just to reset the data if the previous `colData` and the new `colData` are same
+            singleSelectCheckList.model = []
+            multiSelectCheckList.model = []
+
             selectedFormat = DSParamsModel.getDateFormatMap(counter)
             customBox.currentIndex = selectedFormat
 

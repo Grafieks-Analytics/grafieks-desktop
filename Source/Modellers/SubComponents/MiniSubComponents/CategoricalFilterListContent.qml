@@ -86,6 +86,10 @@ Rectangle{
 
         function onColumnListModelDataChanged(colData, options){
 
+            // Just to reset the data if the previous `colData` and the new `colData` are same
+            singleSelectCheckList.model = []
+            multiSelectCheckList.model = []
+
             singleSelectCheckList.model = colData
             multiSelectCheckList.model  = colData
 
@@ -97,6 +101,7 @@ Rectangle{
                 multiSelectCheckList.visible = true
                 singleSelectCheckList.visible = false
 
+                console.log(jsonOptions.values, "VALS JSON")
                 if(jsonOptions.values.length > 0){
                     var checkedValues = jsonOptions.values.split(",")
                     checkedValues.forEach((item) => {
@@ -135,6 +140,7 @@ Rectangle{
     function slotDataCleared(){
         DSParamsModel.removeTmpSelectedValues(0, true)
         radioSelected = ""
+        console.log(DSParamsModel.getTmpSelectedValues(0), "TMP SELECTED")
     }
 
     function onMultiSelectSelected(){
@@ -221,7 +227,6 @@ Rectangle{
                 // Start pushing the individual checked item in the array
                 if(DSParamsModel.searchTmpSelectedValues(modelData) < 0){
                     DSParamsModel.setTmpSelectedValues(modelData)
-                    console.log(DSParamsModel.getTmpSelectedValues(0, true), "VALUES FETCHES")
                 }
 
             } else{
