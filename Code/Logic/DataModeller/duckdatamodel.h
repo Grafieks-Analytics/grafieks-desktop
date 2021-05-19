@@ -39,9 +39,6 @@ public:
     Q_INVOKABLE QStringList getDbList();
 
 
-public slots:
-    void receiveCsvFilterQuery(QString query);
-
 signals:
     void duckColData(QStringList colData);
     void columnListObtained(QList<QStringList> allColumns, QString tableName, QString moduleName);
