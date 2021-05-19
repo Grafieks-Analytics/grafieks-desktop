@@ -7,9 +7,11 @@ ListView{
 
     flickableDirection: Flickable.VerticalFlick
             boundsBehavior: Flickable.StopAtBounds
-            interactive: true
-             clip: true
+            interactive: false
+             clip: false
              ScrollBar.vertical: ScrollBar {}
+
+
 
     property string itemType: "Numerical"
 

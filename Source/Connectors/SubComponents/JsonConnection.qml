@@ -125,20 +125,20 @@ Popup {
 
 
 
-        Rectangle{
+//        Rectangle{
 
-            id: name1
-            width:label_col
-            height: 40
+//            id: name1
+//            width:label_col
+//            height: 40
 
-            Text{
-                text: "Json"
-                anchors.left: parent.left
-                anchors.leftMargin: 10
-                font.pixelSize: Constants.fontCategoryHeader
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
+//            Text{
+//                text: "Json"
+//                anchors.left: parent.left
+//                anchors.leftMargin: 10
+//                font.pixelSize: Constants.fontCategoryHeader
+//                anchors.verticalCenter: parent.verticalCenter
+//            }
+//        }
         Rectangle{
 
                   id: name2
@@ -164,7 +164,7 @@ Popup {
             anchors.left: parent.left
                         anchors.leftMargin:  10
                         anchors.verticalCenter: parent.verticalCenter
-            text:"cbxcf gc gh "
+            text:""
         }
         }
 
