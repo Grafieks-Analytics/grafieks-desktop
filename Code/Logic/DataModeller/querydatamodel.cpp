@@ -89,7 +89,6 @@ QStringList QueryDataModel::getData(QString queryString)
         qWarning() << Q_FUNC_INFO << query.lastError();
     }
 
-    qDebug() << "RESULTS" << this->colData;
     output = this->colData;
     this->colData.clear();
     return output;

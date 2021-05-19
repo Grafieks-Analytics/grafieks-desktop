@@ -49,6 +49,8 @@ QVariant FilterDateListModel::data(const QModelIndex &index, int role) const
         return filterList->slug();
     if( role == FilterListValueRole)
         return filterList->value();
+    if(role == FilterListActualValueRole)
+        return filterList->actualValue();
     if( role == FilterListIncludeNullRole)
         return filterList->includeNull();
     if( role == FilterListExcludeRole)
@@ -145,6 +147,17 @@ bool FilterDateListModel::setData(const QModelIndex &index, const QVariant &valu
         break;
     }
 
+    case FilterListActualValueRole:
+    {
+
+        if( filterList->actualValue()!= value.toString() ){
+            qDebug() << value.toString() << "Actual value insert";
+            filterList->setActualValue(value.toString());
+            somethingChanged = true;
+        }
+        break;
+    }
+
     case FilterListIncludeNullRole:
     {
         if( filterList->includeNull()!= value.toBool()){
@@ -193,6 +206,7 @@ QHash<int, QByteArray> FilterDateListModel::roleNames() const
     roles[FilterListRelationRole] = "relation";
     roles[FilterListSlugRole] = "slug";
     roles[FilterListValueRole] = "value";
+    roles[FilterListActualValueRole] = "actualValue";
     roles[FilterListIncludeNullRole] = "includeNull";
     roles[FilterListExcludeRole] = "exclude";
 
@@ -203,8 +217,8 @@ QHash<int, QByteArray> FilterDateListModel::roleNames() const
 
 void FilterDateListModel::newFilter(int counter, int dateFormatId, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, QString actualValue, bool includeNull, bool exclude )
 {
-
-    addFilterList(new FilterDateList(counter, dateFormatId, section, category, subcategory, tableName, colName, relation, slug, val, includeNull, exclude, this));
+    qDebug() << actualValue << "Actual value request";
+    addFilterList(new FilterDateList(counter, dateFormatId, section, category, subcategory, tableName, colName, relation, slug, val, actualValue, includeNull, exclude, this));
     emit rowCountChanged();
 
 
@@ -239,8 +253,10 @@ void FilterDateListModel::updateFilter(int FilterIndex, int dateFormatId, QStrin
         mFilter[FilterIndex]->setSlug(slug);
     if(value != "")
         mFilter[FilterIndex]->setValue(value);
-    if(actualValue != "")
+    if(actualValue != ""){
         mFilter[FilterIndex]->setActualValue(actualValue);
+        qDebug() << "ACtual Value" << actualValue;
+    }
 
     mFilter[FilterIndex]->setIncludeNull(includeNull);
     mFilter[FilterIndex]->setExclude(exclude);
@@ -261,132 +277,77 @@ QString FilterDateListModel::callQueryModel()
     QString value;
     QString tmpValue;
 
-    QSet <QString> weekDays = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-
     foreach(filter, mFilter){
 
         QString category = filter->category();
+        QString finalValue = "";
 
-        if(category == "date.timeframe"){
+        if(category == Constants::dateMainTimeFrameType){
 
             QString subCategory = filter->subCategory();
 
-            if(subCategory == "Year"){
-                QString newValue = this->timeFrameMap[filter->value()].toString();
-                QStringList yearValues = newValue.split(",");
-                QString year;
-                if(yearValues.length() <= 1){
-                    foreach(year, yearValues){
-                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), year + "%", filter->exclude(), filter->includeNull());
-                    }
-                }
-                else{
-                    newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), yearValues[0] + "%", filter->exclude(), filter->includeNull());
-                    for(int i = 1; i < yearValues.length(); i++){
-                        newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), yearValues[i] + "%", filter->exclude(), filter->includeNull());
-                    }
+            if(subCategory == Constants::dateSubYear){
+
+                if(filter->relation().contains("between", Qt::CaseInsensitive)){
+                    QStringList years =  filter->actualValue().split(",");
+                    QString year1 = years[0];
+                    QString year2 = years[1];
+                    finalValue = year1 + "' AND '" + year2;
+                } else{
+                    finalValue = "%" + filter->actualValue() + "%";
                 }
             }
-            else if(subCategory == "Quarter"){
-                QString newValue = this->timeFrameMap[filter->value()].toString();
-                QStringList quarterValues = newValue.split(",");
-                QString quarter;
-                if(quarterValues.length() <= 1){
-                    foreach(quarter, quarterValues){
-                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), quarter + "%", filter->exclude(), filter->includeNull());
-                    }
-                }
-                else{
-                    newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), quarterValues[0] + "%", filter->exclude(), filter->includeNull());
-                    for(int i = 1; i < quarterValues.length(); i++){
-                        newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), quarterValues[i] + "%", filter->exclude(), filter->includeNull());
-                    }
-                }
+            else if(subCategory == Constants::dateSubQuarter){
+
+                QStringList quarters =  filter->actualValue().split(",");
+                QString q1 = quarters[0];
+                QString q2 = quarters[1];
+                finalValue = q1 + "' AND '" + q2;
+
             }
-            else if(subCategory == "Month"){
-                QString newValue = this->timeFrameMap[filter->value()].toString();
-                QStringList monthValues = newValue.split(",");
-                QString month;
-                if(monthValues.length() <= 1){
-                    foreach(month, monthValues){
-                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), month + "%", filter->exclude(), filter->includeNull());
-                    }
-                }
-                else{
-                    newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), monthValues[0] + "%", filter->exclude(), filter->includeNull());
-                    for(int i = 1; i < monthValues.length(); i++){
-                        newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), monthValues[i] + "%", filter->exclude(), filter->includeNull());
-                    }
-                }
+            else if(subCategory == Constants::dateSubMonth){
+                QStringList months =  filter->actualValue().split(",");
+                QString m1 = months[0];
+                QString m2 = months[1];
+                finalValue = m1 + "' AND '" + m2;
+
+
             }
             else{
-                QString newValue = this->timeFrameMap[filter->value()].toString();
-                QStringList dayValues = newValue.split(",");
-                QString day;
-                if(dayValues.length() <= 1){
-                    foreach(day, dayValues){
-                        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), day + "%", filter->exclude(), filter->includeNull());
-                    }
+                if(filter->relation().contains("between", Qt::CaseInsensitive)){
+                    QStringList days =  filter->actualValue().split(",");
+                    QString d1 = days[0];
+                    QString d2 = days[1];
+                    finalValue = d1 + "' AND '" + d2;
+                } else{
+                    finalValue = "%" + filter->actualValue() + "%";
                 }
-                else{
-                    newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), dayValues[0] + "%", filter->exclude(), filter->includeNull());
-                    for(int i = 1; i < dayValues.length(); i++){
-                        newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), dayValues[i] + "%", filter->exclude(), filter->includeNull());
-                    }
-                }
+
+
             }
         }
-        else if(category == "date.calendar"){
+        else if(category == Constants::dateMainCalendarType){
 
-            QStringList dateRange = filter->value().split(" To ");
+            QStringList dateRange = filter->value().split(",");
             QStringList tmpFromDate = dateRange[0].split("/");
             QString fromDate = tmpFromDate[2] + "-" + tmpFromDate[1] + "-" + tmpFromDate[0];
             tmpFromDate = dateRange[1].split("/");
             QString toDate  = tmpFromDate[2] + "-" + tmpFromDate[1] + "-" + tmpFromDate[0];
-            QString newValue = fromDate + "'" + " AND " + "'" + toDate;
-            newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), newValue, filter->exclude(), filter->includeNull());
+            QString finalValue = fromDate + "'" + " AND " + "'" + toDate;
 
         }
         else{
-            if(filter->value().indexOf(',') > -1)
-            {
-                QStringList dateValue;
-                dateValue = filter->value().split(',');
-                qDebug() << "FVALUE" << filter->value();
 
-                bool initialValue = true;
-                if(weekDays.contains(dateValue[0]))
-                {
-                    for(int i = 0; i < dateValue.length() - 1; i += 2)
-                    {
-                        tmpValue = dateValue[i] + "," + dateValue[i+1];
-                        tmpValue = this->getFilteredValue(tmpValue);
-
-                        if(initialValue)
-                        {
-                            initialValue = false;
-                            newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
-                        }
-                        else if(filter->exclude() == true)
-                            newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
-                        else
-                            newWhereConditions += " OR " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), tmpValue, filter->exclude(), filter->includeNull());
-                    }
-                }
-                else
-                {
-                    qDebug() << "DATE VALUE" <<dateValue;
-                    newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), dateValue.join(","), filter->exclude(), filter->includeNull());
-                }
-
-            }
-            else
-            {
-                value = this->getFilteredValue(filter->value());
-                newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), value, filter->exclude(), filter->includeNull());
-            }
+            QStringList dateValue;
+            dateValue = filter->value().split(',');
+            finalValue = dateValue.join(",");
         }
+
+        newWhereConditions += " AND " + this->setRelation(filter->tableName(), filter->columnName(), filter->relation(), finalValue, filter->exclude(), filter->includeNull());
+
     }
+
+
 
     return newWhereConditions;
 }
@@ -419,127 +380,6 @@ void FilterDateListModel::addFilterList(FilterDateList *filter)
     endInsertRows();
 
     emit rowCountChanged();
-}
-
-QString FilterDateListModel::getFilteredValue(QString val)
-{
-    QString format = this->dateFormatMap[val].toString();
-
-    QMap <QString, QString> monthToIndex;
-    monthToIndex.insert("January", "01");
-    monthToIndex.insert("February", "02");
-    monthToIndex.insert("March", "03");
-    monthToIndex.insert("April", "04");
-    monthToIndex.insert("May", "05");
-    monthToIndex.insert("June", "06");
-    monthToIndex.insert("July", "07");
-    monthToIndex.insert("August", "08");
-    monthToIndex.insert("September", "09");
-    monthToIndex.insert("October", "10");
-    monthToIndex.insert("November", "11");
-    monthToIndex.insert("December", "12");
-
-    QString value = val;
-    QStringList dateFormatList;
-
-    if(format == "DD/MM/YYYY")
-    {
-        dateFormatList = value.split("/");
-        value = dateFormatList[2] + "-" + dateFormatList[1] + "-" + dateFormatList[0] + "%";
-    }
-    else if(format == "DD MMMM YYYY")
-    {
-        dateFormatList = value.split(" ");
-        value = dateFormatList[2] + "-" + monthToIndex[dateFormatList[1]] + "-" + dateFormatList[0] + "%";
-    }
-    else if(format == "D MMMM YYYY")
-    {
-        dateFormatList = value.split(" ");
-
-        if(dateFormatList[0].length() == 1)
-            value = dateFormatList[2] + "-" + monthToIndex[dateFormatList[1]] + "-" + "0" + dateFormatList[0] + "%";
-        else
-            value = dateFormatList[2] + "-" + monthToIndex[dateFormatList[1]] + "-" + dateFormatList[0] + "%";
-    }
-    else if(format == "dddd, D MMMM YYYY")
-    {
-        dateFormatList = value.split(" ");
-
-        if(dateFormatList[1].length() == 1)
-            value = dateFormatList[3] + "-" + monthToIndex[dateFormatList[2]] + "-" + "0" + dateFormatList[1] + "%";
-        else
-            value = dateFormatList[3] + "-" + monthToIndex[dateFormatList[2]] + "-" + dateFormatList[1] + "%";
-    }
-    else if(format == "dddd, DD MMMM YYYY")
-    {
-        dateFormatList = value.split(" ");
-        value = dateFormatList[3] + "-" + monthToIndex[dateFormatList[2]] + "-" + dateFormatList[1] + "%";
-    }
-    else if(format == "DD/MM/YY")
-    {
-        dateFormatList = value.split("/");
-        value = "%" + dateFormatList[2] + "-" + dateFormatList[1] + "-" + dateFormatList[0]+ "%";
-    }
-    else if(format == "D/M/YY")
-    {
-        dateFormatList = value.split("/");
-
-        if(dateFormatList[0].length() == 1 && dateFormatList[1].length() == 1)
-            value = "%" + dateFormatList[2] + "-" + "0" + dateFormatList[1] + "-" + "0" + dateFormatList[0]+ "%";
-        else if(dateFormatList[0].length() == 1)
-            value = "%" + dateFormatList[2] + "-" + dateFormatList[1] + "-" + "0" + dateFormatList[0]+ "%";
-        else
-            value = "%" + dateFormatList[2] + "-" + "0" + dateFormatList[1] + "-" + dateFormatList[0]+ "%";
-    }
-    else if(format == "D.M.YY")
-    {
-        dateFormatList = value.split(".");
-
-        if(dateFormatList[0].length() == 1 && dateFormatList[1].length() == 1)
-            value = "%" + dateFormatList[2] + "-" + "0" + dateFormatList[1] + "-" + "0" + dateFormatList[0]+ "%";
-        else if(dateFormatList[0].length() == 1)
-            value = "%" + dateFormatList[2] + "-" + dateFormatList[1] + "-" + "0" + dateFormatList[0]+ "%";
-        else
-            value = "%" + dateFormatList[2] + "-" + "0" + dateFormatList[1] + "-" + dateFormatList[0]+ "%";
-    }
-    else if(format == "YYYY-MM-DD")
-    {
-        dateFormatList = value.split("-");
-        value = dateFormatList[0] + "-" + dateFormatList[1] + "-" + dateFormatList[2]+ "%";
-    }
-    else if(format == "MMMM YYYY")
-    {
-        dateFormatList = value.split(" ");
-        value = dateFormatList[1] + "-" + monthToIndex[dateFormatList[0]] + "%";
-    }
-    else if(format == "D MMMM")
-    {
-        dateFormatList = value.split(" ");
-
-        if(dateFormatList[0].length() == 1)
-            value = "%-" + monthToIndex[dateFormatList[1]] + "-" + "0" + dateFormatList[0] + "%";
-        else
-            value = "%-" + monthToIndex[dateFormatList[1]] + "-" + dateFormatList[0] + "%";
-    }
-    else if(format == "YY")
-    {
-        value = "%" + value + "-" + "%";
-    }
-    else if(format == "YYYY")
-    {
-        value = value + "%";
-    }
-    else if(format == "DD/MM/YYYY hh:mm:ss")
-    {
-        dateFormatList = value.split(" ");
-        QString newValue = dateFormatList[0];
-        QStringList newDateFormatList = newValue.split("/");
-        newValue = newDateFormatList[2] + "-" + newDateFormatList[1] + "-" + newDateFormatList[0];
-        value = newValue + " " + dateFormatList[1] + "%";
-    }
-    else{}
-
-    return value;
 }
 
 

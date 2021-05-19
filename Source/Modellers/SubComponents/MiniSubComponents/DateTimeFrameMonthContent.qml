@@ -103,6 +103,10 @@ Column{
         }
     }
 
+    function daysInMonth (month, year) {
+        return new Date(year, month, 0).getDate();
+    }
+
     function onLastXChecked(){
 
         var value = lastXRadioTextField.text
@@ -120,26 +124,32 @@ Column{
             if(thisMonth === 1){
                 thisYear = thisYear - 1
                 thisMonth = 12
-                tmpValue = thisYear.toString() + "-" + thisMonth.toString()
-                lastXMonths.push(tmpValue)
+                tmpValue = thisYear.toString() + "-" + thisMonth.toString() + "-" + daysInMonth(thisMonth, thisYear)
+//                lastXMonths.push(tmpValue)
             }
             else{
                 thisMonth = thisMonth - 1
                 if(thisMonth < 10){
-                    tmpValue = thisYear.toString() + "-" + "0" + thisMonth.toString()
+                    tmpValue = thisYear.toString() + "-" + "0" + thisMonth.toString() + "-" + daysInMonth(thisMonth, thisYear)
                 }
                 else{
-                    tmpValue = thisYear.toString() + "-" + thisMonth.toString()
+                    tmpValue = thisYear.toString() + "-" + thisMonth.toString() + "-" + daysInMonth(thisMonth, thisYear)
                 }
-                lastXMonths.push(tmpValue)
+
             }
+
+            lastXMonths.push(tmpValue)
+
         }
 
         lastXMonths.sort()
+        var firstValueArray = lastXMonths[0].split("-")
+        var firstValue = firstValueArray[0] + "-" + firstValueArray[1] + "-01"
+        var finalValue = firstValue + "," + lastXMonths[lastXMonths.length - 1]
 
         console.log("Last " + value + " Months", lastXMonths.toString())
-        DSParamsModel.setSubCategory(Constants.categorySubMonth)
-        DSParamsModel.setActualDateValues(counter, lastXMonths[0], lastXMonths[lastXMonths.length - 1])
+        DSParamsModel.setSubCategory(Constants.dateSubMonth)
+        DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Last " + value + " Months")
         DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
@@ -166,26 +176,29 @@ Column{
             if(thisMonth === 12){
                 thisYear = thisYear + 1
                 thisMonth = 1
-                tmpValue = thisYear.toString() + "-" + "0" + thisMonth.toString()
+                tmpValue = thisYear.toString() + "-" + "0" + thisMonth.toString() + "-" + daysInMonth(thisMonth, thisYear)
                 nextXMonths.push(tmpValue)
             }
             else{
                 thisMonth = thisMonth + 1
                 if(thisMonth < 10){
-                    tmpValue = thisYear.toString() + "-" + "0" + thisMonth.toString()
+                    tmpValue = thisYear.toString() + "-" + "0" + thisMonth.toString() + "-" + daysInMonth(thisMonth, thisYear)
                 }
                 else{
-                    tmpValue = thisYear.toString() + "-" + thisMonth.toString()
+                    tmpValue = thisYear.toString() + "-" + thisMonth.toString() + "-" + daysInMonth(thisMonth, thisYear)
                 }
                 nextXMonths.push(tmpValue)
             }
         }
 
         nextXMonths.sort()
+        var firstValueArray = nextXMonths[0].split("-")
+        var firstValue = firstValueArray[0] + "-" + firstValueArray[1] + "-01"
+        var finalValue = firstValue + "," + nextXMonths[nextXMonths.length - 1]
 
         console.log("Next " + value + " Month", nextXMonths.toString())
-        DSParamsModel.setSubCategory(Constants.categorySubMonth)
-        DSParamsModel.setActualDateValues(counter, nextXMonths[0], nextXMonths[nextXMonths.length - 1])
+        DSParamsModel.setSubCategory(Constants.dateSubMonth)
+        DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Next " + value + " Months")
         DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
@@ -203,19 +216,22 @@ Column{
         var newValue;
 
         if(thisMonth < 10){
-            newValue = thisYear.toString() + "-" + "0" + thisMonth.toString()
+            newValue = thisYear.toString() + "-" + "0" + thisMonth.toString() + "-" + daysInMonth(thisMonth, thisYear)
         }
         else{
-            newValue = thisYear.toString() + "-" + thisMonth.toString()
+            newValue = thisYear.toString() + "-" + thisMonth.toString() + "-" + daysInMonth(thisMonth, thisYear)
         }
 
+        var firstValueArray = newValue.split("-")
+        var firstValue = firstValueArray[0] + "-" + firstValueArray[1] + "-01"
+        var finalValue = firstValue + "," + newValue
 
         console.log("This Month", newValue)
-        DSParamsModel.setSubCategory(Constants.categorySubMonth)
-        DSParamsModel.setActualDateValues(counter, newValue)
+        DSParamsModel.setSubCategory(Constants.dateSubMonth)
+        DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "This Month")
-        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -232,24 +248,28 @@ Column{
         if(thisMonth === 1){
             thisYear = thisYear - 1
             thisMonth = 12
-            newValue = thisYear.toString() + "-" + thisMonth.toString()
+            newValue = thisYear.toString() + "-" + thisMonth.toString() + "-" + daysInMonth(thisMonth, thisYear)
         }
         else{
             thisMonth = thisMonth - 1
             if(thisMonth < 10){
-                newValue = thisYear.toString() + "-" + "0" + thisMonth.toString()
+                newValue = thisYear.toString() + "-" + "0" + thisMonth.toString() + "-" + daysInMonth(thisMonth, thisYear)
             }
             else{
-                newValue = thisYear.toString() + "-" + thisMonth.toString()
+                newValue = thisYear.toString() + "-" + thisMonth.toString() + "-" + daysInMonth(thisMonth, thisYear)
             }
         }
 
+        var firstValueArray = newValue.split("-")
+        var firstValue = firstValueArray[0] + "-" + firstValueArray[1] + "-01"
+        var finalValue = firstValue + "," + newValue
+
         console.log("Last Month", newValue)
-        DSParamsModel.setSubCategory(Constants.categorySubMonth)
-        DSParamsModel.setActualDateValues(counter, newValue)
+        DSParamsModel.setSubCategory(Constants.dateSubMonth)
+        DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Last Month")
-        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -266,24 +286,28 @@ Column{
         if(thisMonth === 12){
             thisYear = thisYear + 1
             thisMonth = 1
-            newValue = thisYear.toString() + "-" + "0" + thisMonth.toString()
+            newValue = thisYear.toString() + "-" + "0" + thisMonth.toString() + "-" + daysInMonth(thisMonth, thisYear)
         }
         else{
             thisMonth = thisMonth + 1
             if(thisMonth < 10){
-                newValue = thisYear.toString() + "-" + "0" + thisMonth.toString()
+                newValue = thisYear.toString() + "-" + "0" + thisMonth.toString() + "-" + daysInMonth(thisMonth, thisYear)
             }
             else{
-                newValue = thisYear.toString() + "-" + thisMonth.toString()
+                newValue = thisYear.toString() + "-" + thisMonth.toString() + "-" + daysInMonth(thisMonth, thisYear)
             }
         }
 
+        var firstValueArray = newValue.split("-")
+        var firstValue = firstValueArray[0] + "-" + firstValueArray[1] + "-01"
+        var finalValue = firstValue + "," + newValue
+
         console.log("Next Month", newValue)
-        DSParamsModel.setSubCategory(Constants.categorySubMonth)
-        DSParamsModel.setActualDateValues(counter, newValue)
+        DSParamsModel.setSubCategory(Constants.dateSubMonth)
+        DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Next Month")
-        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
