@@ -410,7 +410,7 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
                 newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[localCounter] + "')" : conditionList[localCounter] ;
 
                 tmpWhereConditions = QString("%1 %2 %3")
-                        .arg(columnName).arg(excludeCase).arg(newCondition);
+                        .arg("\"" + columnName + "\"").arg(excludeCase).arg(newCondition);
 
                 localCounter++;
             }
@@ -434,7 +434,7 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
             newCondition = relation.contains("like", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
 
             tmpWhereConditions = QString("%1 %2 %3")
-                    .arg(columnName).arg(excludeCase).arg(newCondition);
+                    .arg("\"" + columnName + "\"").arg(excludeCase).arg(newCondition);
         }
         break;
     }

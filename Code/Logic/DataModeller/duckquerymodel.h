@@ -31,6 +31,9 @@ public:
     Q_INVOKABLE void getQueryStats();
     Q_INVOKABLE void removeTmpChartData();
 
+public slots:
+    void receiveCsvFilterQuery(QString query);
+
 private:
     void generateRoleNames();
     void setQueryResult();
