@@ -361,16 +361,6 @@ void FilterDateListModel::clearFilters()
     emit rowCountChanged();
 }
 
-void FilterDateListModel::setDateFormatMap(QVariantMap dateFormatMap)
-{
-    this->dateFormatMap = dateFormatMap;
-}
-
-void FilterDateListModel::setTimeFrameMap(QVariantMap timeFrameMap)
-{
-    this->timeFrameMap = timeFrameMap;
-}
-
 
 void FilterDateListModel::addFilterList(FilterDateList *filter)
 {
