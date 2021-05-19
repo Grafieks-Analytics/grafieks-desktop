@@ -66,18 +66,12 @@ Rectangle{
 
 
         DSParamsModel.setMode(Constants.modeEdit)
-        DSParamsModel.setFilterIndex(filterIndex)
+        DSParamsModel.setInternalCounter(filterIndex)
         DSParamsModel.setSection(section)
         DSParamsModel.setCategory(category)
         DSParamsModel.setSubCategory(subCategory)
         DSParamsModel.setTableName(tableName)
         DSParamsModel.setColName(columnName)
-        DSParamsModel.addToJoinRelation(mapKey, relation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, slug)
-        DSParamsModel.addToJoinValue(mapKey, value)
-        DSParamsModel.setIncludeNull(includeNull)
-        DSParamsModel.setExclude(exclude)
-        DSParamsModel.setInternalCounter(1)
 
         ColumnListModel.columnEditQuery(columnName, tableName, value, category)
 
@@ -211,7 +205,7 @@ Rectangle{
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onEditElement(model.index, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+                                        onEditElement(filterId, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
                                     }
                                 }
                             }
