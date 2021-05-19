@@ -46,6 +46,12 @@ Popup {
                 }
             }
         }
+
+        function onLogout(){
+            selectedFile = ""
+            separator.text = ""
+            csvFileName.text = ""
+        }
     }
 
     Connections{

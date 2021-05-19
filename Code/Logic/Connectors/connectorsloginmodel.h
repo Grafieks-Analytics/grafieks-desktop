@@ -92,6 +92,8 @@ signals:
     void dSSelected(bool dsStatus);
     void dropTables();
 
+    void logout();
+
 private:
     void staticSetter(QString dbName, QString classification, int intType, QString strType = NULL);
     void staticRemover();
