@@ -300,6 +300,8 @@ QString FilterCategoricalListModel::setRelation(QString tableName, QString colum
     // If there are several relations involved
     switch(Statics::currentDbIntType){
 
+    case Constants::excelIntType:
+    case Constants::jsonIntType:
     case Constants::csvIntType:{
 
         if(relation.contains(",", Qt::CaseInsensitive)){
@@ -313,7 +315,7 @@ QString FilterCategoricalListModel::setRelation(QString tableName, QString colum
                 newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[localCounter] + "')" : conditionList[localCounter] ;
 
                 tmpWhereConditions = QString("%1 %2 %3")
-                        .arg(columnName).arg(excludeCase).arg(newCondition);
+                        .arg("\"" + columnName + "\"").arg(excludeCase).arg(newCondition);
 
                 localCounter++;
             }
@@ -335,7 +337,7 @@ QString FilterCategoricalListModel::setRelation(QString tableName, QString colum
             newCondition = relation.contains("in", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
 
             tmpWhereConditions = QString("%1 %2 %3")
-                    .arg(columnName).arg(excludeCase).arg(newCondition);
+                    .arg("\"" + columnName + "\"").arg(excludeCase).arg(newCondition);
         }
 
         break;

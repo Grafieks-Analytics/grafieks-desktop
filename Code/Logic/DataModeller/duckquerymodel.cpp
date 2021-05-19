@@ -274,3 +274,10 @@ void DuckQueryModel::removeTmpChartData()
     emit duckHasData(false);
     emit chartDataChanged(this->duckChartData);
 }
+
+void DuckQueryModel::receiveCsvFilterQuery(QString query)
+{
+
+    this->query += query;
+    this->setQuery(this->query);
+}
