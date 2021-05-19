@@ -1050,6 +1050,7 @@ void DSParamsModel::setTmpSelectedValues(QString value)
 
 void DSParamsModel::removeTmpSelectedValues(int refObjId, bool removeAll)
 {
+    qDebug() << "REMOVE TMP SELECTED" << refObjId << removeAll;
     if(removeAll == true){
         this->tmpSelectedValues.clear();
     } else{
