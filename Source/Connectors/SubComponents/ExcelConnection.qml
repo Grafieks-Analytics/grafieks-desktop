@@ -140,26 +140,27 @@ Popup {
 
 
 
-        Rectangle{
+//        Rectangle{
 
-            id: label2
-            width:label_col
-            height: 40
+//            id: label2
+//            width:label_col
+//            height: 40
 
-            Text{
-                text: "Excel"
-                anchors.left: parent.left
-                anchors.leftMargin:  10
-                font.pixelSize: Constants.fontCategoryHeader
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
+//            Text{
+//                text: "Excel"
+//                anchors.left: parent.left
+//                anchors.leftMargin:  10
+//                font.pixelSize: Constants.fontCategoryHeader
+//                anchors.verticalCenter: parent.verticalCenter
+//            }
+//        }
 
         Rectangle{
 
             id: label3
             width:label_col
             height: 40
+            y:40
 
         Button{
             id : file_btn
