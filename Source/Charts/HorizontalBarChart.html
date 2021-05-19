@@ -90,6 +90,40 @@
                 var width = window.innerWidth - margin.left - margin.right;
                 var height = window.innerHeight - margin.top - margin.bottom;
 
+                var xAxisDataSet = dataValues[0];
+
+                var xAxisDateWiseValues = {};
+
+                var valueDateType = false;
+                if (isDateFormat(xAxisDataSet[0])) {
+                    valueDateType = true;
+                }
+
+                if (valueDateType) {
+                    xAxisDataSet.forEach((d, i) => {
+                        xAxisDataSet[i] = new Date(xAxisDataSet[i]);
+                        var requiredTypeData = getDateFormattedData(
+                            d,
+                            dateFormat
+                        );
+
+                        if (!xAxisDateWiseValues[requiredTypeData]) {
+                            xAxisDateWiseValues[requiredTypeData] = 0;
+                        }
+
+                        xAxisDateWiseValues[requiredTypeData] +=
+                            dataValues[1][i];
+                    });
+
+                    var sortedKeys = sortDates(xAxisDateWiseValues, dateFormat);
+
+                    dataValues[0] = sortedKeys;
+                    dataValues[1] = sortedKeys.map(
+                        (d, i) => xAxisDateWiseValues[d]
+                    );
+                    data[0] = dataValues;
+                }
+
                 if (chartType == constants.chartType.STANDARD) {
                     height = dataValues[0].length * standardThresholdHeight;
                     if (
