@@ -49,7 +49,7 @@ class FilterDateList : public QObject
 
 
 public:
-    explicit FilterDateList(const int & filterId, const int &dateFormatId, const QString & section, const QString & category, const QString & subcategory, const QString & tableName, const QString & columnName, const QString & relation, const QString & slug, const QString & value, const bool & includeNull, const bool & exclude, QObject *parent = nullptr);
+    explicit FilterDateList(const int & filterId, const int &dateFormatId, const QString & section, const QString & category, const QString & subcategory, const QString & tableName, const QString & columnName, const QString & relation, const QString & slug, const QString & value, const QString & actualValue, const bool & includeNull, const bool & exclude, QObject *parent = nullptr);
 
     int filterId() const;
     int dateFormatId() const;

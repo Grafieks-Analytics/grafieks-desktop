@@ -43,7 +43,6 @@ public:
     Q_INVOKABLE void setTimeFrameMap(QVariantMap timeFrameMap);
 
     void addFilterList(FilterDateList * filter);
-    QString getFilteredValue(QString val);
 
 
     enum Roles{

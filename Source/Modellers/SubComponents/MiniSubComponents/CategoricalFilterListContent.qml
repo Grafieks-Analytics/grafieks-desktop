@@ -453,7 +453,6 @@ Rectangle{
                             function onTmpSelectedValuesChanged(values){
                                 if(DSParamsModel.mode === Constants.modeEdit && DSParamsModel.category === Constants.categoryMainListType && DSParamsModel.subCategory === Constants.categorySubMulti){
                                     modelCheckBoxes.checked = values.indexOf(modelCheckBoxes.objectName) >= 0 ? true: false
-                                    console.log("CHECK", values, modelCheckBoxes.objectName)
                                 }
                             }
                         }
