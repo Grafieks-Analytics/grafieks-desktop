@@ -176,7 +176,7 @@ Popup {
 
         case Constants.categoryMainWildCardType:
 
-            for(let i = 0; i < tmpFilterIndexes.length; i++){
+            for(let i = 0; i < tmpFilterIndexes.length - 1; i++){
                 let fi = tmpFilterIndexes[i]
 
                 let joinRelation = DSParamsModel.fetchJoinRelation(fi)

@@ -21,6 +21,7 @@ FilterCategoricalListModel::FilterCategoricalListModel(QObject *parent) : QAbstr
 int FilterCategoricalListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
+    qDebug() << "ROW SIZES" << mFilter.size();
     return mFilter.size();
 }
 
