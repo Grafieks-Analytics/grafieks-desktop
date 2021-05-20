@@ -158,12 +158,14 @@ Rectangle{
                 multiSelectCheckList.visible = true
                 singleSelectCheckList.visible = false
 
-                if(jsonOptions.values.length > 0){
-                    var checkedValues = jsonOptions.values.split(",")
-                    checkedValues.forEach((item) => {
-                                              DSParamsModel.setTmpSelectedValues(item)
-                                          })
-                }
+//                if(jsonOptions.values.length > 0){
+//                    var checkedValues = jsonOptions.values.split(",")
+//                    checkedValues.forEach((item) => {
+//                                              DSParamsModel.setTmpSelectedValues(item)
+//                                              console.log("ITEM 1", item)
+//                                          })
+//                }
+//                console.log(DSParamsModel.getTmpSelectedValues(0, true))
 
             } else{
                 singleSelectRadio.checked = true
