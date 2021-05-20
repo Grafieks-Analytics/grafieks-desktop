@@ -41,7 +41,7 @@ Rectangle{
 
         // Listview height
         function onRowCountChanged(){
-            listFiltersListView.height = FilterDateListModel.rowCount() * 30
+            listFiltersListView.height = FilterDateListModel.rowCount() * 40
         }
     }
     // Connections Ends

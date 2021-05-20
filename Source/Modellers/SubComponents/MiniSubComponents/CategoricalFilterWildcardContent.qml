@@ -201,7 +201,7 @@ Rectangle{
     }
 
     function onAddWildcard(){
-        if(totalWildCards < selectDropdown.count){
+        if(totalWildCards <= selectDropdown.count){
 
             totalWildCards++
             DSParamsModel.setFilterIndex(DSParamsModel.filterIndex + 1)
@@ -276,6 +276,8 @@ Rectangle{
         DSParamsModel.addToJoinRelation(currentSelectedIndex, newRelation)
         DSParamsModel.addToJoinValue(currentSelectedIndex, newFilter)
         DSParamsModel.addToJoinRelationSlug(currentSelectedIndex, slug)
+
+        console.log("FILTER VALUES1a", currentSelectedIndex, DSParamsModel.fetchJoinRelation(currentSelectedIndex)[currentSelectedIndex], DSParamsModel.fetchJoinValue(currentSelectedIndex)[currentSelectedIndex], DSParamsModel.fetchJoinRelationSlug(currentSelectedIndex)[currentSelectedIndex])
 
     }
 

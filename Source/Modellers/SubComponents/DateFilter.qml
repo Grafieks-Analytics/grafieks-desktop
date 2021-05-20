@@ -274,7 +274,7 @@ Popup {
 
     function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude, dateFormatId, counter = 0, filterId = 0){
 
-        //        console.log(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude, "FILTER LIST INSERT/UPDATE")
+//        console.log(mode, filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude, "FILTER DATE LIST INSERT/UPDATE")
 
         // Save the filter
         if(mode === Constants.modeCreate){
