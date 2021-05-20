@@ -138,6 +138,9 @@ Popup {
     }
 
     function onApplyClicked(){
+
+        console.log("Categorical filter applied")
+
         categoricalFilterPopup.visible = false
 
         var section = DSParamsModel.section
@@ -201,6 +204,7 @@ Popup {
 
         // Reset all DSParams
         DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter();
 
         // Clear tabs individual temp data
         categoricalFilterPopup.clearData()

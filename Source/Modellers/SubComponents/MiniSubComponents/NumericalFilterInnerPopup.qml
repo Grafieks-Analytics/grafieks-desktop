@@ -104,6 +104,10 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    function slotDataCleared(){
+
+    }
+
     function slotEditModeNumerical(relation, slug, value){
 
         topContent.visible = true

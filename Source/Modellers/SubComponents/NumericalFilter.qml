@@ -56,6 +56,7 @@ Popup {
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
+    signal clearData()
     signal signalNumericalEditData(string relation, string sug, string value)
 
     // SIGNALS ENDS
@@ -80,6 +81,8 @@ Popup {
 
     Component.onCompleted: {
         numericalFilterPopup.signalNumericalEditData.connect(topContent.slotEditModeNumerical)
+
+        numericalFilterPopup.clearData.connect(topContent.slotDataCleared)
     }
     // SLOT function
     function slotEditMode(section, category, subCategory, relation, slug, value){
@@ -102,6 +105,9 @@ Popup {
     }
 
     function onApplyClicked(){
+
+        console.log("Numerical filter applied")
+
         numericalFilterPopup.visible = false
 
         var filterIndex = DSParamsModel.filterIndex
@@ -129,7 +135,11 @@ Popup {
 //        DSParamsModel.setMode(Constants.modeCreate)
 
         // Reset all DSParams
-        //DSParamsModel.resetFilter();
+        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter();
+
+        // Clear tabs individual temp data
+        dateFilterPopup.clearData()
 
     }
 

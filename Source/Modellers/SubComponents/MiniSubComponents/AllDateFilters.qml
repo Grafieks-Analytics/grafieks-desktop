@@ -80,7 +80,6 @@ Rectangle{
             "values" : value,
             "relation" : relation,
             "slug" : slug
-
         }
 
         QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
@@ -233,7 +232,7 @@ Rectangle{
                                     onClicked: {
 
                                         if(category === "date.timeframe"){
-                                            DSParamsModel.removeValueFormat(value)
+                                            DSParamsModel.removeDateFormatMap(value)
                                         }
                                         if(category === "date.list"){
 //                                            DSParamsModel.removeTimeFrame(value)
