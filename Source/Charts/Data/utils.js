@@ -17,6 +17,10 @@ function getDateFormattedData(dateValue, dateFormat) {
     return d3.timeFormat(dateFormat)(new Date(dateValue));
 }
 
+function getUniqueArrayValues(value, index, self) {
+    return self.indexOf(value) === index;
+}
+
 function changeChartAttributes(selector, attributeName, attributeValue) {
     d3.selectAll(selector).attr(attributeName, attributeValue);
 }

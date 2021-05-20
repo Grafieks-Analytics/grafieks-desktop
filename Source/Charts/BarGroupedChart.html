@@ -28,9 +28,6 @@
                 position: fixed;
                 background: #fff;
             }
-            #my_dataviz {
-                /* overflow-x: scroll; */
-            }
         </style>
     </head>
 
@@ -41,11 +38,91 @@
         </div>
         <div id="tooltip"></div>
         <script>
+            function sumAllData(originalData, currentData) {
+                console.log({ originalData });
+                var allKeys = [
+                    ...Object.keys(originalData),
+                    ...Object.keys(currentData),
+                ];
+
+                allKeys = allKeys.filter((d) => {
+                    if (d != "mainCategory") {
+                        return d;
+                    }
+                });
+
+                allKeys.forEach((d) => {
+                    console.log(originalData[d], currentData[d]);
+                    originalData[d] =
+                        (originalData[d] || 0) + (currentData[d] || 0);
+                });
+
+                console.log(originalData);
+
+                // debugger;
+
+                return originalData;
+            }
+
+            function transformData(dataValue, dateFormat) {
+                var transformedDataValue = {};
+                var globalKeys = [];
+
+                dataValue[0].forEach((d, i) => {
+                    var currentData = d;
+
+                    if (isDateFormat(d.mainCategory)) {
+                        isKey1Date = true;
+                    }
+
+                    var category = getDateFormattedData(
+                        d.mainCategory,
+                        dateFormat
+                    );
+                    console.log(category);
+                    if (!transformedDataValue[category]) {
+                        transformedDataValue[category] = {};
+                    }
+                    var originalData = transformedDataValue[category];
+
+                    var allKeys = [
+                        ...Object.keys(originalData),
+                        ...Object.keys(currentData),
+                    ];
+
+                    allKeys = allKeys
+                        .filter((d) => {
+                            if (d != "mainCategory") {
+                                return d;
+                            }
+                        })
+                        .filter(getUniqueArrayValues);
+
+                    globalKeys.push(...allKeys);
+
+                    allKeys.forEach((d) => {
+                        console.log(originalData[d], currentData[d]);
+                        originalData[d] =
+                            (originalData[d] || 0) + (currentData[d] || 0);
+                    });
+                    transformedDataValue[category] = {
+                        ...originalData,
+                        mainCategory: category,
+                    };
+
+                    console.log({ transformedDataValue });
+                });
+
+                var transformedDataValue = Object.keys(
+                    transformedDataValue
+                ).map((d) => transformedDataValue[d]);
+
+                globalKeys = globalKeys.filter(getUniqueArrayValues);
+                return [transformedDataValue, globalKeys];
+            }
+
             function drawChart(data, plottingConfiguration = {}) {
                 window.data = data;
-                var [data, all_keys] = data;
-
-                var parseTime = d3.timeParse("%d-%b-%y");
 
                 let {
                     d3colorPalette,
@@ -81,6 +158,10 @@
                         defaultD3Config.standardThresholdWidth;
                 }
 
+                data = transformData(data, dateFormat);
+
+                var [data, all_keys] = data;
+
                 var margin = { top: 40, right: 20, bottom: 0, left: 70 };
                 var width = window.innerWidth - margin.left - margin.right - 70;
 
@@ -99,8 +180,7 @@
 
                 var height = window.innerHeight - margin.top - margin.bottom;
 
-                d3.selectAll("#my_dataviz").html("");
-                d3.selectAll("#yAxisDiv").html("");
+                clearChart();
 
                 var minHeight = d3.min(data, (d) =>
                     d3.min(all_keys, (k) => d[k])
@@ -321,55 +401,55 @@
 
             var data = [
                 {
-                    mainCategory: "f1",
+                    mainCategory: "2020-02-01",
                     field1: 19,
                     field2: 83,
                     field3: 2,
                     field4: 30,
                 },
                 {
-                    mainCategory: "f2",
-                    field1: 67,
+                    mainCategory: "2019-04-02",
+                    field1: 100,
                     field2: 29,
                     field3: 100,
                     field4: 130,
                 },
                 {
-                    mainCategory: "f3",
-                    field1: 10,
+                    mainCategory: "2019-03-03",
+                    field1: 100,
                     field3: 100,
                 },
                 {
-                    mainCategory: "f4",
+                    mainCategory: "2019-03-01",
+                    field1: 100,
+                    field2: 43,
+                    field3: 100,
+                },
+                {
+                    mainCategory: "2021-03-03",
                     field1: 98,
                     field2: 43,
                     field3: 100,
                 },
                 {
-                    mainCategory: "f5",
-                    field1: 98,
-                    field2: 43,
-                    field3: 100,
-                },
-                {
-                    mainCategory: "f6",
+                    mainCategory: "2018-02-04",
                     field1: -98,
                     field2: 43,
                     field3: 100,
                 },
                 {
-                    mainCategory: "f7",
-                    field1: 98,
+                    mainCategory: "2019-04-09",
+                    field1: 100,
                     field2: 43,
-                    field3: 100,
+                    field3: 10,
                 },
                 {
-                    mainCategory: "f8",
-                    field1: 98,
+                    mainCategory: "2019-03-09",
                     field2: 43,
                     field3: 100,
                 },
             ];
+
             var all_keys = ["field1", "field2", "field3", "field4"];
 
             data = [data, all_keys];

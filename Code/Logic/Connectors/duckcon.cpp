@@ -40,57 +40,60 @@ void DuckCon::createTable(){
     fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
     table = fileName;
 
-    if(fileExtension.toLower() == "json"){
-        csvFile = jsonToCsv.convertJsonToCsv(Statics::currentDbName).toStdString();
+    if(fileName.trimmed().length() > 0){
+        if(fileExtension.toLower() == "json"){
+            csvFile = jsonToCsv.convertJsonToCsv(Statics::currentDbName).toStdString();
 
-        csvdb = "'" + csvFile + "'";
-        Statics::currentDbName = fileName;
-        std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
-
-        if(res->error.empty() == false){
-            emit importError("Please select a valid JSON format and remove special characters from input file");
-            qWarning() << "JSON import issue" << res->error.c_str();
-        } else{
-            this->tables.append(table);
-            res.release();
-        }
-
-
-    } else if(fileExtension.toLower() == "xls" || fileExtension.toLower() == "xlsx"){
-        excelSheetsList = excelToCsv.convertExcelToCsv(Statics::currentDbName);
-
-
-        for ( const QString& csvFile : excelSheetsList  ) {
-            csvdb = "'" + (csvFile + ".csv").toStdString() + "'";
-            QFileInfo fi(csvdb.c_str());
+            csvdb = "'" + csvFile + "'";
             Statics::currentDbName = fileName;
-            std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + fi.baseName().toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
+            std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
 
             if(res->error.empty() == false){
-                errorStatus = true;
-                qWarning() << "Excel import issue" << res->error.c_str();
-                break;
+                emit importError("Please select a valid JSON format and remove special characters from input file");
+                qWarning() << Q_FUNC_INFO << "JSON import issue" << res->error.c_str();
             } else{
-                this->tables.append(fi.baseName());
+                this->tables.append(table);
+                res.release();
+            }
+
+
+        } else if(fileExtension.toLower() == "xls" || fileExtension.toLower() == "xlsx"){
+            excelSheetsList = excelToCsv.convertExcelToCsv(Statics::currentDbName);
+
+
+            for ( const QString& csvFile : excelSheetsList  ) {
+                csvdb = "'" + (csvFile + ".csv").toStdString() + "'";
+                QFileInfo fi(csvdb.c_str());
+                Statics::currentDbName = fileName;
+                std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + fi.baseName().toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
+
+                if(res->error.empty() == false){
+                    errorStatus = true;
+                    qWarning() << Q_FUNC_INFO << "Excel import issue" << res->error.c_str();
+                    break;
+                } else{
+                    this->tables.append(fi.baseName());
+                    res.release();
+                }
+            }
+
+            if(errorStatus == true){
+                emit importError("Please remove special characters from input Excel file");
+            }
+
+        } else{
+            csvdb = "'" + csvFile + "'";
+            Statics::currentDbName = fileName;
+            std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
+            if(res->error.empty() == false){
+                emit importError("Please remove special characters from input CSV file");
+                qWarning() << Q_FUNC_INFO << "CSV import issue" << res->error.c_str();
+            } else{
+                this->tables.append(table);
                 res.release();
             }
         }
 
-        if(errorStatus == true){
-            emit importError("Please remove special characters from input Excel file");
-        }
-
-    } else{
-        csvdb = "'" + csvFile + "'";
-        Statics::currentDbName = fileName;
-        std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
-        if(res->error.empty() == false){
-            emit importError("Please remove special characters from input CSV file");
-            qWarning() << "CSV import issue" << res->error.c_str();
-        } else{
-            this->tables.append(table);
-            res.release();
-        }
     }
 
 }

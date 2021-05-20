@@ -85,16 +85,28 @@ namespace Constants
     const QString accessOdbcStrType = "access_odbc";
     const QString accessOdbcStrQueryType = "access_odbc_query";
 
-    // Filter type Strings
+    // Filter Sections
     const QString categoricalType = "categorical";
     const QString numericalType = "numerical";
     const QString dateType = "dateformat";
     const QString otherType = "other";
 
-    // Main Category
+    // Filter Category
     const QString categoryMainListType = "categorical.list";
     const QString categoryMainWildCardType = "categorical.wildcard";
     const QString categoryMainTopType = "categorical.top";
+
+    const QString dateMainListList = "date.list";
+    const QString dateMainCalendarType = "date.calendar";
+    const QString dateMainTimeFrameType = "date.timeframe";
+
+    // Filter Sub category
+    const QString categorySubMulti = "multiple";
+    const QString categorySubSingle = "single";
+    const QString dateSubYear = "year";
+    const QString dateSubQuarter = "quarter";
+    const QString dateSubMonth = "month";
+    const QString dateSubDay = "day";
 
     // DSParams Settings
     const QString defaultTabSection = categoricalType;

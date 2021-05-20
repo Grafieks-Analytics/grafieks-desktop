@@ -55,12 +55,10 @@ TableView {
         function onSqlHasData(hasData){
             dataPreviewResult.model = hasData === true? QueryModel: ""
             globalConType = Constants.sqlType
-            console.log("QueryModel1",QueryModel)
         }
 
         function onHeaderDataChanged(tableHeaders){
             mainRepeater.model = tableHeaders
-            console.log("tableHeaders",tableHeaders)
         }
 
     }

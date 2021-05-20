@@ -52,19 +52,6 @@ SOURCES += \
     Code/Logic/Connectors/sheetmodel.cpp \
     Code/Logic/Dashboards/dashboardparamsmodel.cpp \
     Code/Logic/Dashboards/documenthandlermodel.cpp \
-    Code/Logic/DataModeller/Helpers/accessconversions.cpp \
-    Code/Logic/DataModeller/Helpers/hiveconversions.cpp \
-    Code/Logic/DataModeller/Helpers/impalaconversions.cpp \
-    Code/Logic/DataModeller/Helpers/mongoconversions.cpp \
-    Code/Logic/DataModeller/Helpers/mssqlconversions.cpp \
-    Code/Logic/DataModeller/Helpers/mysqlconversions.cpp \
-    Code/Logic/DataModeller/Helpers/oracleconversions.cpp \
-    Code/Logic/DataModeller/Helpers/postgresconversions.cpp \
-    Code/Logic/DataModeller/Helpers/redshiftconversions.cpp \
-    Code/Logic/DataModeller/Helpers/snowflakeconversions.cpp \
-    Code/Logic/DataModeller/Helpers/sqliteconversions.cpp \
-    Code/Logic/DataModeller/Helpers/teradataconversions.cpp \
-    Code/Logic/DataModeller/columnlistmodel.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
     Code/Logic/DataModeller/duckdatamodel.cpp \
@@ -73,7 +60,6 @@ SOURCES += \
     Code/Logic/DataModeller/filtercategoricallistmodel.cpp \
     Code/Logic/DataModeller/filterdatelist.cpp \
     Code/Logic/DataModeller/filterdatelistmodel.cpp \
-    Code/Logic/DataModeller/filterfunctionsmodel.cpp \
     Code/Logic/DataModeller/filternumericallist.cpp \
     Code/Logic/DataModeller/filternumericallistmodel.cpp \
     Code/Logic/DataModeller/forwardonlydatamodel.cpp \
@@ -81,6 +67,7 @@ SOURCES += \
     Code/Logic/DataModeller/newtablelistmodel.cpp \
     Code/Logic/DataModeller/proxyfiltermodel.cpp \
     Code/Logic/DataModeller/publishdatasourcemodel.cpp \
+    Code/Logic/DataModeller/querydatamodel.cpp \
     Code/Logic/DataModeller/querymodel.cpp \
     Code/Logic/DataModeller/querystatsmodel.cpp \
     Code/Logic/DataModeller/scheduler.cpp \
@@ -162,19 +149,6 @@ HEADERS += \
     Code/Logic/Connectors/sheetmodel.h \
     Code/Logic/Dashboards/dashboardparamsmodel.h \
     Code/Logic/Dashboards/documenthandlermodel.h \
-    Code/Logic/DataModeller/Helpers/accessconversions.h \
-    Code/Logic/DataModeller/Helpers/hiveconversions.h \
-    Code/Logic/DataModeller/Helpers/impalaconversions.h \
-    Code/Logic/DataModeller/Helpers/mongoconversions.h \
-    Code/Logic/DataModeller/Helpers/mssqlconversions.h \
-    Code/Logic/DataModeller/Helpers/mysqlconversions.h \
-    Code/Logic/DataModeller/Helpers/oracleconversions.h \
-    Code/Logic/DataModeller/Helpers/postgresconversions.h \
-    Code/Logic/DataModeller/Helpers/redshiftconversions.h \
-    Code/Logic/DataModeller/Helpers/snowflakeconversions.h \
-    Code/Logic/DataModeller/Helpers/sqliteconversions.h \
-    Code/Logic/DataModeller/Helpers/teradataconversions.h \
-    Code/Logic/DataModeller/columnlistmodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
     Code/Logic/DataModeller/duckdatamodel.h \
@@ -183,7 +157,6 @@ HEADERS += \
     Code/Logic/DataModeller/filtercategoricallistmodel.h \
     Code/Logic/DataModeller/filterdatelist.h \
     Code/Logic/DataModeller/filterdatelistmodel.h \
-    Code/Logic/DataModeller/filterfunctionsmodel.h \
     Code/Logic/DataModeller/filternumericallist.h \
     Code/Logic/DataModeller/filternumericallistmodel.h \
     Code/Logic/DataModeller/forwardonlydatamodel.h \
@@ -191,6 +164,7 @@ HEADERS += \
     Code/Logic/DataModeller/newtablelistmodel.h \
     Code/Logic/DataModeller/proxyfiltermodel.h \
     Code/Logic/DataModeller/publishdatasourcemodel.h \
+    Code/Logic/DataModeller/querydatamodel.h \
     Code/Logic/DataModeller/querymodel.h \
     Code/Logic/DataModeller/querystatsmodel.h \
     Code/Logic/DataModeller/scheduler.h \

@@ -47,6 +47,14 @@ Popup {
                  msg_dialog.text = status.msg
              }
         }
+
+        function onLogout(){
+            server.text = ""
+            database.text = ""
+            port.text = ""
+            username.text = ""
+            password.text = ""
+        }
     }
 
     Connections{
@@ -92,8 +100,7 @@ Popup {
     }
 
     function connectToMsSQL(){
-//        ConnectorsLoginModel.mssqlOdbcLogin(server.text, database.text, port.text, username.text, password.text)
-          ConnectorsLoginModel.impalaOdbcLogin("localhost", "grafieks_my", 3306, "root", "")
+        ConnectorsLoginModel.mssqlOdbcLogin(server.text, database.text, port.text, username.text, password.text)
     }
 
     // JAVASCRIPT FUNCTION ENDS

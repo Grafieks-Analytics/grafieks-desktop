@@ -190,23 +190,23 @@ Item{
                     anchors.verticalCenter: droppedRectangle.verticalCenter
                     z: 5
                 }
-                Image{
-                    id: columnMenuIcon
-                    source : "/Images/icons/menu-button.png"
-                    height: 30
-                    width: 30
-                    anchors.left: parent.left
-                    anchors.leftMargin:  160
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 1
-                    anchors.verticalCenter: droppedRectangle.verticalCenter
-                    z: 5
+//                Image{
+//                    id: columnMenuIcon
+//                    source : "/Images/icons/menu-button.png"
+//                    height: 30
+//                    width: 30
+//                    anchors.left: parent.left
+//                    anchors.leftMargin:  160
+//                    anchors.bottom: parent.bottom
+//                    anchors.bottomMargin: 1
+//                    anchors.verticalCenter: droppedRectangle.verticalCenter
+//                    z: 5
 
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: editOptions.open()
-                    }
-                }
+//                    MouseArea{
+//                        anchors.fill: parent
+//                        onClicked: editOptions.open()
+//                    }
+//                }
             }
             //            ToolSeparator{
             //                id: toolsep3
@@ -273,8 +273,8 @@ Item{
         //        x:Constants.newPosition+droppedRectangle.x
         //        y:Constants.droppedRectangle.y
 //        border.color: colors[droppedCount+1]
-         border.color: "#fdb462"
-                color: "#fdb462"
+         border.color: Constants.defaultDroppedRectangleColor
+                color: Constants.defaultDroppedRectangleColor
 //        color: colors[droppedCount+1]
 
         height: 30
