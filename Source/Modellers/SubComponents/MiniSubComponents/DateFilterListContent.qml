@@ -31,7 +31,7 @@ Rectangle{
     property int counter: 0
     property int selectedFormat: 6
 
-    readonly property var availableformats : ["default", "year", "quarter_year", "month_year", "week_year", "full_date", "date_time"]
+    readonly property var availableformats : ["removedTZ",  "year", "quarter_year", "month_year", "week_year", "full_date", "date_time", "original"]
     readonly property var months : ["Jan", "Feb", "Mar", "Apr", "May","Jun","Jul", "Aug", "Sep", "Oct", "Nov","Dec"];
 
     onMasterColDataChanged: {
@@ -158,14 +158,14 @@ Rectangle{
                 multiSelectCheckList.visible = true
                 singleSelectCheckList.visible = false
 
-//                if(jsonOptions.values.length > 0){
-//                    var checkedValues = jsonOptions.values.split(",")
-//                    checkedValues.forEach((item) => {
-//                                              DSParamsModel.setTmpSelectedValues(item)
-//                                              console.log("ITEM 1", item)
-//                                          })
-//                }
-//                console.log(DSParamsModel.getTmpSelectedValues(0, true))
+                //                if(jsonOptions.values.length > 0){
+                //                    var checkedValues = jsonOptions.values.split(",")
+                //                    checkedValues.forEach((item) => {
+                //                                              DSParamsModel.setTmpSelectedValues(item)
+                //                                              console.log("ITEM 1", item)
+                //                                          })
+                //                }
+                //                console.log(DSParamsModel.getTmpSelectedValues(0, true))
 
             } else{
                 singleSelectRadio.checked = true
@@ -234,6 +234,11 @@ Rectangle{
 
     function onSingleSelectRadioSelected(modelData, format){
 
+        var actualValueArray = []
+        DSParamsModel.getTmpSelectedValues(0, true).forEach((item)  => {
+                                                                actualValueArray.push(searchDateFormat(item, selectedFormat))
+                                                            })
+        DSParamsModel.setActualDateValues(counter, actualValueArray)
         DSParamsModel.addToJoinValue(counter, modelData.toString())
         DSParamsModel.addToJoinRelation(counter, Constants.inRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.inRelation)
@@ -292,6 +297,11 @@ Rectangle{
                 }
             }
 
+            var actualValueArray = []
+            DSParamsModel.getTmpSelectedValues(0, true).forEach((item)  => {
+                                                                    actualValueArray.push(searchDateFormat(item, selectedFormat))
+                                                                })
+            DSParamsModel.setActualDateValues(counter, actualValueArray)
             DSParamsModel.addToJoinValue(counter, DSParamsModel.getTmpSelectedValues(0, true).toString())
             DSParamsModel.addToJoinRelation(counter, Constants.inRelation)
             DSParamsModel.addToJoinRelationSlug(counter, Constants.inRelation)
@@ -307,6 +317,17 @@ Rectangle{
         DSParamsModel.setExcludeMap(counter, checked)
     }
 
+
+    function searchDateFormat(inputDate, formatId){
+        var outputData
+
+        masterColData.forEach((item, index) => {
+                                  if(item[formatId] === inputDate){
+                                      outputData = item[item.length - 1]
+                                  }
+                              })
+        return outputData
+    }
 
     function changeDateFormat(currentIndex){
 
@@ -337,6 +358,7 @@ Rectangle{
 
             let dateData = dateColumnData[i]
 
+            let removeTZ = getRemoveTZ(dateData)
             let getYear = getYearValue(dateData)
             let getQuarterYear = getQuarterYearValue(dateData)
             let getMonthYear = getMonthYearValue(dateData)
@@ -344,11 +366,18 @@ Rectangle{
             let getFullDate = getFullDateValue(dateData)
             let getDateTime = getDateTimeValue(dateData)
 
-            var tmpColData = [dateData, getYear, getQuarterYear, getMonthYear, getWeekYear, getFullDate, getDateTime]
+            var tmpColData = [removeTZ, getYear, getQuarterYear, getMonthYear, getWeekYear, getFullDate, getDateTime, dateData]
             sortedMasterColData.push(tmpColData)
         }
 
         masterColData = sortedMasterColData
+    }
+
+    function getRemoveTZ(inputDate){
+
+        let outDate = inputDate.replace(/T/gi, " ")
+        outDate = outDate.replace(/Z/gi, " ")
+        return outDate;
     }
 
     function getYearValue(inputDate){
