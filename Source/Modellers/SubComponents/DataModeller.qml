@@ -198,21 +198,18 @@ Item {
             var undefinedCounter = 0
 
             // DSParams rectangle
-            var rectangleObjects = DSParamsModel.fetchAllRectangles()
-            for (var prop in rectangleObjects) {
-                if(DSParamsModel.fetchFrontRectangleCoordinates(prop) === "")
-                    undefinedCounter++
-            }
+            var rectangleObjectsSize = DSParamsModel.rectanglesSize()
+            var lineObjectsSize = DSParamsModel.linesSize()
+            var rectangleObjectKeys = DSParamsModel.fetchAllRectangleKeys()
+            var newLineObjectKeys = DSParamsModel.fetchAllLineKeys()
+
 
             // Check if the rectangles are connected to some rectangle in front (except the first one)
             // If not throw an error
-            if(undefinedCounter <= 1){
+            if(rectangleObjectsSize - lineObjectsSize === 1){
 
-                for (let prop in rectangleObjects) {
-                    if(DSParamsModel.fetchFrontRectangleCoordinates(prop) === "")
-                        firstRectId  = prop
-                }
-
+                var firstRectArr = rectangleObjectKeys.filter(x => newLineObjectKeys.indexOf(x) === -1)
+                firstRectId = firstRectArr[0]
                 // Call the function to process the rest of the query
                 joinOrder(firstRectId )
 
@@ -287,6 +284,7 @@ Item {
                 DSParamsModel.removeRectangles(refObject);
                 DSParamsModel.removeFrontRectangleCoordinates(refObject)
                 DSParamsModel.removeRearRectangleCoordinates(refObject)
+                DSParamsModel.removeExistingTables(refObject)
             }
 
 
@@ -406,11 +404,12 @@ Item {
             DSParamsModel.addToRearLineMap(tmpNearestTable.tableId, tmpArray)
 
             // Reset glow color of nearest rectangle
-            dataModellerItem.changeGlowColor("white", tmpNearestTable.tableId)
-            dataModellerItem.changeGlowColor("white", tmpOrphanTableId)
+            dataModellerItem.changeGlowColor(Constants.defaultDroppedRectangleColor, tmpNearestTable.tableId)
+            dataModellerItem.changeGlowColor(Constants.defaultDroppedRectangleColor, tmpOrphanTableId)
 
             // Add to DSParamsModel
             DSParamsModel.addToJoinBoxTableMap(tmpOrphanTableId, refObjectName, tmpNearestTable.tableName)
+            DSParamsModel.addToPrimaryJoinTable(tmpOrphanTableId, refObjectName)
 
             // Popup join details
             showJoinPopup(tmpOrphanTableId)
@@ -616,7 +615,7 @@ Item {
                     if(nearestTable.distance <= 100){
 
                         if(tmpNearestTable.tableId !== nearestTable.tableId){
-                            dataModellerItem.changeGlowColor("white", tmpNearestTable.tableId)
+                            dataModellerItem.changeGlowColor(Constants.defaultDroppedRectangleColor, tmpNearestTable.tableId)
                         }
 
                         // Set the temporary nearest table
@@ -630,8 +629,8 @@ Item {
                         dataModellerItem.changeGlowColor(Constants.grafieksLightGreenColor, refObject)
 
                     } else{
-                        dataModellerItem.changeGlowColor("white", tmpNearestTable.tableId)
-                        dataModellerItem.changeGlowColor("white", refObject)
+                        dataModellerItem.changeGlowColor(Constants.defaultDroppedRectangleColor, tmpNearestTable.tableId)
+                        dataModellerItem.changeGlowColor(Constants.defaultDroppedRectangleColor, refObject)
 
                         // Reset tmpNearestTable
                         tmpNearestTable.tableId = 0
@@ -696,6 +695,7 @@ Item {
 
             var nearestTable = nearestRectangle(DSParamsModel.fetchAllRearRectangleCoordinates(), currentPoint)
 
+
             // Get the coordinates for the nearest rectangle
             var nearestRectangleCoordinates = DSParamsModel.fetchRearRectangleCoordinates(nearestTable.tableId)
             DSParamsModel.fetchNewConnectingLine(counter).incomingRectangleFrontX = drag.x
@@ -745,7 +745,7 @@ Item {
         // Assign new variable to the created object
         // Use this variable to connect the signals and slots
         // DSParams Rectangle
-        DSParamsModel.addToRectangles(counter, dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName, objectName : counter, glowColor: "white"}))
+        DSParamsModel.addToRectangles(counter, dynamicRectangle.createObject(parent, {x:drag.x, y: drag.y, name: tableslist.tableName, objectName : counter, glowColor:Constants.defaultDroppedRectangleColor}))
 
         // DSParams Rectangle
         DSParamsModel.fetchRectangles(counter).dragged.connect(onDropAreaDraggedNewComponent)
@@ -840,7 +840,6 @@ Item {
 
         var tmpArray = []
 
-
         // Find the distance b/w all rear of a rectangle
         // and the current point
         var rectangleObjects = tmpRearRectangleCoordinates
@@ -867,7 +866,6 @@ Item {
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryModel.callSql(DSParamsModel.tmpSql)
         } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-            console.log("QUERY exe", DSParamsModel.tmpSql)
             DuckQueryModel.setQuery(DSParamsModel.tmpSql)
         } else{
             ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)

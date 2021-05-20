@@ -71,7 +71,21 @@ Page {
     property bool isHorizontalGraph: false;
 
 
-    property var colorData:any;
+    property var colorData:[];
+
+
+
+    ListModel{
+        id: dataItemList
+//        ListElement{
+//            colorValue: "blue"
+//            dataItemName: "Total Discount"
+//        }
+//        ListElement{
+//            colorValue: "green"
+//            dataItemName: "Total Discount"
+//        }
+    }
 
     onIsHorizontalGraphChanged: {
         if(isHorizontalGraph){
@@ -506,6 +520,7 @@ Page {
             case Constants.barChartTitle:
                 console.log("BAR CLICKED", xAxisColumns[0])
                 dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
+
                 break;
             case Constants.horizontalStackedBarChartTitle:
                 colorByColumnName = colorByData[0].columnName;
@@ -610,8 +625,19 @@ Page {
             }
 
             console.log('Data Values:',JSON.stringify(dataValues));
-            colorData = dataValues;
+            colorData = [];
+            console.log("colorData5",colorData)
+            colorData = JSON.parse(dataValues)[1];
+            console.log("colorData2" ,colorData)
             console.log("dataValues" ,JSON.parse(dataValues))
+
+            dataItemList.clear();
+            colorData.forEach(function (element,index) {
+
+                dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
+            console.log("newreportcolor",Constants.d3ColorPalette[index % Constants.d3ColorPalette.length])
+            });
+
 
             console.log('Webengine View Loading Status:',webEngineView.loading);
             console.log('Selected Chart Title:',report_desiner_page.chartTitle)
@@ -1537,7 +1563,7 @@ Page {
                 width: parent.width
 
                 Text{
-                    text: "Data Source Name"
+                    text: DSParamsModel.dsName
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
                     anchors.leftMargin: 10

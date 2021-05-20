@@ -31,19 +31,21 @@ public:
     ~DuckDataModel();
 
 
-    Q_INVOKABLE void columnData(QString col, QString tableName);
+    Q_INVOKABLE void columnData(QString col, QString tableName, QString options);
+    Q_INVOKABLE void columnSearchData(QString col, QString tableName, QString searchString, QString options);
     Q_INVOKABLE QStringList getColumnList(QString tableName, QString moduleName);
     Q_INVOKABLE QStringList getTableList();
     Q_INVOKABLE QStringList filterTableList(QString keyword);
     Q_INVOKABLE QStringList getDbList();
 
 
-public slots:
-    void receiveCsvFilterQuery(QString query);
-
 signals:
     void duckColData(QStringList colData);
     void columnListObtained(QList<QStringList> allColumns, QString tableName, QString moduleName);
+    void columnListModelDataChanged(QStringList colData, QString options);
+
+private:
+    QStringList getData(QString query);
 
 
 };

@@ -53,7 +53,7 @@ Column{
 
 
     Rectangle{
-        height: parent.height/5 - 5
+        height: parent.height/3 - 6
         width: parent.width
 
         Text {

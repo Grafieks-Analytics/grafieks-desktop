@@ -97,7 +97,23 @@ QtObject {
     property color dropAreaHighlightColor: "ivory"
     property color dashboardDefaultBackgroundColor: "white"
 
+    property color defaultDroppedRectangleColor:"#fdb462"
+
     property color defaultColorDialogColor: "#000000"
+    property var d3ColorPalette : [
+            "#8dd3c7",
+            "#ffffb3",
+            "#bebada",
+            "#fb8072",
+            "#80b1d3",
+            "#fdb462",
+            "#b3de69",
+            "#fccde5",
+            "#d9d9d9",
+            "#bc80bd",
+            "#ccebc5",
+            "#ffed6f",
+        ]
 
 
     // Standard Font Sizes
@@ -175,6 +191,12 @@ QtObject {
     // Sub Categories
     property string categorySubMulti: "multiple"
     property string categorySubSingle: "single"
+
+    property string dateSubYear: "year"
+    property string dateSubQuarter: "quarter"
+    property string dateSubMonth: "month"
+    property string dateSubDay: "day"
+
 
     // Mode
     property string modeCreate: "create"

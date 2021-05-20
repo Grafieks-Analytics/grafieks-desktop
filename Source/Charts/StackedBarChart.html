@@ -19,6 +19,7 @@
         .legend {
             font: 10px sans-serif;
         }
+
         .axis path,
         .axis line {
             fill: none;
@@ -35,8 +36,25 @@
             /* stroke: black; */
             stroke-width: 1.2px;
         }
+        #tooltip {
+            font-size: 14px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #tooltip:before {
+            border: solid;
+            border-color: white transparent;
+            border-width: 12px 6px 0 6px;
+            content: "";
+            left: -12px;
+            transform: rotate(90deg) !important;
+
+            bottom: 22px;
+            position: absolute;
+        }
     </style>
 </head>
+
 <body>
     <div style="display: flex">
         <div id="yAxisDiv"></div>
@@ -143,6 +161,9 @@
             var height = window.innerHeight - margin.top - margin.bottom - 50;
             yaxisTicks = height / 70;
             var timeFormat = d3.timeFormat("%m-%Y");
+            var parseDate = d3.timeParse("%Y");
+            var tooltipColumn1 = "test1";
+            var tooltipColumn2 = "test2";
 
             let {
                 d3colorPalette,
@@ -356,12 +377,29 @@
                         .style("top", ypos + "px")
                         .style("display", "block")
                         .style("position", "absolute")
-                        .text(function () {
+                        .html(function () {
                             var textValue = d.y0 - d.y1;
                             if (d.y1 < 0) {
                                 textValue = d.y1 - d.y0;
                             }
-                            return d.key + ":" + textValue.toFixed(3);
+
+                            return (
+                                "<span style='color:grey;''>" +
+                                tooltipColumn1 +
+                                ":" +
+                                "</span>" +
+                                "<span style='float: right;'>" +
+                                d.key +
+                                "</span>" +
+                                "<br/> <br/>" +
+                                "<span style='color:grey;''>" +
+                                tooltipColumn2 +
+                                ":" +
+                                "</span>" +
+                                "<span style='float: right;margin-left: 15px;'>" +
+                                textValue.toFixed(3) +
+                                "</span>"
+                            );
                         });
 
                     d3.selectAll(".bar").style("opacity", 0.3);

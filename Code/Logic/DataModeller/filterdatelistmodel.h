@@ -17,12 +17,9 @@ class FilterDateListModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    int counter;
     QuerySplitter mQuerySplitter;
     QList <FilterDateList *> mFilter;
     QStringList sqlComparisonOperators;
-    QVariantMap dateFormatMap;
-    QVariantMap timeFrameMap;
 
 public:
     explicit FilterDateListModel(QObject *parent = nullptr);
@@ -34,21 +31,18 @@ public:
     QHash<int, QByteArray> roleNames() const;
 
 
-    Q_INVOKABLE void newFilter(QString section = "",QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString slug = "", QString val = "", bool includeNull = true, bool exclude = false);
+    Q_INVOKABLE void newFilter(int counter, int dateFormatId, QString section = "",QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString slug = "", QString val = "", QString actualValue = "", bool includeNull = true, bool exclude = false);
     Q_INVOKABLE void deleteFilter(int FilterIndex);
-    Q_INVOKABLE void updateFilter(int FilterIndex, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString slug = "", QString value = "", bool includeNull = true, bool exclude = false);
+    Q_INVOKABLE void updateFilter(int FilterIndex, int dateFormatId, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString slug = "", QString value = "", QString actualValue = "", bool includeNull = true, bool exclude = false);
     Q_INVOKABLE QString callQueryModel();
     Q_INVOKABLE void clearFilters();
 
-    Q_INVOKABLE void setDateFormatMap(QVariantMap dateFormatMap);
-    Q_INVOKABLE void setTimeFrameMap(QVariantMap timeFrameMap);
-
     void addFilterList(FilterDateList * filter);
-    QString getFilteredValue(QString val);
 
 
     enum Roles{
         FilterListIdRole = Qt::UserRole +1,
+        FilterListDateFormatIdRole,
         FilterListSectionRole,
         FilterListCategoryRole,
         FilterListSubCategoryRole,
@@ -57,6 +51,7 @@ public:
         FilterListRelationRole,
         FilterListSlugRole,
         FilterListValueRole,
+        FilterListActualValueRole,
         FilterListIncludeNullRole,
         FilterListExcludeRole
     };
