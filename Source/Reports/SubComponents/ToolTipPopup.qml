@@ -271,6 +271,7 @@ Popup {
                     anchors.topMargin: 15
 
                 TextField{
+                     id:toolTipText1
                     width: parent.width-150
                     selectByMouse: true
                     height:25
@@ -278,6 +279,7 @@ Popup {
                     anchors.top: parent.top
                     anchors.topMargin: 5
                     placeholderText: "column1"
+
 
 
                     background: Rectangle{
@@ -295,6 +297,7 @@ Popup {
                     anchors.topMargin: 15
 
                 TextField{
+                    id:toolTipText2
                     width: parent.width-150
                     selectByMouse: true
                     height:25
@@ -327,6 +330,10 @@ Popup {
             anchors.right: parent.right
             anchors.rightMargin: 20
             textValue: "Apply"
+            onClicked: {
+               d3PropertyConfig.toolTip={textColumn1:toolTipText1.text,textColumn2:toolTipText2.text}
+                reDrawChart();
+            }
         }
     }
 }

@@ -9,6 +9,12 @@
             body {
                 padding: 0;
                 margin: 0;
+                overflow-x: hidden;
+            }
+            #xAxisDiv {
+                position: fixed;
+                background: #fff;
+                bottom: 0;
             }
             /* .bar--positive {
                 fill: steelblue;
@@ -20,7 +26,10 @@
         </style>
     </head>
     <body>
-        <div id="my_dataviz"></div>
+        <div style="display: flex; flex-direction: column">
+            <div id="my_dataviz"></div>
+            <div id="xAxisDiv"></div>
+        </div>
 
         <div id="tooltip"></div>
         <script>
@@ -35,7 +44,7 @@
                         "bar",
                         "foo",
                     ],
-                    [10, 40, 10, 50, 30, 20, 70],
+                    [10, 40, 10, 50, 30, 20, 71],
                 ],
                 ["value 1", "value 2Z"],
             ];
@@ -56,6 +65,9 @@
                     markerShape,
                     curveType,
                     dateFormat,
+                    horizontalChartType,
+                    standardThresholdHeight,
+                    chartType,
                 } = plottingConfiguration;
                 if (!d3colorPalette) {
                     d3colorPalette = defaultD3Config.d3ColorPalette;
@@ -65,10 +77,22 @@
                 if (!paddingInner) {
                     paddingInner = defaultD3Config.defaultPaddingInner;
                 }
+                if (!chartType) {
+                    chartType = defaultD3Config.horizontalChartType;
+                }
 
-                var margin = { top: 40, right: 20, bottom: 80, left: 70 };
+                if (!standardThresholdHeight) {
+                    standardThresholdHeight =
+                        defaultD3Config.standardThresholdHeight;
+                }
+
+                var margin = { top: 20, right: 50, bottom: 80, left: 70 };
                 var width = window.innerWidth - margin.left - margin.right;
                 var height = window.innerHeight - margin.top - margin.bottom;
+
+                if (chartType == constants.chartType.STANDARD) {
+                    height = dataValues[0].length * standardThresholdHeight;
+                }
 
                 d3.selectAll("#my_dataviz").html("");
 
@@ -81,7 +105,11 @@
                     .append("g")
                     .attr(
                         "transform",
-                        "translate(" + margin.left + "," + margin.top + ")"
+                        "translate(" +
+                            margin.left +
+                            "," +
+                            (margin.top + 10) +
+                            ")"
                     );
 
                 // set the ranges
@@ -97,7 +125,7 @@
                 );
 
                 var x = d3.scaleLinear().range([0, width]);
-                x.domain([minValue > 0 ? 0 : minValue, maxValue]);
+                x.domain([minValue > 0 ? 0 : minValue, maxValue]).nice();
                 y.domain(dataValues[0]);
 
                 svg.append("g")
@@ -147,10 +175,26 @@
 
                 yaxisTicks = height / 100;
                 // add the x Axis
-                svg.append("g")
-                    .attr("transform", "translate(0," + height + ")")
+                // svg.append("g")
+                //     .attr("transform", "translate(0," + height + ")")
+                //     .attr("class", "x-axis")
+                //     .call(d3.axisBottom(x));
+
+                var xAxis = d3.axisBottom(x).tickSize(0).ticks(10);
+
+                d3.select("#xAxisDiv")
+                    .append("svg")
+                    .attr("height", "72")
+                    .attr("width", width + margin.left + margin.right)
+                    .append("g") //add group to leave margin for axis
+                    .attr(
+                        "transform",
+                        "translate(" + margin.left + ",0)"
+                        // "translate(0,0)"
+                    )
+                    .append("g")
                     .attr("class", "x-axis")
-                    .call(d3.axisBottom(x));
+                    .call(xAxis);
 
                 // add the y Axis
                 svg.append("g")

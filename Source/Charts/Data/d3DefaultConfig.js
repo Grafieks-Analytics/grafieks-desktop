@@ -5,6 +5,7 @@ const constants = {
     chartType: {
         FIT_WIDTH: "FitWidth",
         STANDARD: "Standard",
+        FIT_HEIGHT: "FitHeight",
     },
 };
 
@@ -34,8 +35,11 @@ const defaultD3Config = {
     defaultTimeParseFormat: "%d-%m-%Y",
     defaultSpace: 30,
     dateFormat: "%Y",
-    chartType: constants.chartType.STANDARD,
-    standartThresholdWidth: 100,
+    chartType: constants.chartType.FIT_WIDTH,
+    horizontalChartType: constants.chartType.STANDARD,
+    standardThresholdWidth: 100,
+    standardThresholdHeight: 100,
+
 };
 const markerShapeConfig = {
     circle: {
