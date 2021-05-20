@@ -52,7 +52,7 @@ class DSParamsModel : public QObject
     QMap<int, bool> excludeMap;                 // Map for exclude all checks, QMap<filterId, bool>
     QMap<int, bool> includeNullMap;             // Map for include nulls, QMap<filterId, bool>
     QMap<int, bool> selectAllMap;               // Map for select alls, QMap<filterId, bool>
-    QStringList tmpSelectedValues;              // Tmp selected values in a filter list - used in categorical filter list
+    QStringList tmpSelectedValues;              // Tmp selected values in a filter list - used in categorical/date filter list
     QVector<int> tmpFilterIndex;                // Tmp created filter index - used in categorical filter wildcard
     QMap<int, int> dateFormatMap;               // Date selected format QMap<filterId, formatId>
     QMap<int, QStringList> actualDateValues;    // For dates like This year, last 10 years, quarter, etc, the original values are stored in this variable

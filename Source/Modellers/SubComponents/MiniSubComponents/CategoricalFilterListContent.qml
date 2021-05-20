@@ -101,7 +101,6 @@ Rectangle{
                 multiSelectCheckList.visible = true
                 singleSelectCheckList.visible = false
 
-                console.log(jsonOptions.values, "VALS JSON")
                 if(jsonOptions.values.length > 0){
                     var checkedValues = jsonOptions.values.split(",")
                     checkedValues.forEach((item) => {
@@ -140,7 +139,6 @@ Rectangle{
     function slotDataCleared(){
         DSParamsModel.removeTmpSelectedValues(0, true)
         radioSelected = ""
-        console.log(DSParamsModel.getTmpSelectedValues(0), "TMP SELECTED")
     }
 
     function onMultiSelectSelected(){

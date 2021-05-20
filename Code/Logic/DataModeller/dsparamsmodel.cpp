@@ -368,8 +368,9 @@ void DSParamsModel::resetFilter()
 
 void DSParamsModel::clearFilter()
 {
-    this->tmpSelectedValues.clear();
+    this->removeTmpSelectedValues(0, true);
     this->tmpFilterIndex.clear();
+
 }
 
 void DSParamsModel::addToHideColumns(QString colName)
@@ -840,7 +841,6 @@ QVariantMap DSParamsModel::fetchJoinRelation(int refObjId, bool fetchAll)
 void DSParamsModel::addToJoinValue(int refObjId, QString value)
 {
     this->joinValue.insert(QString::number(refObjId), value);
-    qDebug() << "ADD TO JIN VALUE" << refObjId << value;
 }
 
 void DSParamsModel::removeJoinValue(int refObjId, bool removeAll)
@@ -1075,8 +1075,6 @@ QStringList DSParamsModel::getTmpSelectedValues(int refObjId, bool fetchAll)
     } else{
         output = this->tmpSelectedValues;
     }
-
-    qDebug() << "TMP SELECTED VALUES" << this->tmpSelectedValues;
 
     return output;
 }
