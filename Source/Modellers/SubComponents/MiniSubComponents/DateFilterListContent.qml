@@ -145,6 +145,7 @@ Rectangle{
             singleSelectCheckList.model = []
             multiSelectCheckList.model = []
 
+            // Date format
             selectedFormat = DSParamsModel.getDateFormatMap(counter)
             customBox.currentIndex = selectedFormat
 
@@ -186,6 +187,11 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
+
+    function slotDataCleared(){
+
+    }
+
     function slotEditModeSubCategory(subCategory){
 
         if(subCategory === Constants.categorySubMulti){
@@ -315,7 +321,7 @@ Rectangle{
         multiSelectCheckList.model  = tmpColData
 
 
-        DSParamsModel.setValueFormat(counter, selectedFormat)
+        DSParamsModel.setDateFormatMap(counter, selectedFormat)
         DSParamsModel.removeTmpSelectedValues(0, true)
         DSParamsModel.removeJoinValue(counter)
         DSParamsModel.removeJoinRelation(counter)

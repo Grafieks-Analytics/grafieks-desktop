@@ -89,6 +89,10 @@ Rectangle{
         dateTimeFrameContent.signalTimeFrameRadioEditQuarter.connect(quarterTabContent.slotEditQuarter)
     }
 
+    function slotDataCleared(){
+
+    }
+
     function slotEditModeTimeFrame(subCategory, relation, slug, value){
         dateTimeFrameContent.visible = true
 

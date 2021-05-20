@@ -55,6 +55,7 @@ Popup {
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
+    signal clearData()
     signal subCategoryEditMode(string subCategory)
     signal signalCalendarEditData(string relation, string slug, string value)
     signal signalTimeFrameEditData(string subCategory, string relation, string value, string value)
@@ -139,6 +140,10 @@ Popup {
         dateFilterPopup.subCategoryEditMode.connect(listContent.slotEditModeSubCategory)
         dateFilterPopup.signalCalendarEditData.connect(calendarContent.slotEditModeCalendar)
         dateFilterPopup.signalTimeFrameEditData.connect(dateTimeFrameContent.slotEditModeTimeFrame)
+
+        dateFilterPopup.clearData.connect(listContent.slotDataCleared)
+        dateFilterPopup.clearData.connect(calendarContent.slotDataCleared)
+        dateFilterPopup.clearData.connect(dateTimeFrameContent.slotDataCleared)
     }
 
     // SLOT function
@@ -191,6 +196,7 @@ Popup {
     }
 
     function applyDateFilter(){
+        console.log("Date filter applied")
 
         dateFilterPopup.visible = false
 
@@ -220,6 +226,7 @@ Popup {
             let exclude = DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
             let dateFormatId = category === Constants.dateMainTimeFrameType ? DSParamsModel.getDateFormatMap(counter): 0
 
+            console.log("JOIN VAL", joinValue[counter], actualValue)
 
             singleRelation = joinRelation[counter]
             singleValue = joinValue[counter]
@@ -254,6 +261,13 @@ Popup {
         default:
             break
         }
+
+        // Reset all DSParams
+        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter();
+
+        // Clear tabs individual temp data
+        dateFilterPopup.clearData()
 
 
     }

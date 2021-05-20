@@ -201,6 +201,7 @@ public:
     // Filters
 
     Q_INVOKABLE void resetFilter();
+    Q_INVOKABLE void clearFilter();
 
     Q_INVOKABLE void addToJoinRelation(int refObjId, QString relation = "");
     Q_INVOKABLE void removeJoinRelation(int refObjId = 0, bool removeAll = false);
@@ -214,8 +215,8 @@ public:
     Q_INVOKABLE void removeJoinRelationSlug(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE QVariantMap fetchJoinRelationSlug(int refObjId = 0, bool fetchAll = false);
 
-    Q_INVOKABLE void setValueFormat(int refObjId, int formatId);
-    Q_INVOKABLE void removeValueFormat(int refObjId = 0, bool removeAll = false);
+    Q_INVOKABLE void setDateFormatMap(int refObjId, int formatId);
+    Q_INVOKABLE void removeDateFormatMap(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE int getDateFormatMap(int refObjId);
 
     Q_INVOKABLE void setActualDateValues(int refObjId, QString value1, QString value2 = "");
