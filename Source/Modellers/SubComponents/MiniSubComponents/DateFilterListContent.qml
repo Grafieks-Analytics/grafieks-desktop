@@ -158,15 +158,6 @@ Rectangle{
                 multiSelectCheckList.visible = true
                 singleSelectCheckList.visible = false
 
-                //                if(jsonOptions.values.length > 0){
-                //                    var checkedValues = jsonOptions.values.split(",")
-                //                    checkedValues.forEach((item) => {
-                //                                              DSParamsModel.setTmpSelectedValues(item)
-                //                                              console.log("ITEM 1", item)
-                //                                          })
-                //                }
-                //                console.log(DSParamsModel.getTmpSelectedValues(0, true))
-
             } else{
                 singleSelectRadio.checked = true
 
@@ -265,6 +256,7 @@ Rectangle{
         if(checked === true){
 
             DSParamsModel.addToJoinValue(counter, "%")
+            DSParamsModel.setActualDateValues(counter, "%")
             DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
             DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
         }
@@ -278,6 +270,7 @@ Rectangle{
 
                 // Set SELECT ALL to false
                 DSParamsModel.setSelectAllMap(counter, false)
+                DSParamsModel.setActualDateValues(counter, "")
                 mainCheckBox.checked = false
 
             }
@@ -599,6 +592,7 @@ Rectangle{
             checkState: childGroup.checkState
 
             onCheckedChanged: {
+                console.log("State changed")
                 onAllCheckBoxCheckedChanged(checked)
             }
         }

@@ -170,7 +170,6 @@ Popup {
             singleValue = joinValue[counter]
             singleSlug = joinSlug[counter]
 
-            console.log("MODE 1", DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, counter, DSParamsModel.filterModelIndex)
             manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, counter, DSParamsModel.filterModelIndex)
             break
 
@@ -189,7 +188,6 @@ Popup {
                 singleValue = joinValue[fi]
                 singleSlug = joinSlug[fi]
 
-                console.log("Mode 2", DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, fi, DSParamsModel.filterModelIndex)
                 manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, fi, DSParamsModel.filterModelIndex)
             }
 
@@ -215,6 +213,7 @@ Popup {
 
     function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, counter = 0, filterId = 0){
 
+        console.log("Filter insert categorical", mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, counter, filterId)
         // Save the filter
         if(mode === Constants.modeCreate){
             FilterCategoricalListModel.newFilter(counter, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
