@@ -226,9 +226,7 @@ Rectangle{
     function onSingleSelectRadioSelected(modelData, format){
 
         var actualValueArray = []
-        DSParamsModel.getTmpSelectedValues(0, true).forEach((item)  => {
-                                                                actualValueArray.push(searchDateFormat(item, selectedFormat))
-                                                            })
+        actualValueArray.push(searchDateFormat(modelData, selectedFormat))
         DSParamsModel.setActualDateValues(counter, actualValueArray)
         DSParamsModel.addToJoinValue(counter, modelData.toString())
         DSParamsModel.addToJoinRelation(counter, Constants.inRelation)
@@ -540,6 +538,7 @@ Rectangle{
             anchors.leftMargin: 4
 
             TextField{
+                id: searchText
                 placeholderText: "Search"
                 leftPadding: 20
                 selectByMouse: true
