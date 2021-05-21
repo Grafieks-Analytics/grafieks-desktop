@@ -88,7 +88,7 @@ Rectangle{
         }
 
         QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
-        console.log("EDIT CLICKED", DSParamsModel.mode)
+        console.log("EDIT CLICKED numerical", modelIndex, filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
     }
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
