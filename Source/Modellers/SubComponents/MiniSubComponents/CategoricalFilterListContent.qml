@@ -26,7 +26,6 @@ Rectangle{
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
 
-    property var radioSelected: ""
     property int counter: 0
 
 
@@ -93,7 +92,9 @@ Rectangle{
             singleSelectCheckList.model = colData
             multiSelectCheckList.model  = colData
 
+            console.log(options, "JSON")
             var jsonOptions = JSON.parse(options)
+
 
             if(jsonOptions.subCategory === Constants.categorySubMulti){
                 multiSelectRadio.checked = true
@@ -114,7 +115,10 @@ Rectangle{
                 multiSelectCheckList.visible = false
                 singleSelectCheckList.visible = true
 
-                radioSelected = jsonOptions.values
+                if(DSParamsModel.searchTmpSelectedValues(jsonOptions.values[1]) < 0){
+                    DSParamsModel.setTmpSelectedValues(jsonOptions.values[1])
+                }
+
             }
         }
     }
@@ -138,7 +142,6 @@ Rectangle{
     // SLOT function
     function slotDataCleared(){
         DSParamsModel.removeTmpSelectedValues(0, true)
-        radioSelected = ""
     }
 
     function onMultiSelectSelected(){
@@ -164,12 +167,14 @@ Rectangle{
 
     function onSingleSelectRadioSelected(modelData){
 
-
         DSParamsModel.addToJoinValue(counter, modelData.toString())
         DSParamsModel.addToJoinRelation(counter, Constants.equalRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.equalRelation)
 
-        radioSelected = modelData.toString()
+        // Clear all tmp selected values and insert again
+        DSParamsModel.removeTmpSelectedValues(0, true)
+        DSParamsModel.setTmpSelectedValues(modelData.toString())
+        console.log(DSParamsModel.getTmpSelectedValues(0, true), counter, "COUNTER")
     }
 
 
@@ -512,7 +517,7 @@ Rectangle{
 
                         // On search, highlight the selected radio
                         Component.onCompleted: {
-                            modelRadioButton.checked = radioSelected === modelData ? true: false
+                            modelRadioButton.checked = DSParamsModel.getTmpSelectedValues(0, true)[0] === modelData ? true: false
                         }
 
                         // On edit, highlight the selected option
@@ -522,7 +527,6 @@ Rectangle{
                             function onColumnListModelDataChanged(colData, options){
                                 if(DSParamsModel.mode === Constants.modeEdit && DSParamsModel.category === Constants.categoryMainListType && DSParamsModel.subCategory === Constants.categorySubSingle){
                                     var jsonOptions = JSON.parse(options)
-                                    console.log("RADIO", jsonOptions.values, modelRadioButton.objectName)
                                     modelRadioButton.checked = jsonOptions.values === modelRadioButton.objectName ? true: false
                                 }
                             }
