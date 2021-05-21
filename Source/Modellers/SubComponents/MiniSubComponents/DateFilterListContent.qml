@@ -27,7 +27,6 @@ Rectangle{
 
     property var checkedValues : []
     property var masterColData: []
-    property var radioSelected: ""
     property int counter: 0
     property int selectedFormat: 6
 
@@ -163,8 +162,6 @@ Rectangle{
 
                 multiSelectCheckList.visible = false
                 singleSelectCheckList.visible = true
-
-                radioSelected = jsonOptions.values
             }
 
         }
@@ -232,12 +229,23 @@ Rectangle{
         DSParamsModel.addToJoinRelation(counter, Constants.inRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.inRelation)
 
-        radioSelected = modelData.toString()
+        // Clear all tmp selected values and insert again
+        DSParamsModel.removeTmpSelectedValues(0, true)
+        DSParamsModel.setTmpSelectedValues(modelData.toString())
     }
 
 
     function onTextChangedSearch(){
-        var options = {}
+        var options = {
+            "section" : DSParamsModel.section,
+            "category" : DSParamsModel.category,
+            "subCategory" : DSParamsModel.subCategory,
+            "values" : DSParamsModel.fetchJoinValue(counter),
+            "relation" : DSParamsModel.fetchJoinRelation(counter),
+            "slug" : DSParamsModel.fetchJoinRelationSlug(counter)
+
+        }
+
         QueryDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))
 
         if(DSParamsModel.subCategory === Constants.categorySubMulti){
@@ -685,7 +693,7 @@ Rectangle{
 
                         // On search, highlight the selected radio
                         Component.onCompleted: {
-                            modelRadioButton.checked = radioSelected === modelData ? true: false
+                            modelRadioButton.checked = DSParamsModel.getTmpSelectedValues(0, true)[0] === modelData ? true: false
                         }
 
                         // On edit, highlight the selected option
