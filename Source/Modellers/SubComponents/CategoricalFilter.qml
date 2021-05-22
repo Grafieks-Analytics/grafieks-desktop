@@ -130,7 +130,7 @@ Popup {
         categoricalFilterPopup.visible = false
 
         // Reset all DSParams
-        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter();
 
         // Clear tabs individual temp data
         categoricalFilterPopup.clearData()
@@ -138,8 +138,6 @@ Popup {
     }
 
     function onApplyClicked(){
-
-        console.log("Categorical filter applied")
 
         categoricalFilterPopup.visible = false
 
@@ -200,8 +198,7 @@ Popup {
             break
         }
 
-        // Reset all DSParams
-        DSParamsModel.resetFilter();
+        // Clear filters
         DSParamsModel.clearFilter();
 
         // Clear tabs individual temp data
@@ -225,7 +222,7 @@ Popup {
 
     function onResetClicked(){
         categoricalFilterPopup.visible = false
-        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter()
 
         // Clear tabs individual temp data
         categoricalFilterPopup.clearData()
@@ -238,7 +235,7 @@ Popup {
         topContent.visible = false
 
         // Set the main category of the filter
-        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter()
         DSParamsModel.setCategory(Constants.categoryMainListType)
 
         // For list category type
@@ -257,7 +254,7 @@ Popup {
         topContent.visible = false
 
         // Set the main category of the filter
-        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter();
         DSParamsModel.setCategory(Constants.categoryMainWildCardType)
 
     }
@@ -270,7 +267,7 @@ Popup {
         topContent.visible = true
 
         // Set the main category of the filter
-        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter();
         DSParamsModel.setCategory(Constants.categoryMainTopType)
     }
 

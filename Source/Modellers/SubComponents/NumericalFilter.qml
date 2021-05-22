@@ -97,11 +97,12 @@ Popup {
 
     function closePopup(){
         numericalFilterPopup.visible = false
-        DSParamsModel.resetFilter()
+        DSParamsModel.clearFilter()
     }
 
     function onCancelClicked(){
         closePopup()
+        DSParamsModel.clearFilter();
     }
 
     function onApplyClicked(){
@@ -135,7 +136,6 @@ Popup {
 //        DSParamsModel.setMode(Constants.modeCreate)
 
         // Reset all DSParams
-        DSParamsModel.resetFilter();
         DSParamsModel.clearFilter();
 
         // Clear tabs individual temp data

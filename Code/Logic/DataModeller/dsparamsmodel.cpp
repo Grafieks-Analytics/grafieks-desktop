@@ -353,23 +353,40 @@ QVariantList DSParamsModel::readDatasource(QString filename)
 
 void DSParamsModel::resetFilter()
 {
+    // Q_PROPERTY clear
+    this->setInternalCounter(0);
     this->setSection(Constants::defaultTabSection);
     this->setCategory(Constants::defaultCategory);
     this->setSubCategory(Constants::defaultSubCategory);
-    //    this->setMode(Constants::defaultMode);
-    //    this->setExclude(Constants::defaultExclude);
-    //    this->setIncludeNull(Constants::defaultIncludeNull);
-    //    this->setSelectAll(Constants::defaultSelectAll);
+    this->setTableName("");
+    this->setColName("");
+    this->setFilterIndex(0);
+    this->setFilterModelIndex(0);
+    this->setMode(Constants::defaultMode);
 
-    this->joinValue.clear();
-    this->joinRelation.clear();
-    this->joinRelationSlug.clear();
+    // Variables clear
+    this->removeJoinRelation(0, true);
+    this->removeJoinValue(0, true);
+    this->removeJoinRelationSlug(0, true);
+    this->removeIncludeNullMap(0, true);
+    this->removeIncludeNullMap(0, true);
+    this->removeSelectAllMap(0, true);
+    this->removeTmpSelectedValues(0, true);
+    this->removeTmpFilterIndex(0, true);
+    this->removeDateFormatMap(0, true);
+    this->removeActualDateValues(0, true);
 }
 
 void DSParamsModel::clearFilter()
 {
+    // Q_PROPERTY
+    this->setSection(Constants::defaultTabSection);
+    this->setCategory(Constants::defaultCategory);
+    this->setSubCategory(Constants::defaultSubCategory);
+
+    // variable change
     this->removeTmpSelectedValues(0, true);
-    this->tmpFilterIndex.clear();
+    this->removeTmpFilterIndex(0, true);
 
 }
 
@@ -964,9 +981,13 @@ void DSParamsModel::setExcludeMap(int refObjId, bool value)
     this->excludeMap.insert(refObjId, value);
 }
 
-void DSParamsModel::removeExcludeMap(int refObjId)
+void DSParamsModel::removeExcludeMap(int refObjId, bool removeAll)
 {
-    this->excludeMap.remove(refObjId);
+    if(removeAll == false){
+        this->excludeMap.remove(refObjId);
+    } else{
+        this->excludeMap.clear();
+    }
 }
 
 QVariantMap DSParamsModel::getExcludeMap(int refObjId, bool fetchAll)
@@ -994,9 +1015,13 @@ void DSParamsModel::setIncludeNullMap(int refObjId, bool value)
     this->includeNullMap.insert(refObjId, value);
 }
 
-void DSParamsModel::removeIncludeNullMap(int refObjId)
+void DSParamsModel::removeIncludeNullMap(int refObjId, bool removeAll)
 {
-    this->includeNullMap.remove(refObjId);
+    if(removeAll == false){
+        this->includeNullMap.remove(refObjId);
+    } else{
+        this->includeNullMap.clear();
+    }
 }
 
 QVariantMap DSParamsModel::getIncludeNullMap(int refObjId, bool fetchAll)
@@ -1024,9 +1049,13 @@ void DSParamsModel::setSelectAllMap(bool refObjId, bool value)
     this->selectAllMap.insert(refObjId, value);
 }
 
-void DSParamsModel::removeSelectAllMap(int refObjId)
+void DSParamsModel::removeSelectAllMap(int refObjId, bool removeAll)
 {
-    this->selectAllMap.remove(refObjId);
+    if(removeAll == false){
+        this->selectAllMap.remove(refObjId);
+    } else{
+        this->selectAllMap.clear();
+    }
 }
 
 QVariantMap DSParamsModel::getSelectAllMap(int refObjId, bool fetchAll)
@@ -1051,14 +1080,15 @@ QVariantMap DSParamsModel::getSelectAllMap(int refObjId, bool fetchAll)
 
 void DSParamsModel::setTmpSelectedValues(QString value)
 {
-    this->tmpSelectedValues.append(value);
+    if(this->tmpSelectedValues.indexOf(value) < 0){
+        this->tmpSelectedValues.append(value);
 
-    emit tmpSelectedValuesChanged(this->tmpSelectedValues);
+        emit tmpSelectedValuesChanged(this->tmpSelectedValues);
+    }
 }
 
 void DSParamsModel::removeTmpSelectedValues(int refObjId, bool removeAll)
 {
-    qDebug() << "REMOVE TMP SELECTED" << refObjId << removeAll;
     if(removeAll == true){
         this->tmpSelectedValues.clear();
     } else{
