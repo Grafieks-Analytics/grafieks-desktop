@@ -24,7 +24,7 @@ public:
     Q_INVOKABLE void columnSearchData(QString col, QString tableName, QString searchString, QString options);
 
 signals:
-     void columnListModelDataChanged(QStringList colData, QString options);
+     void columnListModelDataChanged(QStringList colData, QString options, bool searchMode = false);
 
 private:
      QStringList getData(QString query);

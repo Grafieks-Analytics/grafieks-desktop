@@ -41,7 +41,7 @@ Rectangle{
 
         // Listview height
         function onRowCountChanged(){
-            listFiltersListView.height = FilterDateListModel.rowCount() * 30
+            listFiltersListView.height = FilterDateListModel.rowCount() * 40
         }
     }
     // Connections Ends
@@ -80,11 +80,10 @@ Rectangle{
             "values" : value,
             "relation" : relation,
             "slug" : slug
-
         }
 
         QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
-        console.log("EDIT CLICKED", DSParamsModel.mode)
+        console.log("EDIT CLICKED date", modelIndex, filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
     }
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -233,7 +232,7 @@ Rectangle{
                                     onClicked: {
 
                                         if(category === "date.timeframe"){
-                                            DSParamsModel.removeValueFormat(value)
+                                            DSParamsModel.removeDateFormatMap(value)
                                         }
                                         if(category === "date.list"){
 //                                            DSParamsModel.removeTimeFrame(value)
