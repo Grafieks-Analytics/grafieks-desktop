@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     <head>
         <script src="./Data/d3DefaultConfig.js"></script>
@@ -5,18 +6,107 @@
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
         <link rel="stylesheet" href="Data/general.css" />
+        <style type="text/css">
+            body {
+                padding: 0;
+                margin: 0;
+            }
+        </style>
+        <style>
+            .axis .domain {
+                display: none;
+            }
+        </style>
+        <style type="text/css">
+            body {
+                padding: 0;
+                margin: 0;
+            }
+        </style>
     </head>
-    <body>
-        <div id="my_dataviz"></div>
-        <div id="tooltip"></div>
 
+    <body>
+        <div style="display: flex">
+            <div id="xAxisDiv"></div>
+            <div id="my_dataviz"></div>
+        </div>
+        <div id="tooltip"></div>
         <script>
+            function sumAllData(originalData, currentData) {
+                var allKeys = [
+                    ...Object.keys(originalData),
+                    ...Object.keys(currentData),
+                ];
+
+                allKeys = allKeys.filter((d) => {
+                    if (d != "mainCategory") {
+                        return d;
+                    }
+                });
+
+                allKeys.forEach((d) => {
+                    originalData[d] =
+                        (originalData[d] || 0) + (currentData[d] || 0);
+                });
+
+                return originalData;
+            }
+
+            function transformData(dataValue, dateFormat) {
+                var transformedDataValue = {};
+                var globalKeys = [];
+
+                dataValue[0].forEach((d, i) => {
+                    var currentData = d;
+
+                    if (isDateFormat(d.mainCategory)) {
+                        isKey1Date = true;
+                    }
+
+                    var category = getDateFormattedData(
+                        d.mainCategory,
+                        dateFormat
+                    );
+                    if (!transformedDataValue[category]) {
+                        transformedDataValue[category] = {};
+                    }
+                    var originalData = transformedDataValue[category];
+
+                    var allKeys = [
+                        ...Object.keys(originalData),
+                        ...Object.keys(currentData),
+                    ];
+
+                    allKeys = allKeys
+                        .filter((d) => {
+                            if (d != "mainCategory") {
+                                return d;
+                            }
+                        })
+                        .filter(getUniqueArrayValues);
+
+                    globalKeys.push(...allKeys);
+
+                    allKeys.forEach((d) => {
+                        originalData[d] =
+                            (originalData[d] || 0) + (currentData[d] || 0);
+                    });
+                    transformedDataValue[category] = {
+                        ...originalData,
+                        mainCategory: category,
+                    };
+                });
+
+                var transformedDataValue = Object.keys(
+                    transformedDataValue
+                ).map((d) => transformedDataValue[d]);
+
+                globalKeys = globalKeys.filter(getUniqueArrayValues);
+                return [transformedDataValue, globalKeys];
+            }
+
             function drawChart(data, plottingConfiguration = {}) {
                 window.data = data;
-                var keys = data[2];
-                var [xAxisLabel, yAxisLabel] = data[3] || [];
-
-                data = transformData(data);
 
                 let {
                     d3colorPalette,
@@ -24,7 +114,12 @@
                     markerShape,
                     curveType,
                     dateFormat,
+                    chartType,
+                    standardThresholdHeight,
+                    subCategoryColour,
+                    categoryColor,
                 } = plottingConfiguration;
+
                 if (!d3colorPalette) {
                     d3colorPalette = defaultD3Config.d3ColorPalette;
                 }
@@ -34,228 +129,361 @@
                     paddingInner = defaultD3Config.defaultPaddingInner;
                 }
 
-                var requireLegend = false;
-
-                var margin = { top: 40, right: 20, bottom: 80, left: 70 };
-                var width = window.innerWidth - margin.left - margin.right - 70;
-                var height =
-                    window.innerHeight - margin.top - margin.bottom - 20;
-
-                d3.selectAll("#my_dataviz").html("");
-
-                var y0 = d3
-                    .scaleBand()
-                    .rangeRound([height, 0])
-                    .padding(paddingInner);
-
-                var y1 = d3.scaleBand().padding(paddingInner);
-                var x = d3.scaleLinear().rangeRound([0, width]);
-                var z = d3.scaleOrdinal().range(d3Colors);
-
-                y0.domain(
-                    data.map(function (d) {
-                        return d.key;
-                    })
-                );
-                y1.domain(keys).rangeRound([0, y0.bandwidth()]);
-
-                var minValue = d3.min(data, function (d) {
-                    return d3.min(keys, function (key) {
-                        return d[key];
-                    });
-                });
-                if (minValue > 0) {
-                    minValue = 0;
+                if (!dateFormat) {
+                    dateFormat = defaultD3Config.dateFormat;
                 }
-                x.domain([
-                    minValue,
-                    d3.max(data, function (d) {
-                        return d3.max(keys, function (key) {
-                            return d[key];
-                        });
-                    }),
-                ]).nice();
-                var maxTicks = d3.max(data, function (d) {
-                    return d3.max(keys, function (key) {
-                        return d[key];
-                    });
-                });
 
-                // Add svg to
+                if (!chartType) {
+                    chartType = defaultD3Config.horizontalChartType;
+                }
+
+                if (!standardThresholdHeight) {
+                    standardThresholdHeight =
+                        defaultD3Config.standardThresholdHeight;
+                }
+
+                data = transformData(data, dateFormat);
+
+                var [data, all_keys] = data;
+
+                var margin = { top: 40, right: 20, bottom: 0, left: 70 };
+                var width = window.innerWidth - margin.left - margin.right - 70;
+                var height = window.innerHeight - margin.top - margin.bottom;
+
+                if (chartType == constants.chartType.STANDARD) {
+                    var bars = numberOfBars(data);
+                    height = bars * standardThresholdHeight;
+
+                    if (height < window.innerHeight) {
+                        d3.select("#xAxisDiv").style(
+                            "top",
+                            height - margin.top + "px"
+                        );
+                    } else {
+                        d3.select("#xAxisDiv").style(
+                            "bottom",
+                            -(margin.top - 10) + "px"
+                        );
+                        d3.select("#xAxisDiv").style("top", null);
+                    }
+                } else {
+                    height -= margin.top - 10;
+                    d3.select("#xAxisDiv").style("bottom", 0);
+                }
+
+                function numberOfBars(data) {
+                    var count = 0;
+                    for (var i = 0; i < data.length; i++) {
+                        var innerData = data[i];
+                        count += Object.keys(innerData).length - 1;
+                    }
+                    return count;
+                }
+
+                clearChart();
+
+                var minHeight = d3.min(data, (d) =>
+                    d3.min(all_keys, (k) => d[k])
+                );
+
+                if (minHeight > 0) {
+                    minHeight = 0;
+                }
+
+                var maxHeight = d3.max(data, (d) =>
+                    d3.max(all_keys, (k) => d[k])
+                );
+
+                //add svg with margin !important
+                //this is svg is actually group
                 var svg = d3
                     .selectAll("#my_dataviz")
                     .append("svg")
-                    .attr("width", width + margin.left + margin.right)
+                    .attr("width", width + 100)
                     .attr("height", height + margin.top + margin.bottom)
-                    .attr("transform", "translate(0,0)");
-
-                var g = svg
-                    .append("g")
+                    .append("g") //add group to leave margin for axis
                     .attr(
                         "transform",
-                        "translate(" + margin.left + "," + margin.top + ")"
+                        "translate(" +
+                            margin.left +
+                            "," +
+                            (margin.top - 10) +
+                            ")"
                     );
 
-                g.append("g")
-                    .attr("class", "axis grid")
-                    .attr("transform", "translate(0," + height + ")")
-                    .call(make_x_gridlines(x).tickSize(-height).tickFormat(""));
+                // Change xScale from range 0 width to max and min c=value and scale it linearly
+                const xScale = d3.scaleLinear().range([0, width]);
+                // .padding(paddingInner);
 
-                var element = g
+                const yScale0 = d3
+                    .scaleBand()
+                    .rangeRound([height - margin.top - margin.bottom, 0]);
+
+                // change yScale to scale band and range from 0 to height (which is fine here)
+
+                var zScale = d3.scaleOrdinal().range(d3Colors);
+
+                // const xAxis = d3.axisBottom(xScale0);
+                // const yAxis = d3.axisLeft(yScale);
+
+                // yaxisTicks = height / 70;
+                yaxisTicks = width / 150;
+
+                // change scale domain from, xScale from minVaue to maxValue
+                xScale.domain([minHeight, maxHeight]).nice();
+
+                //add x and y axis
+                var yAxis = d3.axisLeft(yScale0).tickSize(0).ticks(yaxisTicks);
+
+                var xAxis = d3.axisBottom(xScale).tickSize(0).ticks(yaxisTicks);
+
+                // d3.select("#xAxisDiv")
+                //     .append("svg")
+                //     .attr("width", "72")
+                //     .attr("height", height + margin.top + margin.bottom)
+                //     .append("g") //add group to leave margin for axis
+                //     .attr(
+                //         "transform",
+                //         "translate(" + margin.left + "," + margin.top + ")"
+                //     )
+                //     .append("g")
+                //     .attr("class", "y-axis") // this will be x-axis
+                //     .call(xAxis); // call xAxis here
+
+                d3.select("#xAxisDiv")
+                    .append("svg")
+                    .attr("height", "80")
+                    .attr("width", width + margin.left + margin.right)
+                    .append("g") //add group to leave margin for axis
+                    .attr(
+                        "transform",
+                        "translate(" + margin.left + ",0)"
+                        // "translate(0,0)"
+                    )
                     .append("g")
-                    .selectAll("g")
+                    .attr("class", "x-axis")
+                    .call(xAxis);
+
+                // change xScale0 to yScale0
+                yScale0.domain(data.map((d) => d.mainCategory));
+
+                svg.append("g")
+                    .attr("class", "grid")
+                    .style("stroke-width", "1")
+                    .call(
+                        make_x_gridlines(xScale)
+                            .tickSize(height - margin.top)
+                            .tickFormat("")
+                    );
+
+                svg.selectAll(".groups")
                     .data(data)
                     .enter()
                     .append("g")
-                    .attr("transform", function (d) {
-                        return "translate(0," + y0(d.key) + ")";
-                    });
+                    .attr("class", "mainCategory")
+                    .each(function (group_data) {
+                        const bar_data = getBars(group_data),
+                            x_offset = groupOffset(group_data),
+                            group_keys = bar_data.map((d) => d.name);
+                        yScale1 = d3
+                            .scaleBand()
+                            .domain(group_keys)
+                            .range([0, yScale0.bandwidth() - x_offset * 2]) // change xScale0 to yScale0
+                            .padding(paddingInner);
 
-                var rect = element
-                    .selectAll("rect")
-                    .data(function (d, i) {
-                        return keys.map(function (key) {
-                            return {
-                                key: key,
-                                value: d[key],
-                                // index:  + d.key,
-                            };
-                        });
-                    })
-                    .enter()
-                    .append("rect")
-                    .attr("x", function (d) {
-                        if (d.value < 0) {
-                            return x(d.value);
-                        }
-                        return x(0);
-                    })
-                    .attr("y", function (d) {
-                        return y1(d.key);
-                    })
-                    .attr("width", function (d) {
-                        return Math.abs(x(d.value) - x(0));
-                    })
-                    .attr("height", y1.bandwidth())
-                    .attr("fill", function (d) {
-                        return z(d.key);
-                    })
-                    .on("mouseout", function (d, i) {
-                        d3.select("#tooltip").style("display", "none");
-                        d3.selectAll(".bar").style("opacity", 1);
-                    })
-                    .on("mouseover mousemove", function (d, i) {
-                        var computedValues = this.getClientRects()[0];
+                        d3.select(this)
+                            .attr(
+                                "transform",
+                                (d) =>
+                                    `translate(0,${
+                                        yScale0(d.mainCategory) + x_offset
+                                    })`
+                            ) // change this to yScale0   ( check translate value )
+                            .selectAll(".bar")
+                            .data(bar_data)
+                            .enter()
+                            .append("rect")
+                            .attr("class", "bar")
+                            .attr("fill", function (d) {
+                                if (categoryColor) {
+                                    return zScale(d.data.mainCategory);
+                                }
+                                if (subCategoryColour) {
+                                    return zScale(d.name);
+                                }
+                                return d3Colors[4];
+                            })
+                            .on("mouseout", function (d, i) {
+                                d3.select("#tooltip").style("display", "none");
+                                d3.selectAll(".bar").style("opacity", 1);
+                            })
+                            .on("mouseover mousemove", function (d, i) {
+                                let xpos = d3.mouse(this)[0] - 20;
+                                let ypos = d3.mouse(this)[1] - 10;
+                                var parentElement = this.parentElement;
 
-                        let ypos = computedValues.y + 20;
-                        let xpos = d3.mouse(this)[0] - 20;
+                                const matrix =
+                                    window.getComputedStyle(
+                                        parentElement
+                                    ).transform;
+                                const matrixValues = matrix
+                                    .match(/matrix.*\((.+)\)/)[1]
+                                    .split(", ");
 
-                        d3.select("#tooltip")
-                            .style("left", xpos + "px")
-                            .style("top", ypos + "px")
-                            .style("display", "block")
-                            .style("position", "absolute")
-                            .text(function () {
-                                var textValue = d.value;
-                                // var labelName = d.data.key;
-                                return textValue.toFixed(3);
+                                ypos += +matrixValues[5] || 0;
+
+                                d3.select("#tooltip")
+                                    .style("left", xpos + "px")
+                                    .style("top", ypos + "px")
+                                    .style("display", "block")
+                                    .html(d.name + ":" + d.value);
+
+                                d3.selectAll(".bar").style("opacity", 0.3);
+                                d3.select(this).style("opacity", 1);
+                            })
+                            .attr("y", (d) => {
+                                return yScale1(d.name); // y = yScale1
+                            })
+                            .attr("x", (d) => {
+                                // x = xscale
+                                if (d.value < 0) {
+                                    return xScale(d.value);
+                                }
+                                return xScale(0);
+                            })
+                            .attr("height", yScale1.bandwidth()) // height = yScale1.bandwidth
+                            .attr("width", (d) => {
+                                var heightValue = Math.abs(
+                                    xScale(0) - xScale(Math.abs(d.value)) // xScale and this will be width
+                                );
+                                if (!heightValue) {
+                                    heightValue = 1;
+                                }
+                                return heightValue;
+
+                                // return (
+                                //     height -
+                                //     margin.top -
+                                //     margin.bottom -
+                                //     yScale(d.value)
+                                // );
                             });
-
-                        d3.selectAll(".bar").style("opacity", 0.3);
-                        d3.select(this).style("opacity", 1);
                     });
 
-                g.append("g")
-                    .attr("class", "axis")
-                    .attr("transform", "translate(0," + height + ")")
-                    .call(d3.axisBottom(x).ticks(null, "s").tickSize(0))
-                    .append("text")
-                    .attr("x", width / 2)
-                    .attr("y", 40)
-                    .attr("dx", "0.32em")
-                    .attr("fill", "#000")
-                    .attr("font-weight", "bold")
-                    .attr("text-anchor", "start")
-                    .text(xAxisLabel);
+                // // Add the X Axis
+                // svg.append("g")
+                //     .attr("class", "x-axis")
+                //     .attr(
+                //         "transform",
+                //         `translate(0,${height - margin.top - margin.bottom})`
+                //     )
+                //     .call(xAxis);
 
-                g.append("g")
-                    .attr("class", "axis")
-                    .call(d3.axisLeft(y0).tickSize(0))
-                    .append("text")
-                    .attr("x", height * 0.4 * -1)
-                    .attr("y", margin.left * 0.8 * -1) //y(y.ticks().pop()) + 0.5)
-                    .attr("dy", "0.71em")
-                    .attr("fill", "#000")
-                    .attr("transform", "rotate(-90)")
-                    .attr("font-weight", "bold")
-                    .attr("text-anchor", "start")
-                    .text(yAxisLabel);
-            }
+                // Add the Y Axis
+                svg.append("g").attr("class", "y-axis").call(yAxis);
 
-            var data = [
-                [
-                    { 2614: -8, 4449: 15, data2: 2, over: 1 },
-                    { 2614: 7, 4449: 2, data2: 1, over: 2 },
-                    { 2614: 4, 4449: 5, data2: 3, over: 3 },
-                    { 2614: 19, 4449: 8, data2: 21, over: 4 },
-                    { 2614: 3, 4449: -7, data2: 41, over: 5 },
-                    { 2614: 6, 4449: 1, data2: 11, over: 6 },
-                    { 2614: 7, 4449: 6, data2: 41, over: 7 },
-                    { 2614: 13, 4449: -2, data2: 11, over: 8 },
-                    { 2614: 1, 4449: 8, data2: 41, over: 9 },
-                    { 2614: -8, 4449: 9, data2: 21, over: "ads" },
-                ],
-                [2614, 4449, "data2"],
-                ["runs", "over"],
-            ];
-
-            var data = [
-                [
-                    [2704659, 4499890, 2659981],
-                    [2027307, 3277946, 1420518],
-                    [1208495, 2141490, 1058031],
-                    [1140516, 1938695, 925060],
-                    [894368, 1558919, 725973],
-                    [737462, 1345341, 1879201],
-                ],
-                ["Over 1", "Over 2", "Over 3", "Over 4", "Over 5", "Over 6"],
-                ["Team 1", "Team 2", "Team 3"],
-                ["X Axis Label", "Y Axis Label"],
-            ];
-
-            drawChart(data);
-
-            function transformData(data) {
-                var dataValues = data[0];
-                var uniqueValues = data[1];
-                var keys = data[2];
-
-                var response = {};
-
-                for (var j = 0; j < dataValues.length; j++) {
-                    var dataRow = dataValues[j];
-                    for (var i = 0; i < dataRow.length; i++) {
-                        var x1Key = uniqueValues[j];
-                        if (!response[x1Key]) {
-                            response[x1Key] = {};
+                function getBars(d) {
+                    const bars = [];
+                    all_keys.forEach((k) => {
+                        if (d.hasOwnProperty(k)) {
+                            bars.push({ name: k, value: d[k], data: d });
                         }
-                        response[x1Key][keys[i]] = dataRow[i];
-                    }
+                    });
+                    return bars;
                 }
 
-                var sendResponseData = [];
-                for (var key in response) {
-                    sendResponseData.push({ ...response[key], key });
+                function groupOffset(d) {
+                    const groupElementsCount = all_keys.reduce(
+                            (acc, k) =>
+                                d.hasOwnProperty(k) ? (acc += 1) : acc,
+                            0
+                        ),
+                        allElementsCount = all_keys.length,
+                        groupWidth = yScale0.bandwidth(), // change to yScale0
+                        x_offset =
+                            ((1 - groupElementsCount / allElementsCount) *
+                                groupWidth) /
+                            2;
+
+                    return x_offset;
                 }
-                return sendResponseData;
+
+                function make_x_gridlines(x) {
+                    return d3.axisBottom(x).ticks(8);
+                }
+                function make_y_gridlines(y) {
+                    return d3.axisLeft(y).ticks(yaxisTicks);
+                }
+
+                function getDateFormattedData(dateValue, dateFormat) {
+                    return d3.timeFormat(dateFormat)(new Date(dateValue));
+                }
             }
 
-            function make_x_gridlines(x) {
-                return d3.axisBottom(x);
-            }
-            function make_y_gridlines(y) {
-                return d3.axisLeft(y).ticks(20);
-            }
+            var data = [
+                {
+                    mainCategory: "2020-02-01",
+                    field1: 19,
+                    field2: 83,
+                    field3: 2,
+                    field4: 30,
+                    field5: 30,
+                    field6: 30,
+                },
+                {
+                    mainCategory: "2019-04-02",
+                    field1: 100,
+                    field2: 29,
+                    field3: 100,
+                    field4: 130,
+                },
+                {
+                    mainCategory: "2019-03-03",
+                    field1: 100,
+                    field3: 100,
+                },
+                {
+                    mainCategory: "2019-03-01",
+                    field1: 100,
+                    field2: 43,
+                    field3: 100,
+                },
+                {
+                    mainCategory: "2021-03-03",
+                    field1: 98,
+                    field2: 43,
+                    field3: 100,
+                },
+                {
+                    mainCategory: "2018-02-04",
+                    // field1: -98,
+                    field2: 43,
+                    field3: 100,
+                },
+                {
+                    mainCategory: "2019-04-09",
+                    field1: 100,
+                    field2: 43,
+                    field3: 10,
+                },
+                {
+                    mainCategory: "2019-03-09",
+                    field2: 43,
+                    field3: 100,
+                },
+            ];
+
+            var all_keys = [
+                "field1",
+                "field2",
+                "field3",
+                "field4",
+                "field5",
+                "field6",
+            ];
+
+            data = [data, all_keys];
+            drawChart(data);
         </script>
     </body>
 </html>
