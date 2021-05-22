@@ -72,6 +72,9 @@ Column{
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
+    function slotDataCleared(){
+
+    }
 
     function slotEditYear(relation, slug, value){
 

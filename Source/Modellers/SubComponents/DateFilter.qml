@@ -55,6 +55,7 @@ Popup {
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
+    signal clearData()
     signal subCategoryEditMode(string subCategory)
     signal signalCalendarEditData(string relation, string slug, string value)
     signal signalTimeFrameEditData(string subCategory, string relation, string value, string value)
@@ -87,11 +88,12 @@ Popup {
         function onColumnListModelDataChanged(colData, options){
 
             var jsonOptions = JSON.parse(options)
+            console.log(options, "OIT")
 
             if(jsonOptions.section === Constants.categoricalTab){
 
                 switch(jsonOptions.category){
-                case Constants.categoryMainListType:
+                case Constants.dateMainListType:
 
                     listContent.visible = true
                     calendarContent.visible = false
@@ -101,7 +103,7 @@ Popup {
 
                     break
 
-                case Constants.categoryMainWildCardType:
+                case Constants.dateMainCalendarType:
 
                     listContent.visible = false
                     calendarContent.visible = true
@@ -111,7 +113,7 @@ Popup {
 
                     break
 
-                case Constants.categoryMainTopType:
+                case Constants.dateMainTimeFrameType:
 
                     listContent.visible = false
                     calendarContent.visible = false
@@ -139,6 +141,10 @@ Popup {
         dateFilterPopup.subCategoryEditMode.connect(listContent.slotEditModeSubCategory)
         dateFilterPopup.signalCalendarEditData.connect(calendarContent.slotEditModeCalendar)
         dateFilterPopup.signalTimeFrameEditData.connect(dateTimeFrameContent.slotEditModeTimeFrame)
+
+        dateFilterPopup.clearData.connect(listContent.slotDataCleared)
+        dateFilterPopup.clearData.connect(calendarContent.slotDataCleared)
+        dateFilterPopup.clearData.connect(dateTimeFrameContent.slotDataCleared)
     }
 
     // SLOT function
@@ -187,10 +193,11 @@ Popup {
 
     function closeDateFilterPopup(){
         dateFilterPopup.visible = false
-        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter();
     }
 
     function applyDateFilter(){
+        console.log("Date filter applied")
 
         dateFilterPopup.visible = false
 
@@ -220,7 +227,6 @@ Popup {
             let exclude = DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
             let dateFormatId = category === Constants.dateMainTimeFrameType ? DSParamsModel.getDateFormatMap(counter): 0
 
-
             singleRelation = joinRelation[counter]
             singleValue = joinValue[counter]
             singleSlug = joinSlug[counter]
@@ -244,7 +250,6 @@ Popup {
                 singleValue = joinValue[fi]
                 singleSlug = joinSlug[fi]
 
-                console.log("Mode 2", DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, actualValue, includeNull, exclude, fi, DSParamsModel.filterModelIndex)
                 manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, actualValue, includeNull, exclude, 0, fi, DSParamsModel.filterModelIndex)
             }
 
@@ -255,12 +260,17 @@ Popup {
             break
         }
 
+        DSParamsModel.clearFilter();
+
+        // Clear tabs individual temp data
+        dateFilterPopup.clearData()
+
 
     }
 
     function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude, dateFormatId, counter = 0, filterId = 0){
 
-        //        console.log(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude, "FILTER LIST INSERT/UPDATE")
+        console.log("Filter insert date", mode, section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude, dateFormatId, counter, filterId)
 
         // Save the filter
         if(mode === Constants.modeCreate){

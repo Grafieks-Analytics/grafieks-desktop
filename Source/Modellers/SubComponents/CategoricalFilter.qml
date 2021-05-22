@@ -130,7 +130,7 @@ Popup {
         categoricalFilterPopup.visible = false
 
         // Reset all DSParams
-        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter();
 
         // Clear tabs individual temp data
         categoricalFilterPopup.clearData()
@@ -138,6 +138,7 @@ Popup {
     }
 
     function onApplyClicked(){
+
         categoricalFilterPopup.visible = false
 
         var section = DSParamsModel.section
@@ -167,7 +168,6 @@ Popup {
             singleValue = joinValue[counter]
             singleSlug = joinSlug[counter]
 
-            console.log("MODE 1", DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, counter, DSParamsModel.filterModelIndex)
             manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, counter, DSParamsModel.filterModelIndex)
             break
 
@@ -186,7 +186,6 @@ Popup {
                 singleValue = joinValue[fi]
                 singleSlug = joinSlug[fi]
 
-                console.log("Mode 2", DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, fi, DSParamsModel.filterModelIndex)
                 manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, fi, DSParamsModel.filterModelIndex)
             }
 
@@ -199,8 +198,8 @@ Popup {
             break
         }
 
-        // Reset all DSParams
-        DSParamsModel.resetFilter();
+        // Clear filters
+        DSParamsModel.clearFilter();
 
         // Clear tabs individual temp data
         categoricalFilterPopup.clearData()
@@ -211,6 +210,7 @@ Popup {
 
     function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, counter = 0, filterId = 0){
 
+        console.log("Filter insert categorical", mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, counter, filterId)
         // Save the filter
         if(mode === Constants.modeCreate){
             FilterCategoricalListModel.newFilter(counter, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
@@ -222,7 +222,7 @@ Popup {
 
     function onResetClicked(){
         categoricalFilterPopup.visible = false
-        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter()
 
         // Clear tabs individual temp data
         categoricalFilterPopup.clearData()
@@ -235,7 +235,7 @@ Popup {
         topContent.visible = false
 
         // Set the main category of the filter
-        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter()
         DSParamsModel.setCategory(Constants.categoryMainListType)
 
         // For list category type
@@ -254,7 +254,7 @@ Popup {
         topContent.visible = false
 
         // Set the main category of the filter
-        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter();
         DSParamsModel.setCategory(Constants.categoryMainWildCardType)
 
     }
@@ -267,7 +267,7 @@ Popup {
         topContent.visible = true
 
         // Set the main category of the filter
-        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter();
         DSParamsModel.setCategory(Constants.categoryMainTopType)
     }
 

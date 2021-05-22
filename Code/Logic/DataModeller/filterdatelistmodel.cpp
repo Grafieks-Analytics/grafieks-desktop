@@ -253,10 +253,8 @@ void FilterDateListModel::updateFilter(int FilterIndex, int dateFormatId, QStrin
         mFilter[FilterIndex]->setSlug(slug);
     if(value != "")
         mFilter[FilterIndex]->setValue(value);
-    if(actualValue != ""){
+    if(actualValue != "")
         mFilter[FilterIndex]->setActualValue(actualValue);
-        qDebug() << "ACtual Value" << actualValue;
-    }
 
     mFilter[FilterIndex]->setIncludeNull(includeNull);
     mFilter[FilterIndex]->setExclude(exclude);
@@ -339,7 +337,7 @@ QString FilterDateListModel::callQueryModel()
         else{
 
             QStringList dateValue;
-            dateValue = filter->value().split(',');
+            dateValue = filter->actualValue().split(',');
             finalValue = dateValue.join(",");
         }
 
