@@ -88,11 +88,12 @@ Popup {
         function onColumnListModelDataChanged(colData, options){
 
             var jsonOptions = JSON.parse(options)
+            console.log(options, "OIT")
 
             if(jsonOptions.section === Constants.categoricalTab){
 
                 switch(jsonOptions.category){
-                case Constants.categoryMainListType:
+                case Constants.dateMainListType:
 
                     listContent.visible = true
                     calendarContent.visible = false
@@ -102,7 +103,7 @@ Popup {
 
                     break
 
-                case Constants.categoryMainWildCardType:
+                case Constants.dateMainCalendarType:
 
                     listContent.visible = false
                     calendarContent.visible = true
@@ -112,7 +113,7 @@ Popup {
 
                     break
 
-                case Constants.categoryMainTopType:
+                case Constants.dateMainTimeFrameType:
 
                     listContent.visible = false
                     calendarContent.visible = false
