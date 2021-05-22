@@ -58,7 +58,7 @@
                 curveType,
                 dateFormat,
                 chartType,
-                standartThresholdWidth,
+                standardThresholdWidth,
             } = plottingConfiguration;
 
             if (!d3colorPalette) {
@@ -78,14 +78,14 @@
                 chartType = defaultD3Config.chartType;
             }
 
-            if (!standartThresholdWidth) {
-                standartThresholdWidth = defaultD3Config.standartThresholdWidth;
+            if (!standardThresholdWidth) {
+                standardThresholdWidth = defaultD3Config.standardThresholdWidth;
             }
 
             var margin = { top: 40, right: 20, bottom: 80, left: 70 };
             var width = window.innerWidth - margin.left - margin.right - 70;
             if (chartType == constants.chartType.STANDARD) {
-                width = dataValues[0].length * standartThresholdWidth;
+                width = dataValues[0].length * standardThresholdWidth;
             }
 
             var height = window.innerHeight - margin.top - margin.bottom;
