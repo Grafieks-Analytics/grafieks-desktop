@@ -173,7 +173,7 @@ Popup {
 
         case Constants.categoryMainWildCardType:
 
-            for(let i = 0; i < tmpFilterIndexes.length - 1; i++){
+            for(let i = 0; i < tmpFilterIndexes.length; i++){
                 let fi = tmpFilterIndexes[i]
 
                 let joinRelation = DSParamsModel.fetchJoinRelation(fi)
@@ -186,7 +186,7 @@ Popup {
                 singleValue = joinValue[fi]
                 singleSlug = joinSlug[fi]
 
-                manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, fi, DSParamsModel.filterModelIndex)
+                manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, fi, fi)
             }
 
             break
