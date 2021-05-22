@@ -540,7 +540,7 @@ Page {
                 break;
             case Constants.groupBarChartTitle:
                 console.log('Grouped bar chart!');
-                dataValues =  ChartsModel.getGroupedBarChartValues(xAxisColumns[1],yAxisColumns[0], xAxisColumns[0]);
+                dataValues =  ChartsModel.getGroupedBarChartValues(xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
                 break;
             case Constants.areaChartTitle:
                 console.log("AREA CLICKED")
@@ -655,9 +655,10 @@ Page {
             });';
 
             webEngineView.runJavaScript('drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue);
-
+            return;
         }
 
+        webEngineView.runJavaScript('clearChart()');
     }
 
     function openYAxisSettings(){

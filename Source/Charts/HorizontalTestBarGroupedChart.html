@@ -71,10 +71,6 @@
                 dataValue[0].forEach((d, i) => {
                     var currentData = d;
 
-                    if (isDateFormat(d.mainCategory)) {
-                        isKey1Date = true;
-                    }
-
                     var category = getDateFormattedData(
                         d.mainCategory,
                         dateFormat
@@ -401,7 +397,7 @@
 
             var data = [
                 {
-                    mainCategory: "2020-02-01",
+                    mainCategory: "2018-02-01",
                     field1: 19,
                     field2: 83,
                     field3: 2,
