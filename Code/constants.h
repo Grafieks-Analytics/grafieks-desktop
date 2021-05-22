@@ -113,9 +113,6 @@ namespace Constants
     const QString defaultCategory = categoryMainListType;
     const QString defaultSubCategory = "multiple";
     const QString defaultMode = "create";
-    const bool defaultExclude = false;
-    const bool defaultIncludeNull = true;
-    const bool defaultSelectAll = true;
 
     // DashboardParams
     const int defaultCanvasWidth = 1280;

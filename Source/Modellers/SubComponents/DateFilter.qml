@@ -192,7 +192,7 @@ Popup {
 
     function closeDateFilterPopup(){
         dateFilterPopup.visible = false
-        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter();
     }
 
     function applyDateFilter(){
@@ -259,8 +259,6 @@ Popup {
             break
         }
 
-        // Reset all DSParams
-        DSParamsModel.resetFilter();
         DSParamsModel.clearFilter();
 
         // Clear tabs individual temp data

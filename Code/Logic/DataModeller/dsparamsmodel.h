@@ -224,15 +224,15 @@ public:
     Q_INVOKABLE QStringList getActualDateValues(int refObjId);
 
     Q_INVOKABLE void setExcludeMap(int refObjId, bool value = false);
-    Q_INVOKABLE void removeExcludeMap(int refObjId);
+    Q_INVOKABLE void removeExcludeMap(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE QVariantMap getExcludeMap(int refObjId = 0, bool fetchAll = false);
 
     Q_INVOKABLE void setIncludeNullMap(int refObjId, bool value = false);
-    Q_INVOKABLE void removeIncludeNullMap(int refObjId);
+    Q_INVOKABLE void removeIncludeNullMap(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE QVariantMap getIncludeNullMap(int refObjId = 0, bool fetchAll = false);
 
     Q_INVOKABLE void setSelectAllMap(bool refObjId, bool value = false);
-    Q_INVOKABLE void removeSelectAllMap(int refObjId);
+    Q_INVOKABLE void removeSelectAllMap(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE QVariantMap getSelectAllMap(int refObjId = 0, bool fetchAll = false);
 
     Q_INVOKABLE void setTmpSelectedValues(QString value);
