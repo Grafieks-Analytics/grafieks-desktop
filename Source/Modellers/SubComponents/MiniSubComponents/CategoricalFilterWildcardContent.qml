@@ -105,6 +105,7 @@ Rectangle{
         function onFilterIndexChanged(){
 
             if(DSParamsModel.getTmpFilterIndex(0, true).length === 0){
+                counter = DSParamsModel.filterIndex
                 DSParamsModel.setTmpFilterIndex(DSParamsModel.filterIndex)
                 DSParamsModel.setExcludeMap(DSParamsModel.filterIndex, false)
             }
@@ -203,13 +204,18 @@ Rectangle{
     function onAddWildcard(){
         if(totalWildCards <= selectDropdown.count){
 
-            totalWildCards++
-            DSParamsModel.setFilterIndex(DSParamsModel.filterIndex + 1)
+            // As already filterindex count has been increased on selecting `create` option
+            // Hence, no need to increment for the first time
+            if(totalWildCards > 1){
+                DSParamsModel.setFilterIndex(DSParamsModel.filterIndex + 1)
+            }
             DSParamsModel.setTmpFilterIndex(DSParamsModel.filterIndex)
             DSParamsModel.setExcludeMap(DSParamsModel.filterIndex, currenctExclude)
 
             // Append a new ListElement on the ListView model
             listviewWildCardModel.append({"value":0})
+
+            totalWildCards++
         }
     }
 
