@@ -38,7 +38,7 @@ const defaultD3Config = {
     chartType: constants.chartType.STANDARD,
     horizontalChartType: constants.chartType.STANDARD,
     standardThresholdWidth: 100,
-    standardThresholdHeight: 100,
+    standardThresholdHeight: 50,
 };
 const markerShapeConfig = {
     circle: {
