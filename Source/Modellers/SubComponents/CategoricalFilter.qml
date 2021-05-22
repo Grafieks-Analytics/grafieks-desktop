@@ -186,7 +186,7 @@ Popup {
                 singleValue = joinValue[fi]
                 singleSlug = joinSlug[fi]
 
-                manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, fi, fi)
+                manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, fi, DSParamsModel.filterModelIndex)
             }
 
             break
