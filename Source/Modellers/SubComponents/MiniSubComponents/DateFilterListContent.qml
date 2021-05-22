@@ -301,7 +301,6 @@ Rectangle{
         if(DSParamsModel.section === Constants.dateTab){
             if(checked === true){
 
-                console.log("INSIDE SELECT ALL DATE")
                 DSParamsModel.addToJoinValue(counter, "%")
                 DSParamsModel.setActualDateValues(counter, "%")
                 DSParamsModel.setSelectAllMap(counter, true)
@@ -319,7 +318,6 @@ Rectangle{
                 if(checked === false){
 
                     // Set SELECT ALL to false
-                    console.log("HOW DID I GET INTO THIS")
                     DSParamsModel.setSelectAllMap(counter, false)
                     DSParamsModel.setActualDateValues(counter, "")
                     mainCheckBox.checked = false
@@ -652,7 +650,6 @@ Rectangle{
             checkState: childGroup.checkState
 
             onCheckedChanged: {
-                console.log("State changed DAT", DSParamsModel.getSelectAllMap(counter)[counter], counter)
                 onAllCheckBoxCheckedChanged(checked)
             }
         }

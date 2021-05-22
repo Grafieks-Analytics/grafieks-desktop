@@ -93,7 +93,6 @@ Rectangle{
 
         function onColumnListModelDataChanged(colData, options){
 
-            console.log("OLA2", DSParamsModel.mode === Constants.modeEdit, DSParamsModel.category === Constants.categoryMainListType, DSParamsModel.subCategory === Constants.categorySubSingle)
 
             if(DSParamsModel.section === Constants.categoricalTab){
                 // Just to reset the data if the previous `colData` and the new `colData` are same
@@ -103,7 +102,6 @@ Rectangle{
                 singleSelectCheckList.model = colData
                 multiSelectCheckList.model  = colData
 
-                console.log(options, "JSON")
                 var jsonOptions = JSON.parse(options)
 
 
@@ -193,7 +191,6 @@ Rectangle{
             // Clear all tmp selected values and insert again
             DSParamsModel.removeTmpSelectedValues(0, true)
             DSParamsModel.setTmpSelectedValues(modelData.toString())
-            console.log(DSParamsModel.getTmpSelectedValues(0, true), counter, "COUNTER")
         }
     }
 
@@ -235,7 +232,6 @@ Rectangle{
             if(DSParamsModel.section === Constants.categoricalTab){
                 if(checked === true){
 
-                    console.log("INSIDE SELECT ALL CATEGORICAL")
                     DSParamsModel.addToJoinValue(counter, "%")
                     DSParamsModel.setActualDateValues(counter, "%")
                     DSParamsModel.setSelectAllMap(counter, true)
@@ -453,7 +449,6 @@ Rectangle{
                 checkState: childGroup.checkState
 
                 onCheckedChanged: {
-                    console.log("State changed CAT", DSParamsModel.getSelectAllMap(counter)[counter], counter)
                     onAllCheckBoxCheckedChanged(checked)
                 }
             }
@@ -561,21 +556,9 @@ Rectangle{
 
                         // On edit, highlight the selected option
                         Connections{
-//                            target: QueryDataModel
-
-//                            function onColumnListModelDataChanged(colData, options){
-//                                console.log("OLA", DSParamsModel.mode === Constants.modeEdit, DSParamsModel.category === Constants.categoryMainListType, DSParamsModel.subCategory === Constants.categorySubSingle)
-//                                if(DSParamsModel.mode === Constants.modeEdit && DSParamsModel.category === Constants.categoryMainListType && DSParamsModel.subCategory === Constants.categorySubSingle){
-//                                    var jsonOptions = JSON.parse(options)
-//                                    console.log(options, "OPI")
-//                                    modelRadioButton.checked = jsonOptions.values === modelRadioButton.objectName ? true: false
-//                                }
-//                            }
-
                             target: DSParamsModel
                             function onTmpSelectedValuesChanged(values){
                                 if(DSParamsModel.mode === Constants.modeEdit && DSParamsModel.category === Constants.categoryMainListType && DSParamsModel.subCategory === Constants.categorySubSingle){
-                                    console.log(values[0], values, modelRadioButton.objectName)
                                     modelRadioButton.checked = values[0] === modelRadioButton.objectName ? true: false
                                 }
                             }
