@@ -288,6 +288,24 @@ Page {
         }
     }
 
+    // Switch Chart Urls
+    function switchChart(chartTitleValue){
+        chartTitle = chartTitleValue;
+        var chartUrl = '';
+        switch(chartTitle){
+            case Constants.horizontalBarChartTitle:
+                chartUrl = Constants.horizontalBarChartUrl;
+                break;
+            case Constants.horizontalStackedBarChartTitle:
+                chartUrl = Constants.horizontalStackedBarChartUrl;
+                break;
+            case Constants.stackedBarChartTitle:
+                chartUrl = Constants.stackedBarChartUrl
+                break;
+        }
+        webEngineView.url = Constants.baseChartUrl+chartUrl;
+    }
+
     // function to get the columnName from model
     function getAxisColumnNames(axisName){
         var model = null;
@@ -324,8 +342,10 @@ Page {
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
 
         if((xAxisListModel.count && xAxisListModel.get(0).droppedItemType.toLowerCase() !== 'numerical')  || (yAxisListModel.count && yAxisListModel.get(0).droppedItemType.toLowerCase() === 'numerical')){
-            isHorizontalGraph = false
-        }else{
+            isHorizontalGraph = false;
+        }
+
+        if(!isHorizontalGraph && (xAxisListModel.count && xAxisListModel.get(0).droppedItemType.toLowerCase() === 'numerical')  || (yAxisListModel.count && yAxisListModel.get(0).droppedItemType.toLowerCase() !== 'numerical')){
             isHorizontalGraph = true;
         }
 
@@ -340,14 +360,22 @@ Page {
             if(isHorizontalGraph){
                 switch(chartTitle){
                     case Constants.barChartTitle:
+                        if(colorByData.length){
+                            switchChart(Constants.horizontalStackedBarChartTitle)
+                            break;
+                        }
                         chartUrl = Constants.horizontalBarChartUrl;
                         webEngineView.url = Constants.baseChartUrl+chartUrl;
                         chartTitle = Constants.horizontalBarChartTitle;
                         break;
+
                 }
             }else{
-                if(chartTitle === Constants.groupBarChartTitle){
 
+                if(chartTitle === Constants.barChartTitle && colorByData.length){
+                    console.log('Change to stacked bar chart')
+                    switchChart(Constants.stackedBarChartTitle);
+                }else if(chartTitle === Constants.groupBarChartTitle){
                     chartUrl = Constants.barChartUrl;
                     webEngineView.url = Constants.baseChartUrl+chartUrl;
                     chartTitle = Constants.barChartTitle;
@@ -503,6 +531,10 @@ Page {
 
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
+
+        if(xAxisColumns.length===0 && yAxisColumns.length === 0){
+            isHorizontalGraph = false;
+        }
 
         if(xAxisColumns.length && yAxisColumns.length){
 
