@@ -77,14 +77,6 @@ Page {
 
     ListModel{
         id: dataItemList
-//        ListElement{
-//            colorValue: "blue"
-//            dataItemName: "Total Discount"
-//        }
-//        ListElement{
-//            colorValue: "green"
-//            dataItemName: "Total Discount"
-//        }
     }
 
     onIsHorizontalGraphChanged: {
@@ -205,7 +197,7 @@ Page {
         }
 
         if(dataValuesRemoved){
-            drawChart();
+            reDrawChart();
         }
 
     }
@@ -333,19 +325,35 @@ Page {
 
         if((xAxisListModel.count && xAxisListModel.get(0).droppedItemType.toLowerCase() !== 'numerical')  || (yAxisListModel.count && yAxisListModel.get(0).droppedItemType.toLowerCase() === 'numerical')){
             isHorizontalGraph = false
+        }else{
+            isHorizontalGraph = true;
         }
 
         // Check graph type for redrawing
         // If length = 1 and type of chart is
         // 1. Grouped Bar Chart and no Colour By is there => Bar chart
-        // 1. Grouped Bar Chart and Colour By Present => Stacked Bar Chart
+        // 2. Grouped Bar Chart and Colour By Present => Stacked Bar Chart
 
         if(xAxisColumns.length === 1 && yAxisColumns.length === 1){
-            if(chartTitle === Constants.groupBarChartTitle){
-                chartUrl = Constants.barChartUrl;
-                webEngineView.url = Constants.baseChartUrl+chartUrl;
-                chartTitle = Constants.barChartTitle;
+
+            // Condition for horizontal bar graph;
+            if(isHorizontalGraph){
+                switch(chartTitle){
+                    case Constants.barChartTitle:
+                        chartUrl = Constants.horizontalBarChartUrl;
+                        webEngineView.url = Constants.baseChartUrl+chartUrl;
+                        chartTitle = Constants.horizontalBarChartTitle;
+                        break;
+                }
+            }else{
+                if(chartTitle === Constants.groupBarChartTitle){
+
+                    chartUrl = Constants.barChartUrl;
+                    webEngineView.url = Constants.baseChartUrl+chartUrl;
+                    chartTitle = Constants.barChartTitle;
+                }
             }
+
         }
 
         drawChart();
@@ -488,7 +496,7 @@ Page {
             console.log('Error',JSON.stringify(loadRequest))
             return;
         }
-        drawChart();
+        reDrawChart();
     }
 
     function drawChart(){
@@ -627,7 +635,7 @@ Page {
             console.log('Data Values:',JSON.stringify(dataValues));
             colorData = [];
             console.log("colorData5",colorData)
-            colorData = JSON.parse(dataValues)[1];
+            colorData = JSON.parse(dataValues)[1] || [];
             console.log("colorData2" ,colorData)
             console.log("dataValues" ,JSON.parse(dataValues))
 
