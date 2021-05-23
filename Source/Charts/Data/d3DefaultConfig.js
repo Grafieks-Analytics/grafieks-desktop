@@ -7,6 +7,12 @@ const constants = {
         STANDARD: "Standard",
         FIT_HEIGHT: "FitHeight",
     },
+    cureveType: {
+        CARDINAL: "curveCardinal",
+        LINEAR: "curveLinear",
+        BASIS: "curveBasis",
+        BUNDLE: "curveBundle",
+    },
 };
 
 const defaultD3Config = {
@@ -26,11 +32,11 @@ const defaultD3Config = {
     ],
     defaultPaddingInner: 0.25,
     defaultMarkerShape: "circle",
-    initialCircleRadius: 2,
-    onHoverCircleRadius: 5,
+    initialCircleRadius: 3,
+    onHoverCircleRadius: 7,
     initialBoxDimension: 6,
     onHoverBoxDimension: 8,
-    defaultLineCurve: "curveCardinal",
+    defaultLineCurve: constants.cureveType.CARDINAL,
     innerRadius: 150,
     defaultTimeParseFormat: "%d-%m-%Y",
     defaultSpace: 30,
