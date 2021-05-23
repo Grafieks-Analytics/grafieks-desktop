@@ -525,6 +525,7 @@ Page {
             case Constants.horizontalStackedBarChartTitle:
                 colorByColumnName = colorByData[0].columnName;
                 dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,xAxisColumns[0], yAxisColumns[0]);
+                
                 break;
             case Constants.stackedBarChartTitle:
                 console.log('Stacked bar chart!');
@@ -627,7 +628,7 @@ Page {
             console.log('Data Values:',JSON.stringify(dataValues));
             colorData = [];
             console.log("colorData5",colorData)
-            colorData = JSON.parse(dataValues)[1];
+            colorData = JSON.parse(dataValues)[1] || [];
             console.log("colorData2" ,colorData)
             console.log("dataValues" ,JSON.parse(dataValues))
 

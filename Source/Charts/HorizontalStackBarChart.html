@@ -10,6 +10,22 @@
         .y-axis .domain {
             display: none;
         }
+                #tooltip{
+            font-size: 14px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #tooltip:before {
+            border: solid;
+            border-color: white transparent;
+            border-width: 12px 6px 0 6px;
+            content: "";
+            left: -12px;
+            transform: rotate(90deg) !important;
+
+            bottom: 22px;
+            position: absolute;
+        }
     </style>
 </head>
 <body>
@@ -80,6 +96,7 @@
                 curveType,
                 dateFormat,
                 chartType,
+                toolTip,
                 standardThresholdHeight,
             } = plottingConfiguration;
 
@@ -103,6 +120,13 @@
             if (!standardThresholdHeight) {
                 standardThresholdHeight =
                     defaultD3Config.standardThresholdHeight;
+            }
+
+              if (!toolTip) {
+                toolTip = {
+                    textColumn1: "labels[0]",
+                    textColumn2: "labels[1]"
+                }
             }
 
             var margin = { top: 20, right: 20, bottom: 30, left: 40 };
@@ -199,11 +223,21 @@
                         .style("top", ypos + "px")
                         .style("display", "block")
                         .style("position", "absolute")
-                        .text(function () {
-                            var textValue = d[1] - d[0];
-                            var labelName = d.data.key;
-                            return textValue.toFixed(3);
+                        // .text(function () {
+                        //     var textValue = d[1] - d[0];
+                        //     var labelName = d.data.key;
+                        //     return textValue.toFixed(3);
+                        // });
+                          .html(function () {
+                            var textValue = d.y0 - d.y1;
+                            if (d.y1 < 0) {
+                                textValue = d.y1 - d.y0;
+                            }
+
+                            return "<span style='color:grey;''>" + toolTip.textColumn1 + ":" + "</span>" + "<span style='float: right;'>" + d.key + "</span>" + "<br/> <br/>" + "<span style='color:grey;''>" + toolTip.textColumn2 + ":" + "</span>" + "<span style='float: right;margin-left: 15px;'>" + textValue.toFixed(3) + "</span>";
                         });
+                        
+
 
                     d3.selectAll(".bar").style("opacity", 0.3);
                     d3.select(this).style("opacity", 1);
