@@ -308,7 +308,7 @@
                                 if (categoryColor) {
                                     return zScale(d.data.mainCategory);
                                 }
-                                if (subCategoryColour) {
+                                if (!subCategoryColour) {
                                     return zScale(d.name);
                                 }
                                 return d3Colors[4];
