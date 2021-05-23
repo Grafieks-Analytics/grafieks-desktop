@@ -170,14 +170,15 @@
                 data = transformData(data, dateFormat);
 
                 clearChart();
-                let margin = { top: 30, right: 140, bottom: 70, left: 50 },
-                    width = window.innerWidth - margin.left - margin.right - 20,
-                    height =
-                        window.innerHeight - margin.top - margin.bottom - 20;
+                (margin = { top: 30, right: 140, bottom: 70, left: 50 }),
+                    (width =
+                        window.innerWidth - margin.left - margin.right - 20),
+                    (height =
+                        window.innerHeight - margin.top - margin.bottom - 20);
 
                 yaxisTicks = height / 70;
 
-                var xScale = d3
+                xScale = d3
                     .scaleBand()
                     .rangeRound([0, width])
                     .padding(paddingInner)
@@ -320,96 +321,96 @@
                     return value;
                 };
 
-                function drawMarker(fillStatus, markerShape) {
-                    let dataValues = data,
-                        fill = "#ffffff",
-                        stroke = d3Colors[0];
-
-                    if (fillStatus) {
-                        initialCircleRadius = 3;
-                        fill = d3Colors[0];
-                        stroke = 0;
-                    }
-                    if (!markerShape) {
-                        markerShape = defaultD3Config.defaultMarkerShape;
-                    }
-
-                    svg.selectAll(".marker-shape").remove();
-
-                    svg.selectAll(".dot")
-                        .data(dataValues)
-                        .enter()
-                        .append(markerShape)
-                        .attr("stroke", stroke)
-                        .attr("class", markerShape)
-                        .attr("class", "marker-shape")
-                        .attr(
-                            "transform",
-                            "translate(" + margin.left + "," + margin.top + ")"
-                        )
-                        .attr("fill", fill)
-                        .attr(
-                            markerShapeConfig[markerShape] &&
-                                markerShapeConfig[markerShape]
-                                    .xPositionAttrName,
-                            function (d, i) {
-                                return xScale(d[0]) + xScale.bandwidth() / 2;
-                            }
-                        )
-                        .attr(
-                            markerShapeConfig[markerShape] &&
-                                markerShapeConfig[markerShape]
-                                    .yPositionAttrName,
-                            function (d) {
-                                return yScale(d[1]);
-                            }
-                        )
-                        .attr("r", initialCircleRadius)
-                        .attr("height", initialBoxDimension)
-                        .attr("width", initialBoxDimension)
-                        .attr("points", function (d, i) {
-                            var x1 = xScale(d[0]);
-                            return x1;
-                        })
-                        .on("mousemove ", function (d, i) {
-                            var x_pos = d3.mouse(this)[0];
-                            var y_pos = d3.mouse(this)[1];
-
-                            // console.log(d);
-                            const xValue = dateformatValue(d[0]);
-                            const yValue = d[1];
-
-                            d3.select("#tooltip")
-                                .style("left", x_pos - 10 + "px")
-                                .style("top", y_pos + "px")
-                                .style("display", "block")
-                                .html(xValue + ", " + yValue.toFixed(2));
-
-                            var shapeClass = ".marker-shape";
-                            d3.selectAll(shapeClass).style("opacity", 0.3);
-                            d3.select(this)
-                                .style("opacity", 1)
-                                .attr("r", onHoverCircleRadius)
-                                .attr("height", onHoverBoxDimension)
-                                .attr("width", onHoverBoxDimension);
-                        })
-                        .on("mouseout", function () {
-                            d3.select("#tooltip").style("display", "none");
-                            var shapeClass = ".marker-shape";
-                            d3.selectAll(shapeClass)
-                                .style("opacity", 1)
-                                .attr("r", initialCircleRadius)
-                                .attr("height", initialBoxDimension)
-                                .attr("width", initialBoxDimension);
-                        });
-                }
-
                 function make_x_gridlines() {
                     return d3.axisBottom(xScale).ticks(dataValues.length);
                 }
                 function make_y_gridlines() {
                     return d3.axisLeft(yScale).ticks(yaxisTicks);
                 }
+            }
+
+            function drawMarker(fillStatus, markerShape) {
+                let dataValues = data,
+                    fill = "#ffffff",
+                    stroke = d3Colors[0];
+
+                if (fillStatus) {
+                    initialCircleRadius = 3;
+                    fill = d3Colors[0];
+                    stroke = 0;
+                }
+                if (!markerShape) {
+                    markerShape = defaultD3Config.defaultMarkerShape;
+                }
+
+                var svg = d3.select("#my_dataviz svg");
+
+                svg.selectAll(".marker-shape").remove();
+
+                svg.selectAll(".dot")
+                    .data(dataValues)
+                    .enter()
+                    .append(markerShape)
+                    .attr("stroke", stroke)
+                    .attr("class", markerShape)
+                    .attr("class", "marker-shape")
+                    .attr(
+                        "transform",
+                        "translate(" + margin.left + "," + margin.top + ")"
+                    )
+                    .attr("fill", fill)
+                    .attr(
+                        markerShapeConfig[markerShape] &&
+                            markerShapeConfig[markerShape].xPositionAttrName,
+                        function (d, i) {
+                            return xScale(d[0]) + xScale.bandwidth() / 2;
+                        }
+                    )
+                    .attr(
+                        markerShapeConfig[markerShape] &&
+                            markerShapeConfig[markerShape].yPositionAttrName,
+                        function (d) {
+                            return yScale(d[1]);
+                        }
+                    )
+                    .attr("r", initialCircleRadius)
+                    .attr("height", initialBoxDimension)
+                    .attr("width", initialBoxDimension)
+                    .attr("points", function (d, i) {
+                        var x1 = xScale(d[0]);
+                        return x1;
+                    })
+                    .on("mousemove ", function (d, i) {
+                        var x_pos = d3.mouse(this)[0];
+                        var y_pos = d3.mouse(this)[1];
+
+                        // console.log(d);
+                        const xValue = dateformatValue(d[0]);
+                        const yValue = d[1];
+
+                        d3.select("#tooltip")
+                            .style("left", x_pos - 10 + "px")
+                            .style("top", y_pos + "px")
+                            .style("display", "block")
+                            .html(xValue + ", " + yValue.toFixed(2));
+
+                        var shapeClass = ".marker-shape";
+                        d3.selectAll(shapeClass).style("opacity", 0.3);
+                        d3.select(this)
+                            .style("opacity", 1)
+                            .attr("r", onHoverCircleRadius)
+                            .attr("height", onHoverBoxDimension)
+                            .attr("width", onHoverBoxDimension);
+                    })
+                    .on("mouseout", function () {
+                        d3.select("#tooltip").style("display", "none");
+                        var shapeClass = ".marker-shape";
+                        d3.selectAll(shapeClass)
+                            .style("opacity", 1)
+                            .attr("r", initialCircleRadius)
+                            .attr("height", initialBoxDimension)
+                            .attr("width", initialBoxDimension);
+                    });
             }
 
             drawChart(dataset);
