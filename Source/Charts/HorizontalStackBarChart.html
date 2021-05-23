@@ -63,6 +63,7 @@
             }
 
             var uniqueKey2 = [];
+            var uniqueKey = [];
             dataValue.forEach((d) => {
                 if (isKey1Date) {
                     var key = getDateFormattedData(d[1], dateFormat);
@@ -80,6 +81,9 @@
                 }
                 if (!uniqueKey2.includes(key2)) {
                     uniqueKey2.push(key2);
+                }
+                if (!uniqueKey.includes(key)) {
+                    uniqueKey.push(key);
                 }
 
                 var value = d[2];
@@ -105,7 +109,8 @@
                 response.push({ ...json[key], key });
             }
 
-            return [response, allKeys, data[2]];
+            const yAxisUniqueKeys = uniqueKey;
+            return [response, allKeys, yAxisUniqueKeys, data[2]];
         }
 
         drawChart(data);
@@ -152,7 +157,7 @@
                     defaultD3Config.standardThresholdHeight;
             }
 
-            var [data, keys, labels] = transformData(
+            var [data, keys, yAxisUniqueKeys, labels] = transformData(
                 data[0],
                 dateFormat,
                 dateFormat1
@@ -163,7 +168,7 @@
             var height = window.innerHeight - margin.top - margin.bottom - 50;
 
             if (chartType == constants.chartType.STANDARD) {
-                height = keys.length * standardThresholdHeight;
+                height = yAxisUniqueKeys.length * standardThresholdHeight;
                 if (height + margin.top + margin.bottom < window.innerHeight) {
                     d3.select("#xAxisDiv").style(
                         "top",
@@ -188,7 +193,8 @@
                     })
                 )
                 .rangeRound([margin.top, height - margin.bottom])
-                .padding(paddingInner);
+                .padding(paddingInner)
+                .paddingInner(paddingInner);
 
             var barWidth = y.bandwidth();
 
