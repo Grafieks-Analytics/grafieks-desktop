@@ -222,10 +222,6 @@
                 // change yScale to scale band and range from 0 to height (which is fine here)
 
                 var zScale = d3.scaleOrdinal().range(d3Colors);
-
-                // const xAxis = d3.axisBottom(xScale0);
-                // const yAxis = d3.axisLeft(yScale);
-
                 // yaxisTicks = height / 70;
                 yaxisTicks = width / 150;
 
@@ -236,19 +232,6 @@
                 var yAxis = d3.axisLeft(yScale0).tickSize(0).ticks(yaxisTicks);
 
                 var xAxis = d3.axisBottom(xScale).tickSize(0).ticks(yaxisTicks);
-
-                // d3.select("#xAxisDiv")
-                //     .append("svg")
-                //     .attr("width", "72")
-                //     .attr("height", height + margin.top + margin.bottom)
-                //     .append("g") //add group to leave margin for axis
-                //     .attr(
-                //         "transform",
-                //         "translate(" + margin.left + "," + margin.top + ")"
-                //     )
-                //     .append("g")
-                //     .attr("class", "y-axis") // this will be x-axis
-                //     .call(xAxis); // call xAxis here
 
                 d3.select("#xAxisDiv")
                     .append("svg")
@@ -308,7 +291,7 @@
                                 if (categoryColor) {
                                     return zScale(d.data.mainCategory);
                                 }
-                                if (!subCategoryColour) {
+                                if (subCategoryColour) {
                                     return zScale(d.name);
                                 }
                                 return d3Colors[4];
