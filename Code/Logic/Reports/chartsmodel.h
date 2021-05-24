@@ -29,6 +29,7 @@ public:
     Q_INVOKABLE QString getBarChartValues(QString xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getStackedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
     Q_INVOKABLE QString getGroupedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
+    Q_INVOKABLE QString getNewGroupedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
     Q_INVOKABLE QString getAreaChartValues(QString xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getLineChartValues(QString xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE QString getLineBarChartValues(QString xAxisColumn, QString yLineAxisColumn, QString yBarAxisColumn);

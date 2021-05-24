@@ -188,6 +188,8 @@ QtObject {
     property string dateMainCalendarType: "date.calendar"
     property string dateMainTimeFrameType: "date.timeframe"
 
+    property string numericalCatType: "numerical.category"
+
     // Sub Categories
     property string categorySubMulti: "multiple"
     property string categorySubSingle: "single"
@@ -196,6 +198,8 @@ QtObject {
     property string dateSubQuarter: "quarter"
     property string dateSubMonth: "month"
     property string dateSubDay: "day"
+
+    property string numericalSubMain: "numerical.subCategory"
 
 
     // Mode

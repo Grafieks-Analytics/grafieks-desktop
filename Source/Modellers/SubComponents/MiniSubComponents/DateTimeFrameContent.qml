@@ -58,8 +58,8 @@ Rectangle{
 
         function onResetInput(){
             onYearTabClicked()
-            DSParamsModel.setExclude(false)
-            DSParamsModel.setIncludeNull(true)
+            DSParamsModel.setExcludeMap(counter, false)
+            DSParamsModel.setIncludeNullMap(counter, true)
         }
 
         function onInternalCounterChanged(){

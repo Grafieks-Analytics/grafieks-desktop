@@ -113,7 +113,7 @@ Rectangle{
         target: DSParamsModel
 
         function onResetInput(){
-            if(DSParamsModel.section === Constants.dateTab){
+            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
                 customBox.currentIndex = 0
                 DSParamsModel.setExcludeMap(counter, false)
                 DSParamsModel.setIncludeNullMap(counter, true)
@@ -121,13 +121,13 @@ Rectangle{
         }
 
         function onInternalCounterChanged(){
-            if(DSParamsModel.section === Constants.dateTab){
+            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
                 counter = DSParamsModel.internalCounter
             }
         }
 
         function onFilterIndexChanged(){
-            if(DSParamsModel.section === Constants.dateTab){
+            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
                 counter = DSParamsModel.filterIndex
             }
         }
@@ -137,7 +137,7 @@ Rectangle{
         target: DuckDataModel
 
         function onDuckColData(colData){
-            if(DSParamsModel.section === Constants.dateTab){
+            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
                 convertDate(colData)
             }
         }
@@ -148,7 +148,7 @@ Rectangle{
 
         function onColumnListModelDataChanged(colData, options){
 
-            if(DSParamsModel.section === Constants.dateTab){
+            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
                 // Just to reset the data if the previous `colData` and the new `colData` are same
                 singleSelectCheckList.model = []
                 multiSelectCheckList.model = []
@@ -163,7 +163,7 @@ Rectangle{
                 convertDate(colData)
                 var jsonOptions = JSON.parse(options)
 
-                if(jsonOptions.section === Constants.dateTab){
+                if(jsonOptions.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
                     if(jsonOptions.subCategory === Constants.categorySubMulti){
                         multiSelectRadio.checked = true
 
@@ -208,20 +208,20 @@ Rectangle{
     // JAVASCRIPT FUNCTION STARTS
 
     Component.onCompleted: {
-        if(DSParamsModel.section === Constants.dateTab){
+        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
             mainCheckBox.visible = true
         }
     }
 
     function slotDataCleared(){
-        if(DSParamsModel.section === Constants.dateTab){
+        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
             DSParamsModel.removeTmpSelectedValues(0, true)
         }
     }
 
 
     function onMultiSelectSelected(){
-        if(DSParamsModel.section === Constants.dateTab){
+        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
             multiSelectCheckList.visible = true
             singleSelectCheckList.visible = false
 
@@ -234,7 +234,7 @@ Rectangle{
 
     function onSingleSelectSelected(){
 
-        if(DSParamsModel.section === Constants.dateTab){
+        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
             multiSelectCheckList.visible = false
             singleSelectCheckList.visible = true
 
@@ -247,7 +247,7 @@ Rectangle{
 
     function onSingleSelectRadioSelected(modelData, format){
 
-        if(DSParamsModel.section === Constants.dateTab){
+        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
             var actualValueArray = []
 
             actualValueArray.push(searchDateFormat(modelData, selectedFormat))
@@ -264,7 +264,7 @@ Rectangle{
 
 
     function onTextChangedSearch(){
-        if(DSParamsModel.section === Constants.dateTab){
+        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
             var options = {
                 "section" : DSParamsModel.section,
                 "category" : DSParamsModel.category,
@@ -290,7 +290,7 @@ Rectangle{
 
     function onAllCheckBoxCheckedChanged(checked){
 
-        if(DSParamsModel.section === Constants.dateTab){
+        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
             setCheckedAll(checked)
         }
     }
@@ -298,7 +298,7 @@ Rectangle{
     function setCheckedAll(checked){
 
         // If Select All option is true
-        if(DSParamsModel.section === Constants.dateTab){
+        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
             if(checked === true){
 
                 DSParamsModel.addToJoinValue(counter, "%")
@@ -312,7 +312,8 @@ Rectangle{
 
     function onMultiSelectCheckboxSelected(modelData,checked){
 
-        if(DSParamsModel.section === Constants.dateTab){
+
+        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
             if(mainCheckBox.checked === true){
 
                 if(checked === false){
@@ -352,14 +353,14 @@ Rectangle{
     }
 
     function onIncludeCheckedClicked(checked){
-        if(DSParamsModel.section === Constants.dateTab){
+        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
             DSParamsModel.setIncludeNullMap(counter, checked)
         }
     }
 
 
     function onExcludeCheckedClicked(checked){
-        if(DSParamsModel.section === Constants.dateTab){
+        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
             DSParamsModel.setExcludeMap(counter, checked)
         }
     }
@@ -367,7 +368,7 @@ Rectangle{
 
     function searchDateFormat(inputDate, formatId){
         var outputData
-        if(DSParamsModel.section === Constants.dateTab){
+        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
             masterColData.forEach((item, index) => {
                                       if(item[formatId] === inputDate){
                                           outputData = item[item.length - 1]
@@ -379,7 +380,7 @@ Rectangle{
 
     function changeDateFormat(currentIndex){
 
-        if(DSParamsModel.section === Constants.dateTab){
+        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
             var tmpColData = []
             selectedFormat = currentIndex
 
