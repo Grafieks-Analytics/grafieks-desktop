@@ -8,6 +8,10 @@
     <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
     <link rel="stylesheet" href="Data/general.css" />
     <style>
+        body {
+            overflow-y: hidden;
+            /* overflow-x: hidden; */
+        }
         .title {
             font: 15px sans-serif;
         }
@@ -15,6 +19,7 @@
         .legend {
             font: 10px sans-serif;
         }
+
         .axis path,
         .axis line {
             fill: none;
@@ -31,70 +36,134 @@
             /* stroke: black; */
             stroke-width: 1.2px;
         }
+        #tooltip {
+            font-size: 14px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #tooltip:before {
+            border: solid;
+            border-color: white transparent;
+            border-width: 12px 6px 0 6px;
+            content: "";
+            left: -12px;
+            transform: rotate(90deg) !important;
+
+            bottom: 22px;
+            position: absolute;
+        }
     </style>
 </head>
+
 <body>
+    <div style="display: flex">
+        <div id="yAxisDiv"></div>
+        <div id="my_dataviz"></div>
+    </div>
     <div id="tooltip"></div>
-    <div id="my_dataviz"></div>
 
     <script>
         var data = [
             [
-                ["Ind", "1999", "139.81"],
-                ["Ind", "2000", "100.81"],
-                ["Ind", "2001", "136.35"],
-                ["Ind", "2002", "143.22"],
-                ["Aus", "1999", "0"],
-                ["Aus", "2000", "241.64"],
-                ["Aus", "2001", "48.43"],
-                ["Aus", "2002", "54.43"],
-                ["Nz", "1999", "-211.31"],
-                ["Nz", "2000", "-200.36"],
-                ["Nz", "2001", "0"],
-                ["Nz", "2002", "0"],
-                ["Uk", "1999", "321.31"],
-                ["Uk", "2000", "-500.36"],
-                ["Uk", "2001", "103.7"],
-                ["Uk", "2002", "100.82"],
+                ["2018-08-05", "2018-08-05", "139.81"],
+                ["2018-08-05", "2019-08-05", "100.81"],
+                ["2018-08-05", "2019-08-05", "136.35"],
+                ["2018-08-05", "2019-08-05", "143.22"],
+                ["2012-08-05", "2019-08-05", "0"],
+                ["2013-08-05", "2018-08-05", "241.64"],
+                ["2014-08-05", "2019-08-05", "48.43"],
+                ["2012-08-05", "2019-08-05", "54.43"],
+                ["2011-08-05", "2018-08-05", "-211.31"],
+                ["2013-08-05", "2019-08-05", "-200.36"],
+                ["2013-08-05", "2019-08-05", "0"],
+                ["2019-08-05", "2019-08-05", "321.31"],
+                ["2019-08-05", "2013-08-05", "500.36"],
+                ["2019-08-05", "2019-08-05", "103.7"],
+                ["2019-08-05", "2019-08-05", "100.82"],
             ],
-            ["Ind", "Aus", "Nz", "Uk"],
-            ["1999", "2000", "2001", "2002"],
+            ["2018-08-05", "2019-08-05", "2019-08-05", "2019-08-05"],
+            ["2019", "2018"],
         ];
 
+        var extraHeightWorked = false;
+        var redrawn = false;
+        var extraHeight = 0;
         drawChart(data);
 
-        function transformData(dataValue) {
+        function transformData(dataValue, dateFormat, dateFormat1) {
             json = {};
+            var isKey1Date = false;
+            var isKey2Date = false;
+
+            if (isDateFormat(dataValue[0][1])) {
+                isKey1Date = true;
+            }
+            if (isDateFormat(dataValue[0][0])) {
+                isKey2Date = true;
+            }
+
+            var uniqueKey2 = [];
             dataValue.forEach((d) => {
-                var key = d[1];
+                if (isKey1Date) {
+                    var key = getDateFormattedData(d[1], dateFormat);
+                } else {
+                    var key = d[1];
+                }
+
                 if (!json[key]) {
                     json[key] = {};
                 }
-                var key2 = d[0];
+                if (isKey2Date) {
+                    var key2 = getDateFormattedData(d[0], dateFormat1);
+                } else {
+                    var key2 = d[0];
+                }
+                if (!uniqueKey2.includes(key2)) {
+                    uniqueKey2.push(key2);
+                }
+
                 var value = d[2];
 
-                json[key][key2] = +value;
+                if (!json[key][key2]) {
+                    json[key][key2] = 0;
+                }
+
+                json[key][key2] += +value;
             });
 
             var response = [];
+            var allKeys = uniqueKey2;
+
             for (var key in json) {
+                if (Object.keys(json[key]).length < allKeys.length) {
+                    allKeys.forEach((d) => {
+                        if (!json[key][d]) {
+                            json[key][d] = 0;
+                        }
+                    });
+                }
                 response.push({ ...json[key], key });
             }
-            return response;
+
+            // console.log(response);
+            // debugger;
+            return [response, allKeys, data[2]];
         }
 
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
 
-            var keys = data[1];
-            var labels = data[2];
-            data = transformData(data[0]);
+            // var keys = data[1];
+            // var labels = data[2];
 
             var margin = { top: 20, right: 20, bottom: 30, left: 40 };
             var width = window.innerWidth - margin.left - margin.right - 50;
             var height = window.innerHeight - margin.top - margin.bottom - 50;
+            yaxisTicks = height / 70;
             var timeFormat = d3.timeFormat("%m-%Y");
             var parseDate = d3.timeParse("%Y");
+            var tooltipColumn1 = "test1";
+            var tooltipColumn2 = "test2";
 
             let {
                 d3colorPalette,
@@ -102,8 +171,9 @@
                 markerShape,
                 curveType,
                 dateFormat,
+                dateFormat1,
                 chartType,
-                standartThresholdWidth,
+                standardThresholdWidth,
             } = plottingConfiguration;
 
             if (!d3colorPalette) {
@@ -119,25 +189,51 @@
                 dateFormat = defaultD3Config.dateFormat;
             }
 
+            if (!dateFormat1) {
+                dateFormat1 = defaultD3Config.dateFormat;
+            }
+
             if (!chartType) {
                 chartType = defaultD3Config.chartType;
             }
 
-            if (!standartThresholdWidth) {
-                standartThresholdWidth = defaultD3Config.standartThresholdWidth;
+            if (!standardThresholdWidth) {
+                standardThresholdWidth = defaultD3Config.standardThresholdWidth;
             }
 
-            // if (chartType == constants.chartType.STANDARD) {
-            //     width = keys.length * standartThresholdWidth;
-            // }
+            var margin = { top: 40, right: 20, bottom: 80, left: 70 };
+            var width = window.innerWidth - margin.left - margin.right - 50;
 
-            var x = d3.scaleBand().rangeRound([0, width]).padding(paddingInner);
+            var [data, keys, labels] = transformData(
+                data[0],
+                dateFormat,
+                dateFormat1
+            );
+
+            if (chartType == constants.chartType.STANDARD) {
+                width = data.length * standardThresholdWidth;
+            }
+
+            var height =
+                window.innerHeight - margin.top - margin.bottom - extraHeight;
+
+            var x = d3
+                .scaleBand()
+                .range([0, width])
+                .domain(
+                    data.map((d) => {
+                        return d.key;
+                    })
+                )
+                .padding(paddingInner)
+                .paddingInner(paddingInner);
+
             var y = d3.scaleLinear().range([height, margin.top]);
             var center = d3.scaleLinear().range([0, width]);
             var color = d3.scaleOrdinal().range(d3Colors);
 
             var xAxis = d3.axisBottom(x);
-            var yAxis = d3.axisLeft(y);
+            var yAxis = d3.axisLeft(y).ticks(yaxisTicks);
 
             var centerLine = d3.axisTop(center).ticks(0);
 
@@ -178,16 +274,15 @@
                 );
             });
 
-            x.domain(
-                data.map((d) => {
-                    return d.key;
-                })
-            );
+            if (y_min > 0) {
+                y_min = 0;
+            }
+
             y.domain([y_min, y_max]).nice();
             color.domain(keys);
             const barWidth = x.bandwidth();
 
-            d3.selectAll("#my_dataviz").html("");
+            clearChart();
 
             //add svg with margin !important
             //this is svg is actually group
@@ -203,18 +298,31 @@
                 );
 
             svg.append("g")
-                .attr("class", "x axis")
+                .attr("class", "x-axis axis")
                 .attr("transform", "translate(0," + height + ")")
                 .call(xAxis.tickSize(0));
 
+            d3.select("#yAxisDiv")
+                .append("svg")
+                .attr("width", "72")
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g") //add group to leave margin for axis
+                .attr(
+                    "transform",
+                    "translate(" + margin.left + "," + margin.top + ")"
+                )
+                .append("g")
+                .attr("class", "y-axis")
+                .call(yAxis.tickSize(-width));
+
             svg.append("g")
                 .attr("class", "y axis grid")
-                .call(yAxis.tickSize(-width - paddingInner * 100));
+                .call(yAxis.tickSize(-width));
 
             svg.append("g")
                 .attr("class", "centerline")
                 .attr("transform", "translate(0," + y(0) + ")")
-                .call(centerLine);
+                .call(centerLine.tickSize(0));
 
             var entry = svg
                 .selectAll(".entry")
@@ -249,34 +357,89 @@
                     d3.selectAll(".bar").style("opacity", 1);
                 })
                 .on("mouseover mousemove", function (d, i) {
-                    var computedValues = this.getClientRects()[0];
+                    let xpos1 = d3.mouse(this)[0] + margin.left;
 
-                    let xpos = computedValues.x + barWidth / 2;
+                    var parentElement = this.parentElement;
+
+                    const matrix =
+                        window.getComputedStyle(parentElement).transform;
+
+                    const matrixValues = matrix
+                        .match(/matrix.*\((.+)\)/)[1]
+                        .split(", ");
+
+                    xpos1 += +matrixValues[4] || 0;
 
                     let ypos = d3.mouse(this)[1] - 20;
 
                     d3.select("#tooltip")
-                        .style("left", xpos + "px")
+                        .style("left", xpos1 + "px")
                         .style("top", ypos + "px")
                         .style("display", "block")
                         .style("position", "absolute")
-                        .text(function () {
+                        .html(function () {
                             var textValue = d.y0 - d.y1;
                             if (d.y1 < 0) {
                                 textValue = d.y1 - d.y0;
                             }
-                            return d.key + ":" + textValue.toFixed(3);
+
+                            return (
+                                "<span style='color:grey;''>" +
+                                tooltipColumn1 +
+                                ":" +
+                                "</span>" +
+                                "<span style='float: right;'>" +
+                                d.key +
+                                "</span>" +
+                                "<br/> <br/>" +
+                                "<span style='color:grey;''>" +
+                                tooltipColumn2 +
+                                ":" +
+                                "</span>" +
+                                "<span style='float: right;margin-left: 15px;'>" +
+                                textValue.toFixed(3) +
+                                "</span>"
+                            );
                         });
 
                     d3.selectAll(".bar").style("opacity", 0.3);
                     d3.select(this).style("opacity", 1);
                 });
 
+            setYaxisWidth();
+
+            if (chartType == constants.chartType.FIT_WIDTH && barWidth < 40) {
+                setXaxisWidth();
+            }
+
+            function setXaxisWidth() {
+                var allYAxisTicks = document.querySelectorAll(".x-axis .tick");
+                var maxWidth = 0;
+                for (var i = 0; i < allYAxisTicks.length; i++) {
+                    var tick = allYAxisTicks[i];
+                    var width = tick.getBBox().width;
+                    if (width > maxWidth) {
+                        maxWidth = width;
+                    }
+                }
+
+                extraHeightWorked = true;
+                extraHeight = maxWidth;
+
+                d3.select(".x-axis").attr("text-anchor", "right");
+
+                d3.selectAll(".x-axis text")
+                    .attr("transform", "rotate(-90)")
+                    .attr("dy", "0.3em")
+                    .attr("x", "-" + (maxWidth + 3))
+                    .attr("y", "0");
+            }
+
             function make_x_gridlines(x) {
-                return d3.axisBottom(x).ticks(10);
+                return d3.axisBottom(x).ticks(yaxisTicks);
             }
             function make_y_gridlines(y) {
-                return d3.axisLeft(y).ticks(10);
+                return d3.axisLeft(y).ticks(yaxisTicks);
             }
 
             function getLeftAxisDistance() {
@@ -285,6 +448,90 @@
                     .getAttribute("transform");
                 a = a.replace("translate(", "");
                 return a.substr(0, a.indexOf(","));
+            }
+
+            function sortDates(dateDataset, dateFormat) {
+                var parseTime = d3.timeParse(dateFormat);
+                var dates = Object.keys(dateDataset);
+                var newDataSet = [];
+                dates.forEach((d) => {
+                    d = new Date(parseTime(d)).getTime();
+                    newDataSet.push(d);
+                });
+                dates = newDataSet.sort();
+                dates = dates.map((d) => {
+                    return d3.timeFormat(dateFormat)(new Date(d));
+                });
+
+                if (
+                    dateFormat == "%b" ||
+                    dateFormat == "%m" ||
+                    dateFormat == "%B" ||
+                    dateFormat == "%d"
+                ) {
+                    dates = dates.reverse();
+                }
+                return dates;
+            }
+
+            allXAxisTexts = document.querySelectorAll(".x-axis text");
+            var textWidth = document
+                .querySelector(".x-axis .tick text")
+                .getBBox().height;
+
+            if (chartType == constants.chartType.FIT_WIDTH) {
+                for (var i = 0; i < allXAxisTexts.length; i++) {
+                    if (!Math.floor(data.length * 0.02)) {
+                        break;
+                    }
+                    if (i % Math.floor(data.length * 0.02) != 0) {
+                        allXAxisTexts[i].remove();
+                        continue;
+                    }
+
+                    if (i == 0 && barWidth < textWidth * 0.5) {
+                        allXAxisTexts[i].setAttribute("dy", "1em");
+                        continue;
+                    }
+                    if (barWidth < textWidth * 0.5) {
+                        allXAxisTexts[i].setAttribute("dy", "0.8em");
+                    }
+                }
+            }
+
+            if (extraHeightWorked && !redrawn) {
+                extraHeightWorked = false;
+                redrawn = true;
+                drawChart(window.data, plottingConfiguration);
+            }
+
+            if (extraHeightWorked && redrawn) {
+                extraHeightWorked = false;
+                redrawn = false;
+            }
+
+            function setYaxisWidth() {
+                var allYAxisTicks = document.querySelectorAll(".y-axis .tick");
+                var maxWidth = 72;
+                for (var i = 0; i < allYAxisTicks.length; i++) {
+                    var tick = allYAxisTicks[i];
+                    var width = tick.getBBox().width + 25;
+                    if (width > maxWidth) {
+                        maxWidth = width;
+                    }
+                }
+
+                var yAxisDiv = document.querySelector("#yAxisDiv svg");
+
+                yAxisDiv.setAttribute("width", maxWidth);
+                yAxisDiv.setAttribute(
+                    "transform",
+                    "translate(" + (maxWidth - margin.left) + "," + 0 + ")"
+                );
+            }
+
+            function getDateFormattedData(dateValue, dateFormat) {
+                return d3.timeFormat(dateFormat)(new Date(dateValue));
             }
         }
     </script>
