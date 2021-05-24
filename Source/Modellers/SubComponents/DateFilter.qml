@@ -197,7 +197,6 @@ Popup {
     }
 
     function applyDateFilter(){
-        console.log("Date filter applied")
 
         dateFilterPopup.visible = false
 
@@ -213,19 +212,27 @@ Popup {
         var singleRelation = "";
         var singleSlug = "";
 
+        let joinRelation = ""
+        let joinValue = ""
+        let actualValue = ""
+        let joinSlug = ""
+        let includeNull =  false
+        let exclude = false
+        let dateFormatId = 0
+
         switch(category){
 
         case Constants.dateMainListType:
         case Constants.dateMainTimeFrameType:
 
 
-            let joinRelation = DSParamsModel.fetchJoinRelation(counter)
-            let joinValue = DSParamsModel.fetchJoinValue(counter)
-            let actualValue = DSParamsModel.getActualDateValues(counter)
-            let joinSlug = DSParamsModel.fetchJoinRelationSlug(counter)
-            let includeNull = DSParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
-            let exclude = DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
-            let dateFormatId = category === Constants.dateMainTimeFrameType ? DSParamsModel.getDateFormatMap(counter): 0
+            joinRelation = DSParamsModel.fetchJoinRelation(counter)
+            joinValue = DSParamsModel.fetchJoinValue(counter)
+            actualValue = DSParamsModel.getActualDateValues(counter)
+            joinSlug = DSParamsModel.fetchJoinRelationSlug(counter)
+            includeNull = DSParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
+            exclude = DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
+            dateFormatId = category === Constants.dateMainTimeFrameType ? DSParamsModel.getDateFormatMap(counter): 0
 
             singleRelation = joinRelation[counter]
             singleValue = joinValue[counter]
@@ -236,22 +243,21 @@ Popup {
 
         case Constants.dateMainCalendarType:
 
-            for(let i = 0; i < tmpFilterIndexes.length; i++){
-                let fi = tmpFilterIndexes[i]
 
-                let joinRelation = DSParamsModel.fetchJoinRelation(fi)
-                let joinValue = DSParamsModel.fetchJoinValue(fi)
-                let actualValue = DSParamsModel.getActualDateValues(fi)
-                let joinSlug = DSParamsModel.fetchJoinRelationSlug(fi)
-                let includeNull = false
-                let exclude = DSParamsModel.getExcludeMap(fi)[fi] === "1" ? true : false
+            joinRelation = DSParamsModel.fetchJoinRelation(counter)
+            joinValue = DSParamsModel.fetchJoinValue(counter)
+            actualValue = DSParamsModel.getActualDateValues(counter)
+            joinSlug = DSParamsModel.fetchJoinRelationSlug(counter)
+            includeNull = false
+            exclude = DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
 
-                singleRelation = joinRelation[fi]
-                singleValue = joinValue[fi]
-                singleSlug = joinSlug[fi]
+            singleRelation = joinRelation[counter]
+            singleValue = joinValue[counter]
+            singleSlug = joinSlug[counter]
+//            console.log(JSON.stringify(joinRelation), JSON.stringify(joinSlug))
 
-                manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, actualValue, includeNull, exclude, 0, fi, DSParamsModel.filterModelIndex)
-            }
+            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, actualValue, includeNull, exclude, 0, counter, DSParamsModel.filterModelIndex)
+
 
             break
 
@@ -297,7 +303,7 @@ Popup {
         // For list date type
         // The db WHERE relation can only be LIKE / NOT LIKE ARRAY type
 
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
     }
     function onCalendarClicked(){
         listContent.visible = false
@@ -305,7 +311,7 @@ Popup {
         dateTimeFrameContent.visible = false
 
         DSParamsModel.setCategory(Constants.dateMainCalendarType)
-        DSParamsModel.addToJoinRelation(mapKey, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
     }
 
     function onTimeFrameClicked(){
@@ -315,7 +321,7 @@ Popup {
 
 
         DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
     }
 
 

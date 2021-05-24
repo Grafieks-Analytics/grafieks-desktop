@@ -300,7 +300,6 @@ Popup {
 
             textValue: "Cancel"
             onClicked: {
-
                 onCancelClicked()
             }
 
