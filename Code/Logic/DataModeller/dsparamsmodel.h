@@ -52,7 +52,7 @@ class DSParamsModel : public QObject
     QMap<int, bool> excludeMap;                 // Map for exclude all checks, QMap<filterId, bool>
     QMap<int, bool> includeNullMap;             // Map for include nulls, QMap<filterId, bool>
     QMap<int, bool> selectAllMap;               // Map for select alls, QMap<filterId, bool>
-    QStringList tmpSelectedValues;              // Tmp selected values in a filter list - used in categorical filter list
+    QStringList tmpSelectedValues;              // Tmp selected values in a filter list - used in categorical/date filter list
     QVector<int> tmpFilterIndex;                // Tmp created filter index - used in categorical filter wildcard
     QMap<int, int> dateFormatMap;               // Date selected format QMap<filterId, formatId>
     QMap<int, QStringList> actualDateValues;    // For dates like This year, last 10 years, quarter, etc, the original values are stored in this variable
@@ -201,6 +201,7 @@ public:
     // Filters
 
     Q_INVOKABLE void resetFilter();
+    Q_INVOKABLE void clearFilter();
 
     Q_INVOKABLE void addToJoinRelation(int refObjId, QString relation = "");
     Q_INVOKABLE void removeJoinRelation(int refObjId = 0, bool removeAll = false);
@@ -214,8 +215,8 @@ public:
     Q_INVOKABLE void removeJoinRelationSlug(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE QVariantMap fetchJoinRelationSlug(int refObjId = 0, bool fetchAll = false);
 
-    Q_INVOKABLE void setValueFormat(int refObjId, int formatId);
-    Q_INVOKABLE void removeValueFormat(int refObjId = 0, bool removeAll = false);
+    Q_INVOKABLE void setDateFormatMap(int refObjId, int formatId);
+    Q_INVOKABLE void removeDateFormatMap(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE int getDateFormatMap(int refObjId);
 
     Q_INVOKABLE void setActualDateValues(int refObjId, QString value1, QString value2 = "");
@@ -223,15 +224,15 @@ public:
     Q_INVOKABLE QStringList getActualDateValues(int refObjId);
 
     Q_INVOKABLE void setExcludeMap(int refObjId, bool value = false);
-    Q_INVOKABLE void removeExcludeMap(int refObjId);
+    Q_INVOKABLE void removeExcludeMap(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE QVariantMap getExcludeMap(int refObjId = 0, bool fetchAll = false);
 
     Q_INVOKABLE void setIncludeNullMap(int refObjId, bool value = false);
-    Q_INVOKABLE void removeIncludeNullMap(int refObjId);
+    Q_INVOKABLE void removeIncludeNullMap(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE QVariantMap getIncludeNullMap(int refObjId = 0, bool fetchAll = false);
 
     Q_INVOKABLE void setSelectAllMap(bool refObjId, bool value = false);
-    Q_INVOKABLE void removeSelectAllMap(int refObjId);
+    Q_INVOKABLE void removeSelectAllMap(int refObjId = 0, bool removeAll = false);
     Q_INVOKABLE QVariantMap getSelectAllMap(int refObjId = 0, bool fetchAll = false);
 
     Q_INVOKABLE void setTmpSelectedValues(QString value);

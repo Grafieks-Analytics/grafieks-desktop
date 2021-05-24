@@ -83,6 +83,10 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    function slotDataCleared(){
+
+    }
+
     function slotEditModeCalendar(relation, slug, value){
 
         calendarContent.visible = true

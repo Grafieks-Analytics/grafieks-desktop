@@ -167,7 +167,7 @@ Rectangle{
 
     function onSingleSelectRadioSelected(modelData, format){
 
-        DSParamsModel.setValueFormat(modelData.toString(), format)
+        DSParamsModel.setDateFormatMap(modelData.toString(), format)
         DSParamsModel.addToJoinValue(mapKey, modelData.toString())
         DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
@@ -226,7 +226,7 @@ Rectangle{
 
             for(let i = 0; i < checkedValues.length; i++)
             {
-                   DSParamsModel.setValueFormat(checkedValues[i].toString(), format)
+                   DSParamsModel.setDateFormatMap(checkedValues[i].toString(), format)
             }
 
             DSParamsModel.addToJoinValue(mapKey, checkedValues.toString())

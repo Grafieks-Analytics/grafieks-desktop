@@ -9,7 +9,7 @@ void QueryDataModel::columnData(QString col, QString tableName, QString options)
 {
     QStringList output;
     output = this->getData("SELECT DISTINCT " + col + " FROM "+ tableName);
-    emit columnListModelDataChanged(output, options);
+    emit columnListModelDataChanged(output, options, false);
 }
 
 void QueryDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
@@ -17,7 +17,7 @@ void QueryDataModel::columnSearchData(QString col, QString tableName, QString se
 
     QStringList output;
     output = this->getData("SELECT DISTINCT " + col + " FROM "+ tableName + " WHERE " + col + " LIKE '%"+searchString+"%'");
-    emit columnListModelDataChanged(output, options);
+    emit columnListModelDataChanged(output, options, true);
 }
 
 QStringList QueryDataModel::getData(QString queryString)
