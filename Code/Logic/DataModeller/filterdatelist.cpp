@@ -1,8 +1,8 @@
 #include "filterdatelist.h"
 
-FilterDateList::FilterDateList(const int &filterId, const int &dateFormatId, const QString &section, const QString &category, const QString &subcategory, const QString &tableName, const QString &columnName, const QString &relation, const QString &slug, const QString &value, const bool &includeNull, const bool &exclude, QObject *parent):
+FilterDateList::FilterDateList(const int &filterId, const int &dateFormatId, const QString &section, const QString &category, const QString &subcategory, const QString &tableName, const QString &columnName, const QString &relation, const QString &slug, const QString &value, const QString &actualValue, const bool &includeNull, const bool &exclude, QObject *parent):
 
-    QObject(parent), m_filterId(filterId), m_dateFormatId(dateFormatId), m_section(section), m_category(category), m_subCategory(subcategory), m_tableName(tableName), m_columnName(columnName), m_relation(relation), m_slug(slug), m_value(value), m_includeNull(includeNull), m_exclude(exclude)
+    QObject(parent), m_filterId(filterId), m_dateFormatId(dateFormatId), m_section(section), m_category(category), m_subCategory(subcategory), m_tableName(tableName), m_columnName(columnName), m_relation(relation), m_slug(slug), m_value(value), m_actualValue(actualValue), m_includeNull(includeNull), m_exclude(exclude)
 {
 
 }

@@ -17,6 +17,10 @@ function getDateFormattedData(dateValue, dateFormat) {
     return d3.timeFormat(dateFormat)(new Date(dateValue));
 }
 
+function getUniqueArrayValues(value, index, self) {
+    return self.indexOf(value) === index;
+}
+
 function changeChartAttributes(selector, attributeName, attributeValue) {
     d3.selectAll(selector).attr(attributeName, attributeValue);
 }
@@ -111,6 +115,30 @@ function setLabel(
             .attr("dy", ".75em")
             .attr("transform", "rotate(-90)");
     }
+}
+
+function sortDates(dateDataset, dateFormat) {
+    var parseTime = d3.timeParse(dateFormat);
+    var dates = Object.keys(dateDataset);
+    var newDataSet = [];
+    dates.forEach((d) => {
+        d = new Date(parseTime(d)).getTime();
+        newDataSet.push(d);
+    });
+    dates = newDataSet.sort();
+    dates = dates.map((d) => {
+        return d3.timeFormat(dateFormat)(new Date(d));
+    });
+
+    if (
+        dateFormat == "%b" ||
+        dateFormat == "%m" ||
+        dateFormat == "%B" ||
+        dateFormat == "%d"
+    ) {
+        dates = dates.reverse();
+    }
+    return dates;
 }
 
 function clearChart() {

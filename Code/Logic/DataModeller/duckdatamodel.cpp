@@ -32,14 +32,14 @@ DuckDataModel::~DuckDataModel()
 void DuckDataModel::columnData(QString col, QString tableName, QString options)
 {
     QStringList output;
-    output = this->getData("SELECT DISTINCT " + col + " FROM " + tableName);
+    output = this->getData("SELECT DISTINCT \"" + col + "\" FROM " + tableName);
     emit columnListModelDataChanged(output, options);
 }
 
 void DuckDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
 {
     QStringList output;
-    output = this->getData("SELECT DISTINCT " + col + " FROM "+ tableName + " WHERE " + col + " LIKE '%"+searchString+"%'");
+    output = this->getData("SELECT DISTINCT \"" + col + "\" FROM "+ tableName + " WHERE \"" + col + "\" LIKE '%"+searchString+"%'");
     emit columnListModelDataChanged(output, options);
 }
 
@@ -130,20 +130,6 @@ QStringList DuckDataModel::getDbList()
 }
 
 
-
-void DuckDataModel::receiveCsvFilterQuery(QString query)
-{
-    QString db = Statics::currentDbName;
-
-    std::string newQuery = query.toStdString();
-    std::string csvQuery = "SELECT * FROM " + db.toStdString() + newQuery;
-
-    auto data = duckCon->con.Query(csvQuery);
-    if(!data->error.empty())
-        qWarning() << Q_FUNC_INFO << data->error.c_str();
-
-    data->Print();
-}
 
 QStringList DuckDataModel::getData(QString query)
 {

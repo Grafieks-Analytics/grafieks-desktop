@@ -193,10 +193,11 @@ Column{
         }
 
         lastXDays.sort()
+        var finalValue = lastXDays[0] + "," + lastXDays[lastXDays.length - 1]
 
         console.log("Last " + value + " Days", lastXDays[0], lastXDays[lastXDays.length - 1])
-        DSParamsModel.setSubCategory(Constants.categorySubDay)
-        DSParamsModel.setActualDateValues(counter, lastXDays[0], lastXDays[lastXDays.length - 1])
+        DSParamsModel.setSubCategory(Constants.dateSubDay)
+        DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Last " + value + " Day")
         DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
@@ -295,10 +296,11 @@ Column{
         }
 
         nextXDays.sort()
+        var finalValue = nextXDays[0] + "," + nextXDays[nextXDays.length - 1]
 
         console.log("Next " + value + " Day", nextXDays[0], nextXDays[nextXDays.length - 1])
-        DSParamsModel.setSubCategory(Constants.categorySubDay)
-        DSParamsModel.setActualDateValues(counter, nextXDays[0], nextXDays[nextXDays.length - 1])
+        DSParamsModel.setSubCategory(Constants.dateSubDay)
+        DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Next " + value + " Day")
         DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
@@ -314,8 +316,8 @@ Column{
         var thisDay = newDate
 
         console.log("This Day", thisDay.toString())
-        DSParamsModel.setSubCategory(Constants.categorySubDay)
-        DSParamsModel.setActualDateValues(counter, thisDay)
+        DSParamsModel.setSubCategory(Constants.dateSubDay)
+        DSParamsModel.setActualDateValues(counter, thisDay.toString())
         DSParamsModel.addToJoinValue(counter, "This Day")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
@@ -394,8 +396,8 @@ Column{
         }
 
         console.log("Last Day", newValue.toString())
-        DSParamsModel.setSubCategory(Constants.categorySubDay)
-        DSParamsModel.setActualDateValues(counter, newValue)
+        DSParamsModel.setSubCategory(Constants.dateSubDay)
+        DSParamsModel.setActualDateValues(counter, newValue.toString())
         DSParamsModel.addToJoinValue(counter, "Last Day")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
@@ -486,8 +488,8 @@ Column{
         }
 
         console.log("Next Day", newValue.toString())
-        DSParamsModel.setSubCategory(Constants.categorySubDay)
-        DSParamsModel.setActualDateValues(counter, newValue)
+        DSParamsModel.setSubCategory(Constants.dateSubDay)
+        DSParamsModel.setActualDateValues(counter, newValue.toString())
         DSParamsModel.addToJoinValue(counter, "Next Day")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)

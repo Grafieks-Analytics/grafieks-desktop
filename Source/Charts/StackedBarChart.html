@@ -36,7 +36,7 @@
             /* stroke: black; */
             stroke-width: 1.2px;
         }
-        #tooltip{
+        #tooltip {
             font-size: 14px;
             font-family: Arial, Helvetica, sans-serif;
         }
@@ -61,6 +61,8 @@
         <div id="my_dataviz"></div>
     </div>
     <div id="tooltip"></div>
+    <div id="legend"></div>
+
 
     <script>
         var data = [
@@ -153,6 +155,7 @@
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
 
+
             // var keys = data[1];
             // var labels = data[2];
 
@@ -162,7 +165,9 @@
             yaxisTicks = height / 70;
             var timeFormat = d3.timeFormat("%m-%Y");
             var parseDate = d3.timeParse("%Y");
-         
+            var tooltipColumn1 = "test1";
+            var tooltipColumn2 = "test2";
+
             let {
                 d3colorPalette,
                 paddingInner,
@@ -172,6 +177,7 @@
                 dateFormat1,
                 chartType,
                 toolTip,
+                legendConfig,
                 standardThresholdWidth,
             } = plottingConfiguration;
 
@@ -180,6 +186,7 @@
             }
             d3Colors = d3colorPalette;
           
+         
 
             if (!paddingInner) {
                 paddingInner = defaultD3Config.defaultPaddingInner;
@@ -210,6 +217,90 @@
                 dateFormat1
             );
 
+
+                 if (!legendConfig) {
+                legendConfig = { legendStatus: false };
+            }
+
+            let { legendStatus, legendPosition } = legendConfig;
+
+            if (legendStatus) {
+                var legendHeight = document.querySelector("#legend")
+                    .offsetHeight;
+                var legendElement = document.querySelector("#legend");
+
+                topPosition = "calc(50vh - " + legendHeight + "px)";
+                legendElement.style.padding = "10px";
+
+                switch (legendPosition) {
+                    case "left":
+                        margin.left += 100;
+                        width -= 100;
+                        d3.select("#legend")
+                            .style("top", topPosition)
+                            .style("right", "auto")
+                            .style("bottom", "auto")
+                            .style("left", "20px")
+                            .style("display", "block");
+                        break;
+                    case "top":
+                        margin.top += 80;
+                        height -= 100;
+                        d3.select("#legend")
+                            .style("top", "20px")
+                            .style("right", "auto")
+                            .style("bottom", "auto")
+                            .style("left", margin.left + "px")
+                            .style("display", "flex");
+                        d3.selectAll("#legend div").style("padding", "2px 4px");
+                        break;
+                    case "bottom":
+                        height -= 80;
+                        margin.bottom += 80;
+                        d3.select("#legend")
+                            .style("top", "auto")
+                            .style("right", "auto")
+                            .style("bottom", "80px")
+                            .style("left", margin.left + "px")
+                            .style("display", "flex");
+                        break;
+                    // For Right Legened
+                    case "right":
+                    default:
+                        width -= 100;
+                        d3.select("#legend")
+                            .style("right", "20px")
+                            .style("left", "auto")
+                            .style("top", topPosition)
+                            .style("bottom", "auto")
+                            .style("display", "block");
+                }
+            }
+
+            d3.select("#legend").html("").style("padding", "");
+
+            if (legendStatus) {
+                d3.select("#legend").html("");
+                d3.select("#legend")
+                    .selectAll("div")
+                    .data(keys)
+                    .enter()
+                    .append("div")
+                    .html((d, i) => {
+                        return (
+                            '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
+                            d3Colors[i] +
+                            ';">  </div>' +
+                            "<span style='margin-left: 5px; max-width: 80px'>" +
+                            d +
+                            "</span>"
+                        );
+                    })
+                    .style("display", "flex")
+                    .style("padding", "2px");
+            }
+
+            
               if (!toolTip) {
                 toolTip = {
                     textColumn1: labels[0],
@@ -321,7 +412,7 @@
                 )
                 .append("g")
                 .attr("class", "y-axis")
-                .call(yAxis);
+                .call(yAxis.tickSize(-width));
 
             svg.append("g")
                 .attr("class", "y axis grid")
@@ -330,7 +421,7 @@
             svg.append("g")
                 .attr("class", "centerline")
                 .attr("transform", "translate(0," + y(0) + ")")
-                .call(centerLine);
+                .call(centerLine.tickSize(0));
 
             var entry = svg
                 .selectAll(".entry")
@@ -345,7 +436,6 @@
             entry
                 .selectAll("rect")
                 .data(function (d) {
-
                     return d.components;
                 })
                 .enter()

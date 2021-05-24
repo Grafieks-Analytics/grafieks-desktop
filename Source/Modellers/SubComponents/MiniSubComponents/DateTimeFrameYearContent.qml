@@ -112,10 +112,11 @@ Column{
         var tmpDate = new Date()
         var thisYear = tmpDate.getFullYear()
         var pastYear = thisYear - newValue
+        var finalValue = pastYear + "-01-01," + thisYear + "12-31"
 
         console.log("Past " + value + " Year", pastYear)
-        DSParamsModel.setSubCategory(Constants.categorySubYear)
-        DSParamsModel.setActualDateValues(counter, pastYear, thisYear)
+        DSParamsModel.setSubCategory(Constants.dateSubYear)
+        DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Last " + value + " Years")
         DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
@@ -130,10 +131,11 @@ Column{
         var tmpDate = new Date()
         var thisYear = tmpDate.getFullYear()
         var futureYear = tmpDate.thisYear + newValue
+        var finalValue = thisYear + "01-01," + futureYear + "12-31"
 
         console.log("Next " + value + " Year", futureYear)
-        DSParamsModel.setSubCategory(Constants.categorySubYear)
-        DSParamsModel.setActualDateValues(counter, thisYear, futureYear)
+        DSParamsModel.setSubCategory(Constants.dateSubYear)
+        DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Next " + value + " Years")
         DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
@@ -148,8 +150,8 @@ Column{
         var thisYear = tmpDate.getFullYear()
 
         console.log("This Year", thisYear)
-        DSParamsModel.setSubCategory(Constants.categorySubYear)
-        DSParamsModel.setActualDateValues(counter, thisYear)
+        DSParamsModel.setSubCategory(Constants.dateSubYear)
+        DSParamsModel.setActualDateValues(counter, thisYear.toString())
         DSParamsModel.addToJoinValue(counter, "This Year")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
@@ -164,8 +166,8 @@ Column{
         var lastYear = tmpDate.getFullYear() - 1
 
         console.log("Last Year", lastYear)
-        DSParamsModel.setSubCategory(Constants.categorySubYear)
-        DSParamsModel.setActualDateValues(counter, lastYear)
+        DSParamsModel.setSubCategory(Constants.dateSubYear)
+        DSParamsModel.setActualDateValues(counter, lastYear.toString())
         DSParamsModel.addToJoinValue(counter, "Last Year")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
@@ -180,8 +182,8 @@ Column{
         var nextYear = tmpDate.getFullYear() + 1
 
         console.log("Next Year", nextYear)
-        DSParamsModel.setSubCategory(Constants.categorySubYear)
-        DSParamsModel.setActualDateValues(counter, nextYear)
+        DSParamsModel.setSubCategory(Constants.dateSubYear)
+        DSParamsModel.setActualDateValues(counter, nextYear.toString())
         DSParamsModel.addToJoinValue(counter, "Next Year")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)

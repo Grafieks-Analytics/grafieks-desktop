@@ -236,7 +236,7 @@ Rectangle{
                                             DSParamsModel.removeValueFormat(value)
                                         }
                                         if(category === "date.list"){
-                                            DSParamsModel.removeTimeFrame(value)
+//                                            DSParamsModel.removeTimeFrame(value)
                                         }
 
                                         onRemoveElement(model.index)
