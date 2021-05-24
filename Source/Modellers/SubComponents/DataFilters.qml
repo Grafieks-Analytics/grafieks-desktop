@@ -214,11 +214,6 @@ Popup {
 
     Component.onCompleted: {
 
-        //        popupMain.signalEditMode.connect(categoricalFilterPopup.slotEditMode)
-        //        popupMain.signalEditMode.connect(dateFilterPopup.slotEditMode)
-        //        popupMain.signalEditMode.connect(numericalFilterPopup.slotEditMode)
-        //        popupMain.signalEditMode.connect(groupFilterPopup.slotEditMode)
-
         DSParamsModel.setSection(Constants.categoricalTab)
         DSParamsModel.setCategory(Constants.categoryMainListType)
         DSParamsModel.setSubCategory(Constants.categorySubMulti)
@@ -237,9 +232,9 @@ Popup {
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryDataModel.columnData(colName, tableName, JSON.stringify(options));
         } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-            DuckDataModel.columnData(colName, tableName)
+            DuckDataModel.columnData(colName, tableName, JSON.stringify(options))
         } else{
-            ForwardOnlyDataModel.columnData(colName, tableName)
+            ForwardOnlyDataModel.columnData(colName, tableName, JSON.stringify(options))
         }
 
         DSParamsModel.setColName(colName)

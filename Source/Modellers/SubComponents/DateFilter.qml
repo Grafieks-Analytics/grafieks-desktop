@@ -214,6 +214,7 @@ Popup {
 
             let joinRelation = DSParamsModel.fetchJoinRelation(counter)
             let joinValue = DSParamsModel.fetchJoinValue(counter)
+            let actualValue = DSParamsModel.getActualDateValues(counter)
             let joinSlug = DSParamsModel.fetchJoinRelationSlug(counter)
             let includeNull = DSParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
             let exclude = DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
@@ -223,7 +224,7 @@ Popup {
             singleRelation = joinRelation[counter]
             singleValue = joinValue[counter]
             singleSlug = joinSlug[counter]
-            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, dateFormatId, counter, DSParamsModel.filterModelIndex)
+            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, actualValue, includeNull, exclude, dateFormatId, counter, DSParamsModel.filterModelIndex)
 
             break
 
@@ -234,6 +235,7 @@ Popup {
 
                 let joinRelation = DSParamsModel.fetchJoinRelation(fi)
                 let joinValue = DSParamsModel.fetchJoinValue(fi)
+                let actualValue = DSParamsModel.getActualDateValues(fi)
                 let joinSlug = DSParamsModel.fetchJoinRelationSlug(fi)
                 let includeNull = false
                 let exclude = DSParamsModel.getExcludeMap(fi)[fi] === "1" ? true : false
@@ -242,8 +244,8 @@ Popup {
                 singleValue = joinValue[fi]
                 singleSlug = joinSlug[fi]
 
-                console.log("Mode 2", DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, fi, DSParamsModel.filterModelIndex)
-                manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, 0, fi, DSParamsModel.filterModelIndex)
+                console.log("Mode 2", DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, actualValue, includeNull, exclude, fi, DSParamsModel.filterModelIndex)
+                manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, actualValue, includeNull, exclude, 0, fi, DSParamsModel.filterModelIndex)
             }
 
             break
@@ -256,16 +258,16 @@ Popup {
 
     }
 
-    function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, dateFormatId, counter = 0, filterId = 0){
+    function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude, dateFormatId, counter = 0, filterId = 0){
 
-        //        console.log(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, "FILTER LIST INSERT/UPDATE")
+        //        console.log(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude, "FILTER LIST INSERT/UPDATE")
 
         // Save the filter
         if(mode === Constants.modeCreate){
-            FilterDateListModel.newFilter(counter, dateFormatId,  section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+            FilterDateListModel.newFilter(counter, dateFormatId,  section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude)
 
         } else{
-            FilterDateListModel.updateFilter(filterId, dateFormatId, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+            FilterDateListModel.updateFilter(filterId, dateFormatId, section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude)
         }
     }
     function resetDateFilter(){

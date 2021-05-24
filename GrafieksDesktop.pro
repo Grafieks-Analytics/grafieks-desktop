@@ -60,7 +60,6 @@ SOURCES += \
     Code/Logic/DataModeller/filtercategoricallistmodel.cpp \
     Code/Logic/DataModeller/filterdatelist.cpp \
     Code/Logic/DataModeller/filterdatelistmodel.cpp \
-    Code/Logic/DataModeller/filterfunctionsmodel.cpp \
     Code/Logic/DataModeller/filternumericallist.cpp \
     Code/Logic/DataModeller/filternumericallistmodel.cpp \
     Code/Logic/DataModeller/forwardonlydatamodel.cpp \
@@ -158,7 +157,6 @@ HEADERS += \
     Code/Logic/DataModeller/filtercategoricallistmodel.h \
     Code/Logic/DataModeller/filterdatelist.h \
     Code/Logic/DataModeller/filterdatelistmodel.h \
-    Code/Logic/DataModeller/filterfunctionsmodel.h \
     Code/Logic/DataModeller/filternumericallist.h \
     Code/Logic/DataModeller/filternumericallistmodel.h \
     Code/Logic/DataModeller/forwardonlydatamodel.h \

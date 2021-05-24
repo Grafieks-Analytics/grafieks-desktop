@@ -114,11 +114,57 @@
                 var width = window.innerWidth - margin.left - margin.right;
                 var height = window.innerHeight - margin.top - margin.bottom;
 
-                if (chartType == constants.chartType.STANDARD) {
-                    height = dataValues[0].length * standardThresholdHeight;
+                var xAxisDataSet = dataValues[0];
+
+                var xAxisDateWiseValues = {};
+
+                var valueDateType = false;
+                if (isDateFormat(xAxisDataSet[0])) {
+                    valueDateType = true;
                 }
 
-                d3.selectAll("#my_dataviz").html("");
+                if (valueDateType) {
+                    xAxisDataSet.forEach((d, i) => {
+                        xAxisDataSet[i] = new Date(xAxisDataSet[i]);
+                        var requiredTypeData = getDateFormattedData(
+                            d,
+                            dateFormat
+                        );
+
+                        if (!xAxisDateWiseValues[requiredTypeData]) {
+                            xAxisDateWiseValues[requiredTypeData] = 0;
+                        }
+
+                        xAxisDateWiseValues[requiredTypeData] +=
+                            dataValues[1][i];
+                    });
+
+                    var sortedKeys = sortDates(xAxisDateWiseValues, dateFormat);
+
+                    dataValues[0] = sortedKeys;
+                    dataValues[1] = sortedKeys.map(
+                        (d, i) => xAxisDateWiseValues[d]
+                    );
+                    data[0] = dataValues;
+                }
+
+                if (chartType == constants.chartType.STANDARD) {
+                    height = dataValues[0].length * standardThresholdHeight;
+                    if (
+                        height + margin.top + margin.bottom <
+                        window.innerHeight
+                    ) {
+                        // console.log("Change Position");
+                        d3.select("#xAxisDiv").style(
+                            "top",
+                            height + margin.top + "px"
+                        );
+                    } else {
+                        d3.select("#xAxisDiv").style("bottom", "0");
+                    }
+                }
+
+                clearChart();
 
                 // Add svg to
                 var svg = d3
@@ -225,6 +271,7 @@
                         "translate(" + margin.left + ",0)"
                         // "translate(0,0)"
                     )
+                    // .style(  ?  :, ? : )
                     .append("g")
                     .attr("class", "x-axis")
                     .call(xAxis);
