@@ -42,7 +42,7 @@ Rectangle{
 
         // Listview height
         function onRowCountChanged(){
-            listFiltersListView.height = FilterCategoricalListModel.rowCount() * 30
+            listFiltersListView.height = FilterCategoricalListModel.rowCount() * 40
         }
     }
     // Connections Ends
@@ -86,7 +86,7 @@ Rectangle{
         }
 
         QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
-        console.log("EDIT CLICKED", DSParamsModel.mode)
+        console.log("EDIT CLICKED categorical", modelIndex, filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
 
     }
 
