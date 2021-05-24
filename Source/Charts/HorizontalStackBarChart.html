@@ -14,51 +14,103 @@
 </head>
 <body>
     <div id="tooltip"></div>
-    <div id="my_dataviz"></div>
+    <div style="display: flex; flex-direction: column">
+        <div id="my_dataviz"></div>
+        <div id="xAxisDiv"></div>
+    </div>
 
     <script>
         // reference: https://bl.ocks.org/seasmith/b72e6b8be1978eae046e0cff131668b1
         var data = [
             [
-                ["Ind", "1999", "139.81"],
-                ["Ind", "2000", "100.81"],
-                ["Ind", "2001", "136.35"],
-                ["Ind", "2002", "143.22"],
-                ["Aus", "1999", "0"],
-                ["Aus", "2000", "241.64"],
-                ["Aus", "2001", "48.43"],
-                ["Aus", "2002", "54.43"],
-                ["Nz", "1999", "-211.31"],
-                ["Nz", "2000", "-200.36"],
-                ["Nz", "2001", "0"],
-                ["Nz", "2002", "0"],
-                ["Uk", "1999", "321.31"],
-                ["Uk", "2000", "-500.36"],
-                ["Uk", "2001", "103.7"],
-                ["Uk", "2002", "100.82"],
+                ["2018-08-05", "2018-08-05", "139.81"],
+                ["2018-08-05", "2019-02-05", "100.81"],
+                ["2018-08-05", "2019-08-05", "136.35"],
+                ["2018-08-05", "2019-02-05", "143.22"],
+                ["2012-08-05", "2019-08-05", "0"],
+                ["2013-08-05", "2018-08-05", "241.64"],
+                ["2014-08-05", "2019-08-05", "48.43"],
+                ["2012-08-05", "2019-02-05", "54.43"],
+                ["2012-08-05", "2019-08-05", "154.43"],
+                ["2011-08-05", "2018-08-05", "-211.31"],
+                ["2013-08-05", "2019-08-05", "-200.36"],
+                ["2013-08-05", "2019-08-05", "0"],
+                ["2019-08-05", "2019-08-05", "321.31"],
+                ["2019-08-05", "2013-08-05", "500.36"],
+                ["2019-08-05", "2019-08-05", "103.7"],
+                ["2019-08-05", "2019-08-05", "100.82"],
             ],
-            ["Ind", "Aus", "Nz", "Uk"],
-            ["1999", "2000", "2001", "2002"],
+            [
+                "2018-08-05",
+                "2019-08-05",
+                "2019-08-05",
+                "2019-08-05",
+                "2019-02-05",
+            ],
+            ["2019", "2018"],
         ];
 
-        function transformData(dataValue) {
+        function transformData(dataValue, dateFormat, dateFormat1) {
             json = {};
+            var isKey1Date = false;
+            var isKey2Date = false;
+
+            if (isDateFormat(dataValue[0][1])) {
+                isKey1Date = true;
+            }
+            if (isDateFormat(dataValue[0][0])) {
+                isKey2Date = true;
+            }
+
+            var uniqueKey2 = [];
+            var uniqueKey = [];
             dataValue.forEach((d) => {
-                var key = d[1];
+                if (isKey1Date) {
+                    var key = getDateFormattedData(d[1], dateFormat);
+                } else {
+                    var key = d[1];
+                }
+
                 if (!json[key]) {
                     json[key] = {};
                 }
-                var key2 = d[0];
+                if (isKey2Date) {
+                    var key2 = getDateFormattedData(d[0], dateFormat1);
+                } else {
+                    var key2 = d[0];
+                }
+                if (!uniqueKey2.includes(key2)) {
+                    uniqueKey2.push(key2);
+                }
+                if (!uniqueKey.includes(key)) {
+                    uniqueKey.push(key);
+                }
+
                 var value = d[2];
 
-                json[key][key2] = +value;
+                if (!json[key][key2]) {
+                    json[key][key2] = 0;
+                }
+
+                json[key][key2] += +value;
             });
 
             var response = [];
+            var allKeys = uniqueKey2;
+
             for (var key in json) {
+                if (Object.keys(json[key]).length < allKeys.length) {
+                    allKeys.forEach((d) => {
+                        if (!json[key][d]) {
+                            json[key][d] = 0;
+                        }
+                    });
+                }
                 response.push({ ...json[key], key });
             }
-            return response;
+
+            const yAxisUniqueKeys = uniqueKey;
+            return [response, allKeys, yAxisUniqueKeys, data[2]];
         }
 
         drawChart(data);
@@ -67,14 +119,6 @@
             window.data = data;
 
             var keys = data[1];
-            // keys = ["apples", "bananas", "cherries", "dates"];
-            data = transformData(data[0]);
-
-            var margin = { top: 20, right: 20, bottom: 30, left: 40 };
-            var width = window.innerWidth - margin.left - margin.right - 50;
-            var height = window.innerHeight - margin.top - margin.bottom - 50;
-            var timeFormat = d3.timeFormat("%m-%Y");
-            var parseDate = d3.timeParse("%Y");
 
             let {
                 d3colorPalette,
@@ -82,8 +126,9 @@
                 markerShape,
                 curveType,
                 dateFormat,
+                dateFormat1,
                 chartType,
-                standartThresholdWidth,
+                standardThresholdHeight,
             } = plottingConfiguration;
 
             if (!d3colorPalette) {
@@ -99,13 +144,46 @@
                 dateFormat = defaultD3Config.dateFormat;
             }
 
-            if (!chartType) {
-                chartType = defaultD3Config.chartType;
+            if (!dateFormat1) {
+                dateFormat1 = defaultD3Config.dateFormat;
             }
 
-            if (!standartThresholdWidth) {
-                standartThresholdWidth = defaultD3Config.standartThresholdWidth;
+            if (!chartType) {
+                chartType = defaultD3Config.horizontalChartType;
             }
+
+            if (!standardThresholdHeight) {
+                standardThresholdHeight =
+                    defaultD3Config.standardThresholdHeight;
+            }
+
+            var [data, keys, yAxisUniqueKeys, labels] = transformData(
+                data[0],
+                dateFormat,
+                dateFormat1
+            );
+
+            var margin = { top: 20, right: 20, bottom: 30, left: 40 };
+            var width = window.innerWidth - margin.left - margin.right - 50;
+            var height = window.innerHeight - margin.top - margin.bottom - 50;
+
+            if (chartType == constants.chartType.STANDARD) {
+                height = yAxisUniqueKeys.length * standardThresholdHeight;
+                if (height + margin.top + margin.bottom < window.innerHeight) {
+                    d3.select("#xAxisDiv").style(
+                        "top",
+                        height + margin.top + "px"
+                    );
+                } else {
+                    d3.select("#xAxisDiv").style("bottom", "0");
+                    d3.select("#xAxisDiv").style("top", null);
+                }
+            } else {
+                d3.select("#xAxisDiv").style("bottom", "0");
+            }
+
+            var timeFormat = d3.timeFormat("%m-%Y");
+            var parseDate = d3.timeParse("%Y");
 
             var y = d3
                 .scaleBand()
@@ -115,7 +193,8 @@
                     })
                 )
                 .rangeRound([margin.top, height - margin.bottom])
-                .padding(paddingInner);
+                .padding(paddingInner)
+                .paddingInner(paddingInner);
 
             var barWidth = y.bandwidth();
 
@@ -126,11 +205,12 @@
             var x = d3
                 .scaleLinear()
                 .domain([d3.min(series, stackMin), d3.max(series, stackMax)])
-                .rangeRound([0, width - margin.right]);
+                .rangeRound([0, width - margin.right])
+                .nice();
 
             var z = d3.scaleOrdinal(d3Colors);
 
-            d3.selectAll("#my_dataviz").html("");
+            clearChart();
             var svg = d3
                 .selectAll("#my_dataviz")
                 .append("svg")
@@ -139,7 +219,7 @@
                 .append("g")
                 .attr(
                     "transform",
-                    "translate(" + margin.left + "," + margin.top + ")"
+                    "translate(" + margin.left + "," + (margin.top + 10) + ")"
                 );
 
             svg.append("g")
@@ -178,13 +258,11 @@
                     d3.selectAll(".bar").style("opacity", 1);
                 })
                 .on("mouseover mousemove", function (d, i) {
-                    var computedValues = this.getClientRects()[0];
-
-                    let xpos = computedValues.x + barWidth / 2;
+                    let xpos1 = d3.mouse(this)[0] + margin.left;
                     let ypos = d3.mouse(this)[1] - 20;
 
                     d3.select("#tooltip")
-                        .style("left", xpos + "px")
+                        .style("left", xpos1 + "px")
                         .style("top", ypos + "px")
                         .style("display", "block")
                         .style("position", "absolute")
@@ -203,9 +281,25 @@
                 .attr("class", "y-axis")
                 .call(d3.axisLeft(y).tickSize(0));
 
-            svg.append("g")
-                .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x).tickSize(0));
+            // svg.append("g")
+            //     .attr("transform", "translate(0," + height + ")")
+            //     .call(d3.axisBottom(x).tickSize(0));
+
+            var xAxis = d3.axisBottom(x).tickSize(0).ticks(10);
+
+            d3.select("#xAxisDiv")
+                .append("svg")
+                .attr("height", "72")
+                .attr("width", width + margin.left + margin.right)
+                .append("g") //add group to leave margin for axis
+                .attr(
+                    "transform",
+                    "translate(" + margin.left + ",0)"
+                    // "translate(0,0)"
+                )
+                .append("g")
+                .attr("class", "x-axis")
+                .call(xAxis);
 
             function stackMin(series) {
                 return d3.min(series, function (d) {

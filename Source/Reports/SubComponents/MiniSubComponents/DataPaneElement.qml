@@ -9,7 +9,7 @@ Rectangle{
     width: parent.width
     anchors.leftMargin: 5
 
-    z: 999
+//    z: 999
 
 
 
@@ -128,7 +128,7 @@ Rectangle{
         anchors.right: parent.right
         anchors.rightMargin: 10
         anchors.verticalCenter: parent.verticalCenter
-        z:100
+//        z:100
         MouseArea{
             anchors.fill: parent
             onClicked: openMenu()

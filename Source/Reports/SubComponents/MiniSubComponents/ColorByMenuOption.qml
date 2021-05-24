@@ -72,12 +72,20 @@ Popup {
         var deleteName = colorByTextItem.text;
         for(var i=0; i<colorListModel.count;i++){
             var elementName = colorListModel.get(i).textValue;
+
+
             if(elementName===deleteName){
                 colorListModel.remove(i);
                 ReportParamsModel.setItemType(null);
                 ReportParamsModel.setLastDropped(null);
-                ReportParamsModel.setChartType(Constants.barChartTitle);
                 report_desiner_page.colorByData = [];
+
+                // Add switch case - change url according to the selected chart
+                report_desiner_page.chartUrl  = Constants.barChartUrl;
+                report_desiner_page.chartTitle  = Constants.barChartTitle;
+                webEngineView.url = Constants.baseChartUrl+Constants.barChartUrl;
+
+                reDrawChart();
                 break;
             }
         }

@@ -71,7 +71,13 @@ Page {
     property bool isHorizontalGraph: false;
 
 
-    property var colorData:any;
+    property var colorData:[];
+
+
+
+    ListModel{
+        id: dataItemList
+    }
 
     onIsHorizontalGraphChanged: {
         if(isHorizontalGraph){
@@ -191,7 +197,7 @@ Page {
         }
 
         if(dataValuesRemoved){
-            drawChart();
+            reDrawChart();
         }
 
     }
@@ -282,6 +288,24 @@ Page {
         }
     }
 
+    // Switch Chart Urls
+    function switchChart(chartTitleValue){
+        chartTitle = chartTitleValue;
+        var chartUrl = '';
+        switch(chartTitle){
+            case Constants.horizontalBarChartTitle:
+                chartUrl = Constants.horizontalBarChartUrl;
+                break;
+            case Constants.horizontalStackedBarChartTitle:
+                chartUrl = Constants.horizontalStackedBarChartUrl;
+                break;
+            case Constants.stackedBarChartTitle:
+                chartUrl = Constants.stackedBarChartUrl
+                break;
+        }
+        webEngineView.url = Constants.baseChartUrl+chartUrl;
+    }
+
     // function to get the columnName from model
     function getAxisColumnNames(axisName){
         var model = null;
@@ -318,20 +342,46 @@ Page {
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
 
         if((xAxisListModel.count && xAxisListModel.get(0).droppedItemType.toLowerCase() !== 'numerical')  || (yAxisListModel.count && yAxisListModel.get(0).droppedItemType.toLowerCase() === 'numerical')){
-            isHorizontalGraph = false
+            isHorizontalGraph = false;
+        }
+
+        if(!isHorizontalGraph && (xAxisListModel.count && xAxisListModel.get(0).droppedItemType.toLowerCase() === 'numerical')  || (yAxisListModel.count && yAxisListModel.get(0).droppedItemType.toLowerCase() !== 'numerical')){
+            isHorizontalGraph = true;
         }
 
         // Check graph type for redrawing
         // If length = 1 and type of chart is
         // 1. Grouped Bar Chart and no Colour By is there => Bar chart
-        // 1. Grouped Bar Chart and Colour By Present => Stacked Bar Chart
+        // 2. Grouped Bar Chart and Colour By Present => Stacked Bar Chart
 
         if(xAxisColumns.length === 1 && yAxisColumns.length === 1){
-            if(chartTitle === Constants.groupBarChartTitle){
-                chartUrl = Constants.barChartUrl;
-                webEngineView.url = Constants.baseChartUrl+chartUrl;
-                chartTitle = Constants.barChartTitle;
+
+            // Condition for horizontal bar graph;
+            if(isHorizontalGraph){
+                switch(chartTitle){
+                    case Constants.barChartTitle:
+                        if(colorByData.length){
+                            switchChart(Constants.horizontalStackedBarChartTitle)
+                            break;
+                        }
+                        chartUrl = Constants.horizontalBarChartUrl;
+                        webEngineView.url = Constants.baseChartUrl+chartUrl;
+                        chartTitle = Constants.horizontalBarChartTitle;
+                        break;
+
+                }
+            }else{
+
+                if(chartTitle === Constants.barChartTitle && colorByData.length){
+                    console.log('Change to stacked bar chart')
+                    switchChart(Constants.stackedBarChartTitle);
+                }else if(chartTitle === Constants.groupBarChartTitle){
+                    chartUrl = Constants.barChartUrl;
+                    webEngineView.url = Constants.baseChartUrl+chartUrl;
+                    chartTitle = Constants.barChartTitle;
+                }
             }
+
         }
 
         drawChart();
@@ -474,13 +524,17 @@ Page {
             console.log('Error',JSON.stringify(loadRequest))
             return;
         }
-        drawChart();
+        reDrawChart();
     }
 
     function drawChart(){
 
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
+
+        if(xAxisColumns.length===0 && yAxisColumns.length === 0){
+            isHorizontalGraph = false;
+        }
 
         if(xAxisColumns.length && yAxisColumns.length){
 
@@ -506,6 +560,7 @@ Page {
             case Constants.barChartTitle:
                 console.log("BAR CLICKED", xAxisColumns[0])
                 dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
+
                 break;
             case Constants.horizontalStackedBarChartTitle:
                 colorByColumnName = colorByData[0].columnName;
@@ -525,7 +580,7 @@ Page {
                 break;
             case Constants.groupBarChartTitle:
                 console.log('Grouped bar chart!');
-                dataValues =  ChartsModel.getGroupedBarChartValues(xAxisColumns[1],yAxisColumns[0], xAxisColumns[0]);
+                dataValues =  ChartsModel.getGroupedBarChartValues(xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
                 break;
             case Constants.areaChartTitle:
                 console.log("AREA CLICKED")
@@ -610,8 +665,19 @@ Page {
             }
 
             console.log('Data Values:',JSON.stringify(dataValues));
-            colorData = dataValues;
+            colorData = [];
+            console.log("colorData5",colorData)
+            colorData = JSON.parse(dataValues)[1] || [];
+            console.log("colorData2" ,colorData)
             console.log("dataValues" ,JSON.parse(dataValues))
+
+            dataItemList.clear();
+            colorData.forEach(function (element,index) {
+
+                dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
+            console.log("newreportcolor",Constants.d3ColorPalette[index % Constants.d3ColorPalette.length])
+            });
+
 
             console.log('Webengine View Loading Status:',webEngineView.loading);
             console.log('Selected Chart Title:',report_desiner_page.chartTitle)
@@ -629,9 +695,10 @@ Page {
             });';
 
             webEngineView.runJavaScript('drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue);
-
+            return;
         }
 
+        webEngineView.runJavaScript('clearChart()');
     }
 
     function openYAxisSettings(){
