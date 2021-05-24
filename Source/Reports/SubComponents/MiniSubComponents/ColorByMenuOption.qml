@@ -81,8 +81,8 @@ Popup {
                 report_desiner_page.colorByData = [];
 
                 // Add switch case - change url according to the selected chart
-                ReportParamsModel.setChartType(Constants.barChartTitle);
                 report_desiner_page.chartUrl  = Constants.barChartUrl;
+                report_desiner_page.chartTitle  = Constants.barChartTitle;
                 webEngineView.url = Constants.baseChartUrl+Constants.barChartUrl;
 
                 reDrawChart();
