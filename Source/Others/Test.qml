@@ -231,13 +231,11 @@ Rectangle {
 
         function onSqlHasData(hasData){
             view.model = hasData === true? QueryModel: ""
-//            globalConType = Constants.sqlType
 
         }
 
         function onHeaderDataChanged(tableHeaders){
             roleList = tableHeaders
-            console.log("tableHeaders",tableHeaders)
         }
 
     }
