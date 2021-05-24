@@ -313,7 +313,7 @@
                 )
                 .append("g")
                 .attr("class", "y-axis")
-                .call(yAxis);
+                .call(yAxis.tickSize(-width));
 
             svg.append("g")
                 .attr("class", "y axis grid")
@@ -322,7 +322,7 @@
             svg.append("g")
                 .attr("class", "centerline")
                 .attr("transform", "translate(0," + y(0) + ")")
-                .call(centerLine);
+                .call(centerLine.tickSize(0));
 
             var entry = svg
                 .selectAll(".entry")

@@ -125,7 +125,14 @@ function sortDates(dateDataset, dateFormat) {
         d = new Date(parseTime(d)).getTime();
         newDataSet.push(d);
     });
-    dates = newDataSet.sort();
+    dates = newDataSet.sort(function (a, b) {
+        // Turn your strings into dates, and then subtract them
+        // to get a value that is either negative, positive, or zero.
+        return new Date(a) - new Date(b);
+    });
+    // dates = newDataSet.sort();
+    // console.log(newDataSet);
+    // console.log(dates);
     dates = dates.map((d) => {
         return d3.timeFormat(dateFormat)(new Date(d));
     });
@@ -138,6 +145,7 @@ function sortDates(dateDataset, dateFormat) {
     ) {
         dates = dates.reverse();
     }
+    console.log(dates);
     return dates;
 }
 
