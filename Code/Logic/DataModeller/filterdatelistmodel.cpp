@@ -331,7 +331,7 @@ QString FilterDateListModel::callQueryModel()
             QString fromDate = tmpFromDate[2] + "-" + tmpFromDate[1] + "-" + tmpFromDate[0];
             tmpFromDate = dateRange[1].split("/");
             QString toDate  = tmpFromDate[2] + "-" + tmpFromDate[1] + "-" + tmpFromDate[0];
-            QString finalValue = fromDate + "'" + " AND " + "'" + toDate;
+            finalValue = fromDate + "'" + " AND " + "'" + toDate;
 
         }
         else{
