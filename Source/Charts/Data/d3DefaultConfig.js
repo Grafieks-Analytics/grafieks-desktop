@@ -41,10 +41,11 @@ const defaultD3Config = {
     defaultTimeParseFormat: "%d-%m-%Y",
     defaultSpace: 30,
     dateFormat: "%Y",
-    chartType: constants.chartType.STANDARD,
+    chartType: constants.chartType.FIT_WIDTH,
     horizontalChartType: constants.chartType.STANDARD,
     standardThresholdWidth: 100,
     standardThresholdHeight: 100,
+
 };
 const markerShapeConfig = {
     circle: {
