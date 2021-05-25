@@ -19,6 +19,22 @@
             #my_dataviz {
                 /* overflow-x: scroll; */
             }
+             #tooltip{
+            font-size: 14px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #tooltip:before {
+            border: solid;
+            border-color: white transparent;
+            border-width: 12px 6px 0 6px;
+            content: "";
+            left: -12px;
+            transform: rotate(90deg) !important;
+
+            bottom: 22px;
+            position: absolute;
+        }
         </style>
     </head>
     <body>
@@ -27,6 +43,7 @@
             <div id="my_dataviz"></div>
         </div>
         <div id="tooltip"></div>
+        <div id="legend"></div>
         <script>
             var extraHeightWorked = false;
             var redrawn = false;
@@ -47,8 +64,92 @@
                     curveType,
                     dateFormat,
                     chartType,
+                     toolTip,
+                      legendConfig,
                     standardThresholdWidth,
                 } = plottingConfiguration;
+
+                 if (!legendConfig) {
+                    legendConfig = { legendStatus: false };
+                }
+                let { legendStatus, legendPosition } = legendConfig;
+
+                 if (legendStatus) {
+                    var legendHeight = document.querySelector("#legend")
+                        .offsetHeight;
+                    var legendElement = document.querySelector("#legend");
+
+                    topPosition = "calc(50vh - " + legendHeight + "px)";
+                    legendElement.style.padding = "10px";
+
+                    switch (legendPosition) {
+                        case "left":
+                            margin.left += 100;
+                            width -= 100;
+                            d3.select("#legend")
+                                .style("top", topPosition)
+                                .style("right", "auto")
+                                .style("bottom", "auto")
+                                .style("left", "20px")
+                                .style("display", "block");
+                            break;
+                        case "top":
+                            margin.top += 80;
+                            height -= 100;
+                            d3.select("#legend")
+                                .style("top", "20px")
+                                .style("right", "auto")
+                                .style("bottom", "auto")
+                                .style("left", margin.left + "px")
+                                .style("display", "flex");
+                            d3.selectAll("#legend div").style("padding", "2px 4px");
+                            break;
+                        case "bottom":
+                            height -= 80;
+                            margin.bottom += 80;
+                            d3.select("#legend")
+                                .style("top", "auto")
+                                .style("right", "auto")
+                                .style("bottom", "80px")
+                                .style("left", margin.left + "px")
+                                .style("display", "flex");
+                            break;
+                        // For Right Legened
+                        case "right":
+                        default:
+                            width -= 100;
+                            d3.select("#legend")
+                                .style("right", "20px")
+                                .style("left", "auto")
+                                .style("top", topPosition)
+                                .style("bottom", "auto")
+                                .style("display", "block");
+                    }
+                }
+
+
+                 d3.select("#legend").html("").style("padding", "");
+
+                  if (legendStatus) {
+                    d3.select("#legend").html("");
+                    d3.select("#legend")
+                        .selectAll("div")
+                        .data(Object.keys(data))
+                        .enter()
+                        .append("div")
+                        .html((d, i) => {
+                            return (
+                                '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
+                                d3Colors[i] +
+                                ';">  </div>' +
+                                "<span style='margin-left: 5px; max-width: 80px'>" +
+                                d +
+                                "</span>"
+                            );
+                        })
+                        .style("display", "flex")
+                        .style("padding", "2px");
+                }
 
                 if (!d3colorPalette) {
                     d3colorPalette = defaultD3Config.d3ColorPalette;
@@ -70,6 +171,14 @@
                 if (!standardThresholdWidth) {
                     standardThresholdWidth =
                         defaultD3Config.standardThresholdWidth;
+                }
+              
+                const [xAxisLabel, yAxisLabel] = data[1];
+                   if (!toolTip) {
+                    toolTip = {
+                        textColumn1: xAxisLabel,
+                        textColumn2: yAxisLabel
+                    }
                 }
 
                 var margin = { top: 40, right: 20, bottom: 80, left: 70 };
@@ -199,6 +308,7 @@
             Thus, a band scale’s values must be coercible to a string, and the stringified version of the domain value uniquely identifies the corresponding band.
             If domain is not specified, this method returns the current domain.*/
 
+            
                 var barpadding = 10;
                 var bars = svg
                     .selectAll("rect")
@@ -240,7 +350,16 @@
                             .style("left", xpos + "px")
                             .style("top", ypos + "px")
                             .style("display", "block")
-                            .text(dataset[i]);
+                            // .text(dataset[i]);
+                            .html(function () {
+                                var textValue = d.y0 - d.y1;
+                                if (d.y1 < 0) {
+                                    textValue = d.y1 - d.y0;
+                                }
+
+                                return "<span style='color:grey;''>" + toolTip.textColumn1 + ":" + "</span>" + "<span style='float: right;'>" + xAxisDataSet[i] + "</span>" + "<br/> <br/>" + "<span style='color:grey;''>" + toolTip.textColumn2 + ":" + "</span>" + "<span style='float: right;margin-left: 15px;'>" + dataset[i] + "</span>";
+                            });
+
 
                         d3.selectAll(".bar").style("opacity", 0.3);
                         d3.select(this).style("opacity", 1);
@@ -258,7 +377,9 @@
                     .attr("class", "x-axis")
                     .attr("transform", "translate(0," + height + ")");
 
-                const [xAxisLabel, yAxisLabel] = data[1];
+           
+
+
 
                 setLabel(xAxisLabel, "x_label", false);
                 setLabel(yAxisLabel, "y_label", false);

@@ -323,8 +323,8 @@ Rectangle {
 
         style: TableViewStyle {
             headerDelegate: Rectangle {
-//                height: textItem.implicitHeight * 1.2
-//                width: textItem.implicitWidth
+                height: textItem.implicitHeight * 1.2
+                width: textItem.implicitWidth
                 color: "lightgrey"
                 Text {
                     id: textItem
