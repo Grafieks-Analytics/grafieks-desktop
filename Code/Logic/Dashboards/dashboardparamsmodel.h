@@ -23,6 +23,9 @@ class DashboardParamsModel: public QObject
     QMap<int, QMap<int, int>> dashboardReportTypeMap; // <dashboardId, <reportId, reportTypeId (constant)>>
     QMap<int, QMap<int, QUrl>> dashboardReportUrl; // <dashboardId, <reportId, URI Link>>
 
+    // Filter parameters
+    QStringList hideColumns;
+
 
     // Customize Dashboard parameters
     QMap<int, QString> dashboardName;
@@ -96,6 +99,11 @@ public:
     Q_INVOKABLE void setDashboardReportUrl(int dashboardId, int reportId, QUrl url);
     Q_INVOKABLE QUrl getDashboardReportUrl(int dashboardId, int reportId);
 
+    // Filter Parameters
+    Q_INVOKABLE void addToHideColumns(QString colName);
+    Q_INVOKABLE void removeFromHideColumns(QString colName, bool removeAll = false);
+    Q_INVOKABLE QStringList fetchHideColumns(QString searchKeyword = "");
+
     // Customize Dashboard parameters
 
     Q_INVOKABLE void setDashboardName(int dashboardId,QString dashboardName);
@@ -161,6 +169,9 @@ signals:
     void dashboardCountChanged(int dashboardCount);
     void currentDashboardChanged(int currentDashboard, QVector<int> reportsInDashboard);
     void currentReportChanged(int currentReport);
+
+    // Filter parameters
+    void hideColumnsChanged(QStringList hideColumns);
 
     // Customize Dashboard parameters
     void dashboardNameChanged(int dashboardId, QString dashboardName);

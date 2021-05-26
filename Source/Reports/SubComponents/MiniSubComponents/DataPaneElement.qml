@@ -9,7 +9,7 @@ Rectangle{
     width: parent.width
     anchors.leftMargin: 5
 
-//    z: 999
+    //    z: 999
 
 
 
@@ -67,9 +67,9 @@ Rectangle{
 
     function getSourceImage(itemType){
         switch(itemType && itemType.toLowerCase()){
-            case "categorical": return "/Images/icons/AB.png"
-            case "numerical": return "/Images/icons/fx.png"
-            case "date": return "/Images/icons/date_field.png"
+        case "categorical": return "/Images/icons/AB.png"
+        case "numerical": return "/Images/icons/fx.png"
+        case "date": return "/Images/icons/date_field.png"
         }
         return "";
     }
@@ -128,7 +128,7 @@ Rectangle{
         anchors.right: parent.right
         anchors.rightMargin: 10
         anchors.verticalCenter: parent.verticalCenter
-//        z:100
+        //        z:100
         MouseArea{
             anchors.fill: parent
             onClicked: openMenu()
@@ -144,21 +144,21 @@ Rectangle{
                 console.log("dragdrag")
                 if(itemType == "Numerical"){
                     console.log("itemtypecolor"+itemType)
-                  rightDataDrag.color= Constants.defaultNumericalColor
+                    rightDataDrag.color= Constants.defaultNumericalColor
                     rightDataDrag.radius=15
                     rightDataDrag.width=parent.width+5
 
                 }
                 else if(itemType == "Categorical"){
                     console.log("itemtypecolor"+itemType)
-                  rightDataDrag.color= Constants.defaultCategoricalColor
+                    rightDataDrag.color= Constants.defaultCategoricalColor
                     rightDataDrag.radius=15
                     rightDataDrag.width=parent.width+5
 
                 }
                 else if(itemType == "Date"){
                     console.log("itemtypecolor"+itemType)
-                  rightDataDrag.color= "yellow"
+                    rightDataDrag.color= "yellow"
                     rightDataDrag.radius=15
                     rightDataDrag.width=parent.width+5
 
@@ -181,7 +181,7 @@ Rectangle{
                 }
             }else{
                 rightDataDrag.color= "white"
-                 rightDataDrag.radius=0
+                rightDataDrag.radius=0
                 ReportParamsModel.setXAxisActive(false);
                 ReportParamsModel.setYAxisActive(false);
                 ReportParamsModel.setColorByActive(false);

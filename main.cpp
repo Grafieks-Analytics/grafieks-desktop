@@ -53,6 +53,7 @@
 
 #include "Code/Logic/Dashboards/documenthandlermodel.h"
 #include "Code/Logic/Dashboards/dashboardparamsmodel.h"
+#include "Code/Logic/Dashboards/tablecolumnsmodel.h"
 
 #include "Code/Logic/Reports/reportparamsmodel.h"
 #include "Code/Logic/Reports/chartsmodel.h"
@@ -268,6 +269,7 @@ int main(int argc, char *argv[])
     ForwardOnlyDataModel forwardOnlyDataModel;
     ForwardOnlyQueryModel forwardOnlyQueryModel;
     NewTableListModel newTableListModel;
+    TableColumnsModel tableColumnsModel;
 
     // Datasource Connector Initializations
     DatasourceModel datasourceModel;
@@ -314,13 +316,21 @@ int main(int argc, char *argv[])
     QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::dropTables, duckCon, &DuckCon::dropTables);
     QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, &duckQueryModel, &DuckQueryModel::receiveCsvFilterQuery);
 
-    // Common data and headers for reports and dashboards
+    // Data and headers for reports
     QObject::connect(&queryModel, &QueryModel::chartDataChanged, &chartsModel, &ChartsModel::getChartData);
     QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::getChartHeader);
     QObject::connect(&duckQueryModel, &DuckQueryModel::chartDataChanged, &chartsModel, &ChartsModel::getChartData);
     QObject::connect(&duckQueryModel, &DuckQueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::getChartHeader);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartDataChanged, &chartsModel, &ChartsModel::getChartData);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::getChartHeader);
+
+    // Data and Headers for Dashboards
+    QObject::connect(&queryModel, &QueryModel::chartDataChanged, &tableColumnsModel, &TableColumnsModel::getChartData);
+    QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &tableColumnsModel, &TableColumnsModel::getChartHeader);
+    QObject::connect(&duckQueryModel, &DuckQueryModel::chartDataChanged, &tableColumnsModel, &TableColumnsModel::getChartData);
+    QObject::connect(&duckQueryModel, &DuckQueryModel::chartHeaderChanged, &tableColumnsModel, &TableColumnsModel::getChartHeader);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartDataChanged, &tableColumnsModel, &TableColumnsModel::getChartData);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &tableColumnsModel, &TableColumnsModel::getChartHeader);
 
     // SIGNAL & SLOTS ENDS
     /***********************************************************************************************************************/
@@ -389,6 +399,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("ForwardOnlyDataModel", &forwardOnlyDataModel);
     engine.rootContext()->setContextProperty("ForwardOnlyQueryModel", &forwardOnlyQueryModel);
     engine.rootContext()->setContextProperty("NewTableListModel", &newTableListModel);
+    engine.rootContext()->setContextProperty("TableColumnsModel", &tableColumnsModel);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/

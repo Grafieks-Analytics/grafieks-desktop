@@ -53,6 +53,7 @@ SOURCES += \
     Code/Logic/Dashboards/dashboardparamsmodel.cpp \
     Code/Logic/Dashboards/documenthandlermodel.cpp \
     Code/Logic/Dashboards/reportslistmodel.cpp \
+    Code/Logic/Dashboards/tablecolumnsmodel.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
     Code/Logic/DataModeller/duckdatamodel.cpp \
@@ -151,6 +152,7 @@ HEADERS += \
     Code/Logic/Dashboards/dashboardparamsmodel.h \
     Code/Logic/Dashboards/documenthandlermodel.h \
     Code/Logic/Dashboards/reportslistmodel.h \
+    Code/Logic/Dashboards/tablecolumnsmodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
     Code/Logic/DataModeller/duckdatamodel.h \
