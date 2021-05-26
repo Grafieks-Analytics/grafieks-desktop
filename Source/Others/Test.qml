@@ -226,6 +226,8 @@ Rectangle {
 
     property var roleNames:["a", "b", "c"]
     property var newObject: []
+    property var previousModelData: 0
+    property var counter : 0
 
     Connections{
         target: QueryModel
@@ -254,7 +256,7 @@ Rectangle {
 
     }
 
-    // This one is to clear the table
+    // This
     function clearTable(){
         for(var i=0; i<roleNames.length; i++){
             view.removeColumn(newObject[i])
@@ -319,12 +321,24 @@ Rectangle {
                     id: textItem1
                     anchors.fill: parent
                     verticalAlignment: Text.AlignVCenter
+                    objectName: modelData
                     horizontalAlignment: styleData.textAlignment
                     anchors.leftMargin: 12
-                    text: modelData
+//                    text: modelData
                     elide: Text.ElideRight
                     color: textColor
                     renderType: Text.NativeRendering
+
+                    onObjectNameChanged: {
+                        if(previousModelData === modelData){
+                            counter++
+                            textItem1.text = QueryModel.data(QueryModel.index(modelData-1,counter))
+                        } else{
+                            counter = 0;
+                            previousModelData = modelData
+                            textItem1.text = QueryModel.data(QueryModel.index(previousModelData - 1,counter))
+                        }
+                    }
                 }
                 Rectangle {
                     anchors.right: parent.right
