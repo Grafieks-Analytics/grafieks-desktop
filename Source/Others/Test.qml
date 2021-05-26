@@ -224,7 +224,8 @@ Rectangle {
     height: 560
     visible: true
 
-    property var roleList:[];
+    property var roleNames:["a", "b", "c"]
+    property var newObject: []
 
     Connections{
         target: QueryModel
@@ -235,92 +236,43 @@ Rectangle {
         }
 
         function onHeaderDataChanged(tableHeaders){
-            roleList = tableHeaders
+            if(tableHeaders.length > 0){
+                roleNames = []
+                roleNames = tableHeaders
+
+                for(var i=0; i<roleNames.length; i++){
+                    var role  = roleNames[i]
+                    var columnString = 'import QtQuick 2.3; import QtQuick.Controls 1.2; TableViewColumn {role: "' + role + '"; title: "' + role + '"; }';
+                    newObject[i] = Qt.createQmlObject(columnString, view)
+                    view.addColumn(newObject[i])
+                }
+            }
         }
 
     }
 
-    property var name: [{"role":"title","title":"Title"},{"role":"author","title":"author"}]
+    function clearTable(){
+        for(var i=0; i<roleNames.length; i++){
+            view.removeColumn(newObject[i])
+            delete newObject[i]
 
-    ListModel {
-        id: libraryModel
-        ListElement {
-            title: "A Masterpiece"
-            author: "Gabriel"
-        }
-        ListElement {
-            title: "Brilliance"
-            author: "Jens"
-        }
-        ListElement {
-            title: "Outstanding"
-            author: "Frederik"
-        }
-        ListElement {
-            title: "Outstanding"
-            author: "Frederik"
-        }
-        ListElement {
-            title: "Outstanding"
-            author: "Frederik"
-        }
-        ListElement {
-            title: "Outstanding"
-            author: "Frederik"
-        }
-        ListElement {
-            title: "Outstanding"
-            author: "Frederik"
-        }
-        ListElement {
-            title: "Outstanding"
-            author: "Frederik"
         }
     }
 
-    Component{
-        id:columnComponent
-        TableViewColumn {
 
-            width: 100
-        }
+    Button{
+        id: clearBtn
+        text: "Clear"
+        height: 30
+        onClicked: clearTable()
     }
 
     TableView {
         id:view
-
         width: parent.width
-        height: parent.height
-
+        height: parent.height - clearBtn.height
+        anchors.top: clearBtn.bottom
         alternatingRowColors: false
-
-
-//        TableViewColumn {
-//            role: "title"
-//            title: "Title"
-//            width: parent.width/2
-//        }
-//        TableViewColumn {
-//            role: "author"
-//            title: "Author"
-//            width: parent.width/2
-//        }
-
-        resources:
-        {
-
-
-            var roleList = ["id","country","country2","state","city","district","ward","population"]
-            var temp = []
-            for(var i=0; i<roleList.length; i++)
-            {
-                var role  = roleList[i]
-                temp.push(columnComponent.createObject(view, { "role": role, "title": role}))
-            }
-            return temp
-        }
-//        model: libraryModel
-
         style: TableViewStyle {
             headerDelegate: Rectangle {
                 height: textItem.implicitHeight * 1.2
@@ -349,24 +301,16 @@ Rectangle {
                     border.color: "black"
                 }
                 Rectangle {
-                    //                    anchors.right: parent.right
-                    //                    anchors.top: parent.top
                     anchors.bottom: parent.bottom
-                    //                    anchors.bottomMargin: 1
-                    //                    anchors.topMargin: 1
                     width: parent.width
                     height: 1
-
                     color: "black"
                     border.color: "black"
                 }
             }
 
             itemDelegate: Rectangle {
-//                height: textItem.implicitHeight * 1.2
-//                width: textItem.implicitWidth
                 color: "white"
-                //                border.color: "black"
                 Text {
                     id: textItem1
                     anchors.fill: parent
@@ -382,32 +326,21 @@ Rectangle {
                     anchors.right: parent.right
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
-                    //                    anchors.bottomMargin: 1
-                    //                    anchors.topMargin: 1
                     width: 1
                     color: "black"
                     border.color: "black"
                 }
                 Rectangle {
-                    //                    anchors.right: parent.right
-                    //                    anchors.top: parent.top
                     anchors.bottom: parent.bottom
-                    //                    anchors.bottomMargin: 1
-                    //                    anchors.topMargin: 1
                     width: parent.width
                     height: 1
-
                     color: "black"
                     border.color: "black"
                 }
             }
-
-
-
         }
     }
 }
-
 
 
 
