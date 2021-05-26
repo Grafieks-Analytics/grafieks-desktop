@@ -1167,7 +1167,15 @@
                     .attr("class", "marker-shape")
                     .attr(
                         "transform",
-                        "translate(" + margin.left + "," + margin.top + ")"
+                        "translate(" +
+                            (markerShape == constants.markerShapes.RECT
+                                ? margin.left - 2.8
+                                : margin.left) +
+                            "," +
+                            (markerShape == constants.markerShapes.RECT
+                                ? margin.top - 3
+                                : margin.top) +
+                            ")"
                     )
                     .attr("fill", fill)
                     .attr(
