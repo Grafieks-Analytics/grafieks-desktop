@@ -992,19 +992,25 @@
 
                 xScale = d3
                     .scaleBand()
-                    .rangeRound([0, width])
+                    .range([0, width])
                     .padding(paddingInner)
                     .domain(
                         data.map(function (d) {
                             return d[0];
                         })
-                    );
+                    )
+                    .padding(paddingInner)
+                    .paddingInner(paddingInner);
+
+                var minValue = d3.min(data, function (d) {
+                    return d[1];
+                });
 
                 yScale = d3
                     .scaleLinear()
                     .rangeRound([height, 0])
                     .domain([
-                        0,
+                        minValue < 0 ? minValue : 0,
                         d3.max(data, function (d) {
                             return d[1];
                         }),
