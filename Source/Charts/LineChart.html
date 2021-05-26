@@ -10,10 +10,17 @@
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
         <link rel="stylesheet" href="Data/general.css" />
+
+        <style>
+            #yAxisDiv {
+                width: 50px;
+            }
+        </style>
     </head>
 
     <body>
-        <div style="text-align: center">
+        <div style="display: flex">
+            <div id="yAxisDiv"></div>
             <div id="my_dataviz"></div>
         </div>
         <div id="tooltip"></div>
@@ -946,11 +953,16 @@
                     timeParseFormat,
                     dateFormat,
                     standardThresholdWidth,
+                    markerStatus,
                 } = plottingConfiguration;
                 if (!d3colorPalette) {
                     d3colorPalette = defaultD3Config.d3ColorPalette;
                 }
                 d3Colors = d3colorPalette;
+
+                if (markerStatus == undefined) {
+                    markerStatus = true;
+                }
 
                 if (!paddingInner) {
                     paddingInner = defaultD3Config.defaultPaddingInner;
@@ -1057,12 +1069,12 @@
                 //     .attr("class", "axis axis--y y-axis")
                 //     .call(d3.axisLeft(yScale).tickSizeOuter(0));
 
-                g.append("g")
-                    .attr("class", "axis axis--y y-axis")
-                    // .attr("transform", "translate(" + (width - 20) + ", 0)")
-                    .call(
-                        d3.axisLeft(yScale).tickSizeOuter(0).ticks(yaxisTicks)
-                    );
+                // g.append("g")
+                //     .attr("class", "axis axis--y y-axis")
+                //     // .attr("transform", "translate(" + (width - 20) + ", 0)")
+                //     .call(
+                //         d3.axisLeft(yScale).tickSizeOuter(0).ticks(yaxisTicks)
+                //     );
 
                 var bar = g.selectAll("rect").data(data).enter().append("g");
 
@@ -1097,7 +1109,24 @@
                         "translate(" + margin.left + "," + margin.top + ")"
                     );
 
-                drawMarker(true, markerShape);
+                //add x and y axis
+                var yAxis = d3.axisLeft(yScale).tickSize(0).ticks(yaxisTicks);
+                d3.select("#yAxisDiv")
+                    .append("svg")
+                    .attr("width", "72")
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g") //add group to leave margin for axis
+                    .attr(
+                        "transform",
+                        "translate(" + margin.left + "," + margin.top + ")"
+                    )
+                    .append("g")
+                    .attr("class", "y-axis")
+                    .call(yAxis);
+
+                if (markerStatus) {
+                    drawMarker(true, markerShape);
+                }
 
                 dateformatValue = function (value) {
                     return value;
