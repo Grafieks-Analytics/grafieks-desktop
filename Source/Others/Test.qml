@@ -230,11 +230,14 @@ Rectangle {
     Connections{
         target: QueryModel
 
+        // This one is for table data
         function onSqlHasData(hasData){
             view.model = hasData === true? QueryModel: ""
 
         }
 
+        // This slot is for updating headers
+        // This is also returning an array of strings
         function onHeaderDataChanged(tableHeaders){
             if(tableHeaders.length > 0){
                 roleNames = []
@@ -251,6 +254,7 @@ Rectangle {
 
     }
 
+    // This one is to clear the table
     function clearTable(){
         for(var i=0; i<roleNames.length; i++){
             view.removeColumn(newObject[i])
