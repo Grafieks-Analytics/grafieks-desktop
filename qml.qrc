@@ -23,7 +23,7 @@
         <file>Source/Modellers/SubComponents/InfoTable.qml</file>
         <file>Source/Modellers/SubComponents/InMemory.qml</file>
         <file>Source/Modellers/SubComponents/NumericalFilter.qml</file>
-        <file>Source/Modellers/SubComponents/QueryModeller.qml</file>
+        <file>Source/Modellers/SubComponents/QueryModellerHtml.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/AllCategoricalFilters.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/AllDateFilters.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/AllGroupFilters.qml</file>
@@ -242,5 +242,6 @@
         <file>Source/Connectors/SubComponents/MiniSubComponents/DropboxDelegate.qml</file>
         <file>Source/Connectors/SubComponents/MiniSubComponents/BoxDelegate.qml</file>
         <file>Source/Charts/HorizontalBarGroupedChart.html</file>
+        <file>Source/Modellers/SubComponents/QueryModeller.qml</file>
     </qresource>
 </RCC>
