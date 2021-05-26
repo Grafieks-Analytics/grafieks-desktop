@@ -1,0 +1,33 @@
+import QtQuick 2.15
+import com.grafieks.singleton.constants 1.0
+
+import "../../../MainSubComponents"
+
+ListView {
+
+    id: numericalChecksItem
+    flickableDirection: Flickable.VerticalFlick
+    boundsBehavior: Flickable.StopAtBounds
+    interactive: false
+    clip: false
+    height: parent.height
+    width: parent.width
+
+
+    Connections{
+        target : TableColumnsModel
+
+        function onSendFilteredColumn(allCategorical, allNumerical, allDates){
+            numericalChecksItem.model =  allNumerical
+        }
+    }
+
+    delegate: CheckBoxTpl{
+        id: checkBox1
+        height: 20
+        checkbox_text: modelData
+        checkbox_checked: true
+        parent_dimension: 16
+    }
+
+}

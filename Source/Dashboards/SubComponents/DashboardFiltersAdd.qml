@@ -4,6 +4,7 @@ import QtQuick.Controls 2.15
 import com.grafieks.singleton.constants 1.0
 
 import "../../MainSubComponents"
+import "./MiniSubComponents"
 
 Item {
 
@@ -205,37 +206,11 @@ Item {
                 text: qsTr("Categorical")
                 font.pixelSize: 15
 
-
             }
 
-            CheckBoxTpl{
-                id: checkBox1
+            CategoricalList{
+                id: categoricalCheckboxes
 
-
-                x: 8
-                y: 52
-                checkbox_text: qsTr("Checkbox")
-                checkbox_checked: true
-                parent_dimension: 16
-            }
-
-            CheckBoxTpl{
-                id: checkBox2
-                x: 8
-                y: 82
-                checkbox_text: qsTr("Checkbox")
-                checkbox_checked: true
-                parent_dimension: 16
-            }
-
-
-            CheckBoxTpl{
-                id: checkBox3
-                x: 8
-                y: 107
-                checkbox_text: qsTr("Checkbox")
-                checkbox_checked: true
-                parent_dimension: 16
             }
         }
         Rectangle {
@@ -266,39 +241,9 @@ Item {
 
             }
 
-            CheckBoxTpl{
-                id: checkBox4
-
-
-                x: 8
-                y: 52
-                checkbox_text: qsTr("Checkbox")
-                checkbox_checked: true
-                parent_dimension: 16
+            DateList{
+                id: dateCheckboxes
             }
-
-            CheckBoxTpl{
-                id: checkBox5
-                x: 8
-                y: 82
-                checkbox_text: qsTr("Checkbox")
-                checkbox_checked: true
-                parent_dimension: 16
-            }
-
-
-            CheckBoxTpl{
-                id: checkBox6
-                x: 8
-                y: 107
-                checkbox_text: qsTr("Checkbox")
-                checkbox_checked: true
-                parent_dimension: 16
-            }
-
-
-
-
 
         }
         Rectangle {
@@ -329,40 +274,9 @@ Item {
 
             }
 
-            CheckBoxTpl{
-                id: checkBox7
-
-
-                x: 8
-                y: 52
-                checkbox_text: qsTr("Checkbox")
-                checkbox_checked: true
-                parent_dimension: 16
+            NumericalList{
+                id: numericalCheckboxes
             }
-
-            CheckBoxTpl{
-                id: checkBox8
-                x: 8
-                y: 82
-                checkbox_text: qsTr("Checkbox")
-                checkbox_checked: true
-                parent_dimension: 16
-            }
-
-
-            CheckBoxTpl{
-                id: checkBox9
-                x: 8
-                y: 107
-                checkbox_text: qsTr("Checkbox")
-                checkbox_checked: true
-                parent_dimension: 16
-            }
-
-
-
-
-
         }
 
 

@@ -324,7 +324,6 @@ Rectangle {
                     objectName: modelData
                     horizontalAlignment: styleData.textAlignment
                     anchors.leftMargin: 12
-//                    text: modelData
                     elide: Text.ElideRight
                     color: textColor
                     renderType: Text.NativeRendering

@@ -429,6 +429,30 @@ QUrl DashboardParamsModel::getDashboardReportUrl(int dashboardId, int reportId)
     return output;
 }
 
+void DashboardParamsModel::addToHideColumns(QString colName)
+{
+    this->hideColumns.append(colName);
+    emit hideColumnsChanged(this->hideColumns);
+}
+
+void DashboardParamsModel::removeFromHideColumns(QString colName, bool removeAll)
+{
+    if (removeAll == true)
+    {
+        this->hideColumns.clear();
+    }
+    else
+    {
+        this->hideColumns.removeOne(colName);
+    }
+    emit hideColumnsChanged(this->hideColumns);
+}
+
+QStringList DashboardParamsModel::fetchHideColumns(QString searchKeyword)
+{
+    return this->hideColumns.filter(searchKeyword);
+}
+
 void DashboardParamsModel::setDashboardName(int dashboardId, QString dashboardName)
 {
 
