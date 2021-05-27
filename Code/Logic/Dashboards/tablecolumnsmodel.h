@@ -25,12 +25,15 @@ public:
     Q_INVOKABLE void setColumnVisibility(QString columnName, bool show = true);
     Q_INVOKABLE QStringList fetchVisibleColumns();
 
+    Q_INVOKABLE QStringList fetchColumnData(QString colName);
+
 public slots:
     void getChartData(QMap<int, QStringList*> chartData);
     void getChartHeader(QMap<int, QStringList> chartHeader);
 
 signals:
     void sendFilteredColumn(QStringList allCategorical, QStringList allNumerical, QStringList allDates);
+    void visibleColumnListChanged(QStringList visibleColumns);
 
 
 };

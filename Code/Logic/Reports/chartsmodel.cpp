@@ -1487,7 +1487,7 @@ void ChartsModel::getChartHeader(QMap<int, QStringList> chartHeader)
             qDebug() << "OTHER UNDETECTED FIELD TYPE" <<   chartHeader.value(key).at(0);
         }
 
-        this->newChartHeader.insert(key, chartHeader.value(key).at(0));
+        this->newChartHeader.insert(key, fullColumnName);
     }
 
     this->categoryList.sort(Qt::CaseInsensitive);

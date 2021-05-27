@@ -247,5 +247,9 @@
         <file>Source/Dashboards/SubComponents/MiniSubComponents/DateList.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/NumericalList.qml</file>
         <file>Source/Dashboards/SubComponents/DashboardFiltersBackupUI.qml</file>
+        <file>Source/Dashboards/SubComponents/ColumnDataList.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataList.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataSingleDropdown.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataMultiDropdown.qml</file>
     </qresource>
 </RCC>
