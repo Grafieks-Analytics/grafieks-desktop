@@ -1475,12 +1475,14 @@ void ChartsModel::getChartHeader(QMap<int, QStringList> chartHeader)
     // Update new data
     foreach(auto key, chartHeader.keys()){
 
+        QString fullColumnName = chartHeader.value(key).at(0)  + " [" + chartHeader.value(key).at(2) + "]";
+
         if(chartHeader.value(key).at(1).contains(Constants::categoricalType)){
-            this->categoryList.append(chartHeader.value(key).at(0) + " [" + chartHeader.value(key).at(2) + "]");
+            this->categoryList.append(fullColumnName);
         } else if(chartHeader.value(key).at(1).contains(Constants::numericalType)){
-            this->numericalList.append(chartHeader.value(key).at(0) + " [" + chartHeader.value(key).at(2) + "]");
+            this->numericalList.append(fullColumnName);
         } else if(chartHeader.value(key).at(1).contains(Constants::dateType)){
-            this->dateList.append(chartHeader.value(key).at(0) + " [" + chartHeader.value(key).at(2) + "]");
+            this->dateList.append(fullColumnName);
         } else{
             qDebug() << "OTHER UNDETECTED FIELD TYPE" <<   chartHeader.value(key).at(0);
         }

@@ -5,6 +5,26 @@ TableColumnsModel::TableColumnsModel(QObject *parent) : QObject(parent)
 
 }
 
+void TableColumnsModel::setColumnVisibility(QString columnName, bool show)
+{
+    if(show == false){
+        this->allColumnVisibleList.removeAll(columnName);
+    } else{
+
+        // Check if already exists
+        // If no, then append
+
+        if(this->allColumnVisibleList.indexOf(columnName) < 0){
+            this->allColumnVisibleList.append(columnName);
+        }
+    }
+}
+
+QStringList TableColumnsModel::fetchVisibleColumns()
+{
+    return this->allColumnVisibleList;
+}
+
 void TableColumnsModel::getChartData(QMap<int, QStringList *> chartData)
 {
     this->newChartData = chartData;
@@ -24,17 +44,20 @@ void TableColumnsModel::getChartHeader(QMap<int, QStringList> chartHeader)
     // Update new data
     foreach(auto key, chartHeader.keys()){
 
+        QString fullColumnName = chartHeader.value(key).at(0)  + " [" + chartHeader.value(key).at(2) + "]";
+
         if(chartHeader.value(key).at(1).contains(Constants::categoricalType)){
-            this->categoryList.append(chartHeader.value(key).at(0)  + " [" + chartHeader.value(key).at(2) + "]");
+            this->categoryList.append(fullColumnName);
         } else if(chartHeader.value(key).at(1).contains(Constants::numericalType)){
-            this->numericalList.append(chartHeader.value(key).at(0)  + " [" + chartHeader.value(key).at(2) + "]");
+            this->numericalList.append(fullColumnName);
         } else if(chartHeader.value(key).at(1).contains(Constants::dateType)){
-            this->dateList.append(chartHeader.value(key).at(0)  + " [" + chartHeader.value(key).at(2) + "]");
+            this->dateList.append(fullColumnName);
         } else{
             qDebug() << "OTHER UNDETECTED FIELD TYPE" << chartHeader.value(key).at(0);
         }
 
         this->newChartHeader.insert(key, chartHeader.value(key).at(0));
+        this->allColumnVisibleList.append(fullColumnName);
     }
 
     this->categoryList.sort(Qt::CaseInsensitive);
