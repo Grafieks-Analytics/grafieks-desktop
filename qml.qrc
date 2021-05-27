@@ -246,5 +246,6 @@
         <file>Source/Dashboards/SubComponents/MiniSubComponents/CategoricalList.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/DateList.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/NumericalList.qml</file>
+        <file>Source/Dashboards/SubComponents/DashboardFiltersBackupUI.qml</file>
     </qresource>
 </RCC>

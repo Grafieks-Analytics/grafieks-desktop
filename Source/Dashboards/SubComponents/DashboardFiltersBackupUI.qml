@@ -603,7 +603,39 @@ Item {
                         onPressed:valuePressed()
 
                     }
+                    TabButton {
+                        id: fourthBtn
+                        width: 150
+                        height: 70
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: thirdBtn.bottom
+                        anchors.topMargin: parent.spacing
+                        background: Rectangle{
+                            height: 50
+                            width:150
+                            color: "white"
+                            anchors.verticalCenter: parent.verticalCenter
+                            Rectangle {
+                                id:fourthLine
+                                visible: false
+                                width: parent.width-50
+                                height: 3
+                                color: "#009B8F"
+                                anchors.bottom: parent.bottom
+                                anchors.horizontalCenter: parent.horizontalCenter
+                            }
+                        }
+                        Text {
 
+                            text: qsTr("Apply")
+                            font.pixelSize: 17
+                            anchors.verticalCenter: parent.verticalCenter
+                            x:30
+                            verticalAlignment: Text.AlignVCenter
+                            styleColor : "white"
+                        }
+                        onPressed:applyPressed()
+                    }
                 }
 
 
@@ -671,6 +703,101 @@ Item {
 
 
                         }
+
+                        Text {
+                            id: propertyList
+                            text: qsTr("Show only")
+                            font.pixelSize: 17
+
+
+                            anchors.horizontalCenter:  parent.horizontalCenter
+                            horizontalAlignment: Text.horizontalAlignment
+                            anchors.left: parent.left
+                            anchors.leftMargin: 50
+                            anchors.top: renameEdit.bottom
+                        }
+                        ColumnLayout {
+                            id: radioGroup5
+                            anchors.top: propertyList.bottom
+                            anchors.topMargin: 15
+                            anchors.horizontalCenter:  parent.horizontalCenter
+
+
+
+                            spacing: 15
+                            RadioButton {
+                                id: control9
+                                ButtonGroup.group: buttonGroupFilterType
+                                indicator: Rectangle {
+                                    implicitWidth: 16
+                                    implicitHeight: 16
+                                    x: control9.width - width - control9.rightPadding
+                                    y: parent.height / 2 - height / 2
+                                    radius: 13
+                                    color: "transparent"
+                                    border.color: "black"
+
+                                    Rectangle {
+                                        width: 16/2
+                                        height: width
+                                        radius: width/2
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                        color: "black"
+                                        visible: control9.checked
+                                    }
+                                }
+
+                                contentItem: Text {
+                                    rightPadding: control9.indicator.width + control9.spacing+60
+                                    text: qsTr("Relevant Data")
+                                    elide: Text.ElideRight
+                                    font.pixelSize: 15
+                                    verticalAlignment: Text.AlignVCenter
+                                }
+
+
+
+                            }
+
+                            RadioButton {
+                                id: control10
+                                ButtonGroup.group: buttonGroupFilterType
+                                indicator: Rectangle {
+                                    implicitWidth: 16
+                                    implicitHeight: 16
+                                    x: control10.width - width - control10.rightPadding
+                                    y: parent.height / 2 - height / 2
+                                    radius: 13
+                                    color: "transparent"
+                                    border.color: "black"
+
+                                    Rectangle {
+                                        width: 16/2
+                                        height: width
+                                        radius: width/2
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                        color: "black"
+                                        visible: control10.checked
+                                    }
+                                }
+
+                                contentItem: Text {
+                                    rightPadding: control10.indicator.width + control10.spacing+102
+                                    text: qsTr("All Data")
+                                    elide: Text.ElideRight
+                                    font.pixelSize: 15
+                                    verticalAlignment: Text.AlignVCenter
+                                }
+
+
+
+                            }
+
+
+                        }
+
                     }
                 }
                 Item {
@@ -866,11 +993,11 @@ Item {
                     Rectangle{
                         height: settingFilterRight.height
                         width: settingFilterRight.width
-//                        color: "blue"
+                        //                        color: "blue"
                         ColumnLayout {
                             id: radioGroup6
                             anchors.top: propertyList.bottom
-                           y:40
+                            y:40
                             anchors.topMargin: 15
                             anchors.horizontalCenter:  parent.horizontalCenter
 
@@ -951,14 +1078,154 @@ Item {
 
                     }
                 }
+                Item {
+                    id:applyTab
+                    Rectangle{
+                        height: settingFilterRight.height
+                        width: settingFilterRight.width
+                        //                        color: "green"
 
+                        RadioButton {
+                            id: control15
+                            ButtonGroup.group: buttonGroupFilterType
+                            anchors.horizontalCenter:  parent.horizontalCenter
+                            y:40
+                            indicator: Rectangle {
+                                implicitWidth: 16
+                                implicitHeight: 16
+                                x: control15.width - width - control15.rightPadding
+                                y: parent.height / 2 - height / 2
+                                radius: 13
+                                color: "transparent"
+                                border.color: "black"
+
+                                Rectangle {
+                                    width: 16/2
+                                    height: width
+                                    radius: width/2
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    color: "black"
+                                    visible: control15.checked
+                                }
+                            }
+
+                            contentItem: Text {
+                                rightPadding: control15.indicator.width + control15.spacing+60
+                                text: qsTr("All Dashboards")
+                                elide: Text.ElideRight
+                                font.pixelSize: 15
+                                verticalAlignment: Text.AlignVCenter
+                            }
+
+
+
+                        }
+                        Text {
+                            id: applyList
+                            text: qsTr("In this Dashboard")
+                            font.pixelSize: 17
+
+
+                            anchors.horizontalCenter:  parent.horizontalCenter
+                            horizontalAlignment: Text.horizontalAlignment
+                            anchors.left: parent.left
+                            anchors.leftMargin: 63
+                            anchors.top: control15.bottom
+                            anchors.topMargin: 20
+
+                        }
+                        ColumnLayout {
+                            id: radioGroup7
+                            anchors.top: applyList.bottom
+                            anchors.topMargin: 15
+                            //                            anchors.horizontalCenter:  parent.horizontalCenter
+
+                            x:70
+
+
+                            spacing: 15
+                            RadioButton {
+                                id: control16
+                                ButtonGroup.group: buttonGroupFilterType
+                                indicator: Rectangle {
+                                    implicitWidth: 16
+                                    implicitHeight: 16
+                                    x: control16.width - width - control16.rightPadding
+                                    y: parent.height / 2 - height / 2
+                                    radius: 13
+                                    color: "transparent"
+                                    border.color: "black"
+
+                                    Rectangle {
+                                        width: 16/2
+                                        height: width
+                                        radius: width/2
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                        color: "black"
+                                        visible: control16.checked
+                                    }
+                                }
+
+                                contentItem: Text {
+                                    rightPadding: control16.indicator.width + control16.spacing+130
+                                    text: qsTr("All")
+                                    elide: Text.ElideRight
+                                    font.pixelSize: 15
+                                    verticalAlignment: Text.AlignVCenter
+                                }
+
+
+
+                            }
+
+                            RadioButton {
+                                id: control17
+                                ButtonGroup.group: buttonGroupFilterType
+                                indicator: Rectangle {
+                                    implicitWidth: 16
+                                    implicitHeight: 16
+                                    x: control17.width - width - control17.rightPadding
+                                    y: parent.height / 2 - height / 2
+                                    radius: 13
+                                    color: "transparent"
+                                    border.color: "black"
+
+                                    Rectangle {
+                                        width: 16/2
+                                        height: width
+                                        radius: width/2
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                        color: "black"
+                                        visible: control17.checked
+                                    }
+                                }
+
+                                contentItem: Text {
+                                    rightPadding: control17.indicator.width + control17.spacing+90
+                                    text: qsTr("Report 1")
+                                    elide: Text.ElideRight
+                                    font.pixelSize: 15
+                                    verticalAlignment: Text.AlignVCenter
+                                }
+
+
+
+                            }
+
+
+                        }
+                    }
+                }
             }
         }
 
         Rectangle{
             id:bottomButtons
             anchors.top: settingFilterLeft.bottom
-//                         color: "red"
+            //                         color: "red"
             height: 35
             width: parent.width
             border.color: Constants.themeColor
@@ -968,7 +1235,7 @@ Item {
 
                 id: apply_btn1
 
-//                                 anchors.verticalCenter: parent.verticalCenter
+                //                                 anchors.verticalCenter: parent.verticalCenter
                 anchors.top: bottomButtons.top
                 anchors.topMargin: 3
 
