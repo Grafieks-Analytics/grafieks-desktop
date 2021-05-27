@@ -63,27 +63,19 @@ Item {
         firstLine.visible=true
         secondLine.visible=false
         thirdLine.visible=false
-        fourthLine.visible=false
 
     }
     function filterTypePressed(){
         secondLine.visible=true
         firstLine.visible=false
         thirdLine.visible=false
-        fourthLine.visible=false
     }
     function valuePressed(){
         thirdLine.visible=true
         firstLine.visible=false
         secondLine.visible=false
-        fourthLine.visible=false
     }
-    function applyPressed(){
-        fourthLine.visible=true
-        firstLine.visible=false
-        secondLine.visible=false
-        thirdLine.visible=false
-    }
+
 
     Component{
         id:multipleselect
@@ -134,8 +126,6 @@ Item {
             text: "Select Filter"
 
             anchors.topMargin: 5
-
-
             id:selectFilter
             font.pointSize: 9
 
@@ -184,7 +174,6 @@ Item {
             background: Rectangle {
                 id: filter_apply_btn_background
                 color:  filter_apply_btn.pressed? Constants.darkThemeColor: Constants.greenThemeColor
-                //                color:  filter_apply_btn.pressed? Constants.darkThemeColor: "#F4F4F4"
 
             }
             contentItem: Text{
@@ -220,9 +209,6 @@ Item {
             Row{
 
                 spacing: 45
-
-
-
 
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -272,7 +258,6 @@ Item {
             anchors.top: columnName.bottom
             height: 0
             width: parent.width
-            //                color: "red"
             TextField{
 
 
@@ -375,11 +360,7 @@ Item {
                 }
             }
             y:260
-            //                anchors.centerIn: parent
             width: parent.width
-
-            //                displayText: "Select"
-
             model: filterData
             // ComboBox closes the popup when its items (anything AbstractButton derivative) are
             //  activated. Wrapping the delegate into a plain Item prevents that.
@@ -388,11 +369,6 @@ Item {
                 height: checkDelegate.height
 
                 function toggle() { checkDelegate.toggle() }
-                //                    CheckBoxTpl{
-                //                        checkbox_text: qsTr(name)
-                //                        checkbox_checked: true
-                //                        parent_dimension: 14
-                //                    }
                 CheckDelegate {
                     id: checkDelegate
                     indicator: Rectangle {
@@ -415,7 +391,6 @@ Item {
                         }
                     }
                     anchors.fill: parent
-                    //                    text: model.name
                     contentItem: Text {
                         text: model.name
                         elide: Text.ElideLeft
@@ -477,18 +452,15 @@ Item {
         Rectangle{
             id:settingFilterLeft
             anchors.top: settingHead.bottom
-            //            anchors.topMargin: 19
             height: parent.height-settingHead.height
             width:150
             border.color: Constants.themeColor
 
             Column{
 
-                //                spacing: 30
                 padding: 0
                 anchors.left: parent.left
                 anchors.leftMargin: 20
-                //                y:10
                 TabBar {
                     id: bar
                     width: firstBtn.width
@@ -496,9 +468,6 @@ Item {
                     anchors.left: parent.left
                     anchors.leftMargin: -20
                     anchors.top: settingFilterLeft.bottom
-                    //                    anchors.topMargin: 800
-                    //                    spacing: 5
-                    //                    topPadding: 10
 
                     TabButton {
                         id: firstBtn
@@ -506,8 +475,6 @@ Item {
                         height: 70
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
-                        //                         topPadding: 100
-                        //                         bottomPadding: 100
                         background: Rectangle{
                             height: 50
                             width:150
@@ -527,7 +494,6 @@ Item {
                             text: qsTr("Property")
                             font.pixelSize: 17
                             anchors.verticalCenter: parent.verticalCenter
-                            //                            anchors.horizontalCenter: parent.horizontalCenter
                             x:30
                             verticalAlignment: Text.AlignVCenter
                             styleColor : "white"
@@ -606,7 +572,6 @@ Item {
 
                 }
 
-
             }
         }
         Rectangle{
@@ -641,23 +606,14 @@ Item {
                                 id: rename
                                 text: qsTr("Rename")
                                 font.pixelSize: 17
-
-                                //                                anchors.horizontalCenter:  parent.horizontalCenter
-                                //                                horizontalAlignment: Text.horizontalAlignment
-                                //                                anchors.left: parent.left
-                                //                                anchors.leftMargin: 10
                             }
 
 
                             TextField{
                                 width: 130
                                 selectByMouse: true
-                                //                                anchors.horizontalCenter: parent.horizontalCenter
-                                //                                anchors.top: parent.top
                                 anchors.left: rename.right
                                 anchors.leftMargin: 50
-
-
                                 placeholderText: qsTr("Rename")
                                 background: Rectangle {
 
@@ -666,10 +622,6 @@ Item {
                                     border.width: Constants.borderWidth
                                 }
                             }
-
-
-
-
                         }
                     }
                 }
@@ -852,9 +804,6 @@ Item {
                                     font.pixelSize: 15
                                     verticalAlignment: Text.AlignVCenter
                                 }
-
-
-
                             }
 
 
@@ -866,11 +815,10 @@ Item {
                     Rectangle{
                         height: settingFilterRight.height
                         width: settingFilterRight.width
-//                        color: "blue"
                         ColumnLayout {
                             id: radioGroup6
                             anchors.top: propertyList.bottom
-                           y:40
+                            y:40
                             anchors.topMargin: 15
                             anchors.horizontalCenter:  parent.horizontalCenter
 
@@ -908,8 +856,6 @@ Item {
                                     verticalAlignment: Text.AlignVCenter
                                 }
 
-
-
                             }
 
                             RadioButton {
@@ -942,9 +888,6 @@ Item {
                                     font.pixelSize: 15
                                     verticalAlignment: Text.AlignVCenter
                                 }
-
-
-
                             }
 
                         }
@@ -958,7 +901,6 @@ Item {
         Rectangle{
             id:bottomButtons
             anchors.top: settingFilterLeft.bottom
-//                         color: "red"
             height: 35
             width: parent.width
             border.color: Constants.themeColor
@@ -967,8 +909,6 @@ Item {
             TabBar{
 
                 id: apply_btn1
-
-//                                 anchors.verticalCenter: parent.verticalCenter
                 anchors.top: bottomButtons.top
                 anchors.topMargin: 3
 
@@ -1005,7 +945,6 @@ Item {
                     background: Rectangle {
                         id: filter_apply_btn_background1
                         color:  filter_apply_btn1.pressed? Constants.darkThemeColor: Constants.greenThemeColor
-                        //                color:  filter_apply_btn.pressed? Constants.darkThemeColor: "#F4F4F4"
 
                     }
                     contentItem: Text{
@@ -1021,143 +960,4 @@ Item {
 
         }
     }
-
-    //    Rectangle {
-    //        id: rectangle2
-    //        //            x: 8
-    //        y: 210
-    //        width: parent.width
-    //        height: 80
-    //        anchors.left: parent.left
-    //        anchors.leftMargin: 5
-    //        color: "white"
-    //        border.color: Constants.themeColor
-
-    //        ToolSeparator {
-    //            id: toolSeparator
-    //            x: 8
-    //            y: 23
-    //            width: 169
-    //            height: 13
-    //            orientation: Qt.Horizontal
-    //        }
-
-    //        Text {
-    //            id: text1
-    //            x: 15
-    //            y: 8
-    //            text: qsTr("PO Number")
-    //            font.pixelSize: 12
-    //        }
-
-    //        ToolSeparator {
-    //            id: toolSeparator3
-    //            x: 8
-    //            y: -123
-    //            width: 169
-    //            height: 13
-    //            orientation: Qt.Horizontal
-    //        }
-    //    }
-
-    //    Rectangle {
-    //        id: rectangle3
-    //        //            x: 8
-    //        y: 330
-    //        width: parent.width
-    //        anchors.left: parent.left
-    //        anchors.leftMargin: 5
-    //        height: 70
-    //        color: "white"
-    //        border.color: Constants.themeColor
-
-    //        ToolSeparator {
-    //            id: toolSeparator1
-    //            x: 8
-    //            y: 18
-    //            width: 169
-    //            height: 13
-    //            orientation: Qt.Horizontal
-    //        }
-
-    //        Text {
-    //            id: text2
-    //            x: 15
-    //            y: 8
-    //            text: qsTr("Sales")
-    //            font.pixelSize: 12
-    //        }
-
-
-
-    //        SliderTpl {
-    //            id: rangeSlider
-    //            x: 15
-    //            y: 37
-    //            slider_height: 10
-    //            slider_width: 150
-    //            knob_size: 16
-
-    //        }
-
-
-    //    }
-
-    //    Rectangle {
-    //        id: rectangle4
-    //        x: 8
-    //        y: 323
-    //        width: 185
-    //        height: 150
-    //        color: "white"
-    //        border.color: Constants.themeColor
-
-
-
-    //        CustomRadioButton{
-    //            id: radioButton
-    //            x: 14
-    //            y: 32
-    //            radio_text: qsTr("Radio Button")
-    //            radio_checked: false
-    //            parent_dimension: 16
-    //        }
-
-    //        CustomRadioButton{
-    //            id: radioButton1
-    //            x: 14
-    //            y: 65
-    //            radio_text: qsTr("Radio Button")
-    //            radio_checked: false
-    //            parent_dimension: 16
-    //        }
-
-    //        CustomRadioButton{
-    //            id: radioButton2
-    //            x: 14
-    //            y: 102
-    //            radio_text: qsTr("Radio Button")
-    //            radio_checked: false
-    //            parent_dimension: 16
-    //        }
-
-
-    //        ToolSeparator {
-    //            id: toolSeparator2
-    //            x: 8
-    //            y: 24
-    //            width: 169
-    //            height: 13
-    //            orientation: Qt.Horizontal
-    //        }
-
-    //        Text {
-    //            id: text3
-    //            x: 14
-    //            y: 8
-    //            text: qsTr("Order Creation Date")
-    //            font.pixelSize: 12
-    //        }
-    //    }
-
 }

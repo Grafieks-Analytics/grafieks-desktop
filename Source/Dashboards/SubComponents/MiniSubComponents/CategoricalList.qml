@@ -20,7 +20,6 @@ ListView {
         target : TableColumnsModel
 
         function onSendFilteredColumn(allCategorical, allNumerical, allDates){
-            console.log("GOCHA1", allCategorical)
             categoricalChecksItem.model =  allCategorical
         }
     }
