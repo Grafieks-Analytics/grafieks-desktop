@@ -7,7 +7,6 @@ TableColumnsModel::TableColumnsModel(QObject *parent) : QObject(parent)
 
 void TableColumnsModel::getChartData(QMap<int, QStringList *> chartData)
 {
-    qDebug() << "GOTCHA" << chartData;
     this->newChartData = chartData;
 }
 
@@ -26,13 +25,13 @@ void TableColumnsModel::getChartHeader(QMap<int, QStringList> chartHeader)
     foreach(auto key, chartHeader.keys()){
 
         if(chartHeader.value(key).at(1).contains(Constants::categoricalType)){
-            this->categoryList.append(chartHeader.value(key).at(0));
+            this->categoryList.append(chartHeader.value(key).at(0)  + " [" + chartHeader.value(key).at(2) + "]");
         } else if(chartHeader.value(key).at(1).contains(Constants::numericalType)){
-            this->numericalList.append(chartHeader.value(key).at(0));
+            this->numericalList.append(chartHeader.value(key).at(0)  + " [" + chartHeader.value(key).at(2) + "]");
         } else if(chartHeader.value(key).at(1).contains(Constants::dateType)){
-            this->dateList.append(chartHeader.value(key).at(0));
+            this->dateList.append(chartHeader.value(key).at(0)  + " [" + chartHeader.value(key).at(2) + "]");
         } else{
-            qDebug() << "OTHER UNDETECTED FIELD TYPE" <<   chartHeader.value(key).at(0);
+            qDebug() << "OTHER UNDETECTED FIELD TYPE" << chartHeader.value(key).at(0);
         }
 
         this->newChartHeader.insert(key, chartHeader.value(key).at(0));
