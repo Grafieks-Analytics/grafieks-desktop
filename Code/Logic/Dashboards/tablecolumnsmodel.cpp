@@ -18,11 +18,23 @@ void TableColumnsModel::setColumnVisibility(QString columnName, bool show)
             this->allColumnVisibleList.append(columnName);
         }
     }
+
+    emit visibleColumnListChanged(this->allColumnVisibleList);
 }
 
 QStringList TableColumnsModel::fetchVisibleColumns()
 {
     return this->allColumnVisibleList;
+}
+
+QStringList TableColumnsModel::fetchColumnData(QString colName)
+{
+    int columnKey = newChartHeader.key( colName );
+
+    QStringList columnDataList = *newChartData.value(columnKey);
+    columnDataList.removeDuplicates();
+
+    return columnDataList;
 }
 
 void TableColumnsModel::getChartData(QMap<int, QStringList *> chartData)
@@ -56,7 +68,7 @@ void TableColumnsModel::getChartHeader(QMap<int, QStringList> chartHeader)
             qDebug() << "OTHER UNDETECTED FIELD TYPE" << chartHeader.value(key).at(0);
         }
 
-        this->newChartHeader.insert(key, chartHeader.value(key).at(0));
+        this->newChartHeader.insert(key, fullColumnName);
         this->allColumnVisibleList.append(fullColumnName);
     }
 

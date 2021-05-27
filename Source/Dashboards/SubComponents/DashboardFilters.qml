@@ -16,36 +16,16 @@ import QtQuick.Layouts 1.3
 import com.grafieks.singleton.constants 1.0
 
 import "../../MainSubComponents"
-import "../../Reports/SubComponents/MiniSubComponents"
+import "./MiniSubComponents"
 
 Item {
 
+    id: dashboard_filter
+    width:200
+    height:parent.height
+    anchors.left: parent.left
+    anchors.leftMargin: 3
 
-    ListModel{
-        id:filterData
-        ListElement{
-            name:"All"
-        }
-        ListElement{
-            name:"data2"
-        }
-        ListElement{
-            name:"data3"
-        }
-        ListElement{
-            name:"data4"
-        }
-        ListElement{
-            name:"data5"
-        }
-        ListElement{
-            name:"data5"
-        }
-        ListElement{
-            name:"data5"
-        }
-
-    }
     //    js funct
     function toggleSearch(){
 
@@ -76,17 +56,6 @@ Item {
         secondLine.visible=false
     }
 
-
-    Component{
-        id:multipleselect
-        Row{
-            CheckBoxTpl{
-                checkbox_text: qsTr(name)
-                checkbox_checked: true
-                parent_dimension: 14
-            }
-        }
-    }
     ButtonGroup{
         id:buttonGroupSingle
     }
@@ -94,26 +63,6 @@ Item {
         id:buttonGroupFilterType
     }
 
-    Component{
-        id:singleselect
-        Row{
-            CustomRadioButton{
-                ButtonGroup.group: buttonGroupSingle
-                radio_text: qsTr(name)
-                radio_checked: false
-                parent_dimension: 16
-            }
-        }
-    }
-
-
-
-    id: dashboard_filter
-    width:200
-    height:parent.height
-
-    anchors.left: parent.left
-    anchors.leftMargin: 3
     Rectangle{
         id: show_filter
         height:28
@@ -189,222 +138,8 @@ Item {
 
 
 
-    Rectangle {
-        id: rectangle1
-
-        width: parent.width-20
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: apply_btn.bottom
-        anchors.topMargin: 10
-        height: 200
-        color: "white"
-        border.color: Constants.themeColor
-        Rectangle{
-            id:columnName
-
-            width:parent.width
-            height:25
-
-            border.color: Constants.themeColor
-            Row{
-
-                spacing: 45
-
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-
-
-                Text {
-                    id: text4
-                    text: qsTr("Customer Name")
-                    font.pixelSize: 12
-                    verticalAlignment: Text.AlignVCenter
-                }
-
-                Row{
-
-                    height: parent.height
-                    width: 40
-                    spacing: 5
-                    Image {
-                        source: "/Images/icons/iconmonstr-search-thin.svg"
-                        width: 14
-                        height: 14
-
-                        MouseArea{
-                            anchors.fill: parent
-                            onClicked:  toggleSearch()
-                        }
-                    }
-                    Image {
-                        source: "/Images/icons/customize.png"
-                        width: 16
-                        height: 16
-                        MouseArea{
-                            anchors.fill: parent
-                            onClicked: labelShapePopup1.visible = true
-                        }
-
-                    }
-                }
-
-            }
-
-        }
-
-        Rectangle{
-            id: searchFilter
-            visible: false
-            anchors.top: columnName.bottom
-            height: 0
-            width: parent.width
-            TextField{
-
-
-                width: parent.width-10
-                selectByMouse: true
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: parent.top
-
-
-                placeholderText: qsTr("Search")
-                background: Rectangle {
-                    border.color: Constants.themeColor
-                    width: parent.width
-                    border.width: Constants.borderWidth
-                }
-            }
-
-        }
-
-
-
-
-        ListView{
-            anchors.top: searchFilter.bottom
-            topMargin: 10
-            height:150
-            flickableDirection: Flickable.VerticalFlick
-            boundsBehavior: Flickable.StopAtBounds
-            clip: true
-            ScrollBar.vertical: CustomScrollBar {}
-            width: parent.width
-            model: filterData
-            delegate:{
-                if(0){
-                    return multipleselect
-                }
-                else if(1){
-                    return singleselect
-                }
-
-                else{
-                    return null
-                }
-
-            }
-        }
-
-        ComboBox {
-            id:control
-            y:200
-            width: parent.width
-            model: filterData
-            indicator: Canvas {
-                id: canvas
-                x: control.width - width - control.rightPadding
-                y: control.topPadding + (control.availableHeight - height) / 2
-                width: 12
-                height: 8
-                contextType: "2d"
-
-                Connections {
-                    target: control
-                    onPressedChanged: canvas.requestPaint()
-                }
-
-                onPaint: {
-                    context.reset();
-                    context.moveTo(0, 0);
-                    context.lineTo(width, 0);
-                    context.lineTo(width / 2, height);
-                    context.closePath();
-                    context.fillStyle = control.pressed ? "#black" : "#gray";
-                    context.fill();
-                }
-            }
-        }
-        ComboBox {
-            id: comboBox
-            indicator: Canvas {
-                id: canvasMultiselect
-                x: comboBox.width - width - comboBox.rightPadding
-                y: comboBox.topPadding + (comboBox.availableHeight - height) / 2
-                width: 12
-                height: 8
-                contextType: "2d"
-
-                Connections {
-                    target: comboBox
-                    onPressedChanged: canvas.requestPaint()
-                }
-
-                onPaint: {
-                    context.reset();
-                    context.moveTo(0, 0);
-                    context.lineTo(width, 0);
-                    context.lineTo(width / 2, height);
-                    context.closePath();
-                    context.fillStyle = comboBox.pressed ? "#black" : "#gray";
-                    context.fill();
-                }
-            }
-            y:260
-            width: parent.width
-            model: filterData
-            // ComboBox closes the popup when its items (anything AbstractButton derivative) are
-            //  activated. Wrapping the delegate into a plain Item prevents that.
-            delegate: Item {
-                width: parent.width
-                height: checkDelegate.height
-
-                function toggle() { checkDelegate.toggle() }
-                CheckDelegate {
-                    id: checkDelegate
-                    indicator: Rectangle {
-                        id: parent_border
-                        implicitHeight: 16
-                        implicitWidth: 16
-                        x:  checkDelegate.leftPadding
-                        y: parent.height / 2 - height / 2
-                        border.color: "black"
-
-
-                        Rectangle {
-                            id: child_border
-                            width: 8
-                            height: width
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            color: checkDelegate.down ?  Constants.darkThemeColor : "black"
-                            visible: checkDelegate.checked
-                        }
-                    }
-                    anchors.fill: parent
-                    contentItem: Text {
-                        text: model.name
-                        elide: Text.ElideLeft
-                        leftPadding: checkDelegate.indicator.width + checkDelegate.spacing
-                    }
-
-
-
-                    highlighted: comboBox.highlightedIndex == index
-                    checked: model.selected
-                    onCheckedChanged: model.selected = checked
-                }
-            }
-        }
+    ColumnDataList{
+        id: columnDataListComponent
     }
 
 
