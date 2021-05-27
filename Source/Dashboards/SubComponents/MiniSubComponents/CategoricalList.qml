@@ -10,8 +10,6 @@ ListView {
     boundsBehavior: Flickable.StopAtBounds
     interactive: false
     clip: false
-//    anchors.top: text4.bottom
-//    anchors.topMargin: 5
     height: parent.height
     width: parent.width
 
@@ -24,12 +22,17 @@ ListView {
         }
     }
 
+    function handleCheckChange(colName, status){
+        TableColumnsModel.setColumnVisibility(colName, status)
+    }
+
     delegate: CheckBoxTpl{
         id: checkBox1
         height: 20
         checkbox_text: modelData
         checkbox_checked: true
         parent_dimension: 16
+        onCheckedChanged: handleCheckChange(modelData, checked)
     }
 
 }
