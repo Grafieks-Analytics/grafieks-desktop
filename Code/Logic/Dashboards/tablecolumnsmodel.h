@@ -26,6 +26,7 @@ public:
     Q_INVOKABLE QStringList fetchVisibleColumns();
 
     Q_INVOKABLE QStringList fetchColumnData(QString colName);
+    Q_INVOKABLE QStringList searchColumnData(QString keyword, QString columnName);
 
 public slots:
     void getChartData(QMap<int, QStringList*> chartData);
