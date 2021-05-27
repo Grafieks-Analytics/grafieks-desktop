@@ -16,6 +16,24 @@ Item {
        dataListView.model = TableColumnsModel.fetchColumnData(componentName)
     }
 
+
+    function toggleSearch(){
+
+        if(searchFilter.visible){
+            searchFilter.visible=false
+            searchFilter.height=0
+            return
+        }
+        searchFilter.visible=true
+        searchFilter.height=30
+    }
+
+    function searchData(searchText){
+        console.log(searchText, componentName)
+        dataListView.model = TableColumnsModel.searchColumnData(searchText, componentName)
+    }
+
+
     Component{
         id:singleselect
         Row{
@@ -96,13 +114,11 @@ Item {
         height: 0
         width: parent.width
         TextField{
-
-
+            id: searchText
             width: parent.width-10
             selectByMouse: true
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
-
 
             placeholderText: qsTr("Search")
             background: Rectangle {
@@ -110,6 +126,8 @@ Item {
                 width: parent.width
                 border.width: Constants.borderWidth
             }
+            onTextChanged: searchData(searchText.text)
+
         }
 
     }

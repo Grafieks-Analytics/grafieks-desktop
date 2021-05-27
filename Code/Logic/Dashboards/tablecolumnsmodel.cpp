@@ -37,6 +37,15 @@ QStringList TableColumnsModel::fetchColumnData(QString colName)
     return columnDataList;
 }
 
+QStringList TableColumnsModel::searchColumnData(QString keyword, QString columnName)
+{
+    int columnKey = newChartHeader.key( columnName );
+
+    QStringList columnDataList = *newChartData.value(columnKey);
+    columnDataList.removeDuplicates();
+    return columnDataList.filter(keyword, Qt::CaseInsensitive);
+}
+
 void TableColumnsModel::getChartData(QMap<int, QStringList *> chartData)
 {
     this->newChartData = chartData;

@@ -27,17 +27,6 @@ Item {
     anchors.leftMargin: 3
 
     //    js funct
-    function toggleSearch(){
-
-        if(searchFilter.visible){
-            searchFilter.visible=false
-            searchFilter.height=0
-            return
-        }
-        searchFilter.visible=true
-        searchFilter.height=30
-    }
-
 
     function propertyPressed(){
         firstLine.visible=true
