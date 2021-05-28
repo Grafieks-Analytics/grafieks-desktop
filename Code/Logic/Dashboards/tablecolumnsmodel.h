@@ -36,6 +36,7 @@ public slots:
 signals:
     void sendFilteredColumn(QStringList allCategorical, QStringList allNumerical, QStringList allDates);
     void visibleColumnListChanged(QStringList visibleColumns);
+    void columnNamesChanged(QStringList columnNames);
 
 
 };
