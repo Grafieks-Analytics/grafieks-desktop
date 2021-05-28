@@ -332,6 +332,9 @@ int main(int argc, char *argv[])
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartDataChanged, &tableColumnsModel, &TableColumnsModel::getChartData);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &tableColumnsModel, &TableColumnsModel::getChartHeader);
 
+    // Dashboards - Connect the obtained column names from modeler filters to dashboard params model
+    QObject::connect(&tableColumnsModel, &TableColumnsModel::columnNamesChanged, &dashboardParamsModel, &DashboardParamsModel::getColumnNames);
+
     // SIGNAL & SLOTS ENDS
     /***********************************************************************************************************************/
     /***********************************************************************************************************************/

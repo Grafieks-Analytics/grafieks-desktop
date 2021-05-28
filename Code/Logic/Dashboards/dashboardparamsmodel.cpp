@@ -453,6 +453,27 @@ QStringList DashboardParamsModel::fetchHideColumns(QString searchKeyword)
     return this->hideColumns.filter(searchKeyword);
 }
 
+void DashboardParamsModel::setColumnAliasName(QString columnName, QString columnAlias)
+{
+    this->columnAliasMap.insert(columnName, columnAlias);
+    emit aliasChanged(columnAlias, columnName);
+}
+
+QString DashboardParamsModel::fetchColumnAliasName(QString columnName)
+{
+    return this->columnAliasMap.value(columnName).toString();
+}
+
+void DashboardParamsModel::setColumnFilterType(QString columnName, QString filterType)
+{
+    this->columnFilterType.insert(columnName, filterType);
+}
+
+QString DashboardParamsModel::fetchColumnFilterType(QString columnName)
+{
+    return this->columnFilterType.value(columnName).toString();
+}
+
 void DashboardParamsModel::setDashboardName(int dashboardId, QString dashboardName)
 {
 
@@ -763,6 +784,11 @@ int DashboardParamsModel::tmpCanvasWidth() const
     return m_tmpCanvasWidth;
 }
 
+QString DashboardParamsModel::currentSelectedColumn() const
+{
+    return m_currentSelectedColumn;
+}
+
 void DashboardParamsModel::setLastContainerType(QString lastContainerType)
 {
     if (m_lastContainerType == lastContainerType)
@@ -857,4 +883,26 @@ void DashboardParamsModel::setTmpCanvasWidth(int tmpCanvasWidth)
         this->dashboardCanvasDimensions[i][0] = m_tmpCanvasWidth;
     }
     emit tmpCanvasWidthChanged(m_tmpCanvasWidth);
+}
+
+void DashboardParamsModel::getColumnNames(QStringList columnNames)
+{
+
+    const QString defaultFilterType = "dataListSingle";
+    foreach(QString column, columnNames){
+
+        // Set default column alias name to the existing column name
+        this->setColumnAliasName(column, column);
+
+        this->setColumnFilterType(column, defaultFilterType);
+    }
+}
+
+void DashboardParamsModel::setCurrentSelectedColumn(QString currentSelectedColumn)
+{
+    if (m_currentSelectedColumn == currentSelectedColumn)
+        return;
+
+    m_currentSelectedColumn = currentSelectedColumn;
+    emit currentSelectedColumnChanged(m_currentSelectedColumn);
 }

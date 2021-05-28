@@ -7,24 +7,77 @@ import com.grafieks.singleton.constants 1.0
 import "../../../MainSubComponents"
 
 Item{
-    height: parent.height
+    id: filterDataSingleItem
+    height: control.height + columnName.height
     width: parent.width
-    property alias componentName: control.objectName
+    property alias componentName: filterDataSingleItem.objectName
 
     onComponentNameChanged: {
-       dataListView.model = TableColumnsModel.fetchColumnData(componentName)
+       control.model = TableColumnsModel.fetchColumnData(componentName)
     }
 
-    function searchData(searchText){
-        console.log(searchText, componentName)
-        dataListView.model = TableColumnsModel.searchColumnData(searchText, componentName)
+    Connections{
+        target: DashboardParamsModel
+
+        function onAliasChanged(newAlias, columnName){
+            if(columnName === componentName){
+                componentTitle.text = newAlias
+            }
+        }
+    }
+
+
+    function filterClicked(){
+        DashboardParamsModel.setCurrentSelectedColumn(componentName)
+        labelShapePopup1.visible = true
+    }
+
+    Rectangle{
+        id:columnName
+        width:parent.width
+        height:25
+
+        border.color: Constants.themeColor
+        Row{
+
+            spacing: 55
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+
+
+            Text {
+                id: componentTitle
+                text: componentName
+                font.pixelSize: 12
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            Row{
+
+                height: parent.height
+                width: 26
+                spacing: 5
+                Image {
+                    source: "/Images/icons/customize.png"
+                    width: 16
+                    height: 16
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: filterClicked()
+                    }
+
+                }
+            }
+
+        }
+
     }
 
     ComboBox {
         id:control
-        y:200
         width: parent.width
-        model: filterData
+        anchors.top : columnName.bottom
+
         indicator: Canvas {
             id: canvas
             x: control.width - width - control.rightPadding
@@ -35,7 +88,9 @@ Item{
 
             Connections {
                 target: control
-                onPressedChanged: canvas.requestPaint()
+                function onPressedChanged(){
+                    canvas.requestPaint()
+                }
             }
 
             onPaint: {

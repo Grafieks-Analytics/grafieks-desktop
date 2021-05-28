@@ -8,21 +8,73 @@ import "../../../MainSubComponents"
 
 Item {
 
-    height: parent.height
+    id: filterDataMultiItem
+    height: control.height + columnName.height
     width: parent.width
-    property alias componentName: comboBox.objectName
+    property alias componentName: filterDataMultiItem.objectName
 
     onComponentNameChanged: {
-       dataListView.model = TableColumnsModel.fetchColumnData(componentName)
+        comboBox.model = TableColumnsModel.fetchColumnData(componentName)
     }
 
-    function searchData(searchText){
-        console.log(searchText, componentName)
-        dataListView.model = TableColumnsModel.searchColumnData(searchText, componentName)
+    Connections{
+        target: DashboardParamsModel
+
+        function onAliasChanged(newAlias, columnName){
+            if(columnName === componentName){
+                componentTitle.text = newAlias
+            }
+        }
+    }
+
+    function filterClicked(){
+        DashboardParamsModel.setCurrentSelectedColumn(componentName)
+        labelShapePopup1.visible = true
+    }
+
+    Rectangle{
+        id:columnName
+        width:parent.width
+        height:25
+
+        border.color: Constants.themeColor
+        Row{
+
+            spacing: 55
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+
+
+            Text {
+                id: componentTitle
+                text: componentName
+                font.pixelSize: 12
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            Row{
+
+                height: parent.height
+                width: 26
+                spacing: 5
+                Image {
+                    source: "/Images/icons/customize.png"
+                    width: 16
+                    height: 16
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: filterClicked()
+                    }
+                }
+            }
+        }
     }
 
     ComboBox {
         id: comboBox
+        y:260
+        width: parent.width
+
         indicator: Canvas {
             id: canvasMultiselect
             x: comboBox.width - width - comboBox.rightPadding
@@ -33,7 +85,9 @@ Item {
 
             Connections {
                 target: comboBox
-                onPressedChanged: canvas.requestPaint()
+                function onPressedChanged(){
+                    canvas.requestPaint()
+                }
             }
 
             onPaint: {
@@ -46,16 +100,16 @@ Item {
                 context.fill();
             }
         }
-        y:260
-        width: parent.width
-        model: filterData
+
         // ComboBox closes the popup when its items (anything AbstractButton derivative) are
         //  activated. Wrapping the delegate into a plain Item prevents that.
         delegate: Item {
             width: parent.width
             height: checkDelegate.height
 
-            function toggle() { checkDelegate.toggle() }
+            function toggle() {
+                checkDelegate.toggle()
+            }
             CheckDelegate {
                 id: checkDelegate
                 indicator: Rectangle {

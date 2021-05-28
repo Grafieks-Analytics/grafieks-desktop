@@ -7,15 +7,25 @@ import com.grafieks.singleton.constants 1.0
 import "../../../MainSubComponents"
 
 Item {
-
+    id: filterDataItem
     width: parent.width
     height: 200
-    property alias componentName: componentTitle.text
+    property alias componentName: filterDataItem.objectName
 
     onComponentNameChanged: {
        dataListView.model = TableColumnsModel.fetchColumnData(componentName)
     }
 
+
+    Connections{
+        target: DashboardParamsModel
+
+        function onAliasChanged(newAlias, columnName){
+            if(columnName === componentName){
+                componentTitle.text = newAlias
+            }
+        }
+    }
 
     function toggleSearch(){
 
@@ -31,6 +41,11 @@ Item {
     function searchData(searchText){
         console.log(searchText, componentName)
         dataListView.model = TableColumnsModel.searchColumnData(searchText, componentName)
+    }
+
+    function filterClicked(){
+        DashboardParamsModel.setCurrentSelectedColumn(componentName)
+        labelShapePopup1.visible = true
     }
 
 
@@ -72,6 +87,7 @@ Item {
 
             Text {
                 id: componentTitle
+                text: componentName
                 font.pixelSize: 12
                 verticalAlignment: Text.AlignVCenter
             }
@@ -97,7 +113,7 @@ Item {
                     height: 16
                     MouseArea{
                         anchors.fill: parent
-                        onClicked: labelShapePopup1.visible = true
+                        onClicked: filterClicked()
                     }
 
                 }

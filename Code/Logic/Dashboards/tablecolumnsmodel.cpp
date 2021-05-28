@@ -89,5 +89,8 @@ void TableColumnsModel::getChartHeader(QMap<int, QStringList> chartHeader)
     this->categoryList.sort(Qt::CaseInsensitive);
     this->numericalList.sort(Qt::CaseInsensitive);
     this->dateList.sort(Qt::CaseInsensitive);
+
+    emit columnNamesChanged(this->allColumnVisibleList);
     emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
+
 }
