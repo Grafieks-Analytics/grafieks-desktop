@@ -46,6 +46,11 @@ QStringList TableColumnsModel::searchColumnData(QString keyword, QString columnN
     return columnDataList.filter(keyword, Qt::CaseInsensitive);
 }
 
+void TableColumnsModel::searchColumnNames(QString keyword)
+{
+    emit sendFilteredColumn(this->categoryList.filter(keyword, Qt::CaseInsensitive), this->numericalList.filter(keyword, Qt::CaseInsensitive), this->dateList.filter(keyword, Qt::CaseInsensitive));
+}
+
 void TableColumnsModel::getChartData(QMap<int, QStringList *> chartData)
 {
     this->newChartData = chartData;
@@ -65,7 +70,7 @@ void TableColumnsModel::getChartHeader(QMap<int, QStringList> chartHeader)
     // Update new data
     foreach(auto key, chartHeader.keys()){
 
-        QString fullColumnName = chartHeader.value(key).at(0)  + " [" + chartHeader.value(key).at(2) + "]";
+        QString fullColumnName = chartHeader.value(key).at(0);
 
         if(chartHeader.value(key).at(1).contains(Constants::categoricalType)){
             this->categoryList.append(fullColumnName);

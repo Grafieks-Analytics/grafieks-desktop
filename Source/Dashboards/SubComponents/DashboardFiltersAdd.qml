@@ -16,6 +16,11 @@ Item {
     anchors.left: parent.left
     anchors.leftMargin: 3
 
+
+    function searchTableColumns(searchText){
+        TableColumnsModel.searchColumnNames(searchText)
+    }
+
     Rectangle{
         id: add_filter
         height:28
@@ -150,7 +155,7 @@ Item {
                     id: mouseAreaSearch
                     anchors.fill: parent
                     hoverEnabled: true
-                    onClicked: searchTable(searchTextBox.text)
+                    onClicked: searchTableColumns(searchTextBox.text)
                 }
             }
         }

@@ -9,31 +9,15 @@ import "../../../MainSubComponents"
 Item{
     height: parent.height
     width: parent.width
+    property alias componentName: control.objectName
 
-    ListModel{
-        id:filterData
-        ListElement{
-            name:"All"
-        }
-        ListElement{
-            name:"data2"
-        }
-        ListElement{
-            name:"data3"
-        }
-        ListElement{
-            name:"data4"
-        }
-        ListElement{
-            name:"data5"
-        }
-        ListElement{
-            name:"data5"
-        }
-        ListElement{
-            name:"data5"
-        }
+    onComponentNameChanged: {
+       dataListView.model = TableColumnsModel.fetchColumnData(componentName)
+    }
 
+    function searchData(searchText){
+        console.log(searchText, componentName)
+        dataListView.model = TableColumnsModel.searchColumnData(searchText, componentName)
     }
 
     ComboBox {
