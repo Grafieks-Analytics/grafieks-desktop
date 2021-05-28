@@ -1456,6 +1456,11 @@ void ChartsModel::removeTmpChartData()
     emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
 }
 
+void ChartsModel::searchColumnNames(QString keyword)
+{
+    emit sendFilteredColumn(this->categoryList.filter(keyword, Qt::CaseInsensitive), this->numericalList.filter(keyword, Qt::CaseInsensitive), this->dateList.filter(keyword, Qt::CaseInsensitive));
+}
+
 
 void ChartsModel::getChartData(QMap<int, QStringList *> chartData)
 {
@@ -1475,7 +1480,7 @@ void ChartsModel::getChartHeader(QMap<int, QStringList> chartHeader)
     // Update new data
     foreach(auto key, chartHeader.keys()){
 
-        QString fullColumnName = chartHeader.value(key).at(0)  + " [" + chartHeader.value(key).at(2) + "]";
+        QString fullColumnName = chartHeader.value(key).at(0);
 
         if(chartHeader.value(key).at(1).contains(Constants::categoricalType)){
             this->categoryList.append(fullColumnName);

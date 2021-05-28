@@ -142,7 +142,6 @@ Item {
         ScrollBar.vertical: CustomScrollBar {}
         width: parent.width
         anchors.top: searchFilter.bottom
-//        model: filterData
 
         delegate:{
             if(0){

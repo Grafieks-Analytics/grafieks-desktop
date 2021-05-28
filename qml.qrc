@@ -251,5 +251,6 @@
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataList.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataSingleDropdown.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataMultiDropdown.qml</file>
+        <file>Source/Dashboards/SubComponents/IntermediateFilterData.qml</file>
     </qresource>
 </RCC>
