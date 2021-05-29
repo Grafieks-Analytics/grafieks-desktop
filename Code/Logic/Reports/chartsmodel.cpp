@@ -190,12 +190,6 @@ QString ChartsModel::getNewGroupedBarChartValues(QString xAxisColumn, QString yA
     newChartData.value(splitKey)->removeDuplicates();
     uniqueSplitKeyData = newChartData.value(splitKey);
 
-    qDebug() << "New Chart data X" << *xAxisDataPointer;
-    qDebug() << "New Chart data Y" << *yAxisDataPointer;
-    qDebug() << "New Chart data Split" << *splitKeyDataPointer;
-    qDebug() << "New Chart unique" << *uniqueSplitKeyData;
-    qDebug() << "NEW chart header" << newChartHeader;
-
     QJsonObject obj;
     int index;
 
@@ -206,6 +200,7 @@ QString ChartsModel::getNewGroupedBarChartValues(QString xAxisColumn, QString yA
 
             if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
                 uniqueHashKeywords->append(xAxisDataPointer->at(i));
+
 
                 obj.insert("mainCategory", xAxisDataPointer->at(i));
 
@@ -223,20 +218,26 @@ QString ChartsModel::getNewGroupedBarChartValues(QString xAxisColumn, QString yA
 
                 axisDataArray.replace(index, obj);
             }
+
+            qDebug() << "COUNTER" << i;
         }
     } catch(std::exception &e){
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
     data.append(axisDataArray);
+    qDebug() << "COUNTER1";
 
     QJsonArray columns;
     columns.append(QJsonArray::fromStringList(*uniqueSplitKeyData));
+    qDebug() << "COUNTER2";
 
     data.append(columns);
+    qDebug() << "COUNTER3";
 
     QJsonDocument doc;
     doc.setArray(data);
+    qDebug() << "COUNTER4";
 
     QString strData = doc.toJson();
     return strData;
