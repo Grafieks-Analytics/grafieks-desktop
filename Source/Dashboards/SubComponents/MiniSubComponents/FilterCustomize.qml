@@ -26,7 +26,34 @@ Popup {
         target: DashboardParamsModel
 
         function onCurrentSelectedColumnChanged(currentSelectedColumn){
+            var currentDashboard = DashboardParamsModel.currentDashboard
+            var currentColumn = DashboardParamsModel.currentSelectedColumn
+            var columnFilter = DashboardParamsModel.fetchColumnFilterType(currentDashboard, currentColumn)
+            var includeExclude = DashboardParamsModel.fetchIncludeExcludeMap(currentDashboard, currentColumn)
 
+            switch(columnFilter){
+            case filterTypes[0]:
+                control1.checked = true
+                break;
+
+            case filterTypes[1]:
+                control2.checked = true
+                break;
+
+            case filterTypes[2]:
+                control3.checked = true
+                break;
+
+            case filterTypes[3]:
+                control4.checked = true
+                break;
+            }
+
+            if(includeExclude.toLowerCase() === "include"){
+                control13.checked = true
+            } else{
+                control14.checked = true
+            }
         }
     }
 
@@ -42,6 +69,39 @@ Popup {
         DashboardParamsModel.setColumnFilterType(currentDashboardId, currentSelectedCol, newFilter)
     }
 
+    function setIncludeExclude(newIncExc){
+        let currentDashboardId = DashboardParamsModel.currentDashboard
+        let currentSelectedCol = DashboardParamsModel.currentSelectedColumn
+        DashboardParamsModel.setIncludeExcludeMap(currentDashboardId, currentSelectedCol, newIncExc)
+    }
+
+
+    function propertyPressed(){
+        firstLine.visible=true
+        secondLine.visible=false
+        thirdLine.visible=false
+
+    }
+    function filterTypePressed(){
+        secondLine.visible=true
+        firstLine.visible=false
+        thirdLine.visible=false
+    }
+    function valuePressed(){
+        thirdLine.visible=true
+        firstLine.visible=false
+        secondLine.visible=false
+    }
+
+    ButtonGroup{
+        id:buttonGroupSingle
+    }
+    ButtonGroup{
+        id:buttonGroupFilterType
+    }
+    ButtonGroup{
+        id:buttonGroupIncExcl
+    }
 
     Rectangle{
         id:settingHead
@@ -454,7 +514,8 @@ Popup {
                         spacing: 15
                         RadioButton {
                             id: control13
-                            ButtonGroup.group: buttonGroupFilterType
+                            ButtonGroup.group: buttonGroupIncExcl
+                            onCheckedChanged: setIncludeExclude("include")
                             indicator: Rectangle {
                                 implicitWidth: 16
                                 implicitHeight: 16
@@ -487,7 +548,8 @@ Popup {
 
                         RadioButton {
                             id: control14
-                            ButtonGroup.group: buttonGroupFilterType
+                            ButtonGroup.group: buttonGroupIncExcl
+                            onCheckedChanged: setIncludeExclude("exclude")
                             indicator: Rectangle {
                                 implicitWidth: 16
                                 implicitHeight: 16

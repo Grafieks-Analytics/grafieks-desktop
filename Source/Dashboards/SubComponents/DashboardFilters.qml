@@ -28,29 +28,7 @@ Item {
 
     //    js funct
 
-    function propertyPressed(){
-        firstLine.visible=true
-        secondLine.visible=false
-        thirdLine.visible=false
 
-    }
-    function filterTypePressed(){
-        secondLine.visible=true
-        firstLine.visible=false
-        thirdLine.visible=false
-    }
-    function valuePressed(){
-        thirdLine.visible=true
-        firstLine.visible=false
-        secondLine.visible=false
-    }
-
-    ButtonGroup{
-        id:buttonGroupSingle
-    }
-    ButtonGroup{
-        id:buttonGroupFilterType
-    }
 
     Rectangle{
         id: show_filter
