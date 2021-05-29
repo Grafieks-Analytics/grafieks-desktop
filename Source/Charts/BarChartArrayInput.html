@@ -16,9 +16,6 @@
                 position: fixed;
                 background: #fff;
             }
-            #my_dataviz {
-                /* overflow-x: scroll; */
-            }
         </style>
     </head>
     <body>
@@ -39,6 +36,9 @@
                 var parseTime = d3.timeParse("%d-%b-%y");
 
                 var dataValues = data[0];
+
+                // Plot configuration contains all the config of report, these values are passed from QML,
+                // if no value is passed default value is taken from defaultConfig.js
 
                 let {
                     d3colorPalette,
@@ -300,6 +300,7 @@
                     }
 
                     extraHeightWorked = true;
+                    maxWidth = maxWidth < 100 ? maxWidth : 100;
                     extraHeight = maxWidth;
 
                     d3.select(".x-axis").attr("text-anchor", "right");
