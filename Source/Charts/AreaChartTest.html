@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+
+    <!-- Load d3.js -->
+    <script src="./Data/d3DefaultConfig.js"></script>
+    <script src="./Data/utils.js"></script>
+    <script src="./Data/d3.v4.min.js"></script>
+    <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+    <link rel="icon" href="logo.png" type="image/png" sizes="32x32" />
+    <link rel="stylesheet" href="Data/general.css" />
+
+    <title>Area Chart</title>
+    <style>
+        .line {
+            fill: none;
+            stroke: #a2c0d9;
+            stroke-width: 2px;
+        }
+        .area {
+            fill: url(#area-gradient);
+            stroke-width: 0px;
+        }
+    </style>
+</head>
+<body>
+    <div id="diagram"></div>
+    <script>
+        var margin = { top: 20, right: 20, bottom: 50, left: 70 };
+        var width = 500 - margin.left - margin.right;
+        var height = 200 - margin.top - margin.bottom;
+
+        //add svg with margin !important
+        //this is svg is actually group
+        var svg = d3
+            .select("#diagram")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g") //add group to leave margin for axis
+            .attr(
+                "transform",
+                "translate(" + margin.left + "," + margin.top + ")"
+            );
+
+        //the code above should be same
+
+        var dataset = [
+            [5, 20],
+            [480, 90],
+            [250, 50],
+            [100, 33],
+            [330, -95],
+            [410, -12],
+            [475, -44],
+            [25, 67],
+            [85, 21],
+            [220, 88],
+        ];
+        //for each d, d[0] is the first num, d[1] is the second num
+        //set y scale
+        var yScale = d3
+            .scaleLinear()
+            .rangeRound([0, height])
+            .domain([
+                d3.max(dataset, function (d) {
+                    return Math.abs(d[1]);
+                }),
+                -d3.max(dataset, function (d) {
+                    return Math.abs(d[1]);
+                }),
+            ]);
+        // .nice(); //show negative
+        //add x axis
+        var xScale = d3
+            .scaleLinear()
+            .rangeRound([0, width])
+            .domain([
+                0,
+                d3.max(dataset, function (d) {
+                    return d[0];
+                }),
+            ]); //scaleBand is used for  bar chart
+
+        //sort x
+        dataset.sort(function (a, b) {
+            if (a[0] < b[0]) {
+                return -1;
+            } else {
+                return 1;
+            }
+        });
+
+        var area = d3
+            .area()
+            .curve(d3.curveCardinal)
+            .x1(function (d) {
+                return xScale(d[0]);
+            })
+            .y1(function (d) {
+                return yScale(d[1]);
+            }) //draw the top line. Similar idea with line chart
+            .x0(function (d) {
+                return xScale(d[0]);
+            })
+            .y0(yScale(0)); //draw the base line. Note: the x0 cannot be 0. it should be a line (x0,y0) --> (xScale(d[0]),0)  --> x axis
+
+        //add area to svg. use path-->to know svg path
+        //must add css class area, you can try to remove it and see the result
+        svg.append("g")
+            .append("path")
+            .attr("class", "area")
+            .attr("d", area(dataset));
+
+        var line = d3
+            .line()
+            .curve(d3.curveCardinal)
+            .x(function (d) {
+                return xScale(d[0]);
+            })
+            .y(function (d) {
+                return yScale(d[1]);
+            });
+        svg.append("g")
+            .append("path")
+            .attr("class", "line")
+            .attr("d", line(dataset));
+
+        //add x and y axis
+        var yAxis = d3.axisLeft(yScale);
+        svg.append("g").call(yAxis);
+
+        var xAxis = d3.axisBottom(xScale); /*.tickFormat("");remove tick label*/
+        svg.append("g")
+            .call(xAxis)
+            .attr("transform", "translate(0," + height / 2 + ")");
+
+        //add label for x axis and y axis
+        svg.append("text")
+            .text("Y Label")
+            .attr("x", 0 - height / 2)
+            .attr("y", 0 - margin.left)
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .attr("transform", "rotate(-90)");
+        svg.append("text")
+            .text("The area fill gradient color")
+            .attr("x", width / 2)
+            .attr("y", height + margin.bottom)
+            .style("text-anchor", "middle");
+
+        //fill area with gradient color
+        svg.append("linearGradient")
+            .attr("id", "area-gradient")
+            .attr("gradientUnits", "userSpaceOnUse")
+            .attr("x1", 0)
+            .attr(
+                "y1",
+                yScale(
+                    d3.min(dataset, function (d) {
+                        return d[0];
+                    })
+                )
+            )
+            .attr("x2", 0)
+            .attr(
+                "y2",
+                yScale(
+                    d3.max(dataset, function (d) {
+                        return d[1];
+                    })
+                )
+            )
+            .selectAll("stop")
+            .data([
+                /* {offset: "0%", color: "#edf3f8"},		
+      {offset: "30%", color: "#dbe7f0"},	
+      {offset: "45%", color: "#c9dae9"},		
+      {offset: "55%", color: "#a4c2da"},		
+      {offset: "60%", color: "#b7cee1"},	
+      {offset: "100%", color: "#a2c0d9"}	*/
+                { offset: "0%", color: "#dbe7f0" },
+                { offset: "50%", color: "#a4c2da" },
+                { offset: "100%", color: "#a2c0d9" },
+            ])
+            .enter()
+            .append("stop")
+            .attr("offset", function (d) {
+                return d.offset;
+            })
+            .attr("stop-color", function (d) {
+                return d.color;
+            });
+    </script>
+</body>

@@ -391,10 +391,7 @@ Popup {
     function onApplyClicked(){
 
         popupMain.visible = false
-        // Reset to show first tab once closed down
-        DSParamsModel.setSection(Constants.categoricalTab)
-        DSParamsModel.setCategory(Constants.categoryMainListType)
-        DSParamsModel.setSubCategory(Constants.categorySubMulti)
+        DSParamsModel.clearFilter()
 
         onTabToggle(true,false,false,false);
 
@@ -404,11 +401,7 @@ Popup {
     }
     function onCancelClicked(){
         popupMain.visible = false
-
-        // on reset, set first tab values
-        DSParamsModel.setSection(Constants.categoricalTab)
-        DSParamsModel.setCategory(Constants.categoryMainListType)
-        DSParamsModel.setSubCategory(Constants.categorySubMulti)
+        DSParamsModel.clearFilter()
 
         onTabToggle(true,false,false,false);
     }

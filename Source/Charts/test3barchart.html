@@ -28,94 +28,24 @@
                 position: fixed;
                 background: #fff;
             }
+            #my_dataviz {
+                /* overflow-x: scroll; */
+            }
         </style>
     </head>
 
     <body>
         <div style="display: flex">
-            <div id="xAxisDiv"></div>
+            <div id="yAxisDiv"></div>
             <div id="my_dataviz"></div>
         </div>
         <div id="tooltip"></div>
         <script>
-            function sumAllData(originalData, currentData) {
-                console.log({ originalData });
-                var allKeys = [
-                    ...Object.keys(originalData),
-                    ...Object.keys(currentData),
-                ];
-
-                allKeys = allKeys.filter((d) => {
-                    if (d != "mainCategory") {
-                        return d;
-                    }
-                });
-
-                allKeys.forEach((d) => {
-                    console.log(originalData[d], currentData[d]);
-                    originalData[d] =
-                        (originalData[d] || 0) + (currentData[d] || 0);
-                });
-
-                console.log(originalData);
-                return originalData;
-            }
-
-            function transformData(dataValue, dateFormat) {
-                var transformedDataValue = {};
-                var globalKeys = [];
-
-                dataValue[0].forEach((d, i) => {
-                    var currentData = d;
-
-                    var category = getDateFormattedData(
-                        d.mainCategory,
-                        dateFormat
-                    );
-                    console.log(category);
-                    if (!transformedDataValue[category]) {
-                        transformedDataValue[category] = {};
-                    }
-                    var originalData = transformedDataValue[category];
-
-                    var allKeys = [
-                        ...Object.keys(originalData),
-                        ...Object.keys(currentData),
-                    ];
-
-                    allKeys = allKeys
-                        .filter((d) => {
-                            if (d != "mainCategory") {
-                                return d;
-                            }
-                        })
-                        .filter(getUniqueArrayValues);
-
-                    globalKeys.push(...allKeys);
-
-                    allKeys.forEach((d) => {
-                        console.log(originalData[d], currentData[d]);
-                        originalData[d] =
-                            (originalData[d] || 0) + (currentData[d] || 0);
-                    });
-                    transformedDataValue[category] = {
-                        ...originalData,
-                        mainCategory: category,
-                    };
-
-                    console.log({ transformedDataValue });
-                });
-
-                var transformedDataValue = Object.keys(
-                    transformedDataValue
-                ).map((d) => transformedDataValue[d]);
-
-                globalKeys = globalKeys.filter(getUniqueArrayValues);
-                return [transformedDataValue, globalKeys];
-            }
-
             function drawChart(data, plottingConfiguration = {}) {
                 window.data = data;
+                var [data, all_keys] = data;
+
+                var parseTime = d3.timeParse("%d-%b-%y");
 
                 let {
                     d3colorPalette,
@@ -124,9 +54,7 @@
                     curveType,
                     dateFormat,
                     chartType,
-                    standardThresholdHeight,
-                    subCategoryColour,
-                    categoryColor,
+                    standardThresholdWidth,
                 } = plottingConfiguration;
 
                 if (!d3colorPalette) {
@@ -146,38 +74,16 @@
                     chartType = defaultD3Config.chartType;
                 }
 
-                if (!standardThresholdHeight) {
-                    standardThresholdHeight =
-                        defaultD3Config.standardThresholdHeight;
+                if (!standardThresholdWidth) {
+                    standardThresholdWidth =
+                        defaultD3Config.standardThresholdWidth;
                 }
 
-                data = transformData(data, dateFormat);
-
-                var [data, all_keys] = data;
-
-                var margin = { top: 40, right: 20, bottom: 0, left: 70 };
+                var margin = { top: 40, right: 20, bottom: 80, left: 70 };
                 var width = window.innerWidth - margin.left - margin.right - 70;
 
-                // if (chartType == constants.chartType.STANDARD) {
-                //     width = numberOfBars(data) * standardThresholdWidth;
-                // }
-
                 if (chartType == constants.chartType.STANDARD) {
-                    height = all_keys.length * standardThresholdHeight;
-                    if (
-                        height + margin.top + margin.bottom <
-                        window.innerHeight
-                    ) {
-                        d3.select("#xAxisDiv").style(
-                            "top",
-                            height + margin.top + "px"
-                        );
-                    } else {
-                        d3.select("#xAxisDiv").style("bottom", "0");
-                        d3.select("#xAxisDiv").style("top", null);
-                    }
-                } else {
-                    d3.select("#xAxisDiv").style("bottom", "0");
+                    width = numberOfBars(data) * standardThresholdWidth;
                 }
 
                 function numberOfBars(data) {
@@ -191,19 +97,20 @@
 
                 var height = window.innerHeight - margin.top - margin.bottom;
 
-                clearChart();
+                d3.selectAll("#my_dataviz").html("");
+                d3.selectAll("#yAxisDiv").html("");
 
-                var minHeight = d3.min(data, (d) =>
-                    d3.min(all_keys, (k) => d[k])
-                );
+                var minHeight = d3.min(data, function (d) {
+                    return d3.min(data, (d) => d3.min(all_keys, (k) => d[k]));
+                });
 
                 if (minHeight > 0) {
                     minHeight = 0;
                 }
 
-                var maxHeight = d3.max(data, (d) =>
-                    d3.max(all_keys, (k) => d[k])
-                );
+                var maxHeight = d3.max(data, function (d) {
+                    return d3.max(data, (d) => d3.max(all_keys, (k) => d[k]));
+                });
 
                 //add svg with margin !important
                 //this is svg is actually group
@@ -218,80 +125,76 @@
                         "translate(" + margin.left + "," + margin.top + ")"
                     );
 
-                const yScale0 = d3
+                const xScale0 = d3
                     .scaleBand()
-                    .range([height, 0])
+                    .range([0, width - margin.left - margin.right])
                     .padding(paddingInner);
 
-                // var yScale = d3
+                var yScale = d3
+                    .scaleLinear()
+                    .rangeRound([0, height])
+                    .domain([maxHeight, minHeight])
+                    .nice();
+
+                // const yScale = d3
                 //     .scaleLinear()
-                //     .rangeRound([0, height])
-                //     .domain([maxHeight, minHeight])
-                //     .nice();
+                //     .range([height - margin.top - margin.bottom, 0]);
 
-                const xScale = d3.scaleLinear().rangeRound([0, width]);
-
-                var zScale = d3.scaleOrdinal().range(d3Colors);
+                var zScale = d3.scaleOrdinal().range([d3Colors[4]]);
 
                 // const xAxis = d3.axisBottom(xScale0);
                 // const yAxis = d3.axisLeft(yScale);
 
                 yaxisTicks = height / 70;
 
-                xScale.domain([minHeight, maxHeight]).nice();
-
                 //add x and y axis
-                var xAxis = d3.axisBottom(xScale).tickSize(0).ticks(10);
+                var yAxis = d3.axisLeft(yScale).tickSize(0).ticks(yaxisTicks);
 
-                var yAxis = d3.axisLeft(yScale0).tickSize(0).ticks(yaxisTicks);
-
-                d3.select("#xAxisDiv")
+                d3.select("#yAxisDiv")
                     .append("svg")
-                    .attr("height", "72")
-                    .attr("width", width + margin.left + margin.right)
+                    .attr("width", "72")
+                    .attr("height", height + margin.top + margin.bottom)
                     .append("g") //add group to leave margin for axis
                     .attr(
                         "transform",
-                        "translate(" + margin.left + ",0)"
-                        // "translate(0,0)"
+                        "translate(" + margin.left + "," + margin.top + ")"
                     )
                     .append("g")
-                    .attr("class", "x-axis")
-                    .call(xAxis);
+                    .attr("class", "y-axis")
+                    .call(yAxis);
 
-                yScale0.domain(data.map((d) => d.mainCategory));
+                svg.append("g")
+                    .attr("class", "grid")
+                    .style("stroke-width", "1")
+                    .call(
+                        make_y_gridlines(yScale).tickSize(-width).tickFormat("")
+                    );
 
-                // svg.append("g")
-                //     .attr("class", "grid")
-                //     .style("stroke-width", "1")
-                //     .call(
-                //         make_y_gridlines(yScale0)
-                //             .tickSize(-width)
-                //             .tickFormat("")
-                //     );
+                xScale0.domain(data.map((d) => d.model_name));
+                yScale.domain([maxHeight, minHeight]);
 
                 svg.selectAll(".groups")
                     .data(data)
                     .enter()
                     .append("g")
-                    .attr("class", "mainCategory")
+                    .attr("class", "model_name")
                     .each(function (group_data) {
                         const bar_data = getBars(group_data),
                             x_offset = groupOffset(group_data),
                             group_keys = bar_data.map((d) => d.name);
-                        yScale1 = d3
+                        xScale1 = d3
                             .scaleBand()
                             .domain(group_keys)
-                            .range([0, yScale0.bandwidth() - x_offset * 2])
+                            .range([0, xScale0.bandwidth() - x_offset * 2])
                             .padding(paddingInner);
 
                         d3.select(this)
                             .attr(
                                 "transform",
                                 (d) =>
-                                    `translate(0,${
-                                        yScale0(d.mainCategory) + x_offset
-                                    })`
+                                    `translate(${
+                                        xScale0(d.model_name) + x_offset
+                                    },0)`
                             )
                             .selectAll(".bar")
                             .data(bar_data)
@@ -299,76 +202,56 @@
                             .append("rect")
                             .attr("class", "bar")
                             .attr("fill", function (d) {
-                                if (categoryColor) {
-                                    return zScale(d.data.mainCategory);
-                                }
-                                if (subCategoryColour) {
-                                    return zScale(d.name);
-                                }
-                                return d3Colors[4];
+                                return zScale(d.key);
                             })
                             .on("mouseout", function (d, i) {
                                 d3.select("#tooltip").style("display", "none");
                                 d3.selectAll(".bar").style("opacity", 1);
                             })
                             .on("mouseover mousemove", function (d, i) {
-                                let xpos = d3.mouse(this)[0] - 20;
+                                let xpos = d3.mouse(this)[0] + margin.left;
                                 let ypos = d3.mouse(this)[1];
-                                var parentElement = this.parentElement;
-
-                                const matrix =
-                                    window.getComputedStyle(
-                                        parentElement
-                                    ).transform;
-                                const matrixValues = matrix
-                                    .match(/matrix.*\((.+)\)/)[1]
-                                    .split(", ");
-
-                                xpos += +matrixValues[4] || 0;
 
                                 d3.select("#tooltip")
                                     .style("left", xpos + "px")
                                     .style("top", ypos + "px")
                                     .style("display", "block")
-                                    .html(d.name + ":" + d.value);
+                                    .text(d.value);
 
                                 d3.selectAll(".bar").style("opacity", 0.3);
                                 d3.select(this).style("opacity", 1);
                             })
-                            .attr("y", (d) => yScale1(d.name))
-                            .attr("x", (d) => {
-                                if (d.value < 0) {
-                                    return xScale(0);
-                                }
-                                return xScale(d.value);
-                            })
-                            .attr("width", yScale1.bandwidth())
+                            .attr("x", (d) => xScale1(d.name))
+                            .attr("y", (d) => yScale(d.value))
+                            .attr("width", xScale1.bandwidth())
                             .attr("height", (d) => {
                                 var heightValue = Math.abs(
-                                    xScale(0) - xScale(Math.abs(d.value))
+                                    yScale(0) - yScale(Math.abs(d.value))
                                 );
                                 if (!heightValue) {
                                     heightValue = 1;
                                 }
                                 return heightValue;
 
-                                // return (
-                                //     height -
-                                //     margin.top -
-                                //     margin.bottom -
-                                //     yScale(d.value)
-                                // );
+                                return (
+                                    height -
+                                    margin.top -
+                                    margin.bottom -
+                                    yScale(d.value)
+                                );
                             });
                     });
 
+                var xAxis = d3.axisBottom(xScale0);
+
                 // Add the X Axis
                 svg.append("g")
-                    .attr("class", "y-axis")
+                    .attr("class", "x-axis")
                     .attr(
                         "transform",
                         `translate(0,${height - margin.top - margin.bottom})`
                     )
-                    .call(yAxis);
+                    .call(xAxis);
 
                 // Add the Y Axis
                 // svg.append("g").attr("class", "y-axis").call(yAxis);
@@ -390,7 +273,7 @@
                             0
                         ),
                         allElementsCount = all_keys.length,
-                        groupWidth = yScale0.bandwidth(),
+                        groupWidth = xScale0.bandwidth(),
                         x_offset =
                             ((1 - groupElementsCount / allElementsCount) *
                                 groupWidth) /
@@ -413,55 +296,55 @@
 
             var data = [
                 {
-                    mainCategory: "2018-02-01",
+                    model_name: "f1",
                     field1: 19,
                     field2: 83,
-                    field3: 2,
+                    field3: 100,
                     field4: 30,
                 },
                 {
-                    mainCategory: "2019-04-02",
-                    field1: 100,
+                    model_name: "f2",
+                    field1: 67,
                     field2: 29,
                     field3: 100,
                     field4: 130,
                 },
                 {
-                    mainCategory: "2019-03-03",
-                    field1: 100,
+                    model_name: "f3",
+                    field1: 10,
                     field3: 100,
                 },
                 {
-                    mainCategory: "2019-03-01",
-                    field1: 100,
+                    model_name: "f4",
+                    field1: -100,
                     field2: 43,
                     field3: 100,
                 },
                 {
-                    mainCategory: "2021-03-03",
+                    model_name: "f5",
                     field1: 98,
                     field2: 43,
                     field3: 100,
                 },
                 {
-                    mainCategory: "2018-02-04",
-                    field1: -98,
+                    model_name: "f6",
+                    field1: 98,
                     field2: 43,
                     field3: 100,
                 },
                 {
-                    mainCategory: "2019-04-09",
-                    field1: 100,
+                    model_name: "f7",
+                    field1: 98,
                     field2: 43,
-                    field3: 10,
+                    field3: 100,
                 },
                 {
-                    mainCategory: "2019-03-09",
+                    model_name: "f8",
+                    field1: 98,
                     field2: 43,
                     field3: 100,
                 },
             ];
-
             var all_keys = ["field1", "field2", "field3", "field4"];
 
             data = [data, all_keys];

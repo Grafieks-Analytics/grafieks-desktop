@@ -70,6 +70,10 @@ Column{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
+    function slotDataCleared(){
+
+    }
+
     function slotEditQuarter(relation, slug, value){
 
         var valueList = value.split(" ")

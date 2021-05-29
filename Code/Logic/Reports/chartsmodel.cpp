@@ -166,8 +166,80 @@ QString ChartsModel::getGroupedBarChartValues(QString xAxisColumn, QString yAxis
     QString strData = doc.toJson();
 
     return strData;
+}
 
-    //    return "";
+QString ChartsModel::getNewGroupedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
+{
+    QJsonArray data;
+    QJsonArray axisDataArray;
+    QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
+    QScopedPointer<QStringList> xAxisDataPointer(new QStringList);
+    QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
+    QScopedPointer<QStringList> splitKeyDataPointer(new QStringList);
+
+    // Fetch data here
+    int xKey = newChartHeader.key( xAxisColumn );
+    int yKey = newChartHeader.key( yAxisColumn );
+    int splitKey = newChartHeader.key( xSplitKey );
+
+    *xAxisDataPointer = *newChartData.value(xKey);
+    *yAxisDataPointer = *newChartData.value(yKey);
+    *splitKeyDataPointer = *newChartData.value(splitKey);
+
+    QList<QString> *uniqueSplitKeyData;
+    newChartData.value(splitKey)->removeDuplicates();
+    uniqueSplitKeyData = newChartData.value(splitKey);
+
+    // qDebug() << "New Chart data X" << *xAxisDataPointer;
+    // qDebug() << "New Chart data Y" << *yAxisDataPointer;
+    // qDebug() << "New Chart data Split" << *splitKeyDataPointer;
+    // qDebug() << "New Chart unique" << *uniqueSplitKeyData;
+    // qDebug() << "NEW chart header" << newChartHeader;
+
+    QJsonObject obj;
+    int index;
+
+    try{
+        for(int i = 0; i < xAxisDataPointer->length(); i++){
+
+            obj.empty();
+
+            if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
+                uniqueHashKeywords->append(xAxisDataPointer->at(i));
+
+                obj.insert("mainCategory", xAxisDataPointer->at(i));
+
+                for(int j = 0; j < splitKeyDataPointer->length(); j++){
+                    obj.insert(splitKeyDataPointer->at(j), 0);
+                }
+                obj[splitKeyDataPointer->at(i)] = yAxisDataPointer->at(i).toDouble();
+                axisDataArray.append(obj);
+
+            } else{
+
+                index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
+                obj = axisDataArray[index].toObject();
+                obj[splitKeyDataPointer->at(i)] = obj.value(splitKeyDataPointer->at(i)).toDouble() + yAxisDataPointer->at(i).toDouble();
+
+                axisDataArray.replace(index, obj);
+            }
+        }
+    } catch(std::exception &e){
+        qWarning() << Q_FUNC_INFO << e.what();
+    }
+
+    data.append(axisDataArray);
+
+    QJsonArray columns;
+    columns.append(QJsonArray::fromStringList(*uniqueSplitKeyData));
+
+    data.append(columns);
+
+    QJsonDocument doc;
+    doc.setArray(data);
+
+    QString strData = doc.toJson();
+    return strData;
 }
 
 QString ChartsModel::getAreaChartValues(QString xAxisColumn, QString yAxisColumn)

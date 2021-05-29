@@ -58,8 +58,8 @@ Rectangle{
 
         function onResetInput(){
             onYearTabClicked()
-            DSParamsModel.setExclude(false)
-            DSParamsModel.setIncludeNull(true)
+            DSParamsModel.setExcludeMap(counter, false)
+            DSParamsModel.setIncludeNullMap(counter, true)
         }
 
         function onInternalCounterChanged(){
@@ -87,6 +87,10 @@ Rectangle{
         dateTimeFrameContent.signalTimeFrameRadioEditDay.connect(dayTabContent.slotEditDay)
         dateTimeFrameContent.signalTimeFrameRadioEditMonth.connect(monthTabContent.slotEditMonth)
         dateTimeFrameContent.signalTimeFrameRadioEditQuarter.connect(quarterTabContent.slotEditQuarter)
+    }
+
+    function slotDataCleared(){
+
     }
 
     function slotEditModeTimeFrame(subCategory, relation, slug, value){

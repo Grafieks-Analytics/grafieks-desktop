@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Load in the d3 library -->
+    <script src="./Data/d3DefaultConfig.js"></script>
+    <script src="./Data/utils.js"></script>
+    <script src="./Data/d3.v4.min.js"></script>
+    <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+    <link rel="stylesheet" href="Data/general.css" />
+</head>
+<body>
+    <!-- Create a div where the graph will take place -->
+    <div id="my_dataviz"></div>
+    <div id="tooltip"></div>
+
+    <script>
+        // dateFormat = "%b %Y";
+
+        var lineStroke = 3;
+        var {
+            initialCircleRadius,
+            initialBoxDimension,
+            onHoverCircleRadius,
+            onHoverBoxDimension,
+            defaultLineCurve,
+        } = defaultD3Config;
+
+        var data = [
+            [
+                ["01-01-1998", 30.5621003042803618],
+                ["01-01-1999", 50.9164824306094999],
+                ["01-01-2000", 40.6363092398355727],
+                ["01-01-2001", 10.6302204824674538],
+                ["01-01-2002", 20.2485817228091547],
+                ["01-01-2003", 32.13664898092621325],
+            ],
+            ["Countries", "Population"],
+        ];
+
+        var data = [
+            [
+                ["a", 1],
+                ["b", 4],
+                ["c", 5],
+            ],
+            ["username", "is_active"],
+        ];
+
+        valueDateType = false;
+
+        function drawChart(data, plottingConfiguration = {}) {
+            window.data = data;
+            var dataValues = data[0];
+
+            let {
+                d3colorPalette,
+                paddingInner,
+                markerShape,
+                curveType,
+                timeParseFormat,
+                dateFormat,
+            } = plottingConfiguration;
+            if (!d3colorPalette) {
+                d3colorPalette = defaultD3Config.d3ColorPalette;
+            }
+            d3Colors = d3colorPalette;
+
+            if (!paddingInner) {
+                paddingInner = defaultD3Config.defaultPaddingInner;
+            }
+
+            if (!curveType) {
+                curveType = defaultLineCurve;
+            }
+
+            if (!timeParseFormat) {
+                timeParseFormat = defaultD3Config.defaultTimeParseFormat;
+            }
+
+            if (!dateFormat) {
+                dateFormat = defaultD3Config.dateFormat;
+            }
+
+            dateformatValue = function (value) {
+                return value;
+            };
+
+            // var parseTime = d3.timeParse(timeParseFormat);
+
+            d3.selectAll("#my_dataviz").html("");
+            let margin = { top: 30, right: 30, bottom: 70, left: 60 },
+                width = window.innerWidth - margin.left - margin.right - 20,
+                height = window.innerHeight - margin.top - margin.bottom - 20;
+
+            yaxisTicks = height / 100;
+
+            dataValues.forEach(function (d) {
+                if (
+                    typeof d[0] == "string" &&
+                    new Date(d[0]) != "Invalid Date"
+                ) {
+                    d[0] = new Date(d[0]);
+                    valueDateType = true;
+                }
+                d[1] = +d[1];
+            });
+
+            if (valueDateType) {
+                dateformatValue = d3.timeFormat(dateFormat);
+                xScale = d3
+                    .scaleTime()
+                    .range([0, width])
+                    .domain(
+                        d3.extent(dataValues, function (d) {
+                            return d[0];
+                        })
+                    ); // input;
+            } else {
+                console.log("Scale band");
+                xScale = d3
+                    .scaleBand()
+                    .range([0, width])
+                    .domain(
+                        dataValues.map((d, i) => {
+                            return d[0];
+                        })
+                    ); // input;
+            }
+
+            yScale = d3
+                .scaleLinear()
+                .domain(
+                    d3.extent(dataValues, function (d) {
+                        return d[1];
+                    })
+                )
+                .range([height, 0]); // output
+
+            line = d3
+                .line()
+                .x(function (d, i) {
+                    return xScale(d[0]);
+                })
+                .y(function (d) {
+                    return yScale(d[1]);
+                })
+                .curve(d3[curveType]);
+
+            svg = d3
+                .select("#my_dataviz")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr(
+                    "transform",
+                    "translate(" + margin.left + "," + margin.top + ")"
+                );
+
+            var bottomAxis = svg
+                .append("g")
+                .attr("class", "x-axis")
+                .attr("transform", "translate(10," + height + ")");
+
+            if (valueDateType) {
+                console.log("Date type?");
+                bottomAxis.call(
+                    d3
+                        .axisBottom(xScale)
+                        .tickSizeOuter(0)
+                        .ticks(dataValues.length)
+                        .tickFormat(d3.timeFormat(dateFormat))
+                );
+            } else {
+                bottomAxis.call(d3.axisBottom(xScale).ticks(dataValues.length));
+            }
+
+            // svg.append("g")
+            //     .attr("class", "grid")
+            //     .attr("transform", "translate(0," + height + ")")
+            //     .style("stroke-width", "1")
+            //     .call(make_x_gridlines().tickSize(0).tickFormat(""));
+
+            svg.append("g")
+                .attr("class", "y-axis")
+                .call(d3.axisLeft(yScale).tickSizeOuter(0).ticks(yaxisTicks));
+
+            svg.append("g")
+                .attr("class", "grid")
+                .style("stroke-width", "1")
+                .call(make_y_gridlines().tickSize(-width).tickFormat(""));
+
+            svg.append("path")
+                .datum(dataValues)
+                .attr("stroke", d3Colors[0])
+                .attr("stroke-width", lineStroke)
+                .attr("fill", "none")
+                .attr("d", line);
+
+            // drawMarker(true, markerShape);
+
+            // Generate Grid starts
+            const [xAxisLabel, yAxisLabel] = data[1];
+
+            console.log(data[1]);
+
+            setLabel(xAxisLabel, "x_label", false);
+            setLabel(yAxisLabel, "y_label", false);
+
+            function make_x_gridlines() {
+                return d3.axisBottom(xScale).ticks(dataValues.length);
+            }
+            function make_y_gridlines() {
+                return d3.axisLeft(yScale).ticks(yaxisTicks);
+            }
+        }
+
+        // drawChart(data);
+
+        function drawMarker(fillStatus, markerShape) {
+            let dataValues = data[0],
+                fill = "#ffffff",
+                stroke = d3Colors[0];
+
+            if (fillStatus) {
+                initialCircleRadius = 3;
+                fill = d3Colors[0];
+                stroke = 0;
+            }
+            if (!markerShape) {
+                markerShape = defaultD3Config.defaultMarkerShape;
+            }
+
+            svg.selectAll(".marker-shape").remove();
+
+            svg.selectAll(".dot")
+                .data(dataValues)
+                .enter()
+                .append(markerShape)
+                .attr("stroke", stroke)
+                .attr("class", markerShape)
+                .attr("class", "marker-shape")
+                .attr("fill", fill)
+                .attr(
+                    markerShapeConfig[markerShape] &&
+                        markerShapeConfig[markerShape].xPositionAttrName,
+                    function (d, i) {
+                        return xScale(d[0]);
+                    }
+                )
+                .attr(
+                    markerShapeConfig[markerShape] &&
+                        markerShapeConfig[markerShape].yPositionAttrName,
+                    function (d) {
+                        return yScale(d[1]);
+                    }
+                )
+                .attr("r", initialCircleRadius)
+                .attr("height", initialBoxDimension)
+                .attr("width", initialBoxDimension)
+                .attr("points", function (d, i) {
+                    var x1 = xScale(d[0]);
+                    return (
+                        x1 +
+                        " " +
+                        (x1 + 3) +
+                        ", " +
+                        (x1 + 10) +
+                        " " +
+                        (x1 + 10) +
+                        ", " +
+                        (x1 - 10) +
+                        " " +
+                        (x1 + 10)
+                    );
+                })
+                .on("mousemove ", function (d, i) {
+                    var x_pos = d3.mouse(this)[0];
+                    var y_pos = d3.mouse(this)[1];
+
+                    // console.log(d);
+                    const xValue = dateformatValue(d[0]);
+                    const yValue = d[1];
+
+                    d3.select("#tooltip")
+                        .style("left", x_pos - 10 + "px")
+                        .style("top", y_pos + "px")
+                        .style("display", "block")
+                        .html(xValue + ", " + yValue.toFixed(2));
+
+                    var shapeClass = ".marker-shape";
+                    d3.selectAll(shapeClass).style("opacity", 0.3);
+                    d3.select(this)
+                        .style("opacity", 1)
+                        .attr("r", onHoverCircleRadius)
+                        .attr("height", onHoverBoxDimension)
+                        .attr("width", onHoverBoxDimension);
+                })
+                .on("mouseout", function () {
+                    d3.select("#tooltip").style("display", "none");
+                    var shapeClass = ".marker-shape";
+                    d3.selectAll(shapeClass)
+                        .style("opacity", 1)
+                        .attr("r", initialCircleRadius)
+                        .attr("height", initialBoxDimension)
+                        .attr("width", initialBoxDimension);
+                });
+        }
+
+        // Pass this from QT
+        window.addEventListener("resize", function () {
+            drawChart(data);
+        });
+
+        // Generate Grid ends
+    </script>
+</body>
