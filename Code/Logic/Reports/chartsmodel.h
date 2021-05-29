@@ -6,6 +6,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QElapsedTimer>
 
 #include "jsoncons/json.hpp"
 #include "../../constants.h"
@@ -21,6 +22,8 @@ class ChartsModel : public QObject
     QStringList numericalList;
     QStringList categoryList;
     QStringList dateList;
+    QTime myTimer;
+    QElapsedTimer myTimer2;
 
 public:
     explicit ChartsModel(QObject *parent = nullptr);
