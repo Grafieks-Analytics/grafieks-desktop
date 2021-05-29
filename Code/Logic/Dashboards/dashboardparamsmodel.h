@@ -24,9 +24,10 @@ class DashboardParamsModel: public QObject
     QMap<int, QMap<int, QUrl>> dashboardReportUrl; // <dashboardId, <reportId, URI Link>>
 
     // Filter parameters
-    QStringList hideColumns;
-    QVariantMap columnAliasMap;
-    QVariantMap columnFilterType;
+    QMap<int, QStringList> hideColumns;                        // dashboardId - List of column names to be hidden from the list
+    QMap<int, QVariantMap> columnAliasMap;                     // dashboardId - Alias name which will appear instead of actual column name in reports
+    QMap<int, QVariantMap> columnFilterType;                   // dashboardId - Whether its single list, multi list, dropdown single, dropdown multiple
+    QMap<int, QVariantMap> columnIncludeExcludeMap;            // dashboardId - If the filter data is to be included or excluded
 
 
     // Customize Dashboard parameters
@@ -106,15 +107,18 @@ public:
     Q_INVOKABLE QUrl getDashboardReportUrl(int dashboardId, int reportId);
 
     // Filter Parameters
-    Q_INVOKABLE void addToHideColumns(QString colName);
-    Q_INVOKABLE void removeFromHideColumns(QString colName, bool removeAll = false);
-    Q_INVOKABLE QStringList fetchHideColumns(QString searchKeyword = "");
+    Q_INVOKABLE void addToHideColumns(int dashboardId, QString colName);
+    Q_INVOKABLE void removeFromHideColumns(int dashboardId, QString colName, bool removeAll = false);
+    Q_INVOKABLE QStringList fetchHideColumns(int dashboardId, QString searchKeyword = "");
 
-    Q_INVOKABLE void setColumnAliasName(QString columnName, QString columnAlias);
-    Q_INVOKABLE QString fetchColumnAliasName(QString columnName);
+    Q_INVOKABLE void setColumnAliasName(int dashboardId, QString columnName, QString columnAlias);
+    Q_INVOKABLE QString fetchColumnAliasName(int dashboardId, QString columnName);
 
-    Q_INVOKABLE void setColumnFilterType(QString columnName, QString filterType);
-    Q_INVOKABLE QString fetchColumnFilterType(QString columnName);
+    Q_INVOKABLE void setColumnFilterType(int dashboardId, QString columnName, QString filterType);
+    Q_INVOKABLE QString fetchColumnFilterType(int dashboardId, QString columnName);
+
+    Q_INVOKABLE void setIncludeExcludeMap(int dashboardId, QString columnName, QString type);
+    Q_INVOKABLE QString fetchIncludeExcludeMap(int dashboardId, QString columnName);
 
     // Customize Dashboard parameters
 
@@ -190,8 +194,8 @@ signals:
     void currentReportChanged(int currentReport);
 
     // Filter parameters
-    void hideColumnsChanged(QStringList hideColumns);
-    void aliasChanged(QString newAlias, QString columnName);
+    void hideColumnsChanged(QStringList hideColumns, int dashboardId);
+    void aliasChanged(QString newAlias, QString columnName, int dashboardId);
 
     // Customize Dashboard parameters
     void dashboardNameChanged(int dashboardId, QString dashboardName);

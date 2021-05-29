@@ -20,9 +20,26 @@ Popup {
     modal: false
     visible: false
     padding: 0
+    property var filterTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti"]
+
+    Connections{
+        target: DashboardParamsModel
+
+        function onCurrentSelectedColumnChanged(currentSelectedColumn){
+
+        }
+    }
 
     function setAliasText(newAliasName){
-        DashboardParamsModel.setColumnAliasName(DashboardParamsModel.currentSelectedColumn, newAliasName)
+        let currentDashboardId = DashboardParamsModel.currentDashboard
+        let currentSelectedCol = DashboardParamsModel.currentSelectedColumn
+        DashboardParamsModel.setColumnAliasName(currentDashboardId, currentSelectedCol, newAliasName)
+    }
+
+    function setFilterType(newFilter){
+        let currentDashboardId = DashboardParamsModel.currentDashboard
+        let currentSelectedCol = DashboardParamsModel.currentSelectedColumn
+        DashboardParamsModel.setColumnFilterType(currentDashboardId, currentSelectedCol, newFilter)
     }
 
 
@@ -216,7 +233,7 @@ Popup {
                         TextField{
                             id: aliasText
                             width: 130
-                            text: DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentSelectedColumn)
+                            text: DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, DashboardParamsModel.currentSelectedColumn)
                             selectByMouse: true
                             anchors.left: rename.right
                             anchors.leftMargin: 50
@@ -259,6 +276,7 @@ Popup {
                         RadioButton {
                             id: control1
                             ButtonGroup.group: buttonGroupFilterType
+                            onCheckedChanged: setFilterType(filterTypes[0])
                             indicator: Rectangle {
                                 implicitWidth: 16
                                 implicitHeight: 16
@@ -294,6 +312,7 @@ Popup {
                         RadioButton {
                             id: control2
                             ButtonGroup.group: buttonGroupFilterType
+                            onCheckedChanged: setFilterType(filterTypes[1])
                             indicator: Rectangle {
                                 implicitWidth: 16
                                 implicitHeight: 16
@@ -348,6 +367,7 @@ Popup {
                         RadioButton {
                             id: control3
                             ButtonGroup.group: buttonGroupFilterType
+                            onCheckedChanged: setFilterType(filterTypes[2])
                             indicator: Rectangle {
                                 implicitWidth: 16
                                 implicitHeight: 16
@@ -366,6 +386,7 @@ Popup {
                                     color: "black"
                                     visible: control3.checked
                                 }
+
                             }
 
                             contentItem: Text {
@@ -382,6 +403,7 @@ Popup {
                         RadioButton {
                             id: control4
                             ButtonGroup.group: buttonGroupFilterType
+                            onCheckedChanged: setFilterType(filterTypes[3])
                             indicator: Rectangle {
                                 implicitWidth: 16
                                 implicitHeight: 16
