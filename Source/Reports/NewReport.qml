@@ -431,7 +431,18 @@ Page {
 
     function addReport(){
         // Add report to dashboard
-        stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
+        stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
+
+        console.log('Report Id',reportId);
+        ReportParamsModel.setChartType(chartTitle);
+        ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertyConfig));
+        ReportParamsModel.setChartUrl(chartUrl);
+        ReportParamsModel.setXAxisColumns(JSON.stringify(getAxisColumnNames(Constants.xAxisName)));
+        ReportParamsModel.setYAxisColumns(JSON.stringify(getAxisColumnNames(Constants.yAxisName)));
+        ReportParamsModel.addReport(reportId);
+
+        ReportParamsModel.getReportsList();
+
     }
 
     function cancelReport(){
@@ -1630,7 +1641,7 @@ Page {
                     }
                     MouseArea{
                         anchors.fill: parent
-                        onClicked: exportReport()
+                        onClicked: addReport()
                     }
                 }
             }
