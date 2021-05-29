@@ -2,7 +2,6 @@
 
 ChartsModel::ChartsModel(QObject *parent) : QObject(parent)
 {
-
 }
 
 ChartsModel::~ChartsModel()
@@ -194,6 +193,9 @@ QString ChartsModel::getNewGroupedBarChartValues(QString xAxisColumn, QString yA
     int index;
 
     try{
+        qint64 nanoSec;
+        myTimer2.start();
+
         for(int i = 0; i < xAxisDataPointer->length(); i++){
 
             obj.empty();
@@ -219,25 +221,22 @@ QString ChartsModel::getNewGroupedBarChartValues(QString xAxisColumn, QString yA
                 axisDataArray.replace(index, obj);
             }
 
-            qDebug() << "COUNTER" << i;
         }
+        nanoSec = myTimer2.nsecsElapsed();
+        qDebug() << "Time Elapsed" << nanoSec / 1000000000 << " seconds";
     } catch(std::exception &e){
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
     data.append(axisDataArray);
-    qDebug() << "COUNTER1";
 
     QJsonArray columns;
     columns.append(QJsonArray::fromStringList(*uniqueSplitKeyData));
-    qDebug() << "COUNTER2";
 
     data.append(columns);
-    qDebug() << "COUNTER3";
 
     QJsonDocument doc;
     doc.setArray(data);
-    qDebug() << "COUNTER4";
 
     QString strData = doc.toJson();
     return strData;
