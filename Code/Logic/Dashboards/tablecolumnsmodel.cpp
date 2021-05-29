@@ -18,7 +18,6 @@ void TableColumnsModel::setColumnVisibility(QString columnName, bool show)
             this->allColumnVisibleList.append(columnName);
         }
     }
-
     emit visibleColumnListChanged(this->allColumnVisibleList);
 }
 

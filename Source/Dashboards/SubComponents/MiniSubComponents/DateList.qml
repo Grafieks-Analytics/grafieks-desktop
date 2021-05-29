@@ -23,7 +23,8 @@ ListView {
     }
 
     function handleCheckChange(colName, status){
-        TableColumnsModel.setColumnVisibility(colName, status)
+        if(colName !== "")
+            TableColumnsModel.setColumnVisibility(colName, status)
     }
 
     delegate: CheckBoxTpl{
@@ -32,7 +33,7 @@ ListView {
         checkbox_text: modelData
         checkbox_checked: true
         parent_dimension: 16
-        onCheckedChanged: handleCheckChange(modelData, checked)
+        onCheckedChanged: handleCheckChange(checkBox1.checkbox_text, checked)
     }
 
 }

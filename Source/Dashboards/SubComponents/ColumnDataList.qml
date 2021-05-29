@@ -19,7 +19,7 @@ Rectangle {
     height: 600
     color: "white"
     border.color: Constants.themeColor
-    property var filterType: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti"]
+    property var filterTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti"]
 
     ListModel{
         id: listModel
@@ -29,9 +29,11 @@ Rectangle {
         target: TableColumnsModel
 
         function onVisibleColumnListChanged(visibleColumns){
+            listModel.clear()
 
             visibleColumns.forEach((item) => {
-                                       var columnType = DashboardParamsModel.fetchColumnFilterType(item)
+                                       var dashboardId = DashboardParamsModel.currentDashboard
+                                       var columnType = DashboardParamsModel.fetchColumnFilterType(dashboardId, item)
                                        listModel.append({type: columnType, name: item})
                                    })
         }
@@ -46,10 +48,10 @@ Rectangle {
         DelegateChooser {
             id: chooser
             role: "type"
-            DelegateChoice { roleValue: filterType[0]; FilterDataList { componentName: name } }
-            DelegateChoice { roleValue: filterType[1]; FilterDataList { componentName: name } }
-            DelegateChoice { roleValue: filterType[2]; FilterDataSingleDropdown { componentName: name } }
-            DelegateChoice { roleValue: filterType[3]; FilterDataMultiDropdown { componentName: name } }
+            DelegateChoice { roleValue: filterTypes[0]; FilterDataList { componentName: name } }
+            DelegateChoice { roleValue: filterTypes[1]; FilterDataList { componentName: name } }
+            DelegateChoice { roleValue: filterTypes[2]; FilterDataSingleDropdown { componentName: name } }
+            DelegateChoice { roleValue: filterTypes[3]; FilterDataMultiDropdown { componentName: name } }
         }
 
         delegate: chooser
