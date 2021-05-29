@@ -306,6 +306,10 @@ Page {
         webEngineView.url = Constants.baseChartUrl+chartUrl;
     }
 
+    function searchColumnNames(searchText){
+        ChartsModel.searchColumnNames(searchText)
+    }
+
     // function to get the columnName from model
     function getAxisColumnNames(axisName){
         var model = null;
@@ -1627,13 +1631,14 @@ Page {
 
                     id: searchBarRow
                     TextField{
+                        id: searchText
                         width: parent.parent.width - search_icon.width - 5
                         selectByMouse: true
                         height:30
                         cursorVisible: true
                         anchors.top: parent.top
                         anchors.topMargin: 5
-                        placeholderText: "Search"
+                        placeholderText: "Search1"
                         background: Rectangle{
                             border.width: 0
                         }
@@ -1646,6 +1651,11 @@ Page {
                         width:20
                         anchors.top: parent.top
                         anchors.topMargin: 10
+
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: searchColumnNames(searchText.text)
+                        }
                     }
                 }
 
