@@ -1,6 +1,6 @@
 #include "filternumericallistmodel.h"
 
-FilterNumericalListModel::FilterNumericalListModel(QObject *parent) : QAbstractListModel(parent), counter(0)
+FilterNumericalListModel::FilterNumericalListModel(QObject *parent) : QAbstractListModel(parent)
 {
 
     sqlComparisonOperators.append("=");
@@ -201,13 +201,10 @@ QHash<int, QByteArray> FilterNumericalListModel::roleNames() const
 
 
 
-void FilterNumericalListModel::newFilter(QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, bool includeNull, bool exclude )
+void FilterNumericalListModel::newFilter(int counter, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, bool includeNull, bool exclude )
 {
 
-    addFilterList(new FilterNumericalList(this->counter, section, category, subcategory, tableName, colName, relation, slug, val, includeNull, exclude, this));
-
-    this->counter++;
-
+    addFilterList(new FilterNumericalList(counter, section, category, subcategory, tableName, colName, relation, slug, val, includeNull, exclude, this));
     emit rowCountChanged();
 
 

@@ -21,12 +21,6 @@
             body {
                 padding: 0;
                 margin: 0;
-                overflow-y: hidden;
-                /* overflow-x: hidden; */
-            }
-            #yAxisDiv {
-                position: fixed;
-                background: #fff;
             }
         </style>
     </head>
@@ -39,7 +33,6 @@
         <div id="tooltip"></div>
         <script>
             function sumAllData(originalData, currentData) {
-                console.log({ originalData });
                 var allKeys = [
                     ...Object.keys(originalData),
                     ...Object.keys(currentData),
@@ -52,12 +45,10 @@
                 });
 
                 allKeys.forEach((d) => {
-                    console.log(originalData[d], currentData[d]);
                     originalData[d] =
                         (originalData[d] || 0) + (currentData[d] || 0);
                 });
 
-                console.log(originalData);
                 return originalData;
             }
 
@@ -68,11 +59,14 @@
                 dataValue[0].forEach((d, i) => {
                     var currentData = d;
 
+                    if (isDateFormat(d.mainCategory)) {
+                        isKey1Date = true;
+                    }
+
                     var category = getDateFormattedData(
                         d.mainCategory,
                         dateFormat
                     );
-                    console.log(category);
                     if (!transformedDataValue[category]) {
                         transformedDataValue[category] = {};
                     }
@@ -94,7 +88,6 @@
                     globalKeys.push(...allKeys);
 
                     allKeys.forEach((d) => {
-                        console.log(originalData[d], currentData[d]);
                         originalData[d] =
                             (originalData[d] || 0) + (currentData[d] || 0);
                     });
@@ -102,8 +95,6 @@
                         ...originalData,
                         mainCategory: category,
                     };
-
-                    console.log({ transformedDataValue });
                 });
 
                 var transformedDataValue = Object.keys(
@@ -143,7 +134,7 @@
                 }
 
                 if (!chartType) {
-                    chartType = defaultD3Config.chartType;
+                    chartType = defaultD3Config.horizontalChartType;
                 }
 
                 if (!standardThresholdHeight) {
@@ -157,27 +148,27 @@
 
                 var margin = { top: 40, right: 20, bottom: 0, left: 70 };
                 var width = window.innerWidth - margin.left - margin.right - 70;
-
-                // if (chartType == constants.chartType.STANDARD) {
-                //     width = numberOfBars(data) * standardThresholdWidth;
-                // }
+                var height = window.innerHeight - margin.top - margin.bottom;
 
                 if (chartType == constants.chartType.STANDARD) {
-                    height = all_keys.length * standardThresholdHeight;
-                    if (
-                        height + margin.top + margin.bottom <
-                        window.innerHeight
-                    ) {
+                    var bars = numberOfBars(data);
+                    height = bars * standardThresholdHeight;
+
+                    if (height < window.innerHeight) {
                         d3.select("#xAxisDiv").style(
                             "top",
-                            height + margin.top + "px"
+                            height - margin.top + "px"
                         );
                     } else {
-                        d3.select("#xAxisDiv").style("bottom", "0");
+                        d3.select("#xAxisDiv").style(
+                            "bottom",
+                            -(margin.top - 10) + "px"
+                        );
                         d3.select("#xAxisDiv").style("top", null);
                     }
                 } else {
-                    d3.select("#xAxisDiv").style("bottom", "0");
+                    height -= margin.top - 10;
+                    d3.select("#xAxisDiv").style("bottom", 0);
                 }
 
                 function numberOfBars(data) {
@@ -188,8 +179,6 @@
                     }
                     return count;
                 }
-
-                var height = window.innerHeight - margin.top - margin.bottom;
 
                 clearChart();
 
@@ -215,39 +204,55 @@
                     .append("g") //add group to leave margin for axis
                     .attr(
                         "transform",
-                        "translate(" + margin.left + "," + margin.top + ")"
+                        "translate(" +
+                            margin.left +
+                            "," +
+                            (margin.top - 10) +
+                            ")"
                     );
+
+                // Change xScale from range 0 width to max and min c=value and scale it linearly
+                const xScale = d3.scaleLinear().range([0, width]);
+                // .padding(paddingInner);
 
                 const yScale0 = d3
                     .scaleBand()
-                    .range([height, 0])
-                    .padding(paddingInner);
+                    .rangeRound([height - margin.top - margin.bottom, 0]);
 
-                // var yScale = d3
-                //     .scaleLinear()
-                //     .rangeRound([0, height])
-                //     .domain([maxHeight, minHeight])
-                //     .nice();
-
-                const xScale = d3.scaleLinear().rangeRound([0, width]);
+                // change yScale to scale band and range from 0 to height (which is fine here)
 
                 var zScale = d3.scaleOrdinal().range(d3Colors);
 
                 // const xAxis = d3.axisBottom(xScale0);
                 // const yAxis = d3.axisLeft(yScale);
 
-                yaxisTicks = height / 70;
+                // yaxisTicks = height / 70;
+                yaxisTicks = width / 150;
 
+                // change scale domain from, xScale from minVaue to maxValue
                 xScale.domain([minHeight, maxHeight]).nice();
 
                 //add x and y axis
-                var xAxis = d3.axisBottom(xScale).tickSize(0).ticks(10);
-
                 var yAxis = d3.axisLeft(yScale0).tickSize(0).ticks(yaxisTicks);
+
+                var xAxis = d3.axisBottom(xScale).tickSize(0).ticks(yaxisTicks);
+
+                // d3.select("#xAxisDiv")
+                //     .append("svg")
+                //     .attr("width", "72")
+                //     .attr("height", height + margin.top + margin.bottom)
+                //     .append("g") //add group to leave margin for axis
+                //     .attr(
+                //         "transform",
+                //         "translate(" + margin.left + "," + margin.top + ")"
+                //     )
+                //     .append("g")
+                //     .attr("class", "y-axis") // this will be x-axis
+                //     .call(xAxis); // call xAxis here
 
                 d3.select("#xAxisDiv")
                     .append("svg")
-                    .attr("height", "72")
+                    .attr("height", "80")
                     .attr("width", width + margin.left + margin.right)
                     .append("g") //add group to leave margin for axis
                     .attr(
@@ -259,16 +264,17 @@
                     .attr("class", "x-axis")
                     .call(xAxis);
 
+                // change xScale0 to yScale0
                 yScale0.domain(data.map((d) => d.mainCategory));
 
-                // svg.append("g")
-                //     .attr("class", "grid")
-                //     .style("stroke-width", "1")
-                //     .call(
-                //         make_y_gridlines(yScale0)
-                //             .tickSize(-width)
-                //             .tickFormat("")
-                //     );
+                svg.append("g")
+                    .attr("class", "grid")
+                    .style("stroke-width", "1")
+                    .call(
+                        make_x_gridlines(xScale)
+                            .tickSize(height - margin.top)
+                            .tickFormat("")
+                    );
 
                 svg.selectAll(".groups")
                     .data(data)
@@ -282,7 +288,7 @@
                         yScale1 = d3
                             .scaleBand()
                             .domain(group_keys)
-                            .range([0, yScale0.bandwidth() - x_offset * 2])
+                            .range([0, yScale0.bandwidth() - x_offset * 2]) // change xScale0 to yScale0
                             .padding(paddingInner);
 
                         d3.select(this)
@@ -292,7 +298,7 @@
                                     `translate(0,${
                                         yScale0(d.mainCategory) + x_offset
                                     })`
-                            )
+                            ) // change this to yScale0   ( check translate value )
                             .selectAll(".bar")
                             .data(bar_data)
                             .enter()
@@ -313,7 +319,7 @@
                             })
                             .on("mouseover mousemove", function (d, i) {
                                 let xpos = d3.mouse(this)[0] - 20;
-                                let ypos = d3.mouse(this)[1];
+                                let ypos = d3.mouse(this)[1] - 10;
                                 var parentElement = this.parentElement;
 
                                 const matrix =
@@ -324,7 +330,7 @@
                                     .match(/matrix.*\((.+)\)/)[1]
                                     .split(", ");
 
-                                xpos += +matrixValues[4] || 0;
+                                ypos += +matrixValues[5] || 0;
 
                                 d3.select("#tooltip")
                                     .style("left", xpos + "px")
@@ -335,17 +341,20 @@
                                 d3.selectAll(".bar").style("opacity", 0.3);
                                 d3.select(this).style("opacity", 1);
                             })
-                            .attr("y", (d) => yScale1(d.name))
-                            .attr("x", (d) => {
-                                if (d.value < 0) {
-                                    return xScale(0);
-                                }
-                                return xScale(d.value);
+                            .attr("y", (d) => {
+                                return yScale1(d.name); // y = yScale1
                             })
-                            .attr("width", yScale1.bandwidth())
-                            .attr("height", (d) => {
+                            .attr("x", (d) => {
+                                // x = xscale
+                                if (d.value < 0) {
+                                    return xScale(d.value);
+                                }
+                                return xScale(0);
+                            })
+                            .attr("height", yScale1.bandwidth()) // height = yScale1.bandwidth
+                            .attr("width", (d) => {
                                 var heightValue = Math.abs(
-                                    xScale(0) - xScale(Math.abs(d.value))
+                                    xScale(0) - xScale(Math.abs(d.value)) // xScale and this will be width
                                 );
                                 if (!heightValue) {
                                     heightValue = 1;
@@ -361,17 +370,17 @@
                             });
                     });
 
-                // Add the X Axis
-                svg.append("g")
-                    .attr("class", "y-axis")
-                    .attr(
-                        "transform",
-                        `translate(0,${height - margin.top - margin.bottom})`
-                    )
-                    .call(yAxis);
+                // // Add the X Axis
+                // svg.append("g")
+                //     .attr("class", "x-axis")
+                //     .attr(
+                //         "transform",
+                //         `translate(0,${height - margin.top - margin.bottom})`
+                //     )
+                //     .call(xAxis);
 
                 // Add the Y Axis
-                // svg.append("g").attr("class", "y-axis").call(yAxis);
+                svg.append("g").attr("class", "y-axis").call(yAxis);
 
                 function getBars(d) {
                     const bars = [];
@@ -390,7 +399,7 @@
                             0
                         ),
                         allElementsCount = all_keys.length,
-                        groupWidth = yScale0.bandwidth(),
+                        groupWidth = yScale0.bandwidth(), // change to yScale0
                         x_offset =
                             ((1 - groupElementsCount / allElementsCount) *
                                 groupWidth) /
@@ -413,11 +422,13 @@
 
             var data = [
                 {
-                    mainCategory: "2018-02-01",
+                    mainCategory: "2020-02-01",
                     field1: 19,
                     field2: 83,
                     field3: 2,
                     field4: 30,
+                    field5: 30,
+                    field6: 30,
                 },
                 {
                     mainCategory: "2019-04-02",
@@ -445,7 +456,7 @@
                 },
                 {
                     mainCategory: "2018-02-04",
-                    field1: -98,
+                    // field1: -98,
                     field2: 43,
                     field3: 100,
                 },
@@ -462,7 +473,14 @@
                 },
             ];
 
-            var all_keys = ["field1", "field2", "field3", "field4"];
+            var all_keys = [
+                "field1",
+                "field2",
+                "field3",
+                "field4",
+                "field5",
+                "field6",
+            ];
 
             data = [data, all_keys];
             drawChart(data);

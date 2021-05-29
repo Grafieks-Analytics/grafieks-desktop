@@ -224,109 +224,65 @@ Rectangle {
     height: 560
     visible: true
 
-    property var roleList:[];
+    property var roleNames:["a", "b", "c"]
+    property var newObject: []
+    property var previousModelData: 0
+    property var counter : 0
 
     Connections{
         target: QueryModel
 
+        // This one is for table data
         function onSqlHasData(hasData){
             view.model = hasData === true? QueryModel: ""
-//            globalConType = Constants.sqlType
 
         }
 
+        // This slot is for updating headers
+        // This is also returning an array of strings
         function onHeaderDataChanged(tableHeaders){
-            roleList = tableHeaders
-            console.log("tableHeaders",tableHeaders)
+            if(tableHeaders.length > 0){
+                roleNames = []
+                roleNames = tableHeaders
+
+                for(var i=0; i<roleNames.length; i++){
+                    var role  = roleNames[i]
+                    var columnString = 'import QtQuick 2.3; import QtQuick.Controls 1.2; TableViewColumn {role: "' + role + '"; title: "' + role + '"; }';
+                    newObject[i] = Qt.createQmlObject(columnString, view)
+                    view.addColumn(newObject[i])
+                }
+            }
         }
 
     }
 
-    property var name: [{"role":"title","title":"Title"},{"role":"author","title":"author"}]
+    // This
+    function clearTable(){
+        for(var i=0; i<roleNames.length; i++){
+            view.removeColumn(newObject[i])
+            delete newObject[i]
 
-    ListModel {
-        id: libraryModel
-        ListElement {
-            title: "A Masterpiece"
-            author: "Gabriel"
-        }
-        ListElement {
-            title: "Brilliance"
-            author: "Jens"
-        }
-        ListElement {
-            title: "Outstanding"
-            author: "Frederik"
-        }
-        ListElement {
-            title: "Outstanding"
-            author: "Frederik"
-        }
-        ListElement {
-            title: "Outstanding"
-            author: "Frederik"
-        }
-        ListElement {
-            title: "Outstanding"
-            author: "Frederik"
-        }
-        ListElement {
-            title: "Outstanding"
-            author: "Frederik"
-        }
-        ListElement {
-            title: "Outstanding"
-            author: "Frederik"
         }
     }
 
-    Component{
-        id:columnComponent
-        TableViewColumn {
 
-            width: 100
-        }
+    Button{
+        id: clearBtn
+        text: "Clear"
+        height: 30
+        onClicked: clearTable()
     }
 
     TableView {
         id:view
-
         width: parent.width
-        height: parent.height
-
+        height: parent.height - clearBtn.height
+        anchors.top: clearBtn.bottom
         alternatingRowColors: false
-
-
-//        TableViewColumn {
-//            role: "title"
-//            title: "Title"
-//            width: parent.width/2
-//        }
-//        TableViewColumn {
-//            role: "author"
-//            title: "Author"
-//            width: parent.width/2
-//        }
-
-        resources:
-        {
-
-
-            var roleList = ["id","country","country2","state","city","district","ward","population"]
-            var temp = []
-            for(var i=0; i<roleList.length; i++)
-            {
-                var role  = roleList[i]
-                temp.push(columnComponent.createObject(view, { "role": role, "title": role}))
-            }
-            return temp
-        }
-//        model: libraryModel
-
         style: TableViewStyle {
             headerDelegate: Rectangle {
-//                height: textItem.implicitHeight * 1.2
-//                width: textItem.implicitWidth
+                height: textItem.implicitHeight * 1.2
+                width: textItem.implicitWidth
                 color: "lightgrey"
                 Text {
                     id: textItem
@@ -351,65 +307,58 @@ Rectangle {
                     border.color: "black"
                 }
                 Rectangle {
-                    //                    anchors.right: parent.right
-                    //                    anchors.top: parent.top
                     anchors.bottom: parent.bottom
-                    //                    anchors.bottomMargin: 1
-                    //                    anchors.topMargin: 1
                     width: parent.width
                     height: 1
-
                     color: "black"
                     border.color: "black"
                 }
             }
 
             itemDelegate: Rectangle {
-//                height: textItem.implicitHeight * 1.2
-//                width: textItem.implicitWidth
                 color: "white"
-                //                border.color: "black"
                 Text {
                     id: textItem1
                     anchors.fill: parent
                     verticalAlignment: Text.AlignVCenter
+                    objectName: modelData
                     horizontalAlignment: styleData.textAlignment
                     anchors.leftMargin: 12
-                    text: modelData
+//                    text: modelData
                     elide: Text.ElideRight
                     color: textColor
                     renderType: Text.NativeRendering
+
+                    onObjectNameChanged: {
+                        if(previousModelData === modelData){
+                            counter++
+                            textItem1.text = QueryModel.data(QueryModel.index(modelData-1,counter))
+                        } else{
+                            counter = 0;
+                            previousModelData = modelData
+                            textItem1.text = QueryModel.data(QueryModel.index(previousModelData - 1,counter))
+                        }
+                    }
                 }
                 Rectangle {
                     anchors.right: parent.right
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
-                    //                    anchors.bottomMargin: 1
-                    //                    anchors.topMargin: 1
                     width: 1
                     color: "black"
                     border.color: "black"
                 }
                 Rectangle {
-                    //                    anchors.right: parent.right
-                    //                    anchors.top: parent.top
                     anchors.bottom: parent.bottom
-                    //                    anchors.bottomMargin: 1
-                    //                    anchors.topMargin: 1
                     width: parent.width
                     height: 1
-
                     color: "black"
                     border.color: "black"
                 }
             }
-
-
-
         }
     }
 }
-
 
 
 

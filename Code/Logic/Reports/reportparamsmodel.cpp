@@ -70,7 +70,7 @@ void ReportParamsModel::addReport(int reportId)
     QMap<QString, QString> tmp;
     tmp.insert("reportTitle",this->reportTitle());
     tmp.insert("d3PropertiesConfig",this->reportTitle());
-    tmp.insert("columns",this->reportTitle());
+    tmp.insert("columns", this->reportTitle() );
     tmp.insert("rows",this->reportTitle());
 
     this->reportsMap.insert(reportId,tmp);

@@ -59,16 +59,36 @@ Rectangle{
         function onResetInput(){
             fromDateInput.text =""
             toDateInput.text   =""
-            DSParamsModel.setExclude(false)
-            DSParamsModel.setIncludeNull(true)
+            DSParamsModel.setExcludeMap(counter, false)
+            DSParamsModel.setIncludeNullMap(counter, true)
         }
 
         function onInternalCounterChanged(){
-            counter = DSParamsModel.internalCounter
+            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainCalendarType){
+                counter = DSParamsModel.internalCounter
+            }
         }
 
         function onFilterIndexChanged(){
-            counter = DSParamsModel.filterIndex
+            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainCalendarType){
+                counter = DSParamsModel.filterIndex
+            }
+        }
+    }
+
+    Connections{
+        target: QueryDataModel
+
+        function onColumnListModelDataChanged(colData, options){
+
+            var jsonOptions = JSON.parse(options)
+            console.log(options, "OIT2")
+
+            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainCalendarType){
+                //                DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+                //                DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+                console.log(JSON.stringify(DSParamsModel.fetchJoinRelation(counter)))
+            }
         }
     }
 
@@ -82,6 +102,10 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
+
+    function slotDataCleared(){
+
+    }
 
     function slotEditModeCalendar(relation, slug, value){
 
@@ -136,6 +160,8 @@ Rectangle{
         DSParamsModel.addToJoinValue(counter, newValue)
         DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+
+//        console.log("DSPARAMS", DSParamsModel.fetchJoinRelation(counter)[counter], DSParamsModel.fetchJoinRelationSlug(counter)[counter], DSParamsModel.fetchJoinValue(counter)[counter])
     }
 
     function onIncludeCheckedClicked(checked){
@@ -332,7 +358,7 @@ Rectangle{
         anchors.leftMargin: 20
 
         CheckBoxTpl {
-            checked: DSParamsModel.includeNull
+            checked: DSParamsModel.getIncludeNullMap(counter)
             text: qsTr("Include Null")
             parent_dimension: Constants.defaultCheckBoxDimension
 
@@ -350,9 +376,9 @@ Rectangle{
         anchors.rightMargin: 20
 
         CheckBoxTpl {
-            checked: DSParamsModel.exclude
+            checked: DSParamsModel.getExcludeMap(counter)
             text: qsTr("Exclude")
-             parent_dimension: Constants.defaultCheckBoxDimension
+            parent_dimension: Constants.defaultCheckBoxDimension
 
             onCheckedChanged: {
                 onExcludeCheckedClicked(checked);
