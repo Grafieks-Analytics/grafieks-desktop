@@ -58,6 +58,7 @@ public:
     Q_INVOKABLE QString getTablePivotValues(QVariantList &xAxisColumn, QVariantList &yAxisColumn);
 
     Q_INVOKABLE void removeTmpChartData();
+    Q_INVOKABLE void searchColumnNames(QString keyword);
 
 public slots:
     void getChartData(QMap<int, QStringList*> chartData);

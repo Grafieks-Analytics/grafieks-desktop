@@ -1456,6 +1456,11 @@ void ChartsModel::removeTmpChartData()
     emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
 }
 
+void ChartsModel::searchColumnNames(QString keyword)
+{
+    emit sendFilteredColumn(this->categoryList.filter(keyword, Qt::CaseInsensitive), this->numericalList.filter(keyword, Qt::CaseInsensitive), this->dateList.filter(keyword, Qt::CaseInsensitive));
+}
+
 
 void ChartsModel::getChartData(QMap<int, QStringList *> chartData)
 {
@@ -1475,17 +1480,19 @@ void ChartsModel::getChartHeader(QMap<int, QStringList> chartHeader)
     // Update new data
     foreach(auto key, chartHeader.keys()){
 
+        QString fullColumnName = chartHeader.value(key).at(0);
+
         if(chartHeader.value(key).at(1).contains(Constants::categoricalType)){
-            this->categoryList.append(chartHeader.value(key).at(0));
+            this->categoryList.append(fullColumnName);
         } else if(chartHeader.value(key).at(1).contains(Constants::numericalType)){
-            this->numericalList.append(chartHeader.value(key).at(0));
+            this->numericalList.append(fullColumnName);
         } else if(chartHeader.value(key).at(1).contains(Constants::dateType)){
-            this->dateList.append(chartHeader.value(key).at(0));
+            this->dateList.append(fullColumnName);
         } else{
             qDebug() << "OTHER UNDETECTED FIELD TYPE" <<   chartHeader.value(key).at(0);
         }
 
-        this->newChartHeader.insert(key, chartHeader.value(key).at(0));
+        this->newChartHeader.insert(key, fullColumnName);
     }
 
     this->categoryList.sort(Qt::CaseInsensitive);
