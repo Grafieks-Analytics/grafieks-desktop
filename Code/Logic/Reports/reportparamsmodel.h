@@ -9,7 +9,7 @@ class ReportParamsModel: public QObject
     Q_OBJECT
 
     // Customize Report parameters
-    QMap<int, QMap<QString, QString>> reportsMap; // <<reportId, reportObj>>
+    QMap<QString, QMap<QString, QString>> reportsMap; // <<reportId, reportObj>>
 
     Q_PROPERTY(QString itemName READ itemName WRITE setItemName NOTIFY itemNameChanged)
     Q_PROPERTY(QString itemType READ itemType WRITE setItemType NOTIFY itemTypeChanged)
@@ -18,34 +18,35 @@ class ReportParamsModel: public QObject
     Q_PROPERTY(bool colorByActive READ colorByActive WRITE setColorByActive NOTIFY colorByActiveChanged)
     Q_PROPERTY(QString lastDropped READ lastDropped WRITE setLastDropped NOTIFY lastDroppedChanged)
     Q_PROPERTY(QString calculatedFieldPopupStatus READ calculatedFieldPopupStatus WRITE setCalculatedFieldPopupStatus NOTIFY calculatedFieldPopupStatusChanged)
-    Q_PROPERTY(QList<QString> xAxisColumns READ xAxisColumns WRITE setXAxisColumns NOTIFY xAxisColumnsChanged)
-    Q_PROPERTY(QList<QString> yAxisColumns READ yAxisColumns WRITE setYAxisColumns NOTIFY yAxisColumnsChanged)
+
     Q_PROPERTY(QList<QString> dataValuesColumns READ dataValuesColumns WRITE setDataValuesColumns NOTIFY dataValuesChanged)
 
     Q_PROPERTY(QString pointerValue READ pointerValue WRITE setPointerValue NOTIFY pointerValueChanged)
 
     Q_PROPERTY(QList<QString> colorBy READ colorBy WRITE setColorBy NOTIFY colorByChanged)
 
+    // Report Properties for generating graph
     Q_PROPERTY(QString chartType READ chartType WRITE setChartType NOTIFY chartTypeChanged)
+    Q_PROPERTY(QString chartUrl READ chartUrl WRITE setChartUrl NOTIFY chartUrlChanged)
     Q_PROPERTY(QString reportId READ reportId WRITE setReportId NOTIFY reportIdChanged)
     Q_PROPERTY(QString reportTitle READ reportTitle WRITE setReportTitle NOTIFY reportTitleChanged)
+    Q_PROPERTY(QString xAxisColumns READ xAxisColumns WRITE setXAxisColumns NOTIFY xAxisColumnsChanged)
+    Q_PROPERTY(QString yAxisColumns READ yAxisColumns WRITE setYAxisColumns NOTIFY yAxisColumnsChanged)
+
+    Q_PROPERTY(QString d3PropertiesConfig READ d3PropertiesConfig WRITE setD3PropertiesConfig NOTIFY d3PropertiesConfigChanged)
 
     QString m_itemName;
     QString m_itemType;
 
     bool m_xAxisActive;
-
     bool m_yAxisActive;
-
     bool m_colorByActive;
-
     QString m_lastDropped;
 
     QString m_createFieldPopupStatus;
+    QString m_xAxisColumns;
 
-    QList<QString> m_xAxisColumns;
-
-    QList<QString> m_yAxisColumns;
+    QString m_yAxisColumns;
 
     QString m_chartType;
 
@@ -59,6 +60,10 @@ class ReportParamsModel: public QObject
 
     QList<QString> m_colorBy;
 
+    QString m_d3PropertiesConfig;
+
+    QString m_chartUrl;
+
 public:
     ReportParamsModel();
     QString itemName() const;
@@ -71,19 +76,24 @@ public:
 
     QString calculatedFieldPopupStatus() const;
 
-    QList<QString> xAxisColumns() const;
-    QList<QString> yAxisColumns() const;
+    QString xAxisColumns() const;
+    QString yAxisColumns() const;
     QString chartType() const;
     QString reportId() const;
     QString reportTitle() const;
 
-    Q_INVOKABLE void addReport(int reportId);
+    Q_INVOKABLE void addReport(QString reportId);
+    Q_INVOKABLE QString getReportsList();
 
     QList<QString> dataValuesColumns() const;
 
     QString pointerValue() const;
 
     QList<QString> colorBy() const;
+
+    QString d3PropertiesConfig() const;
+
+    QString chartUrl() const;
 
 public slots:
 
@@ -99,8 +109,8 @@ public slots:
 
 
 
-    void setXAxisColumns(QList<QString> xAxisColumns);
-    void setYAxisColumns(QList<QString> yAxisColumns);
+    void setXAxisColumns(QString xAxisColumns);
+    void setYAxisColumns(QString yAxisColumns);
     void setChartType(QString chartType);
     void setReportId(QString reportId);
     void setReportTitle(QString reportTitle);
@@ -109,6 +119,10 @@ public slots:
     void setPointerValue(QString pointerValue);
 
     void setColorBy(QList<QString> colorBy);
+
+    void setD3PropertiesConfig(QString d3PropertiesConfig);
+
+    void setChartUrl(QString chartUrl);
 
 signals:
     void itemNameChanged(QString itemName);
@@ -120,14 +134,16 @@ signals:
     void lastDroppedChanged(QString lastDropped);
     void calculatedFieldPopupStatusChanged(QString calculatedFieldPopupStatus);
 
-    void xAxisColumnsChanged(QList<QString> xAxisColumns);
-    void yAxisColumnsChanged(QList<QString> yAxisColumns);
+    void xAxisColumnsChanged(QString xAxisColumns);
+    void yAxisColumnsChanged(QString yAxisColumns);
     void chartTypeChanged(QString chartType);
     void reportIdChanged(QString reportId);
     void reportTitleChanged(QString reportTitle);
     void dataValuesChanged(QList<QString> dataValuesColumns);
     void pointerValueChanged(QString pointerValue);
     void colorByChanged(QList<QString> colorBy);
+    void d3PropertiesConfigChanged(QString d3PropertiesConfig);
+    void chartUrlChanged(QString chartUrl);
 };
 
 #endif // REPORTPARAMSMODEL_H
