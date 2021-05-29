@@ -415,7 +415,9 @@
 
                 setYaxisWidth();
 
-                var barWidth = document.querySelector(".bar").getBBox().width;
+                var barWidth =
+                    document.querySelector(".bar") &&
+                    document.querySelector(".bar").getBBox().width;
                 if (
                     chartType == constants.chartType.FIT_WIDTH &&
                     barWidth < 40
@@ -429,7 +431,7 @@
                     var maxWidth = 0;
                     for (var i = 0; i < allYAxisTicks.length; i++) {
                         var tick = allYAxisTicks[i];
-                        var width = tick.getBBox().width;
+                        var width = tick && tick.getBBox().width;
                         if (width > maxWidth) {
                             maxWidth = width;
                         }
@@ -449,9 +451,10 @@
                 }
 
                 a = document.querySelectorAll(".x-axis text");
-                var textWidth = document
-                    .querySelector(".x-axis .tick text")
-                    .getBBox().height;
+                var textWidth =
+                    document.querySelector(".x-axis .tick text") &&
+                    document.querySelector(".x-axis .tick text").getBBox()
+                        .height;
 
                 if (chartType == constants.chartType.FIT_WIDTH) {
                     for (var i = 0; i < a.length; i++) {
@@ -490,7 +493,7 @@
                     var maxWidth = 72;
                     for (var i = 0; i < allYAxisTicks.length; i++) {
                         var tick = allYAxisTicks[i];
-                        var width = tick.getBBox().width + 25;
+                        var width = tick && tick.getBBox().width + 25;
                         if (width > maxWidth) {
                             maxWidth = width;
                         }
