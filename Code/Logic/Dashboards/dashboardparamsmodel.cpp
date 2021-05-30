@@ -122,6 +122,8 @@ bool DashboardParamsModel::destroyDashboard(int dashboardId)
     this->dashboardReportsZorder.remove(dashboardId);
     this->dashboardReportsMap.remove(dashboardId);
 
+    // Destroy filters -TODO
+
     // Decrease dashboard count
     this->setDashboardCount(this->dashboardCount() - 1);
 
@@ -427,6 +429,76 @@ QUrl DashboardParamsModel::getDashboardReportUrl(int dashboardId, int reportId)
     }
 
     return output;
+}
+
+void DashboardParamsModel::addToHideColumns(int dashboardId, QString colName)
+{
+    QStringList colNames = this->hideColumns.value(dashboardId);
+    colNames.append(colName);
+    this->hideColumns.insert(dashboardId, colNames);
+    emit hideColumnsChanged(colNames, dashboardId);
+}
+
+void DashboardParamsModel::removeFromHideColumns(int dashboardId, QString colName, bool removeAll)
+{
+    QStringList colNames;
+    if (removeAll == true)
+    {
+        this->hideColumns.clear();
+    }
+    else
+    {
+        colNames = this->hideColumns.value(dashboardId);
+        colNames.removeOne(colName);
+        this->hideColumns.insert(dashboardId, colNames);
+    }
+    emit hideColumnsChanged(colNames, dashboardId);
+}
+
+QStringList DashboardParamsModel::fetchHideColumns(int dashboardId, QString searchKeyword)
+{
+    QStringList colNames = this->hideColumns.value(dashboardId);
+    return colNames.filter(searchKeyword);
+}
+
+void DashboardParamsModel::setColumnAliasName(int dashboardId, QString columnName, QString columnAlias)
+{
+    QVariantMap colAliasNames = this->columnAliasMap.value(dashboardId);
+    colAliasNames.insert(columnName, columnAlias);
+    this->columnAliasMap.insert(dashboardId, colAliasNames);
+    emit aliasChanged(columnAlias, columnName, dashboardId);
+}
+
+QString DashboardParamsModel::fetchColumnAliasName(int dashboardId, QString columnName)
+{
+    QVariantMap colAliasNames = this->columnAliasMap.value(dashboardId);
+    return colAliasNames.value(columnName).toString();
+}
+
+void DashboardParamsModel::setColumnFilterType(int dashboardId, QString columnName, QString filterType)
+{
+    QVariantMap colFilterType = this->columnFilterType.value(dashboardId);
+    colFilterType.insert(columnName, filterType);
+    this->columnFilterType.insert(dashboardId, colFilterType);
+}
+
+QString DashboardParamsModel::fetchColumnFilterType(int dashboardId, QString columnName)
+{
+    QVariantMap colFilterType = this->columnFilterType.value(dashboardId);
+    return colFilterType.value(columnName).toString();
+}
+
+void DashboardParamsModel::setIncludeExcludeMap(int dashboardId, QString columnName, QString type)
+{
+    QVariantMap colIncludeExclude = this->columnIncludeExcludeMap.value(dashboardId);
+    colIncludeExclude.insert(columnName, type);
+    this->columnIncludeExcludeMap.insert(dashboardId, colIncludeExclude);
+}
+
+QString DashboardParamsModel::fetchIncludeExcludeMap(int dashboardId, QString columnName)
+{
+    QVariantMap colIncludeExclude = this->columnIncludeExcludeMap.value(dashboardId);
+    return colIncludeExclude.value(columnName).toString();
 }
 
 void DashboardParamsModel::setDashboardName(int dashboardId, QString dashboardName)
@@ -739,6 +811,11 @@ int DashboardParamsModel::tmpCanvasWidth() const
     return m_tmpCanvasWidth;
 }
 
+QString DashboardParamsModel::currentSelectedColumn() const
+{
+    return m_currentSelectedColumn;
+}
+
 void DashboardParamsModel::setLastContainerType(QString lastContainerType)
 {
     if (m_lastContainerType == lastContainerType)
@@ -814,7 +891,7 @@ void DashboardParamsModel::setTmpCanvasHeight(int tmpCanvasHeight)
     m_tmpCanvasHeight = tmpCanvasHeight;
     // Change all the default heights of the canvases
     for(int i = 0; i < this->dashboardCount(); i++){
-         qDebug() << m_tmpCanvasHeight << "CANVAS HEIGHT";
+        qDebug() << m_tmpCanvasHeight << "CANVAS HEIGHT";
         this->dashboardCanvasDimensions[i][1] = m_tmpCanvasHeight;
     }
     emit tmpCanvasHeightChanged(m_tmpCanvasHeight);
@@ -833,4 +910,34 @@ void DashboardParamsModel::setTmpCanvasWidth(int tmpCanvasWidth)
         this->dashboardCanvasDimensions[i][0] = m_tmpCanvasWidth;
     }
     emit tmpCanvasWidthChanged(m_tmpCanvasWidth);
+}
+
+void DashboardParamsModel::getColumnNames(QStringList columnNames)
+{
+
+    const QString defaultFilterType = "dataListSingle";
+    const QString defaultIncludeType = "include";
+
+    for(int i = 0; i < this->dashboardCount(); i++){
+        foreach(QString column, columnNames){
+
+            // Set default column alias name to the existing column name
+            this->setColumnAliasName(i, column, column);
+
+            // Set default filter type
+            this->setColumnFilterType(i, column, defaultFilterType);
+
+            // Set default include/exclude type
+            this->setIncludeExcludeMap(i, column, defaultIncludeType);
+        }
+    }
+}
+
+void DashboardParamsModel::setCurrentSelectedColumn(QString currentSelectedColumn)
+{
+    if (m_currentSelectedColumn == currentSelectedColumn)
+        return;
+
+    m_currentSelectedColumn = currentSelectedColumn;
+    emit currentSelectedColumnChanged(m_currentSelectedColumn);
 }

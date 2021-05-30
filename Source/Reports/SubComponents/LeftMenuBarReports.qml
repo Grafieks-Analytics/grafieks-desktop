@@ -204,13 +204,13 @@ Rectangle{
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
         }
-        ListElement{
-            icon: "force_directed.png"
-            chartHtml:"bar.html"
-            activeChart: false
-            title:"Force Directed"
-            mainCustomizations: "Properties,Legend,Reference Line"
-        }
+        // ListElement{
+        //     icon: "force_directed.png"
+        //     chartHtml:"bar.html"
+        //     activeChart: false
+        //     title:"Force Directed"
+        //     mainCustomizations: "Properties,Legend,Reference Line"
+        // }
         ListElement{
             icon: "sankey.png"
             chartHtml:"SankeyChart.html"
@@ -329,6 +329,8 @@ Rectangle{
     Component.onCompleted: {
 
         // create all charts mapping from the list model
+        // If any mapping is added please update 
+        // New Reports.qml File in onChartTitleChanged function
 
         for(var i=0; i< allCharts.count; i++){
             var chartTitle = allCharts.get(i).title;
