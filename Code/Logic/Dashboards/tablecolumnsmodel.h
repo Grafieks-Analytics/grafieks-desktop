@@ -24,6 +24,7 @@ public:
 
     Q_INVOKABLE void setColumnVisibility(QString columnName, bool show = true);
     Q_INVOKABLE QStringList fetchVisibleColumns();
+//    Q_INVOKABLE void applyColumnVisibility(int dashboardId);
 
     Q_INVOKABLE QStringList fetchColumnData(QString colName);
     Q_INVOKABLE QStringList searchColumnData(QString keyword, QString columnName);
