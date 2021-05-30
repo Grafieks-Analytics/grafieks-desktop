@@ -12,7 +12,6 @@ Rectangle {
     id: win
     width: parent.width
     height: parent.height
-    color: "red"
     visible: true
 
 
@@ -128,7 +127,7 @@ Rectangle {
 
         style: TableViewStyle {
             headerDelegate: Rectangle {
-                height: textItem.implicitHeight * 1.2
+                height: textItem.implicitHeight * 1.8
                 width: textItem.implicitWidth
                 color: Constants.themeColor
 
@@ -141,6 +140,7 @@ Rectangle {
                     text: styleData.value
                     elide: Text.ElideRight
                     color: textColor
+                    font.bold: true
                     renderType: Text.NativeRendering
 
 
@@ -151,6 +151,7 @@ Rectangle {
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: 1
                     anchors.topMargin: 1
+
                     width: 1
                     color: Constants.darkThemeColor
                     border.color: Constants.darkThemeColor
@@ -166,6 +167,9 @@ Rectangle {
 
             itemDelegate: Rectangle {
                 color: "white"
+                height: textItem.implicitHeight * 1.8
+                width: textItem.implicitWidth
+
 
                 Text {
                     id: textItem1
