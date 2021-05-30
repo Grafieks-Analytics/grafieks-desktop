@@ -19,6 +19,9 @@ DuckQueryModel::~DuckQueryModel()
 
 void DuckQueryModel::setQuery(QString query)
 {
+    // Signal to clear exisitng data in tables (qml)
+    emit clearTablePreview();
+
     this->removeTmpChartData();
 
     this->query = query;

@@ -61,6 +61,7 @@ signals:
     void chartHeaderChanged(QMap<int, QStringList> chartHeader);
     void duckHeaderDataChanged(QStringList tableHeaders);
     void duckHasData(bool hasData);
+    void clearTablePreview();
 
 };
 
