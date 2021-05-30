@@ -2,7 +2,6 @@
 
 ChartsModel::ChartsModel(QObject *parent) : QObject(parent)
 {
-
 }
 
 ChartsModel::~ChartsModel()
@@ -190,40 +189,47 @@ QString ChartsModel::getNewGroupedBarChartValues(QString xAxisColumn, QString yA
     newChartData.value(splitKey)->removeDuplicates();
     uniqueSplitKeyData = newChartData.value(splitKey);
 
+<<<<<<< HEAD
     // qDebug() << "New Chart data X" << *xAxisDataPointer;
     // qDebug() << "New Chart data Y" << *yAxisDataPointer;
     // qDebug() << "New Chart data Split" << *splitKeyDataPointer;
     // qDebug() << "New Chart unique" << *uniqueSplitKeyData;
     // qDebug() << "NEW chart header" << newChartHeader;
 
+=======
+>>>>>>> d656b98551dfc3b52ffac726f79ce88ad619f97a
     QJsonObject obj;
     int index;
 
     try{
+        qint64 nanoSec;
+        myTimer2.start();
+
         for(int i = 0; i < xAxisDataPointer->length(); i++){
 
-            obj.empty();
+            obj = QJsonObject();
 
-            if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
-                uniqueHashKeywords->append(xAxisDataPointer->at(i));
+            QString uniqueHash = xAxisDataPointer->at(i);
+            if(!uniqueHashKeywords->contains(uniqueHash)){
+                uniqueHashKeywords->append(uniqueHash);
 
                 obj.insert("mainCategory", xAxisDataPointer->at(i));
 
-                for(int j = 0; j < splitKeyDataPointer->length(); j++){
-                    obj.insert(splitKeyDataPointer->at(j), 0);
-                }
                 obj[splitKeyDataPointer->at(i)] = yAxisDataPointer->at(i).toDouble();
                 axisDataArray.append(obj);
 
             } else{
 
-                index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
+                index = uniqueHashKeywords->indexOf(uniqueHash);
                 obj = axisDataArray[index].toObject();
                 obj[splitKeyDataPointer->at(i)] = obj.value(splitKeyDataPointer->at(i)).toDouble() + yAxisDataPointer->at(i).toDouble();
 
                 axisDataArray.replace(index, obj);
             }
+
         }
+        nanoSec = myTimer2.nsecsElapsed();
+        qDebug() << "Time Elapsed" << nanoSec / 1000000000 << " seconds";
     } catch(std::exception &e){
         qWarning() << Q_FUNC_INFO << e.what();
     }

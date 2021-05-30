@@ -165,30 +165,30 @@ Rectangle{
 
         }
 
-        Rectangle{
+//        Rectangle{
 
-            width: parent.width
-            height: 20
-            anchors.left: parent.left
-            anchors.leftMargin: 15
-            anchors.right: parent.right
-            anchors.rightMargin: 15
+//            width: parent.width
+//            height: 20
+//            anchors.left: parent.left
+//            anchors.leftMargin: 15
+//            anchors.right: parent.right
+//            anchors.rightMargin: 15
 
-            Text {
-                text: qsTr("Grid")
-            }
+//            Text {
+//                text: qsTr("Grid")
+//            }
 
-            CheckBoxTpl{
-                id: gridHideShowId
-                checked: false
-                parent_dimension: Constants.defaultCheckBoxDimension
-                anchors.right: parent.right
-                anchors.top: parent.top
+//            CheckBoxTpl{
+//                id: gridHideShowId
+//                checked: false
+//                parent_dimension: Constants.defaultCheckBoxDimension
+//                anchors.right: parent.right
+//                anchors.top: parent.top
 
-                onCheckedChanged: setGridVisibility(checked)
-            }
+//                onCheckedChanged: setGridVisibility(checked)
+//            }
 
-        }
+//        }
 
 
 

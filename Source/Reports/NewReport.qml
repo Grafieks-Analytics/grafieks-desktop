@@ -629,7 +629,8 @@ Page {
             case Constants.stackedBarChartTitle:
                 console.log('Stacked bar chart!');
                 colorByColumnName = colorByData[0].columnName;
-                dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,yAxisColumns[0], xAxisColumns[0]);
+//                dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,yAxisColumns[0], xAxisColumns[0]);
+                dataValues =  ChartsModel.getNewGroupedBarChartValues(colorByColumnName, yAxisColumns[0], xAxisColumns[0])
                 break;
             case Constants.horizontalBarGroupedChartTitle:
                 console.log('horizontalBarGroupedChart chart!');
@@ -1693,21 +1694,10 @@ Page {
                         background: Rectangle{
                             border.width: 0
                         }
+                        onTextChanged: searchColumnNames(searchText.text)
                     }
 
-                    Image{
-                        id:search_icon
-                        source:"/Images/icons/iconmonstr-search-thin.svg"
-                        height:20
-                        width:20
-                        anchors.top: parent.top
-                        anchors.topMargin: 10
 
-                        MouseArea{
-                            anchors.fill: parent
-                            onClicked: searchColumnNames(searchText.text)
-                        }
-                    }
                 }
 
                 ToolSeparator{
