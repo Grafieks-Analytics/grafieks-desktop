@@ -198,23 +198,20 @@ QString ChartsModel::getNewGroupedBarChartValues(QString xAxisColumn, QString yA
 
         for(int i = 0; i < xAxisDataPointer->length(); i++){
 
-            obj.empty();
+            obj = QJsonObject();
 
-            if(!uniqueHashKeywords->contains(xAxisDataPointer->at(i))){
-                uniqueHashKeywords->append(xAxisDataPointer->at(i));
-
+            QString uniqueHash = xAxisDataPointer->at(i);
+            if(!uniqueHashKeywords->contains(uniqueHash)){
+                uniqueHashKeywords->append(uniqueHash);
 
                 obj.insert("mainCategory", xAxisDataPointer->at(i));
 
-                for(int j = 0; j < splitKeyDataPointer->length(); j++){
-                    obj.insert(splitKeyDataPointer->at(j), 0);
-                }
                 obj[splitKeyDataPointer->at(i)] = yAxisDataPointer->at(i).toDouble();
                 axisDataArray.append(obj);
 
             } else{
 
-                index = uniqueHashKeywords->indexOf(xAxisDataPointer->at(i));
+                index = uniqueHashKeywords->indexOf(uniqueHash);
                 obj = axisDataArray[index].toObject();
                 obj[splitKeyDataPointer->at(i)] = obj.value(splitKeyDataPointer->at(i)).toDouble() + yAxisDataPointer->at(i).toDouble();
 

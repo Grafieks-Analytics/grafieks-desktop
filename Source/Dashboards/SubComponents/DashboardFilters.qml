@@ -85,7 +85,7 @@ Item {
 
         TabButton{
             id: filter_apply_btn
-            text: "Add"
+            text: "Apply"
 
             background: Rectangle {
                 id: filter_apply_btn_background
