@@ -19,22 +19,22 @@
             #my_dataviz {
                 /* overflow-x: scroll; */
             }
-             #tooltip{
-            font-size: 14px;
-            font-family: Arial, Helvetica, sans-serif;
-        }
+            #tooltip {
+                font-size: 14px;
+                font-family: Arial, Helvetica, sans-serif;
+            }
 
-        #tooltip:before {
-            border: solid;
-            border-color: white transparent;
-            border-width: 12px 6px 0 6px;
-            content: "";
-            left: -12px;
-            transform: rotate(90deg) !important;
+            #tooltip:before {
+                border: solid;
+                border-color: white transparent;
+                border-width: 12px 6px 0 6px;
+                content: "";
+                left: -12px;
+                transform: rotate(90deg) !important;
 
-            bottom: 22px;
-            position: absolute;
-        }
+                bottom: 22px;
+                position: absolute;
+            }
         </style>
     </head>
     <body>
@@ -57,6 +57,9 @@
 
                 var dataValues = data[0];
 
+                // Plot configuration contains all the config of report, these values are passed from QML,
+                // if no value is passed default value is taken from defaultConfig.js
+
                 let {
                     d3colorPalette,
                     paddingInner,
@@ -64,19 +67,19 @@
                     curveType,
                     dateFormat,
                     chartType,
-                     toolTip,
-                      legendConfig,
+                    toolTip,
+                    legendConfig,
                     standardThresholdWidth,
                 } = plottingConfiguration;
 
-                 if (!legendConfig) {
+                if (!legendConfig) {
                     legendConfig = { legendStatus: false };
                 }
                 let { legendStatus, legendPosition } = legendConfig;
 
-                 if (legendStatus) {
-                    var legendHeight = document.querySelector("#legend")
-                        .offsetHeight;
+                if (legendStatus) {
+                    var legendHeight =
+                        document.querySelector("#legend").offsetHeight;
                     var legendElement = document.querySelector("#legend");
 
                     topPosition = "calc(50vh - " + legendHeight + "px)";
@@ -102,7 +105,10 @@
                                 .style("bottom", "auto")
                                 .style("left", margin.left + "px")
                                 .style("display", "flex");
-                            d3.selectAll("#legend div").style("padding", "2px 4px");
+                            d3.selectAll("#legend div").style(
+                                "padding",
+                                "2px 4px"
+                            );
                             break;
                         case "bottom":
                             height -= 80;
@@ -127,10 +133,9 @@
                     }
                 }
 
+                d3.select("#legend").html("").style("padding", "");
 
-                 d3.select("#legend").html("").style("padding", "");
-
-                  if (legendStatus) {
+                if (legendStatus) {
                     d3.select("#legend").html("");
                     d3.select("#legend")
                         .selectAll("div")
@@ -172,13 +177,13 @@
                     standardThresholdWidth =
                         defaultD3Config.standardThresholdWidth;
                 }
-              
+
                 const [xAxisLabel, yAxisLabel] = data[1];
-                   if (!toolTip) {
+                if (!toolTip) {
                     toolTip = {
                         textColumn1: xAxisLabel,
-                        textColumn2: yAxisLabel
-                    }
+                        textColumn2: yAxisLabel,
+                    };
                 }
 
                 var margin = { top: 40, right: 20, bottom: 80, left: 70 };
@@ -308,7 +313,6 @@
             Thus, a band scale’s values must be coercible to a string, and the stringified version of the domain value uniquely identifies the corresponding band.
             If domain is not specified, this method returns the current domain.*/
 
-            
                 var barpadding = 10;
                 var bars = svg
                     .selectAll("rect")
@@ -357,9 +361,24 @@
                                     textValue = d.y1 - d.y0;
                                 }
 
-                                return "<span style='color:grey;''>" + toolTip.textColumn1 + ":" + "</span>" + "<span style='float: right;'>" + xAxisDataSet[i] + "</span>" + "<br/> <br/>" + "<span style='color:grey;''>" + toolTip.textColumn2 + ":" + "</span>" + "<span style='float: right;margin-left: 15px;'>" + dataset[i] + "</span>";
+                                return (
+                                    "<span style='color:grey;''>" +
+                                    toolTip.textColumn1 +
+                                    ":" +
+                                    "</span>" +
+                                    "<span style='float: right;'>" +
+                                    xAxisDataSet[i] +
+                                    "</span>" +
+                                    "<br/> <br/>" +
+                                    "<span style='color:grey;''>" +
+                                    toolTip.textColumn2 +
+                                    ":" +
+                                    "</span>" +
+                                    "<span style='float: right;margin-left: 15px;'>" +
+                                    dataset[i] +
+                                    "</span>"
+                                );
                             });
-
 
                         d3.selectAll(".bar").style("opacity", 0.3);
                         d3.select(this).style("opacity", 1);
@@ -376,10 +395,6 @@
                     .call(xAxis)
                     .attr("class", "x-axis")
                     .attr("transform", "translate(0," + height + ")");
-
-           
-
-
 
                 setLabel(xAxisLabel, "x_label", false);
                 setLabel(yAxisLabel, "y_label", false);
@@ -400,7 +415,9 @@
 
                 setYaxisWidth();
 
-                var barWidth = document.querySelector(".bar").getBBox().width;
+                var barWidth =
+                    document.querySelector(".bar") &&
+                    document.querySelector(".bar").getBBox().width;
                 if (
                     chartType == constants.chartType.FIT_WIDTH &&
                     barWidth < 40
@@ -414,13 +431,14 @@
                     var maxWidth = 0;
                     for (var i = 0; i < allYAxisTicks.length; i++) {
                         var tick = allYAxisTicks[i];
-                        var width = tick.getBBox().width;
+                        var width = tick && tick.getBBox().width;
                         if (width > maxWidth) {
                             maxWidth = width;
                         }
                     }
 
                     extraHeightWorked = true;
+                    maxWidth = maxWidth < 100 ? maxWidth : 100;
                     extraHeight = maxWidth;
 
                     d3.select(".x-axis").attr("text-anchor", "right");
@@ -433,9 +451,10 @@
                 }
 
                 a = document.querySelectorAll(".x-axis text");
-                var textWidth = document
-                    .querySelector(".x-axis .tick text")
-                    .getBBox().height;
+                var textWidth =
+                    document.querySelector(".x-axis .tick text") &&
+                    document.querySelector(".x-axis .tick text").getBBox()
+                        .height;
 
                 if (chartType == constants.chartType.FIT_WIDTH) {
                     for (var i = 0; i < a.length; i++) {
@@ -474,7 +493,7 @@
                     var maxWidth = 72;
                     for (var i = 0; i < allYAxisTicks.length; i++) {
                         var tick = allYAxisTicks[i];
-                        var width = tick.getBBox().width + 25;
+                        var width = tick && tick.getBBox().width + 25;
                         if (width > maxWidth) {
                             maxWidth = width;
                         }
