@@ -56,7 +56,6 @@ private:
     QStringList tableHeaders;
 
 signals:
-    void headerDataChanged(Qt::Orientation orientation, int first, int last) const;
     void chartDataChanged(QMap<int, QStringList*> chartData);
     void chartHeaderChanged(QMap<int, QStringList> chartHeader);
     void duckHeaderDataChanged(QStringList tableHeaders);

@@ -54,7 +54,7 @@ Rectangle {
 
         // This slot is for updating headers
         // This is also returning an array of strings
-        function onHeaderDataChanged(tableHeaders){
+        function onDuckHeaderDataChanged(tableHeaders){
             setHeaders(tableHeaders)
         }
 
@@ -68,14 +68,14 @@ Rectangle {
         target: ForwardOnlyQueryModel
 
         // This one is for table data
-        function onSqlHasData(hasData){
+        function onForwardOnlyHasData(hasData){
             view.model = hasData === true? ForwardOnlyQueryModel: ""
 
         }
 
         // This slot is for updating headers
         // This is also returning an array of strings
-        function onHeaderDataChanged(tableHeaders){
+        function onForwardOnlyHeaderDataChanged(tableHeaders){
             setHeaders(tableHeaders)
         }
 
@@ -109,18 +109,18 @@ Rectangle {
     }
 
 
-//    Button{
-//        id: clearBtn
-//        text: "Clear"
-//        height: 30
-//        onClicked: clearTable()
-//    }
+    //    Button{
+    //        id: clearBtn
+    //        text: "Clear"
+    //        height: 30
+    //        onClicked: clearTable()
+    //    }
 
     TableView {
         id:view
         width: parent.width
         height: parent.height
-//        anchors.top: clearBtn.bottom
+        //        anchors.top: clearBtn.bottom
         alternatingRowColors: false
 
 
@@ -181,17 +181,25 @@ Rectangle {
                     elide: Text.ElideRight
                     color: textColor
                     renderType: Text.NativeRendering
-
                     onObjectNameChanged: {
-                        if(previousModelData === modelData){
+
+                        let newCounter = parseInt(textItem1.objectName)
+                        if(previousModelData === newCounter){
                             counter++
-                            textItem1.text = QueryModel.data(QueryModel.index(modelData-1,counter))
                         } else{
                             counter = 0;
-                            previousModelData = modelData
-                            textItem1.text = QueryModel.data(QueryModel.index(previousModelData - 1,counter))
+                            previousModelData = newCounter
+                        }
+
+                        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+                            textItem1.text = QueryModel.data(QueryModel.index(newCounter - 1, counter))
+                        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
+                            textItem1.text = DuckQueryModel.data(DuckQueryModel.index(newCounter - 1, counter))
+                        } else{
+                            textItem1.text = ForwardOnlyQueryModel.data(ForwardOnlyQueryModel.index(newCounter - 1, counter))
                         }
                     }
+
                 }
                 Rectangle {
                     anchors.right: parent.right

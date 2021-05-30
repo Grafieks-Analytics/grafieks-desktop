@@ -44,7 +44,6 @@ QVariant ForwardOnlyQueryModel::headerData(int section, Qt::Orientation orientat
     if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
         return QString(this->m_roleNames[section]);
     }
-    emit headerDataChanged(Qt::Horizontal, 1, this->internalColCount);
     return QVariant();
 }
 
