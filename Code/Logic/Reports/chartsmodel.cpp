@@ -189,15 +189,6 @@ QString ChartsModel::getNewGroupedBarChartValues(QString xAxisColumn, QString yA
     newChartData.value(splitKey)->removeDuplicates();
     uniqueSplitKeyData = newChartData.value(splitKey);
 
-<<<<<<< HEAD
-    // qDebug() << "New Chart data X" << *xAxisDataPointer;
-    // qDebug() << "New Chart data Y" << *yAxisDataPointer;
-    // qDebug() << "New Chart data Split" << *splitKeyDataPointer;
-    // qDebug() << "New Chart unique" << *uniqueSplitKeyData;
-    // qDebug() << "NEW chart header" << newChartHeader;
-
-=======
->>>>>>> d656b98551dfc3b52ffac726f79ce88ad619f97a
     QJsonObject obj;
     int index;
 

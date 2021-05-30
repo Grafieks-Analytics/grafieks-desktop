@@ -751,6 +751,9 @@ Page {
            });';
 
            webEngineView.runJavaScript('drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue);
+
+           // Clear Chart Data
+           // ChartsModel.clearData();
            return;
         }
 
