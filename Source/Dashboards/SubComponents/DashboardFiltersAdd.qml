@@ -134,30 +134,10 @@ Item {
                     border.width: 0
                 }
 
+                onTextChanged: searchTableColumns(searchTextBox.text)
+
             }
 
-            Image{
-                id:search_icon
-                source:"/Images/icons/iconmonstr-search-thin.svg"
-                height:18
-                width:18
-                anchors.rightMargin: 10
-                anchors.top: row_querymodeller_right_col.top
-                anchors.topMargin: 10
-                anchors.verticalCenter: parent.verticalCenter
-
-                ToolTip.delay:Constants.tooltipShowTime
-                ToolTip.timeout: Constants.tooltipHideTime
-                ToolTip.text: qsTr("Search tables in current database")
-                ToolTip.visible:  mouseAreaSearch.containsMouse? true : false
-
-                MouseArea{
-                    id: mouseAreaSearch
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onClicked: searchTableColumns(searchTextBox.text)
-                }
-            }
         }
 
         ToolSeparator{

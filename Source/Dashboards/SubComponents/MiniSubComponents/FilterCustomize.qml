@@ -76,6 +76,10 @@ Popup {
     }
 
 
+    function closePopup(){
+        labelShapePopup1.close()
+    }
+
     function propertyPressed(){
         firstLine.visible=true
         secondLine.visible=false
@@ -125,6 +129,10 @@ Popup {
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
             anchors.rightMargin:10
+            MouseArea{
+                anchors.fill: parent
+                onClicked: closePopup()
+            }
 
         }
     }
@@ -609,14 +617,11 @@ Popup {
 
             TabButton{
                 id: filter_cancel_btn1
-                text: "Cancel"
+                text: "Close"
 
                 background: Rectangle {
                     id: filter_cancel_btn_background1
                     color:  filter_cancel_btn1.pressed? Constants.darkThemeColor: Constants.redThemeColor
-
-
-
                 }
                 contentItem: Text{
                     id: filter_cancel_btn_text1
@@ -625,24 +630,8 @@ Popup {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
-            }
+                onClicked: closePopup()
 
-            TabButton{
-                id: filter_apply_btn1
-                text: "Ok"
-
-                background: Rectangle {
-                    id: filter_apply_btn_background1
-                    color:  filter_apply_btn1.pressed? Constants.darkThemeColor: Constants.greenThemeColor
-
-                }
-                contentItem: Text{
-                    id: filter_apply_btn_text1
-                    text: filter_apply_btn1.text
-                    color:  "black"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
             }
 
         }
