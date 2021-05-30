@@ -14,6 +14,9 @@ ForwardOnlyQueryModel::~ForwardOnlyQueryModel()
 void ForwardOnlyQueryModel::setQuery(QString query)
 {
 
+    // Signal to clear exisitng data in tables (qml)
+    emit clearTablePreview();
+
     this->removeTmpChartData();
 
     this->query = query.simplified();
