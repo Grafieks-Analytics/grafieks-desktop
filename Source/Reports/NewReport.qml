@@ -574,8 +574,7 @@ Page {
             case Constants.stackedBarChartTitle:
                 console.log('Stacked bar chart!');
                 colorByColumnName = colorByData[0].columnName;
-//                dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,yAxisColumns[0], xAxisColumns[0]);
-                dataValues =  ChartsModel.getNewGroupedBarChartValues(colorByColumnName, yAxisColumns[0], xAxisColumns[0])
+                dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,yAxisColumns[0], xAxisColumns[0]);
                 break;
             case Constants.horizontalBarGroupedChartTitle:
                 console.log('horizontalBarGroupedChart chart!');
