@@ -57,6 +57,9 @@ QHash<int, QByteArray> QueryModel::roleNames() const
 
 void QueryModel::callSql(QString tmpSql)
 {
+    // Signal to clear exisitng data in tables (qml)
+    emit clearTablePreview();
+
     QString simpliFiedSql = tmpSql.simplified();
     this->executeQuery(simpliFiedSql);
 }

@@ -56,6 +56,7 @@ signals:
 //    void chartHeaderChanged(QMap<int, QString> chartHeader);
     void forwardOnlyHeaderDataChanged(QStringList tableHeaders);
     void forwardOnlyHasData(bool hasData);
+    void clearTablePreview();
 
 };
 
