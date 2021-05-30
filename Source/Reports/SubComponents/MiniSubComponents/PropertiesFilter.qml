@@ -121,20 +121,16 @@ Column{
 
         switch(report_desiner_page.chartTitle){
             case Constants.barChartTitle:
-                ReportParamsModel.setChartType(Constants.stackedBarChartTitle);
-                report_desiner_page.chartTitle = Constants.stackedBarChartTitle;
+                switchChart(Constants.stackedBarChartTitle)
                 break;
             case Constants.horizontalBarChartTitle:
-                ReportParamsModel.setChartType(Constants.horizontalStackedBarChartTitle);
-                report_desiner_page.chartTitle = Constants.horizontalStackedBarChartTitle;
+                switchChart(Constants.horizontalStackedBarChartTitle)
                 break;
             case Constants.areaChartTitle:
-                ReportParamsModel.setChartType(Constants.stackedAreaChartTitle);
-                report_desiner_page.chartTitle = Constants.stackedAreaChartTitle;
+                switchChart(Constants.stackedAreaChartTitle)
                 break;
             case Constants.lineChartTitle:
-                ReportParamsModel.setChartType(Constants.multiLineChartTitle);
-                report_desiner_page.chartTitle = Constants.multiLineChartTitle;
+                switchChart(Constants.multiLineChartTitle)
                 break;
         }
 
