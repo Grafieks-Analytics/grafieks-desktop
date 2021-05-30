@@ -35,17 +35,12 @@ Rectangle {
         // This slot is for updating headers
         // This is also returning an array of strings
         function onHeaderDataChanged(tableHeaders){
-            if(tableHeaders.length > 0){
-                roleNames = []
-                roleNames = tableHeaders
+            setHeaders(tableHeaders)
+        }
 
-                for(var i=0; i<roleNames.length; i++){
-                    var role  = roleNames[i]
-                    var columnString = 'import QtQuick 2.3; import QtQuick.Controls 1.2; TableViewColumn {role: "' + role + '"; title: "' + role + '"; }';
-                    newObject[i] = Qt.createQmlObject(columnString, view)
-                    view.addColumn(newObject[i])
-                }
-            }
+        // Clear table
+        function onClearTablePreview(){
+            clearTable()
         }
 
     }
@@ -61,17 +56,12 @@ Rectangle {
         // This slot is for updating headers
         // This is also returning an array of strings
         function onHeaderDataChanged(tableHeaders){
-            if(tableHeaders.length > 0){
-                roleNames = []
-                roleNames = tableHeaders
+            setHeaders(tableHeaders)
+        }
 
-                for(var i=0; i<roleNames.length; i++){
-                    var role  = roleNames[i]
-                    var columnString = 'import QtQuick 2.3; import QtQuick.Controls 1.2; TableViewColumn {role: "' + role + '"; title: "' + role + '"; }';
-                    newObject[i] = Qt.createQmlObject(columnString, view)
-                    view.addColumn(newObject[i])
-                }
-            }
+        // Clear table
+        function onClearTablePreview(){
+            clearTable()
         }
 
     }
@@ -87,19 +77,27 @@ Rectangle {
         // This slot is for updating headers
         // This is also returning an array of strings
         function onHeaderDataChanged(tableHeaders){
-            if(tableHeaders.length > 0){
-                roleNames = []
-                roleNames = tableHeaders
-
-                for(var i=0; i<roleNames.length; i++){
-                    var role  = roleNames[i]
-                    var columnString = 'import QtQuick 2.3; import QtQuick.Controls 1.2; TableViewColumn {role: "' + role + '"; title: "' + role + '"; }';
-                    newObject[i] = Qt.createQmlObject(columnString, view)
-                    view.addColumn(newObject[i])
-                }
-            }
+            setHeaders(tableHeaders)
         }
 
+        // Clear table
+        function onClearTablePreview(){
+            clearTable()
+        }
+
+    }
+
+    function setHeaders(tableHeaders){
+        if(tableHeaders.length > 0){
+            roleNames = tableHeaders
+
+            for(var i=0; i<roleNames.length; i++){
+                var role  = roleNames[i]
+                var columnString = 'import QtQuick 2.3; import QtQuick.Controls 1.2; TableViewColumn {role: "' + role + '"; title: "' + role + '"; }';
+                newObject[i] = Qt.createQmlObject(columnString, view)
+                view.addColumn(newObject[i])
+            }
+        }
     }
 
     // This

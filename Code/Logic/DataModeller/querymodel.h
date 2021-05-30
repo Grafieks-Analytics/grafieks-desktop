@@ -42,6 +42,7 @@ signals:
     void chartHeaderChanged(QMap<int, QStringList> chartHeader);
     void headerDataChanged(QStringList tableHeaders);
     void sqlHasData(bool hasData);
+    void clearTablePreview();
 
 private:
     QHash<int, QByteArray> m_roleNames;
