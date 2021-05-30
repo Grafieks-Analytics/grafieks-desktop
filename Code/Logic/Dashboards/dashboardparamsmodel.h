@@ -23,6 +23,12 @@ class DashboardParamsModel: public QObject
     QMap<int, QMap<int, int>> dashboardReportTypeMap; // <dashboardId, <reportId, reportTypeId (constant)>>
     QMap<int, QMap<int, QUrl>> dashboardReportUrl; // <dashboardId, <reportId, URI Link>>
 
+    // Filter parameters
+    QMap<int, QStringList> hideColumns;                        // dashboardId - List of column names to be hidden from the list
+    QMap<int, QVariantMap> columnAliasMap;                     // dashboardId - Alias name which will appear instead of actual column name in reports
+    QMap<int, QVariantMap> columnFilterType;                   // dashboardId - Whether its single list, multi list, dropdown single, dropdown multiple
+    QMap<int, QVariantMap> columnIncludeExcludeMap;            // dashboardId - If the filter data is to be included or excluded
+
 
     // Customize Dashboard parameters
     QMap<int, QString> dashboardName;
@@ -50,6 +56,8 @@ class DashboardParamsModel: public QObject
     Q_PROPERTY(int tmpCanvasHeight READ tmpCanvasHeight WRITE setTmpCanvasHeight NOTIFY tmpCanvasHeightChanged)
     Q_PROPERTY(int tmpCanvasWidth READ tmpCanvasWidth WRITE setTmpCanvasWidth NOTIFY tmpCanvasWidthChanged)
 
+    // Filter
+    Q_PROPERTY(QString currentSelectedColumn READ currentSelectedColumn WRITE setCurrentSelectedColumn NOTIFY currentSelectedColumnChanged)
 
 
     QString m_lastContainerType;
@@ -61,6 +69,8 @@ class DashboardParamsModel: public QObject
     int m_currentReport;
     int m_tmpCanvasHeight;
     int m_tmpCanvasWidth;
+
+    QString m_currentSelectedColumn;
 
 public:
     explicit DashboardParamsModel(QObject *parent = nullptr);
@@ -95,6 +105,20 @@ public:
 
     Q_INVOKABLE void setDashboardReportUrl(int dashboardId, int reportId, QUrl url);
     Q_INVOKABLE QUrl getDashboardReportUrl(int dashboardId, int reportId);
+
+    // Filter Parameters
+    Q_INVOKABLE void addToHideColumns(int dashboardId, QString colName);
+    Q_INVOKABLE void removeFromHideColumns(int dashboardId, QString colName, bool removeAll = false);
+    Q_INVOKABLE QStringList fetchHideColumns(int dashboardId, QString searchKeyword = "");
+
+    Q_INVOKABLE void setColumnAliasName(int dashboardId, QString columnName, QString columnAlias);
+    Q_INVOKABLE QString fetchColumnAliasName(int dashboardId, QString columnName);
+
+    Q_INVOKABLE void setColumnFilterType(int dashboardId, QString columnName, QString filterType);
+    Q_INVOKABLE QString fetchColumnFilterType(int dashboardId, QString columnName);
+
+    Q_INVOKABLE void setIncludeExcludeMap(int dashboardId, QString columnName, QString type);
+    Q_INVOKABLE QString fetchIncludeExcludeMap(int dashboardId, QString columnName);
 
     // Customize Dashboard parameters
 
@@ -142,6 +166,8 @@ public:
     int tmpCanvasHeight() const;
     int tmpCanvasWidth() const;
 
+    QString currentSelectedColumn() const;
+
 public slots:
     void setLastContainerType(QString lastContainerType);
     void setPositionY(int positionY);
@@ -153,6 +179,11 @@ public slots:
     void setTmpCanvasHeight(int tmpCanvasHeight);
     void setTmpCanvasWidth(int tmpCanvasWidth);
 
+    // Filter column names
+    void getColumnNames(QStringList columnNames);
+
+    void setCurrentSelectedColumn(QString currentSelectedColumn);
+
 signals:
     void lastContainerTypeChanged(QString lastContainerType);
     void positionYChanged(int positionY);
@@ -161,6 +192,10 @@ signals:
     void dashboardCountChanged(int dashboardCount);
     void currentDashboardChanged(int currentDashboard, QVector<int> reportsInDashboard);
     void currentReportChanged(int currentReport);
+
+    // Filter parameters
+    void hideColumnsChanged(QStringList hideColumns, int dashboardId);
+    void aliasChanged(QString newAlias, QString columnName, int dashboardId);
 
     // Customize Dashboard parameters
     void dashboardNameChanged(int dashboardId, QString dashboardName);
@@ -173,6 +208,7 @@ signals:
     void reportUrlChanged(int dashboardId, int reportId, QString url);
     void tmpCanvasHeightChanged(int tmpCanvasHeight);
     void tmpCanvasWidthChanged(int tmpCanvasWidth);
+    void currentSelectedColumnChanged(QString currentSelectedColumn);
 };
 
 #endif // DASHBOARDPARAMSMODEL_H

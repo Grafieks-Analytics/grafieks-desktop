@@ -50,11 +50,13 @@ Page {
     property string reportChart:ReportParamsModel.chartType;
     property string reportId:ReportParamsModel.reportId;
 
+    // Initial Chart Config
     property string chartUrl: 'BarChartArrayInput.html';
     property string chartTitle: Constants.barChartTitle;
     property var customizationsAvailable: "Properties,Legend";
 
-
+    // This contains all the customizable config and is passed to drawChart function
+    // In draw chart we take out these config; If config is empty => We have default config for it.
     property var d3PropertyConfig: ({});
 
     property var lastPickedDataPaneElementProperties: ({});
@@ -63,164 +65,44 @@ Page {
     property var dragActiveObject: ({});
 
     property var allChartsMapping: ({});
+    // An array having item type and name of the spilt by value
     property var colorByData: [];
 
     property var allowedXAxisDataPanes: 0;
     property var allowedYAxisDataPanes: 0;
 
+    // Flag for horizontal graph
+    // Changes when numerical value is added on X axis
+    // Or Categorical Value is added on Y axis
+    // On Change we update the graph title
     property bool isHorizontalGraph: false;
-
-
+    
     property var colorData:[];
-
-
-
-    ListModel{
-        id: dataItemList
-    }
-
-    onIsHorizontalGraphChanged: {
-        if(isHorizontalGraph){
-            allowedXAxisDataPanes = 1;
-            allowedYAxisDataPanes = 2;
-            switch(chartTitle){
-            case Constants.barChartTitle:
-                chartUrl = Constants.horizontalBarChartUrl;
-                console.log('Loading horizontal bar chart')
-                webEngineView.url = Constants.baseChartUrl+chartUrl;
-                chartTitle = Constants.horizontalBarChartTitle;
-                break;
-            }
-        }else{
-
-            allowedXAxisDataPanes = 2;
-            allowedYAxisDataPanes = 1;
-
-            chartUrl = Constants.barChartUrl;
-            console.log('Loading bar chart')
-            webEngineView.url = Constants.baseChartUrl+chartUrl;
-            chartTitle = Constants.barChartTitle;
-        }
-    }
-
-
-    onChartTitleChanged: {
-
-        const chartDetailsConfig = allChartsMapping[chartTitle];
-        const { maxDropOnXAxis, maxDropOnYAxis } = chartDetailsConfig || {maxDropOnXAxis: allowedXAxisDataPanes, maxDropOnYAxis: allowedYAxisDataPanes};
-
-        var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
-        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);;
-
-        console.log(xAxisColumns);
-
-        // check if maximum drop is less than in config?
-        // if less then remove all the extra values
-        // else no change -> Plot the graph
-
-        var dataValuesRemoved = false;
-        if(maxDropOnXAxis > 0 && maxDropOnXAxis < xAxisColumns.length){
-            xAxisColumns = xAxisColumns.splice(0,maxDropOnXAxis);
-            ReportParamsModel.setXAxisColumns(xAxisColumns);
-            xAxisListModel.remove(maxDropOnXAxis,xAxisListModel.count - maxDropOnXAxis);
-            dataValuesRemoved = true;
-        }
-
-        if(maxDropOnYAxis > 0 && maxDropOnYAxis < yAxisColumns.length){
-            yAxisColumns = yAxisColumns.splice(0,maxDropOnYAxis);
-            ReportParamsModel.setYAxisColumns(yAxisColumns);
-            yAxisListModel.remove(maxDropOnYAxis,yAxisListModel.count - maxDropOnYAxis);
-            dataValuesRemoved = true;
-        }
-
-        allowedXAxisDataPanes = maxDropOnXAxis;
-        allowedYAxisDataPanes = maxDropOnYAxis;
-
-        // change axis on the basis of chart title
-        switch(chartTitle){
-
-        case Constants.horizontalStackedBarChartTitle:
-            console.log('Make Horizontal stacked bar chart');
-            chartUrl=Constants.horizontalStackedBarChartUrl
-            webEngineView.url = Constants.chartsBaseUrl+chartUrl;
-            xAxisVisible = true
-            yAxisVisible = true
-            row3Visible = false
-            row4Visible = false
-            break;
-        case Constants.stackedBarChartTitle:
-            chartUrl=Constants.stackedBarChartUrl
-            webEngineView.url = Constants.chartsBaseUrl+Constants.stackedBarChartUrl;
-            xAxisVisible = true
-            yAxisVisible = true
-            row3Visible = false
-            row4Visible = false
-            break;
-        case Constants.stackedAreaChartTitle:
-            chartUrl=Constants.stackedAreaChartUrl;
-            webEngineView.url = Constants.chartsBaseUrl+Constants.stackedAreaChartUrl;
-            xAxisVisible = true
-            yAxisVisible = true
-            row3Visible = false
-            row4Visible = false
-            break;
-        case Constants.sankeyTitle:
-            row3Visible =  true;
-            xAxisVisible = true
-            yAxisVisible = true
-            row4Visible = false
-            break;
-        case Constants.pivotTitle:
-            row3Visible =  true;
-            xAxisVisible = true
-            yAxisVisible = true
-            row4Visible = false
-            pivotThemeVisible=true
-            break;
-        case Constants.tableTitle:
-            yAxisVisible = false
-            xAxisVisible = true
-            row3Visible = false
-            row4Visible = false
-            break;
-        case Constants.gaugeChartTitle:
-            row4Visible = true
-            xAxisVisible =  false
-            yAxisVisible =  false
-            row3Visible =  false
-            break;
-        default:
-            xAxisVisible = true
-            yAxisVisible = true
-            row3Visible = false
-            row4Visible = false
-        }
-
-        if(dataValuesRemoved){
-            reDrawChart();
-        }
-
-    }
-
-    onReportChartChanged: {
-        chartTitle = reportChart;
-    }
 
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
+    // X Axis Bar => Used for all charts where 2 axis are requied
     ListModel{
         id: xAxisListModel
     }
 
+    // Y Axis Bar => Used for all charts where 2 axis are requied
     ListModel{
         id: yAxisListModel
     }
 
+    // Value Bar => Used miscellaneous graphs like Sanky
     ListModel{
         id: valuesListModel
     }
+    
+    // Colur By Data Item List
+    ListModel{
+        id: dataItemList
+    }
+
 
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
@@ -258,17 +140,160 @@ Page {
         ReportParamsModel.yAxisActive = false;
         ReportParamsModel.colorByActive = false;
 
+        
+        // If report id is not defined => Case when Add a new reprt is clicked.
+        // Generate a new report id.
+        // New Id = base64 of timestamp in milliseconds
         if(!reportId){
             var newReportId = generateReportId();
             ReportParamsModel.setReportId(newReportId);
         }
 
+        // Clearing xAxisListModel and yAxisListModel if any
+        // Might be possible that this is getting called once
+        // Check if can be removed [TAG: Optimization]
         xAxisListModel.clear();
         yAxisListModel.clear();
 
     }
 
 
+    onIsHorizontalGraphChanged: {
+
+        if(isHorizontalGraph){
+            allowedXAxisDataPanes = 1;
+            allowedYAxisDataPanes = 2;
+            switch(chartTitle){
+                case Constants.barChartTitle:
+                    chartUrl = Constants.horizontalBarChartUrl;
+                    console.log('Loading horizontal bar chart');
+                    webEngineView.url = Constants.baseChartUrl+chartUrl;
+                    chartTitle = Constants.horizontalBarChartTitle;
+                    break;
+            }
+        }else{
+
+            // Changing the maximum values allowed (This will be the only case bar graphs )
+            allowedXAxisDataPanes = 2;
+            allowedYAxisDataPanes = 1;
+
+            chartUrl = Constants.barChartUrl;
+            console.log('Loading bar chart');
+            webEngineView.url = Constants.baseChartUrl+chartUrl;
+            chartTitle = Constants.barChartTitle;
+        }
+    }
+
+
+    onChartTitleChanged: {
+
+        console.log('Chart Title Changed',chartTitle);
+
+        // Charts Mapping
+        // Basically these are the basic configs
+        // Having Max Allowed Values for now 
+        const chartDetailsConfig = allChartsMapping[chartTitle];
+        const { maxDropOnXAxis, maxDropOnYAxis } = chartDetailsConfig || {maxDropOnXAxis: allowedXAxisDataPanes, maxDropOnYAxis: allowedYAxisDataPanes};
+
+        var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
+        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);;
+
+        console.log(xAxisColumns);
+
+        // check if maximum drop is less than in config?
+        // if less then remove all the extra values
+        // else no change -> Plot the graph
+
+        var dataValuesRemoved = false;
+        if(maxDropOnXAxis > 0 && maxDropOnXAxis < xAxisColumns.length){
+            xAxisColumns = xAxisColumns.splice(0,maxDropOnXAxis);
+            ReportParamsModel.setXAxisColumns(xAxisColumns);
+            xAxisListModel.remove(maxDropOnXAxis,xAxisListModel.count - maxDropOnXAxis);
+            dataValuesRemoved = true;
+        }
+
+        if(maxDropOnYAxis > 0 && maxDropOnYAxis < yAxisColumns.length){
+            yAxisColumns = yAxisColumns.splice(0,maxDropOnYAxis);
+            ReportParamsModel.setYAxisColumns(yAxisColumns);
+            yAxisListModel.remove(maxDropOnYAxis,yAxisListModel.count - maxDropOnYAxis);
+            dataValuesRemoved = true;
+        }
+
+        allowedXAxisDataPanes = maxDropOnXAxis;
+        allowedYAxisDataPanes = maxDropOnYAxis;
+
+        // change axis on the basis of chart title
+        // Updating the Row visible here => Sanky charts can have 3 rows
+        // where we can drop the columns
+
+        // Optimization Can be done => call switch function here to change the graph
+        switch(chartTitle){
+            case Constants.horizontalStackedBarChartTitle:
+                console.log('Make Horizontal stacked bar chart');
+                chartUrl=Constants.horizontalStackedBarChartUrl
+                webEngineView.url = Constants.chartsBaseUrl+chartUrl;
+                xAxisVisible = true
+                yAxisVisible = true
+                row3Visible = false
+                row4Visible = false
+                break;
+            case Constants.stackedBarChartTitle:
+                chartUrl=Constants.stackedBarChartUrl
+                webEngineView.url = Constants.chartsBaseUrl+Constants.stackedBarChartUrl;
+                xAxisVisible = true
+                yAxisVisible = true
+                row3Visible = false
+                row4Visible = false
+                break;
+            case Constants.stackedAreaChartTitle:
+                chartUrl=Constants.stackedAreaChartUrl;
+                webEngineView.url = Constants.chartsBaseUrl+Constants.stackedAreaChartUrl;
+                xAxisVisible = true
+                yAxisVisible = true
+                row3Visible = false
+                row4Visible = false
+                break;
+            case Constants.sankeyTitle:
+                row3Visible =  true;
+                xAxisVisible = true
+                yAxisVisible = true
+                row4Visible = false
+                break;
+            case Constants.pivotTitle:
+                row3Visible =  true;
+                xAxisVisible = true
+                yAxisVisible = true
+                row4Visible = false
+                pivotThemeVisible=true
+                break;
+            case Constants.tableTitle:
+                yAxisVisible = false
+                xAxisVisible = true
+                row3Visible = false
+                row4Visible = false
+                break;
+            case Constants.gaugeChartTitle:
+                row4Visible = true
+                xAxisVisible =  false
+                yAxisVisible =  false
+                row3Visible =  false
+                break;
+            default:
+            xAxisVisible = true
+            yAxisVisible = true
+            row3Visible = false
+            row4Visible = false
+        }
+
+        // If any column is removed on changing the chart name
+        // redraw the chart
+        if(dataValuesRemoved){
+            redrawChart();
+        }
+
+    }
+
+    // Variable when drop is hovered on X Axis
     onXaxisActiveChanged: {
         if(xaxisActive){
             xAxisRectangle.border.color = Constants.grafieksLightGreenColor;
@@ -279,6 +304,7 @@ Page {
         }
     }
 
+    // Variable when drop is hovered on Y Axis
     onYaxisActiveChanged: {
         if(yaxisActive){
             yAxisRectangle.border.color = Constants.grafieksLightGreenColor;
@@ -289,21 +315,31 @@ Page {
     }
 
     // Switch Chart Urls
+    // Whenever Chart is changed 
+    // Perform these things
+    // 1. Change the title
+    // 2. Change the URL 
+    // 3. Update the webEngine URL
+    
     function switchChart(chartTitleValue){
         chartTitle = chartTitleValue;
         var chartUrl = '';
         switch(chartTitle){
-            case Constants.horizontalBarChartTitle:
-                chartUrl = Constants.horizontalBarChartUrl;
-                break;
-            case Constants.horizontalStackedBarChartTitle:
-                chartUrl = Constants.horizontalStackedBarChartUrl;
-                break;
-            case Constants.stackedBarChartTitle:
-                chartUrl = Constants.stackedBarChartUrl
-                break;
+        case Constants.horizontalBarChartTitle:
+            chartUrl = Constants.horizontalBarChartUrl;
+            break;
+        case Constants.horizontalStackedBarChartTitle:
+            chartUrl = Constants.horizontalStackedBarChartUrl;
+            break;
+        case Constants.stackedBarChartTitle:
+            chartUrl = Constants.stackedBarChartUrl
+            break;
         }
         webEngineView.url = Constants.baseChartUrl+chartUrl;
+    }
+
+    function searchColumnNames(searchText){
+        ChartsModel.searchColumnNames(searchText)
     }
 
     // function to get the columnName from model
@@ -359,15 +395,15 @@ Page {
             // Condition for horizontal bar graph;
             if(isHorizontalGraph){
                 switch(chartTitle){
-                    case Constants.barChartTitle:
-                        if(colorByData.length){
-                            switchChart(Constants.horizontalStackedBarChartTitle)
-                            break;
-                        }
-                        chartUrl = Constants.horizontalBarChartUrl;
-                        webEngineView.url = Constants.baseChartUrl+chartUrl;
-                        chartTitle = Constants.horizontalBarChartTitle;
+                case Constants.barChartTitle:
+                    if(colorByData.length){
+                        switchChart(Constants.horizontalStackedBarChartTitle)
                         break;
+                    }
+                    chartUrl = Constants.horizontalBarChartUrl;
+                    webEngineView.url = Constants.baseChartUrl+chartUrl;
+                    chartTitle = Constants.horizontalBarChartTitle;
+                    break;
 
                 }
             }else{
@@ -376,6 +412,7 @@ Page {
                     console.log('Change to stacked bar chart')
                     switchChart(Constants.stackedBarChartTitle);
                 }else if(chartTitle === Constants.groupBarChartTitle){
+                    console.log('Check which graph to be plotted here')
                     chartUrl = Constants.barChartUrl;
                     webEngineView.url = Constants.baseChartUrl+chartUrl;
                     chartTitle = Constants.barChartTitle;
@@ -394,13 +431,24 @@ Page {
 
     function addReport(){
         // Add report to dashboard
-        stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
+        stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
+
+        console.log('Report Id',reportId);
+        ReportParamsModel.setChartType(chartTitle);
+        ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertyConfig));
+        ReportParamsModel.setChartUrl(chartUrl);
+        ReportParamsModel.setXAxisColumns(JSON.stringify(getAxisColumnNames(Constants.xAxisName)));
+        ReportParamsModel.setYAxisColumns(JSON.stringify(getAxisColumnNames(Constants.yAxisName)));
+        ReportParamsModel.addReport(reportId);
+
+        ReportParamsModel.getReportsList();
+
     }
 
     function cancelReport(){
         // Back to dashboard
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
-//        ChartsModel.removeTmpChartData()
+        // ChartsModel.removeTmpChartData()
     }
 
     function focusReportTitle(){
@@ -472,6 +520,7 @@ Page {
                 return;
             }
 
+            console.log('X Axis itemType',itemType, itemName);
             xAxisListModel.append({itemName: itemName, droppedItemType: itemType})
             xAxisColumns.push(itemName);
 
@@ -479,7 +528,8 @@ Page {
             if(!yAxisDropEligible(itemName)){
                 return;
             }
-            console.log('itemType',itemType);
+
+            console.log('Y Axis itemType',itemType, itemName);
             yAxisListModel.append({itemName: itemName, droppedItemType: itemType})
             yAxisColumns.push(itemName);
 
@@ -497,20 +547,24 @@ Page {
         if( getAxisColumnNames(Constants.xAxisName).length > 1
                 && getAxisColumnNames(Constants.yAxisName).length
                 && (chartTitle === Constants.barChartTitle  || chartTitle === Constants.stackedBarChartTitle)){
-            console.log('Make Grouped Bar Chart')
+            console.log('Make Grouped Bar Chart');
             webEngineView.url = Constants.baseChartUrl+Constants.barGroupedChartUrl;
             chartTitle = Constants.groupBarChartTitle;
             chartUrl = Constants.barGroupedChartUrl;
+            return;
+
         }
 
         if( getAxisColumnNames(Constants.yAxisName).length > 1
                 && getAxisColumnNames(Constants.xAxisName).length
                 && (chartTitle === Constants.horizontalBarChartTitle  || chartTitle === Constants.horizontalStackedBarChartTitle)){
 
+            console.log('Make Horizontal Grouped Bar Chart')
             chartUrl = Constants.horizontalBarGroupedChartUrl;
             webEngineView.url = Constants.baseChartUrl+chartUrl;
             chartTitle = Constants.horizontalBarGroupedChartTitle;
 
+            return;
         }
 
         drawChart();
@@ -532,7 +586,13 @@ Page {
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
 
+        if(webEngineView.loading){
+            return;
+        }
+
         if(xAxisColumns.length===0 && yAxisColumns.length === 0){
+            // set everything to default
+            // Any can add any default case here
             isHorizontalGraph = false;
         }
 
@@ -549,7 +609,7 @@ Page {
             }
 
             var dataValues = null;
-            console.log('Chart Title',chartTitle)
+            console.log('Chart Title - Draw Chart Function - ',chartTitle)
             var colorByColumnName = '';
 
             switch(chartTitle){
@@ -560,7 +620,6 @@ Page {
             case Constants.barChartTitle:
                 console.log("BAR CLICKED", xAxisColumns[0])
                 dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
-                ChartsModel.getNewGroupedBarChartValues("country", "population", "furniture")
                 break;
             case Constants.horizontalStackedBarChartTitle:
                 colorByColumnName = colorByData[0].columnName;
@@ -574,14 +633,12 @@ Page {
                 break;
             case Constants.horizontalBarGroupedChartTitle:
                 console.log('horizontalBarGroupedChart chart!');
-                dataValues =  ChartsModel.getGroupedBarChartValues(yAxisColumnNamesArray[1],xAxisColumns[0], yAxisColumnNamesArray[0]);
-                var tempDataValues = JSON.parse(dataValues);
-                tempDataValues.push([yAxisColumnNamesArray[0],yAxisColumnNamesArray[1]]);
-                dataValues = JSON.stringify(tempDataValues);
+                dataValues =  ChartsModel.getNewGroupedBarChartValues(yAxisColumns[0],xAxisColumns[0], yAxisColumns[1]);
                 break;
             case Constants.groupBarChartTitle:
-                console.log('Grouped bar chart!');
-                dataValues =  ChartsModel.getGroupedBarChartValues(xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
+                console.log('Grouped bar chart!',xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
+                dataValues =  ChartsModel.getNewGroupedBarChartValues(xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
+                console.log(dataValues);
                 break;
             case Constants.areaChartTitle:
                 console.log("AREA CLICKED")
@@ -665,6 +722,7 @@ Page {
                 return;
             }
 
+            console.log('Webengine View Loading Status:',webEngineView.loading);
             console.log('Data Values:',JSON.stringify(dataValues));
             colorData = [];
             console.log("colorData5",colorData)
@@ -672,31 +730,31 @@ Page {
             console.log("colorData2" ,colorData)
             console.log("dataValues" ,JSON.parse(dataValues))
 
-            dataItemList.clear();
-            colorData.forEach(function (element,index) {
+           dataItemList.clear();
+           colorData.forEach(function (element,index) {
+               dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
+               console.log("newreportcolor",Constants.d3ColorPalette[index % Constants.d3ColorPalette.length])
+           });
 
-                dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
-            console.log("newreportcolor",Constants.d3ColorPalette[index % Constants.d3ColorPalette.length])
-            });
+           console.log('Selected Chart Title:',report_desiner_page.chartTitle)
+           console.log('Selected Chart URL:',report_desiner_page.chartUrl)
+           console.log("D3Config: "+JSON.stringify(d3PropertyConfig))
 
+           //    need to initialise only once
+           console.log('Starting to plot');
+           // console.log('Data Values',dataValues);
+           console.log('Chart Url',report_desiner_page.chartUrl, webEngineView.url)
 
-            console.log('Webengine View Loading Status:',webEngineView.loading);
-            console.log('Selected Chart Title:',report_desiner_page.chartTitle)
-            console.log('Selected Chart URL:',report_desiner_page.chartUrl)
-            console.log("D3Config: "+JSON.stringify(d3PropertyConfig))
-
-            //            need to initialise only once
-            console.log('Starting to plot');
-            // console.log('Data Values',dataValues);
-            console.log('Chart Url',report_desiner_page.chartUrl)
-
-            var scriptValue = 'window.addEventListener("resize", function () {
+           var scriptValue = 'window.addEventListener("resize", function () {
                     d3.selectAll("#my_dataviz").html("");
                     drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
-            });';
+           });';
 
-            webEngineView.runJavaScript('drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue);
-            return;
+           webEngineView.runJavaScript('drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue);
+
+           // Clear Chart Data
+           // ChartsModel.clearData();
+           return;
         }
 
         webEngineView.runJavaScript('clearChart()');
@@ -916,7 +974,7 @@ Page {
                 height: parent.height
                 Text {
                     text: xAxisLabelName
-                    anchors.centerIn: parent 
+                    anchors.centerIn: parent
                 }
                 z:1
             }
@@ -1337,7 +1395,7 @@ Page {
                     width: 160
                     height: 30
                     radius: 15
-//                    color: "red"
+                    //                    color: "red"
                     border.color: Constants.borderBlueColor
 
                     anchors.centerIn: parent
@@ -1402,7 +1460,7 @@ Page {
                     width: 160
                     height: 30
                     radius: 15
-//                    color: "red"
+                    //                    color: "red"
                     border.color: Constants.borderBlueColor
 
                     anchors.centerIn: parent
@@ -1469,7 +1527,7 @@ Page {
                     width: 160
                     height: 30
                     radius: 15
-//                    color: "red"
+                    //                    color: "red"
                     border.color: Constants.borderBlueColor
 
                     anchors.centerIn: parent
@@ -1586,7 +1644,7 @@ Page {
                     }
                     MouseArea{
                         anchors.fill: parent
-                        onClicked: exportReport()
+                        onClicked: addReport()
                     }
                 }
             }
@@ -1627,26 +1685,21 @@ Page {
 
                     id: searchBarRow
                     TextField{
+                        id: searchText
                         width: parent.parent.width - search_icon.width - 5
                         selectByMouse: true
                         height:30
                         cursorVisible: true
                         anchors.top: parent.top
                         anchors.topMargin: 5
-                        placeholderText: "Search"
+                        placeholderText: "Search1"
                         background: Rectangle{
                             border.width: 0
                         }
+                        onTextChanged: searchColumnNames(searchText.text)
                     }
 
-                    Image{
-                        id:search_icon
-                        source:"/Images/icons/iconmonstr-search-thin.svg"
-                        height:20
-                        width:20
-                        anchors.top: parent.top
-                        anchors.topMargin: 10
-                    }
+
                 }
 
                 ToolSeparator{

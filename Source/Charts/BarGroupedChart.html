@@ -71,14 +71,18 @@
                 dataValue[0].forEach((d, i) => {
                     var currentData = d;
 
+                    var isKey1Date = false;
                     if (isDateFormat(d.mainCategory)) {
                         isKey1Date = true;
                     }
 
-                    var category = getDateFormattedData(
-                        d.mainCategory,
-                        dateFormat
-                    );
+                    var category = d.mainCategory;
+                    if (isKey1Date) {
+                        category = getDateFormattedData(
+                            d.mainCategory,
+                            dateFormat
+                        );
+                    }
                     console.log(category);
                     if (!transformedDataValue[category]) {
                         transformedDataValue[category] = {};
@@ -220,7 +224,7 @@
 
                 const yScale = d3
                     .scaleLinear()
-                    .rangeRound([height - margin.top - margin.bottom, 0]);
+                    .range([height - margin.top - margin.bottom, 0]);
 
                 var zScale = d3.scaleOrdinal().range(d3Colors);
 
@@ -453,6 +457,82 @@
             var all_keys = ["field1", "field2", "field3", "field4"];
 
             data = [data, all_keys];
+
+            data = [
+                [
+                    {
+                        NepalState1: 2121,
+                        NepalState2: 443,
+                        mainCategory: "Nepal",
+                    },
+                    {
+                        B1: 2010,
+                        Delhi: 1109,
+                        Thimpu: 4415,
+                        UP: -414,
+                        mainCategory: "India",
+                        ssam: 4465,
+                    },
+                    {
+                        Delhi: 6351,
+                        Thimpu: 4712,
+                        mainCategory: "Bhutan",
+                    },
+                ],
+            ];
+
+            var data = [
+                [
+                    {
+                        ABookcases: 114879.99629999997,
+                        Chairs: 328449.10300000076,
+                        Furnishings: 91705.16400000005,
+                        Tables: 206965.5320000001,
+                        mainCategory: "Furniture",
+                    },
+                    {
+                        Appliances: 107532.161,
+                        Art: 27118.791999999954,
+                        Binders: 203412.7330000001,
+                        Envelopes: 16476.402,
+                        Fasteners: 3024.2799999999997,
+                        Labels: 12486.312,
+                        Paper: 78479.20600000002,
+                        Storage: 223843.60800000012,
+                        Supplies: 46673.538000000015,
+                        mainCategory: "OfficeSupplies",
+                    },
+                    {
+                        Accessories: 167380.3180000001,
+                        Copiers: 149528.02999999994,
+                        Machines: 189238.63099999996,
+                        Phones: 330007.0540000001,
+                        mainCategory: "Technology",
+                    },
+                ],
+                [
+                    [
+                        "Bookcases",
+                        "Chairs",
+                        "Labels",
+                        "Tables",
+                        "Storage",
+                        "Furnishings",
+                        "Art",
+                        "Phones",
+                        "Binders",
+                        "Appliances",
+                        "Paper",
+                        "Accessories",
+                        "Envelopes",
+                        "Fasteners",
+                        "Supplies",
+                        "Machines",
+                        "Copiers",
+                    ],
+                ],
+            ];
+
             drawChart(data);
         </script>
     </body>

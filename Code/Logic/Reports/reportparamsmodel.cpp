@@ -1,3 +1,4 @@
+#include<QDebug>
 #include "reportparamsmodel.h"
 
 ReportParamsModel::ReportParamsModel()
@@ -40,12 +41,12 @@ QString ReportParamsModel::calculatedFieldPopupStatus() const
     return m_createFieldPopupStatus;
 }
 
-QList<QString> ReportParamsModel::xAxisColumns() const
+QString ReportParamsModel::xAxisColumns() const
 {
     return m_xAxisColumns;
 }
 
-QList<QString> ReportParamsModel::yAxisColumns() const
+QString ReportParamsModel::yAxisColumns() const
 {
     return m_yAxisColumns;
 }
@@ -65,15 +66,32 @@ QString ReportParamsModel::reportTitle() const
     return m_reportTitle;
 }
 
-void ReportParamsModel::addReport(int reportId)
+void ReportParamsModel::addReport(QString reportId)
 {
     QMap<QString, QString> tmp;
     tmp.insert("reportTitle",this->reportTitle());
-    tmp.insert("d3PropertiesConfig",this->reportTitle());
-    tmp.insert("columns",this->reportTitle());
-    tmp.insert("rows",this->reportTitle());
-
+    tmp.insert("d3PropertiesConfig",this->d3PropertiesConfig());
+    tmp.insert("xAxisColumns", this->xAxisColumns() );
+    tmp.insert("yAxisColumns", this->yAxisColumns() );
+    tmp.insert("chartUrl", this->chartUrl() );
+    tmp.insert("chartType", this->chartType() );
     this->reportsMap.insert(reportId,tmp);
+}
+
+QString ReportParamsModel::getReportsList(){
+
+    QMap<QString, QMap<QString, QString>> reportList = this->reportsMap;
+
+
+
+    QMap<QString, QString> reportIdsData;
+    if (!reportList.isEmpty()){
+        for(auto key: reportList.keys()){
+            qDebug() << key;
+        }
+    }
+
+    return "";
 }
 
 QList<QString> ReportParamsModel::dataValuesColumns() const
@@ -89,6 +107,16 @@ QString ReportParamsModel::pointerValue() const
 QList<QString> ReportParamsModel::colorBy() const
 {
     return m_colorBy;
+}
+
+QString ReportParamsModel::d3PropertiesConfig() const
+{
+    return m_d3PropertiesConfig;
+}
+
+QString ReportParamsModel::chartUrl() const
+{
+    return m_chartUrl;
 }
 
 void ReportParamsModel::setItemName(QString itemName)
@@ -154,7 +182,7 @@ void ReportParamsModel::setCalculatedFieldPopupStatus(QString createFieldPopupSt
     emit calculatedFieldPopupStatusChanged(m_createFieldPopupStatus);
 }
 
-void ReportParamsModel::setXAxisColumns(QList<QString> xAxisColumns)
+void ReportParamsModel::setXAxisColumns(QString xAxisColumns)
 {
     if (m_xAxisColumns == xAxisColumns)
         return;
@@ -163,7 +191,7 @@ void ReportParamsModel::setXAxisColumns(QList<QString> xAxisColumns)
     emit xAxisColumnsChanged(m_xAxisColumns);
 }
 
-void ReportParamsModel::setYAxisColumns(QList<QString> yAxisColumns)
+void ReportParamsModel::setYAxisColumns(QString yAxisColumns)
 {
     if (m_yAxisColumns == yAxisColumns)
         return;
@@ -224,4 +252,22 @@ void ReportParamsModel::setColorBy(QList<QString> colorBy)
 
     m_colorBy = colorBy;
     emit colorByChanged(m_colorBy);
+}
+
+void ReportParamsModel::setD3PropertiesConfig(QString d3PropertiesConfig)
+{
+    if (m_d3PropertiesConfig == d3PropertiesConfig)
+        return;
+
+    m_d3PropertiesConfig = d3PropertiesConfig;
+    emit d3PropertiesConfigChanged(m_d3PropertiesConfig);
+}
+
+void ReportParamsModel::setChartUrl(QString chartUrl)
+{
+    if (m_chartUrl == chartUrl)
+        return;
+
+    m_chartUrl = chartUrl;
+    emit chartUrlChanged(m_chartUrl);
 }

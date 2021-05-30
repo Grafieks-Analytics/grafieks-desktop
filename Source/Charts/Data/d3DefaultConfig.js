@@ -13,6 +13,10 @@ const constants = {
         BASIS: "curveBasis",
         BUNDLE: "curveBundle",
     },
+    markerShapes: {
+        CIRCLE: "circle",
+        RECT: "rect",
+    },
 };
 
 const defaultD3Config = {
@@ -31,12 +35,12 @@ const defaultD3Config = {
         "#ffed6f",
     ],
     defaultPaddingInner: 0.25,
-    defaultMarkerShape: "circle",
+    defaultMarkerShape: constants.markerShapes.RECT,
     initialCircleRadius: 3,
     onHoverCircleRadius: 7,
     initialBoxDimension: 6,
     onHoverBoxDimension: 8,
-    defaultLineCurve: constants.cureveType.CARDINAL,
+    defaultLineCurve: constants.cureveType.LINEAR,
     innerRadius: 150,
     defaultTimeParseFormat: "%d-%m-%Y",
     defaultSpace: 30,
