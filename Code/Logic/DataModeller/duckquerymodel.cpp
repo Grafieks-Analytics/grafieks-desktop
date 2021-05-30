@@ -27,8 +27,9 @@ void DuckQueryModel::setQuery(QString query)
     this->query = query;
     querySplitter.setQueryForClasses(this->query);
 
-    this->setQueryResult();
     this->generateRoleNames();
+    this->setQueryResult();
+
 }
 
 int DuckQueryModel::rowCount(const QModelIndex &parent) const
@@ -48,7 +49,6 @@ QVariant DuckQueryModel::headerData(int section, Qt::Orientation orientation, in
     if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
         return QString(this->m_roleNames[section]);
     }
-    emit headerDataChanged(Qt::Horizontal, 1, this->internalColCount);
     return QVariant();
 }
 
