@@ -31,14 +31,14 @@ Popup {
             type: "rect"
             filled: false
         }
-        ListElement{
-            icon: "Polygon.png"
-            filled: false
-        }
-        ListElement{
-            icon: "add.png"
-            filled: false
-        }
+//        ListElement{
+//            icon: "Polygon.png"
+//            filled: false
+//        }
+//        ListElement{
+//            icon: "add.png"
+//            filled: false
+//        }
     }
 
     ListModel{
@@ -53,10 +53,10 @@ Popup {
             type: "rect"
             filled: true
         }
-        ListElement{
-            icon: "Polygon_filled.png"
-            filled: true
-        }
+//        ListElement{
+//            icon: "Polygon_filled.png"
+//            filled: true
+//        }
     }
 
     background: Rectangle{

@@ -4,6 +4,7 @@ import QtQuick.Controls 2.15
 import com.grafieks.singleton.constants 1.0
 
 import "../../MainSubComponents"
+import "./MiniSubComponents"
 
 Item {
 
@@ -14,6 +15,11 @@ Item {
 
     anchors.left: parent.left
     anchors.leftMargin: 3
+
+
+    function searchTableColumns(searchText){
+        TableColumnsModel.searchColumnNames(searchText)
+    }
 
     Rectangle{
         id: add_filter
@@ -128,30 +134,10 @@ Item {
                     border.width: 0
                 }
 
+                onTextChanged: searchTableColumns(searchTextBox.text)
+
             }
 
-            Image{
-                id:search_icon
-                source:"/Images/icons/iconmonstr-search-thin.svg"
-                height:18
-                width:18
-                anchors.rightMargin: 10
-                anchors.top: row_querymodeller_right_col.top
-                anchors.topMargin: 10
-                anchors.verticalCenter: parent.verticalCenter
-
-                ToolTip.delay:Constants.tooltipShowTime
-                ToolTip.timeout: Constants.tooltipHideTime
-                ToolTip.text: qsTr("Search tables in current database")
-                ToolTip.visible:  mouseAreaSearch.containsMouse? true : false
-
-                MouseArea{
-                    id: mouseAreaSearch
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    onClicked: searchTable(searchTextBox.text)
-                }
-            }
         }
 
         ToolSeparator{
@@ -205,37 +191,11 @@ Item {
                 text: qsTr("Categorical")
                 font.pixelSize: 15
 
-
             }
 
-            CheckBoxTpl{
-                id: checkBox1
+            CategoricalList{
+                id: categoricalCheckboxes
 
-
-                x: 8
-                y: 52
-                checkbox_text: qsTr("Checkbox")
-                checkbox_checked: true
-                parent_dimension: 16
-            }
-
-            CheckBoxTpl{
-                id: checkBox2
-                x: 8
-                y: 82
-                checkbox_text: qsTr("Checkbox")
-                checkbox_checked: true
-                parent_dimension: 16
-            }
-
-
-            CheckBoxTpl{
-                id: checkBox3
-                x: 8
-                y: 107
-                checkbox_text: qsTr("Checkbox")
-                checkbox_checked: true
-                parent_dimension: 16
             }
         }
         Rectangle {
@@ -266,39 +226,9 @@ Item {
 
             }
 
-            CheckBoxTpl{
-                id: checkBox4
-
-
-                x: 8
-                y: 52
-                checkbox_text: qsTr("Checkbox")
-                checkbox_checked: true
-                parent_dimension: 16
+            DateList{
+                id: dateCheckboxes
             }
-
-            CheckBoxTpl{
-                id: checkBox5
-                x: 8
-                y: 82
-                checkbox_text: qsTr("Checkbox")
-                checkbox_checked: true
-                parent_dimension: 16
-            }
-
-
-            CheckBoxTpl{
-                id: checkBox6
-                x: 8
-                y: 107
-                checkbox_text: qsTr("Checkbox")
-                checkbox_checked: true
-                parent_dimension: 16
-            }
-
-
-
-
 
         }
         Rectangle {
@@ -329,49 +259,11 @@ Item {
 
             }
 
-            CheckBoxTpl{
-                id: checkBox7
-
-
-                x: 8
-                y: 52
-                checkbox_text: qsTr("Checkbox")
-                checkbox_checked: true
-                parent_dimension: 16
+            NumericalList{
+                id: numericalCheckboxes
             }
-
-            CheckBoxTpl{
-                id: checkBox8
-                x: 8
-                y: 82
-                checkbox_text: qsTr("Checkbox")
-                checkbox_checked: true
-                parent_dimension: 16
-            }
-
-
-            CheckBoxTpl{
-                id: checkBox9
-                x: 8
-                y: 107
-                checkbox_text: qsTr("Checkbox")
-                checkbox_checked: true
-                parent_dimension: 16
-            }
-
-
-
-
-
         }
 
-
-
     }
-
-
-
-
-
 
 }
