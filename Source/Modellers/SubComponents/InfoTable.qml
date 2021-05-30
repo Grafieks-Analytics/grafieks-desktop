@@ -161,6 +161,7 @@ Item{
                 } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
                     console.log("DUCK QUERY MDEl", DSParamsModel.tmpSql)
                     DuckQueryModel.setQuery(DSParamsModel.tmpSql)
+                    DuckQueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
 
                     testQueryResult.visible = false
                     dataPreviewResult.visible = true
@@ -559,7 +560,7 @@ Item{
 
                 onClicked:
                 {
-
+                    console.log("LOG LOG")
                     onRunQueryClicked()
 
                 }

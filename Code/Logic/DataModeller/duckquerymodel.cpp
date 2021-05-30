@@ -32,10 +32,51 @@ void DuckQueryModel::setQuery(QString query)
 
 }
 
+void DuckQueryModel::setPreviewQuery(int previewRowCount)
+{
+
+    this->previewRowCount = previewRowCount;
+    beginResetModel();
+    std::vector<duckdb::Value> stdData;
+
+    // Tmp
+    QStringList list;
+    int tmpRowCount = 0;
+    int maxRowCount = 0;
+
+    auto result = duckCon->con.Query(this->query.toStdString());
+    if(!result->error.empty())
+        qWarning() << Q_FUNC_INFO << result->error.c_str();
+
+    tmpRowCount = result->collection.Count();
+    if(previewRowCount > tmpRowCount){
+        maxRowCount = tmpRowCount;
+    } else{
+        maxRowCount = previewRowCount;
+    }
+
+    for(int i = 0; i < maxRowCount; i++){
+        stdData = result->collection.GetRow(i);
+
+        for(auto data: stdData){
+            list << data.ToString().c_str();
+        }
+        this->resultData.append(list);
+        list.clear();
+    }
+
+    if(this->internalRowCount > 0){
+        emit duckHasData(true);
+    } else{
+        emit duckHasData(false);
+    }
+    endResetModel();
+}
+
 int DuckQueryModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return this->internalRowCount;
+    return this->previewRowCount;
 }
 
 int DuckQueryModel::columnCount(const QModelIndex &) const
@@ -171,12 +212,6 @@ void DuckQueryModel::generateRoleNames()
 
 void DuckQueryModel::setQueryResult()
 {
-    beginResetModel();
-    std::vector<duckdb::Value> stdData;
-
-    // Tmp
-    QStringList list;
-
     auto result = duckCon->con.Query(this->query.toStdString());
     if(!result->error.empty())
         qWarning() << Q_FUNC_INFO << result->error.c_str();
@@ -186,24 +221,6 @@ void DuckQueryModel::setQueryResult()
     this->internalRowCount = result->collection.Count();
 
     this->setChartData(result);
-
-    for(int i = 0; i < this->internalRowCount; i++){
-
-        stdData = result->collection.GetRow(i);
-
-        for(auto data: stdData){
-            list << data.ToString().c_str();
-        }
-        this->resultData.append(list);
-        list.clear();
-    }
-
-    if(this->internalRowCount > 0){
-        emit duckHasData(true);
-    } else{
-        emit duckHasData(false);
-    }
-    endResetModel();
 }
 
 void DuckQueryModel::setChartData(std::unique_ptr<duckdb::MaterializedQueryResult> &totalRows)

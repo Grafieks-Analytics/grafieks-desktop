@@ -70,7 +70,6 @@ Rectangle {
         // This one is for table data
         function onForwardOnlyHasData(hasData){
             view.model = hasData === true? ForwardOnlyQueryModel: ""
-
         }
 
         // This slot is for updating headers
@@ -108,13 +107,6 @@ Rectangle {
         }
     }
 
-
-    //    Button{
-    //        id: clearBtn
-    //        text: "Clear"
-    //        height: 30
-    //        onClicked: clearTable()
-    //    }
 
     TableView {
         id:view
