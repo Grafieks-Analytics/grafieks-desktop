@@ -169,6 +169,10 @@ QString ChartsModel::getGroupedBarChartValues(QString xAxisColumn, QString yAxis
 
 QString ChartsModel::getNewGroupedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
+    if(newChartHeader.empty() || newChartData.empty()){
+        return "";
+    }
+
     QJsonArray data;
     QJsonArray axisDataArray;
     QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
@@ -1456,6 +1460,11 @@ void ChartsModel::removeTmpChartData()
 void ChartsModel::searchColumnNames(QString keyword)
 {
     emit sendFilteredColumn(this->categoryList.filter(keyword, Qt::CaseInsensitive), this->numericalList.filter(keyword, Qt::CaseInsensitive), this->dateList.filter(keyword, Qt::CaseInsensitive));
+}
+
+void ChartsModel::clearData()
+{
+
 }
 
 
