@@ -557,7 +557,12 @@ Item{
                     opacity: playBtn.hovered ? 0.42 : 1
                 }
 
-                onClicked:onRunQueryClicked()
+                onClicked:
+                {
+
+                    onRunQueryClicked()
+
+                }
 
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
