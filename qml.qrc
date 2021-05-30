@@ -243,5 +243,6 @@
         <file>Source/Connectors/SubComponents/MiniSubComponents/BoxDelegate.qml</file>
         <file>Source/Charts/HorizontalBarGroupedChart.html</file>
         <file>Source/Modellers/SubComponents/QueryModeller.qml</file>
+        <file>Source/Modellers/SubComponents/DataPreviewTable_backup.qml</file>
     </qresource>
 </RCC>
