@@ -28,6 +28,7 @@ Rectangle {
         // This one is for table data
         function onSqlHasData(hasData){
             view.model = hasData === true? QueryModel: ""
+            view.visible = hasData === true ? true: false
 
         }
 
@@ -49,6 +50,7 @@ Rectangle {
         // This one is for table data
         function onDuckHasData(hasData){
             view.model = hasData === true? DuckQueryModel: ""
+            view.visible = hasData === true ? true: false
 
         }
 
@@ -60,7 +62,6 @@ Rectangle {
 
         // Clear table
         function onClearTablePreview(){
-            console.log("CLEARING SIGNAL CALLED")
             clearTable()
         }
 
@@ -71,6 +72,7 @@ Rectangle {
         // This one is for table data
         function onForwardOnlyHasData(hasData){
             view.model = hasData === true? ForwardOnlyQueryModel: ""
+            view.visible = hasData === true ? true: false
         }
 
         // This slot is for updating headers
@@ -115,6 +117,7 @@ Rectangle {
         height: parent.height
         //        anchors.top: clearBtn.bottom
         alternatingRowColors: false
+        visible: false
 
 
 
