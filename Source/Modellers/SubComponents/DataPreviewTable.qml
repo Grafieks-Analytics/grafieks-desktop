@@ -165,27 +165,19 @@ Rectangle {
                     anchors.fill: parent
                     verticalAlignment: Text.AlignVCenter
                     objectName: modelData
+                    text: model.display
                     horizontalAlignment: styleData.textAlignment
                     anchors.leftMargin: 12
                     elide: Text.ElideRight
                     color: textColor
                     renderType: Text.NativeRendering
                     onObjectNameChanged: {
-
-                        let newCounter = parseInt(textItem1.objectName)
-                        if(previousModelData === newCounter){
-                            counter++
-                        } else{
-                            counter = 0;
-                            previousModelData = newCounter
-                        }
-
                         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
-                            textItem1.text = QueryModel.data(QueryModel.index(newCounter - 1, counter))
+                            textItem1.text = QueryModel.data(QueryModel.index(styleData.row, styleData.column))
                         } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-                            textItem1.text = DuckQueryModel.data(DuckQueryModel.index(newCounter - 1, counter))
+                            textItem1.text = DuckQueryModel.data(DuckQueryModel.index(styleData.row, styleData.column))
                         } else{
-                            textItem1.text = ForwardOnlyQueryModel.data(ForwardOnlyQueryModel.index(newCounter - 1, counter))
+                            textItem1.text = ForwardOnlyQueryModel.data(ForwardOnlyQueryModel.index(styleData.row, styleData.column))
                         }
                     }
 
