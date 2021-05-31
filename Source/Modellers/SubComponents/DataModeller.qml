@@ -543,6 +543,7 @@ Item {
             if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
                 console.log("QUERY set QUERYMODEL", DSParamsModel.tmpSql)
                 QueryModel.callSql(DSParamsModel.tmpSql)
+                QueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
             } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
                 console.log("QUERY set DUCKQUERYMODEL", DSParamsModel.tmpSql)
                 DuckQueryModel.setQuery(DSParamsModel.tmpSql)
@@ -867,6 +868,7 @@ Item {
 
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryModel.callSql(DSParamsModel.tmpSql)
+            QueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
         } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
             DuckQueryModel.setQuery(DSParamsModel.tmpSql)
             DuckQueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
