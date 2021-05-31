@@ -60,6 +60,7 @@ Rectangle {
 
         // Clear table
         function onClearTablePreview(){
+            console.log("CLEARING SIGNAL CALLED")
             clearTable()
         }
 

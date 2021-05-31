@@ -19,6 +19,8 @@ public:
     ~ForwardOnlyQueryModel();
 
     Q_INVOKABLE void setQuery(QString query);
+    Q_INVOKABLE void setPreviewQuery(int previewRowCount);
+
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex & = QModelIndex()) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
@@ -40,6 +42,7 @@ private:
     QList<QStringList> resultData;
     int internalRowCount;
     int internalColCount;
+    int previewRowCount;
 
     QString query;
     QuerySplitter querySplitter;

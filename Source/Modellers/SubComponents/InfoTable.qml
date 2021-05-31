@@ -168,6 +168,7 @@ Item{
                 } else {
                     console.log("FORWARD ONLY", DSParamsModel.tmpSql)
                     ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
+                    ForwardOnlyQueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
 
                     testQueryResult.visible = false
                     dataPreviewResult.visible = true
