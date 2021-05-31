@@ -15,12 +15,10 @@ void QueryModel::setPreviewQuery(int previewRowCount)
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
 
-    int tmpRowCount = 0;
     int maxRowCount = 0;
 
-    tmpRowCount = this->rowCount();
-    if(previewRowCount > tmpRowCount){
-        maxRowCount = tmpRowCount;
+    if(previewRowCount > this->tmpRowCount){
+        maxRowCount = this->tmpRowCount;
     } else{
         maxRowCount = previewRowCount;
     }
@@ -47,8 +45,10 @@ void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
     if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
         qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
 
-    if(this->resetPreviewCount == false)
+    if(this->resetPreviewCount == false){
         this->previewRowCount =  QSqlQueryModel::rowCount();
+        this->tmpRowCount = this->previewRowCount;
+    }
 
     generateRoleNames();
 }
@@ -63,8 +63,10 @@ void QueryModel::setQuery(const QSqlQuery &query)
     if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
         qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
 
-    if(this->resetPreviewCount == false)
+    if(this->resetPreviewCount == false){
         this->previewRowCount =  QSqlQueryModel::rowCount();
+        this->tmpRowCount = this->previewRowCount;
+    }
 
     generateRoleNames();
 }

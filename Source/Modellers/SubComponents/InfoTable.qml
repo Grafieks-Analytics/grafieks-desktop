@@ -148,6 +148,7 @@ Item{
                 //     QueryStatsModel.setProfiling(true)
                 //     QueryStatsModel.setProfileStatus(true)
                 // }
+                console.log("DISPLAY COUNT", DSParamsModel.displayRowsCount)
 
                 QueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
                 // QueryStatsModel.showStats()
