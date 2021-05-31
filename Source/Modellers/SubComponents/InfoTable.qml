@@ -128,60 +128,46 @@ Item{
 
     function onRunQueryClicked(){
 
-//        testQueryBtn.visible = true
+        //        testQueryBtn.visible = true
         queryUpdate.visible = true
 
 
-        // If current tab is queryModeller, then process
-        // else if current tab is dataModeller, fire a signal to activate a slot in DataModeller.qml
+        var isSqlSelect = GeneralParamsModel.returnPlainTextFromHtml(DSParamsModel.tmpSql).toUpperCase().startsWith("SELECT");
+        // If query is SELECT query
+        // Only SELECT query allowed
 
-        if(DSParamsModel.currentTab === Constants.queryModellerTab){
-            var isSqlSelect = GeneralParamsModel.returnPlainTextFromHtml(DSParamsModel.tmpSql).toUpperCase().startsWith("SELECT");
-            console.log(isSqlSelect, GeneralParamsModel.returnPlainTextFromHtml(DSParamsModel.tmpSql).toUpperCase())
-            // If query is SELECT query
-            // Only SELECT query allowed
+        if(isSqlSelect){
+            if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
 
-            if(isSqlSelect){
-                if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+                queryUpdate.visible = true
 
-                    queryUpdate.visible = true
+                // Set profiling on when clicking the play button
+                // Reset profiling and turn off when clicked on Publish button
 
-                    // Set profiling on when clicking the play button
-                    // Reset profiling and turn off when clicked on Publish button
+                // if(QueryStatsModel.profileStatus === false){
+                //     QueryStatsModel.setProfiling(true)
+                //     QueryStatsModel.setProfileStatus(true)
+                // }
 
-                    // if(QueryStatsModel.profileStatus === false){
-                    //     QueryStatsModel.setProfiling(true)
-                    //     QueryStatsModel.setProfileStatus(true)
-                    // }
+                QueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
+                // QueryStatsModel.showStats()
+                // TableSchemaModel.showSchema(DSParamsModel.tmpSql)
 
-                    QueryModel.callSql(DSParamsModel.tmpSql)
-                    QueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
-                    // QueryStatsModel.showStats()
-                    // TableSchemaModel.showSchema(DSParamsModel.tmpSql)
+            } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
+                DuckQueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
 
-                } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-                    console.log("DUCK QUERY MDEl", DSParamsModel.tmpSql)
-                    DuckQueryModel.setQuery(DSParamsModel.tmpSql)
-                    DuckQueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
+                testQueryResult.visible = false
+                dataPreviewResult.visible = true
+            } else {
+                ForwardOnlyQueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
 
-                    testQueryResult.visible = false
-                    dataPreviewResult.visible = true
-                } else {
-                    console.log("FORWARD ONLY", DSParamsModel.tmpSql)
-                    ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
-                    ForwardOnlyQueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
-
-                    testQueryResult.visible = false
-                    dataPreviewResult.visible = true
-                }
-            } else{
-                sqlQueryNotAllowedDialog.visible = true
+                testQueryResult.visible = false
+                dataPreviewResult.visible = true
             }
         } else{
-
-            // Run the signal to activate the slot
-            DSParamsModel.processDataModellerQuery()
+            sqlQueryNotAllowedDialog.visible = true
         }
+
     }
 
     function onCollapseInfoTable(){

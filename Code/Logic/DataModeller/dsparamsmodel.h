@@ -280,9 +280,6 @@ public:
 
 public slots:
 
-    // General Slots
-    void processDataModellerQuery();
-
     // Publish Datasource
     void setCurrentTab(int currentTab);
     void setFileExtension(QString fileExtension);
@@ -316,7 +313,6 @@ signals:
     // General
     void currentTabChanged(int currentTab);
     void fileExtensionChanged(QString fileExtension);
-    void processQuery();
 
     // Publish Datasource
     void dsNameChanged(QString dsName);
