@@ -22,6 +22,8 @@ public:
     ~DuckQueryModel();
 
     Q_INVOKABLE void setQuery(QString query);
+    Q_INVOKABLE void setPreviewQuery(int previewRowCount);
+
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex & = QModelIndex()) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
@@ -45,6 +47,7 @@ private:
     QList<QStringList> resultData;
     int internalRowCount;
     int internalColCount;
+    int previewRowCount;
 
     DuckCon *duckCon;
     QString query;
@@ -56,7 +59,6 @@ private:
     QStringList tableHeaders;
 
 signals:
-    void headerDataChanged(Qt::Orientation orientation, int first, int last) const;
     void chartDataChanged(QMap<int, QStringList*> chartData);
     void chartHeaderChanged(QMap<int, QStringList> chartHeader);
     void duckHeaderDataChanged(QStringList tableHeaders);

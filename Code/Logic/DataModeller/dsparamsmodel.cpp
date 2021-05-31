@@ -1319,11 +1319,6 @@ int DSParamsModel::filterModelIndex() const
     return m_filterModelIndex;
 }
 
-void DSParamsModel::processDataModellerQuery()
-{
-    emit processQuery();
-}
-
 void DSParamsModel::setCurrentTab(int currentTab)
 {
     if (m_currentTab == currentTab)

@@ -229,134 +229,134 @@ Rectangle {
     property var previousModelData: 0
     property var counter : 0
 
-    Connections{
-        target: QueryModel
+//    Connections{
+//        target: QueryModel
 
-        // This one is for table data
-        function onSqlHasData(hasData){
-            view.model = hasData === true? QueryModel: ""
+//        // This one is for table data
+//        function onSqlHasData(hasData){
+//            view.model = hasData === true? QueryModel: ""
 
-        }
+//        }
 
-        // This slot is for updating headers
-        // This is also returning an array of strings
-        function onHeaderDataChanged(tableHeaders){
-            if(tableHeaders.length > 0){
-                roleNames = []
-                roleNames = tableHeaders
+//        // This slot is for updating headers
+//        // This is also returning an array of strings
+//        function onHeaderDataChanged(tableHeaders){
+//            if(tableHeaders.length > 0){
+//                roleNames = []
+//                roleNames = tableHeaders
 
-                for(var i=0; i<roleNames.length; i++){
-                    var role  = roleNames[i]
-                    var columnString = 'import QtQuick 2.3; import QtQuick.Controls 1.2; TableViewColumn {role: "' + role + '"; title: "' + role + '"; }';
-                    newObject[i] = Qt.createQmlObject(columnString, view)
-                    view.addColumn(newObject[i])
-                }
-            }
-        }
+//                for(var i=0; i<roleNames.length; i++){
+//                    var role  = roleNames[i]
+//                    var columnString = 'import QtQuick 2.3; import QtQuick.Controls 1.2; TableViewColumn {role: "' + role + '"; title: "' + role + '"; }';
+//                    newObject[i] = Qt.createQmlObject(columnString, view)
+//                    view.addColumn(newObject[i])
+//                }
+//            }
+//        }
 
-    }
+//    }
 
-    // This
-    function clearTable(){
-        for(var i=0; i<roleNames.length; i++){
-            view.removeColumn(newObject[i])
-            delete newObject[i]
+//    // This
+//    function clearTable(){
+//        for(var i=0; i<roleNames.length; i++){
+//            view.removeColumn(newObject[i])
+//            delete newObject[i]
 
-        }
-    }
+//        }
+//    }
 
 
-    Button{
-        id: clearBtn
-        text: "Clear"
-        height: 30
-        onClicked: clearTable()
-    }
+//    Button{
+//        id: clearBtn
+//        text: "Clear"
+//        height: 30
+//        onClicked: clearTable()
+//    }
 
-    TableView {
-        id:view
-        width: parent.width
-        height: parent.height - clearBtn.height
-        anchors.top: clearBtn.bottom
-        alternatingRowColors: false
-        style: TableViewStyle {
-            headerDelegate: Rectangle {
-                height: textItem.implicitHeight * 1.2
-                width: textItem.implicitWidth
-                color: "lightgrey"
-                Text {
-                    id: textItem
-                    anchors.fill: parent
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: styleData.textAlignment
-                    anchors.leftMargin: 12
-                    text: styleData.value
-                    elide: Text.ElideRight
-                    color: textColor
-                    renderType: Text.NativeRendering
+//    TableView {
+//        id:view
+//        width: parent.width
+//        height: parent.height - clearBtn.height
+//        anchors.top: clearBtn.bottom
+//        alternatingRowColors: false
+//        style: TableViewStyle {
+//            headerDelegate: Rectangle {
+//                height: textItem.implicitHeight * 1.2
+//                width: textItem.implicitWidth
+//                color: "lightgrey"
+//                Text {
+//                    id: textItem
+//                    anchors.fill: parent
+//                    verticalAlignment: Text.AlignVCenter
+//                    horizontalAlignment: styleData.textAlignment
+//                    anchors.leftMargin: 12
+//                    text: styleData.value
+//                    elide: Text.ElideRight
+//                    color: textColor
+//                    renderType: Text.NativeRendering
 
-                }
-                Rectangle {
-                    anchors.right: parent.right
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 1
-                    anchors.topMargin: 1
-                    width: 1
-                    color: "black"
-                    border.color: "black"
-                }
-                Rectangle {
-                    anchors.bottom: parent.bottom
-                    width: parent.width
-                    height: 1
-                    color: "black"
-                    border.color: "black"
-                }
-            }
+//                }
+//                Rectangle {
+//                    anchors.right: parent.right
+//                    anchors.top: parent.top
+//                    anchors.bottom: parent.bottom
+//                    anchors.bottomMargin: 1
+//                    anchors.topMargin: 1
+//                    width: 1
+//                    color: "black"
+//                    border.color: "black"
+//                }
+//                Rectangle {
+//                    anchors.bottom: parent.bottom
+//                    width: parent.width
+//                    height: 1
+//                    color: "black"
+//                    border.color: "black"
+//                }
+//            }
 
-            itemDelegate: Rectangle {
-                color: "white"
-                Text {
-                    id: textItem1
-                    anchors.fill: parent
-                    verticalAlignment: Text.AlignVCenter
-                    objectName: modelData
-                    horizontalAlignment: styleData.textAlignment
-                    anchors.leftMargin: 12
-                    elide: Text.ElideRight
-                    color: textColor
-                    renderType: Text.NativeRendering
+//            itemDelegate: Rectangle {
+//                color: "white"
+//                Text {
+//                    id: textItem1
+//                    anchors.fill: parent
+//                    verticalAlignment: Text.AlignVCenter
+//                    objectName: modelData
+//                    horizontalAlignment: styleData.textAlignment
+//                    anchors.leftMargin: 12
+//                    elide: Text.ElideRight
+//                    color: textColor
+//                    renderType: Text.NativeRendering
 
-                    onObjectNameChanged: {
-                        if(previousModelData === modelData){
-                            counter++
-                            textItem1.text = QueryModel.data(QueryModel.index(modelData-1,counter))
-                        } else{
-                            counter = 0;
-                            previousModelData = modelData
-                            textItem1.text = QueryModel.data(QueryModel.index(previousModelData - 1,counter))
-                        }
-                    }
-                }
-                Rectangle {
-                    anchors.right: parent.right
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    width: 1
-                    color: "black"
-                    border.color: "black"
-                }
-                Rectangle {
-                    anchors.bottom: parent.bottom
-                    width: parent.width
-                    height: 1
-                    color: "black"
-                    border.color: "black"
-                }
-            }
-        }
-    }
+//                    onObjectNameChanged: {
+//                        if(previousModelData === modelData){
+//                            counter++
+//                            textItem1.text = QueryModel.data(QueryModel.index(modelData-1,counter))
+//                        } else{
+//                            counter = 0;
+//                            previousModelData = modelData
+//                            textItem1.text = QueryModel.data(QueryModel.index(previousModelData - 1,counter))
+//                        }
+//                    }
+//                }
+//                Rectangle {
+//                    anchors.right: parent.right
+//                    anchors.top: parent.top
+//                    anchors.bottom: parent.bottom
+//                    width: 1
+//                    color: "black"
+//                    border.color: "black"
+//                }
+//                Rectangle {
+//                    anchors.bottom: parent.bottom
+//                    width: parent.width
+//                    height: 1
+//                    color: "black"
+//                    border.color: "black"
+//                }
+//            }
+//        }
+//    }
 }
 
 

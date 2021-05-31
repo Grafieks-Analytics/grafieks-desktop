@@ -185,43 +185,7 @@ Item {
             DSParamsModel.removeQuerySelectParamsList(hideColumns)
         }
 
-        // Generate the dynamic query and run in on receiving the signal
-        function onProcessQuery(){
 
-            // STEPS
-            // 1. check if more than 1 rects dont have any connections in front
-            // 2. Identify the first rect
-            // 3. Recrsive function to process the back connections and reorder them
-            // 4. Write the function to create query
-            // 5. Execute query
-
-            var undefinedCounter = 0
-
-            // DSParams rectangle
-            var rectangleObjectsSize = DSParamsModel.rectanglesSize()
-            var lineObjectsSize = DSParamsModel.linesSize()
-            var rectangleObjectKeys = DSParamsModel.fetchAllRectangleKeys()
-            var newLineObjectKeys = DSParamsModel.fetchAllLineKeys()
-
-
-            // Check if the rectangles are connected to some rectangle in front (except the first one)
-            // If not throw an error
-            if(rectangleObjectsSize - lineObjectsSize === 1){
-
-                var firstRectArr = rectangleObjectKeys.filter(x => newLineObjectKeys.indexOf(x) === -1)
-                firstRectId = firstRectArr[0]
-                // Call the function to process the rest of the query
-                joinOrder(firstRectId )
-
-
-            } else{
-                // Throw an error here
-                queryErrorModal.text = "JOIN is not complete"
-                queryErrorModal.open();
-
-            }
-
-        }
     }
 
 
@@ -455,6 +419,44 @@ Item {
         joinPopup.visible = true
     }
 
+    // Generate the dynamic query and run in on receiving the signal
+    function processQuery(){
+
+        // STEPS
+        // 1. check if more than 1 rects dont have any connections in front
+        // 2. Identify the first rect
+        // 3. Recrsive function to process the back connections and reorder them
+        // 4. Write the function to create query
+        // 5. Execute query
+
+        var undefinedCounter = 0
+
+        // DSParams rectangle
+        var rectangleObjectsSize = DSParamsModel.rectanglesSize()
+        var lineObjectsSize = DSParamsModel.linesSize()
+        var rectangleObjectKeys = DSParamsModel.fetchAllRectangleKeys()
+        var newLineObjectKeys = DSParamsModel.fetchAllLineKeys()
+
+
+        // Check if the rectangles are connected to some rectangle in front (except the first one)
+        // If not throw an error
+        if(rectangleObjectsSize - lineObjectsSize === 1){
+
+            var firstRectArr = rectangleObjectKeys.filter(x => newLineObjectKeys.indexOf(x) === -1)
+            firstRectId = firstRectArr[0]
+            // Call the function to process the rest of the query
+            joinOrder(firstRectId )
+
+
+        } else{
+            // Throw an error here
+            queryErrorModal.text = "JOIN is not complete"
+            queryErrorModal.open();
+
+        }
+
+    }
+
 
     // Set the join order for sql
     // Form the sql join statement
@@ -540,16 +542,8 @@ Item {
             // Call and execute the query
             DSParamsModel.setTmpSql(finalQuery)
 
-            if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
-                console.log("QUERY set QUERYMODEL", DSParamsModel.tmpSql)
-                QueryModel.callSql(DSParamsModel.tmpSql)
-            } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-                console.log("QUERY set DUCKQUERYMODEL", DSParamsModel.tmpSql)
-                DuckQueryModel.setQuery(DSParamsModel.tmpSql)
-            } else{
-                console.log("QUERY set FORWARDONLYQUERYMODEL", DSParamsModel.tmpSql)
-                ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
-            }
+            // Function to Execute sql generated dynamically
+            executeSql()
 
             TableSchemaModel.showSchema(DSParamsModel.tmpSql)
         }
@@ -825,6 +819,8 @@ Item {
         DSParamsModel.addToFrontRectangleCoordinates(counter, {x: rectLeftX, y: rectLeftY})
         DSParamsModel.addToRearRectangleCoordinates(counter, {x: rectRightX, y: rectRightY})
         DSParamsModel.addToExistingTables(counter, tableslist.tableName)
+
+        processQuery()
     }
 
 
