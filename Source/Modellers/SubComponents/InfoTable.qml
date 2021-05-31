@@ -155,6 +155,7 @@ Item{
                     // }
 
                     QueryModel.callSql(DSParamsModel.tmpSql)
+                    QueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
                     // QueryStatsModel.showStats()
                     // TableSchemaModel.showSchema(DSParamsModel.tmpSql)
 

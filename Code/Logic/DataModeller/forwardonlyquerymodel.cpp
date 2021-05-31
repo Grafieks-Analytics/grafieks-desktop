@@ -76,7 +76,7 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
     } else{
         emit forwardOnlyHasData(false);
     }
-    emit chartDataChanged(this->forwardOnlyChartData);
+
     endResetModel();
 }
 
@@ -168,7 +168,6 @@ void ForwardOnlyQueryModel::generateRoleNames()
                     fieldType = q.value(1).toString().trimmed();
                     colInfo << fieldName << dataType.dataType(fieldType) << tableName;
 
-                    qDebug() << "COL INFO" << colInfo;
                     m_roleNames.insert(i, fieldName.toUtf8());
                     this->setChartHeader(i, colInfo);
 
@@ -289,6 +288,8 @@ void ForwardOnlyQueryModel::setQueryResult()
     }
     // Set the internalRowCount for the QAbstractListModel rowCount method
     this->internalRowCount = totalRowCount;
+
+    emit chartDataChanged(this->forwardOnlyChartData);
 }
 
 

@@ -1470,6 +1470,7 @@ void ChartsModel::clearData()
 
 void ChartsModel::getChartData(QMap<int, QStringList *> chartData)
 {
+    qDebug() << "FIRING HIT";
     this->newChartData = chartData;
 }
 
