@@ -550,6 +550,7 @@ Item {
             } else{
                 console.log("QUERY set FORWARDONLYQUERYMODEL", DSParamsModel.tmpSql)
                 ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
+                ForwardOnlyQueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
             }
 
             TableSchemaModel.showSchema(DSParamsModel.tmpSql)
@@ -871,6 +872,7 @@ Item {
             DuckQueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
         } else{
             ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
+            ForwardOnlyQueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
         }
     }
 

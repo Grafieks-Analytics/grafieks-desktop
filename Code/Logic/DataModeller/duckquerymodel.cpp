@@ -35,8 +35,6 @@ void DuckQueryModel::setQuery(QString query)
 void DuckQueryModel::setPreviewQuery(int previewRowCount)
 {
 
-    this->previewRowCount = previewRowCount;
-    beginResetModel();
     std::vector<duckdb::Value> stdData;
 
     // Tmp
@@ -54,6 +52,12 @@ void DuckQueryModel::setPreviewQuery(int previewRowCount)
     } else{
         maxRowCount = previewRowCount;
     }
+
+
+    this->previewRowCount = maxRowCount;
+
+    beginResetModel();
+    this->resultData.clear();
 
     for(int i = 0; i < maxRowCount; i++){
         stdData = result->collection.GetRow(i);
