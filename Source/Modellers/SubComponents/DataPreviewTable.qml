@@ -13,10 +13,6 @@ Rectangle {
     width: parent.width
     height: parent.height
     visible: true
-
-
-
-
     property var roleNames:["a", "b", "c"]
     property var newObject: []
     property var previousModelData: 0
@@ -101,7 +97,6 @@ Rectangle {
         }
     }
 
-    // This
     function clearTable(){
         for(var i=0; i<roleNames.length; i++){
             view.removeColumn(newObject[i])
@@ -163,8 +158,6 @@ Rectangle {
 
             itemDelegate: Rectangle {
                 color: "white"
-                height: textItem.implicitHeight * 1.8
-                width: textItem.implicitWidth
 
 
                 Text {

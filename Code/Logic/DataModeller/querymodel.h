@@ -56,6 +56,7 @@ private:
     QMap<int, QStringList*> sqlChartData;
     QMap<int, QStringList> sqlChartHeader;
     QStringList tableHeaders;
+    int tmpRowCount;
     int previewRowCount;
     QString tmpSql;
     bool resetPreviewCount;
