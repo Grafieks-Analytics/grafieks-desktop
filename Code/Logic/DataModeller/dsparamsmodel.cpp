@@ -35,6 +35,11 @@ DSParamsModel::~DSParamsModel()
 
 }
 
+void DSParamsModel::executeModelerQuery()
+{
+    emit processQuery();
+}
+
 void DSParamsModel::resetDataModel()
 {
 
