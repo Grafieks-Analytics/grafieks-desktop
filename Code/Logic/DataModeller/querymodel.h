@@ -29,7 +29,6 @@ public:
     void setQuery(const QString &query, const QSqlDatabase &db = QSqlDatabase());
     void setQuery(const QSqlQuery &query);
     QVariant data(const QModelIndex &index, int role) const override;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void callSql(QString tmpSql);
@@ -57,7 +56,6 @@ private:
     QMap<int, QStringList> sqlChartHeader;
     QStringList tableHeaders;
     int tmpRowCount;
-    int previewRowCount;
     QString tmpSql;
     bool resetPreviewCount;
 

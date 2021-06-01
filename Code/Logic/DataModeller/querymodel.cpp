@@ -23,11 +23,19 @@ void QueryModel::setPreviewQuery(int previewRowCount)
         maxRowCount = previewRowCount;
     }
 
+    QString finalSql;
+    if(this->tmpSql.toLower().contains(" limit ", Qt::CaseInsensitive)){
+        finalSql = this->tmpSql.toLower().split(" limit ").first();
+    } else{
+        finalSql = this->tmpSql.toLower();
+    }
+
+    finalSql += " limit " + QString::number(maxRowCount);
+
     // For custom preview count
     this->resetPreviewCount = true;
 
-    this->previewRowCount = maxRowCount;
-    this->executeQuery(this->tmpSql, false);
+    this->executeQuery(finalSql, false);
 
     if(this->rowCount() > 0){
         emit sqlHasData(true);
@@ -45,10 +53,8 @@ void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
     if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
         qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
 
-    if(this->resetPreviewCount == false){
-        this->previewRowCount =  QSqlQueryModel::rowCount();
-        this->tmpRowCount = this->previewRowCount;
-    }
+    if(this->resetPreviewCount == false)
+        this->tmpRowCount = QSqlQueryModel::rowCount();
 
     generateRoleNames();
 }
@@ -63,10 +69,8 @@ void QueryModel::setQuery(const QSqlQuery &query)
     if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
         qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
 
-    if(this->resetPreviewCount == false){
-        this->previewRowCount =  QSqlQueryModel::rowCount();
-        this->tmpRowCount = this->previewRowCount;
-    }
+    if(this->resetPreviewCount == false)
+        this->tmpRowCount = QSqlQueryModel::rowCount();
 
     generateRoleNames();
 }
@@ -87,11 +91,11 @@ QVariant QueryModel::data(const QModelIndex &index, int role) const
     return value;
 }
 
-int QueryModel::rowCount(const QModelIndex &parent) const
-{
-    Q_UNUSED(parent);
-    return this->previewRowCount;
-}
+//int QueryModel::rowCount(const QModelIndex &parent) const
+//{
+//    Q_UNUSED(parent);
+//    return this->previewRowCount;
+//}
 
 
 QHash<int, QByteArray> QueryModel::roleNames() const
