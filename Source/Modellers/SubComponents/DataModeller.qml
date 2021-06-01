@@ -186,6 +186,44 @@ Item {
         }
 
 
+        // Generate the dynamic query and run in on receiving the signal
+        function onProcessQuery(){
+
+            // STEPS
+            // 1. check if more than 1 rects dont have any connections in front
+            // 2. Identify the first rect
+            // 3. Recrsive function to process the back connections and reorder them
+            // 4. Write the function to create query
+            // 5. Execute query
+
+            var undefinedCounter = 0
+
+            // DSParams rectangle
+            var rectangleObjectsSize = DSParamsModel.rectanglesSize()
+            var lineObjectsSize = DSParamsModel.linesSize()
+            var rectangleObjectKeys = DSParamsModel.fetchAllRectangleKeys()
+            var newLineObjectKeys = DSParamsModel.fetchAllLineKeys()
+
+
+            // Check if the rectangles are connected to some rectangle in front (except the first one)
+            // If not throw an error
+            if(rectangleObjectsSize - lineObjectsSize === 1){
+
+                var firstRectArr = rectangleObjectKeys.filter(x => newLineObjectKeys.indexOf(x) === -1)
+                firstRectId = firstRectArr[0]
+                // Call the function to process the rest of the query
+                joinOrder(firstRectId )
+
+
+            } else{
+                // Throw an error here
+                queryErrorModal.text = "JOIN is not complete"
+                queryErrorModal.open();
+
+            }
+
+        }
+
     }
 
 
@@ -417,44 +455,6 @@ Item {
         // Set joinId. Required to get value from Map() in the parent component
         DSParamsModel.setJoinId(counter)
         joinPopup.visible = true
-    }
-
-    // Generate the dynamic query and run in on receiving the signal
-    function processQuery(){
-
-        // STEPS
-        // 1. check if more than 1 rects dont have any connections in front
-        // 2. Identify the first rect
-        // 3. Recrsive function to process the back connections and reorder them
-        // 4. Write the function to create query
-        // 5. Execute query
-
-        var undefinedCounter = 0
-
-        // DSParams rectangle
-        var rectangleObjectsSize = DSParamsModel.rectanglesSize()
-        var lineObjectsSize = DSParamsModel.linesSize()
-        var rectangleObjectKeys = DSParamsModel.fetchAllRectangleKeys()
-        var newLineObjectKeys = DSParamsModel.fetchAllLineKeys()
-
-
-        // Check if the rectangles are connected to some rectangle in front (except the first one)
-        // If not throw an error
-        if(rectangleObjectsSize - lineObjectsSize === 1){
-
-            var firstRectArr = rectangleObjectKeys.filter(x => newLineObjectKeys.indexOf(x) === -1)
-            firstRectId = firstRectArr[0]
-            // Call the function to process the rest of the query
-            joinOrder(firstRectId )
-
-
-        } else{
-            // Throw an error here
-            queryErrorModal.text = "JOIN is not complete"
-            queryErrorModal.open();
-
-        }
-
     }
 
 
@@ -820,7 +820,8 @@ Item {
         DSParamsModel.addToRearRectangleCoordinates(counter, {x: rectRightX, y: rectRightY})
         DSParamsModel.addToExistingTables(counter, tableslist.tableName)
 
-        processQuery()
+        // Call to execute sql query for visual query designer
+        DSParamsModel.executeModelerQuery();
     }
 
 
