@@ -164,8 +164,7 @@ Rectangle {
                     id: textItem1
                     anchors.fill: parent
                     verticalAlignment: Text.AlignVCenter
-                    objectName: modelData
-                    text: model.display
+                    objectName: styleData.value
                     horizontalAlignment: styleData.textAlignment
                     anchors.leftMargin: 12
                     elide: Text.ElideRight

@@ -1,3 +1,4 @@
+
 import QtQuick 2.0
 import QtQuick.Controls 2.15
 
@@ -67,6 +68,9 @@ Rectangle{
             refObjId = joinId
             fetchJoinTableInfo(true)
             setPreviousJoin(DSParamsModel.fetchJoinTypeMap(refObjId))
+
+            // Call to execute sql query for visual query designer
+            DSParamsModel.executeModelerQuery();
         }
 
     }
@@ -323,6 +327,9 @@ Rectangle{
         joinPopupItem.deleteModel(itemId)
         DSParamsModel.removeJoinMapList(refObjId, removeItem, false)
 
+        // Call to execute sql query for visual query designer
+        DSParamsModel.executeModelerQuery();
+
     }
 
     function closePopup(){
@@ -353,6 +360,9 @@ Rectangle{
 
         DSParamsModel.updateJoinIconMap(DSParamsModel.joinId, iconSource)
         DSParamsModel.updateJoinTypeMap(DSParamsModel.joinId, joinType)
+
+        // Call to execute sql query for visual query designer
+        DSParamsModel.executeModelerQuery();
 
     }
 
