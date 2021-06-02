@@ -485,6 +485,8 @@ void DashboardParamsModel::setColumnFilterType(int dashboardId, QString columnNa
     QVariantMap colFilterType = this->columnFilterType.value(dashboardId);
     colFilterType.insert(columnName, filterType);
     this->columnFilterType.insert(dashboardId, colFilterType);
+
+    emit columnFilterTypeChanged();
 }
 
 QString DashboardParamsModel::fetchColumnFilterType(int dashboardId, QString columnName)
@@ -925,8 +927,8 @@ void DashboardParamsModel::setTmpCanvasWidth(int tmpCanvasWidth)
 void DashboardParamsModel::getColumnNames(QStringList columnNames)
 {
 
-    const QString defaultFilterType = "dataListSingle";
-    const QString defaultIncludeType = "include";
+    const QString defaultFilterType = "dataListSingle";  // Do not change this name
+    const QString defaultIncludeType = "include";       // Do not change this name
 
     for(int i = 0; i < this->dashboardCount(); i++){
         foreach(QString column, columnNames){
