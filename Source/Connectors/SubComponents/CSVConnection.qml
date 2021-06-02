@@ -234,7 +234,7 @@ Popup {
 
     MessageDialog{
         id: error_dialog
-        title: "CSV Impoer Error"
+        title: "CSV Import Error"
         text: ""
         icon: StandardIcon.Critical
     }
