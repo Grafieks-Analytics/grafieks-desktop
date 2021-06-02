@@ -431,33 +431,22 @@ QUrl DashboardParamsModel::getDashboardReportUrl(int dashboardId, int reportId)
     return output;
 }
 
-void DashboardParamsModel::addToHideColumns(int dashboardId, QString colName)
+void DashboardParamsModel::addToShowColumns(int dashboardId, QString colName, bool status)
 {
-    QStringList colNames = this->hideColumns.value(dashboardId);
-    colNames.append(colName);
-    this->hideColumns.insert(dashboardId, colNames);
+    QStringList colNames = this->showColumns.value(dashboardId);
+    if(status == true){
+        colNames.append(colName);
+    } else{
+        colNames.removeAll(colName);
+    }
+    this->showColumns.insert(dashboardId, colNames);
     emit hideColumnsChanged(colNames, dashboardId);
 }
 
-void DashboardParamsModel::removeFromHideColumns(int dashboardId, QString colName, bool removeAll)
-{
-    QStringList colNames;
-    if (removeAll == true)
-    {
-        this->hideColumns.clear();
-    }
-    else
-    {
-        colNames = this->hideColumns.value(dashboardId);
-        colNames.removeOne(colName);
-        this->hideColumns.insert(dashboardId, colNames);
-    }
-    emit hideColumnsChanged(colNames, dashboardId);
-}
 
-QStringList DashboardParamsModel::fetchHideColumns(int dashboardId, QString searchKeyword)
+QStringList DashboardParamsModel::fetchShowColumns(int dashboardId, QString searchKeyword)
 {
-    QStringList colNames = this->hideColumns.value(dashboardId);
+    QStringList colNames = this->showColumns.value(dashboardId);
     return colNames.filter(searchKeyword);
 }
 

@@ -39,6 +39,19 @@ Rectangle {
         }
     }
 
+    Connections{
+        target: DashboardParamsModel
+
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+            listModel.clear()
+            var showColumns = DashboardParamsModel.fetchShowColumns(dashboardId)
+            showColumns.forEach((item) => {
+                                       var columnType = DashboardParamsModel.fetchColumnFilterType(dashboardId, item)
+                                       listModel.append({type: columnType, name: item})
+                                   })
+        }
+    }
+
     ListView{
         id: filterDataListview
         height: parent.height

@@ -18,7 +18,7 @@ Item {
 
 
     function searchTableColumns(searchText){
-        TableColumnsModel.searchColumnNames(searchText)
+        TableColumnsModel.searchColumnNames(DashboardParamsModel.currentDashboard, searchText)
     }
 
     function addNewFilterColumns(){
