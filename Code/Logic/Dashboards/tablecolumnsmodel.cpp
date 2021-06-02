@@ -5,25 +5,35 @@ TableColumnsModel::TableColumnsModel(QObject *parent) : QObject(parent)
 
 }
 
-void TableColumnsModel::setColumnVisibility(QString columnName, bool show)
+void TableColumnsModel::setColumnVisibility(int dashboardId, QString columnName, bool show)
 {
+    QStringList allVisibleColumnList = this->allColumnVisibleMap.value(dashboardId);
     if(show == false){
-        this->allColumnVisibleList.removeAll(columnName);
+        allVisibleColumnList.removeAll(columnName);
+        this->allColumnVisibleMap.insert(dashboardId, allVisibleColumnList);
     } else{
 
         // Check if already exists
         // If no, then append
 
-        if(this->allColumnVisibleList.indexOf(columnName) < 0){
-            this->allColumnVisibleList.append(columnName);
+        if(allVisibleColumnList.indexOf(columnName) < 0){
+            allVisibleColumnList.append(columnName);
+            this->allColumnVisibleMap.insert(dashboardId, allVisibleColumnList);
+            qDebug() << "VISIBLE LIST" << allVisibleColumnList;
         }
     }
-    emit visibleColumnListChanged(this->allColumnVisibleList);
+
 }
 
-QStringList TableColumnsModel::fetchVisibleColumns()
+QStringList TableColumnsModel::fetchVisibleColumns(int dashboardId)
 {
-    return this->allColumnVisibleList;
+    return this->allColumnVisibleMap.value(dashboardId);
+}
+
+void TableColumnsModel::applyColumnVisibility(int dashboardId)
+{
+    emit columnNamesChanged(this->allColumnVisibleMap.value(dashboardId));
+    emit visibleColumnListChanged(this->allColumnVisibleMap.value(dashboardId));
 }
 
 QStringList TableColumnsModel::fetchColumnData(QString colName)
@@ -66,6 +76,8 @@ void TableColumnsModel::getChartHeader(QMap<int, QStringList> chartHeader)
     this->dateList.clear();
     this->newChartHeader.clear();
 
+    QStringList tmpVisibleColumnList;
+
     // Update new data
     foreach(auto key, chartHeader.keys()){
 
@@ -82,14 +94,12 @@ void TableColumnsModel::getChartHeader(QMap<int, QStringList> chartHeader)
         }
 
         this->newChartHeader.insert(key, fullColumnName);
-        this->allColumnVisibleList.append(fullColumnName);
     }
 
     this->categoryList.sort(Qt::CaseInsensitive);
     this->numericalList.sort(Qt::CaseInsensitive);
     this->dateList.sort(Qt::CaseInsensitive);
 
-    emit columnNamesChanged(this->allColumnVisibleList);
     emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
 
 }

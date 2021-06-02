@@ -168,6 +168,9 @@ public:
 
     QString currentSelectedColumn() const;
 
+    // Function to call to emit a signal to hide all right columns in dashboard
+    Q_INVOKABLE void hideAllDashboardRight();
+
 public slots:
     void setLastContainerType(QString lastContainerType);
     void setPositionY(int positionY);
@@ -192,6 +195,8 @@ signals:
     void dashboardCountChanged(int dashboardCount);
     void currentDashboardChanged(int currentDashboard, QVector<int> reportsInDashboard);
     void currentReportChanged(int currentReport);
+
+    void hideAllDashboardParams();
 
     // Filter parameters
     void hideColumnsChanged(QStringList hideColumns, int dashboardId);

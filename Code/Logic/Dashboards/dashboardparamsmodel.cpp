@@ -816,6 +816,11 @@ QString DashboardParamsModel::currentSelectedColumn() const
     return m_currentSelectedColumn;
 }
 
+void DashboardParamsModel::hideAllDashboardRight()
+{
+    emit hideAllDashboardParams();
+}
+
 void DashboardParamsModel::setLastContainerType(QString lastContainerType)
 {
     if (m_lastContainerType == lastContainerType)

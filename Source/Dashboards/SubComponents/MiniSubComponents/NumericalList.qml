@@ -24,14 +24,13 @@ ListView {
 
     function handleCheckChange(colName, status){
         if(colName !== "")
-            TableColumnsModel.setColumnVisibility(colName, status)
+            TableColumnsModel.setColumnVisibility(DashboardParamsModel.currentDashboard, colName, status)
     }
 
     delegate: CheckBoxTpl{
         id: checkBox1
         height: 20
         checkbox_text: modelData
-        checkbox_checked: true
         parent_dimension: 16
         onCheckedChanged: handleCheckChange(checkBox1.checkbox_text, checked)
     }
