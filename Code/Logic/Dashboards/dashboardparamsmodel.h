@@ -200,6 +200,7 @@ signals:
     // Filter parameters
 //    void hideColumnsChanged(QStringList hideColumns, int dashboardId);
     void aliasChanged(QString newAlias, QString columnName, int dashboardId);
+    void columnFilterTypeChanged();
 
     // Customize Dashboard parameters
     void dashboardNameChanged(int dashboardId, QString dashboardName);

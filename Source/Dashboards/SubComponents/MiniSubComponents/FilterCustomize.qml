@@ -20,7 +20,6 @@ Popup {
     modal: false
     visible: false
     padding: 0
-    property var filterTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti"]
 
     Connections{
         target: DashboardParamsModel
@@ -31,20 +30,22 @@ Popup {
             var columnFilter = DashboardParamsModel.fetchColumnFilterType(currentDashboard, currentColumn)
             var includeExclude = DashboardParamsModel.fetchIncludeExcludeMap(currentDashboard, currentColumn)
 
+            // filterTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti"]
+
             switch(columnFilter){
-            case filterTypes[0]:
+            case Constants.filterTypes[0]:
                 control1.checked = true
                 break;
 
-            case filterTypes[1]:
+            case Constants.filterTypes[1]:
                 control2.checked = true
                 break;
 
-            case filterTypes[2]:
+            case Constants.filterTypes[2]:
                 control3.checked = true
                 break;
 
-            case filterTypes[3]:
+            case Constants.filterTypes[3]:
                 control4.checked = true
                 break;
 
@@ -348,7 +349,7 @@ Popup {
                         RadioButton {
                             id: control1
                             ButtonGroup.group: buttonGroupFilterType
-                            onCheckedChanged: setFilterType(filterTypes[0])
+                            onCheckedChanged: setFilterType(Constants.filterTypes[0])
                             indicator: Rectangle {
                                 implicitWidth: 16
                                 implicitHeight: 16
@@ -384,7 +385,7 @@ Popup {
                         RadioButton {
                             id: control2
                             ButtonGroup.group: buttonGroupFilterType
-                            onCheckedChanged: setFilterType(filterTypes[1])
+                            onCheckedChanged: setFilterType(Constants.filterTypes[1])
                             indicator: Rectangle {
                                 implicitWidth: 16
                                 implicitHeight: 16
@@ -439,7 +440,7 @@ Popup {
                         RadioButton {
                             id: control3
                             ButtonGroup.group: buttonGroupFilterType
-                            onCheckedChanged: setFilterType(filterTypes[2])
+                            onCheckedChanged: setFilterType(Constants.filterTypes[2])
                             indicator: Rectangle {
                                 implicitWidth: 16
                                 implicitHeight: 16
@@ -475,7 +476,7 @@ Popup {
                         RadioButton {
                             id: control4
                             ButtonGroup.group: buttonGroupFilterType
-                            onCheckedChanged: setFilterType(filterTypes[3])
+                            onCheckedChanged: setFilterType(Constants.filterTypes[3])
                             indicator: Rectangle {
                                 implicitWidth: 16
                                 implicitHeight: 16
