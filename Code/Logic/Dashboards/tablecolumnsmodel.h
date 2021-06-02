@@ -17,14 +17,14 @@ class TableColumnsModel : public QObject
     QStringList numericalList;
     QStringList categoryList;
     QStringList dateList;
-    QStringList allColumnVisibleList;
+    QMap<int, QStringList> allColumnVisibleMap;
 
 public:
     explicit TableColumnsModel(QObject *parent = nullptr);
 
-    Q_INVOKABLE void setColumnVisibility(QString columnName, bool show = true);
-    Q_INVOKABLE QStringList fetchVisibleColumns();
-//    Q_INVOKABLE void applyColumnVisibility(int dashboardId);
+    Q_INVOKABLE void setColumnVisibility(int dashboardId, QString columnName, bool show = true);
+    Q_INVOKABLE QStringList fetchVisibleColumns(int dashboardId);
+    Q_INVOKABLE void applyColumnVisibility(int dashboardId);
 
     Q_INVOKABLE QStringList fetchColumnData(QString colName);
     Q_INVOKABLE QStringList searchColumnData(QString keyword, QString columnName);

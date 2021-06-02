@@ -58,6 +58,25 @@ Page {
         function onDashboardNameChanged(dashboardId, dashboardName){
             dashboardModel.get(dashboardId).dashboardName = dashboardName
         }
+
+        function onHideAllDashboardParams(){
+            column_filter_newdashboard.visible = false
+            column_newdashboard.visible = false
+            column_filter_newdashboard_add.visible = false
+        }
+    }
+
+    Connections{
+        target: TableColumnsModel
+
+        function onVisibleColumnListChanged(visibleColumns){
+
+            column_filter_newdashboard.visible = true
+
+            // hide other panels
+            column_newdashboard.visible = false
+            column_filter_newdashboard_add.visible = false
+        }
     }
 
     // Connections Ends
