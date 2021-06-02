@@ -435,12 +435,28 @@ void DashboardParamsModel::addToShowColumns(int dashboardId, QString colName, bo
 {
     QStringList colNames = this->showColumns.value(dashboardId);
     if(status == true){
-        colNames.append(colName);
+        if(colNames.indexOf(colName) < 0)
+            colNames.append(colName);
     } else{
         colNames.removeAll(colName);
+
+        // Remove from include/exclude
+        QVariantMap colIncludeExclude = this->columnIncludeExcludeMap.value(dashboardId);
+        colIncludeExclude.remove(colName);
+        this->columnIncludeExcludeMap.insert(dashboardId, colIncludeExclude);
+
+        // Remove from alias name
+        QVariantMap colFilterType = this->columnFilterType.value(dashboardId);
+        colFilterType.remove(colName);
+        this->columnFilterType.insert(dashboardId, colFilterType);
+
+        // Remove from filter type
+        QVariantMap colAliasNames = this->columnAliasMap.value(dashboardId);
+        colAliasNames.remove(colName);
+        this->columnAliasMap.insert(dashboardId, colAliasNames);
     }
     this->showColumns.insert(dashboardId, colNames);
-    emit hideColumnsChanged(colNames, dashboardId);
+//    emit hideColumnsChanged(colNames, dashboardId);
 }
 
 
@@ -916,13 +932,16 @@ void DashboardParamsModel::getColumnNames(QStringList columnNames)
         foreach(QString column, columnNames){
 
             // Set default column alias name to the existing column name
-            this->setColumnAliasName(i, column, column);
+            if(this->fetchColumnAliasName(i, column) == "")
+                this->setColumnAliasName(i, column, column);
 
             // Set default filter type
-            this->setColumnFilterType(i, column, defaultFilterType);
+            if(this->fetchColumnFilterType(i, column) == "")
+                this->setColumnFilterType(i, column, defaultFilterType);
 
             // Set default include/exclude type
-            this->setIncludeExcludeMap(i, column, defaultIncludeType);
+            if(this->fetchIncludeExcludeMap(i, column) == "")
+                this->setIncludeExcludeMap(i, column, defaultIncludeType);
         }
     }
 }

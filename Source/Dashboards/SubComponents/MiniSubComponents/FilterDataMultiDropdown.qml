@@ -15,6 +15,7 @@ Item {
 
     onComponentNameChanged: {
         comboBox.model = TableColumnsModel.fetchColumnData(componentName)
+        componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
     Connections{

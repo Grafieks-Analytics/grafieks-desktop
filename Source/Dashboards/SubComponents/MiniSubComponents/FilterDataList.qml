@@ -13,7 +13,8 @@ Item {
     property alias componentName: filterDataItem.objectName
 
     onComponentNameChanged: {
-       dataListView.model = TableColumnsModel.fetchColumnData(componentName)
+        dataListView.model = TableColumnsModel.fetchColumnData(componentName)
+        componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
 
@@ -25,6 +26,7 @@ Item {
                 componentTitle.text = newAlias
             }
         }
+
     }
 
     function toggleSearch(){
@@ -87,7 +89,7 @@ Item {
 
             Text {
                 id: componentTitle
-                text:componentName
+                text: DashboardParamsModel.fetchColumnAliasName(currentDashboardId, componentName)
                 font.pixelSize: 12
                 verticalAlignment: Text.AlignVCenter
             }

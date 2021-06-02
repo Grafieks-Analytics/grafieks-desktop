@@ -13,7 +13,8 @@ Item{
     property alias componentName: filterDataSingleItem.objectName
 
     onComponentNameChanged: {
-       control.model = TableColumnsModel.fetchColumnData(componentName)
+        control.model = TableColumnsModel.fetchColumnData(componentName)
+        componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
     Connections{
