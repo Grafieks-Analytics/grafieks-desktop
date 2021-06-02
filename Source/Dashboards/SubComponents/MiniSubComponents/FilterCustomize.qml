@@ -47,6 +47,10 @@ Popup {
             case filterTypes[3]:
                 control4.checked = true
                 break;
+
+            default:
+                control1.checked = true
+                break;
             }
 
             if(includeExclude.toLowerCase() === "include"){

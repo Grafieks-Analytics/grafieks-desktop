@@ -12,24 +12,42 @@ ListView {
     clip: false
     height: parent.height
     width: parent.width
+    property var currentDashboardId: 0
 
 
     Connections{
         target : TableColumnsModel
 
-        function onSendFilteredColumn(allCategorical, allNumerical, allDates){
-            numericalChecksItem.model =  allNumerical
+        function onSendFilteredColumn(currentDashboard, allCategorical, allNumerical, allDates){
+            if(currentDashboard === DashboardParamsModel.currentDashboard){
+                numericalChecksItem.model =  allNumerical
+                currentDashboardId = currentDashboard
+            }
+        }
+    }
+
+    Connections{
+        target: DashboardParamsModel
+
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+            currentDashboardId = dashboardId
+            console.log(DashboardParamsModel.fetchShowColumns(DashboardParamsModel.currentDashboard), DashboardParamsModel.currentDashboard, "DDD")
         }
     }
 
     function handleCheckChange(colName, status){
-        if(colName !== "")
-            TableColumnsModel.setColumnVisibility(DashboardParamsModel.currentDashboard, colName, status)
+        if(currentDashboardId === DashboardParamsModel.currentDashboard){
+            if(colName !== ""){
+                TableColumnsModel.setColumnVisibility(DashboardParamsModel.currentDashboard, colName, status)
+                DashboardParamsModel.addToShowColumns(DashboardParamsModel.currentDashboard, colName, status)
+            }
+        }
     }
 
     delegate: CheckBoxTpl{
         id: checkBox1
         height: 20
+        checkbox_checked: DashboardParamsModel.fetchShowColumns(DashboardParamsModel.currentDashboard).indexOf(modelData) < 0 ? false: true
         checkbox_text: modelData
         parent_dimension: 16
         onCheckedChanged: handleCheckChange(checkBox1.checkbox_text, checked)

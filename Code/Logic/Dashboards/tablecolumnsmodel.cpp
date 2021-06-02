@@ -19,7 +19,6 @@ void TableColumnsModel::setColumnVisibility(int dashboardId, QString columnName,
         if(allVisibleColumnList.indexOf(columnName) < 0){
             allVisibleColumnList.append(columnName);
             this->allColumnVisibleMap.insert(dashboardId, allVisibleColumnList);
-            qDebug() << "VISIBLE LIST" << allVisibleColumnList;
         }
     }
 
@@ -55,9 +54,19 @@ QStringList TableColumnsModel::searchColumnData(QString keyword, QString columnN
     return columnDataList.filter(keyword, Qt::CaseInsensitive);
 }
 
-void TableColumnsModel::searchColumnNames(QString keyword)
+void TableColumnsModel::searchColumnNames(int dashboardId, QString keyword)
 {
-    emit sendFilteredColumn(this->categoryList.filter(keyword, Qt::CaseInsensitive), this->numericalList.filter(keyword, Qt::CaseInsensitive), this->dateList.filter(keyword, Qt::CaseInsensitive));
+    emit sendFilteredColumn(dashboardId, this->categoryList.filter(keyword, Qt::CaseInsensitive), this->numericalList.filter(keyword, Qt::CaseInsensitive), this->dateList.filter(keyword, Qt::CaseInsensitive));
+}
+
+void TableColumnsModel::addNewDashboard(int dashboardId)
+{
+    emit sendFilteredColumn(dashboardId, this->categoryList, this->numericalList, this->dateList);
+}
+
+void TableColumnsModel::deleteDashboard(int dashboardId)
+{
+    this->allColumnVisibleMap.remove(dashboardId);
 }
 
 void TableColumnsModel::getChartData(QMap<int, QStringList *> chartData)
@@ -100,6 +109,7 @@ void TableColumnsModel::getChartHeader(QMap<int, QStringList> chartHeader)
     this->numericalList.sort(Qt::CaseInsensitive);
     this->dateList.sort(Qt::CaseInsensitive);
 
-    emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
+    int currentDashboard = 0;
+    emit sendFilteredColumn(currentDashboard, this->categoryList, this->numericalList, this->dateList);
 
 }
