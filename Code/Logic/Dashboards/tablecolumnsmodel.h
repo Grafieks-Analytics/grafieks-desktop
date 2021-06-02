@@ -17,25 +17,29 @@ class TableColumnsModel : public QObject
     QStringList numericalList;
     QStringList categoryList;
     QStringList dateList;
-    QStringList allColumnVisibleList;
+    QMap<int, QStringList> allColumnVisibleMap;
 
 public:
     explicit TableColumnsModel(QObject *parent = nullptr);
 
-    Q_INVOKABLE void setColumnVisibility(QString columnName, bool show = true);
-    Q_INVOKABLE QStringList fetchVisibleColumns();
-//    Q_INVOKABLE void applyColumnVisibility(int dashboardId);
+    Q_INVOKABLE void setColumnVisibility(int dashboardId, QString columnName, bool show = true);
+    Q_INVOKABLE QStringList fetchVisibleColumns(int dashboardId);
+    Q_INVOKABLE void applyColumnVisibility(int dashboardId);
+    Q_INVOKABLE void addNewDashboard(int dashboardId);
+    Q_INVOKABLE void deleteDashboard(int dashboardId);
 
     Q_INVOKABLE QStringList fetchColumnData(QString colName);
     Q_INVOKABLE QStringList searchColumnData(QString keyword, QString columnName);
-    Q_INVOKABLE void searchColumnNames(QString keyword);
+    Q_INVOKABLE void searchColumnNames(int dashboardId, QString keyword);
+
+
 
 public slots:
     void getChartData(QMap<int, QStringList*> chartData);
     void getChartHeader(QMap<int, QStringList> chartHeader);
 
 signals:
-    void sendFilteredColumn(QStringList allCategorical, QStringList allNumerical, QStringList allDates);
+    void sendFilteredColumn(int currentDashboard, QStringList allCategorical, QStringList allNumerical, QStringList allDates);
     void visibleColumnListChanged(QStringList visibleColumns);
     void columnNamesChanged(QStringList columnNames);
 
