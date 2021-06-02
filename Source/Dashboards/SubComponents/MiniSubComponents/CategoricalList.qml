@@ -31,7 +31,6 @@ ListView {
 
         function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
             currentDashboardId = dashboardId
-            console.log(DashboardParamsModel.fetchShowColumns(DashboardParamsModel.currentDashboard), DashboardParamsModel.currentDashboard, "DDD")
         }
     }
 

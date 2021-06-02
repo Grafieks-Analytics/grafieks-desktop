@@ -198,7 +198,7 @@ signals:
     void hideAllDashboardParams();
 
     // Filter parameters
-    void hideColumnsChanged(QStringList hideColumns, int dashboardId);
+//    void hideColumnsChanged(QStringList hideColumns, int dashboardId);
     void aliasChanged(QString newAlias, QString columnName, int dashboardId);
 
     // Customize Dashboard parameters
