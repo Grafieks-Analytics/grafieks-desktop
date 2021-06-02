@@ -7,13 +7,14 @@ import com.grafieks.singleton.constants 1.0
 import "../../../MainSubComponents"
 
 Item {
-    id: filterDataItem
+    id: filterDataItemMulti
     width: parent.width
     height: 200
-    property alias componentName: filterDataItem.objectName
+    property alias componentName: filterDataItemMulti.objectName
 
     onComponentNameChanged: {
-       dataListView.model = TableColumnsModel.fetchColumnData(componentName)
+        dataListView.model = TableColumnsModel.fetchColumnData(componentName)
+        componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
 
@@ -25,6 +26,7 @@ Item {
                 componentTitle.text = newAlias
             }
         }
+
     }
 
     function toggleSearch(){
@@ -48,18 +50,6 @@ Item {
         labelShapePopup1.visible = true
     }
 
-
-    Component{
-        id:singleselect
-        Row{
-            CustomRadioButton{
-                ButtonGroup.group: buttonGroupSingle
-                radio_text: modelData
-                radio_checked: false
-                parent_dimension: 16
-            }
-        }
-    }
 
     Component{
         id:multipleselect
@@ -87,7 +77,7 @@ Item {
 
             Text {
                 id: componentTitle
-                text:componentName
+                text: DashboardParamsModel.fetchColumnAliasName(currentDashboardId, componentName)
                 font.pixelSize: 12
                 verticalAlignment: Text.AlignVCenter
             }
@@ -160,13 +150,7 @@ Item {
         anchors.top: searchFilter.bottom
 
         delegate:{
-            if(0){
-                return singleselect
-            } else if(1){
-                return multipleselect
-            } else{
-                return null
-            }
+            return multipleselect
         }
     }
 }

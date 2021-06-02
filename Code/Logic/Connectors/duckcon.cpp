@@ -49,7 +49,7 @@ void DuckCon::createTable(){
             std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
 
             if(res->error.empty() == false){
-                emit importError("Please select a valid JSON format and remove special characters from input file");
+                emit importError("Please select a valid JSON format and remove special characters from input file", "json");
                 qWarning() << Q_FUNC_INFO << "JSON import issue" << res->error.c_str();
             } else{
                 this->tables.append(table);
@@ -78,7 +78,7 @@ void DuckCon::createTable(){
             }
 
             if(errorStatus == true){
-                emit importError("Please remove special characters from input Excel file");
+                emit importError("File format is not valid UTF-8. Please provide a valid UTF-8 file", "excel");
             }
 
         } else{
@@ -86,7 +86,7 @@ void DuckCon::createTable(){
             Statics::currentDbName = fileName;
             std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
             if(res->error.empty() == false){
-                emit importError("Please remove special characters from input CSV file");
+                emit importError("File format is not valid UTF-8. Please provide a valid UTF-8 file", "csv");
                 qWarning() << Q_FUNC_INFO << "CSV import issue" << res->error.c_str();
             } else{
                 this->tables.append(table);
