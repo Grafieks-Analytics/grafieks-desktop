@@ -9,19 +9,21 @@ QueryStatsModel::QueryStatsModel(QObject *parent) : QSqlQueryModel(parent),
 void QueryStatsModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
     QSqlQueryModel::setQuery(query, db);
-    if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
+    if(QSqlQueryModel::lastError().type() != QSqlError::NoError){
         qWarning() << QSqlQueryModel::lastError();
-
-    generateRoleNames();
+    } else{
+        generateRoleNames();
+    }
 }
 
 void QueryStatsModel::setQuery(const QSqlQuery &query)
 {
     QSqlQueryModel::setQuery(query);
-    if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
+    if(QSqlQueryModel::lastError().type() != QSqlError::NoError){
         qWarning() << QSqlQueryModel::lastError();
-
-    generateRoleNames();
+    } else{
+        generateRoleNames();
+    }
 }
 
 QVariant QueryStatsModel::data(const QModelIndex &index, int role) const
