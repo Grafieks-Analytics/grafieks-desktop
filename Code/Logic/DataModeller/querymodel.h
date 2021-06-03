@@ -45,6 +45,7 @@ signals:
     void headerDataChanged(QStringList tableHeaders);
     void sqlHasData(bool hasData);
     void clearTablePreview();
+    void errorSignal(QString errMsg);
 
 private:
     QHash<int, QByteArray> m_roleNames;
