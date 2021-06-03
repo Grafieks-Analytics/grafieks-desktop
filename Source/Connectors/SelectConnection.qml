@@ -196,9 +196,6 @@ Page {
         ConnectorFilter.setSearchString(text)
     }
 
-    function onSearchDataConnector(text){
-        ConnectorFilter.setSearchString(text)
-    }
 
 
     // JAVASCRIPT FUNCTIONS ENDS
@@ -411,26 +408,8 @@ Page {
             font.pointSize: Constants.fontReading
             opacity: 0.6
 
-            onAccepted: searchDataConnector(search_text.text);
+            onTextChanged: searchDataConnector(search_text.text);
 
-
-        }
-
-        Image{
-            id:search_btn
-            source: "/Images/icons/Search.png"
-            anchors.right: searchRectangle.right
-            anchors.rightMargin: 10
-            height:30
-            width: height
-            anchors.verticalCenter: searchRectangle.verticalCenter
-
-            MouseArea{
-                anchors.fill: parent
-
-                onClicked: onSearchDataConnector(search_text.text);
-
-            }
 
         }
 
