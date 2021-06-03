@@ -24,13 +24,48 @@ void QueryModel::setPreviewQuery(int previewRowCount)
     }
 
     QString finalSql;
-    if(this->tmpSql.toLower().contains(" limit ", Qt::CaseInsensitive)){
-        finalSql = this->tmpSql.toLower().split(" limit ").first();
-    } else{
-        finalSql = this->tmpSql.toLower();
+
+    switch (Statics::currentDbIntType) {
+
+    case Constants::mysqlIntType:
+    case Constants::mysqlOdbcIntType:
+    case Constants::sqliteIntType:
+    case Constants::postgresIntType:
+    case Constants::mongoIntType:{
+        if(this->tmpSql.toLower().contains(" limit ", Qt::CaseInsensitive)){
+            finalSql = this->tmpSql.toLower().split(" limit ").first();
+        } else{
+            finalSql = this->tmpSql.toLower();
+        }
+
+        finalSql += " limit " + QString::number(maxRowCount);
+        break;
     }
 
-    finalSql += " limit " + QString::number(maxRowCount);
+    case Constants::oracleIntType:{
+        break;
+    }
+    case Constants::mssqlIntType:{
+        break;
+    }
+
+    case Constants::accessIntType:{
+
+        QString finalSqlInterPart;
+
+        if(this->tmpSql.toLower().contains(" top ", Qt::CaseInsensitive)){
+            finalSqlInterPart = this->tmpSql.toLower().split(" top ").last();
+            finalSql = "select top " + QString::number(maxRowCount) + " " + finalSqlInterPart.section(' ', 1);
+
+        } else{
+            finalSqlInterPart = this->tmpSql.toLower().section(' ', 1);
+            finalSql = "select top " + QString::number(maxRowCount) + " " + finalSqlInterPart;
+        }
+
+        qDebug() << "final query access" << finalSql;
+        break;
+    }
+    }
 
     // For custom preview count
     this->resetPreviewCount = true;
@@ -121,10 +156,7 @@ void QueryModel::removeTmpChartData()
     this->sqlChartHeader.clear();
     this->tableHeaders.clear();
 
-//    QSqlQueryModel::clear();
-
     emit sqlHasData(false);
-//    emit chartDataChanged(this->sqlChartData);
     emit headerDataChanged(this->tableHeaders);
     emit chartHeaderChanged(this->sqlChartHeader);
 }
@@ -237,13 +269,6 @@ void QueryModel::executeQuery(QString &query, bool updateChartData)
         break;
     }
 
-    case Constants::excelIntType:{
-        QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelStrQueryType);
-        this->setQuery(query, dbExcel);
-        if(updateChartData == true)
-            this->setChartData();
-        break;
-    }
     case Constants::mssqlIntType:{
         QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
         this->setQuery(query, dbMssql);
@@ -263,22 +288,6 @@ void QueryModel::executeQuery(QString &query, bool updateChartData)
     case Constants::mongoIntType:{
         QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrQueryType);
         this->setQuery(query, dbMongo);
-        if(updateChartData == true)
-            this->setChartData();
-        break;
-    }
-
-    case Constants::impalaIntType:{
-        QSqlDatabase dbImpala = QSqlDatabase::database(Constants::impalaOdbcStrQueryType);
-        this->setQuery(query, dbImpala);
-        if(updateChartData == true)
-            this->setChartData();
-        break;
-    }
-
-    case Constants::hiveIntType:{
-        QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrQueryType);
-        this->setQuery(query, dbHive);
         if(updateChartData == true)
             this->setChartData();
         break;
