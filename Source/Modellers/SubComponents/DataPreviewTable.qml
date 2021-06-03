@@ -167,8 +167,7 @@ Rectangle {
 
             itemDelegate: Rectangle {
                 color: "white"
-                height: textItem.implicitHeight * 1.8
-                width: textItem.implicitWidth
+
 
 
                 Text {

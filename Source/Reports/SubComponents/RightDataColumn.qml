@@ -56,14 +56,27 @@ Column{
         height: parent.height/3 - 6
         width: parent.width
 
-        Text {
-            id: categoricalHeading
-            text: qsTr("Categorical")
-            font.pixelSize: Constants.fontCategoryHeader
+
+        Rectangle{
+            id:categoricalHeadingRect
+            z:10
+            color: "white"
+            height: 25
+            width:parent.width
+            Text {
+                id: categoricalHeading
+                text: qsTr("Categorical")
+                font.pixelSize: Constants.fontCategoryHeader
+                z: 100
+            }
         }
+
 
         CategoricalList{
             id: categoricalList
+            anchors.top: categoricalHeadingRect.bottom
+            height: parent.height - 6
+
         }
 
     }

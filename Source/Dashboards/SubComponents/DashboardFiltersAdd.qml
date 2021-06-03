@@ -182,11 +182,11 @@ Item {
                 id: text4
 
                 anchors.top: parent.top
-                anchors.topMargin: 20
+                anchors.topMargin: 5
                 anchors.left: parent.left
                 anchors.leftMargin: 10
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
+//                anchors.bottom: parent.bottom
+//                anchors.bottomMargin: 0
 
                 text: qsTr("Categorical")
                 font.pixelSize: 15
@@ -195,6 +195,11 @@ Item {
 
             CategoricalList{
                 id: categoricalCheckboxes
+                anchors.top: text4.bottom
+                anchors.topMargin: 5
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+
 
             }
         }
@@ -202,7 +207,7 @@ Item {
             id: rectangle2
 
             width: parent.width
-
+   anchors.topMargin: 4
             anchors.left: parent.left
             anchors.leftMargin: 5
             height:  parent.height/3-20
@@ -217,8 +222,8 @@ Item {
                 anchors.topMargin: 20
                 anchors.left: parent.left
                 anchors.leftMargin: 10
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
+//                anchors.bottom: parent.bottom
+//                anchors.bottomMargin: 0
 
                 text: qsTr("Date")
                 font.pixelSize: 15
@@ -228,6 +233,11 @@ Item {
 
             DateList{
                 id: dateCheckboxes
+                anchors.top: dataTypeDate.bottom
+                anchors.topMargin: 5
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+
             }
 
         }
@@ -250,8 +260,8 @@ Item {
                 anchors.topMargin: 20
                 anchors.left: parent.left
                 anchors.leftMargin: 10
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
+//                anchors.bottom: parent.bottom
+//                anchors.bottomMargin: 0
 
                 text: qsTr("Numerical")
                 font.pixelSize: 15
@@ -261,6 +271,10 @@ Item {
 
             NumericalList{
                 id: numericalCheckboxes
+                anchors.top: dataTypeNumerical.bottom
+                anchors.topMargin: 5
+                anchors.left: parent.left
+                anchors.leftMargin: 10
             }
         }
 
