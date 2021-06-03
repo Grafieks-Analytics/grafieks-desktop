@@ -45,10 +45,7 @@ void QueryModel::setPreviewQuery(int previewRowCount)
     case Constants::oracleIntType:{
         break;
     }
-    case Constants::mssqlIntType:{
-        break;
-    }
-
+    case Constants::mssqlIntType:
     case Constants::accessIntType:{
 
         QString finalSqlInterPart;
@@ -61,8 +58,6 @@ void QueryModel::setPreviewQuery(int previewRowCount)
             finalSqlInterPart = this->tmpSql.toLower().section(' ', 1);
             finalSql = "select top " + QString::number(maxRowCount) + " " + finalSqlInterPart;
         }
-
-        qDebug() << "final query access" << finalSql;
         break;
     }
     }
