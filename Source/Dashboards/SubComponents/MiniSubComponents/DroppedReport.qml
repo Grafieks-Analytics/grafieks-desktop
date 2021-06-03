@@ -129,9 +129,9 @@ Item{
             mainContainer.width = Constants.defaultDroppedReportWidth
             mainContainer.height = Constants.defaultDroppedReportHeight
             fullScreenReport.source= "/Images/icons/zoom in gray.png"
-            console.log(currnetPointReport.x, currnetPointReport.y, "XY1", mainContainer.y, mainContainer.x)
-            mainContainer.y=originalPoint.y
-            mainContainer.x=originalPoint.x
+
+            mainContainer.y = originalPoint.y
+            mainContainer.x = originalPoint.x
 
 
         }
@@ -146,12 +146,10 @@ Item{
             originalPoint.x = currnetPointReport.x
             originalPoint.y = currnetPointReport.y
 
-            console.log(currnetPointReport.x, currnetPointReport.y, "XY2", mainContainer.y, mainContainer.x)
             fullScreenReport.source= "/Images/icons/zoom out gray.png"
             DashboardParamsModel.setZIndex(++DashboardParamsModel.zIndex);
             newItem.z = DashboardParamsModel.zIndex;
             mainContainer.z = DashboardParamsModel.zIndex;
-            console.log("x",DashboardParamsModel.positionX)
 
         }
     }
@@ -180,12 +178,8 @@ Item{
     }
 
     function onDropAreaPositionChangedReport(){
-        console.log("drag area change x",mainContainer.x, "XY3");
-        //        dashboardArea.currnetPointReport = {x: mainContainer.x, y: mainContainer.y};
-        console.log("currnetPointReport1",JSON.stringify(currnetPointReport))
         currnetPointReport.x=mainContainer.x;
         currnetPointReport.y=mainContainer.y;
-        console.log("currnetPointReport2",JSON.stringify(currnetPointReport))
     }
 
     // JAVASCRIPT FUNCTION ENDS
