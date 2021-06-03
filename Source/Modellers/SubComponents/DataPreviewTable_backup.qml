@@ -1,14 +1,9 @@
-import QtQuick 2.0
-
-Item {
-
-}
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import com.grafieks.singleton.constants 1.0
-2.0
+
 
 // Data Preview - Table View From Query Results
 

@@ -13,10 +13,6 @@ Rectangle {
     width: parent.width
     height: parent.height
     visible: true
-
-
-
-
     property var roleNames:["a", "b", "c"]
     property var newObject: []
     property var previousModelData: 0
@@ -28,6 +24,7 @@ Rectangle {
         // This one is for table data
         function onSqlHasData(hasData){
             view.model = hasData === true? QueryModel: ""
+            view.visible = hasData === true ? true: false
 
         }
 
@@ -49,12 +46,13 @@ Rectangle {
         // This one is for table data
         function onDuckHasData(hasData){
             view.model = hasData === true? DuckQueryModel: ""
+            view.visible = hasData === true ? true: false
 
         }
 
         // This slot is for updating headers
         // This is also returning an array of strings
-        function onHeaderDataChanged(tableHeaders){
+        function onDuckHeaderDataChanged(tableHeaders){
             setHeaders(tableHeaders)
         }
 
@@ -68,14 +66,14 @@ Rectangle {
         target: ForwardOnlyQueryModel
 
         // This one is for table data
-        function onSqlHasData(hasData){
+        function onForwardOnlyHasData(hasData){
             view.model = hasData === true? ForwardOnlyQueryModel: ""
-
+            view.visible = hasData === true ? true: false
         }
 
         // This slot is for updating headers
         // This is also returning an array of strings
-        function onHeaderDataChanged(tableHeaders){
+        function onForwardOnlyHeaderDataChanged(tableHeaders){
             setHeaders(tableHeaders)
         }
 
@@ -99,7 +97,6 @@ Rectangle {
         }
     }
 
-    // This
     function clearTable(){
         for(var i=0; i<roleNames.length; i++){
             view.removeColumn(newObject[i])
@@ -109,19 +106,13 @@ Rectangle {
     }
 
 
-//    Button{
-//        id: clearBtn
-//        text: "Clear"
-//        height: 30
-//        onClicked: clearTable()
-//    }
-
     TableView {
         id:view
         width: parent.width
         height: parent.height
-//        anchors.top: clearBtn.bottom
+        //        anchors.top: clearBtn.bottom
         alternatingRowColors: false
+        visible: false
 
 
 
@@ -169,28 +160,26 @@ Rectangle {
                 color: "white"
 
 
-
                 Text {
                     id: textItem1
                     anchors.fill: parent
                     verticalAlignment: Text.AlignVCenter
-                    objectName: modelData
+                    objectName: styleData.value
                     horizontalAlignment: styleData.textAlignment
                     anchors.leftMargin: 12
                     elide: Text.ElideRight
                     color: textColor
                     renderType: Text.NativeRendering
-
                     onObjectNameChanged: {
-                        if(previousModelData === modelData){
-                            counter++
-                            textItem1.text = QueryModel.data(QueryModel.index(modelData-1,counter))
+                        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+                            textItem1.text = QueryModel.data(QueryModel.index(styleData.row, styleData.column))
+                        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
+                            textItem1.text = DuckQueryModel.data(DuckQueryModel.index(styleData.row, styleData.column))
                         } else{
-                            counter = 0;
-                            previousModelData = modelData
-                            textItem1.text = QueryModel.data(QueryModel.index(previousModelData - 1,counter))
+                            textItem1.text = ForwardOnlyQueryModel.data(ForwardOnlyQueryModel.index(styleData.row, styleData.column))
                         }
                     }
+
                 }
                 Rectangle {
                     anchors.right: parent.right

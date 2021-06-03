@@ -15,13 +15,14 @@ Item {
 
     onComponentNameChanged: {
         comboBox.model = TableColumnsModel.fetchColumnData(componentName)
+        componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
     Connections{
         target: DashboardParamsModel
 
-        function onAliasChanged(newAlias, columnName){
-            if(columnName === componentName){
+        function onAliasChanged(newAlias, columnName, dashboardId){
+            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
                 componentTitle.text = newAlias
             }
         }
@@ -47,7 +48,6 @@ Item {
 
             Text {
                 id: componentTitle
-                text: componentName
                 font.pixelSize: 12
                 verticalAlignment: Text.AlignVCenter
             }
@@ -72,7 +72,6 @@ Item {
 
     ComboBox {
         id: comboBox
-        y:260
         width: parent.width
 
         indicator: Canvas {
@@ -110,6 +109,7 @@ Item {
             function toggle() {
                 checkDelegate.toggle()
             }
+
             CheckDelegate {
                 id: checkDelegate
                 indicator: Rectangle {
@@ -133,7 +133,7 @@ Item {
                 }
                 anchors.fill: parent
                 contentItem: Text {
-                    text: model.name
+                    text: modelData
                     elide: Text.ElideLeft
                     leftPadding: checkDelegate.indicator.width + checkDelegate.spacing
                 }
@@ -141,8 +141,8 @@ Item {
 
 
                 highlighted: comboBox.highlightedIndex == index
-                checked: model.selected
-                onCheckedChanged: model.selected = checked
+                //                checked: model.selected
+                //                onCheckedChanged: model.selected = checked
             }
         }
     }

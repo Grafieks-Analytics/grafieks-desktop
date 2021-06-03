@@ -58,6 +58,31 @@ Page {
         function onDashboardNameChanged(dashboardId, dashboardName){
             dashboardModel.get(dashboardId).dashboardName = dashboardName
         }
+
+        function onHideAllDashboardParams(){
+            column_filter_newdashboard.visible = false
+            column_newdashboard.visible = false
+            column_filter_newdashboard_add.visible = false
+        }
+
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+            column_filter_newdashboard.visible = false
+            column_newdashboard.visible = false
+            column_filter_newdashboard_add.visible = false
+        }
+    }
+
+    Connections{
+        target: TableColumnsModel
+
+        function onVisibleColumnListChanged(visibleColumns){
+
+            column_filter_newdashboard.visible = true
+
+            // hide other panels
+            column_newdashboard.visible = false
+            column_filter_newdashboard_add.visible = false
+        }
     }
 
     // Connections Ends
@@ -138,14 +163,11 @@ Page {
 
         DashboardParamsModel.createNewDashboard(currentCount)
         DashboardParamsModel.setCurrentDashboard(currentCount)
-        console.log(Constants.themeColor)
 
         dashboardModel.setProperty(previousDashboardIndex,"backgroundColorTest",themeColorCopy);
         DashboardParamsModel.setDashboardName(currentCount, newDashboardName)
 
-
-
-
+        TableColumnsModel.addNewDashboard(currentCount)
     }
 
     function setCurrentDashboard(dashboardId,index){
@@ -284,7 +306,7 @@ Page {
             onClicked: addDashboard()
         }
 
-        // Add new Dashboard Button Starts
+        // Add new Dashboard Button End
 
         // All Dashboards Lists Starts
 

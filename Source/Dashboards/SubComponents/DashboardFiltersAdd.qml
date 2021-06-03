@@ -18,7 +18,15 @@ Item {
 
 
     function searchTableColumns(searchText){
-        TableColumnsModel.searchColumnNames(searchText)
+        TableColumnsModel.searchColumnNames(DashboardParamsModel.currentDashboard, searchText)
+    }
+
+    function addNewFilterColumns(){
+        TableColumnsModel.applyColumnVisibility(DashboardParamsModel.currentDashboard)
+    }
+
+    function hideColumn(){
+        DashboardParamsModel.hideAllDashboardRight()
     }
 
     Rectangle{
@@ -62,6 +70,7 @@ Item {
         TabButton{
             id: filter_cancel_btn
             text: "Cancel"
+            onClicked: hideColumn()
 
             background: Rectangle {
                 id: filter_cancel_btn_background
@@ -82,6 +91,7 @@ Item {
         TabButton{
             id: filter_apply_btn
             text: "Add"
+            onClicked: addNewFilterColumns()
 
             background: Rectangle {
                 id: filter_apply_btn_background

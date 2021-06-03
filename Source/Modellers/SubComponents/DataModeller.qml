@@ -185,6 +185,7 @@ Item {
             DSParamsModel.removeQuerySelectParamsList(hideColumns)
         }
 
+
         // Generate the dynamic query and run in on receiving the signal
         function onProcessQuery(){
 
@@ -222,6 +223,7 @@ Item {
             }
 
         }
+
     }
 
 
@@ -540,16 +542,8 @@ Item {
             // Call and execute the query
             DSParamsModel.setTmpSql(finalQuery)
 
-            if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
-                console.log("QUERY set QUERYMODEL", DSParamsModel.tmpSql)
-                QueryModel.callSql(DSParamsModel.tmpSql)
-            } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-                console.log("QUERY set DUCKQUERYMODEL", DSParamsModel.tmpSql)
-                DuckQueryModel.setQuery(DSParamsModel.tmpSql)
-            } else{
-                console.log("QUERY set FORWARDONLYQUERYMODEL", DSParamsModel.tmpSql)
-                ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
-            }
+            // Function to Execute sql generated dynamically
+            executeSql()
 
             TableSchemaModel.showSchema(DSParamsModel.tmpSql)
         }
@@ -825,6 +819,9 @@ Item {
         DSParamsModel.addToFrontRectangleCoordinates(counter, {x: rectLeftX, y: rectLeftY})
         DSParamsModel.addToRearRectangleCoordinates(counter, {x: rectRightX, y: rectRightY})
         DSParamsModel.addToExistingTables(counter, tableslist.tableName)
+
+        // Call to execute sql query for visual query designer
+        DSParamsModel.executeModelerQuery();
     }
 
 
