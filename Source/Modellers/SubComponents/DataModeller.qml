@@ -20,8 +20,6 @@ import "../SubComponents"
 import "../SubComponents/MiniSubComponents"
 
 
-
-
 Item {
 
 
@@ -57,6 +55,7 @@ Item {
 
 
     property string databaseType: ""
+    property var tempLineObject
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -221,6 +220,7 @@ Item {
 
             // Check if the rectangles are connected to some rectangle in front (except the first one)
             // If not throw an error
+            console.log("DIFF", rectangleObjectsSize, lineObjectsSize)
             if(rectangleObjectsSize - lineObjectsSize === 1){
 
                 var firstRectArr = rectangleObjectKeys.filter(x => newLineObjectKeys.indexOf(x) === -1)
@@ -234,6 +234,8 @@ Item {
                 queryErrorModal.text = "JOIN is not complete"
                 queryErrorModal.open();
 
+                DSParamsModel.setTmpSql("")
+                executeSql()
             }
 
         }
@@ -375,6 +377,10 @@ Item {
         DSParamsModel.removeJoinMapList(refObject, 0, true)
 
 
+        if(DSParamsModel.rectanglesSize() <= 0){
+            DSParamsModel.setTmpSql("")
+            executeSql()
+        }
         // Call to execute sql query for visual query designer
         DSParamsModel.executeModelerQuery();
     }
@@ -565,7 +571,6 @@ Item {
             }
 
             finalQuery = "SELECT " + selectColumns + " FROM " + forParams + " " + joinString
-            console.log(finalQuery, "Final Query")
             // Call and execute the query
             DSParamsModel.setTmpSql(finalQuery)
 
@@ -728,8 +733,9 @@ Item {
 
     function onDropAreaExited(){
         highlightRect.color = "white"
-
+        console.log("HERE DELETE")
         DSParamsModel.fetchNewConnectingLine(counter).destroy()
+        DSParamsModel.removeNewConnectingLine(counter)
     }
 
     function onDropAreaEntered(drag){
