@@ -52,26 +52,28 @@ QStringList DuckDataModel::getColumnList(QString tableName, QString moduleName)
 
 
     auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
-    if(!data->error.empty())
+    if(!data->error.empty()){
         qWarning() << Q_FUNC_INFO << data->error.c_str();
+    } else{
 
-    int rows = data->collection.Count();
+        int rows = data->collection.Count();
 
-    for(int i = 0; i < rows; i++){
-        output << data->GetValue(0, i).ToString().c_str();
-        fieldName =  data->GetValue(1, i).ToString().c_str();
-        fieldType =  data->GetValue(2, i).ToString().c_str();
+        for(int i = 0; i < rows; i++){
+            output << data->GetValue(0, i).ToString().c_str();
+            fieldName =  data->GetValue(1, i).ToString().c_str();
+            fieldType =  data->GetValue(2, i).ToString().c_str();
 
-        // Get filter data type for QML
-        QString filterDataType = dataType.dataType(fieldType);
-        outputDataList << fieldName << filterDataType;
+            // Get filter data type for QML
+            QString filterDataType = dataType.dataType(fieldType);
+            outputDataList << fieldName << filterDataType;
 
-        // Append all data type to allList as well
-        allColumns.append(outputDataList);
-        outputDataList.clear();
+            // Append all data type to allList as well
+            allColumns.append(outputDataList);
+            outputDataList.clear();
+        }
+
+        emit columnListObtained(allColumns, tableName, moduleName);
     }
-
-    emit columnListObtained(allColumns, tableName, moduleName);
 
     return output;
 }
@@ -85,13 +87,15 @@ QStringList DuckDataModel::getTableList()
 
     case Constants::excelIntType:{
         auto data = duckCon->con.Query("PRAGMA show_tables");
-        if(!data->error.empty())
+        if(!data->error.empty()){
             qWarning() << Q_FUNC_INFO << data->error.c_str();
+        }else {
 
-        int rows = data->collection.Count();
+            int rows = data->collection.Count();
 
-        for(int i = 0; i < rows; i++){
-            output << data->GetValue(0, i).ToString().c_str();
+            for(int i = 0; i < rows; i++){
+                output << data->GetValue(0, i).ToString().c_str();
+            }
         }
         break;
     }
@@ -117,13 +121,15 @@ QStringList DuckDataModel::getDbList()
 {
     QStringList output;
     auto data = duckCon->con.Query("PRAGMA database_list");
-    if(!data->error.empty())
+    if(!data->error.empty()){
         qWarning() << Q_FUNC_INFO << data->error.c_str();
+    } else{
 
-    int rows = data->collection.Count();
+        int rows = data->collection.Count();
 
-    for(int i = 0; i < rows; i++){
-        output << data->GetValue(0, i).ToString().c_str();
+        for(int i = 0; i < rows; i++){
+            output << data->GetValue(0, i).ToString().c_str();
+        }
     }
 
     return output;
@@ -137,21 +143,23 @@ QStringList DuckDataModel::getData(QString query)
     QStringList out;
 
     auto data = duckCon->con.Query(query.toStdString());
-    if(!data->error.empty())
+    if(!data->error.empty()){
         qWarning() << Q_FUNC_INFO << data->error.c_str();
+    } else{
 
-    int rows = data->collection.Count();
+        int rows = data->collection.Count();
 
-    for(int i = 0; i < rows; i++){
+        for(int i = 0; i < rows; i++){
 
-        duckdb::Value colData = data->GetValue(0, i);
-        QString newColData = QString::fromStdString(colData.ToString());
+            duckdb::Value colData = data->GetValue(0, i);
+            QString newColData = QString::fromStdString(colData.ToString());
 
-        this->colData.append(newColData);
+            this->colData.append(newColData);
+        }
+
+        out = this->colData;
+        emit duckColData(this->colData);
+        this->colData.clear();
     }
-
-    out = this->colData;
-    emit duckColData(this->colData);
-    this->colData.clear();
     return out;
 }

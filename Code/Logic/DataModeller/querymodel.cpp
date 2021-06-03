@@ -80,13 +80,15 @@ void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 
     QSqlQueryModel::setQuery(query, db);
 
-    if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
+    if(QSqlQueryModel::lastError().type() != QSqlError::NoError){
         qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
+    } else{
 
-    if(this->resetPreviewCount == false)
-        this->tmpRowCount = QSqlQueryModel::rowCount();
+        if(this->resetPreviewCount == false)
+            this->tmpRowCount = QSqlQueryModel::rowCount();
 
-    generateRoleNames();
+        generateRoleNames();
+    }
 }
 
 void QueryModel::setQuery(const QSqlQuery &query)
@@ -96,13 +98,15 @@ void QueryModel::setQuery(const QSqlQuery &query)
 
     QSqlQueryModel::setQuery(query);
 
-    if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
+    if(QSqlQueryModel::lastError().type() != QSqlError::NoError){
         qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
+    } else{
 
-    if(this->resetPreviewCount == false)
-        this->tmpRowCount = QSqlQueryModel::rowCount();
+        if(this->resetPreviewCount == false)
+            this->tmpRowCount = QSqlQueryModel::rowCount();
 
-    generateRoleNames();
+        generateRoleNames();
+    }
 }
 
 QVariant QueryModel::data(const QModelIndex &index, int role) const
