@@ -56,6 +56,7 @@ Item {
     property int firstRectId : 1
 
 
+    property string databaseType: ""
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -86,72 +87,85 @@ Item {
         function onMysqlLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("`")
+                databaseType = "mysql"
             }
         }
         function onMongoLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("`")
+                databaseType = "mongo"
             }
         }
         function onPostgresLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("\"")
+                databaseType = "postgres"
             }
         }
         function onOracleLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("")
+                databaseType = "oracle"
             }
         }
         function onMssqlLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("\"")
+                databaseType = "mssql"
             }
         }
         function onAccessLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("\"")
+                databaseType = "access"
             }
         }
 
         function onRedshiftLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("\"")
+                databaseType = "redshift"
             }
         }
         function onTeradataLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("\"")
+                databaseType = "teradata"
             }
         }
 
         function onSnowflakeLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("\"")
+                databaseType = "snowflake"
             }
         }
 
         function onSqliteLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("`")
+                databaseType = "sqlite"
             }
         }
 
         function onExcelLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("\"")
+                databaseType = "excel"
             }
         }
 
         function onCsvLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("\"")
+                databaseType = "csv"
             }
         }
 
         function onJsonLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("\"")
+                databaseType = "json"
             }
         }
     }
@@ -541,8 +555,17 @@ Item {
             let lastIndex = selectColumns.lastIndexOf(",");
             selectColumns = selectColumns.substring(0, lastIndex);
 
-            finalQuery = "SELECT " + selectColumns + " FROM " + DSParamsModel.queryJoiner + DSParamsModel.fetchExistingTables(firstRectId) + DSParamsModel.queryJoiner + " " + joinString
+            let forParams
+            if(databaseType.match(/teradata/gi)){
 
+                forParams = DSParamsModel.queryJoiner + GeneralParamsModel.getCurrentDB() + DSParamsModel.queryJoiner + "." + DSParamsModel.queryJoiner + DSParamsModel.fetchExistingTables(firstRectId) + DSParamsModel.queryJoiner
+
+            } else{
+                forParams = DSParamsModel.queryJoiner + DSParamsModel.fetchExistingTables(firstRectId) + DSParamsModel.queryJoiner
+            }
+
+            finalQuery = "SELECT " + selectColumns + " FROM " + forParams + " " + joinString
+            console.log(finalQuery, "Final Query")
             // Call and execute the query
             DSParamsModel.setTmpSql(finalQuery)
 
