@@ -20,6 +20,8 @@ Item{
 
     property bool profilingStatus: false
     property bool infoTableResizingFixed: true
+    property var errorMsg: ""
+    property string defaultMsg: "SQL query succesfully executed"
 
 
     /***********************************************************************************************************************/
@@ -43,6 +45,48 @@ Item{
     // Connections Starts
 
 
+    Connections{
+        target: QueryModel
+
+        function onErrorSignal(errMsg){
+            if(errMsg !== ""){
+                errorMsg = errMsg
+                queryUpdate.icon = StandardIcon.Critical
+            } else{
+                errorMsg = defaultMsg
+                queryUpdate.icon = StandardIcon.NoIcon
+            }
+        }
+    }
+
+    Connections{
+        target: ForwardOnlyQueryModel
+
+        function onErrorSignal(errMsg){
+            if(errMsg !== ""){
+                errorMsg = errMsg
+                queryUpdate.icon = StandardIcon.Critical
+            } else{
+                errorMsg = defaultMsg
+                queryUpdate.icon = StandardIcon.NoIcon
+            }
+        }
+    }
+
+    Connections{
+        target: DuckQueryModel
+
+        function onErrorSignal(errMsg){
+            console.log("SDSD", errMsg)
+            if(errMsg !== ""){
+                errorMsg = errMsg
+                queryUpdate.icon = StandardIcon.Critical
+            } else{
+                errorMsg = defaultMsg
+                queryUpdate.icon = StandardIcon.NoIcon
+            }
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -129,7 +173,7 @@ Item{
     function onRunQueryClicked(){
 
         //        testQueryBtn.visible = true
-        queryUpdate.visible = true
+        //        queryUpdate.visible = true
 
 
         var isSqlSelect = GeneralParamsModel.returnPlainTextFromHtml(DSParamsModel.tmpSql).toUpperCase().startsWith("SELECT");
@@ -139,6 +183,7 @@ Item{
         if(isSqlSelect){
             if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
 
+                dataPreviewResult.visible = true
                 queryUpdate.visible = true
 
                 // Set profiling on when clicking the play button
@@ -148,7 +193,6 @@ Item{
                 //     QueryStatsModel.setProfiling(true)
                 //     QueryStatsModel.setProfileStatus(true)
                 // }
-                console.log("DISPLAY COUNT", DSParamsModel.displayRowsCount)
 
                 QueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
                 // QueryStatsModel.showStats()
@@ -159,11 +203,13 @@ Item{
 
                 testQueryResult.visible = false
                 dataPreviewResult.visible = true
+                queryUpdate.visible = true
             } else {
                 ForwardOnlyQueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
 
                 testQueryResult.visible = false
                 dataPreviewResult.visible = true
+                queryUpdate.visible = true
             }
         } else{
             sqlQueryNotAllowedDialog.visible = true
@@ -203,19 +249,6 @@ Item{
         }
     }
 
-    function onGetErrorMsg(){
-
-        var message = ""
-
-        // message = QueryStatsModel.showErrorMessage(DSParamsModel.tmpSql);
-        if(message === ""){
-            message = "SQL query succesfully executed"
-            queryUpdate.icon = StandardIcon.NoIcon
-            return message
-        }
-        queryUpdate.icon = StandardIcon.Critical
-        return message;
-    }
 
     //JAVASCRIPT FUNCTIONS ENDS
     /***********************************************************************************************************************/
@@ -245,12 +278,8 @@ Item{
         id: queryUpdate
         visible: false
         title: "Message"
-        text: onGetErrorMsg()
-        icon: StandardIcon.Critical
-
-        onAccepted: {
-            onTestQueryClicked()
-        }
+        text: errorMsg
+        icon: StandardIcon.NoIcon
 
     }
 
@@ -547,12 +576,7 @@ Item{
                     opacity: playBtn.hovered ? 0.42 : 1
                 }
 
-                onClicked:
-                {
-                    console.log("LOG LOG")
-                    onRunQueryClicked()
-
-                }
+                onClicked:onRunQueryClicked()
 
                 ToolTip.delay: Constants.tooltipShowTime
                 ToolTip.timeout: Constants.tooltipHideTime
