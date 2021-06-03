@@ -39,7 +39,7 @@ Rectangle{
         function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
 
             opacitySpinBox.value = DashboardParamsModel.getDashboardOpacity(dashboardId)
-            gridHideShowId.checked = DashboardParamsModel.getDashboardGrid(dashboardId)
+//            gridHideShowId.checked = DashboardParamsModel.getDashboardGrid(dashboardId)
         }
     }
 

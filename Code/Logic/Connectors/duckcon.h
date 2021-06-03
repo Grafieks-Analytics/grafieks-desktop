@@ -30,7 +30,7 @@ public slots:
     void dropTables();
 
 signals:
-    void importError(QString errorString);
+    void importError(QString errorString, QString fileType);
 
 };
 

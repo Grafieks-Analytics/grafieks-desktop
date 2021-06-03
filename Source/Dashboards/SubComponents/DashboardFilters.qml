@@ -26,7 +26,9 @@ Item {
     anchors.left: parent.left
     anchors.leftMargin: 3
 
-    //    js funct
+    function hideColumn(){
+        DashboardParamsModel.hideAllDashboardRight()
+    }
 
 
 
@@ -66,6 +68,7 @@ Item {
         TabButton{
             id: filter_cancel_btn
             text: "Cancel"
+            onClicked: hideColumn()
 
             background: Rectangle {
                 id: filter_cancel_btn_background

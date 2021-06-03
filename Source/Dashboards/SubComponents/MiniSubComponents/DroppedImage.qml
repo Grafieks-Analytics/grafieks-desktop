@@ -25,6 +25,7 @@ Item{
 
 
     property var hoverStatus: false
+    property var originalPoint: Object()
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -147,7 +148,7 @@ Item{
         {
             mainContainer.width = Constants.defaultDroppedReportWidth
             mainContainer.height = Constants.defaultDroppedReportHeight
-           fullScreenReport.source= "/Images/icons/zoom in gray.png"
+            fullScreenReport.source= "/Images/icons/zoom in gray.png"
 
         }
         else{
@@ -158,7 +159,7 @@ Item{
             mainContainer.y=0
             mainContainer.x=0
 
-             fullScreenReport.source= "/Images/icons/zoom out gray.png"
+            fullScreenReport.source= "/Images/icons/zoom out gray.png"
 
         }
 

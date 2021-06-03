@@ -19,7 +19,6 @@ Rectangle {
     height: 600
     color: "white"
     border.color: Constants.themeColor
-    property var filterTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti"]
 
     ListModel{
         id: listModel
@@ -39,19 +38,47 @@ Rectangle {
         }
     }
 
+
+    Connections{
+        target: DashboardParamsModel
+
+        function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
+            listModel.clear()
+            var showColumns = DashboardParamsModel.fetchShowColumns(dashboardId)
+            showColumns.forEach((item) => {
+                                    var columnType = DashboardParamsModel.fetchColumnFilterType(dashboardId, item)
+                                    listModel.append({type: columnType, name: item})
+                                })
+        }
+
+        function onColumnFilterTypeChanged(){
+            listModel.clear()
+
+            var dashboardId = DashboardParamsModel.currentDashboard
+            var showColumns = DashboardParamsModel.fetchShowColumns(dashboardId)
+
+            showColumns.forEach((item) => {
+                                    var columnType = DashboardParamsModel.fetchColumnFilterType(dashboardId, item)
+                                    listModel.append({type: columnType, name: item})
+                                })
+        }
+    }
+
     ListView{
         id: filterDataListview
         height: parent.height
         width: parent.width
         model: listModel
 
+        // filterTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti"]
+
         DelegateChooser {
             id: chooser
             role: "type"
-            DelegateChoice { roleValue: filterTypes[0]; FilterDataList { componentName: name } }
-            DelegateChoice { roleValue: filterTypes[1]; FilterDataList { componentName: name } }
-            DelegateChoice { roleValue: filterTypes[2]; FilterDataSingleDropdown { componentName: name } }
-            DelegateChoice { roleValue: filterTypes[3]; FilterDataMultiDropdown { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterTypes[0]; FilterDataListSingle { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterTypes[1]; FilterDataListMultiple { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterTypes[2]; FilterDataSingleDropdown { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterTypes[3]; FilterDataMultiDropdown { componentName: name } }
         }
 
         delegate: chooser

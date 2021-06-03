@@ -60,8 +60,8 @@ Popup {
     Connections{
         target: DuckCon
 
-        function onImportError(errorString){
-            if(errorString.length > 0){
+        function onImportError(errorString, fileType){
+            if(errorString.length > 0 && fileType === "excel"){
                 // Show on import csv error
                 error_dialog.open();
                 error_dialog.text = errorString
