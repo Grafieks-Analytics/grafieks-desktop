@@ -24,6 +24,7 @@ Item{
         bottom: mainContainer.bottom
     }
     property var hoverStatusReport: false
+    property var originalPoint: Object()
 
 
     /***********************************************************************************************************************/
@@ -128,8 +129,10 @@ Item{
             mainContainer.width = Constants.defaultDroppedReportWidth
             mainContainer.height = Constants.defaultDroppedReportHeight
             fullScreenReport.source= "/Images/icons/zoom in gray.png"
-            mainContainer.y=currnetPointReport.y
-            mainContainer.x=currnetPointReport.x
+
+            mainContainer.y = originalPoint.y
+            mainContainer.x = originalPoint.x
+
 
         }
         else{
@@ -140,12 +143,13 @@ Item{
             mainContainer.y=0
             mainContainer.x=0
 
+            originalPoint.x = currnetPointReport.x
+            originalPoint.y = currnetPointReport.y
 
             fullScreenReport.source= "/Images/icons/zoom out gray.png"
             DashboardParamsModel.setZIndex(++DashboardParamsModel.zIndex);
             newItem.z = DashboardParamsModel.zIndex;
             mainContainer.z = DashboardParamsModel.zIndex;
-            console.log("x",DashboardParamsModel.positionX)
 
         }
     }
@@ -174,12 +178,8 @@ Item{
     }
 
     function onDropAreaPositionChangedReport(){
-        console.log("drag area change x",mainContainer.x);
-        //        dashboardArea.currnetPointReport = {x: mainContainer.x, y: mainContainer.y};
-        console.log("currnetPointReport",JSON.stringify(currnetPointReport))
         currnetPointReport.x=mainContainer.x;
         currnetPointReport.y=mainContainer.y;
-        console.log("currnetPointReport",JSON.stringify(currnetPointReport))
     }
 
     // JAVASCRIPT FUNCTION ENDS
