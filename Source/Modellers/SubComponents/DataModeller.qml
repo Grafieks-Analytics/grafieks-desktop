@@ -359,6 +359,10 @@ Item {
         DSParamsModel.removeJoinIconMap(refObject)
         DSParamsModel.removeJoinTypeMap(refObject)
         DSParamsModel.removeJoinMapList(refObject, 0, true)
+
+
+        // Call to execute sql query for visual query designer
+        DSParamsModel.executeModelerQuery();
     }
 
 

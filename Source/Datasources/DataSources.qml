@@ -203,8 +203,6 @@ Page {
             }
 
 
-
-
             // Search box
 
             Rectangle{
@@ -230,8 +228,6 @@ Page {
                     onTextChanged: DatasourceDS.fetchDatsources(0, true, true, search_text.text)
                 }
             }
-
-
         }
     }
 
@@ -280,10 +276,6 @@ Page {
             }
 
         }
-
-
     }
-
-
 }
 
