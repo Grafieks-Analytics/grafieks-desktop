@@ -41,6 +41,7 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
     QSqlQuery q(this->query, dbForward);
     if(q.lastError().type() != QSqlError::NoError){
         qWarning() << Q_FUNC_INFO << q.lastError();
+        emit errorSignal(q.lastError().text());
     } else{
 
 
@@ -78,6 +79,7 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
             emit forwardOnlyHasData(false);
         }
 
+        emit errorSignal("");
         endResetModel();
     }
 }

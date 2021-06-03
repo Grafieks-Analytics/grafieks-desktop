@@ -82,12 +82,14 @@ void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 
     if(QSqlQueryModel::lastError().type() != QSqlError::NoError){
         qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
+        emit errorSignal(QSqlQueryModel::lastError().text());
     } else{
 
         if(this->resetPreviewCount == false)
             this->tmpRowCount = QSqlQueryModel::rowCount();
 
         generateRoleNames();
+        emit errorSignal("");
     }
 }
 
@@ -100,12 +102,14 @@ void QueryModel::setQuery(const QSqlQuery &query)
 
     if(QSqlQueryModel::lastError().type() != QSqlError::NoError){
         qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
+        emit errorSignal(QSqlQueryModel::lastError().text());
     } else{
 
         if(this->resetPreviewCount == false)
             this->tmpRowCount = QSqlQueryModel::rowCount();
 
         generateRoleNames();
+        emit errorSignal("");
     }
 }
 

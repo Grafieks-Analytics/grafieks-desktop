@@ -220,7 +220,6 @@ Item {
 
             // Check if the rectangles are connected to some rectangle in front (except the first one)
             // If not throw an error
-            console.log("DIFF", rectangleObjectsSize, lineObjectsSize)
             if(rectangleObjectsSize - lineObjectsSize === 1){
 
                 var firstRectArr = rectangleObjectKeys.filter(x => newLineObjectKeys.indexOf(x) === -1)
@@ -380,9 +379,10 @@ Item {
         if(DSParamsModel.rectanglesSize() <= 0){
             DSParamsModel.setTmpSql("")
             executeSql()
+        } else{
+            // Call to execute sql query for visual query designer
+            DSParamsModel.executeModelerQuery();
         }
-        // Call to execute sql query for visual query designer
-        DSParamsModel.executeModelerQuery();
     }
 
 
@@ -733,7 +733,6 @@ Item {
 
     function onDropAreaExited(){
         highlightRect.color = "white"
-        console.log("HERE DELETE")
         DSParamsModel.fetchNewConnectingLine(counter).destroy()
         DSParamsModel.removeNewConnectingLine(counter)
     }

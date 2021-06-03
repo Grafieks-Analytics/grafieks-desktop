@@ -45,6 +45,7 @@ void DuckQueryModel::setPreviewQuery(int previewRowCount)
     auto result = duckCon->con.Query(this->query.toStdString());
     if(!result->error.empty()){
         qWarning() << Q_FUNC_INFO << result->error.c_str();
+        emit errorSignal(result->error.c_str());
     } else {
 
         tmpRowCount = result->collection.Count();
@@ -75,6 +76,8 @@ void DuckQueryModel::setPreviewQuery(int previewRowCount)
         } else{
             emit duckHasData(false);
         }
+
+        emit errorSignal("");
         endResetModel();
     }
 }

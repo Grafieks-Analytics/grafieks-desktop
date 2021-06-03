@@ -64,6 +64,7 @@ signals:
     void duckHeaderDataChanged(QStringList tableHeaders);
     void duckHasData(bool hasData);
     void clearTablePreview();
+    void errorSignal(QString errMsg);
 
 };
 
