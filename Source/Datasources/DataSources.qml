@@ -226,25 +226,8 @@ Page {
                     anchors.left: search_rect.left
                     anchors.leftMargin: 10
                     verticalAlignment:TextEdit.AlignVCenter
-                }
 
-                Image{
-                    id:search_btn
-                    source: "/Images/icons/Search.png"
-                    anchors.left: search_text.right
-                    height:30
-                    width: height
-                    anchors.verticalCenter: search_rect.verticalCenter
-
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: {
-
-                            // Fetch search results
-                            DatasourceDS.fetchDatsources(0, true, true, search_text.text)
-                        }
-                    }
-
+                    onTextChanged: DatasourceDS.fetchDatsources(0, true, true, search_text.text)
                 }
             }
 
