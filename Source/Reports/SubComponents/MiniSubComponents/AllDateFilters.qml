@@ -41,7 +41,7 @@ Rectangle{
 
         // Listview height
         function onRowCountChanged(){
-            listFiltersListView.height = FilterDateListModel.rowCount() * 30
+            listFiltersListView.height = FilterDateListModel.rowCount() * 40
         }
     }
     // Connections Ends
@@ -62,23 +62,28 @@ Rectangle{
     }
 
     // Called when edit filter from date list clicked
-    function onEditElement(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude){
+    function onEditElement(modelIndex, filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude){
 
         DSParamsModel.setMode(Constants.modeEdit)
-        DSParamsModel.setFilterIndex(filterIndex)
+        DSParamsModel.setInternalCounter(filterIndex)
+        DSParamsModel.setFilterModelIndex(modelIndex)
         DSParamsModel.setSection(section)
         DSParamsModel.setCategory(category)
         DSParamsModel.setSubCategory(subCategory)
         DSParamsModel.setTableName(tableName)
         DSParamsModel.setColName(columnName)
-        DSParamsModel.addToJoinRelation(mapKey, relation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, slug)
-        DSParamsModel.addToJoinValue(mapKey, value)
-        DSParamsModel.setIncludeNull(includeNull)
-        DSParamsModel.setExclude(exclude)
-        DSParamsModel.setInternalCounter(1)
 
-        ColumnListModel.columnEditQuery(columnName, tableName, value, category)
+        var options = {
+            "section" : section,
+            "category" : category,
+            "subCategory" : subCategory,
+            "values" : value,
+            "relation" : relation,
+            "slug" : slug
+        }
+
+        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        console.log("EDIT CLICKED date", modelIndex, filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
     }
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -207,7 +212,7 @@ Rectangle{
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onEditElement(model.index, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+                                        onEditElement(model.index, filterId, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
                                     }
                                 }
                             }
@@ -230,7 +235,7 @@ Rectangle{
                                             DSParamsModel.removeDateFormatMap(value)
                                         }
                                         if(category === "date.list"){
-                                            DSParamsModel.removeTimeFrame(value)
+//                                            DSParamsModel.removeTimeFrame(value)
                                         }
 
                                         onRemoveElement(model.index)

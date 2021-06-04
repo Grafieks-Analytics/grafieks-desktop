@@ -26,6 +26,8 @@ Rectangle{
     // SIGNALS STARTS
 
     signal removeFromListModel(int refObjId)
+    signal signalEditMode(string section, string category, string subCategory, string relation, string value, string slug)
+
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -40,7 +42,7 @@ Rectangle{
 
         // Listview height
         function onRowCountChanged(){
-            listFiltersListView.height = FilterCategoricalListModel.rowCount() * 30
+            listFiltersListView.height = FilterCategoricalListModel.rowCount() * 40
         }
     }
     // Connections Ends
@@ -62,18 +64,29 @@ Rectangle{
     }
 
     // Called when edit filter from categorical list clicked
-    function onEditElement(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude){
-
+    function onEditElement(modelIndex, filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude){
 
         DSParamsModel.setMode(Constants.modeEdit)
         DSParamsModel.setInternalCounter(filterIndex)
+        DSParamsModel.setFilterModelIndex(modelIndex)
         DSParamsModel.setSection(section)
         DSParamsModel.setCategory(category)
         DSParamsModel.setSubCategory(subCategory)
         DSParamsModel.setTableName(tableName)
         DSParamsModel.setColName(columnName)
 
-        ColumnListModel.columnEditQuery(columnName, tableName, value, category)
+        var options = {
+            "section" : section,
+            "category" : category,
+            "subCategory" : subCategory,
+            "values" : value,
+            "relation" : relation,
+            "slug" : slug
+
+        }
+
+        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        console.log("EDIT CLICKED categorical", modelIndex, filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
 
     }
 
@@ -205,7 +218,7 @@ Rectangle{
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onEditElement(filterId, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+                                        onEditElement(model.index, filterId, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
                                     }
                                 }
                             }
