@@ -1,4 +1,3 @@
-#include<QDebug>
 #include "reportparamsmodel.h"
 
 ReportParamsModel::ReportParamsModel()
@@ -76,22 +75,268 @@ void ReportParamsModel::addReport(QString reportId)
     tmp.insert("chartUrl", this->chartUrl() );
     tmp.insert("chartType", this->chartType() );
     this->reportsMap.insert(reportId,tmp);
+
+    this->reportsData.insert(this->reportId(),this->reportTitle());
 }
 
-QString ReportParamsModel::getReportsList(){
+QVariantMap ReportParamsModel::getReportsList(){
 
-    QMap<QString, QMap<QString, QString>> reportList = this->reportsMap;
+    return this->reportsData;
+}
 
+void ReportParamsModel::addToCategoricalFilters(int filterId)
+{
+    if(this->categoricalFilters.indexOf(filterId) < 0)
+        this->categoricalFilters.append(filterId);
+}
 
+QVector<int> ReportParamsModel::fetchCategoricalFilters()
+{
+    return this->categoricalFilters;
+}
 
-    QMap<QString, QString> reportIdsData;
-    if (!reportList.isEmpty()){
-        for(auto key: reportList.keys()){
-            qDebug() << key;
+void ReportParamsModel::removeCategoricalFilters(int filterId)
+{
+    this->categoricalFilters.remove(filterId);
+}
+
+void ReportParamsModel::addToDateFilters(int filterId)
+{
+    if(this->dateFilters.indexOf(filterId) < 0)
+        this->dateFilters.append(filterId);
+}
+
+QVector<int> ReportParamsModel::fetchDateFilters()
+{
+    return this->dateFilters;
+}
+
+void ReportParamsModel::removeDateFilters(int filterId)
+{
+    this->dateFilters.remove(filterId);
+}
+
+void ReportParamsModel::addToNumericalFilters(int filterId)
+{
+    if(this->numericalFilters.indexOf(filterId) < 0)
+        this->numericalFilters.append(filterId);
+}
+
+QVector<int> ReportParamsModel::fetchNumericalFilters()
+{
+    return this->numericalFilters;
+}
+
+void ReportParamsModel::removeNumericalFilters(int filterId)
+{
+    this->numericalFilters.remove(filterId);
+}
+
+void ReportParamsModel::addToFilterColumnMap(int filterId, QString value)
+{
+    this->filterColumnMap.insert(filterId, value);
+}
+
+QStringList ReportParamsModel::fetchFilterColumnMap(int filterId, bool fetchAll)
+{
+    QStringList out;
+
+    if(fetchAll == true){
+        foreach(QString tmp, this->filterColumnMap){
+            out.append(tmp);
+        }
+    } else{
+        out.append(this->filterColumnMap.value(filterId));
+    }
+    return out;
+}
+
+void ReportParamsModel::removeFilterColumnMap(int filterId)
+{
+    this->filterColumnMap.remove(filterId);
+}
+
+void ReportParamsModel::addToFilterValueMap(int filterId, QVariant value)
+{
+    QVariantList tmpList;
+
+    if(!this->filterValueMap.contains(filterId)){
+        tmpList.append(value);
+        this->filterValueMap.insert(filterId, tmpList);
+
+    } else{
+
+        if(tmpList.indexOf(value) < 0){
+            tmpList.append(value);
+            this->filterValueMap.insert(filterId, tmpList);
         }
     }
+}
 
-    return "";
+QVariantMap ReportParamsModel::fetchFilterValueMap(int filterId, bool fetchAll)
+{
+    QVariantMap out;
+
+    if(fetchAll == false){
+        out.insert(QString::number(filterId), this->filterValueMap.value(filterId));
+    } else{
+        for(int i = 0; i < this->filterValueMap.size(); i++){
+            out.insert(QString::number(i), this->filterValueMap.value(i));
+        }
+    }
+    return out;
+}
+
+void ReportParamsModel::removeFilterValueMap(int filterId)
+{
+    this->filterValueMap.remove(filterId);
+}
+
+void ReportParamsModel::addToFilterRelationMap(int filterId, QString relation)
+{
+    this->filterRelationMap.insert(filterId, relation);
+}
+
+QStringList ReportParamsModel::fetchFilterRelationMap(int filterId, bool fetchAll)
+{
+    QStringList out;
+
+    if(fetchAll == true){
+        foreach(QString tmp, this->filterRelationMap){
+            out.append(tmp);
+        }
+    } else{
+        out.append(this->filterRelationMap.value(filterId));
+    }
+
+    return out;
+}
+
+void ReportParamsModel::removeFilterRelationMap(int filterId)
+{
+    this->filterRelationMap.remove(filterId);
+}
+
+void ReportParamsModel::addToIncludeExcludeMap(int filterId, bool includeExclude)
+{
+    this->includeExcludeMap.insert(filterId, includeExclude);
+}
+
+QVector<bool> ReportParamsModel::fetchIncludeExcludeMap(int filterId, bool fetchAll)
+{
+    QVector<bool> out;
+
+    if(fetchAll == true){
+        foreach(bool tmp, this->includeExcludeMap){
+            out.append(tmp);
+        }
+    } else{
+        out.append(this->includeExcludeMap.value(filterId));
+    }
+
+    return out;
+}
+
+void ReportParamsModel::removeIncludeExcludeMap(int filterId)
+{
+    this->includeExcludeMap.remove(filterId);
+}
+
+void ReportParamsModel::addToIncludeNullMap(int filterId, bool includeNull)
+{
+    this->includeExcludeMap.insert(filterId, includeNull);
+}
+
+QVector<bool> ReportParamsModel::fetchIncludeNullMap(int filterId, bool fetchAll)
+{
+    QVector<bool> out;
+
+    if(fetchAll == true){
+        foreach(bool tmp, this->includeNullMap){
+            out.append(tmp);
+        }
+    } else{
+        out.append(this->includeNullMap.value(filterId));
+    }
+
+    return out;
+}
+
+void ReportParamsModel::removeIncludeNullMap(int filterId)
+{
+    this->includeNullMap.remove(filterId);
+}
+
+void ReportParamsModel::addToFilterSectionMap(int filterId, QString section)
+{
+    this->filterSectionMap.insert(filterId, section);
+}
+
+QStringList ReportParamsModel::fetchFilterSectionMap(int filterId, bool fetchAll)
+{
+    QStringList out;
+    if(fetchAll == true){
+        foreach(QString tmp, this->filterSectionMap){
+            out.append(tmp);
+        }
+    } else{
+        out.append(this->filterSectionMap.value(filterId));
+    }
+
+    return out;
+}
+
+void ReportParamsModel::removeFilterSectionMap(int filterId)
+{
+    this->filterSectionMap.remove(filterId);
+}
+
+void ReportParamsModel::addToFilterCategoryMap(int filterId, QString category)
+{
+    this->filterCategoryMap.insert(filterId, category);
+}
+
+QStringList ReportParamsModel::fetchFilterCategoryMap(int filterId, bool fetchAll)
+{
+    QStringList out;
+    if(fetchAll == true){
+        foreach(QString tmp, this->filterCategoryMap){
+            out.append(tmp);
+        }
+    } else{
+        out.append(this->filterCategoryMap.value(filterId));
+    }
+
+    return out;
+}
+
+void ReportParamsModel::removeFilterCategoryMap(int filterId)
+{
+    this->filterCategoryMap.remove(filterId);
+}
+
+void ReportParamsModel::addToFilterSubCategoryMap(int filterId, QString subCategory)
+{
+    this->filterSubCategoryMap.insert(filterId, subCategory);
+}
+
+QStringList ReportParamsModel::fetchFilterSubCategoryMap(int filterId, bool fetchAll)
+{
+    QStringList out;
+    if(fetchAll == true){
+        foreach(QString tmp, this->filterSubCategoryMap){
+            out.append(tmp);
+        }
+    } else{
+        out.append(this->filterSubCategoryMap.value(filterId));
+    }
+
+    return out;
+}
+
+void ReportParamsModel::removeFilterSubCategoryMap(int filterId)
+{
+    this->filterSubCategoryMap.remove(filterId);
 }
 
 int ReportParamsModel::internalCounter() const
