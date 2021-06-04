@@ -3,13 +3,29 @@
 
 #include <QObject>
 #include <QMap>
+#include <QVariantMap>
+#include<QDebug>
 
 class ReportParamsModel: public QObject
 {
     Q_OBJECT
 
     // Customize Report parameters
-    QMap<QString, QMap<QString, QString>> reportsMap; // <<reportId, reportObj>>
+    QMap<QString, QMap<QString, QString>> reportsMap;           // <<reportId, reportObj>>
+    QVariantMap reportsData;
+
+    // Filter specific variables
+    QVector<int> categoricalFilters;                            // Id List of categorical filters
+    QVector<int> dateFilters;                                   // Id List of date filters
+    QVector<int> numericalFilters;                              // Id List of numerical filters
+    QMap<int, QString> filterColumnMap;                         // filter id - column name map
+    QMap<int, QVariantList> filterValueMap;                     // filter id - value list map
+    QMap<int, QString> filterRelationMap;                       // filter id - relation map
+    QMap<int, bool> includeExcludeMap;                          // filter id - include exclude map
+    QMap<int, bool> includeNullMap;                             // filter id - include null map
+    QMap<int, QString> filterSectionMap;                        // filter id - section map
+    QMap<int, QString> filterCategoryMap;                       // filter id - category map
+    QMap<int, QString> filterSubCategoryMap;                    // filter id - sub category map
 
     // General properties
     Q_PROPERTY(QString itemName READ itemName WRITE setItemName NOTIFY itemNameChanged)
@@ -108,7 +124,52 @@ public:
     int filterModelIndex() const;
 
     Q_INVOKABLE void addReport(QString reportId);
-    Q_INVOKABLE QString getReportsList();
+    Q_INVOKABLE QVariantMap getReportsList();
+
+    // Filter specific invokable functions
+    Q_INVOKABLE void addToCategoricalFilters(int filterId);
+    Q_INVOKABLE QVector<int> fetchCategoricalFilters();
+    Q_INVOKABLE void removeCategoricalFilters(int filterId);
+
+    Q_INVOKABLE void addToDateFilters(int filterId);
+    Q_INVOKABLE QVector<int> fetchDateFilters();
+    Q_INVOKABLE void removeDateFilters(int filterId);
+
+    Q_INVOKABLE void addToNumericalFilters(int filterId);
+    Q_INVOKABLE QVector<int> fetchNumericalFilters();
+    Q_INVOKABLE void removeNumericalFilters(int filterId);
+
+    Q_INVOKABLE void addToFilterColumnMap(int filterId, QString value);
+    Q_INVOKABLE QStringList fetchFilterColumnMap(int filterId = 0, bool fetchAll = false);
+    Q_INVOKABLE void removeFilterColumnMap(int filterId);
+
+    Q_INVOKABLE void addToFilterValueMap(int filterId, QVariant value);
+    Q_INVOKABLE QVariantMap fetchFilterValueMap(int filterId = 0, bool fetchAll = false);
+    Q_INVOKABLE void removeFilterValueMap(int filterId);
+
+    Q_INVOKABLE void addToFilterRelationMap(int filterId, QString relation);
+    Q_INVOKABLE QStringList fetchFilterRelationMap(int filterId = 0, bool fetchAll = false);
+    Q_INVOKABLE void removeFilterRelationMap(int filterId);
+
+    Q_INVOKABLE void addToIncludeExcludeMap(int filterId, bool includeExclude);
+    Q_INVOKABLE QVector<bool> fetchIncludeExcludeMap(int filterId = 0, bool fetchAll = false);
+    Q_INVOKABLE void removeIncludeExcludeMap(int filterId);
+
+    Q_INVOKABLE void addToIncludeNullMap(int filterId, bool includeNull);
+    Q_INVOKABLE QVector<bool> fetchIncludeNullMap(int filterId = 0, bool fetchAll = false);
+    Q_INVOKABLE void removeIncludeNullMap(int filterId);
+
+    Q_INVOKABLE void addToFilterSectionMap(int filterId, QString section);
+    Q_INVOKABLE QStringList fetchFilterSectionMap(int filterId = 0, bool fetchAll = false);
+    Q_INVOKABLE void removeFilterSectionMap(int filterId);
+
+    Q_INVOKABLE void addToFilterCategoryMap(int filterId, QString category);
+    Q_INVOKABLE QStringList fetchFilterCategoryMap(int filterId = 0, bool fetchAll = false);
+    Q_INVOKABLE void removeFilterCategoryMap(int filterId);
+
+    Q_INVOKABLE void addToFilterSubCategoryMap(int filterId, QString subCategory);
+    Q_INVOKABLE QStringList fetchFilterSubCategoryMap(int filterId = 0, bool fetchAll = false);
+    Q_INVOKABLE void removeFilterSubCategoryMap(int filterId);
 
 public slots:
 
