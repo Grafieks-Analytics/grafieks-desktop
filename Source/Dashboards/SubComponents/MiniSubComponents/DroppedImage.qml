@@ -287,11 +287,7 @@ Item{
                     }
 
                 }
-
-
             }
-
-
         }
 
         // Edit Menu Options Ends

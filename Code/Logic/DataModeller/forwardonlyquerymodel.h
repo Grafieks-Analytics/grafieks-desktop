@@ -58,6 +58,7 @@ signals:
     void forwardOnlyHeaderDataChanged(QStringList tableHeaders);
     void forwardOnlyHasData(bool hasData);
     void clearTablePreview();
+    void errorSignal(QString errMsg);
 
 };
 

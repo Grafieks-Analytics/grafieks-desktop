@@ -43,38 +43,43 @@ void DuckQueryModel::setPreviewQuery(int previewRowCount)
     int maxRowCount = 0;
 
     auto result = duckCon->con.Query(this->query.toStdString());
-    if(!result->error.empty())
+    if(!result->error.empty()){
         qWarning() << Q_FUNC_INFO << result->error.c_str();
+        emit errorSignal(result->error.c_str());
+    } else {
 
-    tmpRowCount = result->collection.Count();
-    if(previewRowCount > tmpRowCount){
-        maxRowCount = tmpRowCount;
-    } else{
-        maxRowCount = previewRowCount;
-    }
-
-
-    this->previewRowCount = maxRowCount;
-
-    beginResetModel();
-    this->resultData.clear();
-
-    for(int i = 0; i < maxRowCount; i++){
-        stdData = result->collection.GetRow(i);
-
-        for(auto data: stdData){
-            list << data.ToString().c_str();
+        tmpRowCount = result->collection.Count();
+        if(previewRowCount > tmpRowCount){
+            maxRowCount = tmpRowCount;
+        } else{
+            maxRowCount = previewRowCount;
         }
-        this->resultData.append(list);
-        list.clear();
-    }
 
-    if(this->internalRowCount > 0){
-        emit duckHasData(true);
-    } else{
-        emit duckHasData(false);
+
+        this->previewRowCount = maxRowCount;
+
+        beginResetModel();
+        this->resultData.clear();
+
+        for(int i = 0; i < maxRowCount; i++){
+            stdData = result->collection.GetRow(i);
+
+            for(auto data: stdData){
+                list << data.ToString().c_str();
+            }
+            this->resultData.append(list);
+            list.clear();
+        }
+
+        if(this->internalRowCount > 0){
+            emit duckHasData(true);
+        } else{
+            emit duckHasData(false);
+        }
+
+        emit errorSignal("");
+        endResetModel();
     }
-    endResetModel();
 }
 
 int DuckQueryModel::rowCount(const QModelIndex &parent) const
@@ -217,14 +222,16 @@ void DuckQueryModel::generateRoleNames()
 void DuckQueryModel::setQueryResult()
 {
     auto result = duckCon->con.Query(this->query.toStdString());
-    if(!result->error.empty())
+    if(!result->error.empty()) {
         qWarning() << Q_FUNC_INFO << result->error.c_str();
+    } else{
 
-    // Set the internalRowCount & internalColCount for the QAbstractListModel rowCount method
-    this->internalColCount = result->collection.ColumnCount();
-    this->internalRowCount = result->collection.Count();
+        // Set the internalRowCount & internalColCount for the QAbstractListModel rowCount method
+        this->internalColCount = result->collection.ColumnCount();
+        this->internalRowCount = result->collection.Count();
 
-    this->setChartData(result);
+        this->setChartData(result);
+    }
 }
 
 void DuckQueryModel::setChartData(std::unique_ptr<duckdb::MaterializedQueryResult> &totalRows)
