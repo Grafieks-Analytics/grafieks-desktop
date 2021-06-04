@@ -39,45 +39,49 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
 
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
     QSqlQuery q(this->query, dbForward);
-    if(q.lastError().type() != QSqlError::NoError)
+    if(q.lastError().type() != QSqlError::NoError){
         qWarning() << Q_FUNC_INFO << q.lastError();
-
-
-    tmpRowCount = this->internalRowCount;
-    if(previewRowCount > tmpRowCount){
-        maxRowCount = tmpRowCount;
+        emit errorSignal(q.lastError().text());
     } else{
-        maxRowCount = previewRowCount;
-    }
-    this->previewRowCount = maxRowCount;
 
-    beginResetModel();
-    this->resultData.clear();
 
-    int totalRowCount = 0;
-    while(q.next() && totalRowCount < maxRowCount){
+        tmpRowCount = this->internalRowCount;
+        if(previewRowCount > tmpRowCount){
+            maxRowCount = tmpRowCount;
+        } else{
+            maxRowCount = previewRowCount;
+        }
+        this->previewRowCount = maxRowCount;
 
-        try{
-            for(int i = 0; i < this->internalColCount; i++){
-                list << q.value(i).toString();
+        beginResetModel();
+        this->resultData.clear();
+
+        int totalRowCount = 0;
+        while(q.next() && totalRowCount < maxRowCount){
+
+            try{
+                for(int i = 0; i < this->internalColCount; i++){
+                    list << q.value(i).toString();
+                }
+                this->resultData.append(list);
+            } catch(std::exception &e){
+                qWarning() << Q_FUNC_INFO << e.what();
             }
-            this->resultData.append(list);
-        } catch(std::exception &e){
-            qWarning() << Q_FUNC_INFO << e.what();
+
+            list.clear();
+            totalRowCount++;
         }
 
-        list.clear();
-        totalRowCount++;
+        if(this->internalRowCount > 0){
+            emit forwardOnlyHasData(true);
+
+        } else{
+            emit forwardOnlyHasData(false);
+        }
+
+        emit errorSignal("");
+        endResetModel();
     }
-
-    if(this->internalRowCount > 0){
-        emit forwardOnlyHasData(true);
-
-    } else{
-        emit forwardOnlyHasData(false);
-    }
-
-    endResetModel();
 }
 
 int ForwardOnlyQueryModel::rowCount(const QModelIndex &parent) const
@@ -262,34 +266,36 @@ void ForwardOnlyQueryModel::setQueryResult()
 
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
     QSqlQuery q(this->query, dbForward);
-    if(q.lastError().type() != QSqlError::NoError)
+    if(q.lastError().type() != QSqlError::NoError){
         qWarning() << Q_FUNC_INFO << q.lastError();
+    } else{
 
 
-    int totalRowCount = 0;
-    while(q.next()){
+        int totalRowCount = 0;
+        while(q.next()){
 
-        try{
-            for(int i = 0; i < this->internalColCount; i++){
+            try{
+                for(int i = 0; i < this->internalColCount; i++){
 
-                // Add to chart data
-                if(totalRowCount == 0){
-                    this->forwardOnlyChartData[i] = new QStringList(q.value(i).toString());
-                } else{
-                    this->forwardOnlyChartData.value(i)->append(q.value(i).toString());
-                    this->forwardOnlyChartData[i] = forwardOnlyChartData.value(i);
+                    // Add to chart data
+                    if(totalRowCount == 0){
+                        this->forwardOnlyChartData[i] = new QStringList(q.value(i).toString());
+                    } else{
+                        this->forwardOnlyChartData.value(i)->append(q.value(i).toString());
+                        this->forwardOnlyChartData[i] = forwardOnlyChartData.value(i);
+                    }
                 }
+            } catch(std::exception &e){
+                qWarning() << Q_FUNC_INFO << e.what();
             }
-        } catch(std::exception &e){
-            qWarning() << Q_FUNC_INFO << e.what();
+
+            totalRowCount++;
         }
+        // Set the internalRowCount for the QAbstractListModel rowCount method
+        this->internalRowCount = totalRowCount;
 
-        totalRowCount++;
+        emit chartDataChanged(this->forwardOnlyChartData);
     }
-    // Set the internalRowCount for the QAbstractListModel rowCount method
-    this->internalRowCount = totalRowCount;
-
-    emit chartDataChanged(this->forwardOnlyChartData);
 }
 
 
