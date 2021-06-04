@@ -8,7 +8,7 @@ import "../../../MainSubComponents"
 
 Item {
     id: filterDataItemSingle
-    width: parent.width
+    width: parent.width-5
     height: 200
     property alias componentName: filterDataItemSingle.objectName
 
@@ -70,13 +70,16 @@ Item {
         id:columnName
         width:parent.width
         height:25
+        color: Constants.themeColor
 
         border.color: Constants.themeColor
         Row{
 
-            spacing: 45
-            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 80
+
             anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: 15
 
 
             Text {
@@ -91,6 +94,8 @@ Item {
                 height: parent.height
                 width: 40
                 spacing: 5
+
+
                 Image {
                     source: "/Images/icons/iconmonstr-search-thin.svg"
                     width: 14
@@ -145,6 +150,8 @@ Item {
     ListView{
         id: dataListView
         topMargin: 10
+
+     leftMargin: 10
         height:150
         flickableDirection: Flickable.VerticalFlick
         boundsBehavior: Flickable.StopAtBounds

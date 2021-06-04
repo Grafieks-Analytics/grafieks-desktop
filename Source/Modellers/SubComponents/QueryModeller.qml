@@ -134,6 +134,7 @@ Item{
                     Text {
                         text: modelData + 1
                         anchors.horizontalCenter: Text.AlignHCenter
+                        font.pointSize: Constants.fontReading
                     }
                 }
 
@@ -164,7 +165,7 @@ Item{
                 id: textEditQueryModeller
                 anchors.left: toolSeperator1.right
                 width: flickText.width-10
-                font.pointSize: 9
+                font.pointSize: Constants.fontReading
                 padding: 10
                 focus: true
                 selectByMouse: true
