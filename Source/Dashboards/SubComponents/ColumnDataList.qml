@@ -16,7 +16,7 @@ Rectangle {
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.top: apply_btn.bottom
     anchors.topMargin: 10
-    height: 600
+    height: parent.height-80
     color: "white"
     border.color: Constants.themeColor
 
@@ -67,8 +67,12 @@ Rectangle {
     ListView{
         id: filterDataListview
         height: parent.height
-        width: parent.width
+        width: parent.width+2
         model: listModel
+        clip: true
+        interactive: true
+            ScrollBar.vertical: ScrollBar {}
+
 
         // filterTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti"]
 
