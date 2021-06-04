@@ -601,7 +601,6 @@ Popup {
         valueRole: "tableName"
 
         onActivated: {
-
             onAddMenuItemTriggered(currentText, currentValue);
             onAddMenuItemClicked()
 
