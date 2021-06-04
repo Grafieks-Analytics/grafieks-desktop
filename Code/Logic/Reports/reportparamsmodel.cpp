@@ -94,6 +94,51 @@ QString ReportParamsModel::getReportsList(){
     return "";
 }
 
+int ReportParamsModel::internalCounter() const
+{
+    return m_internalCounter;
+}
+
+QString ReportParamsModel::section() const
+{
+    return m_section;
+}
+
+QString ReportParamsModel::category() const
+{
+    return m_category;
+}
+
+QString ReportParamsModel::subCategory() const
+{
+    return m_subCategory;
+}
+
+QString ReportParamsModel::tableName() const
+{
+    return m_tableName;
+}
+
+QString ReportParamsModel::colName() const
+{
+    return m_colName;
+}
+
+int ReportParamsModel::filterIndex() const
+{
+    return m_filterIndex;
+}
+
+QString ReportParamsModel::mode() const
+{
+    return m_mode;
+}
+
+int ReportParamsModel::filterModelIndex() const
+{
+    return m_filterModelIndex;
+}
+
 QList<QString> ReportParamsModel::dataValuesColumns() const
 {
     return m_dataValuesColumns;
@@ -261,6 +306,87 @@ void ReportParamsModel::setD3PropertiesConfig(QString d3PropertiesConfig)
 
     m_d3PropertiesConfig = d3PropertiesConfig;
     emit d3PropertiesConfigChanged(m_d3PropertiesConfig);
+}
+
+void ReportParamsModel::setInternalCounter(int internalCounter)
+{
+    if (m_internalCounter == internalCounter)
+        return;
+
+    m_internalCounter = internalCounter;
+    emit internalCounterChanged(m_internalCounter);
+}
+
+void ReportParamsModel::setSection(QString section)
+{
+    if (m_section == section)
+        return;
+
+    m_section = section;
+    emit sectionChanged(m_section);
+}
+
+void ReportParamsModel::setCategory(QString category)
+{
+    if (m_category == category)
+        return;
+
+    m_category = category;
+    emit categoryChanged(m_category);
+}
+
+void ReportParamsModel::setSubCategory(QString subCategory)
+{
+    if (m_subCategory == subCategory)
+        return;
+
+    m_subCategory = subCategory;
+    emit subCategoryChanged(m_subCategory);
+}
+
+void ReportParamsModel::setTableName(QString tableName)
+{
+    if (m_tableName == tableName)
+        return;
+
+    m_tableName = tableName;
+    emit tableNameChanged(m_tableName);
+}
+
+void ReportParamsModel::setColName(QString colName)
+{
+    if (m_colName == colName)
+        return;
+
+    m_colName = colName;
+    emit colNameChanged(m_colName);
+}
+
+void ReportParamsModel::setFilterIndex(int filterIndex)
+{
+    if (m_filterIndex == filterIndex)
+        return;
+
+    m_filterIndex = filterIndex;
+    emit filterIndexChanged(m_filterIndex);
+}
+
+void ReportParamsModel::setMode(QString mode)
+{
+    if (m_mode == mode)
+        return;
+
+    m_mode = mode;
+    emit modeChanged(m_mode);
+}
+
+void ReportParamsModel::setFilterModelIndex(int filterModelIndex)
+{
+    if (m_filterModelIndex == filterModelIndex)
+        return;
+
+    m_filterModelIndex = filterModelIndex;
+    emit filterModelIndexChanged(m_filterModelIndex);
 }
 
 void ReportParamsModel::setChartUrl(QString chartUrl)
