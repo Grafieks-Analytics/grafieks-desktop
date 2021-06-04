@@ -29,7 +29,7 @@ Rectangle{
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
 
-    readonly property string mapKey: "0"
+    property int counter: 0
     property var acceptedValues:["Equal", "Not Equal To", "Smaller Than", "Greater Than", "Equal or Smaller Than", "Equal or Greater Than", "Between"]
 
 
@@ -88,8 +88,20 @@ Rectangle{
             textField.text =""
             textField2nd.text =""
             selectOption.textValue ="Equal"
-            DSParamsModel.setIncludeNull(true)
-            DSParamsModel.setExclude(false)
+            DSParamsModel.setIncludeNullMap(counter, true)
+            DSParamsModel.setExcludeMap(counter, false)
+        }
+
+        function onInternalCounterChanged(){
+            if(DSParamsModel.section === Constants.numericalTab){
+                counter = DSParamsModel.internalCounter
+            }
+        }
+
+        function onFilterIndexChanged(){
+            if(DSParamsModel.section === Constants.numericalTab){
+                counter = DSParamsModel.filterIndex
+            }
         }
     }
 
@@ -103,6 +115,10 @@ Rectangle{
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
+
+    function slotDataCleared(){
+
+    }
 
     function slotEditModeNumerical(relation, slug, value){
 
@@ -165,19 +181,19 @@ Rectangle{
         }
 
         let relation = getNewRelation(tmpRelation)
-        DSParamsModel.addToJoinValue(mapKey, newValue)
-        DSParamsModel.addToJoinRelation(mapKey, relation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, tmpRelation)
+        DSParamsModel.addToJoinValue(counter, newValue)
+        DSParamsModel.addToJoinRelation(counter, relation)
+        DSParamsModel.addToJoinRelationSlug(counter, tmpRelation)
 
     }
 
     function onExludeCheckStateChanged(checked){
-        DSParamsModel.setExclude(checked)
+        DSParamsModel.setExcludeMap(checked)
     }
 
 
     function onIncludeCheckStateChanged(checked){
-        DSParamsModel.setIncludeNull(checked)
+        DSParamsModel.setIncludeNullMap(checked)
     }
 
 
@@ -216,14 +232,16 @@ Rectangle{
 
             id: addnumerical
             anchors.top: parent.top
+            anchors.topMargin: 10
 
             anchors.left: parent.left
             leftPadding: 20
 
             anchors.verticalCenter: parent.verticalAlignment
 
-            CheckBox {
+            CheckBoxTpl {
                 checked: DSParamsModel.includeNull
+                 parent_dimension: Constants.defaultCheckBoxDimension
                 text: qsTr("Include Null")
                 indicator.width: 15
                 indicator.height: 15
