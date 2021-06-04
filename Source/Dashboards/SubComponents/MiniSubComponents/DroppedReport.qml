@@ -25,6 +25,7 @@ Item{
     }
     property var hoverStatusReport: false
     property var originalPoint: Object()
+    property var originalDimensions: Object()
 
 
     /***********************************************************************************************************************/
@@ -167,7 +168,7 @@ Item{
     }
     function showMenusReport(){
         DashboardParamsModel.setCurrentReport(newItem.objectName)
-        hoverStatusReport = true
+         = true
         mainContainer.rulerStatus = true
         console.log("test")
     }
