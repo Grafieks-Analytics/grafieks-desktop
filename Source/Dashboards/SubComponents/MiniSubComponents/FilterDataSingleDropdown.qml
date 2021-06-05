@@ -13,14 +13,15 @@ Item{
     property alias componentName: filterDataSingleItem.objectName
 
     onComponentNameChanged: {
-       control.model = TableColumnsModel.fetchColumnData(componentName)
+        control.model = TableColumnsModel.fetchColumnData(componentName)
+        componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
     Connections{
         target: DashboardParamsModel
 
-        function onAliasChanged(newAlias, columnName){
-            if(columnName === componentName){
+        function onAliasChanged(newAlias, columnName, dashboardId){
+            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
                 componentTitle.text = newAlias
             }
         }
@@ -47,7 +48,6 @@ Item{
 
             Text {
                 id: componentTitle
-                text: componentName
                 font.pixelSize: 12
                 verticalAlignment: Text.AlignVCenter
             }
@@ -103,5 +103,7 @@ Item{
                 context.fill();
             }
         }
+
+
     }
 }

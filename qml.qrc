@@ -243,15 +243,20 @@
         <file>Source/Connectors/SubComponents/MiniSubComponents/BoxDelegate.qml</file>
         <file>Source/Charts/HorizontalBarGroupedChart.html</file>
         <file>Source/Modellers/SubComponents/QueryModeller.qml</file>
+        <file>Source/Modellers/SubComponents/DataPreviewTable_backup.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/CategoricalList.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/DateList.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/NumericalList.qml</file>
         <file>Source/Dashboards/SubComponents/DashboardFiltersBackupUI.qml</file>
         <file>Source/Dashboards/SubComponents/ColumnDataList.qml</file>
-        <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataList.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataListMultiple.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataSingleDropdown.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataMultiDropdown.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterCustomize.qml</file>
+<<<<<<< HEAD
         <file>Source/Reports/SubComponents/MiniSubComponents/ReportSizes.qml</file>
+=======
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataListSingle.qml</file>
+>>>>>>> 0272590c284c31ab148ed6520db453e87dd6d1be
     </qresource>
 </RCC>

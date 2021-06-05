@@ -60,6 +60,14 @@ Item{
         // Save the plain query for execution
         DSParamsModel.setTmpSql(newText)
 
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+            QueryModel.callSql(DSParamsModel.tmpSql)
+        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
+            DuckQueryModel.setQuery(DSParamsModel.tmpSql)
+        } else{
+            ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
+        }
+
     }
 
 

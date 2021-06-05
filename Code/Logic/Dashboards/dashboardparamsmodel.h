@@ -24,7 +24,7 @@ class DashboardParamsModel: public QObject
     QMap<int, QMap<int, QUrl>> dashboardReportUrl; // <dashboardId, <reportId, URI Link>>
 
     // Filter parameters
-    QMap<int, QStringList> hideColumns;                        // dashboardId - List of column names to be hidden from the list
+    QMap<int, QStringList> showColumns;                        // dashboardId - List of column names to be shown from the list
     QMap<int, QVariantMap> columnAliasMap;                     // dashboardId - Alias name which will appear instead of actual column name in reports
     QMap<int, QVariantMap> columnFilterType;                   // dashboardId - Whether its single list, multi list, dropdown single, dropdown multiple
     QMap<int, QVariantMap> columnIncludeExcludeMap;            // dashboardId - If the filter data is to be included or excluded
@@ -107,9 +107,8 @@ public:
     Q_INVOKABLE QUrl getDashboardReportUrl(int dashboardId, int reportId);
 
     // Filter Parameters
-    Q_INVOKABLE void addToHideColumns(int dashboardId, QString colName);
-    Q_INVOKABLE void removeFromHideColumns(int dashboardId, QString colName, bool removeAll = false);
-    Q_INVOKABLE QStringList fetchHideColumns(int dashboardId, QString searchKeyword = "");
+    Q_INVOKABLE void addToShowColumns(int dashboardId, QString colName, bool status);
+    Q_INVOKABLE QStringList fetchShowColumns(int dashboardId, QString searchKeyword = "");
 
     Q_INVOKABLE void setColumnAliasName(int dashboardId, QString columnName, QString columnAlias);
     Q_INVOKABLE QString fetchColumnAliasName(int dashboardId, QString columnName);
@@ -168,6 +167,9 @@ public:
 
     QString currentSelectedColumn() const;
 
+    // Function to call to emit a signal to hide all right columns in dashboard
+    Q_INVOKABLE void hideAllDashboardRight();
+
 public slots:
     void setLastContainerType(QString lastContainerType);
     void setPositionY(int positionY);
@@ -193,9 +195,12 @@ signals:
     void currentDashboardChanged(int currentDashboard, QVector<int> reportsInDashboard);
     void currentReportChanged(int currentReport);
 
+    void hideAllDashboardParams();
+
     // Filter parameters
-    void hideColumnsChanged(QStringList hideColumns, int dashboardId);
+//    void hideColumnsChanged(QStringList hideColumns, int dashboardId);
     void aliasChanged(QString newAlias, QString columnName, int dashboardId);
+    void columnFilterTypeChanged();
 
     // Customize Dashboard parameters
     void dashboardNameChanged(int dashboardId, QString dashboardName);

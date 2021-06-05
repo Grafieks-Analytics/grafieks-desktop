@@ -62,6 +62,7 @@ public:
 
     Q_INVOKABLE void removeTmpChartData();
     Q_INVOKABLE void searchColumnNames(QString keyword);
+    Q_INVOKABLE void clearData();
 
 public slots:
     void getChartData(QMap<int, QStringList*> chartData);

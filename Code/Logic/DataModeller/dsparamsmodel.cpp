@@ -35,6 +35,11 @@ DSParamsModel::~DSParamsModel()
 
 }
 
+void DSParamsModel::executeModelerQuery()
+{
+    emit processQuery();
+}
+
 void DSParamsModel::resetDataModel()
 {
 
@@ -1317,11 +1322,6 @@ QString DSParamsModel::mode() const
 int DSParamsModel::filterModelIndex() const
 {
     return m_filterModelIndex;
-}
-
-void DSParamsModel::processDataModellerQuery()
-{
-    emit processQuery();
 }
 
 void DSParamsModel::setCurrentTab(int currentTab)

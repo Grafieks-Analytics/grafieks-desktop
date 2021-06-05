@@ -20,6 +20,8 @@ Item{
 
     property bool profilingStatus: false
     property bool infoTableResizingFixed: true
+    property var errorMsg: ""
+    property string defaultMsg: "SQL query succesfully executed"
 
 
     /***********************************************************************************************************************/
@@ -43,6 +45,47 @@ Item{
     // Connections Starts
 
 
+    Connections{
+        target: QueryModel
+
+        function onErrorSignal(errMsg){
+            if(errMsg !== ""){
+                errorMsg = errMsg
+                queryUpdate.icon = StandardIcon.Critical
+            } else{
+                errorMsg = defaultMsg
+                queryUpdate.icon = StandardIcon.NoIcon
+            }
+        }
+    }
+
+    Connections{
+        target: ForwardOnlyQueryModel
+
+        function onErrorSignal(errMsg){
+            if(errMsg !== ""){
+                errorMsg = errMsg
+                queryUpdate.icon = StandardIcon.Critical
+            } else{
+                errorMsg = defaultMsg
+                queryUpdate.icon = StandardIcon.NoIcon
+            }
+        }
+    }
+
+    Connections{
+        target: DuckQueryModel
+
+        function onErrorSignal(errMsg){
+            if(errMsg !== ""){
+                errorMsg = errMsg
+                queryUpdate.icon = StandardIcon.Critical
+            } else{
+                errorMsg = defaultMsg
+                queryUpdate.icon = StandardIcon.NoIcon
+            }
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -128,57 +171,49 @@ Item{
 
     function onRunQueryClicked(){
 
-//        testQueryBtn.visible = true
-        queryUpdate.visible = true
+        //        testQueryBtn.visible = true
+        //        queryUpdate.visible = true
 
 
-        // If current tab is queryModeller, then process
-        // else if current tab is dataModeller, fire a signal to activate a slot in DataModeller.qml
+        var isSqlSelect = GeneralParamsModel.returnPlainTextFromHtml(DSParamsModel.tmpSql).toUpperCase().startsWith("SELECT");
+        // If query is SELECT query
+        // Only SELECT query allowed
 
-        if(DSParamsModel.currentTab === Constants.queryModellerTab){
-            var isSqlSelect = GeneralParamsModel.returnPlainTextFromHtml(DSParamsModel.tmpSql).toUpperCase().startsWith("SELECT");
-            console.log(isSqlSelect, GeneralParamsModel.returnPlainTextFromHtml(DSParamsModel.tmpSql).toUpperCase())
-            // If query is SELECT query
-            // Only SELECT query allowed
+        if(isSqlSelect){
+            if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
 
-            if(isSqlSelect){
-                if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+                dataPreviewResult.visible = true
+                queryUpdate.visible = true
 
-                    queryUpdate.visible = true
+                // Set profiling on when clicking the play button
+                // Reset profiling and turn off when clicked on Publish button
 
-                    // Set profiling on when clicking the play button
-                    // Reset profiling and turn off when clicked on Publish button
+                // if(QueryStatsModel.profileStatus === false){
+                //     QueryStatsModel.setProfiling(true)
+                //     QueryStatsModel.setProfileStatus(true)
+                // }
 
-                    // if(QueryStatsModel.profileStatus === false){
-                    //     QueryStatsModel.setProfiling(true)
-                    //     QueryStatsModel.setProfileStatus(true)
-                    // }
+                QueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
+                // QueryStatsModel.showStats()
+                // TableSchemaModel.showSchema(DSParamsModel.tmpSql)
 
-                    QueryModel.callSql(DSParamsModel.tmpSql)
-                    // QueryStatsModel.showStats()
-                    // TableSchemaModel.showSchema(DSParamsModel.tmpSql)
+            } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
+                DuckQueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
 
-                } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-                    console.log("DUCK QUERY MDEl", DSParamsModel.tmpSql)
-                    DuckQueryModel.setQuery(DSParamsModel.tmpSql)
+                testQueryResult.visible = false
+                dataPreviewResult.visible = true
+                queryUpdate.visible = true
+            } else {
+                ForwardOnlyQueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
 
-                    testQueryResult.visible = false
-                    dataPreviewResult.visible = true
-                } else {
-                    console.log("FORWARD ONLY", DSParamsModel.tmpSql)
-                    ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
-
-                    testQueryResult.visible = false
-                    dataPreviewResult.visible = true
-                }
-            } else{
-                sqlQueryNotAllowedDialog.visible = true
+                testQueryResult.visible = false
+                dataPreviewResult.visible = true
+                queryUpdate.visible = true
             }
         } else{
-
-            // Run the signal to activate the slot
-            DSParamsModel.processDataModellerQuery()
+            sqlQueryNotAllowedDialog.visible = true
         }
+
     }
 
     function onCollapseInfoTable(){
@@ -213,19 +248,6 @@ Item{
         }
     }
 
-    function onGetErrorMsg(){
-
-        var message = ""
-
-        // message = QueryStatsModel.showErrorMessage(DSParamsModel.tmpSql);
-        if(message === ""){
-            message = "SQL query succesfully executed"
-            queryUpdate.icon = StandardIcon.NoIcon
-            return message
-        }
-        queryUpdate.icon = StandardIcon.Critical
-        return message;
-    }
 
     //JAVASCRIPT FUNCTIONS ENDS
     /***********************************************************************************************************************/
@@ -255,12 +277,8 @@ Item{
         id: queryUpdate
         visible: false
         title: "Message"
-        text: onGetErrorMsg()
-        icon: StandardIcon.Critical
-
-        onAccepted: {
-            onTestQueryClicked()
-        }
+        text: errorMsg
+        icon: StandardIcon.NoIcon
 
     }
 

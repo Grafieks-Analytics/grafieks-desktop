@@ -121,6 +121,8 @@ public:
     void closeModel();
     ~DSParamsModel();
 
+    Q_INVOKABLE void executeModelerQuery();
+
     Q_INVOKABLE void resetDataModel();
     Q_INVOKABLE bool saveDatasource(QString filename);
     Q_INVOKABLE QVariantList readDatasource(QString filename);
@@ -280,9 +282,6 @@ public:
 
 public slots:
 
-    // General Slots
-    void processDataModellerQuery();
-
     // Publish Datasource
     void setCurrentTab(int currentTab);
     void setFileExtension(QString fileExtension);
@@ -314,9 +313,9 @@ public slots:
 signals:
 
     // General
+    void processQuery();
     void currentTabChanged(int currentTab);
     void fileExtensionChanged(QString fileExtension);
-    void processQuery();
 
     // Publish Datasource
     void dsNameChanged(QString dsName);

@@ -19,19 +19,73 @@ DuckQueryModel::~DuckQueryModel()
 
 void DuckQueryModel::setQuery(QString query)
 {
+    // Signal to clear exisitng data in tables (qml)
+    emit clearTablePreview();
+
     this->removeTmpChartData();
 
     this->query = query;
     querySplitter.setQueryForClasses(this->query);
 
-    this->setQueryResult();
     this->generateRoleNames();
+    this->setQueryResult();
+
+}
+
+void DuckQueryModel::setPreviewQuery(int previewRowCount)
+{
+
+    std::vector<duckdb::Value> stdData;
+
+    // Tmp
+    QStringList list;
+    int tmpRowCount = 0;
+    int maxRowCount = 0;
+
+    auto result = duckCon->con.Query(this->query.toStdString());
+    if(!result->error.empty()){
+        qWarning() << Q_FUNC_INFO << result->error.c_str();
+        emit errorSignal(result->error.c_str());
+    } else {
+
+        tmpRowCount = result->collection.Count();
+        if(previewRowCount > tmpRowCount){
+            maxRowCount = tmpRowCount;
+        } else{
+            maxRowCount = previewRowCount;
+        }
+
+
+        this->previewRowCount = maxRowCount;
+
+        beginResetModel();
+        this->resultData.clear();
+
+        for(int i = 0; i < maxRowCount; i++){
+            stdData = result->collection.GetRow(i);
+
+            for(auto data: stdData){
+                list << data.ToString().c_str();
+            }
+            this->resultData.append(list);
+            list.clear();
+        }
+
+        if(this->internalRowCount > 0){
+            emit duckHasData(true);
+        } else{
+            emit duckHasData(false);
+        }
+
+        emit errorSignal("");
+        endResetModel();
+    }
 }
 
 int DuckQueryModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return this->internalRowCount;
+    return this->previewRowCount;
 }
 
 int DuckQueryModel::columnCount(const QModelIndex &) const
@@ -45,7 +99,6 @@ QVariant DuckQueryModel::headerData(int section, Qt::Orientation orientation, in
     if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
         return QString(this->m_roleNames[section]);
     }
-    emit headerDataChanged(Qt::Horizontal, 1, this->internalColCount);
     return QVariant();
 }
 
@@ -168,39 +221,17 @@ void DuckQueryModel::generateRoleNames()
 
 void DuckQueryModel::setQueryResult()
 {
-    beginResetModel();
-    std::vector<duckdb::Value> stdData;
-
-    // Tmp
-    QStringList list;
-
     auto result = duckCon->con.Query(this->query.toStdString());
-    if(!result->error.empty())
+    if(!result->error.empty()) {
         qWarning() << Q_FUNC_INFO << result->error.c_str();
-
-    // Set the internalRowCount & internalColCount for the QAbstractListModel rowCount method
-    this->internalColCount = result->collection.ColumnCount();
-    this->internalRowCount = result->collection.Count();
-
-    this->setChartData(result);
-
-    for(int i = 0; i < this->internalRowCount; i++){
-
-        stdData = result->collection.GetRow(i);
-
-        for(auto data: stdData){
-            list << data.ToString().c_str();
-        }
-        this->resultData.append(list);
-        list.clear();
-    }
-
-    if(this->internalRowCount > 0){
-        emit duckHasData(true);
     } else{
-        emit duckHasData(false);
+
+        // Set the internalRowCount & internalColCount for the QAbstractListModel rowCount method
+        this->internalColCount = result->collection.ColumnCount();
+        this->internalRowCount = result->collection.Count();
+
+        this->setChartData(result);
     }
-    endResetModel();
 }
 
 void DuckQueryModel::setChartData(std::unique_ptr<duckdb::MaterializedQueryResult> &totalRows)
