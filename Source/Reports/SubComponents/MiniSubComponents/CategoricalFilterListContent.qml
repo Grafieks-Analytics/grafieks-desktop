@@ -62,75 +62,16 @@ Rectangle{
         function onFilterIndexChanged(){
             if(ReportParamsModel.section === Constants.categoricalTab){
                 counter = ReportParamsModel.filterIndex
-            }
-        }
-    }
-
-    Connections{
-        target: DuckDataModel
-
-        function onDuckColData(colData){
-            if(ReportParamsModel.section === Constants.categoricalTab){
-                singleSelectCheckList.model = colData
-                multiSelectCheckList.model  = colData
-            }
-        }
-    }
-
-    Connections{
-        target: ForwardOnlyDataModel
-
-        function onForwardColData(colData){
-            if(ReportParamsModel.section === Constants.categoricalTab){
-                singleSelectCheckList.model = colData
-                multiSelectCheckList.model  = colData
-            }
-        }
-    }
-
-    Connections{
-        target: QueryDataModel
-
-        function onColumnListModelDataChanged(colData, options, searchMode){
-
-
-            if(ReportParamsModel.section === Constants.categoricalTab){
-                // Just to reset the data if the previous `colData` and the new `colData` are same
-                singleSelectCheckList.model = []
-                multiSelectCheckList.model = []
+                var colName = ReportParamsModel.colName
+                var colData = ChartsModel.fetchColumnData(colName)
 
                 singleSelectCheckList.model = colData
                 multiSelectCheckList.model  = colData
-
-                var jsonOptions = JSON.parse(options)
-
-
-                if(jsonOptions.subCategory === Constants.categorySubMulti){
-                    multiSelectRadio.checked = true
-
-                    multiSelectCheckList.visible = true
-                    singleSelectCheckList.visible = false
-
-                    if(jsonOptions.values.length > 0){
-                        var checkedValues = jsonOptions.values.split(",")
-                        checkedValues.forEach((item) => {
-                                                  ReportParamsModel.setTmpSelectedValues(item)
-                                              })
-                    }
-
-                } else{
-                    singleSelectRadio.checked = true
-
-                    multiSelectCheckList.visible = false
-                    singleSelectCheckList.visible = true
-
-                    if(ReportParamsModel.searchTmpSelectedValues(jsonOptions.values) < 0){
-                        ReportParamsModel.setTmpSelectedValues(jsonOptions.values)
-                    }
-                }
             }
         }
     }
+
+
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -184,13 +125,9 @@ Rectangle{
     function onSingleSelectRadioSelected(modelData){
 
         if(ReportParamsModel.section === Constants.categoricalTab){
-            ReportParamsModel.addToJoinValue(counter, modelData.toString())
-            ReportParamsModel.addToJoinRelation(counter, Constants.equalRelation)
-            ReportParamsModel.addToJoinRelationSlug(counter, Constants.equalRelation)
-
-            // Clear all tmp selected values and insert again
-            ReportParamsModel.removeTmpSelectedValues(0, true)
-            ReportParamsModel.setTmpSelectedValues(modelData.toString())
+            ReportParamsModel.addToFilterValueMap(counter, modelData.toString())
+            ReportParamsModel.addToFilterRelationMap(counter, Constants.equalRelation)
+            ReportParamsModel.addToFilterSlugMap(counter, Constants.equalRelation)
         }
     }
 

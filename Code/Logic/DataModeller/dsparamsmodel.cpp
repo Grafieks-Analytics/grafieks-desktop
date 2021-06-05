@@ -937,7 +937,6 @@ QVariantMap DSParamsModel::fetchJoinRelationSlug(int refObjId, bool fetchAll)
 void DSParamsModel::setDateFormatMap(int refObjId, int formatId)
 {
     this->dateFormatMap.insert(refObjId, formatId);
-    qDebug() << "DATE FORMAT" << this->dateFormatMap.value(refObjId);
 }
 
 void DSParamsModel::removeDateFormatMap(int refObjId, bool removeAll)
@@ -1122,7 +1121,6 @@ int DSParamsModel::searchTmpSelectedValues(QString keyword)
 void DSParamsModel::setTmpFilterIndex(int value)
 {
     this->tmpFilterIndex.append(value);
-    qDebug() << this->tmpFilterIndex << "TMP FILTER INDEX";
 }
 
 void DSParamsModel::removeTmpFilterIndex(int refObjId, bool removeAll)

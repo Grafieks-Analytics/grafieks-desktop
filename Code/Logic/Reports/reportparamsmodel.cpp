@@ -115,52 +115,107 @@ void ReportParamsModel::resetInputFields()
     emit resetInput();
 }
 
-void ReportParamsModel::addToCategoricalFilters(int filterId)
+void ReportParamsModel::addToCategoricalFilters(int reportId, int filterId)
 {
-    if(this->categoricalFilters.indexOf(filterId) < 0)
-        this->categoricalFilters.append(filterId);
+    QVector<int> tmp;
+
+    if(this->categoricalFilters.keys().contains(reportId)){
+        tmp = this->categoricalFilters.value(reportId);
+
+        if(tmp.indexOf(filterId) < 0)
+            tmp.append(filterId);
+    } else{
+        tmp.append(filterId);
+    }
+
+    this->categoricalFilters.insert(reportId, tmp);
+
 }
 
-QVector<int> ReportParamsModel::fetchCategoricalFilters()
+QVector<int> ReportParamsModel::fetchCategoricalFilters(int reportId)
 {
-    return this->categoricalFilters;
+    return this->categoricalFilters.value(reportId);
 }
 
-void ReportParamsModel::removeCategoricalFilters(int filterId)
+void ReportParamsModel::removeCategoricalFilters(int reportId, int filterId, bool removeReport)
 {
-    this->categoricalFilters.remove(filterId);
+    QVector<int> tmp;
+
+    if(removeReport == true){
+        this->categoricalFilters.remove(reportId);
+    } else{
+        tmp = this->categoricalFilters.value(reportId);
+        tmp.remove(filterId);
+        this->categoricalFilters.insert(reportId, tmp);
+    }
 }
 
-void ReportParamsModel::addToDateFilters(int filterId)
+void ReportParamsModel::addToDateFilters(int reportId, int filterId)
 {
-    if(this->dateFilters.indexOf(filterId) < 0)
-        this->dateFilters.append(filterId);
+    QVector<int> tmp;
+
+    if(this->dateFilters.keys().contains(reportId)){
+        tmp = this->dateFilters.value(reportId);
+
+        if(tmp.indexOf(filterId) < 0)
+            tmp.append(filterId);
+    } else{
+        tmp.append(filterId);
+    }
+
+    this->dateFilters.insert(reportId, tmp);
 }
 
-QVector<int> ReportParamsModel::fetchDateFilters()
+QVector<int> ReportParamsModel::fetchDateFilters(int reportId)
 {
-    return this->dateFilters;
+    return this->dateFilters.value(reportId);
 }
 
-void ReportParamsModel::removeDateFilters(int filterId)
+void ReportParamsModel::removeDateFilters(int reportId, int filterId, bool removeReport)
 {
-    this->dateFilters.remove(filterId);
+    QVector<int> tmp;
+
+    if(removeReport == true){
+        this->dateFilters.remove(reportId);
+    } else{
+        tmp = this->dateFilters.value(reportId);
+        tmp.remove(filterId);
+        this->dateFilters.insert(reportId, tmp);
+    }
 }
 
-void ReportParamsModel::addToNumericalFilters(int filterId)
+void ReportParamsModel::addToNumericalFilters(int reportId, int filterId)
 {
-    if(this->numericalFilters.indexOf(filterId) < 0)
-        this->numericalFilters.append(filterId);
+    QVector<int> tmp;
+
+    if(this->numericalFilters.keys().contains(reportId)){
+        tmp = this->numericalFilters.value(reportId);
+
+        if(tmp.indexOf(filterId) < 0)
+            tmp.append(filterId);
+    } else{
+        tmp.append(filterId);
+    }
+
+    this->numericalFilters.insert(reportId, tmp);
 }
 
-QVector<int> ReportParamsModel::fetchNumericalFilters()
+QVector<int> ReportParamsModel::fetchNumericalFilters(int reportId)
 {
-    return this->numericalFilters;
+    return this->numericalFilters.value(reportId);
 }
 
-void ReportParamsModel::removeNumericalFilters(int filterId)
+void ReportParamsModel::removeNumericalFilters(int reportId, int filterId, bool removeReport)
 {
-    this->numericalFilters.remove(filterId);
+    QVector<int> tmp;
+
+    if(removeReport == true){
+        this->numericalFilters.remove(reportId);
+    } else{
+        tmp = this->numericalFilters.value(reportId);
+        tmp.remove(filterId);
+        this->numericalFilters.insert(reportId, tmp);
+    }
 }
 
 void ReportParamsModel::addToFilterColumnMap(int filterId, QString value)
@@ -246,6 +301,32 @@ QStringList ReportParamsModel::fetchFilterRelationMap(int filterId, bool fetchAl
 void ReportParamsModel::removeFilterRelationMap(int filterId)
 {
     this->filterRelationMap.remove(filterId);
+}
+
+void ReportParamsModel::addToFilterSlugMap(int filterId, QString slug)
+{
+    this->filterSlugMap.insert(filterId, slug);
+}
+
+QStringList ReportParamsModel::fetchFilterSlugMap(int filterId, bool fetchAll)
+{
+
+    QStringList out;
+
+    if(fetchAll == true){
+        foreach(QString tmp, this->filterSlugMap){
+            out.append(tmp);
+        }
+    } else{
+        out.append(this->filterSlugMap.value(filterId));
+    }
+
+    return out;
+}
+
+void ReportParamsModel::removeFilterSlugMap(int filterId)
+{
+    this->filterSlugMap.remove(filterId);
 }
 
 void ReportParamsModel::addToIncludeExcludeMap(int filterId, bool includeExclude)
@@ -393,6 +474,115 @@ QStringList ReportParamsModel::fetchFilterSubCategoryMap(int filterId, bool fetc
 void ReportParamsModel::removeFilterSubCategoryMap(int filterId)
 {
     this->filterSubCategoryMap.remove(filterId);
+}
+
+void ReportParamsModel::setTmpSelectedValues(QString value)
+{
+    if(this->tmpSelectedValues.indexOf(value) < 0){
+        this->tmpSelectedValues.append(value);
+
+        emit tmpSelectedValuesChanged(this->tmpSelectedValues);
+    }
+}
+
+void ReportParamsModel::removeTmpSelectedValues(int refObjId, bool removeAll)
+{
+    if(removeAll == true){
+        this->tmpSelectedValues.clear();
+    } else{
+        this->tmpSelectedValues.removeAt(refObjId);
+    }
+}
+
+QStringList ReportParamsModel::getTmpSelectedValues(int refObjId, bool fetchAll)
+{
+    QStringList output;
+
+    if(fetchAll == false){
+        output.append(this->tmpSelectedValues.value(refObjId));
+    } else{
+        output = this->tmpSelectedValues;
+    }
+
+    return output;
+}
+
+int ReportParamsModel::searchTmpSelectedValues(QString keyword)
+{
+    return this->tmpSelectedValues.indexOf(keyword);
+}
+
+void ReportParamsModel::setTmpFilterIndex(int value)
+{
+    this->tmpFilterIndex.append(value);
+}
+
+void ReportParamsModel::removeTmpFilterIndex(int refObjId, bool removeAll)
+{
+    if(removeAll == false){
+        this->tmpFilterIndex.remove(refObjId);
+    } else{
+        this->tmpFilterIndex.clear();
+    }
+}
+
+QVector<int> ReportParamsModel::getTmpFilterIndex(int refObjId, bool fetchAll)
+{
+    QVector<int> output;
+
+    if(fetchAll == false){
+        output.append(this->tmpFilterIndex.value(refObjId));
+    } else{
+        output = this->tmpFilterIndex;
+    }
+
+    return output;
+}
+
+void ReportParamsModel::setDateFormatMap(int refObjId, int formatId)
+{
+    this->dateFormatMap.insert(refObjId, formatId);
+}
+
+void ReportParamsModel::removeDateFormatMap(int refObjId, bool removeAll)
+{
+    if(removeAll == false){
+        this->dateFormatMap.remove(refObjId);
+    } else{
+        this->dateFormatMap.clear();
+    }
+}
+
+int ReportParamsModel::getDateFormatMap(int refObjId)
+{
+    return this->dateFormatMap.value(refObjId);
+}
+
+void ReportParamsModel::setActualDateValues(int refObjId, QString value1, QString value2)
+{
+    QStringList input;
+
+    input << value1;
+    if(value2 != ""){
+        input << value2;
+    }
+    this->actualDateValues.insert(refObjId, input);
+}
+
+void ReportParamsModel::removeActualDateValues(int refObjId, bool removeAll)
+{
+    if(removeAll == false){
+        this->actualDateValues.remove(refObjId);
+    } else{
+        this->actualDateValues.clear();
+    }
+}
+
+QStringList ReportParamsModel::getActualDateValues(int refObjId)
+{
+    QStringList output;
+    output = this->actualDateValues.value(refObjId);
+    return output;
 }
 
 int ReportParamsModel::internalCounter() const

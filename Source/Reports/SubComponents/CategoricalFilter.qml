@@ -162,7 +162,7 @@ Popup {
             singleValue = joinValue[counter]
             singleSlug = joinSlug[counter]
 
-            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, counter, DSParamsModel.filterModelIndex)
+            manageFilters(ReportParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, counter, ReportParamsModel.filterModelIndex)
             break
 
         case Constants.categoryMainWildCardType:
@@ -216,7 +216,7 @@ Popup {
 
     function onResetClicked(){
         categoricalFilterPopup.visible = false
-        DSParamsModel.clearFilter()
+        ReportParamsModel.clearFilter()
 
         // Clear tabs individual temp data
         categoricalFilterPopup.clearData()
