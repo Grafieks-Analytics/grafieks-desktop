@@ -18,6 +18,8 @@ Popup {
     padding: 0
     closePolicy: Popup.NoAutoClose
 
+    property int counter: 0
+
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -53,6 +55,7 @@ Popup {
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
+    signal clearData()
     signal subCategoryEditMode(string subCategory)
     signal signalCalendarEditData(string relation, string slug, string value)
     signal signalTimeFrameEditData(string subCategory, string relation, string value, string value)
@@ -66,6 +69,64 @@ Popup {
     // Connections Starts
 
 
+    Connections{
+        target: DSParamsModel
+
+        function onInternalCounterChanged(){
+            counter = DSParamsModel.internalCounter
+        }
+
+        function onFilterIndexChanged(){
+            counter = DSParamsModel.filterIndex
+        }
+    }
+
+
+    Connections{
+        target: QueryDataModel
+
+        function onColumnListModelDataChanged(colData, options){
+
+            var jsonOptions = JSON.parse(options)
+            console.log(options, "OIT")
+
+            if(jsonOptions.section === Constants.categoricalTab){
+
+                switch(jsonOptions.category){
+                case Constants.dateMainListType:
+
+                    listContent.visible = true
+                    calendarContent.visible = false
+                    dateTimeFrameContent.visible = false
+
+                    listRadio.checked = true
+
+                    break
+
+                case Constants.dateMainCalendarType:
+
+                    listContent.visible = false
+                    calendarContent.visible = true
+                    dateTimeFrameContent.visible = false
+
+                    dateRadio.checked = true
+
+                    break
+
+                case Constants.dateMainTimeFrameType:
+
+                    listContent.visible = false
+                    calendarContent.visible = false
+                    dateTimeFrameContent.visible = true
+
+                    topRadio.checked = true
+
+                    break
+                }
+
+            }
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -80,6 +141,10 @@ Popup {
         dateFilterPopup.subCategoryEditMode.connect(listContent.slotEditModeSubCategory)
         dateFilterPopup.signalCalendarEditData.connect(calendarContent.slotEditModeCalendar)
         dateFilterPopup.signalTimeFrameEditData.connect(dateTimeFrameContent.slotEditModeTimeFrame)
+
+        dateFilterPopup.clearData.connect(listContent.slotDataCleared)
+        dateFilterPopup.clearData.connect(calendarContent.slotDataCleared)
+        dateFilterPopup.clearData.connect(dateTimeFrameContent.slotDataCleared)
     }
 
     // SLOT function
@@ -128,7 +193,7 @@ Popup {
 
     function closeDateFilterPopup(){
         dateFilterPopup.visible = false
-        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter();
     }
 
     function applyDateFilter(){
@@ -141,66 +206,84 @@ Popup {
         var subCategory = DSParamsModel.subCategory
         var tableName = DSParamsModel.tableName
         var columnName = DSParamsModel.colName
-        var joinRelation = DSParamsModel.fetchJoinRelation(0, true)
-        var joinValue = DSParamsModel.fetchJoinValue(0, true)
-        var joinSlug = DSParamsModel.fetchJoinRelationSlug(0, true)
-        var includeNull = DSParamsModel.includeNull
-        var exclude = DSParamsModel.exclude
+        var tmpFilterIndexes = DSParamsModel.getTmpFilterIndex(0, true)
 
         var singleValue = "";
         var singleRelation = "";
         var singleSlug = "";
 
+        let joinRelation = ""
+        let joinValue = ""
+        let actualValue = ""
+        let joinSlug = ""
+        let includeNull =  false
+        let exclude = false
+        let dateFormatId = 0
 
         switch(category){
 
         case Constants.dateMainListType:
+        case Constants.dateMainTimeFrameType:
 
-            singleRelation = joinRelation[0]
-            singleValue = joinValue[0]
-            singleSlug = joinSlug[0]
-            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, filterIndex)
+
+            joinRelation = DSParamsModel.fetchJoinRelation(counter)
+            joinValue = DSParamsModel.fetchJoinValue(counter)
+            actualValue = DSParamsModel.getActualDateValues(counter)
+            joinSlug = DSParamsModel.fetchJoinRelationSlug(counter)
+            includeNull = DSParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
+            exclude = DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
+            dateFormatId = category === Constants.dateMainTimeFrameType ? DSParamsModel.getDateFormatMap(counter): 0
+
+            singleRelation = joinRelation[counter]
+            singleValue = joinValue[counter]
+            singleSlug = joinSlug[counter]
+            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, actualValue, includeNull, exclude, dateFormatId, counter, DSParamsModel.filterModelIndex)
 
             break
 
         case Constants.dateMainCalendarType:
 
-            for(let i = 0; i < Object.keys(joinRelation).length; i++){
-                singleRelation = joinRelation[i]
-                singleValue = joinValue[i]
-                singleSlug = joinSlug[i]
-                manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, filterIndex)
-            }
+
+            joinRelation = DSParamsModel.fetchJoinRelation(counter)
+            joinValue = DSParamsModel.fetchJoinValue(counter)
+            actualValue = DSParamsModel.getActualDateValues(counter)
+            joinSlug = DSParamsModel.fetchJoinRelationSlug(counter)
+            includeNull = false
+            exclude = DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
+
+            singleRelation = joinRelation[counter]
+            singleValue = joinValue[counter]
+            singleSlug = joinSlug[counter]
+//            console.log(JSON.stringify(joinRelation), JSON.stringify(joinSlug))
+
+            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, actualValue, includeNull, exclude, 0, counter, DSParamsModel.filterModelIndex)
+
 
             break
 
-        case Constants.dateMainTimeFrameType:
-            singleRelation = joinRelation[0]
-            singleValue = joinValue[0]
-            singleSlug = joinSlug[0]
-            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, filterIndex)
-            break
 
         default:
             break
         }
 
-        DSParamsModel.setMode(Constants.modeCreate)
-        // Reset all DSParams
-        //DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter();
+
+        // Clear tabs individual temp data
+        dateFilterPopup.clearData()
+
 
     }
 
-    function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, filterIndex = 0){
+    function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude, dateFormatId, counter = 0, filterId = 0){
 
-//        console.log(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, "FILTER LIST INSERT/UPDATE")
+        console.log("Filter insert date", mode, section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude, dateFormatId, counter, filterId)
 
         // Save the filter
         if(mode === Constants.modeCreate){
-            FilterDateListModel.newFilter(section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+            FilterDateListModel.newFilter(counter, dateFormatId,  section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude)
 
         } else{
-            FilterDateListModel.updateFilter(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+            FilterDateListModel.updateFilter(filterId, dateFormatId, section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude)
         }
     }
     function resetDateFilter(){
@@ -220,7 +303,7 @@ Popup {
         // For list date type
         // The db WHERE relation can only be LIKE / NOT LIKE ARRAY type
 
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
     }
     function onCalendarClicked(){
         listContent.visible = false
@@ -228,7 +311,7 @@ Popup {
         dateTimeFrameContent.visible = false
 
         DSParamsModel.setCategory(Constants.dateMainCalendarType)
-        DSParamsModel.addToJoinRelation(mapKey, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
     }
 
     function onTimeFrameClicked(){
@@ -238,7 +321,7 @@ Popup {
 
 
         DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
     }
 
 
@@ -341,10 +424,13 @@ Popup {
     Rectangle{
         id: fullExtactRadioBtn
         height: 40
-        width: parent.width
+        width: parent.width-40
+        anchors.horizontalCenter:  parent.horizontalCenter
         anchors.top: headerPopup.bottom
 
         color: "transparent"
+
+
 
         Column{
 
@@ -395,7 +481,7 @@ Popup {
 
             anchors.right: fullExtactRadioBtn.right
             topPadding: 8
-            rightPadding: 30
+            rightPadding: 35
 
             CustomRadioButton{
                 id: topRadio

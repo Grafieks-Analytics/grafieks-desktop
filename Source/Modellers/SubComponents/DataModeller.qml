@@ -20,8 +20,6 @@ import "../SubComponents"
 import "../SubComponents/MiniSubComponents"
 
 
-
-
 Item {
 
 
@@ -56,6 +54,8 @@ Item {
     property int firstRectId : 1
 
 
+    property string databaseType: ""
+    property var tempLineObject
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -86,72 +86,85 @@ Item {
         function onMysqlLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("`")
+                databaseType = "mysql"
             }
         }
         function onMongoLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("`")
+                databaseType = "mongo"
             }
         }
         function onPostgresLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("\"")
+                databaseType = "postgres"
             }
         }
         function onOracleLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("")
+                databaseType = "oracle"
             }
         }
         function onMssqlLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("\"")
+                databaseType = "mssql"
             }
         }
         function onAccessLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("\"")
+                databaseType = "access"
             }
         }
 
         function onRedshiftLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("\"")
+                databaseType = "redshift"
             }
         }
         function onTeradataLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("\"")
+                databaseType = "teradata"
             }
         }
 
         function onSnowflakeLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("\"")
+                databaseType = "snowflake"
             }
         }
 
         function onSqliteLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("`")
+                databaseType = "sqlite"
             }
         }
 
         function onExcelLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("\"")
+                databaseType = "excel"
             }
         }
 
         function onCsvLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("\"")
+                databaseType = "csv"
             }
         }
 
         function onJsonLoginStatus(status){
             if(status.status === true){
                 DSParamsModel.setQueryJoiner("\"")
+                databaseType = "json"
             }
         }
     }
@@ -184,6 +197,7 @@ Item {
         function onHideColumnsChanged(hideColumns){
             DSParamsModel.removeQuerySelectParamsList(hideColumns)
         }
+
 
         // Generate the dynamic query and run in on receiving the signal
         function onProcessQuery(){
@@ -219,9 +233,12 @@ Item {
                 queryErrorModal.text = "JOIN is not complete"
                 queryErrorModal.open();
 
+                DSParamsModel.setTmpSql("")
+                executeSql()
             }
 
         }
+
     }
 
 
@@ -357,6 +374,15 @@ Item {
         DSParamsModel.removeJoinIconMap(refObject)
         DSParamsModel.removeJoinTypeMap(refObject)
         DSParamsModel.removeJoinMapList(refObject, 0, true)
+
+
+        if(DSParamsModel.rectanglesSize() <= 0){
+            DSParamsModel.setTmpSql("")
+            executeSql()
+        } else{
+            // Call to execute sql query for visual query designer
+            DSParamsModel.executeModelerQuery();
+        }
     }
 
 
@@ -535,21 +561,21 @@ Item {
             let lastIndex = selectColumns.lastIndexOf(",");
             selectColumns = selectColumns.substring(0, lastIndex);
 
-            finalQuery = "SELECT " + selectColumns + " FROM " + DSParamsModel.queryJoiner + DSParamsModel.fetchExistingTables(firstRectId) + DSParamsModel.queryJoiner + " " + joinString
+            let forParams
+            if(databaseType.match(/teradata/gi)){
 
+                forParams = DSParamsModel.queryJoiner + GeneralParamsModel.getCurrentDB() + DSParamsModel.queryJoiner + "." + DSParamsModel.queryJoiner + DSParamsModel.fetchExistingTables(firstRectId) + DSParamsModel.queryJoiner
+
+            } else{
+                forParams = DSParamsModel.queryJoiner + DSParamsModel.fetchExistingTables(firstRectId) + DSParamsModel.queryJoiner
+            }
+
+            finalQuery = "SELECT " + selectColumns + " FROM " + forParams + " " + joinString
             // Call and execute the query
             DSParamsModel.setTmpSql(finalQuery)
 
-            if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
-                console.log("QUERY set QUERYMODEL", DSParamsModel.tmpSql)
-                QueryModel.callSql(DSParamsModel.tmpSql)
-            } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-                console.log("QUERY set DUCKQUERYMODEL", DSParamsModel.tmpSql)
-                DuckQueryModel.setQuery(DSParamsModel.tmpSql)
-            } else{
-                console.log("QUERY set FORWARDONLYQUERYMODEL", DSParamsModel.tmpSql)
-                ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
-            }
+            // Function to Execute sql generated dynamically
+            executeSql()
 
             TableSchemaModel.showSchema(DSParamsModel.tmpSql)
         }
@@ -707,8 +733,8 @@ Item {
 
     function onDropAreaExited(){
         highlightRect.color = "white"
-
         DSParamsModel.fetchNewConnectingLine(counter).destroy()
+        DSParamsModel.removeNewConnectingLine(counter)
     }
 
     function onDropAreaEntered(drag){
@@ -825,6 +851,9 @@ Item {
         DSParamsModel.addToFrontRectangleCoordinates(counter, {x: rectLeftX, y: rectLeftY})
         DSParamsModel.addToRearRectangleCoordinates(counter, {x: rectRightX, y: rectRightY})
         DSParamsModel.addToExistingTables(counter, tableslist.tableName)
+
+        // Call to execute sql query for visual query designer
+        DSParamsModel.executeModelerQuery();
     }
 
 

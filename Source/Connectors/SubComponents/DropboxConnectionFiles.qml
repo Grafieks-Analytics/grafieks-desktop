@@ -327,18 +327,7 @@ Popup {
                     radius: 5
                     width: popup.width * 0.6
                 }
-
-
-                CustomButton{
-
-                    id: searchBtn
-                    height: 40
-                    width: 100
-                    textValue: "Search"
-                    x : popup.width * 0.6 - 100
-                    onClicked: searchFiles()
-
-                }
+                onTextChanged: searchFiles()
             }
         }
 

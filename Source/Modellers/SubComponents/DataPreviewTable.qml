@@ -1,193 +1,202 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.3
-
+import QtQuick 2.3
+import QtQuick.Window 2.2
+import QtQuick.Controls 1.2
+import QtQuick.Controls.Styles 1.2
 import com.grafieks.singleton.constants 1.0
 
 import "../../MainSubComponents"
 
 // Data Preview - Table View From Query Results
 
-TableView {
-    id: dataPreviewResult
-
-    columnWidthProvider: function (column) { return 100; }
-    rowHeightProvider: function (column) { if(column < DSParamsModel.displayRowsCount) {return 30;} else {return 0;} }
-    anchors.fill: parent
-    topMargin: columnsHeader1.implicitHeight
+Rectangle {
+    id: win
     width: parent.width
-    ScrollBar.horizontal: ScrollBar{}
-    ScrollBar.vertical: ScrollBar{}
-    clip: true
-    boundsBehavior : Flickable.StopAtBounds
-
-
-    property string globalConType: ""
-
-    /***********************************************************************************************************************/
-    // LIST MODEL STARTS
-
-    ListModel{
-        id:tableModel
-    }
-
-
-    // LIST MODEL ENDS
-    /***********************************************************************************************************************/
-
-
-    /***********************************************************************************************************************/
-    // SIGNALS STARTS
-
-
-
-    // SIGNALS ENDS
-    /***********************************************************************************************************************/
-
-
-
-    /***********************************************************************************************************************/
-    // Connections Starts
+    height: parent.height
+    visible: true
+    property var roleNames:["a", "b", "c"]
+    property var newObject: []
+    property var previousModelData: 0
+    property var counter : 0
 
     Connections{
         target: QueryModel
 
+        // This one is for table data
         function onSqlHasData(hasData){
-            dataPreviewResult.model = hasData === true? QueryModel: ""
-            globalConType = Constants.sqlType
+            view.model = hasData === true? QueryModel: ""
+            view.visible = hasData === true ? true: false
+
         }
 
+        // This slot is for updating headers
+        // This is also returning an array of strings
         function onHeaderDataChanged(tableHeaders){
-            mainRepeater.model = tableHeaders
+            setHeaders(tableHeaders)
+        }
+
+        // Clear table
+        function onClearTablePreview(){
+            clearTable()
         }
 
     }
-
     Connections{
         target: DuckQueryModel
 
+        // This one is for table data
         function onDuckHasData(hasData){
-            dataPreviewResult.model = hasData === true? DuckQueryModel: ""
-            globalConType = Constants.duckType
+            view.model = hasData === true? DuckQueryModel: ""
+            view.visible = hasData === true ? true: false
+
         }
 
+        // This slot is for updating headers
+        // This is also returning an array of strings
         function onDuckHeaderDataChanged(tableHeaders){
-            mainRepeater.model = tableHeaders
+            setHeaders(tableHeaders)
         }
-    }
 
+        // Clear table
+        function onClearTablePreview(){
+            clearTable()
+        }
+
+    }
     Connections{
         target: ForwardOnlyQueryModel
 
+        // This one is for table data
         function onForwardOnlyHasData(hasData){
-            dataPreviewResult.model = hasData === true? ForwardOnlyQueryModel: ""
-            globalConType = Constants.forwardType
+            view.model = hasData === true? ForwardOnlyQueryModel: ""
+            view.visible = hasData === true ? true: false
         }
 
+        // This slot is for updating headers
+        // This is also returning an array of strings
         function onForwardOnlyHeaderDataChanged(tableHeaders){
-            mainRepeater.model = tableHeaders
+            setHeaders(tableHeaders)
         }
-    }
 
-    // Connections Ends
-    /***********************************************************************************************************************/
-
-
-
-
-
-    /***********************************************************************************************************************/
-    // JAVASCRIPT FUNCTION STARTS
-
-
-
-    // JAVASCRIPT FUNCTION ENDS
-    /***********************************************************************************************************************/
-
-
-
-
-    /***********************************************************************************************************************/
-    // SubComponents Starts
-
-
-
-    // SubComponents Ends
-    /***********************************************************************************************************************/
-
-
-
-
-
-    /***********************************************************************************************************************/
-    // Page Design Starts
-
-
-    delegate: Rectangle {
-        border.color: Constants.darkThemeColor
-        border.width: 0.5
-
-        Text {
-            text: display
-            anchors.fill: parent
-            anchors.margins: 10
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
-            color: Constants.lightGrayTextColor
+        // Clear table
+        function onClearTablePreview(){
+            clearTable()
         }
-    }
-    Rectangle { // mask the headers
-        z: 3
-        y: dataPreviewResult.contentY
-        x: dataPreviewResult.contentX
-        width: dataPreviewResult.leftMargin
-        height: dataPreviewResult.topMargin
-        border.color: Constants.themeColor
-        border.width: 0.2
+
     }
 
-    // Table Header Starts
+    function setHeaders(tableHeaders){
+        if(tableHeaders.length > 0){
+            roleNames = tableHeaders
 
-    Row {
-        id: columnsHeader1
-        y: dataPreviewResult.contentY
-        z: 2
-        width: dataPreviewResult.width
-
-        Repeater {
-            id: mainRepeater
-
-            Rectangle{
-                width: dataPreviewResult.columnWidthProvider(modelData)
-                height: 30
-                border.color: Constants.darkThemeColor
-                color: Constants.lightThemeColor
-                border.width: 1
-                Text {
-                    id: textName
-                    text: modelData
-                    width: parent.width
-                    height: parent.height
-                    anchors.centerIn: parent
-                    padding: 10
-                    font.bold: false
-                    verticalAlignment: Text.AlignVCenter
-                }
+            for(var i=0; i<roleNames.length; i++){
+                var role  = roleNames[i]
+                var columnString = 'import QtQuick 2.3; import QtQuick.Controls 1.2; TableViewColumn {role: "' + role + '"; title: "' + role + '"; }';
+                newObject[i] = Qt.createQmlObject(columnString, view)
+                view.addColumn(newObject[i])
             }
         }
     }
 
-    Layout.fillWidth: true
-    Layout.fillHeight: true
+    function clearTable(){
+        for(var i=0; i<roleNames.length; i++){
+            view.removeColumn(newObject[i])
+            delete newObject[i]
+
+        }
+    }
 
 
-    // Table Header Ends
+    TableView {
+        id:view
+        width: parent.width
+        height: parent.height
+        //        anchors.top: clearBtn.bottom
+        alternatingRowColors: false
+        visible: false
 
-    ScrollIndicator.horizontal: CustomScrollHorizontalIndicator  {}
-    ScrollIndicator.vertical: CustomScrollVerticalIndicator {}
 
 
-    // Page Design Ends
-    /***********************************************************************************************************************/
+        style: TableViewStyle {
+            headerDelegate: Rectangle {
+                height: textItem.implicitHeight * 1.8
+                width: textItem.implicitWidth
+                color: Constants.themeColor
 
+                Text {
+                    id: textItem
+                    anchors.fill: parent
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: styleData.textAlignment
+                    anchors.leftMargin: 12
+                    text: styleData.value
+                    elide: Text.ElideRight
+                    color: textColor
+                    font.bold: true
+                    renderType: Text.NativeRendering
+
+
+                }
+                Rectangle {
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 1
+                    anchors.topMargin: 1
+
+                    width: 1
+                    color: Constants.darkThemeColor
+                    border.color: Constants.darkThemeColor
+                }
+                Rectangle {
+                    anchors.bottom: parent.bottom
+                    width: parent.width
+                    height: 1
+                    color: Constants.darkThemeColor
+                    border.color: Constants.darkThemeColor
+                }
+            }
+
+            itemDelegate: Rectangle {
+                color: "white"
+
+
+                Text {
+                    id: textItem1
+                    anchors.fill: parent
+                    verticalAlignment: Text.AlignVCenter
+                    objectName: styleData.value
+                    horizontalAlignment: styleData.textAlignment
+                    anchors.leftMargin: 12
+                    elide: Text.ElideRight
+                    color: textColor
+                    renderType: Text.NativeRendering
+                    onObjectNameChanged: {
+                        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+                            textItem1.text = QueryModel.data(QueryModel.index(styleData.row, styleData.column))
+                        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
+                            textItem1.text = DuckQueryModel.data(DuckQueryModel.index(styleData.row, styleData.column))
+                        } else{
+                            textItem1.text = ForwardOnlyQueryModel.data(ForwardOnlyQueryModel.index(styleData.row, styleData.column))
+                        }
+                    }
+
+                }
+                Rectangle {
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    width: 1
+                    color: Constants.darkThemeColor
+                    border.color: Constants.darkThemeColor
+                }
+                Rectangle {
+                    anchors.bottom: parent.bottom
+                    width: parent.width
+                    height: 1
+                    color: Constants.darkThemeColor
+                    border.color: Constants.darkThemeColor
+                }
+            }
+        }
+    }
 }

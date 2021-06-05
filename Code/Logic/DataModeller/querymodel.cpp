@@ -1,7 +1,7 @@
 #include "querymodel.h"
 
 
-QueryModel::QueryModel(QObject *parent): QSqlQueryModel(parent)
+QueryModel::QueryModel(QObject *parent): QSqlQueryModel(parent), resetPreviewCount(false)
 {
 
 }
@@ -10,15 +10,87 @@ QueryModel::~QueryModel()
 {
 }
 
+void QueryModel::setPreviewQuery(int previewRowCount)
+{
+    // Signal to clear exisitng data in tables (qml)
+    emit clearTablePreview();
+
+    int maxRowCount = 0;
+
+    if(previewRowCount > this->tmpRowCount){
+        maxRowCount = this->tmpRowCount;
+    } else{
+        maxRowCount = previewRowCount;
+    }
+
+    QString finalSql;
+
+    switch (Statics::currentDbIntType) {
+
+    case Constants::mysqlIntType:
+    case Constants::mysqlOdbcIntType:
+    case Constants::sqliteIntType:
+    case Constants::postgresIntType:
+    case Constants::mongoIntType:{
+        if(this->tmpSql.toLower().contains(" limit ", Qt::CaseInsensitive)){
+            finalSql = this->tmpSql.toLower().split(" limit ").first();
+        } else{
+            finalSql = this->tmpSql.toLower();
+        }
+
+        finalSql += " limit " + QString::number(maxRowCount);
+        break;
+    }
+
+    case Constants::oracleIntType:{
+        break;
+    }
+    case Constants::mssqlIntType:
+    case Constants::accessIntType:{
+
+        QString finalSqlInterPart;
+
+        if(this->tmpSql.toLower().contains(" top ", Qt::CaseInsensitive)){
+            finalSqlInterPart = this->tmpSql.toLower().split(" top ").last();
+            finalSql = "select top " + QString::number(maxRowCount) + " " + finalSqlInterPart.section(' ', 1);
+
+        } else{
+            finalSqlInterPart = this->tmpSql.toLower().section(' ', 1);
+            finalSql = "select top " + QString::number(maxRowCount) + " " + finalSqlInterPart;
+        }
+        break;
+    }
+    }
+
+    // For custom preview count
+    this->resetPreviewCount = true;
+
+    this->executeQuery(finalSql, false);
+
+    if(this->rowCount() > 0){
+        emit sqlHasData(true);
+    } else{
+        emit sqlHasData(false);
+    }
+}
+
 void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
     this->removeTmpChartData();
 
     QSqlQueryModel::setQuery(query, db);
-    if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
-        qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
 
-    generateRoleNames();
+    if(QSqlQueryModel::lastError().type() != QSqlError::NoError){
+        qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
+        emit errorSignal(QSqlQueryModel::lastError().text());
+    } else{
+
+        if(this->resetPreviewCount == false)
+            this->tmpRowCount = QSqlQueryModel::rowCount();
+
+        generateRoleNames();
+        emit errorSignal("");
+    }
 }
 
 void QueryModel::setQuery(const QSqlQuery &query)
@@ -27,10 +99,18 @@ void QueryModel::setQuery(const QSqlQuery &query)
     this->removeTmpChartData();
 
     QSqlQueryModel::setQuery(query);
-    if(QSqlQueryModel::lastError().type() != QSqlError::NoError)
-        qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
 
-    generateRoleNames();
+    if(QSqlQueryModel::lastError().type() != QSqlError::NoError){
+        qWarning() << Q_FUNC_INFO << QSqlQueryModel::lastError();
+        emit errorSignal(QSqlQueryModel::lastError().text());
+    } else{
+
+        if(this->resetPreviewCount == false)
+            this->tmpRowCount = QSqlQueryModel::rowCount();
+
+        generateRoleNames();
+        emit errorSignal("");
+    }
 }
 
 QVariant QueryModel::data(const QModelIndex &index, int role) const
@@ -49,6 +129,12 @@ QVariant QueryModel::data(const QModelIndex &index, int role) const
     return value;
 }
 
+//int QueryModel::rowCount(const QModelIndex &parent) const
+//{
+//    Q_UNUSED(parent);
+//    return this->previewRowCount;
+//}
+
 
 QHash<int, QByteArray> QueryModel::roleNames() const
 {
@@ -57,8 +143,14 @@ QHash<int, QByteArray> QueryModel::roleNames() const
 
 void QueryModel::callSql(QString tmpSql)
 {
-    QString simpliFiedSql = tmpSql.simplified();
-    this->executeQuery(simpliFiedSql);
+    // Signal to clear exisitng data in tables (qml)
+    emit clearTablePreview();
+
+    // For custom preview count
+    this->resetPreviewCount = false;
+
+    this->tmpSql = tmpSql.simplified();
+    this->executeQuery(this->tmpSql, true);
 }
 
 void QueryModel::removeTmpChartData()
@@ -67,10 +159,7 @@ void QueryModel::removeTmpChartData()
     this->sqlChartHeader.clear();
     this->tableHeaders.clear();
 
-//    QSqlQueryModel::clear();
-
     emit sqlHasData(false);
-    emit chartDataChanged(this->sqlChartData);
     emit headerDataChanged(this->tableHeaders);
     emit chartHeaderChanged(this->sqlChartHeader);
 }
@@ -92,12 +181,6 @@ void QueryModel::setChartData()
         }
     }
 
-    if(totalRows > 0){
-        emit sqlHasData(true);
-    } else{
-        emit sqlHasData(false);
-    }
-
     emit chartDataChanged(this->sqlChartData);
 }
 
@@ -109,7 +192,14 @@ void QueryModel::setChartHeader(int index, QStringList colInfo)
 
 void QueryModel::receiveFilterQuery(QString &filteredQuery)
 {
-    this->executeQuery(filteredQuery);
+    // Signal to clear exisitng data in tables (qml)
+    emit clearTablePreview();
+
+    // For custom preview count
+    this->resetPreviewCount = false;
+
+    this->tmpSql = filteredQuery;
+    this->executeQuery(this->tmpSql, true);
 }
 
 void QueryModel::generateRoleNames()
@@ -137,7 +227,7 @@ void QueryModel::generateRoleNames()
     emit chartHeaderChanged(this->sqlChartHeader);
 }
 
-void QueryModel::executeQuery(QString &query)
+void QueryModel::executeQuery(QString &query, bool updateChartData)
 {
 
     // For Databases which only allow Forward Only queries
@@ -151,7 +241,9 @@ void QueryModel::executeQuery(QString &query)
     case Constants::mysqlIntType:{
         QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrQueryType);
         this->setQuery(query, dbMysql);
-        this->setChartData();
+        if(updateChartData == true){
+            this->setChartData();
+        }
 
         break;
     }
@@ -159,68 +251,56 @@ void QueryModel::executeQuery(QString &query)
     case Constants::mysqlOdbcIntType:{
         QSqlDatabase dbMysqlOdbc = QSqlDatabase::database(Constants::mysqlOdbcStrQueryType);
         this->setQuery(query, dbMysqlOdbc);
-        this->setChartData();
+        if(updateChartData == true){
+            this->setChartData();
+        }
         break;
     }
 
     case Constants::sqliteIntType:{
         QSqlDatabase dbSqlite = QSqlDatabase::database(Constants::sqliteStrQueryType);
         this->setQuery(query, dbSqlite);
-        this->setChartData();
+        if(updateChartData == true)
+            this->setChartData();
         break;
     }
     case Constants::postgresIntType:{
         QSqlDatabase dbPostgres = QSqlDatabase::database(Constants::postgresOdbcStrQueryType);
         this->setQuery(query, dbPostgres);
-        this->setChartData();
+        if(updateChartData == true)
+            this->setChartData();
         break;
     }
 
-    case Constants::excelIntType:{
-        QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelStrQueryType);
-        this->setQuery(query, dbExcel);
-        this->setChartData();
-        break;
-    }
     case Constants::mssqlIntType:{
         QSqlDatabase dbMssql = QSqlDatabase::database(Constants::mssqlOdbcStrQueryType);
         this->setQuery(query, dbMssql);
-        this->setChartData();
+        if(updateChartData == true)
+            this->setChartData();
         break;
     }
 
     case Constants::oracleIntType:{
         QSqlDatabase dbOracle = QSqlDatabase::database(Constants::oracleOdbcStrQueryType);
         this->setQuery(query, dbOracle);
-        this->setChartData();
+        if(updateChartData == true)
+            this->setChartData();
         break;
     }
 
     case Constants::mongoIntType:{
         QSqlDatabase dbMongo = QSqlDatabase::database(Constants::mongoOdbcStrQueryType);
         this->setQuery(query, dbMongo);
-        this->setChartData();
-        break;
-    }
-
-    case Constants::impalaIntType:{
-        QSqlDatabase dbImpala = QSqlDatabase::database(Constants::impalaOdbcStrQueryType);
-        this->setQuery(query, dbImpala);
-        this->setChartData();
-        break;
-    }
-
-    case Constants::hiveIntType:{
-        QSqlDatabase dbHive = QSqlDatabase::database(Constants::hiveOdbcStrQueryType);
-        this->setQuery(query, dbHive);
-
+        if(updateChartData == true)
+            this->setChartData();
         break;
     }
 
     case Constants::accessIntType:{
         QSqlDatabase dbAccess = QSqlDatabase::database(Constants::accessOdbcStrQueryType);
         this->setQuery(query, dbAccess);
-        this->setChartData();
+        if(updateChartData == true)
+            this->setChartData();
         break;
     }
 

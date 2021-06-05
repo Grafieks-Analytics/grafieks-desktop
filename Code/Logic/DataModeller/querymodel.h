@@ -22,12 +22,14 @@ public:
     explicit QueryModel(QObject *parent = 0);
     ~QueryModel();
 
+    Q_INVOKABLE void setPreviewQuery(int previewRowCount);
+
     // QSqlQueryModel method override
 
     void setQuery(const QString &query, const QSqlDatabase &db = QSqlDatabase());
     void setQuery(const QSqlQuery &query);
-    QVariant data(const QModelIndex &index, int role) const;
-    QHash<int, QByteArray> roleNames() const;
+    QVariant data(const QModelIndex &index, int role) const override;
+    QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void callSql(QString tmpSql);
     Q_INVOKABLE void removeTmpChartData();
@@ -42,16 +44,21 @@ signals:
     void chartHeaderChanged(QMap<int, QStringList> chartHeader);
     void headerDataChanged(QStringList tableHeaders);
     void sqlHasData(bool hasData);
+    void clearTablePreview();
+    void errorSignal(QString errMsg);
 
 private:
     QHash<int, QByteArray> m_roleNames;
     void generateRoleNames();
-    void executeQuery(QString & query);
+    void executeQuery(QString & query, bool updateChartData = true);
 
     // Data variables for Charts
     QMap<int, QStringList*> sqlChartData;
     QMap<int, QStringList> sqlChartHeader;
     QStringList tableHeaders;
+    int tmpRowCount;
+    QString tmpSql;
+    bool resetPreviewCount;
 
 
 

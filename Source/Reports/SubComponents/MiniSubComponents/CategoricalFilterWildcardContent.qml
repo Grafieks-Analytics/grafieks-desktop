@@ -20,13 +20,16 @@ import "../../../MainSubComponents"
 Rectangle{
     id: wildcardContent
     property bool listOpened: false
-    property int counter : 0
     property string selectOption: "Select Wildcard"
     property var acceptedValues:["containing", "endswith", "equalto", "doesntstartwith", "doesntendwith", "notequalto"]
 
     property string editRelation : ""
     property string editValue : ""
     property string editSlug : ""
+    property int totalWildCards: 1
+    property int counter: 0
+
+    property var currenctExclude: false
 
 
     /***********************************************************************************************************************/
@@ -89,12 +92,62 @@ Rectangle{
     /***********************************************************************************************************************/
     // Connections Starts
 
+
     Connections{
         target: DSParamsModel
 
-        function onInternalCounterChanged(internalCounter){
-            if(internalCounter === 0){
-                listviewWildCardModel.clear()
+        function onInternalCounterChanged(){
+            counter = DSParamsModel.internalCounter
+            DSParamsModel.setTmpFilterIndex(counter)
+            excludeCheck.checked = DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
+        }
+
+        function onFilterIndexChanged(){
+
+            if(DSParamsModel.getTmpFilterIndex(0, true).length === 0){
+                counter = DSParamsModel.filterIndex
+                DSParamsModel.setTmpFilterIndex(DSParamsModel.filterIndex)
+                DSParamsModel.setExcludeMap(DSParamsModel.filterIndex, false)
+            }
+        }
+    }
+
+    Connections{
+        target: QueryDataModel
+
+        function onColumnListModelDataChanged(colData, options){
+
+            if(DSParamsModel.category === Constants.categoryMainWildCardType){
+                var finalValue;
+                var jsonOptions = JSON.parse(options)
+
+                switch(jsonOptions.slug){
+
+                case acceptedValues[0]:
+                    finalValue = jsonOptions.values.slice(1,-1)
+                    break
+
+                case acceptedValues[1]:
+                case acceptedValues[4]:
+                    finalValue = jsonOptions.values.slice(1)
+                    break
+
+                case acceptedValues[2]:
+                case acceptedValues[5]:
+                    finalValue = jsonOptions.values
+                    break
+
+                case acceptedValues[3]:
+                    finalValue = jsonOptions.values.slice(0, -1)
+                    break
+                }
+
+                listviewWildCardModel.append({"value":0})
+
+                wildcardContent.editRelation = jsonOptions.relation
+                wildcardContent.editSlug = jsonOptions.slug
+                wildcardContent.editValue = finalValue
+                console.log("WILD", finalValue, JSON.stringify(jsonOptions))
             }
         }
     }
@@ -117,24 +170,19 @@ Rectangle{
 
     }
 
-    function slotWildCardEditData(relation, slug, value){
 
-        // Append a new ListElement on the ListView model
-        listviewWildCardModel.append({"value":0})
-
-        wildcardContent.editRelation = relation
-        wildcardContent.editSlug = slug
-        wildcardContent.editValue = value
-
-
+    function slotDataCleared(){
+        totalWildCards = 1
+        listviewWildCardModel.clear()
+        DSParamsModel.removeTmpFilterIndex(0, true)
     }
+
 
     function setValueDelegate(wildcardDropdown, valueText){
 
         if(DSParamsModel.mode === Constants.modeEdit){
 
             var key = acceptedValues.indexOf(editSlug)
-
             valueText.text = wildcardContent.editValue
             wildcardDropdown.currentIndex = key
         }
@@ -143,17 +191,31 @@ Rectangle{
 
 
     function onExcludeCheckedClicked(checked){
-        DSParamsModel.setExclude(checked)
+        currenctExclude = checked
+
+        var tmpFilters = DSParamsModel.getTmpFilterIndex(0, true)
+
+        for(var i = 0; i < tmpFilters.length; i++){
+            var fi = tmpFilters[i]
+            DSParamsModel.setExcludeMap(fi, currenctExclude)
+        }
     }
 
     function onAddWildcard(){
-        if(DSParamsModel.internalCounter < selectDropdown.count){
+        if(totalWildCards <= selectDropdown.count){
 
-            let newCounter = DSParamsModel.internalCounter + 1
-            DSParamsModel.setInternalCounter(newCounter)
+            // As already filterindex count has been increased on selecting `create` option
+            // Hence, no need to increment for the first time
+            if(totalWildCards > 1){
+                DSParamsModel.setFilterIndex(DSParamsModel.filterIndex + 1)
+            }
+            DSParamsModel.setTmpFilterIndex(DSParamsModel.filterIndex)
+            DSParamsModel.setExcludeMap(DSParamsModel.filterIndex, currenctExclude)
 
             // Append a new ListElement on the ListView model
             listviewWildCardModel.append({"value":0})
+
+            totalWildCards++
         }
     }
 
@@ -162,8 +224,6 @@ Rectangle{
         let newFilter = ""
         let newRelation = ""
         let slug = ""
-
-
 
         switch(selectCurrentValue){
 
@@ -218,9 +278,12 @@ Rectangle{
 
         }
 
-        DSParamsModel.addToJoinRelation(listIndex.toString(), newRelation)
-        DSParamsModel.addToJoinValue(listIndex.toString(), newFilter)
-        DSParamsModel.addToJoinRelationSlug(listIndex.toString(), slug)
+        var currentSelectedIndex = DSParamsModel.getTmpFilterIndex(listIndex)
+        DSParamsModel.addToJoinRelation(currentSelectedIndex, newRelation)
+        DSParamsModel.addToJoinValue(currentSelectedIndex, newFilter)
+        DSParamsModel.addToJoinRelationSlug(currentSelectedIndex, slug)
+
+        console.log("FILTER VALUES1a", currentSelectedIndex, DSParamsModel.fetchJoinRelation(currentSelectedIndex)[currentSelectedIndex], DSParamsModel.fetchJoinValue(currentSelectedIndex)[currentSelectedIndex], DSParamsModel.fetchJoinRelationSlug(currentSelectedIndex)[currentSelectedIndex])
 
     }
 
@@ -294,7 +357,7 @@ Rectangle{
 
             CheckBoxTpl {
 
-                checked: DSParamsModel.exclude
+                id: excludeCheck
                 text: qsTr("Exclude")
                 parent_dimension: Constants.defaultCheckBoxDimension
 

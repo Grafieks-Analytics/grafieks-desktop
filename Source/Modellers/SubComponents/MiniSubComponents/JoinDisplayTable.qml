@@ -128,6 +128,9 @@ Rectangle{
 
     function appendToModel(counter){
         tableListModel.append({counter: counter, currIndex: 0})
+
+        // Call to execute sql query for visual query designer
+        DSParamsModel.executeModelerQuery();
     }
 
     function loadTableColumns(tableName){
@@ -148,6 +151,9 @@ Rectangle{
 
     function changeColumn(columnName, counter){
         selectedColumn(columnName, tableName, counter)
+
+        // Call to execute sql query for visual query designer
+        DSParamsModel.executeModelerQuery();
     }
 
     // JAVASCRIPT FUNCTION ENDS

@@ -14,6 +14,9 @@ ForwardOnlyQueryModel::~ForwardOnlyQueryModel()
 void ForwardOnlyQueryModel::setQuery(QString query)
 {
 
+    // Signal to clear exisitng data in tables (qml)
+    emit clearTablePreview();
+
     this->removeTmpChartData();
 
     this->query = query.simplified();
@@ -25,10 +28,66 @@ void ForwardOnlyQueryModel::setQuery(QString query)
 
 }
 
+void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
+{
+    // Tmp
+    QStringList list;
+    int tmpRowCount = 0;
+    int maxRowCount = 0;
+
+    QString connectionName = this->returnConnectionName();
+
+    QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
+    QSqlQuery q(this->query, dbForward);
+    if(q.lastError().type() != QSqlError::NoError){
+        qWarning() << Q_FUNC_INFO << q.lastError();
+        emit errorSignal(q.lastError().text());
+    } else{
+
+
+        tmpRowCount = this->internalRowCount;
+        if(previewRowCount > tmpRowCount){
+            maxRowCount = tmpRowCount;
+        } else{
+            maxRowCount = previewRowCount;
+        }
+        this->previewRowCount = maxRowCount;
+
+        beginResetModel();
+        this->resultData.clear();
+
+        int totalRowCount = 0;
+        while(q.next() && totalRowCount < maxRowCount){
+
+            try{
+                for(int i = 0; i < this->internalColCount; i++){
+                    list << q.value(i).toString();
+                }
+                this->resultData.append(list);
+            } catch(std::exception &e){
+                qWarning() << Q_FUNC_INFO << e.what();
+            }
+
+            list.clear();
+            totalRowCount++;
+        }
+
+        if(this->internalRowCount > 0){
+            emit forwardOnlyHasData(true);
+
+        } else{
+            emit forwardOnlyHasData(false);
+        }
+
+        emit errorSignal("");
+        endResetModel();
+    }
+}
+
 int ForwardOnlyQueryModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return this->internalRowCount;
+    return this->previewRowCount;
 }
 
 int ForwardOnlyQueryModel::columnCount(const QModelIndex &) const
@@ -41,7 +100,6 @@ QVariant ForwardOnlyQueryModel::headerData(int section, Qt::Orientation orientat
     if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
         return QString(this->m_roleNames[section]);
     }
-    emit headerDataChanged(Qt::Horizontal, 1, this->internalColCount);
     return QVariant();
 }
 
@@ -114,7 +172,6 @@ void ForwardOnlyQueryModel::generateRoleNames()
                     fieldType = q.value(1).toString().trimmed();
                     colInfo << fieldName << dataType.dataType(fieldType) << tableName;
 
-                    qDebug() << "COL INFO" << colInfo;
                     m_roleNames.insert(i, fieldName.toUtf8());
                     this->setChartHeader(i, colInfo);
 
@@ -205,56 +262,40 @@ void ForwardOnlyQueryModel::generateRoleNames()
 void ForwardOnlyQueryModel::setQueryResult()
 {
 
-    beginResetModel();
-
-    // Tmp
-    QStringList list;
-
     QString connectionName = this->returnConnectionName();
 
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
     QSqlQuery q(this->query, dbForward);
-    if(q.lastError().type() != QSqlError::NoError)
+    if(q.lastError().type() != QSqlError::NoError){
         qWarning() << Q_FUNC_INFO << q.lastError();
-
-
-    // this->setChartData(result);
-
-    int totalRowCount = 0;
-    while(q.next()){
-
-        try{
-            for(int i = 0; i < this->internalColCount; i++){
-                list << q.value(i).toString();
-
-                // Add to chart data
-                if(totalRowCount == 0){
-                    this->forwardOnlyChartData[i] = new QStringList(q.value(i).toString());
-                } else{
-                    this->forwardOnlyChartData.value(i)->append(q.value(i).toString());
-                    this->forwardOnlyChartData[i] = forwardOnlyChartData.value(i);
-                }
-            }
-            this->resultData.append(list);
-        } catch(std::exception &e){
-            qWarning() << Q_FUNC_INFO << e.what();
-        }
-
-        list.clear();
-
-        totalRowCount++;
-    }
-    // Set the internalRowCount for the QAbstractListModel rowCount method
-    this->internalRowCount = totalRowCount;
-
-    if(this->internalRowCount > 0){
-        emit forwardOnlyHasData(true);
-
     } else{
-        emit forwardOnlyHasData(false);
+
+
+        int totalRowCount = 0;
+        while(q.next()){
+
+            try{
+                for(int i = 0; i < this->internalColCount; i++){
+
+                    // Add to chart data
+                    if(totalRowCount == 0){
+                        this->forwardOnlyChartData[i] = new QStringList(q.value(i).toString());
+                    } else{
+                        this->forwardOnlyChartData.value(i)->append(q.value(i).toString());
+                        this->forwardOnlyChartData[i] = forwardOnlyChartData.value(i);
+                    }
+                }
+            } catch(std::exception &e){
+                qWarning() << Q_FUNC_INFO << e.what();
+            }
+
+            totalRowCount++;
+        }
+        // Set the internalRowCount for the QAbstractListModel rowCount method
+        this->internalRowCount = totalRowCount;
+
+        emit chartDataChanged(this->forwardOnlyChartData);
     }
-    emit chartDataChanged(this->forwardOnlyChartData);
-    endResetModel();
 }
 
 

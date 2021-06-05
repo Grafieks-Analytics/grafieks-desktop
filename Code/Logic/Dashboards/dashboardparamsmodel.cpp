@@ -431,33 +431,38 @@ QUrl DashboardParamsModel::getDashboardReportUrl(int dashboardId, int reportId)
     return output;
 }
 
-void DashboardParamsModel::addToHideColumns(int dashboardId, QString colName)
+void DashboardParamsModel::addToShowColumns(int dashboardId, QString colName, bool status)
 {
-    QStringList colNames = this->hideColumns.value(dashboardId);
-    colNames.append(colName);
-    this->hideColumns.insert(dashboardId, colNames);
-    emit hideColumnsChanged(colNames, dashboardId);
+    QStringList colNames = this->showColumns.value(dashboardId);
+    if(status == true){
+        if(colNames.indexOf(colName) < 0)
+            colNames.append(colName);
+    } else{
+        colNames.removeAll(colName);
+
+        // Remove from include/exclude
+        QVariantMap colIncludeExclude = this->columnIncludeExcludeMap.value(dashboardId);
+        colIncludeExclude.remove(colName);
+        this->columnIncludeExcludeMap.insert(dashboardId, colIncludeExclude);
+
+        // Remove from alias name
+        QVariantMap colFilterType = this->columnFilterType.value(dashboardId);
+        colFilterType.remove(colName);
+        this->columnFilterType.insert(dashboardId, colFilterType);
+
+        // Remove from filter type
+        QVariantMap colAliasNames = this->columnAliasMap.value(dashboardId);
+        colAliasNames.remove(colName);
+        this->columnAliasMap.insert(dashboardId, colAliasNames);
+    }
+    this->showColumns.insert(dashboardId, colNames);
+//    emit hideColumnsChanged(colNames, dashboardId);
 }
 
-void DashboardParamsModel::removeFromHideColumns(int dashboardId, QString colName, bool removeAll)
-{
-    QStringList colNames;
-    if (removeAll == true)
-    {
-        this->hideColumns.clear();
-    }
-    else
-    {
-        colNames = this->hideColumns.value(dashboardId);
-        colNames.removeOne(colName);
-        this->hideColumns.insert(dashboardId, colNames);
-    }
-    emit hideColumnsChanged(colNames, dashboardId);
-}
 
-QStringList DashboardParamsModel::fetchHideColumns(int dashboardId, QString searchKeyword)
+QStringList DashboardParamsModel::fetchShowColumns(int dashboardId, QString searchKeyword)
 {
-    QStringList colNames = this->hideColumns.value(dashboardId);
+    QStringList colNames = this->showColumns.value(dashboardId);
     return colNames.filter(searchKeyword);
 }
 
@@ -480,6 +485,8 @@ void DashboardParamsModel::setColumnFilterType(int dashboardId, QString columnNa
     QVariantMap colFilterType = this->columnFilterType.value(dashboardId);
     colFilterType.insert(columnName, filterType);
     this->columnFilterType.insert(dashboardId, colFilterType);
+
+    emit columnFilterTypeChanged();
 }
 
 QString DashboardParamsModel::fetchColumnFilterType(int dashboardId, QString columnName)
@@ -816,6 +823,11 @@ QString DashboardParamsModel::currentSelectedColumn() const
     return m_currentSelectedColumn;
 }
 
+void DashboardParamsModel::hideAllDashboardRight()
+{
+    emit hideAllDashboardParams();
+}
+
 void DashboardParamsModel::setLastContainerType(QString lastContainerType)
 {
     if (m_lastContainerType == lastContainerType)
@@ -915,20 +927,23 @@ void DashboardParamsModel::setTmpCanvasWidth(int tmpCanvasWidth)
 void DashboardParamsModel::getColumnNames(QStringList columnNames)
 {
 
-    const QString defaultFilterType = "dataListSingle";
-    const QString defaultIncludeType = "include";
+    const QString defaultFilterType = "dataListSingle";  // Do not change this name
+    const QString defaultIncludeType = "include";       // Do not change this name
 
     for(int i = 0; i < this->dashboardCount(); i++){
         foreach(QString column, columnNames){
 
             // Set default column alias name to the existing column name
-            this->setColumnAliasName(i, column, column);
+            if(this->fetchColumnAliasName(i, column) == "")
+                this->setColumnAliasName(i, column, column);
 
             // Set default filter type
-            this->setColumnFilterType(i, column, defaultFilterType);
+            if(this->fetchColumnFilterType(i, column) == "")
+                this->setColumnFilterType(i, column, defaultFilterType);
 
             // Set default include/exclude type
-            this->setIncludeExcludeMap(i, column, defaultIncludeType);
+            if(this->fetchIncludeExcludeMap(i, column) == "")
+                this->setIncludeExcludeMap(i, column, defaultIncludeType);
         }
     }
 }
