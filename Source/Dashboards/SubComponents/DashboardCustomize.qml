@@ -13,6 +13,7 @@ import QtQuick.Layouts 1.3
 import com.grafieks.singleton.constants 1.0
 import "./MiniSubComponents"
 Item{
+
     id: listViewElem
     width:200
     height: parent.height
@@ -68,15 +69,19 @@ Item{
     }
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
+    
     /***********************************************************************************************************************/
     // SIGNALS STARTS
+
     // SIGNALS ENDS
     /***********************************************************************************************************************/
     /***********************************************************************************************************************/
     // Connections Starts
+
     // Connections Ends
     /***********************************************************************************************************************/
     /***********************************************************************************************************************/
+
     // JAVASCRIPT FUNCTION STARTS
     function editSelectedReport(){
         stacklayout_home.currentIndex = 7
@@ -127,6 +132,8 @@ Item{
                         anchors.fill: parent
                         onClicked: {
                             nestedModel.setProperty(index, "collapsed", !collapsed)
+                            // [TAG: Optimization]
+                            // We can use ternary operator here
                             if(collapsed === true){
                                 drop_icon.source = "/Images/icons/Down_20.png"
                             }
@@ -137,11 +144,20 @@ Item{
                     }
                 }
             }
+
+            // Loader Docs: Allows dynamic loading of a subtree from a URL or Component.
+            // Since there is a nested structure we have used Loader here
+
             Loader {
                 id: subItemLoader
-                visible: !collapsed
-                property variant subItemModel : subItems
+                visible: !collapsed // this is list model's key ( Using it as a flag to collapse the compenent )
+                property variant subItemModel : subItems // The nested model will have subItems as next list modal
                 sourceComponent: {
+                    
+                    // [TAG: Optimization]
+                    // Switch case should be used here
+                    // return null in case of if( collapsed ) | Else is not required. add switch case instead of that.
+
                     if(collapsed){
                         null
                     }else{
@@ -153,20 +169,30 @@ Item{
                             return canvasMenuComponent
                         }
                         else if(categoryName == "Widgets"){
-                            subItemColumnDelegateWidgets
+                            return subItemColumnDelegateWidgets
+                        }
+                        else if(categoryName == "Reports"){
+                            return reportsListComponent
                         }
                         else{
-                            subItemColumnDelegate
+                            return subItemColumnDelegate
                         }
                     }
+
                 }
                 onStatusChanged: {
+
+                    // [TAG: Optimization]
+                    // Some optimmization scope available here as well
+                    // Check from where this item.model is getting accessed. 
+                    // Bit confusing. Not accounting it for version 1 release.
+                    // Will get this corrected in the next release
+
                     if (status == Loader.Ready && (categoryName == "Reports") ){
                         item.model = subItemModel
                     }
                     else if (status == Loader.Ready && (categoryName == "Widgets")){
                         item.model = subItemModel
-
                     }
                 }
             }
@@ -226,54 +252,150 @@ Item{
         }
     }
 
-        Component {
-            id: subItemColumnDelegate
-            Column {
-                property alias model : subItemRepeater.model
-                width: 200
-                Repeater {
-                    id: subItemRepeater
-                    property string itemName : ""
-                    delegate: Rectangle {
-                        id: dragRect
-                        height: 25
-                        width: 200
-                        anchors.topMargin: 50
+
+    // Reports list component
+    Component{
+        id: reportsListComponent
+        Column {
+            property alias model : subItemRepeater.model
+            width: 200
+            
+            // Use List View
+
+            Repeater {
+                id: subItemRepeater
+                property string itemName : ""
+                delegate: Rectangle {
+                    id: dragRect
+                    height: 25
+                    width: 200
+                    anchors.topMargin: 50
 
 
-                        Row{
-    //                        spacing: 50
-    //                        anchors.leftMargin: 20
-                            anchors.left: parent.left
-                              anchors.fill: parent
+                    Row{
+                        anchors.left: parent.left
+                        anchors.fill: parent
+                        height: parent.height
+
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            x: 30
+                            font.pixelSize: 12
+                            text: itemName
+                        }
+                        Rectangle {
                             height: parent.height
-
-
-
-
-                            Text {
+                            width: 50
+                            anchors.right: parent.right
+                            anchors.rightMargin:  20
+                            Image{
+                                id: resizeReport
+                                height: 16
+                                width: 16
+                                anchors.right: parent.right
+                                anchors.rightMargin:  20
+                                visible: editIconVisible
+                                source: "/Images/icons/edit gray.png"
                                 anchors.verticalCenter: parent.verticalCenter
-                                x: 30
-    //                            anchors.left: parent.left
-    //                           anchors.leftMargin: 0
-
-                                font.pixelSize: 12
-                                text: itemName
+                                MouseArea{
+                                    anchors.fill: parent
+                                    onClicked: editSelectedReport()
+                                }
                             }
-                            Rectangle {
-                                            height: parent.height
-                                            width: 50
-                                            anchors.right: parent.right
-                                           anchors.rightMargin:  20
-//                                           color: "red"
+                        }
+
+                    }
+
+                    MouseArea {
+                        id: mouseArea
+                        anchors.fill: parent
+                        drag.target:  dragRect
+                        drag.minimumX: -( new_dashboard_page.width - parent.width)
+                        drag.maximumX: 0
+                        drag.onActiveChanged: {
+                            if (mouseArea.drag.active) {
+                                listViewElem.itemName = itemName
+                            }
+                            dragRect.Drag.drop();
+                        }
+                        hoverEnabled: true
+                        onEntered: showEditIcon()
+                        onExited: hideEditIcon()
+                    }
+                    states: [
+                        State {
+                            when: dragRect.Drag.active
+                            ParentChange {
+                                target: dragRect
+                                parent: subItemRepeater
+                            }
+                            AnchorChanges {
+                                target: dragRect
+                                anchors.horizontalCenter: undefined
+                                anchors.verticalCenter: undefined
+                            }
+                        }
+                    ]
+                    Drag.active: mouseArea.drag.active
+                    Drag.hotSpot.x: - dragRect.width / 2
+                    Drag.hotSpot.y: - dragRect.height / 2
+                    Drag.keys: ['1','2']
+                }
+            }
+        }
+    }
+
+
+    Component {
+
+        // Defailt  Column
+        // Sub Items passed from parent is iterated here.
+        // Each item is added as a sepate row.
+        
+        id: subItemColumnDelegate
+        Column {
+            property alias model : subItemRepeater.model
+            width: 200
+            Repeater {
+                id: subItemRepeater
+                property string itemName : ""
+                delegate: Rectangle {
+                    id: dragRect
+                    height: 25
+                    width: 200
+                    anchors.topMargin: 50
+
+
+                    Row{
+                        //                        spacing: 50
+                        //                        anchors.leftMargin: 20
+                        anchors.left: parent.left
+                        anchors.fill: parent
+                        height: parent.height
+
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            x: 30
+                            //                            anchors.left: parent.left
+                            //                           anchors.leftMargin: 0
+
+                            font.pixelSize: 12
+                            text: itemName
+                        }
+                        Rectangle {
+                            height: parent.height
+                            width: 50
+                            anchors.right: parent.right
+                            anchors.rightMargin:  20
+                            //                                           color: "red"
 
                             Image{
                                 id: resizeReport
                                 height: 16
                                 width: 16
                                 anchors.right: parent.right
-                               anchors.rightMargin:  20
-                               visible: editIconVisible
+                                anchors.rightMargin:  20
+                                visible: editIconVisible
 
                                 source: "/Images/icons/edit gray.png"
                                 anchors.verticalCenter: parent.verticalCenter
@@ -282,48 +404,48 @@ Item{
                                     onClicked: editSelectedReport()
                                 }
                             }
-                            }
-
                         }
 
-                        MouseArea {
-                            id: mouseArea
-                            anchors.fill: parent
-                            drag.target:  dragRect
-                            drag.minimumX: -( new_dashboard_page.width - parent.width)
-                            drag.maximumX: 0
-                            drag.onActiveChanged: {
-                                if (mouseArea.drag.active) {
-                                    listViewElem.itemName = itemName
-                                }
-                                dragRect.Drag.drop();
-                            }
-                            hoverEnabled: true
-                            onEntered: showEditIcon()
-                            onExited: hideEditIcon()
-                        }
-                        states: [
-                            State {
-                                when: dragRect.Drag.active
-                                ParentChange {
-                                    target: dragRect
-                                    parent: subItemRepeater
-                                }
-                                AnchorChanges {
-                                    target: dragRect
-                                    anchors.horizontalCenter: undefined
-                                    anchors.verticalCenter: undefined
-                                }
-                            }
-                        ]
-                        Drag.active: mouseArea.drag.active
-                        Drag.hotSpot.x: - dragRect.width / 2
-                        Drag.hotSpot.y: - dragRect.height / 2
-                        Drag.keys: ['1','2']
                     }
+
+                    MouseArea {
+                        id: mouseArea
+                        anchors.fill: parent
+                        drag.target:  dragRect
+                        drag.minimumX: -( new_dashboard_page.width - parent.width)
+                        drag.maximumX: 0
+                        drag.onActiveChanged: {
+                            if (mouseArea.drag.active) {
+                                listViewElem.itemName = itemName
+                            }
+                            dragRect.Drag.drop();
+                        }
+                        hoverEnabled: true
+                        onEntered: showEditIcon()
+                        onExited: hideEditIcon()
+                    }
+                    states: [
+                        State {
+                            when: dragRect.Drag.active
+                            ParentChange {
+                                target: dragRect
+                                parent: subItemRepeater
+                            }
+                            AnchorChanges {
+                                target: dragRect
+                                anchors.horizontalCenter: undefined
+                                anchors.verticalCenter: undefined
+                            }
+                        }
+                    ]
+                    Drag.active: mouseArea.drag.active
+                    Drag.hotSpot.x: - dragRect.width / 2
+                    Drag.hotSpot.y: - dragRect.height / 2
+                    Drag.keys: ['1','2']
                 }
             }
         }
+    }
     Component{
         id: generalComponent
         CustomizeGeneralMenu{
