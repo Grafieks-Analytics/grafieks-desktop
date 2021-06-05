@@ -169,7 +169,7 @@ Item{
     }
     function showMenusReport(){
         DashboardParamsModel.setCurrentReport(newItem.objectName)
-         = true
+        hoverStatusReport = true
         mainContainer.rulerStatus = true
         console.log("test")
     }
