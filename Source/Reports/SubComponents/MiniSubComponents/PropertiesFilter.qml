@@ -114,7 +114,7 @@ Column{
             return;
         }
 
-        colorByData.push({ columnName: itemName, itemType: itemType })
+        colorByData.push({ columnName: itemName, itemType: itemType });
         colorListModel.append({textValue: itemName})
 
         ReportParamsModel.setLastDropped(itemType);
@@ -132,6 +132,12 @@ Column{
             case Constants.lineChartTitle:
                 switchChart(Constants.multiLineChartTitle)
                 break;
+            case Constants.horizontalBarGroupedChartTitle:
+            case Constants.groupBarChartTitle:
+                var [category, subcategory] =  getAxisColumnNames(Constants.xAxisName);
+                d3PropertyConfig['options'] = { groupBarChartColorBy: itemName == subcategory ? 'subcategory' : 'category'  }
+                reDrawChart();
+                break;
         }
 
         return;
@@ -141,6 +147,17 @@ Column{
     function isDropEligible(){
 
         var itemType = ReportParamsModel.itemType;
+        var itemName = ReportParamsModel.itemName;
+        
+        if(report_desiner_page.chartTitle==Constants.groupBarChartTitle){
+            var xAxisValidNames = getAxisColumnNames(Constants.xAxisName);
+            console.log(xAxisValidNames);
+            if(xAxisValidNames.includes(itemName)){
+                return true;
+            }
+            return false;
+        }
+
         var lastDropped = ReportParamsModel.lastDropped;
         if(!lastDropped){
             return true;

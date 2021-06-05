@@ -10,7 +10,7 @@
         .y-axis .domain {
             display: none;
         }
-                #tooltip{
+        #tooltip {
             font-size: 14px;
             font-family: Arial, Helvetica, sans-serif;
         }
@@ -68,7 +68,7 @@
 
         var data = [
             [
-                ["Furniture", "CG-12520", 1125.2760009765625],
+                ["Furniture", "CG-d-asd asd sa12520", 1125.2760009765625],
                 ["Furniture", "DV-13045", 994.7310180664062],
                 ["Furniture", "SO-20335", 1879.951416015625],
                 ["Furniture", "BH-11710", 2563.971923828125],
@@ -2561,11 +2561,11 @@
                     defaultD3Config.standardThresholdHeight;
             }
 
-              if (!toolTip) {
+            if (!toolTip) {
                 toolTip = {
                     textColumn1: "labels[0]",
-                    textColumn2: "labels[1]"
-                }
+                    textColumn2: "labels[1]",
+                };
             }
             var [data, keys, yAxisUniqueKeys, labels] = transformData(
                 data[0],
@@ -2601,7 +2601,7 @@
                         return d.key;
                     })
                 )
-                .rangeRound([margin.top, height - margin.bottom])
+                .range([margin.top, height - margin.bottom])
                 .padding(paddingInner)
                 .paddingInner(paddingInner);
 
@@ -2628,7 +2628,11 @@
                 .append("g")
                 .attr(
                     "transform",
-                    "translate(" + margin.left + "," + (margin.top + 10) + ")"
+                    "translate(" +
+                        (margin.left + 30) +
+                        "," +
+                        (margin.top + 10) +
+                        ")"
                 );
 
             svg.append("g")
@@ -2680,16 +2684,30 @@
                         //     var labelName = d.data.key;
                         //     return textValue.toFixed(3);
                         // });
-                          .html(function () {
+                        .html(function () {
                             var textValue = d.y0 - d.y1;
                             if (d.y1 < 0) {
                                 textValue = d.y1 - d.y0;
                             }
 
-                            return "<span style='color:grey;''>" + toolTip.textColumn1 + ":" + "</span>" + "<span style='float: right;'>" + d.key + "</span>" + "<br/> <br/>" + "<span style='color:grey;''>" + toolTip.textColumn2 + ":" + "</span>" + "<span style='float: right;margin-left: 15px;'>" + textValue.toFixed(3) + "</span>";
+                            return (
+                                "<span style='color:grey;''>" +
+                                toolTip.textColumn1 +
+                                ":" +
+                                "</span>" +
+                                "<span style='float: right;'>" +
+                                d.key +
+                                "</span>" +
+                                "<br/> <br/>" +
+                                "<span style='color:grey;''>" +
+                                toolTip.textColumn2 +
+                                ":" +
+                                "</span>" +
+                                "<span style='float: right;margin-left: 15px;'>" +
+                                textValue.toFixed(3) +
+                                "</span>"
+                            );
                         });
-                        
-
 
                     d3.selectAll(".bar").style("opacity", 0.3);
                     d3.select(this).style("opacity", 1);
@@ -2713,12 +2731,33 @@
                 .append("g") //add group to leave margin for axis
                 .attr(
                     "transform",
-                    "translate(" + margin.left + ",0)"
+                    "translate(" + (margin.left + 30) + ",0)"
                     // "translate(0,0)"
                 )
                 .append("g")
                 .attr("class", "x-axis")
                 .call(xAxis);
+
+            a = document.querySelectorAll(".y-axis text");
+            for (var i = 0; i < a.length; i++) {
+                if (a[i] && a[i].innerHTML) {
+                    var singleCharacterLength =
+                        a[i].getBBox().width / a[i].innerHTML.length;
+
+                    var maxWidth =
+                        document.querySelector(".y-axis").getBBox().width > 72
+                            ? 72
+                            : document.querySelector(".y-axis").getBBox().width;
+
+                    var numOfCharacters = maxWidth / singleCharacterLength;
+
+                    if (a[i].innerHTML.length > numOfCharacters) {
+                        a[i].innerHTML =
+                            a[i].innerHTML.substr(0, numOfCharacters - 3) +
+                            "...";
+                    }
+                }
+            }
 
             function stackMin(series) {
                 return d3.min(series, function (d) {
