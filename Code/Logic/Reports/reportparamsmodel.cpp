@@ -55,6 +55,15 @@ QString ReportParamsModel::chartType() const
     return m_chartType;
 }
 
+void ReportParamsModel::addDashboardReportInstance(QVariant &newDroppedReportInstance){
+    this->dashboardReportInstances.append(newDroppedReportInstance);
+}
+
+
+QVariant ReportParamsModel::getDashboardReportInstance(int index){
+    return this->dashboardReportInstances[index];
+}
+
 QString ReportParamsModel::reportId() const
 {
     return m_reportId;
@@ -77,6 +86,9 @@ void ReportParamsModel::addReport(QString reportId)
     this->reportsMap.insert(reportId,tmp);
 
     this->reportsData.insert(this->reportId(),this->reportTitle());
+
+    emit reportListChanged();
+    
 }
 
 QVariantMap ReportParamsModel::getReportsList(){

@@ -103,7 +103,9 @@ Rectangle {
             rectangles.set(counter, dynamicBlankBox.createObject(parent, {z:mainContainer.z, name: 'Blank', objectName : counter}))
         }
         else{
-            rectangles.set(counter, dynamicReportBox.createObject(parent, {z:mainContainer.z, name: objectType, objectName : counter}))
+            let reportObj = dynamicReportBox.createObject(parent, {z:mainContainer.z, name: objectType, objectName : counter});
+            ReportParamsModel.addDashboardReportInstance(reportObj);
+            rectangles.set(counter, reportObj);
         }
 
         DashboardParamsModel.setZIndex(++DashboardParamsModel.zIndex);

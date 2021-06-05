@@ -142,18 +142,6 @@ Page {
         ReportParamsModel.yAxisActive = false;
         ReportParamsModel.colorByActive = false;
 
-        // This component is called too early
-        // Removing this report id generation step from here.
-        
-        // If report id is not defined => Case when Add a new reprt is clicked.
-        // Generate a new report id.
-        // New Id = base64 of timestamp in milliseconds
-        
-        // if(!reportIdMain){
-        //     var newReportId = generateReportId();
-        //     ReportParamsModel.setReportId(newReportId);
-        // }
-
         // Clearing xAxisListModel and yAxisListModel if any
         // Might be possible that this is getting called once
         // Check if can be removed [TAG: Optimization]
@@ -390,7 +378,7 @@ Page {
         allChartsMapping= {};
         colorByData= [];
 
-        redrawChart();
+        reDrawChart();
 
     }
 

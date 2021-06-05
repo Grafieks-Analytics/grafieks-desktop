@@ -27,6 +27,7 @@ Item{
     property var originalPoint: Object()
     property var originalDimensions: Object()
 
+    property var chartUrl:  "qrc:/Source/Charts/BarChartArrayInput.html";
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -108,8 +109,7 @@ Item{
     Component.onCompleted: {
         // Add name to report
         // reportName.text = name
-        let newUrl = "qrc:/Source/Charts/BarChartArrayInput.html"
-        webengine.url = newUrl
+        webengine.url = chartUrl
     }
 
     function destroyElement(){
@@ -130,6 +130,9 @@ Item{
         {
             mainContainer.width = Constants.defaultDroppedReportWidth
             mainContainer.height = Constants.defaultDroppedReportHeight
+            
+            // [Tag: Refactor]
+            // Move this to constants
             fullScreenReport.source= "/Images/icons/zoom in gray.png"
 
             mainContainer.y = originalPoint.y
@@ -148,6 +151,8 @@ Item{
             originalPoint.x = currnetPointReport.x
             originalPoint.y = currnetPointReport.y
 
+            // [Tag: Refactor]
+            // Move this to constants
             fullScreenReport.source= "/Images/icons/zoom out gray.png"
             DashboardParamsModel.setZIndex(++DashboardParamsModel.zIndex);
             newItem.z = DashboardParamsModel.zIndex;
