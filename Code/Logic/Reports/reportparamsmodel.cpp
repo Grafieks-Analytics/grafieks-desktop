@@ -84,6 +84,37 @@ QVariantMap ReportParamsModel::getReportsList(){
     return this->reportsData;
 }
 
+void ReportParamsModel::resetFilter()
+{
+
+    // Q_PROPERTY clear
+    this->setInternalCounter(0);
+    this->setSection(Constants::defaultTabSection);
+    this->setCategory(Constants::defaultCategory);
+    this->setSubCategory(Constants::defaultSubCategory);
+    this->setTableName("");
+    this->setColName("");
+    this->setFilterIndex(0);
+    this->setFilterModelIndex(0);
+    this->setMode(Constants::defaultMode);
+}
+
+void ReportParamsModel::clearFilter()
+{
+
+    // Q_PROPERTY
+    this->setSection(Constants::defaultTabSection);
+    this->setCategory(Constants::defaultCategory);
+    this->setSubCategory(Constants::defaultSubCategory);
+
+    // variable change
+}
+
+void ReportParamsModel::resetInputFields()
+{
+    emit resetInput();
+}
+
 void ReportParamsModel::addToCategoricalFilters(int filterId)
 {
     if(this->categoricalFilters.indexOf(filterId) < 0)
@@ -265,6 +296,31 @@ QVector<bool> ReportParamsModel::fetchIncludeNullMap(int filterId, bool fetchAll
 void ReportParamsModel::removeIncludeNullMap(int filterId)
 {
     this->includeNullMap.remove(filterId);
+}
+
+void ReportParamsModel::addToSelectAllMap(int filterId, bool selectAll)
+{
+    this->selectAllMap.insert(filterId, selectAll);
+}
+
+QVector<bool> ReportParamsModel::fetchSelectAllMap(int filterId, bool fetchAll)
+{
+    QVector<bool> out;
+
+    if(fetchAll == true){
+        foreach(bool tmp, this->selectAllMap){
+            out.append(tmp);
+        }
+    } else{
+        out.append(this->selectAllMap.value(filterId));
+    }
+
+    return out;
+}
+
+void ReportParamsModel::removeSelectAllMap(int filterId)
+{
+    this->selectAllMap.remove(filterId);
 }
 
 void ReportParamsModel::addToFilterSectionMap(int filterId, QString section)

@@ -69,14 +69,14 @@ Popup {
 
 
     Connections{
-        target: DSParamsModel
+        target: ReportParamsModel
 
         function onInternalCounterChanged(){
-            counter = DSParamsModel.internalCounter
+            counter = ReportParamsModel.internalCounter
         }
 
         function onFilterIndexChanged(){
-            counter = DSParamsModel.filterIndex
+            counter = ReportParamsModel.filterIndex
         }
     }
 
@@ -109,12 +109,12 @@ Popup {
 
     function closePopup(){
         numericalFilterPopup.visible = false
-        DSParamsModel.clearFilter()
+        ReportParamsModel.clearFilter()
     }
 
     function onCancelClicked(){
         closePopup()
-        DSParamsModel.clearFilter();
+        ReportParamsModel.clearFilter();
     }
 
     function onApplyClicked(){
@@ -123,17 +123,17 @@ Popup {
 
         numericalFilterPopup.visible = false
 
-        var filterIndex = DSParamsModel.filterIndex
-        var section = DSParamsModel.section
-        var category = DSParamsModel.category
-        var subCategory = DSParamsModel.subCategory
-        var tableName = DSParamsModel.tableName
-        var columnName = DSParamsModel.colName
-        var joinRelation = DSParamsModel.fetchJoinRelation(counter)
-        var joinValue = DSParamsModel.fetchJoinValue(counter)
-        var joinSlug = DSParamsModel.fetchJoinRelationSlug(counter)
-        var includeNull = DSParamsModel.includeNull
-        var exclude = DSParamsModel.exclude
+        var filterIndex = ReportParamsModel.filterIndex
+        var section = ReportParamsModel.section
+        var category = ReportParamsModel.category
+        var subCategory = ReportParamsModel.subCategory
+        var tableName = ReportParamsModel.tableName
+        var columnName = ReportParamsModel.colName
+        var joinRelation = ReportParamsModel.fetchJoinRelation(counter)
+        var joinValue = ReportParamsModel.fetchJoinValue(counter)
+        var joinSlug = ReportParamsModel.fetchJoinRelationSlug(counter)
+        var includeNull = ReportParamsModel.includeNull
+        var exclude = ReportParamsModel.exclude
 
         var singleValue = "";
         var singleRelation = "";
@@ -143,12 +143,12 @@ Popup {
         singleRelation = joinRelation[counter]
         singleValue = joinValue[counter]
         singleSlug = joinSlug[counter]
-        manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, counter, DSParamsModel.filterModelIndex)
+        manageFilters(ReportParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, counter, ReportParamsModel.filterModelIndex)
 
-//        DSParamsModel.setMode(Constants.modeCreate)
+//        ReportParamsModel.setMode(Constants.modeCreate)
 
         // Reset all DSParams
-        DSParamsModel.clearFilter();
+        ReportParamsModel.clearFilter();
 
         // Clear tabs individual temp data
         dateFilterPopup.clearData()

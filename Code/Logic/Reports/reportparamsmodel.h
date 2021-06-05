@@ -4,7 +4,11 @@
 #include <QObject>
 #include <QMap>
 #include <QVariantMap>
-#include<QDebug>
+#include <QDebug>
+
+#include "../../constants.h"
+#include "../../Messages.h"
+#include "../../statics.h"
 
 class ReportParamsModel: public QObject
 {
@@ -23,6 +27,7 @@ class ReportParamsModel: public QObject
     QMap<int, QString> filterRelationMap;                       // filter id - relation map
     QMap<int, bool> includeExcludeMap;                          // filter id - include exclude map
     QMap<int, bool> includeNullMap;                             // filter id - include null map
+    QMap<int, bool> selectAllMap;                               // filter id - select All map
     QMap<int, QString> filterSectionMap;                        // filter id - section map
     QMap<int, QString> filterCategoryMap;                       // filter id - category map
     QMap<int, QString> filterSubCategoryMap;                    // filter id - sub category map
@@ -54,7 +59,7 @@ class ReportParamsModel: public QObject
     Q_PROPERTY(QString category READ category WRITE setCategory NOTIFY categoryChanged)                         // Inner sub classifications of the section
     Q_PROPERTY(QString subCategory READ subCategory WRITE setSubCategory NOTIFY subCategoryChanged)             // selection type of categories like multi/single select in categorical tab
     Q_PROPERTY(QString tableName READ tableName WRITE setTableName NOTIFY tableNameChanged)                     // sql table name of the selection
-    Q_PROPERTY(QString colName READ colName WRITE setColName NOTIFY colNameChanged)                             // sql column name
+    Q_PROPERTY(QString colName READ colName WRITE setColName NOTIFY colNameChanged)                             // column name
     Q_PROPERTY(int filterIndex READ filterIndex WRITE setFilterIndex NOTIFY filterIndexChanged)                 // Unique id given to each join type (filter type)
     Q_PROPERTY(QString mode READ mode WRITE setMode NOTIFY modeChanged)                                         // Set Create/Edit mode in a filter
     Q_PROPERTY(int filterModelIndex READ filterModelIndex WRITE setFilterModelIndex NOTIFY filterModelIndexChanged)
@@ -127,6 +132,11 @@ public:
     Q_INVOKABLE QVariantMap getReportsList();
 
     // Filter specific invokable functions
+
+    Q_INVOKABLE void resetFilter();
+    Q_INVOKABLE void clearFilter();
+    Q_INVOKABLE void resetInputFields();
+
     Q_INVOKABLE void addToCategoricalFilters(int filterId);
     Q_INVOKABLE QVector<int> fetchCategoricalFilters();
     Q_INVOKABLE void removeCategoricalFilters(int filterId);
@@ -158,6 +168,10 @@ public:
     Q_INVOKABLE void addToIncludeNullMap(int filterId, bool includeNull);
     Q_INVOKABLE QVector<bool> fetchIncludeNullMap(int filterId = 0, bool fetchAll = false);
     Q_INVOKABLE void removeIncludeNullMap(int filterId);
+
+    Q_INVOKABLE void addToSelectAllMap(int filterId, bool selectAll);
+    Q_INVOKABLE QVector<bool> fetchSelectAllMap(int filterId = 0, bool fetchAll = false);
+    Q_INVOKABLE void removeSelectAllMap(int filterId);
 
     Q_INVOKABLE void addToFilterSectionMap(int filterId, QString section);
     Q_INVOKABLE QStringList fetchFilterSectionMap(int filterId = 0, bool fetchAll = false);
@@ -228,6 +242,7 @@ signals:
     void d3PropertiesConfigChanged(QString d3PropertiesConfig);
 
     // For Filters
+    void resetInput();
     void internalCounterChanged(int internalCounter);
     void sectionChanged(QString section);
     void categoryChanged(QString category);
