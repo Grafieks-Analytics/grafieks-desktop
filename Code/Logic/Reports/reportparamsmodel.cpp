@@ -75,16 +75,6 @@ void ReportParamsModel::addReport(QString reportId)
     tmp.insert("chartUrl", this->chartUrl() );
     tmp.insert("chartType", this->chartType() );
     this->reportsMap.insert(reportId,tmp);
-<<<<<<< HEAD
-
-    this->reportsData.insert(this->reportId(),this->reportTitle());
-
-}
-
-QVariantMap ReportParamsModel::getReportsList()
-{
-    return this->reportsData;
-=======
 
     this->reportsData.insert(this->reportId(),this->reportTitle());
 }
@@ -392,7 +382,6 @@ QString ReportParamsModel::mode() const
 int ReportParamsModel::filterModelIndex() const
 {
     return m_filterModelIndex;
->>>>>>> 0272590c284c31ab148ed6520db453e87dd6d1be
 }
 
 QList<QString> ReportParamsModel::dataValuesColumns() const
