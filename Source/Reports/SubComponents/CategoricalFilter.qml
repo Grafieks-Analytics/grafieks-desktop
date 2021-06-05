@@ -51,28 +51,22 @@ Popup {
     // Connections Starts
 
     Connections{
-        target: DSParamsModel
+        target: ReportParamsModel
 
         function onInternalCounterChanged(){
-            counter = DSParamsModel.internalCounter
+            counter = ReportParamsModel.internalCounter
         }
 
         function onFilterIndexChanged(){
-            counter = DSParamsModel.filterIndex
+            counter = ReportParamsModel.filterIndex
         }
-    }
 
 
-    Connections{
-        target: QueryDataModel
+        function onSectionChanged(){
 
-        function onColumnListModelDataChanged(colData, options){
+            if(ReportParamsModel.section === Constants.categoricalTab){
 
-            var jsonOptions = JSON.parse(options)
-
-            if(jsonOptions.section === Constants.categoricalTab){
-
-                switch(jsonOptions.category){
+                switch(ReportParamsModel.category){
                 case Constants.categoryMainListType:
 
                     listContent.visible = true
@@ -130,7 +124,7 @@ Popup {
         categoricalFilterPopup.visible = false
 
         // Reset all DSParams
-        DSParamsModel.clearFilter();
+        ReportParamsModel.clearFilter();
 
         // Clear tabs individual temp data
         categoricalFilterPopup.clearData()
@@ -141,12 +135,12 @@ Popup {
 
         categoricalFilterPopup.visible = false
 
-        var section = DSParamsModel.section
-        var category = DSParamsModel.category
-        var subCategory = DSParamsModel.subCategory
-        var tableName = DSParamsModel.tableName
-        var columnName = DSParamsModel.colName
-        var tmpFilterIndexes = DSParamsModel.getTmpFilterIndex(0, true)
+        var section = ReportParamsModel.section
+        var category = ReportParamsModel.category
+        var subCategory = ReportParamsModel.subCategory
+        var tableName = ReportParamsModel.tableName
+        var columnName = ReportParamsModel.colName
+        var tmpFilterIndexes = ReportParamsModel.getTmpFilterIndex(0, true)
 
         var singleValue = "";
         var singleRelation = "";
@@ -158,11 +152,11 @@ Popup {
 
         case Constants.categoryMainListType:
 
-            let joinRelation = DSParamsModel.fetchJoinRelation(counter)
-            let joinValue = DSParamsModel.fetchJoinValue(counter)
-            let joinSlug = DSParamsModel.fetchJoinRelationSlug(counter)
-            let includeNull = DSParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
-            let exclude = DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
+            let joinRelation = ReportParamsModel.fetchJoinRelation(counter)
+            let joinValue = ReportParamsModel.fetchJoinValue(counter)
+            let joinSlug = ReportParamsModel.fetchJoinRelationSlug(counter)
+            let includeNull = ReportParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
+            let exclude = ReportParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
 
             singleRelation = joinRelation[counter]
             singleValue = joinValue[counter]
@@ -176,17 +170,17 @@ Popup {
             for(let i = 0; i < tmpFilterIndexes.length; i++){
                 let fi = tmpFilterIndexes[i]
 
-                let joinRelation = DSParamsModel.fetchJoinRelation(fi)
-                let joinValue = DSParamsModel.fetchJoinValue(fi)
-                let joinSlug = DSParamsModel.fetchJoinRelationSlug(fi)
+                let joinRelation = ReportParamsModel.fetchJoinRelation(fi)
+                let joinValue = ReportParamsModel.fetchJoinValue(fi)
+                let joinSlug = ReportParamsModel.fetchJoinRelationSlug(fi)
                 let includeNull = false
-                let exclude = DSParamsModel.getExcludeMap(fi)[fi] === "1" ? true : false
+                let exclude = ReportParamsModel.getExcludeMap(fi)[fi] === "1" ? true : false
 
                 singleRelation = joinRelation[fi]
                 singleValue = joinValue[fi]
                 singleSlug = joinSlug[fi]
 
-                manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, fi, DSParamsModel.filterModelIndex)
+                manageFilters(ReportParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, fi, ReportParamsModel.filterModelIndex)
             }
 
             break
@@ -199,7 +193,7 @@ Popup {
         }
 
         // Clear filters
-        DSParamsModel.clearFilter();
+        ReportParamsModel.clearFilter();
 
         // Clear tabs individual temp data
         categoricalFilterPopup.clearData()
@@ -235,15 +229,15 @@ Popup {
         topContent.visible = false
 
         // Set the main category of the filter
-        DSParamsModel.clearFilter()
-        DSParamsModel.setCategory(Constants.categoryMainListType)
+        ReportParamsModel.clearFilter()
+        ReportParamsModel.setCategory(Constants.categoryMainListType)
 
         // For list category type
         // The db WHERE relation can only be IN / NOT IN ARRAY type
         // Except when "Select All" checked.
         // Then Relation will be LIKE
 
-        DSParamsModel.addToJoinRelation(filterIndex, Constants.likeRelation)
+        ReportParamsModel.addToJoinRelation(filterIndex, Constants.likeRelation)
     }
 
 
@@ -254,8 +248,8 @@ Popup {
         topContent.visible = false
 
         // Set the main category of the filter
-        DSParamsModel.clearFilter();
-        DSParamsModel.setCategory(Constants.categoryMainWildCardType)
+        ReportParamsModel.clearFilter();
+        ReportParamsModel.setCategory(Constants.categoryMainWildCardType)
 
     }
 
@@ -267,8 +261,8 @@ Popup {
         topContent.visible = true
 
         // Set the main category of the filter
-        DSParamsModel.clearFilter();
-        DSParamsModel.setCategory(Constants.categoryMainTopType)
+        ReportParamsModel.clearFilter();
+        ReportParamsModel.setCategory(Constants.categoryMainTopType)
     }
 
 

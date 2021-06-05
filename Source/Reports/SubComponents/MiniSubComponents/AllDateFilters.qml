@@ -57,21 +57,21 @@ Rectangle{
     // Called when remove filter from date list clicked
     function onRemoveElement(filterIndex){
         FilterDateListModel.deleteFilter(filterIndex)
-        DSParamsModel.removeJoinRelation(filterIndex)
-        DSParamsModel.removeJoinValue(filterIndex)
+        ReportParamsModel.removeJoinRelation(filterIndex)
+        ReportParamsModel.removeJoinValue(filterIndex)
     }
 
     // Called when edit filter from date list clicked
     function onEditElement(modelIndex, filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude){
 
-        DSParamsModel.setMode(Constants.modeEdit)
-        DSParamsModel.setInternalCounter(filterIndex)
-        DSParamsModel.setFilterModelIndex(modelIndex)
-        DSParamsModel.setSection(section)
-        DSParamsModel.setCategory(category)
-        DSParamsModel.setSubCategory(subCategory)
-        DSParamsModel.setTableName(tableName)
-        DSParamsModel.setColName(columnName)
+        ReportParamsModel.setMode(Constants.modeEdit)
+        ReportParamsModel.setInternalCounter(filterIndex)
+        ReportParamsModel.setFilterModelIndex(modelIndex)
+        ReportParamsModel.setSection(section)
+        ReportParamsModel.setCategory(category)
+        ReportParamsModel.setSubCategory(subCategory)
+        ReportParamsModel.setTableName(tableName)
+        ReportParamsModel.setColName(columnName)
 
         var options = {
             "section" : section,
@@ -232,10 +232,10 @@ Rectangle{
                                     onClicked: {
 
                                         if(category === "date.timeframe"){
-                                            DSParamsModel.removeDateFormatMap(value)
+                                            ReportParamsModel.removeDateFormatMap(value)
                                         }
                                         if(category === "date.list"){
-//                                            DSParamsModel.removeTimeFrame(value)
+//                                            ReportParamsModel.removeTimeFrame(value)
                                         }
 
                                         onRemoveElement(model.index)

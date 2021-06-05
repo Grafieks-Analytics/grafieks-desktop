@@ -266,7 +266,7 @@ Popup {
             ReportParamsModel.setCategory(Constants.dateMainListType)
             ReportParamsModel.setSubCategory(Constants.categorySubMulti)
 
-//            DSParamsModel.resetInputFields()
+            ReportParamsModel.resetInputFields()
             categoricalFilterPopup.visible = false
             dateFilterPopup.visible = true
             numericalFilterPopup.visible = false
@@ -277,7 +277,7 @@ Popup {
             // Fire the signal for show specific category
             ReportParamsModel.setSection(Constants.numericalTab)
 
-//            DSParamsModel.resetInputFields()
+            ReportParamsModel.resetInputFields()
             categoricalFilterPopup.visible = false
             dateFilterPopup.visible = false
             numericalFilterPopup.visible = true
@@ -392,17 +392,18 @@ Popup {
     function onApplyClicked(){
 
         popupMain.visible = false
-//        DSParamsModel.clearFilter()
+        ReportParamsModel.clearFilter()
 
         onTabToggle(true,false,false,false);
+        console.log("APPLY APPLY")
 
-        var tmpSql = DSParamsModel.tmpSql
-        ProxyFilterModel.callQueryModels(tmpSql, FilterCategoricalListModel, FilterDateListModel, FilterNumericalListModel)
+//        var tmpSql = DSParamsModel.tmpSql
+//        ProxyFilterModel.callQueryModels(tmpSql, FilterCategoricalListModel, FilterDateListModel, FilterNumericalListModel)
 
     }
     function onCancelClicked(){
         popupMain.visible = false
-//        DSParamsModel.clearFilter()
+        ReportParamsModel.clearFilter()
 
         onTabToggle(true,false,false,false);
     }

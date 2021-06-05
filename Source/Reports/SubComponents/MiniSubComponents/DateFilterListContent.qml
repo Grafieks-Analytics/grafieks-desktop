@@ -110,25 +110,25 @@ Rectangle{
 
 
     Connections{
-        target: DSParamsModel
+        target: ReportParamsModel
 
         function onResetInput(){
-            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
+            if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
                 customBox.currentIndex = 0
-                DSParamsModel.setExcludeMap(counter, false)
-                DSParamsModel.setIncludeNullMap(counter, true)
+                ReportParamsModel.setExcludeMap(counter, false)
+                ReportParamsModel.setIncludeNullMap(counter, true)
             }
         }
 
         function onInternalCounterChanged(){
-            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
-                counter = DSParamsModel.internalCounter
+            if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
+                counter = ReportParamsModel.internalCounter
             }
         }
 
         function onFilterIndexChanged(){
-            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
-                counter = DSParamsModel.filterIndex
+            if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
+                counter = ReportParamsModel.filterIndex
             }
         }
     }
@@ -137,7 +137,7 @@ Rectangle{
         target: DuckDataModel
 
         function onDuckColData(colData){
-            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
+            if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
                 convertDate(colData)
             }
         }
@@ -148,7 +148,7 @@ Rectangle{
 
         function onColumnListModelDataChanged(colData, options){
 
-            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
+            if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
                 // Just to reset the data if the previous `colData` and the new `colData` are same
                 singleSelectCheckList.model = []
                 multiSelectCheckList.model = []
@@ -157,13 +157,13 @@ Rectangle{
                 multiSelectCheckList.model  = colData
 
                 // Date format
-                selectedFormat = DSParamsModel.getDateFormatMap(counter)
+                selectedFormat = ReportParamsModel.getDateFormatMap(counter)
                 customBox.currentIndex = selectedFormat
 
                 convertDate(colData)
                 var jsonOptions = JSON.parse(options)
 
-                if(jsonOptions.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
+                if(jsonOptions.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
                     if(jsonOptions.subCategory === Constants.categorySubMulti){
                         multiSelectRadio.checked = true
 
@@ -175,7 +175,7 @@ Rectangle{
                             } else{
                                 var checkedValues = jsonOptions.values.split(",")
                                 checkedValues.forEach((item) => {
-                                                          DSParamsModel.setTmpSelectedValues(item)
+                                                          ReportParamsModel.setTmpSelectedValues(item)
                                                       })
                             }
                         }
@@ -186,8 +186,8 @@ Rectangle{
                         multiSelectCheckList.visible = false
                         singleSelectCheckList.visible = true
 
-                        if(DSParamsModel.searchTmpSelectedValues(jsonOptions.values) < 0){
-                            DSParamsModel.setTmpSelectedValues(jsonOptions.values)
+                        if(ReportParamsModel.searchTmpSelectedValues(jsonOptions.values) < 0){
+                            ReportParamsModel.setTmpSelectedValues(jsonOptions.values)
                         }
                     }
                 }
@@ -208,25 +208,25 @@ Rectangle{
     // JAVASCRIPT FUNCTION STARTS
 
     Component.onCompleted: {
-        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
+        if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
             mainCheckBox.visible = true
         }
     }
 
     function slotDataCleared(){
-        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
-            DSParamsModel.removeTmpSelectedValues(0, true)
+        if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
+            ReportParamsModel.removeTmpSelectedValues(0, true)
         }
     }
 
 
     function onMultiSelectSelected(){
-        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
+        if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
             multiSelectCheckList.visible = true
             singleSelectCheckList.visible = false
 
             // Set the sub category for filter
-            DSParamsModel.setSubCategory(Constants.categorySubMulti)
+            ReportParamsModel.setSubCategory(Constants.categorySubMulti)
             mainCheckBox.visible = true
         }
     }
@@ -234,12 +234,12 @@ Rectangle{
 
     function onSingleSelectSelected(){
 
-        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
+        if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
             multiSelectCheckList.visible = false
             singleSelectCheckList.visible = true
 
             // Set the sub category for filter
-            DSParamsModel.setSubCategory(Constants.categorySubSingle)
+            ReportParamsModel.setSubCategory(Constants.categorySubSingle)
             mainCheckBox.visible = false
         }
     }
@@ -247,38 +247,38 @@ Rectangle{
 
     function onSingleSelectRadioSelected(modelData, format){
 
-        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
+        if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
             var actualValueArray = []
 
             actualValueArray.push(searchDateFormat(modelData, selectedFormat))
-            DSParamsModel.setActualDateValues(counter, actualValueArray)
-            DSParamsModel.addToJoinValue(counter, modelData.toString())
-            DSParamsModel.addToJoinRelation(counter, Constants.equalRelation)
-            DSParamsModel.addToJoinRelationSlug(counter, Constants.equalRelation)
+            ReportParamsModel.setActualDateValues(counter, actualValueArray)
+            ReportParamsModel.addToJoinValue(counter, modelData.toString())
+            ReportParamsModel.addToJoinRelation(counter, Constants.equalRelation)
+            ReportParamsModel.addToJoinRelationSlug(counter, Constants.equalRelation)
 
             // Clear all tmp selected values and insert again
-            DSParamsModel.removeTmpSelectedValues(0, true)
-            DSParamsModel.setTmpSelectedValues(modelData.toString())
+            ReportParamsModel.removeTmpSelectedValues(0, true)
+            ReportParamsModel.setTmpSelectedValues(modelData.toString())
         }
     }
 
 
     function onTextChangedSearch(){
-        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
+        if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
             var options = {
-                "section" : DSParamsModel.section,
-                "category" : DSParamsModel.category,
-                "subCategory" : DSParamsModel.subCategory,
-                "values" : DSParamsModel.fetchJoinValue(counter)[counter],
-                "relation" : DSParamsModel.fetchJoinRelation(counter),
-                "slug" : DSParamsModel.fetchJoinRelationSlug(counter)
+                "section" : ReportParamsModel.section,
+                "category" : ReportParamsModel.category,
+                "subCategory" : ReportParamsModel.subCategory,
+                "values" : ReportParamsModel.fetchJoinValue(counter)[counter],
+                "relation" : ReportParamsModel.fetchJoinRelation(counter),
+                "slug" : ReportParamsModel.fetchJoinRelationSlug(counter)
 
             }
 
 
-            QueryDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))
+            QueryDataModel.columnSearchData(ReportParamsModel.colName, ReportParamsModel.tableName, searchText.text, JSON.stringify(options))
 
-            if(DSParamsModel.subCategory === Constants.categorySubMulti){
+            if(ReportParamsModel.subCategory === Constants.categorySubMulti){
                 if(searchText.text.length > 0){
                     mainCheckBox.visible = false
                 } else{
@@ -290,7 +290,7 @@ Rectangle{
 
     function onAllCheckBoxCheckedChanged(checked){
 
-        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
+        if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
             setCheckedAll(checked)
         }
     }
@@ -298,14 +298,14 @@ Rectangle{
     function setCheckedAll(checked){
 
         // If Select All option is true
-        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
+        if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
             if(checked === true){
 
-                DSParamsModel.addToJoinValue(counter, "%")
-                DSParamsModel.setActualDateValues(counter, "%")
-                DSParamsModel.setSelectAllMap(counter, true)
-                DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-                DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+                ReportParamsModel.addToJoinValue(counter, "%")
+                ReportParamsModel.setActualDateValues(counter, "%")
+                ReportParamsModel.setSelectAllMap(counter, true)
+                ReportParamsModel.addToJoinRelation(counter, Constants.likeRelation)
+                ReportParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
             }
         }
     }
@@ -313,14 +313,14 @@ Rectangle{
     function onMultiSelectCheckboxSelected(modelData,checked){
 
 
-        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
+        if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
             if(mainCheckBox.checked === true){
 
                 if(checked === false){
 
                     // Set SELECT ALL to false
-                    DSParamsModel.setSelectAllMap(counter, false)
-                    DSParamsModel.setActualDateValues(counter, "")
+                    ReportParamsModel.setSelectAllMap(counter, false)
+                    ReportParamsModel.setActualDateValues(counter, "")
                     mainCheckBox.checked = false
 
                 }
@@ -328,47 +328,47 @@ Rectangle{
                 if(checked === true){
 
                     // Start pushing the individual checked item in the array
-                    if(DSParamsModel.searchTmpSelectedValues(modelData) < 0){
-                        DSParamsModel.setTmpSelectedValues(modelData)
+                    if(ReportParamsModel.searchTmpSelectedValues(modelData) < 0){
+                        ReportParamsModel.setTmpSelectedValues(modelData)
                     }
 
                 } else{
                     // Remove item if unchecked
-                    const index = DSParamsModel.searchTmpSelectedValues(modelData);
+                    const index = ReportParamsModel.searchTmpSelectedValues(modelData);
                     if (index > -1) {
-                        DSParamsModel.removeTmpSelectedValues(index);
+                        ReportParamsModel.removeTmpSelectedValues(index);
                     }
                 }
 
                 var actualValueArray = []
-                DSParamsModel.getTmpSelectedValues(0, true).forEach((item)  => {
+                ReportParamsModel.getTmpSelectedValues(0, true).forEach((item)  => {
                                                                         actualValueArray.push(searchDateFormat(item, selectedFormat))
                                                                     })
-                DSParamsModel.setActualDateValues(counter, actualValueArray)
-                DSParamsModel.addToJoinValue(counter, DSParamsModel.getTmpSelectedValues(0, true).toString())
-                DSParamsModel.addToJoinRelation(counter, Constants.inRelation)
-                DSParamsModel.addToJoinRelationSlug(counter, Constants.inRelation)
+                ReportParamsModel.setActualDateValues(counter, actualValueArray)
+                ReportParamsModel.addToJoinValue(counter, ReportParamsModel.getTmpSelectedValues(0, true).toString())
+                ReportParamsModel.addToJoinRelation(counter, Constants.inRelation)
+                ReportParamsModel.addToJoinRelationSlug(counter, Constants.inRelation)
             }
         }
     }
 
     function onIncludeCheckedClicked(checked){
-        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
-            DSParamsModel.setIncludeNullMap(counter, checked)
+        if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
+            ReportParamsModel.setIncludeNullMap(counter, checked)
         }
     }
 
 
     function onExcludeCheckedClicked(checked){
-        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
-            DSParamsModel.setExcludeMap(counter, checked)
+        if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
+            ReportParamsModel.setExcludeMap(counter, checked)
         }
     }
 
 
     function searchDateFormat(inputDate, formatId){
         var outputData
-        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
+        if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
             masterColData.forEach((item, index) => {
                                       if(item[formatId] === inputDate){
                                           outputData = item[item.length - 1]
@@ -380,7 +380,7 @@ Rectangle{
 
     function changeDateFormat(currentIndex){
 
-        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
+        if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
             var tmpColData = []
             selectedFormat = currentIndex
 
@@ -394,11 +394,11 @@ Rectangle{
             multiSelectCheckList.model  = tmpColData
 
 
-            DSParamsModel.setDateFormatMap(counter, selectedFormat)
-            DSParamsModel.removeTmpSelectedValues(0, true)
-            DSParamsModel.removeJoinValue(counter)
-            DSParamsModel.removeJoinRelation(counter)
-            DSParamsModel.removeJoinRelationSlug(counter)
+            ReportParamsModel.setDateFormatMap(counter, selectedFormat)
+            ReportParamsModel.removeTmpSelectedValues(0, true)
+            ReportParamsModel.removeJoinValue(counter)
+            ReportParamsModel.removeJoinRelation(counter)
+            ReportParamsModel.removeJoinRelationSlug(counter)
         }
     }
 
@@ -645,7 +645,7 @@ Rectangle{
 
         CheckBoxTpl {
             id: mainCheckBox
-            checked: DSParamsModel.getSelectAllMap(counter)[counter] === "1" ? true : false
+            checked: ReportParamsModel.getSelectAllMap(counter)[counter] === "1" ? true : false
             text: "All"
             parent_dimension: Constants.defaultCheckBoxDimension
             checkState: childGroup.checkState
@@ -684,17 +684,17 @@ Rectangle{
 
                     // On search, highlight selected option
                     Component.onCompleted: {
-                        if(DSParamsModel.section === Constants.dateTab){
-                            modelCheckBoxes.checked = DSParamsModel.searchTmpSelectedValues(modelData) >= 0 ? true: false
+                        if(ReportParamsModel.section === Constants.dateTab){
+                            modelCheckBoxes.checked = ReportParamsModel.searchTmpSelectedValues(modelData) >= 0 ? true: false
                         }
                     }
 
                     // On edit, highlight the selected option
                     Connections{
-                        target: DSParamsModel
+                        target: ReportParamsModel
                         function onTmpSelectedValuesChanged(values){
 
-                            if(DSParamsModel.mode === Constants.modeEdit && DSParamsModel.category === Constants.dateMainListType && DSParamsModel.subCategory === Constants.categorySubMulti){
+                            if(ReportParamsModel.mode === Constants.modeEdit && ReportParamsModel.category === Constants.dateMainListType && ReportParamsModel.subCategory === Constants.categorySubMulti){
                                 if(values[0] === "%"){
                                     modelCheckBoxes.checked = true
                                 } else{
@@ -753,16 +753,16 @@ Rectangle{
 
                         // On search, highlight the selected radio
                         Component.onCompleted: {
-                            if(DSParamsModel.section === Constants.dateTab){
-                                modelRadioButton.checked = DSParamsModel.getTmpSelectedValues(0, true)[0] === modelData ? true: false
+                            if(ReportParamsModel.section === Constants.dateTab){
+                                modelRadioButton.checked = ReportParamsModel.getTmpSelectedValues(0, true)[0] === modelData ? true: false
                             }
                         }
 
                         // On edit, highlight the selected option
                         Connections{
-                            target: DSParamsModel
+                            target: ReportParamsModel
                             function onTmpSelectedValuesChanged(values){
-                                if(DSParamsModel.mode === Constants.modeEdit && DSParamsModel.category === Constants.dateMainListType && DSParamsModel.subCategory === Constants.categorySubSingle){
+                                if(ReportParamsModel.mode === Constants.modeEdit && ReportParamsModel.category === Constants.dateMainListType && ReportParamsModel.subCategory === Constants.categorySubSingle){
                                     modelRadioButton.checked = values[0] === modelRadioButton.objectName ? true: false
                                 }
                             }
@@ -819,7 +819,7 @@ Rectangle{
             anchors.left: includeExcludeRow.left
 
             CheckBoxTpl {
-                checked: DSParamsModel.includeNull
+                checked: ReportParamsModel.includeNull
                 text: qsTr("Include Null")
 
                 parent_dimension: Constants.defaultCheckBoxDimension
@@ -838,7 +838,7 @@ Rectangle{
             anchors.rightMargin: 5
 
             CheckBoxTpl {
-                checked: DSParamsModel.exclude
+                checked: ReportParamsModel.exclude
                 text: qsTr("Exclude")
                 parent_dimension: Constants.defaultCheckBoxDimension
 

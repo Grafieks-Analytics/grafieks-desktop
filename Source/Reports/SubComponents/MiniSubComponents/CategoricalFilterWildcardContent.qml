@@ -94,20 +94,20 @@ Rectangle{
 
 
     Connections{
-        target: DSParamsModel
+        target: ReportParamsModel
 
         function onInternalCounterChanged(){
-            counter = DSParamsModel.internalCounter
-            DSParamsModel.setTmpFilterIndex(counter)
-            excludeCheck.checked = DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
+            counter = ReportParamsModel.internalCounter
+            ReportParamsModel.setTmpFilterIndex(counter)
+            excludeCheck.checked = ReportParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
         }
 
         function onFilterIndexChanged(){
 
-            if(DSParamsModel.getTmpFilterIndex(0, true).length === 0){
-                counter = DSParamsModel.filterIndex
-                DSParamsModel.setTmpFilterIndex(DSParamsModel.filterIndex)
-                DSParamsModel.setExcludeMap(DSParamsModel.filterIndex, false)
+            if(ReportParamsModel.getTmpFilterIndex(0, true).length === 0){
+                counter = ReportParamsModel.filterIndex
+                ReportParamsModel.setTmpFilterIndex(ReportParamsModel.filterIndex)
+                ReportParamsModel.setExcludeMap(ReportParamsModel.filterIndex, false)
             }
         }
     }
@@ -117,7 +117,7 @@ Rectangle{
 
         function onColumnListModelDataChanged(colData, options){
 
-            if(DSParamsModel.category === Constants.categoryMainWildCardType){
+            if(ReportParamsModel.category === Constants.categoryMainWildCardType){
                 var finalValue;
                 var jsonOptions = JSON.parse(options)
 
@@ -174,13 +174,13 @@ Rectangle{
     function slotDataCleared(){
         totalWildCards = 1
         listviewWildCardModel.clear()
-        DSParamsModel.removeTmpFilterIndex(0, true)
+        ReportParamsModel.removeTmpFilterIndex(0, true)
     }
 
 
     function setValueDelegate(wildcardDropdown, valueText){
 
-        if(DSParamsModel.mode === Constants.modeEdit){
+        if(ReportParamsModel.mode === Constants.modeEdit){
 
             var key = acceptedValues.indexOf(editSlug)
             valueText.text = wildcardContent.editValue
@@ -193,11 +193,11 @@ Rectangle{
     function onExcludeCheckedClicked(checked){
         currenctExclude = checked
 
-        var tmpFilters = DSParamsModel.getTmpFilterIndex(0, true)
+        var tmpFilters = ReportParamsModel.getTmpFilterIndex(0, true)
 
         for(var i = 0; i < tmpFilters.length; i++){
             var fi = tmpFilters[i]
-            DSParamsModel.setExcludeMap(fi, currenctExclude)
+            ReportParamsModel.setExcludeMap(fi, currenctExclude)
         }
     }
 
@@ -207,10 +207,10 @@ Rectangle{
             // As already filterindex count has been increased on selecting `create` option
             // Hence, no need to increment for the first time
             if(totalWildCards > 1){
-                DSParamsModel.setFilterIndex(DSParamsModel.filterIndex + 1)
+                ReportParamsModel.setFilterIndex(ReportParamsModel.filterIndex + 1)
             }
-            DSParamsModel.setTmpFilterIndex(DSParamsModel.filterIndex)
-            DSParamsModel.setExcludeMap(DSParamsModel.filterIndex, currenctExclude)
+            ReportParamsModel.setTmpFilterIndex(ReportParamsModel.filterIndex)
+            ReportParamsModel.setExcludeMap(ReportParamsModel.filterIndex, currenctExclude)
 
             // Append a new ListElement on the ListView model
             listviewWildCardModel.append({"value":0})
@@ -278,12 +278,12 @@ Rectangle{
 
         }
 
-        var currentSelectedIndex = DSParamsModel.getTmpFilterIndex(listIndex)
-        DSParamsModel.addToJoinRelation(currentSelectedIndex, newRelation)
-        DSParamsModel.addToJoinValue(currentSelectedIndex, newFilter)
-        DSParamsModel.addToJoinRelationSlug(currentSelectedIndex, slug)
+        var currentSelectedIndex = ReportParamsModel.getTmpFilterIndex(listIndex)
+        ReportParamsModel.addToJoinRelation(currentSelectedIndex, newRelation)
+        ReportParamsModel.addToJoinValue(currentSelectedIndex, newFilter)
+        ReportParamsModel.addToJoinRelationSlug(currentSelectedIndex, slug)
 
-        console.log("FILTER VALUES1a", currentSelectedIndex, DSParamsModel.fetchJoinRelation(currentSelectedIndex)[currentSelectedIndex], DSParamsModel.fetchJoinValue(currentSelectedIndex)[currentSelectedIndex], DSParamsModel.fetchJoinRelationSlug(currentSelectedIndex)[currentSelectedIndex])
+        console.log("FILTER VALUES1a", currentSelectedIndex, ReportParamsModel.fetchJoinRelation(currentSelectedIndex)[currentSelectedIndex], ReportParamsModel.fetchJoinValue(currentSelectedIndex)[currentSelectedIndex], ReportParamsModel.fetchJoinRelationSlug(currentSelectedIndex)[currentSelectedIndex])
 
     }
 
@@ -337,7 +337,7 @@ Rectangle{
 
             padding: 12
             leftPadding: 30
-            visible: DSParamsModel.mode === Constants.modeCreate? true: false
+            visible: ReportParamsModel.mode === Constants.modeCreate? true: false
 
             anchors.verticalCenter: parent.verticalAlignment
 
