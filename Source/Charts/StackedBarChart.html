@@ -134,21 +134,11 @@
                 response.push({ ...json[key], key });
             }
 
-            // console.log(response);
-            // debugger;
             return [response, allKeys, data[2]];
         }
 
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
-
-            // var keys = data[1];
-            // var labels = data[2];
-
-            // var margin = { top: 20, right: 20, bottom: 30, left: 40 };
-            // var width = window.innerWidth - margin.left - margin.right - 50;
-            // var height = window.innerHeight - margin.top - margin.bottom - 50;
-            // yaxisTicks = height / 70;
 
             var timeFormat = d3.timeFormat("%m-%Y");
             var parseDate = d3.timeParse("%Y");
@@ -540,8 +530,6 @@
                 maxWidth = maxWidth < 100 ? maxWidth : 100;
                 extraHeight = maxWidth;
 
-                console.log({ extraHeight });
-
                 d3.select(".x-axis").attr("text-anchor", "right");
 
                 d3.selectAll(".x-axis text")
@@ -621,7 +609,6 @@
                             allXAxisTexts[i].innerHTML.length > numOfCharacters
                         ) {
                             if (Math.floor(numOfCharacters) > 3) {
-                                console.log(allXAxisTexts[i].innerHTML);
                                 allXAxisTexts[i].innerHTML =
                                     (allXAxisTexts[i].innerHTML &&
                                         allXAxisTexts[i].innerHTML.substr(
@@ -646,16 +633,6 @@
                     if (barWidth < textWidth * 0.5) {
                         allXAxisTexts[i].setAttribute("dy", "0.8em");
                     }
-
-                    // console.log("Axis Data", allXAxisTexts[i]);
-                    // if (allXAxisTexts[i] && allXAxisTexts[i].innerHTML) {
-                    //     var singleCharacterLength =
-                    //         allXAxisTexts[i].getBBox().width /
-                    //         allXAxisTexts[i].innerHTML.length;
-                    //     var numOfCharacters =
-                    //         extraHeight / singleCharacterLength;
-
-                    // }
                 }
             }
 
