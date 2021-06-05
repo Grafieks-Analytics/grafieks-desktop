@@ -10,7 +10,7 @@ class ReportParamsModel: public QObject
 {
     Q_OBJECT
 
-    // Customize Report parameters
+// Customize Report parameters
     QMap<QString, QMap<QString, QString>> reportsMap;           // <<reportId, reportObj>>
     QVariantMap reportsData;
 

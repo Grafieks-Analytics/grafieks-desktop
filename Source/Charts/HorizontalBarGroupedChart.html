@@ -116,9 +116,10 @@
                     dateFormat,
                     chartType,
                     standardThresholdHeight,
-                    subCategoryColour,
-                    categoryColor,
+                    options,
                 } = plottingConfiguration;
+
+                var { groupBarChartColorBy } = options || {};
 
                 if (!d3colorPalette) {
                     d3colorPalette = defaultD3Config.d3ColorPalette;
@@ -288,10 +289,10 @@
                             .append("rect")
                             .attr("class", "bar")
                             .attr("fill", function (d) {
-                                if (categoryColor) {
+                                if (groupBarChartColorBy == "category") {
                                     return zScale(d.data.mainCategory);
                                 }
-                                if (subCategoryColour) {
+                                if (groupBarChartColorBy == "subcategory") {
                                     return zScale(d.name);
                                 }
                                 return d3Colors[4];
@@ -364,6 +365,28 @@
 
                 // Add the Y Axis
                 svg.append("g").attr("class", "y-axis").call(yAxis);
+
+                a = document.querySelectorAll(".y-axis text");
+                for (var i = 0; i < a.length; i++) {
+                    if (a[i] && a[i].innerHTML) {
+                        var singleCharacterLength =
+                            a[i].getBBox().width / a[i].innerHTML.length;
+
+                        var maxWidth =
+                            document.querySelector(".y-axis").getBBox().width >
+                            72
+                                ? 72
+                                : document.querySelector(".y-axis").getBBox()
+                                      .width;
+                        var numOfCharacters = maxWidth / singleCharacterLength;
+
+                        if (a[i].innerHTML.length > numOfCharacters) {
+                            a[i].innerHTML =
+                                a[i].innerHTML.substr(0, numOfCharacters - 3) +
+                                "...";
+                        }
+                    }
+                }
 
                 function getBars(d) {
                     const bars = [];

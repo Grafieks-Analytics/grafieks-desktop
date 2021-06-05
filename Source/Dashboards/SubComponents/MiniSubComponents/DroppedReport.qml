@@ -88,7 +88,7 @@ Item{
             let reportId = DashboardParamsModel.currentReport
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName) && url !== ""){
                 //                let newUrl =  "file:" + GeneralParamsModel.getTmpPath()  + "../area.html"
-                let newUrl = "qrc:/Source/Charts/area.html"
+                let newUrl = "qrc:/Source/Charts/BarChartArrayInput.html"
                 webengine.url = newUrl
             }
         }
@@ -108,7 +108,8 @@ Item{
     Component.onCompleted: {
         // Add name to report
         // reportName.text = name
-        webengine.url = "qrc:/Source/Charts/area.html"
+        let newUrl = "qrc:/Source/Charts/BarChartArrayInput.html"
+        webengine.url = newUrl
     }
 
     function destroyElement(){
@@ -168,7 +169,7 @@ Item{
     }
     function showMenusReport(){
         DashboardParamsModel.setCurrentReport(newItem.objectName)
-         = true
+        hoverStatusReport = true
         mainContainer.rulerStatus = true
         console.log("test")
     }
