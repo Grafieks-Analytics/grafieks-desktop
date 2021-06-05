@@ -2,9 +2,9 @@ function isDateFormat(date) {
     var initialPart = date.split("-");
     if (isNaN(initialPart)) {
         // initialPart
-        if (!isInMonth(initialPart)) {
-            return false;
-        }
+        // if (!isInMonth(initialPart)) {
+        //     return false;
+        // }
     }
 
     if (typeof date == "number") {
