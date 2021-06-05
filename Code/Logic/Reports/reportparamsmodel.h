@@ -19,18 +19,25 @@ class ReportParamsModel: public QObject
     QVariantMap reportsData;
 
     // Filter specific variables
-    QVector<int> categoricalFilters;                            // Id List of categorical filters
-    QVector<int> dateFilters;                                   // Id List of date filters
-    QVector<int> numericalFilters;                              // Id List of numerical filters
+    QMap<int, QMap<int, QVariant>> masterReportFilters;         // Report Id - Map of
+    QMap<int, QVector<int>> categoricalFilters;                 // ReportId - Id List of categorical filters
+    QMap<int, QVector<int>> dateFilters;                        // ReportId - Id List of date filters
+    QMap<int, QVector<int>> numericalFilters;                   // ReportId - Id List of numerical filters
+
     QMap<int, QString> filterColumnMap;                         // filter id - column name map
     QMap<int, QVariantList> filterValueMap;                     // filter id - value list map
     QMap<int, QString> filterRelationMap;                       // filter id - relation map
+    QMap<int, QString> filterSlugMap;                           // filter id - slug map
     QMap<int, bool> includeExcludeMap;                          // filter id - include exclude map
     QMap<int, bool> includeNullMap;                             // filter id - include null map
     QMap<int, bool> selectAllMap;                               // filter id - select All map
     QMap<int, QString> filterSectionMap;                        // filter id - section map
     QMap<int, QString> filterCategoryMap;                       // filter id - category map
     QMap<int, QString> filterSubCategoryMap;                    // filter id - sub category map
+    QStringList tmpSelectedValues;              // Tmp selected values in a filter list - used in categorical/date filter list
+    QVector<int> tmpFilterIndex;                // Tmp created filter index - used in categorical filter wildcard
+    QMap<int, int> dateFormatMap;               // Date selected format QMap<filterId, formatId>
+    QMap<int, QStringList> actualDateValues;    // For dates like This year, last 10 years, quarter, etc, the original values are stored in this variable
 
     // General properties
     Q_PROPERTY(QString itemName READ itemName WRITE setItemName NOTIFY itemNameChanged)
@@ -137,17 +144,17 @@ public:
     Q_INVOKABLE void clearFilter();
     Q_INVOKABLE void resetInputFields();
 
-    Q_INVOKABLE void addToCategoricalFilters(int filterId);
-    Q_INVOKABLE QVector<int> fetchCategoricalFilters();
-    Q_INVOKABLE void removeCategoricalFilters(int filterId);
+    Q_INVOKABLE void addToCategoricalFilters(int reportId, int filterId);
+    Q_INVOKABLE QVector<int> fetchCategoricalFilters(int reportId);
+    Q_INVOKABLE void removeCategoricalFilters(int reportId, int filterId, bool removeReport = false);
 
-    Q_INVOKABLE void addToDateFilters(int filterId);
-    Q_INVOKABLE QVector<int> fetchDateFilters();
-    Q_INVOKABLE void removeDateFilters(int filterId);
+    Q_INVOKABLE void addToDateFilters(int reportId, int filterId);
+    Q_INVOKABLE QVector<int> fetchDateFilters(int reportId);
+    Q_INVOKABLE void removeDateFilters(int reportId, int filterId, bool removeReport = false);
 
-    Q_INVOKABLE void addToNumericalFilters(int filterId);
-    Q_INVOKABLE QVector<int> fetchNumericalFilters();
-    Q_INVOKABLE void removeNumericalFilters(int filterId);
+    Q_INVOKABLE void addToNumericalFilters(int reportId, int filterId);
+    Q_INVOKABLE QVector<int> fetchNumericalFilters(int reportId);
+    Q_INVOKABLE void removeNumericalFilters(int reportId, int filterId, bool removeReport = false);
 
     Q_INVOKABLE void addToFilterColumnMap(int filterId, QString value);
     Q_INVOKABLE QStringList fetchFilterColumnMap(int filterId = 0, bool fetchAll = false);
@@ -160,6 +167,10 @@ public:
     Q_INVOKABLE void addToFilterRelationMap(int filterId, QString relation);
     Q_INVOKABLE QStringList fetchFilterRelationMap(int filterId = 0, bool fetchAll = false);
     Q_INVOKABLE void removeFilterRelationMap(int filterId);
+
+    Q_INVOKABLE void addToFilterSlugMap(int filterId, QString slug);
+    Q_INVOKABLE QStringList fetchFilterSlugMap(int filterId = 0, bool fetchAll = false);
+    Q_INVOKABLE void removeFilterSlugMap(int filterId);
 
     Q_INVOKABLE void addToIncludeExcludeMap(int filterId, bool includeExclude);
     Q_INVOKABLE QVector<bool> fetchIncludeExcludeMap(int filterId = 0, bool fetchAll = false);
@@ -184,6 +195,23 @@ public:
     Q_INVOKABLE void addToFilterSubCategoryMap(int filterId, QString subCategory);
     Q_INVOKABLE QStringList fetchFilterSubCategoryMap(int filterId = 0, bool fetchAll = false);
     Q_INVOKABLE void removeFilterSubCategoryMap(int filterId);
+
+    Q_INVOKABLE void setTmpSelectedValues(QString value);
+    Q_INVOKABLE void removeTmpSelectedValues(int refObjId, bool removeAll = false);
+    Q_INVOKABLE QStringList getTmpSelectedValues(int refObjId = 0, bool fetchAll = false);
+    Q_INVOKABLE int searchTmpSelectedValues(QString keyword);
+
+    Q_INVOKABLE void setTmpFilterIndex(int value);
+    Q_INVOKABLE void removeTmpFilterIndex(int refObjId, bool removeAll = false);
+    Q_INVOKABLE QVector<int> getTmpFilterIndex(int refObjId = 0, bool fetchAll = false);
+
+    Q_INVOKABLE void setDateFormatMap(int refObjId, int formatId);
+    Q_INVOKABLE void removeDateFormatMap(int refObjId = 0, bool removeAll = false);
+    Q_INVOKABLE int getDateFormatMap(int refObjId);
+
+    Q_INVOKABLE void setActualDateValues(int refObjId, QString value1, QString value2 = "");
+    Q_INVOKABLE void removeActualDateValues(int refObjId, bool removeAll = false);
+    Q_INVOKABLE QStringList getActualDateValues(int refObjId);
 
 public slots:
 
@@ -218,6 +246,7 @@ public slots:
     void setFilterIndex(int filterIndex);
     void setMode(QString mode);
     void setFilterModelIndex(int filterModelIndex);
+    void tmpSelectedValuesChanged(QStringList values);
 
 signals:
     // General properties
