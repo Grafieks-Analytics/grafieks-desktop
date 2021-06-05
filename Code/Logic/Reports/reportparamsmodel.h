@@ -5,16 +5,12 @@
 #include <QMap>
 #include <QVariantMap>
 #include<QDebug>
-<<<<<<< HEAD
-
-=======
->>>>>>> 0272590c284c31ab148ed6520db453e87dd6d1be
 
 class ReportParamsModel: public QObject
 {
     Q_OBJECT
 
-    // Customize Report parameters
+// Customize Report parameters
     QMap<QString, QMap<QString, QString>> reportsMap;           // <<reportId, reportObj>>
     QVariantMap reportsData;
 
@@ -52,15 +48,6 @@ class ReportParamsModel: public QObject
     Q_PROPERTY(QString yAxisColumns READ yAxisColumns WRITE setYAxisColumns NOTIFY yAxisColumnsChanged)
     Q_PROPERTY(QString d3PropertiesConfig READ d3PropertiesConfig WRITE setD3PropertiesConfig NOTIFY d3PropertiesConfigChanged)
 
-<<<<<<< HEAD
-
-    QString m_itemName;
-    QString m_itemType;
-
-//    QMap<QString, QVariant> reportsData;
-    QVariantMap reportsData;
-
-=======
     // For Filters
     Q_PROPERTY(int internalCounter READ internalCounter WRITE setInternalCounter NOTIFY internalCounterChanged) // Counter for categorical-wildcard
     Q_PROPERTY(QString section READ section WRITE setSection NOTIFY sectionChanged)                             // Categorical/Numerical/Date/Group filters
@@ -74,7 +61,6 @@ class ReportParamsModel: public QObject
 
     QString m_itemName;
     QString m_itemType;
->>>>>>> 0272590c284c31ab148ed6520db453e87dd6d1be
     bool m_xAxisActive;
     bool m_yAxisActive;
     bool m_colorByActive;
