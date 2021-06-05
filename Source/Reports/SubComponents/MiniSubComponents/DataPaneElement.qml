@@ -46,7 +46,16 @@ Rectangle{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    function isDropEligible(itemType){
+    function isDropEligible(itemType, itemName){
+
+        if(report_desiner_page.chartTitle==Constants.groupBarChartTitle){
+            var xAxisValidNames = getAxisColumnNames(Constants.xAxisName);
+            console.log(xAxisValidNames);
+            if(xAxisValidNames.includes(itemName)){
+                return true;
+            }
+            return false;
+        }
 
         var lastDropped = ReportParamsModel.lastDropped;
         if(!lastDropped){
@@ -174,7 +183,7 @@ Rectangle{
                 ReportParamsModel.setXAxisActive(xAxisDropEligible(modelData));
                 ReportParamsModel.setYAxisActive(yAxisDropEligible(modelData));
 
-                if(isDropEligible(itemType)){
+                if(isDropEligible(itemType, modelData)){
                     ReportParamsModel.setColorByActive(true);
                 }else{
                     ReportParamsModel.setColorByActive(false);

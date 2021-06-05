@@ -1,4 +1,10 @@
 function isDateFormat(date) {
+    var initialPart = date.split("-");
+    if (isNaN(initialPart)) {
+        // initialPart
+        // if(!includes)
+    }
+
     if (typeof date == "number") {
         return false;
     }
@@ -153,4 +159,8 @@ function clearChart() {
     d3.selectAll("#my_dataviz").html("");
     d3.selectAll("#yAxisDiv").html("");
     d3.selectAll("#xAxisDiv").html("");
+
+    if (window.extraHeight) {
+        window.extraHeight = 0;
+    }
 }

@@ -210,8 +210,8 @@ QtObject {
 
     // DASHBOARD starts
 
-    property int defaultDroppedReportWidth : 300
-    property int defaultDroppedReportHeight : 200
+    property int defaultDroppedReportWidth : 500
+    property int defaultDroppedReportHeight : 300
 
     property int dropActiveBorderWidth: 2
     property int dropEligibleBorderWidth: 1

@@ -3,6 +3,9 @@
 
 #include <QObject>
 #include <QMap>
+#include <QVariantMap>
+#include<QDebug>
+
 
 class ReportParamsModel: public QObject
 {
@@ -35,8 +38,12 @@ class ReportParamsModel: public QObject
 
     Q_PROPERTY(QString d3PropertiesConfig READ d3PropertiesConfig WRITE setD3PropertiesConfig NOTIFY d3PropertiesConfigChanged)
 
+
     QString m_itemName;
     QString m_itemType;
+
+//    QMap<QString, QVariant> reportsData;
+    QVariantMap reportsData;
 
     bool m_xAxisActive;
     bool m_yAxisActive;
@@ -83,7 +90,7 @@ public:
     QString reportTitle() const;
 
     Q_INVOKABLE void addReport(QString reportId);
-    Q_INVOKABLE QString getReportsList();
+    Q_INVOKABLE QVariantMap getReportsList();
 
     QList<QString> dataValuesColumns() const;
 

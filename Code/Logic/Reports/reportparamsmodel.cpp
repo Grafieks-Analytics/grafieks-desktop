@@ -1,4 +1,3 @@
-#include<QDebug>
 #include "reportparamsmodel.h"
 
 ReportParamsModel::ReportParamsModel()
@@ -76,22 +75,14 @@ void ReportParamsModel::addReport(QString reportId)
     tmp.insert("chartUrl", this->chartUrl() );
     tmp.insert("chartType", this->chartType() );
     this->reportsMap.insert(reportId,tmp);
+
+    this->reportsData.insert(this->reportId(),this->reportTitle());
+
 }
 
-QString ReportParamsModel::getReportsList(){
-
-    QMap<QString, QMap<QString, QString>> reportList = this->reportsMap;
-
-
-
-    QMap<QString, QString> reportIdsData;
-    if (!reportList.isEmpty()){
-        for(auto key: reportList.keys()){
-            qDebug() << key;
-        }
-    }
-
-    return "";
+QVariantMap ReportParamsModel::getReportsList()
+{
+    return this->reportsData;
 }
 
 QList<QString> ReportParamsModel::dataValuesColumns() const
