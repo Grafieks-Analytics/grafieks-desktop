@@ -24,25 +24,6 @@
     <div id="my_dataviz"></div>
     <div id="tooltip"></div>
     <script>
-        var keys = ["Under 5 Years", "5 to 13 Years", "14 to 17 Years"];
-
-        var states = ["Ind", "Aus", "Nz", "Pak", "DE", "asd"];
-
-        var data = [
-            [
-                [2704659, 4499890, -2659981],
-                [2027307, 3277946, 1420518],
-                [1208495, 2141490, 1058031],
-                [1140516, -1938695, 925060],
-                [894368, 1558919, 725973],
-                [737462, 1345341, -1879201],
-            ],
-            ["Ind", "Aus", "Nz", "Pak", "DE", "asd"],
-            ["Under 5 Years", "5 to 13 Years", "14 to 17 Years"],
-        ];
-
-        drawChart(data);
-
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
             dataValues = data[0];
