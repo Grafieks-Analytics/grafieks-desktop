@@ -13,6 +13,7 @@ class ReportParamsModel: public QObject
 // Customize Report parameters
     QMap<QString, QMap<QString, QString>> reportsMap;           // <<reportId, reportObj>>
     QVariantMap reportsData;
+    QVariantList dashboardReportInstances; 
 
     // Filter specific variables
     QVector<int> categoricalFilters;                            // Id List of categorical filters
@@ -171,6 +172,9 @@ public:
     Q_INVOKABLE QStringList fetchFilterSubCategoryMap(int filterId = 0, bool fetchAll = false);
     Q_INVOKABLE void removeFilterSubCategoryMap(int filterId);
 
+    Q_INVOKABLE void ReportParamsModel::addDashboardReportInstance(QVariant &newReportInstance);
+    Q_INVOKABLE QVariant ReportParamsModel::getDashboardReportInstance(int reportInstanceIndex);
+
 public slots:
 
     // General properties
@@ -237,6 +241,10 @@ signals:
     void filterIndexChanged(int filterIndex);
     void modeChanged(QString mode);
     void filterModelIndexChanged(int filterModelIndex);
+
+    // For Dashboard Reports
+    void reportListChanged();
+
 };
 
 #endif // REPORTPARAMSMODEL_H
