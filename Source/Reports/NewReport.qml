@@ -53,7 +53,7 @@ Page {
     // Initial Chart Config
     property string chartUrl: 'BarChartArrayInput.html';
     property string chartTitle: Constants.barChartTitle;
-    property var customizationsAvailable: "Properties,Legend";
+    property var customizationsAvailable: "Properties,Reference Line,Legend,Charts Size";
 
     // This contains all the customizable config and is passed to drawChart function
     // In draw chart we take out these config; If config is empty => We have default config for it.
@@ -325,15 +325,18 @@ Page {
         chartTitle = chartTitleValue;
         var chartUrl = '';
         switch(chartTitle){
-        case Constants.horizontalBarChartTitle:
-            chartUrl = Constants.horizontalBarChartUrl;
-            break;
-        case Constants.horizontalStackedBarChartTitle:
-            chartUrl = Constants.horizontalStackedBarChartUrl;
-            break;
-        case Constants.stackedBarChartTitle:
-            chartUrl = Constants.stackedBarChartUrl
-            break;
+            case Constants.barChartTitle:
+                chartUrl = Constants.barChartUrl;
+                break;
+            case Constants.horizontalBarChartTitle:
+                chartUrl = Constants.horizontalBarChartUrl;
+                break;
+            case Constants.horizontalStackedBarChartTitle:
+                chartUrl = Constants.horizontalStackedBarChartUrl;
+                break;
+            case Constants.stackedBarChartTitle:
+                chartUrl = Constants.stackedBarChartUrl
+                break;
         }
         webEngineView.url = Constants.baseChartUrl+chartUrl;
     }
@@ -363,6 +366,19 @@ Page {
         return columnsName;
     }
 
+    function clearAllChartValues(){
+        ReportParamsModel.setReportId(null);
+        xAxisListModel.clear();
+        yAxisListModel.clear();
+        d3PropertyConfig = {};
+    
+        lastPickedDataPaneElementProperties= {};
+        reportDataPanes= {};  // Report Data Panes Object
+        dragActiveObject= {};
+        allChartsMapping= {};
+        colorByData= [];
+
+    }
 
     // generate Report Id
     function generateReportId(){
@@ -371,6 +387,11 @@ Page {
 
     // Slot Function
     // For changing the chart on clicking chart icons
+
+    // Clear the chart defaults
+    function clearChartValue(){
+        webEngineView.runJavaScript('clearChart()');
+    }
 
     function reDrawChart(){
 
@@ -439,10 +460,29 @@ Page {
         ReportParamsModel.setChartUrl(chartUrl);
         ReportParamsModel.setXAxisColumns(JSON.stringify(getAxisColumnNames(Constants.xAxisName)));
         ReportParamsModel.setYAxisColumns(JSON.stringify(getAxisColumnNames(Constants.yAxisName)));
+
+        var reportList = ReportParamsModel.getReportsList();
+        console.log(reportList);
+
+        if(!report_title_text.text){
+            var numberOfReports = Object.keys(reportList);
+            ReportParamsModel.setReportTitle('Report '+ (numberOfReports + 1));
+        }
+
         ReportParamsModel.addReport(reportId);
 
-        ReportParamsModel.getReportsList();
+        ReportParamsModel.setReportId(null);
+        chartTitle = Constants.barChartTitle;
+        chartUrl = Constants.barChartUrl;
 
+
+        reportList = ReportParamsModel.getReportsList();
+        console.log('Report List',reportList);
+        for(reportId in  reportList){
+            console.log('Report List Data',reportId,reportList[reportId]);
+        }
+
+        clearChartValue();
     }
 
     function cancelReport(){
@@ -750,10 +790,11 @@ Page {
                     drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
            });';
 
+           clearChartValue();
            webEngineView.runJavaScript('drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue);
 
            // Clear Chart Data
-           // ChartsModel.clearData();
+            // ChartsModel.clearData();
            return;
         }
 
