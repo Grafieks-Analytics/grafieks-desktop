@@ -61,6 +61,7 @@ Item{
 
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName)){
                 droppedReportId.color = refColor
+                setChartBackgroundColor(refColor);
             }
         }
 
@@ -196,6 +197,10 @@ Item{
             return;
         }
         reDrawChart();
+    }
+
+    function setChartBackgroundColor(background){
+        webEngineView.runJavaScript('setSvgBackground("'+background+'")');
     }
 
     // Clear the chart defaults
