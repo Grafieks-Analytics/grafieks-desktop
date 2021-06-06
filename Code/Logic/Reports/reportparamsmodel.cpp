@@ -55,13 +55,32 @@ QString ReportParamsModel::chartType() const
     return m_chartType;
 }
 
-void ReportParamsModel::addDashboardReportInstance(QVariant &newDroppedReportInstance){
+void ReportParamsModel::addDashboardReportInstance(QVariant newDroppedReportInstance){
     this->dashboardReportInstances.append(newDroppedReportInstance);
 }
 
 
 QVariant ReportParamsModel::getDashboardReportInstance(int index){
     return this->dashboardReportInstances[index];
+}
+
+QVariant ReportParamsModel::getAllDashboardReportInstances()
+{
+    return this->dashboardReportInstances;
+}
+
+QString ReportParamsModel::chartTitle() const
+{
+    return m_chartTitle;
+}
+
+QString ReportParamsModel::colorByDataColoumns() const
+{
+    return m_colorByDataColoumns;
+}
+
+QVariant ReportParamsModel::getReport(QString reportId){
+    return this->reportsMap.value(reportId);
 }
 
 QString ReportParamsModel::reportId() const
@@ -76,17 +95,22 @@ QString ReportParamsModel::reportTitle() const
 
 void ReportParamsModel::addReport(QString reportId)
 {
-    QMap<QString, QString> tmp;
+    QVariantMap tmp;
     tmp.insert("reportTitle",this->reportTitle());
     tmp.insert("d3PropertiesConfig",this->d3PropertiesConfig());
     tmp.insert("xAxisColumns", this->xAxisColumns() );
     tmp.insert("yAxisColumns", this->yAxisColumns() );
     tmp.insert("chartUrl", this->chartUrl() );
     tmp.insert("chartType", this->chartType() );
+    tmp.insert("chartTitle", this->chartTitle() );
+    tmp.insert("colorByDataColoumns",this->colorByDataColoumns());
+
     this->reportsMap.insert(reportId,tmp);
 
     this->reportsData.insert(this->reportId(),this->reportTitle());
 
+    // Emitting singal to update report list 
+    // in dashboards
     emit reportListChanged();
     
 }
@@ -644,6 +668,24 @@ void ReportParamsModel::setFilterModelIndex(int filterModelIndex)
 
     m_filterModelIndex = filterModelIndex;
     emit filterModelIndexChanged(m_filterModelIndex);
+}
+
+void ReportParamsModel::setChartTitle(QString chartTitle)
+{
+    if (m_chartTitle == chartTitle)
+        return;
+
+    m_chartTitle = chartTitle;
+    emit chartTitleChanged(m_chartTitle);
+}
+
+void ReportParamsModel::setColorByDataColoumns(QString colorByDataColoumns)
+{
+    if (m_colorByDataColoumns == colorByDataColoumns)
+        return;
+
+    m_colorByDataColoumns = colorByDataColoumns;
+    emit colorByDataColoumnsChanged(m_colorByDataColoumns);
 }
 
 void ReportParamsModel::setChartUrl(QString chartUrl)

@@ -18,6 +18,7 @@ Item{
     width:200
     height: parent.height
     property string itemName : ""
+    property string reportId : ""
     property var editIconVisible: false
     property var reportListDataValues:
     /***********************************************************************************************************************/

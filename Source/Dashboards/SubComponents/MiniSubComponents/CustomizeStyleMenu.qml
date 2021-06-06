@@ -71,6 +71,16 @@ Rectangle{
         DashboardParamsModel.setDashboardBackgroundColor(dashboardId, color)
     }
 
+    function startReDrawingCharts(){
+        // Here are all the instances, Let's Redraw the charts
+        let allReportInstances = ReportParamsModel.getAllDashboardReportInstances();
+        for(var i=0; i<allReportInstances.length;i++){
+            // Redrawing charts one by one;
+            var instance = allReportInstances[i];
+            instance.reDrawChart();
+        }
+    }
+
 
 
     // JAVASCRIPT FUNCTION ENDS
@@ -142,7 +152,7 @@ Rectangle{
 
 
         Rectangle{
-
+            id: opacityBox
             width: parent.width
             height: 30
             anchors.left: parent.left
@@ -164,6 +174,20 @@ Rectangle{
             }
 
         }
+
+        // [Tag: Refactor]
+        // Remove this test button from here
+        // Added this button to call redraw function in all the instances
+        Row{
+            anchors.top: opacityBox.bottom
+            CustomButton{
+                textValue: "Test Re Drawing Buton"
+                onClicked: startReDrawingCharts();
+            }
+        }
+
+        // [Tag: Future Release]
+        // Grid Functionality 
 
 //        Rectangle{
 
