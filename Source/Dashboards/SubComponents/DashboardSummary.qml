@@ -125,13 +125,20 @@ Rectangle {
         // Set the last container type param
         DashboardParamsModel.setLastContainerType(listViewElem.itemName.toLowerCase());
 
-        rectangles.set(counter, dynamicContainer.createObject(parent,{x: x1, y: y1, z: DashboardParamsModel.zIndex,  objectName : counter}))
+        var objectJson = {x: x1, y: y1, z: DashboardParamsModel.zIndex,  objectName : counter};
+        if(listViewElem.reportId){
+            objectJson.reportId = listViewElem.reportId;
+        } 
+        rectangles.set(counter, dynamicContainer.createObject(parent,objectJson))
 
         DashboardParamsModel.dragNewReport(DashboardParamsModel.currentDashboard, counter)
         DashboardParamsModel.setReportZOrder(DashboardParamsModel.currentDashboard, counter, DashboardParamsModel.zIndex)
         DashboardParamsModel.setDashboardReportCoordinates(DashboardParamsModel.currentDashboard, counter, x1, y1, x2, y2)
         DashboardParamsModel.setDashboardReportTypeMap(DashboardParamsModel.currentDashboard, counter, reportType)
-        DashboardParamsModel.setDashboardReportUrl(DashboardParamsModel.currentDashboard, counter, "")
+
+        const reportProperties = ReportParamsModel.getReport(listViewElem.reportId);
+        const chartUrl = Constants.baseChartUrl + reportProperties.chartUrl;
+        DashboardParamsModel.setDashboardReportUrl(DashboardParamsModel.currentDashboard, counter, chartUrl);
 
         DashboardParamsModel.setPositionX(x1);
         DashboardParamsModel.setPositionY(y1);

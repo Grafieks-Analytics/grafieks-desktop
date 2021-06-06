@@ -85,6 +85,11 @@ Page {
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
+    // Colour By Drop List
+    ListModel{
+        id: colorListModel
+    }
+
     // X Axis Bar => Used for all charts where 2 axis are requied
     ListModel{
         id: xAxisListModel
@@ -360,24 +365,34 @@ Page {
     }
 
     function clearAllChartValues(){
-        console.log('Reports: Cleaning All Charts', ReportParamsModel.reportId);
+        
+        // Clear title and report id
         ReportParamsModel.setReportId(null);
-        console.log('Reports: Cleaning All Charts', ReportParamsModel.reportId);
         ReportParamsModel.setReportTitle(null);
-
-        ReportParamsModel.setReportId(null);
+        report_desiner_page.report_title = null;
         reportIdMain = null;
         
+        // Clear all the list models
         xAxisListModel.clear();
         yAxisListModel.clear();
+        colorListModel.clear();
+        valuesListModel.clear();
+        dataItemList.clear();
+        
+        // Clear property Config
         d3PropertyConfig = {};
     
+        // Clear general params
         lastPickedDataPaneElementProperties= {};
         reportDataPanes= {};  // Report Data Panes Object
         dragActiveObject= {};
         allChartsMapping= {};
-        colorByData= [];
+        colorByData = [];
 
+        // Calling this redraw will clear the chart because no x and y columns will be available
+        // [Tag: Optimization]
+        // Check instead of reDraw if we can call only one function to clear the chart
+        // May be webengineview.runJs("call clearValues"); 
         reDrawChart();
 
     }
@@ -461,15 +476,21 @@ Page {
             ReportParamsModel.setReportId(reportIdMain);
         }
 
+        // [Tag: Optimization]
+        // We can create the object here and pass to cpp
+        // to store in reportsMap
+
+        // Save add the data in cpp
+        // get the data in cpp and create an object
         ReportParamsModel.setChartType(chartTitle);
+        ReportParamsModel.setChartTitle(chartTitle);
         ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertyConfig));
         ReportParamsModel.setChartUrl(chartUrl);
         ReportParamsModel.setXAxisColumns(JSON.stringify(getAxisColumnNames(Constants.xAxisName)));
         ReportParamsModel.setYAxisColumns(JSON.stringify(getAxisColumnNames(Constants.yAxisName)));
+        ReportParamsModel.setColorByDataColoumns(JSON.stringify(colorByData));
 
         var reportList = ReportParamsModel.getReportsList();
-        console.log(JSON.stringify(reportList));
-
         if(!report_title_text.text || report_title_text.text == ""){
             var numberOfReports = Object.keys(reportList).length;
             ReportParamsModel.setReportTitle('Report '+ (numberOfReports + 1));
