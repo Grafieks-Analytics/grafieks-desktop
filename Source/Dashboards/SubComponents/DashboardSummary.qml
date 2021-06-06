@@ -67,7 +67,6 @@ Rectangle {
         function onDashboardBackgroundColorChanged(dashboardId, color){
             dashboardArea.color = color
             previousColor = color
-
         }
     }
 
