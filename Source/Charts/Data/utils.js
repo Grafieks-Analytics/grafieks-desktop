@@ -2,7 +2,9 @@ function isDateFormat(date) {
     var initialPart = date.split("-");
     if (isNaN(initialPart)) {
         // initialPart
-        // if(!includes)
+        // if (!isInMonth(initialPart)) {
+        //     return false;
+        // }
     }
 
     if (typeof date == "number") {
@@ -16,6 +18,44 @@ function isDateFormat(date) {
     if (new Date(date) != "Invalid Date") {
         return true;
     }
+    return false;
+}
+
+function isInMonth(value) {
+    var shortMonths = [
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "may",
+        "jun",
+        "jul",
+        "aug",
+        "sept",
+        "oct",
+        "nov",
+        "dec",
+    ];
+    var fullMonths = [
+        "january",
+        "february",
+        "march",
+        "april",
+        "may",
+        "june",
+        "july",
+        "august",
+        "september",
+        "october",
+        "november",
+        "december",
+    ];
+
+    value = value && value.toString().toLowerCase();
+    if (value && (shortMonths.includes(value) || fullMonths.includes(value))) {
+        return true;
+    }
+
     return false;
 }
 

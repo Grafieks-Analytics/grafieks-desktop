@@ -48,7 +48,7 @@ Page {
     property string valuesLabelName: 'Values'
 
     property string reportChart:ReportParamsModel.chartType;
-    property string reportId:ReportParamsModel.reportId;
+    property string reportIdMain:ReportParamsModel.reportId;
 
     // Initial Chart Config
     property string chartUrl: 'BarChartArrayInput.html';
@@ -70,6 +70,8 @@ Page {
 
     property var allowedXAxisDataPanes: 0;
     property var allowedYAxisDataPanes: 0;
+
+    property var reportTitleName: null;
 
     // Flag for horizontal graph
     // Changes when numerical value is added on X axis
@@ -140,14 +142,17 @@ Page {
         ReportParamsModel.yAxisActive = false;
         ReportParamsModel.colorByActive = false;
 
+        // This component is called too early
+        // Removing this report id generation step from here.
         
         // If report id is not defined => Case when Add a new reprt is clicked.
         // Generate a new report id.
         // New Id = base64 of timestamp in milliseconds
-        if(!reportId){
-            var newReportId = generateReportId();
-            ReportParamsModel.setReportId(newReportId);
-        }
+        
+        // if(!reportIdMain){
+        //     var newReportId = generateReportId();
+        //     ReportParamsModel.setReportId(newReportId);
+        // }
 
         // Clearing xAxisListModel and yAxisListModel if any
         // Might be possible that this is getting called once
@@ -367,7 +372,14 @@ Page {
     }
 
     function clearAllChartValues(){
+        console.log('Reports: Cleaning All Charts', ReportParamsModel.reportId);
         ReportParamsModel.setReportId(null);
+        console.log('Reports: Cleaning All Charts', ReportParamsModel.reportId);
+        ReportParamsModel.setReportTitle(null);
+
+        ReportParamsModel.setReportId(null);
+        reportIdMain = null;
+        
         xAxisListModel.clear();
         yAxisListModel.clear();
         d3PropertyConfig = {};
@@ -377,6 +389,8 @@ Page {
         dragActiveObject= {};
         allChartsMapping= {};
         colorByData= [];
+
+        redrawChart();
 
     }
 
@@ -454,7 +468,11 @@ Page {
         // Add report to dashboard
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
 
-        console.log('Report Id',reportId);
+        if(!reportIdMain){
+            reportIdMain = generateReportId();
+            ReportParamsModel.setReportId(reportIdMain);
+        }
+
         ReportParamsModel.setChartType(chartTitle);
         ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertyConfig));
         ReportParamsModel.setChartUrl(chartUrl);
@@ -462,27 +480,25 @@ Page {
         ReportParamsModel.setYAxisColumns(JSON.stringify(getAxisColumnNames(Constants.yAxisName)));
 
         var reportList = ReportParamsModel.getReportsList();
-        console.log(reportList);
+        console.log(JSON.stringify(reportList));
 
-        if(!report_title_text.text){
-            var numberOfReports = Object.keys(reportList);
+        if(!report_title_text.text || report_title_text.text == ""){
+            var numberOfReports = Object.keys(reportList).length;
             ReportParamsModel.setReportTitle('Report '+ (numberOfReports + 1));
         }
 
-        ReportParamsModel.addReport(reportId);
-
-        ReportParamsModel.setReportId(null);
+        ReportParamsModel.addReport(reportIdMain);
+        
         chartTitle = Constants.barChartTitle;
         chartUrl = Constants.barChartUrl;
 
-
         reportList = ReportParamsModel.getReportsList();
-        console.log('Report List',reportList);
-        for(reportId in  reportList){
+        console.log('Report List',JSON.stringify(reportList));
+        for(var reportId in  reportList){
             console.log('Report List Data',reportId,reportList[reportId]);
         }
 
-        clearChartValue();
+        clearAllChartValues();
     }
 
     function cancelReport(){
