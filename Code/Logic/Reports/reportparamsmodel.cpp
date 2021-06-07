@@ -115,106 +115,65 @@ void ReportParamsModel::resetInputFields()
     emit resetInput();
 }
 
-void ReportParamsModel::addToCategoricalFilters(int reportId, int filterId)
+void ReportParamsModel::addToCategoricalFilters(int filterId)
 {
-    QVector<int> tmp;
-
-    if(this->categoricalFilters.keys().contains(reportId)){
-        tmp = this->categoricalFilters.value(reportId);
-
-        if(tmp.indexOf(filterId) < 0)
-            tmp.append(filterId);
-    } else{
-        tmp.append(filterId);
-    }
-
-    this->categoricalFilters.insert(reportId, tmp);
+    if(this->categoricalFilters.indexOf(filterId) < 0)
+        this->categoricalFilters.append(filterId);
 
 }
 
-QVector<int> ReportParamsModel::fetchCategoricalFilters(int reportId)
+QVector<int> ReportParamsModel::fetchCategoricalFilters()
 {
-    return this->categoricalFilters.value(reportId);
+    return this->categoricalFilters;
 }
 
-void ReportParamsModel::removeCategoricalFilters(int reportId, int filterId, bool removeReport)
+void ReportParamsModel::removeCategoricalFilters(int filterId, bool removeAll)
 {
-    QVector<int> tmp;
-
-    if(removeReport == true){
-        this->categoricalFilters.remove(reportId);
+    if(removeAll == true){
+        this->categoricalFilters.clear();
     } else{
-        tmp = this->categoricalFilters.value(reportId);
-        tmp.remove(filterId);
-        this->categoricalFilters.insert(reportId, tmp);
+        this->categoricalFilters.removeAll(filterId);
     }
 }
 
-void ReportParamsModel::addToDateFilters(int reportId, int filterId)
+void ReportParamsModel::addToDateFilters(int filterId)
 {
-    QVector<int> tmp;
-
-    if(this->dateFilters.keys().contains(reportId)){
-        tmp = this->dateFilters.value(reportId);
-
-        if(tmp.indexOf(filterId) < 0)
-            tmp.append(filterId);
-    } else{
-        tmp.append(filterId);
-    }
-
-    this->dateFilters.insert(reportId, tmp);
+    if(this->dateFilters.indexOf(filterId) < 0)
+        this->dateFilters.append(filterId);
 }
 
-QVector<int> ReportParamsModel::fetchDateFilters(int reportId)
+QVector<int> ReportParamsModel::fetchDateFilters()
 {
-    return this->dateFilters.value(reportId);
+    return this->dateFilters;
 }
 
-void ReportParamsModel::removeDateFilters(int reportId, int filterId, bool removeReport)
+void ReportParamsModel::removeDateFilters(int filterId, bool removeAll)
 {
-    QVector<int> tmp;
-
-    if(removeReport == true){
-        this->dateFilters.remove(reportId);
+    if(removeAll == true){
+        this->dateFilters.clear();
     } else{
-        tmp = this->dateFilters.value(reportId);
-        tmp.remove(filterId);
-        this->dateFilters.insert(reportId, tmp);
+        this->dateFilters.removeAll(filterId);
     }
 }
 
-void ReportParamsModel::addToNumericalFilters(int reportId, int filterId)
+void ReportParamsModel::addToNumericalFilters(int filterId)
 {
-    QVector<int> tmp;
+    if(this->numericalFilters.indexOf(filterId) < 0)
+        this->numericalFilters.append(filterId);
 
-    if(this->numericalFilters.keys().contains(reportId)){
-        tmp = this->numericalFilters.value(reportId);
-
-        if(tmp.indexOf(filterId) < 0)
-            tmp.append(filterId);
-    } else{
-        tmp.append(filterId);
-    }
-
-    this->numericalFilters.insert(reportId, tmp);
 }
 
-QVector<int> ReportParamsModel::fetchNumericalFilters(int reportId)
+QVector<int> ReportParamsModel::fetchNumericalFilters()
 {
-    return this->numericalFilters.value(reportId);
+    return this->numericalFilters;
 }
 
-void ReportParamsModel::removeNumericalFilters(int reportId, int filterId, bool removeReport)
+void ReportParamsModel::removeNumericalFilters(int filterId, bool removeAll)
 {
-    QVector<int> tmp;
-
-    if(removeReport == true){
-        this->numericalFilters.remove(reportId);
+    if(removeAll == true){
+        this->numericalFilters.clear();
     } else{
-        tmp = this->numericalFilters.value(reportId);
-        tmp.remove(filterId);
-        this->numericalFilters.insert(reportId, tmp);
+        this->numericalFilters.removeAll(filterId);
     }
 }
 

@@ -157,7 +157,7 @@ Popup {
             if(ReportParamsModel.section === Constants.categoricalTab){
 
                 // Fire the signal for show specific category
-                popupMain.signalEditMode(ReportParamsModel.section, ReportParamsModel.category, ReportParamsModel.subCategory, ReportParamsModel.fetchJoinRelation(mapKey, false)[0], ReportParamsModel.fetchJoinRelationSlug(mapKey, false)[0], ReportParamsModel.fetchJoinValue(mapKey, false)[0])
+                popupMain.signalEditMode(ReportParamsModel.section, ReportParamsModel.category, ReportParamsModel.subCategory, ReportParamsModel.fetchFilterRelationMap(mapKey, false)[0], ReportParamsModel.fetchFilterSlugMap(mapKey, false)[0], ReportParamsModel.fetchFilterValueMap(mapKey, false)[0])
 
                 // show specific section for edit param
                 categoricalFilterPopup.visible = true
@@ -168,7 +168,7 @@ Popup {
             else if(ReportParamsModel.section === Constants.dateTab){
 
                 // Fire the signal for show specific category
-                popupMain.signalEditMode(ReportParamsModel.section, ReportParamsModel.category, ReportParamsModel.subCategory, ReportParamsModel.fetchJoinRelation(mapKey, false)[0], ReportParamsModel.fetchJoinRelationSlug(mapKey, false)[0], ReportParamsModel.fetchJoinValue(mapKey, false)[0])
+                popupMain.signalEditMode(ReportParamsModel.section, ReportParamsModel.category, ReportParamsModel.subCategory, ReportParamsModel.fetchFilterRelationMap(mapKey, false)[0], ReportParamsModel.fetchFilterSlugMap(mapKey, false)[0], ReportParamsModel.fetchFilterValueMap(mapKey, false)[0])
 
 
                 // show specific section for edit param
@@ -180,7 +180,7 @@ Popup {
             else if(ReportParamsModel.section === Constants.numericalTab){
 
                 // Fire the signal for show specific category
-                popupMain.signalEditMode(ReportParamsModel.section, ReportParamsModel.category, ReportParamsModel.subCategory, ReportParamsModel.fetchJoinRelation(mapKey, false)[0], ReportParamsModel.fetchJoinRelationSlug(mapKey, false)[0], ReportParamsModel.fetchJoinValue(mapKey, false)[0])
+                popupMain.signalEditMode(ReportParamsModel.section, ReportParamsModel.category, ReportParamsModel.subCategory, ReportParamsModel.fetchFilterRelationMap(mapKey, false)[0], ReportParamsModel.fetchFilterSlugMap(mapKey, false)[0], ReportParamsModel.fetchFilterValueMap(mapKey, false)[0])
 
                 // show specific section for edit param
                 categoricalFilterPopup.visible = false

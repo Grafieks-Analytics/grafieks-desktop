@@ -65,6 +65,10 @@ Rectangle{
                 var colName = ReportParamsModel.colName
                 var colData = ChartsModel.fetchColumnData(colName)
 
+                // Just to reset the data if the previous `colData` and the new `colData` are same
+                singleSelectCheckList.model = []
+                multiSelectCheckList.model = []
+
                 singleSelectCheckList.model = colData
                 multiSelectCheckList.model  = colData
             }
@@ -128,6 +132,10 @@ Rectangle{
             ReportParamsModel.addToFilterValueMap(counter, modelData.toString())
             ReportParamsModel.addToFilterRelationMap(counter, Constants.equalRelation)
             ReportParamsModel.addToFilterSlugMap(counter, Constants.equalRelation)
+
+            // Clear all tmp selected values and insert again
+            ReportParamsModel.removeTmpSelectedValues(0, true)
+            ReportParamsModel.setTmpSelectedValues(modelData.toString())
         }
     }
 
@@ -138,13 +146,15 @@ Rectangle{
                 "section" : ReportParamsModel.section,
                 "category" : ReportParamsModel.category,
                 "subCategory" : ReportParamsModel.subCategory,
-                "values" : ReportParamsModel.fetchJoinValue(counter)[counter],
-                "relation" : ReportParamsModel.fetchJoinRelation(counter),
-                "slug" : ReportParamsModel.fetchJoinRelationSlug(counter)
+                "values" : ReportParamsModel.fetchFilterValueMap(counter)[counter],
+                "relation" : ReportParamsModel.fetchFilterRelationMap(counter),
+                "slug" : ReportParamsModel.fetchFilterSlugMap(counter)
 
             }
 
-            QueryDataModel.columnSearchData(ReportParamsModel.colName, ReportParamsModel.tableName, searchText.text, JSON.stringify(options))
+            console.log("SEARCH TO BE IMPLEMENTED - CATEGORICAL LIST")
+//            QueryDataModel.columnSearchData(ReportParamsModel.colName, ReportParamsModel.tableName, searchText.text, JSON.stringify(options))
+            ChartsModel.searchColumnData(ReportParamsModel.colName,searchText.text)
 
             if(ReportParamsModel.subCategory === Constants.categorySubMulti){
                 if(searchText.text.length > 0){
@@ -169,11 +179,11 @@ Rectangle{
             if(ReportParamsModel.section === Constants.categoricalTab){
                 if(checked === true){
 
-                    ReportParamsModel.addToJoinValue(counter, "%")
+                    ReportParamsModel.addToFilterValueMap(counter, "%")
                     ReportParamsModel.setActualDateValues(counter, "%")
-                    ReportParamsModel.setSelectAllMap(counter, true)
-                    ReportParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-                    ReportParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+                    ReportParamsModel.addToSelectAllMap(counter, true)
+                    ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
+                    ReportParamsModel.addToFilterSlugMap(counter, Constants.likeRelation)
                 }
             }
         }
@@ -186,7 +196,7 @@ Rectangle{
 
                 if(checked === false){
                     // Set SELECT ALL to false
-                    ReportParamsModel.setSelectAllMap(counter, false)
+                    ReportParamsModel.addToSelectAllMap(counter, false)
                     mainCheckBox.checked = false
                 }
             } else{
@@ -208,23 +218,23 @@ Rectangle{
                 // Save the array and Set relation type to IN
 
 
-                ReportParamsModel.addToJoinValue(counter, ReportParamsModel.getTmpSelectedValues(0, true).toString())
-                ReportParamsModel.addToJoinRelation(counter, Constants.inRelation)
-                ReportParamsModel.addToJoinRelationSlug(counter, Constants.inRelation)
+                ReportParamsModel.addToFilterValueMap(counter, ReportParamsModel.getTmpSelectedValues(0, true).toString())
+                ReportParamsModel.addToFilterRelationMap(counter, Constants.inRelation)
+                ReportParamsModel.addToFilterSlugMap(counter, Constants.inRelation)
             }
         }
     }
 
     function onIncludeCheckedClicked(checked){
         if(ReportParamsModel.section === Constants.categoricalTab){
-            ReportParamsModel.setIncludeNullMap(counter,checked)
+            ReportParamsModel.addToIncludeNullMap(counter,checked)
         }
     }
 
 
     function onExcludeCheckedClicked(checked){
         if(ReportParamsModel.section === Constants.categoricalTab){
-            ReportParamsModel.setExcludeMap(counter, checked)
+            ReportParamsModel.addToIncludeExcludeMap(counter, checked)
         }
     }
 
@@ -379,7 +389,7 @@ Rectangle{
 
             CheckBoxTpl {
                 id: mainCheckBox
-                checked: ReportParamsModel.getSelectAllMap(counter)[counter] === "1" ? true : false
+                checked: ReportParamsModel.fetchSelectAllMap(counter)[counter] === "1" ? true : false
                 text: "All"
                 y:2
                 parent_dimension: Constants.defaultCheckBoxDimension
@@ -531,7 +541,7 @@ Rectangle{
             anchors.left: includeExcludeRow.left
 
             CheckBoxTpl {
-                checked: ReportParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
+                checked: ReportParamsModel.fetchIncludeNullMap(counter)[counter] === "1" ? true : false
                 text: qsTr("Include Null")
                 parent_dimension: Constants.defaultCheckBoxDimension
 
@@ -546,7 +556,7 @@ Rectangle{
             anchors.right: includeExcludeRow.right
             anchors.rightMargin: 30
             CheckBoxTpl {
-                checked: ReportParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
+                checked: ReportParamsModel.fetchIncludeExcludeMap(counter)[counter] === "1" ? true : false
                 text: qsTr("Exclude")
                 parent_dimension: Constants.defaultCheckBoxDimension
 

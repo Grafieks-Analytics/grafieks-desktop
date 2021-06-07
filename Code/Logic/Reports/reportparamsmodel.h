@@ -20,9 +20,9 @@ class ReportParamsModel: public QObject
 
     // Filter specific variables
     QMap<int, QMap<int, QVariant>> masterReportFilters;         // Report Id - Map of
-    QMap<int, QVector<int>> categoricalFilters;                 // ReportId - Id List of categorical filters
-    QMap<int, QVector<int>> dateFilters;                        // ReportId - Id List of date filters
-    QMap<int, QVector<int>> numericalFilters;                   // ReportId - Id List of numerical filters
+    QVector<int> categoricalFilters;                            // List of categorical filters
+    QVector<int> dateFilters;                                   // List of date filters
+    QVector<int> numericalFilters;                              // List of numerical filters
 
     QMap<int, QString> filterColumnMap;                         // filter id - column name map
     QMap<int, QVariantList> filterValueMap;                     // filter id - value list map
@@ -144,17 +144,17 @@ public:
     Q_INVOKABLE void clearFilter();
     Q_INVOKABLE void resetInputFields();
 
-    Q_INVOKABLE void addToCategoricalFilters(int reportId, int filterId);
-    Q_INVOKABLE QVector<int> fetchCategoricalFilters(int reportId);
-    Q_INVOKABLE void removeCategoricalFilters(int reportId, int filterId, bool removeReport = false);
+    Q_INVOKABLE void addToCategoricalFilters(int filterId);
+    Q_INVOKABLE QVector<int> fetchCategoricalFilters();
+    Q_INVOKABLE void removeCategoricalFilters(int filterId, bool removeAll = false);
 
-    Q_INVOKABLE void addToDateFilters(int reportId, int filterId);
-    Q_INVOKABLE QVector<int> fetchDateFilters(int reportId);
-    Q_INVOKABLE void removeDateFilters(int reportId, int filterId, bool removeReport = false);
+    Q_INVOKABLE void addToDateFilters(int filterId);
+    Q_INVOKABLE QVector<int> fetchDateFilters();
+    Q_INVOKABLE void removeDateFilters(int filterId, bool removeAll = false);
 
-    Q_INVOKABLE void addToNumericalFilters(int reportId, int filterId);
-    Q_INVOKABLE QVector<int> fetchNumericalFilters(int reportId);
-    Q_INVOKABLE void removeNumericalFilters(int reportId, int filterId, bool removeReport = false);
+    Q_INVOKABLE void addToNumericalFilters(int filterId);
+    Q_INVOKABLE QVector<int> fetchNumericalFilters();
+    Q_INVOKABLE void removeNumericalFilters(int filterId, bool removeAll = false);
 
     Q_INVOKABLE void addToFilterColumnMap(int filterId, QString value);
     Q_INVOKABLE QStringList fetchFilterColumnMap(int filterId = 0, bool fetchAll = false);
@@ -246,7 +246,6 @@ public slots:
     void setFilterIndex(int filterIndex);
     void setMode(QString mode);
     void setFilterModelIndex(int filterModelIndex);
-    void tmpSelectedValuesChanged(QStringList values);
 
 signals:
     // General properties
@@ -281,6 +280,7 @@ signals:
     void filterIndexChanged(int filterIndex);
     void modeChanged(QString mode);
     void filterModelIndexChanged(int filterModelIndex);
+    void tmpSelectedValuesChanged(QStringList values);
 };
 
 #endif // REPORTPARAMSMODEL_H

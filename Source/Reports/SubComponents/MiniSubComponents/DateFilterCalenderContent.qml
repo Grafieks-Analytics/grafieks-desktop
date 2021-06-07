@@ -59,8 +59,8 @@ Rectangle{
         function onResetInput(){
             fromDateInput.text =""
             toDateInput.text   =""
-            ReportParamsModel.setExcludeMap(counter, false)
-            ReportParamsModel.setIncludeNullMap(counter, true)
+            ReportParamsModel.addToIncludeExcludeMap(counter, false)
+            ReportParamsModel.addToIncludeNullMap(counter, true)
         }
 
         function onInternalCounterChanged(){
@@ -82,12 +82,11 @@ Rectangle{
         function onColumnListModelDataChanged(colData, options){
 
             var jsonOptions = JSON.parse(options)
-            console.log(options, "OIT2")
 
             if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainCalendarType){
                 //                ReportParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
                 //                ReportParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
-                console.log(JSON.stringify(ReportParamsModel.fetchJoinRelation(counter)))
+                console.log(JSON.stringify(ReportParamsModel.fetchFilterRelationMap(counter)))
             }
         }
     }
@@ -157,20 +156,20 @@ Rectangle{
 
     function onCalendarInput(fromDate,toDate){
         var newValue = fromDate + ","  + toDate;
-        ReportParamsModel.addToJoinValue(counter, newValue)
-        ReportParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-        ReportParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterValueMap(counter, newValue)
+        ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
 
 //        console.log("DSPARAMS", ReportParamsModel.fetchJoinRelation(counter)[counter], ReportParamsModel.fetchJoinRelationSlug(counter)[counter], ReportParamsModel.fetchJoinValue(counter)[counter])
     }
 
     function onIncludeCheckedClicked(checked){
-        ReportParamsModel.setIncludeNullMap(counter,checked)
+        ReportParamsModel.addToIncludeNullMap(counter,checked)
     }
 
 
     function onExcludeCheckedClicked(checked){
-        ReportParamsModel.setExcludeMap(counter,checked)
+        ReportParamsModel.addToIncludeExcludeMap(counter,checked)
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -358,7 +357,7 @@ Rectangle{
         anchors.leftMargin: 20
 
         CheckBoxTpl {
-            checked: ReportParamsModel.getIncludeNullMap(counter)
+            checked: ReportParamsModel.fetchIncludeNullMap(counter)
             text: qsTr("Include Null")
             parent_dimension: Constants.defaultCheckBoxDimension
 
@@ -376,7 +375,7 @@ Rectangle{
         anchors.rightMargin: 20
 
         CheckBoxTpl {
-            checked: ReportParamsModel.getExcludeMap(counter)
+            checked: ReportParamsModel.fetchIncludeExcludeMap(counter)
             text: qsTr("Exclude")
             parent_dimension: Constants.defaultCheckBoxDimension
 

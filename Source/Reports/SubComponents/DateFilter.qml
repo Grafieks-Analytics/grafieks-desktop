@@ -88,7 +88,6 @@ Popup {
         function onColumnListModelDataChanged(colData, options){
 
             var jsonOptions = JSON.parse(options)
-            console.log(options, "OIT")
 
             if(jsonOptions.section === Constants.categoricalTab){
 
@@ -226,12 +225,12 @@ Popup {
         case Constants.dateMainTimeFrameType:
 
 
-            joinRelation = ReportParamsModel.fetchJoinRelation(counter)
-            joinValue = ReportParamsModel.fetchJoinValue(counter)
+            joinRelation = ReportParamsModel.fetchFilterRelationMap(counter)
+            joinValue = ReportParamsModel.fetchFilterValueMap(counter)
             actualValue = ReportParamsModel.getActualDateValues(counter)
-            joinSlug = ReportParamsModel.fetchJoinRelationSlug(counter)
-            includeNull = ReportParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
-            exclude = ReportParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
+            joinSlug = ReportParamsModel.fetchFilterSlugMap(counter)
+            includeNull = ReportParamsModel.fetchIncludeNullMap(counter)[counter] === "1" ? true : false
+            exclude = ReportParamsModel.fetchIncludeExcludeMap(counter)[counter] === "1" ? true : false
             dateFormatId = category === Constants.dateMainTimeFrameType ? ReportParamsModel.getDateFormatMap(counter): 0
 
             singleRelation = joinRelation[counter]
@@ -244,10 +243,10 @@ Popup {
         case Constants.dateMainCalendarType:
 
 
-            joinRelation = ReportParamsModel.fetchJoinRelation(counter)
-            joinValue = ReportParamsModel.fetchJoinValue(counter)
+            joinRelation = ReportParamsModel.fetchFilterRelationMap(counter)
+            joinValue = ReportParamsModel.fetchFilterValueMap(counter)
             actualValue = ReportParamsModel.getActualDateValues(counter)
-            joinSlug = ReportParamsModel.fetchJoinRelationSlug(counter)
+            joinSlug = ReportParamsModel.fetchFilterSlugMap(counter)
             includeNull = false
             exclude = ReportParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
 
@@ -276,15 +275,16 @@ Popup {
 
     function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude, dateFormatId, counter = 0, filterId = 0){
 
+        console.log("INSERT DATE FILTER HERE")
         console.log("Filter insert date", mode, section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude, dateFormatId, counter, filterId)
 
-        // Save the filter
-        if(mode === Constants.modeCreate){
-            FilterDateListModel.newFilter(counter, dateFormatId,  section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude)
+//        // Save the filter
+//        if(mode === Constants.modeCreate){
+//            FilterDateListModel.newFilter(counter, dateFormatId,  section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude)
 
-        } else{
-            FilterDateListModel.updateFilter(filterId, dateFormatId, section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude)
-        }
+//        } else{
+//            FilterDateListModel.updateFilter(filterId, dateFormatId, section, category, subCategory, tableName, columnName, relation, slug, value, actualValue, includeNull, exclude)
+//        }
     }
     function resetDateFilter(){
         // Reset date filter here
@@ -303,7 +303,7 @@ Popup {
         // For list date type
         // The db WHERE relation can only be LIKE / NOT LIKE ARRAY type
 
-        ReportParamsModel.addToJoinRelation(counter, Constants.likeRelation)
+        ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
     }
     function onCalendarClicked(){
         listContent.visible = false
@@ -311,7 +311,7 @@ Popup {
         dateTimeFrameContent.visible = false
 
         ReportParamsModel.setCategory(Constants.dateMainCalendarType)
-        ReportParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
     }
 
     function onTimeFrameClicked(){
@@ -321,7 +321,7 @@ Popup {
 
 
         ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
-        ReportParamsModel.addToJoinRelation(counter, Constants.likeRelation)
+        ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
     }
 
 
