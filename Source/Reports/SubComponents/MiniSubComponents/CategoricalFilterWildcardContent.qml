@@ -99,7 +99,7 @@ Rectangle{
         function onInternalCounterChanged(){
             counter = ReportParamsModel.internalCounter
             ReportParamsModel.setTmpFilterIndex(counter)
-            excludeCheck.checked = ReportParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
+            excludeCheck.checked = ReportParamsModel.fetchIncludeExcludeMap(counter)[counter] === "1" ? true : false
         }
 
         function onFilterIndexChanged(){
@@ -107,7 +107,7 @@ Rectangle{
             if(ReportParamsModel.getTmpFilterIndex(0, true).length === 0){
                 counter = ReportParamsModel.filterIndex
                 ReportParamsModel.setTmpFilterIndex(ReportParamsModel.filterIndex)
-                ReportParamsModel.setExcludeMap(ReportParamsModel.filterIndex, false)
+                ReportParamsModel.addToIncludeExcludeMap(ReportParamsModel.filterIndex, false)
             }
         }
     }
@@ -197,7 +197,7 @@ Rectangle{
 
         for(var i = 0; i < tmpFilters.length; i++){
             var fi = tmpFilters[i]
-            ReportParamsModel.setExcludeMap(fi, currenctExclude)
+            ReportParamsModel.addToIncludeExcludeMap(fi, currenctExclude)
         }
     }
 
@@ -210,7 +210,7 @@ Rectangle{
                 ReportParamsModel.setFilterIndex(ReportParamsModel.filterIndex + 1)
             }
             ReportParamsModel.setTmpFilterIndex(ReportParamsModel.filterIndex)
-            ReportParamsModel.setExcludeMap(ReportParamsModel.filterIndex, currenctExclude)
+            ReportParamsModel.addToIncludeExcludeMap(ReportParamsModel.filterIndex, currenctExclude)
 
             // Append a new ListElement on the ListView model
             listviewWildCardModel.append({"value":0})
@@ -279,11 +279,11 @@ Rectangle{
         }
 
         var currentSelectedIndex = ReportParamsModel.getTmpFilterIndex(listIndex)
-        ReportParamsModel.addToJoinRelation(currentSelectedIndex, newRelation)
-        ReportParamsModel.addToJoinValue(currentSelectedIndex, newFilter)
-        ReportParamsModel.addToJoinRelationSlug(currentSelectedIndex, slug)
+        ReportParamsModel.addToFilterRelationMap(currentSelectedIndex, newRelation)
+        ReportParamsModel.addToFilterValueMap(currentSelectedIndex, newFilter)
+        ReportParamsModel.addToFilterSlugMap(currentSelectedIndex, slug)
 
-        console.log("FILTER VALUES1a", currentSelectedIndex, ReportParamsModel.fetchJoinRelation(currentSelectedIndex)[currentSelectedIndex], ReportParamsModel.fetchJoinValue(currentSelectedIndex)[currentSelectedIndex], ReportParamsModel.fetchJoinRelationSlug(currentSelectedIndex)[currentSelectedIndex])
+        console.log("FILTER VALUES1a", currentSelectedIndex, ReportParamsModel.fetchFilterRelationMap(currentSelectedIndex)[currentSelectedIndex], ReportParamsModel.fetchFilterValueMap(currentSelectedIndex)[currentSelectedIndex], ReportParamsModel.fetchFilterSlugMap(currentSelectedIndex)[currentSelectedIndex])
 
     }
 

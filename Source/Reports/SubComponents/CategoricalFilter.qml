@@ -152,12 +152,13 @@ Popup {
 
         case Constants.categoryMainListType:
 
-            let joinRelation = ReportParamsModel.fetchJoinRelation(counter)
-            let joinValue = ReportParamsModel.fetchJoinValue(counter)
-            let joinSlug = ReportParamsModel.fetchJoinRelationSlug(counter)
-            let includeNull = ReportParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
-            let exclude = ReportParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
+            let joinRelation = ReportParamsModel.fetchFilterRelationMap(counter)
+            let joinValue = ReportParamsModel.fetchFilterValueMap(counter)
+            let joinSlug = ReportParamsModel.fetchFilterSlugMap(counter)
+            let includeNull = ReportParamsModel.fetchIncludeNullMap(counter)[counter] === "1" ? true : false
+            let exclude = ReportParamsModel.fetchIncludeExcludeMap(counter)[counter] === "1" ? true : false
 
+            console.log(joinRelation, joinSlug, "FILTER INSERT 1", counter)
             singleRelation = joinRelation[counter]
             singleValue = joinValue[counter]
             singleSlug = joinSlug[counter]
@@ -170,12 +171,13 @@ Popup {
             for(let i = 0; i < tmpFilterIndexes.length; i++){
                 let fi = tmpFilterIndexes[i]
 
-                let joinRelation = ReportParamsModel.fetchJoinRelation(fi)
-                let joinValue = ReportParamsModel.fetchJoinValue(fi)
-                let joinSlug = ReportParamsModel.fetchJoinRelationSlug(fi)
+                let joinRelation = ReportParamsModel.fetchFilterRelationMap(fi)
+                let joinValue = ReportParamsModel.fetchFilterValueMap(fi)
+                let joinSlug = ReportParamsModel.fetchFilterSlugMap(fi)
                 let includeNull = false
-                let exclude = ReportParamsModel.getExcludeMap(fi)[fi] === "1" ? true : false
+                let exclude = ReportParamsModel.fetchIncludeExcludeMap(fi)[fi] === "1" ? true : false
 
+                onsole.log(joinRelation, joinSlug, "FILTER INSERT 2", counter)
                 singleRelation = joinRelation[fi]
                 singleValue = joinValue[fi]
                 singleSlug = joinSlug[fi]
@@ -205,13 +207,14 @@ Popup {
     function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, counter = 0, filterId = 0){
 
         console.log("Filter insert categorical", mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, counter, filterId)
+        console.log("FINAL ADD CATEGORICAL FILTER HERE")
         // Save the filter
-        if(mode === Constants.modeCreate){
-            FilterCategoricalListModel.newFilter(counter, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+//        if(mode === Constants.modeCreate){
+//            FilterCategoricalListModel.newFilter(counter, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
 
-        } else{
-            FilterCategoricalListModel.updateFilter(filterId, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
-        }
+//        } else{
+//            FilterCategoricalListModel.updateFilter(filterId, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+//        }
     }
 
     function onResetClicked(){
@@ -237,7 +240,7 @@ Popup {
         // Except when "Select All" checked.
         // Then Relation will be LIKE
 
-        ReportParamsModel.addToJoinRelation(filterIndex, Constants.likeRelation)
+        ReportParamsModel.addToFilterRelationMap(filterIndex, Constants.likeRelation)
     }
 
 

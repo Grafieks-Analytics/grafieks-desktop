@@ -190,9 +190,9 @@ Column{
         console.log("Last "+ noOfQuarter + " Quarters", lastXQuarter[0], lastXQuarter[lastXQuarter.length - 1])
         ReportParamsModel.setSubCategory(Constants.dateSubQuarter)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
-        ReportParamsModel.addToJoinValue(counter, "Last " + value + " Quarter")
-        ReportParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-        ReportParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterValueMap(counter, "Last " + value + " Quarter")
+        ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = true
@@ -276,9 +276,9 @@ Column{
         console.log("Next "+ noOfQuarter + " Quarters", nextXQuarter[0], nextXQuarter[nextXQuarter.length - 1])
         ReportParamsModel.setSubCategory(Constants.dateSubQuarter)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
-        ReportParamsModel.addToJoinValue(counter, "Next " + value + " Quarter")
-        ReportParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-        ReportParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterValueMap(counter, "Next " + value + " Quarter")
+        ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = true
         lastXRadioTextField.focus = false
@@ -337,9 +337,9 @@ Column{
         console.log("This Quarter", thisQuarter[0], thisQuarter[thisQuarter.length - 1])
         ReportParamsModel.setSubCategory(Constants.dateSubQuarter)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
-        ReportParamsModel.addToJoinValue(counter, "This Quarter")
-        ReportParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-        ReportParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterValueMap(counter, "This Quarter")
+        ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -399,9 +399,9 @@ Column{
         console.log("Last Quarter", lastQuarter[0], lastQuarter[lastQuarter.length - 1])
         ReportParamsModel.setSubCategory(Constants.dateSubQuarter)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
-        ReportParamsModel.addToJoinValue(counter, "Last Quarter")
-        ReportParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-        ReportParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterValueMap(counter, "Last Quarter")
+        ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -462,9 +462,9 @@ Column{
         console.log("Next Quarter", nextQuarter[0], nextQuarter[nextQuarter.length - 1])
         ReportParamsModel.setSubCategory(Constants.dateSubQuarter)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
-        ReportParamsModel.addToJoinValue(counter, "Next Quarter")
-        ReportParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-        ReportParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterValueMap(counter, "Next Quarter")
+        ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false

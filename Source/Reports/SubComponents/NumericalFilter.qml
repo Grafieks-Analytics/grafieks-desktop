@@ -129,9 +129,9 @@ Popup {
         var subCategory = ReportParamsModel.subCategory
         var tableName = ReportParamsModel.tableName
         var columnName = ReportParamsModel.colName
-        var joinRelation = ReportParamsModel.fetchJoinRelation(counter)
-        var joinValue = ReportParamsModel.fetchJoinValue(counter)
-        var joinSlug = ReportParamsModel.fetchJoinRelationSlug(counter)
+        var joinRelation = ReportParamsModel.fetchFilterRelationMap(counter)
+        var joinValue = ReportParamsModel.fetchFilterValueMap(counter)
+        var joinSlug = ReportParamsModel.fetchFilterSlugMap(counter)
         var includeNull = ReportParamsModel.includeNull
         var exclude = ReportParamsModel.exclude
 
@@ -157,15 +157,16 @@ Popup {
 
     function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, counter = 0, filterId = 0){
 
+        console.log("INSERT INTO NUMERICAL FILTERS")
         console.log("Filter insert numerical", mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, filterId)
 
-        // Save the filter
-        if(mode === Constants.modeCreate){
-            FilterNumericalListModel.newFilter(counter, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+//        // Save the filter
+//        if(mode === Constants.modeCreate){
+//            FilterNumericalListModel.newFilter(counter, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
 
-        } else{
-            FilterNumericalListModel.updateFilter(filterId, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
-        }
+//        } else{
+//            FilterNumericalListModel.updateFilter(filterId, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+//        }
     }
 
 

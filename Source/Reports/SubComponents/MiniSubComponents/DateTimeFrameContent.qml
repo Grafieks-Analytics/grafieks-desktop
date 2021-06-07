@@ -58,8 +58,8 @@ Rectangle{
 
         function onResetInput(){
             onYearTabClicked()
-            ReportParamsModel.setExcludeMap(counter, false)
-            ReportParamsModel.setIncludeNullMap(counter, true)
+            ReportParamsModel.addToIncludeExcludeMap(counter, false)
+            ReportParamsModel.addToIncludeNullMap(counter, true)
         }
 
         function onInternalCounterChanged(){

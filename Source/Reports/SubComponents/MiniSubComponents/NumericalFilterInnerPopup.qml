@@ -88,8 +88,8 @@ Rectangle{
             textField.text =""
             textField2nd.text =""
             selectOption.textValue ="Equal"
-            ReportParamsModel.setIncludeNullMap(counter, true)
-            ReportParamsModel.setExcludeMap(counter, false)
+            ReportParamsModel.addToIncludeNullMap(counter, true)
+            ReportParamsModel.addToIncludeExcludeMap(counter, false)
         }
 
         function onInternalCounterChanged(){
@@ -181,19 +181,19 @@ Rectangle{
         }
 
         let relation = getNewRelation(tmpRelation)
-        ReportParamsModel.addToJoinValue(counter, newValue)
-        ReportParamsModel.addToJoinRelation(counter, relation)
-        ReportParamsModel.addToJoinRelationSlug(counter, tmpRelation)
+        ReportParamsModel.addToFilterValueMap(counter, newValue)
+        ReportParamsModel.addToFilterRelationMap(counter, relation)
+        ReportParamsModel.addToFilterSlugMap(counter, tmpRelation)
 
     }
 
     function onExludeCheckStateChanged(checked){
-        ReportParamsModel.setExcludeMap(checked)
+        ReportParamsModel.addToIncludeExcludeMap(checked)
     }
 
 
     function onIncludeCheckStateChanged(checked){
-        ReportParamsModel.setIncludeNullMap(checked)
+        ReportParamsModel.addToIncludeNullMap(checked)
     }
 
 

@@ -88,7 +88,6 @@ Popup {
         function onColumnListModelDataChanged(colData, options){
 
             var jsonOptions = JSON.parse(options)
-            console.log(options, "OIT")
 
             if(jsonOptions.section === Constants.categoricalTab){
 

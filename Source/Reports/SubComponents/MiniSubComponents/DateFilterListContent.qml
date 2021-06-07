@@ -115,8 +115,8 @@ Rectangle{
         function onResetInput(){
             if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
                 customBox.currentIndex = 0
-                ReportParamsModel.setExcludeMap(counter, false)
-                ReportParamsModel.setIncludeNullMap(counter, true)
+                ReportParamsModel.addToIncludeExcludeMap(counter, false)
+                ReportParamsModel.addToIncludeNullMap(counter, true)
             }
         }
 
@@ -129,6 +129,16 @@ Rectangle{
         function onFilterIndexChanged(){
             if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
                 counter = ReportParamsModel.filterIndex
+
+                var colName = ReportParamsModel.colName
+                var colData = ChartsModel.fetchColumnData(colName)
+
+                // Just to reset the data if the previous `colData` and the new `colData` are same
+                singleSelectCheckList.model = []
+                multiSelectCheckList.model = []
+
+                singleSelectCheckList.model = colData
+                multiSelectCheckList.model  = colData
             }
         }
     }
@@ -252,9 +262,9 @@ Rectangle{
 
             actualValueArray.push(searchDateFormat(modelData, selectedFormat))
             ReportParamsModel.setActualDateValues(counter, actualValueArray)
-            ReportParamsModel.addToJoinValue(counter, modelData.toString())
-            ReportParamsModel.addToJoinRelation(counter, Constants.equalRelation)
-            ReportParamsModel.addToJoinRelationSlug(counter, Constants.equalRelation)
+            ReportParamsModel.addToFilterValueMap(counter, modelData.toString())
+            ReportParamsModel.addToFilterRelationMap(counter, Constants.equalRelation)
+            ReportParamsModel.addToFilterSlugMap(counter, Constants.equalRelation)
 
             // Clear all tmp selected values and insert again
             ReportParamsModel.removeTmpSelectedValues(0, true)
@@ -269,14 +279,15 @@ Rectangle{
                 "section" : ReportParamsModel.section,
                 "category" : ReportParamsModel.category,
                 "subCategory" : ReportParamsModel.subCategory,
-                "values" : ReportParamsModel.fetchJoinValue(counter)[counter],
-                "relation" : ReportParamsModel.fetchJoinRelation(counter),
-                "slug" : ReportParamsModel.fetchJoinRelationSlug(counter)
+                "values" : ReportParamsModel.fetchFilterValueMap(counter)[counter],
+                "relation" : ReportParamsModel.fetchFilterRelationMap(counter),
+                "slug" : ReportParamsModel.fetchFilterSlugMap(counter)
 
             }
 
-
-            QueryDataModel.columnSearchData(ReportParamsModel.colName, ReportParamsModel.tableName, searchText.text, JSON.stringify(options))
+            console.log("SEARCH TO BE IMPLEMENTED - DATE LIST")
+//            QueryDataModel.columnSearchData(ReportParamsModel.colName, ReportParamsModel.tableName, searchText.text, JSON.stringify(options))
+            ChartsModel.searchColumnData(ReportParamsModel.colName,searchText.text)
 
             if(ReportParamsModel.subCategory === Constants.categorySubMulti){
                 if(searchText.text.length > 0){
@@ -301,11 +312,11 @@ Rectangle{
         if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
             if(checked === true){
 
-                ReportParamsModel.addToJoinValue(counter, "%")
+                ReportParamsModel.addToFilterValueMap(counter, "%")
                 ReportParamsModel.setActualDateValues(counter, "%")
-                ReportParamsModel.setSelectAllMap(counter, true)
-                ReportParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-                ReportParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+                ReportParamsModel.addToSelectAllMap(counter, true)
+                ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
+                ReportParamsModel.addToFilterSlugMap(counter, Constants.likeRelation)
             }
         }
     }
@@ -319,7 +330,7 @@ Rectangle{
                 if(checked === false){
 
                     // Set SELECT ALL to false
-                    ReportParamsModel.setSelectAllMap(counter, false)
+                    ReportParamsModel.addToSelectAllMap(counter, false)
                     ReportParamsModel.setActualDateValues(counter, "")
                     mainCheckBox.checked = false
 
@@ -345,23 +356,23 @@ Rectangle{
                                                                         actualValueArray.push(searchDateFormat(item, selectedFormat))
                                                                     })
                 ReportParamsModel.setActualDateValues(counter, actualValueArray)
-                ReportParamsModel.addToJoinValue(counter, ReportParamsModel.getTmpSelectedValues(0, true).toString())
-                ReportParamsModel.addToJoinRelation(counter, Constants.inRelation)
-                ReportParamsModel.addToJoinRelationSlug(counter, Constants.inRelation)
+                ReportParamsModel.addToFilterValueMap(counter, ReportParamsModel.getTmpSelectedValues(0, true).toString())
+                ReportParamsModel.addToFilterRelationMap(counter, Constants.inRelation)
+                ReportParamsModel.addToFilterSlugMap(counter, Constants.inRelation)
             }
         }
     }
 
     function onIncludeCheckedClicked(checked){
         if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
-            ReportParamsModel.setIncludeNullMap(counter, checked)
+            ReportParamsModel.addToIncludeNullMap(counter, checked)
         }
     }
 
 
     function onExcludeCheckedClicked(checked){
         if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
-            ReportParamsModel.setExcludeMap(counter, checked)
+            ReportParamsModel.addToIncludeExcludeMap(counter, checked)
         }
     }
 
@@ -396,9 +407,9 @@ Rectangle{
 
             ReportParamsModel.setDateFormatMap(counter, selectedFormat)
             ReportParamsModel.removeTmpSelectedValues(0, true)
-            ReportParamsModel.removeJoinValue(counter)
-            ReportParamsModel.removeJoinRelation(counter)
-            ReportParamsModel.removeJoinRelationSlug(counter)
+            ReportParamsModel.removeFilterValueMap(counter)
+            ReportParamsModel.removeFilterRelationMap(counter)
+            ReportParamsModel.removeFilterSlugMap(counter)
         }
     }
 
@@ -645,7 +656,7 @@ Rectangle{
 
         CheckBoxTpl {
             id: mainCheckBox
-            checked: ReportParamsModel.getSelectAllMap(counter)[counter] === "1" ? true : false
+            checked: ReportParamsModel.fetchSelectAllMap(counter)[counter] === "1" ? true : false
             text: "All"
             parent_dimension: Constants.defaultCheckBoxDimension
             checkState: childGroup.checkState
