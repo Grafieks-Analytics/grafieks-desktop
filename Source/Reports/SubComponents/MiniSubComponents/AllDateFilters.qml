@@ -36,12 +36,31 @@ Rectangle{
     /***********************************************************************************************************************/
     // Connections Starts
 
+//    Connections{
+//        target: FilterDateListModel
+
+//        // Listview height
+//        function onRowCountChanged(){
+//            listFiltersListView.height = FilterDateListModel.rowCount() * 40
+//        }
+//    }
+
     Connections{
-        target: FilterDateListModel
+        target: ReportParamsModel
 
         // Listview height
-        function onRowCountChanged(){
-            listFiltersListView.height = FilterDateListModel.rowCount() * 40
+        function onDateFilterChanged(filterList){
+
+            var modelList = []
+            filterList.forEach((item) => {
+                               console.log(item, "ITEM1s", JSON.stringify(ReportParamsModel.fetchFilterColumnMap(0, true)) , JSON.stringify(ReportParamsModel.fetchFilterRelationMap(item)), ReportParamsModel.fetchFilterValueMap(item)[item][0],ReportParamsModel.fetchIncludeExcludeMap(item))
+                               modelList.push(item)
+                               })
+
+
+            listFiltersListView.height = modelList.length * 40
+            listFiltersListView.model = modelList
+
         }
     }
     // Connections Ends
@@ -132,9 +151,7 @@ Rectangle{
 
             ListView{
                 id: listFiltersListView
-                model: FilterDateListModel
                 width: parent.width
-                height: 50
                 anchors.topMargin: 10
                 spacing: rowSpacing
                 interactive: false
@@ -156,7 +173,7 @@ Rectangle{
 
                         ReadOnlyTextBox{
                             boxWidth: parent.width
-                            text: columnName
+                            text: ReportParamsModel.fetchFilterColumnMap(modelData)[0]
                         }
                     }
 
@@ -166,7 +183,7 @@ Rectangle{
                         width: parent.width / 3 - 50
 
                         Text {
-                            text: exclude === true ? "NOT " +relation : relation
+                            text: ReportParamsModel.fetchIncludeExcludeMap(modelData)[0] === true ? "NOT " + ReportParamsModel.fetchFilterRelationMap(modelData)[0] : ReportParamsModel.fetchFilterRelationMap(modelData)[0]
                             anchors.left: parent.left
                             leftPadding: 20
 
@@ -181,7 +198,7 @@ Rectangle{
 
                         ReadOnlyTextBox{
                             boxWidth: parent.width
-                            text: value
+                            text: ReportParamsModel.fetchFilterValueMap(modelData)[modelData][0]
                         }
                     }
 

@@ -63,31 +63,14 @@ Rectangle{
             ReportParamsModel.addToIncludeNullMap(counter, true)
         }
 
-        function onInternalCounterChanged(){
-            if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainCalendarType){
-                counter = ReportParamsModel.internalCounter
-            }
-        }
+//        function onInternalCounterChanged(){
+//            if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainCalendarType){
+//                counter = ReportParamsModel.internalCounter
+//            }
+//        }
 
         function onFilterIndexChanged(){
-            if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainCalendarType){
-                counter = ReportParamsModel.filterIndex
-            }
-        }
-    }
-
-    Connections{
-        target: QueryDataModel
-
-        function onColumnListModelDataChanged(colData, options){
-
-            var jsonOptions = JSON.parse(options)
-
-            if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainCalendarType){
-                //                ReportParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-                //                ReportParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
-                console.log(JSON.stringify(ReportParamsModel.fetchFilterRelationMap(counter)))
-            }
+            counter = ReportParamsModel.filterIndex
         }
     }
 
@@ -160,7 +143,7 @@ Rectangle{
         ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
         ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
 
-//        console.log("DSPARAMS", ReportParamsModel.fetchJoinRelation(counter)[counter], ReportParamsModel.fetchJoinRelationSlug(counter)[counter], ReportParamsModel.fetchJoinValue(counter)[counter])
+        console.log("DSPARAMS", ReportParamsModel.fetchFilterRelationMap(counter)[0], ReportParamsModel.fetchFilterSlugMap(counter)[0], ReportParamsModel.fetchFilterValueMap(counter)[counter], counter)
     }
 
     function onIncludeCheckedClicked(checked){
@@ -252,6 +235,7 @@ Rectangle{
 
                     height: parent.height
                     onTextChanged: {
+                        console.log("FROM DATE ")
                         onCalendarInput(fromDateInput.text,toDateInput.text)
                     }
 

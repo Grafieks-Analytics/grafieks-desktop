@@ -1,8 +1,17 @@
 #include "reportparamsmodel.h"
 
-ReportParamsModel::ReportParamsModel()
+ReportParamsModel::ReportParamsModel(QObject *parent) : QObject(parent)
 {
 
+    m_section = Constants::defaultTabSection;
+    m_category = Constants::defaultCategory;
+    m_subCategory = Constants::defaultSubCategory;
+    m_mode = Constants::defaultMode;
+    //    m_exclude = Constants::defaultExclude;
+    //    m_includeNull = Constants::defaultIncludeNull;
+    //    m_selectAll = Constants::defaultSelectAll;
+    m_internalCounter = 0;
+    m_filterIndex = 0;
 }
 
 QString ReportParamsModel::itemName() const
@@ -115,10 +124,64 @@ void ReportParamsModel::resetInputFields()
     emit resetInput();
 }
 
+void ReportParamsModel::addToMasterReportFilters(int reportId)
+{
+    QMap<int, QVariantMap> intermediateMasterReportsMap;
+
+    // Categorical filters
+    foreach(int filterId, this->categoricalFilters){
+
+        QVariantMap tmp = insertMasterFilters(filterId);
+        intermediateMasterReportsMap.insert(filterId, tmp);
+        qDebug() << "FID C" << filterId << tmp;
+    }
+
+    // Date filters
+    foreach(int filterId, this->dateFilters){
+        QVariantMap tmp = insertMasterFilters(filterId);
+        intermediateMasterReportsMap.insert(filterId, tmp);
+        qDebug() << "FID D" << filterId << tmp;
+    }
+
+    // Numerical filters
+    foreach(int filterId, this->numericalFilters){
+        QVariantMap tmp = insertMasterFilters(filterId);
+        intermediateMasterReportsMap.insert(filterId, tmp);
+        qDebug() << "FID N" << filterId << tmp;
+    }
+
+    this->masterReportFilters.insert(reportId, intermediateMasterReportsMap);
+
+    qDebug() << "REPORT INSERT MASTER" << reportId << intermediateMasterReportsMap.keys() << intermediateMasterReportsMap.size();
+
+}
+
+void ReportParamsModel::restoreMasterReportFilters(int reportId)
+{
+    QMap<int, QVariantMap> masterValues = this->masterReportFilters.value(reportId);
+    QList<int> keys = masterValues.keys();
+
+    foreach(int filterId, keys){
+        restoreMasterFilters(filterId, masterValues.value(filterId));
+    }
+}
+
+void ReportParamsModel::deleteMasterReportFilters(int reportId, bool deleteAll)
+{
+    if(deleteAll == true){
+        this->masterReportFilters.clear();
+    } else{
+        this->masterReportFilters.remove(reportId);
+    }
+}
+
 void ReportParamsModel::addToCategoricalFilters(int filterId)
 {
-    if(this->categoricalFilters.indexOf(filterId) < 0)
+    if(this->categoricalFilters.indexOf(filterId) < 0){
         this->categoricalFilters.append(filterId);
+
+        emit categoricalFilterChanged(this->categoricalFilters);
+    }
 
 }
 
@@ -138,8 +201,11 @@ void ReportParamsModel::removeCategoricalFilters(int filterId, bool removeAll)
 
 void ReportParamsModel::addToDateFilters(int filterId)
 {
-    if(this->dateFilters.indexOf(filterId) < 0)
+    if(this->dateFilters.indexOf(filterId) < 0){
         this->dateFilters.append(filterId);
+
+        emit dateFilterChanged(this->dateFilters);
+    }
 }
 
 QVector<int> ReportParamsModel::fetchDateFilters()
@@ -158,8 +224,11 @@ void ReportParamsModel::removeDateFilters(int filterId, bool removeAll)
 
 void ReportParamsModel::addToNumericalFilters(int filterId)
 {
-    if(this->numericalFilters.indexOf(filterId) < 0)
+    if(this->numericalFilters.indexOf(filterId) < 0){
         this->numericalFilters.append(filterId);
+
+        emit numericalFilterChanged(this->numericalFilters);
+    }
 
 }
 
@@ -180,6 +249,7 @@ void ReportParamsModel::removeNumericalFilters(int filterId, bool removeAll)
 void ReportParamsModel::addToFilterColumnMap(int filterId, QString value)
 {
     this->filterColumnMap.insert(filterId, value);
+    qDebug() << "COL OUT INS" << this->filterColumnMap;
 }
 
 QStringList ReportParamsModel::fetchFilterColumnMap(int filterId, bool fetchAll)
@@ -193,6 +263,8 @@ QStringList ReportParamsModel::fetchFilterColumnMap(int filterId, bool fetchAll)
     } else{
         out.append(this->filterColumnMap.value(filterId));
     }
+
+    qDebug() << "COL OUT" << this->filterColumnMap << out;
     return out;
 }
 
@@ -204,6 +276,8 @@ void ReportParamsModel::removeFilterColumnMap(int filterId)
 void ReportParamsModel::addToFilterValueMap(int filterId, QVariant value)
 {
     QVariantList tmpList;
+
+    qDebug() << "AA GAUA" << filterId << value;
 
     if(!this->filterValueMap.contains(filterId)){
         tmpList.append(value);
@@ -473,7 +547,8 @@ int ReportParamsModel::searchTmpSelectedValues(QString keyword)
 
 void ReportParamsModel::setTmpFilterIndex(int value)
 {
-    this->tmpFilterIndex.append(value);
+    if(!this->tmpFilterIndex.contains(value))
+        this->tmpFilterIndex.append(value);
 }
 
 void ReportParamsModel::removeTmpFilterIndex(int refObjId, bool removeAll)
@@ -837,6 +912,78 @@ void ReportParamsModel::setFilterModelIndex(int filterModelIndex)
 
     m_filterModelIndex = filterModelIndex;
     emit filterModelIndexChanged(m_filterModelIndex);
+}
+
+QVariantMap ReportParamsModel::insertMasterFilters(int filterId)
+{
+    QVariantMap tmp;
+
+    // filterColumnMap
+    qDebug() << "FILS" << filterId;
+    qDebug() << "COLS" << this->filterColumnMap;
+    tmp.insert("columnName", this->filterColumnMap.value(filterId));
+
+    // filterValueMap
+    qDebug() << "VALS" << this->filterValueMap;
+    tmp.insert("filterValue", this->filterValueMap.value(filterId));
+
+    // filterRelationMap
+    qDebug() << "RELS" << this->filterRelationMap;
+    tmp.insert("filterRelation", this->filterRelationMap.value(filterId));
+
+    // filterSlugMap
+    qDebug() << "SLUGS" << this->filterSlugMap;
+    tmp.insert("filterSlug", this->filterSlugMap.value(filterId));
+
+    // includeExcludeMap
+    tmp.insert("includeExclude", this->includeExcludeMap.value(filterId));
+
+    // includeNullMap
+    tmp.insert("includeNull", this->includeNullMap.value(filterId));
+
+    // selectAllMap
+    tmp.insert("selectAll", this->selectAllMap.value(filterId));
+
+    // filterSectionMap
+    tmp.insert("section", this->filterSectionMap.value(filterId));
+
+    // filterCategoryMap
+    tmp.insert("category", this->filterCategoryMap.value(filterId));
+
+    // filterSubCategoryMap
+    tmp.insert("subCategory", this->filterSubCategoryMap.value(filterId));
+
+    // dateFormat
+    tmp.insert("dateFormat", this->dateFormatMap.value(filterId));
+
+    // actualDateValues
+    tmp.insert("actualDateValues", this->actualDateValues.value(filterId));
+
+    return tmp;
+}
+
+void ReportParamsModel::restoreMasterFilters(int filterId, QVariantMap filterData)
+{
+    if(filterData.value("section") == Constants::categoricalType){
+        this->categoricalFilters.append(filterId);
+    } else if(filterData.value("section") == Constants::dateType){
+        this->dateFilters.append(filterId);
+    } else{
+        this->numericalFilters.append(filterId);
+    }
+
+    this->filterColumnMap.insert(filterId, filterData.value("columnName").toString());
+    this->filterValueMap.insert(filterId, filterData.value("filterValue").toList());
+    this->filterRelationMap.insert(filterId, filterData.value("filterRelation").toString());
+    this->filterSlugMap.insert(filterId, filterData.value("filterSlug").toString());
+    this->includeExcludeMap.insert(filterId, filterData.value("includeExclude").toBool());
+    this->includeNullMap.insert(filterId, filterData.value("includeNull").toBool());
+    this->selectAllMap.insert(filterId, filterData.value("selectAll").toBool());
+    this->filterSectionMap.insert(filterId, filterData.value("section").toString());
+    this->filterCategoryMap.insert(filterId, filterData.value("category").toString());
+    this->filterSubCategoryMap.insert(filterId, filterData.value("subCategory").toString());
+    this->dateFormatMap.insert(filterId, filterData.value("dateFormat").toInt());
+    this->actualDateValues.insert(filterId, filterData.value("actualDateValues").toStringList());
 }
 
 void ReportParamsModel::setChartUrl(QString chartUrl)

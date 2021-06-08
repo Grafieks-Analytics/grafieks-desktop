@@ -120,16 +120,11 @@ Rectangle{
             }
         }
 
-        function onInternalCounterChanged(){
-            if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
-                counter = ReportParamsModel.internalCounter
-            }
-        }
 
         function onFilterIndexChanged(){
-            if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
-                counter = ReportParamsModel.filterIndex
 
+            if(ReportParamsModel.section === Constants.dateTab){
+                counter = ReportParamsModel.filterIndex
                 var colName = ReportParamsModel.colName
                 var colData = ChartsModel.fetchColumnData(colName)
 
@@ -139,70 +134,9 @@ Rectangle{
 
                 singleSelectCheckList.model = colData
                 multiSelectCheckList.model  = colData
-            }
-        }
-    }
-
-    Connections{
-        target: DuckDataModel
-
-        function onDuckColData(colData){
-            if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
-                convertDate(colData)
-            }
-        }
-    }
-
-    Connections{
-        target: QueryDataModel
-
-        function onColumnListModelDataChanged(colData, options){
-
-            if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
-                // Just to reset the data if the previous `colData` and the new `colData` are same
-                singleSelectCheckList.model = []
-                multiSelectCheckList.model = []
-
-                singleSelectCheckList.model = colData
-                multiSelectCheckList.model  = colData
-
-                // Date format
-                selectedFormat = ReportParamsModel.getDateFormatMap(counter)
-                customBox.currentIndex = selectedFormat
 
                 convertDate(colData)
-                var jsonOptions = JSON.parse(options)
-
-                if(jsonOptions.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
-                    if(jsonOptions.subCategory === Constants.categorySubMulti){
-                        multiSelectRadio.checked = true
-
-                        multiSelectCheckList.visible = true
-                        singleSelectCheckList.visible = false
-
-                        if(jsonOptions.values.length > 0){
-                            if(jsonOptions.values === "%"){
-                            } else{
-                                var checkedValues = jsonOptions.values.split(",")
-                                checkedValues.forEach((item) => {
-                                                          ReportParamsModel.setTmpSelectedValues(item)
-                                                      })
-                            }
-                        }
-
-                    } else{
-                        singleSelectRadio.checked = true
-
-                        multiSelectCheckList.visible = false
-                        singleSelectCheckList.visible = true
-
-                        if(ReportParamsModel.searchTmpSelectedValues(jsonOptions.values) < 0){
-                            ReportParamsModel.setTmpSelectedValues(jsonOptions.values)
-                        }
-                    }
-                }
             }
-
         }
     }
 
@@ -286,7 +220,7 @@ Rectangle{
             }
 
             console.log("SEARCH TO BE IMPLEMENTED - DATE LIST")
-//            QueryDataModel.columnSearchData(ReportParamsModel.colName, ReportParamsModel.tableName, searchText.text, JSON.stringify(options))
+            //            QueryDataModel.columnSearchData(ReportParamsModel.colName, ReportParamsModel.tableName, searchText.text, JSON.stringify(options))
             ChartsModel.searchColumnData(ReportParamsModel.colName,searchText.text)
 
             if(ReportParamsModel.subCategory === Constants.categorySubMulti){
@@ -353,8 +287,8 @@ Rectangle{
 
                 var actualValueArray = []
                 ReportParamsModel.getTmpSelectedValues(0, true).forEach((item)  => {
-                                                                        actualValueArray.push(searchDateFormat(item, selectedFormat))
-                                                                    })
+                                                                            actualValueArray.push(searchDateFormat(item, selectedFormat))
+                                                                        })
                 ReportParamsModel.setActualDateValues(counter, actualValueArray)
                 ReportParamsModel.addToFilterValueMap(counter, ReportParamsModel.getTmpSelectedValues(0, true).toString())
                 ReportParamsModel.addToFilterRelationMap(counter, Constants.inRelation)
@@ -682,7 +616,7 @@ Rectangle{
                 height:20
                 CheckBoxTpl {
                     id: modelCheckBoxes
-                    checked: true
+                    checked: false
                     y:2
                     text  : modelData
                     objectName: modelData
