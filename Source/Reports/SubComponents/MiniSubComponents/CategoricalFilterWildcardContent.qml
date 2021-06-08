@@ -209,6 +209,7 @@ Rectangle{
             if(totalWildCards > 1){
                 ReportParamsModel.setFilterIndex(ReportParamsModel.filterIndex + 1)
             }
+
             ReportParamsModel.setTmpFilterIndex(ReportParamsModel.filterIndex)
             ReportParamsModel.addToIncludeExcludeMap(ReportParamsModel.filterIndex, currenctExclude)
 
@@ -279,11 +280,9 @@ Rectangle{
         }
 
         var currentSelectedIndex = ReportParamsModel.getTmpFilterIndex(listIndex)
-        ReportParamsModel.addToFilterRelationMap(currentSelectedIndex, newRelation)
-        ReportParamsModel.addToFilterValueMap(currentSelectedIndex, newFilter)
-        ReportParamsModel.addToFilterSlugMap(currentSelectedIndex, slug)
-
-        console.log("FILTER VALUES1a", currentSelectedIndex, ReportParamsModel.fetchFilterRelationMap(currentSelectedIndex)[currentSelectedIndex], ReportParamsModel.fetchFilterValueMap(currentSelectedIndex)[currentSelectedIndex], ReportParamsModel.fetchFilterSlugMap(currentSelectedIndex)[currentSelectedIndex])
+        ReportParamsModel.addToFilterRelationMap(currentSelectedIndex[0], newRelation)
+        ReportParamsModel.addToFilterValueMap(currentSelectedIndex[0], newFilter)
+        ReportParamsModel.addToFilterSlugMap(currentSelectedIndex[0], slug)
 
     }
 

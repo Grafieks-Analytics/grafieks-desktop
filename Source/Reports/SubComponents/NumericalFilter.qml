@@ -22,6 +22,9 @@ Popup {
         border.color: Constants.darkThemeColor
     }
 
+    property int filterIndex: 0
+    property int counter: 0
+
 
 
     /***********************************************************************************************************************/
@@ -119,8 +122,6 @@ Popup {
 
     function onApplyClicked(){
 
-        console.log("Numerical filter applied")
-
         numericalFilterPopup.visible = false
 
         var filterIndex = ReportParamsModel.filterIndex
@@ -129,23 +130,14 @@ Popup {
         var subCategory = ReportParamsModel.subCategory
         var tableName = ReportParamsModel.tableName
         var columnName = ReportParamsModel.colName
-        var joinRelation = ReportParamsModel.fetchFilterRelationMap(counter)
-        var joinValue = ReportParamsModel.fetchFilterValueMap(counter)
-        var joinSlug = ReportParamsModel.fetchFilterSlugMap(counter)
-        var includeNull = ReportParamsModel.includeNull
-        var exclude = ReportParamsModel.exclude
 
-        var singleValue = "";
-        var singleRelation = "";
-        var singleSlug = "";
+        ReportParamsModel.addToFilterSectionMap(counter, section)
+        ReportParamsModel.addToFilterCategoryMap(counter, category)
+        ReportParamsModel.addToFilterSubCategoryMap(counter, subCategory)
+        ReportParamsModel.addToFilterColumnMap(counter, columnName)
+        ReportParamsModel.addToNumericalFilters(counter)
 
-
-        singleRelation = joinRelation[counter]
-        singleValue = joinValue[counter]
-        singleSlug = joinSlug[counter]
-        manageFilters(ReportParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, counter, ReportParamsModel.filterModelIndex)
-
-//        ReportParamsModel.setMode(Constants.modeCreate)
+        manageFilters(ReportParamsModel.mode, counter, ReportParamsModel.filterModelIndex)
 
         // Reset all DSParams
         ReportParamsModel.clearFilter();
@@ -155,18 +147,11 @@ Popup {
 
     }
 
-    function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, counter = 0, filterId = 0){
+    function manageFilters(mode, counter = 0, filterId = 0){
 
-        console.log("INSERT INTO NUMERICAL FILTERS")
-        console.log("Filter insert numerical", mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, filterId)
+        console.log("INSERT INTO NUMERICAL FILTERS", mode, counter, filterId)
+        ReportParamsModel.addToMasterReportFilters(1);
 
-//        // Save the filter
-//        if(mode === Constants.modeCreate){
-//            FilterNumericalListModel.newFilter(counter, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
-
-//        } else{
-//            FilterNumericalListModel.updateFilter(filterId, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
-//        }
     }
 
 

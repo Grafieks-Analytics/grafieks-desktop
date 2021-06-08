@@ -19,11 +19,12 @@ class ReportParamsModel: public QObject
     QVariantMap reportsData;
 
     // Filter specific variables
-    QMap<int, QMap<int, QVariant>> masterReportFilters;         // Report Id - Map of
+    QMap<int, QMap<int, QVariantMap>> masterReportFilters;         // Report Id - Map of
+
+
     QVector<int> categoricalFilters;                            // List of categorical filters
     QVector<int> dateFilters;                                   // List of date filters
     QVector<int> numericalFilters;                              // List of numerical filters
-
     QMap<int, QString> filterColumnMap;                         // filter id - column name map
     QMap<int, QVariantList> filterValueMap;                     // filter id - value list map
     QMap<int, QString> filterRelationMap;                       // filter id - relation map
@@ -101,7 +102,7 @@ class ReportParamsModel: public QObject
     int m_filterModelIndex;
 
 public:
-    ReportParamsModel();
+    explicit ReportParamsModel(QObject *parent = nullptr);
 
     // General properties
     QString itemName() const;
@@ -143,6 +144,10 @@ public:
     Q_INVOKABLE void resetFilter();
     Q_INVOKABLE void clearFilter();
     Q_INVOKABLE void resetInputFields();
+
+    Q_INVOKABLE void addToMasterReportFilters(int reportId);
+    Q_INVOKABLE void restoreMasterReportFilters(int reportId);
+    Q_INVOKABLE void deleteMasterReportFilters(int reportId, bool deleteAll = false);
 
     Q_INVOKABLE void addToCategoricalFilters(int filterId);
     Q_INVOKABLE QVector<int> fetchCategoricalFilters();
@@ -281,6 +286,15 @@ signals:
     void modeChanged(QString mode);
     void filterModelIndexChanged(int filterModelIndex);
     void tmpSelectedValuesChanged(QStringList values);
-};
 
+    void categoricalFilterChanged(QVector<int> filterList);
+    void dateFilterChanged(QVector<int> filterList);
+    void numericalFilterChanged(QVector<int> filterList);
+
+
+private:
+
+    QVariantMap insertMasterFilters(int filterId);
+    void restoreMasterFilters(int filterId, QVariantMap filterData);
+};
 #endif // REPORTPARAMSMODEL_H
