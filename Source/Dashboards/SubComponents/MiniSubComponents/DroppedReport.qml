@@ -29,6 +29,7 @@ Item{
 
     property var chartUrl: "qrc:/Source/Charts/BarChartArrayInput.html";
     property var reportId: "";
+    property var standardChart: null;
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -210,6 +211,7 @@ Item{
 
     function reDrawChart(){
         const reportProperties = ReportParamsModel.getReport(reportId);
+        reportName.text = reportProperties.reportTitle;
         drawChart(reportProperties);
     }
 
@@ -219,6 +221,7 @@ Item{
         var yAxisColumns = JSON.parse(reportProperties.yAxisColumns);
         var chartTitle = reportProperties.chartTitle;
         var d3PropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
+        
         var colorByData = JSON.parse(reportProperties.colorByDataColoumns);
 
         // Check if chart is still loading or not.
@@ -395,6 +398,24 @@ Item{
         webEngineView.runJavaScript('clearChart()');
     }
 
+    // Convert the graph to Standard
+    function convertToStandard(){
+        const reportProperties = ReportParamsModel.getReport(reportId);
+        var d3PropertiesConfig = reportProperties.d3PropertiesConfig;
+        d3PropertiesConfig.chartType = "Standard";
+        ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertiesConfig));
+        reDrawChart();
+    }
+
+    // Convert the graph to FitWidth / FitHeight 
+    function convertToFit(type){
+        const reportProperties = ReportParamsModel.getReport(reportId);
+        var d3PropertiesConfig = reportProperties.d3PropertiesConfig;
+        d3PropertiesConfig.chartType = "Fit"+type;
+        ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertiesConfig));
+        redrawChart()
+    }
+
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -489,7 +510,6 @@ Item{
 
             Text {
                 id: reportName
-                text: qsTr("Report Name")
                 anchors.left: parent.left
                 anchors.leftMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
@@ -603,12 +623,16 @@ Item{
 
                             MenuItem {
                                 text: qsTr("Standard")
-                                onTriggered: editSelectedReport()
+                                onTriggered: convertToStandard()
                             }
 
                             MenuItem {
-                                text: qsTr("Custom")
-                                onTriggered: destroyElement()
+                                text: qsTr("FitWidth")
+                                onTriggered: convertToFit('Width')
+                            }
+                            MenuItem {
+                                text: qsTr("FitHeight")
+                                onTriggered: convertToFit('Height')
                             }
                         }
 
