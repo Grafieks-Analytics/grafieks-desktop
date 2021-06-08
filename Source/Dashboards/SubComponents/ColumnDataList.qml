@@ -18,7 +18,7 @@ Rectangle {
     anchors.topMargin: 10
     height: parent.height-80
     color: "white"
-    border.color: Constants.themeColor
+    //    border.color: Constants.themeColor
 
     ListModel{
         id: listModel
@@ -71,7 +71,11 @@ Rectangle {
         model: listModel
         clip: true
         interactive: true
-            ScrollBar.vertical: ScrollBar {}
+        spacing: 10
+
+
+        ScrollBar.vertical: ScrollBar {}
+
 
 
         // filterTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti"]
@@ -83,6 +87,14 @@ Rectangle {
             DelegateChoice { roleValue: Constants.filterTypes[1]; FilterDataListMultiple { componentName: name } }
             DelegateChoice { roleValue: Constants.filterTypes[2]; FilterDataSingleDropdown { componentName: name } }
             DelegateChoice { roleValue: Constants.filterTypes[3]; FilterDataMultiDropdown { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterTypes[4]; FilterDataRange { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterTypes[5]; FilterDataEqual { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterTypes[6]; FilterDataNotEqual { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterTypes[7]; FilterDataSmallerThan { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterTypes[8]; FilterDataGreaterThan { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterTypes[9]; FilterDataEqualOrSmaller { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterTypes[10]; FilterDataEqualorGreater { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterTypes[11]; FilterDataBetween { componentName: name } }
         }
 
         delegate: chooser

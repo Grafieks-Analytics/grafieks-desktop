@@ -106,6 +106,8 @@ Item{
             contentWidth: textEditQueryModeller.paintedWidth
             contentHeight: textEditQueryModeller.paintedHeight
             clip: true
+            flickableDirection: Flickable.VerticalFlick
+
             ScrollBar.vertical: ScrollBar {
                 active: flickText.moving || !flickText.moving
             }
