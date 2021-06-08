@@ -23,22 +23,22 @@
             .bar--negative {
                 fill: darkorange;
             } */
-              #tooltip{
-            font-size: 14px;
-            font-family: Arial, Helvetica, sans-serif;
-        }
+            #tooltip {
+                font-size: 14px;
+                font-family: Arial, Helvetica, sans-serif;
+            }
 
-        #tooltip:before {
-            border: solid;
-            border-color: white transparent;
-            border-width: 12px 6px 0 6px;
-            content: "";
-            left: -12px;
-            transform: rotate(90deg) !important;
+            #tooltip:before {
+                border: solid;
+                border-color: white transparent;
+                border-width: 12px 6px 0 6px;
+                content: "";
+                left: -12px;
+                transform: rotate(90deg) !important;
 
-            bottom: 22px;
-            position: absolute;
-        }
+                bottom: 22px;
+                position: absolute;
+            }
         </style>
     </head>
     <body>
@@ -49,24 +49,6 @@
 
         <div id="tooltip"></div>
         <script>
-            var data = [
-                [
-                    [
-                        "barbaz",
-                        "barbar",
-                        "foobaz",
-                        "foobar",
-                        "baz",
-                        "bar",
-                        "foo",
-                    ],
-                    [10, 40, 10, 50, 30, 20, 71],
-                ],
-                ["value 1", "value 2Z"],
-            ];
-
-            drawChart(data);
-
             function drawChart(data, plottingConfiguration = {}) {
                 window.data = data;
                 dataValues = data[0];
@@ -84,7 +66,7 @@
                     horizontalChartType,
                     standardThresholdHeight,
                     chartType,
-                     toolTip,
+                    toolTip,
                 } = plottingConfiguration;
                 if (!d3colorPalette) {
                     d3colorPalette = defaultD3Config.d3ColorPalette;
@@ -103,11 +85,11 @@
                         defaultD3Config.standardThresholdHeight;
                 }
 
-                 if (!toolTip) {
+                if (!toolTip) {
                     toolTip = {
                         textColumn1: "labels[0]",
-                        textColumn2: "labels[1]"
-                    }
+                        textColumn2: "labels[1]",
+                    };
                 }
 
                 var margin = { top: 20, right: 50, bottom: 80, left: 70 };
@@ -238,15 +220,30 @@
                             .style("top", ypos + "px")
                             .style("display", "block")
                             // .text(d);
-                              .html(function () {
+                            .html(function () {
                                 var textValue = d.y0 - d.y1;
                                 if (d.y1 < 0) {
                                     textValue = d.y1 - d.y0;
                                 }
 
-                                return "<span style='color:grey;''>" + toolTip.textColumn1 + ":" + "</span>" + "<span style='float: right;'>" + d.key + "</span>" + "<br/> <br/>" + "<span style='color:grey;''>" + toolTip.textColumn2 + ":" + "</span>" + "<span style='float: right;margin-left: 15px;'>" + textValue.toFixed(3) + "</span>";
+                                return (
+                                    "<span style='color:grey;''>" +
+                                    toolTip.textColumn1 +
+                                    ":" +
+                                    "</span>" +
+                                    "<span style='float: right;'>" +
+                                    d.key +
+                                    "</span>" +
+                                    "<br/> <br/>" +
+                                    "<span style='color:grey;''>" +
+                                    toolTip.textColumn2 +
+                                    ":" +
+                                    "</span>" +
+                                    "<span style='float: right;margin-left: 15px;'>" +
+                                    textValue.toFixed(3) +
+                                    "</span>"
+                                );
                             });
-
 
                         d3.selectAll(".bar").style("opacity", 0.3);
                         d3.select(this).style("opacity", 1);
@@ -282,6 +279,30 @@
                     .attr("dy", "2.32em")
                     .attr("transform", "translate(0,0)")
                     .call(d3.axisLeft(y));
+
+                a = document.querySelectorAll(".y-axis text");
+                for (var i = 0; i < a.length; i++) {
+                    if (a[i] && a[i].innerHTML) {
+                        var singleCharacterLength =
+                            a[i].getBBox().width / a[i].innerHTML.length;
+
+                        var maxWidth =
+                            document.querySelector(".y-axis").getBBox().width >
+                            72
+                                ? 72
+                                : document.querySelector(".y-axis").getBBox()
+                                      .width;
+
+                        console.log(maxWidth);
+                        var numOfCharacters = maxWidth / singleCharacterLength;
+
+                        if (a[i].innerHTML.length > numOfCharacters) {
+                            a[i].innerHTML =
+                                a[i].innerHTML.substr(0, numOfCharacters - 3) +
+                                "...";
+                        }
+                    }
+                }
             }
 
             function make_x_gridlines(x) {

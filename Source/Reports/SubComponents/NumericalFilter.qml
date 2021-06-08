@@ -56,6 +56,7 @@ Popup {
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
+    signal clearData()
     signal signalNumericalEditData(string relation, string sug, string value)
 
     // SIGNALS ENDS
@@ -66,6 +67,18 @@ Popup {
     /***********************************************************************************************************************/
     // Connections Starts
 
+
+    Connections{
+        target: DSParamsModel
+
+        function onInternalCounterChanged(){
+            counter = DSParamsModel.internalCounter
+        }
+
+        function onFilterIndexChanged(){
+            counter = DSParamsModel.filterIndex
+        }
+    }
 
 
     // Connections Ends
@@ -80,6 +93,8 @@ Popup {
 
     Component.onCompleted: {
         numericalFilterPopup.signalNumericalEditData.connect(topContent.slotEditModeNumerical)
+
+        numericalFilterPopup.clearData.connect(topContent.slotDataCleared)
     }
     // SLOT function
     function slotEditMode(section, category, subCategory, relation, slug, value){
@@ -94,14 +109,18 @@ Popup {
 
     function closePopup(){
         numericalFilterPopup.visible = false
-        DSParamsModel.resetFilter()
+        DSParamsModel.clearFilter()
     }
 
     function onCancelClicked(){
         closePopup()
+        DSParamsModel.clearFilter();
     }
 
     function onApplyClicked(){
+
+        console.log("Numerical filter applied")
+
         numericalFilterPopup.visible = false
 
         var filterIndex = DSParamsModel.filterIndex
@@ -110,9 +129,9 @@ Popup {
         var subCategory = DSParamsModel.subCategory
         var tableName = DSParamsModel.tableName
         var columnName = DSParamsModel.colName
-        var joinRelation = DSParamsModel.fetchJoinRelation(0, true)
-        var joinValue = DSParamsModel.fetchJoinValue(0, true)
-        var joinSlug = DSParamsModel.fetchJoinRelationSlug(0, true)
+        var joinRelation = DSParamsModel.fetchJoinRelation(counter)
+        var joinValue = DSParamsModel.fetchJoinValue(counter)
+        var joinSlug = DSParamsModel.fetchJoinRelationSlug(counter)
         var includeNull = DSParamsModel.includeNull
         var exclude = DSParamsModel.exclude
 
@@ -121,28 +140,31 @@ Popup {
         var singleSlug = "";
 
 
-        singleRelation = joinRelation[0]
-        singleValue = joinValue[0]
-        singleSlug = joinSlug[0]
-        manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, filterIndex)
+        singleRelation = joinRelation[counter]
+        singleValue = joinValue[counter]
+        singleSlug = joinSlug[counter]
+        manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, counter, DSParamsModel.filterModelIndex)
 
-        DSParamsModel.setMode(Constants.modeCreate)
+//        DSParamsModel.setMode(Constants.modeCreate)
 
         // Reset all DSParams
-        //DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter();
+
+        // Clear tabs individual temp data
+        dateFilterPopup.clearData()
 
     }
 
-    function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, filterIndex = 0){
+    function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, counter = 0, filterId = 0){
 
-//        console.log(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, "FILTER LIST INSERT/UPDATE")
+        console.log("Filter insert numerical", mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, filterId)
 
         // Save the filter
         if(mode === Constants.modeCreate){
-            FilterNumericalListModel.newFilter(section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+            FilterNumericalListModel.newFilter(counter, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
 
         } else{
-            FilterNumericalListModel.updateFilter(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+            FilterNumericalListModel.updateFilter(filterId, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
         }
     }
 
@@ -221,9 +243,9 @@ Popup {
 
     //    Top Menu Contents
 
-//    NumericalFilterInnerPopup{
-//        id: topContent
-//    }
+    NumericalFilterInnerPopup{
+        id: topContent
+    }
 
     // Footer starts
 
@@ -277,7 +299,6 @@ Popup {
 
             textValue: "Cancel"
             onClicked: {
-
                 onCancelClicked()
             }
 

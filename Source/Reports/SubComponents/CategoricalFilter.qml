@@ -18,13 +18,15 @@ Popup {
     padding: 0
     closePolicy: Popup.NoAutoClose
 
+    property int filterIndex: 0
+
 
     background: Rectangle{
         color: Constants.themeColor
         border.color: Constants.darkThemeColor
     }
 
-    readonly property int mapKey: 0
+    property int counter: 0
 
 
     /***********************************************************************************************************************/
@@ -38,8 +40,7 @@ Popup {
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
-    signal subCategoryEditMode(string subCategory)
-    signal signalWildCardEditData(string relation, string slug, string value)
+    signal clearData()
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -49,6 +50,63 @@ Popup {
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: DSParamsModel
+
+        function onInternalCounterChanged(){
+            counter = DSParamsModel.internalCounter
+        }
+
+        function onFilterIndexChanged(){
+            counter = DSParamsModel.filterIndex
+        }
+    }
+
+
+    Connections{
+        target: QueryDataModel
+
+        function onColumnListModelDataChanged(colData, options){
+
+            var jsonOptions = JSON.parse(options)
+
+            if(jsonOptions.section === Constants.categoricalTab){
+
+                switch(jsonOptions.category){
+                case Constants.categoryMainListType:
+
+                    listContent.visible = true
+                    wildcardContent.visible = false
+                    topContent.visible = false
+
+                    listRadio.checked = true
+
+                    break
+
+                case Constants.categoryMainWildCardType:
+
+                    listContent.visible = false
+                    wildcardContent.visible = true
+                    topContent.visible = false
+
+                    wildcardRadio.checked = true
+
+                    break
+
+                case Constants.categoryMainTopType:
+
+                    listContent.visible = false
+                    wildcardContent.visible = false
+                    topContent.visible = true
+
+                    topRadio.checked = true
+
+                    break
+                }
+
+            }
+        }
+    }
 
 
     // Connections Ends
@@ -63,101 +121,72 @@ Popup {
 
 
     Component.onCompleted: {
-        categoricalFilterPopup.subCategoryEditMode.connect(listContent.slotEditModeSubCategory)
-        categoricalFilterPopup.signalWildCardEditData.connect(wildcardContent.slotWildCardEditData)
+        categoricalFilterPopup.clearData.connect(listContent.slotDataCleared)
+        categoricalFilterPopup.clearData.connect(wildcardContent.slotDataCleared)
     }
 
-
-    // SLOT function
-    function slotEditMode(section, category, subCategory, relation, slug, value){
-
-        if(section === Constants.categoricalTab){
-
-            switch(category){
-            case Constants.categoryMainListType:
-
-                listContent.visible = true
-                wildcardContent.visible = false
-                topContent.visible = false
-
-                listRadio.checked = true
-
-                categoricalFilterPopup.subCategoryEditMode(subCategory)
-
-                break
-
-            case Constants.categoryMainWildCardType:
-
-                listContent.visible = false
-                wildcardContent.visible = true
-                topContent.visible = false
-
-                wildcardRadio.checked = true
-
-                categoricalFilterPopup.signalWildCardEditData(relation, slug, value)
-
-                break
-
-            case Constants.categoryMainTopType:
-
-                listContent.visible = false
-                wildcardContent.visible = false
-                topContent.visible = true
-
-                topRadio.checked = true
-
-                break
-            }
-
-        }
-    }
 
     function closeCategoricalFilterPopup(){
         categoricalFilterPopup.visible = false
 
         // Reset all DSParams
-        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter();
+
+        // Clear tabs individual temp data
+        categoricalFilterPopup.clearData()
 
     }
 
     function onApplyClicked(){
+
         categoricalFilterPopup.visible = false
 
-        var filterIndex = DSParamsModel.filterIndex
         var section = DSParamsModel.section
         var category = DSParamsModel.category
         var subCategory = DSParamsModel.subCategory
         var tableName = DSParamsModel.tableName
         var columnName = DSParamsModel.colName
-        var joinRelation = DSParamsModel.fetchJoinRelation(0, true)
-        var joinValue = DSParamsModel.fetchJoinValue(0, true)
-        var joinSlug = DSParamsModel.fetchJoinRelationSlug(0, true)
-        var includeNull = DSParamsModel.includeNull
-        var exclude = DSParamsModel.exclude
+        var tmpFilterIndexes = DSParamsModel.getTmpFilterIndex(0, true)
 
         var singleValue = "";
         var singleRelation = "";
         var singleSlug = "";
 
 
+
         switch(category){
 
         case Constants.categoryMainListType:
 
-            singleRelation = joinRelation[0]
-            singleValue = joinValue[0]
-            singleSlug = joinSlug[0]
-            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, filterIndex)
+            let joinRelation = DSParamsModel.fetchJoinRelation(counter)
+            let joinValue = DSParamsModel.fetchJoinValue(counter)
+            let joinSlug = DSParamsModel.fetchJoinRelationSlug(counter)
+            let includeNull = DSParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
+            let exclude = DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
 
+            singleRelation = joinRelation[counter]
+            singleValue = joinValue[counter]
+            singleSlug = joinSlug[counter]
+
+            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, counter, DSParamsModel.filterModelIndex)
             break
 
         case Constants.categoryMainWildCardType:
 
-            for(let i = 0; i < Object.keys(joinRelation).length; i++){
-                singleRelation = joinRelation[i]
-                singleValue = joinValue[i]
-                singleSlug = joinSlug[i]
-                manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, filterIndex)
+            for(let i = 0; i < tmpFilterIndexes.length; i++){
+                let fi = tmpFilterIndexes[i]
+
+                let joinRelation = DSParamsModel.fetchJoinRelation(fi)
+                let joinValue = DSParamsModel.fetchJoinValue(fi)
+                let joinSlug = DSParamsModel.fetchJoinRelationSlug(fi)
+                let includeNull = false
+                let exclude = DSParamsModel.getExcludeMap(fi)[fi] === "1" ? true : false
+
+                singleRelation = joinRelation[fi]
+                singleValue = joinValue[fi]
+                singleSlug = joinSlug[fi]
+
+                manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, fi, DSParamsModel.filterModelIndex)
             }
 
             break
@@ -169,29 +198,34 @@ Popup {
             break
         }
 
-        // Reset all DSParams
-        DSParamsModel.resetFilter();
+        // Clear filters
+        DSParamsModel.clearFilter();
+
+        // Clear tabs individual temp data
+        categoricalFilterPopup.clearData()
 
 
 
     }
 
-    function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, filterIndex = 0){
+    function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, counter = 0, filterId = 0){
 
-//        console.log(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, "FILTER LIST INSERT/UPDATE")
-
+        console.log("Filter insert categorical", mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, counter, filterId)
         // Save the filter
         if(mode === Constants.modeCreate){
-            FilterCategoricalListModel.newFilter(section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+            FilterCategoricalListModel.newFilter(counter, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
 
         } else{
-            FilterCategoricalListModel.updateFilter(filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+            FilterCategoricalListModel.updateFilter(filterId, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
         }
     }
 
     function onResetClicked(){
         categoricalFilterPopup.visible = false
-        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter()
+
+        // Clear tabs individual temp data
+        categoricalFilterPopup.clearData()
     }
 
     function onListClicked(){
@@ -201,7 +235,7 @@ Popup {
         topContent.visible = false
 
         // Set the main category of the filter
-        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter()
         DSParamsModel.setCategory(Constants.categoryMainListType)
 
         // For list category type
@@ -209,7 +243,7 @@ Popup {
         // Except when "Select All" checked.
         // Then Relation will be LIKE
 
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
+        DSParamsModel.addToJoinRelation(filterIndex, Constants.likeRelation)
     }
 
 
@@ -220,8 +254,9 @@ Popup {
         topContent.visible = false
 
         // Set the main category of the filter
-        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter();
         DSParamsModel.setCategory(Constants.categoryMainWildCardType)
+
     }
 
 
@@ -232,7 +267,7 @@ Popup {
         topContent.visible = true
 
         // Set the main category of the filter
-        DSParamsModel.resetFilter();
+        DSParamsModel.clearFilter();
         DSParamsModel.setCategory(Constants.categoryMainTopType)
     }
 
@@ -320,14 +355,16 @@ Popup {
             id: listRadioColumn
             anchors.top: fullExtactRadioBtn.top
 
-            width: parent.width/3
+            width: parent.width/2
             anchors.left: parent.left
             leftPadding: 30
             topPadding: 8
+
             anchors.verticalCenter: parent.verticalCenter
 
             CustomRadioButton{
                 id: listRadio
+                x:21
                 text: qsTr("List")
                 ButtonGroup.group: filterType
                 checked: true
@@ -340,14 +377,19 @@ Popup {
             id: wildcardRadioColumn
             topPadding: 10
             bottomPadding: 10
-            leftPadding: 50
-            width: parent.width /3
+            anchors.right: parent.right
+            //            leftPadding: 293
+            width: parent.width /2
             anchors.top: fullExtactRadioBtn.top
-            anchors.centerIn: parent
+            //            anchors.centerIn: parent
 
             CustomRadioButton{
                 id: wildcardRadio
                 text: qsTr("Wildcard")
+
+                //                anchors.left: listRadioColumn.left
+                anchors.right: parent.right
+                anchors.rightMargin: 72
                 checked: false
                 parent_dimension: 16
                 ButtonGroup.group: filterType
@@ -416,8 +458,6 @@ Popup {
 
             anchors.left: parent.left
             anchors.leftMargin: 20
-
-
             onClicked: onResetClicked()
         }
 
@@ -429,8 +469,6 @@ Popup {
 
             anchors.right: parent.right
             anchors.rightMargin: 20
-
-
             onClicked: onApplyClicked()
         }
 
@@ -440,7 +478,6 @@ Popup {
 
             anchors.right: apply_btn1.left
             anchors.rightMargin: 20
-
             textValue: "Cancel"
             onClicked: closeCategoricalFilterPopup()
 

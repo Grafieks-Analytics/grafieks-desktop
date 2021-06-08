@@ -25,6 +25,7 @@ Rectangle{
     y:30
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
+    property int counter: 0
 
     visible: false
 
@@ -57,8 +58,16 @@ Rectangle{
 
         function onResetInput(){
             onYearTabClicked()
-            DSParamsModel.setExclude(false)
-            DSParamsModel.setIncludeNull(true)
+            DSParamsModel.setExcludeMap(counter, false)
+            DSParamsModel.setIncludeNullMap(counter, true)
+        }
+
+        function onInternalCounterChanged(){
+            counter = DSParamsModel.internalCounter
+        }
+
+        function onFilterIndexChanged(){
+            counter = DSParamsModel.filterIndex
         }
     }
 
@@ -78,6 +87,10 @@ Rectangle{
         dateTimeFrameContent.signalTimeFrameRadioEditDay.connect(dayTabContent.slotEditDay)
         dateTimeFrameContent.signalTimeFrameRadioEditMonth.connect(monthTabContent.slotEditMonth)
         dateTimeFrameContent.signalTimeFrameRadioEditQuarter.connect(quarterTabContent.slotEditQuarter)
+    }
+
+    function slotDataCleared(){
+
     }
 
     function slotEditModeTimeFrame(subCategory, relation, slug, value){

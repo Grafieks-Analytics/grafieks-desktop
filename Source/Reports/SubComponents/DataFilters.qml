@@ -137,6 +137,12 @@ Popup {
             add_btn_1.model =  categoricalModel
 
         }
+
+        function onTableSchemaCleared(){
+            categoricalModel.clear()
+            numericalModel.clear()
+            datesModel.clear()
+        }
     }
 
     // This section is called when
@@ -144,9 +150,9 @@ Popup {
     // On receiving the signal from C++, it will popup the relevant screen
 
     Connections{
-        target: ColumnListModel
+        target: QueryDataModel
 
-        function onEditCalled(){
+        function onColumnListModelDataChanged(colData, values){
 
             if(DSParamsModel.section === Constants.categoricalTab){
 
@@ -157,7 +163,7 @@ Popup {
                 categoricalFilterPopup.visible = true
                 dateFilterPopup.visible = false
                 numericalFilterPopup.visible = false
-//                groupFilterPopup.visible = false
+                groupFilterPopup.visible = false
             }
             else if(DSParamsModel.section === Constants.dateTab){
 
@@ -169,7 +175,7 @@ Popup {
                 categoricalFilterPopup.visible = false
                 dateFilterPopup.visible = true
                 numericalFilterPopup.visible = false
-//                groupFilterPopup.visible = false
+                groupFilterPopup.visible = false
             }
             else if(DSParamsModel.section === Constants.numericalTab){
 
@@ -180,7 +186,7 @@ Popup {
                 categoricalFilterPopup.visible = false
                 dateFilterPopup.visible = false
                 numericalFilterPopup.visible = true
-//                groupFilterPopup.visible = false
+                groupFilterPopup.visible = false
             }
             else if(DSParamsModel.section === Constants.groupTab){
 
@@ -191,11 +197,10 @@ Popup {
                 categoricalFilterPopup.visible = false
                 dateFilterPopup.visible = false
                 numericalFilterPopup.visible = false
-//                groupFilterPopup.visible = true
+                groupFilterPopup.visible = true
             }
         }
     }
-
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -209,15 +214,30 @@ Popup {
 
 
     Component.onCompleted: {
-        popupMain.signalEditMode.connect(categoricalFilterPopup.slotEditMode)
-        popupMain.signalEditMode.connect(dateFilterPopup.slotEditMode)
-        popupMain.signalEditMode.connect(numericalFilterPopup.slotEditMode)
-//        popupMain.signalEditMode.connect(groupFilterPopup.slotEditMode)
+
+        DSParamsModel.setSection(Constants.categoricalTab)
+        DSParamsModel.setCategory(Constants.categoryMainListType)
+        DSParamsModel.setSubCategory(Constants.categorySubMulti)
     }
 
 
-    function onAddMenuItemTriggered(colName,tableName){
-        ColumnListModel.columnQuery(colName, tableName)
+    function onAddMenuItemTriggered(colName,tableName, section, category, subCategory){
+
+        var options = {
+            "section" : section,
+            "category" : category,
+            "subCategory" : subCategory,
+            "values" : ""
+        }
+
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+            QueryDataModel.columnData(colName, tableName, JSON.stringify(options));
+        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
+            DuckDataModel.columnData(colName, tableName, JSON.stringify(options))
+        } else{
+            ForwardOnlyDataModel.columnData(colName, tableName, JSON.stringify(options))
+        }
+
         DSParamsModel.setColName(colName)
         DSParamsModel.setTableName(tableName)
 
@@ -225,12 +245,14 @@ Popup {
 
     function onAddMenuItemClicked(){
 
+        DSParamsModel.setFilterIndex(DSParamsModel.filterIndex + 1)
+        DSParamsModel.setMode(Constants.modeCreate)
+
         if(tabBarOpen === Constants.categoricalTab){
 
             // Fire the signal for show specific category
             DSParamsModel.setSection(Constants.categoricalTab)
             DSParamsModel.setCategory(Constants.categoryMainListType)
-            popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, "", "", "")
 
             categoricalFilterPopup.visible = true
             dateFilterPopup.visible = false
@@ -243,36 +265,33 @@ Popup {
             DSParamsModel.setSection(Constants.dateTab)
             DSParamsModel.setCategory(Constants.dateMainListType)
             DSParamsModel.setSubCategory(Constants.categorySubMulti)
-            popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, "", "", "")
 
             DSParamsModel.resetInputFields()
             categoricalFilterPopup.visible = false
             dateFilterPopup.visible = true
             numericalFilterPopup.visible = false
-//            groupFilterPopup.visible = false
+            groupFilterPopup.visible = false
         }
         else if(tabBarOpen === Constants.numericalTab){
 
             // Fire the signal for show specific category
             DSParamsModel.setSection(Constants.numericalTab)
-            popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, "", "", "")
 
             DSParamsModel.resetInputFields()
             categoricalFilterPopup.visible = false
             dateFilterPopup.visible = false
             numericalFilterPopup.visible = true
-//            groupFilterPopup.visible = false
+            groupFilterPopup.visible = false
         }
         else if(tabBarOpen === Constants.groupTab){
 
             // Fire the signal for show specific category
             DSParamsModel.setSection(groupTab)
-            popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, "", "", "")
 
             categoricalFilterPopup.visible = false
             dateFilterPopup.visible = false
             numericalFilterPopup.visible = false
-//            groupFilterPopup.visible = true
+            groupFilterPopup.visible = true
         }
     }
 
@@ -281,12 +300,11 @@ Popup {
         categoricalTabBackground.color =  Constants.whiteColor
         dateTabBackground.color =  Constants.whiteColor
         numericalTabBackground.color = Constants.whiteColor
-//        groupTabBackground.color = Constants.whiteColor
 
         allCategoricalFilterContent.visible = false
         allDateFilterContent.visible = false
         allNumericalFilterContent.visible = false
-//        allGroupFilterContent.visible = false
+        allGroupFilterContent.visible = false
 
         if(characterFilterTab){
             categoricalTabBackground.color =  Constants.themeColor
@@ -304,11 +322,11 @@ Popup {
             allNumericalFilterContent.visible = true
 
         }
-//        if(groupFilterTab){
-//            groupTabBackground.color = Constants.themeColor
-//            allGroupFilterContent.visible=true
-//            tabBarOpen = Constants.groupTab
-//        }
+        if(groupFilterTab){
+            groupTabBackground.color = Constants.themeColor
+            allGroupFilterContent.visible=true
+            tabBarOpen = Constants.groupTab
+        }
 
     }
 
@@ -324,6 +342,8 @@ Popup {
 
         // Set the section in C++
         DSParamsModel.setSection(Constants.categoricalTab)
+        DSParamsModel.setCategory(Constants.categoryMainListType)
+        DSParamsModel.setSubCategory(Constants.categorySubMulti)
 
     }
 
@@ -334,11 +354,12 @@ Popup {
 
         add_btn_1.model = datesModel
 
-
         tabBarOpen = Constants.dateTab
 
         // Set the section in C++
         DSParamsModel.setSection(Constants.dateTab)
+        DSParamsModel.setCategory(Constants.dateMainListType)
+        DSParamsModel.setSubCategory(Constants.categorySubMulti)
     }
 
 
@@ -347,11 +368,12 @@ Popup {
         onTabToggle(false,false,true,false);
         add_btn_1.model = numericalModel
 
-
         tabBarOpen = Constants.numericalTab
 
         // Set the section in C++
         DSParamsModel.setSection(Constants.numericalTab)
+        DSParamsModel.setCategory("")
+        DSParamsModel.setSubCategory("")
 
     }
 
@@ -370,13 +392,19 @@ Popup {
     function onApplyClicked(){
 
         popupMain.visible = false
-        var tmpSql = DSParamsModel.tmpSql
+        DSParamsModel.clearFilter()
 
+        onTabToggle(true,false,false,false);
+
+        var tmpSql = DSParamsModel.tmpSql
         ProxyFilterModel.callQueryModels(tmpSql, FilterCategoricalListModel, FilterDateListModel, FilterNumericalListModel)
 
     }
     function onCancelClicked(){
         popupMain.visible = false
+        DSParamsModel.clearFilter()
+
+        onTabToggle(true,false,false,false);
     }
 
 
@@ -559,29 +587,29 @@ Popup {
 
         // Users Tab button starts
 
-//        TabButton{
-//            id: users_btn
-//            text: "Group"
-//            width:popupMain.width/4 - 2
+        //        TabButton{
+        //            id: users_btn
+        //            text: "Group"
+        //            width:popupMain.width/4 - 2
 
 
-//            background: Rectangle {
-//                id: groupTabBackground
-//                border.color: Constants.darkThemeColor
-//                color: users_btn.pressed? Constants.themeColor: Constants.whiteColor
+        //            background: Rectangle {
+        //                id: groupTabBackground
+        //                border.color: Constants.darkThemeColor
+        //                color: users_btn.pressed? Constants.themeColor: Constants.whiteColor
 
-//            }
+        //            }
 
-//            contentItem: Text{
-//                id:users_btn_text
-//                text: users_btn.text
-//                color:"black"
-//                horizontalAlignment: Text.AlignHCenter
-//                verticalAlignment: Text.AlignVCenter
-//            }
+        //            contentItem: Text{
+        //                id:users_btn_text
+        //                text: users_btn.text
+        //                color:"black"
+        //                horizontalAlignment: Text.AlignHCenter
+        //                verticalAlignment: Text.AlignVCenter
+        //            }
 
-//            onClicked: onGroupTabClicked()
-//        }
+        //            onClicked: onGroupTabClicked()
+        //        }
 
         // Users Tab button ends
     }
@@ -601,8 +629,7 @@ Popup {
         valueRole: "tableName"
 
         onActivated: {
-
-            onAddMenuItemTriggered(currentText, currentValue);
+            onAddMenuItemTriggered(currentText, currentValue, DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory)
             onAddMenuItemClicked()
 
         }
