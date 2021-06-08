@@ -13,7 +13,7 @@ class ReportParamsModel: public QObject
 // Customize Report parameters
     QVariantMap reportsMap;           // <<reportId, reportObj>>
     QVariantMap reportsData;
-    QVariantList dashboardReportInstances; 
+    QVariantMap dashboardReportInstances;
 
     // Filter specific variables
     QVector<int> categoricalFilters;                            // Id List of categorical filters
@@ -182,8 +182,8 @@ public:
     Q_INVOKABLE void removeFilterSubCategoryMap(int filterId);
 
     // Instances of dropped reports in dashboards
-    Q_INVOKABLE void addDashboardReportInstance(QVariant newReportInstance);
-    Q_INVOKABLE QVariant getDashboardReportInstance(int reportInstanceIndex);
+    Q_INVOKABLE void addDashboardReportInstance(QVariant newReportInstance,QString reportId);
+    Q_INVOKABLE QVariant ReportParamsModel::getDashboardReportInstance(QString reportId);
     Q_INVOKABLE QVariant getAllDashboardReportInstances();
 
 

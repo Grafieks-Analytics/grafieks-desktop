@@ -74,9 +74,9 @@ Rectangle{
     function startReDrawingCharts(){
         // Here are all the instances, Let's Redraw the charts
         let allReportInstances = ReportParamsModel.getAllDashboardReportInstances();
-        for(var i=0; i<allReportInstances.length;i++){
+        for(var reportIdValue in allReportInstances){
             // Redrawing charts one by one;
-            var instance = allReportInstances[i];
+            var instance = allReportInstances[reportIdValue]; 
             instance.reDrawChart();
         }
     }
@@ -123,8 +123,10 @@ Rectangle{
 
         Rectangle{
 
+            id: backgroundColorBox
             width: parent.width
             height: 20
+            anchors.top: parent.top
             anchors.left: parent.left
             anchors.leftMargin: 15
             anchors.right: parent.right
@@ -155,6 +157,7 @@ Rectangle{
             id: opacityBox
             width: parent.width
             height: 30
+            anchors.top: backgroundColorBox.bottom
             anchors.left: parent.left
             anchors.leftMargin: 15
             anchors.right: parent.right

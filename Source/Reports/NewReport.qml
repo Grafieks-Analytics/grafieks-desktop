@@ -369,8 +369,8 @@ Page {
         // Clear title and report id
         ReportParamsModel.setReportId(null);
         ReportParamsModel.setReportTitle(null);
-        report_desiner_page.report_title = null;
-        reportIdMain = null;
+        report_title_text.text = "";
+        reportIdMain = "";
         
         // Clear all the list models
         xAxisListModel.clear();
@@ -482,6 +482,17 @@ Page {
 
         // Save add the data in cpp
         // get the data in cpp and create an object
+
+        // Check if report name exists or not
+        // If name is not given add the name as Report "NUMBER"
+        // Else is  not required (Case to set the value, because it is getting saved on key presses)
+        var reportList = ReportParamsModel.getReportsList();
+        console.log(report_title_text.text)
+        if(!report_title_text.text || report_title_text.text == ""){
+            var numberOfReports = Object.keys(reportList).length;
+            ReportParamsModel.setReportTitle('Report '+ (numberOfReports + 1));
+        }
+
         ReportParamsModel.setChartType(chartTitle);
         ReportParamsModel.setChartTitle(chartTitle);
         ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertyConfig));
@@ -489,12 +500,6 @@ Page {
         ReportParamsModel.setXAxisColumns(JSON.stringify(getAxisColumnNames(Constants.xAxisName)));
         ReportParamsModel.setYAxisColumns(JSON.stringify(getAxisColumnNames(Constants.yAxisName)));
         ReportParamsModel.setColorByDataColoumns(JSON.stringify(colorByData));
-
-        var reportList = ReportParamsModel.getReportsList();
-        if(!report_title_text.text || report_title_text.text == ""){
-            var numberOfReports = Object.keys(reportList).length;
-            ReportParamsModel.setReportTitle('Report '+ (numberOfReports + 1));
-        }
 
         ReportParamsModel.addReport(reportIdMain);
         
