@@ -12,6 +12,7 @@ Column{
     anchors.left: parent.left
     anchors.leftMargin: 80
     anchors.topMargin: 30
+    property int counter: 0
 
 
     /***********************************************************************************************************************/
@@ -48,6 +49,14 @@ Column{
             lastXRadio.checked = false
             lastXRadioTextField.text = ""
         }
+
+        function onInternalCounterChanged(){
+            counter = DSParamsModel.internalCounter
+        }
+
+        function onFilterIndexChanged(){
+            counter = DSParamsModel.filterIndex
+        }
     }
 
 
@@ -60,6 +69,10 @@ Column{
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
+
+    function slotDataCleared(){
+
+    }
 
     function slotEditQuarter(relation, slug, value){
 
@@ -91,6 +104,11 @@ Column{
                 nextRadio.activeFocus = true
             }
         }
+    }
+
+
+    function daysInMonth (month, year) {
+        return new Date(year, month, 0).getDate();
     }
 
     function onLastXChecked(){
@@ -128,57 +146,58 @@ Column{
 
             if(tmpMonth >= 1 && tmpMonth <= 3){
 
-                newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+                newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString() + "-01"
                 lastXQuarter.push(newValue)
-                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
-                lastXQuarter.push(newValue)
-                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+
+                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
                 lastXQuarter.push(newValue)
                 thisMonth = 1
                 lastMonth = 1
             }
             else if(tmpMonth >= 4 && tmpMonth <= 6){
 
-                newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+                newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString() + "-01"
                 lastXQuarter.push(newValue)
-                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
-                lastXQuarter.push(newValue)
-                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+
+                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
                 lastXQuarter.push(newValue)
                 tmpMonth = 1
             }
             else if(tmpMonth >= 7 && tmpMonth <= 9){
 
-                newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+                newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString() + "-01"
                 lastXQuarter.push(newValue)
-                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
-                lastXQuarter.push(newValue)
-                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+
+                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
                 lastXQuarter.push(newValue)
                 tmpMonth = 4
             }
             else{
 
-                newValue = thisYear.toString() + "-" + tmpMonth.toString()
+                newValue = thisYear.toString() + "-" + tmpMonth.toString() + "-01"
                 lastXQuarter.push(newValue)
-                newValue = thisYear.toString() + "-" + (tmpMonth+1).toString()
-                lastXQuarter.push(newValue)
-                newValue = thisYear.toString() + "-" + (tmpMonth+2).toString()
+
+                newValue = thisYear.toString() + "-" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
                 lastXQuarter.push(newValue)
                 tmpMonth = 7
             }
         }
 
-        console.log(lastXQuarter.toString())
-        DSParamsModel.setTimeFrame("Last " + value + " Quarter", lastXQuarter.toString())
-        DSParamsModel.setSubCategory("Quarter")
-        DSParamsModel.addToJoinValue(mapKey, "Last " + value + " Quarter")
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+        lastXQuarter.sort()
+
+        var finalValue = lastXQuarter[0] + "," + lastXQuarter[lastXQuarter.length - 1]
+
+        console.log("Last "+ noOfQuarter + " Quarters", lastXQuarter[0], lastXQuarter[lastXQuarter.length - 1])
+        DSParamsModel.setSubCategory(Constants.dateSubQuarter)
+        DSParamsModel.setActualDateValues(counter, finalValue.toString())
+        DSParamsModel.addToJoinValue(counter, "Last " + value + " Quarter")
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = true
     }
+
     function onNextXChecked(){
 
         var value = nextXRadioTextField.text
@@ -214,53 +233,52 @@ Column{
 
             if(tmpMonth >= 1 && tmpMonth <= 3){
 
-                newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+                newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString() + "-01"
                 nextXQuarter.push(newValue)
-                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
-                nextXQuarter.push(newValue)
-                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+
+                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
                 nextXQuarter.push(newValue)
                 tmpMonth = 4
             }
             else if(tmpMonth >= 4 && tmpMonth <= 6){
 
-                newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+                newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString() + "-01"
                 nextXQuarter.push(newValue)
-                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
-                nextXQuarter.push(newValue)
-                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+
+                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
                 nextXQuarter.push(newValue)
                 tmpMonth = 7
             }
             else if(tmpMonth >= 7 && tmpMonth <= 9){
 
-                newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+                newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString() + "-01"
                 nextXQuarter.push(newValue)
-                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
-                nextXQuarter.push(newValue)
-                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+
+                newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
                 nextXQuarter.push(newValue)
                 tmpMonth = 10
             }
             else{
 
-                newValue = thisYear.toString() + "-" + tmpMonth.toString()
+                newValue = thisYear.toString() + "-" + tmpMonth.toString() + "-01"
                 nextXQuarter.push(newValue)
-                newValue = thisYear.toString() + "-" + (tmpMonth+1).toString()
-                nextXQuarter.push(newValue)
-                newValue = thisYear.toString() + "-" + (tmpMonth+2).toString()
+
+                newValue = thisYear.toString() + "-" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
                 nextXQuarter.push(newValue)
                 thisMonth = 10
                 nextMonth = 1
             }
         }
 
-        console.log(nextXQuarter.toString())
-        DSParamsModel.setTimeFrame("Next " + value + " Quarter", nextXQuarter.toString())
-        DSParamsModel.setSubCategory("Quarter")
-        DSParamsModel.addToJoinValue(mapKey, "Next " + value + " Quarter")
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+        nextXQuarter.sort()
+        var finalValue = nextXQuarter[0] + "," + nextXQuarter[nextXQuarter.length - 1]
+
+        console.log("Next "+ noOfQuarter + " Quarters", nextXQuarter[0], nextXQuarter[nextXQuarter.length - 1])
+        DSParamsModel.setSubCategory(Constants.dateSubQuarter)
+        DSParamsModel.setActualDateValues(counter, finalValue.toString())
+        DSParamsModel.addToJoinValue(counter, "Next " + value + " Quarter")
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = true
         lastXRadioTextField.focus = false
@@ -279,49 +297,49 @@ Column{
         if(thisMonth >= 1 && thisMonth <= 3){
 
             tmpMonth = 1
-            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString() + "-01"
             thisQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
-            thisQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
             thisQuarter.push(newValue)
         }
         else if(thisMonth >= 4 && thisMonth <= 6){
 
             tmpMonth = 4
-            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString() + "-01"
             thisQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
-            thisQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
             thisQuarter.push(newValue)
         }
         else if(thisMonth >= 7 && thisMonth <= 9){
 
             tmpMonth = 7
-            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString() + "-01"
             thisQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
-            thisQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
             thisQuarter.push(newValue)
         }
         else{
 
             tmpMonth = 10
-            newValue = thisYear.toString() + "-" + tmpMonth.toString()
+            newValue = thisYear.toString() + "-" + tmpMonth.toString() + "-01"
             thisQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + (tmpMonth+1).toString()
-            thisQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + (tmpMonth+2).toString()
+
+            newValue = thisYear.toString() + "-" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
             thisQuarter.push(newValue)
         }
 
-        DSParamsModel.setTimeFrame("This Quarter", thisQuarter.toString())
-        DSParamsModel.setSubCategory("Quarter")
-        DSParamsModel.addToJoinValue(mapKey, "This Quarter")
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+        thisQuarter.sort()
+        var finalValue = thisQuarter[0] + "," + thisQuarter[thisQuarter.length - 1]
+
+        console.log("This Quarter", thisQuarter[0], thisQuarter[thisQuarter.length - 1])
+        DSParamsModel.setSubCategory(Constants.dateSubQuarter)
+        DSParamsModel.setActualDateValues(counter, finalValue.toString())
+        DSParamsModel.addToJoinValue(counter, "This Quarter")
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -341,49 +359,49 @@ Column{
 
             tmpMonth = 10
             thisYear = thisYear - 1
-            newValue = thisYear.toString() + "-" + tmpMonth.toString()
+            newValue = thisYear.toString() + "-" + tmpMonth.toString() + "-01"
             lastQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + (tmpMonth+1).toString()
-            lastQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + (tmpMonth+2).toString()
+
+            newValue = thisYear.toString() + "-" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
             lastQuarter.push(newValue)
         }
         else if(thisMonth >= 4 && thisMonth <= 6){
 
             tmpMonth = 1
-            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString() + "-01"
             lastQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
-            lastQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
             lastQuarter.push(newValue)
         }
         else if(thisMonth >= 7 && thisMonth <= 9){
 
             tmpMonth = 4
-            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString() + "-01"
             lastQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
-            lastQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
             lastQuarter.push(newValue)
         }
         else{
 
             tmpMonth = 7
-            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString() + "-01"
             lastQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
-            lastQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
             lastQuarter.push(newValue)
         }
 
-        DSParamsModel.setTimeFrame("Last Quarter", lastQuarter.toString())
-        DSParamsModel.setSubCategory("Quarter")
-        DSParamsModel.addToJoinValue(mapKey, "Last Quarter")
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+        lastQuarter.sort()
+        var finalValue = lastQuarter[0] + "," + lastQuarter[lastQuarter.length - 1]
+
+        console.log("Last Quarter", lastQuarter[0], lastQuarter[lastQuarter.length - 1])
+        DSParamsModel.setSubCategory(Constants.dateSubQuarter)
+        DSParamsModel.setActualDateValues(counter, finalValue.toString())
+        DSParamsModel.addToJoinValue(counter, "Last Quarter")
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -402,50 +420,51 @@ Column{
         if(thisMonth >= 1 && thisMonth <= 3){
 
             tmpMonth = 4
-            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString() + "-01"
             nextQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
-            nextQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
             nextQuarter.push(newValue)
         }
         else if(thisMonth >= 4 && thisMonth <= 6){
 
             tmpMonth = 7
-            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString() + "-01"
             nextQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
-            nextQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
             nextQuarter.push(newValue)
         }
         else if(thisMonth >= 7 && thisMonth <= 9){
 
             tmpMonth = 10
-            newValue = thisYear.toString() + "-" + tmpMonth.toString()
+            newValue = thisYear.toString() + "-" + tmpMonth.toString() + "-01"
             nextQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + (tmpMonth+1).toString()
-            nextQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + (tmpMonth+2).toString()
+
+            newValue = thisYear.toString() + "-" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
             nextQuarter.push(newValue)
         }
         else{
 
             tmpMonth = 1
             thisYear = thisYear + 1
-            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString()
+            newValue = thisYear.toString() + "-" + "0" + tmpMonth.toString() + "-01"
             nextQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+1).toString()
-            nextQuarter.push(newValue)
-            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString()
+
+            newValue = thisYear.toString() + "-" + "0" + (tmpMonth+2).toString() + "-" + daysInMonth(tmpMonth + 2, thisYear)
             nextQuarter.push(newValue)
         }
 
-        DSParamsModel.setTimeFrame("Next Quarter", nextQuarter.toString())
-        DSParamsModel.setSubCategory("Quarter")
-        DSParamsModel.addToJoinValue(mapKey, "Next Quarter")
-        DSParamsModel.addToJoinRelation(mapKey, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(mapKey, Constants.likeRelation)
+
+        nextQuarter.sort()
+        var finalValue = nextQuarter[0] + "," + nextQuarter[nextQuarter.length - 1]
+
+        console.log("Next Quarter", nextQuarter[0], nextQuarter[nextQuarter.length - 1])
+        DSParamsModel.setSubCategory(Constants.dateSubQuarter)
+        DSParamsModel.setActualDateValues(counter, finalValue.toString())
+        DSParamsModel.addToJoinValue(counter, "Next Quarter")
+        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false

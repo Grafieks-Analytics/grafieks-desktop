@@ -25,6 +25,7 @@ Item{
     }
     property var hoverStatusReport: false
     property var originalPoint: Object()
+    property var originalDimensions: Object()
 
 
     /***********************************************************************************************************************/
@@ -87,7 +88,7 @@ Item{
             let reportId = DashboardParamsModel.currentReport
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName) && url !== ""){
                 //                let newUrl =  "file:" + GeneralParamsModel.getTmpPath()  + "../area.html"
-                let newUrl = "qrc:/Source/Charts/area.html"
+                let newUrl = "qrc:/Source/Charts/BarChartArrayInput.html"
                 webengine.url = newUrl
             }
         }
@@ -107,7 +108,8 @@ Item{
     Component.onCompleted: {
         // Add name to report
         // reportName.text = name
-        webengine.url = "qrc:/Source/Charts/area.html"
+        let newUrl = "qrc:/Source/Charts/BarChartArrayInput.html"
+        webengine.url = newUrl
     }
 
     function destroyElement(){

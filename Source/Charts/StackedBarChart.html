@@ -49,8 +49,7 @@
 
             background-color: #fff;
             position: absolute;
-            border: 1px solid #CCCCCC;
-
+            border: 1px solid #cccccc;
         }
 
         #tooltip:before {
@@ -75,34 +74,10 @@
     <div id="tooltip"></div>
     <div id="legend"></div>
 
-
     <script>
-        var data = [
-            [
-                ["2018-08-05", "2018-08-05", "139.81"],
-                ["2018-08-05", "2019-08-05", "100.81"],
-                ["2018-08-05", "2019-08-05", "136.35"],
-                ["2018-08-05", "2019-08-05", "143.22"],
-                ["2012-08-05", "2019-08-05", "0"],
-                ["2013-08-05", "2018-08-05", "241.64"],
-                ["2014-08-05", "2019-08-05", "48.43"],
-                ["2012-08-05", "2019-08-05", "54.43"],
-                ["2011-08-05", "2018-08-05", "-211.31"],
-                ["2013-08-05", "2019-08-05", "-200.36"],
-                ["2013-08-05", "2019-08-05", "0"],
-                ["2019-08-05", "2019-08-05", "321.31"],
-                ["2019-08-05", "2013-08-05", "500.36"],
-                ["2019-08-05", "2019-08-05", "103.7"],
-                ["2019-08-05", "2019-08-05", "100.82"],
-            ],
-            ["2018-08-05", "2019-08-05", "2019-08-05", "2019-08-05"],
-            ["2019", "2018"],
-        ];
-
         var extraHeightWorked = false;
         var redrawn = false;
         var extraHeight = 0;
-        drawChart(data);
 
         function transformData(dataValue, dateFormat, dateFormat1) {
             json = {};
@@ -159,22 +134,12 @@
                 response.push({ ...json[key], key });
             }
 
-            // console.log(response);
-            // debugger;
             return [response, allKeys, data[2]];
         }
 
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
 
-
-            // var keys = data[1];
-            // var labels = data[2];
-
-            var margin = { top: 20, right: 20, bottom: 30, left: 40 };
-            var width = window.innerWidth - margin.left - margin.right - 50;
-            var height = window.innerHeight - margin.top - margin.bottom - 50;
-            yaxisTicks = height / 70;
             var timeFormat = d3.timeFormat("%m-%Y");
             var parseDate = d3.timeParse("%Y");
             var tooltipColumn1 = "test1";
@@ -197,8 +162,6 @@
                 d3colorPalette = defaultD3Config.d3ColorPalette;
             }
             d3Colors = d3colorPalette;
-
-
 
             if (!paddingInner) {
                 paddingInner = defaultD3Config.defaultPaddingInner;
@@ -229,7 +192,6 @@
                 dateFormat1
             );
 
-
             if (!legendConfig) {
                 legendConfig = { legendStatus: false };
             }
@@ -237,8 +199,8 @@
             let { legendStatus, legendPosition } = legendConfig;
 
             if (legendStatus) {
-                var legendHeight = document.querySelector("#legend")
-                    .offsetHeight;
+                var legendHeight =
+                    document.querySelector("#legend").offsetHeight;
                 var legendElement = document.querySelector("#legend");
 
                 topPosition = "calc(50vh - " + legendHeight + "px)";
@@ -262,7 +224,7 @@
                             .style("top", "20px")
                             .style("right", "auto")
                             .style("bottom", "auto")
-                            .style("left",  "35%")
+                            .style("left", "35%")
                             .style("display", "flex");
                         d3.selectAll("#legend div").style("padding", "2px 4px");
                         break;
@@ -273,7 +235,7 @@
                             .style("top", "auto")
                             .style("right", "auto")
                             .style("bottom", "40px")
-                            .style("left",  "35%")
+                            .style("left", "35%")
                             .style("display", "flex");
                         break;
                     // For Right Legened
@@ -312,14 +274,12 @@
                     .style("padding", "5px");
             }
 
-
             if (!toolTip) {
                 toolTip = {
                     textColumn1: labels[0],
-                    textColumn2: labels[1]
-                }
+                    textColumn2: labels[1],
+                };
             }
-
 
             if (chartType == constants.chartType.STANDARD) {
                 width = data.length * standardThresholdWidth;
@@ -327,6 +287,7 @@
 
             var height =
                 window.innerHeight - margin.top - margin.bottom - extraHeight;
+            yaxisTicks = height / 70;
 
             var x = d3
                 .scaleBand()
@@ -401,7 +362,10 @@
                 .selectAll("#my_dataviz")
                 .append("svg")
                 .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
+                .attr(
+                    "height",
+                    height + extraHeight + margin.top + margin.bottom
+                )
                 .append("g")
                 .attr(
                     "transform",
@@ -494,7 +458,23 @@
                                 textValue = d.y1 - d.y0;
                             }
 
-                            return "<span style='color:grey;''>" + toolTip.textColumn1 + ":" + "</span>" + "<span style='float: right;'>" + d.key + "</span>" + "<br/> <br/>" + "<span style='color:grey;''>" + toolTip.textColumn2 + ":" + "</span>" + "<span style='float: right;margin-left: 15px;'>" + textValue.toFixed(3) + "</span>";
+                            return (
+                                "<span style='color:grey;''>" +
+                                toolTip.textColumn1 +
+                                ":" +
+                                "</span>" +
+                                "<span style='float: right;'>" +
+                                d.key +
+                                "</span>" +
+                                "<br/> <br/>" +
+                                "<span style='color:grey;''>" +
+                                toolTip.textColumn2 +
+                                ":" +
+                                "</span>" +
+                                "<span style='float: right;margin-left: 15px;'>" +
+                                textValue.toFixed(3) +
+                                "</span>"
+                            );
                         });
 
                     d3.selectAll(".bar").style("opacity", 0.3);
@@ -507,8 +487,36 @@
                 setXaxisWidth();
             }
 
+            if (chartType == constants.chartType.STANDARD) {
+                setStandardTickWidths();
+            }
+
+            function setStandardTickWidths() {
+                var a = document.querySelectorAll(".x-axis .tick text");
+
+                for (var i = 0; i < a.length; i++) {
+                    var singleCharacterLength =
+                        a[i].getBBox().width / a[i].innerHTML.length;
+                    var numOfCharacters = Math.floor(
+                        barWidth / singleCharacterLength
+                    );
+
+                    var tick = a[i];
+
+                    var tickWidth = tick && tick.getBBox().width;
+                    if (tickWidth > barWidth) {
+                        var tickValue = tick.innerHTML;
+                        tickValue =
+                            tickValue &&
+                            tickValue.substr(0, numOfCharacters - 3) + "...";
+                        tick.innerHTML = tickValue;
+                    }
+                }
+            }
+
             function setXaxisWidth() {
-                var allYAxisTicks = document.querySelectorAll(".x-axis .tick");
+                var allYAxisTicks =
+                    document.querySelectorAll(".x-axis .tick text");
                 var maxWidth = 0;
                 for (var i = 0; i < allYAxisTicks.length; i++) {
                     var tick = allYAxisTicks[i];
@@ -519,6 +527,7 @@
                 }
 
                 extraHeightWorked = true;
+                maxWidth = maxWidth < 100 ? maxWidth : 100;
                 extraHeight = maxWidth;
 
                 d3.select(".x-axis").attr("text-anchor", "right");
@@ -574,7 +583,10 @@
                 .querySelector(".x-axis .tick text")
                 .getBBox().height;
 
-            if (chartType == constants.chartType.FIT_WIDTH) {
+            if (
+                chartType == constants.chartType.FIT_WIDTH &&
+                x.bandwidth() < 40
+            ) {
                 for (var i = 0; i < allXAxisTexts.length; i++) {
                     if (!Math.floor(data.length * 0.02)) {
                         break;
@@ -582,6 +594,36 @@
                     if (i % Math.floor(data.length * 0.02) != 0) {
                         allXAxisTexts[i].remove();
                         continue;
+                    }
+
+                    if (allXAxisTexts[i] && allXAxisTexts[i].innerHTML) {
+                        var singleCharacterLength =
+                            allXAxisTexts[i].getBBox().width /
+                            allXAxisTexts[i].innerHTML.length;
+
+                        var numOfCharacters =
+                            extraHeight / singleCharacterLength;
+
+                        if (
+                            allXAxisTexts[i].innerHTML &&
+                            allXAxisTexts[i].innerHTML.length > numOfCharacters
+                        ) {
+                            if (Math.floor(numOfCharacters) > 3) {
+                                allXAxisTexts[i].innerHTML =
+                                    (allXAxisTexts[i].innerHTML &&
+                                        allXAxisTexts[i].innerHTML.substr(
+                                            0,
+                                            numOfCharacters - 3
+                                        )) + "...";
+                            } else {
+                                allXAxisTexts[i].innerHTML =
+                                    (allXAxisTexts[i].innerHTML &&
+                                        allXAxisTexts[i].innerHTML.substr(
+                                            0,
+                                            2
+                                        )) + "...";
+                            }
+                        }
                     }
 
                     if (i == 0 && barWidth < textWidth * 0.5) {
@@ -598,6 +640,10 @@
                 extraHeightWorked = false;
                 redrawn = true;
                 drawChart(window.data, plottingConfiguration);
+                var mainChart = document.querySelector("#my_dataviz svg");
+                var heightValue = mainChart.getAttribute("height");
+                heightValue = +heightValue + extraHeight;
+                mainChart.setAttribute("height", heightValue);
             }
 
             if (extraHeightWorked && redrawn) {

@@ -77,7 +77,6 @@ Item{
         target: DuckQueryModel
 
         function onErrorSignal(errMsg){
-            console.log("SDSD", errMsg)
             if(errMsg !== ""){
                 errorMsg = errMsg
                 queryUpdate.icon = StandardIcon.Critical

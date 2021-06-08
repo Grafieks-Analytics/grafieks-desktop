@@ -70,8 +70,10 @@
                     toolTip,
                     legendConfig,
                     standardThresholdWidth,
+                    fontSize = defaultD3Config.fontSize,
                 } = plottingConfiguration;
 
+                window.fontSize = fontSize;
                 if (!legendConfig) {
                     legendConfig = { legendStatus: false };
                 }
@@ -384,13 +386,13 @@
                         d3.select(this).style("opacity", 1);
                     });
 
-                var xAxis = d3.axisBottom(xScale);
                 // if (valueDateType) {
                 //     xAxis.tickFormat(d3.timeFormat(dateFormat));
                 // }
 
                 /*.tickFormat("");remove tick label*/
 
+                var xAxis = d3.axisBottom(xScale);
                 svg.append("g")
                     .call(xAxis)
                     .attr("class", "x-axis")
@@ -398,20 +400,6 @@
 
                 setLabel(xAxisLabel, "x_label", false);
                 setLabel(yAxisLabel, "y_label", false);
-
-                // //add label for x axis and y axis
-                // svg.append("text")
-                //     .text("Y Label")
-                //     .attr("x", 0 - height / 2)
-                //     .attr("y", 0 - margin.left)
-                //     .attr("dy", "1em")
-                //     .style("text-anchor", "middle")
-                //     .attr("transform", "rotate(-90)");
-                // svg.append("text")
-                //     .text("X Label")
-                //     .attr("x", width / 2)
-                //     .attr("y", height + margin.bottom)
-                //     .style("text-anchor", "middle");
 
                 setYaxisWidth();
 
@@ -425,9 +413,39 @@
                     setXaxisWidth();
                 }
 
+                if (chartType == constants.chartType.STANDARD) {
+                    setStandardTickWidths();
+                }
+
+                function setStandardTickWidths() {
+                    var a = document.querySelectorAll(".x-axis .tick text");
+
+                    for (var i = 0; i < a.length; i++) {
+                        var singleCharacterLength =
+                            a[i].getBBox().width / a[i].innerHTML.length;
+                        var numOfCharacters = Math.floor(
+                            barWidth / singleCharacterLength
+                        );
+
+                        var tick = a[i];
+
+                        var tickWidth = tick && tick.getBBox().width;
+                        if (tickWidth > barWidth) {
+                            console.log("Length is long", numOfCharacters);
+                            var tickValue = tick.innerHTML;
+                            tickValue =
+                                tickValue &&
+                                tickValue.substr(0, numOfCharacters - 3) +
+                                    "...";
+                            console.log(tickValue);
+                            tick.innerHTML = tickValue;
+                        }
+                    }
+                }
+
                 function setXaxisWidth() {
                     var allYAxisTicks =
-                        document.querySelectorAll(".x-axis .tick");
+                        document.querySelectorAll(".x-axis .tick text");
                     var maxWidth = 0;
                     for (var i = 0; i < allYAxisTicks.length; i++) {
                         var tick = allYAxisTicks[i];
@@ -442,11 +460,11 @@
                     extraHeight = maxWidth;
 
                     d3.select(".x-axis").attr("text-anchor", "right");
-
                     d3.selectAll(".x-axis text")
                         .attr("transform", "rotate(-90)")
                         .attr("dy", "0.3em")
                         .attr("x", "-" + (maxWidth + 3))
+                        .attr("font-size", fontSize)
                         .attr("y", "0");
                 }
 
@@ -461,9 +479,37 @@
                         if (!Math.floor(data[0][0].length * 0.02)) {
                             break;
                         }
-                        if (i % Math.floor(data[0][0].length * 0.02) != 0) {
+                        if (i % Math.floor(data[0][0].length * 0.04) != 0) {
                             a[i].remove();
                             continue;
+                        }
+
+                        if (a[i].innerHTML && a[i].innerHTML) {
+                            var singleCharacterLength =
+                                a[i].getBBox().width / a[i].innerHTML.length;
+
+                            var numOfCharacters =
+                                extraHeight / singleCharacterLength;
+
+                            if (
+                                a[i].innerHTML &&
+                                a[i].innerHTML.length > numOfCharacters
+                            ) {
+                                if (Math.floor(numOfCharacters) > 3) {
+                                    console.log(a[i].innerHTML);
+                                    a[i].innerHTML =
+                                        (a[i].innerHTML &&
+                                            a[i].innerHTML.substr(
+                                                0,
+                                                numOfCharacters - 3
+                                            )) + "...";
+                                } else {
+                                    a[i].innerHTML =
+                                        (a[i].innerHTML &&
+                                            a[i].innerHTML.substr(0, 2)) +
+                                        "...";
+                                }
+                            }
                         }
 
                         if (i == 0 && barWidth < textWidth * 0.5) {
