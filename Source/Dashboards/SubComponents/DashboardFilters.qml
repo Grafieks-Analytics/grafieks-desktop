@@ -26,11 +26,16 @@ Item {
     anchors.left: parent.left
     anchors.leftMargin: 3
 
+
     function hideColumn(){
         DashboardParamsModel.hideAllDashboardRight()
     }
 
 
+ Rectangle{
+     height:parent.height
+     width:200
+     color: "white"
 
     Rectangle{
         id: show_filter
@@ -114,4 +119,5 @@ Item {
     FilterCustomize{
         id: labelShapePopup1
     }
+}
 }

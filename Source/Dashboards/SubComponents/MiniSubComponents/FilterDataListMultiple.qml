@@ -8,7 +8,7 @@ import "../../../MainSubComponents"
 
 Item {
     id: filterDataItemMulti
-    width: parent.width
+    width: parent.width-8
     height: 200
     property alias componentName: filterDataItemMulti.objectName
 
@@ -34,10 +34,12 @@ Item {
         if(searchFilter.visible){
             searchFilter.visible=false
             searchFilter.height=0
+             dataListView.height=150
             return
         }
         searchFilter.visible=true
         searchFilter.height=30
+         dataListView.height=130
     }
 
     function searchData(searchText){
@@ -63,23 +65,37 @@ Item {
     }
 
     Rectangle{
+        height: parent.height
+        width: parent.width
+        color: "white"
+        border.color: Constants.darkThemeColor
+
+    Rectangle{
         id:columnName
         width:parent.width
         height:25
 
-        border.color: Constants.themeColor
+
+
+         color: Constants.themeColor
+        border.color: Constants.darkThemeColor
         Row{
 
-            spacing: 45
-            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 10
+
             anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: 15
 
 
             Text {
                 id: componentTitle
+                width:110
+                 elide: Text.ElideRight
                 text: DashboardParamsModel.fetchColumnAliasName(currentDashboardId, componentName)
-                font.pixelSize: 12
+             font.pixelSize: Constants.fontCategoryHeaderMedium
                 verticalAlignment: Text.AlignVCenter
+
             }
 
             Row{
@@ -87,6 +103,8 @@ Item {
                 height: parent.height
                 width: 40
                 spacing: 5
+                anchors.verticalCenter: parent.verticalCenter
+
                 Image {
                     source: "/Images/icons/iconmonstr-search-thin.svg"
                     width: 14
@@ -117,8 +135,10 @@ Item {
         id: searchFilter
         visible: false
         anchors.top: columnName.bottom
+        anchors.topMargin: 10
         height: 0
-        width: parent.width
+        width: parent.width-10
+         anchors.horizontalCenter: parent.horizontalCenter
         TextField{
             id: searchText
             width: parent.width-10
@@ -128,7 +148,7 @@ Item {
 
             placeholderText: qsTr("Search")
             background: Rectangle {
-                border.color: Constants.themeColor
+                border.color: Constants.borderBlueColor
                 width: parent.width
                 border.width: Constants.borderWidth
             }
@@ -141,6 +161,7 @@ Item {
     ListView{
         id: dataListView
         topMargin: 10
+         leftMargin: 10
         height:150
         flickableDirection: Flickable.VerticalFlick
         boundsBehavior: Flickable.StopAtBounds
@@ -153,4 +174,5 @@ Item {
             return multipleselect
         }
     }
+}
 }

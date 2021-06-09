@@ -171,7 +171,7 @@ Item {
 
 
     Column {
-        spacing: 2
+        spacing: 5
         anchors.top: toolsep4.top
         width: parent.width
         anchors.topMargin: 4
@@ -180,100 +180,133 @@ Item {
         Rectangle {
             id: rectangle1
             width: parent.width
-            anchors.topMargin: 4
+            anchors.topMargin: 0
             anchors.left: parent.left
             anchors.leftMargin: 5
             height:  parent.height/3-20
             color: "white"
-            border.color: Constants.themeColor
+            border.color: Constants.darkThemeColor
 
+            Rectangle{
+                id:categoricalCheckboxesRect
+                height: 25
+                width: parent.width
+                color: Constants.themeColor
+                anchors.top: parent.top
+                border.color: Constants.darkThemeColor
 
             Text {
                 id: text4
 
-                anchors.top: parent.top
-                anchors.topMargin: 20
                 anchors.left: parent.left
                 anchors.leftMargin: 10
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
+                   anchors.verticalCenter: parent.verticalCenter
 
                 text: qsTr("Categorical")
                 font.pixelSize: 15
 
             }
+            }
 
             CategoricalList{
                 id: categoricalCheckboxes
-
-            }
-        }
-        Rectangle {
-            id: rectangle2
-
-            width: parent.width
-
-            anchors.left: parent.left
-            anchors.leftMargin: 5
-            height:  parent.height/3-20
-            color: "white"
-            border.color: Constants.themeColor
-
-
-            Text {
-                id: dataTypeDate
-
-                anchors.top: parent.top
-                anchors.topMargin: 20
+                anchors.top: categoricalCheckboxesRect.bottom
+                anchors.topMargin: 5
                 anchors.left: parent.left
                 anchors.leftMargin: 10
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-
-                text: qsTr("Date")
-                font.pixelSize: 15
 
 
             }
-
-            DateList{
-                id: dateCheckboxes
-            }
-
         }
+
         Rectangle {
             id: rectangle3
 
             width: parent.width
-            anchors.topMargin: 4
+            anchors.topMargin: 0
             anchors.left: parent.left
             anchors.leftMargin: 5
             height:  parent.height/3-20
             color: "white"
-            border.color: Constants.themeColor
+            border.color: Constants.darkThemeColor
 
-
-            Text {
-                id: dataTypeNumerical
-
+            Rectangle{
+                id:dataTypeNumericalRect
+                height: 25
+                width: parent.width
+                color: Constants.themeColor
                 anchors.top: parent.top
-                anchors.topMargin: 20
-                anchors.left: parent.left
-                anchors.leftMargin: 10
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
+                border.color: Constants.darkThemeColor
 
-                text: qsTr("Numerical")
-                font.pixelSize: 15
+                Text {
+                    id: dataTypeNumerical
 
+
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    text: qsTr("Numerical")
+                    font.pixelSize: 15
+
+
+                }
 
             }
-
             NumericalList{
                 id: numericalCheckboxes
+                anchors.top: dataTypeNumericalRect.bottom
+                anchors.topMargin: 5
+                anchors.left: parent.left
+                anchors.leftMargin: 10
             }
         }
 
+        Rectangle {
+            id: rectangle2
+
+            width: parent.width
+            anchors.topMargin: 0
+            anchors.left: parent.left
+            anchors.leftMargin: 5
+            height:  parent.height/3-20
+            color: "white"
+            border.color: Constants.darkThemeColor
+            Rectangle{
+                height: 25
+                width: parent.width
+                color: Constants.themeColor
+                anchors.top: parent.top
+                border.color: Constants.darkThemeColor
+
+
+                Text {
+                    id: dataTypeDate
+
+
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    //                anchors.bottom: parent.bottom
+                    //                anchors.bottomMargin: 0
+
+                    text: qsTr("Date")
+                    font.pixelSize: 15
+
+
+                }
+            }
+
+            DateList{
+                id: dateCheckboxes
+                anchors.top: dataTypeDate.bottom
+                anchors.topMargin: 5
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+
+            }
+
+        }
     }
 
 }
