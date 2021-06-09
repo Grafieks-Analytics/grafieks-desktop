@@ -18,6 +18,7 @@ class TableColumnsModel : public QObject
     QStringList categoryList;
     QStringList dateList;
     QMap<int, QStringList> allColumnVisibleMap;
+    QMap<QString, QString> columnTypes;
 
 public:
     explicit TableColumnsModel(QObject *parent = nullptr);
@@ -31,6 +32,7 @@ public:
     Q_INVOKABLE QStringList fetchColumnData(QString colName);
     Q_INVOKABLE QStringList searchColumnData(QString keyword, QString columnName);
     Q_INVOKABLE void searchColumnNames(int dashboardId, QString keyword);
+    Q_INVOKABLE QString findColumnType(QString columnName);
 
 
 

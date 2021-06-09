@@ -36,7 +36,7 @@ Item {
         if(searchFilter.visible){
             searchFilter.visible=false
             searchFilter.height=0
-              dataListView.height=150
+            dataListView.height=150
             return
         }
         searchFilter.visible=true
@@ -50,8 +50,13 @@ Item {
     }
 
     function filterClicked(){
+
+        var currentColumnType = TableColumnsModel.findColumnType(componentName)
+        DashboardParamsModel.setCurrentColumnType(currentColumnType)
         DashboardParamsModel.setCurrentSelectedColumn(componentName)
+
         labelShapePopup1.visible = true
+        console.log(componentName, "CP NAME", currentColumnType)
     }
 
     ButtonGroup{
@@ -80,113 +85,113 @@ Item {
 
 
 
-    Rectangle{
-        id:columnName
-        width:parent.width
-        height:25
-        color: Constants.themeColor
+        Rectangle{
+            id:columnName
+            width:parent.width
+            height:25
+            color: Constants.themeColor
 
-              border.color: Constants.darkThemeColor
-        Row{
-
-            spacing: 10
-
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.leftMargin: 15
-
-
-
-
-            Text {
-                id: componentTitle
-                width:110
-                text: DashboardParamsModel.fetchColumnAliasName(currentDashboardId, componentName)
-                     elide: Text.ElideRight
-                font.pixelSize: Constants.fontCategoryHeaderMedium
-                verticalAlignment: Text.AlignVCenter
-
-
-            }
-
+            border.color: Constants.darkThemeColor
             Row{
 
-                height: parent.height
-                width: 40
-                spacing: 5
+                spacing: 10
+
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.leftMargin: 15
 
 
 
-                Image {
-                    source: "/Images/icons/iconmonstr-search-thin.svg"
-                    width: 14
-                    height: 14
 
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked:  toggleSearch()
-                    }
-                }
-                Image {
-                    source: "/Images/icons/customize.png"
-                    width: 16
-                    height: 16
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: filterClicked()
-                    }
+                Text {
+                    id: componentTitle
+                    width:110
+                    text: DashboardParamsModel.fetchColumnAliasName(currentDashboardId, componentName)
+                    elide: Text.ElideRight
+                    font.pixelSize: Constants.fontCategoryHeaderMedium
+                    verticalAlignment: Text.AlignVCenter
+
 
                 }
+
+                Row{
+
+                    height: parent.height
+                    width: 40
+                    spacing: 5
+                    anchors.verticalCenter: parent.verticalCenter
+
+
+
+                    Image {
+                        source: "/Images/icons/iconmonstr-search-thin.svg"
+                        width: 14
+                        height: 14
+
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked:  toggleSearch()
+                        }
+                    }
+                    Image {
+                        source: "/Images/icons/customize.png"
+                        width: 16
+                        height: 16
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: filterClicked()
+                        }
+
+                    }
+                }
+
             }
 
         }
 
-    }
-
-    Rectangle{
-        id: searchFilter
-        visible: false
-        anchors.top: columnName.bottom
-        anchors.topMargin: 10
-        height: 0
-        width: parent.width-10
-         anchors.horizontalCenter: parent.horizontalCenter
-        TextField{
-            id: searchText
+        Rectangle{
+            id: searchFilter
+            visible: false
+            anchors.top: columnName.bottom
+            anchors.topMargin: 10
+            height: 0
             width: parent.width-10
-            selectByMouse: true
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.top
+            TextField{
+                id: searchText
+                width: parent.width-10
+                selectByMouse: true
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
 
-            placeholderText: qsTr("Search")
-            background: Rectangle {
-                border.color: Constants.borderBlueColor
-                width: parent.width
-                border.width: Constants.borderWidth
+                placeholderText: qsTr("Search")
+                background: Rectangle {
+                    border.color: Constants.borderBlueColor
+                    width: parent.width
+                    border.width: Constants.borderWidth
+                }
+                onTextChanged: searchData(searchText.text)
+
             }
-            onTextChanged: searchData(searchText.text)
 
         }
 
-    }
+        ListView{
+            id: dataListView
+            topMargin: 10
 
-    ListView{
-        id: dataListView
-        topMargin: 10
+            leftMargin: 10
+            height:150
+            flickableDirection: Flickable.VerticalFlick
+            boundsBehavior: Flickable.StopAtBounds
+            clip: true
+            ScrollBar.vertical: CustomScrollBar {}
+            width: parent.width
+            anchors.top: searchFilter.bottom
 
-     leftMargin: 10
-        height:150
-        flickableDirection: Flickable.VerticalFlick
-        boundsBehavior: Flickable.StopAtBounds
-        clip: true
-        ScrollBar.vertical: CustomScrollBar {}
-        width: parent.width
-        anchors.top: searchFilter.bottom
-
-        delegate:{
-            return singleselect
+            delegate:{
+                return singleselect
+            }
         }
     }
 }
-    }
