@@ -172,7 +172,7 @@ QtObject {
     // Tab Bar Open Constants- Section
 
     property string categoricalTab: "categorical"
-    property string dateTab: "date"
+    property string dateTab: "dateformat"
     property string numericalTab: "numerical"
     property string groupTab: "group"
 
