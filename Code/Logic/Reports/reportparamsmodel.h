@@ -310,7 +310,7 @@ signals:
     // For Dashboard Reports
     void reportListChanged();
 
-};
+
 
     void categoricalFilterChanged(QVector<int> filterList);
     void dateFilterChanged(QVector<int> filterList);

@@ -118,7 +118,7 @@ void ReportParamsModel::addReport(QString reportId)
 
     this->reportsData.insert(this->reportId(),this->reportTitle());
 
-    // Emitting singal to update report list 
+    // Emitting singal to update report list
     // in dashboards
     emit reportListChanged();
     
@@ -1020,6 +1020,8 @@ void ReportParamsModel::restoreMasterFilters(int filterId, QVariantMap filterDat
     this->filterSubCategoryMap.insert(filterId, filterData.value("subCategory").toString());
     this->dateFormatMap.insert(filterId, filterData.value("dateFormat").toInt());
     this->actualDateValues.insert(filterId, filterData.value("actualDateValues").toStringList());
+}
+
 void ReportParamsModel::setChartTitle(QString chartTitle)
 {
     if (m_chartTitle == chartTitle)
