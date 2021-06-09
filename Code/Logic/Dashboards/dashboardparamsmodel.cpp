@@ -818,6 +818,11 @@ int DashboardParamsModel::tmpCanvasWidth() const
     return m_tmpCanvasWidth;
 }
 
+QString DashboardParamsModel::currentColumnType() const
+{
+    return m_currentColumnType;
+}
+
 QString DashboardParamsModel::currentSelectedColumn() const
 {
     return m_currentSelectedColumn;
@@ -922,6 +927,16 @@ void DashboardParamsModel::setTmpCanvasWidth(int tmpCanvasWidth)
         this->dashboardCanvasDimensions[i][0] = m_tmpCanvasWidth;
     }
     emit tmpCanvasWidthChanged(m_tmpCanvasWidth);
+}
+
+void DashboardParamsModel::setCurrentColumnType(QString currentColumnType)
+{
+    if (m_currentColumnType == currentColumnType)
+        return;
+
+    m_currentColumnType = currentColumnType;
+    qDebug() << "COL TYPE CHANGED HERE" << m_currentColumnType;
+    emit currentColumnTypeChanged(m_currentColumnType);
 }
 
 void DashboardParamsModel::getColumnNames(QStringList columnNames)

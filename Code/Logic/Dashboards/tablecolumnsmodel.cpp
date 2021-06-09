@@ -59,6 +59,11 @@ void TableColumnsModel::searchColumnNames(int dashboardId, QString keyword)
     emit sendFilteredColumn(dashboardId, this->categoryList.filter(keyword, Qt::CaseInsensitive), this->numericalList.filter(keyword, Qt::CaseInsensitive), this->dateList.filter(keyword, Qt::CaseInsensitive));
 }
 
+QString TableColumnsModel::findColumnType(QString columnName)
+{
+    return this->columnTypes.value(columnName);
+}
+
 void TableColumnsModel::addNewDashboard(int dashboardId)
 {
     emit sendFilteredColumn(dashboardId, this->categoryList, this->numericalList, this->dateList);
@@ -84,6 +89,7 @@ void TableColumnsModel::getChartHeader(QMap<int, QStringList> chartHeader)
     this->categoryList.clear();
     this->dateList.clear();
     this->newChartHeader.clear();
+    this->columnTypes.clear();
 
     QStringList tmpVisibleColumnList;
 
@@ -94,10 +100,13 @@ void TableColumnsModel::getChartHeader(QMap<int, QStringList> chartHeader)
 
         if(chartHeader.value(key).at(1).contains(Constants::categoricalType)){
             this->categoryList.append(fullColumnName);
+            this->columnTypes.insert(fullColumnName, Constants::categoricalType);
         } else if(chartHeader.value(key).at(1).contains(Constants::numericalType)){
             this->numericalList.append(fullColumnName);
+            this->columnTypes.insert(fullColumnName, Constants::numericalType);
         } else if(chartHeader.value(key).at(1).contains(Constants::dateType)){
             this->dateList.append(fullColumnName);
+            this->columnTypes.insert(fullColumnName, Constants::dateType);
         } else{
             qDebug() << "OTHER UNDETECTED FIELD TYPE" << chartHeader.value(key).at(0);
         }
