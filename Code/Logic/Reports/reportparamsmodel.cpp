@@ -955,20 +955,15 @@ QVariantMap ReportParamsModel::insertMasterFilters(int filterId)
     QVariantMap tmp;
 
     // filterColumnMap
-    qDebug() << "FILS" << filterId;
-    qDebug() << "COLS" << this->filterColumnMap;
     tmp.insert("columnName", this->filterColumnMap.value(filterId));
 
     // filterValueMap
-    qDebug() << "VALS" << this->filterValueMap;
     tmp.insert("filterValue", this->filterValueMap.value(filterId));
 
     // filterRelationMap
-    qDebug() << "RELS" << this->filterRelationMap;
     tmp.insert("filterRelation", this->filterRelationMap.value(filterId));
 
     // filterSlugMap
-    qDebug() << "SLUGS" << this->filterSlugMap;
     tmp.insert("filterSlug", this->filterSlugMap.value(filterId));
 
     // includeExcludeMap
