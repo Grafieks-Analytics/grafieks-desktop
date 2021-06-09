@@ -25,9 +25,6 @@ Column{
     // LIST MODEL STARTS
 
 
-    ListModel{
-        id: colorListModel
-    }
 
     ListModel{
         id: fonts

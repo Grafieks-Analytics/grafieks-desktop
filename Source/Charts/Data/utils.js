@@ -204,3 +204,58 @@ function clearChart() {
         window.extraHeight = 0;
     }
 }
+
+function rgbToHex(r, g, b) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+function hexToRgbNew(hex) {
+    hex = hex.substr(1);
+    var arrBuff = new ArrayBuffer(4);
+    var vw = new DataView(arrBuff);
+    vw.setUint32(0, parseInt(hex, 16), false);
+    var arrByte = new Uint8Array(arrBuff);
+
+    return arrByte[1] + "," + arrByte[2] + "," + arrByte[3];
+}
+
+function rgba2hex(orig) {
+    var a,
+        rgb = orig
+            .replace(/\s/g, "")
+            .match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
+        alpha = ((rgb && rgb[4]) || "").trim(),
+        hex = rgb
+            ? (rgb[1] | (1 << 8)).toString(16).slice(1) +
+              (rgb[2] | (1 << 8)).toString(16).slice(1) +
+              (rgb[3] | (1 << 8)).toString(16).slice(1)
+            : orig;
+
+    if (alpha !== "") {
+        a = alpha;
+    } else {
+        a = "01";
+    }
+    // multiply before convert to HEX
+    a = ((a * 255) | (1 << 8)).toString(16).slice(1);
+    hex = hex + a;
+
+    return "#" + hex;
+}
+
+function setSvgBackground(backgroundColor, opacity) {
+    d3.selectAll("#dashboardStyle").remove();
+    if (opacity == 0 || opacity) {
+        var rgb = hexToRgbNew(backgroundColor);
+        var rgba = "rgba(" + rgb + "," + opacity + ")";
+        console.log({ rgba });
+        backgroundColor = rgba2hex(rgba);
+    }
+    var styleTag = document.createElement("style");
+    styleTag.id = "dashboardStyle";
+    styleTag.innerHTML =
+        "#my_dataviz svg, #yAxisDiv, #xAxisDiv{ background-color: " +
+        backgroundColor +
+        " }";
+    document.head.append(styleTag);
+}

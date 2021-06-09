@@ -15,8 +15,9 @@ class ReportParamsModel: public QObject
     Q_OBJECT
 
 // Customize Report parameters
-    QMap<QString, QMap<QString, QString>> reportsMap;           // <<reportId, reportObj>>
+    QVariantMap reportsMap;           // <<reportId, reportObj>>
     QVariantMap reportsData;
+    QVariantMap dashboardReportInstances;
 
     // Filter specific variables
     QMap<int, QMap<int, QVariantMap>> masterReportFilters;         // Report Id - Map of
@@ -54,12 +55,14 @@ class ReportParamsModel: public QObject
 
     // Report Properties for generating graph
     Q_PROPERTY(QString chartType READ chartType WRITE setChartType NOTIFY chartTypeChanged)
+    Q_PROPERTY(QString chartTitle READ chartTitle WRITE setChartTitle NOTIFY chartTitleChanged)
     Q_PROPERTY(QString chartUrl READ chartUrl WRITE setChartUrl NOTIFY chartUrlChanged)
     Q_PROPERTY(QString reportId READ reportId WRITE setReportId NOTIFY reportIdChanged)
     Q_PROPERTY(QString reportTitle READ reportTitle WRITE setReportTitle NOTIFY reportTitleChanged)
     Q_PROPERTY(QString xAxisColumns READ xAxisColumns WRITE setXAxisColumns NOTIFY xAxisColumnsChanged)
     Q_PROPERTY(QString yAxisColumns READ yAxisColumns WRITE setYAxisColumns NOTIFY yAxisColumnsChanged)
     Q_PROPERTY(QString d3PropertiesConfig READ d3PropertiesConfig WRITE setD3PropertiesConfig NOTIFY d3PropertiesConfigChanged)
+    Q_PROPERTY(QString colorByDataColoumns READ colorByDataColoumns WRITE setColorByDataColoumns NOTIFY colorByDataColoumnsChanged)
 
     // For Filters
     Q_PROPERTY(int internalCounter READ internalCounter WRITE setInternalCounter NOTIFY internalCounterChanged) // Counter for categorical-wildcard
@@ -101,6 +104,10 @@ class ReportParamsModel: public QObject
     QString m_mode;
     int m_filterModelIndex;
 
+    QString m_chartTitle;
+
+    QString m_colorByDataColoumns;
+
 public:
     explicit ReportParamsModel(QObject *parent = nullptr);
 
@@ -124,6 +131,8 @@ public:
     QString xAxisColumns() const;
     QString yAxisColumns() const;
     QString d3PropertiesConfig() const;
+    QString chartTitle() const;
+    QString colorByDataColoumns() const;
 
     // For Filters
     int internalCounter() const;
@@ -137,6 +146,7 @@ public:
     int filterModelIndex() const;
 
     Q_INVOKABLE void addReport(QString reportId);
+    Q_INVOKABLE QVariant getReport(QString reportId);
     Q_INVOKABLE QVariantMap getReportsList();
 
     // Filter specific invokable functions
@@ -217,6 +227,11 @@ public:
     Q_INVOKABLE void setActualDateValues(int refObjId, QString value1, QString value2 = "");
     Q_INVOKABLE void removeActualDateValues(int refObjId, bool removeAll = false);
     Q_INVOKABLE QStringList getActualDateValues(int refObjId);
+    // Instances of dropped reports in dashboards
+    Q_INVOKABLE void addDashboardReportInstance(QVariant newReportInstance,QString reportId);
+    Q_INVOKABLE QVariant ReportParamsModel::getDashboardReportInstance(QString reportId);
+    Q_INVOKABLE QVariant getAllDashboardReportInstances();
+
 
 public slots:
 
@@ -240,6 +255,8 @@ public slots:
     void setXAxisColumns(QString xAxisColumns);
     void setYAxisColumns(QString yAxisColumns);
     void setD3PropertiesConfig(QString d3PropertiesConfig);
+    void setChartTitle(QString chartTitle);
+    void setColorByDataColoumns(QString colorByDataColoumns);
 
     // For Filters
     void setInternalCounter(int internalCounter);
@@ -251,6 +268,7 @@ public slots:
     void setFilterIndex(int filterIndex);
     void setMode(QString mode);
     void setFilterModelIndex(int filterModelIndex);
+
 
 signals:
     // General properties
@@ -273,6 +291,8 @@ signals:
     void xAxisColumnsChanged(QString xAxisColumns);
     void yAxisColumnsChanged(QString yAxisColumns);
     void d3PropertiesConfigChanged(QString d3PropertiesConfig);
+    void chartTitleChanged(QString chartTitle);
+    void colorByDataColoumnsChanged(QString colorByDataColoumns);
 
     // For Filters
     void resetInput();
@@ -286,6 +306,11 @@ signals:
     void modeChanged(QString mode);
     void filterModelIndexChanged(int filterModelIndex);
     void tmpSelectedValuesChanged(QStringList values);
+
+    // For Dashboard Reports
+    void reportListChanged();
+
+};
 
     void categoricalFilterChanged(QVector<int> filterList);
     void dateFilterChanged(QVector<int> filterList);
