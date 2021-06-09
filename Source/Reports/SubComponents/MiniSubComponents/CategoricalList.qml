@@ -9,7 +9,7 @@ ListView{
     property string itemType: "Categorical";
     flickableDirection: Flickable.VerticalFlick
     boundsBehavior: Flickable.StopAtBounds
-    interactive: false
+    interactive: true
     clip: false
     ScrollBar.vertical: ScrollBar {}
 
@@ -25,7 +25,7 @@ ListView{
 
     anchors.top: categoricalHeading.bottom
     anchors.topMargin: 5
-    height: parent.height - categoricalHeading.height - 5
+    height: parent.height
     width: parent.width
     delegate: DataPaneElement{
         id: dataPaneListElement

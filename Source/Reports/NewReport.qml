@@ -48,12 +48,12 @@ Page {
     property string valuesLabelName: 'Values'
 
     property string reportChart:ReportParamsModel.chartType;
-    property string reportId:ReportParamsModel.reportId;
+    property string reportIdMain:ReportParamsModel.reportId;
 
     // Initial Chart Config
     property string chartUrl: 'BarChartArrayInput.html';
     property string chartTitle: Constants.barChartTitle;
-    property var customizationsAvailable: "Properties,Legend";
+    property var customizationsAvailable: "Properties,Reference Line,Legend,Charts Size";
 
     // This contains all the customizable config and is passed to drawChart function
     // In draw chart we take out these config; If config is empty => We have default config for it.
@@ -70,6 +70,8 @@ Page {
 
     property var allowedXAxisDataPanes: 0;
     property var allowedYAxisDataPanes: 0;
+
+    property var reportTitleName: null;
 
     // Flag for horizontal graph
     // Changes when numerical value is added on X axis
@@ -140,14 +142,17 @@ Page {
         ReportParamsModel.yAxisActive = false;
         ReportParamsModel.colorByActive = false;
 
+        // This component is called too early
+        // Removing this report id generation step from here.
         
         // If report id is not defined => Case when Add a new reprt is clicked.
         // Generate a new report id.
         // New Id = base64 of timestamp in milliseconds
-        if(!reportId){
-            var newReportId = generateReportId();
-            ReportParamsModel.setReportId(newReportId);
-        }
+        
+        // if(!reportIdMain){
+        //     var newReportId = generateReportId();
+        //     ReportParamsModel.setReportId(newReportId);
+        // }
 
         // Clearing xAxisListModel and yAxisListModel if any
         // Might be possible that this is getting called once
@@ -325,15 +330,18 @@ Page {
         chartTitle = chartTitleValue;
         var chartUrl = '';
         switch(chartTitle){
-        case Constants.horizontalBarChartTitle:
-            chartUrl = Constants.horizontalBarChartUrl;
-            break;
-        case Constants.horizontalStackedBarChartTitle:
-            chartUrl = Constants.horizontalStackedBarChartUrl;
-            break;
-        case Constants.stackedBarChartTitle:
-            chartUrl = Constants.stackedBarChartUrl
-            break;
+            case Constants.barChartTitle:
+                chartUrl = Constants.barChartUrl;
+                break;
+            case Constants.horizontalBarChartTitle:
+                chartUrl = Constants.horizontalBarChartUrl;
+                break;
+            case Constants.horizontalStackedBarChartTitle:
+                chartUrl = Constants.horizontalStackedBarChartUrl;
+                break;
+            case Constants.stackedBarChartTitle:
+                chartUrl = Constants.stackedBarChartUrl
+                break;
         }
         webEngineView.url = Constants.baseChartUrl+chartUrl;
     }
@@ -363,6 +371,28 @@ Page {
         return columnsName;
     }
 
+    function clearAllChartValues(){
+        console.log('Reports: Cleaning All Charts', ReportParamsModel.reportId);
+        ReportParamsModel.setReportId(null);
+        console.log('Reports: Cleaning All Charts', ReportParamsModel.reportId);
+        ReportParamsModel.setReportTitle(null);
+
+        ReportParamsModel.setReportId(null);
+        reportIdMain = null;
+        
+        xAxisListModel.clear();
+        yAxisListModel.clear();
+        d3PropertyConfig = {};
+    
+        lastPickedDataPaneElementProperties= {};
+        reportDataPanes= {};  // Report Data Panes Object
+        dragActiveObject= {};
+        allChartsMapping= {};
+        colorByData= [];
+
+        redrawChart();
+
+    }
 
     // generate Report Id
     function generateReportId(){
@@ -371,6 +401,11 @@ Page {
 
     // Slot Function
     // For changing the chart on clicking chart icons
+
+    // Clear the chart defaults
+    function clearChartValue(){
+        webEngineView.runJavaScript('clearChart()');
+    }
 
     function reDrawChart(){
 
@@ -433,16 +468,37 @@ Page {
         // Add report to dashboard
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
 
-        console.log('Report Id',reportId);
+        if(!reportIdMain){
+            reportIdMain = generateReportId();
+            ReportParamsModel.setReportId(reportIdMain);
+        }
+
         ReportParamsModel.setChartType(chartTitle);
         ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertyConfig));
         ReportParamsModel.setChartUrl(chartUrl);
         ReportParamsModel.setXAxisColumns(JSON.stringify(getAxisColumnNames(Constants.xAxisName)));
         ReportParamsModel.setYAxisColumns(JSON.stringify(getAxisColumnNames(Constants.yAxisName)));
-        ReportParamsModel.addReport(reportId);
 
-        ReportParamsModel.getReportsList();
+        var reportList = ReportParamsModel.getReportsList();
+        console.log(JSON.stringify(reportList));
 
+        if(!report_title_text.text || report_title_text.text == ""){
+            var numberOfReports = Object.keys(reportList).length;
+            ReportParamsModel.setReportTitle('Report '+ (numberOfReports + 1));
+        }
+
+        ReportParamsModel.addReport(reportIdMain);
+        
+        chartTitle = Constants.barChartTitle;
+        chartUrl = Constants.barChartUrl;
+
+        reportList = ReportParamsModel.getReportsList();
+        console.log('Report List',JSON.stringify(reportList));
+        for(var reportId in  reportList){
+            console.log('Report List Data',reportId,reportList[reportId]);
+        }
+
+        clearAllChartValues();
     }
 
     function cancelReport(){
@@ -750,10 +806,11 @@ Page {
                     drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
            });';
 
+           clearChartValue();
            webEngineView.runJavaScript('drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue);
 
            // Clear Chart Data
-           // ChartsModel.clearData();
+            // ChartsModel.clearData();
            return;
         }
 

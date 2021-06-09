@@ -67,6 +67,15 @@ Item{
         }
 
         ListElement {
+            categoryName: "Charts Size"
+            collapsed: false
+            display: false
+            subItems: [
+                ListElement { itemName: "ChartSize" }
+            ]
+        }
+
+        ListElement {
             categoryName: "Reference Line"
             collapsed: false
             display: false
@@ -189,8 +198,11 @@ Item{
     Component{
         id: referenceLineComponent
         CustomizeReferenceLine{}
+    }
 
-
+    Component{
+        id: chartsSizing
+        ReportSizes{}
     }
 
     Component{
@@ -329,6 +341,7 @@ Item{
                         switch(categoryName.toLowerCase()){
                             case "properties": return propertiesComponent
                             case "reference line": return referenceLineComponent
+                            case "charts size": return chartsSizing
                             case "legend": return legendComponent
                             case "total": return totalComponent
                         }

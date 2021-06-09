@@ -9,7 +9,7 @@ import "../../../MainSubComponents"
 Item{
     id: filterDataSingleItem
     height: control.height + columnName.height
-    width: parent.width
+    width: parent.width-8
     property alias componentName: filterDataSingleItem.objectName
 
     onComponentNameChanged: {
@@ -34,29 +34,42 @@ Item{
     }
 
     Rectangle{
+          height: parent.height
+          width: parent.width
+          color: "white"
+          border.color: Constants.darkThemeColor
+
+    Rectangle{
         id:columnName
         width:parent.width
         height:25
 
-        border.color: Constants.themeColor
+        color: Constants.themeColor
+
+                   border.color: Constants.darkThemeColor
         Row{
 
-            spacing: 55
-            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 15
+
             anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: 15
 
 
             Text {
                 id: componentTitle
-                font.pixelSize: 12
+                 width:123
+                  elide: Text.ElideRight
+                font.pixelSize: Constants.fontCategoryHeaderMedium
                 verticalAlignment: Text.AlignVCenter
             }
 
             Row{
 
                 height: parent.height
-                width: 26
-                spacing: 5
+                width: 40
+                spacing: 15
+                 anchors.verticalCenter: parent.verticalCenter
                 Image {
                     source: "/Images/icons/customize.png"
                     width: 16
@@ -69,6 +82,7 @@ Item{
                 }
             }
 
+
         }
 
     }
@@ -77,6 +91,8 @@ Item{
         id:control
         width: parent.width
         anchors.top : columnName.bottom
+
+
 
         indicator: Canvas {
             id: canvas
@@ -106,4 +122,5 @@ Item{
 
 
     }
+}
 }
