@@ -18,7 +18,9 @@ Item{
     width:200
     height: parent.height
     property string itemName : ""
+    property string reportId : ""
     property var editIconVisible: false
+    property var reportListDataValues:
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
     ListModel {
@@ -58,15 +60,15 @@ Item{
         ListElement {
             categoryName: "Reports"
             collapsed: false
-            subItems: [
-                ListElement { itemName: "Report 1" },
-                ListElement { itemName: "Report 2" },
-                ListElement { itemName: "Report 3" },
-                ListElement { itemName: "Report 4" },
-                ListElement { itemName: "Report 5" }
-            ]
+            subItems: []
         }
     }
+
+
+    ListModel{
+        id: allReportsModel
+    }
+    
     // LIST MODEL ENDS
     /***********************************************************************************************************************/
     
@@ -78,6 +80,20 @@ Item{
     /***********************************************************************************************************************/
     // Connections Starts
 
+    
+    Connections{
+        target: ReportParamsModel
+
+        function onReportListChanged(){
+            allReportsModel.clear();
+            const reportListData = ReportParamsModel.getReportsList();
+            for(let reportId in reportListData){
+                allReportsModel.append({ reportName: reportListData[reportId], reportId: reportId })
+            }
+        }
+    }
+
+
     // Connections Ends
     /***********************************************************************************************************************/
     /***********************************************************************************************************************/
@@ -86,6 +102,7 @@ Item{
     function editSelectedReport(){
         stacklayout_home.currentIndex = 7
     }
+
 
 
     function showEditIcon(){
@@ -132,7 +149,7 @@ Item{
                         anchors.fill: parent
                         onClicked: {
                             nestedModel.setProperty(index, "collapsed", !collapsed)
-                            // [TAG: Optimization]
+                            // [TAG: Refactor]
                             // We can use ternary operator here
                             if(collapsed === true){
                                 drop_icon.source = "/Images/icons/Down_20.png"
@@ -154,7 +171,7 @@ Item{
                 property variant subItemModel : subItems // The nested model will have subItems as next list modal
                 sourceComponent: {
                     
-                    // [TAG: Optimization]
+                    // [TAG: Refactor]
                     // Switch case should be used here
                     // return null in case of if( collapsed ) | Else is not required. add switch case instead of that.
 
@@ -184,14 +201,16 @@ Item{
 
                     // [TAG: Optimization]
                     // Some optimmization scope available here as well
-                    // Check from where this item.model is getting accessed. 
+                    // Check from where this item.model is getting accessed.
                     // Bit confusing. Not accounting it for version 1 release.
                     // Will get this corrected in the next release
 
-                    if (status == Loader.Ready && (categoryName == "Reports") ){
-                        item.model = subItemModel
-                    }
-                    else if (status == Loader.Ready && (categoryName == "Widgets")){
+                    // if (status == Loader.Ready && (categoryName == "Reports") ){
+                        
+                    //     item.model = subItemModel;
+                    // }
+                    // else 
+                    if (status == Loader.Ready && (categoryName == "Widgets")){
                         item.model = subItemModel
                     }
                 }
@@ -257,21 +276,21 @@ Item{
     Component{
         id: reportsListComponent
         Column {
-            property alias model : subItemRepeater.model
             width: 200
-            
-            // Use List View
+            anchors.top: parent.top
+
+            // This repeater displays all the added reports
+            // Working: Singal is emitted whenever add report is fired
+            // on Report List addition, List model is changed
+            // Check needs to be added when report is edited.
 
             Repeater {
                 id: subItemRepeater
-                property string itemName : ""
+                model: allReportsModel
                 delegate: Rectangle {
                     id: dragRect
                     height: 25
                     width: 200
-                    anchors.topMargin: 50
-
-
                     Row{
                         anchors.left: parent.left
                         anchors.fill: parent
@@ -281,7 +300,7 @@ Item{
                             anchors.verticalCenter: parent.verticalCenter
                             x: 30
                             font.pixelSize: 12
-                            text: itemName
+                            text: reportName
                         }
                         Rectangle {
                             height: parent.height
@@ -314,7 +333,8 @@ Item{
                         drag.maximumX: 0
                         drag.onActiveChanged: {
                             if (mouseArea.drag.active) {
-                                listViewElem.itemName = itemName
+                                listViewElem.itemName = reportName
+                                listViewElem.reportId = reportId
                             }
                             dragRect.Drag.drop();
                         }

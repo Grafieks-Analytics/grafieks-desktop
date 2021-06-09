@@ -29,6 +29,7 @@ Page {
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
+    // List model for all dashboards
     ListModel{
         id: dashboardModel
     }
@@ -70,6 +71,8 @@ Page {
             column_newdashboard.visible = false
             column_filter_newdashboard_add.visible = false
         }
+
+        
     }
 
     Connections{
@@ -103,6 +106,10 @@ Page {
 
     function openDashboardFilters(){
 
+        // [Tag: Refactor]
+        // Return in if
+        // this will reduce id else ladders
+
         if(column_filter_newdashboard.visible === true){
             column_filter_newdashboard.visible = false
 
@@ -120,6 +127,9 @@ Page {
     }
     function openDashboardFiltersAdd(){
 
+        // [Tag: Refactor]
+        // Return in if
+        // this will reduce id else ladders
         if(column_filter_newdashboard_add.visible === true){
             column_filter_newdashboard_add.visible = false
 
@@ -137,6 +147,10 @@ Page {
     }
 
     function onCustomizeBtnClicked(){
+        
+        // [Tag: Refactor]
+        // Return in if
+        // this will reduce id else ladders
         if(column_newdashboard.visible === true){
             column_newdashboard.visible = false
 
@@ -204,7 +218,7 @@ Page {
     }
 
     function createNewReport(){
-        stacklayout_home.currentIndex = 7
+        stacklayout_home.currentIndex = Constants.newReportIndex
     }
 
     function scrollToLeft(){

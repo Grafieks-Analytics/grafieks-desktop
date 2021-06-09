@@ -27,6 +27,9 @@ Item{
     property var originalPoint: Object()
     property var originalDimensions: Object()
 
+    property var chartUrl: "qrc:/Source/Charts/BarChartArrayInput.html";
+    property var reportId: "";
+    property var standardChart: null;
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -55,21 +58,23 @@ Item{
         function onReportBackgroundColorChanged(refDashboardId, refReportId, refColor){
 
             let dashboardId = DashboardParamsModel.currentDashboard
-            let reportId = DashboardParamsModel.currentReport
+            // let reportIdCpp = DashboardParamsModel.currentReport
 
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName)){
                 droppedReportId.color = refColor
+                setChartBackgroundColor(refColor);
             }
         }
 
         function onReportLineColorChanged(refDashboardId, refReportId, refColor){
 
             let dashboardId = DashboardParamsModel.currentDashboard
-            let reportId = DashboardParamsModel.currentReport
+            // let reportId = DashboardParamsModel.currentReport
 
-            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName))
+            if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName)){
                 droppedReportId.border.color = refColor
                 mainChart.border.color = refColor
+            }
 
         }
 
@@ -83,13 +88,13 @@ Item{
         }
 
         function onReportUrlChanged(refDashboardId, refReportId, url){
+            // this signal is emitted whenever setDashboard cpp function is called
+            // setDashboard Report is called whenever a new report is dropped in dashboard area 
 
             let dashboardId = DashboardParamsModel.currentDashboard
-            let reportId = DashboardParamsModel.currentReport
+            let reportIdCpp = DashboardParamsModel.currentReport
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName) && url !== ""){
-                //                let newUrl =  "file:" + GeneralParamsModel.getTmpPath()  + "../area.html"
-                let newUrl = "qrc:/Source/Charts/BarChartArrayInput.html"
-                webengine.url = newUrl
+                webEngineView.url = url;
             }
         }
 
@@ -105,11 +110,7 @@ Item{
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
 
-    Component.onCompleted: {
-        // Add name to report
-        // reportName.text = name
-        let newUrl = "qrc:/Source/Charts/BarChartArrayInput.html"
-        webengine.url = newUrl
+    Component.onCompleted: {        
     }
 
     function destroyElement(){
@@ -130,6 +131,9 @@ Item{
         {
             mainContainer.width = Constants.defaultDroppedReportWidth
             mainContainer.height = Constants.defaultDroppedReportHeight
+            
+            // [Tag: Refactor]
+            // Move this to constants
             fullScreenReport.source= "/Images/icons/zoom in gray.png"
 
             mainContainer.y = originalPoint.y
@@ -148,6 +152,8 @@ Item{
             originalPoint.x = currnetPointReport.x
             originalPoint.y = currnetPointReport.y
 
+            // [Tag: Refactor]
+            // Move this to constants
             fullScreenReport.source= "/Images/icons/zoom out gray.png"
             DashboardParamsModel.setZIndex(++DashboardParamsModel.zIndex);
             newItem.z = DashboardParamsModel.zIndex;
@@ -183,6 +189,233 @@ Item{
         currnetPointReport.x=mainContainer.x;
         currnetPointReport.y=mainContainer.y;
     }
+
+    function onChartLoaded(loadRequest){
+
+        if(loadRequest.status === WebEngineLoadRequest.LoadFailedStatus){
+            console.log('Page Loading Failed')
+            console.log('Error',JSON.stringify(loadRequest))
+            return;
+        }
+        reDrawChart();
+    }
+
+    function setChartBackgroundColor(background){
+        webEngineView.runJavaScript('setSvgBackground("'+background+'")');
+    }
+
+    // Clear the chart defaults
+    function clearChartValue(){
+        webEngineView.runJavaScript('clearChart()');
+    }
+
+    function reDrawChart(){
+        const reportProperties = ReportParamsModel.getReport(reportId);
+        reportName.text = reportProperties.reportTitle;
+        drawChart(reportProperties);
+    }
+
+    function drawChart(reportProperties){
+
+        var xAxisColumns = JSON.parse(reportProperties.xAxisColumns);
+        var yAxisColumns = JSON.parse(reportProperties.yAxisColumns);
+        var chartTitle = reportProperties.chartTitle;
+        var d3PropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
+        
+        var colorByData = JSON.parse(reportProperties.colorByDataColoumns);
+
+        // Check if chart is still loading or not.
+        if(webEngineView.loading){
+            console.log('Chart is still loading... Please wait')
+            return;
+        }
+
+        console.log("Okay, Now it's time to draw the chart")
+
+        console.log('Draw Chart X Column names',xAxisColumns);
+        console.log('Draw Chart Y Column names',yAxisColumns);
+        console.log('Chart Title', chartTitle);
+        console.log('d3PropertiesConfig', d3PropertyConfig)
+
+        if(xAxisColumns.length===0 && yAxisColumns.length === 0){
+            // set everything to default
+            // Any can add any default case here
+            isHorizontalGraph = false;
+        }
+
+        if(xAxisColumns.length && yAxisColumns.length){
+
+            var xAxisColumnNamesArray = [];
+            var i = 0; // itereator => By passing warning
+            for(i=0;i<xAxisColumns.length;i++){
+                xAxisColumnNamesArray.push(yAxisColumns[i]);
+            }
+            var yAxisColumnNamesArray = [];
+            for(i=0;i<yAxisColumns.length;i++){
+                yAxisColumnNamesArray.push(yAxisColumns[i]);
+            }
+
+            var dataValues = null;
+            console.log('Chart Title - Draw Chart Function - ',chartTitle)
+            var colorByColumnName = '';
+
+            switch(chartTitle){
+            case Constants.horizontalBarChartTitle:
+                console.log("Horizontal BAR");
+                dataValues =  ChartsModel.getBarChartValues(yAxisColumns[0],xAxisColumns[0]);
+                break;
+            case Constants.barChartTitle:
+                console.log("BAR CLICKED", xAxisColumns[0])
+                dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
+                break;
+            case Constants.horizontalStackedBarChartTitle:
+                colorByColumnName = colorByData[0].columnName;
+                dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,xAxisColumns[0], yAxisColumns[0]);
+                
+                break;
+            case Constants.stackedBarChartTitle:
+                console.log('Stacked bar chart!');
+                colorByColumnName = colorByData[0].columnName;
+                dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,yAxisColumns[0], xAxisColumns[0]);
+                break;
+            case Constants.horizontalBarGroupedChartTitle:
+                console.log('horizontalBarGroupedChart chart!');
+                dataValues =  ChartsModel.getNewGroupedBarChartValues(yAxisColumns[0],xAxisColumns[0], yAxisColumns[1]);
+                break;
+            case Constants.groupBarChartTitle:
+                console.log('Grouped bar chart!',xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
+                dataValues =  ChartsModel.getNewGroupedBarChartValues(xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
+                console.log(dataValues);
+                break;
+            case Constants.areaChartTitle:
+                console.log("AREA CLICKED")
+                // Area - xAxis(String), yAxis(String)
+                dataValues =  ChartsModel.getAreaChartValues(xAxisColumns[0],yAxisColumns[0]);
+                break;
+            case Constants.stackedAreaChartTitle:
+                console.log('Stacked Area Chart')
+                colorByColumnName = colorByData[0].columnName;
+                console.log('Colour By columnName',columnName)
+                dataValues =  ChartsModel.getStackedAreaChartValues(colorByColumnName,yAxisColumns[0],xAxisColumns[0]);
+                break;
+            case Constants.lineChartTitle:
+                console.log("LINE CLICKED")
+                // Line - xAxis(String), yAxis(String)
+                dataValues =  ChartsModel.getLineChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+
+                // Line Bar - xAxis(String), yAxis(String)
+                //                dataValues =  ChartsModel.getLineBarChartValues("state", "id", "population");
+                break;
+            case Constants.pieChartTitle:
+            case Constants.donutChartTitle:
+                console.log("DONUT/PIE CLICKED")
+                dataValues = ChartsModel.getPieChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.funnelChartTitle:
+                console.log("FUNNEL CLICKED")
+                dataValues = ChartsModel.getFunnelChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.radarChartTitle:
+                console.log("RADAR CLICKED")
+                dataValues = ChartsModel.getRadarChartValues(xAxisColumns[0],yAxisColumns[0]);
+                break;
+            case Constants.scatterChartTitle:
+                console.log("SCATTER CLICKED")
+                dataValues = ChartsModel.getScatterChartValues(xAxisColumns[0],yAxisColumns[0],yAxisColumns[1]);
+                break;
+            case Constants.treeChartTitle:
+                console.log("TREECHART CLICKED")
+                dataValues = ChartsModel.getTreeChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
+                break;
+            case Constants.treeMapChartTitle:
+                dataValues = ChartsModel.getTreeMapChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
+                break;
+            case Constants.heatMapChartTitle:
+                console.log("HEATMAP CLICKED")
+                dataValues = ChartsModel.getHeatMapChartValues(xAxisColumns[0],yAxisColumns[0], ReportParamsModel.itemName);
+                break;
+            case Constants.sunburstChartTitle:
+                console.log("SUNBURST CLICKED");
+                dataValues = ChartsModel.getSunburstChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
+                break;
+            case Constants.waterfallChartTitle:
+                console.log("WATERFALL CLICKED")
+                dataValues = ChartsModel.getWaterfallChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                console.log('Waterfall Data values',dataValues);
+                break;
+            case Constants.gaugeChartTitle:
+                console.log("GAUGE CLICKED")
+                dataValues = ChartsModel.getGaugeChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                break;
+            case Constants.sankeyChartTitle:
+                console.log("SANKEY CLICKED")
+                dataValues = ChartsModel.getSankeyChartValues(xAxisColumns[0],  xAxisColumns[1], yAxisColumns[0] );
+                break;
+            case Constants.kpiTitle:
+                console.log("KPI CLICKED")
+                dataValues = ChartsModel.getKPIChartValues(xAxisColumns[0]);
+                break;
+            case Constants.tableTitle:
+                console.log("TABLE CLICKED")
+                dataValues = ChartsModel.getTableChartValues(["state", "city", "district"], ["population", "id"],'Sum');
+                break;
+            case Constants.pivotTitle:
+                console.log("PIVOT CLICKED")
+                //                dataValues = ChartsModel.getPivotChartValues(["state", "district"],xAxisColumns[0],'Sum');
+                dataValues = ChartsModel.getTableChartValues(["state", "district"], "population",'Sum');
+                break;
+            }
+            if(!dataValues){
+                return;
+            }
+
+            console.log('Webengine View Loading Status:',webEngineView.loading);
+            console.log('Data Values:',JSON.stringify(dataValues));
+            var colorData = [];
+            console.log("colorData5",colorData)
+            colorData = JSON.parse(dataValues)[1] || [];
+
+            console.log("colorData2" ,colorData)
+            console.log("dataValues" ,JSON.parse(dataValues))
+
+            console.log('Selected Chart Title:',chartTitle)
+            console.log("D3Config: "+JSON.stringify(d3PropertyConfig))
+            console.log('Starting to plot');
+
+           var scriptValue = 'window.addEventListener("resize", function () {
+                    d3.selectAll("#my_dataviz").html("");
+                    drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
+           });';
+
+           clearChartValue();
+           webEngineView.runJavaScript('drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue);
+
+           // Clear Chart Data
+            // ChartsModel.clearData();
+           return;
+        }
+
+        webEngineView.runJavaScript('clearChart()');
+    }
+
+    // Convert the graph to Standard
+    function convertToStandard(){
+        const reportProperties = ReportParamsModel.getReport(reportId);
+        var d3PropertiesConfig = reportProperties.d3PropertiesConfig;
+        d3PropertiesConfig.chartType = "Standard";
+        ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertiesConfig));
+        reDrawChart();
+    }
+
+    // Convert the graph to FitWidth / FitHeight 
+    function convertToFit(type){
+        const reportProperties = ReportParamsModel.getReport(reportId);
+        var d3PropertiesConfig = reportProperties.d3PropertiesConfig;
+        d3PropertiesConfig.chartType = "Fit"+type;
+        ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertiesConfig));
+        redrawChart()
+    }
+
 
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -277,7 +510,6 @@ Item{
 
             Text {
                 id: reportName
-                text: qsTr("Report Name")
                 anchors.left: parent.left
                 anchors.leftMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
@@ -391,12 +623,16 @@ Item{
 
                             MenuItem {
                                 text: qsTr("Standard")
-                                onTriggered: editSelectedReport()
+                                onTriggered: convertToStandard()
                             }
 
                             MenuItem {
-                                text: qsTr("Custom")
-                                onTriggered: destroyElement()
+                                text: qsTr("FitWidth")
+                                onTriggered: convertToFit('Width')
+                            }
+                            MenuItem {
+                                text: qsTr("FitHeight")
+                                onTriggered: convertToFit('Height')
                             }
                         }
 
@@ -412,17 +648,11 @@ Item{
 
         }
         WebEngineView{
-            id: webengine
+            id: webEngineView
             anchors.top : mainChart.bottom
             anchors.topMargin: 10
-//            anchors.right: parent.right
             anchors.horizontalCenter: parent.horizontalCenter
-
-
-
-
-//            anchors.centerIn: parent
-
+            onLoadingChanged: onChartLoaded(loadRequest)
             width:newItem.width - 10
             height:newItem.height  - mainChart.height - 20
 
@@ -431,12 +661,12 @@ Item{
             //                        switch(loadRequest.status){
 
             //                        case ( WebView.LoadFailedStatus):
-            //                            webengine.visible = false
+            //                            webEngineView.visible = false
             //                            chooseImage.visible = true
             //                            break
 
             //                        case ( WebView.LoadSucceededStatus):
-            //                            webengine.visible = true
+            //                            webEngineView.visible = true
             //                            chooseImage.visible = false
             //                            break
             //                        }
