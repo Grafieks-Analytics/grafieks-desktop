@@ -236,7 +236,7 @@ Popup {
 
     function manageFilters(mode, counter = 0, filterId = 0){
 
-        console.log("INSERT DATE FILTER HERE", mode, counter, filterId)
+        console.log("INSERT DATE FILTER HERE  - INSERT REPORT ID", mode, counter, filterId)
         ReportParamsModel.addToMasterReportFilters(1);
     }
     function resetDateFilter(){

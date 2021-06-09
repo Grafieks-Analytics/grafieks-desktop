@@ -74,29 +74,31 @@ Rectangle{
     }
 
     // Called when edit filter from categorical list clicked
-    function onEditElement(modelIndex, filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude){
+    function onEditElement(modelIndex, filterIndex){
 
-        ReportParamsModel.setMode(Constants.modeEdit)
-        ReportParamsModel.setInternalCounter(filterIndex)
-        ReportParamsModel.setFilterModelIndex(modelIndex)
-        ReportParamsModel.setSection(section)
-        ReportParamsModel.setCategory(category)
-        ReportParamsModel.setSubCategory(subCategory)
-        ReportParamsModel.setTableName(tableName)
-        ReportParamsModel.setColName(columnName)
+//        ReportParamsModel.setMode(Constants.modeEdit)
+//        ReportParamsModel.setInternalCounter(filterIndex)
+//        ReportParamsModel.setFilterModelIndex(modelIndex)
+//        ReportParamsModel.setSection(ReportParamsModel.fetchFilterSectionMap(filterIndex)[0])
+//        ReportParamsModel.setCategory(ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0])
+//        ReportParamsModel.setSubCategory(ReportParamsModel.fetchFilterSubCategoryMap(filterIndex)[0])
+////        ReportParamsModel.setTableName(tableName)
+//        ReportParamsModel.setColName(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0])
 
-        var options = {
-            "section" : section,
-            "category" : category,
-            "subCategory" : subCategory,
-            "values" : value,
-            "relation" : relation,
-            "slug" : slug
+//        var options = {
+//            "section" : ReportParamsModel.fetchFilterSectionMap(filterIndex)[0],
+//            "category" : ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0],
+//            "subCategory" : ReportParamsModel.fetchFilterSubCategoryMap(filterIndex)[0],
+//            "values" : ReportParamsModel.fetchFilterValueMap(filterIndex)[filterIndex],
+//            "relation" : ReportParamsModel.fetchFilterRelationMap(filterIndex)[0],
+//            "slug" : ReportParamsModel.fetchFilterSlugMap(filterIndex)[0]
 
-        }
+//        }
 
-        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
-        console.log("EDIT CLICKED categorical", modelIndex, filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+////        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
+//        ChartsModel.fetchColumnData(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0], JSON.stringify(options))
+//        console.log("EDIT CLICKED categorical", ReportParamsModel.fetchFilterColumnMap(filterIndex),ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0])
+
 
     }
 
@@ -227,7 +229,7 @@ Rectangle{
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onEditElement(model.index, filterId, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+                                        onEditElement(model.index, modelData)
                                     }
                                 }
                             }

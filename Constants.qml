@@ -222,7 +222,7 @@ QtObject {
     property int reportTypeImage: 2
     property int reportTypeChart : 3
 
-    property var filterCategoricalTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti"]
+    property var filterCategoricalTypes: ["dataListMulti", "dataListSingle", "dataDropdownSingle", "dataDropdownMulti"]
     property var filterNumericalTypes: ["dataRange","dataEqual","datanotEqual","dataSmaller","dataGreater","dataEqualOrSmaller","dataEqualOrGreater","dataBetween"]
 
     // DASHBOARD ends

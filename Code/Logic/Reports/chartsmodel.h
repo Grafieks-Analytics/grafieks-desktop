@@ -62,7 +62,7 @@ public:
 
 
     Q_INVOKABLE void searchColumnNames(QString keyword);
-    Q_INVOKABLE QStringList fetchColumnData(QString columnName);
+    Q_INVOKABLE QStringList fetchColumnData(QString columnName, QString options = "");
     Q_INVOKABLE QStringList searchColumnData(QString columnName, QString keyword);
     Q_INVOKABLE void clearData();
     Q_INVOKABLE void removeTmpChartData();
@@ -74,6 +74,7 @@ public slots:
 signals:
     void sendFilteredColumn(QStringList allCategorical, QStringList allNumerical, QStringList allDates);
     void sendData(QVariantList xAxis, QVariantList yAxis);
+    void columnDataChanged(QStringList columnData, QString options);
 
 };
 

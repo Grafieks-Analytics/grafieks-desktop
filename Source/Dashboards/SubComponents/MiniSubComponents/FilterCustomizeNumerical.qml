@@ -86,7 +86,7 @@ Item {
         x:5
 
         anchors.margins: 10
-        onCheckedChanged: setFilterType(Constants.filterTypes[4])
+        onCheckedChanged: setFilterType(Constants.filterNumericalTypes[0])
         indicator: Rectangle {
             implicitWidth: 16
             implicitHeight: 16
@@ -141,7 +141,7 @@ Item {
         RadioButton {
             id: control5
             ButtonGroup.group: buttonGroupFilterTypeNumerical
-            onCheckedChanged: setFilterType(Constants.filterTypes[5])
+            onCheckedChanged: setFilterType(Constants.filterNumericalTypes[1])
             indicator: Rectangle {
                 implicitWidth: 16
                 implicitHeight: 16
@@ -177,7 +177,7 @@ Item {
         RadioButton {
             id: control6
             ButtonGroup.group: buttonGroupFilterTypeNumerical
-            onCheckedChanged: setFilterType(Constants.filterTypes[6])
+            onCheckedChanged: setFilterType(Constants.filterNumericalTypes[2])
             indicator: Rectangle {
                 implicitWidth: 16
                 implicitHeight: 16
@@ -209,7 +209,7 @@ Item {
         RadioButton {
             id: control7
             ButtonGroup.group: buttonGroupFilterTypeNumerical
-            onCheckedChanged: setFilterType(Constants.filterTypes[7])
+            onCheckedChanged: setFilterType(Constants.filterNumericalTypes[3])
             indicator: Rectangle {
                 implicitWidth: 16
                 implicitHeight: 16
@@ -241,7 +241,7 @@ Item {
         RadioButton {
             id: control8
             ButtonGroup.group: buttonGroupFilterTypeNumerical
-            onCheckedChanged: setFilterType(Constants.filterTypes[8])
+            onCheckedChanged: setFilterType(Constants.filterNumericalTypes[4])
             indicator: Rectangle {
                 implicitWidth: 16
                 implicitHeight: 16
@@ -273,7 +273,7 @@ Item {
         RadioButton {
             id: control9
             ButtonGroup.group: buttonGroupFilterTypeNumerical
-            onCheckedChanged: setFilterType(Constants.filterTypes[9])
+            onCheckedChanged: setFilterType(Constants.filterNumericalTypes[5])
             indicator: Rectangle {
                 implicitWidth: 16
                 implicitHeight: 16
@@ -305,7 +305,7 @@ Item {
         RadioButton {
             id: control10
             ButtonGroup.group: buttonGroupFilterTypeNumerical
-            onCheckedChanged: setFilterType(Constants.filterTypes[10])
+            onCheckedChanged: setFilterType(Constants.filterNumericalTypes[6])
             indicator: Rectangle {
                 implicitWidth: 16
                 implicitHeight: 16
@@ -337,7 +337,7 @@ Item {
         RadioButton {
             id: control11
             ButtonGroup.group: buttonGroupFilterTypeNumerical
-            onCheckedChanged: setFilterType(Constants.filterTypes[11])
+            onCheckedChanged: setFilterType(Constants.filterNumericalTypes[7])
             indicator: Rectangle {
                 implicitWidth: 16
                 implicitHeight: 16
