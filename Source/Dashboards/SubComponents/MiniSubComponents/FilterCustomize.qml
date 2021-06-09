@@ -41,12 +41,10 @@ Popup {
 
             case Constants.categoricalTab:
             case Constants.dateTab:
-
                 filterCustomizeLoader.sourceComponent = filterCustCat
                 break;
 
             case Constants.numericalTab:
-
                 filterCustomizeLoader.sourceComponent = filterCustNum
                 break;
             }
@@ -58,7 +56,7 @@ Popup {
             var columnFilter = DashboardParamsModel.fetchColumnFilterType(currentDashboard, currentColumn)
             var includeExclude = DashboardParamsModel.fetchIncludeExcludeMap(currentDashboard, currentColumn)
             
-            // filterTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti"]
+            // filterTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti","dataRange","dataEqual","datanotEqual","dataSmaller","dataGreater","dataEqualOrSmaller","dataEqualOrGreater","dataBetween"]
             
             switch(columnFilter){
             case Constants.filterTypes[0]:
@@ -134,15 +132,6 @@ Popup {
         secondLine.visible=false
     }
     
-    ButtonGroup{
-        id:buttonGroupSingle
-    }
-    ButtonGroup{
-        id:buttonGroupFilterType
-    }
-    ButtonGroup{
-        id:buttonGroupIncExcl
-    }
     
     Rectangle{
         id:settingHead

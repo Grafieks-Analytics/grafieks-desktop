@@ -13,6 +13,10 @@ Item {
     height: parent.height
     width: parent.width
 
+    ButtonGroup{
+        id:buttonGroupFilterTypeCategorical
+    }
+
     Text {
         id: listText
         text: qsTr("List")
@@ -32,7 +36,7 @@ Item {
         spacing: 15
         RadioButton {
             id: control1
-            ButtonGroup.group: buttonGroupFilterType
+            ButtonGroup.group: buttonGroupFilterTypeCategorical
             onCheckedChanged: setFilterType(Constants.filterTypes[0])
             indicator: Rectangle {
                 implicitWidth: 16
@@ -68,7 +72,7 @@ Item {
 
         RadioButton {
             id: control2
-            ButtonGroup.group: buttonGroupFilterType
+            ButtonGroup.group: buttonGroupFilterTypeCategorical
             onCheckedChanged: setFilterType(Constants.filterTypes[1])
             indicator: Rectangle {
                 implicitWidth: 16
@@ -124,7 +128,7 @@ Item {
         spacing: 15
         RadioButton {
             id: control3
-            ButtonGroup.group: buttonGroupFilterType
+            ButtonGroup.group: buttonGroupFilterTypeCategorical
             onCheckedChanged: setFilterType(Constants.filterTypes[2])
             indicator: Rectangle {
                 implicitWidth: 16
@@ -160,7 +164,7 @@ Item {
         }
         RadioButton {
             id: control4
-            ButtonGroup.group: buttonGroupFilterType
+            ButtonGroup.group: buttonGroupFilterTypeCategorical
             onCheckedChanged: setFilterType(Constants.filterTypes[3])
             indicator: Rectangle {
                 implicitWidth: 16

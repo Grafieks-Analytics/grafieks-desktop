@@ -56,7 +56,6 @@ Item {
         DashboardParamsModel.setCurrentSelectedColumn(componentName)
 
         labelShapePopup1.visible = true
-        console.log(componentName, "CP NAME", currentColumnType)
     }
 
     ButtonGroup{

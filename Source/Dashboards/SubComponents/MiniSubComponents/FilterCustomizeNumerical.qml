@@ -12,12 +12,16 @@ Item {
 
     id: filterCustomizeNumerical
     height: parent.height
-    width: parent.width
+//    width: parent.width
+
+    ButtonGroup{
+        id:buttonGroupFilterTypeNumerical
+    }
 
     //                    Range Filter
     RadioButton {
         id: rangeText
-        ButtonGroup.group: buttonGroupFilterType
+        ButtonGroup.group: buttonGroupFilterTypeNumerical
         x:5
 
         anchors.margins: 10
@@ -75,7 +79,7 @@ Item {
         spacing: 15
         RadioButton {
             id: control5
-            ButtonGroup.group: buttonGroupFilterType
+            ButtonGroup.group: buttonGroupFilterTypeNumerical
             onCheckedChanged: setFilterType(Constants.filterTypes[5])
             indicator: Rectangle {
                 implicitWidth: 16
@@ -111,7 +115,7 @@ Item {
         }
         RadioButton {
             id: control6
-            ButtonGroup.group: buttonGroupFilterType
+            ButtonGroup.group: buttonGroupFilterTypeNumerical
             onCheckedChanged: setFilterType(Constants.filterTypes[6])
             indicator: Rectangle {
                 implicitWidth: 16
@@ -143,7 +147,7 @@ Item {
         }
         RadioButton {
             id: control7
-            ButtonGroup.group: buttonGroupFilterType
+            ButtonGroup.group: buttonGroupFilterTypeNumerical
             onCheckedChanged: setFilterType(Constants.filterTypes[7])
             indicator: Rectangle {
                 implicitWidth: 16
@@ -175,7 +179,7 @@ Item {
         }
         RadioButton {
             id: control8
-            ButtonGroup.group: buttonGroupFilterType
+            ButtonGroup.group: buttonGroupFilterTypeNumerical
             onCheckedChanged: setFilterType(Constants.filterTypes[8])
             indicator: Rectangle {
                 implicitWidth: 16
@@ -207,7 +211,7 @@ Item {
         }
         RadioButton {
             id: control9
-            ButtonGroup.group: buttonGroupFilterType
+            ButtonGroup.group: buttonGroupFilterTypeNumerical
             onCheckedChanged: setFilterType(Constants.filterTypes[9])
             indicator: Rectangle {
                 implicitWidth: 16
@@ -239,7 +243,7 @@ Item {
         }
         RadioButton {
             id: control10
-            ButtonGroup.group: buttonGroupFilterType
+            ButtonGroup.group: buttonGroupFilterTypeNumerical
             onCheckedChanged: setFilterType(Constants.filterTypes[10])
             indicator: Rectangle {
                 implicitWidth: 16
@@ -271,7 +275,7 @@ Item {
         }
         RadioButton {
             id: control11
-            ButtonGroup.group: buttonGroupFilterType
+            ButtonGroup.group: buttonGroupFilterTypeNumerical
             onCheckedChanged: setFilterType(Constants.filterTypes[11])
             indicator: Rectangle {
                 implicitWidth: 16
