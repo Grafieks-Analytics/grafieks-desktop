@@ -80,10 +80,20 @@ Popup {
                 ReportParamsModel.setLastDropped(null);
                 report_desiner_page.colorByData = [];
 
-                // Add switch case - change url according to the selected chart
-                report_desiner_page.chartUrl  = Constants.barChartUrl;
-                report_desiner_page.chartTitle  = Constants.barChartTitle;
-                webEngineView.url = Constants.baseChartUrl+Constants.barChartUrl;
+                switch(report_desiner_page.chartTitle){
+                    case Constants.stackedBarChartTitle:
+                        switchChart(Constants.barChartTitle);
+                        break;
+                    case Constants.horizontalBarGroupedChartTitle:
+                    case Constants.groupBarChartTitle:
+                        delete d3PropertyConfig['options'];
+                        break;
+                }
+
+                // // Add switch case - change url according to the selected chart
+                // report_desiner_page.chartUrl  = Constants.barChartUrl;
+                // report_desiner_page.chartTitle  = Constants.barChartTitle;
+                // webEngineView.url = Constants.baseChartUrl+Constants.barChartUrl;
 
                 reDrawChart();
                 break;

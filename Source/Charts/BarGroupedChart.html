@@ -38,8 +38,10 @@
         </div>
         <div id="tooltip"></div>
         <script>
+            var extraHeightWorked = false;
+            var redrawn = false;
+            var extraHeight = 0;
             function sumAllData(originalData, currentData) {
-                console.log({ originalData });
                 var allKeys = [
                     ...Object.keys(originalData),
                     ...Object.keys(currentData),
@@ -52,12 +54,10 @@
                 });
 
                 allKeys.forEach((d) => {
-                    console.log(originalData[d], currentData[d]);
+                    // console.log(originalData[d], currentData[d]);
                     originalData[d] =
                         (originalData[d] || 0) + (currentData[d] || 0);
                 });
-
-                console.log(originalData);
 
                 // debugger;
 
@@ -83,7 +83,7 @@
                             dateFormat
                         );
                     }
-                    console.log(category);
+                    // console.log(category);
                     if (!transformedDataValue[category]) {
                         transformedDataValue[category] = {};
                     }
@@ -105,7 +105,7 @@
                     globalKeys.push(...allKeys);
 
                     allKeys.forEach((d) => {
-                        console.log(originalData[d], currentData[d]);
+                        // console.log(originalData[d], currentData[d]);
                         originalData[d] =
                             (originalData[d] || 0) + (currentData[d] || 0);
                     });
@@ -114,7 +114,7 @@
                         mainCategory: category,
                     };
 
-                    console.log({ transformedDataValue });
+                    // console.log({ transformedDataValue });
                 });
 
                 var transformedDataValue = Object.keys(
@@ -136,9 +136,11 @@
                     dateFormat,
                     chartType,
                     standardThresholdWidth,
-                    subCategoryColour,
-                    categoryColor,
+                    options,
+                    fontSize = defaultD3Config.fontSize,
                 } = plottingConfiguration;
+
+                var { groupBarChartColorBy } = options || {};
 
                 if (!d3colorPalette) {
                     d3colorPalette = defaultD3Config.d3ColorPalette;
@@ -182,7 +184,11 @@
                     return count;
                 }
 
-                var height = window.innerHeight - margin.top - margin.bottom;
+                var height =
+                    window.innerHeight -
+                    margin.top -
+                    margin.bottom -
+                    extraHeight;
 
                 clearChart();
 
@@ -204,7 +210,10 @@
                     .selectAll("#my_dataviz")
                     .append("svg")
                     .attr("width", width + 100)
-                    .attr("height", height + margin.top + margin.bottom)
+                    .attr(
+                        "height",
+                        height + extraHeight + margin.top + margin.bottom
+                    )
                     .append("g") //add group to leave margin for axis
                     .attr(
                         "transform",
@@ -289,10 +298,10 @@
                             .append("rect")
                             .attr("class", "bar")
                             .attr("fill", function (d) {
-                                if (categoryColor) {
+                                if (groupBarChartColorBy == "category") {
                                     return zScale(d.data.mainCategory);
                                 }
-                                if (subCategoryColour) {
+                                if (groupBarChartColorBy == "subcategory") {
                                     return zScale(d.name);
                                 }
                                 return d3Colors[4];
@@ -391,6 +400,174 @@
                     return x_offset;
                 }
 
+                setYaxisWidth();
+
+                var barWidth = xScale0.bandwidth();
+                if (
+                    chartType == constants.chartType.FIT_WIDTH &&
+                    barWidth < 40
+                ) {
+                    setXaxisWidth();
+                }
+
+                function setStandardTickWidths() {
+                    var a = document.querySelectorAll(".x-axis .tick text");
+
+                    for (var i = 0; i < a.length; i++) {
+                        var singleCharacterLength =
+                            a[i].getBBox().width / a[i].innerHTML.length;
+                        var numOfCharacters = Math.floor(
+                            barWidth / singleCharacterLength
+                        );
+
+                        var tick = a[i];
+
+                        var tickWidth = tick && tick.getBBox().width;
+                        if (tickWidth > barWidth) {
+                            // console.log("Length is long", numOfCharacters);
+                            var tickValue = tick.innerHTML;
+                            tickValue =
+                                tickValue &&
+                                tickValue.substr(0, numOfCharacters - 3) +
+                                    "...";
+                            // console.log(tickValue);
+                            tick.innerHTML = tickValue;
+                        }
+                    }
+                }
+
+                function setXaxisWidth() {
+                    var allYAxisTicks =
+                        document.querySelectorAll(".x-axis .tick");
+                    var maxWidth = 72;
+                    for (var i = 0; i < allYAxisTicks.length; i++) {
+                        var tick = allYAxisTicks[i];
+                        var width = tick && tick.getBBox().width;
+                        if (width > maxWidth) {
+                            maxWidth = width;
+                        }
+                    }
+
+                    extraHeightWorked = true;
+                    maxWidth = maxWidth < 100 ? maxWidth : 100;
+                    extraHeight = maxWidth + 2;
+
+                    // console.log({ extraHeight });
+                    d3.select(".x-axis").attr("text-anchor", "right");
+                    d3.selectAll(".x-axis text")
+                        .attr("transform", "rotate(-90)")
+                        .attr("dy", "0.3em")
+                        .attr("x", "-" + (maxWidth + 10))
+                        .attr("font-size", fontSize)
+                        .attr("y", "0");
+                }
+
+                allXAxisTexts = document.querySelectorAll(".x-axis text");
+                var textWidth = document
+                    .querySelector(".x-axis .tick text")
+                    .getBBox().height;
+
+                if (
+                    chartType == constants.chartType.FIT_WIDTH &&
+                    xScale0.bandwidth() < 40
+                ) {
+                    for (var i = 0; i < allXAxisTexts.length; i++) {
+                        if (!Math.floor(data.length * 0.04)) {
+                            break;
+                        }
+
+                        if (i % Math.floor(data.length * 0.04) != 0) {
+                            allXAxisTexts[i].remove();
+                            continue;
+                        }
+
+                        if (allXAxisTexts[i] && allXAxisTexts[i].innerHTML) {
+                            var singleCharacterLength =
+                                allXAxisTexts[i].getBBox().width /
+                                allXAxisTexts[i].innerHTML.length;
+
+                            var numOfCharacters =
+                                extraHeight / singleCharacterLength;
+
+                            if (
+                                allXAxisTexts[i].innerHTML &&
+                                allXAxisTexts[i].innerHTML.length >
+                                    numOfCharacters
+                            ) {
+                                if (Math.floor(numOfCharacters) > 3) {
+                                    allXAxisTexts[i].innerHTML =
+                                        (allXAxisTexts[i].innerHTML &&
+                                            allXAxisTexts[i].innerHTML.substr(
+                                                0,
+                                                numOfCharacters - 3
+                                            )) + "...";
+                                } else {
+                                    allXAxisTexts[i].innerHTML =
+                                        (allXAxisTexts[i].innerHTML &&
+                                            allXAxisTexts[i].innerHTML.substr(
+                                                0,
+                                                2
+                                            )) + "...";
+                                }
+                            }
+                        }
+
+                        if (i == 0 && barWidth < textWidth * 0.5) {
+                            allXAxisTexts[i].setAttribute("dy", "1em");
+                            continue;
+                        }
+                        if (barWidth < textWidth * 0.5) {
+                            allXAxisTexts[i].setAttribute("dy", "0.8em");
+                        }
+
+                        // console.log("Axis Data", allXAxisTexts[i]);
+                        // if (allXAxisTexts[i] && allXAxisTexts[i].innerHTML) {
+                        //     var singleCharacterLength =
+                        //         allXAxisTexts[i].getBBox().width /
+                        //         allXAxisTexts[i].innerHTML.length;
+                        //     var numOfCharacters =
+                        //         extraHeight / singleCharacterLength;
+
+                        // }
+                    }
+                }
+
+                if (extraHeightWorked && !redrawn) {
+                    extraHeightWorked = false;
+                    redrawn = true;
+                    drawChart(window.data, plottingConfiguration);
+                    var mainChart = document.querySelector("#my_dataviz svg");
+                    var heightValue = mainChart.getAttribute("height");
+                    heightValue = +heightValue + extraHeight;
+                    mainChart.setAttribute("height", heightValue);
+                }
+
+                if (extraHeightWorked && redrawn) {
+                    extraHeightWorked = false;
+                    redrawn = false;
+                }
+
+                function setYaxisWidth() {
+                    var allYAxisTicks =
+                        document.querySelectorAll(".y-axis .tick");
+                    var maxWidth = 72;
+                    for (var i = 0; i < allYAxisTicks.length; i++) {
+                        var tick = allYAxisTicks[i];
+                        var width = tick && tick.getBBox().width + 25;
+                        if (width > maxWidth) {
+                            maxWidth = width;
+                        }
+                    }
+
+                    var yAxisDiv = document.querySelector("#yAxisDiv svg");
+
+                    yAxisDiv.setAttribute("width", maxWidth);
+                    yAxisDiv.setAttribute(
+                        "transform",
+                        "translate(" + (maxWidth - margin.left) + "," + 0 + ")"
+                    );
+                }
+
                 function make_x_gridlines(x) {
                     return d3.axisBottom(x).ticks(8);
                 }
@@ -402,138 +579,6 @@
                     return d3.timeFormat(dateFormat)(new Date(dateValue));
                 }
             }
-
-            var data = [
-                {
-                    mainCategory: "2020-02-01",
-                    field1: 19,
-                    field2: 83,
-                    field3: 2,
-                    field4: 30,
-                },
-                {
-                    mainCategory: "2019-04-02",
-                    field1: 100,
-                    field2: 29,
-                    field3: 100,
-                    field4: 130,
-                },
-                {
-                    mainCategory: "2019-03-03",
-                    field1: 100,
-                    field3: 100,
-                },
-                {
-                    mainCategory: "2019-03-01",
-                    field1: 100,
-                    field2: 43,
-                    field3: 100,
-                },
-                {
-                    mainCategory: "2021-03-03",
-                    field1: 98,
-                    field2: 43,
-                    field3: 100,
-                },
-                {
-                    mainCategory: "2018-02-04",
-                    field1: -98,
-                    field2: 43,
-                    field3: 100,
-                },
-                {
-                    mainCategory: "2019-04-09",
-                    field1: 100,
-                    field2: 43,
-                    field3: 10,
-                },
-                {
-                    mainCategory: "2019-03-09",
-                    field2: 43,
-                    field3: 100,
-                },
-            ];
-
-            var all_keys = ["field1", "field2", "field3", "field4"];
-
-            data = [data, all_keys];
-
-            data = [
-                [
-                    {
-                        NepalState1: 2121,
-                        NepalState2: 443,
-                        mainCategory: "Nepal",
-                    },
-                    {
-                        B1: 2010,
-                        Delhi: 1109,
-                        Thimpu: 4415,
-                        UP: -414,
-                        mainCategory: "India",
-                        ssam: 4465,
-                    },
-                    {
-                        Delhi: 6351,
-                        Thimpu: 4712,
-                        mainCategory: "Bhutan",
-                    },
-                ],
-            ];
-
-            var data = [
-                [
-                    {
-                        ABookcases: 114879.99629999997,
-                        Chairs: 328449.10300000076,
-                        Furnishings: 91705.16400000005,
-                        Tables: 206965.5320000001,
-                        mainCategory: "Furniture",
-                    },
-                    {
-                        Appliances: 107532.161,
-                        Art: 27118.791999999954,
-                        Binders: 203412.7330000001,
-                        Envelopes: 16476.402,
-                        Fasteners: 3024.2799999999997,
-                        Labels: 12486.312,
-                        Paper: 78479.20600000002,
-                        Storage: 223843.60800000012,
-                        Supplies: 46673.538000000015,
-                        mainCategory: "OfficeSupplies",
-                    },
-                    {
-                        Accessories: 167380.3180000001,
-                        Copiers: 149528.02999999994,
-                        Machines: 189238.63099999996,
-                        Phones: 330007.0540000001,
-                        mainCategory: "Technology",
-                    },
-                ],
-                [
-                    [
-                        "Bookcases",
-                        "Chairs",
-                        "Labels",
-                        "Tables",
-                        "Storage",
-                        "Furnishings",
-                        "Art",
-                        "Phones",
-                        "Binders",
-                        "Appliances",
-                        "Paper",
-                        "Accessories",
-                        "Envelopes",
-                        "Fasteners",
-                        "Supplies",
-                        "Machines",
-                        "Copiers",
-                    ],
-                ],
-            ];
-
-            drawChart(data);
         </script>
     </body>
 </html>

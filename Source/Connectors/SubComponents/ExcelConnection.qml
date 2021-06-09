@@ -134,7 +134,7 @@ Popup {
 
         id: row1
         anchors.top: header_popup.bottom
-        anchors.topMargin: 15
+        anchors.topMargin: 55
         anchors.left: parent.left
         anchors.leftMargin: 100
 

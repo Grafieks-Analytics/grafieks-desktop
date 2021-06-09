@@ -145,7 +145,7 @@ Popup {
         width: parent.width - 2
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 1
+        anchors.topMargin: 10
         anchors.leftMargin: 1
 
         Text{

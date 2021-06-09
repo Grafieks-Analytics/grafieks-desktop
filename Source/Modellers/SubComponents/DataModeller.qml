@@ -971,109 +971,109 @@ Item {
 
 
 
-    Column{
-        id: button_options_group
-        x:20
-        y:10
-        z: 10
+//    Column{
+//        id: button_options_group
+//        x:20
+//        y:10
+//        z: 10
 
-        Button{
-            id: align_btn
-            width: 30
-            height: 30
+//        Button{
+//            id: align_btn
+//            width: 30
+//            height: 30
 
-            Image{
-                id: align_icon
-                height: 22
-                width: 22
+//            Image{
+//                id: align_icon
+//                height: 22
+//                width: 22
 
-                source: "/Images/icons/align.png"
-                anchors.centerIn: align_btn
-                anchors.topMargin: 3
-                anchors.leftMargin: 2
-                horizontalAlignment: Image.AlignHCenter
-                verticalAlignment: Image.AlignVCenter
+//                source: "/Images/icons/align.png"
+//                anchors.centerIn: align_btn
+//                anchors.topMargin: 3
+//                anchors.leftMargin: 2
+//                horizontalAlignment: Image.AlignHCenter
+//                verticalAlignment: Image.AlignVCenter
 
-            }
+//            }
 
-            onClicked: onAlignBtnClicked()
-            background: Rectangle {
-                id: align_btn_background
-                color:  align_btn.hovered? Constants.darkThemeColor: Constants.themeColor
+//            onClicked: onAlignBtnClicked()
+//            background: Rectangle {
+//                id: align_btn_background
+//                color:  align_btn.hovered? Constants.darkThemeColor: Constants.themeColor
 
-            }
+//            }
 
-            ToolTip.delay: Constants.tooltipShowTime
-            ToolTip.timeout: Constants.tooltipHideTime
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Restore original")
+//            ToolTip.delay: Constants.tooltipShowTime
+//            ToolTip.timeout: Constants.tooltipHideTime
+//            ToolTip.visible: hovered
+//            ToolTip.text: qsTr("Restore original")
 
-        }
+//        }
 
-        Button{
-            id:plus_icon_btn
-            width: 30
-            height: 30
-            Image{
-                id: plus_icon
-                source: "/Images/icons/Plus_32.png"
-                height: 25
-                width: 25
-                anchors.centerIn: plus_icon_btn
-                anchors.topMargin: 3
-                horizontalAlignment: Image.AlignHCenter
-                verticalAlignment: Image.AlignVCenter
+//        Button{
+//            id:plus_icon_btn
+//            width: 30
+//            height: 30
+//            Image{
+//                id: plus_icon
+//                source: "/Images/icons/Plus_32.png"
+//                height: 25
+//                width: 25
+//                anchors.centerIn: plus_icon_btn
+//                anchors.topMargin: 3
+//                horizontalAlignment: Image.AlignHCenter
+//                verticalAlignment: Image.AlignVCenter
 
-            }
+//            }
 
-            background: Rectangle {
-                id: plus_icon_btn_background
-                color:  plus_icon_btn.hovered? Constants.darkThemeColor: Constants.themeColor
+//            background: Rectangle {
+//                id: plus_icon_btn_background
+//                color:  plus_icon_btn.hovered? Constants.darkThemeColor: Constants.themeColor
 
-            }
-            onClicked: onZoomInClicked()
+//            }
+//            onClicked: onZoomInClicked()
 
-            ToolTip.delay: Constants.tooltipShowTime
-            ToolTip.timeout: Constants.tooltipHideTime
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Zoom in")
+//            ToolTip.delay: Constants.tooltipShowTime
+//            ToolTip.timeout: Constants.tooltipHideTime
+//            ToolTip.visible: hovered
+//            ToolTip.text: qsTr("Zoom in")
 
 
-        }
+//        }
 
-        Button{
-            id:minus_icon_btn
-            width: 30
-            height: 30
-            Image{
-                id: minus_icon
-                source: "/Images/icons/zoom out.png"
-                height: 20
-                width: 20
-                anchors.topMargin: 3
-                anchors.leftMargin:3
-                anchors.centerIn: minus_icon_btn
-                anchors.top: minus_icon_btn.top
-                horizontalAlignment: Image.AlignHCenter
-                verticalAlignment: Image.AlignVCenter
+//        Button{
+//            id:minus_icon_btn
+//            width: 30
+//            height: 30
+//            Image{
+//                id: minus_icon
+//                source: "/Images/icons/zoom out.png"
+//                height: 20
+//                width: 20
+//                anchors.topMargin: 3
+//                anchors.leftMargin:3
+//                anchors.centerIn: minus_icon_btn
+//                anchors.top: minus_icon_btn.top
+//                horizontalAlignment: Image.AlignHCenter
+//                verticalAlignment: Image.AlignVCenter
 
-            }
+//            }
 
-            background: Rectangle {
-                id: minus_icon_btn_background
-                color:  minus_icon_btn.hovered? Constants.darkThemeColor: Constants.themeColor
+//            background: Rectangle {
+//                id: minus_icon_btn_background
+//                color:  minus_icon_btn.hovered? Constants.darkThemeColor: Constants.themeColor
 
-            }
+//            }
 
-            onClicked: onZoomOutClicked()
+//            onClicked: onZoomOutClicked()
 
-            ToolTip.delay: Constants.tooltipShowTime
-            ToolTip.timeout: Constants.tooltipHideTime
-            ToolTip.visible: hovered
-            ToolTip.text: qsTr("Zoom out")
-        }
+//            ToolTip.delay: Constants.tooltipShowTime
+//            ToolTip.timeout: Constants.tooltipHideTime
+//            ToolTip.visible: hovered
+//            ToolTip.text: qsTr("Zoom out")
+//        }
 
-    }
+//    }
     Rectangle{
         id:outer
         height: parent.height

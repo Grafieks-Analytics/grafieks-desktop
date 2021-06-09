@@ -210,8 +210,8 @@ QtObject {
 
     // DASHBOARD starts
 
-    property int defaultDroppedReportWidth : 300
-    property int defaultDroppedReportHeight : 200
+    property int defaultDroppedReportWidth : 500
+    property int defaultDroppedReportHeight : 300
 
     property int dropActiveBorderWidth: 2
     property int dropEligibleBorderWidth: 1
@@ -222,7 +222,7 @@ QtObject {
     property int reportTypeImage: 2
     property int reportTypeChart : 3
 
-    property var filterTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti"]
+    property var filterTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti","dataRange","dataEqual","datanotEqual","dataSmaller","dataGreater","dataEqualOrSmaller","dataEqualOrGreater","dataBetween"]
 
     // DASHBOARD ends
 
