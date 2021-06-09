@@ -27,14 +27,27 @@ Rectangle {
     Connections{
         target: TableColumnsModel
 
-        function onVisibleColumnListChanged(visibleColumns){
+        function onVisibleColumnListChanged(visibleColumnsTypeMap){
             listModel.clear()
 
-            visibleColumns.forEach((item) => {
-                                       var dashboardId = DashboardParamsModel.currentDashboard
-                                       var columnType = DashboardParamsModel.fetchColumnFilterType(dashboardId, item)
-                                       listModel.append({type: columnType, name: item})
-                                   })
+            for (const key in visibleColumnsTypeMap) {
+
+                var dashboardId = DashboardParamsModel.currentDashboard
+                var columnType = "";
+
+                switch(visibleColumnsTypeMap[key]){
+                case Constants.categoricalTab:
+                case Constants.dateTab:
+                    columnType = Constants.filterCategoricalTypes[0]
+                    break;
+
+                case Constants.numericalTab:
+                    columnType = Constants.filterNumericalTypes[0]
+                    break;
+                }
+
+                listModel.append({type: columnType, name: key})
+            }
         }
     }
 
@@ -78,23 +91,24 @@ Rectangle {
 
 
 
-        // filterTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti","dataRange","dataEqual","datanotEqual","dataSmaller","dataGreater","dataEqualOrSmaller","dataEqualOrGreater","dataBetween"]
+        // filterCategoricalTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti"]
+        // filterNumericalTypes: ["dataRange","dataEqual","datanotEqual","dataSmaller","dataGreater","dataEqualOrSmaller","dataEqualOrGreater","dataBetween"]
 
         DelegateChooser {
             id: chooser
             role: "type"
-            DelegateChoice { roleValue: Constants.filterTypes[0]; FilterDataListSingle { componentName: name } }
-            DelegateChoice { roleValue: Constants.filterTypes[1]; FilterDataListMultiple { componentName: name } }
-            DelegateChoice { roleValue: Constants.filterTypes[2]; FilterDataSingleDropdown { componentName: name } }
-            DelegateChoice { roleValue: Constants.filterTypes[3]; FilterDataMultiDropdown { componentName: name } }
-            DelegateChoice { roleValue: Constants.filterTypes[4]; FilterDataRange { componentName: name } }
-            DelegateChoice { roleValue: Constants.filterTypes[5]; FilterDataEqual { componentName: name } }
-            DelegateChoice { roleValue: Constants.filterTypes[6]; FilterDataNotEqual { componentName: name } }
-            DelegateChoice { roleValue: Constants.filterTypes[7]; FilterDataSmallerThan { componentName: name } }
-            DelegateChoice { roleValue: Constants.filterTypes[8]; FilterDataGreaterThan { componentName: name } }
-            DelegateChoice { roleValue: Constants.filterTypes[9]; FilterDataEqualOrSmaller { componentName: name } }
-            DelegateChoice { roleValue: Constants.filterTypes[10]; FilterDataEqualorGreater { componentName: name } }
-            DelegateChoice { roleValue: Constants.filterTypes[11]; FilterDataBetween { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterCategoricalTypes[0]; FilterDataListSingle { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterCategoricalTypes[1]; FilterDataListMultiple { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterCategoricalTypes[2]; FilterDataSingleDropdown { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterCategoricalTypes[3]; FilterDataMultiDropdown { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterNumericalTypes[0]; FilterDataRange { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterNumericalTypes[1]; FilterDataEqual { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterNumericalTypes[2]; FilterDataNotEqual { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterNumericalTypes[3]; FilterDataSmallerThan { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterNumericalTypes[4]; FilterDataGreaterThan { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterNumericalTypes[5]; FilterDataEqualOrSmaller { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterNumericalTypes[6]; FilterDataEqualorGreater { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterNumericalTypes[7]; FilterDataBetween { componentName: name } }
         }
 
         delegate: chooser

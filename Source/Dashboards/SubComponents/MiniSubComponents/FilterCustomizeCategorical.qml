@@ -13,6 +13,50 @@ Item {
     height: parent.height
     width: parent.width
 
+    Connections{
+
+        target: DashboardParamsModel
+
+        function onCurrentSelectedColumnChanged(currentSelectedColumn){
+
+            if(DashboardParamsModel.currentColumnType === Constants.categoricalTab || DashboardParamsModel.currentColumnType === Constants.dateTab ){
+                var currentDashboard = DashboardParamsModel.currentDashboard
+                var currentColumn = DashboardParamsModel.currentSelectedColumn
+                var columnFilter = DashboardParamsModel.fetchColumnFilterType(currentDashboard, currentColumn)
+
+                // filterCategoricalTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti"]
+
+                switch(columnFilter){
+                case Constants.filterCategoricalTypes[0]:
+                    control1.checked = true
+                    break;
+
+                case Constants.filterCategoricalTypes[1]:
+                    control2.checked = true
+                    break;
+
+                case Constants.filterCategoricalTypes[2]:
+                    control3.checked = true
+                    break;
+
+                case Constants.filterCategoricalTypes[3]:
+                    control4.checked = true
+                    break;
+
+                default:
+                    control1.checked = true
+                    break;
+                }
+            }
+        }
+    }
+
+    function setFilterType(newFilter){
+        let currentDashboardId = DashboardParamsModel.currentDashboard
+        let currentSelectedCol = DashboardParamsModel.currentSelectedColumn
+        DashboardParamsModel.setColumnFilterType(currentDashboardId, currentSelectedCol, newFilter)
+    }
+
     ButtonGroup{
         id:buttonGroupFilterTypeCategorical
     }

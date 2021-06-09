@@ -40,7 +40,7 @@ ListView {
     function handleCheckChange(colName, status){
         if(currentDashboardId === DashboardParamsModel.currentDashboard){
             if(colName !== ""){
-                TableColumnsModel.setColumnVisibility(DashboardParamsModel.currentDashboard, colName, status)
+                TableColumnsModel.setColumnVisibility(DashboardParamsModel.currentDashboard, colName, Constants.dateTab, status)
                 DashboardParamsModel.addToShowColumns(DashboardParamsModel.currentDashboard, colName, status)
             }
         }

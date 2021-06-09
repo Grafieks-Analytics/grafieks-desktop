@@ -5,33 +5,37 @@ TableColumnsModel::TableColumnsModel(QObject *parent) : QObject(parent)
 
 }
 
-void TableColumnsModel::setColumnVisibility(int dashboardId, QString columnName, bool show)
+void TableColumnsModel::setColumnVisibility(int dashboardId, QString columnName, QString columnType, bool show)
 {
-    QStringList allVisibleColumnList = this->allColumnVisibleMap.value(dashboardId);
+    QVariantMap allVisibleColumnMap = this->allColumnVisibleMap.value(dashboardId);
     if(show == false){
-        allVisibleColumnList.removeAll(columnName);
-        this->allColumnVisibleMap.insert(dashboardId, allVisibleColumnList);
+        allVisibleColumnMap.remove(columnName);
+        this->allColumnVisibleMap.insert(dashboardId, allVisibleColumnMap);
     } else{
 
         // Check if already exists
         // If no, then append
 
-        if(allVisibleColumnList.indexOf(columnName) < 0){
-            allVisibleColumnList.append(columnName);
-            this->allColumnVisibleMap.insert(dashboardId, allVisibleColumnList);
+        QStringList visibleKeys = allVisibleColumnMap.keys();
+
+        if(visibleKeys.indexOf(columnName) < 0){
+            allVisibleColumnMap.insert(columnName, columnType);
+            this->allColumnVisibleMap.insert(dashboardId, allVisibleColumnMap);
         }
     }
 
 }
 
-QStringList TableColumnsModel::fetchVisibleColumns(int dashboardId)
+QVariantMap TableColumnsModel::fetchVisibleColumns(int dashboardId)
 {
     return this->allColumnVisibleMap.value(dashboardId);
 }
 
 void TableColumnsModel::applyColumnVisibility(int dashboardId)
 {
-    emit columnNamesChanged(this->allColumnVisibleMap.value(dashboardId));
+    QStringList visibleColumns = this->allColumnVisibleMap.value(dashboardId).keys();
+
+    emit columnNamesChanged(visibleColumns);
     emit visibleColumnListChanged(this->allColumnVisibleMap.value(dashboardId));
 }
 

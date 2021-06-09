@@ -78,7 +78,7 @@ Page {
     Connections{
         target: TableColumnsModel
 
-        function onVisibleColumnListChanged(visibleColumns){
+        function onVisibleColumnListChanged(visibleColumnsTypeMap){
 
             column_filter_newdashboard.visible = true
 
