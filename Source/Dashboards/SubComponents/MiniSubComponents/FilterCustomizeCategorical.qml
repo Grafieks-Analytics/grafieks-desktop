@@ -24,7 +24,7 @@ Item {
                 var currentColumn = DashboardParamsModel.currentSelectedColumn
                 var columnFilter = DashboardParamsModel.fetchColumnFilterType(currentDashboard, currentColumn)
 
-                // filterCategoricalTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti"]
+                // filterCategoricalTypes: ["dataListMulti", "dataListSingle", "dataDropdownSingle", "dataDropdownMulti"]
 
                 switch(columnFilter){
                 case Constants.filterCategoricalTypes[0]:
@@ -81,7 +81,7 @@ Item {
         RadioButton {
             id: control1
             ButtonGroup.group: buttonGroupFilterTypeCategorical
-            onCheckedChanged: setFilterType(Constants.filterTypes[0])
+            onCheckedChanged: setFilterType(Constants.filterCategoricalTypes[0])
             indicator: Rectangle {
                 implicitWidth: 16
                 implicitHeight: 16
@@ -109,15 +109,12 @@ Item {
                 font.pixelSize: 15
                 verticalAlignment: Text.AlignVCenter
             }
-
-
-
         }
 
         RadioButton {
             id: control2
             ButtonGroup.group: buttonGroupFilterTypeCategorical
-            onCheckedChanged: setFilterType(Constants.filterTypes[1])
+            onCheckedChanged: setFilterType(Constants.filterCategoricalTypes[1])
             indicator: Rectangle {
                 implicitWidth: 16
                 implicitHeight: 16
@@ -145,9 +142,6 @@ Item {
                 font.pixelSize: 15
                 verticalAlignment: Text.AlignVCenter
             }
-
-
-
         }
 
     }
@@ -164,6 +158,7 @@ Item {
         anchors.margins: 15
 
     }
+
     ColumnLayout {
         id: dropDownRadio
         anchors.top: dropDownText.bottom
@@ -173,7 +168,7 @@ Item {
         RadioButton {
             id: control3
             ButtonGroup.group: buttonGroupFilterTypeCategorical
-            onCheckedChanged: setFilterType(Constants.filterTypes[2])
+            onCheckedChanged: setFilterType(Constants.filterCategoricalTypes[2])
             indicator: Rectangle {
                 implicitWidth: 16
                 implicitHeight: 16
@@ -202,14 +197,13 @@ Item {
                 font.pixelSize: 15
                 verticalAlignment: Text.AlignVCenter
             }
-
-
-
         }
+
+
         RadioButton {
             id: control4
             ButtonGroup.group: buttonGroupFilterTypeCategorical
-            onCheckedChanged: setFilterType(Constants.filterTypes[3])
+            onCheckedChanged: setFilterType(Constants.filterCategoricalTypes[3])
             indicator: Rectangle {
                 implicitWidth: 16
                 implicitHeight: 16
@@ -238,8 +232,6 @@ Item {
                 verticalAlignment: Text.AlignVCenter
             }
         }
-
-
     }
 
 }

@@ -58,16 +58,23 @@ Popup {
         }
 
 
-        function onSectionChanged(){
+        function onSectionChanged(section){
+
+
+            console.log("SECTION CHANGED", ReportParamsModel.section, Constants.categoricalTab, ReportParamsModel.category, Constants.categoryMainListType)
 
             if(ReportParamsModel.section === Constants.categoricalTab){
 
-                switch(ReportParamsModel.category){
-                case Constants.categoryMainListType:
+                listContentReport.visible = true
 
-                    listContent.visible = true
-                    wildcardContent.visible = false
-                    topContent.visible = false
+                switch(ReportParamsModel.category){
+//                case Constants.categoryMainListType:
+                case "date.list":
+                    console.log("INSIDE THIS")
+
+                    listContentReport.visible = true
+                    wildcardContentReport.visible = false
+                    topContentReport.visible = false
 
                     listRadio.checked = true
 
@@ -75,9 +82,9 @@ Popup {
 
                 case Constants.categoryMainWildCardType:
 
-                    listContent.visible = false
-                    wildcardContent.visible = true
-                    topContent.visible = false
+                    listContentReport.visible = false
+                    wildcardContentReport.visible = true
+                    topContentReport.visible = false
 
                     wildcardRadio.checked = true
 
@@ -85,9 +92,9 @@ Popup {
 
                 case Constants.categoryMainTopType:
 
-                    listContent.visible = false
-                    wildcardContent.visible = false
-                    topContent.visible = true
+                    listContentReport.visible = false
+                    wildcardContentReport.visible = false
+                    topContentReport.visible = true
 
                     topRadio.checked = true
 
@@ -111,8 +118,8 @@ Popup {
 
 
     Component.onCompleted: {
-        categoricalFilterPopup.clearData.connect(listContent.slotDataCleared)
-        categoricalFilterPopup.clearData.connect(wildcardContent.slotDataCleared)
+        categoricalFilterPopup.clearData.connect(listContentReport.slotDataCleared)
+        categoricalFilterPopup.clearData.connect(wildcardContentReport.slotDataCleared)
     }
 
 
@@ -188,7 +195,7 @@ Popup {
 
     function manageFilters(mode, counter = 0, filterId = 0){
 
-        console.log("Filter insert categorical", mode, counter, filterId)
+        console.log("Filter insert categorical - INSERT REPORT ID", mode, counter, filterId)
         ReportParamsModel.addToMasterReportFilters(1);
     }
 
@@ -202,9 +209,9 @@ Popup {
 
     function onListClicked(){
 
-        listContent.visible = true
-        wildcardContent.visible = false
-        topContent.visible = false
+        listContentReport.visible = true
+        wildcardContentReport.visible = false
+        topContentReport.visible = false
 
         // Set the main category of the filter
         ReportParamsModel.clearFilter()
@@ -222,9 +229,9 @@ Popup {
 
     function onWildcardClicked(){
 
-        listContent.visible = false
-        wildcardContent.visible = true
-        topContent.visible = false
+        listContentReport.visible = false
+        wildcardContentReport.visible = true
+        topContentReport.visible = false
 
         // Set the main category of the filter
         ReportParamsModel.clearFilter();
@@ -235,9 +242,9 @@ Popup {
 
     function onTopClicked(){
 
-        listContent.visible = false
-        wildcardContent.visible = false
-        topContent.visible = true
+        listContentReport.visible = false
+        wildcardContentReport.visible = false
+        topContentReport.visible = true
 
         // Set the main category of the filter
         ReportParamsModel.clearFilter();
@@ -402,15 +409,15 @@ Popup {
     //    Top Menu Contents
 
     CategoricalFilterListContent{
-        id: listContent
+        id: listContentReport
     }
 
     CategoricalFilterWildcardContent{
-        id: wildcardContent
+        id: wildcardContentReport
     }
 
     CategoricalFilterTopContent{
-        id: topContent
+        id: topContentReport
     }
 
     // Footer starts

@@ -78,6 +78,7 @@ QVariant ReportParamsModel::getAllDashboardReportInstances()
     return this->dashboardReportInstances;
 }
 
+
 QString ReportParamsModel::chartTitle() const
 {
     return m_chartTitle;
@@ -169,26 +170,21 @@ void ReportParamsModel::addToMasterReportFilters(int reportId)
 
         QVariantMap tmp = insertMasterFilters(filterId);
         intermediateMasterReportsMap.insert(filterId, tmp);
-        qDebug() << "FID C" << filterId << tmp;
     }
 
     // Date filters
     foreach(int filterId, this->dateFilters){
         QVariantMap tmp = insertMasterFilters(filterId);
         intermediateMasterReportsMap.insert(filterId, tmp);
-        qDebug() << "FID D" << filterId << tmp;
     }
 
     // Numerical filters
     foreach(int filterId, this->numericalFilters){
         QVariantMap tmp = insertMasterFilters(filterId);
         intermediateMasterReportsMap.insert(filterId, tmp);
-        qDebug() << "FID N" << filterId << tmp;
     }
 
     this->masterReportFilters.insert(reportId, intermediateMasterReportsMap);
-
-    qDebug() << "REPORT INSERT MASTER" << reportId << intermediateMasterReportsMap.keys() << intermediateMasterReportsMap.size();
 
 }
 
@@ -285,7 +281,6 @@ void ReportParamsModel::removeNumericalFilters(int filterId, bool removeAll)
 void ReportParamsModel::addToFilterColumnMap(int filterId, QString value)
 {
     this->filterColumnMap.insert(filterId, value);
-    qDebug() << "COL OUT INS" << this->filterColumnMap;
 }
 
 QStringList ReportParamsModel::fetchFilterColumnMap(int filterId, bool fetchAll)
@@ -300,7 +295,6 @@ QStringList ReportParamsModel::fetchFilterColumnMap(int filterId, bool fetchAll)
         out.append(this->filterColumnMap.value(filterId));
     }
 
-    qDebug() << "COL OUT" << this->filterColumnMap << out;
     return out;
 }
 
@@ -312,8 +306,6 @@ void ReportParamsModel::removeFilterColumnMap(int filterId)
 void ReportParamsModel::addToFilterValueMap(int filterId, QVariant value)
 {
     QVariantList tmpList;
-
-    qDebug() << "AA GAUA" << filterId << value;
 
     if(!this->filterValueMap.contains(filterId)){
         tmpList.append(value);
@@ -884,6 +876,7 @@ void ReportParamsModel::setSection(QString section)
         return;
 
     m_section = section;
+    qDebug() << "SECTION SIGNAL" << section;
     emit sectionChanged(m_section);
 }
 

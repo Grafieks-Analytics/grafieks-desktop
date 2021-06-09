@@ -229,8 +229,9 @@ public:
     Q_INVOKABLE QStringList getActualDateValues(int refObjId);
     // Instances of dropped reports in dashboards
     Q_INVOKABLE void addDashboardReportInstance(QVariant newReportInstance,QString reportId);
-    Q_INVOKABLE QVariant ReportParamsModel::getDashboardReportInstance(QString reportId);
+    Q_INVOKABLE QVariant getDashboardReportInstance(QString reportId);
     Q_INVOKABLE QVariant getAllDashboardReportInstances();
+
 
 
 public slots:

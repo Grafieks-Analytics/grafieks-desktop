@@ -91,14 +91,14 @@ Rectangle {
 
 
 
-        // filterCategoricalTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti"]
+        // filterCategoricalTypes: ["dataListMulti", "dataListSingle", "dataDropdownSingle", "dataDropdownMulti"]
         // filterNumericalTypes: ["dataRange","dataEqual","datanotEqual","dataSmaller","dataGreater","dataEqualOrSmaller","dataEqualOrGreater","dataBetween"]
 
         DelegateChooser {
             id: chooser
             role: "type"
-            DelegateChoice { roleValue: Constants.filterCategoricalTypes[0]; FilterDataListSingle { componentName: name } }
-            DelegateChoice { roleValue: Constants.filterCategoricalTypes[1]; FilterDataListMultiple { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterCategoricalTypes[0]; FilterDataListMultiple { componentName: name } }
+            DelegateChoice { roleValue: Constants.filterCategoricalTypes[1]; FilterDataListSingle { componentName: name } }
             DelegateChoice { roleValue: Constants.filterCategoricalTypes[2]; FilterDataSingleDropdown { componentName: name } }
             DelegateChoice { roleValue: Constants.filterCategoricalTypes[3]; FilterDataMultiDropdown { componentName: name } }
             DelegateChoice { roleValue: Constants.filterNumericalTypes[0]; FilterDataRange { componentName: name } }
