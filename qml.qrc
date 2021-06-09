@@ -255,5 +255,13 @@
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterCustomize.qml</file>
         <file>Source/Reports/SubComponents/MiniSubComponents/ReportSizes.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataListSingle.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataRange.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataEqual.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataNotEqual.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataSmallerThan.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataEqualOrSmaller.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataEqualorGreater.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataBetween.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataGreaterThan.qml</file>
     </qresource>
 </RCC>

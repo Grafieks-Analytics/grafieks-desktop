@@ -670,6 +670,7 @@ Page {
         width: parent.width - menu_width - column_querymodeller.width
         x: menu_width - 11
 
+
         TabBar{
 
             id: tabbutton_querymodeller
@@ -1060,6 +1061,7 @@ Page {
             border.color: Constants.darkThemeColor
 
 
+
             ToolSeparator{
                 id: toolsep2
                 height:parent.height
@@ -1094,6 +1096,7 @@ Page {
                 id: tabbar_querymodeller
 
                 width:rectangle_querymodeller_right_col.width
+                 z: 20
 
                 background: Rectangle {
                     color: "transparent"
@@ -1104,6 +1107,7 @@ Page {
                     id: tabPublishDashboard
                     width:rectangle_querymodeller_right_col.width / 2
                     height: parent.height
+                     z: 20
 
                     Image {
                         id: publishIcon
@@ -1132,6 +1136,7 @@ Page {
                     id: tabCreateDashboard
                     width:rectangle_querymodeller_right_col.width / 2
                     height: parent.height
+                     z: 20
 
                     Image {
                         id: dashboardIcon
@@ -1175,6 +1180,7 @@ Page {
 
                 height:50
                 width: rectangle_querymodeller_right_col.width
+                z: 20
 
 
 
@@ -1232,6 +1238,7 @@ Page {
                 height:50
                 width: rectangle_querymodeller_right_col.width
                 color:Constants.themeColor
+                z: 20
 
                 Text{
                     id: connected_to
@@ -1254,6 +1261,7 @@ Page {
                 anchors.topMargin: 2
                 height:50
                 width: rectangle_querymodeller_right_col.width
+                z: 20
 
                 Row{
 
@@ -1312,7 +1320,9 @@ Page {
                         id: categoryItem
                         height: 50
                         width: column_querymodeller.width
-                        //                        color: "red"
+
+                        z: 20
+
 
 
 
@@ -1410,6 +1420,7 @@ Page {
                         width: item_querymodeller.width+10
                         delegate: tablelistDelegate
                         visible: true
+
                         flickableDirection: Flickable.VerticalFlick
                         boundsBehavior: Flickable.StopAtBounds
                         ScrollBar.vertical: ScrollBar {}
