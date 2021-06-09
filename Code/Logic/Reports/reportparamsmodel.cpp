@@ -64,6 +64,34 @@ QString ReportParamsModel::chartType() const
     return m_chartType;
 }
 
+void ReportParamsModel::addDashboardReportInstance(QVariant newDroppedReportInstance, QString reportId){
+    this->dashboardReportInstances.insert(reportId,newDroppedReportInstance);
+}
+
+
+QVariant ReportParamsModel::getDashboardReportInstance(QString reportId){
+    return this->dashboardReportInstances.value(reportId);
+}
+
+QVariant ReportParamsModel::getAllDashboardReportInstances()
+{
+    return this->dashboardReportInstances;
+}
+
+QString ReportParamsModel::chartTitle() const
+{
+    return m_chartTitle;
+}
+
+QString ReportParamsModel::colorByDataColoumns() const
+{
+    return m_colorByDataColoumns;
+}
+
+QVariant ReportParamsModel::getReport(QString reportId){
+    return this->reportsMap.value(reportId);
+}
+
 QString ReportParamsModel::reportId() const
 {
     return m_reportId;
@@ -76,16 +104,24 @@ QString ReportParamsModel::reportTitle() const
 
 void ReportParamsModel::addReport(QString reportId)
 {
-    QMap<QString, QString> tmp;
+    QVariantMap tmp;
     tmp.insert("reportTitle",this->reportTitle());
     tmp.insert("d3PropertiesConfig",this->d3PropertiesConfig());
     tmp.insert("xAxisColumns", this->xAxisColumns() );
     tmp.insert("yAxisColumns", this->yAxisColumns() );
     tmp.insert("chartUrl", this->chartUrl() );
     tmp.insert("chartType", this->chartType() );
+    tmp.insert("chartTitle", this->chartTitle() );
+    tmp.insert("colorByDataColoumns",this->colorByDataColoumns());
+
     this->reportsMap.insert(reportId,tmp);
 
     this->reportsData.insert(this->reportId(),this->reportTitle());
+
+    // Emitting singal to update report list 
+    // in dashboards
+    emit reportListChanged();
+    
 }
 
 QVariantMap ReportParamsModel::getReportsList(){
@@ -984,6 +1020,22 @@ void ReportParamsModel::restoreMasterFilters(int filterId, QVariantMap filterDat
     this->filterSubCategoryMap.insert(filterId, filterData.value("subCategory").toString());
     this->dateFormatMap.insert(filterId, filterData.value("dateFormat").toInt());
     this->actualDateValues.insert(filterId, filterData.value("actualDateValues").toStringList());
+void ReportParamsModel::setChartTitle(QString chartTitle)
+{
+    if (m_chartTitle == chartTitle)
+        return;
+
+    m_chartTitle = chartTitle;
+    emit chartTitleChanged(m_chartTitle);
+}
+
+void ReportParamsModel::setColorByDataColoumns(QString colorByDataColoumns)
+{
+    if (m_colorByDataColoumns == colorByDataColoumns)
+        return;
+
+    m_colorByDataColoumns = colorByDataColoumns;
+    emit colorByDataColoumnsChanged(m_colorByDataColoumns);
 }
 
 void ReportParamsModel::setChartUrl(QString chartUrl)
