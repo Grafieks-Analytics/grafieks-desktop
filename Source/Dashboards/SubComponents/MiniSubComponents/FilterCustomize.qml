@@ -49,46 +49,20 @@ Popup {
                 break;
             }
         }
-        
+
         function onCurrentSelectedColumnChanged(currentSelectedColumn){
             var currentDashboard = DashboardParamsModel.currentDashboard
             var currentColumn = DashboardParamsModel.currentSelectedColumn
-            var columnFilter = DashboardParamsModel.fetchColumnFilterType(currentDashboard, currentColumn)
             var includeExclude = DashboardParamsModel.fetchIncludeExcludeMap(currentDashboard, currentColumn)
-            
-            // filterTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti","dataRange","dataEqual","datanotEqual","dataSmaller","dataGreater","dataEqualOrSmaller","dataEqualOrGreater","dataBetween"]
-            
-            switch(columnFilter){
-            case Constants.filterTypes[0]:
-                control1.checked = true
-                break;
-                
-            case Constants.filterTypes[1]:
-                control2.checked = true
-                break;
-                
-            case Constants.filterTypes[2]:
-                control3.checked = true
-                break;
-                
-            case Constants.filterTypes[3]:
-                control4.checked = true
-                break;
-            case Constants.filterTypes[4]:
-                rangeText.checked = true
-                break;
-                
-            default:
-                control1.checked = true
-                break;
-            }
-            
+
             if(includeExclude.toLowerCase() === "include"){
                 control13.checked = true
             } else{
                 control14.checked = true
             }
         }
+        
+
     }
 
     
@@ -96,12 +70,6 @@ Popup {
         let currentDashboardId = DashboardParamsModel.currentDashboard
         let currentSelectedCol = DashboardParamsModel.currentSelectedColumn
         DashboardParamsModel.setColumnAliasName(currentDashboardId, currentSelectedCol, newAliasName)
-    }
-    
-    function setFilterType(newFilter){
-        let currentDashboardId = DashboardParamsModel.currentDashboard
-        let currentSelectedCol = DashboardParamsModel.currentSelectedColumn
-        DashboardParamsModel.setColumnFilterType(currentDashboardId, currentSelectedCol, newFilter)
     }
     
     function setIncludeExclude(newIncExc){

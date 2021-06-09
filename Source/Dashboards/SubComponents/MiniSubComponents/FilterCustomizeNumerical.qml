@@ -18,6 +18,67 @@ Item {
         id:buttonGroupFilterTypeNumerical
     }
 
+
+    Connections{
+
+        target: DashboardParamsModel
+
+        function onCurrentSelectedColumnChanged(currentSelectedColumn){
+
+            if(DashboardParamsModel.currentColumnType === Constants.numericalTab){
+                var currentDashboard = DashboardParamsModel.currentDashboard
+                var currentColumn = DashboardParamsModel.currentSelectedColumn
+                var columnFilter = DashboardParamsModel.fetchColumnFilterType(currentDashboard, currentColumn)
+
+                // filterNumericalTypes: ["dataRange","dataEqual","datanotEqual","dataSmaller","dataGreater","dataEqualOrSmaller","dataEqualOrGreater","dataBetween"]
+
+                switch(columnFilter){
+                case Constants.filterNumericalTypes[0]:
+                    rangeText.checked = true
+                    break;
+
+                case Constants.filterNumericalTypes[1]:
+                    control5.checked = true
+                    break;
+
+                case Constants.filterNumericalTypes[2]:
+                    control6.checked = true
+                    break;
+
+                case Constants.filterNumericalTypes[3]:
+                    control7.checked = true
+                    break;
+
+                case Constants.filterNumericalTypes[4]:
+                    control8.checked = true
+                    break;
+
+                case Constants.filterNumericalTypes[5]:
+                    control9.checked = true
+                    break;
+
+                case Constants.filterNumericalTypes[6]:
+                    control10.checked = true
+                    break;
+                case Constants.filterNumericalTypes[7]:
+                    control11.checked = true
+                    break;
+
+                default:
+                    rangeText.checked = true
+                    break;
+                }
+            }
+        }
+    }
+
+    function setFilterType(newFilter){
+        let currentDashboardId = DashboardParamsModel.currentDashboard
+        let currentSelectedCol = DashboardParamsModel.currentSelectedColumn
+        DashboardParamsModel.setColumnFilterType(currentDashboardId, currentSelectedCol, newFilter)
+    }
+
+
     //                    Range Filter
     RadioButton {
         id: rangeText

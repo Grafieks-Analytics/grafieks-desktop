@@ -62,7 +62,7 @@ Item {
         Row{
             CheckBoxTpl{
                 checkbox_text: modelData
-                checkbox_checked: true
+                checkbox_checked: false
                 parent_dimension: 14
             }
         }
