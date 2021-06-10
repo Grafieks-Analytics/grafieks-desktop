@@ -394,7 +394,6 @@ void ReportParamsModel::addToIncludeExcludeMap(int filterId, bool includeExclude
 {
 
     this->includeExcludeMap.insert(filterId, includeExclude);
-    qDebug()<< filterId << includeExclude << "WJAT" << this->includeExcludeMap;
 }
 
 QVector<bool> ReportParamsModel::fetchIncludeExcludeMap(int filterId, bool fetchAll)
@@ -407,7 +406,6 @@ QVector<bool> ReportParamsModel::fetchIncludeExcludeMap(int filterId, bool fetch
         }
     } else{
         out.append(this->includeExcludeMap.value(filterId));
-        qDebug() << out << "WJAT OUT" << this->includeExcludeMap.value(filterId) << filterId << this->includeExcludeMap;
     }
 
     return out;
@@ -879,7 +877,6 @@ void ReportParamsModel::setSection(QString section)
         return;
 
     m_section = section;
-    qDebug() << "SECTION SIGNAL" << section;
     emit sectionChanged(m_section);
 }
 
