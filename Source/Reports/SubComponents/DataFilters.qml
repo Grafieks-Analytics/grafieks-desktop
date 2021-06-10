@@ -150,10 +150,9 @@ Popup {
     // On receiving the signal from C++, it will popup the relevant screen
 
     Connections{
-        target: QueryDataModel
+        target: ChartsModel
 
-        function onColumnListModelDataChanged(colData, values){
-
+        function onColumnDataChanged(columnData, options){
             if(ReportParamsModel.section === Constants.categoricalTab){
 
                 // Fire the signal for show specific category
@@ -248,6 +247,8 @@ Popup {
         ReportParamsModel.setFilterIndex(ReportParamsModel.filterIndex + 1)
         ReportParamsModel.setMode(Constants.modeCreate)
 
+        console.log("HERE INDEX", ReportParamsModel.filterIndex)
+
         if(tabBarOpen === Constants.categoricalTab){
 
             // Fire the signal for show specific category
@@ -309,17 +310,20 @@ Popup {
         if(characterFilterTab){
             categoricalTabBackground.color =  Constants.themeColor
             allCategoricalFilterContent.visible = true
+            tabBarOpen = Constants.categoricalTab
 
         }
 
         if(dateFilterTab){
             dateTabBackground.color =  Constants.themeColor
             allDateFilterContent.visible = true
+            tabBarOpen = Constants.dateTab
         }
 
         if(numericalFilterTab){
             numericalTabBackground.color = Constants.themeColor
             allNumericalFilterContent.visible = true
+            tabBarOpen = Constants.numericalTab
 
         }
         if(groupFilterTab){

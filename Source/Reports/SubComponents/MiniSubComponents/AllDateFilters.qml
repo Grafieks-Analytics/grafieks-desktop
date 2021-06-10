@@ -81,28 +81,32 @@ Rectangle{
     }
 
     // Called when edit filter from date list clicked
-    function onEditElement(modelIndex, filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude){
+    function onEditElement(modelIndex, filterIndex){
 
         ReportParamsModel.setMode(Constants.modeEdit)
+        ReportParamsModel.setColName(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0])
+        ReportParamsModel.setSection(ReportParamsModel.fetchFilterSectionMap(filterIndex)[0])
+        ReportParamsModel.setCategory(ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0])
+        ReportParamsModel.setSubCategory(ReportParamsModel.fetchFilterSubCategoryMap(filterIndex)[0])
         ReportParamsModel.setInternalCounter(filterIndex)
-        ReportParamsModel.setFilterModelIndex(modelIndex)
-        ReportParamsModel.setSection(section)
-        ReportParamsModel.setCategory(category)
-        ReportParamsModel.setSubCategory(subCategory)
-        ReportParamsModel.setTableName(tableName)
-        ReportParamsModel.setColName(columnName)
+        ReportParamsModel.setFilterIndex(filterIndex)
+        ReportParamsModel.setFilterModelIndex(filterIndex)
 
         var options = {
-            "section" : section,
-            "category" : category,
-            "subCategory" : subCategory,
-            "values" : value,
-            "relation" : relation,
-            "slug" : slug
+            "section" : ReportParamsModel.fetchFilterSectionMap(filterIndex)[0],
+            "category" : ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0],
+            "subCategory" : ReportParamsModel.fetchFilterSubCategoryMap(filterIndex)[0],
+            "values" : ReportParamsModel.fetchFilterValueMap(filterIndex)[filterIndex],
+            "relation" : ReportParamsModel.fetchFilterRelationMap(filterIndex)[0],
+            "slug" : ReportParamsModel.fetchFilterSlugMap(filterIndex)[0]
+
         }
 
-        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
-        console.log("EDIT CLICKED date", modelIndex, filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+        //        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        ChartsModel.fetchColumnData(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0], JSON.stringify(options))
+        console.log("EDIT CLICKED date", ReportParamsModel.fetchFilterColumnMap(filterIndex),ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0], filterIndex, modelIndex)
+
+
     }
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -229,7 +233,7 @@ Rectangle{
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onEditElement(model.index, filterId, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+                                        onEditElement(model.index, modelData)
                                     }
                                 }
                             }
