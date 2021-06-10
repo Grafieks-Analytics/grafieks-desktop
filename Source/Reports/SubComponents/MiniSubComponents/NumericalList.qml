@@ -7,7 +7,7 @@ ListView{
 
     flickableDirection: Flickable.VerticalFlick
             boundsBehavior: Flickable.StopAtBounds
-            interactive: false
+            interactive: true
              clip: false
              ScrollBar.vertical: ScrollBar {}
 
