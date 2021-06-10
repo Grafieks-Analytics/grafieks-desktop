@@ -143,7 +143,6 @@ Rectangle{
         ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
         ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
 
-        console.log("DSPARAMS", ReportParamsModel.fetchFilterRelationMap(counter)[0], ReportParamsModel.fetchFilterSlugMap(counter)[0], ReportParamsModel.fetchFilterValueMap(counter)[counter], counter)
     }
 
     function onIncludeCheckedClicked(checked){
