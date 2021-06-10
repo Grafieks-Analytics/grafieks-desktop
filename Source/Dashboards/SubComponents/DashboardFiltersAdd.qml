@@ -171,7 +171,7 @@ Item {
 
 
     Column {
-        spacing: 5
+//        spacing: 5
         anchors.top: toolsep4.top
         width: parent.width
         anchors.topMargin: 4
@@ -182,10 +182,10 @@ Item {
             width: parent.width
             anchors.topMargin: 0
             anchors.left: parent.left
-            anchors.leftMargin: 5
+            anchors.leftMargin: 4
             height:  parent.height/3-20
             color: "white"
-            border.color: Constants.darkThemeColor
+//            border.color: Constants.darkThemeColor
 
             Rectangle{
                 id:categoricalCheckboxesRect
@@ -225,10 +225,10 @@ Item {
             width: parent.width
             anchors.topMargin: 0
             anchors.left: parent.left
-            anchors.leftMargin: 5
+            anchors.leftMargin: 4
             height:  parent.height/3-20
             color: "white"
-            border.color: Constants.darkThemeColor
+//            border.color: Constants.darkThemeColor
 
             Rectangle{
                 id:dataTypeNumericalRect
@@ -268,11 +268,12 @@ Item {
             width: parent.width
             anchors.topMargin: 0
             anchors.left: parent.left
-            anchors.leftMargin: 5
+            anchors.leftMargin: 4
             height:  parent.height/3-20
             color: "white"
-            border.color: Constants.darkThemeColor
+//            border.color: Constants.darkThemeColor
             Rectangle{
+                id:dataTypeDateRect
                 height: 25
                 width: parent.width
                 color: Constants.themeColor
@@ -299,7 +300,7 @@ Item {
 
             DateList{
                 id: dateCheckboxes
-                anchors.top: dataTypeDate.bottom
+                anchors.top: dataTypeDateRect.bottom
                 anchors.topMargin: 5
                 anchors.left: parent.left
                 anchors.leftMargin: 10

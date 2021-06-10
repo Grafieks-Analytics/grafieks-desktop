@@ -138,30 +138,16 @@ Item {
             anchors.topMargin: 15
             anchors.left: parent.left
             anchors.leftMargin: 15
-            text: "first: "+rangeSlider.first.value
+            text: rangeSlider.first.value
             elide: Text.ElideRight
             font.pixelSize: Constants.fontCategoryHeaderMedium
             verticalAlignment: Text.AlignVCenter
         }
-
-        Text {
-            id: secondText
-            width:110
-            anchors.top: firstText.bottom
-            anchors.topMargin: 15
-            anchors.left: parent.left
-            anchors.leftMargin: 15
-            text: "second: "+rangeSlider.second.value
-            elide: Text.ElideRight
-            font.pixelSize: Constants.fontCategoryHeaderMedium
-            verticalAlignment: Text.AlignVCenter
-        }
-
 
 
         RangeSlider {
             id:rangeSlider
-            anchors.top: secondText.bottom
+            anchors.top: firstText.bottom
              anchors.topMargin: 10
              width: parent.width
             from: 1
@@ -174,6 +160,22 @@ Item {
             second.onValueChanged:{
                 console.log("secondRangeValue",second.value)
             }
+        Text {
+            id: secondText
+            width:110
+            anchors.top: rangeSlider.bottom
+            anchors.topMargin: 15
+            anchors.left: parent.left
+            anchors.leftMargin: 15
+            text: rangeSlider.second.value
+            elide: Text.ElideRight
+            font.pixelSize: Constants.fontCategoryHeaderMedium
+            verticalAlignment: Text.AlignVCenter
+        }
+
+
+
+
 
         }
 
