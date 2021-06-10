@@ -149,9 +149,9 @@ void ReportParamsModel::clearFilter()
 {
 
     // Q_PROPERTY
-    this->setSection(Constants::defaultTabSection);
-    this->setCategory(Constants::defaultCategory);
-    this->setSubCategory(Constants::defaultSubCategory);
+//    this->setSection(Constants::defaultTabSection);
+//    this->setCategory(Constants::defaultCategory);
+//    this->setSubCategory(Constants::defaultSubCategory);
 
     // variable change
 }
@@ -392,7 +392,9 @@ void ReportParamsModel::removeFilterSlugMap(int filterId)
 
 void ReportParamsModel::addToIncludeExcludeMap(int filterId, bool includeExclude)
 {
+
     this->includeExcludeMap.insert(filterId, includeExclude);
+    qDebug()<< filterId << includeExclude << "WJAT" << this->includeExcludeMap;
 }
 
 QVector<bool> ReportParamsModel::fetchIncludeExcludeMap(int filterId, bool fetchAll)
@@ -405,6 +407,7 @@ QVector<bool> ReportParamsModel::fetchIncludeExcludeMap(int filterId, bool fetch
         }
     } else{
         out.append(this->includeExcludeMap.value(filterId));
+        qDebug() << out << "WJAT OUT" << this->includeExcludeMap.value(filterId) << filterId << this->includeExcludeMap;
     }
 
     return out;
@@ -417,7 +420,7 @@ void ReportParamsModel::removeIncludeExcludeMap(int filterId)
 
 void ReportParamsModel::addToIncludeNullMap(int filterId, bool includeNull)
 {
-    this->includeExcludeMap.insert(filterId, includeNull);
+    this->includeNullMap.insert(filterId, includeNull);
 }
 
 QVector<bool> ReportParamsModel::fetchIncludeNullMap(int filterId, bool fetchAll)

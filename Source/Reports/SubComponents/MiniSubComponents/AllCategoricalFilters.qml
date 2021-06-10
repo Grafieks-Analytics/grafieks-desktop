@@ -46,8 +46,8 @@ Rectangle{
 
             var modelList = []
             filterList.forEach((item) => {
-                               console.log(item, "ITEM1s", JSON.stringify(ReportParamsModel.fetchFilterColumnMap(0, true)) , JSON.stringify(ReportParamsModel.fetchFilterRelationMap(item)), ReportParamsModel.fetchFilterValueMap(item)[item][0],ReportParamsModel.fetchIncludeExcludeMap(item))
-                               modelList.push(item)
+                                   console.log(item, "ITEM1s", JSON.stringify(ReportParamsModel.fetchFilterColumnMap(0, true)) , JSON.stringify(ReportParamsModel.fetchFilterRelationMap(item)), ReportParamsModel.fetchFilterValueMap(item)[item][0],ReportParamsModel.fetchIncludeExcludeMap(item))
+                                   modelList.push(item)
                                })
 
 
@@ -76,28 +76,28 @@ Rectangle{
     // Called when edit filter from categorical list clicked
     function onEditElement(modelIndex, filterIndex){
 
-//        ReportParamsModel.setMode(Constants.modeEdit)
-//        ReportParamsModel.setInternalCounter(filterIndex)
-//        ReportParamsModel.setFilterModelIndex(modelIndex)
-//        ReportParamsModel.setSection(ReportParamsModel.fetchFilterSectionMap(filterIndex)[0])
-//        ReportParamsModel.setCategory(ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0])
-//        ReportParamsModel.setSubCategory(ReportParamsModel.fetchFilterSubCategoryMap(filterIndex)[0])
-////        ReportParamsModel.setTableName(tableName)
-//        ReportParamsModel.setColName(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0])
+        ReportParamsModel.setMode(Constants.modeEdit)
+        ReportParamsModel.setColName(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0])
+        ReportParamsModel.setSection(ReportParamsModel.fetchFilterSectionMap(filterIndex)[0])
+        ReportParamsModel.setCategory(ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0])
+        ReportParamsModel.setSubCategory(ReportParamsModel.fetchFilterSubCategoryMap(filterIndex)[0])
+        ReportParamsModel.setInternalCounter(filterIndex)
+        ReportParamsModel.setFilterIndex(filterIndex)
+        ReportParamsModel.setFilterModelIndex(filterIndex)
 
-//        var options = {
-//            "section" : ReportParamsModel.fetchFilterSectionMap(filterIndex)[0],
-//            "category" : ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0],
-//            "subCategory" : ReportParamsModel.fetchFilterSubCategoryMap(filterIndex)[0],
-//            "values" : ReportParamsModel.fetchFilterValueMap(filterIndex)[filterIndex],
-//            "relation" : ReportParamsModel.fetchFilterRelationMap(filterIndex)[0],
-//            "slug" : ReportParamsModel.fetchFilterSlugMap(filterIndex)[0]
+        var options = {
+            "section" : ReportParamsModel.fetchFilterSectionMap(filterIndex)[0],
+            "category" : ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0],
+            "subCategory" : ReportParamsModel.fetchFilterSubCategoryMap(filterIndex)[0],
+            "values" : ReportParamsModel.fetchFilterValueMap(filterIndex)[filterIndex],
+            "relation" : ReportParamsModel.fetchFilterRelationMap(filterIndex)[0],
+            "slug" : ReportParamsModel.fetchFilterSlugMap(filterIndex)[0]
 
-//        }
+        }
 
-////        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
-//        ChartsModel.fetchColumnData(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0], JSON.stringify(options))
-//        console.log("EDIT CLICKED categorical", ReportParamsModel.fetchFilterColumnMap(filterIndex),ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0])
+        //        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        ChartsModel.fetchColumnData(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0], JSON.stringify(options))
+        console.log("EDIT CLICKED categorical", ReportParamsModel.fetchFilterColumnMap(filterIndex),ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0], filterIndex, modelIndex)
 
 
     }

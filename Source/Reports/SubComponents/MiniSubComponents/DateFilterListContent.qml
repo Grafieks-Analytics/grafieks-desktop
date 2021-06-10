@@ -136,6 +136,19 @@ Rectangle{
                 multiSelectCheckList.model  = colData
 
                 convertDate(colData)
+
+                if(ReportParamsModel.subCategory === Constants.categorySubMulti){
+                    multiSelectRadio.checked = true
+
+                    multiSelectCheckList.visible = true
+                    singleSelectCheckList.visible = false
+                } else{
+                    singleSelectRadio.checked = true
+
+                    multiSelectCheckList.visible = false
+                    singleSelectCheckList.visible = true
+
+                }
             }
         }
     }
@@ -635,15 +648,24 @@ Rectangle{
                     }
 
                     // On edit, highlight the selected option
-                    Connections{
-                        target: ReportParamsModel
-                        function onTmpSelectedValuesChanged(values){
 
+                    Connections{
+                        target: ChartsModel
+                        function onColumnDataChanged(columnData, options){
                             if(ReportParamsModel.mode === Constants.modeEdit && ReportParamsModel.category === Constants.dateMainListType && ReportParamsModel.subCategory === Constants.categorySubMulti){
-                                if(values[0] === "%"){
-                                    modelCheckBoxes.checked = true
-                                } else{
-                                    modelCheckBoxes.checked = values.indexOf(modelCheckBoxes.objectName) >= 0 ? true: false
+                                if(options !== ""){
+                                    var JSONValues = JSON.parse(options)
+                                    var selectedValues = []
+
+                                    JSONValues.values.forEach(item => {
+                                                                  selectedValues = item.split(",")
+                                                              })
+
+                                    if(selectedValues[0] === "%"){
+                                        modelCheckBoxes.checked = true
+                                    } else{
+                                        modelCheckBoxes.checked = selectedValues.indexOf(modelCheckBoxes.objectName) >= 0 ? true: false
+                                    }
                                 }
                             }
                         }
@@ -704,11 +726,20 @@ Rectangle{
                         }
 
                         // On edit, highlight the selected option
+
                         Connections{
-                            target: ReportParamsModel
-                            function onTmpSelectedValuesChanged(values){
+                            target: ChartsModel
+                            function onColumnDataChanged(columnData, options){
                                 if(ReportParamsModel.mode === Constants.modeEdit && ReportParamsModel.category === Constants.dateMainListType && ReportParamsModel.subCategory === Constants.categorySubSingle){
-                                    modelRadioButton.checked = values[0] === modelRadioButton.objectName ? true: false
+                                    if(options !== ""){
+                                        var JSONValues = JSON.parse(options)
+                                        var selectedValues = []
+
+                                        JSONValues.values.forEach(item => {
+                                                                      selectedValues = item.split(",")
+                                                                  })
+                                        modelRadioButton.checked = selectedValues.indexOf(modelRadioButton.objectName) >= 0 ? true: false
+                                    }
                                 }
                             }
                         }
