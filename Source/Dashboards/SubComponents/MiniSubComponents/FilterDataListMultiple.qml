@@ -48,7 +48,11 @@ Item {
     }
 
     function filterClicked(){
+
+        var currentColumnType = TableColumnsModel.findColumnType(componentName)
+        DashboardParamsModel.setCurrentColumnType(currentColumnType)
         DashboardParamsModel.setCurrentSelectedColumn(componentName)
+
         labelShapePopup1.visible = true
     }
 
@@ -58,7 +62,7 @@ Item {
         Row{
             CheckBoxTpl{
                 checkbox_text: modelData
-                checkbox_checked: true
+                checkbox_checked: false
                 parent_dimension: 14
             }
         }

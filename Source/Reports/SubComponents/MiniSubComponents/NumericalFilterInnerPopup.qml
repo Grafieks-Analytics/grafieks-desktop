@@ -82,25 +82,34 @@ Rectangle{
     // Connections Starts
 
     Connections{
-        target: DSParamsModel
+        target: ReportParamsModel
 
         function onResetInput(){
             textField.text =""
             textField2nd.text =""
             selectOption.textValue ="Equal"
-            DSParamsModel.setIncludeNullMap(counter, true)
-            DSParamsModel.setExcludeMap(counter, false)
+            ReportParamsModel.addToIncludeNullMap(counter, true)
+            ReportParamsModel.addToIncludeExcludeMap(counter, false)
         }
 
         function onInternalCounterChanged(){
-            if(DSParamsModel.section === Constants.numericalTab){
-                counter = DSParamsModel.internalCounter
+            if(ReportParamsModel.section === Constants.numericalTab){
+                counter = ReportParamsModel.internalCounter
             }
         }
 
         function onFilterIndexChanged(){
-            if(DSParamsModel.section === Constants.numericalTab){
-                counter = DSParamsModel.filterIndex
+            if(ReportParamsModel.section === Constants.numericalTab){
+
+                counter = ReportParamsModel.filterIndex
+                var colName = ReportParamsModel.colName
+                var colData = ReportParamsModel.fetchFilterValueMap(counter)[counter]
+                var slug = ReportParamsModel.fetchFilterSlugMap(counter)
+
+                textField.text = colData[0]
+                selectOption.textValue = slug[0]
+
+                ReportParamsModel.addToIncludeExcludeMap(counter, false)
             }
         }
     }
@@ -181,19 +190,19 @@ Rectangle{
         }
 
         let relation = getNewRelation(tmpRelation)
-        DSParamsModel.addToJoinValue(counter, newValue)
-        DSParamsModel.addToJoinRelation(counter, relation)
-        DSParamsModel.addToJoinRelationSlug(counter, tmpRelation)
+        ReportParamsModel.addToFilterValueMap(counter, newValue)
+        ReportParamsModel.addToFilterRelationMap(counter, relation)
+        ReportParamsModel.addToFilterSlugMap(counter, tmpRelation)
 
     }
 
     function onExludeCheckStateChanged(checked){
-        DSParamsModel.setExcludeMap(checked)
+        ReportParamsModel.addToIncludeExcludeMap(counter, false)
     }
 
 
     function onIncludeCheckStateChanged(checked){
-        DSParamsModel.setIncludeNullMap(checked)
+        ReportParamsModel.addToIncludeNullMap(counter, checked)
     }
 
 
@@ -240,8 +249,8 @@ Rectangle{
             anchors.verticalCenter: parent.verticalAlignment
 
             CheckBoxTpl {
-                checked: DSParamsModel.includeNull
-                 parent_dimension: Constants.defaultCheckBoxDimension
+                checked: ReportParamsModel.includeNull
+                parent_dimension: Constants.defaultCheckBoxDimension
                 text: qsTr("Include Null")
                 indicator.width: 15
                 indicator.height: 15
@@ -264,7 +273,7 @@ Rectangle{
             anchors.verticalCenter: parent.verticalAlignment
 
             CheckBox {
-                checked: DSParamsModel.exclude
+                checked: ReportParamsModel.exclude
                 text: qsTr("Exclude")
                 indicator.width: 15
                 indicator.height: 15

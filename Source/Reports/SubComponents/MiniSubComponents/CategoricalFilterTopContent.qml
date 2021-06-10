@@ -232,7 +232,7 @@ Rectangle{
             onCurrentIndexChanged: {
                 //                selectDropdown.setProperty(index ,"value", currentIndex)
 //                console.log("TOP-BOTTOM", topType.currentValue, topType.currentIndex, topType.currentText )
-                //                DSParamsModel.setSubCategory()
+                //                ReportParamsModel.setSubCategory()
             }
         }
 
