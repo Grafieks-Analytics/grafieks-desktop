@@ -82,25 +82,25 @@ Rectangle{
     // Connections Starts
 
     Connections{
-        target: DSParamsModel
+        target: ReportParamsModel
 
         function onResetInput(){
             textField.text =""
             textField2nd.text =""
             selectOption.textValue ="Equal"
-            DSParamsModel.setIncludeNullMap(counter, true)
-            DSParamsModel.setExcludeMap(counter, false)
+            ReportParamsModel.addToIncludeNullMap(counter, true)
+            ReportParamsModel.addToIncludeExcludeMap(counter, false)
         }
 
         function onInternalCounterChanged(){
-            if(DSParamsModel.section === Constants.numericalTab){
-                counter = DSParamsModel.internalCounter
+            if(ReportParamsModel.section === Constants.numericalTab){
+                counter = ReportParamsModel.internalCounter
             }
         }
 
         function onFilterIndexChanged(){
-            if(DSParamsModel.section === Constants.numericalTab){
-                counter = DSParamsModel.filterIndex
+            if(ReportParamsModel.section === Constants.numericalTab){
+                counter = ReportParamsModel.filterIndex
             }
         }
     }
@@ -181,19 +181,19 @@ Rectangle{
         }
 
         let relation = getNewRelation(tmpRelation)
-        DSParamsModel.addToJoinValue(counter, newValue)
-        DSParamsModel.addToJoinRelation(counter, relation)
-        DSParamsModel.addToJoinRelationSlug(counter, tmpRelation)
+        ReportParamsModel.addToFilterValueMap(counter, newValue)
+        ReportParamsModel.addToFilterRelationMap(counter, relation)
+        ReportParamsModel.addToFilterSlugMap(counter, tmpRelation)
 
     }
 
     function onExludeCheckStateChanged(checked){
-        DSParamsModel.setExcludeMap(checked)
+        ReportParamsModel.addToIncludeExcludeMap(checked)
     }
 
 
     function onIncludeCheckStateChanged(checked){
-        DSParamsModel.setIncludeNullMap(checked)
+        ReportParamsModel.addToIncludeNullMap(checked)
     }
 
 
@@ -240,7 +240,7 @@ Rectangle{
             anchors.verticalCenter: parent.verticalAlignment
 
             CheckBoxTpl {
-                checked: DSParamsModel.includeNull
+                checked: ReportParamsModel.includeNull
                  parent_dimension: Constants.defaultCheckBoxDimension
                 text: qsTr("Include Null")
                 indicator.width: 15
@@ -264,7 +264,7 @@ Rectangle{
             anchors.verticalCenter: parent.verticalAlignment
 
             CheckBox {
-                checked: DSParamsModel.exclude
+                checked: ReportParamsModel.exclude
                 text: qsTr("Exclude")
                 indicator.width: 15
                 indicator.height: 15

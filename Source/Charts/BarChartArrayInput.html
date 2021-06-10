@@ -12,13 +12,6 @@
                 overflow-y: hidden;
                 /* overflow-x: hidden; */
             }
-            #yAxisDiv {
-                position: fixed;
-                background: #fff;
-            }
-            #my_dataviz {
-                /* overflow-x: scroll; */
-            }
             #tooltip {
                 font-size: 14px;
                 font-family: Arial, Helvetica, sans-serif;
@@ -48,6 +41,24 @@
             var extraHeightWorked = false;
             var redrawn = false;
             var extraHeight = 0;
+
+            // var data = [
+            //     [
+            //         [
+            //             "barbaz",
+            //             "barbars adsa dsa adsa sad",
+            //             "foobaz",
+            //             "foobar",
+            //             "baz",
+            //             "bar",
+            //             "foo",
+            //         ],
+            //         [10, 40, 10, 50, 30, 20, 71],
+            //     ],
+            //     ["value 1", "value 2Z"],
+            // ];
+
+            // drawChart(data);
 
             function drawChart(data, plottingConfiguration = {}) {
                 window.data = data;

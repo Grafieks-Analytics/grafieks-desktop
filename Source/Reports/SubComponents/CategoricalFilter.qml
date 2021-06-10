@@ -17,17 +17,13 @@ Popup {
     visible: false
     padding: 0
     closePolicy: Popup.NoAutoClose
-
-    property int filterIndex: 0
-
-
     background: Rectangle{
         color: Constants.themeColor
         border.color: Constants.darkThemeColor
     }
 
+    property int filterIndex: 0
     property int counter: 0
-
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -51,33 +47,34 @@ Popup {
     // Connections Starts
 
     Connections{
-        target: DSParamsModel
+        target: ReportParamsModel
 
         function onInternalCounterChanged(){
-            counter = DSParamsModel.internalCounter
+            counter = ReportParamsModel.internalCounter
         }
 
         function onFilterIndexChanged(){
-            counter = DSParamsModel.filterIndex
+            counter = ReportParamsModel.filterIndex
         }
-    }
 
 
-    Connections{
-        target: QueryDataModel
+        function onSectionChanged(section){
 
-        function onColumnListModelDataChanged(colData, options){
 
-            var jsonOptions = JSON.parse(options)
+            console.log("SECTION CHANGED", ReportParamsModel.section, Constants.categoricalTab, ReportParamsModel.category, Constants.categoryMainListType)
 
-            if(jsonOptions.section === Constants.categoricalTab){
+            if(ReportParamsModel.section === Constants.categoricalTab){
 
-                switch(jsonOptions.category){
-                case Constants.categoryMainListType:
+                listContentReport.visible = true
 
-                    listContent.visible = true
-                    wildcardContent.visible = false
-                    topContent.visible = false
+                switch(ReportParamsModel.category){
+//                case Constants.categoryMainListType:
+                case "date.list":
+                    console.log("INSIDE THIS")
+
+                    listContentReport.visible = true
+                    wildcardContentReport.visible = false
+                    topContentReport.visible = false
 
                     listRadio.checked = true
 
@@ -85,9 +82,9 @@ Popup {
 
                 case Constants.categoryMainWildCardType:
 
-                    listContent.visible = false
-                    wildcardContent.visible = true
-                    topContent.visible = false
+                    listContentReport.visible = false
+                    wildcardContentReport.visible = true
+                    topContentReport.visible = false
 
                     wildcardRadio.checked = true
 
@@ -95,9 +92,9 @@ Popup {
 
                 case Constants.categoryMainTopType:
 
-                    listContent.visible = false
-                    wildcardContent.visible = false
-                    topContent.visible = true
+                    listContentReport.visible = false
+                    wildcardContentReport.visible = false
+                    topContentReport.visible = true
 
                     topRadio.checked = true
 
@@ -121,8 +118,8 @@ Popup {
 
 
     Component.onCompleted: {
-        categoricalFilterPopup.clearData.connect(listContent.slotDataCleared)
-        categoricalFilterPopup.clearData.connect(wildcardContent.slotDataCleared)
+        categoricalFilterPopup.clearData.connect(listContentReport.slotDataCleared)
+        categoricalFilterPopup.clearData.connect(wildcardContentReport.slotDataCleared)
     }
 
 
@@ -130,7 +127,7 @@ Popup {
         categoricalFilterPopup.visible = false
 
         // Reset all DSParams
-        DSParamsModel.clearFilter();
+        ReportParamsModel.clearFilter();
 
         // Clear tabs individual temp data
         categoricalFilterPopup.clearData()
@@ -141,34 +138,25 @@ Popup {
 
         categoricalFilterPopup.visible = false
 
-        var section = DSParamsModel.section
-        var category = DSParamsModel.category
-        var subCategory = DSParamsModel.subCategory
-        var tableName = DSParamsModel.tableName
-        var columnName = DSParamsModel.colName
-        var tmpFilterIndexes = DSParamsModel.getTmpFilterIndex(0, true)
-
-        var singleValue = "";
-        var singleRelation = "";
-        var singleSlug = "";
-
+        var section = ReportParamsModel.section
+        var category = ReportParamsModel.category
+        var subCategory = ReportParamsModel.subCategory
+        var tableName = ReportParamsModel.tableName
+        var columnName = ReportParamsModel.colName
+        var tmpFilterIndexes = ReportParamsModel.getTmpFilterIndex(0, true)
 
 
         switch(category){
 
         case Constants.categoryMainListType:
 
-            let joinRelation = DSParamsModel.fetchJoinRelation(counter)
-            let joinValue = DSParamsModel.fetchJoinValue(counter)
-            let joinSlug = DSParamsModel.fetchJoinRelationSlug(counter)
-            let includeNull = DSParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
-            let exclude = DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
+            ReportParamsModel.addToFilterSectionMap(counter, section)
+            ReportParamsModel.addToFilterCategoryMap(counter, category)
+            ReportParamsModel.addToFilterSubCategoryMap(counter, subCategory)
+            ReportParamsModel.addToFilterColumnMap(counter, columnName)
+            ReportParamsModel.addToCategoricalFilters(counter)
 
-            singleRelation = joinRelation[counter]
-            singleValue = joinValue[counter]
-            singleSlug = joinSlug[counter]
-
-            manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, counter, DSParamsModel.filterModelIndex)
+            manageFilters(ReportParamsModel.mode, counter, ReportParamsModel.filterModelIndex)
             break
 
         case Constants.categoryMainWildCardType:
@@ -176,17 +164,14 @@ Popup {
             for(let i = 0; i < tmpFilterIndexes.length; i++){
                 let fi = tmpFilterIndexes[i]
 
-                let joinRelation = DSParamsModel.fetchJoinRelation(fi)
-                let joinValue = DSParamsModel.fetchJoinValue(fi)
-                let joinSlug = DSParamsModel.fetchJoinRelationSlug(fi)
-                let includeNull = false
-                let exclude = DSParamsModel.getExcludeMap(fi)[fi] === "1" ? true : false
 
-                singleRelation = joinRelation[fi]
-                singleValue = joinValue[fi]
-                singleSlug = joinSlug[fi]
+                ReportParamsModel.addToFilterSectionMap(fi, section)
+                ReportParamsModel.addToFilterCategoryMap(fi, category)
+                ReportParamsModel.addToFilterSubCategoryMap(fi, subCategory)
+                ReportParamsModel.addToFilterColumnMap(fi, columnName)
+                ReportParamsModel.addToCategoricalFilters(fi)
 
-                manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, fi, DSParamsModel.filterModelIndex)
+                manageFilters(ReportParamsModel.mode, fi, ReportParamsModel.filterModelIndex)
             }
 
             break
@@ -199,7 +184,7 @@ Popup {
         }
 
         // Clear filters
-        DSParamsModel.clearFilter();
+        ReportParamsModel.clearFilter();
 
         // Clear tabs individual temp data
         categoricalFilterPopup.clearData()
@@ -208,21 +193,15 @@ Popup {
 
     }
 
-    function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, counter = 0, filterId = 0){
+    function manageFilters(mode, counter = 0, filterId = 0){
 
-        console.log("Filter insert categorical", mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, counter, filterId)
-        // Save the filter
-        if(mode === Constants.modeCreate){
-            FilterCategoricalListModel.newFilter(counter, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
-
-        } else{
-            FilterCategoricalListModel.updateFilter(filterId, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
-        }
+        console.log("Filter insert categorical - INSERT REPORT ID", mode, counter, filterId)
+        ReportParamsModel.addToMasterReportFilters(1);
     }
 
     function onResetClicked(){
         categoricalFilterPopup.visible = false
-        DSParamsModel.clearFilter()
+        ReportParamsModel.clearFilter()
 
         // Clear tabs individual temp data
         categoricalFilterPopup.clearData()
@@ -230,45 +209,46 @@ Popup {
 
     function onListClicked(){
 
-        listContent.visible = true
-        wildcardContent.visible = false
-        topContent.visible = false
+        listContentReport.visible = true
+        wildcardContentReport.visible = false
+        topContentReport.visible = false
 
         // Set the main category of the filter
-        DSParamsModel.clearFilter()
-        DSParamsModel.setCategory(Constants.categoryMainListType)
+        ReportParamsModel.clearFilter()
+        ReportParamsModel.setCategory(Constants.categoryMainListType)
 
         // For list category type
         // The db WHERE relation can only be IN / NOT IN ARRAY type
         // Except when "Select All" checked.
         // Then Relation will be LIKE
 
-        DSParamsModel.addToJoinRelation(filterIndex, Constants.likeRelation)
+//        ReportParamsModel.addToFilterRelationMap(filterIndex, Constants.likeRelation)
+//        ReportParamsModel.addToFilterSlugMap(filterIndex, Constants.likeRelation)
     }
 
 
     function onWildcardClicked(){
 
-        listContent.visible = false
-        wildcardContent.visible = true
-        topContent.visible = false
+        listContentReport.visible = false
+        wildcardContentReport.visible = true
+        topContentReport.visible = false
 
         // Set the main category of the filter
-        DSParamsModel.clearFilter();
-        DSParamsModel.setCategory(Constants.categoryMainWildCardType)
+        ReportParamsModel.clearFilter();
+        ReportParamsModel.setCategory(Constants.categoryMainWildCardType)
 
     }
 
 
     function onTopClicked(){
 
-        listContent.visible = false
-        wildcardContent.visible = false
-        topContent.visible = true
+        listContentReport.visible = false
+        wildcardContentReport.visible = false
+        topContentReport.visible = true
 
         // Set the main category of the filter
-        DSParamsModel.clearFilter();
-        DSParamsModel.setCategory(Constants.categoryMainTopType)
+        ReportParamsModel.clearFilter();
+        ReportParamsModel.setCategory(Constants.categoryMainTopType)
     }
 
 
@@ -429,15 +409,15 @@ Popup {
     //    Top Menu Contents
 
     CategoricalFilterListContent{
-        id: listContent
+        id: listContentReport
     }
 
     CategoricalFilterWildcardContent{
-        id: wildcardContent
+        id: wildcardContentReport
     }
 
     CategoricalFilterTopContent{
-        id: topContent
+        id: topContentReport
     }
 
     // Footer starts

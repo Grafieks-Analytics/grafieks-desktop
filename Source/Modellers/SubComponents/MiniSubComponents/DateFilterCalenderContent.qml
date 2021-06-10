@@ -82,7 +82,6 @@ Rectangle{
         function onColumnListModelDataChanged(colData, options){
 
             var jsonOptions = JSON.parse(options)
-            console.log(options, "OIT2")
 
             if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainCalendarType){
                 //                DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)

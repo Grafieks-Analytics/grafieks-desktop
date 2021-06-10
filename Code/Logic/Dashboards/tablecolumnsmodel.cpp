@@ -5,33 +5,37 @@ TableColumnsModel::TableColumnsModel(QObject *parent) : QObject(parent)
 
 }
 
-void TableColumnsModel::setColumnVisibility(int dashboardId, QString columnName, bool show)
+void TableColumnsModel::setColumnVisibility(int dashboardId, QString columnName, QString columnType, bool show)
 {
-    QStringList allVisibleColumnList = this->allColumnVisibleMap.value(dashboardId);
+    QVariantMap allVisibleColumnMap = this->allColumnVisibleMap.value(dashboardId);
     if(show == false){
-        allVisibleColumnList.removeAll(columnName);
-        this->allColumnVisibleMap.insert(dashboardId, allVisibleColumnList);
+        allVisibleColumnMap.remove(columnName);
+        this->allColumnVisibleMap.insert(dashboardId, allVisibleColumnMap);
     } else{
 
         // Check if already exists
         // If no, then append
 
-        if(allVisibleColumnList.indexOf(columnName) < 0){
-            allVisibleColumnList.append(columnName);
-            this->allColumnVisibleMap.insert(dashboardId, allVisibleColumnList);
+        QStringList visibleKeys = allVisibleColumnMap.keys();
+
+        if(visibleKeys.indexOf(columnName) < 0){
+            allVisibleColumnMap.insert(columnName, columnType);
+            this->allColumnVisibleMap.insert(dashboardId, allVisibleColumnMap);
         }
     }
 
 }
 
-QStringList TableColumnsModel::fetchVisibleColumns(int dashboardId)
+QVariantMap TableColumnsModel::fetchVisibleColumns(int dashboardId)
 {
     return this->allColumnVisibleMap.value(dashboardId);
 }
 
 void TableColumnsModel::applyColumnVisibility(int dashboardId)
 {
-    emit columnNamesChanged(this->allColumnVisibleMap.value(dashboardId));
+    QStringList visibleColumns = this->allColumnVisibleMap.value(dashboardId).keys();
+
+    emit columnNamesChanged(visibleColumns);
     emit visibleColumnListChanged(this->allColumnVisibleMap.value(dashboardId));
 }
 
@@ -59,6 +63,11 @@ void TableColumnsModel::searchColumnNames(int dashboardId, QString keyword)
     emit sendFilteredColumn(dashboardId, this->categoryList.filter(keyword, Qt::CaseInsensitive), this->numericalList.filter(keyword, Qt::CaseInsensitive), this->dateList.filter(keyword, Qt::CaseInsensitive));
 }
 
+QString TableColumnsModel::findColumnType(QString columnName)
+{
+    return this->columnTypes.value(columnName);
+}
+
 void TableColumnsModel::addNewDashboard(int dashboardId)
 {
     emit sendFilteredColumn(dashboardId, this->categoryList, this->numericalList, this->dateList);
@@ -84,6 +93,7 @@ void TableColumnsModel::getChartHeader(QMap<int, QStringList> chartHeader)
     this->categoryList.clear();
     this->dateList.clear();
     this->newChartHeader.clear();
+    this->columnTypes.clear();
 
     QStringList tmpVisibleColumnList;
 
@@ -94,10 +104,13 @@ void TableColumnsModel::getChartHeader(QMap<int, QStringList> chartHeader)
 
         if(chartHeader.value(key).at(1).contains(Constants::categoricalType)){
             this->categoryList.append(fullColumnName);
+            this->columnTypes.insert(fullColumnName, Constants::categoricalType);
         } else if(chartHeader.value(key).at(1).contains(Constants::numericalType)){
             this->numericalList.append(fullColumnName);
+            this->columnTypes.insert(fullColumnName, Constants::numericalType);
         } else if(chartHeader.value(key).at(1).contains(Constants::dateType)){
             this->dateList.append(fullColumnName);
+            this->columnTypes.insert(fullColumnName, Constants::dateType);
         } else{
             qDebug() << "OTHER UNDETECTED FIELD TYPE" << chartHeader.value(key).at(0);
         }

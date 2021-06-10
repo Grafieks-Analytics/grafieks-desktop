@@ -4,28 +4,42 @@
 #include <QObject>
 #include <QMap>
 #include <QVariantMap>
-#include<QDebug>
+#include <QDebug>
+
+#include "../../constants.h"
+#include "../../Messages.h"
+#include "../../statics.h"
 
 class ReportParamsModel: public QObject
 {
     Q_OBJECT
 
 // Customize Report parameters
-    QMap<QString, QMap<QString, QString>> reportsMap;           // <<reportId, reportObj>>
+    QVariantMap reportsMap;           // <<reportId, reportObj>>
     QVariantMap reportsData;
+    QVariantMap dashboardReportInstances;
 
     // Filter specific variables
-    QVector<int> categoricalFilters;                            // Id List of categorical filters
-    QVector<int> dateFilters;                                   // Id List of date filters
-    QVector<int> numericalFilters;                              // Id List of numerical filters
+    QMap<int, QMap<int, QVariantMap>> masterReportFilters;         // Report Id - Map of
+
+
+    QVector<int> categoricalFilters;                            // List of categorical filters
+    QVector<int> dateFilters;                                   // List of date filters
+    QVector<int> numericalFilters;                              // List of numerical filters
     QMap<int, QString> filterColumnMap;                         // filter id - column name map
     QMap<int, QVariantList> filterValueMap;                     // filter id - value list map
     QMap<int, QString> filterRelationMap;                       // filter id - relation map
+    QMap<int, QString> filterSlugMap;                           // filter id - slug map
     QMap<int, bool> includeExcludeMap;                          // filter id - include exclude map
     QMap<int, bool> includeNullMap;                             // filter id - include null map
+    QMap<int, bool> selectAllMap;                               // filter id - select All map
     QMap<int, QString> filterSectionMap;                        // filter id - section map
     QMap<int, QString> filterCategoryMap;                       // filter id - category map
     QMap<int, QString> filterSubCategoryMap;                    // filter id - sub category map
+    QStringList tmpSelectedValues;              // Tmp selected values in a filter list - used in categorical/date filter list
+    QVector<int> tmpFilterIndex;                // Tmp created filter index - used in categorical filter wildcard
+    QMap<int, int> dateFormatMap;               // Date selected format QMap<filterId, formatId>
+    QMap<int, QStringList> actualDateValues;    // For dates like This year, last 10 years, quarter, etc, the original values are stored in this variable
 
     // General properties
     Q_PROPERTY(QString itemName READ itemName WRITE setItemName NOTIFY itemNameChanged)
@@ -41,12 +55,14 @@ class ReportParamsModel: public QObject
 
     // Report Properties for generating graph
     Q_PROPERTY(QString chartType READ chartType WRITE setChartType NOTIFY chartTypeChanged)
+    Q_PROPERTY(QString chartTitle READ chartTitle WRITE setChartTitle NOTIFY chartTitleChanged)
     Q_PROPERTY(QString chartUrl READ chartUrl WRITE setChartUrl NOTIFY chartUrlChanged)
     Q_PROPERTY(QString reportId READ reportId WRITE setReportId NOTIFY reportIdChanged)
     Q_PROPERTY(QString reportTitle READ reportTitle WRITE setReportTitle NOTIFY reportTitleChanged)
     Q_PROPERTY(QString xAxisColumns READ xAxisColumns WRITE setXAxisColumns NOTIFY xAxisColumnsChanged)
     Q_PROPERTY(QString yAxisColumns READ yAxisColumns WRITE setYAxisColumns NOTIFY yAxisColumnsChanged)
     Q_PROPERTY(QString d3PropertiesConfig READ d3PropertiesConfig WRITE setD3PropertiesConfig NOTIFY d3PropertiesConfigChanged)
+    Q_PROPERTY(QString colorByDataColoumns READ colorByDataColoumns WRITE setColorByDataColoumns NOTIFY colorByDataColoumnsChanged)
 
     // For Filters
     Q_PROPERTY(int internalCounter READ internalCounter WRITE setInternalCounter NOTIFY internalCounterChanged) // Counter for categorical-wildcard
@@ -54,7 +70,7 @@ class ReportParamsModel: public QObject
     Q_PROPERTY(QString category READ category WRITE setCategory NOTIFY categoryChanged)                         // Inner sub classifications of the section
     Q_PROPERTY(QString subCategory READ subCategory WRITE setSubCategory NOTIFY subCategoryChanged)             // selection type of categories like multi/single select in categorical tab
     Q_PROPERTY(QString tableName READ tableName WRITE setTableName NOTIFY tableNameChanged)                     // sql table name of the selection
-    Q_PROPERTY(QString colName READ colName WRITE setColName NOTIFY colNameChanged)                             // sql column name
+    Q_PROPERTY(QString colName READ colName WRITE setColName NOTIFY colNameChanged)                             // column name
     Q_PROPERTY(int filterIndex READ filterIndex WRITE setFilterIndex NOTIFY filterIndexChanged)                 // Unique id given to each join type (filter type)
     Q_PROPERTY(QString mode READ mode WRITE setMode NOTIFY modeChanged)                                         // Set Create/Edit mode in a filter
     Q_PROPERTY(int filterModelIndex READ filterModelIndex WRITE setFilterModelIndex NOTIFY filterModelIndexChanged)
@@ -88,8 +104,12 @@ class ReportParamsModel: public QObject
     QString m_mode;
     int m_filterModelIndex;
 
+    QString m_chartTitle;
+
+    QString m_colorByDataColoumns;
+
 public:
-    ReportParamsModel();
+    explicit ReportParamsModel(QObject *parent = nullptr);
 
     // General properties
     QString itemName() const;
@@ -111,6 +131,8 @@ public:
     QString xAxisColumns() const;
     QString yAxisColumns() const;
     QString d3PropertiesConfig() const;
+    QString chartTitle() const;
+    QString colorByDataColoumns() const;
 
     // For Filters
     int internalCounter() const;
@@ -124,20 +146,30 @@ public:
     int filterModelIndex() const;
 
     Q_INVOKABLE void addReport(QString reportId);
+    Q_INVOKABLE QVariant getReport(QString reportId);
     Q_INVOKABLE QVariantMap getReportsList();
 
     // Filter specific invokable functions
+
+    Q_INVOKABLE void resetFilter();
+    Q_INVOKABLE void clearFilter();
+    Q_INVOKABLE void resetInputFields();
+
+    Q_INVOKABLE void addToMasterReportFilters(int reportId);
+    Q_INVOKABLE void restoreMasterReportFilters(int reportId);
+    Q_INVOKABLE void deleteMasterReportFilters(int reportId, bool deleteAll = false);
+
     Q_INVOKABLE void addToCategoricalFilters(int filterId);
     Q_INVOKABLE QVector<int> fetchCategoricalFilters();
-    Q_INVOKABLE void removeCategoricalFilters(int filterId);
+    Q_INVOKABLE void removeCategoricalFilters(int filterId, bool removeAll = false);
 
     Q_INVOKABLE void addToDateFilters(int filterId);
     Q_INVOKABLE QVector<int> fetchDateFilters();
-    Q_INVOKABLE void removeDateFilters(int filterId);
+    Q_INVOKABLE void removeDateFilters(int filterId, bool removeAll = false);
 
     Q_INVOKABLE void addToNumericalFilters(int filterId);
     Q_INVOKABLE QVector<int> fetchNumericalFilters();
-    Q_INVOKABLE void removeNumericalFilters(int filterId);
+    Q_INVOKABLE void removeNumericalFilters(int filterId, bool removeAll = false);
 
     Q_INVOKABLE void addToFilterColumnMap(int filterId, QString value);
     Q_INVOKABLE QStringList fetchFilterColumnMap(int filterId = 0, bool fetchAll = false);
@@ -151,6 +183,10 @@ public:
     Q_INVOKABLE QStringList fetchFilterRelationMap(int filterId = 0, bool fetchAll = false);
     Q_INVOKABLE void removeFilterRelationMap(int filterId);
 
+    Q_INVOKABLE void addToFilterSlugMap(int filterId, QString slug);
+    Q_INVOKABLE QStringList fetchFilterSlugMap(int filterId = 0, bool fetchAll = false);
+    Q_INVOKABLE void removeFilterSlugMap(int filterId);
+
     Q_INVOKABLE void addToIncludeExcludeMap(int filterId, bool includeExclude);
     Q_INVOKABLE QVector<bool> fetchIncludeExcludeMap(int filterId = 0, bool fetchAll = false);
     Q_INVOKABLE void removeIncludeExcludeMap(int filterId);
@@ -158,6 +194,10 @@ public:
     Q_INVOKABLE void addToIncludeNullMap(int filterId, bool includeNull);
     Q_INVOKABLE QVector<bool> fetchIncludeNullMap(int filterId = 0, bool fetchAll = false);
     Q_INVOKABLE void removeIncludeNullMap(int filterId);
+
+    Q_INVOKABLE void addToSelectAllMap(int filterId, bool selectAll);
+    Q_INVOKABLE QVector<bool> fetchSelectAllMap(int filterId = 0, bool fetchAll = false);
+    Q_INVOKABLE void removeSelectAllMap(int filterId);
 
     Q_INVOKABLE void addToFilterSectionMap(int filterId, QString section);
     Q_INVOKABLE QStringList fetchFilterSectionMap(int filterId = 0, bool fetchAll = false);
@@ -170,6 +210,29 @@ public:
     Q_INVOKABLE void addToFilterSubCategoryMap(int filterId, QString subCategory);
     Q_INVOKABLE QStringList fetchFilterSubCategoryMap(int filterId = 0, bool fetchAll = false);
     Q_INVOKABLE void removeFilterSubCategoryMap(int filterId);
+
+    Q_INVOKABLE void setTmpSelectedValues(QString value);
+    Q_INVOKABLE void removeTmpSelectedValues(int refObjId, bool removeAll = false);
+    Q_INVOKABLE QStringList getTmpSelectedValues(int refObjId = 0, bool fetchAll = false);
+    Q_INVOKABLE int searchTmpSelectedValues(QString keyword);
+
+    Q_INVOKABLE void setTmpFilterIndex(int value);
+    Q_INVOKABLE void removeTmpFilterIndex(int refObjId, bool removeAll = false);
+    Q_INVOKABLE QVector<int> getTmpFilterIndex(int refObjId = 0, bool fetchAll = false);
+
+    Q_INVOKABLE void setDateFormatMap(int refObjId, int formatId);
+    Q_INVOKABLE void removeDateFormatMap(int refObjId = 0, bool removeAll = false);
+    Q_INVOKABLE int getDateFormatMap(int refObjId);
+
+    Q_INVOKABLE void setActualDateValues(int refObjId, QString value1, QString value2 = "");
+    Q_INVOKABLE void removeActualDateValues(int refObjId, bool removeAll = false);
+    Q_INVOKABLE QStringList getActualDateValues(int refObjId);
+    // Instances of dropped reports in dashboards
+    Q_INVOKABLE void addDashboardReportInstance(QVariant newReportInstance,QString reportId);
+    Q_INVOKABLE QVariant getDashboardReportInstance(QString reportId);
+    Q_INVOKABLE QVariant getAllDashboardReportInstances();
+
+
 
 public slots:
 
@@ -193,6 +256,8 @@ public slots:
     void setXAxisColumns(QString xAxisColumns);
     void setYAxisColumns(QString yAxisColumns);
     void setD3PropertiesConfig(QString d3PropertiesConfig);
+    void setChartTitle(QString chartTitle);
+    void setColorByDataColoumns(QString colorByDataColoumns);
 
     // For Filters
     void setInternalCounter(int internalCounter);
@@ -204,6 +269,7 @@ public slots:
     void setFilterIndex(int filterIndex);
     void setMode(QString mode);
     void setFilterModelIndex(int filterModelIndex);
+
 
 signals:
     // General properties
@@ -226,8 +292,11 @@ signals:
     void xAxisColumnsChanged(QString xAxisColumns);
     void yAxisColumnsChanged(QString yAxisColumns);
     void d3PropertiesConfigChanged(QString d3PropertiesConfig);
+    void chartTitleChanged(QString chartTitle);
+    void colorByDataColoumnsChanged(QString colorByDataColoumns);
 
     // For Filters
+    void resetInput();
     void internalCounterChanged(int internalCounter);
     void sectionChanged(QString section);
     void categoryChanged(QString category);
@@ -237,6 +306,21 @@ signals:
     void filterIndexChanged(int filterIndex);
     void modeChanged(QString mode);
     void filterModelIndexChanged(int filterModelIndex);
-};
+    void tmpSelectedValuesChanged(QStringList values);
 
+    // For Dashboard Reports
+    void reportListChanged();
+
+
+
+    void categoricalFilterChanged(QVector<int> filterList);
+    void dateFilterChanged(QVector<int> filterList);
+    void numericalFilterChanged(QVector<int> filterList);
+
+
+private:
+
+    QVariantMap insertMasterFilters(int filterId);
+    void restoreMasterFilters(int filterId, QVariantMap filterData);
+};
 #endif // REPORTPARAMSMODEL_H
