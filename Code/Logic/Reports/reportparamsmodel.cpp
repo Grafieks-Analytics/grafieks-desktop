@@ -1,8 +1,17 @@
 #include "reportparamsmodel.h"
 
-ReportParamsModel::ReportParamsModel()
+ReportParamsModel::ReportParamsModel(QObject *parent) : QObject(parent)
 {
 
+    m_section = Constants::defaultTabSection;
+    m_category = Constants::defaultCategory;
+    m_subCategory = Constants::defaultSubCategory;
+    m_mode = Constants::defaultMode;
+    //    m_exclude = Constants::defaultExclude;
+    //    m_includeNull = Constants::defaultIncludeNull;
+    //    m_selectAll = Constants::defaultSelectAll;
+    m_internalCounter = 0;
+    m_filterIndex = 0;
 }
 
 QString ReportParamsModel::itemName() const
@@ -69,6 +78,7 @@ QVariant ReportParamsModel::getAllDashboardReportInstances()
     return this->dashboardReportInstances;
 }
 
+
 QString ReportParamsModel::chartTitle() const
 {
     return m_chartTitle;
@@ -109,7 +119,7 @@ void ReportParamsModel::addReport(QString reportId)
 
     this->reportsData.insert(this->reportId(),this->reportTitle());
 
-    // Emitting singal to update report list 
+    // Emitting singal to update report list
     // in dashboards
     emit reportListChanged();
     
@@ -120,10 +130,91 @@ QVariantMap ReportParamsModel::getReportsList(){
     return this->reportsData;
 }
 
+void ReportParamsModel::resetFilter()
+{
+
+    // Q_PROPERTY clear
+    this->setInternalCounter(0);
+    this->setSection(Constants::defaultTabSection);
+    this->setCategory(Constants::defaultCategory);
+    this->setSubCategory(Constants::defaultSubCategory);
+    this->setTableName("");
+    this->setColName("");
+    this->setFilterIndex(0);
+    this->setFilterModelIndex(0);
+    this->setMode(Constants::defaultMode);
+}
+
+void ReportParamsModel::clearFilter()
+{
+
+    // Q_PROPERTY
+//    this->setSection(Constants::defaultTabSection);
+//    this->setCategory(Constants::defaultCategory);
+//    this->setSubCategory(Constants::defaultSubCategory);
+
+    // variable change
+}
+
+void ReportParamsModel::resetInputFields()
+{
+    emit resetInput();
+}
+
+void ReportParamsModel::addToMasterReportFilters(int reportId)
+{
+    QMap<int, QVariantMap> intermediateMasterReportsMap;
+
+    // Categorical filters
+    foreach(int filterId, this->categoricalFilters){
+
+        QVariantMap tmp = insertMasterFilters(filterId);
+        intermediateMasterReportsMap.insert(filterId, tmp);
+    }
+
+    // Date filters
+    foreach(int filterId, this->dateFilters){
+        QVariantMap tmp = insertMasterFilters(filterId);
+        intermediateMasterReportsMap.insert(filterId, tmp);
+    }
+
+    // Numerical filters
+    foreach(int filterId, this->numericalFilters){
+        QVariantMap tmp = insertMasterFilters(filterId);
+        intermediateMasterReportsMap.insert(filterId, tmp);
+    }
+
+    this->masterReportFilters.insert(reportId, intermediateMasterReportsMap);
+
+}
+
+void ReportParamsModel::restoreMasterReportFilters(int reportId)
+{
+    QMap<int, QVariantMap> masterValues = this->masterReportFilters.value(reportId);
+    QList<int> keys = masterValues.keys();
+
+    foreach(int filterId, keys){
+        restoreMasterFilters(filterId, masterValues.value(filterId));
+    }
+}
+
+void ReportParamsModel::deleteMasterReportFilters(int reportId, bool deleteAll)
+{
+    if(deleteAll == true){
+        this->masterReportFilters.clear();
+    } else{
+        this->masterReportFilters.remove(reportId);
+    }
+}
+
 void ReportParamsModel::addToCategoricalFilters(int filterId)
 {
-    if(this->categoricalFilters.indexOf(filterId) < 0)
+    if(this->categoricalFilters.indexOf(filterId) < 0){
         this->categoricalFilters.append(filterId);
+
+        emit categoricalFilterChanged(this->categoricalFilters);
+    }
+
 }
 
 QVector<int> ReportParamsModel::fetchCategoricalFilters()
@@ -131,15 +222,22 @@ QVector<int> ReportParamsModel::fetchCategoricalFilters()
     return this->categoricalFilters;
 }
 
-void ReportParamsModel::removeCategoricalFilters(int filterId)
+void ReportParamsModel::removeCategoricalFilters(int filterId, bool removeAll)
 {
-    this->categoricalFilters.remove(filterId);
+    if(removeAll == true){
+        this->categoricalFilters.clear();
+    } else{
+        this->categoricalFilters.removeAll(filterId);
+    }
 }
 
 void ReportParamsModel::addToDateFilters(int filterId)
 {
-    if(this->dateFilters.indexOf(filterId) < 0)
+    if(this->dateFilters.indexOf(filterId) < 0){
         this->dateFilters.append(filterId);
+
+        emit dateFilterChanged(this->dateFilters);
+    }
 }
 
 QVector<int> ReportParamsModel::fetchDateFilters()
@@ -147,15 +245,23 @@ QVector<int> ReportParamsModel::fetchDateFilters()
     return this->dateFilters;
 }
 
-void ReportParamsModel::removeDateFilters(int filterId)
+void ReportParamsModel::removeDateFilters(int filterId, bool removeAll)
 {
-    this->dateFilters.remove(filterId);
+    if(removeAll == true){
+        this->dateFilters.clear();
+    } else{
+        this->dateFilters.removeAll(filterId);
+    }
 }
 
 void ReportParamsModel::addToNumericalFilters(int filterId)
 {
-    if(this->numericalFilters.indexOf(filterId) < 0)
+    if(this->numericalFilters.indexOf(filterId) < 0){
         this->numericalFilters.append(filterId);
+
+        emit numericalFilterChanged(this->numericalFilters);
+    }
+
 }
 
 QVector<int> ReportParamsModel::fetchNumericalFilters()
@@ -163,9 +269,13 @@ QVector<int> ReportParamsModel::fetchNumericalFilters()
     return this->numericalFilters;
 }
 
-void ReportParamsModel::removeNumericalFilters(int filterId)
+void ReportParamsModel::removeNumericalFilters(int filterId, bool removeAll)
 {
-    this->numericalFilters.remove(filterId);
+    if(removeAll == true){
+        this->numericalFilters.clear();
+    } else{
+        this->numericalFilters.removeAll(filterId);
+    }
 }
 
 void ReportParamsModel::addToFilterColumnMap(int filterId, QString value)
@@ -184,6 +294,7 @@ QStringList ReportParamsModel::fetchFilterColumnMap(int filterId, bool fetchAll)
     } else{
         out.append(this->filterColumnMap.value(filterId));
     }
+
     return out;
 }
 
@@ -253,8 +364,35 @@ void ReportParamsModel::removeFilterRelationMap(int filterId)
     this->filterRelationMap.remove(filterId);
 }
 
+void ReportParamsModel::addToFilterSlugMap(int filterId, QString slug)
+{
+    this->filterSlugMap.insert(filterId, slug);
+}
+
+QStringList ReportParamsModel::fetchFilterSlugMap(int filterId, bool fetchAll)
+{
+
+    QStringList out;
+
+    if(fetchAll == true){
+        foreach(QString tmp, this->filterSlugMap){
+            out.append(tmp);
+        }
+    } else{
+        out.append(this->filterSlugMap.value(filterId));
+    }
+
+    return out;
+}
+
+void ReportParamsModel::removeFilterSlugMap(int filterId)
+{
+    this->filterSlugMap.remove(filterId);
+}
+
 void ReportParamsModel::addToIncludeExcludeMap(int filterId, bool includeExclude)
 {
+
     this->includeExcludeMap.insert(filterId, includeExclude);
 }
 
@@ -280,7 +418,7 @@ void ReportParamsModel::removeIncludeExcludeMap(int filterId)
 
 void ReportParamsModel::addToIncludeNullMap(int filterId, bool includeNull)
 {
-    this->includeExcludeMap.insert(filterId, includeNull);
+    this->includeNullMap.insert(filterId, includeNull);
 }
 
 QVector<bool> ReportParamsModel::fetchIncludeNullMap(int filterId, bool fetchAll)
@@ -301,6 +439,31 @@ QVector<bool> ReportParamsModel::fetchIncludeNullMap(int filterId, bool fetchAll
 void ReportParamsModel::removeIncludeNullMap(int filterId)
 {
     this->includeNullMap.remove(filterId);
+}
+
+void ReportParamsModel::addToSelectAllMap(int filterId, bool selectAll)
+{
+    this->selectAllMap.insert(filterId, selectAll);
+}
+
+QVector<bool> ReportParamsModel::fetchSelectAllMap(int filterId, bool fetchAll)
+{
+    QVector<bool> out;
+
+    if(fetchAll == true){
+        foreach(bool tmp, this->selectAllMap){
+            out.append(tmp);
+        }
+    } else{
+        out.append(this->selectAllMap.value(filterId));
+    }
+
+    return out;
+}
+
+void ReportParamsModel::removeSelectAllMap(int filterId)
+{
+    this->selectAllMap.remove(filterId);
 }
 
 void ReportParamsModel::addToFilterSectionMap(int filterId, QString section)
@@ -373,6 +536,116 @@ QStringList ReportParamsModel::fetchFilterSubCategoryMap(int filterId, bool fetc
 void ReportParamsModel::removeFilterSubCategoryMap(int filterId)
 {
     this->filterSubCategoryMap.remove(filterId);
+}
+
+void ReportParamsModel::setTmpSelectedValues(QString value)
+{
+    if(this->tmpSelectedValues.indexOf(value) < 0){
+        this->tmpSelectedValues.append(value);
+
+        emit tmpSelectedValuesChanged(this->tmpSelectedValues);
+    }
+}
+
+void ReportParamsModel::removeTmpSelectedValues(int refObjId, bool removeAll)
+{
+    if(removeAll == true){
+        this->tmpSelectedValues.clear();
+    } else{
+        this->tmpSelectedValues.removeAt(refObjId);
+    }
+}
+
+QStringList ReportParamsModel::getTmpSelectedValues(int refObjId, bool fetchAll)
+{
+    QStringList output;
+
+    if(fetchAll == false){
+        output.append(this->tmpSelectedValues.value(refObjId));
+    } else{
+        output = this->tmpSelectedValues;
+    }
+
+    return output;
+}
+
+int ReportParamsModel::searchTmpSelectedValues(QString keyword)
+{
+    return this->tmpSelectedValues.indexOf(keyword);
+}
+
+void ReportParamsModel::setTmpFilterIndex(int value)
+{
+    if(!this->tmpFilterIndex.contains(value))
+        this->tmpFilterIndex.append(value);
+}
+
+void ReportParamsModel::removeTmpFilterIndex(int refObjId, bool removeAll)
+{
+    if(removeAll == false){
+        this->tmpFilterIndex.remove(refObjId);
+    } else{
+        this->tmpFilterIndex.clear();
+    }
+}
+
+QVector<int> ReportParamsModel::getTmpFilterIndex(int refObjId, bool fetchAll)
+{
+    QVector<int> output;
+
+    if(fetchAll == false){
+        output.append(this->tmpFilterIndex.value(refObjId));
+    } else{
+        output = this->tmpFilterIndex;
+    }
+
+    return output;
+}
+
+void ReportParamsModel::setDateFormatMap(int refObjId, int formatId)
+{
+    this->dateFormatMap.insert(refObjId, formatId);
+}
+
+void ReportParamsModel::removeDateFormatMap(int refObjId, bool removeAll)
+{
+    if(removeAll == false){
+        this->dateFormatMap.remove(refObjId);
+    } else{
+        this->dateFormatMap.clear();
+    }
+}
+
+int ReportParamsModel::getDateFormatMap(int refObjId)
+{
+    return this->dateFormatMap.value(refObjId);
+}
+
+void ReportParamsModel::setActualDateValues(int refObjId, QString value1, QString value2)
+{
+    QStringList input;
+
+    input << value1;
+    if(value2 != ""){
+        input << value2;
+    }
+    this->actualDateValues.insert(refObjId, input);
+}
+
+void ReportParamsModel::removeActualDateValues(int refObjId, bool removeAll)
+{
+    if(removeAll == false){
+        this->actualDateValues.remove(refObjId);
+    } else{
+        this->actualDateValues.clear();
+    }
+}
+
+QStringList ReportParamsModel::getActualDateValues(int refObjId)
+{
+    QStringList output;
+    output = this->actualDateValues.value(refObjId);
+    return output;
 }
 
 int ReportParamsModel::internalCounter() const
@@ -668,6 +941,73 @@ void ReportParamsModel::setFilterModelIndex(int filterModelIndex)
 
     m_filterModelIndex = filterModelIndex;
     emit filterModelIndexChanged(m_filterModelIndex);
+}
+
+QVariantMap ReportParamsModel::insertMasterFilters(int filterId)
+{
+    QVariantMap tmp;
+
+    // filterColumnMap
+    tmp.insert("columnName", this->filterColumnMap.value(filterId));
+
+    // filterValueMap
+    tmp.insert("filterValue", this->filterValueMap.value(filterId));
+
+    // filterRelationMap
+    tmp.insert("filterRelation", this->filterRelationMap.value(filterId));
+
+    // filterSlugMap
+    tmp.insert("filterSlug", this->filterSlugMap.value(filterId));
+
+    // includeExcludeMap
+    tmp.insert("includeExclude", this->includeExcludeMap.value(filterId));
+
+    // includeNullMap
+    tmp.insert("includeNull", this->includeNullMap.value(filterId));
+
+    // selectAllMap
+    tmp.insert("selectAll", this->selectAllMap.value(filterId));
+
+    // filterSectionMap
+    tmp.insert("section", this->filterSectionMap.value(filterId));
+
+    // filterCategoryMap
+    tmp.insert("category", this->filterCategoryMap.value(filterId));
+
+    // filterSubCategoryMap
+    tmp.insert("subCategory", this->filterSubCategoryMap.value(filterId));
+
+    // dateFormat
+    tmp.insert("dateFormat", this->dateFormatMap.value(filterId));
+
+    // actualDateValues
+    tmp.insert("actualDateValues", this->actualDateValues.value(filterId));
+
+    return tmp;
+}
+
+void ReportParamsModel::restoreMasterFilters(int filterId, QVariantMap filterData)
+{
+    if(filterData.value("section") == Constants::categoricalType){
+        this->categoricalFilters.append(filterId);
+    } else if(filterData.value("section") == Constants::dateType){
+        this->dateFilters.append(filterId);
+    } else{
+        this->numericalFilters.append(filterId);
+    }
+
+    this->filterColumnMap.insert(filterId, filterData.value("columnName").toString());
+    this->filterValueMap.insert(filterId, filterData.value("filterValue").toList());
+    this->filterRelationMap.insert(filterId, filterData.value("filterRelation").toString());
+    this->filterSlugMap.insert(filterId, filterData.value("filterSlug").toString());
+    this->includeExcludeMap.insert(filterId, filterData.value("includeExclude").toBool());
+    this->includeNullMap.insert(filterId, filterData.value("includeNull").toBool());
+    this->selectAllMap.insert(filterId, filterData.value("selectAll").toBool());
+    this->filterSectionMap.insert(filterId, filterData.value("section").toString());
+    this->filterCategoryMap.insert(filterId, filterData.value("category").toString());
+    this->filterSubCategoryMap.insert(filterId, filterData.value("subCategory").toString());
+    this->dateFormatMap.insert(filterId, filterData.value("dateFormat").toInt());
+    this->actualDateValues.insert(filterId, filterData.value("actualDateValues").toStringList());
 }
 
 void ReportParamsModel::setChartTitle(QString chartTitle)

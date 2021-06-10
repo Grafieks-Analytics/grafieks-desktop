@@ -54,41 +54,23 @@ Rectangle{
     /***********************************************************************************************************************/
     // Connections Starts
     Connections{
-        target: DSParamsModel
+        target: ReportParamsModel
 
         function onResetInput(){
             fromDateInput.text =""
             toDateInput.text   =""
-            DSParamsModel.setExcludeMap(counter, false)
-            DSParamsModel.setIncludeNullMap(counter, true)
+            ReportParamsModel.addToIncludeExcludeMap(counter, false)
+            ReportParamsModel.addToIncludeNullMap(counter, true)
         }
 
-        function onInternalCounterChanged(){
-            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainCalendarType){
-                counter = DSParamsModel.internalCounter
-            }
-        }
+//        function onInternalCounterChanged(){
+//            if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainCalendarType){
+//                counter = ReportParamsModel.internalCounter
+//            }
+//        }
 
         function onFilterIndexChanged(){
-            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainCalendarType){
-                counter = DSParamsModel.filterIndex
-            }
-        }
-    }
-
-    Connections{
-        target: QueryDataModel
-
-        function onColumnListModelDataChanged(colData, options){
-
-            var jsonOptions = JSON.parse(options)
-            console.log(options, "OIT2")
-
-            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainCalendarType){
-                //                DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-                //                DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
-                console.log(JSON.stringify(DSParamsModel.fetchJoinRelation(counter)))
-            }
+            counter = ReportParamsModel.filterIndex
         }
     }
 
@@ -157,20 +139,19 @@ Rectangle{
 
     function onCalendarInput(fromDate,toDate){
         var newValue = fromDate + ","  + toDate;
-        DSParamsModel.addToJoinValue(counter, newValue)
-        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterValueMap(counter, newValue)
+        ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
 
-//        console.log("DSPARAMS", DSParamsModel.fetchJoinRelation(counter)[counter], DSParamsModel.fetchJoinRelationSlug(counter)[counter], DSParamsModel.fetchJoinValue(counter)[counter])
     }
 
     function onIncludeCheckedClicked(checked){
-        DSParamsModel.setIncludeNullMap(counter,checked)
+        ReportParamsModel.addToIncludeNullMap(counter,checked)
     }
 
 
     function onExcludeCheckedClicked(checked){
-        DSParamsModel.setExcludeMap(counter,checked)
+        ReportParamsModel.addToIncludeExcludeMap(counter,checked)
     }
 
     // JAVASCRIPT FUNCTION ENDS
@@ -253,6 +234,7 @@ Rectangle{
 
                     height: parent.height
                     onTextChanged: {
+                        console.log("FROM DATE ")
                         onCalendarInput(fromDateInput.text,toDateInput.text)
                     }
 
@@ -358,7 +340,7 @@ Rectangle{
         anchors.leftMargin: 20
 
         CheckBoxTpl {
-            checked: DSParamsModel.getIncludeNullMap(counter)
+            checked: ReportParamsModel.fetchIncludeNullMap(counter)
             text: qsTr("Include Null")
             parent_dimension: Constants.defaultCheckBoxDimension
 
@@ -376,7 +358,7 @@ Rectangle{
         anchors.rightMargin: 20
 
         CheckBoxTpl {
-            checked: DSParamsModel.getExcludeMap(counter)
+            checked: ReportParamsModel.fetchIncludeExcludeMap(counter)
             text: qsTr("Exclude")
             parent_dimension: Constants.defaultCheckBoxDimension
 

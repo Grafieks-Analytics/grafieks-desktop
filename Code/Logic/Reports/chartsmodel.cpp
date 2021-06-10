@@ -1462,6 +1462,30 @@ void ChartsModel::searchColumnNames(QString keyword)
     emit sendFilteredColumn(this->categoryList.filter(keyword, Qt::CaseInsensitive), this->numericalList.filter(keyword, Qt::CaseInsensitive), this->dateList.filter(keyword, Qt::CaseInsensitive));
 }
 
+QStringList ChartsModel::fetchColumnData(QString columnName, QString options)
+{
+    // Fetch data here
+    int key = newChartHeader.key( columnName );
+
+    QStringList columnDataPointer = *newChartData.value(key);
+
+    emit columnDataChanged(columnDataPointer, options);
+
+    return columnDataPointer;
+}
+
+QStringList ChartsModel::searchColumnData(QString columnName, QString keyword)
+{
+    QStringList searchResults;
+    int key = newChartHeader.key( columnName );
+
+    QStringList columnDataPointer = *newChartData.value(key);
+    searchResults = columnDataPointer.filter(keyword, Qt::CaseInsensitive);
+
+    return searchResults;
+}
+
+
 void ChartsModel::clearData()
 {
 

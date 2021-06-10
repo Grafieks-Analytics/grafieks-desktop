@@ -172,7 +172,7 @@ QtObject {
     // Tab Bar Open Constants- Section
 
     property string categoricalTab: "categorical"
-    property string dateTab: "date"
+    property string dateTab: "dateformat"
     property string numericalTab: "numerical"
     property string groupTab: "group"
 
@@ -222,7 +222,8 @@ QtObject {
     property int reportTypeImage: 2
     property int reportTypeChart : 3
 
-    property var filterTypes: ["dataListSingle", "dataListMulti", "dataDropdownSingle", "dataDropdownMulti","dataRange","dataEqual","datanotEqual","dataSmaller","dataGreater","dataEqualOrSmaller","dataEqualOrGreater","dataBetween"]
+    property var filterCategoricalTypes: ["dataListMulti", "dataListSingle", "dataDropdownSingle", "dataDropdownMulti"]
+    property var filterNumericalTypes: ["dataRange","dataEqual","datanotEqual","dataSmaller","dataGreater","dataEqualOrSmaller","dataEqualOrGreater","dataBetween"]
 
     // DASHBOARD ends
 

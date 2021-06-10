@@ -263,5 +263,7 @@
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataEqualorGreater.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataBetween.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterDataGreaterThan.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterCustomizeNumerical.qml</file>
+        <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterCustomizeCategorical.qml</file>
     </qresource>
 </RCC>
