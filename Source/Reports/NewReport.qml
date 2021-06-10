@@ -85,6 +85,11 @@ Page {
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
+    // Colour By Drop List
+    ListModel{
+        id: colorListModel
+    }
+
     // X Axis Bar => Used for all charts where 2 axis are requied
     ListModel{
         id: xAxisListModel
@@ -141,18 +146,6 @@ Page {
         ReportParamsModel.xAxisActive = false;
         ReportParamsModel.yAxisActive = false;
         ReportParamsModel.colorByActive = false;
-
-        // This component is called too early
-        // Removing this report id generation step from here.
-        
-        // If report id is not defined => Case when Add a new reprt is clicked.
-        // Generate a new report id.
-        // New Id = base64 of timestamp in milliseconds
-        
-        // if(!reportIdMain){
-        //     var newReportId = generateReportId();
-        //     ReportParamsModel.setReportId(newReportId);
-        // }
 
         // Clearing xAxisListModel and yAxisListModel if any
         // Might be possible that this is getting called once
@@ -372,25 +365,35 @@ Page {
     }
 
     function clearAllChartValues(){
-        console.log('Reports: Cleaning All Charts', ReportParamsModel.reportId);
-        ReportParamsModel.setReportId(null);
-        console.log('Reports: Cleaning All Charts', ReportParamsModel.reportId);
-        ReportParamsModel.setReportTitle(null);
-
-        ReportParamsModel.setReportId(null);
-        reportIdMain = null;
         
+        // Clear title and report id
+        ReportParamsModel.setReportId(null);
+        ReportParamsModel.setReportTitle(null);
+        report_title_text.text = "";
+        reportIdMain = "";
+        
+        // Clear all the list models
         xAxisListModel.clear();
         yAxisListModel.clear();
+        colorListModel.clear();
+        valuesListModel.clear();
+        dataItemList.clear();
+        
+        // Clear property Config
         d3PropertyConfig = {};
     
+        // Clear general params
         lastPickedDataPaneElementProperties= {};
         reportDataPanes= {};  // Report Data Panes Object
         dragActiveObject= {};
         allChartsMapping= {};
-        colorByData= [];
+        colorByData = [];
 
-        redrawChart();
+        // Calling this redraw will clear the chart because no x and y columns will be available
+        // [Tag: Optimization]
+        // Check instead of reDraw if we can call only one function to clear the chart
+        // May be webengineview.runJs("call clearValues"); 
+        reDrawChart();
 
     }
 
@@ -473,19 +476,30 @@ Page {
             ReportParamsModel.setReportId(reportIdMain);
         }
 
-        ReportParamsModel.setChartType(chartTitle);
-        ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertyConfig));
-        ReportParamsModel.setChartUrl(chartUrl);
-        ReportParamsModel.setXAxisColumns(JSON.stringify(getAxisColumnNames(Constants.xAxisName)));
-        ReportParamsModel.setYAxisColumns(JSON.stringify(getAxisColumnNames(Constants.yAxisName)));
+        // [Tag: Optimization]
+        // We can create the object here and pass to cpp
+        // to store in reportsMap
 
+        // Save add the data in cpp
+        // get the data in cpp and create an object
+
+        // Check if report name exists or not
+        // If name is not given add the name as Report "NUMBER"
+        // Else is  not required (Case to set the value, because it is getting saved on key presses)
         var reportList = ReportParamsModel.getReportsList();
-        console.log(JSON.stringify(reportList));
-
+        console.log(report_title_text.text)
         if(!report_title_text.text || report_title_text.text == ""){
             var numberOfReports = Object.keys(reportList).length;
             ReportParamsModel.setReportTitle('Report '+ (numberOfReports + 1));
         }
+
+        ReportParamsModel.setChartType(chartTitle);
+        ReportParamsModel.setChartTitle(chartTitle);
+        ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertyConfig));
+        ReportParamsModel.setChartUrl(chartUrl);
+        ReportParamsModel.setXAxisColumns(JSON.stringify(getAxisColumnNames(Constants.xAxisName)));
+        ReportParamsModel.setYAxisColumns(JSON.stringify(getAxisColumnNames(Constants.yAxisName)));
+        ReportParamsModel.setColorByDataColoumns(JSON.stringify(colorByData));
 
         ReportParamsModel.addReport(reportIdMain);
         

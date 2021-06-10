@@ -154,10 +154,10 @@ Popup {
 
         function onColumnListModelDataChanged(colData, values){
 
-            if(DSParamsModel.section === Constants.categoricalTab){
+            if(ReportParamsModel.section === Constants.categoricalTab){
 
                 // Fire the signal for show specific category
-                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, DSParamsModel.fetchJoinRelation(mapKey, false)[0], DSParamsModel.fetchJoinRelationSlug(mapKey, false)[0], DSParamsModel.fetchJoinValue(mapKey, false)[0])
+                popupMain.signalEditMode(ReportParamsModel.section, ReportParamsModel.category, ReportParamsModel.subCategory, ReportParamsModel.fetchFilterRelationMap(mapKey, false)[0], ReportParamsModel.fetchFilterSlugMap(mapKey, false)[0], ReportParamsModel.fetchFilterValueMap(mapKey, false)[0])
 
                 // show specific section for edit param
                 categoricalFilterPopup.visible = true
@@ -165,10 +165,10 @@ Popup {
                 numericalFilterPopup.visible = false
                 groupFilterPopup.visible = false
             }
-            else if(DSParamsModel.section === Constants.dateTab){
+            else if(ReportParamsModel.section === Constants.dateTab){
 
                 // Fire the signal for show specific category
-                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, DSParamsModel.fetchJoinRelation(mapKey, false)[0], DSParamsModel.fetchJoinRelationSlug(mapKey, false)[0], DSParamsModel.fetchJoinValue(mapKey, false)[0])
+                popupMain.signalEditMode(ReportParamsModel.section, ReportParamsModel.category, ReportParamsModel.subCategory, ReportParamsModel.fetchFilterRelationMap(mapKey, false)[0], ReportParamsModel.fetchFilterSlugMap(mapKey, false)[0], ReportParamsModel.fetchFilterValueMap(mapKey, false)[0])
 
 
                 // show specific section for edit param
@@ -177,10 +177,10 @@ Popup {
                 numericalFilterPopup.visible = false
                 groupFilterPopup.visible = false
             }
-            else if(DSParamsModel.section === Constants.numericalTab){
+            else if(ReportParamsModel.section === Constants.numericalTab){
 
                 // Fire the signal for show specific category
-                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, DSParamsModel.fetchJoinRelation(mapKey, false)[0], DSParamsModel.fetchJoinRelationSlug(mapKey, false)[0], DSParamsModel.fetchJoinValue(mapKey, false)[0])
+                popupMain.signalEditMode(ReportParamsModel.section, ReportParamsModel.category, ReportParamsModel.subCategory, ReportParamsModel.fetchFilterRelationMap(mapKey, false)[0], ReportParamsModel.fetchFilterSlugMap(mapKey, false)[0], ReportParamsModel.fetchFilterValueMap(mapKey, false)[0])
 
                 // show specific section for edit param
                 categoricalFilterPopup.visible = false
@@ -188,10 +188,10 @@ Popup {
                 numericalFilterPopup.visible = true
                 groupFilterPopup.visible = false
             }
-            else if(DSParamsModel.section === Constants.groupTab){
+            else if(ReportParamsModel.section === Constants.groupTab){
 
                 // Fire the signal for show specific category
-                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, DSParamsModel.fetchJoinRelation(mapKey, false)[0], DSParamsModel.fetchJoinRelationSlug(mapKey, false)[0], DSParamsModel.fetchJoinValue(mapKey, false)[0])
+                popupMain.signalEditMode(ReportParamsModel.section, ReportParamsModel.category, ReportParamsModel.subCategory, ReportParamsModel.fetchJoinRelation(mapKey, false)[0], ReportParamsModel.fetchJoinRelationSlug(mapKey, false)[0], ReportParamsModel.fetchJoinValue(mapKey, false)[0])
 
                 // show specific section for edit param
                 categoricalFilterPopup.visible = false
@@ -215,9 +215,9 @@ Popup {
 
     Component.onCompleted: {
 
-        DSParamsModel.setSection(Constants.categoricalTab)
-        DSParamsModel.setCategory(Constants.categoryMainListType)
-        DSParamsModel.setSubCategory(Constants.categorySubMulti)
+        ReportParamsModel.setSection(Constants.categoricalTab)
+        ReportParamsModel.setCategory(Constants.categoryMainListType)
+        ReportParamsModel.setSubCategory(Constants.categorySubMulti)
     }
 
 
@@ -238,21 +238,21 @@ Popup {
             ForwardOnlyDataModel.columnData(colName, tableName, JSON.stringify(options))
         }
 
-        DSParamsModel.setColName(colName)
-        DSParamsModel.setTableName(tableName)
+        ReportParamsModel.setColName(colName)
+        ReportParamsModel.setTableName(tableName)
 
     }
 
     function onAddMenuItemClicked(){
 
-        DSParamsModel.setFilterIndex(DSParamsModel.filterIndex + 1)
-        DSParamsModel.setMode(Constants.modeCreate)
+        ReportParamsModel.setFilterIndex(ReportParamsModel.filterIndex + 1)
+        ReportParamsModel.setMode(Constants.modeCreate)
 
         if(tabBarOpen === Constants.categoricalTab){
 
             // Fire the signal for show specific category
-            DSParamsModel.setSection(Constants.categoricalTab)
-            DSParamsModel.setCategory(Constants.categoryMainListType)
+            ReportParamsModel.setSection(Constants.categoricalTab)
+            ReportParamsModel.setCategory(Constants.categoryMainListType)
 
             categoricalFilterPopup.visible = true
             dateFilterPopup.visible = false
@@ -262,11 +262,11 @@ Popup {
         else if(tabBarOpen === Constants.dateTab){
 
             // Fire the signal for show specific category
-            DSParamsModel.setSection(Constants.dateTab)
-            DSParamsModel.setCategory(Constants.dateMainListType)
-            DSParamsModel.setSubCategory(Constants.categorySubMulti)
+            ReportParamsModel.setSection(Constants.dateTab)
+            ReportParamsModel.setCategory(Constants.dateMainListType)
+            ReportParamsModel.setSubCategory(Constants.categorySubMulti)
 
-            DSParamsModel.resetInputFields()
+            ReportParamsModel.resetInputFields()
             categoricalFilterPopup.visible = false
             dateFilterPopup.visible = true
             numericalFilterPopup.visible = false
@@ -275,9 +275,9 @@ Popup {
         else if(tabBarOpen === Constants.numericalTab){
 
             // Fire the signal for show specific category
-            DSParamsModel.setSection(Constants.numericalTab)
+            ReportParamsModel.setSection(Constants.numericalTab)
 
-            DSParamsModel.resetInputFields()
+            ReportParamsModel.resetInputFields()
             categoricalFilterPopup.visible = false
             dateFilterPopup.visible = false
             numericalFilterPopup.visible = true
@@ -286,7 +286,7 @@ Popup {
         else if(tabBarOpen === Constants.groupTab){
 
             // Fire the signal for show specific category
-            DSParamsModel.setSection(groupTab)
+            ReportParamsModel.setSection(groupTab)
 
             categoricalFilterPopup.visible = false
             dateFilterPopup.visible = false
@@ -341,9 +341,9 @@ Popup {
         tabBarOpen = Constants.categoricalTab
 
         // Set the section in C++
-        DSParamsModel.setSection(Constants.categoricalTab)
-        DSParamsModel.setCategory(Constants.categoryMainListType)
-        DSParamsModel.setSubCategory(Constants.categorySubMulti)
+        ReportParamsModel.setSection(Constants.categoricalTab)
+        ReportParamsModel.setCategory(Constants.categoryMainListType)
+        ReportParamsModel.setSubCategory(Constants.categorySubMulti)
 
     }
 
@@ -357,9 +357,9 @@ Popup {
         tabBarOpen = Constants.dateTab
 
         // Set the section in C++
-        DSParamsModel.setSection(Constants.dateTab)
-        DSParamsModel.setCategory(Constants.dateMainListType)
-        DSParamsModel.setSubCategory(Constants.categorySubMulti)
+        ReportParamsModel.setSection(Constants.dateTab)
+        ReportParamsModel.setCategory(Constants.dateMainListType)
+        ReportParamsModel.setSubCategory(Constants.categorySubMulti)
     }
 
 
@@ -371,9 +371,9 @@ Popup {
         tabBarOpen = Constants.numericalTab
 
         // Set the section in C++
-        DSParamsModel.setSection(Constants.numericalTab)
-        DSParamsModel.setCategory("")
-        DSParamsModel.setSubCategory("")
+        ReportParamsModel.setSection(Constants.numericalTab)
+        ReportParamsModel.setCategory("")
+        ReportParamsModel.setSubCategory("")
 
     }
 
@@ -385,24 +385,25 @@ Popup {
         add_btn_1.model = groupModelList
 
         // Set the section in C++
-        DSParamsModel.setSection(Constants.groupTab)
+        ReportParamsModel.setSection(Constants.groupTab)
     }
 
 
     function onApplyClicked(){
 
         popupMain.visible = false
-        DSParamsModel.clearFilter()
+        ReportParamsModel.clearFilter()
 
         onTabToggle(true,false,false,false);
+        console.log("APPLY APPLY")
 
-        var tmpSql = DSParamsModel.tmpSql
-        ProxyFilterModel.callQueryModels(tmpSql, FilterCategoricalListModel, FilterDateListModel, FilterNumericalListModel)
+//        var tmpSql = DSParamsModel.tmpSql
+//        ProxyFilterModel.callQueryModels(tmpSql, FilterCategoricalListModel, FilterDateListModel, FilterNumericalListModel)
 
     }
     function onCancelClicked(){
         popupMain.visible = false
-        DSParamsModel.clearFilter()
+        ReportParamsModel.clearFilter()
 
         onTabToggle(true,false,false,false);
     }
@@ -629,7 +630,7 @@ Popup {
         valueRole: "tableName"
 
         onActivated: {
-            onAddMenuItemTriggered(currentText, currentValue, DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory)
+            onAddMenuItemTriggered(currentText, currentValue, ReportParamsModel.section, ReportParamsModel.category, ReportParamsModel.subCategory)
             onAddMenuItemClicked()
 
         }
