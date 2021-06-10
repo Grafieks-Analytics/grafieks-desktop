@@ -247,8 +247,6 @@ Popup {
         ReportParamsModel.setFilterIndex(ReportParamsModel.filterIndex + 1)
         ReportParamsModel.setMode(Constants.modeCreate)
 
-        console.log("HERE INDEX", ReportParamsModel.filterIndex)
-
         if(tabBarOpen === Constants.categoricalTab){
 
             // Fire the signal for show specific category

@@ -189,7 +189,6 @@ Rectangle{
             newValue = value1 + " And " + value2
         }
 
-        console.log("INSERT COUNTER", counter)
         let relation = getNewRelation(tmpRelation)
         ReportParamsModel.addToFilterValueMap(counter, newValue)
         ReportParamsModel.addToFilterRelationMap(counter, relation)
