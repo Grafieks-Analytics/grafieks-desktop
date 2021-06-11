@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.3
 import com.grafieks.singleton.constants 1.0
 
 import "../../MainSubComponents"
-import "../SubComponents/MiniSubComponents"
+import "./MiniSubComponents"
 
 Popup {
     id: categoricalFilterPopup
@@ -58,51 +58,7 @@ Popup {
         }
 
 
-        function onSectionChanged(section){
 
-
-            console.log("SECTION CHANGED", ReportParamsModel.section, Constants.categoricalTab, ReportParamsModel.category, Constants.categoryMainListType)
-
-            if(ReportParamsModel.section === Constants.categoricalTab){
-
-                listContentReport.visible = true
-
-                switch(ReportParamsModel.category){
-//                case Constants.categoryMainListType:
-                case "date.list":
-                    console.log("INSIDE THIS")
-
-                    listContentReport.visible = true
-                    wildcardContentReport.visible = false
-                    topContentReport.visible = false
-
-                    listRadio.checked = true
-
-                    break
-
-                case Constants.categoryMainWildCardType:
-
-                    listContentReport.visible = false
-                    wildcardContentReport.visible = true
-                    topContentReport.visible = false
-
-                    wildcardRadio.checked = true
-
-                    break
-
-                case Constants.categoryMainTopType:
-
-                    listContentReport.visible = false
-                    wildcardContentReport.visible = false
-                    topContentReport.visible = true
-
-                    topRadio.checked = true
-
-                    break
-                }
-
-            }
-        }
     }
 
 
@@ -209,8 +165,10 @@ Popup {
 
     function onListClicked(){
 
-        listContentReport.visible = true
-        wildcardContentReport.visible = false
+        console.log("LIST CLICKED")
+
+        listContentReport.visible = false
+        wildcardContentReport.visible = true
         topContentReport.visible = false
 
         // Set the main category of the filter
@@ -222,8 +180,8 @@ Popup {
         // Except when "Select All" checked.
         // Then Relation will be LIKE
 
-//        ReportParamsModel.addToFilterRelationMap(filterIndex, Constants.likeRelation)
-//        ReportParamsModel.addToFilterSlugMap(filterIndex, Constants.likeRelation)
+        //        ReportParamsModel.addToFilterRelationMap(filterIndex, Constants.likeRelation)
+        //        ReportParamsModel.addToFilterSlugMap(filterIndex, Constants.likeRelation)
     }
 
 

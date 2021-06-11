@@ -83,13 +83,13 @@ Popup {
 
 
     Connections{
-        target: QueryDataModel
+        target: ChartsModel
 
-        function onColumnListModelDataChanged(colData, options){
+        function onColumnDataChanged(columData, options){
 
             var jsonOptions = JSON.parse(options)
 
-            if(jsonOptions.section === Constants.categoricalTab){
+            if(jsonOptions.section === Constants.dateTab){
 
                 switch(jsonOptions.category){
                 case Constants.dateMainListType:

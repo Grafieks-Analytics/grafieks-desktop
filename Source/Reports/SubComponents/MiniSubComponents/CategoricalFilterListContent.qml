@@ -59,6 +59,8 @@ Rectangle{
             }
         }
 
+
+
         function onFilterIndexChanged(){
             if(ReportParamsModel.section === Constants.categoricalTab){
                 counter = ReportParamsModel.filterIndex
@@ -71,6 +73,19 @@ Rectangle{
 
                 singleSelectCheckList.model = colData
                 multiSelectCheckList.model  = colData
+
+                if(ReportParamsModel.subCategory === Constants.categorySubMulti){
+                    multiSelectRadio.checked = true
+
+                    multiSelectCheckList.visible = true
+                    singleSelectCheckList.visible = false
+                } else{
+                    singleSelectRadio.checked = true
+
+                    multiSelectCheckList.visible = false
+                    singleSelectCheckList.visible = true
+
+                }
             }
         }
     }
@@ -153,7 +168,7 @@ Rectangle{
             }
 
             console.log("SEARCH TO BE IMPLEMENTED - CATEGORICAL LIST")
-//            QueryDataModel.columnSearchData(ReportParamsModel.colName, ReportParamsModel.tableName, searchText.text, JSON.stringify(options))
+            //            QueryDataModel.columnSearchData(ReportParamsModel.colName, ReportParamsModel.tableName, searchText.text, JSON.stringify(options))
             ChartsModel.searchColumnData(ReportParamsModel.colName,searchText.text)
 
             if(ReportParamsModel.subCategory === Constants.categorySubMulti){
@@ -402,7 +417,7 @@ Rectangle{
 
             ListView {
                 id: multiSelectCheckList
-                model: ColumnListModel
+                //                model: ColumnListModel
                 height: parent.height-38
                 width: parent.width
                 anchors.top: mainCheckBox.bottom
@@ -436,11 +451,18 @@ Rectangle{
 
                         // On edit, highlight the selected option
                         Connections{
-                            target: ReportParamsModel
-                            function onTmpSelectedValuesChanged(values){
+                            target: ChartsModel
+                            function onColumnDataChanged(columnData, options){
                                 if(ReportParamsModel.mode === Constants.modeEdit && ReportParamsModel.category === Constants.categoryMainListType && ReportParamsModel.subCategory === Constants.categorySubMulti){
-                                    console.log(ReportParamsModel.mode === Constants.modeEdit, ReportParamsModel.category === Constants.categoryMainListType, ReportParamsModel.subCategory === Constants.categorySubMulti)
-                                    modelCheckBoxes.checked = values.indexOf(modelCheckBoxes.objectName) >= 0 ? true: false
+                                    if(options !== ""){
+                                        var JSONValues = JSON.parse(options)
+                                        var selectedValues = []
+
+                                        JSONValues.values.forEach(item => {
+                                                                      selectedValues = item.split(",")
+                                                                  })
+                                        modelCheckBoxes.checked = selectedValues.indexOf(modelCheckBoxes.objectName) >= 0 ? true: false
+                                    }
                                 }
                             }
                         }
@@ -462,7 +484,7 @@ Rectangle{
         ListView{
 
             id: singleSelectCheckList
-            model: ColumnListModel
+            //            model: ColumnListModel
             height: parent.height-35
             width: parent.width
             visible: false
@@ -504,11 +526,19 @@ Rectangle{
 
                         // On edit, highlight the selected option
                         Connections{
-                            target: ReportParamsModel
-                            function onTmpSelectedValuesChanged(values){
+                            target: ChartsModel
+                            function onColumnDataChanged(columnData, options){
                                 if(ReportParamsModel.mode === Constants.modeEdit && ReportParamsModel.category === Constants.categoryMainListType && ReportParamsModel.subCategory === Constants.categorySubSingle){
-                                    console.log(ReportParamsModel.mode === Constants.modeEdit, ReportParamsModel.category === Constants.categoryMainListType, ReportParamsModel.subCategory === Constants.categorySubSingle)
-                                    modelRadioButton.checked = values[0] === modelRadioButton.objectName ? true: false
+                                    if(options !== ""){
+                                        var JSONValues = JSON.parse(options)
+                                        var selectedValues = []
+
+                                        JSONValues.values.forEach(item => {
+                                                                      selectedValues = item.split(",")
+                                                                  })
+                                        console.log(selectedValues, modelRadioButton.objectName)
+                                        modelRadioButton.checked = selectedValues.indexOf(modelRadioButton.objectName) >= 0 ? true: false
+                                    }
                                 }
                             }
                         }
