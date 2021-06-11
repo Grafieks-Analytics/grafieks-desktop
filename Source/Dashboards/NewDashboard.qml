@@ -489,75 +489,77 @@ Page {
 
             // Add Report button starts
 
-            ToolSeparator{
-                orientation: Qt.Vertical
-                height: 26
+//            ToolSeparator{
+//                orientation: Qt.Vertical
+//                height: 26
 
-                anchors.verticalCenter: parent.verticalCenter
+//                anchors.verticalCenter: parent.verticalCenter
 
-                contentItem: Rectangle {
-                    implicitWidth: parent.vertical ? 1 : 24
-                    implicitHeight: parent.vertical ? 25 : 1
-                    color: Constants.grafieksGreen
-                }
+//                contentItem: Rectangle {
+//                    implicitWidth: parent.vertical ? 1 : 24
+//                    implicitHeight: parent.vertical ? 25 : 1
+//                    color: Constants.grafieksGreen
+//                }
 
-            }
+//            }
 
-            Button{
+//            report button start
+//            Button{
 
-                width: 80
-                height: 28
-
-
-
-                Row{
-                    spacing: 5
-                    anchors.centerIn: parent
-
-                    Text{
-                        text: "Report"
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                    Text {
-
-                        text: qsTr(":")
-
-
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-
-                    Button{
-                        //
-                        width: 22
-                        height: 28
-                        onClicked: createNewReport()
-                        Image {
-                            source: "/Images/icons/Plus_32.png"
-                            width: 20
-                            height: 20
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter:  parent.horizontalCenter
-                        }
-
-                        background: Rectangle {
-                            id: report_btn_background
-                            color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
-
-                        }
-
-                    }
+//                width: 80
+//                height: 28
 
 
 
-                }
-                background: Rectangle {
+//                Row{
+//                    spacing: 5
+//                    anchors.centerIn: parent
 
-                    color:  Constants.whiteColor
-                }
+//                    Text{
+//                        text: "Report"
+//                        anchors.verticalCenter: parent.verticalCenter
+//                    }
+//                    Text {
+
+//                        text: qsTr(":")
 
 
-            }
+//                        anchors.verticalCenter: parent.verticalCenter
+//                    }
 
+//                    Button{
+//                        //
+//                        width: 22
+//                        height: 28
+//                        onClicked: createNewReport()
+//                        Image {
+//                            source: "/Images/icons/Plus_32.png"
+//                            width: 20
+//                            height: 20
+//                            anchors.verticalCenter: parent.verticalCenter
+//                            anchors.horizontalCenter:  parent.horizontalCenter
+//                        }
+
+//                        background: Rectangle {
+//                            id: report_btn_background
+//                            color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
+
+//                        }
+
+//                    }
+
+
+
+//                }
+//                background: Rectangle {
+
+//                    color:  Constants.whiteColor
+//                }
+
+
+//            }
+
+//            report button ends
             ToolSeparator{
                 orientation: Qt.Vertical
                 height: 26
@@ -780,7 +782,83 @@ Page {
 
             }
             // Customize Button Ends
+            // Tab button starts
 
+            TabBar{
+                id: tabbar_dashboard
+
+                width:200
+                 z: 20
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+                // Next button starts
+
+                TabButton{
+                    id: tabPublishDashboard
+                    width:rectangle_querymodeller_right_col.width / 2
+                    height: parent.height
+                     z: 20
+
+                    Image {
+                        id: publishIcon
+                        source: "/Images/icons/publish_20.png"
+                        height: 20
+                        width: 20
+                        anchors.centerIn: parent
+                    }
+
+                    onClicked: onPublishDataSourceClicked()
+
+                    background: Rectangle{
+                        color: Constants.grafieksLightGreenColor
+                        opacity: tabPublishDashboard.hovered ? 0.42 : 1
+                    }
+
+                    ToolTip.delay:Constants.tooltipShowTime
+                    ToolTip.timeout: Constants.tooltipHideTime
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Publish Datasource")
+
+                }
+
+
+                TabButton{
+                    id: tabCreateDashboard
+                    width:rectangle_querymodeller_right_col.width / 2
+                    height: parent.height
+                     z: 20
+
+                    Image {
+                        id: dashboardIcon
+                        source: "/Images/icons/create_dashboard_20.png"
+                        height: 20
+                        width: 20
+                        anchors.centerIn: parent
+                    }
+
+                    contentItem: Text{
+                        id:tabCreateDashboard_text
+                    }
+                    background: Rectangle {
+                        color: Constants.grafieksLightGreenColor
+                        opacity: tabCreateDashboard.hovered ? 0.42 : 1
+                    }
+
+                    onClicked: createNewReport()
+
+                    ToolTip.delay:Constants.tooltipShowTime
+                    ToolTip.timeout: Constants.tooltipHideTime
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Create Report")
+
+                }
+
+                // Next button ends
+            }
+
+            // Tab button ends
 
 
         }
