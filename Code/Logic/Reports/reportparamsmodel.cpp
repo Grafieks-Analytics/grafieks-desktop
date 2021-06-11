@@ -149,9 +149,9 @@ void ReportParamsModel::clearFilter()
 {
 
     // Q_PROPERTY
-    this->setSection(Constants::defaultTabSection);
-    this->setCategory(Constants::defaultCategory);
-    this->setSubCategory(Constants::defaultSubCategory);
+//    this->setSection(Constants::defaultTabSection);
+//    this->setCategory(Constants::defaultCategory);
+//    this->setSubCategory(Constants::defaultSubCategory);
 
     // variable change
 }
@@ -392,6 +392,7 @@ void ReportParamsModel::removeFilterSlugMap(int filterId)
 
 void ReportParamsModel::addToIncludeExcludeMap(int filterId, bool includeExclude)
 {
+
     this->includeExcludeMap.insert(filterId, includeExclude);
 }
 
@@ -417,7 +418,7 @@ void ReportParamsModel::removeIncludeExcludeMap(int filterId)
 
 void ReportParamsModel::addToIncludeNullMap(int filterId, bool includeNull)
 {
-    this->includeExcludeMap.insert(filterId, includeNull);
+    this->includeNullMap.insert(filterId, includeNull);
 }
 
 QVector<bool> ReportParamsModel::fetchIncludeNullMap(int filterId, bool fetchAll)
@@ -876,7 +877,6 @@ void ReportParamsModel::setSection(QString section)
         return;
 
     m_section = section;
-    qDebug() << "SECTION SIGNAL" << section;
     emit sectionChanged(m_section);
 }
 

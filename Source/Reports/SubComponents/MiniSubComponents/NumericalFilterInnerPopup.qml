@@ -100,7 +100,16 @@ Rectangle{
 
         function onFilterIndexChanged(){
             if(ReportParamsModel.section === Constants.numericalTab){
+
                 counter = ReportParamsModel.filterIndex
+                var colName = ReportParamsModel.colName
+                var colData = ReportParamsModel.fetchFilterValueMap(counter)[counter]
+                var slug = ReportParamsModel.fetchFilterSlugMap(counter)
+
+                textField.text = colData[0]
+                selectOption.textValue = slug[0]
+
+                ReportParamsModel.addToIncludeExcludeMap(counter, false)
             }
         }
     }
@@ -188,12 +197,12 @@ Rectangle{
     }
 
     function onExludeCheckStateChanged(checked){
-        ReportParamsModel.addToIncludeExcludeMap(checked)
+        ReportParamsModel.addToIncludeExcludeMap(counter, false)
     }
 
 
     function onIncludeCheckStateChanged(checked){
-        ReportParamsModel.addToIncludeNullMap(checked)
+        ReportParamsModel.addToIncludeNullMap(counter, checked)
     }
 
 
@@ -241,7 +250,7 @@ Rectangle{
 
             CheckBoxTpl {
                 checked: ReportParamsModel.includeNull
-                 parent_dimension: Constants.defaultCheckBoxDimension
+                parent_dimension: Constants.defaultCheckBoxDimension
                 text: qsTr("Include Null")
                 indicator.width: 15
                 indicator.height: 15

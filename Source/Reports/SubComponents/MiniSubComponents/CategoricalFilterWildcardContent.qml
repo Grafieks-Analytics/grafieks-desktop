@@ -109,45 +109,40 @@ Rectangle{
                 ReportParamsModel.setTmpFilterIndex(ReportParamsModel.filterIndex)
                 ReportParamsModel.addToIncludeExcludeMap(ReportParamsModel.filterIndex, false)
             }
-        }
-    }
 
-    Connections{
-        target: QueryDataModel
-
-        function onColumnListModelDataChanged(colData, options){
-
-            if(ReportParamsModel.category === Constants.categoryMainWildCardType){
+            if(ReportParamsModel.category === Constants.categoryMainWildCardType && ReportParamsModel.mode === Constants.modeEdit){
                 var finalValue;
-                var jsonOptions = JSON.parse(options)
+                var slug = ReportParamsModel.fetchFilterSlugMap(counter)[0]
+                var jsonValue = ReportParamsModel.fetchFilterValueMap(counter)[counter]
+                var relation = ReportParamsModel.fetchFilterRelationMap(counter)
 
-                switch(jsonOptions.slug){
+
+                switch(slug){
 
                 case acceptedValues[0]:
-                    finalValue = jsonOptions.values.slice(1,-1)
+                    finalValue = jsonValue[0].slice(1,-1)
                     break
 
                 case acceptedValues[1]:
                 case acceptedValues[4]:
-                    finalValue = jsonOptions.values.slice(1)
+                    finalValue = jsonValue[0].slice(1)
                     break
 
                 case acceptedValues[2]:
                 case acceptedValues[5]:
-                    finalValue = jsonOptions.values
+                    finalValue = jsonValue[0]
                     break
 
                 case acceptedValues[3]:
-                    finalValue = jsonOptions.values.slice(0, -1)
+                    finalValue = jsonValue[0].slice(0, -1)
                     break
                 }
 
                 listviewWildCardModel.append({"value":0})
 
-                wildcardContent.editRelation = jsonOptions.relation
-                wildcardContent.editSlug = jsonOptions.slug
+                wildcardContent.editRelation = relation[0]
+                wildcardContent.editSlug = slug
                 wildcardContent.editValue = finalValue
-                console.log("WILD", finalValue, JSON.stringify(jsonOptions))
             }
         }
     }
@@ -275,8 +270,6 @@ Rectangle{
             slug = wildcardContent.acceptedValues[selectCurrentIndex]
 
             break
-
-
         }
 
         var currentSelectedIndex = ReportParamsModel.getTmpFilterIndex(listIndex)
