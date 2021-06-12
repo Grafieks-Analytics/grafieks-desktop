@@ -81,6 +81,8 @@ Page {
     
     property var colorData:[];
 
+    // Edit Report Flag
+    property bool editReportFlag: false;
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -134,6 +136,7 @@ Page {
         function onEditReportToggleChanged(reportId){
             if(reportId != "false"){
                 addReportButton.text = "Update";
+                editReportFlag = true;
                 setValuesOnEditReport();
             }else{
                 addReportButton.text = "Add";
@@ -357,6 +360,18 @@ Page {
         reDrawChart();
     }
 
+    // On Edit => Redraw all the charts in Dashboard
+    function reDrawAllDashboardCharts(){
+        // Here are all the instances, Let's Redraw the charts
+        let allReportInstances = ReportParamsModel.getAllDashboardReportInstances();
+        for(var reportIdValue in allReportInstances){
+            // Redrawing charts one by one;
+            var instance = allReportInstances[reportIdValue]; 
+            instance.reDrawChart();
+        }
+    }
+
+
     // Switch Chart Urls
     // Whenever Chart is changed 
     // Perform these things
@@ -535,6 +550,7 @@ Page {
 
     function addReport(){
         // Add report to dashboard
+        editReportFlag = false;
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
 
         if(!reportIdMain){
@@ -578,6 +594,9 @@ Page {
         }
 
         clearAllChartValues();
+        // On Edit => Redraw all the charts in Dashboard
+        reDrawAllDashboardCharts();
+        ReportParamsModel.setEditReportToggle(false);
     }
 
     function cancelReport(){
