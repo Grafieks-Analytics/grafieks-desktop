@@ -54,20 +54,20 @@ Rectangle{
     /***********************************************************************************************************************/
     // Connections Starts
     Connections{
-        target: DSParamsModel
+        target: ReportParamsModel
 
         function onResetInput(){
             onYearTabClicked()
-            DSParamsModel.setExcludeMap(counter, false)
-            DSParamsModel.setIncludeNullMap(counter, true)
+            ReportParamsModel.addToIncludeExcludeMap(counter, false)
+            ReportParamsModel.addToIncludeNullMap(counter, true)
         }
 
         function onInternalCounterChanged(){
-            counter = DSParamsModel.internalCounter
+            counter = ReportParamsModel.internalCounter
         }
 
         function onFilterIndexChanged(){
-            counter = DSParamsModel.filterIndex
+            counter = ReportParamsModel.filterIndex
         }
     }
 

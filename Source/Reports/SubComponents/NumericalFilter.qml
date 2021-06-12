@@ -22,6 +22,9 @@ Popup {
         border.color: Constants.darkThemeColor
     }
 
+    property int filterIndex: 0
+    property int counter: 0
+
 
 
     /***********************************************************************************************************************/
@@ -69,14 +72,14 @@ Popup {
 
 
     Connections{
-        target: DSParamsModel
+        target: ReportParamsModel
 
         function onInternalCounterChanged(){
-            counter = DSParamsModel.internalCounter
+            counter = ReportParamsModel.internalCounter
         }
 
         function onFilterIndexChanged(){
-            counter = DSParamsModel.filterIndex
+            counter = ReportParamsModel.filterIndex
         }
     }
 
@@ -109,63 +112,46 @@ Popup {
 
     function closePopup(){
         numericalFilterPopup.visible = false
-        DSParamsModel.clearFilter()
+        ReportParamsModel.clearFilter()
     }
 
     function onCancelClicked(){
         closePopup()
-        DSParamsModel.clearFilter();
+        ReportParamsModel.clearFilter();
     }
 
     function onApplyClicked(){
 
-        console.log("Numerical filter applied")
-
         numericalFilterPopup.visible = false
 
-        var filterIndex = DSParamsModel.filterIndex
-        var section = DSParamsModel.section
-        var category = DSParamsModel.category
-        var subCategory = DSParamsModel.subCategory
-        var tableName = DSParamsModel.tableName
-        var columnName = DSParamsModel.colName
-        var joinRelation = DSParamsModel.fetchJoinRelation(counter)
-        var joinValue = DSParamsModel.fetchJoinValue(counter)
-        var joinSlug = DSParamsModel.fetchJoinRelationSlug(counter)
-        var includeNull = DSParamsModel.includeNull
-        var exclude = DSParamsModel.exclude
+        var filterIndex = ReportParamsModel.filterIndex
+        var section = ReportParamsModel.section
+        var category = ReportParamsModel.category
+        var subCategory = ReportParamsModel.subCategory
+        var tableName = ReportParamsModel.tableName
+        var columnName = ReportParamsModel.colName
 
-        var singleValue = "";
-        var singleRelation = "";
-        var singleSlug = "";
+        ReportParamsModel.addToFilterSectionMap(counter, section)
+        ReportParamsModel.addToFilterCategoryMap(counter, category)
+        ReportParamsModel.addToFilterSubCategoryMap(counter, subCategory)
+        ReportParamsModel.addToFilterColumnMap(counter, columnName)
+        ReportParamsModel.addToNumericalFilters(counter)
 
-
-        singleRelation = joinRelation[counter]
-        singleValue = joinValue[counter]
-        singleSlug = joinSlug[counter]
-        manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, includeNull, exclude, counter, DSParamsModel.filterModelIndex)
-
-//        DSParamsModel.setMode(Constants.modeCreate)
+        manageFilters(ReportParamsModel.mode, counter, ReportParamsModel.filterModelIndex)
 
         // Reset all DSParams
-        DSParamsModel.clearFilter();
+        ReportParamsModel.clearFilter();
 
         // Clear tabs individual temp data
         dateFilterPopup.clearData()
 
     }
 
-    function manageFilters(mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, counter = 0, filterId = 0){
+    function manageFilters(mode, counter = 0, filterId = 0){
 
-        console.log("Filter insert numerical", mode, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude, filterId)
+        console.log("INSERT INTO NUMERICAL FILTERS  - INSERT REPORT ID", mode, counter, filterId)
+        ReportParamsModel.addToMasterReportFilters(1);
 
-        // Save the filter
-        if(mode === Constants.modeCreate){
-            FilterNumericalListModel.newFilter(counter, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
-
-        } else{
-            FilterNumericalListModel.updateFilter(filterId, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
-        }
     }
 
 
