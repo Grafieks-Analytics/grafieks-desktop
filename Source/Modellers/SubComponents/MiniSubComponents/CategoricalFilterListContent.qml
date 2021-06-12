@@ -60,9 +60,7 @@ Rectangle{
         }
 
         function onFilterIndexChanged(){
-            if(DSParamsModel.section === Constants.categoricalTab){
-                counter = DSParamsModel.filterIndex
-            }
+            counter = DSParamsModel.filterIndex
         }
     }
 
@@ -92,7 +90,6 @@ Rectangle{
         target: QueryDataModel
 
         function onColumnListModelDataChanged(colData, options, searchMode){
-
 
             if(DSParamsModel.section === Constants.categoricalTab){
                 // Just to reset the data if the previous `colData` and the new `colData` are same
@@ -472,7 +469,6 @@ Rectangle{
                     height:20
                     CheckBoxTpl {
                         id: modelCheckBoxes
-                        checked: false
                         y:2
                         text: modelData
                         parent_dimension: Constants.defaultCheckBoxDimension

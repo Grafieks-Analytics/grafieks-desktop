@@ -242,8 +242,6 @@ Popup {
         // The db WHERE relation can only be IN / NOT IN ARRAY type
         // Except when "Select All" checked.
         // Then Relation will be LIKE
-
-        DSParamsModel.addToJoinRelation(filterIndex, Constants.likeRelation)
     }
 
 

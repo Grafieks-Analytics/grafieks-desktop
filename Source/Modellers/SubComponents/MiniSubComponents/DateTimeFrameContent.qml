@@ -71,6 +71,42 @@ Rectangle{
         }
     }
 
+    Connections{
+        target: QueryDataModel
+
+        function onColumnListModelDataChanged(colData, options, searchMode){
+            console.log(DSParamsModel.section === Constants.dateTab, DSParamsModel.category, Constants.dateMainTimeFrameType, "CONOS")
+
+            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainTimeFrameType ){
+
+                var jsonOptions = JSON.parse(options)
+                var subCategory = jsonOptions.subCategory
+                var relation = jsonOptions.relation
+                var slug = jsonOptions.slug
+                var value = jsonOptions.values
+
+                console.log(subCategory, relation, slug, value, "JSON DATA")
+
+                if(subCategory.toLowerCase() === "day"){
+                    onDayTabClicked()
+                    dateTimeFrameContent.signalTimeFrameRadioEditDay(relation, slug, value)
+                }
+                else if(subCategory.toLowerCase() === "year"){
+                    onYearTabClicked()
+                    dateTimeFrameContent.signalTimeFrameRadioEditYear(relation, slug, value)
+                }
+                else if(subCategory.toLowerCase() === "month"){
+                    onMonthTabClicked()
+                    dateTimeFrameContent.signalTimeFrameRadioEditMonth(relation, slug, value)
+                }
+                else{
+                    onQuarterTabClicked()
+                    dateTimeFrameContent.signalTimeFrameRadioEditQuarter(relation, slug, value)
+                }
+            }
+        }
+    }
+
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -96,15 +132,16 @@ Rectangle{
     function slotEditModeTimeFrame(subCategory, relation, slug, value){
         dateTimeFrameContent.visible = true
 
-        if(subCategory === "Day"){
+
+        if(subCategory.toLowerCase() === "day"){
             onDayTabClicked()
             dateTimeFrameContent.signalTimeFrameRadioEditDay(relation, slug, value)
         }
-        else if(subCategory === "Year"){
+        else if(subCategory.toLowerCase() === "year"){
             onYearTabClicked()
             dateTimeFrameContent.signalTimeFrameRadioEditYear(relation, slug, value)
         }
-        else if(subCategory === "Month"){
+        else if(subCategory.toLowerCase() === "month"){
             onMonthTabClicked()
             dateTimeFrameContent.signalTimeFrameRadioEditMonth(relation, slug, value)
         }

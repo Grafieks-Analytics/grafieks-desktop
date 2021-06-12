@@ -89,7 +89,7 @@ Popup {
 
             var jsonOptions = JSON.parse(options)
 
-            if(jsonOptions.section === Constants.categoricalTab){
+            if(jsonOptions.section === Constants.dateTab){
 
                 switch(jsonOptions.category){
                 case Constants.dateMainListType:
@@ -193,6 +193,9 @@ Popup {
     function closeDateFilterPopup(){
         dateFilterPopup.visible = false
         DSParamsModel.clearFilter();
+
+        // Clear tabs individual temp data
+        dateFilterPopup.clearData()
     }
 
     function applyDateFilter(){
@@ -253,7 +256,6 @@ Popup {
             singleRelation = joinRelation[counter]
             singleValue = joinValue[counter]
             singleSlug = joinSlug[counter]
-//            console.log(JSON.stringify(joinRelation), JSON.stringify(joinSlug))
 
             manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, actualValue, includeNull, exclude, 0, counter, DSParamsModel.filterModelIndex)
 
@@ -288,6 +290,9 @@ Popup {
     function resetDateFilter(){
         // Reset date filter here
         closeDateFilterPopup()
+        DSParamsModel.clearFilter()
+
+        dateFilterPopup.clearData()
     }
 
 
@@ -302,7 +307,6 @@ Popup {
         // For list date type
         // The db WHERE relation can only be LIKE / NOT LIKE ARRAY type
 
-        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
     }
     function onCalendarClicked(){
         listContent.visible = false
@@ -310,7 +314,6 @@ Popup {
         dateTimeFrameContent.visible = false
 
         DSParamsModel.setCategory(Constants.dateMainCalendarType)
-        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
     }
 
     function onTimeFrameClicked(){
@@ -320,7 +323,6 @@ Popup {
 
 
         DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
-        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
     }
 
 

@@ -200,6 +200,7 @@ Column{
         var finalValue = lastXDays[0] + "," + lastXDays[lastXDays.length - 1]
 
         console.log("Last " + value + " Days", lastXDays[0], lastXDays[lastXDays.length - 1])
+        DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
         DSParamsModel.setSubCategory(Constants.dateSubDay)
         DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Last " + value + " Day")
@@ -302,7 +303,7 @@ Column{
         nextXDays.sort()
         var finalValue = nextXDays[0] + "," + nextXDays[nextXDays.length - 1]
 
-        console.log("Next " + value + " Day", nextXDays[0], nextXDays[nextXDays.length - 1])
+        DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
         DSParamsModel.setSubCategory(Constants.dateSubDay)
         DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Next " + value + " Day")
@@ -319,7 +320,7 @@ Column{
         var newDate = Qt.formatDateTime(tmpDate,'yyyy-MM-dd')
         var thisDay = newDate
 
-        console.log("This Day", thisDay.toString())
+        DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
         DSParamsModel.setSubCategory(Constants.dateSubDay)
         DSParamsModel.setActualDateValues(counter, thisDay.toString())
         DSParamsModel.addToJoinValue(counter, "This Day")
@@ -399,7 +400,7 @@ Column{
             }
         }
 
-        console.log("Last Day", newValue.toString())
+        DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
         DSParamsModel.setSubCategory(Constants.dateSubDay)
         DSParamsModel.setActualDateValues(counter, newValue.toString())
         DSParamsModel.addToJoinValue(counter, "Last Day")
@@ -491,7 +492,7 @@ Column{
             }
         }
 
-        console.log("Next Day", newValue.toString())
+        DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
         DSParamsModel.setSubCategory(Constants.dateSubDay)
         DSParamsModel.setActualDateValues(counter, newValue.toString())
         DSParamsModel.addToJoinValue(counter, "Next Day")

@@ -70,9 +70,7 @@ Rectangle{
         }
 
         function onFilterIndexChanged(){
-            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainCalendarType){
                 counter = DSParamsModel.filterIndex
-            }
         }
     }
 
@@ -84,9 +82,10 @@ Rectangle{
             var jsonOptions = JSON.parse(options)
 
             if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainCalendarType){
-                //                DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-                //                DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
-                console.log(JSON.stringify(DSParamsModel.fetchJoinRelation(counter)))
+
+                var dates = jsonOptions.values.split(",")
+                fromDateInput.text = dates[0]
+                toDateInput.text = dates[1]
             }
         }
     }
@@ -160,7 +159,6 @@ Rectangle{
         DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
         DSParamsModel.addToJoinRelationSlug(counter, Constants.slugBetweenRelation)
 
-//        console.log("DSPARAMS", DSParamsModel.fetchJoinRelation(counter)[counter], DSParamsModel.fetchJoinRelationSlug(counter)[counter], DSParamsModel.fetchJoinValue(counter)[counter])
     }
 
     function onIncludeCheckedClicked(checked){
@@ -206,8 +204,6 @@ Rectangle{
 
             padding: 12
             leftPadding: 20
-
-
 
             Text {
                 text: qsTr("Date Range")

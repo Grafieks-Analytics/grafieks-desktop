@@ -117,7 +117,7 @@ Column{
         var pastYear = thisYear - newValue
         var finalValue = pastYear + "-01-01," + thisYear + "12-31"
 
-        console.log("Past " + value + " Year", pastYear)
+        DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
         DSParamsModel.setSubCategory(Constants.dateSubYear)
         DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Last " + value + " Years")
@@ -136,7 +136,7 @@ Column{
         var futureYear = tmpDate.thisYear + newValue
         var finalValue = thisYear + "01-01," + futureYear + "12-31"
 
-        console.log("Next " + value + " Year", futureYear)
+        DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
         DSParamsModel.setSubCategory(Constants.dateSubYear)
         DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Next " + value + " Years")
@@ -152,7 +152,7 @@ Column{
         var tmpDate = new Date()
         var thisYear = tmpDate.getFullYear()
 
-        console.log("This Year", thisYear)
+        DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
         DSParamsModel.setSubCategory(Constants.dateSubYear)
         DSParamsModel.setActualDateValues(counter, thisYear.toString())
         DSParamsModel.addToJoinValue(counter, "This Year")
@@ -168,7 +168,7 @@ Column{
         var tmpDate = new Date()
         var lastYear = tmpDate.getFullYear() - 1
 
-        console.log("Last Year", lastYear)
+        DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
         DSParamsModel.setSubCategory(Constants.dateSubYear)
         DSParamsModel.setActualDateValues(counter, lastYear.toString())
         DSParamsModel.addToJoinValue(counter, "Last Year")
@@ -184,7 +184,7 @@ Column{
         var tmpDate = new Date()
         var nextYear = tmpDate.getFullYear() + 1
 
-        console.log("Next Year", nextYear)
+        DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
         DSParamsModel.setSubCategory(Constants.dateSubYear)
         DSParamsModel.setActualDateValues(counter, nextYear.toString())
         DSParamsModel.addToJoinValue(counter, "Next Year")
