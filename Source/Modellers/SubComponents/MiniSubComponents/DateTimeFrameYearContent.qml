@@ -122,7 +122,7 @@ Column{
         DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Last " + value + " Years")
         DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = true
@@ -141,7 +141,7 @@ Column{
         DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Next " + value + " Years")
         DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = true
         lastXRadioTextField.focus = false
@@ -157,7 +157,7 @@ Column{
         DSParamsModel.setActualDateValues(counter, thisYear.toString())
         DSParamsModel.addToJoinValue(counter, "This Year")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.slugLikeRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -173,7 +173,7 @@ Column{
         DSParamsModel.setActualDateValues(counter, lastYear.toString())
         DSParamsModel.addToJoinValue(counter, "Last Year")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.slugLikeRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false

@@ -146,7 +146,7 @@ Rectangle{
         if(ReportParamsModel.section === Constants.categoricalTab){
             ReportParamsModel.addToFilterValueMap(counter, modelData.toString())
             ReportParamsModel.addToFilterRelationMap(counter, Constants.equalRelation)
-            ReportParamsModel.addToFilterSlugMap(counter, Constants.equalRelation)
+            ReportParamsModel.addToFilterSlugMap(counter, Constants.slugEqualRelation)
 
             // Clear all tmp selected values and insert again
             ReportParamsModel.removeTmpSelectedValues(0, true)
@@ -198,7 +198,7 @@ Rectangle{
                     ReportParamsModel.setActualDateValues(counter, "%")
                     ReportParamsModel.addToSelectAllMap(counter, true)
                     ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
-                    ReportParamsModel.addToFilterSlugMap(counter, Constants.likeRelation)
+                    ReportParamsModel.addToFilterSlugMap(counter, Constants.slugLikeRelation)
                 }
             }
         }
@@ -235,7 +235,7 @@ Rectangle{
 
                 ReportParamsModel.addToFilterValueMap(counter, ReportParamsModel.getTmpSelectedValues(0, true).toString())
                 ReportParamsModel.addToFilterRelationMap(counter, Constants.inRelation)
-                ReportParamsModel.addToFilterSlugMap(counter, Constants.inRelation)
+                ReportParamsModel.addToFilterSlugMap(counter, Constants.slugInRelation)
             }
         }
     }

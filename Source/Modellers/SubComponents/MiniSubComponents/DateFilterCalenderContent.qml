@@ -158,7 +158,7 @@ Rectangle{
         var newValue = fromDate + ","  + toDate;
         DSParamsModel.addToJoinValue(counter, newValue)
         DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.slugBetweenRelation)
 
 //        console.log("DSPARAMS", DSParamsModel.fetchJoinRelation(counter)[counter], DSParamsModel.fetchJoinRelationSlug(counter)[counter], DSParamsModel.fetchJoinValue(counter)[counter])
     }

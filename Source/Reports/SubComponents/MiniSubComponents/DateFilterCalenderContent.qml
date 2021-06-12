@@ -141,7 +141,7 @@ Rectangle{
         var newValue = fromDate + ","  + toDate;
         ReportParamsModel.addToFilterValueMap(counter, newValue)
         ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugBetweenRelation)
 
     }
 
