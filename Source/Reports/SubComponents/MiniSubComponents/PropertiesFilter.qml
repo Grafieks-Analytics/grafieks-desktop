@@ -148,7 +148,6 @@ Column{
         
         if(report_desiner_page.chartTitle==Constants.groupBarChartTitle){
             var xAxisValidNames = getAxisColumnNames(Constants.xAxisName);
-            console.log(xAxisValidNames);
             if(xAxisValidNames.includes(itemName)){
                 return true;
             }
