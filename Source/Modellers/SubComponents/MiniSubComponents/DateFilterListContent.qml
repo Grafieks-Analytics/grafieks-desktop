@@ -120,16 +120,19 @@ Rectangle{
             }
         }
 
+        // Internal counter is used for edits
+        // When a date list element is clicked, its id is set in internal counter
         function onInternalCounterChanged(){
             if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
                 counter = DSParamsModel.internalCounter
             }
         }
 
+        // Filter Index is used for new inserts
+        // When a new insert is called, its id is set as Filter Index
         function onFilterIndexChanged(){
-            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
                 counter = DSParamsModel.filterIndex
-            }
+
         }
     }
 
@@ -155,6 +158,7 @@ Rectangle{
 
                 singleSelectCheckList.model = colData
                 multiSelectCheckList.model  = colData
+
 
                 // Date format
                 selectedFormat = DSParamsModel.getDateFormatMap(counter)
@@ -311,7 +315,6 @@ Rectangle{
     }
 
     function onMultiSelectCheckboxSelected(modelData,checked){
-
 
         if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
             if(mainCheckBox.checked === true){
@@ -671,7 +674,6 @@ Rectangle{
                 height:20
                 CheckBoxTpl {
                     id: modelCheckBoxes
-                    checked: true
                     y:2
                     text  : modelData
                     objectName: modelData

@@ -99,8 +99,20 @@ Rectangle{
         }
 
         function onFilterIndexChanged(){
+            counter = DSParamsModel.filterIndex
+        }
+    }
+
+    Connections{
+        target: QueryDataModel
+
+        function onColumnListModelDataChanged(colData, options){
+
+            var jsonOptions = JSON.parse(options)
+
             if(DSParamsModel.section === Constants.numericalTab){
-                counter = DSParamsModel.filterIndex
+                selectOption.textValue = jsonOptions.slug
+                textField.text = jsonOptions.values
             }
         }
     }
@@ -241,7 +253,7 @@ Rectangle{
 
             CheckBoxTpl {
                 checked: DSParamsModel.includeNull
-                 parent_dimension: Constants.defaultCheckBoxDimension
+                parent_dimension: Constants.defaultCheckBoxDimension
                 text: qsTr("Include Null")
                 indicator.width: 15
                 indicator.height: 15

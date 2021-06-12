@@ -151,7 +151,7 @@ Column{
         var firstValue = firstValueArray[0] + "-" + firstValueArray[1] + "-01"
         var finalValue = firstValue + "," + lastXMonths[lastXMonths.length - 1]
 
-        console.log("Last " + value + " Months", lastXMonths.toString())
+        DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
         DSParamsModel.setSubCategory(Constants.dateSubMonth)
         DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Last " + value + " Months")
@@ -200,7 +200,7 @@ Column{
         var firstValue = firstValueArray[0] + "-" + firstValueArray[1] + "-01"
         var finalValue = firstValue + "," + nextXMonths[nextXMonths.length - 1]
 
-        console.log("Next " + value + " Month", nextXMonths.toString())
+        DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
         DSParamsModel.setSubCategory(Constants.dateSubMonth)
         DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Next " + value + " Months")
@@ -230,7 +230,7 @@ Column{
         var firstValue = firstValueArray[0] + "-" + firstValueArray[1] + "-01"
         var finalValue = firstValue + "," + newValue
 
-        console.log("This Month", newValue)
+        DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
         DSParamsModel.setSubCategory(Constants.dateSubMonth)
         DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "This Month")
@@ -268,7 +268,7 @@ Column{
         var firstValue = firstValueArray[0] + "-" + firstValueArray[1] + "-01"
         var finalValue = firstValue + "," + newValue
 
-        console.log("Last Month", newValue)
+        DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
         DSParamsModel.setSubCategory(Constants.dateSubMonth)
         DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Last Month")
@@ -306,7 +306,7 @@ Column{
         var firstValue = firstValueArray[0] + "-" + firstValueArray[1] + "-01"
         var finalValue = firstValue + "," + newValue
 
-        console.log("Next Month", newValue)
+        DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
         DSParamsModel.setSubCategory(Constants.dateSubMonth)
         DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Next Month")

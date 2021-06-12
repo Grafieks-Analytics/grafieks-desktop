@@ -385,9 +385,9 @@ void DSParamsModel::resetFilter()
 void DSParamsModel::clearFilter()
 {
     // Q_PROPERTY
-    this->setSection(Constants::defaultTabSection);
-    this->setCategory(Constants::defaultCategory);
-    this->setSubCategory(Constants::defaultSubCategory);
+//    this->setSection(Constants::defaultTabSection);
+//    this->setCategory(Constants::defaultCategory);
+//    this->setSubCategory(Constants::defaultSubCategory);
 
     // variable change
     this->removeTmpSelectedValues(0, true);
