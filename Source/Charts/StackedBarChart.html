@@ -183,7 +183,13 @@
                 standardThresholdWidth = defaultD3Config.standardThresholdWidth;
             }
 
-            var margin = { top: 40, right: 20, bottom: 80, left: 70 };
+            let { top, right, bottom, left } = constants.chartMargins;
+            if (window.innerHeight < 400) {
+                top = top / 2;
+                right = right / 2;
+                // bottom = bottom / 2;
+            }
+            var margin = { top, right, bottom, left };
             var width = window.innerWidth - margin.left - margin.right - 50;
 
             var [data, keys, labels] = transformData(
