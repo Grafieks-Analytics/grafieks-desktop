@@ -340,30 +340,46 @@ Page {
         var reportProperties = ReportParamsModel.getReport(reportIdMain);
         console.log(JSON.stringify(reportProperties));
 
-        report_desiner_page.chartUrl = reportProperties.chartUrl
-        report_desiner_page.d3PropertyConfig = reportProperties.d3PropertiesConfig
-        // report_desiner_page.yAxisColumns = reportProperties.chartUrl
-        // report_desiner_page.chartUrl = reportProperties.chartUrl
-
         var xAxisColumnsReportData = JSON.parse(reportProperties.xAxisColumns);
         var yAxisColumnsReportData = JSON.parse(reportProperties.yAxisColumns);
+        var colorListModelData = JSON.parse(reportProperties.colorByDataColoumns);
 
+        // Update List Models
         for(var i=0; i<xAxisColumnsReportData.length; i++){
             xAxisListModel.append({ itemName: xAxisColumnsReportData[i].itemName, droppedItemType: xAxisColumnsReportData[i].droppedItemType })
         }
         for(var i=0; i< yAxisColumnsReportData.length; i++){
             yAxisListModel.append({ itemName: yAxisColumnsReportData[i].itemName, droppedItemType: yAxisColumnsReportData[i].droppedItemType })
         }
+        for(var i=0; i<colorListModelData.length; i++){
+            colorListModel.append({ textValue: colorListModelData[i].columnName })
+        }
 
+        // Update Property Variables
         report_title_text.text = reportProperties.reportTitle
+        report_desiner_page.chartTitle = reportProperties.chartTitle; 
+        report_desiner_page.chartUrl = reportProperties.chartUrl
+        report_desiner_page.d3PropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
+        report_desiner_page.colorByData = JSON.parse(reportProperties.colorByDataColoumns);
+
         switchChart(reportProperties.chartTitle);
         reDrawChart();
     }
 
     // On Edit Redraw the updated chart
     function reDrawDashboardChart(reportId){
-        console.log('Report Value? Re Draw DAshboard',reportId,'2',reportIdMain)
         let reportInstance = ReportParamsModel.getDashboardReportInstance(reportIdMain);
+        var reportProperties = ReportParamsModel.getReport(reportIdMain);
+        var reportUrl = reportInstance.getChartUrl();
+
+        // Check if on updating the graph chart url was changed. 
+        // If changed update the url in report instance
+        // Else just redraw the chart.        
+        if(reportUrl !== reportProperties.chartUrl){
+            reportInstance.setChartUrl(reportProperties.chartUrl);
+            return;
+        }
+
         reportInstance.reDrawChart();
     }
 
@@ -404,6 +420,7 @@ Page {
                 break;
         }
         webEngineView.url = Constants.baseChartUrl+chartUrl;
+        report_desiner_page.chartUrl = chartUrl;
     }
 
     function searchColumnNames(searchText){
@@ -457,6 +474,7 @@ Page {
         // Clear title and report id
         ReportParamsModel.setReportId(null);
         ReportParamsModel.setReportTitle(null);
+        ReportParamsModel.setLastDropped(null);
         report_title_text.text = "";
         reportIdMain = "";
 
@@ -583,7 +601,7 @@ Page {
         ReportParamsModel.setChartType(chartTitle);
         ReportParamsModel.setChartTitle(chartTitle);
         ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertyConfig));
-        ReportParamsModel.setChartUrl(chartUrl);
+        ReportParamsModel.setChartUrl(report_desiner_page.chartUrl);
         ReportParamsModel.setXAxisColumns(JSON.stringify(getAxisModelAsJson(Constants.xAxisName)));
         ReportParamsModel.setYAxisColumns(JSON.stringify(getAxisModelAsJson(Constants.yAxisName)));
         ReportParamsModel.setColorByDataColoumns(JSON.stringify(colorByData));
@@ -785,13 +803,13 @@ Page {
                 dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.horizontalStackedBarChartTitle:
-                colorByColumnName = colorByData[0].columnName;
+                colorByColumnName = colorByData[0] && colorByData[0].columnName;
                 dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,xAxisColumns[0], yAxisColumns[0]);
 
                 break;
             case Constants.stackedBarChartTitle:
                 console.log('Stacked bar chart!');
-                colorByColumnName = colorByData[0].columnName;
+                colorByColumnName = colorByData[0] && colorByData[0].columnName;
                 dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,yAxisColumns[0], xAxisColumns[0]);
                 break;
             case Constants.horizontalBarGroupedChartTitle:
