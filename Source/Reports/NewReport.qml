@@ -128,6 +128,24 @@ Page {
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: ReportParamsModel
+
+        function onEditReportToggleChanged(reportId){
+            if(reportId != "false"){
+                addReportButton.text = "Update";
+                setValuesOnEditReport();
+            }else{
+                addReportButton.text = "Add";
+                clearValuesOnAddNewReport();
+            }
+        }
+
+        function onReportIdChanged(reportIdValue){
+            report_desiner_page.reportIdMain = reportIdValue;
+        }
+
+    }
 
 
     // Connections Ends
@@ -195,8 +213,6 @@ Page {
 
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);;
-
-        console.log(xAxisColumns);
 
         // check if maximum drop is less than in config?
         // if less then remove all the extra values
@@ -312,6 +328,35 @@ Page {
         }
     }
 
+    function clearValuesOnAddNewReport(){
+        console.log('Okay! Let me clear');
+        clearAllChartValues();
+    }
+
+    function setValuesOnEditReport(){
+        var reportProperties = ReportParamsModel.getReport(reportIdMain);
+        console.log(JSON.stringify(reportProperties));
+
+        report_desiner_page.chartUrl = reportProperties.chartUrl
+        report_desiner_page.d3PropertyConfig = reportProperties.d3PropertiesConfig
+        // report_desiner_page.yAxisColumns = reportProperties.chartUrl
+        // report_desiner_page.chartUrl = reportProperties.chartUrl
+
+        var xAxisColumnsReportData = JSON.parse(reportProperties.xAxisColumns);
+        var yAxisColumnsReportData = JSON.parse(reportProperties.yAxisColumns);
+
+        for(var i=0; i<xAxisColumnsReportData.length; i++){
+            xAxisListModel.append({ itemName: xAxisColumnsReportData[i].itemName, droppedItemType: xAxisColumnsReportData[i].droppedItemType })
+        }
+        for(var i=0; i< yAxisColumnsReportData.length; i++){
+            yAxisListModel.append({ itemName: yAxisColumnsReportData[i].itemName, droppedItemType: yAxisColumnsReportData[i].droppedItemType })
+        }
+
+        report_title_text.text = reportProperties.reportTitle
+        switchChart(reportProperties.chartTitle);
+        reDrawChart();
+    }
+
     // Switch Chart Urls
     // Whenever Chart is changed 
     // Perform these things
@@ -342,6 +387,27 @@ Page {
     function searchColumnNames(searchText){
         ChartsModel.searchColumnNames(searchText)
     }
+
+    function getAxisModelAsJson(axisName){
+        var model = null;
+        switch(axisName){
+        case Constants.xAxisName:
+            model = xAxisListModel;
+            break
+        case Constants.yAxisName:
+            model = yAxisListModel;
+            break;
+        }
+        if(!model){
+            return [];
+        }
+        var columnsData = [];
+        for(var i=0; i< model.count; i++){
+            columnsData.push({ itemName: model.get(i).itemName, droppedItemType: model.get(i).droppedItemType });
+        }
+        return columnsData;
+    }
+    
 
     // function to get the columnName from model
     function getAxisColumnNames(axisName){
@@ -415,7 +481,7 @@ Page {
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
 
-        if((xAxisListModel.count && xAxisListModel.get(0).droppedItemType.toLowerCase() !== 'numerical')  || (yAxisListModel.count && yAxisListModel.get(0).droppedItemType.toLowerCase() === 'numerical')){
+         if((xAxisListModel.count && xAxisListModel.get(0).droppedItemType.toLowerCase() !== 'numerical')  || (yAxisListModel.count && yAxisListModel.get(0).droppedItemType.toLowerCase() === 'numerical')){
             isHorizontalGraph = false;
         }
 
@@ -487,7 +553,6 @@ Page {
         // If name is not given add the name as Report "NUMBER"
         // Else is  not required (Case to set the value, because it is getting saved on key presses)
         var reportList = ReportParamsModel.getReportsList();
-        console.log(report_title_text.text)
         if(!report_title_text.text || report_title_text.text == ""){
             var numberOfReports = Object.keys(reportList).length;
             ReportParamsModel.setReportTitle('Report '+ (numberOfReports + 1));
@@ -497,8 +562,8 @@ Page {
         ReportParamsModel.setChartTitle(chartTitle);
         ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertyConfig));
         ReportParamsModel.setChartUrl(chartUrl);
-        ReportParamsModel.setXAxisColumns(JSON.stringify(getAxisColumnNames(Constants.xAxisName)));
-        ReportParamsModel.setYAxisColumns(JSON.stringify(getAxisColumnNames(Constants.yAxisName)));
+        ReportParamsModel.setXAxisColumns(JSON.stringify(getAxisModelAsJson(Constants.xAxisName)));
+        ReportParamsModel.setYAxisColumns(JSON.stringify(getAxisModelAsJson(Constants.yAxisName)));
         ReportParamsModel.setColorByDataColoumns(JSON.stringify(colorByData));
 
         ReportParamsModel.addReport(reportIdMain);
@@ -835,9 +900,6 @@ Page {
         yAxisSettingsPopup.visible = true
     }
 
-    function exportReport(){
-        console.log('Export Report')
-    }
 
     function updateReportTitle(){
         ReportParamsModel.setReportTitle(report_title_text.text);
@@ -1503,8 +1565,9 @@ Page {
                 height: parent.height
                 anchors.left: row4Valueseparator3.right
                 Text{
+                    // [Tag: Refector]
+                    // Move to constants
                     text: 'Yellow'
-
                     anchors.centerIn: parent
                 }
                 z:1
@@ -1531,9 +1594,7 @@ Page {
                     width: 160
                     height: 30
                     radius: 15
-                    //                    color: "red"
                     border.color: Constants.borderBlueColor
-
                     anchors.centerIn: parent
 
                     TextEdit {
@@ -1570,6 +1631,8 @@ Page {
                 anchors.left: row4Valueseparator5.right
 
                 Text{
+                    // [Tag: Refector]
+                    // Move to constants
                     text: 'Red'
                     anchors.leftMargin: 20
                     anchors.centerIn: parent
@@ -1598,7 +1661,6 @@ Page {
                     width: 160
                     height: 30
                     radius: 15
-                    //                    color: "red"
                     border.color: Constants.borderBlueColor
 
                     anchors.centerIn: parent
@@ -1637,6 +1699,8 @@ Page {
         id: webEngineView
         height:parent.height - axis.height -50
         width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width - 50
+        // [Tag: Refector]
+        // Move to constants
         url: "../Charts/BarChartArrayInput.html"
         onLoadingChanged: onChartLoaded(loadRequest)
         anchors.left: tool_sep_chartFilters.right
@@ -1697,6 +1761,7 @@ Page {
                 }
 
                 Button{
+                    id: addReportButton
                     text:"Add"
                     height: parent.height
                     anchors.right: parent.right
@@ -1763,6 +1828,8 @@ Page {
                         cursorVisible: true
                         anchors.top: parent.top
                         anchors.topMargin: 5
+                        // [Tag: Refector]
+                        // Was this Search?
                         placeholderText: "Search1"
                         background: Rectangle{
                             border.width: 0

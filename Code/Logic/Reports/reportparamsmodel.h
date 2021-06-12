@@ -50,6 +50,8 @@ class ReportParamsModel: public QObject
     Q_PROPERTY(QString yAxisColumns READ yAxisColumns WRITE setYAxisColumns NOTIFY yAxisColumnsChanged)
     Q_PROPERTY(QString d3PropertiesConfig READ d3PropertiesConfig WRITE setD3PropertiesConfig NOTIFY d3PropertiesConfigChanged)
     Q_PROPERTY(QString colorByDataColoumns READ colorByDataColoumns WRITE setColorByDataColoumns NOTIFY colorByDataColoumnsChanged)
+    Q_PROPERTY(QString editReportToggle READ editReportToggle WRITE setEditReportToggle NOTIFY editReportToggleChanged)
+
 
     // For Filters
     Q_PROPERTY(int internalCounter READ internalCounter WRITE setInternalCounter NOTIFY internalCounterChanged) // Counter for categorical-wildcard
@@ -94,6 +96,8 @@ class ReportParamsModel: public QObject
     QString m_chartTitle;
 
     QString m_colorByDataColoumns;
+
+    QString m_editReportToggle;
 
 public:
     ReportParamsModel();
@@ -187,6 +191,8 @@ public:
     Q_INVOKABLE QVariant getAllDashboardReportInstances();
 
 
+    QString editReportToggle() const;
+
 public slots:
 
     // General properties
@@ -223,6 +229,8 @@ public slots:
     void setMode(QString mode);
     void setFilterModelIndex(int filterModelIndex);
 
+
+    void setEditReportToggle(QString editReportToggle);
 
 signals:
     // General properties
@@ -262,6 +270,7 @@ signals:
     // For Dashboard Reports
     void reportListChanged();
 
+    void editReportToggleChanged(QString editReportToggle);
 };
 
 #endif // REPORTPARAMSMODEL_H

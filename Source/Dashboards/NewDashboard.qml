@@ -218,7 +218,12 @@ Page {
     }
 
     function createNewReport(){
-        stacklayout_home.currentIndex = Constants.newReportIndex
+        ReportParamsModel.setReportId(null);
+        // Setting Edit toggle to false
+        // Signal event is added 
+        // If Edit Report is false =>  We clear the chart value 
+        ReportParamsModel.setEditReportToggle(false);
+        stacklayout_home.currentIndex = Constants.newReportIndex;
     }
 
     function scrollToLeft(){
@@ -513,7 +518,6 @@ Page {
                 Row{
                     spacing: 5
                     anchors.centerIn: parent
-
                     Text{
                         text: "Report"
                         anchors.verticalCenter: parent.verticalCenter
@@ -521,13 +525,9 @@ Page {
                     Text {
 
                         text: qsTr(":")
-
-
                         anchors.verticalCenter: parent.verticalCenter
                     }
-
                     Button{
-                        //
                         width: 22
                         height: 28
                         onClicked: createNewReport()
@@ -538,24 +538,16 @@ Page {
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter:  parent.horizontalCenter
                         }
-
                         background: Rectangle {
                             id: report_btn_background
                             color: parent.hovered? Constants.darkThemeColor: Constants.whiteColor
 
                         }
-
                     }
-
-
-
                 }
                 background: Rectangle {
-
                     color:  Constants.whiteColor
                 }
-
-
             }
 
             ToolSeparator{
@@ -571,6 +563,10 @@ Page {
                 }
 
             }
+
+            // [Tag: Future Release]
+            // Remove if not requied
+
             // Add Report Button Ends
 
             // Filter button starts
@@ -822,24 +818,24 @@ Page {
             id: dashboard_summary
             //        height: parent.height
             //        width: parent.width
+
+            // [Tag: Refector]
+            // Move this to constants
+            // Initial Chart Dimension
             height: 800
             width: 1280
 
             Text{
-
                 id:hintText
-
-                text:  if (is_dashboard_blank==0) {
-                           "Add Reports and Widgets Here"
-                       }
-                       else {
-                           ""
-                       }
+                text:  !is_dashboard_blank ? "Add Reports and Widgets Here" : ""
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 color: Constants.grayColor
             }
 
+            // [Tag: Refactor]
+            // Remove Commented Code
+            
             //        anchors.left: left_menubar.right
             //        anchors.top: toolsep1.bottom
             //        anchors.topMargin: -6

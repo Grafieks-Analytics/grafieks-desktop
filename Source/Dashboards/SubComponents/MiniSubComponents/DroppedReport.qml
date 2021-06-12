@@ -31,6 +31,16 @@ Item{
     property var reportId: "";
     property var standardChart: null;
 
+    // Copied Properties from NewReport.qml
+    // So that charts are displayed same as NewReport
+
+    // Flag for horizontal graph
+    // Changes when numerical value is added on X axis
+    // Or Categorical Value is added on Y axis
+    // On Change we update the graph title
+    property bool isHorizontalGraph: false;
+    
+
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
@@ -42,6 +52,7 @@ Item{
     /***********************************************************************************************************************/
     // SIGNALS STARTS
 
+    signal editReport;
 
 
     // SIGNALS ENDS
@@ -121,8 +132,10 @@ Item{
         // Delete from c++
     }
 
-    function editSelectedReport(){
-        stacklayout_home.currentIndex = 7
+    function editSelectedReport(reportId){
+        stacklayout_home.currentIndex = Constants.newReportIndex;
+        ReportParamsModel.setReportId(reportId);
+        ReportParamsModel.setEditReportToggle(reportId);
     }
 
     function toggleFullScreen(){
@@ -215,10 +228,42 @@ Item{
         drawChart(reportProperties);
     }
 
+    
+    // function to get the columnName from model
+    // Difference between NewReport.qml and DroopedReport:
+    // 1. Columns are in modal | Columns are in Array 
+    // 2. Since list model uses count and get function, Modified them here as per Array Change
+
+    function getAxisColumnNames(axisName){
+        var model = null;
+        const reportProperties = ReportParamsModel.getReport(reportId);
+        switch(axisName){
+        case Constants.xAxisName:
+            var xAxisListModel = JSON.parse(reportProperties.xAxisColumns);        
+            model = xAxisListModel;
+            break
+        case Constants.yAxisName:
+            var yAxisListModel = JSON.parse(reportProperties.yAxisColumns);
+            model = yAxisListModel;
+            break;
+        }
+        if(!model){
+            return [];
+        }
+        var columnsName = [];
+        for(var i=0; i< model.length; i++){
+            columnsName.push(model[i].itemName);
+        }
+        return columnsName;
+    }
+
+
+    // This function is copied from NewReport.qml
+    // Make sure to make the changes properly
+    // Add a comment whenever a different change is made
+
     function drawChart(reportProperties){
 
-        var xAxisColumns = JSON.parse(reportProperties.xAxisColumns);
-        var yAxisColumns = JSON.parse(reportProperties.yAxisColumns);
         var chartTitle = reportProperties.chartTitle;
         var d3PropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
         
@@ -230,6 +275,9 @@ Item{
             return;
         }
 
+        var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
+        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
+
         console.log("Okay, Now it's time to draw the chart")
 
         console.log('Draw Chart X Column names',xAxisColumns);
@@ -239,7 +287,7 @@ Item{
 
         if(xAxisColumns.length===0 && yAxisColumns.length === 0){
             // set everything to default
-            // Any can add any default case here
+            // Can add any default case here
             isHorizontalGraph = false;
         }
 
@@ -413,7 +461,7 @@ Item{
         var d3PropertiesConfig = reportProperties.d3PropertiesConfig;
         d3PropertiesConfig.chartType = "Fit"+type;
         ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertiesConfig));
-        redrawChart()
+        reDrawChart()
     }
 
 
@@ -606,7 +654,7 @@ Item{
 
                             MenuItem {
                                 text: qsTr("Edit")
-                                onTriggered: editSelectedReport()
+                                onTriggered: editSelectedReport(newItem.reportId)
                             }
 
                             MenuItem {
