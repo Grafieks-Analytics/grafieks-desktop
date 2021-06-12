@@ -33,6 +33,9 @@ Rectangle{
     visible: false
     property int counter: 0
 
+    property var date1: ""
+    property var date2: ""
+
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
@@ -70,7 +73,7 @@ Rectangle{
         }
 
         function onFilterIndexChanged(){
-                counter = DSParamsModel.filterIndex
+            counter = DSParamsModel.filterIndex
         }
     }
 
@@ -80,12 +83,17 @@ Rectangle{
         function onColumnListModelDataChanged(colData, options){
 
             var jsonOptions = JSON.parse(options)
-
             if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainCalendarType){
 
-                var dates = jsonOptions.values.split(",")
-                fromDateInput.text = dates[0]
-                toDateInput.text = dates[1]
+                var newDates = jsonOptions.values.split(",")
+                if(newDates.length > 0){
+
+                    date1 = newDates[0]
+                    date2 = newDates[1]
+
+                    fromDateInput.text = date1
+                    toDateInput.text = date2
+                }
             }
         }
     }
@@ -153,12 +161,26 @@ Rectangle{
         setToDate(date)
     }
 
-    function onCalendarInput(fromDate,toDate){
-        var newValue = fromDate + ","  + toDate;
-        DSParamsModel.addToJoinValue(counter, newValue)
-        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.slugBetweenRelation)
+    function onCalendarFromInput(fromDate){
 
+        if(fromDate.trim().length > 0){
+            date1 = fromDate
+            var newValue = date1 + ","  + date2;
+            DSParamsModel.addToJoinValue(counter, newValue)
+            DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+            DSParamsModel.addToJoinRelationSlug(counter, Constants.slugBetweenRelation)
+        }
+    }
+
+    function onCalendarToInput(toDate){
+
+        if(toDate.trim().length > 0){
+            date2 = toDate
+            var newValue = date1 + ","  + date2;
+            DSParamsModel.addToJoinValue(counter, newValue)
+            DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+            DSParamsModel.addToJoinRelationSlug(counter, Constants.slugBetweenRelation)
+        }
     }
 
     function onIncludeCheckedClicked(checked){
@@ -248,7 +270,7 @@ Rectangle{
 
                     height: parent.height
                     onTextChanged: {
-                        onCalendarInput(fromDateInput.text,toDateInput.text)
+                        onCalendarFromInput(fromDateInput.text)
                     }
 
                 }
@@ -307,7 +329,7 @@ Rectangle{
 
                     height: parent.height
                     onTextChanged: {
-                        onCalendarInput(fromDateInput.text,toDateInput.text)
+                        onCalendarToInput(toDateInput.text)
                     }
                 }
 
