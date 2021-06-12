@@ -36,12 +36,31 @@ Rectangle{
     /***********************************************************************************************************************/
     // Connections Starts
 
+//    Connections{
+//        target: FilterDateListModel
+
+//        // Listview height
+//        function onRowCountChanged(){
+//            listFiltersListView.height = FilterDateListModel.rowCount() * 40
+//        }
+//    }
+
     Connections{
-        target: FilterDateListModel
+        target: ReportParamsModel
 
         // Listview height
-        function onRowCountChanged(){
-            listFiltersListView.height = FilterDateListModel.rowCount() * 40
+        function onDateFilterChanged(filterList){
+
+            var modelList = []
+            filterList.forEach((item) => {
+                               console.log(item, "ITEM1s", JSON.stringify(ReportParamsModel.fetchFilterColumnMap(0, true)) , JSON.stringify(ReportParamsModel.fetchFilterRelationMap(item)), ReportParamsModel.fetchFilterValueMap(item)[item][0],ReportParamsModel.fetchIncludeExcludeMap(item))
+                               modelList.push(item)
+                               })
+
+
+            listFiltersListView.height = modelList.length * 40
+            listFiltersListView.model = modelList
+
         }
     }
     // Connections Ends
@@ -57,33 +76,37 @@ Rectangle{
     // Called when remove filter from date list clicked
     function onRemoveElement(filterIndex){
         FilterDateListModel.deleteFilter(filterIndex)
-        DSParamsModel.removeJoinRelation(filterIndex)
-        DSParamsModel.removeJoinValue(filterIndex)
+        ReportParamsModel.removeJoinRelation(filterIndex)
+        ReportParamsModel.removeJoinValue(filterIndex)
     }
 
     // Called when edit filter from date list clicked
-    function onEditElement(modelIndex, filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude){
+    function onEditElement(modelIndex, filterIndex){
 
-        DSParamsModel.setMode(Constants.modeEdit)
-        DSParamsModel.setInternalCounter(filterIndex)
-        DSParamsModel.setFilterModelIndex(modelIndex)
-        DSParamsModel.setSection(section)
-        DSParamsModel.setCategory(category)
-        DSParamsModel.setSubCategory(subCategory)
-        DSParamsModel.setTableName(tableName)
-        DSParamsModel.setColName(columnName)
+        ReportParamsModel.setMode(Constants.modeEdit)
+        ReportParamsModel.setColName(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0])
+        ReportParamsModel.setSection(ReportParamsModel.fetchFilterSectionMap(filterIndex)[0])
+        ReportParamsModel.setCategory(ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0])
+        ReportParamsModel.setSubCategory(ReportParamsModel.fetchFilterSubCategoryMap(filterIndex)[0])
+        ReportParamsModel.setInternalCounter(filterIndex)
+        ReportParamsModel.setFilterIndex(filterIndex)
+        ReportParamsModel.setFilterModelIndex(filterIndex)
 
         var options = {
-            "section" : section,
-            "category" : category,
-            "subCategory" : subCategory,
-            "values" : value,
-            "relation" : relation,
-            "slug" : slug
+            "section" : ReportParamsModel.fetchFilterSectionMap(filterIndex)[0],
+            "category" : ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0],
+            "subCategory" : ReportParamsModel.fetchFilterSubCategoryMap(filterIndex)[0],
+            "values" : ReportParamsModel.fetchFilterValueMap(filterIndex)[filterIndex],
+            "relation" : ReportParamsModel.fetchFilterRelationMap(filterIndex)[0],
+            "slug" : ReportParamsModel.fetchFilterSlugMap(filterIndex)[0]
+
         }
 
-        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
-        console.log("EDIT CLICKED date", modelIndex, filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+        //        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        ChartsModel.fetchColumnData(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0], JSON.stringify(options))
+        console.log("EDIT CLICKED date", ReportParamsModel.fetchFilterColumnMap(filterIndex),ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0], filterIndex, modelIndex)
+
+
     }
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
@@ -132,9 +155,7 @@ Rectangle{
 
             ListView{
                 id: listFiltersListView
-                model: FilterDateListModel
                 width: parent.width
-                height: 50
                 anchors.topMargin: 10
                 spacing: rowSpacing
                 interactive: false
@@ -156,7 +177,7 @@ Rectangle{
 
                         ReadOnlyTextBox{
                             boxWidth: parent.width
-                            text: columnName
+                            text: ReportParamsModel.fetchFilterColumnMap(modelData)[0]
                         }
                     }
 
@@ -166,7 +187,7 @@ Rectangle{
                         width: parent.width / 3 - 50
 
                         Text {
-                            text: exclude === true ? "NOT " +relation : relation
+                            text: ReportParamsModel.fetchIncludeExcludeMap(modelData)[0] === true ? "NOT " + ReportParamsModel.fetchFilterRelationMap(modelData)[0] : ReportParamsModel.fetchFilterRelationMap(modelData)[0]
                             anchors.left: parent.left
                             leftPadding: 20
 
@@ -181,7 +202,7 @@ Rectangle{
 
                         ReadOnlyTextBox{
                             boxWidth: parent.width
-                            text: value
+                            text: ReportParamsModel.fetchFilterValueMap(modelData)[modelData][0]
                         }
                     }
 
@@ -212,7 +233,7 @@ Rectangle{
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onEditElement(model.index, filterId, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
+                                        onEditElement(model.index, modelData)
                                     }
                                 }
                             }
@@ -232,10 +253,10 @@ Rectangle{
                                     onClicked: {
 
                                         if(category === "date.timeframe"){
-                                            DSParamsModel.removeDateFormatMap(value)
+                                            ReportParamsModel.removeDateFormatMap(value)
                                         }
                                         if(category === "date.list"){
-//                                            DSParamsModel.removeTimeFrame(value)
+//                                            ReportParamsModel.removeTimeFrame(value)
                                         }
 
                                         onRemoveElement(model.index)

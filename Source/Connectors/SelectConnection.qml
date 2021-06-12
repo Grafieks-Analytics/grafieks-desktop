@@ -553,18 +553,23 @@ Page {
         id: grid1
 
         anchors.top: tabbar.bottom
-        anchors.topMargin: 60
+//        anchors.topMargin: 60
         anchors.left: left_menubar.right
-        width: selectconn_page.width
-        height: parent.height
+        width: selectconn_page.width-50
+        height: parent.height-300
         model: ConnectorFilter
         cellWidth: grid1.width / 6
         cellHeight: 130
+        clip: true
+        interactive: true
+         ScrollBar.vertical: ScrollBar{}
 
 
         delegate : Rectangle{
             scale: 1
             width: 230
+            height: 130
+
 
             Image{
                 id: imageId
@@ -572,6 +577,7 @@ Page {
                 height:60
                 width:height
                 anchors.centerIn: parent
+
 
                 MouseArea{
                     anchors.fill: parent

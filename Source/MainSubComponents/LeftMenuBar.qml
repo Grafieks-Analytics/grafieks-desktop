@@ -77,6 +77,11 @@ Rectangle{
         }
     }
 
+
+    Component.onCompleted: {
+        GeneralParamsModel.setMenuType(Constants.dataDesignerMenu)
+    }
+
     Column{
 
         id: leftMenuContent

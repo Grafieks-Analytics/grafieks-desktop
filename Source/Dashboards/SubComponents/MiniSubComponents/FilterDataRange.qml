@@ -15,7 +15,14 @@ Item {
     property alias componentName: filterDataItemRange.objectName
 
     onComponentNameChanged: {
-        rangeSlider.model = TableColumnsModel.fetchColumnData(componentName)
+        var modelData = TableColumnsModel.fetchColumnData(componentName)
+        modelData.sort()
+
+        rangeSlider.from = Math.min(...modelData)
+        rangeSlider.to = Math.max(...modelData)
+        rangeSlider.first.value = Math.min(...modelData)
+        rangeSlider.second.value = Math.max(...modelData)
+
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
@@ -48,7 +55,11 @@ Item {
     }
 
     function filterClicked(){
+
+        var currentColumnType = TableColumnsModel.findColumnType(componentName)
+        DashboardParamsModel.setCurrentColumnType(currentColumnType)
         DashboardParamsModel.setCurrentSelectedColumn(componentName)
+
         labelShapePopup1.visible = true
     }
 
@@ -112,7 +123,7 @@ Item {
                     height: parent.height
                     width: 40
                     spacing: 15
-                     anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenter: parent.verticalCenter
                     Image {
                         source: "/Images/icons/customize.png"
                         width: 16
@@ -138,42 +149,43 @@ Item {
             anchors.topMargin: 15
             anchors.left: parent.left
             anchors.leftMargin: 15
-            text: "first: "+rangeSlider.first.value
+            text: rangeSlider.first.value
             elide: Text.ElideRight
             font.pixelSize: Constants.fontCategoryHeaderMedium
             verticalAlignment: Text.AlignVCenter
         }
 
-        Text {
-            id: secondText
-            width:110
-            anchors.top: firstText.bottom
-            anchors.topMargin: 15
-            anchors.left: parent.left
-            anchors.leftMargin: 15
-            text: "second: "+rangeSlider.second.value
-            elide: Text.ElideRight
-            font.pixelSize: Constants.fontCategoryHeaderMedium
-            verticalAlignment: Text.AlignVCenter
-        }
+ 
 
 
 
         RangeSlider {
             id:rangeSlider
-            anchors.top: secondText.bottom
-             anchors.topMargin: 10
-             width: parent.width
-            from: 1
-            to: 100
-            first.value: 25
-            second.value: 75
+            anchors.top: firstText.bottom
+            anchors.topMargin: 10
+            width: parent.width
             first.onValueChanged: {
                 console.log("firstRangeValue",first.value)
             }
             second.onValueChanged:{
                 console.log("secondRangeValue",second.value)
             }
+        Text {
+            id: secondText
+            width:110
+            anchors.top: rangeSlider.bottom
+            anchors.topMargin: 15
+            anchors.left: parent.left
+            anchors.leftMargin: 15
+            text: rangeSlider.second.value
+            elide: Text.ElideRight
+            font.pixelSize: Constants.fontCategoryHeaderMedium
+            verticalAlignment: Text.AlignVCenter
+        }
+
+
+
+
 
         }
 

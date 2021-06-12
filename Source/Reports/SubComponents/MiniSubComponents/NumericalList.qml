@@ -6,12 +6,10 @@ ListView{
     id: numericalList
 
     flickableDirection: Flickable.VerticalFlick
-            boundsBehavior: Flickable.StopAtBounds
-            interactive: false
-             clip: false
-             ScrollBar.vertical: ScrollBar {}
-
-
+    boundsBehavior: Flickable.StopAtBounds
+    interactive: false
+    clip: false
+    ScrollBar.vertical: ScrollBar {}
 
     property string itemType: "Numerical"
 
@@ -25,7 +23,7 @@ ListView{
         }
     }
     function appendToList(name){
-          numericalModel.append({categoricalName: name});
+        numericalModel.append({categoricalName: name});
     }
 
     function isDropEligible(itemType){

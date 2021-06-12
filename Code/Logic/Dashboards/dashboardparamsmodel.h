@@ -55,6 +55,7 @@ class DashboardParamsModel: public QObject
     Q_PROPERTY(int currentReport READ currentReport WRITE setCurrentReport NOTIFY currentReportChanged)
     Q_PROPERTY(int tmpCanvasHeight READ tmpCanvasHeight WRITE setTmpCanvasHeight NOTIFY tmpCanvasHeightChanged)
     Q_PROPERTY(int tmpCanvasWidth READ tmpCanvasWidth WRITE setTmpCanvasWidth NOTIFY tmpCanvasWidthChanged)
+    Q_PROPERTY(QString currentColumnType READ currentColumnType WRITE setCurrentColumnType NOTIFY currentColumnTypeChanged)
 
     // Filter
     Q_PROPERTY(QString currentSelectedColumn READ currentSelectedColumn WRITE setCurrentSelectedColumn NOTIFY currentSelectedColumnChanged)
@@ -69,8 +70,11 @@ class DashboardParamsModel: public QObject
     int m_currentReport;
     int m_tmpCanvasHeight;
     int m_tmpCanvasWidth;
+    QString m_currentColumnType;
 
     QString m_currentSelectedColumn;
+
+
 
 public:
     explicit DashboardParamsModel(QObject *parent = nullptr);
@@ -164,11 +168,14 @@ public:
     int currentReport() const;
     int tmpCanvasHeight() const;
     int tmpCanvasWidth() const;
+    QString currentColumnType() const;
 
     QString currentSelectedColumn() const;
 
     // Function to call to emit a signal to hide all right columns in dashboard
     Q_INVOKABLE void hideAllDashboardRight();
+
+
 
 public slots:
     void setLastContainerType(QString lastContainerType);
@@ -180,11 +187,14 @@ public slots:
     void setCurrentReport(int currentReport);
     void setTmpCanvasHeight(int tmpCanvasHeight);
     void setTmpCanvasWidth(int tmpCanvasWidth);
+    void setCurrentColumnType(QString currentColumnType);
 
     // Filter column names
     void getColumnNames(QStringList columnNames);
 
     void setCurrentSelectedColumn(QString currentSelectedColumn);
+
+
 
 signals:
     void lastContainerTypeChanged(QString lastContainerType);
@@ -213,7 +223,9 @@ signals:
     void reportUrlChanged(int dashboardId, int reportId, QString url);
     void tmpCanvasHeightChanged(int tmpCanvasHeight);
     void tmpCanvasWidthChanged(int tmpCanvasWidth);
+    void currentColumnTypeChanged(QString currentColumnType);
     void currentSelectedColumnChanged(QString currentSelectedColumn);
+
 };
 
 #endif // DASHBOARDPARAMSMODEL_H

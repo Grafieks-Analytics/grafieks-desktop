@@ -48,7 +48,11 @@ Item {
     }
 
     function filterClicked(){
+
+        var currentColumnType = TableColumnsModel.findColumnType(componentName)
+        DashboardParamsModel.setCurrentColumnType(currentColumnType)
         DashboardParamsModel.setCurrentSelectedColumn(componentName)
+
         labelShapePopup1.visible = true
     }
 

@@ -1828,9 +1828,7 @@ Page {
                         cursorVisible: true
                         anchors.top: parent.top
                         anchors.topMargin: 5
-                        // [Tag: Refector]
-                        // Was this Search?
-                        placeholderText: "Search1"
+                        placeholderText: "Search"
                         background: Rectangle{
                             border.width: 0
                         }
