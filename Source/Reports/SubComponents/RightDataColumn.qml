@@ -10,8 +10,8 @@ Column{
 
     anchors.fill: parent
     anchors.left: parent.left
-    anchors.leftMargin: leftMargin
-    spacing: 15
+//    anchors.leftMargin: leftMargin
+//    spacing: 5
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -55,6 +55,10 @@ Column{
     Rectangle{
         height: parent.height/3 - 6
         width: parent.width
+        color: "white"
+//        x:-leftMargin
+//        border.color: Constants.darkThemeColor
+//         anchors.horizontalCenter: parent.horizontalCenter
 
 
         Rectangle{
@@ -63,11 +67,24 @@ Column{
             color: "white"
             height: 25
             width:parent.width
+            Rectangle{
+                id:categoricalRect
+                height: 25
+                width: parent.width
+                color: Constants.themeColor
+                anchors.top: parent.top
+//                x:-leftMargin
+                border.color: Constants.darkThemeColor
             Text {
                 id: categoricalHeading
                 text: qsTr("Categorical")
+                anchors.left: parent.left
+
+                anchors.leftMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: Constants.fontCategoryHeader
                 z: 100
+            }
             }
         }
 
@@ -75,64 +92,112 @@ Column{
         CategoricalList{
             id: categoricalList
             anchors.top: categoricalHeadingRect.bottom
-            height: parent.height - 6
+            height: parent.height - 40
+            width: parent.width-10
+             anchors.horizontalCenter: parent.horizontalCenter
 
         }
 
     }
 
-    ToolSeparator{
+//    ToolSeparator{
 
-        orientation: Qt.Horizontal;
-        width: parent.width + leftMargin
-        height: 1
-        x:-leftMargin
-        background: Rectangle{
-            color: Constants.darkThemeColor
-        }
-    }
-
-    Rectangle{
-        height: parent.height/3 - 6
-        width: parent.width
-
-        Text {
-            id: dateHeading
-            text: qsTr("Date")
-            font.pixelSize: Constants.fontCategoryHeader
-        }
-
-        DateList{
-            id: dateList
-        }
-
-    }
-
-
-    ToolSeparator{
-        orientation: Qt.Horizontal;
-        width: parent.width + leftMargin
-        height: 1
-        x:-leftMargin
-        background: Rectangle{
-            color: Constants.darkThemeColor
-        }
-    }
+//        orientation: Qt.Horizontal;
+//        width: parent.width + leftMargin
+//        height: 1
+//        x:-leftMargin
+//        background: Rectangle{
+//            color: Constants.darkThemeColor
+//        }
+//    }
 
 
     Rectangle{
         height: parent.height/3 - 6
         width: parent.width
+        color: "white"
+//        x:-leftMargin
+//        border.color: Constants.darkThemeColor
+//         anchors.horizontalCenter: parent.horizontalCenter
+
+        Rectangle{
+            id:numericalRect
+            height: 25
+            width: parent.width
+            color: Constants.themeColor
+//            anchors.top: parent.top
+//            x:-leftMargin
+
+            border.color: Constants.darkThemeColor
 
         Text {
             id: numericalHeading
             text: qsTr("Numerical")
+            anchors.left: parent.left
+
+            anchors.leftMargin: 10
+            anchors.verticalCenter: parent.verticalCenter
             font.pixelSize: Constants.fontCategoryHeader
         }
+}
 
         NumericalList{
             id: numericalList
+            anchors.top: numericalRect.bottom
+             height: parent.height - 40
+            width: parent.width-10
+             anchors.horizontalCenter: parent.horizontalCenter
         }
 
     }
+
+
+//    ToolSeparator{
+//        orientation: Qt.Horizontal;
+//        width: parent.width + leftMargin
+//        height: 1
+//        x:-leftMargin
+//        background: Rectangle{
+//            color: Constants.darkThemeColor
+//        }
+//    }
+
+    Rectangle{
+        height: parent.height/3 - 6
+         width: parent.width
+        color: "white"
+//        border.color: Constants.darkThemeColor
+//          anchors.horizontalCenter: parent.horizontalCenter
+
+        Rectangle{
+            id:dateRect
+            height: 25
+            width: parent.width
+            color: Constants.themeColor
+//            anchors.top: parent.top
+//            x:-leftMargin
+
+            border.color: Constants.darkThemeColor
+        Text {
+            id: dateHeading
+            text: qsTr("Date")
+            anchors.left: parent.left
+
+            anchors.leftMargin: 10
+            anchors.verticalCenter: parent.verticalCenter
+            font.pixelSize: Constants.fontCategoryHeader
+        }
+        }
+
+        DateList{
+            id: dateList
+             anchors.top: dateRect.bottom
+             height: parent.height - 40
+             width: parent.width-10
+             anchors.horizontalCenter:  parent.horizontalCenter
+        }
+
+    }
+
+
 }

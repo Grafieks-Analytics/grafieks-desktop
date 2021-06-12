@@ -1763,7 +1763,7 @@ Page {
                         cursorVisible: true
                         anchors.top: parent.top
                         anchors.topMargin: 5
-                        placeholderText: "Search1"
+                        placeholderText: "Search"
                         background: Rectangle{
                             border.width: 0
                         }

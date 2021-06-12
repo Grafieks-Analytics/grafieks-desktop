@@ -164,7 +164,7 @@ Item {
             }
 
             contentItem: Text {
-                rightPadding: control5.indicator.width + control5.spacing+60
+                rightPadding: 200
                 text: qsTr("Equal To")
                 elide: Text.ElideRight
                 font.pixelSize: 15
@@ -199,7 +199,7 @@ Item {
             }
 
             contentItem: Text {
-                rightPadding: control6.indicator.width + control6.spacing+49
+                rightPadding: 200
                 text: qsTr("Not Equal To")
                 elide: Text.ElideRight
                 font.pixelSize: 15
@@ -231,7 +231,7 @@ Item {
             }
 
             contentItem: Text {
-                rightPadding: control7.indicator.width + control7.spacing+49
+                rightPadding: 200
                 text: qsTr("Smaller Than")
                 elide: Text.ElideRight
                 font.pixelSize: 15
@@ -263,7 +263,7 @@ Item {
             }
 
             contentItem: Text {
-                rightPadding: control8.indicator.width + control8.spacing+49
+                rightPadding: 200
                 text: qsTr("Greater Than")
                 elide: Text.ElideRight
                 font.pixelSize: 15
@@ -295,7 +295,7 @@ Item {
             }
 
             contentItem: Text {
-                rightPadding: control9.indicator.width + control9.spacing+49
+                rightPadding: 200
                 text: qsTr("Equal or Smaller Than")
                 elide: Text.ElideRight
                 font.pixelSize: 15
@@ -327,7 +327,7 @@ Item {
             }
 
             contentItem: Text {
-                rightPadding: control10.indicator.width + control10.spacing+49
+                rightPadding: 200
                 text: qsTr("Equal or Greater Than")
                 elide: Text.ElideRight
                 font.pixelSize: 15
@@ -359,7 +359,7 @@ Item {
             }
 
             contentItem: Text {
-                rightPadding: control11.indicator.width + control11.spacing+49
+                rightPadding: 200
                 text: qsTr("Between")
                 elide: Text.ElideRight
                 font.pixelSize: 15
