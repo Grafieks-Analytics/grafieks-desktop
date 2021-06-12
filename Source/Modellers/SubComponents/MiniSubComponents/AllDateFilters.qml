@@ -166,7 +166,7 @@ Rectangle{
                         width: parent.width / 3 - 50
 
                         Text {
-                            text: exclude === true ? "NOT " +relation : relation
+                            text: exclude === true ? "NOT " +slug : slug
                             anchors.left: parent.left
                             leftPadding: 20
 
