@@ -418,6 +418,8 @@ Page {
             case Constants.stackedBarChartTitle:
                 chartUrl = Constants.stackedBarChartUrl
                 break;
+            case Constants.groupBarChartTitle:
+                chartUrl = Constants.barGroupedChartUrl
         }
         webEngineView.url = Constants.baseChartUrl+chartUrl;
         report_desiner_page.chartUrl = chartUrl;
@@ -601,6 +603,7 @@ Page {
         ReportParamsModel.setChartType(chartTitle);
         ReportParamsModel.setChartTitle(chartTitle);
         ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertyConfig));
+        console.log('Add Report Value',report_desiner_page.chartUrl, chartUrl);
         ReportParamsModel.setChartUrl(report_desiner_page.chartUrl);
         ReportParamsModel.setXAxisColumns(JSON.stringify(getAxisModelAsJson(Constants.xAxisName)));
         ReportParamsModel.setYAxisColumns(JSON.stringify(getAxisModelAsJson(Constants.yAxisName)));
