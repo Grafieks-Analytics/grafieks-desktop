@@ -187,7 +187,7 @@ Rectangle{
                         width: parent.width / 3 - 50
 
                         Text {
-                            text: ReportParamsModel.fetchIncludeExcludeMap(modelData)[0] === true ? "NOT " + ReportParamsModel.fetchFilterRelationMap(modelData)[0] : ReportParamsModel.fetchFilterRelationMap(modelData)[0]
+                            text: ReportParamsModel.fetchIncludeExcludeMap(modelData)[0] === true ? "NOT " + ReportParamsModel.fetchFilterSlugMap(modelData)[0] : ReportParamsModel.fetchFilterSlugMap(modelData)[0]
                             anchors.left: parent.left
                             leftPadding: 20
 

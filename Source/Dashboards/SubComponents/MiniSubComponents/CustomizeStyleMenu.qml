@@ -78,6 +78,9 @@ Rectangle{
             // Redrawing charts one by one;
             var instance = allReportInstances[reportIdValue]; 
             instance.reDrawChart();
+
+            // Here I need to know the type of graphs that are generated
+            // Or you will have to call the updated graph functions individually when I send an update graph signal
         }
     }
 
