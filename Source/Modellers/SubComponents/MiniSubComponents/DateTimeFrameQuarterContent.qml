@@ -192,7 +192,7 @@ Column{
         DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Last " + value + " Quarter")
         DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = true
@@ -278,7 +278,7 @@ Column{
         DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Next " + value + " Quarter")
         DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = true
         lastXRadioTextField.focus = false
@@ -339,7 +339,7 @@ Column{
         DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "This Quarter")
         DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -401,7 +401,7 @@ Column{
         DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Last Quarter")
         DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -464,7 +464,7 @@ Column{
         DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Next Quarter")
         DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false

@@ -204,7 +204,7 @@ Column{
         DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Last " + value + " Day")
         DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = true
@@ -307,7 +307,7 @@ Column{
         DSParamsModel.setActualDateValues(counter, finalValue.toString())
         DSParamsModel.addToJoinValue(counter, "Next " + value + " Day")
         DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = true
         lastXRadioTextField.focus = false
@@ -324,7 +324,7 @@ Column{
         DSParamsModel.setActualDateValues(counter, thisDay.toString())
         DSParamsModel.addToJoinValue(counter, "This Day")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.slugLikeRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -404,7 +404,7 @@ Column{
         DSParamsModel.setActualDateValues(counter, newValue.toString())
         DSParamsModel.addToJoinValue(counter, "Last Day")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.slugLikeRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -496,7 +496,7 @@ Column{
         DSParamsModel.setActualDateValues(counter, newValue.toString())
         DSParamsModel.addToJoinValue(counter, "Next Day")
         DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+        DSParamsModel.addToJoinRelationSlug(counter, Constants.slugLikeRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false

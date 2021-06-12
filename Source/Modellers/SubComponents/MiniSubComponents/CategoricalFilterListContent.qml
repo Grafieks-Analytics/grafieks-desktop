@@ -186,7 +186,7 @@ Rectangle{
         if(DSParamsModel.section === Constants.categoricalTab){
             DSParamsModel.addToJoinValue(counter, modelData.toString())
             DSParamsModel.addToJoinRelation(counter, Constants.equalRelation)
-            DSParamsModel.addToJoinRelationSlug(counter, Constants.equalRelation)
+            DSParamsModel.addToJoinRelationSlug(counter, Constants.slugEqualRelation)
 
             // Clear all tmp selected values and insert again
             DSParamsModel.removeTmpSelectedValues(0, true)
@@ -236,7 +236,7 @@ Rectangle{
                     DSParamsModel.setActualDateValues(counter, "%")
                     DSParamsModel.setSelectAllMap(counter, true)
                     DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-                    DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+                    DSParamsModel.addToJoinRelationSlug(counter, Constants.slugLikeRelation)
                 }
             }
         }
@@ -273,7 +273,7 @@ Rectangle{
 
                 DSParamsModel.addToJoinValue(counter, DSParamsModel.getTmpSelectedValues(0, true).toString())
                 DSParamsModel.addToJoinRelation(counter, Constants.inRelation)
-                DSParamsModel.addToJoinRelationSlug(counter, Constants.inRelation)
+                DSParamsModel.addToJoinRelationSlug(counter, Constants.slugInRelation)
             }
         }
     }

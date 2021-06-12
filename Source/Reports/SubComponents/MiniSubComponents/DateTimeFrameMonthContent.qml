@@ -156,7 +156,7 @@ Column{
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Last " + value + " Months")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = true
@@ -205,7 +205,7 @@ Column{
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Next " + value + " Months")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = true
         lastXRadioTextField.focus = false
@@ -235,7 +235,7 @@ Column{
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "This Month")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -273,7 +273,7 @@ Column{
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Last Month")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -311,7 +311,7 @@ Column{
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Next Month")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false

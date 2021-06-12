@@ -21,7 +21,7 @@ Rectangle{
     id: wildcardContent
     property bool listOpened: false
     property string selectOption: "Select Wildcard"
-    property var acceptedValues:["containing", "endswith", "equalto", "doesntstartwith", "doesntendwith", "notequalto"]
+    property var acceptedValues:["Containing", "Ends With", "Equal", "Doesnt Start With", "Doesnt End With", "Not Equal"]
 
     property string editRelation : ""
     property string editValue : ""
@@ -49,27 +49,27 @@ Rectangle{
 
         ListElement{
             menuItem:"Containing"
-            compareValue: "containing"
+            compareValue: "Containing"
         }
         ListElement{
             menuItem:"Ends With"
-            compareValue: "endswith"
+            compareValue: "Ends With"
         }
         ListElement{
             menuItem:"Equal To"
-            compareValue: "equalto"
+            compareValue: "Equal"
         }
         ListElement{
             menuItem:"Doesn't Start with"
-            compareValue: "doesntstartwith"
+            compareValue: "Doesnt Start With"
         }
         ListElement{
             menuItem:"Doesn't End with"
-            compareValue: "doesntendwith"
+            compareValue: "Doesnt End With"
         }
         ListElement{
             menuItem:"Not Equal to"
-            compareValue: "notequalto"
+            compareValue: "Not Equal"
         }
     }
 
@@ -164,7 +164,7 @@ Rectangle{
 
     Component.onCompleted: {
         wildcardDropdown.currentText = "Containing"
-        wildcardDropdown.currentValue = "containing"
+        wildcardDropdown.currentValue = "Containing"
 
         listviewWildCard.model = numModels
 

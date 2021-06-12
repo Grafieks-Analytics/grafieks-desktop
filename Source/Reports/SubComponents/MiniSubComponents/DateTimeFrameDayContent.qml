@@ -307,7 +307,7 @@ Column{
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Next " + value + " Day")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = true
         lastXRadioTextField.focus = false
@@ -324,7 +324,7 @@ Column{
         ReportParamsModel.setActualDateValues(counter, thisDay.toString())
         ReportParamsModel.addToFilterValueMap(counter, "This Day")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.likeRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugLikeRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -404,7 +404,7 @@ Column{
         ReportParamsModel.setActualDateValues(counter, newValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Last Day")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.likeRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugLikeRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -496,7 +496,7 @@ Column{
         ReportParamsModel.setActualDateValues(counter, newValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Next Day")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.likeRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugLikeRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
