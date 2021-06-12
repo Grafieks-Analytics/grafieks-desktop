@@ -78,7 +78,7 @@ Page {
     // Or Categorical Value is added on Y axis
     // On Change we update the graph title
     property bool isHorizontalGraph: false;
-    
+
     property var colorData:[];
 
     // Edit Report Flag
@@ -106,7 +106,7 @@ Page {
     ListModel{
         id: valuesListModel
     }
-    
+
     // Colur By Data Item List
     ListModel{
         id: dataItemList
@@ -210,7 +210,7 @@ Page {
 
         // Charts Mapping
         // Basically these are the basic configs
-        // Having Max Allowed Values for now 
+        // Having Max Allowed Values for now
         const chartDetailsConfig = allChartsMapping[chartTitle];
         const { maxDropOnXAxis, maxDropOnYAxis } = chartDetailsConfig || {maxDropOnXAxis: allowedXAxisDataPanes, maxDropOnYAxis: allowedYAxisDataPanes};
 
@@ -360,25 +360,32 @@ Page {
         reDrawChart();
     }
 
-    // On Edit => Redraw all the charts in Dashboard
+    // On Edit Redraw the updated chart
+    function reDrawDashboardChart(reportId){
+        console.log('Report Value? Re Draw DAshboard',reportId,'2',reportIdMain)
+        let reportInstance = ReportParamsModel.getDashboardReportInstance(reportIdMain);
+        reportInstance.reDrawChart();
+    }
+
+    // Redraw all the charts in Dashboard
     function reDrawAllDashboardCharts(){
         // Here are all the instances, Let's Redraw the charts
         let allReportInstances = ReportParamsModel.getAllDashboardReportInstances();
         for(var reportIdValue in allReportInstances){
             // Redrawing charts one by one;
-            var instance = allReportInstances[reportIdValue]; 
+            var instance = allReportInstances[reportIdValue];
             instance.reDrawChart();
         }
     }
 
 
     // Switch Chart Urls
-    // Whenever Chart is changed 
+    // Whenever Chart is changed
     // Perform these things
     // 1. Change the title
-    // 2. Change the URL 
+    // 2. Change the URL
     // 3. Update the webEngine URL
-    
+
     function switchChart(chartTitleValue){
         chartTitle = chartTitleValue;
         var chartUrl = '';
@@ -422,7 +429,7 @@ Page {
         }
         return columnsData;
     }
-    
+
 
     // function to get the columnName from model
     function getAxisColumnNames(axisName){
@@ -446,23 +453,23 @@ Page {
     }
 
     function clearAllChartValues(){
-        
+
         // Clear title and report id
         ReportParamsModel.setReportId(null);
         ReportParamsModel.setReportTitle(null);
         report_title_text.text = "";
         reportIdMain = "";
-        
+
         // Clear all the list models
         xAxisListModel.clear();
         yAxisListModel.clear();
         colorListModel.clear();
         valuesListModel.clear();
         dataItemList.clear();
-        
+
         // Clear property Config
         d3PropertyConfig = {};
-    
+
         // Clear general params
         lastPickedDataPaneElementProperties= {};
         reportDataPanes= {};  // Report Data Panes Object
@@ -473,7 +480,7 @@ Page {
         // Calling this redraw will clear the chart because no x and y columns will be available
         // [Tag: Optimization]
         // Check instead of reDraw if we can call only one function to clear the chart
-        // May be webengineview.runJs("call clearValues"); 
+        // May be webengineview.runJs("call clearValues");
         reDrawChart();
 
     }
@@ -550,7 +557,6 @@ Page {
 
     function addReport(){
         // Add report to dashboard
-        editReportFlag = false;
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
 
         if(!reportIdMain){
@@ -583,7 +589,7 @@ Page {
         ReportParamsModel.setColorByDataColoumns(JSON.stringify(colorByData));
 
         ReportParamsModel.addReport(reportIdMain);
-        
+
         chartTitle = Constants.barChartTitle;
         chartUrl = Constants.barChartUrl;
 
@@ -593,10 +599,13 @@ Page {
             console.log('Report List Data',reportId,reportList[reportId]);
         }
 
-        clearAllChartValues();
-        // On Edit => Redraw all the charts in Dashboard
-        reDrawAllDashboardCharts();
+        // On Edit => Redraw Only Updated chart in Dashboard
+        if(editReportFlag){
+            reDrawDashboardChart(reportIdMain);
+        }
+        editReportFlag = false;
         ReportParamsModel.setEditReportToggle(false);
+        clearAllChartValues();
     }
 
     function cancelReport(){
@@ -778,7 +787,7 @@ Page {
             case Constants.horizontalStackedBarChartTitle:
                 colorByColumnName = colorByData[0].columnName;
                 dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,xAxisColumns[0], yAxisColumns[0]);
-                
+
                 break;
             case Constants.stackedBarChartTitle:
                 console.log('Stacked bar chart!');
