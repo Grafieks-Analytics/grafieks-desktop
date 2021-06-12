@@ -863,6 +863,7 @@ QVariantMap DSParamsModel::fetchJoinRelation(int refObjId, bool fetchAll)
 void DSParamsModel::addToJoinValue(int refObjId, QString value)
 {
     this->joinValue.insert(QString::number(refObjId), value);
+    qDebug() << this->joinValue << "VALUES";
 }
 
 void DSParamsModel::removeJoinValue(int refObjId, bool removeAll)
@@ -894,6 +895,7 @@ QVariantMap DSParamsModel::fetchJoinValue(int refObjId, bool fetchAll)
     {
         output = this->joinValue;
     }
+
     return output;
 }
 

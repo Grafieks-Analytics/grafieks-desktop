@@ -75,7 +75,6 @@ Rectangle{
         target: QueryDataModel
 
         function onColumnListModelDataChanged(colData, options, searchMode){
-            console.log(DSParamsModel.section === Constants.dateTab, DSParamsModel.category, Constants.dateMainTimeFrameType, "CONOS")
 
             if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainTimeFrameType ){
 
@@ -84,8 +83,6 @@ Rectangle{
                 var relation = jsonOptions.relation
                 var slug = jsonOptions.slug
                 var value = jsonOptions.values
-
-                console.log(subCategory, relation, slug, value, "JSON DATA")
 
                 if(subCategory.toLowerCase() === "day"){
                     onDayTabClicked()

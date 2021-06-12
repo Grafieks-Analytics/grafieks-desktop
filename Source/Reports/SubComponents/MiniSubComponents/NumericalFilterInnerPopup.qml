@@ -106,7 +106,15 @@ Rectangle{
                 var colData = ReportParamsModel.fetchFilterValueMap(counter)[counter]
                 var slug = ReportParamsModel.fetchFilterSlugMap(counter)
 
-                textField.text = colData[0]
+                if(slug === Constants.slugBetweenRelation){
+
+                    var splitValues = colData[0].split(" And ")
+                    textField.text = splitValues[0]
+                    textField2nd.text = splitValues[1]
+                } else{
+                    textField.text = colData[0]
+                }
+
                 selectOption.textValue = slug[0]
 
                 ReportParamsModel.addToIncludeExcludeMap(counter, false)

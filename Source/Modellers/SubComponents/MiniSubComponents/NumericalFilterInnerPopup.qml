@@ -111,8 +111,18 @@ Rectangle{
             var jsonOptions = JSON.parse(options)
 
             if(DSParamsModel.section === Constants.numericalTab){
+
+                if(jsonOptions.slug === Constants.slugBetweenRelation){
+
+                    var splitValues = jsonOptions.values.split(" And ")
+                    textField.text = splitValues[0]
+                    textField2nd.text = splitValues[1]
+                } else{
+                    textField.text = jsonOptions.values
+                }
+
                 selectOption.textValue = jsonOptions.slug
-                textField.text = jsonOptions.values
+
             }
         }
     }

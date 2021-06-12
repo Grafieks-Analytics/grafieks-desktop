@@ -131,7 +131,7 @@ Rectangle{
         // Filter Index is used for new inserts
         // When a new insert is called, its id is set as Filter Index
         function onFilterIndexChanged(){
-                counter = DSParamsModel.filterIndex
+            counter = DSParamsModel.filterIndex
 
         }
     }
@@ -164,6 +164,7 @@ Rectangle{
                 selectedFormat = DSParamsModel.getDateFormatMap(counter)
                 customBox.currentIndex = selectedFormat
 
+
                 convertDate(colData)
                 var jsonOptions = JSON.parse(options)
 
@@ -176,6 +177,10 @@ Rectangle{
 
                         if(jsonOptions.values.length > 0){
                             if(jsonOptions.values === "%"){
+                                masterColData.forEach((item) => {
+                                                          DSParamsModel.setTmpSelectedValues(item[selectedFormat])
+                                                      })
+
                             } else{
                                 var checkedValues = jsonOptions.values.split(",")
                                 checkedValues.forEach((item) => {

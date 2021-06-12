@@ -91,6 +91,8 @@ Rectangle{
 
         function onColumnListModelDataChanged(colData, options, searchMode){
 
+            console.log(JSON.stringify(options), "OPTIONSSS")
+
             if(DSParamsModel.section === Constants.categoricalTab){
                 // Just to reset the data if the previous `colData` and the new `colData` are same
                 singleSelectCheckList.model = []
@@ -109,10 +111,18 @@ Rectangle{
                     singleSelectCheckList.visible = false
 
                     if(jsonOptions.values.length > 0){
-                        var checkedValues = jsonOptions.values.split(",")
-                        checkedValues.forEach((item) => {
-                                                  DSParamsModel.setTmpSelectedValues(item)
-                                              })
+
+                        if(jsonOptions.values === "%"){
+                            colData.forEach((item) => {
+                                                DSParamsModel.setTmpSelectedValues(item)
+                                            })
+                        } else{
+
+                            var checkedValues = jsonOptions.values.split(",")
+                            checkedValues.forEach((item) => {
+                                                      DSParamsModel.setTmpSelectedValues(item)
+                                                  })
+                        }
                     }
 
                 } else{
