@@ -188,6 +188,7 @@ Column{
         var finalValue = lastXQuarter[0] + "," + lastXQuarter[lastXQuarter.length - 1]
 
         console.log("Last "+ noOfQuarter + " Quarters", lastXQuarter[0], lastXQuarter[lastXQuarter.length - 1])
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubQuarter)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Last " + value + " Quarter")
@@ -274,6 +275,7 @@ Column{
         var finalValue = nextXQuarter[0] + "," + nextXQuarter[nextXQuarter.length - 1]
 
         console.log("Next "+ noOfQuarter + " Quarters", nextXQuarter[0], nextXQuarter[nextXQuarter.length - 1])
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubQuarter)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Next " + value + " Quarter")
@@ -335,6 +337,7 @@ Column{
         var finalValue = thisQuarter[0] + "," + thisQuarter[thisQuarter.length - 1]
 
         console.log("This Quarter", thisQuarter[0], thisQuarter[thisQuarter.length - 1])
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubQuarter)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "This Quarter")
@@ -397,6 +400,7 @@ Column{
         var finalValue = lastQuarter[0] + "," + lastQuarter[lastQuarter.length - 1]
 
         console.log("Last Quarter", lastQuarter[0], lastQuarter[lastQuarter.length - 1])
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubQuarter)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Last Quarter")
@@ -460,6 +464,7 @@ Column{
         var finalValue = nextQuarter[0] + "," + nextQuarter[nextQuarter.length - 1]
 
         console.log("Next Quarter", nextQuarter[0], nextQuarter[nextQuarter.length - 1])
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubQuarter)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Next Quarter")

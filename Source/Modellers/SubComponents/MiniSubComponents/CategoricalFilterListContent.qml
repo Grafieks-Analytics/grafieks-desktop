@@ -496,7 +496,6 @@ Rectangle{
                             target: DSParamsModel
                             function onTmpSelectedValuesChanged(values){
                                 if(DSParamsModel.mode === Constants.modeEdit && DSParamsModel.category === Constants.categoryMainListType && DSParamsModel.subCategory === Constants.categorySubMulti){
-                                    console.log(DSParamsModel.mode === Constants.modeEdit, DSParamsModel.category === Constants.categoryMainListType, DSParamsModel.subCategory === Constants.categorySubMulti)
                                     modelCheckBoxes.checked = values.indexOf(modelCheckBoxes.objectName) >= 0 ? true: false
                                 }
                             }
@@ -564,7 +563,6 @@ Rectangle{
                             target: DSParamsModel
                             function onTmpSelectedValuesChanged(values){
                                 if(DSParamsModel.mode === Constants.modeEdit && DSParamsModel.category === Constants.categoryMainListType && DSParamsModel.subCategory === Constants.categorySubSingle){
-                                    console.log(DSParamsModel.mode === Constants.modeEdit, DSParamsModel.category === Constants.categoryMainListType, DSParamsModel.subCategory === Constants.categorySubSingle)
                                     modelRadioButton.checked = values[0] === modelRadioButton.objectName ? true: false
                                 }
                             }

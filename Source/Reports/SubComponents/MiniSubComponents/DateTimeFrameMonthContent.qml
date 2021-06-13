@@ -152,6 +152,7 @@ Column{
         var finalValue = firstValue + "," + lastXMonths[lastXMonths.length - 1]
 
         console.log("Last " + value + " Months", lastXMonths.toString())
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubMonth)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Last " + value + " Months")
@@ -201,6 +202,7 @@ Column{
         var finalValue = firstValue + "," + nextXMonths[nextXMonths.length - 1]
 
         console.log("Next " + value + " Month", nextXMonths.toString())
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubMonth)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Next " + value + " Months")
@@ -231,6 +233,7 @@ Column{
         var finalValue = firstValue + "," + newValue
 
         console.log("This Month", newValue)
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubMonth)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "This Month")
@@ -269,6 +272,7 @@ Column{
         var finalValue = firstValue + "," + newValue
 
         console.log("Last Month", newValue)
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubMonth)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Last Month")
@@ -307,6 +311,7 @@ Column{
         var finalValue = firstValue + "," + newValue
 
         console.log("Next Month", newValue)
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubMonth)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Next Month")

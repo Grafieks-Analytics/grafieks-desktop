@@ -83,7 +83,6 @@ Rectangle{
 
             if(options !== ""){
                 var jsonOptions = JSON.parse(options)
-                console.log(JSON.stringify(options), "OPITIONSS",ReportParamsModel.section === Constants.dateTab, ReportParamsModel.category === Constants.dateMainCalendarType )
                 if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainCalendarType){
 
                     if(jsonOptions.values.length > 0){

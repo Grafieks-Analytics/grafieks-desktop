@@ -76,7 +76,7 @@ Rectangle{
 
         function onColumnDataChanged(columnData, options){
 
-            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainTimeFrameType ){
+            if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainTimeFrameType ){
 
                 var jsonOptions = JSON.parse(options)
                 var subCategory = jsonOptions.subCategory
