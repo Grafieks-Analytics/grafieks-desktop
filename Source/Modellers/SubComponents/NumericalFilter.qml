@@ -110,7 +110,6 @@ Popup {
 
     function closePopup(){
         numericalFilterPopup.visible = false
-        DSParamsModel.clearFilter()
     }
 
     function onCancelClicked(){
