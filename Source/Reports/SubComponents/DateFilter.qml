@@ -220,6 +220,8 @@ Popup {
             ReportParamsModel.addToFilterColumnMap(counter, columnName)
             ReportParamsModel.addToDateFilters(counter)
 
+            console.log("INSERT DATE", section, category, subCategory)
+
             manageFilters(ReportParamsModel.mode, counter, ReportParamsModel.filterModelIndex)
 
             break
@@ -257,8 +259,6 @@ Popup {
         // For list date type
         // The db WHERE relation can only be LIKE / NOT LIKE ARRAY type
 
-        //        ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
-        //        ReportParamsModel.addToFilterSlugMap(counter, Constants.likeRelation)
     }
     function onCalendarClicked(){
         listContent.visible = false
@@ -266,8 +266,6 @@ Popup {
         dateTimeFrameContent.visible = false
 
         ReportParamsModel.setCategory(Constants.dateMainCalendarType)
-        //        ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
-        //        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
     }
 
     function onTimeFrameClicked(){
@@ -277,8 +275,6 @@ Popup {
 
 
         ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
-        //        ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
-        //        ReportParamsModel.addToFilterSlugMap(filterIncounterdex, Constants.likeRelation)
     }
 
 

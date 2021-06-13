@@ -128,6 +128,7 @@ Rectangle{
                 var colName = ReportParamsModel.colName
                 var colData = ChartsModel.fetchColumnData(colName)
                 var values = ReportParamsModel.fetchFilterValueMap(counter)[counter]
+                ReportParamsModel.removeTmpSelectedValues(0, true)
 
                 // Just to reset the data if the previous `colData` and the new `colData` are same
                 singleSelectCheckList.model = []
@@ -135,6 +136,10 @@ Rectangle{
 
                 singleSelectCheckList.model = colData
                 multiSelectCheckList.model  = colData
+
+                // Date format
+                selectedFormat = ReportParamsModel.getDateFormatMap(counter)
+                customBox.currentIndex = selectedFormat
 
                 convertDate(colData)
 
@@ -144,13 +149,14 @@ Rectangle{
                     multiSelectCheckList.visible = true
                     singleSelectCheckList.visible = false
 
-                    if(values === "%"){
+                    console.log(values[0], "VALUES 0")
+                    if(values[0] === "%"){
                         masterColData.forEach((item) => {
                                                   ReportParamsModel.setTmpSelectedValues(item[selectedFormat])
                                               })
 
                     } else{
-                        var checkedValues = values.split(",")
+                        var checkedValues = values[0].split(",")
                         checkedValues.forEach((item) => {
                                                   ReportParamsModel.setTmpSelectedValues(item)
                                               })
@@ -161,6 +167,9 @@ Rectangle{
                     multiSelectCheckList.visible = false
                     singleSelectCheckList.visible = true
 
+                    if(ReportParamsModel.searchTmpSelectedValues(values) < 0){
+                        ReportParamsModel.setTmpSelectedValues(values)
+                    }
                 }
             }
         }
@@ -311,14 +320,16 @@ Rectangle{
                     }
                 }
 
-                var actualValueArray = []
-                ReportParamsModel.getTmpSelectedValues(0, true).forEach((item)  => {
-                                                                            actualValueArray.push(searchDateFormat(item, selectedFormat))
-                                                                        })
-                ReportParamsModel.setActualDateValues(counter, actualValueArray)
-                ReportParamsModel.addToFilterValueMap(counter, ReportParamsModel.getTmpSelectedValues(0, true).toString())
-                ReportParamsModel.addToFilterRelationMap(counter, Constants.inRelation)
-                ReportParamsModel.addToFilterSlugMap(counter, Constants.slugInRelation)
+                if(ReportParamsModel.getTmpSelectedValues(0, true).toString() !== ""){
+                    var actualValueArray = []
+                    ReportParamsModel.getTmpSelectedValues(0, true).forEach((item)  => {
+                                                                                actualValueArray.push(searchDateFormat(item, selectedFormat))
+                                                                            })
+                    ReportParamsModel.setActualDateValues(counter, actualValueArray)
+                    ReportParamsModel.addToFilterValueMap(counter, ReportParamsModel.getTmpSelectedValues(0, true).toString())
+                    ReportParamsModel.addToFilterRelationMap(counter, Constants.inRelation)
+                    ReportParamsModel.addToFilterSlugMap(counter, Constants.slugInRelation)
+                }
             }
         }
     }
@@ -616,10 +627,9 @@ Rectangle{
 
         CheckBoxTpl {
             id: mainCheckBox
-            checked: ReportParamsModel.fetchSelectAllMap(counter)[counter] === "1" ? true : false
+            checked: ReportParamsModel.fetchSelectAllMap(counter)[0] === true ? true : false
             text: "All"
             parent_dimension: Constants.defaultCheckBoxDimension
-            checkState: childGroup.checkState
 
             onCheckedChanged: {
                 onAllCheckBoxCheckedChanged(checked)
@@ -627,7 +637,6 @@ Rectangle{
         }
         ListView {
             id: multiSelectCheckList
-            model: ColumnListModel
             height: parent.height-38
             width: parent.width
 
@@ -642,7 +651,6 @@ Rectangle{
                 height:20
                 CheckBoxTpl {
                     id: modelCheckBoxes
-                    checked: false
                     y:2
                     text  : modelData
                     objectName: modelData
@@ -663,23 +671,10 @@ Rectangle{
                     // On edit, highlight the selected option
 
                     Connections{
-                        target: ChartsModel
-                        function onColumnDataChanged(columnData, options){
+                        target: ReportParamsModel
+                        function onTmpSelectedValuesChanged(values){
                             if(ReportParamsModel.mode === Constants.modeEdit && ReportParamsModel.category === Constants.dateMainListType && ReportParamsModel.subCategory === Constants.categorySubMulti){
-                                if(options !== ""){
-                                    var JSONValues = JSON.parse(options)
-                                    var selectedValues = []
-
-                                    JSONValues.values.forEach(item => {
-                                                                  selectedValues = item.split(",")
-                                                              })
-
-                                    if(selectedValues[0] === "%"){
-                                        modelCheckBoxes.checked = true
-                                    } else{
-                                        modelCheckBoxes.checked = selectedValues.indexOf(modelCheckBoxes.objectName) >= 0 ? true: false
-                                    }
-                                }
+                                modelCheckBoxes.checked = values.indexOf(modelCheckBoxes.objectName) >= 0 ? true: false
                             }
                         }
                     }
@@ -739,20 +734,11 @@ Rectangle{
                         }
 
                         // On edit, highlight the selected option
-
                         Connections{
-                            target: ChartsModel
-                            function onColumnDataChanged(columnData, options){
+                            target: ReportParamsModel
+                            function onTmpSelectedValuesChanged(values){
                                 if(ReportParamsModel.mode === Constants.modeEdit && ReportParamsModel.category === Constants.dateMainListType && ReportParamsModel.subCategory === Constants.categorySubSingle){
-                                    if(options !== ""){
-                                        var JSONValues = JSON.parse(options)
-                                        var selectedValues = []
-
-                                        JSONValues.values.forEach(item => {
-                                                                      selectedValues = item.split(",")
-                                                                  })
-                                        modelRadioButton.checked = selectedValues.indexOf(modelRadioButton.objectName) >= 0 ? true: false
-                                    }
+                                    modelRadioButton.checked = values[0] === modelRadioButton.objectName ? true: false
                                 }
                             }
                         }
