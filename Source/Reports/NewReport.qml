@@ -334,6 +334,7 @@ Page {
     function clearValuesOnAddNewReport(){
         console.log('Okay! Let me clear');
         clearAllChartValues();
+        switchChart(Constants.barChartTitle);
     }
 
     function setValuesOnEditReport(){
@@ -362,7 +363,6 @@ Page {
         report_desiner_page.d3PropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
         report_desiner_page.colorByData = JSON.parse(reportProperties.colorByDataColoumns);
 
-        switchChart(reportProperties.chartTitle);
         reDrawChart();
     }
 
@@ -620,6 +620,7 @@ Page {
             console.log('Report List Data',reportId,reportList[reportId]);
         }
 
+        
         // On Edit => Redraw Only Updated chart in Dashboard
         if(editReportFlag){
             reDrawDashboardChart(reportIdMain);
@@ -627,6 +628,7 @@ Page {
         editReportFlag = false;
         ReportParamsModel.setEditReportToggle(false);
         clearAllChartValues();
+        switchChart(barChartTitle);
     }
 
     function cancelReport(){
@@ -927,7 +929,7 @@ Page {
            //    need to initialise only once
            console.log('Starting to plot');
            // console.log('Data Values',dataValues);
-           console.log('Chart Url',report_desiner_page.chartUrl, webEngineView.url)
+           console.log('Chart Url', report_desiner_page.chartUrl, webEngineView.url)
 
            var scriptValue = 'window.addEventListener("resize", function () {
                     d3.selectAll("#my_dataviz").html("");
