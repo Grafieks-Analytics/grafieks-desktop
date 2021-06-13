@@ -138,6 +138,9 @@
         }
 
         function drawChart(data, plottingConfiguration = {}) {
+            if (!redrawn) {
+                extraHeight = 0;
+            }
             window.data = data;
 
             var timeFormat = d3.timeFormat("%m-%Y");

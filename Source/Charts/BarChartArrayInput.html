@@ -59,11 +59,14 @@
             // ];
 
             // prettier-ignore
-            // var data = [[["NepalDist1","NepalDist2","East","West","North","South","Bongaigaon","Kokrajhar","NOIDA","Lucknow","Thi1","D1"],[2121,443,1121,4243,210,4415,2010,222,-12,-624,11053,10]],["district","population"]];
+            var data = [[["NepalDist1","NepalDist2","East","West","North","South","Bongaigaon","Kokrajhar","NOIDA","Lucknow","Thi1","D1"],[2121,443,1121,4243,210,4415,2010,222,-12,-624,11053,10]],["district","population"]];
 
-            // drawChart(data);
+            drawChart(data);
 
             function drawChart(data, plottingConfiguration = {}) {
+                if (!redrawn) {
+                    extraHeight = 0;
+                }
                 window.data = data;
                 dataValues = data[0];
 
