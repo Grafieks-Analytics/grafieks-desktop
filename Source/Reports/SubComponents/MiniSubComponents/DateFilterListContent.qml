@@ -127,6 +127,7 @@ Rectangle{
                 counter = ReportParamsModel.filterIndex
                 var colName = ReportParamsModel.colName
                 var colData = ChartsModel.fetchColumnData(colName)
+                var values = ReportParamsModel.fetchFilterValueMap(counter)[counter]
 
                 // Just to reset the data if the previous `colData` and the new `colData` are same
                 singleSelectCheckList.model = []
@@ -142,6 +143,18 @@ Rectangle{
 
                     multiSelectCheckList.visible = true
                     singleSelectCheckList.visible = false
+
+                    if(values === "%"){
+                        masterColData.forEach((item) => {
+                                                  ReportParamsModel.setTmpSelectedValues(item[selectedFormat])
+                                              })
+
+                    } else{
+                        var checkedValues = values.split(",")
+                        checkedValues.forEach((item) => {
+                                                  ReportParamsModel.setTmpSelectedValues(item)
+                                              })
+                    }
                 } else{
                     singleSelectRadio.checked = true
 

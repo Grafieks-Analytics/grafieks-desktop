@@ -32,6 +32,8 @@ Rectangle{
     border.color: Constants.darkThemeColor
     visible: false
     property int counter: 0
+    property var date1: ""
+    property var date2: ""
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -63,14 +65,38 @@ Rectangle{
             ReportParamsModel.addToIncludeNullMap(counter, true)
         }
 
-//        function onInternalCounterChanged(){
-//            if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainCalendarType){
-//                counter = ReportParamsModel.internalCounter
-//            }
-//        }
+        //        function onInternalCounterChanged(){
+        //            if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainCalendarType){
+        //                counter = ReportParamsModel.internalCounter
+        //            }
+        //        }
 
         function onFilterIndexChanged(){
             counter = ReportParamsModel.filterIndex
+        }
+    }
+
+    Connections{
+        target: ChartsModel
+
+        function onColumnDataChanged(columnData, options){
+
+            if(options !== ""){
+                var jsonOptions = JSON.parse(options)
+                console.log(JSON.stringify(options), "OPITIONSS",ReportParamsModel.section === Constants.dateTab, ReportParamsModel.category === Constants.dateMainCalendarType )
+                if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainCalendarType){
+
+                    if(jsonOptions.values.length > 0){
+
+                        var newDates = jsonOptions.values[0].split(",")
+                        date1 = newDates[0]
+                        date2 = newDates[1]
+
+                        fromDateInput.text = date1
+                        toDateInput.text = date2
+                    }
+                }
+            }
         }
     }
 

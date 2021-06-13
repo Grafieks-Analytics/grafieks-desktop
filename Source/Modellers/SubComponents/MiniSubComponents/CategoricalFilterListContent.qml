@@ -91,8 +91,6 @@ Rectangle{
 
         function onColumnListModelDataChanged(colData, options, searchMode){
 
-            console.log(JSON.stringify(options), "OPTIONSSS")
-
             if(DSParamsModel.section === Constants.categoricalTab){
                 // Just to reset the data if the previous `colData` and the new `colData` are same
                 singleSelectCheckList.model = []

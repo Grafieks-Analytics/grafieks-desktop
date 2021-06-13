@@ -83,6 +83,7 @@ Rectangle{
         function onColumnListModelDataChanged(colData, options){
 
             var jsonOptions = JSON.parse(options)
+            console.log(JSON.parse(options))
             if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainCalendarType){
 
                 var newDates = jsonOptions.values.split(",")
@@ -375,7 +376,7 @@ Rectangle{
         anchors.leftMargin: 20
 
         CheckBoxTpl {
-            checked: DSParamsModel.getIncludeNullMap(counter)
+            checked: DSParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
             text: qsTr("Include Null")
             parent_dimension: Constants.defaultCheckBoxDimension
 
@@ -393,7 +394,7 @@ Rectangle{
         anchors.rightMargin: 20
 
         CheckBoxTpl {
-            checked: DSParamsModel.getExcludeMap(counter)
+            checked: DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
             text: qsTr("Exclude")
             parent_dimension: Constants.defaultCheckBoxDimension
 

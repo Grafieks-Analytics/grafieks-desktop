@@ -209,13 +209,10 @@ Rectangle{
 
     }
 
-    function onExludeCheckStateChanged(checked){
-        DSParamsModel.setExcludeMap(checked)
-    }
 
 
     function onIncludeCheckStateChanged(checked){
-        DSParamsModel.setIncludeNullMap(checked)
+        DSParamsModel.setIncludeNullMap(counter, checked)
     }
 
 
@@ -250,6 +247,7 @@ Rectangle{
 
         color: "transparent"
 
+        /******************* DO NOT DELETE *********************
         Column{
 
             id: addnumerical
@@ -262,7 +260,8 @@ Rectangle{
             anchors.verticalCenter: parent.verticalAlignment
 
             CheckBoxTpl {
-                checked: DSParamsModel.includeNull
+                id: checkedIncludeNull
+                checked: DSParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
                 parent_dimension: Constants.defaultCheckBoxDimension
                 text: qsTr("Include Null")
                 indicator.width: 15
@@ -276,7 +275,7 @@ Rectangle{
 
         }
 
-        /******************* DO NOT DELETE *********************
+
         Column{
             id: singleSelectRadioColumn
 

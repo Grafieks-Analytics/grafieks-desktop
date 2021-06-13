@@ -87,42 +87,43 @@ Popup {
 
         function onColumnDataChanged(columData, options){
 
-            var jsonOptions = JSON.parse(options)
+            if(options !== ""){
+                var jsonOptions = JSON.parse(options)
 
-            if(jsonOptions.section === Constants.dateTab){
+                if(jsonOptions.section === Constants.dateTab){
 
-                switch(jsonOptions.category){
-                case Constants.dateMainListType:
+                    switch(jsonOptions.category){
+                    case Constants.dateMainListType:
 
-                    listContent.visible = true
-                    calendarContent.visible = false
-                    dateTimeFrameContent.visible = false
+                        listContent.visible = true
+                        calendarContent.visible = false
+                        dateTimeFrameContent.visible = false
 
-                    listRadio.checked = true
+                        listRadio.checked = true
 
-                    break
+                        break
 
-                case Constants.dateMainCalendarType:
+                    case Constants.dateMainCalendarType:
 
-                    listContent.visible = false
-                    calendarContent.visible = true
-                    dateTimeFrameContent.visible = false
+                        listContent.visible = false
+                        calendarContent.visible = true
+                        dateTimeFrameContent.visible = false
 
-                    dateRadio.checked = true
+                        dateRadio.checked = true
 
-                    break
+                        break
 
-                case Constants.dateMainTimeFrameType:
+                    case Constants.dateMainTimeFrameType:
 
-                    listContent.visible = false
-                    calendarContent.visible = false
-                    dateTimeFrameContent.visible = true
+                        listContent.visible = false
+                        calendarContent.visible = false
+                        dateTimeFrameContent.visible = true
 
-                    topRadio.checked = true
+                        topRadio.checked = true
 
-                    break
+                        break
+                    }
                 }
-
             }
         }
     }
@@ -256,8 +257,8 @@ Popup {
         // For list date type
         // The db WHERE relation can only be LIKE / NOT LIKE ARRAY type
 
-//        ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
-//        ReportParamsModel.addToFilterSlugMap(counter, Constants.likeRelation)
+        //        ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
+        //        ReportParamsModel.addToFilterSlugMap(counter, Constants.likeRelation)
     }
     function onCalendarClicked(){
         listContent.visible = false
@@ -265,8 +266,8 @@ Popup {
         dateTimeFrameContent.visible = false
 
         ReportParamsModel.setCategory(Constants.dateMainCalendarType)
-//        ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
-//        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
+        //        ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
+        //        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
     }
 
     function onTimeFrameClicked(){
@@ -276,8 +277,8 @@ Popup {
 
 
         ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
-//        ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
-//        ReportParamsModel.addToFilterSlugMap(filterIncounterdex, Constants.likeRelation)
+        //        ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
+        //        ReportParamsModel.addToFilterSlugMap(filterIncounterdex, Constants.likeRelation)
     }
 
 
