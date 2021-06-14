@@ -58,9 +58,15 @@
             //     ["value 1", "value 2Z"],
             // ];
 
-            // drawChart(data);
+            // prettier-ignore
+            var data = [[["NepalDist1","NepalDist2","East","West","North","South","Bongaigaon","Kokrajhar","NOIDA","Lucknow","Thi1","D1"],[2121,443,1121,4243,210,4415,2010,222,-12,-624,11053,10]],["district","population"]];
+
+            drawChart(data);
 
             function drawChart(data, plottingConfiguration = {}) {
+                if (!redrawn) {
+                    extraHeight = 0;
+                }
                 window.data = data;
                 dataValues = data[0];
 
@@ -199,7 +205,8 @@
                     };
                 }
 
-                var margin = { top: 40, right: 20, bottom: 80, left: 70 };
+                const { top, right, bottom, left } = constants.chartMargins;
+                var margin = { top, right, bottom, left };
                 var width = window.innerWidth - margin.left - margin.right;
 
                 var xAxisDataSet = dataValues[0];
@@ -479,56 +486,74 @@
                         .attr("y", "0");
                 }
 
-                a = document.querySelectorAll(".x-axis text");
+                // Remove Text in case they are large in number
+                var allXAxisTexts = document.querySelectorAll(".x-axis text");
                 var textWidth =
                     document.querySelector(".x-axis .tick text") &&
                     document.querySelector(".x-axis .tick text").getBBox()
                         .height;
 
                 if (chartType == constants.chartType.FIT_WIDTH) {
-                    for (var i = 0; i < a.length; i++) {
+                    for (var i = 0; i < allXAxisTexts.length; i++) {
                         if (!Math.floor(data[0][0].length * 0.02)) {
                             break;
                         }
+
                         if (i % Math.floor(data[0][0].length * 0.04) != 0) {
-                            a[i].remove();
+                            allXAxisTexts[i].remove();
                             continue;
                         }
+                    }
+                }
 
-                        if (a[i].innerHTML && a[i].innerHTML) {
+                if (chartType === constants.chartType.FIT_WIDTH) {
+                    var allXAxisTexts =
+                        document.querySelectorAll(".x-axis text");
+                    for (var i = 0; i < allXAxisTexts.length; i++) {
+                        if (
+                            allXAxisTexts[i].innerHTML &&
+                            allXAxisTexts[i].innerHTML
+                        ) {
                             var singleCharacterLength =
-                                a[i].getBBox().width / a[i].innerHTML.length;
+                                allXAxisTexts[i].getBBox().width /
+                                allXAxisTexts[i].innerHTML.length;
 
                             var numOfCharacters =
-                                extraHeight / singleCharacterLength;
+                                (extraHeight
+                                    ? extraHeight
+                                    : xScale.bandwidth()) /
+                                singleCharacterLength;
 
                             if (
-                                a[i].innerHTML &&
-                                a[i].innerHTML.length > numOfCharacters
+                                allXAxisTexts[i].innerHTML &&
+                                allXAxisTexts[i].innerHTML.length >
+                                    numOfCharacters
                             ) {
-                                if (Math.floor(numOfCharacters) > 3) {
-                                    console.log(a[i].innerHTML);
-                                    a[i].innerHTML =
-                                        (a[i].innerHTML &&
-                                            a[i].innerHTML.substr(
+                                if (Math.ceil(numOfCharacters) > 3) {
+                                    console.log(allXAxisTexts[i].innerHTML);
+                                    allXAxisTexts[i].innerHTML =
+                                        (allXAxisTexts[i].innerHTML &&
+                                            allXAxisTexts[i].innerHTML.substr(
                                                 0,
                                                 numOfCharacters - 3
                                             )) + "...";
                                 } else {
-                                    a[i].innerHTML =
-                                        (a[i].innerHTML &&
-                                            a[i].innerHTML.substr(0, 2)) +
-                                        "...";
+                                    allXAxisTexts[i].innerHTML =
+                                        (allXAxisTexts[i].innerHTML &&
+                                            allXAxisTexts[i].innerHTML.substr(
+                                                0,
+                                                2
+                                            )) + "...";
                                 }
                             }
                         }
 
                         if (i == 0 && barWidth < textWidth * 0.5) {
-                            a[i].setAttribute("dy", "1em");
+                            allXAxisTexts[i].setAttribute("dy", "1em");
                             continue;
                         }
                         if (barWidth < textWidth * 0.5) {
-                            a[i].setAttribute("dy", "0.8em");
+                            allXAxisTexts[i].setAttribute("dy", "0.8em");
                         }
                     }
                 }
