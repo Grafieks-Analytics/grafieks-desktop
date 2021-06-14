@@ -78,6 +78,10 @@ QVariant ReportParamsModel::getAllDashboardReportInstances()
     return this->dashboardReportInstances;
 }
 
+QString ReportParamsModel::editReportToggle() const
+{
+    return m_editReportToggle;
+}
 
 QString ReportParamsModel::chartTitle() const
 {
@@ -943,6 +947,15 @@ void ReportParamsModel::setFilterModelIndex(int filterModelIndex)
 
     m_filterModelIndex = filterModelIndex;
     emit filterModelIndexChanged(m_filterModelIndex);
+}
+
+void ReportParamsModel::setEditReportToggle(QString editReportToggle)
+{
+    if (m_editReportToggle == editReportToggle)
+        return;
+
+    m_editReportToggle = editReportToggle;
+    emit editReportToggleChanged(m_editReportToggle);
 }
 
 QVariantMap ReportParamsModel::insertMasterFilters(int filterId)

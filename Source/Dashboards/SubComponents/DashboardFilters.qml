@@ -27,6 +27,7 @@ Item {
     anchors.leftMargin: 3
 
 
+
     function hideColumn(){
         DashboardParamsModel.hideAllDashboardRight()
     }
@@ -36,6 +37,7 @@ Item {
      height:parent.height
      width:200
      color: "white"
+     y:5
 
     Rectangle{
         id: show_filter

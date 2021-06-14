@@ -9,7 +9,7 @@ import "./MiniSubComponents"
 Item {
 
     id: dashboard_filter_add
-    width:200
+    width:parent.width
     height:parent.height
 
 
@@ -71,6 +71,7 @@ Item {
             id: filter_cancel_btn
             text: "Cancel"
             onClicked: hideColumn()
+
 
             background: Rectangle {
                 id: filter_cancel_btn_background
@@ -166,15 +167,15 @@ Item {
         width: parent.width - 15
         anchors.top: filterSearch.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.margins: 5
+//        anchors.margins: 5
     }
 
 
     Column {
-        spacing: 5
+//        spacing: 5
         anchors.top: toolsep4.top
         width: parent.width
-        anchors.topMargin: 4
+//        anchors.topMargin: 4
         height: parent.height-add_filter.height-filterSearch.height-20
 
         Rectangle {
@@ -182,10 +183,10 @@ Item {
             width: parent.width
             anchors.topMargin: 0
             anchors.left: parent.left
-            anchors.leftMargin: 5
-            height:  parent.height/3-20
+            anchors.leftMargin: 4
+            height:  parent.height/3-10
             color: "white"
-            border.color: Constants.darkThemeColor
+//            border.color: Constants.darkThemeColor
 
             Rectangle{
                 id:categoricalCheckboxesRect
@@ -225,10 +226,10 @@ Item {
             width: parent.width
             anchors.topMargin: 0
             anchors.left: parent.left
-            anchors.leftMargin: 5
-            height:  parent.height/3-20
+            anchors.leftMargin: 4
+            height:  parent.height/3-10
             color: "white"
-            border.color: Constants.darkThemeColor
+//            border.color: Constants.darkThemeColor
 
             Rectangle{
                 id:dataTypeNumericalRect
@@ -268,11 +269,12 @@ Item {
             width: parent.width
             anchors.topMargin: 0
             anchors.left: parent.left
-            anchors.leftMargin: 5
-            height:  parent.height/3-20
+            anchors.leftMargin: 4
+            height:  parent.height/3-10
             color: "white"
-            border.color: Constants.darkThemeColor
+//            border.color: Constants.darkThemeColor
             Rectangle{
+                id:dataTypeDateRect
                 height: 25
                 width: parent.width
                 color: Constants.themeColor
@@ -299,7 +301,7 @@ Item {
 
             DateList{
                 id: dateCheckboxes
-                anchors.top: dataTypeDate.bottom
+                anchors.top: dataTypeDateRect.bottom
                 anchors.topMargin: 5
                 anchors.left: parent.left
                 anchors.leftMargin: 10
