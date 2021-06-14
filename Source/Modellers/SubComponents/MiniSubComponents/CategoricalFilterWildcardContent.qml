@@ -21,7 +21,7 @@ Rectangle{
     id: wildcardContent
     property bool listOpened: false
     property string selectOption: "Select Wildcard"
-    property var acceptedValues:["containing", "endswith", "equalto", "doesntstartwith", "doesntendwith", "notequalto"]
+    property var acceptedValues:["Containing", "Ends With", "Equal", "Doesnt Start With", "Doesnt End With", "Not Equal"]
 
     property string editRelation : ""
     property string editValue : ""
@@ -49,27 +49,27 @@ Rectangle{
 
         ListElement{
             menuItem:"Containing"
-            compareValue: "containing"
+            compareValue: "Containing"
         }
         ListElement{
             menuItem:"Ends With"
-            compareValue: "endswith"
+            compareValue: "Ends With"
         }
         ListElement{
             menuItem:"Equal To"
-            compareValue: "equalto"
+            compareValue: "Equal"
         }
         ListElement{
             menuItem:"Doesn't Start with"
-            compareValue: "doesntstartwith"
+            compareValue: "Doesnt Start With"
         }
         ListElement{
             menuItem:"Doesn't End with"
-            compareValue: "doesntendwith"
+            compareValue: "Doesnt End With"
         }
         ListElement{
             menuItem:"Not Equal to"
-            compareValue: "notequalto"
+            compareValue: "Not Equal"
         }
     }
 
@@ -113,44 +113,29 @@ Rectangle{
     }
 
     Connections{
-        target: QueryDataModel
+        target: DuckDataModel
 
-        function onColumnListModelDataChanged(colData, options){
-
-            if(DSParamsModel.category === Constants.categoryMainWildCardType){
-                var finalValue;
-                var jsonOptions = JSON.parse(options)
-
-                switch(jsonOptions.slug){
-
-                case acceptedValues[0]:
-                    finalValue = jsonOptions.values.slice(1,-1)
-                    break
-
-                case acceptedValues[1]:
-                case acceptedValues[4]:
-                    finalValue = jsonOptions.values.slice(1)
-                    break
-
-                case acceptedValues[2]:
-                case acceptedValues[5]:
-                    finalValue = jsonOptions.values
-                    break
-
-                case acceptedValues[3]:
-                    finalValue = jsonOptions.values.slice(0, -1)
-                    break
-                }
-
-                listviewWildCardModel.append({"value":0})
-
-                wildcardContent.editRelation = jsonOptions.relation
-                wildcardContent.editSlug = jsonOptions.slug
-                wildcardContent.editValue = finalValue
-                console.log("WILD", finalValue, JSON.stringify(jsonOptions))
-            }
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
         }
     }
+
+    Connections{
+        target: ForwardOnlyDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
+        target: QueryDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -164,7 +149,7 @@ Rectangle{
 
     Component.onCompleted: {
         wildcardDropdown.currentText = "Containing"
-        wildcardDropdown.currentValue = "containing"
+        wildcardDropdown.currentValue = "Containing"
 
         listviewWildCard.model = numModels
 
@@ -177,6 +162,42 @@ Rectangle{
         DSParamsModel.removeTmpFilterIndex(0, true)
     }
 
+
+    function updateData(colData, options){
+
+        if(DSParamsModel.category === Constants.categoryMainWildCardType){
+            var finalValue;
+            var jsonOptions = JSON.parse(options)
+
+            switch(jsonOptions.slug){
+
+            case acceptedValues[0]:
+                finalValue = jsonOptions.values.slice(1,-1)
+                break
+
+            case acceptedValues[1]:
+            case acceptedValues[4]:
+                finalValue = jsonOptions.values.slice(1)
+                break
+
+            case acceptedValues[2]:
+            case acceptedValues[5]:
+                finalValue = jsonOptions.values
+                break
+
+            case acceptedValues[3]:
+                finalValue = jsonOptions.values.slice(0, -1)
+                break
+            }
+
+            listviewWildCardModel.append({"value":0})
+
+            wildcardContent.editRelation = jsonOptions.relation
+            wildcardContent.editSlug = jsonOptions.slug
+            wildcardContent.editValue = finalValue
+            console.log("WILD", finalValue, JSON.stringify(jsonOptions))
+        }
+    }
 
     function setValueDelegate(wildcardDropdown, valueText){
 

@@ -99,6 +99,7 @@ Rectangle{
         }
 
         function onFilterIndexChanged(){
+
             if(ReportParamsModel.section === Constants.numericalTab){
 
                 counter = ReportParamsModel.filterIndex
@@ -106,7 +107,15 @@ Rectangle{
                 var colData = ReportParamsModel.fetchFilterValueMap(counter)[counter]
                 var slug = ReportParamsModel.fetchFilterSlugMap(counter)
 
-                textField.text = colData[0]
+                if(slug[0] === Constants.slugBetweenRelation){
+
+                    var splitValues = colData[0].split(" And ")
+                    textField.text = splitValues[0]
+                    textField2nd.text = splitValues[1]
+                } else{
+                    textField.text = colData[0]
+                }
+
                 selectOption.textValue = slug[0]
 
                 ReportParamsModel.addToIncludeExcludeMap(counter, false)
@@ -129,20 +138,20 @@ Rectangle{
 
     }
 
-    function slotEditModeNumerical(relation, slug, value){
+//    function slotEditModeNumerical(relation, slug, value){
 
-        topContent.visible = true
-        if( slug === "Between"){
-            var valueList = value.split(" And ")
-            textField.text = valueList[0]
-            textField2nd.text = valueList[1]
-            selectOption.textValue = slug
-        }
-        else{
-            textField.text = value
-            selectOption.textValue = slug
-        }
-    }
+//        topContent.visible = true
+//        if( slug === "Between"){
+//            var valueList = value.split(" And ")
+//            textField.text = valueList[0]
+//            textField2nd.text = valueList[1]
+//            selectOption.textValue = slug
+//        }
+//        else{
+//            textField.text = value
+//            selectOption.textValue = slug
+//        }
+//    }
 
     function getNewRelation(tmpRelation){
 
@@ -237,6 +246,7 @@ Rectangle{
 
         color: "transparent"
 
+        /******************* DO NOT DELETE *********************
         Column{
 
             id: addnumerical
@@ -263,7 +273,7 @@ Rectangle{
 
         }
 
-        /******************* DO NOT DELETE *********************
+
         Column{
             id: singleSelectRadioColumn
 

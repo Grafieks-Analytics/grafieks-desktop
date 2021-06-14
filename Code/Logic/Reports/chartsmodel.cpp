@@ -1468,6 +1468,7 @@ QStringList ChartsModel::fetchColumnData(QString columnName, QString options)
     int key = newChartHeader.key( columnName );
 
     QStringList columnDataPointer = *newChartData.value(key);
+    columnDataPointer.removeDuplicates();
 
     emit columnDataChanged(columnDataPointer, options);
 
@@ -1480,6 +1481,7 @@ QStringList ChartsModel::searchColumnData(QString columnName, QString keyword)
     int key = newChartHeader.key( columnName );
 
     QStringList columnDataPointer = *newChartData.value(key);
+    columnDataPointer.removeDuplicates();
     searchResults = columnDataPointer.filter(keyword, Qt::CaseInsensitive);
 
     return searchResults;
