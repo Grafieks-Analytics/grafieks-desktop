@@ -78,27 +78,28 @@ Rectangle{
     }
 
     Connections{
-        target: QueryDataModel
+        target: DuckDataModel
 
-        function onColumnListModelDataChanged(colData, options){
-
-            var jsonOptions = JSON.parse(options)
-            console.log(JSON.parse(options))
-            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainCalendarType){
-
-                var newDates = jsonOptions.values.split(",")
-                if(newDates.length > 0){
-
-                    date1 = newDates[0]
-                    date2 = newDates[1]
-
-                    fromDateInput.text = date1
-                    toDateInput.text = date2
-                }
-            }
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
         }
     }
 
+    Connections{
+        target: ForwardOnlyDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
+        target: QueryDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -124,6 +125,24 @@ Rectangle{
             toDateInput.text  = valueList[1]
             fromDateInput.activeFocus = true
             toDateInput.activeFocus = true
+        }
+    }
+
+    function updateData(colData, options){
+
+        var jsonOptions = JSON.parse(options)
+        console.log(JSON.parse(options))
+        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainCalendarType){
+
+            var newDates = jsonOptions.values.split(",")
+            if(newDates.length > 0){
+
+                date1 = newDates[0]
+                date2 = newDates[1]
+
+                fromDateInput.text = date1
+                toDateInput.text = date2
+            }
         }
     }
 

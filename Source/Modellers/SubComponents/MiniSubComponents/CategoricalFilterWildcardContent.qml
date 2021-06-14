@@ -113,44 +113,29 @@ Rectangle{
     }
 
     Connections{
-        target: QueryDataModel
+        target: DuckDataModel
 
-        function onColumnListModelDataChanged(colData, options){
-
-            if(DSParamsModel.category === Constants.categoryMainWildCardType){
-                var finalValue;
-                var jsonOptions = JSON.parse(options)
-
-                switch(jsonOptions.slug){
-
-                case acceptedValues[0]:
-                    finalValue = jsonOptions.values.slice(1,-1)
-                    break
-
-                case acceptedValues[1]:
-                case acceptedValues[4]:
-                    finalValue = jsonOptions.values.slice(1)
-                    break
-
-                case acceptedValues[2]:
-                case acceptedValues[5]:
-                    finalValue = jsonOptions.values
-                    break
-
-                case acceptedValues[3]:
-                    finalValue = jsonOptions.values.slice(0, -1)
-                    break
-                }
-
-                listviewWildCardModel.append({"value":0})
-
-                wildcardContent.editRelation = jsonOptions.relation
-                wildcardContent.editSlug = jsonOptions.slug
-                wildcardContent.editValue = finalValue
-                console.log("WILD", finalValue, JSON.stringify(jsonOptions))
-            }
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
         }
     }
+
+    Connections{
+        target: ForwardOnlyDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
+        target: QueryDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -177,6 +162,42 @@ Rectangle{
         DSParamsModel.removeTmpFilterIndex(0, true)
     }
 
+
+    function updateData(colData, options){
+
+        if(DSParamsModel.category === Constants.categoryMainWildCardType){
+            var finalValue;
+            var jsonOptions = JSON.parse(options)
+
+            switch(jsonOptions.slug){
+
+            case acceptedValues[0]:
+                finalValue = jsonOptions.values.slice(1,-1)
+                break
+
+            case acceptedValues[1]:
+            case acceptedValues[4]:
+                finalValue = jsonOptions.values.slice(1)
+                break
+
+            case acceptedValues[2]:
+            case acceptedValues[5]:
+                finalValue = jsonOptions.values
+                break
+
+            case acceptedValues[3]:
+                finalValue = jsonOptions.values.slice(0, -1)
+                break
+            }
+
+            listviewWildCardModel.append({"value":0})
+
+            wildcardContent.editRelation = jsonOptions.relation
+            wildcardContent.editSlug = jsonOptions.slug
+            wildcardContent.editValue = finalValue
+            console.log("WILD", finalValue, JSON.stringify(jsonOptions))
+        }
+    }
 
     function setValueDelegate(wildcardDropdown, valueText){
 

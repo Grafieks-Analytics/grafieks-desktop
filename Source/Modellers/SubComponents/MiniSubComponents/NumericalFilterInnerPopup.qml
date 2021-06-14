@@ -104,30 +104,28 @@ Rectangle{
     }
 
     Connections{
-        target: QueryDataModel
+        target: DuckDataModel
 
-        function onColumnListModelDataChanged(colData, options){
-
-            var jsonOptions = JSON.parse(options)
-
-            if(DSParamsModel.section === Constants.numericalTab){
-
-                if(jsonOptions.slug === Constants.slugBetweenRelation){
-
-                    var splitValues = jsonOptions.values.split(" And ")
-                    console.log(splitValues, "SPLIT VALUES")
-                    textField.text = splitValues[0]
-                    textField2nd.text = splitValues[1]
-                } else{
-                    textField.text = jsonOptions.values
-                }
-
-                selectOption.textValue = jsonOptions.slug
-
-            }
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
         }
     }
 
+    Connections{
+        target: ForwardOnlyDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
+        target: QueryDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -155,6 +153,27 @@ Rectangle{
         else{
             textField.text = value
             selectOption.textValue = slug
+        }
+    }
+
+    function updateData(colData, options){
+
+        var jsonOptions = JSON.parse(options)
+
+        if(DSParamsModel.section === Constants.numericalTab){
+
+            if(jsonOptions.slug === Constants.slugBetweenRelation){
+
+                var splitValues = jsonOptions.values.split(" And ")
+                console.log(splitValues, "SPLIT VALUES")
+                textField.text = splitValues[0]
+                textField2nd.text = splitValues[1]
+            } else{
+                textField.text = jsonOptions.values
+            }
+
+            selectOption.textValue = jsonOptions.slug
+
         }
     }
 
