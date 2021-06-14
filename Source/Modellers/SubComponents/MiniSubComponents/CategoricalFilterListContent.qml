@@ -67,73 +67,24 @@ Rectangle{
     Connections{
         target: DuckDataModel
 
-        function onDuckColData(colData){
-            if(DSParamsModel.section === Constants.categoricalTab){
-                singleSelectCheckList.model = colData
-                multiSelectCheckList.model  = colData
-            }
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
         }
     }
 
     Connections{
         target: ForwardOnlyDataModel
 
-        function onForwardColData(colData){
-            if(DSParamsModel.section === Constants.categoricalTab){
-                singleSelectCheckList.model = colData
-                multiSelectCheckList.model  = colData
-            }
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
         }
     }
 
     Connections{
         target: QueryDataModel
 
-        function onColumnListModelDataChanged(colData, options, searchMode){
-
-            if(DSParamsModel.section === Constants.categoricalTab){
-                // Just to reset the data if the previous `colData` and the new `colData` are same
-                singleSelectCheckList.model = []
-                multiSelectCheckList.model = []
-
-                singleSelectCheckList.model = colData
-                multiSelectCheckList.model  = colData
-
-                var jsonOptions = JSON.parse(options)
-
-
-                if(jsonOptions.subCategory === Constants.categorySubMulti){
-                    multiSelectRadio.checked = true
-
-                    multiSelectCheckList.visible = true
-                    singleSelectCheckList.visible = false
-
-                    if(jsonOptions.values.length > 0){
-
-                        if(jsonOptions.values === "%"){
-                            colData.forEach((item) => {
-                                                DSParamsModel.setTmpSelectedValues(item)
-                                            })
-                        } else{
-
-                            var checkedValues = jsonOptions.values.split(",")
-                            checkedValues.forEach((item) => {
-                                                      DSParamsModel.setTmpSelectedValues(item)
-                                                  })
-                        }
-                    }
-
-                } else{
-                    singleSelectRadio.checked = true
-
-                    multiSelectCheckList.visible = false
-                    singleSelectCheckList.visible = true
-
-                    if(DSParamsModel.searchTmpSelectedValues(jsonOptions.values) < 0){
-                        DSParamsModel.setTmpSelectedValues(jsonOptions.values)
-                    }
-                }
-            }
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
         }
     }
 
@@ -158,6 +109,53 @@ Rectangle{
     function slotDataCleared(){
         if(DSParamsModel.section === Constants.categoricalTab){
             DSParamsModel.removeTmpSelectedValues(0, true)
+        }
+    }
+
+    function updateData(colData, options){
+
+        if(DSParamsModel.section === Constants.categoricalTab){
+            // Just to reset the data if the previous `colData` and the new `colData` are same
+            singleSelectCheckList.model = []
+            multiSelectCheckList.model = []
+
+            singleSelectCheckList.model = colData
+            multiSelectCheckList.model  = colData
+
+            var jsonOptions = JSON.parse(options)
+
+
+            if(jsonOptions.subCategory === Constants.categorySubMulti){
+                multiSelectRadio.checked = true
+
+                multiSelectCheckList.visible = true
+                singleSelectCheckList.visible = false
+
+                if(jsonOptions.values.length > 0){
+
+                    if(jsonOptions.values === "%"){
+                        colData.forEach((item) => {
+                                            DSParamsModel.setTmpSelectedValues(item)
+                                        })
+                    } else{
+
+                        var checkedValues = jsonOptions.values.split(",")
+                        checkedValues.forEach((item) => {
+                                                  DSParamsModel.setTmpSelectedValues(item)
+                                              })
+                    }
+                }
+
+            } else{
+                singleSelectRadio.checked = true
+
+                multiSelectCheckList.visible = false
+                singleSelectCheckList.visible = true
+
+                if(DSParamsModel.searchTmpSelectedValues(jsonOptions.values) < 0){
+                    DSParamsModel.setTmpSelectedValues(jsonOptions.values)
+                }
+            }
         }
     }
 

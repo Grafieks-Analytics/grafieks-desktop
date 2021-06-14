@@ -81,51 +81,30 @@ Popup {
         }
     }
 
+    Connections{
+        target: DuckDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
+        target: ForwardOnlyDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
 
     Connections{
         target: QueryDataModel
 
-        function onColumnListModelDataChanged(colData, options){
-
-            var jsonOptions = JSON.parse(options)
-
-            if(jsonOptions.section === Constants.dateTab){
-
-                switch(jsonOptions.category){
-                case Constants.dateMainListType:
-
-                    listContent.visible = true
-                    calendarContent.visible = false
-                    dateTimeFrameContent.visible = false
-
-                    listRadio.checked = true
-
-                    break
-
-                case Constants.dateMainCalendarType:
-
-                    listContent.visible = false
-                    calendarContent.visible = true
-                    dateTimeFrameContent.visible = false
-
-                    dateRadio.checked = true
-
-                    break
-
-                case Constants.dateMainTimeFrameType:
-
-                    listContent.visible = false
-                    calendarContent.visible = false
-                    dateTimeFrameContent.visible = true
-
-                    topRadio.checked = true
-
-                    break
-                }
-
-            }
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
         }
     }
+
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -182,6 +161,47 @@ Popup {
                 topRadio.checked = true
 
                 dateFilterPopup.signalTimeFrameEditData(subCategory, relation, slug, value)
+
+                break
+            }
+
+        }
+    }
+
+    function updateData(colData, options){
+
+        var jsonOptions = JSON.parse(options)
+
+        if(jsonOptions.section === Constants.dateTab){
+
+            switch(jsonOptions.category){
+            case Constants.dateMainListType:
+
+                listContent.visible = true
+                calendarContent.visible = false
+                dateTimeFrameContent.visible = false
+
+                listRadio.checked = true
+
+                break
+
+            case Constants.dateMainCalendarType:
+
+                listContent.visible = false
+                calendarContent.visible = true
+                dateTimeFrameContent.visible = false
+
+                dateRadio.checked = true
+
+                break
+
+            case Constants.dateMainTimeFrameType:
+
+                listContent.visible = false
+                calendarContent.visible = false
+                dateTimeFrameContent.visible = true
+
+                topRadio.checked = true
 
                 break
             }
