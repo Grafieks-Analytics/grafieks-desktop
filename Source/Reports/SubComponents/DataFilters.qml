@@ -399,9 +399,6 @@ Popup {
         onTabToggle(true,false,false,false);
         console.log("APPLY APPLY")
 
-//        var tmpSql = DSParamsModel.tmpSql
-//        ProxyFilterModel.callQueryModels(tmpSql, FilterCategoricalListModel, FilterDateListModel, FilterNumericalListModel)
-
     }
     function onCancelClicked(){
         popupMain.visible = false
