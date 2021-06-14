@@ -82,7 +82,13 @@ Rectangle{
             "slug" : slug
         }
 
-        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+            QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
+            DuckDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        } else{
+            ForwardOnlyDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        }
         console.log("EDIT CLICKED date", modelIndex, filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
     }
     // JAVASCRIPT FUNCTION ENDS
