@@ -115,7 +115,7 @@ Rectangle {
             let reportObj = dynamicReportBox.createObject(parent, {z:mainContainer.z, name: objectType, objectName : counter, reportId: reportId});
             console.log('Type Report Obj',typeof reportObj);
             
-            ReportParamsModel.addDashboardReportInstance(reportObj);
+            ReportParamsModel.addDashboardReportInstance(reportObj, reportId);
             rectangles.set(counter, reportObj);
         }
 
