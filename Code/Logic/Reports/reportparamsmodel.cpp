@@ -194,6 +194,12 @@ void ReportParamsModel::addToMasterReportFilters(int reportId)
 
 }
 
+QMap<int, QVariantMap> ReportParamsModel::fetchMasterReportFilters(int reportId)
+{
+   QMap<int, QVariantMap> output;
+   return output;
+}
+
 void ReportParamsModel::restoreMasterReportFilters(int reportId)
 {
     QMap<int, QVariantMap> masterValues = this->masterReportFilters.value(reportId);

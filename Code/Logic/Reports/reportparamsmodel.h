@@ -160,6 +160,7 @@ public:
     Q_INVOKABLE void resetInputFields();
 
     Q_INVOKABLE void addToMasterReportFilters(int reportId);
+    Q_INVOKABLE QMap<int, QVariantMap> fetchMasterReportFilters(int reportId);
     Q_INVOKABLE void restoreMasterReportFilters(int reportId);
     Q_INVOKABLE void deleteMasterReportFilters(int reportId, bool deleteAll = false);
 
