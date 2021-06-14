@@ -327,8 +327,8 @@ QString FilterNumericalListModel::setRelation(QString tableName, QString columnN
                 excludeCase = exclude ? tmpRelation.prepend(notSign) : tmpRelation;
                 newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[localCounter] + "')" : conditionList[localCounter] ;
 
-                tmpWhereConditions = QString("%1 %2 %3")
-                        .arg("\"" + columnName + "\"").arg(excludeCase).arg(newCondition);
+                tmpWhereConditions = QString("%1.%2 %3 %4")
+                        .arg("\"" + tableName + "\"").arg("\"" + columnName + "\"").arg(excludeCase).arg(newCondition);
 
                 localCounter++;
             }
@@ -349,8 +349,8 @@ QString FilterNumericalListModel::setRelation(QString tableName, QString columnN
             excludeCase = exclude ? relation.prepend(notSign) : relation;
             newCondition = relation.contains("in", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
 
-            tmpWhereConditions = QString("%1 %2 %3")
-                    .arg("\"" + columnName + "\"").arg(excludeCase).arg(newCondition);
+            tmpWhereConditions = QString("%1.%2 %3 %4")
+                    .arg("\"" + tableName + "\"").arg("\"" + columnName + "\"").arg(excludeCase).arg(newCondition);
         }
         break;
     }
