@@ -140,11 +140,14 @@ Page {
                 setValuesOnEditReport();
             }else{
                 addReportButton.text = "Add";
-                clearValuesOnAddNewReport();
             }
         }
 
         function onReportIdChanged(reportIdValue){
+            if(!reportIdValue){
+                addReport(true);
+                clearValuesOnAddNewReport();
+            }
             report_desiner_page.reportIdMain = reportIdValue;
         }
 
@@ -575,14 +578,24 @@ Page {
         webEngineView.url = chartname;
     }
 
-    function addReport(){
+    function addReport(initialAddition){
         // Add report to dashboard
-        stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
-
         if(!reportIdMain){
             reportIdMain = generateReportId();
             ReportParamsModel.setReportId(reportIdMain);
         }
+        
+        if(initialAddition){
+            ReportParamsModel.setChartType(chartTitle);
+            ReportParamsModel.setChartTitle(chartTitle);
+            var numberOfReports = Object.keys(reportList).length;
+            report_title_text.text = 'Report '+ (numberOfReports + 1);
+            ReportParamsModel.setReportTitle('Report '+ (numberOfReports + 1));
+            ReportParamsModel.addReport(reportIdMain);
+            return;
+        }
+        
+        stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
 
         // [Tag: Optimization]
         // We can create the object here and pass to cpp
@@ -609,6 +622,7 @@ Page {
         ReportParamsModel.setYAxisColumns(JSON.stringify(getAxisModelAsJson(Constants.yAxisName)));
         ReportParamsModel.setColorByDataColoumns(JSON.stringify(colorByData));
 
+        console.log('reportIdMain');
         ReportParamsModel.addReport(reportIdMain);
 
         chartTitle = Constants.barChartTitle;
