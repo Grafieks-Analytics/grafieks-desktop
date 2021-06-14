@@ -66,6 +66,7 @@ public:
     Q_INVOKABLE QStringList searchColumnData(QString columnName, QString keyword);
     Q_INVOKABLE void clearData();
     Q_INVOKABLE void removeTmpChartData();
+    Q_INVOKABLE void updateFilterData(QMap<int, QMap<int, QVariantMap>> masterReportFilters);
 
 public slots:
     void getChartData(QMap<int, QStringList*> chartData);

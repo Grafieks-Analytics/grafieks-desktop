@@ -397,7 +397,11 @@ Popup {
         ReportParamsModel.clearFilter()
 
         onTabToggle(true,false,false,false);
-        console.log("APPLY APPLY")
+        console.log("APPLY APPLY", "REPORT ID", ReportParamsModel.reportId)
+
+        // Call the function to apply all the filters in reports
+        ChartsModel.updateFilterData(ReportParamsModel.fetchMasterReportFilters(ReportParamsModel.reportId))
+
 
     }
     function onCancelClicked(){

@@ -1457,6 +1457,11 @@ void ChartsModel::removeTmpChartData()
     emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
 }
 
+void ChartsModel::updateFilterData(QMap<int, QMap<int, QVariantMap>> masterReportFilters)
+{
+
+}
+
 void ChartsModel::searchColumnNames(QString keyword)
 {
     emit sendFilteredColumn(this->categoryList.filter(keyword, Qt::CaseInsensitive), this->numericalList.filter(keyword, Qt::CaseInsensitive), this->dateList.filter(keyword, Qt::CaseInsensitive));
