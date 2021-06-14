@@ -162,6 +162,18 @@ QtObject {
     property string smallerThanEqualRelation: "<="
     property string greaterThanEqualRelation: ">="
 
+    // SQL Relation Slugs
+    property string slugLikeRelation: "Like"
+    property string slugNotLikeRelation: "Not Like"
+    property string slugInRelation: "In"
+    property string slugEqualRelation: "Equal"
+    property string slugNotEqualRelation: "Not Equal"
+    property string slugBetweenRelation: "Between"
+    property string slugSmallerThanRelation: "Less Than"
+    property string slugGreaterThanRelation: "Greater Than"
+    property string slugSmallerThanEqualRelation: "Less Than Equal To"
+    property string slugGreaterThanEqualRelation: "Greater Than Equal To"
+
     property string innerJoin: "INNER JOIN"
     property string fullJoin: "FULL JOIN"
     property string leftJoin: "LEFT JOIN"

@@ -81,51 +81,30 @@ Popup {
         }
     }
 
+    Connections{
+        target: DuckDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
+        target: ForwardOnlyDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
 
     Connections{
         target: QueryDataModel
 
-        function onColumnListModelDataChanged(colData, options){
-
-            var jsonOptions = JSON.parse(options)
-
-            if(jsonOptions.section === Constants.categoricalTab){
-
-                switch(jsonOptions.category){
-                case Constants.dateMainListType:
-
-                    listContent.visible = true
-                    calendarContent.visible = false
-                    dateTimeFrameContent.visible = false
-
-                    listRadio.checked = true
-
-                    break
-
-                case Constants.dateMainCalendarType:
-
-                    listContent.visible = false
-                    calendarContent.visible = true
-                    dateTimeFrameContent.visible = false
-
-                    dateRadio.checked = true
-
-                    break
-
-                case Constants.dateMainTimeFrameType:
-
-                    listContent.visible = false
-                    calendarContent.visible = false
-                    dateTimeFrameContent.visible = true
-
-                    topRadio.checked = true
-
-                    break
-                }
-
-            }
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
         }
     }
+
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -189,10 +168,54 @@ Popup {
         }
     }
 
+    function updateData(colData, options){
+
+        var jsonOptions = JSON.parse(options)
+
+        if(jsonOptions.section === Constants.dateTab){
+
+            switch(jsonOptions.category){
+            case Constants.dateMainListType:
+
+                listContent.visible = true
+                calendarContent.visible = false
+                dateTimeFrameContent.visible = false
+
+                listRadio.checked = true
+
+                break
+
+            case Constants.dateMainCalendarType:
+
+                listContent.visible = false
+                calendarContent.visible = true
+                dateTimeFrameContent.visible = false
+
+                dateRadio.checked = true
+
+                break
+
+            case Constants.dateMainTimeFrameType:
+
+                listContent.visible = false
+                calendarContent.visible = false
+                dateTimeFrameContent.visible = true
+
+                topRadio.checked = true
+
+                break
+            }
+
+        }
+    }
+
 
     function closeDateFilterPopup(){
         dateFilterPopup.visible = false
         DSParamsModel.clearFilter();
+
+        // Clear tabs individual temp data
+        dateFilterPopup.clearData()
     }
 
     function applyDateFilter(){
@@ -253,7 +276,6 @@ Popup {
             singleRelation = joinRelation[counter]
             singleValue = joinValue[counter]
             singleSlug = joinSlug[counter]
-//            console.log(JSON.stringify(joinRelation), JSON.stringify(joinSlug))
 
             manageFilters(DSParamsModel.mode, section, category, subCategory, tableName, columnName, singleRelation, singleSlug, singleValue, actualValue, includeNull, exclude, 0, counter, DSParamsModel.filterModelIndex)
 
@@ -288,6 +310,9 @@ Popup {
     function resetDateFilter(){
         // Reset date filter here
         closeDateFilterPopup()
+        DSParamsModel.clearFilter()
+
+        dateFilterPopup.clearData()
     }
 
 
@@ -302,7 +327,6 @@ Popup {
         // For list date type
         // The db WHERE relation can only be LIKE / NOT LIKE ARRAY type
 
-        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
     }
     function onCalendarClicked(){
         listContent.visible = false
@@ -310,7 +334,6 @@ Popup {
         dateTimeFrameContent.visible = false
 
         DSParamsModel.setCategory(Constants.dateMainCalendarType)
-        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
     }
 
     function onTimeFrameClicked(){
@@ -320,7 +343,6 @@ Popup {
 
 
         DSParamsModel.setCategory(Constants.dateMainTimeFrameType)
-        DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
     }
 
 

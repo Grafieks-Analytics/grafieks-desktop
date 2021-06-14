@@ -407,8 +407,8 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
                 excludeCase = exclude ? tmpRelation.prepend(notSign) : tmpRelation;
                 newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[localCounter] + "')" : conditionList[localCounter] ;
 
-                tmpWhereConditions = QString("%1 %2 %3")
-                        .arg("\"" + columnName + "\"").arg(excludeCase).arg(newCondition);
+                tmpWhereConditions = QString("%1.%2 %3 %4")
+                        .arg("\"" + tableName + "\"").arg("\"" + columnName + "\"").arg(excludeCase).arg(newCondition);
 
                 localCounter++;
             }
@@ -431,8 +431,8 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
             excludeCase = exclude ? relation.prepend(notSign) : relation;
             newCondition = relation.contains("like", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
 
-            tmpWhereConditions = QString("%1 %2 %3")
-                    .arg("\"" + columnName + "\"").arg(excludeCase).arg(newCondition);
+            tmpWhereConditions = QString("%1.%2 %3 %4")
+                    .arg("\"" + tableName + "\"").arg("\"" + columnName + "\"").arg(excludeCase).arg(newCondition);
         }
         break;
     }

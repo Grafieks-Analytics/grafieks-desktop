@@ -64,7 +64,6 @@ Rectangle{
     function onEditElement(modelIndex, filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude){
 
         DSParamsModel.setMode(Constants.modeEdit)
-//        DSParamsModel.setFilterIndex(filterIndex)
         DSParamsModel.setInternalCounter(filterIndex)
         DSParamsModel.setFilterModelIndex(modelIndex)
         DSParamsModel.setSection(section)
@@ -72,12 +71,6 @@ Rectangle{
         DSParamsModel.setSubCategory(subCategory)
         DSParamsModel.setTableName(tableName)
         DSParamsModel.setColName(columnName)
-//        DSParamsModel.addToJoinRelation(mapKey, relation)
-//        DSParamsModel.addToJoinRelationSlug(mapKey, slug)
-//        DSParamsModel.addToJoinValue(mapKey, value)
-//        DSParamsModel.setIncludeNullMap(includeNull)
-//        DSParamsModel.setExcludeMap(exclude)
-//        DSParamsModel.setInternalCounter(1)
 
         var options = {
             "section" : section,
@@ -89,7 +82,13 @@ Rectangle{
 
         }
 
-        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+            QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
+            DuckDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        } else{
+            ForwardOnlyDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        }
     }
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/

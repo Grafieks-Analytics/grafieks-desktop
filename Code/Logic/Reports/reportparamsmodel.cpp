@@ -158,6 +158,8 @@ void ReportParamsModel::clearFilter()
 //    this->setSubCategory(Constants::defaultSubCategory);
 
     // variable change
+    this->removeTmpSelectedValues(0, true);
+    this->removeTmpFilterIndex(0, true);
 }
 
 void ReportParamsModel::resetInputFields()

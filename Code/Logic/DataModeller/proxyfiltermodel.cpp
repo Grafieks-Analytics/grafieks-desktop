@@ -21,8 +21,6 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
     case Constants::excelIntType:
     case Constants::csvIntType:{
 
-        tmpWhereConditions = "";
-        newWhereConditions = "";
         if(categoryModel->rowCount() > 0){
             QString tempWhereConditions = categoryModel->callQueryModel();
             newWhereConditions += tempWhereConditions;
@@ -39,7 +37,11 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
         if(tmpWhereConditions == ""){
 
             newWhereConditions = newWhereConditions.remove(0, 4);
-            newQuery = " WHERE " + newWhereConditions;
+            if(newWhereConditions != ""){
+                newQuery = tmpSql + " WHERE " + newWhereConditions;
+            } else{
+                newQuery = tmpSql;
+            }
         }
         else{
 
@@ -52,7 +54,6 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
         }
 
 
-        qDebug() << newQuery << "FINAL QUERY";
 
         emit sendCsvFilterQuery(newQuery);
         break;
@@ -76,7 +77,11 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
         if(tmpWhereConditions == ""){
 
             newWhereConditions = newWhereConditions.remove(0, 4);
-            newQuery = tmpSql + " WHERE " + newWhereConditions;
+            if(newWhereConditions != ""){
+                newQuery = tmpSql + " WHERE " + newWhereConditions;
+            } else{
+                newQuery = tmpSql;
+            }
         }
         else{
 
@@ -89,7 +94,6 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
         }
 
 
-        qDebug() << newQuery << "FINAL QUERY";
 
         emit sendFilterQuery(newQuery);
         break;
