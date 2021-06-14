@@ -1059,6 +1059,7 @@ Page {
             width:column_querymodeller.width
             height:column_querymodeller.height
             border.color: Constants.darkThemeColor
+            
 
 
 
@@ -1318,13 +1319,21 @@ Page {
 
                     Rectangle {
                         id: categoryItem
-                        height: 50
+                        height: 40
                         width: column_querymodeller.width
 
                         z: 20
 
 
+                        Rectangle{
+                            id:dateRect
+                            height: 30
+                            width: parent.width
+                            color: Constants.themeColor
+                //            anchors.top: parent.top
+                //            x:-leftMargin
 
+                            border.color: Constants.darkThemeColor
 
                         Image {
                             id: database
@@ -1410,6 +1419,7 @@ Page {
                             }
 
                         }
+                    }
                     }
 
                     ListView {

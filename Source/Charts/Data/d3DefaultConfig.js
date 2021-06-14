@@ -17,6 +17,12 @@ const constants = {
         CIRCLE: "circle",
         RECT: "rect",
     },
+    chartMargins: {
+        top: 20,
+        left: 70,
+        right: 20,
+        bottom: 50,
+    },
 };
 
 const defaultD3Config = {

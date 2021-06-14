@@ -12,7 +12,7 @@ import "./MiniSubComponents"
 Rectangle {
     id: rectangle1
 
-    width: parent.width-20
+    width: 200
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.top: apply_btn.bottom
     anchors.topMargin: 10
@@ -80,7 +80,7 @@ Rectangle {
     ListView{
         id: filterDataListview
         height: parent.height
-        width: parent.width+2
+        width: 198
         model: listModel
         clip: true
         interactive: true
