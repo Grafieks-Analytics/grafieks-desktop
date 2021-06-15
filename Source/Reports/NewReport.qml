@@ -594,7 +594,7 @@ Page {
             ReportParamsModel.addReport(reportIdMain);
             return;
         }
-        
+        GeneralParamsModel.setcurrentScreen(Constants.dashboardScreen)
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
 
         // [Tag: Optimization]
@@ -647,6 +647,7 @@ Page {
 
     function cancelReport(){
         // Back to dashboard
+        GeneralParamsModel.setcurrentScreen(Constants.dashboardScreen)
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
         // ChartsModel.removeTmpChartData()
     }

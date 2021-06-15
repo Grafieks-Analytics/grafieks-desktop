@@ -42,10 +42,14 @@ QString GeneralParamsModel::returnPlainTextFromHtml(QString s)
         return td.toPlainText();
 }
 
-
 int GeneralParamsModel::menuType() const
 {
     return m_menuType;
+}
+
+int GeneralParamsModel::currentScreen() const
+{
+    return m_currentScreen;
 }
 
 
@@ -56,5 +60,14 @@ void GeneralParamsModel::setMenuType(int menuType)
 
     m_menuType = menuType;
     emit menuTypeChanged(m_menuType);
+}
+
+void GeneralParamsModel::setcurrentScreen(int currentScreen)
+{
+    if (m_currentScreen == currentScreen)
+        return;
+
+    m_currentScreen = currentScreen;
+    emit currentScreenChanged(m_currentScreen);
 }
 
