@@ -36,6 +36,10 @@ public:
     Q_INVOKABLE QStringList getDbList();
 
 
+private:
+    QString getQueryJoiner();
+
+
 public slots:
 
 signals:

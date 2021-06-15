@@ -25,6 +25,9 @@ public:
 
     Q_INVOKABLE void callQueryModels(QString tmpSql, FilterCategoricalListModel *categoryModel, FilterDateListModel * dateModel, FilterNumericalListModel *numericalModel);
 
+private:
+    QString getQueryJoiner();
+
 signals:
     void sendFilterQuery(QString &filteredQuery);
     void sendCsvFilterQuery(QString &filteredQuery);

@@ -39,6 +39,7 @@ Popup {
                 if(status.status === true){
 
                     popup.visible = false
+                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
                     stacklayout_home.currentIndex = 5
                 }
                 else{

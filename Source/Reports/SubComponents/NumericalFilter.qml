@@ -134,7 +134,7 @@ Popup {
         ReportParamsModel.addToFilterSectionMap(counter, section)
         ReportParamsModel.addToFilterCategoryMap(counter, category)
         ReportParamsModel.addToFilterSubCategoryMap(counter, subCategory)
-        ReportParamsModel.addToFilterColumnMap(counter, columnName)
+        ReportParamsModel.addToFilterColumnMap(counter, columnName, tableName)
         ReportParamsModel.addToNumericalFilters(counter)
 
         manageFilters(ReportParamsModel.mode, counter, ReportParamsModel.filterModelIndex)
@@ -150,7 +150,7 @@ Popup {
     function manageFilters(mode, counter = 0, filterId = 0){
 
         console.log("INSERT INTO NUMERICAL FILTERS  - INSERT REPORT ID", mode, counter, filterId)
-        ReportParamsModel.addToMasterReportFilters(1);
+        ReportParamsModel.addToMasterReportFilters(Constants.uniqueReportId);
 
     }
 
