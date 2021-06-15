@@ -108,6 +108,18 @@ namespace Constants
     const QString dateSubMonth = "month";
     const QString dateSubDay = "day";
 
+    // Filter Relation Slugs
+    const QString slugLikeRelation = "Like";
+    const QString slugNotLikeRelation = "Not Like";
+    const QString slugInRelation = "In";
+    const QString slugEqualRelation = "Equal";
+    const QString slugNotEqualRelation = "Not Equal";
+    const QString slugBetweenRelation = "Between";
+    const QString slugSmallerThanRelation = "Less Than";
+    const QString slugGreaterThanRelation = "Greater Than";
+    const QString slugSmallerThanEqualRelation = "Less Than Equal To";
+    const QString slugGreaterThanEqualRelation = "Greater Than Equal To";
+
     // DSParams Settings
     const QString defaultTabSection = categoricalType;
     const QString defaultCategory = categoryMainListType;

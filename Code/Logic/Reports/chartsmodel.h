@@ -16,12 +16,15 @@ class ChartsModel : public QObject
 {
     Q_OBJECT
     QMap<int, QStringList *> newChartData;
+    QMap<QString, QMap<int, QStringList *>> reportChartData; // <ReportId - <columnKey - Values Array list>>
+    QMap<QString, QMap<int, QStringList *>> dashboardChartData; // <DashboardId - <columnKey - Values Array list>>
     QMap<int, QString> newChartHeader;
-    QMap<int, QStringList> chartHeaderDetails;
+    QMap<int, QStringList> chartHeaderDetails; // This i dont think is of use. delete in future
 
     QStringList numericalList;
     QStringList categoryList;
     QStringList dateList;
+    QString reportId;
     QTime myTimer;
     QElapsedTimer myTimer2;
 
@@ -71,7 +74,7 @@ public:
 public slots:
     void getChartData(QMap<int, QStringList*> chartData);
     void getChartHeader(QMap<int, QStringList> chartHeader);
-    void updateFilterData(QMap<int, QVariantMap> masterReportFilters);
+    void updateFilterData(QMap<int, QVariantMap> masterReportFilters, QString reportId);
     void currentScreenChanged(int currentScreen);
 
 signals:

@@ -217,7 +217,7 @@ Popup {
             ReportParamsModel.addToFilterSectionMap(counter, section)
             ReportParamsModel.addToFilterCategoryMap(counter, category)
             ReportParamsModel.addToFilterSubCategoryMap(counter, subCategory)
-            ReportParamsModel.addToFilterColumnMap(counter, columnName)
+            ReportParamsModel.addToFilterColumnMap(counter, columnName, tableName)
             ReportParamsModel.addToDateFilters(counter)
 
             console.log("INSERT DATE", section, category, subCategory)

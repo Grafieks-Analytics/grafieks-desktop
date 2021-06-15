@@ -308,7 +308,7 @@ Page {
 
     function onCreateDashboardClicked(){
 
-        GeneralParamsModel.setcurrentScreen(Constants.dashboardScreen)
+        GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
         stacklayout_home.currentIndex = 6
 
     }

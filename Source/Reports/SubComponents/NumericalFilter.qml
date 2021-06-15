@@ -134,7 +134,7 @@ Popup {
         ReportParamsModel.addToFilterSectionMap(counter, section)
         ReportParamsModel.addToFilterCategoryMap(counter, category)
         ReportParamsModel.addToFilterSubCategoryMap(counter, subCategory)
-        ReportParamsModel.addToFilterColumnMap(counter, columnName)
+        ReportParamsModel.addToFilterColumnMap(counter, columnName, tableName)
         ReportParamsModel.addToNumericalFilters(counter)
 
         manageFilters(ReportParamsModel.mode, counter, ReportParamsModel.filterModelIndex)
