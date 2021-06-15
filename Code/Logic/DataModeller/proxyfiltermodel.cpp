@@ -100,7 +100,7 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
         break;
     }
 
-    qDebug() << "NEW QUERY" << newQuery;
+    qDebug() << Q_FUNC_INFO << "NEW QUERY" << newQuery;
 
 }
 
