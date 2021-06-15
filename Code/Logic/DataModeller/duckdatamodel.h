@@ -38,6 +38,9 @@ public:
     Q_INVOKABLE QStringList filterTableList(QString keyword);
     Q_INVOKABLE QStringList getDbList();
 
+private:
+    QString getQueryJoiner();
+
 
 signals:
     void duckColData(QStringList colData);
