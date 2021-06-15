@@ -223,6 +223,7 @@ Page {
         // Signal event is added
         // If Edit Report is false =>  We clear the chart value
         ReportParamsModel.setEditReportToggle(false);
+        GeneralParamsModel.setcurrentScreen(Constants.reportScreen)
         stacklayout_home.currentIndex = Constants.newReportIndex;
     }
 

@@ -1457,9 +1457,51 @@ void ChartsModel::removeTmpChartData()
     emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
 }
 
-void ChartsModel::updateFilterData(QMap<int, QMap<int, QVariantMap>> masterReportFilters)
+void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters)
 {
+    qDebug() << "FILTER PASS" << masterReportFilters;
 
+    QList<int> keys = masterReportFilters.keys();
+
+    int i = 0;
+    foreach(QVariantMap filters, masterReportFilters){
+
+        int filterId = keys[i];
+        QString section = filters.value("section").toString();
+        QString category = filters.value("category").toString();
+        QString subCategory = filters.value("subCategory").toString();
+        QString columnName = filters.value("columnName").toString();
+
+        QStringList actualDateValues = filters.value("actualDateValues").toStringList();
+        int dateFormat = filters.value("dateFormat").toInt();
+
+        QString filterRelation = filters.value("filterRelation").toString();
+        QString filterSlug = filters.value("filterSlug").toString();
+        QVariantList filterValue = filters.value("filterValue").toList();
+        bool includeExclude = filters.value("includeExclude").toBool();
+        bool includeNull = filters.value("includeNull").toBool();
+        bool selectAll = filters.value("selectAll").toBool();
+        i++;
+
+        qDebug() << Q_FUNC_INFO << "Filter values obtained"
+                    <<filterId << section << category << subCategory << columnName << actualDateValues << dateFormat
+                    << filterRelation << filterSlug << filterValue << includeExclude << includeNull << selectAll;
+
+    }
+}
+
+void ChartsModel::currentScreenChanged(int currentScreen)
+{
+    switch(currentScreen){
+    case Constants::dashboardScreen:
+        break;
+
+    case Constants::reportScreen:
+        break;
+
+    default:
+        break;
+    }
 }
 
 void ChartsModel::searchColumnNames(QString keyword)

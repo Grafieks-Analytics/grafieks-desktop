@@ -118,6 +118,14 @@ namespace Constants
     const int defaultCanvasWidth = 1280;
     const int defaultCanvasHeight = 800;
 
+    // Current Screen Types
+    const int homeScreen = 0;
+    const int grsScreen = 1;
+    const int connectorScreen = 2;
+    const int modelerScreen = 3;
+    const int dashboardScreen = 4;
+    const int reportScreen = 5;
+
 
     // Menu User
 

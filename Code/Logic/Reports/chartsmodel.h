@@ -66,11 +66,13 @@ public:
     Q_INVOKABLE QStringList searchColumnData(QString columnName, QString keyword);
     Q_INVOKABLE void clearData();
     Q_INVOKABLE void removeTmpChartData();
-    Q_INVOKABLE void updateFilterData(QMap<int, QMap<int, QVariantMap>> masterReportFilters);
+
 
 public slots:
     void getChartData(QMap<int, QStringList*> chartData);
     void getChartHeader(QMap<int, QStringList> chartHeader);
+    void updateFilterData(QMap<int, QVariantMap> masterReportFilters);
+    void currentScreenChanged(int currentScreen);
 
 signals:
     void sendFilteredColumn(QStringList allCategorical, QStringList allNumerical, QStringList allDates);

@@ -160,7 +160,7 @@ public:
     Q_INVOKABLE void resetInputFields();
 
     Q_INVOKABLE void addToMasterReportFilters(QString reportId);
-    Q_INVOKABLE QMap<int, QVariantMap> fetchMasterReportFilters(QString reportId);
+    Q_INVOKABLE void fetchMasterReportFilters(QString reportId);
     Q_INVOKABLE void restoreMasterReportFilters(QString reportId);
     Q_INVOKABLE void deleteMasterReportFilters(QString reportId, bool deleteAll = false);
 
@@ -269,7 +269,7 @@ public slots:
     void setInternalCounter(int internalCounter);
     void setSection(QString section);
     void setCategory(QString category);
-    void setSubCategory(QString subCategory);
+    void setSubCategory(QString reportFilterChangedsubCategory);
     void setTableName(QString tableName);
     void setColName(QString colName);
     void setFilterIndex(int filterIndex);
@@ -304,6 +304,7 @@ signals:
     void colorByDataColoumnsChanged(QString colorByDataColoumns);
 
     // For Filters
+    void reportFilterChanged(QMap<int, QVariantMap> reportFilters);
     void resetInput();
     void internalCounterChanged(int internalCounter);
     void sectionChanged(QString section);
