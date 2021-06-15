@@ -167,7 +167,7 @@ void ReportParamsModel::resetInputFields()
     emit resetInput();
 }
 
-void ReportParamsModel::addToMasterReportFilters(int reportId)
+void ReportParamsModel::addToMasterReportFilters(QString reportId)
 {
     QMap<int, QVariantMap> intermediateMasterReportsMap;
 
@@ -194,13 +194,13 @@ void ReportParamsModel::addToMasterReportFilters(int reportId)
 
 }
 
-QMap<int, QVariantMap> ReportParamsModel::fetchMasterReportFilters(int reportId)
+QMap<int, QVariantMap> ReportParamsModel::fetchMasterReportFilters(QString reportId)
 {
    QMap<int, QVariantMap> output;
    return output;
 }
 
-void ReportParamsModel::restoreMasterReportFilters(int reportId)
+void ReportParamsModel::restoreMasterReportFilters(QString reportId)
 {
     QMap<int, QVariantMap> masterValues = this->masterReportFilters.value(reportId);
     QList<int> keys = masterValues.keys();
@@ -210,7 +210,7 @@ void ReportParamsModel::restoreMasterReportFilters(int reportId)
     }
 }
 
-void ReportParamsModel::deleteMasterReportFilters(int reportId, bool deleteAll)
+void ReportParamsModel::deleteMasterReportFilters(QString reportId, bool deleteAll)
 {
     if(deleteAll == true){
         this->masterReportFilters.clear();

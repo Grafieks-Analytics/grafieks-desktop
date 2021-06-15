@@ -15,12 +15,12 @@ class ReportParamsModel: public QObject
     Q_OBJECT
 
 // Customize Report parameters
-    QVariantMap reportsMap;           // <<reportId, reportObj>>
+    QVariantMap reportsMap;           // <<QString reportId, reportObj>>
     QVariantMap reportsData;
     QVariantMap dashboardReportInstances;
 
     // Filter specific variables
-    QMap<int, QMap<int, QVariantMap>> masterReportFilters;         // Report Id - Map of
+    QMap<QString, QMap<int, QVariantMap>> masterReportFilters;         // Report Id - Map of various report filters
 
 
     QVector<int> categoricalFilters;                            // List of categorical filters
@@ -159,10 +159,10 @@ public:
     Q_INVOKABLE void clearFilter();
     Q_INVOKABLE void resetInputFields();
 
-    Q_INVOKABLE void addToMasterReportFilters(int reportId);
-    Q_INVOKABLE QMap<int, QVariantMap> fetchMasterReportFilters(int reportId);
-    Q_INVOKABLE void restoreMasterReportFilters(int reportId);
-    Q_INVOKABLE void deleteMasterReportFilters(int reportId, bool deleteAll = false);
+    Q_INVOKABLE void addToMasterReportFilters(QString reportId);
+    Q_INVOKABLE QMap<int, QVariantMap> fetchMasterReportFilters(QString reportId);
+    Q_INVOKABLE void restoreMasterReportFilters(QString reportId);
+    Q_INVOKABLE void deleteMasterReportFilters(QString reportId, bool deleteAll = false);
 
     Q_INVOKABLE void addToCategoricalFilters(int filterId);
     Q_INVOKABLE QVector<int> fetchCategoricalFilters();
