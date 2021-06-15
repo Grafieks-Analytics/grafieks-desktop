@@ -62,7 +62,7 @@ void GeneralParamsModel::setMenuType(int menuType)
     emit menuTypeChanged(m_menuType);
 }
 
-void GeneralParamsModel::setcurrentScreen(int currentScreen)
+void GeneralParamsModel::setCurrentScreen(int currentScreen)
 {
     if (m_currentScreen == currentScreen)
         return;

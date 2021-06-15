@@ -101,7 +101,7 @@ Popup {
             if(directLogin === false){
                 if(status.status === true){
                     popup.visible = false
-                    GeneralParamsModel.setcurrentScreen(Constants.modelerScreen)
+                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
                     stacklayout_home.currentIndex = 5
                 }
                 else{

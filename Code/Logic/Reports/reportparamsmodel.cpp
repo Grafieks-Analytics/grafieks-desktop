@@ -153,9 +153,9 @@ void ReportParamsModel::clearFilter()
 {
 
     // Q_PROPERTY
-//    this->setSection(Constants::defaultTabSection);
-//    this->setCategory(Constants::defaultCategory);
-//    this->setSubCategory(Constants::defaultSubCategory);
+    //    this->setSection(Constants::defaultTabSection);
+    //    this->setCategory(Constants::defaultCategory);
+    //    this->setSubCategory(Constants::defaultSubCategory);
 
     // variable change
     this->removeTmpSelectedValues(0, true);
@@ -196,10 +196,10 @@ void ReportParamsModel::addToMasterReportFilters(QString reportId)
 
 void ReportParamsModel::fetchMasterReportFilters(QString reportId)
 {
-   QMap<int, QVariantMap> output;
-   output = this->masterReportFilters.value(reportId);
+    QMap<int, QVariantMap> output;
+    output = this->masterReportFilters.value(reportId);
 
-   emit reportFilterChanged(output);
+    emit reportFilterChanged(output, reportId);
 }
 
 void ReportParamsModel::restoreMasterReportFilters(QString reportId)
@@ -292,9 +292,11 @@ void ReportParamsModel::removeNumericalFilters(int filterId, bool removeAll)
     }
 }
 
-void ReportParamsModel::addToFilterColumnMap(int filterId, QString value)
+void ReportParamsModel::addToFilterColumnMap(int filterId, QString value, QString tableName)
 {
-    this->filterColumnMap.insert(filterId, value);
+    QStringList columnTableList;
+    columnTableList << value << tableName;
+    this->filterColumnMap.insert(filterId, columnTableList);
 }
 
 QStringList ReportParamsModel::fetchFilterColumnMap(int filterId, bool fetchAll)
@@ -302,11 +304,11 @@ QStringList ReportParamsModel::fetchFilterColumnMap(int filterId, bool fetchAll)
     QStringList out;
 
     if(fetchAll == true){
-        foreach(QString tmp, this->filterColumnMap){
-            out.append(tmp);
+        foreach(QStringList tmp, this->filterColumnMap){
+            out.append(tmp.at(0));
         }
     } else{
-        out.append(this->filterColumnMap.value(filterId));
+        out.append(this->filterColumnMap.value(filterId).at(0));
     }
 
     return out;
@@ -1019,7 +1021,9 @@ void ReportParamsModel::restoreMasterFilters(int filterId, QVariantMap filterDat
         this->numericalFilters.append(filterId);
     }
 
-    this->filterColumnMap.insert(filterId, filterData.value("columnName").toString());
+    QStringList columnTableList;
+    columnTableList << filterData.value("columnName").toString() << filterData.value("tableName").toString();
+    this->filterColumnMap.insert(filterId, columnTableList);
     this->filterValueMap.insert(filterId, filterData.value("filterValue").toList());
     this->filterRelationMap.insert(filterId, filterData.value("filterRelation").toString());
     this->filterSlugMap.insert(filterId, filterData.value("filterSlug").toString());

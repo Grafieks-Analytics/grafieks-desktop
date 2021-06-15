@@ -33,7 +33,7 @@ public:
 
 public slots:
     void setMenuType(int menuType);
-    void setcurrentScreen(int currentScreen);
+    void setCurrentScreen(int currentScreen);
 
 signals:
 

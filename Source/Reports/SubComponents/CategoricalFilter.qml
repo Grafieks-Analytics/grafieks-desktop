@@ -152,7 +152,7 @@ Popup {
             ReportParamsModel.addToFilterSectionMap(counter, section)
             ReportParamsModel.addToFilterCategoryMap(counter, category)
             ReportParamsModel.addToFilterSubCategoryMap(counter, subCategory)
-            ReportParamsModel.addToFilterColumnMap(counter, columnName)
+            ReportParamsModel.addToFilterColumnMap(counter, columnName, tableName)
             ReportParamsModel.addToCategoricalFilters(counter)
 
             manageFilters(ReportParamsModel.mode, counter, ReportParamsModel.filterModelIndex)
@@ -167,7 +167,7 @@ Popup {
                 ReportParamsModel.addToFilterSectionMap(fi, section)
                 ReportParamsModel.addToFilterCategoryMap(fi, category)
                 ReportParamsModel.addToFilterSubCategoryMap(fi, subCategory)
-                ReportParamsModel.addToFilterColumnMap(fi, columnName)
+                ReportParamsModel.addToFilterColumnMap(fi, columnName, tableName)
                 ReportParamsModel.addToCategoricalFilters(fi)
 
                 manageFilters(ReportParamsModel.mode, fi, ReportParamsModel.filterModelIndex)
