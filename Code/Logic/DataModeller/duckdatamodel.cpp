@@ -32,14 +32,20 @@ DuckDataModel::~DuckDataModel()
 void DuckDataModel::columnData(QString col, QString tableName, QString options)
 {
     QStringList output;
-    output = this->getData("SELECT DISTINCT \"" + col + "\" FROM " + tableName);
+    QString joiner = this->getQueryJoiner();
+
+//    output = this->getData("SELECT DISTINCT \"" + col + "\" FROM " + tableName);
+    output = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM " + joiner + tableName + joiner);
     emit columnListModelDataChanged(output, options);
 }
 
 void DuckDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
 {
     QStringList output;
-    output = this->getData("SELECT DISTINCT \"" + col + "\" FROM "+ tableName + " WHERE \"" + col + "\" LIKE '%"+searchString+"%'");
+    QString joiner = this->getQueryJoiner();
+
+//    output = this->getData("SELECT DISTINCT \"" + col + "\" FROM "+ tableName + " WHERE \"" + col + "\" LIKE '%"+searchString+"%'");
+    output = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner + " WHERE " + joiner + col + joiner + " LIKE '%"+searchString+"%'");
     emit columnListModelDataChanged(output, options);
 }
 
@@ -133,6 +139,12 @@ QStringList DuckDataModel::getDbList()
     }
 
     return output;
+}
+
+QString DuckDataModel::getQueryJoiner()
+{
+    QString joiner = "\"";
+    return joiner;
 }
 
 

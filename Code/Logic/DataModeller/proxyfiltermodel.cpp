@@ -10,6 +10,7 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
     QString newQuery;
     QString newWhereConditions;
     QString existingWhereString;
+    QString joiner = this->getQueryJoiner();
 
     mQuerySplitter.setQuery(tmpSql);
     newWhereConditions = mQuerySplitter.getWhereCondition();
@@ -99,4 +100,61 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
         break;
     }
 
+    qDebug() << "NEW QUERY" << newQuery;
+
+}
+
+QString ProxyFilterModel::getQueryJoiner()
+{
+
+    QString joiner;
+
+    switch(Statics::currentDbIntType){
+    case Constants::mysqlIntType:
+        joiner = "`";
+        break;
+
+    case Constants::mongoIntType:
+        joiner = "\"";
+        break;
+
+    case Constants::postgresIntType:
+        joiner = "`";
+        break;
+
+    case Constants::oracleIntType:
+        joiner = "'";
+        break;
+
+    case Constants::mssqlIntType:
+        joiner = "\"";
+        break;
+
+    case Constants::accessIntType:
+        joiner = "\"";
+        break;
+    case Constants::sqliteIntType:
+        joiner = "`";
+        break;
+
+    case Constants::redshiftIntType:
+        joiner = "\"";
+        break;
+
+    case Constants::snowflakeIntType:
+        joiner = "\"";
+        break;
+
+    case Constants::teradataIntType:
+        joiner = "\"";
+        break;
+
+    case Constants::jsonIntType:
+    case Constants::csvIntType:
+    case Constants::excelIntType:
+        joiner = "\"";
+        break;
+    }
+
+    return joiner;
 }
