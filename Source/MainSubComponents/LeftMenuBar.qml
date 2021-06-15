@@ -100,7 +100,8 @@ Rectangle{
             }
 
             onClicked: {
-                GeneralParamsModel.setMenuType(Constants.dataDesignerMenu)
+                GeneralParamsModel.setMenuType(Constants.dataDesignerMenu)               
+                GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
                 stacklayout_home.currentIndex = redirectLayoutId
             }
 
@@ -168,6 +169,7 @@ Rectangle{
 
                 if(dsSelected === true){
                     GeneralParamsModel.setMenuType(Constants.dashboardDesignerMenu)
+                    GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
                     stacklayout_home.currentIndex = 6
                 } else{
                     errorDialog.open()

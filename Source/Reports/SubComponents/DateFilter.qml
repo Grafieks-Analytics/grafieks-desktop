@@ -217,7 +217,7 @@ Popup {
             ReportParamsModel.addToFilterSectionMap(counter, section)
             ReportParamsModel.addToFilterCategoryMap(counter, category)
             ReportParamsModel.addToFilterSubCategoryMap(counter, subCategory)
-            ReportParamsModel.addToFilterColumnMap(counter, columnName)
+            ReportParamsModel.addToFilterColumnMap(counter, columnName, tableName)
             ReportParamsModel.addToDateFilters(counter)
 
             console.log("INSERT DATE", section, category, subCategory)
@@ -240,7 +240,7 @@ Popup {
     function manageFilters(mode, counter = 0, filterId = 0){
 
         console.log("INSERT DATE FILTER HERE  - INSERT REPORT ID", mode, counter, filterId)
-        ReportParamsModel.addToMasterReportFilters(1);
+        ReportParamsModel.addToMasterReportFilters(Constants.uniqueReportId);
     }
     function resetDateFilter(){
         // Reset date filter here

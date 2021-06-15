@@ -8,7 +8,10 @@ QueryDataModel::QueryDataModel(QObject *parent) : QObject(parent)
 void QueryDataModel::columnData(QString col, QString tableName, QString options)
 {
     QStringList output;
-    output = this->getData("SELECT DISTINCT " + col + " FROM "+ tableName);
+    QString joiner = this->getQueryJoiner();
+
+//    output = this->getData("SELECT DISTINCT '" + col + "' FROM "+ tableName);
+    output = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner);
     emit columnListModelDataChanged(output, options, false);
 }
 
@@ -16,8 +19,47 @@ void QueryDataModel::columnSearchData(QString col, QString tableName, QString se
 {
 
     QStringList output;
-    output = this->getData("SELECT DISTINCT " + col + " FROM "+ tableName + " WHERE " + col + " LIKE '%"+searchString+"%'");
+    QString joiner = this->getQueryJoiner();
+
+//    output = this->getData("SELECT DISTINCT '" + col + "' FROM "+ tableName + " WHERE '" + col + "' LIKE '%"+searchString+"%'");
+    output = this->getData("SELECT DISTINCT " + joiner + col + joiner + " FROM "+ joiner + tableName + joiner + " WHERE " + joiner + col + joiner + " LIKE '%"+searchString+"%'");
     emit columnListModelDataChanged(output, options, true);
+}
+
+QString QueryDataModel::getQueryJoiner()
+{
+    QString joiner;
+
+    switch(Statics::currentDbIntType){
+    case Constants::mysqlIntType:
+        joiner = "`";
+        break;
+
+    case Constants::mongoIntType:
+        joiner = "\"";
+        break;
+
+    case Constants::postgresIntType:
+        joiner = "`";
+        break;
+
+    case Constants::oracleIntType:
+        joiner = "'";
+        break;
+
+    case Constants::mssqlIntType:
+        joiner = "\"";
+        break;
+
+    case Constants::accessIntType:
+        joiner = "\"";
+        break;
+    case Constants::sqliteIntType:
+        joiner = "`";
+        break;
+    }
+
+    return joiner;
 }
 
 QStringList QueryDataModel::getData(QString queryString)

@@ -59,6 +59,7 @@ public:
 private:
 
     QString setRelation(QString tableName, QString columnName, QString relation, QString conditions, bool exclude, bool isNull);
+    QString getQueryJoiner();
 
 
 signals:
