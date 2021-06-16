@@ -78,9 +78,11 @@ Page {
     // Or Categorical Value is added on Y axis
     // On Change we update the graph title
     property bool isHorizontalGraph: false;
-    
+
     property var colorData:[];
 
+    // Edit Report Flag
+    property bool editReportFlag: false;
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -104,7 +106,7 @@ Page {
     ListModel{
         id: valuesListModel
     }
-    
+
     // Colur By Data Item List
     ListModel{
         id: dataItemList
@@ -128,6 +130,28 @@ Page {
     /***********************************************************************************************************************/
     // Connections Starts
 
+    Connections{
+        target: ReportParamsModel
+
+        function onEditReportToggleChanged(reportId){
+            if(reportId != "false"){
+                addReportButton.text = "Update";
+                editReportFlag = true;
+                setValuesOnEditReport();
+            }else{
+                addReportButton.text = "Add";
+            }
+        }
+
+        function onReportIdChanged(reportIdValue){
+            if(!reportIdValue){
+                addReport(true);
+                clearValuesOnAddNewReport();
+            }
+            report_desiner_page.reportIdMain = reportIdValue;
+        }
+
+    }
 
 
     // Connections Ends
@@ -189,14 +213,12 @@ Page {
 
         // Charts Mapping
         // Basically these are the basic configs
-        // Having Max Allowed Values for now 
+        // Having Max Allowed Values for now
         const chartDetailsConfig = allChartsMapping[chartTitle];
         const { maxDropOnXAxis, maxDropOnYAxis } = chartDetailsConfig || {maxDropOnXAxis: allowedXAxisDataPanes, maxDropOnYAxis: allowedYAxisDataPanes};
 
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);;
-
-        console.log(xAxisColumns);
 
         // check if maximum drop is less than in config?
         // if less then remove all the extra values
@@ -312,13 +334,77 @@ Page {
         }
     }
 
+    function clearValuesOnAddNewReport(){
+        console.log('Okay! Let me clear');
+        clearAllChartValues();
+        switchChart(Constants.barChartTitle);
+    }
+
+    function setValuesOnEditReport(){
+        var reportProperties = ReportParamsModel.getReport(reportIdMain);
+        console.log(JSON.stringify(reportProperties));
+
+        var xAxisColumnsReportData = JSON.parse(reportProperties.xAxisColumns);
+        var yAxisColumnsReportData = JSON.parse(reportProperties.yAxisColumns);
+        var colorListModelData = JSON.parse(reportProperties.colorByDataColoumns);
+
+        // Update List Models
+        for(var i=0; i<xAxisColumnsReportData.length; i++){
+            xAxisListModel.append({ itemName: xAxisColumnsReportData[i].itemName, droppedItemType: xAxisColumnsReportData[i].droppedItemType })
+        }
+        for(var i=0; i< yAxisColumnsReportData.length; i++){
+            yAxisListModel.append({ itemName: yAxisColumnsReportData[i].itemName, droppedItemType: yAxisColumnsReportData[i].droppedItemType })
+        }
+        for(var i=0; i<colorListModelData.length; i++){
+            colorListModel.append({ textValue: colorListModelData[i].columnName })
+        }
+
+        // Update Property Variables
+        report_title_text.text = reportProperties.reportTitle
+        report_desiner_page.chartTitle = reportProperties.chartTitle; 
+        report_desiner_page.chartUrl = reportProperties.chartUrl
+        report_desiner_page.d3PropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
+        report_desiner_page.colorByData = JSON.parse(reportProperties.colorByDataColoumns);
+
+        reDrawChart();
+    }
+
+    // On Edit Redraw the updated chart
+    function reDrawDashboardChart(reportId){
+        let reportInstance = ReportParamsModel.getDashboardReportInstance(reportIdMain);
+        var reportProperties = ReportParamsModel.getReport(reportIdMain);
+        var reportUrl = reportInstance.getChartUrl();
+
+        // Check if on updating the graph chart url was changed. 
+        // If changed update the url in report instance
+        // Else just redraw the chart.        
+        if(reportUrl !== reportProperties.chartUrl){
+            reportInstance.setChartUrl(reportProperties.chartUrl);
+            return;
+        }
+
+        reportInstance.reDrawChart();
+    }
+
+    // Redraw all the charts in Dashboard
+    function reDrawAllDashboardCharts(){
+        // Here are all the instances, Let's Redraw the charts
+        let allReportInstances = ReportParamsModel.getAllDashboardReportInstances();
+        for(var reportIdValue in allReportInstances){
+            // Redrawing charts one by one;
+            var instance = allReportInstances[reportIdValue];
+            instance.reDrawChart();
+        }
+    }
+
+
     // Switch Chart Urls
-    // Whenever Chart is changed 
+    // Whenever Chart is changed
     // Perform these things
     // 1. Change the title
-    // 2. Change the URL 
+    // 2. Change the URL
     // 3. Update the webEngine URL
-    
+
     function switchChart(chartTitleValue){
         chartTitle = chartTitleValue;
         var chartUrl = '';
@@ -335,13 +421,37 @@ Page {
             case Constants.stackedBarChartTitle:
                 chartUrl = Constants.stackedBarChartUrl
                 break;
+            case Constants.groupBarChartTitle:
+                chartUrl = Constants.barGroupedChartUrl
         }
         webEngineView.url = Constants.baseChartUrl+chartUrl;
+        report_desiner_page.chartUrl = chartUrl;
     }
 
     function searchColumnNames(searchText){
         ChartsModel.searchColumnNames(searchText)
     }
+
+    function getAxisModelAsJson(axisName){
+        var model = null;
+        switch(axisName){
+        case Constants.xAxisName:
+            model = xAxisListModel;
+            break
+        case Constants.yAxisName:
+            model = yAxisListModel;
+            break;
+        }
+        if(!model){
+            return [];
+        }
+        var columnsData = [];
+        for(var i=0; i< model.count; i++){
+            columnsData.push({ itemName: model.get(i).itemName, droppedItemType: model.get(i).droppedItemType });
+        }
+        return columnsData;
+    }
+
 
     // function to get the columnName from model
     function getAxisColumnNames(axisName){
@@ -365,23 +475,24 @@ Page {
     }
 
     function clearAllChartValues(){
-        
+
         // Clear title and report id
         ReportParamsModel.setReportId(null);
         ReportParamsModel.setReportTitle(null);
+        ReportParamsModel.setLastDropped(null);
         report_title_text.text = "";
         reportIdMain = "";
-        
+
         // Clear all the list models
         xAxisListModel.clear();
         yAxisListModel.clear();
         colorListModel.clear();
         valuesListModel.clear();
         dataItemList.clear();
-        
+
         // Clear property Config
         d3PropertyConfig = {};
-    
+
         // Clear general params
         lastPickedDataPaneElementProperties= {};
         reportDataPanes= {};  // Report Data Panes Object
@@ -392,7 +503,7 @@ Page {
         // Calling this redraw will clear the chart because no x and y columns will be available
         // [Tag: Optimization]
         // Check instead of reDraw if we can call only one function to clear the chart
-        // May be webengineview.runJs("call clearValues"); 
+        // May be webengineview.runJs("call clearValues");
         reDrawChart();
 
     }
@@ -415,7 +526,7 @@ Page {
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
 
-        if((xAxisListModel.count && xAxisListModel.get(0).droppedItemType.toLowerCase() !== 'numerical')  || (yAxisListModel.count && yAxisListModel.get(0).droppedItemType.toLowerCase() === 'numerical')){
+         if((xAxisListModel.count && xAxisListModel.get(0).droppedItemType.toLowerCase() !== 'numerical')  || (yAxisListModel.count && yAxisListModel.get(0).droppedItemType.toLowerCase() === 'numerical')){
             isHorizontalGraph = false;
         }
 
@@ -467,14 +578,24 @@ Page {
         webEngineView.url = chartname;
     }
 
-    function addReport(){
+    function addReport(initialAddition){
         // Add report to dashboard
-        stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
-
         if(!reportIdMain){
             reportIdMain = generateReportId();
             ReportParamsModel.setReportId(reportIdMain);
         }
+        
+        if(initialAddition){
+            ReportParamsModel.setChartType(chartTitle);
+            ReportParamsModel.setChartTitle(chartTitle);
+            var numberOfReports = Object.keys(reportList).length;
+            report_title_text.text = 'Report '+ (numberOfReports + 1);
+            ReportParamsModel.setReportTitle('Report '+ (numberOfReports + 1));
+            ReportParamsModel.addReport(reportIdMain);
+            return;
+        }
+        GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
+        stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
 
         // [Tag: Optimization]
         // We can create the object here and pass to cpp
@@ -487,7 +608,6 @@ Page {
         // If name is not given add the name as Report "NUMBER"
         // Else is  not required (Case to set the value, because it is getting saved on key presses)
         var reportList = ReportParamsModel.getReportsList();
-        console.log(report_title_text.text)
         if(!report_title_text.text || report_title_text.text == ""){
             var numberOfReports = Object.keys(reportList).length;
             ReportParamsModel.setReportTitle('Report '+ (numberOfReports + 1));
@@ -496,13 +616,15 @@ Page {
         ReportParamsModel.setChartType(chartTitle);
         ReportParamsModel.setChartTitle(chartTitle);
         ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertyConfig));
-        ReportParamsModel.setChartUrl(chartUrl);
-        ReportParamsModel.setXAxisColumns(JSON.stringify(getAxisColumnNames(Constants.xAxisName)));
-        ReportParamsModel.setYAxisColumns(JSON.stringify(getAxisColumnNames(Constants.yAxisName)));
+        console.log('Add Report Value',report_desiner_page.chartUrl, chartUrl);
+        ReportParamsModel.setChartUrl(report_desiner_page.chartUrl);
+        ReportParamsModel.setXAxisColumns(JSON.stringify(getAxisModelAsJson(Constants.xAxisName)));
+        ReportParamsModel.setYAxisColumns(JSON.stringify(getAxisModelAsJson(Constants.yAxisName)));
         ReportParamsModel.setColorByDataColoumns(JSON.stringify(colorByData));
 
+        console.log('reportIdMain');
         ReportParamsModel.addReport(reportIdMain);
-        
+
         chartTitle = Constants.barChartTitle;
         chartUrl = Constants.barChartUrl;
 
@@ -512,11 +634,20 @@ Page {
             console.log('Report List Data',reportId,reportList[reportId]);
         }
 
+        
+        // On Edit => Redraw Only Updated chart in Dashboard
+        if(editReportFlag){
+            reDrawDashboardChart(reportIdMain);
+        }
+        editReportFlag = false;
+        ReportParamsModel.setEditReportToggle(false);
         clearAllChartValues();
+        switchChart(barChartTitle);
     }
 
     function cancelReport(){
         // Back to dashboard
+        GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
         // ChartsModel.removeTmpChartData()
     }
@@ -692,13 +823,13 @@ Page {
                 dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.horizontalStackedBarChartTitle:
-                colorByColumnName = colorByData[0].columnName;
+                colorByColumnName = colorByData[0] && colorByData[0].columnName;
                 dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,xAxisColumns[0], yAxisColumns[0]);
-                
+
                 break;
             case Constants.stackedBarChartTitle:
                 console.log('Stacked bar chart!');
-                colorByColumnName = colorByData[0].columnName;
+                colorByColumnName = colorByData[0] && colorByData[0].columnName;
                 dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,yAxisColumns[0], xAxisColumns[0]);
                 break;
             case Constants.horizontalBarGroupedChartTitle:
@@ -813,7 +944,7 @@ Page {
            //    need to initialise only once
            console.log('Starting to plot');
            // console.log('Data Values',dataValues);
-           console.log('Chart Url',report_desiner_page.chartUrl, webEngineView.url)
+           console.log('Chart Url', report_desiner_page.chartUrl, webEngineView.url)
 
            var scriptValue = 'window.addEventListener("resize", function () {
                     d3.selectAll("#my_dataviz").html("");
@@ -835,9 +966,6 @@ Page {
         yAxisSettingsPopup.visible = true
     }
 
-    function exportReport(){
-        console.log('Export Report')
-    }
 
     function updateReportTitle(){
         ReportParamsModel.setReportTitle(report_title_text.text);
@@ -1505,8 +1633,9 @@ Page {
                 height: parent.height
                 anchors.left: row4Valueseparator3.right
                 Text{
+                    // [Tag: Refector]
+                    // Move to constants
                     text: 'Yellow'
-
                     anchors.centerIn: parent
                 }
                 z:1
@@ -1533,9 +1662,7 @@ Page {
                     width: 160
                     height: 30
                     radius: 15
-                    //                    color: "red"
                     border.color: Constants.borderBlueColor
-
                     anchors.centerIn: parent
 
                     TextEdit {
@@ -1572,6 +1699,8 @@ Page {
                 anchors.left: row4Valueseparator5.right
 
                 Text{
+                    // [Tag: Refector]
+                    // Move to constants
                     text: 'Red'
                     anchors.leftMargin: 20
                     anchors.centerIn: parent
@@ -1600,7 +1729,6 @@ Page {
                     width: 160
                     height: 30
                     radius: 15
-                    //                    color: "red"
                     border.color: Constants.borderBlueColor
 
                     anchors.centerIn: parent
@@ -1639,6 +1767,8 @@ Page {
         id: webEngineView
         height:parent.height - axis.height -50
         width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width - 50
+        // [Tag: Refector]
+        // Move to constants
         url: "../Charts/BarChartArrayInput.html"
         onLoadingChanged: onChartLoaded(loadRequest)
         anchors.left: tool_sep_chartFilters.right
@@ -1699,6 +1829,7 @@ Page {
                 }
 
                 Button{
+                    id: addReportButton
                     text:"Add"
                     height: parent.height
                     anchors.right: parent.right

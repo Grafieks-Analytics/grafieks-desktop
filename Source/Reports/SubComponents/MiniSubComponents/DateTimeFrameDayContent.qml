@@ -200,6 +200,7 @@ Column{
         var finalValue = lastXDays[0] + "," + lastXDays[lastXDays.length - 1]
 
         console.log("Last " + value + " Days", lastXDays[0], lastXDays[lastXDays.length - 1])
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubDay)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToJoinValue(counter, "Last " + value + " Day")
@@ -303,11 +304,12 @@ Column{
         var finalValue = nextXDays[0] + "," + nextXDays[nextXDays.length - 1]
 
         console.log("Next " + value + " Day", nextXDays[0], nextXDays[nextXDays.length - 1])
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubDay)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Next " + value + " Day")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = true
         lastXRadioTextField.focus = false
@@ -320,11 +322,12 @@ Column{
         var thisDay = newDate
 
         console.log("This Day", thisDay.toString())
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubDay)
         ReportParamsModel.setActualDateValues(counter, thisDay.toString())
         ReportParamsModel.addToFilterValueMap(counter, "This Day")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.likeRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugLikeRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -400,11 +403,12 @@ Column{
         }
 
         console.log("Last Day", newValue.toString())
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubDay)
         ReportParamsModel.setActualDateValues(counter, newValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Last Day")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.likeRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugLikeRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -492,11 +496,12 @@ Column{
         }
 
         console.log("Next Day", newValue.toString())
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubDay)
         ReportParamsModel.setActualDateValues(counter, newValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Next Day")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.likeRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugLikeRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false

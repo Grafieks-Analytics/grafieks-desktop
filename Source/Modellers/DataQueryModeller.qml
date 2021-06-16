@@ -29,7 +29,6 @@ Page {
     height: parent.height
 
 
-
     property int menu_width: 60
     property bool dataModellerSelected: true
     property int statusIndex: 1
@@ -53,6 +52,7 @@ Page {
 
     Connections{
         target: ConnectorsLoginModel
+
 
         // Rest fetch data model from datasources
 
@@ -308,7 +308,9 @@ Page {
 
     function onCreateDashboardClicked(){
 
+        GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
         stacklayout_home.currentIndex = 6
+
     }
 
 
@@ -373,13 +375,13 @@ Page {
 
     function clearModelQueryData(){
 
-//        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
-//            QueryModel.removeTmpChartData()
-//        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-//            DuckQueryModel.removeTmpChartData()
-//        } else{
-//            ForwardOnlyQueryModel.removeTmpChartData()
-//        }
+        //        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+        //            QueryModel.removeTmpChartData()
+        //        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
+        //            DuckQueryModel.removeTmpChartData()
+        //        } else{
+        //            ForwardOnlyQueryModel.removeTmpChartData()
+        //        }
 
         NewTableColumnsModel.clearColumns();
     }
@@ -1097,7 +1099,7 @@ Page {
                 id: tabbar_querymodeller
 
                 width:rectangle_querymodeller_right_col.width
-                 z: 20
+                z: 20
 
                 background: Rectangle {
                     color: "transparent"
@@ -1108,7 +1110,7 @@ Page {
                     id: tabPublishDashboard
                     width:rectangle_querymodeller_right_col.width / 2
                     height: parent.height
-                     z: 20
+                    z: 20
 
                     Image {
                         id: publishIcon
@@ -1137,7 +1139,7 @@ Page {
                     id: tabCreateDashboard
                     width:rectangle_querymodeller_right_col.width / 2
                     height: parent.height
-                     z: 20
+                    z: 20
 
                     Image {
                         id: dashboardIcon
@@ -1341,96 +1343,96 @@ Page {
                             height: 30
                             width: parent.width
                             color: Constants.themeColor
-                //            anchors.top: parent.top
-                //            x:-leftMargin
+                            //            anchors.top: parent.top
+                            //            x:-leftMargin
 
                             border.color: Constants.darkThemeColor
 
-                        Image {
-                            id: database
-                            height: 20
-                            width: 18
-                            source: "/Images/icons/database_32x36.png"
-                            anchors.left: drop_icon.right
-                            anchors.leftMargin: 8
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
+                            Image {
+                                id: database
+                                height: 20
+                                width: 18
+                                source: "/Images/icons/database_32x36.png"
+                                anchors.left: drop_icon.right
+                                anchors.leftMargin: 8
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
 
-                        Text {
-                            id:database_name
-                            anchors.left: database.right
-                            anchors.leftMargin: 10
-                            width: categoryItem.width-100
-                            anchors.verticalCenter: parent.verticalCenter
-                            font.pixelSize: Constants.fontCategoryHeaderMedium
-                            text: ConnectorsLoginModel.connectedDB
-                            elide: Text.ElideRight
+                            Text {
+                                id:database_name
+                                anchors.left: database.right
+                                anchors.leftMargin: 10
+                                width: categoryItem.width-100
+                                anchors.verticalCenter: parent.verticalCenter
+                                font.pixelSize: Constants.fontCategoryHeaderMedium
+                                text: ConnectorsLoginModel.connectedDB
+                                elide: Text.ElideRight
 
 
-                            ToolTip.delay:Constants.tooltipShowTime
-                            ToolTip.timeout: Constants.tooltipHideTime
-                            ToolTip.text: qsTr("Current connected database:" + ConnectorsLoginModel.connectedDB + " ")
-                            ToolTip.visible: mouseAreaCurrentDB.containsMouse? true: false
+                                ToolTip.delay:Constants.tooltipShowTime
+                                ToolTip.timeout: Constants.tooltipHideTime
+                                ToolTip.text: qsTr("Current connected database:" + ConnectorsLoginModel.connectedDB + " ")
+                                ToolTip.visible: mouseAreaCurrentDB.containsMouse? true: false
 
-                            MouseArea{
-                                id: mouseAreaCurrentDB
-                                anchors.fill: parent
-                                hoverEnabled: true
+                                MouseArea{
+                                    id: mouseAreaCurrentDB
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+
+                                }
+                            }
+
+                            Image {
+                                id: power_icon
+                                source: "/Images/icons/PowerOff.png"
+                                width: 18
+                                height: 18
+                                anchors.left: database_name.right
+                                anchors.leftMargin:  13
+                                anchors.verticalCenter: parent.verticalCenter
+                                visible: true
+
+                                ToolTip.delay:Constants.tooltipShowTime
+                                ToolTip.timeout: Constants.tooltipHideTime
+                                ToolTip.text: qsTr("Disconnect")
+                                ToolTip.visible: mousePowerIcon.containsMouse ? true: false
+
+                                MouseArea{
+                                    id:mousePowerIcon
+                                    anchors.fill: parent
+                                    onClicked: disconnectDS()
+                                    hoverEnabled: true
+                                }
+
+
+
+
+                            }
+
+                            Image {
+                                id: drop_icon
+                                source: "/Images/icons/Down_20.png"
+                                width: 10
+                                height: 10
+                                anchors.left: parent.left
+                                anchors.leftMargin:  5
+                                anchors.verticalCenter: parent.verticalCenter
+                                visible: true
+
+                                ToolTip.delay:Constants.tooltipShowTime
+                                ToolTip.timeout: Constants.tooltipHideTime
+                                ToolTip.text: qsTr("Hide/Show database tables")
+                                ToolTip.visible: mouseAreaShowHide.containsMouse ? true: false
+
+                                MouseArea {
+                                    id: mouseAreaShowHide
+                                    anchors.fill: parent
+                                    onClicked: collapseTables()
+                                    hoverEnabled: true
+                                }
 
                             }
                         }
-
-                        Image {
-                            id: power_icon
-                            source: "/Images/icons/PowerOff.png"
-                            width: 18
-                            height: 18
-                            anchors.left: database_name.right
-                            anchors.leftMargin:  13
-                            anchors.verticalCenter: parent.verticalCenter
-                            visible: true
-
-                            ToolTip.delay:Constants.tooltipShowTime
-                            ToolTip.timeout: Constants.tooltipHideTime
-                            ToolTip.text: qsTr("Disconnect")
-                            ToolTip.visible: mousePowerIcon.containsMouse ? true: false
-
-                            MouseArea{
-                                id:mousePowerIcon
-                                anchors.fill: parent
-                                onClicked: disconnectDS()
-                                hoverEnabled: true
-                            }
-
-
-
-
-                        }
-
-                        Image {
-                            id: drop_icon
-                            source: "/Images/icons/Down_20.png"
-                            width: 10
-                            height: 10
-                            anchors.left: parent.left
-                            anchors.leftMargin:  5
-                            anchors.verticalCenter: parent.verticalCenter
-                            visible: true
-
-                            ToolTip.delay:Constants.tooltipShowTime
-                            ToolTip.timeout: Constants.tooltipHideTime
-                            ToolTip.text: qsTr("Hide/Show database tables")
-                            ToolTip.visible: mouseAreaShowHide.containsMouse ? true: false
-
-                            MouseArea {
-                                id: mouseAreaShowHide
-                                anchors.fill: parent
-                                onClicked: collapseTables()
-                                hoverEnabled: true
-                            }
-
-                        }
-                    }
                     }
 
                     ListView {

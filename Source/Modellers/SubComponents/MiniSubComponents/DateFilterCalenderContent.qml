@@ -33,6 +33,9 @@ Rectangle{
     visible: false
     property int counter: 0
 
+    property var date1: ""
+    property var date2: ""
+
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
@@ -70,27 +73,33 @@ Rectangle{
         }
 
         function onFilterIndexChanged(){
-            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainCalendarType){
-                counter = DSParamsModel.filterIndex
-            }
+            counter = DSParamsModel.filterIndex
+        }
+    }
+
+    Connections{
+        target: DuckDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
+        target: ForwardOnlyDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
         }
     }
 
     Connections{
         target: QueryDataModel
 
-        function onColumnListModelDataChanged(colData, options){
-
-            var jsonOptions = JSON.parse(options)
-
-            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainCalendarType){
-                //                DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-                //                DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
-                console.log(JSON.stringify(DSParamsModel.fetchJoinRelation(counter)))
-            }
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
         }
     }
-
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -116,6 +125,24 @@ Rectangle{
             toDateInput.text  = valueList[1]
             fromDateInput.activeFocus = true
             toDateInput.activeFocus = true
+        }
+    }
+
+    function updateData(colData, options){
+
+        var jsonOptions = JSON.parse(options)
+        console.log(JSON.parse(options))
+        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainCalendarType){
+
+            var newDates = jsonOptions.values.split(",")
+            if(newDates.length > 0){
+
+                date1 = newDates[0]
+                date2 = newDates[1]
+
+                fromDateInput.text = date1
+                toDateInput.text = date2
+            }
         }
     }
 
@@ -154,13 +181,26 @@ Rectangle{
         setToDate(date)
     }
 
-    function onCalendarInput(fromDate,toDate){
-        var newValue = fromDate + ","  + toDate;
-        DSParamsModel.addToJoinValue(counter, newValue)
-        DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
-        DSParamsModel.addToJoinRelationSlug(counter, Constants.betweenRelation)
+    function onCalendarFromInput(fromDate){
 
-//        console.log("DSPARAMS", DSParamsModel.fetchJoinRelation(counter)[counter], DSParamsModel.fetchJoinRelationSlug(counter)[counter], DSParamsModel.fetchJoinValue(counter)[counter])
+        if(fromDate.trim().length > 0){
+            date1 = fromDate
+            var newValue = date1 + ","  + date2;
+            DSParamsModel.addToJoinValue(counter, newValue)
+            DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+            DSParamsModel.addToJoinRelationSlug(counter, Constants.slugBetweenRelation)
+        }
+    }
+
+    function onCalendarToInput(toDate){
+
+        if(toDate.trim().length > 0){
+            date2 = toDate
+            var newValue = date1 + ","  + date2;
+            DSParamsModel.addToJoinValue(counter, newValue)
+            DSParamsModel.addToJoinRelation(counter, Constants.betweenRelation)
+            DSParamsModel.addToJoinRelationSlug(counter, Constants.slugBetweenRelation)
+        }
     }
 
     function onIncludeCheckedClicked(checked){
@@ -207,8 +247,6 @@ Rectangle{
             padding: 12
             leftPadding: 20
 
-
-
             Text {
                 text: qsTr("Date Range")
             }
@@ -252,7 +290,7 @@ Rectangle{
 
                     height: parent.height
                     onTextChanged: {
-                        onCalendarInput(fromDateInput.text,toDateInput.text)
+                        onCalendarFromInput(fromDateInput.text)
                     }
 
                 }
@@ -311,7 +349,7 @@ Rectangle{
 
                     height: parent.height
                     onTextChanged: {
-                        onCalendarInput(fromDateInput.text,toDateInput.text)
+                        onCalendarToInput(toDateInput.text)
                     }
                 }
 
@@ -357,7 +395,7 @@ Rectangle{
         anchors.leftMargin: 20
 
         CheckBoxTpl {
-            checked: DSParamsModel.getIncludeNullMap(counter)
+            checked: DSParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
             text: qsTr("Include Null")
             parent_dimension: Constants.defaultCheckBoxDimension
 
@@ -375,7 +413,7 @@ Rectangle{
         anchors.rightMargin: 20
 
         CheckBoxTpl {
-            checked: DSParamsModel.getExcludeMap(counter)
+            checked: DSParamsModel.getExcludeMap(counter)[counter] === "1" ? true : false
             text: qsTr("Exclude")
             parent_dimension: Constants.defaultCheckBoxDimension
 

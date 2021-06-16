@@ -335,6 +335,9 @@ int main(int argc, char *argv[])
     // Dashboards - Connect the obtained column names from modeler filters to dashboard params model
     QObject::connect(&tableColumnsModel, &TableColumnsModel::columnNamesChanged, &dashboardParamsModel, &DashboardParamsModel::getColumnNames);
 
+    // Reports
+    QObject::connect(&reportParamsModel, &ReportParamsModel::reportFilterChanged, &chartsModel, &ChartsModel::updateFilterData);
+
     // SIGNAL & SLOTS ENDS
     /***********************************************************************************************************************/
     /***********************************************************************************************************************/
