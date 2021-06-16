@@ -924,18 +924,19 @@ Page {
                 }
             }
 
-            Image {
-                source: "/Images/icons/Edit.png"
-                height: 20
-                width: 20
-                anchors.right: parent.right
-                anchors.rightMargin: 10
-                anchors.verticalCenter: parent.verticalCenter
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: focusReportTitle()
-                }
-            }
+//
+//            Image {
+//                source: "/Images/icons/Edit.png"
+//                height: 20
+//                width: 20
+//                anchors.right: parent.right
+//                anchors.rightMargin: 10
+//                anchors.verticalCenter: parent.verticalCenter
+//                MouseArea{
+//                    anchors.fill: parent
+//                    onClicked: focusReportTitle()
+//                }
+//            }
         }
 
 
@@ -982,6 +983,7 @@ Page {
         id: tool_sep_leftmenubarreports
         anchors.left: left_menubar_reports.right
         anchors.top: seperator_title_bar.bottom
+        anchors.topMargin: -2
         anchors.leftMargin: 0
         height:parent.height
         padding: 0

@@ -81,7 +81,7 @@ Item {
         RadioButton {
             id: control1
             ButtonGroup.group: buttonGroupFilterTypeCategorical
-            onCheckedChanged: setFilterType(Constants.filterCategoricalTypes[0])
+            onCheckedChanged: setFilterType(Constants.filterCategoricalTypes[1])
             indicator: Rectangle {
                 implicitWidth: 16
                 implicitHeight: 16
@@ -114,7 +114,7 @@ Item {
         RadioButton {
             id: control2
             ButtonGroup.group: buttonGroupFilterTypeCategorical
-            onCheckedChanged: setFilterType(Constants.filterCategoricalTypes[1])
+            onCheckedChanged: setFilterType(Constants.filterCategoricalTypes[0])
             indicator: Rectangle {
                 implicitWidth: 16
                 implicitHeight: 16

@@ -8,8 +8,9 @@ import "../../../MainSubComponents"
 
 Item {
     id: filterDataItemMulti
-    width: parent.width-8
+    width: parent.width-25
     height: 200
+       anchors.horizontalCenter: parent.horizontalCenter
     property alias componentName: filterDataItemMulti.objectName
 
     onComponentNameChanged: {

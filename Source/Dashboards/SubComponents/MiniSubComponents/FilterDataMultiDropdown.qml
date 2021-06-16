@@ -10,7 +10,8 @@ Item {
 
     id: filterDataMultiItem
     height: comboBox.height + columnName.height
-    width: parent.width-8
+    width: parent.width-25
+       anchors.horizontalCenter: parent.horizontalCenter
     property alias componentName: filterDataMultiItem.objectName
 
     onComponentNameChanged: {
