@@ -15,18 +15,18 @@ class ReportParamsModel: public QObject
     Q_OBJECT
 
 // Customize Report parameters
-    QVariantMap reportsMap;           // <<reportId, reportObj>>
+    QVariantMap reportsMap;           // <<QString reportId, reportObj>>
     QVariantMap reportsData;
     QVariantMap dashboardReportInstances;
 
     // Filter specific variables
-    QMap<int, QMap<int, QVariantMap>> masterReportFilters;         // Report Id - Map of
+    QMap<QString, QMap<int, QVariantMap>> masterReportFilters;         // Report Id - Map of various report filters
 
 
     QVector<int> categoricalFilters;                            // List of categorical filters
     QVector<int> dateFilters;                                   // List of date filters
     QVector<int> numericalFilters;                              // List of numerical filters
-    QMap<int, QString> filterColumnMap;                         // filter id - column name map
+    QMap<int, QStringList> filterColumnMap;                         // filter id - <column name - tablename> map
     QMap<int, QVariantList> filterValueMap;                     // filter id - value list map
     QMap<int, QString> filterRelationMap;                       // filter id - relation map
     QMap<int, QString> filterSlugMap;                           // filter id - slug map
@@ -63,6 +63,8 @@ class ReportParamsModel: public QObject
     Q_PROPERTY(QString yAxisColumns READ yAxisColumns WRITE setYAxisColumns NOTIFY yAxisColumnsChanged)
     Q_PROPERTY(QString d3PropertiesConfig READ d3PropertiesConfig WRITE setD3PropertiesConfig NOTIFY d3PropertiesConfigChanged)
     Q_PROPERTY(QString colorByDataColoumns READ colorByDataColoumns WRITE setColorByDataColoumns NOTIFY colorByDataColoumnsChanged)
+    Q_PROPERTY(QString editReportToggle READ editReportToggle WRITE setEditReportToggle NOTIFY editReportToggleChanged)
+
 
     // For Filters
     Q_PROPERTY(int internalCounter READ internalCounter WRITE setInternalCounter NOTIFY internalCounterChanged) // Counter for categorical-wildcard
@@ -107,6 +109,8 @@ class ReportParamsModel: public QObject
     QString m_chartTitle;
 
     QString m_colorByDataColoumns;
+
+    QString m_editReportToggle;
 
 public:
     explicit ReportParamsModel(QObject *parent = nullptr);
@@ -155,9 +159,10 @@ public:
     Q_INVOKABLE void clearFilter();
     Q_INVOKABLE void resetInputFields();
 
-    Q_INVOKABLE void addToMasterReportFilters(int reportId);
-    Q_INVOKABLE void restoreMasterReportFilters(int reportId);
-    Q_INVOKABLE void deleteMasterReportFilters(int reportId, bool deleteAll = false);
+    Q_INVOKABLE void addToMasterReportFilters(QString reportId);
+    Q_INVOKABLE void fetchMasterReportFilters(QString reportId);
+    Q_INVOKABLE void restoreMasterReportFilters(QString reportId);
+    Q_INVOKABLE void deleteMasterReportFilters(QString reportId, bool deleteAll = false);
 
     Q_INVOKABLE void addToCategoricalFilters(int filterId);
     Q_INVOKABLE QVector<int> fetchCategoricalFilters();
@@ -171,7 +176,7 @@ public:
     Q_INVOKABLE QVector<int> fetchNumericalFilters();
     Q_INVOKABLE void removeNumericalFilters(int filterId, bool removeAll = false);
 
-    Q_INVOKABLE void addToFilterColumnMap(int filterId, QString value);
+    Q_INVOKABLE void addToFilterColumnMap(int filterId, QString value, QString tableName);
     Q_INVOKABLE QStringList fetchFilterColumnMap(int filterId = 0, bool fetchAll = false);
     Q_INVOKABLE void removeFilterColumnMap(int filterId);
 
@@ -233,6 +238,7 @@ public:
     Q_INVOKABLE QVariant getAllDashboardReportInstances();
 
 
+    QString editReportToggle() const;
 
 public slots:
 
@@ -263,13 +269,15 @@ public slots:
     void setInternalCounter(int internalCounter);
     void setSection(QString section);
     void setCategory(QString category);
-    void setSubCategory(QString subCategory);
+    void setSubCategory(QString reportFilterChangedsubCategory);
     void setTableName(QString tableName);
     void setColName(QString colName);
     void setFilterIndex(int filterIndex);
     void setMode(QString mode);
     void setFilterModelIndex(int filterModelIndex);
 
+
+    void setEditReportToggle(QString editReportToggle);
 
 signals:
     // General properties
@@ -296,6 +304,7 @@ signals:
     void colorByDataColoumnsChanged(QString colorByDataColoumns);
 
     // For Filters
+    void reportFilterChanged(QMap<int, QVariantMap> reportFilters, QString reportId);
     void resetInput();
     void internalCounterChanged(int internalCounter);
     void sectionChanged(QString section);
@@ -311,8 +320,7 @@ signals:
     // For Dashboard Reports
     void reportListChanged();
 
-
-
+    void editReportToggleChanged(QString editReportToggle);
     void categoricalFilterChanged(QVector<int> filterList);
     void dateFilterChanged(QVector<int> filterList);
     void numericalFilterChanged(QVector<int> filterList);

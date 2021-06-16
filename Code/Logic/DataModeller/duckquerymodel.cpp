@@ -23,7 +23,6 @@ void DuckQueryModel::setQuery(QString query)
     emit clearTablePreview();
 
     this->removeTmpChartData();
-
     this->query = query;
     querySplitter.setQueryForClasses(this->query);
 
@@ -167,6 +166,7 @@ void DuckQueryModel::generateRoleNames()
         tablesList << querySplitter.getMainTable();
         tablesList << querySplitter.getJoinTables();
 
+
         this->internalColCount = output.length();
 
         for(int i =0; i < output.length(); i++){
@@ -309,6 +309,6 @@ void DuckQueryModel::removeTmpChartData()
 void DuckQueryModel::receiveCsvFilterQuery(QString query)
 {
 
-    this->query += query;
+    this->query = query;
     this->setQuery(this->query);
 }

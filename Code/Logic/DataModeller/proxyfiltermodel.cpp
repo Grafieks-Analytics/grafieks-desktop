@@ -10,6 +10,7 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
     QString newQuery;
     QString newWhereConditions;
     QString existingWhereString;
+    QString joiner = this->getQueryJoiner();
 
     mQuerySplitter.setQuery(tmpSql);
     newWhereConditions = mQuerySplitter.getWhereCondition();
@@ -21,8 +22,6 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
     case Constants::excelIntType:
     case Constants::csvIntType:{
 
-        tmpWhereConditions = "";
-        newWhereConditions = "";
         if(categoryModel->rowCount() > 0){
             QString tempWhereConditions = categoryModel->callQueryModel();
             newWhereConditions += tempWhereConditions;
@@ -39,7 +38,11 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
         if(tmpWhereConditions == ""){
 
             newWhereConditions = newWhereConditions.remove(0, 4);
-            newQuery = " WHERE " + newWhereConditions;
+            if(newWhereConditions != ""){
+                newQuery = tmpSql + " WHERE " + newWhereConditions;
+            } else{
+                newQuery = tmpSql;
+            }
         }
         else{
 
@@ -52,7 +55,6 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
         }
 
 
-        qDebug() << newQuery << "FINAL QUERY";
 
         emit sendCsvFilterQuery(newQuery);
         break;
@@ -76,7 +78,11 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
         if(tmpWhereConditions == ""){
 
             newWhereConditions = newWhereConditions.remove(0, 4);
-            newQuery = tmpSql + " WHERE " + newWhereConditions;
+            if(newWhereConditions != ""){
+                newQuery = tmpSql + " WHERE " + newWhereConditions;
+            } else{
+                newQuery = tmpSql;
+            }
         }
         else{
 
@@ -89,10 +95,66 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
         }
 
 
-        qDebug() << newQuery << "FINAL QUERY";
 
         emit sendFilterQuery(newQuery);
         break;
     }
 
+    qDebug() << Q_FUNC_INFO << "NEW QUERY" << newQuery;
+
+}
+
+QString ProxyFilterModel::getQueryJoiner()
+{
+
+    QString joiner;
+
+    switch(Statics::currentDbIntType){
+    case Constants::mysqlIntType:
+        joiner = "`";
+        break;
+
+    case Constants::mongoIntType:
+        joiner = "\"";
+        break;
+
+    case Constants::postgresIntType:
+        joiner = "`";
+        break;
+
+    case Constants::oracleIntType:
+        joiner = "'";
+        break;
+
+    case Constants::mssqlIntType:
+        joiner = "\"";
+        break;
+
+    case Constants::accessIntType:
+        joiner = "\"";
+        break;
+    case Constants::sqliteIntType:
+        joiner = "`";
+        break;
+
+    case Constants::redshiftIntType:
+        joiner = "\"";
+        break;
+
+    case Constants::snowflakeIntType:
+        joiner = "\"";
+        break;
+
+    case Constants::teradataIntType:
+        joiner = "\"";
+        break;
+
+    case Constants::jsonIntType:
+    case Constants::csvIntType:
+    case Constants::excelIntType:
+        joiner = "\"";
+        break;
+    }
+
+    return joiner;
 }

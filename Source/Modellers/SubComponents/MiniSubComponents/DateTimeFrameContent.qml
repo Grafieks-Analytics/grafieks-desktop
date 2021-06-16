@@ -71,6 +71,30 @@ Rectangle{
         }
     }
 
+    Connections{
+        target: DuckDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
+        target: ForwardOnlyDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
+        target: QueryDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -96,21 +120,51 @@ Rectangle{
     function slotEditModeTimeFrame(subCategory, relation, slug, value){
         dateTimeFrameContent.visible = true
 
-        if(subCategory === "Day"){
+
+        if(subCategory.toLowerCase() === "day"){
             onDayTabClicked()
             dateTimeFrameContent.signalTimeFrameRadioEditDay(relation, slug, value)
         }
-        else if(subCategory === "Year"){
+        else if(subCategory.toLowerCase() === "year"){
             onYearTabClicked()
             dateTimeFrameContent.signalTimeFrameRadioEditYear(relation, slug, value)
         }
-        else if(subCategory === "Month"){
+        else if(subCategory.toLowerCase() === "month"){
             onMonthTabClicked()
             dateTimeFrameContent.signalTimeFrameRadioEditMonth(relation, slug, value)
         }
         else{
             onQuarterTabClicked()
             dateTimeFrameContent.signalTimeFrameRadioEditQuarter(relation, slug, value)
+        }
+    }
+
+    function updateData(colData, options, searchMode){
+
+        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainTimeFrameType ){
+
+            var jsonOptions = JSON.parse(options)
+            var subCategory = jsonOptions.subCategory
+            var relation = jsonOptions.relation
+            var slug = jsonOptions.slug
+            var value = jsonOptions.values
+
+            if(subCategory.toLowerCase() === "day"){
+                onDayTabClicked()
+                dateTimeFrameContent.signalTimeFrameRadioEditDay(relation, slug, value)
+            }
+            else if(subCategory.toLowerCase() === "year"){
+                onYearTabClicked()
+                dateTimeFrameContent.signalTimeFrameRadioEditYear(relation, slug, value)
+            }
+            else if(subCategory.toLowerCase() === "month"){
+                onMonthTabClicked()
+                dateTimeFrameContent.signalTimeFrameRadioEditMonth(relation, slug, value)
+            }
+            else{
+                onQuarterTabClicked()
+                dateTimeFrameContent.signalTimeFrameRadioEditQuarter(relation, slug, value)
+            }
         }
     }
 

@@ -1457,6 +1457,220 @@ void ChartsModel::removeTmpChartData()
     emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
 }
 
+void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, QString reportId)
+{
+
+    //    qDebug() << "MC" << masterReportFilters;
+    // Copy newChartData to reportChartData before begining operations
+    this->reportId = reportId;
+    reportChartData.insert(this->reportId, newChartData);
+
+    QList<int> keys = masterReportFilters.keys();
+
+    int i = 0;
+    foreach(QVariantMap filters, masterReportFilters){
+
+        int filterId = keys[i];
+        QString section = filters.value("section").toString();
+        QString category = filters.value("category").toString();
+        QString subCategory = filters.value("subCategory").toString();
+        QString columnName = filters.value("columnName").toStringList().at(0);
+        QString tableName = filters.value("columnName").toStringList().at(1);
+
+        QStringList actualDateValues = filters.value("actualDateValues").toStringList();
+        int dateFormat = filters.value("dateFormat").toInt();
+
+        QString filterRelation = filters.value("filterRelation").toString();
+        QString filterSlug = filters.value("filterSlug").toString();
+        bool includeExclude = filters.value("includeExclude").toBool();
+        bool includeNull = filters.value("includeNull").toBool();
+        bool selectAll = filters.value("selectAll").toBool();
+
+        QVariantList filterValue = filters.value("filterValue").toList();
+        QStringList filterValueList =  filterValue.at(0).toString().split(",");
+
+        i++;
+
+        // Start the filter operations here
+        QScopedPointer<QStringList> columnData(new QStringList);
+        QScopedPointer<QStringList> tmpList(new QStringList);
+
+        // Fetch data here
+        int newKey = newChartHeader.key( columnName );
+        *columnData = *reportChartData.value(reportId).value(newKey);
+
+        // For like relation
+        // If '%' found, no need to check. Just add all
+        // Else do the following processing
+        // For date and categorical only
+        if(filterSlug == Constants::slugLikeRelation){
+
+            if(filterValueList.at(0) != "%"){
+
+                // Containing
+                // Ends with
+                // Equal to
+                // Doenst start with
+                // Doesnt end with
+                // Not equal to
+
+                // in array
+
+            }
+
+        }
+
+        // Not like relation
+        // Categorical & Date only
+        else if(filterSlug == Constants::slugNotLikeRelation){
+
+            if(filterValueList.at(0) == "%"){
+                columnData->clear();
+            } else{
+                foreach(QString tmpVal, filterValueList){
+                    columnData->removeAll(tmpVal);
+                }
+            }
+        }
+
+        // In array relation
+        // Numerical, Categorical & Date
+        else if(filterSlug == Constants::slugInRelation){
+
+            foreach(QString tmpVal, filterValueList){
+                tmpList->append(columnData->filter(tmpVal));
+            }
+            *columnData = *tmpList;
+
+        }
+
+        // Equal to comparison
+        // Numerical, Categorical & Date
+        else if(filterSlug == Constants::slugEqualRelation){
+
+            *tmpList = columnData->filter(filterValueList.at(0));
+            *columnData = *tmpList;
+
+        }
+
+        // Not equal comparison
+        // Numerical, Categorical & Date
+        else if(filterSlug == Constants::slugNotEqualRelation){
+
+            columnData->removeAll(filterValueList.at(0));
+
+        }
+
+        // Between relation
+        // This condition is only for numerical and date
+        else if(filterSlug == Constants::slugBetweenRelation){
+
+            QStringList tmpValues = filterValueList.at(0).split(" AND ");
+
+            if(section == Constants::dateType){
+
+                foreach(QString tmpVal, *columnData){
+
+                    QDateTime dt = QDateTime::fromString(tmpVal, "yyyy-MM-dd hh:mm:ss");
+                    QDateTime dt1 = QDateTime::fromString(tmpValues.at(0), "yyyy-MM-dd hh:mm:ss");
+                    QDateTime dt2 = QDateTime::fromString(tmpValues.at(1), "yyyy-MM-dd hh:mm:ss");
+
+                    if(dt > dt1 && dt < dt2){
+                        tmpList->append(tmpVal);
+                    }
+                }
+
+            } else{
+
+                foreach(QString tmpVal, *columnData){
+                    if(tmpVal.toFloat() > tmpValues.at(0).toFloat() && tmpVal.toFloat() < tmpValues.at(1).toFloat()){
+                        tmpList->append(tmpVal);
+                    }
+                }
+            }
+
+            *columnData = *tmpList;
+
+        }
+
+        // For smaller than relation
+        // Numerical only
+        else if(filterSlug == Constants::slugSmallerThanRelation){
+
+            foreach(QString tmpVal, *columnData){
+                if(tmpVal.toFloat() < filterValueList.at(0).toFloat()){
+                    tmpList->append(tmpVal);
+                }
+            }
+
+            *columnData = *tmpList;
+        }
+
+        // For greater than relation
+        // Numerical only
+        else if(filterSlug == Constants::slugGreaterThanRelation){
+
+            foreach(QString tmpVal, *columnData){
+                if(tmpVal.toFloat() > filterValueList.at(0).toFloat()){
+                    tmpList->append(tmpVal);
+                }
+            }
+
+            *columnData = *tmpList;
+        }
+
+        // For smaller than and equal to relation
+        // Numerical only
+        else if(filterSlug == Constants::slugSmallerThanEqualRelation){
+
+            foreach(QString tmpVal, *columnData){
+                if(tmpVal.toFloat() <= filterValueList.at(0).toFloat()){
+                    tmpList->append(tmpVal);
+                }
+            }
+
+            *columnData = *tmpList;
+        }
+
+        // For greater than and equal to relation
+        // Numerical only
+        else if(filterSlug == Constants::slugGreaterThanEqualRelation){
+
+            foreach(QString tmpVal, *columnData){
+                if(tmpVal.toFloat() >= filterValueList.at(0).toFloat()){
+                    tmpList->append(tmpVal);
+                }
+            }
+
+            *columnData = *tmpList;
+
+        } else{
+
+
+            qDebug() << "Else Filter values obtained"
+                        <<filterId << section << category << subCategory << columnName << actualDateValues << dateFormat
+                        << filterRelation << filterSlug << filterValueList << includeExclude << includeNull << selectAll;
+        }
+
+        qDebug() << "Filtered Column Data" << *columnData;
+
+    }
+}
+
+void ChartsModel::currentScreenChanged(int currentScreen)
+{
+    switch(currentScreen){
+    case Constants::dashboardScreen:
+        break;
+
+    case Constants::reportScreen:
+        break;
+
+    default:
+        break;
+    }
+}
+
 void ChartsModel::searchColumnNames(QString keyword)
 {
     emit sendFilteredColumn(this->categoryList.filter(keyword, Qt::CaseInsensitive), this->numericalList.filter(keyword, Qt::CaseInsensitive), this->dateList.filter(keyword, Qt::CaseInsensitive));
@@ -1468,6 +1682,7 @@ QStringList ChartsModel::fetchColumnData(QString columnName, QString options)
     int key = newChartHeader.key( columnName );
 
     QStringList columnDataPointer = *newChartData.value(key);
+    columnDataPointer.removeDuplicates();
 
     emit columnDataChanged(columnDataPointer, options);
 
@@ -1480,6 +1695,7 @@ QStringList ChartsModel::searchColumnData(QString columnName, QString keyword)
     int key = newChartHeader.key( columnName );
 
     QStringList columnDataPointer = *newChartData.value(key);
+    columnDataPointer.removeDuplicates();
     searchResults = columnDataPointer.filter(keyword, Qt::CaseInsensitive);
 
     return searchResults;
@@ -1500,6 +1716,7 @@ void ChartsModel::getChartData(QMap<int, QStringList *> chartData)
 void ChartsModel::getChartHeader(QMap<int, QStringList> chartHeader)
 {
     this->chartHeaderDetails = chartHeader;
+    qDebug() << "GOT CHART HEADER" << chartHeader;
 
     // Clear existing chart headers data
     this->numericalList.clear();

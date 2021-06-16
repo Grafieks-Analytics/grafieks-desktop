@@ -388,6 +388,7 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
     QString concetantedCondition;
 
     int localCounter = 0;
+    QString joiner = this->getQueryJoiner();
 
     // If there are several relations involved
 
@@ -407,8 +408,8 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
                 excludeCase = exclude ? tmpRelation.prepend(notSign) : tmpRelation;
                 newCondition = tmpRelation.contains("in", Qt::CaseInsensitive) ? " ('" + conditionList[localCounter] + "')" : conditionList[localCounter] ;
 
-                tmpWhereConditions = QString("%1 %2 %3")
-                        .arg("\"" + columnName + "\"").arg(excludeCase).arg(newCondition);
+                tmpWhereConditions = QString("%1.%2 %3 %4")
+                        .arg(joiner + tableName + joiner).arg(joiner + columnName + joiner).arg(excludeCase).arg(newCondition);
 
                 localCounter++;
             }
@@ -431,8 +432,8 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
             excludeCase = exclude ? relation.prepend(notSign) : relation;
             newCondition = relation.contains("like", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
 
-            tmpWhereConditions = QString("%1 %2 %3")
-                    .arg("\"" + columnName + "\"").arg(excludeCase).arg(newCondition);
+            tmpWhereConditions = QString("%1.%2 %3 %4")
+                    .arg(joiner + tableName + joiner).arg(joiner + columnName + joiner).arg(excludeCase).arg(newCondition);
         }
         break;
     }
@@ -451,7 +452,7 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
                 newIncludeNull = isNull == false ? "AND " + tableName + "." + columnName + " IS NOT NULL" : "";
 
                 tmpWhereConditions = QString("%1.%2 %3 %4")
-                        .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition);
+                        .arg(joiner + tableName + joiner).arg(joiner + columnName + joiner).arg(excludeCase).arg(newCondition);
 
                 localCounter++;
             }
@@ -473,13 +474,68 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
             newCondition = relation.contains("in", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
 
             tmpWhereConditions = QString("%1.%2 %3 %4")
-                    .arg(tableName).arg(columnName).arg(excludeCase).arg(newCondition);
+                    .arg(joiner + tableName + joiner).arg(joiner + columnName + joiner).arg(excludeCase).arg(newCondition);
         }
         break;
     }
 
 
     return tmpWhereConditions;
+}
+
+QString FilterDateListModel::getQueryJoiner()
+{
+
+    QString joiner;
+
+    switch(Statics::currentDbIntType){
+    case Constants::mysqlIntType:
+        joiner = "`";
+        break;
+
+    case Constants::mongoIntType:
+        joiner = "\"";
+        break;
+
+    case Constants::postgresIntType:
+        joiner = "`";
+        break;
+
+    case Constants::oracleIntType:
+        joiner = "'";
+        break;
+
+    case Constants::mssqlIntType:
+        joiner = "\"";
+        break;
+
+    case Constants::accessIntType:
+        joiner = "\"";
+        break;
+    case Constants::sqliteIntType:
+        joiner = "`";
+        break;
+
+    case Constants::redshiftIntType:
+        joiner = "\"";
+        break;
+
+    case Constants::snowflakeIntType:
+        joiner = "\"";
+        break;
+
+    case Constants::teradataIntType:
+        joiner = "\"";
+        break;
+
+    case Constants::jsonIntType:
+    case Constants::csvIntType:
+    case Constants::excelIntType:
+        joiner = "\"";
+        break;
+    }
+
+    return joiner;
 }
 
 

@@ -87,42 +87,43 @@ Popup {
 
         function onColumnDataChanged(columData, options){
 
-            var jsonOptions = JSON.parse(options)
+            if(options !== ""){
+                var jsonOptions = JSON.parse(options)
 
-            if(jsonOptions.section === Constants.dateTab){
+                if(jsonOptions.section === Constants.dateTab){
 
-                switch(jsonOptions.category){
-                case Constants.dateMainListType:
+                    switch(jsonOptions.category){
+                    case Constants.dateMainListType:
 
-                    listContent.visible = true
-                    calendarContent.visible = false
-                    dateTimeFrameContent.visible = false
+                        listContent.visible = true
+                        calendarContent.visible = false
+                        dateTimeFrameContent.visible = false
 
-                    listRadio.checked = true
+                        listRadio.checked = true
 
-                    break
+                        break
 
-                case Constants.dateMainCalendarType:
+                    case Constants.dateMainCalendarType:
 
-                    listContent.visible = false
-                    calendarContent.visible = true
-                    dateTimeFrameContent.visible = false
+                        listContent.visible = false
+                        calendarContent.visible = true
+                        dateTimeFrameContent.visible = false
 
-                    dateRadio.checked = true
+                        dateRadio.checked = true
 
-                    break
+                        break
 
-                case Constants.dateMainTimeFrameType:
+                    case Constants.dateMainTimeFrameType:
 
-                    listContent.visible = false
-                    calendarContent.visible = false
-                    dateTimeFrameContent.visible = true
+                        listContent.visible = false
+                        calendarContent.visible = false
+                        dateTimeFrameContent.visible = true
 
-                    topRadio.checked = true
+                        topRadio.checked = true
 
-                    break
+                        break
+                    }
                 }
-
             }
         }
     }
@@ -216,8 +217,10 @@ Popup {
             ReportParamsModel.addToFilterSectionMap(counter, section)
             ReportParamsModel.addToFilterCategoryMap(counter, category)
             ReportParamsModel.addToFilterSubCategoryMap(counter, subCategory)
-            ReportParamsModel.addToFilterColumnMap(counter, columnName)
+            ReportParamsModel.addToFilterColumnMap(counter, columnName, tableName)
             ReportParamsModel.addToDateFilters(counter)
+
+            console.log("INSERT DATE", section, category, subCategory)
 
             manageFilters(ReportParamsModel.mode, counter, ReportParamsModel.filterModelIndex)
 
@@ -237,7 +240,7 @@ Popup {
     function manageFilters(mode, counter = 0, filterId = 0){
 
         console.log("INSERT DATE FILTER HERE  - INSERT REPORT ID", mode, counter, filterId)
-        ReportParamsModel.addToMasterReportFilters(1);
+        ReportParamsModel.addToMasterReportFilters(Constants.uniqueReportId);
     }
     function resetDateFilter(){
         // Reset date filter here
@@ -256,8 +259,6 @@ Popup {
         // For list date type
         // The db WHERE relation can only be LIKE / NOT LIKE ARRAY type
 
-//        ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
-//        ReportParamsModel.addToFilterSlugMap(counter, Constants.likeRelation)
     }
     function onCalendarClicked(){
         listContent.visible = false
@@ -265,8 +266,6 @@ Popup {
         dateTimeFrameContent.visible = false
 
         ReportParamsModel.setCategory(Constants.dateMainCalendarType)
-//        ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
-//        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
     }
 
     function onTimeFrameClicked(){
@@ -276,8 +275,6 @@ Popup {
 
 
         ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
-//        ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
-//        ReportParamsModel.addToFilterSlugMap(filterIncounterdex, Constants.likeRelation)
     }
 
 

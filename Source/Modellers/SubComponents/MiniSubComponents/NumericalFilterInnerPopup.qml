@@ -99,12 +99,33 @@ Rectangle{
         }
 
         function onFilterIndexChanged(){
-            if(DSParamsModel.section === Constants.numericalTab){
-                counter = DSParamsModel.filterIndex
-            }
+            counter = DSParamsModel.filterIndex
         }
     }
 
+    Connections{
+        target: DuckDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
+        target: ForwardOnlyDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
+        target: QueryDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/
@@ -132,6 +153,27 @@ Rectangle{
         else{
             textField.text = value
             selectOption.textValue = slug
+        }
+    }
+
+    function updateData(colData, options){
+
+        var jsonOptions = JSON.parse(options)
+
+        if(DSParamsModel.section === Constants.numericalTab){
+
+            if(jsonOptions.slug === Constants.slugBetweenRelation){
+
+                var splitValues = jsonOptions.values.split(" And ")
+                console.log(splitValues, "SPLIT VALUES")
+                textField.text = splitValues[0]
+                textField2nd.text = splitValues[1]
+            } else{
+                textField.text = jsonOptions.values
+            }
+
+            selectOption.textValue = jsonOptions.slug
+
         }
     }
 
@@ -187,13 +229,10 @@ Rectangle{
 
     }
 
-    function onExludeCheckStateChanged(checked){
-        DSParamsModel.setExcludeMap(checked)
-    }
 
 
     function onIncludeCheckStateChanged(checked){
-        DSParamsModel.setIncludeNullMap(checked)
+        DSParamsModel.setIncludeNullMap(counter, checked)
     }
 
 
@@ -228,6 +267,7 @@ Rectangle{
 
         color: "transparent"
 
+        /******************* DO NOT DELETE *********************
         Column{
 
             id: addnumerical
@@ -240,8 +280,9 @@ Rectangle{
             anchors.verticalCenter: parent.verticalAlignment
 
             CheckBoxTpl {
-                checked: DSParamsModel.includeNull
-                 parent_dimension: Constants.defaultCheckBoxDimension
+                id: checkedIncludeNull
+                checked: DSParamsModel.getIncludeNullMap(counter)[counter] === "1" ? true : false
+                parent_dimension: Constants.defaultCheckBoxDimension
                 text: qsTr("Include Null")
                 indicator.width: 15
                 indicator.height: 15
@@ -254,7 +295,7 @@ Rectangle{
 
         }
 
-        /******************* DO NOT DELETE *********************
+
         Column{
             id: singleSelectRadioColumn
 

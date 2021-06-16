@@ -85,7 +85,14 @@ Rectangle{
 
         }
 
-        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+            QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
+            DuckDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        } else{
+            ForwardOnlyDataModel.columnData(columnName, tableName, JSON.stringify(options))
+        }
+
         console.log("EDIT CLICKED categorical", modelIndex, filterIndex, section, category, subCategory, tableName, columnName, relation, slug, value, includeNull, exclude)
 
     }
@@ -172,7 +179,7 @@ Rectangle{
                         width: parent.width / 3 - 50
 
                         Text {
-                            text: exclude === true ? "NOT " +relation : relation
+                            text: exclude === true ? "NOT " +slug : slug
                             anchors.left: parent.left
                             leftPadding: 20
 
