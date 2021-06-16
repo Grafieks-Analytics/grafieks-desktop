@@ -155,21 +155,21 @@ Rectangle{
                     console.log("itemtypecolor"+itemType)
                     rightDataDrag.color= Constants.defaultNumericalColor
                     rightDataDrag.radius=15
-                    rightDataDrag.width=parent.width+5
+//                    rightDataDrag.width=parent.width+5
 
                 }
                 else if(itemType == "Categorical"){
                     console.log("itemtypecolor"+itemType)
                     rightDataDrag.color= Constants.defaultCategoricalColor
                     rightDataDrag.radius=15
-                    rightDataDrag.width=parent.width+5
+//                    rightDataDrag.width=parent.width+5
 
                 }
                 else if(itemType == "Date"){
                     console.log("itemtypecolor"+itemType)
                     rightDataDrag.color= "yellow"
                     rightDataDrag.radius=15
-                    rightDataDrag.width=parent.width+5
+//                    rightDataDrag.width=parent.width+5
 
                 }
 

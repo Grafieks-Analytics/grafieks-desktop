@@ -36,7 +36,7 @@
             <div id="my_dataviz"></div>
         </div>
         <div id="tooltip"></div>
-        <div id="legend"></div>
+        <div id="legend" ></div>
         <script>
             var extraHeightWorked = false;
             var redrawn = false;
@@ -97,6 +97,8 @@
 
                     topPosition = "calc(50vh - " + legendHeight + "px)";
                     legendElement.style.padding = "10px";
+                    legendElement.style.border = "1px solid black";
+                   
 
                     switch (legendPosition) {
                         case "left":
@@ -146,6 +148,7 @@
                     }
                 }
 
+               
                 d3.select("#legend").html("").style("padding", "");
 
                 if (legendStatus) {
