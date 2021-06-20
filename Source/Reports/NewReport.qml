@@ -134,18 +134,26 @@ Page {
         target: ReportParamsModel
 
         function onEditReportToggleChanged(reportId){
+            if(reportId=="-1"){
+                return;
+            }
             if(reportId != "false"){
                 addReportButton.text = "Update";
                 editReportFlag = true;
-                setValuesOnEditReport();
+                setValuesOnEditReport(reportId);
             }else{
                 addReportButton.text = "Add";
+                var reportIdMain = generateReportId();
+                ReportParamsModel.setReportId(reportIdMain);
+                ReportParamsModel.addReport(reportIdMain);
+                
+                ReportParamsModel.setChartType(Constants.barChartTitle);
+                ReportParamsModel.setChartTitle(Constants.barChartTitle);
             }
         }
 
         function onReportIdChanged(reportIdValue){
             if(!reportIdValue){
-                addReport(true);
                 clearValuesOnAddNewReport();
             }
             report_desiner_page.reportIdMain = reportIdValue;
@@ -176,7 +184,7 @@ Page {
         // Check if can be removed [TAG: Optimization]
         xAxisListModel.clear();
         yAxisListModel.clear();
-
+                
     }
 
 
@@ -335,14 +343,26 @@ Page {
     }
 
     function clearValuesOnAddNewReport(){
-        console.log('Okay! Let me clear');
         clearAllChartValues();
         switchChart(Constants.barChartTitle);
     }
 
-    function setValuesOnEditReport(){
+    function setValuesOnEditReport(reportId){
+
+        ReportParamsModel.setLastDropped(null);
+
+        // Setting the report title value to empty
+        report_title_text.text = "";
+        report_desiner_page.reportIdMain = reportId;
+
+        // Clear all the list models
+        xAxisListModel.clear();
+        yAxisListModel.clear();
+        colorListModel.clear();
+        valuesListModel.clear();
+        dataItemList.clear();
+        
         var reportProperties = ReportParamsModel.getReport(reportIdMain);
-        console.log(JSON.stringify(reportProperties));
 
         var xAxisColumnsReportData = JSON.parse(reportProperties.xAxisColumns);
         var yAxisColumnsReportData = JSON.parse(reportProperties.yAxisColumns);
@@ -476,10 +496,15 @@ Page {
 
     function clearAllChartValues(){
 
-        // Clear title and report id
-        ReportParamsModel.setReportId(null);
+        // Not Setting ReportId to null
+        // Because editReport signal is getting emitted to make it blank
+
+        // Clear title
+        // Clear Model 
+        // Set id to empty
         ReportParamsModel.setReportTitle(null);
         ReportParamsModel.setLastDropped(null);
+
         report_title_text.text = "";
         reportIdMain = "";
 
@@ -585,16 +610,6 @@ Page {
             ReportParamsModel.setReportId(reportIdMain);
         }
         
-        if(initialAddition){
-            ReportParamsModel.setChartType(chartTitle);
-            ReportParamsModel.setChartTitle(chartTitle);
-            var numberOfReports = Object.keys(reportList).length;
-            report_title_text.text = 'Report '+ (numberOfReports + 1);
-            ReportParamsModel.setReportTitle('Report '+ (numberOfReports + 1));
-            ReportParamsModel.addReport(reportIdMain);
-            return;
-        }
-        GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
 
         // [Tag: Optimization]
@@ -610,39 +625,35 @@ Page {
         var reportList = ReportParamsModel.getReportsList();
         if(!report_title_text.text || report_title_text.text == ""){
             var numberOfReports = Object.keys(reportList).length;
-            ReportParamsModel.setReportTitle('Report '+ (numberOfReports + 1));
+            ReportParamsModel.setReportTitle('Report '+ (numberOfReports));
         }
 
         ReportParamsModel.setChartType(chartTitle);
         ReportParamsModel.setChartTitle(chartTitle);
         ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertyConfig));
-        console.log('Add Report Value',report_desiner_page.chartUrl, chartUrl);
         ReportParamsModel.setChartUrl(report_desiner_page.chartUrl);
         ReportParamsModel.setXAxisColumns(JSON.stringify(getAxisModelAsJson(Constants.xAxisName)));
         ReportParamsModel.setYAxisColumns(JSON.stringify(getAxisModelAsJson(Constants.yAxisName)));
         ReportParamsModel.setColorByDataColoumns(JSON.stringify(colorByData));
 
-        console.log('reportIdMain');
         ReportParamsModel.addReport(reportIdMain);
 
         chartTitle = Constants.barChartTitle;
         chartUrl = Constants.barChartUrl;
 
-        reportList = ReportParamsModel.getReportsList();
-        console.log('Report List',JSON.stringify(reportList));
-        for(var reportId in  reportList){
-            console.log('Report List Data',reportId,reportList[reportId]);
-        }
 
-        
+        console.log('Editing Flag?',editReportFlag)
         // On Edit => Redraw Only Updated chart in Dashboard
         if(editReportFlag){
             reDrawDashboardChart(reportIdMain);
         }
         editReportFlag = false;
-        ReportParamsModel.setEditReportToggle(false);
-        clearAllChartValues();
-        switchChart(barChartTitle);
+
+        // Setting it to -1 so that editReportToggle signal is called
+        // After this editReportToggle is set to false
+        // Gets called again which creates a new id and add it to map
+        ReportParamsModel.setEditReportToggle("-1");
+        // switchChart(Constants.barChartTitle);
     }
 
     function cancelReport(){
@@ -704,7 +715,7 @@ Page {
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
 
         var itemType = lastPickedDataPaneElementProperties.itemType;
-        if(itemType && itemType.toLowerCase() === 'categorical' && axis === Constants.yAxisName  && !xAxisColumns.length && !yAxisColumns.length){
+        if(itemType && (itemType.toLowerCase() === 'categorical' || itemType.toLowerCase() === 'date') && axis === Constants.yAxisName  && !xAxisColumns.length && !yAxisColumns.length){
             isHorizontalGraph = true;
         }
 
@@ -952,7 +963,8 @@ Page {
            });';
 
            clearChartValue();
-           webEngineView.runJavaScript('drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue);
+           var runScriptString = 'drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue;
+           webEngineView.runJavaScript(runScriptString);
 
            // Clear Chart Data
             // ChartsModel.clearData();
