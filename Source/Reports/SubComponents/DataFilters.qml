@@ -397,11 +397,11 @@ Popup {
         ReportParamsModel.clearFilter()
 
         onTabToggle(true,false,false,false);
-        console.log("APPLY APPLY", "REPORT ID", Constants.uniqueReportId)
+        console.log("APPLY APPLY", "REPORT ID", ReportParamsModel.reportId)
 
         // Call the function to apply all the filters in reports
         // This will emit a signal from ReportParamsModel.fetchMasterReportFilters to the slot in ChartsModel.updateFilterData
-        ReportParamsModel.fetchMasterReportFilters(Constants.uniqueReportId)
+        ReportParamsModel.fetchMasterReportFilters(ReportParamsModel.reportId)
 
 
     }
