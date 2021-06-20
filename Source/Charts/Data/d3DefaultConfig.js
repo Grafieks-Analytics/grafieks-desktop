@@ -52,10 +52,10 @@ const defaultD3Config = {
     defaultSpace: 30,
     dateFormat: "%Y",
     chartType: constants.chartType.FIT_WIDTH,
-    horizontalChartType: constants.chartType.STANDARD,
+    horizontalChartType: constants.chartType.FIT_HEIGHT,
     standardThresholdWidth: 100,
     standardThresholdHeight: 100,
-    fontSize: 12,
+    fontSize: 20,
 };
 const markerShapeConfig = {
     circle: {

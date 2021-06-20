@@ -17,7 +17,7 @@ import com.grafieks.singleton.constants 1.0
 Rectangle{
     id: rectangle_left
     color: Constants.themeColor
-    height: parent.height - 50
+    height: parent.height - 30
     width: 60
     z:100
 
