@@ -132,34 +132,40 @@ function setText(selector, textValue) {
 function setLabel(
     label = "xLabel",
     labelType = "x_label",
+    svg,
     x_tick_fontSize,
-    y_tick_fontSize
+    y_tick_fontSize,
+    
 ) {
     console.log("x" + x_tick_fontSize);
     console.log("y" + y_tick_fontSize);
-    svg = d3.select("svg");
+    
 
     const margin = { top: 30, right: 30, bottom: 70, left: 60 },
         width = window.innerWidth - margin.left - margin.right - 10,
         height = window.innerHeight - margin.top - margin.bottom - 10;
 
     if (labelType == "x_label") {
-        svg.append("text")
-            .attr("class", labelType)
-            .attr("text-anchor", "end")
-            .text(label)
-            .attr("x", width / 2 + 150)
-            .attr("y", height + 60)
-            .attr("class", labelType);
+        svg
+          .append("text")
+          .attr("class", labelType)
+          .attr("text-anchor", "end")
+          .text(label)
+          .attr("x", window.innerWidth / 2)
+          .attr("y", 60)
+          .attr("font-size", xLabelfontSize)
+          .attr("class", labelType);
     } else {
-        svg.append("text")
-            .attr("class", labelType)
-            .attr("text-anchor", "end")
-            .text(label)
-            .attr("y", 6)
-            .attr("x", -height / 2)
-            .attr("dy", ".75em")
-            .attr("transform", "rotate(-90)");
+        svg
+          .append("text")
+          .attr("class", labelType)
+          .attr("text-anchor", "end")
+          .text(label)
+          .attr("y", 6)
+          .attr("font-size", yLabelfontSize)
+          .attr("x", -height / 2)
+          .attr("dy", ".75em")
+          .attr("transform", "rotate(-90)");
     }
 }
 
@@ -199,6 +205,7 @@ function clearChart() {
     d3.selectAll("#my_dataviz").html("");
     d3.selectAll("#yAxisDiv").html("");
     d3.selectAll("#xAxisDiv").html("");
+    d3.selectAll("#xAxisLabelId").html("");
 
     if (window.extraHeight) {
         window.extraHeight = 0;

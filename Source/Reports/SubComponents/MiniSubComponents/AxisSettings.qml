@@ -69,12 +69,12 @@ Rectangle{
         ListElement{
             size: 20
         }
-        ListElement{
-            size: 22
-        }
-        ListElement{
-            size: 24
-        }
+//        ListElement{
+//            size: 22
+//        }
+//        ListElement{
+//            size: 24
+//        }
 //        ListElement{
 //            size: 28
 //        }
@@ -410,13 +410,16 @@ Rectangle{
                                         CustomComboBox{
                                             id:xAxisLabelFontSize
                                             model: fontSizes
+                                            currentIndex: 4
                                             textRole: "size"
                                             width: parent.width
                                             onCurrentValueChanged: {
 
                                                     webEngineView.runJavaScript("changeChartAttributes('.x_label','font-size', '"+xAxisLabelFontSize.currentValue+"')")
-                                                d3PropertyConfig["xLabelFontSize"]=xAxisLabelFontSize.currentValue;
+//                                                d3PropertyConfig["xLabelFontSize"]=xAxisLabelFontSize.currentValue;
 
+                                                d3PropertyConfig.xLabelfontSize=xAxisLabelFontSize.currentValue;
+                                                reDrawChart();
                                             }
                                         }
 
@@ -586,12 +589,15 @@ Rectangle{
                                         CustomComboBox{
                                             id:xAxisTickMarkFontSize
                                             model: fontSizes
+                                            currentIndex: 4
+                                            
                                             textRole: "size"
                                             width: parent.width
                                             onCurrentValueChanged: {
                                                 console.log("fontsize"+xAxisTickMarkFontSize.currentValue);
-                                                webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-size', '"+xAxisTickMarkFontSize.currentValue+"');changeLabelPostionsAttributes('.x-axis .tick text','.x_label','y')")
-
+//                                                webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-size', '"+xAxisTickMarkFontSize.currentValue+"');changeLabelPostionsAttributes('.x-axis .tick text','.x_label','y')")
+                                                d3PropertyConfig.xTickfontSize=xAxisTickMarkFontSize.currentValue;
+                                                reDrawChart();
                                             }
                                         }
 
@@ -807,12 +813,14 @@ Rectangle{
                                         CustomComboBox{
                                             id:yAxisLabelFontSize
                                             model: fontSizes
+                                            currentIndex: 4
                                             textRole: "size"
                                             width: parent.width
                                             onCurrentValueChanged: {
                                                 console.log("fontsize"+yAxisLabelFontSize.currentValue);
-                                                    webEngineView.runJavaScript("changeChartAttributes('.y_label','font-size', '"+yAxisLabelFontSize.currentValue+"')")
-
+//                                              webEngineView.runJavaScript("changeChartAttributes('.y_label','font-size', '"+yAxisLabelFontSize.currentValue+"')")
+                                                d3PropertyConfig.yLabelfontSize=yAxisLabelFontSize.currentValue;
+                                                reDrawChart();
                                             }
                                         }
 
@@ -980,11 +988,14 @@ Rectangle{
                                             id:yAxisTickMarkFontSize
                                             model: fontSizes
                                             textRole: "size"
+                                            currentIndex: 4
                                             width: parent.width
                                             onCurrentValueChanged: {
                                                 console.log("fontsize"+yAxisTickMarkFontSize.currentValue);
-                                                    webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-size', '"+yAxisTickMarkFontSize.currentValue+"');changeLabelPostionsAttributes('.y-axis .tick text','.y_label','y')")
+//                                                    webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-size', '"+yAxisTickMarkFontSize.currentValue+"');changeLabelPostionsAttributes('.y-axis .tick text','.y_label','y')")
 
+                                                d3PropertyConfig.yTickfontSize=yAxisTickMarkFontSize.currentValue;
+                                                reDrawChart();
                                             }
                                         }
 

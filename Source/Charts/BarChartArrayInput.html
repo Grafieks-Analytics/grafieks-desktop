@@ -31,11 +31,12 @@
         </style>
     </head>
     <body>
-        <div style="display: flex">
+        <div id="mainChartWindow" style="display: flex;height: calc(100vh - 100px);">
             <div id="yAxisDiv"></div>
             <div id="my_dataviz"></div>
         </div>
         <div id="tooltip"></div>
+        <div id="xAxisLabelId" style="position: fixed;"></div>
         <div id="legend" ></div>
         <script>
             var extraHeightWorked = false;
@@ -87,10 +88,16 @@
                     toolTip,
                     legendConfig,
                     standardThresholdWidth,
-                    fontSize = defaultD3Config.fontSize,
+                    xLabelfontSize = defaultD3Config.fontSize,
+                    yLabelfontSize = defaultD3Config.fontSize,
+                    xTickfontSize = defaultD3Config.fontSize,
+                    yTickfontSize = defaultD3Config.fontSize,
                 } = plottingConfiguration;
 
-                window.fontSize = fontSize;
+                window.xLabelfontSize = xLabelfontSize;
+                window.yLabelfontSize = yLabelfontSize;
+                window.xTickfontSize = xTickfontSize;
+                window.yTickfontSize = yTickfontSize;
                 if (!legendConfig) {
                     legendConfig = { legendStatus: false };
                 }
@@ -199,8 +206,10 @@
                     standardThresholdWidth =
                         defaultD3Config.standardThresholdWidth;
                 }
-
+               
                 const [xAxisLabel, yAxisLabel] = data[1];
+            
+                
                 if (!toolTip) {
                     toolTip = {
                         textColumn1: xAxisLabel,
@@ -252,9 +261,10 @@
 
                 var height =
                     window.innerHeight -
+                   
                     margin.top -
                     margin.bottom -
-                    extraHeight;
+                    extraHeight-50;
 
                 d3.selectAll("#my_dataviz").html("");
                 d3.selectAll("#yAxisDiv").html("");
@@ -300,6 +310,7 @@
 
                 //add x and y axis
                 var yAxis = d3.axisLeft(yScale).tickSize(0).ticks(yaxisTicks);
+                
                 d3.select("#yAxisDiv")
                     .append("svg")
                     .attr("width", "72")
@@ -319,6 +330,8 @@
                     .call(
                         make_y_gridlines(yScale).tickSize(-width).tickFormat("")
                     );
+                     d3.selectAll("#yAxisDiv text")
+                     .attr("font-size", yTickfontSize)
 
                 //add x axis
                 var xScale = d3
@@ -387,7 +400,7 @@
                                 return (
                                     "<span style='color:grey;''>" +
                                     toolTip.textColumn1 +
-                                    ":" +
+                                    ":&nbsp;&nbsp;" +
                                     "</span>" +
                                     "<span style='float: right;'>" +
                                     xAxisDataSet[i] +
@@ -419,8 +432,13 @@
                     .attr("class", "x-axis")
                     .attr("transform", "translate(0," + height + ")");
 
-                setLabel(xAxisLabel, "x_label", false);
-                setLabel(yAxisLabel, "y_label", false);
+             
+                setLabel(xAxisLabel, "x_label", d3.select('#xAxisLabelId').append("svg").attr("width",window.innerWidth,"height",150),false);
+                setLabel(yAxisLabel, "y_label",  d3.select("svg"), false);
+
+                
+                    d3.selectAll(".x-axis text")
+                        .attr("font-size", xTickfontSize)
 
                 setYaxisWidth();
 
@@ -485,9 +503,11 @@
                         .attr("transform", "rotate(-90)")
                         .attr("dy", "0.3em")
                         .attr("x", "-" + (maxWidth + 3))
-                        .attr("font-size", fontSize)
+                        // .attr("font-size", fontSize)
                         .attr("y", "0");
                 }
+
+               
 
                 // Remove Text in case they are large in number
                 var allXAxisTexts = document.querySelectorAll(".x-axis text");
