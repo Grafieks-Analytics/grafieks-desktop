@@ -714,7 +714,7 @@ Page {
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
 
         var itemType = lastPickedDataPaneElementProperties.itemType;
-        if(itemType && itemType.toLowerCase() === 'categorical' && axis === Constants.yAxisName  && !xAxisColumns.length && !yAxisColumns.length){
+        if(itemType && (itemType.toLowerCase() === 'categorical' || itemType.toLowerCase() === 'date') && axis === Constants.yAxisName  && !xAxisColumns.length && !yAxisColumns.length){
             isHorizontalGraph = true;
         }
 
@@ -962,7 +962,8 @@ Page {
            });';
 
            clearChartValue();
-           webEngineView.runJavaScript('drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue);
+           var runScriptString = 'drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue;
+           webEngineView.runJavaScript(runScriptString);
 
            // Clear Chart Data
             // ChartsModel.clearData();
