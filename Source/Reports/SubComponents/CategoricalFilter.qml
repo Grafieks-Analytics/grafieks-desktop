@@ -56,9 +56,52 @@ Popup {
         function onFilterIndexChanged(){
             counter = ReportParamsModel.filterIndex
         }
+    }
 
+    Connections{
+        target: ChartsModel
 
+        function onColumnDataChanged(columnData, options){
 
+            if(options !== ""){
+
+                var jsonOptions = JSON.parse(options)
+                if(jsonOptions.section === Constants.categoricalTab){
+
+                    switch(jsonOptions.category){
+                    case Constants.categoryMainListType:
+
+                        listContentReport.visible = true
+                        wildcardContentReport.visible = false
+                        topContentReport.visible = false
+
+                        listRadio.checked = true
+
+                        break
+
+                    case Constants.categoryMainWildCardType:
+
+                        listContentReport.visible = false
+                        wildcardContentReport.visible = true
+                        topContentReport.visible = false
+
+                        wildcardRadio.checked = true
+
+                        break
+
+                    case Constants.categoryMainTopType:
+
+                        listContentReport.visible = false
+                        wildcardContentReport.visible = false
+                        topContentReport.visible = true
+
+                        topRadio.checked = true
+
+                        break
+                    }
+                }
+            }
+        }
     }
 
 
@@ -109,7 +152,7 @@ Popup {
             ReportParamsModel.addToFilterSectionMap(counter, section)
             ReportParamsModel.addToFilterCategoryMap(counter, category)
             ReportParamsModel.addToFilterSubCategoryMap(counter, subCategory)
-            ReportParamsModel.addToFilterColumnMap(counter, columnName)
+            ReportParamsModel.addToFilterColumnMap(counter, columnName, tableName)
             ReportParamsModel.addToCategoricalFilters(counter)
 
             manageFilters(ReportParamsModel.mode, counter, ReportParamsModel.filterModelIndex)
@@ -124,7 +167,7 @@ Popup {
                 ReportParamsModel.addToFilterSectionMap(fi, section)
                 ReportParamsModel.addToFilterCategoryMap(fi, category)
                 ReportParamsModel.addToFilterSubCategoryMap(fi, subCategory)
-                ReportParamsModel.addToFilterColumnMap(fi, columnName)
+                ReportParamsModel.addToFilterColumnMap(fi, columnName, tableName)
                 ReportParamsModel.addToCategoricalFilters(fi)
 
                 manageFilters(ReportParamsModel.mode, fi, ReportParamsModel.filterModelIndex)
@@ -152,7 +195,7 @@ Popup {
     function manageFilters(mode, counter = 0, filterId = 0){
 
         console.log("Filter insert categorical - INSERT REPORT ID", mode, counter, filterId)
-        ReportParamsModel.addToMasterReportFilters(1);
+        ReportParamsModel.addToMasterReportFilters(Constants.uniqueReportId);
     }
 
     function onResetClicked(){
@@ -165,23 +208,13 @@ Popup {
 
     function onListClicked(){
 
-        console.log("LIST CLICKED")
-
-        listContentReport.visible = false
-        wildcardContentReport.visible = true
+        listContentReport.visible = true
+        wildcardContentReport.visible = false
         topContentReport.visible = false
 
         // Set the main category of the filter
         ReportParamsModel.clearFilter()
         ReportParamsModel.setCategory(Constants.categoryMainListType)
-
-        // For list category type
-        // The db WHERE relation can only be IN / NOT IN ARRAY type
-        // Except when "Select All" checked.
-        // Then Relation will be LIKE
-
-        //        ReportParamsModel.addToFilterRelationMap(filterIndex, Constants.likeRelation)
-        //        ReportParamsModel.addToFilterSlugMap(filterIndex, Constants.likeRelation)
     }
 
 

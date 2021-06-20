@@ -120,79 +120,43 @@ Rectangle{
             }
         }
 
+        // Internal counter is used for edits
+        // When a date list element is clicked, its id is set in internal counter
         function onInternalCounterChanged(){
             if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
                 counter = DSParamsModel.internalCounter
             }
         }
 
+        // Filter Index is used for new inserts
+        // When a new insert is called, its id is set as Filter Index
         function onFilterIndexChanged(){
-            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
-                counter = DSParamsModel.filterIndex
-            }
+            counter = DSParamsModel.filterIndex
+
         }
     }
 
     Connections{
         target: DuckDataModel
 
-        function onDuckColData(colData){
-            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
-                convertDate(colData)
-            }
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
+        target: ForwardOnlyDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
         }
     }
 
     Connections{
         target: QueryDataModel
 
-        function onColumnListModelDataChanged(colData, options){
-
-            if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
-                // Just to reset the data if the previous `colData` and the new `colData` are same
-                singleSelectCheckList.model = []
-                multiSelectCheckList.model = []
-
-                singleSelectCheckList.model = colData
-                multiSelectCheckList.model  = colData
-
-                // Date format
-                selectedFormat = DSParamsModel.getDateFormatMap(counter)
-                customBox.currentIndex = selectedFormat
-
-                convertDate(colData)
-                var jsonOptions = JSON.parse(options)
-
-                if(jsonOptions.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
-                    if(jsonOptions.subCategory === Constants.categorySubMulti){
-                        multiSelectRadio.checked = true
-
-                        multiSelectCheckList.visible = true
-                        singleSelectCheckList.visible = false
-
-                        if(jsonOptions.values.length > 0){
-                            if(jsonOptions.values === "%"){
-                            } else{
-                                var checkedValues = jsonOptions.values.split(",")
-                                checkedValues.forEach((item) => {
-                                                          DSParamsModel.setTmpSelectedValues(item)
-                                                      })
-                            }
-                        }
-
-                    } else{
-                        singleSelectRadio.checked = true
-
-                        multiSelectCheckList.visible = false
-                        singleSelectCheckList.visible = true
-
-                        if(DSParamsModel.searchTmpSelectedValues(jsonOptions.values) < 0){
-                            DSParamsModel.setTmpSelectedValues(jsonOptions.values)
-                        }
-                    }
-                }
-            }
-
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
         }
     }
 
@@ -217,6 +181,61 @@ Rectangle{
         if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
             DSParamsModel.removeTmpSelectedValues(0, true)
         }
+    }
+
+    function updateData(colData, options){
+
+        if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
+            // Just to reset the data if the previous `colData` and the new `colData` are same
+            singleSelectCheckList.model = []
+            multiSelectCheckList.model = []
+
+            singleSelectCheckList.model = colData
+            multiSelectCheckList.model  = colData
+
+
+            // Date format
+            selectedFormat = DSParamsModel.getDateFormatMap(counter)
+            customBox.currentIndex = selectedFormat
+
+
+            convertDate(colData)
+            var jsonOptions = JSON.parse(options)
+
+            if(jsonOptions.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
+                if(jsonOptions.subCategory === Constants.categorySubMulti){
+                    multiSelectRadio.checked = true
+
+                    multiSelectCheckList.visible = true
+                    singleSelectCheckList.visible = false
+
+                    if(jsonOptions.values.length > 0){
+                        if(jsonOptions.values === "%"){
+                            masterColData.forEach((item) => {
+                                                      DSParamsModel.setTmpSelectedValues(item[selectedFormat])
+                                                  })
+
+                        } else{
+                            var checkedValues = jsonOptions.values.split(",")
+                            checkedValues.forEach((item) => {
+                                                      DSParamsModel.setTmpSelectedValues(item)
+                                                  })
+                        }
+                    }
+
+                } else{
+                    singleSelectRadio.checked = true
+
+                    multiSelectCheckList.visible = false
+                    singleSelectCheckList.visible = true
+
+                    if(DSParamsModel.searchTmpSelectedValues(jsonOptions.values) < 0){
+                        DSParamsModel.setTmpSelectedValues(jsonOptions.values)
+                    }
+                }
+            }
+        }
+
     }
 
 
@@ -254,7 +273,7 @@ Rectangle{
             DSParamsModel.setActualDateValues(counter, actualValueArray)
             DSParamsModel.addToJoinValue(counter, modelData.toString())
             DSParamsModel.addToJoinRelation(counter, Constants.equalRelation)
-            DSParamsModel.addToJoinRelationSlug(counter, Constants.equalRelation)
+            DSParamsModel.addToJoinRelationSlug(counter, Constants.slugEqualRelation)
 
             // Clear all tmp selected values and insert again
             DSParamsModel.removeTmpSelectedValues(0, true)
@@ -305,13 +324,12 @@ Rectangle{
                 DSParamsModel.setActualDateValues(counter, "%")
                 DSParamsModel.setSelectAllMap(counter, true)
                 DSParamsModel.addToJoinRelation(counter, Constants.likeRelation)
-                DSParamsModel.addToJoinRelationSlug(counter, Constants.likeRelation)
+                DSParamsModel.addToJoinRelationSlug(counter, Constants.slugLikeRelation)
             }
         }
     }
 
     function onMultiSelectCheckboxSelected(modelData,checked){
-
 
         if(DSParamsModel.section === Constants.dateTab && DSParamsModel.category === Constants.dateMainListType){
             if(mainCheckBox.checked === true){
@@ -347,7 +365,7 @@ Rectangle{
                 DSParamsModel.setActualDateValues(counter, actualValueArray)
                 DSParamsModel.addToJoinValue(counter, DSParamsModel.getTmpSelectedValues(0, true).toString())
                 DSParamsModel.addToJoinRelation(counter, Constants.inRelation)
-                DSParamsModel.addToJoinRelationSlug(counter, Constants.inRelation)
+                DSParamsModel.addToJoinRelationSlug(counter, Constants.slugInRelation)
             }
         }
     }
@@ -671,7 +689,6 @@ Rectangle{
                 height:20
                 CheckBoxTpl {
                     id: modelCheckBoxes
-                    checked: true
                     y:2
                     text  : modelData
                     objectName: modelData

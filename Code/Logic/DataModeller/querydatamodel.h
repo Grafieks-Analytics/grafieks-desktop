@@ -23,6 +23,9 @@ public:
     Q_INVOKABLE void columnData(QString col, QString tableName, QString options);
     Q_INVOKABLE void columnSearchData(QString col, QString tableName, QString searchString, QString options);
 
+private:
+    QString getQueryJoiner();
+
 signals:
      void columnListModelDataChanged(QStringList colData, QString options, bool searchMode = false);
 

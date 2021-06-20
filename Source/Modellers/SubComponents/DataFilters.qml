@@ -149,55 +149,26 @@ Popup {
     // On receiving the signal from C++, it will popup the relevant screen
 
     Connections{
+        target: DuckDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
+        target: ForwardOnlyDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
         target: QueryDataModel
 
         function onColumnListModelDataChanged(colData, values){
-
-            if(DSParamsModel.section === Constants.categoricalTab){
-
-                // Fire the signal for show specific category
-                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, DSParamsModel.fetchJoinRelation(mapKey, false)[0], DSParamsModel.fetchJoinRelationSlug(mapKey, false)[0], DSParamsModel.fetchJoinValue(mapKey, false)[0])
-
-                // show specific section for edit param
-                categoricalFilterPopup.visible = true
-                dateFilterPopup.visible = false
-                numericalFilterPopup.visible = false
-                groupFilterPopup.visible = false
-            }
-            else if(DSParamsModel.section === Constants.dateTab){
-
-                // Fire the signal for show specific category
-                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, DSParamsModel.fetchJoinRelation(mapKey, false)[0], DSParamsModel.fetchJoinRelationSlug(mapKey, false)[0], DSParamsModel.fetchJoinValue(mapKey, false)[0])
-
-
-                // show specific section for edit param
-                categoricalFilterPopup.visible = false
-                dateFilterPopup.visible = true
-                numericalFilterPopup.visible = false
-                groupFilterPopup.visible = false
-            }
-            else if(DSParamsModel.section === Constants.numericalTab){
-
-                // Fire the signal for show specific category
-                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, DSParamsModel.fetchJoinRelation(mapKey, false)[0], DSParamsModel.fetchJoinRelationSlug(mapKey, false)[0], DSParamsModel.fetchJoinValue(mapKey, false)[0])
-
-                // show specific section for edit param
-                categoricalFilterPopup.visible = false
-                dateFilterPopup.visible = false
-                numericalFilterPopup.visible = true
-                groupFilterPopup.visible = false
-            }
-            else if(DSParamsModel.section === Constants.groupTab){
-
-                // Fire the signal for show specific category
-                popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, DSParamsModel.fetchJoinRelation(mapKey, false)[0], DSParamsModel.fetchJoinRelationSlug(mapKey, false)[0], DSParamsModel.fetchJoinValue(mapKey, false)[0])
-
-                // show specific section for edit param
-                categoricalFilterPopup.visible = false
-                dateFilterPopup.visible = false
-                numericalFilterPopup.visible = false
-                groupFilterPopup.visible = true
-            }
+            updateData(colData, values)
         }
     }
 
@@ -217,6 +188,56 @@ Popup {
         DSParamsModel.setSection(Constants.categoricalTab)
         DSParamsModel.setCategory(Constants.categoryMainListType)
         DSParamsModel.setSubCategory(Constants.categorySubMulti)
+    }
+
+
+    function updateData(colData, values){
+
+        if(DSParamsModel.section === Constants.categoricalTab){
+
+            // Fire the signal for show specific category
+            popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, DSParamsModel.fetchJoinRelation(mapKey, false)[0], DSParamsModel.fetchJoinRelationSlug(mapKey, false)[0], DSParamsModel.fetchJoinValue(mapKey, false)[0])
+
+            // show specific section for edit param
+            categoricalFilterPopup.visible = true
+            dateFilterPopup.visible = false
+            numericalFilterPopup.visible = false
+            groupFilterPopup.visible = false
+        }
+        else if(DSParamsModel.section === Constants.dateTab){
+
+            // Fire the signal for show specific category
+            popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, DSParamsModel.fetchJoinRelation(mapKey, false)[0], DSParamsModel.fetchJoinRelationSlug(mapKey, false)[0], DSParamsModel.fetchJoinValue(mapKey, false)[0])
+
+
+            // show specific section for edit param
+            categoricalFilterPopup.visible = false
+            dateFilterPopup.visible = true
+            numericalFilterPopup.visible = false
+            groupFilterPopup.visible = false
+        }
+        else if(DSParamsModel.section === Constants.numericalTab){
+
+            // Fire the signal for show specific category
+            popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, DSParamsModel.fetchJoinRelation(mapKey, false)[0], DSParamsModel.fetchJoinRelationSlug(mapKey, false)[0], DSParamsModel.fetchJoinValue(mapKey, false)[0])
+
+            // show specific section for edit param
+            categoricalFilterPopup.visible = false
+            dateFilterPopup.visible = false
+            numericalFilterPopup.visible = true
+            groupFilterPopup.visible = false
+        }
+        else if(DSParamsModel.section === Constants.groupTab){
+
+            // Fire the signal for show specific category
+            popupMain.signalEditMode(DSParamsModel.section, DSParamsModel.category, DSParamsModel.subCategory, DSParamsModel.fetchJoinRelation(mapKey, false)[0], DSParamsModel.fetchJoinRelationSlug(mapKey, false)[0], DSParamsModel.fetchJoinValue(mapKey, false)[0])
+
+            // show specific section for edit param
+            categoricalFilterPopup.visible = false
+            dateFilterPopup.visible = false
+            numericalFilterPopup.visible = false
+            groupFilterPopup.visible = true
+        }
     }
 
 

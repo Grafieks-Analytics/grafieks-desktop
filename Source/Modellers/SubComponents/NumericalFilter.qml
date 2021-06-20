@@ -97,6 +97,7 @@ Popup {
 
         numericalFilterPopup.clearData.connect(topContent.slotDataCleared)
     }
+
     // SLOT function
     function slotEditMode(section, category, subCategory, relation, slug, value){
 
@@ -110,7 +111,6 @@ Popup {
 
     function closePopup(){
         numericalFilterPopup.visible = false
-        DSParamsModel.clearFilter()
     }
 
     function onCancelClicked(){

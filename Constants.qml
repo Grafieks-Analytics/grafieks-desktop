@@ -12,6 +12,9 @@ import QtQuick 2.15
 
 QtObject {
 
+    // Dummy
+    property var uniqueReportId: "MTYyMzcyOTQyOTQ0Mg=="
+
     // Menu Indexes
     property int initialIndex: 3
     property int dataDesignerIndex: 3
@@ -161,6 +164,18 @@ QtObject {
     property string greaterThanRelation: ">"
     property string smallerThanEqualRelation: "<="
     property string greaterThanEqualRelation: ">="
+
+    // SQL Relation Slugs
+    property string slugLikeRelation: "Like"
+    property string slugNotLikeRelation: "Not Like"
+    property string slugInRelation: "In"
+    property string slugEqualRelation: "Equal"
+    property string slugNotEqualRelation: "Not Equal"
+    property string slugBetweenRelation: "Between"
+    property string slugSmallerThanRelation: "Less Than"
+    property string slugGreaterThanRelation: "Greater Than"
+    property string slugSmallerThanEqualRelation: "Less Than Equal To"
+    property string slugGreaterThanEqualRelation: "Greater Than Equal To"
 
     property string innerJoin: "INNER JOIN"
     property string fullJoin: "FULL JOIN"
@@ -322,4 +337,12 @@ QtObject {
     property int joinBoxHeight: 30
     property int joinBoxRadius: 25
     property int droppedRectBufferWidth: 250
+
+    // Current Screen Types
+    property var homeScreen : 0;
+    property var grsScreen : 1;
+    property var connectorScreen : 2;
+    property var modelerScreen : 3;
+    property var dashboardScreen : 4;
+    property var reportScreen : 5;
 }

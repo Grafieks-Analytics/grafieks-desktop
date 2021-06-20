@@ -397,10 +397,12 @@ Popup {
         ReportParamsModel.clearFilter()
 
         onTabToggle(true,false,false,false);
-        console.log("APPLY APPLY")
+        console.log("APPLY APPLY", "REPORT ID", Constants.uniqueReportId)
 
-//        var tmpSql = DSParamsModel.tmpSql
-//        ProxyFilterModel.callQueryModels(tmpSql, FilterCategoricalListModel, FilterDateListModel, FilterNumericalListModel)
+        // Call the function to apply all the filters in reports
+        // This will emit a signal from ReportParamsModel.fetchMasterReportFilters to the slot in ChartsModel.updateFilterData
+        ReportParamsModel.fetchMasterReportFilters(Constants.uniqueReportId)
+
 
     }
     function onCancelClicked(){

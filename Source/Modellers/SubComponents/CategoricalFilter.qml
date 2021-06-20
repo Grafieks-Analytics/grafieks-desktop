@@ -64,47 +64,26 @@ Popup {
 
 
     Connections{
+        target: DuckDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
+        target: ForwardOnlyDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
         target: QueryDataModel
 
-        function onColumnListModelDataChanged(colData, options){
-
-            var jsonOptions = JSON.parse(options)
-
-            if(jsonOptions.section === Constants.categoricalTab){
-
-                switch(jsonOptions.category){
-                case Constants.categoryMainListType:
-
-                    listContent.visible = true
-                    wildcardContent.visible = false
-                    topContent.visible = false
-
-                    listRadio.checked = true
-
-                    break
-
-                case Constants.categoryMainWildCardType:
-
-                    listContent.visible = false
-                    wildcardContent.visible = true
-                    topContent.visible = false
-
-                    wildcardRadio.checked = true
-
-                    break
-
-                case Constants.categoryMainTopType:
-
-                    listContent.visible = false
-                    wildcardContent.visible = false
-                    topContent.visible = true
-
-                    topRadio.checked = true
-
-                    break
-                }
-
-            }
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
         }
     }
 
@@ -123,6 +102,48 @@ Popup {
     Component.onCompleted: {
         categoricalFilterPopup.clearData.connect(listContent.slotDataCleared)
         categoricalFilterPopup.clearData.connect(wildcardContent.slotDataCleared)
+    }
+
+
+    function updateData(colData, options){
+
+        var jsonOptions = JSON.parse(options)
+
+        if(jsonOptions.section === Constants.categoricalTab){
+
+            switch(jsonOptions.category){
+            case Constants.categoryMainListType:
+
+                listContent.visible = true
+                wildcardContent.visible = false
+                topContent.visible = false
+
+                listRadio.checked = true
+
+                break
+
+            case Constants.categoryMainWildCardType:
+
+                listContent.visible = false
+                wildcardContent.visible = true
+                topContent.visible = false
+
+                wildcardRadio.checked = true
+
+                break
+
+            case Constants.categoryMainTopType:
+
+                listContent.visible = false
+                wildcardContent.visible = false
+                topContent.visible = true
+
+                topRadio.checked = true
+
+                break
+            }
+
+        }
     }
 
 
@@ -242,8 +263,6 @@ Popup {
         // The db WHERE relation can only be IN / NOT IN ARRAY type
         // Except when "Select All" checked.
         // Then Relation will be LIKE
-
-        DSParamsModel.addToJoinRelation(filterIndex, Constants.likeRelation)
     }
 
 
