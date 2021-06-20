@@ -152,11 +152,12 @@ Column{
         var finalValue = firstValue + "," + lastXMonths[lastXMonths.length - 1]
 
         console.log("Last " + value + " Months", lastXMonths.toString())
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubMonth)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Last " + value + " Months")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = true
@@ -201,11 +202,12 @@ Column{
         var finalValue = firstValue + "," + nextXMonths[nextXMonths.length - 1]
 
         console.log("Next " + value + " Month", nextXMonths.toString())
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubMonth)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Next " + value + " Months")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = true
         lastXRadioTextField.focus = false
@@ -231,11 +233,12 @@ Column{
         var finalValue = firstValue + "," + newValue
 
         console.log("This Month", newValue)
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubMonth)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "This Month")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -269,11 +272,12 @@ Column{
         var finalValue = firstValue + "," + newValue
 
         console.log("Last Month", newValue)
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubMonth)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Last Month")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -307,11 +311,12 @@ Column{
         var finalValue = firstValue + "," + newValue
 
         console.log("Next Month", newValue)
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubMonth)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Next Month")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false

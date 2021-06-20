@@ -385,9 +385,9 @@ void DSParamsModel::resetFilter()
 void DSParamsModel::clearFilter()
 {
     // Q_PROPERTY
-    this->setSection(Constants::defaultTabSection);
-    this->setCategory(Constants::defaultCategory);
-    this->setSubCategory(Constants::defaultSubCategory);
+//    this->setSection(Constants::defaultTabSection);
+//    this->setCategory(Constants::defaultCategory);
+//    this->setSubCategory(Constants::defaultSubCategory);
 
     // variable change
     this->removeTmpSelectedValues(0, true);
@@ -863,6 +863,7 @@ QVariantMap DSParamsModel::fetchJoinRelation(int refObjId, bool fetchAll)
 void DSParamsModel::addToJoinValue(int refObjId, QString value)
 {
     this->joinValue.insert(QString::number(refObjId), value);
+    qDebug() << this->joinValue << "VALUES";
 }
 
 void DSParamsModel::removeJoinValue(int refObjId, bool removeAll)
@@ -894,6 +895,7 @@ QVariantMap DSParamsModel::fetchJoinValue(int refObjId, bool fetchAll)
     {
         output = this->joinValue;
     }
+
     return output;
 }
 

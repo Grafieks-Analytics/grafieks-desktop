@@ -658,6 +658,7 @@ Page {
 
     function cancelReport(){
         // Back to dashboard
+        GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
         // ChartsModel.removeTmpChartData()
     }

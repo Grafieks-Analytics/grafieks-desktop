@@ -118,11 +118,12 @@ Column{
         var finalValue = pastYear + "-01-01," + thisYear + "12-31"
 
         console.log("Past " + value + " Year", pastYear)
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubYear)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Last " + value + " Years")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = true
@@ -137,11 +138,12 @@ Column{
         var finalValue = thisYear + "01-01," + futureYear + "12-31"
 
         console.log("Next " + value + " Year", futureYear)
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubYear)
         ReportParamsModel.setActualDateValues(counter, finalValue.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Next " + value + " Years")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.betweenRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.betweenRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugBetweenRelation)
 
         nextXRadioTextField.focus = true
         lastXRadioTextField.focus = false
@@ -153,11 +155,12 @@ Column{
         var thisYear = tmpDate.getFullYear()
 
         console.log("This Year", thisYear)
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubYear)
         ReportParamsModel.setActualDateValues(counter, thisYear.toString())
         ReportParamsModel.addToFilterValueMap(counter, "This Year")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.likeRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugLikeRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -169,11 +172,12 @@ Column{
         var lastYear = tmpDate.getFullYear() - 1
 
         console.log("Last Year", lastYear)
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubYear)
         ReportParamsModel.setActualDateValues(counter, lastYear.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Last Year")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.likeRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugLikeRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false
@@ -185,11 +189,12 @@ Column{
         var nextYear = tmpDate.getFullYear() + 1
 
         console.log("Next Year", nextYear)
+        ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
         ReportParamsModel.setSubCategory(Constants.dateSubYear)
         ReportParamsModel.setActualDateValues(counter, nextYear.toString())
         ReportParamsModel.addToFilterValueMap(counter, "Next Year")
         ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
-        ReportParamsModel.addToFilterSlugMap(counter, Constants.likeRelation)
+        ReportParamsModel.addToFilterSlugMap(counter, Constants.slugLikeRelation)
 
         nextXRadioTextField.focus = false
         lastXRadioTextField.focus = false

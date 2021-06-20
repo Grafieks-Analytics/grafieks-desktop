@@ -50,22 +50,18 @@ Rectangle{
     /***********************************************************************************************************************/
     // Connections Starts
 
+
+
     Connections{
         target: ReportParamsModel
-
-        function onInternalCounterChanged(){
-            if(ReportParamsModel.section === Constants.categoricalTab){
-                counter = ReportParamsModel.internalCounter
-            }
-        }
-
-
 
         function onFilterIndexChanged(){
             if(ReportParamsModel.section === Constants.categoricalTab){
                 counter = ReportParamsModel.filterIndex
                 var colName = ReportParamsModel.colName
                 var colData = ChartsModel.fetchColumnData(colName)
+                var values = ReportParamsModel.fetchFilterValueMap(counter)[counter]
+                ReportParamsModel.removeTmpSelectedValues(0, true)
 
                 // Just to reset the data if the previous `colData` and the new `colData` are same
                 singleSelectCheckList.model = []
@@ -79,11 +75,27 @@ Rectangle{
 
                     multiSelectCheckList.visible = true
                     singleSelectCheckList.visible = false
+
+                    if(values[0] === "%"){
+                        colData.forEach((item) => {
+                                            ReportParamsModel.setTmpSelectedValues(item)
+                                        })
+                    } else{
+
+                        var checkedValues = values[0].split(",")
+                        checkedValues.forEach((item) => {
+                                                  ReportParamsModel.setTmpSelectedValues(item)
+                                              })
+                    }
                 } else{
                     singleSelectRadio.checked = true
 
                     multiSelectCheckList.visible = false
                     singleSelectCheckList.visible = true
+
+                    if(ReportParamsModel.searchTmpSelectedValues(values) < 0){
+                        ReportParamsModel.setTmpSelectedValues(values)
+                    }
 
                 }
             }
@@ -146,7 +158,7 @@ Rectangle{
         if(ReportParamsModel.section === Constants.categoricalTab){
             ReportParamsModel.addToFilterValueMap(counter, modelData.toString())
             ReportParamsModel.addToFilterRelationMap(counter, Constants.equalRelation)
-            ReportParamsModel.addToFilterSlugMap(counter, Constants.equalRelation)
+            ReportParamsModel.addToFilterSlugMap(counter, Constants.slugEqualRelation)
 
             // Clear all tmp selected values and insert again
             ReportParamsModel.removeTmpSelectedValues(0, true)
@@ -189,22 +201,20 @@ Rectangle{
 
     function setCheckedAll(checked){
 
+        // If Select All option is true
         if(ReportParamsModel.section === Constants.categoricalTab){
-            // If Select All option is true
-            if(ReportParamsModel.section === Constants.categoricalTab){
-                if(checked === true){
+            if(checked === true){
 
-                    ReportParamsModel.addToFilterValueMap(counter, "%")
-                    ReportParamsModel.setActualDateValues(counter, "%")
-                    ReportParamsModel.addToSelectAllMap(counter, true)
-                    ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
-                    ReportParamsModel.addToFilterSlugMap(counter, Constants.likeRelation)
-                }
+                ReportParamsModel.addToFilterValueMap(counter, "%")
+                ReportParamsModel.addToSelectAllMap(counter, true)
+                ReportParamsModel.addToFilterRelationMap(counter, Constants.likeRelation)
+                ReportParamsModel.addToFilterSlugMap(counter, Constants.slugLikeRelation)
             }
         }
     }
 
     function onMultiSelectCheckboxSelected(modelData,checked){
+
 
         if(ReportParamsModel.section === Constants.categoricalTab){
             if(mainCheckBox.checked === true){
@@ -231,11 +241,11 @@ Rectangle{
                 }
 
                 // Save the array and Set relation type to IN
-
-
-                ReportParamsModel.addToFilterValueMap(counter, ReportParamsModel.getTmpSelectedValues(0, true).toString())
-                ReportParamsModel.addToFilterRelationMap(counter, Constants.inRelation)
-                ReportParamsModel.addToFilterSlugMap(counter, Constants.inRelation)
+                if(ReportParamsModel.getTmpSelectedValues(0, true).toString() !== ""){
+                    ReportParamsModel.addToFilterValueMap(counter, ReportParamsModel.getTmpSelectedValues(0, true).toString())
+                    ReportParamsModel.addToFilterRelationMap(counter, Constants.inRelation)
+                    ReportParamsModel.addToFilterSlugMap(counter, Constants.slugInRelation)
+                }
             }
         }
     }
@@ -404,11 +414,10 @@ Rectangle{
 
             CheckBoxTpl {
                 id: mainCheckBox
-                checked: ReportParamsModel.fetchSelectAllMap(counter)[counter] === "1" ? true : false
+                checked: ReportParamsModel.fetchSelectAllMap(counter)[0] === true ? true : false
                 text: "All"
                 y:2
                 parent_dimension: Constants.defaultCheckBoxDimension
-                checkState: childGroup.checkState
 
                 onCheckedChanged: {
                     onAllCheckBoxCheckedChanged(checked)
@@ -417,7 +426,6 @@ Rectangle{
 
             ListView {
                 id: multiSelectCheckList
-                //                model: ColumnListModel
                 height: parent.height-38
                 width: parent.width
                 anchors.top: mainCheckBox.bottom
@@ -434,7 +442,6 @@ Rectangle{
                     height:20
                     CheckBoxTpl {
                         id: modelCheckBoxes
-                        checked: false
                         y:2
                         text: modelData
                         parent_dimension: Constants.defaultCheckBoxDimension
@@ -451,18 +458,10 @@ Rectangle{
 
                         // On edit, highlight the selected option
                         Connections{
-                            target: ChartsModel
-                            function onColumnDataChanged(columnData, options){
+                            target: ReportParamsModel
+                            function onTmpSelectedValuesChanged(values){
                                 if(ReportParamsModel.mode === Constants.modeEdit && ReportParamsModel.category === Constants.categoryMainListType && ReportParamsModel.subCategory === Constants.categorySubMulti){
-                                    if(options !== ""){
-                                        var JSONValues = JSON.parse(options)
-                                        var selectedValues = []
-
-                                        JSONValues.values.forEach(item => {
-                                                                      selectedValues = item.split(",")
-                                                                  })
-                                        modelCheckBoxes.checked = selectedValues.indexOf(modelCheckBoxes.objectName) >= 0 ? true: false
-                                    }
+                                    modelCheckBoxes.checked = values.indexOf(modelCheckBoxes.objectName) >= 0 ? true: false
                                 }
                             }
                         }
@@ -526,22 +525,14 @@ Rectangle{
 
                         // On edit, highlight the selected option
                         Connections{
-                            target: ChartsModel
-                            function onColumnDataChanged(columnData, options){
+                            target: ReportParamsModel
+                            function onTmpSelectedValuesChanged(values){
                                 if(ReportParamsModel.mode === Constants.modeEdit && ReportParamsModel.category === Constants.categoryMainListType && ReportParamsModel.subCategory === Constants.categorySubSingle){
-                                    if(options !== ""){
-                                        var JSONValues = JSON.parse(options)
-                                        var selectedValues = []
-
-                                        JSONValues.values.forEach(item => {
-                                                                      selectedValues = item.split(",")
-                                                                  })
-                                        console.log(selectedValues, modelRadioButton.objectName)
-                                        modelRadioButton.checked = selectedValues.indexOf(modelRadioButton.objectName) >= 0 ? true: false
-                                    }
+                                    modelRadioButton.checked = values[0] === modelRadioButton.objectName ? true: false
                                 }
                             }
                         }
+
                     }
                 }
 
@@ -593,7 +584,6 @@ Rectangle{
                 onCheckStateChanged: {
                     onExcludeCheckedClicked(checked)
                 }
-
 
             }
         }
