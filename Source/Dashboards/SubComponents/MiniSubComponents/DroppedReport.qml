@@ -461,7 +461,9 @@ Item{
     function convertToStandard(){
         const reportProperties = ReportParamsModel.getReport(reportId);
         var d3PropertiesConfig = reportProperties.d3PropertiesConfig;
+        console.log('d3PropertiesConfig',d3PropertiesConfig);
         d3PropertiesConfig.chartType = "Standard";
+        console.log('d3PropertiesConfig',d3PropertiesConfig);
         ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertiesConfig));
         reDrawChart();
     }

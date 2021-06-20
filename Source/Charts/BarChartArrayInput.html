@@ -518,9 +518,9 @@
                         if (xAxisTick && xAxisTick.length <= 2) {
                             continue;
                         }
-                        if (xAxisTick) {
+                        if (allXAxisTexts[i] && xAxisTick) {
                             var singleCharacterLength =
-                                xAxisTick.getBBox().width /
+                                allXAxisTexts[i].getBBox().width / xAxisTick &&
                                 xAxisTick.innerHTML.length;
 
                             var numOfCharacters =
