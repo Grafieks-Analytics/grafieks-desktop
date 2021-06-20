@@ -1187,44 +1187,55 @@ Page {
 
 
 
-                TextEdit{
+                TextField{
                     id: ds_name
-                    text: "Data Source Name"
+//                    text: "Data Source Name"
+                    placeholderText: "Data Source Name"
                     anchors.verticalCenter: rectangle_querymodeller_right_col1.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col1.left
                     anchors.leftMargin: 10
-                    readOnly: true
-                    selectByKeyboard: true
+                    readOnly: false
                     selectByMouse: true
+                    width:250
+                    height: 40
+                    anchors.horizontalCenter:parent.horizontalCenter
+                    font.pixelSize: 14
+                    verticalAlignment:TextEdit.AlignVCente
 
                     // Set the text
                     onTextChanged: setDataSourceName()
-
-                }
-
-                Image {
-                    id: dataSourceNameEditIcon
-                    source: "/Images/icons/edit-32.png"
-                    height: 20
-                    width: 20
-                    anchors.right: parent.right
-                    anchors.rightMargin: 17
-                    anchors.verticalCenter: parent.verticalCenter
-
-                    ToolTip.delay:Constants.tooltipShowTime
-                    ToolTip.timeout: Constants.tooltipHideTime
-                    ToolTip.text: qsTr("Edit datasource name")
-                    ToolTip.visible:  mouseAreaEditDS.containsMouse? true : false
-
-                    MouseArea{
-                        id: mouseAreaEditDS
-                        anchors.fill: parent
-                        onClicked: focusDataSourceNameField()
-                        hoverEnabled: true
-
+                    background: Rectangle{
+                        color: "transparent"
+                        border.color: "transparent"
                     }
+                     Keys.onReturnPressed: ds_name.focus = false
 
                 }
+
+
+//                Image {
+//                    id: dataSourceNameEditIcon
+//                    source: "/Images/icons/edit-32.png"
+//                    height: 20
+//                    width: 20
+//                    anchors.right: parent.right
+//                    anchors.rightMargin: 17
+//                    anchors.verticalCenter: parent.verticalCenter
+
+//                    ToolTip.delay:Constants.tooltipShowTime
+//                    ToolTip.timeout: Constants.tooltipHideTime
+//                    ToolTip.text: qsTr("Edit datasource name")
+//                    ToolTip.visible:  mouseAreaEditDS.containsMouse? true : false
+
+//                    MouseArea{
+//                        id: mouseAreaEditDS
+//                        anchors.fill: parent
+//                        onClicked: focusDataSourceNameField()
+//                        hoverEnabled: true
+
+//                    }
+
+//                }
 
 
             }

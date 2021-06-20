@@ -1,5 +1,5 @@
 function isDateFormat(date) {
-    var initialPart = date.split("-");
+    var initialPart = date && date.toString().split("-");
     if (isNaN(initialPart)) {
         // initialPart
         // if (!isInMonth(initialPart)) {
@@ -132,38 +132,44 @@ function setText(selector, textValue) {
 function setLabel(
     label = "xLabel",
     labelType = "x_label",
+    svg,
     x_tick_fontSize,
-    y_tick_fontSize
+    y_tick_fontSize,
+    
 ) {
     console.log("x" + x_tick_fontSize);
     console.log("y" + y_tick_fontSize);
-    svg = d3.select("svg");
+    
 
     const margin = { top: 30, right: 30, bottom: 70, left: 60 },
         width = window.innerWidth - margin.left - margin.right - 10,
         height = window.innerHeight - margin.top - margin.bottom - 10;
 
     if (labelType == "x_label") {
-        svg.append("text")
-            .attr("class", labelType)
-            .attr("text-anchor", "end")
-            .text(label)
-            .attr("x", width / 2 + 150)
-            .attr("y", height + 60)
-            .attr("class", labelType);
+        svg
+          .append("text")
+          .attr("class", labelType)
+          .attr("text-anchor", "end")
+          .text(label)
+          .attr("x", window.innerWidth / 2)
+          .attr("y", 60)
+          .attr("font-size", xLabelfontSize)
+          .attr("class", labelType);
     } else {
-        svg.append("text")
-            .attr("class", labelType)
-            .attr("text-anchor", "end")
-            .text(label)
-            .attr("y", 6)
-            .attr("x", -height / 2)
-            .attr("dy", ".75em")
-            .attr("transform", "rotate(-90)");
+        svg
+          .append("text")
+          .attr("class", labelType)
+          .attr("text-anchor", "end")
+          .text(label)
+          .attr("y", 6)
+          .attr("font-size", yLabelfontSize)
+          .attr("x", -height / 2)
+          .attr("dy", ".75em")
+          .attr("transform", "rotate(-90)");
     }
 }
 
-function sortDates(dateDataset, dateFormat) {
+function sortDates(dateDataset, dateFormat, isHorizontalGraph) {
     var parseTime = d3.timeParse(dateFormat);
     var dates = Object.keys(dateDataset);
     var newDataSet = [];
@@ -176,22 +182,23 @@ function sortDates(dateDataset, dateFormat) {
         // to get a value that is either negative, positive, or zero.
         return new Date(a) - new Date(b);
     });
-    // dates = newDataSet.sort();
-    // console.log(newDataSet);
-    // console.log(dates);
     dates = dates.map((d) => {
-        return d3.timeFormat(dateFormat)(new Date(d));
+        var formattedDate = d3.timeFormat(dateFormat)(new Date(d));
+        return formattedDate;
     });
 
-    if (
-        dateFormat == "%b" ||
-        dateFormat == "%m" ||
-        dateFormat == "%B" ||
-        dateFormat == "%d"
-    ) {
-        dates = dates.reverse();
+    if (dateFormat == "%d") {
+        dates = dates.sort(function (a, b) {
+            return a - b;
+        });
     }
-    console.log(dates);
+
+    if (isHorizontalGraph) {
+        if (dateFormat == "%m" || dateFormat == "%d") {
+            dates = dates.reverse();
+        }
+    }
+
     return dates;
 }
 
@@ -199,6 +206,7 @@ function clearChart() {
     d3.selectAll("#my_dataviz").html("");
     d3.selectAll("#yAxisDiv").html("");
     d3.selectAll("#xAxisDiv").html("");
+    d3.selectAll("#xAxisLabelId").html("");
 
     if (window.extraHeight) {
         window.extraHeight = 0;

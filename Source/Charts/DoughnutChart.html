@@ -8,6 +8,7 @@
 
     <!-- Color scale -->
     <script src="./Data/d3DefaultConfig.js"></script>
+    <script src="./Data/utils.js"></script>
 
     <script src="Data/d3-scale-chromatic.v1.min.js"></script>
     <link rel="stylesheet" href="Data/general.css" />
@@ -24,12 +25,8 @@
         var data = { a: 9, b: 20, c: 30, d: 8, e: 12, g: 45 };
 
         function drawChart(data, plottingConfiguration = {}) {
-            let {
-                d3colorPalette,
-                paddingInner,
-                legendConfig,
-                innerRadius,
-            } = plottingConfiguration;
+            let { d3colorPalette, paddingInner, legendConfig, innerRadius } =
+                plottingConfiguration;
             if (!d3colorPalette) {
                 d3colorPalette = defaultD3Config.d3ColorPalette;
             }
@@ -50,8 +47,8 @@
             let { legendStatus, legendPosition } = legendConfig;
 
             if (legendStatus) {
-                var legendHeight = document.querySelector("#legend")
-                    .offsetHeight;
+                var legendHeight =
+                    document.querySelector("#legend").offsetHeight;
                 var legendElement = document.querySelector("#legend");
 
                 topPosition = "calc(50vh - " + legendHeight + "px)";

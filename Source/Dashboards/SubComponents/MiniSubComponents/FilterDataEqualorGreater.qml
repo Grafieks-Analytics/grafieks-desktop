@@ -8,7 +8,8 @@ import "../../../MainSubComponents"
 
 Item {
     id: filterDataItemRange
-    width: parent.width-8
+    width: parent.width-25
+       anchors.horizontalCenter: parent.horizontalCenter
     height: 110
 
 
