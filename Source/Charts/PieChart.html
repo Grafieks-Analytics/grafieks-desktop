@@ -10,6 +10,7 @@
     <script src="./Data/d3DefaultConfig.js"></script>
 
     <script src="Data/d3-scale-chromatic.v1.min.js"></script>
+    <script src="./Data/utils.js"></script>
     <link rel="stylesheet" href="Data/general.css" />
 
     <title>Pie Chart</title>
@@ -25,11 +26,8 @@
 
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
-            let {
-                d3colorPalette,
-                paddingInner,
-                legendConfig,
-            } = plottingConfiguration;
+            let { d3colorPalette, paddingInner, legendConfig } =
+                plottingConfiguration;
             if (!d3colorPalette) {
                 d3colorPalette = defaultD3Config.d3ColorPalette;
             }
@@ -46,8 +44,8 @@
             let { legendStatus, legendPosition } = legendConfig;
 
             if (legendStatus) {
-                var legendHeight = document.querySelector("#legend")
-                    .offsetHeight;
+                var legendHeight =
+                    document.querySelector("#legend").offsetHeight;
                 var legendElement = document.querySelector("#legend");
 
                 topPosition = "calc(50vh - " + legendHeight + "px)";

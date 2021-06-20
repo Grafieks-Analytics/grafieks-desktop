@@ -1,5 +1,5 @@
 function isDateFormat(date) {
-    var initialPart = date.split("-");
+    var initialPart = date && date.toString().split("-");
     if (isNaN(initialPart)) {
         // initialPart
         // if (!isInMonth(initialPart)) {
@@ -169,7 +169,7 @@ function setLabel(
     }
 }
 
-function sortDates(dateDataset, dateFormat) {
+function sortDates(dateDataset, dateFormat, isHorizontalGraph) {
     var parseTime = d3.timeParse(dateFormat);
     var dates = Object.keys(dateDataset);
     var newDataSet = [];
@@ -182,22 +182,23 @@ function sortDates(dateDataset, dateFormat) {
         // to get a value that is either negative, positive, or zero.
         return new Date(a) - new Date(b);
     });
-    // dates = newDataSet.sort();
-    // console.log(newDataSet);
-    // console.log(dates);
     dates = dates.map((d) => {
-        return d3.timeFormat(dateFormat)(new Date(d));
+        var formattedDate = d3.timeFormat(dateFormat)(new Date(d));
+        return formattedDate;
     });
 
-    if (
-        dateFormat == "%b" ||
-        dateFormat == "%m" ||
-        dateFormat == "%B" ||
-        dateFormat == "%d"
-    ) {
-        dates = dates.reverse();
+    if (dateFormat == "%d") {
+        dates = dates.sort(function (a, b) {
+            return a - b;
+        });
     }
-    console.log(dates);
+
+    if (isHorizontalGraph) {
+        if (dateFormat == "%m" || dateFormat == "%d") {
+            dates = dates.reverse();
+        }
+    }
+
     return dates;
 }
 
