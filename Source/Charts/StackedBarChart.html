@@ -120,19 +120,12 @@
                 json[key][key2] += +value;
             });
 
-            var response = [];
             var allKeys = uniqueKey2;
 
-            for (var key in json) {
-                if (Object.keys(json[key]).length < allKeys.length) {
-                    allKeys.forEach((d) => {
-                        if (!json[key][d]) {
-                            json[key][d] = 0;
-                        }
-                    });
-                }
-                response.push({ ...json[key], key });
-            }
+            var sortedKeys = sortDates(json, dateFormat);
+            const response = sortedKeys.map((d) => {
+                return { ...json[d], key: d };
+            });
 
             return [response, allKeys, data[2]];
         }
@@ -635,6 +628,8 @@
                 extraHeightWorked = false;
                 redrawn = false;
             }
+
+            setXAxisTicksDistance();
 
             function setYaxisWidth() {
                 var allYAxisTicks = document.querySelectorAll(".y-axis .tick");
