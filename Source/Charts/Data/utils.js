@@ -134,38 +134,34 @@ function setLabel(
     labelType = "x_label",
     svg,
     x_tick_fontSize,
-    y_tick_fontSize,
-    
+    y_tick_fontSize
 ) {
     console.log("x" + x_tick_fontSize);
     console.log("y" + y_tick_fontSize);
-    
 
     const margin = { top: 30, right: 30, bottom: 70, left: 60 },
         width = window.innerWidth - margin.left - margin.right - 10,
         height = window.innerHeight - margin.top - margin.bottom - 10;
 
     if (labelType == "x_label") {
-        svg
-          .append("text")
-          .attr("class", labelType)
-          .attr("text-anchor", "end")
-          .text(label)
-          .attr("x", window.innerWidth / 2)
-          .attr("y", 60)
-          .attr("font-size", xLabelfontSize)
-          .attr("class", labelType);
+        svg.append("text")
+            .attr("class", labelType)
+            .attr("text-anchor", "end")
+            .text(label)
+            .attr("x", window.innerWidth / 2)
+            .attr("y", 60)
+            .attr("font-size", xLabelfontSize)
+            .attr("class", labelType);
     } else {
-        svg
-          .append("text")
-          .attr("class", labelType)
-          .attr("text-anchor", "end")
-          .text(label)
-          .attr("y", 6)
-          .attr("font-size", yLabelfontSize)
-          .attr("x", -height / 2)
-          .attr("dy", ".75em")
-          .attr("transform", "rotate(-90)");
+        svg.append("text")
+            .attr("class", labelType)
+            .attr("text-anchor", "end")
+            .text(label)
+            .attr("y", 6)
+            .attr("font-size", yLabelfontSize)
+            .attr("x", -height / 2)
+            .attr("dy", ".75em")
+            .attr("transform", "rotate(-90)");
     }
 }
 
@@ -266,4 +262,8 @@ function setSvgBackground(backgroundColor, opacity) {
         backgroundColor +
         " }";
     document.head.append(styleTag);
+}
+
+function setXAxisTicksDistance(distanceValue = "1em") {
+    d3.selectAll(".x-axis text").attr("dy", distanceValue);
 }
