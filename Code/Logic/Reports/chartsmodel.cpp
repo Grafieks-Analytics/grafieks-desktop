@@ -1499,11 +1499,13 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
         int newKey = newChartHeader.key( columnName );
         *columnData = *reportChartData.value(reportId).value(newKey);
 
-        // For like relation
+        // 1. For like relation
         // If '%' found, no need to check. Just add all
         // Else do the following processing
         // For date and categorical only
         if(filterSlug == Constants::slugLikeRelation){
+
+            qDebug() << "FILTER HERE" << filterSlug << "LIKE REL 1";
 
             if(filterValueList.at(0) != "%"){
 
@@ -1520,9 +1522,11 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
         }
 
-        // Not like relation
+        // 2. Not like relation
         // Categorical & Date only
         else if(filterSlug == Constants::slugNotLikeRelation){
+
+            qDebug() << "FILTER HERE" << filterSlug << "NOT LIKE REL 2";
 
             if(filterValueList.at(0) == "%"){
                 columnData->clear();
@@ -1533,9 +1537,11 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
             }
         }
 
-        // In array relation
+        // 3. In array relation
         // Numerical, Categorical & Date
         else if(filterSlug == Constants::slugInRelation){
+
+            qDebug() << "FILTER HERE" << filterSlug << "IN REL 3";
 
             foreach(QString tmpVal, filterValueList){
                 tmpList->append(columnData->filter(tmpVal));
@@ -1544,26 +1550,32 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
         }
 
-        // Equal to comparison
+        // 4. Equal to comparison
         // Numerical, Categorical & Date
         else if(filterSlug == Constants::slugEqualRelation){
+
+            qDebug() << "FILTER HERE" << filterSlug << "EQUAL REL 4";
 
             *tmpList = columnData->filter(filterValueList.at(0));
             *columnData = *tmpList;
 
         }
 
-        // Not equal comparison
+        // 5. Not equal comparison
         // Numerical, Categorical & Date
         else if(filterSlug == Constants::slugNotEqualRelation){
+
+            qDebug() << "FILTER HERE" << filterSlug << "NOT EQUAL REL 5";
 
             columnData->removeAll(filterValueList.at(0));
 
         }
 
-        // Between relation
+        // 6. Between relation
         // This condition is only for numerical and date
         else if(filterSlug == Constants::slugBetweenRelation){
+
+            qDebug() << "FILTER HERE" << filterSlug << "BETWEEN REL 6";
 
             QStringList tmpValues = filterValueList.at(0).split(" AND ");
 
@@ -1593,9 +1605,11 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
         }
 
-        // For smaller than relation
+        // 7. For smaller than relation
         // Numerical only
         else if(filterSlug == Constants::slugSmallerThanRelation){
+
+            qDebug() << "FILTER HERE" << filterSlug << "SMALLER THAN REL 7";
 
             foreach(QString tmpVal, *columnData){
                 if(tmpVal.toFloat() < filterValueList.at(0).toFloat()){
@@ -1606,9 +1620,11 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
             *columnData = *tmpList;
         }
 
-        // For greater than relation
+        // 8. For greater than relation
         // Numerical only
         else if(filterSlug == Constants::slugGreaterThanRelation){
+
+            qDebug() << "FILTER HERE" << filterSlug << "GREATER THAN REL 8";
 
             foreach(QString tmpVal, *columnData){
                 if(tmpVal.toFloat() > filterValueList.at(0).toFloat()){
@@ -1619,9 +1635,11 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
             *columnData = *tmpList;
         }
 
-        // For smaller than and equal to relation
+        // 9. For smaller than and equal to relation
         // Numerical only
         else if(filterSlug == Constants::slugSmallerThanEqualRelation){
+
+            qDebug() << "FILTER HERE" << filterSlug << "SMALLER THAN EQUAL REL 9";
 
             foreach(QString tmpVal, *columnData){
                 if(tmpVal.toFloat() <= filterValueList.at(0).toFloat()){
@@ -1632,9 +1650,11 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
             *columnData = *tmpList;
         }
 
-        // For greater than and equal to relation
+        // 10. For greater than and equal to relation
         // Numerical only
         else if(filterSlug == Constants::slugGreaterThanEqualRelation){
+
+            qDebug() << "FILTER HERE" << filterSlug << "GREATER THAN EQUAL REL 10";
 
             foreach(QString tmpVal, *columnData){
                 if(tmpVal.toFloat() >= filterValueList.at(0).toFloat()){
@@ -1644,8 +1664,40 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             *columnData = *tmpList;
 
-        } else{
+        }
 
+        // 11. For containig relation
+        // Categorical
+        else if(filterSlug == Constants::slugContainingRelation){
+
+            qDebug() << "FILTER HERE" << filterSlug << "CONTAINING REL 11" << "To be implemented";
+        }
+
+        // 12. For Ends With relation
+        // Categorical
+        else if(filterSlug == Constants::slugEndsWithRelation){
+
+            qDebug() << "FILTER HERE" << filterSlug << "ENDS With REL 12" << "To be implemented";
+        }
+
+        // 13. For Doesnt Start With relation
+        // Categorical
+        else if(filterSlug == Constants::slugDoesntStartWithRelation){
+
+            qDebug() << "FILTER HERE" << filterSlug << "Doenst start with REL 13" << "To be implemented";
+        }
+
+        // 14. For Doesnt End With relation
+        // Categorical
+        else if(filterSlug == Constants::slugDoesntEndWithRelation){
+
+            qDebug() << "FILTER HERE" << filterSlug << "Doenst end with REL 14" << "To be implemented";
+        }
+
+        // 15. Filter
+        else{
+
+            qDebug() << "FILTER HERE" << filterSlug << "UNKNOWN REL";
 
             qDebug() << "Else Filter values obtained"
                         <<filterId << section << category << subCategory << columnName << actualDateValues << dateFormat
