@@ -67,7 +67,7 @@ Item{
         }
 
         ListElement {
-            categoryName: "Charts Size"
+            categoryName: "Axis Size"
             collapsed: false
             display: false
             subItems: [
@@ -338,12 +338,15 @@ Item{
                         if(collapsed)
                             return null
 
+                        console.log('Debug',categoryName.toLowerCase());
                         switch(categoryName.toLowerCase()){
                             case "properties": return propertiesComponent
                             case "reference line": return referenceLineComponent
-                            case "charts size": return chartsSizing
+                            case "axis size": return chartsSizing
                             case "legend": return legendComponent
                             case "total": return totalComponent
+                            default:
+                                console.log('Debug',categoryName.toLowerCase())
                         }
 
                     }
