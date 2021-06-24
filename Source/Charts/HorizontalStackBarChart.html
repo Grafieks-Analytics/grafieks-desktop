@@ -126,14 +126,31 @@
 
             if (chartType == constants.chartType.STANDARD) {
                 height = yAxisUniqueKeys.length * standardThresholdHeight;
+                console.log(
+                    height + margin.top + margin.bottom,
+                    window.innerHeight
+                );
                 if (height + margin.top + margin.bottom < window.innerHeight) {
+                    console.log("Bottom", height + margin.top + margin.bottom);
                     d3.select("#xAxisDiv").style("top", height + "px");
                 } else {
                     d3.select("#xAxisDiv").style("bottom", "0");
+                }
+            }
+
+            if (chartType == constants.chartType.FIT_HEIGHT) {
+                if (height + margin.top + margin.bottom < window.innerHeight) {
+                    d3.select("#xAxisDiv").style(
+                        "bottom",
+                        window.innerHeight -
+                            (height + margin.top + margin.bottom) +
+                            "px"
+                    );
+                    d3.select("#xAxisDiv").style("top", null);
+                    console.log("test");
+                } else {
                     d3.select("#xAxisDiv").style("top", null);
                 }
-            } else {
-                d3.select("#xAxisDiv").style("bottom", "0");
             }
 
             var y = d3
@@ -297,6 +314,7 @@
                 }
             }
 
+            setXAxisTicksDistance();
             function stackMin(series) {
                 return d3.min(series, function (d) {
                     return d[0];
