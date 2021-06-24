@@ -88,6 +88,9 @@ Popup {
                     case Constants.groupBarChartTitle:
                         delete d3PropertyConfig['options'];
                         break;
+                    case Constants.horizontalStackedBarChartTitle:
+                        switchChart(Constants.horizontalBarChartTitle);
+                        break;
                 }
 
                 // // Add switch case - change url according to the selected chart

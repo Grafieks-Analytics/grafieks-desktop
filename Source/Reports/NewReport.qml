@@ -53,7 +53,7 @@ Page {
     // Initial Chart Config
     property string chartUrl: 'BarChartArrayInput.html';
     property string chartTitle: Constants.barChartTitle;
-    property var customizationsAvailable: "Properties,Reference Line,Legend,Charts Size";
+    property var customizationsAvailable: "Properties,Reference Line,Legend,Axis Size";
 
     // This contains all the customizable config and is passed to drawChart function
     // In draw chart we take out these config; If config is empty => We have default config for it.
@@ -716,6 +716,10 @@ Page {
 
         var itemType = lastPickedDataPaneElementProperties.itemType;
         if(itemType && (itemType.toLowerCase() === 'categorical' || itemType.toLowerCase() === 'date') && axis === Constants.yAxisName  && !xAxisColumns.length && !yAxisColumns.length){
+            isHorizontalGraph = true;
+        }
+
+        if(itemType && (itemType.toLowerCase() === 'numerical') && axis === Constants.xAxisName  && !xAxisColumns.length && !yAxisColumns.length){
             isHorizontalGraph = true;
         }
 
