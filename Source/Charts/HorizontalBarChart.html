@@ -132,16 +132,25 @@
                         height + margin.top + margin.bottom <
                         window.innerHeight
                     ) {
-                        // console.log("Change Position");
                         d3.select("#xAxisDiv").style(
                             "top",
                             height + margin.top + "px"
                         );
                     } else {
-                        d3.select("#xAxisDiv").style("bottom", "0");
+                        d3.select("#xAxisDiv").style("bottom", 0);
                     }
-                }else{
-                    d3.select("#xAxisDiv").style("bottom", "0");
+                }
+
+                if (height + margin.top + margin.bottom < window.innerHeight) {
+                    d3.select("#xAxisDiv").style(
+                        "bottom",
+                        window.innerHeight -
+                            (height + margin.top + margin.bottom) +
+                            "px"
+                    );
+                } else {
+                    d3.select("#xAxisDiv").style("bottom", 0);
+                    d3.select("#xAxisDiv").style("top", null);
                 }
 
                 clearChart();
