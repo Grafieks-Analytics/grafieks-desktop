@@ -345,4 +345,12 @@ QtObject {
     property var modelerScreen : 3;
     property var dashboardScreen : 4;
     property var reportScreen : 5;
+
+    // Date Formats
+    property var yearFormat: "%Y";
+    property var dayFormat: "%d";
+    property var monthFormat: "%b";
+    property var dayMonthYearFormat: "%d %b %Y";
+    property var monthYearFormat: "%b %Y";
+    
 }
