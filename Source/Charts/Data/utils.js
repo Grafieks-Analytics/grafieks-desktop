@@ -141,9 +141,15 @@ function setLabel(
     console.log("y" + y_tick_fontSize);
     
 
-    const margin = { top: 30, right: 30, bottom: 70, left: 60 },
-        width = window.innerWidth - margin.left - margin.right - 10,
-        height = window.innerHeight - margin.top - margin.bottom - 10;
+    const margin = { top: 30, right: 30, bottom: 70, left: 60 };
+    if (document.querySelector("#my_dataviz").clientWidth > document.documentElement.clientWidth) {
+      
+         width = document.documentElement.clientWidth;
+    }
+    else {
+         width = document.querySelector("#my_dataviz").clientWidth;
+    }
+      height = document.querySelector("#yAxisDiv").clientHeight;
 
     if (labelType == "x_label") {
         svg
@@ -151,9 +157,11 @@ function setLabel(
           .attr("class", labelType)
           .attr("text-anchor", "end")
           .text(label)
-          .attr("x", window.innerWidth / 2)
+          .attr("x", width/2)
           .attr("y", 60)
           .attr("font-size", xLabelfontSize)
+          .attr("font-family", xLabelfontFamily)
+          .attr("fill", xLabelfontColor)
           .attr("class", labelType);
     } else {
         svg
@@ -161,8 +169,10 @@ function setLabel(
           .attr("class", labelType)
           .attr("text-anchor", "end")
           .text(label)
-          .attr("y", 6)
+          .attr("y", 0)
           .attr("font-size", yLabelfontSize)
+          .attr("font-family", yLabelfontFamily)
+          .attr("fill", yLabelfontColor)
           .attr("x", -height / 2)
           .attr("dy", ".75em")
           .attr("transform", "rotate(-90)");
