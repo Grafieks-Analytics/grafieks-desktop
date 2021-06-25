@@ -8,9 +8,16 @@ Rectangle{
 
     id: axisRectangle
     property var itemType: null;
+    property var itemIndexId: null;
+    property var axisType: null;
+    property var dateFormatValue: null;
 
     property alias textValue: textbox.text
     property alias itemType: axisRectangle.itemType
+    property alias itemIndexId: axisRectangle.itemIndexId
+    property alias axisType: axisRectangle.axisType
+    property alias dateFormatValue: axisRectangle.dateFormatValue
+    
 
     height: ((parent && parent.height) - 10) || 0
     width: 200
@@ -22,12 +29,40 @@ Rectangle{
     Component.onCompleted: {
         console.log('Item Type',itemType, typeof(itemType));
         axisRectangle.color = itemType.toLowerCase() === 'numerical' ? Constants.defaultYAxisColor : Constants.defaultXAxisColor
+        console.log('Index and Axis Name', itemIndexId, axisType, dateFormatValue);
+
+        
+        
     }
 
     function onDateFormatSelected(index){
         var dateFormat = dateCalculations.get(index).dateFormat;
         report_desiner_page.d3PropertyConfig['dateFormat'] = dateFormat;
         report_desiner_page.reDrawChart();
+
+        switch(axisType){
+            case Constants.xAxisName:
+                xAxisListModel.setProperty(itemIndexId,'dateFormat',dateFormat);
+                break;
+            case Constants.yAxisName:
+                yAxisListModel.setProperty(itemIndexId,'dateFormat',dateFormat);
+                break;
+        }
+    }
+
+    function getIndexValue(dateFormat){
+        
+        for(var i=0; i< dateCalculations.count; i++){
+            console.log(i);
+            var dateFormatModelValue = dateCalculations.get(i).dateFormat; 
+            if(dateFormatModelValue === dateFormat){
+                return i;
+                break;
+            }
+        }
+
+        console.log('Error');
+        return 0;
     }
 
     ListModel{
@@ -52,10 +87,11 @@ Rectangle{
             calculationName:"Month & Year"
             dateFormat: "%b %Y"
         }
-        ListElement{
-            calculationName:"Quarter"
-            dateFormat: "%d-%m-%Y"
-        }
+        // [Tag: Future Release]
+        // ListElement{
+        //     calculationName:"Quarter"
+        //     dateFormat: "%d-%m-%Y"
+        // }
 
     }
 
@@ -164,6 +200,7 @@ Rectangle{
             textRole: "calculationName"
             width: parent.width
             height: parent.height
+            Component.onCompleted: currentIndex = getIndexValue(dateFormatValue)
             font.pixelSize: Constants.fontReading
             anchors.centerIn: parent
             onCurrentIndexChanged: onDateFormatSelected(currentIndex)

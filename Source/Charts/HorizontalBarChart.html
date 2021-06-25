@@ -74,14 +74,7 @@
                 } = plottingConfiguration;
 
                 d3Colors = d3colorPalette;
-
-                if (!toolTip) {
-                    toolTip = {
-                        textColumn1: "labels[0]",
-                        textColumn2: "labels[1]",
-                    };
-                }
-
+                
                 // const { top, right, bottom, left } = constants.chartMargins;
                 var margin = { top: 0, right: 50, bottom: 80, left: 100 };
                 var width = window.innerWidth - margin.left - margin.right;

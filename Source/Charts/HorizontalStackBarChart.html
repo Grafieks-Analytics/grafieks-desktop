@@ -119,10 +119,11 @@
                 dateFormat1
             );
 
-            const { top, right, bottom, left } = constants.chartMargins;
-            var margin = { top, right, bottom, left };
+            // const { top, right, bottom, left } = constants.chartMargins;
+            var margin = { top: 20, right: 50, bottom: 50, left: 100 };
+            // var margin = { top, right, bottom, left };
             var width = window.innerWidth - margin.left - margin.right;
-            var height = window.innerHeight - margin.top - margin.bottom - 50;
+            var height = window.innerHeight - margin.top - margin.bottom - 100;
 
             if (chartType == constants.chartType.STANDARD) {
                 height = yAxisUniqueKeys.length * standardThresholdHeight;
@@ -135,6 +136,7 @@
                     d3.select("#xAxisDiv").style("top", height + "px");
                 } else {
                     d3.select("#xAxisDiv").style("bottom", "0");
+                    d3.select("#xAxisDiv").style("top", null);
                 }
             }
 

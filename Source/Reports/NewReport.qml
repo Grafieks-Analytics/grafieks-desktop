@@ -370,10 +370,10 @@ Page {
 
         // Update List Models
         for(var i=0; i<xAxisColumnsReportData.length; i++){
-            xAxisListModel.append({ itemName: xAxisColumnsReportData[i].itemName, droppedItemType: xAxisColumnsReportData[i].droppedItemType })
+            xAxisListModel.append({ itemName: xAxisColumnsReportData[i].itemName, droppedItemType: xAxisColumnsReportData[i].droppedItemType, dateFormat: xAxisColumnsReportData[i].dateFormat })
         }
         for(var i=0; i< yAxisColumnsReportData.length; i++){
-            yAxisListModel.append({ itemName: yAxisColumnsReportData[i].itemName, droppedItemType: yAxisColumnsReportData[i].droppedItemType })
+            yAxisListModel.append({ itemName: yAxisColumnsReportData[i].itemName, droppedItemType: yAxisColumnsReportData[i].droppedItemType, dateFormat: yAxisColumnsReportData[i].dateFormat })
         }
         for(var i=0; i<colorListModelData.length; i++){
             colorListModel.append({ textValue: colorListModelData[i].columnName })
@@ -467,7 +467,7 @@ Page {
         }
         var columnsData = [];
         for(var i=0; i< model.count; i++){
-            columnsData.push({ itemName: model.get(i).itemName, droppedItemType: model.get(i).droppedItemType });
+            columnsData.push({ itemName: model.get(i).itemName, droppedItemType: model.get(i).droppedItemType, dateFormat: model.get(i).dateFormat });
         }
         return columnsData;
     }
@@ -736,8 +736,7 @@ Page {
                 return;
             }
 
-            console.log('X Axis itemType',itemType, itemName);
-            xAxisListModel.append({itemName: itemName, droppedItemType: itemType})
+            xAxisListModel.append({itemName: itemName, droppedItemType: itemType, dateFormat: Constants.yearFormat})
             xAxisColumns.push(itemName);
 
         }else if(axis === Constants.yAxisName){
@@ -746,7 +745,7 @@ Page {
             }
 
             console.log('Y Axis itemType',itemType, itemName);
-            yAxisListModel.append({itemName: itemName, droppedItemType: itemType})
+            yAxisListModel.append({itemName: itemName, droppedItemType: itemType, dateFormat: Constants.yearFormat})
             yAxisColumns.push(itemName);
 
         }else{
@@ -1250,6 +1249,9 @@ Page {
                         id: dragRect
                         textValue: itemName
                         itemType: droppedItemType
+                        dateFormatValue: dateFormat
+                        itemIndexId: index
+                        axisType: Constants.xAxisName
                         Component.onCompleted: {
                             console.log(itemName,itemType)
                         }
@@ -1355,6 +1357,9 @@ Page {
                     delegate: AxisDroppedRectangle{
                         textValue: itemName
                         itemType: droppedItemType
+                        itemIndexId: index
+                        axisType: Constants.xAxisName
+                        dateFormatValue: dateFormat
                     }
                 }
 
