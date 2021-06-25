@@ -1500,33 +1500,56 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
         *columnData = *reportChartData.value(reportId).value(newKey);
 
         // 1. For like relation
-        // If '%' found, no need to check. Just add all
-        // Else do the following processing
         // For date and categorical only
         if(filterSlug == Constants::slugLikeRelation){
 
             qDebug() << "FILTER HERE" << filterSlug << "LIKE REL 1";
 
-            if(filterValueList.at(0) != "%"){
+            QStringList tmpValues;
 
-                // Containing
-                // Ends with
-                // Equal to
-                // Doenst start with
-                // Doesnt end with
-                // Not equal to
+            if(section == Constants::dateType){
 
-                // in array
+                tmpValues = actualDateValues;
+                if(subCategory == Constants::dateSubYear){
 
+                    *tmpList = columnData->filter(tmpValues.at(0));
+
+                } else if(subCategory == Constants::dateSubDay){
+
+                    QDate dt1 = QDate::fromString(tmpValues.at(0), "yyyy-MM-dd");
+                    foreach(QString tmpVal, *columnData){
+
+                        QDate dt = this->convertToDateFormatTimeFromString(tmpVal, "date").toDate();
+                        if(dt == dt1){
+                            *tmpList = columnData->filter(tmpVal);
+                        }
+                    }
+                } else {
+                    *tmpList = *columnData;
+                }
+
+            } else{
+
+                if(filterValueList.at(0) == "%"){
+
+                    *tmpList = *columnData;
+                } else{
+                    foreach(QString tmpVal, filterValueList){
+                        if(tmpList->indexOf(tmpVal) < 0) {
+                            tmpList->append(tmpVal);
+                        }
+                    }
+                }
             }
 
+            *columnData = *tmpList;
         }
 
         // 2. Not like relation
         // Categorical & Date only
         else if(filterSlug == Constants::slugNotLikeRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "NOT LIKE REL 2";
+            qDebug() << "FILTER HERE" << filterSlug<< "NOT LIKE REL 2";
 
             if(filterValueList.at(0) == "%"){
                 columnData->clear();
@@ -1543,8 +1566,21 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             qDebug() << "FILTER HERE" << filterSlug << "IN REL 3";
 
-            foreach(QString tmpVal, filterValueList){
-                tmpList->append(columnData->filter(tmpVal));
+            if(section == Constants::dateType){
+
+                foreach(QString tmpVal, actualDateValues){
+
+                    if(tmpList->indexOf(tmpVal) < 0) {
+                        tmpList->append(tmpVal);
+                    }
+                }
+            } else{
+                foreach(QString tmpVal, filterValueList){
+
+                    if(tmpList->indexOf(tmpVal) < 0) {
+                        tmpList->append(tmpVal);
+                    }
+                }
             }
             *columnData = *tmpList;
 
@@ -1556,8 +1592,21 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             qDebug() << "FILTER HERE" << filterSlug << "EQUAL REL 4";
 
-            *tmpList = columnData->filter(filterValueList.at(0));
+            QString tmp = filterValueList.at(0);
+
+            if(section == Constants::dateType){
+                tmp = actualDateValues.at(0);
+                if(columnData->indexOf(tmp) >= 0) {
+                    tmpList->append(tmp);
+                }
+            } else{
+                tmp = filterValueList.at(0);
+                if(columnData->indexOf(tmp) >= 0) {
+                    tmpList->append(tmp);
+                }
+            }
             *columnData = *tmpList;
+
 
         }
 
@@ -1575,17 +1624,20 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
         // This condition is only for numerical and date
         else if(filterSlug == Constants::slugBetweenRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "BETWEEN REL 6";
+            QStringList tmpValues;
 
-            QStringList tmpValues = filterValueList.at(0).split(" AND ");
+            qDebug() << "FILTER HERE" << filterSlug << "BETWEEN REL 6" << filterValue;
 
             if(section == Constants::dateType){
 
+                tmpValues = filterValue.at(0).toString().split(",");
+
+                QDateTime dt1 = QDateTime::fromString(tmpValues.at(0), "dd/MM/yyyy");
+                QDateTime dt2 = QDateTime::fromString(tmpValues.at(1), "dd/MM/yyyy");
+
                 foreach(QString tmpVal, *columnData){
 
-                    QDateTime dt = QDateTime::fromString(tmpVal, "yyyy-MM-dd hh:mm:ss");
-                    QDateTime dt1 = QDateTime::fromString(tmpValues.at(0), "yyyy-MM-dd hh:mm:ss");
-                    QDateTime dt2 = QDateTime::fromString(tmpValues.at(1), "yyyy-MM-dd hh:mm:ss");
+                    QDateTime dt = this->convertToDateFormatTimeFromString(tmpVal, "datetime").toDateTime();
 
                     if(dt > dt1 && dt < dt2){
                         tmpList->append(tmpVal);
@@ -1594,9 +1646,13 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             } else{
 
+                tmpValues = filterValueList.at(0).split(" And ");
+
                 foreach(QString tmpVal, *columnData){
-                    if(tmpVal.toFloat() > tmpValues.at(0).toFloat() && tmpVal.toFloat() < tmpValues.at(1).toFloat()){
-                        tmpList->append(tmpVal);
+                    if(tmpVal.toDouble() > tmpValues.at(0).toDouble() && tmpVal.toDouble() < tmpValues.at(1).toDouble()){
+                        if(tmpList->indexOf(columnData->filter(tmpVal)[0]) < 0) {
+                            tmpList->append(tmpVal);
+                        }
                     }
                 }
             }
@@ -1613,7 +1669,9 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             foreach(QString tmpVal, *columnData){
                 if(tmpVal.toFloat() < filterValueList.at(0).toFloat()){
-                    tmpList->append(tmpVal);
+                    if(tmpList->indexOf(columnData->filter(tmpVal)[0]) < 0) {
+                        tmpList->append(tmpVal);
+                    }
                 }
             }
 
@@ -1628,7 +1686,9 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             foreach(QString tmpVal, *columnData){
                 if(tmpVal.toFloat() > filterValueList.at(0).toFloat()){
-                    tmpList->append(tmpVal);
+                    if(tmpList->indexOf(tmpVal) < 0) {
+                        tmpList->append(tmpVal);
+                    }
                 }
             }
 
@@ -1643,7 +1703,9 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             foreach(QString tmpVal, *columnData){
                 if(tmpVal.toFloat() <= filterValueList.at(0).toFloat()){
-                    tmpList->append(tmpVal);
+                    if(tmpList->indexOf(tmpVal) < 0) {
+                        tmpList->append(tmpVal);
+                    }
                 }
             }
 
@@ -1658,7 +1720,9 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             foreach(QString tmpVal, *columnData){
                 if(tmpVal.toFloat() >= filterValueList.at(0).toFloat()){
-                    tmpList->append(tmpVal);
+                    if(tmpList->indexOf(tmpVal) < 0) {
+                        tmpList->append(tmpVal);
+                    }
                 }
             }
 
@@ -1670,28 +1734,69 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
         // Categorical
         else if(filterSlug == Constants::slugContainingRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "CONTAINING REL 11" << "To be implemented";
+            qDebug() << "FILTER HERE" << filterSlug << "CONTAINING REL 11";
+
+            QString tmpVal = filterValueList.at(0);
+            tmpVal.remove(0,1); // remove first "%"
+            tmpVal.chop(1); // remove last "%"
+
+            *tmpList = columnData->filter(tmpVal, Qt::CaseInsensitive);
+            *columnData = *tmpList;
+
         }
 
         // 12. For Ends With relation
         // Categorical
         else if(filterSlug == Constants::slugEndsWithRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "ENDS With REL 12" << "To be implemented";
+            qDebug() << "FILTER HERE" << filterSlug << "ENDS With REL 12";
+
+            QString tmp = filterValueList.at(0);
+            tmp.remove(0,1); // remove first "%"
+
+            foreach(QString tmpVal, *columnData){
+
+                if(tmpVal.endsWith(tmp, Qt::CaseInsensitive)){
+                    tmpList->append(tmpVal);
+                }
+            }
+            *columnData = *tmpList;
         }
 
         // 13. For Doesnt Start With relation
         // Categorical
         else if(filterSlug == Constants::slugDoesntStartWithRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "Doenst start with REL 13" << "To be implemented";
+            qDebug() << "FILTER HERE" << filterSlug << "Doenst start with REL 13";
+
+            QString tmp = filterValueList.at(0);
+            tmp.chop(1); // remove last "%"
+
+            foreach(QString tmpVal, *columnData){
+
+                if(tmpVal.startsWith(tmp, Qt::CaseInsensitive) == false){
+                    tmpList->append(tmpVal);
+                }
+            }
+            *columnData = *tmpList;
         }
 
         // 14. For Doesnt End With relation
         // Categorical
         else if(filterSlug == Constants::slugDoesntEndWithRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "Doenst end with REL 14" << "To be implemented";
+            qDebug() << "FILTER HERE" << filterSlug << "Doenst end with REL 14";
+
+            QString tmp = filterValueList.at(0);
+            tmp.remove(0,1); // remove first "%"
+
+            foreach(QString tmpVal, *columnData){
+
+                if(tmpVal.endsWith(tmp, Qt::CaseInsensitive) == false){
+                    tmpList->append(tmpVal);
+                }
+            }
+            *columnData = *tmpList;
         }
 
         // 15. Filter
@@ -1701,9 +1806,10 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             qDebug() << "Else Filter values obtained"
                         <<filterId << section << category << subCategory << columnName << actualDateValues << dateFormat
-                        << filterRelation << filterSlug << filterValueList << includeExclude << includeNull << selectAll;
+                       << filterRelation << filterSlug << filterValueList << includeExclude << includeNull << selectAll;
         }
 
+        columnData->removeDuplicates();
         qDebug() << "Filtered Column Data" << *columnData;
 
     }
@@ -1721,6 +1827,54 @@ void ChartsModel::currentScreenChanged(int currentScreen)
     default:
         break;
     }
+}
+
+QVariant ChartsModel::convertToDateFormatTimeFromString(QString stringDateFormat, QString outFormat)
+{
+    QStringList dateFormats;
+    QDateTime dateTime;
+    QDate dateOnly;
+    QVariant out;
+    bool status = false;
+
+    // Custom formats
+    dateFormats.append("yy");                           // 21
+    dateFormats.append("yyyy");                         // 2012
+    dateFormats.append("yyyy-MM-dd");                   // 2012-12-30
+    dateFormats.append("dd.MM.yyyy");                   // 20.07.1969
+    dateFormats.append("dd/MM/yyyy");                   // 20/07/69
+    dateFormats.append("dd/MM/yyyy");                   // 20/07/1969
+    dateFormats.append("ddd MMMM d yy");                // Sun July 20 69
+    dateFormats.append("dddd");                         // Sunday
+
+    // Other datetime parsing formats
+    // Ref: https://help.sumologic.com/03Send-Data/Sources/04Reference-Information-for-Sources/Timestamps%2C-Time-Zones%2C-Time-Ranges%2C-and-Date-Formats
+    dateFormats.append("hh:mm:ss");                     // 21:15:51
+    dateFormats.append("yyyy-MM-dd hh:mm:ss");          // 2012-12-30 12:22:51
+    dateFormats.append("yyyy-MM-ddThh:mm:ss");          // 2012-12-30T12:22:51
+    dateFormats.append("yyyy-MM-ddThh:mm:ss.zzz");      // 2012-12-30T12:22:51.000
+    dateFormats.append("yyyy-MM-ddThh:mm:ss.zzzZ");     // 2012-12-30T12:22:51.000
+
+
+    foreach(QString format, dateFormats){
+
+        if(QDateTime::fromString(stringDateFormat, format).isValid()){
+            dateTime = QDateTime::fromString(stringDateFormat, format);
+            status = true;
+            out = dateTime;
+
+            if(outFormat == "date"){
+
+            }
+        }
+
+    }
+
+    if(status == false){
+        qDebug() << Q_FUNC_INFO << "Date conversion failed" << stringDateFormat;
+    }
+
+    return out;
 }
 
 void ChartsModel::searchColumnNames(QString keyword)
