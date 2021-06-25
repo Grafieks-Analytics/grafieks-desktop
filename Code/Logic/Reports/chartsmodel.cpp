@@ -1630,10 +1630,19 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             if(section == Constants::dateType){
 
-                tmpValues = filterValue.at(0).toString().split(",");
+                QDateTime dt1;
+                QDateTime dt2;
 
-                QDateTime dt1 = QDateTime::fromString(tmpValues.at(0), "dd/MM/yyyy");
-                QDateTime dt2 = QDateTime::fromString(tmpValues.at(1), "dd/MM/yyyy");
+                if(category == Constants::dateMainCalendarType){
+                    tmpValues = filterValue.at(0).toString().split(",");
+                    dt1 = QDateTime::fromString(tmpValues.at(0), "dd/MM/yyyy");
+                    dt2 = QDateTime::fromString(tmpValues.at(1), "dd/MM/yyyy");
+                } else{
+                    tmpValues = actualDateValues.at(0).split(",");
+
+                    dt1 = QDateTime::fromString(tmpValues.at(0), "yyyy-MM-dd");
+                    dt2 = QDateTime::fromString(tmpValues.at(1), "yyyy-MM-dd");
+                }
 
                 foreach(QString tmpVal, *columnData){
 
