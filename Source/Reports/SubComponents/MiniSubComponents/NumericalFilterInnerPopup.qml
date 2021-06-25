@@ -30,7 +30,7 @@ Rectangle{
     border.color: Constants.darkThemeColor
 
     property int counter: 0
-    property var acceptedValues:["Equal", "Not Equal To", "Smaller Than", "Greater Than", "Equal or Smaller Than", "Equal or Greater Than", "Between"]
+    property var acceptedValues:["Equal", "Not Equal", "Smaller Than", "Greater Than", "Equal or Smaller Than", "Equal or Greater Than", "Between"]
 
 
 
@@ -43,7 +43,7 @@ Rectangle{
             menuItem:"Equal"
         }
         ListElement{
-            menuItem:"Not Equal To"
+            menuItem:"Not Equal"
         }
         ListElement{
             menuItem:"Smaller Than"

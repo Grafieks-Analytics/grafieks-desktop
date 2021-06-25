@@ -82,6 +82,10 @@ signals:
     void sendData(QVariantList xAxis, QVariantList yAxis);
     void columnDataChanged(QStringList columnData, QString options);
 
+
+private:
+    QVariant convertToDateFormatTimeFromString(QString stringDateFormat, QString outFormat = "datetime");
+
 };
 
 #endif // CHARTSMODEL_H
