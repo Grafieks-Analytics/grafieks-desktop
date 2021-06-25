@@ -23,8 +23,8 @@ QString ChartsModel::getBarChartValues(QString xAxisColumn, QString yAxisColumn)
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
 
-    *xAxisDataPointer = *newChartData.value(xKey);
-    *yAxisDataPointer = *newChartData.value(yKey);
+    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
 
     QStringList xAxisData;
     QVariantList yAxisData;
@@ -104,13 +104,13 @@ QString ChartsModel::getGroupedBarChartValues(QString xAxisColumn, QString yAxis
     int yKey = newChartHeader.key( yAxisColumn );
     int splitKey = newChartHeader.key( xSplitKey );
 
-    *xAxisDataPointer = *newChartData.value(xKey);
-    *yAxisDataPointer = *newChartData.value(yKey);
-    *splitDataPointer = *newChartData.value(splitKey);
+    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
+    *splitDataPointer = *reportChartData.value(this->reportId).value(splitKey);
 
     // To pre-populate json array
-    QStringList xAxisDataPointerPre = (*newChartData.value(xKey));
-    QStringList splitDataPointerPre = (*newChartData.value(splitKey));
+    QStringList xAxisDataPointerPre = (*reportChartData.value(this->reportId).value(xKey));
+    QStringList splitDataPointerPre = (*reportChartData.value(this->reportId).value(splitKey));
 
     // Fetch unique xAxisData & splitter
     xAxisDataPointerPre.removeDuplicates();
@@ -185,13 +185,13 @@ QString ChartsModel::getNewGroupedBarChartValues(QString xAxisColumn, QString yA
     int yKey = newChartHeader.key( yAxisColumn );
     int splitKey = newChartHeader.key( xSplitKey );
 
-    *xAxisDataPointer = *newChartData.value(xKey);
-    *yAxisDataPointer = *newChartData.value(yKey);
-    *splitKeyDataPointer = *newChartData.value(splitKey);
+    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
+    *splitKeyDataPointer = *reportChartData.value(this->reportId).value(splitKey);
 
     QList<QString> *uniqueSplitKeyData;
-    newChartData.value(splitKey)->removeDuplicates();
-    uniqueSplitKeyData = newChartData.value(splitKey);
+    reportChartData.value(this->reportId).value(splitKey)->removeDuplicates();
+    uniqueSplitKeyData = reportChartData.value(this->reportId).value(splitKey);
 
     QJsonObject obj;
     int index;
@@ -275,9 +275,9 @@ QString ChartsModel::getLineBarChartValues(QString xAxisColumn, QString yLineAxi
     int yBarKey = newChartHeader.key( yBarAxisColumn );
     int yLineKey = newChartHeader.key( yLineAxisColumn );
 
-    *xAxisDataPointer = *newChartData.value(xKey);
-    *yBarAxisDataPointer = *newChartData.value(yBarKey);
-    *yLineAxisDataPointer = *newChartData.value(yLineKey);
+    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
+    *yBarAxisDataPointer = *reportChartData.value(this->reportId).value(yBarKey);
+    *yLineAxisDataPointer = *reportChartData.value(this->reportId).value(yLineKey);
 
     QVariantList tmpData;
     int index;
@@ -345,8 +345,8 @@ QString ChartsModel::getPieChartValues(QString xAxisColumn, QString yAxisColumn)
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
 
-    *xAxisDataPointer = *newChartData.value(xKey);
-    *yAxisDataPointer = *newChartData.value(yKey);
+    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
 
     try{
         for(int i = 0; i < xAxisDataPointer->length(); i++){
@@ -389,8 +389,8 @@ QString ChartsModel::getFunnelChartValues(QString xAxisColumn, QString yAxisColu
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
 
-    *xAxisDataPointer = *newChartData.value(xKey);
-    *yAxisDataPointer = *newChartData.value(yKey);
+    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
 
     QStringList xAxisData;
     QStringList yAxisData;
@@ -457,8 +457,8 @@ QString ChartsModel::getRadarChartValues(QString xAxisColumn, QString yAxisColum
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
 
-    *xAxisDataPointer = *newChartData.value(xKey);
-    *yAxisDataPointer = *newChartData.value(yKey);
+    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
 
     QStringList xAxisData;
     QStringList yAxisData;
@@ -530,13 +530,13 @@ QString ChartsModel::getScatterChartValues(QString xAxisColumn, QString yAxisCol
     int yKey = newChartHeader.key( yAxisColumn );
     int splitKey = newChartHeader.key( xSplitKey );
 
-    *xAxisDataPointer = *newChartData.value(xKey);
-    *yAxisDataPointer = *newChartData.value(yKey);
-    *splitDataPointer = *newChartData.value(splitKey);
+    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
+    *splitDataPointer = *reportChartData.value(this->reportId).value(splitKey);
 
     // To pre-populate json array
-    QStringList xAxisDataPointerPre = (*newChartData.value(xKey));
-    QStringList splitDataPointerPre = (*newChartData.value(splitKey));
+    QStringList xAxisDataPointerPre = (*reportChartData.value(this->reportId).value(xKey));
+    QStringList splitDataPointerPre = (*reportChartData.value(this->reportId).value(splitKey));
 
     // Fetch unique xAxisData & splitter
     xAxisDataPointerPre.removeDuplicates();
@@ -620,13 +620,13 @@ QString ChartsModel::getHeatMapChartValues(QString xAxisColumn, QString yAxisCol
     int yKey = newChartHeader.key( yAxisColumn );
     int splitKey = newChartHeader.key( xSplitKey );
 
-    *xAxisDataPointer = *newChartData.value(xKey);
-    *yAxisDataPointer = *newChartData.value(yKey);
-    *splitDataPointer = *newChartData.value(splitKey);
+    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
+    *splitDataPointer = *reportChartData.value(this->reportId).value(splitKey);
 
     // To pre-populate json array
-    QStringList xAxisDataPointerPre = (*newChartData.value(xKey));
-    QStringList splitDataPointerPre = (*newChartData.value(splitKey));
+    QStringList xAxisDataPointerPre = (*reportChartData.value(this->reportId).value(xKey));
+    QStringList splitDataPointerPre = (*reportChartData.value(this->reportId).value(splitKey));
 
     // Fetch unique xAxisData & splitter
     xAxisDataPointerPre.removeDuplicates();
@@ -711,7 +711,7 @@ float ChartsModel::getGaugeChartValues(QString calculateColumn)
     }
 
     int calculateColumnKey = newChartHeader.key( calculateColumn );
-    QStringList *calculateColumnPointer = &(*newChartData.value(calculateColumnKey));
+    QStringList *calculateColumnPointer = &(*reportChartData.value(this->reportId).value(calculateColumnKey));
     float output = 0.0;
 
     try{
@@ -749,9 +749,9 @@ QString ChartsModel::getSankeyChartValues(QString sourceColumn, QString destinat
     int destinationKey = newChartHeader.key( destinationColumn );
     int measureKey = newChartHeader.key( measureColumn );
 
-    *sourceDataPointer = *newChartData.value(sourceKey);
-    *destinationDataPointer = *newChartData.value(destinationKey);
-    *measureDataPointer = *newChartData.value(measureKey);
+    *sourceDataPointer = *reportChartData.value(this->reportId).value(sourceKey);
+    *destinationDataPointer = *reportChartData.value(this->reportId).value(destinationKey);
+    *measureDataPointer = *reportChartData.value(this->reportId).value(measureKey);
 
     QStringList combinedList;
     combinedList.append(*sourceDataPointer);
@@ -840,7 +840,7 @@ float ChartsModel::getKPIChartValues(QString calculateColumn)
     int calculateColumnKey = newChartHeader.key( calculateColumn );
     QScopedPointer<QStringList> calculateColumnPointer(new QStringList);
 
-    *calculateColumnPointer = *newChartData.value(calculateColumnKey);
+    *calculateColumnPointer = *reportChartData.value(this->reportId).value(calculateColumnKey);
     float output = 0.0;
 
     try{
@@ -900,13 +900,13 @@ QString ChartsModel::getMultiLineChartValues(QString xAxisColumn, QString yAxisC
     int yKey = newChartHeader.key( yAxisColumn );
     int splitKey = newChartHeader.key( xSplitKey );
 
-    *xAxisDataPointer = *newChartData.value(xKey);
-    *yAxisDataPointer = *newChartData.value(yKey);
-    *splitDataPointer = *newChartData.value(splitKey);
+    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
+    *splitDataPointer = *reportChartData.value(this->reportId).value(splitKey);
 
     // To pre-populate json array
-    QStringList xAxisDataPointerPre = (*newChartData.value(xKey));
-    QStringList splitDataPointerPre = (*newChartData.value(splitKey));
+    QStringList xAxisDataPointerPre = (*reportChartData.value(this->reportId).value(xKey));
+    QStringList splitDataPointerPre = (*reportChartData.value(this->reportId).value(splitKey));
 
     // Fetch unique xAxisData & splitter
     xAxisDataPointerPre.removeDuplicates();
@@ -994,8 +994,8 @@ QString ChartsModel::getLineAreaWaterfallValues(QString &xAxisColumn, QString &y
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
 
-    *xAxisDataPointer = *newChartData.value(xKey);
-    *yAxisDataPointer = *newChartData.value(yKey);
+    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
 
     QVariantList tmpData;
     int index;
@@ -1093,7 +1093,7 @@ QString ChartsModel::getTreeSunburstValues(QVariantList & xAxisColumn, QString &
         groupKeyValues.append(newChartHeader.key(xAxisColumn.at(i).toString()));
     }
 
-    int totalData = (*newChartData.value(xKey)).length();
+    int totalData = (*reportChartData.value(this->reportId).value(xKey)).length();
 
 
     // Considering the measure as string here to avoid unwanted errors in wrong casting
@@ -1102,7 +1102,7 @@ QString ChartsModel::getTreeSunburstValues(QVariantList & xAxisColumn, QString &
     try{
         for(int i = 0; i < totalData; i++){
 
-            measure = (*newChartData.value(yKey)).at(i).toFloat();
+            measure = (*reportChartData.value(this->reportId).value(yKey)).at(i).toFloat();
 
             json tmpOutput;
             pastHashKeyword.clear();
@@ -1110,7 +1110,7 @@ QString ChartsModel::getTreeSunburstValues(QVariantList & xAxisColumn, QString &
             for(int j = 0; j < groupKeySize; j++){
 
                 yKeyLoop = newChartHeader.key( xAxisColumn.at(j).toString());
-                paramName = newChartData.value(yKeyLoop)->at(i);
+                paramName = reportChartData.value(this->reportId).value(yKeyLoop)->at(i);
 
                 // Generate unique hash to strings to be stored in master hash
                 if( j == 0){
@@ -1233,13 +1233,13 @@ QString ChartsModel::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxi
     int yKey = newChartHeader.key( yAxisColumn );
     int splitKey = newChartHeader.key( xSplitKey );
 
-    *xAxisDataPointer = *newChartData.value(xKey);
-    *yAxisDataPointer = *newChartData.value(yKey);
-    *splitDataPointer = *newChartData.value(splitKey);
+    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
+    *splitDataPointer = *reportChartData.value(this->reportId).value(splitKey);
 
     // To pre-populate json array
-    QStringList xAxisDataPointerPre = (*newChartData.value(xKey));
-    QStringList splitDataPointerPre = (*newChartData.value(splitKey));
+    QStringList xAxisDataPointerPre = (*reportChartData.value(this->reportId).value(xKey));
+    QStringList splitDataPointerPre = (*reportChartData.value(this->reportId).value(splitKey));
 
     // Fetch unique xAxisData & splitter
     xAxisDataPointerPre.removeDuplicates();
@@ -1345,7 +1345,7 @@ QString ChartsModel::getTablePivotValues(QVariantList &xAxisColumn, QVariantList
     try{
         for(int i = 0; i < xAxisLength; i++){
             xKey.append(newChartHeader.key( xAxisColumn.at(i).toString()));
-            xAxisDataPointer->insert(i, *newChartData.value(xKey.at(i)));
+            xAxisDataPointer->insert(i, *reportChartData.value(this->reportId).value(xKey.at(i)));
 
             // Append to output columns -- all x axis names
             columns.append(xAxisColumn.at(i).toString());
@@ -1357,7 +1357,7 @@ QString ChartsModel::getTablePivotValues(QVariantList &xAxisColumn, QVariantList
     try{
         for(int i = 0; i < yAxisLength; i++){
             yKey.append(newChartHeader.key( yAxisColumn.at(i).toString()));
-            yAxisDataPointer->insert(i, *newChartData.value(yKey.at(i)));
+            yAxisDataPointer->insert(i, *reportChartData.value(this->reportId).value(yKey.at(i)));
 
             // Append to output columns -- all y axis names
             columns.append(yAxisColumn.at(i).toString());
@@ -1460,7 +1460,6 @@ void ChartsModel::removeTmpChartData()
 void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, QString reportId)
 {
 
-    //    qDebug() << "MC" << masterReportFilters;
     // Copy newChartData to reportChartData before begining operations
     this->reportId = reportId;
     reportChartData.insert(this->reportId, newChartData);
@@ -1519,7 +1518,7 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
                     QDate dt1 = QDate::fromString(tmpValues.at(0), "yyyy-MM-dd");
                     foreach(QString tmpVal, *columnData){
 
-                        QDate dt = this->convertToDateFormatTimeFromString(tmpVal, "date").toDate();
+                        QDate dt = this->convertToDateFormatTimeFromString(tmpVal).toDate();
                         if(dt == dt1){
                             *tmpList = columnData->filter(tmpVal);
                         }
@@ -1646,7 +1645,7 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
                 foreach(QString tmpVal, *columnData){
 
-                    QDateTime dt = this->convertToDateFormatTimeFromString(tmpVal, "datetime").toDateTime();
+                    QDateTime dt = this->convertToDateFormatTimeFromString(tmpVal).toDateTime();
 
                     if(dt > dt1 && dt < dt2){
                         tmpList->append(tmpVal);
@@ -1819,7 +1818,9 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
         }
 
         columnData->removeDuplicates();
+        *reportChartData.value(reportId).value(newKey) = *columnData;
         qDebug() << "Filtered Column Data" << *columnData;
+        qDebug() << "NEW result data" << *reportChartData.value(reportId).value(newKey);
 
     }
 }
@@ -1838,11 +1839,10 @@ void ChartsModel::currentScreenChanged(int currentScreen)
     }
 }
 
-QVariant ChartsModel::convertToDateFormatTimeFromString(QString stringDateFormat, QString outFormat)
+QVariant ChartsModel::convertToDateFormatTimeFromString(QString stringDateFormat)
 {
     QStringList dateFormats;
     QDateTime dateTime;
-    QDate dateOnly;
     QVariant out;
     bool status = false;
 
@@ -1871,10 +1871,6 @@ QVariant ChartsModel::convertToDateFormatTimeFromString(QString stringDateFormat
             dateTime = QDateTime::fromString(stringDateFormat, format);
             status = true;
             out = dateTime;
-
-            if(outFormat == "date"){
-
-            }
         }
 
     }

@@ -84,7 +84,7 @@ signals:
 
 
 private:
-    QVariant convertToDateFormatTimeFromString(QString stringDateFormat, QString outFormat = "datetime");
+    QVariant convertToDateFormatTimeFromString(QString stringDateFormat);
 
 };
 
