@@ -1246,15 +1246,11 @@ Page {
                     spacing: spacingColorList
                     interactive: false
                     delegate: AxisDroppedRectangle{
-                        id: dragRect
                         textValue: itemName
                         itemType: droppedItemType
                         dateFormatValue: dateFormat
                         itemIndexId: index
                         axisType: Constants.xAxisName
-                        Component.onCompleted: {
-                            console.log(itemName,itemType)
-                        }
                     }
                 }
 
@@ -1354,11 +1350,12 @@ Page {
                     model: yAxisListModel
                     orientation: Qt.Horizontal
                     spacing: spacingColorList
+                    interactive: false
                     delegate: AxisDroppedRectangle{
                         textValue: itemName
                         itemType: droppedItemType
                         itemIndexId: index
-                        axisType: Constants.xAxisName
+                        axisType: Constants.yAxisName
                         dateFormatValue: dateFormat
                     }
                 }
