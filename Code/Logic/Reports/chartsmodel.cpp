@@ -23,8 +23,8 @@ QString ChartsModel::getBarChartValues(QString xAxisColumn, QString yAxisColumn)
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
 
-    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
-    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
+    *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
 
     QStringList xAxisData;
     QVariantList yAxisData;
@@ -104,13 +104,13 @@ QString ChartsModel::getGroupedBarChartValues(QString xAxisColumn, QString yAxis
     int yKey = newChartHeader.key( yAxisColumn );
     int splitKey = newChartHeader.key( xSplitKey );
 
-    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
-    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
-    *splitDataPointer = *reportChartData.value(this->reportId).value(splitKey);
+    *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
+    *splitDataPointer = reportChartData.value(this->reportId).value(splitKey);
 
     // To pre-populate json array
-    QStringList xAxisDataPointerPre = (*reportChartData.value(this->reportId).value(xKey));
-    QStringList splitDataPointerPre = (*reportChartData.value(this->reportId).value(splitKey));
+    QStringList xAxisDataPointerPre = (reportChartData.value(this->reportId).value(xKey));
+    QStringList splitDataPointerPre = (reportChartData.value(this->reportId).value(splitKey));
 
     // Fetch unique xAxisData & splitter
     xAxisDataPointerPre.removeDuplicates();
@@ -185,13 +185,14 @@ QString ChartsModel::getNewGroupedBarChartValues(QString xAxisColumn, QString yA
     int yKey = newChartHeader.key( yAxisColumn );
     int splitKey = newChartHeader.key( xSplitKey );
 
-    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
-    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
-    *splitKeyDataPointer = *reportChartData.value(this->reportId).value(splitKey);
+    *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
+    *splitKeyDataPointer = reportChartData.value(this->reportId).value(splitKey);
 
-    QList<QString> *uniqueSplitKeyData;
-    reportChartData.value(this->reportId).value(splitKey)->removeDuplicates();
-    uniqueSplitKeyData = reportChartData.value(this->reportId).value(splitKey);
+    QList<QString> uniqueSplitKeyData;
+    QStringList reportChartDataVar = reportChartData.value(this->reportId).value(splitKey);
+    reportChartDataVar.removeDuplicates();
+    uniqueSplitKeyData = reportChartDataVar;
 
     QJsonObject obj;
     int index;
@@ -232,7 +233,7 @@ QString ChartsModel::getNewGroupedBarChartValues(QString xAxisColumn, QString yA
     data.append(axisDataArray);
 
     QJsonArray columns;
-    columns.append(QJsonArray::fromStringList(*uniqueSplitKeyData));
+    columns.append(QJsonArray::fromStringList(uniqueSplitKeyData));
 
     data.append(columns);
 
@@ -275,9 +276,9 @@ QString ChartsModel::getLineBarChartValues(QString xAxisColumn, QString yLineAxi
     int yBarKey = newChartHeader.key( yBarAxisColumn );
     int yLineKey = newChartHeader.key( yLineAxisColumn );
 
-    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
-    *yBarAxisDataPointer = *reportChartData.value(this->reportId).value(yBarKey);
-    *yLineAxisDataPointer = *reportChartData.value(this->reportId).value(yLineKey);
+    *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
+    *yBarAxisDataPointer = reportChartData.value(this->reportId).value(yBarKey);
+    *yLineAxisDataPointer = reportChartData.value(this->reportId).value(yLineKey);
 
     QVariantList tmpData;
     int index;
@@ -345,8 +346,8 @@ QString ChartsModel::getPieChartValues(QString xAxisColumn, QString yAxisColumn)
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
 
-    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
-    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
+    *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
 
     try{
         for(int i = 0; i < xAxisDataPointer->length(); i++){
@@ -389,8 +390,8 @@ QString ChartsModel::getFunnelChartValues(QString xAxisColumn, QString yAxisColu
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
 
-    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
-    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
+    *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
 
     QStringList xAxisData;
     QStringList yAxisData;
@@ -457,8 +458,8 @@ QString ChartsModel::getRadarChartValues(QString xAxisColumn, QString yAxisColum
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
 
-    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
-    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
+    *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
 
     QStringList xAxisData;
     QStringList yAxisData;
@@ -530,13 +531,13 @@ QString ChartsModel::getScatterChartValues(QString xAxisColumn, QString yAxisCol
     int yKey = newChartHeader.key( yAxisColumn );
     int splitKey = newChartHeader.key( xSplitKey );
 
-    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
-    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
-    *splitDataPointer = *reportChartData.value(this->reportId).value(splitKey);
+    *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
+    *splitDataPointer = reportChartData.value(this->reportId).value(splitKey);
 
     // To pre-populate json array
-    QStringList xAxisDataPointerPre = (*reportChartData.value(this->reportId).value(xKey));
-    QStringList splitDataPointerPre = (*reportChartData.value(this->reportId).value(splitKey));
+    QStringList xAxisDataPointerPre = (reportChartData.value(this->reportId).value(xKey));
+    QStringList splitDataPointerPre = (reportChartData.value(this->reportId).value(splitKey));
 
     // Fetch unique xAxisData & splitter
     xAxisDataPointerPre.removeDuplicates();
@@ -620,13 +621,13 @@ QString ChartsModel::getHeatMapChartValues(QString xAxisColumn, QString yAxisCol
     int yKey = newChartHeader.key( yAxisColumn );
     int splitKey = newChartHeader.key( xSplitKey );
 
-    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
-    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
-    *splitDataPointer = *reportChartData.value(this->reportId).value(splitKey);
+    *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
+    *splitDataPointer = reportChartData.value(this->reportId).value(splitKey);
 
     // To pre-populate json array
-    QStringList xAxisDataPointerPre = (*reportChartData.value(this->reportId).value(xKey));
-    QStringList splitDataPointerPre = (*reportChartData.value(this->reportId).value(splitKey));
+    QStringList xAxisDataPointerPre = (reportChartData.value(this->reportId).value(xKey));
+    QStringList splitDataPointerPre = (reportChartData.value(this->reportId).value(splitKey));
 
     // Fetch unique xAxisData & splitter
     xAxisDataPointerPre.removeDuplicates();
@@ -711,13 +712,13 @@ float ChartsModel::getGaugeChartValues(QString calculateColumn)
     }
 
     int calculateColumnKey = newChartHeader.key( calculateColumn );
-    QStringList *calculateColumnPointer = &(*reportChartData.value(this->reportId).value(calculateColumnKey));
+    QStringList calculateColumnPointer = reportChartData.value(this->reportId).value(calculateColumnKey);
     float output = 0.0;
 
     try{
-        for(int i = 0; i < calculateColumnPointer->length(); i++){
+        for(int i = 0; i < calculateColumnPointer.length(); i++){
 
-            output += calculateColumnPointer->at(i).toFloat();
+            output += calculateColumnPointer.at(i).toFloat();
         }
     } catch(std::exception &e){
         qWarning() << Q_FUNC_INFO << e.what();
@@ -749,9 +750,9 @@ QString ChartsModel::getSankeyChartValues(QString sourceColumn, QString destinat
     int destinationKey = newChartHeader.key( destinationColumn );
     int measureKey = newChartHeader.key( measureColumn );
 
-    *sourceDataPointer = *reportChartData.value(this->reportId).value(sourceKey);
-    *destinationDataPointer = *reportChartData.value(this->reportId).value(destinationKey);
-    *measureDataPointer = *reportChartData.value(this->reportId).value(measureKey);
+    *sourceDataPointer = reportChartData.value(this->reportId).value(sourceKey);
+    *destinationDataPointer = reportChartData.value(this->reportId).value(destinationKey);
+    *measureDataPointer = reportChartData.value(this->reportId).value(measureKey);
 
     QStringList combinedList;
     combinedList.append(*sourceDataPointer);
@@ -840,7 +841,7 @@ float ChartsModel::getKPIChartValues(QString calculateColumn)
     int calculateColumnKey = newChartHeader.key( calculateColumn );
     QScopedPointer<QStringList> calculateColumnPointer(new QStringList);
 
-    *calculateColumnPointer = *reportChartData.value(this->reportId).value(calculateColumnKey);
+    *calculateColumnPointer = reportChartData.value(this->reportId).value(calculateColumnKey);
     float output = 0.0;
 
     try{
@@ -900,13 +901,13 @@ QString ChartsModel::getMultiLineChartValues(QString xAxisColumn, QString yAxisC
     int yKey = newChartHeader.key( yAxisColumn );
     int splitKey = newChartHeader.key( xSplitKey );
 
-    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
-    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
-    *splitDataPointer = *reportChartData.value(this->reportId).value(splitKey);
+    *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
+    *splitDataPointer = reportChartData.value(this->reportId).value(splitKey);
 
     // To pre-populate json array
-    QStringList xAxisDataPointerPre = (*reportChartData.value(this->reportId).value(xKey));
-    QStringList splitDataPointerPre = (*reportChartData.value(this->reportId).value(splitKey));
+    QStringList xAxisDataPointerPre = (reportChartData.value(this->reportId).value(xKey));
+    QStringList splitDataPointerPre = (reportChartData.value(this->reportId).value(splitKey));
 
     // Fetch unique xAxisData & splitter
     xAxisDataPointerPre.removeDuplicates();
@@ -994,8 +995,8 @@ QString ChartsModel::getLineAreaWaterfallValues(QString &xAxisColumn, QString &y
     int xKey = newChartHeader.key( xAxisColumn );
     int yKey = newChartHeader.key( yAxisColumn );
 
-    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
-    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
+    *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
 
     QVariantList tmpData;
     int index;
@@ -1093,7 +1094,7 @@ QString ChartsModel::getTreeSunburstValues(QVariantList & xAxisColumn, QString &
         groupKeyValues.append(newChartHeader.key(xAxisColumn.at(i).toString()));
     }
 
-    int totalData = (*reportChartData.value(this->reportId).value(xKey)).length();
+    int totalData = (reportChartData.value(this->reportId).value(xKey)).length();
 
 
     // Considering the measure as string here to avoid unwanted errors in wrong casting
@@ -1102,7 +1103,7 @@ QString ChartsModel::getTreeSunburstValues(QVariantList & xAxisColumn, QString &
     try{
         for(int i = 0; i < totalData; i++){
 
-            measure = (*reportChartData.value(this->reportId).value(yKey)).at(i).toFloat();
+            measure = (reportChartData.value(this->reportId).value(yKey)).at(i).toFloat();
 
             json tmpOutput;
             pastHashKeyword.clear();
@@ -1110,7 +1111,7 @@ QString ChartsModel::getTreeSunburstValues(QVariantList & xAxisColumn, QString &
             for(int j = 0; j < groupKeySize; j++){
 
                 yKeyLoop = newChartHeader.key( xAxisColumn.at(j).toString());
-                paramName = reportChartData.value(this->reportId).value(yKeyLoop)->at(i);
+                paramName = reportChartData.value(this->reportId).value(yKeyLoop).at(i);
 
                 // Generate unique hash to strings to be stored in master hash
                 if( j == 0){
@@ -1233,13 +1234,13 @@ QString ChartsModel::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxi
     int yKey = newChartHeader.key( yAxisColumn );
     int splitKey = newChartHeader.key( xSplitKey );
 
-    *xAxisDataPointer = *reportChartData.value(this->reportId).value(xKey);
-    *yAxisDataPointer = *reportChartData.value(this->reportId).value(yKey);
-    *splitDataPointer = *reportChartData.value(this->reportId).value(splitKey);
+    *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
+    *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
+    *splitDataPointer = reportChartData.value(this->reportId).value(splitKey);
 
     // To pre-populate json array
-    QStringList xAxisDataPointerPre = (*reportChartData.value(this->reportId).value(xKey));
-    QStringList splitDataPointerPre = (*reportChartData.value(this->reportId).value(splitKey));
+    QStringList xAxisDataPointerPre = (reportChartData.value(this->reportId).value(xKey));
+    QStringList splitDataPointerPre = (reportChartData.value(this->reportId).value(splitKey));
 
     // Fetch unique xAxisData & splitter
     xAxisDataPointerPre.removeDuplicates();
@@ -1345,7 +1346,7 @@ QString ChartsModel::getTablePivotValues(QVariantList &xAxisColumn, QVariantList
     try{
         for(int i = 0; i < xAxisLength; i++){
             xKey.append(newChartHeader.key( xAxisColumn.at(i).toString()));
-            xAxisDataPointer->insert(i, *reportChartData.value(this->reportId).value(xKey.at(i)));
+            xAxisDataPointer->insert(i, reportChartData.value(this->reportId).value(xKey.at(i)));
 
             // Append to output columns -- all x axis names
             columns.append(xAxisColumn.at(i).toString());
@@ -1357,7 +1358,7 @@ QString ChartsModel::getTablePivotValues(QVariantList &xAxisColumn, QVariantList
     try{
         for(int i = 0; i < yAxisLength; i++){
             yKey.append(newChartHeader.key( yAxisColumn.at(i).toString()));
-            yAxisDataPointer->insert(i, *reportChartData.value(this->reportId).value(yKey.at(i)));
+            yAxisDataPointer->insert(i, reportChartData.value(this->reportId).value(yKey.at(i)));
 
             // Append to output columns -- all y axis names
             columns.append(yAxisColumn.at(i).toString());
@@ -1462,7 +1463,13 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
     // Copy newChartData to reportChartData before begining operations
     this->reportId = reportId;
-    reportChartData.insert(this->reportId, newChartData);
+    QMap<int, QStringList> copiedChartData;
+
+    QList<int> chartKeys = newChartData.keys();
+    foreach(int key, chartKeys){
+        copiedChartData.insert(key, *newChartData.value(key));
+    }
+    this->reportChartData.insert(this->reportId, copiedChartData);
 
     QList<int> keys = masterReportFilters.keys();
 
@@ -1491,12 +1498,13 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
         i++;
 
         // Start the filter operations here
-        QScopedPointer<QStringList> columnData(new QStringList);
-        QScopedPointer<QStringList> tmpList(new QStringList);
+        QStringList columnData;
+        QStringList tmpList;
+        QVector<int> indexes;
 
         // Fetch data here
         int newKey = newChartHeader.key( columnName );
-        *columnData = *reportChartData.value(reportId).value(newKey);
+        columnData = reportChartData.value(reportId).value(newKey);
 
         // 1. For like relation
         // For date and categorical only
@@ -1511,37 +1519,61 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
                 tmpValues = actualDateValues;
                 if(subCategory == Constants::dateSubYear){
 
-                    *tmpList = columnData->filter(tmpValues.at(0));
+                    tmpList = columnData.filter(tmpValues.at(0));
+
+                    // Keys of the filtered values
+                    // To be later used to fetch parallel column data
+                    int i = 0;
+                    foreach(QString val, tmpList){
+                        indexes.append(columnData.indexOf(val, i));
+                        i++;
+                    }
 
                 } else if(subCategory == Constants::dateSubDay){
 
                     QDate dt1 = QDate::fromString(tmpValues.at(0), "yyyy-MM-dd");
-                    foreach(QString tmpVal, *columnData){
+
+                    int i = 0;
+                    foreach(QString tmpVal, columnData){
 
                         QDate dt = this->convertToDateFormatTimeFromString(tmpVal).toDate();
                         if(dt == dt1){
-                            *tmpList = columnData->filter(tmpVal);
+                            tmpList = columnData.filter(tmpVal);
+
+                            // insert keys
+                            indexes.append(i);
                         }
+                        i++;
                     }
                 } else {
-                    *tmpList = *columnData;
+                    tmpList = columnData;
+
+                    // for keys
+                    for(int i = 0; i < columnData.length(); i++){
+                        indexes.append(i);
+                    }
                 }
 
             } else{
 
                 if(filterValueList.at(0) == "%"){
 
-                    *tmpList = *columnData;
-                } else{
+                    tmpList = columnData;
+
+                    // for keys
+                    for(int i = 0; i < columnData.length(); i++){
+                        indexes.append(i);
+                    }
+                } /*else{
                     foreach(QString tmpVal, filterValueList){
-                        if(tmpList->indexOf(tmpVal) < 0) {
-                            tmpList->append(tmpVal);
+                        if(tmpList.indexOf(tmpVal) < 0) {
+                            tmpList.append(tmpVal);
                         }
                     }
-                }
+                }*/
             }
 
-            *columnData = *tmpList;
+            columnData = tmpList;
         }
 
         // 2. Not like relation
@@ -1551,12 +1583,13 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
             qDebug() << "FILTER HERE" << filterSlug<< "NOT LIKE REL 2";
 
             if(filterValueList.at(0) == "%"){
-                columnData->clear();
-            } else{
+                columnData.clear();
+                indexes.clear();
+            } /*else{
                 foreach(QString tmpVal, filterValueList){
-                    columnData->removeAll(tmpVal);
+                    columnData.removeAll(tmpVal);
                 }
-            }
+            }*/
         }
 
         // 3. In array relation
@@ -1567,21 +1600,29 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             if(section == Constants::dateType){
 
+                qDebug() << "ACTUAL" << actualDateValues;
+
                 foreach(QString tmpVal, actualDateValues){
 
-                    if(tmpList->indexOf(tmpVal) < 0) {
-                        tmpList->append(tmpVal);
+                    if(tmpList.indexOf(tmpVal) < 0) {
+                        tmpList.append(tmpVal);
+
+                        // insert keys
+                        indexes.append(columnData.indexOf(tmpVal));
                     }
                 }
             } else{
                 foreach(QString tmpVal, filterValueList){
 
-                    if(tmpList->indexOf(tmpVal) < 0) {
-                        tmpList->append(tmpVal);
+                    if(tmpList.indexOf(tmpVal) < 0) {
+                        tmpList.append(tmpVal);
+
+                        // insert keys
+                        indexes.append(columnData.indexOf(tmpVal));
                     }
                 }
             }
-            *columnData = *tmpList;
+            columnData = tmpList;
 
         }
 
@@ -1595,16 +1636,22 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             if(section == Constants::dateType){
                 tmp = actualDateValues.at(0);
-                if(columnData->indexOf(tmp) >= 0) {
-                    tmpList->append(tmp);
+                if(columnData.indexOf(tmp) >= 0) {
+                    tmpList.append(tmp);
+
+                    // insert keys
+                    indexes.append(columnData.indexOf(tmp));
                 }
             } else{
                 tmp = filterValueList.at(0);
-                if(columnData->indexOf(tmp) >= 0) {
-                    tmpList->append(tmp);
+                if(columnData.indexOf(tmp) >= 0) {
+                    tmpList.append(tmp);
+
+                    // insert keys
+                    indexes.append(columnData.indexOf(tmp));
                 }
             }
-            *columnData = *tmpList;
+            columnData = tmpList;
 
 
         }
@@ -1615,8 +1662,13 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             qDebug() << "FILTER HERE" << filterSlug << "NOT EQUAL REL 5";
 
-            columnData->removeAll(filterValueList.at(0));
+            // for keys
+            for(int i = 0; i < columnData.length(); i++){
+                if(columnData.value(i) != filterValueList.at(0))
+                    indexes.append(i);
+            }
 
+            columnData.removeAll(filterValueList.at(0));
         }
 
         // 6. Between relation
@@ -1643,29 +1695,40 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
                     dt2 = QDateTime::fromString(tmpValues.at(1), "yyyy-MM-dd");
                 }
 
-                foreach(QString tmpVal, *columnData){
+                int i = 0;
+                foreach(QString tmpVal, columnData){
 
                     QDateTime dt = this->convertToDateFormatTimeFromString(tmpVal).toDateTime();
 
                     if(dt > dt1 && dt < dt2){
-                        tmpList->append(tmpVal);
+                        tmpList.append(tmpVal);
+
+                        // insert keys
+                        indexes.append(i);
                     }
+
+                    i++;
                 }
 
             } else{
 
                 tmpValues = filterValueList.at(0).split(" And ");
 
-                foreach(QString tmpVal, *columnData){
+                int i = 0;
+                foreach(QString tmpVal, columnData){
                     if(tmpVal.toDouble() > tmpValues.at(0).toDouble() && tmpVal.toDouble() < tmpValues.at(1).toDouble()){
-                        if(tmpList->indexOf(columnData->filter(tmpVal)[0]) < 0) {
-                            tmpList->append(tmpVal);
+                        if(tmpList.indexOf(columnData.filter(tmpVal)[0]) < 0) {
+                            tmpList.append(tmpVal);
+
+                            // insert keys
+                            indexes.append(i);
                         }
                     }
+                    i++;
                 }
             }
 
-            *columnData = *tmpList;
+            columnData = tmpList;
 
         }
 
@@ -1675,15 +1738,20 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             qDebug() << "FILTER HERE" << filterSlug << "SMALLER THAN REL 7";
 
-            foreach(QString tmpVal, *columnData){
+            int i = 0;
+            foreach(QString tmpVal, columnData){
                 if(tmpVal.toFloat() < filterValueList.at(0).toFloat()){
-                    if(tmpList->indexOf(columnData->filter(tmpVal)[0]) < 0) {
-                        tmpList->append(tmpVal);
+                    if(tmpList.indexOf(columnData.filter(tmpVal)[0]) < 0) {
+                        tmpList.append(tmpVal);
+
+                        // insert keys
+                        indexes.append(i);
                     }
                 }
+                i++;
             }
 
-            *columnData = *tmpList;
+            columnData = tmpList;
         }
 
         // 8. For greater than relation
@@ -1692,15 +1760,20 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             qDebug() << "FILTER HERE" << filterSlug << "GREATER THAN REL 8";
 
-            foreach(QString tmpVal, *columnData){
+            int i = 0;
+            foreach(QString tmpVal, columnData){
                 if(tmpVal.toFloat() > filterValueList.at(0).toFloat()){
-                    if(tmpList->indexOf(tmpVal) < 0) {
-                        tmpList->append(tmpVal);
+                    if(tmpList.indexOf(tmpVal) < 0) {
+                        tmpList.append(tmpVal);
+
+                        // insert keys
+                        indexes.append(i);
                     }
                 }
+                i++;
             }
 
-            *columnData = *tmpList;
+            columnData = tmpList;
         }
 
         // 9. For smaller than and equal to relation
@@ -1709,15 +1782,21 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             qDebug() << "FILTER HERE" << filterSlug << "SMALLER THAN EQUAL REL 9";
 
-            foreach(QString tmpVal, *columnData){
+            int i = 0;
+            foreach(QString tmpVal, columnData){
                 if(tmpVal.toFloat() <= filterValueList.at(0).toFloat()){
-                    if(tmpList->indexOf(tmpVal) < 0) {
-                        tmpList->append(tmpVal);
+                    if(tmpList.indexOf(tmpVal) < 0) {
+                        tmpList.append(tmpVal);
+
+                        //insert keys
+                        indexes.append(i);
                     }
                 }
+
+                i++;
             }
 
-            *columnData = *tmpList;
+            columnData = tmpList;
         }
 
         // 10. For greater than and equal to relation
@@ -1726,15 +1805,20 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             qDebug() << "FILTER HERE" << filterSlug << "GREATER THAN EQUAL REL 10";
 
-            foreach(QString tmpVal, *columnData){
+            int i = 0;
+            foreach(QString tmpVal, columnData){
                 if(tmpVal.toFloat() >= filterValueList.at(0).toFloat()){
-                    if(tmpList->indexOf(tmpVal) < 0) {
-                        tmpList->append(tmpVal);
+                    if(tmpList.indexOf(tmpVal) < 0) {
+                        tmpList.append(tmpVal);
+
+                        // insert keys
+                        indexes.append(i);
                     }
                 }
+                i++;
             }
 
-            *columnData = *tmpList;
+            columnData = tmpList;
 
         }
 
@@ -1748,8 +1832,19 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
             tmpVal.remove(0,1); // remove first "%"
             tmpVal.chop(1); // remove last "%"
 
-            *tmpList = columnData->filter(tmpVal, Qt::CaseInsensitive);
-            *columnData = *tmpList;
+            tmpList = columnData.filter(tmpVal, Qt::CaseInsensitive);
+
+            // Keys of the filtered values
+            // To be later used to fetch parallel column data
+            int i = 0;
+            foreach(QString val, tmpList){
+                qDebug() << "val" << val;
+                indexes.append(columnData.indexOf(val, i));
+                i++;
+            }
+
+
+            columnData = tmpList;
 
         }
 
@@ -1762,13 +1857,18 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
             QString tmp = filterValueList.at(0);
             tmp.remove(0,1); // remove first "%"
 
-            foreach(QString tmpVal, *columnData){
+            int i = 0;
+            foreach(QString tmpVal, columnData){
 
                 if(tmpVal.endsWith(tmp, Qt::CaseInsensitive)){
-                    tmpList->append(tmpVal);
+                    tmpList.append(tmpVal);
+
+                    // insert keys
+                    indexes.append(i);
                 }
+                i++;
             }
-            *columnData = *tmpList;
+            columnData = tmpList;
         }
 
         // 13. For Doesnt Start With relation
@@ -1780,13 +1880,18 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
             QString tmp = filterValueList.at(0);
             tmp.chop(1); // remove last "%"
 
-            foreach(QString tmpVal, *columnData){
+            int i = 0;
+            foreach(QString tmpVal, columnData){
 
                 if(tmpVal.startsWith(tmp, Qt::CaseInsensitive) == false){
-                    tmpList->append(tmpVal);
+                    tmpList.append(tmpVal);
+
+                    // insert keys
+                    indexes.append(i);
                 }
+                i++;
             }
-            *columnData = *tmpList;
+            columnData = tmpList;
         }
 
         // 14. For Doesnt End With relation
@@ -1798,13 +1903,18 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
             QString tmp = filterValueList.at(0);
             tmp.remove(0,1); // remove first "%"
 
-            foreach(QString tmpVal, *columnData){
+            int i = 0;
+            foreach(QString tmpVal, columnData){
 
                 if(tmpVal.endsWith(tmp, Qt::CaseInsensitive) == false){
-                    tmpList->append(tmpVal);
+                    tmpList.append(tmpVal);
+
+                    // insert keys
+                    indexes.append(i);
                 }
+                i++;
             }
-            *columnData = *tmpList;
+            columnData = tmpList;
         }
 
         // 15. Filter
@@ -1817,10 +1927,15 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
                        << filterRelation << filterSlug << filterValueList << includeExclude << includeNull << selectAll;
         }
 
-        columnData->removeDuplicates();
-        *reportChartData.value(reportId).value(newKey) = *columnData;
-        qDebug() << "Filtered Column Data" << *columnData;
-        qDebug() << "NEW result data" << *reportChartData.value(reportId).value(newKey);
+        columnData.removeDuplicates();
+
+        QMap<int, QStringList> tmpColData;
+        tmpColData.insert(newKey, columnData);
+        reportChartData.insert(reportId, tmpColData);
+
+        qDebug() << "KEYS" << indexes;
+        qDebug() << "NEW result data" << reportChartData.value(reportId).value(newKey);
+        qDebug() << "OLD resuld data" << *newChartData.value(newKey);
 
     }
 }
@@ -1842,7 +1957,13 @@ void ChartsModel::currentScreenChanged(int currentScreen)
 void ChartsModel::getReportId(QString reportId)
 {
     this->reportId = reportId;
-    this->reportChartData.insert(this->reportId, newChartData);
+    QMap<int, QStringList> copiedChartData;
+
+    QList<int> keys = newChartData.keys();
+    foreach(int key, keys){
+        copiedChartData.insert(key, *newChartData.value(key));
+    }
+    this->reportChartData.insert(this->reportId, copiedChartData);
 }
 
 QVariant ChartsModel::convertToDateFormatTimeFromString(QString stringDateFormat)
