@@ -959,46 +959,24 @@
                 var dataValues = data[0];
 
                 let {
-                    d3colorPalette,
-                    paddingInner,
+                    d3colorPalette = defaultD3Config.d3ColorPalette,
+                    paddingInner = defaultD3Config.defaultPaddingInner,
+                    dateFormat = defaultD3Config.dateFormat,
+                    chartType = defaultD3Config.chartType,
+                    toolTip = {
+                        textColumn1: "labels[0]",
+                        textColumn2: "labels[1]",
+                    },
                     markerShape,
-                    curveType,
-                    chartType,
-                    timeParseFormat,
-                    dateFormat,
-                    standardThresholdWidth,
+                    curveType = defaultD3Config.defaultLineCurve,
+                    standardThresholdWidth = defaultD3Config.standardThresholdWidth,
                     markerStatus,
                 } = plottingConfiguration;
-                if (!d3colorPalette) {
-                    d3colorPalette = defaultD3Config.d3ColorPalette;
-                }
+
                 d3Colors = d3colorPalette;
 
-                if (!paddingInner) {
-                    paddingInner = defaultD3Config.defaultPaddingInner;
-                }
-
-                if (!curveType) {
-                    curveType = defaultLineCurve;
-                }
-
-                if (!timeParseFormat) {
-                    timeParseFormat = defaultD3Config.defaultTimeParseFormat;
-                }
-
-                if (!dateFormat) {
-                    dateFormat = defaultD3Config.dateFormat;
-                }
-
-                if (!chartType) {
-                    chartType = defaultD3Config.chartType;
-                }
-                if (!standardThresholdWidth) {
-                    standardThresholdWidth =
-                        defaultD3Config.standardThresholdWidth;
-                }
-
                 dataValues = transformData(dataValues, dateFormat);
+                window.chartDataValues = dataValues;
 
                 clearChart();
                 margin = { top: 30, right: 30, bottom: 70, left: 50 };
@@ -1033,7 +1011,7 @@
 
                 yScale = d3
                     .scaleLinear()
-                    .rangeRound([height, 0])
+                    .range([height, 0])
                     .domain([
                         minValue < 0 ? minValue : 0,
                         d3.max(dataValues, function (d) {
@@ -1253,7 +1231,7 @@
                     return value;
                 };
 
-                let dataValues = data[0],
+                let dataValues = window.chartDataValues,
                     fill = "#ffffff",
                     stroke = d3Colors[0];
 
