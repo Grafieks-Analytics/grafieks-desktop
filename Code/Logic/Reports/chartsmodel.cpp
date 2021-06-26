@@ -1839,6 +1839,12 @@ void ChartsModel::currentScreenChanged(int currentScreen)
     }
 }
 
+void ChartsModel::getReportId(QString reportId)
+{
+    this->reportId = reportId;
+    this->reportChartData.insert(this->reportId, newChartData);
+}
+
 QVariant ChartsModel::convertToDateFormatTimeFromString(QString stringDateFormat)
 {
     QStringList dateFormats;
@@ -1909,6 +1915,8 @@ QStringList ChartsModel::searchColumnData(QString columnName, QString keyword)
     columnDataPointer.removeDuplicates();
     searchResults = columnDataPointer.filter(keyword, Qt::CaseInsensitive);
 
+
+    qDebug() << searchResults;
     return searchResults;
 }
 

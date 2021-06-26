@@ -76,6 +76,7 @@ public slots:
     void getChartHeader(QMap<int, QStringList> chartHeader);
     void updateFilterData(QMap<int, QVariantMap> masterReportFilters, QString reportId);
     void currentScreenChanged(int currentScreen);
+    void getReportId(QString reportId);
 
 signals:
     void sendFilteredColumn(QStringList allCategorical, QStringList allNumerical, QStringList allDates);
