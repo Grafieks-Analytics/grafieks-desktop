@@ -267,3 +267,10 @@ function setSvgBackground(backgroundColor, opacity) {
 function setXAxisTicksDistance(distanceValue = "1em") {
     d3.selectAll(".x-axis text").attr("dy", distanceValue);
 }
+
+// Main
+(function () {
+    oncontextmenu = function () {
+        return false;
+    };
+})();
