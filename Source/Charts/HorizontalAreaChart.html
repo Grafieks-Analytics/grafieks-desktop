@@ -297,7 +297,7 @@
                     .call(make_y_gridlines().tickSize(-width).tickFormat(""));
 
                 // line chart
-                var line = d3
+                var area = d3
                     .area()
                     .y(function (d, i) {
                         return yScale(d[0]);
@@ -310,7 +310,7 @@
                 svg.append("path")
                     .attr("class", "line") // Assign a class for styling
                     .data([dataValues])
-                    .attr("d", line(dataValues)) // 11. Calls the line generator
+                    .attr("d", area) // 11. Calls the line generator
                     .attr("stroke", d3Colors[4])
                     .attr("stroke-width", lineStroke)
                     .attr("fill", d3Colors[4])
