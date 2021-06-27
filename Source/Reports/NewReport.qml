@@ -195,10 +195,10 @@ Page {
             allowedYAxisDataPanes = 2;
             switch(chartTitle){
                 case Constants.barChartTitle:
-                    chartUrl = Constants.horizontalBarChartUrl;
-                    console.log('Loading horizontal bar chart');
-                    webEngineView.url = Constants.baseChartUrl+chartUrl;
-                    chartTitle = Constants.horizontalBarChartTitle;
+                    switchChart(Constants.horizontalBarChartTitle);
+                    break;
+                case Constants.lineChartTitle:
+                    switchChart(Constants.horizontalLineChartTitle);
                     break;
             }
         }else{
@@ -443,6 +443,10 @@ Page {
                 break;
             case Constants.groupBarChartTitle:
                 chartUrl = Constants.barGroupedChartUrl
+                break;
+            case Constants.horizontalLineChartTitle:
+                chartUrl = Constants.horizontalLineChartUrl
+                break;
         }
         webEngineView.url = Constants.baseChartUrl+chartUrl;
         report_desiner_page.chartUrl = chartUrl;
@@ -577,6 +581,9 @@ Page {
                     chartUrl = Constants.horizontalBarChartUrl;
                     webEngineView.url = Constants.baseChartUrl+chartUrl;
                     chartTitle = Constants.horizontalBarChartTitle;
+                    break;
+                case Constants.lineChartTitle:
+                    switchChart(Constants.horizontalLineChartTitle)
                     break;
 
                 }
@@ -870,9 +877,12 @@ Page {
                 console.log("LINE CLICKED")
                 // Line - xAxis(String), yAxis(String)
                 dataValues =  ChartsModel.getLineChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
-
                 // Line Bar - xAxis(String), yAxis(String)
                 //                dataValues =  ChartsModel.getLineBarChartValues("state", "id", "population");
+                break;
+            case Constants.horizontalLineChartTitle:
+                console.log(Constants.horizontalLineChartTitle,"CLICKED")
+                dataValues =  ChartsModel.getLineChartValues(yAxisColumns[0],xAxisColumns[0],'Sum');
                 break;
             case Constants.pieChartTitle:
             case Constants.donutChartTitle:

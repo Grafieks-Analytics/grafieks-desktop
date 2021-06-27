@@ -320,6 +320,8 @@ QtObject {
     property string horizontalBarGroupedChartUrl: "HorizontalBarGroupedChart.html"
     property string horizontalBarGroupedChartTitle: "Horizontal Bar Grouped Chart"
 
+    property string horizontalLineChartTitle: "Horizontal Line Chart"
+    property string horizontalLineChartUrl: "HorizontalLineChart.html"
     property string barGroupedChartUrl: "BarGroupedChart.html";
     property string barChartUrl: "BarChartArrayInput.html";
 
