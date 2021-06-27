@@ -164,46 +164,25 @@
                 var dataValues = data[0];
 
                 let {
-                    d3colorPalette,
-                    paddingInner,
-                    markerShape,
-                    curveType,
-                    chartType,
-                    timeParseFormat,
-                    dateFormat,
-                    standardThresholdWidth,
+                    d3colorPalette = defaultD3Config.d3ColorPalette,
+                    paddingInner = defaultD3Config.defaultPaddingInner,
+                    dateFormat = defaultD3Config.dateFormat,
+                    chartType = defaultD3Config.chartType,
+                    toolTip = {
+                        textColumn1: "label x",
+                        textColumn2: "label y",
+                    },
+                    markerShape = false,
+                    filledStatus = false,
+                    curveType = defaultD3Config.defaultLineCurve,
+                    standardThresholdWidth = defaultD3Config.standardThresholdWidth,
                     markerStatus,
                 } = plottingConfiguration;
-                if (!d3colorPalette) {
-                    d3colorPalette = defaultD3Config.d3ColorPalette;
-                }
+
                 d3Colors = d3colorPalette;
 
-                if (!paddingInner) {
-                    paddingInner = defaultD3Config.defaultPaddingInner;
-                }
-
-                if (!curveType) {
-                    curveType = defaultLineCurve;
-                }
-
-                if (!timeParseFormat) {
-                    timeParseFormat = defaultD3Config.defaultTimeParseFormat;
-                }
-
-                if (!dateFormat) {
-                    dateFormat = defaultD3Config.dateFormat;
-                }
-
-                if (!chartType) {
-                    chartType = defaultD3Config.chartType;
-                }
-                if (!standardThresholdWidth) {
-                    standardThresholdWidth =
-                        defaultD3Config.standardThresholdWidth;
-                }
-
                 dataValues = transformData(dataValues, dateFormat);
+                window.chartDataValues = dataValues;
 
                 clearChart();
                 margin = { top: 30, right: 30, bottom: 70, left: 50 };
@@ -238,13 +217,14 @@
 
                 yScale = d3
                     .scaleLinear()
-                    .rangeRound([height, 0])
+                    .range([height, 0])
                     .domain([
                         minValue < 0 ? minValue : 0,
                         d3.max(dataValues, function (d) {
                             return d[1];
                         }),
-                    ]);
+                    ])
+                    .nice();
 
                 var svg = d3
                     .select("#my_dataviz")
@@ -326,8 +306,6 @@
                         var x_pos = d3.mouse(this)[0];
                         var y_pos = d3.mouse(this)[1];
 
-                        console.log(d[i]);
-
                         const xValue = d[i][0];
                         const yValue = Math.round(yScale.invert(y_pos));
 
@@ -369,10 +347,6 @@
                     .append("g")
                     .attr("class", "y-axis")
                     .call(yAxis);
-
-                if (markerStatus) {
-                    drawMarker(true, markerShape);
-                }
 
                 setYaxisWidth();
 
@@ -500,10 +474,6 @@
                     fill = d3Colors[0];
                     stroke = 0;
                 }
-                if (!markerShape) {
-                    markerShape = defaultD3Config.defaultMarkerShape;
-                }
-
                 var svg = d3.select("#my_dataviz svg");
 
                 svg.selectAll(".marker-shape").remove();
