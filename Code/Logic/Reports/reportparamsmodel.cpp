@@ -162,6 +162,37 @@ void ReportParamsModel::clearFilter()
     this->removeTmpFilterIndex(0, true);
 }
 
+void ReportParamsModel::removeFilter(int filterId, QString reportId, QString filterType)
+{
+    this->removeFilterColumnMap(filterId);
+    this->removeFilterValueMap(filterId);
+    this->removeFilterRelationMap(filterId);
+    this->removeFilterSlugMap(filterId);
+    this->removeIncludeExcludeMap(filterId);
+    this->removeIncludeNullMap(filterId);
+    this->removeSelectAllMap(filterId);
+    this->removeFilterSectionMap(filterId);
+    this->removeFilterCategoryMap(filterId);
+    this->removeFilterSubCategoryMap(filterId);
+    this->removeDateFormatMap(filterId);
+    this->removeActualDateValues(filterId);
+
+    if(filterType == Constants::categoricalType){
+        this->removeCategoricalFilters(filterId);
+        emit categoricalFilterChanged(this->categoricalFilters);
+    } else if(filterType == Constants::numericalType){
+        this->removeNumericalFilters(filterId);
+        emit numericalFilterChanged(this->numericalFilters);
+    } else if(filterType == Constants::dateType){
+        this->removeDateFilters(filterId);
+        emit dateFilterChanged(this->dateFilters);
+    }
+
+    QMap<int, QVariantMap> intermediateMasterReportsMap = this->masterReportFilters.value(reportId);
+    intermediateMasterReportsMap.remove(filterId);
+    this->masterReportFilters.insert(reportId, intermediateMasterReportsMap);
+}
+
 void ReportParamsModel::resetInputFields()
 {
     emit resetInput();

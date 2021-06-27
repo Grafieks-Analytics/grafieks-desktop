@@ -67,10 +67,8 @@ Rectangle{
 
     // Called when remove filter from categorical list clicked
     function onRemoveElement(filterIndex){
-
-        FilterCategoricalListModel.deleteFilter(filterIndex)
-        ReportParamsModel.removeJoinRelation(filterIndex)
-        ReportParamsModel.removeJoinValue(filterIndex)
+        console.log("REMOVE", filterIndex, ReportParamsModel.reportId, Constants.categoricalTab)
+        ReportParamsModel.removeFilter(filterIndex, ReportParamsModel.reportId, Constants.categoricalTab)
     }
 
     // Called when edit filter from categorical list clicked
