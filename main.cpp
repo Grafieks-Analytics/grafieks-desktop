@@ -337,6 +337,7 @@ int main(int argc, char *argv[])
 
     // Reports
     QObject::connect(&reportParamsModel, &ReportParamsModel::reportFilterChanged, &chartsModel, &ChartsModel::updateFilterData);
+    QObject::connect(&reportParamsModel, &ReportParamsModel::reportIdChanged, &chartsModel, &ChartsModel::getReportId);
 
     // SIGNAL & SLOTS ENDS
     /***********************************************************************************************************************/

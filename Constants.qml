@@ -12,9 +12,6 @@ import QtQuick 2.15
 
 QtObject {
 
-    // Dummy
-    property var uniqueReportId: "MTYyMzcyOTQyOTQ0Mg=="
-
     // Menu Indexes
     property int initialIndex: 3
     property int dataDesignerIndex: 3

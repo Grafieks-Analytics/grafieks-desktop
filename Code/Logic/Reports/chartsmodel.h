@@ -16,7 +16,7 @@ class ChartsModel : public QObject
 {
     Q_OBJECT
     QMap<int, QStringList *> newChartData;
-    QMap<QString, QMap<int, QStringList *>> reportChartData; // <ReportId - <columnKey - Values Array list>>
+    QMap<QString, QMap<int, QStringList>> reportChartData; // <ReportId - <columnKey - Values Array list>>
     QMap<QString, QMap<int, QStringList *>> dashboardChartData; // <DashboardId - <columnKey - Values Array list>>
     QMap<int, QString> newChartHeader;
     QMap<int, QStringList> chartHeaderDetails; // This i dont think is of use. delete in future
@@ -76,11 +76,16 @@ public slots:
     void getChartHeader(QMap<int, QStringList> chartHeader);
     void updateFilterData(QMap<int, QVariantMap> masterReportFilters, QString reportId);
     void currentScreenChanged(int currentScreen);
+    void getReportId(QString reportId);
 
 signals:
     void sendFilteredColumn(QStringList allCategorical, QStringList allNumerical, QStringList allDates);
     void sendData(QVariantList xAxis, QVariantList yAxis);
     void columnDataChanged(QStringList columnData, QString options);
+
+
+private:
+    QVariant convertToDateFormatTimeFromString(QString stringDateFormat);
 
 };
 

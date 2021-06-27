@@ -29,6 +29,7 @@ Rectangle{
     property var masterColData: []
     property int counter: 0
     property int selectedFormat: 6
+    property var columnDataModel: []
 
     readonly property var availableformats : ["removedTZ",  "year", "quarter_year", "month_year", "week_year", "full_date", "date_time", "original"]
     readonly property var months : ["Jan", "Feb", "Mar", "Apr", "May","Jun","Jul", "Aug", "Sep", "Oct", "Nov","Dec"];
@@ -134,14 +135,16 @@ Rectangle{
                 singleSelectCheckList.model = []
                 multiSelectCheckList.model = []
 
-                singleSelectCheckList.model = colData
-                multiSelectCheckList.model  = colData
+                columnDataModel = colData
+
+                singleSelectCheckList.model = columnDataModel
+                multiSelectCheckList.model  = columnDataModel
 
                 // Date format
                 selectedFormat = ReportParamsModel.getDateFormatMap(counter)
                 customBox.currentIndex = selectedFormat
 
-                convertDate(colData)
+                convertDate(columnDataModel)
 
                 if(ReportParamsModel.subCategory === Constants.categorySubMulti){
                     multiSelectRadio.checked = true
@@ -149,7 +152,6 @@ Rectangle{
                     multiSelectCheckList.visible = true
                     singleSelectCheckList.visible = false
 
-                    console.log(values[0], "VALUES 0")
                     if(values[0] === "%"){
                         masterColData.forEach((item) => {
                                                   ReportParamsModel.setTmpSelectedValues(item[selectedFormat])
@@ -254,9 +256,10 @@ Rectangle{
 
             }
 
-            console.log("SEARCH TO BE IMPLEMENTED - DATE LIST")
-            //            QueryDataModel.columnSearchData(ReportParamsModel.colName, ReportParamsModel.tableName, searchText.text, JSON.stringify(options))
-            ChartsModel.searchColumnData(ReportParamsModel.colName,searchText.text)
+            var filteredColumns = filterItems(columnDataModel, searchText.text)
+
+            singleSelectCheckList.model = filteredColumns
+            multiSelectCheckList.model  = filteredColumns
 
             if(ReportParamsModel.subCategory === Constants.categorySubMulti){
                 if(searchText.text.length > 0){
@@ -323,8 +326,10 @@ Rectangle{
                 if(ReportParamsModel.getTmpSelectedValues(0, true).toString() !== ""){
                     var actualValueArray = []
                     ReportParamsModel.getTmpSelectedValues(0, true).forEach((item)  => {
-                                                                                actualValueArray.push(searchDateFormat(item, selectedFormat))
-                                                                            })
+                        searchDateFormat(item, selectedFormat).forEach((item2) => {
+                           actualValueArray.push(item2)
+                       })
+                    })
                     ReportParamsModel.setActualDateValues(counter, actualValueArray)
                     ReportParamsModel.addToFilterValueMap(counter, ReportParamsModel.getTmpSelectedValues(0, true).toString())
                     ReportParamsModel.addToFilterRelationMap(counter, Constants.inRelation)
@@ -347,13 +352,19 @@ Rectangle{
         }
     }
 
+    function filterItems(arr, query) {
+        return arr.filter(function(el) {
+            return el.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        })
+    }
+
 
     function searchDateFormat(inputDate, formatId){
-        var outputData
+        var outputData = []
         if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
             masterColData.forEach((item, index) => {
-                                      if(item[formatId] === inputDate){
-                                          outputData = item[item.length - 1]
+                                      if(String(item[formatId]) === String(inputDate)){
+                                          outputData.push(item[item.length - 1])
                                       }
                                   })
         }

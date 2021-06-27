@@ -115,7 +115,7 @@ Column{
         var tmpDate = new Date()
         var thisYear = tmpDate.getFullYear()
         var pastYear = thisYear - newValue
-        var finalValue = pastYear + "-01-01," + thisYear + "12-31"
+        var finalValue = pastYear + "-01-01," + thisYear + "-01-01"
 
         console.log("Past " + value + " Year", pastYear)
         ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
@@ -134,8 +134,8 @@ Column{
         var newValue = Number(value)
         var tmpDate = new Date()
         var thisYear = tmpDate.getFullYear()
-        var futureYear = tmpDate.thisYear + newValue
-        var finalValue = thisYear + "01-01," + futureYear + "12-31"
+        var futureYear = thisYear + newValue
+        var finalValue = thisYear + "-12-31," + futureYear + "-12-31"
 
         console.log("Next " + value + " Year", futureYear)
         ReportParamsModel.setCategory(Constants.dateMainTimeFrameType)
