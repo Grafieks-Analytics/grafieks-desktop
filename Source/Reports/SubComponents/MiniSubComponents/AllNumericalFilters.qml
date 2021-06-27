@@ -64,9 +64,8 @@ Rectangle{
 
     // Called when remove filter from date list clicked
     function onRemoveElement(filterIndex){
-        FilterNumericalListModel.deleteFilter(filterIndex)
-        ReportParamsModel.removeJoinRelation(filterIndex)
-        ReportParamsModel.removeJoinValue(filterIndex)
+        console.log("REMOVE", filterIndex, ReportParamsModel.reportId, Constants.numericalTab)
+        ReportParamsModel.removeFilter(filterIndex, ReportParamsModel.reportId, Constants.numericalTab)
     }
 
     // Called when edit filter from date list clicked

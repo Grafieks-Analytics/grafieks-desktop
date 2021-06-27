@@ -1939,19 +1939,12 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
                 foreach(int internalIndex, indexes){
                     tmp.append(reportChartData.value(reportId).value(internalKey).at(internalIndex));
                     tmpColData.insert(internalKey, tmp);
-                    qDebug() << "Chart keys" << internalKey << "Internal index" << internalIndex << "DATA" << reportChartData.value(reportId).value(internalKey).at(internalIndex);
                 }
                 tmp.clear();
             }
         }
 
         reportChartData.insert(reportId, tmpColData);
-
-//        qDebug() << "KEYS" << indexes;
-//        qDebug() << "ID" << reportChartData.value(reportId).value(0);
-//        qDebug() << "NEW result data" << reportChartData.value(reportId).value(newKey);
-//        qDebug() << "OLD resuld data" << *newChartData.value(newKey);
-
     }
 }
 
