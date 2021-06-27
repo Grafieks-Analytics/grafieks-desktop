@@ -194,8 +194,8 @@ Popup {
 
     function manageFilters(mode, counter = 0, filterId = 0){
 
-        console.log("Filter insert categorical - INSERT REPORT ID", mode, counter, filterId)
-        ReportParamsModel.addToMasterReportFilters(Constants.uniqueReportId);
+        console.log("Filter insert categorical - INSERT REPORT ID", mode, counter, filterId, ReportParamsModel.reportId)
+        ReportParamsModel.addToMasterReportFilters(ReportParamsModel.reportId);
     }
 
     function onResetClicked(){

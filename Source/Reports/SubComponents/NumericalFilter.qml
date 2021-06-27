@@ -150,7 +150,7 @@ Popup {
     function manageFilters(mode, counter = 0, filterId = 0){
 
         console.log("INSERT INTO NUMERICAL FILTERS  - INSERT REPORT ID", mode, counter, filterId)
-        ReportParamsModel.addToMasterReportFilters(Constants.uniqueReportId);
+        ReportParamsModel.addToMasterReportFilters(ReportParamsModel.reportId);
 
     }
 
