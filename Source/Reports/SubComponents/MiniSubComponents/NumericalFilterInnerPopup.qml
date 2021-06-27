@@ -106,6 +106,7 @@ Rectangle{
                 var colName = ReportParamsModel.colName
                 var colData = ReportParamsModel.fetchFilterValueMap(counter)[counter]
                 var slug = ReportParamsModel.fetchFilterSlugMap(counter)
+                console.log(slug[0], colData[0], "COLDATA + SLUG")
 
                 if(slug[0] === Constants.slugBetweenRelation){
 
@@ -117,6 +118,7 @@ Rectangle{
                 }
 
                 selectOption.textValue = slug[0]
+
 
                 ReportParamsModel.addToIncludeExcludeMap(counter, false)
             }

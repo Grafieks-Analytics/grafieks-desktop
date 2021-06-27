@@ -12,6 +12,7 @@ Rectangle{
     property int rowSpacing: 8
 
     readonly property int mapKey: 0
+    property var listViewModel: []
 
 
     /***********************************************************************************************************************/
@@ -41,15 +42,17 @@ Rectangle{
         // Listview height
         function onNumericalFilterChanged(filterList){
 
-            var modelList = []
+            var newModel = []
+            listFiltersListView.model = newModel
+
             filterList.forEach((item) => {
-                               console.log(item, "ITEM1s", JSON.stringify(ReportParamsModel.fetchFilterColumnMap(0, true)) , JSON.stringify(ReportParamsModel.fetchFilterRelationMap(item)), ReportParamsModel.fetchFilterValueMap(item)[item][0],ReportParamsModel.fetchIncludeExcludeMap(item))
-                               modelList.push(item)
+                                   newModel.push(item)
                                })
 
+            listViewModel = newModel
 
-            listFiltersListView.height = modelList.length * 40
-            listFiltersListView.model = modelList
+            listFiltersListView.height = listViewModel.length * 40
+            listFiltersListView.model = listViewModel
         }
     }
     // Connections Ends

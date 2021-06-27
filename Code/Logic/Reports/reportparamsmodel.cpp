@@ -256,9 +256,8 @@ void ReportParamsModel::addToCategoricalFilters(int filterId)
 {
     if(this->categoricalFilters.indexOf(filterId) < 0){
         this->categoricalFilters.append(filterId);
-
-        emit categoricalFilterChanged(this->categoricalFilters);
     }
+    emit categoricalFilterChanged(this->categoricalFilters);
 
 }
 
@@ -280,9 +279,8 @@ void ReportParamsModel::addToDateFilters(int filterId)
 {
     if(this->dateFilters.indexOf(filterId) < 0){
         this->dateFilters.append(filterId);
-
-        emit dateFilterChanged(this->dateFilters);
     }
+    emit dateFilterChanged(this->dateFilters);
 }
 
 QVector<int> ReportParamsModel::fetchDateFilters()
@@ -303,9 +301,9 @@ void ReportParamsModel::addToNumericalFilters(int filterId)
 {
     if(this->numericalFilters.indexOf(filterId) < 0){
         this->numericalFilters.append(filterId);
-
-        emit numericalFilterChanged(this->numericalFilters);
     }
+
+    emit numericalFilterChanged(this->numericalFilters);
 
 }
 
