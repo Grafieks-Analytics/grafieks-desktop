@@ -1600,9 +1600,7 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             if(section == Constants::dateType){
 
-                qDebug() << "ACTUAL" << actualDateValues;
-
-                foreach(QString tmpVal, actualDateValues){
+                foreach(QString tmpVal, actualDateValues.at(0).split(",")){
 
                     if(tmpList.indexOf(tmpVal) < 0) {
                         tmpList.append(tmpVal);
@@ -1936,9 +1934,13 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
             if(internalKey == newKey){
                 tmpColData.insert(newKey, columnData);
             } else{
+
                 foreach(int internalIndex, indexes){
-                    tmp.append(reportChartData.value(reportId).value(internalKey).at(internalIndex));
-                    tmpColData.insert(internalKey, tmp);
+
+                    if(reportChartData.value(reportId).value(internalKey).size() <= internalIndex){
+                        tmp.append(reportChartData.value(reportId).value(internalKey).at(internalIndex));
+                        tmpColData.insert(internalKey, tmp);
+                    }
                 }
                 tmp.clear();
             }
