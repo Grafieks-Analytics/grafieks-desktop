@@ -326,8 +326,10 @@ Rectangle{
                 if(ReportParamsModel.getTmpSelectedValues(0, true).toString() !== ""){
                     var actualValueArray = []
                     ReportParamsModel.getTmpSelectedValues(0, true).forEach((item)  => {
-                                                                                actualValueArray.push(searchDateFormat(item, selectedFormat))
-                                                                            })
+                        searchDateFormat(item, selectedFormat).forEach((item2) => {
+                           actualValueArray.push(item2)
+                       })
+                    })
                     ReportParamsModel.setActualDateValues(counter, actualValueArray)
                     ReportParamsModel.addToFilterValueMap(counter, ReportParamsModel.getTmpSelectedValues(0, true).toString())
                     ReportParamsModel.addToFilterRelationMap(counter, Constants.inRelation)
@@ -351,18 +353,18 @@ Rectangle{
     }
 
     function filterItems(arr, query) {
-      return arr.filter(function(el) {
-          return el.toLowerCase().indexOf(query.toLowerCase()) !== -1
-      })
+        return arr.filter(function(el) {
+            return el.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        })
     }
 
 
     function searchDateFormat(inputDate, formatId){
-        var outputData
+        var outputData = []
         if(ReportParamsModel.section === Constants.dateTab && ReportParamsModel.category === Constants.dateMainListType){
             masterColData.forEach((item, index) => {
-                                      if(item[formatId] === inputDate){
-                                          outputData = item[item.length - 1]
+                                      if(String(item[formatId]) === String(inputDate)){
+                                          outputData.push(item[item.length - 1])
                                       }
                                   })
         }
