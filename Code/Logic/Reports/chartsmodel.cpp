@@ -1930,12 +1930,27 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
         columnData.removeDuplicates();
 
         QMap<int, QStringList> tmpColData;
-        tmpColData.insert(newKey, columnData);
+        QStringList tmp;
+
+        foreach(int internalKey, chartKeys){
+            if(internalKey == newKey){
+                tmpColData.insert(newKey, columnData);
+            } else{
+                foreach(int internalIndex, indexes){
+                    tmp.append(reportChartData.value(reportId).value(internalKey).at(internalIndex));
+                    tmpColData.insert(internalKey, tmp);
+                    qDebug() << "Chart keys" << internalKey << "Internal index" << internalIndex << "DATA" << reportChartData.value(reportId).value(internalKey).at(internalIndex);
+                }
+                tmp.clear();
+            }
+        }
+
         reportChartData.insert(reportId, tmpColData);
 
-        qDebug() << "KEYS" << indexes;
-        qDebug() << "NEW result data" << reportChartData.value(reportId).value(newKey);
-        qDebug() << "OLD resuld data" << *newChartData.value(newKey);
+//        qDebug() << "KEYS" << indexes;
+//        qDebug() << "ID" << reportChartData.value(reportId).value(0);
+//        qDebug() << "NEW result data" << reportChartData.value(reportId).value(newKey);
+//        qDebug() << "OLD resuld data" << *newChartData.value(newKey);
 
     }
 }
