@@ -1634,19 +1634,29 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             if(section == Constants::dateType){
                 tmp = actualDateValues.at(0);
-                if(columnData.indexOf(tmp) >= 0) {
-                    tmpList.append(tmp);
+                qDebug() << tmp << "ACT ADTE DA";
 
-                    // insert keys
-                    indexes.append(columnData.indexOf(tmp));
+                int i = 0;
+                foreach(QString tmpVal, columnData){
+                    if(tmpVal == tmp) {
+                        tmpList.append(tmp);
+
+                        // insert keys
+                        indexes.append(columnData.indexOf(tmp, i));
+                    }
+                    i++;
                 }
             } else{
                 tmp = filterValueList.at(0);
-                if(columnData.indexOf(tmp) >= 0) {
-                    tmpList.append(tmp);
+                int i = 0;
+                foreach(QString tmpVal, columnData){
+                    if(tmpVal == tmp) {
+                        tmpList.append(tmp);
 
-                    // insert keys
-                    indexes.append(columnData.indexOf(tmp));
+                        // insert keys
+                        indexes.append(columnData.indexOf(tmp, i));
+                    }
+                    i++;
                 }
             }
             columnData = tmpList;
@@ -1675,7 +1685,7 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             QStringList tmpValues;
 
-            qDebug() << "FILTER HERE" << filterSlug << "BETWEEN REL 6" << filterValue;
+            qDebug() << "FILTER HERE" << filterSlug << "BETWEEN REL 6";
 
             if(section == Constants::dateType){
 
@@ -1936,17 +1946,23 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
             } else{
 
                 foreach(int internalIndex, indexes){
-
-                    if(reportChartData.value(reportId).value(internalKey).size() <= internalIndex){
-                        tmp.append(reportChartData.value(reportId).value(internalKey).at(internalIndex));
-                        tmpColData.insert(internalKey, tmp);
+                    //                    if(reportChartData.value(reportId).value(internalKey).size() <= internalIndex){
+                    try{
+                    qDebug() << reportChartData.value(reportId).value(internalKey).at(internalIndex);
+                    } catch(...){
+                        qDebug() << "BANG" << internalIndex;
                     }
+
+                    tmp.append(reportChartData.value(reportId).value(internalKey).at(internalIndex));
+                    tmpColData.insert(internalKey, tmp);
+                    //                    }
                 }
                 tmp.clear();
             }
         }
 
         reportChartData.insert(reportId, tmpColData);
+        qDebug() << "TMP COL DATA" << tmpColData;
     }
 }
 

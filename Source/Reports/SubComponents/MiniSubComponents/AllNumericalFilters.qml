@@ -243,7 +243,7 @@ Rectangle{
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
-                                        onRemoveElement(model.index)
+                                        onRemoveElement(modelData)
                                     }
                                 }
                             }

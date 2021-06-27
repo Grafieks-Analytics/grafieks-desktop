@@ -253,15 +253,15 @@ Rectangle{
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
+                                        onRemoveElement(modelData)
+//                                        if(category === "date.timeframe"){
+//                                            ReportParamsModel.removeDateFormatMap(value)
+//                                        }
+//                                        if(category === "date.list"){
+////                                            ReportParamsModel.removeTimeFrame(value)
+//                                        }
 
-                                        if(category === "date.timeframe"){
-                                            ReportParamsModel.removeDateFormatMap(value)
-                                        }
-                                        if(category === "date.list"){
-//                                            ReportParamsModel.removeTimeFrame(value)
-                                        }
-
-                                        onRemoveElement(model.index)
+//                                        onRemoveElement(model.index)
 
                                     }
                                 }
