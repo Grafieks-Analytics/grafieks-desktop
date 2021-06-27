@@ -964,10 +964,11 @@
                     dateFormat = defaultD3Config.dateFormat,
                     chartType = defaultD3Config.chartType,
                     toolTip = {
-                        textColumn1: "labels[0]",
-                        textColumn2: "labels[1]",
+                        textColumn1: "label x",
+                        textColumn2: "label y",
                     },
-                    markerShape,
+                    markerShape = false,
+                    filledStatus = false,
                     curveType = defaultD3Config.defaultLineCurve,
                     standardThresholdWidth = defaultD3Config.standardThresholdWidth,
                     markerStatus,
@@ -1017,7 +1018,8 @@
                         d3.max(dataValues, function (d) {
                             return d[1];
                         }),
-                    ]);
+                    ])
+                    .nice();
 
                 var svg = d3
                     .select("#my_dataviz")
@@ -1111,7 +1113,7 @@
                     .call(yAxis);
 
                 if (markerStatus) {
-                    drawMarker(true, markerShape);
+                    drawMarker(filledStatus, markerShape);
                 }
 
                 setYaxisWidth();
