@@ -178,8 +178,11 @@
                     }
                 );
 
-                var x = d3.scaleLinear().range([0, width]);
-                x.domain([minValue > 0 ? 0 : minValue, maxValue]).nice();
+                var x = d3
+                    .scaleLinear()
+                    .range([0, width])
+                    .domain([minValue > 0 ? 0 : minValue, maxValue])
+                    .nice();
                 y.domain(dataValues[0]);
 
                 svg.append("g")
