@@ -437,6 +437,9 @@
                     return y(d.y0);
                 })
                 .attr("height", function (d) {
+                    this.setAttribute("data-value-y", d.y0);
+                    this.setAttribute("data-value-x", d.key);
+                    this.setAttribute("data-value-y1", d.y0 - d.y1);
                     return Math.abs(y(d.y0) - y(d.y1));
                 })
                 .style("fill", function (d) {
@@ -462,6 +465,10 @@
 
                     let ypos = d3.mouse(this)[1] - 20;
 
+                    let xValue = this.getAttribute("data-value-x");
+                    let yValue = this.getAttribute("data-value-y");
+                    let y1Value = this.getAttribute("data-value-y1");
+
                     d3.select("#tooltip")
                         .style("left", xpos1 + "px")
                         .style("top", ypos + "px")
@@ -479,7 +486,7 @@
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;'>" +
-                                d.key +
+                                xValue +
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
@@ -487,7 +494,7 @@
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +
-                                textValue.toFixed(3) +
+                                (y1Value && (+y1Value).toFixed(3)) +
                                 "</span>"
                             );
                         });
@@ -670,16 +677,16 @@
         // var data = [
         //     [
         //         ["Furniture", "Furniture", 27550],
-        //         ["Furniture", "OfficeSupplies", 0],
-        //         ["Furniture", "Technology", 0],
-        //         ["OfficeSupplies", "Furniture", 0],
-        //         ["OfficeSupplies", "OfficeSupplies", 13384],
-        //         ["OfficeSupplies", "Technology", 0],
-        //         ["Technology", "Furniture", 0],
-        //         ["Technology", "Office Supplies", 0],
+        //         ["Furniture", "Office Supplies", 22220],
+        //         ["Furniture", "Technology", 22223],
+        //         ["Office Supplies", "Furniture", 31110],
+        //         ["Office Supplies", "Office Supplies", 13384],
+        //         ["Office Supplies", "Technology", 3022],
+        //         ["Technology", "Furniture", 1033],
+        //         ["Technology", "Office Supplies", 3330],
         //         ["Technology", "Technology", 9310],
         //     ],
-        //     ["Furniture", "OfficeSupplies", "Technology"],
+        //     ["Furniture", "Office Supplies", "Technology"],
         //     ["Category", "Sales"],
         // ];
         // drawChart(data);

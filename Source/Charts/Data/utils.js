@@ -269,8 +269,10 @@ function setXAxisTicksDistance(distanceValue = "1em") {
 }
 
 // Main
+// Open this function when in production
 (function () {
-    oncontextmenu = function () {
-        return false;
-    };
+    // [Tag: Mandatory]
+    // oncontextmenu = function () {
+    //     return false;
+    // };
 })();
