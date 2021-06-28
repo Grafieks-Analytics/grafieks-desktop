@@ -1466,10 +1466,13 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
     QMap<int, QStringList> copiedChartData;
 
     QList<int> chartKeys = newChartData.keys();
-    foreach(int key, chartKeys){
-        copiedChartData.insert(key, *newChartData.value(key));
-    }
-    this->reportChartData.insert(this->reportId, copiedChartData);
+
+//    if(!this->reportChartData.contains(this->reportId)){
+        foreach(int key, chartKeys){
+            copiedChartData.insert(key, *newChartData.value(key));
+        }
+        this->reportChartData.insert(this->reportId, copiedChartData);
+//    }
 
     QList<int> keys = masterReportFilters.keys();
 
@@ -1647,11 +1650,11 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
                         indexes.remove(columnData.indexOf(tmpVal));
                         columnData.removeAt(columnData.indexOf(tmpVal));
+                        tmpList = columnData;
                     }
                 }
             }
             columnData = tmpList;
-            qDebug() << indexes << "INDEXES";
 
         }
 
@@ -1685,7 +1688,6 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
                         // insert keys
                         indexes.append(columnData.indexOf(tmp, i));
-                        qDebug() << "VALUES" << tmp << "INDEX" << columnData.indexOf(tmp, i);
                     }
                     i++;
                 }
@@ -1966,7 +1968,6 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
                        << filterRelation << filterSlug << filterValueList << includeExclude << includeNull << selectAll;
         }
 
-        columnData.removeDuplicates();
 
         QMap<int, QStringList> tmpColData;
         QStringList tmp;
@@ -1976,8 +1977,8 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
                 tmpColData.insert(newKey, columnData);
             } else{
 
+                // for each selected key values
                 foreach(int internalIndex, indexes){
-                    qDebug() << "IMDEXES" << internalIndex;
                     if(internalIndex >= 0){
                         tmp.append(reportChartData.value(reportId).value(internalKey).at(internalIndex));
                         tmpColData.insert(internalKey, tmp);
@@ -1988,7 +1989,7 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
         }
 
         reportChartData.insert(reportId, tmpColData);
-        qDebug() << "TMP COL DATA" << tmpColData;
+//        qDebug() << "TMP COL DATA" << tmpColData;
     }
 }
 
