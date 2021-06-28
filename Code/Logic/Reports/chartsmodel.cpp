@@ -1946,16 +1946,11 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
             } else{
 
                 foreach(int internalIndex, indexes){
-                    //                    if(reportChartData.value(reportId).value(internalKey).size() <= internalIndex){
-                    try{
-                    qDebug() << reportChartData.value(reportId).value(internalKey).at(internalIndex);
-                    } catch(...){
-                        qDebug() << "BANG" << internalIndex;
+//                    qDebug() << "IMDEXES" << internalIndex;
+                    if(internalIndex >= 0){
+                        tmp.append(reportChartData.value(reportId).value(internalKey).at(internalIndex));
+                        tmpColData.insert(internalKey, tmp);
                     }
-
-                    tmp.append(reportChartData.value(reportId).value(internalKey).at(internalIndex));
-                    tmpColData.insert(internalKey, tmp);
-                    //                    }
                 }
                 tmp.clear();
             }
@@ -2046,6 +2041,7 @@ QStringList ChartsModel::fetchColumnData(QString columnName, QString options)
     int key = newChartHeader.key( columnName );
 
     QStringList columnDataPointer = *newChartData.value(key);
+//    QStringList columnDataPointer = reportChartData.value(this->reportId).value(key);
     columnDataPointer.removeDuplicates();
 
     emit columnDataChanged(columnDataPointer, options);
@@ -2062,8 +2058,6 @@ QStringList ChartsModel::searchColumnData(QString columnName, QString keyword)
     columnDataPointer.removeDuplicates();
     searchResults = columnDataPointer.filter(keyword, Qt::CaseInsensitive);
 
-
-    qDebug() << searchResults;
     return searchResults;
 }
 
