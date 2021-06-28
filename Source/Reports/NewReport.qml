@@ -157,6 +157,8 @@ Page {
                 clearValuesOnAddNewReport();
             }
             report_desiner_page.reportIdMain = reportIdValue;
+            console.log(reportIdValue, "UPDATED REPORT ID")
+            ReportParamsModel.restoreMasterReportFilters(reportIdValue)
         }
 
     }

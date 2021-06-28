@@ -46,6 +46,7 @@ Rectangle{
         // Listview height
         function onCategoricalFilterChanged(filterList){
 
+            console.log("DUMP", filterList)
             var newModel = []
             listFiltersListView.model = newModel
 
@@ -188,6 +189,10 @@ Rectangle{
                             text: ReportParamsModel.fetchIncludeExcludeMap(modelData)[0] === true ? "NOT " + ReportParamsModel.fetchFilterSlugMap(modelData)[0] : ReportParamsModel.fetchFilterSlugMap(modelData)[0]
                             anchors.left: parent.left
                             leftPadding: 20
+
+                            onTextChanged: {
+                                console.log("DUMP Col name", ReportParamsModel.fetchFilterColumnMap(modelData))
+                            }
 
                         }
 
