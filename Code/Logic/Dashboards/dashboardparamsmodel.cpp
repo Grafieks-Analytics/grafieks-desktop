@@ -747,6 +747,11 @@ int DashboardParamsModel::getReportOpacity(int dashboardId, int reportId)
     return output;
 }
 
+void DashboardParamsModel::setSelectAll(bool status, QString columnName, int dashboardId)
+{
+    emit selectAllChanged(status, columnName, dashboardId);
+}
+
 void DashboardParamsModel::saveImage(QUrl originalFile, QString newFilename)
 {
     QFileInfo fi(originalFile.toString());

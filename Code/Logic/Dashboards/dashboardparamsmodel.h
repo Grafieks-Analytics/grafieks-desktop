@@ -123,6 +123,8 @@ public:
     Q_INVOKABLE void setIncludeExcludeMap(int dashboardId, QString columnName, QString type);
     Q_INVOKABLE QString fetchIncludeExcludeMap(int dashboardId, QString columnName);
 
+    Q_INVOKABLE void setSelectAll(bool status, QString columnName, int dashboardId);
+
     // Customize Dashboard parameters
 
     Q_INVOKABLE void setDashboardName(int dashboardId,QString dashboardName);
@@ -215,6 +217,7 @@ signals:
     // Customize Dashboard parameters
     void dashboardNameChanged(int dashboardId, QString dashboardName);
     void dashboardBackgroundColorChanged(int dashboardId, QString color);
+    void selectAllChanged(bool status, QString columnName, int dashboardId);
 
 
     // Customize Report parameters
