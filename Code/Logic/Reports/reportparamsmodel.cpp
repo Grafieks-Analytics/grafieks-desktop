@@ -223,6 +223,9 @@ void ReportParamsModel::addToMasterReportFilters(QString reportId)
 
     this->masterReportFilters.insert(reportId, intermediateMasterReportsMap);
 
+    int count = this->masterReportFilters.value(reportId).count();
+    emit masterReportFiltersChanged(count);
+
 }
 
 void ReportParamsModel::fetchMasterReportFilters(QString reportId)
@@ -250,6 +253,9 @@ void ReportParamsModel::deleteMasterReportFilters(QString reportId, bool deleteA
     } else{
         this->masterReportFilters.remove(reportId);
     }
+
+    int count = this->masterReportFilters.value(reportId).count();
+    emit masterReportFiltersChanged(count);
 }
 
 void ReportParamsModel::addToCategoricalFilters(int filterId)

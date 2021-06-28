@@ -103,6 +103,14 @@ Item{
     // SIGNALS STARTS
 
 
+    Connections{
+        target: ReportParamsModel
+
+        function onMasterReportFiltersChanged(count){
+
+            reportFilterButton.textValue = "Report Filter [" + count +"]"
+        }
+    }
 
     // SIGNALS ENDS
     /***********************************************************************************************************************/
@@ -160,7 +168,7 @@ Item{
 
     function openReportFilters(){
         console.log('Open report filters')
-         datafilters.visible = true
+        datafilters.visible = true
 
     }
 
@@ -261,97 +269,95 @@ Item{
     CustomButton{
         id:reportFilterButton
         width: parent.width
-        textValue: "Report Filter"
+        textValue: "Report Filter [0]"
         onClicked: openReportFilters()
     }
 
-        ListView {
+    ListView {
 
-            anchors.top:
+        anchors.top:reportFilterButton.bottom
+        width: parent.width
+        height: parent.height - reportFilterButton.height
+        interactive: false
 
-                reportFilterButton.bottom
-            width: parent.width
-            height: parent.height - reportFilterButton.height
-            interactive: false
-
-            model: nestedModel
-            delegate: categoryDelegate
-        }
+        model: nestedModel
+        delegate: categoryDelegate
+    }
 
 
-        Component {
-            id: categoryDelegate
+    Component {
+        id: categoryDelegate
 
 
-            Column {
+        Column {
+            width: 150
+
+            Rectangle {
+                id: categoryItem
+                height: 30
                 width: 150
-
-                Rectangle {
-                    id: categoryItem
-                    height: 30
-                    width: 150
-                    color: Constants.themeColor
-                    visible: display
+                color: Constants.themeColor
+                visible: display
 
 
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        x: 15
-                        font.pixelSize: 12
-                        text: categoryName
-                    }
-
-                    Image {
-                        id: drop_icon
-                        source: "/Images/icons/Up_20.png"
-                        width: 10
-                        height: 10
-                        anchors.right: parent.right
-                        anchors.rightMargin: 5
-                        anchors.verticalCenter: parent.verticalCenter
-                        visible: true
-
-                        MouseArea {
-                            anchors.fill: parent
-
-                            onClicked: {
-                                nestedModel.setProperty(index, "collapsed", !collapsed)
-
-                                if(collapsed === true){
-                                    drop_icon.source = "/Images/icons/Down_20.png"
-                                }
-                                else{
-                                    drop_icon.source = "/Images/icons/Up_20.png"
-                                }
-
-                            }
-                        }
-                    }
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    x: 15
+                    font.pixelSize: 12
+                    text: categoryName
                 }
 
-                Loader {
-                    id: subItemLoader
+                Image {
+                    id: drop_icon
+                    source: "/Images/icons/Up_20.png"
+                    width: 10
+                    height: 10
+                    anchors.right: parent.right
+                    anchors.rightMargin: 5
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: true
 
-                    visible: !collapsed
-                    property variant subItemModel : subItems
-                    sourceComponent: {
-                        if(collapsed)
-                            return null
+                    MouseArea {
+                        anchors.fill: parent
 
-                        switch(categoryName.toLowerCase()){
-                            case "properties": return propertiesComponent
-                            case "reference line": return referenceLineComponent
-                            case "charts size": return chartsSizing
-                            case "legend": return legendComponent
-                            case "total": return totalComponent
+                        onClicked: {
+                            nestedModel.setProperty(index, "collapsed", !collapsed)
+
+                            if(collapsed === true){
+                                drop_icon.source = "/Images/icons/Down_20.png"
+                            }
+                            else{
+                                drop_icon.source = "/Images/icons/Up_20.png"
+                            }
+
                         }
-
                     }
-
                 }
             }
 
+            Loader {
+                id: subItemLoader
+
+                visible: !collapsed
+                property variant subItemModel : subItems
+                sourceComponent: {
+                    if(collapsed)
+                        return null
+
+                    switch(categoryName.toLowerCase()){
+                    case "properties": return propertiesComponent
+                    case "reference line": return referenceLineComponent
+                    case "charts size": return chartsSizing
+                    case "legend": return legendComponent
+                    case "total": return totalComponent
+                    }
+
+                }
+
+            }
         }
+
+    }
 
 
     // Page Design Ends
