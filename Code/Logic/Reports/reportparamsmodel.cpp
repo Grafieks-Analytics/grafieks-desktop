@@ -191,6 +191,7 @@ void ReportParamsModel::removeFilter(int filterId, QString reportId, QString fil
     QMap<int, QVariantMap> intermediateMasterReportsMap = this->masterReportFilters.value(reportId);
     intermediateMasterReportsMap.remove(filterId);
     this->masterReportFilters.insert(reportId, intermediateMasterReportsMap);
+    emit masterReportFiltersChanged(this->masterReportFilters.value(reportId).count());
 }
 
 void ReportParamsModel::resetInputFields()
@@ -223,6 +224,9 @@ void ReportParamsModel::addToMasterReportFilters(QString reportId)
 
     this->masterReportFilters.insert(reportId, intermediateMasterReportsMap);
 
+    int count = this->masterReportFilters.value(reportId).count();
+    emit masterReportFiltersChanged(count);
+
 }
 
 void ReportParamsModel::fetchMasterReportFilters(QString reportId)
@@ -250,6 +254,9 @@ void ReportParamsModel::deleteMasterReportFilters(QString reportId, bool deleteA
     } else{
         this->masterReportFilters.remove(reportId);
     }
+
+    int count = this->masterReportFilters.value(reportId).count();
+    emit masterReportFiltersChanged(count);
 }
 
 void ReportParamsModel::addToCategoricalFilters(int filterId)

@@ -305,6 +305,7 @@ signals:
     void colorByDataColoumnsChanged(QString colorByDataColoumns);
 
     // For Filters
+    void masterReportFiltersChanged(int count);
     void reportFilterChanged(QMap<int, QVariantMap> reportFilters, QString reportId);
     void resetInput();
     void internalCounterChanged(int internalCounter);
