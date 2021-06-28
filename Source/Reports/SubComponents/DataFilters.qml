@@ -398,10 +398,6 @@ Popup {
 
         onTabToggle(true,false,false,false);
 
-        // Call the function to apply all the filters in reports
-        // This will emit a signal from ReportParamsModel.fetchMasterReportFilters to the slot in ChartsModel.updateFilterData
-        ReportParamsModel.fetchMasterReportFilters(ReportParamsModel.reportId)
-
         reDrawChart()
 
 

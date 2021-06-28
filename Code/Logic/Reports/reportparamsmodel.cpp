@@ -191,6 +191,7 @@ void ReportParamsModel::removeFilter(int filterId, QString reportId, QString fil
     QMap<int, QVariantMap> intermediateMasterReportsMap = this->masterReportFilters.value(reportId);
     intermediateMasterReportsMap.remove(filterId);
     this->masterReportFilters.insert(reportId, intermediateMasterReportsMap);
+    emit masterReportFiltersChanged(this->masterReportFilters.value(reportId).count());
 }
 
 void ReportParamsModel::resetInputFields()

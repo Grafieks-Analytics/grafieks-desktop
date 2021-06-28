@@ -1564,13 +1564,7 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
                     for(int i = 0; i < columnData.length(); i++){
                         indexes.append(i);
                     }
-                } /*else{
-                    foreach(QString tmpVal, filterValueList){
-                        if(tmpList.indexOf(tmpVal) < 0) {
-                            tmpList.append(tmpVal);
-                        }
-                    }
-                }*/
+                }
             }
 
             columnData = tmpList;
@@ -1585,42 +1579,79 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
             if(filterValueList.at(0) == "%"){
                 columnData.clear();
                 indexes.clear();
-            } /*else{
-                foreach(QString tmpVal, filterValueList){
-                    columnData.removeAll(tmpVal);
-                }
-            }*/
+            }
         }
 
         // 3. In array relation
         // Numerical, Categorical & Date
         else if(filterSlug == Constants::slugInRelation){
 
-            qDebug() << "FILTER HERE" << filterSlug << "IN REL 3";
+            qDebug() << "FILTER HERE" << filterSlug << "IN REL 3" << includeExclude;
+            bool firstInteration = true;
 
             if(section == Constants::dateType){
 
                 foreach(QString tmpVal, actualDateValues.at(0).split(",")){
 
-                    if(tmpList.indexOf(tmpVal) < 0) {
-                        tmpList.append(tmpVal);
+                    // If exclude is false
+                    // else
+                    if(includeExclude == false){
+                        if(tmpList.indexOf(tmpVal) < 0) {
+                            tmpList.append(tmpVal);
 
-                        // insert keys
-                        indexes.append(columnData.indexOf(tmpVal));
+                            // insert keys
+                            indexes.append(columnData.indexOf(tmpVal));
+                        }
+                    } else{
+                        if(firstInteration == true){
+                            tmpList = columnData;
+
+                            int i = 0;
+                            foreach(QString val, tmpList){
+                                indexes.append(columnData.indexOf(val, i));
+                                i++;
+                            }
+
+                            firstInteration = false;
+                        }
+
+                        indexes.remove(columnData.indexOf(tmpVal));
+                        columnData.removeAt(columnData.indexOf(tmpVal));
                     }
                 }
             } else{
                 foreach(QString tmpVal, filterValueList){
 
-                    if(tmpList.indexOf(tmpVal) < 0) {
-                        tmpList.append(tmpVal);
+                    // If exclude is false
+                    // else
+                    if(includeExclude == false){
+                        if(tmpList.indexOf(tmpVal) < 0) {
+                            tmpList.append(tmpVal);
 
-                        // insert keys
-                        indexes.append(columnData.indexOf(tmpVal));
+                            // insert keys
+                            indexes.append(columnData.indexOf(tmpVal));
+                        }
+                    }
+                    else{
+                        if(firstInteration == true){
+                            tmpList = columnData;
+
+                            int i = 0;
+                            foreach(QString val, tmpList){
+                                indexes.append(columnData.indexOf(val, i));
+                                i++;
+                            }
+
+                            firstInteration = false;
+                        }
+
+                        indexes.remove(columnData.indexOf(tmpVal));
+                        columnData.removeAt(columnData.indexOf(tmpVal));
                     }
                 }
             }
             columnData = tmpList;
+            qDebug() << indexes << "INDEXES";
 
         }
 
@@ -1634,7 +1665,6 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
             if(section == Constants::dateType){
                 tmp = actualDateValues.at(0);
-                qDebug() << tmp << "ACT ADTE DA";
 
                 int i = 0;
                 foreach(QString tmpVal, columnData){
@@ -1655,6 +1685,7 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
 
                         // insert keys
                         indexes.append(columnData.indexOf(tmp, i));
+                        qDebug() << "VALUES" << tmp << "INDEX" << columnData.indexOf(tmp, i);
                     }
                     i++;
                 }
@@ -1946,7 +1977,7 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
             } else{
 
                 foreach(int internalIndex, indexes){
-//                    qDebug() << "IMDEXES" << internalIndex;
+                    qDebug() << "IMDEXES" << internalIndex;
                     if(internalIndex >= 0){
                         tmp.append(reportChartData.value(reportId).value(internalKey).at(internalIndex));
                         tmpColData.insert(internalKey, tmp);
@@ -2040,8 +2071,8 @@ QStringList ChartsModel::fetchColumnData(QString columnName, QString options)
     // Fetch data here
     int key = newChartHeader.key( columnName );
 
-    QStringList columnDataPointer = *newChartData.value(key);
-//    QStringList columnDataPointer = reportChartData.value(this->reportId).value(key);
+    //    QStringList columnDataPointer = *newChartData.value(key);
+    QStringList columnDataPointer = reportChartData.value(this->reportId).value(key);
     columnDataPointer.removeDuplicates();
 
     emit columnDataChanged(columnDataPointer, options);
