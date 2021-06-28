@@ -572,7 +572,7 @@ Rectangle{
             anchors.left: includeExcludeRow.left
 
             CheckBoxTpl {
-                checked: ReportParamsModel.fetchIncludeNullMap(counter)[counter] === "1" ? true : false
+                checked: ReportParamsModel.fetchIncludeNullMap(counter)[0]
                 text: qsTr("Include Null")
                 parent_dimension: Constants.defaultCheckBoxDimension
 
@@ -587,7 +587,7 @@ Rectangle{
             anchors.right: includeExcludeRow.right
             anchors.rightMargin: 30
             CheckBoxTpl {
-                checked: ReportParamsModel.fetchIncludeExcludeMap(counter)[counter] === "1" ? true : false
+                checked: ReportParamsModel.fetchIncludeExcludeMap(counter)[0]
                 text: qsTr("Exclude")
                 parent_dimension: Constants.defaultCheckBoxDimension
 
