@@ -145,6 +145,10 @@ Popup {
         // Clear tabs individual temp data
         dateFilterPopup.clearData()
 
+        // Call the function to apply all the filters in reports
+        // This will emit a signal from ReportParamsModel.fetchMasterReportFilters to the slot in ChartsModel.updateFilterData
+        ReportParamsModel.fetchMasterReportFilters(ReportParamsModel.reportId)
+
     }
 
     function manageFilters(mode, counter = 0, filterId = 0){
