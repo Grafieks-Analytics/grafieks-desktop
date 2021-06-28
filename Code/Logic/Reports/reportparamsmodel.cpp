@@ -192,6 +192,10 @@ void ReportParamsModel::removeFilter(int filterId, QString reportId, QString fil
     intermediateMasterReportsMap.remove(filterId);
     this->masterReportFilters.insert(reportId, intermediateMasterReportsMap);
     emit masterReportFiltersChanged(this->masterReportFilters.value(reportId).count());
+
+    // This is necessary to reset the filter values in chartsModel after deleting a filter
+    // Else we cannot restore the deleted data in filter selection list
+    emit reportIdChanged(reportId);
 }
 
 void ReportParamsModel::resetInputFields()
@@ -867,6 +871,12 @@ void ReportParamsModel::setReportId(QString reportId)
 
     m_reportId = reportId;
     emit reportIdChanged(m_reportId);
+
+    // Also emit the following filters
+    // to update the filters list in reports
+    emit categoricalFilterChanged(this->categoricalFilters);
+    emit dateFilterChanged(this->dateFilters);
+    emit numericalFilterChanged(this->numericalFilters);
 }
 
 void ReportParamsModel::setReportTitle(QString reportTitle)
@@ -1049,6 +1059,12 @@ QVariantMap ReportParamsModel::insertMasterFilters(int filterId)
 
 void ReportParamsModel::restoreMasterFilters(int filterId, QVariantMap filterData)
 {
+    this->categoricalFilters.clear();
+    this->dateFilters.clear();
+    this->numericalFilters.clear();
+
+    qDebug() << "DUMP" << filterId << m_reportId << filterData;
+
     if(filterData.value("section") == Constants::categoricalType){
         this->categoricalFilters.append(filterId);
     } else if(filterData.value("section") == Constants::dateType){
