@@ -1879,7 +1879,6 @@ void ChartsModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, Q
             // To be later used to fetch parallel column data
             int i = 0;
             foreach(QString val, tmpList){
-                qDebug() << "val" << val;
                 indexes.append(columnData.indexOf(val, i));
                 i++;
             }
