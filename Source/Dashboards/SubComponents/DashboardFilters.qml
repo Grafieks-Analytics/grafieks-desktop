@@ -96,6 +96,11 @@ Item {
         TabButton{
             id: filter_apply_btn
             text: "Apply"
+            onClicked: {
+                startReDrawingCharts()
+                console.log("Apply dashboard filter here")
+            }
+
 
             background: Rectangle {
                 id: filter_apply_btn_background
