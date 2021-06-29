@@ -14,6 +14,8 @@ Item {
 
 
     property alias componentName: filterDataItemRange.objectName
+    property var value1 : 0
+    property var value2: 0
 
     onComponentNameChanged: {
         var modelData = TableColumnsModel.fetchColumnData(componentName)
@@ -23,6 +25,8 @@ Item {
         rangeSlider.to = Math.max(...modelData)
         rangeSlider.first.value = Math.min(...modelData)
         rangeSlider.second.value = Math.max(...modelData)
+        value1 = Math.min(...modelData)
+        value2 = Math.max(...modelData)
 
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
@@ -39,20 +43,17 @@ Item {
 
     }
 
-    function toggleSearch(){
+    function updateValue(){
 
-        if(searchFilter.visible){
-            searchFilter.visible=false
-            searchFilter.height=0
-            return
-        }
-        searchFilter.visible=true
-        searchFilter.height=30
-    }
+        // Remove existing value
+        DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "", true)
 
-    function searchData(searchText){
-        console.log(searchText, componentName)
-        dataListView.model = TableColumnsModel.searchColumnData(searchText, componentName)
+        // Update new value
+        var updateValue = value1 + "," + value2
+        DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, updateValue)
+
+        console.log("NEW VALUE", DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName))
+
     }
 
     function filterClicked(){
@@ -111,7 +112,7 @@ Item {
                 Text {
                     id: componentTitle
                     width:123
-                    text: DashboardParamsModel.fetchColumnAliasName(currentDashboardId, componentName)
+                    text: DashboardParamsModel.fetchColumnAliasName(currentDashboard, componentName)
                     elide: Text.ElideRight
                     font.pixelSize: 12
                     verticalAlignment: Text.AlignVCenter
@@ -166,10 +167,12 @@ Item {
             anchors.topMargin: 10
             width: parent.width
             first.onValueChanged: {
-                console.log("firstRangeValue",first.value)
+                value1 = first.value
+                updateValue()
             }
             second.onValueChanged:{
-                console.log("secondRangeValue",second.value)
+                value2 = second.value
+                updateValue()
             }
         Text {
             id: secondText
@@ -183,10 +186,6 @@ Item {
             font.pixelSize: Constants.fontCategoryHeaderMedium
             verticalAlignment: Text.AlignVCenter
         }
-
-
-
-
 
         }
 
