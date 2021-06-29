@@ -12,9 +12,11 @@ Item {
     height: 200
     anchors.horizontalCenter: parent.horizontalCenter
     property alias componentName: filterDataItemMulti.objectName
+    property var modelContent: []
 
     onComponentNameChanged: {
-        dataListView.model = TableColumnsModel.fetchColumnData(componentName)
+        modelContent = TableColumnsModel.fetchColumnData(componentName)
+        dataListView.model = modelContent
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
@@ -30,12 +32,25 @@ Item {
     }
 
     function onMultiSelectCheckboxSelected(modelData,checked){
+
         if(mainCheckBox.checked === true){
 
             if(checked === false){
                 // Set SELECT ALL to false
-                ReportParamsModel.addToSelectAllMap(counter, false)
                 mainCheckBox.checked = false
+
+                // Remove item if unchecked
+                DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "", true)
+            }
+        } else{
+            if(checked === true){
+
+                // Start pushing the individual checked item in the array
+                DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
+
+            } else{
+                // Remove item if unchecked
+                DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
             }
         }
     }
@@ -69,6 +84,15 @@ Item {
 
     function selectAll(checkedState){
         DashboardParamsModel.setSelectAll(checkedState, componentName, DashboardParamsModel.currentDashboard)
+
+        if(checkedState === true){
+            modelContent.forEach(item => {
+                                     DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, item)
+                                 })
+
+        } else {
+            DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "", true)
+        }
     }
 
 
@@ -81,9 +105,7 @@ Item {
                 checkbox_checked: false
                 parent_dimension: 14
 
-                onCheckedChanged: {
-                    onMultiSelectCheckboxSelected(modelData,checked)
-                }
+                onCheckedChanged: onMultiSelectCheckboxSelected(modelData,checked)
 
                 Connections{
                     target: DashboardParamsModel
