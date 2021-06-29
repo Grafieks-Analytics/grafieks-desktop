@@ -16,7 +16,6 @@ Item {
     property alias componentName: filterDataItemRange.objectName
 
     onComponentNameChanged: {
-        dataListView.model = TableColumnsModel.fetchColumnData(componentName)
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
@@ -32,20 +31,16 @@ Item {
 
     }
 
-    function toggleSearch(){
+    function updateValue(updateValue){
 
-        if(searchFilter.visible){
-            searchFilter.visible=false
-            searchFilter.height=0
-            return
-        }
-        searchFilter.visible=true
-        searchFilter.height=30
-    }
+        // Remove existing value
+        DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "", true)
 
-    function searchData(searchText){
-        console.log(searchText, componentName)
-        dataListView.model = TableColumnsModel.searchColumnData(searchText, componentName)
+        // Update new value
+        DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, updateValue)
+
+        console.log("NEW VALUE", DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName))
+
     }
 
     function filterClicked(){
@@ -104,7 +99,7 @@ Item {
                 Text {
                     id: componentTitle
                     width:123
-                    text: DashboardParamsModel.fetchColumnAliasName(currentDashboardId, componentName)
+                    text: DashboardParamsModel.fetchColumnAliasName(currentDashboard, componentName)
                     elide: Text.ElideRight
                     font.pixelSize: Constants.fontCategoryHeaderMedium
                     verticalAlignment: Text.AlignVCenter
@@ -173,9 +168,7 @@ Item {
                     width: parent.width
                     border.width: Constants.borderWidth
                 }
-                onTextChanged: {
-                    console.log(conditionText.text)
-                }
+                 onTextChanged: updateValue(conditionText.text)
 
             }
 

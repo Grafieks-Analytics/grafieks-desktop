@@ -512,12 +512,18 @@ void DashboardParamsModel::setColumnValueMap(int dashboardId, QString columnName
 {
     QMap<QString, QStringList> valueMap;
     QStringList values;
+    QString relation = this->fetchColumnFilterType(dashboardId, columnName);
 
     valueMap = this->columnValueMap.value(dashboardId);
     values = valueMap.value(columnName);
 
-    if(values.indexOf(value) < 0){
-        values.append(value);
+    qDebug() << value;
+    if(relation == "dataBetween" || relation == "dataRange"){
+        values = value.split(",");
+    } else{
+        if(values.indexOf(value) < 0){
+            values.append(value);
+        }
     }
 
     valueMap.insert(columnName, values);

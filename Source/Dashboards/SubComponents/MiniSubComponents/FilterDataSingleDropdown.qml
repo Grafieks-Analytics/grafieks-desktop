@@ -30,7 +30,6 @@ Item{
 
     function onRadioSelect(modelData){
 
-
         // Remove existing items
         DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "", true)
 
