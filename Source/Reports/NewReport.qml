@@ -451,7 +451,7 @@ Page {
     }
 
     function searchColumnNames(searchText){
-        ChartsModel.searchColumnNames(searchText)
+        ReportsDataModel.searchColumnNames(searchText)
     }
 
     function getAxisModelAsJson(axisName){
@@ -614,6 +614,9 @@ Page {
         
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex;
 
+        let currentDashboard = DashboardParamsModel.currentDashboard
+        ChartsModel.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
+
         // [Tag: Optimization]
         // We can create the object here and pass to cpp
         // to store in reportsMap
@@ -662,7 +665,10 @@ Page {
         // Back to dashboard
         GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
-        // ChartsModel.removeTmpChartData()
+        // ReportsDataModel.removeTmpChartData()
+
+        let currentDashboard = DashboardParamsModel.currentDashboard
+        ChartsModel.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
     }
 
     function focusReportTitle(){
@@ -969,7 +975,7 @@ Page {
            webEngineView.runJavaScript(runScriptString);
 
            // Clear Chart Data
-            // ChartsModel.clearData();
+            // ReportsDataModel.clearData();
            return;
         }
 

@@ -15,13 +15,16 @@ using namespace jsoncons;
 class ChartsModel : public QObject
 {
     Q_OBJECT
-    QMap<int, QString> newChartHeader;
-    QMap<int, QStringList *> newChartData;
+    QMap<int, QStringList> newChartHeader;
+    QMap<int, QString> headerMap;
     QMap<QString, QMap<int, QStringList>> reportChartData; // <ReportId - <columnKey - Values Array list>>
-    QMap<int, QMap<int, QStringList *>> dashboardChartData; // <DashboardId - <columnKey - Values Array list>>
+    QMap<int, QMap<int, QStringList>> dashboardChartData; // <DashboardId - <columnKey - Values Array list>>
 
     int dashboardId;
     QString reportId;
+    QStringList chartSources;
+    QString currentChartSource;
+    bool dashboardFilterApplied;
     QTime myTimer;
     QElapsedTimer myTimer2;
 
@@ -60,10 +63,13 @@ public:
     Q_INVOKABLE QString getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey);
     Q_INVOKABLE QString getTablePivotValues(QVariantList &xAxisColumn, QVariantList &yAxisColumn);
 
+    Q_INVOKABLE void setChartSource(QString sourceType, QVariant currentSelectedTypeId, bool dashboardFilterApplied = false);
+
 public slots:
 
-    void receiveReportData();
-    void reveiveDashboardData();
+    void receiveHeaders(QMap<int, QStringList> newChartHeader);
+    void receiveReportData(QMap<QString, QMap<int, QStringList>> newChartData, QString currentReportId);
+    void receiveDashboardData(QMap<int, QMap<int, QStringList>> newChartData, int currentDashboardId);
 
 signals:
 

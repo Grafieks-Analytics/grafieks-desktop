@@ -150,7 +150,7 @@ Popup {
     // On receiving the signal from C++, it will popup the relevant screen
 
     Connections{
-        target: ChartsModel
+        target: ReportsDataModel
 
         function onColumnDataChanged(columnData, options){
             if(ReportParamsModel.section === Constants.categoricalTab){

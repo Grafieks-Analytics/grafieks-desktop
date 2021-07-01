@@ -9,14 +9,13 @@ import "../../../MainSubComponents"
 Item {
     id: filterDataItemRange
     width: parent.width-25
-       anchors.horizontalCenter: parent.horizontalCenter
+    anchors.horizontalCenter: parent.horizontalCenter
     height: 110
 
 
     property alias componentName: filterDataItemRange.objectName
 
     onComponentNameChanged: {
-        conditionText.model = TableColumnsModel.fetchColumnData(componentName)
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
@@ -32,21 +31,18 @@ Item {
 
     }
 
-    function toggleSearch(){
+    function updateValue(updateValue){
 
-        if(searchFilter.visible){
-            searchFilter.visible=false
-            searchFilter.height=0
-            return
-        }
-        searchFilter.visible=true
-        searchFilter.height=30
+        // Remove existing value
+        DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "", true)
+
+        // Update new value
+        DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, updateValue)
+
+        console.log("NEW VALUE", DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName))
+
     }
 
-    function searchData(searchText){
-        console.log(searchText, componentName)
-        dataListView.model = TableColumnsModel.searchColumnData(searchText, componentName)
-    }
 
     function filterClicked(){
 
@@ -104,7 +100,7 @@ Item {
                 Text {
                     id: componentTitle
                     width:123
-                    text: DashboardParamsModel.fetchColumnAliasName(currentDashboardId, componentName)
+                    text: DashboardParamsModel.fetchColumnAliasName(currentDashboard, componentName)
                     elide: Text.ElideRight
                     font.pixelSize: Constants.fontCategoryHeaderMedium
                     verticalAlignment: Text.AlignVCenter
@@ -117,7 +113,7 @@ Item {
                     height: parent.height
                     width: 40
                     spacing: 15
-                     anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenter: parent.verticalCenter
                     Image {
                         source: "/Images/icons/customize.png"
                         width: 16
@@ -154,16 +150,17 @@ Item {
         Rectangle{
             id: conditionEqual
             visible: true
-           anchors.top: inputText.bottom
-           anchors.topMargin: 15
+            anchors.top: inputText.bottom
+            anchors.topMargin: 15
             height: 25
             width: parent.width-10
-             anchors.horizontalCenter: parent.horizontalCenter
-//             border.color: Constants.themeColor
+            anchors.horizontalCenter: parent.horizontalCenter
+            //             border.color: Constants.themeColor
             TextField{
                 id: conditionText
                 width: parent.width-10
                 selectByMouse: true
+                text: DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName)[0]
 
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
@@ -174,9 +171,7 @@ Item {
                     width: parent.width
                     border.width: Constants.borderWidth
                 }
-                onTextChanged: {
-                    console.log(conditionText.text)
-                }
+                onTextChanged: updateValue(conditionText.text)
 
             }
 

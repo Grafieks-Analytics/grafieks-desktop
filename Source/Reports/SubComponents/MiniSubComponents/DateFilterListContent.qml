@@ -127,7 +127,7 @@ Rectangle{
             if(ReportParamsModel.section === Constants.dateTab){
                 counter = ReportParamsModel.filterIndex
                 var colName = ReportParamsModel.colName
-                var colData = ChartsModel.fetchColumnData(colName)
+                var colData = ReportsDataModel.fetchColumnData(colName)
                 var values = ReportParamsModel.fetchFilterValueMap(counter)[counter]
                 ReportParamsModel.removeTmpSelectedValues(0, true)
 

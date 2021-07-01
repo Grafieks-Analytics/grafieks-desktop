@@ -14,9 +14,10 @@ Item {
 
 
     property alias componentName: filterDataItemRange.objectName
+    property var value1 : 0
+    property var value2: 0
 
     onComponentNameChanged: {
-        dataListView.model = TableColumnsModel.fetchColumnData(componentName)
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
@@ -32,20 +33,17 @@ Item {
 
     }
 
-    function toggleSearch(){
+    function updateValue(){
 
-        if(searchFilter.visible){
-            searchFilter.visible=false
-            searchFilter.height=0
-            return
-        }
-        searchFilter.visible=true
-        searchFilter.height=30
-    }
+        // Remove existing value
+        DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "", true)
 
-    function searchData(searchText){
-        console.log(searchText, componentName)
-        dataListView.model = TableColumnsModel.searchColumnData(searchText, componentName)
+        // Update new value
+        var updateValue = value1 + "," + value2
+        DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, updateValue)
+
+        console.log("NEW VALUE", DashboardParamsModel.fetchColumnValueMap(DashboardParamsModel.currentDashboard, componentName))
+
     }
 
     function filterClicked(){
@@ -99,12 +97,10 @@ Item {
                 anchors.leftMargin: 15
 
 
-
-
                 Text {
                     id: componentTitle
                     width:123
-                    text: DashboardParamsModel.fetchColumnAliasName(currentDashboardId, componentName)
+                    text: DashboardParamsModel.fetchColumnAliasName(currentDashboard, componentName)
                     elide: Text.ElideRight
                     font.pixelSize: Constants.fontCategoryHeaderMedium
                     verticalAlignment: Text.AlignVCenter
@@ -158,7 +154,7 @@ Item {
             width: parent.width-10
             anchors.horizontalCenter: parent.horizontalCenter
             TextField{
-                id: conditionText
+                id: condition1Text
                 width: parent.width-10
                 selectByMouse: true
 
@@ -170,7 +166,8 @@ Item {
                     border.width: Constants.borderWidth
                 }
                 onTextChanged: {
-                    console.log(conditionText.text)
+                    value1 = condition1Text.text
+                    updateValue()
                 }
 
             }
@@ -202,7 +199,7 @@ Item {
             width: parent.width-10
             anchors.horizontalCenter: parent.horizontalCenter
             TextField{
-                id: conditionText1
+                id: condition2Text
                 width: parent.width-10
                 selectByMouse: true
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -213,18 +210,13 @@ Item {
                     border.width: Constants.borderWidth
                 }
                 onTextChanged: {
-                    console.log(conditionText.text)
+                    value2 = condition2Text.text
+                    updateValue()
                 }
 
             }
 
         }
-
-
-
-
-
-
 
     }
 }
