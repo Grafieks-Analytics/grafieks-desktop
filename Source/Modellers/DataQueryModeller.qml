@@ -309,7 +309,10 @@ Page {
     function onCreateDashboardClicked(){
 
         GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
-        stacklayout_home.currentIndex = 6
+        stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
+
+        let currentDashboard = DashboardParamsModel.currentDashboard
+        ChartsModel.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
 
     }
 

@@ -131,6 +131,8 @@ public:
 
     Q_INVOKABLE void setSelectAll(bool status, QString columnName, int dashboardId);
 
+    Q_INVOKABLE bool ifFilterApplied(int dashboardId);
+
     // Customize Dashboard parameters
 
     Q_INVOKABLE void setDashboardName(int dashboardId,QString dashboardName);

@@ -135,6 +135,7 @@ Item{
     function editSelectedReport(reportId){
         stacklayout_home.currentIndex = Constants.newReportIndex;
         ReportParamsModel.setReportId(reportId);
+        ChartsModel.setChartSource("report", ReportParamsModel.reportId)
         ReportParamsModel.setEditReportToggle(reportId);
     }
 

@@ -225,6 +225,9 @@ Page {
         ReportParamsModel.setEditReportToggle(false);
         GeneralParamsModel.setCurrentScreen(Constants.reportScreen)
         stacklayout_home.currentIndex = Constants.newReportIndex;
+        console.log("REP ID", ReportParamsModel.reportId)
+        ChartsModel.setChartSource("report", ReportParamsModel.reportId)
+
     }
 
     function scrollToLeft(){
