@@ -22,6 +22,9 @@ class ChartsModel : public QObject
 
     int dashboardId;
     QString reportId;
+    QStringList chartSources;
+    QString currentChartSource;
+    bool dashboardFilterApplied;
     QTime myTimer;
     QElapsedTimer myTimer2;
 
@@ -59,6 +62,8 @@ public:
     Q_INVOKABLE QString getTreeSunburstValues(QVariantList &xAxisColumn, QString &yAxisColumn);
     Q_INVOKABLE QString getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey);
     Q_INVOKABLE QString getTablePivotValues(QVariantList &xAxisColumn, QVariantList &yAxisColumn);
+
+    Q_INVOKABLE void setChartSource(QString sourceType, QVariant currentSelectedTypeId, bool dashboardFilterApplied = false);
 
 public slots:
 
