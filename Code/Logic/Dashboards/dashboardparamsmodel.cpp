@@ -517,7 +517,6 @@ void DashboardParamsModel::setColumnValueMap(int dashboardId, QString columnName
     valueMap = this->columnValueMap.value(dashboardId);
     values = valueMap.value(columnName);
 
-    qDebug() << value;
     if(relation == "dataBetween" || relation == "dataRange"){
         values = value.split(",");
     } else{
@@ -528,6 +527,8 @@ void DashboardParamsModel::setColumnValueMap(int dashboardId, QString columnName
 
     valueMap.insert(columnName, values);
     this->columnValueMap.insert(dashboardId, valueMap);
+
+    emit filterValuesChanged(this->showColumns, this->columnFilterType, this->columnIncludeExcludeMap, this->columnValueMap);
 }
 
 QStringList DashboardParamsModel::fetchColumnValueMap(int dashboardId, QString columnName)

@@ -39,11 +39,13 @@ public:
 public slots:
     void getChartData(QMap<int, QStringList*> chartData);
     void getChartHeader(QMap<int, QStringList> chartHeader);
+    void getFilterValues(QMap<int, QStringList> showColumns, QMap<int, QVariantMap> columnFilterType, QMap<int, QVariantMap> columnIncludeExcludeMap, QMap<int, QMap<QString, QStringList>> columnValueMap);
 
 signals:
     void sendFilteredColumn(int currentDashboard, QStringList allCategorical, QStringList allNumerical, QStringList allDates);
     void visibleColumnListChanged(QVariantMap visibleColumnsTypeMap);
     void columnNamesChanged(QStringList columnNames);
+    void dashboardDataChanged(QMap<int, QMap<int, QStringList>> chartData, int currentReportId);
 
 
 };

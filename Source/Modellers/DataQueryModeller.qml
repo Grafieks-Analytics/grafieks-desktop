@@ -425,7 +425,7 @@ Page {
         }
 
         ConnectorsLoginModel.sqlLogout()
-        ChartsModel.removeTmpChartData()
+        ReportsDataModel.removeTmpChartData()
         DSParamsModel.resetDataModel();
         DSParamsModel.resetFilter()
         DSParamsModel.setTmpSql("")
