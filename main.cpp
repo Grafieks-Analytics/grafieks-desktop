@@ -343,7 +343,7 @@ int main(int argc, char *argv[])
     QObject::connect(&reportParamsModel, &ReportParamsModel::reportIdChanged, &reportsDataModel, &ReportsDataModel::getReportId);
 
     // Charts
-    // Headers for charts
+    //filterValuesChanged Headers for charts
     QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::receiveHeaders);
     QObject::connect(&duckQueryModel, &DuckQueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::receiveHeaders);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::receiveHeaders);

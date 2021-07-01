@@ -97,7 +97,7 @@ Item {
             id: filter_apply_btn
             text: "Apply"
             onClicked: {
-                startReDrawingCharts()
+                TableColumnsModel.redrawCharts(DashboardParamsModel.currentDashboard)
                 console.log("Apply dashboard filter here")
             }
 

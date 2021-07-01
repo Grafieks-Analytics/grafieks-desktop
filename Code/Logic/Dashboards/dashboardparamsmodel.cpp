@@ -528,7 +528,7 @@ void DashboardParamsModel::setColumnValueMap(int dashboardId, QString columnName
     valueMap.insert(columnName, values);
     this->columnValueMap.insert(dashboardId, valueMap);
 
-    emit filterValuesChanged(this->showColumns, this->columnFilterType, this->columnIncludeExcludeMap, this->columnValueMap);
+    emit filterValuesChanged(this->showColumns, this->columnFilterType, this->columnIncludeExcludeMap, this->columnValueMap, dashboardId);
 }
 
 QStringList DashboardParamsModel::fetchColumnValueMap(int dashboardId, QString columnName)
