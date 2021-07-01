@@ -797,6 +797,11 @@ void DashboardParamsModel::setSelectAll(bool status, QString columnName, int das
     emit selectAllChanged(status, columnName, dashboardId);
 }
 
+bool DashboardParamsModel::ifFilterApplied(int dashboardId)
+{
+    return this->columnValueMap.value(dashboardId).size() > 0 ? true: false;
+}
+
 void DashboardParamsModel::saveImage(QUrl originalFile, QString newFilename)
 {
     QFileInfo fi(originalFile.toString());
