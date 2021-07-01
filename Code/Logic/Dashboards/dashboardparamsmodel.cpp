@@ -456,7 +456,7 @@ void DashboardParamsModel::addToShowColumns(int dashboardId, QString colName, bo
         this->columnAliasMap.insert(dashboardId, colAliasNames);
     }
     this->showColumns.insert(dashboardId, colNames);
-//    emit hideColumnsChanged(colNames, dashboardId);
+    //    emit hideColumnsChanged(colNames, dashboardId);
 }
 
 
@@ -506,6 +506,51 @@ QString DashboardParamsModel::fetchIncludeExcludeMap(int dashboardId, QString co
 {
     QVariantMap colIncludeExclude = this->columnIncludeExcludeMap.value(dashboardId);
     return colIncludeExclude.value(columnName).toString();
+}
+
+void DashboardParamsModel::setColumnValueMap(int dashboardId, QString columnName, QString value)
+{
+    QMap<QString, QStringList> valueMap;
+    QStringList values;
+    QString relation = this->fetchColumnFilterType(dashboardId, columnName);
+
+    valueMap = this->columnValueMap.value(dashboardId);
+    values = valueMap.value(columnName);
+
+    if(relation == "dataBetween" || relation == "dataRange"){
+        values = value.split(",");
+    } else{
+        if(values.indexOf(value) < 0){
+            values.append(value);
+        }
+    }
+
+    valueMap.insert(columnName, values);
+    this->columnValueMap.insert(dashboardId, valueMap);
+
+    emit filterValuesChanged(this->showColumns, this->columnFilterType, this->columnIncludeExcludeMap, this->columnValueMap, dashboardId);
+}
+
+QStringList DashboardParamsModel::fetchColumnValueMap(int dashboardId, QString columnName)
+{
+    return this->columnValueMap.value(dashboardId).value(columnName);
+}
+
+void DashboardParamsModel::deleteColumnValueMap(int dashboardId, QString columnName, QString value, bool removeAll)
+{
+    QMap<QString, QStringList> valueMap;
+    QStringList values;
+    valueMap = this->columnValueMap.value(dashboardId);
+
+    values = valueMap.value(columnName);
+    if(removeAll == true){
+        values.clear();
+    } else{
+        values.removeAll(value);
+    }
+
+    valueMap.insert(columnName, values);
+    this->columnValueMap.insert(dashboardId, valueMap);
 }
 
 void DashboardParamsModel::setDashboardName(int dashboardId, QString dashboardName)
@@ -745,6 +790,16 @@ int DashboardParamsModel::getReportOpacity(int dashboardId, int reportId)
     }
 
     return output;
+}
+
+void DashboardParamsModel::setSelectAll(bool status, QString columnName, int dashboardId)
+{
+    emit selectAllChanged(status, columnName, dashboardId);
+}
+
+bool DashboardParamsModel::ifFilterApplied(int dashboardId)
+{
+    return this->columnValueMap.value(dashboardId).size() > 0 ? true: false;
 }
 
 void DashboardParamsModel::saveImage(QUrl originalFile, QString newFilename)

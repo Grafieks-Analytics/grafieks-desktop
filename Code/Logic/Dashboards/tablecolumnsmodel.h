@@ -10,6 +10,7 @@
 class TableColumnsModel : public QObject
 {
     Q_OBJECT
+    QMap<int, QMap<int, QStringList>> filteredChartData;
     QMap<int, QStringList *> newChartData;
     QMap<int, QString> newChartHeader;
     QMap<int, QStringList> chartHeaderDetails;
@@ -34,16 +35,21 @@ public:
     Q_INVOKABLE void searchColumnNames(int dashboardId, QString keyword);
     Q_INVOKABLE QString findColumnType(QString columnName);
 
+    Q_INVOKABLE void redrawCharts(int dashboardId);
+
 
 
 public slots:
     void getChartData(QMap<int, QStringList*> chartData);
     void getChartHeader(QMap<int, QStringList> chartHeader);
+    void getFilterValues(QMap<int, QStringList> showColumns, QMap<int, QVariantMap> columnFilterType, QMap<int, QVariantMap> columnIncludeExcludeMap, QMap<int, QMap<QString, QStringList>> columnValueMap, int dashboardId);
 
 signals:
     void sendFilteredColumn(int currentDashboard, QStringList allCategorical, QStringList allNumerical, QStringList allDates);
     void visibleColumnListChanged(QVariantMap visibleColumnsTypeMap);
     void columnNamesChanged(QStringList columnNames);
+    void dashboardDataChanged(QMap<int, QMap<int, QStringList>> chartData, int currentDashboardId);
+    void chartValuesChanged(int currentDashboardId);
 
 
 };

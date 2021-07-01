@@ -14,7 +14,7 @@ class ReportParamsModel: public QObject
 {
     Q_OBJECT
 
-// Customize Report parameters
+    // Customize Report parameters
     QVariantMap reportsMap;           // <<QString reportId, reportObj>>
     QVariantMap reportsData;
     QVariantMap dashboardReportInstances;

@@ -32,6 +32,20 @@ Item {
 
     }
 
+    function onRadioSelect(modelData,checked){
+
+        if(checked === true){
+
+            // Start pushing the individual checked item in the array
+            DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
+
+        } else{
+            // Remove item if unchecked
+            DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
+        }
+
+    }
+
     function toggleSearch(){
 
         if(searchFilter.visible){
@@ -72,6 +86,8 @@ Item {
                 radio_text: modelData
                 radio_checked: false
                 parent_dimension: 16
+
+                onCheckedChanged: onRadioSelect(modelData, checked)
             }
         }
     }

@@ -23,11 +23,13 @@ class DashboardParamsModel: public QObject
     QMap<int, QMap<int, int>> dashboardReportTypeMap; // <dashboardId, <reportId, reportTypeId (constant)>>
     QMap<int, QMap<int, QUrl>> dashboardReportUrl; // <dashboardId, <reportId, URI Link>>
 
+
     // Filter parameters
     QMap<int, QStringList> showColumns;                        // dashboardId - List of column names to be shown from the list
     QMap<int, QVariantMap> columnAliasMap;                     // dashboardId - Alias name which will appear instead of actual column name in reports
     QMap<int, QVariantMap> columnFilterType;                   // dashboardId - Whether its single list, multi list, dropdown single, dropdown multiple
     QMap<int, QVariantMap> columnIncludeExcludeMap;            // dashboardId - If the filter data is to be included or excluded
+    QMap<int, QMap<QString, QStringList>> columnValueMap;      // dashboardId - <Column name - value list>
 
 
     // Customize Dashboard parameters
@@ -123,6 +125,14 @@ public:
     Q_INVOKABLE void setIncludeExcludeMap(int dashboardId, QString columnName, QString type);
     Q_INVOKABLE QString fetchIncludeExcludeMap(int dashboardId, QString columnName);
 
+    Q_INVOKABLE void setColumnValueMap(int dashboardId, QString columnName, QString value);
+    Q_INVOKABLE QStringList fetchColumnValueMap(int dashboardId, QString columnName);
+    Q_INVOKABLE void deleteColumnValueMap(int dashboardId, QString columnName, QString value = "", bool removeAll = false);
+
+    Q_INVOKABLE void setSelectAll(bool status, QString columnName, int dashboardId);
+
+    Q_INVOKABLE bool ifFilterApplied(int dashboardId);
+
     // Customize Dashboard parameters
 
     Q_INVOKABLE void setDashboardName(int dashboardId,QString dashboardName);
@@ -211,10 +221,12 @@ signals:
 //    void hideColumnsChanged(QStringList hideColumns, int dashboardId);
     void aliasChanged(QString newAlias, QString columnName, int dashboardId);
     void columnFilterTypeChanged();
+    void filterValuesChanged(QMap<int, QStringList> showColumns, QMap<int, QVariantMap> columnFilterType, QMap<int, QVariantMap> columnIncludeExcludeMap, QMap<int, QMap<QString, QStringList>> columnValueMap, int dashboardId);
 
     // Customize Dashboard parameters
     void dashboardNameChanged(int dashboardId, QString dashboardName);
     void dashboardBackgroundColorChanged(int dashboardId, QString color);
+    void selectAllChanged(bool status, QString columnName, int dashboardId);
 
 
     // Customize Report parameters

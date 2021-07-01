@@ -83,7 +83,7 @@ Popup {
 
 
     Connections{
-        target: ChartsModel
+        target: ReportsDataModel
 
         function onColumnDataChanged(columData, options){
 
