@@ -56,8 +56,9 @@
 #include "Code/Logic/Dashboards/tablecolumnsmodel.h"
 
 #include "Code/Logic/Reports/reportparamsmodel.h"
-#include "Code/Logic/Reports/chartsmodel.h"
+#include "Code/Logic/Reports/reportsdatamodel.h"
 
+#include "Code/Logic/General/chartsmodel.h"
 #include "Code/Logic/General/generalparamsmodel.h"
 #include "Code/Logic/General/tableschemamodel.h"
 #include "Code/Logic/General/newtablecolumnsmodel.h"
@@ -266,6 +267,7 @@ int main(int argc, char *argv[])
     QuerySplitter querySplitter;
     DashboardParamsModel dashboardParamsModel;
     ReportParamsModel reportParamsModel;
+    ReportsDataModel reportsDataModel;
     ForwardOnlyDataModel forwardOnlyDataModel;
     ForwardOnlyQueryModel forwardOnlyQueryModel;
     NewTableListModel newTableListModel;
@@ -317,12 +319,12 @@ int main(int argc, char *argv[])
     QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, &duckQueryModel, &DuckQueryModel::receiveCsvFilterQuery);
 
     // Data and headers for reports
-    QObject::connect(&queryModel, &QueryModel::chartDataChanged, &chartsModel, &ChartsModel::getChartData);
-    QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::getChartHeader);
-    QObject::connect(&duckQueryModel, &DuckQueryModel::chartDataChanged, &chartsModel, &ChartsModel::getChartData);
-    QObject::connect(&duckQueryModel, &DuckQueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::getChartHeader);
-    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartDataChanged, &chartsModel, &ChartsModel::getChartData);
-    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::getChartHeader);
+    QObject::connect(&queryModel, &QueryModel::chartDataChanged, &reportsDataModel, &ReportsDataModel::getChartData);
+    QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &reportsDataModel, &ReportsDataModel::getChartHeader);
+    QObject::connect(&duckQueryModel, &DuckQueryModel::chartDataChanged, &reportsDataModel, &ReportsDataModel::getChartData);
+    QObject::connect(&duckQueryModel, &DuckQueryModel::chartHeaderChanged, &reportsDataModel, &ReportsDataModel::getChartHeader);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartDataChanged, &reportsDataModel, &ReportsDataModel::getChartData);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &reportsDataModel, &ReportsDataModel::getChartHeader);
 
     // Data and Headers for Dashboards
     QObject::connect(&queryModel, &QueryModel::chartDataChanged, &tableColumnsModel, &TableColumnsModel::getChartData);
@@ -332,12 +334,24 @@ int main(int argc, char *argv[])
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartDataChanged, &tableColumnsModel, &TableColumnsModel::getChartData);
     QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &tableColumnsModel, &TableColumnsModel::getChartHeader);
 
-    // Dashboards - Connect the obtained column names from modeler filters to dashboard params model
+    // Dashboards
     QObject::connect(&tableColumnsModel, &TableColumnsModel::columnNamesChanged, &dashboardParamsModel, &DashboardParamsModel::getColumnNames);
+    QObject::connect(&dashboardParamsModel, &DashboardParamsModel::filterValuesChanged, &tableColumnsModel, &TableColumnsModel::getFilterValues);
 
     // Reports
-    QObject::connect(&reportParamsModel, &ReportParamsModel::reportFilterChanged, &chartsModel, &ChartsModel::updateFilterData);
-    QObject::connect(&reportParamsModel, &ReportParamsModel::reportIdChanged, &chartsModel, &ChartsModel::getReportId);
+    QObject::connect(&reportParamsModel, &ReportParamsModel::reportFilterChanged, &reportsDataModel, &ReportsDataModel::updateFilterData);
+    QObject::connect(&reportParamsModel, &ReportParamsModel::reportIdChanged, &reportsDataModel, &ReportsDataModel::getReportId);
+
+    // Charts
+    // Headers for charts
+    QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::receiveHeaders);
+    QObject::connect(&duckQueryModel, &DuckQueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::receiveHeaders);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::receiveHeaders);
+
+    // Data for charts
+    QObject::connect(&reportsDataModel, &ReportsDataModel::reportDataChanged, &chartsModel, &ChartsModel::receiveReportData);
+    QObject::connect(&tableColumnsModel, &TableColumnsModel::dashboardDataChanged, &chartsModel, &ChartsModel::receiveDashboardData);
+
 
     // SIGNAL & SLOTS ENDS
     /***********************************************************************************************************************/
@@ -364,6 +378,7 @@ int main(int argc, char *argv[])
 
     // Set contexts for QML
     engine.rootContext()->setContextProperty("ReportParamsModel", &reportParamsModel);
+    engine.rootContext()->setContextProperty("ReportsDataModel", &reportsDataModel);
     engine.rootContext()->setContextProperty("DashboardParamsModel", &dashboardParamsModel);
     engine.rootContext()->setContextProperty("QtTest2", &qttest2);
     engine.rootContext()->setContextProperty("MysqlConnect", &mysqlconnect);

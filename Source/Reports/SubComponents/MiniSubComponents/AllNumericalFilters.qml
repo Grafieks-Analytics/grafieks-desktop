@@ -94,7 +94,7 @@ Rectangle{
         }
 
         //        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
-        ChartsModel.fetchColumnData(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0], JSON.stringify(options))
+        ReportsDataModel.fetchColumnData(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0], JSON.stringify(options))
         console.log("EDIT CLICKED numerical", ReportParamsModel.fetchFilterColumnMap(filterIndex),ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0], filterIndex, modelIndex)
     }
     // JAVASCRIPT FUNCTION ENDS

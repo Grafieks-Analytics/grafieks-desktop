@@ -1,6 +1,6 @@
 #include "chartsmodel.h"
 
-ChartsModel::ChartsModel(QObject *parent) : QObject(parent)
+ChartsModel::ChartsModel(QObject *parent) : QObject(parent), dashboardId(0), reportId("")
 {
 }
 
@@ -10,7 +10,7 @@ ChartsModel::~ChartsModel()
 
 QString ChartsModel::getBarChartValues(QString xAxisColumn, QString yAxisColumn)
 {
-    if(newChartHeader.empty() || newChartData.empty()){
+    if(this->newChartHeader.empty()){
         return "";
     }
 
@@ -20,8 +20,8 @@ QString ChartsModel::getBarChartValues(QString xAxisColumn, QString yAxisColumn)
     QScopedPointer<QStringList> yAxisDataPointer(new QStringList);
 
     // Fetch data here
-    int xKey = newChartHeader.key( xAxisColumn );
-    int yKey = newChartHeader.key( yAxisColumn );
+    int xKey = this->headerMap.key( xAxisColumn );
+    int yKey = this->headerMap.key( yAxisColumn );
 
     *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
     *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
@@ -80,7 +80,7 @@ QString ChartsModel::getStackedBarChartValues(QString xAxisColumn, QString yAxis
 
 QString ChartsModel::getGroupedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
-    if(newChartHeader.empty() || newChartData.empty()){
+    if(this->newChartHeader.empty()){
         return "";
     }
 
@@ -100,9 +100,9 @@ QString ChartsModel::getGroupedBarChartValues(QString xAxisColumn, QString yAxis
 
 
     // Fetch data here
-    int xKey = newChartHeader.key( xAxisColumn );
-    int yKey = newChartHeader.key( yAxisColumn );
-    int splitKey = newChartHeader.key( xSplitKey );
+    int xKey = this->headerMap.key( xAxisColumn );
+    int yKey = this->headerMap.key( yAxisColumn );
+    int splitKey = this->headerMap.key( xSplitKey );
 
     *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
     *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
@@ -169,7 +169,7 @@ QString ChartsModel::getGroupedBarChartValues(QString xAxisColumn, QString yAxis
 
 QString ChartsModel::getNewGroupedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
-    if(newChartHeader.empty() || newChartData.empty()){
+    if(this->newChartHeader.empty()){
         return "";
     }
 
@@ -181,9 +181,9 @@ QString ChartsModel::getNewGroupedBarChartValues(QString xAxisColumn, QString yA
     QScopedPointer<QStringList> splitKeyDataPointer(new QStringList);
 
     // Fetch data here
-    int xKey = newChartHeader.key( xAxisColumn );
-    int yKey = newChartHeader.key( yAxisColumn );
-    int splitKey = newChartHeader.key( xSplitKey );
+    int xKey = this->headerMap.key( xAxisColumn );
+    int yKey = this->headerMap.key( yAxisColumn );
+    int splitKey = this->headerMap.key( xSplitKey );
 
     *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
     *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
@@ -260,7 +260,7 @@ QString ChartsModel::getLineChartValues(QString xAxisColumn, QString yAxisColumn
 
 QString ChartsModel::getLineBarChartValues(QString xAxisColumn, QString yLineAxisColumn, QString yBarAxisColumn)
 {
-    if(newChartHeader.empty() || newChartData.empty()){
+    if(this->newChartHeader.empty()){
         return "";
     }
 
@@ -272,9 +272,9 @@ QString ChartsModel::getLineBarChartValues(QString xAxisColumn, QString yLineAxi
 
     // Fetch data here
 
-    int xKey = newChartHeader.key( xAxisColumn );
-    int yBarKey = newChartHeader.key( yBarAxisColumn );
-    int yLineKey = newChartHeader.key( yLineAxisColumn );
+    int xKey = this->headerMap.key( xAxisColumn );
+    int yBarKey = this->headerMap.key( yBarAxisColumn );
+    int yLineKey = this->headerMap.key( yLineAxisColumn );
 
     *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
     *yBarAxisDataPointer = reportChartData.value(this->reportId).value(yBarKey);
@@ -331,7 +331,7 @@ QString ChartsModel::getLineBarChartValues(QString xAxisColumn, QString yLineAxi
 
 QString ChartsModel::getPieChartValues(QString xAxisColumn, QString yAxisColumn)
 {
-    if(newChartHeader.empty() || newChartData.empty()){
+    if(this->newChartHeader.empty()){
         return "";
     }
 
@@ -343,8 +343,8 @@ QString ChartsModel::getPieChartValues(QString xAxisColumn, QString yAxisColumn)
     QScopedPointer<QStringList> uniqueHashKeywords(new QStringList);
 
     // Fetch data here
-    int xKey = newChartHeader.key( xAxisColumn );
-    int yKey = newChartHeader.key( yAxisColumn );
+    int xKey = this->headerMap.key( xAxisColumn );
+    int yKey = this->headerMap.key( yAxisColumn );
 
     *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
     *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
@@ -374,7 +374,7 @@ QString ChartsModel::getPieChartValues(QString xAxisColumn, QString yAxisColumn)
 
 QString ChartsModel::getFunnelChartValues(QString xAxisColumn, QString yAxisColumn)
 {
-    if(newChartHeader.empty() || newChartData.empty()){
+    if(this->newChartHeader.empty()){
         return "";
     }
 
@@ -387,8 +387,8 @@ QString ChartsModel::getFunnelChartValues(QString xAxisColumn, QString yAxisColu
     // Fetch data here
 
 
-    int xKey = newChartHeader.key( xAxisColumn );
-    int yKey = newChartHeader.key( yAxisColumn );
+    int xKey = this->headerMap.key( xAxisColumn );
+    int yKey = this->headerMap.key( yAxisColumn );
 
     *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
     *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
@@ -442,7 +442,7 @@ QString ChartsModel::getFunnelChartValues(QString xAxisColumn, QString yAxisColu
 QString ChartsModel::getRadarChartValues(QString xAxisColumn, QString yAxisColumn)
 {
 
-    if(newChartHeader.empty() || newChartData.empty()){
+    if(this->newChartHeader.empty()){
         return "";
     }
 
@@ -455,8 +455,8 @@ QString ChartsModel::getRadarChartValues(QString xAxisColumn, QString yAxisColum
 
     // Fetch data here
 
-    int xKey = newChartHeader.key( xAxisColumn );
-    int yKey = newChartHeader.key( yAxisColumn );
+    int xKey = this->headerMap.key( xAxisColumn );
+    int yKey = this->headerMap.key( yAxisColumn );
 
     *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
     *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
@@ -509,7 +509,7 @@ QString ChartsModel::getRadarChartValues(QString xAxisColumn, QString yAxisColum
 
 QString ChartsModel::getScatterChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
-    if(newChartHeader.empty() || newChartData.empty()){
+    if(this->newChartHeader.empty()){
         return "";
     }
 
@@ -527,9 +527,9 @@ QString ChartsModel::getScatterChartValues(QString xAxisColumn, QString yAxisCol
 
     // Fetch data here
 
-    int xKey = newChartHeader.key( xAxisColumn );
-    int yKey = newChartHeader.key( yAxisColumn );
-    int splitKey = newChartHeader.key( xSplitKey );
+    int xKey = this->headerMap.key( xAxisColumn );
+    int yKey = this->headerMap.key( yAxisColumn );
+    int splitKey = this->headerMap.key( xSplitKey );
 
     *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
     *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
@@ -599,7 +599,7 @@ QString ChartsModel::getScatterChartValues(QString xAxisColumn, QString yAxisCol
 
 QString ChartsModel::getHeatMapChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
-    if(newChartHeader.empty() || newChartData.empty()){
+    if(this->newChartHeader.empty()){
         return "";
     }
 
@@ -617,9 +617,9 @@ QString ChartsModel::getHeatMapChartValues(QString xAxisColumn, QString yAxisCol
 
     // Fetch data here
 
-    int xKey = newChartHeader.key( xAxisColumn );
-    int yKey = newChartHeader.key( yAxisColumn );
-    int splitKey = newChartHeader.key( xSplitKey );
+    int xKey = this->headerMap.key( xAxisColumn );
+    int yKey = this->headerMap.key( yAxisColumn );
+    int splitKey = this->headerMap.key( xSplitKey );
 
     *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
     *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
@@ -707,11 +707,11 @@ QString ChartsModel::getWaterfallChartValues(QString xAxisColumn, QString yAxisC
 
 float ChartsModel::getGaugeChartValues(QString calculateColumn)
 {
-    if(newChartHeader.empty() || newChartData.empty()){
+    if(this->newChartHeader.empty()){
         return 0;
     }
 
-    int calculateColumnKey = newChartHeader.key( calculateColumn );
+    int calculateColumnKey = this->headerMap.key( calculateColumn );
     QStringList calculateColumnPointer = reportChartData.value(this->reportId).value(calculateColumnKey);
     float output = 0.0;
 
@@ -728,7 +728,7 @@ float ChartsModel::getGaugeChartValues(QString calculateColumn)
 
 QString ChartsModel::getSankeyChartValues(QString sourceColumn, QString destinationColumn, QString measureColumn)
 {
-    if(newChartHeader.empty() || newChartData.empty()){
+    if(this->newChartHeader.empty()){
         return "";
     }
 
@@ -746,9 +746,9 @@ QString ChartsModel::getSankeyChartValues(QString sourceColumn, QString destinat
 
     // Fetch data here
 
-    int sourceKey = newChartHeader.key( sourceColumn );
-    int destinationKey = newChartHeader.key( destinationColumn );
-    int measureKey = newChartHeader.key( measureColumn );
+    int sourceKey = this->headerMap.key( sourceColumn );
+    int destinationKey = this->headerMap.key( destinationColumn );
+    int measureKey = this->headerMap.key( measureColumn );
 
     *sourceDataPointer = reportChartData.value(this->reportId).value(sourceKey);
     *destinationDataPointer = reportChartData.value(this->reportId).value(destinationKey);
@@ -834,11 +834,11 @@ QString ChartsModel::getTreeMapChartValues(QVariantList xAxisColumn, QString yAx
 
 float ChartsModel::getKPIChartValues(QString calculateColumn)
 {
-    if(newChartHeader.empty() || newChartData.empty()){
+    if(this->newChartHeader.empty()){
         return 0;
     }
 
-    int calculateColumnKey = newChartHeader.key( calculateColumn );
+    int calculateColumnKey = this->headerMap.key( calculateColumn );
     QScopedPointer<QStringList> calculateColumnPointer(new QStringList);
 
     *calculateColumnPointer = reportChartData.value(this->reportId).value(calculateColumnKey);
@@ -880,7 +880,7 @@ QString ChartsModel::getStackedAreaChartValues(QString xAxisColumn, QString yAxi
 QString ChartsModel::getMultiLineChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
 
-    if(newChartHeader.empty() || newChartData.empty()){
+    if(this->newChartHeader.empty()){
         return "";
     }
 
@@ -897,9 +897,9 @@ QString ChartsModel::getMultiLineChartValues(QString xAxisColumn, QString yAxisC
     QString masterKeyword;
 
     // Fetch data here
-    int xKey = newChartHeader.key( xAxisColumn );
-    int yKey = newChartHeader.key( yAxisColumn );
-    int splitKey = newChartHeader.key( xSplitKey );
+    int xKey = this->headerMap.key( xAxisColumn );
+    int yKey = this->headerMap.key( yAxisColumn );
+    int splitKey = this->headerMap.key( xSplitKey );
 
     *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
     *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
@@ -981,7 +981,7 @@ QString ChartsModel::getMultiLineChartValues(QString xAxisColumn, QString yAxisC
 
 QString ChartsModel::getLineAreaWaterfallValues(QString &xAxisColumn, QString &yAxisColumn)
 {
-    if(newChartHeader.empty() || newChartData.empty()){
+    if(this->newChartHeader.empty()){
         return "";
     }
 
@@ -992,8 +992,8 @@ QString ChartsModel::getLineAreaWaterfallValues(QString &xAxisColumn, QString &y
 
     // Fetch data here
 
-    int xKey = newChartHeader.key( xAxisColumn );
-    int yKey = newChartHeader.key( yAxisColumn );
+    int xKey = this->headerMap.key( xAxisColumn );
+    int yKey = this->headerMap.key( yAxisColumn );
 
     *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
     *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
@@ -1046,7 +1046,7 @@ QString ChartsModel::getLineAreaWaterfallValues(QString &xAxisColumn, QString &y
 QString ChartsModel::getTreeSunburstValues(QVariantList & xAxisColumn, QString & yAxisColumn)
 {
 
-    if(newChartHeader.empty() || newChartData.empty()){
+    if(this->newChartHeader.empty()){
         return "";
     }
 
@@ -1077,21 +1077,21 @@ QString ChartsModel::getTreeSunburstValues(QVariantList & xAxisColumn, QString &
     // Fetch data here
     int xKey ;
     try{
-        xKey = newChartHeader.key( xAxisColumn.at(0).toString() );
+        xKey = this->headerMap.key( xAxisColumn.at(0).toString() );
     }
     catch(std::exception &e){
         qDebug() << e.what();
         return "{}";
     }
 
-    int yKey = newChartHeader.key( yAxisColumn );
+    int yKey = this->headerMap.key( yAxisColumn );
 
     // Group name operations
     QVector<int> groupKeyValues;
     int groupKeySize = xAxisColumn.length();
 
     for(int i = 0; i < groupKeySize; i++){
-        groupKeyValues.append(newChartHeader.key(xAxisColumn.at(i).toString()));
+        groupKeyValues.append(this->headerMap.key(xAxisColumn.at(i).toString()));
     }
 
     int totalData = (reportChartData.value(this->reportId).value(xKey)).length();
@@ -1110,7 +1110,7 @@ QString ChartsModel::getTreeSunburstValues(QVariantList & xAxisColumn, QString &
 
             for(int j = 0; j < groupKeySize; j++){
 
-                yKeyLoop = newChartHeader.key( xAxisColumn.at(j).toString());
+                yKeyLoop = this->headerMap.key( xAxisColumn.at(j).toString());
                 paramName = reportChartData.value(this->reportId).value(yKeyLoop).at(i);
 
                 // Generate unique hash to strings to be stored in master hash
@@ -1211,7 +1211,7 @@ QString ChartsModel::getTreeSunburstValues(QVariantList & xAxisColumn, QString &
 QString ChartsModel::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey)
 {
 
-    if(newChartHeader.empty() || newChartData.empty()){
+    if(this->newChartHeader.empty()){
         return "";
     }
 
@@ -1230,9 +1230,9 @@ QString ChartsModel::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxi
     // Fetch data here
 
 
-    int xKey = newChartHeader.key( xAxisColumn );
-    int yKey = newChartHeader.key( yAxisColumn );
-    int splitKey = newChartHeader.key( xSplitKey );
+    int xKey = this->headerMap.key( xAxisColumn );
+    int yKey = this->headerMap.key( yAxisColumn );
+    int splitKey = this->headerMap.key( xSplitKey );
 
     *xAxisDataPointer = reportChartData.value(this->reportId).value(xKey);
     *yAxisDataPointer = reportChartData.value(this->reportId).value(yKey);
@@ -1313,7 +1313,7 @@ QString ChartsModel::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxi
 
 QString ChartsModel::getTablePivotValues(QVariantList &xAxisColumn, QVariantList &yAxisColumn)
 {
-    if(newChartHeader.empty() || newChartData.empty()){
+    if(this->newChartHeader.empty()){
         return "";
     }
 
@@ -1345,7 +1345,7 @@ QString ChartsModel::getTablePivotValues(QVariantList &xAxisColumn, QVariantList
 
     try{
         for(int i = 0; i < xAxisLength; i++){
-            xKey.append(newChartHeader.key( xAxisColumn.at(i).toString()));
+            xKey.append(this->headerMap.key( xAxisColumn.at(i).toString()));
             xAxisDataPointer->insert(i, reportChartData.value(this->reportId).value(xKey.at(i)));
 
             // Append to output columns -- all x axis names
@@ -1357,7 +1357,7 @@ QString ChartsModel::getTablePivotValues(QVariantList &xAxisColumn, QVariantList
 
     try{
         for(int i = 0; i < yAxisLength; i++){
-            yKey.append(newChartHeader.key( yAxisColumn.at(i).toString()));
+            yKey.append(this->headerMap.key( yAxisColumn.at(i).toString()));
             yAxisDataPointer->insert(i, reportChartData.value(this->reportId).value(yKey.at(i)));
 
             // Append to output columns -- all y axis names
@@ -1445,12 +1445,27 @@ QString ChartsModel::getTablePivotValues(QVariantList &xAxisColumn, QVariantList
     return strData;
 }
 
-void ChartsModel::receiveReportData()
+void ChartsModel::receiveHeaders(QMap<int, QStringList> newChartHeader)
 {
+    qDebug() << "HEADERS" << newChartHeader;
+    this->newChartHeader = newChartHeader;
 
+    QList<int> keyList = this->newChartHeader.keys();
+
+    foreach(int key, keyList){
+        headerMap.insert(key, this->newChartHeader.value(key).at(0));
+    }
 }
 
-void ChartsModel::reveiveDashboardData()
+void ChartsModel::receiveReportData(QMap<QString, QMap<int, QStringList>> newChartData, QString currentReportId)
 {
+    qDebug() << "REPORT DATA" << newChartData;
+    this->reportChartData = newChartData;
+    this->reportId = currentReportId;
+}
 
+void ChartsModel::receiveDashboardData(QMap<int, QMap<int, QStringList>> newChartData, int currentDashboardId)
+{
+    qDebug() << "DASHBOARD DATA" << newChartData;
+    this->dashboardId = currentDashboardId;
 }

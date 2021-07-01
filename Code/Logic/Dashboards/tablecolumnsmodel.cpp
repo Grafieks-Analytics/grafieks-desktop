@@ -126,3 +126,8 @@ void TableColumnsModel::getChartHeader(QMap<int, QStringList> chartHeader)
     emit sendFilteredColumn(currentDashboard, this->categoryList, this->numericalList, this->dateList);
 
 }
+
+void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap<int, QVariantMap> columnFilterType, QMap<int, QVariantMap> columnIncludeExcludeMap, QMap<int, QMap<QString, QStringList> > columnValueMap)
+{
+    qDebug() << "FILTER SIGNAL RECEIVED" << showColumns << columnFilterType << columnIncludeExcludeMap << columnValueMap;
+}
