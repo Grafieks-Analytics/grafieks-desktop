@@ -43,6 +43,14 @@ Rectangle{
         }
     }
 
+    Connections{
+        target: TableColumnsModel
+
+        function onChartValuesChanged(dashboardId){
+            startReDrawingCharts()
+        }
+    }
+
     // Connections Ends
     /***********************************************************************************************************************/
 
