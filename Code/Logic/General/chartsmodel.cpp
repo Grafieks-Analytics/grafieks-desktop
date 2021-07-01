@@ -25,6 +25,8 @@ QString ChartsModel::getBarChartValues(QString xAxisColumn, QString yAxisColumn)
     int xKey = this->headerMap.key( xAxisColumn );
     int yKey = this->headerMap.key( yAxisColumn );
 
+    qDebug() << "TYPER" << this->currentChartSource  << this->chartSources.at(0) << dashboardFilterApplied;
+
     if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
         *xAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(xKey);
         *yAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(yKey);

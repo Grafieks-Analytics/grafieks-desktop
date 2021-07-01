@@ -97,6 +97,7 @@ Item {
             id: filter_apply_btn
             text: "Apply"
             onClicked: {
+                ChartsModel.setChartSource("dashboard", DashboardParamsModel.currentDashboard, true)
                 TableColumnsModel.redrawCharts(DashboardParamsModel.currentDashboard)
                 console.log("Apply dashboard filter here")
             }
