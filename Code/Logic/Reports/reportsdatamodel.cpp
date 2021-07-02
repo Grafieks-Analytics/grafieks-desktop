@@ -46,6 +46,22 @@ void ReportsDataModel::removeTmpChartData()
 
 }
 
+void ReportsDataModel::deleteReportData(QString reportId, bool deleteAll)
+{
+
+    if(deleteAll == false){
+        this->reportChartData.remove(reportId);
+    } else {
+        this->newChartData.clear();
+        this->reportChartData.clear();
+        this->newChartHeader.clear();
+
+        this->numericalList.clear();
+        this->categoryList.clear();
+        this->dateList.clear();
+    }
+}
+
 void ReportsDataModel::getChartData(QMap<int, QStringList *> chartData)
 {
     this->newChartData = chartData;

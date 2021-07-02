@@ -149,6 +149,47 @@ void ReportParamsModel::resetFilter()
     this->setMode(Constants::defaultMode);
 }
 
+void ReportParamsModel::deleteReport(QString reportId, bool allReports)
+{
+
+    if(allReports == false){
+        // Customize Report parameters
+        this->reportsMap.remove(reportId);
+        this->reportsData.remove(reportId);
+        this->dashboardReportInstances.remove(reportId);
+
+        // Filter specific variables
+        this->masterReportFilters.remove(reportId);
+    } else {
+
+        // Customize Report parameters
+        this->reportsMap.clear();
+        this->reportsData.clear();
+        this->dashboardReportInstances.clear();
+
+        // Filter specific variables
+        this->masterReportFilters.clear();
+
+        this->categoricalFilters.clear();
+        this->dateFilters.clear();
+        this->numericalFilters.clear();
+        this->filterColumnMap.clear();
+        this->filterValueMap.clear();
+        this->filterRelationMap.clear();
+        this->filterSlugMap.clear();
+        this->includeExcludeMap.clear();
+        this->includeNullMap.clear();
+        this->selectAllMap.clear();
+        this->filterSectionMap.clear();
+        this->filterCategoryMap.clear();
+        this->filterSubCategoryMap.clear();
+        this->tmpSelectedValues.clear();
+        this->tmpFilterIndex.clear();
+        this->dateFormatMap.clear();
+        this->actualDateValues.clear();
+    }
+}
+
 void ReportParamsModel::clearFilter()
 {
 

@@ -156,6 +156,7 @@ public:
     // Filter specific invokable functions
 
     Q_INVOKABLE void resetFilter();
+    Q_INVOKABLE void deleteReport(QString reportId, bool allReports = false);
     Q_INVOKABLE void clearFilter();
     Q_INVOKABLE void removeFilter(int filterId, QString reportId, QString filterType);
     Q_INVOKABLE void resetInputFields();
