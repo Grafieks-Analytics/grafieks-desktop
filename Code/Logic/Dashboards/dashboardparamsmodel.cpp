@@ -549,8 +549,14 @@ void DashboardParamsModel::deleteColumnValueMap(int dashboardId, QString columnN
         values.removeAll(value);
     }
 
-    valueMap.insert(columnName, values);
-    this->columnValueMap.insert(dashboardId, valueMap);
+    if(values.length() > 0){
+        valueMap.insert(columnName, values);
+        this->columnValueMap.insert(dashboardId, valueMap);
+    } else {
+        this->columnValueMap.remove(dashboardId);
+    }
+
+     emit filterValuesChanged(this->showColumns, this->columnFilterType, this->columnIncludeExcludeMap, this->columnValueMap, dashboardId);
 }
 
 void DashboardParamsModel::setDashboardName(int dashboardId, QString dashboardName)
