@@ -86,7 +86,7 @@ public:
     Q_INVOKABLE bool removeReport(int dashboardId, int reportId);
 
     Q_INVOKABLE bool createNewDashboard(int dashboardId);
-    Q_INVOKABLE bool destroyDashboard(int dashboardId);
+    Q_INVOKABLE bool destroyDashboard(int dashboardId, bool destroyAll = false);
     Q_INVOKABLE QVariantMap fetchAllDashboards(); // returns [dashboardId, dashboardName]
     Q_INVOKABLE QVector<int> fetchReportsInDashboard(int dashboardId);
     Q_INVOKABLE QVariantMap fetchAllReportZOrder(int dashboardId);
@@ -212,6 +212,7 @@ signals:
     void positionXChanged(int positionX);
     void zIndexChanged(int zIndex);
     void dashboardCountChanged(int dashboardCount);
+    void dashboardContentDestroyed(int dashboardId);
     void currentDashboardChanged(int currentDashboard, QVector<int> reportsInDashboard);
     void currentReportChanged(int currentReport);
 

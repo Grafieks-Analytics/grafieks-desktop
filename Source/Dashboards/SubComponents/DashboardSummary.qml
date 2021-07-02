@@ -68,6 +68,13 @@ Rectangle {
             dashboardArea.color = color
             previousColor = color
         }
+
+        function onDashboardContentDestroyed(dashboardId){
+
+            if(dashboardId === -1){
+                rectangles.clear()
+            }
+        }
     }
 
     // Connections Ends

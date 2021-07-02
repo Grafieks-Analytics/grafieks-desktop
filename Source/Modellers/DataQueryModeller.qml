@@ -441,6 +441,14 @@ Page {
 
         resetOnlineStorageType()
 
+        // Destroy dashboards
+        DashboardParamsModel.destroyDashboard(0, true)
+        TableColumnsModel.deleteDashboard(0, true)
+
+        // Destroy reports
+        ReportParamsModel.deleteReport(0, true)
+        ReportsDataModel.deleteReportData(0, true)
+
         // Take back to select connection screen
         stacklayout_home.currentIndex = 3
     }
