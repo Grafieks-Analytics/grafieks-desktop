@@ -21,6 +21,11 @@ Item {
         modelContent.unshift("Select All")
         comboBox.model = modelContent
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+
+        // for the first time, select all values
+        selectAllValue = true
+        selectAll(true)
+
     }
 
     Connections{
@@ -163,6 +168,7 @@ Item {
 
                 CheckDelegate {
                     id: checkDelegate
+                    checked: true
                     indicator: Rectangle {
                         id: parent_border
                         implicitHeight: 16

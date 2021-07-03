@@ -15,8 +15,11 @@ Item {
     property var modelContent: []
 
     onComponentNameChanged: {
-        modelContent = TableColumnsModel.fetchColumnData(componentName)
-        dataListView.model = modelContent
+        var modelList = TableColumnsModel.fetchColumnData(componentName)
+        modelList.unshift("Select All")
+        dataListView.model = modelList
+
+        selectAll(true)
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
@@ -102,7 +105,7 @@ Item {
             CheckBoxTpl{
                 id: multicheckbox
                 checkbox_text: modelData
-                checkbox_checked: false
+                checkbox_checked: true
                 parent_dimension: 14
 
                 onCheckedChanged: onMultiSelectCheckboxSelected(modelData,checked)
@@ -214,17 +217,6 @@ Item {
         }
 
 
-        CheckBoxTpl{
-            id: mainCheckBox
-            checkbox_text: "All"
-            checkbox_checked: false
-            parent_dimension: 14
-            onCheckedChanged: selectAll(checked)
-            anchors.top: searchFilter.bottom
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-        }
-
         ListView{
             id: dataListView
             leftMargin: 10
@@ -234,7 +226,7 @@ Item {
             clip: true
             ScrollBar.vertical: CustomScrollBar {}
             width: parent.width
-            anchors.top: mainCheckBox.bottom
+            anchors.top: searchFilter.bottom
 
 
             delegate:{

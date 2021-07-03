@@ -16,7 +16,9 @@ Item {
     property alias componentName: filterDataItemSingle.objectName
 
     onComponentNameChanged: {
-        dataListView.model = TableColumnsModel.fetchColumnData(componentName)
+        var listModel = TableColumnsModel.fetchColumnData(componentName)
+        listModel.unshift("Select All")
+        dataListView.model = listModel
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
@@ -84,7 +86,7 @@ Item {
             CustomRadioButton{
                 ButtonGroup.group: buttonGroupSingleList
                 radio_text: modelData
-                radio_checked: false
+                radio_checked: index === 0 ? true : false
                 parent_dimension: 16
 
                 onCheckedChanged: onRadioSelect(modelData, checked)

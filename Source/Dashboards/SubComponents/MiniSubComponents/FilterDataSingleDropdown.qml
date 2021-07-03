@@ -14,7 +14,9 @@ Item{
     property alias componentName: filterDataSingleItem.objectName
 
     onComponentNameChanged: {
-        control.model = TableColumnsModel.fetchColumnData(componentName)
+        var listModel = TableColumnsModel.fetchColumnData(componentName)
+        listModel.unshift("Select All")
+        control.model = listModel
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
@@ -136,8 +138,6 @@ Item{
             }
 
             onCurrentValueChanged: onRadioSelect(currentValue)
-
-
         }
     }
 }
