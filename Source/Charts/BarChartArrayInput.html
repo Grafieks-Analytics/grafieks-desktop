@@ -1,792 +1,835 @@
 <html>
+    <head>
+        <script src="./Data/d3DefaultConfig.js"></script>
+        <script src="./Data/utils.js"></script>
+        <script src="./Data/d3.v4.min.js"></script>
+        <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+        <link rel="stylesheet" href="Data/general.css" />
+        <style type="text/css">
+            body {
+                padding: 0;
+                margin: 0;
+                /* overflow-y: hidden; */
+                /* background-color: red; */
+                /* width: 500px; */
+                /* overflow-x: hidden; */
+            }
 
-<head>
-    <script src="./Data/d3DefaultConfig.js"></script>
-    <script src="./Data/utils.js"></script>
-    <script src="./Data/d3.v4.min.js"></script>
-    <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
-    <link rel="stylesheet" href="Data/general.css" />
-    <style type="text/css">
-        body {
-            padding: 0;
-            margin: 0;
-            /* overflow-y: hidden; */
-            /* background-color: red; */
-            /* width: 500px; */
-            /* overflow-x: hidden; */
-        }
+            #tooltip {
+                font-size: 14px;
+                font-family: Arial, Helvetica, sans-serif;
+                min-width: fit-content;
+                max-width: max-content;
+            }
 
-        #tooltip {
-            font-size: 14px;
-            font-family: Arial, Helvetica, sans-serif;
-            min-width: fit-content;
-            max-width: max-content;
-        }
+            #my_dataviz {
+                overflow-x: scroll;
+                margin-left: 72px;
+                /* background-color: yellow; */
+            }
 
-        #my_dataviz {
-
-            overflow-x: scroll;
-            margin-left: 72px;
-            /* background-color: yellow; */
-        }
-
-        #xAxisLabelId {
-            position: fixed;
-            bottom: 20px;
-            z-index: -1;
-            /* background-color: red; */
-            height: 50px;
-        }
-        /* #mainChartWindow{
+            #xAxisLabelId {
+                position: fixed;
+                bottom: 20px;
+                z-index: -1;
+                /* background-color: red; */
+                height: 50px;
+            }
+            /* #mainChartWindow{
             width: 100%;
         } */
-    </style>
-</head>
+        </style>
+    </head>
 
-<body>
+    <body>
+        <div id="mainChartWindow" style="display: flex">
+            <div id="yAxisDiv"></div>
+            <div id="my_dataviz"></div>
+            <div id="xAxisLabelId" style="position: fixed"></div>
+        </div>
+        <!-- <div class="tooltipOut"> -->
+        <div id="tooltip"></div>
+        <!-- <div class="tooltipArrow">assss</div> -->
+        <!-- </div> -->
 
-    <div id="mainChartWindow" style="display: flex;">
-        <div id="yAxisDiv"></div>
-        <div id="my_dataviz"></div>
-        <div id="xAxisLabelId" style="position: fixed;"></div>
-    </div>
-    <!-- <div class="tooltipOut"> -->
-    <div id="tooltip"></div>
-    <!-- <div class="tooltipArrow">assss</div> -->
-    <!-- </div> -->
+        <div id="legend"></div>
+        <script>
+            var extraHeightWorked = false;
+            var redrawn = false;
+            var extraHeight = 0;
 
+            // var data = [
+            //     [
+            //         [
+            //             "barbaz",
+            //             "barbars adsa dsa adsa sad",
+            //             "foobaz",
+            //             "foobar",
+            //             "baz",
+            //             "bar",
+            //             "foo",
+            //         ],
+            //         [10, 40, 10, 50, 30, 20, 71],
+            //     ],
+            //     ["value 1", "value 2Z"],
+            // ];
 
-    <div id="legend" ></div>
-    <script>
-        var extraHeightWorked = false;
-        var redrawn = false;
-        var extraHeight = 0;
+            // prettier-ignore
+            var data = [[["NepalDist1 asd sasadas asd sads", "NepalDist2", "East", "West", "North", "South", "Bongaigaon", "Kokrajhar", "NOIDA", "Lucknow", "Thi1", "D1"], [2121, 443, 1121, 4243, 210, 4415, 2010, 222, -12, -624, 11053, 10]], ["district", "population"]];
 
-        // var data = [
-        //     [
-        //         [
-        //             "barbaz",
-        //             "barbars adsa dsa adsa sad",
-        //             "foobaz",
-        //             "foobar",
-        //             "baz",
-        //             "bar",
-        //             "foo",
-        //         ],
-        //         [10, 40, 10, 50, 30, 20, 71],
-        //     ],
-        //     ["value 1", "value 2Z"],
-        // ];
+            // prettier-ignore
+            var data = [[["2019-11-08", "2019-06-12", "2018-10-11", "2017-06-09", "2020-04-15", "2019-12-05", "2018-11-22", "2017-11-11", "2017-05-13", "2017-08-27", "2019-12-09", "2020-07-16", "2018-09-25", "2019-01-16", "2018-09-17", "2020-10-19", "2019-12-08", "2018-12-27", "2020-09-10", "2019-07-17", "2020-09-19", "2019-03-11", "2017-10-20", "2019-06-20", "2018-04-18", "2019-12-11", "2019-06-17", "2018-11-24", "2018-04-30", "2017-12-05", "2019-06-04", "2019-09-18", "2020-09-14", "2018-04-26", "2020-12-09", "2017-11-26", "2017-10-12", "2018-09-03", "2020-11-13", "2020-05-28", "2020-10-26", "2019-04-05", "2019-09-17", "2018-01-31", "2020-11-06", "2020-11-09", "2020-06-17", "2019-09-06", "2019-08-29", "2019-12-01", "2018-11-13", "2020-11-23", "2020-12-25", "2019-11-03", "2017-08-25", "2018-03-02", "2018-04-05", "2017-12-26", "2017-09-20", "2020-11-05", "2019-11-06", "2020-02-02", "2019-10-13"], [2250, 1456, 1960, 5606, 32, 816, 144, 1332, 112, 490, 158, 142, 2090, 24, 6658, 58, 2578, 2456, 294, 156, 192, 126, 424, 44, 418, 2090, 1250, 534, 426, 2562, 152, 10, 38, 2004, 76, 38, 72, 402, 460, 604, 12, 316, 200, 198, 12, 194, 102, 156, 326, 48, 756, 210, 84, 206, 398, 1576, 316, 1202, 1236, 492, 640, 318, 512]], ["Order_Date", "Sales"]]
 
-        // prettier-ignore
-        var data = [[["NepalDist1 asd sasadas asd sads", "NepalDist2", "East", "West", "North", "South", "Bongaigaon", "Kokrajhar", "NOIDA", "Lucknow", "Thi1", "D1"], [2121, 443, 1121, 4243, 210, 4415, 2010, 222, -12, -624, 11053, 10]], ["district", "population"]];
+            drawChart(data);
 
-        // prettier-ignore
-        // var data = [[["2019-11-08", "2019-06-12", "2018-10-11", "2017-06-09", "2020-04-15", "2019-12-05", "2018-11-22", "2017-11-11", "2017-05-13", "2017-08-27", "2019-12-09", "2020-07-16", "2018-09-25", "2019-01-16", "2018-09-17", "2020-10-19", "2019-12-08", "2018-12-27", "2020-09-10", "2019-07-17", "2020-09-19", "2019-03-11", "2017-10-20", "2019-06-20", "2018-04-18", "2019-12-11", "2019-06-17", "2018-11-24", "2018-04-30", "2017-12-05", "2019-06-04", "2019-09-18", "2020-09-14", "2018-04-26", "2020-12-09", "2017-11-26", "2017-10-12", "2018-09-03", "2020-11-13", "2020-05-28", "2020-10-26", "2019-04-05", "2019-09-17", "2018-01-31", "2020-11-06", "2020-11-09", "2020-06-17", "2019-09-06", "2019-08-29", "2019-12-01", "2018-11-13", "2020-11-23", "2020-12-25", "2019-11-03", "2017-08-25", "2018-03-02", "2018-04-05", "2017-12-26", "2017-09-20", "2020-11-05", "2019-11-06", "2020-02-02", "2019-10-13"], [2250, 1456, 1960, 5606, 32, 816, 144, 1332, 112, 490, 158, 142, 2090, 24, 6658, 58, 2578, 2456, 294, 156, 192, 126, 424, 44, 418, 2090, 1250, 534, 426, 2562, 152, 10, 38, 2004, 76, 38, 72, 402, 460, 604, 12, 316, 200, 198, 12, 194, 102, 156, 326, 48, 756, 210, 84, 206, 398, 1576, 316, 1202, 1236, 492, 640, 318, 512]], ["Order_Date", "Sales"]]
+            function drawChart(data, plottingConfiguration = {}) {
+                if (!redrawn) {
+                    extraHeight = 0;
+                }
+                window.data = data;
+                dataValues = data[0];
 
-        drawChart(data);
+                var parseTime = d3.timeParse("%d-%b-%y");
 
-        function drawChart(data, plottingConfiguration = {}) {
-            if (!redrawn) {
-                extraHeight = 0;
-            }
-            window.data = data;
-            dataValues = data[0];
+                var dataValues = data[0];
+                //   var [data, keys, labels] = transformData(
+                //     data[0],
+                //     dateFormat,
+                //     dateFormat1
+                // );
 
-            var parseTime = d3.timeParse("%d-%b-%y");
+                // Plot configuration contains all the config of report, these values are passed from QML,
+                // if no value is passed default value is taken from defaultConfig.js
 
-            var dataValues = data[0];
-            //   var [data, keys, labels] = transformData(
-            //     data[0],
-            //     dateFormat,
-            //     dateFormat1
-            // );
+                let {
+                    d3colorPalette,
+                    paddingInner,
+                    markerShape,
+                    curveType,
+                    dateFormat,
+                    chartType,
+                    toolTip,
+                    legendConfig = defaultD3Config.defaultLegendConfig,
+                    standardThresholdWidth,
+                    // font size
+                    xLabelfontSize = defaultD3Config.fontSize,
+                    yLabelfontSize = defaultD3Config.fontSize,
+                    xTickfontSize = defaultD3Config.fontSize,
+                    yTickfontSize = defaultD3Config.fontSize,
+                    // font family
+                    xLabelfontFamily = defaultD3Config.fontFamily,
+                    yLabelfontFamily = defaultD3Config.fontFamily,
+                    xTickfontFamily = defaultD3Config.fontFamily,
+                    yTickfontFamily = defaultD3Config.fontFamily,
+                    // font color
+                    xLabelfontColor = defaultD3Config.fontColor,
+                    yLabelfontColor = defaultD3Config.fontColor,
+                    xTickfontColor = defaultD3Config.fontColor,
+                    yTickfontColor = defaultD3Config.fontColor,
+                } = plottingConfiguration;
 
-            // Plot configuration contains all the config of report, these values are passed from QML,
-            // if no value is passed default value is taken from defaultConfig.js
+                window.xLabelfontSize = xLabelfontSize;
+                window.yLabelfontSize = yLabelfontSize;
+                window.xTickfontSize = xTickfontSize;
+                window.yTickfontSize = yTickfontSize;
 
-            let {
-                d3colorPalette,
-                paddingInner,
-                markerShape,
-                curveType,
-                dateFormat,
-                chartType,
-                toolTip,
-                legendConfig,
-                standardThresholdWidth,
-                // font size
-                xLabelfontSize = defaultD3Config.fontSize,
-                yLabelfontSize = defaultD3Config.fontSize,
-                xTickfontSize = defaultD3Config.fontSize,
-                yTickfontSize = defaultD3Config.fontSize,
-                // font family
-                xLabelfontFamily = defaultD3Config.fontFamily,
-                yLabelfontFamily = defaultD3Config.fontFamily,
-                xTickfontFamily = defaultD3Config.fontFamily,
-                yTickfontFamily = defaultD3Config.fontFamily,
-                // font color
-                xLabelfontColor = defaultD3Config.fontColor,
-                yLabelfontColor = defaultD3Config.fontColor,
-                xTickfontColor = defaultD3Config.fontColor,
-                yTickfontColor = defaultD3Config.fontColor,
+                window.xLabelfontFamily = xLabelfontFamily;
+                window.yLabelfontFamily = yLabelfontFamily;
+                window.xTickfontFamily = xTickfontFamily;
+                window.yTickfontFamily = yTickfontFamily;
 
-            } = plottingConfiguration;
+                window.xLabelfontColor = xLabelfontColor;
+                window.yLabelfontColor = yLabelfontColor;
+                window.xTickfontColor = xTickfontColor;
+                window.yTickfontColor = yTickfontColor;
 
-            window.xLabelfontSize = xLabelfontSize;
-            window.yLabelfontSize = yLabelfontSize;
-            window.xTickfontSize = xTickfontSize;
-            window.yTickfontSize = yTickfontSize;
+                d3.selectAll("#my_dataviz").html("");
+                d3.selectAll("#yAxisDiv").html("");
 
-            window.xLabelfontFamily = xLabelfontFamily;
-            window.yLabelfontFamily = yLabelfontFamily;
-            window.xTickfontFamily = xTickfontFamily;
-            window.yTickfontFamily = yTickfontFamily;
+                let { legendStatus, legendPosition } = legendConfig;
 
-            window.xLabelfontColor = xLabelfontColor;
-            window.yLabelfontColor = yLabelfontColor;
-            window.xTickfontColor = xTickfontColor;
-            window.yTickfontColor = yTickfontColor;
+                d3.select("#legend").html("").style("padding", "");
+                if (!d3colorPalette) {
+                    d3colorPalette = defaultD3Config.d3ColorPalette;
+                }
+                d3Colors = d3colorPalette;
 
-            d3.selectAll("#my_dataviz").html("");
-            d3.selectAll("#yAxisDiv").html("");
+                if (legendStatus) {
+                    d3.select("#legend").html("");
 
-            if (!legendConfig) {
-                legendConfig = { legendStatus: true, legendPosition: "right" };
-            }
-            let { legendStatus, legendPosition } = legendConfig;
-
-
-            d3.select("#legend").html("").style("padding", "");
-            if (!d3colorPalette) {
-                d3colorPalette = defaultD3Config.d3ColorPalette;
-            }
-            d3Colors = d3colorPalette;
-
-            if (legendStatus) {
-                d3.select("#legend").html("");
-              
-                d3.select("#legend")
-                    .append("p")
-                    .html("Product_Name")
-                    .style("font-weight", "bold")
-                    .style("margin", 0)
-                    .style("position", "sticky")
+                    d3.select("#legend")
+                        .append("p")
+                        .html("Product_Name")
+                        .style("font-weight", "bold")
+                        .style("margin", 0)
+                        .style("position", "sticky");
                     // .style("top", "20")
                     // .style("margin-bottom", 80+"px");
 
                     // .style("background-color", "red")
-                    
-                d3.select("#legend")
-                    .selectAll("div")
-                    .data(data[0][0])
-                    .enter()
-                    .append("div")
-                    .html((d, i) => {
-                        return (
-                            '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
-                            d3Colors[i % data[0][0].length] +
-                            ';">  </div>' +
-                            "<span style='margin-left: 5px; max-width: 160px'>" +
-                            d +
-                            "</span>"
+
+                    d3.select("#legend")
+                        .selectAll("div")
+                        .data(data[0][0])
+                        .enter()
+                        .append("div")
+                        .html((d, i) => {
+                            return (
+                                '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
+                                d3Colors[i % data[0][0].length] +
+                                ';">  </div>' +
+                                "<span style='margin-left: 5px; max-width: 160px'>" +
+                                d +
+                                "</span>"
+                            );
+                        })
+                        .style("display", "flex")
+                        .style("padding", "2px");
+                }
+
+                if (!paddingInner) {
+                    paddingInner = defaultD3Config.defaultPaddingInner;
+                }
+
+                if (!dateFormat) {
+                    dateFormat = defaultD3Config.dateFormat;
+                }
+
+                if (!chartType) {
+                    chartType = defaultD3Config.chartType;
+                }
+
+                if (!standardThresholdWidth) {
+                    standardThresholdWidth =
+                        defaultD3Config.standardThresholdWidth;
+                }
+
+                const [xAxisLabel, yAxisLabel] = data[1];
+
+                if (!toolTip) {
+                    toolTip = {
+                        textColumn1: xAxisLabel,
+                        textColumn2: yAxisLabel,
+                    };
+                }
+
+                const { top, right, bottom, left } = constants.chartMargins;
+                var margin = { top, right, bottom, left };
+                var width = window.innerWidth - 10;
+
+                var xAxisDataSet = dataValues[0];
+
+                var xAxisDateWiseValues = {};
+
+                var valueDateType = false;
+                if (isDateFormat(xAxisDataSet[0])) {
+                    valueDateType = true;
+                }
+
+                if (valueDateType) {
+                    xAxisDataSet.forEach((d, i) => {
+                        xAxisDataSet[i] = new Date(xAxisDataSet[i]);
+                        var requiredTypeData = getDateFormattedData(
+                            d,
+                            dateFormat
                         );
-                    })
-                    .style("display", "flex")
-                    .style("padding", "2px");   
-            }
 
+                        if (!xAxisDateWiseValues[requiredTypeData]) {
+                            xAxisDateWiseValues[requiredTypeData] = 0;
+                        }
 
+                        xAxisDateWiseValues[requiredTypeData] +=
+                            dataValues[1][i];
+                    });
 
-            if (!paddingInner) {
-                paddingInner = defaultD3Config.defaultPaddingInner;
-            }
+                    var sortedKeys = sortDates(xAxisDateWiseValues, dateFormat);
 
-            if (!dateFormat) {
-                dateFormat = defaultD3Config.dateFormat;
-            }
-
-            if (!chartType) {
-                chartType = defaultD3Config.chartType;
-            }
-
-            if (!standardThresholdWidth) {
-                standardThresholdWidth =
-                    defaultD3Config.standardThresholdWidth;
-            }
-
-            const [xAxisLabel, yAxisLabel] = data[1];
-
-
-            if (!toolTip) {
-                toolTip = {
-                    textColumn1: xAxisLabel,
-                    textColumn2: yAxisLabel,
-                };
-            }
-
-            const { top, right, bottom, left } = constants.chartMargins;
-            var margin = { top, right, bottom, left };
-            var width = window.innerWidth - margin.left - margin.right;
-
-            var xAxisDataSet = dataValues[0];
-
-            var xAxisDateWiseValues = {};
-
-            var valueDateType = false;
-            if (isDateFormat(xAxisDataSet[0])) {
-                valueDateType = true;
-            }
-
-            if (valueDateType) {
-                xAxisDataSet.forEach((d, i) => {
-                    xAxisDataSet[i] = new Date(xAxisDataSet[i]);
-                    var requiredTypeData = getDateFormattedData(
-                        d,
-                        dateFormat
+                    dataValues[0] = sortedKeys;
+                    dataValues[1] = sortedKeys.map(
+                        (d, i) => xAxisDateWiseValues[d]
                     );
+                    data[0] = dataValues;
+                }
 
-                    if (!xAxisDateWiseValues[requiredTypeData]) {
-                        xAxisDateWiseValues[requiredTypeData] = 0;
+                if (chartType == constants.chartType.STANDARD) {
+                    width = dataValues[0].length * standardThresholdWidth;
+                }
+
+                var height =
+                    window.innerHeight -
+                    margin.top -
+                    margin.bottom -
+                    extraHeight -
+                    20;
+
+                var legendElement = document.querySelector("#legend");
+                var legendHeight = legendElement.offsetHeight;
+                var legendWidth = legendElement.offsetWidth;
+
+                const yAxisWidth =
+                    document.querySelector("#yAxisDiv").clientWidth;
+
+                d3.select("#legend").attr("style", null);
+                d3.select("#mainChartWindow").attr("style", null);
+
+                if (legendStatus) {
+                    if (
+                        legendHeight <
+                        document.querySelector("html").offsetHeight
+                    ) {
+                        topPosition = "calc(50vh - " + legendHeight / 2 + "px)";
+                    } else {
+                        topPosition = 0;
                     }
 
-                    xAxisDateWiseValues[requiredTypeData] +=
-                        dataValues[1][i];
+                    //  var widthOld = (document.querySelector("#my_dataviz").clientWidth) ;
+                    var widthOld =
+                        document.querySelector("html").clientWidth - 72;
+                    var heightOld = document.querySelector("html").clientHeight;
+
+                    // legendElement.style.padding = "10px";
+                    legendElement.style.border = "1px solid black";
+
+                    switch (legendPosition) {
+                        case "left":
+                            d3.select("#legend")
+                                .attr("style", null)
+                                .style("top", topPosition)
+                                .style("right", "auto")
+                                // .style("bottom", "auto")
+                                .style("left", "0px")
+                                // .style("right", "5px")
+                                .style("display", "block")
+                                .style("max-height", "100vh")
+                                .style("overflow", "scroll")
+                                .style("border", "none")
+                                .style("position", "fixed");
+                            d3.selectAll("#legend div span")
+                                .style("max-width", "160px")
+                                .style("white-space", "nowrap")
+                                .style("overflow", "hidden")
+                                .style("text-overflow", "ellipsis");
+
+                            var legendWidth = legendElement.offsetWidth;
+                            // margin.left += 100;
+                            // width -= 100;
+                            // d3.select("#my_dataviz svg").attr("width", width + margin.left + margin.right);
+
+                            d3.select("#mainChartWindow").attr("style", null);
+                            d3.select("#mainChartWindow").style(
+                                "width",
+                                widthOld - legendWidth + yAxisWidth
+                            );
+                            d3.select("#mainChartWindow").style(
+                                "margin-left",
+                                legendWidth
+                            );
+                            break;
+                        case "top":
+                            d3.select("#mainChartWindow").attr("style", null);
+                            margin.top += 80;
+                            height -= 100;
+                            d3.select("#legend")
+                                .attr("style", null)
+                                .style("top", "1px")
+                                .style("right", "auto")
+                                .style("bottom", "auto")
+                                .style("left", "auto")
+                                .style("display", "flex")
+                                .style("max-width", "99vw")
+                                .style("overflow", "scroll")
+                                .style("border", "none");
+                            d3.selectAll("#legend div span")
+                                .style("max-width", "160px")
+                                .style("white-space", "nowrap")
+                                .style("overflow", "hidden")
+                                .style("text-overflow", "ellipsis");
+
+                            d3.selectAll("#legend div").style(
+                                "padding",
+                                "2px 4px"
+                            );
+                            break;
+                        case "bottom":
+                            height -= 50; // use legend client height
+                            margin.bottom += 10;
+
+                            d3.select("#xAxisLabelId").style("bottom", 50);
+                            d3.select("#mainChartWindow").attr("style", null);
+
+                            // d3.select("#mainChartWindow").style("width", width);
+                            //  d3.select("#mainChartWindow").style("height",heightOld-80 );
+                            d3.select("#mainChartWindow").style(
+                                "margin-left",
+                                0
+                            );
+                            d3.select("#legend")
+                                .attr("style", null)
+                                .style("top", "auto")
+                                .style("right", "auto")
+                                .style("bottom", "0px")
+                                // .style("left", margin.left + "px")
+                                .style("display", "flex")
+                                .style("max-width", "99vw")
+                                .style("overflow", "scroll")
+                                .style("border", "none");
+
+                            d3.selectAll("#legend div span")
+                                .style("max-width", "160px")
+                                .style("white-space", "nowrap")
+                                .style("overflow", "hidden")
+                                .style("text-overflow", "ellipsis");
+                            break;
+                        // For Right Legened
+                        case "right":
+                        default:
+                            // width -= 220;
+                            // d3.select("#my_dataviz").style("width", width + margin.left + margin.right);
+
+                            d3.select("#legend")
+                                .attr("style", null)
+                                .style("right", "5px")
+                                .style("left", "auto")
+                                .style("position", "fixed")
+                                .style("top", topPosition)
+                                .style("max-height", "100vh")
+                                .style("overflow", "scroll")
+                                .style("border", "none")
+                                .style("bottom", "auto")
+                                .style("display", "block");
+                            d3.selectAll("#legend div span")
+                                .style("max-width", "160px")
+                                .style("white-space", "nowrap")
+                                .style("overflow", "hidden")
+                                .style("text-overflow", "ellipsis");
+
+                            d3.select("#mainChartWindow").attr("style", null);
+                            d3.select("#mainChartWindow").style(
+                                "width",
+                                widthOld - legendWidth + yAxisWidth
+                            );
+                            d3.select("#mainChartWindow").style(
+                                "margin-left",
+                                0
+                            );
+                    }
+                }
+
+                width = width - yAxisWidth;
+
+                if (legendPosition == "left" || legendPosition == "right") {
+                    var legendWidth = legendElement.offsetWidth;
+                    width -= legendWidth;
+                }
+
+                var mainChartWidth =
+                    document.querySelector("#mainChartWindow").clientWidth;
+                console.log({ legendWidth, width, mainChartWidth });
+
+                //add svg with margin !important
+                //this is svg is actually group
+                var svg = d3
+                    .selectAll("#my_dataviz")
+                    .append("svg")
+                    .attr("width", width)
+                    .attr(
+                        "height",
+                        height + extraHeight + margin.top + margin.bottom
+                    )
+                    .append("g") //add group to leave margin for axis
+                    .attr("transform", "translate(0," + margin.top + ")");
+
+                var dataset = dataValues[1];
+
+                var maxHeight = d3.max(dataset, function (d) {
+                    return Math.abs(d);
+                });
+                var minHeight = d3.min(dataset, function (d) {
+                    return d;
                 });
 
-                var sortedKeys = sortDates(xAxisDateWiseValues, dateFormat);
-
-                dataValues[0] = sortedKeys;
-                dataValues[1] = sortedKeys.map(
-                    (d, i) => xAxisDateWiseValues[d]
-                );
-                data[0] = dataValues;
-            }
-
-            if (chartType == constants.chartType.STANDARD) {
-                width = dataValues[0].length * standardThresholdWidth;
-            }
-
-            var height =
-                window.innerHeight -
-
-                margin.top -
-                margin.bottom -
-                extraHeight - 20;
-
-
-
-            //add svg with margin !important
-            //this is svg is actually group
-            var svg = d3
-                .selectAll("#my_dataviz")
-                .append("svg")
-                .attr("width", width)
-                .attr(
-                    "height",
-                    height + extraHeight + margin.top + margin.bottom
-                )
-                .append("g") //add group to leave margin for axis
-                .attr(
-                    "transform",
-                    "translate()"
-                );
-
-            var dataset = dataValues[1];
-
-            var maxHeight = d3.max(dataset, function (d) {
-                return Math.abs(d);
-            });
-            var minHeight = d3.min(dataset, function (d) {
-                return d;
-            });
-
-            if (minHeight > 0) {
-                minHeight = 0;
-            }
-
-
-            if (legendStatus) {
-                var legendHeight =
-                    document.querySelector("#legend").offsetHeight;
-                var legendWidth =
-                    document.querySelector("#legend").offsetWidth;
-                var legendElement = document.querySelector("#legend");
-
-                if (legendHeight < document.querySelector("html").offsetHeight) {
-                    topPosition = "calc(50vh - " + (legendHeight / 2) + "px)";
-                }
-                else {
-                    topPosition = 0;
+                if (minHeight > 0) {
+                    minHeight = 0;
                 }
 
-                //  var widthOld = (document.querySelector("#my_dataviz").clientWidth) ;
-                 var widthOld = (document.querySelector("html").clientWidth)-72 ;
-                 var heightOld = (document.querySelector("html").clientHeight) ;
+                // height = height - 100;
+                //set y scale
+                var yScale = d3
+                    .scaleLinear()
+                    .rangeRound([0, height])
+                    .domain([maxHeight, minHeight])
+                    .nice();
+                //show negative
 
-                legendElement.style.padding = "10px";
-                legendElement.style.border = "1px solid black";
+                yaxisTicks = height / 70;
 
+                //add x and y axis
+                var yAxis = d3
+                    .axisLeft(yScale)
+                    .tickSize(0)
+                    .ticks(yaxisTicks)
+                    .tickFormat(d3.format(".2s"));
 
-                switch (legendPosition) {
-                    case "left":
-                        // margin.left += 100;
-                        // width -= 100;
-                        // d3.select("#my_dataviz svg").attr("width", width + margin.left + margin.right);
-                          d3.select("#mainChartWindow").style("width", widthOld + 45 - legendWidth);
-                          d3.select("#mainChartWindow").style("margin-left",  (legendWidth+30));
-                        d3.select("#legend")
-                            .style("top", topPosition)
-                            .style("right", "auto")
-                            // .style("bottom", "auto")
-                            .style("left", "0px")
-                            // .style("right", "5px")
-                            .style("display", "block")
-                            .style("max-height", "100vh")
-                            .style("overflow", "scroll")
-                            .style("border", "none")
-                            .style("position", "fixed");
-                        d3.selectAll("#legend div span")
-                            .style("max-width", "160px")
-                            .style("white-space", "nowrap")
-                            .style("overflow", "hidden")
-                            .style("text-overflow", "ellipsis")
-                        break;
-                    case "top":
-                        margin.top += 80;
-                        // height -= 100;
-                        d3.select("#legend")
-                            .style("top", "1px")
-                            .style("right", "auto")
-                            .style("bottom", "auto")
-                            .style("left", "auto")
-                            .style("display", "flex")
-                            .style("max-width", "99vw")
-                            .style("overflow", "scroll")
-                            .style("border", "none");
-                        d3.selectAll("#legend div span")
-                            .style("max-width", "160px")
-                            .style("white-space", "nowrap")
-                            .style("overflow", "hidden")
-                            .style("text-overflow", "ellipsis")
+                d3.select("#yAxisDiv")
+                    .append("svg")
+                    .attr("width", "72")
+                    .attr("height", height + margin.top + margin.bottom)
+                    .style("margin-top", margin.top - 5)
+                    .append("g") //add group to leave margin for axis
+                    .attr("transform", "translate(" + margin.left + ",5)")
+                    .append("g")
+                    .attr("class", "y-axis")
+                    .call(yAxis);
 
-                        d3.selectAll("#legend div").style(
-                            "padding",
-                            "2px 4px"
-                        );
-                        break;
-                    case "bottom":
-                        // height -= 80;
-                        // margin.bottom += 80;
-                         d3.select("#mainChartWindow").style("width", widthOld );
-                        //  d3.select("#mainChartWindow").style("height",heightOld-80 );
-                           d3.select("#mainChartWindow").style("margin-left", 0);
-                        d3.select("#legend")
-                            .style("top", "auto")
-                            .style("right", "auto")
-                            .style("bottom", "0px")
-                            // .style("left", margin.left + "px")
-                            .style("display", "flex")
-                            .style("max-width", "99vw")
-                            .style("overflow", "scroll")
-                            .style("border", "none");
+                svg.append("g")
+                    .attr("class", "grid")
+                    .style("stroke-width", "1")
+                    .call(
+                        make_y_gridlines(yScale)
+                            .tickSize(-width)
+                            .tickFormat(d3.format(".2s"))
 
-                        d3.selectAll("#legend div span")
-                            .style("max-width", "160px")
-                            .style("white-space", "nowrap")
-                            .style("overflow", "hidden")
-                            .style("text-overflow", "ellipsis")
-                        break;
-                    // For Right Legened
-                    case "right":
-                    default:
-                        // width -= 220;
-                        // d3.select("#my_dataviz").style("width", width + margin.left + margin.right);
-                       
-                            d3.select("#mainChartWindow").style("width", widthOld - legendWidth);
-                            d3.select("#mainChartWindow").style("margin-left", 0);
+                        //  .tickValues([0, .2, .5, .70, 1])
+                        // .tickFormat((d, i) => ['a', 'e', 'i', 'o', 'u'][i]);
+                    );
 
-                        d3.select("#legend")
-                            .style("right", "5px")
-                            .style("left", "auto")
-                            .style("position", "fixed")
-                            .style("top", topPosition)
-                            .style("max-height", "100vh")
-                            .style("overflow", "scroll")
-                            .style("border", "none")
-                            .style("bottom", "auto")
-                            .style("display", "block");
-                        d3.selectAll("#legend div span")
-                            .style("max-width", "160px")
-                            .style("white-space", "nowrap")
-                            .style("overflow", "hidden")
-                            .style("text-overflow", "ellipsis")
+                d3.selectAll("#yAxisDiv text")
+                    .attr("font-size", yTickfontSize)
+                    .attr("font-family", yTickfontFamily)
+                    .attr("fill", yTickfontColor);
+                // .attr("dy", 40)
 
-                }
-            }
+                //  .text(d3.format("~s")(d3.selectAll("#yAxisDiv text").text()))
+                //  .text(d3.format(".2s")(1500))
 
+                //add x axis
+                var xScale = d3
+                    .scaleBand()
+                    .domain(dataValues[0])
+                    .range([0, width])
+                    .padding(paddingInner)
+                    .paddingInner(paddingInner);
 
-            //set y scale
-            var yScale = d3
-                .scaleLinear()
-                .rangeRound([0, height])
-                .domain([maxHeight, minHeight])
-                .nice();
-            //show negative
+                //scaleBand is used for  bar chart
 
-            yaxisTicks = height / 70;
-
-            //add x and y axis
-            var yAxis = d3.axisLeft(yScale).tickSize(0).ticks(yaxisTicks).tickFormat(d3.format(".2s"));
-
-            d3.select("#yAxisDiv")
-                .append("svg")
-                .attr("width", "72")
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g") //add group to leave margin for axis
-                .attr(
-                    "transform",
-                    "translate(" + margin.left + "," + 5 + ")"
-                )
-                .append("g")
-                .attr("class", "y-axis")
-                .call(yAxis);
-
-            // svg.append("g")
-            //     .attr("class", "grid")
-            //     .style("stroke-width", "1")
-            //     // .call(
-            //     //     make_y_gridlines(yScale).tickSize(-width)
-            //     //         .tickFormat(d3.format(".2s"))
-
-            //     //     //  .tickValues([0, .2, .5, .70, 1])
-            //     //     // .tickFormat((d, i) => ['a', 'e', 'i', 'o', 'u'][i]);
-            //     // );
-            d3.selectAll("#yAxisDiv text")
-                .attr("font-size", yTickfontSize)
-                .attr("font-family", yTickfontFamily)
-                .attr("fill", yTickfontColor)
-            // .attr("dy", 40)
-
-            //  .text(d3.format("~s")(d3.selectAll("#yAxisDiv text").text()))
-            //  .text(d3.format(".2s")(1500))
-
-
-            //add x axis
-            var xScale = d3
-                .scaleBand()
-                .domain(dataValues[0])
-                .range([0, width])
-                .padding(paddingInner)
-                .paddingInner(paddingInner);
-
-            //scaleBand is used for  bar chart
-
-            /*if domain is specified, sets the domain to the specified array of values.
+                /*if domain is specified, sets the domain to the specified array of values.
         The first element in domain will be mapped to the first band, the second domain value to the second band, and so on.
         Domain values are stored internally in a map from stringified value to index; the resulting index is then used to determine the band.
         Thus, a band scale’s values must be coercible to a string, and the stringified version of the domain value uniquely identifies the corresponding band.
         If domain is not specified, this method returns the current domain.*/
 
-            var barpadding = 10;
-            var bars = svg
-                .selectAll("rect")
-                .data(dataset)
-                .enter()
-                .append("rect")
-                .attr("class", "bar")
-                .attr("x", function (d, i) {
-                    return xScale(dataValues[0][i]); //i*(width/dataset.length);
-                })
-                .attr("y", function (d) {
-                    if (d < 0) {
-                        return yScale(0);
-                    } else {
-                        return yScale(d);
-                    }
-                }) //for bottom to top
-                .attr(
-                    "width",
-                    xScale.bandwidth() /*width/dataset.length-barpadding*/
-                )
-                .attr("height", function (d) {
-                    var height = Math.abs(yScale(0) - yScale(Math.abs(d)));
-                    if (!height) {
-                        height = 1;
-                    }
-                    return height;
-                })
-                .attr("fill", d3Colors[4])
-                .on("mouseout", function (d, i) {
-                    d3.select("#tooltip").style("display", "none");
-                    d3.selectAll(".bar").style("opacity", 1);
-                })
-                .on("mouseover mousemove", function (d, i) {
-                    let xpos = d3.mouse(this)[0] + margin.left;
-                    let ypos = d3.mouse(this)[1];
-                    d3.select("#tooltip")
-                        // .style("left", xpos + "px")
-                        // .style("left", xpos -500+ "px")
-                        .style("top", ypos - 22 + "px")
-                        .style("display", "block")
-                        // .text(dataset[i]);
-                        .html(function () {
-                            var textValue = d.y0 - d.y1;
-                            if (d.y1 < 0) {
-                                textValue = d.y1 - d.y0;
-                            }
-
-                            return (
-                                "<div class='arrowTooltip'></div>" +
-                                "<span style='color:grey;''>" +
-                                toolTip.textColumn1 +
-                                ":&nbsp;&nbsp;" +
-                                "</span>" +
-                                "<span style='float: right;'>" +
-                                xAxisDataSet[i] +
-                                "</span>" +
-                                "<br/> <br/>" +
-                                "<span style='color:grey;''>" +
-                                toolTip.textColumn2 +
-                                ":" +
-                                "</span>" +
-                                "<span style='float: right;margin-left: 15px;'>" +
-                                dataset[i] +
-                                "</span>"
-                            );
-                        });
-
-                    if (xpos - window.scrollX > (document.documentElement.clientWidth - document.querySelector("#tooltip").clientWidth)) {
+                var barpadding = 10;
+                var bars = svg
+                    .selectAll("rect")
+                    .data(dataset)
+                    .enter()
+                    .append("rect")
+                    .attr("class", "bar")
+                    .attr("x", function (d, i) {
+                        return xScale(dataValues[0][i]); //i*(width/dataset.length);
+                    })
+                    .attr("y", function (d) {
+                        if (d < 0) {
+                            return yScale(0);
+                        } else {
+                            return yScale(d);
+                        }
+                    }) //for bottom to top
+                    .attr(
+                        "width",
+                        xScale.bandwidth() /*width/dataset.length-barpadding*/
+                    )
+                    .attr("height", function (d) {
+                        var height = Math.abs(yScale(0) - yScale(Math.abs(d)));
+                        if (!height) {
+                            height = 1;
+                        }
+                        return height;
+                    })
+                    .attr("fill", d3Colors[4])
+                    .on("mouseout", function (d, i) {
+                        d3.select("#tooltip").style("display", "none");
+                        d3.selectAll(".bar").style("opacity", 1);
+                    })
+                    .on("mouseover mousemove", function (d, i) {
+                        let xpos = d3.mouse(this)[0] + margin.left;
+                        let ypos = d3.mouse(this)[1];
                         d3.select("#tooltip")
-                            .style("left", xpos - document.querySelector("#tooltip").clientWidth - 10 + "px")
+                            // .style("left", xpos + "px")
+                            // .style("left", xpos -500+ "px")
+                            .style("top", ypos - 22 + "px")
+                            .style("display", "block")
+                            // .text(dataset[i]);
+                            .html(function () {
+                                var textValue = d.y0 - d.y1;
+                                if (d.y1 < 0) {
+                                    textValue = d.y1 - d.y0;
+                                }
 
-                        d3.select(".arrowTooltip")
-                            //  document.querySelector("#tooltip:before")
-                            // .style("height","50px";"width","50px";"background-color","red";")
-
-                            .attr("style", "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;")
-
-                    }
-                    else {
-                        d3.select("#tooltip")
-                            .style("left", xpos + 12 + "px")
-
-                        d3.select(".arrowTooltip")
-                            .attr("style", "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;")
-
-                    }
-
-
-
-                    d3.selectAll(".bar").style("opacity", 0.3);
-                    d3.select(this).style("opacity", 1);
-                });
-
-            // if (valueDateType) {
-            //     xAxis.tickFormat(d3.timeFormat(dateFormat));
-            // }
-
-            /*.tickFormat("");remove tick label*/
-
-            var xAxis = d3.axisBottom(xScale);
-            svg.append("g")
-                .call(xAxis)
-                .attr("class", "x-axis")
-                .attr("transform", "translate(0," + height + ")");
-
-
-            setLabel(xAxisLabel, "x_label", d3.select('#xAxisLabelId').append("svg").attr("width", window.innerWidth, "height", 150), false);
-            setLabel(yAxisLabel, "y_label", d3.select("svg"), false);
-
-
-            d3.selectAll(".x-axis text")
-                .attr("font-size", xTickfontSize)
-                .attr("font-family", xTickfontFamily)
-                .attr("fill", xTickfontColor)
-
-            setYaxisWidth();
-
-            var barWidth =
-                document.querySelector(".bar") &&
-                document.querySelector(".bar").getBBox().width;
-            if (
-                chartType == constants.chartType.FIT_WIDTH &&
-                barWidth < 40
-            ) {
-                setXaxisWidth();
-            }
-
-            if (chartType == constants.chartType.STANDARD) {
-                setStandardTickWidths();
-            }
-
-            function setStandardTickWidths() {
-                var a = document.querySelectorAll(".x-axis .tick text");
-
-                for (var i = 0; i < a.length; i++) {
-                    var singleCharacterLength =
-                        a[i].getBBox().width / a[i].innerHTML.length;
-                    var numOfCharacters = Math.floor(
-                        barWidth / singleCharacterLength
-                    );
-
-                    var tick = a[i];
-
-                    var tickWidth = tick && tick.getBBox().width;
-                    if (tickWidth > barWidth) {
-                        console.log("Length is long", numOfCharacters);
-                        var tickValue = tick.innerHTML;
-                        tickValue =
-                            tickValue &&
-                            tickValue.substr(0, numOfCharacters - 3) +
-                            "...";
-                        console.log(tickValue);
-                        tick.innerHTML = tickValue;
-                    }
-                }
-            }
-
-            function setXaxisWidth() {
-                var allYAxisTicks =
-                    document.querySelectorAll(".x-axis .tick text");
-                var maxWidth = 0;
-                for (var i = 0; i < allYAxisTicks.length; i++) {
-                    var tick = allYAxisTicks[i];
-                    var width = tick && tick.getBBox().width;
-                    if (width > maxWidth) {
-                        maxWidth = width;
-                    }
-                }
-
-                extraHeightWorked = true;
-                maxWidth = maxWidth < 100 ? maxWidth : 100;
-                extraHeight = maxWidth;
-
-                d3.select(".x-axis").attr("text-anchor", "right");
-                d3.selectAll(".x-axis text")
-                    .attr("transform", "rotate(-90)")
-                    .attr("dy", "0.3em")
-                    .attr("text-anchor", "end")
-                    // .attr("x", "-" + (maxWidth + 3))
-                    .attr("x", "-" + 10)
-                    // .attr("font-size", fontSize)
-                    .attr("y", "0");
-            }
-
-
-
-            // Remove Text in case they are large in number
-            var allXAxisTexts = document.querySelectorAll(".x-axis text");
-            var textWidth =
-                document.querySelector(".x-axis .tick text") &&
-                document.querySelector(".x-axis .tick text").getBBox()
-                    .height;
-
-            if (chartType == constants.chartType.FIT_WIDTH) {
-
-                for (var i = 0; i < allXAxisTexts.length - 1; i++) {
-                    if (!Math.floor(data[0][0].length * 0.02)) {
-                        break;
-                    }
-
-
-                    if (i % Math.floor(data[0][0].length * 0.04) != 0) {
-                        allXAxisTexts[i].remove();
-                        continue;
-                    }
-                }
-            }
-
-            if (chartType === constants.chartType.FIT_WIDTH) {
-                var allXAxisTexts =
-                    document.querySelectorAll(".x-axis text");
-                for (var i = 0; i < allXAxisTexts.length; i++) {
-                    var xAxisTick = allXAxisTexts[i].innerHTML;
-                    // Check added to bypass all the names with length <= 2 from getting trimmed
-                    if (xAxisTick && xAxisTick.length <= 2) {
-                        continue;
-                    }
-                    if (xAxisTick) {
-                        var singleCharacterLength =
-                            allXAxisTexts[i].getBBox().width /
-                            (xAxisTick && xAxisTick.length);
-
-                        var numOfCharacters =
-                            (extraHeight
-                                ? extraHeight
-                                : xScale.bandwidth()) /
-                            singleCharacterLength;
+                                return (
+                                    "<div class='arrowTooltip'></div>" +
+                                    "<span style='color:grey;''>" +
+                                    toolTip.textColumn1 +
+                                    ":&nbsp;&nbsp;" +
+                                    "</span>" +
+                                    "<span style='float: right;'>" +
+                                    xAxisDataSet[i] +
+                                    "</span>" +
+                                    "<br/> <br/>" +
+                                    "<span style='color:grey;''>" +
+                                    toolTip.textColumn2 +
+                                    ":" +
+                                    "</span>" +
+                                    "<span style='float: right;margin-left: 15px;'>" +
+                                    dataset[i] +
+                                    "</span>"
+                                );
+                            });
 
                         if (
-                            xAxisTick &&
-                            xAxisTick.length > numOfCharacters
+                            xpos - window.scrollX >
+                            document.documentElement.clientWidth -
+                                document.querySelector("#tooltip").clientWidth
                         ) {
-                            if (Math.ceil(numOfCharacters) > 3) {
-                                console.log(xAxisTick);
-                                allXAxisTexts[i].innerHTML =
-                                    (xAxisTick &&
-                                        xAxisTick.substr(
-                                            0,
-                                            numOfCharacters - 3
-                                        )) + "...";
-                            } else {
-                                allXAxisTexts[i].innerHTML =
-                                    (xAxisTick && xAxisTick.substr(0, 2)) +
+                            d3.select("#tooltip").style(
+                                "left",
+                                xpos -
+                                    document.querySelector("#tooltip")
+                                        .clientWidth -
+                                    10 +
+                                    "px"
+                            );
+
+                            d3.select(".arrowTooltip")
+                                //  document.querySelector("#tooltip:before")
+                                // .style("height","50px";"width","50px";"background-color","red";")
+
+                                .attr(
+                                    "style",
+                                    "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
+                                );
+                        } else {
+                            d3.select("#tooltip").style(
+                                "left",
+                                xpos + 12 + "px"
+                            );
+
+                            d3.select(".arrowTooltip").attr(
+                                "style",
+                                "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
+                            );
+                        }
+
+                        d3.selectAll(".bar").style("opacity", 0.3);
+                        d3.select(this).style("opacity", 1);
+                    });
+
+                // if (valueDateType) {
+                //     xAxis.tickFormat(d3.timeFormat(dateFormat));
+                // }
+
+                /*.tickFormat("");remove tick label*/
+
+                var xAxis = d3.axisBottom(xScale);
+                svg.append("g")
+                    .call(xAxis.tickSize(0))
+                    .attr("class", "x-axis axis")
+                    .attr("transform", "translate(0," + height + ")");
+
+                setLabel(
+                    xAxisLabel,
+                    "x_label",
+                    d3
+                        .select("#xAxisLabelId")
+                        .append("svg")
+                        .attr("width", window.innerWidth, "height", 150),
+                    false
+                );
+                setLabel(yAxisLabel, "y_label", d3.select("svg"), false);
+
+                d3.selectAll(".x-axis text")
+                    .attr("font-size", xTickfontSize)
+                    .attr("font-family", xTickfontFamily)
+                    .attr("fill", xTickfontColor);
+
+                setYaxisWidth();
+
+                var barWidth =
+                    document.querySelector(".bar") &&
+                    document.querySelector(".bar").getBBox().width;
+                if (
+                    chartType == constants.chartType.FIT_WIDTH &&
+                    barWidth < 40
+                ) {
+                    setXaxisWidth();
+                }
+
+                if (chartType == constants.chartType.STANDARD) {
+                    setStandardTickWidths();
+                }
+
+                function setStandardTickWidths() {
+                    var a = document.querySelectorAll(".x-axis .tick text");
+
+                    for (var i = 0; i < a.length; i++) {
+                        var singleCharacterLength =
+                            a[i].getBBox().width / a[i].innerHTML.length;
+                        var numOfCharacters = Math.floor(
+                            barWidth / singleCharacterLength
+                        );
+
+                        var tick = a[i];
+
+                        var tickWidth = tick && tick.getBBox().width;
+                        if (tickWidth > barWidth) {
+                            console.log("Length is long", numOfCharacters);
+                            var tickValue = tick.innerHTML;
+                            tickValue =
+                                tickValue &&
+                                tickValue.substr(0, numOfCharacters - 3) +
                                     "...";
-                            }
+                            console.log(tickValue);
+                            tick.innerHTML = tickValue;
+                        }
+                    }
+                }
+
+                function setXaxisWidth() {
+                    var allYAxisTicks =
+                        document.querySelectorAll(".x-axis .tick text");
+                    var maxWidth = 0;
+                    for (var i = 0; i < allYAxisTicks.length; i++) {
+                        var tick = allYAxisTicks[i];
+                        var width = tick && tick.getBBox().width;
+                        if (width > maxWidth) {
+                            maxWidth = width;
                         }
                     }
 
-                    if (i == 0 && barWidth < textWidth * 0.5) {
-                        allXAxisTexts[i].setAttribute("dy", "1em");
-                        continue;
-                    }
-                    if (barWidth < textWidth * 0.5) {
-                        allXAxisTexts[i].setAttribute("dy", "0.8em");
-                    }
-                }
-            }
+                    extraHeightWorked = true;
+                    maxWidth = maxWidth < 100 ? maxWidth : 100;
+                    extraHeight = maxWidth;
 
-            if (extraHeightWorked && !redrawn) {
-                extraHeightWorked = false;
-                redrawn = true;
-                drawChart(window.data, plottingConfiguration);
-            }
-
-            if (extraHeightWorked && redrawn) {
-                extraHeightWorked = false;
-                redrawn = false;
-            }
-
-            function setYaxisWidth() {
-                var allYAxisTicks =
-                    document.querySelectorAll(".y-axis .tick");
-                var maxWidth = 72;
-                for (var i = 0; i < allYAxisTicks.length; i++) {
-                    var tick = allYAxisTicks[i];
-                    var width = tick && tick.getBBox().width + 25;
-                    if (width > maxWidth) {
-                        maxWidth = width;
-                    }
+                    d3.select(".x-axis").attr("text-anchor", "right");
+                    d3.selectAll(".x-axis text")
+                        .attr("transform", "rotate(-90)")
+                        .attr("dy", "0.3em")
+                        .attr("text-anchor", "end")
+                        // .attr("x", "-" + (maxWidth + 3))
+                        .attr("x", "-" + 10)
+                        // .attr("font-size", fontSize)
+                        .attr("y", "0");
                 }
 
-                var yAxisDiv = document.querySelector("#yAxisDiv svg");
+                // Remove Text in case they are large in number
+                var allXAxisTexts = document.querySelectorAll(".x-axis text");
+                var textWidth =
+                    document.querySelector(".x-axis .tick text") &&
+                    document.querySelector(".x-axis .tick text").getBBox()
+                        .height;
 
-                yAxisDiv.setAttribute("width", maxWidth);
-                yAxisDiv.setAttribute(
-                    "transform",
-                    "translate(" + (maxWidth - margin.left) + "," + 0 + ")"
-                );
-            }
+                if (chartType == constants.chartType.FIT_WIDTH) {
+                    for (var i = 0; i < allXAxisTexts.length - 1; i++) {
+                        if (!Math.floor(data[0][0].length * 0.02)) {
+                            break;
+                        }
 
-            function make_x_gridlines(x) {
-                return d3.axisBottom(x).ticks(8);
-            }
-            function make_y_gridlines(y) {
-                return d3.axisLeft(y).ticks(yaxisTicks);
-            }
-        }
-    </script>
-</body>
+                        if (i % Math.floor(data[0][0].length * 0.04) != 0) {
+                            allXAxisTexts[i].remove();
+                            continue;
+                        }
+                    }
+                }
 
+                if (chartType === constants.chartType.FIT_WIDTH) {
+                    var allXAxisTexts =
+                        document.querySelectorAll(".x-axis text");
+                    for (var i = 0; i < allXAxisTexts.length; i++) {
+                        var xAxisTick = allXAxisTexts[i].innerHTML;
+                        // Check added to bypass all the names with length <= 2 from getting trimmed
+                        if (xAxisTick && xAxisTick.length <= 2) {
+                            continue;
+                        }
+                        if (xAxisTick) {
+                            var singleCharacterLength =
+                                allXAxisTexts[i].getBBox().width /
+                                (xAxisTick && xAxisTick.length);
+
+                            var numOfCharacters =
+                                (extraHeight
+                                    ? extraHeight
+                                    : xScale.bandwidth()) /
+                                singleCharacterLength;
+
+                            if (
+                                xAxisTick &&
+                                xAxisTick.length > numOfCharacters
+                            ) {
+                                if (Math.ceil(numOfCharacters) > 3) {
+                                    console.log(xAxisTick);
+                                    allXAxisTexts[i].innerHTML =
+                                        (xAxisTick &&
+                                            xAxisTick.substr(
+                                                0,
+                                                numOfCharacters - 3
+                                            )) + "...";
+                                } else {
+                                    allXAxisTexts[i].innerHTML =
+                                        (xAxisTick && xAxisTick.substr(0, 2)) +
+                                        "...";
+                                }
+                            }
+                        }
+
+                        if (i == 0 && barWidth < textWidth * 0.5) {
+                            allXAxisTexts[i].setAttribute("dy", "1em");
+                            continue;
+                        }
+                        if (barWidth < textWidth * 0.5) {
+                            allXAxisTexts[i].setAttribute("dy", "0.8em");
+                        }
+                    }
+                }
+
+                if (extraHeightWorked && !redrawn) {
+                    extraHeightWorked = false;
+                    redrawn = true;
+                    drawChart(window.data, plottingConfiguration);
+                }
+
+                if (extraHeightWorked && redrawn) {
+                    extraHeightWorked = false;
+                    redrawn = false;
+                }
+
+                function setYaxisWidth() {
+                    var allYAxisTicks =
+                        document.querySelectorAll(".y-axis .tick");
+                    var maxWidth = 72;
+                    for (var i = 0; i < allYAxisTicks.length; i++) {
+                        var tick = allYAxisTicks[i];
+                        var width = tick && tick.getBBox().width + 25;
+                        if (width > maxWidth) {
+                            maxWidth = width;
+                        }
+                    }
+
+                    var yAxisDiv = document.querySelector("#yAxisDiv svg");
+
+                    yAxisDiv.setAttribute("width", maxWidth);
+                    yAxisDiv.setAttribute(
+                        "transform",
+                        "translate(" + (maxWidth - margin.left) + "," + 0 + ")"
+                    );
+                }
+
+                function make_x_gridlines(x) {
+                    return d3.axisBottom(x).ticks(8).tickSizeOuter(0);
+                }
+                function make_y_gridlines(y) {
+                    return d3.axisLeft(y).ticks(yaxisTicks);
+                }
+            }
+        </script>
+    </body>
 </html>
