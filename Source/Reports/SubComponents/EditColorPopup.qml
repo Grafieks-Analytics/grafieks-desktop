@@ -279,7 +279,7 @@ Popup {
                 }
             }
             Rectangle{
-                height: parent.height - dataItemListRectangle.height
+                height: parent.height - dataItemListRectangle.height-5
                 width: parent.width
                 border.color: Constants.borderBlueColor
                 border.width: 2
@@ -290,6 +290,8 @@ Popup {
                     model: dataItemList
                     spacing: 10
                     topMargin: 15
+                    clip: true
+                    ScrollBar.vertical: ScrollBar{}
                     delegate: Row{
 
                         height: 20
@@ -316,6 +318,8 @@ Popup {
                                 anchors.left: colorBox.right
                                 anchors.leftMargin: 10
                                 anchors.verticalCenter: parent.verticalCenter
+                                width: parent.width-50
+                                elide: Text.ElideRight
                             }
                             MouseArea{
                                 anchors.fill: parent
