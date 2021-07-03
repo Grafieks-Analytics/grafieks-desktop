@@ -14,9 +14,11 @@ Item {
     anchors.horizontalCenter: parent.horizontalCenter
     property var modelContent: []
     property alias componentName: filterDataMultiItem.objectName
+    property bool selectAllValue: false
 
     onComponentNameChanged: {
         modelContent = TableColumnsModel.fetchColumnData(componentName)
+        modelContent.unshift("Select All")
         comboBox.model = modelContent
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
@@ -31,27 +33,16 @@ Item {
         }
     }
 
-    function onMultiSelectCheckboxSelected(modelData,checked){
+    function onMultiSelectCheckboxSelected(modelData,checked, index){
 
-        if(mainCheckBox.checked === true){
+        if(checked === true){
 
-            if(checked === false){
-                // Set SELECT ALL to false
-                mainCheckBox.checked = false
+            // Start pushing the individual checked item in the array
+            DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
 
-                // Remove item if unchecked
-                DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "", true)
-            }
         } else{
-            if(checked === true){
-
-                // Start pushing the individual checked item in the array
-                DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
-
-            } else{
-                // Remove item if unchecked
-                DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
-            }
+            // Remove item if unchecked
+            DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
         }
 
     }
@@ -128,21 +119,11 @@ Item {
             }
         }
 
-        CheckBoxTpl{
-            id: mainCheckBox
-            checkbox_text: "All"
-            checkbox_checked: false
-            parent_dimension: 14
-            onCheckedChanged: selectAll(checked)
-            anchors.top: columnName.bottom
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-        }
 
         ComboBox {
             id: comboBox
             width: parent.width
-            anchors.top : mainCheckBox.bottom
+            anchors.top : columnName.bottom
 
             indicator: Canvas {
                 id: canvasMultiselect
@@ -214,7 +195,15 @@ Item {
                     //                checked: model.selected
                     //                onCheckedChanged: model.selected = checked
 
-                    onCheckedChanged: onMultiSelectCheckboxSelected(modelData,checked)
+                    onCheckedChanged: {
+
+                        if(index === 0){
+                            selectAllValue = checked
+                            selectAll(checked)
+                        } else {
+                            onMultiSelectCheckboxSelected(modelData,checked, index)
+                        }
+                    }
 
                     Connections{
                         target: DashboardParamsModel
