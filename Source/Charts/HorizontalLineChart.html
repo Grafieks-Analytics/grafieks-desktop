@@ -956,7 +956,7 @@
                     d3colorPalette = defaultD3Config.d3ColorPalette,
                     paddingInner = defaultD3Config.defaultPaddingInner,
                     dateFormat = defaultD3Config.dateFormat,
-                    chartType = defaultD3Config.chartType,
+                    chartType = defaultD3Config.horizontalChartType,
                     toolTip = {
                         textColumn1: "labels[0]",
                         textColumn2: "labels[1]",
@@ -979,10 +979,12 @@
                 clearChart();
 
                 // margins, height, width
-                margin = { top: 20, right: 50, bottom: 80, left: 100 };
+                margin = { top: 20, right: 50, bottom: 50, left: 100 };
                 var width = window.innerWidth - margin.left - margin.right;
 
-                var height = window.innerHeight - margin.top - margin.bottom;
+                var height =
+                    window.innerHeight - margin.top - margin.bottom - 4;
+                console.log(height);
 
                 // Update height based on type of chart
                 /*
@@ -1007,6 +1009,10 @@
                         height + margin.top + margin.bottom <
                         window.innerHeight
                     ) {
+                        console.log(
+                            height + margin.top + margin.bottom,
+                            window.innerHeight
+                        );
                         d3.select("#xAxisDiv").style(
                             "top",
                             height + margin.top + "px"
@@ -1014,7 +1020,12 @@
                     } else {
                         d3.select("#xAxisDiv").style("bottom", 0);
                     }
+                } else {
+                    d3.select("#xAxisDiv").style("bottom", 0);
+                    d3.select("#xAxisDiv").style("top", null);
                 }
+
+                console.log(height);
 
                 yaxisTicks = height / 70;
 
@@ -1047,10 +1058,7 @@
                     .select("#my_dataviz")
                     .append("svg")
                     .attr("width", width + margin.left + margin.right)
-                    .attr(
-                        "height",
-                        height + margin.top + margin.bottom + extraHeight
-                    );
+                    .attr("height", height + extraHeight);
 
                 var g = svg
                     .append("g")
@@ -1145,7 +1153,7 @@
                     .attr("class", "x-axis")
                     .call(xAxis);
 
-                if (!markerStatus) {
+                if (markerStatus) {
                     drawMarker(filledStatus, markerShape);
                 }
 
@@ -1154,7 +1162,7 @@
                 // var barWidth = document.querySelector(".bar").getBBox().width;
                 var barWidth = yScale.bandwidth();
                 if (
-                    chartType == constants.chartType.FIT_WIDTH &&
+                    chartType == constants.chartType.FIT_HEIGHT &&
                     barWidth < 40
                 ) {
                     setXaxisWidth();
@@ -1191,7 +1199,7 @@
 
                 // setXAxisTicksDistance();
 
-                if (chartType == constants.chartType.FIT_WIDTH) {
+                if (chartType == constants.chartType.FIT_HEIGHT) {
                     for (var i = 0; i < a.length; i++) {
                         if (!Math.floor(dataValues.length * 0.02)) {
                             break;
@@ -1224,7 +1232,7 @@
 
                 function setYaxisWidth() {
                     var allYAxisTicks =
-                        document.querySelectorAll(".y-axis .tick");
+                        document.querySelectorAll(".x-axis .tick");
                     var maxWidth = 72;
                     for (var i = 0; i < allYAxisTicks.length; i++) {
                         var tick = allYAxisTicks[i];

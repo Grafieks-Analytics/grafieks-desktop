@@ -447,6 +447,9 @@ Page {
             case Constants.horizontalLineChartTitle:
                 chartUrl = Constants.horizontalLineChartUrl
                 break;
+            case Constants.multiLineChartTitle:
+                chartUrl = Constants.multiLineChartUrl;
+                break;
         }
         webEngineView.url = Constants.baseChartUrl+chartUrl;
         report_desiner_page.chartUrl = chartUrl;
@@ -879,6 +882,11 @@ Page {
                 dataValues =  ChartsModel.getLineChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 // Line Bar - xAxis(String), yAxis(String)
                 //                dataValues =  ChartsModel.getLineBarChartValues("state", "id", "population");
+                break;
+            case Constants.multiLineChartTitle:
+                console.log(Constants.multiLineChartTitle,"CLICKED");
+                colorByColumnName = colorByData[0] && colorByData[0].columnName;
+                dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,yAxisColumns[0], xAxisColumns[0]);
                 break;
             case Constants.horizontalLineChartTitle:
                 console.log(Constants.horizontalLineChartTitle,"CLICKED")

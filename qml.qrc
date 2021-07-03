@@ -266,5 +266,6 @@
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterCustomizeNumerical.qml</file>
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterCustomizeCategorical.qml</file>
         <file>Source/Charts/HorizontalLineChart.html</file>
+        <file>Source/Charts/MultipleLineChart.html</file>
     </qresource>
 </RCC>
