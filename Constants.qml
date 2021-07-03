@@ -325,6 +325,8 @@ QtObject {
     property string barGroupedChartUrl: "BarGroupedChart.html";
     property string barChartUrl: "BarChartArrayInput.html";
 
+    property string multiLineChartUrl: "MultipleLineChart.html";
+
 
     // Charts ends
 
