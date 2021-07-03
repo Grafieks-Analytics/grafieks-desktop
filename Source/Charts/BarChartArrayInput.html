@@ -316,6 +316,7 @@
                             // d3.select("#my_dataviz svg").attr("width", width + margin.left + margin.right);
 
                             d3.select("#mainChartWindow").attr("style", null);
+                            debugger;
                             d3.select("#mainChartWindow").style(
                                 "width",
                                 widthOld - legendWidth + yAxisWidth
@@ -353,6 +354,7 @@
                         case "bottom":
                             height -= 50; // use legend client height
                             margin.bottom += 10;
+                            var legendWidth = legendElement.offsetWidth;
 
                             d3.select("#xAxisLabelId").style("bottom", 50);
                             d3.select("#mainChartWindow").attr("style", null);
@@ -385,6 +387,7 @@
                         default:
                             // width -= 220;
                             // d3.select("#my_dataviz").style("width", width + margin.left + margin.right);
+                            var legendWidth = legendElement.offsetWidth;
 
                             d3.select("#legend")
                                 .attr("style", null)
