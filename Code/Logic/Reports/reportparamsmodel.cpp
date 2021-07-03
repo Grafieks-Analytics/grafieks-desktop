@@ -188,6 +188,8 @@ void ReportParamsModel::deleteReport(QString reportId, bool allReports)
         this->dateFormatMap.clear();
         this->actualDateValues.clear();
     }
+
+    emit reportListChanged();
 }
 
 void ReportParamsModel::clearFilter()

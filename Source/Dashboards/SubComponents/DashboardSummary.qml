@@ -72,6 +72,7 @@ Rectangle {
         function onDashboardContentDestroyed(dashboardId){
 
             if(dashboardId === -1){
+                console.log("CLEAR ALL")
                 rectangles.clear()
             }
         }
