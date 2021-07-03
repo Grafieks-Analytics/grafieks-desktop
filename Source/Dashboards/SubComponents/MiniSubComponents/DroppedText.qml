@@ -87,6 +87,12 @@ Item{
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName))
                 webengine.reload()
         }
+
+        function onDashboardContentDestroyed(dashboardId){
+            if(dashboardId === -1){
+                newItem.destroy()
+            }
+        }
     }
 
 
