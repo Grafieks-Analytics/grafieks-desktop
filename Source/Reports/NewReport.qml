@@ -958,7 +958,7 @@ Page {
            console.log('Chart Url', report_desiner_page.chartUrl, webEngineView.url)
 
            var scriptValue = 'window.addEventListener("resize", function () {
-                    d3.selectAll("#my_dataviz").html("");
+                   clearChart();
                     drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
            });';
 
@@ -1778,13 +1778,13 @@ Page {
     WebEngineView {
         id: webEngineView
         height:parent.height - axis.height -50
-        width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width - 50
+        width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width
         // [Tag: Refector]
         // Move to constants
         url: "../Charts/BarChartArrayInput.html"
         onLoadingChanged: onChartLoaded(loadRequest)
         anchors.left: tool_sep_chartFilters.right
-        anchors.leftMargin: 50
+//        anchors.leftMargin: 50
         anchors.top: axis.bottom
     }
 

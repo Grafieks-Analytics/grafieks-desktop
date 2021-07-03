@@ -442,7 +442,7 @@ Item{
             console.log('Starting to plot');
 
            var scriptValue = 'window.addEventListener("resize", function () {
-                    d3.selectAll("#my_dataviz").html("");
+                    clearChart();
                     drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
            });';
 
