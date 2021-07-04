@@ -12,11 +12,12 @@ Item{
     width: parent.width-25
     anchors.horizontalCenter: parent.horizontalCenter
     property alias componentName: filterDataSingleItem.objectName
+    property var modelContent: []
 
     onComponentNameChanged: {
-        var listModel = TableColumnsModel.fetchColumnData(componentName)
-        listModel.unshift("Select All")
-        control.model = listModel
+        modelContent = TableColumnsModel.fetchColumnData(componentName)
+        modelContent.unshift("Select All")
+        control.model = modelContent
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 

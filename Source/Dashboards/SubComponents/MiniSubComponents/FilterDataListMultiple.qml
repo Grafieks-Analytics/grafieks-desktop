@@ -13,14 +13,17 @@ Item {
     anchors.horizontalCenter: parent.horizontalCenter
     property alias componentName: filterDataItemMulti.objectName
     property var modelContent: []
+    property bool selectAllValue: false
 
     onComponentNameChanged: {
-        var modelList = TableColumnsModel.fetchColumnData(componentName)
-        modelList.unshift("Select All")
-        dataListView.model = modelList
-
-        selectAll(true)
+        modelContent = TableColumnsModel.fetchColumnData(componentName)
+        modelContent.unshift("Select All")
+        dataListView.model = modelContent
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+
+        // for the first time, select all values
+        selectAllValue = true
+        selectAll(true)
     }
 
 
@@ -34,28 +37,19 @@ Item {
         }
     }
 
-    function onMultiSelectCheckboxSelected(modelData,checked){
+    function onMultiSelectCheckboxSelected(modelData,checked, index){
 
-        if(mainCheckBox.checked === true){
+        if(checked === true){
 
-            if(checked === false){
-                // Set SELECT ALL to false
-                mainCheckBox.checked = false
+            // Start pushing the individual checked item in the array
+            DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
 
-                // Remove item if unchecked
-                DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "", true)
-            }
         } else{
-            if(checked === true){
-
-                // Start pushing the individual checked item in the array
-                DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
-
-            } else{
-                // Remove item if unchecked
-                DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
-            }
+            // Remove item if unchecked
+            DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
+            selectAll(false)
         }
+
     }
 
     function toggleSearch(){
@@ -73,7 +67,9 @@ Item {
 
     function searchData(searchText){
         console.log(searchText, componentName)
-        dataListView.model = TableColumnsModel.searchColumnData(searchText, componentName)
+        modelContent = TableColumnsModel.searchColumnData(searchText, componentName)
+        modelContent.unshift("Select All")
+        dataListView.model = modelContent
     }
 
     function filterClicked(){
@@ -108,7 +104,14 @@ Item {
                 checkbox_checked: true
                 parent_dimension: 14
 
-                onCheckedChanged: onMultiSelectCheckboxSelected(modelData,checked)
+                onCheckedChanged: {
+                    if(index === 0){
+                        selectAllValue = checked
+                        selectAll(checked)
+                    } else {
+                        onMultiSelectCheckboxSelected(modelData,checked, index)
+                    }
+                }
 
                 Connections{
                     target: DashboardParamsModel
