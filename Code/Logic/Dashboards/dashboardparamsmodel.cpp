@@ -1064,7 +1064,7 @@ void DashboardParamsModel::setCurrentColumnType(QString currentColumnType)
 void DashboardParamsModel::getColumnNames(QStringList columnNames)
 {
 
-    const QString defaultFilterType = "dataListSingle";  // Do not change this name
+    const QString defaultFilterType = "dataListMulti";  // Do not change this name
     const QString defaultIncludeType = "include";       // Do not change this name
 
     for(int i = 0; i < this->dashboardCount(); i++){
