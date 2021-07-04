@@ -12,13 +12,13 @@ Item {
     height: 200
     anchors.horizontalCenter: parent.horizontalCenter
 
-
     property alias componentName: filterDataItemSingle.objectName
+    property var modelContent: []
 
     onComponentNameChanged: {
-        var listModel = TableColumnsModel.fetchColumnData(componentName)
-        listModel.unshift("Select All")
-        dataListView.model = listModel
+        modelContent = TableColumnsModel.fetchColumnData(componentName)
+        modelContent.unshift("Select All")
+        dataListView.model = modelContent
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
@@ -63,7 +63,9 @@ Item {
 
     function searchData(searchText){
         console.log(searchText, componentName)
-        dataListView.model = TableColumnsModel.searchColumnData(searchText, componentName)
+        modelContent = TableColumnsModel.searchColumnData(searchText, componentName)
+        modelContent.unshift("Select All")
+        dataListView.model = modelContent
     }
 
     function filterClicked(){

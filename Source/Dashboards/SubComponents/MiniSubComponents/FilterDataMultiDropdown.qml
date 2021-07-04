@@ -48,6 +48,7 @@ Item {
         } else{
             // Remove item if unchecked
             DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
+            selectAll(false)
         }
 
     }
@@ -71,6 +72,7 @@ Item {
 
         } else {
             DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "", true)
+
         }
     }
 
