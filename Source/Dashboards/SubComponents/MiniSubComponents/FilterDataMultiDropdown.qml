@@ -14,7 +14,6 @@ Item {
     anchors.horizontalCenter: parent.horizontalCenter
     property var modelContent: []
     property alias componentName: filterDataMultiItem.objectName
-    property bool selectAllValue: false
 
     onComponentNameChanged: {
         modelContent = TableColumnsModel.fetchColumnData(componentName)
@@ -23,7 +22,6 @@ Item {
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
 
         // for the first time, select all values
-        selectAllValue = true
         selectAll(true)
 
     }
@@ -74,6 +72,11 @@ Item {
             DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "", true)
 
         }
+    }
+
+    ButtonGroup {
+        id: childGroup
+        exclusive: false
     }
 
 
@@ -170,7 +173,9 @@ Item {
 
                 CheckDelegate {
                     id: checkDelegate
-                    checked: true
+                    checked: childGroup.checkState
+                    ButtonGroup.group: childGroup
+
                     indicator: Rectangle {
                         id: parent_border
                         implicitHeight: 16
@@ -196,31 +201,25 @@ Item {
                         elide: Text.ElideLeft
                         leftPadding: checkDelegate.indicator.width + checkDelegate.spacing
                     }
-
-
-
                     highlighted: comboBox.highlightedIndex == index
-                    //                checked: model.selected
-                    //                onCheckedChanged: model.selected = checked
 
                     onCheckedChanged: {
 
                         if(index === 0){
-                            selectAllValue = checked
-                            selectAll(checked)
+                            childGroup.checkState = checkState
                         } else {
                             onMultiSelectCheckboxSelected(modelData,checked, index)
                         }
                     }
 
-                    Connections{
-                        target: DashboardParamsModel
-                        function onSelectAllChanged(status, columnName, dashboardId){
-                            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
-                                checkDelegate.checked = status
-                            }
-                        }
-                    }
+//                    Connections{
+//                        target: DashboardParamsModel
+//                        function onSelectAllChanged(status, columnName, dashboardId){
+//                            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
+//                                checkDelegate.checked = status
+//                            }
+//                        }
+//                    }
                 }
             }
         }
