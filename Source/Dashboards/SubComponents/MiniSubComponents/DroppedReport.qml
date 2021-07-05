@@ -109,6 +109,12 @@ Item{
             }
         }
 
+        function onDashboardContentDestroyed(dashboardId){
+            if(dashboardId === -1){
+                newItem.destroy()
+            }
+        }
+
     }
 
     // Connections Ends

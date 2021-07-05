@@ -44,7 +44,7 @@ Item {
                     break;
 
                 default:
-                    control1.checked = true
+                    control2.checked = true
                     break;
                 }
             }

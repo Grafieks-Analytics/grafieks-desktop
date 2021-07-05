@@ -12,9 +12,12 @@ Item{
     width: parent.width-25
     anchors.horizontalCenter: parent.horizontalCenter
     property alias componentName: filterDataSingleItem.objectName
+    property var modelContent: []
 
     onComponentNameChanged: {
-        control.model = TableColumnsModel.fetchColumnData(componentName)
+        modelContent = TableColumnsModel.fetchColumnData(componentName)
+        modelContent.unshift("Select All")
+        control.model = modelContent
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
@@ -136,8 +139,6 @@ Item{
             }
 
             onCurrentValueChanged: onRadioSelect(currentValue)
-
-
         }
     }
 }

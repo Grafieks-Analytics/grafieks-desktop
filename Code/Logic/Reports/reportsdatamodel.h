@@ -31,6 +31,7 @@ public:
     Q_INVOKABLE QStringList searchColumnData(QString columnName, QString keyword);
     Q_INVOKABLE void clearData();
     Q_INVOKABLE void removeTmpChartData();
+    Q_INVOKABLE void deleteReportData(QString reportId, bool deleteAll = false);
 
 public slots:
     void getChartData(QMap<int, QStringList*> chartData);

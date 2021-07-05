@@ -105,28 +105,89 @@ bool DashboardParamsModel::createNewDashboard(int dashboardId)
     return true;
 }
 
-bool DashboardParamsModel::destroyDashboard(int dashboardId)
+bool DashboardParamsModel::destroyDashboard(int dashboardId, bool destroyAll)
 {
-    // Customize dashboard parameters
+    if(destroyAll == false){
+        // Customize dashboard parameters
+        this->dashboardName.remove(dashboardId);
+        this->dashboardBackgroundColor.remove(dashboardId);
+        this->dashboardOpacity.remove(dashboardId);
+        this->dashboardGrid.remove(dashboardId);
+        this->dashboardCanvasDimensions.remove(dashboardId);
 
-    this->dashboardName.remove(dashboardId);
-    this->dashboardBackgroundColor.remove(dashboardId);
-    this->dashboardOpacity.remove(dashboardId);
-    this->dashboardGrid.remove(dashboardId);
-    this->dashboardCanvasDimensions.remove(dashboardId);
+        // Dashboard report mapping
+        this->dashboardReportUrl.remove(dashboardId);
+        this->dashboardReportTypeMap.remove(dashboardId);
+        this->dashboardReportCoordinates.remove(dashboardId);
+        this->dashboardReportsZorder.remove(dashboardId);
+        this->dashboardReportsMap.remove(dashboardId);
 
-    // Dashboard report mapping
-    this->dashboardReportUrl.remove(dashboardId);
-    this->dashboardReportTypeMap.remove(dashboardId);
-    this->dashboardReportCoordinates.remove(dashboardId);
-    this->dashboardReportsZorder.remove(dashboardId);
-    this->dashboardReportsMap.remove(dashboardId);
+        // Destroy filters
+        this->showColumns.remove(dashboardId);
+        this->columnAliasMap.remove(dashboardId);
+        this->columnFilterType.remove(dashboardId);
+        this->columnIncludeExcludeMap.remove(dashboardId);
+        this->columnValueMap.remove(dashboardId);
 
-    // Destroy filters -TODO
+        // Customize Report parameters
+        this->reportName.remove(dashboardId);
+        this->reportBackgroundColor.remove(dashboardId);
+        this->reportLineColor.remove(dashboardId);
+        this->reportOpacity.remove(dashboardId);
 
-    // Decrease dashboard count
-    this->setDashboardCount(this->dashboardCount() - 1);
+        // Decrease dashboard count
+        this->setDashboardCount(this->dashboardCount() - 1);
 
+        emit dashboardContentDestroyed(dashboardId);
+    } else{
+        // Customize dashboard parameters
+        this->dashboardName.clear();
+        this->dashboardBackgroundColor.clear();
+        this->dashboardOpacity.clear();
+        this->dashboardGrid.clear();
+        this->dashboardCanvasDimensions.clear();
+
+        // Dashboard report mapping
+        this->dashboardReportUrl.clear();
+        this->dashboardReportTypeMap.clear();
+        this->dashboardReportCoordinates.clear();
+        this->dashboardReportsZorder.clear();
+        this->dashboardReportsMap.clear();
+
+        // Destroy filters
+        this->showColumns.clear();
+        this->columnAliasMap.clear();
+        this->columnFilterType.clear();
+        this->columnIncludeExcludeMap.clear();
+        this->columnValueMap.clear();
+
+        // Customize Report parameters
+        this->reportName.clear();
+        this->reportBackgroundColor.clear();
+        this->reportLineColor.clear();
+        this->reportOpacity.clear();
+
+        // Decrease dashboard count
+        this->setDashboardCount(1);
+        this->setCurrentDashboard(0);
+        this->setZIndex(1);
+
+        // Create 1 default dashboard
+        QVariantList canvasDimensions;
+        canvasDimensions.append(Constants::defaultCanvasWidth); // width
+        canvasDimensions.append(Constants::defaultCanvasHeight); // height
+
+        this->dashboardName.insert(0, "Dashboard 1");
+        this->dashboardBackgroundColor.insert(0, Constants::DefaultBackgroundColor);
+        this->dashboardOpacity.insert(0, 0);
+        this->dashboardGrid.insert(0, false);
+
+        this->dashboardCanvasDimensions.insert(0, canvasDimensions);
+        this->setTmpCanvasWidth(Constants::defaultCanvasWidth);
+        this->setTmpCanvasHeight(Constants::defaultCanvasHeight);
+
+        emit dashboardContentDestroyed(-1);
+    }
     return true;
 }
 
@@ -549,8 +610,14 @@ void DashboardParamsModel::deleteColumnValueMap(int dashboardId, QString columnN
         values.removeAll(value);
     }
 
-    valueMap.insert(columnName, values);
-    this->columnValueMap.insert(dashboardId, valueMap);
+    if(values.length() > 0){
+        valueMap.insert(columnName, values);
+        this->columnValueMap.insert(dashboardId, valueMap);
+    } else {
+        this->columnValueMap.remove(dashboardId);
+    }
+
+    emit filterValuesChanged(this->showColumns, this->columnFilterType, this->columnIncludeExcludeMap, this->columnValueMap, dashboardId);
 }
 
 void DashboardParamsModel::setDashboardName(int dashboardId, QString dashboardName)
@@ -997,7 +1064,7 @@ void DashboardParamsModel::setCurrentColumnType(QString currentColumnType)
 void DashboardParamsModel::getColumnNames(QStringList columnNames)
 {
 
-    const QString defaultFilterType = "dataListSingle";  // Do not change this name
+    const QString defaultFilterType = "dataListMulti";  // Do not change this name
     const QString defaultIncludeType = "include";       // Do not change this name
 
     for(int i = 0; i < this->dashboardCount(); i++){

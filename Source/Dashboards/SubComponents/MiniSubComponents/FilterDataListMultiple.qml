@@ -16,8 +16,12 @@ Item {
 
     onComponentNameChanged: {
         modelContent = TableColumnsModel.fetchColumnData(componentName)
+        modelContent.unshift("Select All")
         dataListView.model = modelContent
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+
+        // for the first time, select all values
+        selectAll(true)
     }
 
 
@@ -31,28 +35,19 @@ Item {
         }
     }
 
-    function onMultiSelectCheckboxSelected(modelData,checked){
+    function onMultiSelectCheckboxSelected(modelData,checked, index){
 
-        if(mainCheckBox.checked === true){
+        if(checked === true){
 
-            if(checked === false){
-                // Set SELECT ALL to false
-                mainCheckBox.checked = false
+            // Start pushing the individual checked item in the array
+            DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
 
-                // Remove item if unchecked
-                DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "", true)
-            }
         } else{
-            if(checked === true){
-
-                // Start pushing the individual checked item in the array
-                DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
-
-            } else{
-                // Remove item if unchecked
-                DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
-            }
+            // Remove item if unchecked
+            DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
+            selectAll(false)
         }
+
     }
 
     function toggleSearch(){
@@ -70,7 +65,9 @@ Item {
 
     function searchData(searchText){
         console.log(searchText, componentName)
-        dataListView.model = TableColumnsModel.searchColumnData(searchText, componentName)
+        modelContent = TableColumnsModel.searchColumnData(searchText, componentName)
+        modelContent.unshift("Select All")
+        dataListView.model = modelContent
     }
 
     function filterClicked(){
@@ -95,29 +92,53 @@ Item {
         }
     }
 
+    ButtonGroup {
+        id: childGroup
+        exclusive: false
+    }
 
     Component{
         id:multipleselect
         Row{
             CheckBoxTpl{
                 id: multicheckbox
+                objectName: index
+                checkbox_checked: true
                 checkbox_text: modelData
-                checkbox_checked: false
                 parent_dimension: 14
 
-                onCheckedChanged: onMultiSelectCheckboxSelected(modelData,checked)
+                Component.onCompleted: {
+                    if(index > 0){
+                        ButtonGroup.group = childGroup
+                    }
+                }
+
+                onCheckedChanged: {
+                    if(index === 0){
+                        childGroup.checkState = multicheckbox.checkState
+                        selectAll(checked)
+                    } else {
+                        if(multicheckbox.checked === false){
+                            DashboardParamsModel.setSelectAll(false, componentName, DashboardParamsModel.currentDashboard)
+                        }
+                        onMultiSelectCheckboxSelected(modelData, checked, index)
+                    }
+                }
 
                 Connections{
                     target: DashboardParamsModel
                     function onSelectAllChanged(status, columnName, dashboardId){
-                        if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
-                            multicheckbox.checked = status
+                        if(multicheckbox.objectName === "0" && status === false && columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
+                            multicheckbox.checked = false
                         }
                     }
                 }
             }
         }
     }
+
+
+
 
     Rectangle{
         height: parent.height
@@ -214,17 +235,6 @@ Item {
         }
 
 
-        CheckBoxTpl{
-            id: mainCheckBox
-            checkbox_text: "All"
-            checkbox_checked: false
-            parent_dimension: 14
-            onCheckedChanged: selectAll(checked)
-            anchors.top: searchFilter.bottom
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-        }
-
         ListView{
             id: dataListView
             leftMargin: 10
@@ -234,7 +244,7 @@ Item {
             clip: true
             ScrollBar.vertical: CustomScrollBar {}
             width: parent.width
-            anchors.top: mainCheckBox.bottom
+            anchors.top: searchFilter.bottom
 
 
             delegate:{
