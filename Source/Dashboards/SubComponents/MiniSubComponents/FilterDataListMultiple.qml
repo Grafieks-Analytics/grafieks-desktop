@@ -13,7 +13,6 @@ Item {
     anchors.horizontalCenter: parent.horizontalCenter
     property alias componentName: filterDataItemMulti.objectName
     property var modelContent: []
-    property var tmpCheckedValues: []
 
     onComponentNameChanged: {
         modelContent = TableColumnsModel.fetchColumnData(componentName)
@@ -42,17 +41,10 @@ Item {
 
             // Start pushing the individual checked item in the array
             DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
-            tmpCheckedValues.push(modelData)
 
         } else{
             // Remove item if unchecked
             DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
-
-            const removeIndex = tmpCheckedValues.indexOf(modelData);
-            if (removeIndex > -1) {
-                tmpCheckedValues.splice(removeIndex, 1);
-            }
-
             selectAll(false)
         }
 
@@ -88,6 +80,8 @@ Item {
     }
 
     function selectAll(checkedState){
+        DashboardParamsModel.setSelectAll(checkedState, componentName, DashboardParamsModel.currentDashboard)
+
         if(checkedState === true){
             modelContent.forEach(item => {
                                      DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, item)
@@ -108,17 +102,35 @@ Item {
         Row{
             CheckBoxTpl{
                 id: multicheckbox
+                objectName: index
+                checkbox_checked: true
                 checkbox_text: modelData
                 parent_dimension: 14
-                checkbox_checked: childGroup.checkState
-                ButtonGroup.group: childGroup
+
+                Component.onCompleted: {
+                    if(index > 0){
+                        ButtonGroup.group = childGroup
+                    }
+                }
 
                 onCheckedChanged: {
                     if(index === 0){
-                        childGroup.checkState = checkState
-                        selectAll(true)
+                        childGroup.checkState = multicheckbox.checkState
+                        selectAll(checked)
                     } else {
-                        onMultiSelectCheckboxSelected(modelData,checked, index)
+                        if(multicheckbox.checked === false){
+                            DashboardParamsModel.setSelectAll(false, componentName, DashboardParamsModel.currentDashboard)
+                        }
+                        onMultiSelectCheckboxSelected(modelData, checked, index)
+                    }
+                }
+
+                Connections{
+                    target: DashboardParamsModel
+                    function onSelectAllChanged(status, columnName, dashboardId){
+                        if(multicheckbox.objectName === "0" && status === false && columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
+                            multicheckbox.checked = false
+                        }
                     }
                 }
             }

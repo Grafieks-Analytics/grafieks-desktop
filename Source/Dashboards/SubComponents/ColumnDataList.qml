@@ -57,7 +57,6 @@ Rectangle {
 
         function onCurrentDashboardChanged(dashboardId, reportsInDashboard){
             listModel.clear()
-            console.log("DASHBARD ID", dashboardId)
             var showColumns = DashboardParamsModel.fetchShowColumns(dashboardId)
             showColumns.forEach((item) => {
                                     var columnType = DashboardParamsModel.fetchColumnFilterType(dashboardId, item)
