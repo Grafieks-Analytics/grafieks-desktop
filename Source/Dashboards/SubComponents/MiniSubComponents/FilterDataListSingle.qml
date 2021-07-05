@@ -12,11 +12,13 @@ Item {
     height: 200
     anchors.horizontalCenter: parent.horizontalCenter
 
-
     property alias componentName: filterDataItemSingle.objectName
+    property var modelContent: []
 
     onComponentNameChanged: {
-        dataListView.model = TableColumnsModel.fetchColumnData(componentName)
+        modelContent = TableColumnsModel.fetchColumnData(componentName)
+        modelContent.unshift("Select All")
+        dataListView.model = modelContent
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
@@ -61,7 +63,9 @@ Item {
 
     function searchData(searchText){
         console.log(searchText, componentName)
-        dataListView.model = TableColumnsModel.searchColumnData(searchText, componentName)
+        modelContent = TableColumnsModel.searchColumnData(searchText, componentName)
+        modelContent.unshift("Select All")
+        dataListView.model = modelContent
     }
 
     function filterClicked(){
@@ -84,7 +88,7 @@ Item {
             CustomRadioButton{
                 ButtonGroup.group: buttonGroupSingleList
                 radio_text: modelData
-                radio_checked: false
+                radio_checked: index === 0 ? true : false
                 parent_dimension: 16
 
                 onCheckedChanged: onRadioSelect(modelData, checked)

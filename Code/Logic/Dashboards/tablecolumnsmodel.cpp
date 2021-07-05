@@ -78,9 +78,21 @@ void TableColumnsModel::addNewDashboard(int dashboardId)
     emit sendFilteredColumn(dashboardId, this->categoryList, this->numericalList, this->dateList);
 }
 
-void TableColumnsModel::deleteDashboard(int dashboardId)
+void TableColumnsModel::deleteDashboard(int dashboardId, bool deleteAll)
 {
-    this->allColumnVisibleMap.remove(dashboardId);
+    if(deleteAll == false){
+        this->allColumnVisibleMap.remove(dashboardId);
+    } else {
+        this->filteredChartData.clear();
+        this->newChartData.clear();
+        this->newChartHeader.clear();
+        this->chartHeaderDetails.clear();
+
+        this->numericalList.clear();
+        this->categoryList.clear();
+        this->allColumnVisibleMap.clear();
+        this->columnTypes.clear();
+    }
 }
 
 void TableColumnsModel::getChartData(QMap<int, QStringList *> chartData)

@@ -17,8 +17,13 @@ Item {
 
     onComponentNameChanged: {
         modelContent = TableColumnsModel.fetchColumnData(componentName)
+        modelContent.unshift("Select All")
         comboBox.model = modelContent
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+
+        // for the first time, select all values
+        selectAll(true)
+
     }
 
     Connections{
@@ -31,27 +36,17 @@ Item {
         }
     }
 
-    function onMultiSelectCheckboxSelected(modelData,checked){
+    function onMultiSelectCheckboxSelected(modelData,checked, index){
 
-        if(mainCheckBox.checked === true){
+        if(checked === true){
 
-            if(checked === false){
-                // Set SELECT ALL to false
-                mainCheckBox.checked = false
+            // Start pushing the individual checked item in the array
+            DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
 
-                // Remove item if unchecked
-                DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "", true)
-            }
         } else{
-            if(checked === true){
-
-                // Start pushing the individual checked item in the array
-                DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
-
-            } else{
-                // Remove item if unchecked
-                DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
-            }
+            // Remove item if unchecked
+            DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
+            selectAll(false)
         }
 
     }
@@ -75,7 +70,13 @@ Item {
 
         } else {
             DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "", true)
+
         }
+    }
+
+    ButtonGroup {
+        id: childGroup
+        exclusive: false
     }
 
 
@@ -128,21 +129,11 @@ Item {
             }
         }
 
-        CheckBoxTpl{
-            id: mainCheckBox
-            checkbox_text: "All"
-            checkbox_checked: false
-            parent_dimension: 14
-            onCheckedChanged: selectAll(checked)
-            anchors.top: columnName.bottom
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-        }
 
         ComboBox {
             id: comboBox
             width: parent.width
-            anchors.top : mainCheckBox.bottom
+            anchors.top : columnName.bottom
 
             indicator: Canvas {
                 id: canvasMultiselect
@@ -182,6 +173,12 @@ Item {
 
                 CheckDelegate {
                     id: checkDelegate
+                    checked: true
+                    ButtonGroup.group: childGroup
+                    highlighted: comboBox.highlightedIndex == index
+                    anchors.fill: parent
+                    objectName: index
+
                     indicator: Rectangle {
                         id: parent_border
                         implicitHeight: 16
@@ -201,26 +198,36 @@ Item {
                             visible: checkDelegate.checked
                         }
                     }
-                    anchors.fill: parent
                     contentItem: Text {
                         text: modelData
                         elide: Text.ElideLeft
                         leftPadding: checkDelegate.indicator.width + checkDelegate.spacing
                     }
 
+                    Component.onCompleted: {
+                        if(index > 0){
+                            ButtonGroup.group = childGroup
+                        }
+                    }
 
+                    onCheckedChanged: {
 
-                    highlighted: comboBox.highlightedIndex == index
-                    //                checked: model.selected
-                    //                onCheckedChanged: model.selected = checked
-
-                    onCheckedChanged: onMultiSelectCheckboxSelected(modelData,checked)
+                        if(index === 0){
+                            childGroup.checkState = checkDelegate.checkState
+                            selectAll(checked)
+                        } else {
+                            if(checkDelegate.checked === false){
+                                DashboardParamsModel.setSelectAll(false, componentName, DashboardParamsModel.currentDashboard)
+                            }
+                            onMultiSelectCheckboxSelected(modelData,checked, index)
+                        }
+                    }
 
                     Connections{
                         target: DashboardParamsModel
                         function onSelectAllChanged(status, columnName, dashboardId){
-                            if(columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
-                                checkDelegate.checked = status
+                            if(checkDelegate.objectName === "0" && status === false && columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
+                                checkDelegate.checked = false
                             }
                         }
                     }

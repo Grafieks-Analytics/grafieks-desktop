@@ -28,7 +28,7 @@ public:
     Q_INVOKABLE QVariantMap fetchVisibleColumns(int dashboardId);
     Q_INVOKABLE void applyColumnVisibility(int dashboardId);
     Q_INVOKABLE void addNewDashboard(int dashboardId);
-    Q_INVOKABLE void deleteDashboard(int dashboardId);
+    Q_INVOKABLE void deleteDashboard(int dashboardId, bool deleteAll = false);
 
     Q_INVOKABLE QStringList fetchColumnData(QString colName);
     Q_INVOKABLE QStringList searchColumnData(QString keyword, QString columnName);
