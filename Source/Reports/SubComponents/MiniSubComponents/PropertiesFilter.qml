@@ -572,7 +572,7 @@ Column{
 
             CheckBoxTpl{
 
-                checked: false
+                checked: true
                 parent_dimension: editImageSize - 2
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
