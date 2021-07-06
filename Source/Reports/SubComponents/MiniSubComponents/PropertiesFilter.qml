@@ -181,6 +181,14 @@ Column{
         reDrawChart();
     }
 
+
+    function showGrid(checked){
+           var gridConfig = d3PropertyConfig.gridConfig || {};
+           gridConfig['gridStatus'] = checked;
+           d3PropertyConfig.gridConfig = gridConfig;
+           reDrawChart();
+       }
+
     // JAVASCRIPT FUNCTION ENDS
     /***********************************************************************************************************************/
 
@@ -542,6 +550,43 @@ Column{
 
     }
     // Theme Ends
+
+    // Gride Line starts
+    Rectangle{
+
+        height: 30
+        width: parent.width
+
+        Rectangle{
+
+            height: 20
+            width: parent.width
+
+            Text {
+                text: qsTr("Grid Line")
+                anchors.left: parent.left
+                anchors.leftMargin: leftMargin
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: Constants.fontCategoryHeaderSmall
+            }
+
+            CheckBoxTpl{
+
+                checked: false
+                parent_dimension: editImageSize - 2
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.rightMargin: 5
+                anchors.top: parent.top
+                onCheckedChanged: showGrid(checked);
+
+
+            }
+
+        }
+
+    }
+    // Gride Line Ends
 
 
 

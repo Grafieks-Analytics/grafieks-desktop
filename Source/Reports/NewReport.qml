@@ -823,7 +823,8 @@ Page {
             var dataValues = null;
             console.log('Chart Title - Draw Chart Function - ',chartTitle)
             var colorByColumnName = '';
-
+             dataItemList.clear();
+             var colorData = [];
             switch(chartTitle){
             case Constants.horizontalBarChartTitle:
                 console.log("Horizontal BAR");
@@ -832,6 +833,15 @@ Page {
             case Constants.barChartTitle:
                 console.log("BAR CLICKED", xAxisColumns[0])
                 dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
+
+                console.log("colorData5",colorData)
+                colorData = [JSON.parse(dataValues)[1][0]] || [];
+                console.log("colorData2" ,colorData)
+                console.log("dataValues" ,JSON.parse(dataValues))
+                           colorData.forEach(function (element,index) {
+                               dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
+                               console.log("newreportcolor",Constants.d3ColorPalette[index % Constants.d3ColorPalette.length])
+                           });
                 break;
             case Constants.horizontalStackedBarChartTitle:
                 colorByColumnName = colorByData[0] && colorByData[0].columnName;
@@ -936,17 +946,17 @@ Page {
 
             console.log('Webengine View Loading Status:',webEngineView.loading);
             console.log('Data Values:',JSON.stringify(dataValues));
-            colorData = [];
-            console.log("colorData5",colorData)
-            colorData = JSON.parse(dataValues)[1] || [];
-            console.log("colorData2" ,colorData)
-            console.log("dataValues" ,JSON.parse(dataValues))
+//            colorData = [];
+//            console.log("colorData5",colorData)
+//            colorData = JSON.parse(dataValues)[1] || [];
+//            console.log("colorData2" ,colorData)
+//            console.log("dataValues" ,JSON.parse(dataValues))
 
-           dataItemList.clear();
-           colorData.forEach(function (element,index) {
-               dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
-               console.log("newreportcolor",Constants.d3ColorPalette[index % Constants.d3ColorPalette.length])
-           });
+//           dataItemList.clear();
+//           colorData.forEach(function (element,index) {
+//               dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
+//               console.log("newreportcolor",Constants.d3ColorPalette[index % Constants.d3ColorPalette.length])
+//           });
 
            console.log('Selected Chart Title:',report_desiner_page.chartTitle)
            console.log('Selected Chart URL:',report_desiner_page.chartUrl)
