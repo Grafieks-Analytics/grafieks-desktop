@@ -13,6 +13,7 @@ Rectangle{
     property int rowSpacing: 8
 
     readonly property int mapKey: 0
+    property var listViewModel: []
 
 
     /***********************************************************************************************************************/
@@ -51,15 +52,17 @@ Rectangle{
         // Listview height
         function onDateFilterChanged(filterList){
 
-            var modelList = []
+            var newModel = []
+            listFiltersListView.model = newModel
+
             filterList.forEach((item) => {
-                               console.log(item, "ITEM1s", JSON.stringify(ReportParamsModel.fetchFilterColumnMap(0, true)) , JSON.stringify(ReportParamsModel.fetchFilterRelationMap(item)), ReportParamsModel.fetchFilterValueMap(item)[item][0],ReportParamsModel.fetchIncludeExcludeMap(item))
-                               modelList.push(item)
+                                   newModel.push(item)
                                })
 
+            listViewModel = newModel
 
-            listFiltersListView.height = modelList.length * 40
-            listFiltersListView.model = modelList
+            listFiltersListView.height = listViewModel.length * 40
+            listFiltersListView.model = listViewModel
 
         }
     }
@@ -75,9 +78,8 @@ Rectangle{
 
     // Called when remove filter from date list clicked
     function onRemoveElement(filterIndex){
-        FilterDateListModel.deleteFilter(filterIndex)
-        ReportParamsModel.removeJoinRelation(filterIndex)
-        ReportParamsModel.removeJoinValue(filterIndex)
+        console.log("REMOVE", filterIndex, ReportParamsModel.reportId, Constants.dateTab)
+        ReportParamsModel.removeFilter(filterIndex, ReportParamsModel.reportId, Constants.dateTab)
     }
 
     // Called when edit filter from date list clicked
@@ -103,7 +105,7 @@ Rectangle{
         }
 
         //        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
-        ChartsModel.fetchColumnData(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0], JSON.stringify(options))
+        ReportsDataModel.fetchColumnData(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0], JSON.stringify(options))
         console.log("EDIT CLICKED date", ReportParamsModel.fetchFilterColumnMap(filterIndex),ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0], filterIndex, modelIndex, ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0])
 
 
@@ -251,15 +253,15 @@ Rectangle{
                                 MouseArea{
                                     anchors.fill: parent
                                     onClicked: {
+                                        onRemoveElement(modelData)
+//                                        if(category === "date.timeframe"){
+//                                            ReportParamsModel.removeDateFormatMap(value)
+//                                        }
+//                                        if(category === "date.list"){
+////                                            ReportParamsModel.removeTimeFrame(value)
+//                                        }
 
-                                        if(category === "date.timeframe"){
-                                            ReportParamsModel.removeDateFormatMap(value)
-                                        }
-                                        if(category === "date.list"){
-//                                            ReportParamsModel.removeTimeFrame(value)
-                                        }
-
-                                        onRemoveElement(model.index)
+//                                        onRemoveElement(model.index)
 
                                     }
                                 }

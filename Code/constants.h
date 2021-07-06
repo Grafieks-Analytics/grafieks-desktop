@@ -115,10 +115,19 @@ namespace Constants
     const QString slugEqualRelation = "Equal";
     const QString slugNotEqualRelation = "Not Equal";
     const QString slugBetweenRelation = "Between";
-    const QString slugSmallerThanRelation = "Less Than";
+//    const QString slugSmallerThanRelation = "Less Than";
     const QString slugGreaterThanRelation = "Greater Than";
-    const QString slugSmallerThanEqualRelation = "Less Than Equal To";
-    const QString slugGreaterThanEqualRelation = "Greater Than Equal To";
+//    const QString slugSmallerThanEqualRelation = "";
+//    const QString slugGreaterThanEqualRelation = "Greater Than Equal To";
+
+    const QString slugSmallerThanRelation = "Smaller Than";
+    const QString slugSmallerThanEqualRelation = "Equal or Smaller Than";
+    const QString slugGreaterThanEqualRelation = "Equal or Greater Than";
+
+    const QString slugContainingRelation = "Containing";
+    const QString slugEndsWithRelation = "Ends With";
+    const QString slugDoesntStartWithRelation = "Doesnt Start With";
+    const QString slugDoesntEndWithRelation = "Doesnt End With";
 
     // DSParams Settings
     const QString defaultTabSection = categoricalType;

@@ -13,6 +13,8 @@ Rectangle{
     property int rowSpacing: 8
     readonly property int mapKey: 0
 
+    property var listViewModel: []
+
 
     /***********************************************************************************************************************/
     // LIST MODELS STARTS
@@ -44,15 +46,18 @@ Rectangle{
         // Listview height
         function onCategoricalFilterChanged(filterList){
 
-            var modelList = []
+            console.log("DUMP", filterList)
+            var newModel = []
+            listFiltersListView.model = newModel
+
             filterList.forEach((item) => {
-                                   console.log(item, "ITEM1s", JSON.stringify(ReportParamsModel.fetchFilterColumnMap(0, true)) , JSON.stringify(ReportParamsModel.fetchFilterRelationMap(item)), ReportParamsModel.fetchFilterValueMap(item)[item][0],ReportParamsModel.fetchIncludeExcludeMap(item))
-                                   modelList.push(item)
+                                   newModel.push(item)
                                })
 
+            listViewModel = newModel
 
-            listFiltersListView.height = modelList.length * 40
-            listFiltersListView.model = modelList
+            listFiltersListView.height = listViewModel.length * 40
+            listFiltersListView.model = listViewModel
         }
     }
     // Connections Ends
@@ -67,10 +72,8 @@ Rectangle{
 
     // Called when remove filter from categorical list clicked
     function onRemoveElement(filterIndex){
-
-        FilterCategoricalListModel.deleteFilter(filterIndex)
-        ReportParamsModel.removeJoinRelation(filterIndex)
-        ReportParamsModel.removeJoinValue(filterIndex)
+        console.log("REMOVE", filterIndex, ReportParamsModel.reportId, Constants.categoricalTab)
+        ReportParamsModel.removeFilter(filterIndex, ReportParamsModel.reportId, Constants.categoricalTab)
     }
 
     // Called when edit filter from categorical list clicked
@@ -96,7 +99,7 @@ Rectangle{
         }
 
         //        QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
-        ChartsModel.fetchColumnData(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0], JSON.stringify(options))
+        ReportsDataModel.fetchColumnData(ReportParamsModel.fetchFilterColumnMap(filterIndex)[0], JSON.stringify(options))
         console.log("EDIT CLICKED categorical", ReportParamsModel.fetchFilterColumnMap(filterIndex),ReportParamsModel.fetchFilterCategoryMap(filterIndex)[0], filterIndex, modelIndex)
 
 
@@ -186,6 +189,10 @@ Rectangle{
                             text: ReportParamsModel.fetchIncludeExcludeMap(modelData)[0] === true ? "NOT " + ReportParamsModel.fetchFilterSlugMap(modelData)[0] : ReportParamsModel.fetchFilterSlugMap(modelData)[0]
                             anchors.left: parent.left
                             leftPadding: 20
+
+                            onTextChanged: {
+                                console.log("DUMP Col name", ReportParamsModel.fetchFilterColumnMap(modelData))
+                            }
 
                         }
 

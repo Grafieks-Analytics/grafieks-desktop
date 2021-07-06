@@ -109,6 +109,12 @@ Item{
             }
         }
 
+        function onDashboardContentDestroyed(dashboardId){
+            if(dashboardId === -1){
+                newItem.destroy()
+            }
+        }
+
     }
 
     // Connections Ends
@@ -135,6 +141,7 @@ Item{
     function editSelectedReport(reportId){
         stacklayout_home.currentIndex = Constants.newReportIndex;
         ReportParamsModel.setReportId(reportId);
+        ChartsModel.setChartSource("report", ReportParamsModel.reportId)
         ReportParamsModel.setEditReportToggle(reportId);
     }
 
@@ -450,7 +457,7 @@ Item{
            webEngineView.runJavaScript('drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue);
 
            // Clear Chart Data
-            // ChartsModel.clearData();
+            // ReportsDataModel.clearData();
            return;
         }
 

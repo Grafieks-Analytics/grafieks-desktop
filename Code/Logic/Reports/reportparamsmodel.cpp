@@ -149,6 +149,49 @@ void ReportParamsModel::resetFilter()
     this->setMode(Constants::defaultMode);
 }
 
+void ReportParamsModel::deleteReport(QString reportId, bool allReports)
+{
+
+    if(allReports == false){
+        // Customize Report parameters
+        this->reportsMap.remove(reportId);
+        this->reportsData.remove(reportId);
+        this->dashboardReportInstances.remove(reportId);
+
+        // Filter specific variables
+        this->masterReportFilters.remove(reportId);
+    } else {
+
+        // Customize Report parameters
+        this->reportsMap.clear();
+        this->reportsData.clear();
+        this->dashboardReportInstances.clear();
+
+        // Filter specific variables
+        this->masterReportFilters.clear();
+
+        this->categoricalFilters.clear();
+        this->dateFilters.clear();
+        this->numericalFilters.clear();
+        this->filterColumnMap.clear();
+        this->filterValueMap.clear();
+        this->filterRelationMap.clear();
+        this->filterSlugMap.clear();
+        this->includeExcludeMap.clear();
+        this->includeNullMap.clear();
+        this->selectAllMap.clear();
+        this->filterSectionMap.clear();
+        this->filterCategoryMap.clear();
+        this->filterSubCategoryMap.clear();
+        this->tmpSelectedValues.clear();
+        this->tmpFilterIndex.clear();
+        this->dateFormatMap.clear();
+        this->actualDateValues.clear();
+    }
+
+    emit reportListChanged();
+}
+
 void ReportParamsModel::clearFilter()
 {
 
@@ -160,6 +203,42 @@ void ReportParamsModel::clearFilter()
     // variable change
     this->removeTmpSelectedValues(0, true);
     this->removeTmpFilterIndex(0, true);
+}
+
+void ReportParamsModel::removeFilter(int filterId, QString reportId, QString filterType)
+{
+    this->removeFilterColumnMap(filterId);
+    this->removeFilterValueMap(filterId);
+    this->removeFilterRelationMap(filterId);
+    this->removeFilterSlugMap(filterId);
+    this->removeIncludeExcludeMap(filterId);
+    this->removeIncludeNullMap(filterId);
+    this->removeSelectAllMap(filterId);
+    this->removeFilterSectionMap(filterId);
+    this->removeFilterCategoryMap(filterId);
+    this->removeFilterSubCategoryMap(filterId);
+    this->removeDateFormatMap(filterId);
+    this->removeActualDateValues(filterId);
+
+    if(filterType == Constants::categoricalType){
+        this->removeCategoricalFilters(filterId);
+        emit categoricalFilterChanged(this->categoricalFilters);
+    } else if(filterType == Constants::numericalType){
+        this->removeNumericalFilters(filterId);
+        emit numericalFilterChanged(this->numericalFilters);
+    } else if(filterType == Constants::dateType){
+        this->removeDateFilters(filterId);
+        emit dateFilterChanged(this->dateFilters);
+    }
+
+    QMap<int, QVariantMap> intermediateMasterReportsMap = this->masterReportFilters.value(reportId);
+    intermediateMasterReportsMap.remove(filterId);
+    this->masterReportFilters.insert(reportId, intermediateMasterReportsMap);
+    emit masterReportFiltersChanged(this->masterReportFilters.value(reportId).count());
+
+    // This is necessary to reset the filter values in chartsModel after deleting a filter
+    // Else we cannot restore the deleted data in filter selection list
+    emit reportIdChanged(reportId);
 }
 
 void ReportParamsModel::resetInputFields()
@@ -192,6 +271,9 @@ void ReportParamsModel::addToMasterReportFilters(QString reportId)
 
     this->masterReportFilters.insert(reportId, intermediateMasterReportsMap);
 
+    int count = this->masterReportFilters.value(reportId).count();
+    emit masterReportFiltersChanged(count);
+
 }
 
 void ReportParamsModel::fetchMasterReportFilters(QString reportId)
@@ -219,15 +301,17 @@ void ReportParamsModel::deleteMasterReportFilters(QString reportId, bool deleteA
     } else{
         this->masterReportFilters.remove(reportId);
     }
+
+    int count = this->masterReportFilters.value(reportId).count();
+    emit masterReportFiltersChanged(count);
 }
 
 void ReportParamsModel::addToCategoricalFilters(int filterId)
 {
     if(this->categoricalFilters.indexOf(filterId) < 0){
         this->categoricalFilters.append(filterId);
-
-        emit categoricalFilterChanged(this->categoricalFilters);
     }
+    emit categoricalFilterChanged(this->categoricalFilters);
 
 }
 
@@ -249,9 +333,8 @@ void ReportParamsModel::addToDateFilters(int filterId)
 {
     if(this->dateFilters.indexOf(filterId) < 0){
         this->dateFilters.append(filterId);
-
-        emit dateFilterChanged(this->dateFilters);
     }
+    emit dateFilterChanged(this->dateFilters);
 }
 
 QVector<int> ReportParamsModel::fetchDateFilters()
@@ -272,9 +355,9 @@ void ReportParamsModel::addToNumericalFilters(int filterId)
 {
     if(this->numericalFilters.indexOf(filterId) < 0){
         this->numericalFilters.append(filterId);
-
-        emit numericalFilterChanged(this->numericalFilters);
     }
+
+    emit numericalFilterChanged(this->numericalFilters);
 
 }
 
@@ -831,6 +914,12 @@ void ReportParamsModel::setReportId(QString reportId)
 
     m_reportId = reportId;
     emit reportIdChanged(m_reportId);
+
+    // Also emit the following filters
+    // to update the filters list in reports
+    emit categoricalFilterChanged(this->categoricalFilters);
+    emit dateFilterChanged(this->dateFilters);
+    emit numericalFilterChanged(this->numericalFilters);
 }
 
 void ReportParamsModel::setReportTitle(QString reportTitle)
@@ -1013,6 +1102,12 @@ QVariantMap ReportParamsModel::insertMasterFilters(int filterId)
 
 void ReportParamsModel::restoreMasterFilters(int filterId, QVariantMap filterData)
 {
+    this->categoricalFilters.clear();
+    this->dateFilters.clear();
+    this->numericalFilters.clear();
+
+    qDebug() << "DUMP" << filterId << m_reportId << filterData;
+
     if(filterData.value("section") == Constants::categoricalType){
         this->categoricalFilters.append(filterId);
     } else if(filterData.value("section") == Constants::dateType){
