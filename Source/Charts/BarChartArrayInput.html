@@ -664,7 +664,8 @@
                 svg.append("g")
                     .call(xAxis.tickSize([0,0]))
                     .attr("class", "axis label")
-                    .attr("font-family", xDataLabelfontFamily)
+                    // .attr("font-family", xDataLabelfontFamily)
+                    .attr("font-family", xTickfontFamily);
                      
                 // .attr("transform", "translate(0,0)");
                 var labelSelector = document.querySelectorAll(".axis.label text")
