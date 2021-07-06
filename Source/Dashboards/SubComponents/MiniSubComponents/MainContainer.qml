@@ -73,8 +73,14 @@ Rectangle {
                 mainContainer.visible = false
             }
         }
-    }
 
+        function onDashboardContentDestroyed(dashboardId){
+            if(dashboardId === -1){
+                rectangles.clear()
+                mainContainer.destroy()
+            }
+        }
+    }
 
     // Connections Ends
     /***********************************************************************************************************************/

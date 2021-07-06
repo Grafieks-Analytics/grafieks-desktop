@@ -11,12 +11,19 @@ Item {
     id: filterDataMultiItem
     height: comboBox.height + columnName.height
     width: parent.width-25
-       anchors.horizontalCenter: parent.horizontalCenter
+    anchors.horizontalCenter: parent.horizontalCenter
+    property var modelContent: []
     property alias componentName: filterDataMultiItem.objectName
 
     onComponentNameChanged: {
-        comboBox.model = TableColumnsModel.fetchColumnData(componentName)
+        modelContent = TableColumnsModel.fetchColumnData(componentName)
+        modelContent.unshift("Select All")
+        comboBox.model = modelContent
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+
+        // for the first time, select all values
+        selectAll(true)
+
     }
 
     Connections{
@@ -29,6 +36,21 @@ Item {
         }
     }
 
+    function onMultiSelectCheckboxSelected(modelData,checked, index){
+
+        if(checked === true){
+
+            // Start pushing the individual checked item in the array
+            DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
+
+        } else{
+            // Remove item if unchecked
+            DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
+            selectAll(false)
+        }
+
+    }
+
     function filterClicked(){
 
         var currentColumnType = TableColumnsModel.findColumnType(componentName)
@@ -38,131 +60,179 @@ Item {
         labelShapePopup1.visible = true
     }
 
+    function selectAll(checkedState){
+        DashboardParamsModel.setSelectAll(checkedState, componentName, DashboardParamsModel.currentDashboard)
+
+        if(checkedState === true){
+            modelContent.forEach(item => {
+                                     DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, item)
+                                 })
+
+        } else {
+            DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "", true)
+
+        }
+    }
+
+    ButtonGroup {
+        id: childGroup
+        exclusive: false
+    }
+
+
     Rectangle{
-             height: parent.height
-             width: parent.width
-             color: "white"
-             border.color: Constants.darkThemeColor
-    Rectangle{
-        id:columnName
-        width:parent.width
-        height:25
+        height: parent.height
+        width: parent.width
+        color: "white"
+        border.color: Constants.darkThemeColor
+        Rectangle{
+            id:columnName
+            width:parent.width
+            height:25
 
 
-        color: Constants.themeColor
+            color: Constants.themeColor
 
-                   border.color: Constants.darkThemeColor
-        Row{
-
-           spacing: 15
-           anchors.verticalCenter: parent.verticalCenter
-                    anchors.left: parent.left
-                    anchors.leftMargin: 15
-
-
-            Text {
-                id: componentTitle
-                width:123
-                elide: Text.ElideRight
-                font.pixelSize: Constants.fontCategoryHeaderMedium
-                verticalAlignment: Text.AlignVCenter
-            }
-
+            border.color: Constants.darkThemeColor
             Row{
 
-                height: parent.height
-                width: 40
                 spacing: 15
                 anchors.verticalCenter: parent.verticalCenter
-                Image {
-                    source: "/Images/icons/customize.png"
-                    width: 16
-                    height: 16
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: filterClicked()
+                anchors.left: parent.left
+                anchors.leftMargin: 15
+
+
+                Text {
+                    id: componentTitle
+                    width:123
+                    elide: Text.ElideRight
+                    font.pixelSize: Constants.fontCategoryHeaderMedium
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                Row{
+
+                    height: parent.height
+                    width: 40
+                    spacing: 15
+                    anchors.verticalCenter: parent.verticalCenter
+                    Image {
+                        source: "/Images/icons/customize.png"
+                        width: 16
+                        height: 16
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: filterClicked()
+                        }
                     }
                 }
             }
         }
-    }
 
-    ComboBox {
-        id: comboBox
-        width: parent.width
-        anchors.top : columnName.bottom
 
-        indicator: Canvas {
-            id: canvasMultiselect
-            x: comboBox.width - width - comboBox.rightPadding
-            y: comboBox.topPadding + (comboBox.availableHeight - height) / 2
-            width: 12
-            height: 8
-            contextType: "2d"
-
-            Connections {
-                target: comboBox
-                function onPressedChanged(){
-                    canvas.requestPaint()
-                }
-            }
-
-            onPaint: {
-                context.reset();
-                context.moveTo(0, 0);
-                context.lineTo(width, 0);
-                context.lineTo(width / 2, height);
-                context.closePath();
-                context.fillStyle = comboBox.pressed ? "#black" : "#gray";
-                context.fill();
-            }
-        }
-
-        // ComboBox closes the popup when its items (anything AbstractButton derivative) are
-        //  activated. Wrapping the delegate into a plain Item prevents that.
-        delegate: Item {
+        ComboBox {
+            id: comboBox
             width: parent.width
-            height: checkDelegate.height
+            anchors.top : columnName.bottom
 
-            function toggle() {
-                checkDelegate.toggle()
-            }
+            indicator: Canvas {
+                id: canvasMultiselect
+                x: comboBox.width - width - comboBox.rightPadding
+                y: comboBox.topPadding + (comboBox.availableHeight - height) / 2
+                width: 12
+                height: 8
+                contextType: "2d"
 
-            CheckDelegate {
-                id: checkDelegate
-                indicator: Rectangle {
-                    id: parent_border
-                    implicitHeight: 16
-                    implicitWidth: 16
-                    x:  checkDelegate.leftPadding
-                    y: parent.height / 2 - height / 2
-                    border.color: "black"
-
-
-                    Rectangle {
-                        id: child_border
-                        width: 8
-                        height: width
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        color: checkDelegate.down ?  Constants.darkThemeColor : "black"
-                        visible: checkDelegate.checked
+                Connections {
+                    target: comboBox
+                    function onPressedChanged(){
+                        canvas.requestPaint()
                     }
                 }
-                anchors.fill: parent
-                contentItem: Text {
-                    text: modelData
-                    elide: Text.ElideLeft
-                    leftPadding: checkDelegate.indicator.width + checkDelegate.spacing
+
+                onPaint: {
+                    context.reset();
+                    context.moveTo(0, 0);
+                    context.lineTo(width, 0);
+                    context.lineTo(width / 2, height);
+                    context.closePath();
+                    context.fillStyle = comboBox.pressed ? "#black" : "#gray";
+                    context.fill();
+                }
+            }
+
+            // ComboBox closes the popup when its items (anything AbstractButton derivative) are
+            //  activated. Wrapping the delegate into a plain Item prevents that.
+            delegate: Item {
+                width: parent.width
+                height: checkDelegate.height
+
+                function toggle() {
+                    checkDelegate.toggle()
                 }
 
+                CheckDelegate {
+                    id: checkDelegate
+                    checked: true
+                    ButtonGroup.group: childGroup
+                    highlighted: comboBox.highlightedIndex == index
+                    anchors.fill: parent
+                    objectName: index
+
+                    indicator: Rectangle {
+                        id: parent_border
+                        implicitHeight: 16
+                        implicitWidth: 16
+                        x:  checkDelegate.leftPadding
+                        y: parent.height / 2 - height / 2
+                        border.color: "black"
 
 
-                highlighted: comboBox.highlightedIndex == index
-                //                checked: model.selected
-                //                onCheckedChanged: model.selected = checked
+                        Rectangle {
+                            id: child_border
+                            width: 8
+                            height: width
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            color: checkDelegate.down ?  Constants.darkThemeColor : "black"
+                            visible: checkDelegate.checked
+                        }
+                    }
+                    contentItem: Text {
+                        text: modelData
+                        elide: Text.ElideLeft
+                        leftPadding: checkDelegate.indicator.width + checkDelegate.spacing
+                    }
+
+                    Component.onCompleted: {
+                        if(index > 0){
+                            ButtonGroup.group = childGroup
+                        }
+                    }
+
+                    onCheckedChanged: {
+
+                        if(index === 0){
+                            childGroup.checkState = checkDelegate.checkState
+                            selectAll(checked)
+                        } else {
+                            if(checkDelegate.checked === false){
+                                DashboardParamsModel.setSelectAll(false, componentName, DashboardParamsModel.currentDashboard)
+                            }
+                            onMultiSelectCheckboxSelected(modelData,checked, index)
+                        }
+                    }
+
+                    Connections{
+                        target: DashboardParamsModel
+                        function onSelectAllChanged(status, columnName, dashboardId){
+                            if(checkDelegate.objectName === "0" && status === false && columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
+                                checkDelegate.checked = false
+                            }
+                        }
+                    }
+                }
             }
         }
     }
-}
 }

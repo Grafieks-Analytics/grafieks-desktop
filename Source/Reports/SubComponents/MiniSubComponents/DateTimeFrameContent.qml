@@ -72,7 +72,7 @@ Rectangle{
     }
 
     Connections{
-        target: ChartsModel
+        target: ReportsDataModel
 
         function onColumnDataChanged(columnData, options){
 

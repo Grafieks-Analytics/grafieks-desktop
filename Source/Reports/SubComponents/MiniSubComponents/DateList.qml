@@ -38,7 +38,7 @@ ListView{
     /***********************************************************************************************************************/
     // Connections Starts
     Connections{
-        target : ChartsModel
+        target : ReportsDataModel
 
 
         function onSendFilteredColumn(allCategorical, allNumerical, allDates){

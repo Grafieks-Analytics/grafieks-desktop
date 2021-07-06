@@ -30,7 +30,7 @@ Rectangle{
     border.color: Constants.darkThemeColor
 
     property int counter: 0
-    property var acceptedValues:["Equal", "Not Equal To", "Smaller Than", "Greater Than", "Equal or Smaller Than", "Equal or Greater Than", "Between"]
+    property var acceptedValues:["Equal", "Not Equal", "Smaller Than", "Greater Than", "Equal or Smaller Than", "Equal or Greater Than", "Between"]
 
 
 
@@ -43,7 +43,7 @@ Rectangle{
             menuItem:"Equal"
         }
         ListElement{
-            menuItem:"Not Equal To"
+            menuItem:"Not Equal"
         }
         ListElement{
             menuItem:"Smaller Than"
@@ -106,6 +106,7 @@ Rectangle{
                 var colName = ReportParamsModel.colName
                 var colData = ReportParamsModel.fetchFilterValueMap(counter)[counter]
                 var slug = ReportParamsModel.fetchFilterSlugMap(counter)
+                console.log(slug[0], colData[0], "COLDATA + SLUG")
 
                 if(slug[0] === Constants.slugBetweenRelation){
 
@@ -117,6 +118,7 @@ Rectangle{
                 }
 
                 selectOption.textValue = slug[0]
+
 
                 ReportParamsModel.addToIncludeExcludeMap(counter, false)
             }

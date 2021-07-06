@@ -68,14 +68,31 @@ QString TableColumnsModel::findColumnType(QString columnName)
     return this->columnTypes.value(columnName);
 }
 
+void TableColumnsModel::redrawCharts(int dashboardId)
+{
+    emit chartValuesChanged(dashboardId);
+}
+
 void TableColumnsModel::addNewDashboard(int dashboardId)
 {
     emit sendFilteredColumn(dashboardId, this->categoryList, this->numericalList, this->dateList);
 }
 
-void TableColumnsModel::deleteDashboard(int dashboardId)
+void TableColumnsModel::deleteDashboard(int dashboardId, bool deleteAll)
 {
-    this->allColumnVisibleMap.remove(dashboardId);
+    if(deleteAll == false){
+        this->allColumnVisibleMap.remove(dashboardId);
+    } else {
+        this->filteredChartData.clear();
+        this->newChartData.clear();
+        this->newChartHeader.clear();
+        this->chartHeaderDetails.clear();
+
+        this->numericalList.clear();
+        this->categoryList.clear();
+        this->allColumnVisibleMap.clear();
+        this->columnTypes.clear();
+    }
 }
 
 void TableColumnsModel::getChartData(QMap<int, QStringList *> chartData)
@@ -125,4 +142,201 @@ void TableColumnsModel::getChartHeader(QMap<int, QStringList> chartHeader)
     int currentDashboard = 0;
     emit sendFilteredColumn(currentDashboard, this->categoryList, this->numericalList, this->dateList);
 
+}
+
+void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap<int, QVariantMap> columnFilterType, QMap<int, QVariantMap> columnIncludeExcludeMap, QMap<int, QMap<QString, QStringList> > columnValueMap, int dashboardId)
+{
+    qDebug() << "FILTER SIGNAL RECEIVED" << showColumns << columnFilterType << columnIncludeExcludeMap << columnValueMap;
+
+    QStringList equalRelationsList;
+    QStringList betweenRelationList;
+    int index;
+    int incrementer;
+    QMap<int, QStringList> tmpColData;
+    QStringList tmp;
+
+    bool firstIteration = true;
+    QList<int> chartKeys = this->newChartHeader.keys();
+
+    equalRelationsList << "dataListMulti" << "dataListSingle" << "dataDropdownSingle" << "dataDropdownMulti" << "dataEqual";
+    betweenRelationList << "dataRange" << "dataBetween";
+
+    QList<int> dashboardIdLists = showColumns.keys();
+
+    for(int i = 0; i < dashboardIdLists.length(); i++){
+
+        int filterCount = showColumns.value(i).length();
+
+        for(int j = 0; j < filterCount; j++){
+
+            QString currentColumnName = showColumns.value(i).at(j);
+            int currentColumnKey = this->newChartHeader.key(currentColumnName);
+
+            QString currentColumnRelation = columnFilterType.value(i).value(currentColumnName).toString();
+            QString valueIncludeExclude = columnIncludeExcludeMap.value(i).value(currentColumnName).toString();
+            QStringList filterValues = columnValueMap.value(i).value(currentColumnName);
+
+            QVector<int> filterValueIds;
+            QStringList selectedValues;
+
+            // Equal relations
+            if(equalRelationsList.indexOf(currentColumnRelation) >= 0){
+
+                firstIteration = true;
+                incrementer = 0;
+
+                foreach(QString value, filterValues){
+
+                    index = this->newChartData.value(currentColumnKey)->indexOf(value, incrementer);
+
+                    if(valueIncludeExclude == "include"){
+
+                        if(index >= 0){
+                            filterValueIds.append(index);
+                        }
+                    } else {
+
+                        if(firstIteration == true){
+                            for(int tmpCount = 0; tmpCount < this->newChartData.value(currentColumnKey)->length(); tmpCount++){
+                                filterValueIds.append(tmpCount);
+                            }
+                            firstIteration = false;
+                        }
+
+                        if(index >= 0){
+                            filterValueIds.removeOne(index);
+                        }
+
+                    }
+
+                    incrementer++;
+                }
+            }
+
+            // Between relations
+            else if(betweenRelationList.indexOf(currentColumnRelation) >= 0){
+
+                float min = filterValues.at(0).toFloat();
+                float max = filterValues.at(1).toFloat();
+
+                for(int tmpCount = 0; tmpCount < this->newChartData.value(currentColumnKey)->length(); tmpCount++){
+
+                    if(valueIncludeExclude == "include"){
+                        if(this->newChartData.value(currentColumnKey)->value(tmpCount).toFloat() > min && this->newChartData.value(currentColumnKey)->value(tmpCount).toFloat() < max){
+                            filterValueIds.append(tmpCount);
+                        }
+                    } else {
+                        if(!(this->newChartData.value(currentColumnKey)->value(tmpCount).toFloat() > min && this->newChartData.value(currentColumnKey)->value(tmpCount).toFloat() < max)){
+                            filterValueIds.append(tmpCount);
+                        }
+                    }
+                }
+            }
+
+            // Not equal relations
+            else if(currentColumnRelation == "dataNotEqual"){
+
+                float value = filterValues.at(0).toFloat();
+
+                for(int tmpCount = 0; tmpCount < this->newChartData.value(currentColumnKey)->length(); tmpCount++){
+
+                    if(valueIncludeExclude == "include"){
+                        if(this->newChartData.value(currentColumnKey)->value(tmpCount).toFloat() != value){
+                            filterValueIds.append(tmpCount);
+                        }
+                    } else {
+                        if(this->newChartData.value(currentColumnKey)->value(tmpCount).toFloat() == value){
+                            filterValueIds.append(tmpCount);
+                        }
+                    }
+                }
+            }
+
+            // Smaller than relations
+            else if(currentColumnRelation == "dataSmaller"){
+
+                float value = filterValues.at(0).toFloat();
+
+                for(int tmpCount = 0; tmpCount < this->newChartData.value(currentColumnKey)->length(); tmpCount++){
+
+                    if(valueIncludeExclude == "include"){
+                        if(this->newChartData.value(currentColumnKey)->value(tmpCount).toFloat() < value){
+                            filterValueIds.append(tmpCount);
+                        }
+                    } else {
+                        if(this->newChartData.value(currentColumnKey)->value(tmpCount).toFloat() >= value){
+                            filterValueIds.append(tmpCount);
+                        }
+                    }
+                }
+
+            } else if(currentColumnRelation == "dataGreater"){
+
+                float value = filterValues.at(0).toFloat();
+
+                for(int tmpCount = 0; tmpCount < this->newChartData.value(currentColumnKey)->length(); tmpCount++){
+
+                    if(valueIncludeExclude == "include"){
+                        if(this->newChartData.value(currentColumnKey)->value(tmpCount).toFloat() > value){
+                            filterValueIds.append(tmpCount);
+                        }
+                    } else {
+                        if(this->newChartData.value(currentColumnKey)->value(tmpCount).toFloat() <= value){
+                            filterValueIds.append(tmpCount);
+                        }
+                    }
+                }
+
+            } else if(currentColumnRelation == "dataEqualOrSmaller"){
+
+                float value = filterValues.at(0).toFloat();
+
+                for(int tmpCount = 0; tmpCount < this->newChartData.value(currentColumnKey)->length(); tmpCount++){
+
+                    if(valueIncludeExclude == "include"){
+                        if(this->newChartData.value(currentColumnKey)->value(tmpCount).toFloat() <= value){
+                            filterValueIds.append(tmpCount);
+                        }
+                    } else {
+                        if(this->newChartData.value(currentColumnKey)->value(tmpCount).toFloat() > value){
+                            filterValueIds.append(tmpCount);
+                        }
+                    }
+                }
+
+            } else if(currentColumnRelation == "dataEqualOrGreater"){
+
+                float value = filterValues.at(0).toFloat();
+
+                for(int tmpCount = 0; tmpCount < this->newChartData.value(currentColumnKey)->length(); tmpCount++){
+
+                    if(valueIncludeExclude == "include"){
+                        if(this->newChartData.value(currentColumnKey)->value(tmpCount).toFloat() >= value){
+                            filterValueIds.append(tmpCount);
+                        }
+                    } else {
+                        if(this->newChartData.value(currentColumnKey)->value(tmpCount).toFloat() < value){
+                            filterValueIds.append(tmpCount);
+                        }
+                    }
+                }
+
+            } else{
+                qDebug() << "ELSE CONDITION" << currentColumnRelation;
+            }
+
+            foreach(int internalKey, chartKeys){
+                // for each selected key values
+                foreach(int internalIndex, filterValueIds){
+                    tmp.append(this->newChartData.value(internalKey)->at(internalIndex));
+                    tmpColData.insert(internalKey, tmp);
+                }
+                tmp.clear();
+            }
+        }
+        this->filteredChartData.insert(i, tmpColData);
+        tmpColData.clear();
+    }
+
+    emit dashboardDataChanged(this->filteredChartData, dashboardId);
 }

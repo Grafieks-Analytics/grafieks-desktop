@@ -10,12 +10,18 @@ Item {
     id: filterDataItemMulti
     width: parent.width-25
     height: 200
-       anchors.horizontalCenter: parent.horizontalCenter
+    anchors.horizontalCenter: parent.horizontalCenter
     property alias componentName: filterDataItemMulti.objectName
+    property var modelContent: []
 
     onComponentNameChanged: {
-        dataListView.model = TableColumnsModel.fetchColumnData(componentName)
+        modelContent = TableColumnsModel.fetchColumnData(componentName)
+        modelContent.unshift("Select All")
+        dataListView.model = modelContent
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
+
+        // for the first time, select all values
+        selectAll(true)
     }
 
 
@@ -27,6 +33,20 @@ Item {
                 componentTitle.text = newAlias
             }
         }
+    }
+
+    function onMultiSelectCheckboxSelected(modelData,checked, index){
+
+        if(checked === true){
+
+            // Start pushing the individual checked item in the array
+            DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
+
+        } else{
+            // Remove item if unchecked
+            DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
+            selectAll(false)
+        }
 
     }
 
@@ -35,17 +55,19 @@ Item {
         if(searchFilter.visible){
             searchFilter.visible=false
             searchFilter.height=0
-             dataListView.height=150
+            dataListView.height=150
             return
         }
         searchFilter.visible=true
         searchFilter.height=30
-         dataListView.height=130
+        dataListView.height=130
     }
 
     function searchData(searchText){
         console.log(searchText, componentName)
-        dataListView.model = TableColumnsModel.searchColumnData(searchText, componentName)
+        modelContent = TableColumnsModel.searchColumnData(searchText, componentName)
+        modelContent.unshift("Select All")
+        dataListView.model = modelContent
     }
 
     function filterClicked(){
@@ -57,17 +79,66 @@ Item {
         labelShapePopup1.visible = true
     }
 
+    function selectAll(checkedState){
+        DashboardParamsModel.setSelectAll(checkedState, componentName, DashboardParamsModel.currentDashboard)
+
+        if(checkedState === true){
+            modelContent.forEach(item => {
+                                     DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, item)
+                                 })
+
+        } else {
+            DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "", true)
+        }
+    }
+
+    ButtonGroup {
+        id: childGroup
+        exclusive: false
+    }
 
     Component{
         id:multipleselect
         Row{
             CheckBoxTpl{
+                id: multicheckbox
+                objectName: index
+                checkbox_checked: true
                 checkbox_text: modelData
-                checkbox_checked: false
                 parent_dimension: 14
+
+                Component.onCompleted: {
+                    if(index > 0){
+                        ButtonGroup.group = childGroup
+                    }
+                }
+
+                onCheckedChanged: {
+                    if(index === 0){
+                        childGroup.checkState = multicheckbox.checkState
+                        selectAll(checked)
+                    } else {
+                        if(multicheckbox.checked === false){
+                            DashboardParamsModel.setSelectAll(false, componentName, DashboardParamsModel.currentDashboard)
+                        }
+                        onMultiSelectCheckboxSelected(modelData, checked, index)
+                    }
+                }
+
+                Connections{
+                    target: DashboardParamsModel
+                    function onSelectAllChanged(status, columnName, dashboardId){
+                        if(multicheckbox.objectName === "0" && status === false && columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
+                            multicheckbox.checked = false
+                        }
+                    }
+                }
             }
         }
     }
+
+
+
 
     Rectangle{
         height: parent.height
@@ -75,109 +146,110 @@ Item {
         color: "white"
         border.color: Constants.darkThemeColor
 
-    Rectangle{
-        id:columnName
-        width:parent.width
-        height:25
+        Rectangle{
+            id:columnName
+            width:parent.width
+            height:25
 
 
 
-         color: Constants.themeColor
-        border.color: Constants.darkThemeColor
-        Row{
-
-            spacing: 10
-
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.leftMargin: 15
-
-
-            Text {
-                id: componentTitle
-                width:110
-                 elide: Text.ElideRight
-                text: DashboardParamsModel.fetchColumnAliasName(currentDashboardId, componentName)
-             font.pixelSize: Constants.fontCategoryHeaderMedium
-                verticalAlignment: Text.AlignVCenter
-
-            }
-
+            color: Constants.themeColor
+            border.color: Constants.darkThemeColor
             Row{
 
-                height: parent.height
-                width: 40
-                spacing: 5
+                spacing: 10
+
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.leftMargin: 15
 
-                Image {
-                    source: "/Images/icons/iconmonstr-search-thin.svg"
-                    width: 14
-                    height: 14
 
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked:  toggleSearch()
-                    }
-                }
-                Image {
-                    source: "/Images/icons/customize.png"
-                    width: 16
-                    height: 16
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: filterClicked()
-                    }
+                Text {
+                    id: componentTitle
+                    width:110
+                    elide: Text.ElideRight
+                    text: DashboardParamsModel.fetchColumnAliasName(currentDashboardId, componentName)
+                    font.pixelSize: Constants.fontCategoryHeaderMedium
+                    verticalAlignment: Text.AlignVCenter
 
                 }
+
+                Row{
+
+                    height: parent.height
+                    width: 40
+                    spacing: 5
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Image {
+                        source: "/Images/icons/iconmonstr-search-thin.svg"
+                        width: 14
+                        height: 14
+
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked:  toggleSearch()
+                        }
+                    }
+                    Image {
+                        source: "/Images/icons/customize.png"
+                        width: 16
+                        height: 16
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: filterClicked()
+                        }
+
+                    }
+                }
+
             }
 
         }
 
-    }
-
-    Rectangle{
-        id: searchFilter
-        visible: false
-        anchors.top: columnName.bottom
-        anchors.topMargin: 10
-        height: 0
-        width: parent.width-10
-         anchors.horizontalCenter: parent.horizontalCenter
-        TextField{
-            id: searchText
+        Rectangle{
+            id: searchFilter
+            visible: false
+            anchors.top: columnName.bottom
+            anchors.topMargin: 10
+            height: 0
             width: parent.width-10
-            selectByMouse: true
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.top
+            TextField{
+                id: searchText
+                width: parent.width-10
+                selectByMouse: true
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
 
-            placeholderText: qsTr("Search")
-            background: Rectangle {
-                border.color: Constants.borderBlueColor
-                width: parent.width
-                border.width: Constants.borderWidth
+                placeholderText: qsTr("Search")
+                background: Rectangle {
+                    border.color: Constants.borderBlueColor
+                    width: parent.width
+                    border.width: Constants.borderWidth
+                }
+                onTextChanged: searchData(searchText.text)
+
             }
-            onTextChanged: searchData(searchText.text)
 
         }
 
-    }
 
-    ListView{
-        id: dataListView
-        topMargin: 10
-         leftMargin: 10
-        height:150
-        flickableDirection: Flickable.VerticalFlick
-        boundsBehavior: Flickable.StopAtBounds
-        clip: true
-        ScrollBar.vertical: CustomScrollBar {}
-        width: parent.width
-        anchors.top: searchFilter.bottom
+        ListView{
+            id: dataListView
+            leftMargin: 10
+            height:130
+            flickableDirection: Flickable.VerticalFlick
+            boundsBehavior: Flickable.StopAtBounds
+            clip: true
+            ScrollBar.vertical: CustomScrollBar {}
+            width: parent.width
+            anchors.top: searchFilter.bottom
 
-        delegate:{
-            return multipleselect
+
+            delegate:{
+                return multipleselect
+            }
         }
     }
-}
 }
