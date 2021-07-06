@@ -21,7 +21,7 @@ const constants = {
         top: 20,
         left: 70,
         right: 20,
-        bottom: 50,
+        bottom: 60,
     },
 };
 
@@ -60,8 +60,15 @@ const defaultD3Config = {
     fontFamily: "MS Sans Serif",
     fontColor: "black",
     defaultLegendConfig: {
-        legendStatus: true,
+        legendStatus: false,
         legendPosition: "right",
+    },
+    defaultlabelConfig: {
+        labelStatus: false,
+       
+    },
+    defaultGridConfig: {
+        gridStatus: true,
     },
 };
 const markerShapeConfig = {

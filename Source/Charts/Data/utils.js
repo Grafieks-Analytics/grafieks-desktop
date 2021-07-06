@@ -158,7 +158,7 @@ function setLabel(
           .attr("text-anchor", "end")
           .text(label)
           .attr("x", width/2+60)
-          .attr("y", 35)
+          .attr("y", 55)
           .attr("font-size", xLabelfontSize)
           .attr("font-family", xLabelfontFamily)
           .attr("fill", xLabelfontColor)
