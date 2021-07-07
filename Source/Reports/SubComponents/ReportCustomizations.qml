@@ -67,7 +67,7 @@ Item{
         }
 
         ListElement {
-            categoryName: "Charts Size"
+            categoryName: "Axis Size"
             collapsed: false
             display: false
             subItems: [
@@ -335,22 +335,28 @@ Item{
                 }
             }
 
-            Loader {
-                id: subItemLoader
+                Loader {
+                    id: subItemLoader
 
-                visible: !collapsed
-                property variant subItemModel : subItems
-                sourceComponent: {
-                    if(collapsed)
-                        return null
+                    visible: !collapsed
+                    property variant subItemModel : subItems
+                    sourceComponent: {
+                        if(collapsed)
+                            return null
 
-                    switch(categoryName.toLowerCase()){
-                    case "properties": return propertiesComponent
-                    case "reference line": return referenceLineComponent
-                    case "charts size": return chartsSizing
-                    case "legend": return legendComponent
-                    case "total": return totalComponent
-                    }
+                        console.log('Debug',categoryName.toLowerCase());
+                        switch(categoryName.toLowerCase()){
+                            case "properties": return propertiesComponent
+                            case "reference line": return referenceLineComponent
+                            case "axis size": return chartsSizing
+                            case "legend": return legendComponent
+                            case "total": return totalComponent
+                            default:
+                                console.log('Debug',categoryName.toLowerCase())
+                        }
+
+                  
+                    
 
                 }
 

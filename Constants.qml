@@ -317,6 +317,8 @@ QtObject {
     property string horizontalBarGroupedChartUrl: "HorizontalBarGroupedChart.html"
     property string horizontalBarGroupedChartTitle: "Horizontal Bar Grouped Chart"
 
+    property string horizontalLineChartTitle: "Horizontal Line Chart"
+    property string horizontalLineChartUrl: "HorizontalLineChart.html"
     property string barGroupedChartUrl: "BarGroupedChart.html";
     property string barChartUrl: "BarChartArrayInput.html";
 
@@ -342,4 +344,12 @@ QtObject {
     property var modelerScreen : 3;
     property var dashboardScreen : 4;
     property var reportScreen : 5;
+
+    // Date Formats
+    property var yearFormat: "%Y";
+    property var dayFormat: "%d";
+    property var monthFormat: "%b";
+    property var dayMonthYearFormat: "%d %b %Y";
+    property var monthYearFormat: "%b %Y";
+    
 }

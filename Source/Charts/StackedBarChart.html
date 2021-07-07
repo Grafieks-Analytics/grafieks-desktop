@@ -123,6 +123,12 @@
             var response = [];
             var allKeys = uniqueKey2;
 
+            var sortedKeys = sortDates(json, dateFormat);
+            const response1 = sortedKeys.map((d) => {
+                return { ...json[d], key: d };
+            });
+            console.log({ response1 });
+
             for (var key in json) {
                 if (Object.keys(json[key]).length < allKeys.length) {
                     allKeys.forEach((d) => {
@@ -431,6 +437,9 @@
                     return y(d.y0);
                 })
                 .attr("height", function (d) {
+                    this.setAttribute("data-value-y", d.y0);
+                    this.setAttribute("data-value-x", d.key);
+                    this.setAttribute("data-value-y1", d.y0 - d.y1);
                     return Math.abs(y(d.y0) - y(d.y1));
                 })
                 .style("fill", function (d) {
@@ -456,6 +465,10 @@
 
                     let ypos = d3.mouse(this)[1] - 20;
 
+                    let xValue = this.getAttribute("data-value-x");
+                    let yValue = this.getAttribute("data-value-y");
+                    let y1Value = this.getAttribute("data-value-y1");
+
                     d3.select("#tooltip")
                         .style("left", xpos1 + "px")
                         .style("top", ypos + "px")
@@ -473,7 +486,7 @@
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;'>" +
-                                d.key +
+                                xValue +
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
@@ -481,7 +494,7 @@
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +
-                                textValue.toFixed(3) +
+                                (y1Value && (+y1Value).toFixed(3)) +
                                 "</span>"
                             );
                         });
@@ -636,6 +649,7 @@
                 redrawn = false;
             }
 
+            setXAxisTicksDistance();
             function setYaxisWidth() {
                 var allYAxisTicks = document.querySelectorAll(".y-axis .tick");
                 var maxWidth = 72;
@@ -660,5 +674,21 @@
                 return d3.timeFormat(dateFormat)(new Date(dateValue));
             }
         }
+        // var data = [
+        //     [
+        //         ["Furniture", "Furniture", 27550],
+        //         ["Furniture", "Office Supplies", 22220],
+        //         ["Furniture", "Technology", 22223],
+        //         ["Office Supplies", "Furniture", 31110],
+        //         ["Office Supplies", "Office Supplies", 13384],
+        //         ["Office Supplies", "Technology", 3022],
+        //         ["Technology", "Furniture", 1033],
+        //         ["Technology", "Office Supplies", 3330],
+        //         ["Technology", "Technology", 9310],
+        //     ],
+        //     ["Furniture", "Office Supplies", "Technology"],
+        //     ["Category", "Sales"],
+        // ];
+        // drawChart(data);
     </script>
 </body>
