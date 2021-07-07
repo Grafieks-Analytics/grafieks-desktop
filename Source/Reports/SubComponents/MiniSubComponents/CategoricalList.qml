@@ -11,7 +11,12 @@ ListView{
     boundsBehavior: Flickable.StopAtBounds
     interactive: true
     clip: false
-    ScrollBar.vertical: ScrollBar {}
+    ScrollBar.vertical: ScrollBar {
+        policy: ScrollBar.AlwaysOn
+        anchors.right: parent.right
+        anchors.rightMargin: -6
+    }
+
 
 
 
