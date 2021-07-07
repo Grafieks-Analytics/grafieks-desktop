@@ -46,7 +46,7 @@ Rectangle{
             lineTypeChartVisible: false
             maxDropOnXAxis: 2
             maxDropOnYAxis: 1
-            mainCustomizations: "Properties,Legend,Reference Line,Charts Size"
+            mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
         }
         ListElement{
             icon: "area.png"
@@ -58,7 +58,7 @@ Rectangle{
             lineTypeChartVisible: false
             maxDropOnXAxis: 2
             maxDropOnYAxis: 1
-            mainCustomizations: "Properties,Legend,Reference Line,Charts Size"
+            mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
         }
         ListElement{
             icon: "line_chart.png"
@@ -69,7 +69,7 @@ Rectangle{
             maxDropOnXAxis: 2
             maxDropOnYAxis: 1
             lineTypeChartVisible: true
-            mainCustomizations: "Properties,Legend,Reference Line,Charts Size"
+            mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
         }
         ListElement{
             icon: "combination_chart.png"
@@ -79,7 +79,7 @@ Rectangle{
             yAxisVisible: true
             maxDropOnXAxis: 1
             lineTypeChartVisible: true
-            mainCustomizations: "Properties,Legend,Reference Line,Charts Size"
+            mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
         }
         ListElement{
             icon: "heatmap.png"

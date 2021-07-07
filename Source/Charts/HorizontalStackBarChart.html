@@ -15,6 +15,11 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
+        #xAxisDiv {
+            position: fixed;
+            background: #fff;
+            bottom: 0;
+        }
         #tooltip:before {
             border: solid;
             border-color: white transparent;
@@ -29,11 +34,11 @@
     </style>
 </head>
 <body>
-    <div id="tooltip"></div>
     <div style="display: flex; flex-direction: column">
         <div id="my_dataviz"></div>
         <div id="xAxisDiv"></div>
     </div>
+    <div id="tooltip"></div>
 
     <script>
         // reference: https://bl.ocks.org/seasmith/b72e6b8be1978eae046e0cff131668b1
@@ -96,7 +101,6 @@
 
         function drawChart(data, plottingConfiguration = {}) {
             window.data = data;
-
             var keys = data[1];
 
             let {
@@ -106,8 +110,8 @@
                 dateFormat1 = defaultD3Config.dateFormat,
                 chartType = defaultD3Config.horizontalChartType,
                 toolTip = {
-                    textColumn1: "labels[0]",
-                    textColumn2: "labels[1]",
+                    textColumn1: "label x",
+                    textColumn2: "label y",
                 },
                 standardThresholdHeight = defaultD3Config.standardThresholdHeight,
             } = plottingConfiguration;
@@ -119,21 +123,68 @@
                 dateFormat1
             );
 
-            const { top, right, bottom, left } = constants.chartMargins;
-            var margin = { top, right, bottom, left };
-            var width = window.innerWidth - margin.left - margin.right;
-            var height = window.innerHeight - margin.top - margin.bottom - 50;
+            // const { top, right, bottom, left } = constants.chartMargins;
+            var margin = { top: 0, right: 50, bottom: 80, left: 100 };
+            // var margin = { top, right, bottom, left };
+            var width = window.innerWidth - margin.left - margin.right - 12;
+            var height = window.innerHeight - margin.top - margin.bottom;
 
+            /*
             if (chartType == constants.chartType.STANDARD) {
                 height = yAxisUniqueKeys.length * standardThresholdHeight;
                 if (height + margin.top + margin.bottom < window.innerHeight) {
+                    console.log("Bottom", height + margin.top + margin.bottom);
                     d3.select("#xAxisDiv").style("top", height + "px");
                 } else {
                     d3.select("#xAxisDiv").style("bottom", "0");
                     d3.select("#xAxisDiv").style("top", null);
                 }
+            }
+
+            if (chartType == constants.chartType.FIT_HEIGHT) {
+                if (height + margin.top + margin.bottom < window.innerHeight) {
+                    d3.select("#xAxisDiv").style(
+                        "bottom",
+                        window.innerHeight -
+                            (height + margin.top + margin.bottom) +
+                            "px"
+                    );
+                    d3.select("#xAxisDiv").style("top", null);
+                    console.log("test");
+                } else {
+                    d3.select("#xAxisDiv").style("top", null);
+                }
+            }
+
+            */
+
+            if (chartType == constants.chartType.STANDARD) {
+                console.log(yAxisUniqueKeys.length);
+                height = yAxisUniqueKeys.length * standardThresholdHeight;
+                if (height + margin.top + margin.bottom < window.innerHeight) {
+                    d3.select("#xAxisDiv").style(
+                        "top",
+                        height + margin.top + "px"
+                    );
+                } else {
+                    d3.select("#xAxisDiv").style("bottom", 0);
+                }
+            }
+
+            if (height + margin.top + margin.bottom < window.innerHeight) {
+                d3.select("#xAxisDiv").style(
+                    "bottom",
+                    window.innerHeight -
+                        (height + margin.top + margin.bottom) +
+                        "px"
+                );
             } else {
-                d3.select("#xAxisDiv").style("bottom", "0");
+                d3.select("#xAxisDiv").style("bottom", 0);
+                d3.select("#xAxisDiv").style("top", null);
+            }
+
+            if (chartType !== constants.chartType.STANDARD) {
+                height -= 5;
             }
 
             var y = d3
@@ -143,9 +194,8 @@
                         return d.key;
                     })
                 )
-                .range([margin.top, height - margin.bottom])
-                .padding(paddingInner)
-                .paddingInner(paddingInner);
+                .range([0, height])
+                .padding(paddingInner);
 
             var barWidth = y.bandwidth();
 
@@ -156,7 +206,7 @@
             var x = d3
                 .scaleLinear()
                 .domain([d3.min(series, stackMin), d3.max(series, stackMax)])
-                .rangeRound([0, width - margin.right])
+                .range([0, width])
                 .nice();
 
             var z = d3.scaleOrdinal(d3Colors);
@@ -165,12 +215,12 @@
             var svg = d3
                 .selectAll("#my_dataviz")
                 .append("svg")
-                .attr("width", width)
-                .attr("height", height)
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
                 .append("g")
                 .attr(
                     "transform",
-                    "translate(" + margin.left + "," + margin.top + ")"
+                    "translate(" + margin.left + "," + (margin.top + 10) + ")"
                 );
 
             svg.append("g")
@@ -196,12 +246,16 @@
                 .attr("height", y.bandwidth)
                 .attr("class", "bar")
                 .attr("y", function (d) {
+                    this.setAttribute("data-value-y", d.data.key);
                     return y(d.data.key);
                 })
                 .attr("x", function (d, i) {
+                    this.setAttribute("data-value-x", x(d[0]));
                     return x(d[0]);
                 })
                 .attr("width", function (d) {
+                    // this.setAttribute("data-value-y", d.y0);
+                    this.setAttribute("data-value-x1", d[1] - d[0]);
                     return x(d[1]) - x(d[0]);
                 })
                 .on("mouseout", function (d, i) {
@@ -211,6 +265,10 @@
                 .on("mouseover mousemove", function (d, i) {
                     let xpos1 = d3.mouse(this)[0] + margin.left;
                     let ypos = d3.mouse(this)[1] - 20;
+
+                    let xValue = this.getAttribute("data-value-x");
+                    let x1Value = this.getAttribute("data-value-x1");
+                    let yValue = this.getAttribute("data-value-y");
 
                     d3.select("#tooltip")
                         .style("left", xpos1 + "px")
@@ -234,7 +292,7 @@
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;'>" +
-                                d.key +
+                                yValue +
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
@@ -242,7 +300,7 @@
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +
-                                textValue.toFixed(3) +
+                                (x1Value && (+x1Value).toFixed(3)) +
                                 "</span>"
                             );
                         });
@@ -252,15 +310,16 @@
                 });
 
             svg.append("g")
-                .attr("transform", "translate(0, 0)")
                 .attr("class", "y-axis")
+                .attr("dy", "2.32em")
+                .attr("transform", "translate(0, 0)")
                 .call(d3.axisLeft(y).tickSize(0));
 
-            // svg.append("g")
-            //     .attr("transform", "translate(0," + height + ")")
-            //     .call(d3.axisBottom(x).tickSize(0));
-
-            var xAxis = d3.axisBottom(x).tickSize(0).ticks(10);
+            var xAxis = d3
+                .axisBottom(x)
+                .tickSize(0)
+                .ticks(10)
+                .tickFormat(d3.format(".1s"));
 
             d3.select("#xAxisDiv")
                 .append("svg")
@@ -297,6 +356,7 @@
                 }
             }
 
+            setXAxisTicksDistance();
             function stackMin(series) {
                 return d3.min(series, function (d) {
                     return d[0];

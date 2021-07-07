@@ -1,5 +1,4 @@
 <html>
-
 <head>
     <script src="./Data/d3DefaultConfig.js"></script>
     <script src="./Data/utils.js"></script>
@@ -10,6 +9,7 @@
         body {
             padding: 0;
             margin: 0;
+            
         }
 
         #tooltip {
@@ -179,10 +179,20 @@
                         height + margin.top + "px"
                     );
                 } else {
-                    d3.select("#xAxisDiv").style("bottom", "0");
+                    d3.select("#xAxisDiv").style("bottom", 0);
                 }
+            }
+
+             if (height + margin.top + margin.bottom < window.innerHeight) {
+                d3.select("#xAxisDiv").style(
+                    "bottom",
+                    window.innerHeight -
+                    (height + margin.top + margin.bottom) +
+                    "px"
+                );
             } else {
-                d3.select("#xAxisDiv").style("bottom", "0");
+                d3.select("#xAxisDiv").style("bottom", 0);
+                 d3.select("#xAxisDiv").style("top", null);
             }
 
             clearChart();
@@ -261,6 +271,8 @@
                     return x(Math.min(0, d));
                 })
                 .attr("y", function (d, i) {
+                    this.setAttribute("data-value-y", dataValues[0][i]);
+                    this.setAttribute("data-value-x", dataValues[1][i]);
                     return y(dataValues[0][i]);
                 })
                 .attr("width", function (d) {
@@ -275,6 +287,9 @@
                 .on("mouseover mousemove", function (d, i) {
                     let xpos = d3.mouse(this)[0] + margin.left;
                     let ypos = d3.mouse(this)[1];
+
+                    let xValue = this.getAttribute("data-value-x");
+                    let yValue = this.getAttribute("data-value-y");
 
                     d3.select("#tooltip")
                         .style("left", xpos +20+ "px")
@@ -294,7 +309,7 @@
                                 ":&nbsp;&nbsp;" +
                                 "</span>" +
                                 "<span style='float: right;'>" +
-                                xAxisDataSet[i] +
+                                yValue +
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
@@ -302,7 +317,7 @@
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +
-                                dataset[i] +
+                                (xValue && (+xValue).toFixed(3)) +
                                 "</span>"
                             );
                         });
@@ -351,7 +366,7 @@
             //     .attr("class", "x-axis")
             //     .call(d3.axisBottom(x));
 
-            var xAxis = d3.axisBottom(x).tickSize(0).ticks(10);
+            var xAxis = d3.axisBottom(x).tickSize(0).ticks(10).tickFormat(d3.format(".1s"));
 
             d3.select("#xAxisDiv")
                 .append("svg")
@@ -374,6 +389,12 @@
                 .attr("dy", "2.32em")
                 .attr("transform", "translate(0,0)")
                 .call(d3.axisLeft(y));
+                 setXAxisTicksDistance();
+
+            if (chartType == constants.chartType.FIT_HEIGHT) {
+                removeAxisTicks("yAxis");
+            }
+
 
             a = document.querySelectorAll(".y-axis text");
             for (var i = 0; i < a.length; i++) {
@@ -407,5 +428,6 @@
         }
     </script>
 </body>
+
 
 </html>
