@@ -21,7 +21,7 @@ Item {
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
 
         // for the first time, select all values
-        selectAll(true)
+       //  selectAll(true)
     }
 
 
@@ -45,7 +45,7 @@ Item {
         } else{
             // Remove item if unchecked
             DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
-            selectAll(false)
+//            selectAll(false)
         }
 
     }
@@ -116,7 +116,7 @@ Item {
                 onCheckedChanged: {
                     if(index === 0){
                         childGroup.checkState = multicheckbox.checkState
-                        selectAll(checked)
+//                        selectAll(checked)
                     } else {
                         if(multicheckbox.checked === false){
                             DashboardParamsModel.setSelectAll(false, componentName, DashboardParamsModel.currentDashboard)
