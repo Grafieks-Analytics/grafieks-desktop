@@ -253,9 +253,13 @@ Rectangle{
             fonts.append({"fontName": fontFamilies[i]});
         }
         xAxisLegendFonts.model = fonts;
+        xAxisLegendFonts.currentIndex = 29;
         xAxisTickMarkFonts.model = fonts;
+        xAxisTickMarkFonts.currentIndex = 29;
         yAxisLegendFonts.model = fonts;
+         yAxisLegendFonts.currentIndex = 29;
         yAxisTickMarkFonts.model = fonts;
+         yAxisTickMarkFonts.currentIndex = 29;
 
     }
 
@@ -349,7 +353,9 @@ Rectangle{
 
                                     id:xAxisLabelNameBox
                                     width: parent.width*3/4
-                                    text: qsTr(ReportParamsModel.xAxisColumns[0])
+//                                    text: qsTr(ReportParamsModel.xAxisColumns[0])
+//                                    text: getAxisColumnNames(Constants.yAxisName)
+                                    text: qsTr(getAxisColumnNames(Constants.xAxisName)[0])
                                     onTextChanged: {
 
                                          webEngineView.runJavaScript("setText('.x_label','"+xAxisLabelNameBox.text+"');")
@@ -373,10 +379,13 @@ Rectangle{
                                         id: xAxisLegendFonts
                                         width: parent.width
                                         textRole: "fontName"
+                                        currentIndex: 5
 
                                         onCurrentValueChanged: {
-                                                webEngineView.runJavaScript("changeChartAttributes('.x_label','font-family', '"+xAxisLegendFonts.currentValue+"')")
+//                                                webEngineView.runJavaScript("changeChartAttributes('.x_label','font-family', '"+xAxisLegendFonts.currentValue+"')")
 
+                                            d3PropertyConfig.xLabelfontFamily=xAxisLegendFonts.currentValue;
+                                            reDrawChart();
                                         }
                                     }
                                 }
@@ -415,7 +424,7 @@ Rectangle{
                                             width: parent.width
                                             onCurrentValueChanged: {
 
-                                                    webEngineView.runJavaScript("changeChartAttributes('.x_label','font-size', '"+xAxisLabelFontSize.currentValue+"')")
+//                                                    webEngineView.runJavaScript("changeChartAttributes('.x_label','font-size', '"+xAxisLabelFontSize.currentValue+"')")
 //                                                d3PropertyConfig["xLabelFontSize"]=xAxisLabelFontSize.currentValue;
 
                                                 d3PropertyConfig.xLabelfontSize=xAxisLabelFontSize.currentValue;
@@ -552,9 +561,13 @@ Rectangle{
                                         id: xAxisTickMarkFonts
                                         width: parent.width
                                         textRole: "fontName"
+
                                         onCurrentValueChanged: {
 
-                                                webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-family', '"+xAxisTickMarkFonts.currentValue+"')")
+//                                                webEngineView.runJavaScript("changeChartAttributes('.x-axis text','font-family', '"+xAxisTickMarkFonts.currentValue+"')")
+
+                                            d3PropertyConfig.xTickfontFamily=xAxisTickMarkFonts.currentValue;
+                                            reDrawChart();
 
                                         }
                                     }
@@ -753,7 +766,8 @@ Rectangle{
                                 CustomTextBox {
                                     id:yAxisLabelNameBox
                                     width: parent.width*3/4
-                                      text: qsTr(ReportParamsModel.yAxisColumns[0])
+//                                      text: qsTr(ReportParamsModel.yAxisColumns[0])
+                                      text: qsTr(getAxisColumnNames(Constants.yAxisName)[0])
                                       onTextChanged: {
 
                                            webEngineView.runJavaScript("setText('.y_label','"+yAxisLabelNameBox.text+"');")
@@ -778,8 +792,10 @@ Rectangle{
                                         width: parent.width
                                         textRole: "fontName"
                                         onCurrentValueChanged: {
-                                                webEngineView.runJavaScript("changeChartAttributes('.y_label','font-family', '"+yAxisLegendFonts.currentValue+"')")
+//                                                webEngineView.runJavaScript("changeChartAttributes('.y_label','font-family', '"+yAxisLegendFonts.currentValue+"')")
 
+                                            d3PropertyConfig.yLabelfontFamily=yAxisLegendFonts.currentValue;
+                                            reDrawChart();
                                         }
                                     }
                                 }
@@ -950,8 +966,10 @@ Rectangle{
                                         textRole: "fontName"
                                         onCurrentValueChanged: {
 
-                                                      webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-family', '"+yAxisTickMarkFonts.currentValue+"')")
+//                                                      webEngineView.runJavaScript("changeChartAttributes('.y-axis text','font-family', '"+yAxisTickMarkFonts.currentValue+"')")
 
+                                            d3PropertyConfig.yTickfontFamily=yAxisTickMarkFonts.currentValue;
+                                            reDrawChart();
                                               }
 
 

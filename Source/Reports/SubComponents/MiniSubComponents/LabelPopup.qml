@@ -56,6 +56,15 @@ Popup {
         }
     }
 
+
+    function showLabel(checked){
+           var labelConfig = d3PropertyConfig.labelConfig || {};
+           labelConfig['labelStatus'] = checked;
+           d3PropertyConfig.labelConfig = labelConfig;
+           reDrawChart();
+       }
+
+
     background: Rectangle{
         color: Constants.whiteColor
         border.color: Constants.darkThemeColor
@@ -79,7 +88,7 @@ Popup {
                     anchors.fill: parent
 
                     Text {
-                        text: qsTr("Label")
+                        text: qsTr("Data Label")
                         anchors.left: parent.left
                         anchors.leftMargin: leftMargin
                         anchors.verticalCenter: parent.verticalCenter
@@ -94,6 +103,9 @@ Popup {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.rightMargin: 5
                         anchors.top: parent.top
+
+                        onCheckedChanged: showLabel(checked);
+
 
                     }
 
