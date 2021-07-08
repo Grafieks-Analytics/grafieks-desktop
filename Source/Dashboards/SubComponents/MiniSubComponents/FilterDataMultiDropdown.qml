@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+import QtQml.Models 2.2
 
 import com.grafieks.singleton.constants 1.0
 
@@ -12,17 +13,28 @@ Item {
     height: comboBox.height + columnName.height
     width: parent.width-25
     anchors.horizontalCenter: parent.horizontalCenter
-    property var modelContent: []
     property alias componentName: filterDataMultiItem.objectName
+    property var modelContent: []
+    property bool master: false
+
+    ListModel{
+        id: listModel
+        dynamicRoles: true
+    }
 
     onComponentNameChanged: {
         modelContent = TableColumnsModel.fetchColumnData(componentName)
         modelContent.unshift("Select All")
-        comboBox.model = modelContent
+
+        var i = 0;
+        modelContent.forEach(item => {
+                             listModel.append({"name": item, "checked": true, "index": i})
+                                 i++
+                             })
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
 
         // for the first time, select all values
-//        selectAll(true)
+       master = true
 
     }
 
@@ -46,7 +58,6 @@ Item {
         } else{
             // Remove item if unchecked
             DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
-//            selectAll(false)
         }
 
     }
@@ -133,6 +144,7 @@ Item {
         ComboBox {
             id: comboBox
             width: parent.width
+            model: listModel
             anchors.top : columnName.bottom
 
             indicator: Canvas {
@@ -173,11 +185,10 @@ Item {
 
                 CheckDelegate {
                     id: checkDelegate
-                    checked: true
-                    ButtonGroup.group: childGroup
-                    highlighted: comboBox.highlightedIndex == index
+                    checked:  model.checked
+                    highlighted: comboBox.highlightedIndex === model.index
                     anchors.fill: parent
-                    objectName: index
+                    objectName: model.index
 
                     indicator: Rectangle {
                         id: parent_border
@@ -199,7 +210,7 @@ Item {
                         }
                     }
                     contentItem: Text {
-                        text: modelData
+                        text: model.name
                         elide: Text.ElideLeft
                         leftPadding: checkDelegate.indicator.width + checkDelegate.spacing
                     }
@@ -214,21 +225,27 @@ Item {
 
                         if(index === 0){
                             childGroup.checkState = checkDelegate.checkState
-//                            selectAll(checked)
+                            for(var i =0; i < listModel.count; ++i){
+                                listModel.setProperty(i, "checked", checked)
+                            }
+                            if(checked === true){
+                                master = true
+                            } else {
+                                master = false
+                            }
                         } else {
-                            if(checkDelegate.checked === false){
-                                DashboardParamsModel.setSelectAll(false, componentName, DashboardParamsModel.currentDashboard)
-                            }
-                            onMultiSelectCheckboxSelected(modelData,checked, index)
-                        }
-                    }
 
-                    Connections{
-                        target: DashboardParamsModel
-                        function onSelectAllChanged(status, columnName, dashboardId){
-                            if(checkDelegate.objectName === "0" && status === false && columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
-                                checkDelegate.checked = false
+                            if(master === true && checked === false){
+                                master = false
+                                for(var i =0; i < listModel.count; ++i){
+                                    listModel.setProperty(i, "checked", false)
+                                }
                             }
+
+                            if(master === false && checked === true){
+                                listModel.setProperty(model.index, "checked", true)
+                            }
+                            onMultiSelectCheckboxSelected(model.name, checked, index)
                         }
                     }
                 }

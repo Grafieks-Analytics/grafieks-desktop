@@ -53,6 +53,8 @@ Item{
             let dashboardId = DashboardParamsModel.currentDashboard
             let reportId = DashboardParamsModel.currentReport
 
+            console.log(newItem.objectName, parseInt(newItem.objectName), "PARSE INT")
+
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName)){
 
                 droppedTextId.color = refColor

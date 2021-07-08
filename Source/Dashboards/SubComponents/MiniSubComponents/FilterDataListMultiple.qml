@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+import QtQml.Models 2.2
 
 import com.grafieks.singleton.constants 1.0
 
@@ -13,15 +14,26 @@ Item {
     anchors.horizontalCenter: parent.horizontalCenter
     property alias componentName: filterDataItemMulti.objectName
     property var modelContent: []
+    property bool master: false
+
+    ListModel{
+        id: listModel
+        dynamicRoles: true
+    }
 
     onComponentNameChanged: {
         modelContent = TableColumnsModel.fetchColumnData(componentName)
         modelContent.unshift("Select All")
-        dataListView.model = modelContent
+
+        var i = 0;
+        modelContent.forEach(item => {
+                             listModel.append({"name": item, "checked": true, "index": i})
+                                 i++
+                             })
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
 
         // for the first time, select all values
-       //  selectAll(true)
+       master = true
     }
 
 
@@ -45,7 +57,6 @@ Item {
         } else{
             // Remove item if unchecked
             DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
-//            selectAll(false)
         }
 
     }
@@ -99,12 +110,12 @@ Item {
 
     Component{
         id:multipleselect
-        Row{
+        Column{
             CheckBoxTpl{
                 id: multicheckbox
-                objectName: index
-                checkbox_checked: true
-                checkbox_text: modelData
+                objectName: model.index
+                checkbox_checked: model.checked
+                checkbox_text: model.name
                 parent_dimension: 14
 
                 Component.onCompleted: {
@@ -116,21 +127,27 @@ Item {
                 onCheckedChanged: {
                     if(index === 0){
                         childGroup.checkState = multicheckbox.checkState
-//                        selectAll(checked)
+                        for(var i =0; i < listModel.count; ++i){
+                            listModel.setProperty(i, "checked", checked)
+                        }
+                        if(checked === true){
+                            master = true
+                        } else {
+                            master = false
+                        }
                     } else {
-                        if(multicheckbox.checked === false){
-                            DashboardParamsModel.setSelectAll(false, componentName, DashboardParamsModel.currentDashboard)
-                        }
-                        onMultiSelectCheckboxSelected(modelData, checked, index)
-                    }
-                }
 
-                Connections{
-                    target: DashboardParamsModel
-                    function onSelectAllChanged(status, columnName, dashboardId){
-                        if(multicheckbox.objectName === "0" && status === false && columnName === componentName && dashboardId === DashboardParamsModel.currentDashboard){
-                            multicheckbox.checked = false
+                        if(master === true && checked === false){
+                            master = false
+                            for(var i =0; i < listModel.count; ++i){
+                                listModel.setProperty(i, "checked", false)
+                            }
                         }
+
+                        if(master === false && checked === true){
+                            listModel.setProperty(model.index, "checked", true)
+                        }
+                        onMultiSelectCheckboxSelected(model.name, checked, index)
                     }
                 }
             }
@@ -237,6 +254,7 @@ Item {
 
         ListView{
             id: dataListView
+            model: listModel
             leftMargin: 10
             height:130
             flickableDirection: Flickable.VerticalFlick

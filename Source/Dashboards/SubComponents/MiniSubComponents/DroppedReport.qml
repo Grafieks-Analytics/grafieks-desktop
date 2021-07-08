@@ -71,6 +71,8 @@ Item{
             let dashboardId = DashboardParamsModel.currentDashboard
             // let reportIdCpp = DashboardParamsModel.currentReport
 
+            console.log(newItem.objectName, parseInt(newItem.objectName), "PARSE INT")
+
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName)){
                 droppedReportId.color = refColor
                 setChartBackgroundColor(refColor);
