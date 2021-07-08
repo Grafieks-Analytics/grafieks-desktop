@@ -93,7 +93,7 @@ Rectangle {
     function onDropAreaEntered(drag){
 
         dashboardArea.color = Constants.dropHighlightColor
-//        console.log("Entered", currentPoint.x, listViewElem.itemName)
+        //        console.log("Entered", currentPoint.x, listViewElem.itemName)
         console.log("droparaea",dropArea.height,dropArea.width)
     }
 
@@ -135,7 +135,7 @@ Rectangle {
         var objectJson = {x: x1, y: y1, z: DashboardParamsModel.zIndex,  objectName : counter};
         if(listViewElem.reportId){
             objectJson.reportId = listViewElem.reportId;
-        } 
+        }
         rectangles.set(counter, dynamicContainer.createObject(parent,objectJson))
 
         DashboardParamsModel.dragNewReport(DashboardParamsModel.currentDashboard, counter)
@@ -144,7 +144,8 @@ Rectangle {
         DashboardParamsModel.setDashboardReportTypeMap(DashboardParamsModel.currentDashboard, counter, reportType)
 
         const reportProperties = ReportParamsModel.getReport(listViewElem.reportId);
-        const chartUrl = Constants.baseChartUrl + reportProperties.chartUrl;
+        //        const chartUrl = Constants.baseChartUrl + reportProperties.chartUrl;
+        const chartUrl = reportProperties && (Constants.baseChartUrl + reportProperties.chartUrl);
         DashboardParamsModel.setDashboardReportUrl(DashboardParamsModel.currentDashboard, counter, chartUrl);
 
         DashboardParamsModel.setPositionX(x1);
@@ -158,7 +159,7 @@ Rectangle {
 
     }
     function onDropAreaExited(){
-//        console.log('Exit');
+        //        console.log('Exit');
     }
 
 
