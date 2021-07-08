@@ -117,7 +117,7 @@ public:
     Q_INVOKABLE QStringList fetchShowColumns(int dashboardId, QString searchKeyword = "");
 
     Q_INVOKABLE void setColumnAliasName(int dashboardId, QString columnName, QString columnAlias);
-    Q_INVOKABLE QString fetchColumnAliasName(int dashboardId, QString columnName);
+    Q_INVOKABLE QString fetchColumnAliasName(int dashboardCountdashboardId, QString columnName);
 
     Q_INVOKABLE void setColumnFilterType(int dashboardId, QString columnName, QString filterType);
     Q_INVOKABLE QString fetchColumnFilterType(int dashboardId, QString columnName);
