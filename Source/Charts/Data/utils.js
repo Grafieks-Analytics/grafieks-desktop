@@ -134,12 +134,10 @@ function setLabel(
     labelType = "x_label",
     svg,
     x_tick_fontSize,
-    y_tick_fontSize,
-    
+    y_tick_fontSize
 ) {
     console.log("x" + x_tick_fontSize);
     console.log("y" + y_tick_fontSize);
-    
 
     const margin = { top: 30, right: 30, bottom: 70, left: 60 };
     if (document.querySelector("#my_dataviz").clientWidth > document.documentElement.clientWidth) {
@@ -277,3 +275,38 @@ function setSvgBackground(backgroundColor, opacity) {
         " }";
     document.head.append(styleTag);
 }
+
+function setXAxisTicksDistance(distanceValue = "1em") {
+    d3.selectAll(".x-axis text").attr("dy", distanceValue);
+}
+
+function removeAxisTicks(axis = "xAxis") {
+  selector = ".x-axis text";
+
+  if (axis == "yAxis") {
+    selector = ".y-axis text";
+  }
+
+  // Remove Text in case they are large in number
+  var allXAxisTexts = document.querySelectorAll(selector);
+
+  for (var i = 0; i < allXAxisTexts.length; i++) {
+    if (!Math.floor(data[0][0].length * 0.02)) {
+      break;
+    }
+
+    if (i % Math.floor(data[0][0].length * 0.04) != 0) {
+      allXAxisTexts[i].remove();
+      continue;
+    }
+  }
+}
+
+// Main
+// Open this function when in production
+(function () {
+    // [Tag: Mandatory]
+    // oncontextmenu = function () {
+    //     return false;
+    // };
+})();

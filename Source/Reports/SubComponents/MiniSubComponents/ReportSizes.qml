@@ -32,7 +32,7 @@ Column{
         ListElement{
             chartSize: "Fit Height"
             chartSizeValue: "FitHeight"
-            configName: "horizontalChartType"
+            configName: "chartType"
         }
         ListElement{
             chartSize: "Standard"
@@ -78,10 +78,9 @@ Column{
             d3PropertyConfig['chartType'] = value;
             break;
         case "FitHeight":
-            d3PropertyConfig['horizontalChartType'] = value;
+            d3PropertyConfig['chartType'] = value;
             break;
         case "Standard":
-            d3PropertyConfig['horizontalChartType'] = value;
             d3PropertyConfig['chartType'] = value;
             break;
         }

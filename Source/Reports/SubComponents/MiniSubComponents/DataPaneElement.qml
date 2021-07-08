@@ -175,7 +175,7 @@ Rectangle{
 
 
 
-                report_desiner_page.lastPickedDataPaneElementProperties = { itemName: modelData, itemType: itemType };
+                report_desiner_page.lastPickedDataPaneElementProperties = { itemName: modelData, itemType: itemType, dateFormat: Constants.yearFormat };
                 console.log(modelData);
 
                 ReportParamsModel.itemName = modelData;
