@@ -75,9 +75,9 @@ Page {
         function onDashboardContentDestroyed(dashboardId){
 
             if(dashboardId === -1){
-                console.log("SIGNAL TO REMOVE ALL DASH")
                 dashboardModel.clear()
                 dashboardModel.append({"dashboardName" : 'Dashboard 1', 'dashboardId': 0, backgroundColorTest:"white"})
+                is_dashboard_blank = 0
             }
         }
 
@@ -179,6 +179,7 @@ Page {
 
         let currentCount = DashboardParamsModel.dashboardCount
         let newCount = currentCount + 1
+        DashboardParamsModel.setDashboardCount(newCount)
         let newDashboardName =  "Dashboard "+ newCount
         var previousDashboardIndex = DashboardParamsModel.currentDashboard;
         var themeColorCopy = Constants.themeColor.toString();
@@ -197,31 +198,10 @@ Page {
         var listContent = dashboardList.contentItem.children
         var previousDashboardIndex = DashboardParamsModel.currentDashboard;
         var themeColorCopy = Constants.themeColor.toString();
-        console.log(previousDashboardIndex);
+        console.log(dashboardId, "DASH ID");
 
         dashboardModel.setProperty(previousDashboardIndex,"backgroundColorTest",themeColorCopy);
         dashboardModel.setProperty(index,"backgroundColorTest","white");
-
-
-        //        dashboardList.contentItem.children[index].backgroundColor = "red";
-        //        for(var i=0; i<dashboardModel.count; i++){
-        //            console.log(i);
-        //            if(dashboardIdLoop === dashboardId){
-
-        //            }else{
-        //                dashboardList.contentItem.children[i].backgroundColor = "green";
-        //            }
-        //        }
-
-        //        for(var child in listContent){
-        //            var dashboardIdLoop = dashboardModel.get(child).dashboardId;
-        //            var dashboardName = dashboardModel.get(child).dashboardName;
-        //            console.log('Loop name',dashboardName);
-        //            console.log('Text Value',listContent[child].textValue);
-        //            console.log('Loop id',dashboardIdLoop)
-        //            console.log('clicked',dashboardId)
-        //        }
-
         DashboardParamsModel.setCurrentDashboard(dashboardId)
 
     }
@@ -255,6 +235,8 @@ Page {
         dashboardModel.remove(index);
         DashboardParamsModel.destroyDashboard(index)
         TableColumnsModel.deleteDashboard(index)
+
+        console.log(dashboardModel.get(index).dashboardName, "NEW INDEX", index)
     }
 
     function getEndPos(){

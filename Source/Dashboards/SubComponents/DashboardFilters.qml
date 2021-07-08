@@ -100,7 +100,7 @@ Item {
                 let currentDashboard = DashboardParamsModel.currentDashboard
                 ChartsModel.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
                 TableColumnsModel.redrawCharts(currentDashboard)
-                console.log("Apply dashboard filter here")
+                console.log("Apply dashboard filter here", currentDashboard, currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
             }
 
 
