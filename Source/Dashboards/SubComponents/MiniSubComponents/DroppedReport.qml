@@ -289,6 +289,16 @@ Item{
         var chartUrl = reportProperties.chartUrl;
         var d3PropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
         
+        if(standardChart){
+            d3PropertyConfig.chartType = "Standard";
+        }else{
+            if(isHorizontalGraph){
+                d3PropertyConfig.chartType = "FitHeight";
+            }else{
+                d3PropertyConfig.chartType = "FitWidth";
+            }
+        }
+        
         var colorByData = JSON.parse(reportProperties.colorByDataColoumns);
         console.log('Colour By Data',JSON.stringify(colorByData));
 
@@ -466,21 +476,13 @@ Item{
 
     // Convert the graph to Standard
     function convertToStandard(){
-        const reportProperties = ReportParamsModel.getReport(reportId);
-        var d3PropertiesConfig = reportProperties.d3PropertiesConfig;
-        console.log('d3PropertiesConfig',d3PropertiesConfig);
-        d3PropertiesConfig.chartType = "Standard";
-        console.log('d3PropertiesConfig',d3PropertiesConfig);
-        ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertiesConfig));
+        standardChart = true;
         reDrawChart();
     }
 
     // Convert the graph to FitWidth / FitHeight 
-    function convertToFit(type){
-        const reportProperties = ReportParamsModel.getReport(reportId);
-        var d3PropertiesConfig = reportProperties.d3PropertiesConfig;
-        d3PropertiesConfig.chartType = "Fit"+type;
-        ReportParamsModel.setD3PropertiesConfig(JSON.stringify(d3PropertiesConfig));
+    function convertToFit(){
+        standardChart = false;
         reDrawChart()
     }
 
@@ -696,11 +698,11 @@ Item{
 
                             MenuItem {
                                 text: qsTr("FitWidth")
-                                onTriggered: convertToFit('Width')
+                                onTriggered: convertToFit()
                             }
                             MenuItem {
                                 text: qsTr("FitHeight")
-                                onTriggered: convertToFit('Height')
+                                onTriggered: convertToFit()
                             }
                         }
 

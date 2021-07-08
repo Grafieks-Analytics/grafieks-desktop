@@ -65,8 +65,11 @@ Popup {
     }
 
     function drawMarkerShape(filledStatus,markerShape){
-        var query = 'drawMarker('+filledStatus+',"'+markerShape+'")';
-        webEngineView.runJavaScript(query)
+        // var query = 'drawMarker('+filledStatus+',"'+markerShape+'")';
+        d3PropertyConfig.filledStatus = filledStatus;
+        d3PropertyConfig.markerShape = markerShape;
+        d3PropertyConfig.markerStatus = true;        
+        reDrawChart();
     }
 
     Rectangle{

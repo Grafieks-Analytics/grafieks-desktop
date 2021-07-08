@@ -11,17 +11,13 @@
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
         <link rel="stylesheet" href="Data/general.css" />
 
-        <style>
-            #my_dataviz {
-                margin-left: 22px;
-            }
-        </style>
+        <style></style>
     </head>
 
     <body>
-        <div style="display: flex">
-            <div id="yAxisDiv"></div>
+        <div style="display: flex; flex-direction: column">
             <div id="my_dataviz"></div>
+            <div id="xAxisDiv"></div>
         </div>
         <div id="tooltip"></div>
 
@@ -955,61 +951,90 @@
                 window.data = data;
                 var dataValues = data[0];
 
+                // Setting up config
                 let {
                     d3colorPalette = defaultD3Config.d3ColorPalette,
                     paddingInner = defaultD3Config.defaultPaddingInner,
                     dateFormat = defaultD3Config.dateFormat,
                     chartType = defaultD3Config.chartType,
                     toolTip = {
-                        textColumn1: "label x",
-                        textColumn2: "label y",
+                        textColumn1: "labels[0]",
+                        textColumn2: "labels[1]",
                     },
                     markerShape = false,
                     filledStatus = false,
                     curveType = defaultD3Config.defaultLineCurve,
-                    standardThresholdWidth = defaultD3Config.standardThresholdWidth,
+                    standardThresholdHeight = defaultD3Config.standardThresholdHeight,
                     markerStatus,
                 } = plottingConfiguration;
 
                 d3Colors = d3colorPalette;
 
+                // transforming data
+                // Checking date values
                 dataValues = transformData(dataValues, dateFormat);
                 window.chartDataValues = dataValues;
 
+                // clear chart
                 clearChart();
-                margin = { top: 30, right: 30, bottom: 70, left: 50 };
-                width = window.innerWidth - margin.left - margin.right - 20;
-                height =
-                    window.innerHeight -
-                    margin.top -
-                    margin.bottom -
-                    20 -
-                    extraHeight;
+
+                // margins, height, width
+                margin = { top: 20, right: 50, bottom: 80, left: 100 };
+                var width = window.innerWidth - margin.left - margin.right;
+
+                var height = window.innerHeight - margin.top - margin.bottom;
+
+                // Update height based on type of chart
+                /*
+                if (chartType == constants.chartType.STANDARD) {
+                    height = dataValues.length * standardThresholdHeight;
+                    if (
+                        height + margin.top + margin.bottom <
+                        window.innerHeight
+                    ) {
+                        d3.select("#xAxisDiv").style(
+                            "top",
+                            height + margin.top + "px"
+                        );
+                    } else {
+                        d3.select("#xAxisDiv").style("bottom", 0);
+                    }
+                } */
 
                 if (chartType == constants.chartType.STANDARD) {
-                    width = dataValues.length * standardThresholdWidth;
+                    height = dataValues.length * standardThresholdHeight;
+                    if (
+                        height + margin.top + margin.bottom <
+                        window.innerHeight
+                    ) {
+                        d3.select("#xAxisDiv").style(
+                            "top",
+                            height + margin.top + "px"
+                        );
+                    } else {
+                        d3.select("#xAxisDiv").style("bottom", 0);
+                    }
                 }
+
                 yaxisTicks = height / 70;
 
-                xScale = d3
+                yScale = d3
                     .scaleBand()
-                    .range([0, width])
+                    .range([0, height])
                     .padding(paddingInner)
                     .domain(
                         dataValues.map(function (d) {
                             return d[0];
                         })
-                    )
-                    .padding(paddingInner)
-                    .paddingInner(paddingInner);
+                    );
 
                 var minValue = d3.min(dataValues, function (d) {
                     return d[1];
                 });
 
-                yScale = d3
+                xScale = d3
                     .scaleLinear()
-                    .range([height, 0])
+                    .range([0, width])
                     .domain([
                         minValue < 0 ? minValue : 0,
                         d3.max(dataValues, function (d) {
@@ -1021,7 +1046,7 @@
                 var svg = d3
                     .select("#my_dataviz")
                     .append("svg")
-                    .attr("width", width + margin.left + margin.right - 20)
+                    .attr("width", width + margin.left + margin.right)
                     .attr(
                         "height",
                         height + margin.top + margin.bottom + extraHeight
@@ -1035,27 +1060,25 @@
                     );
 
                 // axis-x
-                bottomAxis = g
-                    .append("g")
-                    .attr("class", "axis axis--x x-axis")
-                    .attr("transform", "translate(" + 0 + "," + height + ")");
+                bottomAxis = g.append("g").attr("class", "axis axis--x x-axis");
+                // .attr("transform", "translate(" + 0 + "," + height + ")");
 
-                if (isDateFormat(dataValues[0][0])) {
-                    bottomAxis.call(
-                        d3
-                            .axisBottom(xScale)
-                            .tickSizeOuter(0)
-                            .ticks(dataValues.length)
-                            .tickFormat(d3.timeFormat(dateFormat))
-                    );
-                } else {
-                    bottomAxis.call(
-                        d3
-                            .axisBottom(xScale)
-                            .tickSizeOuter(0)
-                            .ticks(dataValues.length)
-                    );
-                }
+                // if (isDateFormat(dataValues[0][0])) {
+                //     bottomAxis.call(
+                //         d3
+                //             .axisBottom(xScale)
+                //             .tickSizeOuter(0)
+                //             .ticks(dataValues.length)
+                //             .tickFormat(d3.timeFormat(dateFormat))
+                //     );
+                // } else {
+                bottomAxis.call(
+                    d3
+                        .axisLeft(yScale)
+                        .tickSizeOuter(0)
+                        .ticks(dataValues.length)
+                );
+                // }
 
                 var bar = g
                     .selectAll("rect")
@@ -1076,10 +1099,10 @@
                 var line = d3
                     .line()
                     .x(function (d, i) {
-                        return xScale(d[0]) + xScale.bandwidth() / 2;
+                        return xScale(d[1]);
                     })
                     .y(function (d) {
-                        return yScale(d[1]);
+                        return yScale(d[0]);
                     })
                     .curve(d3[curveType]);
 
@@ -1091,32 +1114,45 @@
                     .attr("fill", "none")
                     .attr(
                         "transform",
-                        "translate(" + margin.left + "," + margin.top + ")"
+                        "translate(" +
+                            margin.left +
+                            "," +
+                            (margin.top + yScale.bandwidth() / 2) +
+                            ")"
                     );
 
+                xAxisTicks = width / 100;
+
                 //add x and y axis
-                var yAxis = d3.axisLeft(yScale).tickSize(0).ticks(yaxisTicks);
-                d3.select("#yAxisDiv")
+                var xAxis = d3
+                    .axisBottom(xScale)
+                    .tickSize(0)
+                    .ticks(5)
+                    .tickFormat(d3.format(".1s"));
+
+                d3.select("#xAxisDiv")
                     .append("svg")
-                    .attr("width", "72")
-                    .attr("height", height + margin.top + margin.bottom)
+                    .attr("height", "72")
+                    .attr("width", width + margin.left + margin.right)
                     .append("g") //add group to leave margin for axis
                     .attr(
                         "transform",
-                        "translate(" + margin.left + "," + margin.top + ")"
+                        "translate(" + margin.left + ",0)"
+                        // "translate(0,0)"
                     )
+                    // .style(  ?  :, ? : )
                     .append("g")
-                    .attr("class", "y-axis")
-                    .call(yAxis);
+                    .attr("class", "x-axis")
+                    .call(xAxis);
 
-                if (markerStatus) {
+                if (!markerStatus) {
                     drawMarker(filledStatus, markerShape);
                 }
 
                 setYaxisWidth();
 
                 // var barWidth = document.querySelector(".bar").getBBox().width;
-                var barWidth = xScale.bandwidth();
+                var barWidth = yScale.bandwidth();
                 if (
                     chartType == constants.chartType.FIT_WIDTH &&
                     barWidth < 40
@@ -1152,6 +1188,8 @@
                 var textWidth = document
                     .querySelector(".x-axis .tick text")
                     .getBBox().height;
+
+                // setXAxisTicksDistance();
 
                 if (chartType == constants.chartType.FIT_WIDTH) {
                     for (var i = 0; i < a.length; i++) {
@@ -1195,26 +1233,6 @@
                             maxWidth = width;
                         }
                     }
-
-                    var yAxisDiv = document.querySelector("#yAxisDiv svg");
-
-                    yAxisDiv && yAxisDiv.setAttribute("width", maxWidth);
-                    // d3.select("#my_dataviz").style(
-                    //     "margin-left",
-                    //     maxWidth + "px"
-                    // );
-                    document.querySelector("#my_dataviz").style["margin-left"] =
-                        maxWidth + "px !important";
-
-                    yAxisDiv &&
-                        yAxisDiv.setAttribute(
-                            "transform",
-                            "translate(" +
-                                (maxWidth - margin.left) +
-                                "," +
-                                0 +
-                                ")"
-                        );
                 }
 
                 function make_x_gridlines() {
@@ -1271,21 +1289,22 @@
                         markerShapeConfig[markerShape] &&
                             markerShapeConfig[markerShape].xPositionAttrName,
                         function (d, i) {
-                            return xScale(d[0]) + xScale.bandwidth() / 2;
+                            return xScale(d[1]);
                         }
                     )
                     .attr(
                         markerShapeConfig[markerShape] &&
                             markerShapeConfig[markerShape].yPositionAttrName,
                         function (d) {
-                            return yScale(d[1]);
+                            return yScale(d[0]) + yScale.bandwidth() / 2;
                         }
                     )
                     .attr("r", initialCircleRadius)
                     .attr("height", initialBoxDimension)
                     .attr("width", initialBoxDimension)
                     .attr("points", function (d, i) {
-                        var x1 = xScale(d[0]);
+                        console.log(d);
+                        var x1 = xScale(d[1]);
                         return x1;
                     })
                     .on("mousemove ", function (d, i) {

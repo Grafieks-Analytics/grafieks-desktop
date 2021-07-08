@@ -53,6 +53,7 @@ const defaultD3Config = {
   dateFormat: "%Y",
   chartType: constants.chartType.FIT_WIDTH,
   //   chartType: constants.chartType.STANDARD,
+  // horizontalChartType: constants.chartType.STANDARD,
   horizontalChartType: constants.chartType.FIT_HEIGHT,
   standardThresholdWidth: 100,
   standardThresholdHeight: 100,

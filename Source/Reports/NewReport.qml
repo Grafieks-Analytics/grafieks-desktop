@@ -53,7 +53,7 @@ Page {
     // Initial Chart Config
     property string chartUrl: 'BarChartArrayInput.html';
     property string chartTitle: Constants.barChartTitle;
-    property var customizationsAvailable: "Properties,Reference Line,Legend,Charts Size";
+    property var customizationsAvailable: "Properties,Reference Line,Legend,Axis Size";
 
     // This contains all the customizable config and is passed to drawChart function
     // In draw chart we take out these config; If config is empty => We have default config for it.
@@ -197,10 +197,10 @@ Page {
             allowedYAxisDataPanes = 2;
             switch(chartTitle){
                 case Constants.barChartTitle:
-                    chartUrl = Constants.horizontalBarChartUrl;
-                    console.log('Loading horizontal bar chart');
-                    webEngineView.url = Constants.baseChartUrl+chartUrl;
-                    chartTitle = Constants.horizontalBarChartTitle;
+                    switchChart(Constants.horizontalBarChartTitle);
+                    break;
+                case Constants.lineChartTitle:
+                    switchChart(Constants.horizontalLineChartTitle);
                     break;
             }
         }else{
@@ -372,10 +372,10 @@ Page {
 
         // Update List Models
         for(var i=0; i<xAxisColumnsReportData.length; i++){
-            xAxisListModel.append({ itemName: xAxisColumnsReportData[i].itemName, droppedItemType: xAxisColumnsReportData[i].droppedItemType })
+            xAxisListModel.append({ itemName: xAxisColumnsReportData[i].itemName, droppedItemType: xAxisColumnsReportData[i].droppedItemType, dateFormat: xAxisColumnsReportData[i].dateFormat })
         }
         for(var i=0; i< yAxisColumnsReportData.length; i++){
-            yAxisListModel.append({ itemName: yAxisColumnsReportData[i].itemName, droppedItemType: yAxisColumnsReportData[i].droppedItemType })
+            yAxisListModel.append({ itemName: yAxisColumnsReportData[i].itemName, droppedItemType: yAxisColumnsReportData[i].droppedItemType, dateFormat: yAxisColumnsReportData[i].dateFormat })
         }
         for(var i=0; i<colorListModelData.length; i++){
             colorListModel.append({ textValue: colorListModelData[i].columnName })
@@ -445,6 +445,10 @@ Page {
                 break;
             case Constants.groupBarChartTitle:
                 chartUrl = Constants.barGroupedChartUrl
+                break;
+            case Constants.horizontalLineChartTitle:
+                chartUrl = Constants.horizontalLineChartUrl
+                break;
         }
         webEngineView.url = Constants.baseChartUrl+chartUrl;
         report_desiner_page.chartUrl = chartUrl;
@@ -469,7 +473,7 @@ Page {
         }
         var columnsData = [];
         for(var i=0; i< model.count; i++){
-            columnsData.push({ itemName: model.get(i).itemName, droppedItemType: model.get(i).droppedItemType });
+            columnsData.push({ itemName: model.get(i).itemName, droppedItemType: model.get(i).droppedItemType, dateFormat: model.get(i).dateFormat });
         }
         return columnsData;
     }
@@ -579,6 +583,9 @@ Page {
                     chartUrl = Constants.horizontalBarChartUrl;
                     webEngineView.url = Constants.baseChartUrl+chartUrl;
                     chartTitle = Constants.horizontalBarChartTitle;
+                    break;
+                case Constants.lineChartTitle:
+                    switchChart(Constants.horizontalLineChartTitle)
                     break;
 
                 }
@@ -727,6 +734,10 @@ Page {
             isHorizontalGraph = true;
         }
 
+        if(itemType && (itemType.toLowerCase() === 'numerical') && axis === Constants.xAxisName  && !xAxisColumns.length && !yAxisColumns.length){
+            isHorizontalGraph = true;
+        }
+
         element.border.width = Constants.dropEligibleBorderWidth
         element.border.color = Constants.themeColor
 
@@ -740,8 +751,7 @@ Page {
                 return;
             }
 
-            console.log('X Axis itemType',itemType, itemName);
-            xAxisListModel.append({itemName: itemName, droppedItemType: itemType})
+            xAxisListModel.append({itemName: itemName, droppedItemType: itemType, dateFormat: Constants.yearFormat})
             xAxisColumns.push(itemName);
 
         }else if(axis === Constants.yAxisName){
@@ -750,7 +760,7 @@ Page {
             }
 
             console.log('Y Axis itemType',itemType, itemName);
-            yAxisListModel.append({itemName: itemName, droppedItemType: itemType})
+            yAxisListModel.append({itemName: itemName, droppedItemType: itemType, dateFormat: Constants.yearFormat})
             yAxisColumns.push(itemName);
 
         }else{
@@ -885,9 +895,12 @@ Page {
                 console.log("LINE CLICKED")
                 // Line - xAxis(String), yAxis(String)
                 dataValues =  ChartsModel.getLineChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
-
                 // Line Bar - xAxis(String), yAxis(String)
                 //                dataValues =  ChartsModel.getLineBarChartValues("state", "id", "population");
+                break;
+            case Constants.horizontalLineChartTitle:
+                console.log(Constants.horizontalLineChartTitle,"CLICKED")
+                dataValues =  ChartsModel.getLineChartValues(yAxisColumns[0],xAxisColumns[0],'Sum');
                 break;
             case Constants.pieChartTitle:
             case Constants.donutChartTitle:
@@ -1261,12 +1274,11 @@ Page {
                     spacing: spacingColorList
                     interactive: false
                     delegate: AxisDroppedRectangle{
-                        id: dragRect
                         textValue: itemName
                         itemType: droppedItemType
-                        Component.onCompleted: {
-                            console.log(itemName,itemType)
-                        }
+                        dateFormatValue: dateFormat
+                        itemIndexId: index
+                        axisType: Constants.xAxisName
                     }
                 }
 
@@ -1366,9 +1378,13 @@ Page {
                     model: yAxisListModel
                     orientation: Qt.Horizontal
                     spacing: spacingColorList
+                    interactive: false
                     delegate: AxisDroppedRectangle{
                         textValue: itemName
                         itemType: droppedItemType
+                        itemIndexId: index
+                        axisType: Constants.yAxisName
+                        dateFormatValue: dateFormat
                     }
                 }
 
