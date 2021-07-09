@@ -53,6 +53,8 @@ Item{
             let dashboardId = DashboardParamsModel.currentDashboard
             let reportId = DashboardParamsModel.currentReport
 
+            console.log(newItem.objectName, parseInt(newItem.objectName), "PARSE INT")
+
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName)){
 
                 droppedTextId.color = refColor
@@ -86,6 +88,12 @@ Item{
             let reportId = DashboardParamsModel.currentReport
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName))
                 webengine.reload()
+        }
+
+        function onDashboardContentDestroyed(dashboardId){
+            if(dashboardId === -1){
+                newItem.destroy()
+            }
         }
     }
 

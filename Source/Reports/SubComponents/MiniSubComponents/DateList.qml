@@ -9,7 +9,11 @@ ListView{
             boundsBehavior: Flickable.StopAtBounds
             interactive: true
              clip: false
-             ScrollBar.vertical: ScrollBar {}
+             ScrollBar.vertical: ScrollBar {
+                 policy: ScrollBar.AlwaysOn
+                 anchors.right: parent.right
+                 anchors.rightMargin: -6
+             }
 
 
 
@@ -34,7 +38,7 @@ ListView{
     /***********************************************************************************************************************/
     // Connections Starts
     Connections{
-        target : ChartsModel
+        target : ReportsDataModel
 
 
         function onSendFilteredColumn(allCategorical, allNumerical, allDates){

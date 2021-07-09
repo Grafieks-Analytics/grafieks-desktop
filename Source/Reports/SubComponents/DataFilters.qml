@@ -150,7 +150,7 @@ Popup {
     // On receiving the signal from C++, it will popup the relevant screen
 
     Connections{
-        target: ChartsModel
+        target: ReportsDataModel
 
         function onColumnDataChanged(columnData, options){
             if(ReportParamsModel.section === Constants.categoricalTab){
@@ -397,11 +397,8 @@ Popup {
         ReportParamsModel.clearFilter()
 
         onTabToggle(true,false,false,false);
-        console.log("APPLY APPLY", "REPORT ID", Constants.uniqueReportId)
 
-        // Call the function to apply all the filters in reports
-        // This will emit a signal from ReportParamsModel.fetchMasterReportFilters to the slot in ChartsModel.updateFilterData
-        ReportParamsModel.fetchMasterReportFilters(Constants.uniqueReportId)
+        reDrawChart()
 
 
     }

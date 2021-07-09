@@ -10,11 +10,14 @@ Item{
     id: filterDataSingleItem
     height: control.height + columnName.height
     width: parent.width-25
-       anchors.horizontalCenter: parent.horizontalCenter
+    anchors.horizontalCenter: parent.horizontalCenter
     property alias componentName: filterDataSingleItem.objectName
+    property var modelContent: []
 
     onComponentNameChanged: {
-        control.model = TableColumnsModel.fetchColumnData(componentName)
+        modelContent = TableColumnsModel.fetchColumnData(componentName)
+        modelContent.unshift("Select All")
+        control.model = modelContent
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
     }
 
@@ -28,6 +31,16 @@ Item{
         }
     }
 
+    function onRadioSelect(modelData){
+
+        // Remove existing items
+        DashboardParamsModel.deleteColumnValueMap(DashboardParamsModel.currentDashboard, componentName, "", true)
+
+        // Start pushing the individual checked item in the array
+        DashboardParamsModel.setColumnValueMap(DashboardParamsModel.currentDashboard, componentName, modelData)
+
+    }
+
 
     function filterClicked(){
 
@@ -39,93 +52,93 @@ Item{
     }
 
     Rectangle{
-          height: parent.height
-          width: parent.width
-          color: "white"
-          border.color: Constants.darkThemeColor
+        height: parent.height
+        width: parent.width
+        color: "white"
+        border.color: Constants.darkThemeColor
 
-    Rectangle{
-        id:columnName
-        width:parent.width
-        height:25
+        Rectangle{
+            id:columnName
+            width:parent.width
+            height:25
 
-        color: Constants.themeColor
+            color: Constants.themeColor
 
-                   border.color: Constants.darkThemeColor
-        Row{
-
-            spacing: 15
-
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.leftMargin: 15
-
-
-            Text {
-                id: componentTitle
-                 width:123
-                  elide: Text.ElideRight
-                font.pixelSize: Constants.fontCategoryHeaderMedium
-                verticalAlignment: Text.AlignVCenter
-            }
-
+            border.color: Constants.darkThemeColor
             Row{
 
-                height: parent.height
-                width: 40
                 spacing: 15
-                 anchors.verticalCenter: parent.verticalCenter
-                Image {
-                    source: "/Images/icons/customize.png"
-                    width: 16
-                    height: 16
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: filterClicked()
+
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.leftMargin: 15
+
+
+                Text {
+                    id: componentTitle
+                    width:123
+                    elide: Text.ElideRight
+                    font.pixelSize: Constants.fontCategoryHeaderMedium
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                Row{
+
+                    height: parent.height
+                    width: 40
+                    spacing: 15
+                    anchors.verticalCenter: parent.verticalCenter
+                    Image {
+                        source: "/Images/icons/customize.png"
+                        width: 16
+                        height: 16
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: filterClicked()
+                        }
+
                     }
-
                 }
-            }
 
+
+            }
 
         }
 
-    }
-
-    ComboBox {
-        id:control
-        width: parent.width
-        anchors.top : columnName.bottom
+        ComboBox {
+            id:control
+            width: parent.width
+            anchors.top : columnName.bottom
 
 
 
-        indicator: Canvas {
-            id: canvas
-            x: control.width - width - control.rightPadding
-            y: control.topPadding + (control.availableHeight - height) / 2
-            width: 12
-            height: 8
-            contextType: "2d"
+            indicator: Canvas {
+                id: canvas
+                x: control.width - width - control.rightPadding
+                y: control.topPadding + (control.availableHeight - height) / 2
+                width: 12
+                height: 8
+                contextType: "2d"
 
-            Connections {
-                target: control
-                function onPressedChanged(){
-                    canvas.requestPaint()
+                Connections {
+                    target: control
+                    function onPressedChanged(){
+                        canvas.requestPaint()
+                    }
+                }
+
+                onPaint: {
+                    context.reset();
+                    context.moveTo(0, 0);
+                    context.lineTo(width, 0);
+                    context.lineTo(width / 2, height);
+                    context.closePath();
+                    context.fillStyle = control.pressed ? "#black" : "#gray";
+                    context.fill();
                 }
             }
 
-            onPaint: {
-                context.reset();
-                context.moveTo(0, 0);
-                context.lineTo(width, 0);
-                context.lineTo(width / 2, height);
-                context.closePath();
-                context.fillStyle = control.pressed ? "#black" : "#gray";
-                context.fill();
-            }
+            onCurrentValueChanged: onRadioSelect(currentValue)
         }
-
-
     }
-}
 }

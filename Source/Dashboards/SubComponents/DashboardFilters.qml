@@ -96,6 +96,13 @@ Item {
         TabButton{
             id: filter_apply_btn
             text: "Apply"
+            onClicked: {
+                let currentDashboard = DashboardParamsModel.currentDashboard
+                ChartsModel.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
+                TableColumnsModel.redrawCharts(currentDashboard)
+                console.log("Apply dashboard filter here", currentDashboard, currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
+            }
+
 
             background: Rectangle {
                 id: filter_apply_btn_background

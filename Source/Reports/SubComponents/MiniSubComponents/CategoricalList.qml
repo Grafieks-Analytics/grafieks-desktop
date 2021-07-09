@@ -11,12 +11,17 @@ ListView{
     boundsBehavior: Flickable.StopAtBounds
     interactive: true
     clip: false
-    ScrollBar.vertical: ScrollBar {}
+    ScrollBar.vertical: ScrollBar {
+        policy: ScrollBar.AlwaysOn
+        anchors.right: parent.right
+        anchors.rightMargin: -6
+    }
+
 
 
 
     Connections{
-        target : ChartsModel
+        target : ReportsDataModel
 
         function onSendFilteredColumn(allCategorical, allNumerical, allDates){
             categoricalList.model =  allCategorical

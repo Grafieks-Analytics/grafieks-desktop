@@ -14,7 +14,7 @@ class ReportParamsModel: public QObject
 {
     Q_OBJECT
 
-// Customize Report parameters
+    // Customize Report parameters
     QVariantMap reportsMap;           // <<QString reportId, reportObj>>
     QVariantMap reportsData;
     QVariantMap dashboardReportInstances;
@@ -26,7 +26,7 @@ class ReportParamsModel: public QObject
     QVector<int> categoricalFilters;                            // List of categorical filters
     QVector<int> dateFilters;                                   // List of date filters
     QVector<int> numericalFilters;                              // List of numerical filters
-    QMap<int, QStringList> filterColumnMap;                         // filter id - <column name - tablename> map
+    QMap<int, QStringList> filterColumnMap;                     // filter id - <column name - tablename> map
     QMap<int, QVariantList> filterValueMap;                     // filter id - value list map
     QMap<int, QString> filterRelationMap;                       // filter id - relation map
     QMap<int, QString> filterSlugMap;                           // filter id - slug map
@@ -156,7 +156,9 @@ public:
     // Filter specific invokable functions
 
     Q_INVOKABLE void resetFilter();
+    Q_INVOKABLE void deleteReport(QString reportId, bool allReports = false);
     Q_INVOKABLE void clearFilter();
+    Q_INVOKABLE void removeFilter(int filterId, QString reportId, QString filterType);
     Q_INVOKABLE void resetInputFields();
 
     Q_INVOKABLE void addToMasterReportFilters(QString reportId);
@@ -304,6 +306,7 @@ signals:
     void colorByDataColoumnsChanged(QString colorByDataColoumns);
 
     // For Filters
+    void masterReportFiltersChanged(int count);
     void reportFilterChanged(QMap<int, QVariantMap> reportFilters, QString reportId);
     void resetInput();
     void internalCounterChanged(int internalCounter);

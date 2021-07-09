@@ -52,7 +52,6 @@ SOURCES += \
     Code/Logic/Connectors/sheetmodel.cpp \
     Code/Logic/Dashboards/dashboardparamsmodel.cpp \
     Code/Logic/Dashboards/documenthandlermodel.cpp \
-    Code/Logic/Dashboards/reportslistmodel.cpp \
     Code/Logic/Dashboards/tablecolumnsmodel.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
@@ -86,9 +85,10 @@ SOURCES += \
     Code/Logic/General/qttest2.cpp \
     Code/Logic/General/querysplitter.cpp \
     Code/Logic/General/tableschemamodel.cpp \
-    Code/Logic/Menu/user.cpp \
-    Code/Logic/Reports/chartsmodel.cpp \
+    Code/Logic/General/chartsmodel.cpp \
+    Code/Logic/Menu/user.cpp \  
     Code/Logic/Reports/reportparamsmodel.cpp \
+    Code/Logic/Reports/reportsdatamodel.cpp \
     main.cpp \
 
 RESOURCES += \
@@ -151,7 +151,6 @@ HEADERS += \
     Code/Logic/Connectors/sheetmodel.h \
     Code/Logic/Dashboards/dashboardparamsmodel.h \
     Code/Logic/Dashboards/documenthandlermodel.h \
-    Code/Logic/Dashboards/reportslistmodel.h \
     Code/Logic/Dashboards/tablecolumnsmodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
@@ -185,9 +184,10 @@ HEADERS += \
     Code/Logic/General/qttest2.h \
     Code/Logic/General/querysplitter.h \
     Code/Logic/General/tableschemamodel.h \
+    Code/Logic/General/chartsmodel.h \
     Code/Logic/Menu/user.h \
-    Code/Logic/Reports/chartsmodel.h \
     Code/Logic/Reports/reportparamsmodel.h \
+    Code/Logic/Reports/reportsdatamodel.h \
     Code/duckdb.hpp \
     Code/jsoncons/include/jsoncons/json.hpp \
     Code/jsoncons/include/jsoncons_ext/csv/csv.hpp \

@@ -145,12 +145,16 @@ Popup {
         // Clear tabs individual temp data
         dateFilterPopup.clearData()
 
+        // Call the function to apply all the filters in reports
+        // This will emit a signal from ReportParamsModel.fetchMasterReportFilters to the slot in ChartsModel.updateFilterData
+        ReportParamsModel.fetchMasterReportFilters(ReportParamsModel.reportId)
+
     }
 
     function manageFilters(mode, counter = 0, filterId = 0){
 
         console.log("INSERT INTO NUMERICAL FILTERS  - INSERT REPORT ID", mode, counter, filterId)
-        ReportParamsModel.addToMasterReportFilters(Constants.uniqueReportId);
+        ReportParamsModel.addToMasterReportFilters(ReportParamsModel.reportId);
 
     }
 

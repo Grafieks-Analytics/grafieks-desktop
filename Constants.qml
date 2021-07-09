@@ -12,9 +12,6 @@ import QtQuick 2.15
 
 QtObject {
 
-    // Dummy
-    property var uniqueReportId: "MTYyMzcyOTQyOTQ0Mg=="
-
     // Menu Indexes
     property int initialIndex: 3
     property int dataDesignerIndex: 3
@@ -238,7 +235,7 @@ QtObject {
     property int reportTypeChart : 3
 
     property var filterCategoricalTypes: ["dataListMulti", "dataListSingle", "dataDropdownSingle", "dataDropdownMulti"]
-    property var filterNumericalTypes: ["dataRange","dataEqual","datanotEqual","dataSmaller","dataGreater","dataEqualOrSmaller","dataEqualOrGreater","dataBetween"]
+    property var filterNumericalTypes: ["dataRange","dataEqual","dataNotEqual","dataSmaller","dataGreater","dataEqualOrSmaller","dataEqualOrGreater","dataBetween"]
 
     // DASHBOARD ends
 

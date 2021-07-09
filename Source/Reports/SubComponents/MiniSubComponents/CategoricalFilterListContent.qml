@@ -26,7 +26,8 @@ Rectangle{
     color: Constants.whiteColor
     border.color: Constants.darkThemeColor
 
-    property int counter: 0
+    property int counter: 0    
+    property var columnDataModel: []
 
 
     /***********************************************************************************************************************/
@@ -59,7 +60,7 @@ Rectangle{
             if(ReportParamsModel.section === Constants.categoricalTab){
                 counter = ReportParamsModel.filterIndex
                 var colName = ReportParamsModel.colName
-                var colData = ChartsModel.fetchColumnData(colName)
+                var colData = ReportsDataModel.fetchColumnData(colName)
                 var values = ReportParamsModel.fetchFilterValueMap(counter)[counter]
                 ReportParamsModel.removeTmpSelectedValues(0, true)
 
@@ -67,8 +68,10 @@ Rectangle{
                 singleSelectCheckList.model = []
                 multiSelectCheckList.model = []
 
-                singleSelectCheckList.model = colData
-                multiSelectCheckList.model  = colData
+                columnDataModel = colData
+
+                singleSelectCheckList.model = columnDataModel
+                multiSelectCheckList.model  = columnDataModel
 
                 if(ReportParamsModel.subCategory === Constants.categorySubMulti){
                     multiSelectRadio.checked = true
@@ -77,7 +80,7 @@ Rectangle{
                     singleSelectCheckList.visible = false
 
                     if(values[0] === "%"){
-                        colData.forEach((item) => {
+                        columnDataModel.forEach((item) => {
                                             ReportParamsModel.setTmpSelectedValues(item)
                                         })
                     } else{
@@ -179,9 +182,10 @@ Rectangle{
 
             }
 
-            console.log("SEARCH TO BE IMPLEMENTED - CATEGORICAL LIST")
-            //            QueryDataModel.columnSearchData(ReportParamsModel.colName, ReportParamsModel.tableName, searchText.text, JSON.stringify(options))
-            ChartsModel.searchColumnData(ReportParamsModel.colName,searchText.text)
+            var filteredColumns = filterItems(columnDataModel, searchText.text)
+
+            singleSelectCheckList.model = filteredColumns
+            multiSelectCheckList.model  = filteredColumns
 
             if(ReportParamsModel.subCategory === Constants.categorySubMulti){
                 if(searchText.text.length > 0){
@@ -261,6 +265,12 @@ Rectangle{
         if(ReportParamsModel.section === Constants.categoricalTab){
             ReportParamsModel.addToIncludeExcludeMap(counter, checked)
         }
+    }
+
+    function filterItems(arr, query) {
+      return arr.filter(function(el) {
+          return el.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      })
     }
 
 
@@ -562,7 +572,7 @@ Rectangle{
             anchors.left: includeExcludeRow.left
 
             CheckBoxTpl {
-                checked: ReportParamsModel.fetchIncludeNullMap(counter)[counter] === "1" ? true : false
+                checked: ReportParamsModel.fetchIncludeNullMap(counter)[0]
                 text: qsTr("Include Null")
                 parent_dimension: Constants.defaultCheckBoxDimension
 
@@ -577,7 +587,7 @@ Rectangle{
             anchors.right: includeExcludeRow.right
             anchors.rightMargin: 30
             CheckBoxTpl {
-                checked: ReportParamsModel.fetchIncludeExcludeMap(counter)[counter] === "1" ? true : false
+                checked: ReportParamsModel.fetchIncludeExcludeMap(counter)[0]
                 text: qsTr("Exclude")
                 parent_dimension: Constants.defaultCheckBoxDimension
 
