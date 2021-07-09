@@ -71,6 +71,8 @@ Item{
             let dashboardId = DashboardParamsModel.currentDashboard
             // let reportIdCpp = DashboardParamsModel.currentReport
 
+            console.log(newItem.objectName, parseInt(newItem.objectName), "PARSE INT")
+
             if(dashboardId === refDashboardId && refReportId === parseInt(newItem.objectName)){
                 droppedReportId.color = refColor
                 setChartBackgroundColor(refColor);
@@ -109,6 +111,12 @@ Item{
             }
         }
 
+        function onDashboardContentDestroyed(dashboardId){
+            if(dashboardId === -1){
+                newItem.destroy()
+            }
+        }
+
     }
 
     // Connections Ends
@@ -135,6 +143,7 @@ Item{
     function editSelectedReport(reportId){
         stacklayout_home.currentIndex = Constants.newReportIndex;
         ReportParamsModel.setReportId(reportId);
+        ChartsModel.setChartSource("report", ReportParamsModel.reportId)
         ReportParamsModel.setEditReportToggle(reportId);
     }
 
@@ -452,7 +461,7 @@ Item{
             console.log('Starting to plot');
 
            var scriptValue = 'window.addEventListener("resize", function () {
-                    d3.selectAll("#my_dataviz").html("");
+                    clearChart();
                     drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
            });';
 
@@ -460,7 +469,7 @@ Item{
            webEngineView.runJavaScript('drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue);
 
            // Clear Chart Data
-            // ChartsModel.clearData();
+            // ReportsDataModel.clearData();
            return;
         }
 

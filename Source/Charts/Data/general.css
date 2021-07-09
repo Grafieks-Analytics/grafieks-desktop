@@ -90,6 +90,7 @@ body {
 #yAxisDiv {
     position: fixed;
     background: #fff;
+    width: 72px;
 }
 #my_dataviz {
     /* overflow-x: scroll; */

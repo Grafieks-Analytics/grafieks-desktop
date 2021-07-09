@@ -68,6 +68,14 @@ Rectangle {
             dashboardArea.color = color
             previousColor = color
         }
+
+        function onDashboardContentDestroyed(dashboardId){
+
+            if(dashboardId === -1){
+                rectangles.clear()
+                dashboardArea.color =  Constants.dashboardDefaultBackgroundColor
+            }
+        }
     }
 
     // Connections Ends
@@ -85,7 +93,7 @@ Rectangle {
     function onDropAreaEntered(drag){
 
         dashboardArea.color = Constants.dropHighlightColor
-//        console.log("Entered", currentPoint.x, listViewElem.itemName)
+        //        console.log("Entered", currentPoint.x, listViewElem.itemName)
         console.log("droparaea",dropArea.height,dropArea.width)
     }
 
@@ -127,7 +135,7 @@ Rectangle {
         var objectJson = {x: x1, y: y1, z: DashboardParamsModel.zIndex,  objectName : counter};
         if(listViewElem.reportId){
             objectJson.reportId = listViewElem.reportId;
-        } 
+        }
         rectangles.set(counter, dynamicContainer.createObject(parent,objectJson))
 
         DashboardParamsModel.dragNewReport(DashboardParamsModel.currentDashboard, counter)
@@ -151,7 +159,7 @@ Rectangle {
 
     }
     function onDropAreaExited(){
-//        console.log('Exit');
+        //        console.log('Exit');
     }
 
 

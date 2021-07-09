@@ -22,11 +22,12 @@ const constants = {
         top: 20,
         left: 70,
         right: 20,
-        bottom: 50,
+        bottom: 60,
     },
 };
 
 const defaultD3Config = {
+<<<<<<< HEAD
     d3ColorPalette: [
         "#8dd3c7",
         "#ffffb3",
@@ -58,6 +59,52 @@ const defaultD3Config = {
     standardThresholdLineChartWidth: 100,
     standardThresholdHeight: 100,
     fontSize: 12,
+=======
+  d3ColorPalette: [
+    "#8dd3c7",
+    "#ffffb3",
+    "#bebada",
+    "#fb8072",
+    "#80b1d3",
+    "#fdb462",
+    "#b3de69",
+    "#fccde5",
+    "#d9d9d9",
+    "#bc80bd",
+    "#ccebc5",
+    "#ffed6f",
+  ],
+  defaultPaddingInner: 0.25,
+  defaultMarkerShape: constants.markerShapes.RECT,
+  initialCircleRadius: 3,
+  onHoverCircleRadius: 7,
+  initialBoxDimension: 6,
+  onHoverBoxDimension: 8,
+  defaultLineCurve: constants.cureveType.LINEAR,
+  innerRadius: 150,
+  defaultTimeParseFormat: "%d-%m-%Y",
+  defaultSpace: 30,
+  dateFormat: "%Y",
+  chartType: constants.chartType.FIT_WIDTH,
+  //   chartType: constants.chartType.STANDARD,
+  // horizontalChartType: constants.chartType.STANDARD,
+  horizontalChartType: constants.chartType.FIT_HEIGHT,
+  standardThresholdWidth: 100,
+  standardThresholdHeight: 100,
+  fontSize: 12,
+  fontFamily: "MS Sans Serif",
+  fontColor: "black",
+  defaultLegendConfig: {
+    legendStatus: false,
+    legendPosition: "right",
+  },
+  defaultlabelConfig: {
+    labelStatus: false,
+  },
+  defaultGridConfig: {
+    gridStatus: false,
+  },
+>>>>>>> 874649c0e867bfe4776222997709111e8fdf2e41
 };
 const markerShapeConfig = {
     circle: {

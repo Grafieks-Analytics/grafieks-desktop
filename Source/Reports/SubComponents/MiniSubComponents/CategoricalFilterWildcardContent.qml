@@ -341,23 +341,6 @@ Rectangle{
 
         }
 
-        Column{
-            id: singleSelectRadioColumn
-
-            anchors.right: parent.right
-            rightPadding: 30
-
-            CheckBoxTpl {
-
-                id: excludeCheck
-                text: qsTr("Exclude")
-                parent_dimension: Constants.defaultCheckBoxDimension
-
-                onCheckStateChanged: onExcludeCheckedClicked(checked)
-            }
-
-
-        }
     }
 
 

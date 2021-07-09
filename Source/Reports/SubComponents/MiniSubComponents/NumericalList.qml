@@ -9,13 +9,17 @@ ListView{
     boundsBehavior: Flickable.StopAtBounds
     interactive: false
     clip: false
-    ScrollBar.vertical: ScrollBar {}
+    ScrollBar.vertical: ScrollBar {
+        policy: ScrollBar.AlwaysOn
+        anchors.right: parent.right
+        anchors.rightMargin: -6
+    }
 
     property string itemType: "Numerical"
 
 
     Connections{
-        target : ChartsModel
+        target : ReportsDataModel
 
         function onSendFilteredColumn(allCategorical, allNumerical, allDates){
             numericalList.model =  allNumerical

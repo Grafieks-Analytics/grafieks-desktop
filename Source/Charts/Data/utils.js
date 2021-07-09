@@ -139,29 +139,41 @@ function setLabel(
     console.log("x" + x_tick_fontSize);
     console.log("y" + y_tick_fontSize);
 
-    const margin = { top: 30, right: 30, bottom: 70, left: 60 },
-        width = window.innerWidth - margin.left - margin.right - 10,
-        height = window.innerHeight - margin.top - margin.bottom - 10;
+    const margin = { top: 30, right: 30, bottom: 70, left: 60 };
+    if (document.querySelector("#my_dataviz").clientWidth > document.documentElement.clientWidth) {
+      
+         width = document.documentElement.clientWidth;
+    }
+    else {
+         width = document.querySelector("#my_dataviz").clientWidth;
+    }
+      height = document.querySelector("#yAxisDiv").clientHeight;
 
     if (labelType == "x_label") {
-        svg.append("text")
-            .attr("class", labelType)
-            .attr("text-anchor", "end")
-            .text(label)
-            .attr("x", window.innerWidth / 2)
-            .attr("y", 60)
-            .attr("font-size", xLabelfontSize)
-            .attr("class", labelType);
+        svg
+          .append("text")
+          .attr("class", labelType)
+          .attr("text-anchor", "end")
+          .text(label)
+          .attr("x", width/2+60)
+          .attr("y", 55)
+          .attr("font-size", xLabelfontSize)
+          .attr("font-family", xLabelfontFamily)
+          .attr("fill", xLabelfontColor)
+          .attr("class", labelType);
     } else {
-        svg.append("text")
-            .attr("class", labelType)
-            .attr("text-anchor", "end")
-            .text(label)
-            .attr("y", 6)
-            .attr("font-size", yLabelfontSize)
-            .attr("x", -height / 2)
-            .attr("dy", ".75em")
-            .attr("transform", "rotate(-90)");
+        svg
+          .append("text")
+          .attr("class", labelType)
+          .attr("text-anchor", "end")
+          .text(label)
+          .attr("y", 5)
+          .attr("font-size", yLabelfontSize)
+          .attr("font-family", yLabelfontFamily)
+          .attr("fill", yLabelfontColor)
+          .attr("x", -height / 2)
+          .attr("dy", ".75em")
+          .attr("transform", "rotate(-90)");
     }
 }
 
@@ -269,6 +281,7 @@ function setXAxisTicksDistance(distanceValue = "1em") {
 }
 
 function removeAxisTicks(axis = "xAxis") {
+<<<<<<< HEAD
     selector = ".x-axis text";
 
     if (axis == "yAxis") {
@@ -288,6 +301,27 @@ function removeAxisTicks(axis = "xAxis") {
             continue;
         }
     }
+=======
+  selector = ".x-axis text";
+
+  if (axis == "yAxis") {
+    selector = ".y-axis text";
+  }
+
+  // Remove Text in case they are large in number
+  var allXAxisTexts = document.querySelectorAll(selector);
+
+  for (var i = 0; i < allXAxisTexts.length; i++) {
+    if (!Math.floor(data[0][0].length * 0.02)) {
+      break;
+    }
+
+    if (i % Math.floor(data[0][0].length * 0.04) != 0) {
+      allXAxisTexts[i].remove();
+      continue;
+    }
+  }
+>>>>>>> 874649c0e867bfe4776222997709111e8fdf2e41
 }
 
 // Main
