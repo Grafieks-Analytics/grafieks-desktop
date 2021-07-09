@@ -136,7 +136,8 @@ Rectangle {
         DashboardParamsModel.setDashboardReportTypeMap(DashboardParamsModel.currentDashboard, counter, reportType)
 
         const reportProperties = ReportParamsModel.getReport(listViewElem.reportId);
-        const chartUrl = Constants.baseChartUrl + reportProperties.chartUrl;
+        const chartUrl = reportProperties && (Constants.baseChartUrl + reportProperties.chartUrl);
+
         DashboardParamsModel.setDashboardReportUrl(DashboardParamsModel.currentDashboard, counter, chartUrl);
 
         DashboardParamsModel.setPositionX(x1);
