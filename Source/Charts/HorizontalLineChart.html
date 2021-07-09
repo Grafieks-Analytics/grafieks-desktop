@@ -1101,7 +1101,12 @@
                         "transform",
                         "translate(" + margin.left + "," + margin.top + ")"
                     )
-                    .call(make_y_gridlines().tickSize(-width).tickFormat(""));
+                    .call(
+                        make_x_gridlines(xScale)
+                            .tickSize(height)
+                            .ticks(5)
+                            .tickFormat("")
+                    );
 
                 // line chart
                 var line = d3
@@ -1192,10 +1197,8 @@
                         .attr("y", "0");
                 }
 
-                a = document.querySelectorAll(".x-axis text");
-                var textWidth = document
-                    .querySelector(".x-axis .tick text")
-                    .getBBox().height;
+                a = document.querySelectorAll(".y-axis text");
+                var textWidth = 100;
 
                 // setXAxisTicksDistance();
 

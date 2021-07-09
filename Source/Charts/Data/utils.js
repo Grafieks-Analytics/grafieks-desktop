@@ -268,6 +268,28 @@ function setXAxisTicksDistance(distanceValue = "1em") {
     d3.selectAll(".x-axis text").attr("dy", distanceValue);
 }
 
+function removeAxisTicks(axis = "xAxis") {
+    selector = ".x-axis text";
+
+    if (axis == "yAxis") {
+        selector = ".y-axis text";
+    }
+
+    // Remove Text in case they are large in number
+    var allXAxisTexts = document.querySelectorAll(selector);
+
+    for (var i = 0; i < allXAxisTexts.length; i++) {
+        if (!Math.floor(data[0][0].length * 0.02)) {
+            break;
+        }
+
+        if (i % Math.floor(data[0][0].length * 0.04) != 0) {
+            allXAxisTexts[i].remove();
+            continue;
+        }
+    }
+}
+
 // Main
 // Open this function when in production
 (function () {

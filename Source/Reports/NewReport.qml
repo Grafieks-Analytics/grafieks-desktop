@@ -577,7 +577,7 @@ Page {
             if(isHorizontalGraph){
                 switch(chartTitle){
                 case Constants.barChartTitle:
-                    if(colorByData.length){
+                    if(colorByData.length)  {
                         switchChart(Constants.horizontalStackedBarChartTitle)
                         break;
                     }
@@ -886,7 +886,7 @@ Page {
             case Constants.multiLineChartTitle:
                 console.log(Constants.multiLineChartTitle,"CLICKED");
                 colorByColumnName = colorByData[0] && colorByData[0].columnName;
-                dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,yAxisColumns[0], xAxisColumns[0]);
+                dataValues =  ChartsModel.getStackedAreaChartValues(xAxisColumns[0],yAxisColumns[0],colorByColumnName);
                 break;
             case Constants.horizontalLineChartTitle:
                 console.log(Constants.horizontalLineChartTitle,"CLICKED")

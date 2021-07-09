@@ -18,9 +18,11 @@
         <div id="tooltip"></div>
 
         <script>
+            var tooltipData = {};
+
             var data = [
                 [
-                    ["asdsad2221", "Helen", "6129"],
+                    ["2221", "Helen", "6129"],
                     ["1903", "Dorothy", "3078"],
                     ["1903", "Betty", "596"],
                     ["1903", "Amanda", "247"],
@@ -47,21 +49,21 @@
                 ["Labels"],
             ];
 
-            var data = [
-                [
-                    ["Furniture", "Furniture", -3636],
-                    ["Furniture", "OfficeSupplies", 0],
-                    ["Furniture", "Technology", 0],
-                    ["OfficeSupplies", "Furniture", 0],
-                    ["OfficeSupplies", "OfficeSupplies", 2010],
-                    ["OfficeSupplies", "Technology", 0],
-                    ["Technology", "Furniture", 0],
-                    ["Technology", "OfficeSupplies", 0],
-                    ["Technology", "Technology", 1362],
-                ],
-                ["Furniture", "OfficeSupplies", "Technology"],
-                ["Category", "Profit"],
-            ];
+            // var data = [
+            //     [
+            //         ["Furniture", "Furniture", -3636],
+            //         ["Furniture", "OfficeSupplies", 0],
+            //         ["Furniture", "Technology", 0],
+            //         ["OfficeSupplies", "Furniture", 0],
+            //         ["OfficeSupplies", "OfficeSupplies", 2010],
+            //         ["OfficeSupplies", "Technology", 0],
+            //         ["Technology", "Furniture", 0],
+            //         ["Technology", "OfficeSupplies", 0],
+            //         ["Technology", "Technology", 1362],
+            //     ],
+            //     ["Furniture", "OfficeSupplies", "Technology"],
+            //     ["Category", "Profit"],
+            // ];
             // set the dimensions and margins of the graph
 
             var {
@@ -72,28 +74,97 @@
                 defaultLineCurve,
             } = defaultD3Config;
 
-            function drawChart(data, plottingConfiguration = {}) {
-                var dataValues = data[0];
+            function transformData(dataValue, dateFormat, dateFormat1) {
+                json = {};
+                var isKey1Date = false;
+                var isKey2Date = false;
 
-                let { d3colorPalette, paddingInner, markerShape, curveType } =
-                    plottingConfiguration;
-                if (!d3colorPalette) {
-                    d3colorPalette = defaultD3Config.d3ColorPalette;
+                if (isDateFormat(dataValue[0][1])) {
+                    isKey1Date = true;
                 }
+                if (isDateFormat(dataValue[0][0])) {
+                    isKey2Date = true;
+                }
+
+                var uniqueKey2 = [];
+                dataValue.forEach((d) => {
+                    if (isKey1Date) {
+                        var key = getDateFormattedData(d[1], dateFormat);
+                    } else {
+                        var key = d[1];
+                    }
+
+                    if (!json[key]) {
+                        json[key] = {};
+                    }
+                    if (isKey2Date) {
+                        var key2 = getDateFormattedData(d[0], dateFormat1);
+                    } else {
+                        var key2 = d[0];
+                    }
+                    if (!uniqueKey2.includes(key2)) {
+                        uniqueKey2.push(key2);
+                    }
+
+                    var value = d[2];
+
+                    if (!json[key][key2]) {
+                        json[key][key2] = 0;
+                    }
+
+                    json[key][key2] += +value;
+                });
+
+                var response = [];
+                var allKeys = uniqueKey2;
+
+                var sortedKeys = sortDates(json, dateFormat);
+                const response1 = sortedKeys.map((d) => {
+                    return { ...json[d], key: d };
+                });
+                console.log({ response1 });
+
+                for (var key in json) {
+                    if (Object.keys(json[key]).length < allKeys.length) {
+                        allKeys.forEach((d) => {
+                            if (!json[key][d]) {
+                                json[key][d] = 0;
+                            }
+                        });
+                    }
+                    response.push({ ...json[key], key });
+                }
+
+                return [response, allKeys, data[2]];
+            }
+
+            function drawChart(data, plottingConfiguration = {}) {
+                let {
+                    dateFormat = defaultD3Config.dateFormat,
+                    d3colorPalette = defaultD3Config.d3ColorPalette,
+                    paddingInner = defaultD3Config.defaultPaddingInner,
+                    chartType = defaultD3Config.chartType,
+                    curveType = defaultLineCurve,
+                    standardThresholdWidth = defaultD3Config.standardThresholdLineChartWidth,
+                } = plottingConfiguration;
+
+                var dataValues = data[0];
+                console.log(data);
+                // dataValues = transformData(data, dateFormat);
+                // console.log(dataValues);
+                // var [dataValues, all_keys, keys2] = dataValues;
+
                 d3Colors = d3colorPalette;
 
-                if (!paddingInner) {
-                    paddingInner = defaultD3Config.defaultPaddingInner;
-                }
-
-                if (!curveType) {
-                    curveType = defaultLineCurve;
-                }
                 d3.selectAll("#my_dataviz").html("");
                 var margin = { top: 30, right: 30, bottom: 70, left: 60 },
                     width = window.innerWidth - margin.left - margin.right - 20,
                     height =
                         window.innerHeight - margin.top - margin.bottom - 20;
+
+                if (chartType == constants.chartType.STANDARD) {
+                    width = dataValues.length * standardThresholdWidth;
+                }
 
                 // append the svg object to the body of the page
                 svg = d3
@@ -108,7 +179,7 @@
                     );
 
                 // group the data: I want to draw one line per group
-                var sumstat = d3
+                sumstat = d3
                     .nest() // nest function allows to group the calculation per level of a factor
                     .key(function (d) {
                         return d[1];
@@ -123,7 +194,7 @@
 
                 svg.append("g")
                     .attr("transform", "translate(0," + height + ")")
-                    .call(d3.axisBottom(x).ticks(5));
+                    .call(d3.axisBottom(x).ticks(5).tickSize(0));
 
                 // Add Y axis
                 y = d3
@@ -154,12 +225,13 @@
                     .attr("stroke", function (d) {
                         return color(d.key);
                     })
+                    .attr("class", "line")
                     .attr("stroke-width", 1.5)
                     .attr("d", function (d) {
                         return d3
                             .line()
                             .x(function (d) {
-                                return x(d[0]);
+                                return x(d[0]) + x.bandwidth() / 2;
                             })
                             .y(function (d) {
                                 return y(+d[2]);
@@ -167,204 +239,165 @@
                             .curve(d3[curveType])(d.values);
                     });
 
-                drawMarker(true, false, "#ff00ff");
-            }
+                var mouseG = svg
+                    .append("g")
+                    .attr("class", "mouse-over-effects");
 
-            // function drawMarker(fillStatus, markerShape, fillColor) {
-            //     let dataValues = data,
-            //         fill = "#ffffff",
-            //         stroke = d3Colors[0];
+                mouseG
+                    .append("path") // this is the black vertical line to follow mouse
+                    .attr("class", "mouse-line")
+                    .style("stroke", "#999")
+                    .style("stroke-width", "1px")
+                    .style("opacity", "0.5");
 
-            //     if (fillStatus) {
-            //         initialCircleRadius = 3;
-            //         fill = fillColor;
-            //         stroke = 0;
-            //     }
+                var lines = document.getElementsByClassName("line");
+                console.log({ lines });
 
-            //     if (!markerShape) {
-            //         markerShape = defaultD3Config.defaultMarkerShape;
-            //     }
-
-            //     svg.selectAll(".marker-shape").remove();
-
-            //     svg.selectAll(".dot")
-            //         .data(dataValues)
-            //         .enter()
-            //         .append(markerShape)
-            //         .attr("stroke", stroke)
-            //         .attr("class", markerShape)
-            //         .attr("class", "marker-shape")
-            //         .attr("fill", fill)
-            //         .attr(
-            //             markerShapeConfig[markerShape] &&
-            //                 markerShapeConfig[markerShape].xPositionAttrName,
-            //             function (d, i) {
-            //                 return x(i);
-            //             }
-            //         )
-            //         .attr(
-            //             markerShapeConfig[markerShape] &&
-            //                 markerShapeConfig[markerShape].yPositionAttrName,
-            //             function (d) {
-            //                 return y(d);
-            //             }
-            //         )
-            //         .attr("r", initialCircleRadius)
-            //         .attr("height", initialBoxDimension)
-            //         .attr("width", initialBoxDimension)
-            //         .attr("points", function (d, i) {
-            //             console.log(x(i));
-            //             var x1 = x(i);
-            //             return (
-            //                 x1 +
-            //                 " " +
-            //                 (x1 + 3) +
-            //                 ", " +
-            //                 (x1 + 10) +
-            //                 " " +
-            //                 (x1 + 10) +
-            //                 ", " +
-            //                 (x1 - 10) +
-            //                 " " +
-            //                 (x1 + 10)
-            //             );
-            //         })
-            //         .on("mousemove ", function (d, i) {
-            //             var x_pos = d3.mouse(this)[0];
-            //             var y_pos = d3.mouse(this)[1];
-
-            //             const xValue = x.invert(x_pos);
-            //             const yValue = y.invert(y_pos);
-
-            //             d3.select("#tooltip")
-            //                 .style("left", x_pos - 10 + "px")
-            //                 .style("top", y_pos + "px")
-            //                 .style("display", "block")
-            //                 .html(parseInt(xValue) + ", " + yValue.toFixed(2));
-
-            //             var shapeClass = ".marker-shape";
-            //             d3.selectAll(shapeClass).style("opacity", 0.3);
-            //             d3.select(this)
-            //                 .style("opacity", 1)
-            //                 .attr("r", onHoverCircleRadius)
-            //                 .attr("height", onHoverBoxDimension)
-            //                 .attr("width", onHoverBoxDimension);
-            //         })
-            //         .on("mouseout", function () {
-            //             d3.select("#tooltip").style("display", "none");
-            //             var shapeClass = ".marker-shape";
-            //             d3.selectAll(shapeClass)
-            //                 .style("opacity", 1)
-            //                 .attr("r", initialCircleRadius)
-            //                 .attr("height", initialBoxDimension)
-            //                 .attr("width", initialBoxDimension);
-            //         });
-            // }
-
-            function drawMarker(fillStatus, markerShape) {
-                dateformatValue = function (value) {
-                    return value;
-                };
-
-                let dataValues = window.chartDataValues,
-                    fill = "#ffffff",
-                    stroke = d3Colors[0];
-
-                if (fillStatus) {
-                    initialCircleRadius = 3;
-                    fill = d3Colors[0];
-                    stroke = 0;
-                }
-                if (!markerShape) {
-                    markerShape = defaultD3Config.defaultMarkerShape;
-                }
-
-                var svg = d3.select("#my_dataviz svg");
-
-                svg.selectAll(".marker-shape").remove();
-
-                svg.selectAll(".dot")
+                var mousePerLine = mouseG
+                    .selectAll(".mouse-per-line")
                     .data(sumstat)
                     .enter()
-                    .append(markerShape)
-                    .attr("stroke", stroke)
-                    .attr("class", markerShape)
-                    .attr("class", "marker-shape")
-                    .attr(
-                        "transform",
-                        "translate(" +
-                            (markerShape == constants.markerShapes.RECT
-                                ? margin.left - 2.8
-                                : margin.left) +
-                            "," +
-                            (markerShape == constants.markerShapes.RECT
-                                ? margin.top - 3
-                                : margin.top) +
-                            ")"
-                    )
-                    .attr("fill", fill)
-                    .attr(
-                        markerShapeConfig[markerShape] &&
-                            markerShapeConfig[markerShape].xPositionAttrName,
-                        function (d, i) {
-                            return xScale(d[0]) + xScale.bandwidth() / 2;
-                        }
-                    )
-                    .attr(
-                        markerShapeConfig[markerShape] &&
-                            markerShapeConfig[markerShape].yPositionAttrName,
-                        function (d) {
-                            return yScale(d[1]);
-                        }
-                    )
-                    .attr("r", initialCircleRadius)
-                    .attr("height", initialBoxDimension)
-                    .attr("width", initialBoxDimension)
-                    .attr("points", function (d, i) {
-                        var x1 = xScale(d[0]);
-                        return x1;
+                    .append("g")
+                    .attr("class", "mouse-per-line");
+
+                mousePerLine
+                    .append("circle")
+                    .attr("r", 3)
+                    .style("stroke", function (d) {
+                        return color(d.key);
                     })
-                    .on("mousemove ", function (d, i) {
-                        var x_pos = d3.mouse(this)[0];
-                        var y_pos = d3.mouse(this)[1];
-
-                        // console.log(d);
-                        const xValue = dateformatValue(d[0]);
-                        const yValue = d[1];
-
-                        d3.select("#tooltip")
-                            .style("left", x_pos - 20 + "px")
-                            .style("top", y_pos - 20 + "px")
-                            .style("display", "block")
-                            .html(xValue + ", " + yValue.toFixed(2));
-
-                        var shapeClass = ".marker-shape";
-                        d3.selectAll(shapeClass).style("opacity", 0.3);
-                        d3.select(this)
-                            .style("opacity", 1)
-                            .attr("r", onHoverCircleRadius)
-                            .attr("height", onHoverBoxDimension)
-                            .attr("width", onHoverBoxDimension);
+                    .style("fill", function (d) {
+                        return color(d.key);
                     })
+                    .style("stroke-width", "1px")
+                    .style("opacity", "0");
+
+                mousePerLine
+                    .append("text")
+                    .attr("transform", "translate(10,3)");
+
+                mouseG
+                    .append("svg:rect") // append a rect to catch mouse movements on canvas
+                    .attr("width", width) // can't catch mouse events on a g element
+                    .attr("height", height)
+                    .attr("fill", "none")
+                    .attr("pointer-events", "all")
                     .on("mouseout", function () {
-                        d3.select("#tooltip").style("display", "none");
-                        var shapeClass = ".marker-shape";
-                        d3.selectAll(shapeClass)
-                            .style("opacity", 1)
-                            .attr("r", initialCircleRadius)
-                            .attr("height", initialBoxDimension)
-                            .attr("width", initialBoxDimension);
+                        d3.select(".mouse-line").style("opacity", "0");
+                        d3.selectAll(".mouse-per-line circle").style(
+                            "opacity",
+                            "0"
+                        );
+                        d3.selectAll(".mouse-per-line text").style(
+                            "opacity",
+                            "0"
+                        );
+                        d3.select("#tooltip")
+                            .style("display", "none")
+                            .style("opacity", "0");
+                    })
+                    .on("mouseover", function () {
+                        // on mouse in show line, circles and text
+                        d3.select(".mouse-line").style("opacity", "1");
+                        d3.selectAll(".mouse-per-line circle").style(
+                            "opacity",
+                            "1"
+                        );
+                        d3.selectAll(".mouse-per-line text").style(
+                            "opacity",
+                            "1"
+                        );
+                    })
+                    .on("mousemove", function () {
+                        // mouse moving over canvas
+
+                        var mouse = d3.mouse(this);
+                        d3.select(".mouse-line").attr("d", function () {
+                            var d = "M" + mouse[0] + "," + height;
+                            d += " " + mouse[0] + "," + 0;
+                            return d;
+                        });
+
+                        d3.selectAll(".mouse-per-line").attr(
+                            "transform",
+                            function (d, i) {
+                                var xValue = mouse[0];
+
+                                bisect = d3.bisector(function (d) {
+                                    return d.key;
+                                }).right;
+
+                                idx = bisect(d.values, xValue);
+
+                                var beginning = 0,
+                                    end = lines[i].getTotalLength(),
+                                    target = null;
+
+                                while (true) {
+                                    target = Math.floor((beginning + end) / 2);
+                                    pos = lines[i].getPointAtLength(target);
+                                    if (
+                                        (target === end ||
+                                            target === beginning) &&
+                                        pos.x !== mouse[0]
+                                    ) {
+                                        break;
+                                    }
+                                    if (pos.x > mouse[0]) end = target;
+                                    else if (pos.x < mouse[0])
+                                        beginning = target;
+                                    else break; //position found
+                                }
+
+                                tooltipData[d.key] = {
+                                    xAxis: xValue,
+                                    yAxis: pos.y,
+                                    yPos: mouse[1],
+                                    dataValue: y.invert(pos.y).toFixed(2),
+                                };
+
+                                drawToolTip(color, mouse);
+
+                                // d3.select(this)
+                                //     .select("text")
+                                //     .text(y.invert(pos.y).toFixed(2));
+
+                                return (
+                                    "translate(" + mouse[0] + "," + pos.y + ")"
+                                );
+                            }
+                        );
                     });
             }
 
-            window.onload = function () {
-                drawChart(data);
-            };
+            function drawToolTip(color, mouse) {
+                // return;
 
-            // Pass this from QT
-            window.addEventListener("resize", function () {
-                drawChart(data);
-            });
+                var tooltipDataText = "";
+
+                for (var key in tooltipData) {
+                    tooltipDataText +=
+                        "<div style='display: flex'><div style='margin:  7px; width: 6px; height: 6px; border-radius: 100%; background-color:" +
+                        color(key) +
+                        "'></div>" +
+                        "<span>" +
+                        key +
+                        ": " +
+                        tooltipData[key].dataValue +
+                        "</span></div>";
+                }
+
+                // console.log(d3.select("#tooltip").clientWidth);
+
+                d3.select("#tooltip")
+                    .style("left", mouse[0] + 80 + "px")
+                    .style("top", mouse[1] + "px")
+                    .style("display", "block")
+                    .style("opacity", "1")
+                    .html(tooltipDataText);
+            }
+
+            drawChart(data);
         </script>
     </body>
 </html>

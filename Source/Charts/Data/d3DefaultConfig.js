@@ -11,6 +11,7 @@ const constants = {
         CARDINAL: "curveCardinal",
         LINEAR: "curveLinear",
         BASIS: "curveBasis",
+        OPEN_BASIS: "curveBasisOpen",
         BUNDLE: "curveBundle",
     },
     markerShapes: {
@@ -54,6 +55,7 @@ const defaultD3Config = {
     chartType: constants.chartType.FIT_WIDTH,
     horizontalChartType: constants.chartType.FIT_HEIGHT,
     standardThresholdWidth: 100,
+    standardThresholdLineChartWidth: 100,
     standardThresholdHeight: 100,
     fontSize: 12,
 };
