@@ -282,7 +282,7 @@ function setXAxisTicksDistance(distanceValue = "1em") {
 function removeAxisTicks(axis = "xAxis") {
     selector = ".x-axis text";
 
-    if (axis == "yAxis") {
+    if (axis === "yAxis") {
         selector = ".y-axis text";
     }
 

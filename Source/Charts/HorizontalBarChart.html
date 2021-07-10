@@ -1,433 +1,432 @@
 <html>
-<head>
-    <script src="./Data/d3DefaultConfig.js"></script>
-    <script src="./Data/utils.js"></script>
-    <script src="./Data/d3.v4.min.js"></script>
-    <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
-    <link rel="stylesheet" href="Data/general.css" />
-    <style type="text/css">
-        body {
-            padding: 0;
-            margin: 0;
-            
-        }
+    <head>
+        <script src="./Data/d3DefaultConfig.js"></script>
+        <script src="./Data/utils.js"></script>
+        <script src="./Data/d3.v4.min.js"></script>
+        <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+        <link rel="stylesheet" href="Data/general.css" />
+        <style type="text/css">
+            body {
+                padding: 0;
+                margin: 0;
+            }
 
-        #tooltip {
-            font-size: 14px;
-            font-family: Arial, Helvetica, sans-serif;
-            min-width: fit-content;
-            max-width: max-content;
-        }
-         #my_dataviz {
-            overflow-y: scroll;
-            /* margin-left: 72px; */
-        }
+            #tooltip {
+                font-size: 14px;
+                font-family: Arial, Helvetica, sans-serif;
+                min-width: fit-content;
+                max-width: max-content;
+            }
+            #my_dataviz {
+                overflow-y: scroll;
+                /* margin-left: 72px; */
+            }
 
-         #xAxisLabelId {
-            position: fixed;
-            bottom: 30px;
-            z-index: -1;
-            height: 50px;
-        }
+            #xAxisLabelId {
+                position: fixed;
+                bottom: 30px;
+                z-index: -1;
+                height: 50px;
+            }
 
-        /* .bar--positive {
+            /* .bar--positive {
                 fill: steelblue;
             }
 
             .bar--negative {
                 fill: darkorange;
             } */
-    </style>
-</head>
+        </style>
+    </head>
 
-<body>
-    <div id="mainChartWindow" style="display: flex; flex-direction: column">
-        <div id="yAxisDiv"></div>
-        <div id="my_dataviz"></div>
-        <div id="xAxisDiv"></div>
-        <!-- <div id="xAxisLabelId" style="position: fixed"></div> -->
-    </div>
+    <body>
+        <div id="mainChartWindow" style="display: flex; flex-direction: column">
+            <div id="yAxisDiv"></div>
+            <div id="my_dataviz"></div>
+            <div id="xAxisDiv"></div>
+            <!-- <div id="xAxisLabelId" style="position: fixed"></div> -->
+        </div>
 
-    <div id="tooltip"></div>
-    <div id="legend"></div>
-    <script>
-        // prettier-ignore
-        var data = [[["NepalDist1 asd asdsa dasdsa ", "NepalDist2", "East", "West", "North", "South", "Bongaigaon", "Kokrajhar", "NOIDA", "Lucknow", "Thi1", "D1"], [2121, 443, 1121, 4243, 210, 4415, 2010, 222, -12, -624, 11053, 10]], ["district", "population"]];
+        <div id="tooltip"></div>
+        <div id="legend"></div>
+        <script>
+            // prettier-ignore
+            var data = [[["NepalDist1 asd asdsa dasdsa ", "NepalDist2", "East", "West", "North", "South", "Bongaigaon", "Kokrajhar", "NOIDA", "Lucknow", "Thi1", "D1"], [2121, 443, 1121, 4243, 210, 4415, 2010, 222, -12, -624, 11053, 10]], ["district", "population"]];
 
-        // prettier-ignore
-        // var data = [[["2019-11-08","2019-06-12","2018-10-11","2017-06-09","2020-04-15","2019-12-05","2018-11-22","2017-11-11","2017-05-13","2017-08-27","2019-12-09","2020-07-16","2018-09-25","2019-01-16","2018-09-17","2020-10-19","2019-12-08","2018-12-27","2020-09-10","2019-07-17","2020-09-19","2019-03-11","2017-10-20","2019-06-20","2018-04-18","2019-12-11","2019-06-17","2018-11-24","2018-04-30","2017-12-05","2019-06-04","2019-09-18","2020-09-14","2018-04-26","2020-12-09","2017-11-26","2017-10-12","2018-09-03","2020-11-13","2020-05-28","2020-10-26","2019-04-05","2019-09-17","2018-01-31","2020-11-06","2020-11-09","2020-06-17","2019-09-06","2019-08-29","2019-12-01","2018-11-13","2020-11-23","2020-12-25","2019-11-03","2017-08-25","2018-03-02","2018-04-05","2017-12-26","2017-09-20","2020-11-05","2019-11-06","2020-02-02","2019-10-13"],[2250,1456,1960,5606,32,816,144,1332,112,490,158,142,2090,24,6658,58,2578,2456,294,156,192,126,424,44,418,2090,1250,534,426,2562,152,10,38,2004,76,38,72,402,460,604,12,316,200,198,12,194,102,156,326,48,756,210,84,206,398,1576,316,1202,1236,492,640,318,512]],["Order_Date","Sales"]]
+            // prettier-ignore
+            // var data = [[["2019-11-08","2019-06-12","2018-10-11","2017-06-09","2020-04-15","2019-12-05","2018-11-22","2017-11-11","2017-05-13","2017-08-27","2019-12-09","2020-07-16","2018-09-25","2019-01-16","2018-09-17","2020-10-19","2019-12-08","2018-12-27","2020-09-10","2019-07-17","2020-09-19","2019-03-11","2017-10-20","2019-06-20","2018-04-18","2019-12-11","2019-06-17","2018-11-24","2018-04-30","2017-12-05","2019-06-04","2019-09-18","2020-09-14","2018-04-26","2020-12-09","2017-11-26","2017-10-12","2018-09-03","2020-11-13","2020-05-28","2020-10-26","2019-04-05","2019-09-17","2018-01-31","2020-11-06","2020-11-09","2020-06-17","2019-09-06","2019-08-29","2019-12-01","2018-11-13","2020-11-23","2020-12-25","2019-11-03","2017-08-25","2018-03-02","2018-04-05","2017-12-26","2017-09-20","2020-11-05","2019-11-06","2020-02-02","2019-10-13"],[2250,1456,1960,5606,32,816,144,1332,112,490,158,142,2090,24,6658,58,2578,2456,294,156,192,126,424,44,418,2090,1250,534,426,2562,152,10,38,2004,76,38,72,402,460,604,12,316,200,198,12,194,102,156,326,48,756,210,84,206,398,1576,316,1202,1236,492,640,318,512]],["Order_Date","Sales"]]
 
-        drawChart(data);
+            drawChart(data);
 
-        function drawChart(data, plottingConfiguration = {}) {
-            window.data = data;
-            var dataValues = data[0];
+            function drawChart(data, plottingConfiguration = {}) {
+                window.data = data;
+                var dataValues = data[0];
 
-            let {
-                d3colorPalette = defaultD3Config.d3ColorPalette,
-                paddingInner = defaultD3Config.defaultPaddingInner,
-                dateFormat = defaultD3Config.dateFormat,
-                chartType = defaultD3Config.horizontalChartType,
-                toolTip,
-                 legendConfig = defaultD3Config.defaultLegendConfig,
-                labelConfig = defaultD3Config.defaultlabelConfig,
-                gridConfig = defaultD3Config.defaultGridConfig,
-                standardThresholdHeight = defaultD3Config.standardThresholdHeight,
-                 // font size
-                xLabelfontSize = defaultD3Config.fontSize,
-                yLabelfontSize = defaultD3Config.fontSize,
-                xTickfontSize = defaultD3Config.fontSize,
-                yTickfontSize = defaultD3Config.fontSize,
-                // font family
-                xLabelfontFamily = defaultD3Config.fontFamily,
-                yLabelfontFamily = defaultD3Config.fontFamily,
-                xTickfontFamily = defaultD3Config.fontFamily,
-                yTickfontFamily = defaultD3Config.fontFamily,
-                // font color
-                xLabelfontColor = defaultD3Config.fontColor,
-                yLabelfontColor = defaultD3Config.fontColor,
-                xTickfontColor = defaultD3Config.fontColor,
-                yTickfontColor = defaultD3Config.fontColor,
-            } = plottingConfiguration;
-             window.xLabelfontSize = xLabelfontSize;
-            window.yLabelfontSize = yLabelfontSize;
-            window.xTickfontSize = xTickfontSize;
-            window.yTickfontSize = yTickfontSize;
+                let {
+                    d3colorPalette = defaultD3Config.d3ColorPalette,
+                    paddingInner = defaultD3Config.defaultPaddingInner,
+                    dateFormat = defaultD3Config.dateFormat,
+                    chartType = defaultD3Config.horizontalChartType,
+                    toolTip,
+                    legendConfig = defaultD3Config.defaultLegendConfig,
+                    labelConfig = defaultD3Config.defaultlabelConfig,
+                    gridConfig = defaultD3Config.defaultGridConfig,
+                    standardThresholdHeight = defaultD3Config.standardThresholdHeight,
+                    // font size
+                    xLabelfontSize = defaultD3Config.fontSize,
+                    yLabelfontSize = defaultD3Config.fontSize,
+                    xTickfontSize = defaultD3Config.fontSize,
+                    yTickfontSize = defaultD3Config.fontSize,
+                    // font family
+                    xLabelfontFamily = defaultD3Config.fontFamily,
+                    yLabelfontFamily = defaultD3Config.fontFamily,
+                    xTickfontFamily = defaultD3Config.fontFamily,
+                    yTickfontFamily = defaultD3Config.fontFamily,
+                    // font color
+                    xLabelfontColor = defaultD3Config.fontColor,
+                    yLabelfontColor = defaultD3Config.fontColor,
+                    xTickfontColor = defaultD3Config.fontColor,
+                    yTickfontColor = defaultD3Config.fontColor,
+                } = plottingConfiguration;
+                window.xLabelfontSize = xLabelfontSize;
+                window.yLabelfontSize = yLabelfontSize;
+                window.xTickfontSize = xTickfontSize;
+                window.yTickfontSize = yTickfontSize;
 
-            window.xLabelfontFamily = xLabelfontFamily;
-            window.yLabelfontFamily = yLabelfontFamily;
-            window.xTickfontFamily = xTickfontFamily;
-            window.yTickfontFamily = yTickfontFamily;
+                window.xLabelfontFamily = xLabelfontFamily;
+                window.yLabelfontFamily = yLabelfontFamily;
+                window.xTickfontFamily = xTickfontFamily;
+                window.yTickfontFamily = yTickfontFamily;
 
-            window.xLabelfontColor = xLabelfontColor;
-            window.yLabelfontColor = yLabelfontColor;
-            window.xTickfontColor = xTickfontColor;
-            window.yTickfontColor = yTickfontColor;
+                window.xLabelfontColor = xLabelfontColor;
+                window.yLabelfontColor = yLabelfontColor;
+                window.xTickfontColor = xTickfontColor;
+                window.yTickfontColor = yTickfontColor;
 
-             d3.selectAll("#my_dataviz").html("");
-            d3.selectAll("#yAxisDiv").html("");
+                d3.selectAll("#my_dataviz").html("");
+                d3.selectAll("#yAxisDiv").html("");
 
-              let { legendStatus, legendPosition } = legendConfig;
-            let { labelStatus } = labelConfig;
-            let { gridStatus } = gridConfig;
+                let { legendStatus, legendPosition } = legendConfig;
+                let { labelStatus } = labelConfig;
+                let { gridStatus } = gridConfig;
 
-            d3Colors = d3colorPalette;
+                d3Colors = d3colorPalette;
 
-            const [xAxisLabel, yAxisLabel] = data[1];
+                const [xAxisLabel, yAxisLabel] = data[1];
 
-            if (!toolTip) {
-                toolTip = {
-                    textColumn1: xAxisLabel,
-                    textColumn2: yAxisLabel,
-                };
-            }
+                if (!toolTip) {
+                    toolTip = {
+                        textColumn1: xAxisLabel,
+                        textColumn2: yAxisLabel,
+                    };
+                }
 
-            // const { top, right, bottom, left } = constants.chartMargins;
-            var margin = { top: 0, right: 50, bottom: 80, left: 100 };
-            var width = window.innerWidth ;
+                // const { top, right, bottom, left } = constants.chartMargins;
+                var margin = { top: 0, right: 50, bottom: 80, left: 100 };
+                var width = window.innerWidth;
 
-            var height = window.innerHeight - margin.top - margin.bottom;
+                var height = window.innerHeight - margin.top - margin.bottom;
 
-            var dataset = dataValues[1];
-            var xAxisDataSet = dataValues[0];
+                var dataset = dataValues[1];
+                var xAxisDataSet = dataValues[0];
 
-            var xAxisDateWiseValues = {};
+                var xAxisDateWiseValues = {};
 
-            var valueDateType = false;
-            if (isDateFormat(xAxisDataSet[0])) {
-                valueDateType = true;
-            }
+                var valueDateType = false;
+                if (isDateFormat(xAxisDataSet[0])) {
+                    valueDateType = true;
+                }
 
-            if (valueDateType) {
-                xAxisDataSet.forEach((d, i) => {
-                    xAxisDataSet[i] = new Date(xAxisDataSet[i]);
-                    var requiredTypeData = getDateFormattedData(
-                        d,
-                        dateFormat
+                if (valueDateType) {
+                    xAxisDataSet.forEach((d, i) => {
+                        xAxisDataSet[i] = new Date(xAxisDataSet[i]);
+                        var requiredTypeData = getDateFormattedData(
+                            d,
+                            dateFormat
+                        );
+
+                        if (!xAxisDateWiseValues[requiredTypeData]) {
+                            xAxisDateWiseValues[requiredTypeData] = 0;
+                        }
+
+                        xAxisDateWiseValues[requiredTypeData] +=
+                            dataValues[1][i];
+                    });
+
+                    var sortedKeys = sortDates(
+                        xAxisDateWiseValues,
+                        dateFormat,
+                        true
                     );
 
-                    if (!xAxisDateWiseValues[requiredTypeData]) {
-                        xAxisDateWiseValues[requiredTypeData] = 0;
+                    dataValues[0] = sortedKeys;
+                    dataValues[1] = sortedKeys.map(
+                        (d, i) => xAxisDateWiseValues[d]
+                    );
+                    data[0] = dataValues;
+                }
+
+                if (chartType == constants.chartType.STANDARD) {
+                    height = dataValues[0].length * standardThresholdHeight;
+                    if (
+                        height + margin.top + margin.bottom <
+                        window.innerHeight
+                    ) {
+                        // console.log("Change Position");
+                        d3.select("#xAxisDiv").style(
+                            "top",
+                            height + margin.top + "px"
+                        );
+                    } else {
+                        d3.select("#xAxisDiv").style("bottom", 0);
                     }
+                }
 
-                    xAxisDateWiseValues[requiredTypeData] +=
-                        dataValues[1][i];
-                });
-
-                var sortedKeys = sortDates(
-                    xAxisDateWiseValues,
-                    dateFormat,
-                    true
-                );
-
-                dataValues[0] = sortedKeys;
-                dataValues[1] = sortedKeys.map(
-                    (d, i) => xAxisDateWiseValues[d]
-                );
-                data[0] = dataValues;
-            }
-
-            if (chartType == constants.chartType.STANDARD) {
-                height = dataValues[0].length * standardThresholdHeight;
-                if (
-                    height + margin.top + margin.bottom <
-                    window.innerHeight
-                ) {
-                    // console.log("Change Position");
+                if (height + margin.top + margin.bottom < window.innerHeight) {
                     d3.select("#xAxisDiv").style(
-                        "top",
-                        height + margin.top + "px"
+                        "bottom",
+                        window.innerHeight -
+                            (height + margin.top + margin.bottom) +
+                            "px"
                     );
                 } else {
                     d3.select("#xAxisDiv").style("bottom", 0);
+                    d3.select("#xAxisDiv").style("top", null);
                 }
-            }
 
-             if (height + margin.top + margin.bottom < window.innerHeight) {
-                d3.select("#xAxisDiv").style(
-                    "bottom",
-                    window.innerHeight -
-                    (height + margin.top + margin.bottom) +
-                    "px"
-                );
-            } else {
-                d3.select("#xAxisDiv").style("bottom", 0);
-                 d3.select("#xAxisDiv").style("top", null);
-            }
+                clearChart();
 
-            clearChart();
-            
-            const yAxisWidth =
-                document.querySelector("#yAxisDiv").clientWidth;
+                const yAxisWidth =
+                    document.querySelector("#yAxisDiv").clientWidth;
 
-             width = width - yAxisWidth;
-            // Add svg to
-            var svg = d3
-                .selectAll("#my_dataviz")
-                .append("svg")
-                .attr("width", width )
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g")
-                .attr(
-                    "transform",
-                    "translate(" +
-                    margin.left +
-                    "," +
-                    (margin.top + 10) +
-                    ")"
-                );
-            
-                 d3.select("#xAxisLabelId").style("bottom", 50);
-
-            // set the ranges
-            var y = d3.scaleBand().range([height, 0]).padding(paddingInner);
-
-            // Scale the range of the data in the domains
-
-            var [minValue, maxValue] = d3.extent(
-                dataValues[1],
-                function (d) {
-                    return d;
-                }
-            );
-
-            setLabel(
-                xAxisLabel,
-                "x_label",
-                d3
-                    .select("#xAxisLabelId")
+                width = width - yAxisWidth;
+                // Add svg to
+                var svg = d3
+                    .selectAll("#my_dataviz")
                     .append("svg")
-                    .attr("width", window.innerWidth, "height", 150),
-                false
-            );
-            d3.selectAll(".x-axis text")
-                .attr("font-size", xTickfontSize)
-                .attr("font-family", xTickfontFamily)
-                .attr("fill", xTickfontColor)
-                .attr("y", 8);
+                    .attr("width", width)
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                    .attr(
+                        "transform",
+                        "translate(" +
+                            margin.left +
+                            "," +
+                            (margin.top + 10) +
+                            ")"
+                    );
 
+                d3.select("#xAxisLabelId").style("bottom", 50);
 
-            var x = d3.scaleLinear().range([0, width]);
-            x.domain([minValue > 0 ? 0 : minValue, maxValue]).nice();
-            y.domain(dataValues[0]);
+                // set the ranges
+                var y = d3.scaleBand().range([height, 0]).padding(paddingInner);
 
-            svg.append("g")
-                .attr("class", "grid")
-                .style("stroke-width", "1")
-                .call(make_x_gridlines(x).tickSize(height).tickFormat(""));
+                // Scale the range of the data in the domains
 
-            // append the rectangles for the bar chart
-            svg.selectAll(".bar")
-                .data(dataValues[1])
-                .enter()
-                .append("rect")
-                .attr("class", function (d) {
-                    return "bar bar--" + (d < 0 ? "negative" : "positive");
-                })
-                .attr("x", function (d) {
-                    if (minValue > 0) {
-                        return 0;
+                var [minValue, maxValue] = d3.extent(
+                    dataValues[1],
+                    function (d) {
+                        return d;
                     }
-                    return x(Math.min(0, d));
-                })
-                .attr("y", function (d, i) {
-                    this.setAttribute("data-value-y", dataValues[0][i]);
-                    this.setAttribute("data-value-x", dataValues[1][i]);
-                    return y(dataValues[0][i]);
-                })
-                .attr("width", function (d) {
-                    return Math.abs(x(d) - x(0));
-                })
-                .attr("height", y.bandwidth())
-                .attr("fill", d3Colors[0])
-                .on("mouseout", function (d, i) {
-                    d3.select("#tooltip").style("display", "none");
-                    d3.selectAll(".bar").style("opacity", 1);
-                })
-                .on("mouseover mousemove", function (d, i) {
-                    let xpos = d3.mouse(this)[0] + margin.left;
-                    let ypos = d3.mouse(this)[1];
+                );
 
-                    let xValue = this.getAttribute("data-value-x");
-                    let yValue = this.getAttribute("data-value-y");
+                setLabel(
+                    xAxisLabel,
+                    "x_label",
+                    d3
+                        .select("#xAxisLabelId")
+                        .append("svg")
+                        .attr("width", window.innerWidth, "height", 150),
+                    false
+                );
+                d3.selectAll(".x-axis text")
+                    .attr("font-size", xTickfontSize)
+                    .attr("font-family", xTickfontFamily)
+                    .attr("fill", xTickfontColor)
+                    .attr("y", 8);
 
-                    d3.select("#tooltip")
-                        .style("left", xpos +20+ "px")
-                        .style("top", ypos - 35+"px")
-                        .style("display", "block")
-                        // .text(d);
-                        .html(function () {
-                            var textValue = d.y0 - d.y1;
-                            if (d.y1 < 0) {
-                                textValue = d.y1 - d.y0;
-                            }
+                var x = d3.scaleLinear().range([0, width]);
+                x.domain([minValue > 0 ? 0 : minValue, maxValue]).nice();
+                y.domain(dataValues[0]);
 
-                            return (
-                              "<div class='arrowTooltip'></div>" +
-                                "<span style='color:grey;''>" +
-                                toolTip.textColumn1 +
-                                ":&nbsp;&nbsp;" +
-                                "</span>" +
-                                "<span style='float: right;'>" +
-                                yValue +
-                                "</span>" +
-                                "<br/> <br/>" +
-                                "<span style='color:grey;''>" +
-                                toolTip.textColumn2 +
-                                ":" +
-                                "</span>" +
-                                "<span style='float: right;margin-left: 15px;'>" +
-                                (xValue && (+xValue).toFixed(3)) +
-                                "</span>"
+                svg.append("g")
+                    .attr("class", "grid")
+                    .style("stroke-width", "1")
+                    .call(make_x_gridlines(x).tickSize(height).tickFormat(""));
+
+                // append the rectangles for the bar chart
+                svg.selectAll(".bar")
+                    .data(dataValues[1])
+                    .enter()
+                    .append("rect")
+                    .attr("class", function (d) {
+                        return "bar bar--" + (d < 0 ? "negative" : "positive");
+                    })
+                    .attr("x", function (d) {
+                        if (minValue > 0) {
+                            return 0;
+                        }
+                        return x(Math.min(0, d));
+                    })
+                    .attr("y", function (d, i) {
+                        this.setAttribute("data-value-y", dataValues[0][i]);
+                        this.setAttribute("data-value-x", dataValues[1][i]);
+                        return y(dataValues[0][i]);
+                    })
+                    .attr("width", function (d) {
+                        return Math.abs(x(d) - x(0));
+                    })
+                    .attr("height", y.bandwidth())
+                    .attr("fill", d3Colors[0])
+                    .on("mouseout", function (d, i) {
+                        d3.select("#tooltip").style("display", "none");
+                        d3.selectAll(".bar").style("opacity", 1);
+                    })
+                    .on("mouseover mousemove", function (d, i) {
+                        let xpos = d3.mouse(this)[0] + margin.left;
+                        let ypos = d3.mouse(this)[1];
+
+                        let xValue = this.getAttribute("data-value-x");
+                        let yValue = this.getAttribute("data-value-y");
+
+                        d3.select("#tooltip")
+                            .style("left", xpos + 20 + "px")
+                            .style("top", ypos - 35 + "px")
+                            .style("display", "block")
+                            // .text(d);
+                            .html(function () {
+                                var textValue = d.y0 - d.y1;
+                                if (d.y1 < 0) {
+                                    textValue = d.y1 - d.y0;
+                                }
+
+                                return (
+                                    "<div class='arrowTooltip'></div>" +
+                                    "<span style='color:grey;''>" +
+                                    toolTip.textColumn1 +
+                                    ":&nbsp;&nbsp;" +
+                                    "</span>" +
+                                    "<span style='float: right;'>" +
+                                    yValue +
+                                    "</span>" +
+                                    "<br/> <br/>" +
+                                    "<span style='color:grey;''>" +
+                                    toolTip.textColumn2 +
+                                    ":" +
+                                    "</span>" +
+                                    "<span style='float: right;margin-left: 15px;'>" +
+                                    (xValue && (+xValue).toFixed(3)) +
+                                    "</span>"
+                                );
+                            });
+                        if (
+                            xpos - window.scrollX >
+                            document.documentElement.clientWidth -
+                                document.querySelector("#tooltip").clientWidth
+                        ) {
+                            d3.select("#tooltip").style(
+                                "left",
+                                xpos -
+                                    document.querySelector("#tooltip")
+                                        .clientWidth -
+                                    10 +
+                                    "px"
                             );
-                        });
-                    if (
-                        xpos - window.scrollX >
-                        document.documentElement.clientWidth -
-                        document.querySelector("#tooltip").clientWidth
-                    ) {
-                        d3.select("#tooltip").style(
-                            "left",
-                            xpos -
-                            document.querySelector("#tooltip")
-                                .clientWidth -
-                            10 +
-                            "px"
-                        );
 
-                        d3.select(".arrowTooltip")
-                            //  document.querySelector("#tooltip:before")
-                            // .style("height","50px";"width","50px";"background-color","red";")
+                            d3.select(".arrowTooltip")
+                                //  document.querySelector("#tooltip:before")
+                                // .style("height","50px";"width","50px";"background-color","red";")
 
-                            .attr(
+                                .attr(
+                                    "style",
+                                    "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
+                                );
+                        } else {
+                            d3.select("#tooltip").style(
+                                "left",
+                                xpos + 12 + "px"
+                            );
+
+                            d3.select(".arrowTooltip").attr(
                                 "style",
-                                "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
+                                "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
                             );
-                    } else {
-                        d3.select("#tooltip").style(
-                            "left",
-                            xpos + 12 + "px"
-                        );
+                        }
 
-                        d3.select(".arrowTooltip").attr(
-                            "style",
-                            "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
-                        );
-                    }
+                        d3.selectAll(".bar").style("opacity", 0.3);
+                        d3.select(this).style("opacity", 1);
+                    });
 
-                    d3.selectAll(".bar").style("opacity", 0.3);
-                    d3.select(this).style("opacity", 1);
-                });
+                yaxisTicks = height / 100;
+                // add the x Axis
+                // svg.append("g")
+                //     .attr("transform", "translate(0," + height + ")")
+                //     .attr("class", "x-axis")
+                //     .call(d3.axisBottom(x));
 
-            yaxisTicks = height / 100;
-            // add the x Axis
-            // svg.append("g")
-            //     .attr("transform", "translate(0," + height + ")")
-            //     .attr("class", "x-axis")
-            //     .call(d3.axisBottom(x));
+                var xAxis = d3
+                    .axisBottom(x)
+                    .tickSize(0)
+                    .ticks(10)
+                    .tickFormat(d3.format(".2s"));
 
-            var xAxis = d3.axisBottom(x).tickSize(0).ticks(10).tickFormat(d3.format(".1s"));
+                d3.select("#xAxisDiv")
+                    .append("svg")
+                    .attr("height", "72")
+                    .attr("width", width + margin.left + margin.right)
+                    .append("g") //add group to leave margin for axis
+                    .attr(
+                        "transform",
+                        "translate(" + margin.left + ",0)"
+                        // "translate(0,0)"
+                    )
+                    // .style(  ?  :, ? : )
+                    .append("g")
+                    .attr("class", "x-axis")
+                    .call(xAxis);
 
-            d3.select("#xAxisDiv")
-                .append("svg")
-                .attr("height", "72")
-                .attr("width", width + margin.left + margin.right)
-                .append("g") //add group to leave margin for axis
-                .attr(
-                    "transform",
-                    "translate(" + margin.left + ",0)"
-                    // "translate(0,0)"
-                )
-                // .style(  ?  :, ? : )
-                .append("g")
-                .attr("class", "x-axis")
-                .call(xAxis);
+                // add the y Axis
+                svg.append("g")
+                    .attr("class", "y-axis")
+                    .attr("dy", "2.32em")
+                    .attr("transform", "translate(0,0)")
+                    .call(d3.axisLeft(y));
+                setXAxisTicksDistance();
 
-            // add the y Axis
-            svg.append("g")
-                .attr("class", "y-axis")
-                .attr("dy", "2.32em")
-                .attr("transform", "translate(0,0)")
-                .call(d3.axisLeft(y));
-                 setXAxisTicksDistance();
+                if (chartType == constants.chartType.FIT_HEIGHT) {
+                    removeAxisTicks("yAxis");
+                }
 
-            if (chartType == constants.chartType.FIT_HEIGHT) {
-                removeAxisTicks("yAxis");
-            }
+                a = document.querySelectorAll(".y-axis text");
+                for (var i = 0; i < a.length; i++) {
+                    if (a[i] && a[i].innerHTML) {
+                        var singleCharacterLength =
+                            a[i].getBBox().width / a[i].innerHTML.length;
 
-
-            a = document.querySelectorAll(".y-axis text");
-            for (var i = 0; i < a.length; i++) {
-                if (a[i] && a[i].innerHTML) {
-                    var singleCharacterLength =
-                        a[i].getBBox().width / a[i].innerHTML.length;
-
-                    var maxWidth =
-                        document.querySelector(".y-axis").getBBox().width >
+                        var maxWidth =
+                            document.querySelector(".y-axis").getBBox().width >
                             72
-                            ? 72
-                            : document.querySelector(".y-axis").getBBox()
-                                .width;
+                                ? 72
+                                : document.querySelector(".y-axis").getBBox()
+                                      .width;
 
-                    var numOfCharacters = maxWidth / singleCharacterLength;
+                        var numOfCharacters = maxWidth / singleCharacterLength;
 
-                    if (a[i].innerHTML.length > numOfCharacters) {
-                        a[i].innerHTML =
-                            a[i].innerHTML.substr(0, numOfCharacters - 3) +
-                            "...";
+                        if (a[i].innerHTML.length > numOfCharacters) {
+                            a[i].innerHTML =
+                                a[i].innerHTML.substr(0, numOfCharacters - 3) +
+                                "...";
+                        }
                     }
                 }
             }
-        }
 
-        function make_x_gridlines(x) {
-            return d3.axisBottom(x);
-        }
-        function make_y_gridlines(y) {
-            return d3.axisLeft(y).ticks(10);
-        }
-    </script>
-</body>
-
-
+            function make_x_gridlines(x) {
+                return d3.axisBottom(x);
+            }
+            function make_y_gridlines(y) {
+                return d3.axisLeft(y).ticks(10);
+            }
+        </script>
+    </body>
 </html>
