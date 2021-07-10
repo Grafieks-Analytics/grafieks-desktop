@@ -59,14 +59,19 @@
                 dataValue[0].forEach((d, i) => {
                     var currentData = d;
 
+                    var isKey1Date = false;
                     if (isDateFormat(d.mainCategory)) {
                         isKey1Date = true;
                     }
 
-                    var category = getDateFormattedData(
-                        d.mainCategory,
-                        dateFormat
-                    );
+                    var category = d.mainCategory;
+                    if (isKey1Date) {
+                        category = getDateFormattedData(
+                            d.mainCategory,
+                            dateFormat
+                        );
+                    }
+                    // console.log(category);
                     if (!transformedDataValue[category]) {
                         transformedDataValue[category] = {};
                     }
@@ -88,6 +93,7 @@
                     globalKeys.push(...allKeys);
 
                     allKeys.forEach((d) => {
+                        // console.log(originalData[d], currentData[d]);
                         originalData[d] =
                             (originalData[d] || 0) + (currentData[d] || 0);
                     });
@@ -95,6 +101,8 @@
                         ...originalData,
                         mainCategory: category,
                     };
+
+                    // console.log({ transformedDataValue });
                 });
 
                 var transformedDataValue = Object.keys(
@@ -143,7 +151,9 @@
                         defaultD3Config.standardThresholdHeight;
                 }
 
+                // console.log({ data });
                 data = transformData(data, dateFormat);
+                console.log(data);
 
                 var [data, all_keys] = data;
 
@@ -295,7 +305,7 @@
                                 if (groupBarChartColorBy == "subcategory") {
                                     return zScale(d.name);
                                 }
-                                return d3Colors[4];
+                                return d3Colors[0];
                             })
                             .on("mouseout", function (d, i) {
                                 d3.select("#tooltip").style("display", "none");
@@ -478,18 +488,6 @@
                     field3: 100,
                 },
             ];
-
-            var all_keys = [
-                "field1",
-                "field2",
-                "field3",
-                "field4",
-                "field5",
-                "field6",
-            ];
-
-            data = [data, all_keys];
-            drawChart(data);
         </script>
     </body>
 </html>
