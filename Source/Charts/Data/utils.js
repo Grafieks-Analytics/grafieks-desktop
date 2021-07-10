@@ -133,8 +133,10 @@ function setLabel(
     label = "xLabel",
     labelType = "x_label",
     svg,
+     y_pos,
     x_tick_fontSize,
     y_tick_fontSize
+   
 ) {
     console.log("x" + x_tick_fontSize);
     console.log("y" + y_tick_fontSize);
@@ -156,7 +158,8 @@ function setLabel(
           .attr("text-anchor", "end")
           .text(label)
           .attr("x", width/2+60)
-          .attr("y", 55)
+          .attr("y", y_pos)
+          
           .attr("font-size", xLabelfontSize)
           .attr("font-family", xLabelfontFamily)
           .attr("fill", xLabelfontColor)
@@ -167,12 +170,13 @@ function setLabel(
           .attr("class", labelType)
           .attr("text-anchor", "end")
           .text(label)
-          .attr("y", 5)
+          .attr("y", 10)
           .attr("font-size", yLabelfontSize)
           .attr("font-family", yLabelfontFamily)
           .attr("fill", yLabelfontColor)
           .attr("x", -height / 2)
           .attr("dy", ".75em")
+          .attr("position", "fixed")
           .attr("transform", "rotate(-90)");
     }
 }
