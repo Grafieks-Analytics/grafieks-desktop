@@ -51,24 +51,24 @@ const defaultD3Config = {
   defaultTimeParseFormat: "%d-%m-%Y",
   defaultSpace: 30,
   dateFormat: "%Y",
-  chartType: constants.chartType.FIT_WIDTH,
-  //   chartType: constants.chartType.STANDARD,
-  // horizontalChartType: constants.chartType.STANDARD,
-  horizontalChartType: constants.chartType.FIT_HEIGHT,
+  // chartType: constants.chartType.FIT_WIDTH,
+    chartType: constants.chartType.STANDARD,
+  horizontalChartType: constants.chartType.STANDARD,
+  // horizontalChartType: constants.chartType.FIT_HEIGHT,
   standardThresholdWidth: 100,
   standardThresholdHeight: 100,
   fontSize: 12,
   fontFamily: "MS Sans Serif",
   fontColor: "black",
   defaultLegendConfig: {
-    legendStatus: false,
+    legendStatus: true,
     legendPosition: "right",
   },
   defaultlabelConfig: {
     labelStatus: false,
   },
   defaultGridConfig: {
-    gridStatus: false,
+    gridStatus: true,
   },
 };
 const markerShapeConfig = {

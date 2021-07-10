@@ -847,6 +847,12 @@ Page {
             case Constants.horizontalBarChartTitle:
                 console.log("Horizontal BAR");
                 dataValues =  ChartsModel.getBarChartValues(yAxisColumns[0],xAxisColumns[0]);
+
+                colorData = [JSON.parse(dataValues)[1][0]] || [];
+
+                           colorData.forEach(function (element,index) {
+                               dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
+                           });
                 break;
             case Constants.barChartTitle:
                 console.log("BAR CLICKED", xAxisColumns[0])
