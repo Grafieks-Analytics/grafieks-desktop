@@ -10,7 +10,6 @@
         body {
             padding: 0;
             margin: 0;
-
         }
 
         ::-webkit-scrollbar {
@@ -27,7 +26,8 @@
         #my_dataviz {
             overflow-y: scroll;
             margin-left: 40px;
-            height: calc(100vh - 72px);
+            height: calc(100vh - 71px);
+            /* background-color: red; */
         }
 
         #xAxisLabelId {
@@ -36,11 +36,20 @@
             /* z-index: -1; */
             height: 20px;
             margin-left: 40px;
+            /* display: none; */
         }
 
         #xAxisDiv {
             margin-left: 40px;
+            /* display: none; */
         }
+
+        /* .y-axis text{
+            max-width: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        } */
 
         #yAxisDiv {
             width: 40px;
@@ -138,11 +147,15 @@
                 };
             }
 
+            clearStyle();
+           
+
             // const { top, right, bottom, left } = constants.chartMargins;
             var margin = { top: 0, right: 50, bottom: 80, left: 100 };
             var width = window.innerWidth - 40;
 
-            var height = window.innerHeight - margin.top - margin.bottom - 20;
+            var height =
+                window.innerHeight -92;
 
             var dataset = dataValues[1];
             var xAxisDataSet = dataValues[0];
@@ -154,6 +167,11 @@
                 valueDateType = true;
             }
 
+            d3.selectAll("#my_dataviz").style(
+                "height",
+                "calc(100vh - 71px)"
+            );
+
             // legends code starts
             d3.select("#legend").html("").style("padding", "");
             if (legendStatus) {
@@ -161,9 +179,9 @@
 
                 d3.select("#legend")
                     .append("p")
-                    .html("Product_Name")
+                    .html("Product_Name " + "&nbsp;")
                     .style("font-weight", "bold")
-                    .style("margin", 0)
+                    .style("margin", "auto")
                     .style("position", "sticky");
 
                 d3.select("#legend")
@@ -184,6 +202,11 @@
                     .style("display", "flex")
                     .style("padding", "2px");
             }
+
+            d3.selectAll("#my_dataviz").style(
+                "height",
+                "calc(100vh - 71px)"
+            );
 
             // legends code ends
 
@@ -217,7 +240,7 @@
             }
 
             if (chartType == constants.chartType.STANDARD) {
-                height = ((dataValues[0].length) * standardThresholdHeight);
+                height = dataValues[0].length * standardThresholdHeight;
                 if (
                     height + margin.top + margin.bottom <
                     window.innerHeight
@@ -233,26 +256,25 @@
             }
 
             if (height + margin.top + margin.bottom < window.innerHeight) {
-                d3.select("#xAxisDiv").style(
-                    "bottom",
-                    window.innerHeight -
-                    (height + margin.top + margin.bottom) +
-                    "px"
-                );
+                // d3.select("#xAxisDiv").style(
+                //     "bottom",
+                //     window.innerHeight -
+                //     (height + margin.top + margin.bottom) +
+                //     "px"
+                // );
             } else {
                 d3.select("#xAxisDiv").style("bottom", 0);
                 d3.select("#xAxisDiv").style("top", null);
             }
 
             clearChart();
+       
 
             const yAxisWidth =
                 document.querySelector("#yAxisDiv").clientWidth;
 
             // debugger;
             width = width - yAxisWidth;
-
-
 
             d3.select("#xAxisLabelId").style("bottom", 50);
 
@@ -275,8 +297,6 @@
 
             // const yAxisWidth =
             //     document.querySelector("#yAxisDiv").clientWidth;
-
-
 
             d3.select("#legend").attr("style", null);
             d3.select("#mainChartWindow").attr("style", null);
@@ -304,6 +324,7 @@
 
                 switch (legendPosition) {
                     case "left":
+                        clearStyle();
                         d3.select("#legend")
                             .attr("style", null)
                             .style("top", topPosition)
@@ -339,18 +360,19 @@
                         );
                         break;
                     case "top":
+                        clearStyle();
                         d3.select("#mainChartWindow").attr("style", null);
-                        margin.top += 80;
-                        height -= 100;
+                        // margin.top += 50;
+                        height -= 20;
                         d3.select("#legend")
                             .attr("style", null)
-                            .style("top", "1px")
+                            .style("top", "10px")
                             .style("right", rightPosition)
                             .style("bottom", "auto")
                             .style("left", "auto")
                             .style("display", "flex")
                             .style("max-width", "99vw")
-                            .style("overflow", "scroll")
+                            .style("overflow-x", "scroll")
                             .style("border", "none");
                         d3.selectAll("#legend div span")
                             .style("max-width", "160px")
@@ -358,14 +380,29 @@
                             .style("overflow", "hidden")
                             .style("text-overflow", "ellipsis");
 
-                        d3.selectAll("#legend div").style(
-                            "padding",
-                            "2px 4px"
+                        // d3.selectAll("#legend div").style(
+                        //     "padding",
+                        //     "2px 4px"
+                        // );
+                        d3.selectAll("#my_dataviz").style(
+                            "margin-top",
+                            50
+                        );
+                       
+                        d3.selectAll("#my_dataviz").style(
+                            "height",
+                            "calc(100vh - 122px)"
+                        );
+                        // debugger;
+                         d3.selectAll("#xAxisDiv").style(
+                            "bottom",
+                            "0"
                         );
                         break;
                     case "bottom":
-                        height -= 50; // use legend client height
-                        margin.bottom += 10;
+                        clearStyle();
+                        // height -= 50; // use legend client height
+                        // margin.bottom += 10;
                         var legendWidth = legendElement.offsetWidth;
 
                         d3.select("#xAxisLabelId").style("bottom", 50);
@@ -393,14 +430,37 @@
                             .style("white-space", "nowrap")
                             .style("overflow", "hidden")
                             .style("text-overflow", "ellipsis");
+
+                        d3.selectAll("#my_dataviz").style(
+                            "margin-bottom",
+                            50
+                        );
+                        // d3.selectAll("#my_dataviz").style(
+                        //     "margin-bottom",
+                        //     180
+                        // );
+                        d3.selectAll("#my_dataviz").style(
+                            "height",
+                            "calc(100vh - 122px)"
+                        );
+                        d3.selectAll("#xAxisDiv").style(
+                            "bottom",
+                            "50"
+                        );
+                        d3.selectAll("#xAxisLabelId").style(
+                            "bottom",
+                            "100"
+                        );
+
                         break;
                     // For Right Legened
                     case "right":
                     default:
+                        // debugger;
+                        clearStyle();
                         var legendWidth = legendElement.offsetWidth;
                         // width -= legendWidth;
                         // d3.select("#my_dataviz").style("width", width + margin.left + margin.right);
-
 
                         d3.select("#legend")
                             .attr("style", null)
@@ -429,29 +489,28 @@
                         //    widthOld+yAxisWidth-legendWidth-20
                         // );
 
-                        // d3.select("#mainChartWindow").style(
-                        //     "margin-left",
-                        //     0
-                        // );
+                        d3.select("#mainChartWindow").style(
+                            "margin-left",
+                            0
+                        );
                 }
             }
-
-
-
 
             if (legendPosition == "left" || legendPosition == "right") {
                 var legendWidth = legendElement.offsetWidth;
                 width -= legendWidth + 30;
             }
-            // width = 500;
+            // .;
 
             // legends code ends
             // Add svg to
             // debugger;
+            
+
             var svg = d3
                 .selectAll("#my_dataviz")
                 .append("svg")
-                .attr("width", width)
+                .attr("width", width + 20)
                 .attr("height", height + margin.top + 20)
                 .append("g")
                 .attr(
@@ -459,7 +518,7 @@
                     "translate(" +
                     margin.left +
                     "," +
-                    (margin.top + 25) +
+                    (margin.top + 20) +
                     ")"
                 );
             setLabel(
@@ -476,8 +535,7 @@
             //     .append("svg")
             //     .attr("width", "72")
 
-            d3
-                .selectAll("#yAxisDiv")
+            d3.selectAll("#yAxisDiv")
                 .append("svg")
                 .attr("width", 40)
                 .attr("height", window.innerHeight)
@@ -493,9 +551,7 @@
 
             setLabel(xAxisLabel, "y_label", d3.select("svg"), false);
 
-
-
-            var x = d3.scaleLinear().range([0, width]);
+            var x = d3.scaleLinear().range([0, width - margin.left]);
             x.domain([minValue > 0 ? 0 : minValue, maxValue]).nice();
             y.domain(dataValues[0]);
 
@@ -503,9 +559,10 @@
                 svg.append("g")
                     .attr("class", "grid")
                     .style("stroke-width", "1")
-                    .call(make_x_gridlines(x).tickSize(height).tickFormat(""));
+                    .call(
+                        make_x_gridlines(x).tickSize(height).tickFormat("")
+                    );
             }
-
 
             // append the rectangles for the bar chart
             svg.selectAll(".bar")
@@ -581,7 +638,8 @@
                             "left",
                             xpos -
                             document.querySelector("#tooltip")
-                                .clientWidth + 25 +
+                                .clientWidth +
+                            25 +
                             "px"
                         );
 
@@ -616,12 +674,16 @@
             //     .attr("class", "x-axis")
             //     .call(d3.axisBottom(x));
 
-            var xAxis = d3.axisBottom(x).tickSize(0).ticks(10).tickFormat(d3.format(".2s"));
+            var xAxis = d3
+                .axisBottom(x)
+                .tickSize(0)
+                .ticks(10)
+                .tickFormat(d3.format(".2s"));
 
             d3.select("#xAxisDiv")
                 .append("svg")
                 .attr("height", "72")
-                .attr("width", width)
+                .attr("width", width + 20)
                 .append("g") //add group to leave margin for axis
                 .attr(
                     "transform",
@@ -637,7 +699,7 @@
             // add the y Axis
             svg.append("g")
                 .attr("class", "y-axis")
-                .attr("dy", "2.32em")
+                .attr("dy", ".32em")
                 .attr("transform", "translate(0,0)")
                 .call(d3.axisLeft(y).tickSize(0));
             setXAxisTicksDistance();
@@ -646,12 +708,25 @@
                 removeAxisTicks("yAxis");
             }
 
+            d3.selectAll(".y-axis g text")
+                .attr("font-size", yTickfontSize)
+                .attr("font-family", yTickfontFamily)
+                // .attr("fill", "red");
+                .attr("fill", yTickfontColor);
 
-            a = document.querySelectorAll(".y-axis text");
+            d3.selectAll(".x-axis g text")
+                .attr("font-size", xTickfontSize)
+                .attr("font-family", xTickfontFamily)
+                .attr("fill", xTickfontColor)
+                .attr("y", 8);
+
+
+            var a = document.querySelectorAll(".y-axis text");
             for (var i = 0; i < a.length; i++) {
                 if (a[i] && a[i].innerHTML) {
                     var singleCharacterLength =
                         a[i].getBBox().width / a[i].innerHTML.length;
+
 
                     var maxWidth =
                         document.querySelector(".y-axis").getBBox().width >
@@ -660,6 +735,8 @@
                             : document.querySelector(".y-axis").getBBox()
                                 .width;
 
+
+                    console.log({ i, maxWidth })
                     var numOfCharacters = maxWidth / singleCharacterLength;
 
                     if (a[i].innerHTML.length > numOfCharacters) {
@@ -670,45 +747,21 @@
                 }
             }
 
-            d3.selectAll(".y-axis g text")
-                .attr("font-size", yTickfontSize)
-                .attr("font-family", yTickfontFamily)
-                // .attr("fill", "red");
-                .attr("fill", yTickfontColor);
 
 
 
-            d3.selectAll(".x-axis g text")
-                .attr("font-size", xTickfontSize)
-                .attr("font-family", xTickfontFamily)
-                .attr("fill", xTickfontColor)
-                .attr("y", 8);
+            setYaxisWidth();
 
-        }
-
-
-
-        // *******
-        d3.selectAll(".x-axis g text")
-            .attr("font-size", xTickfontSize)
-            .attr("font-family", xTickfontFamily)
-            .attr("fill", xTickfontColor)
-            .attr("y", 8);
-
-        setYaxisWidth();
-
-
-        function setYaxisWidth() {
-
-            var allYAxisTicks =
-                document.querySelectorAll(".y-axis .tick");
-            var maxWidth = 72;
-            console.log(maxWidth);
-            for (var i = 0; i < allYAxisTicks.length; i++) {
-                var tick = allYAxisTicks[i];
-                var width = tick && tick.getBBox().width + 25;
-                if (width > maxWidth) {
-                    maxWidth = width;
+            function setYaxisWidth() {
+                var allYAxisTicks = document.querySelectorAll(".y-axis .tick");
+                var maxWidth = 72;
+                console.log(maxWidth);
+                for (var i = 0; i < allYAxisTicks.length; i++) {
+                    var tick = allYAxisTicks[i];
+                    var width = tick && tick.getBBox().width + 25;
+                    if (width > maxWidth) {
+                        maxWidth = width;
+                    }
                 }
             }
 
@@ -719,16 +772,27 @@
             //     "transform",
             //     "translate(" + (maxWidth - margin.left) + "," + 0 + ")"
             // );
-        }
+            //    } 
 
-        function make_x_gridlines(x) {
-            return d3.axisBottom(x);
-        }
-        function make_y_gridlines(y) {
-            return d3.axisLeft(y).ticks(10);
+            function make_x_gridlines(x) {
+                return d3.axisBottom(x);
+            }
+            function make_y_gridlines(y) {
+                return d3.axisLeft(y).ticks(10);
+            }
+
+
+            // d3.selectAll("#xAxisDiv").style(
+            //     "bottom",
+            //     "50"
+            // );
+            // d3.selectAll("#xAxisLabelId").style(
+            //     "bottom",
+            //     "100"
+            // );
+
         }
     </script>
 </body>
-
 
 </html>
