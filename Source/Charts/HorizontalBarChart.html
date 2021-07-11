@@ -690,11 +690,43 @@
                     "translate(" + margin.left + ")"
                     // "translate(0,0)"
                 )
-                // .style(  ?  :, ? : )
                 .append("g")
                 .attr("class", "x-axis")
 
                 .call(xAxis);
+
+
+
+                  if (labelStatus) {
+                                 svg.append("g")
+                          .attr("class", "axis label")
+                          .attr("dy", ".32em")
+                          .attr("transform", "translate(0,0)")
+                          .call(d3.axisLeft(y).tickSize(0))
+                          .attr("font-family", xTickfontFamily)
+
+                           var labelSelector = document.querySelectorAll(".axis.label text")
+                // svg.append("g")
+                //     .call(xAxis.tickSize([0, 0]))
+                //     .attr("class", "axis label")
+                //     // .attr("font-family", xDataLabelfontFamily)
+                //     .attr("font-family", xTickfontFamily);
+
+                // // .attr("transform", "translate(0,0)");
+                // var labelSelector = document.querySelectorAll(".axis.label text")
+
+
+                labelSelector.forEach((label, i) => {
+                    var labelValue = label.textContent;
+
+                    var labelXPosition = x(data[0][1][i])
+                //     console.log(dataset[i]);
+                    label.setAttribute("x", labelXPosition + 30);
+                    //  label.textContent = textColumn2[1];
+                    label.textContent = dataset[i];
+                });
+            }
+
 
             // add the y Axis
             svg.append("g")
@@ -702,6 +734,8 @@
                 .attr("dy", ".32em")
                 .attr("transform", "translate(0,0)")
                 .call(d3.axisLeft(y).tickSize(0));
+
+ ;
             setXAxisTicksDistance();
 
             if (chartType == constants.chartType.FIT_HEIGHT) {
