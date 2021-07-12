@@ -66,6 +66,9 @@ Page {
 
     property var allChartsMapping: ({});
     // An array having item type and name of the spilt by value
+    // Colour By Data is filled 
+    // 1. saved colour values -> CPP (Report Properties) 
+    // 2. when it is dropped -> (PropertiesFilter.qml)
     property var colorByData: [];
 
     property var allowedXAxisDataPanes: 0;
@@ -561,6 +564,8 @@ Page {
 
     function reDrawChart(){
 
+        console.log('Debug: Colour By',colorByData, colorListModel.count, colorListModel)
+        
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
 
@@ -657,6 +662,7 @@ Page {
         var reportList = ReportParamsModel.getReportsList();
         if(!report_title_text.text || report_title_text.text == ""){
             var numberOfReports = Object.keys(reportList).length;
+            numberOfReports = !numberOfReports ? 1 : numberOfReports;
             ReportParamsModel.setReportTitle('Report '+ (numberOfReports));
         }
 
@@ -693,6 +699,11 @@ Page {
         GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
         // ReportsDataModel.removeTmpChartData()
+
+        if(addReportButton.text == "Add"){
+            console.log('Deleting Report',reportIdMain)
+            ReportParamsModel.deleteReport(reportIdMain,false);
+        }
 
         let currentDashboard = DashboardParamsModel.currentDashboard
         ChartsModel.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
@@ -903,6 +914,7 @@ Page {
                 }else{
                     delete d3PropertyConfig['options'];
                     colorListModel.clear();
+                    colorByData = [];
                 }
                 dataValues =  ChartsModel.getNewGroupedBarChartValues(yAxisColumns[0],xAxisColumns[0], yAxisColumns[1]);
                 break;
@@ -913,10 +925,17 @@ Page {
                 }else{
                     delete d3PropertyConfig['options'];
                     colorListModel.clear();
+                    colorByData = [];
+                        
+                    ReportParamsModel.setItemType(null);
+                    ReportParamsModel.setLastDropped(null);
                 }
                 console.log('Grouped bar chart!',xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
                 dataValues =  ChartsModel.getNewGroupedBarChartValues(xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
                 // console.log(dataValues);
+                    
+                ReportParamsModel.setItemType(null);
+                ReportParamsModel.setLastDropped(null);
                 break;
             case Constants.areaChartTitle:
                 console.log("AREA CLICKED")
