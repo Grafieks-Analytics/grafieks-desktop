@@ -201,9 +201,7 @@ function sortDates(dateDataset, dateFormat, isHorizontalGraph) {
     }
 
     if (isHorizontalGraph) {
-        if (dateFormat == "%m" || dateFormat == "%d") {
-            dates = dates.reverse();
-        }
+        dates = dates.reverse();
     }
 
     return dates;

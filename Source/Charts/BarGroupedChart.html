@@ -68,13 +68,14 @@
                 var transformedDataValue = {};
                 var globalKeys = [];
 
+                var isKey1Date = false;
+
+                if (isDateFormat(dataValue[0][0].mainCategory)) {
+                    isKey1Date = true;
+                }
+
                 dataValue[0].forEach((d, i) => {
                     var currentData = d;
-
-                    var isKey1Date = false;
-                    if (isDateFormat(d.mainCategory)) {
-                        isKey1Date = true;
-                    }
 
                     var category = d.mainCategory;
                     if (isKey1Date) {
@@ -105,7 +106,6 @@
                     globalKeys.push(...allKeys);
 
                     allKeys.forEach((d) => {
-                        // console.log(originalData[d], currentData[d]);
                         originalData[d] =
                             (originalData[d] || 0) + (currentData[d] || 0);
                     });
@@ -113,13 +113,24 @@
                         ...originalData,
                         mainCategory: category,
                     };
-
-                    // console.log({ transformedDataValue });
                 });
 
-                var transformedDataValue = Object.keys(
-                    transformedDataValue
-                ).map((d) => transformedDataValue[d]);
+                if (isKey1Date) {
+                    var sortedKeys = sortDates(
+                        transformedDataValue,
+                        dateFormat
+                    );
+                    console.log(sortedKeys);
+                    transformedDataValue = sortedKeys.map((key) => {
+                        return transformedDataValue[key];
+                    });
+                } else {
+                    transformedDataValue = Object.keys(
+                        transformedDataValue
+                    ).map((key) => {
+                        return transformedDataValue[key];
+                    });
+                }
 
                 globalKeys = globalKeys.filter(getUniqueArrayValues);
                 return [transformedDataValue, globalKeys];
@@ -199,7 +210,7 @@
                 clearChart();
 
                 var minHeight = d3.min(data, (d) =>
-                    d3.min(all_keys, (k) => d[k])
+                    d3.min(all_keys, (k) => d && d[k])
                 );
 
                 if (minHeight > 0) {
@@ -207,7 +218,7 @@
                 }
 
                 var maxHeight = d3.max(data, (d) =>
-                    d3.max(all_keys, (k) => d[k])
+                    d3.max(all_keys, (k) => d && d[k])
                 );
 
                 //add svg with margin !important
@@ -266,7 +277,8 @@
                     .attr("class", "y-axis")
                     .call(yAxis);
 
-                xScale0.domain(data.map((d) => d.mainCategory));
+                // console.log(data);
+                xScale0.domain(data.map((d) => d && d.mainCategory));
 
                 svg.append("g")
                     .attr("class", "grid")
@@ -295,7 +307,7 @@
                                 "transform",
                                 (d) =>
                                     `translate(${
-                                        xScale0(d.mainCategory) + x_offset
+                                        xScale0(d && d.mainCategory) + x_offset
                                     },0)`
                             )
                             .selectAll(".bar")
@@ -383,7 +395,7 @@
                 function getBars(d) {
                     const bars = [];
                     all_keys.forEach((k) => {
-                        if (d.hasOwnProperty(k)) {
+                        if (d && d.hasOwnProperty(k)) {
                             bars.push({ name: k, value: d[k], data: d });
                         }
                     });
@@ -393,7 +405,7 @@
                 function groupOffset(d) {
                     const groupElementsCount = all_keys.reduce(
                             (acc, k) =>
-                                d.hasOwnProperty(k) ? (acc += 1) : acc,
+                                d && d.hasOwnProperty(k) ? (acc += 1) : acc,
                             0
                         ),
                         allElementsCount = all_keys.length,
@@ -586,6 +598,216 @@
                 }
             }
 
+            // var data = [
+            //     [
+            //         {
+            //             Bookcases: 8016,
+            //             Chairs: 6906,
+            //             Furnishings: 2398,
+            //             Tables: 10230,
+            //             mainCategory: "Furniture",
+            //         },
+            //         {
+            //             Appliances: 1060,
+            //             Art: 2756,
+            //             Binders: 2114,
+            //             Envelopes: 1134,
+            //             Fasteners: 160,
+            //             Labels: 192,
+            //             Paper: 1198,
+            //             Storage: 4638,
+            //             Supplies: 132,
+            //             mainCategory: "OfficeSupplies",
+            //         },
+            //         {
+            //             Accessories: 938,
+            //             Phones: 8372,
+            //             mainCategory: "Technology",
+            //         },
+            //     ],
+            //     [
+            //         [
+            //             "Bookcases",
+            //             "Chairs",
+            //             "Labels",
+            //             "Tables",
+            //             "Storage",
+            //             "Furnishings",
+            //             "Art",
+            //             "Phones",
+            //             "Binders",
+            //             "Appliances",
+            //             "Paper",
+            //             "Envelopes",
+            //             "Accessories",
+            //             "Fasteners",
+            //             "Supplies",
+            //         ],
+            //     ],
+            // ];
+
+            // var data = [
+            //     [
+            //         { Furniture: 2250, mainCategory: "2019-11-08" },
+            //         {
+            //             Furniture: 94,
+            //             OfficeSupplies: 1226,
+            //             Technology: 136,
+            //             mainCategory: "2019-06-12",
+            //         },
+            //         {
+            //             Furniture: 1916,
+            //             OfficeSupplies: 44,
+            //             mainCategory: "2018-10-11",
+            //         },
+            //         {
+            //             Furniture: 3510,
+            //             OfficeSupplies: 282,
+            //             Technology: 1814,
+            //             mainCategory: "2017-06-09",
+            //         },
+            //         { OfficeSupplies: 32, mainCategory: "2020-04-15" },
+            //         { OfficeSupplies: 816, mainCategory: "2019-12-05" },
+            //         { OfficeSupplies: 144, mainCategory: "2018-11-22" },
+            //         { OfficeSupplies: 1332, mainCategory: "2017-11-11" },
+            //         { OfficeSupplies: 112, mainCategory: "2017-05-13" },
+            //         {
+            //             OfficeSupplies: 64,
+            //             Technology: 426,
+            //             mainCategory: "2017-08-27",
+            //         },
+            //         { OfficeSupplies: 158, mainCategory: "2019-12-09" },
+            //         { Furniture: 142, mainCategory: "2020-07-16" },
+            //         { Furniture: 2090, mainCategory: "2018-09-25" },
+            //         { OfficeSupplies: 24, mainCategory: "2019-01-16" },
+            //         {
+            //             Furniture: 6414,
+            //             OfficeSupplies: 244,
+            //             mainCategory: "2018-09-17",
+            //         },
+            //         { OfficeSupplies: 58, mainCategory: "2020-10-19" },
+            //         {
+            //             Furniture: 382,
+            //             Technology: 2196,
+            //             mainCategory: "2019-12-08",
+            //         },
+            //         {
+            //             Furniture: 1488,
+            //             OfficeSupplies: 226,
+            //             Technology: 742,
+            //             mainCategory: "2018-12-27",
+            //         },
+            //         { Technology: 294, mainCategory: "2020-09-10" },
+            //         { OfficeSupplies: 156, mainCategory: "2019-07-17" },
+            //         { OfficeSupplies: 192, mainCategory: "2020-09-19" },
+            //         {
+            //             OfficeSupplies: 34,
+            //             Technology: 92,
+            //             mainCategory: "2019-03-11",
+            //         },
+            //         { OfficeSupplies: 424, mainCategory: "2017-10-20" },
+            //         { Technology: 44, mainCategory: "2019-06-20" },
+            //         {
+            //             Furniture: 192,
+            //             OfficeSupplies: 226,
+            //             mainCategory: "2018-04-18",
+            //         },
+            //         {
+            //             OfficeSupplies: 30,
+            //             Technology: 2060,
+            //             mainCategory: "2019-12-11",
+            //         },
+            //         {
+            //             Furniture: 638,
+            //             OfficeSupplies: 612,
+            //             mainCategory: "2019-06-17",
+            //         },
+            //         {
+            //             Furniture: 160,
+            //             OfficeSupplies: 346,
+            //             Technology: 28,
+            //             mainCategory: "2018-11-24",
+            //         },
+            //         { Furniture: 426, mainCategory: "2018-04-30" },
+            //         {
+            //             OfficeSupplies: 2226,
+            //             Technology: 336,
+            //             mainCategory: "2017-12-05",
+            //         },
+            //         { OfficeSupplies: 152, mainCategory: "2019-06-04" },
+            //         { OfficeSupplies: 10, mainCategory: "2019-09-18" },
+            //         { OfficeSupplies: 38, mainCategory: "2020-09-14" },
+            //         {
+            //             Furniture: 1858,
+            //             OfficeSupplies: 146,
+            //             mainCategory: "2018-04-26",
+            //         },
+            //         {
+            //             Furniture: 20,
+            //             OfficeSupplies: 56,
+            //             mainCategory: "2020-12-09",
+            //         },
+            //         { Furniture: 38, mainCategory: "2017-11-26" },
+            //         { OfficeSupplies: 72, mainCategory: "2017-10-12" },
+            //         { OfficeSupplies: 402, mainCategory: "2018-09-03" },
+            //         { OfficeSupplies: 460, mainCategory: "2020-11-13" },
+            //         { Furniture: 604, mainCategory: "2020-05-28" },
+            //         { OfficeSupplies: 12, mainCategory: "2020-10-26" },
+            //         { OfficeSupplies: 316, mainCategory: "2019-04-05" },
+            //         {
+            //             OfficeSupplies: 52,
+            //             Technology: 148,
+            //             mainCategory: "2019-09-17",
+            //         },
+            //         {
+            //             Furniture: 106,
+            //             OfficeSupplies: 92,
+            //             mainCategory: "2018-01-31",
+            //         },
+            //         { OfficeSupplies: 12, mainCategory: "2020-11-06" },
+            //         { Furniture: 194, mainCategory: "2020-11-09" },
+            //         { OfficeSupplies: 102, mainCategory: "2020-06-17" },
+            //         { OfficeSupplies: 156, mainCategory: "2019-09-06" },
+            //         {
+            //             OfficeSupplies: 134,
+            //             Technology: 192,
+            //             mainCategory: "2019-08-29",
+            //         },
+            //         { OfficeSupplies: 48, mainCategory: "2019-12-01" },
+            //         {
+            //             Furniture: 204,
+            //             OfficeSupplies: 74,
+            //             Technology: 478,
+            //             mainCategory: "2018-11-13",
+            //         },
+            //         {
+            //             OfficeSupplies: 6,
+            //             Technology: 204,
+            //             mainCategory: "2020-11-23",
+            //         },
+            //         { Furniture: 84, mainCategory: "2020-12-25" },
+            //         { OfficeSupplies: 206, mainCategory: "2019-11-03" },
+            //         { OfficeSupplies: 398, mainCategory: "2017-08-25" },
+            //         { Furniture: 1576, mainCategory: "2018-03-02" },
+            //         { OfficeSupplies: 316, mainCategory: "2018-04-05" },
+            //         { Furniture: 1202, mainCategory: "2017-12-26" },
+            //         { Furniture: 1236, mainCategory: "2017-09-20" },
+            //         { OfficeSupplies: 492, mainCategory: "2020-11-05" },
+            //         { Furniture: 640, mainCategory: "2019-11-06" },
+            //         {
+            //             OfficeSupplies: 198,
+            //             Technology: 120,
+            //             mainCategory: "2020-02-02",
+            //         },
+            //         {
+            //             Furniture: 86,
+            //             OfficeSupplies: 426,
+            //             mainCategory: "2019-10-13",
+            //         },
+            //     ],
+            //     [["Furniture", "OfficeSupplies", "Technology"]],
+            // ];
+
             var data = [
                 [
                     {
@@ -633,6 +855,331 @@
                     ],
                 ],
             ];
+
+            // var data = [
+            //     [
+            //         { Furniture: 2250, mainCategory: "2019-11-08" },
+            //         {
+            //             Furniture: 94,
+            //             OfficeSupplies: 1226,
+            //             Technology: 136,
+            //             mainCategory: "2019-06-12",
+            //         },
+            //         {
+            //             Furniture: 1916,
+            //             OfficeSupplies: 44,
+            //             mainCategory: "2018-10-11",
+            //         },
+            //         {
+            //             Furniture: 3510,
+            //             OfficeSupplies: 282,
+            //             Technology: 1814,
+            //             mainCategory: "2017-06-09",
+            //         },
+            //         { OfficeSupplies: 32, mainCategory: "2020-04-15" },
+            //         { OfficeSupplies: 816, mainCategory: "2019-12-05" },
+            //         { OfficeSupplies: 144, mainCategory: "2018-11-22" },
+            //         { OfficeSupplies: 1332, mainCategory: "2017-11-11" },
+            //         { OfficeSupplies: 112, mainCategory: "2017-05-13" },
+            //         {
+            //             OfficeSupplies: 64,
+            //             Technology: 426,
+            //             mainCategory: "2017-08-27",
+            //         },
+            //         { OfficeSupplies: 158, mainCategory: "2019-12-09" },
+            //         { Furniture: 142, mainCategory: "2020-07-16" },
+            //         { Furniture: 2090, mainCategory: "2018-09-25" },
+            //         { OfficeSupplies: 24, mainCategory: "2019-01-16" },
+            //         {
+            //             Furniture: 6414,
+            //             OfficeSupplies: 244,
+            //             mainCategory: "2018-09-17",
+            //         },
+            //         { OfficeSupplies: 58, mainCategory: "2020-10-19" },
+            //         {
+            //             Furniture: 382,
+            //             Technology: 2196,
+            //             mainCategory: "2019-12-08",
+            //         },
+            //         {
+            //             Furniture: 1488,
+            //             OfficeSupplies: 226,
+            //             Technology: 742,
+            //             mainCategory: "2018-12-27",
+            //         },
+            //         { Technology: 294, mainCategory: "2020-09-10" },
+            //         { OfficeSupplies: 156, mainCategory: "2019-07-17" },
+            //         { OfficeSupplies: 192, mainCategory: "2020-09-19" },
+            //         {
+            //             OfficeSupplies: 34,
+            //             Technology: 92,
+            //             mainCategory: "2019-03-11",
+            //         },
+            //         { OfficeSupplies: 424, mainCategory: "2017-10-20" },
+            //         { Technology: 44, mainCategory: "2019-06-20" },
+            //         {
+            //             Furniture: 192,
+            //             OfficeSupplies: 226,
+            //             mainCategory: "2018-04-18",
+            //         },
+            //         {
+            //             OfficeSupplies: 30,
+            //             Technology: 2060,
+            //             mainCategory: "2019-12-11",
+            //         },
+            //         {
+            //             Furniture: 638,
+            //             OfficeSupplies: 612,
+            //             mainCategory: "2019-06-17",
+            //         },
+            //         {
+            //             Furniture: 160,
+            //             OfficeSupplies: 346,
+            //             Technology: 28,
+            //             mainCategory: "2018-11-24",
+            //         },
+            //         { Furniture: 426, mainCategory: "2018-04-30" },
+            //         {
+            //             OfficeSupplies: 2226,
+            //             Technology: 336,
+            //             mainCategory: "2017-12-05",
+            //         },
+            //         { OfficeSupplies: 152, mainCategory: "2019-06-04" },
+            //         { OfficeSupplies: 10, mainCategory: "2019-09-18" },
+            //         { OfficeSupplies: 38, mainCategory: "2020-09-14" },
+            //         {
+            //             Furniture: 1858,
+            //             OfficeSupplies: 146,
+            //             mainCategory: "2018-04-26",
+            //         },
+            //         {
+            //             Furniture: 20,
+            //             OfficeSupplies: 56,
+            //             mainCategory: "2020-12-09",
+            //         },
+            //         { Furniture: 38, mainCategory: "2017-11-26" },
+            //         { OfficeSupplies: 72, mainCategory: "2017-10-12" },
+            //         { OfficeSupplies: 402, mainCategory: "2018-09-03" },
+            //         { OfficeSupplies: 460, mainCategory: "2020-11-13" },
+            //         { Furniture: 604, mainCategory: "2020-05-28" },
+            //         { OfficeSupplies: 12, mainCategory: "2020-10-26" },
+            //         { OfficeSupplies: 316, mainCategory: "2019-04-05" },
+            //         {
+            //             OfficeSupplies: 52,
+            //             Technology: 148,
+            //             mainCategory: "2019-09-17",
+            //         },
+            //         {
+            //             Furniture: 106,
+            //             OfficeSupplies: 92,
+            //             mainCategory: "2018-01-31",
+            //         },
+            //         { OfficeSupplies: 12, mainCategory: "2020-11-06" },
+            //         { Furniture: 194, mainCategory: "2020-11-09" },
+            //         { OfficeSupplies: 102, mainCategory: "2020-06-17" },
+            //         { OfficeSupplies: 156, mainCategory: "2019-09-06" },
+            //         {
+            //             OfficeSupplies: 134,
+            //             Technology: 192,
+            //             mainCategory: "2019-08-29",
+            //         },
+            //         { OfficeSupplies: 48, mainCategory: "2019-12-01" },
+            //         {
+            //             Furniture: 204,
+            //             OfficeSupplies: 74,
+            //             Technology: 478,
+            //             mainCategory: "2018-11-13",
+            //         },
+            //         {
+            //             OfficeSupplies: 6,
+            //             Technology: 204,
+            //             mainCategory: "2020-11-23",
+            //         },
+            //         { Furniture: 84, mainCategory: "2020-12-25" },
+            //         { OfficeSupplies: 206, mainCategory: "2019-11-03" },
+            //         { OfficeSupplies: 398, mainCategory: "2017-08-25" },
+            //         { Furniture: 1576, mainCategory: "2018-03-02" },
+            //         { OfficeSupplies: 316, mainCategory: "2018-04-05" },
+            //         { Furniture: 1202, mainCategory: "2017-12-26" },
+            //         { Furniture: 1236, mainCategory: "2017-09-20" },
+            //         { OfficeSupplies: 492, mainCategory: "2020-11-05" },
+            //         { Furniture: 640, mainCategory: "2019-11-06" },
+            //         {
+            //             OfficeSupplies: 198,
+            //             Technology: 120,
+            //             mainCategory: "2020-02-02",
+            //         },
+            //         {
+            //             Furniture: 86,
+            //             OfficeSupplies: 426,
+            //             mainCategory: "2019-10-13",
+            //         },
+            //     ],
+            //     [["Furniture", "OfficeSupplies", "Technology"]],
+            // ];
+
+            // var data = [
+            //     [
+            //         { Furniture: 2250, mainCategory: "2019-11-08" },
+            //         {
+            //             Furniture: 94,
+            //             OfficeSupplies: 1226,
+            //             Technology: 136,
+            //             mainCategory: "2019-06-12",
+            //         },
+            //         {
+            //             Furniture: 1916,
+            //             OfficeSupplies: 44,
+            //             mainCategory: "2018-10-11",
+            //         },
+            //         {
+            //             Furniture: 3510,
+            //             OfficeSupplies: 282,
+            //             Technology: 1814,
+            //             mainCategory: "2017-06-09",
+            //         },
+            //         { OfficeSupplies: 32, mainCategory: "2020-04-15" },
+            //         { OfficeSupplies: 816, mainCategory: "2019-12-05" },
+            //         { OfficeSupplies: 144, mainCategory: "2018-11-22" },
+            //         { OfficeSupplies: 1332, mainCategory: "2017-11-11" },
+            //         { OfficeSupplies: 112, mainCategory: "2017-05-13" },
+            //         {
+            //             OfficeSupplies: 64,
+            //             Technology: 426,
+            //             mainCategory: "2017-08-27",
+            //         },
+            //         { OfficeSupplies: 158, mainCategory: "2019-12-09" },
+            //         { Furniture: 142, mainCategory: "2020-07-16" },
+            //         { Furniture: 2090, mainCategory: "2018-09-25" },
+            //         { OfficeSupplies: 24, mainCategory: "2019-01-16" },
+            //         {
+            //             Furniture: 6414,
+            //             OfficeSupplies: 244,
+            //             mainCategory: "2018-09-17",
+            //         },
+            //         { OfficeSupplies: 58, mainCategory: "2020-10-19" },
+            //         {
+            //             Furniture: 382,
+            //             Technology: 2196,
+            //             mainCategory: "2019-12-08",
+            //         },
+            //         {
+            //             Furniture: 1488,
+            //             OfficeSupplies: 226,
+            //             Technology: 742,
+            //             mainCategory: "2018-12-27",
+            //         },
+            //         { Technology: 294, mainCategory: "2020-09-10" },
+            //         { OfficeSupplies: 156, mainCategory: "2019-07-17" },
+            //         { OfficeSupplies: 192, mainCategory: "2020-09-19" },
+            //         {
+            //             OfficeSupplies: 34,
+            //             Technology: 92,
+            //             mainCategory: "2019-03-11",
+            //         },
+            //         { OfficeSupplies: 424, mainCategory: "2017-10-20" },
+            //         { Technology: 44, mainCategory: "2019-06-20" },
+            //         {
+            //             Furniture: 192,
+            //             OfficeSupplies: 226,
+            //             mainCategory: "2018-04-18",
+            //         },
+            //         {
+            //             OfficeSupplies: 30,
+            //             Technology: 2060,
+            //             mainCategory: "2019-12-11",
+            //         },
+            //         {
+            //             Furniture: 638,
+            //             OfficeSupplies: 612,
+            //             mainCategory: "2019-06-17",
+            //         },
+            //         {
+            //             Furniture: 160,
+            //             OfficeSupplies: 346,
+            //             Technology: 28,
+            //             mainCategory: "2018-11-24",
+            //         },
+            //         { Furniture: 426, mainCategory: "2018-04-30" },
+            //         {
+            //             OfficeSupplies: 2226,
+            //             Technology: 336,
+            //             mainCategory: "2017-12-05",
+            //         },
+            //         { OfficeSupplies: 152, mainCategory: "2019-06-04" },
+            //         { OfficeSupplies: 10, mainCategory: "2019-09-18" },
+            //         { OfficeSupplies: 38, mainCategory: "2020-09-14" },
+            //         {
+            //             Furniture: 1858,
+            //             OfficeSupplies: 146,
+            //             mainCategory: "2018-04-26",
+            //         },
+            //         {
+            //             Furniture: 20,
+            //             OfficeSupplies: 56,
+            //             mainCategory: "2020-12-09",
+            //         },
+            //         { Furniture: 38, mainCategory: "2017-11-26" },
+            //         { OfficeSupplies: 72, mainCategory: "2017-10-12" },
+            //         { OfficeSupplies: 402, mainCategory: "2018-09-03" },
+            //         { OfficeSupplies: 460, mainCategory: "2020-11-13" },
+            //         { Furniture: 604, mainCategory: "2020-05-28" },
+            //         { OfficeSupplies: 12, mainCategory: "2020-10-26" },
+            //         { OfficeSupplies: 316, mainCategory: "2019-04-05" },
+            //         {
+            //             OfficeSupplies: 52,
+            //             Technology: 148,
+            //             mainCategory: "2019-09-17",
+            //         },
+            //         {
+            //             Furniture: 106,
+            //             OfficeSupplies: 92,
+            //             mainCategory: "2018-01-31",
+            //         },
+            //         { OfficeSupplies: 12, mainCategory: "2020-11-06" },
+            //         { Furniture: 194, mainCategory: "2020-11-09" },
+            //         { OfficeSupplies: 102, mainCategory: "2020-06-17" },
+            //         { OfficeSupplies: 156, mainCategory: "2019-09-06" },
+            //         {
+            //             OfficeSupplies: 134,
+            //             Technology: 192,
+            //             mainCategory: "2019-08-29",
+            //         },
+            //         { OfficeSupplies: 48, mainCategory: "2019-12-01" },
+            //         {
+            //             Furniture: 204,
+            //             OfficeSupplies: 74,
+            //             Technology: 478,
+            //             mainCategory: "2018-11-13",
+            //         },
+            //         {
+            //             OfficeSupplies: 6,
+            //             Technology: 204,
+            //             mainCategory: "2020-11-23",
+            //         },
+            //         { Furniture: 84, mainCategory: "2020-12-25" },
+            //         { OfficeSupplies: 206, mainCategory: "2019-11-03" },
+            //         { OfficeSupplies: 398, mainCategory: "2017-08-25" },
+            //         { Furniture: 1576, mainCategory: "2018-03-02" },
+            //         { OfficeSupplies: 316, mainCategory: "2018-04-05" },
+            //         { Furniture: 1202, mainCategory: "2017-12-26" },
+            //         { Furniture: 1236, mainCategory: "2017-09-20" },
+            //         { OfficeSupplies: 492, mainCategory: "2020-11-05" },
+            //         { Furniture: 640, mainCategory: "2019-11-06" },
+            //         {
+            //             OfficeSupplies: 198,
+            //             Technology: 120,
+            //             mainCategory: "2020-02-02",
+            //         },
+            //         {
+            //             Furniture: 86,
+            //             OfficeSupplies: 426,
+            //             mainCategory: "2019-10-13",
+            //         },
+            //     ],
+            //     [["Furniture", "OfficeSupplies", "Technology"]],
+            // ];
+
             drawChart(data);
         </script>
     </body>
