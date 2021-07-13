@@ -140,26 +140,30 @@ function setLabel(
   console.log("x" + x_tick_fontSize);
   console.log("y" + y_tick_fontSize);
 
+  // debugger;
   const margin = { top: 30, right: 30, bottom: 70, left: 60 };
   if (
-    document.querySelector("#my_dataviz").clientWidth >
+    document.querySelector("#my_dataviz svg").clientWidth >
     document.documentElement.clientWidth
   ) {
     width = document.documentElement.clientWidth;
   } else {
-    width = document.querySelector("#my_dataviz").clientWidth;
+    width = document.querySelector("#my_dataviz svg").clientWidth;
   }
+  d3.selectAll("#xAxisLabelId").style("width", width + "px");
+  d3.selectAll("#xAxisLabelId").style("margin-left", "72px");
   height = document.querySelector("#yAxisDiv").clientHeight;
+  heightXLabelId = document.querySelector("#xAxisLabelId").clientHeight;
+  widthXLabelId = document.querySelector("#xAxisLabelId").clientWidth;
 
   if (labelType == "x_label") {
     svg
       .append("text")
       .attr("class", labelType)
-      .attr("text-anchor", "end")
+      .attr("text-anchor", "start")
       .text(label)
-      .attr("x", width / 2 + 60)
-      .attr("y", y_pos)
-
+      .attr("x", widthXLabelId / 2 - (label.length))
+      .attr("y", heightXLabelId / 2)
       .attr("font-size", xLabelfontSize)
       .attr("font-family", xLabelfontFamily)
       .attr("fill", xLabelfontColor)
@@ -289,8 +293,8 @@ function clearStyle() {
   d3.selectAll("#xAxisLabelId").attr("style", null);
   d3.selectAll("#my_dataviz").attr("style", null);
   d3.selectAll("#mainChartWindow").attr("style", null);
-    d3.selectAll("#legend").attr("style", null);
-    console.log("clear");
+  d3.selectAll("#legend").attr("style", null);
+  console.log("clear");
 }
 
 function removeAxisTicks(axis = "xAxis") {

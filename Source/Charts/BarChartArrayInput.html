@@ -170,10 +170,10 @@
                 d3.select("#legend").html("");
 
                 d3.select("#legend")
-                    .append("p")
-                    .html("Product_Name")
+                       .append("p")
+                    .html("Product_Name " + "&nbsp;")
                     .style("font-weight", "bold")
-                    .style("margin", 0)
+                    .style("margin", "auto")
                     .style("position", "sticky");
 
                 d3.select("#legend")
@@ -230,7 +230,7 @@
 
             var xAxisDateWiseValues = {};
 
-                     var y_pos_x_label = 55
+            var y_pos_x_label = 55
 
             var valueDateType = false;
             if (isDateFormat(xAxisDataSet[0])) {
@@ -291,7 +291,7 @@
                     document.querySelector("html").offsetHeight
                 ) {
                     topPosition = "calc(50vh - " + legendHeight / 2 + "px)";
-                    
+
                 } else {
                     topPosition = 0;
                 }
@@ -331,7 +331,7 @@
                         // d3.select("#my_dataviz svg").attr("width", width + margin.left + margin.right);
 
                         d3.select("#mainChartWindow").attr("style", null);
-                        
+
                         d3.select("#mainChartWindow").style(
                             "width",
                             widthOld - legendWidth + yAxisWidth
@@ -362,10 +362,10 @@
                             .style("overflow", "hidden")
                             .style("text-overflow", "ellipsis");
 
-                        d3.selectAll("#legend div").style(
-                            "padding",
-                            "2px 4px"
-                        );
+                        // d3.selectAll("#legend div").style(
+                        //     "padding",
+                        //     "2px 4px"
+                        // );
                         break;
                     case "bottom":
                         height -= 50; // use legend client height
@@ -630,20 +630,20 @@
                                 "</span>"
                             );
                         });
-                        var scrollVal = document.querySelector("#my_dataviz").scrollLeft;
+                    var scrollVal = document.querySelector("#my_dataviz").scrollLeft;
 
-                     
+
 
 
                     if (
-                        xpos - scrollVal>
+                        xpos - scrollVal >
                         document.documentElement.clientWidth -
                         document.querySelector("#tooltip").clientWidth
                     ) {
-                        
+
                         d3.select("#tooltip").style(
                             "left",
-                            xpos - scrollVal-
+                            xpos - scrollVal -
                             document.querySelector("#tooltip")
                                 .clientWidth -
                             10 +
@@ -710,7 +710,7 @@
 
 
 
-   
+
             setLabel(
                 xAxisLabel,
                 "x_label",

@@ -21,7 +21,7 @@ const constants = {
         top: 20,
         left: 70,
         right: 20,
-        bottom: 60,
+        bottom: 80,
     },
 };
 
@@ -62,10 +62,10 @@ const defaultD3Config = {
     fontColor: "black",
     defaultLegendConfig: {
         legendStatus: false,
-        legendPosition: "top",
+        legendPosition: "right",
     },
     defaultlabelConfig: {
-        labelStatus: true,
+        labelStatus: false,
     },
     defaultGridConfig: {
         gridStatus: true,
