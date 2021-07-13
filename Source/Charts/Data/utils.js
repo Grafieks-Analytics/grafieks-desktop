@@ -146,7 +146,7 @@ function setLabel(
     document.querySelector("#my_dataviz svg").clientWidth >
     document.documentElement.clientWidth
   ) {
-    width = document.documentElement.clientWidth;
+    width = document.querySelector("#my_dataviz").clientWidth;
   } else {
     width = document.querySelector("#my_dataviz svg").clientWidth;
   }
@@ -154,6 +154,9 @@ function setLabel(
   d3.selectAll("#xAxisLabelId").style("margin-left", "72px");
   height = document.querySelector("#yAxisDiv").clientHeight;
   heightXLabelId = document.querySelector("#xAxisLabelId").clientHeight;
+  heightYLabelId = document
+    .querySelector("#my_dataviz svg g g.grid")
+    .getBoundingClientRect().height;
   widthXLabelId = document.querySelector("#xAxisLabelId").clientWidth;
 
   if (labelType == "x_label") {
@@ -162,8 +165,8 @@ function setLabel(
       .attr("class", labelType)
       .attr("text-anchor", "start")
       .text(label)
-      .attr("x", widthXLabelId / 2 - (label.length))
-      .attr("y", heightXLabelId / 2)
+      .attr("x", (widthXLabelId-72) / 2 - (label.length) / 2)
+      .attr("y", heightXLabelId / 2 + xLabelfontSize / 2)
       .attr("font-size", xLabelfontSize)
       .attr("font-family", xLabelfontFamily)
       .attr("fill", xLabelfontColor)
@@ -178,7 +181,7 @@ function setLabel(
       .attr("font-size", yLabelfontSize)
       .attr("font-family", yLabelfontFamily)
       .attr("fill", yLabelfontColor)
-      .attr("x", -height / 2)
+      .attr("x", -(heightYLabelId / 2) + (label.length-5) / 2)
       .attr("dy", ".75em")
       .attr("position", "fixed")
       .attr("transform", "rotate(-90)");

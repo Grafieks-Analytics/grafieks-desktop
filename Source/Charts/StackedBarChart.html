@@ -44,10 +44,10 @@
         #xAxisLabelId {
             position: fixed;
             /* bottom: 30px; */
-            bottom: 0px;
+            bottom: 15px;
             z-index: -1;
-            height: 50px;
-            background-color: red;
+            height: 40px;
+
         }
     </style>
 </head>
@@ -239,6 +239,7 @@
             var margin = { top, right, bottom, left };
             var width = window.innerWidth - margin.left - margin.right - 50;
             var y_pos_x_label = 55
+            var topLegendMargin = 0
 
             var [data, keys, labels] = transformData(
                 data[0],
@@ -246,7 +247,7 @@
                 dateFormat1
             );
 
-         
+
             d3.select("#legend").attr("style", null);
             d3.select("#mainChartWindow").attr("style", null);
 
@@ -297,10 +298,10 @@
             const yAxisWidth =
                 document.querySelector("#yAxisDiv").clientWidth;
 
+            var height = window.innerHeight - margin.top - margin.bottom - 2 - extraHeight
 
-           
             // legends code starts
-            
+
             if (legendStatus) {
                 if (
                     legendHeight < htmlHeight
@@ -310,7 +311,7 @@
                 } else {
                     topPosition = "0px";
                 }
-              
+
                 var widthOld =
                     document.querySelector("html").clientWidth - 72;
                 var heightOld = document.querySelector("html").clientHeight;
@@ -320,31 +321,28 @@
 
                 switch (legendPosition) {
                     case "left":
+
+                        var legendWidth = legendElement.offsetWidth;
+
                         d3.select("#legend")
                             .attr("style", null)
-                            .style("top", topPosition)
                             .style("right", "auto")
-                            // .style("bottom", "auto")
-                            .style("left", "0px")
-                            // .style("right", "5px")
-                            .style("display", "block")
+                            .style("left", "auto")
+                            .style("position", "fixed")
+                            .style("top", topPosition)
                             .style("max-height", "100vh")
                             .style("overflow", "scroll")
                             .style("border", "none")
-                            .style("position", "fixed");
+                            .style("bottom", "auto")
+                            .style("display", "block");
                         d3.selectAll("#legend div span")
                             .style("max-width", "160px")
                             .style("white-space", "nowrap")
                             .style("overflow", "hidden")
                             .style("text-overflow", "ellipsis");
 
-                        var legendWidth = legendElement.offsetWidth;
-                        // margin.left += 100;
-                        // width -= 100;
-                        // d3.select("#my_dataviz svg").attr("width", width + margin.left + margin.right);
-
+                        // debugger;
                         d3.select("#mainChartWindow").attr("style", null);
-
                         d3.select("#mainChartWindow").style(
                             "width",
                             widthOld - legendWidth + yAxisWidth + "px"
@@ -353,12 +351,25 @@
                             "margin-left",
                             legendWidth + "px"
                         );
+                        d3.select("#xAxisLabelId").style("bottom", 15 + "px");
+                        // d3.select("#mainChartWindow").style(
+                        //     "width",
+                        //     widthOld - legendWidth + yAxisWidth - 20 + "px"
+                        //     // "500px"
+                        // );
+                        // d3.select("#mainChartWindow").style(
+                        //     "margin-right",
+                        //     0
+                        // );
                         break;
                     case "top":
 
                         margin.top += 18;
-                        height -= 50;
-                        y_pos_x_label = 57
+                        margin.bottom += 20;
+                        topLegendMargin += 20;
+
+                        height -= 35;
+                        // y_pos_x_label = 57
                         d3.select("#legend")
                             .attr("style", null)
                             .style("top", "10px")
@@ -375,6 +386,7 @@
                             .style("white-space", "nowrap")
                             .style("overflow", "hidden")
                             .style("text-overflow", "ellipsis");
+                        d3.select("#mainChartWindow").attr("style", null);
 
                         legendWidth = legendElement.offsetWidth;
                         if (
@@ -388,36 +400,61 @@
                         d3.select("#legend")
                             .style("right", rightPosition)
 
+                        d3.select("#xAxisLabelId").style("bottom", 15 + "px");
 
-                        // d3.selectAll("#legend div").style(
-                        //     "padding",
-                        //     "2px 4px"
-                        // );
                         break;
                     case "bottom":
-                        height -= 50; // use legend client height
-                        margin.bottom += 10;
-                        var legendWidth = legendElement.offsetWidth;
-                        y_pos_x_label = 20
+                        // height -= 50; // use legend client height
+                        // margin.bottom += 10;
+                        // var legendWidth = legendElement.offsetWidth;
+                        // y_pos_x_label = 20
 
-                        d3.select("#xAxisLabelId").style("bottom", 50);
+                        // d3.select("#xAxisLabelId").style("bottom", 50);
+                        // d3.select("#mainChartWindow").attr("style", null);
+
+                        // // d3.select("#mainChartWindow").style("width", width);
+                        // //  d3.select("#mainChartWindow").style("height",heightOld-80 );
+                        // d3.select("#mainChartWindow").style(
+                        //     "margin-left",
+                        //     0
+                        // );
+                        // d3.select("#legend")
+                        //     .attr("style", null)
+                        //     .style("top", "auto")
+                        //     .style("right", rightPosition)
+                        //     .style("bottom", "0px")
+                        //     // .style("left", margin.left + "px")
+                        //     .style("display", "flex")
+                        //     .style("max-width", "100vw")
+                        //     .style("overflow", "scroll")
+                        //     .style("border", "none");
+
+                        // d3.selectAll("#legend div span")
+                        //     .style("max-width", "160px")
+                        //     .style("white-space", "nowrap")
+                        //     .style("overflow", "hidden")
+                        //     .style("text-overflow", "ellipsis");
+                        // *************
+                        //    margin.top += 18;
+                        // margin.bottom += 50;
+                        // topLegendMargin += 20;
+
+                        height -= 70;
+                        // y_pos_x_label = 57
+
+                        d3.select("#xAxisLabelId").style("bottom", 85 + "px");
+                        // d3.select("#my_dataviz").style("bottom", 50 + "px");
+                        // d3.select("#my_dataviz").style("height", 500 + "px");
                         d3.select("#mainChartWindow").attr("style", null);
-
-                        // d3.select("#mainChartWindow").style("width", width);
-                        //  d3.select("#mainChartWindow").style("height",heightOld-80 );
-                        d3.select("#mainChartWindow").style(
-                            "margin-left",
-                            0
-                        );
                         d3.select("#legend")
                             .attr("style", null)
                             .style("top", "auto")
-                            .style("right", rightPosition)
                             .style("bottom", "0px")
-                            // .style("left", margin.left + "px")
+                            .style("left", "auto")
                             .style("display", "flex")
                             .style("max-width", "100vw")
                             .style("overflow", "scroll")
+                            // .style("right", rightPosition)
                             .style("border", "none");
 
                         d3.selectAll("#legend div span")
@@ -425,6 +462,22 @@
                             .style("white-space", "nowrap")
                             .style("overflow", "hidden")
                             .style("text-overflow", "ellipsis");
+                        d3.select("#mainChartWindow").attr("style", null);
+
+                        legendWidth = legendElement.offsetWidth;
+                        if (
+                            legendWidth < htmlWidth
+                        ) {
+                            rightPosition = "calc(50vw - " + legendWidth / 2 + "px)";
+
+                        } else {
+                            rightPosition = "0px";
+                        }
+                        d3.select("#legend")
+                            .style("right", rightPosition)
+
+                        // d3.select("#mainChartWindow").style("height", "500px");
+                        // d3.select("#mainChartWindow").style("height", "500px");
                         break;
                     // For Right Legened
                     case "right":
@@ -461,6 +514,8 @@
                             "margin-left",
                             0
                         );
+                        d3.select("#xAxisLabelId").style("bottom", 15 + "px");
+
                 }
             }
 
@@ -475,7 +530,7 @@
             // legends code ends
 
 
-        
+
             if (!toolTip) {
                 toolTip = {
                     textColumn1: labels[0],
@@ -487,8 +542,8 @@
                 width = data.length * standardThresholdWidth;
             }
 
-            var height = window.innerHeight - margin.top - margin.bottom - 2 - extraHeight
-                // window.innerHeight - margin.top - margin.bottom - extraHeight - 2;
+            // var height = window.innerHeight - margin.top - margin.bottom - 2 - extraHeight
+            // window.innerHeight - margin.top - margin.bottom - extraHeight - 2;
             yaxisTicks = height / 70;
 
             var x = d3
@@ -566,7 +621,7 @@
                 .attr("width", width)
                 .attr(
                     "height",
-                    height + margin.bottom
+                    height + margin.bottom + topLegendMargin
                 )
                 .append("g")
                 .attr(
@@ -924,7 +979,7 @@
                 return d3.timeFormat(dateFormat)(new Date(dateValue));
             }
         }
-  
+
 
         drawChart(data);
     </script>
