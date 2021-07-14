@@ -37,6 +37,7 @@
             height: 20px;
             margin-left: 40px;
             /* display: none; */
+            background-color: red;
         }
 
         #xAxisDiv {
@@ -276,7 +277,7 @@
             // debugger;
             width = width - yAxisWidth;
 
-            d3.select("#xAxisLabelId").style("bottom", 50);
+            // d3.select("#xAxisLabelId").style("bottom", 50);
 
             // set the ranges
             var y = d3.scaleBand().range([height, 0]).padding(paddingInner);
@@ -362,8 +363,8 @@
                     case "top":
                         clearStyle();
                         d3.select("#mainChartWindow").attr("style", null);
-                        // margin.top += 50;
-                        height -= 20;
+                        margin.top -= 50;
+                        // height -= 50;
                         d3.select("#legend")
                             .attr("style", null)
                             .style("top", "10px")
@@ -521,15 +522,7 @@
                     (margin.top + 20) +
                     ")"
                 );
-            setLabel(
-                yAxisLabel,
-                "x_label",
-                d3
-                    .select("#xAxisLabelId")
-                    .append("svg")
-                    .attr("width", window.innerWidth, "height", 150),
-                50
-            );
+          
 
             // d3.select("#yAxisDiv")
             //     .append("svg")
@@ -549,8 +542,7 @@
                     ")"
                 );
 
-            setLabel(xAxisLabel, "y_label", d3.select("svg"), false);
-
+           
             var x = d3.scaleLinear().range([0, width - margin.left]);
             x.domain([minValue > 0 ? 0 : minValue, maxValue]).nice();
             y.domain(dataValues[0]);
@@ -782,7 +774,16 @@
             }
 
 
-
+            setLabel(xAxisLabel, "y_label", d3.select("svg"), false);
+            setLabel(
+                yAxisLabel,
+                "x_label",
+                d3
+                    .select("#xAxisLabelId")
+                    .append("svg")
+                    .attr("width", window.innerWidth, "height", 150),
+                50
+            );
 
             setYaxisWidth();
 
