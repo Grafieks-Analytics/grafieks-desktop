@@ -352,15 +352,7 @@
                             legendWidth + "px"
                         );
                         d3.select("#xAxisLabelId").style("bottom", 15 + "px");
-                        // d3.select("#mainChartWindow").style(
-                        //     "width",
-                        //     widthOld - legendWidth + yAxisWidth - 20 + "px"
-                        //     // "500px"
-                        // );
-                        // d3.select("#mainChartWindow").style(
-                        //     "margin-right",
-                        //     0
-                        // );
+                     
                         break;
                     case "top":
 
@@ -368,7 +360,7 @@
                         margin.bottom += 20;
                         topLegendMargin += 20;
 
-                        height -= 35;
+                        height -= 40;
                         // y_pos_x_label = 57
                         d3.select("#legend")
                             .attr("style", null)
@@ -376,16 +368,20 @@
                             .style("bottom", "auto")
                             .style("left", "auto")
                             .style("display", "flex")
-                            .style("max-width", "100vw")
+                            .style("max-width", "99vw")
                             .style("overflow", "scroll")
-                            // .style("right", rightPosition)
+                
                             .style("border", "none");
 
                         d3.selectAll("#legend div span")
                             .style("max-width", "160px")
+
                             .style("white-space", "nowrap")
                             .style("overflow", "hidden")
                             .style("text-overflow", "ellipsis");
+                        d3.selectAll("#legend p")
+                            .style("min-width", "fit-content");
+
                         d3.select("#mainChartWindow").attr("style", null);
 
                         legendWidth = legendElement.offsetWidth;
@@ -404,40 +400,7 @@
 
                         break;
                     case "bottom":
-                        // height -= 50; // use legend client height
-                        // margin.bottom += 10;
-                        // var legendWidth = legendElement.offsetWidth;
-                        // y_pos_x_label = 20
 
-                        // d3.select("#xAxisLabelId").style("bottom", 50);
-                        // d3.select("#mainChartWindow").attr("style", null);
-
-                        // // d3.select("#mainChartWindow").style("width", width);
-                        // //  d3.select("#mainChartWindow").style("height",heightOld-80 );
-                        // d3.select("#mainChartWindow").style(
-                        //     "margin-left",
-                        //     0
-                        // );
-                        // d3.select("#legend")
-                        //     .attr("style", null)
-                        //     .style("top", "auto")
-                        //     .style("right", rightPosition)
-                        //     .style("bottom", "0px")
-                        //     // .style("left", margin.left + "px")
-                        //     .style("display", "flex")
-                        //     .style("max-width", "100vw")
-                        //     .style("overflow", "scroll")
-                        //     .style("border", "none");
-
-                        // d3.selectAll("#legend div span")
-                        //     .style("max-width", "160px")
-                        //     .style("white-space", "nowrap")
-                        //     .style("overflow", "hidden")
-                        //     .style("text-overflow", "ellipsis");
-                        // *************
-                        //    margin.top += 18;
-                        // margin.bottom += 50;
-                        // topLegendMargin += 20;
 
                         height -= 70;
                         // y_pos_x_label = 57
@@ -452,7 +415,7 @@
                             .style("bottom", "0px")
                             .style("left", "auto")
                             .style("display", "flex")
-                            .style("max-width", "100vw")
+                            .style("max-width", "99vw")
                             .style("overflow", "scroll")
                             // .style("right", rightPosition)
                             .style("border", "none");
@@ -462,6 +425,8 @@
                             .style("white-space", "nowrap")
                             .style("overflow", "hidden")
                             .style("text-overflow", "ellipsis");
+                             d3.selectAll("#legend p")
+                            .style("min-width", "fit-content");
                         d3.select("#mainChartWindow").attr("style", null);
 
                         legendWidth = legendElement.offsetWidth;
