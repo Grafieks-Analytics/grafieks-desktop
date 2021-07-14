@@ -27,9 +27,10 @@
 
         #xAxisLabelId {
             position: fixed;
-            bottom: 30px;
+            bottom: 20px;
             z-index: -1;
-            height: 50px;
+            height: 40px;
+            background-color: red;
         }
     </style>
 </head>
@@ -528,6 +529,16 @@
                             .tickSize(-width)
                             .tickFormat(d3.format(".2s"))
                     );
+            }else{
+                 svg.append("g")
+                    .attr("class", "grid")
+                    .style("stroke-width", "1")
+                    .call(
+                        make_y_gridlines(yScale)
+                            // .tickSize(-width)
+                            .tickFormat(d3.format(".2s"))
+                    );
+
             }
 
             d3.selectAll("#yAxisDiv text")
