@@ -138,7 +138,8 @@
 
             if (chartType != constants.chartType.STANDARD) {
                 chartType = constants.chartType.FIT_HEIGHT;
-            } let { legendStatus, legendPosition } = legendConfig;
+            }
+            let { legendStatus, legendPosition } = legendConfig;
             let { labelStatus } = labelConfig;
             let { gridStatus } = gridConfig;
 
@@ -254,10 +255,21 @@
                     window.innerHeight
                 ) {
                     // console.log("Change Position");
-                    d3.select("#xAxisDiv").style(
-                        "top",
-                        height + margin.top + "px"
-                    );
+                      if (legendPosition == "bottom" || legendStatus == "true") {
+                        d3.select("#xAxisDiv").style(
+                              "top",
+                              height + margin.top - 50 + "px"
+                          );
+                           d3.select("#xAxisLabelId").style("top", height + margin.top + "px");
+                    }else{
+                        d3.select("#xAxisDiv").style(
+                              "top",
+                              height + margin.top + "px"
+                          );
+                           d3.select("#xAxisLabelId").style("top", height + margin.top + 50 + "px");
+                    }
+                    
+                           
                     // TODO:x-axis label
                 } else {
                     d3.select("#xAxisDiv").style("bottom", 0);
