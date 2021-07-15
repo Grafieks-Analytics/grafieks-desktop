@@ -312,6 +312,8 @@ int main(int argc, char *argv[])
     /***********************************************************************************************************************/
     /***********************************************************************************************************************/
     // SIGNAL & SLOTS STARTS
+    // These signal and slots are for same threads
+    // For multi threaded signal and slots, they are written inside individual classes
 
     QObject::connect(&proxyModel, &ProxyFilterModel::sendFilterQuery, &queryModel, &QueryModel::receiveFilterQuery);
     QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::sendDbName, duckCon, &DuckCon::createTable);

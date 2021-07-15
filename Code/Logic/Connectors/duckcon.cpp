@@ -3,9 +3,15 @@
 DuckCon::DuckCon(QObject *parent) : QObject(parent),
     db(nullptr), con(db)
 {
+    // IMPORTANT
+    // Multithreaded signal and slots only
+    // All main thread signal and slots are written in main.cpp
+
     connect(&thread, &QThread::started, &excelToCsv, &ExcelCon::convertExcelToCsv, Qt::QueuedConnection);
     connect(&excelToCsv, &ExcelCon::convertedExcelPaths, this, &DuckCon::convertedExcelPaths, Qt::QueuedConnection);
-    connect(&thread2, &QThread::started, this, &DuckCon::processThis);
+    connect(&thread2, &QThread::started, this, &DuckCon::processThis, Qt::QueuedConnection);
+    connect(&thread2, &QThread::finished, this, &DuckCon::processThat, Qt::QueuedConnection);
+
 }
 
 void DuckCon::dropTables()
@@ -43,7 +49,6 @@ void DuckCon::processThis()
 
     QString fileName       = QFileInfo(db).baseName().toLower();
     std::string csvdb       = "";
-    bool errorStatus = false;
 
     QString fileExtension = QFileInfo(db).completeSuffix();
     qDebug() << fileName << fileExtension << db << "DUCK FILE INFO`";
@@ -69,15 +74,25 @@ void DuckCon::processThis()
         }
     }
 
-    if(errorStatus == true){
+    thread2.quit();
+}
+
+void DuckCon::processThat()
+{
+    emit excelLoginStatus(this->response, this->directLogin);
+
+    if(this->errorStatus == true){
         emit importError("File format is not valid UTF-8. Please provide a valid UTF-8 file", "excel");
     }
 }
 
 
 
-void DuckCon::createTable(){
+void DuckCon::createTable(QString dbName, bool directLogin, QVariantMap response){
 
+
+    this->directLogin = directLogin;
+    this->response = response;
 
     QString table = "";
     QString db = Statics::currentDbName;

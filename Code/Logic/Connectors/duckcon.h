@@ -23,25 +23,30 @@ class DuckCon : public QObject
     QThread thread2;
 
     QStringList excelSheetsList;
+    bool directLogin;
+    QVariantMap response;
+    bool errorStatus = false;
 
 
 public:
     explicit DuckCon(QObject *parent = nullptr);
-//    ~DuckCon();
+    //    ~DuckCon();
 
     duckdb::DuckDB db;
     duckdb::Connection con;
 
 public slots:
-    void createTable();
+    void createTable(QString dbName, bool directLogin, QVariantMap response);
     void dropTables();
 
     void convertedExcelPaths(QStringList paths);
     void processThis();
+    void processThat();
 
 signals:
     void importError(QString errorString, QString fileType);
     void test();
+    void excelLoginStatus(QVariantMap status, bool directLogin);
 
 };
 
