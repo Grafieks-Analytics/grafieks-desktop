@@ -52,6 +52,8 @@ Column{
     function showLegend(checked){
         var legendConfig = d3PropertyConfig.legendConfig || {};
         legendConfig['legendStatus'] = checked;
+        legendConfig['legendPosition'] = "right";
+        right_radio.radio_checked = true;
         d3PropertyConfig.legendConfig = legendConfig;
         reDrawChart();
     }
@@ -168,6 +170,7 @@ Column{
                     }
 
                     CustomRadioButton{
+                        id:right_radio
                         radio_checked: false
                         parent_dimension: 12
                         width: parent.width

@@ -72,9 +72,14 @@ Popup {
 
 
     function removeElement(index){
+        // [Tag: Refactor]
+        // Remove these parent -> parent -> parent 
+        // Possible to get model via id or some other reference?
+        
        var axisModel = axisItemMenuPopup.parent.parent.parent.model;
        axisModel.remove(index);
        reDrawChart();
+       
     }
 
 

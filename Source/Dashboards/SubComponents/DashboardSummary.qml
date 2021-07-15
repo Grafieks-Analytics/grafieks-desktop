@@ -140,13 +140,13 @@ Rectangle {
 
         DashboardParamsModel.dragNewReport(DashboardParamsModel.currentDashboard, counter)
         DashboardParamsModel.setReportZOrder(DashboardParamsModel.currentDashboard, counter, DashboardParamsModel.zIndex)
-        DashboardParamsModel.setDashboardReportCoordinates(DashboardParamsModel.currentDashboard, counter, x1, y1, x2, y2)
-        DashboardParamsModel.setDashboardReportTypeMap(DashboardParamsModel.currentDashboard, counter, reportType)
+        DashboardParamsModel.setDashboardWidgetCoordinates(DashboardParamsModel.currentDashboard, counter, x1, y1, x2, y2)
+        DashboardParamsModel.setDashboardWidgetTypeMap(DashboardParamsModel.currentDashboard, counter, reportType)
 
         const reportProperties = ReportParamsModel.getReport(listViewElem.reportId);
-        //        const chartUrl = Constants.baseChartUrl + reportProperties.chartUrl;
         const chartUrl = reportProperties && (Constants.baseChartUrl + reportProperties.chartUrl);
-        DashboardParamsModel.setDashboardReportUrl(DashboardParamsModel.currentDashboard, counter, chartUrl);
+
+        DashboardParamsModel.setDashboardWidgetUrl(DashboardParamsModel.currentDashboard, counter, chartUrl);
 
         DashboardParamsModel.setPositionX(x1);
         DashboardParamsModel.setPositionY(y1);
