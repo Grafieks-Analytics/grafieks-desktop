@@ -228,10 +228,11 @@
                     "translate(" + margin.left + "," + (margin.top + 10) + ")"
                 );
 
+            xTicks = width / 70;
             svg.append("g")
                 .attr("class", "grid")
                 .style("stroke-width", "1")
-                .call(make_x_gridlines(x).tickSize(height).tickFormat(""));
+                .call(make_x_gridlines(x).tickSize(height).tickFormat("").ticks(xTicks));
 
             var keysIterator = 0;
             svg.append("g")
@@ -323,7 +324,7 @@
             var xAxis = d3
                 .axisBottom(x)
                 .tickSize(0)
-                .ticks(10)
+                .ticks(xTicks)
                 .tickFormat(d3.format(".2s"));
 
             d3.select("#xAxisDiv")
@@ -378,7 +379,7 @@
                 return d3.axisBottom(x);
             }
             function make_y_gridlines(y) {
-                return d3.axisLeft(y).ticks(10);
+                return d3.axisLeft(y).ticks(xTicks);
             }
         }
         // prettier-ignore

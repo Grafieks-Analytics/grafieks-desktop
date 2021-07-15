@@ -249,10 +249,17 @@
                 x.domain([minValue > 0 ? 0 : minValue, maxValue]).nice();
                 y.domain(dataValues[0]);
 
+                xTicks = width / 70;
+
                 svg.append("g")
                     .attr("class", "grid")
                     .style("stroke-width", "1")
-                    .call(make_x_gridlines(x).tickSize(height).tickFormat(""));
+                    .call(
+                        make_x_gridlines(x)
+                            .tickSize(height)
+                            .tickFormat("")
+                            .ticks(xTicks)
+                    );
 
                 // append the rectangles for the bar chart
                 svg.selectAll(".bar")
@@ -367,7 +374,7 @@
                 var xAxis = d3
                     .axisBottom(x)
                     .tickSize(0)
-                    .ticks(10)
+                    .ticks(xTicks)
                     .tickFormat(d3.format(".2s"));
 
                 d3.select("#xAxisDiv")
