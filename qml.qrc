@@ -51,7 +51,6 @@
         <file>Source/Modellers/SubComponents/MiniSubComponents/CategoricalFilterTopContent.qml</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/CategoricalFilterWildcardContent.qml</file>
         <file>Constants.qml</file>
-        <file>main.qml</file>
         <file>Source/MainSubComponents/CheckBoxTpl.qml</file>
         <file>Source/MainSubComponents/CustomButton.qml</file>
         <file>Source/MainSubComponents/CustomTextArea.qml</file>
@@ -267,5 +266,8 @@
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterCustomizeCategorical.qml</file>
         <file>Source/Charts/HorizontalLineChart.html</file>
         <file>Source/Charts/MultipleLineChart.html</file>
+        <file>Source/Modellers/SubComponents/MiniSubComponents/CategoricalFilterListContent_copy.qml</file>
+        <file>Splash.qml</file>
+        <file>Main.qml</file>
     </qresource>
 </RCC>

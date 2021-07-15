@@ -146,7 +146,7 @@ void TableColumnsModel::getChartHeader(QMap<int, QStringList> chartHeader)
 
 void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap<int, QVariantMap> columnFilterType, QMap<int, QVariantMap> columnIncludeExcludeMap, QMap<int, QMap<QString, QStringList> > columnValueMap, int dashboardId)
 {
-    qDebug() << "FILTER SIGNAL RECEIVED" << showColumns << columnFilterType << columnIncludeExcludeMap << columnValueMap;
+//    qDebug() << "FILTER SIGNAL RECEIVED" << showColumns << columnFilterType << columnIncludeExcludeMap << columnValueMap;
 
     QStringList equalRelationsList;
     QStringList betweenRelationList;
@@ -339,4 +339,12 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
     }
 
     emit dashboardDataChanged(this->filteredChartData, dashboardId);
+}
+
+void TableColumnsModel::receiveReportData(QMap<QString, QMap<int, QStringList> > newChartData, QString currentReportId)
+{
+    QStringList keys = newChartData.keys();
+
+    this->reportChartData = newChartData;
+
 }

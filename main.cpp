@@ -426,7 +426,9 @@ int main(int argc, char *argv[])
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/
 
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:/Splash.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:/Main.qml")));
+
     if (engine.rootObjects().isEmpty())
         return -1;
 

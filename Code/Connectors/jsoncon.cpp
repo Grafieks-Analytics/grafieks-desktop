@@ -41,7 +41,7 @@ QVariantMap JsonCon::JsonInstance(const QString &filepath)
 
 }
 
-QString JsonCon::convertJsonToCsv(QString &jsonPath)
+void JsonCon::convertJsonToCsv(QString &jsonPath)
 {
     QFile jsonFile;
     jsonFile.setFileName(jsonPath);
@@ -67,6 +67,4 @@ QString JsonCon::convertJsonToCsv(QString &jsonPath)
 
         csvFile.close();
     }
-
-    return outPath;
 }

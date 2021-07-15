@@ -157,7 +157,7 @@ void ConnectorsLoginModel::excelLogin(QString filename, bool directLogin)
 {
     QVariantMap response = excelcon->ExcelInstance(filename);
     this->staticSetter(filename, Constants::duckType, Constants::excelIntType);
-    emit excelLoginStatus(response, directLogin);
+//    emit excelLoginStatus(response, directLogin);
 }
 
 void ConnectorsLoginModel::sqlLogout()
