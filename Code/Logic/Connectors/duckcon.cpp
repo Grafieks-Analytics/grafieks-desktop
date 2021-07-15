@@ -3,7 +3,9 @@
 DuckCon::DuckCon(QObject *parent) : QObject(parent),
     db(nullptr), con(db)
 {
-
+    connect(&thread, &QThread::started, &excelToCsv, &ExcelCon::convertExcelToCsv2, Qt::QueuedConnection);
+    connect(&excelToCsv, &ExcelCon::convertedExcelPaths, this, &DuckCon::convertedExcelPaths, Qt::QueuedConnection);
+//    connect(this, &DuckCon::test, this, &DuckCon::processThis);
 }
 
 void DuckCon::dropTables()
@@ -20,11 +22,65 @@ void DuckCon::dropTables()
     }
 }
 
+void DuckCon::convertedExcelPaths(QStringList paths)
+{
+    qDebug() << "CONV EXCEL PATHS" << paths;
+    this->excelSheetsList = paths;
+
+    emit test();
+    thread.quit();
+
+    moveToThread(&thread2);
+    connect(&thread2, &QThread::started, this, &DuckCon::processThis);
+    thread2.start();
+}
+
+void DuckCon::processThis()
+{
+
+    QString table = "";
+    QString db = Statics::currentDbName;
+    std::string csvFile    = db.toStdString();
+
+    QString fileName       = QFileInfo(db).baseName().toLower();
+    std::string csvdb       = "";
+    bool errorStatus = false;
+
+    QString fileExtension = QFileInfo(db).completeSuffix();
+    qDebug() << fileName << fileExtension << db << "DUCK FILE INFO`";
+
+
+    fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    table = fileName;
+
+    for ( const QString& csvFile : this->excelSheetsList  ) {
+
+        csvdb = "'" + (csvFile + ".csv").toStdString() + "'";
+        QFileInfo fi(csvdb.c_str());
+        Statics::currentDbName = fileName;
+        std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + fi.baseName().toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
+
+        if(res->error.empty() == false){
+            errorStatus = true;
+            qWarning() << Q_FUNC_INFO << "Excel import issue" << res->error.c_str();
+            break;
+        } else{
+            qDebug() << "HERE BABSE";
+            this->tables.append(fi.baseName());
+            res.release();
+        }
+    }
+
+    if(errorStatus == true){
+        emit importError("File format is not valid UTF-8. Please provide a valid UTF-8 file", "excel");
+    }
+}
+
 
 
 void DuckCon::createTable(){
 
-    QStringList excelSheetsList;
+
     QString table = "";
     QString db = Statics::currentDbName;
     std::string csvFile    = db.toStdString();
@@ -58,25 +114,29 @@ void DuckCon::createTable(){
 
 
         } else if(fileExtension.toLower() == "xls" || fileExtension.toLower() == "xlsx"){
-            excelSheetsList = excelToCsv.convertExcelToCsv(Statics::currentDbName);
+            //            excelSheetsList = excelToCsv.convertExcelToCsv(Statics::currentDbName);
 
 
-            for ( const QString& csvFile : excelSheetsList  ) {
-                csvdb = "'" + (csvFile + ".csv").toStdString() + "'";
-                QFileInfo fi(csvdb.c_str());
-                Statics::currentDbName = fileName;
-                std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + fi.baseName().toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
+            //            for ( const QString& csvFile : excelSheetsList  ) {
+            //                csvdb = "'" + (csvFile + ".csv").toStdString() + "'";
+            //                QFileInfo fi(csvdb.c_str());
+            //                Statics::currentDbName = fileName;
+            //                std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + fi.baseName().toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
 
-                if(res->error.empty() == false){
-                    errorStatus = true;
-                    qWarning() << Q_FUNC_INFO << "Excel import issue" << res->error.c_str();
-                    break;
-                } else{
-                    this->tables.append(fi.baseName());
-                    res.release();
-                }
-            }
+            //                if(res->error.empty() == false){
+            //                    errorStatus = true;
+            //                    qWarning() << Q_FUNC_INFO << "Excel import issue" << res->error.c_str();
+            //                    break;
+            //                } else{
+            //                    this->tables.append(fi.baseName());
+            //                    res.release();
+            //                }
+            //            }
 
+            excelToCsv.moveToThread(&thread);
+            thread.start();
+
+            errorStatus = true;
             if(errorStatus == true){
                 emit importError("File format is not valid UTF-8. Please provide a valid UTF-8 file", "excel");
             }
