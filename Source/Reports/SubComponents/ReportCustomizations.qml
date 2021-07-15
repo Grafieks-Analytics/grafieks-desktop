@@ -75,14 +75,14 @@ Item{
             ]
         }
 
-        ListElement {
-            categoryName: "Reference Line"
-            collapsed: false
-            display: false
-            subItems: [
-                ListElement { itemName: "Add Reference Line" }
-            ]
-        }
+//        ListElement {
+//            categoryName: "Reference Line"
+//            collapsed: false
+//            display: false
+//            subItems: [
+//                ListElement { itemName: "Add Reference Line" }
+//            ]
+//        }
 
         ListElement {
             categoryName: "Total"
