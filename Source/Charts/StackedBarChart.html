@@ -250,7 +250,7 @@
 
             d3.select("#legend").attr("style", null);
             d3.select("#mainChartWindow").attr("style", null);
-             d3.select("#xAxisLabelId").style("bottom", 15 + "px");
+            d3.select("#xAxisLabelId").style("bottom", 15 + "px");
 
             //    debugger;
             if (legendStatus) {
@@ -353,7 +353,7 @@
                             legendWidth + "px"
                         );
                         d3.select("#xAxisLabelId").style("bottom", 15 + "px");
-                     
+
                         break;
                     case "top":
 
@@ -371,7 +371,7 @@
                             .style("display", "flex")
                             .style("max-width", "99vw")
                             .style("overflow", "scroll")
-                
+
                             .style("border", "none");
 
                         d3.selectAll("#legend div span")
@@ -426,7 +426,7 @@
                             .style("white-space", "nowrap")
                             .style("overflow", "hidden")
                             .style("text-overflow", "ellipsis");
-                             d3.selectAll("#legend p")
+                        d3.selectAll("#legend p")
                             .style("min-width", "fit-content");
                         d3.select("#mainChartWindow").attr("style", null);
 
@@ -528,7 +528,7 @@
             var color = d3.scaleOrdinal().range(d3Colors);
 
             var xAxis = d3.axisBottom(x);
-            var yAxis = d3.axisLeft(y).ticks(yaxisTicks);
+            var yAxis = d3.axisLeft(y).ticks(yaxisTicks).tickFormat(d3.format(".2s"));
 
             var centerLine = d3.axisTop(center).ticks(0);
 
@@ -605,6 +605,17 @@
                             .tickFormat(d3.format(".2s"))
                     );
             }
+            else {
+                svg.append("g")
+                    .attr("class", "grid")
+                    .style("stroke-width", "1")
+                    .style("display", "none")
+                    .call(
+                        make_y_gridlines(y)
+                            .tickSize(-width)
+                            .tickFormat(d3.format(".2s"))
+                    );
+            }
 
             svg.append("g")
                 .attr("class", "x-axis axis")
@@ -672,7 +683,8 @@
                     d3.selectAll(".bar").style("opacity", 1);
                 })
                 .on("mouseover mousemove", function (d, i) {
-                    let xpos1 = d3.mouse(this)[0] + margin.left;
+                    let xpos = d3.mouse(this)[0] + margin.left;
+                    // let ypos = d3.mouse(this)[1];
 
                     var parentElement = this.parentElement;
 
@@ -683,19 +695,19 @@
                         .match(/matrix.*\((.+)\)/)[1]
                         .split(", ");
 
-                    xpos1 += +matrixValues[4] || 0;
+                    xpos += +matrixValues[4] || 0;
 
-                    let ypos = d3.mouse(this)[1] - 20;
+                    let ypos = d3.mouse(this)[1] ;
 
                     let xValue = this.getAttribute("data-value-x");
                     let yValue = this.getAttribute("data-value-y");
                     let y1Value = this.getAttribute("data-value-y1");
 
+                    // debugger;
+
                     d3.select("#tooltip")
-                        .style("left", xpos1 + "px")
-                        .style("top", ypos + "px")
+                        .style("top", ypos - 22 + "px")
                         .style("display", "block")
-                        .style("position", "absolute")
                         .html(function () {
                             var textValue = d.y0 - d.y1;
                             if (d.y1 < 0) {
@@ -703,9 +715,10 @@
                             }
 
                             return (
+                                "<div class='arrowTooltip'></div>" +
                                 "<span style='color:grey;''>" +
                                 toolTip.textColumn1 +
-                                ":" +
+                                ":&nbsp;&nbsp;" +
                                 "</span>" +
                                 "<span style='float: right;'>" +
                                 xValue +
@@ -720,6 +733,45 @@
                                 "</span>"
                             );
                         });
+                    var scrollVal = document.querySelector("#my_dataviz").scrollLeft;
+
+
+
+
+                    if (
+                        xpos - scrollVal >
+                        document.documentElement.clientWidth -
+                        document.querySelector("#tooltip").clientWidth
+                    ) {
+
+                        d3.select("#tooltip").style(
+                            "left",
+                            xpos - scrollVal -
+                            document.querySelector("#tooltip")
+                                .clientWidth -
+                            10 +
+                            "px"
+                        );
+
+                        d3.select(".arrowTooltip")
+                            //  document.querySelector("#tooltip:before")
+                            // .style("height","50px";"width","50px";"background-color","red";")
+
+                            .attr(
+                                "style",
+                                "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
+                            );
+                    } else {
+                        d3.select("#tooltip").style(
+                            "left",
+                            xpos - scrollVal + 12 + "px"
+                        );
+
+                        d3.select(".arrowTooltip").attr(
+                            "style",
+                            "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
+                        );
+                    }
 
                     d3.selectAll(".bar").style("opacity", 0.3);
                     d3.select(this).style("opacity", 1);
