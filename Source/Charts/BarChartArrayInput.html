@@ -97,6 +97,7 @@
 
             // data values to be plot
             var dataValues = data[0];
+                        const [xAxisLabel, yAxisLabel] = data[1];
             //   var [data, keys, labels] = transformData(
             //     data[0],
             //     dateFormat,
@@ -172,7 +173,7 @@
 
                 d3.select("#legend")
                     .append("p")
-                    .html("Product_Name " + "&nbsp;")
+                    .html(xAxisLabel + "&nbsp;")
                     .style("font-weight", "bold")
                     .style("margin", "auto")
                     .style("position", "sticky");
@@ -214,7 +215,7 @@
                     defaultD3Config.standardThresholdWidth;
             }
 
-            const [xAxisLabel, yAxisLabel] = data[1];
+
 
             if (!toolTip) {
                 toolTip = {
@@ -284,6 +285,7 @@
 
             d3.select("#legend").attr("style", null);
             d3.select("#mainChartWindow").attr("style", null);
+                   d3.select("#xAxisLabelId").style("bottom", 20);
 
             // legends code starts
             if (legendStatus) {
