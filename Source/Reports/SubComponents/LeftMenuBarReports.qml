@@ -357,6 +357,28 @@ Rectangle{
         report_desiner_page.chartTitle = chartTitle;
 
         report_desiner_page.customizationsAvailable = mainCustomizations;
+        
+        var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
+        var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
+
+        if(chartTitle === Constants.barChartTitle){
+            if(report_desiner_page.isHorizontalGraph){
+                if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 0){
+                    chartHtml = Constants.horizontalBarChartUrl;
+                }
+                else if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 1){
+                    chartHtml = Constants.horizontalStackedBarChartUrl;
+                }else if(xAxisColumns.length === 1 && yAxisColumns.length === 2){
+                    chartHtml = Constants.horizontalBarGroupedChartUrl;
+                }
+            }else{
+                if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count === 1){
+                    chartHtml = Constants.stackedBarChartUrl;
+                }else if(xAxisColumns.length === 1 && yAxisColumns.length === 2){
+                    chartHtml = Constants.barGroupedChartUrl;
+                }
+            }
+        }
 
         loadchart("../Charts/"+chartHtml);
 

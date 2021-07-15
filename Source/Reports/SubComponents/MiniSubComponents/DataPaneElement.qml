@@ -48,7 +48,7 @@ Rectangle{
 
     function isDropEligible(itemType, itemName){
 
-        if(report_desiner_page.chartTitle==Constants.groupBarChartTitle){
+        if(report_desiner_page.chartTitle==Constants.groupBarChartTitle || report_desiner_page.chartTitle==Constants.horizontalBarGroupedChartTitle){
             var xAxisValidNames = getAxisColumnNames(Constants.xAxisName);
             console.log(xAxisValidNames);
             if(xAxisValidNames.includes(itemName)){

@@ -52,21 +52,88 @@
                 return originalData;
             }
 
+            // function transformData(dataValue, dateFormat) {
+            //     var transformedDataValue = {};
+            //     var globalKeys = [];
+
+            //     dataValue[0].forEach((d, i) => {
+            //         var currentData = d;
+
+            //         var isKey1Date = false;
+            //         if (isDateFormat(d.mainCategory)) {
+            //             isKey1Date = true;
+            //         }
+
+            //         var category = d.mainCategory;
+            //         if (isKey1Date) {
+            //             category = getDateFormattedData(
+            //                 d.mainCategory,
+            //                 dateFormat
+            //             );
+            //         }
+            //         // console.log(category);
+            //         if (!transformedDataValue[category]) {
+            //             transformedDataValue[category] = {};
+            //         }
+            //         var originalData = transformedDataValue[category];
+
+            //         var allKeys = [
+            //             ...Object.keys(originalData),
+            //             ...Object.keys(currentData),
+            //         ];
+
+            //         allKeys = allKeys
+            //             .filter((d) => {
+            //                 if (d != "mainCategory") {
+            //                     return d;
+            //                 }
+            //             })
+            //             .filter(getUniqueArrayValues);
+
+            //         globalKeys.push(...allKeys);
+
+            //         allKeys.forEach((d) => {
+            //             // console.log(originalData[d], currentData[d]);
+            //             originalData[d] =
+            //                 (originalData[d] || 0) + (currentData[d] || 0);
+            //         });
+            //         transformedDataValue[category] = {
+            //             ...originalData,
+            //             mainCategory: category,
+            //         };
+
+            //         // console.log({ transformedDataValue });
+            //     });
+
+            //     var transformedDataValue = Object.keys(
+            //         transformedDataValue
+            //     ).map((d) => transformedDataValue[d]);
+
+            //     globalKeys = globalKeys.filter(getUniqueArrayValues);
+            //     return [transformedDataValue, globalKeys];
+            // }
+
             function transformData(dataValue, dateFormat) {
                 var transformedDataValue = {};
                 var globalKeys = [];
 
+                var isKey1Date = false;
+
+                if (isDateFormat(dataValue[0][0].mainCategory)) {
+                    isKey1Date = true;
+                }
+
                 dataValue[0].forEach((d, i) => {
                     var currentData = d;
 
-                    if (isDateFormat(d.mainCategory)) {
-                        isKey1Date = true;
+                    var category = d.mainCategory;
+                    if (isKey1Date) {
+                        category = getDateFormattedData(
+                            d.mainCategory,
+                            dateFormat
+                        );
                     }
-
-                    var category = getDateFormattedData(
-                        d.mainCategory,
-                        dateFormat
-                    );
+                    // console.log(category);
                     if (!transformedDataValue[category]) {
                         transformedDataValue[category] = {};
                     }
@@ -97,9 +164,23 @@
                     };
                 });
 
-                var transformedDataValue = Object.keys(
-                    transformedDataValue
-                ).map((d) => transformedDataValue[d]);
+                if (isKey1Date) {
+                    var sortedKeys = sortDates(
+                        transformedDataValue,
+                        dateFormat,
+                        true
+                    );
+                    console.log(sortedKeys);
+                    transformedDataValue = sortedKeys.map((key) => {
+                        return transformedDataValue[key];
+                    });
+                } else {
+                    transformedDataValue = Object.keys(
+                        transformedDataValue
+                    ).map((key) => {
+                        return transformedDataValue[key];
+                    });
+                }
 
                 globalKeys = globalKeys.filter(getUniqueArrayValues);
                 return [transformedDataValue, globalKeys];
@@ -143,7 +224,9 @@
                         defaultD3Config.standardThresholdHeight;
                 }
 
+                // console.log({ data });
                 data = transformData(data, dateFormat);
+                console.log(data);
 
                 var [data, all_keys] = data;
 
@@ -295,7 +378,7 @@
                                 if (groupBarChartColorBy == "subcategory") {
                                     return zScale(d.name);
                                 }
-                                return d3Colors[4];
+                                return d3Colors[0];
                             })
                             .on("mouseout", function (d, i) {
                                 d3.select("#tooltip").style("display", "none");
@@ -478,18 +561,6 @@
                     field3: 100,
                 },
             ];
-
-            var all_keys = [
-                "field1",
-                "field2",
-                "field3",
-                "field4",
-                "field5",
-                "field6",
-            ];
-
-            data = [data, all_keys];
-            drawChart(data);
         </script>
     </body>
 </html>
