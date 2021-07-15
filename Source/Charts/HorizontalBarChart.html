@@ -106,6 +106,10 @@
                 d3.selectAll("#my_dataviz").html("");
                 d3.selectAll("#yAxisDiv").html("");
 
+                if (chartType != constants.chartType.STANDARD) {
+                    chartType = constants.chartType.FIT_HEIGHT;
+                }
+
                 let { legendStatus, legendPosition } = legendConfig;
                 let { labelStatus } = labelConfig;
                 let { gridStatus } = gridConfig;

@@ -121,6 +121,10 @@
                 standardThresholdHeight = defaultD3Config.standardThresholdHeight,
             } = plottingConfiguration;
 
+            if (chartType != constants.chartType.STANDARD) {
+                    chartType = constants.chartType.FIT_HEIGHT;
+                }
+
             d3Colors = d3colorPalette;
             var [data, keys, yAxisUniqueKeys, labels] = transformData(
                 data[0],
