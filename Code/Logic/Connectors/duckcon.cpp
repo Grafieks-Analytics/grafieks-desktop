@@ -3,9 +3,9 @@
 DuckCon::DuckCon(QObject *parent) : QObject(parent),
     db(nullptr), con(db)
 {
-    connect(&thread, &QThread::started, &excelToCsv, &ExcelCon::convertExcelToCsv2, Qt::QueuedConnection);
+    connect(&thread, &QThread::started, &excelToCsv, &ExcelCon::convertExcelToCsv, Qt::QueuedConnection);
     connect(&excelToCsv, &ExcelCon::convertedExcelPaths, this, &DuckCon::convertedExcelPaths, Qt::QueuedConnection);
-//    connect(this, &DuckCon::test, this, &DuckCon::processThis);
+    connect(&thread2, &QThread::started, this, &DuckCon::processThis);
 }
 
 void DuckCon::dropTables()
@@ -31,7 +31,6 @@ void DuckCon::convertedExcelPaths(QStringList paths)
     thread.quit();
 
     moveToThread(&thread2);
-    connect(&thread2, &QThread::started, this, &DuckCon::processThis);
     thread2.start();
 }
 
@@ -65,7 +64,6 @@ void DuckCon::processThis()
             qWarning() << Q_FUNC_INFO << "Excel import issue" << res->error.c_str();
             break;
         } else{
-            qDebug() << "HERE BABSE";
             this->tables.append(fi.baseName());
             res.release();
         }
@@ -98,48 +96,25 @@ void DuckCon::createTable(){
 
     if(fileName.trimmed().length() > 0){
         if(fileExtension.toLower() == "json"){
-            csvFile = jsonToCsv.convertJsonToCsv(Statics::currentDbName).toStdString();
+//            csvFile = jsonToCsv.convertJsonToCsv(Statics::currentDbName).toStdString();
 
-            csvdb = "'" + csvFile + "'";
-            Statics::currentDbName = fileName;
-            std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
+//            csvdb = "'" + csvFile + "'";
+//            Statics::currentDbName = fileName;
+//            std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
 
-            if(res->error.empty() == false){
-                emit importError("Please select a valid JSON format and remove special characters from input file", "json");
-                qWarning() << Q_FUNC_INFO << "JSON import issue" << res->error.c_str();
-            } else{
-                this->tables.append(table);
-                res.release();
-            }
+//            if(res->error.empty() == false){
+//                emit importError("Please select a valid JSON format and remove special characters from input file", "json");
+//                qWarning() << Q_FUNC_INFO << "JSON import issue" << res->error.c_str();
+//            } else{
+//                this->tables.append(table);
+//                res.release();
+//            }
 
 
         } else if(fileExtension.toLower() == "xls" || fileExtension.toLower() == "xlsx"){
-            //            excelSheetsList = excelToCsv.convertExcelToCsv(Statics::currentDbName);
-
-
-            //            for ( const QString& csvFile : excelSheetsList  ) {
-            //                csvdb = "'" + (csvFile + ".csv").toStdString() + "'";
-            //                QFileInfo fi(csvdb.c_str());
-            //                Statics::currentDbName = fileName;
-            //                std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + fi.baseName().toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
-
-            //                if(res->error.empty() == false){
-            //                    errorStatus = true;
-            //                    qWarning() << Q_FUNC_INFO << "Excel import issue" << res->error.c_str();
-            //                    break;
-            //                } else{
-            //                    this->tables.append(fi.baseName());
-            //                    res.release();
-            //                }
-            //            }
 
             excelToCsv.moveToThread(&thread);
             thread.start();
-
-            errorStatus = true;
-            if(errorStatus == true){
-                emit importError("File format is not valid UTF-8. Please provide a valid UTF-8 file", "excel");
-            }
 
         } else{
             csvdb = "'" + csvFile + "'";

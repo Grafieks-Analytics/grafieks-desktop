@@ -81,6 +81,8 @@ ApplicationWindow {
 
     Component.onCompleted: {
 
+
+
         if(settings.value("user/profileId") > 0){
             var firstname = settings.value("user/firstname")
             var lastname = settings.value("user/lastname")

@@ -33,7 +33,9 @@ public:
     ~JsonCon();
 
     QVariantMap JsonInstance(const QString & filepath);
-    QString convertJsonToCsv(QString &jsonPath);
+
+public slots:
+    void convertJsonToCsv(QString &jsonPath);
 
 signals:
     void jsonConverted(QString status);
