@@ -344,7 +344,6 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
 void TableColumnsModel::receiveReportData(QMap<QString, QMap<int, QStringList> > newChartData, QString currentReportId)
 {
     QStringList keys = newChartData.keys();
-    qDebug() << "HAGAR" << keys;
 
     this->reportChartData = newChartData;
 
