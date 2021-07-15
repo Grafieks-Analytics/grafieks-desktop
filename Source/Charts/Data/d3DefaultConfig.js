@@ -11,6 +11,7 @@ const constants = {
         CARDINAL: "curveCardinal",
         LINEAR: "curveLinear",
         BASIS: "curveBasis",
+        OPEN_BASIS: "curveBasisOpen",
         BUNDLE: "curveBundle",
     },
     markerShapes: {

@@ -86,10 +86,10 @@ SOURCES += \
     Code/Logic/General/querysplitter.cpp \
     Code/Logic/General/tableschemamodel.cpp \
     Code/Logic/General/chartsmodel.cpp \
-    Code/Logic/Menu/user.cpp \  
+    Code/Logic/Menu/user.cpp \
     Code/Logic/Reports/reportparamsmodel.cpp \
     Code/Logic/Reports/reportsdatamodel.cpp \
-    main.cpp \
+    main.cpp
 
 RESOURCES += \
     images.qrc \

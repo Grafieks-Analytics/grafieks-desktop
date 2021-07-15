@@ -223,11 +223,10 @@ function sortDates(dateDataset, dateFormat, isHorizontalGraph) {
     });
   }
 
-  if (isHorizontalGraph) {
-    if (dateFormat == "%m" || dateFormat == "%d") {
-      dates = dates.reverse();
+    if (isHorizontalGraph) {
+        dates = dates.reverse();
     }
-  }
+  
 
   return dates;
 }
@@ -312,25 +311,25 @@ function clearStyle() {
 }
 
 function removeAxisTicks(axis = "xAxis") {
-  selector = ".x-axis text";
+    selector = ".x-axis text";
 
-  if (axis == "yAxis") {
-    selector = ".y-axis text";
-  }
+    if (axis === "yAxis") {
+        selector = ".y-axis text";
+    }
 
-  // Remove Text in case they are large in number
-  var allXAxisTexts = document.querySelectorAll(selector);
+    // Remove Text in case they are large in number
+    var allXAxisTexts = document.querySelectorAll(selector);
 
   for (var i = 0; i < allXAxisTexts.length - 1; i++) {
     if (!Math.floor(data[0][0].length * 0.02)) {
       break;
     }
 
-    if (i % Math.floor(data[0][0].length * 0.04) != 0) {
-      allXAxisTexts[i].remove();
-      continue;
+        if (i % Math.floor(data[0][0].length * 0.04) != 0) {
+            allXAxisTexts[i].remove();
+            continue;
+        }
     }
-  }
 }
 
 // Main
