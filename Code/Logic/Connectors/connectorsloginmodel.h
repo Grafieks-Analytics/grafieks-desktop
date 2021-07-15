@@ -40,6 +40,8 @@ class ConnectorsLoginModel : public QObject
     QString m_connectedDB;
     GeneralParamsModel generalParamsModel;
 
+    QVariantMap response;
+
 
 public:
     explicit ConnectorsLoginModel(QObject *parent = nullptr);
@@ -88,14 +90,14 @@ signals:
     void accessLoginStatus(QVariantMap status);
     void connectedDBChanged(QString connectedDB);
     void connectedDBType(QString conType);
-    void sendDbName();
+    void sendDbName(QString dbName, bool directLogin, QVariantMap response);
     void dSSelected(bool dsStatus);
     void dropTables();
 
     void logout();
 
 private:
-    void staticSetter(QString dbName, QString classification, int intType, QString strType = NULL);
+    void staticSetter(QString dbName, QString classification, int intType, QString strType = NULL, bool directLogin = false);
     void staticRemover();
 };
 

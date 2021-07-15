@@ -49,6 +49,16 @@ Page {
     /***********************************************************************************************************************/
     // Connection Starts
 
+    Connections{
+        target: DuckCon
+
+        function onExcelLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                tableslist.model = DuckDataModel.getTableList()
+            }
+        }
+    }
 
     Connections{
         target: ConnectorsLoginModel
