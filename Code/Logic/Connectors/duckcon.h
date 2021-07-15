@@ -5,6 +5,8 @@
 #include <QDebug>
 #include <QUrl>
 #include <QFileInfo>
+#include <QThread>
+
 #include "../../duckdb.hpp"
 #include "../../statics.h"
 #include "../../constants.h"
@@ -17,6 +19,11 @@ class DuckCon : public QObject
     ExcelCon excelToCsv;
     JsonCon jsonToCsv;
     QStringList tables;
+    QThread thread;
+    QThread thread2;
+
+    QStringList excelSheetsList;
+
 
 public:
     explicit DuckCon(QObject *parent = nullptr);
@@ -29,8 +36,12 @@ public slots:
     void createTable();
     void dropTables();
 
+    void convertedExcelPaths(QStringList paths);
+    void processThis();
+
 signals:
     void importError(QString errorString, QString fileType);
+    void test();
 
 };
 

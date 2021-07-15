@@ -42,6 +42,11 @@ QString GeneralParamsModel::returnPlainTextFromHtml(QString s)
         return td.toPlainText();
 }
 
+void GeneralParamsModel::loadingComplete()
+{
+    emit hideSplash();
+}
+
 int GeneralParamsModel::menuType() const
 {
     return m_menuType;
