@@ -27,6 +27,7 @@ public:
     Q_INVOKABLE QString getCurrentDB();
     Q_INVOKABLE int getOnlineStorageType();
     Q_INVOKABLE QString returnPlainTextFromHtml(QString s);
+    Q_INVOKABLE void loadingComplete();
 
     int menuType() const;    
     int currentScreen() const;
@@ -39,6 +40,7 @@ signals:
 
     void menuTypeChanged(int menuType);
     void currentScreenChanged(int currentScreen);
+    void hideSplash();
 };
 
 #endif // GENERALPARAMSMODEL_H

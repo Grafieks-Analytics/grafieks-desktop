@@ -136,7 +136,9 @@
             d3.selectAll("#my_dataviz").html("");
             d3.selectAll("#yAxisDiv").html("");
 
-            let { legendStatus, legendPosition } = legendConfig;
+            if (chartType != constants.chartType.STANDARD) {
+                chartType = constants.chartType.FIT_HEIGHT;
+            } let { legendStatus, legendPosition } = legendConfig;
             let { labelStatus } = labelConfig;
             let { gridStatus } = gridConfig;
 
@@ -555,12 +557,14 @@
             x.domain([minValue > 0 ? 0 : minValue, maxValue]).nice();
             y.domain(dataValues[0]);
 
+            xTicks = width / 70;
+
             if (gridStatus) {
                 svg.append("g")
                     .attr("class", "grid")
                     .style("stroke-width", "1")
                     .call(
-                        make_x_gridlines(x).tickSize(height).tickFormat("")
+                        make_x_gridlines(x).tickSize(height).tickFormat("").ticks(xTicks)
                     );
             } else {
                 svg.append("g")
@@ -568,7 +572,7 @@
                     .style("stroke-width", "1")
                     .style("display", "none")
                     .call(
-                        make_x_gridlines(x).tickSize(height).tickFormat("")
+                        make_x_gridlines(x).tickSize(height).tickFormat("").ticks(xTicks)
                     );
             }
 
@@ -687,7 +691,7 @@
             var xAxis = d3
                 .axisBottom(x)
                 .tickSize(0)
-                .ticks(10)
+                .ticks(xTicks)
                 .tickFormat(d3.format(".2s"));
 
             d3.select("#xAxisDiv")

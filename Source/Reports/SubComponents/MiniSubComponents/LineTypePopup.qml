@@ -23,7 +23,7 @@ Popup {
         id: lineTypeModel
         ListElement{
             lineType: "Smooth Line"
-            d3LineCurve: 'curveCardinal'
+            d3LineCurve: 'curveBasis'
         }
         ListElement{
             lineType: "Straight Line"

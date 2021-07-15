@@ -210,7 +210,7 @@ Popup {
 
         BusyIndicatorTpl {
             id: busyindicator
-            running: false
+            running: true
             anchors.right: btn_cancel.left
             anchors.rightMargin: 10
         }

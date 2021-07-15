@@ -66,6 +66,9 @@ Page {
 
     property var allChartsMapping: ({});
     // An array having item type and name of the spilt by value
+    // Colour By Data is filled 
+    // 1. saved colour values -> CPP (Report Properties) 
+    // 2. when it is dropped -> (PropertiesFilter.qml)
     property var colorByData: [];
 
     property var allowedXAxisDataPanes: 0;
@@ -186,22 +189,26 @@ Page {
         // Check if can be removed [TAG: Optimization]
         xAxisListModel.clear();
         yAxisListModel.clear();
-                
+
     }
 
 
     onIsHorizontalGraphChanged: {
 
+        console.log('Horizontal Bar Flag Change');
+
         if(isHorizontalGraph){
             allowedXAxisDataPanes = 1;
             allowedYAxisDataPanes = 2;
             switch(chartTitle){
-                case Constants.barChartTitle:
-                    switchChart(Constants.horizontalBarChartTitle);
-                    break;
-                case Constants.lineChartTitle:
-                    switchChart(Constants.horizontalLineChartTitle);
-                    break;
+            case Constants.barChartTitle:
+                console.log('Switching to horizontal bar chart')
+                switchChart(Constants.horizontalBarChartTitle);
+                break;
+            case Constants.lineChartTitle:
+                console.log('Switching to horizontal line chart')
+                switchChart(Constants.horizontalLineChartTitle);
+                break;
             }
         }else{
 
@@ -258,57 +265,57 @@ Page {
 
         // Optimization Can be done => call switch function here to change the graph
         switch(chartTitle){
-            case Constants.horizontalStackedBarChartTitle:
-                console.log('Make Horizontal stacked bar chart');
-                chartUrl=Constants.horizontalStackedBarChartUrl
-                webEngineView.url = Constants.chartsBaseUrl+chartUrl;
-                xAxisVisible = true
-                yAxisVisible = true
-                row3Visible = false
-                row4Visible = false
-                break;
-            case Constants.stackedBarChartTitle:
-                chartUrl=Constants.stackedBarChartUrl
-                webEngineView.url = Constants.chartsBaseUrl+Constants.stackedBarChartUrl;
-                xAxisVisible = true
-                yAxisVisible = true
-                row3Visible = false
-                row4Visible = false
-                break;
-            case Constants.stackedAreaChartTitle:
-                chartUrl=Constants.stackedAreaChartUrl;
-                webEngineView.url = Constants.chartsBaseUrl+Constants.stackedAreaChartUrl;
-                xAxisVisible = true
-                yAxisVisible = true
-                row3Visible = false
-                row4Visible = false
-                break;
-            case Constants.sankeyTitle:
-                row3Visible =  true;
-                xAxisVisible = true
-                yAxisVisible = true
-                row4Visible = false
-                break;
-            case Constants.pivotTitle:
-                row3Visible =  true;
-                xAxisVisible = true
-                yAxisVisible = true
-                row4Visible = false
-                pivotThemeVisible=true
-                break;
-            case Constants.tableTitle:
-                yAxisVisible = false
-                xAxisVisible = true
-                row3Visible = false
-                row4Visible = false
-                break;
-            case Constants.gaugeChartTitle:
-                row4Visible = true
-                xAxisVisible =  false
-                yAxisVisible =  false
-                row3Visible =  false
-                break;
-            default:
+        case Constants.horizontalStackedBarChartTitle:
+            console.log('Make Horizontal stacked bar chart');
+            chartUrl=Constants.horizontalStackedBarChartUrl
+            webEngineView.url = Constants.chartsBaseUrl+chartUrl;
+            xAxisVisible = true
+            yAxisVisible = true
+            row3Visible = false
+            row4Visible = false
+            break;
+        case Constants.stackedBarChartTitle:
+            chartUrl=Constants.stackedBarChartUrl
+            webEngineView.url = Constants.chartsBaseUrl+Constants.stackedBarChartUrl;
+            xAxisVisible = true
+            yAxisVisible = true
+            row3Visible = false
+            row4Visible = false
+            break;
+        case Constants.stackedAreaChartTitle:
+            chartUrl=Constants.stackedAreaChartUrl;
+            webEngineView.url = Constants.chartsBaseUrl+Constants.stackedAreaChartUrl;
+            xAxisVisible = true
+            yAxisVisible = true
+            row3Visible = false
+            row4Visible = false
+            break;
+        case Constants.sankeyTitle:
+            row3Visible =  true;
+            xAxisVisible = true
+            yAxisVisible = true
+            row4Visible = false
+            break;
+        case Constants.pivotTitle:
+            row3Visible =  true;
+            xAxisVisible = true
+            yAxisVisible = true
+            row4Visible = false
+            pivotThemeVisible=true
+            break;
+        case Constants.tableTitle:
+            yAxisVisible = false
+            xAxisVisible = true
+            row3Visible = false
+            row4Visible = false
+            break;
+        case Constants.gaugeChartTitle:
+            row4Visible = true
+            xAxisVisible =  false
+            yAxisVisible =  false
+            row3Visible =  false
+            break;
+        default:
             xAxisVisible = true
             yAxisVisible = true
             row3Visible = false
@@ -383,7 +390,7 @@ Page {
 
         // Update Property Variables
         report_title_text.text = reportProperties.reportTitle
-        report_desiner_page.chartTitle = reportProperties.chartTitle; 
+        report_desiner_page.chartTitle = reportProperties.chartTitle;
         report_desiner_page.chartUrl = reportProperties.chartUrl
         report_desiner_page.d3PropertyConfig = JSON.parse(reportProperties.d3PropertiesConfig);
         report_desiner_page.colorByData = JSON.parse(reportProperties.colorByDataColoumns);
@@ -397,9 +404,9 @@ Page {
         var reportProperties = ReportParamsModel.getReport(reportIdMain);
         var reportUrl = reportInstance.getChartUrl();
 
-        // Check if on updating the graph chart url was changed. 
+        // Check if on updating the graph chart url was changed.
         // If changed update the url in report instance
-        // Else just redraw the chart.        
+        // Else just redraw the chart.
         if(reportUrl !== reportProperties.chartUrl){
             reportInstance.setChartUrl(reportProperties.chartUrl);
             return;
@@ -431,24 +438,27 @@ Page {
         chartTitle = chartTitleValue;
         var chartUrl = '';
         switch(chartTitle){
-            case Constants.barChartTitle:
-                chartUrl = Constants.barChartUrl;
-                break;
-            case Constants.horizontalBarChartTitle:
-                chartUrl = Constants.horizontalBarChartUrl;
-                break;
-            case Constants.horizontalStackedBarChartTitle:
-                chartUrl = Constants.horizontalStackedBarChartUrl;
-                break;
-            case Constants.stackedBarChartTitle:
-                chartUrl = Constants.stackedBarChartUrl
-                break;
-            case Constants.groupBarChartTitle:
-                chartUrl = Constants.barGroupedChartUrl
-                break;
-            case Constants.horizontalLineChartTitle:
-                chartUrl = Constants.horizontalLineChartUrl
-                break;
+        case Constants.barChartTitle:
+            chartUrl = Constants.barChartUrl;
+            break;
+        case Constants.horizontalBarChartTitle:
+            chartUrl = Constants.horizontalBarChartUrl;
+            break;
+        case Constants.horizontalStackedBarChartTitle:
+            chartUrl = Constants.horizontalStackedBarChartUrl;
+            break;
+        case Constants.stackedBarChartTitle:
+            chartUrl = Constants.stackedBarChartUrl
+            break;
+        case Constants.groupBarChartTitle:
+            chartUrl = Constants.barGroupedChartUrl
+            break;
+        case Constants.horizontalLineChartTitle:
+            chartUrl = Constants.horizontalLineChartUrl
+            break;
+        case Constants.multiLineChartTitle:
+            chartUrl = Constants.multiLineChartUrl;
+            break;
         }
         webEngineView.url = Constants.baseChartUrl+chartUrl;
         report_desiner_page.chartUrl = chartUrl;
@@ -506,7 +516,7 @@ Page {
         // Because editReport signal is getting emitted to make it blank
 
         // Clear title
-        // Clear Model 
+        // Clear Model
         // Set id to empty
         ReportParamsModel.setReportTitle(null);
         ReportParamsModel.setLastDropped(null);
@@ -554,6 +564,8 @@ Page {
 
     function reDrawChart(){
 
+        console.log('Debug: Colour By',colorByData, colorListModel.count, colorListModel)
+        
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
 
@@ -574,9 +586,13 @@ Page {
 
             // Condition for horizontal bar graph;
             if(isHorizontalGraph){
+                allowedXAxisDataPanes = 1;
+                allowedYAxisDataPanes = 2;
+                
                 switch(chartTitle){
+
                 case Constants.barChartTitle:
-                    if(colorByData.length){
+                    if(colorByData.length)  {
                         switchChart(Constants.horizontalStackedBarChartTitle)
                         break;
                     }
@@ -587,6 +603,15 @@ Page {
                 case Constants.lineChartTitle:
                     switchChart(Constants.horizontalLineChartTitle)
                     break;
+                case Constants.horizontalBarGroupedChartTitle:
+                    if(colorByData.length){
+                        switchChart(Constants.horizontalStackedBarChartTitle)
+                        break;
+                    }
+                    switchChart(Constants.horizontalBarChartTitle);
+                    break;
+                default: 
+                    console.log('Debug:','Horizontal Graph Missed condition',chartTitle);
 
                 }
             }else{
@@ -612,7 +637,7 @@ Page {
         webEngineView.url = chartname;
     }
 
-    function addReport(initialAddition){
+    function addReport(){
         // Add report to dashboard
         if(!reportIdMain){
             reportIdMain = generateReportId();
@@ -637,6 +662,7 @@ Page {
         var reportList = ReportParamsModel.getReportsList();
         if(!report_title_text.text || report_title_text.text == ""){
             var numberOfReports = Object.keys(reportList).length;
+            numberOfReports = !numberOfReports ? 1 : numberOfReports;
             ReportParamsModel.setReportTitle('Report '+ (numberOfReports));
         }
 
@@ -673,6 +699,11 @@ Page {
         GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
         // ReportsDataModel.removeTmpChartData()
+
+        if(addReportButton.text == "Add"){
+            console.log('Deleting Report',reportIdMain)
+            ReportParamsModel.deleteReport(reportIdMain,false);
+        }
 
         let currentDashboard = DashboardParamsModel.currentDashboard
         ChartsModel.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
@@ -730,11 +761,22 @@ Page {
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
 
         var itemType = lastPickedDataPaneElementProperties.itemType;
-        if(itemType && (itemType.toLowerCase() === 'categorical' || itemType.toLowerCase() === 'date') && axis === Constants.yAxisName  && !xAxisColumns.length && !yAxisColumns.length){
+
+        if(itemType
+            && (
+                itemType.toLowerCase() === 'categorical'
+                || itemType.toLowerCase() === 'date'
+            )
+            && axis === Constants.yAxisName
+            && !xAxisColumns.length && !yAxisColumns.length
+            ){
             isHorizontalGraph = true;
         }
 
-        if(itemType && (itemType.toLowerCase() === 'numerical') && axis === Constants.xAxisName  && !xAxisColumns.length && !yAxisColumns.length){
+        if(itemType
+            && itemType.toLowerCase() === 'numerical'
+            && axis === Constants.xAxisName  && !xAxisColumns.length && !yAxisColumns.length
+            ){
             isHorizontalGraph = true;
         }
 
@@ -822,7 +864,7 @@ Page {
 
         if(xAxisColumns.length===0 && yAxisColumns.length === 0){
             // set everything to default
-            // Any can add any default case here
+            // Can add any default case here
             isHorizontalGraph = false;
         }
 
@@ -831,7 +873,7 @@ Page {
             var xAxisColumnNamesArray = [];
             var i = 0; // itereator => By passing warning
             for(i=0;i<xAxisColumns.length;i++){
-                xAxisColumnNamesArray.push(yAxisColumns[i]);
+                xAxisColumnNamesArray.push(xAxisColumns[i]);
             }
             var yAxisColumnNamesArray = [];
             for(i=0;i<yAxisColumns.length;i++){
@@ -840,9 +882,9 @@ Page {
 
             var dataValues = null;
             console.log('Chart Title - Draw Chart Function - ',chartTitle)
-            var colorByColumnName = '';
-             dataItemList.clear();
-             var colorData = [];
+            var colorByColumnName = colorByData[0] && colorByData[0].columnName;;
+            dataItemList.clear();
+            var colorData = [];
             switch(chartTitle){
             case Constants.horizontalBarChartTitle:
                 console.log("Horizontal BAR");
@@ -857,34 +899,49 @@ Page {
             case Constants.barChartTitle:
                 console.log("BAR CLICKED", xAxisColumns[0])
                 dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
-
-                console.log("colorData5",colorData)
                 colorData = [JSON.parse(dataValues)[1][0]] || [];
-                console.log("colorData2" ,colorData)
-                console.log("dataValues" ,JSON.parse(dataValues))
-                           colorData.forEach(function (element,index) {
-                               dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
-                               console.log("newreportcolor",Constants.d3ColorPalette[index % Constants.d3ColorPalette.length])
-                           });
+                colorData.forEach(function (element,index) {
+                    dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
+                    console.log("newreportcolor",Constants.d3ColorPalette[index % Constants.d3ColorPalette.length])
+                });
                 break;
             case Constants.horizontalStackedBarChartTitle:
-                colorByColumnName = colorByData[0] && colorByData[0].columnName;
                 dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,xAxisColumns[0], yAxisColumns[0]);
-
                 break;
             case Constants.stackedBarChartTitle:
                 console.log('Stacked bar chart!');
-                colorByColumnName = colorByData[0] && colorByData[0].columnName;
                 dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,yAxisColumns[0], xAxisColumns[0]);
                 break;
             case Constants.horizontalBarGroupedChartTitle:
-                console.log('horizontalBarGroupedChart chart!');
+                console.log('horizontalBarGroupedChart chart!', yAxisColumns[0],xAxisColumns[0], yAxisColumns[1]);
+                var [category, subcategory] =  getAxisColumnNames(Constants.yAxisName);
+                if(colorByColumnName && (colorByColumnName == category || colorByColumnName==subcategory) ){
+                    d3PropertyConfig['options'] = { groupBarChartColorBy: colorByColumnName == subcategory ? 'subcategory' : 'category'  }
+                }else{
+                    delete d3PropertyConfig['options'];
+                    colorListModel.clear();
+                    colorByData = [];
+                }
                 dataValues =  ChartsModel.getNewGroupedBarChartValues(yAxisColumns[0],xAxisColumns[0], yAxisColumns[1]);
                 break;
             case Constants.groupBarChartTitle:
+                var [category, subcategory] =  getAxisColumnNames(Constants.xAxisName);
+                if(colorByColumnName && (colorByColumnName == category || colorByColumnName==subcategory) ){
+                    d3PropertyConfig['options'] = { groupBarChartColorBy: colorByColumnName == subcategory ? 'subcategory' : 'category'  }
+                }else{
+                    delete d3PropertyConfig['options'];
+                    colorListModel.clear();
+                    colorByData = [];
+                        
+                    ReportParamsModel.setItemType(null);
+                    ReportParamsModel.setLastDropped(null);
+                }
                 console.log('Grouped bar chart!',xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
                 dataValues =  ChartsModel.getNewGroupedBarChartValues(xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
-                console.log(dataValues);
+                // console.log(dataValues);
+                    
+                ReportParamsModel.setItemType(null);
+                ReportParamsModel.setLastDropped(null);
                 break;
             case Constants.areaChartTitle:
                 console.log("AREA CLICKED")
@@ -893,7 +950,6 @@ Page {
                 break;
             case Constants.stackedAreaChartTitle:
                 console.log('Stacked Area Chart')
-                colorByColumnName = colorByData[0].columnName;
                 console.log('Colour By columnName',columnName)
                 dataValues =  ChartsModel.getStackedAreaChartValues(colorByColumnName,yAxisColumns[0],xAxisColumns[0]);
                 break;
@@ -903,6 +959,10 @@ Page {
                 dataValues =  ChartsModel.getLineChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 // Line Bar - xAxis(String), yAxis(String)
                 //                dataValues =  ChartsModel.getLineBarChartValues("state", "id", "population");
+                break;
+            case Constants.multiLineChartTitle:
+                console.log(Constants.multiLineChartTitle,"CLICKED");
+                dataValues =  ChartsModel.getStackedAreaChartValues(xAxisColumns[0],yAxisColumns[0],colorByColumnName);
                 break;
             case Constants.horizontalLineChartTitle:
                 console.log(Constants.horizontalLineChartTitle,"CLICKED")
@@ -973,39 +1033,39 @@ Page {
 
             console.log('Webengine View Loading Status:',webEngineView.loading);
             console.log('Data Values:',JSON.stringify(dataValues));
-//            colorData = [];
-//            console.log("colorData5",colorData)
-//            colorData = JSON.parse(dataValues)[1] || [];
-//            console.log("colorData2" ,colorData)
-//            console.log("dataValues" ,JSON.parse(dataValues))
+            //            colorData = [];
+            //            console.log("colorData5",colorData)
+            //            colorData = JSON.parse(dataValues)[1] || [];
+            //            console.log("colorData2" ,colorData)
+            //            console.log("dataValues" ,JSON.parse(dataValues))
 
-//           dataItemList.clear();
-//           colorData.forEach(function (element,index) {
-//               dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
-//               console.log("newreportcolor",Constants.d3ColorPalette[index % Constants.d3ColorPalette.length])
-//           });
+            //           dataItemList.clear();
+            //           colorData.forEach(function (element,index) {
+            //               dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
+            //               console.log("newreportcolor",Constants.d3ColorPalette[index % Constants.d3ColorPalette.length])
+            //           });
 
-           console.log('Selected Chart Title:',report_desiner_page.chartTitle)
-           console.log('Selected Chart URL:',report_desiner_page.chartUrl)
-           console.log("D3Config: "+JSON.stringify(d3PropertyConfig))
+            console.log('Selected Chart Title:',report_desiner_page.chartTitle)
+            console.log('Selected Chart URL:',report_desiner_page.chartUrl)
+            console.log("D3Config: "+JSON.stringify(d3PropertyConfig))
 
-           //    need to initialise only once
-           console.log('Starting to plot');
-           // console.log('Data Values',dataValues);
-           console.log('Chart Url', report_desiner_page.chartUrl, webEngineView.url)
+            //    need to initialise only once
+            console.log('Starting to plot');
+            // console.log('Data Values',dataValues);
+            console.log('Chart Url', report_desiner_page.chartUrl, webEngineView.url)
 
-           var scriptValue = 'window.addEventListener("resize", function () {
+            var scriptValue = 'window.addEventListener("resize", function () {
                    clearChart();
                     drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
            });';
 
-           clearChartValue();
-           var runScriptString = 'drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue;
-           webEngineView.runJavaScript(runScriptString);
+            clearChartValue();
+            var runScriptString = 'drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue;
+            webEngineView.runJavaScript(runScriptString);
 
-           // Clear Chart Data
+            // Clear Chart Data
             // ReportsDataModel.clearData();
-           return;
+            return;
         }
 
         webEngineView.runJavaScript('clearChart()');
@@ -1101,19 +1161,19 @@ Page {
                 }
             }
 
-//
-//            Image {
-//                source: "/Images/icons/Edit.png"
-//                height: 20
-//                width: 20
-//                anchors.right: parent.right
-//                anchors.rightMargin: 10
-//                anchors.verticalCenter: parent.verticalCenter
-//                MouseArea{
-//                    anchors.fill: parent
-//                    onClicked: focusReportTitle()
-//                }
-//            }
+            //
+            //            Image {
+            //                source: "/Images/icons/Edit.png"
+            //                height: 20
+            //                width: 20
+            //                anchors.right: parent.right
+            //                anchors.rightMargin: 10
+            //                anchors.verticalCenter: parent.verticalCenter
+            //                MouseArea{
+            //                    anchors.fill: parent
+            //                    onClicked: focusReportTitle()
+            //                }
+            //            }
         }
 
 
@@ -1824,7 +1884,7 @@ Page {
         url: "../Charts/BarChartArrayInput.html"
         onLoadingChanged: onChartLoaded(loadRequest)
         anchors.left: tool_sep_chartFilters.right
-//        anchors.leftMargin: 50
+        //        anchors.leftMargin: 50
         anchors.top: axis.bottom
     }
 

@@ -28,11 +28,11 @@ Item {
 
                 switch(columnFilter){
                 case Constants.filterCategoricalTypes[0]:
-                    control1.checked = true
+                    control2.checked = true
                     break;
 
                 case Constants.filterCategoricalTypes[1]:
-                    control2.checked = true
+                    control1.checked = true
                     break;
 
                 case Constants.filterCategoricalTypes[2]:
