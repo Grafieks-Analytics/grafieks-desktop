@@ -691,6 +691,8 @@ Page {
         // After this editReportToggle is set to false
         // Gets called again which creates a new id and add it to map
         ReportParamsModel.setEditReportToggle("-1");
+
+        DashboardParamsModel.setDashboardReportMap(reportIdMain);
         // switchChart(Constants.barChartTitle);
     }
 
