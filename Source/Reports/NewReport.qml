@@ -551,7 +551,8 @@ Page {
 
     // generate Report Id
     function generateReportId(){
-        return Qt.btoa(new Date().getTime());
+        return ReportParamsModel.generateNewReportId();
+        // return new Date().getTime();
     }
 
     // Slot Function

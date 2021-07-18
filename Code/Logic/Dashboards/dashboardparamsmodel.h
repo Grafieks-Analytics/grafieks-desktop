@@ -24,7 +24,7 @@ class DashboardParamsModel: public QObject
     QMap<int, QMap<int, int>> dashboardWidgetTypeMap; // <dashboardId, <widgetId, reportTypeId (constant)>>
     QMap<int, QMap<int, QUrl>> dashboardWidgetUrl; // <dashboardId, <widgetId, URI Link>>
 
-    QMap<int, QStringList> dashboardReportMap; // <dashboardId, [reportId1, reportId2]>
+    QMap<int, QVector<int>> dashboardReportMap; // <dashboardId, [reportId1, reportId2]>
 
 
     // Filter parameters
@@ -170,7 +170,7 @@ public:
 
     Q_INVOKABLE void saveImage(QUrl originalFile, QString newFilename);
 
-    Q_INVOKABLE void setDashboardReportMap(QString reportId);
+    Q_INVOKABLE void setDashboardReportMap(int reportId);
 
     // General
     QString lastContainerType() const;
