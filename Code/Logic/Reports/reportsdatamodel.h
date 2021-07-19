@@ -13,8 +13,8 @@ class ReportsDataModel : public QObject
 {
     Q_OBJECT
 
-    QMap<int, QList<int> *> newChartData;
-    QMap<int, QMap<int, QList<int>>> reportChartData; // <ReportId - <columnKey - Values Array list>>
+    QMap<int, QStringList *> newChartData;
+    QMap<int, QMap<int, QStringList>> reportChartData; // <ReportId - <columnKey - Values Array list>>
     QMap<int, QString> newChartHeader;
 
     QStringList numericalList;
@@ -27,7 +27,7 @@ public:
 
 
     Q_INVOKABLE void searchColumnNames(QString keyword);
-    Q_INVOKABLE QList<int> fetchColumnData(QString columnName, QString options = "");
+    Q_INVOKABLE QStringList fetchColumnData(QString columnName, QString options = "");
     Q_INVOKABLE QStringList searchColumnData(QString columnName, QString keyword);
     Q_INVOKABLE void clearData();
     Q_INVOKABLE void removeTmpChartData();
@@ -43,7 +43,7 @@ public slots:
 signals:
     void sendFilteredColumn(QStringList allCategorical, QStringList allNumerical, QStringList allDates);
     void reportDataChanged(QMap<int, QMap<int, QStringList>> reportChartData, int currentReportId);
-    void columnDataChanged(QList<int> columnData, QString options);
+    void columnDataChanged(QStringList columnData, QString options);
 
 
 private:

@@ -10,26 +10,24 @@ void ReportsDataModel::searchColumnNames(QString keyword)
     emit sendFilteredColumn(this->categoryList.filter(keyword, Qt::CaseInsensitive), this->numericalList.filter(keyword, Qt::CaseInsensitive), this->dateList.filter(keyword, Qt::CaseInsensitive));
 }
 
-QList<int> ReportsDataModel::fetchColumnData(QString columnName, QString options)
+QStringList ReportsDataModel::fetchColumnData(QString columnName, QString options)
 {
     // Fetch data here
     int key = newChartHeader.key( columnName );
 
     //    QStringList columnDataPointer = *newChartData.value(key);
-    QList<int> columnDataPointer = reportChartData.value(this->reportId).value(key);
-    columnDataPointer.toSet().toList();
+    QStringList columnDataPointer = reportChartData.value(this->reportId).value(key);
     emit columnDataChanged(columnDataPointer, options);
 
     return columnDataPointer;
 }
 
-QList<int> ReportsDataModel::searchColumnData(QString columnName, QString keyword)
+QStringList ReportsDataModel::searchColumnData(QString columnName, QString keyword)
 {
     QStringList searchResults;
     int key = newChartHeader.key( columnName );
 
-    QList<int> columnDataPointer = *newChartData.value(key);
-    columnDataPointer.toSet().toList();
+    QStringList columnDataPointer = *newChartData.value(key);
     searchResults = columnDataPointer.filter(keyword, Qt::CaseInsensitive);
 
     return searchResults;
@@ -659,6 +657,8 @@ void ReportsDataModel::getReportId(int reportId)
         copiedChartData.insert(key, *newChartData.value(key));
     }
     this->reportChartData.insert(this->reportId, copiedChartData);
+
+    qDebug() << "REP DATA" << this->reportChartData << this->reportId;
 
     emit reportDataChanged(this->reportChartData, this->reportId);
 
