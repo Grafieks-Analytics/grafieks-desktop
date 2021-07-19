@@ -639,6 +639,7 @@ Page {
     }
 
     function addReport(){
+
         // Add report to dashboard
         if(!reportIdMain){
             reportIdMain = generateReportId();

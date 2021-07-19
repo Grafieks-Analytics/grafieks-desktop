@@ -12,6 +12,7 @@ ReportParamsModel::ReportParamsModel(QObject *parent) : QObject(parent)
     //    m_selectAll = Constants::defaultSelectAll;
     m_internalCounter = 0;
     m_filterIndex = 0;
+    m_reportId = -1;
 }
 
 QString ReportParamsModel::itemName() const
@@ -911,6 +912,7 @@ void ReportParamsModel::setReportId(int reportId)
     if (m_reportId == reportId)
         return;
 
+    qDebug() << "RECEIVED REPORT ID" << reportId;
     m_reportId = reportId;
     emit reportIdChanged(m_reportId);
 
