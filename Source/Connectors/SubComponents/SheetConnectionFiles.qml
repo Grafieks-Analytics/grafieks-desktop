@@ -103,10 +103,6 @@ Popup {
                 }
             }
         }
-    }
-
-    Connections{
-        target: ConnectorsLoginModel
 
         function onCsvLoginStatus(status, directLogin){
 
@@ -124,7 +120,7 @@ Popup {
             }
         }
 
-        function onExcelLoginStatus(status, directLogin){
+        function onJsonLoginStatus(status, directLogin){
 
             if(directLogin === false){
                 if(status.status === true){
@@ -138,8 +134,12 @@ Popup {
                 }
             }
         }
+    }
 
-        function onJsonLoginStatus(status, directLogin){
+    Connections{
+        target: ConnectorsLoginModel
+
+        function onExcelLoginStatus(status, directLogin){
 
             if(directLogin === false){
                 if(status.status === true){

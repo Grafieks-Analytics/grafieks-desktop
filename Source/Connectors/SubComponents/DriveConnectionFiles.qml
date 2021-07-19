@@ -103,11 +103,6 @@ Popup {
                 }
             }
         }
-    }
-
-
-    Connections{
-        target: ConnectorsLoginModel
 
         function onCsvLoginStatus(status, directLogin){
 
@@ -115,21 +110,6 @@ Popup {
                 if(status.status === true){
                     popup.visible = false
                     GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
-                    stacklayout_home.currentIndex = 5
-                }
-                else{
-                    popup.visible = true
-                    msg_dialog.open()
-                    msg_dialog.text = status.msg
-                }
-            }
-        }
-
-        function onExcelLoginStatus(status, directLogin){
-
-            if(directLogin === false){
-                if(status.status === true){
-                    popup.visible = false
                     stacklayout_home.currentIndex = 5
                 }
                 else{
@@ -154,6 +134,27 @@ Popup {
                 }
             }
         }
+    }
+
+
+    Connections{
+        target: ConnectorsLoginModel
+
+        function onExcelLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
+
     }
 
 
