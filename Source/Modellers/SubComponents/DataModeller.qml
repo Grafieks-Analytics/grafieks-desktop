@@ -87,6 +87,20 @@ Item {
                 databaseType = "excel"
             }
         }
+
+        function onCsvLoginStatus(status){
+            if(status.status === true){
+                DSParamsModel.setQueryJoiner("\"")
+                databaseType = "csv"
+            }
+        }
+
+        function onJsonLoginStatus(status){
+            if(status.status === true){
+                DSParamsModel.setQueryJoiner("\"")
+                databaseType = "json"
+            }
+        }
     }
 
     Connections{
@@ -165,19 +179,7 @@ Item {
             }
         }
 
-        function onCsvLoginStatus(status){
-            if(status.status === true){
-                DSParamsModel.setQueryJoiner("\"")
-                databaseType = "csv"
-            }
-        }
 
-        function onJsonLoginStatus(status){
-            if(status.status === true){
-                DSParamsModel.setQueryJoiner("\"")
-                databaseType = "json"
-            }
-        }
     }
 
 

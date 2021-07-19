@@ -142,15 +142,21 @@ void ConnectorsLoginModel::csvLogin(QString filename, bool directLogin, QString 
     response = csvcon->CSVInstance(filename);
     Statics::separator = separator;
 
-    this->staticSetter(filename, Constants::duckType, Constants::csvIntType);
-    emit csvLoginStatus(response, directLogin);
+    this->staticSetter(filename, Constants::duckType, Constants::csvIntType, NULL, directLogin);
+//    emit csvLoginStatus(response, directLogin);
+
+    // Here the login signal will be handled from DuckCon Class
+    // As we are using multithreaded signal and slot
 }
 
 void ConnectorsLoginModel::jsonLogin(QString filename, bool directLogin)
 {
     response = jsoncon->JsonInstance(filename);
-    this->staticSetter(filename, Constants::duckType, Constants::jsonIntType);
-    emit jsonLoginStatus(response, directLogin);
+    this->staticSetter(filename, Constants::duckType, Constants::jsonIntType, NULL, directLogin);
+//    emit jsonLoginStatus(response, directLogin);
+
+    // Here the login signal will be handled from DuckCon Class
+    // As we are using multithreaded signal and slot
 }
 
 void ConnectorsLoginModel::excelLogin(QString filename, bool directLogin)

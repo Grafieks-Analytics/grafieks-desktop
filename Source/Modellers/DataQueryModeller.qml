@@ -58,6 +58,20 @@ Page {
                 tableslist.model = DuckDataModel.getTableList()
             }
         }
+
+        function onCsvLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                tableslist.model = DuckDataModel.getTableList()
+            }
+        }
+
+        function onJsonLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                tableslist.model = DuckDataModel.getTableList()
+            }
+        }
     }
 
     Connections{
@@ -134,21 +148,6 @@ Page {
                 tableslist.model = DuckDataModel.getTableList()
             }
         }
-
-        function onCsvLoginStatus(status){
-            if(status.status === true){
-                // Call functions
-                tableslist.model = DuckDataModel.getTableList()
-            }
-        }
-
-        function onJsonLoginStatus(status){
-            if(status.status === true){
-                // Call functions
-                tableslist.model = DuckDataModel.getTableList()
-            }
-        }
-
     }
 
     Connections{

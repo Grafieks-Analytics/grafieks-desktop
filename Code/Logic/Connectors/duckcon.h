@@ -19,8 +19,9 @@ class DuckCon : public QObject
     ExcelCon excelToCsv;
     JsonCon jsonToCsv;
     QStringList tables;
-    QThread thread;
-    QThread thread2;
+    QThread threadExcel;
+    QThread threadCsv;
+    QThread threadJson;
 
     QStringList excelSheetsList;
     QVariantMap response;
@@ -40,11 +41,14 @@ public slots:
     void dropTables();
 
     void convertedExcelPaths(QStringList paths);
-//    void processData();
+    void convertedCsvPath();
+    void convertedJsonPaths(QString path);
 
 signals:
     void importError(QString errorString, QString fileType);
     void excelLoginStatus(QVariantMap response, bool directLogin);
+    void csvLoginStatus(QVariantMap response, bool directLogin);
+    void jsonLoginStatus(QVariantMap response, bool directLogin);
 
 };
 

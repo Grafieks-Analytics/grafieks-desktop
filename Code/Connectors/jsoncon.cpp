@@ -41,8 +41,9 @@ QVariantMap JsonCon::JsonInstance(const QString &filepath)
 
 }
 
-void JsonCon::convertJsonToCsv(QString &jsonPath)
+void JsonCon::convertJsonToCsv()
 {
+    QString jsonPath = Statics::currentDbName;
     QFile jsonFile;
     jsonFile.setFileName(jsonPath);
     jsonFile.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -67,4 +68,6 @@ void JsonCon::convertJsonToCsv(QString &jsonPath)
 
         csvFile.close();
     }
+
+    emit convertedJsonPaths(outPath);
 }
