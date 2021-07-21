@@ -78,6 +78,8 @@ SOURCES += \
     Code/Logic/Datasources/datasourceds.cpp \
     Code/Logic/Datasources/datasourcefilter.cpp \
     Code/Logic/Datasources/datasourcemodel.cpp \
+    Code/Logic/General/chartsmodel.cpp \
+    Code/Logic/General/chartsthread.cpp \
     Code/Logic/General/datatype.cpp \
     Code/Logic/General/generalparamsmodel.cpp \
     Code/Logic/General/newtablecolumnsmodel.cpp \
@@ -85,7 +87,6 @@ SOURCES += \
     Code/Logic/General/qttest2.cpp \
     Code/Logic/General/querysplitter.cpp \
     Code/Logic/General/tableschemamodel.cpp \
-    Code/Logic/General/chartsmodel.cpp \
     Code/Logic/Menu/user.cpp \
     Code/Logic/Reports/reportparamsmodel.cpp \
     Code/Logic/Reports/reportsdatamodel.cpp \
@@ -177,6 +178,8 @@ HEADERS += \
     Code/Logic/Datasources/datasourceds.h \
     Code/Logic/Datasources/datasourcefilter.h \
     Code/Logic/Datasources/datasourcemodel.h \
+    Code/Logic/General/chartsmodel.h \
+    Code/Logic/General/chartsthread.h \
     Code/Logic/General/datatype.h \
     Code/Logic/General/generalparamsmodel.h \
     Code/Logic/General/newtablecolumnsmodel.h \
@@ -184,7 +187,6 @@ HEADERS += \
     Code/Logic/General/qttest2.h \
     Code/Logic/General/querysplitter.h \
     Code/Logic/General/tableschemamodel.h \
-    Code/Logic/General/chartsmodel.h \
     Code/Logic/Menu/user.h \
     Code/Logic/Reports/reportparamsmodel.h \
     Code/Logic/Reports/reportsdatamodel.h \
