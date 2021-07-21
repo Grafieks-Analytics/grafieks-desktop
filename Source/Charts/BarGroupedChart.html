@@ -625,6 +625,14 @@
                         .append("rect")
                         .attr("class", "bar")
                         .attr("fill", function (d) {
+                            // TODO:
+                            this.setAttribute(
+                                "data-value-x1",
+                                d.mainCategory
+                            );
+                            this.setAttribute("data-value-x2", d.name);
+                            this.setAttribute("data-value-y", d.value);
+
                             if (groupBarChartColorBy == "category") {
                                 return zScale(d.data.mainCategory);
                             }
@@ -651,6 +659,10 @@
                                 .split(", ");
 
                             xpos += +matrixValues[4] || 0;
+                            xAxisValue1 = this.getAttribute("data-value-x1");
+                            xAxisValue2 = this.getAttribute("data-value-x2");
+                            console.log({xAxisValue1})
+                            console.log({ xAxisValue2})
 
                             d3.select("#tooltip")
                                 // .style("left", xpos + "px")
@@ -663,6 +675,8 @@
                                         textValue = d.y1 - d.y0;
                                     }
 
+
+
                                     return (
                                         "<div class='arrowTooltip'></div>" +
                                         "<span style='color:grey;''>" +
@@ -670,7 +684,7 @@
                                         ":&nbsp;&nbsp;" +
                                         "</span>" +
                                         "<span style='float: right;'>" +
-                                        "d.value "+
+                                       xAxisValue1+
                                         "</span>" +
                                             "<br/> <br/>" +
                                             "<span style='color:grey;''>" +
@@ -678,7 +692,7 @@
                                             ":" +
                                             "</span>" +
                                             "<span style='float: right;margin-left: 15px;'>" +
-                                           "d.value" +
+                                           xAxisValue2 +
                                         "</span>" +
                                             "<br/> <br/>" +
                                             "<span style='color:grey;''>" +
@@ -774,7 +788,7 @@
                 const bars = [];
                 all_keys.forEach((k) => {
                     if (d && d.hasOwnProperty(k)) {
-                        bars.push({ name: k, value: d[k], data: d });
+                        bars.push({ name: k, value: d[k], data: d,mainCategory:d.mainCategory });
                     }
                 });
                 return bars;

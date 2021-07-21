@@ -217,7 +217,7 @@
             }
 
             globalKeys = globalKeys.filter(getUniqueArrayValues);
-            return [transformedDataValue, globalKeys,data[2]];
+            return [transformedDataValue, globalKeys, data[2]];
         }
 
 
@@ -307,7 +307,7 @@
 
             var margin = { top: 40, right: 20, bottom: 0, left: 70 };
             var width = window.innerWidth - margin.left - margin.right - 70;
-            var height = window.innerHeight - margin.top - margin.bottom +25;
+            var height = window.innerHeight - margin.top - margin.bottom + 25;
 
             if (chartType == constants.chartType.STANDARD) {
                 var bars = numberOfBars(data);
@@ -322,7 +322,7 @@
                     d3.select("#xAxisDiv").style(
                         "bottom",
                         // -(margin.top -10) + "px"
-                        0 +"px"
+                        0 + "px"
                     );
                     d3.select("#xAxisDiv").style("top", null);
                 }
@@ -350,14 +350,14 @@
                 minHeight = 0;
             }
 
-             const yAxisWidth =
+            const yAxisWidth =
                 document.querySelector("#yAxisDiv").clientWidth;
 
             var maxHeight = d3.max(data, (d) =>
                 d3.max(all_keys, (k) => d[k])
             );
 
-               // legends code starts
+            // legends code starts
             d3.select("#legend").html("").style("padding", "");
             if (legendStatus) {
                 d3.select("#legend").html("");
@@ -457,13 +457,13 @@
 
                         d3.select("#mainChartWindow").style(
                             "width",
-                            widthOld - legendWidth + yAxisWidth +"px"
+                            widthOld - legendWidth + yAxisWidth + "px"
                         );
                         d3.select("#mainChartWindow").style(
                             "margin-left",
-                            legendWidth +"px"
+                            legendWidth + "px"
                         );
-                          d3.selectAll("#xAxisLabelId").style(
+                        d3.selectAll("#xAxisLabelId").style(
                             "bottom",
                             "0px"
                         );
@@ -495,7 +495,7 @@
                         // );
                         d3.selectAll("#my_dataviz").style(
                             "margin-top",
-                            50+"px"
+                            50 + "px"
                         );
 
                         d3.selectAll("#my_dataviz").style(
@@ -507,7 +507,7 @@
                             "bottom",
                             "0px"
                         );
-                          d3.selectAll("#xAxisLabelId").style(
+                        d3.selectAll("#xAxisLabelId").style(
                             "bottom",
                             "0px"
                         );
@@ -597,7 +597,7 @@
                         d3.select("#mainChartWindow").attr("style", null);
                         d3.select("#mainChartWindow").style(
                             "width",
-                            widthOld + yAxisWidth - legendWidth - 10 +"px"
+                            widthOld + yAxisWidth - legendWidth - 10 + "px"
                         );
                         // d3.select("#my_dataviz svg" ).style(
                         //     "width",
@@ -608,7 +608,7 @@
                             "margin-left",
                             "0px"
                         );
-                          d3.selectAll("#xAxisLabelId").style(
+                        d3.selectAll("#xAxisLabelId").style(
                             "bottom",
                             "0px"
                         );
@@ -629,14 +629,14 @@
                 .selectAll("#my_dataviz")
                 .append("svg")
                 .attr("width", width + 100)
-                .attr("height", height - margin.top - margin.bottom )
+                .attr("height", height - margin.top - margin.bottom)
                 .append("g") //add group to leave margin for axis
                 .attr(
                     "transform",
                     "translate(" +
                     margin.left +
                     "," +
-                    (margin.top -10) +
+                    (margin.top - 10) +
                     ")"
                 );
 
@@ -743,8 +743,10 @@
                             d3.selectAll(".bar").style("opacity", 1);
                         })
                         .on("mouseover mousemove", function (d, i) {
-                            let xpos = d3.mouse(this)[0] - 20;
-                            let ypos = d3.mouse(this)[1] - 10;
+                            let xpos = d3.mouse(this)[0] + margin.left;
+                            let ypos = d3.mouse(this)[1];
+                            var yScroll = document.querySelector("#my_dataviz").scrollTop;
+                            ypos -= yScroll;
                             var parentElement = this.parentElement;
 
                             const matrix =
@@ -758,10 +760,69 @@
                             ypos += +matrixValues[5] || 0;
 
                             d3.select("#tooltip")
-                                .style("left", xpos + "px")
-                                .style("top", ypos + "px")
+                                .style("left", xpos+20 + "px")
+                                .style("top", ypos-15 + "px")
                                 .style("display", "block")
-                                .html(d.name + ":" + d.value);
+                                // .html(d.name + ":" + d.value);
+                                .html(function () {
+                                    var textValue = d.y0 - d.y1;
+                                    if (d.y1 < 0) {
+                                        textValue = d.y1 - d.y0;
+                                    }
+
+                                    return (
+                                        "<div class='arrowTooltip'></div>" +
+                                        "<span style='color:grey;''>" +
+                                        "toolTip.textColumn1" +
+                                        ":&nbsp;&nbsp;" +
+                                        "</span>" +
+                                        "<span style='float: right;'>" +
+                                        "yValue" +
+                                        "</span>" +
+                                        "<br/> <br/>" +
+                                        "<span style='color:grey;''>" +
+                                        "toolTip.textColumn2" +
+                                        ":" +
+                                        "</span>" +
+                                        "<span style='float: right;margin-left: 15px;'>" +
+                                        "(xValue.toFixed(3))" +
+                                        "</span>"
+                                    );
+                                });
+
+                                 if (
+                                xpos - window.scrollX >
+                                document.documentElement.clientWidth -
+                                document.querySelector("#tooltip").clientWidth
+                            ) {
+                                d3.select("#tooltip").style(
+                                    "left",
+                                    xpos -
+                                    document.querySelector("#tooltip")
+                                        .clientWidth +
+                                    25 +
+                                    "px"
+                                );
+
+                                d3.select(".arrowTooltip")
+                                    //  document.querySelector("#tooltip:before")
+                                    // .style("height","50px";"width","50px";"background-color","red";")
+
+                                    .attr(
+                                        "style",
+                                        "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
+                                    );
+                            } else {
+                                d3.select("#tooltip").style(
+                                    "left",
+                                    xpos + 55 + "px"
+                                );
+
+                                d3.select(".arrowTooltip").attr(
+                                    "style",
+                                    "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
+                                );
+                            }
 
                             d3.selectAll(".bar").style("opacity", 0.3);
                             d3.select(this).style("opacity", 1);
@@ -934,7 +995,7 @@
         // ];
 
 
-        var data = [[{ "Bookcases": 8016, "Chairs": 6906, "Furnishings": 2398, "Tables": 10230, "mainCategory": "Furniture" }, { "Appliances": 1060, "Art": 2756, "Binders": 2114, "Envelopes": 1134, "Fasteners": 160, "Labels": 192, "Paper": 1198, "Storage": 4638, "Supplies": 132, "mainCategory": "Office Supplies" }, { "Accessories": 938, "Phones": 8372, "mainCategory": "Technology" }], [["Bookcases", "Chairs", "Labels", "Tables", "Storage", "Furnishings", "Art", "Phones", "Binders", "Appliances", "Paper", "Envelopes", "Accessories", "Fasteners", "Supplies"]], ["Category","Sub-category", "Sales"]]
+        var data = [[{ "Bookcases": 8016, "Chairs": 6906, "Furnishings": 2398, "Tables": 10230, "mainCategory": "Furniture" }, { "Appliances": 1060, "Art": 2756, "Binders": 2114, "Envelopes": 1134, "Fasteners": 160, "Labels": 192, "Paper": 1198, "Storage": 4638, "Supplies": 132, "mainCategory": "Office Supplies" }, { "Accessories": 938, "Phones": 8372, "mainCategory": "Technology" }], [["Bookcases", "Chairs", "Labels", "Tables", "Storage", "Furnishings", "Art", "Phones", "Binders", "Appliances", "Paper", "Envelopes", "Accessories", "Fasteners", "Supplies"]], ["Category", "Sub-category", "Sales"]]
 
 
         drawChart(data);
