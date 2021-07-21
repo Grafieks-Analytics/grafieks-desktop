@@ -12,6 +12,7 @@ ReportParamsModel::ReportParamsModel(QObject *parent) : QObject(parent)
     //    m_selectAll = Constants::defaultSelectAll;
     m_internalCounter = 0;
     m_filterIndex = 0;
+    m_reportId = -1;
 }
 
 QString ReportParamsModel::itemName() const
@@ -64,16 +65,16 @@ QString ReportParamsModel::chartType() const
     return m_chartType;
 }
 
-void ReportParamsModel::addDashboardReportInstance(QVariant newDroppedReportInstance, QString reportId){
+void ReportParamsModel::addDashboardReportInstance(QVariant newDroppedReportInstance, int reportId){
     this->dashboardReportInstances.insert(reportId,newDroppedReportInstance);
 }
 
 
-QVariant ReportParamsModel::getDashboardReportInstance(QString reportId){
+QVariant ReportParamsModel::getDashboardReportInstance(int reportId){
     return this->dashboardReportInstances.value(reportId);
 }
 
-QVariant ReportParamsModel::getAllDashboardReportInstances()
+QMap<int, QVariant> ReportParamsModel::getAllDashboardReportInstances()
 {
     return this->dashboardReportInstances;
 }
@@ -93,11 +94,11 @@ QString ReportParamsModel::colorByDataColoumns() const
     return m_colorByDataColoumns;
 }
 
-QVariant ReportParamsModel::getReport(QString reportId){
+QVariant ReportParamsModel::getReport(int reportId){
     return this->reportsMap.value(reportId);
 }
 
-QString ReportParamsModel::reportId() const
+int ReportParamsModel::reportId() const
 {
     return m_reportId;
 }
@@ -107,7 +108,7 @@ QString ReportParamsModel::reportTitle() const
     return m_reportTitle;
 }
 
-void ReportParamsModel::addReport(QString reportId)
+void ReportParamsModel::addReport(int reportId)
 {
     QVariantMap tmp;
     tmp.insert("reportTitle",this->reportTitle());
@@ -120,8 +121,7 @@ void ReportParamsModel::addReport(QString reportId)
     tmp.insert("colorByDataColoumns",this->colorByDataColoumns());
 
     this->reportsMap.insert(reportId,tmp);
-
-    this->reportsData.insert(this->reportId(),this->reportTitle());
+    this->reportsData.insert(reportId,this->reportTitle());
 
     // Emitting singal to update report list
     // in dashboards
@@ -129,7 +129,7 @@ void ReportParamsModel::addReport(QString reportId)
     
 }
 
-QVariantMap ReportParamsModel::getReportsList(){
+QMap<int, QVariant> ReportParamsModel::getReportsList(){
 
     return this->reportsData;
 }
@@ -149,7 +149,7 @@ void ReportParamsModel::resetFilter()
     this->setMode(Constants::defaultMode);
 }
 
-void ReportParamsModel::deleteReport(QString reportId, bool allReports)
+void ReportParamsModel::deleteReport(int reportId, bool allReports)
 {
 
     if(allReports == false){
@@ -205,7 +205,7 @@ void ReportParamsModel::clearFilter()
     this->removeTmpFilterIndex(0, true);
 }
 
-void ReportParamsModel::removeFilter(int filterId, QString reportId, QString filterType)
+void ReportParamsModel::removeFilter(int filterId, int reportId, QString filterType)
 {
     this->removeFilterColumnMap(filterId);
     this->removeFilterValueMap(filterId);
@@ -246,7 +246,7 @@ void ReportParamsModel::resetInputFields()
     emit resetInput();
 }
 
-void ReportParamsModel::addToMasterReportFilters(QString reportId)
+void ReportParamsModel::addToMasterReportFilters(int reportId)
 {
     QMap<int, QVariantMap> intermediateMasterReportsMap;
 
@@ -276,7 +276,7 @@ void ReportParamsModel::addToMasterReportFilters(QString reportId)
 
 }
 
-void ReportParamsModel::fetchMasterReportFilters(QString reportId)
+void ReportParamsModel::fetchMasterReportFilters(int reportId)
 {
     QMap<int, QVariantMap> output;
     output = this->masterReportFilters.value(reportId);
@@ -284,7 +284,7 @@ void ReportParamsModel::fetchMasterReportFilters(QString reportId)
     emit reportFilterChanged(output, reportId);
 }
 
-void ReportParamsModel::restoreMasterReportFilters(QString reportId)
+void ReportParamsModel::restoreMasterReportFilters(int reportId)
 {
     QMap<int, QVariantMap> masterValues = this->masterReportFilters.value(reportId);
     QList<int> keys = masterValues.keys();
@@ -294,7 +294,7 @@ void ReportParamsModel::restoreMasterReportFilters(QString reportId)
     }
 }
 
-void ReportParamsModel::deleteMasterReportFilters(QString reportId, bool deleteAll)
+void ReportParamsModel::deleteMasterReportFilters(int reportId, bool deleteAll)
 {
     if(deleteAll == true){
         this->masterReportFilters.clear();
@@ -907,11 +907,12 @@ void ReportParamsModel::setChartType(QString chartType)
     emit chartTypeChanged(m_chartType);
 }
 
-void ReportParamsModel::setReportId(QString reportId)
+void ReportParamsModel::setReportId(int reportId)
 {
     if (m_reportId == reportId)
         return;
 
+    qDebug() << "RECEIVED REPORT ID" << reportId;
     m_reportId = reportId;
     emit reportIdChanged(m_reportId);
 
@@ -1157,4 +1158,8 @@ void ReportParamsModel::setChartUrl(QString chartUrl)
 
     m_chartUrl = chartUrl;
     emit chartUrlChanged(m_chartUrl);
+}
+
+int ReportParamsModel::generateNewReportId(){
+    return this->reportIdsCounter++;
 }

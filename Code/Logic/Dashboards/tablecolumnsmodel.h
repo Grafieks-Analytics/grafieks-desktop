@@ -19,7 +19,7 @@ class TableColumnsModel : public QObject
     QStringList categoryList;
     QStringList dateList;
     QMap<int, QVariantMap> allColumnVisibleMap;         // dashboardId - <columnName - columnType>
-    QMap<QString, QMap<int, QStringList>> reportChartData; // <ReportId - <columnKey - Values Array list>>
+    QMap<int, QMap<int, QStringList>> reportChartData; // <ReportId - <columnKey - Values Array list>>
     QMap<QString, QString> columnTypes;
 
 public:
@@ -44,7 +44,7 @@ public slots:
     void getChartData(QMap<int, QStringList*> chartData);
     void getChartHeader(QMap<int, QStringList> chartHeader);
     void getFilterValues(QMap<int, QStringList> showColumns, QMap<int, QVariantMap> columnFilterType, QMap<int, QVariantMap> columnIncludeExcludeMap, QMap<int, QMap<QString, QStringList>> columnValueMap, int dashboardId);
-    void receiveReportData(QMap<QString, QMap<int, QStringList>> newChartData, QString currentReportId);
+    void receiveReportData(QMap<int, QMap<int, QStringList>> newChartData, int currentReportId);
 
 signals:
     void sendFilteredColumn(int currentDashboard, QStringList allCategorical, QStringList allNumerical, QStringList allDates);
