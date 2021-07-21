@@ -33,23 +33,6 @@ Popup {
     Connections{
         target: ConnectorsLoginModel
 
-        function onJsonLoginStatus(status, directLogin){
-
-            if(directLogin === true){
-                if(status.status === true){
-
-                    popup.visible = false
-                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
-                    stacklayout_home.currentIndex = 5
-                }
-                else{
-                    popup.visible = true
-                    msg_dialog.open()
-                    msg_dialog.text = status.msg
-                }
-            }
-        }
-
         function onLogout(){
             selectedFile = ""
             jsonFileName.text = ""
@@ -64,6 +47,23 @@ Popup {
                 // Show on import csv error
                 error_dialog.open();
                 error_dialog.text = errorString
+            }
+        }
+
+        function onJsonLoginStatus(status, directLogin){
+
+            if(directLogin === true){
+                if(status.status === true){
+
+                    popup.visible = false
+                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
             }
         }
     }

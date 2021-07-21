@@ -19,10 +19,14 @@ class DuckCon : public QObject
     ExcelCon excelToCsv;
     JsonCon jsonToCsv;
     QStringList tables;
-    QThread thread;
-    QThread thread2;
+    QThread threadExcel;
+    QThread threadCsv;
+    QThread threadJson;
 
     QStringList excelSheetsList;
+    QVariantMap response;
+    bool directLogin;
+
 
 
 public:
@@ -33,17 +37,19 @@ public:
     duckdb::Connection con;
 
 public slots:
-    void createTable();
+    void createTable(QString dbName, bool directLogin, QVariantMap response);
     void dropTables();
 
     void convertedExcelPaths(QStringList paths);
-    void processThis();
+    void convertedCsvPath();
+    void convertedJsonPaths(QString path);
 
 signals:
     void importError(QString errorString, QString fileType);
-    void test();
+    void excelLoginStatus(QVariantMap response, bool directLogin);
+    void csvLoginStatus(QVariantMap response, bool directLogin);
+    void jsonLoginStatus(QVariantMap response, bool directLogin);
 
 };
 
 #endif // DUCKCON_H
-

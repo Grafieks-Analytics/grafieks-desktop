@@ -79,6 +79,31 @@ Item {
     // Connections Starts
 
     Connections{
+        target: DuckCon
+
+        function onExcelLoginStatus(status){
+            if(status.status === true){
+                DSParamsModel.setQueryJoiner("\"")
+                databaseType = "excel"
+            }
+        }
+
+        function onCsvLoginStatus(status){
+            if(status.status === true){
+                DSParamsModel.setQueryJoiner("\"")
+                databaseType = "csv"
+            }
+        }
+
+        function onJsonLoginStatus(status){
+            if(status.status === true){
+                DSParamsModel.setQueryJoiner("\"")
+                databaseType = "json"
+            }
+        }
+    }
+
+    Connections{
         target: ConnectorsLoginModel
 
         // Query joiner
@@ -154,19 +179,7 @@ Item {
             }
         }
 
-        function onCsvLoginStatus(status){
-            if(status.status === true){
-                DSParamsModel.setQueryJoiner("\"")
-                databaseType = "csv"
-            }
-        }
 
-        function onJsonLoginStatus(status){
-            if(status.status === true){
-                DSParamsModel.setQueryJoiner("\"")
-                databaseType = "json"
-            }
-        }
     }
 
 

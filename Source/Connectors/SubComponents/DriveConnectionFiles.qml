@@ -87,14 +87,13 @@ Popup {
     }
 
     Connections{
-        target: ConnectorsLoginModel
+        target: DuckCon
 
-        function onCsvLoginStatus(status, directLogin){
+        function onExcelLoginStatus(status, directLogin){
 
             if(directLogin === false){
                 if(status.status === true){
                     popup.visible = false
-                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
                     stacklayout_home.currentIndex = 5
                 }
                 else{
@@ -105,11 +104,12 @@ Popup {
             }
         }
 
-        function onExcelLoginStatus(status, directLogin){
+        function onCsvLoginStatus(status, directLogin){
 
             if(directLogin === false){
                 if(status.status === true){
                     popup.visible = false
+                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
                     stacklayout_home.currentIndex = 5
                 }
                 else{
@@ -134,6 +134,27 @@ Popup {
                 }
             }
         }
+    }
+
+
+    Connections{
+        target: ConnectorsLoginModel
+
+        function onExcelLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
+
     }
 
 

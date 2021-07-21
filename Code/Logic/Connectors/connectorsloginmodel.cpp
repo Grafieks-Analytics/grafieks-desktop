@@ -33,7 +33,7 @@ void ConnectorsLoginModel::mysqlLogin(QString host, QString db, int port, QStrin
 void ConnectorsLoginModel::sqliteLogin(QString filename)
 {
 
-    QVariantMap response = sqlitecon->SqliteInstance(filename);
+    response = sqlitecon->SqliteInstance(filename);
 
     QFile sqliteFile(QUrl(filename).toLocalFile());
     QFileInfo fileInfo(sqliteFile.fileName());
@@ -46,7 +46,7 @@ void ConnectorsLoginModel::sqliteLogin(QString filename)
 
 void ConnectorsLoginModel::mysqlOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
-    QVariantMap response = mysqlcon->MysqlOdbcInstance(driver, host, db, port, username, password);
+    response = mysqlcon->MysqlOdbcInstance(driver, host, db, port, username, password);
     this->staticSetter(db, Constants::sqlType, Constants::mysqlOdbcIntType, Constants::mysqlOdbcStrType);
     emit mysqlLoginStatus(response);
 }
@@ -55,14 +55,14 @@ void ConnectorsLoginModel::mysqlOdbcLogin(QString driver, QString host, QString 
 void ConnectorsLoginModel::mssqlOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
 
-    QVariantMap response = mssqlcon->MSSqlOdbcInstance(driver, host, db, port, username, password);
+    response = mssqlcon->MSSqlOdbcInstance(driver, host, db, port, username, password);
     this->staticSetter(db, Constants::sqlType, Constants::mssqlIntType, Constants::mssqlOdbcStrType);
     emit mssqlLoginStatus(response);
 }
 
 void ConnectorsLoginModel::postgresOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
-    QVariantMap response = postgrescon->PostgresOdbcInstance(driver, host, db, port, username, password);
+    response = postgrescon->PostgresOdbcInstance(driver, host, db, port, username, password);
     this->staticSetter(db, Constants::sqlType, Constants::postgresIntType, Constants::postgresOdbcStrType);
     emit postgresLoginStatus(response);
 
@@ -70,21 +70,21 @@ void ConnectorsLoginModel::postgresOdbcLogin(QString driver, QString host, QStri
 
 void ConnectorsLoginModel::redshiftOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
-    QVariantMap response = redshiftcon->RedshiftOdbcInstance(driver, host, db, port, username, password);
+    response = redshiftcon->RedshiftOdbcInstance(driver, host, db, port, username, password);
     this->staticSetter(db, Constants::forwardType, Constants::redshiftIntType, Constants::redshiftOdbcStrType);
     emit redshiftLoginStatus(response);
 }
 
 void ConnectorsLoginModel::oracleOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
-    QVariantMap response = oraclecon->OracleOdbcInstance(driver, host, db, port, username, password);
+    response = oraclecon->OracleOdbcInstance(driver, host, db, port, username, password);
     this->staticSetter(db, Constants::sqlType, Constants::oracleIntType, Constants::oracleOdbcStrType);
     emit postgresLoginStatus(response);
 }
 
 void ConnectorsLoginModel::mongoOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
-    QVariantMap response = mongocon->MongoOdbcInstance(driver, host, db, port, username, password);
+    response = mongocon->MongoOdbcInstance(driver, host, db, port, username, password);
     this->staticSetter(db, Constants::sqlType, Constants::mongoIntType, Constants::mongoOdbcStrType);
     emit mongoLoginStatus(response);
 
@@ -92,35 +92,35 @@ void ConnectorsLoginModel::mongoOdbcLogin(QString driver, QString host, QString 
 
 void ConnectorsLoginModel::impalaOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
-    QVariantMap response = impalacon->ImpalaOdbcInstance(driver, host, db, port, username, password);
+    response = impalacon->ImpalaOdbcInstance(driver, host, db, port, username, password);
     this->staticSetter(db, Constants::sqlType, Constants::impalaIntType, Constants::impalaOdbcStrType);
     emit impalaLoginStatus(response);
 }
 
 void ConnectorsLoginModel::hiveOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
-    QVariantMap response = hivecon->HiveOdbcInstance(driver, host, db, port, username, password);
+    response = hivecon->HiveOdbcInstance(driver, host, db, port, username, password);
     this->staticSetter(db, Constants::sqlType, Constants::hiveIntType, Constants::hiveOdbcStrType);
     emit hiveLoginStatus(response);
 }
 
 void ConnectorsLoginModel::snowflakeOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
-    QVariantMap response = snowflakecon->SnowflakeOdbcInstance(driver, host, db, port, username, password);
+    response = snowflakecon->SnowflakeOdbcInstance(driver, host, db, port, username, password);
     this->staticSetter(db, Constants::forwardType, Constants::snowflakeIntType, Constants::snowflakeOdbcStrType);
     emit snowflakeLoginStatus(response);
 }
 
 void ConnectorsLoginModel::teradataOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
-    QVariantMap response = teradatacon->TeradataOdbcInstance(driver, host, db, port, username, password);
+    response = teradatacon->TeradataOdbcInstance(driver, host, db, port, username, password);
     this->staticSetter(db, Constants::forwardType, Constants::teradataIntType, Constants::teradataOdbcStrType);
     emit teradataLoginStatus(response);
 }
 
 void ConnectorsLoginModel::accessOdbcLogin(QString driver, QString db, QString username, QString password)
 {
-    QVariantMap response = accesscon->AccessOdbcInstance(driver, db, username, password);
+    response = accesscon->AccessOdbcInstance(driver, db, username, password);
 
     QFileInfo fileInfo(db);
     QString accessFileName = fileInfo.fileName();
@@ -132,32 +132,40 @@ void ConnectorsLoginModel::accessOdbcLogin(QString driver, QString db, QString u
 
 void ConnectorsLoginModel::excelOdbcLogin(QString driver, QString filename)
 {
-    QVariantMap response = excelcon->ExcelOdbcInstance(driver, filename);
+    response = excelcon->ExcelOdbcInstance(driver, filename);
     this->staticSetter(filename, Constants::sqlType, Constants::excelIntType, Constants::excelOdbcStrType);
     emit excelLoginStatus(response, true);
 }
 
 void ConnectorsLoginModel::csvLogin(QString filename, bool directLogin, QString separator)
 {
-    QVariantMap response = csvcon->CSVInstance(filename);
+    response = csvcon->CSVInstance(filename);
     Statics::separator = separator;
 
-    this->staticSetter(filename, Constants::duckType, Constants::csvIntType);
-    emit csvLoginStatus(response, directLogin);
+    this->staticSetter(filename, Constants::duckType, Constants::csvIntType, NULL, directLogin);
+//    emit csvLoginStatus(response, directLogin);
+
+    // Here the login signal will be handled from DuckCon Class
+    // As we are using multithreaded signal and slot
 }
 
 void ConnectorsLoginModel::jsonLogin(QString filename, bool directLogin)
 {
-    QVariantMap response = jsoncon->JsonInstance(filename);
-    this->staticSetter(filename, Constants::duckType, Constants::jsonIntType);
-    emit jsonLoginStatus(response, directLogin);
+    response = jsoncon->JsonInstance(filename);
+    this->staticSetter(filename, Constants::duckType, Constants::jsonIntType, NULL, directLogin);
+//    emit jsonLoginStatus(response, directLogin);
+
+    // Here the login signal will be handled from DuckCon Class
+    // As we are using multithreaded signal and slot
 }
 
 void ConnectorsLoginModel::excelLogin(QString filename, bool directLogin)
 {
-    QVariantMap response = excelcon->ExcelInstance(filename);
-    this->staticSetter(filename, Constants::duckType, Constants::excelIntType);
-//    emit excelLoginStatus(response, directLogin);
+    response = excelcon->ExcelInstance(filename);
+    this->staticSetter(filename, Constants::duckType, Constants::excelIntType, NULL, directLogin);
+
+    // Here the login signal will be handled from DuckCon Class
+    // As we are using multithreaded signal and slot
 }
 
 void ConnectorsLoginModel::sqlLogout()
@@ -273,7 +281,7 @@ void ConnectorsLoginModel::setConnectedDB(QString connectedDB)
     emit connectedDBChanged(m_connectedDB);
 }
 
-void ConnectorsLoginModel::staticSetter(QString dbName, QString classification, int intType, QString strType)
+void ConnectorsLoginModel::staticSetter(QString dbName, QString classification, int intType, QString strType, bool directLogin)
 {
     Statics::currentDbName = dbName;
     Statics::currentDbClassification = classification;
@@ -284,7 +292,7 @@ void ConnectorsLoginModel::staticSetter(QString dbName, QString classification, 
         QFileInfo fi(dbName);
         dbName = fi.baseName();
 
-        emit sendDbName();
+        emit sendDbName(Statics::currentDbName, directLogin, this->response);
     }
 
     this->setConnectedDB(dbName);
