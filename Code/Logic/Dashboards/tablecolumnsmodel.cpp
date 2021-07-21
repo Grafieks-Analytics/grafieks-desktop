@@ -341,10 +341,9 @@ void TableColumnsModel::getFilterValues(QMap<int, QStringList> showColumns, QMap
     emit dashboardDataChanged(this->filteredChartData, dashboardId);
 }
 
-void TableColumnsModel::receiveReportData(QMap<QString, QMap<int, QStringList> > newChartData, QString currentReportId)
+void TableColumnsModel::receiveReportData(QMap<int, QMap<int, QStringList> > newChartData, int currentReportId)
 {
-    QStringList keys = newChartData.keys();
-
+    QList<int> keys = newChartData.keys();
     this->reportChartData = newChartData;
 
 }

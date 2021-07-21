@@ -551,7 +551,8 @@ Page {
 
     // generate Report Id
     function generateReportId(){
-        return Qt.btoa(new Date().getTime());
+        return ReportParamsModel.generateNewReportId();
+        // return new Date().getTime();
     }
 
     // Slot Function
@@ -638,6 +639,7 @@ Page {
     }
 
     function addReport(){
+
         // Add report to dashboard
         if(!reportIdMain){
             reportIdMain = generateReportId();
@@ -691,6 +693,8 @@ Page {
         // After this editReportToggle is set to false
         // Gets called again which creates a new id and add it to map
         ReportParamsModel.setEditReportToggle("-1");
+
+        DashboardParamsModel.setDashboardReportMap(reportIdMain);
         // switchChart(Constants.barChartTitle);
     }
 

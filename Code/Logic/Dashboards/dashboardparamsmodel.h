@@ -24,6 +24,8 @@ class DashboardParamsModel: public QObject
     QMap<int, QMap<int, int>> dashboardWidgetTypeMap; // <dashboardId, <widgetId, reportTypeId (constant)>>
     QMap<int, QMap<int, QUrl>> dashboardWidgetUrl; // <dashboardId, <widgetId, URI Link>>
 
+    QMap<int, QVector<int>> dashboardReportMap; // <dashboardId, [reportId1, reportId2]>
+
 
     // Filter parameters
     QMap<int, QStringList> showColumns;                        // dashboardId - List of column names to be shown from the list
@@ -62,7 +64,6 @@ class DashboardParamsModel: public QObject
 
     // Filter
     Q_PROPERTY(QString currentSelectedColumn READ currentSelectedColumn WRITE setCurrentSelectedColumn NOTIFY currentSelectedColumnChanged)
-
 
     QString m_lastContainerType;
     int m_positionY;
@@ -168,6 +169,8 @@ public:
     // Save and read files
 
     Q_INVOKABLE void saveImage(QUrl originalFile, QString newFilename);
+
+    Q_INVOKABLE void setDashboardReportMap(int reportId);
 
     // General
     QString lastContainerType() const;

@@ -17,11 +17,11 @@ class ChartsModel : public QObject
     Q_OBJECT
     QMap<int, QStringList> newChartHeader;
     QMap<int, QString> headerMap;
-    QMap<QString, QMap<int, QStringList>> reportChartData; // <ReportId - <columnKey - Values Array list>>
+    QMap<int, QMap<int, QStringList>> reportChartData; // <ReportId - <columnKey - Values Array list>>
     QMap<int, QMap<int, QStringList>> dashboardChartData; // <DashboardId - <columnKey - Values Array list>>
 
     int dashboardId;
-    QString reportId;
+    int reportId;
     QStringList chartSources;
     QString currentChartSource;
     bool dashboardFilterApplied;
@@ -68,7 +68,7 @@ public:
 public slots:
 
     void receiveHeaders(QMap<int, QStringList> newChartHeader);
-    void receiveReportData(QMap<QString, QMap<int, QStringList>> newChartData, QString currentReportId);
+    void receiveReportData(QMap<int, QMap<int, QStringList>> newChartData, int currentReportId);
     void receiveDashboardData(QMap<int, QMap<int, QStringList>> newChartData, int currentDashboardId);
 
 signals:
