@@ -3,9 +3,16 @@
 DuckCon::DuckCon(QObject *parent) : QObject(parent),
     db(nullptr), con(db)
 {
-    connect(&thread, &QThread::started, &excelToCsv, &ExcelCon::convertExcelToCsv, Qt::QueuedConnection);
+    // Excel
+    connect(&threadExcel, &QThread::started, &excelToCsv, &ExcelCon::convertExcelToCsv, Qt::QueuedConnection);
     connect(&excelToCsv, &ExcelCon::convertedExcelPaths, this, &DuckCon::convertedExcelPaths, Qt::QueuedConnection);
-    connect(&thread2, &QThread::started, this, &DuckCon::processThis);
+
+    // CSV
+//    connect(&threadCsv, &QThread::started, this, &DuckCon::convertedCsvPath, Qt::QueuedConnection);
+
+    // JSON
+    connect(&threadJson, &QThread::started, &jsonToCsv, &JsonCon::convertJsonToCsv, Qt::QueuedConnection);
+    connect(&jsonToCsv, &JsonCon::convertedJsonPaths, this, &DuckCon::convertedJsonPaths, Qt::QueuedConnection);
 }
 
 void DuckCon::dropTables()
@@ -24,18 +31,8 @@ void DuckCon::dropTables()
 
 void DuckCon::convertedExcelPaths(QStringList paths)
 {
-    qDebug() << "CONV EXCEL PATHS" << paths;
     this->excelSheetsList = paths;
 
-    emit test();
-    thread.quit();
-
-    moveToThread(&thread2);
-    thread2.start();
-}
-
-void DuckCon::processThis()
-{
 
     QString table = "";
     QString db = Statics::currentDbName;
@@ -46,8 +43,6 @@ void DuckCon::processThis()
     bool errorStatus = false;
 
     QString fileExtension = QFileInfo(db).completeSuffix();
-    qDebug() << fileName << fileExtension << db << "DUCK FILE INFO`";
-
 
     fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
     table = fileName;
@@ -59,6 +54,7 @@ void DuckCon::processThis()
         Statics::currentDbName = fileName;
         std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + fi.baseName().toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
 
+
         if(res->error.empty() == false){
             errorStatus = true;
             qWarning() << Q_FUNC_INFO << "Excel import issue" << res->error.c_str();
@@ -69,64 +65,107 @@ void DuckCon::processThis()
         }
     }
 
+    threadExcel.quit();
+
+    emit excelLoginStatus(this->response, this->directLogin);
+
     if(errorStatus == true){
         emit importError("File format is not valid UTF-8. Please provide a valid UTF-8 file", "excel");
     }
+
 }
 
-
-
-void DuckCon::createTable(){
-
-
+void DuckCon::convertedCsvPath()
+{
+    bool errorStatus = false;
     QString table = "";
     QString db = Statics::currentDbName;
     std::string csvFile    = db.toStdString();
 
     QString fileName       = QFileInfo(db).baseName().toLower();
     std::string csvdb       = "";
-    bool errorStatus = false;
 
     QString fileExtension = QFileInfo(db).completeSuffix();
-    qDebug() << fileName << fileExtension << db << "DUCK FILE INFO`";
-
 
     fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
     table = fileName;
 
+    csvdb = "'" + csvFile + "'";
+    Statics::currentDbName = fileName;
+    std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
+    if(res->error.empty() == false){
+        errorStatus = true;
+        qWarning() << Q_FUNC_INFO << "CSV import issue" << res->error.c_str();
+    } else{
+        this->tables.append(table);
+        res.release();
+    }
+
+    emit csvLoginStatus(this->response, this->directLogin);
+
+    if(errorStatus == true){
+        emit importError("File format is not valid UTF-8. Please provide a valid UTF-8 file", "csv");
+    }
+}
+
+void DuckCon::convertedJsonPaths(QString path)
+{
+
+    QString table = "";
+    QString db = Statics::currentDbName;
+    std::string csvFile    = path.toStdString();
+
+    QString fileName       = QFileInfo(db).baseName().toLower();
+    std::string csvdb       = "";
+
+    QString fileExtension = QFileInfo(db).completeSuffix();
+
+    fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
+    table = fileName;
+
+    csvdb = "'" + csvFile + "'";
+    Statics::currentDbName = fileName;
+    std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
+
+    if(res->error.empty() == false){
+        emit importError("Please select a valid JSON format and remove special characters from input file", "json");
+        qWarning() << Q_FUNC_INFO << "JSON import issue" << res->error.c_str();
+    } else{
+        this->tables.append(table);
+        res.release();
+    }
+
+    emit jsonLoginStatus(this->response, this->directLogin);
+    threadJson.quit();
+}
+
+
+
+void DuckCon::createTable(QString dbName, bool directLogin, QVariantMap response){
+
+    this->directLogin = directLogin;
+    this->response = response;
+
+    QString db = Statics::currentDbName;
+    QString fileName       = QFileInfo(db).baseName().toLower();
+    QString fileExtension = QFileInfo(db).completeSuffix();
+    fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
+
     if(fileName.trimmed().length() > 0){
         if(fileExtension.toLower() == "json"){
-//            csvFile = jsonToCsv.convertJsonToCsv(Statics::currentDbName).toStdString();
 
-//            csvdb = "'" + csvFile + "'";
-//            Statics::currentDbName = fileName;
-//            std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
-
-//            if(res->error.empty() == false){
-//                emit importError("Please select a valid JSON format and remove special characters from input file", "json");
-//                qWarning() << Q_FUNC_INFO << "JSON import issue" << res->error.c_str();
-//            } else{
-//                this->tables.append(table);
-//                res.release();
-//            }
-
+            jsonToCsv.moveToThread(&threadJson);
+            threadJson.start();
 
         } else if(fileExtension.toLower() == "xls" || fileExtension.toLower() == "xlsx"){
 
-            excelToCsv.moveToThread(&thread);
-            thread.start();
+            excelToCsv.moveToThread(&threadExcel);
+            threadExcel.start();
 
         } else{
-            csvdb = "'" + csvFile + "'";
-            Statics::currentDbName = fileName;
-            std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
-            if(res->error.empty() == false){
-                emit importError("File format is not valid UTF-8. Please provide a valid UTF-8 file", "csv");
-                qWarning() << Q_FUNC_INFO << "CSV import issue" << res->error.c_str();
-            } else{
-                this->tables.append(table);
-                res.release();
-            }
+//            moveToThread(&threadCsv);
+//            threadCsv.start();
+            convertedCsvPath();
         }
 
     }

@@ -49,6 +49,30 @@ Page {
     /***********************************************************************************************************************/
     // Connection Starts
 
+    Connections{
+        target: DuckCon
+
+        function onExcelLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                tableslist.model = DuckDataModel.getTableList()
+            }
+        }
+
+        function onCsvLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                tableslist.model = DuckDataModel.getTableList()
+            }
+        }
+
+        function onJsonLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                tableslist.model = DuckDataModel.getTableList()
+            }
+        }
+    }
 
     Connections{
         target: ConnectorsLoginModel
@@ -124,21 +148,6 @@ Page {
                 tableslist.model = DuckDataModel.getTableList()
             }
         }
-
-        function onCsvLoginStatus(status){
-            if(status.status === true){
-                // Call functions
-                tableslist.model = DuckDataModel.getTableList()
-            }
-        }
-
-        function onJsonLoginStatus(status){
-            if(status.status === true){
-                // Call functions
-                tableslist.model = DuckDataModel.getTableList()
-            }
-        }
-
     }
 
     Connections{
