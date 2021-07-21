@@ -59,6 +59,7 @@
 #include "Code/Logic/Reports/reportsdatamodel.h"
 
 #include "Code/Logic/General/chartsmodel.h"
+#include "Code/Logic/General/chartsthread.h"
 #include "Code/Logic/General/generalparamsmodel.h"
 #include "Code/Logic/General/tableschemamodel.h"
 #include "Code/Logic/General/newtablecolumnsmodel.h"
@@ -261,7 +262,9 @@ int main(int argc, char *argv[])
     FilterDateListModel filterDateListModel;
     FilterNumericalListModel filterNumericalListModel;
     ODBCDriversModel odbcDriversModel;
-    ChartsModel chartsModel;
+    ChartsThread chartsThread;
+    ChartsModel chartsModel(nullptr, &chartsThread);
+
 
     GeneralParamsModel generalParamsModel;
     QuerySplitter querySplitter;
@@ -346,13 +349,13 @@ int main(int argc, char *argv[])
 
     // Charts
     //filterValuesChanged Headers for charts
-    QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::receiveHeaders);
-    QObject::connect(&duckQueryModel, &DuckQueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::receiveHeaders);
-    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &chartsModel, &ChartsModel::receiveHeaders);
+    QObject::connect(&queryModel, &QueryModel::chartHeaderChanged, &chartsThread, &ChartsThread::receiveHeaders);
+    QObject::connect(&duckQueryModel, &DuckQueryModel::chartHeaderChanged, &chartsThread, &ChartsThread::receiveHeaders);
+    QObject::connect(&forwardOnlyQueryModel, &ForwardOnlyQueryModel::chartHeaderChanged, &chartsThread, &ChartsThread::receiveHeaders);
 
     // Data for charts
-    QObject::connect(&reportsDataModel, &ReportsDataModel::reportDataChanged, &chartsModel, &ChartsModel::receiveReportData);
-    QObject::connect(&tableColumnsModel, &TableColumnsModel::dashboardDataChanged, &chartsModel, &ChartsModel::receiveDashboardData);
+    QObject::connect(&reportsDataModel, &ReportsDataModel::reportDataChanged, &chartsThread, &ChartsThread::receiveReportData);
+    QObject::connect(&tableColumnsModel, &TableColumnsModel::dashboardDataChanged, &chartsThread, &ChartsThread::receiveDashboardData);
 
 
     // SIGNAL & SLOTS ENDS
