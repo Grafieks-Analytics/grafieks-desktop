@@ -17,8 +17,6 @@ QStringList ReportsDataModel::fetchColumnData(QString columnName, QString option
 
     //    QStringList columnDataPointer = *newChartData.value(key);
     QStringList columnDataPointer = reportChartData.value(this->reportId).value(key);
-    columnDataPointer.removeDuplicates();
-
     emit columnDataChanged(columnDataPointer, options);
 
     return columnDataPointer;
@@ -30,7 +28,6 @@ QStringList ReportsDataModel::searchColumnData(QString columnName, QString keywo
     int key = newChartHeader.key( columnName );
 
     QStringList columnDataPointer = *newChartData.value(key);
-    columnDataPointer.removeDuplicates();
     searchResults = columnDataPointer.filter(keyword, Qt::CaseInsensitive);
 
     return searchResults;
@@ -46,7 +43,7 @@ void ReportsDataModel::removeTmpChartData()
 
 }
 
-void ReportsDataModel::deleteReportData(QString reportId, bool deleteAll)
+void ReportsDataModel::deleteReportData(int reportId, bool deleteAll)
 {
 
     if(deleteAll == false){
@@ -103,7 +100,7 @@ void ReportsDataModel::getChartHeader(QMap<int, QStringList> chartHeader)
     emit sendFilteredColumn(this->categoryList, this->numericalList, this->dateList);
 }
 
-void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, QString reportId)
+void ReportsDataModel::updateFilterData(QMap<int, QVariantMap> masterReportFilters, int reportId)
 {
     // Copy newChartData to reportChartData before begining operations
     this->reportId = reportId;
@@ -650,7 +647,7 @@ void ReportsDataModel::currentScreenChanged(int currentScreen)
     }
 }
 
-void ReportsDataModel::getReportId(QString reportId)
+void ReportsDataModel::getReportId(int reportId)
 {
     this->reportId = reportId;
     QMap<int, QStringList> copiedChartData;
@@ -660,6 +657,8 @@ void ReportsDataModel::getReportId(QString reportId)
         copiedChartData.insert(key, *newChartData.value(key));
     }
     this->reportChartData.insert(this->reportId, copiedChartData);
+
+    qDebug() << "REP DATA" << this->reportChartData << this->reportId;
 
     emit reportDataChanged(this->reportChartData, this->reportId);
 

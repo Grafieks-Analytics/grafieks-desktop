@@ -1,6 +1,6 @@
 #include "chartsmodel.h"
 
-ChartsModel::ChartsModel(QObject *parent) : QObject(parent), dashboardId(0), reportId(""), dashboardFilterApplied(false)
+ChartsModel::ChartsModel(QObject *parent) : QObject(parent), dashboardId(0), reportId(0), dashboardFilterApplied(false)
 {
     chartSources.append("dashboard");
     chartSources.append("report");
@@ -25,7 +25,7 @@ QString ChartsModel::getBarChartValues(QString xAxisColumn, QString yAxisColumn)
     int xKey = this->headerMap.key( xAxisColumn );
     int yKey = this->headerMap.key( yAxisColumn );
 
-    qDebug() << "TYPER" << this->currentChartSource  << this->chartSources.at(0) << dashboardFilterApplied;
+    qDebug() << "TYPER" << this->currentChartSource  << this->chartSources.at(0) << dashboardFilterApplied << this->reportId << reportChartData.value(this->reportId).value(yKey);
 
     if(this->currentChartSource == this->chartSources.at(0) && dashboardFilterApplied){
         *xAxisDataPointer = this->dashboardChartData.value(this->dashboardId).value(xKey);
@@ -1616,7 +1616,7 @@ void ChartsModel::setChartSource(QString sourceType, QVariant currentSelectedTyp
     } else {
 
         this->currentChartSource = this->chartSources.at(1);
-        this->reportId = currentSelectedTypeId.toString();
+        this->reportId = currentSelectedTypeId.toInt();
         this->dashboardFilterApplied = false;
     }
 
@@ -1635,7 +1635,7 @@ void ChartsModel::receiveHeaders(QMap<int, QStringList> newChartHeader)
     }
 }
 
-void ChartsModel::receiveReportData(QMap<QString, QMap<int, QStringList>> newChartData, QString currentReportId)
+void ChartsModel::receiveReportData(QMap<int, QMap<int, QStringList>> newChartData, int currentReportId)
 {
     qDebug() << "REPORT DATA" << newChartData;
     this->reportChartData = newChartData;
