@@ -29,6 +29,37 @@ Popup {
 
     property var selectedFile: ""
 
+    Connections{
+        target: DuckCon
+
+        function onExcelLoginStatus(status, directLogin){
+
+            console.log("STATSM", status, directLogin)
+            if(directLogin === true){
+                if(status.status === true){
+
+                    popup.visible = false
+                    GeneralParamsModel.setCurrentScreen(Constants.modelerScreen)
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+
+            busyindicator.running = false
+        }
+
+        function onImportError(errorString, fileType){
+            if(errorString.length > 0 && fileType === "excel"){
+                // Show on import csv error
+                error_dialog.open();
+                error_dialog.text = errorString
+            }
+        }
+    }
 
     Connections{
         target: ConnectorsLoginModel
@@ -55,18 +86,6 @@ Popup {
         function onLogout(){
             selectedFile = ""
             excelFileName.text = ""
-        }
-    }
-
-    Connections{
-        target: DuckCon
-
-        function onImportError(errorString, fileType){
-            if(errorString.length > 0 && fileType === "excel"){
-                // Show on import csv error
-                error_dialog.open();
-                error_dialog.text = errorString
-            }
         }
     }
 

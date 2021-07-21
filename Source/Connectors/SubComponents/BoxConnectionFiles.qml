@@ -91,7 +91,22 @@ Popup {
     }
 
     Connections{
-        target: ConnectorsLoginModel
+        target: DuckCon
+
+        function onExcelLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
 
         function onCsvLoginStatus(status, directLogin){
 
@@ -109,20 +124,6 @@ Popup {
             }
 
         }
-        function onExcelLoginStatus(status, directLogin){
-
-            if(directLogin === false){
-                if(status.status === true){
-                    popup.visible = false
-                    stacklayout_home.currentIndex = 5
-                }
-                else{
-                    popup.visible = true
-                    msg_dialog.open()
-                    msg_dialog.text = status.msg
-                }
-            }
-        }
 
         function onJsonLoginStatus(status, directLogin){
 
@@ -138,6 +139,26 @@ Popup {
                 }
             }
         }
+    }
+
+    Connections{
+        target: ConnectorsLoginModel
+
+        function onExcelLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+            }
+        }
+
     }
 
 

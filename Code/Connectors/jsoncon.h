@@ -35,10 +35,10 @@ public:
     QVariantMap JsonInstance(const QString & filepath);
 
 public slots:
-    void convertJsonToCsv(QString &jsonPath);
+    void convertJsonToCsv();
 
 signals:
-    void jsonConverted(QString status);
+    void convertedJsonPaths(QString path);
 
 };
 
