@@ -1,6 +1,6 @@
 #include "chartsthread.h"
 
-ChartsThread::ChartsThread(QObject *parent) : QObject(parent), dashboardId(0), reportId(""), dashboardFilterApplied(false)
+ChartsThread::ChartsThread(QObject *parent) : QObject(parent), dashboardId(0), reportId(0), dashboardFilterApplied(false)
 {
     chartSources.append("dashboard");
     chartSources.append("report");
@@ -1638,7 +1638,7 @@ void ChartsThread::setChartSource(QString sourceType, QVariant currentSelectedTy
     } else {
 
         this->currentChartSource = this->chartSources.at(1);
-        this->reportId = currentSelectedTypeId.toString();
+        this->reportId = currentSelectedTypeId.toInt();
         this->dashboardFilterApplied = false;
     }
 
@@ -1657,7 +1657,7 @@ void ChartsThread::receiveHeaders(QMap<int, QStringList> newChartHeader)
     }
 }
 
-void ChartsThread::receiveReportData(QMap<QString, QMap<int, QStringList>> newChartData, QString currentReportId)
+void ChartsThread::receiveReportData(QMap<int, QMap<int, QStringList>> newChartData, int currentReportId)
 {
     qDebug() << "REPORT DATA" << newChartData;
     this->reportChartData = newChartData;
