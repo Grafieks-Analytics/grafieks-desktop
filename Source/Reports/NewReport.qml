@@ -192,11 +192,11 @@ Page {
         function onSignalHeatMapChartValues(output){}
         function onSignalSunburstChartValues(output){}
         function onSignalWaterfallChartValues(output){}
-        function onSignalGaugeChartValues(float output);
+        function onSignalGaugeChartValues(output){}
         function onSignalSankeyChartValues(output){}
         function onSignalTreeChartValues(output){}
         function onSignalTreeMapChartValues(output){}
-        function onSignalKPIChartValues(float output);
+        function onSignalKPIChartValues(){}
         function onSignalTableChartValues(output){}
         function onSignalPivotChartValues(output){}
         function onSignalStackedAreaChartValues(output){}
