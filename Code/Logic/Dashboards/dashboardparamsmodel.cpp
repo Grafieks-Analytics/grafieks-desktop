@@ -1,4 +1,5 @@
 #include "dashboardparamsmodel.h"
+#include "../Reports/reportparamsmodel.h"
 
 DashboardParamsModel::DashboardParamsModel(QObject *parent) : QObject(parent)
 {
@@ -1092,4 +1093,11 @@ void DashboardParamsModel::setCurrentSelectedColumn(QString currentSelectedColum
 
     m_currentSelectedColumn = currentSelectedColumn;
     emit currentSelectedColumnChanged(m_currentSelectedColumn);
+}
+
+void DashboardParamsModel::setDashboardReportMap(int reportId){
+    QVector<int> dashboardReportMapList = dashboardReportMap.value(this->currentDashboard());
+    dashboardReportMapList.append(reportId);
+    this->dashboardReportMap.insert(this->currentDashboard(),dashboardReportMapList);
+    qDebug() << "Dashboard Report Model" << reportId << this->dashboardReportMap;
 }

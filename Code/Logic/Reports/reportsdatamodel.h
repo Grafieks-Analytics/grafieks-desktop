@@ -14,13 +14,13 @@ class ReportsDataModel : public QObject
     Q_OBJECT
 
     QMap<int, QStringList *> newChartData;
-    QMap<QString, QMap<int, QStringList>> reportChartData; // <ReportId - <columnKey - Values Array list>>
+    QMap<int, QMap<int, QStringList>> reportChartData; // <ReportId - <columnKey - Values Array list>>
     QMap<int, QString> newChartHeader;
 
     QStringList numericalList;
     QStringList categoryList;
     QStringList dateList;
-    QString reportId;
+    int reportId;
 
 public:
     explicit ReportsDataModel(QObject *parent = nullptr);
@@ -31,18 +31,18 @@ public:
     Q_INVOKABLE QStringList searchColumnData(QString columnName, QString keyword);
     Q_INVOKABLE void clearData();
     Q_INVOKABLE void removeTmpChartData();
-    Q_INVOKABLE void deleteReportData(QString reportId, bool deleteAll = false);
+    Q_INVOKABLE void deleteReportData(int reportId, bool deleteAll = false);
 
 public slots:
     void getChartData(QMap<int, QStringList*> chartData);
     void getChartHeader(QMap<int, QStringList> chartHeader);
-    void updateFilterData(QMap<int, QVariantMap> masterReportFilters, QString reportId);
+    void updateFilterData(QMap<int, QVariantMap> masterReportFilters, int reportId);
     void currentScreenChanged(int currentScreen);
-    void getReportId(QString reportId);
+    void getReportId(int reportId);
 
 signals:
     void sendFilteredColumn(QStringList allCategorical, QStringList allNumerical, QStringList allDates);
-    void reportDataChanged(QMap<QString, QMap<int, QStringList>> reportChartData, QString currentReportId);
+    void reportDataChanged(QMap<int, QMap<int, QStringList>> reportChartData, int currentReportId);
     void columnDataChanged(QStringList columnData, QString options);
 
 

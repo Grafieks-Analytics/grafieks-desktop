@@ -86,6 +86,7 @@ Page {
 
     // Edit Report Flag
     property bool editReportFlag: false;
+    property var dataValues : null;
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -164,6 +165,42 @@ Page {
             ReportParamsModel.restoreMasterReportFilters(reportIdValue)
         }
 
+    }
+
+    Connections{
+        target: ChartsModel
+
+        function onSignalBarChartValues(output){
+            dataValues = output
+            colorData = [JSON.parse(dataValues)[1][0]] || [];
+            colorData.forEach(function (element,index) {
+                dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
+                console.log("newreportcolor",Constants.d3ColorPalette[index % Constants.d3ColorPalette.length])
+            });
+        }
+
+        function onSignalStackedBarChartValues(output){}
+        function onSignalGroupedBarChartValues(output){}
+        function onSignalNewGroupedBarChartValues(output){}
+        function onSignalAreaChartValues(output){}
+        function onSignalLineChartValues(output){}
+        function onSignalLineBarChartValues(output){}
+        function onSignalPieChartValues(output){}
+        function onSignalFunnelChartValues(output){}
+        function onSignalRadarChartValues(output){}
+        function onSignalScatterChartValues(output){}
+        function onSignalHeatMapChartValues(output){}
+        function onSignalSunburstChartValues(output){}
+        function onSignalWaterfallChartValues(output){}
+        function onSignalGaugeChartValues(output){}
+        function onSignalSankeyChartValues(output){}
+        function onSignalTreeChartValues(output){}
+        function onSignalTreeMapChartValues(output){}
+        function onSignalKPIChartValues(output){}
+        function onSignalTableChartValues(output){}
+        function onSignalPivotChartValues(output){}
+        function onSignalStackedAreaChartValues(output){}
+        function onSignalMultiLineChartValues(output){}
     }
 
 
@@ -551,7 +588,8 @@ Page {
 
     // generate Report Id
     function generateReportId(){
-        return Qt.btoa(new Date().getTime());
+        return ReportParamsModel.generateNewReportId();
+        // return new Date().getTime();
     }
 
     // Slot Function
@@ -638,6 +676,7 @@ Page {
     }
 
     function addReport(){
+
         // Add report to dashboard
         if(!reportIdMain){
             reportIdMain = generateReportId();
@@ -691,6 +730,8 @@ Page {
         // After this editReportToggle is set to false
         // Gets called again which creates a new id and add it to map
         ReportParamsModel.setEditReportToggle("-1");
+
+        DashboardParamsModel.setDashboardReportMap(reportIdMain);
         // switchChart(Constants.barChartTitle);
     }
 
@@ -880,7 +921,7 @@ Page {
                 yAxisColumnNamesArray.push(yAxisColumns[i]);
             }
 
-            var dataValues = null;
+
             console.log('Chart Title - Draw Chart Function - ',chartTitle)
             var colorByColumnName = colorByData[0] && colorByData[0].columnName;;
             dataItemList.clear();
@@ -888,8 +929,10 @@ Page {
             switch(chartTitle){
             case Constants.horizontalBarChartTitle:
                 console.log("Horizontal BAR");
-                dataValues =  ChartsModel.getBarChartValues(yAxisColumns[0],xAxisColumns[0]);
+                ChartsModel.getBarChartValues(yAxisColumns[0],xAxisColumns[0]);
 
+                // datavalues is a global property and set using connections
+                // due to multi threading
                 colorData = [JSON.parse(dataValues)[1][0]] || [];
 
                            colorData.forEach(function (element,index) {
@@ -898,19 +941,15 @@ Page {
                 break;
             case Constants.barChartTitle:
                 console.log("BAR CLICKED", xAxisColumns[0])
-                dataValues =  ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
-                colorData = [JSON.parse(dataValues)[1][0]] || [];
-                colorData.forEach(function (element,index) {
-                    dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
-                    console.log("newreportcolor",Constants.d3ColorPalette[index % Constants.d3ColorPalette.length])
-                });
+                ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
+
                 break;
             case Constants.horizontalStackedBarChartTitle:
-                dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,xAxisColumns[0], yAxisColumns[0]);
+                ChartsModel.getStackedBarChartValues(colorByColumnName,xAxisColumns[0], yAxisColumns[0]);
                 break;
             case Constants.stackedBarChartTitle:
                 console.log('Stacked bar chart!');
-                dataValues =  ChartsModel.getStackedBarChartValues(colorByColumnName,yAxisColumns[0], xAxisColumns[0]);
+                ChartsModel.getStackedBarChartValues(colorByColumnName,yAxisColumns[0], xAxisColumns[0]);
                 break;
             case Constants.horizontalBarGroupedChartTitle:
                 console.log('horizontalBarGroupedChart chart!', yAxisColumns[0],xAxisColumns[0], yAxisColumns[1]);
@@ -922,7 +961,7 @@ Page {
                     colorListModel.clear();
                     colorByData = [];
                 }
-                dataValues =  ChartsModel.getNewGroupedBarChartValues(yAxisColumns[0],xAxisColumns[0], yAxisColumns[1]);
+                ChartsModel.getNewGroupedBarChartValues(yAxisColumns[0],xAxisColumns[0], yAxisColumns[1]);
                 break;
             case Constants.groupBarChartTitle:
                 var [category, subcategory] =  getAxisColumnNames(Constants.xAxisName);
@@ -951,85 +990,85 @@ Page {
             case Constants.areaChartTitle:
                 console.log("AREA CLICKED")
                 // Area - xAxis(String), yAxis(String)
-                dataValues =  ChartsModel.getAreaChartValues(xAxisColumns[0],yAxisColumns[0]);
+                ChartsModel.getAreaChartValues(xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.stackedAreaChartTitle:
                 console.log('Stacked Area Chart')
                 console.log('Colour By columnName',columnName)
-                dataValues =  ChartsModel.getStackedAreaChartValues(colorByColumnName,yAxisColumns[0],xAxisColumns[0]);
+                ChartsModel.getStackedAreaChartValues(colorByColumnName,yAxisColumns[0],xAxisColumns[0]);
                 break;
             case Constants.lineChartTitle:
                 console.log("LINE CLICKED")
                 // Line - xAxis(String), yAxis(String)
-                dataValues =  ChartsModel.getLineChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                ChartsModel.getLineChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 // Line Bar - xAxis(String), yAxis(String)
                 //                dataValues =  ChartsModel.getLineBarChartValues("state", "id", "population");
                 break;
             case Constants.multiLineChartTitle:
                 console.log(Constants.multiLineChartTitle,"CLICKED");
-                dataValues =  ChartsModel.getStackedAreaChartValues(xAxisColumns[0],yAxisColumns[0],colorByColumnName);
+                ChartsModel.getStackedAreaChartValues(xAxisColumns[0],yAxisColumns[0],colorByColumnName);
                 break;
             case Constants.horizontalLineChartTitle:
                 console.log(Constants.horizontalLineChartTitle,"CLICKED")
-                dataValues =  ChartsModel.getLineChartValues(yAxisColumns[0],xAxisColumns[0],'Sum');
+                ChartsModel.getLineChartValues(yAxisColumns[0],xAxisColumns[0],'Sum');
                 break;
             case Constants.pieChartTitle:
             case Constants.donutChartTitle:
                 console.log("DONUT/PIE CLICKED")
-                dataValues = ChartsModel.getPieChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                ChartsModel.getPieChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.funnelChartTitle:
                 console.log("FUNNEL CLICKED")
-                dataValues = ChartsModel.getFunnelChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                ChartsModel.getFunnelChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.radarChartTitle:
                 console.log("RADAR CLICKED")
-                dataValues = ChartsModel.getRadarChartValues(xAxisColumns[0],yAxisColumns[0]);
+                ChartsModel.getRadarChartValues(xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.scatterChartTitle:
                 console.log("SCATTER CLICKED")
-                dataValues = ChartsModel.getScatterChartValues(xAxisColumns[0],yAxisColumns[0],yAxisColumns[1]);
+                ChartsModel.getScatterChartValues(xAxisColumns[0],yAxisColumns[0],yAxisColumns[1]);
                 break;
             case Constants.treeChartTitle:
                 console.log("TREECHART CLICKED")
-                dataValues = ChartsModel.getTreeChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
+                ChartsModel.getTreeChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
                 break;
             case Constants.treeMapChartTitle:
-                dataValues = ChartsModel.getTreeMapChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
+                ChartsModel.getTreeMapChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
                 break;
             case Constants.heatMapChartTitle:
                 console.log("HEATMAP CLICKED")
-                dataValues = ChartsModel.getHeatMapChartValues(xAxisColumns[0],yAxisColumns[0], ReportParamsModel.itemName);
+                ChartsModel.getHeatMapChartValues(xAxisColumns[0],yAxisColumns[0], ReportParamsModel.itemName);
                 break;
             case Constants.sunburstChartTitle:
                 console.log("SUNBURST CLICKED");
-                dataValues = ChartsModel.getSunburstChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
+                ChartsModel.getSunburstChartValues(xAxisColumnNamesArray,yAxisColumns[0],'Sum');
                 break;
             case Constants.waterfallChartTitle:
                 console.log("WATERFALL CLICKED")
-                dataValues = ChartsModel.getWaterfallChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                ChartsModel.getWaterfallChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 console.log('Waterfall Data values',dataValues);
                 break;
             case Constants.gaugeChartTitle:
                 console.log("GAUGE CLICKED")
-                dataValues = ChartsModel.getGaugeChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
+                ChartsModel.getGaugeChartValues(xAxisColumns[0],yAxisColumns[0],'Sum');
                 break;
             case Constants.sankeyChartTitle:
                 console.log("SANKEY CLICKED")
-                dataValues = ChartsModel.getSankeyChartValues(xAxisColumns[0],  xAxisColumns[1], yAxisColumns[0] );
+                ChartsModel.getSankeyChartValues(xAxisColumns[0],  xAxisColumns[1], yAxisColumns[0] );
                 break;
             case Constants.kpiTitle:
                 console.log("KPI CLICKED")
-                dataValues = ChartsModel.getKPIChartValues(xAxisColumns[0]);
+                ChartsModel.getKPIChartValues(xAxisColumns[0]);
                 break;
             case Constants.tableTitle:
                 console.log("TABLE CLICKED")
-                dataValues = ChartsModel.getTableChartValues(["state", "city", "district"], ["population", "id"],'Sum');
+                ChartsModel.getTableChartValues(["state", "city", "district"], ["population", "id"],'Sum');
                 break;
             case Constants.pivotTitle:
                 console.log("PIVOT CLICKED")
                 //                dataValues = ChartsModel.getPivotChartValues(["state", "district"],xAxisColumns[0],'Sum');
-                dataValues = ChartsModel.getTableChartValues(["state", "district"], "population",'Sum');
+                ChartsModel.getTableChartValues(["state", "district"], "population",'Sum');
                 break;
             }
             if(!dataValues){

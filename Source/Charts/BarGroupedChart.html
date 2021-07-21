@@ -162,7 +162,7 @@
             }
 
             globalKeys = globalKeys.filter(getUniqueArrayValues);
-            return [transformedDataValue, globalKeys,dataValue[2]];
+            return [transformedDataValue, globalKeys, dataValue[2]];
         }
 
         function drawChart(data, plottingConfiguration = {}) {
@@ -250,7 +250,9 @@
 
             data = transformData(data, dateFormat);
 
-            var [data, all_keys,labels] = data;
+            var [data, all_keys, labels] = data;
+            // TODO:
+            // console.log({ data})
 
             let { top, right, bottom, left } = constants.chartMargins;
             if (window.innerHeight < 400) {
@@ -651,10 +653,79 @@
                             xpos += +matrixValues[4] || 0;
 
                             d3.select("#tooltip")
-                                .style("left", xpos + "px")
-                                .style("top", ypos + "px")
+                                // .style("left", xpos + "px")
+                                .style("top", ypos-59 + "px")
                                 .style("display", "block")
-                                .html(d.name + ":" + d.value);
+                                // .html(d.name + ":" + d.value);
+                                .html(function () {
+                                    var textValue = d.y0 - d.y1;
+                                    if (d.y1 < 0) {
+                                        textValue = d.y1 - d.y0;
+                                    }
+
+                                    return (
+                                        "<div class='arrowTooltip'></div>" +
+                                        "<span style='color:grey;''>" +
+                                        labels[0] +
+                                        ":&nbsp;&nbsp;" +
+                                        "</span>" +
+                                        "<span style='float: right;'>" +
+                                        "d.value "+
+                                        "</span>" +
+                                            "<br/> <br/>" +
+                                            "<span style='color:grey;''>" +
+                                           labels[1] +
+                                            ":" +
+                                            "</span>" +
+                                            "<span style='float: right;margin-left: 15px;'>" +
+                                           "d.value" +
+                                        "</span>" +
+                                            "<br/> <br/>" +
+                                            "<span style='color:grey;''>" +
+                                           labels[2] +
+                                            ":" +
+                                            "</span>" +
+                                            "<span style='float: right;margin-left: 15px;'>" +
+                                           d.value +
+                                        "</span>"
+                                    );
+                                });
+                            var scrollVal = document.querySelector("#my_dataviz").scrollLeft;
+                            if (
+                                xpos - scrollVal >
+                                document.documentElement.clientWidth -
+                                document.querySelector("#tooltip").clientWidth -40
+                            ) {
+
+                                d3.select("#tooltip").style(
+                                    "left",
+                                    xpos - scrollVal -
+                                    document.querySelector("#tooltip")
+                                        .clientWidth +
+                                    80 +
+                                    "px"
+                                );
+
+                                d3.select(".arrowTooltip")
+                                    //  document.querySelector("#tooltip:before")
+                                    // .style("height","50px";"width","50px";"background-color","red";")
+
+                                    .attr(
+                                        "style",
+                                        "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
+                                    );
+                            } else {
+                                d3.select("#tooltip").style(
+                                    "left",
+                                    xpos - scrollVal + 100 + "px"
+                                );
+
+                                d3.select(".arrowTooltip").attr(
+                                    "style",
+                                    "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
+                                );
+                            }
+
 
                             d3.selectAll(".bar").style("opacity", 0.3);
                             d3.select(this).style("opacity", 1);
@@ -793,7 +864,7 @@
                 .getBBox().height;
 
 
-            console.log({ labels});
+            console.log({ labels });
             setLabel(
                 labels[0],
                 "x_label",
@@ -803,7 +874,7 @@
                     .attr("width", window.innerWidth, "height", 150), y_pos_x_label,
                 false
             );
-            setLabel(labels[1], "y_label", d3.select("svg"), false);
+            setLabel(labels[2], "y_label", d3.select("svg"), false);
 
             d3.selectAll(".x-axis text")
                 .attr("font-size", xTickfontSize)
@@ -1180,7 +1251,7 @@
                     "Supplies",
                 ],
             ],
-             ["Category","Sales"]
+            ["Category","Sub-category","Sales"]
         ];
 
         // var data = [
