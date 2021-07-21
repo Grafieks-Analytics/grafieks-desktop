@@ -453,7 +453,7 @@
             // legends code ends
             var mainChartWidth =
                 document.querySelector("#mainChartWindow").clientWidth;
-            console.log({ legendWidth, width, mainChartWidth });
+            // console.log({ legendWidth, width, mainChartWidth });
 
             //add svg with margin !important
             //this is svg is actually group
@@ -705,7 +705,7 @@
 
             if (labelStatus) {
                 svg.append("g")
-                    .call(xAxis.tickSize([0, 0]))
+                    .call(xAxis.tickSize(0))
                     .attr("class", "axis label")
                     // .attr("font-family", xDataLabelfontFamily)
                     .attr("font-family", xTickfontFamily);
@@ -718,8 +718,13 @@
                     var labelValue = label.textContent;
 
                     var labelYPosition = yScale(data[0][1][i])
-                    console.log(dataset[i]);
+                    // console.log(dataset[i]);
                     label.setAttribute("y", labelYPosition - 10);
+                    // label.setAttribute("y", function (d) {
+                    //     var height = Math.abs(yScale(0) - yScale(Math.abs(d)));
+                    //     console.log({height})
+                    //     return 10;
+                    // })
                     //  label.textContent = textColumn2[1];
                     label.textContent = dataset[i];
                 });
