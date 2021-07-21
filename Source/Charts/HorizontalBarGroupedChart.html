@@ -636,7 +636,7 @@
                     "translate(" +
                     margin.left +
                     "," +
-                    (margin.top - 40) +
+                    (margin.top -10) +
                     ")"
                 );
 
@@ -831,9 +831,9 @@
                 }
             }
 
-            setLabel("labels[0]", "y_label", d3.select("svg"), false);
+            setLabel(labels[0], "y_label", d3.select("svg"), false);
             setLabel(
-                "labels[1]",
+                labels[2],
                 "x_label",
                 d3
                     .select("#xAxisLabelId")
@@ -934,7 +934,7 @@
         // ];
 
 
-        var data = [[{ "Bookcases": 8016, "Chairs": 6906, "Furnishings": 2398, "Tables": 10230, "mainCategory": "Furniture" }, { "Appliances": 1060, "Art": 2756, "Binders": 2114, "Envelopes": 1134, "Fasteners": 160, "Labels": 192, "Paper": 1198, "Storage": 4638, "Supplies": 132, "mainCategory": "Office Supplies" }, { "Accessories": 938, "Phones": 8372, "mainCategory": "Technology" }], [["Bookcases", "Chairs", "Labels", "Tables", "Storage", "Furnishings", "Art", "Phones", "Binders", "Appliances", "Paper", "Envelopes", "Accessories", "Fasteners", "Supplies"]], ["Category", "Sales"]]
+        var data = [[{ "Bookcases": 8016, "Chairs": 6906, "Furnishings": 2398, "Tables": 10230, "mainCategory": "Furniture" }, { "Appliances": 1060, "Art": 2756, "Binders": 2114, "Envelopes": 1134, "Fasteners": 160, "Labels": 192, "Paper": 1198, "Storage": 4638, "Supplies": 132, "mainCategory": "Office Supplies" }, { "Accessories": 938, "Phones": 8372, "mainCategory": "Technology" }], [["Bookcases", "Chairs", "Labels", "Tables", "Storage", "Furnishings", "Art", "Phones", "Binders", "Appliances", "Paper", "Envelopes", "Accessories", "Fasteners", "Supplies"]], ["Category","Sub-category", "Sales"]]
 
 
         drawChart(data);

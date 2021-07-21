@@ -15,12 +15,14 @@ class ReportParamsModel: public QObject
     Q_OBJECT
 
     // Customize Report parameters
-    QVariantMap reportsMap;           // <<QString reportId, reportObj>>
-    QVariantMap reportsData;
-    QVariantMap dashboardReportInstances;
+    QMap<int, QVariantMap> reportsMap;           // <<int reportId, reportObj>>
+    QMap<int, QVariant> reportsData;
+    QMap<int, QVariant> dashboardReportInstances; // <[reportId: <reportObject>]>
+
+    int reportIdsCounter = 0;
 
     // Filter specific variables
-    QMap<QString, QMap<int, QVariantMap>> masterReportFilters;         // Report Id - Map of various report filters
+    QMap<int, QMap<int, QVariantMap>> masterReportFilters;         // Report Id - Map of various report filters
 
 
     QVector<int> categoricalFilters;                            // List of categorical filters
@@ -57,7 +59,7 @@ class ReportParamsModel: public QObject
     Q_PROPERTY(QString chartType READ chartType WRITE setChartType NOTIFY chartTypeChanged)
     Q_PROPERTY(QString chartTitle READ chartTitle WRITE setChartTitle NOTIFY chartTitleChanged)
     Q_PROPERTY(QString chartUrl READ chartUrl WRITE setChartUrl NOTIFY chartUrlChanged)
-    Q_PROPERTY(QString reportId READ reportId WRITE setReportId NOTIFY reportIdChanged)
+    Q_PROPERTY(int reportId READ reportId WRITE setReportId NOTIFY reportIdChanged)
     Q_PROPERTY(QString reportTitle READ reportTitle WRITE setReportTitle NOTIFY reportTitleChanged)
     Q_PROPERTY(QString xAxisColumns READ xAxisColumns WRITE setXAxisColumns NOTIFY xAxisColumnsChanged)
     Q_PROPERTY(QString yAxisColumns READ yAxisColumns WRITE setYAxisColumns NOTIFY yAxisColumnsChanged)
@@ -90,7 +92,7 @@ class ReportParamsModel: public QObject
 
     QString m_chartType;
     QString m_chartUrl;
-    QString m_reportId;
+    int m_reportId;
     QString m_reportTitle;
     QString m_xAxisColumns;
     QString m_yAxisColumns;
@@ -130,7 +132,7 @@ public:
     // Report Properties for generating graph
     QString chartType() const;
     QString chartUrl() const;
-    QString reportId() const;
+    int reportId() const;
     QString reportTitle() const;
     QString xAxisColumns() const;
     QString yAxisColumns() const;
@@ -149,22 +151,22 @@ public:
     QString mode() const;
     int filterModelIndex() const;
 
-    Q_INVOKABLE void addReport(QString reportId);
-    Q_INVOKABLE QVariant getReport(QString reportId);
-    Q_INVOKABLE QVariantMap getReportsList();
+    Q_INVOKABLE void addReport(int reportId);
+    Q_INVOKABLE QVariant getReport(int reportId);
+    Q_INVOKABLE QMap<int, QVariant> getReportsList();
 
     // Filter specific invokable functions
 
     Q_INVOKABLE void resetFilter();
-    Q_INVOKABLE void deleteReport(QString reportId, bool allReports = false);
+    Q_INVOKABLE void deleteReport(int reportId, bool allReports = false);
     Q_INVOKABLE void clearFilter();
-    Q_INVOKABLE void removeFilter(int filterId, QString reportId, QString filterType);
+    Q_INVOKABLE void removeFilter(int filterId, int reportId, QString filterType);
     Q_INVOKABLE void resetInputFields();
 
-    Q_INVOKABLE void addToMasterReportFilters(QString reportId);
-    Q_INVOKABLE void fetchMasterReportFilters(QString reportId);
-    Q_INVOKABLE void restoreMasterReportFilters(QString reportId);
-    Q_INVOKABLE void deleteMasterReportFilters(QString reportId, bool deleteAll = false);
+    Q_INVOKABLE void addToMasterReportFilters(int reportId);
+    Q_INVOKABLE void fetchMasterReportFilters(int reportId);
+    Q_INVOKABLE void restoreMasterReportFilters(int reportId);
+    Q_INVOKABLE void deleteMasterReportFilters(int reportId, bool deleteAll = false);
 
     Q_INVOKABLE void addToCategoricalFilters(int filterId);
     Q_INVOKABLE QVector<int> fetchCategoricalFilters();
@@ -235,10 +237,11 @@ public:
     Q_INVOKABLE void removeActualDateValues(int refObjId, bool removeAll = false);
     Q_INVOKABLE QStringList getActualDateValues(int refObjId);
     // Instances of dropped reports in dashboards
-    Q_INVOKABLE void addDashboardReportInstance(QVariant newReportInstance,QString reportId);
-    Q_INVOKABLE QVariant getDashboardReportInstance(QString reportId);
-    Q_INVOKABLE QVariant getAllDashboardReportInstances();
+    Q_INVOKABLE void addDashboardReportInstance(QVariant newReportInstance,int reportId);
+    Q_INVOKABLE QVariant getDashboardReportInstance(int reportId);
+    Q_INVOKABLE QMap<int, QVariant> getAllDashboardReportInstances();
 
+    Q_INVOKABLE int generateNewReportId();
 
     QString editReportToggle() const;
 
@@ -259,7 +262,7 @@ public slots:
     // Report Properties for generating graph
     void setChartType(QString chartType);
     void setChartUrl(QString chartUrl);
-    void setReportId(QString reportId);
+    void setReportId(int reportId);
     void setReportTitle(QString reportTitle);
     void setXAxisColumns(QString xAxisColumns);
     void setYAxisColumns(QString yAxisColumns);
@@ -297,7 +300,7 @@ signals:
     // Report Properties for generating graph
     void chartTypeChanged(QString chartType);
     void chartUrlChanged(QString chartUrl);
-    void reportIdChanged(QString reportId);
+    void reportIdChanged(int reportId);
     void reportTitleChanged(QString reportTitle);
     void xAxisColumnsChanged(QString xAxisColumns);
     void yAxisColumnsChanged(QString yAxisColumns);
@@ -307,7 +310,7 @@ signals:
 
     // For Filters
     void masterReportFiltersChanged(int count);
-    void reportFilterChanged(QMap<int, QVariantMap> reportFilters, QString reportId);
+    void reportFilterChanged(QMap<int, QVariantMap> reportFilters, int reportId);
     void resetInput();
     void internalCounterChanged(int internalCounter);
     void sectionChanged(QString section);
