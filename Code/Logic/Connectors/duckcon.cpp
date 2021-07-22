@@ -12,7 +12,7 @@ DuckCon::DuckCon(QObject *parent) : QObject(parent),
 
     // CSV
     connect(&threadCsv, &QThread::started, this, &DuckCon::convertedCsvPath, Qt::QueuedConnection);
-    connect(this, &DuckCon::signalProcessingFinished, this, &DuckCon::endCsvThread, Qt::QueuedConnection);
+    connect(this, &DuckCon::signalProcessingFinished, &threadCsv, &QThread::quit, Qt::QueuedConnection);
 
     // JSON
     connect(&threadJson, &QThread::started, &jsonToCsv, &JsonCon::convertJsonToCsv, Qt::QueuedConnection);
@@ -107,7 +107,14 @@ void DuckCon::convertedCsvPath()
         res.release();
     }
 
-    signalProcessingFinished();
+    emit csvLoginStatus(this->response, this->directLogin);
+
+
+    if(this->errorStatus == true){
+        emit importError("File format is not valid UTF-8. Please provide a valid UTF-8 file", this->fileType);
+    }
+
+    //    signalProcessingFinished();
 }
 
 void DuckCon::convertedJsonPaths(QString path)
@@ -194,8 +201,10 @@ void DuckCon::createTable(QString dbName, bool directLogin, QVariantMap response
             threadExcel.start(QThread::InheritPriority);
 
         } else{
-            moveToThread(&threadCsv);
-            threadCsv.start(QThread::InheritPriority);
+            //            moveToThread(&threadCsv);
+            //            threadCsv.start(QThread::InheritPriority);
+
+            convertedCsvPath();
         }
     }
 }
