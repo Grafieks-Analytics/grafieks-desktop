@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QThread>
 #include <QDebug>
+#include <QApplication>
 
 #include "chartsthread.h"
 
@@ -11,7 +12,9 @@ class ChartsModel : public QObject
 {
     Q_OBJECT
     ChartsThread *chartsThread;
+    QString threadName;
 
+    QThread chartsThreadThread;
     QThread threadBarChartValues;
     QThread threadStackedBarChartValues;
     QThread threadGroupedBarChartValues;
@@ -41,6 +44,7 @@ class ChartsModel : public QObject
 
 public:
     explicit ChartsModel(QObject *parent = nullptr, ChartsThread *chartsThread = nullptr);
+    ~ChartsModel();
 
     Q_INVOKABLE void getBarChartValues(QString xAxisColumn, QString yAxisColumn);
     Q_INVOKABLE void getStackedBarChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey);
@@ -67,6 +71,9 @@ public:
     Q_INVOKABLE void getPivotChartValues( QVariantList xAxisColumn, QVariantList yAxisColumn);
     Q_INVOKABLE void getStackedAreaChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey );
     Q_INVOKABLE void getMultiLineChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey );
+
+private:
+    void callThread();
 
 
 public slots:

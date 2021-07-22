@@ -57,14 +57,24 @@ Page {
 
     // This contains all the customizable config and is passed to drawChart function
     // In draw chart we take out these config; If config is empty => We have default config for it.
-    property var d3PropertyConfig: ({});
+    property var d3PropertyConfig: ({
+//            console.log(output)
+        });
 
-    property var lastPickedDataPaneElementProperties: ({});
-    property var reportDataPanes: ({});  // Report Data Panes Object
+    property var lastPickedDataPaneElementProperties: ({
+//            console.log(output)
+        });
+    property var reportDataPanes: ({
+//            console.log(output)
+        });  // Report Data Panes Object
 
-    property var dragActiveObject: ({});
+    property var dragActiveObject: ({
+//            console.log(output)
+        });
 
-    property var allChartsMapping: ({});
+    property var allChartsMapping: ({
+//            console.log(output)
+        });
     // An array having item type and name of the spilt by value
     // Colour By Data is filled 
     // 1. saved colour values -> CPP (Report Properties) 
@@ -179,28 +189,72 @@ Page {
             });
         }
 
-        function onSignalStackedBarChartValues(output){}
-        function onSignalGroupedBarChartValues(output){}
-        function onSignalNewGroupedBarChartValues(output){}
-        function onSignalAreaChartValues(output){}
-        function onSignalLineChartValues(output){}
-        function onSignalLineBarChartValues(output){}
-        function onSignalPieChartValues(output){}
-        function onSignalFunnelChartValues(output){}
-        function onSignalRadarChartValues(output){}
-        function onSignalScatterChartValues(output){}
-        function onSignalHeatMapChartValues(output){}
-        function onSignalSunburstChartValues(output){}
-        function onSignalWaterfallChartValues(output){}
-        function onSignalGaugeChartValues(output){}
-        function onSignalSankeyChartValues(output){}
-        function onSignalTreeChartValues(output){}
-        function onSignalTreeMapChartValues(output){}
-        function onSignalKPIChartValues(){}
-        function onSignalTableChartValues(output){}
-        function onSignalPivotChartValues(output){}
-        function onSignalStackedAreaChartValues(output){}
-        function onSignalMultiLineChartValues(output){}
+        function onSignalStackedBarChartValues(output){
+            console.log(output)
+        }
+        function onSignalGroupedBarChartValues(output){
+            console.log(output)
+        }
+        function onSignalNewGroupedBarChartValues(output){
+            console.log(output)
+        }
+        function onSignalAreaChartValues(output){
+            console.log(output)
+        }
+        function onSignalLineChartValues(output){
+            console.log(output)
+        }
+        function onSignalLineBarChartValues(output){
+            console.log(output)
+        }
+        function onSignalPieChartValues(output){
+            console.log(output)
+        }
+        function onSignalFunnelChartValues(output){
+            console.log(output)
+        }
+        function onSignalRadarChartValues(output){
+            console.log(output)
+        }
+        function onSignalScatterChartValues(output){
+            console.log(output)
+        }
+        function onSignalHeatMapChartValues(output){
+            console.log(output)
+        }
+        function onSignalSunburstChartValues(output){
+            console.log(output)
+        }
+        function onSignalWaterfallChartValues(output){
+            console.log(output)
+        }
+        function onSignalGaugeChartValues(output){
+            console.log(output)
+        }
+        function onSignalSankeyChartValues(output){
+            console.log(output)
+        }
+        function onSignalTreeChartValues(output){
+            console.log(output)
+        }
+        function onSignalTreeMapChartValues(output){
+            console.log(output)
+        }
+        function onSignalKPIChartValues(){
+            console.log(output)
+        }
+        function onSignalTableChartValues(output){
+            console.log(output)
+        }
+        function onSignalPivotChartValues(output){
+            console.log(output)
+        }
+        function onSignalStackedAreaChartValues(output){
+            console.log(output)
+        }
+        function onSignalMultiLineChartValues(output){
+            console.log(output)
+        }
     }
 
 
@@ -569,13 +623,23 @@ Page {
         dataItemList.clear();
 
         // Clear property Config
-        d3PropertyConfig = {};
+        d3PropertyConfig = {
+//            console.log(output)
+        };
 
         // Clear general params
-        lastPickedDataPaneElementProperties= {};
-        reportDataPanes= {};  // Report Data Panes Object
-        dragActiveObject= {};
-        allChartsMapping= {};
+        lastPickedDataPaneElementProperties= {
+//            console.log(output)
+        };
+        reportDataPanes= {
+//            console.log(output)
+        };  // Report Data Panes Object
+        dragActiveObject= {
+//            console.log(output)
+        };
+        allChartsMapping= {
+//            console.log(output)
+        };
         colorByData = [];
 
         // Calling this redraw will clear the chart because no x and y columns will be available
@@ -2075,7 +2139,9 @@ Page {
                 height: parent.height - (searchRectangle.height + dashboardNameRectangle.height + tabbarQuerymodeller.height)
                 width: parent.width
 
-                RightDataColumn{}
+                RightDataColumn{
+//            console.log(output)
+        }
 
             }
             // Data Pane Ends

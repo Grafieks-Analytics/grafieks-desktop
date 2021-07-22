@@ -3,16 +3,25 @@
 DuckCon::DuckCon(QObject *parent) : QObject(parent),
     db(nullptr), con(db)
 {
+    errorStatus = false;
+    fileType = "";
+
     // Excel
     connect(&threadExcel, &QThread::started, &excelToCsv, &ExcelCon::convertExcelToCsv, Qt::QueuedConnection);
     connect(&excelToCsv, &ExcelCon::convertedExcelPaths, this, &DuckCon::convertedExcelPaths, Qt::QueuedConnection);
 
     // CSV
-//    connect(&threadCsv, &QThread::started, this, &DuckCon::convertedCsvPath, Qt::QueuedConnection);
+    connect(&threadCsv, &QThread::started, this, &DuckCon::convertedCsvPath, Qt::QueuedConnection);
+    connect(this, &DuckCon::signalProcessingFinished, this, &DuckCon::endCsvThread, Qt::QueuedConnection);
 
     // JSON
     connect(&threadJson, &QThread::started, &jsonToCsv, &JsonCon::convertJsonToCsv, Qt::QueuedConnection);
     connect(&jsonToCsv, &JsonCon::convertedJsonPaths, this, &DuckCon::convertedJsonPaths, Qt::QueuedConnection);
+
+    // Common
+    connect(&threadExcel, &QThread::finished, this, &DuckCon::processingFinished, Qt::QueuedConnection);
+    connect(&threadCsv, &QThread::finished, this, &DuckCon::processingFinished, Qt::QueuedConnection);
+    connect(&threadJson, &QThread::finished, this, &DuckCon::processingFinished, Qt::QueuedConnection);
 }
 
 void DuckCon::dropTables()
@@ -32,7 +41,7 @@ void DuckCon::dropTables()
 void DuckCon::convertedExcelPaths(QStringList paths)
 {
     this->excelSheetsList = paths;
-
+    this->fileType = "excel";
 
     QString table = "";
     QString db = Statics::currentDbName;
@@ -40,7 +49,6 @@ void DuckCon::convertedExcelPaths(QStringList paths)
 
     QString fileName       = QFileInfo(db).baseName().toLower();
     std::string csvdb       = "";
-    bool errorStatus = false;
 
     QString fileExtension = QFileInfo(db).completeSuffix();
 
@@ -56,7 +64,8 @@ void DuckCon::convertedExcelPaths(QStringList paths)
 
 
         if(res->error.empty() == false){
-            errorStatus = true;
+            this->errorStatus = true;
+
             qWarning() << Q_FUNC_INFO << "Excel import issue" << res->error.c_str();
             break;
         } else{
@@ -66,18 +75,13 @@ void DuckCon::convertedExcelPaths(QStringList paths)
     }
 
     threadExcel.quit();
-
-    emit excelLoginStatus(this->response, this->directLogin);
-
-    if(errorStatus == true){
-        emit importError("File format is not valid UTF-8. Please provide a valid UTF-8 file", "excel");
-    }
-
 }
 
 void DuckCon::convertedCsvPath()
 {
-    bool errorStatus = false;
+    qDebug() << "PROJECT IGI";
+    this->fileType = "csv";
+
     QString table = "";
     QString db = Statics::currentDbName;
     std::string csvFile    = db.toStdString();
@@ -92,24 +96,24 @@ void DuckCon::convertedCsvPath()
 
     csvdb = "'" + csvFile + "'";
     Statics::currentDbName = fileName;
+    qDebug() << "PROJECT IGI1";
     std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
+    qDebug() << "PROJECT IGI2";
     if(res->error.empty() == false){
-        errorStatus = true;
+        this->errorStatus = true;
         qWarning() << Q_FUNC_INFO << "CSV import issue" << res->error.c_str();
     } else{
         this->tables.append(table);
         res.release();
     }
 
-    emit csvLoginStatus(this->response, this->directLogin);
-
-    if(errorStatus == true){
-        emit importError("File format is not valid UTF-8. Please provide a valid UTF-8 file", "csv");
-    }
+    signalProcessingFinished();
 }
 
 void DuckCon::convertedJsonPaths(QString path)
 {
+
+    this->fileType = "json";
 
     QString table = "";
     QString db = Statics::currentDbName;
@@ -128,20 +132,45 @@ void DuckCon::convertedJsonPaths(QString path)
     std::unique_ptr<duckdb::MaterializedQueryResult> res = con.Query("CREATE TABLE " + table.toStdString() + " AS SELECT * FROM read_csv_auto(" + csvdb + ", HEADER=TRUE)");
 
     if(res->error.empty() == false){
-        emit importError("Please select a valid JSON format and remove special characters from input file", "json");
+        this->errorStatus = true;
+
         qWarning() << Q_FUNC_INFO << "JSON import issue" << res->error.c_str();
     } else{
         this->tables.append(table);
         res.release();
     }
-
-    emit jsonLoginStatus(this->response, this->directLogin);
     threadJson.quit();
+}
+
+void DuckCon::endCsvThread()
+{
+    qDebug() << "PROJECT IGIO" << threadCsv.currentThread()<< QThread::currentThread();
+
+    threadCsv.terminate();
+    qDebug() << threadCsv.isRunning();
+}
+
+void DuckCon::processingFinished()
+{
+    qDebug() << "PROJECT IGO";
+    if(this->fileType == "json"){
+        emit jsonLoginStatus(this->response, this->directLogin);
+    } else if(this->fileType == "excel"){
+        emit excelLoginStatus(this->response, this->directLogin);
+    } else {
+        emit csvLoginStatus(this->response, this->directLogin);
+    }
+
+    if(this->errorStatus == true){
+        emit importError("File format is not valid UTF-8. Please provide a valid UTF-8 file", this->fileType);
+    }
 }
 
 
 
 void DuckCon::createTable(QString dbName, bool directLogin, QVariantMap response){
+
+    Q_UNUSED(dbName);
 
     this->directLogin = directLogin;
     this->response = response;
@@ -155,19 +184,18 @@ void DuckCon::createTable(QString dbName, bool directLogin, QVariantMap response
         if(fileExtension.toLower() == "json"){
 
             jsonToCsv.moveToThread(&threadJson);
-            threadJson.start();
+            threadJson.setObjectName("Grafieks Json Process");
+            threadJson.start(QThread::InheritPriority);
 
         } else if(fileExtension.toLower() == "xls" || fileExtension.toLower() == "xlsx"){
 
             excelToCsv.moveToThread(&threadExcel);
-            threadExcel.start();
+            threadExcel.setObjectName("Grafieks Excel Process");
+            threadExcel.start(QThread::InheritPriority);
 
         } else{
-//            moveToThread(&threadCsv);
-//            threadCsv.start();
-            convertedCsvPath();
+            moveToThread(&threadCsv);
+            threadCsv.start(QThread::InheritPriority);
         }
-
     }
-
 }
