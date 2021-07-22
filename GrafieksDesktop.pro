@@ -43,6 +43,7 @@ SOURCES += \
     Code/Logic/Connectors/dropboxds.cpp \
     Code/Logic/Connectors/dropboxmodel.cpp \
     Code/Logic/Connectors/duckcon.cpp \
+    Code/Logic/Connectors/duckthread.cpp \
     Code/Logic/Connectors/github.cpp \
     Code/Logic/Connectors/githubds.cpp \
     Code/Logic/Connectors/githubmodel.cpp \
@@ -143,6 +144,7 @@ HEADERS += \
     Code/Logic/Connectors/dropboxds.h \
     Code/Logic/Connectors/dropboxmodel.h \
     Code/Logic/Connectors/duckcon.h \
+    Code/Logic/Connectors/duckthread.h \
     Code/Logic/Connectors/github.h \
     Code/Logic/Connectors/githubds.h \
     Code/Logic/Connectors/githubmodel.h \
