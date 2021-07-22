@@ -7,6 +7,7 @@
 #include <QFileInfo>
 #include <QThread>
 
+#include "duckthread.h"
 #include "../../duckdb.hpp"
 #include "../../statics.h"
 #include "../../constants.h"
@@ -19,15 +20,15 @@ class DuckCon : public QObject
     ExcelCon excelToCsv;
     JsonCon jsonToCsv;
     QStringList tables;
+
     QThread threadExcel;
     QThread threadCsv;
     QThread threadJson;
+    QThread processThread;
+    QString threadName;
 
-    QStringList excelSheetsList;
     QVariantMap response;
     bool directLogin;
-    bool errorStatus;
-    QString fileType;
 
 
 
@@ -37,6 +38,10 @@ public:
 
     duckdb::DuckDB db;
     duckdb::Connection con;
+    DuckThread *duckThread;
+
+private:
+    void callThread();
 
 public slots:
     void createTable(QString dbName, bool directLogin, QVariantMap response);
@@ -46,8 +51,7 @@ public slots:
     void convertedCsvPath();
     void convertedJsonPaths(QString path);
 
-    void endCsvThread();
-    void processingFinished();
+    void processingFinished(QString fileType, bool errorStatus, QStringList tables );
 
 signals:
     void importError(QString errorString, QString fileType);
