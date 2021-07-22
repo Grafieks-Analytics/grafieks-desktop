@@ -26,6 +26,8 @@ class DuckCon : public QObject
     QStringList excelSheetsList;
     QVariantMap response;
     bool directLogin;
+    bool errorStatus;
+    QString fileType;
 
 
 
@@ -44,11 +46,15 @@ public slots:
     void convertedCsvPath();
     void convertedJsonPaths(QString path);
 
+    void endCsvThread();
+    void processingFinished();
+
 signals:
     void importError(QString errorString, QString fileType);
     void excelLoginStatus(QVariantMap response, bool directLogin);
     void csvLoginStatus(QVariantMap response, bool directLogin);
     void jsonLoginStatus(QVariantMap response, bool directLogin);
+    void signalProcessingFinished();
 
 };
 
