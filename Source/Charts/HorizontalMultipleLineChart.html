@@ -14,59 +14,14 @@
 
     <body>
         <!-- Create a div where the graph will take place -->
-        <div style="display: flex">
-            <div id="yAxisDiv"></div>
+        <div style="display: flex; flex-direction: column">
             <div id="my_dataviz"></div>
+            <div id="xAxisDiv"></div>
         </div>
         <div id="tooltip"></div>
 
         <script>
             var tooltipData = {};
-
-            var data = [
-                [
-                    ["2221", "Helen", "6129"],
-                    ["1903", "Dorothy", "3078"],
-                    ["1903", "Betty", "596"],
-                    ["1903", "Amanda", "247"],
-                    ["1998", "Betty", "194"],
-                    ["1999", "Ashley", "18132"],
-                    ["1999", "Jessica", "16346"],
-                    ["1999", "Amanda", "9741"],
-                    ["1999", "Patricia", "1532"],
-                    ["1999", "Linda", "898"],
-                    ["1999", "Helen", "841"],
-                    ["1999", "Deborah", "524"],
-                    ["1999", "Dorothy", "335"],
-                    ["1999", "Betty", "182"],
-                    ["2000", "Ashley", "17997"],
-                    ["2000", "Jessica", "15705"],
-                    ["2000", "Amanda", "8550"],
-                    ["2000", "Patricia", "1392"],
-                    ["2000", "Helen", "890"],
-                    ["2000", "Linda", "849"],
-                    ["2000", "Deborah", "545"],
-                    ["2000", "Dorothy", "312"],
-                    ["2000", "Betty", "174"],
-                ],
-                ["Labels"],
-            ];
-
-            var data = [
-                [
-                    ["Furniture", "Furniture", -3636],
-                    ["Furniture", "OfficeSupplies", 0],
-                    ["Furniture", "Technology", 0],
-                    ["OfficeSupplies", "Furniture", 0],
-                    ["OfficeSupplies", "OfficeSupplies", 2010],
-                    ["OfficeSupplies", "Technology", 0],
-                    ["Technology", "Furniture", 0],
-                    ["Technology", "OfficeSupplies", 0],
-                    ["Technology", "Technology", 1362],
-                ],
-                ["Furniture", "OfficeSupplies", "Technology"],
-                ["Category", "Profit"],
-            ];
 
             var data = [
                 [
@@ -248,6 +203,21 @@
                 ["Category", "Row_ID"],
             ];
 
+            // var data = [
+            //     [
+            //         ["Furniture", "Furniture", -3636],
+            //         ["Furniture", "OfficeSupplies", 0],
+            //         ["Furniture", "Technology", 0],
+            //         ["OfficeSupplies", "Furniture", 0],
+            //         ["OfficeSupplies", "OfficeSupplies", 2010],
+            //         ["OfficeSupplies", "Technology", 0],
+            //         ["Technology", "Furniture", 0],
+            //         ["Technology", "OfficeSupplies", 0],
+            //         ["Technology", "Technology", 1362],
+            //     ],
+            //     ["Furniture", "OfficeSupplies", "Technology"],
+            //     ["Category", "Profit"],
+            // ];
             // set the dimensions and margins of the graph
 
             var {
@@ -329,7 +299,7 @@
                     paddingInner = defaultD3Config.defaultPaddingInner,
                     chartType = defaultD3Config.chartType,
                     curveType = defaultLineCurve,
-                    standardThresholdWidth = defaultD3Config.standardThresholdWidth,
+                    standardThresholdHeight = defaultD3Config.standardThresholdHeight,
                 } = plottingConfiguration;
 
                 var dataValues = data[0];
@@ -347,10 +317,26 @@
                         window.innerHeight - margin.top - margin.bottom - 20;
 
                 if (chartType == constants.chartType.STANDARD) {
-                    width = dataValues.length * standardThresholdWidth;
+                    height = dataValues.length * 30;
+                    if (
+                        height + margin.top + margin.bottom <
+                        window.innerHeight
+                    ) {
+                        console.log(
+                            height + margin.top + margin.bottom,
+                            window.innerHeight
+                        );
+                        d3.select("#xAxisDiv").style(
+                            "top",
+                            height + margin.top + "px"
+                        );
+                    } else {
+                        d3.select("#xAxisDiv").style("bottom", 0);
+                    }
+                } else {
+                    d3.select("#xAxisDiv").style("bottom", 0);
+                    d3.select("#xAxisDiv").style("top", null);
                 }
-
-                console.log(width);
 
                 // append the svg object to the body of the page
                 svg = d3
@@ -372,18 +358,21 @@
                     })
                     .entries(dataValues);
 
-                var xAxisValues = dataValues.map((d) => d[0]);
-                console.log(xAxisValues);
+                // Change xAxisValues to yAxisValues
+                var yAxisValues = dataValues.map((d) => d[0]);
+                // Change done
+                console.log(yAxisValues);
 
-                // Add X axis --> it is a date format
-                x = d3.scaleBand().domain(xAxisValues).range([0, width]);
+                // Add Y axis --> it is a date format
 
-                svg.append("g")
-                    .attr("transform", "translate(0," + height + ")")
-                    .call(d3.axisBottom(x).ticks(5).tickSize(0));
+                // Change x to y
+                y = d3.scaleBand().domain(yAxisValues).range([0, height]);
+                // Change done
 
                 // Add Y axis
-                y = d3
+                // Change y to x
+                // remove nice
+                x = d3
                     .scaleLinear()
                     .domain([
                         0,
@@ -391,24 +380,43 @@
                             return +d[2];
                         }),
                     ])
-                    .range([height, 0])
+                    .range([0, width])
                     .nice();
+                svg.append("g").call(d3.axisLeft(y).tickSize(0));
+                // Change done
 
-                yAxisTicks = height / 70;
-                // svg.append("g").call(d3.axisLeft(y));
-                var yAxis = d3.axisLeft(y).tickSize(0).ticks(yAxisTicks);
-                d3.select("#yAxisDiv")
+                //add x and y axis
+                var xAxis = d3
+                    .axisBottom(x)
+                    .tickSize(0)
+                    .ticks(5)
+                    .tickFormat(d3.format(".1s"));
+
+                d3.select("#xAxisDiv")
                     .append("svg")
-                    .attr("width", "72")
-                    .attr("height", height + margin.top + margin.bottom)
+                    .attr("height", "72")
+                    .attr("width", width + margin.left + margin.right)
                     .append("g") //add group to leave margin for axis
                     .attr(
                         "transform",
-                        "translate(" + margin.left + "," + margin.top + ")"
+                        "translate(" + margin.left + ",0)"
+                        // "translate(0,0)"
                     )
+                    // .style(  ?  :, ? : )
                     .append("g")
-                    .attr("class", "y-axis")
-                    .call(yAxis);
+                    .attr("class", "x-axis")
+                    .call(xAxis);
+
+                // // change x to y
+                // svg.append("g")
+                //     .attr("transform", "translate(0," + height + ")")
+                //     .call(
+                //         d3
+                //             .axisBottom(x)
+                //             .ticks(width / 50)
+                //             .tickSize(0)
+                //     );
+                // Change done
 
                 // color palette
                 var res = sumstat.map(function (d) {
@@ -428,15 +436,18 @@
                     .attr("class", "line")
                     .attr("stroke-width", 1.5)
                     .attr("d", function (d) {
+                        // change x to y
+                        // change y to x
                         return d3
                             .line()
-                            .x(function (d) {
-                                return x(d[0]) + x.bandwidth() / 2;
-                            })
                             .y(function (d) {
-                                return y(+d[2]);
+                                return y(d[0]) + y.bandwidth() / 2;
+                            })
+                            .x(function (d) {
+                                return x(+d[2]);
                             })
                             .curve(d3[curveType])(d.values);
+                        // Changes done
                     });
 
                 var mouseG = svg
@@ -448,7 +459,8 @@
                     .attr("class", "mouse-line")
                     .style("stroke", "#999")
                     .style("stroke-width", "1px")
-                    .style("opacity", "0.5");
+                    .style("opacity", "1");
+                // .style("transform", "rotate(90deg)");
 
                 var lines = document.getElementsByClassName("line");
                 console.log({ lines });
@@ -513,21 +525,21 @@
 
                         var mouse = d3.mouse(this);
                         d3.select(".mouse-line").attr("d", function () {
-                            var d = "M" + mouse[0] + "," + height;
-                            d += " " + mouse[0] + "," + 0;
+                            var d = "M0 " + mouse[1] + "," + width;
+                            d += " " + mouse[1];
                             return d;
                         });
 
                         d3.selectAll(".mouse-per-line").attr(
                             "transform",
                             function (d, i) {
-                                var xValue = mouse[0];
+                                var yValue = mouse[1];
 
                                 bisect = d3.bisector(function (d) {
                                     return d.key;
                                 }).right;
 
-                                idx = bisect(d.values, xValue);
+                                idx = bisect(d.values, yValue);
 
                                 var beginning = 0,
                                     end = lines[i].getTotalLength(),
@@ -536,34 +548,31 @@
                                 while (true) {
                                     target = Math.floor((beginning + end) / 2);
                                     pos = lines[i].getPointAtLength(target);
+                                    console.log(pos);
                                     if (
                                         (target === end ||
                                             target === beginning) &&
-                                        pos.x !== mouse[0]
+                                        pos.y !== mouse[1]
                                     ) {
                                         break;
                                     }
-                                    if (pos.x > mouse[0]) end = target;
-                                    else if (pos.x < mouse[0])
+                                    if (pos.y > mouse[1]) end = target;
+                                    else if (pos.y < mouse[1])
                                         beginning = target;
                                     else break; //position found
                                 }
 
                                 tooltipData[d.key] = {
-                                    xAxis: xValue,
-                                    yAxis: pos.y,
-                                    yPos: mouse[1],
-                                    dataValue: y.invert(pos.y).toFixed(2),
+                                    xAxis: pos.x,
+                                    yAxis: yValue,
+                                    xPos: mouse[0],
+                                    dataValue: x.invert(pos.x).toFixed(2),
                                 };
 
                                 drawToolTip(color, mouse);
 
-                                // d3.select(this)
-                                //     .select("text")
-                                //     .text(y.invert(pos.y).toFixed(2));
-
                                 return (
-                                    "translate(" + mouse[0] + "," + pos.y + ")"
+                                    "translate(" + pos.x + "," + mouse[1] + ")"
                                 );
                             }
                         );
@@ -571,23 +580,21 @@
             }
 
             function drawToolTip(color, mouse) {
-                // return;
-
                 var tooltipDataText = "";
 
-                var i = 0;
                 for (var key in tooltipData) {
-                    if (i++ < 10) {
-                        tooltipDataText +=
-                            "<div style='display: flex'><div style='margin:  7px; width: 6px; height: 6px; border-radius: 100%; background-color:" +
-                            color(key) +
-                            "'></div>" +
-                            "<span>" +
-                            key +
-                            ": " +
-                            tooltipData[key].dataValue +
-                            "</span></div>";
+                    if (document.querySelectorAll("#tooltip div").length > 10) {
+                        continue;
                     }
+                    tooltipDataText +=
+                        "<div style='display: flex'><div style='margin:  7px; width: 6px; height: 6px; border-radius: 100%; background-color:" +
+                        color(key) +
+                        "'></div>" +
+                        "<span>" +
+                        key +
+                        ": " +
+                        tooltipData[key].dataValue +
+                        "</span></div>";
                 }
 
                 // console.log(d3.select("#tooltip").clientWidth);
