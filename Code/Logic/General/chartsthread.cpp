@@ -20,6 +20,57 @@ ChartsThread::~ChartsThread()
 {
 }
 
+void ChartsThread::methodSelector(QString functionName)
+{
+    if(functionName == "getBarChartValues"){
+       this->getBarChartValues();
+    } else if(functionName == "getStackedBarChartValues"){
+        this->getStackedBarChartValues();
+    } else if(functionName == "getGroupedBarChartValues"){
+        this->getGroupedBarChartValues();
+    } else if(functionName == "getNewGroupedBarChartValues"){
+        this->getNewGroupedBarChartValues();
+    } else if(functionName == "getAreaChartValues"){
+        this->getAreaChartValues();
+    } else if(functionName == "getLineChartValues"){
+        this->getLineChartValues();
+    } else if(functionName == "getLineBarChartValues"){
+        this->getLineBarChartValues();
+    } else if(functionName == "getPieChartValues"){
+        this->getPieChartValues();
+    } else if(functionName == "getFunnelChartValues"){
+        this->getFunnelChartValues();
+    } else if(functionName == "getRadarChartValues"){
+        this->getRadarChartValues();
+    } else if(functionName == "getScatterChartValues"){
+        this->getScatterChartValues();
+    } else if(functionName == "getHeatMapChartValues"){
+        this->getHeatMapChartValues();
+    } else if(functionName == "getSunburstChartValues"){
+        this->getSunburstChartValues();
+    } else if(functionName == "getWaterfallChartValues"){
+        this->getWaterfallChartValues();
+    } else if(functionName == "getGaugeChartValues"){
+        this->getGaugeChartValues();
+    } else if(functionName == "getSankeyChartValues"){
+        this->getSankeyChartValues();
+    } else if(functionName == "getTreeChartValues"){
+        this->getTreeChartValues();
+    } else if(functionName == "getTreeMapChartValues"){
+        this->getTreeMapChartValues();
+    } else if(functionName == "getKPIChartValues"){
+        this->getKPIChartValues();
+    } else if(functionName == "getTableChartValues"){
+        this->getTableChartValues();
+    } else if(functionName == "getPivotChartValues"){
+        this->getPivotChartValues();
+    } else if(functionName == "getStackedAreaChartValues"){
+        this->getStackedAreaChartValues();
+    } else if(functionName == "getMultiLineChartValues"){
+        this->getMultiLineChartValues();
+    } else {}
+}
+
 
 void ChartsThread::setAxes(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey)
 {
@@ -55,14 +106,16 @@ void ChartsThread::setSankeyDetails(QString &sourceColumn, QString &destinationC
 
 void ChartsThread::setGaugeKpiDetails(QString &calculateColumn)
 {
-//    this->calculateColumn->clear();
-
     this->calculateColumn = calculateColumn;
+}
+
+void ChartsThread::start()
+{
+    qDebug() << "Charts Thread";
 }
 
 void ChartsThread::getBarChartValues()
 {
-
     Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;

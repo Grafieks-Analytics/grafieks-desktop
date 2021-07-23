@@ -42,12 +42,15 @@ public:
     explicit ChartsThread(QObject *parent = nullptr);
     ~ChartsThread();
 
+    void methodSelector(QString functionName = "");
     void setAxes(QString &xAxisColumn, QString &yAxisColumn, QString &xSplitKey);
     void setLists(QVariantList &xAxisColumnList, QVariantList &yAxisColumnList);
     void setSankeyDetails(QString &sourceColumn, QString &destinationColumn, QString &measureColumn);
     void setGaugeKpiDetails(QString &calculateColumn);
 
 public slots:
+
+    void start();
 
     void getBarChartValues();
     void getStackedBarChartValues(); // getStackedBarAreaValues

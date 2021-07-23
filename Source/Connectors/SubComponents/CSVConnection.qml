@@ -14,6 +14,7 @@ import QtQuick.Dialogs 1.2
 
 import com.grafieks.singleton.constants 1.0
 
+import "../../MainSubComponents"
 
 
 Popup {
@@ -28,7 +29,15 @@ Popup {
     property int label_col : 135
 
     property var selectedFile: ""
+    property var startTime: 0
 
+    onClosed: {
+        mainTimer.stop()
+        mainTimer.running = false
+        busyindicator.running = false
+
+        displayTime.text = ""
+    }
 
     Connections{
         target: ConnectorsLoginModel
@@ -64,6 +73,27 @@ Popup {
                     msg_dialog.text = status.msg
                 }
             }
+
+            mainTimer.stop()
+            mainTimer.running = false
+            busyindicator.running = false
+            displayTime.text = ""
+        }
+    }
+
+    function handleCsv(csvFileName, separator){
+
+        if(csvFileName !== ""){
+            startTime = new Date().getTime().toString()
+            busyindicator.running = true
+            mainTimer.running = true
+            mainTimer.start()
+            displayTime.text = ""
+
+            ConnectorsLoginModel.csvLogin(csvFileName, true, separator)
+        } else {
+            msg_dialog.text = "No file selected"
+            msg_dialog.visible = true
         }
     }
 
@@ -198,8 +228,29 @@ Popup {
         anchors.top: row4.bottom
         anchors.topMargin: 15
         anchors.right: parent.right
-        anchors.rightMargin: label_col - 70
+        anchors.rightMargin: label_col
         spacing: 10
+
+        Text{
+            id: displayTime
+            anchors.right: busyindicator.left
+            anchors.rightMargin: 10
+
+            Timer {
+                id: mainTimer
+                interval: 1000;
+                running: false;
+                repeat: true
+                onTriggered: displayTime.text = Math.round((new Date().getTime() - startTime) / 1000) + " s"
+            }
+        }
+
+        BusyIndicatorTpl {
+            id: busyindicator
+            running: false
+            anchors.right: btn_cancel.left
+            anchors.rightMargin: 10
+        }
 
         Button{
             id: btn_cancel
@@ -219,7 +270,7 @@ Popup {
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
-            onClicked: ConnectorsLoginModel.csvLogin(selectedFile, true, separator.text)
+            onClicked: handleCsv(selectedFile, separator.text)
 
         }
     }
