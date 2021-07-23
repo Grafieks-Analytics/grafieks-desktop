@@ -57,14 +57,24 @@ Page {
 
     // This contains all the customizable config and is passed to drawChart function
     // In draw chart we take out these config; If config is empty => We have default config for it.
-    property var d3PropertyConfig: ({});
+    property var d3PropertyConfig: ({
+//            console.log(output)
+        });
 
-    property var lastPickedDataPaneElementProperties: ({});
-    property var reportDataPanes: ({});  // Report Data Panes Object
+    property var lastPickedDataPaneElementProperties: ({
+//            console.log(output)
+        });
+    property var reportDataPanes: ({
+//            console.log(output)
+        });  // Report Data Panes Object
 
-    property var dragActiveObject: ({});
+    property var dragActiveObject: ({
+//            console.log(output)
+        });
 
-    property var allChartsMapping: ({});
+    property var allChartsMapping: ({
+//            console.log(output)
+        });
     // An array having item type and name of the spilt by value
     // Colour By Data is filled 
     // 1. saved colour values -> CPP (Report Properties) 
@@ -626,13 +636,23 @@ Page {
         dataItemList.clear();
 
         // Clear property Config
-        d3PropertyConfig = {};
+        d3PropertyConfig = {
+//            console.log(output)
+        };
 
         // Clear general params
-        lastPickedDataPaneElementProperties= {};
-        reportDataPanes= {};  // Report Data Panes Object
-        dragActiveObject= {};
-        allChartsMapping= {};
+        lastPickedDataPaneElementProperties= {
+//            console.log(output)
+        };
+        reportDataPanes= {
+//            console.log(output)
+        };  // Report Data Panes Object
+        dragActiveObject= {
+//            console.log(output)
+        };
+        allChartsMapping= {
+//            console.log(output)
+        };
         colorByData = [];
 
         // Calling this redraw will clear the chart because no x and y columns will be available
@@ -2137,7 +2157,9 @@ Page {
                 height: parent.height - (searchRectangle.height + dashboardNameRectangle.height + tabbarQuerymodeller.height)
                 width: parent.width
 
-                RightDataColumn{}
+                RightDataColumn{
+//            console.log(output)
+        }
 
             }
             // Data Pane Ends
