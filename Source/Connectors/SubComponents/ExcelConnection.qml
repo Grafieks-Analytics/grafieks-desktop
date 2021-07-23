@@ -28,13 +28,21 @@ Popup {
     property int label_col : 135
 
     property var selectedFile: ""
+    property var startTime: 0
+
+    onClosed: {
+        mainTimer.stop()
+        mainTimer.running = false
+        busyindicator.running = false
+
+        displayTime.text = ""
+    }
 
     Connections{
         target: DuckCon
 
         function onExcelLoginStatus(status, directLogin){
 
-            console.log("STATSM", status, directLogin)
             if(directLogin === true){
                 if(status.status === true){
 
@@ -49,7 +57,10 @@ Popup {
                 }
             }
 
+            mainTimer.stop()
+            mainTimer.running = false
             busyindicator.running = false
+            displayTime.text = ""
         }
 
         function onImportError(errorString, fileType){
@@ -80,7 +91,10 @@ Popup {
                 }
             }
 
+            mainTimer.stop()
+            mainTimer.running = false
             busyindicator.running = false
+            displayTime.text = ""
         }
 
         function onLogout(){
@@ -92,13 +106,25 @@ Popup {
 
     Component.onCompleted: {
         busyindicator.running = false
+        mainTimer.running = false
+        displayTime.text = ""
     }
 
 
     function handleExcel(excelFileName){
 
-        busyindicator.running = true
-        ConnectorsLoginModel.excelLogin(excelFileName, true)
+        if(excelFileName !== ""){
+            startTime = new Date().getTime().toString()
+            busyindicator.running = true
+            mainTimer.running = true
+            mainTimer.start()
+            displayTime.text = ""
+
+            ConnectorsLoginModel.excelLogin(excelFileName, true)
+        } else {
+            msg_dialog.text = "No file selected"
+            msg_dialog.visible = true
+        }
     }
 
 
@@ -160,20 +186,20 @@ Popup {
 
 
 
-//        Rectangle{
+        //        Rectangle{
 
-//            id: label2
-//            width:label_col
-//            height: 40
+        //            id: label2
+        //            width:label_col
+        //            height: 40
 
-//            Text{
-//                text: "Excel"
-//                anchors.left: parent.left
-//                anchors.leftMargin:  10
-//                font.pixelSize: Constants.fontCategoryHeader
-//                anchors.verticalCenter: parent.verticalCenter
-//            }
-//        }
+        //            Text{
+        //                text: "Excel"
+        //                anchors.left: parent.left
+        //                anchors.leftMargin:  10
+        //                font.pixelSize: Constants.fontCategoryHeader
+        //                anchors.verticalCenter: parent.verticalCenter
+        //            }
+        //        }
 
         Rectangle{
 
@@ -182,14 +208,14 @@ Popup {
             height: 40
             y:40
 
-        Button{
-            id : file_btn
+            Button{
+                id : file_btn
 
-            anchors.left: parent.left
-            anchors.leftMargin:  10
-            text: "Select Excel file"
-            onClicked: promptExcel.open();
-        }
+                anchors.left: parent.left
+                anchors.leftMargin:  10
+                text: "Select Excel file"
+                onClicked: promptExcel.open();
+            }
         }
 
 
@@ -198,13 +224,13 @@ Popup {
             id: label4
             width:label_col
             height: 40
-        Text{
-            id: excelFileName
-            anchors.left: parent.left
-            anchors.leftMargin:  10
-            anchors.verticalCenter: parent.verticalCenter
-            text:""
-        }
+            Text{
+                id: excelFileName
+                anchors.left: parent.left
+                anchors.leftMargin:  10
+                anchors.verticalCenter: parent.verticalCenter
+                text:""
+            }
         }
 
     }
@@ -219,17 +245,31 @@ Popup {
     Row{
 
         id: row2
-//        anchors.top: row1.bottom
-//        anchors.topMargin: 15
+        //        anchors.top: row1.bottom
+        //        anchors.topMargin: 15
         anchors.right: parent.right
         anchors.rightMargin: label_col
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 70
         spacing: 10
 
+        Text{
+            id: displayTime
+            anchors.right: busyindicator.left
+            anchors.rightMargin: 10
+
+            Timer {
+                id: mainTimer
+                interval: 1000;
+                running: false;
+                repeat: true
+                onTriggered: displayTime.text = Math.round((new Date().getTime() - startTime) / 1000) + " s"
+            }
+        }
+
         BusyIndicatorTpl {
             id: busyindicator
-            running: true
+            running: false
             anchors.right: btn_cancel.left
             anchors.rightMargin: 10
         }
@@ -288,7 +328,9 @@ Popup {
         onRejected: {
             console.log("file rejected")
         }
+
     }
+
 
 
 }
