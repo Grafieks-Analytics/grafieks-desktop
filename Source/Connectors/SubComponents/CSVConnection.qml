@@ -241,7 +241,7 @@ Popup {
                 interval: 1000;
                 running: false;
                 repeat: true
-                onTriggered: displayTime.text = Math.ceil((new Date().getTime() - startTime) / 1000) + " s"
+                onTriggered: displayTime.text = Math.round((new Date().getTime() - startTime) / 1000) + " s"
             }
         }
 
