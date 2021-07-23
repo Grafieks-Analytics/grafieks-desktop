@@ -1167,15 +1167,8 @@
                     .getBBox().height;
 
                 if (chartType == constants.chartType.FIT_WIDTH) {
+                    removeAxisTicks("xAxis", dataValues);
                     for (var i = 0; i < a.length; i++) {
-                        if (!Math.floor(dataValues.length * 0.02)) {
-                            break;
-                        }
-                        if (i % Math.floor(dataValues.length * 0.015) != 0) {
-                            a[i].remove();
-                            continue;
-                        }
-
                         if (i == 0 && barWidth < textWidth * 0.5) {
                             a[i].setAttribute("dy", "1em");
                             continue;
@@ -1245,6 +1238,36 @@
                 if (extraHeightWorked && redrawn) {
                     extraHeightWorked = false;
                     redrawn = false;
+                }
+
+                if (chartType == constants.chartType.STANDARD) {
+                    setStandardTickWidths();
+                }
+
+                function setStandardTickWidths() {
+                    var a = document.querySelectorAll(".x-axis .tick text");
+
+                    for (var i = 0; i < a.length; i++) {
+                        var singleCharacterLength =
+                            a[i].getBBox().width / a[i].innerHTML.length;
+                        var numOfCharacters = Math.floor(
+                            barWidth / singleCharacterLength
+                        );
+
+                        var tick = a[i];
+
+                        var tickWidth = tick && tick.getBBox().width;
+                        if (tickWidth > barWidth) {
+                            console.log("Length is long", numOfCharacters);
+                            var tickValue = tick.innerHTML;
+                            tickValue =
+                                tickValue &&
+                                tickValue.substr(0, numOfCharacters - 3) +
+                                    "...";
+                            console.log(tickValue);
+                            tick.innerHTML = tickValue;
+                        }
+                    }
                 }
 
                 function setYaxisWidth() {
