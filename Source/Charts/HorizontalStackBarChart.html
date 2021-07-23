@@ -820,8 +820,8 @@
                 .attr("class", "x-axis")
                 .call(xAxis);
 
-            if (chartType == constants.chartType.FIT_HEIGHT) {
-                removeAxisTicks("yAxis");
+                  if (chartType == constants.chartType.FIT_HEIGHT) {
+                removeAxisTicks("yAxis",data[0][0]);
             }
 
             a = document.querySelectorAll(".y-axis text");
