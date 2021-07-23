@@ -194,7 +194,7 @@ void ChartsModel::getKPIChartValues(QString calculateColumn)
     this->callThread();
 
     chartsThread->setGaugeKpiDetails(calculateColumn);
-    chartsThread->methodSelector("getTreeMapChartValues");
+    chartsThread->methodSelector("getKPIChartValues");
 }
 
 void ChartsModel::getTableChartValues(QVariantList xAxisColumn, QVariantList yAxisColumn)
@@ -202,7 +202,7 @@ void ChartsModel::getTableChartValues(QVariantList xAxisColumn, QVariantList yAx
     this->callThread();
 
     chartsThread->setLists(xAxisColumn, yAxisColumn);
-    chartsThread->methodSelector("getTreeMapChartValues");
+    chartsThread->methodSelector("getTableChartValues");
 }
 
 void ChartsModel::getPivotChartValues(QVariantList xAxisColumn, QVariantList yAxisColumn)
@@ -210,7 +210,7 @@ void ChartsModel::getPivotChartValues(QVariantList xAxisColumn, QVariantList yAx
     this->callThread();
 
     chartsThread->setLists(xAxisColumn, yAxisColumn);
-    chartsThread->methodSelector("getTreeMapChartValues");
+    chartsThread->methodSelector("getPivotChartValues");
 }
 
 void ChartsModel::getStackedAreaChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
@@ -218,15 +218,16 @@ void ChartsModel::getStackedAreaChartValues(QString xAxisColumn, QString yAxisCo
     this->callThread();
 
     chartsThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
-    chartsThread->methodSelector("getTreeMapChartValues");
+    chartsThread->methodSelector("getStackedAreaChartValues");
 }
 
 void ChartsModel::getMultiLineChartValues(QString xAxisColumn, QString yAxisColumn, QString xSplitKey)
 {
     this->callThread();
 
+    qDebug() << "HERE";
     chartsThread->setAxes(xAxisColumn, yAxisColumn, xSplitKey);
-    chartsThread->methodSelector("getTreeMapChartValues");
+    chartsThread->methodSelector("getMultiLineChartValues");
 }
 
 void ChartsModel::callThread()
