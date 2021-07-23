@@ -40,7 +40,6 @@ public:
     QVariantMap ExcelOdbcInstance(const QString & driver, const QString & filepath);
     void closeConnection();
 
-//    QStringList convertExcelToCsv(QString &excelPath);
     ~ExcelCon();
 
 public slots:
