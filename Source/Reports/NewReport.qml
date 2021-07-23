@@ -1078,7 +1078,7 @@ Page {
                 break;
             case Constants.multiLineChartTitle:
                 console.log(Constants.multiLineChartTitle,"CLICKED");
-                ChartsModel.getStackedAreaChartValues(xAxisColumns[0],yAxisColumns[0],colorByColumnName);
+                ChartsModel.getMultiLineChartValues(xAxisColumns[0],yAxisColumns[0],colorByColumnName);
                 break;
             case Constants.horizontalLineChartTitle:
                 console.log(Constants.horizontalLineChartTitle,"CLICKED")

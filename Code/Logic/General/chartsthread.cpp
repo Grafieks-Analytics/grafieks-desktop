@@ -106,20 +106,16 @@ void ChartsThread::setSankeyDetails(QString &sourceColumn, QString &destinationC
 
 void ChartsThread::setGaugeKpiDetails(QString &calculateColumn)
 {
-//    this->calculateColumn->clear();
-
     this->calculateColumn = calculateColumn;
 }
 
 void ChartsThread::start()
 {
-    qDebug() << "START";
+    qDebug() << "Charts Thread";
 }
 
 void ChartsThread::getBarChartValues()
 {
-    qDebug()<< "thread m" <<this->thread();
-
     Q_ASSERT(!this->newChartHeader.empty());
 
     QJsonArray data;
@@ -180,7 +176,6 @@ void ChartsThread::getBarChartValues()
     doc.setArray(data);
 
     QString strData = doc.toJson();
-    qDebug() << "EMITTING BAR" << strData;
     emit signalBarChartValues(strData);
 }
 
