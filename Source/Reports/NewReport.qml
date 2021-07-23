@@ -181,79 +181,74 @@ Page {
         target: ChartsModel
 
         function onSignalBarChartValues(output){
-            dataValues = output
-            colorData = [JSON.parse(dataValues)[1][0]] || [];
-            colorData.forEach(function (element,index) {
-                dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
-                console.log("newreportcolor",Constants.d3ColorPalette[index % Constants.d3ColorPalette.length])
-            });
+            drawChartAfterReceivingSignal(output); 
         }
 
         function onSignalStackedBarChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalGroupedBarChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalNewGroupedBarChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalAreaChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalLineChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalLineBarChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalPieChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalFunnelChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalRadarChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalScatterChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalHeatMapChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalSunburstChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalWaterfallChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalGaugeChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalSankeyChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalTreeChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalTreeMapChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
-        function onSignalKPIChartValues(){
-            console.log(output)
+        function onSignalKPIChartValues(output){
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalTableChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalPivotChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalStackedAreaChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
         function onSignalMultiLineChartValues(output){
-            console.log(output)
+            drawChartAfterReceivingSignal(output); 
         }
     }
 
@@ -267,6 +262,24 @@ Page {
 
     /***********************************************************************************************************************/
     // JAVASCRIPT FUNCTION STARTS
+
+    function drawChartAfterReceivingSignal(dataValues){
+            console.log(dataValues);
+            colorData = [JSON.parse(dataValues)[1][0]] || [];
+            colorData.forEach(function (element,index) {
+                dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
+                console.log("newreportcolor",Constants.d3ColorPalette[index % Constants.d3ColorPalette.length])
+            });
+
+            var scriptValue = 'window.addEventListener("resize", function () {
+                   clearChart();
+                    drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
+           });';
+
+            clearChartValue();
+            var runScriptString = 'drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+'); '+scriptValue;
+            webEngineView.runJavaScript(runScriptString);        
+    }
 
     Component.onCompleted: {
 
@@ -1134,6 +1147,7 @@ Page {
                 return;
             }
 
+/*
             console.log('Webengine View Loading Status:',webEngineView.loading);
             console.log('Data Values:',JSON.stringify(dataValues));
             //            colorData = [];
@@ -1168,7 +1182,11 @@ Page {
 
             // Clear Chart Data
             // ReportsDataModel.clearData();
+
+            */
+
             return;
+
         }
 
         webEngineView.runJavaScript('clearChart()');
