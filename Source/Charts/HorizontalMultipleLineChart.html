@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+
+<head>
     <meta charset="utf-8" />
 
     <!-- Load d3.js -->
@@ -9,605 +11,994 @@
     <script src="./Data/d3.v4.min.js"></script>
     <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
     <link rel="stylesheet" href="Data/general.css" />
+    <style type="text/css">
+        body {
+            padding: 0;
+            margin: 0;
+        }
 
+        ::-webkit-scrollbar {
+            width: 15px;
+        }
+
+        #tooltip {
+            font-size: 14px;
+            font-family: Arial, Helvetica, sans-serif;
+            min-width: fit-content;
+            max-width: max-content;
+        }
+
+        #my_dataviz {
+            overflow-y: scroll;
+            margin-left: 40px;
+            height: calc(100vh - 71px);
+            /* background-color: red; */
+        }
+
+        #xAxisLabelId {
+            position: fixed;
+            bottom: 20px;
+            /* z-index: -1; */
+            height: 20px;
+            margin-left: 40px;
+            /* display: none; */
+            /* background-color: red; */
+        }
+
+        #xAxisDiv {
+            margin-left: 40px;
+            /* display: none; */
+        }
+
+        /* .y-axis text{
+                        max-width: 10px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    } */
+
+        #yAxisDiv {
+            width: 40px;
+        }
+
+        /* .bar--positive {
+                            fill: steelblue;
+                        }
+            
+                        .bar--negative {
+                            fill: darkorange;
+                        } */
+    </style>
+
+</head>
+<!-- Create a div where the graph will take place -->
+
+<body>
     <!-- Create a div where the graph will take place -->
-
-    <body>
-        <!-- Create a div where the graph will take place -->
-        <div style="display: flex; flex-direction: column">
-            <div id="my_dataviz"></div>
-            <div id="xAxisDiv"></div>
-        </div>
+    <div id="mainChartWindow" style="display: flex; flex-direction: column">
+        <div id="yAxisDiv"></div>
+        <div id="my_dataviz"></div>
+        <div id="xAxisDiv"></div>
         <div id="tooltip"></div>
+        <div id="xAxisLabelId" style="position: fixed"></div>
+    </div>
 
-        <script>
-            var tooltipData = {};
 
-            var data = [
-                [
-                    ["Henderson", "Furniture", 7],
-                    ["Henderson", "OfficeSupplies", 0],
-                    ["Henderson", "Technology", 0],
-                    ["LosAngeles", "Furniture", 684],
-                    ["LosAngeles", "OfficeSupplies", 818],
-                    ["LosAngeles", "Technology", 324],
-                    ["FortLauderdale", "Furniture", 8],
-                    ["FortLauderdale", "OfficeSupplies", 10],
-                    ["FortLauderdale", "Technology", 0],
-                    ["Concord", "Furniture", 0],
-                    ["Concord", "OfficeSupplies", 26],
-                    ["Concord", "Technology", 0],
-                    ["Seattle", "Furniture", 236],
-                    ["Seattle", "OfficeSupplies", 28],
-                    ["Seattle", "Technology", 0],
-                    ["FortWorth", "Furniture", 0],
-                    ["FortWorth", "OfficeSupplies", 62],
-                    ["FortWorth", "Technology", 0],
-                    ["Madison", "Furniture", 0],
-                    ["Madison", "OfficeSupplies", 34],
-                    ["Madison", "Technology", 0],
-                    ["WestJordan", "Furniture", 0],
-                    ["WestJordan", "OfficeSupplies", 36],
-                    ["WestJordan", "Technology", 0],
-                    ["SanFrancisco", "Furniture", 0],
-                    ["SanFrancisco", "OfficeSupplies", 606],
-                    ["SanFrancisco", "Technology", 40],
-                    ["Fremont", "Furniture", 0],
-                    ["Fremont", "OfficeSupplies", 90],
-                    ["Fremont", "Technology", 0],
-                    ["Philadelphia", "Furniture", 164],
-                    ["Philadelphia", "OfficeSupplies", 318],
-                    ["Philadelphia", "Technology", 0],
-                    ["Orem", "Furniture", 50],
-                    ["Orem", "OfficeSupplies", 0],
-                    ["Orem", "Technology", 0],
-                    ["Houston", "Furniture", 720],
-                    ["Houston", "OfficeSupplies", 632],
-                    ["Houston", "Technology", 82],
-                    ["Richardson", "Furniture", 74],
-                    ["Richardson", "OfficeSupplies", 0],
-                    ["Richardson", "Technology", 72],
-                    ["Naperville", "Furniture", 0],
-                    ["Naperville", "OfficeSupplies", 0],
-                    ["Naperville", "Technology", 84],
-                    ["Melbourne", "Furniture", 0],
-                    ["Melbourne", "OfficeSupplies", 88],
-                    ["Melbourne", "Technology", 0],
-                    ["Eagan", "Furniture", 0],
-                    ["Eagan", "OfficeSupplies", 92],
-                    ["Eagan", "Technology", 90],
-                    ["Westland", "Furniture", 0],
-                    ["Westland", "OfficeSupplies", 94],
-                    ["Westland", "Technology", 0],
-                    ["Dover", "Furniture", 0],
-                    ["Dover", "OfficeSupplies", 0],
-                    ["Dover", "Technology", 98],
-                    ["NewAlbany", "Furniture", 210],
-                    ["NewAlbany", "OfficeSupplies", 202],
-                    ["NewAlbany", "Technology", 0],
-                    ["NewYorkCity", "Furniture", 416],
-                    ["NewYorkCity", "OfficeSupplies", 250],
-                    ["NewYorkCity", "Technology", 110],
-                    ["Troy", "Furniture", 116],
-                    ["Troy", "OfficeSupplies", 590],
-                    ["Troy", "Technology", 0],
-                    ["Chicago", "Furniture", 134],
-                    ["Chicago", "OfficeSupplies", 574],
-                    ["Chicago", "Technology", 202],
-                    ["Gilbert", "Furniture", 0],
-                    ["Gilbert", "OfficeSupplies", 136],
-                    ["Gilbert", "Technology", 138],
-                    ["Springfield", "Furniture", 0],
-                    ["Springfield", "OfficeSupplies", 140],
-                    ["Springfield", "Technology", 0],
-                    ["Jackson", "Furniture", 0],
-                    ["Jackson", "OfficeSupplies", 144],
-                    ["Jackson", "Technology", 0],
-                    ["Memphis", "Furniture", 294],
-                    ["Memphis", "OfficeSupplies", 150],
-                    ["Memphis", "Technology", 0],
-                    ["Decatur", "Furniture", 0],
-                    ["Decatur", "OfficeSupplies", 322],
-                    ["Decatur", "Technology", 0],
-                    ["Durham", "Furniture", 0],
-                    ["Durham", "OfficeSupplies", 168],
-                    ["Durham", "Technology", 0],
-                    ["Columbia", "Furniture", 172],
-                    ["Columbia", "OfficeSupplies", 0],
-                    ["Columbia", "Technology", 0],
-                    ["Rochester", "Furniture", 0],
-                    ["Rochester", "OfficeSupplies", 382],
-                    ["Rochester", "Technology", 0],
-                    ["Minneapolis", "Furniture", 188],
-                    ["Minneapolis", "OfficeSupplies", 376],
-                    ["Minneapolis", "Technology", 0],
-                    ["Portland", "Furniture", 0],
-                    ["Portland", "OfficeSupplies", 192],
-                    ["Portland", "Technology", 0],
-                    ["SaintPaul", "Furniture", 0],
-                    ["SaintPaul", "OfficeSupplies", 198],
-                    ["SaintPaul", "Technology", 0],
-                    ["Aurora", "Furniture", 210],
-                    ["Aurora", "OfficeSupplies", 212],
-                    ["Aurora", "Technology", 208],
-                    ["Charlotte", "Furniture", 0],
-                    ["Charlotte", "OfficeSupplies", 218],
-                    ["Charlotte", "Technology", 430],
-                    ["Urbandale", "Furniture", 0],
-                    ["Urbandale", "OfficeSupplies", 450],
-                    ["Urbandale", "Technology", 0],
-                    ["Columbus", "Furniture", 0],
-                    ["Columbus", "OfficeSupplies", 1454],
-                    ["Columbus", "Technology", 262],
-                    ["Bristol", "Furniture", 0],
-                    ["Bristol", "OfficeSupplies", 238],
-                    ["Bristol", "Technology", 0],
-                    ["Wilmington", "Furniture", 240],
-                    ["Wilmington", "OfficeSupplies", 732],
-                    ["Wilmington", "Technology", 248],
-                    ["Bloomington", "Furniture", 252],
-                    ["Bloomington", "OfficeSupplies", 0],
-                    ["Bloomington", "Technology", 0],
-                    ["Phoenix", "Furniture", 0],
-                    ["Phoenix", "OfficeSupplies", 510],
-                    ["Phoenix", "Technology", 0],
-                    ["Roseville", "Furniture", 280],
-                    ["Roseville", "OfficeSupplies", 1638],
-                    ["Roseville", "Technology", 0],
-                ],
-                [
-                    "Henderson",
-                    "LosAngeles",
-                    "FortLauderdale",
-                    "Concord",
-                    "Seattle",
-                    "FortWorth",
-                    "Madison",
-                    "WestJordan",
-                    "SanFrancisco",
-                    "Fremont",
-                    "Philadelphia",
-                    "Orem",
-                    "Houston",
-                    "Richardson",
-                    "Naperville",
-                    "Melbourne",
-                    "Eagan",
-                    "Westland",
-                    "Dover",
-                    "NewAlbany",
-                    "NewYorkCity",
-                    "Troy",
-                    "Chicago",
-                    "Gilbert",
-                    "Springfield",
-                    "Jackson",
-                    "Memphis",
-                    "Decatur",
-                    "Durham",
-                    "Columbia",
-                    "Rochester",
-                    "Minneapolis",
-                    "Portland",
-                    "SaintPaul",
-                    "Aurora",
-                    "Charlotte",
-                    "Urbandale",
-                    "Columbus",
-                    "Bristol",
-                    "Wilmington",
-                    "Bloomington",
-                    "Phoenix",
-                    "Roseville",
-                ],
-                ["Category", "Row_ID"],
-            ];
 
-            // var data = [
-            //     [
-            //         ["Furniture", "Furniture", -3636],
-            //         ["Furniture", "OfficeSupplies", 0],
-            //         ["Furniture", "Technology", 0],
-            //         ["OfficeSupplies", "Furniture", 0],
-            //         ["OfficeSupplies", "OfficeSupplies", 2010],
-            //         ["OfficeSupplies", "Technology", 0],
-            //         ["Technology", "Furniture", 0],
-            //         ["Technology", "OfficeSupplies", 0],
-            //         ["Technology", "Technology", 1362],
-            //     ],
-            //     ["Furniture", "OfficeSupplies", "Technology"],
-            //     ["Category", "Profit"],
-            // ];
-            // set the dimensions and margins of the graph
+    <div id="legend"></div>
+    <script>
+        var tooltipData = {};
 
-            var {
-                initialCircleRadius,
-                initialBoxDimension,
-                onHoverCircleRadius,
-                onHoverBoxDimension,
-                defaultLineCurve,
-            } = defaultD3Config;
+        var data = [
+            [
+                ["Henderson", "Furniture", 7],
+                ["Henderson", "OfficeSupplies", 0],
+                ["Henderson", "Technology", 0],
+                ["LosAngeles", "Furniture", 684],
+                ["LosAngeles", "OfficeSupplies", 818],
+                ["LosAngeles", "Technology", 324],
+                ["FortLauderdale", "Furniture", 8],
+                ["FortLauderdale", "OfficeSupplies", 10],
+                ["FortLauderdale", "Technology", 0],
+                ["Concord", "Furniture", 0],
+                ["Concord", "OfficeSupplies", 26],
+                ["Concord", "Technology", 0],
+                ["Seattle", "Furniture", 236],
+                ["Seattle", "OfficeSupplies", 28],
+                ["Seattle", "Technology", 0],
+                ["FortWorth", "Furniture", 0],
+                ["FortWorth", "OfficeSupplies", 62],
+                ["FortWorth", "Technology", 0],
+                ["Madison", "Furniture", 0],
+                ["Madison", "OfficeSupplies", 34],
+                ["Madison", "Technology", 0],
+                ["WestJordan", "Furniture", 0],
+                ["WestJordan", "OfficeSupplies", 36],
+                ["WestJordan", "Technology", 0],
+                ["SanFrancisco", "Furniture", 0],
+                ["SanFrancisco", "OfficeSupplies", 606],
+                ["SanFrancisco", "Technology", 40],
+                ["Fremont", "Furniture", 0],
+                ["Fremont", "OfficeSupplies", 90],
+                ["Fremont", "Technology", 0],
+                ["Philadelphia", "Furniture", 164],
+                ["Philadelphia", "OfficeSupplies", 318],
+                ["Philadelphia", "Technology", 0],
+                ["Orem", "Furniture", 50],
+                ["Orem", "OfficeSupplies", 0],
+                ["Orem", "Technology", 0],
+                ["Houston", "Furniture", 720],
+                ["Houston", "OfficeSupplies", 632],
+                ["Houston", "Technology", 82],
+                ["Richardson", "Furniture", 74],
+                ["Richardson", "OfficeSupplies", 0],
+                ["Richardson", "Technology", 72],
+                ["Naperville", "Furniture", 0],
+                ["Naperville", "OfficeSupplies", 0],
+                ["Naperville", "Technology", 84],
+                ["Melbourne", "Furniture", 0],
+                ["Melbourne", "OfficeSupplies", 88],
+                ["Melbourne", "Technology", 0],
+                ["Eagan", "Furniture", 0],
+                ["Eagan", "OfficeSupplies", 92],
+                ["Eagan", "Technology", 90],
+                ["Westland", "Furniture", 0],
+                ["Westland", "OfficeSupplies", 94],
+                ["Westland", "Technology", 0],
+                ["Dover", "Furniture", 0],
+                ["Dover", "OfficeSupplies", 0],
+                ["Dover", "Technology", 98],
+                ["NewAlbany", "Furniture", 210],
+                ["NewAlbany", "OfficeSupplies", 202],
+                ["NewAlbany", "Technology", 0],
+                ["NewYorkCity", "Furniture", 416],
+                ["NewYorkCity", "OfficeSupplies", 250],
+                ["NewYorkCity", "Technology", 110],
+                ["Troy", "Furniture", 116],
+                ["Troy", "OfficeSupplies", 590],
+                ["Troy", "Technology", 0],
+                ["Chicago", "Furniture", 134],
+                ["Chicago", "OfficeSupplies", 574],
+                ["Chicago", "Technology", 202],
+                ["Gilbert", "Furniture", 0],
+                ["Gilbert", "OfficeSupplies", 136],
+                ["Gilbert", "Technology", 138],
+                ["Springfield", "Furniture", 0],
+                ["Springfield", "OfficeSupplies", 140],
+                ["Springfield", "Technology", 0],
+                ["Jackson", "Furniture", 0],
+                ["Jackson", "OfficeSupplies", 144],
+                ["Jackson", "Technology", 0],
+                ["Memphis", "Furniture", 294],
+                ["Memphis", "OfficeSupplies", 150],
+                ["Memphis", "Technology", 0],
+                ["Decatur", "Furniture", 0],
+                ["Decatur", "OfficeSupplies", 322],
+                ["Decatur", "Technology", 0],
+                ["Durham", "Furniture", 0],
+                ["Durham", "OfficeSupplies", 168],
+                ["Durham", "Technology", 0],
+                ["Columbia", "Furniture", 172],
+                ["Columbia", "OfficeSupplies", 0],
+                ["Columbia", "Technology", 0],
+                ["Rochester", "Furniture", 0],
+                ["Rochester", "OfficeSupplies", 382],
+                ["Rochester", "Technology", 0],
+                ["Minneapolis", "Furniture", 188],
+                ["Minneapolis", "OfficeSupplies", 376],
+                ["Minneapolis", "Technology", 0],
+                ["Portland", "Furniture", 0],
+                ["Portland", "OfficeSupplies", 192],
+                ["Portland", "Technology", 0],
+                ["SaintPaul", "Furniture", 0],
+                ["SaintPaul", "OfficeSupplies", 198],
+                ["SaintPaul", "Technology", 0],
+                ["Aurora", "Furniture", 210],
+                ["Aurora", "OfficeSupplies", 212],
+                ["Aurora", "Technology", 208],
+                ["Charlotte", "Furniture", 0],
+                ["Charlotte", "OfficeSupplies", 218],
+                ["Charlotte", "Technology", 430],
+                ["Urbandale", "Furniture", 0],
+                ["Urbandale", "OfficeSupplies", 450],
+                ["Urbandale", "Technology", 0],
+                ["Columbus", "Furniture", 0],
+                ["Columbus", "OfficeSupplies", 1454],
+                ["Columbus", "Technology", 262],
+                ["Bristol", "Furniture", 0],
+                ["Bristol", "OfficeSupplies", 238],
+                ["Bristol", "Technology", 0],
+                ["Wilmington", "Furniture", 240],
+                ["Wilmington", "OfficeSupplies", 732],
+                ["Wilmington", "Technology", 248],
+                ["Bloomington", "Furniture", 252],
+                ["Bloomington", "OfficeSupplies", 0],
+                ["Bloomington", "Technology", 0],
+                ["Phoenix", "Furniture", 0],
+                ["Phoenix", "OfficeSupplies", 510],
+                ["Phoenix", "Technology", 0],
+                ["Roseville", "Furniture", 280],
+                ["Roseville", "OfficeSupplies", 1638],
+                ["Roseville", "Technology", 0],
+            ],
+            [
+                "Henderson",
+                "LosAngeles",
+                "FortLauderdale",
+                "Concord",
+                "Seattle",
+                "FortWorth",
+                "Madison",
+                "WestJordan",
+                "SanFrancisco",
+                "Fremont",
+                "Philadelphia",
+                "Orem",
+                "Houston",
+                "Richardson",
+                "Naperville",
+                "Melbourne",
+                "Eagan",
+                "Westland",
+                "Dover",
+                "NewAlbany",
+                "NewYorkCity",
+                "Troy",
+                "Chicago",
+                "Gilbert",
+                "Springfield",
+                "Jackson",
+                "Memphis",
+                "Decatur",
+                "Durham",
+                "Columbia",
+                "Rochester",
+                "Minneapolis",
+                "Portland",
+                "SaintPaul",
+                "Aurora",
+                "Charlotte",
+                "Urbandale",
+                "Columbus",
+                "Bristol",
+                "Wilmington",
+                "Bloomington",
+                "Phoenix",
+                "Roseville",
+            ],
+            ["Category", "Row_ID"],
+        ];
 
-            function transformData(dataValue, dateFormat, dateFormat1) {
-                json = {};
-                var isKey1Date = false;
-                var isKey2Date = false;
+        // var data = [
+        //     [
+        //         ["Furniture", "Furniture", -3636],
+        //         ["Furniture", "OfficeSupplies", 0],
+        //         ["Furniture", "Technology", 0],
+        //         ["OfficeSupplies", "Furniture", 0],
+        //         ["OfficeSupplies", "OfficeSupplies", 2010],
+        //         ["OfficeSupplies", "Technology", 0],
+        //         ["Technology", "Furniture", 0],
+        //         ["Technology", "OfficeSupplies", 0],
+        //         ["Technology", "Technology", 1362],
+        //     ],
+        //     ["Furniture", "OfficeSupplies", "Technology"],
+        //     ["Category", "Profit"],
+        // ];
+        // set the dimensions and margins of the graph
 
-                if (isDateFormat(dataValue[0][1])) {
-                    isKey1Date = true;
-                }
-                if (isDateFormat(dataValue[0][0])) {
-                    isKey2Date = true;
-                }
+        var {
+            initialCircleRadius,
+            initialBoxDimension,
+            onHoverCircleRadius,
+            onHoverBoxDimension,
+            defaultLineCurve,
+        } = defaultD3Config;
 
-                var uniqueKey2 = [];
-                dataValue.forEach((d) => {
-                    if (isKey1Date) {
-                        var key = getDateFormattedData(d[1], dateFormat);
-                    } else {
-                        var key = d[1];
-                    }
+        function transformData(dataValue, dateFormat, dateFormat1) {
+            json = {};
+            var isKey1Date = false;
+            var isKey2Date = false;
 
-                    if (!json[key]) {
-                        json[key] = {};
-                    }
-                    if (isKey2Date) {
-                        var key2 = getDateFormattedData(d[0], dateFormat1);
-                    } else {
-                        var key2 = d[0];
-                    }
-                    if (!uniqueKey2.includes(key2)) {
-                        uniqueKey2.push(key2);
-                    }
-
-                    var value = d[2];
-
-                    if (!json[key][key2]) {
-                        json[key][key2] = 0;
-                    }
-
-                    json[key][key2] += +value;
-                });
-
-                var response = [];
-                var allKeys = uniqueKey2;
-
-                var sortedKeys = sortDates(json, dateFormat);
-                const response1 = sortedKeys.map((d) => {
-                    return { ...json[d], key: d };
-                });
-                console.log({ response1 });
-
-                for (var key in json) {
-                    if (Object.keys(json[key]).length < allKeys.length) {
-                        allKeys.forEach((d) => {
-                            if (!json[key][d]) {
-                                json[key][d] = 0;
-                            }
-                        });
-                    }
-                    response.push({ ...json[key], key });
-                }
-
-                return [response, allKeys, data[2]];
+            if (isDateFormat(dataValue[0][1])) {
+                isKey1Date = true;
+            }
+            if (isDateFormat(dataValue[0][0])) {
+                isKey2Date = true;
             }
 
-            function drawChart(data, plottingConfiguration = {}) {
-                let {
-                    dateFormat = defaultD3Config.dateFormat,
-                    d3colorPalette = defaultD3Config.d3ColorPalette,
-                    paddingInner = defaultD3Config.defaultPaddingInner,
-                    chartType = defaultD3Config.chartType,
-                    curveType = defaultLineCurve,
-                    standardThresholdHeight = defaultD3Config.standardThresholdHeight,
-                } = plottingConfiguration;
+            var uniqueKey2 = [];
+            dataValue.forEach((d) => {
+                if (isKey1Date) {
+                    var key = getDateFormattedData(d[1], dateFormat);
+                } else {
+                    var key = d[1];
+                }
 
-                var dataValues = data[0];
-                console.log(data);
-                // dataValues = transformData(data, dateFormat);
-                // console.log(dataValues);
-                // var [dataValues, all_keys, keys2] = dataValues;
+                if (!json[key]) {
+                    json[key] = {};
+                }
+                if (isKey2Date) {
+                    var key2 = getDateFormattedData(d[0], dateFormat1);
+                } else {
+                    var key2 = d[0];
+                }
+                if (!uniqueKey2.includes(key2)) {
+                    uniqueKey2.push(key2);
+                }
 
-                d3Colors = d3colorPalette;
+                var value = d[2];
 
-                d3.selectAll("#my_dataviz").html("");
-                var margin = { top: 30, right: 30, bottom: 70, left: 60 },
-                    width = window.innerWidth - margin.left - margin.right - 20,
-                    height =
-                        window.innerHeight - margin.top - margin.bottom - 20;
+                if (!json[key][key2]) {
+                    json[key][key2] = 0;
+                }
 
-                if (chartType == constants.chartType.STANDARD) {
-                    height = dataValues.length * 30;
-                    if (
-                        height + margin.top + margin.bottom <
+                json[key][key2] += +value;
+            });
+
+            var response = [];
+            var allKeys = uniqueKey2;
+
+            var sortedKeys = sortDates(json, dateFormat);
+            const response1 = sortedKeys.map((d) => {
+                return { ...json[d], key: d };
+            });
+            console.log({ response1 });
+
+            for (var key in json) {
+                if (Object.keys(json[key]).length < allKeys.length) {
+                    allKeys.forEach((d) => {
+                        if (!json[key][d]) {
+                            json[key][d] = 0;
+                        }
+                    });
+                }
+                response.push({ ...json[key], key });
+            }
+
+            return [response, allKeys, data[2]];
+        }
+
+        function drawChart(data, plottingConfiguration = {}) {
+            let {
+                dateFormat = defaultD3Config.dateFormat,
+                d3colorPalette = defaultD3Config.d3ColorPalette,
+                paddingInner = defaultD3Config.defaultPaddingInner,
+                chartType = defaultD3Config.chartType,
+                curveType = defaultLineCurve,
+               legendConfig = defaultD3Config.defaultLegendConfig,
+                labelConfig = defaultD3Config.defaultlabelConfig,
+                gridConfig = defaultD3Config.defaultGridConfig,
+                standardThresholdHeight = defaultD3Config.standardThresholdHeight,
+                // font size
+                xLabelfontSize = defaultD3Config.fontSize,
+                yLabelfontSize = defaultD3Config.fontSize,
+                xTickfontSize = defaultD3Config.fontSize,
+                yTickfontSize = defaultD3Config.fontSize,
+                // font family
+                xLabelfontFamily = defaultD3Config.fontFamily,
+                yLabelfontFamily = defaultD3Config.fontFamily,
+                xTickfontFamily = defaultD3Config.fontFamily,
+                yTickfontFamily = defaultD3Config.fontFamily,
+                // font color
+                xLabelfontColor = defaultD3Config.fontColor,
+                yLabelfontColor = defaultD3Config.fontColor,
+                xTickfontColor = defaultD3Config.fontColor,
+                yTickfontColor = defaultD3Config.fontColor,
+            } = plottingConfiguration;
+              window.xLabelfontSize = xLabelfontSize;
+            window.yLabelfontSize = yLabelfontSize;
+            window.xTickfontSize = xTickfontSize;
+            window.yTickfontSize = yTickfontSize;
+
+            window.xLabelfontFamily = xLabelfontFamily;
+            window.yLabelfontFamily = yLabelfontFamily;
+            window.xTickfontFamily = xTickfontFamily;
+            window.yTickfontFamily = yTickfontFamily;
+
+            window.xLabelfontColor = xLabelfontColor;
+            window.yLabelfontColor = yLabelfontColor;
+            window.xTickfontColor = xTickfontColor;
+            window.yTickfontColor = yTickfontColor;
+
+            d3.selectAll("#my_dataviz").html("");
+            d3.selectAll("#yAxisDiv").html("");
+
+            if (chartType != constants.chartType.STANDARD) {
+                chartType = constants.chartType.FIT_HEIGHT;
+            }
+            let { legendStatus, legendPosition } = legendConfig;
+            let { labelStatus } = labelConfig;
+            let { gridStatus } = gridConfig;
+
+            var dataValues = data[0];
+            console.log(data);
+            // dataValues = transformData(data, dateFormat);
+            // console.log(dataValues);
+            // var [dataValues, all_keys, keys2] = dataValues;
+
+            d3Colors = d3colorPalette;
+
+             // legends code starts
+            d3.select("#legend").html("").style("padding", "");
+            if (legendStatus) {
+                d3.select("#legend").html("");
+
+                d3.select("#legend")
+                    .append("p")
+                    .html("xAxisLabel" + "&nbsp;")
+                    .style("font-weight", "bold")
+                    .style("margin", "auto")
+                    .style("position", "sticky");
+
+                d3.select("#legend")
+                    .selectAll("div")
+                    .data([data[1][0]])
+                    .enter()
+                    .append("div")
+                    .html((d, i) => {
+                        return (
+                            '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
+                            d3Colors[i % data[1][1].length] +
+                            ';">  </div>' +
+                            "<span style='margin-left: 5px; max-width: 160px'>" +
+                            d +
+                            "</span>"
+                        );
+                    })
+                    .style("display", "flex")
+                    .style("padding", "2px");
+            }
+
+            d3.selectAll("#my_dataviz").style(
+                "height",
+                "calc(100vh - 71px)"
+            );
+
+            // legends code ends
+                const yAxisWidth =
+                document.querySelector("#yAxisDiv").clientWidth;
+
+            // debugger;
+            width = width - yAxisWidth;
+
+            // d3.select("#xAxisLabelId").style("bottom", 50);
+
+            // legends height ,width elements
+            var legendElement = document.querySelector("#legend");
+            var legendHeight = legendElement.offsetHeight;
+            var legendWidth = legendElement.offsetWidth;
+
+            // const yAxisWidth =
+            //     document.querySelector("#yAxisDiv").clientWidth;
+
+            d3.select("#legend").attr("style", null);
+            d3.select("#mainChartWindow").attr("style", null);
+                        d3.selectAll("#my_dataviz").html("");
+            var margin = { top: 30, right: 30, bottom: 70, left: 60 },
+                width = window.innerWidth - margin.left - margin.right - 70,
+                height =
+                    window.innerHeight - margin.top - margin.bottom - 20;
+
+            // legends code starts
+            if (legendStatus) {
+                if (
+                    legendHeight <
+                    document.querySelector("html").offsetHeight
+                ) {
+                    topPosition = "calc(50vh - " + legendHeight / 2 + "px)";
+                } else {
+                    topPosition = 0;
+                }
+
+                rightPosition = "calc(50vw - " + legendWidth / 2 + "px)";
+
+                //  var widthOld = (document.querySelector("#my_dataviz").clientWidth) ;
+                var widthOld =
+                    document.querySelector("html").clientWidth - 40;
+                var heightOld = document.querySelector("html").clientHeight;
+
+                // legendElement.style.padding = "10px";
+                legendElement.style.border = "1px solid black";
+
+                switch (legendPosition) {
+                    case "left":
+                        // clearStyle();
+                        d3.select("#legend")
+                            .attr("style", null)
+                            .style("top", topPosition)
+                            .style("right", "auto")
+                            // .style("bottom", "auto")
+                            .style("left", "0px")
+                            // .style("right", "5px")
+                            .style("display", "block")
+                            .style("max-height", "100vh")
+                            .style("overflow-x", "scroll")
+                            .style("border", "none")
+                            .style("position", "fixed");
+                        d3.selectAll("#legend div span")
+                            .style("max-width", "160px")
+                            .style("white-space", "nowrap")
+                            .style("overflow", "hidden")
+                            .style("text-overflow", "ellipsis");
+
+                        var legendWidth = legendElement.offsetWidth;
+                        // margin.left += 100;
+                        width += 40;
+                        // d3.select("#my_dataviz svg").attr("width", width + margin.left + margin.right);
+
+                        d3.select("#mainChartWindow").attr("style", null);
+
+                        d3.select("#mainChartWindow").style(
+                            "width",
+                            widthOld - legendWidth + yAxisWidth+"px"
+                        );
+                        d3.select("#mainChartWindow").style(
+                            "margin-left",
+                            legendWidth+"px"
+                        );
+                        break;
+                    case "top":
+                        // clearStyle();
+                        d3.select("#mainChartWindow").attr("style", null);
+                        // margin.top -= 50;
+                        // height -= 50;
+                        d3.select("#legend")
+                            .attr("style", null)
+                            .style("top", "10px")
+                            .style("right", rightPosition)
+                            .style("bottom", "auto")
+                            .style("left", "auto")
+                            .style("display", "flex")
+                            .style("max-width", "99vw")
+                            .style("overflow-x", "scroll")
+                            .style("border", "none");
+                        d3.selectAll("#legend div span")
+                            .style("max-width", "160px")
+                            .style("white-space", "nowrap")
+                            .style("overflow", "hidden")
+                            .style("text-overflow", "ellipsis");
+
+                        // d3.selectAll("#legend div").style(
+                        //     "padding",
+                        //     "2px 4px"
+                        // );
+                        d3.selectAll("#my_dataviz").style("margin-top", 50+"px");
+
+                        d3.selectAll("#my_dataviz").style(
+                            "height",
+                            "calc(100vh - 122px)"
+                        );
+                        // debugger;
+                        d3.selectAll("#xAxisDiv").style("bottom", "0");
+                        break;
+                    case "bottom":
+                        // clearStyle();
+                        height -= 50; // use legend client height
+                        bottomHeight += 50;
+                        // margin.bottom += 10;
+                        var legendWidth = legendElement.offsetWidth;
+
+                        d3.select("#xAxisLabelId").style("bottom", 50);
+                        d3.select("#mainChartWindow").attr("style", null);
+
+                        // d3.select("#mainChartWindow").style("width", width);
+                        //  d3.select("#mainChartWindow").style("height",heightOld-80 );
+                        d3.select("#mainChartWindow").style(
+                            "margin-left",
+                            0
+                        );
+                        d3.select("#legend")
+                            .attr("style", null)
+                            .style("top", "auto")
+                            .style("right", rightPosition)
+                            .style("bottom", "0px")
+                            // .style("left", margin.left + "px")
+                            .style("display", "flex")
+                            .style("max-width", "99vw")
+                            .style("overflow-x", "scroll")
+                            .style("border", "none");
+
+                        d3.selectAll("#legend div span")
+                            .style("max-width", "160px")
+                            .style("white-space", "nowrap")
+                            .style("overflow", "hidden")
+                            .style("text-overflow", "ellipsis");
+
+                        // d3.selectAll("#my_dataviz").style(
+                        //     "margin-bottom",
+                        //     50
+                        // );
+                        // d3.selectAll("#my_dataviz").style(
+                        //     "margin-bottom",
+                        //     180
+                        // );
+                        // d3.selectAll("#my_dataviz").style(
+                        //     "height",
+                        //     "calc(100vh - 122px)"
+                        // );
+                        d3.selectAll("#xAxisDiv").style("bottom", "50");
+                        // d3.selectAll("#xAxisLabelId").style(
+                        //     "bottom",
+                        //     "50"
+                        // );
+
+                        break;
+                    // For Right Legened
+                    case "right":
+                    default:
+                        // debugger;
+                        // clearStyle();
+                        var legendWidth = legendElement.offsetWidth;
+                        // width -= legendWidth;
+                        width += 20;
+                        // d3.select("#my_dataviz").style("width", width + margin.left + margin.right);
+
+                        d3.select("#legend")
+                            .attr("style", null)
+                            .style("right", "5px")
+                            .style("left", "auto")
+                            .style("position", "fixed")
+                            .style("top", topPosition)
+                            .style("max-height", "100vh")
+                            .style("overflow-x", "scroll")
+                            .style("border", "none")
+                            .style("bottom", "auto")
+                            .style("display", "block");
+                        d3.selectAll("#legend div span")
+                            .style("max-width", "160px")
+                            .style("white-space", "nowrap")
+                            .style("overflow", "hidden")
+                            .style("text-overflow", "ellipsis");
+
+                        d3.select("#mainChartWindow").attr("style", null);
+                        d3.select("#mainChartWindow").style(
+                            "width",
+                            widthOld + yAxisWidth - legendWidth - 20+"px"
+                        );
+                        // d3.select("#my_dataviz svg" ).style(
+                        //     "width",
+                        //    widthOld+yAxisWidth-legendWidth-20+"px"
+                        // );
+
+                        d3.select("#mainChartWindow").style(
+                            "margin-left",
+                            0
+                        );
+                }
+            }
+
+            if (legendPosition == "left" || legendPosition == "right") {
+                var legendWidth = legendElement.offsetWidth;
+                width -= legendWidth + 30;
+            }
+            // .;
+
+            // legends code ends
+
+
+
+
+            if (chartType == constants.chartType.STANDARD) {
+                height = dataValues.length * 30;
+                if (
+                    height + margin.top + margin.bottom <
+                    window.innerHeight
+                ) {
+                    console.log(
+                        height + margin.top + margin.bottom,
                         window.innerHeight
-                    ) {
-                        console.log(
-                            height + margin.top + margin.bottom,
-                            window.innerHeight
-                        );
-                        d3.select("#xAxisDiv").style(
-                            "top",
-                            height + margin.top + "px"
-                        );
-                    } else {
-                        d3.select("#xAxisDiv").style("bottom", 0);
-                    }
+                    );
+                    d3.select("#xAxisDiv").style(
+                        "top",
+                        height + margin.top + "px"
+                    );
                 } else {
                     d3.select("#xAxisDiv").style("bottom", 0);
-                    d3.select("#xAxisDiv").style("top", null);
                 }
+            } else {
+                d3.select("#xAxisDiv").style("bottom", 0);
+                d3.select("#xAxisDiv").style("top", null);
+            }
 
-                // append the svg object to the body of the page
-                svg = d3
-                    .select("#my_dataviz")
+            // append the svg object to the body of the page
+            svg = d3
+                .select("#my_dataviz")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height )
+                .append("g")
+                .attr(
+                    "transform",
+                    "translate(" + margin.left + "," + margin.top + ")"
+                );
+
+            // group the data: I want to draw one line per group
+            sumstat = d3
+                .nest() // nest function allows to group the calculation per level of a factor
+                .key(function (d) {
+                    return d[1];
+                })
+                .entries(dataValues);
+
+            // Change xAxisValues to yAxisValues
+            var yAxisValues = dataValues.map((d) => d[0]);
+            // Change done
+            console.log(yAxisValues);
+
+            // Add Y axis --> it is a date format
+
+            // Change x to y
+            y = d3.scaleBand().domain(yAxisValues).range([0, height]);
+            // Change done
+
+            // Add Y axis
+            // Change y to x
+            // remove nice
+            x = d3
+                .scaleLinear()
+                .domain([
+                    0,
+                    d3.max(dataValues, function (d) {
+                        return +d[2];
+                    }),
+                ])
+                .range([0, width])
+                .nice();
+            svg.append("g").call(d3.axisLeft(y).tickSize(0));
+            // Change done
+
+            //add x and y axis
+            var xAxis = d3
+                .axisBottom(x)
+                .tickSize(0)
+                .ticks(5)
+                .tickFormat(d3.format(".1s"));
+
+            d3.select("#xAxisDiv")
+                .append("svg")
+                .attr("height", "72")
+                .attr("width", width + margin.left + margin.right)
+                .append("g") //add group to leave margin for axis
+                .attr(
+                    "transform",
+                    "translate(" + margin.left + ",0)"
+                    // "translate(0,0)"
+                )
+                // .style(  ?  :, ? : )
+                .append("g")
+                .attr("class", "x-axis")
+                .call(xAxis);
+
+            // // change x to y
+            // svg.append("g")
+            //     .attr("transform", "translate(0," + height + ")")
+            //     .call(
+            //         d3
+            //             .axisBottom(x)
+            //             .ticks(width / 50)
+            //             .tickSize(0)
+            //     );
+            // Change done
+
+            // color palette
+            var res = sumstat.map(function (d) {
+                return d.key;
+            }); // list of group names
+            var color = d3.scaleOrdinal().domain(res).range(d3Colors);
+            d3.selectAll("#yAxisDiv")
+                .append("svg")
+                .attr("width", 40)
+                .attr("height", window.innerHeight)
+                .append("g")
+                .attr(
+                    "transform",
+                    "translate(" +
+                    margin.left +
+                    "," +
+                    (margin.top + 10) +
+                    ")"
+                );
+             setLabel("xAxisLabel", "y_label", d3.select("svg"), false);
+            setLabel(
+                "yAxisLabel",
+                "x_label",
+                d3
+                    .select("#xAxisLabelId")
                     .append("svg")
-                    .attr("width", width + margin.left + margin.right)
-                    .attr("height", height + margin.top + margin.bottom)
-                    .append("g")
-                    .attr(
-                        "transform",
-                        "translate(" + margin.left + "," + margin.top + ")"
+                    .attr("width", window.innerWidth, "height", 150),
+                50
+            );
+            
+            // Draw the line
+            svg.selectAll(".line")
+                .data(sumstat)
+                .enter()
+                .append("path")
+                .attr("fill", "none")
+                .attr("stroke", function (d) {
+                    return color(d.key);
+                })
+                .attr("class", "line")
+                .attr("stroke-width", 1.5)
+                .attr("d", function (d) {
+                    // change x to y
+                    // change y to x
+                    return d3
+                        .line()
+                        .y(function (d) {
+                            return y(d[0]) + y.bandwidth() / 2;
+                        })
+                        .x(function (d) {
+                            return x(+d[2]);
+                        })
+                        .curve(d3[curveType])(d.values);
+                    // Changes done
+                });
+
+            var mouseG = svg
+                .append("g")
+                .attr("class", "mouse-over-effects");
+
+            mouseG
+                .append("path") // this is the black vertical line to follow mouse
+                .attr("class", "mouse-line")
+                .style("stroke", "#999")
+                .style("stroke-width", "1px")
+                .style("opacity", "1");
+            // .style("transform", "rotate(90deg)");
+
+            var lines = document.getElementsByClassName("line");
+            console.log({ lines });
+
+            var mousePerLine = mouseG
+                .selectAll(".mouse-per-line")
+                .data(sumstat)
+                .enter()
+                .append("g")
+                .attr("class", "mouse-per-line");
+
+            mousePerLine
+                .append("circle")
+                .attr("r", 3)
+                .style("stroke", function (d) {
+                    return color(d.key);
+                })
+                .style("fill", function (d) {
+                    return color(d.key);
+                })
+                .style("stroke-width", "1px")
+                .style("opacity", "0");
+
+            mousePerLine
+                .append("text")
+                .attr("transform", "translate(10,3)");
+
+            mouseG
+                .append("svg:rect") // append a rect to catch mouse movements on canvas
+                .attr("width", width) // can't catch mouse events on a g element
+                .attr("height", height)
+                .attr("fill", "none")
+                .attr("pointer-events", "all")
+                .on("mouseout", function () {
+                    d3.select(".mouse-line").style("opacity", "0");
+                    d3.selectAll(".mouse-per-line circle").style(
+                        "opacity",
+                        "0"
                     );
+                    d3.selectAll(".mouse-per-line text").style(
+                        "opacity",
+                        "0"
+                    );
+                    d3.select("#tooltip")
+                        .style("display", "none")
+                        .style("opacity", "0");
+                })
+                .on("mouseover", function () {
+                    // on mouse in show line, circles and text
+                    d3.select(".mouse-line").style("opacity", "1");
+                    d3.selectAll(".mouse-per-line circle").style(
+                        "opacity",
+                        "1"
+                    );
+                    d3.selectAll(".mouse-per-line text").style(
+                        "opacity",
+                        "1"
+                    );
+                })
+                .on("mousemove", function () {
+                    // mouse moving over canvas
 
-                // group the data: I want to draw one line per group
-                sumstat = d3
-                    .nest() // nest function allows to group the calculation per level of a factor
-                    .key(function (d) {
-                        return d[1];
-                    })
-                    .entries(dataValues);
+                    var mouse = d3.mouse(this);
+                    d3.select(".mouse-line").attr("d", function () {
+                        var d = "M0 " + mouse[1] + "," + width;
+                        d += " " + mouse[1];
+                        return d;
+                    });
 
-                // Change xAxisValues to yAxisValues
-                var yAxisValues = dataValues.map((d) => d[0]);
-                // Change done
-                console.log(yAxisValues);
-
-                // Add Y axis --> it is a date format
-
-                // Change x to y
-                y = d3.scaleBand().domain(yAxisValues).range([0, height]);
-                // Change done
-
-                // Add Y axis
-                // Change y to x
-                // remove nice
-                x = d3
-                    .scaleLinear()
-                    .domain([
-                        0,
-                        d3.max(dataValues, function (d) {
-                            return +d[2];
-                        }),
-                    ])
-                    .range([0, width])
-                    .nice();
-                svg.append("g").call(d3.axisLeft(y).tickSize(0));
-                // Change done
-
-                //add x and y axis
-                var xAxis = d3
-                    .axisBottom(x)
-                    .tickSize(0)
-                    .ticks(5)
-                    .tickFormat(d3.format(".1s"));
-
-                d3.select("#xAxisDiv")
-                    .append("svg")
-                    .attr("height", "72")
-                    .attr("width", width + margin.left + margin.right)
-                    .append("g") //add group to leave margin for axis
-                    .attr(
+                    d3.selectAll(".mouse-per-line").attr(
                         "transform",
-                        "translate(" + margin.left + ",0)"
-                        // "translate(0,0)"
-                    )
-                    // .style(  ?  :, ? : )
-                    .append("g")
-                    .attr("class", "x-axis")
-                    .call(xAxis);
+                        function (d, i) {
+                            var yValue = mouse[1];
 
-                // // change x to y
-                // svg.append("g")
-                //     .attr("transform", "translate(0," + height + ")")
-                //     .call(
-                //         d3
-                //             .axisBottom(x)
-                //             .ticks(width / 50)
-                //             .tickSize(0)
-                //     );
-                // Change done
+                            bisect = d3.bisector(function (d) {
+                                return d.key;
+                            }).right;
 
-                // color palette
-                var res = sumstat.map(function (d) {
-                    return d.key;
-                }); // list of group names
-                var color = d3.scaleOrdinal().domain(res).range(d3Colors);
+                            idx = bisect(d.values, yValue);
 
-                // Draw the line
-                svg.selectAll(".line")
-                    .data(sumstat)
-                    .enter()
-                    .append("path")
-                    .attr("fill", "none")
-                    .attr("stroke", function (d) {
-                        return color(d.key);
-                    })
-                    .attr("class", "line")
-                    .attr("stroke-width", 1.5)
-                    .attr("d", function (d) {
-                        // change x to y
-                        // change y to x
-                        return d3
-                            .line()
-                            .y(function (d) {
-                                return y(d[0]) + y.bandwidth() / 2;
-                            })
-                            .x(function (d) {
-                                return x(+d[2]);
-                            })
-                            .curve(d3[curveType])(d.values);
-                        // Changes done
-                    });
+                            var beginning = 0,
+                                end = lines[i].getTotalLength(),
+                                target = null;
 
-                var mouseG = svg
-                    .append("g")
-                    .attr("class", "mouse-over-effects");
-
-                mouseG
-                    .append("path") // this is the black vertical line to follow mouse
-                    .attr("class", "mouse-line")
-                    .style("stroke", "#999")
-                    .style("stroke-width", "1px")
-                    .style("opacity", "1");
-                // .style("transform", "rotate(90deg)");
-
-                var lines = document.getElementsByClassName("line");
-                console.log({ lines });
-
-                var mousePerLine = mouseG
-                    .selectAll(".mouse-per-line")
-                    .data(sumstat)
-                    .enter()
-                    .append("g")
-                    .attr("class", "mouse-per-line");
-
-                mousePerLine
-                    .append("circle")
-                    .attr("r", 3)
-                    .style("stroke", function (d) {
-                        return color(d.key);
-                    })
-                    .style("fill", function (d) {
-                        return color(d.key);
-                    })
-                    .style("stroke-width", "1px")
-                    .style("opacity", "0");
-
-                mousePerLine
-                    .append("text")
-                    .attr("transform", "translate(10,3)");
-
-                mouseG
-                    .append("svg:rect") // append a rect to catch mouse movements on canvas
-                    .attr("width", width) // can't catch mouse events on a g element
-                    .attr("height", height)
-                    .attr("fill", "none")
-                    .attr("pointer-events", "all")
-                    .on("mouseout", function () {
-                        d3.select(".mouse-line").style("opacity", "0");
-                        d3.selectAll(".mouse-per-line circle").style(
-                            "opacity",
-                            "0"
-                        );
-                        d3.selectAll(".mouse-per-line text").style(
-                            "opacity",
-                            "0"
-                        );
-                        d3.select("#tooltip")
-                            .style("display", "none")
-                            .style("opacity", "0");
-                    })
-                    .on("mouseover", function () {
-                        // on mouse in show line, circles and text
-                        d3.select(".mouse-line").style("opacity", "1");
-                        d3.selectAll(".mouse-per-line circle").style(
-                            "opacity",
-                            "1"
-                        );
-                        d3.selectAll(".mouse-per-line text").style(
-                            "opacity",
-                            "1"
-                        );
-                    })
-                    .on("mousemove", function () {
-                        // mouse moving over canvas
-
-                        var mouse = d3.mouse(this);
-                        d3.select(".mouse-line").attr("d", function () {
-                            var d = "M0 " + mouse[1] + "," + width;
-                            d += " " + mouse[1];
-                            return d;
-                        });
-
-                        d3.selectAll(".mouse-per-line").attr(
-                            "transform",
-                            function (d, i) {
-                                var yValue = mouse[1];
-
-                                bisect = d3.bisector(function (d) {
-                                    return d.key;
-                                }).right;
-
-                                idx = bisect(d.values, yValue);
-
-                                var beginning = 0,
-                                    end = lines[i].getTotalLength(),
-                                    target = null;
-
-                                while (true) {
-                                    target = Math.floor((beginning + end) / 2);
-                                    pos = lines[i].getPointAtLength(target);
-                                    console.log(pos);
-                                    if (
-                                        (target === end ||
-                                            target === beginning) &&
-                                        pos.y !== mouse[1]
-                                    ) {
-                                        break;
-                                    }
-                                    if (pos.y > mouse[1]) end = target;
-                                    else if (pos.y < mouse[1])
-                                        beginning = target;
-                                    else break; //position found
+                            while (true) {
+                                target = Math.floor((beginning + end) / 2);
+                                pos = lines[i].getPointAtLength(target);
+                                console.log(pos);
+                                if (
+                                    (target === end ||
+                                        target === beginning) &&
+                                    pos.y !== mouse[1]
+                                ) {
+                                    break;
                                 }
-
-                                tooltipData[d.key] = {
-                                    xAxis: pos.x,
-                                    yAxis: yValue,
-                                    xPos: mouse[0],
-                                    dataValue: x.invert(pos.x).toFixed(2),
-                                };
-
-                                drawToolTip(color, mouse);
-
-                                return (
-                                    "translate(" + pos.x + "," + mouse[1] + ")"
-                                );
+                                if (pos.y > mouse[1]) end = target;
+                                else if (pos.y < mouse[1])
+                                    beginning = target;
+                                else break; //position found
                             }
-                        );
-                    });
-            }
 
-            function drawToolTip(color, mouse) {
-                var tooltipDataText = "";
+                            tooltipData[d.key] = {
+                                xAxis: pos.x,
+                                yAxis: yValue,
+                                xPos: mouse[0],
+                                dataValue: x.invert(pos.x).toFixed(2),
+                            };
 
-                for (var key in tooltipData) {
-                    if (document.querySelectorAll("#tooltip div").length > 10) {
-                        continue;
-                    }
-                    tooltipDataText +=
-                        "<div style='display: flex'><div style='margin:  7px; width: 6px; height: 6px; border-radius: 100%; background-color:" +
-                        color(key) +
-                        "'></div>" +
-                        "<span>" +
-                        key +
-                        ": " +
-                        tooltipData[key].dataValue +
-                        "</span></div>";
+                            drawToolTip(color, mouse);
+
+                            return (
+                                "translate(" + pos.x + "," + mouse[1] + ")"
+                            );
+                        }
+                    );
+                });
+        }
+          
+
+        function drawToolTip(color, mouse) {
+            var tooltipDataText = "";
+
+            for (var key in tooltipData) {
+                if (document.querySelectorAll("#tooltip div").length > 10) {
+                    continue;
                 }
-
-                // console.log(d3.select("#tooltip").clientWidth);
-
-                d3.select("#tooltip")
-                    .style("left", mouse[0] + 80 + "px")
-                    .style("top", mouse[1] + "px")
-                    .style("display", "block")
-                    .style("opacity", "1")
-                    .html(tooltipDataText);
+                tooltipDataText +=
+                    "<div style='display: flex'><div style='margin:  7px; width: 6px; height: 6px; border-radius: 100%; background-color:" +
+                    color(key) +
+                    "'></div>" +
+                    "<span>" +
+                    key +
+                    ": " +
+                    tooltipData[key].dataValue +
+                    "</span></div>";
             }
 
-            drawChart(data);
-        </script>
-    </body>
+            // console.log(d3.select("#tooltip").clientWidth);
+
+            var yScroll =
+                document.querySelector("#my_dataviz").scrollTop;
+            console.log(yScroll)
+
+            d3.select("#tooltip")
+                .style("left", mouse[0] + 80 + "px")
+                .style("top", mouse[1]- yScroll + "px")
+                .style("display", "block")
+                .style("opacity", "1")
+                .html(tooltipDataText);
+        }
+
+        drawChart(data);
+    </script>
+</body>
+
 </html>

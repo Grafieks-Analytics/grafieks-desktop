@@ -27,7 +27,7 @@
 
         #my_dataviz {
             overflow-x: scroll;
-            margin-left: 22px;
+            margin-left: 72px;
             height: 100vh;
         }
 
@@ -44,7 +44,7 @@
 <body>
     <!-- html containers starts-->
     <div id="mainChartWindow" style="display: flex">
-        <div id="yAxisDiv" ></div>
+        <div id="yAxisDiv"></div>
         <div id="my_dataviz"></div>
         <div id="xAxisLabelId" style="position: fixed"></div>
     </div>
@@ -1052,6 +1052,7 @@
 
             dataValues = transformData(dataValues, dateFormat);
             window.chartDataValues = dataValues;
+             [xAxisLabel, yAxisLabel] = data[1];
 
             clearChart();
             margin = { top: 30, right: 30, bottom: 70, left: 50 };
@@ -1065,10 +1066,17 @@
 
             if (chartType == constants.chartType.STANDARD) {
                 width = dataValues.length * standardThresholdWidth;
+                 height =
+                    window.innerHeight -
+                    margin.top -
+                    margin.bottom -
+                    50 -
+                    extraHeight+20;
+
             }
             yaxisTicks = height / 70;
             var y_pos_x_label = 55
-            const [xAxisLabel, yAxisLabel] = data[1];
+         
 
 
             // legends code starts
@@ -1234,7 +1242,7 @@
                             .style("white-space", "nowrap")
                             .style("overflow", "hidden")
                             .style("text-overflow", "ellipsis");
-                         d3.selectAll("#my_dataviz").style(
+                        d3.selectAll("#my_dataviz").style(
                             "height",
                             "calc(100vh - 42px)"
                         );
@@ -1318,7 +1326,7 @@
             var svg = d3
                 .select("#my_dataviz")
                 .append("svg")
-                .attr("width", width + margin.left + margin.right - 20)
+                .attr("width", width + 0 + margin.right - 20)
                 .attr(
                     "height",
                     height + margin.top + margin.bottom + extraHeight
@@ -1328,7 +1336,7 @@
                 .append("g")
                 .attr(
                     "transform",
-                    "translate(" + margin.left + "," + margin.top + ")"
+                    "translate(" + 0 + "," + margin.top + ")"
                 );
 
             // axis-x
@@ -1360,14 +1368,17 @@
                 .enter()
                 .append("g");
 
-            svg.append("g")
-                .attr("class", "grid")
-                .style("stroke-width", "1")
-                .attr(
-                    "transform",
-                    "translate(" + margin.left + "," + margin.top + ")"
-                )
-                .call(make_y_gridlines().tickSize(-width).tickFormat(""));
+            if (gridStatus) {
+                svg.append("g")
+                    .attr("class", "grid")
+                    .style("stroke-width", "1")
+                    .attr(
+                        "transform",
+                        "translate(" + 0 + "," + margin.top + ")"
+                    )
+                    .call(make_y_gridlines().tickSize(-width).tickFormat(""));
+            }
+
 
             // line chart
             var line = d3
@@ -1391,7 +1402,7 @@
                 .attr("fill", "none")
                 .attr(
                     "transform",
-                    "translate(" + margin.left + "," + margin.top + ")"
+                    "translate(" + 0 + "," + margin.top + ")"
                 );
 
             //add x and y axis
@@ -1409,7 +1420,7 @@
                 .attr("class", "y-axis")
                 .call(yAxis);
 
-            if (!markerStatus && curveType == constants.cureveType.LINEAR) {
+            if (markerStatus && curveType == constants.cureveType.LINEAR) {
                 drawMarker(filledStatus, markerShape);
             }
 
@@ -1448,17 +1459,33 @@
                     }
                 }
 
-                extraHeightWorked = true;
-                extraHeight = maxWidth < 100 ? maxWidth : 100;
+            //     extraHeightWorked = true;
+            //     extraHeight = maxWidth < 60 ? maxWidth : 60;
+
+            //     // d3.select(".x-axis .tick text").attr("text-anchor", "right");
+
+            //     d3.selectAll(".x-axis text")
+            //         .attr("transform", "rotate(-90)")
+            //         .attr("dy", "0.3em")
+            //         .attr("x", "-" + +extraHeight)
+            //         .attr("text-anchor", "start")
+            //         .attr("y", "0");
+            // }
+               extraHeightWorked = true;
+                maxWidth = maxWidth < 60 ? maxWidth : 60;
+                extraHeight = maxWidth;
 
                 d3.select(".x-axis").attr("text-anchor", "right");
-
                 d3.selectAll(".x-axis text")
                     .attr("transform", "rotate(-90)")
                     .attr("dy", "0.3em")
-                    .attr("x", "-" + +extraHeight)
+                    .attr("text-anchor", "end")
+                    // .attr("x", "-" + (maxWidth + 3))
+                    .attr("x", "-" + 10)
+                    // .attr("font-size", fontSize)
                     .attr("y", "0");
             }
+
 
             a = document.querySelectorAll(".x-axis text");
             var textWidth = document
@@ -1643,8 +1670,8 @@
                     "transform",
                     "translate(" +
                     (markerShape == constants.markerShapes.RECT
-                        ? margin.left - 2.8
-                        : margin.left) +
+                        ? 0 - 2.8
+                        : 0) +
                     "," +
                     (markerShape == constants.markerShapes.RECT
                         ? margin.top - 3
@@ -1699,19 +1726,19 @@
                             return (
                                 "<div class='arrowTooltip'></div>" +
                                 "<span style='color:grey;''>" +
-                                "toolTip.textColumn1" +
+                                xAxisLabel +
                                 ":&nbsp;&nbsp;" +
                                 "</span>" +
                                 "<span style='float: right;'>" +
-                                "xValue" +
+                                xValue +
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
-                                "toolTip.textColumn2" +
+                                yAxisLabel +
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +
-                                "yValue" +
+                                yValue.toFixed(2) +
                                 "</span>"
                             );
                         });
