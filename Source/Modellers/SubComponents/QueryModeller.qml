@@ -60,6 +60,10 @@ Item{
         // Save the plain query for execution
         DSParamsModel.setTmpSql(newText)
 
+        // This is for Data Preview Table (Important. Else while tying query GUI thread is blocked)
+        // If set false, header wont generate in Preview
+        DSParamsModel.setRunCalled(false);
+
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryModel.callSql(DSParamsModel.tmpSql)
         } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){

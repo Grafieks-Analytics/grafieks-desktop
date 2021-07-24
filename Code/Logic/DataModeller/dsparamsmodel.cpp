@@ -1243,6 +1243,11 @@ QString DSParamsModel::fileExtension() const
     return m_fileExtension;
 }
 
+bool DSParamsModel::runCalled() const
+{
+    return m_runCalled;
+}
+
 QString DSParamsModel::dsName() const
 {
     return m_dsName;
@@ -1340,6 +1345,15 @@ void DSParamsModel::setFileExtension(QString fileExtension)
 
     m_fileExtension = fileExtension;
     emit fileExtensionChanged(m_fileExtension);
+}
+
+void DSParamsModel::setRunCalled(bool runCalled)
+{
+    if (m_runCalled == runCalled)
+        return;
+
+    m_runCalled = runCalled;
+    emit runCalledChanged(m_runCalled);
 }
 
 QString DSParamsModel::category() const

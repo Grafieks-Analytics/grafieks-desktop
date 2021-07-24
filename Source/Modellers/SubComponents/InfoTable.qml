@@ -174,12 +174,17 @@ Item{
         //        testQueryBtn.visible = true
         //        queryUpdate.visible = true
 
+        // This is for Data Preview Table (Important. Else while tying query GUI thread is blocked)
+        // If set false, header wont generate in Preview
+        DSParamsModel.setRunCalled(true);
+
 
         var isSqlSelect = GeneralParamsModel.returnPlainTextFromHtml(DSParamsModel.tmpSql).toUpperCase().startsWith("SELECT");
         // If query is SELECT query
         // Only SELECT query allowed
 
         if(isSqlSelect){
+
             if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
 
                 dataPreviewResult.visible = true
@@ -198,6 +203,7 @@ Item{
                 // TableSchemaModel.showSchema(DSParamsModel.tmpSql)
 
             } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
+                console.log("INSIDE DUCK RUN")
                 DuckQueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
 
                 testQueryResult.visible = false

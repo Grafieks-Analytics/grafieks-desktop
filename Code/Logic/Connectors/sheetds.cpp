@@ -163,7 +163,7 @@ void SheetDS::fileDownloadFinished()
         emit fileDownloaded(fileName, "excel");
     }
 
-    emit showBusyIndicator(false);
+//    emit showBusyIndicator(false);
 }
 
 /*!

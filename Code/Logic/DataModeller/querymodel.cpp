@@ -3,7 +3,6 @@
 
 QueryModel::QueryModel(QObject *parent): QSqlQueryModel(parent), resetPreviewCount(false)
 {
-
 }
 
 QueryModel::~QueryModel()
