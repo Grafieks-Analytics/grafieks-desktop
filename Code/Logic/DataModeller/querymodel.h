@@ -18,11 +18,10 @@ class QueryModel : public QSqlQueryModel
     Q_OBJECT
 
 
+
 public:
     explicit QueryModel(QObject *parent = 0);
     ~QueryModel();
-
-    Q_INVOKABLE void setPreviewQuery(int previewRowCount);
 
     // QSqlQueryModel method override
 
@@ -33,6 +32,7 @@ public:
 
     Q_INVOKABLE void callSql(QString tmpSql);
     Q_INVOKABLE void removeTmpChartData();
+    Q_INVOKABLE void setPreviewQuery(int previewRowCount);
 
 public slots:
     void receiveFilterQuery(QString & filteredQuery);
