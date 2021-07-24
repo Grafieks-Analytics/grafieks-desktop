@@ -180,6 +180,11 @@ Item{
         // Only SELECT query allowed
 
         if(isSqlSelect){
+
+            // This is for Data Preview Table (Important. Else while tying query GUI thread is blocked)
+            // If set false, header wont generate in Preview
+            DSParamsModel.setRunCalled(true);
+
             if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
 
                 dataPreviewResult.visible = true

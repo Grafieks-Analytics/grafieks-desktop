@@ -908,6 +908,10 @@ Item {
     // and execute query
     function executeSql(){
 
+        // This is for Data Preview Table (Important. Else while tying query GUI thread is blocked)
+        // If set false, header wont generate in Preview
+        DSParamsModel.setRunCalled(false);
+
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryModel.callSql(DSParamsModel.tmpSql)
         } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
