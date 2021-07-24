@@ -38,6 +38,7 @@ Popup {
     property var generalObjectName : ""
 
     closePolicy: Popup.NoAutoClose
+    property var startTime: 0
 
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
@@ -69,8 +70,20 @@ Popup {
         function onShowBusyIndicator(status){
             if(status === true){
                 busyindicator.running = true
+
+                startTime = new Date().getTime().toString()
+                busyindicator.running = true
+                mainTimer.running = true
+                mainTimer.start()
+                displayTime.text = ""
+
             } else{
                 busyindicator.running = false
+
+                mainTimer.stop()
+                mainTimer.running = false
+                busyindicator.running = false
+                displayTime.text = ""
             }
         }
 
@@ -101,6 +114,11 @@ Popup {
                     msg_dialog.open()
                     msg_dialog.text = status.msg
                 }
+
+                mainTimer.stop()
+                mainTimer.running = false
+                busyindicator.running = false
+                displayTime.text = ""
             }
         }
 
@@ -117,6 +135,11 @@ Popup {
                     msg_dialog.open()
                     msg_dialog.text = status.msg
                 }
+
+                mainTimer.stop()
+                mainTimer.running = false
+                busyindicator.running = false
+                displayTime.text = ""
             }
         }
 
@@ -132,6 +155,11 @@ Popup {
                     msg_dialog.open()
                     msg_dialog.text = status.msg
                 }
+
+                mainTimer.stop()
+                mainTimer.running = false
+                busyindicator.running = false
+                displayTime.text = ""
             }
         }
     }
@@ -152,6 +180,11 @@ Popup {
                     msg_dialog.open()
                     msg_dialog.text = status.msg
                 }
+
+                mainTimer.stop()
+                mainTimer.running = false
+                busyindicator.running = false
+                displayTime.text = ""
             }
         }
 
@@ -539,6 +572,20 @@ Popup {
                 width: popup.width * 0.4
                 anchors.left:breadcrumb.right
                 anchors.leftMargin: popup.width * 0.4  - 190
+
+                Text{
+                    id: displayTime
+                    anchors.right: busyindicator.left
+                    anchors.rightMargin: 10
+
+                    Timer {
+                        id: mainTimer
+                        interval: 1000;
+                        running: false;
+                        repeat: true
+                        onTriggered: displayTime.text = Math.round((new Date().getTime() - startTime) / 1000) + " s"
+                    }
+                }
 
                 BusyIndicatorTpl {
                     id: busyindicator

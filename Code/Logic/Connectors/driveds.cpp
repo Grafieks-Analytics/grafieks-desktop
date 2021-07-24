@@ -317,7 +317,7 @@ void DriveDS::fileDownloadFinished()
         }
     }
 
-    emit showBusyIndicator(false);
+   // emit showBusyIndicator(false);
 }
 
 

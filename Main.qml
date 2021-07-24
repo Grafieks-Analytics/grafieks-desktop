@@ -328,10 +328,18 @@ ApplicationWindow {
             MenuItem{
                 text: qsTr("Open Help")
                 onTriggered: {
-                    stacklayout_home.currentIndex = 2
+                    // stacklayout_home.currentIndex = 2
+                    Qt.openUrlExternally("https://docs.grafieks.com/");
                 }
 
             }
+            MenuItem{
+                text: qsTr("Support")
+            }
+            MenuItem{
+                text: qsTr("Grafieks Community")
+            }
+
             MenuSeparator{}
             MenuItem{
                 text: qsTr("Manage License")
@@ -341,26 +349,11 @@ ApplicationWindow {
                 text: qsTr("Check for updates")
 
             }
+
             MenuSeparator{}
 
             MenuItem{
-                text: qsTr("Report Issue")
-
-            }
-            MenuItem{
-                text: qsTr("Locate Log Files")
-
-            }
-            MenuSeparator{}
-            MenuItem{
-                text: qsTr("Function List")
-
-            }
-            MenuSeparator{}
-
-
-            MenuItem{
-                text: qsTr("Grafieks Community")
+                text: qsTr("About")
             }
 
             MenuItem{
