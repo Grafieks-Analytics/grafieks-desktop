@@ -22,6 +22,9 @@
 
         <script>
             var tooltipData = {};
+            var extraHeightWorked = false;
+            var redrawn = false;
+            var extraHeight = 0;
 
             var data = [
                 [
@@ -380,6 +383,7 @@
 
                 svg.append("g")
                     .attr("transform", "translate(0," + height + ")")
+                    .attr("class", "x-axis")
                     .call(d3.axisBottom(x).ticks(5).tickSize(0));
 
                 // Add Y axis
@@ -568,6 +572,216 @@
                             }
                         );
                     });
+
+                /*
+                if (chartType == constants.chartType.STANDARD) {
+                    setStandardTickWidths();
+                }
+
+                function setStandardTickWidths() {
+                    var a = document.querySelectorAll(".x-axis .tick text");
+
+                    for (var i = 0; i < a.length; i++) {
+                        var singleCharacterLength =
+                            a[i].getBBox().width / a[i].innerHTML.length;
+                        var numOfCharacters = Math.floor(
+                            barWidth / singleCharacterLength
+                        );
+
+                        var tick = a[i];
+
+                        var tickWidth = tick && tick.getBBox().width;
+                        if (tickWidth > barWidth) {
+                            console.log("Length is long", numOfCharacters);
+                            var tickValue = tick.innerHTML;
+                            tickValue =
+                                tickValue &&
+                                tickValue.substr(0, numOfCharacters - 3) +
+                                    "...";
+                            console.log(tickValue);
+                            tick.innerHTML = tickValue;
+                        }
+                    }
+                }
+                
+                */
+
+                setYaxisWidth();
+
+                // var barWidth = document.querySelector(".bar").getBBox().width;
+                var barWidth = x.bandwidth();
+                if (
+                    chartType == constants.chartType.FIT_WIDTH &&
+                    barWidth < 40
+                ) {
+                    setXaxisWidth();
+                }
+
+                function setXaxisWidth() {
+                    var allYAxisTicks =
+                        document.querySelectorAll(".x-axis .tick");
+                    var maxWidth = 0;
+                    for (var i = 0; i < allYAxisTicks.length; i++) {
+                        var tick = allYAxisTicks[i];
+                        var width = tick.getBBox().width;
+                        if (width > maxWidth) {
+                            maxWidth = width;
+                        }
+                    }
+
+                    extraHeightWorked = true;
+                    extraHeight = maxWidth < 100 ? maxWidth : 100;
+
+                    d3.select(".x-axis").attr("text-anchor", "right");
+
+                    d3.selectAll(".x-axis text")
+                        .attr("transform", "rotate(-90)")
+                        .attr("dy", "0.3em")
+                        .attr("x", "-" + +extraHeight)
+                        .attr("y", "0");
+                }
+
+                a = document.querySelectorAll(".x-axis text");
+                var textWidth = document
+                    .querySelector(".x-axis .tick text")
+                    .getBBox().height;
+
+                if (chartType == constants.chartType.FIT_WIDTH) {
+                    removeAxisTicks("xAxis", dataValues, dataValues.length / 2);
+                    for (var i = 0; i < a.length; i++) {
+                        if (i == 0 && barWidth < textWidth * 0.5) {
+                            a[i].setAttribute("dy", "1em");
+                            continue;
+                        }
+                        if (barWidth < textWidth * 0.5) {
+                            a[i].setAttribute("dy", "0.8em");
+                        }
+                    }
+                }
+                if (chartType === constants.chartType.FIT_WIDTH) {
+                    var allXAxisTexts =
+                        document.querySelectorAll(".x-axis text");
+                    for (var i = 0; i < allXAxisTexts.length; i++) {
+                        var xAxisTick = allXAxisTexts[i].innerHTML;
+                        // Check added to bypass all the names with length <= 2 from getting trimmed
+                        if (xAxisTick && xAxisTick.length <= 2) {
+                            continue;
+                        }
+
+                        if (xAxisTick) {
+                            var singleCharacterLength =
+                                allXAxisTexts[i].getBBox().width /
+                                (xAxisTick && xAxisTick.length);
+
+                            var numOfCharacters =
+                                (extraHeight
+                                    ? extraHeight
+                                    : xScale.bandwidth()) /
+                                singleCharacterLength;
+
+                            if (
+                                xAxisTick &&
+                                xAxisTick.length > numOfCharacters
+                            ) {
+                                if (Math.ceil(numOfCharacters) > 3) {
+                                    // console.log(xAxisTick);
+                                    allXAxisTexts[i].innerHTML =
+                                        (xAxisTick &&
+                                            xAxisTick.substr(
+                                                0,
+                                                numOfCharacters - 3
+                                            )) + "...";
+                                } else {
+                                    allXAxisTexts[i].innerHTML =
+                                        (xAxisTick && xAxisTick.substr(0, 2)) +
+                                        "...";
+                                }
+                            }
+                        }
+
+                        if (i == 0 && barWidth < textWidth * 0.5) {
+                            allXAxisTexts[i].setAttribute("dy", "1em");
+                            continue;
+                        }
+                        if (barWidth < textWidth * 0.5) {
+                            allXAxisTexts[i].setAttribute("dy", "0.8em");
+                        }
+                    }
+                }
+
+                if (extraHeightWorked && !redrawn) {
+                    extraHeightWorked = false;
+                    redrawn = true;
+                    drawChart(window.data, plottingConfiguration);
+                }
+
+                if (extraHeightWorked && redrawn) {
+                    extraHeightWorked = false;
+                    redrawn = false;
+                }
+
+                if (chartType == constants.chartType.STANDARD) {
+                    setStandardTickWidths();
+                }
+
+                function setStandardTickWidths() {
+                    var a = document.querySelectorAll(".x-axis .tick text");
+
+                    for (var i = 0; i < a.length; i++) {
+                        var singleCharacterLength =
+                            a[i].getBBox().width / a[i].innerHTML.length;
+                        var numOfCharacters = Math.floor(
+                            barWidth / singleCharacterLength
+                        );
+
+                        var tick = a[i];
+
+                        var tickWidth = tick && tick.getBBox().width;
+                        if (tickWidth > barWidth) {
+                            console.log("Length is long", numOfCharacters);
+                            var tickValue = tick.innerHTML;
+                            tickValue =
+                                tickValue &&
+                                tickValue.substr(0, numOfCharacters - 3) +
+                                    "...";
+                            console.log(tickValue);
+                            tick.innerHTML = tickValue;
+                        }
+                    }
+                }
+
+                function setYaxisWidth() {
+                    var allYAxisTicks =
+                        document.querySelectorAll(".y-axis .tick");
+                    var maxWidth = 72;
+                    for (var i = 0; i < allYAxisTicks.length; i++) {
+                        var tick = allYAxisTicks[i];
+                        var width = tick.getBBox().width + 25;
+                        if (width > maxWidth) {
+                            maxWidth = width;
+                        }
+                    }
+
+                    var yAxisDiv = document.querySelector("#yAxisDiv svg");
+
+                    yAxisDiv && yAxisDiv.setAttribute("width", maxWidth);
+                    // d3.select("#my_dataviz").style(
+                    //     "margin-left",
+                    //     maxWidth + "px"
+                    // );
+                    document.querySelector("#my_dataviz").style["margin-left"] =
+                        maxWidth + "px !important";
+
+                    yAxisDiv &&
+                        yAxisDiv.setAttribute(
+                            "transform",
+                            "translate(" +
+                                (maxWidth - margin.left) +
+                                "," +
+                                0 +
+                                ")"
+                        );
+                }
             }
 
             function drawToolTip(color, mouse) {
