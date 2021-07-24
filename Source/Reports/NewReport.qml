@@ -264,15 +264,125 @@ Page {
     // JAVASCRIPT FUNCTION STARTS
 
     function drawChartAfterReceivingSignal(dataValues){
-            console.log(dataValues);
-            colorData = [JSON.parse(dataValues)[1][0]] || [];
-            colorData.forEach(function (element,index) {
-                dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
-                console.log("newreportcolor",Constants.d3ColorPalette[index % Constants.d3ColorPalette.length])
-            });
 
+        switch(chartTitle){
+            case Constants.horizontalBarChartTitle:
+                console.log(chartTitle,"CLICKED")
+                // datavalues is a global property and set using connections
+                // due to multi threading
+                colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
+                break;
+            case Constants.barChartTitle:
+                console.log(chartTitle,"CLICKED")
+                colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
+                break;
+            case Constants.horizontalStackedBarChartTitle:
+                console.log(chartTitle,"CLICKED")
+                colorData = (dataValues && JSON.parse(dataValues)[1]) || [];
+                break;
+            case Constants.stackedBarChartTitle:
+                console.log(chartTitle,"CLICKED")
+                colorData = (dataValues && JSON.parse(dataValues)[1]) || [];
+                break;
+            case Constants.horizontalBarGroupedChartTitle:
+                var [category, subcategory] =  getAxisColumnNames(Constants.yAxisName);
+                if(colorByColumnName && (colorByColumnName == category || colorByColumnName==subcategory) ){
+                    d3PropertyConfig['options'] = { groupBarChartColorBy: colorByColumnName == subcategory ? 'subcategory' : 'category'  }
+                }else{
+                    delete d3PropertyConfig['options'];
+                    colorListModel.clear();
+                    colorByData = [];
+                }
+                break;
+            case Constants.groupBarChartTitle:
+                var [category, subcategory] =  getAxisColumnNames(Constants.xAxisName);
+                if(colorByColumnName && (colorByColumnName == category || colorByColumnName==subcategory) ){
+                    d3PropertyConfig['options'] = { groupBarChartColorBy: colorByColumnName == subcategory ? 'subcategory' : 'category'  }
+                }else{
+                    delete d3PropertyConfig['options'];
+                    colorListModel.clear();
+                    colorByData = [];
+                        
+                    ReportParamsModel.setItemType(null);
+                    ReportParamsModel.setLastDropped(null);
+                }
+                console.log('Grouped bar chart!',xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);    
+                break;
+            case Constants.areaChartTitle:
+                console.log(chartTitle,"CLICKED")
+                break;
+            case Constants.stackedAreaChartTitle:
+                console.log(chartTitle,"CLICKED")
+                break;
+            case Constants.lineChartTitle:
+                console.log(chartTitle,"CLICKED")
+                break;
+            case Constants.multiLineChartTitle:
+                console.log(Constants.multiLineChartTitle,"CLICKED");
+                ChartsModel.getMultiLineChartValues(xAxisColumns[0],yAxisColumns[0],colorByColumnName);
+                break;
+            case Constants.horizontalLineChartTitle:
+                console.log(chartTitle,"CLICKED")
+                break;
+            case Constants.pieChartTitle:
+            case Constants.donutChartTitle:
+                console.log(chartTitle,"CLICKED")
+                break;
+            case Constants.funnelChartTitle:
+                console.log(chartTitle,"CLICKED")
+                break;
+            case Constants.radarChartTitle:
+                console.log(chartTitle,"CLICKED")
+                break;
+            case Constants.scatterChartTitle:
+                console.log(chartTitle,"CLICKED")
+                break;
+            case Constants.treeChartTitle:
+                console.log(chartTitle,"CLICKED")
+                break;
+            case Constants.treeMapChartTitle:
+                console.log(chartTitle,"CLICKED")
+                break;
+            case Constants.heatMapChartTitle:
+                console.log(chartTitle,"CLICKED")
+                break;
+            case Constants.sunburstChartTitle:
+                console.log(chartTitle,"CLICKED")
+                break;
+            case Constants.waterfallChartTitle:
+                console.log(chartTitle,"CLICKED")
+                break;
+            case Constants.gaugeChartTitle:
+                console.log(chartTitle,"CLICKED")
+                break;
+            case Constants.sankeyChartTitle:
+                console.log(chartTitle,"CLICKED")
+                break;
+            case Constants.kpiTitle:
+                console.log(chartTitle,"CLICKED")
+                break;
+            case Constants.tableTitle:
+                console.log(chartTitle,"CLICKED")
+                break;
+            case Constants.pivotTitle:
+                console.log(chartTitle,"CLICKED")
+                break;
+            }
+            if(!dataValues){
+                return;
+            }
+
+            console.log(colorData);
+            dataItemList.clear();
+            if(colorData && colorData.length){
+                colorData.forEach(function (element,index) {
+                    console.log(element);
+                    dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
+                    console.log("newreportcolor",Constants.d3ColorPalette[index % Constants.d3ColorPalette.length])
+                });
+            }
             var scriptValue = 'window.addEventListener("resize", function () {
-                   clearChart();
+                   clearChart && clearChart();
                     drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
            });';
 
@@ -716,6 +826,11 @@ Page {
                     chartTitle = Constants.horizontalBarChartTitle;
                     break;
                 case Constants.lineChartTitle:
+                    console.log(Constants.lineChartTitle);
+                    if(colorByData.length)  {
+                        switchChart(Constants.multiLineChartTitle)
+                        break;
+                    }
                     switchChart(Constants.horizontalLineChartTitle)
                     break;
                 case Constants.horizontalBarGroupedChartTitle:
