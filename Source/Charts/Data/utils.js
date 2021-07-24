@@ -155,14 +155,18 @@ function setLabel(
     height = document.querySelector("#yAxisDiv").clientHeight;
     heightXLabelId = document.querySelector("#xAxisLabelId").clientHeight;
     // heightYLabelId = 250;
-    if (
-        document
-            .querySelector("#my_dataviz svg g g.grid")
-            .getBoundingClientRect().height < 600
-    ) {
-        heightYLabelId = document
-            .querySelector("#my_dataviz svg g g.grid")
-            .getBoundingClientRect().height;
+    if (document.querySelector("#my_dataviz svg g g.grid") != null) {
+        if (
+            document
+                .querySelector("#my_dataviz svg g g.grid")
+                .getBoundingClientRect().height < 600
+        ) {
+            heightYLabelId = document
+                .querySelector("#my_dataviz svg g g.grid")
+                .getBoundingClientRect().height;
+        } else {
+            heightYLabelId = document.querySelector("#my_dataviz").clientHeight;
+        }
     } else {
         heightYLabelId = document.querySelector("#my_dataviz").clientHeight;
     }
@@ -306,8 +310,9 @@ function clearStyle() {
     console.log("clear");
 }
 
-function removeAxisTicks(axis = "xAxis", dataValues) {
+function removeAxisTicks(axis = "xAxis", dataValues, range) {
     selector = ".x-axis text";
+    range = range ? range : dataValues.length;
 
     if (axis === "yAxis") {
         selector = ".y-axis text";
@@ -315,14 +320,12 @@ function removeAxisTicks(axis = "xAxis", dataValues) {
 
     // Remove Text in case they are large in number
     var allXAxisTexts = document.querySelectorAll(selector);
-    console.log(allXAxisTexts);
-
     for (var i = 0; i < allXAxisTexts.length - 1; i++) {
-        if (!Math.floor(dataValues.length * 0.02)) {
+        if (!Math.floor(range * 0.02)) {
             break;
         }
 
-        if (i % Math.floor(dataValues.length * 0.04) != 0) {
+        if (i % Math.floor(range * 0.04) != 0) {
             allXAxisTexts[i].remove();
             continue;
         }

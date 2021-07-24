@@ -380,6 +380,25 @@ Rectangle{
             }
         }
 
+        /*
+        if(chartTitle === Constants.lineChartTitle){
+            if(report_desiner_page.isHorizontalGraph){
+                if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 0){
+                    chartHtml = Constants.horizontalLineChartUrl;
+                }else{
+                    console.log('Horizontal Chart Load');
+                    // chartHtml = Constants.horizontal;
+                }
+            }else{
+                if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count !== 0){
+                    // chartHtml = Constants.multiLineChartUrl;
+                    switchChart(Constants.multiLineChartTitle);
+                }
+            }
+        }
+        */
+
+        console.log('Loading Chart from LeftMenuBarReports.qml',chartHtml)
         loadchart("../Charts/"+chartHtml);
 
 //        add toggle left menu
