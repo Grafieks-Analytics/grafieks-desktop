@@ -82,6 +82,8 @@ void ForwardOnlyQueryModel::setPreviewQuery(int previewRowCount)
         emit errorSignal("");
         endResetModel();
     }
+
+    emit forwardOnlyHeaderDataChanged(this->tableHeaders);
 }
 
 int ForwardOnlyQueryModel::rowCount(const QModelIndex &parent) const

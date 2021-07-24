@@ -68,7 +68,7 @@ void ReportsDataModel::getChartHeader(QMap<int, QStringList> chartHeader)
 {
 
     //    this->chartHeaderDetails = chartHeader;
-    qDebug() << "GOT CHART HEADER" << chartHeader;
+//    qDebug() << "GOT CHART HEADER" << chartHeader;
 
     // Clear existing chart headers data
     this->numericalList.clear();
@@ -658,7 +658,7 @@ void ReportsDataModel::getReportId(int reportId)
     }
     this->reportChartData.insert(this->reportId, copiedChartData);
 
-    qDebug() << "REP DATA" << this->reportChartData << this->reportId;
+//    qDebug() << "REP DATA" << this->reportChartData << this->reportId;
 
     emit reportDataChanged(this->reportChartData, this->reportId);
 
