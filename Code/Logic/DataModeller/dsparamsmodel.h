@@ -62,6 +62,7 @@ class DSParamsModel : public QObject
     // General
     Q_PROPERTY(int currentTab READ currentTab WRITE setCurrentTab NOTIFY currentTabChanged) // 0.Data modeller / 1.Query modeller
     Q_PROPERTY(QString fileExtension READ fileExtension WRITE setFileExtension NOTIFY fileExtensionChanged)
+    Q_PROPERTY(bool runCalled READ runCalled WRITE setRunCalled NOTIFY runCalledChanged)
 
     // Publish datasource
     Q_PROPERTY(QString dsName READ dsName WRITE setDsName NOTIFY dsNameChanged)                                     // Data source name in publish DS
@@ -90,6 +91,8 @@ class DSParamsModel : public QObject
     Q_PROPERTY(int filterModelIndex READ filterModelIndex WRITE setFilterModelIndex NOTIFY filterModelIndexChanged)
 
     int m_currentTab;
+    QString m_fileExtension;
+    bool m_runCalled;
 
     QString m_dsName;
     QString m_dsType;
@@ -255,6 +258,8 @@ public:
 
     int currentTab() const;
     QString fileExtension() const;
+    bool runCalled() const;
+
     QString dsName() const;
     QString dsType() const;
     bool isFullExtract() const;
@@ -280,11 +285,15 @@ public:
     QString mode() const;
     int filterModelIndex() const;
 
+
+
 public slots:
 
     // Publish Datasource
     void setCurrentTab(int currentTab);
     void setFileExtension(QString fileExtension);
+    void setRunCalled(bool runCalled);
+
     void setDsName(QString dsName);
     void setDsType(QString dsType);
     void setIsFullExtract(bool isFullExtract);
@@ -310,12 +319,14 @@ public slots:
     void setMode(QString mode);
     void setFilterModelIndex(int filterModelIndex);
 
+
 signals:
 
     // General
     void processQuery();
     void currentTabChanged(int currentTab);
     void fileExtensionChanged(QString fileExtension);
+    void runCalledChanged(bool runCalled);
 
     // Publish Datasource
     void dsNameChanged(QString dsName);
@@ -361,9 +372,10 @@ signals:
 
     void filterModelIndexChanged(int filterModelIndex);
 
+
+
 private:
     QMap<QString, QString> datasourceCredentials();
-    QString m_fileExtension;
     int counter;
 
 
@@ -377,7 +389,6 @@ private:
     void updateMany();
     void deleteMany();
     void fetchMany();
-
 };
 
 #endif // DSPARAMSMODEL_H

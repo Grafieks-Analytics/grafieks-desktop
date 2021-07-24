@@ -31,7 +31,8 @@ Rectangle {
         // This slot is for updating headers
         // This is also returning an array of strings
         function onHeaderDataChanged(tableHeaders){
-            setHeaders(tableHeaders)
+            if(DSParamsModel.runCalled === true)
+                setHeaders(tableHeaders)
         }
 
         // Clear table
