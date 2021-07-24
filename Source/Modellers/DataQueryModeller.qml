@@ -321,7 +321,7 @@ Page {
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
 
         let currentDashboard = DashboardParamsModel.currentDashboard
-        ChartsModel.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
+        ChartsThread.setChartSource("dashboard", currentDashboard, DashboardParamsModel.ifFilterApplied(currentDashboard))
 
     }
 
