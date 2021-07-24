@@ -481,6 +481,27 @@
                     .tickSize(0)
                     .ticks(yAxisTicks)
                     .tickFormat(d3.format(".2s"));
+
+                if (gridStatus) {
+                    svg.append("g")
+                        .attr("class", "grid")
+                        .style("stroke-width", "1")
+                        .call(
+                            make_y_gridlines(y)
+                                .tickSize(-width)
+                                .tickFormat(d3.format(".2s"))
+                        );
+                } else {
+                    svg.append("g")
+                        .attr("class", "grid")
+                        .style("stroke-width", "1")
+                        .call(
+                            make_y_gridlines(yScale)
+                                // .tickSize(-width)
+                                .tickFormat(d3.format(".2s"))
+                        );
+                }
+
                 d3.select("#yAxisDiv")
                     .append("svg")
                     .attr("width", "72")
@@ -1082,6 +1103,13 @@
                                 0 +
                                 ")"
                         );
+                }
+
+                function make_x_gridlines(x) {
+                    return d3.axisBottom(x).ticks(8).tickSizeOuter(0);
+                }
+                function make_y_gridlines(y) {
+                    return d3.axisLeft(y).ticks(yAxisTicks);
                 }
             }
 

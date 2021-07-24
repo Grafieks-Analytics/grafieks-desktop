@@ -264,7 +264,7 @@ Page {
     // JAVASCRIPT FUNCTION STARTS
 
     function drawChartAfterReceivingSignal(dataValues){
-
+        var colorByData = [];
         switch(chartTitle){
             case Constants.horizontalBarChartTitle:
                 console.log(chartTitle,"CLICKED")
@@ -301,8 +301,7 @@ Page {
                 }else{
                     delete d3PropertyConfig['options'];
                     colorListModel.clear();
-                    colorByData = [];
-                        
+                    colorByData = [];       
                     ReportParamsModel.setItemType(null);
                     ReportParamsModel.setLastDropped(null);
                 }
@@ -315,14 +314,19 @@ Page {
                 console.log(chartTitle,"CLICKED")
                 break;
             case Constants.lineChartTitle:
-                console.log(chartTitle,"CLICKED")
-                break;
-            case Constants.multiLineChartTitle:
-                console.log(Constants.multiLineChartTitle,"CLICKED");
-                ChartsModel.getMultiLineChartValues(xAxisColumns[0],yAxisColumns[0],colorByColumnName);
+                console.log(chartTitle,"CLICKED");
+                colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
                 break;
             case Constants.horizontalLineChartTitle:
                 console.log(chartTitle,"CLICKED")
+                colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
+                break;
+            case Constants.multiLineChartTitle:
+                console.log(Constants.multiLineChartTitle,"CLICKED");
+                colorData = (dataValues && JSON.parse(dataValues)[1]) || [];
+                break;                
+            case Constants.multiLineChartTitle:
+                console.log(Constants.multiLineChartTitle,"CLICKED");
                 break;
             case Constants.pieChartTitle:
             case Constants.donutChartTitle:
