@@ -155,14 +155,18 @@ function setLabel(
     height = document.querySelector("#yAxisDiv").clientHeight;
     heightXLabelId = document.querySelector("#xAxisLabelId").clientHeight;
     // heightYLabelId = 250;
-    if (
-        document
-            .querySelector("#my_dataviz svg g g.grid")
-            .getBoundingClientRect().height < 600
-    ) {
-        heightYLabelId = document
-            .querySelector("#my_dataviz svg g g.grid")
-            .getBoundingClientRect().height;
+    if (document.querySelector("#my_dataviz svg g g.grid") != null) {
+        if (
+            document
+                .querySelector("#my_dataviz svg g g.grid")
+                .getBoundingClientRect().height < 600
+        ) {
+            heightYLabelId = document
+                .querySelector("#my_dataviz svg g g.grid")
+                .getBoundingClientRect().height;
+        } else {
+            heightYLabelId = document.querySelector("#my_dataviz").clientHeight;
+        }
     } else {
         heightYLabelId = document.querySelector("#my_dataviz").clientHeight;
     }

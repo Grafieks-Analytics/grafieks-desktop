@@ -1168,8 +1168,13 @@ Page {
                     ReportParamsModel.setLastDropped(null);
                 }
                 console.log('Grouped bar chart!',xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
-                ChartsModel.getNewGroupedBarChartValues(xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
+                dataValues =  ChartsModel.getNewGroupedBarChartValues(xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
+
+               dataValues = JSON.parse(dataValues);
+                dataValues.push([xAxisColumns[0],yAxisColumns[0]]);
                 // console.log(dataValues);
+
+                dataValues = JSON.stringify(dataValues);
                     
                 ReportParamsModel.setItemType(null);
                 ReportParamsModel.setLastDropped(null);
