@@ -54,8 +54,8 @@ const defaultD3Config = {
     dateFormat: "%Y",
     chartType: constants.chartType.FIT_WIDTH,
     // chartType: constants.chartType.STANDARD,
-    horizontalChartType: constants.chartType.STANDARD,
-    // horizontalChartType: constants.chartType.FIT_HEIGHT,
+    // horizontalChartType: constants.chartType.STANDARD,
+    horizontalChartType: constants.chartType.FIT_HEIGHT,
     standardThresholdWidth: 100,
     standardThresholdHeight: 100,
     fontSize: 12,
@@ -63,10 +63,10 @@ const defaultD3Config = {
     fontColor: "black",
     defaultLegendConfig: {
         legendStatus: true,
-        legendPosition: "bottom",
+        legendPosition: "right",
     },
     defaultlabelConfig: {
-        labelStatus: true,
+        labelStatus: false,
     },
     defaultGridConfig: {
         gridStatus: true,

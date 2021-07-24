@@ -320,7 +320,7 @@ function removeAxisTicks(axis = "xAxis", dataValues) {
 
     // Remove Text in case they are large in number
     var allXAxisTexts = document.querySelectorAll(selector);
-    console.log(allXAxisTexts);
+    // console.log(allXAxisTexts);
 
     for (var i = 0; i < allXAxisTexts.length - 1; i++) {
         if (!Math.floor(dataValues.length * 0.02)) {
