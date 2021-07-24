@@ -79,6 +79,8 @@ void DuckQueryModel::setPreviewQuery(int previewRowCount)
         emit errorSignal("");
         endResetModel();
     }
+
+    emit duckHeaderDataChanged(this->tableHeaders);
 }
 
 int DuckQueryModel::rowCount(const QModelIndex &parent) const
