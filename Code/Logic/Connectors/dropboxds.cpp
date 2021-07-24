@@ -430,7 +430,7 @@ void DropboxDS::saveFile()
         }
     }
 
-    emit showBusyIndicator(false);
+    // emit showBusyIndicator(false);
 }
 
 void DropboxDS::addDatasourceHelper(QJsonDocument &doc)
