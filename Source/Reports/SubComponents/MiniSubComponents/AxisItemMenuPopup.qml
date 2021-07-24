@@ -80,7 +80,7 @@ Popup {
            var modelData = axisModel.get(index);
        if(modelData.droppedItemType == "Date"){
            console.log(modelData);
-           delete d3PropertiesConfig['dateFormat']
+           delete d3PropertyConfig['dateFormat']
        }
 
         axisModel.remove(index);
