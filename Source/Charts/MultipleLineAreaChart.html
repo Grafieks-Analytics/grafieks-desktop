@@ -754,7 +754,10 @@
                     .data(sumstat)
                     .enter()
                     .append("path")
-                    .attr("fill", "none")
+                    .attr("fill", function (d) {
+                        return color(d.key);
+                    })
+                    .style("opacity", "0.7")
                     .attr("stroke", function (d) {
                         return color(d.key);
                     })
@@ -762,12 +765,15 @@
                     .attr("stroke-width", 1.5)
                     .attr("d", function (d) {
                         return d3
-                            .line()
+                            .area()
                             .x(function (d) {
                                 return x(d[0]) + x.bandwidth() / 2;
                             })
-                            .y(function (d) {
+                            .y1(function (d) {
                                 return y(+d[2]);
+                            })
+                            .y0(function (d) {
+                                return y(0);
                             })
                             .curve(d3[curveType])(d.values);
                     });
