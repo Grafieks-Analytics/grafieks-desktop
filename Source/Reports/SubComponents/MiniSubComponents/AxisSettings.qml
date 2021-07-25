@@ -252,14 +252,15 @@ Rectangle{
         for(let i=0; i<fontFamilies.length;i++){
             fonts.append({"fontName": fontFamilies[i]});
         }
+
         xAxisLegendFonts.model = fonts;
-        xAxisLegendFonts.currentIndex = 29;
+        xAxisLegendFonts.currentIndex = xAxisLegendFonts.find("Arial");
         xAxisTickMarkFonts.model = fonts;
-        xAxisTickMarkFonts.currentIndex = 29;
+        xAxisTickMarkFonts.currentIndex = xAxisTickMarkFonts.find("Arial");
         yAxisLegendFonts.model = fonts;
-        yAxisLegendFonts.currentIndex = 29;
+        yAxisLegendFonts.currentIndex = yAxisLegendFonts.find("Arial");
         yAxisTickMarkFonts.model = fonts;
-        yAxisTickMarkFonts.currentIndex = 29;
+        yAxisTickMarkFonts.currentIndex = yAxisTickMarkFonts.find("Arial");
 
     }
 
