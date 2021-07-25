@@ -9,6 +9,7 @@
 
 #include "../General/datatype.h"
 #include "../General/querysplitter.h"
+#include "./Workers/generaterolenamesforwardonlyworker.h"
 
 class ForwardOnlyQueryModel : public QAbstractTableModel
 {
@@ -34,9 +35,9 @@ private:
     void generateRoleNames();
     void setQueryResult();
     void setChartHeader(int index, QStringList colInfo);
-    QString returnDatatypeQuery(QString tableName);
     QString returnConnectionName();
-    QMap<QString, QString> returnColumnList(QString tableName);
+    void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount);
+
 
     QHash<int, QByteArray> m_roleNames;
     QList<QStringList> resultData;
