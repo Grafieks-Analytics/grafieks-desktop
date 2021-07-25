@@ -11,12 +11,12 @@
 #include "../../Connectors/allconnectors.h"
 #include "../../constants.h"
 #include "../General/datatype.h"
+#include "./Workers/generaterolenamesqueryworker.h"
 
 
 class QueryModel : public QSqlQueryModel
 {
     Q_OBJECT
-
 
 
 public:
@@ -37,7 +37,8 @@ public:
 public slots:
     void receiveFilterQuery(QString & filteredQuery);
     void setChartData();
-    void setChartHeader(int index, QStringList colInfo);
+
+    void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
 
 signals:
     void chartDataChanged(QMap<int, QStringList*> chartData);
