@@ -11,6 +11,7 @@
 
 #include "../General/datatype.h"
 #include "../General/querysplitter.h"
+#include "./Workers/generaterolenamesduckworker.h"
 
 class DuckQueryModel : public QAbstractTableModel
 {
@@ -35,13 +36,14 @@ public:
 
 public slots:
     void receiveCsvFilterQuery(QString query);
+    void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount);
 
 private:
     void generateRoleNames();
     void setQueryResult();
     void setChartData(std::unique_ptr<duckdb::MaterializedQueryResult> &totalRows);
-    void setChartHeader(int index, QStringList colInfo);
     QMap<QString, QString> returnColumnList(QString tableName);
+    void setChartHeader(int index, QStringList colInfo);
 
     QHash<int, QByteArray> m_roleNames;
     QList<QStringList> resultData;

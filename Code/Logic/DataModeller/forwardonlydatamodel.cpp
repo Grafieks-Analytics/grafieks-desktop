@@ -116,8 +116,8 @@ QStringList ForwardOnlyDataModel::getTableList()
 
     case Constants::redshiftIntType:
         conType = Constants::redshiftOdbcStrType;
-//        queryString = "SELECT DISTINCT tablename FROM pg_table_def WHERE schemaname = 'public'";
-        queryString = "SELECT DISTINCT tablename FROM pg_table_def WHERE schemaname = " + joiner + "public" + joiner;
+        queryString = "SELECT DISTINCT tablename FROM pg_table_def WHERE schemaname = 'public'";
+//        queryString = "SELECT DISTINCT tablename FROM pg_table_def WHERE schemaname = " + joiner + "public" + joiner;
         break;
 
     case Constants::snowflakeIntType:
@@ -127,8 +127,8 @@ QStringList ForwardOnlyDataModel::getTableList()
 
     case Constants::teradataIntType:
         conType = Constants::teradataOdbcStrType;
-//        queryString = "SELECT TableName FROM DBC.TablesV WHERE TableKind = 'T' and DatabaseName = '" + Statics::currentDbName + "'";
-        queryString = "SELECT TableName FROM DBC.TablesV WHERE TableKind = " + joiner + "T" + joiner + " and DatabaseName = " + joiner + Statics::currentDbName + joiner;
+        queryString = "SELECT TableName FROM DBC.TablesV WHERE TableKind = 'T' and DatabaseName = '" + Statics::currentDbName + "'";
+//        queryString = "SELECT TableName FROM DBC.TablesV WHERE TableKind = " + joiner + "T" + joiner + " and DatabaseName = " + joiner + Statics::currentDbName + joiner;
         break;
 
     }

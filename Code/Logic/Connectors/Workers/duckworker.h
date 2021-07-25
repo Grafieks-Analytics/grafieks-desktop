@@ -11,8 +11,11 @@
 class DuckWorker : public QThread
 {
     Q_OBJECT
+    QString threadName;
+
 public:
 
+protected:
     void run() override;
 
 signals:
