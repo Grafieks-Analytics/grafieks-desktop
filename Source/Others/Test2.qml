@@ -11,8 +11,5 @@ Item{
     height: 500
     width:  500
 
-    Component.onCompleted: {
-        ChartsModel.testing()
-    }
 
 }
