@@ -56,7 +56,6 @@ Rectangle {
             indicator.height: 15
 
             onCheckedChanged: {
-                console.log("INSIDE", checked, master, model.number)
                 if(master === true && checked === false){
                     master = false
                     mainCheckBox.checked = false
