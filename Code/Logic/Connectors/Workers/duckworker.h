@@ -13,6 +13,7 @@ class DuckWorker : public QThread
     Q_OBJECT
 public:
 
+protected:
     void run() override;
 
 signals:

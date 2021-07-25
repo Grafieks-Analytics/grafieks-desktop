@@ -55,7 +55,15 @@ SOURCES += \
     Code/Logic/Dashboards/dashboardparamsmodel.cpp \
     Code/Logic/Dashboards/documenthandlermodel.cpp \
     Code/Logic/Dashboards/tablecolumnsmodel.cpp \
-    Code/Logic/DataModeller/Workers/generaterolesworker.cpp \
+    Code/Logic/DataModeller/Workers/generaterolenamesduckworker.cpp \
+    Code/Logic/DataModeller/Workers/generaterolenamesforwardonlyworker.cpp \
+    Code/Logic/DataModeller/Workers/generaterolenamesqueryworker.cpp \
+    Code/Logic/DataModeller/Workers/setchartdataduckworker.cpp \
+    Code/Logic/DataModeller/Workers/setchartdataforwardonlyworker.cpp \
+    Code/Logic/DataModeller/Workers/setchartdataqueryworker.cpp \
+    Code/Logic/DataModeller/Workers/setpreviewqueryduckworker.cpp \
+    Code/Logic/DataModeller/Workers/setpreviewqueryforwardonlyworker.cpp \
+    Code/Logic/DataModeller/Workers/setpreviewqueryqueryworker.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
     Code/Logic/DataModeller/duckdatamodel.cpp \
@@ -92,6 +100,7 @@ SOURCES += \
     Code/Logic/General/querysplitter.cpp \
     Code/Logic/General/tableschemamodel.cpp \
     Code/Logic/Menu/user.cpp \
+    Code/Logic/Reports/Workers/updatefilterdataworker.cpp \
     Code/Logic/Reports/reportparamsmodel.cpp \
     Code/Logic/Reports/reportsdatamodel.cpp \
     main.cpp
@@ -159,7 +168,15 @@ HEADERS += \
     Code/Logic/Dashboards/dashboardparamsmodel.h \
     Code/Logic/Dashboards/documenthandlermodel.h \
     Code/Logic/Dashboards/tablecolumnsmodel.h \
-    Code/Logic/DataModeller/Workers/generaterolesworker.h \
+    Code/Logic/DataModeller/Workers/generaterolenamesduckworker.h \
+    Code/Logic/DataModeller/Workers/generaterolenamesforwardonlyworker.h \
+    Code/Logic/DataModeller/Workers/generaterolenamesqueryworker.h \
+    Code/Logic/DataModeller/Workers/setchartdataduckworker.h \
+    Code/Logic/DataModeller/Workers/setchartdataforwardonlyworker.h \
+    Code/Logic/DataModeller/Workers/setchartdataqueryworker.h \
+    Code/Logic/DataModeller/Workers/setpreviewqueryduckworker.h \
+    Code/Logic/DataModeller/Workers/setpreviewqueryforwardonlyworker.h \
+    Code/Logic/DataModeller/Workers/setpreviewqueryqueryworker.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
     Code/Logic/DataModeller/duckdatamodel.h \
@@ -196,6 +213,7 @@ HEADERS += \
     Code/Logic/General/querysplitter.h \
     Code/Logic/General/tableschemamodel.h \
     Code/Logic/Menu/user.h \
+    Code/Logic/Reports/Workers/updatefilterdataworker.h \
     Code/Logic/Reports/reportparamsmodel.h \
     Code/Logic/Reports/reportsdatamodel.h \
     Code/duckdb.hpp \
