@@ -1,6 +1,11 @@
 #ifndef DUCKTHREAD_H
 #define DUCKTHREAD_H
 
+// ----------------------
+// IMPORTANT
+// ----------------------
+// This class will be replaced DuckWorker class in the future
+
 #include <QObject>
 #include <QDebug>
 #include <QUrl>
