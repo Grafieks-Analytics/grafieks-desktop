@@ -402,9 +402,7 @@ Page {
         dataItemList.clear();
         if(colorData && colorData.length){
             colorData.forEach(function (element,index) {
-                console.log(element);
                 dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
-                console.log("newreportcolor",Constants.d3ColorPalette[index % Constants.d3ColorPalette.length])
             });
         }
 
@@ -1227,7 +1225,7 @@ Page {
                 break;
             case Constants.multiLineChartTitle:
                 console.log(Constants.multiLineChartTitle,"CLICKED");
-                ChartsModel.getMultiLineChartValues(colorByColumnName,xAxisColumns[0],yAxisColumns[0]);
+                ChartsModel.getMultiLineChartValues(xAxisColumns[0],yAxisColumns[0],colorByColumnName);
                 break;
             case Constants.horizontalMultiLineChartTitle:
                 console.log(chartTitle,"CLICKED");
