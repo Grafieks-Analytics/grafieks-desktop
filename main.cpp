@@ -423,6 +423,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("DuckDataModel", duckDataModel);
     engine.rootContext()->setContextProperty("DuckQueryModel", &duckQueryModel);
     engine.rootContext()->setContextProperty("ChartsModel", &chartsModel);
+    engine.rootContext()->setContextProperty("ChartsThread", &chartsThread);
     engine.rootContext()->setContextProperty("ForwardOnlyDataModel", &forwardOnlyDataModel);
     engine.rootContext()->setContextProperty("ForwardOnlyQueryModel", &forwardOnlyQueryModel);
     engine.rootContext()->setContextProperty("NewTableListModel", &newTableListModel);

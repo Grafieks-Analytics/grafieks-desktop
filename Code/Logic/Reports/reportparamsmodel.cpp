@@ -129,9 +129,15 @@ void ReportParamsModel::addReport(int reportId)
     
 }
 
-QMap<int, QVariant> ReportParamsModel::getReportsList(){
+QVariantMap ReportParamsModel::getReportsList(){
 
-    return this->reportsData;
+    QVariantMap tmpReportsData;
+    QList<int> keys = this->reportsData.keys();
+
+    foreach(int key, keys){
+        tmpReportsData.insert(QString::number(key), this->reportsData.value(key));
+    }
+    return tmpReportsData;
 }
 
 void ReportParamsModel::resetFilter()
