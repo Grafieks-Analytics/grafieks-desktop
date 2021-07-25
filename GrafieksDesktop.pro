@@ -29,6 +29,7 @@ SOURCES += \
     Code/Connectors/snowflakecon.cpp \
     Code/Connectors/sqlitecon.cpp \
     Code/Connectors/teradatacon.cpp \
+    Code/Logic/Connectors/Workers/duckworker.cpp \
     Code/Logic/Connectors/box.cpp \
     Code/Logic/Connectors/boxds.cpp \
     Code/Logic/Connectors/boxmodel.cpp \
@@ -54,6 +55,7 @@ SOURCES += \
     Code/Logic/Dashboards/dashboardparamsmodel.cpp \
     Code/Logic/Dashboards/documenthandlermodel.cpp \
     Code/Logic/Dashboards/tablecolumnsmodel.cpp \
+    Code/Logic/DataModeller/Workers/generaterolesworker.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
     Code/Logic/DataModeller/duckdatamodel.cpp \
@@ -79,6 +81,7 @@ SOURCES += \
     Code/Logic/Datasources/datasourceds.cpp \
     Code/Logic/Datasources/datasourcefilter.cpp \
     Code/Logic/Datasources/datasourcemodel.cpp \
+    Code/Logic/General/Workers/chartsworker.cpp \
     Code/Logic/General/chartsmodel.cpp \
     Code/Logic/General/chartsthread.cpp \
     Code/Logic/General/datatype.cpp \
@@ -130,6 +133,7 @@ HEADERS += \
     Code/Connectors/snowflakecon.h \
     Code/Connectors/sqlitecon.h \
     Code/Connectors/teradatacon.h \
+    Code/Logic/Connectors/Workers/duckworker.h \
     Code/Logic/Connectors/box.h \
     Code/Logic/Connectors/boxds.h \
     Code/Logic/Connectors/boxmodel.h \
@@ -155,6 +159,7 @@ HEADERS += \
     Code/Logic/Dashboards/dashboardparamsmodel.h \
     Code/Logic/Dashboards/documenthandlermodel.h \
     Code/Logic/Dashboards/tablecolumnsmodel.h \
+    Code/Logic/DataModeller/Workers/generaterolesworker.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
     Code/Logic/DataModeller/duckdatamodel.h \
@@ -180,6 +185,7 @@ HEADERS += \
     Code/Logic/Datasources/datasourceds.h \
     Code/Logic/Datasources/datasourcefilter.h \
     Code/Logic/Datasources/datasourcemodel.h \
+    Code/Logic/General/Workers/chartsworker.h \
     Code/Logic/General/chartsmodel.h \
     Code/Logic/General/chartsthread.h \
     Code/Logic/General/datatype.h \

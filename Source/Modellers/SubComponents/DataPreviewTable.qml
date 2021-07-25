@@ -54,8 +54,10 @@ Rectangle {
         // This slot is for updating headers
         // This is also returning an array of strings
         function onDuckHeaderDataChanged(tableHeaders){
-            if(DSParamsModel.runCalled === true)
+            console.log("DKCU", DSParamsModel.runCalled)
+            if(DSParamsModel.runCalled === true){
                 setHeaders(tableHeaders)
+            }
         }
 
         // Clear table
