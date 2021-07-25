@@ -183,9 +183,14 @@ void QueryModel::setChartData()
     emit chartDataChanged(this->sqlChartData);
 }
 
-void QueryModel::setChartHeader(int index, QStringList colInfo)
+
+void QueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader)
 {
-    this->sqlChartHeader.insert(index, colInfo);
+    this->tableHeaders = tableHeaders;
+    this->sqlChartHeader = sqlChartHeader;
+
+    emit headerDataChanged(this->tableHeaders);
+    emit chartHeaderChanged(this->sqlChartHeader);
 }
 
 
@@ -204,26 +209,12 @@ void QueryModel::receiveFilterQuery(QString &filteredQuery)
 void QueryModel::generateRoleNames()
 {
 
-    QStringList colInfo;
-    QVariant fieldType;
-    DataType dataType;
-
-    m_roleNames.clear();
-    this->tableHeaders.clear();
-
-    for( int i = 0; i < record().count(); i ++) {
-
-        m_roleNames.insert(Qt::UserRole + i + 1, record().fieldName(i).toUtf8());
-        fieldType = record().field(i).value();
-        colInfo << record().fieldName(i) << dataType.dataType(fieldType.typeName())  << record().field(i).tableName();
-
-        this->setChartHeader(i, colInfo);
-        this->tableHeaders.append(record().fieldName(i));
-        colInfo.clear();
-    }
-
-    emit headerDataChanged(this->tableHeaders);
-    emit chartHeaderChanged(this->sqlChartHeader);
+    QSqlRecord sqlRecord = record();
+    GenerateRoleNamesQueryWorker *generateRoleNameWorker = new GenerateRoleNamesQueryWorker(sqlRecord);
+    connect(generateRoleNameWorker, &GenerateRoleNamesQueryWorker::signalGenerateRoleNames, this, &QueryModel::slotGenerateRoleNames, Qt::QueuedConnection);
+    connect(generateRoleNameWorker, &GenerateRoleNamesQueryWorker::finished, generateRoleNameWorker, &QObject::deleteLater, Qt::QueuedConnection);
+    generateRoleNameWorker->setObjectName("Grafieks Query Rolenames");
+    generateRoleNameWorker->start();
 }
 
 void QueryModel::executeQuery(QString &query, bool updateChartData)
