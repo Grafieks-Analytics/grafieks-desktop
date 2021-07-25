@@ -153,7 +153,7 @@ public:
 
     Q_INVOKABLE void addReport(int reportId);
     Q_INVOKABLE QVariant getReport(int reportId);
-    Q_INVOKABLE QMap<int, QVariant> getReportsList();
+    Q_INVOKABLE QVariantMap getReportsList();
 
     // Filter specific invokable functions
 
