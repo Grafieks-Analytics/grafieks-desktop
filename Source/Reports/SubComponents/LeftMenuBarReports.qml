@@ -382,9 +382,7 @@ Rectangle{
                 }
             }
         }
-
-        /*
-        if(chartTitle === Constants.lineChartTitle){
+        else if(chartTitle === Constants.lineChartTitle){
             if(report_desiner_page.isHorizontalGraph){
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 0){
                     chartHtml = Constants.horizontalLineChartUrl;
@@ -394,12 +392,13 @@ Rectangle{
                 }
             }else{
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count !== 0){
-                    // chartHtml = Constants.multiLineChartUrl;
-                    switchChart(Constants.multiLineChartTitle);
+                    console.log('Debug: Loading multiline chart');
+                    chartHtml = Constants.multiLineChartUrl;
+                    // switchChart(Constants.multiLineChartTitle);
                 }
             }
         }
-        */
+        
 
         console.log(chartTitle);
         console.log('Loading Chart from LeftMenuBarReports.qml',chartHtml)
