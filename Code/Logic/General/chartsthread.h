@@ -1,6 +1,11 @@
 #ifndef CHARTSTHREAD_H
 #define CHARTSTHREAD_H
 
+// ----------------------
+// IMPORTANT
+// ----------------------
+// This class will be replaced ChartsWorker class in the future
+
 #include <QObject>
 #include <QDebug>
 #include <QJsonArray>

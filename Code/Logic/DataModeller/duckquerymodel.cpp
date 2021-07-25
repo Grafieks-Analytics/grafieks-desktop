@@ -217,8 +217,9 @@ void DuckQueryModel::generateRoleNames()
         }
     }
 
-    emit duckHeaderDataChanged(this->tableHeaders);
-    emit chartHeaderChanged(this->duckChartHeader);
+//    emit duckHeaderDataChanged(this->tableHeaders);
+    if(!this->duckChartHeader.empty())
+        emit chartHeaderChanged(this->duckChartHeader);
 }
 
 void DuckQueryModel::setQueryResult()

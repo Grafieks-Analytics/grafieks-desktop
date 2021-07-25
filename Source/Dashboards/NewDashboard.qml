@@ -215,7 +215,7 @@ Page {
         GeneralParamsModel.setCurrentScreen(Constants.reportScreen)
         stacklayout_home.currentIndex = Constants.newReportIndex;
         console.log("REP ID", ReportParamsModel.reportId)
-        ChartsModel.setChartSource("report", ReportParamsModel.reportId)
+        ChartsThread.setChartSource("report", ReportParamsModel.reportId)
 
     }
 
