@@ -819,7 +819,9 @@
                     .data(sumstat)
                     .enter()
                     .append("path")
-                    .attr("fill", "none")
+                    .attr("fill", function (d) {
+                        return color(d.key);
+                    })
                     .attr("stroke", function (d) {
                         return color(d.key);
                     })
@@ -829,12 +831,15 @@
                         // change x to y
                         // change y to x
                         return d3
-                            .line()
+                            .area()
                             .y(function (d) {
                                 return y(d[0]) + y.bandwidth() / 2;
                             })
-                            .x(function (d) {
+                            .x1(function (d) {
                                 return x(+d[2]);
+                            })
+                            .x0(function (d) {
+                                return x(0);
                             })
                             .curve(d3[curveType])(d.values);
                         // Changes done

@@ -91,6 +91,9 @@ Popup {
                     case Constants.horizontalStackedBarChartTitle:
                         switchChart(Constants.horizontalBarChartTitle);
                         break;
+                    case Constants.multiLineChartTitle:
+                        switchChart(Constants.lineChartTitle);
+                        break;
                 }
 
                 // // Add switch case - change url according to the selected chart

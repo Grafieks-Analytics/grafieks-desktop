@@ -1,1095 +1,295 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Line Bar Chart</title>
+        <link rel="icon" href="logo.png" type="image/png" sizes="32x32" />
 
-<head>
-    <meta charset="utf-8" />
-    <title>Line Bar Chart</title>
-    <link rel="icon" href="logo.png" type="image/png" sizes="32x32" />
+        <script src="./Data/d3DefaultConfig.js"></script>
+        <script src="./Data/utils.js"></script>
+        <script src="./Data/d3.v4.min.js"></script>
+        <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
+        <link rel="stylesheet" href="Data/general.css" />
 
-    <script src="./Data/d3DefaultConfig.js"></script>
-    <script src="./Data/utils.js"></script>
-    <script src="./Data/d3.v4.min.js"></script>
-    <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
-    <link rel="stylesheet" href="Data/general.css" />
+        <style type="text/css">
+            body {
+                padding: 0;
+                margin: 0;
+            }
 
-    <style type="text/css">
-        body {
-            padding: 0;
-            margin: 0;
-        }
+            ::-webkit-scrollbar {
+                width: 15px;
+            }
 
-        ::-webkit-scrollbar {
-            width: 15px;
-        }
+            #tooltip {
+                font-size: 14px;
+                font-family: Arial, Helvetica, sans-serif;
+                min-width: fit-content;
+                max-width: max-content;
+            }
 
-        #tooltip {
-            font-size: 14px;
-            font-family: Arial, Helvetica, sans-serif;
-            min-width: fit-content;
-            max-width: max-content;
-        }
+            #my_dataviz {
+                overflow-y: scroll;
+                margin-left: 40px;
+                height: calc(100vh - 71px);
+                /* background-color: red; */
+            }
 
-        #my_dataviz {
-            overflow-y: scroll;
-            margin-left: 40px;
-            height: calc(100vh - 71px);
-            /* background-color: red; */
-        }
+            #xAxisLabelId {
+                position: fixed;
+                bottom: 20px;
+                /* z-index: -1; */
+                height: 20px;
+                margin-left: 40px;
+                /* display: none; */
+                /* background-color: red; */
+            }
 
-        #xAxisLabelId {
-            position: fixed;
-            bottom: 20px;
-            /* z-index: -1; */
-            height: 20px;
-            margin-left: 40px;
-            /* display: none; */
-            /* background-color: red; */
-        }
+            #xAxisDiv {
+                margin-left: 40px;
+                /* display: none; */
+            }
 
-        #xAxisDiv {
-            margin-left: 40px;
-            /* display: none; */
-        }
-
-        /* .y-axis text{
+            /* .y-axis text{
                     max-width: 10px;
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
                 } */
 
-        #yAxisDiv {
-            width: 40px;
-        }
+            #yAxisDiv {
+                width: 40px;
+            }
 
-        /* .bar--positive {
+            /* .bar--positive {
                         fill: steelblue;
                     }
         
                     .bar--negative {
                         fill: darkorange;
                     } */
-    </style>
-</head>
+        </style>
+    </head>
 
-<body>
-    <div id="mainChartWindow" style="display: flex; flex-direction: column">
-        <div id="yAxisDiv"></div>
-        <div id="my_dataviz"></div>
-        <div id="xAxisDiv"></div>
-        <div id="xAxisLabelId" style="position: fixed"></div>
-    </div>
+    <body>
+        <div id="mainChartWindow" style="display: flex; flex-direction: column">
+            <div id="yAxisDiv"></div>
+            <div id="my_dataviz"></div>
+            <div id="xAxisDiv"></div>
+            <div id="xAxisLabelId" style="position: fixed"></div>
+        </div>
 
-    <div id="tooltip"></div>
+        <div id="tooltip"></div>
 
-    <div id="legend"></div>
-    <script>
-        // var extraHeightWorked = false;
-        // var redrawn = false;
-        // var extraHeight = 0;
+        <div id="legend"></div>
+        <script>
+            // var extraHeightWorked = false;
+            // var redrawn = false;
+            // var extraHeight = 0;
 
-        // Color Pallets - Set 3
-        const d3colors = [
-            "#8DD3C9",
-            "#FFFFAA",
-            "#B8BED6",
-            "#F98171",
-            "#78B5D1",
-            "#FFB15B",
-            "#B4E061",
-            "#FDCDE5",
-            "#DAD9D4",
-            "#BD7FBE",
-            "#CDE9C1",
-            "#FFEA77",
-        ];
+            // Color Pallets - Set 3
+            const d3colors = [
+                "#8DD3C9",
+                "#FFFFAA",
+                "#B8BED6",
+                "#F98171",
+                "#78B5D1",
+                "#FFB15B",
+                "#B4E061",
+                "#FDCDE5",
+                "#DAD9D4",
+                "#BD7FBE",
+                "#CDE9C1",
+                "#FFEA77",
+            ];
 
-        var dataset = [
-            [
-                ["01-01-1998", 30.5621003042803618],
-                ["01-01-1999", 50.9164824306094999],
-                ["01-01-2000", 40.6363092398355727],
-                ["01-01-2001", 10.6302204824674538],
-                ["01-01-2002", 20.2485817228091547],
-                ["01-01-2003", 32.13664898092621325],
-            ],
-            ["Countries", "Population"],
-        ];
+            var dataset = [
+                [
+                    ["01-01-1998", 30.5621003042803618],
+                    ["01-01-1999", 50.9164824306094999],
+                    ["01-01-2000", 40.6363092398355727],
+                    ["01-01-2001", 10.6302204824674538],
+                    ["01-01-2002", 20.2485817228091547],
+                    ["01-01-2003", 32.13664898092621325],
+                ],
+                ["Countries", "Population"],
+            ];
 
-        // var dataset = [
-        //     [
-        //         ["a", 1],
-        //         ["b", 4],
-        //         ["c", 5],
-        //     ],
-        //     ["username", "is_active"],
-        // ];
+            // var dataset = [
+            //     [
+            //         ["a", 1],
+            //         ["b", 4],
+            //         ["c", 5],
+            //     ],
+            //     ["username", "is_active"],
+            // ];
 
-        // var dataset = [
-        //     [
-        //         ["a", 703, 1902],
-        //         ["b", 1473, 3341],
-        //         ["c", 863, 1935],
-        //         ["d", 1494, 3008],
-        //         ["e", 965, 1743],
-        //         ["f", 568, 1271],
-        //         ["g", 189, 626],
-        //         ["i", 731, 1443],
-        //         ["j", 306, 630],
-        //         ["k", 899, 2556],
-        //         ["l", 231, 880],
-        //         ["m", 262, 589],
-        //         ["n", 429, 1497],
-        //         ["o", 322, 749],
-        //         ["p", 315, 720],
-        //         ["q", 228, 522],
-        //         ["r", 436, 1391],
-        //         ["s", 287, 613],
-        //         ["t", 419, 932],
-        //         ["u", 296, 612],
-        //         ["v", 343, 855],
-        //     ],
-        //     ["Label 1", "Line Data", "bar Fa"],
-        // ];
+            // var dataset = [
+            //     [
+            //         ["a", 703, 1902],
+            //         ["b", 1473, 3341],
+            //         ["c", 863, 1935],
+            //         ["d", 1494, 3008],
+            //         ["e", 965, 1743],
+            //         ["f", 568, 1271],
+            //         ["g", 189, 626],
+            //         ["i", 731, 1443],
+            //         ["j", 306, 630],
+            //         ["k", 899, 2556],
+            //         ["l", 231, 880],
+            //         ["m", 262, 589],
+            //         ["n", 429, 1497],
+            //         ["o", 322, 749],
+            //         ["p", 315, 720],
+            //         ["q", 228, 522],
+            //         ["r", 436, 1391],
+            //         ["s", 287, 613],
+            //         ["t", 419, 932],
+            //         ["u", 296, 612],
+            //         ["v", 343, 855],
+            //     ],
+            //     ["Label 1", "Line Data", "bar Fa"],
+            // ];
 
-        // var dataset = [
-        //     [
-        //         ["Furniture", 741999.0625],
-        //         ["OfficeSupplies", 719048.25],
-        //         ["Technology", 836155.4375],
-        //     ],
-        //     ["Category", "Sales"],
-        // ];
+            // var dataset = [
+            //     [
+            //         ["Furniture", 741999.0625],
+            //         ["OfficeSupplies", 719048.25],
+            //         ["Technology", 836155.4375],
+            //     ],
+            //     ["Category", "Sales"],
+            // ];
 
-        // var dataset = [
-        //     [
-        //         ["ClaireGute", 1148.780029296875],
-        //         ["DarrinVanHuff", 1119.48291015625],
-        //         ["SeanO'Donnell", 2602.57568359375],
-        //         ["BrosinaHoffman", 6255.3505859375],
-        //         ["AndrewAllen", 1790.511962890625],
-        //         ["IreneMaddox", 4930.474609375],
-        //         ["HaroldPawlan", 1990.3140869140625],
-        //         ["PeteKriz", 8646.93359375],
-        //         ["AlejandroGrove", 2582.89794921875],
-        //         ["ZuschussDonatelli", 1493.94384765625],
-        //         ["KenBlack", 2744.741943359375],
-        //         ["SandraFlanagan", 763.5459594726562],
-        //         ["EmilyBurns", 2767.218994140625],
-        //         ["EricHoffmann", 684.1710205078125],
-        //         ["TracyBlumstein", 4737.4853515625],
-        //         ["MattAbelman", 4299.1611328125],
-        //         ["GeneHale", 1361.2440185546875],
-        //         ["SteveNguyen", 3127.958740234375],
-        //         ["LindaCazamias", 4492.94580078125],
-        //         ["RubenAusman", 3832.31396484375],
-        //         ["ErinSmith", 4657.92431640625],
-        //         ["OdellaNelson", 1567.52001953125],
-        //         ["PatrickO'Donnell", 2493.214111328125],
-        //         ["LenaHernandez", 2295.33203125],
-        //         ["DarrenPowers", 1050.6358642578125],
-        //         ["JanetMolinari", 1804.1461181640625],
-        //         ["TedButterfield", 1467.881103515625],
-        //         ["KunstMiller", 4909.47216796875],
-        //         ["PaulStevenson", 1278.6390380859375],
-        //         ["BrendanSweed", 2454.927978515625],
-        //         ["KarenDaniels", 8282.3583984375],
-        //         ["HenryMacAllister", 736.2760620117188],
-        //         ["JoelEaton", 6760.814453125],
-        //         ["KenBrennan", 983.9219970703125],
-        //         ["StewartCarmichael", 4492.65673828125],
-        //         ["DuaneNoonan", 2139.789794921875],
-        //         ["JulieCreighton", 858.5760498046875],
-        //         ["ChristopherSchild", 3651.858642578125],
-        //         ["PaulGonzalez", 1987.1639404296875],
-        //         ["GaryMitchum", 3078.6240234375],
-        //         ["JimSink", 1131.0640869140625],
-        //         ["KarlBraun", 1569.464111328125],
-        //         ["RogerBarcio", 2067.449951171875],
-        //         ["ParhenaNorris", 1467.1519775390625],
-        //         ["KatherineDucich", 1888.9639892578125],
-        //         ["ElpidaRittenbach", 1245.7879638671875],
-        //         ["RickBensley", 4715.46630859375],
-        //         ["GaryZandusky", 4355.150390625],
-        //         ["LenaCacioppo", 2580.7041015625],
-        //         ["JanetMartin", 3159.1220703125],
-        //         ["PeteArmstrong", 729.4080200195312],
-        //         ["CynthiaVoltz", 2370.313720703125],
-        //         ["ClayLudtke", 10880.546875],
-        //         ["RyanCrowe", 885.7520141601562],
-        //         ["DaveKipp", 2650.556884765625],
-        //         ["GregGuthrie", 2224.000244140625],
-        //         ["StevenCartwright", 5226.20947265625],
-        //         ["AlanDominguez", 6106.87890625],
-        //         ["PhilipFox", 2770],
-        //         ["TroyStaebel", 2820.423828125],
-        //         ["LindsayShagiari", 2988.67431640625],
-        //         ["DorothyWardle", 1204.85400390625],
-        //         ["LenaCreighton", 7663.1259765625],
-        //         ["JonathanDoherty", 7610.86474609375],
-        //         ["SallyHughsby", 3406.83984375],
-        //         ["SandraGlassco", 3406.580810546875],
-        //         ["HelenAndreada", 2584.158203125],
-        //         ["MaureenGastineau", 2350.18798828125],
-        //         ["JustinEllison", 2697.248046875],
-        //         ["TamaraWillingham", 5278.826171875],
-        //         ["StephaniePhelps", 1872.4359130859375],
-        //         ["NeilKnudson", 572.0479736328125],
-        //         ["DaveBrooks", 4531.64599609375],
-        //         ["NoraPaige", 3908.40185546875],
-        //         ["TedTrevino", 4915.6015625],
-        //         ["EricMurdock", 933.7039794921875],
-        //         ["RubenDartt", 3133.924072265625],
-        //         ["MaxJones", 6320.74560546875],
-        //         ["BeckyMartin", 11789.6318359375],
-        //         ["ChadSievert", 884.6399536132812],
-        //         ["JenniferBraxton", 1791.6048583984375],
-        //         ["ShirleyJackson", 1318.77587890625],
-        //         ["JimKriz", 4760.43310546875],
-        //         ["DavidKendrick", 797.8319702148438],
-        //         ["RobertMarley", 5979.09619140625],
-        //         ["SallyKnutson", 883.4089965820312],
-        //         ["FrankMerwin", 3736.197509765625],
-        //         ["AliceMcCarthy", 814.0120849609375],
-        //         ["MarkPacker", 3206.132080078125],
-        //         ["MaryZewe", 2564.906005859375],
-        //         ["CassandraBrandow", 6076.13916015625],
-        //         ["ValerieMitchum", 2454.865966796875],
-        //         ["FredHopkins", 6987.1962890625],
-        //         ["MariaBertelson", 1548.7020263671875],
-        //         ["BruceStewart", 2562.3818359375],
-        //         ["LoganCurrie", 2633.58203125],
-        //         ["HeatherKirkland", 4877.78369140625],
-        //         ["LaurelElliston", 1469.449951171875],
-        //         ["JosephHolt", 7954.998046875],
-        //         ["MichaelStewart", 855.1160278320312],
-        //         ["VictoriaWilson", 6134.0380859375],
-        //         ["JonathanHowell", 959.4769287109375],
-        //         ["JoniBlumstein", 900.5519409179688],
-        //         ["DavidSmith", 2881.812744140625],
-        //         ["ValerieDominguez", 6442.25390625],
-        //         ["ErinAshbrook", 2846.705078125],
-        //         ["DavidBremer", 2973.093994140625],
-        //         ["KenLonsdale", 14175.23046875],
-        //         ["DiannaWilson", 5271.6279296875],
-        //         ["LoganHaushalter", 1739.6890869140625],
-        //         ["KellyCollister", 3908.261962890625],
-        //         ["DelfinaLatchford", 1458.258056640625],
-        //         ["DanReichenbach", 6528.0341796875],
-        //         ["CraigCarreira", 2269.701171875],
-        //         ["Dorrisliebe", 755.6019897460938],
-        //         ["SeanBraxton", 8057.89111328125],
-        //         ["RoyCollins", 966.4089965820312],
-        //         ["AlanHwang", 4805.34375],
-        //         ["ClaudiaBergmann", 4246.45556640625],
-        //         ["ChristineAbelman", 1421.953857421875],
-        //         ["KristenHastings", 5990.79833984375],
-        //         ["BarryBlumstein", 744.3399658203125],
-        //         ["AndrewGjertsen", 2356.85498046875],
-        //         ["JasO'Carroll", 1934.27197265625],
-        //         ["AlanHaines", 1587.451904296875],
-        //         ["NickZandusky", 2488.309814453125],
-        //         ["KellyLampkin", 5016.4873046875],
-        //         ["AlanSchoenberger", 4260.78369140625],
-        //         ["CoreyRoper", 475.9000244140625],
-        //         ["ShahidHopkins", 2180.71826171875],
-        //         ["BenPeterman", 3675.86083984375],
-        //         ["ThomasSeio", 5371.08984375],
-        //         ["AndyGerbode", 1455.0379638671875],
-        //         ["SungPak", 4282.93994140625],
-        //         ["NathanMautz", 6459.34375],
-        //         ["FrankAtkinson", 2984.05419921875],
-        //         ["GraceKelly", 6497.27001953125],
-        //         ["DonJones", 2501.688232421875],
-        //         ["PatrickO'Brill", 7473.828125],
-        //         ["JohnLucas", 2725.256103515625],
-        //         ["DougBickford", 1989.050048828125],
-        //         ["AlyssaCrouse", 925.7999267578125],
-        //         ["ClayCheatham", 113.83200073242188],
-        //         ["TamaraDahlen", 1434.5479736328125],
-        //         ["AdamBellavance", 7755.61962890625],
-        //         ["JeremyLonsdale", 3173.8740234375],
-        //         ["VictoriaBrennan", 2005.59619140625],
-        //         ["KatrinaWillman", 4416.51953125],
-        //         ["JuliaDunbar", 695.4420166015625],
-        //         ["MichaelKennedy", 2302.3681640625],
-        //         ["GuyThornton", 226.43600463867188],
-        //         ["ArthurGainer", 4510.796875],
-        //         ["MuhammedMacIntyre", 775.4139404296875],
-        //         ["AllenRosenblatt", 2236.1279296875],
-        //         ["RussellApplegate", 4793.54296875],
-        //         ["AlejandroSavely", 3214.23583984375],
-        //         ["LauraArmstrong", 8673.2216796875],
-        //         ["DennyOrdway", 1300.0313720703125],
-        //         ["DeanKatz", 4802.39404296875],
-        //         ["NathanGelder", 1395.9378662109375],
-        //         ["MikeVittorini", 1734.573974609375],
-        //         ["JackGarza", 2358.67578125],
-        //         ["BartPistole", 2442.0439453125],
-        //         ["VictorPreis", 993.9019775390625],
-        //         ["SaphhiraShifley", 1324.0279541015625],
-        //         ["AnnaGayman", 3489.03955078125],
-        //         ["LukeFoster", 3930.5087890625],
-        //         ["RoyFranzösisch", 945.2219848632812],
-        //         ["KeithHerrera", 5952.859375],
-        //         ["KimberlyCarter", 1146.0499267578125],
-        //         ["CarolineJumper", 11164.9736328125],
-        //         ["PhilipBrown", 1456.9500732421875],
-        //         ["MichaelPaige", 3983.64208984375],
-        //         ["NatalieFritzler", 8322.8251953125],
-        //         ["ShirleyDaniels", 6121.1142578125],
-        //         ["KenHeidel", 3918.966064453125],
-        //         ["RossBaird", 5633.3154296875],
-        //         ["MikeKennedy", 1031.6019287109375],
-        //         ["PhilisseOvercash", 4893.04345703125],
-        //         ["BrendaBowman", 6765.7275390625],
-        //         ["TroyBlackwell", 1387.5589599609375],
-        //         ["RaymondBuch", 15117.3388671875],
-        //         ["EdBraxton", 3644.97802734375],
-        //         ["SanjitChand", 14142.3330078125],
-        //         ["TanjaNorvell", 3130.220947265625],
-        //         ["JoniSundaresam", 469.1689758300781],
-        //         ["MayaHerman", 2203.778076171875],
-        //         ["JeremyPistek", 3635.593994140625],
-        //         ["JeremyEllison", 1388.6820068359375],
-        //         ["JohnGrady", 1507.017822265625],
-        //         ["XylonaPreis", 2374.658203125],
-        //         ["ErinMull", 228.99000549316406],
-        //         ["MichelleTran", 1319.449951171875],
-        //         ["SueAnnReed", 4767.341796875],
-        //         ["CarlWeiss", 1136.592041015625],
-        //         ["AstreaJones", 629.248046875],
-        //         ["SoniaSunley", 418.489990234375],
-        //         ["RoseO'Brian", 3815.477783203125],
-        //         ["MaribethDona", 3766.382080078125],
-        //         ["MaribethYedwab", 2254.284912109375],
-        //         ["ChristopherMartinez", 8954.01953125],
-        //         ["LynnSmith", 1008.1361083984375],
-        //         ["BradleyNguyen", 1459.343994140625],
-        //         ["DeanBraden", 2332.576904296875],
-        //         ["MattConnell", 2258.19189453125],
-        //         ["BrianDahlen", 3288.470458984375],
-        //         ["PatriciaHirasaki", 729.6480102539062],
-        //         ["MikeGockenbach", 3061.543212890625],
-        //         ["KarenBern", 3152.615234375],
-        //         ["JasperCacioppo", 71.26300048828125],
-        //         ["RobLucas", 6234.91015625],
-        //         ["AllenArmold", 1056.3900146484375],
-        //         ["EmilyPhan", 5478.06103515625],
-        //         ["DarrenKoutras", 1687.0401611328125],
-        //         ["BradleyDrucker", 4411.2431640625],
-        //         ["LizMacKendrick", 1346.77392578125],
-        //         ["AdrianShami", 58.81999969482422],
-        //         ["BillDonatelli", 5718.52099609375],
-        //         ["GregTran", 11820.12109375],
-        //         ["AshleyJarboe", 1839.239990234375],
-        //         ["OlveraToch", 3818.6240234375],
-        //         ["LizPelletier", 756.60595703125],
-        //         ["CynthiaArntzen", 3041.56591796875],
-        //         ["JeremyFarry", 1082.91796875],
-        //         ["FrankPreis", 4046.74609375],
-        //         ["EllisBallard", 4358.1279296875],
-        //         ["JenniferFerguson", 2371.4482421875],
-        //         ["SarahFoster", 3422.785888671875],
-        //         ["TrudyGlocke", 2074.6611328125],
-        //         ["CarlosSoltero", 3036.546630859375],
-        //         ["CharlesCrestani", 2471.650146484375],
-        //         ["DiannaVittorini", 3341.5869140625],
-        //         ["BruceDegenhardt", 1526.5],
-        //         ["ZuschussCarroll", 8025.70703125],
-        //         ["MelanieSeite", 370.3479919433594],
-        //         ["LenaRadford", 5142.89208984375],
-        //         ["TheonePippenger", 4454.05615234375],
-        //         ["ChlorisKastensmidt", 3154.854736328125],
-        //         ["AlanShonely", 584.6080322265625],
-        //         ["AndrewRoberts", 264.864013671875],
-        //         ["NonaBalk", 1972.59912109375],
-        //         ["GiuliettaDortch", 1888.0699462890625],
-        //         ["ClytieKelty", 2372.75],
-        //         ["NatGilpin", 1869.5799560546875],
-        //         ["ChristinaAnderson", 2648.287109375],
-        //         ["SylviaFoulston", 3336.53515625],
-        //         ["MegO'Connel", 1687.0269775390625],
-        //         ["AnnieThurman", 3831.86376953125],
-        //         ["FredMcMath", 2523.265869140625],
-        //         ["DennyJoy", 2012.52001953125],
-        //         ["MaxEngle", 1908.453125],
-        //         ["JustinDeggeller", 8828.0302734375],
-        //         ["JohnLee", 9799.9228515625],
-        //         ["SeanChristensen", 3979.06494140625],
-        //         ["ChuckClark", 2870.0498046875],
-        //         ["AnthonyRawles", 4523.3359375],
-        //         ["StevenRoelle", 4345.8857421875],
-        //         ["CraigReiter", 1600.550048828125],
-        //         ["EugeneHildebrand", 3082.653076171875],
-        //         ["SibellaParks", 1306.0859375],
-        //         ["TiffanyHouse", 1022.2011108398438],
-        //         ["ResiPölking", 5153.083984375],
-        //         ["RobBeeghly", 528.5460205078125],
-        //         ["CarolDarley", 639.7659912109375],
-        //         ["DougJacobs", 3356.39794921875],
-        //         ["GrantThornton", 9351.2109375],
-        //         ["MichaelChen", 3805.7138671875],
-        //         ["RalphArnett", 2617.906005859375],
-        //         ["NaresjPatel", 5529.61962890625],
-        //         ["AlanBarnes", 1113.838134765625],
-        //         ["JesusOcampo", 1090.8380126953125],
-        //         ["JayKimmel", 2709.63232421875],
-        //         ["BradNorvell", 265.2959899902344],
-        //         ["DavidPhilippe", 1058.615966796875],
-        //         ["TracyHopkins", 4234.095703125],
-        //         ["ArthurPrichep", 3323.5556640625],
-        //         ["RolandSchwarz", 4159.7705078125],
-        //         ["SethVernon", 11470.9482421875],
-        //         ["ChristineKargatis", 2945.321044921875],
-        //         ["RossDeVincentis", 1137.615966796875],
-        //         ["MathewReese", 639.177978515625],
-        //         ["SteveChapman", 2576.407958984375],
-        //         ["JayFein", 1911.8438720703125],
-        //         ["EmilyGrady", 1832.02001953125],
-        //         ["DarrinSayre", 1762.2130126953125],
-        //         ["PhillinaOber", 1056.8580322265625],
-        //         ["SungShariari", 964.635986328125],
-        //         ["PeterBühler", 688.3240356445312],
-        //         ["RolandFjeld", 2341.296142578125],
-        //         ["YosephCarroll", 5454.35009765625],
-        //         ["DebraCatini", 1174.617919921875],
-        //         ["ChristinePhan", 5888.275390625],
-        //         ["BarryFranzösisch", 2888.505859375],
-        //         ["LisaHazard", 318.239013671875],
-        //         ["ChrisSelesnick", 2754.2158203125],
-        //         ["AnthonyJohnson", 4501.390625],
-        //         ["BenjaminVenier", 1523.2728271484375],
-        //         ["DanLawera", 1503.112060546875],
-        //         ["BryanMills", 1338.842041015625],
-        //         ["LizThompson", 2936.251953125],
-        //         ["JoeKamberova", 4867.2001953125],
-        //         ["EricaSmith", 3510.4580078125],
-        //         ["RickHansen", 3621.375732421875],
-        //         ["CarlosDaly", 2033.9677734375],
-        //         ["HelenWasserman", 9300.2529296875],
-        //         ["MikeCaudle", 1581.998046875],
-        //         ["GaryMcGarr", 3582.819580078125],
-        //         ["PaulineJohnson", 1824.2340087890625],
-        //         ["BartWatters", 4750.35791015625],
-        //         ["TobyRitter", 675.9420166015625],
-        //         ["PatrickGardner", 3086.90673828125],
-        //         ["JamesLanier", 1571.52294921875],
-        //         ["BrianMoss", 7294.185546875],
-        //         ["EudokiaMartin", 1041.0419921875],
-        //         ["ArtFoster", 861.5650024414062],
-        //         ["GuyArmstrong", 1398.3819580078125],
-        //         ["CymaKinney", 1582.109130859375],
-        //         ["DavePoirier", 2215.001953125],
-        //         ["BerenikeKampe", 659.1380004882812],
-        //         ["SanjitJacobs", 3949.656005859375],
-        //         ["ChuckMagee", 287.989990234375],
-        //         ["AnthonyJacobs", 4867.34375],
-        //         ["LindaSouthworth", 2845.27001953125],
-        //         ["GuyPhonely", 236.53001403808594],
-        //         ["PaulKnutson", 1441.1519775390625],
-        //         ["SallyMatthias", 244.49400329589844],
-        //         ["AnthonyGarverick", 170.58399963378906],
-        //         ["PeterMcVee", 4115.662109375],
-        //         ["LaurenLeatherbury", 2741.2041015625],
-        //         ["JillStevenson", 1417.6541748046875],
-        //         ["EdLudwig", 124.27999877929688],
-        //         ["PamelaCoakley", 1832.0640869140625],
-        //         ["HunterLopez", 12873.2978515625],
-        //         ["MaribethSchnelling", 7443.689453125],
-        //         ["GeorgeBell", 1568.43994140625],
-        //         ["JustinRitter", 2201.686279296875],
-        //         ["BillEplett", 4204.67578125],
-        //         ["SampleCompanyA", 4624.5712890625],
-        //         ["RobWilliams", 3279.74609375],
-        //         ["SanjitEngle", 12209.439453125],
-        //         ["AdamHart", 3250.33642578125],
-        //         ["JessicaMyrick", 1733.4429931640625],
-        //         ["JoelJenkins", 195],
-        //         ["RalphKennedy", 1460.192138671875],
-        //         ["CatherineGlotzbach", 904.468017578125],
-        //         ["RachelPayne", 954.6451416015625],
-        //         ["KarenCarlisle", 2120.953857421875],
-        //         ["KatherineHughes", 3100.612060546875],
-        //         ["GregHansen", 146.9407958984375],
-        //         ["ScottWilliamson", 1966.64990234375],
-        //         ["JosephAirdo", 6491.0244140625],
-        //         ["DanielLacy", 3272.19970703125],
-        //         ["LindsayWilliams", 3230.30810546875],
-        //         ["ThomasBrumley", 816.1739501953125],
-        //         ["BryanSpruell", 949.4300537109375],
-        //         ["RobertWaldorf", 3495.64599609375],
-        //         ["TracyZic", 1707.2860107421875],
-        //         ["AnnSteele", 833.39794921875],
-        //         ["TobySwindell", 974.7819213867188],
-        //         ["SaraLuxemburg", 3053.01220703125],
-        //         ["MitchWillingham", 5253.8759765625],
-        //         ["RobDowd", 2912.893798828125],
-        //         ["RyanAkin", 1686.922607421875],
-        //         ["MegTillman", 2890.138916015625],
-        //         ["VivekGonzalez", 846.010009765625],
-        //         ["JohnStevenson", 3868.020263671875],
-        //         ["KalycaMeade", 2260.9580078125],
-        //         ["HallieRedmond", 1299.2880859375],
-        //         ["DeanraEno", 2550.8740234375],
-        //         ["AllenGoldenen", 200.9449920654297],
-        //         ["JenniferJackson", 709.1780395507812],
-        //         ["JenniferHalladay", 309.281005859375],
-        //         ["RobertDilbeck", 2786.6318359375],
-        //         ["MaryO'Rourke", 922.4869995117188],
-        //         ["NoelStaavos", 2964.822998046875],
-        //         ["DeirdreGreer", 3195.81787109375],
-        //         ["NicoleFjeld", 2031.4720458984375],
-        //         ["MatthewGrinstein", 3785.27587890625],
-        //         ["TheresaSwint", 2163.624267578125],
-        //         ["BrianDeCherney", 1538.1099853515625],
-        //         ["CharlesMcCrossin", 2533.31396484375],
-        //         ["SkyeNorling", 1860.418212890625],
-        //         ["EricaHernandez", 1219.530029296875],
-        //         ["FrankOlsen", 2678.437744140625],
-        //         ["MauriceSatty", 1613.4019775390625],
-        //         ["ChadCunningham", 1770.9449462890625],
-        //         ["DonWeiss", 344.0799865722656],
-        //         ["BillTyler", 2186.613037109375],
-        //         ["CraigYedwab", 2900.02587890625],
-        //         ["BradThomas", 415.19598388671875],
-        //         ["PenelopeSewall", 6843.63330078125],
-        //         ["PaulVanHugh", 2876.0458984375],
-        //         ["NeomaMurray", 2161.97900390625],
-        //         ["DionisLloyd", 3539.322021484375],
-        //         ["ChristineSundaresam", 3202.161865234375],
-        //         ["FrankHawley", 4256.27294921875],
-        //         ["NatCarroll", 2461.40380859375],
-        //         ["AlexAvila", 5563.560546875],
-        //         ["LarryTron", 329.8760070800781],
-        //         ["AnnePryor", 1638.553955078125],
-        //         ["PaulMacIntyre", 1405.4019775390625],
-        //         ["AlyssaTate", 1171.81396484375],
-        //         ["CathyArmstrong", 1679.723876953125],
-        //         ["HaroldRyan", 5248.787109375],
-        //         ["BradleyTalbott", 2684.491943359375],
-        //         ["LarryHughes", 287.4259948730469],
-        //         ["StevenWard", 758.6959838867188],
-        //         ["StefaniaPerrino", 5440.3193359375],
-        //         ["BenFerrer", 5907.97216796875],
-        //         ["KeanThornton", 4642.08837890625],
-        //         ["BrookeGillingham", 1874.1719970703125],
-        //         ["GregMatthias", 3163.6279296875],
-        //         ["EvaJacobs", 2656.691162109375],
-        //         ["NoraPreis", 7903.18310546875],
-        //         ["MickHernandez", 5503.0927734375],
-        //         ["JocastaRupert", 863.8800048828125],
-        //         ["SuzanneMcNair", 5563.3916015625],
-        //         ["ChrisCortes", 3913.41748046875],
-        //         ["PhillipFlathmann", 2206.1279296875],
-        //         ["DanCampbell", 3336.16796875],
-        //         ["BryanDavis", 658.4659423828125],
-        //         ["GeneMcClure", 1255.68212890625],
-        //         ["ToddBoyes", 834.3279418945312],
-        //         ["JustinHirsh", 2256.39404296875],
-        //         ["EricaBern", 1643.2550048828125],
-        //         ["QuincyJones", 6108.337890625],
-        //         ["TracyCollins", 742.5579223632812],
-        //         ["ChuckSachs", 550.64404296875],
-        //         ["HenryGoldwyn", 3247.641845703125],
-        //         ["LaurelWorkman", 2238.06103515625],
-        //         ["MattCollins", 1303.89306640625],
-        //         ["LizPreis", 3653.399169921875],
-        //         ["EvanBailliet", 1186.3260498046875],
-        //         ["GeorgeZrebassa", 2454.6220703125],
-        //         ["CathyPrescott", 5402.25390625],
-        //         ["FrankGastineau", 1383.1439208984375],
-        //         ["LisaDeCherney", 1961.93408203125],
-        //         ["AlejandroBallentine", 914.5320434570312],
-        //         ["MichaelNguyen", 2477.946044921875],
-        //         ["JimRadford", 1156.657958984375],
-        //         ["JamieFrazer", 2279.5859375],
-        //         ["ChadMcGuire", 1661.610107421875],
-        //         ["AaronSmayling", 3050.6923828125],
-        //         ["BethPaige", 2475.15673828125],
-        //         ["NatalieDeCherney", 4326.13916015625],
-        //         ["LarryBlacks", 50.1879997253418],
-        //         ["KeanTakahito", 3057.10009765625],
-        //         ["HarryMarie", 8236.765625],
-        //         ["AnnBlume", 1515.8619384765625],
-        //         ["SamZeldin", 3625.3291015625],
-        //         ["MichaelGranlund", 776.3839721679688],
-        //         ["JulieKriz", 2932.484130859375],
-        //         ["PaulProst", 7252.6083984375],
-        //         ["YanaSorensen", 6720.4443359375],
-        //         ["KatherineMurray", 5620.18505859375],
-        //         ["AdrianBarton", 14473.5712890625],
-        //         ["HelenAbelman", 2163.300048828125],
-        //         ["BethThompson", 2567.656005859375],
-        //         ["StuartVan", 1271.090087890625],
-        //         ["RickWilson", 7397.4013671875],
-        //         ["DamalaKotsonis", 3256.479736328125],
-        //         ["ShuiTom", 433.34002685546875],
-        //         ["MichaelMoore", 3794.07958984375],
-        //         ["PaulineWebber", 3454.915771484375],
-        //         ["ShaunChance", 1874.998046875],
-        //         ["ThaisSissman", 4.833000183105469],
-        //         ["MarkCousins", 4432.1376953125],
-        //         ["MariaEtezadi", 10663.7275390625],
-        //         ["NicoleHansen", 2673.2900390625],
-        //         ["MickBrown", 1428.231201171875],
-        //         ["KeithDawkins", 8181.25634765625],
-        //         ["KatherineNockton", 2617.27197265625],
-        //         ["NoraPelletier", 1228.697998046875],
-        //         ["CindyStewart", 5690.05517578125],
-        //         ["MaxwellSchwartz", 3144.67822265625],
-        //         ["CorinnaMitchell", 6339.5576171875],
-        //         ["Corey-Lock", 1300.0760498046875],
-        //         ["ToddSumrall", 11891.75],
-        //         ["JaneWaco", 7721.7138671875],
-        //         ["JohnDryer", 2152.351806640625],
-        //         ["PaulineChand", 1061.488037109375],
-        //         ["AndyReiter", 6608.447265625],
-        //         ["ArianneIrving", 4375.7861328125],
-        //         ["TomBoeckenhauer", 9133.990234375],
-        //         ["PaulLucas", 239.48098754882812],
-        //         ["GaryHwang", 4172.84619140625],
-        //         ["MikePelletier", 5087.919921875],
-        //         ["JimMitchum", 864.947021484375],
-        //         ["CarlLudwig", 1262.0140380859375],
-        //         ["DeborahBrumfield", 4655.89697265625],
-        //         ["IvanGibson", 744.573974609375],
-        //         ["BobbyOdegard", 130.8300018310547],
-        //         ["AimeeBixby", 966.7100219726562],
-        //         ["JuliaWest", 1428.7310791015625],
-        //         ["EdwardBecker", 3236.3134765625],
-        //         ["SheriGordon", 1884.798095703125],
-        //         ["CharlotteMelton", 1475.1441650390625],
-        //         ["AnthonyWitt", 649.3759765625],
-        //         ["MickCrebagga", 2218.980224609375],
-        //         ["TonjaTurnell", 5364.8076171875],
-        //         ["VivekGrady", 427.37200927734375],
-        //         ["MuhammedYedwab", 4152.6962890625],
-        //         ["RickDuston", 4272.9296875],
-        //         ["DennisPardue", 5480.72412109375],
-        //         ["MarinaLichtenstein", 2722.8427734375],
-        //         ["JennaCaffey", 1058.1080322265625],
-        //         ["JamesGalang", 6366.3916015625],
-        //         ["MarcCrier", 2725.98193359375],
-        //         ["NatalieWebber", 7234.013671875],
-        //         ["TobyBraunhardt", 2198.449951171875],
-        //         ["BillStewart", 3887.833984375],
-        //         ["HilaryHolden", 218.66799926757812],
-        //         ["ChristinaDeMoss", 1205.5841064453125],
-        //         ["TheaHendricks", 2422.823974609375],
-        //         ["MichelleMoray", 2749.881103515625],
-        //         ["NeolaSchneider", 2575.863037109375],
-        //         ["RobertBarroso", 221.08399963378906],
-        //         ["ShaunWeien", 2921.5439453125],
-        //         ["EricBarreto", 944.5999755859375],
-        //         ["PamelaStobb", 2181.47900390625],
-        //         ["HerbertFlentye", 2533.163818359375],
-        //         ["HeniaZydlo", 886.52001953125],
-        //         ["CynthiaDelaney", 1860.7320556640625],
-        //         ["JamieKunitz", 4427.14208984375],
-        //         ["FiliaMcAdams", 2456.6376953125],
-        //         ["EmilyDucich", 3484.919921875],
-        //         ["DiannaArnett", 156.760009765625],
-        //         ["JoniWasserman", 1244.0859375],
-        //         ["RaymondMesse", 1453.4739990234375],
-        //         ["MaxLudwig", 2071.913818359375],
-        //         ["CraigCarroll", 2854.115234375],
-        //         ["JimEpp", 7754.97607421875],
-        //         ["RoyPhan", 2170.716064453125],
-        //         ["ThomasBoland", 3589.295654296875],
-        //         ["BradEason", 1727.6519775390625],
-        //         ["JillFjeld", 4198.33251953125],
-        //         ["PhillipBreyer", 132.73800659179688],
-        //         ["BrianThompson", 3196.752197265625],
-        //         ["JanetLee", 2203.699951171875],
-        //         ["CathyHwang", 1537.2359619140625],
-        //         ["NeilDucich", 2893.454833984375],
-        //         ["BarbaraFisher", 599.7979125976562],
-        //         ["KatharineHarms", 3312.86376953125],
-        //         ["GiuliettaWeimer", 2189.01904296875],
-        //         ["NoahChilds", 1821.7420654296875],
-        //         ["MichelleEllison", 1256.94384765625],
-        //         ["BenjaminPatterson", 1181.489990234375],
-        //         ["JohnCastell", 2772.05517578125],
-        //         ["AdamShillingsburg", 3255.31005859375],
-        //         ["AmyCox", 5527.845703125],
-        //         ["MichaelDominguez", 1204.9100341796875],
-        //         ["DuaneBenoit", 1155.201904296875],
-        //         ["EricaHackney", 825.9500122070312],
-        //         ["EdwardHooks", 10310.880859375],
-        //         ["ScotCoram", 4371.9580078125],
-        //         ["JoeElijah", 8697.8427734375],
-        //         ["AnnChong", 2537.686279296875],
-        //         ["JoyDaniels", 385.4299621582031],
-        //         ["ChristyBrittain", 1949.199951171875],
-        //         ["JoySmith", 2516.493896484375],
-        //         ["LukeWeiss", 5420.51416015625],
-        //         ["StuartCalhoun", 279.2560119628906],
-        //         ["AnneMcFarland", 5664.021484375],
-        //         ["RickHuthwaite", 6979.18017578125],
-        //         ["CarolTriggs", 3241.898193359375],
-        //         ["MattCollister", 2426.06689453125],
-        //         ["CoreyCatlett", 2540.630859375],
-        //         ["KellyAndreada", 1519.505859375],
-        //         ["TamaraChand", 19052.216796875],
-        //         ["BartFolk", 272.95001220703125],
-        //         ["MagdeleneMorse", 1314.02294921875],
-        //         ["AdrianHane", 1735.5142822265625],
-        //         ["BenWallace", 1738.4061279296875],
-        //         ["ScotWooten", 1085.0780029296875],
-        //         ["BrianStugart", 3288.110107421875],
-        //         ["RandyFerguson", 3309.150146484375],
-        //         ["WilliamBrown", 6160.10205078125],
-        //         ["TrudyBrown", 2797.668212890625],
-        //         ["ArtFerguson", 2052.908203125],
-        //         ["RichardBierner", 2663.0859375],
-        //         ["KarenFerguson", 10604.265625],
-        //         ["JohnHuston", 528.9099731445312],
-        //         ["IvanListon", 5040.73583984375],
-        //         ["PatrickBzostek", 740.3560180664062],
-        //         ["RobHaberlin", 2085.73974609375],
-        //         ["ArthurWiediger", 2852.9677734375],
-        //         ["MarisLaWare", 2921.499755859375],
-        //         ["DorothyBadders", 3908.802734375],
-        //         ["MattHagelstein", 1252.7999267578125],
-        //         ["DennisKane", 3318.485107421875],
-        //         ["BobbyTrafton", 603.8759765625],
-        //         ["DennyBlanton", 1711.6920166015625],
-        //         ["TobyGnade", 3058.371826171875],
-        //         ["BarryFranz", 1333.8800048828125],
-        //         ["JustinMacKendrick", 2833.92578125],
-        //         ["MariaZettner", 593.60595703125],
-        //         ["MitchWebber", 5341.89990234375],
-        //         ["MarkVanHuff", 1560.05029296875],
-        //         ["SeanMiller", 25043.052734375],
-        //         ["TomPrescott", 5329.0048828125],
-        //         ["JimKarlsson", 3760.028076171875],
-        //         ["PatrickJones", 1220.0899658203125],
-        //         ["RicardoSperren", 3221.289794921875],
-        //         ["SusanVittorini", 1903.490966796875],
-        //         ["BeckyCastell", 2933.67578125],
-        //         ["ElizabethMoffitt", 2339.597900390625],
-        //         ["BrendanMurry", 808.1619873046875],
-        //         ["KristinaNunn", 2280.580322265625],
-        //         ["KellyWilliams", 449.09600830078125],
-        //         ["ScottCohen", 3729.79248046875],
-        //         ["ChristinaVanderZanden", 2830.6279296875],
-        //         ["SperosGoranitis", 3124.83203125],
-        //         ["TamaraManning", 2955.225830078125],
-        //         ["EleniMcCrary", 2567.010009765625],
-        //         ["MichelleLonsdale", 742.08203125],
-        //         ["ClayRozendal", 2148.85205078125],
-        //         ["AnnieZypern", 1622.0179443359375],
-        //         ["PierreWener", 3922.4150390625],
-        //         ["ShahidCollister", 5992.53564453125],
-        //         ["CarlosMeador", 565.3919677734375],
-        //         ["GregMaxwell", 6049.96533203125],
-        //         ["TimBrockman", 1602.3759765625],
-        //         ["JohnMurray", 7625.076171875],
-        //         ["SoniaCooley", 902.72802734375],
-        //         ["LukeSchmidt", 1010.2560424804688],
-        //         ["RalphRitter", 615.9320068359375],
-        //         ["DanielByrd", 2171.59912109375],
-        //         ["ThomasThornton", 1427.0440673828125],
-        //         ["LoriOlson", 644.3499755859375],
-        //         ["KenDana", 2243.510009765625],
-        //         ["NicoleBrennan", 273.87200927734375],
-        //         ["BrianDerr", 582.64599609375],
-        //         ["ChrisMcAfee", 2305.712158203125],
-        //         ["EdwardNazzal", 2199.365966796875],
-        //         ["KeanNguyen", 2171.962158203125],
-        //         ["BillOverfelt", 2682.72802734375],
-        //         ["AleksandraGannaway", 367.5480041503906],
-        //         ["MatthewClasen", 795.1539916992188],
-        //         ["TomAshbrook", 14595.62109375],
-        //         ["JasonFortune-", 955.1240234375],
-        //         ["TimTaslimi", 439.5],
-        //         ["SarahBern", 1348.02001953125],
-        //         ["CraigLeslie", 2353.5859375],
-        //         ["HunterGlantz", 3690.2841796875],
-        //         ["NancyLomonaco", 1418.0899658203125],
-        //         ["RickReed", 3302.261962890625],
-        //         ["TobyCarlisle", 4266.81201171875],
-        //         ["StewartVisinsky", 4105.30517578125],
-        //         ["BobbyElias", 2261.43798828125],
-        //         ["SteveCarroll", 1254.6400146484375],
-        //         ["DavidFlashing", 2390.5341796875],
-        //         ["FredHarton", 2271.2841796875],
-        //         ["MaryBethSkach", 475.6559753417969],
-        //         ["RitsaHightower", 740.3820190429688],
-        //         ["GeorgeAshbrook", 3919.77587890625],
-        //         ["JuliePrescott", 1707.7100830078125],
-        //         ["Deanpercer", 7198.759765625],
-        //         ["MichaelOakman", 154.28799438476562],
-        //         ["DeniseLeinenbach", 585.02001953125],
-        //         ["MichelleHuthwaite", 2984.94775390625],
-        //         ["DanielRaglin", 8350.8681640625],
-        //         ["DarrinMartin", 6345.10302734375],
-        //         ["CarolAdams", 3789.72265625],
-        //         ["AnnaChung", 657.3159790039062],
-        //         ["DeniseMonton", 4074.471923828125],
-        //         ["VickyFreymann", 847.944091796875],
-        //         ["ChristopherConant", 12129.0712890625],
-        //         ["BethFritzler", 791.9899291992188],
-        //         ["HarryGreene", 785.6279907226562],
-        //         ["BeckyPak", 1697.8609619140625],
-        //         ["EugeneMoren", 4588.43603515625],
-        //         ["MichelleArnett", 2453.28369140625],
-        //         ["AndyYotov", 497.01397705078125],
-        //         ["GiuliettaBaptist", 4716.2880859375],
-        //         ["JuliaBarnett", 2518.114990234375],
-        //         ["MichaelGrace", 1242.8330078125],
-        //         ["SharelleRoach", 3233.481201171875],
-        //         ["JoyBell-", 644.1188354492188],
-        //         ["DarioMedina", 1322.033935546875],
-        //         ["TonyChapman", 1244.9759521484375],
-        //         ["SeanWendt", 1019.0440673828125],
-        //         ["RichardEichhorn", 876.6959838867188],
-        //         ["BenjaminFarhat", 1585.1619873046875],
-        //         ["KatrinaBavinger", 908.8209228515625],
-        //         ["JasonGross", 2240.580078125],
-        //         ["ErinCreighton", 461.91400146484375],
-        //         ["EugeneBarchas", 3071.126220703125],
-        //         ["JenniferPatt", 1669.1348876953125],
-        //         ["CariSayre", 1278.9541015625],
-        //         ["GaryHansen", 2819.466552734375],
-        //         ["PeteTakahito", 160.57199096679688],
-        //         ["JackLebron", 1214.9561767578125],
-        //         ["AaronHawkins", 1744.699951171875],
-        //         ["CindyChapman", 1659.4381103515625],
-        //         ["DavidWiener", 1080.7509765625],
-        //         ["SarahJordon", 1341.0360107421875],
-        //         ["BruceGeld", 1006.35595703125],
-        //         ["LaurelBeltran", 4985.67578125],
-        //         ["CandaceMcMahon", 1673.8880615234375],
-        //         ["EvanHenry", 923.8839721679688],
-        //         ["TonySayre", 2243.27392578125],
-        //         ["PatrickRyan", 1840.1781005859375],
-        //         ["LizCarlisle", 2095.064208984375],
-        //         ["CindySchnelling", 1077.2283935546875],
-        //         ["DaveHallsten", 4932.87158203125],
-        //         ["JackO'Briant", 3254.948974609375],
-        //         ["AnnaHäberlin", 7888.29296875],
-        //         ["HeatherJas", 358.1000061035156],
-        //         ["MarkHamilton", 2456.18212890625],
-        //         ["RussellD'Ascenzo", 970.9420166015625],
-        //         ["SamCraven", 3362.96337890625],
-        //         ["StephanieUlpright", 2595.3642578125],
-        //         ["FredChung", 3889.365966796875],
-        //         ["RandyBradley", 1008.1959838867188],
-        //         ["NickCrebassa", 8241.7392578125],
-        //         ["DarrenBudd", 2839.2275390625],
-        //         ["MaureenFritzler", 937.0390014648438],
-        //         ["RolandMurray", 98.3499984741211],
-        //         ["VivianMathis", 380.6900329589844],
-        //         ["EdJacobs", 2162.174072265625],
-        //         ["NathanCano", 2218.98974609375],
-        //         ["LycorisSaunders", 368.8800048828125],
-        //         ["KatrinaEdelman", 1686.7313232421875],
-        //         ["DuaneHuffman", 1043.095947265625],
-        //         ["PeterFuller", 9062.8642578125],
-        //         ["ValerieTakahito", 1736.595947265625],
-        //         ["MaureenGnade", 1342.281982421875],
-        //         ["SusanPistek", 3990.68896484375],
-        //         ["CharlesSheldon", 844.4579467773438],
-        //         ["DanaKaydos", 4282.17626953125],
-        //         ["KhloeMiller", 453.5379943847656],
-        //         ["AnnaAndreadi", 5086.93505859375],
-        //         ["DorothyDickinson", 269.5419921875],
-        //         ["AmyHunt", 2495.391357421875],
-        //         ["TracyPoddar", 1936.639892578125],
-        //         ["EileenKiefer", 1303.47802734375],
-        //         ["CyraReiten", 1397.8724365234375],
-        //         ["SusanGilcrest", 47.94599914550781],
-        //         ["AngeleHood", 738.5040283203125],
-        //         ["NeilFranzösisch", 377.1620178222656],
-        //         ["BillShonely", 10501.6533203125],
-        //         ["StefanieHolloman", 2096.39208984375],
-        //         ["RogerDemir", 1419.7369384765625],
-        //         ["AlexGrayson", 660.9719848632812],
-        //         ["GeorgiaRosenberg", 1284.3800048828125],
-        //         ["VivekSundaresam", 1055.98095703125],
-        //         ["TonyMolinari", 1094.677978515625],
-        //         ["TomStivers", 2054.139892578125],
-        //         ["DennisBolton", 1081.4659423828125],
-        //         ["NickRadford", 2367.277099609375],
-        //         ["CariSchnelling", 537.6319580078125],
-        //         ["MonicaFederle", 1758.300048828125],
-        //         ["LizWillingham", 1259.0400390625],
-        //         ["AlexRussell", 1055.6939697265625],
-        //         ["KarenSeio", 88.47200012207031],
-        //         ["AaronBergman", 886.156005859375],
-        //         ["LisaRyan", 1879.3060302734375],
-        //         ["ShahidShariari", 3056.806640625],
-        //         ["JillMatthias", 303.947998046875],
-        //         ["JasonKlamczynski", 383.81195068359375],
-        //         ["DonMiller", 1376.7919921875],
-        //         ["MuhammedLee", 162.2320098876953],
-        //         ["MarcHarrigan", 2394.02490234375],
-        //         ["FrankCarlisle", 3418.741943359375],
-        //         ["TheaHudgings", 2942.77197265625],
-        //         ["JulianaKrohn", 3747.66796875],
-        //         ["SarahBrown", 6410.99658203125],
-        //         ["BarryGonzalez", 2798.94775390625],
-        //         ["BarryWeirich", 385.5159912109375],
-        //         ["MitchGastineau", 16.73900032043457],
-        //         ["DougO'Connell", 1267.31591796875],
-        //         ["BarryPond", 983.4201049804688],
-        //         ["TrudySchmidt", 3368.093505859375],
-        //         ["EvanMinnotte", 366.8219909667969],
-        //         ["AnthonyO'Donnell", 161.27999877929688],
-        //         ["MarkHaberlin", 400.0159912109375],
-        //         ["ShirleySchmidt", 613.39990234375],
-        //         ["LelaDonovan", 5.303999900817871],
-        //         ["VictoriaPisteka", 3360.526123046875],
-        //         ["TheresaCoyne", 1038.260009765625],
-        //         ["IoniaMcGrath", 2872.6298828125],
-        //         ["AnemoneRatner", 88.1500015258789],
-        //         ["CraigMolinari", 3984.4521484375],
-        //         ["FredWasserman", 79.75],
-        //         ["LindsayCastell", 3246.6259765625],
-        //         ["HaroldEngle", 883.5320434570312],
-        //         ["BrendanDodson", 320.5400085449219],
-        //         ["HaroldDahlen", 251.36000061035156],
-        //         ["CarlJackson", 16.520000457763672],
-        //         ["RoySkaria", 22.327999114990234],
-        //         ["SungChung", 280.6319885253906],
-        //         ["RicardoEmerson", 48.36000061035156],
-        //         ["SusanMacKendrick", 1043.041015625],
-        //     ],
-        //     ["CustomerName", "Sales"],
-        // ];
+            var lineStroke = 3;
+            var {
+                initialCircleRadius,
+                initialBoxDimension,
+                onHoverCircleRadius,
+                onHoverBoxDimension,
+                defaultLineCurve,
+            } = defaultD3Config;
 
-        var lineStroke = 3;
-        var {
-            initialCircleRadius,
-            initialBoxDimension,
-            onHoverCircleRadius,
-            onHoverBoxDimension,
-            defaultLineCurve,
-        } = defaultD3Config;
+            var extraHeightWorked = false;
+            var redrawn = false;
+            var extraHeight = 0;
 
-        var extraHeightWorked = false;
-        var redrawn = false;
-        var extraHeight = 0;
+            // drawChart(dataset);
 
-        drawChart(dataset);
+            function transformData(dataValues, dateFormat) {
+                var valueDateType = false;
+                if (isDateFormat(dataValues[0][0])) {
+                    valueDateType = true;
+                }
+                var dateWiseResponse = {};
 
-        function transformData(dataValues, dateFormat) {
-            var valueDateType = false;
-            if (isDateFormat(dataValues[0][0])) {
-                valueDateType = true;
-            }
-            var dateWiseResponse = {};
+                if (valueDateType) {
+                    dataValues.forEach((dataRow) => {
+                        var requiredTypeData = getDateFormattedData(
+                            dataRow[0],
+                            dateFormat
+                        );
+                        if (!dateWiseResponse[requiredTypeData]) {
+                            dateWiseResponse[requiredTypeData] = 0;
+                        }
+                        dateWiseResponse[requiredTypeData] += +dataRow[1];
+                    });
 
-            if (valueDateType) {
-                dataValues.forEach((dataRow) => {
-                    var requiredTypeData = getDateFormattedData(
-                        dataRow[0],
-                        dateFormat
-                    );
-                    if (!dateWiseResponse[requiredTypeData]) {
-                        dateWiseResponse[requiredTypeData] = 0;
-                    }
-                    dateWiseResponse[requiredTypeData] += +dataRow[1];
-                });
+                    var sortedKeys = sortDates(dateWiseResponse, dateFormat);
+                    var response = [];
 
-                var sortedKeys = sortDates(dateWiseResponse, dateFormat);
-                var response = [];
+                    sortedKeys.forEach((dateKey) => {
+                        response.push([dateKey, dateWiseResponse[dateKey]]);
+                    });
+                    return response;
+                }
 
-                sortedKeys.forEach((dateKey) => {
-                    response.push([dateKey, dateWiseResponse[dateKey]]);
-                });
-                return response;
+                return dataValues;
             }
 
-            return dataValues;
-        }
+            function drawChart(data, plottingConfiguration = {}) {
+                if (!redrawn) {
+                    extraHeight = 0;
+                }
+                window.data = data;
+                var dataValues = data[0];
 
-        function drawChart(data, plottingConfiguration = {}) {
-            if (!redrawn) {
-                extraHeight = 0;
-            }
-            window.data = data;
-            var dataValues = data[0];
+                // Setting up config
+                let {
+                    d3colorPalette = defaultD3Config.d3ColorPalette,
+                    paddingInner = defaultD3Config.defaultPaddingInner,
+                    dateFormat = defaultD3Config.dateFormat,
+                    chartType = defaultD3Config.horizontalChartType,
+                    toolTip = {
+                        textColumn1: "labels[0]",
+                        textColumn2: "labels[1]",
+                    },
+                    legendConfig = defaultD3Config.defaultLegendConfig,
+                    labelConfig = defaultD3Config.defaultlabelConfig,
+                    gridConfig = defaultD3Config.defaultGridConfig,
+                    // standardThresholdHeight = defaultD3Config.standardThresholdHeight,
+                    // font size
+                    xLabelfontSize = defaultD3Config.fontSize,
+                    yLabelfontSize = defaultD3Config.fontSize,
+                    xTickfontSize = defaultD3Config.fontSize,
+                    yTickfontSize = defaultD3Config.fontSize,
+                    // font family
+                    xLabelfontFamily = defaultD3Config.fontFamily,
+                    yLabelfontFamily = defaultD3Config.fontFamily,
+                    xTickfontFamily = defaultD3Config.fontFamily,
+                    yTickfontFamily = defaultD3Config.fontFamily,
+                    // font color
+                    xLabelfontColor = defaultD3Config.fontColor,
+                    yLabelfontColor = defaultD3Config.fontColor,
+                    xTickfontColor = defaultD3Config.fontColor,
+                    yTickfontColor = defaultD3Config.fontColor,
+                    markerShape = false,
+                    filledStatus = false,
+                    curveType = defaultD3Config.defaultLineCurve,
+                    standardThresholdHeight = defaultD3Config.standardThresholdHeight,
+                    markerStatus = true,
+                } = plottingConfiguration;
+                window.xLabelfontSize = xLabelfontSize;
+                window.yLabelfontSize = yLabelfontSize;
+                window.xTickfontSize = xTickfontSize;
+                window.yTickfontSize = yTickfontSize;
 
-            // Setting up config
-            let {
-                d3colorPalette = defaultD3Config.d3ColorPalette,
-                paddingInner = defaultD3Config.defaultPaddingInner,
-                dateFormat = defaultD3Config.dateFormat,
-                chartType = defaultD3Config.horizontalChartType,
-                toolTip = {
-                    textColumn1: "labels[0]",
-                    textColumn2: "labels[1]",
-                },
-                legendConfig = defaultD3Config.defaultLegendConfig,
-                labelConfig = defaultD3Config.defaultlabelConfig,
-                gridConfig = defaultD3Config.defaultGridConfig,
-                // standardThresholdHeight = defaultD3Config.standardThresholdHeight,
-                // font size
-                xLabelfontSize = defaultD3Config.fontSize,
-                yLabelfontSize = defaultD3Config.fontSize,
-                xTickfontSize = defaultD3Config.fontSize,
-                yTickfontSize = defaultD3Config.fontSize,
-                // font family
-                xLabelfontFamily = defaultD3Config.fontFamily,
-                yLabelfontFamily = defaultD3Config.fontFamily,
-                xTickfontFamily = defaultD3Config.fontFamily,
-                yTickfontFamily = defaultD3Config.fontFamily,
-                // font color
-                xLabelfontColor = defaultD3Config.fontColor,
-                yLabelfontColor = defaultD3Config.fontColor,
-                xTickfontColor = defaultD3Config.fontColor,
-                yTickfontColor = defaultD3Config.fontColor,
-                markerShape = false,
-                filledStatus = false,
-                curveType = defaultD3Config.defaultLineCurve,
-                standardThresholdHeight = defaultD3Config.standardThresholdHeight,
-                markerStatus = true,
-            } = plottingConfiguration;
-            window.xLabelfontSize = xLabelfontSize;
-            window.yLabelfontSize = yLabelfontSize;
-            window.xTickfontSize = xTickfontSize;
-            window.yTickfontSize = yTickfontSize;
+                window.xLabelfontFamily = xLabelfontFamily;
+                window.yLabelfontFamily = yLabelfontFamily;
+                window.xTickfontFamily = xTickfontFamily;
+                window.yTickfontFamily = yTickfontFamily;
 
-            window.xLabelfontFamily = xLabelfontFamily;
-            window.yLabelfontFamily = yLabelfontFamily;
-            window.xTickfontFamily = xTickfontFamily;
-            window.yTickfontFamily = yTickfontFamily;
+                window.xLabelfontColor = xLabelfontColor;
+                window.yLabelfontColor = yLabelfontColor;
+                window.xTickfontColor = xTickfontColor;
+                window.yTickfontColor = yTickfontColor;
 
-            window.xLabelfontColor = xLabelfontColor;
-            window.yLabelfontColor = yLabelfontColor;
-            window.xTickfontColor = xTickfontColor;
-            window.yTickfontColor = yTickfontColor;
+                d3.selectAll("#my_dataviz").html("");
+                d3.selectAll("#yAxisDiv").html("");
 
-            d3.selectAll("#my_dataviz").html("");
-            d3.selectAll("#yAxisDiv").html("");
+                let { legendStatus, legendPosition } = legendConfig;
+                let { labelStatus } = labelConfig;
+                let { gridStatus } = gridConfig;
 
-            let { legendStatus, legendPosition } = legendConfig;
-            let { labelStatus } = labelConfig;
-            let { gridStatus } = gridConfig;
+                d3Colors = d3colorPalette;
 
-            d3Colors = d3colorPalette;
+                // transforming data
+                // Checking date values
+                dataValues = transformData(dataValues, dateFormat);
+                window.chartDataValues = dataValues;
 
-            // transforming data
-            // Checking date values
-            dataValues = transformData(dataValues, dateFormat);
-            window.chartDataValues = dataValues;
+                // clear chart
+                clearChart();
 
-            // clear chart
-            clearChart();
+                // margins, height, width
+                margin = { top: 20, right: 50, bottom: 50, left: 40 };
+                var width = window.innerWidth - margin.left - margin.right - 60;
 
-            // margins, height, width
-            margin = { top: 20, right: 50, bottom: 50, left: 40 };
-            var width = window.innerWidth - margin.left - margin.right - 60;
+                var height =
+                    window.innerHeight - margin.top - margin.bottom - 5;
+                console.log(height);
 
-            var height =
-                window.innerHeight - margin.top - margin.bottom - 5;
-            console.log(height);
-
-            // Update height based on type of chart
-            /*
+                // Update height based on type of chart
+                /*
             if (chartType == constants.chartType.STANDARD) {
                 height = dataValues.length * standardThresholdHeight;
                 if (
@@ -1104,630 +304,631 @@
                     d3.select("#xAxisDiv").style("bottom", 0);
                 }
             } */
-            const yAxisWidth =
-                document.querySelector("#yAxisDiv").clientWidth;
+                const yAxisWidth =
+                    document.querySelector("#yAxisDiv").clientWidth;
                 //    width = width - yAxisWidth;
 
-            if (chartType == constants.chartType.STANDARD) {
-                height = dataValues.length * standardThresholdHeight;
-                if (
-                    height + margin.top + margin.bottom <
-                    window.innerHeight
-                ) {
-                    console.log(
-                        height + margin.top + margin.bottom,
+                if (chartType == constants.chartType.STANDARD) {
+                    height = dataValues.length * standardThresholdHeight;
+                    if (
+                        height + margin.top + margin.bottom <
                         window.innerHeight
-                    );
-                    d3.select("#xAxisDiv").style(
-                        "top",
-                        height + margin.top + "px"
-                    );
+                    ) {
+                        console.log(
+                            height + margin.top + margin.bottom,
+                            window.innerHeight
+                        );
+                        d3.select("#xAxisDiv").style(
+                            "top",
+                            height + margin.top + "px"
+                        );
+                    } else {
+                        d3.select("#xAxisDiv").style("bottom", 0);
+                    }
                 } else {
                     d3.select("#xAxisDiv").style("bottom", 0);
-                }
-            } else {
-                d3.select("#xAxisDiv").style("bottom", 0);
-                d3.select("#xAxisDiv").style("top", null);
-            }
-
-             // legends code starts
-            d3.select("#legend").html("").style("padding", "");
-            if (legendStatus) {
-                d3.select("#legend").html("");
-
-                d3.select("#legend")
-                    .append("p")
-                    .html("xAxisLabel" + "&nbsp;")
-                    .style("font-weight", "bold")
-                    .style("margin", "auto")
-                    .style("position", "sticky");
-
-                d3.select("#legend")
-                    .selectAll("div")
-                    .data([data[1][0]])
-                    .enter()
-                    .append("div")
-                    .html((d, i) => {
-                        return (
-                            '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
-                            d3Colors[i % data[1][1].length] +
-                            ';">  </div>' +
-                            "<span style='margin-left: 5px; max-width: 160px'>" +
-                            d +
-                            "</span>"
-                        );
-                    })
-                    .style("display", "flex")
-                    .style("padding", "2px");
-            }
-
-            d3.selectAll("#my_dataviz").style(
-                "height",
-                "calc(100vh - 71px)"
-            );
-
-            // legends code ends
-              // legends height ,width elements
-            var legendElement = document.querySelector("#legend");
-            var legendHeight = legendElement.offsetHeight;
-            var legendWidth = legendElement.offsetWidth;
-             var bottomHeight = 0;
-
-            // const yAxisWidth =
-            //     document.querySelector("#yAxisDiv").clientWidth;
-
-            d3.select("#legend").attr("style", null);
-            d3.select("#mainChartWindow").attr("style", null);
-
-            // legends code starts
-            if (legendStatus) {
-                if (
-                    legendHeight <
-                    document.querySelector("html").offsetHeight
-                ) {
-                    topPosition = "calc(50vh - " + legendHeight / 2 + "px)";
-                } else {
-                    topPosition = 0;
+                    d3.select("#xAxisDiv").style("top", null);
                 }
 
-                rightPosition = "calc(50vw - " + legendWidth / 2 + "px)";
+                // legends code starts
+                d3.select("#legend").html("").style("padding", "");
+                if (legendStatus) {
+                    d3.select("#legend").html("");
 
-                //  var widthOld = (document.querySelector("#my_dataviz").clientWidth) ;
-                var widthOld =
-                    document.querySelector("html").clientWidth - 40;
-                var heightOld = document.querySelector("html").clientHeight;
+                    d3.select("#legend")
+                        .append("p")
+                        .html("xAxisLabel" + "&nbsp;")
+                        .style("font-weight", "bold")
+                        .style("margin", "auto")
+                        .style("position", "sticky");
 
-                // legendElement.style.padding = "10px";
-                legendElement.style.border = "1px solid black";
-
-                switch (legendPosition) {
-                    case "left":
-                        // clearStyle();
-                        d3.select("#legend")
-                            .attr("style", null)
-                            .style("top", topPosition)
-                            .style("right", "auto")
-                            // .style("bottom", "auto")
-                            .style("left", "0px")
-                            // .style("right", "5px")
-                            .style("display", "block")
-                            .style("max-height", "100vh")
-                            .style("overflow-x", "scroll")
-                            .style("border", "none")
-                            .style("position", "fixed");
-                        d3.selectAll("#legend div span")
-                            .style("max-width", "160px")
-                            .style("white-space", "nowrap")
-                            .style("overflow", "hidden")
-                            .style("text-overflow", "ellipsis");
-
-                        var legendWidth = legendElement.offsetWidth;
-                        // margin.left += 100;
-                        // width -= 100;
-                        // d3.select("#my_dataviz svg").attr("width", width + margin.left + margin.right);
-
-                        d3.select("#mainChartWindow").attr("style", null);
-
-                        d3.select("#mainChartWindow").style(
-                            "width",
-                            widthOld - legendWidth + yAxisWidth
-                        );
-                        d3.select("#mainChartWindow").style(
-                            "margin-left",
-                            legendWidth+"px"
-                        );
-                        break;
-                    case "top":
-                        // clearStyle();
-                        d3.select("#mainChartWindow").attr("style", null);
-                        // margin.top -= 50;
-                        // height -= 50;
-                        d3.select("#legend")
-                            .attr("style", null)
-                            .style("top", "10px")
-                            .style("right", rightPosition)
-                            .style("bottom", "auto")
-                            .style("left", "auto")
-                            .style("display", "flex")
-                            .style("max-width", "99vw")
-                            .style("overflow-x", "scroll")
-                            .style("border", "none");
-                        d3.selectAll("#legend div span")
-                            .style("max-width", "160px")
-                            .style("white-space", "nowrap")
-                            .style("overflow", "hidden")
-                            .style("text-overflow", "ellipsis");
-
-                        // d3.selectAll("#legend div").style(
-                        //     "padding",
-                        //     "2px 4px"
-                        // );
-                        d3.selectAll("#my_dataviz").style("margin-top", 50+"px");
-
-                        d3.selectAll("#my_dataviz").style(
-                            "height",
-                            "calc(100vh - 122px)"
-                        );
-                        // debugger;
-                        d3.selectAll("#xAxisDiv").style("bottom", "0px");
-                        break;
-                    case "bottom":
-                        // clearStyle();
-                        // height -= 50; // use legend client height
-                        // bottomHeight += 50;
-                        // margin.bottom += 10;
-                        var legendWidth = legendElement.offsetWidth;
-
-                        d3.select("#xAxisLabelId").style("bottom", 50);
-                        d3.select("#mainChartWindow").attr("style", null);
-
-                        // d3.select("#mainChartWindow").style("width", width);
-                        //  d3.select("#mainChartWindow").style("height",heightOld-80 );
-                        d3.select("#mainChartWindow").style(
-                            "margin-left",
-                            "0px"
-                        );
-                        d3.select("#legend")
-                            .attr("style", null)
-                            .style("top", "auto")
-                            .style("right", rightPosition)
-                            .style("bottom", "0px")
-                            // .style("left", margin.left + "px")
-                            .style("display", "flex")
-                            .style("max-width", "99vw")
-                            .style("overflow-x", "scroll")
-                            .style("border", "none");
-
-                        d3.selectAll("#legend div span")
-                            .style("max-width", "160px")
-                            .style("white-space", "nowrap")
-                            .style("overflow", "hidden")
-                            .style("text-overflow", "ellipsis");
-
-                        // d3.selectAll("#my_dataviz").style(
-                        //     "margin-bottom",
-                        //     70+"px"
-                        // );
-                        // d3.selectAll("#my_dataviz").style(
-                        //     "margin-bottom",
-                        //     180
-                        // );
-                        d3.selectAll("#my_dataviz").style(
-                            "height",
-                            "calc(100vh - 102px)"
-                        );
-                        d3.selectAll("#xAxisDiv").style("bottom", "30px");
-                        d3.selectAll("#xAxisLabelId").style(
-                            "bottom",
-                            "50px"
-                        );
-
-                        break;
-                    // For Right Legened
-                    case "right":
-                    default:
-                        // debugger;
-                        // clearStyle();
-                        var legendWidth = legendElement.offsetWidth;
-                        // width -= legendWidth;
-                        // d3.select("#my_dataviz").style("width", width + margin.left + margin.right);
-
-                        d3.select("#legend")
-                            .attr("style", null)
-                            .style("right", "5px")
-                            .style("left", "auto")
-                            .style("position", "fixed")
-                            .style("top", topPosition)
-                            .style("max-height", "100vh")
-                            .style("overflow-x", "scroll")
-                            .style("border", "none")
-                            .style("bottom", "auto")
-                            .style("display", "block");
-                        d3.selectAll("#legend div span")
-                            .style("max-width", "160px")
-                            .style("white-space", "nowrap")
-                            .style("overflow", "hidden")
-                            .style("text-overflow", "ellipsis");
-
-                        d3.select("#mainChartWindow").attr("style", null);
-                        d3.select("#mainChartWindow").style(
-                            "width",
-                            widthOld + yAxisWidth - legendWidth - 20+"px"
-                        );
-                        // d3.select("#my_dataviz svg" ).style(
-                        //     "width",
-                        //    widthOld+yAxisWidth-legendWidth-20
-                        // );
-
-                        d3.select("#mainChartWindow").style(
-                            "margin-left",
-                            0
-                        );
+                    d3.select("#legend")
+                        .selectAll("div")
+                        .data([data[1][0]])
+                        .enter()
+                        .append("div")
+                        .html((d, i) => {
+                            return (
+                                '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
+                                d3Colors[i % data[1][1].length] +
+                                ';">  </div>' +
+                                "<span style='margin-left: 5px; max-width: 160px'>" +
+                                d +
+                                "</span>"
+                            );
+                        })
+                        .style("display", "flex")
+                        .style("padding", "2px");
                 }
-            }
 
-            if (legendPosition == "left" || legendPosition == "right") {
+                d3.selectAll("#my_dataviz").style(
+                    "height",
+                    "calc(100vh - 71px)"
+                );
+
+                // legends code ends
+                // legends height ,width elements
+                var legendElement = document.querySelector("#legend");
+                var legendHeight = legendElement.offsetHeight;
                 var legendWidth = legendElement.offsetWidth;
-                width -= legendWidth + 30;
-            }
-            
+                var bottomHeight = 0;
 
-            // legends code ends
+                // const yAxisWidth =
+                //     document.querySelector("#yAxisDiv").clientWidth;
 
+                d3.select("#legend").attr("style", null);
+                d3.select("#mainChartWindow").attr("style", null);
 
-            console.log(height);
+                // legends code starts
+                if (legendStatus) {
+                    if (
+                        legendHeight <
+                        document.querySelector("html").offsetHeight
+                    ) {
+                        topPosition = "calc(50vh - " + legendHeight / 2 + "px)";
+                    } else {
+                        topPosition = 0;
+                    }
 
-            yaxisTicks = height / 70;
+                    rightPosition = "calc(50vw - " + legendWidth / 2 + "px)";
 
-            yScale = d3
-                .scaleBand()
-                .range([0, height])
-                .padding(paddingInner)
-                .domain(
-                    dataValues.map(function (d) {
-                        return d[0];
-                    })
-                );
+                    //  var widthOld = (document.querySelector("#my_dataviz").clientWidth) ;
+                    var widthOld =
+                        document.querySelector("html").clientWidth - 40;
+                    var heightOld = document.querySelector("html").clientHeight;
 
-            var minValue = d3.min(dataValues, function (d) {
-                return d[1];
-            });
+                    // legendElement.style.padding = "10px";
+                    legendElement.style.border = "1px solid black";
 
-            xScale = d3
-                .scaleLinear()
-                .range([0, width + 30])
-                .domain([
-                    minValue < 0 ? minValue : 0,
-                    d3.max(dataValues, function (d) {
-                        return d[1];
-                    }),
-                ])
-                .nice();
+                    switch (legendPosition) {
+                        case "left":
+                            // clearStyle();
+                            d3.select("#legend")
+                                .attr("style", null)
+                                .style("top", topPosition)
+                                .style("right", "auto")
+                                // .style("bottom", "auto")
+                                .style("left", "0px")
+                                // .style("right", "5px")
+                                .style("display", "block")
+                                .style("max-height", "100vh")
+                                .style("overflow-x", "scroll")
+                                .style("border", "none")
+                                .style("position", "fixed");
+                            d3.selectAll("#legend div span")
+                                .style("max-width", "160px")
+                                .style("white-space", "nowrap")
+                                .style("overflow", "hidden")
+                                .style("text-overflow", "ellipsis");
 
-            var svg = d3
-                .select("#my_dataviz")
-                .append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height+ bottomHeight  + extraHeight);
+                            var legendWidth = legendElement.offsetWidth;
+                            // margin.left += 100;
+                            // width -= 100;
+                            // d3.select("#my_dataviz svg").attr("width", width + margin.left + margin.right);
 
-            var g = svg
-                .append("g")
-                .attr(
-                    "transform",
-                    "translate(" + margin.left + "," + margin.top + ")"
-                );
+                            d3.select("#mainChartWindow").attr("style", null);
 
+                            d3.select("#mainChartWindow").style(
+                                "width",
+                                widthOld - legendWidth + yAxisWidth
+                            );
+                            d3.select("#mainChartWindow").style(
+                                "margin-left",
+                                legendWidth + "px"
+                            );
+                            break;
+                        case "top":
+                            // clearStyle();
+                            d3.select("#mainChartWindow").attr("style", null);
+                            // margin.top -= 50;
+                            // height -= 50;
+                            d3.select("#legend")
+                                .attr("style", null)
+                                .style("top", "10px")
+                                .style("right", rightPosition)
+                                .style("bottom", "auto")
+                                .style("left", "auto")
+                                .style("display", "flex")
+                                .style("max-width", "99vw")
+                                .style("overflow-x", "scroll")
+                                .style("border", "none");
+                            d3.selectAll("#legend div span")
+                                .style("max-width", "160px")
+                                .style("white-space", "nowrap")
+                                .style("overflow", "hidden")
+                                .style("text-overflow", "ellipsis");
 
-            d3.selectAll("#yAxisDiv")
-                .append("svg")
-                .attr("width", 40)
-                .attr("height", window.innerHeight)
-                .append("g")
-                .attr(
-                    "transform",
-                    "translate(" +
-                    margin.left +
-                    "," +
-                    (margin.top + 10) +
-                    ")"
-                );
-            // axis-x
-            bottomAxis = g.append("g").attr("class", "axis axis--x x-axis");
-            // .attr("transform", "translate(" + 0 + "," + height + ")");
+                            // d3.selectAll("#legend div").style(
+                            //     "padding",
+                            //     "2px 4px"
+                            // );
+                            d3.selectAll("#my_dataviz").style(
+                                "margin-top",
+                                50 + "px"
+                            );
 
-            // if (isDateFormat(dataValues[0][0])) {
-            //     bottomAxis.call(
-            //         d3
-            //             .axisBottom(xScale)
-            //             .tickSizeOuter(0)
-            //             .ticks(dataValues.length)
-            //             .tickFormat(d3.timeFormat(dateFormat))
-            //     );
-            // } else {
-            bottomAxis.call(
-                d3
-                    .axisLeft(yScale)
-                    .tickSizeOuter(0)
-                    .ticks(dataValues.length)
-            );
-            // }
+                            d3.selectAll("#my_dataviz").style(
+                                "height",
+                                "calc(100vh - 122px)"
+                            );
+                            // debugger;
+                            d3.selectAll("#xAxisDiv").style("bottom", "0px");
+                            break;
+                        case "bottom":
+                            // clearStyle();
+                            // height -= 50; // use legend client height
+                            // bottomHeight += 50;
+                            // margin.bottom += 10;
+                            var legendWidth = legendElement.offsetWidth;
 
-            var bar = g
-                .selectAll("rect")
-                .data(dataValues)
-                .enter()
-                .append("g");
+                            d3.select("#xAxisLabelId").style("bottom", 50);
+                            d3.select("#mainChartWindow").attr("style", null);
 
-            if (gridStatus) {
-                svg.append("g")
-                    .attr("class", "grid")
-                    .style("stroke-width", "1")
+                            // d3.select("#mainChartWindow").style("width", width);
+                            //  d3.select("#mainChartWindow").style("height",heightOld-80 );
+                            d3.select("#mainChartWindow").style(
+                                "margin-left",
+                                "0px"
+                            );
+                            d3.select("#legend")
+                                .attr("style", null)
+                                .style("top", "auto")
+                                .style("right", rightPosition)
+                                .style("bottom", "0px")
+                                // .style("left", margin.left + "px")
+                                .style("display", "flex")
+                                .style("max-width", "99vw")
+                                .style("overflow-x", "scroll")
+                                .style("border", "none");
+
+                            d3.selectAll("#legend div span")
+                                .style("max-width", "160px")
+                                .style("white-space", "nowrap")
+                                .style("overflow", "hidden")
+                                .style("text-overflow", "ellipsis");
+
+                            // d3.selectAll("#my_dataviz").style(
+                            //     "margin-bottom",
+                            //     70+"px"
+                            // );
+                            // d3.selectAll("#my_dataviz").style(
+                            //     "margin-bottom",
+                            //     180
+                            // );
+                            d3.selectAll("#my_dataviz").style(
+                                "height",
+                                "calc(100vh - 102px)"
+                            );
+                            d3.selectAll("#xAxisDiv").style("bottom", "30px");
+                            d3.selectAll("#xAxisLabelId").style(
+                                "bottom",
+                                "50px"
+                            );
+
+                            break;
+                        // For Right Legened
+                        case "right":
+                        default:
+                            // debugger;
+                            // clearStyle();
+                            var legendWidth = legendElement.offsetWidth;
+                            // width -= legendWidth;
+                            // d3.select("#my_dataviz").style("width", width + margin.left + margin.right);
+
+                            d3.select("#legend")
+                                .attr("style", null)
+                                .style("right", "5px")
+                                .style("left", "auto")
+                                .style("position", "fixed")
+                                .style("top", topPosition)
+                                .style("max-height", "100vh")
+                                .style("overflow-x", "scroll")
+                                .style("border", "none")
+                                .style("bottom", "auto")
+                                .style("display", "block");
+                            d3.selectAll("#legend div span")
+                                .style("max-width", "160px")
+                                .style("white-space", "nowrap")
+                                .style("overflow", "hidden")
+                                .style("text-overflow", "ellipsis");
+
+                            d3.select("#mainChartWindow").attr("style", null);
+                            d3.select("#mainChartWindow").style(
+                                "width",
+                                widthOld + yAxisWidth - legendWidth - 20 + "px"
+                            );
+                            // d3.select("#my_dataviz svg" ).style(
+                            //     "width",
+                            //    widthOld+yAxisWidth-legendWidth-20
+                            // );
+
+                            d3.select("#mainChartWindow").style(
+                                "margin-left",
+                                0
+                            );
+                    }
+                }
+
+                if (legendPosition == "left" || legendPosition == "right") {
+                    var legendWidth = legendElement.offsetWidth;
+                    width -= legendWidth + 30;
+                }
+
+                // legends code ends
+
+                console.log(height);
+
+                yaxisTicks = height / 70;
+
+                yScale = d3
+                    .scaleBand()
+                    .range([0, height])
+                    .padding(paddingInner)
+                    .domain(
+                        dataValues.map(function (d) {
+                            return d[0];
+                        })
+                    );
+
+                var minValue = d3.min(dataValues, function (d) {
+                    return d[1];
+                });
+
+                xScale = d3
+                    .scaleLinear()
+                    .range([0, width + 30])
+                    .domain([
+                        minValue < 0 ? minValue : 0,
+                        d3.max(dataValues, function (d) {
+                            return d[1];
+                        }),
+                    ])
+                    .nice();
+
+                var svg = d3
+                    .select("#my_dataviz")
+                    .append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + bottomHeight + extraHeight);
+
+                var g = svg
+                    .append("g")
                     .attr(
                         "transform",
                         "translate(" + margin.left + "," + margin.top + ")"
-                    )
-                    .call(
-                        make_x_gridlines(xScale)
-                            .tickSize(height)
-                            .ticks(5)
-                            .tickFormat("")
                     );
-            }
 
+                d3.selectAll("#yAxisDiv")
+                    .append("svg")
+                    .attr("width", 40)
+                    .attr("height", window.innerHeight)
+                    .append("g")
+                    .attr(
+                        "transform",
+                        "translate(" +
+                            margin.left +
+                            "," +
+                            (margin.top + 10) +
+                            ")"
+                    );
+                // axis-x
+                bottomAxis = g.append("g").attr("class", "axis axis--x y-axis");
+                // .attr("transform", "translate(" + 0 + "," + height + ")");
 
-            // line chart
-            var line = d3
-                .line()
-                .x(function (d, i) {
-                    return xScale(d[1]);
-                })
-                .y(function (d) {
-                    return yScale(d[0]);
-                })
-                .curve(d3[curveType]);
+                // if (isDateFormat(dataValues[0][0])) {
+                //     bottomAxis.call(
+                //         d3
+                //             .axisBottom(xScale)
+                //             .tickSizeOuter(0)
+                //             .ticks(dataValues.length)
+                //             .tickFormat(d3.timeFormat(dateFormat))
+                //     );
+                // } else {
+                bottomAxis.call(
+                    d3
+                        .axisLeft(yScale)
+                        .tickSizeOuter(0)
+                        .ticks(dataValues.length)
+                );
+                // }
 
-            svg.append("path")
-                .attr("class", "line") // Assign a class for styling
-                .attr("d", line(dataValues)) // 11. Calls the line generator
-                .attr("stroke", d3Colors[0])
-                .attr("stroke-width", lineStroke)
-                .attr("fill", "none")
-                .attr(
-                    "transform",
-                    "translate(" +
-                    margin.left +
-                    "," +
-                    (margin.top + yScale.bandwidth() / 2) +
-                    ")"
+                var bar = g
+                    .selectAll("rect")
+                    .data(dataValues)
+                    .enter()
+                    .append("g");
+
+                if (gridStatus) {
+                    svg.append("g")
+                        .attr("class", "grid")
+                        .style("stroke-width", "1")
+                        .attr(
+                            "transform",
+                            "translate(" + margin.left + "," + margin.top + ")"
+                        )
+                        .call(
+                            make_x_gridlines(xScale)
+                                .tickSize(height)
+                                .ticks(height / 50)
+                                .tickFormat("")
+                        );
+                }
+
+                // line chart
+                var line = d3
+                    .line()
+                    .x(function (d, i) {
+                        return xScale(d[1]);
+                    })
+                    .y(function (d) {
+                        return yScale(d[0]);
+                    })
+                    .curve(d3[curveType]);
+
+                svg.append("path")
+                    .attr("class", "line") // Assign a class for styling
+                    .attr("d", line(dataValues)) // 11. Calls the line generator
+                    .attr("stroke", d3Colors[0])
+                    .attr("stroke-width", lineStroke)
+                    .attr("fill", "none")
+                    .attr(
+                        "transform",
+                        "translate(" +
+                            margin.left +
+                            "," +
+                            (margin.top + yScale.bandwidth() / 2) +
+                            ")"
+                    );
+
+                xAxisTicks = width / 100;
+
+                //add x and y axis
+                var xAxis = d3
+                    .axisBottom(xScale)
+                    .tickSize(0)
+                    .ticks(5)
+                    .tickFormat(d3.format(".2s"));
+
+                d3.select("#xAxisDiv")
+                    .append("svg")
+                    .attr("height", "72")
+                    .attr("width", width + margin.left + margin.right)
+                    .append("g") //add group to leave margin for axis
+                    .attr(
+                        "transform",
+                        "translate(" + margin.left + ",0)"
+                        // "translate(0,0)"
+                    )
+                    // .style(  ?  :, ? : )
+                    .append("g")
+                    .attr("class", "x-axis")
+                    .call(xAxis);
+
+                if (markerStatus) {
+                    drawMarker(filledStatus, markerShape);
+                }
+
+                setYaxisWidth();
+
+                // var barWidth = document.querySelector(".bar").getBBox().width;
+                // var barWidth = yScale.bandwidth();
+                // if (
+                //     chartType == constants.chartType.FIT_HEIGHT &&
+                //     barWidth < 40
+                // ) {
+                //     setXaxisWidth();
+                // }
+
+                // function setXaxisWidth() {
+                //     var allYAxisTicks =
+                //         document.querySelectorAll(".x-axis .tick");
+                //     var maxWidth = 0;
+                //     for (var i = 0; i < allYAxisTicks.length; i++) {
+                //         var tick = allYAxisTicks[i];
+                //         var width = tick.getBBox().width;
+                //         if (width > maxWidth) {
+                //             maxWidth = width;
+                //         }
+                //     }
+
+                //     extraHeightWorked = true;
+                //     extraHeight = maxWidth < 100 ? maxWidth : 100;
+
+                //     d3.select(".x-axis").attr("text-anchor", "right");
+
+                //     d3.selectAll(".x-axis text")
+                //         .attr("transform", "rotate(-90)")
+                //         .attr("dy", "0.3em")
+                //         .attr("x", "-" + (maxWidth + 3))
+                //         .attr("y", "0");
+                // }
+
+                // a = document.querySelectorAll(".y-axis text");
+                // var textWidth = 100;
+
+                // // setXAxisTicksDistance();
+
+                // if (chartType == constants.chartType.FIT_HEIGHT) {
+                //     for (var i = 0; i < a.length; i++) {
+                //         if (!Math.floor(dataValues.length * 0.02)) {
+                //             break;
+                //         }
+                //         if (i % Math.floor(dataValues.length * 0.015) != 0) {
+                //             a[i].remove();
+                //             continue;
+                //         }
+
+                //         if (i == 0 && barWidth < textWidth * 0.5) {
+                //             a[i].setAttribute("dy", "1em");
+                //             continue;
+                //         }
+                //         if (barWidth < textWidth * 0.5) {
+                //             a[i].setAttribute("dy", "0.8em");
+                //         }
+                //     }
+                // }
+
+                console.log(dataValues);
+                removeAxisTicks("yAxis", dataValues);
+
+                if (extraHeightWorked && !redrawn) {
+                    extraHeightWorked = false;
+                    redrawn = true;
+                    drawChart(window.data, plottingConfiguration);
+                }
+
+                if (extraHeightWorked && redrawn) {
+                    extraHeightWorked = false;
+                    redrawn = false;
+                }
+
+                setLabel(xAxisLabel, "y_label", d3.select("svg"), false);
+                setLabel(
+                    yAxisLabel,
+                    "x_label",
+                    d3
+                        .select("#xAxisLabelId")
+                        .append("svg")
+                        .attr("width", window.innerWidth, "height", 150)
                 );
 
-            xAxisTicks = width / 100;
-
-            //add x and y axis
-            var xAxis = d3
-                .axisBottom(xScale)
-                .tickSize(0)
-                .ticks(5)
-                .tickFormat(d3.format(".2s"));
-
-            d3.select("#xAxisDiv")
-                .append("svg")
-                .attr("height", "72")
-                .attr("width", width + margin.left + margin.right)
-                .append("g") //add group to leave margin for axis
-                .attr(
-                    "transform",
-                    "translate(" + margin.left + ",0)"
-                    // "translate(0,0)"
-                )
-                // .style(  ?  :, ? : )
-                .append("g")
-                .attr("class", "x-axis")
-                .call(xAxis);
-
-            if (markerStatus) {
-                drawMarker(filledStatus, markerShape);
-            }
-
-            setYaxisWidth();
-
-            // var barWidth = document.querySelector(".bar").getBBox().width;
-            var barWidth = yScale.bandwidth();
-            if (
-                chartType == constants.chartType.FIT_HEIGHT &&
-                barWidth < 40
-            ) {
-                setXaxisWidth();
-            }
-
-            function setXaxisWidth() {
-                var allYAxisTicks =
-                    document.querySelectorAll(".x-axis .tick");
-                var maxWidth = 0;
-                for (var i = 0; i < allYAxisTicks.length; i++) {
-                    var tick = allYAxisTicks[i];
-                    var width = tick.getBBox().width;
-                    if (width > maxWidth) {
-                        maxWidth = width;
+                function setYaxisWidth() {
+                    var allYAxisTicks =
+                        document.querySelectorAll(".x-axis .tick");
+                    var maxWidth = 72;
+                    for (var i = 0; i < allYAxisTicks.length; i++) {
+                        var tick = allYAxisTicks[i];
+                        var width = tick.getBBox().width + 25;
+                        if (width > maxWidth) {
+                            maxWidth = width;
+                        }
                     }
                 }
 
-                extraHeightWorked = true;
-                extraHeight = maxWidth < 100 ? maxWidth : 100;
-
-                d3.select(".x-axis").attr("text-anchor", "right");
-
-                d3.selectAll(".x-axis text")
-                    .attr("transform", "rotate(-90)")
-                    .attr("dy", "0.3em")
-                    .attr("x", "-" + (maxWidth + 3))
-                    .attr("y", "0");
-            }
-
-            a = document.querySelectorAll(".y-axis text");
-            var textWidth = 100;
-
-            // setXAxisTicksDistance();
-
-            if (chartType == constants.chartType.FIT_HEIGHT) {
-                for (var i = 0; i < a.length; i++) {
-                    if (!Math.floor(dataValues.length * 0.02)) {
-                        break;
-                    }
-                    if (i % Math.floor(dataValues.length * 0.015) != 0) {
-                        a[i].remove();
-                        continue;
-                    }
-
-                    if (i == 0 && barWidth < textWidth * 0.5) {
-                        a[i].setAttribute("dy", "1em");
-                        continue;
-                    }
-                    if (barWidth < textWidth * 0.5) {
-                        a[i].setAttribute("dy", "0.8em");
-                    }
+                function make_x_gridlines() {
+                    return d3.axisBottom(xScale).ticks(dataValues.length);
+                }
+                function make_y_gridlines() {
+                    return d3.axisLeft(yScale).ticks(yaxisTicks);
                 }
             }
 
-            if (extraHeightWorked && !redrawn) {
-                extraHeightWorked = false;
-                redrawn = true;
-                drawChart(window.data, plottingConfiguration);
-            }
+            function drawMarker(fillStatus, markerShape) {
+                dateformatValue = function (value) {
+                    return value;
+                };
 
-            if (extraHeightWorked && redrawn) {
-                extraHeightWorked = false;
-                redrawn = false;
-            }
+                let dataValues = window.chartDataValues,
+                    fill = "#ffffff",
+                    stroke = d3Colors[0];
 
-            setLabel(xAxisLabel, "y_label", d3.select("svg"), false);
-            setLabel(
-                yAxisLabel,
-                "x_label",
-                d3
-                    .select("#xAxisLabelId")
-                    .append("svg")
-                    .attr("width", window.innerWidth, "height", 150)
-            );
-
-            function setYaxisWidth() {
-                var allYAxisTicks =
-                    document.querySelectorAll(".x-axis .tick");
-                var maxWidth = 72;
-                for (var i = 0; i < allYAxisTicks.length; i++) {
-                    var tick = allYAxisTicks[i];
-                    var width = tick.getBBox().width + 25;
-                    if (width > maxWidth) {
-                        maxWidth = width;
-                    }
+                if (fillStatus) {
+                    initialCircleRadius = 3;
+                    fill = d3Colors[0];
+                    stroke = 0;
                 }
+                if (!markerShape) {
+                    markerShape = defaultD3Config.defaultMarkerShape;
+                }
+
+                var svg = d3.select("#my_dataviz svg");
+                [xAxisLabel, yAxisLabel] = data[1];
+                svg.selectAll(".marker-shape").remove();
+
+                svg.selectAll(".dot")
+                    .data(dataValues)
+                    .enter()
+                    .append(markerShape)
+                    .attr("stroke", stroke)
+                    .attr("class", markerShape)
+                    .attr("class", "marker-shape")
+                    .attr(
+                        "transform",
+                        "translate(" +
+                            (markerShape == constants.markerShapes.RECT
+                                ? margin.left - 2.8
+                                : margin.left) +
+                            "," +
+                            (markerShape == constants.markerShapes.RECT
+                                ? margin.top - 3
+                                : margin.top) +
+                            ")"
+                    )
+                    .attr("fill", fill)
+                    .attr(
+                        markerShapeConfig[markerShape] &&
+                            markerShapeConfig[markerShape].xPositionAttrName,
+                        function (d, i) {
+                            return xScale(d[1]);
+                        }
+                    )
+                    .attr(
+                        markerShapeConfig[markerShape] &&
+                            markerShapeConfig[markerShape].yPositionAttrName,
+                        function (d) {
+                            return yScale(d[0]) + yScale.bandwidth() / 2;
+                        }
+                    )
+                    .attr("r", initialCircleRadius)
+                    .attr("height", initialBoxDimension)
+                    .attr("width", initialBoxDimension)
+                    .attr("points", function (d, i) {
+                        console.log(d);
+                        var x1 = xScale(d[1]);
+                        return x1;
+                    })
+                    .on("mousemove ", function (d, i) {
+                        var x_pos = d3.mouse(this)[0];
+                        var y_pos = d3.mouse(this)[1];
+
+                        // console.log(d);
+                        const xValue = dateformatValue(d[0]);
+                        const yValue = d[1];
+
+                        d3.select("#tooltip")
+                            .style("left", x_pos - 20 + "px")
+                            .style("top", y_pos - 20 + "px")
+                            .style("display", "block")
+                            .html(xValue + ", " + yValue.toFixed(2));
+
+                        var shapeClass = ".marker-shape";
+                        d3.selectAll(shapeClass).style("opacity", 0.3);
+                        d3.select(this)
+                            .style("opacity", 1)
+                            .attr("r", onHoverCircleRadius)
+                            .attr("height", onHoverBoxDimension)
+                            .attr("width", onHoverBoxDimension);
+                    })
+                    .on("mouseout", function () {
+                        d3.select("#tooltip").style("display", "none");
+                        var shapeClass = ".marker-shape";
+                        d3.selectAll(shapeClass)
+                            .style("opacity", 1)
+                            .attr("r", initialCircleRadius)
+                            .attr("height", initialBoxDimension)
+                            .attr("width", initialBoxDimension);
+                    });
             }
-
-            function make_x_gridlines() {
-                return d3.axisBottom(xScale).ticks(dataValues.length);
-            }
-            function make_y_gridlines() {
-                return d3.axisLeft(yScale).ticks(yaxisTicks);
-            }
-        }
-
-        function drawMarker(fillStatus, markerShape) {
-            dateformatValue = function (value) {
-                return value;
-            };
-
-            let dataValues = window.chartDataValues,
-                fill = "#ffffff",
-                stroke = d3Colors[0];
-
-            if (fillStatus) {
-                initialCircleRadius = 3;
-                fill = d3Colors[0];
-                stroke = 0;
-            }
-            if (!markerShape) {
-                markerShape = defaultD3Config.defaultMarkerShape;
-            }
-
-            var svg = d3.select("#my_dataviz svg");
-            [xAxisLabel, yAxisLabel] = data[1];
-            svg.selectAll(".marker-shape").remove();
-
-            svg.selectAll(".dot")
-                .data(dataValues)
-                .enter()
-                .append(markerShape)
-                .attr("stroke", stroke)
-                .attr("class", markerShape)
-                .attr("class", "marker-shape")
-                .attr(
-                    "transform",
-                    "translate(" +
-                    (markerShape == constants.markerShapes.RECT
-                        ? margin.left - 2.8
-                        : margin.left) +
-                    "," +
-                    (markerShape == constants.markerShapes.RECT
-                        ? margin.top - 3
-                        : margin.top) +
-                    ")"
-                )
-                .attr("fill", fill)
-                .attr(
-                    markerShapeConfig[markerShape] &&
-                    markerShapeConfig[markerShape].xPositionAttrName,
-                    function (d, i) {
-                        return xScale(d[1]);
-                    }
-                )
-                .attr(
-                    markerShapeConfig[markerShape] &&
-                    markerShapeConfig[markerShape].yPositionAttrName,
-                    function (d) {
-                        return yScale(d[0]) + yScale.bandwidth() / 2;
-                    }
-                )
-                .attr("r", initialCircleRadius)
-                .attr("height", initialBoxDimension)
-                .attr("width", initialBoxDimension)
-                .attr("points", function (d, i) {
-                    console.log(d);
-                    var x1 = xScale(d[1]);
-                    return x1;
-                })
-                .on("mousemove ", function (d, i) {
-                    var x_pos = d3.mouse(this)[0];
-                    var y_pos = d3.mouse(this)[1];
-
-                    // console.log(d);
-                    const xValue = dateformatValue(d[0]);
-                    const yValue = d[1];
-
-                    d3.select("#tooltip")
-                        .style("left", x_pos - 20 + "px")
-                        .style("top", y_pos - 20 + "px")
-                        .style("display", "block")
-                        .html(xValue + ", " + yValue.toFixed(2));
-
-                    var shapeClass = ".marker-shape";
-                    d3.selectAll(shapeClass).style("opacity", 0.3);
-                    d3.select(this)
-                        .style("opacity", 1)
-                        .attr("r", onHoverCircleRadius)
-                        .attr("height", onHoverBoxDimension)
-                        .attr("width", onHoverBoxDimension);
-                })
-                .on("mouseout", function () {
-                    d3.select("#tooltip").style("display", "none");
-                    var shapeClass = ".marker-shape";
-                    d3.selectAll(shapeClass)
-                        .style("opacity", 1)
-                        .attr("r", initialCircleRadius)
-                        .attr("height", initialBoxDimension)
-                        .attr("width", initialBoxDimension);
-                });
-        }
-    </script>
-</body>
-
+        </script>
+    </body>
 </html>
