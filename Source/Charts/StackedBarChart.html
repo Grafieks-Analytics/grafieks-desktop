@@ -527,7 +527,7 @@
                     .html((d, i) => {
                         return (
                             '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
-                            d3Colors[i] +
+                            d3Colors[i % d3Colors.length] +
                             ';">  </div>' +
                             "<span style='margin-left: 5px; max-width: 160px'>" +
                             d +
@@ -899,11 +899,14 @@
                     return y(d.y0);
                 })
                 .attr("height", function (d) {
-                    this.setAttribute("data-value-y", d.y0);
+                    this.setAttribute("data-value-y", d.y0 && d.y0.toFixed(3));
                     this.setAttribute("data-value-x", d.key);
-                    this.setAttribute("data-value-y1", d.y0 - d.y1);
 
-                    // set here
+                    var yValue = d.y0 - d.y1;
+                    if (d.y1 < 0) {
+                        yValue = d.y1 - d.y0;
+                    }
+                    this.setAttribute("data-value-y1", yValue);
 
                     return Math.abs(y(d.y0) - y(d.y1));
                 })
@@ -936,17 +939,10 @@
                     let yValue = this.getAttribute("data-value-y");
                     let y1Value = this.getAttribute("data-value-y1");
 
-                    // debugger;
-
                     d3.select("#tooltip")
                         .style("top", ypos - 22 + "px")
                         .style("display", "block")
                         .html(function () {
-                            var textValue = d.y0 - d.y1;
-                            if (d.y1 < 0) {
-                                textValue = d.y1 - d.y0;
-                            }
-
                             return (
                                 "<div class='arrowTooltip'></div>" +
                                 "<span style='color:grey;''>" +
@@ -963,7 +959,6 @@
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +
                                 (y1Value && (+y1Value).toFixed(3)) +
-                                yValue +
                                 "</span>"
                             );
                         });
@@ -1019,17 +1014,11 @@
                     .attr("class", "label")
                     .attr("width", x.bandwidth())
                     .attr("y", function (d) {
-                        this.setAttribute("data-value-y", d.y0);
-                        this.setAttribute("data-value-y1", d.y0 - d.y1);
-                        console.log(d.y0 - d.y1);
                         // return (y(d.y0))
                         return y(d.y0) + Math.abs(y(d.y0) - y(d.y1)) / 2 + 6;
                     })
                     .attr("x", x.bandwidth() / 2 - 15)
                     .attr("display", function (d) {
-                        this.setAttribute("data-value-y", d.y0);
-                        this.setAttribute("data-value-x", d.key);
-                        this.setAttribute("data-value-y1", d.y0 - d.y1);
                         if (Math.abs(y(d.y0) - y(d.y1)) < 20) {
                             return "none";
                         } else {
@@ -1038,7 +1027,7 @@
                     })
 
                     .text(function (d) {
-                        return d.y0;
+                        return d.y1 >= 0 ? d.y0 - d.y1 : d.y1 - d.y0;
                     });
             }
             d3.selectAll("#yAxisDiv text")
