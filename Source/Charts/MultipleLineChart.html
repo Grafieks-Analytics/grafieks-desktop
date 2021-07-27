@@ -62,7 +62,7 @@
 
             var data = [
                 [
-                    ["2221", "Helen", "6129"],
+                    ["1903", "Helen", "6129"],
                     ["1903", "Dorothy", "3078"],
                     ["1903", "Betty", "596"],
                     ["1903", "Amanda", "247"],
@@ -89,6 +89,7 @@
                 ["Labels"],
             ];
 
+            /*
             var data = [
                 [
                     ["Furniture", "Furniture", -3636],
@@ -284,6 +285,8 @@
                 ],
                 ["Category", "Row_ID"],
             ];
+
+            */
 
             // set the dimensions and margins of the graph
 
@@ -542,13 +545,13 @@
 
                     d3.select("#legend")
                         .selectAll("div")
-                        .data([data[1][0]])
+                        .data([data[1]])
                         .enter()
                         .append("div")
                         .html((d, i) => {
                             return (
                                 '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
-                                d3Colors[i % data[1][1].length] +
+                                d3Colors[i % d3Colors.length] +
                                 ';">  </div>' +
                                 "<span style='margin-left: 5px; max-width: 160px'>" +
                                 d +
