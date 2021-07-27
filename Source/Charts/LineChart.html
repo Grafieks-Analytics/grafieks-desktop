@@ -1533,7 +1533,7 @@
                     var labelValue = label.textContent;
 
 
-                    var labelYPosition = yScale(data[0][i][1])
+                    var labelYPosition = yScale(dataValues[i][1])
                     // console.log(dataset[i]);
                     label.setAttribute("y", labelYPosition + 10);
                     // label.setAttribute("y", 50 - 10);
@@ -1543,7 +1543,7 @@
                     //     return 10;
                     // })
                     //  label.textContent = textColumn2[1];
-                    label.textContent = data[0][i][1];
+                    label.textContent = dataValues[i][1];
                 });
             }
 
