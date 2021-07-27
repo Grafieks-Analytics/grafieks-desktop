@@ -527,7 +527,7 @@
                     .html((d, i) => {
                         return (
                             '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
-                            d3Colors[i] +
+                            d3Colors[i % d3Colors.length] +
                             ';">  </div>' +
                             "<span style='margin-left: 5px; max-width: 160px'>" +
                             d +
@@ -963,7 +963,7 @@
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +
                                 (y1Value && (+y1Value).toFixed(3)) +
-                                yValue +
+                               
                                 "</span>"
                             );
                         });
