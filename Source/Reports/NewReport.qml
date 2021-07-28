@@ -303,7 +303,7 @@ Page {
                 colorByData = [];
             }
             dataValues = JSON.parse(dataValues);
-            dataValues.push([xAxisColumns[0],yAxisColumns[0]]);
+            dataValues.push([xAxisColumns[0],xAxisColumns[1],yAxisColumns[0]]);
             // console.log(dataValues);
 
             dataValues = JSON.stringify(dataValues);
@@ -322,7 +322,7 @@ Page {
             }
             
             dataValues = JSON.parse(dataValues);
-            dataValues.push([xAxisColumns[0],yAxisColumns[0]]);
+            dataValues.push([xAxisColumns[0],xAxisColumns[1],yAxisColumns[0]]);
             // console.log(dataValues);
 
             dataValues = JSON.stringify(dataValues);
