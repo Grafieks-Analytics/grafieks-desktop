@@ -173,7 +173,7 @@
             var redrawn = false;
             var extraHeight = 0;
 
-            // drawChart(dataset);
+            drawChart(dataset);
 
             function transformData(dataValues, dateFormat) {
                 var valueDateType = false;
@@ -337,7 +337,7 @@
 
                     d3.select("#legend")
                         .append("p")
-                        .html("xAxisLabel" + "&nbsp;")
+                        .html(xAxisLabel + "&nbsp;")
                         .style("font-weight", "bold")
                         .style("margin", "auto")
                         .style("position", "sticky");
@@ -909,7 +909,33 @@
                             .style("left", x_pos - 20 + "px")
                             .style("top", y_pos - 20 + "px")
                             .style("display", "block")
-                            .html(xValue + ", " + yValue.toFixed(2));
+                            // .html(xValue + ", " + yValue.toFixed(2));
+                             .html(function () {
+                                var textValue = d.y0 - d.y1;
+                                if (d.y1 < 0) {
+                                    textValue = d.y1 - d.y0;
+                                }
+
+                                return (
+                                    "<div class='arrowTooltip'></div>" +
+                                    "<span style='color:grey;''>" +
+                                    "toolTip.textColumn1" +
+                                    ":&nbsp;&nbsp;" +
+                                    "</span>" +
+                                    "<span style='float: right;'>" +
+                                    "xValue" +
+                                    "</span>" +
+                                    "<br/> <br/>" +
+                                    "<span style='color:grey;''>" +
+                                    "toolTip.textColumn2" +
+                                    ":" +
+                                    "</span>" +
+                                    "<span style='float: right;margin-left: 15px;'>" +
+                                    "yValue" +
+                                    "</span>"
+                                );
+                            });
+
 
                         var shapeClass = ".marker-shape";
                         d3.selectAll(shapeClass).style("opacity", 0.3);

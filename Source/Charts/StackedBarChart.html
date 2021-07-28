@@ -326,10 +326,10 @@
                 ["Technology", "2019-10-13", 0],
             ],
             ["Furniture", "Office Supplies", "Technology"],
-            ["Order_Date", "Sales"],
+            ["Order_Date","category","Sales"],
         ];
 
-        const [xAxisLabel, yAxisLabel] = data[2];
+
 
         var extraHeightWorked = false;
         var redrawn = false;
@@ -403,6 +403,7 @@
             var parseDate = d3.timeParse("%Y");
             var tooltipColumn1 = "test1";
             var tooltipColumn2 = "test2";
+                    var [xAxisLabel,colorbyLabel, yAxisLabel] = data[2];
 
             let {
                 d3colorPalette,
@@ -513,7 +514,7 @@
 
                 d3.select("#legend")
                     .append("p")
-                    .html("Product_Name " + "&nbsp;")
+                    .html("data yet to come " + "&nbsp;")
                     .style("font-weight", "bold")
                     .style("margin", "auto")
                     .style("position", "sticky");
@@ -737,6 +738,7 @@
                 toolTip = {
                     textColumn1: labels && labels[0],
                     textColumn2: labels && labels[1],
+                    textColumn3: labels && labels[2],
                 };
             }
 
@@ -901,6 +903,7 @@
                 .attr("height", function (d) {
                     this.setAttribute("data-value-y", d.y0 && d.y0.toFixed(3));
                     this.setAttribute("data-value-x", d.key);
+                    console.log(d)
 
                     var yValue = d.y0 - d.y1;
                     if (d.y1 < 0) {
@@ -940,7 +943,7 @@
                     let y1Value = this.getAttribute("data-value-y1");
 
                     d3.select("#tooltip")
-                        .style("top", ypos - 22 + "px")
+                        .style("top", ypos - 52 + "px")
                         .style("display", "block")
                         .html(function () {
                             return (
@@ -950,15 +953,24 @@
                                 ":&nbsp;&nbsp;" +
                                 "</span>" +
                                 "<span style='float: right;'>" +
-                                xValue +
+                                "yValue" +
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
                                 toolTip.textColumn2 +
+                                ":&nbsp;&nbsp;" +
+                                "</span>" +
+                                "<span style='float: right;'>" +
+                                xValue +
+                                "</span>" +
+                                "<br/> <br/>" +
+                                "<span style='color:grey;''>" +
+                                toolTip.textColumn3 +
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +
                                 (y1Value && (+y1Value).toFixed(3)) +
+                               
                                 "</span>"
                             );
                         });
