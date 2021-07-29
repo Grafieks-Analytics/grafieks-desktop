@@ -129,6 +129,7 @@ Popup {
                 CustomComboBox{
                     id: fontSizes
                     height: 500
+                  
 
                     Component.onCompleted: {
                         let fontFamilies = Qt.fontFamilies();
@@ -136,7 +137,14 @@ Popup {
                             fonts.append({"fontName": fontFamilies[i]});
                         }
                         fontSizes.model = fonts
+
+                         fontSizes.currentIndex = fontSizes.find("Arial");
                     }
+                       onCurrentValueChanged: {
+                           console.log("labelfont"+fontSizes.currentValue)
+                                            d3PropertyConfig.dataLabelfontFamily=fontSizes.currentValue;
+                                            reDrawChart();
+                                        }
 //                    popup: Popup {
 //                //                            y: control.height - 1
 //                            implicitWidth:  200

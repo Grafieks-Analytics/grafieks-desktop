@@ -51,7 +51,7 @@ Item{
                 ListElement { itemName: "Tool Tip" },
                 ListElement { itemName: "Size" },
                 ListElement { itemName: "Marker Shape" },
-                ListElement { itemName: "Label" }
+                ListElement { itemName: "Data Label" }
             ]
         }
 
