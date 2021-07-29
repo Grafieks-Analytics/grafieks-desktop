@@ -2,5 +2,5 @@
 
 void SetChartDataDuckWorker::run()
 {
-
+    qDebug() << "Hello test";
 }
