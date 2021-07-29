@@ -2,6 +2,7 @@
 #define SETCHARTDATADUCKWORKER_H
 
 #include <QThread>
+#include <QDebug>
 
 class SetChartDataDuckWorker : public QThread
 {
