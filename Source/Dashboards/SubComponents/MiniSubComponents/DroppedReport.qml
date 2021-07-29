@@ -227,6 +227,9 @@ Item{
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
 
         console.log(xAxisColumns, yAxisColumns)
+        var colorByData = JSON.parse(reportProperties.colorByDataColoumns);
+        var colorByColumnName = colorByData[0] && colorByData[0].columnName;;
+
         var colorData = [];
         switch(chartTitle){
         case Constants.horizontalBarChartTitle:
@@ -241,20 +244,26 @@ Item{
             break;
         case Constants.horizontalStackedBarChartTitle:
             console.log(chartTitle,"CLICKED")
-            colorData = (dataValues && JSON.parse(dataValues)[1]) || [];
+            // colorData = (dataValues && JSON.parse(dataValues)[1]) || [];
+            dataValues = dataValues && JSON.parse(dataValues);
+            dataValues[2] = [yAxisColumns[0],colorByColumnName,xAxisColumns[0]];
+            colorData = dataValues[1] || [];
+            dataValues = JSON.stringify(dataValues);
             break;
         case Constants.stackedBarChartTitle:
             console.log(chartTitle,"CLICKED")
-            colorData = (dataValues && JSON.parse(dataValues)[1]) || [];
+            dataValues = dataValues && JSON.parse(dataValues);
+            dataValues[2] = [xAxisColumns[0],colorByColumnName,yAxisColumns[0]];
+            colorData = dataValues[1] || [];
+            dataValues = JSON.stringify(dataValues);
+            // colorData = (dataValues && JSON.parse(dataValues)[1]) || [];
             break;
         case Constants.horizontalBarGroupedChartTitle:
             var [category, subcategory] =  getAxisColumnNames(Constants.yAxisName);
-            var colorByColumnName = colorByData[0] && colorByData[0].columnName;;
             if(colorByColumnName && (colorByColumnName == category || colorByColumnName==subcategory) ){
                 d3PropertyConfig['options'] = { groupBarChartColorBy: colorByColumnName == subcategory ? 'subcategory' : 'category'  }
             }else{
                 delete d3PropertyConfig['options'];
-                colorListModel.clear();
                 colorByData = [];
             }
             dataValues = JSON.parse(dataValues);
@@ -270,7 +279,6 @@ Item{
                 d3PropertyConfig['options'] = { groupBarChartColorBy: colorByColumnName == subcategory ? 'subcategory' : 'category'  }
             }else{
                 delete d3PropertyConfig['options'];
-                colorListModel.clear();
                 colorByData = [];
                 ReportParamsModel.setItemType(null);
                 ReportParamsModel.setLastDropped(null);
@@ -578,7 +586,7 @@ Item{
 
             var dataValues = null;
             console.log('Chart Title - Draw Chart Function - ',chartTitle)
-            var colorByColumnName = '';
+            var colorByColumnName = colorByData[0] && colorByData[0].columnName;
 
             var colorData = [];
             switch(chartTitle){

@@ -326,10 +326,8 @@
                 ["Technology", "2019-10-13", 0],
             ],
             ["Furniture", "Office Supplies", "Technology"],
-            ["Order_Date","category","Sales"],
+            ["Order_Date", "category", "Sales"],
         ];
-
-
 
         var extraHeightWorked = false;
         var redrawn = false;
@@ -403,7 +401,7 @@
             var parseDate = d3.timeParse("%Y");
             var tooltipColumn1 = "test1";
             var tooltipColumn2 = "test2";
-                    var [xAxisLabel,colorbyLabel, yAxisLabel] = data[2];
+            var [xAxisLabel, colorbyLabel, yAxisLabel] = data[2];
 
             let {
                 d3colorPalette,
@@ -901,15 +899,15 @@
                     return y(d.y0);
                 })
                 .attr("height", function (d) {
-                    this.setAttribute("data-value-y", d.y0 && d.y0.toFixed(3));
-                    this.setAttribute("data-value-x", d.key);
-                    console.log(d)
+                    this.setAttribute("data-value-x", d.y0 && d.y0);
+                    this.setAttribute("data-value-y", d.key);
+                    console.log(d);
 
                     var yValue = d.y0 - d.y1;
                     if (d.y1 < 0) {
                         yValue = d.y1 - d.y0;
                     }
-                    this.setAttribute("data-value-y1", yValue);
+                    this.setAttribute("data-value-y1", Math.round(yValue));
 
                     return Math.abs(y(d.y0) - y(d.y1));
                 })
@@ -953,7 +951,7 @@
                                 ":&nbsp;&nbsp;" +
                                 "</span>" +
                                 "<span style='float: right;'>" +
-                                "yValue" +
+                                yValue +
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
@@ -969,8 +967,7 @@
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +
-                                (y1Value && (+y1Value).toFixed(3)) +
-                               
+                                (y1Value && Math.round(+y1Value).toFixed(3)) +
                                 "</span>"
                             );
                         });
