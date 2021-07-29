@@ -326,7 +326,7 @@
                 ["Technology", "2019-10-13", 0],
             ],
             ["Furniture", "Office Supplies", "Technology"],
-            ["Order_Date","category","Sales"],
+            ["Order_Date", "category", "Sales"],
         ];
 
 
@@ -403,7 +403,7 @@
             var parseDate = d3.timeParse("%Y");
             var tooltipColumn1 = "test1";
             var tooltipColumn2 = "test2";
-                    var [xAxisLabel,colorbyLabel, yAxisLabel] = data[2];
+            var [xAxisLabel, colorbyLabel, yAxisLabel] = data[2];
 
             let {
                 d3colorPalette,
@@ -970,7 +970,7 @@
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +
                                 (y1Value && (+y1Value).toFixed(3)) +
-                               
+
                                 "</span>"
                             );
                         });
@@ -980,15 +980,15 @@
                     if (
                         xpos - scrollVal >
                         document.documentElement.clientWidth -
-                            document.querySelector("#tooltip").clientWidth
+                        document.querySelector("#tooltip").clientWidth
                     ) {
                         d3.select("#tooltip").style(
                             "left",
                             xpos -
-                                scrollVal -
-                                document.querySelector("#tooltip").clientWidth -
-                                10 +
-                                "px"
+                            scrollVal -
+                            document.querySelector("#tooltip").clientWidth -
+                            10 +
+                            "px"
                         );
 
                         d3.select(".arrowTooltip")

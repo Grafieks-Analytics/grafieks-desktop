@@ -140,6 +140,7 @@
             if (chartType != constants.chartType.STANDARD) {
                 chartType = constants.chartType.FIT_HEIGHT;
             }
+
             let { legendStatus, legendPosition } = legendConfig;
             let { labelStatus } = labelConfig;
             let { gridStatus } = gridConfig;
@@ -165,12 +166,13 @@
 
             var bottomHeight = 0;
 
-            var dataset = dataValues[1];
+     
             var xAxisDataSet = dataValues[0];
 
             var xAxisDateWiseValues = {};
 
             var valueDateType = false;
+
             if (isDateFormat(xAxisDataSet[0])) {
                 valueDateType = true;
             }
@@ -246,6 +248,7 @@
                 );
                 data[0] = dataValues;
             }
+                   var dataset = dataValues[1];
 
             if (chartType == constants.chartType.STANDARD) {
                 height = dataValues[0].length * standardThresholdHeight;
@@ -391,12 +394,15 @@
                         break;
                     case "bottom":
                         // clearStyle();
-                        height -= 50; // use legend client height
+
+                        if (chartType == constants.chartType.FIT_HEIGHT) {
+                            height -= 50; // use legend client height
+                        }
                         bottomHeight += 50;
                         // margin.bottom += 10;
                         var legendWidth = legendElement.offsetWidth;
 
-                        d3.select("#xAxisLabelId").style("bottom", 50);
+                        d3.select("#xAxisLabelId").style("bottom", 50 + "px");
                         d3.select("#mainChartWindow").attr("style", null);
 
                         // d3.select("#mainChartWindow").style("width", width);
@@ -434,7 +440,7 @@
                         //     "height",
                         //     "calc(100vh - 122px)"
                         // );
-                        d3.selectAll("#xAxisDiv").style("bottom", "50");
+                        d3.selectAll("#xAxisDiv").style("bottom", "50px");
                         // d3.selectAll("#xAxisLabelId").style(
                         //     "bottom",
                         //     "50"
@@ -656,7 +662,7 @@
                             xpos -
                             document.querySelector("#tooltip")
                                 .clientWidth +
-                            25 + 
+                            25 + legendWidthLeft +
                             "px"
                         );
 
@@ -671,7 +677,7 @@
                     } else {
                         d3.select("#tooltip").style(
                             "left",
-                            xpos + 55 + "px"
+                            xpos + 55 + legendWidthLeft + "px"
                         );
 
                         d3.select(".arrowTooltip").attr(
@@ -684,6 +690,17 @@
                     d3.select(this).style("opacity", 1);
                 });
 
+            if (chartType == constants.chartType.STANDARD) {
+                console.log(data[0][1]);
+                height = data[0][1].length * standardThresholdHeight;
+                if (height + margin.top + margin.bottom < window.innerHeight) {
+                    d3.select("#xAxisDiv").style("top", height + margin.top + "px");
+                    d3.select("#xAxisLabelId").style("top", height + margin.top + 50 + "px");
+                } else {
+                    d3.select("#xAxisDiv").style("bottom", 0);
+                    d3.select("#xAxisLabelId").style("bottom", "0px");
+                }
+            }
             yaxisTicks = height / 100;
             // add the x Axis
             // svg.append("g")
