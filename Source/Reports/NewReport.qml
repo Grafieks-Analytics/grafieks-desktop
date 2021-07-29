@@ -270,6 +270,7 @@ Page {
         
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
+        var colorByColumnName = colorByData[0] && colorByData[0].columnName;
 
         console.log(xAxisColumns, yAxisColumns)
         colorData = [];
@@ -286,15 +287,23 @@ Page {
             break;
         case Constants.horizontalStackedBarChartTitle:
             console.log(chartTitle,"CLICKED")
-            colorData = (dataValues && JSON.parse(dataValues)[1]) || [];
+
+            dataValues = dataValues && JSON.parse(dataValues);
+            dataValues[2] = [yAxisColumns[0],colorByColumnName,xAxisColumns[0]];
+            colorData = dataValues[1] || [];
+            console.log(dataValues);
+            dataValues = JSON.stringify(dataValues);
             break;
         case Constants.stackedBarChartTitle:
             console.log(chartTitle,"CLICKED")
-            colorData = (dataValues && JSON.parse(dataValues)[1]) || [];
+            
+            dataValues = dataValues && JSON.parse(dataValues);
+            dataValues[2] = [xAxisColumns[0],colorByColumnName,yAxisColumns[0]];
+            colorData = dataValues[1] || [];
+            dataValues = JSON.stringify(dataValues);
             break;
         case Constants.horizontalBarGroupedChartTitle:
             var [category, subcategory] =  getAxisColumnNames(Constants.yAxisName);
-            var colorByColumnName = colorByData[0] && colorByData[0].columnName;;
             if(colorByColumnName && (colorByColumnName == category || colorByColumnName==subcategory) ){
                 d3PropertyConfig['options'] = { groupBarChartColorBy: colorByColumnName == subcategory ? 'subcategory' : 'category'  }
             }else{
@@ -303,7 +312,7 @@ Page {
                 colorByData = [];
             }
             dataValues = JSON.parse(dataValues);
-            dataValues.push([xAxisColumns[0],xAxisColumns[1],yAxisColumns[0]]);
+            dataValues.push([yAxisColumns[0],yAxisColumns[1],xAxisColumns[0]]);
             // console.log(dataValues);
 
             dataValues = JSON.stringify(dataValues);
@@ -323,8 +332,6 @@ Page {
             
             dataValues = JSON.parse(dataValues);
             dataValues.push([xAxisColumns[0],xAxisColumns[1],yAxisColumns[0]]);
-            // console.log(dataValues);
-
             dataValues = JSON.stringify(dataValues);
 
             console.log('Grouped bar chart!',xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
@@ -400,6 +407,7 @@ Page {
 
         // Appending list to select color
         dataItemList.clear();
+        console.log(colorData);
         if(colorData && colorData.length){
             colorData.forEach(function (element,index) {
                 dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
@@ -1144,7 +1152,7 @@ Page {
 
 
             console.log('Chart Title - Draw Chart Function - ',chartTitle)
-            var colorByColumnName = colorByData[0] && colorByData[0].columnName;;
+            var colorByColumnName = colorByData[0] && colorByData[0].columnName;
             dataItemList.clear();
             var colorData = [];
             switch(chartTitle){
