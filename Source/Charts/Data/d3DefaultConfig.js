@@ -63,7 +63,7 @@ const defaultD3Config = {
     fontColor: "black",
     defaultLegendConfig: {
         legendStatus: false,
-        legendPosition: "bottom",
+        legendPosition: "left",
     },
     defaultlabelConfig: {
         labelStatus: true,
