@@ -730,6 +730,12 @@
                         .append("rect")
                         .attr("class", "bar")
                         .attr("fill", function (d) {
+                             this.setAttribute(
+                                "data-value-x1",
+                                d.mainCategory
+                            );
+                            this.setAttribute("data-value-x2", d.name);
+                            this.setAttribute("data-value-y", d.value);
                             if (groupBarChartColorBy == "category") {
                                 return zScale(d.data.mainCategory);
                             }
@@ -748,6 +754,10 @@
                             var yScroll = document.querySelector("#my_dataviz").scrollTop;
                             ypos -= yScroll;
                             var parentElement = this.parentElement;
+                              xAxisValue1 =
+                                this.getAttribute("data-value-x1");
+                            xAxisValue2 =
+                                this.getAttribute("data-value-x2");
 
                             const matrix =
                                 window.getComputedStyle(
@@ -761,7 +771,7 @@
 
                             d3.select("#tooltip")
                                 .style("left", xpos+20 + "px")
-                                .style("top", ypos-15 + "px")
+                                .style("top", ypos-49 + "px")
                                 .style("display", "block")
                                 // .html(d.name + ":" + d.value);
                                 .html(function () {
@@ -773,19 +783,27 @@
                                     return (
                                         "<div class='arrowTooltip'></div>" +
                                         "<span style='color:grey;''>" +
-                                        "toolTip.textColumn1" +
+                                        labels[0]+
                                         ":&nbsp;&nbsp;" +
                                         "</span>" +
                                         "<span style='float: right;'>" +
-                                        "yValue" +
+                                        xAxisValue1 +
                                         "</span>" +
                                         "<br/> <br/>" +
                                         "<span style='color:grey;''>" +
-                                        "toolTip.textColumn2" +
+                                        labels[1] +
                                         ":" +
                                         "</span>" +
                                         "<span style='float: right;margin-left: 15px;'>" +
-                                        "(xValue.toFixed(3))" +
+                                        xAxisValue2 +
+                                        "</span>" +
+                                        "<br/> <br/>" +
+                                        "<span style='color:grey;''>" +
+                                        labels[2] +
+                                        ":" +
+                                        "</span>" +
+                                        "<span style='float: right;margin-left: 15px;'>" +
+                                         d.value  +
                                         "</span>"
                                     );
                                 });
@@ -907,7 +925,8 @@
                 const bars = [];
                 all_keys.forEach((k) => {
                     if (d.hasOwnProperty(k)) {
-                        bars.push({ name: k, value: d[k], data: d });
+                        bars.push({ name: k, value: d[k], data: d ,
+                            mainCategory: d.mainCategory,});
                     }
                 });
                 return bars;
