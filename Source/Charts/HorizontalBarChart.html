@@ -85,7 +85,6 @@
         var data = [[["2019-11-08", "2019-06-12", "2018-10-11", "2017-06-09", "2020-04-15", "2019-12-05", "2018-11-22", "2017-11-11", "2017-05-13", "2017-08-27", "2019-12-09", "2020-07-16", "2018-09-25", "2019-01-16", "2018-09-17", "2020-10-19", "2019-12-08", "2018-12-27", "2020-09-10", "2019-07-17", "2020-09-19", "2019-03-11", "2017-10-20", "2019-06-20", "2018-04-18", "2019-12-11", "2019-06-17", "2018-11-24", "2018-04-30", "2017-12-05", "2019-06-04", "2019-09-18", "2020-09-14", "2018-04-26", "2020-12-09", "2017-11-26", "2017-10-12", "2018-09-03", "2020-11-13", "2020-05-28", "2020-10-26", "2019-04-05", "2019-09-17", "2018-01-31", "2020-11-06", "2020-11-09", "2020-06-17", "2019-09-06", "2019-08-29", "2019-12-01", "2018-11-13", "2020-11-23", "2020-12-25", "2019-11-03", "2017-08-25", "2018-03-02", "2018-04-05", "2017-12-26", "2017-09-20", "2020-11-05", "2019-11-06", "2020-02-02", "2019-10-13"], [2250, 1456, 1960, 5606, 32, 816, 144, 1332, 112, 490, 158, 142, 2090, 24, 6658, 58, 2578, 2456, 294, 156, 192, 126, 424, 44, 418, 2090, 1250, 534, 426, 2562, 152, 10, 38, 2004, 76, 38, 72, 402, 460, 604, 12, 316, 200, 198, 12, 194, 102, 156, 326, 48, 756, 210, 84, 206, 398, 1576, 316, 1202, 1236, 492, 640, 318, 512]], ["Order_Date", "Sales"]]
 
         // var data = [[["Furniture", "Office Supplies", "Technology"], [-3636, 2010, 1362]], ["Category", "Profit"]];
-
         drawChart(data);
 
         function drawChart(data, plottingConfiguration = {}) {
@@ -112,6 +111,7 @@
                 yLabelfontFamily = defaultD3Config.fontFamily,
                 xTickfontFamily = defaultD3Config.fontFamily,
                 yTickfontFamily = defaultD3Config.fontFamily,
+                dataLabelfontFamily = defaultD3Config.fontFamily,
                 // font color
                 xLabelfontColor = defaultD3Config.fontColor,
                 yLabelfontColor = defaultD3Config.fontColor,
@@ -127,6 +127,7 @@
             window.yLabelfontFamily = yLabelfontFamily;
             window.xTickfontFamily = xTickfontFamily;
             window.yTickfontFamily = yTickfontFamily;
+            window.dataLabelfontFamily = dataLabelfontFamily;
 
             window.xLabelfontColor = xLabelfontColor;
             window.yLabelfontColor = yLabelfontColor;
@@ -139,6 +140,7 @@
             if (chartType != constants.chartType.STANDARD) {
                 chartType = constants.chartType.FIT_HEIGHT;
             }
+
             let { legendStatus, legendPosition } = legendConfig;
             let { labelStatus } = labelConfig;
             let { gridStatus } = gridConfig;
@@ -164,12 +166,13 @@
 
             var bottomHeight = 0;
 
-            var dataset = dataValues[1];
+     
             var xAxisDataSet = dataValues[0];
 
             var xAxisDateWiseValues = {};
 
             var valueDateType = false;
+
             if (isDateFormat(xAxisDataSet[0])) {
                 valueDateType = true;
             }
@@ -245,6 +248,7 @@
                 );
                 data[0] = dataValues;
             }
+                   var dataset = dataValues[1];
 
             if (chartType == constants.chartType.STANDARD) {
                 height = dataValues[0].length * standardThresholdHeight;
@@ -390,12 +394,15 @@
                         break;
                     case "bottom":
                         // clearStyle();
-                        height -= 50; // use legend client height
+
+                        if (chartType == constants.chartType.FIT_HEIGHT) {
+                            height -= 50; // use legend client height
+                        }
                         bottomHeight += 50;
                         // margin.bottom += 10;
                         var legendWidth = legendElement.offsetWidth;
 
-                        d3.select("#xAxisLabelId").style("bottom", 50);
+                        d3.select("#xAxisLabelId").style("bottom", 50 + "px");
                         d3.select("#mainChartWindow").attr("style", null);
 
                         // d3.select("#mainChartWindow").style("width", width);
@@ -433,7 +440,7 @@
                         //     "height",
                         //     "calc(100vh - 122px)"
                         // );
-                        d3.selectAll("#xAxisDiv").style("bottom", "50");
+                        d3.selectAll("#xAxisDiv").style("bottom", "50px");
                         // d3.selectAll("#xAxisLabelId").style(
                         //     "bottom",
                         //     "50"
@@ -486,6 +493,18 @@
             if (legendPosition == "left" || legendPosition == "right") {
                 var legendWidth = legendElement.offsetWidth;
                 width -= legendWidth + 30;
+            }
+            if (legendPosition == "top") {
+                var legendHeightTop = legendHeight;
+            }
+            else {
+                legendHeightTop = 0;
+            }
+            if (legendPosition == "left") {
+                var legendWidthLeft = legendWidth;
+            }
+            else {
+                legendWidthLeft = 0;
             }
             // .;
 
@@ -643,7 +662,7 @@
                             xpos -
                             document.querySelector("#tooltip")
                                 .clientWidth +
-                            25 +
+                            25 + legendWidthLeft +
                             "px"
                         );
 
@@ -658,7 +677,7 @@
                     } else {
                         d3.select("#tooltip").style(
                             "left",
-                            xpos + 55 + "px"
+                            xpos + 55 + legendWidthLeft + "px"
                         );
 
                         d3.select(".arrowTooltip").attr(
@@ -671,6 +690,17 @@
                     d3.select(this).style("opacity", 1);
                 });
 
+            if (chartType == constants.chartType.STANDARD) {
+                console.log(data[0][1]);
+                height = data[0][1].length * standardThresholdHeight;
+                if (height + margin.top + margin.bottom < window.innerHeight) {
+                    d3.select("#xAxisDiv").style("top", height + margin.top + "px");
+                    d3.select("#xAxisLabelId").style("top", height + margin.top + 50 + "px");
+                } else {
+                    d3.select("#xAxisDiv").style("bottom", 0);
+                    d3.select("#xAxisLabelId").style("bottom", "0px");
+                }
+            }
             yaxisTicks = height / 100;
             // add the x Axis
             // svg.append("g")
@@ -705,7 +735,7 @@
                     .attr("dy", ".32em")
                     .attr("transform", "translate(0,0)")
                     .call(d3.axisLeft(y).tickSize(0))
-                    .attr("font-family", xTickfontFamily);
+                    .attr("font-family", dataLabelfontFamily);
 
                 var labelSelector =
                     document.querySelectorAll(".axis.label text");

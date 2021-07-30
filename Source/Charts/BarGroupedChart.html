@@ -17,7 +17,6 @@
             display: none;
         } */
 
-
         /* body {
             padding: 0;
             margin: 0;
@@ -68,7 +67,7 @@
         var extraHeight = 0;
         var topLegendMargin = 0;
 
-        var y_pos_x_label = 55
+        var y_pos_x_label = 55;
 
         function sumAllData(originalData, currentData) {
             var allKeys = [
@@ -223,7 +222,6 @@
             let { labelStatus } = labelConfig;
             let { gridStatus } = gridConfig;
 
-
             var { groupBarChartColorBy } = options || {};
 
             if (!d3colorPalette) {
@@ -343,13 +341,8 @@
 
             // legends code starts
             if (legendStatus) {
-
-                if (
-                    legendHeight <
-                    window.innerHeight
-                ) {
+                if (legendHeight < window.innerHeight) {
                     topPosition = "calc(50vh - " + legendHeight / 2 + "px)";
-
                 } else {
                     topPosition = 0;
                 }
@@ -395,7 +388,7 @@
                             "width",
                             widthOld - legendWidth + yAxisWidth
                         );
-                        console.log({ legendWidth })
+                        console.log({ legendWidth });
                         d3.select("#mainChartWindow").style(
                             "margin-left",
                             legendWidth + "px"
@@ -407,7 +400,7 @@
                         d3.select("#mainChartWindow").attr("style", null);
                         margin.top += 50;
                         // height -= 50;
-                        y_pos_x_label = 57
+                        y_pos_x_label = 57;
                         topLegendMargin -= 50;
                         d3.select("#legend")
                             .attr("style", null)
@@ -435,7 +428,7 @@
                         height -= 50; // use legend client height
                         margin.bottom += 10;
                         var legendWidth = legendElement.offsetWidth;
-                        y_pos_x_label = 20
+                        y_pos_x_label = 20;
 
                         d3.select("#xAxisLabelId").style("bottom", 60);
                         d3.select("#mainChartWindow").attr("style", null);
@@ -473,7 +466,7 @@
                         var legendWidth = legendElement.offsetWidth;
                         topLegendMargin = 0;
 
-                        console.log(topPosition)
+                        console.log(topPosition);
                         d3.select("#legend")
                             .attr("style", null)
                             .style("right", "0px")
@@ -504,14 +497,10 @@
                 }
             }
 
-
-
-
             if (legendPosition == "left" || legendPosition == "right") {
                 var legendWidth = legendElement.offsetWidth;
                 width -= legendWidth;
             }
-
 
             //add svg with margin !important
             //this is svg is actually group
@@ -551,7 +540,11 @@
             yScale.domain([minHeight, maxHeight]).nice();
 
             //add x and y axis
-            var yAxis = d3.axisLeft(yScale).tickSize(0).ticks(yaxisTicks).tickFormat(d3.format(".2s"));
+            var yAxis = d3
+                .axisLeft(yScale)
+                .tickSize(0)
+                .ticks(yaxisTicks)
+                .tickFormat(d3.format(".2s"));
 
             d3.select("#yAxisDiv")
                 .append("svg")
@@ -576,26 +569,26 @@
             //         make_y_gridlines(yScale).tickSize(-width).tickFormat("")
             //     );
 
-
             if (gridStatus) {
                 svg.append("g")
                     .attr("class", "grid")
                     .style("stroke-width", "1")
                     .call(
-                        make_y_gridlines(yScale).tickSize(-width).tickFormat("")
+                        make_y_gridlines(yScale)
+                            .tickSize(-width)
+                            .tickFormat("")
                     );
-
             } else {
                 svg.append("g")
                     .attr("class", "grid")
                     .style("stroke-width", "1")
                     .style("display", "none")
                     .call(
-                        make_y_gridlines(yScale).tickSize(-width).tickFormat("")
+                        make_y_gridlines(yScale)
+                            .tickSize(-width)
+                            .tickFormat("")
                     );
             }
-
-
 
             svg.selectAll(".groups")
                 .data(data)
@@ -659,14 +652,16 @@
                                 .split(", ");
 
                             xpos += +matrixValues[4] || 0;
-                            xAxisValue1 = this.getAttribute("data-value-x1");
-                            xAxisValue2 = this.getAttribute("data-value-x2");
-                            console.log({xAxisValue1})
-                            console.log({ xAxisValue2})
+                            xAxisValue1 =
+                                this.getAttribute("data-value-x1");
+                            xAxisValue2 =
+                                this.getAttribute("data-value-x2");
+                            console.log({ xAxisValue1 });
+                            console.log({ xAxisValue2 });
 
                             d3.select("#tooltip")
                                 // .style("left", xpos + "px")
-                                .style("top", ypos-59 + "px")
+                                .style("top", ypos - 59 + "px")
                                 .style("display", "block")
                                 // .html(d.name + ":" + d.value);
                                 .html(function () {
@@ -675,8 +670,6 @@
                                         textValue = d.y1 - d.y0;
                                     }
 
-
-
                                     return (
                                         "<div class='arrowTooltip'></div>" +
                                         "<span style='color:grey;''>" +
@@ -684,36 +677,41 @@
                                         ":&nbsp;&nbsp;" +
                                         "</span>" +
                                         "<span style='float: right;'>" +
-                                       xAxisValue1+
+                                        xAxisValue1 +
                                         "</span>" +
-                                            "<br/> <br/>" +
-                                            "<span style='color:grey;''>" +
-                                           labels[1] +
-                                            ":" +
-                                            "</span>" +
-                                            "<span style='float: right;margin-left: 15px;'>" +
-                                           xAxisValue2 +
+                                        "<br/> <br/>" +
+                                        "<span style='color:grey;''>" +
+                                        labels[1] +
+                                        ":" +
                                         "</span>" +
-                                            "<br/> <br/>" +
-                                            "<span style='color:grey;''>" +
-                                           labels[2] +
-                                            ":" +
-                                            "</span>" +
-                                            "<span style='float: right;margin-left: 15px;'>" +
-                                           d.value +
+                                        "<span style='float: right;margin-left: 15px;'>" +
+                                        xAxisValue2 +
+                                        "</span>" +
+                                        "<br/> <br/>" +
+                                        "<span style='color:grey;''>" +
+                                        labels[2] +
+                                        ":" +
+                                        "</span>" +
+                                        "<span style='float: right;margin-left: 15px;'>" +
+                                        d.value +
                                         "</span>"
                                     );
                                 });
-                            var scrollVal = document.querySelector("#my_dataviz").scrollLeft;
+                            var scrollVal =
+                                document.querySelector(
+                                    "#my_dataviz"
+                                ).scrollLeft;
                             if (
                                 xpos - scrollVal >
                                 document.documentElement.clientWidth -
-                                document.querySelector("#tooltip").clientWidth -40
+                                document.querySelector("#tooltip")
+                                    .clientWidth -
+                                40
                             ) {
-
                                 d3.select("#tooltip").style(
                                     "left",
-                                    xpos - scrollVal -
+                                    xpos -
+                                    scrollVal -
                                     document.querySelector("#tooltip")
                                         .clientWidth +
                                     80 +
@@ -739,7 +737,6 @@
                                     "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
                                 );
                             }
-
 
                             d3.selectAll(".bar").style("opacity", 0.3);
                             d3.select(this).style("opacity", 1);
@@ -788,7 +785,12 @@
                 const bars = [];
                 all_keys.forEach((k) => {
                     if (d && d.hasOwnProperty(k)) {
-                        bars.push({ name: k, value: d[k], data: d,mainCategory:d.mainCategory });
+                        bars.push({
+                            name: k,
+                            value: d[k],
+                            data: d,
+                            mainCategory: d.mainCategory,
+                        });
                     }
                 });
                 return bars;
@@ -877,7 +879,6 @@
                 .querySelector(".x-axis .tick text")
                 .getBBox().height;
 
-
             console.log({ labels });
             setLabel(
                 labels[0],
@@ -885,7 +886,8 @@
                 d3
                     .select("#xAxisLabelId")
                     .append("svg")
-                    .attr("width", window.innerWidth, "height", 150), y_pos_x_label,
+                    .attr("width", window.innerWidth, "height", 150),
+                y_pos_x_label,
                 false
             );
             setLabel(labels[2], "y_label", d3.select("svg"), false);
@@ -1265,7 +1267,7 @@
                     "Supplies",
                 ],
             ],
-            ["Category","Sub-category","Sales"]
+            ["Category", "Sub-category", "Sales"],
         ];
 
         // var data = [
