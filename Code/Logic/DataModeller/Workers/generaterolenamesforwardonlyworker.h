@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include <QDebug>
+#include <QSqlDatabase>
 
 #include "../../General/datatype.h"
 #include "../../General/querysplitter.h"
@@ -17,11 +18,12 @@ class GenerateRoleNamesForwardOnlyWorker : public QThread
     QStringList tableHeaders;
     int internalColCount;
     QuerySplitter *querySplitter;
-    QSqlDatabase *dbForward;
+
+    QSqlDatabase dbForward2;
 
 
 public:
-    explicit GenerateRoleNamesForwardOnlyWorker(QSqlDatabase *dbForward = nullptr, QString query = "", QuerySplitter *querySplitter = nullptr);
+    explicit GenerateRoleNamesForwardOnlyWorker( QString query = "", QuerySplitter *querySplitter = nullptr);
 
 protected:
     void run() override;
@@ -29,7 +31,9 @@ protected:
 private:
     QString returnDatatypeQuery(QString tableName);
     QString returnConnectionName();
-    QMap<QString, QString> returnColumnList(QString tableName);
+    QMap<QString, QString> returnColumnList(QString tableName, QSqlDatabase dbForward);
+
+    void newConnection();
 signals:
 
     void signalGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount);

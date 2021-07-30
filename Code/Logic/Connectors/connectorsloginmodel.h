@@ -97,7 +97,7 @@ signals:
     void logout();
 
 private:
-    void staticSetter(QString dbName, QString classification, int intType, QString strType = NULL, bool directLogin = false);
+    void staticSetter(QString dbName, QString classification, int intType, QString strType = NULL, bool directLogin = false, QString driverName = "");
     void staticRemover();
 };
 

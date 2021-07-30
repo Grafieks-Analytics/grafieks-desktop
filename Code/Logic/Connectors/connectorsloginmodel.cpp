@@ -47,7 +47,7 @@ void ConnectorsLoginModel::sqliteLogin(QString filename)
 void ConnectorsLoginModel::mysqlOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
     response = mysqlcon->MysqlOdbcInstance(driver, host, db, port, username, password);
-    this->staticSetter(db, Constants::sqlType, Constants::mysqlOdbcIntType, Constants::mysqlOdbcStrType);
+    this->staticSetter(db, Constants::sqlType, Constants::mysqlOdbcIntType, Constants::mysqlOdbcStrType, false, driver);
     emit mysqlLoginStatus(response);
 }
 
@@ -56,14 +56,14 @@ void ConnectorsLoginModel::mssqlOdbcLogin(QString driver, QString host, QString 
 {
 
     response = mssqlcon->MSSqlOdbcInstance(driver, host, db, port, username, password);
-    this->staticSetter(db, Constants::sqlType, Constants::mssqlIntType, Constants::mssqlOdbcStrType);
+    this->staticSetter(db, Constants::sqlType, Constants::mssqlIntType, Constants::mssqlOdbcStrType, false, driver);
     emit mssqlLoginStatus(response);
 }
 
 void ConnectorsLoginModel::postgresOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
     response = postgrescon->PostgresOdbcInstance(driver, host, db, port, username, password);
-    this->staticSetter(db, Constants::sqlType, Constants::postgresIntType, Constants::postgresOdbcStrType);
+    this->staticSetter(db, Constants::sqlType, Constants::postgresIntType, Constants::postgresOdbcStrType, false, driver);
     emit postgresLoginStatus(response);
 
 }
@@ -71,21 +71,21 @@ void ConnectorsLoginModel::postgresOdbcLogin(QString driver, QString host, QStri
 void ConnectorsLoginModel::redshiftOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
     response = redshiftcon->RedshiftOdbcInstance(driver, host, db, port, username, password);
-    this->staticSetter(db, Constants::forwardType, Constants::redshiftIntType, Constants::redshiftOdbcStrType);
+    this->staticSetter(db, Constants::forwardType, Constants::redshiftIntType, Constants::redshiftOdbcStrType, false, driver);
     emit redshiftLoginStatus(response);
 }
 
 void ConnectorsLoginModel::oracleOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
     response = oraclecon->OracleOdbcInstance(driver, host, db, port, username, password);
-    this->staticSetter(db, Constants::sqlType, Constants::oracleIntType, Constants::oracleOdbcStrType);
+    this->staticSetter(db, Constants::sqlType, Constants::oracleIntType, Constants::oracleOdbcStrType, false, driver);
     emit postgresLoginStatus(response);
 }
 
 void ConnectorsLoginModel::mongoOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
     response = mongocon->MongoOdbcInstance(driver, host, db, port, username, password);
-    this->staticSetter(db, Constants::sqlType, Constants::mongoIntType, Constants::mongoOdbcStrType);
+    this->staticSetter(db, Constants::sqlType, Constants::mongoIntType, Constants::mongoOdbcStrType, false, driver);
     emit mongoLoginStatus(response);
 
 }
@@ -93,28 +93,28 @@ void ConnectorsLoginModel::mongoOdbcLogin(QString driver, QString host, QString 
 void ConnectorsLoginModel::impalaOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
     response = impalacon->ImpalaOdbcInstance(driver, host, db, port, username, password);
-    this->staticSetter(db, Constants::sqlType, Constants::impalaIntType, Constants::impalaOdbcStrType);
+    this->staticSetter(db, Constants::sqlType, Constants::impalaIntType, Constants::impalaOdbcStrType, false, driver);
     emit impalaLoginStatus(response);
 }
 
 void ConnectorsLoginModel::hiveOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
     response = hivecon->HiveOdbcInstance(driver, host, db, port, username, password);
-    this->staticSetter(db, Constants::sqlType, Constants::hiveIntType, Constants::hiveOdbcStrType);
+    this->staticSetter(db, Constants::sqlType, Constants::hiveIntType, Constants::hiveOdbcStrType, false, driver);
     emit hiveLoginStatus(response);
 }
 
 void ConnectorsLoginModel::snowflakeOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
     response = snowflakecon->SnowflakeOdbcInstance(driver, host, db, port, username, password);
-    this->staticSetter(db, Constants::forwardType, Constants::snowflakeIntType, Constants::snowflakeOdbcStrType);
+    this->staticSetter(db, Constants::forwardType, Constants::snowflakeIntType, Constants::snowflakeOdbcStrType, false, driver);
     emit snowflakeLoginStatus(response);
 }
 
 void ConnectorsLoginModel::teradataOdbcLogin(QString driver, QString host, QString db, int port, QString username, QString password)
 {
     response = teradatacon->TeradataOdbcInstance(driver, host, db, port, username, password);
-    this->staticSetter(db, Constants::forwardType, Constants::teradataIntType, Constants::teradataOdbcStrType);
+    this->staticSetter(db, Constants::forwardType, Constants::teradataIntType, Constants::teradataOdbcStrType, false, driver);
     emit teradataLoginStatus(response);
 }
 
@@ -126,14 +126,14 @@ void ConnectorsLoginModel::accessOdbcLogin(QString driver, QString db, QString u
     QString accessFileName = fileInfo.fileName();
 
 
-    this->staticSetter(accessFileName, Constants::sqlType, Constants::accessIntType, Constants::accessOdbcStrType);
+    this->staticSetter(accessFileName, Constants::sqlType, Constants::accessIntType, Constants::accessOdbcStrType, false, driver);
     emit accessLoginStatus(response);
 }
 
 void ConnectorsLoginModel::excelOdbcLogin(QString driver, QString filename)
 {
     response = excelcon->ExcelOdbcInstance(driver, filename);
-    this->staticSetter(filename, Constants::sqlType, Constants::excelIntType, Constants::excelOdbcStrType);
+    this->staticSetter(filename, Constants::sqlType, Constants::excelIntType, Constants::excelOdbcStrType, false, driver);
     emit excelLoginStatus(response, true);
 }
 
@@ -281,12 +281,13 @@ void ConnectorsLoginModel::setConnectedDB(QString connectedDB)
     emit connectedDBChanged(m_connectedDB);
 }
 
-void ConnectorsLoginModel::staticSetter(QString dbName, QString classification, int intType, QString strType, bool directLogin)
+void ConnectorsLoginModel::staticSetter(QString dbName, QString classification, int intType, QString strType, bool directLogin, QString driverName)
 {
     Statics::currentDbName = dbName;
     Statics::currentDbClassification = classification;
     Statics::currentDbIntType = intType;
     Statics::currentDbStrType = strType;
+    Statics::driverName = driverName;
 
     if(classification == Constants::duckType){
         QFileInfo fi(dbName);
@@ -307,6 +308,7 @@ void ConnectorsLoginModel::staticRemover()
     Statics::currentDbClassification = "";
     Statics::currentDbIntType = 0;
     Statics::currentDbStrType = "";
+    Statics::driverName = "";
 
     emit dSSelected(false);
 }

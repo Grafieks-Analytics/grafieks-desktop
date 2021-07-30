@@ -367,12 +367,18 @@ void ChartsThread::getNewGroupedBarChartValues()
     QJsonArray columns;
     columns.append(QJsonArray::fromStringList(uniqueSplitKeyData));
 
+    QJsonArray categories;
+    xAxisDataPointer->removeDuplicates();
+    categories.append(QJsonArray::fromStringList(*xAxisDataPointer));
+
     data.append(columns);
+    data.append(categories);
 
     QJsonDocument doc;
     doc.setArray(data);
 
     QString strData = doc.toJson();
+    qDebug() << doc;
 
     emit signalNewGroupedBarChartValues(strData);
 }
@@ -1522,12 +1528,14 @@ void ChartsThread::getStackedBarAreaValues(QString &xAxisColumn, QString &yAxisC
 
     data.append(colData);
     data.append(QJsonArray::fromStringList(xAxisDataPointerPre));
+    data.append(QJsonArray::fromStringList(splitDataPointerPre));
     data.append(columns);
 
     QJsonDocument doc;
     doc.setArray(data);
 
     QString strData = doc.toJson();
+    qDebug() << doc;
 
     if(identifier == "getStackedBarChartValues"){
         emit signalStackedBarChartValues(strData);
