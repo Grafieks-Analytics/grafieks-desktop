@@ -77,7 +77,13 @@ Popup {
         // Possible to get model via id or some other reference?
         
        var axisModel = axisItemMenuPopup.parent.parent.parent.model;
-       axisModel.remove(index);
+           var modelData = axisModel.get(index);
+       if(modelData.droppedItemType == "Date"){
+           console.log(modelData);
+           delete d3PropertyConfig['dateFormat']
+       }
+
+        axisModel.remove(index);
        reDrawChart();
        
     }

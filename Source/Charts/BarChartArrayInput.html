@@ -97,7 +97,7 @@
 
             // data values to be plot
             var dataValues = data[0];
-                        const [xAxisLabel, yAxisLabel] = data[1];
+            const [xAxisLabel, yAxisLabel] = data[1];
             //   var [data, keys, labels] = transformData(
             //     data[0],
             //     dateFormat,
@@ -130,6 +130,7 @@
                 yLabelfontFamily = defaultD3Config.fontFamily,
                 xTickfontFamily = defaultD3Config.fontFamily,
                 yTickfontFamily = defaultD3Config.fontFamily,
+                dataLabelfontFamily = defaultD3Config.fontFamily,
                 // font color
                 xLabelfontColor = defaultD3Config.fontColor,
                 yLabelfontColor = defaultD3Config.fontColor,
@@ -147,6 +148,7 @@
             window.yLabelfontFamily = yLabelfontFamily;
             window.xTickfontFamily = xTickfontFamily;
             window.yTickfontFamily = yTickfontFamily;
+            window.dataLabelfontFamily = dataLabelfontFamily;
 
             window.xLabelfontColor = xLabelfontColor;
             window.yLabelfontColor = yLabelfontColor;
@@ -285,7 +287,7 @@
 
             d3.select("#legend").attr("style", null);
             d3.select("#mainChartWindow").attr("style", null);
-                   d3.select("#xAxisLabelId").style("bottom", 20);
+            d3.select("#xAxisLabelId").style("bottom", 20);
 
             // legends code starts
             if (legendStatus) {
@@ -449,6 +451,19 @@
                 var legendWidth = legendElement.offsetWidth;
                 width -= legendWidth;
             }
+            if (legendPosition == "top") {
+                var legendHeightTop = legendHeight;
+            }
+            else {
+                legendHeightTop = 0;
+            }
+            if (legendPosition == "left") {
+                var legendWidthLeft = legendWidth;
+            }
+            else {
+                legendWidthLeft = 0;
+            }
+
 
             // legends code ends
             var mainChartWidth =
@@ -616,10 +631,12 @@
                     let xValue = this.getAttribute("data-value-x");
                     let yValue = this.getAttribute("data-value-y");
 
+
+
                     d3.select("#tooltip")
                         // .style("left", xpos + "px")
                         // .style("left", xpos -500+ "px")
-                        .style("top", ypos - 22 + "px")
+                        .style("top", ypos - 22 + legendHeightTop + "px")
                         .style("display", "block")
                         // .text(dataset[i]);
                         .html(function () {
@@ -663,7 +680,7 @@
                             xpos - scrollVal -
                             document.querySelector("#tooltip")
                                 .clientWidth -
-                            10 +
+                            10 + legendWidthLeft +
                             "px"
                         );
 
@@ -678,7 +695,7 @@
                     } else {
                         d3.select("#tooltip").style(
                             "left",
-                            xpos - scrollVal + 12 + "px"
+                            xpos - scrollVal + 12 + legendWidthLeft + "px"
                         );
 
                         d3.select(".arrowTooltip").attr(
@@ -708,7 +725,7 @@
                     .call(xAxis.tickSize(0))
                     .attr("class", "axis label")
                     // .attr("font-family", xDataLabelfontFamily)
-                    .attr("font-family", xTickfontFamily);
+                    .attr("font-family", dataLabelfontFamily);
 
                 // .attr("transform", "translate(0,0)");
                 var labelSelector = document.querySelectorAll(".axis.label text")
@@ -819,6 +836,8 @@
                     .attr("y", "0");
             }
 
+
+
             // Remove Text in case they are large in number
             var allXAxisTexts = document.querySelectorAll(".x-axis text");
             var textWidth =
@@ -928,7 +947,7 @@
                 return d3.axisLeft(y).ticks(yaxisTicks);
             }
         }
-    //  draw function defination starts
+            //  draw function defination starts
     </script>
     <!-- javascripts ends -->
 </body>

@@ -300,6 +300,7 @@ QtObject {
     property string lineBarTitle: "Line Bar"
     property string sankeyChartTitle: "Sankey"
     property string multiLineChartTitle: "Multi Line"
+    property string horizontalMultiLineChartTitle: "Horizontal Multi Line"
     property string stackedAreaChartTitle: "Stacked Area Chart"
 
     // Chart Urls
@@ -323,6 +324,7 @@ QtObject {
     property string barChartUrl: "BarChartArrayInput.html";
 
     property string multiLineChartUrl: "MultipleLineChart.html";
+    property string lineChartUrl: "LineChart.html";
 
 
     // Charts ends

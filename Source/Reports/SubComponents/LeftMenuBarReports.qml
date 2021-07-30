@@ -75,11 +75,12 @@ Rectangle{
             icon: "combination_chart.png"
             activeChart: false
             chartHtml:"bar.html"
-            title:"Combination"
+            title:"Combination - Coming Soon"
             yAxisVisible: true
             maxDropOnXAxis: 1
             lineTypeChartVisible: true
             mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
+            nonClickable: true
         }
         ListElement{
             icon: "heatmap.png"
@@ -245,8 +246,9 @@ Rectangle{
             activeChart: false
             xAxisLabelName: "Location"
             yAxisLabelName: "Numerical"
-            title:"Map"
+            title:"Map - Coming Soon"
             mainCustomizations: "Properties,Legend"
+            nonClickable: true
         }
         ListElement{
             icon: "gauge_chart.png"
@@ -365,6 +367,7 @@ Rectangle{
             if(report_desiner_page.isHorizontalGraph){
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 0){
                     chartHtml = Constants.horizontalBarChartUrl;
+//                    switchChart(Constants.horizontalBarChartTitle);
                 }
                 else if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 1){
                     chartHtml = Constants.horizontalStackedBarChartUrl;
@@ -379,9 +382,7 @@ Rectangle{
                 }
             }
         }
-
-        /*
-        if(chartTitle === Constants.lineChartTitle){
+        else if(chartTitle === Constants.lineChartTitle){
             if(report_desiner_page.isHorizontalGraph){
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 0){
                     chartHtml = Constants.horizontalLineChartUrl;
@@ -391,13 +392,15 @@ Rectangle{
                 }
             }else{
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count !== 0){
-                    // chartHtml = Constants.multiLineChartUrl;
-                    switchChart(Constants.multiLineChartTitle);
+                    console.log('Debug: Loading multiline chart');
+                    chartHtml = Constants.multiLineChartUrl;
+                    // switchChart(Constants.multiLineChartTitle);
                 }
             }
         }
-        */
+        
 
+        console.log(chartTitle);
         console.log('Loading Chart from LeftMenuBarReports.qml',chartHtml)
         loadchart("../Charts/"+chartHtml);
 
