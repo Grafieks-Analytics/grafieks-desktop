@@ -4,7 +4,6 @@
 #include <QThread>
 #include <QDebug>
 
-#include "../../Connectors/duckcon.h"
 #include "../../General/datatype.h"
 #include "../../General/querysplitter.h"
 

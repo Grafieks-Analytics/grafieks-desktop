@@ -6,6 +6,7 @@ GenerateRoleNamesForwardOnlyWorker::GenerateRoleNamesForwardOnlyWorker(QSqlDatab
     this->dbForward = dbForward;
     this->query = query;
     this->querySplitter = querySplitter;
+    qDebug() << dbForward;
 }
 
 void GenerateRoleNamesForwardOnlyWorker::run()
@@ -61,7 +62,6 @@ void GenerateRoleNamesForwardOnlyWorker::run()
         tablesList << this->querySplitter->getMainTable();
         tablesList << this->querySplitter->getJoinTables();
 
-
         this->internalColCount = output.length();
 
         for(int i =0; i < output.length(); i++){
@@ -79,7 +79,7 @@ void GenerateRoleNamesForwardOnlyWorker::run()
                     }
 
                     tableName = tableName.remove(QRegularExpression("[\"`']+")).trimmed();
-
+                    qDebug() << "OK TILL HERE" << tmpTableName << tableName << this->dbForward;
                     if(tmpTableName != tableName){
                         colTypeMap = this->returnColumnList(tableName);
                     }
@@ -184,7 +184,8 @@ QMap<QString, QString> GenerateRoleNamesForwardOnlyWorker::returnColumnList(QStr
     QString conName = this->returnConnectionName();
     QMap<QString, QString>colTypeMap;
 
-    QSqlQuery q(conQuery, *dbForward);
+
+    QSqlQuery q(conQuery, *this->dbForward);
 
     if(q.lastError().type() == QSqlError::NoError){
         while(q.next()){

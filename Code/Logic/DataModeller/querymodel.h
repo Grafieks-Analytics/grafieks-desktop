@@ -1,5 +1,5 @@
-#ifndef QUERYMODELLER_H
-#define QUERYMODELLER_H
+#ifndef QUERYMODELLERMAIN_H
+#define QUERYMODELLERMAIN_H
 
 #include <QSqlQueryModel>
 #include <QSqlRecord>
@@ -12,6 +12,7 @@
 #include "../../constants.h"
 #include "../General/datatype.h"
 #include "./Workers/generaterolenamesqueryworker.h"
+#include "./Workers/setchartdataqueryworker.h"
 
 
 class QueryModel : public QSqlQueryModel
@@ -28,6 +29,7 @@ public:
     void setQuery(const QString &query, const QSqlDatabase &db = QSqlDatabase());
     void setQuery(const QSqlQuery &query);
     QVariant data(const QModelIndex &index, int role) const override;
+    int rowCount(const QModelIndex &parent) const;
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void callSql(QString tmpSql);
@@ -39,6 +41,7 @@ public slots:
     void setChartData();
 
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
+    void slotSetChartData(bool success);
 
 signals:
     void chartDataChanged(QMap<int, QStringList*> chartData);
@@ -58,11 +61,13 @@ private:
     QMap<int, QStringList> sqlChartHeader;
     QStringList tableHeaders;
     int tmpRowCount;
+    int tmpColCount;
     QString tmpSql;
     bool resetPreviewCount;
-
-
+    SetChartDataQueryWorker *setChartDataWorker;
+    QSqlQueryModel queryModel;
+    int maxRowCount;
 
 };
 
-#endif // QUERYMODELLER_H
+#endif // QUERYMODELLERMAIN_H

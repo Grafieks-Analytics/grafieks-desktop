@@ -43,10 +43,10 @@ QStringList TableColumnsModel::fetchColumnData(QString colName)
 {
     int columnKey = newChartHeader.key( colName );
 
-    QStringList columnDataList = *newChartData.value(columnKey);
-    columnDataList.removeDuplicates();
+    QStringList *columnDataList = this->newChartData.value(columnKey);
+    columnDataList->removeDuplicates();
 
-    return columnDataList;
+    return *columnDataList;
 }
 
 QStringList TableColumnsModel::searchColumnData(QString keyword, QString columnName)

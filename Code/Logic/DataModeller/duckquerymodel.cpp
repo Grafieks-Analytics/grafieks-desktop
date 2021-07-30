@@ -1,6 +1,6 @@
 #include "duckquerymodel.h"
 
-DuckQueryModel::DuckQueryModel(QObject *parent) : QAbstractTableModel(parent)
+DuckQueryModel::DuckQueryModel(QObject *parent) : QAbstractTableModel(parent), setChartDataWorker(nullptr)
 {
 
 }
@@ -140,38 +140,13 @@ void DuckQueryModel::setChartHeader(int index, QStringList colInfo)
 
 void DuckQueryModel::setQueryResult()
 {
-    auto result = duckCon->con.Query(this->query.toStdString());
-    if(!result->error.empty()) {
-        qWarning() << Q_FUNC_INFO << result->error.c_str();
-    } else{
+    this->setChartDataWorker = new SetChartDataDuckWorker(duckCon, this->query);
+    connect(setChartDataWorker, &SetChartDataDuckWorker::signalSetChartData, this, &DuckQueryModel::slotSetChartData, Qt::QueuedConnection);
+    connect(setChartDataWorker, &SetChartDataDuckWorker::finished, setChartDataWorker, &QObject::deleteLater, Qt::QueuedConnection);
+    setChartDataWorker->setObjectName("Grafieks Duck Chart Data");
+    setChartDataWorker->start(QThread::HighestPriority);
 
-        // Set the internalRowCount & internalColCount for the QAbstractListModel rowCount method
-        this->internalColCount = result->collection.ColumnCount();
-        this->internalRowCount = result->collection.Count();
-
-        this->setChartData(result);
-    }
 }
-
-void DuckQueryModel::setChartData(std::unique_ptr<duckdb::MaterializedQueryResult> &totalRows)
-{
-
-    int i, j;
-
-    for(j = 0; j < this->internalRowCount; j++){
-        for(i = 0; i < this->internalColCount; i++){
-
-            if(j == 0){
-                this->duckChartData[i] = new QStringList(totalRows->GetValue(i, j).ToString().c_str());
-            } else{
-                this->duckChartData.value(i)->append(totalRows->GetValue(i, j).ToString().c_str());
-                this->duckChartData[i] = duckChartData.value(i);
-            }
-        }
-    }
-    emit chartDataChanged(this->duckChartData);
-}
-
 
 
 QMap<QString, QString> DuckQueryModel::returnColumnList(QString tableName)
@@ -237,5 +212,16 @@ void DuckQueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, cons
 
     emit duckHeaderDataChanged(this->tableHeaders);
     emit chartHeaderChanged(this->duckChartHeader);
+}
+
+void DuckQueryModel::slotSetChartData(bool success)
+{
+    if(success){
+        qDebug() << "GOT CHART DATA";
+        this->internalColCount = this->setChartDataWorker->getInternalColCount();
+        this->internalRowCount = this->setChartDataWorker->getInternalRowCount();
+        this->duckChartData = this->setChartDataWorker->getDuckChartData();
+        emit chartDataChanged(this->duckChartData);
+    }
 }
 

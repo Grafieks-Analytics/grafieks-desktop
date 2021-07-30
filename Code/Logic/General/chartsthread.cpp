@@ -1720,7 +1720,7 @@ void ChartsThread::receiveReportData(QMap<int, QMap<int, QStringList>> newChartD
 
 void ChartsThread::receiveDashboardData(QMap<int, QMap<int, QStringList>> newChartData, int currentDashboardId)
 {
-    qDebug() << "DASHBOARD DATA" << newChartData;
+//    qDebug() << "DASHBOARD DATA" << newChartData;
     this->dashboardChartData = newChartData;
     this->dashboardId = currentDashboardId;
     this->currentChartSource = this->chartSources.at(0); // dashboard
