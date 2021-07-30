@@ -144,7 +144,7 @@ void ForwardOnlyQueryModel::generateRoleNames()
     QString connectionName = this->returnConnectionName();
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
 
-    GenerateRoleNamesForwardOnlyWorker *generateRoleNameWorker = new GenerateRoleNamesForwardOnlyWorker(&dbForward, this->query, &querySplitter);
+    GenerateRoleNamesForwardOnlyWorker *generateRoleNameWorker = new GenerateRoleNamesForwardOnlyWorker(this->query, &querySplitter);
     connect(generateRoleNameWorker, &GenerateRoleNamesForwardOnlyWorker::signalGenerateRoleNames, this, &ForwardOnlyQueryModel::slotGenerateRoleNames, Qt::QueuedConnection);
     connect(generateRoleNameWorker, &GenerateRoleNamesForwardOnlyWorker::finished, generateRoleNameWorker, &QObject::deleteLater, Qt::QueuedConnection);
     generateRoleNameWorker->setObjectName("Grafieks ForwardOnly Rolenames");
@@ -163,10 +163,10 @@ void ForwardOnlyQueryModel::setQueryResult()
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
 
     this->setChartDataWorker = new SetChartDataForwardOnlyWorker(&dbForward, this->query, this->internalColCount);
-//    connect(setChartDataWorker, &SetChartDataForwardOnlyWorker::signalSetChartData, this, &ForwardOnlyQueryModel::slotSetChartData, Qt::QueuedConnection);
-//    connect(setChartDataWorker, &SetChartDataForwardOnlyWorker::finished, setChartDataWorker, &QObject::deleteLater, Qt::QueuedConnection);
-//    setChartDataWorker->setObjectName("Grafieks ForwardOnly Chart Data");
-//    setChartDataWorker->start(QThread::InheritPriority);
+    connect(setChartDataWorker, &SetChartDataForwardOnlyWorker::signalSetChartData, this, &ForwardOnlyQueryModel::slotSetChartData, Qt::QueuedConnection);
+    connect(setChartDataWorker, &SetChartDataForwardOnlyWorker::finished, setChartDataWorker, &QObject::deleteLater, Qt::QueuedConnection);
+    setChartDataWorker->setObjectName("Grafieks ForwardOnly Chart Data");
+    setChartDataWorker->start(QThread::InheritPriority);
 }
 
 

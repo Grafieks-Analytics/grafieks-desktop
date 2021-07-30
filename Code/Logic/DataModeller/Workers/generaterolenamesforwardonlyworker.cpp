@@ -1,12 +1,10 @@
 #include "generaterolenamesforwardonlyworker.h"
 
 
-GenerateRoleNamesForwardOnlyWorker::GenerateRoleNamesForwardOnlyWorker(QSqlDatabase *dbForward, QString query, QuerySplitter *querySplitter)
+GenerateRoleNamesForwardOnlyWorker::GenerateRoleNamesForwardOnlyWorker(QString query, QuerySplitter *querySplitter)
 {
-    this->dbForward = dbForward;
     this->query = query;
     this->querySplitter = querySplitter;
-    qDebug() << dbForward;
 }
 
 void GenerateRoleNamesForwardOnlyWorker::run()
@@ -17,115 +15,136 @@ void GenerateRoleNamesForwardOnlyWorker::run()
     QStringList colInfo, tablesList, output;
     QMap<QString, QString> colTypeMap;
 
-    roleNames.clear();
-    this->tableHeaders.clear();
+    qDebug() << Statics::driverName << Statics::teradataHost << Statics::teradataPort << Statics::teradataHost << Statics::teradataUsername << Statics::teradataPassword;
+
+    QString dbString = "DRIVER={" + Statics::driverName + "};" + "DBCName=" + Statics::teradataHost + ";Tusted_Connection=True";
+
+    this->dbForward2 = QSqlDatabase::addDatabase("QODBC", "RoleNameThread");
+
+    this->dbForward2.setDatabaseName(dbString);
+    this->dbForward2.setPort(Statics::teradataPort);
+    this->dbForward2.setHostName(Statics::teradataHost);
+    this->dbForward2.setUserName(Statics::teradataUsername);
+    this->dbForward2.setPassword(Statics::teradataPassword);
 
 
-    QRegularExpression selectListRegex(R"(SELECT\s+(.*?)\sFROM\s)", QRegularExpression::CaseInsensitiveOption);
-    QRegularExpressionMatch selectIterator = selectListRegex.match(this->query);
-    QString containsStar = selectIterator.captured(1);
+    if(!this->dbForward2.open()){
+        qDebug() << this->dbForward2.lastError().text();
+    } else{
 
-    if(containsStar.contains("*", Qt::CaseInsensitive) == true){
-        tablesList << this->querySplitter->getMainTable();
-        tablesList << this->querySplitter->getJoinTables();
+        //    QSqlDatabase dbForward = QSqlDatabase::database("RoleNameThread");
 
-        foreach(QString tableName, tablesList){
+        roleNames.clear();
+        this->tableHeaders.clear();
 
-            QString conQuery = this->returnDatatypeQuery(tableName);
-            QString conName = this->returnConnectionName();
 
-            QSqlQuery q(conQuery, *dbForward);
+        QRegularExpression selectListRegex(R"(SELECT\s+(.*?)\sFROM\s)", QRegularExpression::CaseInsensitiveOption);
+        QRegularExpressionMatch selectIterator = selectListRegex.match(this->query);
+        QString containsStar = selectIterator.captured(1);
 
-            if(q.lastError().type() == QSqlError::NoError){
-                int i = 0;
+        if(containsStar.contains("*", Qt::CaseInsensitive) == true){
+            tablesList << this->querySplitter->getMainTable();
+            tablesList << this->querySplitter->getJoinTables();
 
-                while(q.next()){
-                    fieldName = q.value(0).toString().trimmed();
-                    fieldType = q.value(1).toString().trimmed();
-                    colInfo << fieldName << dataType.dataType(fieldType) << tableName;
+            foreach(QString tableName, tablesList){
 
+                QString conQuery = this->returnDatatypeQuery(tableName);
+                QString conName = this->returnConnectionName();
+
+                QSqlQuery q(conQuery, this->dbForward2);
+
+                if(q.lastError().type() == QSqlError::NoError){
+                    int i = 0;
+
+                    while(q.next()){
+                        fieldName = q.value(0).toString().trimmed();
+                        fieldType = q.value(1).toString().trimmed();
+                        colInfo << fieldName << dataType.dataType(fieldType) << tableName;
+
+                        roleNames.insert(i, fieldName.toUtf8());
+                        this->forwardOnlyChartHeader.insert(i, colInfo);
+
+                        this->tableHeaders.append(fieldName);
+                        this->internalColCount++;
+                        colInfo.clear();
+                        i++;
+                    }
+                } else{
+                    qWarning() << Q_FUNC_INFO << q.lastError();
+                }
+            }
+
+        } else{
+            output = this->querySplitter->getSelectParams();
+            tablesList << this->querySplitter->getMainTable();
+            tablesList << this->querySplitter->getJoinTables();
+
+            this->internalColCount = output.length();
+
+            for(int i =0; i < output.length(); i++){
+                fieldName = output[i].remove(QRegularExpression("[\"`']+")).trimmed();
+
+                // If fieldname contains a dot(.), then probably it might have joins
+                // Else for sure it doesnt contain a join
+                if(fieldName.contains(".")){
+                    foreach(QString tableName, tablesList){
+
+                        if(Statics::currentDbIntType == Constants::teradataIntType){
+                            tableName.remove("\"" + Statics::currentDbName + "\".");
+                            tableName.remove(Statics::currentDbName + ".");
+                            tableName.remove("\"");
+                        }
+
+                        tableName = tableName.remove(QRegularExpression("[\"`']+")).trimmed();
+
+                        if(tmpTableName != tableName){
+                            colTypeMap = this->returnColumnList(tableName, dbForward2);
+                        }
+
+                        if(fieldName.contains(tableName)){
+
+                            try{
+                                tmpFieldName = fieldName;
+                                fieldName.remove(tableName + ".");
+                                fieldType = colTypeMap.value(fieldName);
+                                colInfo << fieldName << dataType.dataType(fieldType.left(fieldType.indexOf("("))) << tableName;
+
+                            } catch(std::exception &e){
+                                qDebug() << e.what();
+                            }
+                        }
+                        tmpTableName = tableName;
+
+                    }
+                } else{
+
+                    if(tmpTableName != tablesList.at(0)){
+                        colTypeMap = this->returnColumnList(tablesList.at(0), dbForward2);
+                    }
+                    tmpTableName = tablesList.at(0);
+
+                    fieldType = colTypeMap.value(fieldName);
+                    colInfo << fieldName << dataType.dataType(fieldType.left(fieldType.indexOf("("))) << tablesList.at(0);
+                }
+
+
+                try{
                     roleNames.insert(i, fieldName.toUtf8());
                     this->forwardOnlyChartHeader.insert(i, colInfo);
-
                     this->tableHeaders.append(fieldName);
-                    this->internalColCount++;
-                    colInfo.clear();
-                    i++;
+                }catch(std::exception &er){
+                    qDebug() << er.what();
                 }
-            } else{
-                qWarning() << Q_FUNC_INFO << q.lastError();
+
+                colInfo.clear();
+
             }
-        }
-
-    } else{
-        output = this->querySplitter->getSelectParams();
-        tablesList << this->querySplitter->getMainTable();
-        tablesList << this->querySplitter->getJoinTables();
-
-        this->internalColCount = output.length();
-
-        for(int i =0; i < output.length(); i++){
-            fieldName = output[i].remove(QRegularExpression("[\"`']+")).trimmed();
-
-            // If fieldname contains a dot(.), then probably it might have joins
-            // Else for sure it doesnt contain a join
-            if(fieldName.contains(".")){
-                foreach(QString tableName, tablesList){
-
-                    if(Statics::currentDbIntType == Constants::teradataIntType){
-                        tableName.remove("\"" + Statics::currentDbName + "\".");
-                        tableName.remove(Statics::currentDbName + ".");
-                        tableName.remove("\"");
-                    }
-
-                    tableName = tableName.remove(QRegularExpression("[\"`']+")).trimmed();
-                    qDebug() << "OK TILL HERE" << tmpTableName << tableName << this->dbForward;
-                    if(tmpTableName != tableName){
-                        colTypeMap = this->returnColumnList(tableName);
-                    }
-
-                    if(fieldName.contains(tableName)){
-
-                        try{
-                            tmpFieldName = fieldName;
-                            fieldName.remove(tableName + ".");
-                            fieldType = colTypeMap.value(fieldName);
-                            colInfo << fieldName << dataType.dataType(fieldType.left(fieldType.indexOf("("))) << tableName;
-
-                        } catch(std::exception &e){
-                            qDebug() << e.what();
-                        }
-                    }
-                    tmpTableName = tableName;
-
-                }
-            } else{
-
-                if(tmpTableName != tablesList.at(0)){
-                    colTypeMap = this->returnColumnList(tablesList.at(0));
-                }
-                tmpTableName = tablesList.at(0);
-
-                fieldType = colTypeMap.value(fieldName);
-                colInfo << fieldName << dataType.dataType(fieldType.left(fieldType.indexOf("("))) << tablesList.at(0);
-            }
-
-
-            try{
-                roleNames.insert(i, fieldName.toUtf8());
-                this->forwardOnlyChartHeader.insert(i, colInfo);
-                this->tableHeaders.append(fieldName);
-            }catch(std::exception &er){
-                qDebug() << er.what();
-            }
-
-            colInfo.clear();
 
         }
 
+        qDebug() << "READY TO EMIT SIGNAL";
+        emit signalGenerateRoleNames(this->tableHeaders, this->forwardOnlyChartHeader, this->roleNames, this->internalColCount);
     }
-
-    emit signalGenerateRoleNames(this->tableHeaders, this->forwardOnlyChartHeader, this->roleNames, this->internalColCount);
 }
 
 QString GenerateRoleNamesForwardOnlyWorker::returnDatatypeQuery(QString tableName)
@@ -177,7 +196,7 @@ QString GenerateRoleNamesForwardOnlyWorker::returnConnectionName()
     return conType;
 }
 
-QMap<QString, QString> GenerateRoleNamesForwardOnlyWorker::returnColumnList(QString tableName)
+QMap<QString, QString> GenerateRoleNamesForwardOnlyWorker::returnColumnList(QString tableName, QSqlDatabase dbForward)
 {
 
     QString conQuery = this->returnDatatypeQuery(tableName);
@@ -185,7 +204,8 @@ QMap<QString, QString> GenerateRoleNamesForwardOnlyWorker::returnColumnList(QStr
     QMap<QString, QString>colTypeMap;
 
 
-    QSqlQuery q(conQuery, *this->dbForward);
+    qDebug() << this->returnConnectionName() << "DB NAME";;
+    QSqlQuery q(conQuery, dbForward);
 
     if(q.lastError().type() == QSqlError::NoError){
         while(q.next()){
@@ -198,4 +218,18 @@ QMap<QString, QString> GenerateRoleNamesForwardOnlyWorker::returnColumnList(QStr
     }
 
     return colTypeMap;
+}
+
+void GenerateRoleNamesForwardOnlyWorker::newConnection()
+{
+    QString dbString = "DRIVER={" + Statics::driverName + "};" + "DBCName=" + Statics::teradataHost + ";Tusted_Connection=True";
+
+    QSqlDatabase dbTeradataOdbcRoleName = QSqlDatabase::addDatabase("QODBC", Constants::teradataOdbcStrType + "RoleName");
+
+    dbTeradataOdbcRoleName.setDatabaseName(dbString);
+    dbTeradataOdbcRoleName.setPort(Statics::teradataPort);
+    dbTeradataOdbcRoleName.setHostName(Statics::teradataHost);
+    dbTeradataOdbcRoleName.setUserName(Statics::teradataUsername);
+    dbTeradataOdbcRoleName.setPassword(Statics::teradataPassword);
+    dbTeradataOdbcRoleName.open();
 }

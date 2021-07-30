@@ -30,37 +30,37 @@ int SetChartDataForwardOnlyWorker::getInternalRowCount()
 void SetChartDataForwardOnlyWorker::run()
 {
 
-    QSqlQuery q(this->query, *this->dbForward);
-    if(q.lastError().type() != QSqlError::NoError){
-        qWarning() << Q_FUNC_INFO << q.lastError();
-    } else{
+    QSqlQuery q(this->query, *dbForward);
+//    if(q.lastError().type() != QSqlError::NoError){
+//        qWarning() << Q_FUNC_INFO << q.lastError();
+//    } else{
 
-        int totalRowCount = 0;
-        while(q.next()){
+//        int totalRowCount = 0;
+//        while(q.next()){
 
-            int i;
+//            int i;
 
-            // To delete new pointer stringlist later
-            this->maxColCount = this->internalColCount > this->maxColCount ? this->internalColCount : this->maxColCount;
+//            // To delete new pointer stringlist later
+//            this->maxColCount = this->internalColCount > this->maxColCount ? this->internalColCount : this->maxColCount;
 
-            for(i = 0; i < this->internalColCount; i++){
-                QStringList *tmpStringList = new QStringList;
-                vectorStringList.append(tmpStringList);
-            }
+//            for(i = 0; i < this->internalColCount; i++){
+//                QStringList *tmpStringList = new QStringList;
+//                vectorStringList.append(tmpStringList);
+//            }
 
-            for(i = 0; i < this->internalColCount; i++){
-                vectorStringList.at(i)->append(q.value(i).toString());
-            }
+//            for(i = 0; i < this->internalColCount; i++){
+//                vectorStringList.at(i)->append(q.value(i).toString());
+//            }
 
-            for(i = 0; i < this->internalColCount; i++){
-                this->forwardOnlyChartData->insert(i, vectorStringList.at(i));
-            }
+//            for(i = 0; i < this->internalColCount; i++){
+//                this->forwardOnlyChartData->insert(i, vectorStringList.at(i));
+//            }
 
-            totalRowCount++;
-        }
-        // Set the internalRowCount for the QAbstractListModel rowCount method
-        this->internalRowCount = totalRowCount;
+//            totalRowCount++;
+//        }
+//        // Set the internalRowCount for the QAbstractListModel rowCount method
+//        this->internalRowCount = totalRowCount;
 
-        emit signalSetChartData(true);
-    }
+//        emit signalSetChartData(true);
+//    }
 }
