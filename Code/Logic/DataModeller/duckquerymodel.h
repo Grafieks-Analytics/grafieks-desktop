@@ -12,6 +12,7 @@
 #include "../General/datatype.h"
 #include "../General/querysplitter.h"
 #include "./Workers/generaterolenamesduckworker.h"
+#include "./Workers/setchartdataduckworker.h"
 
 class DuckQueryModel : public QAbstractTableModel
 {
@@ -37,11 +38,11 @@ public:
 public slots:
     void receiveCsvFilterQuery(QString query);
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount);
+    void slotSetChartData(bool success);
 
 private:
     void generateRoleNames();
     void setQueryResult();
-    void setChartData(std::unique_ptr<duckdb::MaterializedQueryResult> &totalRows);
     QMap<QString, QString> returnColumnList(QString tableName);
     void setChartHeader(int index, QStringList colInfo);
 
@@ -59,6 +60,7 @@ private:
     QMap<int, QStringList*> duckChartData;
     QMap<int, QStringList> duckChartHeader;
     QStringList tableHeaders;
+    SetChartDataDuckWorker *setChartDataWorker;
 
 signals:
     void chartDataChanged(QMap<int, QStringList*> chartData);

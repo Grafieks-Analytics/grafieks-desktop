@@ -1,7 +1,7 @@
 #include "querymodel.h"
 
 
-QueryModel::QueryModel(QObject *parent): QSqlQueryModel(parent), resetPreviewCount(false)
+QueryModel::QueryModel(QObject *parent): QSqlQueryModel(parent), resetPreviewCount(false), setChartDataWorker(nullptr)
 {
 }
 
@@ -14,12 +14,10 @@ void QueryModel::setPreviewQuery(int previewRowCount)
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
 
-    int maxRowCount = 0;
-
     if(previewRowCount > this->tmpRowCount){
-        maxRowCount = this->tmpRowCount;
+        this->maxRowCount = this->tmpRowCount;
     } else{
-        maxRowCount = previewRowCount;
+        this->maxRowCount = previewRowCount;
     }
 
     QString finalSql;
@@ -66,7 +64,9 @@ void QueryModel::setPreviewQuery(int previewRowCount)
 
     this->executeQuery(finalSql, false);
 
-    if(this->rowCount() > 0){
+    qDebug() << "ROW COUNT" <<QSqlQueryModel::rowCount() << maxRowCount;
+
+    if(QSqlQueryModel::rowCount() > 0){
         emit sqlHasData(true);
     } else{
         emit sqlHasData(false);
@@ -84,8 +84,10 @@ void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
         emit errorSignal(QSqlQueryModel::lastError().text());
     } else{
 
-        if(this->resetPreviewCount == false)
+        if(this->resetPreviewCount == false){
             this->tmpRowCount = QSqlQueryModel::rowCount();
+            this->tmpColCount = QSqlQueryModel::columnCount();
+        }
 
         generateRoleNames();
         emit errorSignal("");
@@ -104,8 +106,10 @@ void QueryModel::setQuery(const QSqlQuery &query)
         emit errorSignal(QSqlQueryModel::lastError().text());
     } else{
 
-        if(this->resetPreviewCount == false)
+        if(this->resetPreviewCount == false){
             this->tmpRowCount = QSqlQueryModel::rowCount();
+            this->tmpColCount = QSqlQueryModel::columnCount();
+        }
 
         generateRoleNames();
         emit errorSignal("");
@@ -128,11 +132,11 @@ QVariant QueryModel::data(const QModelIndex &index, int role) const
     return value;
 }
 
-//int QueryModel::rowCount(const QModelIndex &parent) const
-//{
-//    Q_UNUSED(parent);
-//    return this->previewRowCount;
-//}
+int QueryModel::rowCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent);
+    return this->maxRowCount;
+}
 
 
 QHash<int, QByteArray> QueryModel::roleNames() const
@@ -165,22 +169,12 @@ void QueryModel::removeTmpChartData()
 
 void QueryModel::setChartData()
 {
-    int totalCols = this->columnCount();
-    int totalRows = this->rowCount();
+    this->setChartDataWorker = new SetChartDataQueryWorker(this, this->tmpRowCount, this->tmpColCount);
+    connect(setChartDataWorker, &SetChartDataQueryWorker::signalSetChartData, this, &QueryModel::slotSetChartData, Qt::QueuedConnection);
+    connect(setChartDataWorker, &SetChartDataQueryWorker::finished, setChartDataWorker, &QObject::deleteLater, Qt::QueuedConnection);
+    setChartDataWorker->setObjectName("Grafieks Query Chart Data");
+    setChartDataWorker->start(QThread::InheritPriority);
 
-    for(int j = 0; j < totalRows; j++){
-        for(int i = 0; i < totalCols; i++){
-
-            if(j == 0){
-                this->sqlChartData[i] = new QStringList(record(0).field(i).value().toString());
-            } else{
-                this->sqlChartData.value(i)->append(record(j).field(i).value().toString());
-                this->sqlChartData[i] = sqlChartData.value(i);
-            }
-        }
-    }
-
-    emit chartDataChanged(this->sqlChartData);
 }
 
 
@@ -191,6 +185,13 @@ void QueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QM
 
     emit headerDataChanged(this->tableHeaders);
     emit chartHeaderChanged(this->sqlChartHeader);
+}
+
+void QueryModel::slotSetChartData(bool success)
+{
+    if(success){
+        emit chartDataChanged(setChartDataWorker->getSqlChartData());
+    }
 }
 
 
@@ -209,8 +210,7 @@ void QueryModel::receiveFilterQuery(QString &filteredQuery)
 void QueryModel::generateRoleNames()
 {
 
-    QSqlRecord sqlRecord = record();
-    GenerateRoleNamesQueryWorker *generateRoleNameWorker = new GenerateRoleNamesQueryWorker(sqlRecord);
+    GenerateRoleNamesQueryWorker *generateRoleNameWorker = new GenerateRoleNamesQueryWorker(this);
     connect(generateRoleNameWorker, &GenerateRoleNamesQueryWorker::signalGenerateRoleNames, this, &QueryModel::slotGenerateRoleNames, Qt::QueuedConnection);
     connect(generateRoleNameWorker, &GenerateRoleNamesQueryWorker::finished, generateRoleNameWorker, &QObject::deleteLater, Qt::QueuedConnection);
     generateRoleNameWorker->setObjectName("Grafieks Query Rolenames");
