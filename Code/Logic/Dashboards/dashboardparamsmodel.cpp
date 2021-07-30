@@ -1058,7 +1058,6 @@ void DashboardParamsModel::setCurrentColumnType(QString currentColumnType)
         return;
 
     m_currentColumnType = currentColumnType;
-    qDebug() << "COL TYPE CHANGED HERE" << m_currentColumnType;
     emit currentColumnTypeChanged(m_currentColumnType);
 }
 

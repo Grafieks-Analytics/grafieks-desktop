@@ -27,13 +27,13 @@ Item {
 
         var i = 0;
         modelContent.forEach(item => {
-                             listModel.append({"name": item, "checked": true, "index": i})
+                                 listModel.append({"name": item, "checked": true, "index": i})
                                  i++
                              })
         componentTitle.text = DashboardParamsModel.fetchColumnAliasName(DashboardParamsModel.currentDashboard, componentName)
 
         // for the first time, select all values
-       master = true
+        master = true
     }
 
 

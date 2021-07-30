@@ -74,6 +74,7 @@ int Statics::currentDbIntType;
 QString Statics::currentDbStrType;
 QString Statics::currentDbClassification;
 int Statics::onlineStorageType;
+QString Statics::driverName;
 
 QString Statics::myHost;
 QString Statics::myDb;

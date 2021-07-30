@@ -3,7 +3,7 @@
 
 #include <QThread>
 #include <QVariant>
-#include <QSqlRecord>
+#include <QSqlQueryModel>
 #include <QSqlField>
 #include <QSqlDatabase>
 
@@ -13,11 +13,11 @@
 class GenerateRoleNamesQueryWorker : public QThread
 {
     Q_OBJECT
-    QSqlRecord record;
+    QSqlQueryModel *queryModel;
 
 
 public:
-    explicit GenerateRoleNamesQueryWorker(QSqlRecord record);
+    explicit GenerateRoleNamesQueryWorker(QSqlQueryModel *queryModel = nullptr);
 
 protected:
     void run() override;

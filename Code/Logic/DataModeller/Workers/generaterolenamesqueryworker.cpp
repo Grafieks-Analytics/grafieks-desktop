@@ -2,9 +2,9 @@
 
 
 
-GenerateRoleNamesQueryWorker::GenerateRoleNamesQueryWorker(QSqlRecord record)
+GenerateRoleNamesQueryWorker::GenerateRoleNamesQueryWorker(QSqlQueryModel *queryModel)
 {
-    this->record = record;
+    this->queryModel = queryModel;
 }
 
 void GenerateRoleNamesQueryWorker::run()
@@ -18,14 +18,14 @@ void GenerateRoleNamesQueryWorker::run()
     QMap<int, QStringList> sqlChartHeader;
     QHash<int, QByteArray> roleNames;
 
-    for( int i = 0; i < this->record.count(); i ++) {
+    for( int i = 0; i < this->queryModel->record().count(); i ++) {
 
-        roleNames.insert(Qt::UserRole + i + 1, this->record.fieldName(i).toUtf8());
-        fieldType = this->record.field(i).value();
-        colInfo << this->record.fieldName(i) << dataType.dataType(fieldType.typeName())  << this->record.field(i).tableName();
+        roleNames.insert(Qt::UserRole + i + 1, this->queryModel->record().fieldName(i).toUtf8());
+        fieldType = this->queryModel->record().field(i).value();
+        colInfo << this->queryModel->record().fieldName(i) << dataType.dataType(fieldType.typeName())  << this->queryModel->record().field(i).tableName();
 
         sqlChartHeader.insert(i, colInfo);
-        tableHeaders.append(this->record.fieldName(i));
+        tableHeaders.append(this->queryModel->record().fieldName(i));
         colInfo.clear();
     }
 

@@ -1,8 +1,7 @@
 #include "forwardonlyquerymodel.h"
 
-ForwardOnlyQueryModel::ForwardOnlyQueryModel(QObject *parent) : QAbstractTableModel(parent)
+ForwardOnlyQueryModel::ForwardOnlyQueryModel(QObject *parent) : QAbstractTableModel(parent), setChartDataWorker(nullptr)
 {
-
 }
 
 ForwardOnlyQueryModel::~ForwardOnlyQueryModel()
@@ -145,7 +144,7 @@ void ForwardOnlyQueryModel::generateRoleNames()
     QString connectionName = this->returnConnectionName();
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
 
-    GenerateRoleNamesForwardOnlyWorker *generateRoleNameWorker = new GenerateRoleNamesForwardOnlyWorker(&dbForward, this->query, &querySplitter);
+    GenerateRoleNamesForwardOnlyWorker *generateRoleNameWorker = new GenerateRoleNamesForwardOnlyWorker(this->query, &querySplitter);
     connect(generateRoleNameWorker, &GenerateRoleNamesForwardOnlyWorker::signalGenerateRoleNames, this, &ForwardOnlyQueryModel::slotGenerateRoleNames, Qt::QueuedConnection);
     connect(generateRoleNameWorker, &GenerateRoleNamesForwardOnlyWorker::finished, generateRoleNameWorker, &QObject::deleteLater, Qt::QueuedConnection);
     generateRoleNameWorker->setObjectName("Grafieks ForwardOnly Rolenames");
@@ -161,38 +160,13 @@ void ForwardOnlyQueryModel::setQueryResult()
 {
 
     QString connectionName = this->returnConnectionName();
-
     QSqlDatabase dbForward = QSqlDatabase::database(connectionName);
-    QSqlQuery q(this->query, dbForward);
-    if(q.lastError().type() != QSqlError::NoError){
-        qWarning() << Q_FUNC_INFO << q.lastError();
-    } else{
 
-        int totalRowCount = 0;
-        while(q.next()){
-
-            try{
-                for(int i = 0; i < this->internalColCount; i++){
-
-                    // Add to chart data
-                    if(totalRowCount == 0){
-                        this->forwardOnlyChartData[i] = new QStringList(q.value(i).toString());
-                    } else{
-                        this->forwardOnlyChartData.value(i)->append(q.value(i).toString());
-                        this->forwardOnlyChartData[i] = forwardOnlyChartData.value(i);
-                    }
-                }
-            } catch(std::exception &e){
-                qWarning() << Q_FUNC_INFO << e.what();
-            }
-
-            totalRowCount++;
-        }
-        // Set the internalRowCount for the QAbstractListModel rowCount method
-        this->internalRowCount = totalRowCount;
-
-        emit chartDataChanged(this->forwardOnlyChartData);
-    }
+    this->setChartDataWorker = new SetChartDataForwardOnlyWorker(&dbForward, this->query, this->internalColCount);
+    connect(setChartDataWorker, &SetChartDataForwardOnlyWorker::signalSetChartData, this, &ForwardOnlyQueryModel::slotSetChartData, Qt::QueuedConnection);
+    connect(setChartDataWorker, &SetChartDataForwardOnlyWorker::finished, setChartDataWorker, &QObject::deleteLater, Qt::QueuedConnection);
+    setChartDataWorker->setObjectName("Grafieks ForwardOnly Chart Data");
+    setChartDataWorker->start(QThread::InheritPriority);
 }
 
 
@@ -233,3 +207,14 @@ void ForwardOnlyQueryModel::slotGenerateRoleNames(const QStringList &tableHeader
     emit forwardOnlyHeaderDataChanged(this->tableHeaders);
     emit chartHeaderChanged(this->forwardOnlyChartHeader);
 }
+
+void ForwardOnlyQueryModel::slotSetChartData(bool success)
+{
+    if(success){
+        this->forwardOnlyChartData = this->setChartDataWorker->getChartData();
+        this->internalRowCount = this->setChartDataWorker->getInternalRowCount();
+
+        emit chartDataChanged(this->forwardOnlyChartData);
+    }
+}
+
