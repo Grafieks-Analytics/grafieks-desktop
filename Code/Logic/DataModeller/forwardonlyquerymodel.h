@@ -10,6 +10,7 @@
 #include "../General/datatype.h"
 #include "../General/querysplitter.h"
 #include "./Workers/generaterolenamesforwardonlyworker.h"
+#include "./Workers/setchartdataforwardonlyworker.h"
 
 class ForwardOnlyQueryModel : public QAbstractTableModel
 {
@@ -37,6 +38,7 @@ private:
     void setChartHeader(int index, QStringList colInfo);
     QString returnConnectionName();
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount);
+    void slotSetChartData(bool success);
 
 
     QHash<int, QByteArray> m_roleNames;
@@ -52,9 +54,10 @@ private:
     QMap<int, QStringList*> forwardOnlyChartData;
     QMap<int, QStringList> forwardOnlyChartHeader;
     QStringList tableHeaders;
+    SetChartDataForwardOnlyWorker *setChartDataWorker;
 
-signals:
-    void chartDataChanged(QMap<int, QStringList*> chartData);
+    signals:
+        void chartDataChanged(QMap<int, QStringList*> chartData);
     void chartHeaderChanged(QMap<int, QStringList> chartHeader);
     void forwardOnlyHeaderDataChanged(QStringList tableHeaders);
     void forwardOnlyHasData(bool hasData);
