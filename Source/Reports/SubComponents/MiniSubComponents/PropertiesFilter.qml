@@ -442,7 +442,7 @@ Column{
             }
 
             Text {
-                text: qsTr("Label")
+                text: qsTr("Data Label")
                 anchors.left: parent.left
                 anchors.leftMargin: leftMargin
                 anchors.verticalCenter: parent.verticalCenter
@@ -591,38 +591,38 @@ Column{
 
 
     // Merge Axis starts
-    Rectangle{
+//    Rectangle{
 
-        height: 30
-        width: parent.width
+//        height: 30
+//        width: parent.width
 
-        Rectangle{
+//        Rectangle{
 
-            height: 20
-            width: parent.width
+//            height: 20
+//            width: parent.width
 
-            Text {
-                text: qsTr("Merge Axis")
-                anchors.left: parent.left
-                anchors.leftMargin: leftMargin
-                anchors.verticalCenter: parent.verticalCenter
-                font.pixelSize: Constants.fontCategoryHeaderSmall
-            }
+//            Text {
+//                text: qsTr("Merge Axis")
+//                anchors.left: parent.left
+//                anchors.leftMargin: leftMargin
+//                anchors.verticalCenter: parent.verticalCenter
+//                font.pixelSize: Constants.fontCategoryHeaderSmall
+//            }
 
-            CheckBoxTpl{
+//            CheckBoxTpl{
 
-                checked: false
-                parent_dimension: editImageSize - 2
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.rightMargin: 5
-                anchors.top: parent.top
+//                checked: false
+//                parent_dimension: editImageSize - 2
+//                anchors.right: parent.right
+//                anchors.verticalCenter: parent.verticalCenter
+//                anchors.rightMargin: 5
+//                anchors.top: parent.top
 
-            }
+//            }
 
-        }
+//        }
 
-    }
+//    }
     // Merge Axis Ends
 
 
