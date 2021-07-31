@@ -239,7 +239,10 @@
 
 
             });
-
+            d3.selectAll("#my_dataviz").style(
+                "height",
+                "calc(100vh - 71px)"
+            );
             /*
                   if (chartType == constants.chartType.STANDARD) {
                       height = yAxisUniqueKeys.length * standardThresholdHeight;
@@ -401,17 +404,21 @@
 
                         d3.select("#mainChartWindow").style(
                             "width",
-                            widthOld - legendWidth + yAxisWidth
+                            widthOld - legendWidth + yAxisWidth+"px"
                         );
                         d3.select("#mainChartWindow").style(
                             "margin-left",
                             legendWidth + "px"
                         );
+                          d3.selectAll("#my_dataviz").style(
+                            "margin-top",
+                            "0px"
+                        );
                         break;
                     case "top":
                         // clearStyle();
                         d3.select("#mainChartWindow").attr("style", null);
-                        margin.top += 50;
+                        // margin.top += 50;
                         height -= 50;
                         d3.select("#legend")
                             .attr("style", null)
@@ -433,10 +440,11 @@
                         //     "padding",
                         //     "2px 4px"
                         // );
-                        // d3.selectAll("#my_dataviz").style(
-                        //     "margin-top",
-                        //     "50px"
-                        // );
+                        d3.selectAll("#my_dataviz").style(
+                            "margin-top",
+                            "50px"
+                        );
+                        
 
                         d3.selectAll("#my_dataviz").style(
                             "height",
@@ -447,12 +455,20 @@
                         //     "bottom",
                         //     "0"
                         // );
+                         d3.select("#mainChartWindow").style(
+                            "margin-left",
+                            0
+                        );
+                        //   d3.select("#my_dataviz").style(
+                        //     "width",
+                        //     widthOld + yAxisWidth - 50 + "px"
+                        // );
                         break;
                     case "bottom":
                         // clearStyle();
                         height -= 50; // use legend client height
-                        bottomHeight += 50;
-                        // margin.bottom += 10;
+                        // bottomHeight += 50;
+                        margin.bottom += 10;
                         var legendWidth = legendElement.offsetWidth;
 
                         d3.select("#xAxisLabelId").style("bottom", "50px");
@@ -488,20 +504,21 @@
                         );
                         // d3.selectAll("#my_dataviz").style(
                         //     "margin-bottom",
-                        //     180
+                        //     180+"px"
                         // );
-                        // d3.selectAll("#my_dataviz").style(
-                        //     "height",
-                        //     "calc(100vh - 122px)"
-                        // );
+                        d3.selectAll("#my_dataviz").style(
+                            "height",
+                            "calc(100vh - 122px)"
+                        );
                         d3.selectAll("#xAxisDiv").style(
                             "bottom",
-                            "50px"
+                            "450px"
                         );
                         d3.selectAll("#xAxisLabelId").style(
                             "bottom",
                             "50px"
                         );
+                        
 
                         break;
                     // For Right Legened
@@ -534,10 +551,15 @@
                         // d3.select("#mainChartWindow").style(
                         //     "width",
                         //     widthOld + yAxisWidth - legendWidth - 20
-                        // d3.select("#my_dataviz svg" ).style(
+                        // )
+                        // d3.select("#my_dataviz").style(
                         //     "width",
-                        //    widthOld+yAxisWidth-legendWidth-20
+                        //     widthOld + yAxisWidth - legendWidth -50+"px"
                         // );
+                           d3.select("#mainChartWindow").style(
+                            "width",
+                            widthOld + yAxisWidth - legendWidth - 20+"px"
+                        );
 
                         d3.select("#mainChartWindow").style(
                             "margin-left",
@@ -550,10 +572,19 @@
                 var legendWidth = legendElement.offsetWidth;
                 width -= legendWidth;
             }
-            d3.selectAll("#my_dataviz").style(
-                "height",
-                "calc(100vh - 71px)"
-            );
+            if (legendPosition == "top") {
+                var legendHeightTop = legendHeight;
+            }
+            else {
+                legendHeightTop = 0;
+            }
+            if (legendPosition == "left") {
+                var legendWidthLeft = legendWidth;
+            }
+            else {
+                legendWidthLeft = 0;
+            }
+
 
             // legends code ends
 
@@ -603,7 +634,12 @@
 
                     // TODO:x-axis label
                 } else {
-                    d3.select("#xAxisDiv").style("bottom", 0);
+                    if(legendPosition == "bottom" && legendStatus == true){
+                        d3.select("#xAxisDiv").style("bottom", 50 + "px");
+                    }
+                    else{
+                        d3.select("#xAxisDiv").style("bottom", 0+"px");
+                    }
                 }
             }
 
@@ -704,13 +740,16 @@
                     let xpos1 = d3.mouse(this)[0] + margin.left;
                     let ypos = d3.mouse(this)[1] - 20;
 
+                     var yScroll =
+                        document.querySelector("#my_dataviz").scrollTop;
+                         ypos -= yScroll;
                     let xValue = this.getAttribute("data-value-x");
                     let x1Value = this.getAttribute("data-value-x1");
                     let yValue = this.getAttribute("data-value-y");
 
                     d3.select("#tooltip")
                         .style("left", xpos1 + "px")
-                        .style("top", ypos -28+ "px")
+                        .style("top", ypos - 28 + "px")
                         .style("display", "block")
                         .style("position", "absolute")
 
@@ -747,17 +786,19 @@
                                 "</span>"
                             );
                         });
+                        console.log(window.scrollX)
                     if (
                         xpos1 - window.scrollX >
                         document.documentElement.clientWidth -
                         document.querySelector("#tooltip").clientWidth
                     ) {
+                   
                         d3.select("#tooltip").style(
                             "left",
                             xpos1 -
                             document.querySelector("#tooltip")
                                 .clientWidth +
-                            25 +
+                            25 + legendWidthLeft +
                             "px"
                         );
 
@@ -772,7 +813,7 @@
                     } else {
                         d3.select("#tooltip").style(
                             "left",
-                            xpos1 + 55 + "px"
+                            xpos1 + 55 + legendWidthLeft + "px"
                         );
 
                         d3.select(".arrowTooltip").attr(
@@ -860,7 +901,8 @@
                 .call(xAxis);
 
             if (chartType == constants.chartType.FIT_HEIGHT) {
-                removeAxisTicks("yAxis", data[0][0]);
+                removeAxisTicks("yAxis", data[0]);
+                // console.log(data[0]);
             }
 
             a = document.querySelectorAll(".y-axis text");

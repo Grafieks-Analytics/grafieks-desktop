@@ -426,6 +426,7 @@
                 yLabelfontFamily = defaultD3Config.fontFamily,
                 xTickfontFamily = defaultD3Config.fontFamily,
                 yTickfontFamily = defaultD3Config.fontFamily,
+                dataLabelfontFamily = defaultD3Config.fontFamily,
                 // font color
                 xLabelfontColor = defaultD3Config.fontColor,
                 yLabelfontColor = defaultD3Config.fontColor,
@@ -443,6 +444,7 @@
             window.yLabelfontFamily = yLabelfontFamily;
             window.xTickfontFamily = xTickfontFamily;
             window.yTickfontFamily = yTickfontFamily;
+            window.dataLabelfontFamily = dataLabelfontFamily;
 
             window.xLabelfontColor = xLabelfontColor;
             window.yLabelfontColor = yLabelfontColor;
@@ -512,7 +514,7 @@
 
                 d3.select("#legend")
                     .append("p")
-                    .html("data yet to come " + "&nbsp;")
+                    .html(labels && labels[1] + "&nbsp;")
                     .style("font-weight", "bold")
                     .style("margin", "auto")
                     .style("position", "sticky");
@@ -729,6 +731,18 @@
                 var legendWidth = legendElement.offsetWidth;
                 width -= legendWidth;
             }
+              if (legendPosition == "top") {
+                var legendHeightTop = 20;
+            }
+            else {
+                legendHeightTop = 0;
+            }
+            if (legendPosition == "left") {
+                var legendWidthLeft = legendWidth;
+            }
+            else {
+                legendWidthLeft = 0;
+            }
 
             // legends code ends
 
@@ -941,7 +955,7 @@
                     let y1Value = this.getAttribute("data-value-y1");
 
                     d3.select("#tooltip")
-                        .style("top", ypos - 52 + "px")
+                        .style("top", ypos - 52 + legendHeightTop+ "px")
                         .style("display", "block")
                         .html(function () {
                             return (
@@ -951,7 +965,7 @@
                                 ":&nbsp;&nbsp;" +
                                 "</span>" +
                                 "<span style='float: right;'>" +
-                                yValue +
+                                xValue +
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
@@ -959,7 +973,7 @@
                                 ":&nbsp;&nbsp;" +
                                 "</span>" +
                                 "<span style='float: right;'>" +
-                                xValue +
+                                yValue +
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
@@ -984,7 +998,7 @@
                             xpos -
                             scrollVal -
                             document.querySelector("#tooltip").clientWidth -
-                            10 +
+                            10 + legendWidthLeft +
                             "px"
                         );
 
@@ -999,7 +1013,7 @@
                     } else {
                         d3.select("#tooltip").style(
                             "left",
-                            xpos - scrollVal + 12 + "px"
+                            xpos - scrollVal + legendWidthLeft+ 12 + "px"
                         );
 
                         d3.select(".arrowTooltip").attr(
@@ -1034,6 +1048,7 @@
                             return "";
                         }
                     })
+                    .attr("font-family", dataLabelfontFamily)
 
                     .text(function (d) {
                         return d.y1 >= 0 ? d.y0 - d.y1 : d.y1 - d.y0;
