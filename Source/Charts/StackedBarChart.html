@@ -495,7 +495,6 @@
             var y_pos_x_label = 55;
             var topLegendMargin = 0;
 
-            console.log(data);
             var [data, keys, labels] = transformData(
                 data[0],
                 dateFormat,
@@ -731,16 +730,14 @@
                 var legendWidth = legendElement.offsetWidth;
                 width -= legendWidth;
             }
-              if (legendPosition == "top") {
+            if (legendPosition == "top") {
                 var legendHeightTop = 20;
-            }
-            else {
+            } else {
                 legendHeightTop = 0;
             }
             if (legendPosition == "left") {
                 var legendWidthLeft = legendWidth;
-            }
-            else {
+            } else {
                 legendWidthLeft = 0;
             }
 
@@ -789,16 +786,20 @@
                 var y0_positive = 0;
                 var y0_negative = 0;
 
+                var mainKey = d.key;
+
                 d.components = keys.map(function (key) {
                     if (d[key] >= 0) {
                         return {
                             key,
+                            mainKey,
                             y1: y0_positive,
                             y0: (y0_positive += d[key]),
                         };
                     } else if (d[key] < 0) {
                         return {
                             key,
+                            mainKey,
                             y0: y0_negative,
                             y1: (y0_negative += d[key]),
                         };
@@ -913,9 +914,8 @@
                     return y(d.y0);
                 })
                 .attr("height", function (d) {
-                    this.setAttribute("data-value-x", d.y0 && d.y0);
+                    this.setAttribute("data-value-x", d.mainKey);
                     this.setAttribute("data-value-y", d.key);
-                    console.log(d);
 
                     var yValue = d.y0 - d.y1;
                     if (d.y1 < 0) {
@@ -955,7 +955,7 @@
                     let y1Value = this.getAttribute("data-value-y1");
 
                     d3.select("#tooltip")
-                        .style("top", ypos - 52 + legendHeightTop+ "px")
+                        .style("top", ypos - 52 + legendHeightTop + "px")
                         .style("display", "block")
                         .html(function () {
                             return (
@@ -991,15 +991,16 @@
                     if (
                         xpos - scrollVal >
                         document.documentElement.clientWidth -
-                        document.querySelector("#tooltip").clientWidth
+                            document.querySelector("#tooltip").clientWidth
                     ) {
                         d3.select("#tooltip").style(
                             "left",
                             xpos -
-                            scrollVal -
-                            document.querySelector("#tooltip").clientWidth -
-                            10 + legendWidthLeft +
-                            "px"
+                                scrollVal -
+                                document.querySelector("#tooltip").clientWidth -
+                                10 +
+                                legendWidthLeft +
+                                "px"
                         );
 
                         d3.select(".arrowTooltip")
@@ -1013,7 +1014,7 @@
                     } else {
                         d3.select("#tooltip").style(
                             "left",
-                            xpos - scrollVal + legendWidthLeft+ 12 + "px"
+                            xpos - scrollVal + legendWidthLeft + 12 + "px"
                         );
 
                         d3.select(".arrowTooltip").attr(
