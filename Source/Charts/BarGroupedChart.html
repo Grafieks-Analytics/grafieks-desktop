@@ -667,6 +667,9 @@
                                     this.getAttribute("data-value-x1");
                                 xAxisValue2 =
                                     this.getAttribute("data-value-x2");
+
+                                var yDataValue =
+                                    this.getAttribute("data-value-y");
                                 console.log({ xAxisValue1 });
                                 console.log({ xAxisValue2 });
 
@@ -704,7 +707,7 @@
                                             ":" +
                                             "</span>" +
                                             "<span style='float: right;margin-left: 15px;'>" +
-                                            d.value +
+                                            Math.round(yDataValue) +
                                             "</span>"
                                         );
                                     });
