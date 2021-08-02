@@ -1050,7 +1050,7 @@
                 window.chartDataValues = dataValues;
                 [xAxisLabel, yAxisLabel] = data[1];
 
-                clearChart();
+                window.clearChart && clearChart();
                 margin = { top: 30, right: 30, bottom: 70, left: 50 };
                 width = window.innerWidth - margin.left - margin.right - 20;
                 height =

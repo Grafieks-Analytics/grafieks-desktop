@@ -52,7 +52,7 @@ Popup {
     function onThemeChanged(curve){
         const themeValue = pivotSelectBox.currentValue;
         d3PropertyConfig.pivotTheme = pivotSelectBox.currentValue;
-        webEngineView.runJavaScript('changeThemeColour("'+themeValue+'")');
+        webEngineView.runJavaScript('window.changeThemeColour && changeThemeColour("'+themeValue+'")');
     }
 
     Rectangle{

@@ -609,7 +609,7 @@
                 }
             }
 
-            clearChart();
+            window.clearChart && clearChart();
             var svg = d3
                 .selectAll("#my_dataviz")
                 .append("svg")

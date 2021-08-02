@@ -160,7 +160,16 @@
                 }
 
                 globalKeys = globalKeys.filter(getUniqueArrayValues);
-                return [transformedDataValue, globalKeys, dataValue[2]];
+                var mainCategoryData = transformedDataValue.map(
+                    (d) => d.mainCategory
+                );
+
+                return [
+                    transformedDataValue,
+                    globalKeys,
+                    dataValue[2],
+                    [dataValue[2][0], mainCategoryData, globalKeys],
+                ];
             }
 
             function drawChart(data, plottingConfiguration = {}) {
@@ -247,13 +256,15 @@
 
                 data = transformData(data, dateFormat);
 
-                var [data, all_keys, labels] = data;
+                var [data, all_keys, labels, legendNames] = data;
+                console.log({ legendNames });
+
                 // TODO:
                 // console.log({ data})
 
                 let { top, right, bottom, left } = constants.chartMargins;
                 if (window.innerHeight < 400) {
-                    top = top / 2;
+                    top = top / 2 + 10;
                     right = right / 2;
                     // bottom = bottom / 2;
                 }
@@ -280,7 +291,7 @@
                     // margin.bottom -
                     extraHeight;
 
-                clearChart();
+                window.clearChart && clearChart();
 
                 var minHeight = d3.min(data, (d) =>
                     d3.min(all_keys, (k) => d && d[k])
@@ -306,15 +317,22 @@
                         .style("margin", "auto")
                         .style("position", "sticky");
 
+                    var legendNameArray = [legendNames[0]];
+                    if (groupBarChartColorBy == "category") {
+                        legendNameArray = legendNames[1];
+                    } else if (groupBarChartColorBy) {
+                        legendNameArray = legendNames[2];
+                    }
+
                     d3.select("#legend")
                         .selectAll("div")
-                        .data("ravi test")
+                        .data(legendNameArray)
                         .enter()
                         .append("div")
                         .html((d, i) => {
                             return (
                                 '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
-                                " d3Colors[i % data[1][1].length]" +
+                                d3Colors[i % d3Colors.length] +
                                 ';">  </div>' +
                                 "<span style='margin-left: 5px; max-width: 160px'>" +
                                 d +
@@ -589,7 +607,6 @@
                         );
                 }
 
-                var legendNames = [];
                 svg.selectAll(".groups")
                     .data(data)
                     .enter()
@@ -628,19 +645,9 @@
                                 this.setAttribute("data-value-y", d.value);
 
                                 if (groupBarChartColorBy == "category") {
-                                    if (
-                                        legendNames.indexOf(
-                                            d.data.mainCategory
-                                        ) == -1
-                                    ) {
-                                        legendNames.push(d.data.mainCategory);
-                                    }
                                     return zScale(d.data.mainCategory);
                                 }
                                 if (groupBarChartColorBy == "subcategory") {
-                                    if (legendNames.indexOf(d.name) == -1) {
-                                        legendNames.push(d.name);
-                                    }
                                     return zScale(d.name);
                                 }
                                 return d3Colors[0];
@@ -781,9 +788,6 @@
                             });
                     });
 
-                if (!legendNames.length) {
-                    legendNames.push(labels[0]);
-                }
                 var xAxis = d3.axisBottom(xScale0).tickSize(0);
 
                 // Add the X Axis
