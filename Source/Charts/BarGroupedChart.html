@@ -812,6 +812,35 @@
                     });
                     return bars;
                 }
+                 if (1) {
+                    entry
+                        .selectAll("text.label")
+                        .data(function (d) {
+                            return d.components;
+                        })
+                        .enter()
+                        .append("text")
+                        .attr("class", "label")
+                        .attr("width", x.bandwidth())
+                        .attr("y", function (d) {
+                            // return (y(d.y0))
+                            return y(d.y0) + Math.abs(y(d.y0) - y(d.y1)) / 2 + 6;
+                        })
+                        .attr("x", x.bandwidth() / 2 - 15)
+                        .attr("display", function (d) {
+                            if (Math.abs(y(d.y0) - y(d.y1)) < 20) {
+                                return "none";
+                            } else {
+                                return "";
+                            }
+                        })
+                        .attr("font-family", dataLabelfontFamily)
+                        .attr("font-size", dataLabelfontSize)
+
+                        .text(function (d) {
+                            return d.y1 >= 0 ? d.y0 - d.y1 : d.y1 - d.y0;
+                        });
+                }
 
                 function groupOffset(d) {
                     const groupElementsCount = all_keys.reduce(
