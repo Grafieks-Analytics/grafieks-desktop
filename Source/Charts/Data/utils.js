@@ -188,7 +188,7 @@ function setLabel(
     svg
       .append("text")
       .attr("class", labelType)
-      .attr("text-anchor", "end")
+      .attr("text-anchor", "middle")
       .text(label)
       .attr("y", 10)
       .attr("font-size", yLabelfontSize)

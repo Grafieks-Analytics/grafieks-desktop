@@ -125,6 +125,7 @@
                 yLabelfontSize = defaultD3Config.fontSize,
                 xTickfontSize = defaultD3Config.fontSize,
                 yTickfontSize = defaultD3Config.fontSize,
+                dataLabelfontSize = defaultD3Config.fontSize,
                 // font family
                 xLabelfontFamily = defaultD3Config.fontFamily,
                 yLabelfontFamily = defaultD3Config.fontFamily,
@@ -143,6 +144,7 @@
             window.yLabelfontSize = yLabelfontSize;
             window.xTickfontSize = xTickfontSize;
             window.yTickfontSize = yTickfontSize;
+            window.dataLabelfontSize = dataLabelfontSize;
 
             window.xLabelfontFamily = xLabelfontFamily;
             window.yLabelfontFamily = yLabelfontFamily;
@@ -725,7 +727,8 @@
                     .call(xAxis.tickSize(0))
                     .attr("class", "axis label")
                     // .attr("font-family", xDataLabelfontFamily)
-                    .attr("font-family", dataLabelfontFamily);
+                    .attr("font-family", dataLabelfontFamily)
+                    .attr("font-size", dataLabelfontSize);
 
                 // .attr("transform", "translate(0,0)");
                 var labelSelector = document.querySelectorAll(".axis.label text")
@@ -833,7 +836,7 @@
                     // .attr("x", "-" + (maxWidth + 3))
                     .attr("x", "-" + 20)
                     // .attr("font-size", fontSize)
-                    .attr("y", "0");
+                    .attr("y", "8");
             }
 
 
@@ -846,7 +849,7 @@
                     .height;
 
             if (chartType == constants.chartType.FIT_WIDTH) {
-                for (var i = 0; i < allXAxisTexts.length - 1; i++) {
+                for (var i = 0; i < allXAxisTexts.length ; i++) {
                     if (!Math.floor(data[0][0].length * 0.02)) {
                         break;
                     }

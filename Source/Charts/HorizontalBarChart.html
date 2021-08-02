@@ -106,6 +106,7 @@
                 yLabelfontSize = defaultD3Config.fontSize,
                 xTickfontSize = defaultD3Config.fontSize,
                 yTickfontSize = defaultD3Config.fontSize,
+                dataLabelfontSize = defaultD3Config.fontSize,
                 // font family
                 xLabelfontFamily = defaultD3Config.fontFamily,
                 yLabelfontFamily = defaultD3Config.fontFamily,
@@ -122,6 +123,7 @@
             window.yLabelfontSize = yLabelfontSize;
             window.xTickfontSize = xTickfontSize;
             window.yTickfontSize = yTickfontSize;
+             window.dataLabelfontSize = dataLabelfontSize;
 
             window.xLabelfontFamily = xLabelfontFamily;
             window.yLabelfontFamily = yLabelfontFamily;
@@ -166,7 +168,7 @@
 
             var bottomHeight = 0;
 
-     
+
             var xAxisDataSet = dataValues[0];
 
             var xAxisDateWiseValues = {};
@@ -248,7 +250,7 @@
                 );
                 data[0] = dataValues;
             }
-                   var dataset = dataValues[1];
+            var dataset = dataValues[1];
 
             if (chartType == constants.chartType.STANDARD) {
                 height = dataValues[0].length * standardThresholdHeight;
@@ -648,7 +650,7 @@
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +
-                                (xValue && (+xValue).toFixed(3)) +
+                                (xValue && Math.round(+xValue)) +
                                 "</span>"
                             );
                         });
@@ -735,7 +737,8 @@
                     .attr("dy", ".32em")
                     .attr("transform", "translate(0,0)")
                     .call(d3.axisLeft(y).tickSize(0))
-                    .attr("font-family", dataLabelfontFamily);
+                    .attr("font-family", dataLabelfontFamily)
+                    .attr("font-size", dataLabelfontSize);
 
                 var labelSelector =
                     document.querySelectorAll(".axis.label text");
@@ -755,7 +758,7 @@
                     //     console.log(dataset[i]);
                     label.setAttribute("x", labelXPosition + 30);
                     //  label.textContent = textColumn2[1];
-                    label.textContent = dataset[i];
+                    label.textContent = Math.round(dataset[i]);
                 });
             }
 
@@ -818,6 +821,7 @@
                     .attr("width", window.innerWidth, "height", 150),
                 50
             );
+         
 
             setYaxisWidth();
 
