@@ -730,9 +730,10 @@
                     .attr("font-family", dataLabelfontFamily)
                     .attr("font-size", dataLabelfontSize);
 
+                    
                 // .attr("transform", "translate(0,0)");
                 var labelSelector = document.querySelectorAll(".axis.label text")
-
+                d3.select(".axis.label path").remove();
 
                 labelSelector.forEach((label, i) => {
                     var labelValue = label.textContent;
