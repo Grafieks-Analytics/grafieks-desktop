@@ -241,11 +241,13 @@
                 yLabelfontSize = defaultD3Config.fontSize,
                 xTickfontSize = defaultD3Config.fontSize,
                 yTickfontSize = defaultD3Config.fontSize,
+                dataLabelfontSize = defaultD3Config.fontSize,
                 // font family
                 xLabelfontFamily = defaultD3Config.fontFamily,
                 yLabelfontFamily = defaultD3Config.fontFamily,
                 xTickfontFamily = defaultD3Config.fontFamily,
                 yTickfontFamily = defaultD3Config.fontFamily,
+                dataLabelfontFamily = defaultD3Config.fontFamily,
                 // font color
                 xLabelfontColor = defaultD3Config.fontColor,
                 yLabelfontColor = defaultD3Config.fontColor,
@@ -257,11 +259,13 @@
             window.yLabelfontSize = yLabelfontSize;
             window.xTickfontSize = xTickfontSize;
             window.yTickfontSize = yTickfontSize;
+            window.dataLabelfontSize = dataLabelfontSize;
 
             window.xLabelfontFamily = xLabelfontFamily;
             window.yLabelfontFamily = yLabelfontFamily;
             window.xTickfontFamily = xTickfontFamily;
             window.yTickfontFamily = yTickfontFamily;
+            window.dataLabelfontFamily = dataLabelfontFamily;
 
             window.xLabelfontColor = xLabelfontColor;
             window.yLabelfontColor = yLabelfontColor;
@@ -426,7 +430,10 @@
 
                 // legendElement.style.padding = "10px";
                 legendElement.style.border = "1px solid black";
-
+                d3.selectAll("#my_dataviz").style(
+                    "margin-top",
+                    0 + "px"
+                );
                 switch (legendPosition) {
                     case "left":
                         // clearStyle();
@@ -619,6 +626,18 @@
                 var legendWidth = legendElement.offsetWidth;
                 width -= legendWidth + 30;
             }
+              if (legendPosition == "top") {
+                var legendHeightTop = 60;
+            }
+            else {
+                legendHeightTop = 0;
+            }
+            if (legendPosition == "left") {
+                var legendWidthLeft = legendWidth;
+            }
+            else {
+                legendWidthLeft = 0;
+            }
             // .;
 
             // legends code ends
@@ -730,7 +749,7 @@
                         .append("rect")
                         .attr("class", "bar")
                         .attr("fill", function (d) {
-                             this.setAttribute(
+                            this.setAttribute(
                                 "data-value-x1",
                                 d.mainCategory
                             );
@@ -754,7 +773,7 @@
                             var yScroll = document.querySelector("#my_dataviz").scrollTop;
                             ypos -= yScroll;
                             var parentElement = this.parentElement;
-                              xAxisValue1 =
+                            xAxisValue1 =
                                 this.getAttribute("data-value-x1");
                             xAxisValue2 =
                                 this.getAttribute("data-value-x2");
@@ -770,8 +789,8 @@
                             ypos += +matrixValues[5] || 0;
 
                             d3.select("#tooltip")
-                                .style("left", xpos+20 + "px")
-                                .style("top", ypos-49 + "px")
+                                .style("left", xpos + 20 + "px")
+                                .style("top", ypos - 49+legendHeightTop + "px")
                                 .style("display", "block")
                                 // .html(d.name + ":" + d.value);
                                 .html(function () {
@@ -783,7 +802,7 @@
                                     return (
                                         "<div class='arrowTooltip'></div>" +
                                         "<span style='color:grey;''>" +
-                                        labels[0]+
+                                        labels[0] +
                                         ":&nbsp;&nbsp;" +
                                         "</span>" +
                                         "<span style='float: right;'>" +
@@ -803,12 +822,12 @@
                                         ":" +
                                         "</span>" +
                                         "<span style='float: right;margin-left: 15px;'>" +
-                                         d.value  +
+                                        d.value +
                                         "</span>"
                                     );
                                 });
 
-                                 if (
+                            if (
                                 xpos - window.scrollX >
                                 document.documentElement.clientWidth -
                                 document.querySelector("#tooltip").clientWidth
@@ -818,7 +837,7 @@
                                     xpos -
                                     document.querySelector("#tooltip")
                                         .clientWidth +
-                                    25 +
+                                    25 +legendWidthLeft +
                                     "px"
                                 );
 
@@ -833,7 +852,7 @@
                             } else {
                                 d3.select("#tooltip").style(
                                     "left",
-                                    xpos + 55 + "px"
+                                    xpos + 55 + legendWidthLeft + "px"
                                 );
 
                                 d3.select(".arrowTooltip").attr(
@@ -925,8 +944,10 @@
                 const bars = [];
                 all_keys.forEach((k) => {
                     if (d.hasOwnProperty(k)) {
-                        bars.push({ name: k, value: d[k], data: d ,
-                            mainCategory: d.mainCategory,});
+                        bars.push({
+                            name: k, value: d[k], data: d,
+                            mainCategory: d.mainCategory,
+                        });
                     }
                 });
                 return bars;

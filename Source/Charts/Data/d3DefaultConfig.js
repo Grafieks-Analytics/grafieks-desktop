@@ -66,7 +66,7 @@ const defaultD3Config = {
         legendPosition: "top",
     },
     defaultlabelConfig: {
-        labelStatus: true,
+        labelStatus: false,
     },
     defaultGridConfig: {
         gridStatus: true,
