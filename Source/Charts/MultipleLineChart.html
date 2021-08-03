@@ -516,57 +516,57 @@
             //     ["Category", "Row_ID"],
             // ];
 
-            // var data = [
-            //     [
-            //         ["Furniture", "Bookcases", -3298],
-            //         ["Furniture", "Chairs", 228],
-            //         ["Furniture", "Labels", 0],
-            //         ["Furniture", "Tables", -602],
-            //         ["Furniture", "Storage", 0],
-            //         ["Furniture", "Furnishings", 36],
-            //         ["Furniture", "Art", 0],
-            //         ["Furniture", "Phones", 0],
-            //         ["Furniture", "Binders", 0],
-            //         ["Furniture", "Appliances", 0],
-            //         ["Furniture", "Paper", 0],
-            //         ["Furniture", "Envelopes", 0],
-            //         ["Furniture", "Accessories", 0],
-            //         ["Furniture", "Fasteners", 0],
-            //         ["Furniture", "Supplies", 0],
-            //         ["Office Supplies", "Bookcases", 0],
-            //         ["Office Supplies", "Chairs", 0],
-            //         ["Office Supplies", "Labels", 90],
-            //         ["Office Supplies", "Tables", 0],
-            //         ["Office Supplies", "Storage", 298],
-            //         ["Office Supplies", "Furnishings", 0],
-            //         ["Office Supplies", "Art", 346],
-            //         ["Office Supplies", "Phones", 0],
-            //         ["Office Supplies", "Binders", 258],
-            //         ["Office Supplies", "Appliances", 10],
-            //         ["Office Supplies", "Paper", 518],
-            //         ["Office Supplies", "Envelopes", 394],
-            //         ["Office Supplies", "Accessories", 0],
-            //         ["Office Supplies", "Fasteners", 60],
-            //         ["Office Supplies", "Supplies", 36],
-            //         ["Technology", "Bookcases", 0],
-            //         ["Technology", "Chairs", 0],
-            //         ["Technology", "Labels", 0],
-            //         ["Technology", "Tables", 0],
-            //         ["Technology", "Storage", 0],
-            //         ["Technology", "Furnishings", 0],
-            //         ["Technology", "Art", 0],
-            //         ["Technology", "Phones", 1350],
-            //         ["Technology", "Binders", 0],
-            //         ["Technology", "Appliances", 0],
-            //         ["Technology", "Paper", 0],
-            //         ["Technology", "Envelopes", 0],
-            //         ["Technology", "Accessories", 12],
-            //         ["Technology", "Fasteners", 0],
-            //         ["Technology", "Supplies", 0],
-            //     ],
-            //     ["Furniture", "Office Supplies", "Technology"],
-            //     ["Category", "Sub_Category", "Profit"],
-            // ];
+            var data = [
+                [
+                    ["Furniture", "Bookcases", -3298],
+                    ["Furniture", "Chairs", 228],
+                    ["Furniture", "Labels", 0],
+                    ["Furniture", "Tables", -602],
+                    ["Furniture", "Storage", 0],
+                    ["Furniture", "Furnishings", 36],
+                    ["Furniture", "Art", 0],
+                    ["Furniture", "Phones", 0],
+                    ["Furniture", "Binders", 0],
+                    ["Furniture", "Appliances", 0],
+                    ["Furniture", "Paper", 0],
+                    ["Furniture", "Envelopes", 0],
+                    ["Furniture", "Accessories", 0],
+                    ["Furniture", "Fasteners", 0],
+                    ["Furniture", "Supplies", 0],
+                    ["Office Supplies", "Bookcases", 0],
+                    ["Office Supplies", "Chairs", 0],
+                    ["Office Supplies", "Labels", 90],
+                    ["Office Supplies", "Tables", 0],
+                    ["Office Supplies", "Storage", 298],
+                    ["Office Supplies", "Furnishings", 0],
+                    ["Office Supplies", "Art", 346],
+                    ["Office Supplies", "Phones", 0],
+                    ["Office Supplies", "Binders", 258],
+                    ["Office Supplies", "Appliances", 10],
+                    ["Office Supplies", "Paper", 518],
+                    ["Office Supplies", "Envelopes", 394],
+                    ["Office Supplies", "Accessories", 0],
+                    ["Office Supplies", "Fasteners", 60],
+                    ["Office Supplies", "Supplies", 36],
+                    ["Technology", "Bookcases", 0],
+                    ["Technology", "Chairs", 0],
+                    ["Technology", "Labels", 0],
+                    ["Technology", "Tables", 0],
+                    ["Technology", "Storage", 0],
+                    ["Technology", "Furnishings", 0],
+                    ["Technology", "Art", 0],
+                    ["Technology", "Phones", 1350],
+                    ["Technology", "Binders", 0],
+                    ["Technology", "Appliances", 0],
+                    ["Technology", "Paper", 0],
+                    ["Technology", "Envelopes", 0],
+                    ["Technology", "Accessories", 12],
+                    ["Technology", "Fasteners", 0],
+                    ["Technology", "Supplies", 0],
+                ],
+                ["Furniture", "Office Supplies", "Technology"],
+                ["Category", "Sub_Category", "Profit"],
+            ];
 
             // set the dimensions and margins of the graph
 
@@ -668,7 +668,10 @@
                     yLabelfontColor = defaultD3Config.fontColor,
                     xTickfontColor = defaultD3Config.fontColor,
                     yTickfontColor = defaultD3Config.fontColor,
+
+                    markerShape = defaultD3Config.defaultMarkerShape,
                 } = plottingConfiguration;
+
                 window.xLabelfontSize = xLabelfontSize;
                 window.yLabelfontSize = yLabelfontSize;
                 window.xTickfontSize = xTickfontSize;
@@ -687,11 +690,15 @@
                 var dataValues = data[0];
                 var y_pos_x_label = 55;
                 console.log(data);
+
                 // dataValues = transformData(data, dateFormat);
                 // console.log(dataValues);
                 // var [dataValues, all_keys, keys2] = dataValues;
 
                 d3Colors = d3colorPalette;
+
+                stroke = d3Colors[0];
+
                 d3.selectAll("#my_dataviz").html("");
                 d3.selectAll("#yAxisDiv").html("");
 
@@ -1055,6 +1062,86 @@
                             .curve(d3[curveType])(d.values);
                     });
 
+                dateformatValue = function (value) {
+                    return value;
+                };
+
+                svg.selectAll(".dot")
+                    .data(dataValues)
+                    .enter()
+                    .append(markerShape)
+                    .attr("stroke", function (d) {
+                        return color(d[1]);
+                    })
+                    .attr("class", markerShape)
+                    .attr("class", "marker-shape")
+                    .attr(
+                        "transform",
+                        "translate(" +
+                            (markerShape == constants.markerShapes.RECT
+                                ? 0 - 2.8
+                                : 0) +
+                            "," +
+                            -2.8 +
+                            ")"
+                    )
+                    .attr("fill", function (d) {
+                        return color(d[1]);
+                    })
+                    .attr(
+                        markerShapeConfig[markerShape] &&
+                            markerShapeConfig[markerShape].xPositionAttrName,
+                        function (d, i) {
+                            console.log(d);
+
+                            this.setAttribute("data-value-x", d[0]);
+                            this.setAttribute("data-value-y", d[2]);
+
+                            return x(d[0]) + x.bandwidth() / 2;
+                        }
+                    )
+                    .attr(
+                        markerShapeConfig[markerShape] &&
+                            markerShapeConfig[markerShape].yPositionAttrName,
+                        function (d) {
+                            return y(d[2]);
+                        }
+                    )
+                    .attr("r", initialCircleRadius)
+                    .attr("height", initialBoxDimension)
+                    .attr("width", initialBoxDimension)
+                    .attr("points", function (d, i) {
+                        var x1 = x(d[0]);
+                        return x1;
+                    })
+                    .on("mousemove", function (d, i) {
+                        var x_pos = d3.mouse(this)[0];
+                        var y_pos = d3.mouse(this)[1];
+
+                        const xValue = dateformatValue(d[0]);
+                        const yValue = d[2];
+
+                        d3.select("#tooltip")
+                            .style("left", x_pos + "px")
+                            // .style("top", y_pos - 20 + "px")
+                            .style("top", y_pos + "px")
+                            .style("display", "block")
+                            // .html(xValue + ", " + yValue.toFixed(2));
+                            .html(function () {
+                                var textValue = d.y0 - d.y1;
+                                if (d.y1 < 0) {
+                                    textValue = d.y1 - d.y0;
+                                }
+
+                                return (
+                                    "<div class='arrowTooltip'></div>" +
+                                    Math.round(yValue) +
+                                    "</div>"
+                                );
+                            });
+                    });
+
+                /*
                 var mouseG = svg
                     .append("g")
                     .attr("class", "mouse-over-effects");
@@ -1184,6 +1271,7 @@
                         );
                     });
 
+                    */
                 /*
                 if (chartType == constants.chartType.STANDARD) {
                     setStandardTickWidths();
@@ -1430,7 +1518,7 @@
                     .html(tooltipDataText);
             }
 
-            // drawChart(data);
+            drawChart(data);
         </script>
     </body>
 </html>
