@@ -488,7 +488,7 @@
 
             let { top, right, bottom, left } = constants.chartMargins;
             if (window.innerHeight < 400) {
-                top = top / 2;
+                top = top / 2 + 10;
                 right = right / 2;
                 // bottom = bottom / 2;
             }
@@ -833,7 +833,7 @@
             color.domain(keys);
             const barWidth = x.bandwidth();
 
-            clearChart();
+            window.clearChart && clearChart();
 
             //add svg with margin !important
             //this is svg is actually group
@@ -1276,6 +1276,11 @@
                 return d3.timeFormat(dateFormat)(new Date(dateValue));
             }
         }
+
+        // window.addEventListener("resize", function () {
+        //     window.clearChart && clearChart();
+        //     drawChart(data);
+        // });
 
         drawChart(data);
     </script>
