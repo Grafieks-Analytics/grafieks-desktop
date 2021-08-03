@@ -577,12 +577,8 @@
             function drawChart(root, plottingConfiguration = {}) {
                 window.data = root;
                 // root = { name: "", children: root };
-                let {
-                    d3colorPalette,
-                    paddingInner,
-                    markerShape,
-                    curveType,
-                } = plottingConfiguration;
+                let { d3colorPalette, paddingInner, markerShape, curveType } =
+                    plottingConfiguration;
                 if (!d3colorPalette) {
                     d3colorPalette = defaultD3Config.d3ColorPalette;
                 }
@@ -751,8 +747,9 @@
 
                     transition
                         .selectAll("text")
-                        .attrTween("display", (d) => () =>
-                            textFits(d) ? null : "none"
+                        .attrTween(
+                            "display",
+                            (d) => () => textFits(d) ? null : "none"
                         );
 
                     moveStackToFront(d);
