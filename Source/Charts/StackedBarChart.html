@@ -993,16 +993,16 @@
                     if (
                         xpos - scrollVal >
                         document.documentElement.clientWidth -
-                        document.querySelector("#tooltip").clientWidth
+                            document.querySelector("#tooltip").clientWidth
                     ) {
                         d3.select("#tooltip").style(
                             "left",
                             xpos -
-                            scrollVal -
-                            document.querySelector("#tooltip").clientWidth -
-                            10 +
-                            legendWidthLeft +
-                            "px"
+                                scrollVal -
+                                document.querySelector("#tooltip").clientWidth -
+                                10 +
+                                legendWidthLeft +
+                                "px"
                         );
 
                         d3.select(".arrowTooltip")
