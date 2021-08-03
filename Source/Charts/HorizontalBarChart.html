@@ -279,7 +279,7 @@
                     d3.select("#xAxisDiv").style("top", null);
                 }
 
-                clearChart();
+                window.clearChart && clearChart();
 
                 const yAxisWidth =
                     document.querySelector("#yAxisDiv").clientWidth;

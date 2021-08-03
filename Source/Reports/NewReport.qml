@@ -311,11 +311,10 @@ Page {
                 colorListModel.clear();
                 colorByData = [];
             }
-            dataValues = JSON.parse(dataValues);
-            dataValues.push([yAxisColumns[0],yAxisColumns[1],xAxisColumns[0]]);
-            // console.log(dataValues);
-
-            dataValues = JSON.stringify(dataValues);
+            // dataValues = JSON.parse(dataValues);
+            // dataValues.push([yAxisColumns[0],yAxisColumns[1],xAxisColumns[0]]);
+            // // console.log(dataValues);
+            // dataValues = JSON.stringify(dataValues);
             
             break;
         case Constants.groupBarChartTitle:
@@ -330,9 +329,9 @@ Page {
                 ReportParamsModel.setLastDropped(null);
             }
             
-            dataValues = JSON.parse(dataValues);
-            dataValues.push([xAxisColumns[0],xAxisColumns[1],yAxisColumns[0]]);
-            dataValues = JSON.stringify(dataValues);
+            // dataValues = JSON.parse(dataValues);
+            // dataValues.push([xAxisColumns[0],xAxisColumns[1],yAxisColumns[0]]);
+            // dataValues = JSON.stringify(dataValues);
 
             console.log('Grouped bar chart!',xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
             break;
@@ -407,7 +406,7 @@ Page {
 
         // Appending list to select color
         dataItemList.clear();
-        console.log(colorData);
+        console.log('Color Data',colorData);
         if(colorData && colorData.length){
             colorData.forEach(function (element,index) {
                 dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
@@ -416,7 +415,7 @@ Page {
 
 
         var scriptValue = 'window.addEventListener("resize", function () {
-                   clearChart && clearChart();
+                   window.clearChart && clearChart();
                     drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
            });';
 
@@ -1218,7 +1217,7 @@ Page {
             case Constants.stackedAreaChartTitle:
                 console.log('Stacked Area Chart')
                 console.log('Colour By columnName',columnName)
-                ChartsModel.getStackedAreaChartValues(colorByColumnName,yAxisColumns[0],xAxisColumns[0]);
+                ChartsModel.getStackedAreaChartValues(xAxisColumns[0],yAxisColumns[0],colorByColumnName);
                 break;
             case Constants.lineChartTitle:
                 console.log("LINE CLICKED")
@@ -1237,7 +1236,7 @@ Page {
                 break;
             case Constants.horizontalMultiLineChartTitle:
                 console.log(chartTitle,"CLICKED");
-                ChartsModel.getMultiLineChartValues(colorByColumnName,xAxisColumns[0],yAxisColumns[0]);
+                ChartsModel.getStackedAreaChartValues(colorByColumnName,xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.pieChartTitle:
             case Constants.donutChartTitle:
@@ -1327,7 +1326,7 @@ Page {
             console.log('Chart Url', report_desiner_page.chartUrl, webEngineView.url)
 
             var scriptValue = 'window.addEventListener("resize", function () {
-                   clearChart();
+                    window.clearChart && clearChart();
                     drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
            });';
 

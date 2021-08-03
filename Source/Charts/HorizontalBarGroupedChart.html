@@ -342,7 +342,7 @@
                     return count;
                 }
 
-                clearChart();
+                window.clearChart && clearChart();
 
                 var minHeight = d3.min(data, (d) =>
                     d3.min(all_keys, (k) => d[k])
@@ -783,10 +783,7 @@
 
                                 d3.select("#tooltip")
                                     .style("left", xpos + 20 + "px")
-                                    .style(
-                                        "top",
-                                        ypos - 49 + legendHeightTop + "px"
-                                    )
+                                    .style("top", ypos - 49 + "px")
                                     .style("display", "block")
                                     // .html(d.name + ":" + d.value);
                                     .html(function () {
@@ -835,7 +832,6 @@
                                             document.querySelector("#tooltip")
                                                 .clientWidth +
                                             25 +
-                                            legendWidthLeft +
                                             "px"
                                     );
 
