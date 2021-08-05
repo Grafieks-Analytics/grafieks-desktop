@@ -266,7 +266,6 @@
                 var [data, all_keys, labels, legendNames] = data;
                 console.log({ legendNames });
 
-                // TODO:
                 // console.log({ data})
 
                 let { top, right, bottom, left } = constants.chartMargins;
@@ -816,29 +815,36 @@
                                 // );
                             });
 
-                        d3.select(this)
-                            .attr(
-                                "transform",
-                                (d) =>
-                                    `translate(${
-                                        xScale0(d && d.mainCategory) + x_offset
-                                    },0)`
-                            )
-                            .selectAll("text.label")
-                            .data(bar_data)
-                            .enter()
-                            .append("text")
-                            .attr("class", "label")
-                            .attr("x", (d) => xScale1(d.name))
-                            .attr("y", (d) => {
-                                if (d.value < 0) {
-                                    return yScale(0);
-                                }
-                                return yScale(d.value);
-                            })
-                            .text(function (d) {
-                                return d.value;
-                            });
+                        if (labelStatus) {
+                            d3.select(this)
+                                .attr(
+                                    "transform",
+                                    (d) =>
+                                        `translate(${
+                                            xScale0(d && d.mainCategory) +
+                                            x_offset
+                                        },0)`
+                                )
+                                .selectAll("text.label")
+                                .data(bar_data)
+                                .enter()
+                                .append("text")
+                                .attr("class", "label")
+
+                                .attr("y", (d) => {
+                                    if (d.value < 0) {
+                                        return yScale(0);
+                                    }
+                                    return yScale(d.value) - 8;
+                                })
+                                .text(function (d) {
+                                    return d.value;
+                                })
+                                .attr("font-family", dataLabelfontFamily)
+                                .attr("font-size", dataLabelfontSize)
+                                // .attr("x", (d) => xScale1(d.name)-textLength.baseVal.value);
+                                .attr("x", (d) => xScale1(d.name) - 5);
+                        }
                     });
 
                 var xAxis = d3.axisBottom(xScale0).tickSize(0);
