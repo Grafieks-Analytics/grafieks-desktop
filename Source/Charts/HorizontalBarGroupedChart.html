@@ -391,7 +391,6 @@
                         .style("margin", "auto")
                         .style("position", "sticky");
 
-              
                     d3.select("#legend")
                         .selectAll("div")
                         .data(legendNameArray)
@@ -406,10 +405,9 @@
                                 d +
                                 "</span>"
                             );
-                        })     
+                        })
                         .style("display", "flex")
-                        .style("padding", "2px"); 
-                
+                        .style("padding", "2px");
                 }
 
                 d3.selectAll("#my_dataviz").style(
@@ -911,33 +909,45 @@
 
                         if (labelStatus) {
                             d3.select(this)
-                                // .attr(
-                                //     "transform",
-                                //     (d) =>
-                                //         `translate(${
-                                //             yScale0(d && d.mainCategory) +
-                                //             0
-                                //         },0)`
-                                // )
+                                .attr(
+                                    "transform",
+                                    (d) =>
+                                        `translate(0,${
+                                            yScale0(d && d.mainCategory) +
+                                            x_offset
+                                        })`
+                                )
                                 .selectAll("text.label")
                                 .data(bar_data)
                                 .enter()
                                 .append("text")
                                 .attr("class", "label")
-
+                                // yScale1.bandwidth()
                                 .attr("y", (d) => {
-                                    if (d.value < 0) {
-                                        return yScale(0);
-                                    }
-                                    return xScale(d.value) - 8;
+                                    return yScale1(d.name); // y = yScale1
                                 })
                                 .text(function (d) {
                                     return d.value;
                                 })
                                 .attr("font-family", dataLabelfontFamily)
-                                .attr("font-size", dataLabelfontSize);
-                            // .attr("x", (d) => xScale1(d.name)-textLength.baseVal.value)
-                            // .attr("x", (d) => yScale1(d.name) - 5);
+                                .attr("font-size", dataLabelfontSize)
+                                // .attr("x", (d) => xScale1(d.name)-textLength.baseVal.value)
+                                .attr("x", (d) => {
+                                    // x = xscale
+                                     var heightValue = Math.abs(
+                                    xScale(0) - xScale(Math.abs(d.value)) // xScale and this will be width
+                                );
+                                if (!heightValue) {
+                                    heightValue = 1;
+                                }
+
+
+                                    if (d.value < 0) {
+                                        return xScale(d.value);
+                                    }
+
+                                    return xScale(0)+heightValue;
+                                });
                         }
                     });
 
@@ -1085,9 +1095,9 @@
             var data = [
                 [
                     {
-                        Bookcases: 8016,
+                        Bookcases: -8016,
                         Chairs: 6906,
-                        Furnishings: 2398,
+                        Furnishings: -2398,
                         Tables: 10230,
                         mainCategory: "Furniture",
                     },
