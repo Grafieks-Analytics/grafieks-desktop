@@ -215,7 +215,15 @@
                 }
 
                 globalKeys = globalKeys.filter(getUniqueArrayValues);
-                return [transformedDataValue, globalKeys, data[2]];
+                var mainCategoryData = transformedDataValue.map(
+                    (d) => d.mainCategory
+                );
+                return [
+                    transformedDataValue,
+                    globalKeys,
+                    data[2],
+                    [dataValue[2][0], mainCategoryData, globalKeys],
+                ];
             }
 
             function drawChart(data, plottingConfiguration = {}) {
@@ -272,6 +280,7 @@
                 d3.selectAll("#my_dataviz").html("");
                 d3.selectAll("#yAxisDiv").html("");
 
+                var legendNames = [];
                 let { legendStatus, legendPosition } = legendConfig;
                 let { labelStatus } = labelConfig;
                 let { gridStatus } = gridConfig;
@@ -304,7 +313,8 @@
                 data = transformData(data, dateFormat);
                 console.log(data);
 
-                var [data, all_keys, labels] = data;
+                var [data, all_keys, labels, legendNames] = data;
+                console.log({ legendNames });
 
                 var margin = { top: 40, right: 20, bottom: 0, left: 70 };
                 var width = window.innerWidth - margin.left - margin.right - 70;
@@ -359,6 +369,16 @@
                     d3.max(all_keys, (k) => d[k])
                 );
 
+                var legendNameArray = [legendNames[0]];
+                var legenedNameLabel = legendNames[0];
+
+                if (groupBarChartColorBy == "category") {
+                    legendNameArray = legendNames[1];
+                    legenedNameLabel = labels[0];
+                } else if (groupBarChartColorBy) {
+                    legendNameArray = legendNames[2];
+                    legenedNameLabel = labels[1];
+                }
                 // legends code starts
                 d3.select("#legend").html("").style("padding", "");
                 if (legendStatus) {
@@ -366,28 +386,30 @@
 
                     d3.select("#legend")
                         .append("p")
-                        .html("xAxisLabel" + "&nbsp;")
+                        .html(legenedNameLabel + "&nbsp;")
                         .style("font-weight", "bold")
                         .style("margin", "auto")
                         .style("position", "sticky");
 
+              
                     d3.select("#legend")
                         .selectAll("div")
-                        .data("test")
+                        .data(legendNameArray)
                         .enter()
                         .append("div")
                         .html((d, i) => {
                             return (
                                 '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
-                                "d3Colors[i % data[1][1].length]" +
+                                d3Colors[i % d3Colors.length] +
                                 ';">  </div>' +
                                 "<span style='margin-left: 5px; max-width: 160px'>" +
                                 d +
                                 "</span>"
                             );
-                        })
+                        })     
                         .style("display", "flex")
-                        .style("padding", "2px");
+                        .style("padding", "2px"); 
+                
                 }
 
                 d3.selectAll("#my_dataviz").style(
@@ -745,6 +767,7 @@
                                 );
                                 this.setAttribute("data-value-x2", d.name);
                                 this.setAttribute("data-value-y", d.value);
+
                                 if (groupBarChartColorBy == "category") {
                                     return zScale(d.data.mainCategory);
                                 }
@@ -885,6 +908,37 @@
                                 //     yScale(d.value)
                                 // );
                             });
+
+                        if (labelStatus) {
+                            d3.select(this)
+                                // .attr(
+                                //     "transform",
+                                //     (d) =>
+                                //         `translate(${
+                                //             yScale0(d && d.mainCategory) +
+                                //             0
+                                //         },0)`
+                                // )
+                                .selectAll("text.label")
+                                .data(bar_data)
+                                .enter()
+                                .append("text")
+                                .attr("class", "label")
+
+                                .attr("y", (d) => {
+                                    if (d.value < 0) {
+                                        return yScale(0);
+                                    }
+                                    return xScale(d.value) - 8;
+                                })
+                                .text(function (d) {
+                                    return d.value;
+                                })
+                                .attr("font-family", dataLabelfontFamily)
+                                .attr("font-size", dataLabelfontSize);
+                            // .attr("x", (d) => xScale1(d.name)-textLength.baseVal.value)
+                            // .attr("x", (d) => yScale1(d.name) - 5);
+                        }
                     });
 
                 // // Add the X Axis
