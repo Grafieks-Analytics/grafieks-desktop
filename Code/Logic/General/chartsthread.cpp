@@ -373,6 +373,10 @@ void ChartsThread::getNewGroupedBarChartValues()
 //    xAxisDataPointer->removeDuplicates();
 //    categories.append(QJsonArray::fromStringList(*xAxisDataPointer));
 
+    QJsonArray categories;
+    xAxisDataPointer->removeDuplicates();
+    categories.append(QJsonArray::fromStringList(*xAxisDataPointer));
+
     data.append(columns);
 //    data.append(categories);
 
