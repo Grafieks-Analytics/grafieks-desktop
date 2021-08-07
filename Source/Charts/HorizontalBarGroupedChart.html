@@ -924,7 +924,7 @@
                                 .attr("class", "label")
                                 // yScale1.bandwidth()
                                 .attr("y", (d) => {
-                                    return yScale1(d.name); // y = yScale1
+                                    return yScale1(d.name) - 20; // y = yScale1
                                 })
                                 .text(function (d) {
                                     return d.value;
@@ -934,19 +934,18 @@
                                 // .attr("x", (d) => xScale1(d.name)-textLength.baseVal.value)
                                 .attr("x", (d) => {
                                     // x = xscale
-                                     var heightValue = Math.abs(
-                                    xScale(0) - xScale(Math.abs(d.value)) // xScale and this will be width
-                                );
-                                if (!heightValue) {
-                                    heightValue = 1;
-                                }
-
+                                    var heightValue = Math.abs(
+                                        xScale(0) - xScale(Math.abs(d.value)) // xScale and this will be width
+                                    );
+                                    if (!heightValue) {
+                                        heightValue = 1;
+                                    }
 
                                     if (d.value < 0) {
                                         return xScale(d.value);
                                     }
 
-                                    return xScale(0)+heightValue;
+                                    return xScale(0) + heightValue;
                                 });
                         }
                     });
