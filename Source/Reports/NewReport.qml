@@ -713,7 +713,12 @@ Page {
             break;
         case Constants.lineChartTitle:
             chartUrl  = Constants.lineChartUrl;
+            break;
+        case Constants.horizontalMultiLineChartTitle:
+            chartUrl = Constants.horizontalMultiLineChartUrl;
+            break;
         }
+
         webEngineView.url = Constants.baseChartUrl+chartUrl;
         report_desiner_page.chartUrl = chartUrl;
     }
@@ -1241,7 +1246,7 @@ Page {
                 break;
             case Constants.horizontalMultiLineChartTitle:
                 console.log(chartTitle,"CLICKED");
-                ChartsModel.getStackedAreaChartValues(colorByColumnName,xAxisColumns[0],yAxisColumns[0]);
+                ChartsModel.getMultiLineChartValues(yAxisColumns[0],xAxisColumns[0],colorByColumnName);
                 break;
             case Constants.pieChartTitle:
             case Constants.donutChartTitle:

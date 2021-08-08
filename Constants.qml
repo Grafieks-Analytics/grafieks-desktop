@@ -324,6 +324,7 @@ QtObject {
     property string barChartUrl: "BarChartArrayInput.html";
 
     property string multiLineChartUrl: "MultipleLineChart.html";
+    property string horizontalMultiLineChartUrl: "HorizontalMultipleLineChart.html";
     property string lineChartUrl: "LineChart.html";
 
 
