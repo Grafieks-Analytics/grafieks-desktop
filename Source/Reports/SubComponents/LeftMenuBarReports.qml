@@ -367,7 +367,7 @@ Rectangle{
             if(report_desiner_page.isHorizontalGraph){
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 0){
                     chartHtml = Constants.horizontalBarChartUrl;
-//                    switchChart(Constants.horizontalBarChartTitle);
+                    // switchChart(Constants.horizontalBarChartTitle);
                 }
                 else if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 1){
                     chartHtml = Constants.horizontalStackedBarChartUrl;
@@ -395,14 +395,12 @@ Rectangle{
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count !== 0){
                     console.log('Debug: Loading multiline chart');
                     chartHtml = Constants.multiLineChartUrl;
-                    // switchChart(Constants.multiLineChartTitle);
                 }
             }
         }else if(chartTitle === Constants.horizontalLineChartTitle){
             if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count !== 0){
                 console.log('Debug: Loading horizontal multi line chart');
                 chartHtml = Constants.horizontalMultiLineChartUrl;
-                // switchChart(Constants.multiLineChartTitle);
             }
             console.log("Miss in horizontalLineChartTitle chart title count??")
         }else{
