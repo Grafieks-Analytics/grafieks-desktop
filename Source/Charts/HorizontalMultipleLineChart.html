@@ -379,6 +379,7 @@
                     yLabelfontColor = defaultD3Config.fontColor,
                     xTickfontColor = defaultD3Config.fontColor,
                     yTickfontColor = defaultD3Config.fontColor,
+                    markerShape = defaultD3Config.defaultMarkerShape,
                 } = plottingConfiguration;
                 window.xLabelfontSize = xLabelfontSize;
                 window.yLabelfontSize = yLabelfontSize;
@@ -724,14 +725,21 @@
                 // Add Y axis
                 // Change y to x
                 // remove nice
+
+                var y_min = d3.min(dataValues, function (d) {
+                    return +d[2];
+                });
+                var y_max = d3.max(dataValues, function (d) {
+                    return +d[2];
+                });
+
+                if (y_min > 0) {
+                    y_min = 0;
+                }
+
                 x = d3
                     .scaleLinear()
-                    .domain([
-                        0,
-                        d3.max(dataValues, function (d) {
-                            return +d[2];
-                        }),
-                    ])
+                    .domain([y_min, y_max])
                     .range([0, width])
                     .nice();
                 svg.append("g").call(d3.axisLeft(y).tickSize(0));
@@ -840,6 +848,89 @@
                         // Changes done
                     });
 
+                dateformatValue = function (value) {
+                    return value;
+                };
+
+                svg.selectAll(".dot")
+                    .data(dataValues)
+                    .enter()
+                    .append(markerShape)
+                    .attr("stroke", function (d) {
+                        return color(d[1]);
+                    })
+                    .attr("class", markerShape)
+                    .attr("class", "marker-shape")
+                    .attr(
+                        "transform",
+                        "translate(" +
+                            (markerShape == constants.markerShapes.RECT
+                                ? 0 - 2.8
+                                : 0) +
+                            "," +
+                            -2.8 +
+                            ")"
+                    )
+                    .attr("fill", function (d) {
+                        return color(d[1]);
+                    })
+                    .attr(
+                        markerShapeConfig[markerShape] &&
+                            markerShapeConfig[markerShape].xPositionAttrName,
+                        function (d, i) {
+                            this.setAttribute("data-value-x", d[2]);
+                            this.setAttribute("data-value-y", d[0]);
+
+                            return x(d[2]);
+                        }
+                    )
+                    .attr(
+                        markerShapeConfig[markerShape] &&
+                            markerShapeConfig[markerShape].yPositionAttrName,
+                        function (d) {
+                            return y(d[0]) + y.bandwidth() / 2;
+                        }
+                    )
+                    .attr("r", initialCircleRadius)
+                    .attr("height", initialBoxDimension)
+                    .attr("width", initialBoxDimension)
+                    .attr("points", function (d, i) {
+                        var x1 = y(d[2]);
+                        return x1;
+                    })
+                    .on("mouseout", function (d, i) {
+                        d3.select("#tooltip").style("display", "none");
+                        d3.selectAll(".bar").style("opacity", 1);
+                    })
+                    .on("mousemove", function (d, i) {
+                        var x_pos = d3.mouse(this)[0];
+                        var y_pos = d3.mouse(this)[1];
+
+                        const xValue = dateformatValue(d[0]);
+                        const yValue = d[2];
+
+                        d3.select("#tooltip")
+                            .style("left", x_pos + "px")
+                            // .style("top", y_pos - 20 + "px")
+                            .style("top", y_pos + "px")
+                            .style("display", "block")
+                            // .html(xValue + ", " + yValue.toFixed(2));
+                            .html(function () {
+                                var textValue = d.y0 - d.y1;
+                                if (d.y1 < 0) {
+                                    textValue = d.y1 - d.y0;
+                                }
+
+                                return (
+                                    "<div class='arrowTooltip'></div>" +
+                                    Math.round(yValue) +
+                                    "</div>"
+                                );
+                            });
+                    });
+
+                /*
+                    
                 var mouseG = svg
                     .append("g")
                     .attr("class", "mouse-over-effects");
@@ -966,42 +1057,14 @@
                         );
                     });
 
+                    */
+
                 function make_x_gridlines(x) {
                     return d3.axisBottom(x);
                 }
                 function make_y_gridlines(y) {
                     return d3.axisLeft(y).ticks(10);
                 }
-            }
-
-            function drawToolTip(color, mouse) {
-                var tooltipDataText = "";
-
-                for (var key in tooltipData) {
-                    if (document.querySelectorAll("#tooltip div").length > 10) {
-                        continue;
-                    }
-                    tooltipDataText +=
-                        "<div style='display: flex'><div style='margin:  7px; width: 6px; height: 6px; border-radius: 100%; background-color:" +
-                        color(key) +
-                        "'></div>" +
-                        "<span>" +
-                        key +
-                        ": " +
-                        tooltipData[key].dataValue +
-                        "</span></div>";
-                }
-
-                // console.log(d3.select("#tooltip").clientWidth);
-
-                var yScroll = document.querySelector("#my_dataviz").scrollTop;
-
-                d3.select("#tooltip")
-                    .style("left", mouse[0] + 80 + "px")
-                    .style("top", mouse[1] - yScroll + "px")
-                    .style("display", "block")
-                    .style("opacity", "1")
-                    .html(tooltipDataText);
             }
 
             drawChart(data);
