@@ -412,7 +412,7 @@
                 // var [dataValues, all_keys, keys2] = dataValues;
 
                 d3Colors = d3colorPalette;
-                console.log({data});
+                console.log({ data });
                 [xAxisLabel, yAxisLabel] = data[2];
 
                 // legends code starts
@@ -472,9 +472,8 @@
                 d3.select("#mainChartWindow").attr("style", null);
                 d3.selectAll("#my_dataviz").html("");
                 var margin = { top: 30, right: 30, bottom: 70, left: 60 },
-                    width = window.innerWidth - margin.left - margin.right - 70,
-                    height =
-                        window.innerHeight  - margin.bottom - 7;
+                    width = window.innerWidth - margin.left - margin.right - 30,
+                    height = window.innerHeight - margin.bottom - 7;
                 var bottomHeight = 0;
 
                 // legends code starts
@@ -725,7 +724,7 @@
                 // Change done
 
                 // Add Y axis
-                  svg.append("g")
+                svg.append("g")
                     .attr("class", "y-axis")
                     .attr("dy", ".32em")
                     .attr("transform", "translate(0,0)")
@@ -762,9 +761,6 @@
                     .tickSize(0)
                     .ticks(xTicks)
                     .tickFormat(d3.format(".2s"));
-
-                    
-              
 
                 d3.select("#xAxisDiv")
                     .append("svg")
@@ -916,14 +912,17 @@
                     .on("mousemove", function (d, i) {
                         var x_pos = d3.mouse(this)[0];
                         var y_pos = d3.mouse(this)[1];
+                        var yScroll =
+                            document.querySelector("#my_dataviz").scrollTop;
+                        y_pos -= yScroll;
 
                         const xValue = dateformatValue(d[0]);
                         const yValue = d[2];
 
                         d3.select("#tooltip")
-                            .style("left", x_pos + "px")
-                            // .style("top", y_pos - 20 + "px")
-                            .style("top", y_pos + "px")
+                            // .style("left", x_pos + "px")
+                            .style("top", y_pos - 20 + "px")
+                            // .style("top", y_pos + "px")
                             .style("display", "block")
                             // .html(xValue + ", " + yValue.toFixed(2));
                             .html(function () {
@@ -933,11 +932,64 @@
                                 }
 
                                 return (
+                                    // "<div class='arrowTooltip'></div>" +
+                                    // Math.round(yValue) +
+                                    // "</div>"
                                     "<div class='arrowTooltip'></div>" +
+                                    "<span style='color:grey;''>" +
+                                    xAxisLabel +
+                                    ":&nbsp;&nbsp;" +
+                                    "</span>" +
+                                    "<span style='float: right;'>" +
+                                    xValue +
+                                    "</span>" +
+                                    "<br/> <br/>" +
+                                    "<span style='color:grey;''>" +
+                                    yAxisLabel +
+                                    ":" +
+                                    "</span>" +
+                                    "<span style='float: right;margin-left: 15px;'>" +
                                     Math.round(yValue) +
-                                    "</div>"
+                                    "</span>"
                                 );
                             });
+                        var scrollVal =
+                            document.querySelector("#my_dataviz").scrollLeft;
+
+                        if (
+                            x_pos - window.scrollX >
+                            document.documentElement.clientWidth -
+                                document.querySelector("#tooltip").clientWidth-50
+                        ) {
+                            d3.select("#tooltip").style(
+                                "left",
+                                x_pos -
+                                    document.querySelector("#tooltip")
+                                        .clientWidth +
+                                    250 +
+                                    0 +
+                                    "px"
+                            );
+
+                            d3.select(".arrowTooltip")
+                                //  document.querySelector("#tooltip:before")
+                                // .style("height","50px";"width","50px";"background-color","red";")
+
+                                .attr(
+                                    "style",
+                                    "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
+                                );
+                        } else {
+                            d3.select("#tooltip").style(
+                                "left",
+                                x_pos + 110 + 0 + "px"
+                            );
+
+                            d3.select(".arrowTooltip").attr(
+                                "style",
+                                "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
+                            );
+                        }
                     });
                 d3.selectAll(".y-axis g text")
                     .attr("font-size", yTickfontSize)
