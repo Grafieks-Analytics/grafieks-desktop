@@ -201,6 +201,7 @@
         <file>Source/Charts/Data/geoCoordinates.js</file>
         <file>Source/Charts/HeatmapChart.html</file>
         <file>Source/Charts/MultipleLineChart.html</file>
+        <file>Source/Charts/HorizontalMultipleLineChart.html</file>
         <file>Source/Charts/Data/sankeySingle.js</file>
         <file>Source/Connectors/SubComponents/JsonConnection.qml</file>
         <file>Source/Connectors/SubComponents/ExcelConnection.qml</file>
@@ -266,6 +267,7 @@
         <file>Source/Dashboards/SubComponents/MiniSubComponents/FilterCustomizeCategorical.qml</file>
         <file>Source/Charts/HorizontalLineChart.html</file>
         <file>Source/Charts/MultipleLineChart.html</file>
+        <file>Source/Charts/HorizontalMultipleLineChart.html</file>
         <file>Source/Modellers/SubComponents/MiniSubComponents/CategoricalFilterListContent_copy.qml</file>
         <file>Splash.qml</file>
         <file>Main.qml</file>

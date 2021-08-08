@@ -129,6 +129,8 @@ Column{
             case Constants.lineChartTitle:
                 switchChart(Constants.multiLineChartTitle)
                 break;
+            case Constants.horizontalLineChartTitle:
+                switchChart(Constants.horizontalMultiLineChartTitle)
             case Constants.horizontalBarGroupedChartTitle:
             case Constants.groupBarChartTitle:
                 var [category, subcategory] =  getAxisColumnNames(Constants.xAxisName);
