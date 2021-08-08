@@ -311,10 +311,9 @@ Page {
                 colorListModel.clear();
                 colorByData = [];
             }
-            // dataValues = JSON.parse(dataValues);
-            // dataValues.push([yAxisColumns[0],yAxisColumns[1],xAxisColumns[0]]);
-            // // console.log(dataValues);
-            // dataValues = JSON.stringify(dataValues);
+            dataValues = JSON.parse(dataValues);
+            dataValues.push([yAxisColumns[0],yAxisColumns[1],xAxisColumns[0]]);
+            dataValues = JSON.stringify(dataValues);
             
             break;
         case Constants.groupBarChartTitle:
@@ -329,9 +328,9 @@ Page {
                 ReportParamsModel.setLastDropped(null);
             }
             
-            // dataValues = JSON.parse(dataValues);
-            // dataValues.push([xAxisColumns[0],xAxisColumns[1],yAxisColumns[0]]);
-            // dataValues = JSON.stringify(dataValues);
+            dataValues = JSON.parse(dataValues);
+            dataValues.push([xAxisColumns[0],xAxisColumns[1],yAxisColumns[0]]);
+            dataValues = JSON.stringify(dataValues);
 
             console.log('Grouped bar chart!',xAxisColumns[0],yAxisColumns[0], xAxisColumns[1]);
             break;
@@ -353,6 +352,9 @@ Page {
             console.log(Constants.multiLineChartTitle,"CLICKED");
             colorData = (dataValues && JSON.parse(dataValues)[1]) || [];
             break;
+        case Constants.horizontalMultiLineChartTitle:
+            console.log(chartTitle,"CLICKED");
+            colorData = (dataValues && JSON.parse(dataValues)[1]) || [];
         case Constants.pieChartTitle:
         case Constants.donutChartTitle:
             console.log(chartTitle,"CLICKED")
@@ -873,8 +875,8 @@ Page {
                 case Constants.lineChartTitle:
                     console.log(Constants.lineChartTitle);
                     if(colorByData.length)  {
-                        console.log('Changeing to Multi Line');
-                        switchChart(Constants.multiLineChartTitle)
+                        console.log('Changeing to Horizontal Multi Line');
+                        switchChart(Constants.horizontalMultiLineChartTitle)
                         break;
                     }
                     switchChart(Constants.horizontalLineChartTitle)
