@@ -755,6 +755,9 @@
                     .ticks(xTicks)
                     .tickFormat(d3.format(".2s"));
 
+                    
+              
+
                 d3.select("#xAxisDiv")
                     .append("svg")
                     .attr("height", "72")
@@ -928,6 +931,18 @@
                                 );
                             });
                     });
+                d3.selectAll(".y-axis g text")
+                    .attr("font-size", yTickfontSize)
+                    .attr("font-family", yTickfontFamily)
+                    .attr("fill", "red")
+                    // .attr("fill", yTickfontColor)
+                    .attr("x", -8);
+
+                d3.selectAll(".x-axis g text")
+                    .attr("font-size", xTickfontSize)
+                    .attr("font-family", xTickfontFamily)
+                    .attr("fill", xTickfontColor)
+                    .attr("y", 8);
 
                 /*
                     
