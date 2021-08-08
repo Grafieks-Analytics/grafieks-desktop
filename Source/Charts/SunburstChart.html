@@ -577,12 +577,8 @@
             function drawChart(root, plottingConfiguration = {}) {
                 window.data = root;
                 // root = { name: "", children: root };
-                let {
-                    d3colorPalette,
-                    paddingInner,
-                    markerShape,
-                    curveType,
-                } = plottingConfiguration;
+                let { d3colorPalette, paddingInner, markerShape, curveType } =
+                    plottingConfiguration;
                 if (!d3colorPalette) {
                     d3colorPalette = defaultD3Config.d3ColorPalette;
                 }
@@ -610,7 +606,7 @@
 
                 const y = d3.scaleSqrt().range([maxRadius * 0.1, maxRadius]);
 
-                const color = d3.scaleOrdinal(d3.schemeSet3);
+                const color = d3.scaleOrdinal(d3Colors);
 
                 const partition = d3.partition();
 
@@ -670,7 +666,6 @@
                     .enter()
                     .append("g")
                     .attr("class", "slice")
-
                     .on("click", (d) => {
                         d3.event.stopPropagation();
                         focusOn(d);
@@ -751,8 +746,9 @@
 
                     transition
                         .selectAll("text")
-                        .attrTween("display", (d) => () =>
-                            textFits(d) ? null : "none"
+                        .attrTween(
+                            "display",
+                            (d) => () => textFits(d) ? null : "none"
                         );
 
                     moveStackToFront(d);

@@ -4,6 +4,10 @@ import com.grafieks.singleton.constants 1.0
 import "../../MainSubComponents"
 import "./MiniSubComponents"
 
+// TODO
+// Add the custom values used in model
+// axisType: To update the dateFormat -> This get the axis name
+
 Rectangle{
 
     id: axisRectangle

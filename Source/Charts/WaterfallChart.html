@@ -1,5 +1,6 @@
 <html>
     <head>
+        <!-- <script src="./Data/utils.js"></script> -->
         <script src="./Data/d3DefaultConfig.js"></script>
         <script src="./Data/d3.v4.min.js"></script>
         <script src="./Data/d3-scale-chromatic.v1.min.js"></script>
@@ -25,7 +26,7 @@
         <script>
             const waterfallTransformedData = {};
 
-            let sampleData = [
+            let data = [
                 [
                     ["one", "3.5"],
                     ["two", -5.94],
@@ -36,16 +37,17 @@
                 ["XLabels", "YLabels"],
             ];
 
-            function waterfall(bind, data, config) {
-                config = {
+            function waterfall(bind, data, plottingConfiguration) {
+                plottingConfiguration = {
                     f: d3.format(".1f"),
                     margin: { top: 20, right: 50, bottom: 70, left: 60 },
                     width: window.innerWidth,
                     height: window.innerHeight,
-                    domainPadding: 1.1,
-                    ...config,
+                    paddingInner: defaultD3Config.defaultPaddingInner,
+                    ...plottingConfiguration,
                 };
-                const { f, margin, width, height, domainPadding } = config;
+                const { f, margin, width, height, paddingInner } =
+                    plottingConfiguration;
                 const w = width - margin.left - margin.right - 20;
                 const h = height - margin.top - margin.bottom - 20;
                 var dataValues = data[0];
@@ -68,7 +70,7 @@
                     .range([0, w])
                     .padding(0.2);
 
-                const y = d3.scaleLinear().range([h, 0]);
+                y = d3.scaleLinear().range([h, 0]);
 
                 const xAxis = d3.axisBottom(x);
                 const yAxis = d3.axisLeft(y);
@@ -79,7 +81,7 @@
                 const minValue = d3Min < 0 ? d3Min : 0;
 
                 x.domain(_data.map((d) => d.label));
-                y.domain([minValue * domainPadding, maxValue * domainPadding]);
+                y.domain([minValue, maxValue]);
 
                 chart
                     .append("g")
@@ -138,6 +140,16 @@
                     .attr("y1", 0)
                     .attr("x2", w)
                     .attr("y2", 0);
+
+                // selection
+                //     .append("g")
+                //     .attr("class", "grid")
+                //     .style("stroke-width", "1")
+                //     .call(
+                //         make_y_gridlines(y)
+                //             .tickSize(w)
+                //             .tickFormat(d3.format(".2s"))
+                //     );
             }
             // transform data for floating bars
             function waterfallData(data) {
@@ -160,20 +172,19 @@
                 return data;
             }
 
-            function drawChart(data, plottingConfiguration = {}) {
-                window.sampleData = data;
-                waterfall(".chart", sampleData);
+            function make_x_gridlines(x) {
+                return d3.axisBottom(x).ticks(8).tickSizeOuter(0);
+            }
+            function make_y_gridlines(y) {
+                return d3.axisLeft(y).ticks(10);
             }
 
-            window.onload = function () {
-                // render the chart
-                drawChart(sampleData);
-            };
+            function drawChart(data, plottingConfiguration = {}) {
+                window.data = data;
+                waterfall(".chart", data, plottingConfiguration);
+            }
 
-            window.addEventListener("resize", function () {
-                // render the chart
-                drawChart(sampleData);
-            });
+            // drawChart(data);
         </script>
     </body>
 </html>
