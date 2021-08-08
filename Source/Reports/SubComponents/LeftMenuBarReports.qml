@@ -386,7 +386,8 @@ Rectangle{
             if(report_desiner_page.isHorizontalGraph){
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 0){
                     chartHtml = Constants.horizontalLineChartUrl;
-                }else{
+                }
+                else{
                     console.log('Horizontal Chart Load');
                     // chartHtml = Constants.horizontal;
                 }
@@ -397,6 +398,15 @@ Rectangle{
                     // switchChart(Constants.multiLineChartTitle);
                 }
             }
+        }else if(chartTitle === Constants.horizontalLineChartTitle){
+            if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count !== 0){
+                console.log('Debug: Loading horizontal multi line chart');
+                chartHtml = Constants.horizontalMultiLineChartUrl;
+                // switchChart(Constants.multiLineChartTitle);
+            }
+            console.log("Miss in horizontalLineChartTitle chart title count??")
+        }else{
+            console.log('Why am I here? ', chartTitle);
         }
         
 
