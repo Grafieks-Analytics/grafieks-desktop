@@ -603,46 +603,60 @@ Page {
                         Menu{
                             id: menuOptionsdsd
                             title: qsTr("Convert Data To")
+
                             background: Rectangle{
                                 implicitWidth: 180
+
                                 border.color: Constants.darkThemeColor
                             }
                             MenuItem {
                                 id:menuItem1
+                                implicitHeight: 30
+                                leftPadding: 15
                                 text: qsTr("Categorical")
-                            }
-                            ToolSeparator{
-                                id: toolsep1
-                                orientation: Qt.Horizontal
-                                width: parent.width
-                                anchors.top: menuItem1.bottom
-
-                                contentItem: Rectangle {
-                                    implicitWidth: parent.vertical ? 1 : 24
-                                    implicitHeight: parent.vertical ? 24 : 1
-                                    color: Constants.darkThemeColor
-                                }
 
                             }
+                            MenuSeparator{}
+//                            ToolSeparator{
+//                                id: toolsep1
+//                                orientation: Qt.Horizontal
+//                                width: parent.width
+//                                anchors.top: menuItem1.bottom
+
+//                                contentItem: Rectangle {
+//                                    implicitWidth: parent.vertical ? 1 : 24
+//                                    implicitHeight: parent.vertical ? 24 : 1
+//                                    color: Constants.darkThemeColor
+//                                }
+
+//                            }
                             MenuItem {
                                  id:menuItem2
+                                 implicitHeight: 30
+                                 leftPadding: 15
                                 text: qsTr("Numerical")
                             }
-                            ToolSeparator{
-                                id: toolsep2
-                                orientation: Qt.Horizontal
-                                width: parent.width
-                                anchors.top: menuItem2.bottom
+                             MenuSeparator{
+                             padding: 0
+                             }
+//                            ToolSeparator{
+//                                id: toolsep2
+//                                orientation: Qt.Horizontal
+//                                width: parent.width
+//                                anchors.top: menuItem2.bottom
 
-                                contentItem: Rectangle {
-                                    implicitWidth: parent.vertical ? 1 : 24
-                                    implicitHeight: parent.vertical ? 24 : 1
-                                    color: Constants.darkThemeColor
-                                }
+//                                contentItem: Rectangle {
+//                                    implicitWidth: parent.vertical ? 1 : 24
+//                                    implicitHeight: parent.vertical ? 24 : 1
+//                                    color: Constants.darkThemeColor
+//                                }
 
-                            }
+//                            }
                             MenuItem {
                                 text: qsTr("Date")
+                                implicitHeight: 30
+                                leftPadding: 15
+
                             }
                         }
 
