@@ -412,6 +412,8 @@
                 // var [dataValues, all_keys, keys2] = dataValues;
 
                 d3Colors = d3colorPalette;
+                console.log({data});
+                [xAxisLabel, yAxisLabel] = data[2];
 
                 // legends code starts
                 d3.select("#legend").html("").style("padding", "");
@@ -472,7 +474,7 @@
                 var margin = { top: 30, right: 30, bottom: 70, left: 60 },
                     width = window.innerWidth - margin.left - margin.right - 70,
                     height =
-                        window.innerHeight - margin.top - margin.bottom - 20;
+                        window.innerHeight  - margin.bottom - 7;
                 var bottomHeight = 0;
 
                 // legends code starts
@@ -723,6 +725,12 @@
                 // Change done
 
                 // Add Y axis
+                  svg.append("g")
+                    .attr("class", "y-axis")
+                    .attr("dy", ".32em")
+                    .attr("transform", "translate(0,0)")
+                    .call(d3.axisLeft(y).tickSize(0));
+
                 // Change y to x
                 // remove nice
 
@@ -742,7 +750,7 @@
                     .domain([y_min, y_max])
                     .range([0, width])
                     .nice();
-                svg.append("g").call(d3.axisLeft(y).tickSize(0));
+                // svg.append("g").call(d3.axisLeft(y).tickSize(0));
 
                 xTicks = width / 70;
 
@@ -814,9 +822,9 @@
                             (margin.top + 10) +
                             ")"
                     );
-                setLabel("xAxisLabel", "y_label", d3.select("svg"), false);
+                setLabel(xAxisLabel, "y_label", d3.select("svg"), false);
                 setLabel(
-                    "yAxisLabel",
+                    yAxisLabel,
                     "x_label",
                     d3
                         .select("#xAxisLabelId")
@@ -934,8 +942,8 @@
                 d3.selectAll(".y-axis g text")
                     .attr("font-size", yTickfontSize)
                     .attr("font-family", yTickfontFamily)
-                    .attr("fill", "red")
-                    // .attr("fill", yTickfontColor)
+                    // .attr("fill", "red")
+                    .attr("fill", yTickfontColor)
                     .attr("x", -8);
 
                 d3.selectAll(".x-axis g text")
