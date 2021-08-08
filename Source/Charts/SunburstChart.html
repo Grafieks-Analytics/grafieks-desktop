@@ -606,7 +606,7 @@
 
                 const y = d3.scaleSqrt().range([maxRadius * 0.1, maxRadius]);
 
-                const color = d3.scaleOrdinal(d3.schemeSet3);
+                const color = d3.scaleOrdinal(d3Colors);
 
                 const partition = d3.partition();
 
@@ -666,7 +666,6 @@
                     .enter()
                     .append("g")
                     .attr("class", "slice")
-
                     .on("click", (d) => {
                         d3.event.stopPropagation();
                         focusOn(d);
