@@ -276,6 +276,8 @@
                 // Checking date values
                 dataValues = transformData(dataValues, dateFormat);
                 window.chartDataValues = dataValues;
+                console.log({ data });
+                // [xAxisLabel, yAxisLabel] = data[2];
 
                 // clear chart
                 window.clearChart && clearChart();
@@ -904,9 +906,12 @@
                         // console.log(d);
                         const xValue = dateformatValue(d[0]);
                         const yValue = d[1];
+                        var yScroll =
+                            document.querySelector("#my_dataviz").scrollTop;
+                        y_pos -= yScroll;
 
                         d3.select("#tooltip")
-                            .style("left", x_pos - 20 + "px")
+                            // .style("left", x_pos - 20 + "px")
                             .style("top", y_pos - 20 + "px")
                             .style("display", "block")
                             // .html(xValue + ", " + yValue.toFixed(2));
@@ -919,22 +924,59 @@
                                 return (
                                     "<div class='arrowTooltip'></div>" +
                                     "<span style='color:grey;''>" +
-                                    "toolTip.textColumn1" +
+                                    xAxisLabel +
                                     ":&nbsp;&nbsp;" +
                                     "</span>" +
                                     "<span style='float: right;'>" +
-                                    "xValue" +
+                                    xValue +
                                     "</span>" +
                                     "<br/> <br/>" +
                                     "<span style='color:grey;''>" +
-                                    "toolTip.textColumn2" +
+                                    yAxisLabel +
                                     ":" +
                                     "</span>" +
                                     "<span style='float: right;margin-left: 15px;'>" +
-                                    "yValue" +
+                                    Math.round(yValue) +
                                     "</span>"
                                 );
                             });
+                             var scrollVal =
+                            document.querySelector("#my_dataviz").scrollLeft;
+
+                        if (
+                            x_pos - window.scrollX >
+                            document.documentElement.clientWidth -
+                                document.querySelector("#tooltip").clientWidth-50
+                        ) {
+                            d3.select("#tooltip").style(
+                                "left",
+                                x_pos -
+                                    document.querySelector("#tooltip")
+                                        .clientWidth +
+                                    250 +
+                                    0 +
+                                    "px"
+                            );
+
+                            d3.select(".arrowTooltip")
+                                //  document.querySelector("#tooltip:before")
+                                // .style("height","50px";"width","50px";"background-color","red";")
+
+                                .attr(
+                                    "style",
+                                    "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
+                                );
+                        } else {
+                            d3.select("#tooltip").style(
+                                "left",
+                                x_pos + 110 + 0 + "px"
+                            );
+
+                            d3.select(".arrowTooltip").attr(
+                                "style",
+                                "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
+                            );
+                        }
 
                         var shapeClass = ".marker-shape";
                         d3.selectAll(shapeClass).style("opacity", 0.3);

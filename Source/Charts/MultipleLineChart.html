@@ -713,8 +713,9 @@
                 d3Colors = d3colorPalette;
 
                 stroke = d3Colors[0];
-                [xAxisLabel, colorData, yAxisLabel] = data[2];
-                console.log({ data });
+                [xAxisLabel,  yAxisLabel] = data[2];
+                colorData = "colorData"
+                // console.log({ data });
 
                 d3.selectAll("#my_dataviz").html("");
                 d3.selectAll("#yAxisDiv").html("");
@@ -737,6 +738,10 @@
 
                 if (legendPosition == "top" || legendPosition == "bottom") {
                     height -= 50;
+                }
+                if (legendPosition == "left" || legendPosition == "right") {
+                    // var legendWidth = legendElement.offsetWidth;
+                    width -= 20;
                 }
 
                 // append the svg object to the body of the page
@@ -850,9 +855,10 @@
                         .style("margin", "auto")
                         .style("position", "sticky");
 
+                        console.log({data})
                     d3.select("#legend")
                         .selectAll("div")
-                        .data([data[1]])
+                        .data(data[1])
                         .enter()
                         .append("div")
                         .html((d, i) => {
@@ -861,7 +867,7 @@
                                 d3Colors[i % d3Colors.length] +
                                 ';">  </div>' +
                                 "<span style='margin-left: 5px; max-width: 160px'>" +
-                                "d" +
+                                d +
                                 "</span>"
                             );
                         })
@@ -1057,7 +1063,7 @@
 
                 if (legendPosition == "left" || legendPosition == "right") {
                     var legendWidth = legendElement.offsetWidth;
-                    width -= legendWidth;
+                    width -= legendWidth-20;
                 }
 
                 // legends code ends
