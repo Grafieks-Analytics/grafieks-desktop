@@ -648,6 +648,7 @@
             }
 
             function drawChart(data, plottingConfiguration = {}) {
+                window.data = data;
                 let {
                     dateFormat = defaultD3Config.dateFormat,
                     dateFormat1 = defaultD3Config.dateFormat,
@@ -712,8 +713,8 @@
                 d3Colors = d3colorPalette;
 
                 stroke = d3Colors[0];
-                [xAxisLabel,  yAxisLabel] = data[2];
-                colorData = "colorData"
+                [xAxisLabel, yAxisLabel] = data[2];
+                colorData = "colorData";
                 // console.log({ data });
 
                 d3.selectAll("#my_dataviz").html("");
@@ -817,7 +818,7 @@
                         .attr("class", "grid")
                         .style("stroke-width", "1")
                         .call(
-                            make_y_gridlines(yScale)
+                            make_y_gridlines(y)
                                 // .tickSize(-width)
                                 .tickFormat(d3.format(".2s"))
                         );
@@ -854,7 +855,7 @@
                         .style("margin", "auto")
                         .style("position", "sticky");
 
-                        console.log({data})
+                    console.log({ data });
                     d3.select("#legend")
                         .selectAll("div")
                         .data(data[1])
@@ -884,7 +885,7 @@
                 d3.select("#mainChartWindow").attr("style", null);
                 d3.select("#xAxisLabelId").style("bottom", 20);
                 var legendElement = document.querySelector("#legend");
-                
+
                 var legendHeight = legendElement.offsetHeight;
 
                 console.log(document.querySelector("#legend").offsetHeight);
@@ -1062,7 +1063,7 @@
 
                 if (legendPosition == "left" || legendPosition == "right") {
                     var legendWidth = legendElement.offsetWidth;
-                    width -= legendWidth-20;
+                    width -= legendWidth - 20;
                 }
 
                 // legends code ends
@@ -1630,7 +1631,7 @@
                     .html(tooltipDataText);
             }
 
-            drawChart(data);
+            // drawChart(data);
         </script>
     </body>
 </html>

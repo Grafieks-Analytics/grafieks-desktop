@@ -382,11 +382,30 @@ Rectangle{
                 }
             }
         }
+        else if(chartTitle === Constants.areaChartTitle){
+            if(report_desiner_page.isHorizontalGraph){
+                if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 0){
+                    chartHtml = Constants.horizontalAreaChartUrl;
+//                    switchChart(Constants.horizontalBarChartTitle);
+                }
+                else if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 1){
+                    chartHtml = Constants.multipleHorizontalAreaChartUrl;
+                }else{
+                    console.log('missed horizontal area case');
+                }
+            }else{
+                if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count === 1){
+                    chartHtml = Constants.multipleAreaChartUrl;
+                }else{
+                    console.log('missed area case',chartHtml);
+                }
+            }
+        }
         else if(chartTitle === Constants.lineChartTitle){
             if(report_desiner_page.isHorizontalGraph){
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 0){
                     chartHtml = Constants.horizontalLineChartUrl;
-                }else if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count != 0){
+                }else if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 1){
                     chartHtml = Constants.horizontalMultiLineChartUrl;
                     console.log('Horizontal Chart Load');
                 }else{
