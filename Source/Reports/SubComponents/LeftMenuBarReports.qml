@@ -367,7 +367,7 @@ Rectangle{
             if(report_desiner_page.isHorizontalGraph){
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 0){
                     chartHtml = Constants.horizontalBarChartUrl;
-                    // switchChart(Constants.horizontalBarChartTitle);
+//                    switchChart(Constants.horizontalBarChartTitle);
                 }
                 else if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 1){
                     chartHtml = Constants.horizontalStackedBarChartUrl;
@@ -386,25 +386,21 @@ Rectangle{
             if(report_desiner_page.isHorizontalGraph){
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 0){
                     chartHtml = Constants.horizontalLineChartUrl;
-                }
-                else{
+                }else if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count != 0){
+                    chartHtml = Constants.horizontalMultiLineChartUrl;
                     console.log('Horizontal Chart Load');
-                    // chartHtml = Constants.horizontal;
+                }else{
+                    console.log('Missed Horizontal Condition')
                 }
             }else{
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count !== 0){
                     console.log('Debug: Loading multiline chart');
                     chartHtml = Constants.multiLineChartUrl;
+                    // switchChart(Constants.multiLineChartTitle);
+                }else{
+                    console.log('Moving to line ????')
                 }
             }
-        }else if(chartTitle === Constants.horizontalLineChartTitle){
-            if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count !== 0){
-                console.log('Debug: Loading horizontal multi line chart');
-                chartHtml = Constants.horizontalMultiLineChartUrl;
-            }
-            console.log("Miss in horizontalLineChartTitle chart title count??")
-        }else{
-            console.log('Why am I here? ', chartTitle);
         }
         
 
