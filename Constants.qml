@@ -276,8 +276,6 @@ QtObject {
 
 
     property string barChartTitle: "Bar Chart"
-    property string areaChartTitle:"Area Chart"
-    property string lineChartTitle: "Line Chart"
     property string headMapChartTitle:"Heat Map"
     property string pieChartTitle: "Pie Chart"
     property string donutChartTitle:"Donut Chart"
@@ -299,8 +297,6 @@ QtObject {
     property string pivotTitle: "Pivot"
     property string lineBarTitle: "Line Bar"
     property string sankeyChartTitle: "Sankey"
-    property string multiLineChartTitle: "Multi Line"
-    property string horizontalMultiLineChartTitle: "Horizontal Multi Line"
     property string stackedAreaChartTitle: "Stacked Area Chart"
 
     // Chart Urls
@@ -318,14 +314,39 @@ QtObject {
     property string horizontalBarGroupedChartUrl: "HorizontalBarGroupedChart.html"
     property string horizontalBarGroupedChartTitle: "Horizontal Bar Grouped Chart"
 
-    property string horizontalLineChartTitle: "Horizontal Line Chart"
-    property string horizontalLineChartUrl: "HorizontalLineChart.html"
     property string barGroupedChartUrl: "BarGroupedChart.html";
     property string barChartUrl: "BarChartArrayInput.html";
 
-    property string multiLineChartUrl: "MultipleLineChart.html";
-    property string horizontalMultiLineChartUrl: "HorizontalMultipleLineChart.html";
+
+    property string lineChartTitle: "Line Chart"
     property string lineChartUrl: "LineChart.html";
+    
+    property string horizontalLineChartTitle: "Horizontal Line Chart"
+    property string horizontalLineChartUrl: "HorizontalLineChart.html"
+
+    
+    property string multiLineChartTitle: "Multi Line"
+    property string multiLineChartUrl: "MultipleLineChart.html";
+    
+    property string horizontalMultiLineChartTitle: "Horizontal Multi Line"
+    property string horizontalMultiLineChartUrl: "HorizontalMultipleLineChart.html";
+
+    // Area Charts
+    property string areaChartTitle:"Area Chart"
+    property string areaChartUrl: "AreaChart.html";
+    
+    // Horizontal Area Chart
+    property string horizontalAreaChartTitle: "Horizontal Area Chart"
+    property string horizontalAreaChartUrl: "HorizontalAreaChart.html"
+
+    // Multiple Area Chart
+    property string multipleAreaChartTitle: "Multiple Area Chart"
+    property string multipleAreaChartUrl: "MultipleAreaChart.html"
+    
+    // Multiple Horizontal Area Chart
+    property string multipleHorizontalAreaChartTitle: "Multiple Horizontal Area Chart"
+    property string multipleHorizontalAreaChartUrl: "HorizontalMultipleAreaChart.html"
+
 
 
     // Charts ends

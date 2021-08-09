@@ -722,6 +722,18 @@ Page {
         case Constants.horizontalMultiLineChartTitle:
             chartUrl = Constants.horizontalMultiLineChartUrl;
             break;
+        case Constants.areaChartTitle:
+            chartUrl = Constants.areaChartUrl;
+            break;
+        case Constants.multipleAreaChartTitle:
+            chartUrl = Constants.multipleAreaChartUrl;
+            break;
+        case Constants.horizontalAreaChartTitle:
+            chartUrl = Constants.horizontalAreaChartUrl;
+            break;
+        case Constants.multipleHorizontalAreaChartTitle:
+            chartUrl = Constants.multipleHorizontalAreaChartUrl;
+            break;
         }
 
         webEngineView.url = Constants.baseChartUrl+chartUrl;
@@ -906,11 +918,17 @@ Page {
                 if(chartTitle === Constants.barChartTitle && colorByData.length){
                     console.log('Change to stacked bar chart')
                     switchChart(Constants.stackedBarChartTitle);
-                }else if(chartTitle === Constants.groupBarChartTitle){
-                    console.log('Check which graph to be plotted here')
+                }else if(chartTitle === Constants.groupBarChartTitle && !colorByData.length){
+                    console.log('Redraw Function - Check which graph to be plotted here')
                     chartUrl = Constants.barChartUrl;
                     webEngineView.url = Constants.baseChartUrl+chartUrl;
                     chartTitle = Constants.barChartTitle;
+                }else if(chartTitle === Constants.areaChartTitle && colorByData.length){
+                    switchChart(Constants.multipleAreaChartTitle);
+                }else if(chartTitle === Constants.lineChartTitle && colorByData.length){
+                    switchChart(Constants.multiLineChartTitle);
+                }else if(chartTitle === Constants.multipleAreaChartTitle && !colorByData.length){
+                    switchChart(Constants.areaChartTitle);
                 }
             }
 
@@ -1236,9 +1254,15 @@ Page {
                 ChartsModel.getAreaChartValues(xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.stackedAreaChartTitle:
+            case Constants.multipleAreaChartTitle:
                 console.log('Stacked Area Chart')
-                console.log('Colour By columnName',columnName)
+                console.log('Colour By columnName',colorByColumnName)
                 ChartsModel.getStackedAreaChartValues(xAxisColumns[0],yAxisColumns[0],colorByColumnName);
+                break;
+            case Constants.multipleHorizontalAreaChartTitle:
+                console.log('Stacked Area Chart')
+                console.log('Colour By columnName',colorByColumnName)
+                ChartsModel.getStackedAreaChartValues(yAxisColumns[0],xAxisColumns[0],colorByColumnName);
                 break;
             case Constants.lineChartTitle:
                 console.log("LINE CLICKED")

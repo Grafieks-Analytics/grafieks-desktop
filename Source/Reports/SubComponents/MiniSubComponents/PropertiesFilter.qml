@@ -124,7 +124,7 @@ Column{
                 switchChart(Constants.horizontalStackedBarChartTitle)
                 break;
             case Constants.areaChartTitle:
-                switchChart(Constants.stackedAreaChartTitle)
+                switchChart(Constants.multipleAreaChartTitle)
                 break;
             case Constants.lineChartTitle:
                 switchChart(Constants.multiLineChartTitle)
