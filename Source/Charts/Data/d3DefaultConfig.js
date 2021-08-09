@@ -51,9 +51,9 @@ const defaultD3Config = {
     innerRadius: 150,
     defaultTimeParseFormat: "%d-%m-%Y",
     defaultSpace: 30,
-    dateFormat: "%d",
-    // chartType: constants.chartType.FIT_WIDTH,
-    chartType: constants.chartType.STANDARD,
+    dateFormat: "%Y",
+    chartType: constants.chartType.FIT_WIDTH,
+    // chartType: constants.chartType.STANDARD,
     horizontalChartType: constants.chartType.STANDARD,
     // horizontalChartType: constants.chartType.FIT_HEIGHT,
     standardThresholdWidth: 100,
@@ -63,7 +63,7 @@ const defaultD3Config = {
     fontColor: "black",
     defaultLegendConfig: {
         legendStatus: false,
-        legendPosition: "bottom",
+        legendPosition: "right",
     },
     defaultlabelConfig: {
         labelStatus: true,

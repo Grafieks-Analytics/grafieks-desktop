@@ -192,11 +192,14 @@
                     yLabelfontSize = defaultD3Config.fontSize,
                     xTickfontSize = defaultD3Config.fontSize,
                     yTickfontSize = defaultD3Config.fontSize,
+                    dataLabelfontSize = defaultD3Config.fontSize,
                     // font family
                     xLabelfontFamily = defaultD3Config.fontFamily,
                     yLabelfontFamily = defaultD3Config.fontFamily,
                     xTickfontFamily = defaultD3Config.fontFamily,
                     yTickfontFamily = defaultD3Config.fontFamily,
+                    dataLabelfontFamily = defaultD3Config.fontFamily,
+
                     // font color
                     xLabelfontColor = defaultD3Config.fontColor,
                     yLabelfontColor = defaultD3Config.fontColor,
@@ -212,11 +215,13 @@
                 window.yLabelfontSize = yLabelfontSize;
                 window.xTickfontSize = xTickfontSize;
                 window.yTickfontSize = yTickfontSize;
+                window.dataLabelfontSize = dataLabelfontSize;
 
                 window.xLabelfontFamily = xLabelfontFamily;
                 window.yLabelfontFamily = yLabelfontFamily;
                 window.xTickfontFamily = xTickfontFamily;
                 window.yTickfontFamily = yTickfontFamily;
+                window.dataLabelfontFamily = dataLabelfontFamily;
 
                 window.xLabelfontColor = xLabelfontColor;
                 window.yLabelfontColor = yLabelfontColor;
@@ -225,6 +230,8 @@
 
                 d3.selectAll("#my_dataviz").html("");
                 d3.selectAll("#yAxisDiv").html("");
+
+                var legendNames = [];
 
                 let { legendStatus, legendPosition } = legendConfig;
                 let { labelStatus } = labelConfig;
@@ -259,7 +266,6 @@
                 var [data, all_keys, labels, legendNames] = data;
                 console.log({ legendNames });
 
-                // TODO:
                 // console.log({ data})
 
                 let { top, right, bottom, left } = constants.chartMargins;
@@ -327,6 +333,7 @@
                         .style("margin", "auto")
                         .style("position", "sticky");
 
+                    console.log({ legendNames });
                     d3.select("#legend")
                         .selectAll("div")
                         .data(legendNameArray)
@@ -357,7 +364,7 @@
 
                 d3.select("#legend").attr("style", null);
                 d3.select("#mainChartWindow").attr("style", null);
-                d3.select("#xAxisLabelId").style("bottom", 20);
+                d3.select("#xAxisLabelId").style("bottom", 20 + "px");
 
                 // legends code starts
                 if (legendStatus) {
@@ -375,7 +382,7 @@
 
                     // legendElement.style.padding = "10px";
                     legendElement.style.border = "1px solid black";
-
+                    topLegendMargin = 0;
                     switch (legendPosition) {
                         case "left":
                             topLegendMargin = 0;
@@ -520,6 +527,16 @@
                 if (legendPosition == "left" || legendPosition == "right") {
                     var legendWidth = legendElement.offsetWidth;
                     width -= legendWidth;
+                }
+                if (legendPosition == "top") {
+                    var legendHeightTop = 55;
+                } else {
+                    legendHeightTop = 0;
+                }
+                if (legendPosition == "left") {
+                    var legendWidthLeft = legendWidth;
+                } else {
+                    legendWidthLeft = 0;
                 }
 
                 //add svg with margin !important
@@ -685,7 +702,10 @@
 
                                 d3.select("#tooltip")
                                     // .style("left", xpos + "px")
-                                    .style("top", ypos - 59 + "px")
+                                    .style(
+                                        "top",
+                                        ypos - 59 + legendHeightTop + "px"
+                                    )
                                     .style("display", "block")
                                     // .html(d.name + ":" + d.value);
                                     .html(function () {
@@ -739,6 +759,7 @@
                                             document.querySelector("#tooltip")
                                                 .clientWidth +
                                             80 +
+                                            legendWidthLeft +
                                             "px"
                                     );
 
@@ -753,7 +774,11 @@
                                 } else {
                                     d3.select("#tooltip").style(
                                         "left",
-                                        xpos - scrollVal + 100 + "px"
+                                        xpos -
+                                            scrollVal +
+                                            100 +
+                                            legendWidthLeft +
+                                            "px"
                                     );
 
                                     d3.select(".arrowTooltip").attr(
@@ -790,29 +815,36 @@
                                 // );
                             });
 
-                        d3.select(this)
-                            .attr(
-                                "transform",
-                                (d) =>
-                                    `translate(${
-                                        xScale0(d && d.mainCategory) + x_offset
-                                    },0)`
-                            )
-                            .selectAll("text.label")
-                            .data(bar_data)
-                            .enter()
-                            .append("text")
-                            .attr("class", "label")
-                            .attr("x", (d) => xScale1(d.name))
-                            .attr("y", (d) => {
-                                if (d.value < 0) {
-                                    return yScale(0);
-                                }
-                                return yScale(d.value);
-                            })
-                            .text(function (d) {
-                                return d.value;
-                            });
+                        if (labelStatus) {
+                            d3.select(this)
+                                .attr(
+                                    "transform",
+                                    (d) =>
+                                        `translate(${
+                                            xScale0(d && d.mainCategory) +
+                                            x_offset
+                                        },0)`
+                                )
+                                .selectAll("text.label")
+                                .data(bar_data)
+                                .enter()
+                                .append("text")
+                                .attr("class", "label")
+
+                                .attr("y", (d) => {
+                                    if (d.value < 0) {
+                                        return yScale(0);
+                                    }
+                                    return yScale(d.value) - 8;
+                                })
+                                .text(function (d) {
+                                    return d.value;
+                                })
+                                .attr("font-family", dataLabelfontFamily)
+                                .attr("font-size", dataLabelfontSize)
+                                // .attr("x", (d) => xScale1(d.name)-textLength.baseVal.value);
+                                .attr("x", (d) => xScale1(d.name) - 5);
+                        }
                     });
 
                 var xAxis = d3.axisBottom(xScale0).tickSize(0);
@@ -843,6 +875,35 @@
                     });
                     return bars;
                 }
+                //  if (1) {
+                //     entry
+                //         .selectAll("text.label")
+                //         .data(function (d) {
+                //             return d.components;
+                //         })
+                //         .enter()
+                //         .append("text")
+                //         .attr("class", "label")
+                //         .attr("width", x.bandwidth())
+                //         .attr("y", function (d) {
+                //             // return (y(d.y0))
+                //             return y(d.y0) + Math.abs(y(d.y0) - y(d.y1)) / 2 + 6;
+                //         })
+                //         .attr("x", x.bandwidth() / 2 - 15)
+                //         .attr("display", function (d) {
+                //             if (Math.abs(y(d.y0) - y(d.y1)) < 20) {
+                //                 return "none";
+                //             } else {
+                //                 return "";
+                //             }
+                //         })
+                //         .attr("font-family", dataLabelfontFamily)
+                //         .attr("font-size", dataLabelfontSize)
+
+                //         .text(function (d) {
+                //             return d.y1 >= 0 ? d.y0 - d.y1 : d.y1 - d.y0;
+                //         });
+                // }
 
                 function groupOffset(d) {
                     const groupElementsCount = all_keys.reduce(

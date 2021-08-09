@@ -524,6 +524,7 @@ Page {
             height: 30
 
 
+
             property bool caught: false
 
             Image {
@@ -561,6 +562,117 @@ Page {
                 }
             }
 
+            Image {
+                id: toggleMenuIcon
+                height: 20
+                width: 20
+                source : "/Images/icons/menu-button.png"
+                anchors.right: parent.right
+                anchors.leftMargin:  15
+                anchors.verticalCenter: tableImg.verticalCenter
+                visible: tableShowToggle
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: menuOptions.open()
+                }
+            }
+            Row{
+
+                anchors.right: tableImg.right
+                anchors.top: toggleMenuIcon.bottom
+                anchors.rightMargin: -70
+                width: parent.width-30
+                height: 80
+
+                Item {
+                    id: name
+
+                    anchors.right:parent.right
+
+                    x: -menuOptions.width
+
+                    Menu{
+                        id: menuOptions
+                        background: Rectangle{
+                            implicitWidth: 200
+                            border.color: Constants.darkThemeColor
+                        }
+
+
+                        Menu{
+                            id: menuOptionsdsd
+                            title: qsTr("Convert Data To")
+
+                            background: Rectangle{
+                                implicitWidth: 180
+
+                                border.color: Constants.darkThemeColor
+                            }
+                            MenuItem {
+                                id:menuItem1
+                                implicitHeight: 30
+                                leftPadding: 15
+                                text: qsTr("Categorical")
+
+                            }
+                            MenuSeparator{}
+//                            ToolSeparator{
+//                                id: toolsep1
+//                                orientation: Qt.Horizontal
+//                                width: parent.width
+//                                anchors.top: menuItem1.bottom
+
+//                                contentItem: Rectangle {
+//                                    implicitWidth: parent.vertical ? 1 : 24
+//                                    implicitHeight: parent.vertical ? 24 : 1
+//                                    color: Constants.darkThemeColor
+//                                }
+
+//                            }
+                            MenuItem {
+                                 id:menuItem2
+                                 implicitHeight: 30
+                                 leftPadding: 15
+                                text: qsTr("Numerical")
+                            }
+                             MenuSeparator{
+                             padding: 0
+                             }
+//                            ToolSeparator{
+//                                id: toolsep2
+//                                orientation: Qt.Horizontal
+//                                width: parent.width
+//                                anchors.top: menuItem2.bottom
+
+//                                contentItem: Rectangle {
+//                                    implicitWidth: parent.vertical ? 1 : 24
+//                                    implicitHeight: parent.vertical ? 24 : 1
+//                                    color: Constants.darkThemeColor
+//                                }
+
+//                            }
+                            MenuItem {
+                                text: qsTr("Date")
+                                implicitHeight: 30
+                                leftPadding: 15
+
+                            }
+                        }
+
+
+
+
+                        //                MenuItem {
+                        //                    text: qsTr("Delete")
+                        //                    onTriggered: destroyElement()
+                        //                }
+                    }
+                }
+
+
+            }
+
             TableColumns{
                 id: tablecolumnListView
                 anchors.top: tableImg.bottom
@@ -592,19 +704,20 @@ Page {
 
 
 
-                onClicked: {
-                    NewTableColumnsModel.getColumnsForTable(modelData, "TableColumns")
+                //                onClicked: {
+                //                    NewTableColumnsModel.getColumnsForTable(modelData, "TableColumns")
 
-                    if(tablecolumnListView.visible === true){
-                        toggleTableIcon.source ="/Images/icons/Right_20.png"
-                        tablecolumnListView.visible = false
-                        dragRect.height -= tablecolumnListView.height
-                    } else{
-                        toggleTableIcon.source ="/Images/icons/Down_20.png"
-                        tablecolumnListView.visible = true
-                        dragRect.height += tablecolumnListView.height
-                    }
-                }
+                //                    if(tablecolumnListView.visible === true){
+                //                        toggleTableIcon.source ="/Images/icons/Right_20.png"
+                //                        tablecolumnListView.visible = false
+                //                        dragRect.height -= tablecolumnListView.height
+                //                    } else{
+                //                        toggleTableIcon.source ="/Images/icons/Down_20.png"
+                //                        tablecolumnListView.visible = true
+                //                        dragRect.height += tablecolumnListView.height
+                //                    }
+                //                }
+                onClicked: menuOptions.open()
             }
 
             states: [
@@ -1209,7 +1322,7 @@ Page {
 
                 TextField{
                     id: ds_name
-//                    text: "Data Source Name"
+                    //                    text: "Data Source Name"
                     placeholderText: "Data Source Name"
                     anchors.verticalCenter: rectangle_querymodeller_right_col1.verticalCenter
                     anchors.left: rectangle_querymodeller_right_col1.left
@@ -1228,34 +1341,34 @@ Page {
                         color: "transparent"
                         border.color: "transparent"
                     }
-                     Keys.onReturnPressed: ds_name.focus = false
+                    Keys.onReturnPressed: ds_name.focus = false
 
                 }
 
 
-//                Image {
-//                    id: dataSourceNameEditIcon
-//                    source: "/Images/icons/edit-32.png"
-//                    height: 20
-//                    width: 20
-//                    anchors.right: parent.right
-//                    anchors.rightMargin: 17
-//                    anchors.verticalCenter: parent.verticalCenter
+                //                Image {
+                //                    id: dataSourceNameEditIcon
+                //                    source: "/Images/icons/edit-32.png"
+                //                    height: 20
+                //                    width: 20
+                //                    anchors.right: parent.right
+                //                    anchors.rightMargin: 17
+                //                    anchors.verticalCenter: parent.verticalCenter
 
-//                    ToolTip.delay:Constants.tooltipShowTime
-//                    ToolTip.timeout: Constants.tooltipHideTime
-//                    ToolTip.text: qsTr("Edit datasource name")
-//                    ToolTip.visible:  mouseAreaEditDS.containsMouse? true : false
+                //                    ToolTip.delay:Constants.tooltipShowTime
+                //                    ToolTip.timeout: Constants.tooltipHideTime
+                //                    ToolTip.text: qsTr("Edit datasource name")
+                //                    ToolTip.visible:  mouseAreaEditDS.containsMouse? true : false
 
-//                    MouseArea{
-//                        id: mouseAreaEditDS
-//                        anchors.fill: parent
-//                        onClicked: focusDataSourceNameField()
-//                        hoverEnabled: true
+                //                    MouseArea{
+                //                        id: mouseAreaEditDS
+                //                        anchors.fill: parent
+                //                        onClicked: focusDataSourceNameField()
+                //                        hoverEnabled: true
 
-//                    }
+                //                    }
 
-//                }
+                //                }
 
 
             }

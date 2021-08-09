@@ -421,6 +421,7 @@
                 yLabelfontSize = defaultD3Config.fontSize,
                 xTickfontSize = defaultD3Config.fontSize,
                 yTickfontSize = defaultD3Config.fontSize,
+                dataLabelfontSize = defaultD3Config.fontSize,
                 // font family
                 xLabelfontFamily = defaultD3Config.fontFamily,
                 yLabelfontFamily = defaultD3Config.fontFamily,
@@ -439,6 +440,7 @@
             window.yLabelfontSize = yLabelfontSize;
             window.xTickfontSize = xTickfontSize;
             window.yTickfontSize = yTickfontSize;
+            window.dataLabelfontSize = dataLabelfontSize;
 
             window.xLabelfontFamily = xLabelfontFamily;
             window.yLabelfontFamily = yLabelfontFamily;
@@ -1050,6 +1052,7 @@
                         }
                     })
                     .attr("font-family", dataLabelfontFamily)
+                    .attr("font-size", dataLabelfontSize)
 
                     .text(function (d) {
                         return d.y1 >= 0 ? d.y0 - d.y1 : d.y1 - d.y0;

@@ -2174,7 +2174,7 @@ Page {
     WebEngineView {
         id: webEngineView
         height:parent.height - axis.height -50
-        width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width
+        width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width-5
         // [Tag: Refector]
         // Move to constants
         url: "../Charts/BarChartArrayInput.html"

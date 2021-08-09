@@ -332,12 +332,8 @@
             function drawChart(data, plottingConfiguration = {}) {
                 var [dataValues, [myGroups, myVars]] = data;
 
-                let {
-                    d3colorPalette,
-                    paddingInner,
-                    markerShape,
-                    curveType,
-                } = plottingConfiguration;
+                let { d3colorPalette, paddingInner, markerShape, curveType } =
+                    plottingConfiguration;
                 if (!d3colorPalette) {
                     d3colorPalette = defaultD3Config.d3ColorPalette;
                 }
