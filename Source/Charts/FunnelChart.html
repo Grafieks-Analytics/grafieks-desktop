@@ -53,12 +53,8 @@
 
             function drawChart(root, plottingConfiguration = {}) {
                 window.data = root[0];
-                let {
-                    d3colorPalette,
-                    paddingInner,
-                    markerShape,
-                    curveType,
-                } = plottingConfiguration;
+                let { d3colorPalette, paddingInner, markerShape, curveType } =
+                    plottingConfiguration;
                 if (!d3colorPalette) {
                     d3colorPalette = defaultD3Config.d3ColorPalette;
                 }

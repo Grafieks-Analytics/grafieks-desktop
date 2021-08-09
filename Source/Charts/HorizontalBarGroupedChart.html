@@ -215,7 +215,15 @@
                 }
 
                 globalKeys = globalKeys.filter(getUniqueArrayValues);
-                return [transformedDataValue, globalKeys, data[2]];
+                var mainCategoryData = transformedDataValue.map(
+                    (d) => d.mainCategory
+                );
+                return [
+                    transformedDataValue,
+                    globalKeys,
+                    data[2],
+                    [dataValue[2][0], mainCategoryData, globalKeys],
+                ];
             }
 
             function drawChart(data, plottingConfiguration = {}) {
@@ -238,11 +246,13 @@
                     yLabelfontSize = defaultD3Config.fontSize,
                     xTickfontSize = defaultD3Config.fontSize,
                     yTickfontSize = defaultD3Config.fontSize,
+                    dataLabelfontSize = defaultD3Config.fontSize,
                     // font family
                     xLabelfontFamily = defaultD3Config.fontFamily,
                     yLabelfontFamily = defaultD3Config.fontFamily,
                     xTickfontFamily = defaultD3Config.fontFamily,
                     yTickfontFamily = defaultD3Config.fontFamily,
+                    dataLabelfontFamily = defaultD3Config.fontFamily,
                     // font color
                     xLabelfontColor = defaultD3Config.fontColor,
                     yLabelfontColor = defaultD3Config.fontColor,
@@ -254,11 +264,13 @@
                 window.yLabelfontSize = yLabelfontSize;
                 window.xTickfontSize = xTickfontSize;
                 window.yTickfontSize = yTickfontSize;
+                window.dataLabelfontSize = dataLabelfontSize;
 
                 window.xLabelfontFamily = xLabelfontFamily;
                 window.yLabelfontFamily = yLabelfontFamily;
                 window.xTickfontFamily = xTickfontFamily;
                 window.yTickfontFamily = yTickfontFamily;
+                window.dataLabelfontFamily = dataLabelfontFamily;
 
                 window.xLabelfontColor = xLabelfontColor;
                 window.yLabelfontColor = yLabelfontColor;
@@ -268,6 +280,7 @@
                 d3.selectAll("#my_dataviz").html("");
                 d3.selectAll("#yAxisDiv").html("");
 
+                var legendNames = [];
                 let { legendStatus, legendPosition } = legendConfig;
                 let { labelStatus } = labelConfig;
                 let { gridStatus } = gridConfig;
@@ -300,7 +313,8 @@
                 data = transformData(data, dateFormat);
                 console.log(data);
 
-                var [data, all_keys, labels] = data;
+                var [data, all_keys, labels, legendNames] = data;
+                console.log({ legendNames });
 
                 var margin = { top: 40, right: 20, bottom: 0, left: 70 };
                 var width = window.innerWidth - margin.left - margin.right - 70;
@@ -355,6 +369,16 @@
                     d3.max(all_keys, (k) => d[k])
                 );
 
+                var legendNameArray = [legendNames[0]];
+                var legenedNameLabel = legendNames[0];
+
+                if (groupBarChartColorBy == "category") {
+                    legendNameArray = legendNames[1];
+                    legenedNameLabel = labels[0];
+                } else if (groupBarChartColorBy) {
+                    legendNameArray = legendNames[2];
+                    legenedNameLabel = labels[1];
+                }
                 // legends code starts
                 d3.select("#legend").html("").style("padding", "");
                 if (legendStatus) {
@@ -362,20 +386,20 @@
 
                     d3.select("#legend")
                         .append("p")
-                        .html("xAxisLabel" + "&nbsp;")
+                        .html(legenedNameLabel + "&nbsp;")
                         .style("font-weight", "bold")
                         .style("margin", "auto")
                         .style("position", "sticky");
 
                     d3.select("#legend")
                         .selectAll("div")
-                        .data("test")
+                        .data(legendNameArray)
                         .enter()
                         .append("div")
                         .html((d, i) => {
                             return (
                                 '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
-                                "d3Colors[i % data[1][1].length]" +
+                                d3Colors[i % d3Colors.length] +
                                 ';">  </div>' +
                                 "<span style='margin-left: 5px; max-width: 160px'>" +
                                 d +
@@ -424,7 +448,7 @@
 
                     // legendElement.style.padding = "10px";
                     legendElement.style.border = "1px solid black";
-
+                    d3.selectAll("#my_dataviz").style("margin-top", 0 + "px");
                     switch (legendPosition) {
                         case "left":
                             // clearStyle();
@@ -610,6 +634,16 @@
                     var legendWidth = legendElement.offsetWidth;
                     width -= legendWidth + 30;
                 }
+                if (legendPosition == "top") {
+                    var legendHeightTop = 60;
+                } else {
+                    legendHeightTop = 0;
+                }
+                if (legendPosition == "left") {
+                    var legendWidthLeft = legendWidth;
+                } else {
+                    legendWidthLeft = 0;
+                }
                 // .;
 
                 // legends code ends
@@ -731,6 +765,7 @@
                                 );
                                 this.setAttribute("data-value-x2", d.name);
                                 this.setAttribute("data-value-y", d.value);
+
                                 if (groupBarChartColorBy == "category") {
                                     return zScale(d.data.mainCategory);
                                 }
@@ -832,7 +867,7 @@
                                 } else {
                                     d3.select("#tooltip").style(
                                         "left",
-                                        xpos + 55 + "px"
+                                        xpos + 55 + legendWidthLeft + "px"
                                     );
 
                                     d3.select(".arrowTooltip").attr(
@@ -871,6 +906,48 @@
                                 //     yScale(d.value)
                                 // );
                             });
+
+                        if (labelStatus) {
+                            d3.select(this)
+                                .attr(
+                                    "transform",
+                                    (d) =>
+                                        `translate(0,${
+                                            yScale0(d && d.mainCategory) +
+                                            x_offset
+                                        })`
+                                )
+                                .selectAll("text.label")
+                                .data(bar_data)
+                                .enter()
+                                .append("text")
+                                .attr("class", "label")
+                                // yScale1.bandwidth()
+                                .attr("y", (d) => {
+                                    return yScale1(d.name) - 20; // y = yScale1
+                                })
+                                .text(function (d) {
+                                    return d.value;
+                                })
+                                .attr("font-family", dataLabelfontFamily)
+                                .attr("font-size", dataLabelfontSize)
+                                // .attr("x", (d) => xScale1(d.name)-textLength.baseVal.value)
+                                .attr("x", (d) => {
+                                    // x = xscale
+                                    var heightValue = Math.abs(
+                                        xScale(0) - xScale(Math.abs(d.value)) // xScale and this will be width
+                                    );
+                                    if (!heightValue) {
+                                        heightValue = 1;
+                                    }
+
+                                    if (d.value < 0) {
+                                        return xScale(d.value);
+                                    }
+
+                                    return xScale(0) + heightValue;
+                                });
+                        }
                     });
 
                 // // Add the X Axis
@@ -1017,9 +1094,9 @@
             var data = [
                 [
                     {
-                        Bookcases: 8016,
+                        Bookcases: -8016,
                         Chairs: 6906,
-                        Furnishings: 2398,
+                        Furnishings: -2398,
                         Tables: 10230,
                         mainCategory: "Furniture",
                     },
