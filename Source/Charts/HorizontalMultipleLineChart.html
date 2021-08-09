@@ -959,7 +959,8 @@
                         if (
                             x_pos - window.scrollX >
                             document.documentElement.clientWidth -
-                                document.querySelector("#tooltip").clientWidth-50
+                                document.querySelector("#tooltip").clientWidth -
+                                50
                         ) {
                             d3.select("#tooltip").style(
                                 "left",
@@ -1004,135 +1005,10 @@
                     .attr("fill", xTickfontColor)
                     .attr("y", 8);
 
-                /*
-                    
-                var mouseG = svg
-                    .append("g")
-                    .attr("class", "mouse-over-effects");
-
-                mouseG
-                    .append("path") // this is the black vertical line to follow mouse
-                    .attr("class", "mouse-line")
-                    .style("stroke", "#999")
-                    .style("stroke-width", "1px")
-                    .style("opacity", "1");
-                // .style("transform", "rotate(90deg)");
-
-                var lines = document.getElementsByClassName("line");
-
-                var mousePerLine = mouseG
-                    .selectAll(".mouse-per-line")
-                    .data(sumstat)
-                    .enter()
-                    .append("g")
-                    .attr("class", "mouse-per-line");
-
-                mousePerLine
-                    .append("circle")
-                    .attr("r", 3)
-                    .style("stroke", function (d) {
-                        return color(d.key);
-                    })
-                    .style("fill", function (d) {
-                        return color(d.key);
-                    })
-                    .style("stroke-width", "1px")
-                    .style("opacity", "0");
-
-                mousePerLine
-                    .append("text")
-                    .attr("transform", "translate(10,3)");
-
-                mouseG
-                    .append("svg:rect") // append a rect to catch mouse movements on canvas
-                    .attr("width", width) // can't catch mouse events on a g element
-                    .attr("height", height)
-                    .attr("fill", "none")
-                    .attr("pointer-events", "all")
-                    .on("mouseout", function () {
-                        d3.select(".mouse-line").style("opacity", "0");
-                        d3.selectAll(".mouse-per-line circle").style(
-                            "opacity",
-                            "0"
-                        );
-                        d3.selectAll(".mouse-per-line text").style(
-                            "opacity",
-                            "0"
-                        );
-                        d3.select("#tooltip")
-                            .style("display", "none")
-                            .style("opacity", "0");
-                    })
-                    .on("mouseover", function () {
-                        // on mouse in show line, circles and text
-                        d3.select(".mouse-line").style("opacity", "1");
-                        d3.selectAll(".mouse-per-line circle").style(
-                            "opacity",
-                            "1"
-                        );
-                        d3.selectAll(".mouse-per-line text").style(
-                            "opacity",
-                            "1"
-                        );
-                    })
-                    .on("mousemove", function () {
-                        // mouse moving over canvas
-
-                        var mouse = d3.mouse(this);
-                        d3.select(".mouse-line").attr("d", function () {
-                            var d = "M0 " + mouse[1] + "," + width;
-                            d += " " + mouse[1];
-                            return d;
-                        });
-
-                        d3.selectAll(".mouse-per-line").attr(
-                            "transform",
-                            function (d, i) {
-                                var yValue = mouse[1];
-
-                                bisect = d3.bisector(function (d) {
-                                    return d.key;
-                                }).right;
-
-                                idx = bisect(d.values, yValue);
-
-                                var beginning = 0,
-                                    end = lines[i].getTotalLength(),
-                                    target = null;
-
-                                while (true) {
-                                    target = Math.floor((beginning + end) / 2);
-                                    pos = lines[i].getPointAtLength(target);
-                                    if (
-                                        (target === end ||
-                                            target === beginning) &&
-                                        pos.y !== mouse[1]
-                                    ) {
-                                        break;
-                                    }
-                                    if (pos.y > mouse[1]) end = target;
-                                    else if (pos.y < mouse[1])
-                                        beginning = target;
-                                    else break; //position found
-                                }
-
-                                tooltipData[d.key] = {
-                                    xAxis: pos.x,
-                                    yAxis: yValue,
-                                    xPos: mouse[0],
-                                    dataValue: x.invert(pos.x).toFixed(2),
-                                };
-
-                                drawToolTip(color, mouse);
-
-                                return (
-                                    "translate(" + pos.x + "," + mouse[1] + ")"
-                                );
-                            }
-                        );
-                    });
-
-                    */
+                if (chartType == constants.chartType.FIT_HEIGHT) {
+                    console.log(dataValues);
+                    removeAxisTicks("yAxis", dataValues);
+                }
 
                 function make_x_gridlines(x) {
                     return d3.axisBottom(x);

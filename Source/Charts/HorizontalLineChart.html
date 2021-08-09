@@ -940,13 +940,14 @@
                                     "</span>"
                                 );
                             });
-                             var scrollVal =
+                        var scrollVal =
                             document.querySelector("#my_dataviz").scrollLeft;
 
                         if (
                             x_pos - window.scrollX >
                             document.documentElement.clientWidth -
-                                document.querySelector("#tooltip").clientWidth-50
+                                document.querySelector("#tooltip").clientWidth -
+                                50
                         ) {
                             d3.select("#tooltip").style(
                                 "left",
