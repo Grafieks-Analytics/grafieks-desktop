@@ -350,7 +350,10 @@ Page {
             break;
         case Constants.multiLineChartTitle:
             console.log(Constants.multiLineChartTitle,"CLICKED");
-            colorData = (dataValues && JSON.parse(dataValues)[1]) || [];
+            dataValues = JSON.parse(dataValues);
+            dataValues[1].splice(1,0,colorByColumnName); 
+            colorData = (dataValues && dataValues[1]) || [];
+            dataValues = JSON.stringify(dataValues);
             break;
         case Constants.horizontalMultiLineChartTitle:
             console.log(chartTitle,"CLICKED");
@@ -887,6 +890,12 @@ Page {
                         break;
                     }
                     switchChart(Constants.horizontalBarChartTitle);
+                    break;
+                case Constants.horizontalMultiLineChartTitle:
+                    if(colorByData.length){
+                        break;
+                    }
+                    switchChart(Constants.horizontalLineChartTitle);
                     break;
                 default:
                     console.log('Debug:','Horizontal Graph Missed condition',chartTitle);
