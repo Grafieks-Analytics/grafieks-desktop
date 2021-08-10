@@ -14,6 +14,13 @@ public:
     explicit DataType(QObject *parent = nullptr);
     QString dataType(QString parameter);
 
+    QString variableType(QString inputVariable);
+
+private:
+    bool checkNumberType(QString inputVariable);
+    bool checkDateTimeType(QString inputVariable);
+
+
 signals:
 
 };
