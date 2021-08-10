@@ -14,7 +14,7 @@ Popup {
     property int shapeHeight: 20
 
     width: 160
-    height: 120
+    height: 200
     x: 10
     modal: false
     visible: false
@@ -55,14 +55,47 @@ Popup {
             fontName:"Default"
         }
     }
+    ListModel{
+        id: fontSizes
+        ListElement{
+            size: 8
+        }
+        ListElement{
+            size: 9
+        }
+        ListElement{
+            size: 10
+        }
+        ListElement{
+            size: 11
+        }
+        ListElement{
+            size: 12
+        }
+        ListElement{
+            size: 13
+        }
+        ListElement{
+            size: 14
+        }
+        ListElement{
+            size: 16
+        }
+        ListElement{
+            size: 18
+        }
+        ListElement{
+            size: 20
+        }
+    }
 
 
     function showLabel(checked){
-           var labelConfig = d3PropertyConfig.labelConfig || {};
-           labelConfig['labelStatus'] = checked;
-           d3PropertyConfig.labelConfig = labelConfig;
-           reDrawChart();
-       }
+        var labelConfig = d3PropertyConfig.labelConfig || {};
+        labelConfig['labelStatus'] = checked;
+        d3PropertyConfig.labelConfig = labelConfig;
+        reDrawChart();
+    }
 
 
     background: Rectangle{
@@ -118,7 +151,7 @@ Popup {
                 width: parent.width
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: qsTr("Font")
+                    text: qsTr("Font Family")
                 }
             }
 
@@ -127,43 +160,43 @@ Popup {
                 width: parent.width
 
                 CustomComboBox{
-                    id: fontSizes
+                    id: fontFamily
                     height: 500
-                  
+
 
                     Component.onCompleted: {
                         let fontFamilies = Qt.fontFamilies();
                         for(let i=0; i<fontFamilies.length;i++){
                             fonts.append({"fontName": fontFamilies[i]});
                         }
-                        fontSizes.model = fonts
+                        fontFamily.model = fonts
 
-                         fontSizes.currentIndex = fontSizes.find("Arial");
+                        fontFamily.currentIndex = fontFamily.find("Arial");
                     }
-                       onCurrentValueChanged: {
-                           console.log("labelfont"+fontSizes.currentValue)
-                                            d3PropertyConfig.dataLabelfontFamily=fontSizes.currentValue;
-                                            reDrawChart();
-                                        }
-//                    popup: Popup {
-//                //                            y: control.height - 1
-//                            implicitWidth:  200
+                    onCurrentValueChanged: {
+                        console.log("labelfont"+fontFamily.currentValue)
+                        d3PropertyConfig.dataLabelfontFamily=fontFamily.currentValue;
+                        reDrawChart();
+                    }
+                    //                    popup: Popup {
+                    //                //                            y: control.height - 1
+                    //                            implicitWidth:  200
 
-//                //                            implicitHeight: contentItem.implicitHeight
-//                        implicitHeight: 500
-//                //                            padding: 1
+                    //                //                            implicitHeight: contentItem.implicitHeight
+                    //                        implicitHeight: 500
+                    //                //                            padding: 1
 
 
-//                        contentItem: ListView {
-//                                     clip: true
-//                                     implicitHeight: 20
-//                                     model:  fonts
-//                                     currentIndex: fontSizes.highlightedIndex
+                    //                        contentItem: ListView {
+                    //                                     clip: true
+                    //                                     implicitHeight: 20
+                    //                                     model:  fonts
+                    //                                     currentIndex: fontSizes.highlightedIndex
 
-//                                     ScrollIndicator.vertical: ScrollIndicator { }
-//                                 }
+                    //                                     ScrollIndicator.vertical: ScrollIndicator { }
+                    //                                 }
 
-//                    }
+                    //                    }
 
 
 
@@ -183,6 +216,52 @@ Popup {
 
             }
 
+            Rectangle{
+                height: 20
+                width: parent.width
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTr("Font Size")
+                }
+            }
+
+            Rectangle{
+                height: 30
+                width: parent.width
+
+                CustomComboBox{
+                    id: fontSizescombo
+                    height: 500
+//                    model: fontSizes
+
+//                    Component.onCompleted: {
+//                        //                                                let fontFamilies = Qt.fontFamilies();
+//                        //                                                for(let i=0; i<fontFamilies.length;i++){
+//                        //                                                    fonts.append({"fontName": fontFamilies[i]});
+//                        //                                                }
+//                        fontSizescombo.model = fontSizes;
+
+//                        fontSizescombo.currentIndex = 4;
+//                    }
+                    onCurrentValueChanged: {
+                        //                           console.log("labelfont"+fontSizes.currentValue)
+                        d3PropertyConfig.dataLabelfontSize=fontSizescombo.currentValue;
+                        reDrawChart();
+                    }
+
+                    model: fontSizes
+                    currentIndex: 4
+
+                    textRole: "size"
+                    width: parent.width-2*leftMargin
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.rightMargin: leftMargin
+                    anchors.top: parent.top
+
+                }
+
+            }
 
         }
 

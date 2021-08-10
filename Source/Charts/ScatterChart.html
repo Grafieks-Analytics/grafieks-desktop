@@ -204,12 +204,8 @@
             window.data = data;
             d3.selectAll("#my_dataviz").html("");
 
-            let {
-                d3colorPalette,
-                paddingInner,
-                legendConfig,
-                innerRadius,
-            } = plottingConfiguration;
+            let { d3colorPalette, paddingInner, legendConfig, innerRadius } =
+                plottingConfiguration;
             if (!d3colorPalette) {
                 d3colorPalette = defaultD3Config.d3ColorPalette;
             }

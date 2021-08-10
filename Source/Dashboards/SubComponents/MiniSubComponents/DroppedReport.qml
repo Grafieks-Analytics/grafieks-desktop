@@ -371,7 +371,7 @@ Item{
 
 
         var scriptValue = 'window.addEventListener("resize", function () {
-                   clearChart && clearChart();
+                   window.clearChart && clearChart();
                     drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
            });';
 
@@ -487,7 +487,7 @@ Item{
 
     // Clear the chart defaults
     function clearChartValue(){
-        webEngineView.runJavaScript('clearChart()');
+        webEngineView.runJavaScript('window.clearChart && clearChart()');
     }
 
     function reDrawChart(){
@@ -746,7 +746,7 @@ Item{
         //     console.log('Starting to plot');
 
         //    var scriptValue = 'window.addEventListener("resize", function () {
-        //             clearChart();
+        //              window.clearChart && clearChart();
         //             drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
         //    });';
 
