@@ -640,7 +640,6 @@
                 response.forEach((d) => {
                     var objectName = d.key;
                     allKeys.forEach((key) => {
-                        console.log(key);
                         responseData.push([key, objectName, d[key]]);
                     });
                 });
@@ -649,10 +648,6 @@
             }
 
             function drawChart(data, plottingConfiguration = {}) {
-                // console.log("drawdata");
-
-                // console.log(data)
-                // this should be in every chart
                 window.data = data;
                 let {
                     dateFormat = defaultD3Config.dateFormat,
@@ -823,7 +818,7 @@
                         .attr("class", "grid")
                         .style("stroke-width", "1")
                         .call(
-                            make_y_gridlines(yScale)
+                            make_y_gridlines(y)
                                 // .tickSize(-width)
                                 .tickFormat(d3.format(".2s"))
                         );
