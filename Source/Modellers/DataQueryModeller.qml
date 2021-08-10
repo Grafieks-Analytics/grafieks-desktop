@@ -35,7 +35,7 @@ Page {
     property bool collapsed: false
     property bool open: true
     property int dataPreviewNo: 6
-    property var tableShowToggle: false
+    property var tableShowToggle: true
     property Page page: queryModellerPage
     property LeftMenuBar leftMenuBar : left_menubar
     property int droppedCount: 0
@@ -558,9 +558,13 @@ Page {
 
                 MouseArea{
                     anchors.fill: parent
-                    onClicked: onTableToggle()
+                    onClicked: menuOptions.open()
+
                 }
             }
+
+
+
 
             Image {
                 id: toggleMenuIcon
@@ -571,12 +575,16 @@ Page {
                 anchors.leftMargin:  15
                 anchors.verticalCenter: tableImg.verticalCenter
                 visible: tableShowToggle
-
+                z:50
                 MouseArea{
                     anchors.fill: parent
                     onClicked: menuOptions.open()
                 }
+
+
             }
+
+
             Row{
 
                 anchors.right: tableImg.right
@@ -617,41 +625,41 @@ Page {
 
                             }
                             MenuSeparator{}
-//                            ToolSeparator{
-//                                id: toolsep1
-//                                orientation: Qt.Horizontal
-//                                width: parent.width
-//                                anchors.top: menuItem1.bottom
+                            //                            ToolSeparator{
+                            //                                id: toolsep1
+                            //                                orientation: Qt.Horizontal
+                            //                                width: parent.width
+                            //                                anchors.top: menuItem1.bottom
 
-//                                contentItem: Rectangle {
-//                                    implicitWidth: parent.vertical ? 1 : 24
-//                                    implicitHeight: parent.vertical ? 24 : 1
-//                                    color: Constants.darkThemeColor
-//                                }
+                            //                                contentItem: Rectangle {
+                            //                                    implicitWidth: parent.vertical ? 1 : 24
+                            //                                    implicitHeight: parent.vertical ? 24 : 1
+                            //                                    color: Constants.darkThemeColor
+                            //                                }
 
-//                            }
+                            //                            }
                             MenuItem {
-                                 id:menuItem2
-                                 implicitHeight: 30
-                                 leftPadding: 15
+                                id:menuItem2
+                                implicitHeight: 30
+                                leftPadding: 15
                                 text: qsTr("Numerical")
                             }
-                             MenuSeparator{
-                             padding: 0
-                             }
-//                            ToolSeparator{
-//                                id: toolsep2
-//                                orientation: Qt.Horizontal
-//                                width: parent.width
-//                                anchors.top: menuItem2.bottom
+                            MenuSeparator{
+                                padding: 0
+                            }
+                            //                            ToolSeparator{
+                            //                                id: toolsep2
+                            //                                orientation: Qt.Horizontal
+                            //                                width: parent.width
+                            //                                anchors.top: menuItem2.bottom
 
-//                                contentItem: Rectangle {
-//                                    implicitWidth: parent.vertical ? 1 : 24
-//                                    implicitHeight: parent.vertical ? 24 : 1
-//                                    color: Constants.darkThemeColor
-//                                }
+                            //                                contentItem: Rectangle {
+                            //                                    implicitWidth: parent.vertical ? 1 : 24
+                            //                                    implicitHeight: parent.vertical ? 24 : 1
+                            //                                    color: Constants.darkThemeColor
+                            //                                }
 
-//                            }
+                            //                            }
                             MenuItem {
                                 text: qsTr("Date")
                                 implicitHeight: 30
@@ -704,20 +712,21 @@ Page {
 
 
 
-                //                onClicked: {
-                //                    NewTableColumnsModel.getColumnsForTable(modelData, "TableColumns")
+                onClicked: {
 
-                //                    if(tablecolumnListView.visible === true){
-                //                        toggleTableIcon.source ="/Images/icons/Right_20.png"
-                //                        tablecolumnListView.visible = false
-                //                        dragRect.height -= tablecolumnListView.height
-                //                    } else{
-                //                        toggleTableIcon.source ="/Images/icons/Down_20.png"
-                //                        tablecolumnListView.visible = true
-                //                        dragRect.height += tablecolumnListView.height
-                //                    }
-                //                }
-                onClicked: menuOptions.open()
+                    NewTableColumnsModel.getColumnsForTable(modelData, "TableColumns")
+
+                    if(tablecolumnListView.visible === true){
+                        toggleTableIcon.source ="/Images/icons/Right_20.png"
+                        tablecolumnListView.visible = false
+                        dragRect.height -= tablecolumnListView.height
+                    } else{
+                        toggleTableIcon.source ="/Images/icons/Down_20.png"
+                        tablecolumnListView.visible = true
+                        dragRect.height += tablecolumnListView.height
+                    }
+                }
+
             }
 
             states: [
