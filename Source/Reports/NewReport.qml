@@ -313,8 +313,6 @@ Page {
             }
             dataValues = JSON.parse(dataValues);
             dataValues.push([yAxisColumns[0],yAxisColumns[1],xAxisColumns[0]]);
-            // console.log(dataValues);
-
             dataValues = JSON.stringify(dataValues);
             
             break;
@@ -352,8 +350,14 @@ Page {
             break;
         case Constants.multiLineChartTitle:
             console.log(Constants.multiLineChartTitle,"CLICKED");
-            colorData = (dataValues && JSON.parse(dataValues)[1]) || [];
+            dataValues = JSON.parse(dataValues);
+            dataValues[1].splice(1,0,colorByColumnName); 
+            colorData = (dataValues && dataValues[1]) || [];
+            dataValues = JSON.stringify(dataValues);
             break;
+        case Constants.horizontalMultiLineChartTitle:
+            console.log(chartTitle,"CLICKED");
+            colorData = (dataValues && JSON.parse(dataValues)[1]) || [];
         case Constants.pieChartTitle:
         case Constants.donutChartTitle:
             console.log(chartTitle,"CLICKED")
@@ -369,6 +373,8 @@ Page {
             break;
         case Constants.treeChartTitle:
             console.log(chartTitle,"CLICKED")
+            dataValues = { name: xAxisColumns[0] , children: JSON.parse(dataValues) }
+            dataValues = JSON.stringify(dataValues);
             break;
         case Constants.treeMapChartTitle:
             console.log(chartTitle,"CLICKED")
@@ -377,6 +383,9 @@ Page {
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.sunburstChartTitle:
+            dataValues = { name: xAxisColumns[0] , children: JSON.parse(dataValues) }
+            dataValues = JSON.stringify(dataValues);
+            console.log('Data values sunburst', dataValues);
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.waterfallChartTitle:
@@ -407,7 +416,7 @@ Page {
 
         // Appending list to select color
         dataItemList.clear();
-        console.log(colorData);
+        console.log('Color Data',colorData);
         if(colorData && colorData.length){
             colorData.forEach(function (element,index) {
                 dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
@@ -416,7 +425,7 @@ Page {
 
 
         var scriptValue = 'window.addEventListener("resize", function () {
-                   clearChart && clearChart();
+                   window.clearChart && clearChart();
                     drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
            });';
 
@@ -709,7 +718,24 @@ Page {
             break;
         case Constants.lineChartTitle:
             chartUrl  = Constants.lineChartUrl;
+            break;
+        case Constants.horizontalMultiLineChartTitle:
+            chartUrl = Constants.horizontalMultiLineChartUrl;
+            break;
+        case Constants.areaChartTitle:
+            chartUrl = Constants.areaChartUrl;
+            break;
+        case Constants.multipleAreaChartTitle:
+            chartUrl = Constants.multipleAreaChartUrl;
+            break;
+        case Constants.horizontalAreaChartTitle:
+            chartUrl = Constants.horizontalAreaChartUrl;
+            break;
+        case Constants.multipleHorizontalAreaChartTitle:
+            chartUrl = Constants.multipleHorizontalAreaChartUrl;
+            break;
         }
+
         webEngineView.url = Constants.baseChartUrl+chartUrl;
         report_desiner_page.chartUrl = chartUrl;
     }
@@ -864,8 +890,8 @@ Page {
                 case Constants.lineChartTitle:
                     console.log(Constants.lineChartTitle);
                     if(colorByData.length)  {
-                        console.log('Changeing to Multi Line');
-                        switchChart(Constants.multiLineChartTitle)
+                        console.log('Changeing to Horizontal Multi Line');
+                        switchChart(Constants.horizontalMultiLineChartTitle)
                         break;
                     }
                     switchChart(Constants.horizontalLineChartTitle)
@@ -877,6 +903,12 @@ Page {
                     }
                     switchChart(Constants.horizontalBarChartTitle);
                     break;
+                case Constants.horizontalMultiLineChartTitle:
+                    if(colorByData.length){
+                        break;
+                    }
+                    switchChart(Constants.horizontalLineChartTitle);
+                    break;
                 default:
                     console.log('Debug:','Horizontal Graph Missed condition',chartTitle);
 
@@ -886,11 +918,17 @@ Page {
                 if(chartTitle === Constants.barChartTitle && colorByData.length){
                     console.log('Change to stacked bar chart')
                     switchChart(Constants.stackedBarChartTitle);
-                }else if(chartTitle === Constants.groupBarChartTitle){
-                    console.log('Check which graph to be plotted here')
+                }else if(chartTitle === Constants.groupBarChartTitle && !colorByData.length){
+                    console.log('Redraw Function - Check which graph to be plotted here')
                     chartUrl = Constants.barChartUrl;
                     webEngineView.url = Constants.baseChartUrl+chartUrl;
                     chartTitle = Constants.barChartTitle;
+                }else if(chartTitle === Constants.areaChartTitle && colorByData.length){
+                    switchChart(Constants.multipleAreaChartTitle);
+                }else if(chartTitle === Constants.lineChartTitle && colorByData.length){
+                    switchChart(Constants.multiLineChartTitle);
+                }else if(chartTitle === Constants.multipleAreaChartTitle && !colorByData.length){
+                    switchChart(Constants.areaChartTitle);
                 }
             }
 
@@ -1216,9 +1254,15 @@ Page {
                 ChartsModel.getAreaChartValues(xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.stackedAreaChartTitle:
+            case Constants.multipleAreaChartTitle:
                 console.log('Stacked Area Chart')
-                console.log('Colour By columnName',columnName)
-                ChartsModel.getStackedAreaChartValues(colorByColumnName,yAxisColumns[0],xAxisColumns[0]);
+                console.log('Colour By columnName',colorByColumnName)
+                ChartsModel.getStackedAreaChartValues(xAxisColumns[0],yAxisColumns[0],colorByColumnName);
+                break;
+            case Constants.multipleHorizontalAreaChartTitle:
+                console.log('Stacked Area Chart')
+                console.log('Colour By columnName',colorByColumnName)
+                ChartsModel.getStackedAreaChartValues(yAxisColumns[0],xAxisColumns[0],colorByColumnName);
                 break;
             case Constants.lineChartTitle:
                 console.log("LINE CLICKED")
@@ -1237,7 +1281,7 @@ Page {
                 break;
             case Constants.horizontalMultiLineChartTitle:
                 console.log(chartTitle,"CLICKED");
-                ChartsModel.getMultiLineChartValues(colorByColumnName,xAxisColumns[0],yAxisColumns[0]);
+                ChartsModel.getMultiLineChartValues(yAxisColumns[0],xAxisColumns[0],colorByColumnName);
                 break;
             case Constants.pieChartTitle:
             case Constants.donutChartTitle:
@@ -1327,7 +1371,7 @@ Page {
             console.log('Chart Url', report_desiner_page.chartUrl, webEngineView.url)
 
             var scriptValue = 'window.addEventListener("resize", function () {
-                   clearChart();
+                    window.clearChart && clearChart();
                     drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
            });';
 
@@ -2154,7 +2198,7 @@ Page {
     WebEngineView {
         id: webEngineView
         height:parent.height - axis.height -50
-        width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width
+        width: parent.width - chartFilters1.width - left_menubar_reports.width - column_querymodeller.width-5
         // [Tag: Refector]
         // Move to constants
         url: "../Charts/BarChartArrayInput.html"

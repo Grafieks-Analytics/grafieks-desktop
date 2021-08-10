@@ -421,11 +421,13 @@
                 yLabelfontSize = defaultD3Config.fontSize,
                 xTickfontSize = defaultD3Config.fontSize,
                 yTickfontSize = defaultD3Config.fontSize,
+                dataLabelfontSize = defaultD3Config.fontSize,
                 // font family
                 xLabelfontFamily = defaultD3Config.fontFamily,
                 yLabelfontFamily = defaultD3Config.fontFamily,
                 xTickfontFamily = defaultD3Config.fontFamily,
                 yTickfontFamily = defaultD3Config.fontFamily,
+                dataLabelfontFamily = defaultD3Config.fontFamily,
                 // font color
                 xLabelfontColor = defaultD3Config.fontColor,
                 yLabelfontColor = defaultD3Config.fontColor,
@@ -438,11 +440,13 @@
             window.yLabelfontSize = yLabelfontSize;
             window.xTickfontSize = xTickfontSize;
             window.yTickfontSize = yTickfontSize;
+            window.dataLabelfontSize = dataLabelfontSize;
 
             window.xLabelfontFamily = xLabelfontFamily;
             window.yLabelfontFamily = yLabelfontFamily;
             window.xTickfontFamily = xTickfontFamily;
             window.yTickfontFamily = yTickfontFamily;
+            window.dataLabelfontFamily = dataLabelfontFamily;
 
             window.xLabelfontColor = xLabelfontColor;
             window.yLabelfontColor = yLabelfontColor;
@@ -484,7 +488,7 @@
 
             let { top, right, bottom, left } = constants.chartMargins;
             if (window.innerHeight < 400) {
-                top = top / 2;
+                top = top / 2 + 10;
                 right = right / 2;
                 // bottom = bottom / 2;
             }
@@ -493,7 +497,6 @@
             var y_pos_x_label = 55;
             var topLegendMargin = 0;
 
-            console.log(data);
             var [data, keys, labels] = transformData(
                 data[0],
                 dateFormat,
@@ -512,7 +515,7 @@
 
                 d3.select("#legend")
                     .append("p")
-                    .html("data yet to come " + "&nbsp;")
+                    .html(labels && labels[1] + "&nbsp;")
                     .style("font-weight", "bold")
                     .style("margin", "auto")
                     .style("position", "sticky");
@@ -729,6 +732,16 @@
                 var legendWidth = legendElement.offsetWidth;
                 width -= legendWidth;
             }
+            if (legendPosition == "top") {
+                var legendHeightTop = 20;
+            } else {
+                legendHeightTop = 0;
+            }
+            if (legendPosition == "left") {
+                var legendWidthLeft = legendWidth;
+            } else {
+                legendWidthLeft = 0;
+            }
 
             // legends code ends
 
@@ -775,16 +788,20 @@
                 var y0_positive = 0;
                 var y0_negative = 0;
 
+                var mainKey = d.key;
+
                 d.components = keys.map(function (key) {
                     if (d[key] >= 0) {
                         return {
                             key,
+                            mainKey,
                             y1: y0_positive,
                             y0: (y0_positive += d[key]),
                         };
                     } else if (d[key] < 0) {
                         return {
                             key,
+                            mainKey,
                             y0: y0_negative,
                             y1: (y0_negative += d[key]),
                         };
@@ -816,7 +833,7 @@
             color.domain(keys);
             const barWidth = x.bandwidth();
 
-            clearChart();
+            window.clearChart && clearChart();
 
             //add svg with margin !important
             //this is svg is actually group
@@ -899,9 +916,8 @@
                     return y(d.y0);
                 })
                 .attr("height", function (d) {
-                    this.setAttribute("data-value-x", d.y0 && d.y0);
+                    this.setAttribute("data-value-x", d.mainKey);
                     this.setAttribute("data-value-y", d.key);
-                    console.log(d);
 
                     var yValue = d.y0 - d.y1;
                     if (d.y1 < 0) {
@@ -941,7 +957,7 @@
                     let y1Value = this.getAttribute("data-value-y1");
 
                     d3.select("#tooltip")
-                        .style("top", ypos - 52 + "px")
+                        .style("top", ypos - 52 + legendHeightTop + "px")
                         .style("display", "block")
                         .html(function () {
                             return (
@@ -951,7 +967,7 @@
                                 ":&nbsp;&nbsp;" +
                                 "</span>" +
                                 "<span style='float: right;'>" +
-                                yValue +
+                                xValue +
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
@@ -959,7 +975,7 @@
                                 ":&nbsp;&nbsp;" +
                                 "</span>" +
                                 "<span style='float: right;'>" +
-                                xValue +
+                                yValue +
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
@@ -977,15 +993,16 @@
                     if (
                         xpos - scrollVal >
                         document.documentElement.clientWidth -
-                        document.querySelector("#tooltip").clientWidth
+                            document.querySelector("#tooltip").clientWidth
                     ) {
                         d3.select("#tooltip").style(
                             "left",
                             xpos -
-                            scrollVal -
-                            document.querySelector("#tooltip").clientWidth -
-                            10 +
-                            "px"
+                                scrollVal -
+                                document.querySelector("#tooltip").clientWidth -
+                                10 +
+                                legendWidthLeft +
+                                "px"
                         );
 
                         d3.select(".arrowTooltip")
@@ -999,7 +1016,7 @@
                     } else {
                         d3.select("#tooltip").style(
                             "left",
-                            xpos - scrollVal + 12 + "px"
+                            xpos - scrollVal + legendWidthLeft + 12 + "px"
                         );
 
                         d3.select(".arrowTooltip").attr(
@@ -1034,6 +1051,8 @@
                             return "";
                         }
                     })
+                    .attr("font-family", dataLabelfontFamily)
+                    .attr("font-size", dataLabelfontSize)
 
                     .text(function (d) {
                         return d.y1 >= 0 ? d.y0 - d.y1 : d.y1 - d.y0;
@@ -1257,6 +1276,11 @@
                 return d3.timeFormat(dateFormat)(new Date(dateValue));
             }
         }
+
+        // window.addEventListener("resize", function () {
+        //     window.clearChart && clearChart();
+        //     drawChart(data);
+        // });
 
         drawChart(data);
     </script>

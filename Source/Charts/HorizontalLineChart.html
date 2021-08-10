@@ -103,17 +103,17 @@
                 "#FFEA77",
             ];
 
-            var dataset = [
-                [
-                    ["01-01-1998", 30.5621003042803618],
-                    ["01-01-1999", 50.9164824306094999],
-                    ["01-01-2000", 40.6363092398355727],
-                    ["01-01-2001", 10.6302204824674538],
-                    ["01-01-2002", 20.2485817228091547],
-                    ["01-01-2003", 32.13664898092621325],
-                ],
-                ["Countries", "Population"],
-            ];
+            // var dataset = [
+            //     [
+            //         ["01-01-1998", 30.5621003042803618],
+            //         ["01-01-1999", 50.9164824306094999],
+            //         ["01-01-2000", 40.6363092398355727],
+            //         ["01-01-2001", 10.6302204824674538],
+            //         ["01-01-2002", 20.2485817228091547],
+            //         ["01-01-2003", 32.13664898092621325],
+            //     ],
+            //     ["Countries", "Population"],
+            // ];
 
             // var dataset = [
             //     [
@@ -124,32 +124,32 @@
             //     ["username", "is_active"],
             // ];
 
-            // var dataset = [
-            //     [
-            //         ["a", 703, 1902],
-            //         ["b", 1473, 3341],
-            //         ["c", 863, 1935],
-            //         ["d", 1494, 3008],
-            //         ["e", 965, 1743],
-            //         ["f", 568, 1271],
-            //         ["g", 189, 626],
-            //         ["i", 731, 1443],
-            //         ["j", 306, 630],
-            //         ["k", 899, 2556],
-            //         ["l", 231, 880],
-            //         ["m", 262, 589],
-            //         ["n", 429, 1497],
-            //         ["o", 322, 749],
-            //         ["p", 315, 720],
-            //         ["q", 228, 522],
-            //         ["r", 436, 1391],
-            //         ["s", 287, 613],
-            //         ["t", 419, 932],
-            //         ["u", 296, 612],
-            //         ["v", 343, 855],
-            //     ],
-            //     ["Label 1", "Line Data", "bar Fa"],
-            // ];
+            var dataset = [
+                [
+                    ["a", 703, 1902],
+                    ["b", 1473, 3341],
+                    ["c", 863, 1935],
+                    ["d", 1494, 3008],
+                    ["e", 965, 1743],
+                    ["f", 568, 1271],
+                    ["g", 189, 626],
+                    ["i", 731, 1443],
+                    ["j", 306, 630],
+                    ["k", 899, 2556],
+                    ["l", 231, 880],
+                    ["m", 262, 589],
+                    ["n", 429, 1497],
+                    ["o", 322, 749],
+                    ["p", 315, 720],
+                    ["q", 228, 522],
+                    ["r", 436, 1391],
+                    ["s", 287, 613],
+                    ["t", 419, 932],
+                    ["u", 296, 612],
+                    ["v", 343, 855],
+                ],
+                ["Label 1", "Line Data", "bar Fa"],
+            ];
 
             // var dataset = [
             //     [
@@ -276,9 +276,11 @@
                 // Checking date values
                 dataValues = transformData(dataValues, dateFormat);
                 window.chartDataValues = dataValues;
+                console.log({ data });
+                // [xAxisLabel, yAxisLabel] = data[2];
 
                 // clear chart
-                clearChart();
+                window.clearChart && clearChart();
 
                 // margins, height, width
                 margin = { top: 20, right: 50, bottom: 50, left: 40 };
@@ -337,7 +339,7 @@
 
                     d3.select("#legend")
                         .append("p")
-                        .html(xAxisLabel + "&nbsp;")
+                        .html("xAxisLabel" + "&nbsp;")
                         .style("font-weight", "bold")
                         .style("margin", "auto")
                         .style("position", "sticky");
@@ -904,13 +906,16 @@
                         // console.log(d);
                         const xValue = dateformatValue(d[0]);
                         const yValue = d[1];
+                        var yScroll =
+                            document.querySelector("#my_dataviz").scrollTop;
+                        y_pos -= yScroll;
 
                         d3.select("#tooltip")
-                            .style("left", x_pos - 20 + "px")
+                            // .style("left", x_pos - 20 + "px")
                             .style("top", y_pos - 20 + "px")
                             .style("display", "block")
                             // .html(xValue + ", " + yValue.toFixed(2));
-                             .html(function () {
+                            .html(function () {
                                 var textValue = d.y0 - d.y1;
                                 if (d.y1 < 0) {
                                     textValue = d.y1 - d.y0;
@@ -919,23 +924,60 @@
                                 return (
                                     "<div class='arrowTooltip'></div>" +
                                     "<span style='color:grey;''>" +
-                                    "toolTip.textColumn1" +
+                                    xAxisLabel +
                                     ":&nbsp;&nbsp;" +
                                     "</span>" +
                                     "<span style='float: right;'>" +
-                                    "xValue" +
+                                    xValue +
                                     "</span>" +
                                     "<br/> <br/>" +
                                     "<span style='color:grey;''>" +
-                                    "toolTip.textColumn2" +
+                                    yAxisLabel +
                                     ":" +
                                     "</span>" +
                                     "<span style='float: right;margin-left: 15px;'>" +
-                                    "yValue" +
+                                    Math.round(yValue) +
                                     "</span>"
                                 );
                             });
+                        var scrollVal =
+                            document.querySelector("#my_dataviz").scrollLeft;
 
+                        if (
+                            x_pos - window.scrollX >
+                            document.documentElement.clientWidth -
+                                document.querySelector("#tooltip").clientWidth -
+                                50
+                        ) {
+                            d3.select("#tooltip").style(
+                                "left",
+                                x_pos -
+                                    document.querySelector("#tooltip")
+                                        .clientWidth +
+                                    250 +
+                                    0 +
+                                    "px"
+                            );
+
+                            d3.select(".arrowTooltip")
+                                //  document.querySelector("#tooltip:before")
+                                // .style("height","50px";"width","50px";"background-color","red";")
+
+                                .attr(
+                                    "style",
+                                    "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';right: -12px; transform: rotate(-90deg)!important;bottom: 22px; position: absolute;"
+                                );
+                        } else {
+                            d3.select("#tooltip").style(
+                                "left",
+                                x_pos + 110 + 0 + "px"
+                            );
+
+                            d3.select(".arrowTooltip").attr(
+                                "style",
+                                "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
+                            );
+                        }
 
                         var shapeClass = ".marker-shape";
                         d3.selectAll(shapeClass).style("opacity", 0.3);
