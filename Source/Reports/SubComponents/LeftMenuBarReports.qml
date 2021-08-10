@@ -382,19 +382,42 @@ Rectangle{
                 }
             }
         }
+        else if(chartTitle === Constants.areaChartTitle){
+            if(report_desiner_page.isHorizontalGraph){
+                if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 0){
+                    chartHtml = Constants.horizontalAreaChartUrl;
+//                    switchChart(Constants.horizontalBarChartTitle);
+                }
+                else if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 1){
+                    chartHtml = Constants.multipleHorizontalAreaChartUrl;
+                }else{
+                    console.log('missed horizontal area case');
+                }
+            }else{
+                if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count === 1){
+                    chartHtml = Constants.multipleAreaChartUrl;
+                }else{
+                    console.log('missed area case',chartHtml);
+                }
+            }
+        }
         else if(chartTitle === Constants.lineChartTitle){
             if(report_desiner_page.isHorizontalGraph){
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 0){
                     chartHtml = Constants.horizontalLineChartUrl;
-                }else{
+                }else if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count == 1){
+                    chartHtml = Constants.horizontalMultiLineChartUrl;
                     console.log('Horizontal Chart Load');
-                    // chartHtml = Constants.horizontal;
+                }else{
+                    console.log('Missed Horizontal Condition')
                 }
             }else{
                 if(xAxisColumns.length === 1 && yAxisColumns.length === 1 && colorListModel.count !== 0){
                     console.log('Debug: Loading multiline chart');
                     chartHtml = Constants.multiLineChartUrl;
                     // switchChart(Constants.multiLineChartTitle);
+                }else{
+                    console.log('Moving to line ????')
                 }
             }
         }
