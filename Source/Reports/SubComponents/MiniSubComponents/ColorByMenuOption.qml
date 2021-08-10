@@ -94,6 +94,15 @@ Popup {
                     case Constants.multiLineChartTitle:
                         switchChart(Constants.lineChartTitle);
                         break;
+                    case Constants.horizontalMultiLineChartTitle:
+                        switchChart(Constants.horizontalLineChartTitle);
+                        break;
+                    case Constants.multipleAreaChartTitle:
+                        switchChart(Constants.areaChartTitle);
+                        break;
+                    case Constants.multipleHorizontalAreaChartTitle:
+                        switchChart(Constants.horizontalAreaChartTitle);
+                        break;
                 }
 
                 // // Add switch case - change url according to the selected chart
