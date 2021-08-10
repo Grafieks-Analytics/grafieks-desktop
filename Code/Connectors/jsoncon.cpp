@@ -47,10 +47,10 @@ void JsonCon::convertJsonToCsv()
     QFile jsonFile;
     jsonFile.setFileName(jsonPath);
     jsonFile.open(QIODevice::ReadOnly | QIODevice::Text);
-    QString input = jsonFile.readAll();
-    jsonFile.close();
+//    QString input = jsonFile.readAll();
 
-    QJsonDocument jsonResponse = QJsonDocument::fromJson(input.toUtf8());
+
+    QJsonDocument jsonResponse = QJsonDocument::fromJson(jsonFile.readAll());
     ojson j = ojson::parse(jsonResponse.toJson());
     std::string output;
     csv::encode_csv(j, output);
@@ -69,5 +69,6 @@ void JsonCon::convertJsonToCsv()
         csvFile.close();
     }
 
+    jsonFile.close();
     emit convertedJsonPaths(outPath);
 }
