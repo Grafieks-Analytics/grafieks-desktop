@@ -57,24 +57,14 @@ Page {
 
     // This contains all the customizable config and is passed to drawChart function
     // In draw chart we take out these config; If config is empty => We have default config for it.
-    property var d3PropertyConfig: ({
-                                        //            console.log(output)
-                                    });
+    property var d3PropertyConfig: ({});
 
-    property var lastPickedDataPaneElementProperties: ({
-                                                           //            console.log(output)
-                                                       });
-    property var reportDataPanes: ({
-                                       //            console.log(output)
-                                   });  // Report Data Panes Object
+    property var lastPickedDataPaneElementProperties: ({});
+    property var reportDataPanes: ({});  // Report Data Panes Object
 
-    property var dragActiveObject: ({
-                                        //            console.log(output)
-                                    });
+    property var dragActiveObject: ({});
 
-    property var allChartsMapping: ({
-                                        //            console.log(output)
-                                    });
+    property var allChartsMapping: ({});
     // An array having item type and name of the spilt by value
     // Colour By Data is filled
     // 1. saved colour values -> CPP (Report Properties)
@@ -923,6 +913,8 @@ Page {
                     chartUrl = Constants.barChartUrl;
                     webEngineView.url = Constants.baseChartUrl+chartUrl;
                     chartTitle = Constants.barChartTitle;
+                }else if(chartTitle === Constants.groupBarChartTitle && colorByData.length){
+                    switchChart(Constants.stackedBarChartTitle);
                 }else if(chartTitle === Constants.areaChartTitle && colorByData.length){
                     switchChart(Constants.multipleAreaChartTitle);
                 }else if(chartTitle === Constants.lineChartTitle && colorByData.length){
