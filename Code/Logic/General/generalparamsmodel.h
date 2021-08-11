@@ -26,7 +26,11 @@ public:
     Q_INVOKABLE QString getDbClassification();
     Q_INVOKABLE QString getCurrentDB();
     Q_INVOKABLE int getOnlineStorageType();
+
+    //! Return plain text from html
     Q_INVOKABLE QString returnPlainTextFromHtml(QString s);
+
+    //! Application loading complete. To hide splash screen
     Q_INVOKABLE void loadingComplete();
 
     int menuType() const;    
