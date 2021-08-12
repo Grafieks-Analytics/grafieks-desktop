@@ -170,9 +170,6 @@ Popup {
 
     // Popup Header ends
 
-
-
-
     // Row1: Select excel starts
 
 
@@ -183,23 +180,6 @@ Popup {
         anchors.topMargin: 55
         anchors.left: parent.left
         anchors.leftMargin: 100
-
-
-
-        //        Rectangle{
-
-        //            id: label2
-        //            width:label_col
-        //            height: 40
-
-        //            Text{
-        //                text: "Excel"
-        //                anchors.left: parent.left
-        //                anchors.leftMargin:  10
-        //                font.pixelSize: Constants.fontCategoryHeader
-        //                anchors.verticalCenter: parent.verticalCenter
-        //            }
-        //        }
 
         Rectangle{
 

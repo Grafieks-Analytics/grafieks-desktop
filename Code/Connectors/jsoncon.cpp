@@ -49,13 +49,16 @@ void JsonCon::convertJsonToCsv()
     jsonFile.open(QIODevice::ReadOnly | QIODevice::Text);
 //    QString input = jsonFile.readAll();
 
+    qDebug() << "HERE";
 
     QJsonDocument jsonResponse = QJsonDocument::fromJson(jsonFile.readAll());
+//    qDebug() <<jsonResponse.toJson();
     ojson j = ojson::parse(jsonResponse.toJson());
     std::string output;
     csv::encode_csv(j, output);
 
 
+    qDebug() << "AGAIN";
     QFile csvFile;
     QFileInfo fi(jsonPath);
 

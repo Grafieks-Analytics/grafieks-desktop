@@ -40,6 +40,9 @@ namespace Constants
     const QString sqlType = "SQL";
     const QString duckType = "DUCK";
     const QString forwardType = "FORWARD";
+    const QString excelType = "EXCEL";
+    const QString csvType = "CSV";
+    const QString jsonType = "JSON";
 
     // Datasource type Strings
     const QString mysqlStrType = "mysql";

@@ -68,6 +68,8 @@ SOURCES += \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
     Code/Logic/DataModeller/duckdatamodel.cpp \
     Code/Logic/DataModeller/duckquerymodel.cpp \
+    Code/Logic/DataModeller/exceldatamodel.cpp \
+    Code/Logic/DataModeller/excelquerymodel.cpp \
     Code/Logic/DataModeller/filtercategoricallist.cpp \
     Code/Logic/DataModeller/filtercategoricallistmodel.cpp \
     Code/Logic/DataModeller/filterdatelist.cpp \
@@ -181,6 +183,8 @@ HEADERS += \
     Code/Logic/DataModeller/dsparamsmodel.h \
     Code/Logic/DataModeller/duckdatamodel.h \
     Code/Logic/DataModeller/duckquerymodel.h \
+    Code/Logic/DataModeller/exceldatamodel.h \
+    Code/Logic/DataModeller/excelquerymodel.h \
     Code/Logic/DataModeller/filtercategoricallist.h \
     Code/Logic/DataModeller/filtercategoricallistmodel.h \
     Code/Logic/DataModeller/filterdatelist.h \
@@ -235,6 +239,8 @@ DEPENDPATH += $$PWD/Libraries
 
 macx: LIBS += -L$$PWD/Libraries/ -lduckdb
 win32: LIBS += $$PWD/Libraries/duckdb.lib
+
+win32: LIBS += $$PWD/Libraries/OpenXLSX-sharedd.lib
 
 macx: LIBS += -L$$PWD/Libraries/ -lparquet_extension
 macx: PRE_TARGETDEPS += $$PWD/Libraries/libparquet_extension.a

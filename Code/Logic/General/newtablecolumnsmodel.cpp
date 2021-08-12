@@ -261,7 +261,36 @@ void NewTableColumnsModel::getColumnsForTable(QString tableName, QString moduleN
     }
 
 
-    case Constants::excelIntType:
+    case Constants::excelIntType:{
+        QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
+        QString dbQueryString = "select * from ["+tableName+"$]";
+
+        QSqlQuery query(dbQueryString, dbExcel);
+        QSqlRecord record = query.record();
+
+
+        if(!record.isEmpty()){
+
+            for(int i=0; i < record.count(); i++){
+
+                fieldName = record.fieldName(i);
+                fieldType = record.field(i).value().typeName();
+
+                // Get filter data type for QML
+                QString filterDataType = dataType.dataType(fieldType);
+                outputDataList << fieldName << filterDataType;
+
+                // Append all data type to allList as well
+                allColumns.append(outputDataList);
+
+                outputDataList.clear();
+            }
+        }
+
+
+
+        break;
+    }
     case Constants::csvIntType:
     case Constants::jsonIntType:{
 

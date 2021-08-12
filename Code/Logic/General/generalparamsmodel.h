@@ -25,6 +25,7 @@ public:
     Q_INVOKABLE QString getTmpPath();
     Q_INVOKABLE QString getDbClassification();
     Q_INVOKABLE QString getCurrentDB();
+
     Q_INVOKABLE int getOnlineStorageType();
 
     //! Return plain text from html
@@ -33,11 +34,18 @@ public:
     //! Application loading complete. To hide splash screen
     Q_INVOKABLE void loadingComplete();
 
+    //! Current selected left side menu
     int menuType() const;    
+
+    //! Current screen selector for highlighting the left menu
     int currentScreen() const;
 
 public slots:
+
+    //! Set the current highlighted left menu
     void setMenuType(int menuType);
+
+    //! Set current screen to highlight the respective left menu
     void setCurrentScreen(int currentScreen);
 
 signals:
