@@ -145,7 +145,7 @@ Page {
         function onExcelLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                tableslist.model = DuckDataModel.getTableList()
+                tableslist.model = ExcelDataModel.getTableList()
             }
         }
     }

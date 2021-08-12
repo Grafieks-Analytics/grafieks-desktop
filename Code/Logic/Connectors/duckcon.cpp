@@ -97,6 +97,8 @@ void DuckCon::createTable(QString dbName, bool directLogin, QVariantMap response
     QString fileExtension = QFileInfo(db).completeSuffix();
     fileName = fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
 
+    qDebug() << fileName << fileExtension << "CONTRA";
+
     if(fileName.trimmed().length() > 0){
         if(fileExtension.toLower() == "json"){
 

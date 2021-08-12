@@ -37,6 +37,8 @@
 #include "Code/Logic/DataModeller/forwardonlydatamodel.h"
 #include "Code/Logic/DataModeller/forwardonlyquerymodel.h"
 #include "Code/Logic/DataModeller/newtablelistmodel.h"
+#include "Code/Logic/DataModeller/exceldatamodel.h"
+#include "Code/Logic/DataModeller/excelquerymodel.h"
 
 #include "Code/Logic/Connectors/duckcon.h"
 #include "Code/Logic/Connectors/odbcdriversmodel.h"
@@ -276,6 +278,8 @@ int main(int argc, char *argv[])
     ForwardOnlyQueryModel forwardOnlyQueryModel;
     NewTableListModel newTableListModel;
     TableColumnsModel tableColumnsModel;
+//    ExcelQueryModel excelQueryModel;
+    ExcelDataModel excelDataModel;
 
     // Datasource Connector Initializations
     DatasourceModel datasourceModel;
@@ -429,6 +433,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("ForwardOnlyQueryModel", &forwardOnlyQueryModel);
     engine.rootContext()->setContextProperty("NewTableListModel", &newTableListModel);
     engine.rootContext()->setContextProperty("TableColumnsModel", &tableColumnsModel);
+//    engine.rootContext()->setContextProperty("ExcelQueryModel", &excelQueryModel);
+    engine.rootContext()->setContextProperty("ExcelDataModel", &excelDataModel);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/
