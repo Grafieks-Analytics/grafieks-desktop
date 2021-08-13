@@ -39,6 +39,8 @@
 #include "Code/Logic/DataModeller/newtablelistmodel.h"
 #include "Code/Logic/DataModeller/exceldatamodel.h"
 #include "Code/Logic/DataModeller/excelquerymodel.h"
+#include "Code/Logic/DataModeller/csvjsondatamodel.h"
+#include "Code/Logic/DataModeller/csvjsonquerymodel.h"
 
 #include "Code/Logic/Connectors/duckcon.h"
 #include "Code/Logic/Connectors/odbcdriversmodel.h"
@@ -280,6 +282,8 @@ int main(int argc, char *argv[])
     TableColumnsModel tableColumnsModel;
 //    ExcelQueryModel excelQueryModel;
     ExcelDataModel excelDataModel;
+    CSVJsonDataModel csvJsonDataModel;
+    CSVJsonQueryModel csvJsonQueryModel;
 
     // Datasource Connector Initializations
     DatasourceModel datasourceModel;
@@ -435,6 +439,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("TableColumnsModel", &tableColumnsModel);
 //    engine.rootContext()->setContextProperty("ExcelQueryModel", &excelQueryModel);
     engine.rootContext()->setContextProperty("ExcelDataModel", &excelDataModel);
+    engine.rootContext()->setContextProperty("CSVJsonQueryModel", &csvJsonQueryModel);
+    engine.rootContext()->setContextProperty("CSVJsonDataModel", &csvJsonDataModel);
 
     // CONTEXT PROPERTY  ENDS
     /***********************************************************************************************************************/

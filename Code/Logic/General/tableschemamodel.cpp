@@ -386,7 +386,56 @@ void TableSchemaModel::showSchema(QString query)
         break;
     }
 
-    case Constants::excelIntType:
+    case Constants::excelIntType:{
+        querySplitter.setQueryForClasses(query);
+        QStringList tablesList = querySplitter.getJoinTables();
+        QString mainTable = querySplitter.getMainTable();
+        tablesList.push_back(mainTable);
+
+        QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
+
+        for(QString tableName: tablesList){
+
+            QString dbQueryString = "select * from ["+tableName+"$] LIMIT 1";
+
+            QSqlQuery query(dbQueryString, dbExcel);
+            QSqlRecord record = query.record();
+
+
+            if(!record.isEmpty()){
+
+                for(int i=0; i < record.count(); i++){
+
+                    QString fieldName = record.fieldName(i).trimmed();
+                    QString fieldType = record.field(i).value().typeName();
+
+                    // Get filter data type for QML
+                    QString filterDataType = dataType.dataType(fieldType);
+
+                    outputDataList << tableName << fieldName << fieldType << filterDataType;
+
+                    // Output data according to Filter type
+
+                    if(filterDataType == Constants::categoricalType){
+                        allCategorical.append(outputDataList);
+                    } else if(filterDataType == Constants::numericalType){
+                        allNumerical.append(outputDataList);
+                    } else if(filterDataType == Constants::dateType){
+                        allDates.append(outputDataList);
+                    } else{
+                        allOthers.append(outputDataList);
+                    }
+
+                    // Append all data type to allList as well
+                    allList.append(outputDataList);
+
+                    // Clear Stringlist for future
+                    outputDataList.clear();
+                }
+            }
+        }
+        break;
+    }
     case Constants::csvIntType:
     case Constants::jsonIntType:{
 

@@ -263,7 +263,7 @@ void NewTableColumnsModel::getColumnsForTable(QString tableName, QString moduleN
 
     case Constants::excelIntType:{
         QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
-        QString dbQueryString = "select * from ["+tableName+"$]";
+        QString dbQueryString = "select * from ["+tableName+"$] LIMIT 1";
 
         QSqlQuery query(dbQueryString, dbExcel);
         QSqlRecord record = query.record();
@@ -286,9 +286,6 @@ void NewTableColumnsModel::getColumnsForTable(QString tableName, QString moduleN
                 outputDataList.clear();
             }
         }
-
-
-
         break;
     }
     case Constants::csvIntType:

@@ -7,7 +7,7 @@ ExcelDataModel::ExcelDataModel(QObject *parent) : QObject(parent)
 
 void ExcelDataModel::clearData()
 {
-
+    this->sheetNamesMap.clear();
 }
 
 ExcelDataModel::~ExcelDataModel()
@@ -18,11 +18,33 @@ ExcelDataModel::~ExcelDataModel()
 void ExcelDataModel::columnData(QString col, QString tableName, QString options)
 {
 
+    QStringList output;
+    QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
+    QString dbQueryString = "SELECT DISTINCT("+col+") FROM ["+tableName+"$]";
+
+    QSqlQuery query(dbQueryString, dbExcel);
+
+    while(query.next()){
+        output.append(query.value(0).toString());
+    }
+
+    emit columnListModelDataChanged(output, options);
 }
 
 void ExcelDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
 {
 
+    QStringList output;
+    QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
+    QString dbQueryString = "SELECT DISTINCT("+col+") FROM ["+tableName+"$] WHERE " + col + " LIKE %" + searchString + "%";
+
+    QSqlQuery query(dbQueryString, dbExcel);
+
+    while(query.next()){
+        output.append(query.value(0).toString());
+    }
+
+    emit columnListModelDataChanged(output, options);
 }
 
 QStringList ExcelDataModel::getTableList()
@@ -45,15 +67,10 @@ QStringList ExcelDataModel::filterTableList(QString keyword)
     return output;
 }
 
-QStringList ExcelDataModel::getDbList()
-{
-    QStringList output;
-    return output;
-}
-
 QString ExcelDataModel::getQueryJoiner()
 {
     QString output;
+    output = "\"";
     return output;
 }
 
@@ -83,7 +100,7 @@ QStringList ExcelDataModel::getTableListQAXObject()
 
     /* Get the worksheet of the worksheet collection */
     QAxObject *worksheets = workbook->querySubObject("WorkSheets");
-//    worksheets->dumpObjectTree();
+    //    worksheets->dumpObjectTree();
 
     /* Get worksheet 1 of the worksheet collection, namely sheet1 */
     int count = worksheets->dynamicCall("Count()").toInt();
