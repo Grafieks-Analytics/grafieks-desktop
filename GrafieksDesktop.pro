@@ -64,6 +64,8 @@ SOURCES += \
     Code/Logic/DataModeller/Workers/setpreviewqueryduckworker.cpp \
     Code/Logic/DataModeller/Workers/setpreviewqueryforwardonlyworker.cpp \
     Code/Logic/DataModeller/Workers/setpreviewqueryqueryworker.cpp \
+    Code/Logic/DataModeller/csvjsondatamodel.cpp \
+    Code/Logic/DataModeller/csvjsonquerymodel.cpp \
     Code/Logic/DataModeller/dblistmodel.cpp \
     Code/Logic/DataModeller/dsparamsmodel.cpp \
     Code/Logic/DataModeller/duckdatamodel.cpp \
@@ -179,6 +181,8 @@ HEADERS += \
     Code/Logic/DataModeller/Workers/setpreviewqueryduckworker.h \
     Code/Logic/DataModeller/Workers/setpreviewqueryforwardonlyworker.h \
     Code/Logic/DataModeller/Workers/setpreviewqueryqueryworker.h \
+    Code/Logic/DataModeller/csvjsondatamodel.h \
+    Code/Logic/DataModeller/csvjsonquerymodel.h \
     Code/Logic/DataModeller/dblistmodel.h \
     Code/Logic/DataModeller/dsparamsmodel.h \
     Code/Logic/DataModeller/duckdatamodel.h \
@@ -239,8 +243,6 @@ DEPENDPATH += $$PWD/Libraries
 
 macx: LIBS += -L$$PWD/Libraries/ -lduckdb
 win32: LIBS += $$PWD/Libraries/duckdb.lib
-
-win32: LIBS += $$PWD/Libraries/OpenXLSX-sharedd.lib
 
 macx: LIBS += -L$$PWD/Libraries/ -lparquet_extension
 macx: PRE_TARGETDEPS += $$PWD/Libraries/libparquet_extension.a

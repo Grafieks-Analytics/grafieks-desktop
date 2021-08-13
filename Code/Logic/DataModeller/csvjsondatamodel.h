@@ -1,41 +1,33 @@
-#ifndef EXCELDATAMODEL_H
-#define EXCELDATAMODEL_H
+#ifndef CSVJSONDATAMODEL_H
+#define CSVJSONDATAMODEL_H
 
 #include <QObject>
-#include <QSqlDatabase>
-#include <QSqlQuery>
+#include <QFile>
 #include <QDebug>
 
-#include <QFile>
-#include <QAxObject>
-#include <QDir>
-
-#include "../../constants.h"
-#include "../../Messages.h"
 #include "../../statics.h"
+#include "../../constants.h"
+#include "../Connectors/duckcon.h"
 
+#include "../General/datatype.h"
+#include "../General/querysplitter.h"
 
-class ExcelDataModel : public QObject
+class CSVJsonDataModel : public QObject
 {
     Q_OBJECT
-    QMap<int, QString> sheetNamesMap;
 public:
-    explicit ExcelDataModel(QObject *parent = nullptr);
+    explicit CSVJsonDataModel(QObject *parent = nullptr);
     Q_INVOKABLE void clearData();
-    ~ExcelDataModel();
-
+    ~CSVJsonDataModel();
 
     Q_INVOKABLE void columnData(QString col, QString tableName, QString options);
     Q_INVOKABLE void columnSearchData(QString col, QString tableName, QString searchString, QString options);
     Q_INVOKABLE QStringList getTableList();
     Q_INVOKABLE QStringList filterTableList(QString keyword);
 
-private:
-    QString getQueryJoiner();
-    QStringList getTableListQAXObject();
-
 signals:
     void columnListModelDataChanged(QStringList colData, QString options);
+
 };
 
-#endif // EXCELDATAMODEL_H
+#endif // CSVJSONDATAMODEL_H
