@@ -13,6 +13,7 @@ class DataType : public QObject
 public:
     explicit DataType(QObject *parent = nullptr);
     QString dataType(QString parameter);
+    QString duckNumericType(QString parameter);
 
     QString variableType(QString inputVariable);
 
