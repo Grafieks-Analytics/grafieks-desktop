@@ -190,7 +190,7 @@ function setLabel(
       .attr("class", labelType)
       .attr("text-anchor", "middle")
       .text(label)
-      .attr("y", 0)
+      .attr("y", 5)
       .attr("font-size", yLabelfontSize)
       .attr("font-family", yLabelfontFamily)
       .attr("fill", yLabelfontColor)
