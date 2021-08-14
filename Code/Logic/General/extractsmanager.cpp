@@ -31,32 +31,32 @@ void ExtractsManager::createTable(QList<QByteArray> columnNames, QStringList col
 
 void ExtractsManager::uploadCSVData(QFile *csvFile, char delimiter)
 {
-//    QString dbPath = Statics::extractPath;
-//    duckdb::DuckDB db(dbPath.toStdString());
-//    duckdb::Connection con(db);
-//    duckdb::Appender appender(con, this->tableName.toStdString());
+    QString dbPath = Statics::extractPath;
+    duckdb::DuckDB db(dbPath.toStdString());
+    duckdb::Connection con(db);
+    duckdb::Appender appender(con, this->tableName.toStdString());
 
-//    int columnsLength = this->columnNames.length();
+    int columnsLength = this->columnNames.length();
 
-//    while(!csvFile->atEnd()){
-//        QByteArray line = csvFile->readLine().simplified();
-//        QList<QByteArray>strings = line.split(delimiter);
+    while(!csvFile->atEnd()){
+        QByteArray line = csvFile->readLine().simplified();
+        QList<QByteArray>byteData = line.split(delimiter);
 
-//        appender.BeginRow();
-//        for(int i = 0; i < columnsLength; i++){
+        appender.BeginRow();
+        for(int i = 0; i < columnsLength; i++){
 
-//            if(this->columnTypes.at(i) == Constants::categoricalType){
-//                appender.Append(strings.at(i).toBase64().constData());
-//            } else {
-//                appender.Append(strings.at(i));
-//            }
+            if(this->columnTypes.at(i) == Constants::categoricalType){
+                appender.Append(byteData.at(i).toBase64().constData());
+            } else {
+                appender.Append(byteData.at(i).toDouble());
+            }
 
-//        }
-//        appender.EndRow();
-//    }
-//    appender.Close();
+        }
+        appender.EndRow();
+    }
+    appender.Close();
 
-//    db.~DuckDB();
+    db.~DuckDB();
 }
 
 void ExtractsManager::uploadQueryData(QSqlQuery *query)
