@@ -413,7 +413,6 @@ Page {
             });
         }
 
-
         var scriptValue = 'window.addEventListener("resize", function () {
                    window.clearChart && clearChart();
                     drawChart('+dataValues+','+JSON.stringify(d3PropertyConfig)+');
@@ -798,23 +797,13 @@ Page {
         dataItemList.clear();
 
         // Clear property Config
-        d3PropertyConfig = {
-            //            console.log(output)
-        };
+        d3PropertyConfig = {};
 
         // Clear general params
-        lastPickedDataPaneElementProperties= {
-            //            console.log(output)
-        };
-        reportDataPanes= {
-            //            console.log(output)
-        };  // Report Data Panes Object
-        dragActiveObject= {
-            //            console.log(output)
-        };
-        allChartsMapping= {
-            //            console.log(output)
-        };
+        lastPickedDataPaneElementProperties= {};
+        reportDataPanes= {};  // Report Data Panes Object
+        dragActiveObject= {};
+        allChartsMapping= {};
         colorByData = [];
 
         // Calling this redraw will clear the chart because no x and y columns will be available
