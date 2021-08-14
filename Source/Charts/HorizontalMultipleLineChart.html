@@ -90,9 +90,9 @@
                     ["Henderson", "Furniture", 7],
                     ["Henderson", "OfficeSupplies", 0],
                     ["Henderson", "Technology", 0],
-                    ["LosAngeles", "Furniture", 684],
-                    ["LosAngeles", "OfficeSupplies", 818],
-                    ["LosAngeles", "Technology", 324],
+                    ["LosAngelesASBDHSAJBD SJBDSABJDA", "Furniture", 684],
+                    ["LosAngelesASBDHSAJBD SJBDSABJDA", "OfficeSupplies", 818],
+                    ["LosAngelesASBDHSAJBD SJBDSABJDA", "Technology", 324],
                     ["FortLauderdale", "Furniture", 8],
                     ["FortLauderdale", "OfficeSupplies", 10],
                     ["FortLauderdale", "Technology", 0],
@@ -219,7 +219,7 @@
                 ],
                 [
                     "Henderson",
-                    "LosAngeles",
+                    "LosAngelesASBDHSAJBD SJBDSABJDA",
                     "FortLauderdale",
                     "Concord",
                     "Seattle",
@@ -412,7 +412,6 @@
                 // var [dataValues, all_keys, keys2] = dataValues;
 
                 d3Colors = d3colorPalette;
-                console.log({ data });
                 [xAxisLabel, yAxisLabel] = data[2];
 
                 // legends code starts
@@ -471,7 +470,7 @@
                 d3.select("#legend").attr("style", null);
                 d3.select("#mainChartWindow").attr("style", null);
                 d3.selectAll("#my_dataviz").html("");
-                var margin = { top: 30, right: 30, bottom: 70, left: 60 },
+                var margin = { top: 30, right: 30, bottom: 70, left: 100 },
                     width = window.innerWidth - margin.left - margin.right - 30,
                     height = window.innerHeight - margin.bottom - 7;
                 var bottomHeight = 0;
@@ -818,6 +817,30 @@
                             (margin.top + 10) +
                             ")"
                     );
+
+                var a = document.querySelectorAll(".y-axis text");
+                for (var i = 0; i < a.length; i++) {
+                    if (a[i] && a[i].innerHTML) {
+                        var singleCharacterLength =
+                            a[i].getBBox().width / a[i].innerHTML.length;
+
+                        var maxWidth =
+                            document.querySelector(".y-axis").getBBox().width >
+                            72
+                                ? 72
+                                : document.querySelector(".y-axis").getBBox()
+                                      .width;
+
+                        var numOfCharacters = maxWidth / singleCharacterLength;
+
+                        if (a[i].innerHTML.length > numOfCharacters) {
+                            a[i].innerHTML =
+                                a[i].innerHTML.substr(0, numOfCharacters - 3) +
+                                "...";
+                        }
+                    }
+                }
+
                 setLabel(xAxisLabel, "y_label", d3.select("svg"), false);
                 setLabel(
                     yAxisLabel,
@@ -1006,7 +1029,6 @@
                     .attr("y", 8);
 
                 if (chartType == constants.chartType.FIT_HEIGHT) {
-                    console.log(dataValues);
                     removeAxisTicks("yAxis", dataValues);
                 }
 

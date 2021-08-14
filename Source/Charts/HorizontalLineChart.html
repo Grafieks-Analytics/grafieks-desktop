@@ -126,7 +126,7 @@
 
             var dataset = [
                 [
-                    ["a", 703, 1902],
+                    ["a snnnnnnnnnnnnnnn", 703, 1902],
                     ["b", 1473, 3341],
                     ["c", 863, 1935],
                     ["d", 1494, 3008],
@@ -246,7 +246,7 @@
                     filledStatus = false,
                     curveType = defaultD3Config.defaultLineCurve,
                     standardThresholdHeight = defaultD3Config.standardThresholdHeight,
-                    markerStatus = true,
+                    markerStatus = defaultD3Config.defaultMarkerStatus,
                 } = plottingConfiguration;
                 window.xLabelfontSize = xLabelfontSize;
                 window.yLabelfontSize = yLabelfontSize;
@@ -276,19 +276,17 @@
                 // Checking date values
                 dataValues = transformData(dataValues, dateFormat);
                 window.chartDataValues = dataValues;
-                console.log({ data });
                 // [xAxisLabel, yAxisLabel] = data[2];
 
                 // clear chart
                 window.clearChart && clearChart();
 
                 // margins, height, width
-                margin = { top: 20, right: 50, bottom: 50, left: 40 };
+                margin = { top: 20, right: 50, bottom: 50, left: 100 };
                 var width = window.innerWidth - margin.left - margin.right - 60;
 
                 var height =
                     window.innerHeight - margin.top - margin.bottom - 5;
-                console.log(height);
 
                 // Update height based on type of chart
                 /*
@@ -316,10 +314,6 @@
                         height + margin.top + margin.bottom <
                         window.innerHeight
                     ) {
-                        console.log(
-                            height + margin.top + margin.bottom,
-                            window.innerHeight
-                        );
                         d3.select("#xAxisDiv").style(
                             "top",
                             height + margin.top + "px"
@@ -578,8 +572,6 @@
 
                 // legends code ends
 
-                console.log(height);
-
                 yaxisTicks = height / 70;
 
                 yScale = d3
@@ -635,22 +627,10 @@
                     );
                 // axis-x
                 bottomAxis = g.append("g").attr("class", "axis axis--x y-axis");
-                // .attr("transform", "translate(" + 0 + "," + height + ")");
+                xAxisTicks = width / 100;
 
-                // if (isDateFormat(dataValues[0][0])) {
-                //     bottomAxis.call(
-                //         d3
-                //             .axisBottom(xScale)
-                //             .tickSizeOuter(0)
-                //             .ticks(dataValues.length)
-                //             .tickFormat(d3.timeFormat(dateFormat))
-                //     );
-                // } else {
                 bottomAxis.call(
-                    d3
-                        .axisLeft(yScale)
-                        .tickSizeOuter(0)
-                        .ticks(dataValues.length)
+                    d3.axisLeft(yScale).tickSizeOuter(0).ticks(xAxisTicks)
                 );
                 // }
 
@@ -671,7 +651,7 @@
                         .call(
                             make_x_gridlines(xScale)
                                 .tickSize(height)
-                                .ticks(height / 50)
+                                .ticks(xAxisTicks)
                                 .tickFormat("")
                         );
                 }
@@ -702,13 +682,11 @@
                             ")"
                     );
 
-                xAxisTicks = width / 100;
-
                 //add x and y axis
                 var xAxis = d3
                     .axisBottom(xScale)
                     .tickSize(0)
-                    .ticks(5)
+                    .ticks(xAxisTicks)
                     .tickFormat(d3.format(".2s"));
 
                 d3.select("#xAxisDiv")
@@ -790,7 +768,6 @@
                 //     }
                 // }
 
-                console.log(dataValues);
                 removeAxisTicks("yAxis", dataValues);
 
                 if (extraHeightWorked && !redrawn) {
@@ -802,6 +779,29 @@
                 if (extraHeightWorked && redrawn) {
                     extraHeightWorked = false;
                     redrawn = false;
+                }
+
+                var a = document.querySelectorAll(".y-axis text");
+                for (var i = 0; i < a.length; i++) {
+                    if (a[i] && a[i].innerHTML) {
+                        var singleCharacterLength =
+                            a[i].getBBox().width / a[i].innerHTML.length;
+
+                        var maxWidth =
+                            document.querySelector(".y-axis").getBBox().width >
+                            72
+                                ? 72
+                                : document.querySelector(".y-axis").getBBox()
+                                      .width;
+
+                        var numOfCharacters = maxWidth / singleCharacterLength;
+
+                        if (a[i].innerHTML.length > numOfCharacters) {
+                            a[i].innerHTML =
+                                a[i].innerHTML.substr(0, numOfCharacters - 3) +
+                                "...";
+                        }
+                    }
                 }
 
                 setLabel(xAxisLabel, "y_label", d3.select("svg"), false);
@@ -895,7 +895,6 @@
                     .attr("height", initialBoxDimension)
                     .attr("width", initialBoxDimension)
                     .attr("points", function (d, i) {
-                        console.log(d);
                         var x1 = xScale(d[1]);
                         return x1;
                     })
@@ -903,7 +902,6 @@
                         var x_pos = d3.mouse(this)[0];
                         var y_pos = d3.mouse(this)[1];
 
-                        // console.log(d);
                         const xValue = dateformatValue(d[0]);
                         const yValue = d[1];
                         var yScroll =
