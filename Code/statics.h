@@ -13,6 +13,7 @@ public:
     static QString currentDbClassification;
     static int onlineStorageType;
     static QString driverName;
+    static QString extractPath;
 
     // Mysql
     static QString myHost;

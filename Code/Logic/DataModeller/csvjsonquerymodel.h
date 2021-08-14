@@ -2,6 +2,10 @@
 #define CSVJSONQUERYMODEL_H
 
 #include <QObject>
+#include <QFile>
+#include <QDebug>
+
+#include "../../duckdb.hpp"
 
 class CSVJsonQueryModel : public QObject
 {
