@@ -86,6 +86,11 @@ function changeLabelPostionsAttributes(
         window.isFirstInitialValueSet = true;
     }
 
+    console.log(
+        "window['initialLabelPosition' + attributeName]" +
+            window["initialLabelPosition" + attributeName]
+    );
+
     if (selectorLabel == ".y_label") {
         d3.selectAll(selectorLabel).attr(
             attributeName,
@@ -180,7 +185,7 @@ function setLabel(
             .attr("class", labelType)
             .attr("text-anchor", "middle")
             .text(label)
-            .attr("y", 0)
+            .attr("y", 5)
             .attr("font-size", yLabelfontSize)
             .attr("font-family", yLabelfontFamily)
             .attr("fill", yLabelfontColor)
