@@ -1242,6 +1242,8 @@
                     sortedKeys.forEach((dateKey) => {
                         response.push([dateKey, dateWiseResponse[dateKey]]);
                     });
+
+                    console.log(response);
                     return response;
                 }
 
@@ -1285,7 +1287,7 @@
                     filledStatus = false,
                     curveType = defaultD3Config.defaultLineCurve,
                     standardThresholdWidth = defaultD3Config.standardThresholdWidth,
-                    markerStatus,
+                    markerStatus = defaultD3Config.defaultMarkerStatus,
                 } = plottingConfiguration;
                 window.xLabelfontSize = xLabelfontSize;
                 window.yLabelfontSize = yLabelfontSize;
@@ -1626,22 +1628,12 @@
                     .attr("class", "axis axis--x x-axis")
                     .attr("transform", "translate(" + 0 + "," + height + ")");
 
-                if (isDateFormat(dataValues[0][0])) {
-                    bottomAxis.call(
-                        d3
-                            .axisBottom(xScale)
-                            .tickSizeOuter(0)
-                            .ticks(dataValues.length)
-                            .tickFormat(d3.timeFormat(dateFormat))
-                    );
-                } else {
-                    bottomAxis.call(
-                        d3
-                            .axisBottom(xScale)
-                            .tickSizeOuter(0)
-                            .ticks(dataValues.length)
-                    );
-                }
+                bottomAxis.call(
+                    d3
+                        .axisBottom(xScale)
+                        .tickSizeOuter(0)
+                        .ticks(dataValues.length)
+                );
 
                 var bar = g
                     .selectAll("rect")
