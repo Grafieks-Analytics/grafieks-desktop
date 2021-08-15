@@ -15,7 +15,8 @@ class ExtractsManager : public QObject
 {
     Q_OBJECT
     QList<QByteArray> columnNames;
-    QStringList columnTypes;
+    QVector<int> columnIntTypes;
+    QStringList columnStringTypes;
     QString tableName;
 
 
@@ -23,7 +24,7 @@ public:
     explicit ExtractsManager(QObject *parent = nullptr);
 
 public slots:
-    void createTable(QList<QByteArray> columnNames, QStringList columnTypes, QString tableName);
+    void createTable(QList<QByteArray> columnNames, QVector<int> columnIntTypes, QStringList columnStringTypes, QString tableName);
     void uploadCSVData(QFile *csvFile = nullptr, char delimiter = ',');
     void uploadQueryData(QSqlQuery *query = nullptr);
 
