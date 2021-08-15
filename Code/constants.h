@@ -12,6 +12,34 @@ namespace Constants
     const int GeneralErrorCode = 403;
     const QString DefaultBackgroundColor = "#FFFFFF";
 
+    // EXTRACTS (DuckDb) Data Type integer for switching
+    const int varcharIntType = 0;
+    const int boolIntType = 1;
+    const int dateIntType = 2;
+    const int dateTimeIntType = 3;
+    const int blobIntType = 4;
+    const int tinyIntIntType = 5;
+    const int smallIntIntType = 6;
+    const int intIntType = 7;
+    const int bigIntIntType = 8;
+    const int hugeIntIntType = 9;
+    const int realIntType = 10;
+    const int doubleIntType = 11;
+
+    // Extracts (DuckDB) Data Type names
+    const QString varcharStringType = "VARCHAR";
+    const QString boolStringType = "BOOL";
+    const QString dateStringType = "DATE";
+    const QString dateTimeStringType = "DATETIME";
+    const QString blobStringType = "BLOB";
+    const QString tinyIntIStringType = "TINYINT";
+    const QString smallIntStringType = "SMALLINT";
+    const QString intStringType = "INTEGER";
+    const QString bigIntStringType = "BIGINT";
+    const QString hugeIntStringType = "HUGEINT";
+    const QString realStringType = "REAL";
+    const QString doubleStringType = "DOUBLE";
+
 
     // Datasource type int
     const int mysqlIntType = 0;
