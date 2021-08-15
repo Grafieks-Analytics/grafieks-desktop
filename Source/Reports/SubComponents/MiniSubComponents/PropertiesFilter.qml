@@ -126,6 +126,9 @@ Column{
             case Constants.areaChartTitle:
                 switchChart(Constants.multipleAreaChartTitle)
                 break;
+            case Constants.horizontalAreaChartTitle:
+                switchChart(Constants.multipleHorizontalAreaChartTitle)
+                break;
             case Constants.lineChartTitle:
                 switchChart(Constants.multiLineChartTitle)
                 break;

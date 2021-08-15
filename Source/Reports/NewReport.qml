@@ -327,8 +327,9 @@ Page {
         case Constants.areaChartTitle:
             console.log(chartTitle,"CLICKED")
             break;
-        case Constants.stackedAreaChartTitle:
+        case Constants.horizontalAreaChartTitle:
             console.log(chartTitle,"CLICKED")
+            colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
             break;
         case Constants.lineChartTitle:
             console.log(chartTitle,"CLICKED");
@@ -338,6 +339,7 @@ Page {
             console.log(chartTitle,"CLICKED")
             colorData = (dataValues && [JSON.parse(dataValues)[1][0]]) || [];
             break;
+        case Constants.stackedAreaChartTitle:
         case Constants.multiLineChartTitle:
             console.log(Constants.multiLineChartTitle,"CLICKED");
             dataValues = JSON.parse(dataValues);
@@ -345,6 +347,7 @@ Page {
             colorData = (dataValues && dataValues[1]) || [];
             dataValues = JSON.stringify(dataValues);
             break;
+        case Constants.multipleHorizontalAreaChartTitle:
         case Constants.horizontalMultiLineChartTitle:
             dataValues = JSON.parse(dataValues);
             dataValues[1].splice(1,0,colorByColumnName); 
@@ -399,6 +402,8 @@ Page {
         case Constants.pivotTitle:
             console.log(chartTitle,"CLICKED")
             break;
+        default:
+            console.log(chartTitle,"Clicked, but is a missed case")
         }
         if(!dataValues){
             return;
@@ -457,6 +462,10 @@ Page {
             case Constants.lineChartTitle:
                 console.log('Switching to horizontal line chart')
                 switchChart(Constants.horizontalLineChartTitle);
+                break;
+            case Constants.areaChartTitle:
+                console.log('Switching to horizontal line chart')
+                switchChart(Constants.horizontalAreaChartTitle);
                 break;
             }
         }else{
@@ -878,6 +887,15 @@ Page {
                     }
                     switchChart(Constants.horizontalLineChartTitle)
                     break;
+                case Constants.areaChartTitle:
+                    console.log(Constants.areaChartTitle);
+                    if(colorByData.length)  {
+                        console.log('Changeing to Horizontal Stack Area');
+                        switchChart(Constants.multipleHorizontalAreaChartTitle)
+                        break;
+                    }
+                    switchChart(Constants.horizontalAreaChartTitle)
+                    break;
                 case Constants.horizontalBarGroupedChartTitle:
                     if(colorByData.length){
                         switchChart(Constants.horizontalStackedBarChartTitle)
@@ -890,6 +908,18 @@ Page {
                         break;
                     }
                     switchChart(Constants.horizontalLineChartTitle);
+                    break;
+                case Constants.horizontalAreaChartTitle:
+                    if(colorByData.length){
+                        switchChart(Constants.multipleHorizontalAreaChartTitle);
+                        break;
+                    }
+                    break;
+                case Constants.multipleHorizontalAreaChartTitle:
+                    if(colorByData.length){
+                        break;
+                    }
+                    switchChart(Constants.horizontalAreaChartTitle);
                     break;
                 default:
                     console.log('Debug:','Horizontal Graph Missed condition',chartTitle);
@@ -1187,7 +1217,6 @@ Page {
                 // datavalues is a global property and set using connections
                 // due to multi threading
                 colorData = [JSON.parse(dataValues)[1][0]] || [];
-
                 colorData.forEach(function (element,index) {
                     dataItemList.append({"colorValue" : Constants.d3ColorPalette[index % Constants.d3ColorPalette.length], "dataItemName" : element});
                 });
@@ -1239,16 +1268,19 @@ Page {
                 // Area - xAxis(String), yAxis(String)
                 ChartsModel.getAreaChartValues(xAxisColumns[0],yAxisColumns[0]);
                 break;
+            case Constants.horizontalAreaChartTitle:
+                ChartsModel.getAreaChartValues(yAxisColumns[0],xAxisColumns[0]);
+                break;
             case Constants.stackedAreaChartTitle:
             case Constants.multipleAreaChartTitle:
                 console.log('Stacked Area Chart')
                 console.log('Colour By columnName',colorByColumnName)
-                ChartsModel.getStackedAreaChartValues(xAxisColumns[0],yAxisColumns[0],colorByColumnName);
+                ChartsModel.getMultiLineChartValues(xAxisColumns[0],yAxisColumns[0],colorByColumnName);
                 break;
             case Constants.multipleHorizontalAreaChartTitle:
                 console.log('Stacked Area Chart')
                 console.log('Colour By columnName',colorByColumnName)
-                ChartsModel.getStackedAreaChartValues(yAxisColumns[0],xAxisColumns[0],colorByColumnName);
+                ChartsModel.getMultiLineChartValues(yAxisColumns[0],xAxisColumns[0],colorByColumnName);
                 break;
             case Constants.lineChartTitle:
                 console.log("LINE CLICKED")
@@ -1295,7 +1327,8 @@ Page {
                 break;
             case Constants.heatMapChartTitle:
                 console.log("HEATMAP CLICKED")
-                ChartsModel.getHeatMapChartValues(xAxisColumns[0],yAxisColumns[0], ReportParamsModel.itemName);
+                console.log(xAxisColumns[0],yAxisColumns[0], colorByColumnName);
+                ChartsModel.getHeatMapChartValues(xAxisColumns[0],colorByColumnName, yAxisColumns[0]);
                 break;
             case Constants.sunburstChartTitle:
                 console.log("SUNBURST CLICKED");
