@@ -8,7 +8,6 @@
         <script src="./Data/utils.js"></script>
         <script src="./Data/d3.v4.min.js"></script>
         <title>Heatmap</title>
-        <link rel="icon" href="logo.png" type="image/png" sizes="32x32" />
         <link rel="stylesheet" href="Data/general.css" />
     </head>
     <body>
@@ -372,7 +371,7 @@
                     .scaleBand()
                     .range([0, width])
                     .domain(myGroups)
-                    .padding(paddingInner);
+                    .padding(0);
                 svg.append("g")
                     .attr("class", "x-axis")
                     .attr("transform", "translate(0," + height + ")")
@@ -383,7 +382,7 @@
                     .scaleBand()
                     .range([height, 0])
                     .domain(myVars)
-                    .padding(0.1);
+                    .padding(0.003);
                 svg.append("g")
                     .attr("class", "y-axis")
                     .call(d3.axisLeft(y).tickSizeOuter(0));
@@ -439,7 +438,6 @@
                                     "<br/>Value: " +
                                     d[2]
                             );
-                        d3.select(".heatmap" + i).style("fill", d3colors[9]);
                     })
                     .on("mouseout", function (d, i) {
                         d3.select("#tooltip").style("display", "none");
