@@ -551,10 +551,6 @@
             } = defaultD3Config;
 
             function transformData(dataValue, dateFormat, dateFormat1) {
-                debugger;
-                console.log(dataValue);
-                // return dataValue;
-
                 json = {};
                 var isKey1Date = false;
                 var isKey2Date = false;
@@ -567,6 +563,7 @@
                 }
 
                 var uniqueKey2 = [];
+                var lineMainCategories = [];
                 dataValue.forEach((d) => {
                     if (isKey1Date) {
                         var key = getDateFormattedData(d[1], dateFormat);
@@ -581,6 +578,10 @@
                     }
                     if (!uniqueKey2.includes(key)) {
                         uniqueKey2.push(key);
+                    }
+
+                    if (!lineMainCategories.includes(key2)) {
+                        lineMainCategories.push(key2);
                     }
 
                     var value = d[2];
@@ -616,7 +617,7 @@
                     });
                 });
 
-                return [responseData, allKeys, data[2]];
+                return [responseData, lineMainCategories, allKeys, data[2]];
             }
 
             function drawChart(data, plottingConfiguration = {}) {
@@ -679,11 +680,8 @@
                 // var [dataValues, all_keys, keys2] = dataValues;
 
                 d3Colors = d3colorPalette;
-                var [dataValues, allKeys, label] = transformData(
-                    data[0],
-                    dateFormat,
-                    dateFormat
-                );
+                var [dataValues, lineMainCategories, allKeys, label] =
+                    transformData(data[0], dateFormat, dateFormat);
                 [xAxisLabel, yAxisLabel] = data[2];
 
                 // legends code starts
@@ -947,7 +945,7 @@
                 // legends code ends
 
                 if (chartType == constants.chartType.STANDARD) {
-                    height = dataValues.length * 30;
+                    height = lineMainCategories.length * 30;
                     if (
                         height + margin.top + margin.bottom <
                         window.innerHeight
@@ -1301,7 +1299,11 @@
                     .attr("y", 8);
 
                 if (chartType == constants.chartType.FIT_HEIGHT) {
-                    removeAxisTicks("yAxis", dataValues);
+                    removeAxisTicks(
+                        "yAxis",
+                        dataValues,
+                        lineMainCategories.length
+                    );
                 }
 
                 function make_x_gridlines(x) {

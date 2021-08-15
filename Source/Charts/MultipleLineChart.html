@@ -513,7 +513,7 @@
                     "Phoenix",
                     "Roseville",
                 ],
-                ["Category", "Row_ID","city"],
+                ["Category", "Row_ID", "city"],
             ];
 
             var data = [
@@ -914,6 +914,7 @@
                 }
 
                 var uniqueKey2 = [];
+                var lineMainCategories = [];
                 dataValue.forEach((d) => {
                     if (isKey1Date) {
                         var key = getDateFormattedData(d[1], dateFormat);
@@ -928,6 +929,10 @@
                     }
                     if (!uniqueKey2.includes(key)) {
                         uniqueKey2.push(key);
+                    }
+
+                    if (!lineMainCategories.includes(key2)) {
+                        lineMainCategories.push(key2);
                     }
 
                     var value = d[2];
@@ -963,7 +968,7 @@
                     });
                 });
 
-                return [responseData, allKeys, data[2]];
+                return [responseData, lineMainCategories, allKeys, data[2]];
             }
 
             function drawChart(data, plottingConfiguration = {}) {
@@ -1017,13 +1022,10 @@
                 // var dataValues = data[0];
                 var y_pos_x_label = 55;
 
-                var [dataValues, allKeys, label] = transformData(
-                    data[0],
-                    dateFormat,
-                    dateFormat
-                );
+                var [dataValues, lineMainCategories, allKeys, label] =
+                    transformData(data[0], dateFormat, dateFormat);
 
-                console.log({ dataValues });
+                console.log({ lineMainCategories });
 
                 // console.log({ dataValues, keys });
 
@@ -1034,7 +1036,7 @@
                 d3Colors = d3colorPalette;
 
                 stroke = d3Colors[0];
-                [xAxisLabel,colorData, yAxisLabel] = data[2];
+                [xAxisLabel, colorData, yAxisLabel] = data[2];
                 // colorData = "colorData";
                 // console.log({ data });
 
@@ -1047,12 +1049,12 @@
 
                 d3.selectAll("#my_dataviz").html("");
                 var margin = { top: 30, right: 30, bottom: 70, left: 60 },
-                    width = window.innerWidth  - 88,
+                    width = window.innerWidth - 88,
                     height =
                         window.innerHeight - margin.top - margin.bottom - 55;
 
                 if (chartType == constants.chartType.STANDARD) {
-                    width = allKeys.length * standardThresholdWidth;
+                    width = lineMainCategories.length * standardThresholdWidth;
                 }
 
                 if (legendPosition == "top" || legendPosition == "bottom") {
@@ -1086,15 +1088,7 @@
                 var xAxisValues = dataValues.map((d) => d[0]);
 
                 // Add X axis --> it is a date format
-                x = d3
-                    .scaleBand()
-                    .domain(xAxisValues)
-                    .range([
-                        0,
-                        chartType == constants.chartType.STANDARD
-                            ? width
-                            : width + 70,
-                    ]);
+                x = d3.scaleBand().domain(xAxisValues).range([0, width]);
 
                 svg.append("g")
                     .attr("transform", "translate(0," + height + ")")
@@ -1771,16 +1765,16 @@
                     extraHeightWorked = true;
                     extraHeight = maxWidth < 55 ? maxWidth : 53;
 
-                //     d3.select(".x-axis").attr("text-anchor", "right");
+                    //     d3.select(".x-axis").attr("text-anchor", "right");
 
-                //     d3.selectAll(".x-axis text")
-                //         .attr("transform", "rotate(-90)")
-                //         .attr("dy", "0.3em")
+                    //     d3.selectAll(".x-axis text")
+                    //         .attr("transform", "rotate(-90)")
+                    //         .attr("dy", "0.3em")
 
-                //         .attr("x", "-"+extraHeight)
-                //         .attr("y", "0");
-                // }
-                      d3.select(".x-axis").attr("text-anchor", "right");
+                    //         .attr("x", "-"+extraHeight)
+                    //         .attr("y", "0");
+                    // }
+                    d3.select(".x-axis").attr("text-anchor", "right");
                     d3.selectAll(".x-axis text")
                         .attr("transform", "rotate(-90)")
                         .attr("dy", "0.3em")
@@ -1797,7 +1791,11 @@
                     .getBBox().height;
 
                 if (chartType == constants.chartType.FIT_WIDTH) {
-                    removeAxisTicks("xAxis", dataValues, dataValues.length / 2);
+                    removeAxisTicks(
+                        "xAxis",
+                        dataValues,
+                        lineMainCategories.length
+                    );
                     for (var i = 0; i < a.length; i++) {
                         if (i == 0 && barWidth < textWidth * 0.5) {
                             a[i].setAttribute("dy", "1em");
