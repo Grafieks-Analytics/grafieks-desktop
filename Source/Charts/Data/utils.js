@@ -121,7 +121,6 @@ function getAttributesValues(selector) {
         return false;
     }
     value = value.getBoundingClientRect().height;
-    console.log(value);
     return value;
 }
 
@@ -137,9 +136,6 @@ function setLabel(
     x_tick_fontSize,
     y_tick_fontSize
 ) {
-    console.log("x" + x_tick_fontSize);
-    console.log("y" + y_tick_fontSize);
-
     // debugger;
     const margin = { top: 30, right: 30, bottom: 70, left: 60 };
     if (
@@ -285,7 +281,6 @@ function setSvgBackground(backgroundColor, opacity) {
     if (opacity == 0 || opacity) {
         var rgb = hexToRgbNew(backgroundColor);
         var rgba = "rgba(" + rgb + "," + opacity + ")";
-        console.log({ rgba });
         backgroundColor = rgba2hex(rgba);
     }
     var styleTag = document.createElement("style");
