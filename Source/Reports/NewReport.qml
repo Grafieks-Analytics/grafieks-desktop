@@ -346,8 +346,11 @@ Page {
             dataValues = JSON.stringify(dataValues);
             break;
         case Constants.horizontalMultiLineChartTitle:
-            console.log(chartTitle,"CLICKED");
-            colorData = (dataValues && JSON.parse(dataValues)[1]) || [];
+            dataValues = JSON.parse(dataValues);
+            dataValues[1].splice(1,0,colorByColumnName); 
+            colorData = (dataValues && dataValues[1]) || [];
+            dataValues = JSON.stringify(dataValues);
+            break;
         case Constants.pieChartTitle:
         case Constants.donutChartTitle:
             console.log(chartTitle,"CLICKED")
@@ -1150,6 +1153,8 @@ Page {
         if(webEngineView.loading){
             return;
         }
+
+        console.log(JSON.stringify(d3PropertyConfig));
 
         if(xAxisColumns.length===0 && yAxisColumns.length === 0){
             // set everything to default

@@ -551,6 +551,10 @@
             } = defaultD3Config;
 
             function transformData(dataValue, dateFormat, dateFormat1) {
+                debugger;
+                console.log(dataValue);
+                // return dataValue;
+
                 json = {};
                 var isKey1Date = false;
                 var isKey2Date = false;
@@ -570,51 +574,48 @@
                         var key = d[1];
                     }
 
-                    if (!json[key]) {
-                        json[key] = {};
-                    }
                     if (isKey2Date) {
                         var key2 = getDateFormattedData(d[0], dateFormat1);
                     } else {
                         var key2 = d[0];
                     }
-                    if (!uniqueKey2.includes(key2)) {
-                        uniqueKey2.push(key2);
+                    if (!uniqueKey2.includes(key)) {
+                        uniqueKey2.push(key);
                     }
 
                     var value = d[2];
 
-                    if (!json[key][key2]) {
-                        json[key][key2] = 0;
+                    if (!json[key2]) {
+                        json[key2] = {};
+                    }
+                    if (!json[key2][key]) {
+                        json[key2][key] = 0;
                     }
 
-                    json[key][key2] += +value;
+                    json[key2][key] += +value;
                 });
 
                 var allKeys = uniqueKey2;
-
                 let response = Object.keys(json).map((key) => {
                     return { ...json[key], key };
                 });
-                if (isKey1Date) {
+
+                if (isKey2Date) {
                     var sortedKeys = sortDates(json, dateFormat);
                     response = sortedKeys.map((d) => {
                         return { ...json[d], key: d };
                     });
                 }
 
-                var allKeys = uniqueKey2;
-
                 var responseData = [];
 
                 response.forEach((d) => {
                     var objectName = d.key;
                     allKeys.forEach((key) => {
-                        responseData.push([key, objectName, d[key]]);
+                        responseData.push([objectName, key, d[key]]);
                     });
                 });
 
-                console.log({ responseData });
                 return [responseData, allKeys, data[2]];
             }
 
@@ -681,7 +682,7 @@
                 var [dataValues, allKeys, label] = transformData(
                     data[0],
                     dateFormat,
-                    dateFormat1
+                    dateFormat
                 );
                 [xAxisLabel, yAxisLabel] = data[2];
 
@@ -699,13 +700,13 @@
 
                     d3.select("#legend")
                         .selectAll("div")
-                        .data([data[1][0]])
+                        .data([dataValues[1][0]])
                         .enter()
                         .append("div")
                         .html((d, i) => {
                             return (
                                 '<div style="width: 15px; height: 15px; margin-top:2px; background: ' +
-                                d3Colors[i % data[1][1].length] +
+                                d3Colors[i % dataValues[1][1].length] +
                                 ';">  </div>' +
                                 "<span style='margin-left: 5px; max-width: 160px'>" +
                                 d +
