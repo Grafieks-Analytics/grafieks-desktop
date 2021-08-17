@@ -21,6 +21,10 @@ function isDateFormat(date) {
     return false;
 }
 
+function arraySum(arr){
+    return arr.reduce((a, b) => a + b, 0)
+}
+
 function isInMonth(value) {
     var shortMonths = [
         "jan",

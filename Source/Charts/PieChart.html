@@ -141,6 +141,8 @@
                 .domain(Object.keys(data))
                 .range(d3Colors);
 
+            var totalSum = arraySum(Object.values(data));
+                
             // Compute the position of each group on the pie:
             var pie = d3
                 .pie()
@@ -162,9 +164,11 @@
                 .merge(u)
                 // .transition()
                 // .duration(1000)
-                .attr("id", "new_path")
                 .attr("d", d3.arc().innerRadius(0).outerRadius(radius))
                 .attr("fill", function (d) {
+                    this.setAttribute("data-label-name",d.data.key);
+                    this.setAttribute("data-value",d.data.value);
+                    this.setAttribute('data-percentage',(d.data.value/totalSum)*100)
                     return color(d.data.key);
                 })
                 .attr("class", function (d, i) {
