@@ -292,6 +292,9 @@ QtObject {
     property string stackedBarChartUrl: "StackedBarChart.html"
     property string stackedAreaChartUrl: "StackedAreaChart.html"
 
+    property string horizontalStackedAreaChartTitle: "Horizontal Stacked Area Chart"
+    property string horizontalStackedAreaChartUrl: "HorizontalMultipleAreaChart.html"
+
     property string horizontalBarChartTitle: "HorizontalBarChart"
     property string horizontalBarChartUrl: "HorizontalBarChart.html"
 
