@@ -416,8 +416,6 @@ Rectangle{
                     console.log('Debug: Loading multiline chart');
                     chartHtml = Constants.multiLineChartUrl;
                     // switchChart(Constants.multiLineChartTitle);
-                }else{
-                    console.log('Moving to line ????')
                 }
             }
         }
