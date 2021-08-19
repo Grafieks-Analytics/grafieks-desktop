@@ -184,6 +184,7 @@ Item{
         // Only SELECT query allowed
 
         if(isSqlSelect){
+            console.log(GeneralParamsModel.getDbClassification(), "Classification");
 
             if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
 
@@ -202,9 +203,16 @@ Item{
                 // QueryStatsModel.showStats()
                 // TableSchemaModel.showSchema(DSParamsModel.tmpSql)
 
-            } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-                console.log("INSIDE DUCK RUN")
-                DuckQueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
+            } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
+                console.log("INSIDE CSV JSON RUN")
+                CSVJsonQueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
+
+                testQueryResult.visible = false
+                dataPreviewResult.visible = true
+                queryUpdate.visible = true
+            } else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+                console.log("INSIDE EXCEL RUN")
+                ExcelQueryModel.setPreviewQuery(DSParamsModel.displayRowsCount)
 
                 testQueryResult.visible = false
                 dataPreviewResult.visible = true

@@ -48,18 +48,6 @@ Popup {
             separator.text = ""
             csvFileName.text = ""
         }
-    }
-
-    Connections{
-        target: DuckCon
-
-        function onImportError(errorString, fileType){
-            if(errorString.length > 0 && fileType === "csv"){
-                // Show on import csv error
-                error_dialog.open();
-                error_dialog.text = errorString
-            }
-        }
 
         function onCsvLoginStatus(status, directLogin){
             if(directLogin === true){
@@ -79,6 +67,18 @@ Popup {
             mainTimer.running = false
             busyindicator.running = false
             displayTime.text = ""
+        }
+    }
+
+    Connections{
+        target: DuckCon
+
+        function onImportError(errorString, fileType){
+            if(errorString.length > 0 && fileType === "csv"){
+                // Show on import csv error
+                error_dialog.open();
+                error_dialog.text = errorString
+            }
         }
     }
 

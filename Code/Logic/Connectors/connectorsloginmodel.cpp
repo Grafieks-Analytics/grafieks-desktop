@@ -133,7 +133,7 @@ void ConnectorsLoginModel::accessOdbcLogin(QString driver, QString db, QString u
 void ConnectorsLoginModel::excelOdbcLogin(QString driver, QString filename)
 {
     response = excelcon->ExcelOdbcInstance(driver, filename);
-    this->staticSetter(filename, Constants::sqlType, Constants::excelIntType, Constants::excelOdbcStrType, false, driver);
+    this->staticSetter(filename, Constants::excelType, Constants::excelIntType, Constants::excelOdbcStrType, false, driver);
     emit excelLoginStatus(response, true);
 }
 
@@ -144,18 +144,15 @@ void ConnectorsLoginModel::csvLogin(QString filename, bool directLogin, QString 
 
     Statics::separator = separator;
 
-    this->staticSetter(filename, Constants::duckType, Constants::csvIntType, NULL, directLogin);
-//    emit csvLoginStatus(response, directLogin);
-
-    // Here the login signal will be handled from DuckCon Class
-    // As we are using multithreaded signal and slot
+    this->staticSetter(filename, Constants::csvType, Constants::csvIntType, NULL, directLogin);
+    emit csvLoginStatus(response, directLogin);
 }
 
 void ConnectorsLoginModel::jsonLogin(QString filename, bool directLogin)
 {
     response = jsoncon->JsonInstance(filename);
-    this->staticSetter(filename, Constants::duckType, Constants::jsonIntType, NULL, directLogin);
-//    emit jsonLoginStatus(response, directLogin);
+    this->staticSetter(filename, Constants::jsonType, Constants::jsonIntType, NULL, directLogin);
+    emit jsonLoginStatus(response, directLogin);
 
     // Here the login signal will be handled from DuckCon Class
     // As we are using multithreaded signal and slot
@@ -291,12 +288,12 @@ void ConnectorsLoginModel::staticSetter(QString dbName, QString classification, 
     Statics::currentDbStrType = strType;
     Statics::driverName = driverName;
 
-    if(classification == Constants::duckType){
-        QFileInfo fi(dbName);
-        dbName = fi.baseName();
+//    if(classification == Constants::duckType){
+//        QFileInfo fi(dbName);
+//        dbName = fi.baseName();
 
-        emit sendDbName(Statics::currentDbName, directLogin, this->response);
-    }
+//        emit sendDbName(Statics::currentDbName, directLogin, this->response);
+//    }
 
     this->setConnectedDB(dbName);
     emit dSSelected(true);

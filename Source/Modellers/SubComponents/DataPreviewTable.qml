@@ -176,8 +176,10 @@ Rectangle {
                     onObjectNameChanged: {
                         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
                             textItem1.text = QueryModel.data(QueryModel.index(styleData.row, styleData.column))
-                        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-                            textItem1.text = DuckQueryModel.data(DuckQueryModel.index(styleData.row, styleData.column))
+                        } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
+                            // textItem1.text = CSVJsonQueryModel.data(DuckQueryModel.index(styleData.row, styleData.column))
+                        }else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+                            // textItem1.text = ExcelJsonQueryModel.data(DuckQueryModel.index(styleData.row, styleData.column))
                         } else{
                             textItem1.text = ForwardOnlyQueryModel.data(ForwardOnlyQueryModel.index(styleData.row, styleData.column))
                         }

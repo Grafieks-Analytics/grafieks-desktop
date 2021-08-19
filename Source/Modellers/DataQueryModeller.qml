@@ -59,19 +59,7 @@ Page {
             }
         }
 
-        function onCsvLoginStatus(status){
-            if(status.status === true){
-                // Call functions
-                tableslist.model = CSVJsonDataModel.getTableList()
-            }
-        }
 
-        function onJsonLoginStatus(status){
-            if(status.status === true){
-                // Call functions
-                tableslist.model = CSVJsonDataModel.getTableList()
-            }
-        }
     }
 
 
@@ -147,6 +135,20 @@ Page {
             if(status.status === true){
                 // Call functions
                 tableslist.model = ExcelDataModel.getTableList()
+            }
+        }
+
+        function onCsvLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                tableslist.model = CSVJsonDataModel.getTableList()
+            }
+        }
+
+        function onJsonLoginStatus(status){
+            if(status.status === true){
+                // Call functions
+                tableslist.model = CSVJsonDataModel.getTableList()
             }
         }
     }
@@ -345,8 +347,10 @@ Page {
     function searchTable(text){
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             tableslist.model = NewTableListModel.filterTableList(text)
-        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-            tableslist.model = DuckDataModel.filterTableList(text)
+        } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
+            tableslist.model = CSVJsonDataModel.filterTableList(text)
+        } else if(GeneralParamsModel.getDbClassification() === Constants.csvType){
+            tableslist.model = ExcelDataModel.filterTableList(text)
         } else{
             tableslist.model = ForwardOnlyDataModel.filterTableList(text)
         }

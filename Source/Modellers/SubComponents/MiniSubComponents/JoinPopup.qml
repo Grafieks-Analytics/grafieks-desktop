@@ -89,27 +89,7 @@ Rectangle{
             }
         }
 
-        function onCsvLoginStatus(status){
-            if(status.status === true){
-                availableJoins = 4
 
-                leftJoinCol.visible = true
-                rightJoinCol.visible = true
-                innerJoinCol.visible = true
-                fullJoinCol.visible = true
-            }
-        }
-
-        function onJsonLoginStatus(status){
-            if(status.status === true){
-                availableJoins = 4
-
-                leftJoinCol.visible = true
-                rightJoinCol.visible = true
-                innerJoinCol.visible = true
-                fullJoinCol.visible = true
-            }
-        }
     }
 
     Connections{
@@ -198,7 +178,27 @@ Rectangle{
             }
         }
 
+        function onCsvLoginStatus(status){
+            if(status.status === true){
+                availableJoins = 4
 
+                leftJoinCol.visible = true
+                rightJoinCol.visible = true
+                innerJoinCol.visible = true
+                fullJoinCol.visible = true
+            }
+        }
+
+        function onJsonLoginStatus(status){
+            if(status.status === true){
+                availableJoins = 4
+
+                leftJoinCol.visible = true
+                rightJoinCol.visible = true
+                innerJoinCol.visible = true
+                fullJoinCol.visible = true
+            }
+        }
     }
 
 

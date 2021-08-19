@@ -88,19 +88,7 @@ Item {
             }
         }
 
-        function onCsvLoginStatus(status){
-            if(status.status === true){
-                DSParamsModel.setQueryJoiner("\"")
-                databaseType = "csv"
-            }
-        }
 
-        function onJsonLoginStatus(status){
-            if(status.status === true){
-                DSParamsModel.setQueryJoiner("\"")
-                databaseType = "json"
-            }
-        }
     }
 
     Connections{
@@ -179,7 +167,19 @@ Item {
             }
         }
 
+        function onCsvLoginStatus(status){
+            if(status.status === true){
+                DSParamsModel.setQueryJoiner("\"")
+                databaseType = "csv"
+            }
+        }
 
+        function onJsonLoginStatus(status){
+            if(status.status === true){
+                DSParamsModel.setQueryJoiner("\"")
+                databaseType = "json"
+            }
+        }
     }
 
 
@@ -914,10 +914,12 @@ Item {
 
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryModel.callSql(DSParamsModel.tmpSql)
-        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-            DuckQueryModel.setQuery(DSParamsModel.tmpSql)
-        } else{
+        } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
+            CSVJsonQueryModel.setQuery(DSParamsModel.tmpSql)
+        } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType){
             ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
+        } else {
+            ExcelQueryModel.setQuery(DSParamsModel.tmpSql)
         }
     }
 

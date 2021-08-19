@@ -277,7 +277,7 @@ int main(int argc, char *argv[])
     ForwardOnlyQueryModel forwardOnlyQueryModel;
     NewTableListModel newTableListModel;
     TableColumnsModel tableColumnsModel;
-//    ExcelQueryModel excelQueryModel;
+    ExcelQueryModel excelQueryModel;
     ExcelDataModel excelDataModel;
     CSVJsonDataModel csvJsonDataModel;
     CSVJsonQueryModel csvJsonQueryModel;
@@ -433,7 +433,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("ForwardOnlyQueryModel", &forwardOnlyQueryModel);
     engine.rootContext()->setContextProperty("NewTableListModel", &newTableListModel);
     engine.rootContext()->setContextProperty("TableColumnsModel", &tableColumnsModel);
-//    engine.rootContext()->setContextProperty("ExcelQueryModel", &excelQueryModel);
+    engine.rootContext()->setContextProperty("ExcelQueryModel", &excelQueryModel);
     engine.rootContext()->setContextProperty("ExcelDataModel", &excelDataModel);
     engine.rootContext()->setContextProperty("CSVJsonQueryModel", &csvJsonQueryModel);
     engine.rootContext()->setContextProperty("CSVJsonDataModel", &csvJsonDataModel);
