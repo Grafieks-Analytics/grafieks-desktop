@@ -38,7 +38,7 @@
             const d3Colors = d3colorPalette;
             // set the dimensions and margins of the graph
             var margin = { top: 30, right: 30, bottom: 70, left: 60 },
-                width = window.innerWidth - margin.left - margin.right + 100,
+                width = window.innerWidth - margin.left - margin.right + 80,
                 height = window.innerHeight - margin.top - margin.bottom - 20;
 
             if (!legendConfig) {
@@ -137,7 +137,7 @@
                 .select("#my_dataviz")
                 .append("svg")
                 .attr("width", width )
-                .attr("height", height + 100)
+                .attr("height", height + 80)
                 .append("g")
                 .attr(
                     "transform",
@@ -191,15 +191,44 @@
                 .style("stroke-width", "0.2px")
                 .style("opacity", 1)
                 .on("mouseover mousemove", function (d, i) {
-                    var x_pos = d3.mouse(this)[0] + width / 2 - 30;
-                    var y_pos = d3.mouse(this)[1] + height / 2 - 30;
+                    var x_pos = d3.mouse(this)[0] + width / 2 +15;
+                    var y_pos = d3.mouse(this)[1] + height / 2 +8;
 
                     d3.select("#tooltip")
                         .style("left", x_pos + "px")
                         .style("top", y_pos + "px")
                         .style("display", "block")
-                        .text(d.data.key);
+                        // .text(d.data.key);
+                        .html(function () {
+                                // var textValue = d.y0 - d.y1;
+                                // if (d.y1 < 0) {
+                                //     textValue = d.y1 - d.y0;
+                                // }
 
+                                return (
+                                    "<div class='arrowTooltip'></div>" +
+                                    "<span style='color:grey;''>" +
+                                    "xAxisLabel" +
+                                    ":&nbsp;&nbsp;" +
+                                    "</span>" +
+                                    "<span style='float: right;'>" +
+                                    d.data.key +
+                                    "</span>" +
+                                    "<br/> <br/>" +
+                                    "<span style='color:grey;''>" +
+                                    "yAxisLabel" +
+                                    ":" +
+                                    "</span>" +
+                                    "<span style='float: right;margin-left: 15px;'>" +
+                                    "yValue.toFixed(2)" +
+                                    "</span>"
+                                );
+                            });
+
+                        d3.select(".arrowTooltip").attr(
+                                "style",
+                                "border: solid; border-color: white transparent; border-width: 12px 6px 0 6px; content: '';left: -12px; transform: rotate(90deg)!important;bottom: 22px; position: absolute;"
+                            );
                     d3.selectAll(".pie").style("opacity", 0.3);
                     d3.select(this).style("opacity", 1);
                 })
