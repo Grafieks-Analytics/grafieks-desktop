@@ -263,7 +263,7 @@ void NewTableColumnsModel::getColumnsForTable(QString tableName, QString moduleN
 
     case Constants::excelIntType:{
         QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
-        QString dbQueryString = "select * from ["+tableName+"$]";
+        QString dbQueryString = "SELECT TOP 1 * FROM ["+tableName+"$]";
 
         QSqlQuery query(dbQueryString, dbExcel);
         QSqlRecord record = query.record();

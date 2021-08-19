@@ -252,12 +252,12 @@ Popup {
 
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryDataModel.columnData(colName, tableName, JSON.stringify(options));
-        } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-//            DuckDataModel.columnData(colName, tableName, JSON.stringify(options))
+        } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
             CSVJsonDataModel.columnData(colName, tableName, JSON.stringify(options))
-
-        } else{
+        } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType){
             ForwardOnlyDataModel.columnData(colName, tableName, JSON.stringify(options))
+        } else {
+            ExcelDataModel.columnData(colName, tableName, JSON.stringify(options))
         }
 
         DSParamsModel.setColName(colName)

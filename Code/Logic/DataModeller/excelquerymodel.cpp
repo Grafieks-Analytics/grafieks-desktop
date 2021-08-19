@@ -7,6 +7,7 @@ ExcelQueryModel::ExcelQueryModel(QObject *parent) : QAbstractTableModel(parent)
 
 void ExcelQueryModel::setQuery(QString query)
 {
+    qDebug() << query << "ISIDER EXCEL MODEL";
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
     this->removeTmpChartData();

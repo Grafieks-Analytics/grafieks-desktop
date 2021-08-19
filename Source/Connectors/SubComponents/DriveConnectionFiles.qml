@@ -122,6 +122,33 @@ Popup {
             }
         }
 
+
+    }
+
+
+    Connections{
+        target: ConnectorsLoginModel
+
+        function onExcelLoginStatus(status, directLogin){
+
+            if(directLogin === false){
+                if(status.status === true){
+                    popup.visible = false
+                    stacklayout_home.currentIndex = 5
+                }
+                else{
+                    popup.visible = true
+                    msg_dialog.open()
+                    msg_dialog.text = status.msg
+                }
+
+                mainTimer.stop()
+                mainTimer.running = false
+                busyindicator.running = false
+                displayTime.text = ""
+            }
+        }
+
         function onCsvLoginStatus(status, directLogin){
 
             if(directLogin === false){
@@ -162,32 +189,6 @@ Popup {
                 displayTime.text = ""
             }
         }
-    }
-
-
-    Connections{
-        target: ConnectorsLoginModel
-
-        function onExcelLoginStatus(status, directLogin){
-
-            if(directLogin === false){
-                if(status.status === true){
-                    popup.visible = false
-                    stacklayout_home.currentIndex = 5
-                }
-                else{
-                    popup.visible = true
-                    msg_dialog.open()
-                    msg_dialog.text = status.msg
-                }
-
-                mainTimer.stop()
-                mainTimer.running = false
-                busyindicator.running = false
-                displayTime.text = ""
-            }
-        }
-
     }
 
 
