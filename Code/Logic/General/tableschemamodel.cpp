@@ -396,7 +396,7 @@ void TableSchemaModel::showSchema(QString query)
 
         for(QString tableName: tablesList){
 
-            QString dbQueryString = "select * from ["+tableName+"$] LIMIT 1";
+            QString dbQueryString = "select * from ["+tableName+"$]";
 
             QSqlQuery query(dbQueryString, dbExcel);
             QSqlRecord record = query.record();

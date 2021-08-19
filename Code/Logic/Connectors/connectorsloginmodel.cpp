@@ -143,7 +143,6 @@ void ConnectorsLoginModel::csvLogin(QString filename, bool directLogin, QString 
     response = csvcon->CSVInstance(filename);
 
     Statics::separator = separator;
-    qDebug() << "CSV LOGIN" << separator << Statics::separator << separator.toStdString().c_str();
 
     this->staticSetter(filename, Constants::duckType, Constants::csvIntType, NULL, directLogin);
 //    emit csvLoginStatus(response, directLogin);

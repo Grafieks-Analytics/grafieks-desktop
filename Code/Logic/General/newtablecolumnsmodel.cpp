@@ -263,11 +263,10 @@ void NewTableColumnsModel::getColumnsForTable(QString tableName, QString moduleN
 
     case Constants::excelIntType:{
         QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
-        QString dbQueryString = "select * from ["+tableName+"$] LIMIT 1";
+        QString dbQueryString = "select * from ["+tableName+"$]";
 
         QSqlQuery query(dbQueryString, dbExcel);
         QSqlRecord record = query.record();
-
 
         if(!record.isEmpty()){
 

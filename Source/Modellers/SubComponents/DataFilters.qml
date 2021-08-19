@@ -253,7 +253,9 @@ Popup {
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryDataModel.columnData(colName, tableName, JSON.stringify(options));
         } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-            DuckDataModel.columnData(colName, tableName, JSON.stringify(options))
+//            DuckDataModel.columnData(colName, tableName, JSON.stringify(options))
+            CSVJsonDataModel.columnData(colName, tableName, JSON.stringify(options))
+
         } else{
             ForwardOnlyDataModel.columnData(colName, tableName, JSON.stringify(options))
         }
