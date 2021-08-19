@@ -888,7 +888,6 @@ Page {
         lastPickedDataPaneElementProperties= {};
         reportDataPanes= {};  // Report Data Panes Object
         dragActiveObject= {};
-        allChartsMapping= {};
         colorByData = [];
 
         // Calling this redraw will clear the chart because no x and y columns will be available
