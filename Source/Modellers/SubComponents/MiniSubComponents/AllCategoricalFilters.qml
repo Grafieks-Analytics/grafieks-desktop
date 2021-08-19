@@ -88,7 +88,8 @@ Rectangle{
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryDataModel.columnData(columnName, tableName, JSON.stringify(options))
         } else if(GeneralParamsModel.getDbClassification() === Constants.duckType){
-            DuckDataModel.columnData(columnName, tableName, JSON.stringify(options))
+//            DuckDataModel.columnData(columnName, tableName, JSON.stringify(options))
+            CSVJsonDataModel.columnData(columnName, tableName, JSON.stringify(options))
         } else{
             ForwardOnlyDataModel.columnData(columnName, tableName, JSON.stringify(options))
         }

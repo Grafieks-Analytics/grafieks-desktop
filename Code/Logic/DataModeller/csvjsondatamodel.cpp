@@ -17,95 +17,72 @@ CSVJsonDataModel::~CSVJsonDataModel()
 
 void CSVJsonDataModel::columnData(QString col, QString tableName, QString options)
 {
+    bool firstLine = true;
+    QString delimiter = Statics::separator;
+    int columnNumber = 0;
 
+    QFile file(Statics::csvJsonPath);
+    file.open(QFile::ReadOnly | QFile::Text);
+
+    if(!file.isOpen()){
+        qDebug() << "Cannot open file" << file.errorString();
+    } else{
+
+        while(!file.atEnd()){
+            const QByteArray line = file.readLine().simplified();
+            if(firstLine){
+
+                firstLine = false;
+                this->headerDataFinal = line.split(*delimiter.toStdString().c_str());
+
+                if (this->headerDataFinal.at(0).contains("\xEF\xBB\xBF")){
+                    this->headerDataFinal[0] =  this->headerDataFinal.at(0).right(this->headerDataFinal.at(0).length() - 3);
+                }
+
+                columnNumber = this->headerDataFinal.indexOf(col.toUtf8().constData());
+            } else {
+                QString colData = line.split(*delimiter.toStdString().c_str()).at(columnNumber);
+
+                if(!this->output.contains(colData)){
+                    this->output.append(colData);
+                }
+
+            }
+        }
+    }
+
+    emit columnListModelDataChanged(output, options);
 }
 
 void CSVJsonDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
 {
-
-}
-
-QStringList CSVJsonDataModel::getColumnList(QString tableName, char delimiter, QString moduleName)
-{
-    QFile file(tableName);
-    QList<QStringList> allColumns;
-    QStringList allColumnsA;
-
-    if(!file.open(QFile::ReadOnly | QFile::Text)) {
-        qDebug() << "Cannot open file" << file.errorString();
-    } else {
-        int lineCounter = 0;
-        while(lineCounter < 2){
-            const QByteArray line = file.readLine().simplified();
-            qDebug() << "LINE COUNTER" << lineCounter<< line;
-
-            if(lineCounter == 0){
-                qDebug() << "SETTING HEADERS";
-                setHeaders(line, delimiter);
-            } else {
-                qDebug() << "DETECTING DATA TYPES";
-                allColumns = detectHeaderTypes(line, delimiter);
-            }
-            lineCounter++;
+    QStringList out;
+    for(int i = 0; i < this->output.length(); i++){
+        if(this->output.at(i).contains(searchString, Qt::CaseInsensitive)){
+            out.append(this->output.at(i));
         }
     }
 
-    emit columnListObtained(allColumns, tableName, moduleName);
-
-    file.close();
-
-    return allColumnsA;
+    emit columnListModelDataChanged(out, options);
 }
 
 QStringList CSVJsonDataModel::getTableList()
 {
     QStringList output;
-    output << Statics::currentDbName;
+    QString db = Statics::currentDbName;
+    this->fileName       = QFileInfo(db).baseName().toLower();
+    this->fileName = this->fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
+
+    output << this->fileName;
     return output;
 }
 
 QStringList CSVJsonDataModel::filterTableList(QString keyword)
 {
     QStringList output;
-    output << Statics::currentDbName;
+    output << this->fileName;
 
     output.filter(keyword, Qt::CaseInsensitive);
     return output;
 }
 
-void CSVJsonDataModel::setHeaders(const QByteArray line, char delimiter)
-{
-    QList<QByteArray> headerData = line.split(delimiter);
-    this->headerLength = headerData.at(1).toInt();
-
-    this->headerDataFinal =  headerData.at(0).split(',');
-    if (this->headerDataFinal.at(0).contains("\xEF\xBB\xBF")){
-        this->headerDataFinal[0] =  this->headerDataFinal.at(0).right(this->headerDataFinal.at(0).length() - 3);
-    }
-
-    qDebug() << this->headerDataFinal << this->headerLength;
-}
-
-QList<QStringList> CSVJsonDataModel::detectHeaderTypes(const QByteArray line, char delimiter)
-{
-    QList<QByteArray> lineData = line.split(delimiter);
-
-    QStringList output;
-    QString fieldName;
-    QString fieldType;
-    QStringList outputDataList;
-    QList<QStringList> allColumns;
-
-    for(int i = 0; i < this->headerLength; i++){
-        fieldName = this->headerDataFinal.at(i);
-        fieldType = dataType.variableType(QString(lineData.at(i)));
-
-        outputDataList << fieldName << fieldType;
-
-        // Append all data type to allList as well
-        allColumns.append(outputDataList);
-        outputDataList.clear();
-    }
-
-    return allColumns;
-}

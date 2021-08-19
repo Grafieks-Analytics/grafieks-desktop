@@ -55,24 +55,25 @@ Page {
         function onExcelLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                tableslist.model = DuckDataModel.getTableList()
+                tableslist.model = ExcelDataModel.getTableList()
             }
         }
 
         function onCsvLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                tableslist.model = DuckDataModel.getTableList()
+                tableslist.model = CSVJsonDataModel.getTableList()
             }
         }
 
         function onJsonLoginStatus(status){
             if(status.status === true){
                 // Call functions
-                tableslist.model = DuckDataModel.getTableList()
+                tableslist.model = CSVJsonDataModel.getTableList()
             }
         }
     }
+
 
     Connections{
         target: ConnectorsLoginModel
@@ -1431,7 +1432,7 @@ Page {
                         id:searchTextBox
                         placeholderText: "Search"
                         selectByMouse: true
-                        width: parent.width - search_icon.width-8
+                        width: parent.width -8
                         height:30
                         cursorVisible: true
                         anchors.top: row_querymodeller_right_col.top
