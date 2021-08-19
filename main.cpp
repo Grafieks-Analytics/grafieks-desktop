@@ -79,6 +79,7 @@ QString Statics::currentDbClassification;
 int Statics::onlineStorageType;
 QString Statics::driverName;
 QString Statics::extractPath;
+QString Statics::csvJsonPath;
 
 QString Statics::myHost;
 QString Statics::myDb;

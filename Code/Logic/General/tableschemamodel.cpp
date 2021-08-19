@@ -439,47 +439,28 @@ void TableSchemaModel::showSchema(QString query)
     case Constants::csvIntType:
     case Constants::jsonIntType:{
 
-        querySplitter.setQueryForClasses(query);
-        QStringList tablesList = querySplitter.getJoinTables();
-        QString mainTable = querySplitter.getMainTable();
-        tablesList.push_back(mainTable);
+        QFile file(Statics::csvJsonPath);
 
-        for(QString tableName: tablesList){
-            tableName = tableName.replace(QRegularExpression("[\"`']"), "");
-            auto data = duckCon->con.Query("PRAGMA table_info('"+ tableName.toStdString() +"')");
-            if(data->error.empty()){
-                int rows = data->collection.Count();
+        if(!file.open(QFile::ReadOnly | QFile::Text)) {
+            qDebug() << "Cannot open file" << file.errorString();
+        } else {
+            int lineCounter = 0;
+            while(lineCounter < 2){
+                const QByteArray line = file.readLine().simplified();
 
-                for(int i = 0; i < rows; i++){
-                    QString fieldName =  data->GetValue(1, i).ToString().c_str();
-                    QString fieldType =  data->GetValue(2, i).ToString().c_str();
-
-                    // Get filter data type for QML
-                    QString filterDataType = dataType.dataType(fieldType);
-                    outputDataList << tableName << fieldName << fieldType << filterDataType;
-
-                    // Output data according to Filter type
-
-                    if(filterDataType == Constants::categoricalType){
-                        allCategorical.append(outputDataList);
-                    } else if(filterDataType == Constants::numericalType){
-                        allNumerical.append(outputDataList);
-                    } else if(filterDataType == Constants::dateType){
-                        allDates.append(outputDataList);
-                    } else{
-                        allOthers.append(outputDataList);
-                    }
-
-                    // Append all data type to allList as well
-                    allList.append(outputDataList);
-                    outputDataList.clear();
+                if(lineCounter == 0){
+                    setHeaders(line, Statics::separator);
+                } else {
+                    QMap<QString, QList<QStringList>> allColumns = detectHeaderTypes(line, Statics::separator, Statics::currentDbName);
                 }
-            }  else{
-                qWarning() << Q_FUNC_INFO << data->error.c_str();
+                lineCounter++;
             }
-
-            break;
         }
+
+        file.close();
+
+        break;
+
     }
 
     }
@@ -515,4 +496,64 @@ void TableSchemaModel::clearSchema()
 
     emit tableSchemaCleared();
 
+}
+
+void TableSchemaModel::setHeaders(const QByteArray line, QString delimiter)
+{
+
+    this->csvHeaderDataFinal = line.split(*delimiter.toStdString().c_str());
+    this->csvHeaderLength = this->csvHeaderDataFinal.length();
+
+    if (this->csvHeaderDataFinal.at(0).contains("\xEF\xBB\xBF")){
+        this->csvHeaderDataFinal[0] =  this->csvHeaderDataFinal.at(0).right(this->csvHeaderDataFinal.at(0).length() - 3);
+    }
+}
+
+QMap<QString, QList<QStringList>> TableSchemaModel::detectHeaderTypes(const QByteArray line, QString delimiter, QString tableName)
+{
+    QList<QByteArray> lineData = line.split(*delimiter.toStdString().c_str());
+
+    QStringList output;
+    QString fieldName;
+    QString fieldType;
+    QStringList outputDataList;
+    QMap<QString, QList<QStringList>> allColumns;
+
+    for(int i = 0; i < this->csvHeaderLength; i++){
+
+        fieldName = this->csvHeaderDataFinal.at(i);
+        fieldType = dataType.variableType(QString(lineData.at(i)));
+
+        // Get filter data type for QML
+        QString filterDataType = dataType.dataType(fieldType);
+
+        outputDataList << tableName << fieldName << fieldType << filterDataType;
+
+        // Output data according to Filter type
+
+        if(filterDataType == Constants::categoricalType){
+            allCategorical.append(outputDataList);
+        } else if(filterDataType == Constants::numericalType){
+            allNumerical.append(outputDataList);
+        } else if(filterDataType == Constants::dateType){
+            allDates.append(outputDataList);
+        } else{
+            allOthers.append(outputDataList);
+        }
+
+        // Append all data type to allList as well
+        allList.append(outputDataList);
+
+        // Clear Stringlist for future
+        outputDataList.clear();
+
+    }
+
+    allColumns.insert("categorical", allCategorical);
+    allColumns.insert("numerical", allNumerical);
+    allColumns.insert("dates", allDates);
+    allColumns.insert("others", allOthers);
+    allColumns.insert("allList", allList);
+
+    return allColumns;
 }

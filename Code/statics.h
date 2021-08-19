@@ -14,6 +14,7 @@ public:
     static int onlineStorageType;
     static QString driverName;
     static QString extractPath;
+    static QString csvJsonPath;
 
     // Mysql
     static QString myHost;

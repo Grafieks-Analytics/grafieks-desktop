@@ -32,6 +32,9 @@ class TableSchemaModel : public QObject
     QuerySplitter querySplitter;
     DuckCon *duckCon;
 
+    int csvHeaderLength;
+    QList<QByteArray> csvHeaderDataFinal;
+
 public:
     explicit TableSchemaModel(QObject *parent = nullptr);
     explicit TableSchemaModel(DuckCon *duckCon, QObject *parent = nullptr);
@@ -50,6 +53,9 @@ private:
     QList<QStringList> allDates;
     QList<QStringList> allOthers;
     QStringList queriedColumnNames;
+
+    void setHeaders(const QByteArray line, QString delimiter);
+    QMap<QString, QList<QStringList>> detectHeaderTypes(const QByteArray line, QString delimiter, QString tableName);
 };
 
 #endif // TABLESCHEMAMODEL_H

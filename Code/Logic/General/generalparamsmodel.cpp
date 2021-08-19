@@ -57,6 +57,11 @@ int GeneralParamsModel::currentScreen() const
     return m_currentScreen;
 }
 
+void GeneralParamsModel::setExtractPath(QString extractsPath)
+{
+    Statics::extractPath = extractsPath;
+}
+
 
 void GeneralParamsModel::setMenuType(int menuType)
 {

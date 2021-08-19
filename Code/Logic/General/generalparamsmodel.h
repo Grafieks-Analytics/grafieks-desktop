@@ -40,6 +40,9 @@ public:
     //! Current screen selector for highlighting the left menu
     int currentScreen() const;
 
+    //! Set Static Extracts Path
+    Q_INVOKABLE void setExtractPath(QString extractsPath);
+
 public slots:
 
     //! Set the current highlighted left menu

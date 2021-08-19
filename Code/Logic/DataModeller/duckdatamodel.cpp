@@ -81,6 +81,8 @@ QStringList DuckDataModel::getColumnList(QString tableName, QString moduleName)
         emit columnListObtained(allColumns, tableName, moduleName);
     }
 
+    qDebug() << "PRAGMA" << output << allColumns;
+
     return output;
 }
 
