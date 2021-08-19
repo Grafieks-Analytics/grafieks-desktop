@@ -317,6 +317,8 @@ Page {
 
     function onCreateDashboardClicked(){
 
+        saveFilePrompt.open()
+
         GeneralParamsModel.setCurrentScreen(Constants.dashboardScreen)
         stacklayout_home.currentIndex = Constants.dashboardDesignerIndex
 
@@ -1602,6 +1604,25 @@ Page {
     }
 
     // Righthand Panel ends
+
+    FileDialog{
+        id: saveFilePrompt
+        title: "Save Extract As"
+        nameFilters: ["Grafieks Extract (*.gdx )"];
+        selectExisting : false
+
+        onAccepted: {
+
+            let fileName = ConnectorsLoginModel.urlToFilePath(saveFilePrompt.fileUrl)
+            console.log("FILEPATH", fileName)
+            GeneralParamsModel.setExtractPath(fileName)
+            QueryModel.createTableTest()
+            QueryModel.insertTableTest()
+        }
+        onRejected: {
+            console.log("file rejected")
+        }
+    }
 
     //Page Design Ends
     /***********************************************************************************************************************/

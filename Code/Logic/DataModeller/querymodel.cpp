@@ -73,6 +73,54 @@ void QueryModel::setPreviewQuery(int previewRowCount)
     }
 }
 
+void QueryModel::createTableTest()
+{
+    QList<QByteArray> columnNames;
+    QVector<int> columnIntTypes;
+    QStringList columnStringTypes;
+    QString tableName;
+
+    // 这是什么,学校,ab
+//    QString x = "这是什么";
+    QString x = "aa";
+    columnNames.append(x.toUtf8());
+//    x = "学校";
+    x = "ab";
+    columnNames.append(x.toUtf8());
+    x = "ac";
+    columnNames.append(x.toUtf8());
+
+    columnIntTypes.append(Constants::varcharIntType);
+    columnIntTypes.append(Constants::varcharIntType);
+//    columnIntTypes.append(Constants::dateIntType);
+    columnIntTypes.append(Constants::doubleIntType);
+
+    columnStringTypes.append(Constants::varcharStringType);
+    columnStringTypes.append(Constants::varcharStringType);
+//    columnStringTypes.append(Constants::dateStringType);
+    columnStringTypes.append(Constants::doubleStringType);
+
+    extractsManager.createTable(columnNames, columnIntTypes, columnStringTypes, "TAB1");
+}
+
+void QueryModel::insertTableTest()
+{
+    // Query model section starts
+
+//     QSqlDatabase dbMysql = QSqlDatabase::database(Constants::mysqlStrType);
+//     QSqlQuery query("SELECT * FROM test_final", dbMysql);
+//     extractsManager.uploadQueryData(&query);
+
+    // Query model section ends
+
+    // CSV model starts
+     QFile file("C:\\Users\\chill\\Desktop\\ex.csv");
+     file.open(QFile::ReadOnly | QFile::Text);
+     extractsManager.uploadCSVData(&file);
+    // CSV model ends
+}
+
+
 void QueryModel::setQuery(const QString &query, const QSqlDatabase &db)
 {
     this->removeTmpChartData();

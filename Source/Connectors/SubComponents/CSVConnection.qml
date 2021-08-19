@@ -30,6 +30,7 @@ Popup {
 
     property var selectedFile: ""
     property var startTime: 0
+    property var separator: ","
 
     onClosed: {
         mainTimer.stop()
@@ -81,7 +82,7 @@ Popup {
         }
     }
 
-    function handleCsv(csvFileName, separator){
+    function handleCsv(csvFileName, separatorText){
 
         if(csvFileName !== ""){
             startTime = new Date().getTime().toString()
@@ -90,7 +91,7 @@ Popup {
             mainTimer.start()
             displayTime.text = ""
 
-            ConnectorsLoginModel.csvLogin(csvFileName, true, separator)
+            ConnectorsLoginModel.csvLogin(csvFileName, true, separatorText)
         } else {
             msg_dialog.text = "No file selected"
             msg_dialog.visible = true
@@ -199,16 +200,19 @@ Popup {
                 anchors.rightMargin: 10
                 font.pixelSize: Constants.fontCategoryHeader
                 anchors.verticalCenter: parent.verticalCenter
+
             }
         }
 
         TextField{
-            id: separator
+            id: idSeparatorText
             maximumLength: 45
             selectByMouse: true
             anchors.verticalCenter: parent.verticalCenter
             width: 200
             height: 40
+
+            onTextChanged: separator = idSeparatorText.text
 
             background: Rectangle {
                 border.color: Constants.borderBlueColor
@@ -270,7 +274,7 @@ Popup {
                     color: btn_cancel.hovered ? "white" : "black"
                 }
             }
-            onClicked: handleCsv(selectedFile, separator.text)
+            onClicked: handleCsv(selectedFile, separator)
 
         }
     }

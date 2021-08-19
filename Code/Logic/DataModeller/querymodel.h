@@ -13,11 +13,13 @@
 #include "../General/datatype.h"
 #include "./Workers/generaterolenamesqueryworker.h"
 #include "./Workers/setchartdataqueryworker.h"
+#include "../General/extractsmanager.h"
 
 
 class QueryModel : public QSqlQueryModel
 {
     Q_OBJECT
+    ExtractsManager extractsManager;
 
 
 public:
@@ -35,6 +37,9 @@ public:
     Q_INVOKABLE void callSql(QString tmpSql);
     Q_INVOKABLE void removeTmpChartData();
     Q_INVOKABLE void setPreviewQuery(int previewRowCount);
+
+    Q_INVOKABLE void createTableTest();
+    Q_INVOKABLE void insertTableTest();
 
 public slots:
     void receiveFilterQuery(QString & filteredQuery);
