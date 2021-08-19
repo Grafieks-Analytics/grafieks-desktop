@@ -158,6 +158,7 @@ Rectangle{
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
             maxDropOnYAxis: 1
+            maxDropOnXAxis: 5
             yAxisVisible: false
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
