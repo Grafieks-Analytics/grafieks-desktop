@@ -26,6 +26,10 @@ class ExcelQueryModel : public QAbstractTableModel
 
     QHash<int, QByteArray> m_roleNames;
 
+    QStringList selectParams;
+    QStringList tableParams;
+    QStringList whereParams;
+
 public:
     explicit ExcelQueryModel(QObject *parent = nullptr);
 
@@ -55,8 +59,8 @@ private:
 signals:
     void chartDataChanged(QMap<int, QStringList*> chartData);
     void chartHeaderChanged(QMap<int, QStringList> chartHeader);
-    void duckHeaderDataChanged(QStringList tableHeaders);
-    void duckHasData(bool hasData);
+    void excelHeaderDataChanged(QStringList tableHeaders);
+    void excelHasData(bool hasData);
     void clearTablePreview();
     void errorSignal(QString errMsg);
 

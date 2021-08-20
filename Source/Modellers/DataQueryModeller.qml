@@ -58,8 +58,6 @@ Page {
                 tableslist.model = ExcelDataModel.getTableList()
             }
         }
-
-
     }
 
 

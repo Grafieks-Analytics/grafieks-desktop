@@ -14,6 +14,11 @@ void ExcelQueryModel::setQuery(QString query)
     this->query = query;
     querySplitter.setQueryForClasses(this->query);
 
+    this->selectParams = querySplitter.getSelectParams();
+//    this->whereParams = querySplitter.getWhereCondition();
+//    this->tableParams = querySplitter.getMainTable();
+//    this->tableParams.append(querySplitter.getJoinTables());
+
     this->generateRoleNames();
     this->setQueryResult();
 
@@ -24,11 +29,15 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
     QStringList list;
     int tmpRowCount = 0;
     int maxRowCount = 0;
+    QString finalSqlInterPart;
 
     QSqlDatabase conExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
-    QString newLimitQuery = this->query + " LIMIT " + previewRowCount;
+
+    finalSqlInterPart = this->query.toLower().section(' ', 1);
+    QString newLimitQuery = "SELECT TOP " + QString::number(previewRowCount) + " " + finalSqlInterPart;
     QSqlQuery query(newLimitQuery, conExcel);
     QSqlRecord record = query.record();
+    qDebug() << record;
 
     this->internalColCount = record.count();
 
@@ -42,14 +51,28 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
     this->previewRowCount = maxRowCount;
 
     beginResetModel();
+    this->resultData.clear();
+
+    int j = 0;
     while(query.next()){
         for(int i = 0; i < this->internalColCount; i++){
             list << query.value(i).toString();
         }
         this->resultData.append(list);
         list.clear();
+        j++;
     }
+
+    if(j > 0){
+        emit errorSignal(query.lastError().text());
+        emit excelHasData(true);
+    } else{
+        emit errorSignal("");
+        emit excelHasData(false);
+    }
+
     endResetModel();
+    emit excelHeaderDataChanged(this->selectParams);
 
     qDebug() << this->resultData;
 }
@@ -75,6 +98,7 @@ QVariant ExcelQueryModel::headerData(int section, Qt::Orientation orientation, i
 
 QVariant ExcelQueryModel::data(const QModelIndex &index, int role) const
 {
+    qDebug() << "RES DATS" << this->resultData;
     switch (role) {
     case Qt::DisplayRole:
         return this->resultData[index.row()][index.column()];
