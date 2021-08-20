@@ -54,7 +54,6 @@ void DuckQueryModel::setPreviewQuery(int previewRowCount)
             maxRowCount = previewRowCount;
         }
 
-
         this->previewRowCount = maxRowCount;
 
         beginResetModel();

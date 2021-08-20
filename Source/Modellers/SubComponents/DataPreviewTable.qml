@@ -64,6 +64,32 @@ Rectangle {
         }
 
     }
+
+    Connections{
+        target: ExcelQueryModel
+
+        // This one is for table data
+        function onExcelHasData(hasData){
+            view.model = hasData === true? ExcelQueryModel: ""
+            view.visible = hasData === true ? true: false
+            console.log("HJAS DATA", hasData)
+
+        }
+
+        // This slot is for updating headers
+        // This is also returning an array of strings
+        function onExcelHeaderDataChanged(tableHeaders){
+            if(DSParamsModel.runCalled === true)
+                setHeaders(tableHeaders)
+            console.log("TABLE HEADERS", tableHeaders)
+        }
+
+        // Clear table
+        function onClearTablePreview(){
+            clearTable()
+        }
+
+    }
     Connections{
         target: ForwardOnlyQueryModel
 
