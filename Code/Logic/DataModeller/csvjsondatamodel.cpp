@@ -46,7 +46,6 @@ void CSVJsonDataModel::columnData(QString col, QString tableName, QString option
                 if(!this->output.contains(colData)){
                     this->output.append(colData);
                 }
-
             }
         }
     }
@@ -72,8 +71,7 @@ QStringList CSVJsonDataModel::getTableList()
     QString db = Statics::currentDbName;
     this->fileName       = QFileInfo(db).baseName().toLower();
     this->fileName = this->fileName.remove(QRegularExpression("[^A-Za-z0-9]"));
-
-    output << this->fileName;
+    output.append(this->fileName);
     return output;
 }
 

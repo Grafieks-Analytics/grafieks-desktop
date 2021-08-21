@@ -121,8 +121,6 @@ Popup {
             numericalModel.clear()
             datesModel.clear()
 
-            console.log("MODELS", allList, allCategorical, allNumerical, allDates, allOthers, queriedColumnNames)
-
             allCategorical.forEach(function (element) {
                 categoricalModel.append({"tableName" : element[0], "colName" : element[1]});
             });
