@@ -20,7 +20,7 @@ void ExcelDataModel::columnData(QString col, QString tableName, QString options)
 
     QStringList output;
     QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
-    QString dbQueryString = "SELECT DISTINCT("+col+") FROM ["+tableName+"$]";
+    QString dbQueryString = "SELECT DISTINCT ["+col+"] FROM "+tableName;
 
     QSqlQuery query(dbQueryString, dbExcel);
 
@@ -36,7 +36,7 @@ void ExcelDataModel::columnSearchData(QString col, QString tableName, QString se
 
     QStringList output;
     QSqlDatabase dbExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
-    QString dbQueryString = "SELECT DISTINCT("+col+") FROM ["+tableName+"$] WHERE " + col + " LIKE %" + searchString + "%";
+    QString dbQueryString = "SELECT DISTINCT ["+col+" FROM "+ tableName + " WHERE [" + col + "] LIKE %" + searchString + "%";
 
     QSqlQuery query(dbQueryString, dbExcel);
 

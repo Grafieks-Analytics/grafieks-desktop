@@ -93,6 +93,22 @@ Rectangle{
     }
 
     Connections{
+        target: CSVJsonDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
+        target: ExcelDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
         target: QueryDataModel
 
         function onColumnListModelDataChanged(colData, values){
