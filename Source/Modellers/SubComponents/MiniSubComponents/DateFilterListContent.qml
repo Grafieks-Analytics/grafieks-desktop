@@ -153,6 +153,14 @@ Rectangle{
     }
 
     Connections{
+        target: ExcelDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
         target: ForwardOnlyDataModel
 
         function onColumnListModelDataChanged(colData, values){

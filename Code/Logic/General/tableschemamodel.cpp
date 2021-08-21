@@ -396,11 +396,10 @@ void TableSchemaModel::showSchema(QString query)
 
         for(QString tableName: tablesList){
 
-            QString dbQueryString = "SELECT TOP 1 * FROM ["+tableName+"$]";
+            QString dbQueryString = "SELECT TOP 1 * FROM "+tableName;
 
             QSqlQuery query(dbQueryString, dbExcel);
             QSqlRecord record = query.record();
-
 
             if(!record.isEmpty()){
 

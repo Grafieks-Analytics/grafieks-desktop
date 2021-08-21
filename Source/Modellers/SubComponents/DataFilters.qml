@@ -121,6 +121,8 @@ Popup {
             numericalModel.clear()
             datesModel.clear()
 
+            console.log("MODELS", allList, allCategorical, allNumerical, allDates, allOthers, queriedColumnNames)
+
             allCategorical.forEach(function (element) {
                 categoricalModel.append({"tableName" : element[0], "colName" : element[1]});
             });
@@ -150,6 +152,22 @@ Popup {
 
     Connections{
         target: DuckDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
+        target: ExcelDataModel
+
+        function onColumnListModelDataChanged(colData, values){
+            updateData(colData, values)
+        }
+    }
+
+    Connections{
+        target: CSVJsonDataModel
 
         function onColumnListModelDataChanged(colData, values){
             updateData(colData, values)
@@ -250,6 +268,7 @@ Popup {
             "values" : ""
         }
 
+        console.log(colName, tableName, section, category)
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryDataModel.columnData(colName, tableName, JSON.stringify(options));
         } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
