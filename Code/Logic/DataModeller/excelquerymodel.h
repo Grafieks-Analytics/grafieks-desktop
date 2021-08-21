@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QAbstractTableModel>
 #include <QSqlDatabase>
+#include <QSqlField>
+#include <QSqlRecord>
 
 #include "../../statics.h"
 #include "../../constants.h"
@@ -63,6 +65,7 @@ signals:
     void excelHasData(bool hasData);
     void clearTablePreview();
     void errorSignal(QString errMsg);
+    void signalGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &sqlChartHeader);
 
 };
 

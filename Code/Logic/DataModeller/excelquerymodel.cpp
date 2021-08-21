@@ -7,7 +7,6 @@ ExcelQueryModel::ExcelQueryModel(QObject *parent) : QAbstractTableModel(parent)
 
 void ExcelQueryModel::setQuery(QString query)
 {
-    qDebug() << query << "ISIDER EXCEL MODEL";
     // Signal to clear exisitng data in tables (qml)
     emit clearTablePreview();
     this->removeTmpChartData();
@@ -15,9 +14,6 @@ void ExcelQueryModel::setQuery(QString query)
     querySplitter.setQueryForClasses(this->query);
 
     this->selectParams = querySplitter.getSelectParams();
-//    this->whereParams = querySplitter.getWhereCondition();
-//    this->tableParams = querySplitter.getMainTable();
-//    this->tableParams.append(querySplitter.getJoinTables());
 
     this->generateRoleNames();
     this->setQueryResult();
@@ -33,13 +29,10 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
 
     QSqlDatabase conExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
 
-    finalSqlInterPart = this->query.toLower().section(' ', 1);
+    finalSqlInterPart = this->query.section(' ', 1);
     QString newLimitQuery = "SELECT TOP " + QString::number(previewRowCount) + " " + finalSqlInterPart;
     QSqlQuery query(newLimitQuery, conExcel);
     QSqlRecord record = query.record();
-    qDebug() << record;
-
-    this->internalColCount = record.count();
 
     tmpRowCount = query.size();
     if(previewRowCount > tmpRowCount){
@@ -48,7 +41,8 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
         maxRowCount = previewRowCount;
     }
 
-    this->previewRowCount = maxRowCount;
+    this->internalColCount = record.count();
+    this->previewRowCount = 4;
 
     beginResetModel();
     this->resultData.clear();
@@ -73,8 +67,6 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
 
     endResetModel();
     emit excelHeaderDataChanged(this->selectParams);
-
-    qDebug() << this->resultData;
 }
 
 int ExcelQueryModel::rowCount(const QModelIndex &parent) const
@@ -98,7 +90,6 @@ QVariant ExcelQueryModel::headerData(int section, Qt::Orientation orientation, i
 
 QVariant ExcelQueryModel::data(const QModelIndex &index, int role) const
 {
-    qDebug() << "RES DATS" << this->resultData;
     switch (role) {
     case Qt::DisplayRole:
         return this->resultData[index.row()][index.column()];
@@ -141,8 +132,37 @@ void ExcelQueryModel::slotSetChartData(bool success)
 
 void ExcelQueryModel::generateRoleNames()
 {
+    QStringList colInfo;
+    QVariant fieldType;
+    DataType dataType;
 
+    QStringList tableHeaders;
+    QMap<int, QStringList> sqlChartHeader;
+    QHash<int, QByteArray> roleNames;
+
+    QSqlDatabase conExcel = QSqlDatabase::database(Constants::excelOdbcStrType);
+
+    QSqlQuery query(this->query, conExcel);
+    QSqlRecord record = query.record();
+//    QSqlField x = record.field(0);
+
+
+//    qDebug() << "GENERATE ROLENAMES" << record.count() << query.record().field(0).value();
+    for( int i = 0; i < record.count(); i ++) {
+
+        roleNames.insert(Qt::UserRole + i + 1, record.fieldName(i).toUtf8());
+        fieldType = record.field(i).value();
+        colInfo << record.fieldName(i) << dataType.dataType(fieldType.typeName())  << record.field(i).tableName();
+
+        sqlChartHeader.insert(i, colInfo);
+        tableHeaders.append(record.fieldName(i));
+        colInfo.clear();
+    }
+
+    qDebug() << tableHeaders << sqlChartHeader << "XAXAXA";
+    emit signalGenerateRoleNames(tableHeaders, sqlChartHeader);
 }
+
 
 void ExcelQueryModel::setQueryResult()
 {
