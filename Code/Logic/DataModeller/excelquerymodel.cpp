@@ -34,28 +34,31 @@ void ExcelQueryModel::setPreviewQuery(int previewRowCount)
     QSqlQuery query(newLimitQuery, conExcel);
     QSqlRecord record = query.record();
 
-    tmpRowCount = query.size();
-    if(previewRowCount > tmpRowCount){
-        maxRowCount = tmpRowCount;
-    } else{
-        maxRowCount = previewRowCount;
-    }
-
     this->internalColCount = record.count();
-    this->previewRowCount = 4;
 
     beginResetModel();
     this->resultData.clear();
 
     int j = 0;
+    tmpRowCount = 0;
     while(query.next()){
         for(int i = 0; i < this->internalColCount; i++){
             list << query.value(i).toString();
         }
         this->resultData.append(list);
         list.clear();
+
+        tmpRowCount++;
         j++;
     }
+
+    if(previewRowCount > tmpRowCount){
+        maxRowCount = tmpRowCount;
+    } else{
+        maxRowCount = previewRowCount;
+    }
+
+    this->previewRowCount = maxRowCount;
 
     if(j > 0){
         emit errorSignal(query.lastError().text());
@@ -144,10 +147,7 @@ void ExcelQueryModel::generateRoleNames()
 
     QSqlQuery query(this->query, conExcel);
     QSqlRecord record = query.record();
-//    QSqlField x = record.field(0);
 
-
-//    qDebug() << "GENERATE ROLENAMES" << record.count() << query.record().field(0).value();
     for( int i = 0; i < record.count(); i ++) {
 
         roleNames.insert(Qt::UserRole + i + 1, record.fieldName(i).toUtf8());
@@ -158,8 +158,6 @@ void ExcelQueryModel::generateRoleNames()
         tableHeaders.append(record.fieldName(i));
         colInfo.clear();
     }
-
-    qDebug() << tableHeaders << sqlChartHeader << "XAXAXA";
     emit signalGenerateRoleNames(tableHeaders, sqlChartHeader);
 }
 

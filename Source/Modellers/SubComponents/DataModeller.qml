@@ -366,7 +366,12 @@ Item {
 
         if(DSParamsModel.rectanglesSize() <= 0){
             DSParamsModel.setTmpSql("")
-            executeSql()
+            if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
+                executeCsvJson("")
+            } else {
+                executeSql()
+            }
+
         } else{
             // Call to execute sql query for visual query designer
             DSParamsModel.executeModelerQuery();
@@ -471,7 +476,12 @@ Item {
             queryErrorModal.open();
 
             DSParamsModel.setTmpSql("")
-            executeSql()
+            if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
+                executeCsvJson("")
+            } else {
+                executeSql()
+            }
+
         }
     }
 
@@ -615,7 +625,11 @@ Item {
             DSParamsModel.setTmpSql(finalQuery)
 
             // Function to Execute sql generated dynamically
-            executeSql()
+            if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
+                executeCsvJson(selectColumns)
+            } else {
+                executeSql()
+            }
 
             TableSchemaModel.showSchema(DSParamsModel.tmpSql)
         }
@@ -938,13 +952,16 @@ Item {
 
         if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
             QueryModel.callSql(DSParamsModel.tmpSql)
-        } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
-            CSVJsonQueryModel.setQuery(DSParamsModel.tmpSql)
         } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType){
             ForwardOnlyQueryModel.setQuery(DSParamsModel.tmpSql)
         } else {
             ExcelQueryModel.setQuery(DSParamsModel.tmpSql)
         }
+    }
+
+    function executeCsvJson(selectParams){
+        console.log(DSParamsModel.fetchHideColumns(), "HIDE PARAMS")
+        CSVJsonQueryModel.setSelectParams(DSParamsModel.fetchHideColumns())
     }
 
 
