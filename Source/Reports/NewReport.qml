@@ -379,6 +379,7 @@ Page {
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.heatMapChartTitle:
+            console.log('Debug:: datavalues',dataValues);
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.sunburstChartTitle:
@@ -1294,7 +1295,6 @@ Page {
             case Constants.barChartTitle:
                 console.log("BAR CLICKED", xAxisColumns[0])
                 ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
-
                 break;
             case Constants.horizontalStackedBarChartTitle:
                 ChartsModel.getStackedBarChartValues(colorByColumnName,xAxisColumns[0], yAxisColumns[0]);
@@ -1385,8 +1385,11 @@ Page {
                 ChartsModel.getRadarChartValues(xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.scatterChartTitle:
-                console.log("SCATTER CLICKED")
-                ChartsModel.getScatterChartValues(xAxisColumns[0],yAxisColumns[0],yAxisColumns[1]);
+                console.log("SCATTER CLICKED");
+                if(!colorByColumnName){
+                    break;
+                }
+                ChartsModel.getScatterChartValues(xAxisColumns[0],yAxisColumns[0],colorByColumnName);
                 break;
             case Constants.treeChartTitle:
                 console.log("TREECHART CLICKED")
@@ -1397,6 +1400,9 @@ Page {
                 break;
             case Constants.heatMapChartTitle:
                 console.log("HEATMAP CLICKED")
+                if(!colorByColumnName){
+                    break;
+                }
                 console.log(xAxisColumns[0],yAxisColumns[0], colorByColumnName);
                 ChartsModel.getHeatMapChartValues(xAxisColumns[0],colorByColumnName, yAxisColumns[0]);
                 break;

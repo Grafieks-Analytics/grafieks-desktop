@@ -8,7 +8,8 @@
         <link rel="stylesheet" href="Data/general.css" />
     </head>
     <body>
-        <div id="my_dataviz">
+        <div id="mainChartWindow" style="display: flex">
+            <div id="my_dataviz"></div>
         </div>
         <style>
             .bar.total rect {
@@ -25,6 +26,7 @@
 
         <script>
             // variables
+            var chartTitle = constants.chartTitles.waterfallChart;
             var extraHeightWorked = false;
             var redrawn = false;
             var extraHeight = 0;
@@ -100,44 +102,41 @@
                 ["Order_Date", "Sales"],
             ];
 
-            function transformData(data, dateFormat){
+            function transformData(data, dateFormat) {
                 var [dataValues, labels] = data;
                 var isKey1Date = false;
                 if (isDateFormat(dataValues[0][0])) {
                     isKey1Date = true;
                 }
-                if(!isKey1Date){
+                if (!isKey1Date) {
                     return data;
                 }
 
-                var json = {}
+                var json = {};
 
                 var uniqueKey = [];
                 dataValues.forEach((d) => {
-                    
                     var key = getDateFormattedData(d[0], dateFormat);
-                    if(!uniqueKey.includes(key)){
+                    if (!uniqueKey.includes(key)) {
                         uniqueKey.push(key);
                     }
 
-                    if(!json[key]){
-                        json[key] = 0
+                    if (!json[key]) {
+                        json[key] = 0;
                     }
 
                     json[key] += d[1];
-
                 });
-                
+
                 var sortedKeys = sortDates(json, dateFormat);
-            
-                var response = sortedKeys.map(d=>{
-                    return [d, json[d]]
-                })
-                
+
+                var response = sortedKeys.map((d) => {
+                    return [d, json[d]];
+                });
+
                 return [response, labels];
-                
             }
-            
+
             function drawChart(data, plottingConfiguration) {
                 window.data = data;
 
@@ -159,28 +158,31 @@
                     height,
                     paddingInner,
                     chartType = constants.chartType.FIT_WIDTH,
-                    dateFormat =  defaultD3Config.dateFormat,
+                    dateFormat = defaultD3Config.dateFormat,
                 } = plottingConfiguration;
                 const w = width - margin.left - margin.right - 20;
                 const h =
                     height - margin.top - margin.bottom - 20 - extraHeight + 30;
 
                 var data = transformData(data, dateFormat);
-                
+
                 var dataValues = data[0];
 
                 const _data = waterfallData(dataValues);
-    
+
                 window.clearChart && clearChart();
-                
+
                 var svg = d3
                     .selectAll("#my_dataviz")
                     .append("svg")
                     .attr("width", width - 20)
                     .attr("height", height - 20)
                     .append("g")
-                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-                    
+                    .attr(
+                        "transform",
+                        "translate(" + margin.left + "," + margin.top + ")"
+                    );
+
                 // const chart = d3
                 //     .select("s")
                 //     .attr("width", width - 20)
@@ -210,8 +212,7 @@
                 x.domain(_data.map((d) => d.label));
                 y.domain([minValue, maxValue]);
 
-                svg
-                    .append("g")
+                svg.append("g")
                     .attr("class", "x-axis axis")
                     .attr("transform", "translate(0," + h + ")")
                     .call(xAxis);
@@ -252,7 +253,7 @@
                 var textWidth = (a[0] && a[0].getBBox().height) || 20;
                 var barWidth = x.bandwidth();
 
-                removeAxisTicks("xAxis", dataValues);
+                removeAxisTicks("xAxis", dataValues, null, { chartTitle });
                 for (var i = 0; i < a.length; i++) {
                     if (i == 0 && barWidth < textWidth * 0.5) {
                         a[i].setAttribute("dy", "1em");
