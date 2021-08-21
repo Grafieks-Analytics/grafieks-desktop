@@ -9,7 +9,6 @@
     </head>
     <body>
         <div id="my_dataviz">
-            <svg class="chart"></svg>
         </div>
         <style>
             .bar.total rect {
@@ -113,8 +112,6 @@
 
                 var json = {}
 
-                console.log('Is date');
-
                 var uniqueKey = [];
                 dataValues.forEach((d) => {
                     
@@ -131,8 +128,6 @@
 
                 });
                 
-                console.log(uniqueKey);
-
                 var sortedKeys = sortDates(json, dateFormat);
             
                 var response = sortedKeys.map(d=>{
@@ -143,7 +138,7 @@
                 
             }
             
-            function waterfall(bind, data, plottingConfiguration) {
+            function drawChart(data, plottingConfiguration) {
                 window.data = data;
 
                 if (!redrawn) {
@@ -175,25 +170,26 @@
                 var dataValues = data[0];
 
                 const _data = waterfallData(dataValues);
-
-                d3.select(bind).html("");
-                // var svgChart = document.querySelector('#my_dataviz svg');
-                // if(!svgChart){
-                //     var svgTag =  document.createElement('svg');
-                //     svgTag.className = "chart";
-                //     document.querySelector('#my_dataviz').appendChild(svgTag);
-                // }
-
+    
+                window.clearChart && clearChart();
                 
-                const chart = d3
-                    .select(bind)
+                var svg = d3
+                    .selectAll("#my_dataviz")
+                    .append("svg")
                     .attr("width", width - 20)
                     .attr("height", height - 20)
                     .append("g")
-                    .attr(
-                        "transform",
-                        "translate(" + margin.left + "," + margin.top + ")"
-                    );
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                    
+                // const chart = d3
+                //     .select("s")
+                //     .attr("width", width - 20)
+                //     .attr("height", height - 20)
+                //     .append("g")
+                //     .attr(
+                //         "transform",
+                //         "translate(" + margin.left + "," + margin.top + ")"
+                //     );
 
                 const x = d3
                     .scaleBand()
@@ -214,18 +210,18 @@
                 x.domain(_data.map((d) => d.label));
                 y.domain([minValue, maxValue]);
 
-                chart
+                svg
                     .append("g")
                     .attr("class", "x-axis axis")
                     .attr("transform", "translate(0," + h + ")")
                     .call(xAxis);
 
-                chart.append("g").attr("class", "y-axis axis").call(yAxis);
+                svg.append("g").attr("class", "y-axis axis").call(yAxis);
 
                 // render some gridlines
-                gridlines(chart, -h, -w);
+                gridlines(svg, -h, -w);
 
-                const bar = chart
+                const bar = svg
                     .selectAll(".bar")
                     .data(_data)
                     .enter()
@@ -267,7 +263,6 @@
                     }
                 }
 
-                console.log(barWidth);
                 if (
                     chartType == constants.chartType.FIT_WIDTH &&
                     barWidth < 50
@@ -325,7 +320,6 @@
                                 xAxisTick.length > numOfCharacters
                             ) {
                                 if (Math.ceil(numOfCharacters) > 3) {
-                                    console.log(xAxisTick);
                                     allXAxisTexts[i].innerHTML =
                                         (xAxisTick &&
                                             xAxisTick.substr(
@@ -350,12 +344,9 @@
                     }
                 }
 
-                console.log("Drawing Over");
-
                 if (extraHeightWorked && !redrawn) {
                     extraHeightWorked = false;
                     redrawn = true;
-                    console.log("ReDrawing Chart");
                     drawChart(window.data, plottingConfiguration);
                 }
 
@@ -422,9 +413,9 @@
                 return d3.axisLeft(y).ticks(10).tickSizeOuter(0);
             }
 
-            function drawChart(data, plottingConfiguration = {}) {
-                waterfall(".chart", data, plottingConfiguration);
-            }
+            // function drawChart(data, plottingConfiguration = {}) {
+            //     waterfall(".chart", data, plottingConfiguration);
+            // }
 
             drawChart(data);
         </script>
