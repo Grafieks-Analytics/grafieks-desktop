@@ -163,7 +163,7 @@ Item {
         function onExcelLoginStatus(status){
             console.log("TYOER", GeneralParamsModel.getDbClassification(), Constants.excelType, GeneralParamsModel.getDbClassification() === Constants.excelType)
             if(status.status === true){
-                DSParamsModel.setQueryJoiner("\"")
+                DSParamsModel.setQueryJoiner("")
                 databaseType = "excel"
             }
         }

@@ -230,7 +230,6 @@ Rectangle {
                             textItem1.text = QueryModel.data(QueryModel.index(styleData.row, styleData.column))
                         } else if(GeneralParamsModel.getDbClassification() === Constants.csvType || GeneralParamsModel.getDbClassification() === Constants.jsonType ){
                              textItem1.text = CSVJsonQueryModel.data(CSVJsonQueryModel.index(styleData.row, styleData.column))
-                            console.log(CSVJsonQueryModel.data(CSVJsonQueryModel.index(styleData.row, styleData.column)), "LOLOA")
                         }else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
                              textItem1.text = ExcelQueryModel.data(ExcelQueryModel.index(styleData.row, styleData.column))
                         } else{

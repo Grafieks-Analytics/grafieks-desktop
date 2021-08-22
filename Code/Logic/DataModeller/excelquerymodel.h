@@ -13,7 +13,6 @@
 
 #include "../General/datatype.h"
 #include "../General/querysplitter.h"
-#include "./Workers/generaterolenamesduckworker.h"
 #include "./Workers/setchartdataduckworker.h"
 
 class ExcelQueryModel : public QAbstractTableModel
@@ -48,7 +47,7 @@ public:
     Q_INVOKABLE void removeTmpChartData();
 
 public slots:
-    void receiveCsvFilterQuery(QString query);
+    void receiveExcelFilterQuery(QString query);
     void slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount);
     void slotSetChartData(bool success);
 

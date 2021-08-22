@@ -118,9 +118,9 @@ void ExcelQueryModel::removeTmpChartData()
 
 }
 
-void ExcelQueryModel::receiveCsvFilterQuery(QString query)
+void ExcelQueryModel::receiveExcelFilterQuery(QString query)
 {
-
+    this->query = query;
 }
 
 void ExcelQueryModel::slotGenerateRoleNames(const QStringList &tableHeaders, const QMap<int, QStringList> &duckChartHeader, const QHash<int, QByteArray> roleNames, const int internalColCount)
