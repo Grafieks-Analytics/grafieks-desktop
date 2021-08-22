@@ -140,6 +140,8 @@ Column{
                 d3PropertyConfig['options'] = { groupBarChartColorBy: itemName == subcategory ? 'subcategory' : 'category'  }
                 reDrawChart();
                 break;
+            default:
+                reDrawChart();
         }
 
         return;

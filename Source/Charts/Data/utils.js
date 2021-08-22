@@ -309,14 +309,21 @@ function clearStyle() {
     console.log("clear");
 }
 
-function removeAxisTicks(axis = "xAxis", dataValues, range) {
+function removeAxisTicks(axis = "xAxis", dataValues, range, options) {
     selector = ".x-axis text";
     range = range ? range : dataValues.length;
 
+    const { chartTitle } = options;
+    
     if (axis === "yAxis") {
         selector = ".y-axis text";
     }
-
+    
+    var dataLabels = [];
+    if(constants.chartTitles.waterfallChart == chartTitle){
+        dataLabels =  document.querySelectorAll('.bar text');
+    }
+    
     // Remove Text in case they are large in number
     var allXAxisTexts = document.querySelectorAll(selector);
     for (var i = 0; i < allXAxisTexts.length - 1; i++) {
@@ -326,6 +333,9 @@ function removeAxisTicks(axis = "xAxis", dataValues, range) {
 
         if (i % Math.floor(range * 0.04) != 0) {
             allXAxisTexts[i].remove();
+            if(constants.chartTitles.waterfallChart == chartTitle){
+                dataLabels[i].remove();
+            }
             continue;
         }
     }

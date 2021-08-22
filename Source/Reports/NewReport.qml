@@ -88,6 +88,9 @@ Page {
     property bool editReportFlag: false;
     property var dataValues : null;
 
+    // Array List -> This will contain all the charts which can be converted to horizontal
+    property var horizontalChartList: [];
+
     /***********************************************************************************************************************/
     // LIST MODEL STARTS
 
@@ -376,6 +379,7 @@ Page {
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.heatMapChartTitle:
+            console.log('Debug:: datavalues',dataValues);
             console.log(chartTitle,"CLICKED")
             break;
         case Constants.sunburstChartTitle:
@@ -444,29 +448,69 @@ Page {
         xAxisListModel.clear();
         yAxisListModel.clear();
 
+        // Pushing all the horiontal type chart
+        horizontalChartList.push(Constants.barChartTitle);
+        horizontalChartList.push(Constants.stackedBarChartTitle);
+        horizontalChartList.push(Constants.groupBarChartTitle);
+
+        horizontalChartList.push(Constants.horizontalBarChartTitle);
+        horizontalChartList.push(Constants.horizontalStackedBarChartTitle);
+        horizontalChartList.push(Constants.horizontalBarGroupedChartTitle);
+
+        horizontalChartList.push(Constants.lineChartTitle);
+        horizontalChartList.push(Constants.horizontalLineChartTitle);
+        horizontalChartList.push(Constants.multiLineChartTitle);
+        horizontalChartList.push(Constants.horizontalMultiLineChartTitle);
+        
+        horizontalChartList.push(Constants.areaChartTitle);
+        horizontalChartList.push(Constants.horizontalAreaChartTitle);
+        horizontalChartList.push(Constants.multipleAreaChartTitle);
+        horizontalChartList.push(Constants.multipleHorizontalAreaChartTitle);
+
     }
 
 
     onIsHorizontalGraphChanged: {
 
-        console.log('Horizontal Bar Flag Change');
+        console.log('Horizontal Bar Flag Change', chartTitle);
 
         if(isHorizontalGraph){
+
             allowedXAxisDataPanes = 1;
             allowedYAxisDataPanes = 2;
+
             switch(chartTitle){
-            case Constants.barChartTitle:
-                console.log('Switching to horizontal bar chart')
-                switchChart(Constants.horizontalBarChartTitle);
-                break;
-            case Constants.lineChartTitle:
-                console.log('Switching to horizontal line chart')
-                switchChart(Constants.horizontalLineChartTitle);
-                break;
-            case Constants.areaChartTitle:
-                console.log('Switching to horizontal line chart')
-                switchChart(Constants.horizontalAreaChartTitle);
-                break;
+                case Constants.stackedBarChartTitle:
+                    console.log('Switching to horizontal stacked bar chart')
+                    switchChart(Constants.horizontalStackedBarChartTitle);
+                    break;
+                case Constants.barChartTitle:
+                    allowedYAxisDataPanes = 2;
+                    console.log('Switching to horizontal bar chart')
+                    switchChart(Constants.horizontalBarChartTitle);
+                    break;
+                case Constants.multiLineChartTitle:
+                    allowedYAxisDataPanes = 1;
+                    console.log('Switching to multiple horizontal line chart')
+                    switchChart(Constants.horizontalMultiLineChartTitle);
+                    break;
+                case Constants.lineChartTitle:
+                    allowedYAxisDataPanes = 1;
+                    console.log('Switching to horizontal line chart')
+                    switchChart(Constants.horizontalLineChartTitle);
+                    break;
+                case Constants.multipleAreaChartTitle:
+                    allowedYAxisDataPanes = 1;
+                    console.log('Switching to multiple horizontal area chart')
+                    switchChart(Constants.multipleHorizontalAreaChartTitle);
+                    break;
+                case Constants.areaChartTitle:
+                    allowedYAxisDataPanes = 1;
+                    console.log('Switching to horizontal area chart')
+                    switchChart(Constants.horizontalAreaChartTitle);
+                    break;
+                default:
+                    console.log('Missed condition in isHorizontalGraph change horizontal')
             }
         }else{
 
@@ -474,10 +518,40 @@ Page {
             allowedXAxisDataPanes = 2;
             allowedYAxisDataPanes = 1;
 
-            chartUrl = Constants.barChartUrl;
-            console.log('Loading bar chart');
-            webEngineView.url = Constants.baseChartUrl+chartUrl;
-            chartTitle = Constants.barChartTitle;
+            switch(chartTitle){
+                case Constants.horizontalBarChartTitle:
+                    console.log('Switching to bar chart')
+                    switchChart(Constants.barChartTitle);
+                    break;
+                case Constants.horizontalStackedBarChartTitle:
+                    console.log('Switching to stacked bar chart')
+                    switchChart(Constants.stackedBarChartTitle);
+                    break;
+                case Constants.horizontalLineChartTitle:
+                    allowedXAxisDataPanes = 1;
+                    console.log('Switching to line chart')
+                    switchChart(Constants.lineChartTitle);
+                    break;
+                case Constants.horizontalMultiLineChartTitle:
+                    allowedXAxisDataPanes = 1;
+                    console.log('Switching to multiple line chart')
+                    switchChart(Constants.multiLineChartTitle);
+                    break;
+                case Constants.horizontalAreaChartTitle:
+                    allowedXAxisDataPanes = 1;
+                    console.log('Switching to line chart')
+                    switchChart(Constants.areaChartTitle);
+                    break;
+                case Constants.multipleHorizontalAreaChartTitle:
+                    allowedXAxisDataPanes = 1;
+                    console.log('Switching to multiple line chart')
+                    switchChart(Constants.multipleAreaChartTitle);
+                    break;
+                default:
+                    console.log('Missed condition in isHorizontalGraph change veritcal')
+
+            }
+
         }
     }
 
@@ -815,7 +889,6 @@ Page {
         lastPickedDataPaneElementProperties= {};
         reportDataPanes= {};  // Report Data Panes Object
         dragActiveObject= {};
-        allChartsMapping= {};
         colorByData = [];
 
         // Calling this redraw will clear the chart because no x and y columns will be available
@@ -840,20 +913,34 @@ Page {
         webEngineView.runJavaScript('clearChart()');
     }
 
+    function checkHorizontalGraph(){
+        
+        if(!horizontalChartList.includes(chartTitle)){
+            console.log('Debug:: Chart does not have horizontal title... returning')
+            return;
+        }
+        var xAxisType = xAxisListModel.count && xAxisListModel.get(0).droppedItemType.toLowerCase();
+        var yAxisType = yAxisListModel.count && yAxisListModel.get(0).droppedItemType.toLowerCase();
+
+        console.log('Debug::',xAxisType, yAxisType);
+
+        if(xAxisType == "numerical" || yAxisType == "date" || yAxisType == "categorical"){
+            console.log('Debug:: Graph is horizontal');
+            isHorizontalGraph = true;
+        }else if(yAxisType == "numerical" || xAxisType == "date" || xAxisType == "categorical"){
+            console.log('Debug:: Graph is not horizontal');
+            isHorizontalGraph = false;
+        }
+
+    }
+
     function reDrawChart(){
 
+        checkHorizontalGraph();
         console.log('Debug: Colour By',colorByData, colorListModel.count, colorListModel)
         
         var xAxisColumns = getAxisColumnNames(Constants.xAxisName);
         var yAxisColumns = getAxisColumnNames(Constants.yAxisName);
-
-        if((xAxisListModel.count && xAxisListModel.get(0).droppedItemType.toLowerCase() !== 'numerical')  || (yAxisListModel.count && yAxisListModel.get(0).droppedItemType.toLowerCase() === 'numerical')){
-            isHorizontalGraph = false;
-        }
-
-        if(!isHorizontalGraph && (xAxisListModel.count && xAxisListModel.get(0).droppedItemType.toLowerCase() === 'numerical')  || (yAxisListModel.count && yAxisListModel.get(0).droppedItemType.toLowerCase() !== 'numerical')){
-            isHorizontalGraph = true;
-        }
 
         // Check graph type for redrawing
         // If length = 1 and type of chart is
@@ -1084,24 +1171,6 @@ Page {
 
         var itemType = lastPickedDataPaneElementProperties.itemType;
 
-        if(itemType
-                && (
-                    itemType.toLowerCase() === 'categorical'
-                    || itemType.toLowerCase() === 'date'
-                    )
-                && axis === Constants.yAxisName
-                && !xAxisColumns.length && !yAxisColumns.length
-                ){
-            isHorizontalGraph = true;
-        }
-
-        if(itemType
-                && itemType.toLowerCase() === 'numerical'
-                && axis === Constants.xAxisName  && !xAxisColumns.length && !yAxisColumns.length
-                ){
-            isHorizontalGraph = true;
-        }
-
         element.border.width = Constants.dropEligibleBorderWidth
         element.border.color = Constants.themeColor
 
@@ -1161,7 +1230,7 @@ Page {
             return;
         }
 
-        drawChart();
+        reDrawChart();
 
     }
 
@@ -1186,11 +1255,13 @@ Page {
 
         console.log(JSON.stringify(d3PropertyConfig));
 
+        /*
         if(xAxisColumns.length===0 && yAxisColumns.length === 0){
             // set everything to default
             // Can add any default case here
             isHorizontalGraph = false;
         }
+        */
 
         if(xAxisColumns.length && yAxisColumns.length){
 
@@ -1224,7 +1295,6 @@ Page {
             case Constants.barChartTitle:
                 console.log("BAR CLICKED", xAxisColumns[0])
                 ChartsModel.getBarChartValues(xAxisColumns[0],yAxisColumns[0]);
-
                 break;
             case Constants.horizontalStackedBarChartTitle:
                 ChartsModel.getStackedBarChartValues(colorByColumnName,xAxisColumns[0], yAxisColumns[0]);
@@ -1315,8 +1385,11 @@ Page {
                 ChartsModel.getRadarChartValues(xAxisColumns[0],yAxisColumns[0]);
                 break;
             case Constants.scatterChartTitle:
-                console.log("SCATTER CLICKED")
-                ChartsModel.getScatterChartValues(xAxisColumns[0],yAxisColumns[0],yAxisColumns[1]);
+                console.log("SCATTER CLICKED");
+                if(!colorByColumnName){
+                    break;
+                }
+                ChartsModel.getScatterChartValues(xAxisColumns[0],yAxisColumns[0],colorByColumnName);
                 break;
             case Constants.treeChartTitle:
                 console.log("TREECHART CLICKED")
@@ -1327,6 +1400,9 @@ Page {
                 break;
             case Constants.heatMapChartTitle:
                 console.log("HEATMAP CLICKED")
+                if(!colorByColumnName){
+                    break;
+                }
                 console.log(xAxisColumns[0],yAxisColumns[0], colorByColumnName);
                 ChartsModel.getHeatMapChartValues(xAxisColumns[0],colorByColumnName, yAxisColumns[0]);
                 break;

@@ -8,8 +8,8 @@
         <link rel="stylesheet" href="Data/general.css" />
     </head>
     <body>
-        <div id="my_dataviz">
-            <svg class="chart"></svg>
+        <div id="mainChartWindow" style="display: flex">
+            <div id="my_dataviz"></div>
         </div>
         <style>
             .bar.total rect {
@@ -26,24 +26,120 @@
 
         <script>
             // variables
+            var chartTitle = constants.chartTitles.waterfallChart;
             var extraHeightWorked = false;
             var redrawn = false;
             var extraHeight = 0;
 
             const waterfallTransformedData = {};
 
-            // let data = [
-            //     [
-            //         ["one", "3.5"],
-            //         ["two", -5.94],
-            //         ["three three three three", 0.29],
-            //         ["four", 5.12],
-            //         ["five", 2.21],
-            //     ],
-            //     ["XLabels", "YLabels"],
-            // ];
+            var data = [
+                [
+                    ["2019-11-08", 2250],
+                    ["2019-06-12", 1456],
+                    ["2018-10-11", 1960],
+                    ["2017-06-09", 5606],
+                    ["2020-04-15", 32],
+                    ["2019-12-05", 816],
+                    ["2018-11-22", 144],
+                    ["2017-11-11", 1332],
+                    ["2017-05-13", 112],
+                    ["2017-08-27", 490],
+                    ["2019-12-09", 158],
+                    ["2020-07-16", 142],
+                    ["2018-09-25", 2090],
+                    ["2019-01-16", 24],
+                    ["2018-09-17", 6658],
+                    ["2020-10-19", 58],
+                    ["2019-12-08", 2578],
+                    ["2018-12-27", 2456],
+                    ["2020-09-10", 294],
+                    ["2019-07-17", 156],
+                    ["2020-09-19", 192],
+                    ["2019-03-11", 126],
+                    ["2017-10-20", 424],
+                    ["2019-06-20", 44],
+                    ["2018-04-18", 418],
+                    ["2019-12-11", 2090],
+                    ["2019-06-17", 1250],
+                    ["2018-11-24", 534],
+                    ["2018-04-30", 426],
+                    ["2017-12-05", 2562],
+                    ["2019-06-04", 152],
+                    ["2019-09-18", 10],
+                    ["2020-09-14", 38],
+                    ["2018-04-26", 2004],
+                    ["2020-12-09", 76],
+                    ["2017-11-26", 38],
+                    ["2017-10-12", 72],
+                    ["2018-09-03", 402],
+                    ["2020-11-13", 460],
+                    ["2020-05-28", 604],
+                    ["2020-10-26", 12],
+                    ["2019-04-05", 316],
+                    ["2019-09-17", 200],
+                    ["2018-01-31", 198],
+                    ["2020-11-06", 12],
+                    ["2020-11-09", 194],
+                    ["2020-06-17", 102],
+                    ["2019-09-06", 156],
+                    ["2019-08-29", 326],
+                    ["2019-12-01", 48],
+                    ["2018-11-13", 756],
+                    ["2020-11-23", 210],
+                    ["2020-12-25", 84],
+                    ["2019-11-03", 206],
+                    ["2017-08-25", 398],
+                    ["2018-03-02", 1576],
+                    ["2018-04-05", 316],
+                    ["2017-12-26", 1202],
+                    ["2017-09-20", 1236],
+                    ["2020-11-05", 492],
+                    ["2019-11-06", 640],
+                    ["2020-02-02", 318],
+                    ["2019-10-13", 512],
+                ],
+                ["Order_Date", "Sales"],
+            ];
 
-            function waterfall(bind, data, plottingConfiguration) {
+            function transformData(data, dateFormat) {
+                var [dataValues, labels] = data;
+                var isKey1Date = false;
+                if (isDateFormat(dataValues[0][0])) {
+                    isKey1Date = true;
+                }
+                if (!isKey1Date) {
+                    return data;
+                }
+
+                var json = {};
+
+                var uniqueKey = [];
+                dataValues.forEach((d) => {
+                    var key = getDateFormattedData(d[0], dateFormat);
+                    if (!uniqueKey.includes(key)) {
+                        uniqueKey.push(key);
+                    }
+
+                    if (!json[key]) {
+                        json[key] = 0;
+                    }
+
+                    json[key] += d[1];
+                });
+
+                var sortedKeys = sortDates(json, dateFormat);
+
+                var response = sortedKeys.map((d) => {
+                    return [d, json[d]];
+                });
+
+                return [response, labels];
+            }
+
+            function drawChart(data, plottingConfiguration) {
+                window.data = data;
+
                 if (!redrawn) {
                     extraHeight = 0;
                 }
@@ -55,16 +151,30 @@
                     paddingInner: defaultD3Config.defaultPaddingInner,
                     ...plottingConfiguration,
                 };
-                const { f, margin, width, height, paddingInner, chartType = constants.chartType.FIT_WIDTH } =
-                    plottingConfiguration;
+                const {
+                    f,
+                    margin,
+                    width,
+                    height,
+                    paddingInner,
+                    chartType = constants.chartType.FIT_WIDTH,
+                    dateFormat = defaultD3Config.dateFormat,
+                } = plottingConfiguration;
                 const w = width - margin.left - margin.right - 20;
-                const h = height - margin.top - margin.bottom - 20 - extraHeight + 30;
+                const h =
+                    height - margin.top - margin.bottom - 20 - extraHeight + 30;
+
+                var data = transformData(data, dateFormat);
+
                 var dataValues = data[0];
+
                 const _data = waterfallData(dataValues);
 
-                d3.select(bind).html("");
-                const chart = d3
-                    .select(bind)
+                window.clearChart && clearChart();
+
+                var svg = d3
+                    .selectAll("#my_dataviz")
+                    .append("svg")
                     .attr("width", width - 20)
                     .attr("height", height - 20)
                     .append("g")
@@ -72,6 +182,16 @@
                         "transform",
                         "translate(" + margin.left + "," + margin.top + ")"
                     );
+
+                // const chart = d3
+                //     .select("s")
+                //     .attr("width", width - 20)
+                //     .attr("height", height - 20)
+                //     .append("g")
+                //     .attr(
+                //         "transform",
+                //         "translate(" + margin.left + "," + margin.top + ")"
+                //     );
 
                 const x = d3
                     .scaleBand()
@@ -81,8 +201,8 @@
 
                 y = d3.scaleLinear().range([h, 0]);
 
-                const xAxis = d3.axisBottom(x).tickSizeOuter(0);;
-                const yAxis = d3.axisLeft(y).tickSizeOuter(0);;
+                const xAxis = d3.axisBottom(x).tickSizeOuter(0);
+                const yAxis = d3.axisLeft(y).tickSizeOuter(0);
 
                 const d3Min = d3.min(_data, (d) => d.end);
                 const d3Max = d3.max(_data, (d) => d.end);
@@ -92,18 +212,17 @@
                 x.domain(_data.map((d) => d.label));
                 y.domain([minValue, maxValue]);
 
-                chart
-                    .append("g")
+                svg.append("g")
                     .attr("class", "x-axis axis")
                     .attr("transform", "translate(0," + h + ")")
                     .call(xAxis);
 
-                chart.append("g").attr("class", "y-axis axis").call(yAxis);
+                svg.append("g").attr("class", "y-axis axis").call(yAxis);
 
                 // render some gridlines
-                gridlines(chart, -h, -w);
+                gridlines(svg, -h, -w);
 
-                const bar = chart
+                const bar = svg
                     .selectAll(".bar")
                     .data(_data)
                     .enter()
@@ -130,14 +249,11 @@
                     .text((d) => f(d.end - d.start));
                 // .text(d => f(d.value))
 
-                
                 a = document.querySelectorAll(".x-axis text");
-                var textWidth = document
-                    .querySelector(".x-axis .tick text")
-                    .getBBox().height;
-                var barWidth = x.bandwidth()
+                var textWidth = (a[0] && a[0].getBBox().height) || 20;
+                var barWidth = x.bandwidth();
 
-                removeAxisTicks("xAxis", dataValues);
+                removeAxisTicks("xAxis", dataValues, null, { chartTitle });
                 for (var i = 0; i < a.length; i++) {
                     if (i == 0 && barWidth < textWidth * 0.5) {
                         a[i].setAttribute("dy", "1em");
@@ -148,15 +264,13 @@
                     }
                 }
 
-                console.log(barWidth);
                 if (
                     chartType == constants.chartType.FIT_WIDTH &&
                     barWidth < 50
                 ) {
                     setXaxisWidth();
                 }
-                
-               
+
                 function setXaxisWidth() {
                     var allYAxisTicks =
                         document.querySelectorAll(".x-axis text");
@@ -199,9 +313,7 @@
                                 (xAxisTick && xAxisTick.length);
 
                             var numOfCharacters =
-                                (extraHeight
-                                    ? 60
-                                    : x.bandwidth()) /
+                                (extraHeight ? 60 : x.bandwidth()) /
                                 singleCharacterLength;
 
                             if (
@@ -209,7 +321,6 @@
                                 xAxisTick.length > numOfCharacters
                             ) {
                                 if (Math.ceil(numOfCharacters) > 3) {
-                                    console.log(xAxisTick);
                                     allXAxisTexts[i].innerHTML =
                                         (xAxisTick &&
                                             xAxisTick.substr(
@@ -244,11 +355,7 @@
                     extraHeightWorked = false;
                     redrawn = false;
                 }
-
-
             }
-
-            
 
             // generate gridlines using tick groups
             function gridlines(selection, h, w) {
@@ -300,8 +407,6 @@
                 return data;
             }
 
-            
-
             function make_x_gridlines(x) {
                 return d3.axisBottom(x).ticks(8).tickSizeOuter(0);
             }
@@ -309,12 +414,11 @@
                 return d3.axisLeft(y).ticks(10).tickSizeOuter(0);
             }
 
-            function drawChart(data, plottingConfiguration = {}) {
-                window.data = data;
-                waterfall(".chart", data, plottingConfiguration);
-            }
+            // function drawChart(data, plottingConfiguration = {}) {
+            //     waterfall(".chart", data, plottingConfiguration);
+            // }
 
-            // drawChart(data);
+            drawChart(data);
         </script>
     </body>
 </html>
