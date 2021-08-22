@@ -204,6 +204,10 @@ QHash<int, QByteArray> FilterNumericalListModel::roleNames() const
 void FilterNumericalListModel::newFilter(int counter, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, bool includeNull, bool exclude )
 {
 
+    if(Statics::currentDbClassification == Constants::excelType){
+        colName = "["+colName+"]";
+    }
+
     addFilterList(new FilterNumericalList(counter, section, category, subcategory, tableName, colName, relation, slug, val, includeNull, exclude, this));
     emit rowCountChanged();
 
@@ -221,6 +225,10 @@ void FilterNumericalListModel::deleteFilter(int FilterIndex)
 
 void FilterNumericalListModel::updateFilter(int FilterIndex, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString value, bool includeNull, bool exclude)
 {
+
+    if(Statics::currentDbClassification == Constants::excelType){
+        colName = "["+colName+"]";
+    }
 
     beginResetModel();
     if(section != "")
@@ -445,8 +453,11 @@ QString FilterNumericalListModel::getQueryJoiner()
 
     case Constants::jsonIntType:
     case Constants::csvIntType:
-    case Constants::excelIntType:
         joiner = "\"";
+        break;
+
+    case Constants::excelIntType:
+        joiner = "";
         break;
     }
 

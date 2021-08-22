@@ -328,6 +328,7 @@ int main(int argc, char *argv[])
     QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::sendDbName, duckCon, &DuckCon::createTable);
     QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::dropTables, duckCon, &DuckCon::dropTables);
     QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, &duckQueryModel, &DuckQueryModel::receiveCsvFilterQuery);
+    QObject::connect(&proxyModel, &ProxyFilterModel::sendExcelFilterQuery, &excelQueryModel, &ExcelQueryModel::receiveExcelFilterQuery);
 
     // Data and headers for reports
     QObject::connect(&queryModel, &QueryModel::chartDataChanged, &reportsDataModel, &ReportsDataModel::getChartData);

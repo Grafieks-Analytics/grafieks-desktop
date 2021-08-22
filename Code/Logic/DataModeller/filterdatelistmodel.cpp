@@ -218,6 +218,10 @@ QHash<int, QByteArray> FilterDateListModel::roleNames() const
 void FilterDateListModel::newFilter(int counter, int dateFormatId, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString val, QString actualValue, bool includeNull, bool exclude )
 {
     qDebug() << actualValue << "Actual value request";
+
+    if(Statics::currentDbClassification == Constants::excelType){
+        colName = "["+colName+"]";
+    }
     addFilterList(new FilterDateList(counter, dateFormatId, section, category, subcategory, tableName, colName, relation, slug, val, actualValue, includeNull, exclude, this));
     emit rowCountChanged();
 
@@ -235,6 +239,10 @@ void FilterDateListModel::deleteFilter(int FilterIndex)
 
 void FilterDateListModel::updateFilter(int FilterIndex, int dateFormatId, QString section, QString category, QString subcategory, QString tableName, QString colName, QString relation, QString slug, QString value, QString actualValue, bool includeNull, bool exclude)
 {
+
+    if(Statics::currentDbClassification == Constants::excelType){
+        colName = "["+colName+"]";
+    }
 
     beginResetModel();
     if(section != "")
@@ -530,8 +538,11 @@ QString FilterDateListModel::getQueryJoiner()
 
     case Constants::jsonIntType:
     case Constants::csvIntType:
-    case Constants::excelIntType:
         joiner = "\"";
+        break;
+
+    case Constants::excelIntType:
+        joiner = "";
         break;
     }
 

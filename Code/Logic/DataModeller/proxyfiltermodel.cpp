@@ -18,8 +18,9 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
 
     switch (Statics::currentDbIntType) {
 
-    case Constants::jsonIntType:
+
     case Constants::excelIntType:
+    case Constants::jsonIntType:
     case Constants::csvIntType:{
 
         if(categoryModel->rowCount() > 0){
@@ -56,7 +57,12 @@ void ProxyFilterModel::callQueryModels(QString tmpSql, FilterCategoricalListMode
 
 
 
-        emit sendCsvFilterQuery(newQuery);
+        if(Statics::currentDbIntType == Constants::excelIntType){
+            emit sendExcelFilterQuery(newQuery);
+        } else {
+            emit sendCsvFilterQuery(newQuery);
+        }
+
         break;
     }
 
