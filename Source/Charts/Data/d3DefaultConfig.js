@@ -1,4 +1,7 @@
 const constants = {
+    chartTitles:{
+        waterfallChart: "Waterfall Chart"
+    },
     redColor: "#E15759",
     yellowColor: "#EDC949",
     greenColor: "#59A14F",
