@@ -1,6 +1,6 @@
 const constants = {
-    chartTitles:{
-        waterfallChart: "Waterfall Chart"
+    chartTitles: {
+        waterfallChart: "Waterfall Chart",
     },
     redColor: "#E15759",
     yellowColor: "#EDC949",
@@ -64,7 +64,7 @@ const defaultD3Config = {
     fontFamily: "MS Sans Serif",
     fontColor: "black",
     defaultLegendConfig: {
-        legendStatus: false,
+        legendStatus: true,
         legendPosition: "right",
     },
     defaultlabelConfig: {
