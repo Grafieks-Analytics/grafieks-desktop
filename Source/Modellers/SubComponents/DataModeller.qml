@@ -961,7 +961,7 @@ Item {
 
     function executeCsvJson(selectParams){
         console.log(DSParamsModel.fetchHideColumns(), "HIDE PARAMS")
-        CSVJsonQueryModel.setSelectParams(DSParamsModel.fetchHideColumns())
+        CSVJsonQueryModel.setHideParams(DSParamsModel.fetchHideColumns())
     }
 
 

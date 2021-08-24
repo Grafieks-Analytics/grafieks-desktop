@@ -277,6 +277,11 @@ void FilterCategoricalListModel::clearFilters()
     emit rowCountChanged();
 }
 
+QList<FilterCategoricalList *> FilterCategoricalListModel::getFilters()
+{
+    return mFilter;
+}
+
 
 void FilterCategoricalListModel::addFilterList(FilterCategoricalList *filter)
 {
@@ -312,9 +317,17 @@ QString FilterCategoricalListModel::setRelation(QString tableName, QString colum
     // If there are several relations involved
     switch(Statics::currentDbIntType){
 
-    case Constants::excelIntType:
+
     case Constants::jsonIntType:
     case Constants::csvIntType:{
+
+        // Directly send the object to ProxyFilter to process
+        // getFilters() function
+
+        break;
+    }
+
+    case Constants::excelIntType:{
 
         if(relation.contains(",", Qt::CaseInsensitive)){
             relationList = relation.split(",");

@@ -38,6 +38,7 @@ public:
     Q_INVOKABLE void updateFilter(int FilterIndex, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString slug = "", QString value = "", bool includeNull = true, bool exclude = false);
     Q_INVOKABLE QString callQueryModel();
     Q_INVOKABLE void clearFilters();
+    QList<FilterNumericalList *> getFilters();
 
     void addFilterList(FilterNumericalList * filter);
 

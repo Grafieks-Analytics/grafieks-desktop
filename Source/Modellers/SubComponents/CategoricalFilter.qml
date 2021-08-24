@@ -75,7 +75,6 @@ Popup {
         target: CSVJsonDataModel
 
         function onColumnListModelDataChanged(colData, values){
-            console.log(colData, values, "BAMG")
             updateData(colData, values)
         }
     }
