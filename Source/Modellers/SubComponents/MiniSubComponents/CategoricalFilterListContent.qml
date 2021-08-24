@@ -226,7 +226,15 @@ Rectangle{
 
             }
 
-            QueryDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))
+            if(GeneralParamsModel.getDbClassification() === Constants.sqlType){
+                QueryDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))
+            } else if(GeneralParamsModel.getDbClassification() === Constants.forwardType){
+                ForwardOnlyDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))
+            } else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
+                ExcelDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))
+            } else {
+                CSVJsonDataModel.columnSearchData(DSParamsModel.colName, DSParamsModel.tableName, searchText.text, JSON.stringify(options))
+            }
 
             if(DSParamsModel.subCategory === Constants.categorySubMulti){
                 if(searchText.text.length > 0){

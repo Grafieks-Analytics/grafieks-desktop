@@ -55,14 +55,8 @@ void CSVJsonDataModel::columnData(QString col, QString tableName, QString option
 
 void CSVJsonDataModel::columnSearchData(QString col, QString tableName, QString searchString, QString options)
 {
-    QStringList out;
-    for(int i = 0; i < this->output.length(); i++){
-        if(this->output.at(i).contains(searchString, Qt::CaseInsensitive)){
-            out.append(this->output.at(i));
-        }
-    }
-
-    emit columnListModelDataChanged(out, options);
+    this->output.filter(searchString, Qt::CaseInsensitive);
+    emit columnListModelDataChanged(this->output.filter(searchString, Qt::CaseInsensitive), options);
 }
 
 QStringList CSVJsonDataModel::getTableList()
