@@ -10,6 +10,8 @@
 #include "filtercategoricallistmodel.h"
 #include "filterdatelistmodel.h"
 #include "filternumericallistmodel.h"
+#include "csvjsonquerymodel.h"
+
 #include "../General/querysplitter.h"
 #include "../../statics.h"
 #include "../../constants.h"
@@ -23,7 +25,7 @@ class ProxyFilterModel : public QObject
 public:
     explicit ProxyFilterModel(QObject *parent = nullptr);
 
-    Q_INVOKABLE void callQueryModels(QString tmpSql, FilterCategoricalListModel *categoryModel, FilterDateListModel * dateModel, FilterNumericalListModel *numericalModel);
+    Q_INVOKABLE void callQueryModels(QString tmpSql, FilterCategoricalListModel *categoryModel = nullptr, FilterDateListModel * dateModel = nullptr, FilterNumericalListModel *numericalModel = nullptr);
 
 private:
     QString getQueryJoiner();
@@ -32,6 +34,7 @@ signals:
     void sendFilterQuery(QString &filteredQuery);
     void sendCsvFilterQuery(QString &filteredQuery);
     void sendExcelFilterQuery(QString &filteredQuery);
+    void sendModels(FilterCategoricalListModel *categoryModel, FilterNumericalListModel * numericalModel, FilterDateListModel *dateModel);
 
 };
 

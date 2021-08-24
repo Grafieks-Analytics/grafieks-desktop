@@ -139,26 +139,32 @@ namespace Constants
     const QString dateSubMonth = "month";
     const QString dateSubDay = "day";
 
+    // **************************** //
     // Filter Relation Slugs
-    const QString slugLikeRelation = "Like";
-    const QString slugNotLikeRelation = "Not Like";
-    const QString slugInRelation = "In";
-    const QString slugEqualRelation = "Equal";
-    const QString slugNotEqualRelation = "Not Equal";
-    const QString slugBetweenRelation = "Between";
+    // Please do not change the order
+    // Used in bool CsvJsonQueryModel::filteredValue()
+
+    const QString slugLikeRelation = "Like"; //0
+    const QString slugNotLikeRelation = "Not Like"; //1
+    const QString slugInRelation = "In"; //2
+    const QString slugEqualRelation = "Equal"; //3
+    const QString slugNotEqualRelation = "Not Equal"; //4
+    const QString slugBetweenRelation = "Between"; //5
 //    const QString slugSmallerThanRelation = "Less Than";
-    const QString slugGreaterThanRelation = "Greater Than";
+    const QString slugGreaterThanRelation = "Greater Than"; //6
 //    const QString slugSmallerThanEqualRelation = "";
 //    const QString slugGreaterThanEqualRelation = "Greater Than Equal To";
 
-    const QString slugSmallerThanRelation = "Smaller Than";
-    const QString slugSmallerThanEqualRelation = "Equal or Smaller Than";
-    const QString slugGreaterThanEqualRelation = "Equal or Greater Than";
+    const QString slugSmallerThanRelation = "Smaller Than"; //7
+    const QString slugSmallerThanEqualRelation = "Equal or Smaller Than"; //8
+    const QString slugGreaterThanEqualRelation = "Equal or Greater Than"; //9
 
-    const QString slugContainingRelation = "Containing";
-    const QString slugEndsWithRelation = "Ends With";
-    const QString slugDoesntStartWithRelation = "Doesnt Start With";
-    const QString slugDoesntEndWithRelation = "Doesnt End With";
+    const QString slugContainingRelation = "Containing"; //10
+    const QString slugEndsWithRelation = "Ends With"; //11
+    const QString slugDoesntStartWithRelation = "Doesnt Start With"; // 12
+    const QString slugDoesntEndWithRelation = "Doesnt End With"; //13
+
+    // ***************************//
 
     // DSParams Settings
     const QString defaultTabSection = categoricalType;

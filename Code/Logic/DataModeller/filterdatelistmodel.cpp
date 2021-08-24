@@ -353,8 +353,6 @@ QString FilterDateListModel::callQueryModel()
 
     }
 
-
-
     return newWhereConditions;
 }
 
@@ -365,6 +363,11 @@ void FilterDateListModel::clearFilters()
     endResetModel();
 
     emit rowCountChanged();
+}
+
+QList<FilterDateList *> FilterDateListModel::getFilters()
+{
+    return mFilter;
 }
 
 
@@ -402,9 +405,17 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
 
     switch (Statics::currentDbIntType) {
 
-    case Constants::jsonIntType:
     case Constants::excelIntType:
     case Constants::csvIntType:{
+
+        // Directly send the object to ProxyFilter to process
+        // getFilters() function
+
+        break;
+
+    }
+
+    case Constants::jsonIntType:{
 
         if(relation.contains(",", Qt::CaseInsensitive)){
             relationList = relation.split(",");
@@ -434,8 +445,6 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
                 concetantedCondition.append("'" + individualCondition + "'");
             }
 
-
-
             notSign = sqlComparisonOperators.contains(relation)? " !" : " NOT ";
             excludeCase = exclude ? relation.prepend(notSign) : relation;
             newCondition = relation.contains("like", Qt::CaseInsensitive) ? " (" + concetantedCondition+ ")" : concetantedCondition ;
@@ -446,7 +455,6 @@ QString FilterDateListModel::setRelation(QString tableName, QString columnName, 
         break;
     }
     default:
-
 
         if(relation.contains(",", Qt::CaseInsensitive)){
             relationList = relation.split(",");

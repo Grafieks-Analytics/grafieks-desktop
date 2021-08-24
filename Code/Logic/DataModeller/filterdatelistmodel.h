@@ -36,6 +36,7 @@ public:
     Q_INVOKABLE void updateFilter(int FilterIndex, int dateFormatId, QString section = "", QString category = "", QString subcategory = "", QString tableName = "", QString colName = "", QString relation = "", QString slug = "", QString value = "", QString actualValue = "", bool includeNull = true, bool exclude = false);
     Q_INVOKABLE QString callQueryModel();
     Q_INVOKABLE void clearFilters();
+    QList<FilterDateList *> getFilters();
 
     void addFilterList(FilterDateList * filter);
 

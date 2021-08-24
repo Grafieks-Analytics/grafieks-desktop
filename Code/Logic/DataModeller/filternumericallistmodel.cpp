@@ -283,8 +283,12 @@ void FilterNumericalListModel::clearFilters()
     beginResetModel();
     mFilter.clear();
     endResetModel();
-
     emit rowCountChanged();
+}
+
+QList<FilterNumericalList *> FilterNumericalListModel::getFilters()
+{
+    return mFilter;
 }
 
 
@@ -322,9 +326,16 @@ QString FilterNumericalListModel::setRelation(QString tableName, QString columnN
 
     switch (Statics::currentDbIntType) {
 
-    case Constants::excelIntType:
+
     case Constants::jsonIntType:
     case Constants::csvIntType:{
+
+        // Directly send the object to ProxyFilter to process
+        // getFilters() function
+
+        break;
+    }
+    case Constants::excelIntType:{
 
         if(relation.contains(",", Qt::CaseInsensitive)){
             relationList = relation.split(",");

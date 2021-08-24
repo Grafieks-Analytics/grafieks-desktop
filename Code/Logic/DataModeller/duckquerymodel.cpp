@@ -16,7 +16,6 @@ DuckQueryModel::~DuckQueryModel()
 
 }
 
-
 void DuckQueryModel::setQuery(QString query)
 {
     // Signal to clear exisitng data in tables (qml)
@@ -144,7 +143,6 @@ void DuckQueryModel::setQueryResult()
     connect(setChartDataWorker, &SetChartDataDuckWorker::finished, setChartDataWorker, &QObject::deleteLater, Qt::QueuedConnection);
     setChartDataWorker->setObjectName("Grafieks Duck Chart Data");
     setChartDataWorker->start(QThread::HighestPriority);
-
 }
 
 

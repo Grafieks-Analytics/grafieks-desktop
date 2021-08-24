@@ -328,7 +328,7 @@ int main(int argc, char *argv[])
     QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::sendDbName, duckCon, &DuckCon::createTable);
     QObject::connect(&connectorsLoginModel, &ConnectorsLoginModel::dropTables, duckCon, &DuckCon::dropTables);
     QObject::connect(&proxyModel, &ProxyFilterModel::sendCsvFilterQuery, &duckQueryModel, &DuckQueryModel::receiveCsvFilterQuery);
-    QObject::connect(&proxyModel, &ProxyFilterModel::sendExcelFilterQuery, &excelQueryModel, &ExcelQueryModel::receiveExcelFilterQuery);
+    QObject::connect(&proxyModel, &ProxyFilterModel::sendExcelFilterQuery, &csvJsonQueryModel, &CSVJsonQueryModel::receiveCsvJsonFilterQuery);
 
     // Data and headers for reports
     QObject::connect(&queryModel, &QueryModel::chartDataChanged, &reportsDataModel, &ReportsDataModel::getChartData);
@@ -363,6 +363,9 @@ int main(int argc, char *argv[])
     // Data for charts
     QObject::connect(&reportsDataModel, &ReportsDataModel::reportDataChanged, &chartsThread, &ChartsThread::receiveReportData);
     QObject::connect(&tableColumnsModel, &TableColumnsModel::dashboardDataChanged, &chartsThread, &ChartsThread::receiveDashboardData);
+
+
+    QObject::connect(&proxyModel, &ProxyFilterModel::sendModels, &csvJsonQueryModel, &CSVJsonQueryModel::getAllFilters);
 
 
     // SIGNAL & SLOTS ENDS
