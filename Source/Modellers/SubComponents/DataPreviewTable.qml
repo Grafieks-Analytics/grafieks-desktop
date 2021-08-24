@@ -72,7 +72,6 @@ Rectangle {
         function onCsvJsonHasData(hasData){
             view.model = hasData === true? CSVJsonQueryModel: ""
             view.visible = hasData === true ? true: false
-            console.log("HJAS DATA", hasData)
 
         }
 
@@ -98,7 +97,6 @@ Rectangle {
         function onExcelHasData(hasData){
             view.model = hasData === true? ExcelQueryModel: ""
             view.visible = hasData === true ? true: false
-            console.log("HJAS DATA", hasData)
 
         }
 
@@ -232,6 +230,7 @@ Rectangle {
                              textItem1.text = CSVJsonQueryModel.data(CSVJsonQueryModel.index(styleData.row, styleData.column))
                         }else if(GeneralParamsModel.getDbClassification() === Constants.excelType){
                              textItem1.text = ExcelQueryModel.data(ExcelQueryModel.index(styleData.row, styleData.column))
+
                         } else{
                             textItem1.text = ForwardOnlyQueryModel.data(ForwardOnlyQueryModel.index(styleData.row, styleData.column))
                         }
