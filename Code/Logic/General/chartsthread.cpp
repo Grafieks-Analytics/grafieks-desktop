@@ -517,9 +517,15 @@ void ChartsThread::getPieChartValues()
         qWarning() << Q_FUNC_INFO << e.what();
     }
 
-    QJsonDocument doc;
-    doc.setObject(obj);
+    QJsonArray columns;
+    columns.append(xAxisColumn);
+    columns.append(yAxisColumn);
 
+    data.append(obj);
+    data.append(columns);
+
+    QJsonDocument doc;
+    doc.setArray(data);
     QString strData = doc.toJson();
 
     emit signalPieChartValues(strData);
