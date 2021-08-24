@@ -30,23 +30,44 @@
     <script>
         // var data = { a: 9, b: 20, c: 30, d: 8, e: 12, g: 45 };
 
-        var data = {
-            Accessories: 938,
-            Appliances: 1060,
-            Art: 2756,
-            Binders: 2114,
-            Bookcases: 8016,
-            Chairs: 6906,
-            Envelopes: 1134,
-            Fasteners: 160,
-            Furnishings: 2398,
-            Labels: 192,
-            Paper: 1198,
-            Phones: 8372,
-            Storage: 4638,
-            Supplies: 132,
-            Tables: 10230,
-        };
+        // var data = {
+        //     Accessories: 938,
+        //     Appliances: 1060,
+        //     Art: 2756,
+        //     Binders: 2114,
+        //     Bookcases: 8016,
+        //     Chairs: 6906,
+        //     Envelopes: 1134,
+        //     Fasteners: 160,
+        //     Furnishings: 2398,
+        //     Labels: 192,
+        //     Paper: 1198,
+        //     Phones: 8372,
+        //     Storage: 4638,
+        //     Supplies: 132,
+        //     Tables: 10230,
+        // };
+
+        var data = [
+            {
+                Accessories: 938,
+                Appliances: 1060,
+                Art: 2756,
+                Binders: 2114,
+                Bookcases: 8016,
+                Chairs: 6906,
+                Envelopes: 1134,
+                Fasteners: 160,
+                Furnishings: 2398,
+                Labels: 192,
+                Paper: 1198,
+                Phones: 8372,
+                Storage: 4638,
+                Supplies: 132,
+                Tables: 10230,
+            },
+            ["sub-category", "sales"],
+        ];
 
         function drawChart(data, plottingConfiguration = {}) {
             let {
@@ -83,18 +104,20 @@
 
             var translateSvg = 0;
             var translateSvgTop = 100;
+             var xAxisLabel = data[1][0]
+            var yAxisLabel = data[1][1]
 
             if (legendStatus) {
                 // d3.select("#legend").html("");
                 d3.select("#legend")
                     .append("p")
-                    .html("xAxisLabel" + "&nbsp;")
+                    .html(xAxisLabel + "&nbsp;")
                     .style("font-weight", "bold")
                     .style("margin", "auto")
                     .style("position", "sticky");
                 d3.select("#legend")
                     .selectAll("div")
-                    .data(Object.keys(data))
+                    .data(Object.keys(data[0]))
                     .enter()
                     .append("div")
                     .html((d, i) => {
@@ -241,7 +264,7 @@
                 .scaleOrdinal()
                 .domain(Object.keys(data))
                 .range(d3Colors);
-            var totalSum = arraySum(Object.values(data));
+            var totalSum = arraySum(Object.values(data[0]));
 
             // Compute the position of each group on the pie:
             var pie = d3
@@ -253,10 +276,9 @@
                     return d3.ascending(a.key, b.key);
                 }); // This make sure that group order remains the same in the pie chart
 
-            var data_ready = pie(d3.entries(data));
-            console.log(data_ready);
+            var data_ready = pie(d3.entries(data[0]));
+            // console.log(data_ready);
 
-          
             // map to data
             var u = svg.selectAll("path").data(data_ready);
             var arcOver = d3
@@ -270,10 +292,7 @@
                 .merge(u)
                 // .transition()
                 // .duration(1000)
-                .attr(
-                    "d",
-                    d3.arc().innerRadius(0).outerRadius(radius)
-                )
+                .attr("d", d3.arc().innerRadius(0).outerRadius(radius))
                 .attr("fill", function (d) {
                     this.setAttribute("data-label-name", d.data.key);
                     this.setAttribute("data-value", d.data.value);
@@ -293,7 +312,7 @@
                 .on("mouseover mousemove", function (d, i) {
                     var x_pos = d3.mouse(this)[0] + width / 2 + 15;
                     var y_pos = d3.mouse(this)[1] + height / 2 + 8;
-                     xValue = this.getAttribute("data-value");
+                    xValue = this.getAttribute("data-value");
                     percentageValue = this.getAttribute("data-percentage");
 
                     d3.select("#tooltip")
@@ -307,10 +326,10 @@
                             //     textValue = d.y1 - d.y0;
                             // }
 
-                             return (
+                            return (
                                 "<div class='arrowTooltip'></div>" +
                                 "<span style='color:grey;''>" +
-                                "xAxisLabel" +
+                                xAxisLabel +
                                 ":&nbsp;&nbsp;" +
                                 "</span>" +
                                 "<span style='float: right;'>" +
@@ -318,7 +337,7 @@
                                 "</span>" +
                                 "<br/> <br/>" +
                                 "<span style='color:grey;''>" +
-                                "yAxisLabel" +
+                                yAxisLabel +
                                 ":" +
                                 "</span>" +
                                 "<span style='float: right;margin-left: 15px;'>" +
@@ -327,7 +346,7 @@
                                 " (" +
                                 // (percentageValue &&
                                 //     Math.round(+percentageValue)) +
-                                percentageValue+
+                                percentageValue +
                                 "%)" +
                                 "</span>" +
                                 "</span>"
@@ -347,7 +366,7 @@
                             "d",
                             d3
                                 .arc()
-                                .innerRadius(0 )
+                                .innerRadius(0)
                                 .outerRadius(radius + 5)
                         );
                     d3.select(this).style("opacity", 1);
@@ -359,13 +378,7 @@
                         // .select("path")
                         .transition()
                         .duration(200)
-                        .attr(
-                            "d",
-                            d3
-                                .arc()
-                                .innerRadius(0)
-                                .outerRadius(radius)
-                        );
+                        .attr("d", d3.arc().innerRadius(0).outerRadius(radius));
 
                     d3.selectAll(".pie").style("opacity", 1);
                 });
@@ -373,7 +386,7 @@
             // remove the group that is not present anymore
             u.exit().remove();
 
-            var data_ready = pie(d3.entries(data));
+            var data_ready = pie(d3.entries(data[0]));
 
             // The arc generator
             var arc = d3
@@ -426,7 +439,7 @@
                     });
 
                 // Add the polylines between chart and labels:
-             // Add the polylines between chart and labels:
+                // Add the polylines between chart and labels:
                 svg.selectAll("allLabels")
                     .data(data_ready)
                     .enter()
