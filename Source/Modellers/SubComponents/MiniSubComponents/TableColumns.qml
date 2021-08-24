@@ -1,4 +1,7 @@
 import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.3
+import QtQuick.Dialogs 1.3
 
 import "../../../MainSubComponents"
 
@@ -85,6 +88,88 @@ Item {
                 parent_dimension: 12
 
                 onClicked: hideColumnSelection(checked, colName, tableName)
+            }
+
+            Image {
+                id: toggleMenuIcon
+                height: 20
+                width: 20
+                source : "/Images/icons/menu-button.png"
+                anchors.right: parent.right
+                anchors.leftMargin:  15
+                anchors.verticalCenter: tableImg.verticalCenter
+                visible: tableShowToggle
+                z:50
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: menuOptions.open()
+                }
+
+
+            }
+
+
+            Row{
+
+                anchors.right: tableImg.right
+                anchors.top: toggleMenuIcon.bottom
+                anchors.rightMargin: -70
+                width: parent.width-30
+                height: 80
+
+                Item {
+                    id: name
+
+                    anchors.right:parent.right
+
+                    x: -menuOptions.width
+
+                    Menu{
+                        id: menuOptions
+                        background: Rectangle{
+                            implicitWidth: 200
+                            border.color: Constants.darkThemeColor
+                        }
+
+
+                        Menu{
+                            id: menuOptionsdsd
+                            title: qsTr("Convert Data To")
+
+                            background: Rectangle{
+                                implicitWidth: 180
+
+                                border.color: Constants.darkThemeColor
+                            }
+                            MenuItem {
+                                id:menuItem1
+                                implicitHeight: 30
+                                leftPadding: 15
+                                text: qsTr("Categorical")
+
+                            }
+                            MenuSeparator{}
+                            MenuItem {
+                                id:menuItem2
+                                implicitHeight: 30
+                                leftPadding: 15
+                                text: qsTr("Numerical")
+                            }
+                            MenuSeparator{
+                                padding: 0
+                            }
+
+                            MenuItem {
+                                text: qsTr("Date")
+                                implicitHeight: 30
+                                leftPadding: 15
+
+                            }
+                        }
+                    }
+                }
+
+
             }
         }
     }
