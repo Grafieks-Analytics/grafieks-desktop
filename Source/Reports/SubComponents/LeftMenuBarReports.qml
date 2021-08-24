@@ -56,7 +56,7 @@ Rectangle{
             title: "Area Chart"
             yAxisVisible: true
             lineTypeChartVisible: false
-            maxDropOnXAxis: 2
+            maxDropOnXAxis: 1
             maxDropOnYAxis: 1
             mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
         }
@@ -66,7 +66,7 @@ Rectangle{
             activeChart: false
             title: "Line Chart"
             yAxisVisible: true
-            maxDropOnXAxis: 2
+            maxDropOnXAxis: 1
             maxDropOnYAxis: 1
             lineTypeChartVisible: true
             mainCustomizations: "Properties,Legend,Reference Line,Axis Size"
@@ -87,7 +87,7 @@ Rectangle{
             chartHtml:"HeatmapChart.html"
             activeChart: false
             title: "Heat Map"
-            maxDropOnXAxis: 2
+            maxDropOnXAxis: 1
             maxDropOnYAxis: 1
             yAxisVisible: true
             lineTypeChartVisible: false
@@ -158,6 +158,7 @@ Rectangle{
             xAxisLabelName: "Categorical"
             yAxisLabelName: "Numerical"
             maxDropOnYAxis: 1
+            maxDropOnXAxis: 5
             yAxisVisible: false
             lineTypeChartVisible: false
             mainCustomizations: "Properties,Legend,Reference Line"
@@ -416,8 +417,6 @@ Rectangle{
                     console.log('Debug: Loading multiline chart');
                     chartHtml = Constants.multiLineChartUrl;
                     // switchChart(Constants.multiLineChartTitle);
-                }else{
-                    console.log('Moving to line ????')
                 }
             }
         }
