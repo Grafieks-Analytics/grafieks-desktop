@@ -1,6 +1,6 @@
 const constants = {
-    chartTitles:{
-        waterfallChart: "Waterfall Chart"
+    chartTitles: {
+        waterfallChart: "Waterfall Chart",
     },
     redColor: "#E15759",
     yellowColor: "#EDC949",
@@ -30,6 +30,7 @@ const constants = {
 };
 
 const defaultD3Config = {
+    d3SequentialDefaultTheme: ["#ffffff", "#08306b"],
     d3ColorPalette: [
         "#1f77b4",
         "#ff7f0e",
